@@ -4,15 +4,15 @@ import {
   ACCORDION_ITEM_TITLE_CLASS,
 } from '@ts/ui/accordion';
 import {
-  CHAT_MESSAGEBUBBLE_TOOLCALL_ARGUMENTS_CLASS,
-  CHAT_MESSAGEBUBBLE_TOOLCALL_ERROR_CLASS,
-  CHAT_MESSAGEBUBBLE_TOOLCALL_ERROR_TAG_CLASS,
-  CHAT_MESSAGEBUBBLE_TOOLCALL_FIELD_CLASS,
-  CHAT_MESSAGEBUBBLE_TOOLCALL_FIELD_LABEL_CLASS,
-  CHAT_MESSAGEBUBBLE_TOOLCALL_ICON_CLASS,
-  CHAT_MESSAGEBUBBLE_TOOLCALL_NAME_CLASS,
-  CHAT_MESSAGEBUBBLE_TOOLCALL_RESULT_CLASS,
-} from '@ts/ui/chat/messagebubble';
+  CHAT_TOOL_CALL_ARGUMENTS_CLASS,
+  CHAT_TOOL_CALL_ERROR_CLASS,
+  CHAT_TOOL_CALL_ERROR_TAG_CLASS,
+  CHAT_TOOL_CALL_FIELD_CLASS,
+  CHAT_TOOL_CALL_FIELD_LABEL_CLASS,
+  CHAT_TOOL_CALL_ICON_CLASS,
+  CHAT_TOOL_CALL_NAME_CLASS,
+  CHAT_TOOL_CALL_RESULT_CLASS,
+} from '@ts/ui/chat/tool_call_view/tool_call_view';
 import { TEXTEDITOR_INPUT_CLASS } from '@ts/ui/text_box/text_editor.base';
 
 export class ToolCallModel {
@@ -23,15 +23,15 @@ export class ToolCallModel {
   }
 
   public getName(): string {
-    return this.root.querySelector(`.${CHAT_MESSAGEBUBBLE_TOOLCALL_NAME_CLASS}`)?.textContent ?? '';
+    return this.root.querySelector(`.${CHAT_TOOL_CALL_NAME_CLASS}`)?.textContent ?? '';
   }
 
   public hasIcon(): boolean {
-    return !!this.root.querySelector(`.${CHAT_MESSAGEBUBBLE_TOOLCALL_ICON_CLASS}`);
+    return !!this.root.querySelector(`.${CHAT_TOOL_CALL_ICON_CLASS}`);
   }
 
   public getErrorTagText(): string | null {
-    return this.root.querySelector(`.${CHAT_MESSAGEBUBBLE_TOOLCALL_ERROR_TAG_CLASS}`)
+    return this.root.querySelector(`.${CHAT_TOOL_CALL_ERROR_TAG_CLASS}`)
       ?.textContent ?? null;
   }
 
@@ -45,15 +45,15 @@ export class ToolCallModel {
 
   public getFieldLabels(): string[] {
     return this.getFields()
-      .map((field) => field.querySelector(`.${CHAT_MESSAGEBUBBLE_TOOLCALL_FIELD_LABEL_CLASS}`)?.textContent ?? '');
+      .map((field) => field.querySelector(`.${CHAT_TOOL_CALL_FIELD_LABEL_CLASS}`)?.textContent ?? '');
   }
 
   public getArgumentsText(): string | null {
-    return this.getFieldValue(CHAT_MESSAGEBUBBLE_TOOLCALL_ARGUMENTS_CLASS);
+    return this.getFieldValue(CHAT_TOOL_CALL_ARGUMENTS_CLASS);
   }
 
   public getResultText(): string | null {
-    return this.getFieldValue(CHAT_MESSAGEBUBBLE_TOOLCALL_RESULT_CLASS);
+    return this.getFieldValue(CHAT_TOOL_CALL_RESULT_CLASS);
   }
 
   public areFieldsReadOnly(): boolean {
@@ -71,7 +71,7 @@ export class ToolCallModel {
   }
 
   public hasErrorResult(): boolean {
-    return !!this.root.querySelector(`.${CHAT_MESSAGEBUBBLE_TOOLCALL_ERROR_CLASS}`);
+    return !!this.root.querySelector(`.${CHAT_TOOL_CALL_ERROR_CLASS}`);
   }
 
   public hasBody(): boolean {
@@ -79,12 +79,12 @@ export class ToolCallModel {
   }
 
   private getFields(): HTMLElement[] {
-    return Array.from(this.root.querySelectorAll(`.${CHAT_MESSAGEBUBBLE_TOOLCALL_FIELD_CLASS}`));
+    return Array.from(this.root.querySelectorAll(`.${CHAT_TOOL_CALL_FIELD_CLASS}`));
   }
 
   private getFieldInputs(): HTMLTextAreaElement[] {
     return Array.from(this.root.querySelectorAll<HTMLTextAreaElement>(
-      `.${CHAT_MESSAGEBUBBLE_TOOLCALL_FIELD_CLASS} .${TEXTEDITOR_INPUT_CLASS}`,
+      `.${CHAT_TOOL_CALL_FIELD_CLASS} .${TEXTEDITOR_INPUT_CLASS}`,
     ));
   }
 
