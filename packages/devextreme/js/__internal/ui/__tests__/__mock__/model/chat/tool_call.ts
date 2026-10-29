@@ -56,6 +56,20 @@ export class ToolCallModel {
     return this.getFieldValue(CHAT_MESSAGEBUBBLE_TOOLCALL_RESULT_CLASS);
   }
 
+  public areFieldsReadOnly(): boolean {
+    const inputs = this.getFieldInputs();
+
+    return inputs.length > 0 && inputs.every((input) => input.readOnly);
+  }
+
+  public getFieldInputLabels(): string[] {
+    return this.getFieldInputs().map((input) => {
+      const labelId = input.getAttribute('aria-labelledby') ?? '';
+
+      return document.getElementById(labelId)?.textContent ?? '';
+    });
+  }
+
   public hasErrorResult(): boolean {
     return !!this.root.querySelector(`.${CHAT_MESSAGEBUBBLE_TOOLCALL_ERROR_CLASS}`);
   }
@@ -66,6 +80,12 @@ export class ToolCallModel {
 
   private getFields(): HTMLElement[] {
     return Array.from(this.root.querySelectorAll(`.${CHAT_MESSAGEBUBBLE_TOOLCALL_FIELD_CLASS}`));
+  }
+
+  private getFieldInputs(): HTMLTextAreaElement[] {
+    return Array.from(this.root.querySelectorAll<HTMLTextAreaElement>(
+      `.${CHAT_MESSAGEBUBBLE_TOOLCALL_FIELD_CLASS} .${TEXTEDITOR_INPUT_CLASS}`,
+    ));
   }
 
   private getFieldValue(fieldClass: string): string | null {

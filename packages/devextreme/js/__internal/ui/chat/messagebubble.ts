@@ -170,7 +170,7 @@ class MessageBubble extends Widget<Properties> {
 
   _renderToolCallBody(call: ToolCall, container: Element): void {
     const hasArguments = !!call.arguments && Object.keys(call.arguments).length > 0;
-    const hasResult = call.result !== undefined;
+    const hasResult = call.result !== undefined && call.result !== '';
 
     if (hasArguments) {
       this._renderToolCallField(
