@@ -4,6 +4,7 @@ const CLASSES = {
   popupWrapper: 'dx-popup-wrapper',
   popupTitle: 'dx-popup-title',
   overlayContent: 'dx-overlay-content',
+  popupContent: 'dx-popup-content',
 };
 
 const SELECTORS = {
@@ -18,6 +19,10 @@ export class PopupModel {
   public getOverlayContent(): HTMLElement {
     const wrapper = this.getPopupWrapper();
     return wrapper?.querySelector(`.${CLASSES.overlayContent}`) as HTMLElement;
+  }
+
+  public getContent(): HTMLElement {
+    return this.getOverlayContent()?.querySelector(`.${CLASSES.popupContent}`) as HTMLElement;
   }
 
   public isVisible(): boolean {
