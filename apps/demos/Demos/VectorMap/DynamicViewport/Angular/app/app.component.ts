@@ -1,5 +1,5 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, ViewChild, provideZoneChangeDetection } from '@angular/core';
+import { Component, enableProdMode, ViewChild } from '@angular/core';
 import { DxTextBoxModule, DxSwitchModule } from 'devextreme-angular';
 import * as mapsData from 'devextreme-dist/js/vectormap-data/world.js';
 import { DxSelectBoxModule, DxSelectBoxTypes } from 'devextreme-angular/ui/select-box';
@@ -53,8 +53,4 @@ export class AppComponent {
   }
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);
