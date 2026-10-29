@@ -25,7 +25,7 @@ export const CHAT_TOOL_CALL_CLASSES = {
   arguments: 'dx-chat-tool-call-arguments',
   result: 'dx-chat-tool-call-result',
   error: 'dx-chat-tool-call-error',
-} as const;
+};
 
 const stringifyValue = (value: unknown): string => (typeof value === 'string'
   ? value
