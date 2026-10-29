@@ -1,6 +1,6 @@
 import type { ReadonlySignal, Signal } from '@ts/core/state_manager/index';
 import { computed, effect, signal } from '@ts/core/state_manager/index';
-import { MAX_PAGES_COUNT } from '@ts/grids/grid_core/pager/m_pager';
+import { MAX_PAGES_COUNT } from '@ts/grids/grid_core/pager/pager';
 
 import { View } from '../core/view';
 import { DataController } from '../data_controller/index';
