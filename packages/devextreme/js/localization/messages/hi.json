@@ -448,6 +448,12 @@
         "dxChat-fileViewLabel": "फ़ाइल सूची",
         "dxChat-downloadButtonLabel": "फ़ाइल डाउनलोड करें {0}",
         "dxChat-fileLimitReachedWarning": "आपने बहुत सारी फ़ाइलें चुनीं. {0} से अधिक फ़ाइलें न चुनें और पुनः प्रयास करें।",
+        "dxChat-toolCallArgumentsLabel": "Arguments",
+        "dxChat-toolCallResultLabel": "Result",
+        "dxChat-toolCallsTitle": "{0} tools",
+        "dxChat-toolCallError": "Error",
+        "dxChat-toolCallsErrorSingle": "{0} Error",
+        "dxChat-toolCallsErrorMultiple": "{0} Errors",
 
         "dxColorView-ariaRed": "लाल",
         "dxColorView-ariaGreen": "हरा",

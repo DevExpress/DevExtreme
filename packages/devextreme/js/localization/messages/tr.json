@@ -448,6 +448,12 @@
         "dxChat-fileViewLabel": "Dosya listesi",
         "dxChat-downloadButtonLabel": "{0} dosyasını indir",
         "dxChat-fileLimitReachedWarning": "Çok fazla dosya seçtiniz. En fazla {0} dosya seçip tekrar deneyin.",
+        "dxChat-toolCallArgumentsLabel": "Arguments",
+        "dxChat-toolCallResultLabel": "Result",
+        "dxChat-toolCallsTitle": "{0} tools",
+        "dxChat-toolCallError": "Error",
+        "dxChat-toolCallsErrorSingle": "{0} Error",
+        "dxChat-toolCallsErrorMultiple": "{0} Errors",
 
         "dxColorView-ariaRed": "Kırmızı",
         "dxColorView-ariaGreen": "Yeşil",

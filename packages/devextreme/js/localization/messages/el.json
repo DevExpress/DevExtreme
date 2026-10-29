@@ -448,6 +448,12 @@
         "dxChat-fileViewLabel": "Λίστα αρχείων",
         "dxChat-downloadButtonLabel": "Λήψη αρχείου {0}",
         "dxChat-fileLimitReachedWarning": "Επιλέξατε πολλά αρχεία. Επιλέξτε έως {0} αρχεία και δοκιμάστε ξανά.",
+        "dxChat-toolCallArgumentsLabel": "Arguments",
+        "dxChat-toolCallResultLabel": "Result",
+        "dxChat-toolCallsTitle": "{0} tools",
+        "dxChat-toolCallError": "Error",
+        "dxChat-toolCallsErrorSingle": "{0} Error",
+        "dxChat-toolCallsErrorMultiple": "{0} Errors",
 
         "dxColorView-ariaRed": "Κόκκινο",
         "dxColorView-ariaGreen": "Πράσινο",

@@ -448,6 +448,12 @@
         "dxChat-fileViewLabel": "Danh sách tập tin",
         "dxChat-downloadButtonLabel": "Tải xuống tập tin {0}",
         "dxChat-fileLimitReachedWarning": "Bạn đã chọn quá nhiều tập tin. Chọn không quá {0} tập tin và thử lại.",
+        "dxChat-toolCallArgumentsLabel": "Arguments",
+        "dxChat-toolCallResultLabel": "Result",
+        "dxChat-toolCallsTitle": "{0} tools",
+        "dxChat-toolCallError": "Error",
+        "dxChat-toolCallsErrorSingle": "{0} Error",
+        "dxChat-toolCallsErrorMultiple": "{0} Errors",
 
         "dxColorView-ariaRed": "Đỏ",
         "dxColorView-ariaGreen": "Xanh lá",
