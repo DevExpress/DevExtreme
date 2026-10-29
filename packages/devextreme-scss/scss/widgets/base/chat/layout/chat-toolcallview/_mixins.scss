@@ -1,0 +1,128 @@
+@mixin chat-tool-call-view(
+  $color,
+  $subtle-color,
+  $border-color,
+  $error-color,
+  $error-background-color,
+  $font-size,
+  $line-height,
+  $header-font-weight,
+  $monospace-font-family,
+  $tag-font-size,
+  $tag-line-height,
+  $tag-padding,
+  $tag-border-radius,
+  $padding,
+  $gap,
+  $items-gap,
+  $icon-size,
+  $body-padding-block-start,
+  $body-padding-inline-end,
+  $body-padding-block-end,
+  $separator-width,
+  $separator-line-width,
+  $fields-gap,
+  $label-padding-block-end,
+  $field-padding,
+  $field-border-radius,
+  $field-border-width,
+) {
+  .dx-chat-tool-call-view {
+    color: $color;
+    font-size: $font-size;
+    line-height: $line-height;
+
+    .dx-accordion {
+      color: $color;
+    }
+
+    .dx-accordion-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: $items-gap;
+    }
+
+    .dx-chat-tool-call-header {
+      gap: $gap;
+      padding: $padding;
+      font-weight: $header-font-weight;
+    }
+
+    .dx-accordion-item-title {
+      gap: $gap;
+      padding: $padding;
+      font-size: $font-size;
+      line-height: $line-height;
+      color: $subtle-color;
+
+      &::before {
+        font-size: $icon-size;
+        color: $subtle-color;
+      }
+    }
+
+    .dx-accordion-item.dx-state-hover > .dx-accordion-item-title,
+    .dx-accordion-item.dx-accordion-item-opened > .dx-accordion-item-title {
+      color: $color;
+
+      &::before {
+        color: $color;
+      }
+    }
+
+    .dx-chat-tool-call-icon {
+      width: $icon-size;
+      height: $icon-size;
+      font-size: $icon-size;
+      line-height: $icon-size;
+    }
+
+    .dx-chat-tool-call-error-tag {
+      padding: $tag-padding;
+      border-radius: $tag-border-radius;
+      font-size: $tag-font-size;
+      line-height: $tag-line-height;
+      font-weight: normal;
+      color: $error-color;
+      background-color: $error-background-color;
+    }
+
+    .dx-accordion-item-body {
+      gap: $fields-gap;
+      padding-block: $body-padding-block-start $body-padding-block-end;
+      padding-inline: $separator-width $body-padding-inline-end;
+
+      &::before {
+        inset-inline-start: calc((#{$separator-width} - #{$separator-line-width}) / 2);
+        width: $separator-line-width;
+        background-color: $border-color;
+      }
+    }
+
+    .dx-chat-tool-call-field-label {
+      padding-block-end: $label-padding-block-end;
+      color: $color;
+    }
+
+    .dx-chat-tool-call-field .dx-texteditor {
+      border: $field-border-width solid $border-color;
+      border-radius: $field-border-radius;
+      background-color: transparent;
+      color: $color;
+
+      .dx-texteditor-input {
+        padding: $field-padding;
+        font-family: $monospace-font-family;
+        font-size: $font-size;
+        line-height: $line-height;
+        color: inherit;
+      }
+
+      &.dx-chat-tool-call-error {
+        border-color: transparent;
+        background-color: $error-background-color;
+        color: $error-color;
+      }
+    }
+  }
+}

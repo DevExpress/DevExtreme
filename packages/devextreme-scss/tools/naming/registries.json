@@ -1267,7 +1267,14 @@
       "circle",
       "bubble",
       "group",
-      "image"
+      "image",
+      "tool-call",
+      "tool-call-header",
+      "tool-call-tag",
+      "tool-call-body",
+      "tool-call-separator",
+      "tool-call-label",
+      "tool-call-field"
     ],
     "color-view": [
       "palette",
