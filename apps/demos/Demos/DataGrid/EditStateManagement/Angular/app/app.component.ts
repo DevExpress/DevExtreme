@@ -1,5 +1,5 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, OnInit, OnDestroy, ChangeDetectorRef, enableProdMode, inject } from '@angular/core';
+import { Component, OnInit, OnDestroy, enableProdMode, inject, signal } from '@angular/core';
 import { provideHttpClient, withFetch } from '@angular/common/http';
 import { AsyncPipe } from '@angular/common';
 import { DxLoadPanelModule } from 'devextreme-angular';
@@ -24,8 +24,6 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent implements OnInit, OnDestroy {
-  changeDetectorRef = inject(ChangeDetectorRef);
-
   ordersSubscription: Subscription;
 
   orders$: Observable<Order[]>;
@@ -34,7 +32,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
   editRowKey?: number = null;
 
-  isLoading = false;
+  isLoading = signal(false);
 
   loadPanelPosition = { of: '#gridContainer' };
 
@@ -43,9 +41,9 @@ export class AppComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.orders$ = this.service.getOrders();
 
-    this.isLoading = true;
+    this.isLoading.set(true);
     this.ordersSubscription = this.orders$.subscribe(() => {
-      this.isLoading = false;
+      this.isLoading.set(false);
     });
   }
 
@@ -67,15 +65,14 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   async processSaving(change: Change<Order>) {
-    this.isLoading = true;
+    this.isLoading.set(true);
 
     try {
       await this.service.saveChange(change);
       this.editRowKey = null;
       this.changes = [];
     } finally {
-      this.isLoading = false;
-      this.changeDetectorRef.markForCheck();
+      this.isLoading.set(false);
     }
   }
 
