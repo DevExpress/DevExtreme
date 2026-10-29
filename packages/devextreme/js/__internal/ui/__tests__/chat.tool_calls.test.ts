@@ -12,6 +12,7 @@ import DataSource from '@js/data/data_source';
 import type { Message, Properties, ToolCall } from '@js/ui/chat';
 import Chat from '@js/ui/chat';
 import {
+  CHAT_MESSAGEBUBBLE_CLASS,
   CHAT_MESSAGEBUBBLE_CONTENT_CLASS,
   CHAT_MESSAGEBUBBLE_TOOLCALLS_CLASS,
 } from '@ts/ui/chat/messagebubble';
@@ -596,6 +597,24 @@ describe('Chat tool calls', () => {
       expect(received[0].map(({ name }) => name)).toEqual(['getWeather', 'getCurrentTime']);
     });
 
+    it('should render the template again with the new toolCalls when only toolCalls are updated', () => {
+      const message = createMessage({ toolCalls: [WEATHER] });
+      const { chat, push } = createStoreChat([message], {
+        messageTemplate: ({ message: data }: { message: Message }, container: Element) => {
+          const names = ((data as { toolCalls?: ToolCall[] }).toolCalls ?? [])
+            .map(({ name }) => name).join(',');
+
+          $('<span>').addClass('custom-text').text(names).appendTo(container);
+        },
+      });
+
+      expect(getCustomText(getBubble(chat))).toBe('getWeather');
+
+      push([{ type: 'update', key: message.id, data: { toolCalls: [WEATHER, TIME] } }]);
+
+      expect(getCustomText(getBubble(chat))).toBe('getWeather,getCurrentTime');
+    });
+
     it('should render the block above the content of the template when showInMessageTemplate is true', () => {
       const chat = createChat({
         messageTemplate,
@@ -788,6 +807,34 @@ describe('Chat tool calls', () => {
 
       expect(getBubble(chat).isImage()).toBe(true);
       expect(getBubble(chat).hasToolCalls()).toBe(false);
+    });
+
+    it('should remove the block when a text message is changed to an image message', () => {
+      const message = createMessage({ toolCalls: [WEATHER] });
+      const { chat, push } = createStoreChat([message]);
+
+      push([{
+        type: 'update', key: message.id, data: { type: 'image', src: 'image.png', alt: 'Image' },
+      }]);
+
+      expect(getBubble(chat).isImage()).toBe(true);
+      expect(getBubble(chat).hasToolCalls()).toBe(false);
+    });
+
+    it('should render the block when an image message is changed to a text message with toolCalls', () => {
+      const message = createMessage({
+        type: 'image', src: 'image.png', alt: 'Image', text: undefined,
+      });
+      const { chat, push } = createStoreChat([message]);
+
+      push([{
+        type: 'update',
+        key: message.id,
+        data: { type: 'text', text: 'Answer', toolCalls: [WEATHER] },
+      }]);
+
+      expect(getBubble(chat).isImage()).toBe(false);
+      expect(getBubble(chat).hasToolCalls()).toBe(true);
     });
 
     it('should not render the block when toolCalls are added to a message with messageTemplate', () => {
@@ -993,6 +1040,23 @@ describe('Chat tool calls', () => {
       expect(second.getToolCallsTitleErrorTagText()).toBe('2 failures');
       expect(failed.getErrorTagText()).toBe('Failed');
       expect(success.getFieldLabels()).toEqual(['Input', 'Output']);
+    });
+  });
+
+  describe('focus', () => {
+    it('should target the message input and not a field of an expanded tool call', () => {
+      const chat = createChat({
+        items: [createMessage({ toolCalls: [{ ...WEATHER, expanded: true }] })],
+      });
+
+      expect(getBubble(chat).getToolCalls()[0].getArgumentsText()).not.toBeNull();
+
+      const target = (chat.getInstance() as unknown as {
+        _focusTarget: () => { get: (index: number) => HTMLElement };
+      })._focusTarget().get(0);
+
+      expect(chat.getElement().contains(target)).toBe(true);
+      expect(target.closest(`.${CHAT_MESSAGEBUBBLE_CLASS}`)).toBeNull();
     });
   });
 });
