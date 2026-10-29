@@ -15,8 +15,9 @@ fixture.disablePageReloads`Appointment tooltip behavior during scrolling in the 
 test.meta({ browserSize: [600, 450] })('The tooltip of collector should not scroll page and immediately hide', async (t) => {
   const scheduler = new Scheduler('#container');
 
+  await scheduler.collectors.find('7').click();
+
   await t
-    .click(scheduler.collectors.find('7').element)
     .expect(scheduler.appointmentTooltip.isVisible())
     .ok();
 }).before(async () => createScheduler({
