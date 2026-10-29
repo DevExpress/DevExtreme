@@ -244,7 +244,7 @@ describe('Chat tool calls', () => {
 
       call.toggle();
 
-      expect(call.getFieldLabels()).toEqual(['Arguments:', 'Result:']);
+      expect(call.getFieldLabels()).toEqual(['Arguments', 'Result']);
       expect(call.getArgumentsText()).toBe('{\n  "city": "London"\n}');
       expect(call.getResultText()).toBe('15°C');
     });
@@ -257,7 +257,7 @@ describe('Chat tool calls', () => {
 
       call.toggle();
 
-      expect(call.getFieldLabels()).toEqual(['Result:']);
+      expect(call.getFieldLabels()).toEqual(['Result']);
       expect(call.getArgumentsText()).toBeNull();
       expect(call.getResultText()).toBe('14:30');
     });
@@ -270,7 +270,7 @@ describe('Chat tool calls', () => {
 
       call.toggle();
 
-      expect(call.getFieldLabels()).toEqual(['Result:']);
+      expect(call.getFieldLabels()).toEqual(['Result']);
     });
 
     it('should show only the Arguments for a call without result', () => {
@@ -281,7 +281,7 @@ describe('Chat tool calls', () => {
 
       call.toggle();
 
-      expect(call.getFieldLabels()).toEqual(['Arguments:']);
+      expect(call.getFieldLabels()).toEqual(['Arguments']);
       expect(call.getResultText()).toBeNull();
     });
 
@@ -992,7 +992,7 @@ describe('Chat tool calls', () => {
       expect(first.getToolCallsTitleErrorTagText()).toBe('1 failure');
       expect(second.getToolCallsTitleErrorTagText()).toBe('2 failures');
       expect(failed.getErrorTagText()).toBe('Failed');
-      expect(success.getFieldLabels()).toEqual(['Input:', 'Output:']);
+      expect(success.getFieldLabels()).toEqual(['Input', 'Output']);
     });
   });
 });
