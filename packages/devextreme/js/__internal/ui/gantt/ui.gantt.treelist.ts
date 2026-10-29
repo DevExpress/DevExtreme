@@ -165,9 +165,9 @@ export class GanttTreeList {
 
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   _getHeight() {
-    if (getHeight(this._$treeList)) {
+    if (getHeight(this._$treeList.get(0))) {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-      return getHeight(this._$treeList);
+      return getHeight(this._$treeList.get(0));
     }
     this._gantt._hasHeight = isDefined(this._gantt.option('height'))
       && this._gantt.option('height') !== '';

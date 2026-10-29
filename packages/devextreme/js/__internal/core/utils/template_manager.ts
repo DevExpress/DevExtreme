@@ -13,10 +13,10 @@ import { TemplateBase } from '@js/core/templates/template_base';
 import { groupBy } from '@js/core/utils/array';
 import { extend } from '@js/core/utils/extend';
 import type { TemplateElement, TemplateRenderOptions } from '@ts/core/templates/template_base';
-import { findBestMatches } from '@ts/core/utils/m_common';
+import { findBestMatches } from '@ts/core/utils/common';
 
-import domUtils from './m_dom';
-import typeUtils from './m_type';
+import domUtils from './dom';
+import typeUtils from './type';
 
 interface TemplateWithRender {
   render: (options: TemplateRenderOptions) => unknown;

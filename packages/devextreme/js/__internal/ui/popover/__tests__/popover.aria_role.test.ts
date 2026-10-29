@@ -1,5 +1,5 @@
 import {
-  afterEach, beforeAll, describe, expect, it,
+  afterAll, afterEach, beforeAll, describe, expect, it,
 } from '@jest/globals';
 import fx from '@js/common/core/animation/fx';
 import $ from '@js/core/renderer';
@@ -84,6 +84,74 @@ describe('Popover overlay content aria role', () => {
       model.getInstance().option('toolbarItems', []);
 
       expect(model.getRole()).toBe('tooltip');
+    });
+  });
+
+  describe('on a shown popover with focusable toolbar elements', () => {
+    const originalGetClientRects = Element.prototype.getClientRects;
+
+    beforeAll(() => {
+      // jsdom performs no layout, so without this stub nothing counts as visible
+      // and the toolbar buttons are never tabbable.
+      Element.prototype.getClientRects = () => [{}] as unknown as DOMRectList;
+    });
+
+    afterAll(() => {
+      Element.prototype.getClientRects = originalGetClientRects;
+    });
+
+    it('sets the role on the overlay content, not on the close button, when a title and a close button are enabled', async () => {
+      const model = await createPopover({});
+
+      model.getInstance().option({ showTitle: true, title: 'Title', showCloseButton: true });
+
+      expect(model.getRole()).toBe('dialog');
+      expect(model.getCloseButton()?.getAttribute('role')).toBe('button');
+    });
+
+    it('switches back to "tooltip" when the close button is hidden again', async () => {
+      const model = await createPopover({});
+      model.getInstance().option({ showTitle: true, title: 'Title', showCloseButton: true });
+
+      model.getInstance().option('showCloseButton', false);
+
+      expect(model.getRole()).toBe('tooltip');
+      expect(model.getCloseButton()).toBeNull();
+    });
+
+    it('sets the role on the overlay content, not on the toolbar button, when toolbar items with a button are added', async () => {
+      const model = await createPopover({});
+
+      model.getInstance().option('toolbarItems', [{ widget: 'dxButton', options: { text: 'OK' } }]);
+
+      expect(model.getRole()).toBe('dialog');
+      expect(model.getToolbarButtons().map((button) => button.getAttribute('role'))).toEqual(['button']);
+    });
+
+    it('applies a forced _popoverContentRole to the overlay content, not to the close button', async () => {
+      const model = await createPopover({ showTitle: true, title: 'Title', showCloseButton: true });
+
+      model.getInstance().option('_popoverContentRole', 'tooltip');
+
+      expect(model.getRole()).toBe('tooltip');
+      expect(model.getCloseButton()?.getAttribute('role')).toBe('button');
+
+      model.getInstance().option('_popoverContentRole', undefined);
+
+      expect(model.getRole()).toBe('dialog');
+      expect(model.getCloseButton()?.getAttribute('role')).toBe('button');
+    });
+
+    it('toggles aria-disabled on the overlay content when disabled changes', async () => {
+      const model = await createPopover({ showTitle: true, title: 'Title', showCloseButton: true });
+
+      model.getInstance().option('disabled', true);
+
+      expect(model.getOverlayContent().getAttribute('aria-disabled')).toBe('true');
+
+      model.getInstance().option('disabled', false);
+
+      expect(model.getOverlayContent().getAttribute('aria-disabled')).toBeNull();
     });
   });
 });

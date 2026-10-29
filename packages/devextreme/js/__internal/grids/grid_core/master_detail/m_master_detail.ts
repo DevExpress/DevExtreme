@@ -24,6 +24,7 @@ import type {
 import type { RawItemData } from '../data_source_adapter/types';
 import gridCoreUtils from '../utils';
 import { CLASSES } from './const';
+import type { MasterDetailRowsViewExtension } from './types';
 import { isDetailRow } from './utils';
 
 const columns = (Base: ModuleType<ColumnsController>) => class ColumnsMasterDetailExtender extends Base {
@@ -353,7 +354,11 @@ const resizing = (Base: ModuleType<ResizingController>) => class ResizingMasterD
   }
 };
 
-const rowsView = (Base: ModuleType<RowsView>) => class RowsViewMasterDetailExtender extends Base {
+const rowsView = (
+  Base: ModuleType<RowsView>,
+): ModuleType<
+  RowsView & MasterDetailRowsViewExtension
+> => class RowsViewMasterDetailExtender extends Base {
   protected _getCellTemplate(options) {
     const that = this;
     const { column } = options;
@@ -394,14 +399,14 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewMasterDetailExten
 
     if (isDetailRowResult) {
       if (this._needRenderCell(0, options.columnIndices)) {
-        this._renderMasterDetailCell($row, row, options);
+        this.renderMasterDetailCell($row, row, options);
       }
     } else {
       super._renderCells.apply(this, arguments as any);
     }
   }
 
-  protected _renderMasterDetailCell($row, row, options): dxElementWrapper {
+  public renderMasterDetailCell($row, row, options): dxElementWrapper {
     const visibleColumns = this._columnsController.getVisibleColumns();
 
     const $detailCell = this._renderCell($row, {

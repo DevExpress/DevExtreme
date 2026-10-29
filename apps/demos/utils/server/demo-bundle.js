@@ -72,6 +72,7 @@ const ignoreMissingCssPlugin = {
   name: 'demo-bundle:ignore-missing-css',
   setup(build) {
     build.onResolve({ filter: /\.css$/ }, (args) => {
+      if (!args.path.startsWith('.') && !path.isAbsolute(args.path)) return null;
       const fullPath = path.resolve(args.resolveDir, args.path);
       if (!fs.existsSync(fullPath)) {
         return { path: fullPath, namespace: 'demo-bundle-empty-css' };
@@ -147,6 +148,7 @@ function getSharedOptions(framework) {
     bundle: true,
     minify: false,
     format: 'iife',
+    nodePaths: [NODE_MODULES],
     loader: {
       '.js': 'jsx',
       '.png': 'dataurl',

@@ -19,7 +19,7 @@ import 'ui/switch';
 import 'ui/slider';
 import 'ui/range_slider';
 
-import windowModule from '__internal/core/utils/m_window';
+import windowModule from '__internal/core/utils/window';
 import Form from 'ui/form';
 import Button from 'ui/button';
 import LoadIndicator from 'ui/load_indicator';

@@ -1,22 +1,26 @@
 import './module_not_extended/editor_factory';
 
+import type { DeferredObj } from '@js/core/utils/deferred';
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
+import { editingModule } from '@ts/grids/grid_core/editing/editing';
 import { editingDataControllerExtender } from '@ts/grids/grid_core/editing/extenders/editing_data_controller';
-import { editingModule } from '@ts/grids/grid_core/editing/m_editing';
-import type { ModuleType } from '@ts/grids/grid_core/types';
+import type { EditingDataControllerExtension } from '@ts/grids/grid_core/editing/types';
+import type { ModuleType, RowKey } from '@ts/grids/grid_core/types';
 
 import gridCore from './core';
+import type { GroupingDataControllerExtension } from './grouping/m_grouping';
 
-const data = (Base: ModuleType<DataController>) => class DataGridEditingDataControllerExtender extends editingDataControllerExtender(Base) {
-  protected changeRowExpandCore(key) {
-    const editingController = this._editingController;
-
+const data = (
+  Base: ModuleType<DataController & GroupingDataControllerExtension>,
+): ModuleType<
+  DataController & EditingDataControllerExtension & GroupingDataControllerExtension
+> => class DataGridEditingDataControllerExtender extends editingDataControllerExtender(Base) {
+  public changeRowExpandCore(key: RowKey): DeferredObj<unknown> {
     if (Array.isArray(key)) {
-      editingController && editingController.refresh();
+      this._editingController?.refresh();
     }
 
-    // @ts-expect-error
-    return super.changeRowExpandCore.apply(this, arguments);
+    return super.changeRowExpandCore(key);
   }
 };
 

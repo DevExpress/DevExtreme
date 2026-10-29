@@ -18,14 +18,14 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable no-plusplus */
 
-import { noop } from '@ts/core/utils/m_common';
-import { dateUtils } from '@ts/core/utils/m_date';
-import { extend } from '@ts/core/utils/m_extend';
-import { each } from '@ts/core/utils/m_iterator';
+import { noop } from '@ts/core/utils/common';
+import { dateUtils } from '@ts/core/utils/date';
+import { extend } from '@ts/core/utils/extend';
+import { each } from '@ts/core/utils/iterator';
+import { adjust, sign } from '@ts/core/utils/math';
 import {
   isDefined, isExponential, isFunction, isNumeric, isString,
-} from '@ts/core/utils/m_type';
-import { adjust, sign } from '@ts/core/utils/math';
+} from '@ts/core/utils/type';
 
 const {
   PI,
@@ -581,33 +581,31 @@ export function adjustVisualRange(options, visualRange, wholeRange, dataRange?) 
     };
   }
 
-  if (isDefined(rangeLength)) {
-    if (nonDiscrete) {
-      if (options.dataType === 'datetime' && !isNumeric(rangeLength)) {
-        rangeLength = dateToMilliseconds(rangeLength);
-      }
+  if (isDefined(rangeLength) && nonDiscrete) {
+    if (options.dataType === 'datetime' && !isNumeric(rangeLength)) {
+      rangeLength = dateToMilliseconds(rangeLength);
+    }
 
-      if (maxDefined && !minDefined || !maxDefined && !minDefined) {
-        isDefined(wholeRange.max) && (max = max > wholeRange.max ? wholeRange.max : max);
-        min = add(max, rangeLength, -1);
+    if (maxDefined && !minDefined || !maxDefined && !minDefined) {
+      isDefined(wholeRange.max) && (max = max > wholeRange.max ? wholeRange.max : max);
+      min = add(max, rangeLength, -1);
+    } else if (minDefined && !maxDefined) {
+      isDefined(wholeRange.min) && (min = min < wholeRange.min ? wholeRange.min : min);
+      max = add(min, rangeLength);
+    }
+  } else if (isDefined(rangeLength)) {
+    rangeLength = parseInt(rangeLength);
+    if (!isNaN(rangeLength) && isFinite(rangeLength)) {
+      rangeLength--;
+      if (!maxDefined && !minDefined) {
+        max = categories[categories.length - 1];
+        min = categories[categories.length - 1 - rangeLength];
       } else if (minDefined && !maxDefined) {
-        isDefined(wholeRange.min) && (min = min < wholeRange.min ? wholeRange.min : min);
-        max = add(min, rangeLength);
-      }
-    } else {
-      rangeLength = parseInt(rangeLength);
-      if (!isNaN(rangeLength) && isFinite(rangeLength)) {
-        rangeLength--;
-        if (!maxDefined && !minDefined) {
-          max = categories[categories.length - 1];
-          min = categories[categories.length - 1 - rangeLength];
-        } else if (minDefined && !maxDefined) {
-          const categoriesInfo = getCategoriesInfo(categories, min, undefined);
-          max = categoriesInfo.categories[rangeLength];
-        } else if (!minDefined && maxDefined) {
-          const categoriesInfo = getCategoriesInfo(categories, undefined, max);
-          min = categoriesInfo.categories[categoriesInfo.categories.length - 1 - rangeLength];
-        }
+        const categoriesInfo = getCategoriesInfo(categories, min, undefined);
+        max = categoriesInfo.categories[rangeLength];
+      } else if (!minDefined && maxDefined) {
+        const categoriesInfo = getCategoriesInfo(categories, undefined, max);
+        min = categoriesInfo.categories[categoriesInfo.categories.length - 1 - rangeLength];
       }
     }
   }

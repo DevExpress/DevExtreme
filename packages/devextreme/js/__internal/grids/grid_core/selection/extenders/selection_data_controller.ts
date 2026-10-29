@@ -7,6 +7,7 @@ import type {
 } from '@ts/grids/grid_core/data_controller/types';
 import type { ChangedEvent } from '@ts/grids/grid_core/data_source_adapter/types';
 import type { SelectionController } from '@ts/grids/grid_core/selection/m_selection';
+import { getSelectColumnIndex, updateSelectCellValue } from '@ts/grids/grid_core/selection/utils';
 import type { ModuleType } from '@ts/grids/grid_core/types';
 import type { SelectionFilter } from '@ts/ui/selection/types';
 
@@ -47,11 +48,10 @@ export const selectionDataControllerExtender = (
     );
 
     if (hasSelectColumn && processedItem.values) {
-      for (let i = 0; i < options.visibleColumns.length; i += 1) {
-        if (options.visibleColumns[i].command === 'select') {
-          processedItem.values[i] = processedItem.isSelected;
-          break;
-        }
+      const selectColumnIndex = getSelectColumnIndex(options.visibleColumns);
+
+      if (selectColumnIndex >= 0) {
+        processedItem.values[selectColumnIndex] = processedItem.isSelected;
       }
     }
 
@@ -87,11 +87,13 @@ export const selectionDataControllerExtender = (
 
   protected _applyChange(change: DataChange): void {
     if (change?.changeType === 'updateSelection') {
-      change.items?.forEach((item, index) => {
+      const selectColumnIndex = getSelectColumnIndex(this._columnsController.getVisibleColumns());
+
+      change.items?.forEach((newItem, index) => {
         const currentItem = this._items[index];
         if (currentItem) {
-          currentItem.isSelected = item.isSelected;
-          currentItem.values = item.values;
+          currentItem.isSelected = newItem.isSelected;
+          updateSelectCellValue(currentItem, newItem, selectColumnIndex);
         }
       });
       return;
