@@ -750,7 +750,7 @@ class PivotGridDataSource {
           that._sort(loadOptions, data);
         }
         d.resolve(data.columns);
-      }).fail(d);
+      }).fail(d.reject);
     } else {
       d.reject();
     }

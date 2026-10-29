@@ -15,18 +15,15 @@ import {
   MODES_WITH_DELAYED_FOCUS,
 } from './const';
 import type { EditingController } from './editing';
+import { isRowBasedEditMode } from './editing_utils';
 import { editingRowBasedDataControllerExtender } from './extenders/editing_row_based_data_controller';
 import type { EditorCellOptions, InternalColumnButton } from './types';
 
 const editingControllerExtender = (
   Base: ModuleType<EditingController>,
 ): ModuleType<EditingController> => class RowBasedEditingControllerExtender extends Base {
-  private isRowEditMode(): boolean {
-    return this.getEditMode() === EDIT_MODE.row;
-  }
-
   protected _afterCancelEditData(rowIndex: number): void {
-    if (this.isRowBasedEditMode() && rowIndex >= 0) {
+    if (isRowBasedEditMode(this.getEditMode()) && rowIndex >= 0) {
       this._dataController.updateItems({
         changeType: 'update',
         rowIndices: [rowIndex, rowIndex + 1],
@@ -40,8 +37,9 @@ const editingControllerExtender = (
     button: InternalColumnButton,
     options: EditorCellOptions,
   ): boolean {
-    const isRowMode = this.isRowBasedEditMode();
-    const isEditRow = !this.isPopupEditMode()
+    const editMode = this.getEditMode();
+    const isRowMode = isRowBasedEditMode(editMode);
+    const isEditRow = editMode !== EDIT_MODE.popup
       && !!options.row
       && equalByValue(options.row.key, this.option(EDITING_EDITROWKEY_OPTION_NAME));
 
@@ -63,11 +61,11 @@ const editingControllerExtender = (
   }
 
   public isEditRow(rowIndex: number | undefined): boolean {
-    return this.isRowBasedEditMode() && this.isEditRowByIndex(rowIndex);
+    return isRowBasedEditMode(this.getEditMode()) && this.isEditRowByIndex(rowIndex);
   }
 
   protected _cancelSaving(saveDeferred: DeferredObj<unknown>): void {
-    if (this.isRowBasedEditMode()) {
+    if (isRowBasedEditMode(this.getEditMode())) {
       if (!this.hasChanges()) {
         this._cancelEditDataCore();
       }
@@ -78,7 +76,7 @@ const editingControllerExtender = (
 
   protected _refreshCore(params?: RefreshOptions): void {
     const { allowCancelEditing } = params ?? {};
-    if (this.isRowBasedEditMode()) {
+    if (isRowBasedEditMode(this.getEditMode())) {
       const hasUpdateChanges = this.getChanges().filter((it) => it.type === 'update').length > 0;
 
       this.init();
@@ -93,7 +91,7 @@ const editingControllerExtender = (
   protected _isEditColumnVisible(): boolean {
     const result = super._isEditColumnVisible();
     const editingOptions = this.option('editing');
-    const isRowEditMode = this.isRowEditMode();
+    const isRowEditMode = this.getEditMode() === EDIT_MODE.row;
     const isVisibleInRowEditMode = !!editingOptions?.allowUpdating || !!editingOptions?.allowAdding;
 
     return result || (isRowEditMode && isVisibleInRowEditMode);

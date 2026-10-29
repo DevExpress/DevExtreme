@@ -44,6 +44,10 @@ const CSP_DEMO_ALLOWLIST = {
     'font-src': ['https://atlas.microsoft.com'],
     'style-src-elem': ["'self'", "'unsafe-inline'"],
   },
+  'Map/OpenStreetMapProvider': {
+    'img-src': ['https://tiles-eu.stadiamaps.com'],
+    'connect-src': ['https://api-eu.stadiamaps.com'],
+  },
   'DataGrid/CollaborativeEditing': {
     'connect-src': ['wss://js.devexpress.com'],
   },
@@ -196,6 +200,9 @@ const CSP_DEMO_ALLOWLIST = {
 // Framework-specific overrides (e.g. Font Awesome loaded only in React/Vue demos)
 const CSP_FRAMEWORK_ALLOWLIST = {
   jQuery: {
+    'Map/OpenStreetMapProvider': {
+      'style-src-elem': ['https://cdn.jsdelivr.net'],
+    },
     FilterBuilder: { 'font-src': ['https://maxcdn.bootstrapcdn.com'] },
     // globalize/message.js uses new Function() internally
     'Localization/UsingGlobalize': {

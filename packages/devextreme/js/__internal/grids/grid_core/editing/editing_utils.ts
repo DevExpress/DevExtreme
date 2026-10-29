@@ -1,3 +1,4 @@
+import type { GridsEditMode } from '@js/common/grids';
 import Guid from '@js/core/guid';
 import type { dxElementWrapper } from '@js/core/renderer';
 import type { DeferredObj } from '@js/core/utils/deferred';
@@ -10,7 +11,13 @@ import type Validator from '@ts/ui/validator';
 
 import type { ProcessedItem } from '../data_controller/types';
 import type { InternalGrid, RowKey } from '../types';
-import { GUID_LENGTH, NEW_ROW_TEMP_KEY_PREFIX } from './const';
+import {
+  CELL_BASED_MODES,
+  FORM_BASED_MODES,
+  GUID_LENGTH,
+  NEW_ROW_TEMP_KEY_PREFIX,
+  ROW_BASED_MODES,
+} from './const';
 import type {
   EditFormColumnItem,
   EditFormItemNode,
@@ -18,6 +25,18 @@ import type {
   EditingButtonTexts,
   EditingCellOptions,
 } from './types';
+
+export const isCellBasedEditMode = (
+  editMode: GridsEditMode,
+): boolean => CELL_BASED_MODES.includes(editMode);
+
+export const isRowBasedEditMode = (
+  editMode: GridsEditMode,
+): boolean => ROW_BASED_MODES.includes(editMode);
+
+export const isFormBasedEditMode = (
+  editMode: GridsEditMode,
+): boolean => FORM_BASED_MODES.includes(editMode);
 
 export const createFailureHandler = (
   deferred: DeferredObj<unknown>,

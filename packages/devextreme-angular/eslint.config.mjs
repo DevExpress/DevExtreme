@@ -1,7 +1,6 @@
 /* eslint-disable spellcheck/spell-checker */
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import babelParser from '@babel/eslint-parser';
 import tsParser from '@typescript-eslint/parser';
 import stylistic from '@stylistic/eslint-plugin';
 import importPlugin from 'eslint-plugin-import';
@@ -30,12 +29,12 @@ export default [
     },
   },
   {
+    files: ['**/*.ts'],
     languageOptions: {
       parser: tsParser,
       parserOptions: {
         project: './tsconfig.json',
         tsconfigRootDir: dirname,
-        requireConfigFile: false,
         ecmaVersion: 6,
         sourceType: 'module',
       },
@@ -46,7 +45,7 @@ export default [
     ...config,
     files: ['**/*.js', '**/*.mjs'],
     languageOptions: {
-      parser: babelParser,
+      ecmaVersion: 'latest',
     },
   })),
   ...typescriptConfig.map((config) => ({
@@ -87,9 +86,6 @@ export default [
   },
   {
     files: ['**/*.js', '**/*.mjs'],
-    languageOptions: {
-      parser: babelParser,
-    },
     rules: {
       'global-require': 'off',
       'import/no-unresolved': 'off',
@@ -116,7 +112,7 @@ export default [
       '@typescript-eslint/restrict-plus-operands': 'warn',
       '@typescript-eslint/no-this-alias': 'warn',
       '@typescript-eslint/prefer-optional-chain': 'warn',
-      '@typescript-eslint/init-declarations': 'warn',
+      '@typescript-eslint/init-declarations': ['warn', 'always'],
       '@typescript-eslint/prefer-nullish-coalescing': 'warn',
       '@typescript-eslint/no-use-before-define': 'warn',
       '@typescript-eslint/member-ordering': 'warn',

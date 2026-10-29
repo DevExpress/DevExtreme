@@ -2,13 +2,13 @@ import {
   afterEach, beforeEach, describe, expect, it, jest,
 } from '@jest/globals';
 import $ from '@js/core/renderer';
-import type { ToolbarItem } from '@ts/grids/new/grid_core/toolbar/types';
 
 import {
   afterTest,
   beforeTest,
   createDataGrid,
 } from '../../__tests__/__mock__/helpers/utils';
+import type { ToolbarItem } from '../types';
 
 const getHeaderPanel = (instance): any => instance.getView('headerPanel');
 

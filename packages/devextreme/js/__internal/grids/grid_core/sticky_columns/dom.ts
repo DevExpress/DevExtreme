@@ -3,8 +3,9 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { getBoundingRect } from '@js/core/utils/position';
 import { isDefined } from '@js/core/utils/type';
+import type { ColumnPointProps } from '@ts/grids/grid_core/types';
 
-import type { ColumnHeadersView } from '../column_headers/m_column_headers';
+import type { ColumnHeadersView } from '../column_headers/column_headers';
 import { CLASSES, StickyPosition } from './const';
 import { isFixedEdge } from './utils';
 
@@ -196,13 +197,7 @@ const noNeedToCreateResizingPoint = (
     nextColumn,
     cells,
   }: {
-    point: {
-      x: number;
-      index: number;
-      item: HTMLElement;
-      isLeftBoundary: boolean | undefined;
-      isRightBoundary: boolean | undefined;
-    };
+    point: ColumnPointProps;
     column;
     nextColumn;
     cells: dxElementWrapper | undefined;
