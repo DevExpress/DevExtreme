@@ -10,7 +10,7 @@
 /* eslint-disable prefer-destructuring */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 
-import { extend } from '@ts/core/utils/m_extend';
+import { extend } from '@ts/core/utils/extend';
 import symbolPoint from '@ts/viz/series/points/symbol_point';
 
 const _extend = extend;

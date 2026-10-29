@@ -5,7 +5,7 @@ import type { Item, ItemClickEvent, Properties as DropDownProperties } from '@js
 import DropDownButton from '@js/ui/drop_down_button';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 
-import type { ColumnHeadersView } from '../../column_headers/m_column_headers';
+import type { ColumnHeadersView } from '../../column_headers/column_headers';
 import type { ColumnsResizerViewController } from '../../columns_resizing_reordering/m_columns_resizing_reordering';
 import type { ModuleType } from '../../types';
 import type { ColumnViewTemplate } from '../../views/types';

@@ -20,7 +20,7 @@ import type {
 import type { dxPopupAnimation, ToolbarItem } from '@js/ui/popup';
 import { current, isFluent } from '@js/ui/themes';
 import errors from '@js/ui/widget/ui.errors';
-import domUtils from '@ts/core/utils/m_dom';
+import domUtils from '@ts/core/utils/dom';
 import type { PopupProperties } from '@ts/ui/popup/popup';
 import Popup from '@ts/ui/popup/popup';
 

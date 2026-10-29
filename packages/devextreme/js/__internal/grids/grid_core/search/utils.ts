@@ -1,6 +1,7 @@
 import type { LangParams } from '@js/common/data';
 import dataQuery from '@js/common/data/query';
 import { compileGetter } from '@js/core/utils/data';
+import gridCoreUtils from '@ts/grids/grid_core/utils';
 
 import type { Column } from '../columns_controller/types';
 import type { RawItemData } from '../data_source_adapter/types';
@@ -23,6 +24,12 @@ export const parseValue = (column: Column, text: string): unknown => {
   }
 
   return column.parseValue(text);
+};
+
+export const getFormattedSearchText = (column: Column, searchText: string): string => {
+  const value = parseValue(column, searchText);
+  const formatOptions = gridCoreUtils.getFormatOptionsByColumn(column, 'search');
+  return gridCoreUtils.formatValue(value, formatOptions);
 };
 
 export const createLookupFilterExpressions = (

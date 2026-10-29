@@ -216,6 +216,17 @@ export interface GroupContinuationData {
 /** @architectureLeak data_grid: group cells show the grouping continuation texts */
 export type RowsViewOptions = InternalGridOptions & Pick<DataGridProperties, 'grouping'>;
 
+/** @architectureLeak data_grid/summary: core extenders adjust the group summary cells */
+export interface SummaryRowsViewExtension {
+  // eslint-disable-next-line @typescript-eslint/method-signature-style -- overridden by methods
+  renderGroupSummaryCellsCore(
+    $groupCell: dxElementWrapper,
+    options: RowRenderOptions,
+    groupCellColSpan: number,
+    alignByColumnCellCount: number,
+  ): void;
+}
+
 // the grid passes loadPanel options to the LoadPanel widget, so its animation applies too
 export type RowsViewLoadPanelOptions = LoadPanel & Pick<LoadPanelProperties, 'animation'>;
 

@@ -200,3 +200,43 @@ describe('DataGrid Cell Editing', () => {
     });
   });
 });
+
+describe('DataGrid Form Editing', () => {
+  beforeEach(beforeTest);
+  afterEach(afterTest);
+
+  it.each(['form', 'popup'] as const)('should not save a value that breaks a form item rule in the %s edit mode', async (mode) => {
+    const data = [
+      { id: 1, name: 'Item 1' },
+    ];
+
+    const { instance } = await createDataGrid({
+      dataSource: data,
+      keyExpr: 'id',
+      editing: {
+        mode,
+        allowUpdating: true,
+        form: {
+          items: [{
+            dataField: 'name',
+            validationRules: [{ type: 'required' }],
+          }],
+        },
+      },
+      columns: ['name'],
+    });
+
+    instance.editRow(0);
+    jest.runAllTimers();
+
+    instance.cellValue(0, 'name', '');
+    jest.runAllTimers();
+
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises -- settled by runAllTimers
+    instance.saveEditData();
+    jest.runAllTimers();
+
+    expect(instance.hasEditData()).toBe(true);
+    expect(data[0].name).toBe('Item 1');
+  });
+});

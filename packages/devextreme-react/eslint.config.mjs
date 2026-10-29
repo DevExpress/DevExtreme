@@ -1,5 +1,4 @@
 import i18N from 'eslint-plugin-i18n';
-import babelParser from '@babel/eslint-parser';
 import tsParser from '@typescript-eslint/parser';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -84,10 +83,7 @@ export default [
         module: true,
         exports: true,
       },
-      parser: babelParser,
-      parserOptions: {
-        requireConfigFile: false,
-      },
+      ecmaVersion: 'latest',
     },
      plugins: {
       '@stylistic': stylistic,
