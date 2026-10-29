@@ -116,8 +116,8 @@ export abstract class DxComponent implements OnChanges, OnInit, DoCheck, AfterCo
 
       if (
         !this.widgetUpdateLocked
-        && canMarkForOptionChange(this.ngZone)
         && this[`${e.name}Change`]
+        && canMarkForOptionChange(this.ngZone)
       ) {
         this.changeDetectorRef.markForCheck();
       }
