@@ -139,6 +139,8 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
 
   private _needNavigationToCell = false;
 
+  private focusRestoreScrollTop = 0;
+
   // #region Initialization
   public init() {
     this._dataController = this.getController('data');
@@ -1579,12 +1581,25 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     this.silentUpdateFocusedCellPosition({ columnIndex: firstOrLastColumnIndex });
 
     if (scrollLeft >= 0) {
-      this.needToRestoreFocus = true;
+      this.deferFocusRestore();
       this.scrollTo({ left: scrollLeft });
     } else if (this.isFocusedRowRenderPending()) {
-      this.needToRestoreFocus = true;
+      this.deferFocusRestore();
     } else {
       this.focusFirstOrLastCell(e);
+    }
+  }
+
+  private deferFocusRestore(): void {
+    this.needToRestoreFocus = true;
+    this.focusRestoreScrollTop = this._rowsView.getScrollable()?.scrollTop() ?? 0;
+  }
+
+  public cancelFocusRestoreOnScrollAway(scrollTop: number): void {
+    const isScrolledAway = Math.abs(scrollTop - this.focusRestoreScrollTop) >= 1;
+
+    if (this.needToRestoreFocus && isScrolledAway && this.isFocusedRowRenderPending()) {
+      this.needToRestoreFocus = false;
     }
   }
 
@@ -3133,6 +3148,8 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewKeyboardExtender 
 
   protected _handleScroll(e: RowsViewScrollEvent): void {
     super._handleScroll(e);
+
+    this._keyboardNavigationController.cancelFocusRestoreOnScrollAway(e.scrollOffset.top);
 
     if (this._keyboardNavigationController.needNavigationToCell()) {
       this._keyboardNavigationController
