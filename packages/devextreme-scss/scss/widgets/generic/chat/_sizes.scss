@@ -84,6 +84,29 @@ $chat-file-icon-font-size: null !default;
 $chat-file-view-items-gap: 8px !default;
 $chat-bubble-gap: 8px !default;
 
+$chat-tool-call-font-size: $generic-base-font-size !default;
+$chat-tool-call-line-height: $generic-base-line-height !default;
+$chat-tool-call-header-font-weight: 600 !default;
+$chat-tool-call-monospace-font-family: Consolas, "Courier New", monospace !default;
+$chat-tool-call-tag-font-size: $chat-information-font-size !default;
+$chat-tool-call-tag-line-height: $generic-base-line-height !default;
+$chat-tool-call-tag-padding: 2px 6px !default;
+$chat-tool-call-tag-border-radius: $base-border-radius !default;
+$chat-tool-call-padding: 6px !default;
+$chat-tool-call-gap: 4px !default;
+$chat-tool-call-items-gap: 2px !default;
+$chat-tool-call-icon-size: 20px !default;
+$chat-tool-call-body-padding-block-start: 2px !default;
+$chat-tool-call-body-padding-inline-end: 8px !default;
+$chat-tool-call-body-padding-block-end: 8px !default;
+$chat-tool-call-separator-width: 30px !default;
+$chat-tool-call-separator-line-width: $generic-base-border-width !default;
+$chat-tool-call-fields-gap: 8px !default;
+$chat-tool-call-label-padding-block-end: 2px !default;
+$chat-tool-call-field-padding: 6px 12px !default;
+$chat-tool-call-field-border-radius: 2 * $base-border-radius !default;
+$chat-tool-call-field-border-width: $generic-base-border-width !default;
+
 @if $size == "default" {
   $chat-bubble-padding: 8px 12px !default;
   $chat-bubble-delete-gap: 4px !default;

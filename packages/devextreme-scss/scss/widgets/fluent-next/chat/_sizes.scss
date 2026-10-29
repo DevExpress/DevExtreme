@@ -158,3 +158,26 @@ $chat-editing-preview-caption-font-weight: ds.$font-weight-caption-strong !defau
 
 $chat-border-width: ds.$border-width-10 !default;
 $chat-message-box-border-block-start-width: ds.$border-width-10 !default;
+
+$chat-tool-call-font-size: ds.$font-size-base-md !default;
+$chat-tool-call-line-height: ds.$line-height-200 !default;
+$chat-tool-call-header-font-weight: ds.$font-weight-base-strong !default;
+$chat-tool-call-field-font-family: ds.$font-family-mono !default;
+$chat-tool-call-tag-font-size: ds.$font-size-caption-md !default;
+$chat-tool-call-tag-line-height: ds.$line-height-160 !default;
+$chat-tool-call-tag-padding: ds.$spacing-20 ds.$spacing-60 !default;
+$chat-tool-call-tag-border-radius: ds.$border-radius-40 !default;
+$chat-tool-call-padding: ds.$spacing-60 !default;
+$chat-tool-call-gap: ds.$spacing-40 !default;
+$chat-tool-call-row-gap: ds.$spacing-20 !default;
+$chat-tool-call-icon-size: ds.$spacing-200 !default;
+$chat-tool-call-body-padding-block-start: ds.$spacing-20 !default;
+$chat-tool-call-body-padding-inline-end: ds.$spacing-80 !default;
+$chat-tool-call-body-padding-block-end: ds.$spacing-80 !default;
+$chat-tool-call-body-row-gap: ds.$spacing-80 !default;
+$chat-tool-call-separator-width: ds.$spacing-300 !default;
+$chat-tool-call-separator-thickness: ds.$border-width-10 !default;
+$chat-tool-call-label-padding-block-end: ds.$spacing-20 !default;
+$chat-tool-call-field-padding: ds.$spacing-60 ds.$spacing-120 !default;
+$chat-tool-call-field-border-radius: ds.$border-radius-80 !default;
+$chat-tool-call-field-border-width: ds.$border-width-10 !default;
