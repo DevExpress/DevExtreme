@@ -1,18 +1,18 @@
 import messageLocalization from '@js/common/core/localization/message';
 import { getPublicElement } from '@js/core/element';
+import Guid from '@js/core/guid';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import type {
   Attachment, AttachmentDownloadClickEvent, Message, ToolCall,
 } from '@js/ui/chat';
-import type { SimpleItem } from '@js/ui/form';
 import type { WidgetOptions } from '@js/ui/widget/ui.widget';
 import { ICON_CLASS } from '@ts/core/utils/icon';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
 import Accordion from '@ts/ui/accordion';
 import FileView from '@ts/ui/chat/file_view/file_view';
-import Form from '@ts/ui/form/form';
+import TextArea from '@ts/ui/text_area';
 
 export const CHAT_MESSAGEBUBBLE_CLASS = 'dx-chat-messagebubble';
 export const CHAT_MESSAGEBUBBLE_DELETED_CLASS = 'dx-chat-messagebubble-deleted';
@@ -23,6 +23,10 @@ export const CHAT_MESSAGEBUBBLE_TOOLCALLS_TITLE_CLASS = 'dx-chat-messagebubble-t
 export const CHAT_MESSAGEBUBBLE_TOOLCALL_ICON_CLASS = 'dx-chat-messagebubble-toolcall-icon';
 export const CHAT_MESSAGEBUBBLE_TOOLCALL_NAME_CLASS = 'dx-chat-messagebubble-toolcall-name';
 export const CHAT_MESSAGEBUBBLE_TOOLCALL_ERROR_TAG_CLASS = 'dx-chat-messagebubble-toolcall-error-tag';
+export const CHAT_MESSAGEBUBBLE_TOOLCALL_FIELD_CLASS = 'dx-chat-messagebubble-toolcall-field';
+export const CHAT_MESSAGEBUBBLE_TOOLCALL_FIELD_LABEL_CLASS = 'dx-chat-messagebubble-toolcall-field-label';
+export const CHAT_MESSAGEBUBBLE_TOOLCALL_ARGUMENTS_CLASS = 'dx-chat-messagebubble-toolcall-arguments';
+export const CHAT_MESSAGEBUBBLE_TOOLCALL_RESULT_CLASS = 'dx-chat-messagebubble-toolcall-result';
 export const CHAT_MESSAGEBUBBLE_ICON_PROHIBITION_CLASS = `${ICON_CLASS}-cursorprohibition`;
 export const CHAT_MESSAGEBUBBLE_HAS_IMAGE_CLASS = 'dx-has-image';
 export const CHAT_MESSAGEBUBBLE_IMAGE_CLASS = 'dx-chat-messagebubble-image';
@@ -165,42 +169,54 @@ class MessageBubble extends Widget<Properties> {
   _renderToolCallBody(call: ToolCall, container: Element): void {
     const hasArguments = !!call.arguments && Object.keys(call.arguments).length > 0;
     const hasResult = call.result !== undefined;
-    const isError = call.status === 'error';
-    const editorOptions = {
-      autoResizeEnabled: true,
-      focusStateEnabled: false,
-      hoverStateEnabled: false,
-    };
-    const items: SimpleItem[] = [];
 
     if (hasArguments) {
-      items.push({
-        dataField: 'arguments',
-        label: { text: messageLocalization.format('dxChat-toolCallArgumentsLabel') },
-        editorType: 'dxTextArea',
-        editorOptions,
-      });
+      this._renderToolCallField(
+        container,
+        CHAT_MESSAGEBUBBLE_TOOLCALL_ARGUMENTS_CLASS,
+        messageLocalization.format('dxChat-toolCallArgumentsLabel'),
+        this._stringifyToolCallValue(call.arguments),
+      );
     }
 
     if (hasResult) {
-      items.push({
-        dataField: 'result',
-        label: { text: messageLocalization.format('dxChat-toolCallResultLabel') },
-        editorType: 'dxTextArea',
-        editorOptions: isError
-          ? { ...editorOptions, elementAttr: { class: CHAT_MESSAGEBUBBLE_TOOLCALL_ERROR_CLASS } }
-          : editorOptions,
-      });
+      this._renderToolCallField(
+        container,
+        CHAT_MESSAGEBUBBLE_TOOLCALL_RESULT_CLASS,
+        messageLocalization.format('dxChat-toolCallResultLabel'),
+        this._stringifyToolCallValue(call.result),
+        call.status === 'error',
+      );
     }
+  }
 
-    this._createComponent($('<div>').appendTo(container), Form, {
-      formData: {
-        arguments: hasArguments ? this._stringifyToolCallValue(call.arguments) : '',
-        result: hasResult ? this._stringifyToolCallValue(call.result) : '',
-      },
-      labelLocation: 'top',
+  _renderToolCallField(
+    container: Element,
+    fieldClass: string,
+    labelText: string,
+    value: string,
+    isError = false,
+  ): void {
+    const labelId = `dx-${new Guid()}`;
+    const $field = $('<div>')
+      .addClass(CHAT_MESSAGEBUBBLE_TOOLCALL_FIELD_CLASS)
+      .addClass(fieldClass)
+      .appendTo(container);
+
+    $('<div>')
+      .attr('id', labelId)
+      .addClass(CHAT_MESSAGEBUBBLE_TOOLCALL_FIELD_LABEL_CLASS)
+      .text(labelText)
+      .appendTo($field);
+
+    this._createComponent($('<div>').appendTo($field), TextArea, {
+      value,
       readOnly: true,
-      items,
+      autoResizeEnabled: true,
+      focusStateEnabled: false,
+      hoverStateEnabled: false,
+      inputAttr: { 'aria-labelledby': labelId },
+      elementAttr: isError ? { class: CHAT_MESSAGEBUBBLE_TOOLCALL_ERROR_CLASS } : {},
     });
   }
 
