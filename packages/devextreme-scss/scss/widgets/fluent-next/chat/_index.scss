@@ -169,7 +169,11 @@
     color: var(--dx-chat-file-content-disabled);
   }
 
-  .dx-chat-messagebubble {
+  .dx-chat-messagebubble,
+  .dx-chat-tool-call-view,
+  .dx-chat-tool-call-field-label,
+  .dx-chat-tool-call-error-tag,
+  .dx-chat-tool-call-field .dx-texteditor {
     color: var(--dx-chat-content-disabled);
   }
 
@@ -183,3 +187,35 @@
     color: var(--dx-chat-information-content-disabled);
   }
 }
+
+@include chat-tool-call-view(
+  $color: var(--dx-chat-tool-call-content),
+  $subtle-color: var(--dx-chat-tool-call-title),
+  $border-color: var(--dx-chat-tool-call-border),
+  $error-color: var(--dx-chat-tool-call-error-content),
+  $error-background-color: var(--dx-chat-tool-call-error-bg),
+  $font-size: var(--dx-chat-tool-call-font-size),
+  $line-height: var(--dx-chat-tool-call-line-height),
+  $header-font-weight: var(--dx-chat-tool-call-header-font-weight),
+  $monospace-font-family: var(--dx-chat-tool-call-field-font-family),
+  $tag-font-size: var(--dx-chat-tool-call-tag-font-size),
+  $tag-line-height: var(--dx-chat-tool-call-tag-line-height),
+  $tag-padding: var(--dx-chat-tool-call-tag-padding),
+  $tag-border-radius: var(--dx-chat-tool-call-tag-border-radius),
+  $padding: var(--dx-chat-tool-call-padding),
+  $gap: var(--dx-chat-tool-call-gap),
+  $items-gap: var(--dx-chat-tool-call-row-gap),
+  $icon-size: var(--dx-chat-tool-call-icon-size),
+  $body-padding-block-start: var(--dx-chat-tool-call-body-padding-block-start),
+  $body-padding-inline-end: var(--dx-chat-tool-call-body-padding-inline-end),
+  $body-padding-block-end: var(--dx-chat-tool-call-body-padding-block-end),
+  $body-margin-inline-start: var(--dx-chat-tool-call-body-margin-inline-start),
+  $body-padding-inline-start: var(--dx-chat-tool-call-body-padding-inline-start),
+  $body-border-width: var(--dx-chat-tool-call-body-border-inline-start-width),
+  $fields-gap: var(--dx-chat-tool-call-body-row-gap),
+  $label-padding-block-end: var(--dx-chat-tool-call-label-padding-block-end),
+  $field-padding: var(--dx-chat-tool-call-field-padding),
+  $field-border-radius: var(--dx-chat-tool-call-field-border-radius),
+  $field-border-width: var(--dx-chat-tool-call-field-border-width),
+  $text-padding: var(--dx-chat-tool-call-text-padding),
+);

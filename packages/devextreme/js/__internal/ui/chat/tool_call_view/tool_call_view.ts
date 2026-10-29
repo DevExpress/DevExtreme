@@ -5,6 +5,7 @@ import $ from '@js/core/renderer';
 import Accordion from '@js/ui/accordion';
 import type { ToolCall } from '@js/ui/chat';
 import TextArea from '@js/ui/text_area';
+import { ICON_CLASS } from '@ts/core/utils/icon';
 import type { DOMComponentProperties } from '@ts/core/widget/dom_component';
 import DOMComponent from '@ts/core/widget/dom_component';
 import type { OptionChanged } from '@ts/core/widget/types';
@@ -95,6 +96,8 @@ class ToolCallView extends DOMComponent<ToolCallView, ToolCallViewProperties> {
     const $container = $(container);
 
     $('<span>')
+      .addClass(ICON_CLASS)
+      .addClass(`${ICON_CLASS}-wrench`)
       .addClass(CHAT_TOOL_CALL_CLASSES.icon)
       .appendTo($container);
 
@@ -161,6 +164,7 @@ class ToolCallView extends DOMComponent<ToolCallView, ToolCallViewProperties> {
     this._createComponent($('<div>').appendTo($field), TextArea, {
       value,
       readOnly: true,
+      stylingMode: 'outlined',
       autoResizeEnabled: true,
       focusStateEnabled: false,
       hoverStateEnabled: false,

@@ -143,6 +143,37 @@
   $chat-suggestions-gap,
   $chat-suggestions-box-shadow,
 );
+@include chat-tool-call-view(
+  $color: $chat-tool-call-color,
+  $subtle-color: $chat-tool-call-subtle-color,
+  $border-color: $chat-tool-call-border-color,
+  $error-color: $chat-tool-call-error-color,
+  $error-background-color: $chat-tool-call-error-background-color,
+  $font-size: $chat-tool-call-font-size,
+  $line-height: $chat-tool-call-line-height,
+  $header-font-weight: $chat-tool-call-header-font-weight,
+  $monospace-font-family: $chat-tool-call-monospace-font-family,
+  $tag-font-size: $chat-tool-call-tag-font-size,
+  $tag-line-height: $chat-tool-call-tag-line-height,
+  $tag-padding: $chat-tool-call-tag-padding,
+  $tag-border-radius: $chat-tool-call-tag-border-radius,
+  $padding: $chat-tool-call-padding,
+  $gap: $chat-tool-call-gap,
+  $items-gap: $chat-tool-call-items-gap,
+  $icon-size: $chat-tool-call-icon-size,
+  $body-padding-block-start: $chat-tool-call-body-padding-block-start,
+  $body-padding-inline-end: $chat-tool-call-body-padding-inline-end,
+  $body-padding-block-end: $chat-tool-call-body-padding-block-end,
+  $body-margin-inline-start: $chat-tool-call-body-margin-inline-start,
+  $body-padding-inline-start: $chat-tool-call-body-padding-inline-start,
+  $body-border-width: $chat-tool-call-body-border-width,
+  $fields-gap: $chat-tool-call-fields-gap,
+  $label-padding-block-end: $chat-tool-call-label-padding-block-end,
+  $field-padding: $chat-tool-call-field-padding,
+  $field-border-radius: $chat-tool-call-field-border-radius,
+  $field-border-width: $chat-tool-call-field-border-width,
+  $text-padding: $chat-tool-call-text-padding,
+);
 
 .dx-chat-file {
   @include dx-base-typography();
