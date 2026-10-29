@@ -14,8 +14,10 @@ import Chat from '@js/ui/chat';
 import {
   CHAT_MESSAGEBUBBLE_CLASS,
   CHAT_MESSAGEBUBBLE_CONTENT_CLASS,
-  CHAT_MESSAGEBUBBLE_TOOLCALLS_CLASS,
 } from '@ts/ui/chat/messagebubble';
+import {
+  CHAT_TOOL_CALL_VIEW_CLASS,
+} from '@ts/ui/chat/tool_call_view/tool_call_view';
 
 import { ChatModel } from './__mock__/model/chat/chat';
 import type { MessageBubbleModel } from './__mock__/model/chat/message_bubble';
@@ -145,7 +147,7 @@ describe('Chat tool calls', () => {
       const bubble = getBubble(chat);
 
       expect(bubble.getChildClassNames()).toEqual([
-        CHAT_MESSAGEBUBBLE_TOOLCALLS_CLASS,
+        CHAT_TOOL_CALL_VIEW_CLASS,
         CHAT_MESSAGEBUBBLE_CONTENT_CLASS,
       ]);
       expect(bubble.isToolCallsBeforeContent()).toBe(true);
@@ -164,7 +166,7 @@ describe('Chat tool calls', () => {
 
       expect(classNames).toHaveLength(3);
       expect(classNames.slice(0, 2)).toEqual([
-        CHAT_MESSAGEBUBBLE_TOOLCALLS_CLASS,
+        CHAT_TOOL_CALL_VIEW_CLASS,
         CHAT_MESSAGEBUBBLE_CONTENT_CLASS,
       ]);
     });
@@ -890,7 +892,7 @@ describe('Chat tool calls', () => {
       push([{ type: 'update', key: message.id, data: { toolCalls: [WEATHER] } }]);
 
       expect(getBubble(chat).hasToolCalls()).toBe(true);
-      expect(getBubble(chat).getChildClassNames()[0]).toBe(CHAT_MESSAGEBUBBLE_TOOLCALLS_CLASS);
+      expect(getBubble(chat).getChildClassNames()[0]).toBe(CHAT_TOOL_CALL_VIEW_CLASS);
     });
 
     it('should remove the block when toolCalls are removed', () => {
