@@ -4,13 +4,15 @@ import {
   ACCORDION_ITEM_TITLE_CLASS,
 } from '@ts/ui/accordion';
 import {
+  CHAT_MESSAGEBUBBLE_TOOLCALL_ARGUMENTS_CLASS,
   CHAT_MESSAGEBUBBLE_TOOLCALL_ERROR_CLASS,
   CHAT_MESSAGEBUBBLE_TOOLCALL_ERROR_TAG_CLASS,
+  CHAT_MESSAGEBUBBLE_TOOLCALL_FIELD_CLASS,
+  CHAT_MESSAGEBUBBLE_TOOLCALL_FIELD_LABEL_CLASS,
   CHAT_MESSAGEBUBBLE_TOOLCALL_ICON_CLASS,
   CHAT_MESSAGEBUBBLE_TOOLCALL_NAME_CLASS,
+  CHAT_MESSAGEBUBBLE_TOOLCALL_RESULT_CLASS,
 } from '@ts/ui/chat/messagebubble';
-import { FIELD_ITEM_LABEL_TEXT_CLASS } from '@ts/ui/form/components/label';
-import { FIELD_ITEM_CLASS } from '@ts/ui/form/constants';
 import { TEXTEDITOR_INPUT_CLASS } from '@ts/ui/text_box/text_editor.base';
 
 export class ToolCallModel {
@@ -43,15 +45,15 @@ export class ToolCallModel {
 
   public getFieldLabels(): string[] {
     return this.getFields()
-      .map((field) => field.querySelector(`.${FIELD_ITEM_LABEL_TEXT_CLASS}`)?.textContent ?? '');
+      .map((field) => field.querySelector(`.${CHAT_MESSAGEBUBBLE_TOOLCALL_FIELD_LABEL_CLASS}`)?.textContent ?? '');
   }
 
   public getArgumentsText(): string | null {
-    return this.getFieldValue('arguments');
+    return this.getFieldValue(CHAT_MESSAGEBUBBLE_TOOLCALL_ARGUMENTS_CLASS);
   }
 
   public getResultText(): string | null {
-    return this.getFieldValue('result');
+    return this.getFieldValue(CHAT_MESSAGEBUBBLE_TOOLCALL_RESULT_CLASS);
   }
 
   public hasErrorResult(): boolean {
@@ -63,13 +65,12 @@ export class ToolCallModel {
   }
 
   private getFields(): HTMLElement[] {
-    return Array.from(this.root.querySelectorAll(`.${FIELD_ITEM_CLASS}`));
+    return Array.from(this.root.querySelectorAll(`.${CHAT_MESSAGEBUBBLE_TOOLCALL_FIELD_CLASS}`));
   }
 
-  private getFieldValue(dataField: 'arguments' | 'result'): string | null {
-    const field = this.getFields()
-      .find((item) => item.querySelector('label')?.getAttribute('for')?.endsWith(`_${dataField}`));
-    const input = field?.querySelector(`.${TEXTEDITOR_INPUT_CLASS}`) as HTMLTextAreaElement | null;
+  private getFieldValue(fieldClass: string): string | null {
+    const input = this.root
+      .querySelector<HTMLTextAreaElement>(`.${fieldClass} .${TEXTEDITOR_INPUT_CLASS}`);
 
     return input ? input.value : null;
   }
