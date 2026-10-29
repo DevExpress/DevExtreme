@@ -221,13 +221,43 @@ describe('machine-wide key file', () => {
     it('finds nothing when no location has a key', () => {
         expect(getDevExpressLCXKey()).toMatchObject({ key: null, source: null });
     });
+
+    it.each([
+        ['empty', ''],
+        ['blank', '  '],
+    ])('goes on to the files when DevExpress_License is %s', (_, value) => {
+        writeKey(userFile());
+        process.env.DevExpress_License = value;
+
+        expect(getDevExpressLCXKey().source).toEqual({ type: 'file', path: userFile() });
+    });
+
+    it('uses a broken DevExpress_License and does not try the files', () => {
+        writeKey(userFile());
+        process.env.DevExpress_License = 'LCXv1garbage';
+
+        expect(getDevExpressLCXKey()).toMatchObject({ key: 'LCXv1garbage', source: { type: 'envVariable' } });
+    });
+
+    it.each([
+        ['a file that does not exist', () => path.join(tmp, 'nowhere', 'key.txt')],
+        ['a folder that does not exist', () => path.join(tmp, 'nowhere')],
+        ['a folder without the key file', () => { const folder = path.join(tmp, 'empty'); fs.mkdirSync(folder); return folder; }],
+        ['a folder with an empty key file', () => { const folder = path.join(tmp, 'blank'); writeKey(path.join(folder, 'DevExpress_License.txt'), ' \n '); return folder; }],
+        ['blank', () => '  '],
+    ])('goes on to the files when DevExpress_LicensePath is %s', (_, prepare) => {
+        process.env.DevExpress_LicensePath = prepare();
+        writeKey(userFile());
+
+        expect(getDevExpressLCXKey().source).toEqual({ type: 'file', path: userFile() });
+    });
 });
 
 describe('devextreme-license', () => {
     let tmp;
 
-    const run = (env, args = []) => {
-        const result = spawnSync(process.execPath, [CLI, ...args], {
+    const run = (env, args = [], nodeArgs = []) => {
+        const result = spawnSync(process.execPath, [...nodeArgs, CLI, ...args], {
             cwd: tmp,
             encoding: 'utf8',
             env: {
@@ -375,6 +405,34 @@ describe('devextreme-license', () => {
             expect(stderr).toContain(`License Source: File (${filePath}).`);
         });
 
+    });
+
+    describe('no key at all', () => {
+        // the child process looks like Windows with ProgramData and APPDATA in the temp folder, so it never reads the key folders of the real machine
+        const withoutMachineKeys = () => {
+            const preload = path.join(tmp, 'no-machine-keys.js');
+            fs.writeFileSync(preload, 'Object.defineProperty(process, \'platform\', { value: \'win32\' });\nprocess.env.ProgramData = process.env.APPDATA;\n');
+            return ['--require', preload];
+        };
+
+        it('prints TRIAL, warns with DX1000 and DX1001 and exits with 0', () => {
+            const { code, stdout, stderr } = run({}, [], withoutMachineKeys());
+
+            expect(code).toBe(0);
+            expect(stdout).toBe('TRIAL\n');
+            expect(stderr).toContain('Warning DX1000: For evaluation purposes only');
+            expect(stderr).toContain('A valid DevExpress license key was not found on this machine.');
+            expect(stderr).toContain('Warning DX1001: License key is missing or uses invalid format');
+            expect(stderr).not.toContain('License ID');
+            expect(stderr).not.toContain('License Source');
+        });
+
+        it('writes TRIAL to the generated file', () => {
+            const { code } = run({}, ['--out', 'key.ts', '--no-gitignore'], withoutMachineKeys());
+
+            expect(code).toBe(0);
+            expect(fs.readFileSync(path.join(tmp, 'key.ts'), 'utf8')).toContain('export const licenseKey = \'TRIAL\';');
+        });
     });
 
     describe('a key that cannot be read', () => {
