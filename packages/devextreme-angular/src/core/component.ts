@@ -41,11 +41,12 @@ import {
   CollectionNestedOptionContainerImpl,
 } from './nested-option';
 
+import { DxIntegrationModule } from './integration';
+
 import {
-  DxIntegrationModule,
   canMarkForOptionChange,
   isZoneless,
-} from './integration';
+} from './zone-utils';
 
 config({
   buyNowLink: 'https://go.devexpress.com/Licensing_Installer_Watermark_DevExtremeAngular.aspx',

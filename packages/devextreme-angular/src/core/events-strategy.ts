@@ -1,7 +1,7 @@
 /* eslint-disable max-classes-per-file */
 import { ChangeDetectorRef, EventEmitter, NgZone } from '@angular/core';
 import { DxComponent } from './component';
-import { isZoneless } from './integration';
+import { isZoneless } from './zone-utils';
 
 interface IEventSubscription {
   handler: any;

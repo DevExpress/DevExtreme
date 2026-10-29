@@ -8,29 +8,13 @@ import httpRequest from 'devextreme/core/http_request';
 import domAdapter from 'devextreme/core/dom_adapter';
 import readyCallbacks from 'devextreme/core/utils/ready_callbacks';
 import eventsEngine from 'devextreme/common/core/events/core/events_engine';
+import {
+  isZoneless,
+  trackOutsideAngularHandler,
+} from './zone-utils';
 
 const outsideAngularEvents = ['mousemove', 'mouseover', 'mouseout'];
 const insideAngularEvents = ['mouseup', 'click', 'mousedown', 'transitionend', 'wheel'];
-
-let inOutsideAngular = false;
-
-export const isZoneless = (ngZone: NgZone) => !(ngZone instanceof NgZone);
-
-export const canMarkForOptionChange = (ngZone: NgZone) => (
-  isZoneless(ngZone)
-    ? !inOutsideAngular
-    : NgZone.isInAngularZone()
-);
-
-const trackOutsideAngularHandler = (callback: (...args: any[]) => any) => function (this: unknown, e: Event) {
-  const prevInOutsideAngular = inOutsideAngular;
-  inOutsideAngular = true;
-  try {
-    return callback.call(this, e);
-  } finally {
-    inOutsideAngular = prevInOutsideAngular;
-  }
-};
 
 type ReadyCallback = () => void;
 type ReadyCallbackAdd = (callback: ReadyCallback) => void;
