@@ -323,7 +323,14 @@ jobs:
     steps:
       - run: exit 1
   demos_visual_tests15:
-    name: 'CSP check (jQuery)'
+    name: 'CSP check (jQuery 1/2)'
+    needs: [ stubChecksReady ]
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+  demos_visual_tests22:
+    name: 'CSP check (jQuery 2/2)'
     needs: [ stubChecksReady ]
     if: false
     runs-on: ubuntu-latest

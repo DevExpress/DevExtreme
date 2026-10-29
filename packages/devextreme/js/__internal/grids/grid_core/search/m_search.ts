@@ -1,5 +1,4 @@
 /* eslint-disable max-classes-per-file */
-
 import messageLocalization from '@js/common/core/localization/message';
 import type { SearchPanel } from '@js/common/grids';
 import type { dxElementWrapper } from '@js/core/renderer';
@@ -14,10 +13,10 @@ import type { DataChange, UserState } from '@ts/grids/grid_core/data_controller/
 import type { DataFilter, FilterSourceContext } from '@ts/grids/grid_core/filter/types';
 import { CLASSES as HEADER_PANEL_CLASSES } from '@ts/grids/grid_core/header_panel/const';
 import type { HeaderPanel } from '@ts/grids/grid_core/header_panel/header_panel';
+import type { ToolbarItem } from '@ts/grids/grid_core/header_panel/types';
 import modules from '@ts/grids/grid_core/modules/modules';
 import type { ModuleType, OptionChanged } from '@ts/grids/grid_core/types';
 import type { RowsView } from '@ts/grids/grid_core/views/rows_view';
-import type { ToolbarItem } from '@ts/grids/new/grid_core/toolbar/types';
 
 import { CLASSES, FILTERING_TIMEOUT, SEARCH_PANEL_ITEM_NAME } from './const';
 import type {

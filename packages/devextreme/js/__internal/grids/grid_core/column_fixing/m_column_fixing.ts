@@ -34,7 +34,7 @@ import gridCoreUtils from '../utils';
 import type { ColumnsView } from '../views/columns_view';
 import { normalizeWidth } from '../views/columns_view';
 import type { RowsView } from '../views/rows_view';
-import type { RowsViewScrollEvent } from '../views/types';
+import type { RowsViewScrollEvent, SummaryRowsViewExtension } from '../views/types';
 import { CLASSES } from './const';
 import type { ColumnFixingRowsViewExtension } from './types';
 
@@ -683,7 +683,7 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
 };
 
 const rowsView = (
-  Base: ModuleType<RowsView>,
+  Base: ModuleType<RowsView & SummaryRowsViewExtension>,
 ): ModuleType<
   RowsView & ColumnFixingRowsViewExtension
 > => class RowsViewFixedColumnsExtender extends baseFixedColumns(Base) {
@@ -861,7 +861,7 @@ const rowsView = (
     return result && (!this._isFixedColumns || !column.fixed);
   }
 
-  private _renderGroupSummaryCellsCore($groupCell, options, groupCellColSpan, alignByColumnCellCount) {
+  public renderGroupSummaryCellsCore($groupCell, options, groupCellColSpan, alignByColumnCellCount) {
     let alignByFixedColumnCellCount;
 
     if (this._isFixedTableRendering) {
@@ -883,8 +883,7 @@ const rowsView = (
       alignByColumnCellCount = alignByFixedColumnCellCount;
     }
 
-    // @ts-expect-error DataGrid's method
-    super._renderGroupSummaryCellsCore($groupCell, options, groupCellColSpan, alignByColumnCellCount);
+    super.renderGroupSummaryCellsCore($groupCell, options, groupCellColSpan, alignByColumnCellCount);
   }
 
   private _getSummaryCellIndex(columnIndex, columns) {

@@ -91,55 +91,58 @@ function hydrateChildren(parentVNode: VNode, parentNode: any, currentNode: any, 
   const props = parentVNode.props;
   const flags = parentVNode.flags;
 
-  if (childFlags !== ChildFlags.HasInvalidChildren) {
-    if (childFlags === ChildFlags.HasVNodeChildren) {
-      if (isNull(currentNode)) {
-        _M(children as VNode, parentNode, context, isSVG, null, lifecycle, animations);
+  if (childFlags === ChildFlags.HasInvalidChildren) {
+    if (!isNull(parentNode.firstChild) && !isSamePropsInnerHTML(parentNode, props)) {
+      parentNode.textContent = ''; // dom has content, but VNode has no children remove everything from DOM
+      if (flags & VNodeFlags.FormElement) {
+        // If element is form element, we need to clear defaultValue also
+        (parentNode as any).defaultValue = '';
+      }
+    }
+    return;
+  }
+
+  if (childFlags === ChildFlags.HasVNodeChildren) {
+    if (isNull(currentNode)) {
+      _M(children as VNode, parentNode, context, isSVG, null, lifecycle, animations);
+    } else {
+      currentNode = hydrateVNode(children as VNode, parentNode, currentNode as Element, context, isSVG, lifecycle, animations);
+      currentNode = currentNode ? currentNode.nextSibling : null;
+    }
+  } else if (childFlags === ChildFlags.HasTextChildren) {
+    if (isNull(currentNode)) {
+      parentNode.appendChild(document.createTextNode(children as string));
+    } else if (parentNode.childNodes.length !== 1 || currentNode.nodeType !== 3) {
+      parentNode.textContent = children as string;
+    } else if (currentNode.nodeValue !== children) {
+      currentNode.nodeValue = children as string;
+    }
+    currentNode = null;
+  } else if (childFlags & ChildFlags.MultipleChildren) {
+    let prevVNodeIsTextNode = false;
+
+    for (let i = 0, len = (children as VNode[]).length; i < len; ++i) {
+      const child = (children as VNode[])[i];
+
+      if (isNull(currentNode) || (prevVNodeIsTextNode && (child.flags & VNodeFlags.Text) > 0)) {
+        _M(child as VNode, parentNode, context, isSVG, currentNode, lifecycle, animations);
       } else {
-        currentNode = hydrateVNode(children as VNode, parentNode, currentNode as Element, context, isSVG, lifecycle, animations);
+        currentNode = hydrateVNode(child as VNode, parentNode, currentNode as Element, context, isSVG, lifecycle, animations);
         currentNode = currentNode ? currentNode.nextSibling : null;
       }
-    } else if (childFlags === ChildFlags.HasTextChildren) {
-      if (isNull(currentNode)) {
-        parentNode.appendChild(document.createTextNode(children as string));
-      } else if (parentNode.childNodes.length !== 1 || currentNode.nodeType !== 3) {
-        parentNode.textContent = children as string;
-      } else if (currentNode.nodeValue !== children) {
-        currentNode.nodeValue = children as string;
-      }
-      currentNode = null;
-    } else if (childFlags & ChildFlags.MultipleChildren) {
-      let prevVNodeIsTextNode = false;
 
-      for (let i = 0, len = (children as VNode[]).length; i < len; ++i) {
-        const child = (children as VNode[])[i];
-
-        if (isNull(currentNode) || (prevVNodeIsTextNode && (child.flags & VNodeFlags.Text) > 0)) {
-          _M(child as VNode, parentNode, context, isSVG, currentNode, lifecycle, animations);
-        } else {
-          currentNode = hydrateVNode(child as VNode, parentNode, currentNode as Element, context, isSVG, lifecycle, animations);
-          currentNode = currentNode ? currentNode.nextSibling : null;
-        }
-
-        prevVNodeIsTextNode = (child.flags & VNodeFlags.Text) > 0;
-      }
+      prevVNodeIsTextNode = (child.flags & VNodeFlags.Text) > 0;
     }
+  }
 
-    // clear any other DOM nodes, there should be only a single entry for the root
-    if ((flags & VNodeFlags.Fragment) === 0) {
-      let nextSibling: Node | null = null;
+  // clear any other DOM nodes, there should be only a single entry for the root
+  if ((flags & VNodeFlags.Fragment) === 0) {
+    let nextSibling: Node | null = null;
 
-      while (currentNode) {
-        nextSibling = currentNode.nextSibling;
-        parentNode.removeChild(currentNode);
-        currentNode = nextSibling;
-      }
-    }
-  } else if (!isNull(parentNode.firstChild) && !isSamePropsInnerHTML(parentNode, props)) {
-    parentNode.textContent = ''; // dom has content, but VNode has no children remove everything from DOM
-    if (flags & VNodeFlags.FormElement) {
-      // If element is form element, we need to clear defaultValue also
-      (parentNode as any).defaultValue = '';
+    while (currentNode) {
+      nextSibling = currentNode.nextSibling;
+      parentNode.removeChild(currentNode);
+      currentNode = nextSibling;
     }
   }
 }
