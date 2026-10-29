@@ -115,7 +115,7 @@ export const dataSourceAdapterExtender = (
 
   public _renderTime = 0;
 
-  public _isLoading?: boolean;
+  public _isLoading!: boolean;
 
   private _startLoadTime?: Date;
 
@@ -124,6 +124,7 @@ export const dataSourceAdapterExtender = (
     this._items = [];
     this._totalCount = -1;
     this._isLoaded = true;
+    this._isLoading = false;
     this._loadPageCount = 1;
 
     this._virtualScrollController = new VirtualScrollController(
@@ -267,7 +268,6 @@ export const dataSourceAdapterExtender = (
   public isLoading(): boolean {
     return this.option(LEGACY_SCROLLING_MODE) === false
       ? this._dataSource.isLoading()
-      // @ts-expect-error _isLoading stays undefined until the first loading change
       : this._isLoading;
   }
 
@@ -698,9 +698,8 @@ export const rowsView = (
     const d = Deferred<unknown>();
     const reject = d.reject as (...a: unknown[]) => void;
 
-    // @ts-expect-error the view is rendered here
-    const contentTable: dxElementWrapper = contentElement.children().first();
-    if (changeType === 'append' || changeType === 'prepend') {
+    const contentTable = contentElement?.children().first();
+    if (contentTable && (changeType === 'append' || changeType === 'prepend')) {
       this.waitAsyncTemplates().done(() => {
         const $tBodies = this._getBodies(tableElement);
         if ($tBodies.length === 1) {
@@ -763,15 +762,15 @@ export const rowsView = (
     this._dataController.setContentItemSizes(correctedRowHeights);
   }
 
-  private _updateViewportSize(viewportHeight: number | null, scrollTop?: number): void {
-    let height = viewportHeight;
+  private _updateViewportSize(viewportHeight?: number | null, scrollTop?: number): void {
+    let height: number | null | undefined = viewportHeight;
 
     if (!isDefined(height)) {
-      // @ts-expect-error the view is rendered here
-      const viewHeight: number = this._hasHeight
-        ? getOuterHeight(this.element())
-        : getOuterHeight(getWindow());
-      height = viewHeight;
+      height = this._hasHeight ? getOuterHeight(this.element()) : getOuterHeight(getWindow());
+    }
+
+    if (!isDefined(height)) {
+      return;
     }
 
     this._dataController.viewportHeight(height, scrollTop);
@@ -882,7 +881,7 @@ export const rowsView = (
     const bottomLoadPanelElement = this._findBottomLoadPanel($contentElement);
 
     if (showBottomLoading) {
-      if (!bottomLoadPanelElement) {
+      if (!bottomLoadPanelElement && $contentElement) {
         $('<div>')
           .addClass(this.addWidgetPrefix(CLASSES.bottomLoadPanel))
           .append(this._createComponent($('<div>'), LoadIndicator, {
@@ -891,7 +890,6 @@ export const rowsView = (
               'aria-label': null,
             },
           }).$element())
-          // @ts-expect-error the view is rendered here
           .appendTo($contentElement);
       }
     } else if (bottomLoadPanelElement) {
@@ -939,8 +937,7 @@ export const rowsView = (
     if (this._rowHeight) {
       this._updateContentPosition();
 
-      // @ts-expect-error the view is rendered here
-      const viewportHeight: number = this._hasHeight
+      const viewportHeight = this._hasHeight
         ? getOuterHeight(this.element())
         : getOuterHeight(getWindow());
 
@@ -948,7 +945,7 @@ export const rowsView = (
         this._updateViewportSize(viewportHeight);
 
         this._dataController.updateViewport();
-      } else {
+      } else if (isDefined(viewportHeight)) {
         this._dataController.viewportSize(Math.ceil(viewportHeight / this._rowHeight));
       }
     }
@@ -1002,14 +999,13 @@ export const rowsView = (
   }
 
   protected _resizeCore(): void {
-    // @ts-expect-error the view is rendered here
-    const $element: dxElementWrapper = this.element();
+    const $element = this.element();
 
     super._resizeCore();
 
     this.throwHeightWarningIfNeed();
 
-    if (this.component.$element() && !this._windowScroll && isElementInDom($element)) {
+    if (this.component.$element() && !this._windowScroll && $element && isElementInDom($element)) {
       const windowScroll = subscribeToExternalScrollers($element, (scrollPos) => {
         if (!this._hasHeight && this._rowHeight) {
           this._dataController.setViewportPosition(scrollPos);

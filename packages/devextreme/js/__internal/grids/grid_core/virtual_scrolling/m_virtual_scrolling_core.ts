@@ -221,10 +221,8 @@ class VirtualScrollController<
       if (this.option(LEGACY_SCROLLING_MODE) === false && totalItemsCount !== -1) {
         const renderedItemsRange = dataOptions.renderedItemsRange?.();
         const viewportParams = this.getViewportParams();
-        // @ts-expect-error only the new rendering mode reaches here
-        const loadedOffset: number = dataOptions.loadedOffset();
-        // @ts-expect-error only the new rendering mode reaches here
-        const loadedItemCount: number = dataOptions.loadedItemCount();
+        const loadedOffset = Number(dataOptions.loadedOffset?.());
+        const loadedItemCount = Number(dataOptions.loadedItemCount?.());
 
         const skip = renderedItemsRange?.skip ?? Math.max(viewportParams.skip, loadedOffset);
         const take = renderedItemsRange?.take ?? Math.min(viewportParams.take, loadedItemCount);

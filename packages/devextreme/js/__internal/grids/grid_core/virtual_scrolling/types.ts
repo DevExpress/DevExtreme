@@ -46,7 +46,7 @@ export interface ExternalScrollers {
 export interface VirtualScrollingDataSourceAdapterExtension {
   _virtualScrollController: VirtualScrollController;
   _renderTime: number;
-  _isLoading?: boolean;
+  _isLoading: boolean;
   loadPageCount: {
     (): number;
     (count: number): void;
