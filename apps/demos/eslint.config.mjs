@@ -40,7 +40,6 @@ export default [
       'node_modules',
       'bundles',
       'coverage',
-      'publish-demos',
       'Demos/**/testcafe-test-code.js',
       'shared/empty-file.ts',
       'Demos/**/config.js',
@@ -111,7 +110,6 @@ export default [
           'timestamps',
           'urls',
           'whitespace',
-          'yargs',
           'treshold', // should be updated to 'threshold' in the codebase
           'callstack',
           'reseller',
