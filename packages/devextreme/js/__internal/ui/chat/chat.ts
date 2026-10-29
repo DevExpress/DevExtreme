@@ -117,6 +117,10 @@ class Chat extends Widget<Properties> {
       showUserName: true,
       speechToTextEnabled: false,
       speechToTextOptions: undefined,
+      toolCallOptions: {
+        showInMessageTemplate: false,
+        expandAll: false,
+      },
       typingUsers: [],
       user: { id: new Guid().toString() },
       sendButtonOptions: {
@@ -225,6 +229,7 @@ class Chat extends Widget<Properties> {
       dayHeaderFormat,
       messageTimestampFormat,
       typingUsers = [],
+      toolCallOptions,
     } = this.option();
 
     // @ts-expect-error
@@ -248,6 +253,7 @@ class Chat extends Widget<Properties> {
       messageTimestampFormat,
       typingUsers,
       isLoading,
+      toolCallOptions,
       onMessageEditingStart: (e) => {
         this._messageEditingStartHandler(e);
 
@@ -813,6 +819,9 @@ class Chat extends Widget<Properties> {
         break;
       case 'messageTemplate':
         this._messageList.option(name, this._getMessageTemplate());
+        break;
+      case 'toolCallOptions':
+        this._messageList.option(fullName, value);
         break;
       case 'emptyViewTemplate':
         this._messageList.option(name, this._getEmptyViewTemplate());

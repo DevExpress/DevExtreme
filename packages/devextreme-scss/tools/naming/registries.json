@@ -1267,7 +1267,12 @@
       "circle",
       "bubble",
       "group",
-      "image"
+      "image",
+      "tool-call",
+      "header",
+      "title",
+      "badge",
+      "field"
     ],
     "color-view": [
       "palette",
