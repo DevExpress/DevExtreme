@@ -19,13 +19,15 @@
   $body-padding-block-start,
   $body-padding-inline-end,
   $body-padding-block-end,
-  $separator-width,
-  $separator-line-width,
+  $body-margin-inline-start,
+  $body-padding-inline-start,
+  $body-border-width,
   $fields-gap,
   $label-padding-block-end,
   $field-padding,
   $field-border-radius,
   $field-border-width,
+  $text-padding,
 ) {
   .dx-chat-tool-call-view {
     color: $color;
@@ -61,8 +63,7 @@
       }
     }
 
-    .dx-accordion-item.dx-state-hover > .dx-accordion-item-title,
-    .dx-accordion-item.dx-accordion-item-opened > .dx-accordion-item-title {
+    .dx-accordion-item.dx-state-hover > .dx-accordion-item-title {
       color: $color;
 
       &::before {
@@ -70,7 +71,7 @@
       }
     }
 
-    .dx-chat-tool-call-icon {
+    .dx-chat-tool-call-icon.dx-icon {
       width: $icon-size;
       height: $icon-size;
       font-size: $icon-size;
@@ -87,16 +88,19 @@
       background-color: $error-background-color;
     }
 
+    // The vertical line of an opened item is the left border of the body
     .dx-accordion-item-body {
       gap: $fields-gap;
+      margin-inline-start: $body-margin-inline-start;
       padding-block: $body-padding-block-start $body-padding-block-end;
-      padding-inline: $separator-width $body-padding-inline-end;
+      padding-inline: $body-padding-inline-start $body-padding-inline-end;
+      border-inline-start: $body-border-width solid $border-color;
+    }
 
-      &::before {
-        inset-inline-start: calc((#{$separator-width} - #{$separator-line-width}) / 2);
-        width: $separator-line-width;
-        background-color: $border-color;
-      }
+    // The message text under the block lines up with the title and the icons of the block
+    & + .dx-chat-messagebubble-content {
+      margin-block-start: $gap;
+      padding: $text-padding;
     }
 
     .dx-chat-tool-call-field-label {
@@ -104,11 +108,18 @@
       color: $color;
     }
 
-    .dx-chat-tool-call-field .dx-texteditor {
-      border: $field-border-width solid $border-color;
+    .dx-chat-tool-call-field .dx-texteditor.dx-editor-outlined {
       border-radius: $field-border-radius;
-      background-color: transparent;
       color: $color;
+
+      &,
+      &.dx-state-hover,
+      &.dx-state-focused,
+      &.dx-state-active,
+      &.dx-state-readonly {
+        border: $field-border-width solid $border-color;
+        background-color: transparent;
+      }
 
       .dx-texteditor-input {
         padding: $field-padding;
@@ -118,7 +129,11 @@
         color: inherit;
       }
 
-      &.dx-chat-tool-call-error {
+      &.dx-chat-tool-call-error,
+      &.dx-chat-tool-call-error.dx-state-hover,
+      &.dx-chat-tool-call-error.dx-state-focused,
+      &.dx-chat-tool-call-error.dx-state-active,
+      &.dx-chat-tool-call-error.dx-state-readonly {
         border-color: transparent;
         background-color: $error-background-color;
         color: $error-color;

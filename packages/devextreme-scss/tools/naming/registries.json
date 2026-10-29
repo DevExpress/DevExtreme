@@ -1272,9 +1272,9 @@
       "tool-call-header",
       "tool-call-tag",
       "tool-call-body",
-      "tool-call-separator",
       "tool-call-label",
-      "tool-call-field"
+      "tool-call-field",
+      "tool-call-text"
     ],
     "color-view": [
       "palette",

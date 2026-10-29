@@ -169,7 +169,11 @@
     color: var(--dx-chat-file-content-disabled);
   }
 
-  .dx-chat-messagebubble {
+  .dx-chat-messagebubble,
+  .dx-chat-tool-call-view,
+  .dx-chat-tool-call-field-label,
+  .dx-chat-tool-call-error-tag,
+  .dx-chat-tool-call-field .dx-texteditor {
     color: var(--dx-chat-content-disabled);
   }
 
@@ -205,11 +209,13 @@
   $body-padding-block-start: var(--dx-chat-tool-call-body-padding-block-start),
   $body-padding-inline-end: var(--dx-chat-tool-call-body-padding-inline-end),
   $body-padding-block-end: var(--dx-chat-tool-call-body-padding-block-end),
-  $separator-width: var(--dx-chat-tool-call-separator-width),
-  $separator-line-width: var(--dx-chat-tool-call-separator-thickness),
+  $body-margin-inline-start: var(--dx-chat-tool-call-body-margin-inline-start),
+  $body-padding-inline-start: var(--dx-chat-tool-call-body-padding-inline-start),
+  $body-border-width: var(--dx-chat-tool-call-body-border-inline-start-width),
   $fields-gap: var(--dx-chat-tool-call-body-row-gap),
   $label-padding-block-end: var(--dx-chat-tool-call-label-padding-block-end),
   $field-padding: var(--dx-chat-tool-call-field-padding),
   $field-border-radius: var(--dx-chat-tool-call-field-border-radius),
   $field-border-width: var(--dx-chat-tool-call-field-border-width),
+  $text-padding: var(--dx-chat-tool-call-text-padding),
 );
