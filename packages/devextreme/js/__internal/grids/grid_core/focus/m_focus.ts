@@ -578,6 +578,17 @@ const focusDataControllerExtender = (
     return super._applyChange.apply(this, arguments);
   }
 
+  protected _endUpdateCore(): void {
+    const isUpdateFocusedRow = this.changes.length > 1
+      && this.changes.every((change) => change.changeType === 'updateFocusedRow');
+
+    if (isUpdateFocusedRow) {
+      this.changes = [this.changes[this.changes.length - 1]];
+    }
+
+    super._endUpdateCore();
+  }
+
   protected _fireChanged(e) {
     super._fireChanged(e);
 
