@@ -6,7 +6,7 @@ import type { DataSourceOptions } from '@js/data/data_source';
 import type { DxEvent, PointerInteractionEvent } from '@js/events/events.types';
 import type { Properties } from '@js/ui/autocomplete';
 import type { ItemClickEvent, PageLoadMode } from '@js/ui/list';
-import { isDefined } from '@ts/core/utils/m_type';
+import { isDefined } from '@ts/core/utils/type';
 import type { OptionChanged } from '@ts/core/widget/types';
 import { isCommandKeyPressed } from '@ts/events/utils/index';
 import type { DropDownEditorInternalProperties } from '@ts/ui/drop_down_editor/drop_down_editor';

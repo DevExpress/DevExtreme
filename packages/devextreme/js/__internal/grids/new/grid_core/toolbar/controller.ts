@@ -1,12 +1,13 @@
 import type { ReadonlySignal } from '@ts/core/state_manager/index';
 import { computed, effect, signal } from '@ts/core/state_manager/index';
+import { normalizeToolbarItems } from '@ts/grids/grid_core/header_panel/utils';
 
 import { OptionsController } from '../options_controller/options_controller';
 import { DEFAULT_TOOLBAR_ITEMS } from './const';
 import type {
   DefaultToolbarItem, DefaultToolbarItemsCollection, ToolbarItem, ToolbarItems,
 } from './types';
-import { getSortedToolbarItems, normalizeToolbarItems } from './utils';
+import { getSortedToolbarItems } from './utils';
 
 export class ToolbarController {
   private readonly itemSubscriptions: Record<string, () => void> = {};

@@ -134,7 +134,7 @@ class MultiView<
       return this._itemWidthValue;
     }
 
-    return getWidth(this._$wrapper) as number;
+    return getWidth(this._$wrapper.get(0));
   }
 
   _clearItemWidthCache(): void {
@@ -327,7 +327,6 @@ class MultiView<
     const $itemElements = this._itemElements();
     const itemsCount = this._itemsCount();
 
-    // @ts-expect-error ts-error
     $itemElements.each((itemIndex, item) => {
       const aria = this._getItemAria({ itemIndex, itemsCount });
 
@@ -347,7 +346,6 @@ class MultiView<
       roledescription: messageLocalization.format('dxMultiView-itemAriaRoleDescription'),
       label: messageLocalization.format(
         'dxMultiView-itemAriaLabel',
-        // @ts-expect-error ts-error
         itemIndex + 1,
         itemsCount,
       ),
@@ -388,7 +386,6 @@ class MultiView<
   _updateItemsVisibility(selectedIndex: number, newIndex?: number): void {
     const $itemElements = this._itemElements();
 
-    // @ts-expect-error ts-error
     $itemElements.each((itemIndex, item) => {
       const $item = $(item);
       const isHidden = itemIndex !== selectedIndex && itemIndex !== newIndex;
@@ -438,7 +435,7 @@ class MultiView<
       this._updateItems(newIndex);
 
       // NOTE: force layout recalculation on iOS 6 & iOS 7.0 (B254713)
-      getWidth(this._$itemContainer);
+      getWidth(this._$itemContainer.get(0));
     });
   }
 

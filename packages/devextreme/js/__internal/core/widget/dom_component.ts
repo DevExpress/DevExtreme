@@ -17,7 +17,7 @@ import { hasWindow } from '@js/core/utils/window';
 import license, { peekValidationPerformed } from '@ts/core/license/license_validation';
 import type { IntegrationOptions } from '@ts/core/template_manager';
 import TemplateManagerModule from '@ts/core/template_manager';
-import { uiLayerInitialized } from '@ts/core/utils/m_common';
+import { uiLayerInitialized } from '@ts/core/utils/common';
 import type { ComponentProperties, DefaultActionArgs, DefaultActionConfig } from '@ts/core/widget/component';
 import { Component } from '@ts/core/widget/component';
 import type { OptionChanged } from '@ts/core/widget/types';

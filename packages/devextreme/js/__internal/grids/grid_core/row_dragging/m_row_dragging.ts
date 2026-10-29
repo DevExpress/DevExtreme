@@ -1,3 +1,7 @@
+// ThemeBuilder reads the `// STYLE sortable` comment from the public module
+import '@js/ui/sortable';
+
+import type { ChangedOptionInfo } from '@js/common/core/events';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { deferUpdate } from '@js/core/utils/common';
@@ -5,48 +9,76 @@ import type { DeferredObj } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { getWidth, setWidth } from '@js/core/utils/size';
 import { isDefined } from '@js/core/utils/type';
-import Sortable from '@js/ui/sortable';
+import type { DragTemplateData } from '@js/ui/sortable';
+import { WIDGET_CLASS } from '@ts/core/widget/widget';
+import type { DragElementShownArgs, DragEventArgs, ElementOffsetOptions } from '@ts/draggable.types';
+/** @architectureLeak data_grid/summary: footer rows are not draggable */
+import { DATAGRID_FOOTER_ROW_CLASS } from '@ts/grids/data_grid/summary/const';
+import type { ColumnFixingRowsView } from '@ts/grids/grid_core/column_fixing/types';
 import { CLASSES as COLUMN_HEADERS_CLASSES } from '@ts/grids/grid_core/column_headers/const';
-import type { DataChange } from '@ts/grids/grid_core/data_controller/types';
+import type { DataChange, ProcessedItem } from '@ts/grids/grid_core/data_controller/types';
 import { CLASSES as GRID_VIEW_CLASSES } from '@ts/grids/grid_core/grid_view/const';
-import type { ModuleType } from '@ts/grids/grid_core/types';
+import type {
+  InternalGrid,
+  InternalGridOptions,
+  ModuleType,
+  OptionChanged,
+} from '@ts/grids/grid_core/types';
+import gridCoreUtils from '@ts/grids/grid_core/utils';
 import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
-import type { RowsView } from '@ts/grids/grid_core/views/rows_view';
+import { VIRTUAL_ROW_CLASS } from '@ts/grids/grid_core/virtual_scrolling/const';
+import Sortable from '@ts/sortable';
+import { SCROLLABLE_CONTAINER_CLASS } from '@ts/ui/scroll_view/consts';
 
-import gridCoreUtils from '../utils';
 import { ATTRIBUTES, CLASSES } from './const';
 import { GridCoreRowDraggingDom } from './dom';
+import type {
+  DraggableGridOptions,
+  HandleCellTemplate,
+  RowDraggingAddEvent,
+  RowDraggingEndEvent,
+  RowDraggingOptions,
+  RowDraggingStartEvent,
+} from './types';
 
-const rowsView = (Base: ModuleType<RowsView>) => class RowsViewRowDraggingExtender extends Base {
-  public init() {
-    super.init.apply(this, arguments as any);
+const rowsView = (
+  Base: ModuleType<ColumnFixingRowsView>,
+): ModuleType<ColumnFixingRowsView> => class RowsViewRowDraggingExtender extends Base {
+  private _sortable?: Sortable;
+
+  private _sortableFixed?: Sortable;
+
+  private _previousOffset?: number;
+
+  public init(): void {
+    super.init();
     this._updateHandleColumn();
   }
 
-  public optionChanged(args) {
+  public optionChanged(args: OptionChanged): void {
     if (args.name === 'rowDragging') {
       this._updateHandleColumn();
       this._invalidate(true, true);
       args.handled = true;
     }
 
-    super.optionChanged.apply(this, arguments as any);
+    super.optionChanged(args);
   }
 
-  private _allowReordering() {
+  private _allowReordering(): boolean {
     const rowDragging = this.option('rowDragging');
 
-    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-    return !!(rowDragging && (rowDragging.allowReordering || rowDragging.allowDropInsideItem || rowDragging.group));
+    return !!rowDragging?.allowReordering
+      || !!rowDragging?.allowDropInsideItem
+      || !!rowDragging?.group;
   }
 
-  private _updateHandleColumn() {
-    const rowDragging: any = this.option('rowDragging');
+  private _updateHandleColumn(): void {
+    const rowDragging = this.option('rowDragging');
     const allowReordering = this._allowReordering();
-    const columnsController = this._columnsController;
-    const isHandleColumnVisible = allowReordering && rowDragging.showDragIcons;
+    const isHandleColumnVisible = allowReordering && rowDragging?.showDragIcons;
 
-    columnsController?.addCommandColumn({
+    this._columnsController?.addCommandColumn({
       type: 'drag',
       command: 'drag',
       visibleIndex: -2,
@@ -58,71 +90,91 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewRowDraggingExtend
       visible: isHandleColumnVisible,
     });
 
-    columnsController?.columnOption('type:drag', 'visible', isHandleColumnVisible);
+    this._columnsController?.columnOption('type:drag', 'visible', isHandleColumnVisible);
   }
 
-  protected _renderContent() {
-    const rowDragging: any = this.option('rowDragging');
+  private getSortable(): Sortable | undefined {
+    return this._isFixedTableRendering ? this._sortableFixed : this._sortable;
+  }
+
+  private setSortable(sortable: Sortable): void {
+    if (this._isFixedTableRendering) {
+      this._sortableFixed = sortable;
+    } else {
+      this._sortable = sortable;
+    }
+  }
+
+  protected _renderContent(
+    contentElement: dxElementWrapper,
+    tableElement: dxElementWrapper,
+    isFixedTable?: boolean,
+  ): dxElementWrapper | undefined {
+    // @ts-expect-error the rowDragging option has a default value
+    const rowDragging: RowDraggingOptions = this.option('rowDragging');
     const allowReordering = this._allowReordering();
-    // @ts-expect-error the view is rendered here
-    const $content: dxElementWrapper = super._renderContent.apply(this, arguments as any);
-    // @ts-expect-error
-    const isFixedTableRendering = this._isFixedTableRendering;
-    const sortableName = '_sortable';
-    const sortableFixedName = '_sortableFixed';
-    const currentSortableName = isFixedTableRendering ? sortableFixedName : sortableName;
-    const anotherSortableName = isFixedTableRendering ? sortableName : sortableFixedName;
-    const togglePointerEventsStyle = (toggle) => {
+    const $content = super._renderContent(
+      contentElement,
+      tableElement,
+      isFixedTable,
+    );
+
+    if (!$content) {
+      return undefined;
+    }
+
+    const isFixedSortable = this._isFixedTableRendering;
+    const togglePointerEventsStyle = (toggle: boolean): void => {
       // T929503
-      this[sortableFixedName]?.$element().css('pointerEvents', toggle ? 'auto' : '');
+      this._sortableFixed?.$element().css('pointerEvents', toggle ? 'auto' : '');
     };
 
-    const rowSelector = `.${VIEW_CLASSES.row}:not(.dx-freespace-row):not(.dx-virtual-row):not(.${COLUMN_HEADERS_CLASSES.headerRow}):not(.dx-footer-row)`;
+    const rowSelector = `.${VIEW_CLASSES.row}:not(.${VIEW_CLASSES.freeSpaceRow}):not(.${VIRTUAL_ROW_CLASS}):not(.${COLUMN_HEADERS_CLASSES.headerRow}):not(.${DATAGRID_FOOTER_ROW_CLASS})`;
     const filter = this.option('dataRowTemplate')
       ? `> table > tbody${rowSelector}`
       : `> table > tbody > ${rowSelector}`;
 
-    if ((allowReordering || this[currentSortableName]) && $content.length) {
-      this[currentSortableName] = this._createComponent($content, Sortable, extend({
+    if ((allowReordering || this.getSortable()) && $content.length) {
+      // @ts-expect-error rowDragging handlers are typed for the grid's event args
+      this.setSortable(this._createComponent($content, Sortable, extend({
         component: this.component,
         contentTemplate: null,
         filter,
-        cursorOffset: (options) => {
+        cursorOffset: (options: ElementOffsetOptions) => {
           const { event } = options;
           const rowsViewOffset = $(this.element()).offset();
 
           return {
-            // @ts-expect-error
+            // @ts-expect-error offset() is typed as possibly undefined
             x: event.pageX - rowsViewOffset.left,
           };
         },
-        onDraggableElementShown: (e) => {
+        onDraggableElementShown: (e: DragElementShownArgs) => {
           if (rowDragging.dragTemplate) {
             return;
           }
 
-          const $dragElement = $(e.dragElement);
-          const gridInstance = $dragElement.children('.dx-widget').data(this.component.NAME);
+          const gridInstance = $(e.dragElement).children(`.${WIDGET_CLASS}`).data(this.component.NAME);
 
           this._synchronizeScrollLeftPosition(gridInstance);
         },
         dragTemplate: this._getDraggableRowTemplate(),
         handle: rowDragging.showDragIcons && `.${CLASSES.commandDrag}`,
-        dropFeedbackMode: 'indicate',
+        dropFeedbackMode: 'indicate' as const,
       }, rowDragging, {
-        onDragStart: (e) => {
+        onDragStart: (e: RowDraggingStartEvent) => {
           // TODO getController
           this.getController('keyboardNavigation')?._resetFocusedCell();
           const row = e.component.getVisibleRows()[e.fromIndex];
           e.itemData = row?.data;
 
-          const isDataRow = row && row.rowType === 'data';
+          const isDataRow = row?.rowType === 'data';
 
           e.cancel = !allowReordering || !isDataRow;
 
           rowDragging.onDragStart?.(e);
         },
-        onDragEnter: (e) => {
+        onDragEnter: (e: DragEventArgs) => {
           if (e.fromComponent !== e.toComponent) {
             togglePointerEventsStyle(true);
           }
@@ -130,27 +182,33 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewRowDraggingExtend
         onDragLeave: () => {
           togglePointerEventsStyle(false);
         },
-        onDragEnd: (e) => {
+        onDragEnd: (e: RowDraggingEndEvent) => {
           togglePointerEventsStyle(false);
           rowDragging.onDragEnd?.(e);
         },
-        onAdd: (e) => {
+        onAdd: (e: RowDraggingAddEvent) => {
           togglePointerEventsStyle(false);
           rowDragging.onAdd?.(e);
         },
         dropFeedbackMode: rowDragging.dropFeedbackMode,
-        onOptionChanged: (e) => {
-          const hasFixedSortable = this[sortableFixedName];
-          if (hasFixedSortable) {
-            if (e.name === 'fromIndex' || e.name === 'toIndex') {
-              this[anotherSortableName].option(e.name, e.value);
+        onOptionChanged: (e: ChangedOptionInfo) => {
+          const isIndexOption = e.name === 'fromIndex' || e.name === 'toIndex';
+          if (this._sortableFixed && isIndexOption) {
+            if (isFixedSortable) {
+              // @ts-expect-error both sortables exist once the fixed one does
+              this._sortable.option(e.name, e.value);
+            } else {
+              this._sortableFixed.option(e.name, e.value);
             }
           }
         },
-      }));
+      })));
 
-      $content.toggleClass('dx-scrollable-container', isFixedTableRendering);
-      $content.toggleClass(CLASSES.sortableWithoutHandle, allowReordering && !rowDragging.showDragIcons);
+      $content.toggleClass(SCROLLABLE_CONTAINER_CLASS, this._isFixedTableRendering);
+      $content.toggleClass(
+        CLASSES.sortableWithoutHandle,
+        allowReordering && !rowDragging.showDragIcons,
+      );
     }
 
     return $content;
@@ -171,36 +229,34 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewRowDraggingExtend
     return deferred;
   }
 
-  private _updateSortable() {
+  private _updateSortable(): void {
     const offset = this._dataController.getRowIndexOffset();
-    // @ts-expect-error
-    const offsetDiff = offset - this._previousOffset;
 
-    // @ts-expect-error
     [this._sortable, this._sortableFixed].forEach((sortable) => {
       const toIndex = sortable?.option('toIndex');
 
-      // @ts-expect-error
       if (isDefined(toIndex) && isDefined(this._previousOffset)) {
+        const offsetDiff = offset - this._previousOffset;
         sortable?.option('toIndex', toIndex - offsetDiff);
       }
       sortable?.option('offset', offset);
       sortable?.update();
     });
 
-    // @ts-expect-error
     this._previousOffset = offset;
   }
 
-  protected _resizeCore() {
-    super._resizeCore.apply(this, arguments as any);
+  protected _resizeCore(): void {
+    super._resizeCore();
     this._updateSortable();
   }
 
-  private _getDraggableGridOptions(options) {
+  private _getDraggableGridOptions(options: ProcessedItem): DraggableGridOptions {
     const gridOptions = this.option();
     const columns = this.getColumns();
-    const $rowElement = $(this.getRowElement(options.rowIndex));
+    const $rowElement = isDefined(options.rowIndex)
+      ? $(this.getRowElement(options.rowIndex))
+      : $();
 
     return {
       dataSource: [{ id: 1, parentId: 0 }],
@@ -218,34 +274,37 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewRowDraggingExtend
       columnAutoWidth: gridOptions.columnAutoWidth,
       showColumnLines: gridOptions.showColumnLines,
       columns: columns.map((column) => ({
+        // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing -- 0 falls back
         width: column.width || column.visibleWidth,
         fixed: column.fixed,
         fixedPosition: column.fixedPosition,
       })),
       isDragging: true,
-      onRowPrepared: (e) => {
-        const rowsView = e.component.getView('rowsView');
-        $(e.rowElement).replaceWith($rowElement.eq(rowsView._isFixedTableRendering ? 1 : 0).clone());
+      onRowPrepared: (e): void => {
+        const draggableRowsView = e.component.getView('rowsView') as ColumnFixingRowsView;
+        const tableIndex = draggableRowsView._isFixedTableRendering ? 1 : 0;
+
+        $(e.rowElement).replaceWith($rowElement.eq(tableIndex).clone());
       },
     };
   }
 
-  private _synchronizeScrollLeftPosition(gridInstance) {
+  private _synchronizeScrollLeftPosition(gridInstance: InternalGrid | undefined): void {
     const scrollable = gridInstance?.getScrollable();
 
     scrollable?.scrollTo({ left: this._scrollLeft });
   }
 
-  private _getDraggableRowTemplate() {
+  private _getDraggableRowTemplate(): (options: DragTemplateData) => dxElementWrapper {
     return (options) => {
       const $rootElement = this.component.$element();
       const $dataGridContainer = $('<div>');
-      setWidth($dataGridContainer, getWidth($rootElement));
+      setWidth($dataGridContainer, getWidth($rootElement.get(0)));
       const items = this._dataController.items();
-      const row = items && items[options.fromIndex];
+      const row = items?.[options.fromIndex];
       const gridOptions = this._getDraggableGridOptions(row);
 
-      // @ts-expect-error
+      // @ts-expect-error _createComponent() is typed for a class, the grid passes its name
       this._createComponent($dataGridContainer, this.component.NAME, gridOptions);
       $dataGridContainer
         .find(`.${GRID_VIEW_CLASSES.gridBaseContainer}`)
@@ -258,7 +317,7 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewRowDraggingExtend
     };
   }
 
-  private _getHandleTemplate() {
+  private _getHandleTemplate(): HandleCellTemplate {
     return GridCoreRowDraggingDom.createHandleTemplateFunc(
       (string) => this.addWidgetPrefix(string),
     );
@@ -266,7 +325,7 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewRowDraggingExtend
 };
 
 export const rowDraggingModule = {
-  defaultOptions() {
+  defaultOptions(): Pick<InternalGridOptions, 'rowDragging'> {
     return {
       rowDragging: {
         showDragIcons: true,

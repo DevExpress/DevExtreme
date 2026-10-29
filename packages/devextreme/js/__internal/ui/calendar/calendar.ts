@@ -1070,8 +1070,7 @@ class Calendar<
     let newCurrentDate = contouredDate ?? date;
 
     if (cell) {
-      // @ts-expect-error ts-error
-      newCurrentDate = $(cell).data(CALENDAR_DATE_VALUE_KEY);
+      newCurrentDate = $(cell).data<Date>(CALENDAR_DATE_VALUE_KEY);
     }
 
     this._isOtherViewCellClicked = true;
@@ -1242,7 +1241,7 @@ class Calendar<
     if (!this._viewWidthValue) {
       const { viewsCount } = this.option();
 
-      this._viewWidthValue = getWidth(this.$element()) / viewsCount;
+      this._viewWidthValue = getWidth(this.$element().get(0)) / viewsCount;
     }
 
     return this._viewWidthValue;

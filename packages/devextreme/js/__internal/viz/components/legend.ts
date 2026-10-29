@@ -23,14 +23,14 @@
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 
 import type { DeferredObj } from '@js/core/utils/deferred';
+import { noop } from '@ts/core/utils/common';
+/// #DEBUG
+import { debug } from '@ts/core/utils/console';
+/// #ENDDEBUG
 import { paintedColor } from '@ts/core/utils/css_variables';
 import { Deferred } from '@ts/core/utils/deferred';
-import { noop } from '@ts/core/utils/m_common';
-/// #DEBUG
-import { debug } from '@ts/core/utils/m_console';
-/// #ENDDEBUG
-import { extend } from '@ts/core/utils/m_extend';
-import { isDefined, isFunction } from '@ts/core/utils/m_type';
+import { extend } from '@ts/core/utils/extend';
+import { isDefined, isFunction } from '@ts/core/utils/type';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 import type { LayoutTargetOptions } from '@ts/viz/core/layout';
 import type { AlignedLayoutRect, LayoutAlignment } from '@ts/viz/core/layout_element';

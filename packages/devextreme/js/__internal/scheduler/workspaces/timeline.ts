@@ -50,7 +50,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
   }
 
   getGroupTableWidth(): number {
-    return this.$sidebarTable ? getOuterWidth(this.$sidebarTable) as number : 0;
+    return this.$sidebarTable ? getOuterWidth(this.$sidebarTable.get(0)) : 0;
   }
 
   protected override getTotalRowCount(
@@ -205,7 +205,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
   private getWorkSpaceMinHeight(): number {
     let minHeight = this.getWorkSpaceHeight();
 
-    const workspaceContainerHeight = getOuterHeight(this.$flexContainer, true);
+    const workspaceContainerHeight = getOuterHeight(this.$flexContainer.get(0), true);
 
     if (minHeight < workspaceContainerHeight) {
       minHeight = workspaceContainerHeight;
@@ -237,7 +237,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
   }
 
   protected override getWorkSpaceWidth(): number {
-    return getOuterWidth(this.$dateTable, true) as number;
+    return getOuterWidth(this.$dateTable.get(0), true);
   }
 
   private getIndicationFirstViewDate(): Date {

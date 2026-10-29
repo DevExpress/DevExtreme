@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import { DataSource } from 'common/data/data_source/data_source';
 import { isFunction, isRenderer } from 'core/utils/type';
-import { createTextElementHiddenCopy } from '__internal/core/utils/m_dom';
+import { createTextElementHiddenCopy } from '__internal/core/utils/dom';
 import ajaxMock from '../../helpers/ajaxMock.js';
 import config from 'core/config';
 import dataQuery from 'common/data/query';

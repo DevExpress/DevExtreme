@@ -1,7 +1,7 @@
 const { test } = QUnit;
 import $ from 'jquery';
 import { extend } from 'core/utils/extend';
-import consoleUtils from '__internal/core/utils/m_console';
+import consoleUtils from '__internal/core/utils/console';
 import 'ui/file_manager';
 import fx from 'common/core/animation/fx';
 import windowUtils from 'core/utils/window';
