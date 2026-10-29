@@ -31,7 +31,3 @@ Demos/**/config.js
 Demos/**/tsconfig.json
 
 .DS_Store
-publish-demos
-
-.angular
-angular.json
