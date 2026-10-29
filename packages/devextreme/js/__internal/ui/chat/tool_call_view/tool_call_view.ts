@@ -2,12 +2,12 @@ import messageLocalization from '@js/common/core/localization/message';
 import Guid from '@js/core/guid';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
+import Accordion from '@js/ui/accordion';
 import type { ToolCall } from '@js/ui/chat';
+import TextArea from '@js/ui/text_area';
 import type { DOMComponentProperties } from '@ts/core/widget/dom_component';
 import DOMComponent from '@ts/core/widget/dom_component';
 import type { OptionChanged } from '@ts/core/widget/types';
-import Accordion from '@ts/ui/accordion';
-import TextArea from '@ts/ui/text_area';
 
 export interface ToolCallViewProperties extends DOMComponentProperties<ToolCallView> {
   toolCalls?: ToolCall[];
