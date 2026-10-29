@@ -1,7 +1,6 @@
 import {
   Component,
   enableProdMode,
-  provideZoneChangeDetection,
 } from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
 import { DxTabsModule, DxSelectBoxModule, DxMultiViewModule } from 'devextreme-angular';
@@ -33,8 +32,4 @@ export class AppComponent {
   }
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);
