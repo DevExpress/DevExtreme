@@ -1,6 +1,6 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import {
-  ChangeDetectorRef, Component, enableProdMode,
+  ChangeDetectorRef, Component, enableProdMode, signal,
 } from '@angular/core';
 import {
   DxSelectBoxModule,
@@ -28,20 +28,18 @@ export class AppComponent {
 
   products: Product[];
 
-  isLoaded = true;
+  isLoaded = signal(true);
 
   selectedItem: Product;
 
   deferredProducts = {
     loadMode: 'raw',
     load: () => {
-      this.isLoaded = false;
-      this.changeDetectorRef.markForCheck();
+      this.isLoaded.set(false);
       const promise = new Promise((resolve) => {
         setTimeout(() => {
           resolve(this.simpleProducts);
-          this.isLoaded = true;
-          this.changeDetectorRef.detectChanges();
+          this.isLoaded.set(true);
         }, 3000);
       });
 
