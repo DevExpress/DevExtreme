@@ -1,7 +1,7 @@
 /* eslint-disable max-classes-per-file */
-import { ChangeDetectorRef, EventEmitter, NgZone } from '@angular/core';
+import { EventEmitter } from '@angular/core';
 import { DxComponent } from './component';
-import { isZoneless } from './zone-utils';
+import type { ZoneMode } from './zone-mode';
 
 interface IEventSubscription {
   handler: any;
@@ -14,8 +14,7 @@ export class NgEventsStrategy {
 
   constructor(
     private readonly instance: any,
-    private readonly zone: NgZone,
-    private readonly changeDetectorRef?: ChangeDetectorRef,
+    private readonly zoneMode: ZoneMode,
   ) { }
 
   hasEvent(name: string) {
@@ -30,15 +29,11 @@ export class NgEventsStrategy {
     const internalSubs = this.subscriptions[name] || [];
     const hasAngularSubscribers = emitter.observers.length > internalSubs.length;
 
-    if (isZoneless(this.zone)) {
-      this.fireZoneless(emitter, args?.[0], name, hasAngularSubscribers);
-      return;
+    if (hasAngularSubscribers) {
+      this.zoneMode.emit(emitter, args?.[0]);
+    } else {
+      this.zoneMode.emitInternal(emitter, args?.[0], name !== 'optionChanged');
     }
-    this.fireInZone(
-      emitter,
-      args?.[0],
-      hasAngularSubscribers,
-    );
   }
 
   on(name: string | object, handler?: Function) {
@@ -88,42 +83,14 @@ export class NgEventsStrategy {
     }
     return this.events[eventName];
   }
-
-  private fireZoneless(
-    emitter: EventEmitter<any>,
-    value: any,
-    name: string,
-    hasAngularSubscribers: boolean,
-  ) {
-    const shouldMark = name !== 'optionChanged' || hasAngularSubscribers;
-    emitter.next(value);
-    if (shouldMark) {
-      this.changeDetectorRef?.markForCheck();
-    }
-  }
-
-  private fireInZone(
-    emitter: EventEmitter<any>,
-    value: any,
-    hasAngularSubscribers: boolean,
-  ) {
-    if (hasAngularSubscribers) {
-      this.zone.run(() => {
-        emitter.next(value);
-      });
-    } else {
-      emitter.next(value);
-    }
-  }
 }
 
 export class EmitterHelper {
   lockedValueChangeEvent = false;
 
   constructor(
-    private readonly zone: NgZone,
+    private readonly zoneMode: ZoneMode,
     private component: DxComponent,
-    private readonly changeDetectorRef?: ChangeDetectorRef,
   ) { }
 
   fireNgEvent(eventName: string, eventArgs: any) {
@@ -132,34 +99,13 @@ export class EmitterHelper {
     }
     const emitter = this.component[eventName];
     if (emitter?.observers.length) {
-      if (isZoneless(this.zone)) {
-        this.fireZoneless(emitter, eventArgs?.[0]);
-      } else {
-        this.fireInZone(emitter, eventArgs?.[0]);
-      }
+      this.zoneMode.emit(emitter, eventArgs?.[0]);
     }
   }
 
   createEmitters(events: any[]) {
     events.forEach((event) => {
       this.component[event.emit] = new EventEmitter();
-    });
-  }
-
-  private fireZoneless(
-    emitter: EventEmitter<any>,
-    value: any,
-  ) {
-    emitter.next(value);
-    this.changeDetectorRef?.markForCheck();
-  }
-
-  private fireInZone(
-    emitter: EventEmitter<any>,
-    value: any,
-  ) {
-    this.zone.run(() => {
-      emitter.next(value);
     });
   }
 }
