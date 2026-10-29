@@ -12,7 +12,7 @@ fixture`Rendering of the recurrence appointments in  Scheduler `
 // a grab at the vertical center leaves that point above the all-day panel
 const DRAG_OFFSET_Y = 15;
 
-test.meta({ unstable: true })('Drag-n-drop recurrence appointment between dateTable and allDay panel', async (t) => {
+test('Drag-n-drop recurrence appointment between dateTable and allDay panel', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const scheduler = new Scheduler('#container');
   const draggableAppointment = scheduler.getAppointment('Simple recurrence appointment');
