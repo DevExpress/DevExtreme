@@ -3,16 +3,7 @@ import {
   ACCORDION_ITEM_OPENED_CLASS,
   ACCORDION_ITEM_TITLE_CLASS,
 } from '@ts/ui/accordion';
-import {
-  CHAT_TOOL_CALL_ARGUMENTS_CLASS,
-  CHAT_TOOL_CALL_ERROR_CLASS,
-  CHAT_TOOL_CALL_ERROR_TAG_CLASS,
-  CHAT_TOOL_CALL_FIELD_CLASS,
-  CHAT_TOOL_CALL_FIELD_LABEL_CLASS,
-  CHAT_TOOL_CALL_ICON_CLASS,
-  CHAT_TOOL_CALL_NAME_CLASS,
-  CHAT_TOOL_CALL_RESULT_CLASS,
-} from '@ts/ui/chat/tool_call_view/tool_call_view';
+import { CHAT_TOOL_CALL_CLASSES } from '@ts/ui/chat/tool_call_view/tool_call_view';
 import { TEXTEDITOR_INPUT_CLASS } from '@ts/ui/text_box/text_editor.base';
 
 export class ToolCallModel {
@@ -23,15 +14,15 @@ export class ToolCallModel {
   }
 
   public getName(): string {
-    return this.root.querySelector(`.${CHAT_TOOL_CALL_NAME_CLASS}`)?.textContent ?? '';
+    return this.root.querySelector(`.${CHAT_TOOL_CALL_CLASSES.name}`)?.textContent ?? '';
   }
 
   public hasIcon(): boolean {
-    return !!this.root.querySelector(`.${CHAT_TOOL_CALL_ICON_CLASS}`);
+    return !!this.root.querySelector(`.${CHAT_TOOL_CALL_CLASSES.icon}`);
   }
 
   public getErrorTagText(): string | null {
-    return this.root.querySelector(`.${CHAT_TOOL_CALL_ERROR_TAG_CLASS}`)
+    return this.root.querySelector(`.${CHAT_TOOL_CALL_CLASSES.errorTag}`)
       ?.textContent ?? null;
   }
 
@@ -45,15 +36,15 @@ export class ToolCallModel {
 
   public getFieldLabels(): string[] {
     return this.getFields()
-      .map((field) => field.querySelector(`.${CHAT_TOOL_CALL_FIELD_LABEL_CLASS}`)?.textContent ?? '');
+      .map((field) => field.querySelector(`.${CHAT_TOOL_CALL_CLASSES.fieldLabel}`)?.textContent ?? '');
   }
 
   public getArgumentsText(): string | null {
-    return this.getFieldValue(CHAT_TOOL_CALL_ARGUMENTS_CLASS);
+    return this.getFieldValue(CHAT_TOOL_CALL_CLASSES.arguments);
   }
 
   public getResultText(): string | null {
-    return this.getFieldValue(CHAT_TOOL_CALL_RESULT_CLASS);
+    return this.getFieldValue(CHAT_TOOL_CALL_CLASSES.result);
   }
 
   public areFieldsReadOnly(): boolean {
@@ -71,7 +62,7 @@ export class ToolCallModel {
   }
 
   public hasErrorResult(): boolean {
-    return !!this.root.querySelector(`.${CHAT_TOOL_CALL_ERROR_CLASS}`);
+    return !!this.root.querySelector(`.${CHAT_TOOL_CALL_CLASSES.error}`);
   }
 
   public hasBody(): boolean {
@@ -79,12 +70,12 @@ export class ToolCallModel {
   }
 
   private getFields(): HTMLElement[] {
-    return Array.from(this.root.querySelectorAll(`.${CHAT_TOOL_CALL_FIELD_CLASS}`));
+    return Array.from(this.root.querySelectorAll(`.${CHAT_TOOL_CALL_CLASSES.field}`));
   }
 
   private getFieldInputs(): HTMLTextAreaElement[] {
     return Array.from(this.root.querySelectorAll<HTMLTextAreaElement>(
-      `.${CHAT_TOOL_CALL_FIELD_CLASS} .${TEXTEDITOR_INPUT_CLASS}`,
+      `.${CHAT_TOOL_CALL_CLASSES.field} .${TEXTEDITOR_INPUT_CLASS}`,
     ));
   }
 

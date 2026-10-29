@@ -14,16 +14,18 @@ export interface ToolCallViewProperties extends DOMComponentProperties<ToolCallV
   expandAll?: boolean;
 }
 
-export const CHAT_TOOL_CALL_VIEW_CLASS = 'dx-chat-tool-call-view';
-export const CHAT_TOOL_CALL_HEADER_CLASS = 'dx-chat-tool-call-header';
-export const CHAT_TOOL_CALL_ICON_CLASS = 'dx-chat-tool-call-icon';
-export const CHAT_TOOL_CALL_NAME_CLASS = 'dx-chat-tool-call-name';
-export const CHAT_TOOL_CALL_ERROR_TAG_CLASS = 'dx-chat-tool-call-error-tag';
-export const CHAT_TOOL_CALL_FIELD_CLASS = 'dx-chat-tool-call-field';
-export const CHAT_TOOL_CALL_FIELD_LABEL_CLASS = 'dx-chat-tool-call-field-label';
-export const CHAT_TOOL_CALL_ARGUMENTS_CLASS = 'dx-chat-tool-call-arguments';
-export const CHAT_TOOL_CALL_RESULT_CLASS = 'dx-chat-tool-call-result';
-export const CHAT_TOOL_CALL_ERROR_CLASS = 'dx-chat-tool-call-error';
+export const CHAT_TOOL_CALL_CLASSES = {
+  view: 'dx-chat-tool-call-view',
+  header: 'dx-chat-tool-call-header',
+  icon: 'dx-chat-tool-call-icon',
+  name: 'dx-chat-tool-call-name',
+  errorTag: 'dx-chat-tool-call-error-tag',
+  field: 'dx-chat-tool-call-field',
+  fieldLabel: 'dx-chat-tool-call-field-label',
+  arguments: 'dx-chat-tool-call-arguments',
+  result: 'dx-chat-tool-call-result',
+  error: 'dx-chat-tool-call-error',
+} as const;
 
 const stringifyValue = (value: unknown): string => (typeof value === 'string'
   ? value
@@ -39,7 +41,7 @@ class ToolCallView extends DOMComponent<ToolCallView, ToolCallViewProperties> {
   }
 
   _initMarkup(): void {
-    this.$element().addClass(CHAT_TOOL_CALL_VIEW_CLASS);
+    this.$element().addClass(CHAT_TOOL_CALL_CLASSES.view);
 
     super._initMarkup();
 
@@ -73,7 +75,7 @@ class ToolCallView extends DOMComponent<ToolCallView, ToolCallViewProperties> {
   _renderHeader(toolCalls: ToolCall[]): void {
     const errorCount = toolCalls.filter(({ status }) => status === 'error').length;
     const $header = $('<div>')
-      .addClass(CHAT_TOOL_CALL_HEADER_CLASS)
+      .addClass(CHAT_TOOL_CALL_CLASSES.header)
       .appendTo(this.$element());
 
     $('<span>')
@@ -93,11 +95,11 @@ class ToolCallView extends DOMComponent<ToolCallView, ToolCallViewProperties> {
     const $container = $(container);
 
     $('<span>')
-      .addClass(CHAT_TOOL_CALL_ICON_CLASS)
+      .addClass(CHAT_TOOL_CALL_CLASSES.icon)
       .appendTo($container);
 
     $('<span>')
-      .addClass(CHAT_TOOL_CALL_NAME_CLASS)
+      .addClass(CHAT_TOOL_CALL_CLASSES.name)
       .text(call.name)
       .appendTo($container);
 
@@ -108,7 +110,7 @@ class ToolCallView extends DOMComponent<ToolCallView, ToolCallViewProperties> {
 
   _renderErrorTag(text: string, $container: dxElementWrapper): void {
     $('<span>')
-      .addClass(CHAT_TOOL_CALL_ERROR_TAG_CLASS)
+      .addClass(CHAT_TOOL_CALL_CLASSES.errorTag)
       .text(text)
       .appendTo($container);
   }
@@ -120,7 +122,7 @@ class ToolCallView extends DOMComponent<ToolCallView, ToolCallViewProperties> {
     if (hasArguments) {
       this._renderField(
         container,
-        CHAT_TOOL_CALL_ARGUMENTS_CLASS,
+        CHAT_TOOL_CALL_CLASSES.arguments,
         messageLocalization.format('dxChat-toolCallArgumentsLabel'),
         stringifyValue(call.arguments),
       );
@@ -129,7 +131,7 @@ class ToolCallView extends DOMComponent<ToolCallView, ToolCallViewProperties> {
     if (hasResult) {
       this._renderField(
         container,
-        CHAT_TOOL_CALL_RESULT_CLASS,
+        CHAT_TOOL_CALL_CLASSES.result,
         messageLocalization.format('dxChat-toolCallResultLabel'),
         stringifyValue(call.result),
         call.status === 'error',
@@ -146,13 +148,13 @@ class ToolCallView extends DOMComponent<ToolCallView, ToolCallViewProperties> {
   ): void {
     const labelId = `dx-${new Guid()}`;
     const $field = $('<div>')
-      .addClass(CHAT_TOOL_CALL_FIELD_CLASS)
+      .addClass(CHAT_TOOL_CALL_CLASSES.field)
       .addClass(fieldClass)
       .appendTo(container);
 
     $('<div>')
       .attr('id', labelId)
-      .addClass(CHAT_TOOL_CALL_FIELD_LABEL_CLASS)
+      .addClass(CHAT_TOOL_CALL_CLASSES.fieldLabel)
       .text(labelText)
       .appendTo($field);
 
@@ -163,7 +165,7 @@ class ToolCallView extends DOMComponent<ToolCallView, ToolCallViewProperties> {
       focusStateEnabled: false,
       hoverStateEnabled: false,
       inputAttr: { 'aria-labelledby': labelId },
-      elementAttr: isError ? { class: CHAT_TOOL_CALL_ERROR_CLASS } : {},
+      elementAttr: isError ? { class: CHAT_TOOL_CALL_CLASSES.error } : {},
     });
   }
 

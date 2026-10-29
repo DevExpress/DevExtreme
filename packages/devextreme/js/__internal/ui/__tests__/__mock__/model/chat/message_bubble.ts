@@ -4,11 +4,7 @@ import {
   CHAT_MESSAGEBUBBLE_DELETED_CLASS,
   CHAT_MESSAGEBUBBLE_HAS_IMAGE_CLASS,
 } from '@ts/ui/chat/messagebubble';
-import {
-  CHAT_TOOL_CALL_ERROR_TAG_CLASS,
-  CHAT_TOOL_CALL_HEADER_CLASS,
-  CHAT_TOOL_CALL_VIEW_CLASS,
-} from '@ts/ui/chat/tool_call_view/tool_call_view';
+import { CHAT_TOOL_CALL_CLASSES } from '@ts/ui/chat/tool_call_view/tool_call_view';
 
 import { ToolCallModel } from './tool_call';
 
@@ -40,7 +36,7 @@ export class MessageBubbleModel {
   }
 
   public getToolCallsElement(): HTMLElement | null {
-    return this.root.querySelector(`.${CHAT_TOOL_CALL_VIEW_CLASS}`);
+    return this.root.querySelector(`.${CHAT_TOOL_CALL_CLASSES.view}`);
   }
 
   public hasToolCalls(): boolean {
@@ -61,14 +57,14 @@ export class MessageBubbleModel {
 
   public getToolCallsTitleText(): string | null {
     const title = this.getToolCallsElement()
-      ?.querySelector(`.${CHAT_TOOL_CALL_HEADER_CLASS}`);
+      ?.querySelector(`.${CHAT_TOOL_CALL_CLASSES.header}`);
 
     return title?.firstElementChild?.textContent ?? null;
   }
 
   public getToolCallsTitleErrorTagText(): string | null {
     const tag = this.getToolCallsElement()?.querySelector(
-      `.${CHAT_TOOL_CALL_HEADER_CLASS} .${CHAT_TOOL_CALL_ERROR_TAG_CLASS}`,
+      `.${CHAT_TOOL_CALL_CLASSES.header} .${CHAT_TOOL_CALL_CLASSES.errorTag}`,
     );
 
     return tag?.textContent ?? null;
