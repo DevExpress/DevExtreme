@@ -1,23 +1,27 @@
 /* eslint-disable max-classes-per-file */
-import type { dxElementWrapper } from '@js/core/renderer';
 import browser from '@js/core/utils/browser';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import { getHeight, getOuterWidth } from '@js/core/utils/size';
 import { isDefined } from '@js/core/utils/type';
 import { hasWindow } from '@js/core/utils/window';
+import type { DxEvent } from '@js/events';
 import type { DataChange } from '@ts/grids/grid_core/data_controller/types';
 import type { ResizingController } from '@ts/grids/grid_core/grid_view/grid_view';
 
 import type { ColumnsController } from '../columns_controller/columns_controller';
+import type { Column } from '../columns_controller/types';
 import type { ModuleType } from '../types';
 import gridCoreUtils from '../utils';
 import type { ColumnsView } from '../views/columns_view';
 import type { RowsView } from '../views/rows_view';
 import type { RowsViewScrollEvent } from '../views/types';
 import { createColumnsInfo } from './m_virtual_columns_core';
+import type { VirtualColumnsController, VirtualColumnsOptions } from './types';
 
-const baseView = <T extends ModuleType<ColumnsView>>(Base: T) => class BaseViewVirtualColumnsExtender extends Base {
-  protected _needToSetCellWidths() {
+const baseView = <T extends ModuleType<ColumnsView>>(
+  Base: T,
+): T => class BaseViewVirtualColumnsExtender extends Base {
+  protected _needToSetCellWidths(): boolean | undefined {
     let result = super._needToSetCellWidths();
 
     if (!result && this._columnsController.isVirtualMode()) {
@@ -30,11 +34,13 @@ const baseView = <T extends ModuleType<ColumnsView>>(Base: T) => class BaseViewV
   }
 };
 
-const rowsView = (Base: ModuleType<RowsView>) => class VirtualColumnsRowsViewExtender extends baseView(Base) {
-  protected _resizeCore() {
-    // @ts-expect-error
-    super._resizeCore.apply(this, arguments);
-    // @ts-expect-error
+const rowsView = (
+  Base: ModuleType<RowsView>,
+): ModuleType<RowsView> => class VirtualColumnsRowsViewExtender extends baseView(Base) {
+  protected declare _columnsController: VirtualColumnsController;
+
+  protected _resizeCore(): void {
+    super._resizeCore();
     this._columnsController.resize();
   }
 
@@ -43,22 +49,19 @@ const rowsView = (Base: ModuleType<RowsView>) => class VirtualColumnsRowsViewExt
 
     this._scrollLeft = e.scrollOffset.left;
 
-    // @ts-expect-error
-    super._handleScroll.apply(this, arguments);
+    super._handleScroll(e);
 
-    // @ts-expect-error
     this._columnsController.setScrollPosition(left, e.event);
   }
 
   protected _renderCore(e?: DataChange): DeferredObj<unknown> {
     if (e && 'virtualColumnsScrolling' in e && e.virtualColumnsScrolling) {
-      // @ts-expect-error _findContentElement() is typed as possibly undefined
-      const $contentElement: dxElementWrapper = this._findContentElement();
+      const $contentElement = this._findContentElement();
       const fixedColumns = this._columnsController?.getFixedColumns();
       const useNativeScrolling = this._scrollable?.option('useNative');
       const legacyMode = this.option('columnFixing.legacyMode');
 
-      if (fixedColumns?.length) {
+      if ($contentElement && fixedColumns?.length) {
         // TODO: remove the condition when legacyMode is removed
         if (legacyMode && !useNativeScrolling) {
           $contentElement.css({ minHeight: gridCoreUtils.getContentHeightLimit(browser) });
@@ -79,51 +82,50 @@ const rowsView = (Base: ModuleType<RowsView>) => class VirtualColumnsRowsViewExt
   }
 };
 
-const columns = (Base: ModuleType<ColumnsController>) => class VirtualColumnsControllerExtender extends Base {
-  private _beginPageIndex: any;
+const columns = (
+  Base: ModuleType<ColumnsController>,
+): ModuleType<VirtualColumnsController> => class VirtualColumnsControllerExtender extends Base {
+  private _beginPageIndex!: number | null;
 
-  private _endPageIndex: any;
+  private _endPageIndex!: number | null;
 
-  private _position: any;
+  private _position!: number;
 
-  private _virtualVisibleColumns: any;
+  private _virtualVisibleColumns!: Record<string, Column[]>;
 
-  private _renderTime: any;
+  private _renderTime?: number;
 
-  private _changedTimeout: any;
+  private _changedTimeout?: ReturnType<typeof setTimeout>;
 
   private _resizingController!: ResizingController;
 
-  public init() {
-    const that = this;
-    // @ts-expect-error
-    super.init.apply(this, arguments);
+  public init(isApplyingUserState?: boolean): void {
+    super.init(isApplyingUserState);
 
     this._resizingController = this.getController('resizing');
 
-    that._beginPageIndex = null;
-    that._endPageIndex = null;
-    that._position ??= 0;
-    that._virtualVisibleColumns = {};
+    this._beginPageIndex = null;
+    this._endPageIndex = null;
+    this._position ??= 0;
+    this._virtualVisibleColumns = {};
   }
 
-  public dispose() {
+  public dispose(): void {
     clearTimeout(this._changedTimeout);
-    // @ts-expect-error
-    super.dispose.apply(this, arguments);
+    super.dispose();
   }
 
-  public resetColumnsCache() {
+  public resetColumnsCache(): void {
     super.resetColumnsCache();
     this._virtualVisibleColumns = {};
   }
 
-  private getBeginPageIndex(position) {
+  private getBeginPageIndex(position: number): number {
     const visibleColumns = this.getVisibleColumns(undefined, true);
     const widths = gridCoreUtils.getColumnWidths(visibleColumns);
     let currentPosition = 0;
 
-    for (let index = 0; index < widths.length; index++) {
+    for (let index = 0; index < widths.length; index += 1) {
       if (currentPosition >= position) {
         return Math.floor(index / this.getColumnPageSize());
       }
@@ -133,23 +135,23 @@ const columns = (Base: ModuleType<ColumnsController>) => class VirtualColumnsCon
     return 0;
   }
 
-  private getTotalWidth() {
+  private getTotalWidth(): number {
     const width = this.option('width');
     if (typeof width === 'number') {
       return width;
     }
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing -- 0 falls back
     return this._resizingController._lastWidth || getOuterWidth(this.component.$element().get(0));
   }
 
-  private getEndPageIndex(position) {
+  private getEndPageIndex(position: number): number {
     const visibleColumns = this.getVisibleColumns(undefined, true);
     const widths = gridCoreUtils.getColumnWidths(visibleColumns);
+    const endPosition = position + this.getTotalWidth();
     let currentPosition = 0;
 
-    position += this.getTotalWidth();
-
-    for (let index = 0; index < widths.length; index++) {
-      if (currentPosition >= position) {
+    for (let index = 0; index < widths.length; index += 1) {
+      if (currentPosition >= endPosition) {
         return Math.ceil(index / this.getColumnPageSize());
       }
       currentPosition += widths[index];
@@ -158,38 +160,38 @@ const columns = (Base: ModuleType<ColumnsController>) => class VirtualColumnsCon
     return Math.ceil(widths.length / this.getColumnPageSize());
   }
 
-  private getColumnPageSize() {
+  private getColumnPageSize(): number {
     return this.option('scrolling.columnPageSize');
   }
 
-  private _fireColumnsChanged(event?) {
-    const date: any = new Date();
+  private _fireColumnsChanged(event?: DxEvent): void {
+    const date = new Date();
     this.columnsChanged.fire({
       optionNames: { all: true, length: 1 },
       changeTypes: {
         columns: true, virtualColumnsScrolling: true, length: 2, event,
       },
     });
-    this._renderTime = (new Date()) as any - date;
+    this._renderTime = new Date().getTime() - date.getTime();
   }
 
-  private getScrollingTimeout() {
+  private getScrollingTimeout(): number {
     const renderingThreshold = this.option('scrolling.columnRenderingThreshold');
     const renderAsync = this.option('scrolling.renderAsync');
     let scrollingTimeout = 0;
 
-    if ((!isDefined(renderAsync) && this._renderTime > renderingThreshold) || renderAsync) {
+    if ((!isDefined(renderAsync) && Number(this._renderTime) > renderingThreshold) || renderAsync) {
       scrollingTimeout = this.option('scrolling.timeout');
     }
 
     return scrollingTimeout;
   }
 
-  private resize() {
+  public resize(): void {
     this._setScrollPositionCore(this._position);
   }
 
-  private _setScrollPositionCore(position, event?) {
+  private _setScrollPositionCore(position: number, event?: DxEvent): void {
     const needColumnsChanged = this.isNeedToRenderVirtualColumns(position);
 
     if (needColumnsChanged) {
@@ -200,35 +202,40 @@ const columns = (Base: ModuleType<ColumnsController>) => class VirtualColumnsCon
     }
   }
 
-  public isNeedToRenderVirtualColumns(scrollPosition): boolean {
+  public isNeedToRenderVirtualColumns(scrollPosition: number): boolean {
     if (this.isVirtualMode()) {
       if (scrollPosition < this._position) {
-        return this._beginPageIndex > this.getBeginPageIndex(scrollPosition);
+        return Number(this._beginPageIndex) > this.getBeginPageIndex(scrollPosition);
       }
 
-      return this._endPageIndex < this.getEndPageIndex(scrollPosition);
+      return Number(this._endPageIndex) < this.getEndPageIndex(scrollPosition);
     }
 
     return false;
   }
 
-  public getFixedColumns(rowIndex?, isBase?) {
+  public getFixedColumns(rowIndex?: number | null, isBase?: boolean): Column[] {
     const fixedColumns = super.getFixedColumns(rowIndex);
     if (this.isVirtualMode() && !isBase && fixedColumns.length) {
       const transparentColumnIndex = fixedColumns.map((c) => c.command).indexOf('transparent');
-      fixedColumns[transparentColumnIndex].colspan = this.getVisibleColumns().length - super.getFixedColumns().length + 1;
+      fixedColumns[transparentColumnIndex].colspan = this.getVisibleColumns().length
+        - super.getFixedColumns().length + 1;
       return fixedColumns;
     }
 
     return fixedColumns;
   }
 
-  protected _compileVisibleColumns(rowIndex, isBase?) {
+  protected _compileVisibleColumns(rowIndex?: number | null, isBase?: boolean): Column[] {
     if (isBase || !this.isVirtualMode() || !this._shouldReturnVisibleColumns()) {
       return super._compileVisibleColumns(rowIndex);
     }
 
-    if (this._columns?.length && !isDefined(this._beginPageIndex) && !isDefined(this._endPageIndex)) {
+    if (
+      this._columns?.length
+      && !isDefined(this._beginPageIndex)
+      && !isDefined(this._endPageIndex)
+    ) {
       this._beginPageIndex = this.getBeginPageIndex(this._position);
       this._endPageIndex = this.getEndPageIndex(this._position);
     }
@@ -244,8 +251,8 @@ const columns = (Base: ModuleType<ColumnsController>) => class VirtualColumnsCon
     let visibleColumns = super._compileVisibleColumns();
     const rowCount = this.getRowCount();
     const pageSize = this.getColumnPageSize();
-    let startIndex = beginPageIndex * pageSize;
-    let endIndex = endPageIndex * pageSize;
+    let startIndex = Number(beginPageIndex) * pageSize;
+    let endIndex = Number(endPageIndex) * pageSize;
     const fixedColumns = this.getFixedColumns(undefined, true);
     const transparentColumnIndex = fixedColumns.map((c) => c.command).indexOf('transparent');
 
@@ -258,7 +265,9 @@ const columns = (Base: ModuleType<ColumnsController>) => class VirtualColumnsCon
       startIndex = 0;
     }
 
-    const endFixedColumnCount = fixedColumns.length ? fixedColumns.length - transparentColumnIndex - 1 : 0;
+    const endFixedColumnCount = fixedColumns.length
+      ? fixedColumns.length - transparentColumnIndex - 1
+      : 0;
     let endFixedColumns = visibleColumns.slice(visibleColumns.length - endFixedColumnCount);
     const endColumns = visibleColumns.slice(endIndex, visibleColumns.length - endFixedColumnCount);
     const endWidth = gridCoreUtils.getColumnWidths(endColumns).reduce((a, b) => a + b, 0);
@@ -268,12 +277,20 @@ const columns = (Base: ModuleType<ColumnsController>) => class VirtualColumnsCon
     }
 
     if (rowCount > 1 && typeof rowIndex === 'number') {
-      const columnsInfo: any = [];
-      for (let i = 0; i <= rowCount; i++) {
+      const columnsInfo: Column[][] = [];
+      for (let i = 0; i <= rowCount; i += 1) {
         columnsInfo.push(super._compileVisibleColumns(i));
       }
-      beginFixedColumns = createColumnsInfo(columnsInfo, 0, beginFixedColumns.length)[rowIndex] || [];
-      endFixedColumns = createColumnsInfo(columnsInfo, visibleColumns.length - endFixedColumns.length, visibleColumns.length)[rowIndex] || [];
+      beginFixedColumns = createColumnsInfo(
+        columnsInfo,
+        0,
+        beginFixedColumns.length,
+      )[rowIndex] || [];
+      endFixedColumns = createColumnsInfo(
+        columnsInfo,
+        visibleColumns.length - endFixedColumns.length,
+        visibleColumns.length,
+      )[rowIndex] || [];
       visibleColumns = createColumnsInfo(columnsInfo, startIndex, endIndex)[rowIndex] || [];
     } else {
       visibleColumns = visibleColumns.slice(startIndex, endIndex);
@@ -294,13 +311,14 @@ const columns = (Base: ModuleType<ColumnsController>) => class VirtualColumnsCon
     return visibleColumns;
   }
 
-  public getColumnIndexOffset() {
+  public getColumnIndexOffset(): number {
     let offset = 0;
-    if (this._beginPageIndex > 0) {
+    const beginPageIndex = Number(this._beginPageIndex);
+    if (beginPageIndex > 0) {
       const fixedColumns = this.getFixedColumns();
       const transparentColumnIndex = fixedColumns.map((c) => c.command).indexOf('transparent');
       const leftFixedColumnCount = transparentColumnIndex >= 0 ? transparentColumnIndex : 0;
-      offset = this._beginPageIndex * this.getColumnPageSize() - leftFixedColumnCount - 1;
+      offset = beginPageIndex * this.getColumnPageSize() - leftFixedColumnCount - 1;
     }
     return offset > 0 ? offset : 0;
   }
@@ -309,7 +327,7 @@ const columns = (Base: ModuleType<ColumnsController>) => class VirtualColumnsCon
     return hasWindow() && this.option('scrolling.columnRenderingMode') === 'virtual';
   }
 
-  public setScrollPosition(position, event?) {
+  public setScrollPosition(position: number, event?: DxEvent): void {
     const scrollingTimeout = this.getScrollingTimeout();
 
     if (scrollingTimeout > 0) {
@@ -325,7 +343,7 @@ const columns = (Base: ModuleType<ColumnsController>) => class VirtualColumnsCon
 };
 
 export const virtualColumnsModule = {
-  defaultOptions() {
+  defaultOptions(): VirtualColumnsOptions {
     return {
       scrolling: {
         columnRenderingMode: 'standard',
