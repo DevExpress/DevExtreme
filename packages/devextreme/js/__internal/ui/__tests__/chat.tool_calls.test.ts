@@ -2,7 +2,7 @@ import {
   afterEach, beforeAll, beforeEach, describe, expect, it, jest,
 } from '@jest/globals';
 import fx from '@js/common/core/animation/fx';
-import { loadMessages } from '@js/common/core/localization';
+import { loadMessages, locale } from '@js/common/core/localization';
 import $ from '@js/core/renderer';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred } from '@js/core/utils/deferred';
@@ -27,15 +27,6 @@ const WEATHER: ToolCall = { name: 'getWeather', arguments: { city: 'London' }, r
 const TIME: ToolCall = { name: 'getCurrentTime', arguments: { city: 'Barcelona' }, result: '14:30' };
 const FAILED: ToolCall = {
   name: 'getRate', arguments: { from: 'USD' }, result: 'Service is not available', status: 'error',
-};
-
-const DEFAULT_TEXTS = {
-  'dxChat-toolCallsTitle': '{0} tools',
-  'dxChat-toolCallArgumentsLabel': 'Arguments',
-  'dxChat-toolCallResultLabel': 'Result',
-  'dxChat-toolCallError': 'Error',
-  'dxChat-toolCallsErrorSingle': '{0} Error',
-  'dxChat-toolCallsErrorMultiple': '{0} Errors',
 };
 
 let nextId = 0;
@@ -104,7 +95,7 @@ describe('Chat tool calls', () => {
     chats.forEach((instance) => instance.dispose());
     chats.length = 0;
     document.body.innerHTML = '';
-    loadMessages({ en: DEFAULT_TEXTS });
+    locale('en');
     jest.useRealTimers();
   });
 
@@ -821,6 +812,23 @@ describe('Chat tool calls', () => {
       expect(getBubble(chat).hasToolCalls()).toBe(false);
     });
 
+    it('should apply expandAll when an image message is changed to a text message with toolCalls', () => {
+      const message = createMessage({
+        type: 'image', src: 'image.png', alt: 'Image', text: undefined,
+      });
+      const { chat, push } = createStoreChat([message], {
+        toolCallOptions: { expandAll: true },
+      });
+
+      push([{
+        type: 'update',
+        key: message.id,
+        data: { type: 'text', text: 'Answer', toolCalls: [WEATHER, TIME] },
+      }]);
+
+      expect(getCallsExpandedStates(getBubble(chat))).toEqual([true, true]);
+    });
+
     it('should render the block when an image message is changed to a text message with toolCalls', () => {
       const message = createMessage({
         type: 'image', src: 'image.png', alt: 'Image', text: undefined,
@@ -1014,7 +1022,7 @@ describe('Chat tool calls', () => {
   describe('localization', () => {
     it('should use the overridden texts', () => {
       loadMessages({
-        en: {
+        xx: {
           'dxChat-toolCallsTitle': 'Tools used: {0}',
           'dxChat-toolCallArgumentsLabel': 'Input',
           'dxChat-toolCallResultLabel': 'Output',
@@ -1023,6 +1031,7 @@ describe('Chat tool calls', () => {
           'dxChat-toolCallsErrorMultiple': '{0} failures',
         },
       });
+      locale('xx');
 
       const chat = createChat({
         items: [

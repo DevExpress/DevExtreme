@@ -358,14 +358,9 @@ class MessageBubble extends Widget<Properties> {
         this._updateContent();
         break;
       case 'toolCalls':
-      case 'showToolCalls':
-      case 'expandAllToolCalls':
         this._renderToolCallsElement();
         this._renderToolCalls();
-
-        if (name === 'toolCalls') {
-          this._updateContent();
-        }
+        this._updateContent();
         break;
       case 'isEdited':
         this._updateMessageData(name, value);

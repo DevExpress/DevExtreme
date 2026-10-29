@@ -133,18 +133,16 @@ class MessageGroup extends Widget<Properties> {
       type,
       attachments,
       onAttachmentDownloadClick,
+      toolCalls: (message as TextMessage).toolCalls,
       showToolCalls: !messageTemplate || !!toolCallOptions?.showInMessageTemplate,
+      expandAllToolCalls: toolCallOptions?.expandAll,
     };
 
     if (type === 'image') {
       options.alt = (message as ImageMessage).alt;
       options.src = (message as ImageMessage).src;
     } else {
-      const { text, toolCalls } = message as TextMessage;
-
-      options.text = text;
-      options.toolCalls = toolCalls;
-      options.expandAllToolCalls = toolCallOptions?.expandAll;
+      options.text = (message as TextMessage).text;
     }
 
     if (messageTemplate) {
