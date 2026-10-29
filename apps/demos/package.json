@@ -15,8 +15,6 @@
         "devextreme-vue": "workspace:~"
     },
     "dependencies": {
-        "@angular/cli": "17.3.11",
-        "@angular-devkit/build-angular": "17.3.11",
         "@angular/common": "17.3.12",
         "@angular/compiler": "17.3.12",
         "@angular/compiler-cli": "17.3.12",
@@ -43,8 +41,6 @@
         "devextreme-cldr-data": "1.0.3",
         "devextreme-quill": "catalog:",
         "dx-systemjs-vue-browser": "1.1.2",
-        "esbuild": "0.19.3",
-        "esbuild-plugin-vue3": "0.3.2",
         "eslint-plugin-react-hooks": "4.6.0",
         "exceljs": "4.4.0",
         "file-saver-es": "2.0.5",
@@ -84,7 +80,6 @@
         "vue": "^3.3.4",
         "vuex": "4.0.0-beta.4",
         "whatwg-fetch": "2.0.4",
-        "yargs": "17.7.2",
         "zone.js": "0.14.10"
     },
     "devDependencies": {
@@ -100,7 +95,6 @@
         "@types/fs-extra": "11.0.2",
         "@types/react": "17.0.2",
         "@types/react-dom": "17.0.2",
-        "@types/yargs": "17.0.32",
         "@typescript-eslint/parser": "5.62.0",
         "@vue/eslint-config-typescript": "12.0.0",
         "axe-core": "4.10.2",
@@ -166,11 +160,6 @@
         "prepare-bundles": "pnpm run generate-devextreme-angular-umd && gulp bundles && gulp update-config",
         "convert-to-js": "ts-node ./utils/ts-to-js-converter/cli.ts",
         "create-typestat-cfg": "cd ./utils/internal && node ./create-typestat-cfg.js",
-        "make-demos-bundle": "ts-node ./utils/create-bundles",
-        "update-angular-json": "ts-node ./utils/create-bundles/Angular/update-angular-json.ts",
-        "build-angular": "ng build",
-        "post-process-angular": "ts-node ./utils/create-bundles/Angular/post-process-index.ts",
-        "webserver-gh": "cd ./publish-demos && http-server --port 5645",
         "ts-check-react": "pnpm exec tsc --noEmit --project tsconfig.react-check.json",
         "ts-check-ng": "pnpm exec ngc --noEmit --project tsconfig.ngc-check.json",
         "ts-check-vue": "pnpm exec vue-tsc --noEmit --project tsconfig.vue-check.json"

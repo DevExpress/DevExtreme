@@ -25,8 +25,6 @@ import { createMdReport, createTestCafeReport } from '../utils/axe-reporter/repo
 import knownWarnings from './known-warnings.json';
 import skipJsErrorsComponents from './skip-js-errors-components.json';
 
-import { gitHubIgnored } from '../utils/visual-tests/github-ignored-list';
-
 const execCode = ClientFunction((code) => {
   // eslint-disable-next-line no-eval
   const result = eval(code);
@@ -415,19 +413,8 @@ FRAMEWORKS.forEach((approach) => {
       }
     }
 
-    const isGitHubDemos = process.env.ISGITHUBDEMOS;
-    let pageURL = '';
-    const theme = process.env.THEME.replace('generic.', '');
-    if (isGitHubDemos) {
-      pageURL = `http://127.0.0.1:808${getPortByIndex(index)}/Demos/${widgetName}/${demoName}/${approach}/?theme=dx.${theme}`;
-    } else {
-      changeTheme(__dirname, `../${demoPath}/index.html`, process.env.THEME);
-      pageURL = `http://127.0.0.1:808${getPortByIndex(index)}/apps/demos/Demos/${widgetName}/${demoName}/${approach}/`;
-    }
-    // remove when tests enabled not only for datagrid
-    if (isGitHubDemos && (widgetName !== 'DataGrid' || gitHubIgnored.includes(demoName))) {
-      return;
-    }
+    changeTheme(__dirname, `../${demoPath}/index.html`, process.env.THEME);
+    const pageURL = `http://127.0.0.1:808${getPortByIndex(index)}/apps/demos/Demos/${widgetName}/${demoName}/${approach}/`;
 
     if (shouldSkipDemo(approach, widgetName, demoName, SKIPPED_TESTS)) {
       return;
@@ -473,15 +460,7 @@ FRAMEWORKS.forEach((approach) => {
         } else {
           const testTheme = process.env.THEME;
 
-          let comparisonResult;
-          if (isGitHubDemos) {
-            comparisonResult = await compareScreenshot(t, `${testName}${getThemePostfix(testTheme)}.png`, undefined, (comparisonOptions && {
-              ...comparisonOptions,
-              ...{ looksSameComparisonOptions: { antialiasingTolerance: 10 } },
-            }));
-          } else {
-            comparisonResult = await compareScreenshot(t, `${testName}${getThemePostfix(testTheme)}.png`, undefined, comparisonOptions);
-          }
+          const comparisonResult = await compareScreenshot(t, `${testName}${getThemePostfix(testTheme)}.png`, undefined, comparisonOptions);
 
           const consoleMessages = await t.getBrowserConsoleMessages();
 
