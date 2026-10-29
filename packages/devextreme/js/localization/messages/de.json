@@ -448,6 +448,12 @@
         "dxChat-fileViewLabel": "Dateiliste",
         "dxChat-downloadButtonLabel": "Datei {0} herunterladen",
         "dxChat-fileLimitReachedWarning": "Sie haben zu viele Dateien ausgewählt. Wählen Sie höchstens {0} Dateien aus und versuchen Sie es erneut.",
+        "dxChat-toolCallArgumentsLabel": "Arguments",
+        "dxChat-toolCallResultLabel": "Result",
+        "dxChat-toolCallsTitle": "{0} tools",
+        "dxChat-toolCallError": "Error",
+        "dxChat-toolCallsErrorSingle": "{0} Error",
+        "dxChat-toolCallsErrorMultiple": "{0} Errors",
 
         "dxColorView-ariaRed": "Rot",
         "dxColorView-ariaGreen": "Grün",

@@ -448,6 +448,12 @@
         "dxChat-fileViewLabel": "파일 목록",
         "dxChat-downloadButtonLabel": "파일 {0} 다운로드",
         "dxChat-fileLimitReachedWarning": "파일을 너무 많이 선택했습니다. {0}개 이하의 파일을 선택하고 다시 시도하세요.",
+        "dxChat-toolCallArgumentsLabel": "Arguments",
+        "dxChat-toolCallResultLabel": "Result",
+        "dxChat-toolCallsTitle": "{0} tools",
+        "dxChat-toolCallError": "Error",
+        "dxChat-toolCallsErrorSingle": "{0} Error",
+        "dxChat-toolCallsErrorMultiple": "{0} Errors",
 
         "dxColorView-ariaRed": "빨강",
         "dxColorView-ariaGreen": "초록",

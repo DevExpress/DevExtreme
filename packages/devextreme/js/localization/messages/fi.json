@@ -448,6 +448,12 @@
         "dxChat-fileViewLabel": "Tiedostoluettelo",
         "dxChat-downloadButtonLabel": "Lataa tiedosto {0}",
         "dxChat-fileLimitReachedWarning": "Valitsit liian monta tiedostoa. Valitse enintään {0} tiedostoa ja yritä uudelleen.",
+        "dxChat-toolCallArgumentsLabel": "Arguments",
+        "dxChat-toolCallResultLabel": "Result",
+        "dxChat-toolCallsTitle": "{0} tools",
+        "dxChat-toolCallError": "Error",
+        "dxChat-toolCallsErrorSingle": "{0} Error",
+        "dxChat-toolCallsErrorMultiple": "{0} Errors",
 
         "dxColorView-ariaRed": "Punainen",
         "dxColorView-ariaGreen": "Vihreä",
