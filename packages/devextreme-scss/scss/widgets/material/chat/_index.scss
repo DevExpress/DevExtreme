@@ -164,13 +164,15 @@
   $body-padding-block-start: $chat-tool-call-body-padding-block-start,
   $body-padding-inline-end: $chat-tool-call-body-padding-inline-end,
   $body-padding-block-end: $chat-tool-call-body-padding-block-end,
-  $separator-width: $chat-tool-call-separator-width,
-  $separator-line-width: $chat-tool-call-separator-line-width,
+  $body-margin-inline-start: $chat-tool-call-body-margin-inline-start,
+  $body-padding-inline-start: $chat-tool-call-body-padding-inline-start,
+  $body-border-width: $chat-tool-call-body-border-width,
   $fields-gap: $chat-tool-call-fields-gap,
   $label-padding-block-end: $chat-tool-call-label-padding-block-end,
   $field-padding: $chat-tool-call-field-padding,
   $field-border-radius: $chat-tool-call-field-border-radius,
   $field-border-width: $chat-tool-call-field-border-width,
+  $text-padding: $chat-tool-call-text-padding,
 );
 
 .dx-chat-file {

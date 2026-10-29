@@ -45,16 +45,8 @@
   }
 
   .dx-accordion-item-body {
-    position: relative;
     display: flex;
     flex-direction: column;
-
-    // The vertical line of the opened item
-    &::before {
-      content: "";
-      position: absolute;
-      inset-block: 0;
-    }
   }
 
   .dx-chat-tool-call-header {
