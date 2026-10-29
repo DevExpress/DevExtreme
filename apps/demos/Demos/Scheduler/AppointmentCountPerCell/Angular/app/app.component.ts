@@ -1,5 +1,5 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { ViewChild, Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import { ViewChild, Component, enableProdMode } from '@angular/core';
 import { DxSchedulerModule, DxSchedulerComponent } from 'devextreme-angular';
 import { Appointment, Resource, Service } from './app.service';
 
@@ -30,8 +30,4 @@ export class AppComponent {
   }
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);
