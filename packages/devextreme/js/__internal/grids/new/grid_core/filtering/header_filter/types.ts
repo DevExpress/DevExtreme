@@ -1,4 +1,4 @@
-import type { FilterType } from '@js/common/grids';
+import type { ColumnHeaderFilter, FilterType } from '@js/common/grids';
 import type { DataSourceLike } from '@js/data/data_source';
 import type { FilterValue } from '@ts/grids/new/grid_core/filtering/types';
 
@@ -69,7 +69,7 @@ export interface HeaderFilterBaseOptions {
 
 export interface HeaderFilterColumnOptions extends HeaderFilterBaseOptions {
   // Specifies the header filter's data source.
-  dataSource?: DataSourceLike<unknown>;
+  dataSource?: ColumnHeaderFilter['dataSource'];
   // Specifies how the header filter combines values into groups.
   // Does not apply if you specify a custom header filter data source
   // TODO: Maybe we should add values for dates to this option

@@ -167,6 +167,13 @@ if (Quill) {
           // @ts-expect-error the option value is untyped (HtmlEditor._moduleOptionChanged)
           this.options.uploadDirectory = value;
           break;
+        case 'uploadUrl':
+          // @ts-expect-error the option value is untyped (HtmlEditor._moduleOptionChanged)
+          this.options.uploadUrl = value;
+          if (!isDefined(this.options.fileUploaderOptions?.uploadUrl)) {
+            this._fileUploader?.option('uploadUrl', this.options.uploadUrl);
+          }
+          break;
         case 'fileUploaderOptions':
           this.options.fileUploaderOptions = extend(
             true,

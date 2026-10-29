@@ -15,6 +15,7 @@ import {
 import variableWrapper from '@js/core/utils/variable_wrapper';
 import type { DataGridCommandColumnType } from '@js/ui/data_grid';
 import errors from '@js/ui/widget/ui.errors';
+import { getNumberFormatLocale } from '@ts/core/global_format_config';
 import { CLASSES as COLUMN_HEADERS_CLASSES } from '@ts/grids/grid_core/column_headers/const';
 
 import { AI_COLUMN_NAME } from '../ai_column/const';
@@ -1164,11 +1165,15 @@ export const sortColumnsByCaption = (
 };
 
 export const strictParseNumber = (text: string, format: Format): number | undefined => {
-  const parsedValue = numberLocalization.parse(text);
+  const locale = getNumberFormatLocale(format);
+  const parsedValue = numberLocalization.parse(text, { locale });
 
   if (isNumeric(parsedValue)) {
     const formattedValue = numberLocalization.format(parsedValue, format);
-    const formattedValueWithDefaultFormat = numberLocalization.format(parsedValue, 'decimal');
+    const formattedValueWithDefaultFormat = numberLocalization.format(
+      parsedValue,
+      { type: 'decimal', locale },
+    );
 
     if (formattedValue === text || formattedValueWithDefaultFormat === text) {
       return parsedValue;

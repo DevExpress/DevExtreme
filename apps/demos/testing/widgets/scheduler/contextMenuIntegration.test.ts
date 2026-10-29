@@ -5,7 +5,7 @@ import { testScreenshot } from '../../../utils/visual-tests/helpers/theme-utils'
 
 fixture('Scheduler.ContextMenuIntegration')
   .before(async (ctx) => {
-    ctx.initialWindowSize = [900, 600];
+    ctx.initialWindowSize = [900, 800];
   });
 
 runManualTest('Scheduler', 'ContextMenu', (test) => {

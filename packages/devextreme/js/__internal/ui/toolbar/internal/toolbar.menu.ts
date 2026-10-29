@@ -195,6 +195,7 @@ export default class DropDownMenu extends Widget<DropDownMenuProperties> {
 
     delete this._list;
     delete this._popup;
+    delete this._$popup;
   }
 
   _renderButton(): void {
@@ -340,7 +341,7 @@ export default class DropDownMenu extends Widget<DropDownMenuProperties> {
     const windowHeight = getOuterHeight(getWindow());
     const maxHeight = Math.max(
       offsetTop,
-      windowHeight - offsetTop - getOuterHeight($element),
+      windowHeight - offsetTop - getOuterHeight($element.get(0)),
     );
 
     return Math.min(

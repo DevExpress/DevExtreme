@@ -4,7 +4,7 @@ import holdEvent from '@js/common/core/events/hold';
 import { addNamespace, fireEvent, isMouseEvent } from '@js/common/core/events/utils/index';
 import $ from '@js/core/renderer';
 import devices from '@ts/core/devices';
-import supportUtils from '@ts/core/utils/m_support';
+import supportUtils from '@ts/core/utils/support';
 import type { EmitterEvent } from '@ts/events/core/emitter';
 
 const CONTEXTMENU_NAMESPACE = 'dxContexMenu';

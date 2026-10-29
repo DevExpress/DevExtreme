@@ -144,7 +144,6 @@ class File extends DOMComponent<File, Properties> {
       focusStateEnabled,
       hoverStateEnabled,
     } = this.option();
-    // @ts-expect-error format params should be extended
     const ariaLabel = messageLocalization.format('dxChat-downloadButtonLabel', data?.name ?? '');
 
     // @ts-expect-error useInkRipple should be optional
