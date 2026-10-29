@@ -52,7 +52,6 @@ import type {
   WidgetElementData,
   WrappedLookupDataSource,
 } from '@ts/grids/grid_core/types';
-import SelectBox from '@ts/ui/select_box';
 
 import { HIDDEN_COLUMNS_WIDTH } from './adaptivity/const';
 import { AI_COLUMN_NAME } from './ai_column/const';
@@ -608,7 +607,9 @@ export default {
     if (!isFocused && isSelectTextOnEditingStart && $element.is('.dx-texteditor-input') && !$element.is('[readonly]')) {
       const element = $element.get(0) as HTMLInputElement | HTMLTextAreaElement;
       const editor = getWidgetInstance($element.closest('.dx-texteditor'));
-      const loadItemDeferred = editor instanceof SelectBox ? editor._loadItemDeferred : undefined;
+      const loadItemDeferred = editor && '_loadItemDeferred' in editor
+        ? editor._loadItemDeferred
+        : undefined;
 
       when(loadItemDeferred).done(() => {
         element.select();
