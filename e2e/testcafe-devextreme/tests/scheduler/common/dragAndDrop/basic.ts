@@ -85,8 +85,9 @@ test.meta({ unstable: true })('Drag recurrent appointment occurrence from collec
   const appointmentTooltipItem = appointmentTooltip.getListItem('Recurrence two');
   const popup = Scheduler.getDeleteRecurrenceDialog();
 
+  await collector.click();
+
   await t
-    .click(collector.element)
     .expect(appointmentTooltip.isVisible()).ok()
     .dragToElement(appointmentTooltipItem.element, scheduler.getDateTableCell(2, 2))
     .expect(appointmentTooltipItem.element.exists)

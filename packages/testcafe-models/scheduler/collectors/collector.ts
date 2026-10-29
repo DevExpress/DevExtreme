@@ -1,3 +1,5 @@
+import { ClientFunction } from 'testcafe';
+
 export const CLASS = {
   appointmentCollector: 'dx-scheduler-appointment-collector',
   stateFocused: 'dx-state-focused',
@@ -18,5 +20,41 @@ export default class AppointmentCollector {
 
   get isCompact(): Promise<boolean> {
     return this.element.hasClass(CLASS.compact);
+  }
+
+  // the pointer events are dispatched synchronously: a mouseup that arrives
+  // more than 750ms after mousedown starts the hold gesture of the appointment
+  // collection, which cancels the click of the collector button
+  click(): Promise<void> {
+    const { element: getElement } = this;
+
+    return ClientFunction(() => {
+      const element = getElement() as unknown as HTMLElement;
+
+      element.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+
+      const {
+        left, top, width, height,
+      } = element.getBoundingClientRect();
+      const options = {
+        bubbles: true,
+        cancelable: true,
+        clientX: left + width / 2,
+        clientY: top + height / 2,
+        button: 0,
+        pointerId: 1,
+        pointerType: 'mouse',
+        isPrimary: true,
+      };
+
+      element.dispatchEvent(new PointerEvent('pointerdown', { ...options, buttons: 1 }));
+      element.dispatchEvent(new MouseEvent('mousedown', { ...options, buttons: 1 }));
+      element.focus();
+      element.dispatchEvent(new PointerEvent('pointerup', options));
+      element.dispatchEvent(new MouseEvent('mouseup', options));
+      element.dispatchEvent(new MouseEvent('click', options));
+    }, {
+      dependencies: { getElement },
+    })();
   }
 }
