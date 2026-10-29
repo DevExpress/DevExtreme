@@ -413,8 +413,6 @@ export function runManualTestCore(
   framework,
   callback,
 ) {
-  const isGitHubDemos = process.env.ISGITHUBDEMOS;
-
   const index = settings.manualTestIndex;
   settings.manualTestIndex += 1;
 
@@ -424,19 +422,8 @@ export function runManualTestCore(
 
   const clientScriptSource = globalReadFrom(__dirname, `../../Demos/${widget}/${demo}/client-script.js`, (x) => [{ content: x }]) || [];
 
-  let testURL = '';
-
-  if (isGitHubDemos) {
-    if (widget !== 'DataGrid' || demo.NoPreloaded) {
-      return;
-    }
-
-    const theme = process.env.THEME.replace('generic.', '');
-    testURL = `http://127.0.0.1:808${getPortByIndex(index)}/${widget}/${demo}/${framework}/?theme=dx.${theme}`;
-  } else {
-    changeTheme(__dirname, `../../Demos/${widget}/${demo}/${framework}/index.html`, process.env.THEME);
-    testURL = `http://127.0.0.1:808${getPortByIndex(index)}/apps/demos/Demos/${widget}/${demo}/${framework}/`;
-  }
+  changeTheme(__dirname, `../../Demos/${widget}/${demo}/${framework}/index.html`, process.env.THEME);
+  const testURL = `http://127.0.0.1:808${getPortByIndex(index)}/apps/demos/Demos/${widget}/${demo}/${framework}/`;
 
   const test = testObject.clientScripts([
     { module: 'mockdate' },
