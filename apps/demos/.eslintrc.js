@@ -272,7 +272,6 @@ module.exports = {
         'xhr',
         'Xmla',
         'xmla',
-        'yargs',
         'youtube',
         'ytd',
         'zipcode',

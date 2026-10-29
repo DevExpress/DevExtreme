@@ -23,8 +23,6 @@ import { knownWarnings } from './known-warnings';
 import { skipJsErrorsComponents } from './skip-js-errors-components';
 import { skippedTests } from './skipped-tests';
 
-import { gitHubIgnored } from '../utils/visual-tests/github-ignored-list';
-
 const execTestCafeCode = (t, code) => {
   // eslint-disable-next-line no-eval
   const testCafeFunction = eval(code);
@@ -127,19 +125,8 @@ Object.values(FRAMEWORKS).forEach((approach) => {
       }
     }
 
-    const isGitHubDemos = process.env.ISGITHUBDEMOS;
-    let pageURL = '';
-    const theme = process.env.THEME.replace('generic.', '');
-    if (isGitHubDemos) {
-      pageURL = `http://127.0.0.1:8080/Demos/${widgetName}/${demoName}/${approach}/?theme=dx.${theme}`;
-    } else {
-      changeTheme(__dirname, `../${demoPath}/index.html`, process.env.THEME);
-      pageURL = `http://127.0.0.1:8080/apps/demos/Demos/${widgetName}/${demoName}/${approach}/`;
-    }
-    // remove when tests enabled not only for datagrid
-    if (isGitHubDemos && (widgetName !== 'DataGrid' || gitHubIgnored.includes(demoName))) {
-      return;
-    }
+    changeTheme(__dirname, `../${demoPath}/index.html`, process.env.THEME);
+    const pageURL = `http://127.0.0.1:8080/apps/demos/Demos/${widgetName}/${demoName}/${approach}/`;
 
     if (shouldSkipDemo(approach, widgetName, demoName, skippedTests)) {
       return;
