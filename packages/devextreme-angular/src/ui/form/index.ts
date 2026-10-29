@@ -1,7 +1,6 @@
 /* tslint:disable:max-line-length */
 import {
     TransferState,
-    ChangeDetectorRef,
     Component,
     NgModule,
     ElementRef,
@@ -17,7 +16,6 @@ import {
     SimpleChanges,
     ContentChildren,
     QueryList,
-    inject
 } from '@angular/core';
 
 
@@ -36,7 +34,6 @@ import {
     IterableDifferHelper,
     WatcherHelper,
     CollectionNestedOption,
-    canMarkForCheck,
 } from 'devextreme-angular/core';
 
 import { DxoColCountByScreenModule } from 'devextreme-angular/ui/nested';
@@ -709,10 +706,6 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
      */
     @Output() widthChange: EventEmitter<number | string | undefined>;
 
-    private readonly _changeDetectorRef = inject(ChangeDetectorRef);
-
-    private readonly _ngZone = inject(NgZone);
-
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,
             private _idh: IterableDifferHelper,
@@ -779,11 +772,7 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
 
     _createWidget(element: any) {
         super._createWidget(element);
-        this.instance.on('fieldDataChanged', () => {
-            if (canMarkForCheck(this._ngZone)) {
-                this._changeDetectorRef.markForCheck();
-            }
-        });
+        this.instance.on('fieldDataChanged', () => this._markForCheck());
     }
 
     ngOnDestroy() {

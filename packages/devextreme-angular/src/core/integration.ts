@@ -12,12 +12,23 @@ import eventsEngine from 'devextreme/common/core/events/core/events_engine';
 const outsideAngularEvents = ['mousemove', 'mouseover', 'mouseout'];
 const insideAngularEvents = ['mouseup', 'click', 'mousedown', 'transitionend', 'wheel'];
 
-let inOutsideAngularHandler = false;
-
-export const isInOutsideAngularHandler = () => inOutsideAngularHandler;
+let inOutsideAngular = false;
 
 export const isZoneless = (ngZone: NgZone) => !(ngZone instanceof NgZone);
-export const canMarkForCheck = (ngZone: NgZone) => isZoneless(ngZone) || NgZone.isInAngularZone();
+
+export const canMarkForOptionChange = (ngZone: NgZone) => (isZoneless(ngZone)
+  ? !inOutsideAngular
+  : NgZone.isInAngularZone());
+
+const trackOutsideAngularHandler = (callback: (...args: any[]) => any) => function (this: unknown, e: Event) {
+  const prevInOutsideAngular = inOutsideAngular;
+  inOutsideAngular = true;
+  try {
+    return callback.call(this, e);
+  } finally {
+    inOutsideAngular = prevInOutsideAngular;
+  }
+};
 
 type ReadyCallback = () => void;
 type ReadyCallbackAdd = (callback: ReadyCallback) => void;
@@ -51,16 +62,11 @@ let doInjections = (document: any, ngZone: NgZone, xhrFactory: XhrFactory) => {
 
     listen(this: { callBase: (...args: any[]) => any }, element, event: string, callback, options) {
       if (outsideAngularEvents.includes(event)) {
-        const trackedCallback = function (this: unknown, e: Event) {
-          const prevInOutsideAngularHandler = inOutsideAngularHandler;
-          inOutsideAngularHandler = true;
-          try {
-            return callback.call(this, e);
-          } finally {
-            inOutsideAngularHandler = prevInOutsideAngularHandler;
-          }
-        };
-        return ngZone.runOutsideAngular(() => this.callBase(element, event, trackedCallback, options));
+        if (isZoneless(ngZone)) {
+          return this.callBase(element, event, trackOutsideAngularHandler(callback), options);
+        }
+
+        return ngZone.runOutsideAngular(() => this.callBase(element, event, callback, options));
       }
 
       if (ngZone.isStable && insideAngularEvents.includes(event)) {

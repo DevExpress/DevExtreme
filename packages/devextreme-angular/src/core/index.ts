@@ -1,6 +1,6 @@
 export * from './component';
 export * from './events-strategy';
-export * from './integration';
+export { DxIntegrationModule } from './integration';
 export * from './iterable-differ-helper';
 export * from './nested-option';
 export * from './template-host';

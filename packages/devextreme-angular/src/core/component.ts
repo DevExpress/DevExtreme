@@ -41,7 +41,11 @@ import {
   CollectionNestedOptionContainerImpl,
 } from './nested-option';
 
-import { DxIntegrationModule, canMarkForCheck, isInOutsideAngularHandler } from './integration';
+import {
+  DxIntegrationModule,
+  canMarkForOptionChange,
+  isZoneless,
+} from './integration';
 
 config({
   buyNowLink: 'https://go.devexpress.com/Licensing_Installer_Watermark_DevExtremeAngular.aspx',
@@ -112,9 +116,8 @@ export abstract class DxComponent implements OnChanges, OnInit, DoCheck, AfterCo
 
       if (
         !this.widgetUpdateLocked
-        && !isInOutsideAngularHandler()
+        && canMarkForOptionChange(this.ngZone)
         && this[`${e.name}Change`]
-        && canMarkForCheck(this.ngZone)
       ) {
         this.changeDetectorRef.markForCheck();
       }
@@ -154,6 +157,12 @@ export abstract class DxComponent implements OnChanges, OnInit, DoCheck, AfterCo
         nestedComponentOptions: component.option('nestedComponentOptions'),
       };
     };
+  }
+
+  protected _markForCheck() {
+    if (isZoneless(this.ngZone) || NgZone.isInAngularZone()) {
+      this.changeDetectorRef.markForCheck();
+    }
   }
 
   _shouldOptionChange(name: string, value: any) {
