@@ -399,7 +399,7 @@ class Tabs extends CollectionWidgetLiveUpdate<TabsProperties> {
   _isItemsWidthExceeded(): boolean {
     const $visibleItems = this._getVisibleItems();
     const tabItemTotalWidth = this._getSummaryItemsSize('width', $visibleItems, true);
-    const elementWidth = getWidth(this.$element());
+    const elementWidth = getWidth(this.$element().get(0));
 
     if ([tabItemTotalWidth, elementWidth].includes(0)) {
       return false;
@@ -411,14 +411,14 @@ class Tabs extends CollectionWidgetLiveUpdate<TabsProperties> {
   _isItemsHeightExceeded(): boolean {
     const $visibleItems = this._getVisibleItems();
     const itemsHeight = this._getSummaryItemsSize('height', $visibleItems, true);
-    const elementHeight = getHeight(this.$element());
+    const elementHeight = getHeight(this.$element().get(0));
 
     return itemsHeight - 1 > elementHeight;
   }
 
   _needStretchItems(): boolean {
     const $visibleItems = this._getVisibleItems();
-    const elementWidth = getWidth(this.$element());
+    const elementWidth = getWidth(this.$element().get(0));
     const itemsWidth = [];
 
     each($visibleItems, (_, item) => {

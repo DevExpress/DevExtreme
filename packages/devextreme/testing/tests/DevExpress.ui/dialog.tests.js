@@ -2,7 +2,7 @@ import $ from 'jquery';
 import config from 'core/config';
 import devices from '__internal/core/devices';
 import { alert, confirm, custom } from 'ui/dialog';
-import domUtils from '__internal/core/utils/m_dom';
+import domUtils from '__internal/core/utils/dom';
 import errors from 'ui/widget/ui.errors';
 import fx from 'common/core/animation/fx';
 import keyboardMock from '../../helpers/keyboardMock.js';

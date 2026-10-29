@@ -3,7 +3,7 @@
 export {
     detectPointerEvent,
     detectTouchEvents,
-} from '../../__internal/core/utils/m_support';
+} from '../../__internal/core/utils/support';
 /// #ENDDEBUG
 export {
     animation,
@@ -17,4 +17,4 @@ export {
     touchEvents,
     transition,
     transitionEndEventName
-} from '../../__internal/core/utils/m_support';
+} from '../../__internal/core/utils/support';

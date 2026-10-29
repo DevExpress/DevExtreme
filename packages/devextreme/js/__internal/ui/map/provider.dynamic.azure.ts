@@ -35,7 +35,7 @@ export type AzureLocation = [number, number];
 
 // eslint-disable-next-line @typescript-eslint/init-declarations
 let azureMapsLoader;
-class AzureProvider extends DynamicProvider {
+class AzureProvider extends DynamicProvider<AzureLocation> {
   _preventZoomChangeEvent?: boolean;
 
   _mapReadyPromise!: Promise<void>;
@@ -75,7 +75,7 @@ class AzureProvider extends DynamicProvider {
       } else {
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
         this._geocodeLocation(location as string).then((geocodedLocation) => {
-          resolve(geocodedLocation as AzureLocation);
+          resolve(geocodedLocation);
         });
       }
     });

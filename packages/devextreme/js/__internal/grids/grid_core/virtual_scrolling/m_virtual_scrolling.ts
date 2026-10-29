@@ -14,6 +14,7 @@ import type { DataController } from '@ts/grids/grid_core/data_controller/data_co
 import type { DataChange } from '@ts/grids/grid_core/data_controller/types';
 import type { DataSourceController } from '@ts/grids/grid_core/data_source/data_source_controller';
 import type DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/data_source_adapter';
+import { EDIT_MODE } from '@ts/grids/grid_core/editing/const';
 import type { ErrorHandlingViewController } from '@ts/grids/grid_core/error_handling/error_handling_view_controller';
 import type { ResizingController } from '@ts/grids/grid_core/grid_view/grid_view';
 import type { ModuleType } from '@ts/grids/grid_core/types';
@@ -33,6 +34,7 @@ import {
   VIRTUAL_ROW_CLASS,
 } from './const';
 import { subscribeToExternalScrollers, VirtualScrollController } from './m_virtual_scrolling_core';
+import type { VirtualScrollingResizingControllerExtension } from './types';
 import { isItemCountableByDataSource } from './utils/items';
 import { isInfiniteMode, isVirtualMode, isVirtualPaging } from './utils/scrolling_mode';
 
@@ -428,7 +430,11 @@ export const dataSourceAdapterExtender = (Base: ModuleType<DataSourceAdapter>) =
   }
 };
 
-export const resizing = (Base: ModuleType<ResizingController>) => class VirtualScrollingResizingControllerExtender extends Base {
+export const resizing = (
+  Base: ModuleType<ResizingController>,
+): ModuleType<
+  ResizingController & VirtualScrollingResizingControllerExtension
+> => class VirtualScrollingResizingControllerExtender extends Base {
   private _resizeTimeout: any;
 
   private _lastTime: any;
@@ -453,7 +459,7 @@ export const resizing = (Base: ModuleType<ResizingController>) => class VirtualS
     });
   }
 
-  private hasResizeTimeout() {
+  public hasResizeTimeout(): boolean {
     return isDefined(this._resizeTimeout);
   }
 
@@ -708,9 +714,7 @@ export const rowsView = (Base: ModuleType<RowsView>) => class VirtualScrollingRo
   }
 
   private _getRowHeights() {
-    const isPopupEditMode = this._editingController
-      // @ts-expect-error
-      ?.isPopupEditMode?.();
+    const isPopupEditMode = this._editingController?.getEditMode() === EDIT_MODE.popup;
 
     let rowElements = this._getRowElements(this._tableElement).toArray();
 
@@ -786,7 +790,6 @@ export const rowsView = (Base: ModuleType<RowsView>) => class VirtualScrollingRo
 
       removeEmptyRows($virtualRows, VIRTUAL_ROW_CLASS);
 
-      // @ts-expect-error each() is typed for callbacks that return a boolean
       $tables.each((index, element) => {
         const isFixed = index > 0;
         const prevFixed = this._isFixedTableRendering;

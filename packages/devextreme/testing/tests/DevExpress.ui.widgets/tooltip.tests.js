@@ -9,6 +9,8 @@ const TOOLTIP_CLASS = 'dx-tooltip';
 const TOOLTIP_WRAPPER_CLASS = 'dx-tooltip-wrapper';
 const DX_INVISIBILITY_CLASS = 'dx-state-invisible';
 const OVERLAY_CONTENT_CLASS = 'dx-overlay-content';
+const TOOLBAR_CLASS = 'dx-toolbar';
+const BUTTON_CLASS = 'dx-button';
 
 const wrapper = function() {
     return $('body').find('.' + TOOLTIP_WRAPPER_CLASS);
@@ -206,6 +208,22 @@ QUnit.module('accessibility', () => {
         const $overlayContent = $tooltip.find(`.${OVERLAY_CONTENT_CLASS}`);
 
         assert.equal($overlayContent.attr('role'), 'dialog');
+    });
+
+    QUnit.test('adding toolbar items with a button at runtime should set the role on the overlay content and keep the button role', function(assert) {
+        const tooltip = new Tooltip($('#tooltip'), {
+            target: '#target',
+            visible: true,
+            animation: null
+        });
+
+        tooltip.option('toolbarItems', [{ widget: 'dxButton', options: { text: 'OK' } }]);
+
+        const $overlayContent = tooltip.$overlayContent();
+        const $button = $overlayContent.find(`.${TOOLBAR_CLASS} .${BUTTON_CLASS}`);
+
+        assert.equal($overlayContent.attr('role'), 'dialog', 'overlay content role is dialog');
+        assert.equal($button.attr('role'), 'button', 'toolbar button keeps its role');
     });
 
     QUnit.module('WCAG - dismissible', () => {

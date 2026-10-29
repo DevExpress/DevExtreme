@@ -340,7 +340,7 @@ class Diagram extends Widget<Properties> {
   isMobileScreenSize(): boolean {
     if (this._isMobileScreenSize === undefined) {
       this._isMobileScreenSize = hasWindow()
-        && getOuterWidth(this.$element()) < DIAGRAM_MAX_MOBILE_WINDOW_WIDTH;
+        && getOuterWidth(this.$element().get(0)) < DIAGRAM_MAX_MOBILE_WINDOW_WIDTH;
     }
     return this._isMobileScreenSize;
   }
@@ -622,20 +622,20 @@ class Diagram extends Widget<Properties> {
       offsetX: DIAGRAM_FLOATING_PANEL_OFFSET,
       offsetY: DIAGRAM_FLOATING_PANEL_OFFSET,
       height: !isServerSide
-        ? getHeight($parent) - 2 * DIAGRAM_FLOATING_PANEL_OFFSET
+        ? Number(getHeight($parent)) - 2 * DIAGRAM_FLOATING_PANEL_OFFSET
         : 0,
     };
     if (this._historyToolbar && !isServerSide) {
       result.offsetY
-        += getOuterHeight(this._historyToolbar.$element())
+        += getOuterHeight(this._historyToolbar.$element().get(0))
         + DIAGRAM_FLOATING_PANEL_OFFSET;
       result.height
-        -= getOuterHeight(this._historyToolbar.$element())
+        -= getOuterHeight(this._historyToolbar.$element().get(0))
         + DIAGRAM_FLOATING_PANEL_OFFSET;
     }
     if (this._viewToolbar && !isServerSide) {
       result.height
-        -= getOuterHeight(this._viewToolbar.$element())
+        -= getOuterHeight(this._viewToolbar.$element().get(0))
         + this._getViewToolbarYOffset(isServerSide);
     }
     return result;
@@ -660,14 +660,18 @@ class Diagram extends Widget<Properties> {
     };
   }
 
+  _getViewToolbarYOffset(isServerSide: false): number;
+
+  _getViewToolbarYOffset(isServerSide: boolean): number | undefined;
+
   _getViewToolbarYOffset(isServerSide: boolean): number | undefined {
     if (isServerSide) return undefined;
 
     let result = DIAGRAM_FLOATING_PANEL_OFFSET;
     if (this._viewToolbar && this._propertiesToolbar) {
       result
-        += (getOuterHeight(this._propertiesToolbar.$element())
-          - getOuterHeight(this._viewToolbar.$element()))
+        += (getOuterHeight(this._propertiesToolbar.$element().get(0))
+          - getOuterHeight(this._viewToolbar.$element().get(0)))
         / 2;
     }
     return result;
@@ -751,7 +755,7 @@ class Diagram extends Widget<Properties> {
       : DIAGRAM_FLOATING_PANEL_OFFSET;
     const offsetX = offset;
     const offsetY = 2 * offset
-      + (!isServerSide ? getOuterHeight(this._propertiesToolbar?.$element()) : 0);
+      + (!isServerSide ? Number(getOuterHeight(this._propertiesToolbar?.$element())) : 0);
     this._propertiesPanel = this._createComponent(
       $propertiesPanel,
       DiagramPropertiesPanel,

@@ -114,8 +114,8 @@ const getWaveStyleConfig = (
   config: InkRippleWaveConfig,
 ): WaveStyleConfig => {
   const element = $(config.element);
-  const elementWidth = getOuterWidth(element);
-  const elementHeight = getOuterHeight(element);
+  const elementWidth = Number(getOuterWidth(element));
+  const elementHeight = Number(getOuterHeight(element));
   const elementDiagonal = Math.trunc(
     Math.sqrt(elementWidth * elementWidth + elementHeight * elementHeight),
   );

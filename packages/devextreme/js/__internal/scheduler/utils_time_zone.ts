@@ -1,6 +1,6 @@
 // TODO(Refactoring): move this module to ./utils directory
 import errors from '@js/core/errors';
-import { addOffsets, isValidDate } from '@ts/core/utils/m_date';
+import { addOffsets, isValidDate } from '@ts/core/utils/date';
 import { macroTaskArray } from '@ts/scheduler/utils/index';
 
 import dateUtils from '../../core/utils/date';
@@ -61,20 +61,20 @@ const getDaylightOffsetInMs = (
 ): number => getDaylightOffset(startDate, endDate) * toMs('minute');
 
 const getTimezoneOffsetChangeInMinutes = (
-  startDate: Date,
-  endDate: Date,
-  updatedStartDate: Date,
-  updatedEndDate: Date,
+  startDate: Date | number,
+  endDate: Date | number,
+  updatedStartDate: Date | number,
+  updatedEndDate: Date | number,
 ): number => getDaylightOffset(updatedStartDate, updatedEndDate) - getDaylightOffset(
   startDate,
   endDate,
 );
 
 const getTimezoneOffsetChangeInMs = (
-  startDate: Date,
-  endDate: Date,
-  updatedStartDate: Date,
-  updatedEndDate: Date,
+  startDate: Date | number,
+  endDate: Date | number,
+  updatedStartDate: Date | number,
+  updatedEndDate: Date | number,
 ): number => {
   const minutes = getTimezoneOffsetChangeInMinutes(
     startDate,
