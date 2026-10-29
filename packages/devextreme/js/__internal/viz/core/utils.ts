@@ -663,6 +663,9 @@ export function raiseToExt(value, base, allowNegatives = false, linearThreshold?
 }
 
 export function rangesAreEqual(range, rangeFromOptions) {
+  if (!isDefined(rangeFromOptions)) {
+    return false;
+  }
   if (Array.isArray(rangeFromOptions)) {
     return range.length === rangeFromOptions.length
     && range.every((item, i) => valueOf(item) === valueOf(rangeFromOptions[i]));
