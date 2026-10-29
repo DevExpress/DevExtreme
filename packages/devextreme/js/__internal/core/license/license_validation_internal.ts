@@ -4,6 +4,7 @@ import type { Token } from './types';
 export function parseLicenseKey(
   encodedKey: string | undefined,
   acceptAspNetEntitlement?: boolean,
+  versionCode?: number,
 ): Token {
   return undefined as unknown as Token;
 }

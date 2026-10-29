@@ -183,6 +183,9 @@ jobs:
         with:
           name: devextreme-sources
 
+      - name: Unpack npm packages
+        uses: ./.github/actions/unpack-npm-packages
+
       - uses: pnpm/action-setup@v6
         with:
           run_install: false
@@ -202,10 +205,6 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
-
-      - name: Install tgz
-        working-directory: apps/demos
-        run: pnpm add --ignore-workspace --allow-build=core-js --allow-build=inferno devextreme-aspnet-data@5.1.0 devextreme-aspnet-data-nojquery@5.1.0 ../../devextreme-installer.tgz ../../devextreme-dist-installer.tgz ../../devextreme-react-installer.tgz ../../devextreme-vue-installer.tgz ../../devextreme-angular-installer.tgz && rm -f pnpm-workspace.yaml pnpm-lock.yaml
 
       - name: Build vendor bundles
         working-directory: apps/demos
@@ -291,6 +290,9 @@ jobs:
       with:
         name: devextreme-sources
 
+    - name: Unpack npm packages
+      uses: ./.github/actions/unpack-npm-packages
+
     - name: Use Node.js
       uses: actions/setup-node@v7
       with:
@@ -315,10 +317,6 @@ jobs:
 
     - name: Install dependencies
       run: pnpm install --frozen-lockfile
-
-    - name: Install tgz
-      working-directory: apps/demos
-      run: pnpm add --ignore-workspace --allow-build=core-js --allow-build=inferno devextreme-aspnet-data@5.1.0 devextreme-aspnet-data-nojquery@5.1.0 ../../devextreme-installer.tgz ../../devextreme-dist-installer.tgz ../../devextreme-react-installer.tgz ../../devextreme-vue-installer.tgz ../../devextreme-angular-installer.tgz && rm -f pnpm-workspace.yaml pnpm-lock.yaml
 
     - name: Demos - Check Vue TS
       id: ts_vue
@@ -355,7 +353,7 @@ jobs:
 
         git add ./Demos -N
 
-        if git diff --exit-code . ':!package.json' ; then
+        if git diff --exit-code . ; then
           echo "Generated JS demos are up-to-date"
         else
           echo "Generated JS demos are outdated. Execute 'pnpm run convert-to-js' and commit changes."
@@ -608,6 +606,9 @@ jobs:
       with:
         name: devextreme-sources
 
+    - name: Unpack npm packages
+      uses: ./.github/actions/unpack-npm-packages
+
     - uses: pnpm/action-setup@v6
       with:
         run_install: false
@@ -627,10 +628,6 @@ jobs:
 
     - name: Install dependencies
       run: pnpm install --frozen-lockfile
-
-    - name: Install tgz
-      working-directory: apps/demos
-      run: pnpm add --ignore-workspace --allow-build=core-js --allow-build=inferno devextreme-aspnet-data@5.1.0 devextreme-aspnet-data-nojquery@5.1.0 ../../devextreme-installer.tgz ../../devextreme-dist-installer.tgz ../../devextreme-react-installer.tgz ../../devextreme-vue-installer.tgz ../../devextreme-angular-installer.tgz && rm -f pnpm-workspace.yaml pnpm-lock.yaml
 
     - name: Download demo bundles (React)
       if: startsWith(matrix.CONSTEL, 'react')
@@ -779,12 +776,18 @@ jobs:
           delete-merged: true
 
   csp-check-jquery:
-    name: CSP check (jQuery)
+    name: CSP check (jQuery ${{ matrix.SHARD_INDEX }}/${{ matrix.SHARD_TOTAL }})
     needs: [check-should-run, build-devextreme]
     if: |
       !cancelled() &&
       needs.check-should-run.outputs.should-run == 'true' &&
       needs.build-devextreme.result == 'success'
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { SHARD_INDEX: 1, SHARD_TOTAL: 2 }
+          - { SHARD_INDEX: 2, SHARD_TOTAL: 2 }
     runs-on: ${{ github.event_name == 'merge_group' && 'devextreme-shr2-ondemand' || 'devextreme-shr2' }}
     timeout-minutes: 20
 
@@ -839,13 +842,15 @@ jobs:
       env:
         CSP_FRAMEWORKS: jQuery
         CHROME_PATH: google-chrome-stable
+        DEMO_SHARD_INDEX: ${{ matrix.SHARD_INDEX }}
+        DEMO_SHARD_TOTAL: ${{ matrix.SHARD_TOTAL }}
       run: node utils/server/csp-check.js
 
     - name: Upload CSP report
       if: always()
       uses: actions/upload-artifact@v7
       with:
-        name: csp-violations-jquery
+        name: csp-violations-jquery-shard${{ matrix.SHARD_INDEX }}
         path: apps/demos/csp-reports/
         if-no-files-found: ignore
 
@@ -879,6 +884,9 @@ jobs:
       with:
         name: devextreme-sources
 
+    - name: Unpack npm packages
+      uses: ./.github/actions/unpack-npm-packages
+
     - name: Setup Chrome
       uses: ./.github/actions/setup-chrome
       with:
@@ -907,10 +915,6 @@ jobs:
 
     - name: Install dependencies
       run: pnpm install --frozen-lockfile
-
-    - name: Install tgz
-      working-directory: apps/demos
-      run: pnpm add --ignore-workspace --allow-build=core-js --allow-build=inferno devextreme-aspnet-data@5.1.0 devextreme-aspnet-data-nojquery@5.1.0 ../../devextreme-installer.tgz ../../devextreme-dist-installer.tgz ../../devextreme-react-installer.tgz ../../devextreme-vue-installer.tgz ../../devextreme-angular-installer.tgz && rm -f pnpm-workspace.yaml pnpm-lock.yaml
 
     - name: Download demo bundles
       uses: actions/download-artifact@v8

@@ -31,7 +31,8 @@ import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
 import type { DataChange, RowIndexCorrection } from '@ts/grids/grid_core/data_controller/types';
 import type { DataSourceController } from '@ts/grids/grid_core/data_source/data_source_controller';
-import type { CellBasedEditingController } from '@ts/grids/grid_core/editing/m_editing_cell_based';
+import { isCellBasedEditMode } from '@ts/grids/grid_core/editing/editing_utils';
+import type { CellBasedEditingController } from '@ts/grids/grid_core/editing/types';
 import { CLASSES as FILTER_ROW_CLASSES } from '@ts/grids/grid_core/filter_row/const';
 import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
 import type { RowsView } from '@ts/grids/grid_core/views/rows_view';
@@ -87,6 +88,7 @@ import {
   isGroupRow,
   isMobile,
   isNotFocusedRow,
+  isRowOrFormEditMode,
   shouldPreventScroll,
 } from './utils';
 
@@ -138,6 +140,8 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
   private searchPanel!: Controllers['searchPanel'];
 
   private _needNavigationToCell = false;
+
+  private focusRestoreScrollTop = 0;
 
   // #region Initialization
   public init() {
@@ -295,7 +299,9 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
 
     const scrollLeft = this._rowsView?.getScrollable()?.scrollLeft() ?? 0;
 
-    if (!this._columnsController.isNeedToRenderVirtualColumns(scrollLeft)) {
+    const isColumnRenderPending = this._columnsController.isNeedToRenderVirtualColumns(scrollLeft);
+
+    if (!isColumnRenderPending && !this.isFocusedRowRenderPending()) {
       this.needToRestoreFocus = false;
       this.focusFirstOrLastCell();
     }
@@ -522,7 +528,8 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
 
     this._editorFactory.loseFocus();
 
-    if (this._editingController.isEditing() && !this.isRowEditMode()) {
+    if (this._editingController.isEditing()
+      && !isRowOrFormEditMode(this._editingController.getEditMode())) {
       // Focus the cell before closing the editor on native Tab-out,
       // so the browser's native Shift+Tab leaves from a stable anchor.
       ($cell.get(0) as HTMLElement | undefined)?.focus({ preventScroll: true });
@@ -1082,7 +1089,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     const nextCellFocused = this._focusCell($nextCell, !isHighlighted);
 
     if (nextCellFocused) {
-      if (!this.isRowEditMode() && isEditingAllowed) {
+      if (!isRowOrFormEditMode(this._editingController.getEditMode()) && isEditingAllowed) {
         this._editFocusedCell();
       } else {
         this._focusInteractiveElement($nextCell, isShift);
@@ -1140,7 +1147,8 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     const $cell: dxElementWrapper = this.getCellElementFromTarget(eventTarget);
 
     // Non-editor cells with intermediate interactive elements use native tab
-    if (!isEditorCell(this, $cell) && this.isOriginalTabHandlerRequired($cell, eventArgs)) {
+    if (!isEditorCell(this._editingController.getEditMode(), $cell)
+      && this.isOriginalTabHandlerRequired($cell, eventArgs)) {
       return true;
     }
 
@@ -1175,7 +1183,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
 
     this._focusCell($newFocusedCell, !nextCellInfo.isHighlighted);
 
-    if (!isEditorCell(this, $newFocusedCell)) {
+    if (!isEditorCell(this._editingController.getEditMode(), $newFocusedCell)) {
       this._focusInteractiveElement($newFocusedCell, eventArgs.shift);
     }
 
@@ -1327,11 +1335,11 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     const d = Deferred();
     const { target } = event;
     const $cell = this.getCellElementFromTarget(target);
-    const isRowEditMode = this.isRowEditMode();
+    const isRowOrFormMode = isRowOrFormEditMode(this._editingController.getEditMode());
 
     this._updateFocusedCellPosition($cell);
 
-    if (isRowEditMode) {
+    if (isRowOrFormMode) {
       this._focusEditFormCell($cell);
       setTimeout(
         // eslint-disable-next-line @typescript-eslint/no-misused-promises -- ignores the result
@@ -1358,8 +1366,10 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     );
     if (isEditing) {
       this._updateFocusedCellPosition($cell);
-      if (!this.isRowEditMode()) {
-        if (this._editingController.getEditMode() === 'cell') {
+      const editMode = this._editingController.getEditMode();
+
+      if (!isRowOrFormEditMode(editMode)) {
+        if (editMode === EDIT_MODE.cell) {
           this._editingController.cancelEditData();
         } else {
           this._closeEditCell();
@@ -1577,11 +1587,36 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     this.silentUpdateFocusedCellPosition({ columnIndex: firstOrLastColumnIndex });
 
     if (scrollLeft >= 0) {
-      this.needToRestoreFocus = true;
+      this.deferFocusRestore();
       this.scrollTo({ left: scrollLeft });
+    } else if (this.isFocusedRowRenderPending()) {
+      this.deferFocusRestore();
     } else {
       this.focusFirstOrLastCell(e);
     }
+  }
+
+  private deferFocusRestore(): void {
+    this.needToRestoreFocus = true;
+    this.focusRestoreScrollTop = this._rowsView.getScrollable()?.scrollTop() ?? 0;
+  }
+
+  public cancelFocusRestoreOnScrollAway(scrollTop: number): void {
+    const isScrolledAway = Math.abs(scrollTop - this.focusRestoreScrollTop) >= 1;
+
+    if (this.needToRestoreFocus && isScrolledAway && this.isFocusedRowRenderPending()) {
+      this.needToRestoreFocus = false;
+    }
+  }
+
+  private isFocusedRowRenderPending(): boolean {
+    const rowIndex = this._focusedCellPosition?.rowIndex ?? -1;
+
+    if (rowIndex < 0 || rowIndex > this.getFirstOrLastRowIndex(false)) {
+      return false;
+    }
+
+    return !this._rowsView.getRow(this.getVisibleRowIndex())?.length;
   }
 
   public isQuickNavigationToFirstCell(): boolean {
@@ -1633,7 +1668,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
 
   private _clickTargetCellHandler(event, $cell) {
     const column = this._getColumnByCellElement($cell);
-    const isCellEditMode = this._isCellEditMode();
+    const isCellOrBatchEditMode = isCellBasedEditMode(this._editingController.getEditMode());
     const isEditing = this._editingController.isEditing();
 
     this.setCellFocusType();
@@ -1650,7 +1685,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
         $cell = this._getFocusedCell();
       }
 
-      if (!args.isHighlighted && !isCellEditMode) {
+      if (!args.isHighlighted && !isCellOrBatchEditMode) {
         this.setRowFocusType();
       }
 
@@ -1658,7 +1693,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
 
       if (
         this._allowRowUpdating()
-        && isCellEditMode
+        && isCellOrBatchEditMode
         && column
         && column.allowEditing
       ) {
@@ -1680,7 +1715,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     } else {
       this.setRowFocusType();
       this.setFocusedRowIndex(args.prevRowIndex);
-      if (isEditing && isCellEditMode) {
+      if (isEditing && isCellOrBatchEditMode) {
         this._closeEditCell();
       }
     }
@@ -1863,7 +1898,8 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
       let $cell: dxElementWrapper | null = this._getFocusedCell();
       const isEditing = this._editingController.isEditing();
 
-      if (!this.getMasterDetailCell($cell) || this.isRowEditMode()) {
+      if (!this.getMasterDetailCell($cell)
+        || isRowOrFormEditMode(this._editingController.getEditMode())) {
         if (this._hasSkipRow($cell.parent())) {
           const direction = this._focusedCellPosition && this._focusedCellPosition.rowIndex > 0
             ? 'upArrow'
@@ -2229,7 +2265,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
         const visibleRowIndex = this._rowsView.getRowIndex($row);
         const row = rowItems[visibleRowIndex];
         const isCellEditing = editingController
-          && this._isCellEditMode()
+          && isCellBasedEditMode(editingController.getEditMode())
           && editingController.isEditing();
         const isRowEditingInCurrentRow = editingController?.isEditRow(visibleRowIndex);
         const isEditing = isRowEditingInCurrentRow || isCellEditing;
@@ -2379,7 +2415,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     const column = this._columnsController.getVisibleColumns()[visibleColumnIndex];
 
     if (this._isAllowEditing(row, column)) {
-      if (this.isRowEditMode()) {
+      if (isRowOrFormEditMode(this._editingController.getEditMode())) {
         this._editingController.editRow(visibleRowIndex);
       } else if (focusedCellPosition) {
         this._startEditCell(eventArgs, fastEditingKey);
@@ -2683,14 +2719,10 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     return gridCoreUtils.isElementInCurrentGrid(this, $(event.target));
   }
 
-  private _isCellEditMode() {
-    const editMode = this._editingController.getEditMode();
-    return editMode === EDIT_MODE.cell || editMode === EDIT_MODE.batch;
-  }
-
   private _isFastEditingAllowed() {
     return (
-      this._isCellEditMode() && this.option('keyboardNavigation.editOnKeyPress')
+      isCellBasedEditMode(this._editingController.getEditMode())
+      && this.option('keyboardNavigation.editOnKeyPress')
     );
   }
 
@@ -2936,11 +2968,6 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     return this.needToRestoreFocus || this.needNavigationToCell();
   }
 
-  public isRowEditMode(): boolean {
-    const editMode = this._editingController.getEditMode();
-    return editMode === EDIT_MODE.row || editMode === EDIT_MODE.form;
-  }
-
   public getRowIndex(): number {
     return this._focusedCellPosition ? this._focusedCellPosition.rowIndex : -1;
   }
@@ -3120,6 +3147,8 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewKeyboardExtender 
   protected _handleScroll(e: RowsViewScrollEvent): void {
     super._handleScroll(e);
 
+    this._keyboardNavigationController.cancelFocusRestoreOnScrollAway(e.scrollOffset.top);
+
     if (this._keyboardNavigationController.needNavigationToCell()) {
       this._keyboardNavigationController
         .navigateToFirstOrLastCell(this._keyboardNavigationController.isQuickNavigationToFirstCell());
@@ -3158,7 +3187,7 @@ const editing = (
     const visibleColumnIndex = this._keyboardNavigationController.getVisibleColumnIndex();
     const column = this._columnsController.getVisibleColumns()[visibleColumnIndex];
 
-    if (column && column.type || this.option('editing.mode') === EDIT_MODE.form) {
+    if ((column && column.type) || this.getEditMode() === EDIT_MODE.form) {
       this._keyboardNavigationController._resetFocusedCell();
     }
     super.editRow(rowIndex);

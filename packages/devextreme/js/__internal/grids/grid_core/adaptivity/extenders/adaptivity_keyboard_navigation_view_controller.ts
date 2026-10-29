@@ -3,6 +3,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
+import { isCellBasedEditMode } from '@ts/grids/grid_core/editing/editing_utils';
 import type { KeyboardNavigationController } from '@ts/grids/grid_core/keyboard_navigation/m_keyboard_navigation';
 import type { ModuleType } from '@ts/grids/grid_core/types';
 
@@ -31,7 +32,7 @@ export const adaptivityKeyboardNavigationViewControllerExtender = (
   protected _processNextCellInMasterDetail($nextCell, $cell) {
     super._processNextCellInMasterDetail($nextCell, $cell);
 
-    const isCellOrBatchMode = this._editingController.isCellOrBatchEditMode();
+    const isCellOrBatchMode = isCellBasedEditMode(this._editingController.getEditMode());
     const isEditing = this._editingController.isEditing();
 
     if (

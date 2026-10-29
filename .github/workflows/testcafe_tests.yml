@@ -46,7 +46,7 @@ jobs:
     needs: check-should-run
     if: needs.check-should-run.outputs.should-run == 'true'
 
-    runs-on: devextreme-shr2
+    runs-on: ${{ github.event_name == 'merge_group' && 'devextreme-shr2-ondemand' || 'devextreme-shr2' }}
     timeout-minutes: 15
 
     steps:
@@ -295,7 +295,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix: ${{ fromJson(needs.determine-testcafe-matrix.outputs.matrix) }}
-    runs-on: devextreme-shr2
+    runs-on: ${{ github.event_name == 'merge_group' && 'devextreme-shr2-ondemand' || 'devextreme-shr2' }}
     timeout-minutes: 12
 
     steps:
@@ -425,7 +425,7 @@ jobs:
       !cancelled() &&
       needs.check-should-run.outputs.should-run == 'true' &&
       needs.build.result == 'success'
-    runs-on: devextreme-shr2
+    runs-on: ${{ github.event_name == 'merge_group' && 'devextreme-shr2-ondemand' || 'devextreme-shr2' }}
     timeout-minutes: 8
 
     steps:

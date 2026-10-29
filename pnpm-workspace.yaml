@@ -25,7 +25,7 @@ minimumReleaseAgeExclude:
 overrides:
   "js-yaml@<4.3.2": "^4.3.2"
   "rollup@<4.59.0": "^4.59.0"
-  qs: ">=6.16.0"
+  qs: ">=6.16.1"
   "minimatch@>=9.0.0 < 9.0.7": 9.0.9
   "micromatch@<4.0.8": ^4.0.8
   "esbuild@<0.28.1": ^0.28.1
@@ -80,10 +80,10 @@ catalog:
   devexpress-gantt: 4.1.72
   devextreme-exceljs-fork: 4.4.13
   devextreme-quill: 1.8.0
-  "@eslint/js": 9.39.4
-  eslint: 9.39.4
+  "@eslint/js": 9.39.5
+  eslint: 9.39.5
   eslint-config-airbnb-typescript: 18.0.0
-  eslint-config-devextreme: 1.1.12
+  eslint-config-devextreme: 1.1.13
   eslint-plugin-i18n: 2.4.0
   eslint-plugin-import: 2.32.0
   eslint-plugin-jsx-a11y: 6.10.2
@@ -97,7 +97,6 @@ catalog:
   stylelint: 16.22.0
   testcafe: 3.7.5
   zod: 4.6.7
-  "@babel/eslint-parser": 7.29.7
   "@playwright/test": 1.62.1
   "@eslint-stylistic/metadata": ^2.13.0
   "@eslint/eslintrc": 3.3.7
