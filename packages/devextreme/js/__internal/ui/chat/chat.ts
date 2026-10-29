@@ -726,9 +726,9 @@ class Chat extends Widget<Properties> {
   }
 
   _focusTarget(): dxElementWrapper {
-    const $input = $(this.element()).find(`.${TEXTEDITOR_INPUT_CLASS}`);
+    const $messageBox = this._messageBox ? $(this._messageBox.element()) : $();
 
-    return $input;
+    return $messageBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
   }
 
   _optionChanged(args: OptionChanged<Properties>): void {

@@ -133,8 +133,7 @@ class MessageGroup extends Widget<Properties> {
       type,
       attachments,
       onAttachmentDownloadClick,
-      showToolCalls: type !== 'image'
-        && (!messageTemplate || !!toolCallOptions?.showInMessageTemplate),
+      showToolCalls: !messageTemplate || !!toolCallOptions?.showInMessageTemplate,
     };
 
     if (type === 'image') {

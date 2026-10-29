@@ -83,12 +83,14 @@ class MessageBubble extends Widget<Properties> {
   }
 
   _renderToolCallsElement(): void {
-    const { toolCalls, isDeleted, showToolCalls } = this.option();
+    const {
+      toolCalls, isDeleted, showToolCalls, type,
+    } = this.option();
 
     this._$toolCalls?.remove();
     this._$toolCalls = undefined;
 
-    if (toolCalls?.length && !isDeleted && showToolCalls) {
+    if (toolCalls?.length && !isDeleted && showToolCalls && type !== 'image') {
       this._$toolCalls = $('<div>')
         .addClass(CHAT_MESSAGEBUBBLE_TOOLCALLS_CLASS)
         .prependTo(this.$element());
@@ -250,6 +252,7 @@ class MessageBubble extends Widget<Properties> {
       text,
       src,
       alt,
+      toolCalls,
       isDeleted = false,
     } = this.option();
 
@@ -261,8 +264,8 @@ class MessageBubble extends Widget<Properties> {
 
     if (template) {
       template({
-        type, text, src, alt,
-      }, getPublicElement(this._$content));
+        type, text, src, alt, toolCalls,
+      } as Message, getPublicElement(this._$content));
 
       return;
     }
@@ -346,6 +349,8 @@ class MessageBubble extends Widget<Properties> {
         this._renderAttachments();
         break;
       case 'type':
+        this._renderToolCallsElement();
+        this._renderToolCalls();
         this._updateContent();
         this._renderAttachmentsElement();
         this._renderAttachments();
@@ -358,6 +363,10 @@ class MessageBubble extends Widget<Properties> {
       case 'expandAllToolCalls':
         this._renderToolCallsElement();
         this._renderToolCalls();
+
+        if (name === 'toolCalls') {
+          this._updateContent();
+        }
         break;
       case 'isEdited':
         this._updateMessageData(name, value);
