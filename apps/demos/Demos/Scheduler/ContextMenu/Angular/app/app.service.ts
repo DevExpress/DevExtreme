@@ -89,11 +89,11 @@ const resources: Resource[] = [
   }, {
     text: 'Meeting room',
     id: 4,
-    color: '#DD2C00',
+    color: '#CD2900',
   }, {
     text: 'Conference hall',
     id: 5,
-    color: '#2E7D32',
+    color: '#2D7C31',
   },
 ];
 

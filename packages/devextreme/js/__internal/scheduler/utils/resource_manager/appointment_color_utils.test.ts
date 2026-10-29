@@ -1,6 +1,7 @@
 import {
   describe, expect, it,
 } from '@jest/globals';
+import { Color } from '@ts/color';
 import {
   complexIdResourceMock,
   getResourceManagerMock,
@@ -8,8 +9,10 @@ import {
   resourceIndexesMock,
   resourceItemsByIdMock,
 } from '@ts/scheduler/__mock__/resource_manager.mock';
+// eslint-disable-next-line spellcheck/spell-checker
+import { getRelativeLuminance } from '@ts/utils/color.helpers';
 
-import { getAppointmentColor, getPaintedResource } from './appointment_color_utils';
+import { getAppointmentColor, getContrastTextColor, getPaintedResource } from './appointment_color_utils';
 
 const ownerFirstColor = '#cb2824';
 const ownerSecondColor = '#cb7d7b';
@@ -327,5 +330,68 @@ describe('appointment color utils', () => {
         ),
       ).toEqual(dataSource[2].color);
     });
+  });
+});
+
+describe('getContrastTextColor', () => {
+  it('should return the light text color for dark backgrounds', () => {
+    const results = ['#1564C0', '#2E7D32', 'rgb(85, 26, 139)', 'darkred'].map(getContrastTextColor);
+
+    expect(results).toEqual(['#fff', '#fff', '#fff', '#fff']);
+  });
+
+  it('should return the dark text color for light backgrounds', () => {
+    const results = ['#A7E3A5', '#F9E2AE', 'rgb(255, 255, 255)', 'lightblue'].map(getContrastTextColor);
+
+    expect(results).toEqual(['#000', '#000', '#000', '#000']);
+  });
+
+  it('should reach the AA contrast ratio on both sides of the threshold', () => {
+    const results = ['#757575', '#767676'].map(getContrastTextColor);
+
+    expect(results).toEqual(['#fff', '#000']);
+  });
+
+  it('should reach the AA contrast ratio for every channel value', () => {
+    const backgrounds = Array.from({ length: 256 }, (_, value) => [
+      [value, value, value],
+      [value, 0, 0],
+      [0, value, 0],
+      [0, 0, value],
+      [255, value, 0],
+      [value, 255, 255],
+    ]).flat();
+    const getContrastRatio = (first: string, second: string): number => {
+      const [lighter, darker] = [first, second]
+        .map((value) => {
+          const { r, g, b } = new Color(value);
+
+          // eslint-disable-next-line spellcheck/spell-checker
+          return getRelativeLuminance(r, g, b);
+        })
+        .sort((a, b) => b - a);
+
+      return (lighter + 0.05) / (darker + 0.05);
+    };
+
+    const ratios = backgrounds.map(([r, g, b]) => {
+      const background = `rgb(${r}, ${g}, ${b})`;
+
+      return getContrastRatio(background, getContrastTextColor(background) as string);
+    });
+
+    expect(Math.min(...ratios)).toBeGreaterThanOrEqual(4.5);
+  });
+
+  it('should return undefined for an unparsable color', () => {
+    const results = ['', 'not a color'].map(getContrastTextColor);
+
+    expect(results).toEqual([undefined, undefined]);
+  });
+
+  it('should return undefined for a translucent color', () => {
+    const results = ['rgba(0, 0, 0, 0.1)', 'rgba(255, 255, 255, 0.5)'].map(getContrastTextColor);
+
+    expect(results).toEqual([undefined, undefined]);
   });
 });
