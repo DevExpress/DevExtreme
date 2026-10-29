@@ -19,6 +19,7 @@ import {
 
 import { ChatModel } from './__mock__/model/chat/chat';
 import type { MessageBubbleModel } from './__mock__/model/chat/message_bubble';
+import type { ToolCallModel } from './__mock__/model/chat/tool_call';
 
 const USER = { id: 'user', name: 'User' };
 const ASSISTANT = { id: 'assistant', name: 'Assistant' };
@@ -299,7 +300,7 @@ describe('Chat tool calls', () => {
       expect(call.getResultText()).toBe('Barcelona: 14:30\nLondon: 13:30');
     });
 
-    it('should show the fields as read-only text (no HTML is created from the values)', () => {
+    it('should not create HTML from the values', () => {
       const html = {
         name: '<b>bold</b>',
         arguments: { value: '<img src="x" onerror="alert(1)">' },
@@ -317,6 +318,71 @@ describe('Chat tool calls', () => {
       expect(call.getArgumentsText()).toContain('<img src=');
       expect(call.getResultText()).toBe('<script>alert(1)</script>');
       expect(block.querySelector('b, img, script')).toBeNull();
+    });
+  });
+
+  describe('call body fields', () => {
+    const openCall = (toolCall: ToolCall): ToolCallModel => {
+      const chat = createChat({ items: [createMessage({ toolCalls: [toolCall] })] });
+      const [call] = getBubble(chat).getToolCalls();
+
+      call.toggle();
+
+      return call;
+    };
+
+    it('should make the fields read-only', () => {
+      expect(openCall(WEATHER).areFieldsReadOnly()).toBe(true);
+    });
+
+    it('should label every field input with its own label', () => {
+      expect(openCall(WEATHER).getFieldInputLabels()).toEqual(['Arguments', 'Result']);
+    });
+
+    it('should label the only field of a call without arguments', () => {
+      expect(openCall({ name: 'getTime', result: '14:30' }).getFieldInputLabels())
+        .toEqual(['Result']);
+    });
+
+    [
+      { result: 0, text: '0' },
+      { result: false, text: 'false' },
+      { result: null, text: 'null' },
+      { result: 42, text: '42' },
+      { result: [1, 2], text: '[\n  1,\n  2\n]' },
+    ].forEach(({ result, text }) => {
+      it(`should show the result ${JSON.stringify(result)} as text`, () => {
+        const call = openCall({ name: 'getValue', result: result as ToolCall['result'] });
+
+        expect(call.getFieldLabels()).toEqual(['Result']);
+        expect(call.getResultText()).toBe(text);
+      });
+    });
+
+    it('should not show the Result for an empty string result', () => {
+      const call = openCall({ ...WEATHER, result: '' });
+
+      expect(call.getFieldLabels()).toEqual(['Arguments']);
+      expect(call.getResultText()).toBeNull();
+    });
+
+    it('should show no fields for a call with empty arguments and an empty string result', () => {
+      const call = openCall({ name: 'ping', arguments: {}, result: '' });
+
+      expect(call.getFieldLabels()).toEqual([]);
+    });
+
+    it('should show nested arguments as indented JSON', () => {
+      const call = openCall({
+        name: 'search',
+        arguments: { filter: { tags: ['a', 'b'], limit: 10 } },
+      });
+
+      expect(call.getArgumentsText()).toBe(JSON.stringify(
+        { filter: { tags: ['a', 'b'], limit: 10 } },
+        null,
+        2,
+      ));
     });
   });
 
@@ -588,7 +654,7 @@ describe('Chat tool calls', () => {
       expect(received[0].map(({ name }) => name)).toEqual(['getWeather', 'getCurrentTime']);
     });
 
-    it('should render the template again with the new toolCalls when only toolCalls are updated', () => {
+    it('should render the template again when only toolCalls are updated', () => {
       const message = createMessage({ toolCalls: [WEATHER] });
       const { chat, push } = createStoreChat([message], {
         messageTemplate: ({ message: data }: { message: Message }, container: Element) => {
@@ -651,6 +717,21 @@ describe('Chat tool calls', () => {
 
       expect(getBubble(chat).hasToolCalls()).toBe(false);
       expect(getCustomText(getBubble(chat))).toBe('custom: Answer');
+    });
+
+    it('should show and hide the block when the whole toolCallOptions object is changed at run time', () => {
+      const chat = createChat({
+        messageTemplate,
+        items: [createMessage({ toolCalls: [WEATHER] })],
+      });
+
+      chat.getInstance().option('toolCallOptions', { showInMessageTemplate: true });
+
+      expect(getBubble(chat).hasToolCalls()).toBe(true);
+
+      chat.getInstance().option('toolCallOptions', { showInMessageTemplate: false });
+
+      expect(getBubble(chat).hasToolCalls()).toBe(false);
     });
 
     it('should hide and show the block when messageTemplate is set and removed at run time', () => {
@@ -734,6 +815,70 @@ describe('Chat tool calls', () => {
       }]);
 
       expect(getCallsExpandedStates(getBubble(chat))).toEqual([false, true]);
+    });
+
+    it('should show the result that arrives after the call', () => {
+      const pending: ToolCall = { name: 'getWeather', arguments: { city: 'London' } };
+      const message = createMessage({ toolCalls: [pending] });
+      const { chat, push } = createStoreChat([message]);
+
+      getBubble(chat).getToolCalls()[0].toggle();
+
+      expect(getBubble(chat).getToolCalls()[0].getFieldLabels()).toEqual(['Arguments']);
+
+      push([{ type: 'update', key: message.id, data: { toolCalls: [{ ...pending, result: '15°C', expanded: true }] } }]);
+
+      const [call] = getBubble(chat).getToolCalls();
+
+      expect(call.getFieldLabels()).toEqual(['Arguments', 'Result']);
+      expect(call.getResultText()).toBe('15°C');
+    });
+
+    it('should show the changed arguments', () => {
+      const message = createMessage({ toolCalls: [{ ...WEATHER, expanded: true }] });
+      const { chat, push } = createStoreChat([message]);
+
+      push([{
+        type: 'update',
+        key: message.id,
+        data: { toolCalls: [{ ...WEATHER, arguments: { city: 'Paris' }, expanded: true }] },
+      }]);
+
+      expect(getBubble(chat).getToolCalls()[0].getArgumentsText()).toBe('{\n  "city": "Paris"\n}');
+    });
+
+    it('should show the error tag and highlight the result when the status becomes "error"', () => {
+      const message = createMessage({ toolCalls: [{ ...WEATHER, expanded: true }] });
+      const { chat, push } = createStoreChat([message]);
+
+      expect(getBubble(chat).getToolCalls()[0].getErrorTagText()).toBeNull();
+      expect(getBubble(chat).getToolCalls()[0].hasErrorResult()).toBe(false);
+
+      push([{
+        type: 'update',
+        key: message.id,
+        data: { toolCalls: [{ ...WEATHER, status: 'error', expanded: true }] },
+      }]);
+
+      const [call] = getBubble(chat).getToolCalls();
+
+      expect(call.getErrorTagText()).toBe('Error');
+      expect(call.hasErrorResult()).toBe(true);
+    });
+
+    it('should render the block of a message when items are changed with the option', () => {
+      const chat = createChat({
+        items: [createMessage({ toolCalls: [WEATHER] }), createMessage({ toolCalls: [TIME] })],
+      });
+
+      chat.getInstance().option('items', [
+        createMessage({ toolCalls: [TIME] }),
+        createMessage({ toolCalls: [WEATHER, FAILED] }),
+      ]);
+
+      expect(chat.getMessageBubbles().map((bubble) => bubble.getToolCalls().length))
+        .toEqual([1, 2]);
+      expect(getBubble(chat).getToolCalls()[0].getName()).toBe('getCurrentTime');
     });
 
     it('should add the block to a message that had no toolCalls', () => {
@@ -1049,6 +1194,41 @@ describe('Chat tool calls', () => {
       expect(second.getToolCallsTitleErrorTagText()).toBe('2 failures');
       expect(failed.getErrorTagText()).toBe('Failed');
       expect(success.getFieldLabels()).toEqual(['Input', 'Output']);
+    });
+  });
+
+  describe('widget state', () => {
+    const getBlockHtmlClasses = (chat: ChatModel): string => (
+      getBubble(chat).getAccordionElement() as HTMLElement
+    ).className;
+
+    it('should render the block of a rtl chat as rtl', () => {
+      const chat = createChat({
+        rtlEnabled: true,
+        items: [createMessage({ toolCalls: [WEATHER] })],
+      });
+
+      expect(getBlockHtmlClasses(chat)).toContain('dx-rtl');
+    });
+
+    it('should render the block of a disabled chat as disabled', () => {
+      const chat = createChat({
+        disabled: true,
+        items: [createMessage({ toolCalls: [WEATHER] })],
+      });
+
+      expect(getBlockHtmlClasses(chat)).toContain('dx-state-disabled');
+    });
+
+    it('should remove the block elements when the chat is disposed', () => {
+      const chat = createChat({
+        items: [createMessage({ toolCalls: [{ ...WEATHER, expanded: true }] })],
+      });
+      const block = getBubble(chat).getToolCallsElement() as HTMLElement;
+
+      chat.getInstance().dispose();
+
+      expect(block.isConnected).toBe(false);
     });
   });
 
