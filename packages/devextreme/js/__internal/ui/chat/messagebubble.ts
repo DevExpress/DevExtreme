@@ -252,7 +252,6 @@ class MessageBubble extends Widget<Properties> {
       text,
       src,
       alt,
-      toolCalls,
       isDeleted = false,
     } = this.option();
 
@@ -264,8 +263,8 @@ class MessageBubble extends Widget<Properties> {
 
     if (template) {
       template({
-        type, text, src, alt, toolCalls,
-      } as Message, getPublicElement(this._$content));
+        type, text, src, alt,
+      }, getPublicElement(this._$content));
 
       return;
     }
