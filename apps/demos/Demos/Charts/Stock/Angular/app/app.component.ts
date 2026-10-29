@@ -1,11 +1,15 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import {
-  ChangeDetectorRef, Component, enableProdMode, provideZoneChangeDetection,
+  ChangeDetectorRef, Component, enableProdMode, provideZoneChangeDetection, ViewChild,
 } from '@angular/core';
-import { DxChartModule, DxToolbarModule } from 'devextreme-angular';
+import {
+  DxChartComponent, DxChartModule, DxDropDownButtonModule, DxToolbarModule,
+} from 'devextreme-angular';
 import type { DxChartTypes } from 'devextreme-angular/ui/chart';
 import type { DxButtonTypes } from 'devextreme-angular/ui/button';
+import type { DxDropDownButtonTypes } from 'devextreme-angular/ui/drop-down-button';
 import type { VisualRange } from 'devextreme-angular/common/charts';
+import { formatDate } from 'devextreme/localization';
 import { StockPrice, Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -18,6 +22,12 @@ const zoomFactor = 0.75;
 const minVisualRangeLength = { days: 3 };
 const minVisibleSpanMs = minVisualRangeLength.days * dayMs;
 
+const exportFormats = ['PNG', 'PDF', 'JPEG', 'GIF', 'SVG'] as const;
+const exportItems = [
+  { text: 'Print' },
+  ...exportFormats.map((format) => ({ text: `${format} file`, format })),
+];
+
 function clamp(value: number, min: number, max: number): number {
   return Math.min(Math.max(value, min), max);
 }
@@ -29,10 +39,13 @@ function clamp(value: number, min: number, max: number): number {
   providers: [Service],
   imports: [
     DxChartModule,
+    DxDropDownButtonModule,
     DxToolbarModule,
   ],
 })
 export class AppComponent {
+  @ViewChild(DxChartComponent, { static: false }) chart: DxChartComponent;
+
   minVisualRange = minVisualRangeLength;
 
   stockPrices: StockPrice[];
@@ -52,28 +65,28 @@ export class AppComponent {
   rangeMax: number;
 
   panLeftButtonOptions: DxButtonTypes.Properties = {
-    icon: 'chevronleft',
+    icon: 'arrowleft',
     hint: 'Pan Left',
     elementAttr: { 'aria-label': 'Pan Left' },
     onClick: () => this.pan(-1),
   };
 
   panRightButtonOptions: DxButtonTypes.Properties = {
-    icon: 'chevronright',
+    icon: 'arrowright',
     hint: 'Pan Right',
     elementAttr: { 'aria-label': 'Pan Right' },
     onClick: () => this.pan(1),
   };
 
   zoomInButtonOptions: DxButtonTypes.Properties = {
-    icon: 'plus',
+    icon: 'zoominoutline',
     hint: 'Zoom In',
     elementAttr: { 'aria-label': 'Zoom In' },
     onClick: () => this.zoom(zoomFactor),
   };
 
   zoomOutButtonOptions: DxButtonTypes.Properties = {
-    icon: 'minus',
+    icon: 'zoomoutoutline',
     hint: 'Zoom Out',
     elementAttr: { 'aria-label': 'Zoom Out' },
     onClick: () => this.zoom(1 / zoomFactor),
@@ -84,6 +97,24 @@ export class AppComponent {
     hint: 'Reset Zoom',
     elementAttr: { 'aria-label': 'Reset Zoom' },
     onClick: () => this.resetZoom(),
+  };
+
+  exportButtonOptions: DxDropDownButtonTypes.Properties = {
+    icon: 'export',
+    hint: 'Exporting/Printing',
+    elementAttr: { 'aria-label': 'Exporting/Printing' },
+    stylingMode: 'text',
+    useSelectMode: false,
+    dropDownOptions: { width: 100 },
+    displayExpr: 'text',
+    items: exportItems,
+    onItemClick: ({ itemData }) => {
+      if (itemData.format) {
+        this.chart.instance.exportTo('file', itemData.format);
+      } else {
+        this.chart.instance.print();
+      }
+    },
   };
 
   constructor(service: Service, private changeDetectorRef: ChangeDetectorRef) {
@@ -133,6 +164,13 @@ export class AppComponent {
 
   resetZoom() {
     this.setRange(this.initialStart.getTime(), this.initialEnd.getTime());
+  }
+
+  customizeLabelText({ value }: { value?: Date | number | string }) {
+    const date = value as Date;
+    const isMidnight = date.getHours() === 0 && date.getMinutes() === 0;
+
+    return formatDate(date, isMidnight ? 'MMM dd' : 'shortTime');
   }
 
   customizeTooltip(arg: DxChartTypes.PointInfo) {

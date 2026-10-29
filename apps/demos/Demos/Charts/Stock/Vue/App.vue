@@ -1,6 +1,11 @@
 <template>
   <DxToolbar>
     <DxItem
+      location="before"
+      text="Stock Price"
+      css-class="chart-title"
+    />
+    <DxItem
       :options="panLeftButtonOptions"
       location="after"
       widget="dxButton"
@@ -11,12 +16,12 @@
       widget="dxButton"
     />
     <DxItem
-      :options="zoomInButtonOptions"
+      :options="zoomOutButtonOptions"
       location="after"
       widget="dxButton"
     />
     <DxItem
-      :options="zoomOutButtonOptions"
+      :options="zoomInButtonOptions"
       location="after"
       widget="dxButton"
     />
@@ -25,11 +30,16 @@
       location="after"
       widget="dxButton"
     />
+    <DxItem
+      :options="exportButtonOptions"
+      location="after"
+      widget="dxDropDownButton"
+    />
   </DxToolbar>
   <DxChart
     id="chart"
+    ref="chart"
     :data-source="dataSource"
-    title="Stock Price"
   >
     <DxCommonSeriesSettings
       argument-field="date"
@@ -64,7 +74,7 @@
       />
       <DxLabel
         :rotation-angle="30"
-        format="MMM dd"
+        :customize-text="customizeLabelText"
         overlapping-behavior="rotate"
       />
     </DxArgumentAxis>
@@ -80,7 +90,6 @@
         />
       </DxLabel>
     </DxValueAxis>
-    <DxExport :enabled="true"/>
     <DxTooltip
       :enabled="true"
       :format="{ type: 'currency', precision: 2 }"
@@ -104,12 +113,14 @@ import DxChart, {
   DxZoomAndPan,
   DxScrollBar,
   DxLegend,
-  DxExport,
   DxTooltip,
   type DxChartTypes,
 } from 'devextreme-vue/chart';
 import type { DxButtonTypes } from 'devextreme-vue/button';
+import type { DxDropDownButtonTypes } from 'devextreme-vue/drop-down-button';
 import DxToolbar, { DxItem } from 'devextreme-vue/toolbar';
+import { formatDate } from 'devextreme/localization';
+import 'devextreme/ui/drop_down_button';
 import { dataSource } from './data.ts';
 
 const dayMs = 24 * 60 * 60 * 1000;
@@ -125,6 +136,14 @@ const dataMax = dataSource[dataSource.length - 1].date.getTime();
 const rangeMin = dataMin - dayMs / 2;
 const rangeMax = dataMax + dayMs / 2;
 const initialStart = new Date(rangeMin);
+
+const exportFormats = ['PNG', 'PDF', 'JPEG', 'GIF', 'SVG'] as const;
+const exportItems = [
+  { text: 'Print' },
+  ...exportFormats.map((format) => ({ text: `${format} file`, format })),
+];
+
+const chart = ref();
 
 const startValue = ref(initialStart);
 const endValue = ref(initialEnd);
@@ -163,28 +182,28 @@ const resetZoom = () => {
 };
 
 const panLeftButtonOptions: DxButtonTypes.Properties = {
-  icon: 'chevronleft',
+  icon: 'arrowleft',
   hint: 'Pan Left',
   elementAttr: { 'aria-label': 'Pan Left' },
   onClick: () => pan(-1),
 };
 
 const panRightButtonOptions: DxButtonTypes.Properties = {
-  icon: 'chevronright',
+  icon: 'arrowright',
   hint: 'Pan Right',
   elementAttr: { 'aria-label': 'Pan Right' },
   onClick: () => pan(1),
 };
 
 const zoomInButtonOptions: DxButtonTypes.Properties = {
-  icon: 'plus',
+  icon: 'zoominoutline',
   hint: 'Zoom In',
   elementAttr: { 'aria-label': 'Zoom In' },
   onClick: () => zoom(zoomFactor),
 };
 
 const zoomOutButtonOptions: DxButtonTypes.Properties = {
-  icon: 'minus',
+  icon: 'zoomoutoutline',
   hint: 'Zoom Out',
   elementAttr: { 'aria-label': 'Zoom Out' },
   onClick: () => zoom(1 / zoomFactor),
@@ -195,6 +214,31 @@ const resetZoomButtonOptions: DxButtonTypes.Properties = {
   hint: 'Reset Zoom',
   elementAttr: { 'aria-label': 'Reset Zoom' },
   onClick: resetZoom,
+};
+
+const exportButtonOptions: DxDropDownButtonTypes.Properties = {
+  icon: 'export',
+  hint: 'Exporting/Printing',
+  elementAttr: { 'aria-label': 'Exporting/Printing' },
+  stylingMode: 'text',
+  useSelectMode: false,
+  dropDownOptions: { width: 100 },
+  displayExpr: 'text',
+  items: exportItems,
+  onItemClick: ({ itemData }) => {
+    if (itemData.format) {
+      chart.value.instance.exportTo('file', itemData.format);
+    } else {
+      chart.value.instance.print();
+    }
+  },
+};
+
+const customizeLabelText = ({ value }: { value?: Date | number | string }) => {
+  const date = value as Date;
+  const isMidnight = date.getHours() === 0 && date.getMinutes() === 0;
+
+  return formatDate(date, isMidnight ? 'MMM dd' : 'shortTime');
 };
 
 const customizeTooltip = (pointInfo: DxChartTypes.PointInfo) => {
@@ -213,6 +257,11 @@ const customizeTooltip = (pointInfo: DxChartTypes.PointInfo) => {
 };
 </script>
 <style>
+.chart-title {
+  font-size: 20px;
+  font-weight: 600;
+}
+
 #chart {
   height: 440px;
 }
