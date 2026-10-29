@@ -16,7 +16,7 @@ env:
 
 jobs:
   build:
-    runs-on: devextreme-shr2
+    runs-on: ${{ github.event_name == 'merge_group' && 'devextreme-shr2-ondemand' || 'devextreme-shr2' }}
     timeout-minutes: 16
 
     steps:
@@ -117,7 +117,7 @@ jobs:
           key: ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-${{ github.sha }}
 
   custom_bundles:
-    runs-on: devextreme-shr2
+    runs-on: ${{ github.event_name == 'merge_group' && 'devextreme-shr2-ondemand' || 'devextreme-shr2' }}
     timeout-minutes: 7
     needs: build
 
