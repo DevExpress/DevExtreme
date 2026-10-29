@@ -1,7 +1,6 @@
 import {
   Component,
   enableProdMode,
-  provideZoneChangeDetection,
   inject,
 } from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
@@ -65,7 +64,6 @@ export class AppComponent {
 
 bootstrapApplication(AppComponent, {
   providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
     provideHttpClient(withFetch()),
   ],
 });
