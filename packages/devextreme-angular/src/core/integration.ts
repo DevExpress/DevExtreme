@@ -16,9 +16,11 @@ let inOutsideAngular = false;
 
 export const isZoneless = (ngZone: NgZone) => !(ngZone instanceof NgZone);
 
-export const canMarkForOptionChange = (ngZone: NgZone) => (isZoneless(ngZone)
-  ? !inOutsideAngular
-  : NgZone.isInAngularZone());
+export const canMarkForOptionChange = (ngZone: NgZone) => (
+  isZoneless(ngZone)
+    ? !inOutsideAngular
+    : NgZone.isInAngularZone()
+);
 
 const trackOutsideAngularHandler = (callback: (...args: any[]) => any) => function (this: unknown, e: Event) {
   const prevInOutsideAngular = inOutsideAngular;
