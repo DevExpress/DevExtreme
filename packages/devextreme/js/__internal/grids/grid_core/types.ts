@@ -301,7 +301,7 @@ export interface Controllers {
   resizing: import('./grid_view/grid_view').ResizingController;
   selection: import('./selection/m_selection').SelectionController;
   validating: import('./validating/m_validating').ValidatingController;
-  searchPanel: import('./search/m_search').SearchPanelViewController;
+  searchPanel: import('./search/search').SearchPanelViewController;
   stateStoring: import('./state_storing/state_storing_controller_core').StateStoringController;
   synchronizeScrolling: import('./grid_view/grid_view').SynchronizeScrollingController;
   tablePosition: import('./columns_resizing_reordering/columns_resizing_reordering').TablePositionViewController;
@@ -322,7 +322,7 @@ export interface Views {
   headerPanel: import('./header_panel/header_panel').HeaderPanel;
   headerFilterView: import('./header_filter/header_filter_core').HeaderFilterView;
   rowsView: import('./views/rows_view').RowsView;
-  pagerView: import('./pager/m_pager').PagerView;
+  pagerView: import('./pager/pager').PagerView;
   columnsSeparatorView: import('./columns_resizing_reordering/columns_resizing_reordering').ColumnsSeparatorView;
   blockSeparatorView: import('./columns_resizing_reordering/columns_resizing_reordering').BlockSeparatorView;
   draggingHeaderView: import('./columns_resizing_reordering/columns_resizing_reordering').DraggingHeaderView;

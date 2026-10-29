@@ -36,7 +36,7 @@ const DATA_GRID_FEATURE_MAP: Record<string, string> = {
   widget: 'Core',
   widget_base: 'Core',
   utils: 'Core',
-  m_editing: 'Editing',
+  editing: 'Editing',
   grouping: 'Grouping',
   summary: 'Summary',
   export: 'Export',
