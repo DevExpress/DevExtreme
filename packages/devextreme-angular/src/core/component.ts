@@ -161,7 +161,7 @@ export abstract class DxComponent implements OnChanges, OnInit, DoCheck, AfterCo
   }
 
   protected _markForCheck() {
-    if (isZoneless(this.ngZone) || NgZone.isInAngularZone()) {
+    if (isZoneless(this.ngZone)) {
       this.changeDetectorRef.markForCheck();
     }
   }
@@ -190,7 +190,9 @@ export abstract class DxComponent implements OnChanges, OnInit, DoCheck, AfterCo
     if (!this.widgetUpdateLocked && this.instance) {
       this.instance.beginUpdate();
       this.widgetUpdateLocked = true;
-      this.changeDetectorRef.markForCheck();
+      if (isZoneless(this.ngZone)) {
+        this.changeDetectorRef.markForCheck();
+      }
     }
   }
 

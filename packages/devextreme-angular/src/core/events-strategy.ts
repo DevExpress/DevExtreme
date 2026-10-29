@@ -29,17 +29,15 @@ export class NgEventsStrategy {
     }
     const internalSubs = this.subscriptions[name] || [];
     const hasAngularSubscribers = emitter.observers.length > internalSubs.length;
-    const shouldMark = name !== 'optionChanged' || hasAngularSubscribers;
 
     if (isZoneless(this.zone)) {
-      this.fireZoneless(emitter, args?.[0], shouldMark);
+      this.fireZoneless(emitter, args?.[0], name, hasAngularSubscribers);
       return;
     }
     this.fireInZone(
       emitter,
       args?.[0],
       hasAngularSubscribers,
-      shouldMark,
     );
   }
 
@@ -94,8 +92,10 @@ export class NgEventsStrategy {
   private fireZoneless(
     emitter: EventEmitter<any>,
     value: any,
-    shouldMark: boolean,
+    name: string,
+    hasAngularSubscribers: boolean,
   ) {
+    const shouldMark = name !== 'optionChanged' || hasAngularSubscribers;
     emitter.next(value);
     if (shouldMark) {
       this.changeDetectorRef?.markForCheck();
@@ -106,18 +106,13 @@ export class NgEventsStrategy {
     emitter: EventEmitter<any>,
     value: any,
     hasAngularSubscribers: boolean,
-    shouldMark: boolean,
   ) {
     if (hasAngularSubscribers) {
       this.zone.run(() => {
         emitter.next(value);
-        this.changeDetectorRef?.markForCheck();
       });
     } else {
       emitter.next(value);
-      if (shouldMark && NgZone.isInAngularZone()) {
-        this.changeDetectorRef?.markForCheck();
-      }
     }
   }
 }
@@ -165,7 +160,6 @@ export class EmitterHelper {
   ) {
     this.zone.run(() => {
       emitter.next(value);
-      this.changeDetectorRef?.markForCheck();
     });
   }
 }
