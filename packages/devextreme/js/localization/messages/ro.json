@@ -448,6 +448,12 @@
         "dxChat-fileViewLabel": "Listă fișiere",
         "dxChat-downloadButtonLabel": "Descărcați fișierul {0}",
         "dxChat-fileLimitReachedWarning": "Ați selectat prea multe fișiere. Selectați cel mult {0} fișiere și încercați din nou.",
+        "dxChat-toolCallArgumentsLabel": "Arguments",
+        "dxChat-toolCallResultLabel": "Result",
+        "dxChat-toolCallsTitle": "{0} tools",
+        "dxChat-toolCallError": "Error",
+        "dxChat-toolCallsErrorSingle": "{0} Error",
+        "dxChat-toolCallsErrorMultiple": "{0} Errors",
 
         "dxColorView-ariaRed": "Roșu",
         "dxColorView-ariaGreen": "Verde",

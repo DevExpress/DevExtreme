@@ -448,6 +448,12 @@
         "dxChat-fileViewLabel": "Llista de fitxers",
         "dxChat-downloadButtonLabel": "Descarrega el fitxer {0}",
         "dxChat-fileLimitReachedWarning": "Heu seleccionat massa fitxers. Seleccioneu-ne com a màxim {0} i torneu-ho a provar.",
+        "dxChat-toolCallArgumentsLabel": "Arguments",
+        "dxChat-toolCallResultLabel": "Result",
+        "dxChat-toolCallsTitle": "{0} tools",
+        "dxChat-toolCallError": "Error",
+        "dxChat-toolCallsErrorSingle": "{0} Error",
+        "dxChat-toolCallsErrorMultiple": "{0} Errors",
 
         "dxColorView-ariaRed": "Vermell",
         "dxColorView-ariaGreen": "Verd",

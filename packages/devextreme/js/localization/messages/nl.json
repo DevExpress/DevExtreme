@@ -448,6 +448,12 @@
         "dxChat-fileViewLabel": "Bestandslijst",
         "dxChat-downloadButtonLabel": "Bestand {0} downloaden",
         "dxChat-fileLimitReachedWarning": "U heeft te veel bestanden geselecteerd. Selecteer maximaal {0} bestanden en probeer opnieuw.",
+        "dxChat-toolCallArgumentsLabel": "Arguments",
+        "dxChat-toolCallResultLabel": "Result",
+        "dxChat-toolCallsTitle": "{0} tools",
+        "dxChat-toolCallError": "Error",
+        "dxChat-toolCallsErrorSingle": "{0} Error",
+        "dxChat-toolCallsErrorMultiple": "{0} Errors",
 
         "dxColorView-ariaRed": "Rood",
         "dxColorView-ariaGreen": "Groen",

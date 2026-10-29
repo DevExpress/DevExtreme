@@ -448,6 +448,12 @@
         "dxChat-fileViewLabel": "Failų sąrašas",
         "dxChat-downloadButtonLabel": "Atsisiųsti failą {0}",
         "dxChat-fileLimitReachedWarning": "Pasirinkote per daug failų. Pasirinkite ne daugiau kaip {0} failų ir bandykite dar kartą.",
+        "dxChat-toolCallArgumentsLabel": "Arguments",
+        "dxChat-toolCallResultLabel": "Result",
+        "dxChat-toolCallsTitle": "{0} tools",
+        "dxChat-toolCallError": "Error",
+        "dxChat-toolCallsErrorSingle": "{0} Error",
+        "dxChat-toolCallsErrorMultiple": "{0} Errors",
 
         "dxColorView-ariaRed": "Raudona",
         "dxColorView-ariaGreen": "Žalia",
