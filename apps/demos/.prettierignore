@@ -7,6 +7,4 @@
 *.md
 *.json
 .github
-publish-demos
 coverage
-utils/**/template.html
