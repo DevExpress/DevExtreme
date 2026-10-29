@@ -1,6 +1,6 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import {
-  enableProdMode, ChangeDetectorRef, Component, provideZoneChangeDetection,
+  enableProdMode, ChangeDetectorRef, Component,
 } from '@angular/core';
 import notify from 'devextreme/ui/notify';
 import { DxToolbarModule } from 'devextreme-angular';
@@ -92,8 +92,4 @@ export class AppComponent {
   }
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);
