@@ -1,28 +1,56 @@
-import type { DataChange, NewRowPosition, RowInsertedInfo } from '@js/common/grids';
+import type {
+  DataChange, EditingBase, NewRowPosition, RowInsertedInfo,
+} from '@js/common/grids';
 import type { DxElement } from '@js/core/element';
+import type { dxElementWrapper } from '@js/core/renderer';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import type { StoreChange } from '@js/data/store';
 import type { DxEvent } from '@js/events';
 import type { Column as DataGridColumn, ColumnButton, ColumnButtonClickEvent } from '@js/ui/data_grid';
-import type { FormItemComponent } from '@js/ui/form';
+import type Form from '@js/ui/form';
+import type {
+  FormItemComponent, Item as FormItem, SimpleItem, SimpleItemTemplateData,
+} from '@js/ui/form';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 
 import type { ProcessedItem } from '../data_controller/types';
 import type { RawItemData } from '../data_source_adapter/types';
 import type {
-  InternalGrid, InternalGridOptions, OptionChanged, OptionChangedFor, RowKey,
+  InternalGrid, OptionChanged, OptionChangedFor, RowKey,
 } from '../types';
-import type { ViewCellOptions, ViewDataChange } from '../views/types';
-import type { EDITING_CHANGES_OPTION_NAME, INSERT_INDEX } from './const';
+import type {
+  CellRenderOptions, ViewCellOptions, ViewDataChange, ViewRow, ViewRowEvent,
+} from '../views/types';
+import type {
+  EDITING_CHANGES_OPTION_NAME, EDITING_EDITCOLUMNNAME_OPTION_NAME, INSERT_INDEX,
+} from './const';
+import type { EditingController } from './editing';
+
+export interface EditCellOptions {
+  rowIndex: number;
+  columnIndex: number | string;
+  oldColumnIndex?: number;
+  oldRowIndex?: number;
+}
+
+export type EditCellResult = boolean | DeferredObj<unknown>;
 
 export interface NormalizedEditCellOptions {
   item: ProcessedItem;
-  oldColumn: Column;
-  column: Column;
+  oldColumn?: Column;
+  column?: Column;
   columnIndex: number;
   oldRowIndex: number;
   rowIndex: number;
 }
+
+export type PrepareEditCellOptions = NormalizedEditCellOptions
+  & Required<Pick<NormalizedEditCellOptions, 'column'>>;
+
+export type EditColumnNameOptionChanged = Extract<
+  OptionChanged,
+  { fullName: typeof EDITING_EDITCOLUMNNAME_OPTION_NAME }
+>;
 
 export interface InsertInfo {
   [INSERT_INDEX]: number;
@@ -67,8 +95,25 @@ export interface EditingButtonTexts {
 
 export interface EditFormColumnItem {
   column: Column;
+  name?: string;
+  dataField?: string;
   editorType?: FormItemComponent;
+  editorOptions?: object;
   isCustomEditorType?: boolean;
+}
+
+export type EditFormItem = SimpleItem & {
+  column?: Column;
+  isCustomEditorType?: boolean;
+};
+
+export type EditFormDetailOptions = Partial<ViewCellOptions> & Pick<ViewCellOptions, 'rowType'>;
+
+export interface EditFormOptions {
+  validationGroup?: unknown;
+  items: (FormItem | EditFormItem)[];
+  formID: string;
+  customizeItem: (item: EditFormItem) => void;
 }
 
 export interface OnSavingParams {
@@ -97,11 +142,22 @@ export type EditingColumn = Column
   & Pick<DataGridColumn, 'editCellTemplate'>
   & { buttons?: EditingButton[] };
 
+export interface EditingViewRow extends ViewRow {
+  removed?: boolean;
+  modified?: boolean;
+  modifiedValues?: unknown[];
+}
+
+export interface EditingCellRenderOptions extends CellRenderOptions {
+  row: EditingViewRow;
+}
+
 export interface EditorCellOptions extends ViewCellOptions {
   column: EditingColumn;
   row?: ProcessedItem;
   setValue?: (value: unknown, text?: string) => void;
   isOnForm?: boolean;
+  item?: EditFormColumnItem;
   id?: string;
 }
 
@@ -159,7 +215,7 @@ export interface ProcessedChanges {
   dataChanges: StoreChange[];
 }
 
-export type EditingOptions = NonNullable<InternalGridOptions['editing']> & {
+export type EditingOptions = EditingBase<RawItemData, RowKey> & {
   allowAdding?: AllowEditActionValue;
   allowUpdating?: AllowEditActionValue;
   allowDeleting?: AllowEditActionValue;
@@ -168,13 +224,65 @@ export type EditingOptions = NonNullable<InternalGridOptions['editing']> & {
 
 export type EditingChangeParams = Partial<EditingChange> & { oldData?: RawItemData };
 
-export type EditingButtonLocalizationNames = Record<
-'edit' | 'save' | 'delete' | 'undelete' | 'cancel',
-string
->;
-
 export interface EditingModuleOptions {
   useLegacyColumnButtonTemplate?: boolean;
 }
 
+export type EditingDefaultOptions = { editing: EditingOptions } & EditingModuleOptions;
+
 export type EditingModuleOptionChanged = OptionChanged | OptionChangedFor<EditingModuleOptions>;
+
+export interface EditingRowsViewExtension {
+  // eslint-disable-next-line @typescript-eslint/method-signature-style -- overridden by methods
+  handleRowClickByEditing(e: ViewRowEvent): boolean;
+
+  // eslint-disable-next-line @typescript-eslint/method-signature-style -- overridden by methods
+  handleRowDblClickByEditing(e: ViewRowEvent): boolean;
+}
+
+export interface EditingDataControllerExtension {
+  _editingController: EditingController;
+}
+
+export interface CellBasedEditingControllerExtension {
+  // eslint-disable-next-line @typescript-eslint/method-signature-style -- overridden by methods
+  closeEditCell(isError?: boolean | null, withoutSaveEditData?: boolean): DeferredObj<unknown>;
+
+  // eslint-disable-next-line @typescript-eslint/method-signature-style -- overridden by methods
+  editCell(rowIndex: number, columnIndex: number | string): EditCellResult;
+
+  // eslint-disable-next-line @typescript-eslint/method-signature-style -- overridden by methods
+  beforeCloseEditCell(rowIndices: number[]): void;
+
+  // eslint-disable-next-line @typescript-eslint/method-signature-style -- overridden by methods
+  beforeEditCell(
+    rowIndex: number,
+    columnIndex: number,
+    item: ProcessedItem,
+  ): DeferredObj<boolean> | boolean;
+}
+
+export type CellBasedEditingController = EditingController & CellBasedEditingControllerExtension;
+
+export interface FormBasedEditingControllerExtension {
+  renderFormEditorTemplate: (
+    detailCellOptions: EditFormDetailOptions,
+    item: EditFormColumnItem,
+    formTemplateOptions: SimpleItemTemplateData,
+    container: dxElementWrapper,
+    isReadOnly?: boolean,
+  ) => EditorCellOptions;
+  getEditForm: () => Form | null | undefined;
+
+  // eslint-disable-next-line @typescript-eslint/method-signature-style -- overridden by methods
+  getEditFormOptions(detailOptions: EditFormDetailOptions): EditFormOptions;
+}
+
+export type FormBasedEditingController = EditingController & FormBasedEditingControllerExtension;
+
+export interface EditingFormBasedRowsViewExtension {
+  _getEditFormEditorVisibleIndex: (
+    $cells: dxElementWrapper | undefined,
+    column: Column | undefined,
+  ) => number;
+}

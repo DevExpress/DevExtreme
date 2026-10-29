@@ -1,29 +1,30 @@
 /* eslint-disable max-classes-per-file */
+import type { dxElementWrapper } from '@js/core/renderer';
 import { equalByValue } from '@js/core/utils/common';
+import type { DeferredObj } from '@js/core/utils/deferred';
+import type { RefreshOptions } from '@ts/grids/grid_core/data_controller/types';
+import { ROW_SELECTION_CLASS } from '@ts/grids/grid_core/selection/const';
+import type { ModuleType } from '@ts/grids/grid_core/types';
 import type { RowsView } from '@ts/grids/grid_core/views/rows_view';
+import type { ViewRow } from '@ts/grids/grid_core/views/types';
 
-import type { ModuleType } from '../types';
 import {
-  EDIT_FORM_CLASS,
-  EDIT_MODE_ROW,
-  EDIT_ROW,
+  CLASSES,
+  EDIT_MODE,
   EDITING_EDITROWKEY_OPTION_NAME,
   MODES_WITH_DELAYED_FOCUS,
-  ROW_SELECTED_CLASS,
 } from './const';
+import type { EditingController } from './editing';
+import { isRowBasedEditMode } from './editing_utils';
 import { editingRowBasedDataControllerExtender } from './extenders/editing_row_based_data_controller';
-import type { EditingController } from './m_editing';
+import type { EditorCellOptions, InternalColumnButton } from './types';
 
-const editingControllerExtender = (Base: ModuleType<EditingController>) => class RowBasedEditingControllerExtender extends Base {
-  private isRowEditMode() {
-    return this.getEditMode() === EDIT_MODE_ROW;
-  }
-
-  protected _afterCancelEditData(rowIndex) {
-    const dataController = this._dataController;
-
-    if (this.isRowBasedEditMode() && rowIndex >= 0) {
-      dataController.updateItems({
+const editingControllerExtender = (
+  Base: ModuleType<EditingController>,
+): ModuleType<EditingController> => class RowBasedEditingControllerExtender extends Base {
+  protected _afterCancelEditData(rowIndex: number): void {
+    if (isRowBasedEditMode(this.getEditMode()) && rowIndex >= 0) {
+      this._dataController.updateItems({
         changeType: 'update',
         rowIndices: [rowIndex, rowIndex + 1],
       });
@@ -32,10 +33,15 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
     }
   }
 
-  protected _isDefaultButtonVisible(button, options) {
-    const isRowMode = this.isRowBasedEditMode();
-    const isPopupEditMode = this.isPopupEditMode();
-    const isEditRow = !isPopupEditMode && options.row && equalByValue(options.row.key, this.option(EDITING_EDITROWKEY_OPTION_NAME));
+  protected _isDefaultButtonVisible(
+    button: InternalColumnButton,
+    options: EditorCellOptions,
+  ): boolean {
+    const editMode = this.getEditMode();
+    const isRowMode = isRowBasedEditMode(editMode);
+    const isEditRow = editMode !== EDIT_MODE.popup
+      && !!options.row
+      && equalByValue(options.row.key, this.option(EDITING_EDITROWKEY_OPTION_NAME));
 
     if (isRowMode) {
       switch (button.name) {
@@ -54,12 +60,12 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
     return super._isDefaultButtonVisible(button, options);
   }
 
-  public isEditRow(rowIndex) {
-    return this.isRowBasedEditMode() && this.isEditRowByIndex(rowIndex);
+  public isEditRow(rowIndex: number | undefined): boolean {
+    return isRowBasedEditMode(this.getEditMode()) && this.isEditRowByIndex(rowIndex);
   }
 
-  protected _cancelSaving(saveDeferred) {
-    if (this.isRowBasedEditMode()) {
+  protected _cancelSaving(saveDeferred: DeferredObj<unknown>): void {
+    if (isRowBasedEditMode(this.getEditMode())) {
       if (!this.hasChanges()) {
         this._cancelEditDataCore();
       }
@@ -68,28 +74,30 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
     super._cancelSaving(saveDeferred);
   }
 
-  protected _refreshCore(params) {
+  protected _refreshCore(params?: RefreshOptions): void {
     const { allowCancelEditing } = params ?? {};
-    if (this.isRowBasedEditMode()) {
+    if (isRowBasedEditMode(this.getEditMode())) {
       const hasUpdateChanges = this.getChanges().filter((it) => it.type === 'update').length > 0;
 
       this.init();
-      allowCancelEditing && hasUpdateChanges && this._cancelEditDataCore();
+      if (allowCancelEditing && hasUpdateChanges) {
+        this._cancelEditDataCore();
+      }
     }
 
     super._refreshCore(params);
   }
 
-  protected _isEditColumnVisible() {
+  protected _isEditColumnVisible(): boolean {
     const result = super._isEditColumnVisible();
-    const editingOptions: any = this.option('editing');
-    const isRowEditMode = this.isRowEditMode();
-    const isVisibleInRowEditMode = editingOptions.allowUpdating || editingOptions.allowAdding;
+    const editingOptions = this.option('editing');
+    const isRowEditMode = this.getEditMode() === EDIT_MODE.row;
+    const isVisibleInRowEditMode = !!editingOptions?.allowUpdating || !!editingOptions?.allowAdding;
 
     return result || (isRowEditMode && isVisibleInRowEditMode);
   }
 
-  public _focusEditorIfNeed() {
+  public _focusEditorIfNeed(): void {
     const editMode = this.getEditMode();
 
     if (this._needFocusEditor) {
@@ -97,8 +105,10 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
         const $editingCell = this.getFocusedCellInRow(this._getVisibleEditRowIndex());
 
         this._delayedInputFocus($editingCell, () => {
-          // @ts-expect-error
-          $editingCell && this.component.focus($editingCell);
+          if ($editingCell) {
+            // @ts-expect-error focus() is typed for Element
+            this.component.focus($editingCell);
+          }
         });
       }
 
@@ -107,20 +117,22 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
   }
 };
 
-const rowsView = (Base: ModuleType<RowsView>) => class RowsViewEditingRowBasedExtender extends Base {
-  protected _createRow(row) {
-    const $row = super._createRow.apply(this, arguments as any);
+const rowsView = (
+  Base: ModuleType<RowsView>,
+): ModuleType<RowsView> => class RowsViewEditingRowBasedExtender extends Base {
+  protected _createRow(row?: ViewRow, tag?: string): dxElementWrapper {
+    const $row = super._createRow(row, tag);
 
     if (row) {
       const editingController = this._editingController;
       const isEditRow = editingController.isEditRow(row.rowIndex);
 
       if (isEditRow) {
-        $row.addClass(EDIT_ROW);
-        $row.removeClass(ROW_SELECTED_CLASS);
+        $row.addClass(CLASSES.editRow);
+        $row.removeClass(ROW_SELECTION_CLASS);
 
         if (row.rowType === 'detail') {
-          $row.addClass(this.addWidgetPrefix(EDIT_FORM_CLASS));
+          $row.addClass(this.addWidgetPrefix(CLASSES.editForm));
         }
       }
     }

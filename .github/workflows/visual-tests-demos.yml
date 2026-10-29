@@ -19,6 +19,7 @@ jobs:
   check-should-run:
     name: Check if tests should run
     runs-on: ubuntu-slim
+    timeout-minutes: 6
     outputs:
       should-run: ${{ steps.check.outputs.should-run }}
     steps:
@@ -35,14 +36,14 @@ jobs:
       needs.check-should-run.outputs.should-run == 'true'
     env:
       NODE_OPTIONS: --max-old-space-size=8192
-    timeout-minutes: 30
+    timeout-minutes: 14
 
     steps:
       - name: Get sources
         uses: actions/checkout@v6
 
       - name: Use Node.js
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v7
         with:
           node-version-file: '.node-version'
 
@@ -54,8 +55,8 @@ jobs:
         shell: bash
         run: echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
 
-      - uses: actions/cache@v5
-        name: Setup pnpm cache
+      - uses: actions/cache/restore@v5
+        name: Restore pnpm cache
         with:
           path: ${{ env.STORE_PATH }}
           key: ${{ runner.os }}-pnpm-cache-${{ hashFiles('**/pnpm-lock.yaml') }}
@@ -96,9 +97,9 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Setup nx cache
-        id: setup-nx-cache
-        uses: actions/cache@v5
+      - name: Restore nx cache
+        id: restore-nx-cache
+        uses: actions/cache/restore@v5
         with:
           path: |
             .nx/cache
@@ -145,10 +146,21 @@ jobs:
             devextreme-react-installer.tgz
             devextreme-vue-installer.tgz
           retention-days: 1
-  build-vendor-bundles:
-    name: Build vendor bundles (React, Vue)
+
+      - name: Save nx cache
+        if: github.event_name != 'pull_request' && github.event_name != 'merge_group'
+        uses: actions/cache/save@v5
+        with:
+          path: |
+            .nx/cache
+            .nx/workspace-data/*.db
+            .nx/workspace-data/*.db-wal
+            .nx/workspace-data/*.db-shm
+          key: ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-${{ github.sha }}
+  build-demos:
+    name: Build demos
     runs-on: ${{ github.event_name == 'merge_group' && 'devextreme-shr2-ondemand' || 'devextreme-shr2' }}
-    timeout-minutes: 15
+    timeout-minutes: 10
     needs: [check-should-run, build-devextreme]
     if: |
       !cancelled() &&
@@ -156,12 +168,13 @@ jobs:
       needs.build-devextreme.result == 'success'
     env:
       NODE_OPTIONS: --max-old-space-size=8192
+
     steps:
       - name: Get sources
         uses: actions/checkout@v6
 
       - name: Use Node.js
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v7
         with:
           node-version-file: '.node-version'
 
@@ -170,75 +183,8 @@ jobs:
         with:
           name: devextreme-sources
 
-      - uses: pnpm/action-setup@v6
-        with:
-          run_install: false
-
-      - name: Get pnpm store directory
-        shell: bash
-        run: echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
-
-      - uses: actions/cache/restore@v5
-        name: Restore pnpm cache
-        with:
-          path: ${{ env.STORE_PATH }}
-          key: ${{ runner.os }}-pnpm-cache-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-pnpm-cache
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Install tgz
-        working-directory: apps/demos
-        run: pnpm add --ignore-workspace --allow-build=core-js --allow-build=inferno devextreme-aspnet-data@5.1.0 devextreme-aspnet-data-nojquery@5.1.0 ../../devextreme-installer.tgz ../../devextreme-dist-installer.tgz ../../devextreme-react-installer.tgz ../../devextreme-vue-installer.tgz ../../devextreme-angular-installer.tgz && rm -f pnpm-workspace.yaml pnpm-lock.yaml
-
-      - name: Build vendor bundles
-        working-directory: apps/demos
-        run: node utils/server/build-vendor-bundles.js
-
-      - name: Copy vendor bundles
-        uses: actions/upload-artifact@v7
-        with:
-          name: devextreme-vendor-bundles
-          path: apps/demos/bundles/vendor
-          retention-days: 1
-
-  build-demos:
-    name: ${{ matrix.SHARD_TOTAL == 1 && format('Build demos ({0})', matrix.FRAMEWORK) || format('Build demos ({0} {1}/{2})', matrix.FRAMEWORK, matrix.SHARD_INDEX, matrix.SHARD_TOTAL) }}
-    runs-on: ${{ github.event_name == 'merge_group' && 'devextreme-shr2-ondemand' || 'devextreme-shr2' }}
-    timeout-minutes: 30
-    needs: [check-should-run, build-devextreme, build-vendor-bundles]
-    if: |
-      !cancelled() &&
-      needs.check-should-run.outputs.should-run == 'true' &&
-      needs.build-devextreme.result == 'success' &&
-      needs.build-vendor-bundles.result == 'success'
-    env:
-      NODE_OPTIONS: --max-old-space-size=8192
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - { FRAMEWORK: React,   SHARD_INDEX: 1, SHARD_TOTAL: 1 }
-          - { FRAMEWORK: Vue,     SHARD_INDEX: 1, SHARD_TOTAL: 1 }
-          - { FRAMEWORK: Angular, SHARD_INDEX: 1, SHARD_TOTAL: 3 }
-          - { FRAMEWORK: Angular, SHARD_INDEX: 2, SHARD_TOTAL: 3 }
-          - { FRAMEWORK: Angular, SHARD_INDEX: 3, SHARD_TOTAL: 3 }
-
-    steps:
-      - name: Get sources
-        uses: actions/checkout@v6
-
-      - name: Use Node.js
-        uses: actions/setup-node@v6
-        with:
-          node-version-file: '.node-version'
-
-      - name: Download devextreme sources
-        uses: actions/download-artifact@v8
-        with:
-          name: devextreme-sources
+      - name: Unpack npm packages
+        uses: ./.github/actions/unpack-npm-packages
 
       - uses: pnpm/action-setup@v6
         with:
@@ -260,52 +206,72 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Install tgz
+      - name: Build vendor bundles
         working-directory: apps/demos
-        run: pnpm add --ignore-workspace --allow-build=core-js --allow-build=inferno devextreme-aspnet-data@5.1.0 devextreme-aspnet-data-nojquery@5.1.0 ../../devextreme-installer.tgz ../../devextreme-dist-installer.tgz ../../devextreme-react-installer.tgz ../../devextreme-vue-installer.tgz ../../devextreme-angular-installer.tgz && rm -f pnpm-workspace.yaml pnpm-lock.yaml
+        run: node utils/server/build-vendor-bundles.js
 
-#    - name: Build wrappers
-#      run: pnpm exec nx run-many -t pack -p devextreme-angular devextreme-react devetreme-vue
-
-#    - name: Link wrappers packages
-#      run: pnpm install --frozen-lockfile
-
-      # No-op for Angular (no manifest — see build-vendor-bundles).
-      - name: Download vendor bundles
-        uses: actions/download-artifact@v8
-        with:
-          name: devextreme-vendor-bundles
-          path: apps/demos/bundles/vendor
-
-      - name: Build demo bundles
+      - name: Build demo bundles (React)
         working-directory: apps/demos
-        env:
-          DEMO_SHARD_INDEX: ${{ matrix.SHARD_INDEX }}
-          DEMO_SHARD_TOTAL: ${{ matrix.SHARD_TOTAL }}
-        run: node utils/server/demo-bundle.js --framework=${{ matrix.FRAMEWORK }}
+        run: node utils/server/demo-bundle.js --framework=React
+
+      - name: Build demo bundles (Vue)
+        working-directory: apps/demos
+        run: node utils/server/demo-bundle.js --framework=Vue
+
+      - name: Build demo bundles (Angular)
+        working-directory: apps/demos
+        run: node utils/server/demo-bundle.js --framework=Angular
 
       - name: Demos - Run tsc
-        if: matrix.FRAMEWORK == 'React' && matrix.SHARD_INDEX == 1 # global check, only needs to run once
         working-directory: apps/demos
         run: pnpm exec tsc --noEmit
 
-      # Packed into one tarball — a glob path would lose the Demos/ prefix on extract.
+      # One tarball per framework, so a test job unpacks only its own demos.
+      # Angular shares its esbuild chunks across demos in Demos/_chunks.
       - name: Pack demo bundles
         working-directory: apps/demos
         run: |
-          find Demos \( -name 'bundle.js' -o -name 'bundle.css' -o -path '*/_chunks/*.js' -o -path '*/media/*' \) -print0 \
-            | tar -czf demo-bundles.tgz --null --files-from -
-          tar -tzf demo-bundles.tgz | head -3
+          for framework in React Vue Angular; do
+            chunks=()
+            if [ "$framework" = Angular ]; then
+              chunks=(-o -path '*/_chunks/*.js')
+            fi
+            mkdir -p "demo-bundles/$framework"
+            find Demos \( -path "*/$framework/*" \( -name 'bundle.js' -o -name 'bundle.css' -o -path '*/media/*' \) "${chunks[@]}" \) -print0 \
+              | tar -czf "demo-bundles/$framework/demo-bundles.tgz" --null --files-from -
+            echo "$framework: $(tar -tzf "demo-bundles/$framework/demo-bundles.tgz" | grep -c '/bundle\.js$') bundle.js, $(tar -tzf "demo-bundles/$framework/demo-bundles.tgz" | wc -l) files"
+          done
 
-      - name: Copy build artifacts
+      - name: Copy vendor bundles
         uses: actions/upload-artifact@v7
         with:
-          name: devextreme-bundles-${{ matrix.FRAMEWORK }}${{ matrix.SHARD_TOTAL != 1 && format('-shard{0}', matrix.SHARD_INDEX) || '' }}
-          path: apps/demos/demo-bundles.tgz
+          name: devextreme-vendor-bundles
+          path: apps/demos/bundles/vendor
+          retention-days: 1
+
+      - name: Copy demo bundles (React)
+        uses: actions/upload-artifact@v7
+        with:
+          name: devextreme-bundles-React
+          path: apps/demos/demo-bundles/React/demo-bundles.tgz
+          retention-days: 1
+
+      - name: Copy demo bundles (Vue)
+        uses: actions/upload-artifact@v7
+        with:
+          name: devextreme-bundles-Vue
+          path: apps/demos/demo-bundles/Vue/demo-bundles.tgz
+          retention-days: 1
+
+      - name: Copy demo bundles (Angular)
+        uses: actions/upload-artifact@v7
+        with:
+          name: devextreme-bundles-Angular
+          path: apps/demos/demo-bundles/Angular/demo-bundles.tgz
           retention-days: 1
 
   lint:
-    name: Check TS and lint code base
+    name: Check TS, lint and generated demos
     needs: [check-should-run, build-devextreme]
     if: |
       !cancelled() &&
@@ -313,7 +279,7 @@ jobs:
       needs.build-devextreme.result == 'success'
 
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    timeout-minutes: 19
 
     steps:
     - name: Get sources
@@ -324,8 +290,11 @@ jobs:
       with:
         name: devextreme-sources
 
+    - name: Unpack npm packages
+      uses: ./.github/actions/unpack-npm-packages
+
     - name: Use Node.js
-      uses: actions/setup-node@v6
+      uses: actions/setup-node@v7
       with:
         node-version-file: '.node-version'
 
@@ -348,10 +317,6 @@ jobs:
 
     - name: Install dependencies
       run: pnpm install --frozen-lockfile
-
-    - name: Install tgz
-      working-directory: apps/demos
-      run: pnpm add --ignore-workspace --allow-build=core-js --allow-build=inferno devextreme-aspnet-data@5.1.0 devextreme-aspnet-data-nojquery@5.1.0 ../../devextreme-installer.tgz ../../devextreme-dist-installer.tgz ../../devextreme-react-installer.tgz ../../devextreme-vue-installer.tgz ../../devextreme-angular-installer.tgz && rm -f pnpm-workspace.yaml pnpm-lock.yaml
 
     - name: Demos - Check Vue TS
       id: ts_vue
@@ -378,19 +343,39 @@ jobs:
         NODE_OPTIONS: --max-old-space-size=8192
       run: pnpm exec nx lint
 
-    - name: Check TS and lint results
+    - name: Check generated JS demos
+      id: generated_js
+      continue-on-error: true
+      working-directory: apps/demos
+      run: |
+        echo "Running convert-to-js"
+        pnpm run convert-to-js
+
+        git add ./Demos -N
+
+        if git diff --exit-code . ; then
+          echo "Generated JS demos are up-to-date"
+        else
+          echo "Generated JS demos are outdated. Execute 'pnpm run convert-to-js' and commit changes."
+          echo "If you see another diff, ensure that extra listed files have LF endings."
+          exit 1
+        fi
+
+    - name: Check TS, lint and generated demos results
       if: always()
       env:
         TS_VUE_OUTCOME: ${{ steps.ts_vue.outcome }}
         TS_REACT_OUTCOME: ${{ steps.ts_react.outcome }}
         LINT_ALL_OUTCOME: ${{ steps.lint_all.outcome }}
+        GENERATED_JS_OUTCOME: ${{ steps.generated_js.outcome }}
       run: |
         failed=0
 
         for check in \
           "Demos - Check Vue TS:$TS_VUE_OUTCOME" \
           "Demos - Check React TS:$TS_REACT_OUTCOME" \
-          "Run lint on all demos:$LINT_ALL_OUTCOME"; do
+          "Run lint on all demos:$LINT_ALL_OUTCOME" \
+          "Check generated JS demos:$GENERATED_JS_OUTCOME"; do
           name="${check%%:*}"
           outcome="${check#*:}"
 
@@ -401,70 +386,6 @@ jobs:
         done
 
         exit "$failed"
-
-  check-generated-demos-all:
-    name: Check generated demos
-    runs-on: ${{ github.event_name == 'merge_group' && 'devextreme-shr2-ondemand' || 'devextreme-shr2' }}
-    timeout-minutes: 20
-    needs: [check-should-run, build-devextreme]
-    if: |
-      !cancelled() &&
-      needs.check-should-run.outputs.should-run == 'true' &&
-      needs.build-devextreme.result == 'success'
-
-    steps:
-    - name: Get sources
-      uses: actions/checkout@v6
-
-    - uses: pnpm/action-setup@v6
-      with:
-        run_install: false
-
-    - name: Use Node.js
-      uses: actions/setup-node@v6
-      with:
-        node-version-file: '.node-version'
-
-    - name: Download devextreme sources
-      uses: actions/download-artifact@v8
-      with:
-        name: devextreme-sources
-
-    - name: Get pnpm store directory
-      shell: bash
-      run: |
-        echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
-
-    - uses: actions/cache/restore@v5
-      name: Restore pnpm cache
-      with:
-        path: ${{ env.STORE_PATH }}
-        key: ${{ runner.os }}-pnpm-cache-${{ hashFiles('**/pnpm-lock.yaml') }}
-        restore-keys: |
-          ${{ runner.os }}-pnpm-cache
-
-    - name: Install dependencies
-      run: pnpm install --frozen-lockfile
-
-    - name: Install tgz
-      working-directory: apps/demos
-      run: pnpm add --ignore-workspace --allow-build=core-js --allow-build=inferno devextreme-aspnet-data@5.1.0 devextreme-aspnet-data-nojquery@5.1.0 ../../devextreme-installer.tgz ../../devextreme-dist-installer.tgz ../../devextreme-react-installer.tgz ../../devextreme-vue-installer.tgz ../../devextreme-angular-installer.tgz && rm -f pnpm-workspace.yaml pnpm-lock.yaml
-
-    - name: Check generated JS demos
-      working-directory: apps/demos
-      run: |
-        echo "Running convert-to-js"
-        pnpm run convert-to-js
-
-        git add ./Demos -N
-
-        if git diff --exit-code . ':!package.json' ; then
-          echo "Generated JS demos are up-to-date"
-        else
-          echo "Generated JS demos are outdated. Execute 'pnpm run convert-to-js' and commit changes."
-          echo "If you see another diff, ensure that extra listed files have LF endings."
-          exit 1
-        fi
 
   testcafe-jquery:
     needs: [check-should-run, build-devextreme]
@@ -496,7 +417,7 @@ jobs:
 
     runs-on: ${{ github.event_name == 'merge_group' && 'devextreme-shr2-ondemand' || 'devextreme-shr2' }}
     name: ${{ matrix.CONSTEL }}-${{ matrix.STRATEGY }}-${{ matrix.THEME }}
-    timeout-minutes: 30
+    timeout-minutes: 15
 
     steps:
     - name: Get sources
@@ -518,7 +439,7 @@ jobs:
         chrome-version: '155.0.8059.39'
 
     - name: Use Node.js
-      uses: actions/setup-node@v6
+      uses: actions/setup-node@v7
       with:
         node-version-file: '.node-version'
 
@@ -590,6 +511,7 @@ jobs:
         echo "flags=$BASE_FLAGS" >> $GITHUB_OUTPUT
 
     - name: Run TestCafe tests (jQuery)
+      timeout-minutes: 12
       shell: bash
       working-directory: apps/demos
       env:
@@ -639,7 +561,7 @@ jobs:
         if-no-files-found: ignore
 
   testcafe-frameworks-all:
-    needs: [check-should-run, build-demos, build-vendor-bundles]
+    needs: [check-should-run, build-demos]
     if: |
       !cancelled() &&
       needs.check-should-run.outputs.should-run == 'true' &&
@@ -651,27 +573,19 @@ jobs:
           react(1/3),
           react(2/3),
           react(3/3),
-          vue(1/5),
-          vue(2/5),
-          vue(3/5),
-          vue(4/5),
-          vue(5/5),
-          angular(1/10),
-          angular(2/10),
-          angular(3/10),
-          angular(4/10),
-          angular(5/10),
-          angular(6/10),
-          angular(7/10),
-          angular(8/10),
-          angular(9/10),
-          angular(10/10),
+          vue(1/3),
+          vue(2/3),
+          vue(3/3),
+          angular(1/4),
+          angular(2/4),
+          angular(3/4),
+          angular(4/4),
         ]
         THEME: ['fluent.blue.light', 'fluent-next.blue.light']
 
     runs-on: ${{ github.event_name == 'merge_group' && 'devextreme-shr2-ondemand' || 'devextreme-shr2' }}
     name: ${{ matrix.CONSTEL }}-screenshots-${{ matrix.THEME }}
-    timeout-minutes: 60
+    timeout-minutes: 18
 
     steps:
     - name: Get sources
@@ -683,7 +597,7 @@ jobs:
         chrome-version: '155.0.8059.39'
 
     - name: Use Node.js
-      uses: actions/setup-node@v6
+      uses: actions/setup-node@v7
       with:
         node-version-file: '.node-version'
 
@@ -691,6 +605,9 @@ jobs:
       uses: actions/download-artifact@v8
       with:
         name: devextreme-sources
+
+    - name: Unpack npm packages
+      uses: ./.github/actions/unpack-npm-packages
 
     - uses: pnpm/action-setup@v6
       with:
@@ -712,10 +629,6 @@ jobs:
     - name: Install dependencies
       run: pnpm install --frozen-lockfile
 
-    - name: Install tgz
-      working-directory: apps/demos
-      run: pnpm add --ignore-workspace --allow-build=core-js --allow-build=inferno devextreme-aspnet-data@5.1.0 devextreme-aspnet-data-nojquery@5.1.0 ../../devextreme-installer.tgz ../../devextreme-dist-installer.tgz ../../devextreme-react-installer.tgz ../../devextreme-vue-installer.tgz ../../devextreme-angular-installer.tgz && rm -f pnpm-workspace.yaml pnpm-lock.yaml
-
     - name: Download demo bundles (React)
       if: startsWith(matrix.CONSTEL, 'react')
       uses: actions/download-artifact@v8
@@ -730,27 +643,12 @@ jobs:
         name: devextreme-bundles-Vue
         path: apps/demos/.demo-bundles/vue
 
-    # Angular is built in 3 shards but tested in 10 — every test shard needs all 3.
-    - name: Download demo bundles (Angular shard 1)
+    - name: Download demo bundles (Angular)
       if: startsWith(matrix.CONSTEL, 'angular')
       uses: actions/download-artifact@v8
       with:
-        name: devextreme-bundles-Angular-shard1
-        path: apps/demos/.demo-bundles/angular-shard1
-
-    - name: Download demo bundles (Angular shard 2)
-      if: startsWith(matrix.CONSTEL, 'angular')
-      uses: actions/download-artifact@v8
-      with:
-        name: devextreme-bundles-Angular-shard2
-        path: apps/demos/.demo-bundles/angular-shard2
-
-    - name: Download demo bundles (Angular shard 3)
-      if: startsWith(matrix.CONSTEL, 'angular')
-      uses: actions/download-artifact@v8
-      with:
-        name: devextreme-bundles-Angular-shard3
-        path: apps/demos/.demo-bundles/angular-shard3
+        name: devextreme-bundles-Angular
+        path: apps/demos/.demo-bundles/angular
 
     # No-op for angular demos (no manifest — see build-vendor-bundles.js).
     - name: Download vendor bundles
@@ -797,6 +695,7 @@ jobs:
         fi
 
     - name: Run TestCafe tests
+      timeout-minutes: 15
       shell: bash
       working-directory: apps/demos
       env:
@@ -826,6 +725,7 @@ jobs:
 
   merge-artifacts:
     runs-on: ubuntu-latest
+    timeout-minutes: 6
     needs: [testcafe-jquery, testcafe-frameworks-all]
     if: ${{ !cancelled() && (needs.testcafe-jquery.result == 'failure' || needs.testcafe-frameworks-all.result == 'failure') }}
 
@@ -883,7 +783,7 @@ jobs:
       needs.check-should-run.outputs.should-run == 'true' &&
       needs.build-devextreme.result == 'success'
     runs-on: ${{ github.event_name == 'merge_group' && 'devextreme-shr2-ondemand' || 'devextreme-shr2' }}
-    timeout-minutes: 60
+    timeout-minutes: 20
 
     steps:
     - name: Get sources
@@ -905,7 +805,7 @@ jobs:
         chrome-version: '155.0.8059.39'
 
     - name: Use Node.js
-      uses: actions/setup-node@v6
+      uses: actions/setup-node@v7
       with:
         node-version-file: '.node-version'
 
@@ -948,7 +848,7 @@ jobs:
 
   csp-check-frameworks:
     name: ${{ matrix.SHARD_TOTAL == 1 && format('CSP check ({0})', matrix.FRAMEWORK) || format('CSP check ({0} {1}/{2})', matrix.FRAMEWORK, matrix.SHARD_INDEX, matrix.SHARD_TOTAL) }}
-    needs: [check-should-run, build-demos, build-vendor-bundles]
+    needs: [check-should-run, build-demos]
     if: |
       !cancelled() &&
       needs.check-should-run.outputs.should-run == 'true' &&
@@ -965,7 +865,7 @@ jobs:
           - { FRAMEWORK: Angular, SHARD_INDEX: 2, SHARD_TOTAL: 3 }
           - { FRAMEWORK: Angular, SHARD_INDEX: 3, SHARD_TOTAL: 3 }
     runs-on: ${{ github.event_name == 'merge_group' && 'devextreme-shr2-ondemand' || 'devextreme-shr2' }}
-    timeout-minutes: 60
+    timeout-minutes: 16
 
     steps:
     - name: Get sources
@@ -976,13 +876,16 @@ jobs:
       with:
         name: devextreme-sources
 
+    - name: Unpack npm packages
+      uses: ./.github/actions/unpack-npm-packages
+
     - name: Setup Chrome
       uses: ./.github/actions/setup-chrome
       with:
         chrome-version: '155.0.8059.39'
 
     - name: Use Node.js
-      uses: actions/setup-node@v6
+      uses: actions/setup-node@v7
       with:
         node-version-file: '.node-version'
 
@@ -1004,10 +907,6 @@ jobs:
 
     - name: Install dependencies
       run: pnpm install --frozen-lockfile
-
-    - name: Install tgz
-      working-directory: apps/demos
-      run: pnpm add --ignore-workspace --allow-build=core-js --allow-build=inferno devextreme-aspnet-data@5.1.0 devextreme-aspnet-data-nojquery@5.1.0 ../../devextreme-installer.tgz ../../devextreme-dist-installer.tgz ../../devextreme-react-installer.tgz ../../devextreme-vue-installer.tgz ../../devextreme-angular-installer.tgz && rm -f pnpm-workspace.yaml pnpm-lock.yaml
 
     - name: Download demo bundles
       uses: actions/download-artifact@v8
@@ -1059,14 +958,14 @@ jobs:
     runs-on: ubuntu-latest
     needs: [check-should-run, csp-check-jquery, csp-check-frameworks]
     if: ${{ !cancelled() && needs.check-should-run.outputs.should-run == 'true' }}
-    timeout-minutes: 5
+    timeout-minutes: 6
 
     steps:
       - name: Get sources
         uses: actions/checkout@v6
 
       - name: Use Node.js
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v7
         with:
           node-version-file: '.node-version'
 

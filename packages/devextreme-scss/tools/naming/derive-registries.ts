@@ -695,7 +695,7 @@ const OVERRIDES: Overrides = {
       'icon-container', 'cards', 'divider', 'allowance', 'prohibition', 'link', 'icon', 'caption',
       'text',
     ],
-    map: ['marker-tooltip'],
+    map: ['marker', 'marker-tooltip'],
     toast: ['content', 'icon', 'item', 'stack'],
     // .dx-icon and .dx-button-text are real boxes inside a button; `icon` is also a part, which
     // is allowed — the grammar resolves it by position (see assertParseable).

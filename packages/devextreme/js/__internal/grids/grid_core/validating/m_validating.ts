@@ -4,6 +4,7 @@ import eventsEngine from '@js/common/core/events/core/events_engine';
 import pointerEvents from '@js/common/core/events/pointer';
 import messageLocalization from '@js/common/core/localization/message';
 import { createObjectWithChanges } from '@js/common/data/array_utils';
+import type { GridsEditMode } from '@js/common/grids';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import browser from '@js/core/utils/browser';
@@ -27,14 +28,24 @@ import Validator from '@js/ui/validator';
 import errors from '@js/ui/widget/ui.errors';
 import { focused } from '@ts/core/utils/selectors';
 import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/columns_controller';
+import type { ProcessedItem } from '@ts/grids/grid_core/data_controller/types';
+import { isCellBasedEditMode, isFormBasedEditMode } from '@ts/grids/grid_core/editing/editing_utils';
 import type { EditorFactory } from '@ts/grids/grid_core/editor_factory/editor_factory';
 import type { ErrorHandlingViewController } from '@ts/grids/grid_core/error_handling/error_handling_view_controller';
+import { CLASSES as MASTER_DETAIL_CLASSES } from '@ts/grids/grid_core/master_detail/const';
 import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
 import type { RowsView } from '@ts/grids/grid_core/views/rows_view';
 
-import { EDITORS_INPUT_SELECTOR, EDITORS_TEXTAREA_SELECTOR } from '../editing/const';
-import type { EditingController } from '../editing/m_editing';
-import type { NormalizedEditCellOptions } from '../editing/types';
+import {
+  EDIT_MODE, EDITORS_INPUT_SELECTOR, EDITORS_TEXTAREA_SELECTOR, INSERT_INDEX,
+} from '../editing/const';
+import type {
+  CellBasedEditingController,
+  EditFormDetailOptions,
+  EditFormOptions,
+  FormBasedEditingControllerExtension,
+  PrepareEditCellOptions,
+} from '../editing/types';
 import modules from '../modules/modules';
 import type { ModuleType } from '../types';
 import gridCoreUtils from '../utils';
@@ -44,6 +55,7 @@ import {
   VALIDATION_STATUS,
   validationResultIsValid,
 } from './const';
+import type { ValidatingEditorFactoryExtension } from './types';
 
 const REVERT_TOOLTIP_CLASS = 'revert-tooltip';
 const INVALID_MESSAGE_CLASS = 'dx-invalid-message';
@@ -56,15 +68,7 @@ const VALIDATOR_CLASS = 'validator';
 const PENDING_INDICATOR_CLASS = 'dx-pending-indicator';
 const VALIDATION_PENDING_CLASS = 'dx-validation-pending';
 
-const INSERT_INDEX = '__DX_INSERT_INDEX__';
 const PADDING_BETWEEN_TOOLTIPS = 2;
-const EDIT_MODE_ROW = 'row';
-const EDIT_MODE_FORM = 'form';
-const EDIT_MODE_BATCH = 'batch';
-const EDIT_MODE_CELL = 'cell';
-const EDIT_MODE_POPUP = 'popup';
-
-const FORM_BASED_MODES = [EDIT_MODE_POPUP, EDIT_MODE_FORM];
 
 const COMMAND_TRANSPARENT = 'transparent';
 
@@ -80,7 +84,7 @@ export class ValidatingController extends modules.Controller {
 
   private _disableApplyValidationResults = false;
 
-  private _editingController!: EditingController;
+  private _editingController!: CellBasedEditingController;
 
   private _editorFactoryController!: EditorFactory;
 
@@ -93,7 +97,7 @@ export class ValidatingController extends modules.Controller {
   private _currentCellValidator: any;
 
   public init() {
-    this._editingController = this.getController('editing');
+    this._editingController = this.getController('editing') as CellBasedEditingController;
     this._editorFactoryController = this.getController('editorFactory');
     this._columnsController = this.getController('columns');
     this.createAction('onRowValidating');
@@ -232,7 +236,7 @@ export class ValidatingController extends modules.Controller {
     const completeList: any[] = [];
 
     const editMode = editingController.getEditMode();
-    isFull = isFull || editMode === EDIT_MODE_ROW;
+    isFull = isFull || editMode === EDIT_MODE.row;
 
     if (this._isValidationInProgress) {
       return deferred.resolve(false).promise();
@@ -296,7 +300,7 @@ export class ValidatingController extends modules.Controller {
     const { key } = change;
     const validationData = this._getValidationData(key, true);
 
-    if (!FORM_BASED_MODES.includes(editMode)) {
+    if (!isFormBasedEditMode(editMode)) {
       if (change.type === EDIT_DATA_INSERT_TYPE && !this.isRowDataModified(change)) {
         validationData.isValid = true;
         return;
@@ -456,7 +460,8 @@ export class ValidatingController extends modules.Controller {
       }
 
       const isEditRow = equalByValue(this.option('editing.editRowKey'), parameters.key);
-      const isCellOrBatchEditingAllowed = editingController.isCellOrBatchEditMode() && editingController.allowUpdating({ row: parameters.row });
+      const isCellOrBatchEditingAllowed = isCellBasedEditMode(editingController.getEditMode())
+        && editingController.allowUpdating({ row: parameters.row });
 
       needCreateValidator = isEditRow || isCellOrBatchEditingAllowed && showEditorAlways;
 
@@ -584,7 +589,7 @@ export class ValidatingController extends modules.Controller {
       result = extend({}, validationResult);
       validationData.validationResults[columnIndex] = result;
       if (validationResult.status === VALIDATION_STATUS.pending) {
-        if (this._editingController.getEditMode() === EDIT_MODE_CELL) {
+        if (this._editingController.getEditMode() === EDIT_MODE.cell) {
           // @ts-expect-error
           result.deferred = new Deferred();
           result.complete.always(() => {
@@ -671,7 +676,9 @@ export class ValidatingController extends modules.Controller {
   }
 }
 
-export const validatingEditingExtender = (Base: ModuleType<EditingController>) => class ValidateEditingControllerExtender extends Base {
+export const validatingEditingExtender = (
+  Base: ModuleType<CellBasedEditingController & FormBasedEditingControllerExtension>,
+) => class ValidateEditingControllerExtender extends Base {
   protected _errorHandlingController!: ErrorHandlingViewController;
 
   public init(): void {
@@ -729,11 +736,10 @@ export const validatingEditingExtender = (Base: ModuleType<EditingController>) =
     });
   }
 
-  private _getValidationGroupsInForm(detailOptions) {
-    const validationData = this._validatingController._getValidationData(detailOptions.key, true);
-
+  public override getEditFormOptions(detailOptions: EditFormDetailOptions): EditFormOptions {
     return {
-      validationGroup: validationData,
+      validationGroup: this._validatingController._getValidationData(detailOptions.key, true),
+      ...super.getEditFormOptions(detailOptions),
     };
   }
 
@@ -746,7 +752,7 @@ export const validatingEditingExtender = (Base: ModuleType<EditingController>) =
     super._validateEditFormAfterUpdate.apply(this, arguments as any);
   }
 
-  protected _prepareEditCell(parameters: NormalizedEditCellOptions): boolean {
+  protected _prepareEditCell(parameters: PrepareEditCellOptions): boolean {
     const { column, item } = parameters;
     const isNotCanceled: boolean = super._prepareEditCell(parameters);
     const key = !item.isNewRow ? item.key : undefined;
@@ -795,7 +801,7 @@ export const validatingEditingExtender = (Base: ModuleType<EditingController>) =
       items.splice(rowIndex, 0, data);
     };
 
-    if (this.getEditMode() === EDIT_MODE_BATCH && changeType !== 'prepend' && changeType !== 'append') {
+    if (this.getEditMode() === EDIT_MODE.batch && changeType !== 'prepend' && changeType !== 'append') {
       changes.forEach((change) => {
         const { key } = change;
         const validationData = this._validatingController._getValidationData(key);
@@ -813,7 +819,7 @@ export const validatingEditingExtender = (Base: ModuleType<EditingController>) =
     const key = isInserted ? item.data.key : item.key;
     const editMode = this.getEditMode();
 
-    if (editMode === EDIT_MODE_BATCH && isInserted && key) {
+    if (editMode === EDIT_MODE.batch && isInserted && key) {
       const changes = this.getChanges();
       const editIndex = gridCoreUtils.getIndexByKey(key, changes);
 
@@ -841,7 +847,7 @@ export const validatingEditingExtender = (Base: ModuleType<EditingController>) =
 
     invisibleColumns.push(...groupColumns);
 
-    if (!FORM_BASED_MODES.includes(this.getEditMode())) {
+    if (!isFormBasedEditMode(this.getEditMode())) {
       each(columns, (_, column) => {
         changes.forEach((change) => {
           let data;
@@ -897,12 +903,12 @@ export const validatingEditingExtender = (Base: ModuleType<EditingController>) =
 
           // eslint-disable-next-line default-case, @typescript-eslint/switch-exhaustiveness-check
           switch (this.getEditMode()) {
-            case EDIT_MODE_CELL:
+            case EDIT_MODE.cell:
               if (!isFullValid) {
                 this._focusEditingCell();
               }
               break;
-            case EDIT_MODE_BATCH:
+            case EDIT_MODE.batch:
               if (!isFullValid) {
                 this._resetEditRowKey();
                 this._resetEditColumnName();
@@ -923,15 +929,17 @@ export const validatingEditingExtender = (Base: ModuleType<EditingController>) =
    * @param item Data item
    * @returns A deferred object that resolves to a boolean or just a boolean to determine whether to cancel cell editing
    */
-  private _beforeEditCell(rowIndex: number, columnIndex: number, item: any): DeferredObj<boolean> | boolean {
-    // @ts-expect-error
-    const result = super._beforeEditCell(rowIndex, columnIndex, item);
+  public override beforeEditCell(
+    rowIndex: number,
+    columnIndex: number,
+    item: ProcessedItem,
+  ): DeferredObj<boolean> | boolean {
+    const result = super.beforeEditCell(rowIndex, columnIndex, item);
 
-    if (this.getEditMode() === EDIT_MODE_CELL) {
+    if (this.getEditMode() === EDIT_MODE.cell) {
       const $cell = this._rowsView._getCellElement(rowIndex, columnIndex);
       const validator = $cell && $cell.data('dxValidator');
       const rowOptions = $cell && $cell.closest(`.${VIEW_CLASSES.row}`).data('options');
-      // @ts-expect-error
       const value = validator && validator.option('adapter').getValue();
       if (validator && cellValueShouldBeValidated(value, rowOptions)) {
         // @ts-expect-error
@@ -949,7 +957,7 @@ export const validatingEditingExtender = (Base: ModuleType<EditingController>) =
 
   protected _afterSaveEditData(cancel?) {
     let $firstErrorRow;
-    const isCellEditMode = this.getEditMode() === EDIT_MODE_CELL;
+    const isCellEditMode = this.getEditMode() === EDIT_MODE.cell;
 
     each(this.getChanges(), (_, change) => {
       const $errorRow = this._showErrorRow(change);
@@ -1022,7 +1030,7 @@ export const validatingEditingExtender = (Base: ModuleType<EditingController>) =
   }
 
   private _shouldResetValidationState(): boolean {
-    const isCellEditMode = this.getEditMode() === EDIT_MODE_CELL;
+    const isCellEditMode = this.getEditMode() === EDIT_MODE.cell;
 
     if (isCellEditMode) {
       const columns = this._columnsController.getColumns();
@@ -1134,7 +1142,11 @@ const getBoundaryNonFixedColumnsInfo = function (fixedColumns) {
   };
 };
 
-export const validatingEditorFactoryExtender = (Base: ModuleType<EditorFactory>) => class ValidatingEditorFactoryExtender extends Base {
+export const validatingEditorFactoryExtender = (
+  Base: ModuleType<EditorFactory>,
+): ModuleType<
+  EditorFactory & ValidatingEditorFactoryExtension
+> => class ValidatingEditorFactoryExtender extends Base {
   private _revertTooltip: any;
 
   private _showRevertButton($container) {
@@ -1207,10 +1219,8 @@ export const validatingEditorFactoryExtender = (Base: ModuleType<EditorFactory>)
     let $groupCellElement;
     // @ts-expect-error
     const isFixedColumns = this._rowsView?.isFixedColumns?.();
-    // @ts-expect-error
-    const isFormOrPopupEditMode = this._editingController.isFormOrPopupEditMode();
 
-    if (isFixedColumns && !isFormOrPopupEditMode) {
+    if (isFixedColumns && !isFormBasedEditMode(this._editingController.getEditMode())) {
       const nextRowOptions = $cell.closest(`.${VIEW_CLASSES.row}`).next().data('options');
 
       if (nextRowOptions && nextRowOptions.rowType === 'group') {
@@ -1356,11 +1366,11 @@ export const validatingEditorFactoryExtender = (Base: ModuleType<EditorFactory>)
     }
   }
 
-  protected getOverlayBaseZIndex(): number {
+  public getOverlayBaseZIndex(): number {
     return Overlay.baseZIndex();
   }
 
-  protected overlayPositionedHandler(e, isOverlayVisible) {
+  public overlayPositionedHandler(e, isOverlayVisible) {
     if (!e.component.__skipPositionProcessing) {
       const isRevertButton = $(e.element).hasClass(this.addWidgetPrefix(REVERT_TOOLTIP_CLASS));
       const needRepaint = !isRevertButton && this._rowsView.updateFreeSpaceRowHeight();
@@ -1406,7 +1416,7 @@ export const validatingEditorFactoryExtender = (Base: ModuleType<EditorFactory>)
     const isCellModified = (change?.data?.[column?.name] !== undefined) && !this._editingController.isSaving();
     const validationDescriptionValues: string[] = [];
 
-    if (this._editingController.getEditMode() === EDIT_MODE_CELL) {
+    if (this._editingController.getEditMode() === EDIT_MODE.cell) {
       if ((validationResult?.status === VALIDATION_STATUS.invalid) || isCellModified) {
         this._showRevertButton($focus);
         validationDescriptionValues.push(REVERT_BUTTON_ID);
@@ -1439,10 +1449,8 @@ export const validatingEditorFactoryExtender = (Base: ModuleType<EditorFactory>)
     if (inputDescriptionValues.length === 0) { return; }
 
     const editMode = this._editingController.getEditMode();
-    const shouldSetValidationAriaAttributes = [
-      EDIT_MODE_CELL,
-      EDIT_MODE_BATCH,
-      EDIT_MODE_ROW].includes(editMode);
+    const validationAriaModes: GridsEditMode[] = [EDIT_MODE.cell, EDIT_MODE.batch, EDIT_MODE.row];
+    const shouldSetValidationAriaAttributes = validationAriaModes.includes(editMode);
 
     if (shouldSetValidationAriaAttributes) {
       const $focusElement = this._getCurrentFocusElement($focus);
@@ -1465,7 +1473,10 @@ export const validatingEditorFactoryExtender = (Base: ModuleType<EditorFactory>)
 
     this._hideValidationMessage();
 
-    if ($element?.hasClass(VIEW_CLASSES.row) || $element?.hasClass('dx-master-detail-cell')) {
+    if (
+      $element?.hasClass(VIEW_CLASSES.row)
+      || $element?.hasClass(MASTER_DETAIL_CLASSES.detailCell)
+    ) {
       return super.focus($element, isHideBorder);
     }
 
@@ -1513,11 +1524,11 @@ export const validatingEditorFactoryExtender = (Base: ModuleType<EditorFactory>)
     return gridCoreUtils.getWidgetInstance($editor);
   }
 
-  protected getValidationMessageContainer($cell: dxElementWrapper): dxElementWrapper {
+  public getValidationMessageContainer($cell: dxElementWrapper): dxElementWrapper {
     return $cell.closest(`.${this.addWidgetPrefix(VIEW_CLASSES.content)}`);
   }
 
-  protected getRevertButtonContainer($cell: dxElementWrapper): dxElementWrapper {
+  public getRevertButtonContainer($cell: dxElementWrapper): dxElementWrapper {
     return $cell.closest(`.${this.addWidgetPrefix(VIEW_CLASSES.content)}`).parent();
   }
 
@@ -1552,7 +1563,7 @@ export const validatingRowsViewExtender = (Base: ModuleType<RowsView>) => class 
         && $rowElements.length === 1
         && (
           !$freeSpaceRowElement.is(':visible')
-          || getOuterHeight($tooltipContent) > getOuterHeight($freeSpaceRowElement)
+          || Number(getOuterHeight($tooltipContent)) > getOuterHeight($freeSpaceRowElement)
         )
         && rowElementsHasFocusInside
       ) {
@@ -1580,8 +1591,7 @@ export const validatingRowsViewExtender = (Base: ModuleType<RowsView>) => class 
   }
 
   public _cellPrepared($cell, parameters) {
-    // @ts-expect-error
-    if (!this._editingController.isFormOrPopupEditMode()) {
+    if (!isFormBasedEditMode(this._editingController.getEditMode())) {
       this._validatingController.createValidator(parameters, $cell);
     }
 
@@ -1589,7 +1599,6 @@ export const validatingRowsViewExtender = (Base: ModuleType<RowsView>) => class 
   }
 
   protected _restoreErrorRow(contentTable?) {
-    // @ts-expect-error each() is typed for callbacks that return a boolean
     this._editingController && this._editingController.hasChanges() && this._getRowElements(contentTable).each((_, item) => {
       const rowOptions = $(item).data('options');
       if (rowOptions) {

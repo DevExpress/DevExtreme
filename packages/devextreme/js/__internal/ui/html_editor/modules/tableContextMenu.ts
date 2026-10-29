@@ -84,13 +84,18 @@ if (Quill) {
     }
 
     _enableContextMenu(items?: ContextMenuItems): void {
-      this._contextMenu?.dispose();
+      this._removeContextMenu();
       this._contextMenu = this._createContextMenu(items);
 
       this._attachEvents();
     }
 
+    _removeContextMenu(): void {
+      this._contextMenu?.$element().remove();
+    }
+
     _attachEvents(): void {
+      this._detachEvents();
       eventsEngine.on(
         this.editorInstance._getContent(),
         CONTEXT_MENU_EVENT,
@@ -261,7 +266,7 @@ if (Quill) {
           this.clean();
         }
       } else if (option === 'items') {
-        this._contextMenu?.dispose();
+        this._removeContextMenu();
         // @ts-expect-error the option value is untyped (HtmlEditor._moduleOptionChanged)
         this._contextMenu = this._createContextMenu(value);
       }

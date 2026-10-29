@@ -1,5 +1,5 @@
-import { extend } from '@ts/core/utils/m_extend';
-import { isPlainObject } from '@ts/core/utils/m_type';
+import { extend } from '@ts/core/utils/extend';
+import { isPlainObject } from '@ts/core/utils/type';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type TreeNodeChild = any;

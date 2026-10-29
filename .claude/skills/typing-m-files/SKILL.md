@@ -65,18 +65,23 @@ Not counted at all: `max-classes-per-file`, `simple-import-sort/imports` and `sp
    - strict errors and warnings, before and after, for each file or range in the input format;
    - every body edit, one line each, with why it behaves the same;
    - what was added to the module's `types.ts`;
+   - every change in other files, file by file: declarations added, and directives added at callers;
    - the warnings left, grouped by rule, with the reason each was left.
-6. **Review loop.** The developer then usually goes through the remaining directives and casts one by one. A question like "can we remove them?" is about what the last step added. Don't reopen items that were already settled; if a technique you found would also fit one of them, say so in one line.
+6. **Review loop.** The developer then usually goes through the remaining directives and casts one by one. A question like "can we remove them?" is about what the last step added. Don't reopen items that were already settled; if a technique you found would also fit one of them, say so in one line. A change the developer asks for directly is already agreed, even where Scope says to ask first: make it (a refactor still gets tests first) and list the files it touched.
 
 ## Rules
 
 **Scope**
 - The task's files are the given files plus the module's own `types.ts`, where new types go (create it if the module has none). With a range, touch only those lines of the given file, plus its import block.
-- Anything else needs the developer's OK before you touch it: the test file for an agreed refactor, another module's `types.ts`, or callers in other files.
-- If a new type (usually a return type) breaks callers in other files, stop and ask the developer. The options are a compile-only fix at those callers, a wider type, or agreeing it with whoever is typing those files.
+- Files in other modules may change too, to improve the typing, as long as it stays small:
+  - Declare a property or type you know in the `types.ts` of the module that owns it, when that needs no refactoring. For example, a row field another module sets (`ProcessedItem.summaryCells?: unknown[][]`), or an option the component has but `InternalGridOptions` lacks (`integrationOptions?: IntegrationOptions`). In grids, a feature's field that core reads is also marked as a leak (grids.md). Before editing a hub such as `grid_core/types.ts`, list the open PRs that touch it (Workflow, step 1).
+  - When a stricter type breaks callers in other `m_` files, fix them compile-only: a `@ts-expect-error` with a reason, one typed declaration with a directive instead of several, or a behaviour-neutral `return undefined;`. Those directives get removed when that file is typed.
+  - Files that are already typed (no `m_` prefix, or an `m_` file already at 0 strict errors) stay clean. Ask before adding a new directive there.
+  - Exporting a class from another `m_` file, to use it as a type, makes `explicit-module-boundary-types` check all its public and protected members: `tree_list/rows/m_rows.ts` went from 19 to 35 strict errors when `TreeListRowsView` was exported. Say so in the report.
+- Ask the developer first when it goes further: the change needs a refactor, moves types between modules, or reaches many call sites.
   - Measure before asking. Put the honest type in on a backup copy, run `tsc`, and group the errors by cause. For example, `element(): dxElementWrapper | undefined` broke 90 places in 26 files: about 78 were the `| undefined`, about 10 were gaps in `renderer.d.ts` (see fixes.md). Bring that table to the developer, then restore the file from the backup (`cmp` it).
   - Until the developer decides, keep the wider type with a directive that gives the reason.
-  - When agreed, a behaviour-neutral change that reaches many files (one accessor typed across 26 files) goes in its own commit, separate from the file's typing.
+- A behaviour-neutral change that reaches many files (one accessor typed across 26 files) goes in its own commit, separate from the file's typing.
 - Don't change public API: no edits to `js/**/*.d.ts`.
 
 **Typing only**
@@ -95,6 +100,7 @@ Not counted at all: `max-classes-per-file`, `simple-import-sort/imports` and `sp
 **Where types go**
 - Reuse before creating: public types from the `js/**/*.d.ts` files (`@js/common`, `@js/core/utils/callbacks`, the component's own `@js/ui/<component>`, …), then the module's own `types.ts`.
 - A new type goes into the module's own `types.ts`. Other modules import it from there.
+- A property of a type that another module owns goes into that module's `types.ts` (see Scope).
 
 **Disables**
 - Existing inline `eslint-disable` comments and `@ts-expect-error` may stay.
@@ -128,6 +134,7 @@ node_modules/.bin/tsc --noEmit -p js/__internal/tsconfig.json; echo "exit $?"   
 
 - Call the binaries in `node_modules/.bin` directly, not through `pnpm exec`. When `node_modules` lags the lockfile (after a dependency bump on `main`), `pnpm exec` and `pnpm run` first run a full install, the `nx-infra-plugin` postinstall and `nx reset`. `nx reset` stops the Nx daemon and can take down the developer's watch build. If a step needs `pnpm run` (for example `update-ts-reexports` in [rename.md](rename.md)), tell the developer before running it.
 
+- ESLint on your own files isn't enough when you typed a member that other modules call. A return type that changed from `any` to `DeferredObj` makes `no-misused-promises` fire at a caller (`setTimeout(this._editingController.saveEditData.bind(…))`), and tsc stays green. Then lint the whole area, errors only; it takes a few minutes: `node_modules/.bin/eslint --quiet 'js/__internal/grids/**/*.ts'; echo "exit $?"`.
 - `tsc`: use `js/__internal/tsconfig.json`. The root `tsconfig.json` compiles only `.d.ts` files, so it passes no matter what. In a fresh worktree, run `pnpm nx build:localization:generate devextreme` first, or you get phantom TS2307 errors for `cldr-data`.
 - With a range, only the range must be at 0. The rest of the file keeps its errors until its own part.
 - Tests: only those that cover the changed code. Pick them by tracing what uses it, not by folder. Whole-tree runs happen on CI.
@@ -141,3 +148,4 @@ node_modules/.bin/tsc --noEmit -p js/__internal/tsconfig.json; echo "exit $?"   
   - In a browser that draws 15px scrollbars, a few pixel tests fail with `Expected: 0, Result: 15`, for example two "Scroller shown …" tests in `DevExpress.ui.widgets.dataGrid/gridView.tests.js`. They fail before your change too; don't chase them.
   - In headless Chrome, `DevExpress.ui.widgets.dataGrid/adaptiveColumns.tests.js` › "Columns should hide consistently if percentage width (T640539)" fails too (expected 2 adaptive buttons, got 4), on unmodified code. Don't chase it either.
 - Check a type question with a probe, not by reading the diff. Write a small file with one line that must compile and one that must fail. Run it with `node_modules/.bin/tsc` from `packages/devextreme` (TypeScript 5.9.3), through a tsconfig that extends `js/__internal/tsconfig.json` with `"files": ["<probe>"]` and `"include": []`. That config also prints unrelated JSX and lib errors, so keep only the probe file's lines. Delete the probe afterwards.
+- After removing a directive at a `super` call or a field read, check that the base or the field isn't `any`. An untyped `Base` param or field is silently `any` (`noImplicitAny` is off), and any call on `any` compiles. Add a misspelled call next to it (`super.changeRowExpandX(key)`): tsc must fail with TS2339 or TS2551. Then remove it.

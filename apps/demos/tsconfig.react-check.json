@@ -11,7 +11,12 @@
     "jsx": "react-jsx",
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
-    "lib": ["es2023", "DOM", "DOM.Iterable"]
+    "lib": ["es2023", "DOM", "DOM.Iterable"],
+    // devextreme-react is a workspace link: its react imports must resolve to the demos' React types, as in the bundler aliases
+    "paths": {
+      "react": ["./node_modules/@types/react"],
+      "react-dom": ["./node_modules/@types/react-dom"]
+    }
   },
   "include": [
     "Demos/**/React/**/*.tsx",

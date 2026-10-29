@@ -1,0 +1,39 @@
+<dx-map
+  provider="osm"
+  [zoom]="14"
+  [height]="440"
+  width="100%"
+  [controls]="true"
+  [markers]="markers"
+  [routes]="routes"
+  (onReady)="onMapReady($event)"
+>
+  <dxo-map-provider-config
+    [tileServer]="tileServer"
+    [calculateRoute]="calculateRoute"
+  ></dxo-map-provider-config>
+</dx-map>
+
+<div class="options">
+  <div class="caption">Options</div>
+  <div class="option">
+    <span>Set mode</span>
+    <dx-select-box
+      [dataSource]="['driving', 'walking']"
+      value="walking"
+      [inputAttr]="{ 'aria-label': 'Mode' }"
+      (onValueChanged)="setMode($event)"
+    >
+    </dx-select-box>
+  </div>
+  <div class="option">
+    <span>Route color</span>
+    <dx-select-box
+      [dataSource]="['blue', 'green', 'red']"
+      value="blue"
+      [inputAttr]="{ 'aria-label': 'Route color' }"
+      (onValueChanged)="selectColor($event)"
+    >
+    </dx-select-box>
+  </div>
+</div>

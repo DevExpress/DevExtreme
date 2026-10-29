@@ -26,7 +26,7 @@ const oldHeaderFilterMock = {
   showHeaderFilterMenu: jest.fn(),
 };
 
-jest.mock('@ts/grids/grid_core/header_filter/m_header_filter_core', () => ({
+jest.mock('@ts/grids/grid_core/header_filter/header_filter_core', () => ({
   HeaderFilterView: class {
     init = oldHeaderFilterMock.init;
 

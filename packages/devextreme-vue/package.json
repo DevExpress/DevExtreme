@@ -85,7 +85,6 @@
     "eslint-plugin-import": "catalog:",
     "eslint-plugin-no-only-tests": "catalog:",
     "eslint-plugin-vue": "catalog:",
-    "@babel/eslint-parser": "catalog:",
     "@typescript-eslint/eslint-plugin": "catalog:",
     "@typescript-eslint/parser": "catalog:",
     "vue-eslint-parser": "catalog:"

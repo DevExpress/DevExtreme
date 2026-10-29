@@ -1,0 +1,4 @@
+@use "../../../_design-system/variables/ds" as ds;
+
+$map-marker-bg: ds.$color-bg-primary !default;
+$map-marker-content: ds.$color-content-static-dark !default;

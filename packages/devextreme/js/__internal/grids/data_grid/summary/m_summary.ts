@@ -2,6 +2,7 @@
 import dataQuery from '@js/common/data/query';
 import storeHelper from '@js/common/data/store_helper';
 import { normalizeSortingInfo } from '@js/common/data/utils';
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
@@ -14,8 +15,9 @@ import type { RawItemData, RemoteOperationsOptions } from '@ts/grids/grid_core/d
 import type { ModuleType } from '@ts/grids/grid_core/types';
 import { ColumnsView } from '@ts/grids/grid_core/views/columns_view';
 import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
+import type { RowRenderOptions, SummaryRowsViewExtension } from '@ts/grids/grid_core/views/types';
 
-import type { EditingController } from '../../grid_core/editing/m_editing';
+import type { EditingController } from '../../grid_core/editing/editing';
 import type { RowsView } from '../../grid_core/views/rows_view';
 import AggregateCalculator from '../aggregate_calculator';
 import gridCore from '../core';
@@ -485,7 +487,7 @@ export const summaryEditingControllerExtender = (
 
 export const summaryRowsViewExtender = (
   Base: ModuleType<RowsView>,
-): ModuleType<RowsView> => class SummaryRowsViewExtender extends Base {
+): ModuleType<RowsView & SummaryRowsViewExtension> => class SummaryRowsViewExtender extends Base {
   protected _createRow(row) {
     // @ts-expect-error
     const $row = super._createRow.apply(this, arguments);
@@ -530,10 +532,15 @@ export const summaryRowsViewExtender = (
     const groupCellColSpan = Number($groupCell.attr('colSpan')) || 1;
     const alignByColumnCellCount = this._getAlignByColumnCellCount(groupCellColSpan, options);
 
-    this._renderGroupSummaryCellsCore($groupCell, options, groupCellColSpan, alignByColumnCellCount);
+    this.renderGroupSummaryCellsCore($groupCell, options, groupCellColSpan, alignByColumnCellCount);
   }
 
-  private _renderGroupSummaryCellsCore($groupCell, options, groupCellColSpan, alignByColumnCellCount) {
+  public renderGroupSummaryCellsCore(
+    $groupCell: dxElementWrapper,
+    options: RowRenderOptions,
+    groupCellColSpan: number,
+    alignByColumnCellCount: number,
+  ): void {
     if (alignByColumnCellCount > 0) {
       $groupCell.attr('colSpan', groupCellColSpan - alignByColumnCellCount);
 

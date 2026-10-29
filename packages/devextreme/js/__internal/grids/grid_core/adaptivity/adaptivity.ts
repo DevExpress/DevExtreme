@@ -3,7 +3,6 @@ import eventsEngine from '@js/common/core/events/core/events_engine';
 import { removeEvent } from '@js/common/core/events/remove';
 import { addNamespace } from '@js/common/core/events/utils/index';
 import messageLocalization from '@js/common/core/localization/message';
-import type { GridsEditMode } from '@js/common/grids';
 import type { DxElement } from '@js/core/element';
 import Guid from '@js/core/guid';
 import type { dxElementWrapper } from '@js/core/renderer';
@@ -18,14 +17,14 @@ import type { Properties as FormProperties, SimpleItemTemplateData } from '@js/u
 import Form from '@js/ui/form';
 import { isMaterial } from '@js/ui/themes';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
+import { isCellBasedEditMode, isFormBasedEditMode } from '@ts/grids/grid_core/editing/editing_utils';
 import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
 import { FIELD_ITEM_CONTENT_CLASS } from '@ts/ui/form/constants';
 
 import { AI_COLUMN_NAME } from '../ai_column/const';
 import type { ColumnsController } from '../columns_controller/columns_controller';
 import type { ProcessedItem } from '../data_controller/types';
-import { EDIT_MODE_FORM, EDIT_MODE_POPUP, EDIT_MODE_ROW } from '../editing/const';
-import type { EditingController } from '../editing/m_editing';
+import { EDIT_MODE } from '../editing/const';
 import type { KeyboardNavigationController } from '../keyboard_navigation/m_keyboard_navigation';
 import { CLASSES as MASTER_DETAIL_CLASSES } from '../master_detail/const';
 import modules from '../modules/modules';
@@ -48,6 +47,7 @@ import type {
   AdaptiveDetailCellOptions,
   AdaptiveFormItem,
   AdaptivityDataController,
+  AdaptivityEditingController,
   HiddenCellInViewOptions,
   HiddenCellsInViewOptions,
   HideVisibleColumnInViewOptions,
@@ -84,7 +84,7 @@ export class AdaptiveColumnsViewController extends modules.ViewController {
 
   private _dataController!: AdaptivityDataController;
 
-  private _editingController!: EditingController;
+  private _editingController!: AdaptivityEditingController;
 
   protected _rowsView!: RowsView;
 
@@ -101,7 +101,7 @@ export class AdaptiveColumnsViewController extends modules.ViewController {
   public init(): void {
     this._columnsController = this.getController('columns');
     this._dataController = this.getController('data') as AdaptivityDataController;
-    this._editingController = this.getController('editing');
+    this._editingController = this.getController('editing') as AdaptivityEditingController;
     this._keyboardNavigationController = this.getController('keyboardNavigation');
     this._rowsView = this.getView('rowsView');
 
@@ -149,11 +149,6 @@ export class AdaptiveColumnsViewController extends modules.ViewController {
     return cellOptions.row.values[columnIndex];
   }
 
-  private _isRowEditMode(): boolean {
-    const editMode = this._getEditMode();
-    return editMode === EDIT_MODE_ROW;
-  }
-
   private _isItemModified(
     item: AdaptiveFormItem,
     cellOptions: AdaptiveDetailCellOptions,
@@ -187,7 +182,7 @@ export class AdaptiveColumnsViewController extends modules.ViewController {
 
     const displayValue = gridCoreUtils.getDisplayValue(column, value, rowData, cellOptions.rowType);
     const text = gridCoreUtils.formatValue(displayValue, column);
-    const isCellOrBatchEditMode = this._editingController.isCellOrBatchEditMode();
+    const isCellOrBatchEditMode = isCellBasedEditMode(this._editingController.getEditMode());
     const rowsView = this._rowsView;
 
     if (column.allowEditing && this._keyboardNavigationController.isKeyboardEnabled()) {
@@ -226,7 +221,7 @@ export class AdaptiveColumnsViewController extends modules.ViewController {
         $container.html('&nbsp;');
       }
 
-      if (!this._isRowEditMode()) {
+      if (this._editingController.getEditMode() !== EDIT_MODE.row) {
         if (this._isItemModified(item, cellOptions)) {
           $container.addClass(CLASSES.itemModified);
         }
@@ -436,11 +431,13 @@ export class AdaptiveColumnsViewController extends modules.ViewController {
   }
 
   private _isItemEdited(item: AdaptiveFormItem): boolean | undefined {
-    if (this.isFormOrPopupEditMode()) {
+    const editMode = this._editingController.getEditMode();
+
+    if (isFormBasedEditMode(editMode)) {
       return false;
     }
 
-    if (this._isRowEditMode()) {
+    if (editMode === EDIT_MODE.row) {
       const editRowKey = this.option('editing.editRowKey');
       if (equalByValue(editRowKey, this._dataController.getAdaptiveExpandedKey())) {
         return true;
@@ -582,7 +579,7 @@ export class AdaptiveColumnsViewController extends modules.ViewController {
     for (let rowIndex = 0; rowIndex < rowsCount; rowIndex += 1) {
       const cancelClassAdding = rowIndex === editFormRowIndex
         && viewName === ROWS_VIEW
-        && this.option('editing.mode') !== 'popup';
+        && this._editingController.getEditMode() !== EDIT_MODE.popup;
       const currentVisibleIndex = viewName === COLUMN_HEADERS_VIEW && !cancelClassAdding
         ? this._columnsController.getVisibleIndex(column.index, rowIndex)
         : visibleIndex;
@@ -637,16 +634,6 @@ export class AdaptiveColumnsViewController extends modules.ViewController {
     }).addClass(cssClassNameToAdd);
   }
 
-  private _getEditMode(): GridsEditMode {
-    return this._editingController.getEditMode();
-  }
-
-  public isFormOrPopupEditMode(): boolean {
-    const editMode = this._getEditMode();
-
-    return editMode === EDIT_MODE_FORM || editMode === EDIT_MODE_POPUP;
-  }
-
   public hideRedundantColumns(
     resultWidths: (number | string | undefined)[],
     visibleColumns: Column[],
@@ -661,7 +648,7 @@ export class AdaptiveColumnsViewController extends modules.ViewController {
 
     let totalWidth = 0;
     const $rootElement = this.component.$element();
-    const availableWidth = getWidth($rootElement) - this._rowsView.getScrollbarWidth();
+    const availableWidth = getWidth($rootElement.get(0)) - this._rowsView.getScrollbarWidth();
     let rootElementWidth = availableWidth - this._getCommandColumnsWidth();
     const getVisibleContentColumns = (): Column[] => visibleColumns.filter(
       (item) => !item.command
@@ -750,8 +737,7 @@ export class AdaptiveColumnsViewController extends modules.ViewController {
 
     for (let i = 0; i < $itemContents.length; i += 1) {
       const $itemContent = $itemContents.eq(i);
-      // @ts-expect-error data(key) is typed as returning the wrapper
-      const item: AdaptiveFormItem | undefined = $itemContent.data('dx-form-item');
+      const item = $itemContent.data<AdaptiveFormItem | undefined>('dx-form-item');
       if (
         item?.column
         && this._columnsController.getVisibleIndex(item.column.index) === visibleColumnIndex
@@ -764,7 +750,10 @@ export class AdaptiveColumnsViewController extends modules.ViewController {
   }
 
   public toggleExpandAdaptiveDetailRow(key?: RowKey, alwaysExpanded = false): void {
-    if (!(this.isFormOrPopupEditMode() && this._editingController.isEditing())) {
+    const isEditingInFormOrPopup = isFormBasedEditMode(this._editingController.getEditMode())
+      && this._editingController.isEditing();
+
+    if (!isEditingInFormOrPopup) {
       this._dataController.toggleExpandAdaptiveDetailRow(key, alwaysExpanded);
     }
   }

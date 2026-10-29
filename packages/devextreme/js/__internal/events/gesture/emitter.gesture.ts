@@ -10,7 +10,7 @@ import { styleProp } from '@js/core/utils/style';
 import { isDefined } from '@js/core/utils/type';
 import devices from '@ts/core/devices';
 import { callOnce } from '@ts/core/utils/call_once';
-import domUtils from '@ts/core/utils/m_dom';
+import domUtils from '@ts/core/utils/dom';
 import type { EmitterConfigData, EmitterEvent, EventCoords } from '@ts/events/core/emitter';
 import Emitter from '@ts/events/core/emitter';
 import eventsEngine from '@ts/events/core/events_engine';

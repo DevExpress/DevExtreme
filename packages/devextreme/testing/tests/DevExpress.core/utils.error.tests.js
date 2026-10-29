@@ -1,5 +1,5 @@
 import errorUtils from '__internal/core/utils/error';
-import consoleUtils from '__internal/core/utils/m_console';
+import consoleUtils from '__internal/core/utils/console';
 
 const errors = errorUtils({
     'E1': 'Error 1',
