@@ -10,12 +10,12 @@
       <dxi-toolbar-item
         location="after"
         widget="dxButton"
-        [options]="clearButtonOptions"
+        [options]="clearButtonOptions()"
       >
       </dxi-toolbar-item>
     </dx-toolbar>
     <dx-chat
-      [class.chat-disabled]="isDisabled"
+      [class.chat-disabled]="isDisabled()"
       [dataSource]="dataSource"
       [reloadOnChange]="false"
       [showAvatar]="false"
@@ -25,8 +25,8 @@
       [typingUsers]="typingUsers$ | async"
       [alerts]="alerts$ | async"
       [speechToTextEnabled]="true"
-      [inputFieldText]="inputFieldText"
-      [suggestions]="suggestions"
+      [inputFieldText]="inputFieldText()"
+      [suggestions]="suggestions()"
       (onMessageEntered)="onMessageEntered($event)"
       (onInputFieldTextChanged)="onInputFieldTextChanged($event)"
       messageTemplate="messageTemplate"

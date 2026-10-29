@@ -1,5 +1,5 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import { Component, enableProdMode } from '@angular/core';
 import RemoteFileSystemProvider from 'devextreme/file_management/remote_provider';
 import { DxPopupModule } from 'devextreme-angular';
 import { DxFileManagerModule, DxFileManagerTypes } from 'devextreme-angular/ui/file-manager';
@@ -37,8 +37,4 @@ export class AppComponent {
   }
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

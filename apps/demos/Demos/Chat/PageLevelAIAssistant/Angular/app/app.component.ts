@@ -1,6 +1,6 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import {
-  Component, ViewChild, enableProdMode, provideZoneChangeDetection,
+  Component, ViewChild, enableProdMode,
 } from '@angular/core';
 import config from 'devextreme/core/config';
 import { loadMessages } from 'devextreme-angular/common/core/localization';
@@ -74,8 +74,4 @@ export class AppComponent {
   }
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

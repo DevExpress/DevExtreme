@@ -8,9 +8,13 @@ import httpRequest from 'devextreme/core/http_request';
 import domAdapter from 'devextreme/core/dom_adapter';
 import readyCallbacks from 'devextreme/core/utils/ready_callbacks';
 import eventsEngine from 'devextreme/common/core/events/core/events_engine';
+import {
+  isZoneless,
+  trackOutsideAngularHandler,
+} from './zone-utils';
 
-const outsideZoneEvents = ['mousemove', 'mouseover', 'mouseout'];
-const insideZoneEvents = ['mouseup', 'click', 'mousedown', 'transitionend', 'wheel'];
+const outsideAngularEvents = ['mousemove', 'mouseover', 'mouseout'];
+const insideAngularEvents = ['mouseup', 'click', 'mousedown', 'transitionend', 'wheel'];
 
 type ReadyCallback = () => void;
 type ReadyCallbackAdd = (callback: ReadyCallback) => void;
@@ -42,29 +46,32 @@ let doInjections = (document: any, ngZone: NgZone, xhrFactory: XhrFactory) => {
   domAdapter.inject({
     _document: document,
 
-    listen(this: { callBase: (...args: any[]) => any }, ...args) {
-      const eventName = args[1];
-      if (outsideZoneEvents.includes(eventName)) {
-        return ngZone.runOutsideAngular(() => this.callBase.apply(this, args));
+    listen(this: { callBase: (...args: any[]) => any }, element, event: string, callback, options) {
+      if (outsideAngularEvents.includes(event)) {
+        if (isZoneless(ngZone)) {
+          return this.callBase(element, event, trackOutsideAngularHandler(callback), options);
+        }
+
+        return ngZone.runOutsideAngular(() => this.callBase(element, event, callback, options));
       }
 
-      if (ngZone.isStable && insideZoneEvents.includes(eventName)) {
-        return ngZone.run(() => this.callBase.apply(this, args));
+      if (ngZone.isStable && insideAngularEvents.includes(event)) {
+        return ngZone.run(() => this.callBase(element, event, callback, options));
       }
 
-      return this.callBase.apply(this, args);
+      return this.callBase(element, event, callback, options);
     },
 
     isElementNode(element) {
-      return element && element.nodeType === 1;
+      return element?.nodeType === 1;
     },
 
     isTextNode(element) {
-      return element && element.nodeType === 3;
+      return element?.nodeType === 3;
     },
 
     isDocument(element) {
-      return element && element.nodeType === 9;
+      return element?.nodeType === 9;
     },
   });
 

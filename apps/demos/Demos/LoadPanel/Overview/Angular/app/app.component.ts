@@ -1,5 +1,5 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, ChangeDetectorRef, provideZoneChangeDetection } from '@angular/core';
+import { Component, enableProdMode, ChangeDetectorRef } from '@angular/core';
 import { DxButtonModule, DxLoadPanelModule, DxCheckBoxModule } from 'devextreme-angular';
 
 import { Employee, Service } from './app.service';
@@ -50,8 +50,4 @@ export class AppComponent {
   }
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

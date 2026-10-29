@@ -1,6 +1,6 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import {
-  ChangeDetectorRef, Component, enableProdMode, provideZoneChangeDetection,
+  ChangeDetectorRef, Component, enableProdMode,
 } from '@angular/core';
 import { AsyncPipe } from '@angular/common';
 import { DxChatModule, DxButtonModule, DxToolbarModule } from 'devextreme-angular';
@@ -121,7 +121,6 @@ export class AppComponent {
 
 bootstrapApplication(AppComponent, {
   providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
     AppService,
     AiService,
   ],

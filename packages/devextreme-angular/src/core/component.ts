@@ -1,6 +1,8 @@
+/* eslint-disable max-classes-per-file */
 import {
   TransferState,
   makeStateKey,
+  ChangeDetectorRef,
   Component,
   ElementRef,
   NgZone,
@@ -40,6 +42,11 @@ import {
 } from './nested-option';
 
 import { DxIntegrationModule } from './integration';
+
+import {
+  canMarkForOptionChange,
+  isZoneless,
+} from './zone-utils';
 
 config({
   buyNowLink: 'https://go.devexpress.com/Licensing_Installer_Watermark_DevExtremeAngular.aspx',
@@ -86,6 +93,8 @@ export abstract class DxComponent implements OnChanges, OnInit, DoCheck, AfterCo
 
   templateUpdateRequired = false;
 
+  private readonly changeDetectorRef = inject(ChangeDetectorRef);
+
   private _updateTemplates() {
     if (this.templates.length && this.templateUpdateRequired) {
       const updatedTemplates = {};
@@ -105,6 +114,14 @@ export abstract class DxComponent implements OnChanges, OnInit, DoCheck, AfterCo
       const value = e.name === e.fullName ? e.value : e.component.option(e.name);
       this.eventHelper.fireNgEvent(`${e.name}Change`, [value]);
       this.optionChangedHandlers.emit(e);
+
+      if (
+        !this.widgetUpdateLocked
+        && this[`${e.name}Change`]
+        && canMarkForOptionChange(this.ngZone)
+      ) {
+        this.changeDetectorRef.markForCheck();
+      }
     });
   }
 
@@ -122,10 +139,11 @@ export abstract class DxComponent implements OnChanges, OnInit, DoCheck, AfterCo
 
   protected _createEventEmitters(events) {
     const zone = this.ngZone;
+    const { changeDetectorRef } = this;
     this.eventHelper.createEmitters(events);
 
     this._initialOptions.eventsStrategy = (instance) => {
-      const strategy = new NgEventsStrategy(instance, zone);
+      const strategy = new NgEventsStrategy(instance, zone, changeDetectorRef);
 
       events.filter((event) => event.subscribe).forEach((event) => {
         strategy.addEmitter(event.subscribe, this[event.emit]);
@@ -140,6 +158,12 @@ export abstract class DxComponent implements OnChanges, OnInit, DoCheck, AfterCo
         nestedComponentOptions: component.option('nestedComponentOptions'),
       };
     };
+  }
+
+  protected _markForCheck() {
+    if (isZoneless(this.ngZone) || NgZone.isInAngularZone()) {
+      this.changeDetectorRef.markForCheck();
+    }
   }
 
   _shouldOptionChange(name: string, value: any) {
@@ -166,6 +190,7 @@ export abstract class DxComponent implements OnChanges, OnInit, DoCheck, AfterCo
     if (!this.widgetUpdateLocked && this.instance) {
       this.instance.beginUpdate();
       this.widgetUpdateLocked = true;
+      this.changeDetectorRef.markForCheck();
     }
   }
 
@@ -237,7 +262,7 @@ export abstract class DxComponent implements OnChanges, OnInit, DoCheck, AfterCo
     this.templates = [];
     templateHost.setHost(this);
     this._collectionContainerImpl = new CollectionNestedOptionContainerImpl(this._setOption.bind(this));
-    this.eventHelper = new EmitterHelper(ngZone, this);
+    this.eventHelper = new EmitterHelper(ngZone, this, this.changeDetectorRef);
   }
 
   ngOnChanges(changes: SimpleChanges) {
