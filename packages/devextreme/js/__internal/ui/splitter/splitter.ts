@@ -559,7 +559,7 @@ class Splitter extends CollectionWidgetLiveUpdate<Properties> {
 
         this._currentOnePxRatio = convertSizeToRatio(
           1,
-          getElementSize($(this.element()), currentOrientation),
+          getElementSize($(this.element()).get(0), currentOrientation),
           this._getResizeHandlesSize(),
         );
 
@@ -1056,7 +1056,7 @@ class Splitter extends CollectionWidgetLiveUpdate<Properties> {
     const { orientation, items = [] } = this.option();
 
     const handlesSizeSum = this._getResizeHandlesSize();
-    const elementSize = getElementSize($(this.element()), orientation);
+    const elementSize = getElementSize($(this.element()).get(0), orientation);
 
     this._itemRestrictions = [];
 
@@ -1195,7 +1195,7 @@ class Splitter extends CollectionWidgetLiveUpdate<Properties> {
     }
 
     const { orientation, items = [] } = this.option();
-    const elementSize = getElementSize(this.$element(), orientation);
+    const elementSize = getElementSize(this.$element().get(0), orientation);
     const handlesSize = this._getResizeHandlesSize();
     const availableSize = Math.max(0, elementSize - handlesSize);
 
@@ -1253,7 +1253,7 @@ class Splitter extends CollectionWidgetLiveUpdate<Properties> {
     remaining: number,
   ): number[] {
     const { items = [], orientation } = this.option();
-    const elementSize = getElementSize(this.$element(), orientation);
+    const elementSize = getElementSize(this.$element().get(0), orientation);
     const indices: number[] = [];
     const direction = remaining > 0 ? 1 : -1;
 
@@ -1315,7 +1315,7 @@ class Splitter extends CollectionWidgetLiveUpdate<Properties> {
     share: number,
   ): { applied: number; distributed: boolean } {
     const { items = [], orientation } = this.option();
-    const elementSize = getElementSize(this.$element(), orientation);
+    const elementSize = getElementSize(this.$element().get(0), orientation);
     let applied = 0;
     let distributed = false;
 

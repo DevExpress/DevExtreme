@@ -10,14 +10,14 @@ function getTreeViewItem($sourceItem: dxElementWrapper): dxElementWrapper {
   return $sourceItem
     .clone()
     .addClass(CLASSES.area.box)
-    .css('width', parseFloat(getOuterWidth($sourceItem)));
+    .css('width', parseFloat(String(getOuterWidth($sourceItem))));
 }
 
 function getAreaBoxItemArray($sourceItem: dxElementWrapper, target: string): dxElementWrapper {
   const $itemArray = $sourceItem.clone();
   if (target === SORTABLE_CONST.targets.drag) {
     $sourceItem.each((idx, sourceItem) => {
-      const width = parseFloat(getOuterWidth(sourceItem));
+      const width = parseFloat(String(getOuterWidth(sourceItem)));
       $itemArray.eq(idx).css('width', width);
       return true;
     });

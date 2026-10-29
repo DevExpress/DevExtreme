@@ -1,5 +1,5 @@
 import { wrapToArray } from '@ts/core/utils/array';
-import { equalByValue } from '@ts/core/utils/m_common';
+import { equalByValue } from '@ts/core/utils/common';
 import type { SafeAppointment } from '@ts/scheduler/types';
 
 import type { ResourceLoader } from '../loader/resource_loader';

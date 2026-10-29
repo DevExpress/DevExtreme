@@ -6,7 +6,7 @@
 /* eslint-disable @stylistic/max-len */
 /* eslint-disable prefer-destructuring */
 
-import { extend } from '@ts/core/utils/m_extend';
+import { extend } from '@ts/core/utils/extend';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 import type {
   BBox, Bounds, Canvas, Coords,

@@ -59,13 +59,24 @@ export class AppComponent implements AfterViewInit {
 
   pullDown = false;
 
+  useNative: boolean;
+
   constructor(service: Service, private changeDetectorRef: ChangeDetectorRef) {
     this.content = service.getContent();
   }
 
   ngAfterViewInit() {
     this.scrollView.instance.option('onReachBottom', this.updateBottomContent);
+    this.useNative = this.scrollView.instance.option('useNative');
+    this.changeDetectorRef.detectChanges();
   }
+
+  useNativeChanged = (data: DxCheckBoxTypes.ValueChangedEvent) => {
+    this.scrollView.instance.option('useNative', data.value);
+    if (data.value && this.scrollbarMode === 'never') {
+      this.scrollbarMode = 'onScroll';
+    }
+  };
 
   valueChanged = (data: DxCheckBoxTypes.ValueChangedEvent) => {
     this.scrollView.instance.option('onReachBottom', data.value ? this.updateBottomContent : null);

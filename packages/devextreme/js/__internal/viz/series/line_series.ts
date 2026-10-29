@@ -17,8 +17,8 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 
-import { extend } from '@ts/core/utils/m_extend';
-import { each } from '@ts/core/utils/m_iterator';
+import { extend } from '@ts/core/utils/extend';
+import { each } from '@ts/core/utils/iterator';
 import { solveCubicEquation, trunc } from '@ts/core/utils/math';
 import { clone } from '@ts/core/utils/object';
 import {

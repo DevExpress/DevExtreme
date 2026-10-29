@@ -8,10 +8,10 @@ import {
 } from '@js/common/core/events/drag';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
-import type DataGrid from '@js/ui/data_grid';
 import errors from '@js/ui/widget/ui.errors';
 import type { DataGridModel } from '@ts/grids/data_grid/__tests__/__mock__/model/data_grid';
 
+import type { DataGridInstance } from '../__tests__/__mock__/helpers/utils';
 import {
   afterTest as baseAfterTest,
   beforeTest as baseBeforeTest,
@@ -29,10 +29,10 @@ describe('Performance optimization', () => {
   beforeEach(beforeTest);
   afterEach(afterTest);
 
-  const createGridWith200Columns = async (): Promise<{
+  const createGridWith200Columns = (): Promise<{
     $container: dxElementWrapper;
     component: DataGridModel;
-    instance: DataGrid;
+    instance: DataGridInstance;
   }> => {
     const columns = [
       {
@@ -74,10 +74,12 @@ describe('Performance optimization', () => {
   describe('ColumnsResizerViewController', () => {
     it('should call "_pointCreated" 202 times when generating points by columns (1 fixed + 1 group + 2 group children + 198 regular)', async () => {
       const { instance } = await createGridWith200Columns();
-      const columnsResizerController = (instance as any).getController('columnsResizer');
+      const columnsResizerController = instance.getController('columnsResizer');
 
+      // @ts-expect-error _pointCreated is protected
       const pointCreatedSpy = jest.spyOn(columnsResizerController, '_pointCreated');
 
+      // @ts-expect-error pointsByColumns is private
       columnsResizerController.pointsByColumns();
 
       expect(pointCreatedSpy).toHaveBeenCalledTimes(202);
@@ -85,11 +87,12 @@ describe('Performance optimization', () => {
 
     it('should call "getColumnElements" as many times as there are head rows', async () => {
       const { instance } = await createGridWith200Columns();
-      const columnsResizerController = (instance as any).getController('columnsResizer');
-      const columnHeadersView = (instance as any).getView('columnHeadersView');
+      const columnsResizerController = instance.getController('columnsResizer');
+      const columnHeadersView = instance.getView('columnHeadersView');
 
       const columnHeadersViewSpy = jest.spyOn(columnHeadersView, 'getColumnElements');
 
+      // @ts-expect-error pointsByColumns is private
       columnsResizerController.pointsByColumns();
 
       expect(columnHeadersViewSpy).toHaveBeenCalledTimes(2);
@@ -101,22 +104,26 @@ describe('Performance optimization', () => {
       eventName: string,
       headerOffset: { left: number; top: number },
       dragOffset: { left: number; top: number },
-    ) => {
-      const dragEndEvent = document.createEvent('CustomEvent') as any;
+    ): CustomEvent => {
+      const dragEvent = document.createEvent('CustomEvent') as CustomEvent & {
+        pageX: number;
+        pageY: number;
+        pointerType: string;
+      };
 
-      dragEndEvent.initCustomEvent(eventName, true, true);
-      dragEndEvent.pageX = headerOffset.left + dragOffset.left;
-      dragEndEvent.pageY = headerOffset.top + dragOffset.top;
-      dragEndEvent.pointerType = 'mouse';
+      dragEvent.initCustomEvent(eventName, true, true);
+      dragEvent.pageX = headerOffset.left + dragOffset.left;
+      dragEvent.pageY = headerOffset.top + dragOffset.top;
+      dragEvent.pointerType = 'mouse';
 
-      return dragEndEvent;
+      return dragEvent;
     };
 
     it('should call "getBoundingRect" once for each dragging panel view', async () => {
       const { instance } = await createGridWith200Columns();
-      const columnHeadersView = (instance as any).getView('columnHeadersView');
-      const columnChooserView = (instance as any).getView('columnChooserView');
-      const headerPanelView = (instance as any).getView('headerPanel');
+      const columnHeadersView = instance.getView('columnHeadersView');
+      const columnChooserView = instance.getView('columnChooserView');
+      const headerPanelView = instance.getView('headerPanel');
 
       const getBoundingViewMocks = [
         jest.spyOn(columnHeadersView, 'getBoundingRect'),

@@ -4,8 +4,8 @@ import { callOnce } from '@ts/core/utils/call_once';
 import type { CallbackInterface } from './callbacks';
 // eslint-disable-next-line import/no-named-as-default
 import Callbacks from './callbacks';
-import windowModule from './m_window';
 import readyCallbacks from './ready_callbacks';
+import windowModule from './window';
 
 interface Size {
   width: number;

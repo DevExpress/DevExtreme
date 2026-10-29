@@ -29,7 +29,7 @@ export interface TextEditorLabelProperties {
   containsButtonsBefore?: boolean;
   beforeWidth?: number;
   containerWidth?: number;
-  getContainerWidth: () => number;
+  getContainerWidth: () => number | undefined;
   getBeforeWidth: () => number;
   onClickHandler: () => void;
   onHoverHandler: (e: MouseEvent | PointerEvent) => void;
@@ -189,7 +189,7 @@ export class TextEditorLabel {
     if (this._isVisible() && this._isOutsideMode()) {
       const sign = this._props.rtlEnabled ? 1 : -1;
 
-      const labelTranslateX = sign * (getWidth(this._$before) + offset);
+      const labelTranslateX = sign * (Number(getWidth(this._$before)) + offset);
 
       this._$labelSpan.css('transform', `translateX(${labelTranslateX}px)`);
     }
@@ -248,7 +248,7 @@ export class TextEditorLabel {
     this._updateBeforeWidth();
   }
 
-  updateMaxWidth(containerWidth: number): void {
+  updateMaxWidth(containerWidth: number | undefined): void {
     this._props.containerWidth = containerWidth;
     this._updateMaxWidth();
   }
