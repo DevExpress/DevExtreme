@@ -1189,7 +1189,7 @@ describe('Keyboard Navigation', () => {
       [[1, 0], 'cell', 'upArrow', [1, 0]],
       [[1, 1], 'cell', 'downArrow', [1, 2]],
       [[1, 2], 'cell', 'downArrow', [1, 2]],
-    ] as const)(
+    ])(
       'should move from %j (%s) by %s to %j',
       async ([startColumnIndex, startRowIndex], elementType, code, [columnIndex, rowIndex]) => {
         const { instance, component } = await createDataGrid({
@@ -1234,7 +1234,7 @@ describe('Keyboard Navigation', () => {
       ['the group indent cell of a column shown when grouped', false, SHOWN_WHEN_GROUPED, 1, 0],
       ['a group footer cell of a column shown when grouped', false, SHOWN_WHEN_GROUPED, 3, 2],
       ['the caption cell of an outer group row', true, TWO_GROUP_LEVELS, 0, 1],
-    ] as const)(
+    ])(
       '%s is valid: %s',
       async (_, expected, options, rowIndex, cellIndex) => {
         const { instance } = await createDataGrid({
