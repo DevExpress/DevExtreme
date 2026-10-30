@@ -23,7 +23,6 @@ import {
 } from '@js/core/utils/size';
 import { isDeferred, isDefined, isEmptyObject } from '@js/core/utils/type';
 import type { DxEvent } from '@js/events';
-import type { Grouping, MasterDetail } from '@js/ui/data_grid';
 import * as accessibility from '@js/ui/shared/accessibility';
 import { isElementInDom } from '@ts/core/utils/dom';
 import { focused } from '@ts/core/utils/selectors';
@@ -135,7 +134,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
 
   public _isNeedScroll?: boolean;
 
-  private _focusedView?: RowsView | null;
+  protected _focusedView?: RowsView | null;
 
   public _isNeedFocus?: boolean;
 
@@ -1290,29 +1289,16 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     return $cell;
   }
 
-  private _enterKeyHandler(eventArgs: KeyboardKeyDownEvent, isEditing: boolean): void {
+  /**
+   * @extended: DataGrid's grouping
+   */
+  protected _enterKeyHandler(eventArgs: KeyboardKeyDownEvent, isEditing: boolean): void {
     const rowIndex = this.getVisibleRowIndex();
     const key = this._dataController.getKeyByRowIndex(rowIndex);
-
-    const $row = this._focusedView?.getRow(rowIndex);
     const $cell = this._getFocusedCell();
-
-    const allowCollapsing: Grouping['allowCollapsing'] = this.option('grouping.allowCollapsing');
-    const needExpandGroupRow = allowCollapsing && isGroupRow($row);
-    const masterDetailEnabled: MasterDetail['enabled'] = this.option('masterDetail.enabled');
-    const needExpandMasterDetailRow = masterDetailEnabled
-      && $cell?.hasClass(COLUMNS_CONTROLLER_CLASSES.commandExpand);
     const needExpandAdaptiveRow = $cell?.hasClass(ADAPTIVITY_CLASSES.commandAdaptive);
 
-    if (needExpandGroupRow || needExpandMasterDetailRow) {
-      const item = this._dataController.items()[rowIndex];
-
-      const isNotContinuation = item?.data && !item.data.isContinuation;
-
-      if (isDefined(key) && isNotContinuation) {
-        this._dataController.changeRowExpand(key);
-      }
-    } else if (needExpandAdaptiveRow) {
+    if (needExpandAdaptiveRow) {
       this.adaptiveColumnsController.toggleExpandAdaptiveDetailRow(key);
 
       this._updateFocusedCellPosition($cell);
