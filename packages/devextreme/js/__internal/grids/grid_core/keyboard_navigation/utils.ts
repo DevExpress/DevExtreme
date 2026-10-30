@@ -3,6 +3,7 @@ import devices from '@js/core/devices';
 import type { dxElementWrapper } from '@js/core/renderer';
 import { isDefined } from '@js/core/utils/type';
 import { CLASSES as COLUMN_HEADERS_CLASSES } from '@ts/grids/grid_core/column_headers/const';
+import { CLASSES as COLUMNS_CONTROLLER_CLASSES } from '@ts/grids/grid_core/columns_controller/const';
 import { CLASSES as MASTER_DETAIL_CLASSES } from '@ts/grids/grid_core/master_detail/const';
 import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
 
@@ -85,6 +86,20 @@ export const isFixedColumnIndexOffsetRequired = (
   return !(!isDefined(column.fixedPosition) || column.fixedPosition === 'left');
 };
 
+export const isNavigableColumnCell = (
+  $cell: dxElementWrapper,
+  column: Column | undefined,
+): boolean => {
+  const $row = $cell.parent();
+  const isDataCell = !$cell.hasClass(COLUMNS_CONTROLLER_CLASSES.commandExpand) && isDataRow($row);
+  const isShownGroupedCell = !!column?.showWhenGrouped && isDataCell;
+  const isGroupSpaceCell = isDefined(column?.groupIndex) && !isShownGroupedCell;
+  const isColumnCell = !!column && !isDetailRow($row);
+  const isSpanningCell = parseInt($cell.attr('colspan') ?? '', 10) > 1;
+
+  return (isColumnCell && !isGroupSpaceCell) || isSpanningCell;
+};
+
 export const shouldPreventScroll = (
   that: KeyboardNavigationController,
 ): boolean => (that._isVirtualScrolling()
@@ -97,7 +112,7 @@ export const getInteractiveElements = ($cell: dxElementWrapper): dxElementWrappe
 
 export const getInteractiveElement = (
   $cell: dxElementWrapper,
-  isLast: boolean,
+  isLast?: boolean,
 ): dxElementWrapper => {
   const $focusedElement = getInteractiveElements($cell);
 
