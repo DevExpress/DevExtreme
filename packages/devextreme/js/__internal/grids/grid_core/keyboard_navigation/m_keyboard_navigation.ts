@@ -124,7 +124,7 @@ import {
 export class KeyboardNavigationController extends KeyboardNavigationControllerCore {
   private _updateFocusTimeout?: ReturnType<typeof setTimeout>;
 
-  public _fastEditingStarted!: boolean;
+  private _fastEditingStarted!: boolean;
 
   private _canceledCellPosition!: CellPosition | null;
 
@@ -132,11 +132,11 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
 
   private focusOutHandlerContext!: (event: DxEvent<FocusEvent>) => void;
 
-  public _isNeedScroll?: boolean;
+  private _isNeedScroll?: boolean;
 
   protected _focusedView?: RowsView | null;
 
-  public _isNeedFocus?: boolean;
+  private _isNeedFocus?: boolean;
 
   private _isHiddenFocus?: boolean;
 
@@ -1911,6 +1911,16 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     }
   }
 
+  public scrollOnNextFocus(): void {
+    this._isNeedScroll = true;
+  }
+
+  public focusCellAfterCanceledEditing(): void {
+    if (!this._isNeedFocus) {
+      this.applyFocus(this._getFocusedCell(), true);
+    }
+  }
+
   public updateFocus(isRenderView: boolean, skipFocusEvent = false): void {
     this._updateFocusTimeout = setTimeout(() => {
       if (this._needFocusEditingCell()) {
@@ -2932,6 +2942,10 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     return this._isFastEditingAllowed() && this._fastEditingStarted;
   }
 
+  public stopFastEditing(): void {
+    this._fastEditingStarted = false;
+  }
+
   private _getVisibleColumnCount(): number {
     return this._columnsController.getVisibleColumns(null, true).length;
   }
@@ -3278,7 +3292,7 @@ const editing = (
     withoutSaveEditData?: boolean,
   ): DeferredObj<unknown> {
     const keyboardNavigation = this._keyboardNavigationController;
-    keyboardNavigation._fastEditingStarted = false;
+    keyboardNavigation.stopFastEditing();
 
     const result = super.closeEditCell(isError, withoutSaveEditData);
 
@@ -3304,16 +3318,15 @@ const editing = (
     beforeFocusCallback?: (() => void) | null,
     callBeforeFocusCallbackAlways?: boolean,
   ): void {
-    this._keyboardNavigationController._isNeedScroll = true;
+    this._keyboardNavigationController.scrollOnNextFocus();
     super._delayedInputFocus($cell, beforeFocusCallback, callBeforeFocusCallbackAlways);
   }
 
   protected _isEditingStart(options: EditingStartOptions): boolean {
     const cancel = super._isEditingStart(options);
 
-    if (cancel && !this._keyboardNavigationController._isNeedFocus) {
-      const $cell = this._keyboardNavigationController._getFocusedCell();
-      this._keyboardNavigationController.applyFocus($cell, true);
+    if (cancel) {
+      this._keyboardNavigationController.focusCellAfterCanceledEditing();
     }
 
     return cancel;

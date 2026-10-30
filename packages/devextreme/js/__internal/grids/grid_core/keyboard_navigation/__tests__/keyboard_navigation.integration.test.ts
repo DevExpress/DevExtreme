@@ -1348,4 +1348,80 @@ describe('Keyboard Navigation', () => {
       expect(getKeyboardNavigationController(instance).isCellFocusType()).toBe(true);
     });
   });
+
+  describe('focus while editing in cell mode', () => {
+    afterEach(() => {
+      jest.restoreAllMocks();
+    });
+
+    const createEditableGrid = (
+      options: DataGridProperties = {},
+    ): ReturnType<typeof createDataGrid> => createDataGrid({
+      dataSource: DATA_SOURCE.slice(0, 3),
+      keyExpr: 'id',
+      columns: ['id', 'name'],
+      editing: { mode: 'cell', allowUpdating: true },
+      keyboardNavigation: { editOnKeyPress: true },
+      ...options,
+    });
+
+    const cancelEditing = (e: { cancel?: boolean }): void => {
+      e.cancel = true;
+    };
+
+    it('arrow keys stay in an editor opened after a fast-editing editor was closed', async () => {
+      const { instance, component } = await createEditableGrid();
+      triggerPointerDown(component.getDataCell(0, 1).getElement() as HTMLElement);
+      jest.runAllTimers();
+      triggerKeyDown(instance, 'a');
+      jest.runAllTimers();
+      instance.closeEditCell();
+      jest.runAllTimers();
+
+      instance.editCell(1, 1);
+      jest.runAllTimers();
+      triggerKeyDown(instance, 'leftArrow', instance.getCellElement(1, 1)?.querySelector('input'));
+      jest.runAllTimers();
+
+      expect(component.getDataCell(1, 1).isEditCell).toBe(true);
+    });
+
+    it('the cell of an editor opened by the API is scrolled into view', async () => {
+      // JSDOM has no layout: without client rects the cell isn't :visible
+      jest.spyOn(Element.prototype, 'getClientRects').mockReturnValue([{}] as unknown as DOMRectList);
+      const { instance } = await createEditableGrid({ height: 100 });
+      const scrollToElement = jest.spyOn(instance.getView('rowsView'), '_scrollToElement');
+
+      instance.editCell(1, 1);
+      jest.runAllTimers();
+
+      expect(scrollToElement.mock.calls.map(([$element]) => $element.get(0)))
+        .toContain(instance.getCellElement(1, 1));
+    });
+
+    it('a clicked cell gets focus when onEditingStart cancels editing', async () => {
+      const { instance, component } = await createEditableGrid({ onEditingStart: cancelEditing });
+      const cell = component.getDataCell(1, 1).getElement() as HTMLElement;
+
+      triggerPointerDown(cell);
+      instance.editCell(1, 1);
+      jest.runAllTimers();
+
+      expect(document.activeElement).toBe(cell);
+      expect(cell.classList.contains('dx-cell-focus-disabled')).toBe(true);
+    });
+
+    it('a cell keeps its visible focus when onEditingStart cancels editing on Enter', async () => {
+      const { instance, component } = await createEditableGrid({ onEditingStart: cancelEditing });
+      const cell = component.getDataCell(1, 1).getElement() as HTMLElement;
+      instance.focus(cell);
+      jest.runAllTimers();
+
+      triggerKeyDown(instance, 'enter');
+      jest.runAllTimers();
+
+      expect(document.activeElement).toBe(cell);
+      expect(cell.classList.contains('dx-cell-focus-disabled')).toBe(false);
+    });
+  });
 });
