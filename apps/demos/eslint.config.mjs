@@ -343,7 +343,7 @@ export default [
           ignoreRefs: true,
         },
       ],
-      'react/jsx-tag-spacing': ['error', { beforeClosing: 'never' }],
+      '@stylistic/jsx-tag-spacing': ['error', { beforeClosing: 'never' }],
       'react/jsx-no-undef': ['error', { allowGlobals: true }],
       'react/jsx-no-target-blank': ['error', { enforceDynamicLinks: 'never' }],
 
