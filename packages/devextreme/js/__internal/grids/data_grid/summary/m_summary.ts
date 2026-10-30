@@ -96,22 +96,26 @@ const getSummaryCellOptions = (
   options: CellRenderOptions,
 ): SummaryCellOptions => ({
   totalItem: options.row,
-  // @ts-expect-error summaryCells is set for rows that render summary cells
-  summaryItems: options.row.summaryCells[options.columnIndex],
+  summaryItems: options.row.summaryCells?.[options.columnIndex],
 });
 
+const hasGroupSummaryCells = (
+  options: RowRenderOptions,
+): options is GroupSummaryRenderOptions => !!options.row.summaryCells?.length;
+
 const forEachGroup = (
-  groups: GroupData<RawItemData>[],
+  groups: RawItemData[],
   groupCount: number,
-  callback: (path: unknown[], items: GroupData<RawItemData>['items']) => void,
+  callback: (path: unknown[], items: RawItemData[]) => void,
   path: unknown[] = [],
 ): void => {
   for (const group of groups) {
     path.push(group.key);
     if (groupCount === 1) {
-      callback(path, group.items);
-    } else {
-      // @ts-expect-error groups above the last group level hold groups
+      if (Array.isArray(group.items)) {
+        callback(path, group.items);
+      }
+    } else if (Array.isArray(group.items)) {
       forEachGroup(group.items, groupCount - 1, callback, path);
     }
     path.pop();
@@ -139,8 +143,8 @@ const applyRemovedData = (
   if (groupLevel) {
     return data.map((group) => {
       const updatedData = {};
-      // @ts-expect-error groups above the last group level hold groups
-      const updatedItems = applyRemovedData(group.items ?? [], removedData, groupLevel - 1);
+      const groupItems = Array.isArray(group.items) ? group.items : [];
+      const updatedItems = applyRemovedData(groupItems, removedData, groupLevel - 1);
 
       Object.defineProperty(updatedData, 'aggregates', {
         get: () => group.aggregates,
@@ -186,8 +190,9 @@ const sortGroupsBySummaryCore = (
   const nextSortByGroups = sortByGroups.slice(1);
   if (nextGroups.length && nextSortByGroups.length) {
     each(sortedItems, function sortGroupItems(this: RawItemData) {
-      // @ts-expect-error groups above the last group level hold groups
-      this.items = sortGroupsBySummaryCore(this.items, nextGroups, nextSortByGroups);
+      if (Array.isArray(this.items)) {
+        this.items = sortGroupsBySummaryCore(this.items, nextGroups, nextSortByGroups);
+      }
     });
   }
 
@@ -232,9 +237,8 @@ export class FooterView extends ColumnsView {
     const totalItem = this._dataController.footerItems()[0];
 
     if (!change?.columnIndices) {
-      // @ts-expect-error the view is rendered here
       this.element()
-        .empty()
+        ?.empty()
         .addClass(DATAGRID_TOTAL_FOOTER_CLASS)
         .toggleClass(DATAGRID_NOWRAP_CLASS, !this.option('wordWrapEnabled'));
 
@@ -258,12 +262,13 @@ export class FooterView extends ColumnsView {
   ): DeferredObj<unknown> {
     if (change?.changeType === 'update' && change.columnIndices) {
       return this.waitAsyncTemplates().done(() => {
-        // @ts-expect-error the view is rendered here
-        const $row = this.getTableElement().find(`.${VIEW_CLASSES.row}`);
+        const $row = this.getTableElement()?.find(`.${VIEW_CLASSES.row}`);
         const $newRow = $newTable.find(`.${VIEW_CLASSES.row}`);
+        const columnIndices = change.columnIndices?.[0];
 
-        // @ts-expect-error the footer has one row, so columnIndices[0] is set
-        this._updateCells($row, $newRow, change.columnIndices[0]);
+        if ($row && columnIndices) {
+          this._updateCells($row, $newRow, columnIndices);
+        }
       });
     }
 
@@ -384,7 +389,7 @@ export const summaryDataSourceAdapterExtender = (
     paths.forEach((path) => {
       // @ts-expect-error multiLevelGroup is typed as returning unknown[]
       forEachGroup(groupedItems, groups.length, (itemsPath, groupItems) => {
-        if (path.toString() === itemsPath.toString() && groupItems) {
+        if (path.toString() === itemsPath.toString()) {
           result = result.concat(groupItems);
         }
       });
@@ -398,10 +403,9 @@ export const summaryDataSourceAdapterExtender = (
     operationTypes: OperationTypes,
   ): void {
     const summary = this.getSummary();
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- set before load
-    const remoteOperations = options.remoteOperations!;
+    const { remoteOperations } = options;
 
-    if (summary && remoteOperations.summary) {
+    if (summary && remoteOperations?.summary) {
       if (!options.isCustomLoading || options.storeLoadOptions.isLoadingAll) {
         if (options.storeLoadOptions.group && remoteOperations.grouping) {
           options.storeLoadOptions.groupSummary = summary.groupAggregates;
@@ -412,6 +416,7 @@ export const summaryDataSourceAdapterExtender = (
       }
     } else if (
       summary
+      && remoteOperations
       && (
         summary.totalAggregates.length
         || (summary.groupAggregates.length && options.storeLoadOptions.group)
@@ -421,9 +426,7 @@ export const summaryDataSourceAdapterExtender = (
     }
     super._customizeRemoteOperations(options, operationTypes);
 
-    // eslint-disable-next-line @stylistic/max-len
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- cachedData is set by the base method
-    const cachedExtra = options.cachedData!.extra;
+    const cachedExtra = options.cachedData?.extra;
 
     if (cachedExtra?.summary && !options.isCustomLoading) {
       options.storeLoadOptions.totalSummary = undefined;
@@ -573,8 +576,7 @@ export const summaryRowsViewExtender = (
   protected _renderCells($row: dxElementWrapper, options: RowRenderOptions): void {
     super._renderCells($row, options);
 
-    if (options.row.rowType === 'group' && options.row.summaryCells?.length) {
-      // @ts-expect-error summaryCells is set for rows that render summary cells
+    if (options.row.rowType === 'group' && hasGroupSummaryCells(options)) {
       this._renderGroupSummaryCells($row, options);
     }
   }
