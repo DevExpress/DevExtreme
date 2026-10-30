@@ -26,7 +26,7 @@ import type {
 } from '@ts/grids/grid_core/types';
 import gridCoreUtils from '@ts/grids/grid_core/utils';
 import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
-import { VIRTUAL_ROW_CLASS } from '@ts/grids/grid_core/virtual_scrolling/const';
+import { CLASSES as VIRTUAL_SCROLLING_CLASSES } from '@ts/grids/grid_core/virtual_scrolling/const';
 import Sortable from '@ts/sortable';
 import { SCROLLABLE_CONTAINER_CLASS } from '@ts/ui/scroll_view/consts';
 
@@ -129,7 +129,7 @@ const rowsView = (
       this._sortableFixed?.$element().css('pointerEvents', toggle ? 'auto' : '');
     };
 
-    const rowSelector = `.${VIEW_CLASSES.row}:not(.${VIEW_CLASSES.freeSpaceRow}):not(.${VIRTUAL_ROW_CLASS}):not(.${COLUMN_HEADERS_CLASSES.headerRow}):not(.${DATAGRID_FOOTER_ROW_CLASS})`;
+    const rowSelector = `.${VIEW_CLASSES.row}:not(.${VIEW_CLASSES.freeSpaceRow}):not(.${VIRTUAL_SCROLLING_CLASSES.virtualRow}):not(.${COLUMN_HEADERS_CLASSES.headerRow}):not(.${DATAGRID_FOOTER_ROW_CLASS})`;
     const filter = this.option('dataRowTemplate')
       ? `> table > tbody${rowSelector}`
       : `> table > tbody > ${rowSelector}`;

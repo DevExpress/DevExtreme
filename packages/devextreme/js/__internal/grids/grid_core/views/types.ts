@@ -15,7 +15,9 @@ import type {
   Cell, DataChange, RowChangeType, RowUpdate, RowWatch, UpdateChange,
 } from '@ts/grids/grid_core/data_controller/types';
 import type { RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
-import type { InternalGrid, InternalGridOptions, RowKey } from '@ts/grids/grid_core/types';
+import type {
+  InternalGrid, InternalGridOptions, RowKey, SummaryTextItem,
+} from '@ts/grids/grid_core/types';
 import type Scrollable from '@ts/ui/scroll_view/scrollable';
 
 export type RowsViewScrollEvent = Partial<ScrollEventInfo<Scrollable>> & {
@@ -91,7 +93,7 @@ export interface ViewRow {
   oldValues?: unknown[];
   cells?: ViewRowCell[];
   /** @architectureLeak data_grid: core passes the summary items of a group row to its group cell */
-  summaryCells?: unknown[][];
+  summaryCells?: SummaryTextItem[][];
   /** @architectureLeak data_grid: core picks the column and the value of a group cell by it */
   groupIndex?: number;
   visible?: boolean;
@@ -130,7 +132,8 @@ export interface ViewCellOptions {
   displayValue?: unknown;
   text?: string;
   values?: unknown[];
-  summaryItems?: unknown[];
+  /** @architectureLeak data_grid/summary: core renders summary items of group and footer cells */
+  summaryItems?: SummaryTextItem[];
   resized?: Column['resizedCallbacks'];
   groupContinuesMessage?: string | false;
   groupContinuedMessage?: string | false;

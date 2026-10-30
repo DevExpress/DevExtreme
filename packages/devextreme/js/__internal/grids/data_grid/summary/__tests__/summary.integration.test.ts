@@ -136,4 +136,52 @@ describe('Summary', () => {
       spy.mockRestore();
     });
   });
+
+  describe('recalculateWhileEditing with an inserted row', () => {
+    const dataSource = [
+      {
+        id: 1, value: 1, category: 'A', region: 'X',
+      },
+      {
+        id: 2, value: 2, category: 'B', region: 'Y',
+      },
+    ];
+
+    it.each([
+      { groupLevels: 1, groupedFields: ['category'] },
+      { groupLevels: 2, groupedFields: ['category', 'region'] },
+    ])('should count an unsaved inserted row in total summary with $groupLevels grouping level(s)', async ({ groupedFields }) => {
+      const { instance } = await createDataGrid({
+        dataSource,
+        columns: [
+          { dataField: 'id' },
+          { dataField: 'value' },
+          ...groupedFields.map((dataField, groupIndex) => ({ dataField, groupIndex })),
+        ],
+        editing: { mode: 'batch', allowAdding: true },
+        onInitNewRow: (e) => {
+          e.data.value = 10;
+        },
+        summary: {
+          recalculateWhileEditing: true,
+          totalItems: [
+            { name: 'sum', column: 'value', summaryType: 'sum' },
+            { name: 'count', column: 'value', summaryType: 'count' },
+          ],
+        },
+      });
+
+      await flushAsync();
+
+      expect(instance.getTotalSummaryValue('sum')).toBe(3);
+      expect(instance.getTotalSummaryValue('count')).toBe(2);
+
+      instance.addRow().catch(() => {});
+      await flushAsync();
+
+      expect(instance.hasEditData()).toBe(true);
+      expect(instance.getTotalSummaryValue('sum')).toBe(13);
+      expect(instance.getTotalSummaryValue('count')).toBe(3);
+    });
+  });
 });

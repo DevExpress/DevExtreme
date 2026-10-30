@@ -32,6 +32,7 @@ export const APPOINTMENT_CONTENT_CLASSES = {
 };
 export const AGENDA_LAST_IN_DATE_APPOINTMENT_CLASS = 'dx-scheduler-last-in-date-agenda-appointment';
 export const APPOINTMENT_HAS_RESOURCE_COLOR_CLASS = 'dx-scheduler-appointment-has-resource-color';
+export const APPOINTMENT_HAS_DARK_TEXT_CLASS = 'dx-scheduler-appointment-has-dark-text';
 
 export const HEADER_CURRENT_TIME_CELL_CLASS = 'dx-scheduler-header-panel-current-time-cell';
 export const VIRTUAL_CELL_CLASS = 'dx-scheduler-virtual-cell';

@@ -98,4 +98,26 @@ describe('Resources', () => {
       expect(POM.getAppointment().getColor(view)).toBe(rooms2[0].color);
     });
   });
+
+  it.each([
+    { color: 'rgb(249, 226, 174)', hasDarkText: true },
+    { color: 'rgb(21, 100, 192)', hasDarkText: false },
+  ])('should mark the appointment with dark text on the $color resource color', async ({ color, hasDarkText }) => {
+    setupSchedulerTestEnvironment();
+
+    const { POM } = await createScheduler({
+      views: ['month'],
+      currentView: 'month',
+      currentDate: new Date(2024, 8, 7),
+      dataSource,
+      resources: [{
+        fieldExpr: 'roomId',
+        label: 'Room',
+        dataSource: [{ id: 1, text: 'Room 1', color }],
+      }],
+    });
+    const { element } = POM.getAppointment();
+
+    expect(element?.classList.contains('dx-scheduler-appointment-has-dark-text')).toBe(hasDarkText);
+  });
 });

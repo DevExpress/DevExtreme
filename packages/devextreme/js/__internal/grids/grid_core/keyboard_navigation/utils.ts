@@ -11,7 +11,7 @@ import { CLASSES as ADAPTIVITY_CLASSES } from '../adaptivity/const';
 import type { Column } from '../columns_controller/types';
 import { CLASSES as EDITING_CLASSES, EDIT_MODE } from '../editing/const';
 import { COMMAND_SELECT_CLASS } from '../selection/const';
-import { VIRTUAL_ROW_CLASS } from '../virtual_scrolling/const';
+import { CLASSES as VIRTUAL_SCROLLING_CLASSES } from '../virtual_scrolling/const';
 import { INTERACTIVE_ELEMENTS_SELECTOR } from './const';
 import type { KeyboardNavigationController as KeyboardNavigationControllerCore } from './keyboard_navigation_core';
 import type { KeyboardNavigationController } from './m_keyboard_navigation';
@@ -52,7 +52,9 @@ export const isDataRow = (
 
 export const isNotFocusedRow = (
   $row: dxElementWrapper,
-): boolean => !$row || $row.hasClass(VIEW_CLASSES.freeSpaceRow) || $row.hasClass(VIRTUAL_ROW_CLASS);
+): boolean => !$row
+  || $row.hasClass(VIEW_CLASSES.freeSpaceRow)
+  || $row.hasClass(VIRTUAL_SCROLLING_CLASSES.virtualRow);
 
 export const isRowOrFormEditMode = (
   editMode: GridsEditMode,
