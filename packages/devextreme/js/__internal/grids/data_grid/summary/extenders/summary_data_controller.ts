@@ -19,10 +19,9 @@ import type { ProcessGroupItemsOptions } from '../../grouping/types';
 import { isSameContinuationState } from '../../grouping/utils';
 import { isDataColumn } from '../../utils';
 import { DATAGRID_GROUP_FOOTER_ROW_TYPE, DATAGRID_TOTAL_FOOTER_ROW_TYPE } from '../const';
-import type { SummaryDataSourceAdapter } from '../m_summary';
 import type {
   CalculateSummaryCellsArgs, ColumnMap, FooterItem, SummaryCellItem,
-  SummaryDataControllerExtension, SummaryGroupItem,
+  SummaryDataControllerExtension, SummaryDataSourceAdapter, SummaryGroupItem,
 } from '../types';
 import { getColumnFromMap, getSummaryCellIndex, isSummaryGroupItem } from '../utils';
 import { getGroupAggregates } from '../utils/get_group_aggregates';

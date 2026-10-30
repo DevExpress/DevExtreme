@@ -65,10 +65,6 @@ import type {
 } from './types';
 import { getSummaryOptions } from './utils/get_summary_options';
 
-export type SummaryDataSourceAdapter = InstanceType<
-  ReturnType<typeof summaryDataSourceAdapterExtender>
->;
-
 export const renderSummaryCell = (
   $cell: dxElementWrapper,
   options: ViewCellOptions,

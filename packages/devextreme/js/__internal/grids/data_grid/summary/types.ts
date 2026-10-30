@@ -2,7 +2,9 @@ import type {
   SummaryGroupItem as SummaryGroupItemOption,
   SummaryTotalItem as SummaryTotalItemOption, SummaryType,
 } from '@js/ui/data_grid';
+import type { SortingInfo } from '@ts/data/utils';
 import type { Column } from '@ts/grids/data_grid/types';
+import type DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/data_source_adapter';
 import type { RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
 import type { EditingController } from '@ts/grids/grid_core/editing/editing';
 import type { RowRenderOptions, ViewRow } from '@ts/grids/grid_core/views/types';
@@ -74,7 +76,15 @@ export interface SummaryDataControllerExtension {
 
 export interface SummaryDataSourceAdapterExtension {
   totalAggregates: () => unknown[];
+  isLastLevelGroupItemsPagingLocal: () => number | undefined;
+  sortLastLevelGroupItems: (
+    items: RawItemData[],
+    groups: SortingInfo[],
+    paths: unknown[][],
+  ) => unknown[];
 }
+
+export type SummaryDataSourceAdapter = DataSourceAdapter & SummaryDataSourceAdapterExtension;
 
 export interface GroupSummaryRenderOptions extends RowRenderOptions {
   row: ViewRow & { summaryCells: unknown[][] };
