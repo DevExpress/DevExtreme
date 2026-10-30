@@ -316,4 +316,75 @@ describe('GridCore focus', () => {
       expect(instance.option('focusedRowIndex')).toBe(-1);
     });
   });
+
+  describe('state restore', () => {
+    const DATA = Array.from({ length: 12 }, (_, i) => ({
+      id: i + 1,
+      group: i < 6 ? 'A' : 'B',
+      value: `row ${i + 1}`,
+    }));
+
+    it.each([
+      { title: 'data row', focusedRowKey: 1 },
+      { title: 'group row', focusedRowKey: ['A'] },
+    ])('raises no error when the restored state drops runtime grouping and a $title is focused (T1337363)', async ({ focusedRowKey }) => {
+      const errors: (string | undefined)[] = [];
+      const { instance } = await createDataGrid({
+        dataSource: DATA,
+        focusedRowEnabled: true,
+        columns: ['group', 'id', 'value'],
+        grouping: { autoExpandAll: false },
+        onDataErrorOccurred: ({ error }) => { errors.push(error?.message); },
+      });
+      instance.columnOption('group', 'groupIndex', 0);
+      await flushAsync();
+      instance.option('focusedRowKey', focusedRowKey);
+      await flushAsync();
+
+      instance.state({ ...instance.state(), columns: undefined });
+
+      expect(errors).toEqual([]);
+      expect(instance.getVisibleRows().some((row) => row.rowType === 'data' && row.key === undefined)).toBe(false);
+    });
+
+    it('raises no error when the restored state drops runtime grouping and also changes selection (T1337363)', async () => {
+      const errors: (string | undefined)[] = [];
+      const { instance } = await createDataGrid({
+        dataSource: DATA,
+        focusedRowEnabled: true,
+        selection: { mode: 'multiple' },
+        columns: ['group', 'id', 'value'],
+        grouping: { autoExpandAll: false },
+        onDataErrorOccurred: ({ error }) => { errors.push(error?.message); },
+      });
+      instance.columnOption('group', 'groupIndex', 0);
+      await flushAsync();
+      instance.option('focusedRowKey', 1);
+      await flushAsync();
+
+      instance.state({ ...instance.state(), columns: undefined, selectedRowKeys: [2] });
+
+      expect(errors).toEqual([]);
+      expect(instance.option('selectedRowKeys')).toEqual([2]);
+    });
+
+    it('keeps the focused data row when the restored state drops runtime grouping (T1337363)', async () => {
+      const { instance } = await createDataGrid({
+        dataSource: DATA,
+        focusedRowEnabled: true,
+        columns: ['group', 'id', 'value'],
+        grouping: { autoExpandAll: false },
+      });
+      instance.columnOption('group', 'groupIndex', 0);
+      await flushAsync();
+      instance.option('focusedRowKey', 1);
+      await flushAsync();
+
+      instance.state({ ...instance.state(), columns: undefined });
+      await flushAsync();
+
+      expect(instance.option('focusedRowKey')).toBe(1);
+      expect(instance.getVisibleRows().every((row) => row.rowType === 'data')).toBe(true);
+    });
+  });
 });
