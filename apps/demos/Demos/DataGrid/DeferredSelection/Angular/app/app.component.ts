@@ -3,7 +3,6 @@ import {
   ViewChild,
   AfterViewInit,
   enableProdMode,
-  provideZoneChangeDetection,
   ChangeDetectorRef,
 } from '@angular/core';
 import { DxDataGridModule, DxDataGridComponent, DxButtonModule } from 'devextreme-angular';
@@ -85,8 +84,4 @@ export class AppComponent implements AfterViewInit {
   }
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);
