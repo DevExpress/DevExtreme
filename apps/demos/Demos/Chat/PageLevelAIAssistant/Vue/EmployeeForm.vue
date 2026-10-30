@@ -90,7 +90,7 @@ defineExpose({
 
 <style>
 #form-container {
-  border: 1px solid var(--dx-color-border);
+  border: 1px solid var(--dxds-color-border, var(--dx-color-border));
   padding: 16px;
   background-color: var(--dx-component-color-bg);
 }
