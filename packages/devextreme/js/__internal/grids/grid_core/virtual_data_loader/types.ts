@@ -7,6 +7,8 @@ export interface VirtualItemsCount {
   end: number;
 }
 
+export type ItemSizes = Record<number, number>;
+
 export interface VirtualDataLoaderCacheItem {
   pageIndex: number;
   itemsLength: number;
@@ -38,7 +40,7 @@ export interface VirtualDataLoaderController {
   getContentOffset: () => number;
   getViewportPosition: () => number;
   virtualItemsCount: () => VirtualItemsCount | undefined;
-  getItemSizes: () => Record<number, number>;
+  getItemSizes: () => ItemSizes;
   _setViewportPositionCore: (position: number) => void;
 }
 

@@ -21,7 +21,7 @@ import type { ResizingController } from '@ts/grids/grid_core/grid_view/grid_view
 import type { InternalGrid, ModuleType, RowKey } from '@ts/grids/grid_core/types';
 import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
 import type { RowsView } from '@ts/grids/grid_core/views/rows_view';
-import type { VirtualItemsCount } from '@ts/grids/grid_core/virtual_data_loader/types';
+import type { ItemSizes, VirtualItemsCount } from '@ts/grids/grid_core/virtual_data_loader/types';
 
 import type {
   ChangedEvent,
@@ -40,6 +40,7 @@ import {
 import type { VirtualScrollingDataControllerExtension } from './extenders/virtual_scrolling_data_controller';
 import { subscribeToExternalScrollers, VirtualScrollController } from './m_virtual_scrolling_core';
 import type {
+  ContentOffsetType,
   ExternalScrollers,
   VirtualScrollDataOptions,
   VirtualScrollingDataChange,
@@ -419,7 +420,7 @@ export const dataSourceAdapterExtender = (
     return this._virtualScrollController.virtualItemsCount();
   }
 
-  public getContentOffset(type?: 'begin' | 'end'): number {
+  public getContentOffset(type?: ContentOffsetType): number {
     return this._virtualScrollController.getContentOffset(type);
   }
 
@@ -459,7 +460,7 @@ export const dataSourceAdapterExtender = (
     return this._virtualScrollController.getItemSize();
   }
 
-  public getItemSizes(): Record<number, number> {
+  public getItemSizes(): ItemSizes {
     return this._virtualScrollController.getItemSizes();
   }
 
@@ -667,7 +668,7 @@ export const rowsView = (
   private _removeRowsElements(
     contentTable: dxElementWrapper,
     removeCount: number,
-    changeType: string,
+    changeType: 'append' | 'prepend',
   ): void {
     const allRowElements = this._getRowElements(contentTable).toArray();
     const rowElements = changeType === 'append'
@@ -958,7 +959,7 @@ export const rowsView = (
     const dataController = this._dataController;
     const hasBottomLoadPanel = dataController.pageIndex() > 0
       && dataController.isLoaded()
-      && !!this._findBottomLoadPanel();
+      && Boolean(this._findBottomLoadPanel());
     const isDefaultLoading = isLoading && !dataController.isCustomLoading();
 
     if (
