@@ -2984,7 +2984,7 @@ const rowsView = <TBase extends ModuleType<RowsView>>(
     }
 
     if (isEditing) {
-      this._editCellPrepared($cell);
+      this.editCellPrepared($cell);
     }
 
     const isCommandCell = !!parameters.column.command;
@@ -3098,7 +3098,7 @@ const rowsView = <TBase extends ModuleType<RowsView>>(
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars -- used by overrides
-  protected _editCellPrepared($cell: dxElementWrapper): void {}
+  public editCellPrepared($cell: dxElementWrapper): void {}
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars -- used by overrides
   protected _formItemPrepared(cellOptions: ViewCellOptions, $container: dxElementWrapper): void {}
