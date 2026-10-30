@@ -81,7 +81,7 @@ export const expandAllDayRegularPanel = <T extends Pick<ListEntity, 'startDateUT
 
   const startDate = new Date(entity.startDateUTC);
   const endDate = new Date(entity.endDateUTC);
-  endDate.setDate(endDate.getDate() + 1);
+  endDate.setUTCDate(endDate.getUTCDate() + 1);
 
   return {
     ...entity,
