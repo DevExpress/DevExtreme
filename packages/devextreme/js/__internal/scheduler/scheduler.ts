@@ -493,8 +493,8 @@ class Scheduler extends SchedulerOptionsBaseWidget {
         this.updateOption('header', name, value);
         break;
       case 'firstDayOfWeek':
-        this.updateOption('workSpace', name, value);
-        this.updateOption('header', name, value);
+        this.updateOption('workSpace', name, this.getViewOption('firstDayOfWeek'));
+        this.updateOption('header', name, this.getFirstDayOfWeek());
         this.updateOption('header', 'startViewDate', this.getStartViewDate());
         this.createAppointmentPopupForm();
         break;
