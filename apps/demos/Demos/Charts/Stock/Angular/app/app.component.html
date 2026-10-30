@@ -1,4 +1,6 @@
 <dx-toolbar>
+  <dxi-toolbar-item location="before" text="Stock Price" cssClass="chart-title">
+  </dxi-toolbar-item>
   <dxi-toolbar-item
     location="after"
     widget="dxButton"
@@ -14,13 +16,13 @@
   <dxi-toolbar-item
     location="after"
     widget="dxButton"
-    [options]="zoomInButtonOptions"
+    [options]="zoomOutButtonOptions"
   >
   </dxi-toolbar-item>
   <dxi-toolbar-item
     location="after"
     widget="dxButton"
-    [options]="zoomOutButtonOptions"
+    [options]="zoomInButtonOptions"
   >
   </dxi-toolbar-item>
   <dxi-toolbar-item
@@ -29,8 +31,14 @@
     [options]="resetZoomButtonOptions"
   >
   </dxi-toolbar-item>
+  <dxi-toolbar-item
+    location="after"
+    widget="dxDropDownButton"
+    [options]="exportButtonOptions"
+  >
+  </dxi-toolbar-item>
 </dx-toolbar>
-<dx-chart id="chart" title="Stock Price" [dataSource]="stockPrices">
+<dx-chart id="chart" [dataSource]="stockPrices" [resizePanesOnZoom]="true">
   <dxi-chart-series
     name="E-Mart"
     openValueField="o"
@@ -67,12 +75,11 @@
     [minVisualRangeLength]="minVisualRange"
   >
     <dxo-chart-label
-      format="MMM dd"
       overlappingBehavior="rotate"
       [rotationAngle]="30"
+      [customizeText]="customizeLabelText"
     ></dxo-chart-label>
   </dxo-chart-argument-axis>
-  <dxo-chart-export [enabled]="true"></dxo-chart-export>
   <dxo-chart-tooltip
     [enabled]="true"
     [format]="{ type: 'currency', precision: 2 }"

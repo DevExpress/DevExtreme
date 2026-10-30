@@ -16,8 +16,8 @@ $(() => {
   const initialStart = new Date(rangeMin);
 
   const chart = $('#chart').dxChart({
-    title: 'Stock Price',
     dataSource: data,
+    resizePanesOnZoom: true,
     commonSeriesSettings: { argumentField: 'date', type: 'stock' },
     series: [{
       name: 'E-Mart',
@@ -44,12 +44,14 @@ $(() => {
       minVisualRangeLength,
       visualRange: { startValue: initialStart, endValue: initialEnd },
       label: {
-        format: 'MMM dd',
         overlappingBehavior: 'rotate',
         rotationAngle: 30,
+        customizeText({ value }) {
+          const isMidnight = value.getHours() === 0 && value.getMinutes() === 0;
+          return DevExpress.localization.formatDate(value, isMidnight ? 'MMM dd' : 'shortTime');
+        },
       },
     },
-    export: { enabled: true },
     tooltip: {
       enabled: true,
       location: 'edge',
@@ -106,13 +108,26 @@ $(() => {
     setRange(initialStart.getTime(), initialEnd.getTime());
   }
 
+  const exportItems = [
+    { text: 'Print' },
+    ...['PNG', 'PDF', 'JPEG', 'GIF', 'SVG'].map((format) => ({
+      text: `${format} file`,
+      format,
+    })),
+  ];
+
   $('#toolbar').dxToolbar({
     items: [
+      {
+        location: 'before',
+        text: 'Stock Price',
+        cssClass: 'chart-title',
+      },
       {
         location: 'after',
         widget: 'dxButton',
         options: {
-          icon: 'chevronleft',
+          icon: 'arrowleft',
           hint: 'Pan Left',
           elementAttr: { 'aria-label': 'Pan Left' },
           onClick: () => pan(-1),
@@ -122,7 +137,7 @@ $(() => {
         location: 'after',
         widget: 'dxButton',
         options: {
-          icon: 'chevronright',
+          icon: 'arrowright',
           hint: 'Pan Right',
           elementAttr: { 'aria-label': 'Pan Right' },
           onClick: () => pan(1),
@@ -132,20 +147,20 @@ $(() => {
         location: 'after',
         widget: 'dxButton',
         options: {
-          icon: 'plus',
-          hint: 'Zoom In',
-          elementAttr: { 'aria-label': 'Zoom In' },
-          onClick: () => zoom(zoomFactor),
+          icon: 'zoomoutoutline',
+          hint: 'Zoom Out',
+          elementAttr: { 'aria-label': 'Zoom Out' },
+          onClick: () => zoom(1 / zoomFactor),
         },
       },
       {
         location: 'after',
         widget: 'dxButton',
         options: {
-          icon: 'minus',
-          hint: 'Zoom Out',
-          elementAttr: { 'aria-label': 'Zoom Out' },
-          onClick: () => zoom(1 / zoomFactor),
+          icon: 'zoominoutline',
+          hint: 'Zoom In',
+          elementAttr: { 'aria-label': 'Zoom In' },
+          onClick: () => zoom(zoomFactor),
         },
       },
       {
@@ -156,6 +171,27 @@ $(() => {
           hint: 'Reset Zoom',
           elementAttr: { 'aria-label': 'Reset Zoom' },
           onClick: resetZoom,
+        },
+      },
+      {
+        location: 'after',
+        widget: 'dxDropDownButton',
+        options: {
+          icon: 'export',
+          hint: 'Exporting/Printing',
+          elementAttr: { 'aria-label': 'Exporting/Printing' },
+          stylingMode: 'text',
+          useSelectMode: false,
+          dropDownOptions: { width: 100 },
+          displayExpr: 'text',
+          items: exportItems,
+          onItemClick: ({ itemData }) => {
+            if (itemData.format) {
+              chart.exportTo('file', itemData.format);
+            } else {
+              chart.print();
+            }
+          },
         },
       },
     ],

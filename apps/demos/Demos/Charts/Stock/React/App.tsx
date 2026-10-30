@@ -1,4 +1,6 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, {
+  useCallback, useMemo, useRef, useState,
+} from 'react';
 import Chart, {
   CommonSeriesSettings,
   Series,
@@ -11,13 +13,15 @@ import Chart, {
   ZoomAndPan,
   ScrollBar,
   Legend,
-  Export,
   Tooltip,
 } from 'devextreme-react/chart';
-import type { ChartTypes } from 'devextreme-react/chart';
+import type { ChartRef, ChartTypes } from 'devextreme-react/chart';
 import type { VisualRange } from 'devextreme-react/common/charts';
 import type { ButtonTypes } from 'devextreme-react/button';
+import type { DropDownButtonTypes } from 'devextreme-react/drop-down-button';
 import Toolbar, { Item } from 'devextreme-react/toolbar';
+import { formatDate } from 'devextreme/localization';
+import 'devextreme/ui/drop_down_button';
 import { dataSource } from './data.ts';
 
 const dayMs = 24 * 60 * 60 * 1000;
@@ -26,6 +30,11 @@ const zoomFactor = 0.75;
 const minVisualRangeLength = { days: 3 };
 const minVisibleSpanMs = minVisualRangeLength.days * dayMs;
 const tooltipFormat = { type: 'currency', precision: 2 } as const;
+const exportFormats = ['PNG', 'PDF', 'JPEG', 'GIF', 'SVG'] as const;
+const exportItems = [
+  { text: 'Print' },
+  ...exportFormats.map((format) => ({ text: `${format} file`, format })),
+];
 
 const initialEnd = new Date(1994, 3, 29, 12);
 
@@ -57,6 +66,13 @@ function getNextRange(start: number, end: number): VisualRange {
   };
 }
 
+function customizeLabelText({ value }: { value?: Date | number | string }): string {
+  const date = value as Date;
+  const isMidnight = date.getHours() === 0 && date.getMinutes() === 0;
+
+  return formatDate(date, isMidnight ? 'MMM dd' : 'shortTime');
+}
+
 function customizeTooltip(arg: ChartTypes.PointInfo): Record<string, string> {
   if (!('openValue' in arg)) {
     return { text: '' };
@@ -73,6 +89,8 @@ function customizeTooltip(arg: ChartTypes.PointInfo): Record<string, string> {
 }
 
 function App() {
+  const chartRef = useRef<ChartRef>(null);
+
   const [visualRange, setVisualRange] = useState<VisualRange>({
     startValue: initialStart,
     endValue: initialEnd,
@@ -104,28 +122,28 @@ function App() {
   }, []);
 
   const panLeftButtonOptions = useMemo<ButtonTypes.Properties>(() => ({
-    icon: 'chevronleft',
+    icon: 'arrowleft',
     hint: 'Pan Left',
     elementAttr: { 'aria-label': 'Pan Left' },
     onClick: () => pan(-1),
   }), [pan]);
 
   const panRightButtonOptions = useMemo<ButtonTypes.Properties>(() => ({
-    icon: 'chevronright',
+    icon: 'arrowright',
     hint: 'Pan Right',
     elementAttr: { 'aria-label': 'Pan Right' },
     onClick: () => pan(1),
   }), [pan]);
 
   const zoomInButtonOptions = useMemo<ButtonTypes.Properties>(() => ({
-    icon: 'plus',
+    icon: 'zoominoutline',
     hint: 'Zoom In',
     elementAttr: { 'aria-label': 'Zoom In' },
     onClick: () => zoom(zoomFactor),
   }), [zoom]);
 
   const zoomOutButtonOptions = useMemo<ButtonTypes.Properties>(() => ({
-    icon: 'minus',
+    icon: 'zoomoutoutline',
     hint: 'Zoom Out',
     elementAttr: { 'aria-label': 'Zoom Out' },
     onClick: () => zoom(1 / zoomFactor),
@@ -138,19 +156,40 @@ function App() {
     onClick: resetZoom,
   }), [resetZoom]);
 
+  const exportButtonOptions = useMemo<DropDownButtonTypes.Properties>(() => ({
+    icon: 'export',
+    hint: 'Exporting/Printing',
+    elementAttr: { 'aria-label': 'Exporting/Printing' },
+    stylingMode: 'text',
+    useSelectMode: false,
+    dropDownOptions: { width: 100 },
+    displayExpr: 'text',
+    items: exportItems,
+    onItemClick: ({ itemData }) => {
+      if (itemData.format) {
+        chartRef.current?.instance().exportTo('file', itemData.format);
+      } else {
+        chartRef.current?.instance().print();
+      }
+    },
+  }), []);
+
   return (
     <>
       <Toolbar>
+        <Item location="before" text="Stock Price" cssClass="chart-title" />
         <Item location="after" widget="dxButton" options={panLeftButtonOptions} />
         <Item location="after" widget="dxButton" options={panRightButtonOptions} />
-        <Item location="after" widget="dxButton" options={zoomInButtonOptions} />
         <Item location="after" widget="dxButton" options={zoomOutButtonOptions} />
+        <Item location="after" widget="dxButton" options={zoomInButtonOptions} />
         <Item location="after" widget="dxButton" options={resetZoomButtonOptions} />
+        <Item location="after" widget="dxDropDownButton" options={exportButtonOptions} />
       </Toolbar>
       <Chart
         id="chart"
-        title="Stock Price"
+        ref={chartRef}
         dataSource={dataSource}
+        resizePanesOnZoom={true}
       >
         <CommonSeriesSettings argumentField="date" type="stock" />
         <Series
@@ -175,9 +214,9 @@ function App() {
           minVisualRangeLength={minVisualRangeLength}
         >
           <Label
-            format="MMM dd"
             overlappingBehavior="rotate"
             rotationAngle={30}
+            customizeText={customizeLabelText}
           />
         </ArgumentAxis>
         <ValueAxis tickInterval={1} position="right">
@@ -186,7 +225,6 @@ function App() {
             <Format precision={0} type="currency" />
           </Label>
         </ValueAxis>
-        <Export enabled={true} />
         <Tooltip
           enabled={true}
           format={tooltipFormat}
