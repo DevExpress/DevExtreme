@@ -238,6 +238,9 @@ export interface EditingRowsViewExtension {
 
   // eslint-disable-next-line @typescript-eslint/method-signature-style -- overridden by methods
   handleRowDblClickByEditing(e: ViewRowEvent): boolean;
+
+  // eslint-disable-next-line @typescript-eslint/method-signature-style -- overridden by methods
+  editCellPrepared($cell: dxElementWrapper): void;
 }
 
 export interface EditingDataControllerExtension {

@@ -1,3 +1,10 @@
+/**
+ * @timezone UTC
+ */
+
+// NOTE: addLastInGroup groups by UTC day, while the items below are built from local
+// dates, so the expectations only hold where the local day matches the UTC day.
+
 import { describe, expect, it } from '@jest/globals';
 
 import { addLastInGroup } from './add_last_in_group';

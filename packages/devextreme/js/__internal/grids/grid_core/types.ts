@@ -1,6 +1,6 @@
 /* eslint-disable spellcheck/spell-checker */
 import type {
-  ColumnCustomizeTextArg, GridBase, GridBaseOptions, SelectionBase,
+  ColumnCustomizeTextArg, GridBase, GridBaseOptions, SelectionBase, SelectionColumnDisplayMode,
 } from '@js/common/grids';
 import type { PropertyType } from '@js/core';
 import type { Component } from '@js/core/component';
@@ -209,6 +209,7 @@ type TemporarlyOptionsTakenFromTreeList = Pick<TreeListdOptions<unknown, RowKey>
 >;
 interface InternalSelection extends SelectionBase {
   alwaysSelectByShift?: boolean;
+  showCheckBoxesMode?: SelectionColumnDisplayMode;
 }
 
 export interface InternalGridOptions extends
