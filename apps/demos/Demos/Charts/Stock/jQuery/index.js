@@ -17,6 +17,7 @@ $(() => {
 
   const chart = $('#chart').dxChart({
     dataSource: data,
+    resizePanesOnZoom: true,
     commonSeriesSettings: { argumentField: 'date', type: 'stock' },
     series: [{
       name: 'E-Mart',

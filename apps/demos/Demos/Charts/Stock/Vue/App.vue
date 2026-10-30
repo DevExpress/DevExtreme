@@ -40,6 +40,7 @@
     id="chart"
     ref="chart"
     :data-source="dataSource"
+    :resize-panes-on-zoom="true"
   >
     <DxCommonSeriesSettings
       argument-field="date"

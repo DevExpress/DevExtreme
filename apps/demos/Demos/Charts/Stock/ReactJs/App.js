@@ -208,6 +208,7 @@ function App() {
         id="chart"
         ref={chartRef}
         dataSource={dataSource}
+        resizePanesOnZoom={true}
       >
         <CommonSeriesSettings
           argumentField="date"
