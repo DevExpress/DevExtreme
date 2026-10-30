@@ -27,7 +27,7 @@ import type {
 import type { DataSourceController } from '@ts/grids/grid_core/data_source/data_source_controller';
 import type { RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
 import type { ModuleType, OptionChanged } from '@ts/grids/grid_core/types';
-import type { VirtualItemsCount } from '@ts/grids/grid_core/virtual_data_loader/types';
+import type { ItemSizes, VirtualItemsCount } from '@ts/grids/grid_core/virtual_data_loader/types';
 
 import gridCoreUtils from '../../utils';
 import {
@@ -38,6 +38,7 @@ import {
 import { VirtualScrollController } from '../m_virtual_scrolling_core';
 import type {
   ChangedLoadParams,
+  ContentOffsetType,
   VirtualScrollDataOptions,
   VirtualScrollingDataSourceAdapter,
 } from '../types';
@@ -62,8 +63,8 @@ export interface VirtualScrollingDataControllerExtension {
   setViewportPosition: (position: number) => void;
   setContentItemSizes: (sizes: number[]) => void;
   getItemSize: () => number | undefined;
-  getItemSizes: () => Record<number, number> | undefined;
-  getContentOffset: (type?: 'begin' | 'end') => number | undefined;
+  getItemSizes: () => ItemSizes | undefined;
+  getContentOffset: (type?: ContentOffsetType) => number | undefined;
   updateViewport: () => void;
   loadIfNeed: () => void;
 }

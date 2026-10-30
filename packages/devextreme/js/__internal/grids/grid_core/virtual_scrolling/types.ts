@@ -4,6 +4,7 @@ import type DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/data
 import type { RowsView } from '@ts/grids/grid_core/views/rows_view';
 import type { ViewDataChange } from '@ts/grids/grid_core/views/types';
 import type {
+  ItemSizes,
   VirtualDataLoaderDataOptions,
   VirtualItemsCount,
 } from '@ts/grids/grid_core/virtual_data_loader/types';
@@ -19,6 +20,8 @@ export interface ChangedLoadParams {
 export interface VirtualScrollingResizingControllerExtension {
   hasResizeTimeout: () => boolean;
 }
+
+export type ContentOffsetType = 'begin' | 'end';
 
 export interface ViewportParams {
   skip: number;
@@ -49,7 +52,7 @@ export interface VirtualScrollingDataSourceAdapterExtension {
   };
   beginPageIndex: () => number;
   virtualItemsCount: () => VirtualItemsCount | undefined;
-  getContentOffset: (type?: 'begin' | 'end') => number;
+  getContentOffset: (type?: ContentOffsetType) => number;
   getVirtualContentSize: () => number;
   setContentItemSizes: (sizes: number[]) => void;
   setViewportPosition: (position: number) => DeferredObj<unknown>;
@@ -59,7 +62,7 @@ export interface VirtualScrollingDataSourceAdapterExtension {
   viewportSize: (size?: number) => number;
   viewportItemSize: (size?: number) => number;
   getItemSize: () => number;
-  getItemSizes: () => Record<number, number>;
+  getItemSizes: () => ItemSizes;
   loadIfNeed: () => void;
 }
 

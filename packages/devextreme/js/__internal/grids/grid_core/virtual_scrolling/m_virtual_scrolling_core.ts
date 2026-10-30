@@ -18,6 +18,7 @@ import type {
 } from '@ts/grids/grid_core/types';
 import type {
   ChangedCallback,
+  ItemSizes,
   VirtualItemsCount,
 } from '@ts/grids/grid_core/virtual_data_loader/types';
 import type Scrollable from '@ts/ui/scroll_view/scrollable';
@@ -30,6 +31,7 @@ import {
   SCROLLING_MODE_VIRTUAL,
 } from './const';
 import type {
+  ContentOffsetType,
   ExternalScrollable,
   ExternalScrollers,
   ViewportParams,
@@ -156,7 +158,7 @@ class VirtualScrollController<
 
   private _isScrollingBack: boolean;
 
-  private _itemSizes: Record<number, number>;
+  private _itemSizes: ItemSizes;
 
   private readonly _isVirtual: boolean;
 
@@ -188,7 +190,7 @@ class VirtualScrollController<
     this._dataLoader = new VirtualDataLoader(this, this._dataOptions);
   }
 
-  public getItemSizes(): Record<number, number> {
+  public getItemSizes(): ItemSizes {
     return this._itemSizes;
   }
 
@@ -365,7 +367,7 @@ class VirtualScrollController<
     return offset + itemCount * this._viewportItemSize * this._sizeRatio;
   }
 
-  public getContentOffset(type?: 'begin' | 'end'): number {
+  public getContentOffset(type?: ContentOffsetType): number {
     const isEnd = type === 'end';
     const virtualItemsCount = this.virtualItemsCount();
 
