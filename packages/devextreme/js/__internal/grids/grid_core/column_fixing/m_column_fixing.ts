@@ -25,7 +25,7 @@ import type { ColumnHeadersView } from '../column_headers/column_headers';
 import type {
   ColumnsResizerViewController,
   DraggingHeaderViewController,
-} from '../columns_resizing_reordering/m_columns_resizing_reordering';
+} from '../columns_resizing_reordering/columns_resizing_reordering';
 import type { Coordinates } from '../columns_resizing_reordering/types';
 import type { ResizingController } from '../grid_view/grid_view';
 import type { KeyboardNavigationController } from '../keyboard_navigation/m_keyboard_navigation';

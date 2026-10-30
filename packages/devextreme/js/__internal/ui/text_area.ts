@@ -250,17 +250,52 @@ class TextArea<
   _getBoundaryHeight(optionName: 'minHeight' | 'maxHeight'): number | undefined {
     const { [optionName]: boundaryValue } = this.option();
 
-    if (isDefined(boundaryValue)) {
-      return typeof boundaryValue === 'number'
-        ? boundaryValue : Number(parseHeight(
-          boundaryValue,
-          // @ts-expect-error no parent when detached; read only for a percentage, as before
-          this.$element().get(0).parentElement,
-          this.$element().get(0),
-        ));
+    if (!isDefined(boundaryValue)) {
+      return undefined;
     }
 
-    return undefined;
+    if (typeof boundaryValue === 'number') {
+      return boundaryValue;
+    }
+
+    const element = this.$element().get(0);
+    // _renderDimensions has applied the option, so the browser resolves calc(), rem and inherit
+    const cssValue = getWindow().getComputedStyle(element)[optionName];
+
+    if (cssValue === 'none' || cssValue === 'auto') {
+      return undefined;
+    }
+
+    if (cssValue.endsWith('px')) {
+      return parseFloat(cssValue);
+    }
+
+    const height = cssValue.includes('(')
+      ? this._getPercentageFunctionHeight(cssValue)
+      : Number(parseHeight(
+        boundaryValue,
+        // @ts-expect-error no parent when detached; read only for a percentage, as before
+        element.parentElement,
+        element,
+      ));
+
+    return Number.isFinite(height) ? height : undefined;
+  }
+
+  _getPercentageFunctionHeight(cssValue: string): number {
+    const $element = this.$element();
+    const $probe = $('<div>')
+      .css({
+        position: 'absolute',
+        visibility: 'hidden',
+        height: $element.get(0).parentElement?.offsetHeight,
+      })
+      .appendTo($element);
+    const height = String($('<div>').css('height', cssValue).appendTo($probe).css('height'));
+
+    $probe.remove();
+
+    return height.endsWith('px') ? parseFloat(height) : NaN;
   }
 
   _renderInputType(): void {}

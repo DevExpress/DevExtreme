@@ -29,7 +29,7 @@ import type {
 } from '@ts/grids/grid_core/columns_controller/types';
 import type {
   ColumnsResizerViewController,
-} from '@ts/grids/grid_core/columns_resizing_reordering/m_columns_resizing_reordering';
+} from '@ts/grids/grid_core/columns_resizing_reordering/columns_resizing_reordering';
 import type {
   DataChange, ProcessedItem, RowWatch, UpdateChange, UpdateItemChange,
 } from '@ts/grids/grid_core/data_controller/types';

@@ -581,33 +581,31 @@ export function adjustVisualRange(options, visualRange, wholeRange, dataRange?) 
     };
   }
 
-  if (isDefined(rangeLength)) {
-    if (nonDiscrete) {
-      if (options.dataType === 'datetime' && !isNumeric(rangeLength)) {
-        rangeLength = dateToMilliseconds(rangeLength);
-      }
+  if (isDefined(rangeLength) && nonDiscrete) {
+    if (options.dataType === 'datetime' && !isNumeric(rangeLength)) {
+      rangeLength = dateToMilliseconds(rangeLength);
+    }
 
-      if (maxDefined && !minDefined || !maxDefined && !minDefined) {
-        isDefined(wholeRange.max) && (max = max > wholeRange.max ? wholeRange.max : max);
-        min = add(max, rangeLength, -1);
+    if (maxDefined && !minDefined || !maxDefined && !minDefined) {
+      isDefined(wholeRange.max) && (max = max > wholeRange.max ? wholeRange.max : max);
+      min = add(max, rangeLength, -1);
+    } else if (minDefined && !maxDefined) {
+      isDefined(wholeRange.min) && (min = min < wholeRange.min ? wholeRange.min : min);
+      max = add(min, rangeLength);
+    }
+  } else if (isDefined(rangeLength)) {
+    rangeLength = parseInt(rangeLength);
+    if (!isNaN(rangeLength) && isFinite(rangeLength)) {
+      rangeLength--;
+      if (!maxDefined && !minDefined) {
+        max = categories[categories.length - 1];
+        min = categories[categories.length - 1 - rangeLength];
       } else if (minDefined && !maxDefined) {
-        isDefined(wholeRange.min) && (min = min < wholeRange.min ? wholeRange.min : min);
-        max = add(min, rangeLength);
-      }
-    } else {
-      rangeLength = parseInt(rangeLength);
-      if (!isNaN(rangeLength) && isFinite(rangeLength)) {
-        rangeLength--;
-        if (!maxDefined && !minDefined) {
-          max = categories[categories.length - 1];
-          min = categories[categories.length - 1 - rangeLength];
-        } else if (minDefined && !maxDefined) {
-          const categoriesInfo = getCategoriesInfo(categories, min, undefined);
-          max = categoriesInfo.categories[rangeLength];
-        } else if (!minDefined && maxDefined) {
-          const categoriesInfo = getCategoriesInfo(categories, undefined, max);
-          min = categoriesInfo.categories[categoriesInfo.categories.length - 1 - rangeLength];
-        }
+        const categoriesInfo = getCategoriesInfo(categories, min, undefined);
+        max = categoriesInfo.categories[rangeLength];
+      } else if (!minDefined && maxDefined) {
+        const categoriesInfo = getCategoriesInfo(categories, undefined, max);
+        min = categoriesInfo.categories[categoriesInfo.categories.length - 1 - rangeLength];
       }
     }
   }
@@ -660,6 +658,9 @@ export function raiseToExt(value, base, allowNegatives = false, linearThreshold?
 }
 
 export function rangesAreEqual(range, rangeFromOptions) {
+  if (!isDefined(rangeFromOptions)) {
+    return false;
+  }
   if (Array.isArray(rangeFromOptions)) {
     return range.length === rangeFromOptions.length
     && range.every((item, i) => valueOf(item) === valueOf(rangeFromOptions[i]));

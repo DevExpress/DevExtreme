@@ -6,6 +6,7 @@ import {
   PRODUCT_KIND_ERROR,
   type Token,
   TokenKind,
+  TRIAL_EXPIRED_ERROR,
   VERIFICATION_ERROR,
 } from '../types';
 import {
@@ -13,7 +14,7 @@ import {
   RSA_PUBLIC_KEY_XML,
   SIGN_LENGTH,
 } from './const';
-import { findLatestDevExtremeVersion } from './license_info';
+import { findLatestDevExtremeVersion, getDevExtremeProductKinds, isTrialExpired } from './license_info';
 import { createProductInfo, type ProductInfo } from './product_info';
 import {
   dotNetTicksToMs,
@@ -24,6 +25,7 @@ import {
 
 interface ParsedProducts {
   products: ProductInfo[];
+  licenseId: string;
   errorToken?: ErrorToken;
 }
 
@@ -35,6 +37,7 @@ function productsFromString(encodedString: string): ParsedProducts {
   if (!encodedString) {
     return {
       products: [],
+      licenseId: '',
       errorToken: GENERAL_ERROR,
     };
   }
@@ -56,10 +59,12 @@ function productsFromString(encodedString: string): ParsedProducts {
 
     return {
       products,
+      licenseId: splitInfo[0],
     };
   } catch (error) {
     return {
       products: [],
+      licenseId: '',
       errorToken: DESERIALIZATION_ERROR,
     };
   }
@@ -68,6 +73,7 @@ function productsFromString(encodedString: string): ParsedProducts {
 export function parseDevExpressProductKey(
   productsLicenseSource: string,
   acceptAspNetEntitlement = false,
+  versionCode?: number,
 ): Token {
   if (!isProductOnlyLicense(productsLicenseSource)) {
     return GENERAL_ERROR;
@@ -87,6 +93,7 @@ export function parseDevExpressProductKey(
 
     const {
       products,
+      licenseId,
       errorToken,
     } = productsFromString(
       encodeString(productsPayload, shiftDecodeText),
@@ -96,19 +103,25 @@ export function parseDevExpressProductKey(
       return errorToken;
     }
 
+    const productKinds = getDevExtremeProductKinds(acceptAspNetEntitlement);
+
+    if (versionCode !== undefined && isTrialExpired({ products }, versionCode, productKinds)) {
+      return { ...TRIAL_EXPIRED_ERROR, licenseId };
+    }
+
     const maxVersionAllowed = findLatestDevExtremeVersion(
       { products },
       acceptAspNetEntitlement,
     );
 
     if (!maxVersionAllowed) {
-      return PRODUCT_KIND_ERROR;
+      return { ...PRODUCT_KIND_ERROR, licenseId };
     }
 
     return {
       kind: TokenKind.verified,
       payload: {
-        customerId: '',
+        licenseId,
         maxVersionAllowed,
         format: FORMAT,
       },

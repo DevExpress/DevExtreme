@@ -1,3 +1,4 @@
+import type { DeferredObj } from '@js/core/utils/deferred';
 import type { RowExpandingEvent } from '@js/ui/data_grid';
 import type { RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
 import type { ExecuteActionArgs } from '@ts/grids/grid_core/modules/types';
@@ -5,6 +6,13 @@ import type { RowKey } from '@ts/grids/grid_core/types';
 
 export type ChangeRowExpandArgs = ExecuteActionArgs<RowExpandingEvent<unknown, RowKey>>
   & { expanded: boolean };
+
+export interface GroupingDataControllerExtension {
+  isRowExpanded: (key: RowKey) => boolean;
+  changeRowExpand: (key: RowKey, isRowClick?: boolean) => DeferredObj<unknown>;
+  // eslint-disable-next-line @typescript-eslint/method-signature-style -- overridden by methods
+  changeRowExpandCore(key: RowKey): DeferredObj<unknown>;
+}
 
 export interface GroupItemData {
   key: unknown;

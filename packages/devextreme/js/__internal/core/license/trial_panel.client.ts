@@ -262,19 +262,8 @@ class DxLicense extends SafeHTMLElement {
       this.setAttribute(attributeNames.subscriptions, subscriptions);
     }
 
-    if (this._expired) {
-      this._subscriptionsSpan.innerText = this._getTrialExpiredEnding(subscriptions)
-        + this._getLicenseText();
-      return;
-    }
-
-    const subscriptionsText = subscriptions ? ` Included in Subscriptions: ${subscriptions}` : '';
-    const licenseText = this._getLicenseText();
-    if (subscriptionsText || licenseText) {
-      this._subscriptionsSpan.innerText = licenseText && subscriptionsText
-        ? `${subscriptionsText}.${licenseText}`
-        : `${subscriptionsText}${licenseText}`;
-    }
+    this._subscriptionsSpan.innerText = this._getContinueUseEnding(subscriptions)
+      + this._getLicenseText();
   }
 
   private _getLicenseText(): string {
@@ -284,7 +273,7 @@ class DxLicense extends SafeHTMLElement {
     return `${licenseId ? ` License ID: ${licenseId}.` : ''}${licenseSource ? ` License Source: ${licenseSource}` : ''}`;
   }
 
-  private _getTrialExpiredEnding(subscriptions: string | null): string {
+  private _getContinueUseEnding(subscriptions: string | null): string {
     const libraries = this.getAttribute(attributeNames.libraries);
     const subscriptionsText = `Included in Subscriptions: ${subscriptions}.`;
 
@@ -393,11 +382,10 @@ class DxLicense extends SafeHTMLElement {
     const contentContainer = document.createElement('div');
     contentContainer.style.cssText = this._contentStyles;
     contentContainer.append(
-      this._createSpan('For evaluation purposes only. Redistribution prohibited. Please '),
+      this._createSpan(`For evaluation purposes only (v${this.getAttribute(attributeNames.version)}). Redistribution prohibited. Please `),
       this._createLink('register', this.getAttribute(attributeNames.licensingDoc) as string),
-      this._createSpan(' an existing license or '),
+      this._createSpan(' a valid license or '),
       this._createLink('purchase a new license', this.getAttribute(attributeNames.buyNow) as string),
-      this._createSpan(` to continue use of DevExpress product libraries (v${this.getAttribute(attributeNames.version)}).`),
       this._createSubscriptionsSpan(),
     );
 
