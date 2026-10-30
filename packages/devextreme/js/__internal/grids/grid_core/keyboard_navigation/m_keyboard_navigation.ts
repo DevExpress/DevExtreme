@@ -37,7 +37,7 @@ import type {
 } from '@ts/grids/grid_core/adaptivity/types';
 import { CLASSES as COLUMNS_CONTROLLER_CLASSES } from '@ts/grids/grid_core/columns_controller/const';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
-import type { ColumnsResizerViewController } from '@ts/grids/grid_core/columns_resizing_reordering/m_columns_resizing_reordering';
+import type { ColumnsResizerViewController } from '@ts/grids/grid_core/columns_resizing_reordering/columns_resizing_reordering';
 import type { DataChange, ProcessedItem, RowIndexCorrection } from '@ts/grids/grid_core/data_controller/types';
 import type { DataSourceController } from '@ts/grids/grid_core/data_source/data_source_controller';
 import {
@@ -57,7 +57,7 @@ import { CLASSES as FILTER_ROW_CLASSES } from '@ts/grids/grid_core/filter_row/co
 import type { FocusController } from '@ts/grids/grid_core/focus/m_focus';
 import type { ResizingController } from '@ts/grids/grid_core/grid_view/grid_view';
 import { CLASSES as MASTER_DETAIL_CLASSES } from '@ts/grids/grid_core/master_detail/const';
-import type { SearchPanelViewController } from '@ts/grids/grid_core/search/m_search';
+import type { SearchPanelViewController } from '@ts/grids/grid_core/search/search';
 import { COMMAND_SELECT_CLASS } from '@ts/grids/grid_core/selection/const';
 import type { SelectionController } from '@ts/grids/grid_core/selection/m_selection';
 import type { Module, ModuleType, RowKey } from '@ts/grids/grid_core/types';
