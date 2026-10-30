@@ -1209,13 +1209,11 @@ export class SimulatedStrategy<
     const $target = $(target as Element);
     const $scrollable = $target.closest(`.${SCROLLABLE_SIMULATED_CLASS}:not(.dx-state-disabled)`);
     const targetScrollable = $scrollable.length && $scrollable.data(SCROLLABLE_STRATEGY);
-    // @ts-expect-error ts-error
     if (hoveredScrollable && hoveredScrollable !== targetScrollable) {
       hoveredScrollable._cursorLeaveHandler();
     }
 
     if (targetScrollable) {
-      // @ts-expect-error ts-error
       targetScrollable._cursorEnterHandler();
     }
   }

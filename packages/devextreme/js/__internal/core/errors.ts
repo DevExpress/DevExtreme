@@ -66,6 +66,10 @@ export default errorUtils({
 
   E0123: 'Disallowed property name in expression: \'{0}\'',
 
+  E0124: 'Your 30-day trial has expired (v{0}). Use and Redistribution prohibited. '
+        + 'Please register a valid license (https://devexpress.com/DX1004) or purchase a new license (https://devexpress.com/BUY) '
+        + 'to continue use of the following DevExpress product libraries: {1} - Included in Subscriptions: {2}.{3}',
+
   W0000: '\'{0}\' is deprecated in {1}. {2}',
 
   W0001: '{0} - \'{1}\' option is deprecated in {2}. {3}',

@@ -1,6 +1,9 @@
 import $ from 'jquery';
 import { MARKERS, ROUTES } from './utils.js';
 import Map from 'ui/map';
+import { logger } from 'core/utils/console';
+import Provider from '__internal/ui/map/provider';
+import DynamicProvider from '__internal/ui/map/provider.dynamic';
 import GoogleStaticProvider from '__internal/ui/map/provider.google_static';
 import ajaxMock from '../../../helpers/ajaxMock.js';
 
@@ -778,8 +781,74 @@ QUnit.test('routes option change should not render incorrect routes', function(a
 });
 
 
+QUnit.module('Dynamic provider batch errors', () => {
+    ['Markers', 'Routes'].forEach(failedItems => {
+        QUnit.test(`render waits for both collections after add${failedItems} fails`, async function(assert) {
+            const reason = new Error('Collection failed');
+            let finishPending;
+            const pending = new Promise(resolve => { finishPending = resolve; });
+            const provider = {
+                _renderImpl: () => Promise.resolve(),
+                _waitForAll: Provider.prototype._waitForAll,
+                _applyFunctionIfNeeded: Provider.prototype._applyFunctionIfNeeded,
+                addMarkers: () => failedItems === 'Markers' ? Promise.reject(reason) : pending,
+                addRoutes: () => failedItems === 'Routes' ? Promise.reject(reason) : pending
+            };
+            let settled = false;
+            const render = Provider.prototype.render.call(provider, [{}], [{}]);
+            const rejection = assert.rejects(render, reason, 'render preserves the collection error');
+            render.then(() => { settled = true; }, () => { settled = true; });
+
+            await new Promise(resolve => setTimeout(resolve));
+
+            assert.notOk(settled, 'render waits for the other collection');
+            finishPending();
+            await rejection;
+        });
+    });
+
+    ['Markers', 'Routes'].forEach(items => {
+        ['reject', 'throw'].forEach(failure => {
+            QUnit.test(`add${items} waits for pending items after ${failure}`, async function(assert) {
+                const reason = new Error('First item failed');
+                const laterReason = new Error('Second item failed');
+                let rejectPending;
+                const pending = new Promise((_resolve, reject) => { rejectPending = reject; });
+                pending.catch(() => {});
+                const addItem = sinon.stub().callsFake(options => {
+                    if(options.first) {
+                        if(failure === 'throw') {
+                            throw reason;
+                        }
+                        return Promise.reject(reason);
+                    }
+                    return pending;
+                });
+                const provider = {
+                    [`_add${items === 'Markers' ? 'Marker' : 'Route'}`]: addItem,
+                    _waitForAll: Provider.prototype._waitForAll,
+                    _fitBounds: sinon.spy()
+                };
+                let settled = false;
+                const batch = Promise.resolve().then(() => DynamicProvider.prototype[`add${items}`].call(provider, [{ first: true }, {}]));
+                const rejection = assert.rejects(batch, reason, 'the first error is preserved');
+                batch.then(() => { settled = true; }, () => { settled = true; });
+
+                await new Promise(resolve => setTimeout(resolve));
+
+                assert.ok(addItem.calledTwice, 'both items are processed');
+                assert.notOk(settled, 'the batch waits for the pending item');
+                rejectPending(laterReason);
+                await rejection;
+                assert.ok(provider._fitBounds.notCalled, 'a failed batch does not adjust the viewport');
+            });
+        });
+    });
+});
+
 QUnit.module('Change provider', {
     beforeEach: function() {
+        this.logError = sinon.stub(logger, 'error');
         const fakeURL = '/fakeGoogleUrl?';
 
         GoogleStaticProvider.remapConstant(fakeURL);
@@ -790,6 +859,7 @@ QUnit.module('Change provider', {
         });
     },
     afterEach: function() {
+        this.logError.restore();
         ajaxMock.clear();
     }
 });
@@ -827,6 +897,185 @@ QUnit.test('change provider and async options', function(assert) {
         });
     }).then(function(map) {
         assert.ok(map._asyncActionSuppressed);
+    });
+});
+
+['reject', 'throw'].forEach(failure => {
+    [false, true].forEach(queuedBeforeFailure => {
+        QUnit.test(`async queue continues after ${failure} (next action already queued: ${queuedBeforeFailure})`, async function(assert) {
+            const reason = new Error('Provider operation failed');
+            const provider = {
+                updateZoom: sinon.stub().callsFake(() => {
+                    if(failure === 'throw') {
+                        throw reason;
+                    }
+                    return Promise.reject(reason);
+                }),
+                updateCenter: sinon.stub().returns(Promise.resolve())
+            };
+            const map = {
+                _provider: provider,
+                _lastAsyncAction: Promise.resolve(),
+                _triggerReadyAction: sinon.spy(),
+                _triggerUpdateAction: sinon.spy()
+            };
+            const failedAction = Map.prototype._queueAsyncAction.call(map, 'updateZoom');
+            let nextAction;
+            if(queuedBeforeFailure) {
+                nextAction = Map.prototype._queueAsyncAction.call(map, 'updateCenter');
+                nextAction.catch(() => {});
+            }
+
+            await assert.rejects(failedAction, reason, 'the failed action keeps its original error');
+            if(!queuedBeforeFailure) {
+                nextAction = Map.prototype._queueAsyncAction.call(map, 'updateCenter');
+            }
+            await nextAction;
+
+            assert.ok(provider.updateZoom.calledOnce, 'failed action is not retried');
+            assert.ok(provider.updateCenter.calledOnce, 'the next action is executed');
+            assert.ok(map._triggerReadyAction.notCalled, 'no ready event is raised');
+            assert.ok(map._triggerUpdateAction.calledOnce, 'only the successful action raises an update');
+            assert.ok(this.logError.calledOnceWithExactly(reason), 'the original error is logged once');
+        });
+    });
+    QUnit.test(`failed render skips queued provider updates after ${failure}`, async function(assert) {
+        const reason = new Error('Provider initialization failed');
+        const provider = {
+            render: sinon.stub().callsFake(() => {
+                if(failure === 'throw') {
+                    throw reason;
+                }
+                return Promise.reject(reason);
+            }),
+            updateZoom: sinon.stub().returns(Promise.resolve())
+        };
+        const map = {
+            _provider: provider,
+            _lastAsyncAction: Promise.resolve(),
+            _triggerReadyAction: sinon.spy(),
+            _triggerUpdateAction: sinon.spy()
+        };
+        const render = Map.prototype._queueAsyncAction.call(map, 'render');
+        const update = Map.prototype._queueAsyncAction.call(map, 'updateZoom');
+        update.catch(() => {});
+
+        await assert.rejects(render, reason, 'render keeps its original error');
+        await update;
+
+        assert.ok(provider.updateZoom.notCalled, 'an uninitialized provider is not updated');
+        assert.ok(map._triggerReadyAction.notCalled, 'failed render does not raise ready');
+        assert.ok(map._triggerUpdateAction.notCalled, 'skipped update does not raise updated');
+        assert.ok(this.logError.calledOnceWithExactly(reason), 'skipped updates do not log the render error again');
+    });
+});
+
+['resolve', 'reject'].forEach((completion) => {
+    QUnit.test(`async ${completion} from a replaced provider is ignored`, function(assert) {
+        let completeAction;
+        const actionResult = new Promise((resolve, reject) => {
+            completeAction = completion === 'resolve' ? resolve : reject;
+        });
+        const replacedProvider = {
+            updateZoom: sinon.stub().returns(actionResult)
+        };
+        const map = {
+            _provider: replacedProvider,
+            _lastAsyncAction: Promise.resolve(),
+            _triggerReadyAction: sinon.spy(),
+            _triggerUpdateAction: sinon.spy(),
+        };
+        const action = Map.prototype._queueAsyncAction.call(map, 'updateZoom');
+
+        return Promise.resolve().then(() => {
+            assert.ok(replacedProvider.updateZoom.calledOnce, 'action starts on the captured provider');
+            map._provider = {};
+            completeAction(completion === 'resolve' ? true : new Error('stale provider'));
+
+            return action;
+        }).then(() => {
+            assert.ok(map._triggerReadyAction.notCalled, 'stale action does not raise onReady');
+            assert.ok(map._triggerUpdateAction.notCalled, 'stale action does not raise onUpdated');
+            assert.ok(this.logError.notCalled, 'a replaced provider does not log stale errors');
+        });
+    });
+});
+
+QUnit.test('a rejection after disposal is not logged', async function(assert) {
+    let rejectAction;
+    const provider = {
+        updateZoom: () => new Promise((_resolve, reject) => {
+            rejectAction = reject;
+        })
+    };
+    const map = {
+        _provider: provider,
+        _lastAsyncAction: Promise.resolve()
+    };
+    const action = Map.prototype._queueAsyncAction.call(map, 'updateZoom');
+    await Promise.resolve();
+    map._disposed = true;
+    rejectAction(new Error('Disposed provider'));
+    await action;
+
+    assert.ok(this.logError.notCalled, 'a disposed map does not log stale errors');
+});
+
+QUnit.test('queued action is not started after its provider is replaced', function(assert) {
+    let continueQueue;
+    const replacedProvider = {
+        updateZoom: sinon.spy()
+    };
+    const map = {
+        _provider: replacedProvider,
+        _lastAsyncAction: new Promise(resolve => {
+            continueQueue = resolve;
+        }),
+        _triggerReadyAction: sinon.spy(),
+        _triggerUpdateAction: sinon.spy(),
+    };
+    const action = Map.prototype._queueAsyncAction.call(map, 'updateZoom');
+    map._provider = {};
+    continueQueue();
+
+    return action.then(() => {
+        assert.ok(replacedProvider.updateZoom.notCalled, 'action captured for the old provider is skipped');
+    });
+});
+
+[
+    ['addMarker', 'markers', MARKERS[0], 'onMarkerAdded'],
+    ['removeMarker', 'markers', MARKERS[0], 'onMarkerRemoved'],
+    ['addRoute', 'routes', ROUTES[0], 'onRouteAdded'],
+    ['removeRoute', 'routes', ROUTES[0], 'onRouteRemoved']
+].forEach(([method, option, item, event]) => {
+    QUnit.test(`${method} rejects its public promise when ${event} throws`, async function(assert) {
+        const reason = new Error('Item handler failed');
+        const map = await new Promise(resolve => {
+            new Map($('#map'), {
+                provider: 'googleStatic',
+                [option]: method.startsWith('remove') ? [item] : [],
+                onReady: ({ component }) => resolve(component)
+            });
+        });
+        map.option(event, () => { throw reason; });
+        const onResolved = sinon.spy();
+        const onRejected = sinon.spy();
+        const updateZoom = sinon.spy(map._provider, 'updateZoom');
+        const operation = map[method](item);
+        operation.done(onResolved).fail(onRejected);
+        const batch = map._lastAsyncAction;
+        map.option('zoom', 8);
+
+        await assert.rejects(batch, reason, 'the batch retains the original error');
+        await map._lastAsyncAction;
+
+        assert.strictEqual(operation.state(), 'rejected', 'the public promise does not remain pending');
+        assert.ok(onRejected.calledOnceWithExactly(reason), 'the public promise rejects with the same error');
+        assert.strictEqual(onRejected.firstCall?.thisValue, map, 'the rejection retains the component context');
+        assert.ok(onResolved.notCalled, 'a failed operation does not resolve');
+        assert.ok(updateZoom.calledOnce, 'the next queued update is executed');
+        assert.ok(this.logError.calledOnceWithExactly(reason), 'the original error is logged once');
     });
 });
 
@@ -879,6 +1128,59 @@ QUnit.module('disposed widget', {
                     done();
                 }
             );
+        });
+    });
+});
+
+QUnit.module('provider update operations', () => {
+    ['Markers', 'Routes'].forEach(collection => {
+        const updateMethod = `update${collection}`;
+        const addMethod = `add${collection}`;
+        const removeMethod = `remove${collection}`;
+
+        QUnit.test(`${updateMethod} waits for removal and returns the addition result`, async function(assert) {
+            const provider = new Provider(null, null);
+            const removedOptions = [{}];
+            const addedOptions = [{}];
+            const addedResult = [false, [{}]];
+            let completeRemoval;
+            const removal = new Promise(resolve => { completeRemoval = resolve; });
+            const remove = sinon.stub(provider, removeMethod).returns(removal);
+            const add = sinon.stub(provider, addMethod).returns(Promise.resolve(addedResult));
+
+            const pending = provider[updateMethod](removedOptions, addedOptions);
+            assert.ok(remove.calledOnceWithExactly(removedOptions), 'removal receives its options');
+            assert.ok(add.notCalled, 'addition waits for removal to finish');
+            completeRemoval(true);
+
+            assert.strictEqual(await pending, addedResult, 'addition result is preserved');
+            assert.ok(add.calledOnceWithExactly(addedOptions), 'addition receives its options');
+        });
+
+        ['add', 'remove'].forEach(operation => {
+            QUnit.test(`${updateMethod} rejects when ${operation} fails`, async function(assert) {
+                const provider = new Provider(null, null);
+                const reason = new Error('Provider operation failed');
+                const remove = sinon.stub(provider, removeMethod).returns(Promise.resolve());
+                const add = sinon.stub(provider, addMethod).returns(Promise.resolve());
+                const failingOperation = operation === 'add' ? add : remove;
+                failingOperation.callsFake(() => Promise.reject(reason));
+
+                await assert.rejects(provider[updateMethod]([{}], [{}]), reason, 'the update rejects with the original error');
+                if(operation === 'remove') {
+                    assert.ok(add.notCalled, 'failed removal prevents addition');
+                }
+            });
+        });
+
+        QUnit.test(`${updateMethod} skips empty batches`, async function(assert) {
+            const provider = new Provider(null, null);
+            const remove = sinon.spy(provider, removeMethod);
+            const add = sinon.spy(provider, addMethod);
+
+            assert.strictEqual(await provider[updateMethod]([], []), undefined, 'empty update completes without a result');
+            assert.ok(remove.notCalled, 'empty removal is skipped');
+            assert.ok(add.notCalled, 'empty addition is skipped');
         });
     });
 });

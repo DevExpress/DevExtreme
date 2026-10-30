@@ -9,11 +9,15 @@ import type Map from './map';
 import type { MapProperties } from './map';
 import type { LocationOption, MarkerOptions, RouteOptions } from './provider.dynamic';
 
+type KeyedMapProvider = Exclude<MapProvider, 'osm'>;
+
 abstract class Provider {
   _mapWidget!: Map;
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   _map?: any;
+
+  _isInitialized = false;
 
   _$container!: dxElementWrapper;
 
@@ -34,14 +38,27 @@ abstract class Provider {
     return '#0000FF';
   }
 
+  protected async _waitForAll<T>(promises: Promise<T>[]): Promise<T[]> {
+    try {
+      return await Promise.all(promises);
+    } catch (error) {
+      await Promise.allSettled(promises);
+      throw error;
+    }
+  }
+
   render(
     markerOptions: MarkerOptions[],
     routeOptions: RouteOptions[],
   ): Promise<unknown> {
-    return this._renderImpl().then(() => Promise.all([
-      this._applyFunctionIfNeeded('addMarkers', markerOptions),
-      this._applyFunctionIfNeeded('addRoutes', routeOptions),
-    ]).then(() => true));
+    this._isInitialized = false;
+    return this._renderImpl().then(() => {
+      this._isInitialized = true;
+      return this._waitForAll([
+        this._applyFunctionIfNeeded('addMarkers', markerOptions),
+        this._applyFunctionIfNeeded('addRoutes', routeOptions),
+      ]).then(() => true);
+    });
   }
 
   _renderImpl(): Promise<unknown> {
@@ -53,6 +70,10 @@ abstract class Provider {
   abstract updateMapType(): Promise<unknown>;
 
   updateDisabled(): Promise<unknown> {
+    return Promise.resolve();
+  }
+
+  updateFocus(): Promise<void> {
     return Promise.resolve();
   }
 
@@ -71,17 +92,9 @@ abstract class Provider {
     markerOptionsToRemove: MarkerOptions[],
     markerOptionsToAdd: MarkerOptions[],
   ): Promise<unknown> {
-    return new Promise((resolve) => {
-      // eslint-disable-next-line @typescript-eslint/no-floating-promises
-      this._applyFunctionIfNeeded('removeMarkers', markerOptionsToRemove)
-        .then((removeValue) => {
-          // eslint-disable-next-line @typescript-eslint/no-floating-promises
-          this._applyFunctionIfNeeded('addMarkers', markerOptionsToAdd)
-            .then((addValue) => {
-              resolve(addValue || removeValue);
-            });
-        });
-    });
+    return this._applyFunctionIfNeeded('removeMarkers', markerOptionsToRemove)
+      .then((removeValue) => this._applyFunctionIfNeeded('addMarkers', markerOptionsToAdd)
+        .then((addValue) => addValue || removeValue));
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -100,17 +113,9 @@ abstract class Provider {
     routeOptionsToRemove: RouteOptions[],
     routeOptionsToAdd: RouteOptions[],
   ): Promise<unknown> {
-    return new Promise((resolve) => {
-      // eslint-disable-next-line @typescript-eslint/no-floating-promises
-      this._applyFunctionIfNeeded('removeRoutes', routeOptionsToRemove)
-        .then((removeValue) => {
-          // eslint-disable-next-line @typescript-eslint/no-floating-promises
-          this._applyFunctionIfNeeded('addRoutes', routeOptionsToAdd)
-            .then((addValue) => {
-              resolve(addValue || removeValue);
-            });
-        });
-    });
+    return this._applyFunctionIfNeeded('removeRoutes', routeOptionsToRemove)
+      .then((removeValue) => this._applyFunctionIfNeeded('addRoutes', routeOptionsToAdd)
+        .then((addValue) => addValue || removeValue));
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -152,7 +157,7 @@ abstract class Provider {
     return undefined;
   }
 
-  _keyOption(providerName: MapProvider): string {
+  _keyOption(providerName: KeyedMapProvider): string {
     const key = this._option('apiKey') ?? '';
     if (typeof key === 'string') {
       return key;

@@ -5,6 +5,10 @@ const CLASSES = {
   popupWrapper: 'dx-popup-wrapper',
   popupTitle: 'dx-popup-title',
   overlayContent: 'dx-overlay-content',
+  popupContent: 'dx-popup-content',
+  closeButton: 'dx-closebutton',
+  toolbar: 'dx-toolbar',
+  button: 'dx-button',
 };
 
 const SELECTORS = {
@@ -33,8 +37,21 @@ export class PopupModel {
     return wrapper?.querySelector(`.${CLASSES.overlayContent}`) as HTMLElement;
   }
 
+  public getContent(): HTMLElement {
+    return this.getOverlayContent()?.querySelector(`.${CLASSES.popupContent}`) as HTMLElement;
+  }
+
   public getRole(): string | null {
     return this.getOverlayContent()?.getAttribute('role') ?? null;
+  }
+
+  public getCloseButton(): HTMLElement | null {
+    return this.getOverlayContent()?.querySelector(`.${CLASSES.closeButton}`) ?? null;
+  }
+
+  public getToolbarButtons(): HTMLElement[] {
+    const buttons = this.getOverlayContent()?.querySelectorAll<HTMLElement>(`.${CLASSES.toolbar} .${CLASSES.button}`);
+    return Array.from(buttons ?? []);
   }
 
   public isVisible(): boolean {

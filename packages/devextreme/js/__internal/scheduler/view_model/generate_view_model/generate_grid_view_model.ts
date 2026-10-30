@@ -81,14 +81,13 @@ export const generateGridViewModel = (
   );
   const step5 = maybeSplit(step4, hasAllDayPanel, (entities, panelName) => {
     const innerStep = addGeometry(entities, optionManager.getGeometryOptions(panelName));
-    return innerStep;
+    return cropByVirtualScreen(innerStep, optionManager.getVirtualCropOptions(panelName));
   });
-  const step6 = cropByVirtualScreen(step5, optionManager.getVirtualCropOptions());
 
-  const step7 = addDirection(step6, 'horizontal', viewOrientation);
-  const step8 = addEmptiness(step7, {
+  const step6 = addDirection(step5, 'horizontal', viewOrientation);
+  const step7 = addEmptiness(step6, {
     isTimelineView, isAdaptivityEnabled, isMonthView, appointmentMinHeight,
   });
 
-  return step8;
+  return step7;
 };

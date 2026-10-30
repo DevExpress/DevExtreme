@@ -1089,7 +1089,6 @@ class Overlay<
       const $reverseElement = $elements?.eq(elementsCount - i) ?? null;
 
       if (!$first && $currentElement) {
-        // @ts-expect-error is should can get function as callback
         const isTabbableAndNotOverlay = $currentElement?.not(`.${OVERLAY_CONTENT_CLASS}`).is(selectors.tabbable);
         if (isTabbableAndNotOverlay) {
           $first = $currentElement;
@@ -1097,7 +1096,6 @@ class Overlay<
       }
 
       if (!$last && $reverseElement) {
-        // @ts-expect-error is should can get function as callback
         const isTabbableAndNotOverlay = $reverseElement?.not(`.${OVERLAY_CONTENT_CLASS}`).is(selectors.tabbable);
         if (isTabbableAndNotOverlay) {
           $last = $reverseElement;
@@ -1286,7 +1284,6 @@ class Overlay<
 
     let isHidden = false;
 
-    // @ts-expect-error add should can get dxElementWrapper
     $parent.add($parent.parents()).each((index, element) => {
       const $element = $(element);
 

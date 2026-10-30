@@ -792,6 +792,10 @@ class Popup<
     });
   }
 
+  _getAriaTarget(): dxElementWrapper {
+    return this.$overlayContent();
+  }
+
   protected _getAriaRole(): string {
     return 'dialog';
   }

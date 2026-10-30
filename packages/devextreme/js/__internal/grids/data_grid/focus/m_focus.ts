@@ -1,6 +1,7 @@
 import { equalByValue } from '@js/core/utils/common';
 import { compileGetter } from '@js/core/utils/data';
 import { Deferred } from '@js/core/utils/deferred';
+import type { GroupingDataControllerExtension } from '@ts/grids/data_grid/grouping/types';
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
 import type { DataSourceController } from '@ts/grids/grid_core/data_source/data_source_controller';
 import type { FocusDataSourceControllerExtension } from '@ts/grids/grid_core/focus/extenders/focus_data_source_controller';
@@ -9,7 +10,7 @@ import type { KeyboardNavigationController } from '@ts/grids/grid_core/keyboard_
 import type { ModuleType } from '@ts/grids/grid_core/types';
 
 import gridCore from '../core';
-import type { GroupingDataControllerExtension, GroupingDataSourceAdapter } from '../grouping/m_grouping';
+import type { GroupingDataSourceAdapter } from '../grouping/m_grouping';
 import { createGroupFilter } from '../utils';
 
 const MAX_SAFE_INTEGER = Number.MAX_SAFE_INTEGER || 9007199254740991/* IE11 */;

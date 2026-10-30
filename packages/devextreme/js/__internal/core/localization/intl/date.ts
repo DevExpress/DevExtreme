@@ -24,7 +24,10 @@ interface DateArgs {
 const SYMBOLS_TO_REMOVE_REGEX = /[\u200E\u200F]/g;
 const NARROW_NO_BREAK_SPACE_REGEX = /[\u202F]/g;
 
+const DEFAULT_TIME_SEPARATOR = ':';
+
 const formattersCache: Record<string, DateFormatter> = {};
+const timeSeparatorsCache: Record<string, string> = {};
 const getFormatter = (
   format: Intl.DateTimeFormatOptions,
   formatLocale = localizationCoreUtils.locale(),
@@ -149,16 +152,17 @@ const intlFormats = {
   year: { year: 'numeric' },
 };
 
-Object.defineProperty(intlFormats, 'shortdateshorttime', {
-  get() {
-    const formatLocale = getEffectiveFormatLocale(undefined, 'datetime');
-    const defaultOptions = Intl.DateTimeFormat(formatLocale).resolvedOptions();
+const getShortDateShortTimeFormat = (formatLocale: string): Intl.DateTimeFormatOptions => {
+  const defaultOptions = Intl.DateTimeFormat(formatLocale).resolvedOptions();
 
-    return {
-      year: defaultOptions.year, month: defaultOptions.month, day: defaultOptions.day, hour: 'numeric', minute: 'numeric',
-    };
-  },
-});
+  return {
+    year: defaultOptions.year,
+    month: defaultOptions.month,
+    day: defaultOptions.day,
+    hour: 'numeric',
+    minute: 'numeric',
+  } as Intl.DateTimeFormatOptions;
+};
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-return
 const getIntlFormat = (format): Intl.DateTimeFormatOptions => typeof format === 'string' && intlFormats[format.toLowerCase()];
@@ -168,7 +172,9 @@ const formatWithIntlPreset = (
   presetName: string,
   formatLocale: string,
 ): string | undefined => {
-  const intlFormat = getIntlFormat(presetName);
+  const intlFormat = presetName.toLowerCase() === 'shortdateshorttime'
+    ? getShortDateShortTimeFormat(formatLocale)
+    : getIntlFormat(presetName);
 
   if (!intlFormat) {
     return undefined;
@@ -342,9 +348,7 @@ export default {
         return intlPresetResult;
       }
 
-      const dateParts = formatLocale === localizationCoreUtils.locale()
-        ? this
-        : bindDatePartsToLocale(this, formatLocale);
+      const dateParts = bindDatePartsToLocale(this, formatLocale);
 
       // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       return this.callBase(date, resolvedFormat, dateParts);
@@ -369,10 +373,8 @@ export default {
     }
 
     const formatLocale = format ? getDateFormatLocale(format) : localizationCoreUtils.locale();
-    const dateParts = formatLocale === localizationCoreUtils.locale()
-      ? this
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-      : bindDatePartsToLocale(this, formatLocale);
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+    const dateParts = bindDatePartsToLocale(this, formatLocale);
 
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return this.callBase(dateString, formatter ?? format, dateParts);
@@ -461,16 +463,25 @@ export default {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return this.callBase.apply(this, [format]);
   },
-  getTimeSeparator(): string {
-    const formatLocale = getEffectiveFormatLocale(undefined, 'time');
-    const formatOptions: Intl.DateTimeFormatOptions = {
-      hour: 'numeric',
-      minute: 'numeric',
-      hour12: false,
-    };
-    return normalizeNumerals(
-      formatDateTime(new Date(2001, 1, 1, 11, 11), formatOptions, formatLocale),
-    ).replace(/\d/g, '');
+  getTimeSeparator(locale?: string): string {
+    const formatLocale = locale ?? getEffectiveFormatLocale(undefined, 'time');
+
+    if (!timeSeparatorsCache[formatLocale]) {
+      const parts = new Intl.DateTimeFormat(formatLocale, {
+        hour: 'numeric',
+        minute: 'numeric',
+        hour12: false,
+      }).formatToParts(new Date(2001, 1, 1, 11, 11));
+      const hourIndex = parts.findIndex(({ type }) => type === 'hour');
+      const separatorPart = parts[hourIndex + 1];
+      const separator = separatorPart?.type === 'literal'
+        ? separatorPart.value.replace(SYMBOLS_TO_REMOVE_REGEX, '')
+        : '';
+
+      timeSeparatorsCache[formatLocale] = separator || DEFAULT_TIME_SEPARATOR;
+    }
+
+    return timeSeparatorsCache[formatLocale];
   },
 
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types

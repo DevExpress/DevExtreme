@@ -1,12 +1,10 @@
 import globals from 'globals';
-import babelParser from '@babel/eslint-parser';
 import spellcheckDevextreme from 'eslint-config-devextreme/spell-check';
 import testcafeConfig from 'eslint-config-devextreme/testcafe';
 import typescriptConfig from 'eslint-config-devextreme/typescript';
 import javascriptConfig from 'eslint-config-devextreme/javascript';
 import spellcheckPlugin from 'eslint-plugin-spellcheck';
 import noOnlyTests from 'eslint-plugin-no-only-tests';
-import deprecation from 'eslint-plugin-deprecation';
 import reactPlugin from 'eslint-plugin-react';
 import reactHooks from 'eslint-plugin-react-hooks';
 import reactPerf from 'eslint-plugin-react-perf';
@@ -15,7 +13,6 @@ import vuePlugin from 'eslint-plugin-vue';
 import vueParser from 'vue-eslint-parser';
 import tsParser from '@typescript-eslint/parser';
 import js from '@eslint/js';
-import { fixupPluginRules } from '@eslint/compat';
 import { FlatCompat } from '@eslint/eslintrc';
 import stylistic from '@stylistic/eslint-plugin';
 import { fileURLToPath } from 'node:url';
@@ -39,7 +36,6 @@ export default [
       'node_modules',
       'bundles',
       'coverage',
-      'publish-demos',
       'Demos/**/testcafe-test-code.js',
       'shared/empty-file.ts',
       'Demos/**/Vue/**/*.html',
@@ -51,29 +47,21 @@ export default [
     ],
   },
 
-  // Plugins and parser
+  // Plugins and language options
   {
     plugins: {
       spellcheck: spellcheckPlugin,
       'no-only-tests': noOnlyTests,
       '@stylistic': stylistic,
       jest,
-      'deprecation': fixupPluginRules(deprecation),
     },
     languageOptions: {
       globals: {
         ...globals.browser,
         ...globals.es6,
       },
-      parser: babelParser,
       ecmaVersion: 2018,
       sourceType: 'module',
-      parserOptions: {
-        requireConfigFile: false,
-        babelOptions: {
-          presets: ['@babel/preset-react'],
-        },
-      },
     },
   },
 
@@ -108,7 +96,6 @@ export default [
           'timestamps',
           'urls',
           'whitespace',
-          'yargs',
           'treshold', // should be updated to 'threshold' in the codebase
           'callstack',
           'Deprecations',
@@ -191,6 +178,14 @@ export default [
   // .js and .jsx files
   {
     files: ['**/*.js', '**/*.jsx'],
+    languageOptions: {
+      ecmaVersion: 'latest',
+      parserOptions: {
+        ecmaFeatures: {
+          jsx: true,
+        },
+      },
+    },
     rules: {
       'no-unused-vars': 'error',
     }
@@ -222,7 +217,7 @@ export default [
       'no-underscore-dangle': 0,
       'operator-assignment': 0,
 
-      'deprecation/deprecation': 'error',
+      '@typescript-eslint/no-deprecated': 'error',
 
       '@typescript-eslint/naming-convention': 0,
       '@typescript-eslint/no-throw-literal': 0,

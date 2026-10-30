@@ -1,4 +1,5 @@
 import type { DeferredObj } from '@js/core/utils/deferred';
+import type { DxEvent } from '@js/events';
 
 import type { Column } from '../columns_controller/types';
 import type { ChangedEvent, OperationTypes, RawItemData } from '../data_source_adapter/types';
@@ -54,6 +55,7 @@ export interface GeneratedItem {
   oldData?: RawItemData;
   modifiedValues?: unknown[];
   removed?: boolean;
+  visible?: boolean;
 }
 
 export interface ProcessedItem extends GeneratedItem {
@@ -61,7 +63,6 @@ export interface ProcessedItem extends GeneratedItem {
   oldValues?: unknown[];
   dataIndex?: number;
   isSelected?: boolean;
-  visible?: boolean;
   isExpanded?: boolean;
   loadIndex?: number;
   rowIndex?: number;
@@ -125,7 +126,7 @@ export type DataChange = | UpdateChange
   | (DataChangeBase & { changeType: 'pageIndex' })
   | (DataChangeBase & { changeType: 'loadingAll' })
   | (DataChangeBase & { changeType: 'refresh', isLiveUpdate: boolean; isOptionChanged: boolean })
-  | (DataChangeBase & { changeType: 'refresh', event: unknown; virtualColumnsScrolling: boolean })
+  | (DataChangeBase & { changeType: 'refresh', event?: DxEvent; virtualColumnsScrolling: boolean })
   | (DataChangeBase & { changeType: 'refresh', useProcessedItemsCache: boolean; cancelEmptyChanges: boolean });
 
 export interface UpdateItemChange {

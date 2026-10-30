@@ -9,7 +9,7 @@ import {
   parseVersion,
 } from '../../utils/version';
 import {
-  BUY_NOW_LINK, LICENSE_KEY_PLACEHOLDER,
+  BUY_NOW_LINK, LIBRARIES, LICENSE_KEY_PLACEHOLDER,
   LICENSING_DOC_LINK, RTM_MIN_PATCH_VERSION, SUBSCRIPTION_NAMES,
 } from './const';
 import { isProductOnlyLicense, parseDevExpressProductKey } from './lcp_key_validation/lcp_key_validator';
@@ -35,13 +35,14 @@ function hasAspNetVersionAssertion(): boolean {
 export function parseLicenseKey(
   encodedKey: string | undefined,
   acceptAspNetEntitlement = false,
+  versionCode?: number,
 ): Token {
   if (encodedKey === undefined) {
     return GENERAL_ERROR;
   }
 
   if (isProductOnlyLicense(encodedKey)) {
-    return parseDevExpressProductKey(encodedKey, acceptAspNetEntitlement);
+    return parseDevExpressProductKey(encodedKey, acceptAspNetEntitlement, versionCode);
   }
 
   return GENERAL_ERROR;
@@ -55,10 +56,21 @@ function hasLicensePrefix(licenseKey: string, prefix: string): boolean {
   return licenseKey.trim().startsWith(prefix);
 }
 
-function displayTrialPanel(): void {
+function displayTrialPanel(trialExpired: boolean, licenseId?: string): void {
   const buyNowLink = config().buyNowLink ?? BUY_NOW_LINK;
   const licensingDocLink = config().licensingDocLink ?? LICENSING_DOC_LINK;
-  showTrialPanel(buyNowLink, licensingDocLink, fullVersion, SUBSCRIPTION_NAMES);
+  showTrialPanel(
+    buyNowLink,
+    licensingDocLink,
+    fullVersion,
+    SUBSCRIPTION_NAMES,
+    undefined,
+    {
+      trialExpired,
+      libraries: LIBRARIES,
+      licenseId,
+    },
+  );
 }
 
 function getLicenseCheckParams({
@@ -88,11 +100,18 @@ function getLicenseCheckParams({
     }
 
     const acceptAspNetEntitlement = hasAspNetVersionAssertion();
-    const license = parseLicenseKey(licenseKey, acceptAspNetEntitlement);
+    const license = parseLicenseKey(licenseKey, acceptAspNetEntitlement, major * 10 + minor);
 
     if (license.kind === TokenKind.corrupted) {
+      if (license.error === 'trial-expired') {
+        return {
+          preview, error: 'E0124', warningType: 'trial-expired', licenseId: license.licenseId,
+        };
+      }
       if (license.error === 'product-kind') {
-        return { preview, error: 'W0021', warningType: 'no-devextreme-license' };
+        return {
+          preview, error: 'W0021', warningType: 'no-devextreme-license', licenseId: license.licenseId,
+        };
       }
       return { preview, error: 'W0021', warningType: 'invalid-key' };
     }
@@ -111,6 +130,7 @@ function getLicenseCheckParams({
         error: 'W0020',
         warningType: 'version-mismatch',
         maxVersionAllowed: license.payload.maxVersionAllowed,
+        licenseId: license.payload.licenseId,
       };
     }
 
@@ -131,14 +151,14 @@ export function validateLicense(licenseKey: string, versionStr: string = fullVer
   assertedVersionsCompatible(version);
 
   const {
-    error, warningType, maxVersionAllowed,
+    error, warningType, maxVersionAllowed, licenseId,
   } = getLicenseCheckParams({
     licenseKey,
     version,
   });
 
   if (error) {
-    displayTrialPanel();
+    displayTrialPanel(warningType === 'trial-expired', licenseId);
   }
 
   if (error) {
@@ -149,7 +169,12 @@ export function validateLicense(licenseKey: string, versionStr: string = fullVer
           requiredVersion: `${version.major}.${version.minor}`,
         }
         : undefined;
-      logLicenseWarning(warningType, versionStr, versionInfo);
+      logLicenseWarning(
+        warningType,
+        versionStr,
+        versionInfo,
+        licenseId ? { licenseId, licenseKey: licenseKey.trim() } : undefined,
+      );
     } else {
       errors.log(error);
     }

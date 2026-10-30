@@ -178,6 +178,7 @@ export default class TableResizingModule extends BaseModule {
       this.quill.off('text-change', this._quillTextChangeHandler);
     }
 
+    eventsEngine.off(this.editorInstance._getContent(), SCROLL_EVENT);
     eventsEngine.on(
       this.editorInstance._getContent(),
       SCROLL_EVENT,
@@ -189,7 +190,7 @@ export default class TableResizingModule extends BaseModule {
   }
 
   _detachEvents(): void {
-    eventsEngine.off(this.editorInstance._getContent(), MODULE_NAMESPACE);
+    eventsEngine.off(this.editorInstance._getContent(), SCROLL_EVENT);
     if (this._quillTextChangeHandler) {
       this.quill.off('text-change', this._quillTextChangeHandler);
       this._quillTextChangeHandler = undefined;
@@ -294,7 +295,6 @@ export default class TableResizingModule extends BaseModule {
   _createResizeFrames($tables: dxElementWrapper): void {
     this._framesForTables = new Map();
 
-    // @ts-expect-error each() is typed for callbacks that return a boolean
     $tables.each((index, table) => {
       const $table = $(table);
       const $lastTable = this._tableResizeFrames[index]?.$table;
@@ -357,7 +357,6 @@ export default class TableResizingModule extends BaseModule {
   }
 
   _detachSeparatorEvents($lineSeparators: dxElementWrapper): void {
-    // @ts-expect-error each() is typed for callbacks that return a boolean
     $lineSeparators.each((i, $lineSeparator) => {
       eventsEngine.off($lineSeparator, POINTERDOWN_EVENT);
     });

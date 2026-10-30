@@ -173,7 +173,7 @@ class LayoutStrategy {
 
     each($items, function renderEachItem(this: Element): void {
       const $item = $(this);
-      const item = $item.data(BOX_ITEM_DATA_KEY) as unknown as BoxItemData;
+      const item = $item.data<BoxItemData>(BOX_ITEM_DATA_KEY);
 
       $item.css({ display: `${flexPropPrefix}flex` })
         .css(MAXSIZE_MAP[direction], item.maxSize ?? 'none')

@@ -26,8 +26,17 @@
             :items="showScrollbarModes"
             :input-attr="{ 'aria-label': 'Show Scrollbar Mode' }"
             v-model:value="showScrollbar"
+            :disabled="useNative"
             value-expr="value"
             display-expr="text"
+          />
+        </div>
+        <div class="option">
+          <DxCheckBox
+            id="use-native"
+            v-model:value="useNative"
+            text="Use browser scrolling logic"
+            @value-changed="onUseNativeChanged"
           />
         </div>
         <div class="option">
@@ -48,12 +57,14 @@
         <div class="option">
           <DxCheckBox
             v-model:value="scrollByContent"
+            :disabled="useNative"
             text="Scroll by content"
           />
         </div>
         <div class="option">
           <DxCheckBox
             v-model:value="scrollByThumb"
+            :disabled="useNative"
             text="Scroll by thumb"
           />
         </div>
@@ -62,13 +73,14 @@
   </div>
 </template>
 <script setup lang="ts">
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import { DxScrollView, type DxScrollViewTypes } from 'devextreme-vue/scroll-view';
 import { DxSelectBox } from 'devextreme-vue/select-box';
 import { DxCheckBox, type DxCheckBoxTypes } from 'devextreme-vue/check-box';
 import { longText } from './data.ts';
 
 const content = ref(longText);
+const useNative = ref<boolean>(false);
 const pullDown = ref(false);
 const showScrollbarModes = ref([
   {
@@ -92,6 +104,10 @@ const showScrollbar = ref<DxScrollViewTypes.Properties['showScrollbar']>('onScro
 const scrollByContent = ref(true);
 const scrollByThumb = ref(true);
 const scrollViewWidget = ref();
+
+onMounted(() => {
+  useNative.value = scrollViewWidget.value.instance.option('useNative');
+});
 
 let updateContentTimer: ReturnType<typeof setTimeout>;
 function updateContent(args: DxScrollViewTypes.ReachBottomEvent, eventName: string) {
@@ -117,6 +133,12 @@ function onValueChanged(args: DxCheckBoxTypes.ValueChangedEvent) {
     'onReachBottom',
     args.value ? updateBottomContent : null,
   );
+}
+function onUseNativeChanged(args: DxCheckBoxTypes.ValueChangedEvent) {
+  scrollViewWidget.value.instance.option('useNative', args.value);
+  if (args.value && showScrollbar.value === 'never') {
+    showScrollbar.value = 'onScroll';
+  }
 }
 </script>
 <style>

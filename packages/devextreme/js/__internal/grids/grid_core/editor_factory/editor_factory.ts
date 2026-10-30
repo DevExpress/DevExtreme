@@ -15,10 +15,10 @@ import {
 } from '@js/core/utils/size';
 import type { DxEvent } from '@js/events';
 import EditorFactoryMixin from '@js/ui/shared/ui.editor_factory_mixin';
-import type { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/m_column_headers';
+import type { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/column_headers';
 import type {
   ColumnsResizerViewController,
-} from '@ts/grids/grid_core/columns_resizing_reordering/m_columns_resizing_reordering';
+} from '@ts/grids/grid_core/columns_resizing_reordering/columns_resizing_reordering';
 import type { ValidatingController } from '@ts/grids/grid_core/validating/m_validating';
 import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
 
@@ -280,7 +280,6 @@ export class EditorFactory extends ViewControllerWithMixin {
       return this._$focusedElement;
     } if ($element) {
       // To prevent overlay flicking
-      // @ts-expect-error is() is typed without null and undefined
       if (!$element.is(this._$focusedElement)) {
         // TODO: this code should be before timeout
         // else focus is not will move to adaptive form by shift + tab key

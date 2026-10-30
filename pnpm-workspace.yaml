@@ -18,11 +18,14 @@ minimumReleaseAge: 1440 # ⚠️ Do NOT modify this.
 minimumReleaseAgeExclude:
   - "devextreme-internal-tools@22.1.0"
   - "@devexpress/design-tokens-internal@262.26.0"
+  - "devexpress-diagram"
+  - "devexpress-gantt"
+  - "@devexpress/utils"
 
 overrides:
   "js-yaml@<4.3.2": "^4.3.2"
   "rollup@<4.59.0": "^4.59.0"
-  qs: ">=6.16.0"
+  qs: ">=6.16.1"
   "minimatch@>=9.0.0 < 9.0.7": 9.0.9
   "micromatch@<4.0.8": ^4.0.8
   "esbuild@<0.28.1": ^0.28.1
@@ -38,15 +41,18 @@ overrides:
   "brace-expansion@<3.0.0": "^2.1.7"
   "brace-expansion@>=3.0.0 <5.0.12": "^5.0.12"
   engine.io@>=6.6.0 <6.6.10: ^6.6.10
-  fast-uri@>=3.0.0 <3.1.8: ^3.1.8
+  fast-uri@>=3.0.0 <3.1.9: ^3.1.9
   handlebars@<4.7.10: ^4.7.10
   moment@>=2.29.2 <2.31.0: ^2.31.0
   webpack-dev-middleware@<7.4.6: ^7.4.6
   webpack-dev-middleware@>=8.0.0 <8.3.0: ^8.3.0
   '@modelcontextprotocol/sdk@>=1.12.0 <1.31.0': ^1.31.0
+  '@hono/node-server@<2.1.3': ^2.1.3
   '@jridgewell/sourcemap-codec@<1.6.0': ^1.6.0
   '@vue/server-renderer@<3.5.42': ^3.5.42
   axios@>=1.0.0 <1.20.0: ^1.20.0
+  body-parser@<1.20.9: ^1.20.9
+  body-parser@>=2.0.0 <2.4.0: ^2.4.0
   compression@<1.8.2: ^1.8.2
   dompurify@<=3.4.16: ^3.4.17
   follow-redirects@>=1.16.0 <1.16.1: ^1.16.1
@@ -58,24 +64,27 @@ overrides:
   postcss-selector-parser@<7.1.6: ^7.1.6
   probe-image-size@<=7.3.0: ^7.3.1
   proxy-addr@>=1.1.0 <2.0.8: ^2.0.8
+  serialize-javascript@<7.1.3: ^7.1.3
   shell-quote@>=1.8.4 <1.11.0: ^1.11.0
   smol-toml@<=1.8.0: ^1.8.1
   source-map-js@>=1.0.0 <1.2.2: ^1.2.2
+  undici@>=7.0.0 <7.30.1: ^7.30.1
   "vite@>=7.0.0 <=7.3.6": ^7.3.7
   "vite@>=8.3.0 <=8.3.2": ^8.3.3
+  zod@>=4.0.0 <4.6.6: ^4.6.6
 catalog:
   axe-core: 4.13.0
   inferno: ^8.2.3
   inferno-create-element: ^8.2.3
   inferno-server: ^8.2.3
-  devexpress-diagram: 2.2.31
-  devexpress-gantt: 4.1.71
+  devexpress-diagram: 2.2.32
+  devexpress-gantt: 4.1.72
   devextreme-exceljs-fork: 4.4.13
   devextreme-quill: 1.8.0
-  "@eslint/js": 9.39.4
-  eslint: 9.39.4
+  "@eslint/js": 9.39.5
+  eslint: 9.39.5
   eslint-config-airbnb-typescript: 18.0.0
-  eslint-config-devextreme: 1.1.12
+  eslint-config-devextreme: 1.1.13
   eslint-plugin-i18n: 2.4.0
   eslint-plugin-import: 2.32.0
   eslint-plugin-jsx-a11y: 6.10.2
@@ -89,7 +98,6 @@ catalog:
   stylelint: 16.22.0
   testcafe: 3.7.5
   zod: 4.6.7
-  "@babel/eslint-parser": 7.29.7
   "@playwright/test": 1.62.1
   "@eslint-stylistic/metadata": ^2.13.0
   "@eslint/eslintrc": 3.3.7
@@ -140,3 +148,4 @@ allowBuilds:
 
 patchedDependencies:
   testcafe-hammerhead@31.7.8: patches/testcafe-hammerhead@31.7.8.patch
+  testcafe@3.7.5: patches/testcafe@3.7.5.patch

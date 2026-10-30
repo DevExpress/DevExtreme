@@ -19,6 +19,7 @@ jobs:
   check-should-run:
     name: Check if tests should run
     runs-on: ubuntu-latest
+    timeout-minutes: 6
     outputs:
       should-run: ${{ steps.check.outputs.should-run }}
       styles-changed: ${{ steps.changes.outputs.styles }}
@@ -45,7 +46,7 @@ jobs:
     needs: check-should-run
     if: needs.check-should-run.outputs.should-run == 'true'
 
-    runs-on: devextreme-shr2
+    runs-on: ${{ github.event_name == 'merge_group' && 'devextreme-shr2-ondemand' || 'devextreme-shr2' }}
     timeout-minutes: 15
 
     steps:
@@ -108,9 +109,9 @@ jobs:
     - name: Install dependencies
       run: pnpm install --frozen-lockfile
 
-    - name: Setup nx cache
-      id: setup-nx-cache
-      uses: actions/cache@v5
+    - name: Restore nx cache
+      id: restore-nx-cache
+      uses: actions/cache/restore@v5
       with:
         path: |
           .nx/cache
@@ -198,8 +199,20 @@ jobs:
         path: ./packages/devextreme/artifacts.zip
         retention-days: 1
 
+    - name: Save nx cache
+      if: github.event_name != 'pull_request' && github.event_name != 'merge_group'
+      uses: actions/cache/save@v5
+      with:
+        path: |
+          .nx/cache
+          .nx/workspace-data/*.db
+          .nx/workspace-data/*.db-wal
+          .nx/workspace-data/*.db-shm
+        key: ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-${{ github.sha }}
+
   determine-testcafe-matrix:
     runs-on: ubuntu-latest
+    timeout-minutes: 6
     name: Determine TestCafe matrix
     needs: check-should-run
     if: needs.check-should-run.outputs.should-run == 'true'
@@ -282,8 +295,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix: ${{ fromJson(needs.determine-testcafe-matrix.outputs.matrix) }}
-    runs-on: devextreme-shr2
-    timeout-minutes: 45
+    runs-on: ${{ github.event_name == 'merge_group' && 'devextreme-shr2-ondemand' || 'devextreme-shr2' }}
+    timeout-minutes: 12
 
     steps:
     - name: Set machine timezone
@@ -341,6 +354,7 @@ jobs:
         echo "Disk: $(df -h)"
 
     - name: Run TestCafe tests
+      timeout-minutes: 9
       working-directory: ./e2e/testcafe-devextreme
       env:
         NODE_OPTIONS: --max-old-space-size=8192
@@ -411,8 +425,8 @@ jobs:
       !cancelled() &&
       needs.check-should-run.outputs.should-run == 'true' &&
       needs.build.result == 'success'
-    runs-on: devextreme-shr2
-    timeout-minutes: 45
+    runs-on: ${{ github.event_name == 'merge_group' && 'devextreme-shr2-ondemand' || 'devextreme-shr2' }}
+    timeout-minutes: 8
 
     steps:
     - name: Set machine timezone
@@ -660,7 +674,7 @@ jobs:
 
     - name: Upload flaky candidates report
       if: ${{ !cancelled() }}
-      uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+      uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
       with:
         name: flaky-candidates
         path: ${{ github.workspace }}/e2e/testcafe-devextreme/artifacts/flaky-candidates.json
@@ -669,6 +683,7 @@ jobs:
 
   merge-artifacts:
     runs-on: ubuntu-latest
+    timeout-minutes: 6
     needs: [testcafe, testcafe-quarantine]
     if: ${{ always() }}
 

@@ -1,6 +1,6 @@
 /* eslint-disable spellcheck/spell-checker */
 import type {
-  ColumnCustomizeTextArg, GridBase, GridBaseOptions, SelectionBase,
+  ColumnCustomizeTextArg, GridBase, GridBaseOptions, SelectionBase, SelectionColumnDisplayMode,
 } from '@js/common/grids';
 import type { PropertyType } from '@js/core';
 import type { Component } from '@js/core/component';
@@ -18,6 +18,7 @@ import type { IntegrationOptions } from '@ts/core/template_manager';
 import type { ActionConfig } from '@ts/core/widget/component';
 import type { NormalizedDataSourceOptions, StoreLoadOptions } from '@ts/data/data_source/types';
 import type { TemplateModel } from '@ts/grids/grid_core/columns_controller/types';
+import type { ProcessedItem } from '@ts/grids/grid_core/data_controller/types';
 import type { EditingOptions } from '@ts/grids/grid_core/editing/types';
 import type { FilterValue } from '@ts/grids/grid_core/filter/types';
 import type { ModuleItem } from '@ts/grids/grid_core/modules/modules';
@@ -174,6 +175,8 @@ export interface InternalGrid extends GridBaseType {
   _createActionByOption: (optionName: string, config?: ActionConfig) => ModuleItemAction;
   isReady: () => boolean;
 
+  getVisibleRows: () => ProcessedItem[];
+
   _setOptionWithoutOptionChange: (name: string, value: unknown) => void;
 }
 
@@ -205,6 +208,7 @@ type TemporarlyOptionsTakenFromTreeList = Pick<TreeListdOptions<unknown, RowKey>
 >;
 interface InternalSelection extends SelectionBase {
   alwaysSelectByShift?: boolean;
+  showCheckBoxesMode?: SelectionColumnDisplayMode;
 }
 
 export interface InternalGridOptions extends
@@ -274,13 +278,13 @@ export type OptionChanged = OptionChangedFor<InternalGridOptions>;
 export interface Controllers {
   adaptiveColumns: import('./adaptivity/adaptivity').AdaptiveColumnsViewController;
   applyFilter: import('./filter_row/m_filter_row').ApplyFilterViewController;
-  columnChooser: import('./column_chooser/m_column_chooser').ColumnChooserController;
+  columnChooser: import('./column_chooser/column_chooser').ColumnChooserController;
   columns: import('./columns_controller/columns_controller').ColumnsController;
-  columnsResizer: import('./columns_resizing_reordering/m_columns_resizing_reordering').ColumnsResizerViewController;
-  contextMenu: import('./context_menu/m_context_menu').ContextMenuController;
+  columnsResizer: import('./columns_resizing_reordering/columns_resizing_reordering').ColumnsResizerViewController;
+  contextMenu: import('./context_menu/context_menu').ContextMenuController;
   data: import('./data_controller/data_controller').DataController;
   dataSource: import('./data_source/data_source_controller').DataSourceController;
-  draggingHeader: import('./columns_resizing_reordering/m_columns_resizing_reordering').DraggingHeaderViewController;
+  draggingHeader: import('./columns_resizing_reordering/columns_resizing_reordering').DraggingHeaderViewController;
   editing: import('./editing/editing').EditingController;
   editorFactory: import('./editor_factory/editor_factory').EditorFactory;
   errorHandling: import('./error_handling/error_handling_view_controller').ErrorHandlingViewController;
@@ -290,17 +294,17 @@ export interface Controllers {
   filterSync: import('./filter_sync/filter_sync').FilterSyncController;
   filterBuilder: import('./filter_builder/filter_builder').FilterBuilderController;
   focus: import('./focus/m_focus').FocusController;
-  headerFilter: import('./header_filter/m_header_filter').HeaderFilterController;
+  headerFilter: import('./header_filter/header_filter').HeaderFilterController;
   keyboardNavigation: import('./keyboard_navigation/m_keyboard_navigation').KeyboardNavigationController;
   columnFocusDispatcher: import('./keyboard_navigation/column_focus_dispatcher').ColumnFocusDispatcher;
   headersKeyboardNavigation: import('./keyboard_navigation/headers_keyboard_navigation').HeadersKeyboardNavigationController;
   resizing: import('./grid_view/grid_view').ResizingController;
   selection: import('./selection/m_selection').SelectionController;
   validating: import('./validating/m_validating').ValidatingController;
-  searchPanel: import('./search/m_search').SearchPanelViewController;
+  searchPanel: import('./search/search').SearchPanelViewController;
   stateStoring: import('./state_storing/state_storing_controller_core').StateStoringController;
   synchronizeScrolling: import('./grid_view/grid_view').SynchronizeScrollingController;
-  tablePosition: import('./columns_resizing_reordering/m_columns_resizing_reordering').TablePositionViewController;
+  tablePosition: import('./columns_resizing_reordering/columns_resizing_reordering').TablePositionViewController;
   toastViewController: import('./toast/toast_controller').ToastViewController;
   aiColumn: import('./ai_column/controllers/ai_column_controller').AIColumnController;
   aiPromptEditor: import('./ai_column/controllers/ai_prompt_editor_view_controller').AIPromptEditorViewController;
@@ -313,17 +317,17 @@ type ControllerTypes = {
 };
 
 export interface Views {
-  columnChooserView: import('./column_chooser/m_column_chooser').ColumnChooserView;
-  columnHeadersView: import('./column_headers/m_column_headers').ColumnHeadersView;
+  columnChooserView: import('./column_chooser/column_chooser').ColumnChooserView;
+  columnHeadersView: import('./column_headers/column_headers').ColumnHeadersView;
   headerPanel: import('./header_panel/header_panel').HeaderPanel;
-  headerFilterView: import('./header_filter/m_header_filter_core').HeaderFilterView;
+  headerFilterView: import('./header_filter/header_filter_core').HeaderFilterView;
   rowsView: import('./views/rows_view').RowsView;
-  pagerView: import('./pager/m_pager').PagerView;
-  columnsSeparatorView: import('./columns_resizing_reordering/m_columns_resizing_reordering').ColumnsSeparatorView;
-  blockSeparatorView: import('./columns_resizing_reordering/m_columns_resizing_reordering').BlockSeparatorView;
-  draggingHeaderView: import('./columns_resizing_reordering/m_columns_resizing_reordering').DraggingHeaderView;
-  trackerView: import('./columns_resizing_reordering/m_columns_resizing_reordering').TrackerView;
-  contextMenuView: import('./context_menu/m_context_menu').ContextMenuView;
+  pagerView: import('./pager/pager').PagerView;
+  columnsSeparatorView: import('./columns_resizing_reordering/columns_resizing_reordering').ColumnsSeparatorView;
+  blockSeparatorView: import('./columns_resizing_reordering/columns_resizing_reordering').BlockSeparatorView;
+  draggingHeaderView: import('./columns_resizing_reordering/columns_resizing_reordering').DraggingHeaderView;
+  trackerView: import('./columns_resizing_reordering/columns_resizing_reordering').TrackerView;
+  contextMenuView: import('./context_menu/context_menu').ContextMenuView;
   footerView: import('../data_grid/summary/m_summary').FooterView;
   gridView: import('./grid_view/grid_view').GridView;
   filterBuilderView: import('./filter_builder/filter_builder').FilterBuilderView;

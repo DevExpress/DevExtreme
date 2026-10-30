@@ -685,10 +685,10 @@ QUnit.module('Grid view', {
         const pagerView = gridView.getView('pagerView');
 
         // B232626
-        assert.roughEqual(columnsHeaderViewContainer[0].offsetHeight + rowsViewViewContainer[0].offsetHeight + pagerView.getHeight(), 200, 1.01);
+        assert.roughEqual(columnsHeaderViewContainer[0].offsetHeight + rowsViewViewContainer[0].offsetHeight + pagerView.getElementHeight(), 200, 1.01);
         assert.notStrictEqual(columnsHeaderViewContainer[0].offsetHeight, 0);
         assert.notStrictEqual(rowsViewViewContainer[0].offsetHeight, 0);
-        assert.notStrictEqual(pagerView.getHeight(), 0);
+        assert.notStrictEqual(pagerView.getElementHeight(), 0);
     });
 
     QUnit.test('RowsView height calculation when no data', function(assert) {

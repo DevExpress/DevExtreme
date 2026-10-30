@@ -214,7 +214,6 @@ export class EditPopupView extends View<Props> {
       onContentReady: (e): void => {
         // TODO: refactor
         setTimeout(() => {
-          // @ts-expect-error
           $(e.element).data('dxValidator')?.option('dataGetter', () => ({
             data: this.editingController.editingCard.peek()?.data,
             column,
