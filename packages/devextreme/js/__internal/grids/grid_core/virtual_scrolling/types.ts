@@ -2,6 +2,7 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import type DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/data_source_adapter';
 import type { RowsView } from '@ts/grids/grid_core/views/rows_view';
+import type { ViewDataChange } from '@ts/grids/grid_core/views/types';
 import type {
   VirtualDataLoaderDataOptions,
   VirtualItemsCount,
@@ -33,11 +34,6 @@ export interface VirtualScrollDataOptions extends VirtualDataLoaderDataOptions {
 
 export type ExternalScrollable = Scrollable | dxElementWrapper;
 
-export interface ScrollEventsStrategy {
-  on: (scrollable: ExternalScrollable, eventName: string, handler: () => void) => void;
-  off: (scrollable: ExternalScrollable, eventName: string, handler: () => void) => void;
-}
-
 export interface ExternalScrollers {
   scrollTo: (position: number) => void;
   dispose: () => void;
@@ -51,7 +47,7 @@ export interface VirtualScrollingDataSourceAdapterExtension {
     (): number;
     (count: number): void;
   };
-  beginPageIndex: (...args: [] | [number]) => number;
+  beginPageIndex: () => number;
   virtualItemsCount: () => VirtualItemsCount | undefined;
   getContentOffset: (type?: 'begin' | 'end') => number;
   getVirtualContentSize: () => number;
@@ -69,6 +65,8 @@ export interface VirtualScrollingDataSourceAdapterExtension {
 
 export type VirtualScrollingDataSourceAdapter = DataSourceAdapter
 & VirtualScrollingDataSourceAdapterExtension;
+
+export type VirtualScrollingDataChange = ViewDataChange & { removeCount?: number };
 
 export interface VirtualScrollingRowsViewExtension {
   _updateContentPosition: (isRender?: boolean) => void;

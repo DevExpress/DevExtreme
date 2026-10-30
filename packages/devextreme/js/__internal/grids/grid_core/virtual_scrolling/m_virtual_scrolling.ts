@@ -21,7 +21,6 @@ import type { ResizingController } from '@ts/grids/grid_core/grid_view/grid_view
 import type { InternalGrid, ModuleType, RowKey } from '@ts/grids/grid_core/types';
 import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
 import type { RowsView } from '@ts/grids/grid_core/views/rows_view';
-import type { ViewDataChange } from '@ts/grids/grid_core/views/types';
 import type { VirtualItemsCount } from '@ts/grids/grid_core/virtual_data_loader/types';
 
 import type {
@@ -43,6 +42,7 @@ import { subscribeToExternalScrollers, VirtualScrollController } from './m_virtu
 import type {
   ExternalScrollers,
   VirtualScrollDataOptions,
+  VirtualScrollingDataChange,
   VirtualScrollingDataSourceAdapter,
   VirtualScrollingResizingControllerExtension,
   VirtualScrollingRowsView,
@@ -155,13 +155,12 @@ export const dataSourceAdapterExtender = (
       items: (): unknown[] => this._dataSource.items(),
       viewportItems: (items?: unknown[]): unknown[] => {
         if (items) {
-          // @ts-expect-error viewportItems() gets back the items that items() returned
+          // @ts-expect-error the loader passes back the items it got from items()
           this._items = items;
         }
         return this._items;
       },
       onChanged: (e): void => {
-        // @ts-expect-error ChangedEvent lacks the legacy virtual scrolling change types
         this.changed.fire(e);
       },
       changingDuration: (): number => {
@@ -212,7 +211,6 @@ export const dataSourceAdapterExtender = (
 
     const callBase = super.dataChangedHandler.bind(this);
 
-    // @ts-expect-error ChangedEvent lacks the legacy virtual scrolling change types
     this._virtualScrollController.handleDataChanged(callBase, e);
   }
 
@@ -371,8 +369,6 @@ export const dataSourceAdapterExtender = (
     const { storeLoadOptions } = options;
     const takeIsDefined = isDefined(storeLoadOptions.take);
 
-    // @ts-expect-error LoadOperation has no loadPageCount
-    options.loadPageCount = loadPageCount;
     if (
       !options.isCustomLoading
       && newMode
@@ -389,13 +385,12 @@ export const dataSourceAdapterExtender = (
     return super._loadPageSize() * this.loadPageCount();
   }
 
-  public beginPageIndex(...args: [] | [number]): number {
+  public beginPageIndex(): number {
     if (this.option(LEGACY_SCROLLING_MODE) === false) {
-      // @ts-expect-error a spread argument can't match the overloads of pageIndex()
-      return this._dataSource.pageIndex(...args);
+      return this._dataSource.pageIndex();
     }
 
-    return this._virtualScrollController.beginPageIndex(...args);
+    return this._virtualScrollController.beginPageIndex();
   }
 
   private endPageIndex(): number {
@@ -408,14 +403,16 @@ export const dataSourceAdapterExtender = (
 
   public pageIndex(): number;
   public pageIndex(pageIndex: number): void;
-  public pageIndex(...args: [] | [number]): number | void {
+  public pageIndex(pageIndex?: number): number | void {
     if (this.option(LEGACY_SCROLLING_MODE) === false) {
-      // @ts-expect-error a spread argument can't match the overloads of pageIndex()
-      return this._dataSource.pageIndex(...args);
+      return pageIndex === undefined
+        ? this._dataSource.pageIndex()
+        : this._dataSource.pageIndex(pageIndex);
     }
 
-    // @ts-expect-error a spread argument can't match the overloads of pageIndex()
-    return this._virtualScrollController.pageIndex(...args);
+    return pageIndex === undefined
+      ? this._virtualScrollController.pageIndex()
+      : this._virtualScrollController.pageIndex(pageIndex);
   }
 
   public virtualItemsCount(): VirtualItemsCount | undefined {
@@ -672,12 +669,10 @@ export const rowsView = (
     removeCount: number,
     changeType: string,
   ): void {
-    let rowElements = this._getRowElements(contentTable).toArray();
-    if (changeType === 'append') {
-      rowElements = rowElements.slice(0, removeCount);
-    } else {
-      rowElements = rowElements.slice(-removeCount);
-    }
+    const allRowElements = this._getRowElements(contentTable).toArray();
+    const rowElements = changeType === 'append'
+      ? allRowElements.slice(0, removeCount)
+      : allRowElements.slice(-removeCount);
 
     rowElements.forEach((rowElement) => {
       const $rowElement = $(rowElement);
@@ -690,7 +685,7 @@ export const rowsView = (
 
   protected _updateContent(
     tableElement: dxElementWrapper,
-    change?: ViewDataChange,
+    change?: VirtualScrollingDataChange,
     isFixedTableRendering?: boolean,
   ): DeferredObj<unknown> {
     const contentElement = this._findContentElement();
@@ -712,9 +707,7 @@ export const rowsView = (
         const $freeSpaceRowElements = this._getFreeSpaceRowElements(contentTable);
         removeEmptyRows($freeSpaceRowElements, VIEW_CLASSES.freeSpaceRow);
 
-        // @ts-expect-error DataChange lacks the loader's removeCount
-        if (change.removeCount) {
-          // @ts-expect-error DataChange lacks the loader's removeCount
+        if (change?.removeCount) {
           this._removeRowsElements(contentTable, change.removeCount, changeType);
         }
 
@@ -979,14 +972,10 @@ export const rowsView = (
     super.setLoading(hasBottomLoadPanel ? false : isLoading, messageText);
   }
 
-  private isGridDragging(): boolean {
-    return this.component.option('isDragging');
-  }
-
   // NOTE: warning won't be thrown if height was specified and then removed,
   // because for some reason `_hasHeight` is not updated properly in this case
   private throwHeightWarningIfNeed(): void {
-    const isGridDragging = this.isGridDragging();
+    const isGridDragging = this.component.option('isDragging');
     if (this._hasHeight === undefined || isGridDragging) {
       return;
     }

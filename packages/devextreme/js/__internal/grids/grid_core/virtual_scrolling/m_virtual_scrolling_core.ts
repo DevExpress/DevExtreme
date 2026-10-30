@@ -32,7 +32,6 @@ import {
 import type {
   ExternalScrollable,
   ExternalScrollers,
-  ScrollEventsStrategy,
   ViewportParams,
   VirtualScrollDataOptions,
 } from './types';
@@ -40,12 +39,14 @@ import type {
 const isVirtualMode = (that: VirtualScrollController): boolean => that.option('scrolling.mode') === SCROLLING_MODE_VIRTUAL || that.isVirtual();
 const isAppendMode = (that: VirtualScrollController): boolean => that.option('scrolling.mode') === SCROLLING_MODE_INFINITE && !that.isVirtual();
 
+// @ts-expect-error scrollTop() is typed as a setter only
+const getScrollTop = (scrollable: ExternalScrollable): number => scrollable.scrollTop();
+
 function subscribeToExternalScrollers(
   $element: dxElementWrapper,
   scrollChangedHandler: (scrollTop: number) => void,
   $targetElement?: dxElementWrapper,
 ): ExternalScrollers {
-  const scrollableArray: ExternalScrollable[] = [];
   const scrollToArray: ((position: number) => void)[] = [];
   const disposeArray: (() => void)[] = [];
   const $target = $targetElement ?? $element;
@@ -53,59 +54,43 @@ function subscribeToExternalScrollers(
   function getElementOffset(scrollable: ExternalScrollable): number {
     const $scrollableElement = 'element' in scrollable ? scrollable.$element() : scrollable;
     const scrollableOffset = positionUtils.offset($scrollableElement);
+    const elementTop = Number($element.offset()?.top);
 
     if (!scrollableOffset) {
-      // @ts-expect-error offset() is typed as possibly undefined
-      return $element.offset().top;
+      return elementTop;
     }
 
-    // @ts-expect-error scrollTop() is typed as a setter only
-    const scrollTop: number = scrollable.scrollTop();
-
-    // @ts-expect-error offset() is typed as possibly undefined
-    return scrollTop - (scrollableOffset.top - $element.offset().top);
+    return getScrollTop(scrollable) - (scrollableOffset.top - elementTop);
   }
 
   function createWindowScrollHandler(scrollable: ExternalScrollable): () => void {
     return function windowScrollHandler(): void {
-      // @ts-expect-error scrollTop() is typed as a setter only
-      const scrollableScrollTop: number = scrollable.scrollTop();
-      let scrollTop = scrollableScrollTop - getElementOffset(scrollable);
+      let scrollTop = getScrollTop(scrollable) - getElementOffset(scrollable);
 
       scrollTop = scrollTop > 0 ? scrollTop : 0;
       scrollChangedHandler(scrollTop);
     };
   }
 
-  const widgetScrollStrategy: ScrollEventsStrategy = {
-    on(scrollable, eventName, handler) {
-      // @ts-expect-error the widget strategy gets only a Scrollable
-      scrollable.on('scroll', handler);
-    },
-    off(scrollable, eventName, handler) {
-      // @ts-expect-error the widget strategy gets only a Scrollable
-      scrollable.off('scroll', handler);
-    },
-  };
-
   function subscribeToScrollEvents($parentElement: dxElementWrapper): void {
     const isDocument = $parentElement.get(0).nodeName === '#document';
-    // @ts-expect-error the Window type has no Node
-    const isElement = $parentElement.get(0).nodeType === getWindow().Node.ELEMENT_NODE;
-    let scrollable: ExternalScrollable | false | undefined = $parentElement.data<Scrollable | undefined>('dxScrollable');
-    let eventsStrategy = widgetScrollStrategy;
+    const isElement = $parentElement.get(0).nodeType === Node.ELEMENT_NODE;
+    const widget = $parentElement.data<Scrollable | undefined>('dxScrollable');
+    const scrollable = widget
+      ?? ((isDocument && $(getWindow()))
+      || (isElement && $parentElement.css('overflowY') === 'auto' && $parentElement));
 
     if (!scrollable) {
-      scrollable = (isDocument && $(getWindow()))
-        || (isElement && $parentElement.css('overflowY') === 'auto' && $parentElement);
-      eventsStrategy = eventsEngine;
-      if (!scrollable) {
-        return;
-      }
+      return;
     }
 
     const handler = createWindowScrollHandler(scrollable);
-    eventsStrategy.on(scrollable, 'scroll', handler);
+
+    if (widget) {
+      widget.on('scroll', handler);
+    } else {
+      eventsEngine.on(scrollable, 'scroll', handler);
+    }
 
     scrollToArray.push((pos) => {
       const topOffset = getElementOffset(scrollable);
@@ -116,17 +101,20 @@ function subscribeToExternalScrollers(
       }
     });
 
-    scrollableArray.push(scrollable);
-
     disposeArray.push(() => {
-      eventsStrategy.off(scrollable, 'scroll', handler);
+      if (widget) {
+        widget.off('scroll', handler);
+      } else {
+        eventsEngine.off(scrollable, 'scroll', handler);
+      }
     });
   }
 
-  const getScrollElementParent = ($child: dxElementWrapper): dxElementWrapper => $(
-    // @ts-expect-error get() is typed as Element, but a shadow root has host
-    $child.get(0).parentNode ?? $child.get(0).host,
-  );
+  const getScrollElementParent = ($child: dxElementWrapper): dxElementWrapper => {
+    const node: Node & { host?: Element } = $child.get(0);
+
+    return $(node.parentNode ?? node.host);
+  };
 
   for (
     let $scrollElement = $target.parent();
@@ -495,22 +483,19 @@ class VirtualScrollController<
   }
 
   public itemsCount(isBase?: boolean): number {
-    let result = 0;
-
     if (this.option(LEGACY_SCROLLING_MODE)) {
-      result = this._dataLoader.itemsCount(isBase);
-    } else {
-      result = this._dataOptions.itemsCount();
+      return this._dataLoader.itemsCount(isBase);
     }
 
-    return result;
+    return this._dataOptions.itemsCount();
   }
 
   public pageIndex(): number;
   public pageIndex(pageIndex: number): number | undefined;
-  public pageIndex(...args: [] | [number]): number | undefined {
-    // @ts-expect-error a spread argument can't match the overloads of pageIndex()
-    return this._dataLoader.pageIndex(...args);
+  public pageIndex(pageIndex?: number): number | undefined {
+    return pageIndex === undefined
+      ? this._dataLoader.pageIndex()
+      : this._dataLoader.pageIndex(pageIndex);
   }
 
   public beginPageIndex(defaultPageIndex?: number): number {

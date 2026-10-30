@@ -62,7 +62,6 @@ const NON_PAGING_CASES: { method: string; args: unknown[] }[] = [
 
 const PAGING_CASES: { method: string; args: unknown[] }[] = [
   { method: 'beginPageIndex', args: [] },
-  { method: 'beginPageIndex', args: [-1] },
   { method: 'endPageIndex', args: [] },
   { method: 'pageIndex', args: [] },
   { method: 'pageIndex', args: [2] },

@@ -36,7 +36,11 @@ import {
   VISIBLE_PAGE_INDEX,
 } from '../const';
 import { VirtualScrollController } from '../m_virtual_scrolling_core';
-import type { ChangedLoadParams, VirtualScrollingDataSourceAdapter } from '../types';
+import type {
+  ChangedLoadParams,
+  VirtualScrollDataOptions,
+  VirtualScrollingDataSourceAdapter,
+} from '../types';
 import {
   correctCount,
   isItemCountableByDataSource,
@@ -124,12 +128,11 @@ export const virtualScrollingDataControllerExtender = (
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public reload(reload?: boolean, changesOnly?: boolean): DeferredObj<unknown> {
     const rowsScrollController = this._rowsScrollController || this.dataSourceController.getAdapter();
-    const itemIndex = rowsScrollController?.getItemIndexByPosition();
+    const itemIndex = Number(rowsScrollController?.getItemIndexByPosition());
     const result = super.reload.apply(this, arguments as any);
     return result?.done(() => {
       if (isVirtualMode(this) || gridCoreUtils.isVirtualRowRendering(this)) {
         const rowIndexOffset = this.getRowIndexOffset();
-        // @ts-expect-error the data controller extender is not typed yet
         const rowIndex = Math.floor(itemIndex) - rowIndexOffset;
         const { component } = this;
         const scrollable = component.getScrollable && component.getScrollable();
@@ -141,7 +144,6 @@ export const virtualScrollingDataControllerExtender = (
           let top = $rowElement?.position()?.top;
           const allowedTopOffset = browser.mozilla || browser.chrome ? 1 : 0; // T884308
           if ($rowElement && top && top > allowedTopOffset) {
-            // @ts-expect-error the data controller extender is not typed yet
             top = Math.round(top + Number(getOuterHeight($rowElement)) * (itemIndex % 1));
             scrollable.scrollTo({ top });
           }
@@ -171,7 +173,6 @@ export const virtualScrollingDataControllerExtender = (
     this._needUpdateViewportAfterLoading = false;
 
     if (!this._rowsScrollController) {
-      // @ts-expect-error _getRowsScrollDataOptions() is not typed yet
       this._rowsScrollController = new VirtualScrollController(this.component, this._getRowsScrollDataOptions(), true);
 
       this._rowsScrollController.positionChanged.add(() => {
@@ -194,7 +195,7 @@ export const virtualScrollingDataControllerExtender = (
     }
   }
 
-  private _getRowsScrollDataOptions() {
+  private _getRowsScrollDataOptions(): VirtualScrollDataOptions {
     const that = this;
     const isItemCountable = function (item) {
       return isItemCountableByDataSource(item, that.dataSourceController.getAdapter());
@@ -223,7 +224,7 @@ export const virtualScrollingDataControllerExtender = (
       hasKnownLastPage() {
         return that.option(LEGACY_SCROLLING_MODE) === false ? that.dataSourceController.hasKnownLastPage() : true;
       },
-      pageIndex(index) {
+      pageIndex(index?: number) {
         if (index !== undefined) {
           that._rowPageIndex = index;
         }
@@ -236,34 +237,35 @@ export const virtualScrollingDataControllerExtender = (
         const pageCount = Math.ceil(this.totalItemsCount() / this.pageSize());
         return pageCount || 1;
       },
-      load() {
+      load(): undefined {
         if (that._rowsScrollController!.pageIndex() >= this.pageCount()) {
           that._rowPageIndex = this.pageCount() - 1;
           that._rowsScrollController!.pageIndex(that._rowPageIndex);
         }
 
-        if (!this.items().length && this.totalItemsCount()) return;
+        if (!this.items().length && this.totalItemsCount()) return undefined;
 
-        that._rowsScrollController!.handleDataChanged((change) => {
-          change = change || {};
-          // @ts-expect-error the loader change is not typed in this extender yet
+        that._rowsScrollController!.handleDataChanged((loaderChange) => {
+          // @ts-expect-error the loader change becomes a data change here
+          const change: DataChange = loaderChange || {};
           change.changeType = change.changeType || 'refresh';
-          // @ts-expect-error the loader change is not typed in this extender yet
           change.items = change.items || that._visibleItems;
 
           that._visibleItems.forEach((item, index) => {
             item.rowIndex = index;
           });
-          // @ts-expect-error the loader change is not typed in this extender yet
           that._fireChanged(change);
         });
+
+        return undefined;
       },
       updateLoading() {
       },
       itemsCount() {
         return this.items(true).length;
       },
-      correctCount(items: ProcessedItem[], count, fromEnd) {
+      correctCount(items: unknown[], count: number, fromEnd = false) {
+        // @ts-expect-error the loader passes back the items it got from items()
         return correctCount(items, count, fromEnd, (item, isNextAfterLast, fromEnd) => {
           if (item.isNewRow) {
             return isNextAfterLast && !fromEnd;
@@ -639,9 +641,8 @@ export const virtualScrollingDataControllerExtender = (
       return preloadCount;
     }
 
-    const viewportSize = this.viewportSize();
+    const viewportSize = Number(this.viewportSize());
 
-    // @ts-expect-error the data controller extender is not typed yet
     return preloadEnabled ? 2 * viewportSize : viewportSize;
   }
 
@@ -656,7 +657,6 @@ export const virtualScrollingDataControllerExtender = (
     const topPreloadCount = isScrollingBack ? this.getPreloadedRowCount() : 0;
     const bottomPreloadCount = isScrollingBack ? 0 : this.getPreloadedRowCount();
     const totalCountCorrection = this.dataSourceController.getAdapter()?.totalCountCorrection() || 0;
-    // @ts-expect-error the data controller extender is not typed yet
     const skipWithPreload = Math.max(0, viewportParams.skip - topPreloadCount);
     const pageIndex = byLoadedPage ? loadedPageIndex : Math.floor(pageSize ? skipWithPreload / pageSize : 0);
     const pageOffset = pageIndex * pageSize;
@@ -848,9 +848,8 @@ export const virtualScrollingDataControllerExtender = (
   }
 
   public updateViewport() {
-    const viewportSize = this.viewportSize();
+    const viewportSize = Number(this.viewportSize());
     const itemCount = this.items().length;
-    // @ts-expect-error the data controller extender is not typed yet
     const viewportIsNotFilled = viewportSize > itemCount;
     const currentTake = this._loadViewportParams?.take ?? 0;
     const newTake = this._rowsScrollController?.getViewportParams().take ?? 0;
