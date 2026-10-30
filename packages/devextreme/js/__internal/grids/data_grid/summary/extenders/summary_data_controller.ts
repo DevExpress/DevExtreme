@@ -19,10 +19,9 @@ import type { ProcessGroupItemsOptions } from '../../grouping/types';
 import { isSameContinuationState } from '../../grouping/utils';
 import { isDataColumn } from '../../utils';
 import { DATAGRID_GROUP_FOOTER_ROW_TYPE, DATAGRID_TOTAL_FOOTER_ROW_TYPE } from '../const';
-import type { SummaryDataSourceAdapter } from '../m_summary';
 import type {
   CalculateSummaryCellsArgs, ColumnMap, FooterItem, SummaryCellItem,
-  SummaryGroupItem,
+  SummaryDataControllerExtension, SummaryDataSourceAdapter, SummaryGroupItem,
 } from '../types';
 import { getColumnFromMap, getSummaryCellIndex, isSummaryGroupItem } from '../utils';
 import { getGroupAggregates } from '../utils/get_group_aggregates';
@@ -30,7 +29,9 @@ import { getSummaryItemIndex } from '../utils/get_summary_item_index';
 
 export const summaryDataControllerExtender = (
   Base: ModuleType<DataController>,
-): ModuleType<DataController> => class SummaryDataControllerExtender extends Base {
+): ModuleType<
+  DataController & SummaryDataControllerExtension
+> => class SummaryDataControllerExtender extends Base {
   protected declare dataSourceController: DataSourceController<SummaryDataSourceAdapter>;
 
   private _footerItems!: FooterItem[];
