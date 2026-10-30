@@ -92,5 +92,5 @@ export interface GroupSummaryRenderOptions extends RowRenderOptions {
 
 export interface SummaryCellOptions {
   totalItem: ViewRow;
-  summaryItems: unknown[];
+  summaryItems: SummaryCellItem[];
 }

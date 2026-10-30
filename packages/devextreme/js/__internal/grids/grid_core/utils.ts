@@ -147,7 +147,7 @@ const getSummaryText = (
   summaryItem: SummaryTextItem,
   summaryTexts: Record<string, string | undefined>,
 ): string => {
-  const displayFormat = summaryItem.displayFormat || (summaryItem.columnCaption && summaryTexts[`${summaryItem.summaryType}OtherColumn`]) || summaryTexts[summaryItem.summaryType];
+  const displayFormat = summaryItem.displayFormat || (summaryItem.columnCaption && summaryTexts[`${summaryItem.summaryType}OtherColumn`]) || summaryTexts[String(summaryItem.summaryType)];
 
   return formatValue(summaryItem.value, {
     format: summaryItem.valueFormat,
