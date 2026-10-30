@@ -3,7 +3,7 @@ import { isDefined } from '@js/core/utils/type';
 import type { KeyboardKeyDownEvent } from '@ts/events/core/keyboard_processor';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import { KEY_CODES } from '@ts/grids/grid_core/keyboard_navigation/const';
-import type { FocusedCellPosition } from '@ts/grids/grid_core/keyboard_navigation/types';
+import type { CellPosition } from '@ts/grids/grid_core/views/types';
 
 import type { MixinBase } from './types';
 
@@ -22,7 +22,7 @@ export const ColumnKeyboardNavigationMixin = <T extends MixinBase>(Base: T) => c
 
   protected getFocusedCellPositionByColumn(
     column: Column | undefined,
-  ): FocusedCellPosition | undefined {
+  ): CellPosition | undefined {
     if (!column) {
       return undefined;
     }

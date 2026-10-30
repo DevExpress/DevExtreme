@@ -52,7 +52,7 @@ export const keyboardNavigationScrollableA11yExtender = (Base: ModuleType<Keyboa
     if (firstCellHasTabIndex && notFixedCellIsTarget) {
       event.preventDefault();
 
-      this._focus($firstCell);
+      this.applyFocus($firstCell);
     }
   }
 
@@ -63,13 +63,13 @@ export const keyboardNavigationScrollableA11yExtender = (Base: ModuleType<Keyboa
     super.renderCompleted(e);
   }
 
-  public _focus(
+  public applyFocus(
     $cell: dxElementWrapper,
     disableFocus?: boolean,
     skipFocusEvent?: boolean,
     preventScroll?: boolean,
   ): void {
-    super._focus($cell, disableFocus, skipFocusEvent, preventScroll);
+    super.applyFocus($cell, disableFocus, skipFocusEvent, preventScroll);
 
     this.makeScrollableFocusableIfNeed();
   }
@@ -115,6 +115,6 @@ export const keyboardNavigationScrollableA11yExtender = (Base: ModuleType<Keyboa
       return;
     }
 
-    this._applyTabIndexToElement(this._$firstNotFixedCell);
+    this.applyTabIndexToElement(this._$firstNotFixedCell);
   }
 };
