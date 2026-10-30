@@ -313,8 +313,7 @@ export const dataSourceAdapterExtender = (
 
   public refresh(options: LoadOperation, operationTypes: OperationTypes): void {
     if (this.option(LEGACY_SCROLLING_MODE) === false) {
-      super.refresh(options, operationTypes);
-      return;
+      return super.refresh(options, operationTypes);
     }
 
     const { storeLoadOptions } = options;
@@ -345,7 +344,7 @@ export const dataSourceAdapterExtender = (
       storeLoadOptions.skip += this._totalCountCorrection;
     }
 
-    super.refresh(options, operationTypes);
+    return super.refresh(options, operationTypes);
   }
 
   public loadPageCount(): number;
