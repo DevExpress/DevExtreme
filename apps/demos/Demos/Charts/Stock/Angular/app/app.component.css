@@ -1,4 +1,4 @@
-::ng-deep .chart-title {
+::ng-deep .dx-toolbar-item.chart-title {
   font-size: 20px;
   font-weight: 600;
 }

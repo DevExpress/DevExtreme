@@ -258,7 +258,7 @@ const customizeTooltip = (pointInfo: DxChartTypes.PointInfo) => {
 };
 </script>
 <style>
-.chart-title {
+.dx-toolbar-item.chart-title {
   font-size: 20px;
   font-weight: 600;
 }
