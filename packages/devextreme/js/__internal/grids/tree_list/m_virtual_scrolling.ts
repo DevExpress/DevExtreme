@@ -30,7 +30,7 @@ virtualScrollingModule.extenders.views.rowsView = (
   protected _handleDataChanged(e: DataChange): void {
     const { operationTypes } = e;
 
-    if (e?.isDataChanged && gridCoreUtils.isVirtualRowRendering(this) && operationTypes) {
+    if (e.isDataChanged && gridCoreUtils.isVirtualRowRendering(this) && operationTypes) {
       const { fullReload, pageIndex } = operationTypes;
 
       if (!fullReload && pageIndex) {

@@ -57,6 +57,6 @@ export interface VirtualDataLoaderDataOptions {
   items: (isBase?: boolean) => unknown[];
   viewportItems: (items?: unknown[]) => unknown[];
   updateLoading: () => void;
-  onChanged: (e: { changeType: string }) => void;
+  onChanged: (e: { changeType: 'pageIndex' }) => void;
   correctCount?: (items: unknown[], count: number, fromEnd?: boolean) => number;
 }
