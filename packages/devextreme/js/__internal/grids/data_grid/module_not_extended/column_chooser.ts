@@ -1,4 +1,4 @@
-import { columnChooserModule } from '@ts/grids/grid_core/column_chooser/m_column_chooser';
+import { columnChooserModule } from '@ts/grids/grid_core/column_chooser/column_chooser';
 
 import gridCore from '../core';
 
