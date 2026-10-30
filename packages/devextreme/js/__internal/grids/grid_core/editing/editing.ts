@@ -36,7 +36,7 @@ import type { AdaptiveColumnsViewController } from '@ts/grids/grid_core/adaptivi
 import { HIDDEN_COLUMNS_WIDTH } from '@ts/grids/grid_core/adaptivity/const';
 import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/columns_controller';
 import type { Column, ColumnTemplateSource } from '@ts/grids/grid_core/columns_controller/types';
-import type { ColumnsResizerViewController } from '@ts/grids/grid_core/columns_resizing_reordering/m_columns_resizing_reordering';
+import type { ColumnsResizerViewController } from '@ts/grids/grid_core/columns_resizing_reordering/columns_resizing_reordering';
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
 import type {
   DataChange,
@@ -2985,7 +2985,7 @@ const rowsView = <TBase extends ModuleType<RowsView>>(
     }
 
     if (isEditing) {
-      this._editCellPrepared($cell);
+      this.editCellPrepared($cell);
     }
 
     const isCommandCell = !!parameters.column.command;
@@ -3099,7 +3099,7 @@ const rowsView = <TBase extends ModuleType<RowsView>>(
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars -- used by overrides
-  protected _editCellPrepared($cell: dxElementWrapper): void {}
+  public editCellPrepared($cell: dxElementWrapper): void {}
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars -- used by overrides
   protected _formItemPrepared(cellOptions: ViewCellOptions, $container: dxElementWrapper): void {}
