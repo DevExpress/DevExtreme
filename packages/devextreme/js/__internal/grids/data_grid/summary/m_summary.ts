@@ -377,14 +377,14 @@ export const summaryDataSourceAdapterExtender = (
     items: RawItemData[],
     groups: SortingInfo[],
     paths: unknown[][],
-  ): unknown[] {
+  ): RawItemData[] {
     const groupedItems = storeHelper.multiLevelGroup(dataQuery(items), groups).toArray();
-    let result: unknown[] = [];
+    let result: RawItemData[] = [];
 
     paths.forEach((path) => {
       // @ts-expect-error multiLevelGroup is typed as returning unknown[]
       forEachGroup(groupedItems, groups.length, (itemsPath, groupItems) => {
-        if (path.toString() === itemsPath.toString()) {
+        if (path.toString() === itemsPath.toString() && groupItems) {
           result = result.concat(groupItems);
         }
       });
