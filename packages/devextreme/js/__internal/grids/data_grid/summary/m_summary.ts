@@ -22,7 +22,7 @@ import type {
   OperationTypes, RawItemData, RemoteOperationsOptions,
 } from '@ts/grids/grid_core/data_source_adapter/types';
 import type { EditingChange, EditingChangeParams } from '@ts/grids/grid_core/editing/types';
-import type { ModuleType, SummaryTextItem } from '@ts/grids/grid_core/types';
+import type { ModuleType } from '@ts/grids/grid_core/types';
 import { ColumnsView } from '@ts/grids/grid_core/views/columns_view';
 import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
 import type {
@@ -57,7 +57,6 @@ import type {
   FooterItem,
   GroupSummaryRenderOptions,
   SortByGroups,
-  SummaryCellItem,
   SummaryCellOptions,
   SummaryDataControllerExtension,
   SummaryDataSourceAdapterExtension,
@@ -75,10 +74,7 @@ export const renderSummaryCell = (
   const $summaryItems: dxElementWrapper[] = [];
 
   if (!column.command && summaryItems) {
-    // @ts-expect-error summaryItems is typed as unknown[] in ViewCellOptions
-    const summaryCellItems: (SummaryCellItem & SummaryTextItem)[] = summaryItems;
-
-    for (const summaryItem of summaryCellItems) {
+    for (const summaryItem of summaryItems) {
       const text = gridCore.getSummaryText(summaryItem, summaryTexts);
       const $summaryItemElement = $('<div>')
         // @ts-expect-error css() is typed without undefined

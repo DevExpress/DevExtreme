@@ -1,4 +1,5 @@
 import type { DeferredObj } from '@js/core/utils/deferred';
+import type { SummaryTextItem } from '@ts/grids/grid_core/types';
 
 import type { Column } from '../columns_controller/types';
 import type { ChangedEvent, OperationTypes, RawItemData } from '../data_source_adapter/types';
@@ -66,7 +67,7 @@ export interface ProcessedItem extends GeneratedItem {
   loadIndex?: number;
   rowIndex?: number;
   cells?: Cell[];
-  summaryCells?: unknown[][];
+  summaryCells?: SummaryTextItem[][];
   update?: RowUpdate;
   watch?: RowWatch;
 }

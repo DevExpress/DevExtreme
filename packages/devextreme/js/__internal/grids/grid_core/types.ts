@@ -53,8 +53,8 @@ export interface FormatOptions {
 }
 
 /** @architectureLeak data_grid/summary: core renders summary texts in group rows */
-export interface SummaryTextItem extends Pick<SummaryTotalItem, 'displayFormat' | 'valueFormat' | 'customizeText'> {
-  summaryType: string;
+export interface SummaryTextItem extends Pick<SummaryTotalItem, 'alignment' | 'cssClass' | 'displayFormat' | 'valueFormat' | 'customizeText'> {
+  summaryType?: string;
   value?: unknown;
   columnCaption?: string;
 }
