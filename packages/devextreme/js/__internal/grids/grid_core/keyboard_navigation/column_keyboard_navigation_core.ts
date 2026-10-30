@@ -1,11 +1,11 @@
 import { isDefined, isEmptyObject } from '@js/core/utils/type';
 import type { KeyboardKeyDownEvent } from '@ts/events/core/keyboard_processor';
 import type { Column, DropLocationNames } from '@ts/grids/grid_core/columns_controller/types';
+import type { CellPosition } from '@ts/grids/grid_core/views/types';
 
 import type { ColumnFocusDispatcher } from './column_focus_dispatcher';
 import { Direction } from './const';
 import { KeyboardNavigationController as KeyboardNavigationControllerCore } from './keyboard_navigation_core';
-import type { FocusedCellPosition } from './types';
 
 export class ColumnKeyboardNavigationController extends KeyboardNavigationControllerCore {
   public columnFocusDispatcher!: ColumnFocusDispatcher;
@@ -94,11 +94,11 @@ export class ColumnKeyboardNavigationController extends KeyboardNavigationContro
     return -1;
   }
 
-  public updateViewFocusPosition(cellPosition?: FocusedCellPosition): void {
+  public updateViewFocusPosition(cellPosition?: CellPosition): void {
     this.columnFocusDispatcher?.updateFocusPosition(this, cellPosition);
   }
 
-  public updateFocusPosition(cellPosition?: FocusedCellPosition): void {
+  public updateFocusPosition(cellPosition?: CellPosition): void {
     this.needToRestoreFocus = true;
 
     if (isDefined(cellPosition)) {

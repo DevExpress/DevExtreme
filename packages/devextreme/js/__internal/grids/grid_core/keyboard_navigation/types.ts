@@ -16,11 +16,6 @@ export type NavigationElementType = 'cell' | 'row';
 
 export type DirectionCode = 'prevRow' | 'nextRow' | 'nextInRow' | 'previousInRow';
 
-export interface FocusedCellPosition {
-  columnIndex: number;
-  rowIndex: number;
-}
-
 export interface ScrollOffset {
   left?: number;
   top?: number;

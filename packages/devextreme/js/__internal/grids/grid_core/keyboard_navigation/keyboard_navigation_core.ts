@@ -9,6 +9,7 @@ import type { DxEvent } from '@js/events';
 import type { KeyboardKeyDownEvent } from '@ts/events/core/keyboard_processor';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
+import type { CellPosition, ViewDataChange } from '@ts/grids/grid_core/views/types';
 import type Scrollable from '@ts/ui/scroll_view/scrollable';
 import { getElementLocationInternal } from '@ts/ui/scroll_view/utils/get_element_location_internal';
 
@@ -16,9 +17,8 @@ import modules from '../modules/modules';
 import type { Controllers, OptionChanged, Views } from '../types';
 import gridCoreUtils from '../utils';
 import type { ColumnsView } from '../views/columns_view';
-import type { ViewDataChange } from '../views/types';
 import { Direction } from './const';
-import type { FocusedCellPosition, HorizontalBounds, NavigationDirection } from './types';
+import type { HorizontalBounds, NavigationDirection } from './types';
 import { isElementDefined, isFixedColumnIndexOffsetRequired } from './utils';
 
 export class KeyboardNavigationController extends modules.ViewController {
@@ -38,8 +38,7 @@ export class KeyboardNavigationController extends modules.ViewController {
 
   protected _rowsView!: Views['rowsView'];
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- rows KBN resets it to {}
-  public _focusedCellPosition: any;
+  public _focusedCellPosition!: Partial<CellPosition>;
 
   private _applyColumnIndexBoundaries(columnIndex: number): number {
     const visibleColumnCount = this._columnsController.getVisibleColumns(null, true).length;
@@ -187,7 +186,7 @@ export class KeyboardNavigationController extends modules.ViewController {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars -- overridable signature
-  protected _getCell(cellPosition: FocusedCellPosition): dxElementWrapper | undefined {
+  protected _getCell(cellPosition: Partial<CellPosition>): dxElementWrapper | undefined {
     return undefined;
   }
 
@@ -221,7 +220,7 @@ export class KeyboardNavigationController extends modules.ViewController {
   protected _getCellPosition(
     $cell: dxElementWrapper,
     direction?: NavigationDirection,
-  ): FocusedCellPosition | undefined {
+  ): CellPosition | undefined {
     const $row = isElementDefined($cell) ? $cell.closest('tr') : undefined;
 
     if ($row && isElementDefined($row)) {
@@ -267,7 +266,7 @@ export class KeyboardNavigationController extends modules.ViewController {
   /**
      * @extended: focus
      */
-  protected setFocusedColumnIndex(columnIndex: number): void {
+  protected setFocusedColumnIndex(columnIndex: number | undefined): void {
     this._focusedCellPosition ??= {};
     this._focusedCellPosition.columnIndex = columnIndex;
   }
@@ -278,7 +277,7 @@ export class KeyboardNavigationController extends modules.ViewController {
   protected _updateFocusedCellPosition(
     $cell: dxElementWrapper,
     direction?: NavigationDirection,
-  ): FocusedCellPosition | undefined {
+  ): CellPosition | undefined {
     const position = this._getCellPosition($cell, direction);
 
     if (position) {
@@ -390,7 +389,7 @@ export class KeyboardNavigationController extends modules.ViewController {
     this._focusedCellPosition.rowIndex = rowIndex;
   }
 
-  public setFocusedCellPosition(rowIndex: number, columnIndex: number): void {
+  public setFocusedCellPosition(rowIndex: number, columnIndex: number | undefined): void {
     this.setFocusedRowIndex(rowIndex);
     this.setFocusedColumnIndex(columnIndex);
   }

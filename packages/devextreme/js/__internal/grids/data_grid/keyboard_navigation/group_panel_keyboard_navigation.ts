@@ -11,9 +11,8 @@ import type { KeyboardKeyDownEvent } from '@ts/events/core/keyboard_processor';
 import type { Column, GroupColumn } from '@ts/grids/grid_core/columns_controller/types';
 import { ColumnKeyboardNavigationController } from '@ts/grids/grid_core/keyboard_navigation/column_keyboard_navigation_core';
 import { Direction } from '@ts/grids/grid_core/keyboard_navigation/const';
-import type { FocusedCellPosition } from '@ts/grids/grid_core/keyboard_navigation/types';
 import type { Views } from '@ts/grids/grid_core/types';
-import type { ViewDataChange } from '@ts/grids/grid_core/views/types';
+import type { CellPosition, ViewDataChange } from '@ts/grids/grid_core/views/types';
 
 import gridCore from '../core';
 import { CLASSES as GROUPING_CLASSES } from '../grouping/const';
@@ -91,10 +90,16 @@ export class GroupPanelKeyboardNavigationController
       : groupColumns[visibleColumnIndex + 1];
   }
 
-  protected _getCell(cellPosition: FocusedCellPosition): dxElementWrapper | undefined {
+  protected _getCell(cellPosition: Partial<CellPosition>): dxElementWrapper | undefined {
+    const { columnIndex } = cellPosition;
+
+    if (columnIndex === undefined) {
+      return undefined;
+    }
+
     const $groupColumnElements = this.headerPanel?.getColumnElements();
 
-    return $groupColumnElements?.eq(cellPosition.columnIndex);
+    return $groupColumnElements?.eq(columnIndex);
   }
 
   protected getFocusedView(): Views['headerPanel'] {

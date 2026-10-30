@@ -9,6 +9,7 @@ import type { DxEvent } from '@js/events';
 import type { KeyboardKeyDownEvent } from '@ts/events/core/keyboard_processor';
 import { CLASSES as COLUMN_HEADERS_CLASSES } from '@ts/grids/grid_core/column_headers/const';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
+import type { CellPosition } from '@ts/grids/grid_core/views/types';
 
 import { StickyPosition } from '../sticky_columns/const';
 import { GridCoreStickyColumnsDom } from '../sticky_columns/dom';
@@ -17,7 +18,6 @@ import type { Views } from '../types';
 import { ColumnFocusDispatcher } from './column_focus_dispatcher';
 import { ColumnKeyboardNavigationController } from './column_keyboard_navigation_core';
 import { Direction } from './const';
-import type { FocusedCellPosition } from './types';
 
 export class HeadersKeyboardNavigationController extends ColumnKeyboardNavigationController {
   protected _columnHeadersView!: Views['columnHeadersView'];
@@ -139,7 +139,7 @@ export class HeadersKeyboardNavigationController extends ColumnKeyboardNavigatio
     return this._columnHeadersView.getCellIndex($cell);
   }
 
-  protected _getCell(cellPosition: FocusedCellPosition): dxElementWrapper | undefined {
+  protected _getCell(cellPosition: Partial<CellPosition>): dxElementWrapper | undefined {
     return this._columnHeadersView?.getCell(cellPosition);
   }
 
