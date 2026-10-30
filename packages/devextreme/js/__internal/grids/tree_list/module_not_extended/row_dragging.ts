@@ -1,4 +1,4 @@
-import { rowDraggingModule } from '@ts/grids/grid_core/row_dragging/m_row_dragging';
+import { rowDraggingModule } from '@ts/grids/grid_core/row_dragging/row_dragging';
 
 import gridCore from '../core';
 

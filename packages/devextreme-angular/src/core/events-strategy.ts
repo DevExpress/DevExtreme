@@ -1,6 +1,7 @@
 /* eslint-disable max-classes-per-file */
-import { ChangeDetectorRef, EventEmitter, NgZone } from '@angular/core';
+import { EventEmitter } from '@angular/core';
 import { DxComponent } from './component';
+import type { ZoneMode } from './zone-mode';
 
 interface IEventSubscription {
   handler: any;
@@ -13,8 +14,7 @@ export class NgEventsStrategy {
 
   constructor(
     private readonly instance: any,
-    private readonly zone: NgZone,
-    private readonly changeDetectorRef?: ChangeDetectorRef,
+    private readonly zoneMode: ZoneMode,
   ) { }
 
   hasEvent(name: string) {
@@ -23,16 +23,16 @@ export class NgEventsStrategy {
 
   fireEvent(name, args) {
     const emitter = this.getEmitter(name);
-    if (emitter.observers.length) {
-      const internalSubs = this.subscriptions[name] || [];
-      if (internalSubs.length === emitter.observers.length) {
-        emitter.next(args?.[0]);
-      } else {
-        this.zone.run(() => emitter.next(args?.[0]));
-      }
-      if (name !== 'optionChanged' || emitter.observers.length > internalSubs.length) {
-        this.changeDetectorRef?.markForCheck();
-      }
+    if (!emitter.observers.length) {
+      return;
+    }
+    const internalSubs = this.subscriptions[name] || [];
+    const hasAngularSubscribers = emitter.observers.length > internalSubs.length;
+
+    if (hasAngularSubscribers) {
+      this.zoneMode.emit(emitter, args?.[0]);
+    } else {
+      this.zoneMode.emitInternal(emitter, args?.[0], name !== 'optionChanged');
     }
   }
 
@@ -89,9 +89,8 @@ export class EmitterHelper {
   lockedValueChangeEvent = false;
 
   constructor(
-    private readonly zone: NgZone,
+    private readonly zoneMode: ZoneMode,
     private component: DxComponent,
-    private readonly changeDetectorRef?: ChangeDetectorRef,
   ) { }
 
   fireNgEvent(eventName: string, eventArgs: any) {
@@ -100,10 +99,7 @@ export class EmitterHelper {
     }
     const emitter = this.component[eventName];
     if (emitter?.observers.length) {
-      this.zone.run(() => {
-        emitter.next(eventArgs?.[0]);
-      });
-      this.changeDetectorRef?.markForCheck();
+      this.zoneMode.emit(emitter, eventArgs?.[0]);
     }
   }
 

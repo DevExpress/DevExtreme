@@ -43,6 +43,8 @@ import {
 
 import { DxIntegrationModule } from './integration';
 
+import { createZoneMode, type ZoneMode } from './zone-mode';
+
 config({
   buyNowLink: 'https://go.devexpress.com/Licensing_Installer_Watermark_DevExtremeAngular.aspx',
   licensingDocLink: 'https://www.devexpress.com/go/Licensing_Documentation_DevExpress_Angular.aspx',
@@ -91,6 +93,8 @@ export abstract class DxComponent implements OnChanges, OnInit, DoCheck, AfterCo
 
   private readonly _collectionContainerImpl: ICollectionNestedOptionContainer;
 
+  private readonly zoneMode: ZoneMode;
+
   eventHelper: EmitterHelper;
 
   optionChangedHandlers: EventEmitter<any> = new EventEmitter();
@@ -133,8 +137,11 @@ export abstract class DxComponent implements OnChanges, OnInit, DoCheck, AfterCo
       this.eventHelper.fireNgEvent(`${e.name}Change`, [value]);
       this.optionChangedHandlers.emit(e);
 
-      if (!this.widgetUpdateLocked && getPublicOptions(Object.getPrototypeOf(this)).has(e.name)) {
-        this.changeDetectorRef.markForCheck();
+      if (
+        !this.widgetUpdateLocked
+        && this[`${e.name}Change`]
+      ) {
+        this.zoneMode.markForOptionChange();
       }
     });
   }
@@ -152,12 +159,12 @@ export abstract class DxComponent implements OnChanges, OnInit, DoCheck, AfterCo
   }
 
   protected _createEventEmitters(events) {
-    const zone = this.ngZone;
-    const { changeDetectorRef } = this;
+    const { zoneMode } = this;
+    const nestedZoneMode = createZoneMode(this.ngZone);
     this.eventHelper.createEmitters(events);
 
     this._initialOptions.eventsStrategy = (instance) => {
-      const strategy = new NgEventsStrategy(instance, zone, changeDetectorRef);
+      const strategy = new NgEventsStrategy(instance, zoneMode);
 
       events.filter((event) => event.subscribe).forEach((event) => {
         strategy.addEmitter(event.subscribe, this[event.emit]);
@@ -168,10 +175,14 @@ export abstract class DxComponent implements OnChanges, OnInit, DoCheck, AfterCo
 
     this._initialOptions.nestedComponentOptions = function (component) {
       return {
-        eventsStrategy: (instance) => new NgEventsStrategy(instance, zone, changeDetectorRef),
+        eventsStrategy: (instance) => new NgEventsStrategy(instance, nestedZoneMode),
         nestedComponentOptions: component.option('nestedComponentOptions'),
       };
     };
+  }
+
+  protected _markForCheck() {
+    this.zoneMode.markForCheck();
   }
 
   _shouldOptionChange(name: string, value: any) {
@@ -198,6 +209,7 @@ export abstract class DxComponent implements OnChanges, OnInit, DoCheck, AfterCo
     if (!this.widgetUpdateLocked && this.instance) {
       this.instance.beginUpdate();
       this.widgetUpdateLocked = true;
+      this.zoneMode.markForCheck();
     }
   }
 
@@ -267,9 +279,10 @@ export abstract class DxComponent implements OnChanges, OnInit, DoCheck, AfterCo
     }
 
     this.templates = [];
+    this.zoneMode = createZoneMode(this.ngZone, this.changeDetectorRef);
     templateHost.setHost(this);
     this._collectionContainerImpl = new CollectionNestedOptionContainerImpl(this._setOption.bind(this));
-    this.eventHelper = new EmitterHelper(ngZone, this, this.changeDetectorRef);
+    this.eventHelper = new EmitterHelper(this.zoneMode, this);
   }
 
   ngOnChanges(changes: SimpleChanges) {

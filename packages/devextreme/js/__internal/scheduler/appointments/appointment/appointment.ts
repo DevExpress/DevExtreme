@@ -28,6 +28,7 @@ import { validateRRule } from '../../recurrence/validate_rule';
 import type { SubscribeKey, SubscribeMethods } from '../../subscribes';
 import type { SafeAppointment } from '../../types';
 import type { AppointmentDataAccessor } from '../../utils/data_accessor/appointment_data_accessor';
+import { getContrastTextColor } from '../../utils/resource_manager/appointment_color_utils';
 import {
   getAriaDescription,
   getAriaLabel,
@@ -196,7 +197,10 @@ export class Appointment extends DOMComponent<Appointment, AppointmentProperties
     void resourceManager.getAppointmentColor(appointmentConfig)
       .then((color) => {
         if (color) {
-          this.coloredElement.css('backgroundColor', color);
+          this.coloredElement.css({
+            backgroundColor: color,
+            color: getContrastTextColor(color),
+          });
           this.coloredElement.addClass(APPOINTMENT_HAS_RESOURCE_COLOR_CLASS);
         }
       });

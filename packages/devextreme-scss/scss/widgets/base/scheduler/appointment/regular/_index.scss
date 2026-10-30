@@ -90,6 +90,10 @@ $appointment-reduced-icon-rtl-left: null !default;
   white-space: pre-wrap;
 }
 
+.dx-scheduler-appointment-has-resource-color .dx-scheduler-appointment-content-date {
+  opacity: 1;
+}
+
 .dx-scheduler-appointment-content-details {
   margin-top: $appointment-content-details-margin-top;
 }

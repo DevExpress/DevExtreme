@@ -341,6 +341,7 @@ const iconSet = {
   gridkanban: '\f240',
   listbartreeoffset: '\f241',
   clearhistory: '\f242',
+  wrench: '\f243',
 };
 
 fixture.disablePageReloads`Icons`
