@@ -61,43 +61,45 @@ function parseArgs(argv) {
     for(let i = 0; i < args.length; i++) {
         const a = args[i];
 
-        if(a === '-h' || a === '--help') out.help = true;
-        else if(a === '--out') {
+        if(a === '-h' || a === '--help') {
+            out.help = true;
+        } else if(a === '--out') {
             const next = args[i + 1];
             if(!next || next.startsWith('-')) {
                 logStderr(prefixed('Warning: --out requires a path argument but none was provided. Ignoring --out.'));
             } else {
                 out.outPath = args[++i];
             }
-        }
-        else if(a.startsWith('--out=')) {
+        } else if(a.startsWith('--out=')) {
             const val = a.slice('--out='.length);
             if(!val) {
                 logStderr(prefixed('Warning: --out requires a path argument but none was provided. Ignoring --out.'));
             } else {
                 out.outPath = val;
             }
-        }
-        else if(a === '--non-modular') out.nonModular = true;
-        else if(a === '--no-gitignore') out.gitignore = false;
-        else if(a === '--force') out.force = true;
-        else if(a === '--cwd') {
+        } else if(a === '--non-modular') {
+            out.nonModular = true;
+        } else if(a === '--no-gitignore') {
+            out.gitignore = false;
+        } else if(a === '--force') {
+            out.force = true;
+        } else if(a === '--cwd') {
             const next = args[i + 1];
             if(!next || next.startsWith('-')) {
                 logStderr(prefixed('Warning: --cwd requires a path argument but none was provided. Ignoring --cwd.'));
             } else {
                 out.cwd = args[++i];
             }
-        }
-        else if(a.startsWith('--cwd=')) {
+        } else if(a.startsWith('--cwd=')) {
             const val = a.slice('--cwd='.length);
             if(!val) {
                 logStderr(prefixed('Warning: --cwd requires a path argument but none was provided. Ignoring --cwd.'));
             } else {
                 out.cwd = val;
             }
+        } else {
+            fail(`Unknown argument: ${a}\nRun devextreme-license --help`);
         }
-        else fail(`Unknown argument: ${a}\nRun devextreme-license --help`);
     }
 
     return out;
@@ -173,39 +175,52 @@ function main() {
     const opts = parseArgs(process.argv);
     if(opts.help) {
         printHelp();
-        process.exit(0);
+        process.exitCode = 0;
+        return;
     }
 
-    const { key: lcx, source, currentVersion } = getDevExpressLCXKey() || {};
+    const { key: lcx, source, currentVersion, fullVersion } = getDevExpressLCXKey() || {};
 
+    const converted = lcx ? tryConvertLCXtoLCP(lcx) : null;
     let lcp = TRIAL_VALUE;
     let licenseId = null;
+    let exitCode = 0;
+
+    const withDetails = (message, id) => [
+        message,
+        id ? TEMPLATES.licenseId(id) : null,
+        source ? TEMPLATES.keyWasFound(source.type, source.path) : null,
+    ].filter(Boolean).join(' ');
 
     if(lcx && lcx.trimStart().startsWith('ewog')) {
         logStderr(
-            prefixed(`${TEMPLATES.warningPrefix(1000)} ${TEMPLATES.purchaseLicense}`),
+            prefixed(`${TEMPLATES.warningPrefix(1000)} ${withDetails(TEMPLATES.purchaseLicense(fullVersion), null)}`),
             TEMPLATES.oldDevExtremeKey(currentVersion),
-            TEMPLATES.keyWasFound(source.type, source.path),
-            prefixed(`${TEMPLATES.warningPrefix(1001)} ${TEMPLATES.installationInstructions}`),
+            prefixed(`${TEMPLATES.warningPrefix(1001)} ${TEMPLATES.installationInstructions(fullVersion)}`),
         );
-    } else if(lcx) {
-        lcp = tryConvertLCXtoLCP(lcx) || TRIAL_VALUE;
+    } else if(lcx && !converted) {
+        logStderr(
+            prefixed(`${TEMPLATES.warningPrefix(1000)} ${withDetails(TEMPLATES.purchaseLicense(fullVersion), null)}`),
+            prefixed(`${TEMPLATES.warningPrefix(1001)} ${TEMPLATES.installationInstructions(fullVersion)}`),
+        );
+    } else if(converted) {
+        lcp = converted;
         const { warning, licenseId: id } = getLCPInfo(lcp);
         licenseId = id;
 
-        if(warning) {
+        if(warning && warning.type === 'trialExpired') {
+            exitCode = 1;
+
+            logStderr(
+                prefixed(`${TEMPLATES.errorPrefix(1004)} ${withDetails(TEMPLATES.trialExpired(fullVersion), licenseId)}`),
+            );
+        } else if(warning) {
             const lines = [];
 
-            lines.push(
-                prefixed(`${TEMPLATES.warningPrefix(1000)} ${TEMPLATES.purchaseLicense}`),
-            );
-
-            if(licenseId) {
-                lines.push(TEMPLATES.licenseId(licenseId));
-            }
+            const purchaseLicense = TEMPLATES.purchaseLicense(fullVersion);
 
             lines.push(
-                TEMPLATES.keyWasFound(source.type, source.path),
+                prefixed(`${TEMPLATES.warningPrefix(1000)} ${warning.type === 'incompatibleVersion' ? purchaseLicense : withDetails(purchaseLicense, licenseId)}`),
             );
 
             if(warning.type !== 'trial') {
@@ -213,10 +228,10 @@ function main() {
 
                 if(warning.type === 'incompatibleVersion') {
                     lines.push(
-                        prefixed(`${TEMPLATES.warningPrefix(code)} ${TEMPLATES.keyVerificationFailed(warning.type, warning.keyVersion, warning.currentVersion)}`),
+                        prefixed(`${TEMPLATES.warningPrefix(code)} ${withDetails(TEMPLATES.keyVerificationFailed(warning.type, warning.keyVersion, warning.currentVersion), licenseId)}`),
                     );
                 } else {
-                    lines.push(prefixed(`${TEMPLATES.warningPrefix(code)} ${TEMPLATES.installationInstructions}`));
+                    lines.push(prefixed(`${TEMPLATES.warningPrefix(code)} ${TEMPLATES.installationInstructions(fullVersion)}`));
                 }
             }
 
@@ -224,15 +239,16 @@ function main() {
         }
     } else {
         logStderr(
-            prefixed(`${TEMPLATES.warningPrefix(1000)} ${TEMPLATES.purchaseLicense}`),
+            prefixed(`${TEMPLATES.warningPrefix(1000)} ${TEMPLATES.purchaseLicense(fullVersion)}`),
             TEMPLATES.keyNotFound,
-            prefixed(`${TEMPLATES.warningPrefix(1001)} ${TEMPLATES.installationInstructions}`),
+            prefixed(`${TEMPLATES.warningPrefix(1001)} ${TEMPLATES.installationInstructions(fullVersion)}`),
         );
     }
 
     if(!opts.outPath) {
         process.stdout.write(lcp + '\n');
-        process.exit(0);
+        process.exitCode = exitCode;
+        return;
     }
 
     const projectRoot = path.resolve(opts.cwd);
@@ -241,7 +257,9 @@ function main() {
     ensureDirExists(path.dirname(outAbs));
 
     if(!opts.force && fs.existsSync(outAbs)) {
-        fail(`Output file already exists: ${opts.outPath}\nUse --force to overwrite.`);
+        process.stderr.write(`Output file already exists: ${opts.outPath}\nUse --force to overwrite.\n`);
+        process.exitCode = exitCode;
+        return;
     }
 
     const useNonModular = opts.nonModular && outAbs.endsWith('.js');
@@ -253,7 +271,7 @@ function main() {
         } catch{}
     }
 
-    process.exit(0);
+    process.exitCode = exitCode;
 }
 
 main();

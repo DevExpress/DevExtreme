@@ -100,6 +100,9 @@
     * @name ErrorsCore.E0123
     */
 /**
+    * @name ErrorsCore.E0124
+    */
+/**
     * @name ErrorsCore.W0000
     */
 /**
