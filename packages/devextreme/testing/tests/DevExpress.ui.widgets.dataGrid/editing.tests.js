@@ -20955,7 +20955,7 @@ QUnit.module('Editing - new row position', {
                     keyboardNavigation: {
                         setFocusedRowIndex: () => {},
                         focus: () => {},
-                        _fireFocusedRowChanged: () => {},
+                        fireFocusedRowChanged: () => {},
                     },
                 },
             });

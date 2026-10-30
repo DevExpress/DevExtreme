@@ -1244,7 +1244,7 @@ describe('Keyboard Navigation', () => {
         });
         const controller = getKeyboardNavigationController(instance);
 
-        expect(controller._isCellValid(getCell(instance, rowIndex, cellIndex))).toBe(expected);
+        expect(controller.isCellValid(getCell(instance, rowIndex, cellIndex))).toBe(expected);
       },
     );
 
@@ -1256,7 +1256,7 @@ describe('Keyboard Navigation', () => {
       });
       const controller = getKeyboardNavigationController(instance);
 
-      expect(controller._isCellValid($('<td>'))).toBe(false);
+      expect(controller.isCellValid($('<td>'))).toBe(false);
     });
 
     it('a detached spanning cell is not valid', async () => {
@@ -1267,7 +1267,7 @@ describe('Keyboard Navigation', () => {
       });
       const controller = getKeyboardNavigationController(instance);
 
-      expect(controller._isCellValid($('<td>').attr('colspan', '2'))).toBe(false);
+      expect(controller.isCellValid($('<td>').attr('colspan', '2'))).toBe(false);
     });
 
     it('a spanning cell past the last column is not valid', async () => {
@@ -1279,7 +1279,7 @@ describe('Keyboard Navigation', () => {
       const controller = getKeyboardNavigationController(instance);
       const $cell = $('<td>').attr('colspan', '2').appendTo($(instance.getRowElement(1)?.[0]));
 
-      expect(controller._isCellValid($cell)).toBe(false);
+      expect(controller.isCellValid($cell)).toBe(false);
     });
   });
 

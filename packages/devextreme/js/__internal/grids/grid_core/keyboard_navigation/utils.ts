@@ -102,7 +102,7 @@ export const isNavigableColumnCell = (
 
 export const shouldPreventScroll = (
   that: KeyboardNavigationController,
-): boolean => (that._isVirtualScrolling()
+): boolean => (that.isVirtualScrolling()
   ? that.option('focusedRowIndex') === that.getRowIndex()
   : false);
 

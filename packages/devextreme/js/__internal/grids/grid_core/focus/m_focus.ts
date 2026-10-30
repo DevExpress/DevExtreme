@@ -116,7 +116,7 @@ export class FocusController extends core.ViewController {
     const {
       reload, fullReload, pageIndex, paging,
     } = operationTypes;
-    const isVirtualScrolling = this.getKeyboardController()._isVirtualScrolling();
+    const isVirtualScrolling = this.getKeyboardController().isVirtualScrolling();
     const pagingWithoutVirtualScrolling = paging && !isVirtualScrolling;
     const focusedRowKey = this.option('focusedRowKey');
     const isAutoNavigate = this.isAutoNavigateToFocusedRow();
@@ -168,7 +168,7 @@ export class FocusController extends core.ViewController {
     switch (name) {
       case 'focusedRowIndex':
         this._focusRowByIndex(value);
-        this.getKeyboardController()._fireFocusedRowChanged();
+        this.getKeyboardController().fireFocusedRowChanged();
         args.handled = true;
         break;
       case 'focusedRowKey':
@@ -177,7 +177,7 @@ export class FocusController extends core.ViewController {
         }
 
         this._focusRowByKey(value).done(() => {
-          this.getKeyboardController()._fireFocusedRowChanged();
+          this.getKeyboardController().fireFocusedRowChanged();
         });
         args.handled = true;
         break;
@@ -251,7 +251,7 @@ export class FocusController extends core.ViewController {
   }
 
   private _isLocalRowIndex(index) {
-    const isVirtualScrolling = this.getKeyboardController()._isVirtualScrolling();
+    const isVirtualScrolling = this.getKeyboardController().isVirtualScrolling();
 
     if (isVirtualScrolling) {
       const pageIndex = Math.floor(index / this.getDataController().pageSize());
@@ -306,7 +306,7 @@ export class FocusController extends core.ViewController {
       focusedRowKey: null,
     });
 
-    this.getKeyboardController()._fireFocusedRowChanged();
+    this.getKeyboardController().fireFocusedRowChanged();
   }
 
   private _isValidFocusedRowIndex(rowIndex) {
@@ -463,7 +463,7 @@ export class FocusController extends core.ViewController {
     if (isDefined(focusedRowKey)) {
       const visibleRowIndex = this.getDataController().getRowIndexByKey(focusedRowKey);
       if (visibleRowIndex >= 0) {
-        if (this.getKeyboardController()._isVirtualScrolling()) {
+        if (this.getKeyboardController().isVirtualScrolling()) {
           currentFocusedRowIndex = visibleRowIndex + this.getDataController().getRowIndexOffset();
         }
         this.getKeyboardController().setFocusedRowIndex(currentFocusedRowIndex);
@@ -602,7 +602,7 @@ export const keyboardNavigation = (Base: ModuleType<KeyboardNavigationController
     }
     if (this.isCellFocusType()) {
       this.setRowFocusType();
-      this._focus(this.getCellElementFromTarget(eventArgs.originalEvent.target), true);
+      this.applyFocus(this.getCellElementFromTarget(eventArgs.originalEvent.target), true);
 
       return true;
     }
@@ -642,7 +642,7 @@ export const focusEditorFactoryViewControllerExtender = (
     ) {
       super.renderFocusOverlay($element, isHideBorder);
     } else if (focusedRowEnabled) {
-      const isRowElement = this.keyboardNavigationController._getElementType($element) === 'row';
+      const isRowElement = this.keyboardNavigationController.getElementType($element) === 'row';
 
       if (isRowElement && !$element.hasClass(ROW_FOCUSED_CLASS)) {
         const $cell = this.keyboardNavigationController.getFirstValidCellInRow($element);

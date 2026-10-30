@@ -225,7 +225,7 @@ QUnit.module('Real DataController and ColumnsController', {
 
         // act
         const navigationController = this.getController('keyboardNavigation');
-        navigationController._isCellValid = () => false;
+        navigationController.isCellValid = () => false;
         navigationController._focusedCellPosition = { columnIndex: 0, rowIndex: 0 };
         navigationController._isNeedFocus = true;
 
