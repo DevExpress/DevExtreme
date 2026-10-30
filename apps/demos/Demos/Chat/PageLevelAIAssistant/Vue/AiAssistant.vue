@@ -172,13 +172,13 @@ defineExpose({ pushMessage });
   font-size: 18px;
   font-weight: 400;
   text-align: center;
-  color: var(--dx-color-text);
+  color: var(--dxds-color-content, var(--dx-color-text));
   margin-bottom: 8px;
 }
 
 .ai-chat-empty-prompt {
   font-size: 14px;
-  color: #616161;
+  color: var(--dxds-color-content-subtle, #616161);
   text-align: center;
   padding: 0 24px;
   white-space: pre-line;
@@ -193,7 +193,7 @@ defineExpose({ pushMessage });
 }
 
 .dx-chat-messagebox {
-  border-top-color: transparent;
+  border-top-color: var(--dxds-color-none, transparent);
 }
 
 .dx-chat-messagelist-empty-view,
