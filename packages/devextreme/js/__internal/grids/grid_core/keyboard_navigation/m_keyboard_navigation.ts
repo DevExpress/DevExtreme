@@ -2166,6 +2166,20 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
       : columnIndex - this._columnsController.getColumnIndexOffset();
   }
 
+  public getFocusedCellInVisibleRow(visibleRowIndex: number): dxElementWrapper | undefined {
+    const rowIndexOffset = this._dataController.getRowIndexOffset();
+    const { rowIndex } = this._focusedCellPosition;
+    const isFocusedRow = rowIndex !== undefined && rowIndex - rowIndexOffset === visibleRowIndex;
+
+    if (!isFocusedRow) {
+      return undefined;
+    }
+
+    const $cell = this._getFocusedCell();
+
+    return isElementDefined($cell) ? $cell : undefined;
+  }
+
   private _isCellByPositionValid(cellPosition: CellPosition): boolean {
     const $cell = $(this._getCell(cellPosition));
     return this.isCellValid($cell);
@@ -3264,16 +3278,11 @@ const editing = (
 
   protected getFocusedCellInRow(rowIndex: number): dxElementWrapper | undefined {
     let $cell = super.getFocusedCellInRow(rowIndex);
-    const rowIndexOffset = this._dataController.getRowIndexOffset();
-    const { rowIndex: focusedRowIndex } = this._keyboardNavigationController._focusedCellPosition;
 
-    if (
-      this._keyboardNavigationController.isKeyboardEnabled()
-      && focusedRowIndex !== undefined
-      && focusedRowIndex - rowIndexOffset === rowIndex
-    ) {
-      const $focusedCell = this._keyboardNavigationController._getFocusedCell();
-      if (isElementDefined($focusedCell) && !$focusedCell.hasClass(EDITING_CLASSES.commandEdit)) {
+    if (this._keyboardNavigationController.isKeyboardEnabled()) {
+      const $focusedCell = this._keyboardNavigationController.getFocusedCellInVisibleRow(rowIndex);
+
+      if ($focusedCell && !$focusedCell.hasClass(EDITING_CLASSES.commandEdit)) {
         $cell = $focusedCell;
       }
     }

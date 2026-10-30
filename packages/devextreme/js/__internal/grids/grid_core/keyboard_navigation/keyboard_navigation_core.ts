@@ -38,7 +38,7 @@ export class KeyboardNavigationController extends modules.ViewController {
 
   protected _rowsView!: Views['rowsView'];
 
-  public _focusedCellPosition!: Partial<CellPosition>;
+  protected _focusedCellPosition!: Partial<CellPosition>;
 
   private _applyColumnIndexBoundaries(columnIndex: number): number {
     const visibleColumnCount = this._columnsController.getVisibleColumns(null, true).length;
@@ -418,7 +418,7 @@ export class KeyboardNavigationController extends modules.ViewController {
     return this.option('keyboardNavigation.enabled');
   }
 
-  public _getFocusedCell(): dxElementWrapper {
+  protected _getFocusedCell(): dxElementWrapper {
     return $(this._getCell(this._focusedCellPosition));
   }
 
