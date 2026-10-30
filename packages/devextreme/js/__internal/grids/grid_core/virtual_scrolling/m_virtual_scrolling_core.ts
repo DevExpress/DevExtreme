@@ -38,9 +38,6 @@ import type {
   VirtualScrollDataOptions,
 } from './types';
 
-const isVirtualMode = (that: VirtualScrollController): boolean => that.option('scrolling.mode') === SCROLLING_MODE_VIRTUAL || that.isVirtual();
-const isAppendMode = (that: VirtualScrollController): boolean => that.option('scrolling.mode') === SCROLLING_MODE_INFINITE && !that.isVirtual();
-
 // @ts-expect-error scrollTop() is typed as a setter only
 const getScrollTop = (scrollable: ExternalScrollable): number => scrollable.scrollTop();
 
@@ -205,7 +202,7 @@ class VirtualScrollController<
   }
 
   public virtualItemsCount(): VirtualItemsCount | undefined {
-    if (isVirtualMode(this)) {
+    if (this.isVirtualMode()) {
       const dataOptions = this._dataOptions;
       const totalItemsCount = dataOptions.totalItemsCount();
       if (this.option(LEGACY_SCROLLING_MODE) === false && totalItemsCount !== -1) {
@@ -450,11 +447,11 @@ class VirtualScrollController<
   }
 
   public isVirtualMode(): boolean {
-    return isVirtualMode(this);
+    return this.option('scrolling.mode') === SCROLLING_MODE_VIRTUAL || this.isVirtual();
   }
 
   public isAppendMode(): boolean {
-    return isAppendMode(this);
+    return this.option('scrolling.mode') === SCROLLING_MODE_INFINITE && !this.isVirtual();
   }
 
   public getViewportParams(): ViewportParams {

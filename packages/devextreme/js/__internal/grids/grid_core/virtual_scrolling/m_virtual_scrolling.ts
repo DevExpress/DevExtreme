@@ -55,21 +55,17 @@ const updateLoading = (that: VirtualScrollingDataSourceAdapter): void => {
   const beginPageIndex = that._virtualScrollController.beginPageIndex(-1);
 
   if (isVirtualMode(that)) {
-    if (
-      beginPageIndex < 0
-      || (
-        (
-          that.viewportSize() >= 0
-          && that.getViewportItemIndex() >= 0
-          && (
-            beginPageIndex * that.pageSize() > that.getViewportItemIndex()
-            || beginPageIndex * that.pageSize() + that.itemsCount()
-              < that.getViewportItemIndex() + that.viewportSize()
-          )
-        )
-        && that._dataSource.isLoading()
-      )
-    ) {
+    const viewportSize = that.viewportSize();
+    const viewportItemIndex = that.getViewportItemIndex();
+    const beginItemIndex = beginPageIndex * that.pageSize();
+    const isViewportBeforeLoadedItems = beginItemIndex > viewportItemIndex;
+    const isViewportAfterLoadedItems = beginItemIndex + that.itemsCount()
+      < viewportItemIndex + viewportSize;
+    const isViewportOutsideLoadedItems = viewportSize >= 0
+      && viewportItemIndex >= 0
+      && (isViewportBeforeLoadedItems || isViewportAfterLoadedItems);
+
+    if (beginPageIndex < 0 || (isViewportOutsideLoadedItems && that._dataSource.isLoading())) {
       if (!that._isLoading) {
         that._isLoading = true;
         that.loadingChanged.fire(true);
@@ -474,13 +470,13 @@ export const resizing = (
 ): ModuleType<
   ResizingController & VirtualScrollingResizingControllerExtension
 > => class VirtualScrollingResizingControllerExtender extends Base {
-  private _resizeTimeout?: ReturnType<typeof setTimeout> | null;
+  private _resizeTimeout?: ReturnType<typeof setTimeout>;
 
   private _lastTime?: Date;
 
   public dispose(): void {
     super.dispose();
-    clearTimeout(this._resizeTimeout ?? undefined);
+    clearTimeout(this._resizeTimeout);
   }
 
   public _updateMasterDataGridCore(
@@ -513,37 +509,36 @@ export const resizing = (
   }
 
   public resize(): DeferredObj<unknown> {
-    // eslint-disable-next-line @typescript-eslint/init-declarations -- assigned in branches
-    let result: DeferredObj<unknown>;
-
-    if (isVirtualMode(this) || gridCoreUtils.isVirtualRowRendering(this)) {
-      clearTimeout(this._resizeTimeout ?? undefined);
-      this._resizeTimeout = null;
-
-      const diff = new Date().getTime() - Number(this._lastTime);
-      const updateTimeout = this.option('scrolling.updateTimeout');
-
-      if (this._lastTime && diff < updateTimeout) {
-        const deferred = Deferred<unknown>();
-        const resolve = deferred.resolve as (...a: unknown[]) => void;
-        const reject = deferred.reject as (...a: unknown[]) => void;
-        result = deferred;
-        // eslint-disable-next-line no-restricted-globals -- delays resize by updateTimeout
-        this._resizeTimeout = setTimeout(() => {
-          this._resizeTimeout = null;
-          super.resize().done(resolve).fail(reject);
-          this._lastTime = new Date();
-        }, updateTimeout);
-        this._lastTime = new Date();
-      } else {
-        result = super.resize();
-        if (this._dataController.isLoaded()) {
-          this._lastTime = new Date();
-        }
-      }
-    } else {
-      result = super.resize();
+    if (!isVirtualMode(this) && !gridCoreUtils.isVirtualRowRendering(this)) {
+      return super.resize();
     }
+
+    clearTimeout(this._resizeTimeout);
+    this._resizeTimeout = undefined;
+
+    const diff = new Date().getTime() - Number(this._lastTime);
+    const updateTimeout = this.option('scrolling.updateTimeout');
+
+    if (this._lastTime && diff < updateTimeout) {
+      const deferred = Deferred<unknown>();
+      const resolve = deferred.resolve as (...a: unknown[]) => void;
+      const reject = deferred.reject as (...a: unknown[]) => void;
+      // eslint-disable-next-line no-restricted-globals -- delays resize by updateTimeout
+      this._resizeTimeout = setTimeout(() => {
+        this._resizeTimeout = undefined;
+        super.resize().done(resolve).fail(reject);
+        this._lastTime = new Date();
+      }, updateTimeout);
+      this._lastTime = new Date();
+
+      return deferred;
+    }
+
+    const result = super.resize();
+    if (this._dataController.isLoaded()) {
+      this._lastTime = new Date();
+    }
+
     return result;
   }
 };
@@ -918,9 +913,8 @@ export const rowsView = (
     super._handleScroll(e);
   }
 
-  protected _needUpdateRowHeight(itemsCount: number): boolean | undefined {
-    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing -- OR of two flags
-    return super._needUpdateRowHeight(itemsCount) || (itemsCount > 0
+  protected _needUpdateRowHeight(itemsCount: number): boolean {
+    return Boolean(super._needUpdateRowHeight(itemsCount)) || (itemsCount > 0
       && (isInfiniteMode(this) && !gridCoreUtils.isVirtualRowRendering(this))
     );
   }
