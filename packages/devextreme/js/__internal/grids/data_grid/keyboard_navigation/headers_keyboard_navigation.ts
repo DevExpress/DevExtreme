@@ -81,8 +81,8 @@ const headersKeyboardNavigation: (
     return isHandled;
   }
 
-  public groupColumn(column, rowIndex = 0): void {
-    if (!isDefined(column.groupIndex) && column?.allowGrouping) {
+  public groupColumn(column: Column | undefined, rowIndex = 0): void {
+    if (column && !isDefined(column.groupIndex) && column.allowGrouping) {
       const newGroupIndex = this._columnsController.getGroupColumns()?.length ?? 0;
       const newFocusedColumn = this.getNewFocusedColumnBeforeGrouping(
         column,
@@ -100,13 +100,17 @@ const headersKeyboardNavigation: (
     this._columnsController.beginUpdate();
     super.ungroupAllColumns();
 
-    const rowIndex = this._columnsController.getRowIndex(focusedColumn.index ?? -1, true);
-    const newVisibleIndex = this.getVisibleIndex(focusedColumn);
+    if (focusedColumn) {
+      const rowIndex = this._columnsController.getRowIndex(focusedColumn.index ?? -1, true);
+      const newVisibleIndex = this.getVisibleIndex(focusedColumn);
 
-    this.updateFocusPosition({
-      rowIndex,
-      columnIndex: newVisibleIndex,
-    });
+      this.updateFocusPosition({
+        rowIndex,
+        columnIndex: newVisibleIndex,
+      });
+    } else {
+      this.updateFocusPosition();
+    }
     this._columnsController.endUpdate();
   }
 };

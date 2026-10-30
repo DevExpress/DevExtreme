@@ -240,7 +240,10 @@ export class KeyboardNavigationController extends modules.ViewController {
     return undefined;
   }
 
-  protected _getColumnByCellElement($cell: dxElementWrapper, rowIndex?: number): Column {
+  protected _getColumnByCellElement(
+    $cell: dxElementWrapper,
+    rowIndex?: number,
+  ): Column | undefined {
     const cellIndex = this.getCellIndex($cell);
     const columnIndex = cellIndex + this._columnsController.getColumnIndexOffset();
 

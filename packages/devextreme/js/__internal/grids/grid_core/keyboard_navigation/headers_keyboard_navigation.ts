@@ -31,7 +31,7 @@ export class HeadersKeyboardNavigationController extends ColumnKeyboardNavigatio
       const rowIndex = this._getRowIndex($cell.parent());
       const column = this._getColumnByCellElement($cell, rowIndex);
 
-      if (this.canReorderColumn(column, direction, rowIndex)) {
+      if (column && this.canReorderColumn(column, direction, rowIndex)) {
         this.moveColumn(
           column,
           direction,

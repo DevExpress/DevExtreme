@@ -1258,6 +1258,29 @@ describe('Keyboard Navigation', () => {
 
       expect(controller._isCellValid($('<td>'))).toBe(false);
     });
+
+    it('a detached spanning cell is not valid', async () => {
+      const { instance } = await createDataGrid({
+        dataSource: DATA_SOURCE,
+        keyExpr: 'id',
+        ...GROUPED,
+      });
+      const controller = getKeyboardNavigationController(instance);
+
+      expect(controller._isCellValid($('<td>').attr('colspan', '2'))).toBe(false);
+    });
+
+    it('a spanning cell past the last column is not valid', async () => {
+      const { instance } = await createDataGrid({
+        dataSource: DATA_SOURCE,
+        keyExpr: 'id',
+        ...GROUPED,
+      });
+      const controller = getKeyboardNavigationController(instance);
+      const $cell = $('<td>').attr('colspan', '2').appendTo($(instance.getRowElement(1)?.[0]));
+
+      expect(controller._isCellValid($cell)).toBe(false);
+    });
   });
 
   describe('cell tabindex after render', () => {

@@ -2275,10 +2275,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     }
 
     const $row = $cell.parent();
-    const columnIndex = this._rowsView.getCellIndex($cell)
-      + this._columnsController.getColumnIndexOffset();
     const column = this._getColumnByCellElement($cell);
-    const visibleColumnCount = this._getVisibleColumnCount();
 
     const isDragCell = GridCoreKeyboardNavigationDom.isDragCell($cell);
     if (isDragCell) {
@@ -2289,7 +2286,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
       return true;
     }
 
-    if (visibleColumnCount > columnIndex && isNavigableColumnCell($cell, column)) {
+    if (column && isNavigableColumnCell($cell, column)) {
       const rowItems = this._dataController.items();
       const visibleRowIndex = this._rowsView.getRowIndex($row);
       const row = rowItems[visibleRowIndex];
