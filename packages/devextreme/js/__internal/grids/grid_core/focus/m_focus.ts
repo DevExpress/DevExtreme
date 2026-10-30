@@ -579,11 +579,14 @@ const focusDataControllerExtender = (
   }
 
   protected _endUpdateCore(): void {
-    const isUpdateFocusedRow = this.changes.length > 1
-      && this.changes.every((change) => change.changeType === 'updateFocusedRow');
+    const focusedRowChanges = this.changes.filter((change) => change.changeType === 'updateFocusedRow');
+    const hasOnlyFocusOrSelectionChanges = this.changes.every(
+      (change) => change.changeType === 'updateFocusedRow' || change.changeType === 'updateSelection',
+    );
 
-    if (isUpdateFocusedRow) {
-      this.changes = this.changes.slice(-1);
+    if (focusedRowChanges.length && hasOnlyFocusOrSelectionChanges) {
+      this.changes = this.changes.filter((change) => change.changeType !== 'updateFocusedRow');
+      this.updateItems(focusedRowChanges[focusedRowChanges.length - 1]);
     }
 
     super._endUpdateCore();

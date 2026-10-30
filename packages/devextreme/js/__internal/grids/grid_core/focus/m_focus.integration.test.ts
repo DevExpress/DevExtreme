@@ -347,6 +347,27 @@ describe('GridCore focus', () => {
       expect(instance.getVisibleRows().some((row) => row.rowType === 'data' && row.key === undefined)).toBe(false);
     });
 
+    it('raises no error when the restored state drops runtime grouping and also changes selection (T1337363)', async () => {
+      const errors: (string | undefined)[] = [];
+      const { instance } = await createDataGrid({
+        dataSource: DATA,
+        focusedRowEnabled: true,
+        selection: { mode: 'multiple' },
+        columns: ['group', 'id', 'value'],
+        grouping: { autoExpandAll: false },
+        onDataErrorOccurred: ({ error }) => { errors.push(error?.message); },
+      });
+      instance.columnOption('group', 'groupIndex', 0);
+      await flushAsync();
+      instance.option('focusedRowKey', 1);
+      await flushAsync();
+
+      instance.state({ ...instance.state(), columns: undefined, selectedRowKeys: [2] });
+
+      expect(errors).toEqual([]);
+      expect(instance.option('selectedRowKeys')).toEqual([2]);
+    });
+
     it('keeps the focused data row when the restored state drops runtime grouping (T1337363)', async () => {
       const { instance } = await createDataGrid({
         dataSource: DATA,
