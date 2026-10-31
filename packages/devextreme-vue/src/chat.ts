@@ -23,11 +23,14 @@ import {
  TypingEndEvent,
  TypingStartEvent,
  SendButtonProperties,
+ ToolCallOptions,
  User,
  Attachment,
+ ToolCall,
  MessageType,
  SendButtonAction,
  SendButtonClickEvent,
+ ToolCallStatus,
 } from "devextreme/ui/chat";
 import {
  DataSourceOptions,
@@ -134,6 +137,7 @@ type AccessibleOptions = Pick<Properties,
   "speechToTextEnabled" |
   "speechToTextOptions" |
   "suggestions" |
+  "toolCallOptions" |
   "typingUsers" |
   "user" |
   "visible" |
@@ -188,6 +192,7 @@ const componentConfig = {
     speechToTextEnabled: Boolean,
     speechToTextOptions: Object as PropType<dxSpeechToTextOptions | Record<string, any>>,
     suggestions: Object as PropType<dxButtonGroupOptions | Record<string, any>>,
+    toolCallOptions: Object as PropType<ToolCallOptions | Record<string, any>>,
     typingUsers: Array as PropType<Array<User>>,
     user: Object as PropType<User | Record<string, any>>,
     visible: Boolean,
@@ -238,6 +243,7 @@ const componentConfig = {
     "update:speechToTextEnabled": null,
     "update:speechToTextOptions": null,
     "update:suggestions": null,
+    "update:toolCallOptions": null,
     "update:typingUsers": null,
     "update:user": null,
     "update:visible": null,
@@ -262,6 +268,7 @@ const componentConfig = {
       sendButtonOptions: { isCollectionItem: false, optionName: "sendButtonOptions" },
       speechToTextOptions: { isCollectionItem: false, optionName: "speechToTextOptions" },
       suggestions: { isCollectionItem: false, optionName: "suggestions" },
+      toolCallOptions: { isCollectionItem: false, optionName: "toolCallOptions" },
       typingUser: { isCollectionItem: true, optionName: "typingUsers" },
       user: { isCollectionItem: false, optionName: "user" }
     };
@@ -349,6 +356,7 @@ const DxChatItemConfig = {
     "update:src": null,
     "update:text": null,
     "update:timestamp": null,
+    "update:toolCalls": null,
     "update:type": null,
   },
   props: {
@@ -361,6 +369,7 @@ const DxChatItemConfig = {
     src: String,
     text: String,
     timestamp: [Date, Number, String],
+    toolCalls: Array as PropType<Array<ToolCall>>,
     type: String as PropType<MessageType>
   }
 };
@@ -373,7 +382,8 @@ const DxChatItem = defineComponent(DxChatItemConfig);
 (DxChatItem as any).$_isCollectionItem = true;
 (DxChatItem as any).$_expectedChildren = {
   attachment: { isCollectionItem: true, optionName: "attachments" },
-  author: { isCollectionItem: false, optionName: "author" }
+  author: { isCollectionItem: false, optionName: "author" },
+  toolCall: { isCollectionItem: true, optionName: "toolCalls" }
 };
 
 const DxCustomSpeechRecognizerConfig = {
@@ -604,6 +614,7 @@ const DxItemConfig = {
     "update:template": null,
     "update:text": null,
     "update:timestamp": null,
+    "update:toolCalls": null,
     "update:type": null,
     "update:visible": null,
   },
@@ -622,6 +633,7 @@ const DxItemConfig = {
     template: {},
     text: String,
     timestamp: [Date, Number, String],
+    toolCalls: Array as PropType<Array<ToolCall>>,
     type: String as PropType<MessageType | ButtonType | string>,
     visible: Boolean
   }
@@ -635,7 +647,8 @@ const DxItem = defineComponent(DxItemConfig);
 (DxItem as any).$_isCollectionItem = true;
 (DxItem as any).$_expectedChildren = {
   attachment: { isCollectionItem: true, optionName: "attachments" },
-  author: { isCollectionItem: false, optionName: "author" }
+  author: { isCollectionItem: false, optionName: "author" },
+  toolCall: { isCollectionItem: true, optionName: "toolCalls" }
 };
 
 const DxMessageTimestampFormatConfig = {
@@ -891,6 +904,51 @@ const DxSuggestionsItem = defineComponent(DxSuggestionsItemConfig);
 (DxSuggestionsItem as any).$_optionName = "items";
 (DxSuggestionsItem as any).$_isCollectionItem = true;
 
+const DxToolCallConfig = {
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:arguments": null,
+    "update:expanded": null,
+    "update:name": null,
+    "update:result": null,
+    "update:status": null,
+  },
+  props: {
+    arguments: Object as PropType<Record<string, any>>,
+    expanded: Boolean,
+    name: String,
+    result: [Object, String] as PropType<object | string>,
+    status: String as PropType<ToolCallStatus>
+  }
+};
+
+prepareConfigurationComponentConfig(DxToolCallConfig);
+
+const DxToolCall = defineComponent(DxToolCallConfig);
+
+(DxToolCall as any).$_optionName = "toolCalls";
+(DxToolCall as any).$_isCollectionItem = true;
+
+const DxToolCallOptionsConfig = {
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:expandAll": null,
+    "update:showInMessageTemplate": null,
+  },
+  props: {
+    expandAll: Boolean,
+    showInMessageTemplate: Boolean
+  }
+};
+
+prepareConfigurationComponentConfig(DxToolCallOptionsConfig);
+
+const DxToolCallOptions = defineComponent(DxToolCallOptionsConfig);
+
+(DxToolCallOptions as any).$_optionName = "toolCallOptions";
+
 const DxTypingUserConfig = {
   emits: {
     "update:isActive": null,
@@ -956,6 +1014,8 @@ export {
   DxSpeechToTextOptions,
   DxSuggestions,
   DxSuggestionsItem,
+  DxToolCall,
+  DxToolCallOptions,
   DxTypingUser,
   DxUser
 };
