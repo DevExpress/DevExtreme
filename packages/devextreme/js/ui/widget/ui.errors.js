@@ -24,9 +24,6 @@
     * @name ErrorsUIWidgets.E1007
     */
 /**
-    * @name ErrorsUIWidgets.E1010
-    */
-/**
     * @name ErrorsUIWidgets.E1011
     */
 /**

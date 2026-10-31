@@ -22,7 +22,6 @@ const DROP_DOWN_EDITOR_CLASS = 'dx-dropdowneditor';
 const DROP_DOWN_EDITOR_INPUT_WRAPPER = 'dx-dropdowneditor-input-wrapper';
 const DROP_DOWN_EDITOR_BUTTON_CLASS = 'dx-dropdowneditor-button';
 const DROP_DOWN_EDITOR_BUTTON_VISIBLE = 'dx-dropdowneditor-button-visible';
-const DROP_DOWN_EDITOR_FIELD_TEMPLATE_WRAPPER = 'dx-dropdowneditor-field-template-wrapper';
 const TEXT_EDITOR_INPUT_CLASS = 'dx-texteditor-input';
 
 module('DropDownEditor markup', {
@@ -87,19 +86,6 @@ module('DropDownEditor markup', {
         assert.equal($buttons.length, 2, 'clear button and drop button were rendered');
         assert.ok($buttons.eq(0).hasClass('dx-clear-button-area'), 'clear button is the first one');
         assert.ok($buttons.eq(1).hasClass(DROP_DOWN_EDITOR_BUTTON_CLASS), 'drop button is the second one');
-    });
-
-    test('fieldTemplate as render', function(assert) {
-        const $dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({
-            fieldTemplate: function(value) {
-                const $textBox = $('<div>').dxTextBox();
-                return $('<div>').text(value + this.option('value')).append($textBox);
-            },
-            value: 'test'
-        });
-
-        assert.strictEqual($dropDownEditor.find(`.${DROP_DOWN_EDITOR_FIELD_TEMPLATE_WRAPPER}`).length, 1);
-        assert.equal($dropDownEditor.text().trim(), 'testtest', 'field rendered');
     });
 
     test('field should be rendered after input value rendering', function(assert) {
