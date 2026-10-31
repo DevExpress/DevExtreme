@@ -1742,3 +1742,104 @@ QUnit.module('action API', {}, () => {
         config({ wrapActionsBeforeExecute: originFlag });
     });
 });
+
+QUnit.module('construction order', {
+    beforeEach: function() {
+        const log = this.log = [];
+
+        this.LoggingComponent = class extends Component {
+            _init() {
+                log.push('_init');
+                super._init();
+            }
+        };
+    }
+}, () => {
+    QUnit.test('onInitializing, _init and onInitialized run inside the constructor in this order', function(assert) {
+        const log = this.log;
+
+        const component = new this.LoggingComponent({
+            onInitializing() {
+                log.push('onInitializing: options ' + (this._options ? 'exist' : 'missing'));
+            },
+            onInitialized() {
+                log.push('onInitialized');
+            }
+        });
+        log.push('constructed');
+
+        assert.deepEqual(log, ['onInitializing: options exist', '_init', 'onInitialized', 'constructed']);
+        assert.strictEqual(component._initialized, true, 'the component is initialized');
+    });
+
+    QUnit.test('the ctor of an included mixin runs before the options exist, its postCtor after onInitialized and before the derived constructor body', function(assert) {
+        const log = this.log;
+
+        class Base extends this.LoggingComponent {}
+        Base.include({
+            ctor() {
+                log.push('mixin ctor: options ' + (this._options ? 'exist' : 'missing'));
+            },
+            postCtor() {
+                log.push('mixin postCtor: initialized ' + this._initialized);
+            },
+            mixinMethod() {
+                return 'mixin';
+            }
+        });
+
+        class Derived extends Base {
+            constructor(options) {
+                super(options);
+                log.push('derived constructor body');
+            }
+
+            _init() {
+                super._init();
+                log.push('mixin method in _init: ' + this.mixinMethod());
+            }
+        }
+
+        new Derived({
+            onInitialized() {
+                log.push('onInitialized');
+            }
+        });
+
+        assert.deepEqual(log, [
+            'mixin ctor: options missing',
+            '_init',
+            'mixin method in _init: mixin',
+            'onInitialized',
+            'mixin postCtor: initialized true',
+            'derived constructor body'
+        ]);
+    });
+
+    QUnit.test('disposing event subscribers fire in subscription order, before the onDisposing option handler', function(assert) {
+        const log = this.log;
+
+        class Base extends this.LoggingComponent {}
+        Base.include({
+            postCtor() {
+                this.on('disposing', () => {
+                    log.push('postCtor disposing handler');
+                });
+            }
+        });
+
+        const component = new Base({
+            onDisposing() {
+                log.push('onDisposing');
+            }
+        });
+        component.on('disposing', () => {
+            log.push('disposing handler subscribed after construction');
+        });
+        log.length = 0;
+
+        component._dispose();
+
+        assert.deepEqual(log, ['postCtor disposing handler', 'disposing handler subscribed after construction', 'onDisposing']);
+    });
+});
