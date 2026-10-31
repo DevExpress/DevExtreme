@@ -448,6 +448,12 @@
         "dxChat-fileViewLabel": "لیست فایل",
         "dxChat-downloadButtonLabel": "دانلود فایل {0}",
         "dxChat-fileLimitReachedWarning": "تعداد فایل‌های انتخاب شده زیاد است. حداکثر {0} فایل انتخاب کنید و دوباره امتحان کنید.",
+        "dxChat-toolCallArgumentsLabel": "Arguments",
+        "dxChat-toolCallResultLabel": "Result",
+        "dxChat-toolCallsTitle": "{0} tools",
+        "dxChat-toolCallError": "Error",
+        "dxChat-toolCallsErrorSingle": "{0} Error",
+        "dxChat-toolCallsErrorMultiple": "{0} Errors",
 
         "dxColorView-ariaRed": "قرمز",
         "dxColorView-ariaGreen": "سبز",

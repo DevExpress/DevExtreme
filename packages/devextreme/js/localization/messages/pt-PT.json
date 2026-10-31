@@ -448,6 +448,12 @@
         "dxChat-fileViewLabel": "Lista de ficheiros",
         "dxChat-downloadButtonLabel": "Transferir ficheiro {0}",
         "dxChat-fileLimitReachedWarning": "Selecionou demasiados ficheiros. Selecione, no máximo, {0} ficheiros e tente novamente.",
+        "dxChat-toolCallArgumentsLabel": "Arguments",
+        "dxChat-toolCallResultLabel": "Result",
+        "dxChat-toolCallsTitle": "{0} tools",
+        "dxChat-toolCallError": "Error",
+        "dxChat-toolCallsErrorSingle": "{0} Error",
+        "dxChat-toolCallsErrorMultiple": "{0} Errors",
 
         "dxColorView-ariaRed": "Vermelho",
         "dxColorView-ariaGreen": "Verde",

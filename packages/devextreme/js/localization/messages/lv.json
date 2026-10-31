@@ -448,6 +448,12 @@
         "dxChat-fileViewLabel": "Failu saraksts",
         "dxChat-downloadButtonLabel": "Lejupielādēt failu {0}",
         "dxChat-fileLimitReachedWarning": "Jūs izvēlējāties pārāk daudz failu. Izvēlieties ne vairāk kā {0} failus un mēģinājiet vēlreiz.",
+        "dxChat-toolCallArgumentsLabel": "Arguments",
+        "dxChat-toolCallResultLabel": "Result",
+        "dxChat-toolCallsTitle": "{0} tools",
+        "dxChat-toolCallError": "Error",
+        "dxChat-toolCallsErrorSingle": "{0} Error",
+        "dxChat-toolCallsErrorMultiple": "{0} Errors",
 
         "dxColorView-ariaRed": "Sarkans",
         "dxColorView-ariaGreen": "Zaļš",
