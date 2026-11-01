@@ -5,6 +5,7 @@ import type { DataController } from '@ts/grids/grid_core/data_controller/data_co
 import type { DataSourceController } from '@ts/grids/grid_core/data_source/data_source_controller';
 import type { KeyboardNavigationController } from '@ts/grids/grid_core/keyboard_navigation/keyboard_navigation';
 import type { InternalGridOptions, OptionChanged } from '@ts/grids/grid_core/types';
+import { isVirtualPaging } from '@ts/grids/grid_core/utils';
 import type { PaginationProps } from '@ts/pagination/common/pagination_props';
 import Pagination from '@ts/pagination/wrappers/pagination';
 
@@ -173,9 +174,7 @@ export class PagerView extends modules.View {
       return !!pagerVisible;
     }
 
-    const scrollingMode = this.option('scrolling')?.mode;
-
-    if (scrollingMode === 'virtual' || scrollingMode === 'infinite') {
+    if (isVirtualPaging(this.option('scrolling'))) {
       return false;
     }
 
