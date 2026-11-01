@@ -1,6 +1,7 @@
 import {
   afterEach, beforeEach, describe, expect, it,
 } from '@jest/globals';
+import type { DataGridScrollMode } from '@js/ui/data_grid';
 
 import type { DataGridInstance } from '../../__tests__/__mock__/helpers/utils';
 import {
@@ -69,6 +70,17 @@ describe('PagerView', () => {
         dataSource: ITEMS,
         paging: { pageSize: 10 },
         pager: { visible: 'auto' },
+      });
+
+      expect(isPagerVisible(instance)).toBe(false);
+    });
+
+    it.each<DataGridScrollMode>(['virtual', 'infinite'])('is hidden in auto mode in the %s scrolling mode when there is more than one page', async (mode) => {
+      const { instance } = await createDataGrid({
+        dataSource: ITEMS,
+        paging: { pageSize: 2 },
+        pager: { visible: 'auto' },
+        scrolling: { mode },
       });
 
       expect(isPagerVisible(instance)).toBe(false);
