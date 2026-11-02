@@ -21,9 +21,9 @@ export const adaptivityKeyboardNavigationViewControllerExtender = (
   Base: ModuleType<KeyboardNavigationController>,
 ): ModuleType<KeyboardNavigationController> => class AdaptivityKeyboardNavigationViewControllerExtender
   extends Base {
-  public _isCellValid($cell, isClick?) {
+  public isCellValid($cell, isClick?) {
     return (
-      super._isCellValid($cell, isClick)
+      super.isCellValid($cell, isClick)
         && !$cell.hasClass(this.addWidgetPrefix(CLASSES.hiddenColumn))
         && !$cell.hasClass(CLASSES.commandAdaptiveHidden)
     );
@@ -53,7 +53,7 @@ export const adaptivityKeyboardNavigationViewControllerExtender = (
     return super.isFocusableColumn(column) && column.visibleWidth !== HIDDEN_COLUMNS_WIDTH;
   }
 
-  public _isCellElement($cell) {
-    return super._isCellElement($cell) || $cell.hasClass(CLASSES.adaptiveItemText);
+  public isCellElement($cell) {
+    return super.isCellElement($cell) || $cell.hasClass(CLASSES.adaptiveItemText);
   }
 };

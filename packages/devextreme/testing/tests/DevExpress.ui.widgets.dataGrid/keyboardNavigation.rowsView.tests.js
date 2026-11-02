@@ -94,8 +94,8 @@ QUnit.module('Rows view', {
         this.keyboardNavigationController._focusedView = this.rowsView;
         this.keyboardNavigationController._isNeedFocus = true;
 
-        const origUpdateFocus = this.keyboardNavigationController._updateFocus;
-        this.keyboardNavigationController._updateFocus = function() {
+        const origUpdateFocus = this.keyboardNavigationController.updateFocus;
+        this.keyboardNavigationController.updateFocus = function() {
             origUpdateFocus.apply(this, arguments);
 
             // assert
@@ -119,12 +119,12 @@ QUnit.module('Rows view', {
         this.keyboardNavigationController._focusedView = this.rowsView;
         this.keyboardNavigationController._isNeedScroll = true;
         this.keyboardNavigationController._focusedCellPosition = { columnIndex: 0, rowIndex: 0 };
-        this.keyboardNavigationController._focus(this.gridView.element().find('td').eq(4));
+        this.keyboardNavigationController.applyFocus(this.gridView.element().find('td').eq(4));
 
         this.clock.tick(10);
 
         this.keyboardNavigationController._focusedCellPosition = { columnIndex: 0, rowIndex: 0 };
-        this.keyboardNavigationController._focus = function() {
+        this.keyboardNavigationController.applyFocus = function() {
             isCellFocused = true;
         };
         this.rowsView.renderCompleted.fire();
@@ -177,7 +177,7 @@ QUnit.module('Rows view', {
         const rowsView = this.createRowsView(this.items, null, [{}, {}, {}, {}]);
         const navigationController = this.dataGrid.keyboardNavigationController;
 
-        navigationController._isCellValid = function($cell) {
+        navigationController.isCellValid = function($cell) {
             const cell = $cell[0];
             return cell.cellIndex === 3;
         };
@@ -195,7 +195,7 @@ QUnit.module('Rows view', {
         const rowsView = this.createRowsView(this.items, null, [{}, {}, {}, {}]);
         const navigationController = this.dataGrid.keyboardNavigationController;
 
-        navigationController._isCellValid = function($cell) {
+        navigationController.isCellValid = function($cell) {
             const cell = $cell[0];
             return cell.cellIndex < 3 && cell.cellIndex !== 2 && cell.cellIndex !== 1 && cell.cellIndex >= 0;
         };
@@ -213,7 +213,7 @@ QUnit.module('Rows view', {
         const rowsView = this.createRowsView(this.items, null, [{}, {}, {}, {}]);
         const $element = $('<div>');
 
-        this.dataGrid.getController('keyboardNavigation')._isCellValid = function($cell) {
+        this.dataGrid.getController('keyboardNavigation').isCellValid = function($cell) {
             return true;
         };
 
