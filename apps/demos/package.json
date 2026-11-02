@@ -120,7 +120,7 @@
         "eslint-plugin-spellcheck": "0.0.20",
         "eslint-plugin-vue": "catalog:",
         "express": "4.22.1",
-        "glob": "11.1.0",
+        "glob": "14.0.3",
         "globals": "catalog:",
         "jest": "30.4.2",
         "jest-environment-node": "30.4.1",
