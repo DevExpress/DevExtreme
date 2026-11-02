@@ -6,7 +6,7 @@ This demo leverages [Stadia Maps](https://stadiamaps.com/) services to display m
 
 [note]
 
-Map tiles in this demo are provided by [Stadia Maps](https://stadiamaps.com/) under Developer Express Inc's own subscription, for demonstration purposes only. The product does not include map tiles, map data or a tile-service license.
+Map tiles in this demo are provided by [Stadia Maps](https://stadiamaps.com/) under Developer Express Inc.'s own subscription, for demonstration purposes only. The product does not include map tiles, map data, or a tile-service license.
 
 [/note]
 
