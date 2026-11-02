@@ -17,8 +17,9 @@ test('Drag-n-drop between a scheduler table cell and the appointment tooltip', a
   const { appointmentTooltip } = scheduler;
   const appointmentTooltipItem = appointmentTooltip.getListItem('Approve Personal Computer Upgrade Plan');
 
+  await collector.click();
+
   await t
-    .click(collector.element)
     .expect(appointmentTooltip.isVisible()).ok()
     .dragToElement(appointmentTooltipItem.element, scheduler.getDateTableCell(2, 5), { speed: 0.5 })
     .expect(appointmentTooltipItem.element.exists)
@@ -29,8 +30,11 @@ test('Drag-n-drop between a scheduler table cell and the appointment tooltip', a
     .eql('76px')
     .expect(appointment.date.time)
     .eql('9:30 AM - 10:30 AM')
-    .dragToElement(appointment.element, scheduler.getDateTableCell(3, 2), { speed: 0.5 })
-    .click(collector.element)
+    .dragToElement(appointment.element, scheduler.getDateTableCell(3, 2), { speed: 0.5 });
+
+  await collector.click();
+
+  await t
     .expect(appointmentTooltip.isVisible())
     .ok()
     .expect(appointment.element.exists)

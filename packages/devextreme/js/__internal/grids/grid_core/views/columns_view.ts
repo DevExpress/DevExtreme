@@ -31,7 +31,7 @@ import type { ActionEvent } from '@ts/core/action';
 import supportUtils from '@ts/core/utils/support';
 import type { AdaptiveColumnsViewController } from '@ts/grids/grid_core/adaptivity/adaptivity';
 import { HIDDEN_COLUMNS_WIDTH } from '@ts/grids/grid_core/adaptivity/const';
-import type { ColumnChooserController, ColumnChooserView } from '@ts/grids/grid_core/column_chooser/m_column_chooser';
+import type { ColumnChooserController, ColumnChooserView } from '@ts/grids/grid_core/column_chooser/column_chooser';
 import { CLASSES as COLUMN_FIXING_CLASSES } from '@ts/grids/grid_core/column_fixing/const';
 import { CLASSES as COLUMN_HEADERS_CLASSES } from '@ts/grids/grid_core/column_headers/const';
 import { ColumnStateMixin } from '@ts/grids/grid_core/column_state_mixin/column_state_mixin';

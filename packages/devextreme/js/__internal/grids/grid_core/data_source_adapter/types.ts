@@ -73,10 +73,11 @@ export interface LoadOperation extends Omit<BaseLoadOperation, 'operationId'> {
 }
 
 export interface ChangedEvent extends BaseChangedEvent {
-  // When  virtual scrolling with scrolling.legacyMode, changeType
-  // also can be 'append', 'prepend', 'pageIndex' in case of
-  changeType?: 'loadError';
+  changeType?: 'loadError' | 'append' | 'prepend' | 'pageIndex';
   error?: unknown;
+  items?: unknown[];
+  removeCount?: number;
+  isDelayed?: boolean;
 }
 
 /** provider */
