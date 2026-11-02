@@ -7,6 +7,15 @@ import {
 const baseURL = `http://localhost:${SERVER_PORT}`;
 const [width, height] = DEFAULT_BROWSER_SIZE;
 
+// The TestCafe run changes the machine timezone on the CI agent; the browser context takes it per
+// run instead, so the same agent can serve any timezone job. The tests also build dates in Node —
+// "new Date(2021, 2, 1)" — that TestCafe read in the agent timezone, so this process is pointed at
+// the same zone before any test file is loaded. It also keeps the zone a previous job left on a
+// shared agent out of the run.
+const timezone = readEnv(process.env.TIMEZONE, 'GMT');
+
+process.env.TZ = timezone;
+
 // The budget follows the renderer, not the job: the agent and the local container draw the same
 // pixels, so both are judged strictly — including the UI mode, where an etalon gets rewritten by
 // hand and a lenient budget would let CI-breaking drift through. A host run stays lenient because
@@ -34,9 +43,7 @@ export default defineConfig<TestOptions>({
   },
   use: {
     theme: readEnv(process.env.THEME, DEFAULT_THEME),
-    // The TestCafe run changes the machine timezone on the CI agent; the browser context
-    // takes it per run instead, so the same agent can serve any timezone job.
-    timezoneId: readEnv(process.env.TIMEZONE, 'GMT'),
+    timezoneId: timezone,
     baseURL,
     channel: 'chrome',
     headless: true,

@@ -57,6 +57,21 @@ test together with its etalon. The two sets must never cover the same case at on
 left behind gets updated by whoever touches the component next and starts asserting a render
 nobody checks.
 
+### Etalons from CI
+
+Without a container, CI records the etalons. A test whose etalon does not exist fails, and
+Playwright writes what it rendered in the etalon's place; the workflow collects those files at
+their repository paths into the `playwright-etalons` artifact:
+
+```bash
+gh run download <run-id> -n playwright-etalons -D ci-etalons
+cp -R ci-etalons/. ../..                 # from e2e/playwright: the paths start at the repository root
+```
+
+Look through them before committing — a new etalon is only as right as the render it captured. On
+the host, run such tests with `--ignore-snapshots`: a host run writes missing etalons too, and a
+macOS or Windows render must not end up among them.
+
 ## Themes
 
 A test runs in the default theme unless it says otherwise. The jobs that run the whole suite in
