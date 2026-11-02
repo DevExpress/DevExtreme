@@ -4,6 +4,7 @@ import eventsEngine from '@js/common/core/events/core/events_engine';
 import holdEvent from '@js/common/core/events/hold';
 import { addNamespace, isCommandKeyPressed } from '@js/common/core/events/utils/index';
 import messageLocalization from '@js/common/core/localization/message';
+import type { LoadOptions } from '@js/common/data.types';
 import { applyBatch } from '@js/common/data/array_utils';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
@@ -17,10 +18,15 @@ import { isDefined } from '@js/core/utils/type';
 import type { StoreChange } from '@js/data/store';
 import errors from '@js/ui/widget/ui.errors';
 import supportUtils from '@ts/core/utils/support';
+import type { StoreKey } from '@ts/data/abstract_store';
+import type { StoreLoadOptions } from '@ts/data/data_source/types';
 import type { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/column_headers';
 import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/columns_controller';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import type { ContextMenuController } from '@ts/grids/grid_core/context_menu/context_menu';
+import type { CustomLoadResult } from '@ts/grids/grid_core/data_source_adapter/custom_loader';
+import type { RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
+import type { DataFilter } from '@ts/grids/grid_core/filter/types';
 import type { StateStoringController } from '@ts/grids/grid_core/state_storing/state_storing_controller_core';
 import type { ModuleType, RowKey } from '@ts/grids/grid_core/types';
 import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
@@ -29,7 +35,7 @@ import Selection from '@ts/ui/selection/selection';
 import type { SelectionChangeEvent, SelectionFilter, SelectionOptions } from '@ts/ui/selection/types';
 
 import type { DataController } from '../data_controller/data_controller';
-import type { DataChange } from '../data_controller/types';
+import type { DataChange, ProcessedItem } from '../data_controller/types';
 import type { DataSourceController } from '../data_source/data_source_controller';
 import { isEditRow } from '../keyboard_navigation/utils';
 import modules from '../modules/modules';
@@ -214,11 +220,11 @@ export class SelectionController extends modules.Controller {
   /**
    * @extended: TreeList's selection
    */
-  protected _getSelectionConfig(): SelectionOptions {
+  protected _getSelectionConfig(): Partial<SelectionOptions> {
     const dataController = this._dataController;
     const { dataSourceController } = this;
     const columnsController = this._columnsController;
-    const selectionOptions: any = this.option('selection') ?? {};
+    const selectionOptions = this.option('selection') ?? {};
     const { deferred } = selectionOptions;
     const scrollingMode = this.option('scrolling.mode');
     const virtualPaging = scrollingMode === 'virtual' || scrollingMode === 'infinite';
@@ -236,42 +242,44 @@ export class SelectionController extends modules.Controller {
       ignoreDisabledItems: true,
       isVirtualPaging: virtualPaging,
       sensitivity: this.option('selection.sensitivity'),
-      allowLoadByRange() {
+      allowLoadByRange(): boolean | undefined {
         const hasGroupColumns = columnsController.getGroupColumns().length > 0;
-        return virtualPaging && !legacyScrollingMode && !hasGroupColumns && allowSelectAll && !deferred;
+        return virtualPaging && !legacyScrollingMode && !hasGroupColumns
+          && allowSelectAll && !deferred;
       },
-      key() {
+      key(): StoreKey | undefined {
         return dataSourceController.key();
       },
-      keyOf(item) {
+      keyOf(item): RowKey | undefined {
         return dataSourceController.keyOf(item);
       },
-      dataFields() {
+      dataFields(): StoreLoadOptions['select'] {
         return dataSourceController.select();
       },
-      load(options) {
-        // @ts-expect-error
-        return dataSourceController.getAdapter()?.customLoader.load(options) || new Deferred().resolve([]);
+      load(options): DeferredObj<CustomLoadResult | RawItemData[]> {
+        // @ts-expect-error the custom loader is typed for StoreLoadOptions
+        return dataSourceController.getAdapter()?.customLoader.load(options)
+          || Deferred<CustomLoadResult | RawItemData[]>().resolve([]);
       },
-      // eslint-disable-next-line
-      plainItems(cached?) {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      plainItems(cached?): ProcessedItem[] {
         return dataController.items(true);
       },
-      isItemSelected(item) {
-        return item.selected;
+      isItemSelected(item): boolean {
+        return !!item.selected;
       },
-      isSelectableItem(item) {
+      isSelectableItem(item): boolean {
         return item?.rowType === 'data' && !item.isNewRow;
       },
-      getItemData(item) {
+      getItemData(item?: ProcessedItem): RawItemData | ProcessedItem | undefined {
         return isDefined(item?.rowType) ? item?.oldData || item?.data : item;
       },
       // @ts-expect-error poorly typed SelectionOptions
-      filter() {
+      filter(): DataFilter {
         return dataController.getCombinedFilter(deferred);
       },
       totalCount: () => dataSourceController.totalCount(),
-      getLoadOptions(loadItemIndex, focusedItemIndex, shiftItemIndex) {
+      getLoadOptions(loadItemIndex, focusedItemIndex, shiftItemIndex): LoadOptions {
         const { sort, filter } = dataSourceController.lastLoadOptions();
         let minIndex = Math.min(loadItemIndex, focusedItemIndex);
         let maxIndex = Math.max(loadItemIndex, focusedItemIndex);
@@ -294,7 +302,7 @@ export class SelectionController extends modules.Controller {
     };
   }
 
-  protected _updateSelectColumn() {
+  protected _updateSelectColumn(): void {
     const columnsController = this._columnsController;
     const isSelectColumnVisible = this.isSelectColumnVisible();
 
@@ -314,7 +322,7 @@ export class SelectionController extends modules.Controller {
     columnsController.columnOption('command:select', 'visible', isSelectColumnVisible);
   }
 
-  private _createSelection() {
+  private _createSelection(): Selection {
     const options = this._getSelectionConfig();
 
     return new Selection(options);

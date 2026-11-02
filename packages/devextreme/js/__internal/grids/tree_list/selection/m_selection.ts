@@ -17,6 +17,7 @@ import {
 import { selectionModule } from '@ts/grids/grid_core/selection/selection_module';
 import type { ModuleType } from '@ts/grids/grid_core/types';
 import type { RowsView } from '@ts/grids/grid_core/views/rows_view';
+import type { SelectionOptions } from '@ts/ui/selection/types';
 
 import treeListCore from '../core';
 
@@ -88,18 +89,14 @@ SelectionController & TreeListSelectionControllerExtension
     this._selectionStateByKey = {};
   }
 
-  protected _getSelectionConfig() {
-    const config = super._getSelectionConfig.apply(this, arguments as any);
-
+  protected _getSelectionConfig(): Partial<SelectionOptions> {
+    const config = super._getSelectionConfig();
     const { plainItems } = config;
-    config.plainItems = (cached) => {
-      let result;
-      if (cached) {
-        result = this.dataSourceController.getCachedStoreData();
-      }
 
-      result ||= plainItems.apply(this, arguments as any).map((item) => item.data);
-      return result || [];
+    config.plainItems = (cached) => {
+      const cachedStoreData = cached ? this.dataSourceController.getCachedStoreData() : undefined;
+
+      return cachedStoreData ?? plainItems?.().map((item) => item.data) ?? [];
     };
     config.isItemSelected = (item) => {
       const key = this.dataSourceController.keyOf(item);
@@ -109,6 +106,7 @@ SelectionController & TreeListSelectionControllerExtension
     config.isSelectableItem = (item) => !!item;
     config.getItemData = (item) => item;
     config.allowLoadByRange = undefined;
+
     return config;
   }
 
