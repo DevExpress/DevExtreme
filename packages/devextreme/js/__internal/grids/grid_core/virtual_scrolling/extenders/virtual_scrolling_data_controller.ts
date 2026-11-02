@@ -154,7 +154,7 @@ export const virtualScrollingDataControllerExtender = (
     this._allItems = null;
     this._loadViewportParams = null;
 
-    if (this.option('scrolling.mode') !== 'virtual' && !virtualRowsRendering || !virtualRowsRendering || this.option(LEGACY_SCROLLING_MODE) !== false && !this.option('scrolling.rowPageSize')) {
+    if (!isVirtualMode(this.option('scrolling')) && !virtualRowsRendering || !virtualRowsRendering || this.option(LEGACY_SCROLLING_MODE) !== false && !this.option('scrolling.rowPageSize')) {
       this._visibleItems = null;
       this._rowsScrollController = null;
       return;
@@ -939,9 +939,8 @@ export const virtualScrollingDataControllerExtender = (
   public pageIndex(): number;
   public pageIndex(value: number): DeferredObj<unknown>;
   public pageIndex(pageIndex?): PagingResult {
-    const virtualPaging = isVirtualPaging(this.option('scrolling'));
     const rowsScrollController = this._rowsScrollController;
-    if (this.option(LEGACY_SCROLLING_MODE) === false && virtualPaging && rowsScrollController) {
+    if (this.isNewModeVirtualPaging() && rowsScrollController) {
       if (pageIndex === undefined) {
         return this.option(VISIBLE_PAGE_INDEX) ?? 0;
       }
@@ -949,11 +948,15 @@ export const virtualScrollingDataControllerExtender = (
     return super.pageIndex.apply(this, arguments as any);
   }
 
+  private isNewModeVirtualPaging(): boolean {
+    return this.option(LEGACY_SCROLLING_MODE) === false && isVirtualPaging(this.option('scrolling'));
+  }
+
   protected _fireChanged(e: DataChange): void {
     super._fireChanged.apply(this, arguments as any);
 
     const { operationTypes } = e;
-    if (this.option(LEGACY_SCROLLING_MODE) === false && isVirtualPaging(this.option('scrolling')) && operationTypes) {
+    if (this.isNewModeVirtualPaging() && operationTypes) {
       const { fullReload, pageIndex } = operationTypes;
 
       if (e.isDataChanged && !fullReload && pageIndex) {
@@ -965,7 +968,7 @@ export const virtualScrollingDataControllerExtender = (
   protected _getPagingOptionValue(optionName: PagingOptionName): number {
     let result = super._getPagingOptionValue.apply(this, arguments as any);
 
-    if (this.option(LEGACY_SCROLLING_MODE) === false && isVirtualPaging(this.option('scrolling'))) {
+    if (this.isNewModeVirtualPaging()) {
       result = this[optionName]();
     }
 
@@ -1001,7 +1004,7 @@ export const virtualScrollingDataControllerExtender = (
   public isLastPageLoaded(): boolean {
     let result = false;
 
-    if (this.option(LEGACY_SCROLLING_MODE) === false && isVirtualPaging(this.option('scrolling'))) {
+    if (this.isNewModeVirtualPaging()) {
       const { pageIndex, loadPageCount } = this.getLoadPageParams(true);
       const pageCount = this.dataSourceController.pageCount();
 

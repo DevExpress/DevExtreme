@@ -31,7 +31,7 @@ import type { DataChange } from '../data_controller/types';
 import type { DataSourceController } from '../data_source/data_source_controller';
 import { isEditRow } from '../keyboard_navigation/utils';
 import modules from '../modules/modules';
-import gridCoreUtils, { isVirtualPaging } from '../utils';
+import gridCoreUtils, { isInfiniteMode, isVirtualPaging } from '../utils';
 import {
   CHECKBOXES_HIDDEN_CLASS,
   COMMAND_SELECT_CLASS,
@@ -140,7 +140,7 @@ export class SelectionController extends modules.Controller {
   public init() {
     // @ts-expect-error
     const { deferred, selectAllMode, mode } = this.option('selection') ?? {};
-    if (this.option('scrolling.mode') === 'infinite' && !deferred && mode === 'multiple' && selectAllMode === 'allPages') {
+    if (isInfiniteMode(this.option('scrolling')) && !deferred && mode === 'multiple' && selectAllMode === 'allPages') {
       errors.log('W1018');
     }
 
