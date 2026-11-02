@@ -11,6 +11,7 @@ fixture`HtmlEditor - common`
   .page(url(__dirname, '../../../../container-extended.html'));
 
 const ADD_IMAGE_POPUP_CONTENT_SELECTOR = '.dx-htmleditor-add-image-popup .dx-overlay-content';
+const LONG_FILE_UPLOADER_LABEL_TEXT = 'Drop an image here or click the button to browse';
 
 test('TabPanel in HtmlEditor must have correct borders', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -31,6 +32,33 @@ test('TabPanel in HtmlEditor must have correct borders', async (t) => {
     width: 800,
     imageUpload: {
       tabs: ['file', 'url'],
+    },
+    toolbar: { items: ['image'] },
+  });
+});
+
+test('File uploader label in the image dialog should take the whole dialog width (T1337565)', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const htmlEditor = new HtmlEditor('#container');
+
+  await t.click(htmlEditor.toolbar.getItemByName('image').element);
+
+  await testScreenshot(t, takeScreenshot, 'htmleditor-add-image-long-file-uploader-label.png', {
+    element: ADD_IMAGE_POPUP_CONTENT_SELECTOR,
+  });
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await createWidget('dxHtmlEditor', {
+    height: 600,
+    width: 800,
+    imageUpload: {
+      tabs: ['file'],
+      fileUploaderOptions: {
+        labelText: LONG_FILE_UPLOADER_LABEL_TEXT,
+      },
     },
     toolbar: { items: ['image'] },
   });
