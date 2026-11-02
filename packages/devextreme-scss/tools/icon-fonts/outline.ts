@@ -12,10 +12,15 @@ export interface GlyphPoint extends Point {
 
 export type Contour = GlyphPoint[];
 
+export interface IconPath {
+  d: string;
+  evenOdd: boolean;
+}
+
 export interface IconDrawing {
   size: number;
   viewBox: [number, number, number, number];
-  paths: string[];
+  paths: IconPath[];
 }
 
 // Font units a quadratic curve may deviate from the drawn cubic one.
@@ -88,11 +93,30 @@ const pathContours = (d: string, toFont: (point: Point) => Point): Contour[] => 
   })
   .filter((points) => points.length >= 3);
 
+const contains = (contour: Contour, { x, y }: Point): boolean => contour
+  .reduce((inside, a, index) => {
+    const b = contour[(index + 1) % contour.length];
+    const crosses = a.y > y !== b.y > y && x < a.x + ((y - a.y) * (b.x - a.x)) / (b.y - a.y);
+
+    return crosses ? !inside : inside;
+  }, false);
+
+const reverse = ([first, ...rest]: Contour): Contour => [first, ...rest.reverse()];
+
 // Every svg path is filled on its own, while a glyph fills all its contours together. Turning each
 // path clockwise makes overlapping paths add up instead of cancelling each other out.
 const clockwise = (contours: Contour[]): Contour[] => (signedArea(contours) > 0
-  ? contours.map(([first, ...rest]) => [first, ...rest.reverse()])
+  ? contours.map(reverse)
   : contours);
+
+// Under the evenodd rule each nested contour toggles the fill, so outer contours turn clockwise
+// and the ones inside them the other way.
+const evenOddClockwise = (contours: Contour[]): Contour[] => contours.map((contour) => {
+  const depth = contours.filter((other) => other !== contour && contains(other, contour[0])).length;
+  const isClockwise = signedArea([contour]) < 0;
+
+  return isClockwise === (depth % 2 === 0) ? contour : reverse(contour);
+});
 
 export const iconContours = ({ size, viewBox, paths }: IconDrawing): Contour[] => {
   const [x0, y0, , height] = viewBox;
@@ -102,5 +126,9 @@ export const iconContours = ({ size, viewBox, paths }: IconDrawing): Contour[] =
   const top = UNITS_PER_EM - baseline;
   const toFont = ({ x, y }: Point): Point => ({ x: (x - x0) * scale, y: top - (y - y0) * scale });
 
-  return paths.flatMap((d) => clockwise(pathContours(d, toFont)));
+  return paths.flatMap(({ d, evenOdd }) => {
+    const contours = pathContours(d, toFont);
+
+    return evenOdd ? evenOddClockwise(contours) : clockwise(contours);
+  });
 };

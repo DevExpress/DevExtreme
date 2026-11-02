@@ -59,28 +59,30 @@ const attribute = (tag: string, name: string): string | undefined => new RegExp(
 
 export const parseIconSvg = (svg: string): IconDrawing => {
   const root = /<svg\b[^>]*>/.exec(svg)?.[0] ?? '';
-  const [width, height] = ['width', 'height'].map((name) => Number(attribute(root, name)));
+  const height = Number(attribute(root, 'height'));
   const viewBox = (attribute(root, 'viewBox') ?? '').trim().split(/[\s,]+/).map(Number);
   const tags = [...svg.matchAll(/<([a-zA-Z][\w:-]*)\b[^>]*>/g)];
   const unsupported = tags.map(([, name]) => name).filter((name) => !['svg', 'title', 'path'].includes(name));
   const paths = tags.filter(([, name]) => name === 'path').map(([tag]) => tag);
 
-  if (!width || width !== height || viewBox.length !== 4 || viewBox.some(Number.isNaN)) {
-    throw new Error('expected a square width/height and a viewBox');
+  if (!height || viewBox.length !== 4 || viewBox.some(Number.isNaN)) {
+    throw new Error('expected a height and a viewBox');
   }
 
   if (unsupported.length) {
     throw new Error(`only <path> elements are supported, found <${unsupported.join('>, <')}>`);
   }
 
-  if (paths.some((tag) => attribute(tag, 'transform') !== undefined || attribute(tag, 'fill-rule') === 'evenodd')) {
-    throw new Error('paths with a transform or the evenodd fill rule are not supported');
+  if (paths.some((tag) => attribute(tag, 'transform') !== undefined)) {
+    throw new Error('paths with a transform are not supported');
   }
 
   return {
     size: height,
     viewBox: viewBox as IconDrawing['viewBox'],
-    paths: paths.map((tag) => attribute(tag, 'd') ?? '').filter(Boolean),
+    paths: paths
+      .map((tag) => ({ d: attribute(tag, 'd') ?? '', evenOdd: attribute(tag, 'fill-rule') === 'evenodd' }))
+      .filter(({ d }) => d),
   };
 };
 

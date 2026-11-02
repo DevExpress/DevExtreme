@@ -1,8 +1,8 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 1024 1024">
-<title>decreaselinespacing</title>
-<path d="M426.667 213.333h512v85.333h-512v-85.333z"/>
-<path d="M426.667 725.333h512v85.333h-512v-85.333z"/>
-<path d="M426.667 469.333h512v85.333h-512v-85.333z"/>
-<path d="M170.667 853.333h85.333v-128h106.667l-149.333-149.333-149.333 149.333h106.667z"/>
-<path d="M256 170.667h-85.333v128h-106.667l149.333 149.333 149.333-149.333h-106.667z"/>
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+<title>indent1</title>
+<path d="M10 5h12v2h-12v-2z"></path>
+<path d="M10 17h12v2h-12v-2z"></path>
+<path d="M10 11h12v2h-12v-2z"></path>
+<path d="M4 20h2v-3h2.5l-3.5-3.5-3.5 3.5h2.5z"></path>
+<path d="M6 4h-2v3h-2.5l3.5 3.5 3.5-3.5h-2.5z"></path>
 </svg>

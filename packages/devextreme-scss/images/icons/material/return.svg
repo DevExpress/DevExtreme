@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 1024 1024">
-<title>return</title>
-<path d="M810.667 298.667v170.667h-561.92l152.747-153.173-60.16-60.16-256 256 256 256 60.16-60.16-152.747-153.173h647.253v-256h-85.333z"/>
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+<title>keyboard-return</title>
+<path d="M19 7v4h-13.17l3.58-3.59-1.41-1.41-6 6 6 6 1.41-1.41-3.58-3.59h15.17v-6h-2z"></path>
 </svg>

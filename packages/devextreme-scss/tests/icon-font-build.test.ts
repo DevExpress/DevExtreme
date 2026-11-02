@@ -11,7 +11,7 @@ const PACKAGE_ROOT = join(__dirname, '..');
 
 const sha256 = (data: Buffer | undefined): string => (data ? createHash('sha256').update(data).digest('hex') : 'not built');
 
-const icon = (paths: string[]): string => `<svg width="16" height="16" viewBox="0 0 1024 1024">${paths.map((d) => `<path d="${d}"/>`).join('')}</svg>`;
+const icon = (paths: string[], fillRule = 'nonzero'): string => `<svg width="16" height="16" viewBox="0 0 1024 1024">${paths.map((d) => `<path fill-rule="${fillRule}" d="${d}"/>`).join('')}</svg>`;
 
 const area = (contour: Contour): number => contour.reduce((sum, point, index) => {
   const next = contour[(index + 1) % contour.length];
@@ -44,6 +44,12 @@ describe('Icon outlines', () => {
 
   test('a hole inside a path keeps the opposite direction', () => {
     const contours = iconContours(parseIconSvg(icon(['M100 100h800v800h-800zM300 300v400h400v-400z'])));
+
+    expect(contours.map((contour) => Math.sign(area(contour)))).toEqual([-1, 1]);
+  });
+
+  test('a contour inside an evenodd path is a hole whatever its direction', () => {
+    const contours = iconContours(parseIconSvg(icon(['M100 100h800v800h-800zM300 300h400v400h-400z'], 'evenodd')));
 
     expect(contours.map((contour) => Math.sign(area(contour)))).toEqual([-1, 1]);
   });

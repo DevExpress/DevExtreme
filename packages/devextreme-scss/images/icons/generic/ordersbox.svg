@@ -1,8 +1,8 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 1024 1024">
-<title>ordersbox</title>
-<path d="M284.444 341.333h113.778v113.778h-113.778v-113.778z"/>
-<path d="M398.222 568.889h-113.778v113.778h113.778v-113.778z"/>
-<path d="M512 341.333h227.556v113.778h-227.556v-113.778z"/>
-<path d="M739.556 568.889h-227.556v113.778h227.556v-113.778z"/>
-<path d="M967.111 56.889v910.222h-910.222v-910.222h910.222zM853.333 170.667h-682.667v682.667h682.667v-682.667z"/>
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18">
+<title>orders-box</title>
+<path d="M5 6h2v2h-2v-2z"></path>
+<path d="M7 10h-2v2h2v-2z"></path>
+<path d="M9 6h4v2h-4v-2z"></path>
+<path d="M13 10h-4v2h4v-2z"></path>
+<path d="M17 1v16h-16v-16h16zM15 3h-12v12h12v-12z"></path>
 </svg>

@@ -1,6 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 1024 1024">
-<title>hidepanel</title>
-<path d="M384 682.667h554.667v85.333h-554.667v-85.333z"/>
-<path d="M384 256h554.667v85.333h-554.667v-85.333z"/>
-<path d="M298.667 682.667v-128h640v-85.333h-640v-128l-170.667 170.667 170.667 170.667z"/>
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+<title>drawer-left</title>
+<path d="M9 16h13v2h-13v-2z"></path>
+<path d="M9 6h13v2h-13v-2z"></path>
+<path d="M7 16v-3h15v-2h-15v-3l-4 4 4 4z"></path>
 </svg>

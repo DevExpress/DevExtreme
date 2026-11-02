@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 1024 1024">
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
 <title>alignjustify</title>
-<path d="M128 896h768v-85.333h-768v85.333zM128 725.333h768v-85.333h-768v85.333zM128 554.667h768v-85.333h-768v85.333zM128 384h768v-85.333h-768v85.333zM128 128v85.333h768v-85.333h-768z"/>
+<path d="M3 21h18v-2h-18v2zM3 17h18v-2h-18v2zM3 13h18v-2h-18v2zM3 9h18v-2h-18v2zM3 3v2h18v-2h-18z"></path>
 </svg>

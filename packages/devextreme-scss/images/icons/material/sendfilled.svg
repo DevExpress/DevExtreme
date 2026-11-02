@@ -1,4 +1,3 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 1024 1024">
-<title>sendfilled</title>
-<path d="M128 853.333v-256l341.333-85.333-341.333-85.333v-256l810.667 341.333-810.667 341.333z"/>
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+<path d="M3 20v-6l8-2-8-2v-6l19 8-19 8z"></path>
 </svg>

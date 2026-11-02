@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 1024 1024">
-<title>indeterminatestate</title>
-<path d="M332.8 256c-42.416 0-76.8 34.384-76.8 76.8v358.4c0 42.414 34.384 76.8 76.8 76.8h358.4c42.414 0 76.8-34.386 76.8-76.8v-358.4c0-42.416-34.386-76.8-76.8-76.8h-358.4z"/>
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20">
+<title>Indeterminate</title>
+<path d="M6.5 5c-0.828 0-1.5 0.672-1.5 1.5v7c0 0.828 0.672 1.5 1.5 1.5h7c0.828 0 1.5-0.672 1.5-1.5v-7c0-0.828-0.672-1.5-1.5-1.5h-7z"></path>
 </svg>

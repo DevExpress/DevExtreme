@@ -1,5 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 1024 1024">
-<title>insertcolumnleft</title>
-<path d="M853.333 85.333h-640c-47.128 0-85.333 38.205-85.333 85.333v0 384h85.333v-384h213.333v768h426.667c47.128 0 85.333-38.205 85.333-85.333v0-682.667c0-47.128-38.205-85.333-85.333-85.333v0zM853.333 853.333h-170.667v-170.667h170.667zM853.333 597.333h-170.667v-170.667h170.667zM853.333 341.333h-170.667v-170.667h170.667z"/>
-<path d="M213.333 640h-85.333v128h-128v85.333h128v128h85.333v-128h128v-85.333h-128v-128z"/>
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+<title>table-add-column-before</title>
+<path d="M20 2h-15c-1.105 0-2 0.895-2 2v0 9h2v-9h5v18h10c1.105 0 2-0.895 2-2v0-16c0-1.105-0.895-2-2-2v0zM20 20h-4v-4h4zM20 14h-4v-4h4zM20 8h-4v-4h4z"></path>
+<path d="M5 15h-2v3h-3v2h3v3h2v-3h3v-2h-3v-3z"></path>
 </svg>

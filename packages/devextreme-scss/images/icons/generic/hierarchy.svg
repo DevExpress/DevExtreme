@@ -1,6 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 1024 1024">
-<title>hierarchy</title>
-<path d="M113.778 113.778h455.111v227.556h-455.111v-227.556z"/>
-<path d="M284.444 398.222h455.111v227.556h-455.111v-227.556z"/>
-<path d="M455.111 682.667h455.111v227.556h-455.111v-227.556z"/>
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18">
+<title>grouped</title>
+<path d="M2 2h8v4h-8v-4z"></path>
+<path d="M5 7h8v4h-8v-4z"></path>
+<path d="M8 12h8v4h-8v-4z"></path>
 </svg>
