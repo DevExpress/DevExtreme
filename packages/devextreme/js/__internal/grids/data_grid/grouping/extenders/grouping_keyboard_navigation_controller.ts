@@ -2,7 +2,7 @@ import { isDefined } from '@js/core/utils/type';
 import type { Grouping, MasterDetail } from '@js/ui/data_grid';
 import type { KeyboardKeyDownEvent } from '@ts/events/core/keyboard_processor';
 import { CLASSES as COLUMNS_CONTROLLER_CLASSES } from '@ts/grids/grid_core/columns_controller/const';
-import type { KeyboardNavigationController } from '@ts/grids/grid_core/keyboard_navigation/m_keyboard_navigation';
+import type { KeyboardNavigationController } from '@ts/grids/grid_core/keyboard_navigation/keyboard_navigation';
 import type { KeyboardNavigationDataController } from '@ts/grids/grid_core/keyboard_navigation/types';
 import { isGroupRow } from '@ts/grids/grid_core/keyboard_navigation/utils';
 import type { ModuleType } from '@ts/grids/grid_core/types';
