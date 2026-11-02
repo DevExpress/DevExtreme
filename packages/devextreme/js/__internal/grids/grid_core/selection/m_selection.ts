@@ -138,7 +138,6 @@ export class SelectionController extends modules.Controller {
   private _dataPushedHandler: any;
 
   public init() {
-    // @ts-expect-error
     const { deferred, selectAllMode, mode } = this.option('selection') ?? {};
     if (this.option('scrolling.mode') === 'infinite' && !deferred && mode === 'multiple' && selectAllMode === 'allPages') {
       errors.log('W1018');

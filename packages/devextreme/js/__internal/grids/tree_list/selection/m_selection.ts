@@ -29,7 +29,7 @@ const nodeExists = function (array, currentKey) {
 };
 
 interface TreeListSelectionControllerExtension {
-  isRecursiveSelection: () => boolean;
+  isRecursiveSelection: () => boolean | undefined;
   updateSelectionState: (options: {
     selectedItemKeys?: unknown[];
     removedItemKeys?: unknown[];
