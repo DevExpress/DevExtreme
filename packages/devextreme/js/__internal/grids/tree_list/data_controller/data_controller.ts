@@ -139,7 +139,7 @@ export class TreeListDataController extends DataController {
     return Deferred<unknown>().resolve();
   }
 
-  private collapseRow(key: RowKey): DeferredObj<unknown> {
+  public collapseRow(key: RowKey): DeferredObj<unknown> {
     if (this.isRowExpanded(key)) {
       return this.changeRowExpand(key);
     }

@@ -29,7 +29,7 @@ import type {
 } from '@ts/grids/grid_core/columns_controller/types';
 import type {
   ColumnsResizerViewController,
-} from '@ts/grids/grid_core/columns_resizing_reordering/m_columns_resizing_reordering';
+} from '@ts/grids/grid_core/columns_resizing_reordering/columns_resizing_reordering';
 import type {
   DataChange, ProcessedItem, RowWatch, UpdateChange, UpdateItemChange,
 } from '@ts/grids/grid_core/data_controller/types';
@@ -42,7 +42,7 @@ import type { ResizingController } from '@ts/grids/grid_core/grid_view/grid_view
 import type {
   KeyboardNavigationController,
 } from '@ts/grids/grid_core/keyboard_navigation/m_keyboard_navigation';
-import type { OptionChanged, SummaryTextItem } from '@ts/grids/grid_core/types';
+import type { OptionChanged } from '@ts/grids/grid_core/types';
 import type { ValidatingController } from '@ts/grids/grid_core/validating/m_validating';
 import Scrollable from '@ts/ui/scroll_view/scrollable';
 import type { ElementOffset } from '@ts/ui/scroll_view/types';
@@ -230,7 +230,7 @@ export class RowsView extends ColumnsView {
       const container = $container.get(0);
 
       if (options.summaryItems?.length) {
-        text += ` ${gridCoreUtils.getGroupRowSummaryText(options.summaryItems as SummaryTextItem[], summaryTexts)}`;
+        text += ` ${gridCoreUtils.getGroupRowSummaryText(options.summaryItems, summaryTexts)}`;
       }
 
       if (data) {

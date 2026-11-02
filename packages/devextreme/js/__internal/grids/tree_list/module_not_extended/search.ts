@@ -1,4 +1,4 @@
-import { searchModule } from '@ts/grids/grid_core/search/m_search';
+import { searchModule } from '@ts/grids/grid_core/search/search';
 
 import core from '../core';
 

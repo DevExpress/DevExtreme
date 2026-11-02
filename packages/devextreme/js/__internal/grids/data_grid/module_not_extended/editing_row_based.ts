@@ -1,4 +1,4 @@
-import { editingRowBasedModule } from '@ts/grids/grid_core/editing/m_editing_row_based';
+import { editingRowBasedModule } from '@ts/grids/grid_core/editing/editing_row_based';
 
 import gridCore from '../core';
 

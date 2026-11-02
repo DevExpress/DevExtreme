@@ -5,6 +5,7 @@ const CLASSES = {
   popupWrapper: 'dx-popup-wrapper',
   popupTitle: 'dx-popup-title',
   overlayContent: 'dx-overlay-content',
+  popupContent: 'dx-popup-content',
   closeButton: 'dx-closebutton',
   toolbar: 'dx-toolbar',
   button: 'dx-button',
@@ -34,6 +35,10 @@ export class PopupModel {
   public getOverlayContent(): HTMLElement {
     const wrapper = this.getPopupWrapper();
     return wrapper?.querySelector(`.${CLASSES.overlayContent}`) as HTMLElement;
+  }
+
+  public getContent(): HTMLElement {
+    return this.getOverlayContent()?.querySelector(`.${CLASSES.popupContent}`) as HTMLElement;
   }
 
   public getRole(): string | null {
