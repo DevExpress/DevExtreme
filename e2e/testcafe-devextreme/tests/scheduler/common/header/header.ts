@@ -4,6 +4,7 @@ import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 import { insertStylesheetRulesToPage } from '../../../../helpers/domUtils';
 import { testScreenshot } from '../../../../helpers/themeUtils';
+import { Themes } from '../../../../helpers/themes';
 
 fixture.disablePageReloads`Scheduler header`
   .page(url(__dirname, '../../../container.html'));
@@ -28,7 +29,7 @@ test('dateNavigator buttons should not be selected after clicking', async (t) =>
   height: 580,
 }));
 
-test.meta({ runInTheme: 'generic.blue.light' })('dateNavigator buttons should have "contained" styling mode with generic theme', async (t) => {
+test.meta({ runInTheme: Themes.genericLight })('dateNavigator buttons should have "contained" styling mode with generic theme', async (t) => {
   const { toolbar } = new Scheduler('#container');
 
   await t

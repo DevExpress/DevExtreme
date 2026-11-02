@@ -102,52 +102,52 @@ end: ${endDayHour},
   });
 });
 
-// [
-//   { views: [{ type: 'day', cellDuration: 60 }], dataSource: APPOINTMENTS },
-//   { views: [{ type: 'timelineDay', cellDuration: 240 }], dataSource: APPOINTMENTS },
-// ].forEach(({ views, dataSource }) => {
-//   [
-//     0,
-//     -735,
-//     735,
-//   ].forEach((offset) => {
-//     [
-//       { startDayHour: 0, endDayHour: 24 },
-//       { startDayHour: 9, endDayHour: 17 },
-//     ].forEach(({ startDayHour, endDayHour }) => {
-//       test(`
-// Appointments and workspaces with virtual scrolling render (
-// view: ${views[0].type}
-// offset: ${offset},
-// start: ${startDayHour},
-// end: ${endDayHour},
-// )`, async (t) => {
-//         const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-//         const scheduler = new Scheduler(SCHEDULER_SELECTOR);
-//
-//         await testScreenshot(
-//           t,
-//           takeScreenshot,
-//           getScreenshotName(views[0].type, offset, startDayHour, endDayHour),
-//           { element: scheduler.workSpace },
-//         );
-//
-//         await t.expect(compareResults.isValid())
-//           .ok(compareResults.errorMessages());
-//       }).before(async () => {
-//         await insertStylesheetRulesToPage(REDUCE_CELLS_CSS);
-//         await createWidget('dxScheduler', {
-//           currentDate: '2023-09-05',
-//           height: 800,
-//           maxAppointmentsPerCell: 'unlimited',
-//           dataSource,
-//           views,
-//           currentView: views[0].type,
-//           offset,
-//           startDayHour,
-//           endDayHour,
-//         });
-//       });
-//     });
-//   });
-// });
+[
+  { views: [{ type: 'day', cellDuration: 60 }], dataSource: APPOINTMENTS },
+  { views: [{ type: 'timelineDay', cellDuration: 240 }], dataSource: APPOINTMENTS },
+].forEach(({ views, dataSource }) => {
+  [
+    0,
+    -735,
+    735,
+  ].forEach((offset) => {
+    [
+      { startDayHour: 0, endDayHour: 24 },
+      { startDayHour: 9, endDayHour: 17 },
+    ].forEach(({ startDayHour, endDayHour }) => {
+      test(`
+Appointments and workspaces with virtual scrolling render (
+view: ${views[0].type}
+offset: ${offset},
+start: ${startDayHour},
+end: ${endDayHour},
+)`, async (t) => {
+        const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+        const scheduler = new Scheduler(SCHEDULER_SELECTOR);
+
+        await testScreenshot(
+          t,
+          takeScreenshot,
+          getScreenshotName(views[0].type, offset, startDayHour, endDayHour),
+          { element: scheduler.workSpace },
+        );
+
+        await t.expect(compareResults.isValid())
+          .ok(compareResults.errorMessages());
+      }).before(async () => {
+        await insertStylesheetRulesToPage(REDUCE_CELLS_CSS);
+        await createWidget('dxScheduler', {
+          currentDate: '2023-09-05',
+          height: 800,
+          maxAppointmentsPerCell: 'unlimited',
+          dataSource,
+          views,
+          currentView: views[0].type,
+          offset,
+          startDayHour,
+          endDayHour,
+        });
+      });
+    });
+  });
+});

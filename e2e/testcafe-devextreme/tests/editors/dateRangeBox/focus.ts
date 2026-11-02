@@ -705,8 +705,7 @@ test('Opened dateRangeBox should be closed after outside click, openOnFieldClick
   opened: true,
 }));
 
-// TODO: find way to reproduce focus using accessKey accessKey
-test.skip('DateRangeBox and StartDateBox should have focus class after focus via accessKey', async (t) => {
+test('DateRangeBox and StartDateBox should have focus class after focus via accessKey', async (t) => {
   const dateRangeBox = new DateRangeBox('#container');
 
   await t
