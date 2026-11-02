@@ -47,7 +47,7 @@ overrides:
   compression@<1.8.2: ^1.8.2
   dompurify@<=3.4.16: ^3.4.17
   fast-uri@>=3.0.0 <3.1.9: ^3.1.9
-  follow-redirects@>=1.16.0 <1.16.1: ^1.16.1
+  follow-redirects@>=1.16.0 <1.16.2: ^1.16.2
   hono@<4.13.11: ^4.13.11
   http-cache-semantics@<4.3.0: ^4.3.0
   ip-address@<10.7.4: ^10.7.4
@@ -124,7 +124,6 @@ catalogs:
 allowBuilds:
   '@parcel/watcher': true
   '@swc/core': true
-  cldr-data: true
   core-js: true
   es5-ext: true
   esbuild: true
