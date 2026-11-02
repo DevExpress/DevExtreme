@@ -2215,7 +2215,10 @@ test('Restoring focus on re-rendering should be done without unexpected scrollin
   await t.expect(isContentReadyFired()).ok();
 
   await dataGrid.scrollBy(t, { left: -1000 });
+
+  await resetContentReadyFlag();
   await dataGrid.scrollBy(t, { top: 50 });
+  await t.expect(isContentReadyFired()).ok();
 
   await t.expect(dataGrid.getScrollLeft()).eql(0);
 }).before(async () => {
