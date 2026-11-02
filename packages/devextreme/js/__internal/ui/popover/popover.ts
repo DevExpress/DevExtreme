@@ -24,6 +24,7 @@ import type { DxEvent, PointerInteractionEvent } from '@js/events';
 import type { dxPopoverAnimation, Properties } from '@js/ui/popover';
 import { current, isMaterial, isMaterialBased } from '@js/ui/themes';
 import errors from '@js/ui/widget/ui.errors';
+import type { PositionResult } from '@ts/common/core/animation/types';
 import { addAriaDescriptionId, removeAriaDescriptionId } from '@ts/core/utils/dom';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { InternalPositionConfig, OverlayInternalProperties } from '@ts/ui/overlay/overlay';
@@ -73,15 +74,6 @@ const ESC_KEY_NAME = 'escape';
 
 type PopoverTarget = string | dxElementWrapper | Element | undefined;
 type PopoverEventOption = 'showEvent' | 'hideEvent';
-
-interface PositionAxisResult {
-  flip: boolean;
-}
-
-interface PositionCalculationResult {
-  h: PositionAxisResult;
-  v: PositionAxisResult;
-}
 
 export interface PopoverProperties extends Omit<Properties,
 'onTitleRendered' | 'onHidden' | 'onHiding' | 'onShowing' | 'onShown'
@@ -688,6 +680,10 @@ class Popover<
     const contentPosition = this._getContainerPosition();
     const resultLocation = positionUtils.setup(this.$overlayContent(), contentPosition);
 
+    if (!resultLocation) {
+      return;
+    }
+
     const positionSide = this._getSideByLocation(resultLocation);
 
     this._togglePositionClass(`dx-position-${positionSide}`);
@@ -753,7 +749,7 @@ class Popover<
     return $(this._positionController._position?.of || super._getHideOnParentScrollTarget());
   }
 
-  _getSideByLocation(location: PositionCalculationResult): DisplaySide | undefined {
+  _getSideByLocation(location: PositionResult): DisplaySide | undefined {
     const isFlippedByVertical = location.v.flip;
     const isFlippedByHorizontal = location.h.flip;
 
@@ -803,7 +799,7 @@ class Popover<
     const contentOffset = positionUtils.offset(this.$overlayContent());
 
     const arrowSize = arrowRect[sizeProperty];
-    const contentLocation = contentOffset?.[axis];
+    const contentLocation = contentOffset?.[axis] ?? NaN;
     const contentSize = getBoundingRect(this.$overlayContent().get(0))[sizeProperty];
     const targetLocation = targetOffset[axis];
     const targetElement = $target.get(0);
