@@ -7,12 +7,14 @@ import messageLocalization from '@js/common/core/localization/message';
 import { applyBatch } from '@js/common/data/array_utils';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
+import type { Callback } from '@js/core/utils/callbacks';
 import { equalByValue } from '@js/core/utils/common';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { isDefined } from '@js/core/utils/type';
+import type { StoreChange } from '@js/data/store';
 import errors from '@js/ui/widget/ui.errors';
 import supportUtils from '@ts/core/utils/support';
 import type { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/column_headers';
@@ -20,7 +22,7 @@ import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/c
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import type { ContextMenuController } from '@ts/grids/grid_core/context_menu/context_menu';
 import type { StateStoringController } from '@ts/grids/grid_core/state_storing/state_storing_controller_core';
-import type { ModuleType } from '@ts/grids/grid_core/types';
+import type { ModuleType, RowKey } from '@ts/grids/grid_core/types';
 import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
 import type { RowsView } from '@ts/grids/grid_core/views/rows_view';
 import Selection from '@ts/ui/selection/selection';
@@ -42,6 +44,7 @@ import {
   SELECTION_MODE,
   SHOW_CHECKBOXES_MODE,
 } from './const';
+import type { SelectionChangedArgs } from './types';
 
 const processLongTap = function (that, dxEvent) {
   // TODO getView
@@ -131,13 +134,13 @@ export class SelectionController extends modules.Controller {
 
   private _selection!: Selection;
 
-  public selectionChanged: any;
+  public selectionChanged!: Callback<[SelectionChangedArgs]>;
 
   private _selectedItemsInternalChange?: boolean;
 
-  private _dataPushedHandler: any;
+  private _dataPushedHandler?: (changes: StoreChange[]) => void;
 
-  public init() {
+  public init(): void {
     const { deferred, selectAllMode, mode } = this.option('selection') ?? {};
     if (this.option('scrolling.mode') === 'infinite' && !deferred && mode === 'multiple' && selectAllMode === 'allPages') {
       errors.log('W1018');
@@ -147,7 +150,7 @@ export class SelectionController extends modules.Controller {
     this.dataSourceController = this.getController('dataSource');
     this._columnsController = this.getController('columns');
     this._stateStoringController = this.getController('stateStoring');
-    // mode has a default value
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- mode has a default value
     this._selectionMode = mode!;
     this._isSelectionWithCheckboxes = false;
 
@@ -161,17 +164,17 @@ export class SelectionController extends modules.Controller {
     }
   }
 
-  private _handleDataPushed(changes) {
+  private _handleDataPushed(changes: StoreChange[]): void {
     this._deselectRemovedOnPush(changes);
     this._updateSelectedOnPush(changes);
   }
 
-  private _deselectRemovedOnPush(changes) {
+  private _deselectRemovedOnPush(changes: StoreChange[]): void {
     const isDeferredSelection = this.option('selection.deferred');
 
     let removedKeys = changes
       .filter((change) => change.type === 'remove')
-      .map((change) => change.key);
+      .map((change): RowKey => change.key);
 
     if (isDeferredSelection) {
       const selectedKeys = this._dataController.items()
@@ -182,10 +185,12 @@ export class SelectionController extends modules.Controller {
         .filter((key) => selectedKeys.find((selectedKey) => equalByValue(selectedKey, key)));
     }
 
-    removedKeys.length && this.deselectRows(removedKeys);
+    if (removedKeys.length) {
+      this.deselectRows(removedKeys);
+    }
   }
 
-  private _updateSelectedOnPush(changes) {
+  private _updateSelectedOnPush(changes: StoreChange[]): void {
     const isDeferredSelection = this.option('selection.deferred');
 
     if (isDeferredSelection) {
@@ -195,11 +200,15 @@ export class SelectionController extends modules.Controller {
     const updateChanges = changes.filter((change) => change.type === 'update');
     const data = this.getSelectedRowsData();
 
+    if (!Array.isArray(data)) {
+      return;
+    }
+
     applyBatch({
       keyInfo: this._selection.options,
       data,
       changes: updateChanges,
-    } as any);
+    });
   }
 
   /**
