@@ -313,6 +313,17 @@ export function toHslFromRgb(r: number, g: number, b: number): { h: number; s: n
   return { h: Math.round(h * 360), s: Math.round(s * 100), l: Math.round(l * 100) };
 }
 
+function toLinearChannel(value: number): number {
+  const channel = value / 255;
+
+  return channel <= 0.03928 ? channel / 12.92 : ((channel + 0.055) / 1.055) ** 2.4;
+}
+
+// eslint-disable-next-line spellcheck/spell-checker
+export function getRelativeLuminance(r: number, g: number, b: number): number {
+  return 0.2126 * toLinearChannel(r) + 0.7152 * toLinearChannel(g) + 0.0722 * toLinearChannel(b);
+}
+
 export function isIntegerBetweenMinAndMax(value: unknown, min = 0, max = 255): value is number {
   if (typeof value !== 'number'
        || value % 1 !== 0
