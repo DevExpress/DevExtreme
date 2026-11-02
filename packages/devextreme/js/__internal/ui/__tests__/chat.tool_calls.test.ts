@@ -359,6 +359,18 @@ describe('Chat tool calls', () => {
       });
     });
 
+    it('should show a result that cannot be serialized as text instead of throwing', () => {
+      const call = openCall({ name: 'getValue', result: BigInt(10) as unknown as ToolCall['result'] });
+
+      expect(call.getResultText()).toBe('10');
+    });
+
+    it('should show arguments that cannot be serialized as text instead of throwing', () => {
+      const call = openCall({ name: 'getValue', arguments: { count: BigInt(10) } });
+
+      expect(call.getArgumentsText()).toBe('[object Object]');
+    });
+
     it('should not show the Result for an empty string result', () => {
       const call = openCall({ ...WEATHER, result: '' });
 
@@ -436,11 +448,11 @@ describe('Chat tool calls', () => {
       expect(getBubble(chat).getToolCallsTitleErrorTagText()).toBe('1 Error');
     });
 
-    it('should show "N Errors" in the title for several failed calls', () => {
+    it('should show "N errors" in the title for several failed calls', () => {
       const chat = createChat({ items: [createMessage({ toolCalls: [FAILED, WEATHER, FAILED] })] });
 
       expect(getBubble(chat).getToolCallsTitleText()).toBe('3 tools');
-      expect(getBubble(chat).getToolCallsTitleErrorTagText()).toBe('2 Errors');
+      expect(getBubble(chat).getToolCallsTitleErrorTagText()).toBe('2 errors');
     });
   });
 
@@ -1172,7 +1184,6 @@ describe('Chat tool calls', () => {
           'dxChat-toolCallArgumentsLabel': 'Input',
           'dxChat-toolCallResultLabel': 'Output',
           'dxChat-toolCallError': 'Failed',
-          'dxChat-toolCallsErrorSingle': '{0} failure',
           'dxChat-toolCallsErrorMultiple': '{0} failures',
         },
       });
@@ -1190,7 +1201,7 @@ describe('Chat tool calls', () => {
       success.toggle();
 
       expect(first.getToolCallsTitleText()).toBe('Tools used: 2');
-      expect(first.getToolCallsTitleErrorTagText()).toBe('1 failure');
+      expect(first.getToolCallsTitleErrorTagText()).toBe('1 Failed');
       expect(second.getToolCallsTitleErrorTagText()).toBe('2 failures');
       expect(failed.getErrorTagText()).toBe('Failed');
       expect(success.getFieldLabels()).toEqual(['Input', 'Output']);
