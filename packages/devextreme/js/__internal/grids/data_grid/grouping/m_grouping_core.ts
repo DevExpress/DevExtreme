@@ -131,11 +131,7 @@ export class GroupingHelper {
   }
 
   protected isGroupItemCountable(item) {
-    return !this._isVirtualPaging() || !item.isContinuation;
-  }
-
-  public _isVirtualPaging() {
-    return isVirtualPaging(this.dataSourceAdapter.option('scrolling'));
+    return !isVirtualPaging(this.dataSourceAdapter.option('scrolling')) || !item.isContinuation;
   }
 
   private itemsCount() {
