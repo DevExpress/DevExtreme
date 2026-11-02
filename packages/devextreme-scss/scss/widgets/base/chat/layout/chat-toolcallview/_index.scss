@@ -79,5 +79,14 @@
     .dx-texteditor {
       width: 100%;
     }
+
+    // The TextArea theme puts a margin around the input and a minimum height on it
+    .dx-texteditor > .dx-texteditor-container > .dx-texteditor-input-container {
+      margin: 0;
+    }
+
+    .dx-texteditor .dx-texteditor-input {
+      min-height: 0;
+    }
   }
 }

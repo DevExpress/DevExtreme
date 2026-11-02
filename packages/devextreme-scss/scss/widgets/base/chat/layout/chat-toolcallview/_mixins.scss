@@ -25,10 +25,15 @@
   $fields-gap,
   $label-padding-block-end,
   $field-padding,
+  $field-line-height,
   $field-border-radius,
   $field-border-width,
   $text-padding,
 ) {
+  .dx-chat-messagebubble:has(> .dx-chat-tool-call-view) {
+    gap: $gap;
+  }
+
   .dx-chat-tool-call-view {
     color: $color;
     font-size: $font-size;
@@ -99,7 +104,6 @@
 
     // The message text under the block lines up with the title and the icons of the block
     & + .dx-chat-messagebubble-content {
-      margin-block-start: $gap;
       padding: $text-padding;
     }
 
@@ -125,7 +129,7 @@
         padding: $field-padding;
         font-family: $monospace-font-family;
         font-size: $font-size;
-        line-height: $line-height;
+        line-height: $field-line-height;
         color: inherit;
       }
 
@@ -134,7 +138,7 @@
       &.dx-chat-tool-call-error.dx-state-focused,
       &.dx-chat-tool-call-error.dx-state-active,
       &.dx-chat-tool-call-error.dx-state-readonly {
-        border-color: transparent;
+        border-width: 0;
         background-color: $error-background-color;
         color: $error-color;
       }
