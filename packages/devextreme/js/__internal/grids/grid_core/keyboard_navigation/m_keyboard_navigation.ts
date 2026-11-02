@@ -1841,7 +1841,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     gridCoreUtils.focusAndSelectElement(this, $focusedElement);
   }
 
-  public applyFocus(
+  protected applyFocus(
     $cell: dxElementWrapper,
     disableFocus?: boolean,
     skipFocusEvent?: boolean,

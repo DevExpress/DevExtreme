@@ -63,7 +63,7 @@ export const keyboardNavigationScrollableA11yExtender = (Base: ModuleType<Keyboa
     super.renderCompleted(e);
   }
 
-  public applyFocus(
+  protected applyFocus(
     $cell: dxElementWrapper,
     disableFocus?: boolean,
     skipFocusEvent?: boolean,
