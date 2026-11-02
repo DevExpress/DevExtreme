@@ -11,11 +11,7 @@ import eventsEngine from 'devextreme/common/core/events/core/events_engine';
 import {
   isZoneless,
   trackOutsideAngularHandler,
-<<<<<<< HEAD
-} from './zone-utils';
-=======
 } from './zone-mode';
->>>>>>> b66452332b275e6ecaf1ebfb1fa6bb9b0c66ff76
 
 const outsideAngularEvents = ['mousemove', 'mouseover', 'mouseout'];
 const insideAngularEvents = ['mouseup', 'click', 'mousedown', 'transitionend', 'wheel'];
