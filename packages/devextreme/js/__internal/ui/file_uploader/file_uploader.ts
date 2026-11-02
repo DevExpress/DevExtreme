@@ -1519,8 +1519,8 @@ class FileUploader extends Editor<FileUploaderProperties> {
   ): boolean {
     if (!element) return false;
 
-    const beforeHeight = correctPseudoElements ? parseFloat(window.getComputedStyle(element, ':before').height) : 0;
-    const afterHeight = correctPseudoElements ? parseFloat(window.getComputedStyle(element, ':after').height) : 0;
+    const beforeHeight = correctPseudoElements ? parseFloat(window.getComputedStyle(element, ':before').height) || 0 : 0;
+    const afterHeight = correctPseudoElements ? parseFloat(window.getComputedStyle(element, ':after').height) || 0 : 0;
     const x = getOffset(element).left;
     const y = getOffset(element).top + beforeHeight;
     const w = element.offsetWidth;
