@@ -1077,6 +1077,10 @@
   color: var(--dx-scheduler-appointment-date-content);
 }
 
+.dx-scheduler-appointment-has-resource-color .dx-scheduler-appointment-content-date {
+  color: inherit;
+}
+
 .dx-scheduler-agenda .dx-scheduler-appointment-content-details {
   color: var(--dx-scheduler-agenda-details-content);
 }

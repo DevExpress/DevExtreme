@@ -18,7 +18,7 @@ import EditorFactoryMixin from '@js/ui/shared/ui.editor_factory_mixin';
 import type { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/column_headers';
 import type {
   ColumnsResizerViewController,
-} from '@ts/grids/grid_core/columns_resizing_reordering/m_columns_resizing_reordering';
+} from '@ts/grids/grid_core/columns_resizing_reordering/columns_resizing_reordering';
 import type { ValidatingController } from '@ts/grids/grid_core/validating/m_validating';
 import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
 
