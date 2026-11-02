@@ -41,7 +41,7 @@ import type { FocusController } from '@ts/grids/grid_core/focus/m_focus';
 import type { ResizingController } from '@ts/grids/grid_core/grid_view/grid_view';
 import type {
   KeyboardNavigationController,
-} from '@ts/grids/grid_core/keyboard_navigation/m_keyboard_navigation';
+} from '@ts/grids/grid_core/keyboard_navigation/keyboard_navigation';
 import type { OptionChanged } from '@ts/grids/grid_core/types';
 import type { ValidatingController } from '@ts/grids/grid_core/validating/m_validating';
 import Scrollable from '@ts/ui/scroll_view/scrollable';

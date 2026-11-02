@@ -16,7 +16,7 @@ import type { EditingController } from '../editing/editing';
 import { isNewRowTempKey } from '../editing/editing_utils';
 import type { EditorFactory } from '../editor_factory/editor_factory';
 import { combineFilters } from '../filter/utils';
-import type { KeyboardNavigationController } from '../keyboard_navigation/m_keyboard_navigation';
+import type { KeyboardNavigationController } from '../keyboard_navigation/keyboard_navigation';
 import core from '../modules/modules';
 import type { ModuleType, RowKey } from '../types';
 import gridCoreUtils from '../utils';

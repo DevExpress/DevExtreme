@@ -52,7 +52,7 @@ import type { EditorFactory } from '@ts/grids/grid_core/editor_factory/editor_fa
 import type { FocusController } from '@ts/grids/grid_core/focus/m_focus';
 import type { HeaderPanel } from '@ts/grids/grid_core/header_panel/header_panel';
 import type { ToolbarItem } from '@ts/grids/grid_core/header_panel/types';
-import type { KeyboardNavigationController } from '@ts/grids/grid_core/keyboard_navigation/m_keyboard_navigation';
+import type { KeyboardNavigationController } from '@ts/grids/grid_core/keyboard_navigation/keyboard_navigation';
 import { CLASSES as MASTER_DETAIL_CLASSES } from '@ts/grids/grid_core/master_detail/const';
 import modules from '@ts/grids/grid_core/modules/modules';
 import { ROW_SELECTION_CLASS } from '@ts/grids/grid_core/selection/const';

@@ -13,8 +13,8 @@ import { CLASSES as EDITING_CLASSES, EDIT_MODE } from '../editing/const';
 import { COMMAND_SELECT_CLASS } from '../selection/const';
 import { CLASSES as VIRTUAL_SCROLLING_CLASSES } from '../virtual_scrolling/const';
 import { INTERACTIVE_ELEMENTS_SELECTOR } from './const';
+import type { KeyboardNavigationController } from './keyboard_navigation';
 import type { KeyboardNavigationController as KeyboardNavigationControllerCore } from './keyboard_navigation_core';
-import type { KeyboardNavigationController } from './m_keyboard_navigation';
 import type { NavigationDirection } from './types';
 
 const DATAGRID_GROUP_FOOTER_CLASS = 'dx-datagrid-group-footer';
