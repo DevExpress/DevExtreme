@@ -131,7 +131,7 @@ QUnit.module('Customize keyboard navigation', {
         assert.equal($input.length, 0, 'input');
         assert.notOk(this.keyboardNavigationController._isEditing);
         assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 2, rowIndex: 2 }, 'focusedCellPosition');
-        assert.notOk(this.keyboardNavigationController._isFastEditingStarted(), 'Fast editing mode');
+        assert.notOk(this.keyboardNavigationController.isFastEditingStarted(), 'Fast editing mode');
         assert.deepEqual(this.getController('data').items()[1].data, { name: 'Dan1', date: '04/05/2006', room: 222, phone: 666666 }, 'row 1 data');
 
         // act
@@ -149,7 +149,7 @@ QUnit.module('Customize keyboard navigation', {
         assert.equal($input.length, 0, 'input');
         assert.notOk(this.keyboardNavigationController._isEditing);
         assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 2, rowIndex: 1 }, 'focusedCellPosition');
-        assert.notOk(this.keyboardNavigationController._isFastEditingStarted(), 'Fast editing mode');
+        assert.notOk(this.keyboardNavigationController.isFastEditingStarted(), 'Fast editing mode');
         assert.deepEqual(this.getController('data').items()[2].data, { name: 'Dan2', date: '07/08/2009', room: 1, phone: 777777 }, 'row 2 data');
     });
 
@@ -180,7 +180,7 @@ QUnit.module('Customize keyboard navigation', {
         this.clock.tick(10);
 
         // assert
-        assert.notOk(this.keyboardNavigationController._isFastEditingStarted(), 'Is editing by char key');
+        assert.notOk(this.keyboardNavigationController.isFastEditingStarted(), 'Is editing by char key');
     });
 
     testInDesktop('Enter key if \'enterKeyAction\' is \'moveFocus\'', function(assert) {
@@ -642,7 +642,7 @@ QUnit.module('Customize keyboard navigation', {
         this.editCell(0, 0);
 
         // assert
-        assert.notOk(this.keyboardNavigationController._isFastEditingStarted(), 'Is editing began by char key');
+        assert.notOk(this.keyboardNavigationController.isFastEditingStarted(), 'Is editing began by char key');
 
         // act
         this.triggerKeyDown('enter');
@@ -650,7 +650,7 @@ QUnit.module('Customize keyboard navigation', {
 
         // assert
         assert.equal(this.editingController._getVisibleEditRowIndex(), -1, 'row is editing');
-        assert.notOk(this.keyboardNavigationController._isFastEditingStarted(), 'Is editing began by char key');
+        assert.notOk(this.keyboardNavigationController.isFastEditingStarted(), 'Is editing began by char key');
         assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 0, rowIndex: 0 }, 'focusedCellPosition');
     });
 
@@ -672,7 +672,7 @@ QUnit.module('Customize keyboard navigation', {
         this.editCell(0, 0);
 
         // assert
-        assert.notOk(this.keyboardNavigationController._isFastEditingStarted(), 'Is editing began by char key');
+        assert.notOk(this.keyboardNavigationController.isFastEditingStarted(), 'Is editing began by char key');
 
         // act
         this.triggerKeyDown('enter');
@@ -680,7 +680,7 @@ QUnit.module('Customize keyboard navigation', {
 
         // assert
         assert.equal(this.editingController._getVisibleEditRowIndex(), -1, 'row is editing');
-        assert.notOk(this.keyboardNavigationController._isFastEditingStarted(), 'Is editing began by char key');
+        assert.notOk(this.keyboardNavigationController.isFastEditingStarted(), 'Is editing began by char key');
         assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 0, rowIndex: 0 }, 'focusedCellPosition');
     });
 
@@ -704,7 +704,7 @@ QUnit.module('Customize keyboard navigation', {
         this.editCell(0, 0);
 
         // assert
-        assert.notOk(this.keyboardNavigationController._isFastEditingStarted(), 'Editing navigation mode');
+        assert.notOk(this.keyboardNavigationController.isFastEditingStarted(), 'Editing navigation mode');
 
         const $input = $('.dx-row .dx-texteditor-input').eq(0);
         $input.val('Test');
@@ -713,7 +713,7 @@ QUnit.module('Customize keyboard navigation', {
 
         // assert
         assert.equal(this.editingController._getVisibleEditRowIndex(), -1, 'row is editing');
-        assert.notOk(this.keyboardNavigationController._isFastEditingStarted(), 'Editing navigation mode');
+        assert.notOk(this.keyboardNavigationController.isFastEditingStarted(), 'Editing navigation mode');
         assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 0, rowIndex: 0 }, 'focusedCellPosition');
     });
 
@@ -737,7 +737,7 @@ QUnit.module('Customize keyboard navigation', {
         this.editCell(0, 0);
 
         // assert
-        assert.notOk(this.keyboardNavigationController._isFastEditingStarted(), 'Editing navigation mode');
+        assert.notOk(this.keyboardNavigationController.isFastEditingStarted(), 'Editing navigation mode');
 
         const $input = $('.dx-row .dx-texteditor-input').eq(0);
         $input.val('Test');
@@ -746,7 +746,7 @@ QUnit.module('Customize keyboard navigation', {
 
         // assert
         assert.equal(this.editingController._getVisibleEditRowIndex(), -1, 'row is editing');
-        assert.notOk(this.keyboardNavigationController._isFastEditingStarted(), 'Editing navigation mode');
+        assert.notOk(this.keyboardNavigationController.isFastEditingStarted(), 'Editing navigation mode');
         assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 0, rowIndex: 0 }, 'focusedCellPosition');
     });
 
@@ -767,7 +767,7 @@ QUnit.module('Customize keyboard navigation', {
 
         // assert
         assert.equal(this.editingController._getVisibleEditRowIndex(), 0, 'row is editing');
-        assert.notOk(this.keyboardNavigationController._isFastEditingStarted(), 'Is editing by char key');
+        assert.notOk(this.keyboardNavigationController.isFastEditingStarted(), 'Is editing by char key');
         assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 0, rowIndex: 0 }, 'focusedCellPosition');
         assert.equal($('td[tabIndex]').attr('tabIndex'), 0, 'tabIndex of cell');
         assert.equal($('td.dx-focused').length, 1, 'one cell is focused');
@@ -778,7 +778,7 @@ QUnit.module('Customize keyboard navigation', {
 
         // assert
         assert.equal(this.editingController._getVisibleEditRowIndex(), 0, 'row is editing');
-        assert.notOk(this.keyboardNavigationController._isFastEditingStarted(), 'Is editing by char key');
+        assert.notOk(this.keyboardNavigationController.isFastEditingStarted(), 'Is editing by char key');
         assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 0, rowIndex: 0 }, 'focusedCellPosition');
         assert.equal($('td[tabIndex]').attr('tabIndex'), 0, 'tabIndex of cell');
         assert.equal($('td.dx-focused').length, 1, 'one cell is focused');
@@ -801,7 +801,7 @@ QUnit.module('Customize keyboard navigation', {
 
         // assert
         assert.equal(this.editingController._getVisibleEditRowIndex(), 0, 'row is editing');
-        assert.notOk(this.keyboardNavigationController._isFastEditingStarted(), 'Is editing by char key');
+        assert.notOk(this.keyboardNavigationController.isFastEditingStarted(), 'Is editing by char key');
         assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 0, rowIndex: 0 }, 'focusedCellPosition');
         assert.equal($('td[tabIndex]').attr('tabIndex'), 0, 'tabIndex of cell');
         assert.equal($('td.dx-focused').length, 1, 'one cell is focused');
@@ -812,7 +812,7 @@ QUnit.module('Customize keyboard navigation', {
 
         // assert
         assert.equal(this.editingController._getVisibleEditRowIndex(), 0, 'row is editing');
-        assert.notOk(this.keyboardNavigationController._isFastEditingStarted(), 'Is editing by char key');
+        assert.notOk(this.keyboardNavigationController.isFastEditingStarted(), 'Is editing by char key');
         assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 0, rowIndex: 0 }, 'focusedCellPosition');
         assert.equal($('td[tabIndex]').attr('tabIndex'), 0, 'tabIndex of cell');
         assert.equal($('td.dx-focused').length, 1, 'one cell is focused');
@@ -850,7 +850,7 @@ QUnit.module('Customize keyboard navigation', {
         assert.equal($editor.length, 1, 'editor');
         assert.equal(this.editingController._getVisibleEditRowIndex(), 0, 'cell is editing');
         assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 0, rowIndex: 0 }, 'focusedCellPosition');
-        assert.ok(this.keyboardNavigationController._isFastEditingStarted(), 'Is begin editing by char key');
+        assert.ok(this.keyboardNavigationController.isFastEditingStarted(), 'Is begin editing by char key');
         assert.deepEqual(this.getController('data').items()[0].data, { name: 'Alex', date: '01/02/2003', room: 0, phone: 555555 }, 'data');
         assert.equal($editor.dxTextBox('instance').option('value'), 'Alex', 'editor value');
         assert.strictEqual($editor.find('.dx-texteditor-input').val(), '', 'input value');
@@ -866,7 +866,7 @@ QUnit.module('Customize keyboard navigation', {
         assert.equal(this.editingController._getVisibleEditRowIndex(), -1, 'cell is editing');
         assert.notOk(this.keyboardNavigationController._isEditing);
         assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 0, rowIndex: 1 }, 'focusedCellPosition');
-        assert.notOk(this.keyboardNavigationController._isFastEditingStarted(), 'Is begin editing by char key');
+        assert.notOk(this.keyboardNavigationController.isFastEditingStarted(), 'Is begin editing by char key');
         assert.deepEqual(this.getController('data').items()[0].data, { name: '', date: '01/02/2003', room: 0, phone: 555555 }, 'data');
     });
 
@@ -902,7 +902,7 @@ QUnit.module('Customize keyboard navigation', {
         assert.equal($editor.length, 1, 'editor');
         assert.equal(this.editingController._getVisibleEditRowIndex(), 0, 'cell is editing');
         assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 0, rowIndex: 0 }, 'focusedCellPosition');
-        assert.ok(this.keyboardNavigationController._isFastEditingStarted(), 'Is begin editing by char key');
+        assert.ok(this.keyboardNavigationController.isFastEditingStarted(), 'Is begin editing by char key');
         assert.deepEqual(this.getController('data').items()[0].data, { name: 'Alex', date: '01/02/2003', room: 0, phone: 555555 }, 'data');
         assert.equal($editor.dxTextBox('instance').option('value'), 'Alex', 'editor value');
         assert.strictEqual($editor.find('.dx-texteditor-input').val(), '', 'input value');
@@ -918,7 +918,7 @@ QUnit.module('Customize keyboard navigation', {
         assert.equal(this.editingController._getVisibleEditRowIndex(), -1, 'cell is editing');
         assert.notOk(this.keyboardNavigationController._isEditing);
         assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 0, rowIndex: 1 }, 'focusedCellPosition');
-        assert.notOk(this.keyboardNavigationController._isFastEditingStarted(), 'Is begin editing by char key');
+        assert.notOk(this.keyboardNavigationController.isFastEditingStarted(), 'Is begin editing by char key');
         assert.deepEqual(this.getController('data').items()[0].data, { name: '', date: '01/02/2003', room: 0, phone: 555555 }, 'data');
     });
 
@@ -954,7 +954,7 @@ QUnit.module('Customize keyboard navigation', {
         assert.equal($editor.length, 1, 'editor');
         assert.equal(this.editingController._getVisibleEditRowIndex(), 0, 'cell is editing');
         assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 0, rowIndex: 0 }, 'focusedCellPosition');
-        assert.ok(this.keyboardNavigationController._isFastEditingStarted(), 'Is begin editing by char key');
+        assert.ok(this.keyboardNavigationController.isFastEditingStarted(), 'Is begin editing by char key');
         assert.deepEqual(this.getController('data').items()[0].data, { name: 'Alex', date: '01/02/2003', room: 0, phone: 555555 }, 'data');
         assert.equal($editor.dxTextBox('instance').option('value'), 'Alex', 'editor value');
         assert.strictEqual($editor.find('.dx-texteditor-input').val(), '', 'input value');
@@ -970,7 +970,7 @@ QUnit.module('Customize keyboard navigation', {
         assert.equal(this.editingController._getVisibleEditRowIndex(), -1, 'cell is editing');
         assert.notOk(this.keyboardNavigationController._isEditing);
         assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 0, rowIndex: 1 }, 'focusedCellPosition');
-        assert.notOk(this.keyboardNavigationController._isFastEditingStarted(), 'Is begin editing by char key');
+        assert.notOk(this.keyboardNavigationController.isFastEditingStarted(), 'Is begin editing by char key');
         assert.deepEqual(this.getController('data').items()[0].data, { name: '', date: '01/02/2003', room: 0, phone: 555555 }, 'data');
     });
 
@@ -1006,7 +1006,7 @@ QUnit.module('Customize keyboard navigation', {
         assert.equal($editor.length, 1, 'editor');
         assert.equal(this.editingController._getVisibleEditRowIndex(), 0, 'cell is editing');
         assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 0, rowIndex: 0 }, 'focusedCellPosition');
-        assert.ok(this.keyboardNavigationController._isFastEditingStarted(), 'Is begin editing by char key');
+        assert.ok(this.keyboardNavigationController.isFastEditingStarted(), 'Is begin editing by char key');
         assert.deepEqual(this.getController('data').items()[0].data, { name: 'Alex', date: '01/02/2003', room: 0, phone: 555555 }, 'data');
         assert.equal($editor.dxTextBox('instance').option('value'), 'Alex', 'editor value');
         assert.strictEqual($editor.find('.dx-texteditor-input').val(), '', 'input value');
@@ -1022,7 +1022,7 @@ QUnit.module('Customize keyboard navigation', {
         assert.equal(this.editingController._getVisibleEditRowIndex(), -1, 'cell is editing');
         assert.notOk(this.keyboardNavigationController._isEditing);
         assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 0, rowIndex: 1 }, 'focusedCellPosition');
-        assert.notOk(this.keyboardNavigationController._isFastEditingStarted(), 'Is begin editing by char key');
+        assert.notOk(this.keyboardNavigationController.isFastEditingStarted(), 'Is begin editing by char key');
         assert.deepEqual(this.getController('data').items()[0].data, { name: '', date: '01/02/2003', room: 0, phone: 555555 }, 'data');
     });
 
@@ -1058,7 +1058,7 @@ QUnit.module('Customize keyboard navigation', {
         assert.equal($editor.length, 1, 'editor');
         assert.equal(this.editingController._getVisibleEditRowIndex(), 0, 'cell is editing');
         assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 0, rowIndex: 0 }, 'focusedCellPosition');
-        assert.ok(this.keyboardNavigationController._isFastEditingStarted(), 'Is begin editing by char key');
+        assert.ok(this.keyboardNavigationController.isFastEditingStarted(), 'Is begin editing by char key');
         assert.deepEqual(this.getController('data').items()[0].data, { name: 'Alex', date: '01/02/2003', room: 0, phone: 555555 }, 'data');
         assert.equal($editor.dxTextBox('instance').option('value'), 'Alex', 'editor value');
         assert.equal($editor.find('.dx-texteditor-input').val(), 'D', 'input value');
@@ -1074,7 +1074,7 @@ QUnit.module('Customize keyboard navigation', {
         assert.equal(this.editingController._getVisibleEditRowIndex(), -1, 'cell is editing');
         assert.notOk(this.keyboardNavigationController._isEditing);
         assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 0, rowIndex: 1 }, 'focusedCellPosition');
-        assert.notOk(this.keyboardNavigationController._isFastEditingStarted(), 'Is begin editing by char key');
+        assert.notOk(this.keyboardNavigationController.isFastEditingStarted(), 'Is begin editing by char key');
         assert.deepEqual(this.getController('data').items()[0].data, { name: 'D', date: '01/02/2003', room: 0, phone: 555555 }, 'data');
     });
 
@@ -1109,7 +1109,7 @@ QUnit.module('Customize keyboard navigation', {
         assert.equal($editor.length, 1, 'editor');
         assert.equal(this.editingController._getVisibleEditRowIndex(), 0, 'cell is editing');
         assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 0, rowIndex: 0 }, 'focusedCellPosition');
-        assert.ok(this.keyboardNavigationController._isFastEditingStarted(), 'Is begin editing by char key');
+        assert.ok(this.keyboardNavigationController.isFastEditingStarted(), 'Is begin editing by char key');
         assert.deepEqual(this.getController('data').items()[0].data, { name: 'Alex', date: '01/02/2003', room: 0, phone: 555555 }, 'data');
         assert.equal($editor.dxTextBox('instance').option('value'), 'Alex', 'editor value');
         assert.equal($editor.find('.dx-texteditor-input').val(), 'D', 'input value');
@@ -1125,7 +1125,7 @@ QUnit.module('Customize keyboard navigation', {
         assert.equal(this.editingController._getVisibleEditRowIndex(), -1, 'cell is editing');
         assert.notOk(this.keyboardNavigationController._isEditing);
         assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 1, rowIndex: 0 }, 'focusedCellPosition');
-        assert.notOk(this.keyboardNavigationController._isFastEditingStarted(), 'Is begin editing by char key');
+        assert.notOk(this.keyboardNavigationController.isFastEditingStarted(), 'Is begin editing by char key');
         assert.deepEqual(this.getController('data').items()[0].data, { name: 'D', date: '01/02/2003', room: 0, phone: 555555 }, 'data');
     });
 
@@ -1161,7 +1161,7 @@ QUnit.module('Customize keyboard navigation', {
         assert.equal($editor.length, 1, 'editor');
         assert.equal(this.editingController._getVisibleEditRowIndex(), 0, 'cell is editing');
         assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 0, rowIndex: 0 }, 'focusedCellPosition');
-        assert.ok(this.keyboardNavigationController._isFastEditingStarted(), 'Is begin editing by char key');
+        assert.ok(this.keyboardNavigationController.isFastEditingStarted(), 'Is begin editing by char key');
         assert.deepEqual(this.getController('data').items()[0].data, { name: 'Alex', date: '01/02/2003', room: 0, phone: 555555 }, 'data');
         assert.equal($editor.dxTextBox('instance').option('value'), 'Alex', 'editor value');
         assert.equal($editor.find('.dx-texteditor-input').val(), 'D', 'input value');
@@ -1177,7 +1177,7 @@ QUnit.module('Customize keyboard navigation', {
         assert.equal(this.editingController._getVisibleEditRowIndex(), -1, 'cell is editing');
         assert.notOk(this.keyboardNavigationController._isEditing);
         assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 0, rowIndex: 1 }, 'focusedCellPosition');
-        assert.notOk(this.keyboardNavigationController._isFastEditingStarted(), 'Is begin editing by char key');
+        assert.notOk(this.keyboardNavigationController.isFastEditingStarted(), 'Is begin editing by char key');
         assert.deepEqual(this.getController('data').items()[0].data, { name: 'D', date: '01/02/2003', room: 0, phone: 555555 }, 'data');
     });
 
@@ -1212,7 +1212,7 @@ QUnit.module('Customize keyboard navigation', {
         assert.equal($editor.length, 1, 'editor');
         assert.equal(this.editingController._getVisibleEditRowIndex(), 0, 'cell is editing');
         assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 0, rowIndex: 0 }, 'focusedCellPosition');
-        assert.ok(this.keyboardNavigationController._isFastEditingStarted(), 'Is begin editing by char key');
+        assert.ok(this.keyboardNavigationController.isFastEditingStarted(), 'Is begin editing by char key');
         assert.deepEqual(this.getController('data').items()[0].data, { name: 'Alex', date: '01/02/2003', room: 0, phone: 555555 }, 'data');
         assert.equal($editor.dxTextBox('instance').option('value'), 'Alex', 'editor value');
         assert.equal($editor.find('.dx-texteditor-input').val(), 'D', 'input value');
@@ -1228,7 +1228,7 @@ QUnit.module('Customize keyboard navigation', {
         assert.equal(this.editingController._getVisibleEditRowIndex(), -1, 'cell is editing');
         assert.notOk(this.keyboardNavigationController._isEditing);
         assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 1, rowIndex: 0 }, 'focusedCellPosition');
-        assert.notOk(this.keyboardNavigationController._isFastEditingStarted(), 'Is begin editing by char key');
+        assert.notOk(this.keyboardNavigationController.isFastEditingStarted(), 'Is begin editing by char key');
         assert.deepEqual(this.getController('data').items()[0].data, { name: 'D', date: '01/02/2003', room: 0, phone: 555555 }, 'data');
     });
 
@@ -1264,7 +1264,7 @@ QUnit.module('Customize keyboard navigation', {
         assert.equal($editor.length, 1, 'editor');
         assert.equal(this.editingController._getVisibleEditRowIndex(), 0, 'cell is editing');
         assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 0, rowIndex: 0 }, 'focusedCellPosition');
-        assert.ok(this.keyboardNavigationController._isFastEditingStarted(), 'Is begin editing by char key');
+        assert.ok(this.keyboardNavigationController.isFastEditingStarted(), 'Is begin editing by char key');
         assert.deepEqual(this.getController('data').items()[0].data, { name: 'Alex', date: '01/02/2003', room: 0, phone: 555555 }, 'data');
         assert.equal($editor.dxTextBox('instance').option('value'), 'Alex', 'editor value');
         assert.equal($editor.find('.dx-texteditor-input').val(), 'D', 'input value');
@@ -1280,7 +1280,7 @@ QUnit.module('Customize keyboard navigation', {
         assert.equal(this.editingController._getVisibleEditRowIndex(), -1, 'cell is editing');
         assert.notOk(this.keyboardNavigationController._isEditing);
         assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 1, rowIndex: 0 }, 'focusedCellPosition');
-        assert.notOk(this.keyboardNavigationController._isFastEditingStarted(), 'Is begin editing by char key');
+        assert.notOk(this.keyboardNavigationController.isFastEditingStarted(), 'Is begin editing by char key');
         assert.deepEqual(this.getController('data').items()[0].data, { name: 'D', date: '01/02/2003', room: 0, phone: 555555 }, 'data');
     });
 
@@ -1306,7 +1306,7 @@ QUnit.module('Customize keyboard navigation', {
 
         // assert
         assert.equal(this.editingController._getVisibleEditRowIndex(), -1, 'row is editing');
-        assert.notOk(this.keyboardNavigationController._isFastEditingStarted(), 'Editing navigation mode');
+        assert.notOk(this.keyboardNavigationController.isFastEditingStarted(), 'Editing navigation mode');
         assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 0, rowIndex: 0 }, 'focusedCellPosition');
     });
 
@@ -1341,7 +1341,7 @@ QUnit.module('Customize keyboard navigation', {
         assert.equal($editor.length, 1, 'editor');
         assert.equal(this.editingController._getVisibleEditRowIndex(), 0, 'cell is editing');
         assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 0, rowIndex: 0 }, 'focusedCellPosition');
-        assert.ok(this.keyboardNavigationController._isFastEditingStarted(), 'Fast editing mode');
+        assert.ok(this.keyboardNavigationController.isFastEditingStarted(), 'Fast editing mode');
         assert.deepEqual(this.getController('data').items()[0].data, { name: 'Alex', date: '01/02/2003', room: 0, phone: 555555 }, 'data');
         assert.equal($editor.dxTextBox('instance').option('value'), 'Alex', 'editor value');
         assert.equal($editor.find('.dx-texteditor-input').val(), 'D', 'input value');
@@ -1356,7 +1356,7 @@ QUnit.module('Customize keyboard navigation', {
         assert.equal($editor.length, 0, 'no editor');
         assert.notOk(this.keyboardNavigationController._isEditing);
         assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 1, rowIndex: 0 }, 'focusedCellPosition');
-        assert.notOk(this.keyboardNavigationController._isFastEditingStarted(), 'Editing navigation mode');
+        assert.notOk(this.keyboardNavigationController.isFastEditingStarted(), 'Editing navigation mode');
         assert.deepEqual(this.getController('data').items()[0].data, { name: 'D', date: '01/02/2003', room: 0, phone: 555555 }, 'data');
     });
 
@@ -1391,7 +1391,7 @@ QUnit.module('Customize keyboard navigation', {
         assert.equal($editor.length, 1, 'editor');
         assert.equal(this.editingController._getVisibleEditRowIndex(), 1, 'cell is editing');
         assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 2, rowIndex: 1 }, 'focusedCellPosition');
-        assert.ok(this.keyboardNavigationController._isFastEditingStarted(), 'Fast editing mode');
+        assert.ok(this.keyboardNavigationController.isFastEditingStarted(), 'Fast editing mode');
         assert.deepEqual(this.getController('data').items()[1].data, { name: 'Dan1', date: '04/05/2006', room: 1, phone: 666666 }, 'data');
         assert.equal($editor.dxNumberBox('instance').option('value'), '1', 'editor value');
         assert.equal($editor.find('.dx-texteditor-input').val(), '2', 'input value');
@@ -1406,7 +1406,7 @@ QUnit.module('Customize keyboard navigation', {
         assert.equal($editor.length, 0, 'no editor');
         assert.notOk(this.keyboardNavigationController._isEditing);
         assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 1, rowIndex: 1 }, 'focusedCellPosition');
-        assert.notOk(this.keyboardNavigationController._isFastEditingStarted(), 'Fast editing mode');
+        assert.notOk(this.keyboardNavigationController.isFastEditingStarted(), 'Fast editing mode');
         assert.deepEqual(this.getController('data').items()[1].data, { name: 'Dan1', date: '04/05/2006', room: 2, phone: 666666 }, 'cell value');
     });
 
@@ -1441,7 +1441,7 @@ QUnit.module('Customize keyboard navigation', {
         assert.equal($editor.length, 1, 'editor');
         assert.equal(this.editingController._getVisibleEditRowIndex(), 1, 'cell is editing');
         assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 0, rowIndex: 1 }, 'focusedCellPosition');
-        assert.ok(this.keyboardNavigationController._isFastEditingStarted(), 'Fast editing mode');
+        assert.ok(this.keyboardNavigationController.isFastEditingStarted(), 'Fast editing mode');
         assert.deepEqual(this.getController('data').items()[1].data, { name: 'Dan1', date: '04/05/2006', room: 1, phone: 666666 }, 'data');
         assert.equal($editor.dxTextBox('instance').option('value'), 'Dan1', 'editor value');
         assert.equal($editor.find('.dx-texteditor-input').val(), 'D', 'input value');
@@ -1456,7 +1456,7 @@ QUnit.module('Customize keyboard navigation', {
         assert.equal($editor.length, 0, 'no editor');
         assert.notOk(this.keyboardNavigationController._isEditing);
         assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 0, rowIndex: 0 }, 'focusedCellPosition');
-        assert.notOk(this.keyboardNavigationController._isFastEditingStarted(), 'Fast editing mode');
+        assert.notOk(this.keyboardNavigationController.isFastEditingStarted(), 'Fast editing mode');
         assert.deepEqual(this.getController('data').items()[1].data, { name: 'D', date: '04/05/2006', room: 1, phone: 666666 }, 'cell value');
     });
 
@@ -1491,7 +1491,7 @@ QUnit.module('Customize keyboard navigation', {
         assert.equal($editor.length, 1, 'editor');
         assert.equal(this.editingController._getVisibleEditRowIndex(), 1, 'cell is editing');
         assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 0, rowIndex: 1 }, 'focusedCellPosition');
-        assert.ok(this.keyboardNavigationController._isFastEditingStarted(), 'Fast editing mode');
+        assert.ok(this.keyboardNavigationController.isFastEditingStarted(), 'Fast editing mode');
         assert.deepEqual(this.getController('data').items()[1].data, { name: 'Dan1', date: '04/05/2006', room: 1, phone: 666666 }, 'data');
         assert.equal($editor.dxTextBox('instance').option('value'), 'Dan1', 'editor value');
         assert.equal($editor.find('.dx-texteditor-input').val(), 'D', 'input value');
@@ -1506,7 +1506,7 @@ QUnit.module('Customize keyboard navigation', {
         assert.equal($editor.length, 0, 'no editor');
         assert.notOk(this.keyboardNavigationController._isEditing);
         assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 0, rowIndex: 2 }, 'focusedCellPosition');
-        assert.notOk(this.keyboardNavigationController._isFastEditingStarted(), 'Fast editing mode');
+        assert.notOk(this.keyboardNavigationController.isFastEditingStarted(), 'Fast editing mode');
         assert.deepEqual(this.getController('data').items()[1].data, { name: 'D', date: '04/05/2006', room: 1, phone: 666666 }, 'cell value');
     });
 
@@ -1542,7 +1542,7 @@ QUnit.module('Customize keyboard navigation', {
         assert.equal($editor.length, 1, 'editor');
         assert.equal(this.editingController._getVisibleEditRowIndex(), 1, 'cell is editing');
         assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 0, rowIndex: 1 }, 'focusedCellPosition');
-        assert.ok(this.keyboardNavigationController._isFastEditingStarted(), 'Fast editing mode');
+        assert.ok(this.keyboardNavigationController.isFastEditingStarted(), 'Fast editing mode');
 
         // act
         this.triggerKeyDown('downArrow');
@@ -1555,7 +1555,7 @@ QUnit.module('Customize keyboard navigation', {
         assert.equal($editor.length, 1, 'editor');
         assert.equal(this.editingController._getVisibleEditRowIndex(), 2, 'cell is editing');
         assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 0, rowIndex: 2 }, 'focusedCellPosition');
-        assert.ok(this.keyboardNavigationController._isFastEditingStarted(), 'Fast editing mode');
+        assert.ok(this.keyboardNavigationController.isFastEditingStarted(), 'Fast editing mode');
 
         this.triggerKeyDown('downArrow');
         this.clock.tick(10);
@@ -1565,7 +1565,7 @@ QUnit.module('Customize keyboard navigation', {
         assert.equal($editor.length, 0, 'no editor');
         assert.notOk(this.keyboardNavigationController._isEditing);
         assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 0, rowIndex: 3 }, 'focusedCellPosition');
-        assert.notOk(this.keyboardNavigationController._isFastEditingStarted(), 'Fast editing mode');
+        assert.notOk(this.keyboardNavigationController.isFastEditingStarted(), 'Fast editing mode');
 
         assert.deepEqual(this.getController('data').items()[1].data, { name: 'D', date: '04/05/2006', room: 1, phone: 666666 }, 'row 1 data');
         assert.deepEqual(this.getController('data').items()[2].data, { name: 'A', date: '07/08/2009', room: 2, phone: 777777 }, 'row 2 data');
@@ -1594,7 +1594,7 @@ QUnit.module('Customize keyboard navigation', {
         let $input = $('.dx-row .dx-texteditor-input').eq(0);
         assert.equal(this.editingController._getVisibleEditRowIndex(), 1, 'cell is editing');
         assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 2, rowIndex: 1 }, 'focusedCellPosition');
-        assert.ok(this.keyboardNavigationController._isFastEditingStarted(), 'Fast editing mode');
+        assert.ok(this.keyboardNavigationController.isFastEditingStarted(), 'Fast editing mode');
         assert.deepEqual(this.getController('data').items()[1].data, { name: 'Dan1', date: '04/05/2006', room: 1, phone: 666666 }, 'row 1 data');
         assert.deepEqual(this.getController('data').items()[2].data, { name: 'Dan2', date: '07/08/2009', room: 2, phone: 777777 }, 'row 2 data');
         assert.equal($input.val(), '2', 'input value');
@@ -1609,7 +1609,7 @@ QUnit.module('Customize keyboard navigation', {
         $input = $('.dx-row .dx-texteditor-input').eq(0);
         assert.equal(this.editingController._getVisibleEditRowIndex(), 2, 'cell is editing');
         assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 2, rowIndex: 2 }, 'focusedCellPosition');
-        assert.ok(this.keyboardNavigationController._isFastEditingStarted(), 'Fast editing mode');
+        assert.ok(this.keyboardNavigationController.isFastEditingStarted(), 'Fast editing mode');
         assert.deepEqual(this.getController('data').items()[1].data, { name: 'Dan1', date: '04/05/2006', room: 2, phone: 666666 }, 'row 1 data');
         assert.equal($input.val(), '1', 'input value');
 
@@ -1621,7 +1621,7 @@ QUnit.module('Customize keyboard navigation', {
         assert.equal($input.length, 0, 'input');
         assert.notOk(this.keyboardNavigationController._isEditing);
         assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 2, rowIndex: 1 }, 'focusedCellPosition');
-        assert.notOk(this.keyboardNavigationController._isFastEditingStarted(), 'Fast editing mode');
+        assert.notOk(this.keyboardNavigationController.isFastEditingStarted(), 'Fast editing mode');
         assert.deepEqual(this.getController('data').items()[2].data, { name: 'Dan2', date: '07/08/2009', room: 1, phone: 777777 }, 'row 2 data');
     });
 
@@ -1680,7 +1680,7 @@ QUnit.module('Customize keyboard navigation', {
         let $input = $('.dx-row .dx-texteditor-container input').eq(0);
         assert.equal(this.editingController._getVisibleEditRowIndex(), 1, 'cell is editing');
         assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 2, rowIndex: 1 }, 'focusedCellPosition');
-        assert.ok(this.keyboardNavigationController._isFastEditingStarted(), 'Fast editing mode');
+        assert.ok(this.keyboardNavigationController.isFastEditingStarted(), 'Fast editing mode');
         assert.equal($input.val(), '2', 'input value');
 
         // act
@@ -1693,7 +1693,7 @@ QUnit.module('Customize keyboard navigation', {
         $input = $('.dx-row .dx-texteditor-container input').eq(0);
         assert.equal(this.editingController._getVisibleEditRowIndex(), 1, 'cell is editing');
         assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 3, rowIndex: 1 }, 'focusedCellPosition');
-        assert.ok(this.keyboardNavigationController._isFastEditingStarted(), 'Fast editing mode');
+        assert.ok(this.keyboardNavigationController.isFastEditingStarted(), 'Fast editing mode');
         assert.equal($input.val(), '1', 'input value');
 
         this.triggerKeyDown('leftArrow');
@@ -1704,7 +1704,7 @@ QUnit.module('Customize keyboard navigation', {
         assert.equal($input.length, 0, 'input');
         assert.notOk(this.keyboardNavigationController._isEditing);
         assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 2, rowIndex: 1 }, 'focusedCellPosition');
-        assert.notOk(this.keyboardNavigationController._isFastEditingStarted(), 'Fast editing mode');
+        assert.notOk(this.keyboardNavigationController.isFastEditingStarted(), 'Fast editing mode');
     });
 
     testInDesktop('Editing navigation mode for a date cell if \'keyboardNavigation.editOnKeyPress\' and Up/Down arrow keys', function(assert) {
@@ -1730,7 +1730,7 @@ QUnit.module('Customize keyboard navigation', {
         let $input = $('.dx-texteditor-input').eq(0);
         assert.equal(this.editingController._getVisibleEditRowIndex(), 1, 'cell is editing');
         assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 1, rowIndex: 1 }, 'focusedCellPosition');
-        assert.ok(this.keyboardNavigationController._isFastEditingStarted(), 'Fast editing mode');
+        assert.ok(this.keyboardNavigationController.isFastEditingStarted(), 'Fast editing mode');
         assert.equal($input.val(), '2', 'input value');
 
         // act
@@ -1743,7 +1743,7 @@ QUnit.module('Customize keyboard navigation', {
         $input = $('.dx-texteditor-input').eq(0);
         assert.equal(this.editingController._getVisibleEditRowIndex(), 2, 'cell is editing');
         assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 1, rowIndex: 2 }, 'focusedCellPosition');
-        assert.ok(this.keyboardNavigationController._isFastEditingStarted(), 'Fast editing mode');
+        assert.ok(this.keyboardNavigationController.isFastEditingStarted(), 'Fast editing mode');
         assert.equal($input.val(), '1', 'input value');
 
         // act
@@ -1755,7 +1755,7 @@ QUnit.module('Customize keyboard navigation', {
         assert.equal($input.length, 0, 'input');
         assert.notOk(this.keyboardNavigationController._isEditing);
         assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 1, rowIndex: 1 }, 'focusedCellPosition');
-        assert.notOk(this.keyboardNavigationController._isFastEditingStarted(), 'Fast editing mode');
+        assert.notOk(this.keyboardNavigationController.isFastEditingStarted(), 'Fast editing mode');
     });
 
     testInDesktop('Editing navigation mode for a date cell if \'keyboardNavigation.editOnKeyPress\' and Left/Right arrow keys exit', function(assert) {
@@ -1781,7 +1781,7 @@ QUnit.module('Customize keyboard navigation', {
         let $input = $('.dx-row .dx-texteditor-input').eq(0);
         assert.equal(this.editingController._getVisibleEditRowIndex(), 1, 'cell is editing');
         assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 1, rowIndex: 1 }, 'focusedCellPosition');
-        assert.ok(this.keyboardNavigationController._isFastEditingStarted(), 'Fast editing mode');
+        assert.ok(this.keyboardNavigationController.isFastEditingStarted(), 'Fast editing mode');
         assert.equal($input.val(), '2', 'input value');
 
         // act
@@ -1794,7 +1794,7 @@ QUnit.module('Customize keyboard navigation', {
         $input = $('.dx-row .dx-texteditor-input').eq(0);
         assert.equal(this.editingController._getVisibleEditRowIndex(), 1, 'cell is editing');
         assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 2, rowIndex: 1 }, 'focusedCellPosition');
-        assert.ok(this.keyboardNavigationController._isFastEditingStarted(), 'Fast editing mode');
+        assert.ok(this.keyboardNavigationController.isFastEditingStarted(), 'Fast editing mode');
         assert.equal($input.val(), '1', 'input value');
 
         this.triggerKeyDown('leftArrow');
@@ -1805,7 +1805,7 @@ QUnit.module('Customize keyboard navigation', {
         assert.equal($input.length, 0, 'input');
         assert.notOk(this.keyboardNavigationController._isEditing);
         assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 1, rowIndex: 1 }, 'focusedCellPosition');
-        assert.notOk(this.keyboardNavigationController._isFastEditingStarted(), 'Fast editing mode');
+        assert.notOk(this.keyboardNavigationController.isFastEditingStarted(), 'Fast editing mode');
     });
 
     testInDesktop('Editing navigation mode for a date cell if \'useMaskBehavior\', \'keyboardNavigation.editOnKeyPress\' are set and \'cell\' edit mode', function(assert) {
@@ -1847,7 +1847,7 @@ QUnit.module('Customize keyboard navigation', {
         let $input = $('.dx-texteditor-input').eq(0);
         assert.equal(this.editingController._getVisibleEditRowIndex(), 1, 'cell is editing');
         assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 1, rowIndex: 1 }, 'focusedCellPosition');
-        assert.ok(this.keyboardNavigationController._isFastEditingStarted(), 'Fast editing mode');
+        assert.ok(this.keyboardNavigationController.isFastEditingStarted(), 'Fast editing mode');
         assert.equal($input.val(), '1/5/2006', 'input value');
 
         // act
@@ -1858,7 +1858,7 @@ QUnit.module('Customize keyboard navigation', {
         $input = $('.dx-texteditor-input').eq(0);
         assert.equal($input.length, 0, 'input');
         assert.notOk(this.keyboardNavigationController._isEditing);
-        assert.notOk(this.keyboardNavigationController._isFastEditingStarted(), 'Fast editing mode');
+        assert.notOk(this.keyboardNavigationController.isFastEditingStarted(), 'Fast editing mode');
         assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 1, rowIndex: 2 }, 'focusedCellPosition');
         assert.deepEqual(this.getController('data').items()[1].data, { name: 'Dan1', date: '2006/01/05', room: 1, phone: 666666 }, 'row 1 data');
 
@@ -1912,7 +1912,7 @@ QUnit.module('Customize keyboard navigation', {
         let $input = $('.dx-texteditor-input').eq(0);
         assert.equal(this.editingController._getVisibleEditRowIndex(), 1, 'cell is editing');
         assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 1, rowIndex: 1 }, 'focusedCellPosition');
-        assert.ok(this.keyboardNavigationController._isFastEditingStarted(), 'Fast editing mode');
+        assert.ok(this.keyboardNavigationController.isFastEditingStarted(), 'Fast editing mode');
         assert.equal($input.val(), '1/5/2006', 'input value');
 
         // act
@@ -1975,7 +1975,7 @@ QUnit.module('Customize keyboard navigation', {
         let $input = $('.dx-row .dx-texteditor-container input').eq(0);
         assert.equal(this.editingController._getVisibleEditRowIndex(), 1, 'cell is editing');
         assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 2, rowIndex: 1 }, 'focusedCellPosition');
-        assert.ok(this.keyboardNavigationController._isFastEditingStarted(), 'Fast editing mode');
+        assert.ok(this.keyboardNavigationController.isFastEditingStarted(), 'Fast editing mode');
         assert.equal($input.val(), '#_2.00', 'input value');
 
         // act
@@ -1988,7 +1988,7 @@ QUnit.module('Customize keyboard navigation', {
         $input = $('.dx-row .dx-texteditor-container input').eq(0);
         assert.equal(this.editingController._getVisibleEditRowIndex(), 2, 'cell is editing');
         assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 2, rowIndex: 2 }, 'focusedCellPosition');
-        assert.ok(this.keyboardNavigationController._isFastEditingStarted(), 'Fast editing mode');
+        assert.ok(this.keyboardNavigationController.isFastEditingStarted(), 'Fast editing mode');
         assert.equal($input.val(), '#_1.00', 'input value');
 
         this.triggerKeyDown('upArrow');
@@ -2002,7 +2002,7 @@ QUnit.module('Customize keyboard navigation', {
         $input = $('.dx-row .dx-texteditor-container input').eq(0);
         assert.equal(this.editingController._getVisibleEditRowIndex(), 0, 'cell is editing');
         assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 2, rowIndex: 0 }, 'focusedCellPosition');
-        assert.ok(this.keyboardNavigationController._isFastEditingStarted(), 'Fast editing mode');
+        assert.ok(this.keyboardNavigationController.isFastEditingStarted(), 'Fast editing mode');
         assert.equal($input.val(), '#_1.00', 'input value');
 
         this.triggerKeyDown('enter', false, false, $input);
@@ -2013,7 +2013,7 @@ QUnit.module('Customize keyboard navigation', {
         assert.equal($input.length, 0, 'input');
         assert.notOk(this.keyboardNavigationController._isEditing);
         assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 2, rowIndex: 1 }, 'focusedCellPosition');
-        assert.notOk(this.keyboardNavigationController._isFastEditingStarted(), 'Fast editing mode');
+        assert.notOk(this.keyboardNavigationController.isFastEditingStarted(), 'Fast editing mode');
         assert.deepEqual(this.getController('data').items()[0].data, { name: 'Alex', date: '01/02/2003', room: 1, phone: 555555 }, 'row 0 data');
         assert.deepEqual(this.getController('data').items()[1].data, { name: 'Dan1', date: '04/05/2006', room: 2, phone: 666666 }, 'row 1 data');
         assert.deepEqual(this.getController('data').items()[2].data, { name: 'Dan2', date: '07/08/2009', room: 1, phone: 777777 }, 'row 2 data');
