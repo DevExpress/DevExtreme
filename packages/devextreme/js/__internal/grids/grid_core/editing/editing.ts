@@ -36,7 +36,7 @@ import type { AdaptiveColumnsViewController } from '@ts/grids/grid_core/adaptivi
 import { HIDDEN_COLUMNS_WIDTH } from '@ts/grids/grid_core/adaptivity/const';
 import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/columns_controller';
 import type { Column, ColumnTemplateSource } from '@ts/grids/grid_core/columns_controller/types';
-import type { ColumnsResizerViewController } from '@ts/grids/grid_core/columns_resizing_reordering/m_columns_resizing_reordering';
+import type { ColumnsResizerViewController } from '@ts/grids/grid_core/columns_resizing_reordering/columns_resizing_reordering';
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
 import type {
   DataChange,

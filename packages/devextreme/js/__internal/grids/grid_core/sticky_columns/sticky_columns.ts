@@ -26,7 +26,7 @@ import type { Column } from '../columns_controller/types';
 import type {
   ColumnsResizerViewController,
   DraggingHeaderViewController,
-} from '../columns_resizing_reordering/m_columns_resizing_reordering';
+} from '../columns_resizing_reordering/columns_resizing_reordering';
 import type { HeadersKeyboardNavigationController } from '../keyboard_navigation/headers_keyboard_navigation';
 import {
   isAdaptiveItem,
