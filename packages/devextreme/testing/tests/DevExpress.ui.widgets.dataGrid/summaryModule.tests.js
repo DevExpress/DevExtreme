@@ -447,9 +447,8 @@ QUnit.module('Summary footer', {
                 summaryType: 'coun',
                 value: 119
             }],
-            column: { alignment: 'left' },
-            summaryTexts: summaryTexts
-        }, noop);
+            column: { alignment: 'left' }
+        }, summaryTexts, noop);
 
         // assert
         assert.equal($cellElements[0].find('.dx-datagrid-summary-item').text(), 119, 'column is not command');
@@ -461,9 +460,8 @@ QUnit.module('Summary footer', {
                 summaryType: 'min',
                 value: 19
             }],
-            column: { command: 'expand', alignment: 'left' },
-            summaryTexts: summaryTexts
-        }, noop);
+            column: { command: 'expand', alignment: 'left' }
+        }, summaryTexts, noop);
 
         // assert
         assert.equal($cellElements[1].html(), '', 'command column');
@@ -495,7 +493,6 @@ QUnit.module('Summary footer', {
         assert.strictEqual(resultOptions.rowType, 'totalFooter', 'rowType');
         assert.deepEqual(resultOptions.column, { caption: 'Column 1', alignment: 'left', index: 0 }, 'column');
         assert.equal(resultOptions.summaryItems.length, 3, 'summaryItems');
-        assert.ok(resultOptions.summaryTexts, 'summaryTexts');
         assert.equal(resultOptions.totalItem.summaryCells.length, 5, 'summaryCells');
     });
 

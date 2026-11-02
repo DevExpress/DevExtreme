@@ -70,8 +70,9 @@ fixture.disablePageReloads`Hotkeys for appointments update and navigation`
     const collector = scheduler.collectors.find('3');
     const { appointmentPopup, appointmentTooltip } = scheduler;
 
+    await collector.click();
+
     await t
-      .click(collector.element)
       .expect(appointmentTooltip.isVisible()).ok()
       .pressKey('down')
       .expect(appointmentTooltip.getListItem('New Brochures').isFocused)

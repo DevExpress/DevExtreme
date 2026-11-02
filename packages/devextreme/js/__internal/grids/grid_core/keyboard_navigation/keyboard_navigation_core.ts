@@ -385,7 +385,7 @@ export class KeyboardNavigationController extends modules.ViewController {
   /**
      * @extended: focus
      */
-  public setFocusedRowIndex(rowIndex: number): void {
+  public setFocusedRowIndex(rowIndex: number | undefined): void {
     this._focusedCellPosition ??= {};
     this._focusedCellPosition.rowIndex = rowIndex;
   }

@@ -16,6 +16,7 @@ import {
   ALL_DAY_APPOINTMENT_CLASS,
   APPOINTMENT_CONTENT_CLASSES,
   APPOINTMENT_DRAG_SOURCE_CLASS,
+  APPOINTMENT_HAS_DARK_TEXT_CLASS,
   APPOINTMENT_HAS_RESOURCE_COLOR_CLASS,
   DIRECTION_APPOINTMENT_CLASSES,
   EMPTY_APPOINTMENT_CLASS,
@@ -28,6 +29,7 @@ import { validateRRule } from '../../recurrence/validate_rule';
 import type { SubscribeKey, SubscribeMethods } from '../../subscribes';
 import type { SafeAppointment } from '../../types';
 import type { AppointmentDataAccessor } from '../../utils/data_accessor/appointment_data_accessor';
+import { DARK_TEXT_COLOR, getContrastTextColor } from '../../utils/resource_manager/appointment_color_utils';
 import {
   getAriaDescription,
   getAriaLabel,
@@ -196,8 +198,14 @@ export class Appointment extends DOMComponent<Appointment, AppointmentProperties
     void resourceManager.getAppointmentColor(appointmentConfig)
       .then((color) => {
         if (color) {
-          this.coloredElement.css('backgroundColor', color);
+          const textColor = getContrastTextColor(color);
+
+          this.coloredElement.css({ backgroundColor: color, color: textColor });
           this.coloredElement.addClass(APPOINTMENT_HAS_RESOURCE_COLOR_CLASS);
+          this.coloredElement.toggleClass(
+            APPOINTMENT_HAS_DARK_TEXT_CLASS,
+            textColor === DARK_TEXT_COLOR,
+          );
         }
       });
   }

@@ -6,6 +6,6 @@ export {
   dataSourceAdapterExtender,
   resizing,
   rowsView,
-  type VirtualScrollingDataSourceAdapter,
 } from './m_virtual_scrolling';
+export type { VirtualScrollingDataSourceAdapter, VirtualScrollingRowsView } from './types';
 export { virtualScrollingModule } from './virtual_scrolling_module';
