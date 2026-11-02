@@ -557,9 +557,7 @@ export class DataController extends modules.Controller {
           this.loadingChangedHandler(false);
         }
 
-        // @ts-expect-error e.isDelayed is set for virtual scrolling with scrolling.legacyMode
         if (isAsyncApplying && e?.isDelayed) {
-          // @ts-expect-error e.isDelayed is set for virtual scrolling with scrolling.legacyMode
           e.isDelayed = false;
         }
 

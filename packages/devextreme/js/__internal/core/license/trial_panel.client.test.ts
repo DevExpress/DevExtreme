@@ -408,6 +408,43 @@ describe('trial panel client: options (trialExpired, libraries)', () => {
       expect(getText(getPanel())).toContain('libraries: First - Included in Subscriptions: Universal, DXperience.');
     });
   });
+  describe('banner text', () => {
+    it('should show the title, the links and the end of the text', () => {
+      addTrigger({ libraries: 'DevExtreme', subscriptions: 'Universal, DXperience' });
+
+      expect(getText(getPanel())).toBe('For evaluation purposes only (v26.2.0). Redistribution prohibited. '
+        + 'Please register a valid license or purchase a new license to continue use of the following DevExpress product libraries: '
+        + 'DevExtreme - Included in Subscriptions: Universal, DXperience.');
+      expect(Array.from(getPanel().querySelectorAll('a')).map((link) => link.innerText))
+        .toEqual(['register', 'purchase a new license']);
+      expect(getPanel().querySelector(`a[href="${licensingDoc}"]`)).not.toBeNull();
+      expect(getPanel().querySelector(`a[href="${buyNow}"]`)).not.toBeNull();
+    });
+
+    it.each([
+      ['DevExtreme', 'Universal, DXperience', 'libraries: DevExtreme - Included in Subscriptions: Universal, DXperience.'],
+      ['DevExtreme', undefined, 'libraries: DevExtreme.'],
+      [undefined, 'Universal', 'use of DevExpress product libraries. Included in Subscriptions: Universal.'],
+      [undefined, undefined, 'use of DevExpress product libraries.'],
+    ])('should end the text with the libraries %s and the subscriptions %s', (libraries, subscriptions, expected) => {
+      const attributes: Record<string, string> = {};
+      if (libraries) attributes.libraries = libraries;
+      if (subscriptions) attributes.subscriptions = subscriptions;
+
+      addTrigger(attributes);
+
+      expect(getText(getPanel())).toContain(expected);
+    });
+
+    it('should keep the libraries of the first trigger when subscriptions of later triggers are merged', () => {
+      addTrigger({ libraries: 'First', subscriptions: 'Universal, DXperience' });
+
+      addTrigger({ libraries: 'Second', subscriptions: 'Universal' });
+
+      expect(getText(getPanel())).toContain('libraries: First - Included in Subscriptions: Universal.');
+      expect(getText(getPanel())).not.toContain('Second');
+    });
+  });
   describe('license id and license source', () => {
     it('should pass them to the trigger and the panel and not set them when they are not passed', () => {
       showTrialPanel(buyNow, licensingDoc, version, 'Universal', undefined, {
@@ -474,7 +511,7 @@ describe('trial panel client: options (trialExpired, libraries)', () => {
       it('should show the license id when there are no subscriptions', () => {
         addTrigger({ 'license-id': 'ABC123' });
 
-        expect(getText(getPanel())).toContain('(v26.2.0). License ID: ABC123.');
+        expect(getText(getPanel())).toContain('use of DevExpress product libraries. License ID: ABC123.');
         expect(getText(getPanel())).not.toContain('Included in Subscriptions');
       });
 
@@ -488,7 +525,7 @@ describe('trial panel client: options (trialExpired, libraries)', () => {
       it('should show both when there are no subscriptions', () => {
         addTrigger({ 'license-id': 'ABC123', 'license-source': 'File (x)' });
 
-        expect(getText(getPanel())).toContain('(v26.2.0). License ID: ABC123. License Source: File (x)');
+        expect(getText(getPanel())).toContain('use of DevExpress product libraries. License ID: ABC123. License Source: File (x)');
         expect(getText(getPanel())).not.toContain('Included in Subscriptions');
       });
 
@@ -512,7 +549,7 @@ describe('trial panel client: options (trialExpired, libraries)', () => {
       it('should show only the license source when there are no subscriptions', () => {
         addTrigger({ 'license-source': 'File (x)' });
 
-        expect(getText(getPanel())).toContain('(v26.2.0). License Source: File (x)');
+        expect(getText(getPanel())).toContain('use of DevExpress product libraries. License Source: File (x)');
         expect(getText(getPanel())).not.toContain('License ID');
       });
 
@@ -521,7 +558,7 @@ describe('trial panel client: options (trialExpired, libraries)', () => {
 
         expect(getText(getPanel())).toContain('Included in Subscriptions: Universal');
         expect(getText(getPanel())).not.toContain('License ID');
-        expect(getText(getPanel()).endsWith('Included in Subscriptions: Universal')).toBe(true);
+        expect(getText(getPanel()).endsWith('Included in Subscriptions: Universal.')).toBe(true);
       });
 
       it('should keep the ones of the first trigger when subscriptions of later triggers are merged', () => {

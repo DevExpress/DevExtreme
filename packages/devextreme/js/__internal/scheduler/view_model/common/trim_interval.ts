@@ -9,6 +9,6 @@ export const trimInterval = ({
 
   return {
     min: new Date(min).setUTCHours(0, 0, 0, 0),
-    max: maxMinusDayDate.setDate(maxMinusDayDate.getDate() + 1),
+    max: maxMinusDayDate.setUTCDate(maxMinusDayDate.getUTCDate() + 1),
   };
 };

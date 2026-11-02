@@ -3,6 +3,7 @@ import type { ColumnAIOptions, ColumnBase, ColumnLookup } from '@js/common/grids
 import type { dxElementWrapper } from '@js/core/renderer';
 import type { Callback } from '@js/core/utils/callbacks';
 import type { DeferredObj } from '@js/core/utils/deferred';
+import type { DxEvent } from '@js/events';
 import type { Properties as DataGridProperties } from '@js/ui/data_grid';
 import type { StoreLoadOptions } from '@ts/data/data_source/types';
 import type { SortingInfo } from '@ts/data/utils';
@@ -186,7 +187,7 @@ export interface ColumnsChanges {
     groupExpanding?: boolean;
     columns?: boolean;
     filtering?: boolean;
-    event?: unknown;
+    event?: DxEvent;
     virtualColumnsScrolling?: boolean;
     length: number;
   };
@@ -201,7 +202,7 @@ export interface ColumnsChanges {
   appliedFilters?: DataFilter[];
 }
 
-export type ColumnChangeType = Exclude<keyof ColumnsChanges['changeTypes'], 'length'>;
+export type ColumnChangeType = Exclude<keyof ColumnsChanges['changeTypes'], 'length' | 'event'>;
 
 export type ColumnsOptionChanged = Extract<OptionChanged, { name: 'columns' }>;
 
