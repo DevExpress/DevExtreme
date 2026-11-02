@@ -731,7 +731,6 @@ class FilterBuilder extends Widget<FilterBuilderProperties> implements EditorFac
       .addClass(FILTER_BUILDER_ACTION_CLASS)
       .attr('tabindex', 0);
     if (type) {
-      // @ts-expect-error format is declared with one argument
       const removeMessage = messageLocalization.format('dxFilterBuilder-filterAriaRemoveButton', type);
       this._addAriaAttributes($removeButton, removeMessage, 'button');
     }

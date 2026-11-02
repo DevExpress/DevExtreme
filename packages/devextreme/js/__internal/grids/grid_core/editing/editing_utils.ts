@@ -1,13 +1,23 @@
+import type { GridsEditMode } from '@js/common/grids';
 import Guid from '@js/core/guid';
 import type { dxElementWrapper } from '@js/core/renderer';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import { isObject } from '@js/core/utils/type';
 import type { FormItemComponent } from '@js/ui/form';
 import type { EditingTexts } from '@js/ui/tree_list';
+import { data } from '@ts/core/element_data';
+import { WIDGET_CLASS } from '@ts/core/widget/widget';
+import type Validator from '@ts/ui/validator';
 
 import type { ProcessedItem } from '../data_controller/types';
 import type { InternalGrid, RowKey } from '../types';
-import { GUID_LENGTH, NEW_ROW_TEMP_KEY_PREFIX } from './const';
+import {
+  CELL_BASED_MODES,
+  FORM_BASED_MODES,
+  GUID_LENGTH,
+  NEW_ROW_TEMP_KEY_PREFIX,
+  ROW_BASED_MODES,
+} from './const';
 import type {
   EditFormColumnItem,
   EditFormItemNode,
@@ -15,6 +25,18 @@ import type {
   EditingButtonTexts,
   EditingCellOptions,
 } from './types';
+
+export const isCellBasedEditMode = (
+  editMode: GridsEditMode,
+): boolean => CELL_BASED_MODES.includes(editMode);
+
+export const isRowBasedEditMode = (
+  editMode: GridsEditMode,
+): boolean => ROW_BASED_MODES.includes(editMode);
+
+export const isFormBasedEditMode = (
+  editMode: GridsEditMode,
+): boolean => FORM_BASED_MODES.includes(editMode);
 
 export const createFailureHandler = (
   deferred: DeferredObj<unknown>,
@@ -80,6 +102,12 @@ export function isEditable($element: dxElementWrapper | undefined): boolean {
 
   return $element.is('input') || $element.is('textarea');
 }
+
+export const getEditorValidator = ($container: dxElementWrapper): Validator | undefined => {
+  const editorElement = $container.find(`.${WIDGET_CLASS}`).get(0);
+
+  return editorElement ? data<Validator | undefined>(editorElement, 'dxValidator') : undefined;
+};
 
 export const getEditorType = (item: EditFormColumnItem): FormItemComponent | undefined => {
   const { column } = item;

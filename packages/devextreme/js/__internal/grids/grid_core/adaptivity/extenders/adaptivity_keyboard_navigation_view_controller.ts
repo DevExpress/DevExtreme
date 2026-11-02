@@ -3,7 +3,8 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
-import type { KeyboardNavigationController } from '@ts/grids/grid_core/keyboard_navigation/m_keyboard_navigation';
+import { isCellBasedEditMode } from '@ts/grids/grid_core/editing/editing_utils';
+import type { KeyboardNavigationController } from '@ts/grids/grid_core/keyboard_navigation/keyboard_navigation';
 import type { ModuleType } from '@ts/grids/grid_core/types';
 
 import { CLASSES, HIDDEN_COLUMNS_WIDTH } from '../const';
@@ -20,9 +21,9 @@ export const adaptivityKeyboardNavigationViewControllerExtender = (
   Base: ModuleType<KeyboardNavigationController>,
 ): ModuleType<KeyboardNavigationController> => class AdaptivityKeyboardNavigationViewControllerExtender
   extends Base {
-  public _isCellValid($cell, isClick?) {
+  public isCellValid($cell, isClick?) {
     return (
-      super._isCellValid($cell, isClick)
+      super.isCellValid($cell, isClick)
         && !$cell.hasClass(this.addWidgetPrefix(CLASSES.hiddenColumn))
         && !$cell.hasClass(CLASSES.commandAdaptiveHidden)
     );
@@ -31,7 +32,7 @@ export const adaptivityKeyboardNavigationViewControllerExtender = (
   protected _processNextCellInMasterDetail($nextCell, $cell) {
     super._processNextCellInMasterDetail($nextCell, $cell);
 
-    const isCellOrBatchMode = this._editingController.isCellOrBatchEditMode();
+    const isCellOrBatchMode = isCellBasedEditMode(this._editingController.getEditMode());
     const isEditing = this._editingController.isEditing();
 
     if (
@@ -52,7 +53,7 @@ export const adaptivityKeyboardNavigationViewControllerExtender = (
     return super.isFocusableColumn(column) && column.visibleWidth !== HIDDEN_COLUMNS_WIDTH;
   }
 
-  public _isCellElement($cell) {
-    return super._isCellElement($cell) || $cell.hasClass(CLASSES.adaptiveItemText);
+  public isCellElement($cell) {
+    return super.isCellElement($cell) || $cell.hasClass(CLASSES.adaptiveItemText);
   }
 };

@@ -18,11 +18,11 @@
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 
 import { applyDataTypePreset } from '@ts/core/global_format_config';
+import { noop as _noop } from '@ts/core/utils/common';
 import { paintedColor } from '@ts/core/utils/css_variables';
-import { noop as _noop } from '@ts/core/utils/m_common';
-import { extend as _extend } from '@ts/core/utils/m_extend';
-import { each as _each } from '@ts/core/utils/m_iterator';
-import { isDefined as _isDefined, isEmptyObject as _isEmptyObject, isFunction } from '@ts/core/utils/m_type';
+import { extend as _extend } from '@ts/core/utils/extend';
+import { each as _each } from '@ts/core/utils/iterator';
+import { isDefined as _isDefined, isEmptyObject as _isEmptyObject, isFunction } from '@ts/core/utils/type';
 import consts from '@ts/viz/components/consts';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 import { normalizeEnum as _normalizeEnum } from '@ts/viz/core/utils';

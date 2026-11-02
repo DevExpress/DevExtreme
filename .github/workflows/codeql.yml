@@ -11,13 +11,15 @@ jobs:
       actions: read
       contents: read
       security-events: write
+    env:
+      CODEQL_OVERLAY_DATABASE_MODE: none
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
 
       - name: Use Node.js
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v7
         with:
           node-version-file: '.node-version'
 

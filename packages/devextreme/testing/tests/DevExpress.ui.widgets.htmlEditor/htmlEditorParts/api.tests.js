@@ -163,6 +163,16 @@ testModule('API', moduleConfig, () => {
         assert.strictEqual(this.instance.option('value'), '<h1>Test 1</h1><h1>Test 2</h1><p>Test 3</p>', 'just block format applied');
     });
 
+    test('format should sanitize the href of an existing link', function(assert) {
+        this.options.value = '<p><a href="http://test.test">test</a></p>';
+        this.createEditor();
+        this.instance.setSelection(0, 4);
+
+        this.instance.format('link', { href: 'javascript:void(0)' });
+
+        assert.strictEqual($('#htmlEditor').find('a').attr('href'), 'about:blank', 'unsafe href is replaced');
+    });
+
     test('getBounds', function(assert) {
         this.createEditor();
         this.instance.option({

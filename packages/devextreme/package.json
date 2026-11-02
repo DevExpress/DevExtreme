@@ -67,7 +67,6 @@
   },
   "devDependencies": {
     "@babel/core": "7.29.7",
-    "@babel/eslint-parser": "catalog:",
     "@babel/plugin-proposal-decorators": "7.29.7",
     "@babel/plugin-transform-modules-commonjs": "7.29.7",
     "@babel/plugin-transform-nullish-coalescing-operator": "7.29.7",
@@ -125,7 +124,7 @@
     "ts-jest": "29.4.12",
     "typescript": "catalog:tools",
     "typescript-min": "npm:typescript@4.9.5",
-    "vite": "8.0.16",
+    "vite": "8.1.6",
     "webpack": "5.105.4"
   },
   "scripts": {

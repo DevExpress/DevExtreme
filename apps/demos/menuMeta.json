@@ -6565,8 +6565,7 @@
             "Name": "OpenStreetMapProvider",
             "Widget": "Map",
             "DemoType": "Web",
-            "Badge": "Roadmap",
-            "RoadmapSurveyUrl": "https://www.devexpress.com/support/surveys/devextreme-wg-roadmap-openstreetmap-provider.xml"
+            "Badge": "New"
           },
           {
             "Title": "Markers",

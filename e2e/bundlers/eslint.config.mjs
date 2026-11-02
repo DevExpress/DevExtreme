@@ -1,4 +1,3 @@
-import babelParser from '@babel/eslint-parser';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import js from '@eslint/js';
@@ -51,10 +50,6 @@ export default [
         require: true,
         module: true,
         exports: true,
-      },
-      parser: babelParser,
-      parserOptions: {
-        requireConfigFile: false,
       },
     },
     plugins: {

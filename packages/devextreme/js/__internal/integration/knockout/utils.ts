@@ -19,9 +19,7 @@ export const getClosestNodeWithContext = (node) => {
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types,@typescript-eslint/explicit-function-return-type
 export const getClosestNodeWithKoCreation = (node) => {
   const $el = $(node);
-  // @ts-expect-error
   const data = $el.data();
-  // @ts-expect-error
   const hasFlag = data?.dxKoCreation;
   if (hasFlag) {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return

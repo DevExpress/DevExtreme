@@ -23,13 +23,13 @@ import type { Properties as LoadPanelProperties } from '@js/ui/load_panel';
 import type { ActionEvent } from '@ts/core/action';
 import { compileGetter } from '@ts/core/utils/data';
 import { CLASSES as COLUMN_FIXING_CLASSES } from '@ts/grids/grid_core/column_fixing/const';
-import type { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/m_column_headers';
+import type { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/column_headers';
 import type {
   Column, ColumnRenderTemplate, ColumnsChanges, ColumnTemplateSource,
 } from '@ts/grids/grid_core/columns_controller/types';
 import type {
   ColumnsResizerViewController,
-} from '@ts/grids/grid_core/columns_resizing_reordering/m_columns_resizing_reordering';
+} from '@ts/grids/grid_core/columns_resizing_reordering/columns_resizing_reordering';
 import type {
   DataChange, ProcessedItem, RowWatch, UpdateChange, UpdateItemChange,
 } from '@ts/grids/grid_core/data_controller/types';
@@ -41,15 +41,15 @@ import type { FocusController } from '@ts/grids/grid_core/focus/m_focus';
 import type { ResizingController } from '@ts/grids/grid_core/grid_view/grid_view';
 import type {
   KeyboardNavigationController,
-} from '@ts/grids/grid_core/keyboard_navigation/m_keyboard_navigation';
-import type { OptionChanged, SummaryTextItem } from '@ts/grids/grid_core/types';
+} from '@ts/grids/grid_core/keyboard_navigation/keyboard_navigation';
+import type { OptionChanged } from '@ts/grids/grid_core/types';
 import type { ValidatingController } from '@ts/grids/grid_core/validating/m_validating';
 import Scrollable from '@ts/ui/scroll_view/scrollable';
 import type { ElementOffset } from '@ts/ui/scroll_view/types';
 
 import { CLASSES as REORDERING_CLASSES } from '../columns_resizing_reordering/const';
 import { isLocalStore } from '../data_source_adapter/utils/store';
-import type { EditingController } from '../editing/m_editing';
+import type { EditingController } from '../editing/editing';
 import { CLASSES } from '../sticky_columns/const';
 import gridCoreUtils from '../utils';
 import { ColumnsView } from './columns_view';
@@ -230,7 +230,7 @@ export class RowsView extends ColumnsView {
       const container = $container.get(0);
 
       if (options.summaryItems?.length) {
-        text += ` ${gridCoreUtils.getGroupRowSummaryText(options.summaryItems as SummaryTextItem[], summaryTexts)}`;
+        text += ` ${gridCoreUtils.getGroupRowSummaryText(options.summaryItems, summaryTexts)}`;
       }
 
       if (data) {
@@ -464,9 +464,19 @@ export class RowsView extends ColumnsView {
     const { top, left } = e.scrollOffset;
     const rtlEnabled = this.option('rtlEnabled');
     const isNativeScrolling = e.component.option('useNative');
-    const isHorizontalScrollbarVisible = this.isScrollbarVisible(true);
 
     this._scrollTop = top;
+    this._saveHorizontalScrollPosition(left);
+
+    const scrollLeft = rtlEnabled && isNativeScrolling ? -this._scrollRight : left;
+
+    this.scrollChanged.fire({ ...e.scrollOffset, left: scrollLeft }, this.name);
+  }
+
+  protected _saveHorizontalScrollPosition(left: number): void {
+    const rtlEnabled = this.option('rtlEnabled');
+    const isHorizontalScrollbarVisible = this.isScrollbarVisible(true);
+
     this._scrollLeft = rtlEnabled && !isHorizontalScrollbarVisible ? -1 : left;
 
     if (rtlEnabled) {
@@ -476,10 +486,6 @@ export class RowsView extends ColumnsView {
 
       this._scrollRight = maxHorizontalScrollOffset - left;
     }
-
-    const scrollLeft = rtlEnabled && isNativeScrolling ? -this._scrollRight : left;
-
-    this.scrollChanged.fire({ ...e.scrollOffset, left: scrollLeft }, this.name);
   }
 
   private _renderScrollableCore($element: dxElementWrapper): void {
@@ -1232,8 +1238,8 @@ export class RowsView extends ColumnsView {
         // eslint-disable-next-line @typescript-eslint/no-floating-promises -- fire-and-forget
         deferUpdate(() => {
           const scrollbarWidth = this.getScrollbarWidth(true);
-          const elementHeightWithoutScrollbar = getHeight(this.element()) - scrollbarWidth;
-          const contentHeight = getOuterHeight(contentElement);
+          const elementHeightWithoutScrollbar = Number(getHeight(this.element())) - scrollbarWidth;
+          const contentHeight = Number(getOuterHeight(contentElement));
           const showFreeSpaceRow = (elementHeightWithoutScrollbar - contentHeight) > 0;
           const rowsHeight = this._getRowsHeight(contentElement.children().first());
           const $tableElement = $table ?? this.getTableElements();
@@ -1311,7 +1317,7 @@ export class RowsView extends ColumnsView {
   }
 
   public contentWidth(): number {
-    return getWidth(this.element()) - this.getScrollbarWidth();
+    return Number(getWidth(this.element())) - this.getScrollbarWidth();
   }
 
   public getScrollbarWidth(isHorizontal?: boolean): number {
@@ -1554,7 +1560,7 @@ export class RowsView extends ColumnsView {
     let viewportBoundary = this._scrollTop;
 
     if (!isTop) {
-      const height = getOuterHeight(this._hasHeight ? this.element() : getWindow());
+      const height = Number(getOuterHeight(this._hasHeight ? this.element() : getWindow()));
 
       viewportBoundary += height;
     }
@@ -1565,7 +1571,7 @@ export class RowsView extends ColumnsView {
       const rowOffset = $rowElement.offset();
 
       if (rowOffset) {
-        offset = (isTop ? rowOffset.top : rowOffset.top + getOuterHeight($rowElement))
+        offset = (isTop ? rowOffset.top : rowOffset.top + Number(getOuterHeight($rowElement)))
           - contentElementOffset.top;
 
         if (offset > viewportBoundary) {
@@ -1718,7 +1724,9 @@ export class RowsView extends ColumnsView {
     const scrollable = this.getScrollable();
 
     if (this.option('rtlEnabled') && scrollable) {
-      return getWidth(scrollable.$content()) - getWidth(scrollable.$element()) - scrollLeft;
+      return getWidth(scrollable.$content().get(0))
+        - getWidth(scrollable.$element().get(0))
+        - scrollLeft;
     }
 
     return scrollLeft;

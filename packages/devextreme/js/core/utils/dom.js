@@ -11,4 +11,4 @@ export {
     insertBefore,
     replaceWith,
     isElementInDom,
-} from '../../__internal/core/utils/m_dom';
+} from '../../__internal/core/utils/dom';

@@ -11,7 +11,7 @@ import { current, isFluent, isMaterialBased } from '@js/ui/themes';
 import type { FormProperties } from '@ts/ui/form/form';
 import type { DialogPromise } from '@ts/ui/html_editor/types';
 
-import BaseDialog from './m_baseDialog';
+import BaseDialog from './baseDialog';
 
 interface ButtonConfig {
   stylingMode?: string;

@@ -240,7 +240,7 @@ class FileManagerFileUploader extends Widget<FileManagerFileUploaderOptions> {
     const containerBorderLeftWidth = parseFloat(
       $placeholderContainer?.css('borderLeftWidth') ?? '',
     );
-    const containerHeight = getInnerHeight($placeholderContainer);
+    const containerHeight = Number(getInnerHeight($placeholderContainer));
     const containerOffset = $placeholderContainer?.offset();
     const dropZoneOffset = $dropZoneTarget?.offset();
 

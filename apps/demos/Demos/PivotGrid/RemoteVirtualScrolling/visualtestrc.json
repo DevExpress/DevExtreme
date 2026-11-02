@@ -1,0 +1,12 @@
+{
+  "$schema": "../../../../testing/visualtestrc-schema.json",
+  "comment": "In jQuery material the CY 2024 and Grand Total text sometimes lands on another sub-pixel offset: about a thousand pixels along glyph edges.",
+  "jquery": {
+    "comparison-options": {
+      "looksSameComparisonOptions": {
+        "tolerance": 30,
+        "antialiasingTolerance": 30
+      }
+    }
+  }
+}

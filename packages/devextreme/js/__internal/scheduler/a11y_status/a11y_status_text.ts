@@ -59,11 +59,9 @@ export const getA11yStatusText = (
   const endDateText = isMonth ? localizeMonth(endDate) : localizeDate(endDate);
   const intervalText = startDateText === endDateText
     ? `${startDateText}`
-    // @ts-expect-error ts-error
     : messageLocalization.format(KEYS.dateRange, startDateText, endDateText);
 
   const statusText = messageLocalization
-    // @ts-expect-error
     .format(KEYS.label, viewTypeLabel, intervalText, appointmentCount);
 
   if (indicatorTime) {

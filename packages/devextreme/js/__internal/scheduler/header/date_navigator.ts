@@ -5,8 +5,8 @@ import type { Item as ButtonGroupItem, ItemClickEvent, Properties as ButtonGroup
 import type { ToolbarItem as SchedulerToolbarItem } from '@js/ui/scheduler';
 import { current, isMaterialBased } from '@js/ui/themes';
 import type { Item as ToolbarItem } from '@js/ui/toolbar';
-import { isValidDate } from '@ts/core/utils/m_date';
-import { extend } from '@ts/core/utils/m_extend';
+import { isValidDate } from '@ts/core/utils/date';
+import { extend } from '@ts/core/utils/extend';
 import type { SchedulerHeader } from '@ts/scheduler/header/header';
 
 import { Direction } from './constants';

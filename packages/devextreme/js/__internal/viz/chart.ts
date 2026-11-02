@@ -17,13 +17,13 @@
 /* eslint-disable no-plusplus */
 
 import { registerComponent } from '@ts/core/component_registrator';
-import { noop } from '@ts/core/utils/m_common';
-import { extend as _extend } from '@ts/core/utils/m_extend';
-import { each as _each } from '@ts/core/utils/m_iterator';
-import { getHeight } from '@ts/core/utils/m_size';
-import { isDefined as _isDefined, type } from '@ts/core/utils/m_type';
-import { hasWindow } from '@ts/core/utils/m_window';
+import { noop } from '@ts/core/utils/common';
+import { extend as _extend } from '@ts/core/utils/extend';
+import { each as _each } from '@ts/core/utils/iterator';
 import { getPrecision } from '@ts/core/utils/math';
+import { getHeight } from '@ts/core/utils/size';
+import { isDefined as _isDefined, type } from '@ts/core/utils/type';
+import { hasWindow } from '@ts/core/utils/window';
 import { Crosshair, getMargins } from '@ts/viz/chart_components/crosshair';
 import { LayoutManager } from '@ts/viz/chart_components/layout_manager';
 import multiAxesSynchronizer from '@ts/viz/chart_components/multi_axes_synchronizer';
@@ -535,7 +535,7 @@ class Chart extends AdvancedChart {
   }
 
   _init(): void {
-    this._containerInitialHeight = hasWindow() ? getHeight(this._$element) : 0;
+    this._containerInitialHeight = hasWindow() ? getHeight(this._$element.get(0)) : 0;
     super._init();
   }
 

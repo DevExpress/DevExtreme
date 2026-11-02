@@ -1,5 +1,5 @@
 import type { FilterDescriptor } from '@js/data';
-import { isString } from '@ts/core/utils/m_type';
+import { isString } from '@ts/core/utils/type';
 import { getFilterExpression } from '@ts/filter_builder/utils';
 
 import type { Column } from '../columns_controller/types';

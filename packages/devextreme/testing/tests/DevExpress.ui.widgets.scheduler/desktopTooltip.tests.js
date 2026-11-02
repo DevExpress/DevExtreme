@@ -5,7 +5,7 @@ import { extend } from 'core/utils/extend';
 import Tooltip from 'ui/tooltip';
 import List from '__internal/ui/list/list.edit';
 import Button from 'ui/button';
-import support from '__internal/core/utils/m_support';
+import support from '__internal/core/utils/support';
 
 const stubComponent = {
     option: sinon.stub().returns('stubOption'),

@@ -12,7 +12,7 @@ import messageLocalization from 'common/core/localization/message';
 import localization from 'localization';
 import ja from 'localization/messages/ja.json!';
 import pointerMock from '../../helpers/pointerMock.js';
-import support from '__internal/core/utils/m_support';
+import support from '__internal/core/utils/support';
 import typeUtils from 'core/utils/type';
 import uiDateUtils from '__internal/ui/date_box/date_utils';
 import DateBox from 'ui/date_box';

@@ -206,7 +206,7 @@ class Switch extends Editor<Properties> {
   }
 
   _getItemSizeFunc(): number {
-    return getOuterWidth(this._$switchContainer, true)
+    return getOuterWidth(this._$switchContainer.get(0), true)
     - getBoundingRect(this._$handle.get(0)).width;
   }
 

@@ -1,6 +1,6 @@
 function readShardConfig(env = process.env) {
-  const SHARD_TOTAL = Math.max(1, parseInt(env.CSP_SHARD_TOTAL, 10) || 1);
-  const n = parseInt(env.CSP_SHARD_INDEX, 10);
+  const SHARD_TOTAL = Math.max(1, parseInt(env.DEMO_SHARD_TOTAL, 10) || 1);
+  const n = parseInt(env.DEMO_SHARD_INDEX, 10);
   const SHARD_INDEX = n >= 1 && n <= SHARD_TOTAL ? n : 1;
   return { SHARD_TOTAL, SHARD_INDEX };
 }

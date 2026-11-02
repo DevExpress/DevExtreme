@@ -7,7 +7,7 @@ import { getEmptyResourceManager } from '../../helpers/scheduler/mockResourceMan
 
 import $ from 'jquery';
 import '__internal/scheduler/workspaces/work_space_week';
-import SchedulerAppointments from '__internal/scheduler/appointments/m_appointment_collection';
+import SchedulerAppointments from '__internal/scheduler/appointments/appointment_collection';
 import dblclickEvent from 'common/core/events/dblclick';
 import translator from 'common/core/animation/translator';
 import Resizable from 'ui/resizable';

@@ -1,7 +1,7 @@
 import {
   beforeAll, beforeEach, describe, expect, it, jest,
 } from '@jest/globals';
-import { logger } from '@ts/core/utils/m_console';
+import { logger } from '@ts/core/utils/console';
 
 import { getResourceManagerMock } from '../__mock__/resource_manager.mock';
 import SchedulerTimelineDay from '../workspaces/timeline_day';

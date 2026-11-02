@@ -22,10 +22,19 @@ const RELEASE_YEAR = 2000 + Number(MAJOR);
 const FORMATS = ['ttf', 'woff', 'woff2'] as const;
 const CONTAINERS: Record<typeof FORMATS[number], FontContainer> = { ttf: 'sfnt', woff: 'woff', woff2: 'woff2' };
 const WEB_FORMATS = ['woff', 'woff2'] as const;
-interface WebHeaderOffsets { metadataLength: number; privateDataLength: number }
+interface WebHeaderOffsets {
+  majorVersionOffset: number;
+  minorVersionOffset: number;
+  metadataLength: number;
+  privateDataLength: number;
+}
 const WEB_HEADER_OFFSETS: Record<typeof WEB_FORMATS[number], WebHeaderOffsets> = {
-  woff: { metadataLength: 28, privateDataLength: 40 },
-  woff2: { metadataLength: 32, privateDataLength: 44 },
+  woff: {
+    majorVersionOffset: 20, minorVersionOffset: 22, metadataLength: 28, privateDataLength: 40,
+  },
+  woff2: {
+    majorVersionOffset: 24, minorVersionOffset: 26, metadataLength: 32, privateDataLength: 44,
+  },
 };
 const NAME_RECORDS = {
   copyright: NAME_ID.copyright,
@@ -129,6 +138,15 @@ describe('Icon fonts metadata', () => {
         metadata: font.readUInt32BE(metadataLength),
         privateData: font.readUInt32BE(privateDataLength),
       }).toEqual({ metadata: 0, privateData: 0 });
+    });
+
+    test.each(WEB_FORMATS)('%s header has the release version', (format) => {
+      const font = readFont(fileName, format);
+      const { majorVersionOffset, minorVersionOffset } = WEB_HEADER_OFFSETS[format];
+      const major = font.readUInt16BE(majorVersionOffset);
+      const minor = font.readUInt16BE(minorVersionOffset);
+
+      expect(`${major}.${minor}`).toBe(VERSION);
     });
 
     test.each(FORMATS)('%s has the release revision', (format) => {

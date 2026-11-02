@@ -1,5 +1,5 @@
-import { each } from '@ts/core/utils/m_iterator';
-import { isNumeric } from '@ts/core/utils/m_type';
+import { each } from '@ts/core/utils/iterator';
+import { isNumeric } from '@ts/core/utils/type';
 import { compare as compareVersion } from '@ts/core/utils/version';
 import registerEvent from '@ts/events/core/event_registrator';
 import hookTouchProps from '@ts/events/core/hook_touch_props';

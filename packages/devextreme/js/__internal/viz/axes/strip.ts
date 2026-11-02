@@ -6,8 +6,8 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 
-import { extend } from '@ts/core/utils/m_extend';
-import { isDefined } from '@ts/core/utils/m_type';
+import { extend } from '@ts/core/utils/extend';
+import { isDefined } from '@ts/core/utils/type';
 import { patchFontOptions } from '@ts/viz/core/utils';
 
 export default function createStrip(axis, options) {

@@ -562,7 +562,6 @@ class ChatTextArea extends TextArea<Properties> {
   _fileUploaderFileLimitReached(): void {
     this._showInformer(messageLocalization.format(
       ERROR_MESSAGE_NAME.fileLimit,
-      // @ts-expect-error format params should be extended
       MAX_ATTACHMENTS_COUNT,
     ));
     this._updateInputHeight();

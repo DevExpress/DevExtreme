@@ -171,12 +171,10 @@ abstract class BaseRuleValidator {
   }
 
   defaultMessage(value?: string): string {
-    // @ts-expect-error messageLocalization.getFormatter is declared as () => string
     return messageLocalization.getFormatter(`validation-${this.NAME}`)(value);
   }
 
   defaultFormattedMessage(value?: string): string {
-    // @ts-expect-error messageLocalization.getFormatter is declared as () => string
     return messageLocalization.getFormatter(`validation-${this.NAME}-formatted`)(value);
   }
 

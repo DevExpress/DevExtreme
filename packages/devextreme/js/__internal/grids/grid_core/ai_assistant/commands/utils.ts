@@ -3,7 +3,7 @@ import type {
   ScalarFilterValue,
 } from '@js/common/grids';
 import { isString } from '@js/core/utils/type';
-import { isValidDate } from '@ts/core/utils/m_date';
+import { isValidDate } from '@ts/core/utils/date';
 import * as z from '@ts/grids/grid_core/ai_assistant/zod';
 import { isDateType } from '@ts/grids/grid_core/utils';
 

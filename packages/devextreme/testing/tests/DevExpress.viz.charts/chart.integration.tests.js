@@ -9,6 +9,7 @@ import dxChart from 'viz/chart';
 import dxPieChart from 'viz/pie_chart';
 import dxPolarChart from 'viz/polar_chart';
 import { overlapping } from '__internal/viz/chart_components/base_chart';
+import Layout from '__internal/viz/core/layout';
 import seriesFamilyModule from 'viz/core/series_family';
 import { setupSeriesFamily } from '../../helpers/chartMocks.js';
 import pointerMock from '../../helpers/pointerMock.js';
@@ -2454,15 +2455,41 @@ QUnit.test('check horizontal alignment === center', function(assert) {
     assert.roughEqual(chart._legend._insideLegendGroup._settings.translateX, 370, 5);
 });
 
-['center', 'right'].forEach(function(horizontalAlignment) {
-    QUnit.test(`The title keeps its position when no legend item is visible, title horizontal alignment - ${horizontalAlignment}`, function(assert) {
-        const chart = this.createChart({
-            commonSeriesSettings: { showInLegend: false },
-            legend: { title: { horizontalAlignment } }
-        });
+[
+    { name: 'outside', legend: {} },
+    { name: 'inside', legend: { position: 'inside' } }
+].forEach(function(testCase) {
+    ['left', 'center', 'right'].forEach(function(horizontalAlignment) {
+        QUnit.test(`The title is hidden when no legend item is visible, legend position - ${testCase.name}, title horizontal alignment - ${horizontalAlignment}`, function(assert) {
+            const chart = this.createChart({
+                commonSeriesSettings: { showInLegend: false },
+                legend: $.extend({ title: { horizontalAlignment } }, testCase.legend)
+            });
 
-        assert.strictEqual(chart._legend._title._group._settings.translateX, 0);
+            assert.strictEqual(this.$container.find('.dxc-legend .dxc-title').length, 0, 'the legend title is not drawn');
+
+            const plotCanvas = $.extend({}, chart.panes[0].canvas);
+
+            chart.option('legend.visible', false);
+
+            assert.deepEqual(plotCanvas, chart.panes[0].canvas, 'the plot canvas is the same as without the legend');
+        });
     });
+});
+
+QUnit.test('The title is hidden when there is no series, and is drawn again when a series appears', function(assert) {
+    const chart = moduleSetup.createChart.call(this, {
+        legend: { title: { text: 'Super title', horizontalAlignment: 'center' } }
+    });
+
+    assert.strictEqual(this.$container.find('.dxc-legend .dxc-title').length, 0, 'the legend title is not drawn');
+
+    chart.option({
+        dataSource: [{ arg: 1, val: 1 }],
+        series: [{ name: 'series1' }]
+    });
+
+    assert.strictEqual(this.$container.find('.dxc-legend .dxc-title').length, 1, 'the legend title is drawn');
 });
 
 QUnit.module('Legend title that does not fit', moduleSetup);
@@ -2490,6 +2517,43 @@ QUnit.module('Legend title that does not fit', moduleSetup);
         assert.notStrictEqual(incidentIds.indexOf('W2103'), -1, 'W2103 is raised');
         assert.strictEqual(this.$container.find('.dxc-legend .dxc-title').length, 0, 'the legend title is not drawn');
     });
+});
+
+QUnit.module('Legend under a space shortage', moduleSetup);
+
+QUnit.test('An inside legend does not push the panes out of the canvas when the panes lack space', function(assert) {
+    const incidentOccurred = sinon.spy();
+    const backward = sinon.spy(Layout.prototype, 'backward');
+
+    try {
+        const chart = this.createChart({
+            size: { width: 400, height: 160 },
+            dataSource: [{ arg: 'a', val: 1 }],
+            series: [{ name: 'Series 1' }],
+            argumentAxis: { label: { font: { size: 80 } } },
+            legend: {
+                position: 'inside',
+                verticalAlignment: 'top',
+                horizontalAlignment: 'center',
+                orientation: 'horizontal',
+                margin: 0,
+                paddingTopBottom: 0
+            },
+            onIncidentOccurred: incidentOccurred
+        });
+
+        const incidentIds = incidentOccurred.getCalls().map(function(call) { return call.args[0].target.id; });
+        const shortageCall = backward.getCalls().find(function(call) { return call.returnValue[1] !== 0; });
+        const paneTop = chart.panes[0].canvas.top;
+
+        assert.ok(shortageCall, 'the panes lacked space');
+        assert.ok(shortageCall.thisValue._cache.some(function(item) { return item.position === 'inside'; }), 'the legend passed the minimal-size check');
+        assert.ok(shortageCall.returnValue[1] > 0, 'the legend gave no space back');
+        assert.notStrictEqual(incidentIds.indexOf('W2104'), -1, 'the legend is hidden because the panes lack space');
+        assert.ok(paneTop >= 0, `the pane stays inside the canvas (top = ${paneTop})`);
+    } finally {
+        backward.restore();
+    }
 });
 
 QUnit.module('Auto hide point markers', $.extend({}, moduleSetup, {

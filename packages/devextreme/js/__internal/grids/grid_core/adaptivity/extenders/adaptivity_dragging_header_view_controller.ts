@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-import type { DraggingHeaderViewController } from '@ts/grids/grid_core/columns_resizing_reordering/m_columns_resizing_reordering';
+import type { DraggingHeaderViewController } from '@ts/grids/grid_core/columns_resizing_reordering/columns_resizing_reordering';
 import type { ModuleType } from '@ts/grids/grid_core/types';
 
 import { HIDDEN_COLUMNS_WIDTH } from '../const';

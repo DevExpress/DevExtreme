@@ -7,19 +7,18 @@ import { each } from '@js/core/utils/iterator';
 import { isBoolean, isDefined } from '@js/core/utils/type';
 import type { DataSourceController } from '@ts/grids/grid_core/data_source/data_source_controller';
 import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
-import type { Key } from '@ts/grids/new/grid_core/data_controller/types';
 
 import type { ColumnsController } from '../columns_controller/columns_controller';
 import type { ColumnDataSourceParameter } from '../columns_controller/types';
 import type { DataController } from '../data_controller/data_controller';
 import type { DataChange } from '../data_controller/types';
+import type { EditingController } from '../editing/editing';
 import { isNewRowTempKey } from '../editing/editing_utils';
-import type { EditingController } from '../editing/m_editing';
 import type { EditorFactory } from '../editor_factory/editor_factory';
 import { combineFilters } from '../filter/utils';
-import type { KeyboardNavigationController } from '../keyboard_navigation/m_keyboard_navigation';
+import type { KeyboardNavigationController } from '../keyboard_navigation/keyboard_navigation';
 import core from '../modules/modules';
-import type { ModuleType } from '../types';
+import type { ModuleType, RowKey } from '../types';
 import gridCoreUtils from '../utils';
 import type { RowsView } from '../views/rows_view';
 import type { VirtualScrollingDataControllerExtension } from '../virtual_scrolling/index';
@@ -117,7 +116,7 @@ export class FocusController extends core.ViewController {
     const {
       reload, fullReload, pageIndex, paging,
     } = operationTypes;
-    const isVirtualScrolling = this.getKeyboardController()._isVirtualScrolling();
+    const isVirtualScrolling = this.getKeyboardController().isVirtualScrolling();
     const pagingWithoutVirtualScrolling = paging && !isVirtualScrolling;
     const focusedRowKey = this.option('focusedRowKey');
     const isAutoNavigate = this.isAutoNavigateToFocusedRow();
@@ -169,7 +168,7 @@ export class FocusController extends core.ViewController {
     switch (name) {
       case 'focusedRowIndex':
         this._focusRowByIndex(value);
-        this.getKeyboardController()._fireFocusedRowChanged();
+        this.getKeyboardController().fireFocusedRowChanged();
         args.handled = true;
         break;
       case 'focusedRowKey':
@@ -178,7 +177,7 @@ export class FocusController extends core.ViewController {
         }
 
         this._focusRowByKey(value).done(() => {
-          this.getKeyboardController()._fireFocusedRowChanged();
+          this.getKeyboardController().fireFocusedRowChanged();
         });
         args.handled = true;
         break;
@@ -252,7 +251,7 @@ export class FocusController extends core.ViewController {
   }
 
   private _isLocalRowIndex(index) {
-    const isVirtualScrolling = this.getKeyboardController()._isVirtualScrolling();
+    const isVirtualScrolling = this.getKeyboardController().isVirtualScrolling();
 
     if (isVirtualScrolling) {
       const pageIndex = Math.floor(index / this.getDataController().pageSize());
@@ -280,7 +279,7 @@ export class FocusController extends core.ViewController {
   }
 
   private _focusRowByKey(
-    key: Key,
+    key: RowKey,
   ): DeferredObj<number | unknown> {
     if (!isDefined(key)) {
       this._resetFocusedRow();
@@ -307,7 +306,7 @@ export class FocusController extends core.ViewController {
       focusedRowKey: null,
     });
 
-    this.getKeyboardController()._fireFocusedRowChanged();
+    this.getKeyboardController().fireFocusedRowChanged();
   }
 
   private _isValidFocusedRowIndex(rowIndex) {
@@ -324,7 +323,7 @@ export class FocusController extends core.ViewController {
   }
 
   public _navigateToRow(
-    key: Key,
+    key: RowKey,
     needFocusRow: boolean,
   ): DeferredObj<number> {
     const that = this;
@@ -408,10 +407,12 @@ export class FocusController extends core.ViewController {
         }
         this.component.off('contentReady', triggerUpdateFocusedRow);
 
-        if (needFocusRow) {
+        if (!needFocusRow) {
+          deferred.resolve(focusedRowIndex);
+        } else if (this.isRowFocused(key)) {
           this._triggerUpdateFocusedRow(key, deferred);
         } else {
-          deferred.resolve(focusedRowIndex);
+          deferred.reject();
         }
       };
       this.component.on('contentReady', triggerUpdateFocusedRow);
@@ -462,7 +463,7 @@ export class FocusController extends core.ViewController {
     if (isDefined(focusedRowKey)) {
       const visibleRowIndex = this.getDataController().getRowIndexByKey(focusedRowKey);
       if (visibleRowIndex >= 0) {
-        if (this.getKeyboardController()._isVirtualScrolling()) {
+        if (this.getKeyboardController().isVirtualScrolling()) {
           currentFocusedRowIndex = visibleRowIndex + this.getDataController().getRowIndexOffset();
         }
         this.getKeyboardController().setFocusedRowIndex(currentFocusedRowIndex);
@@ -601,7 +602,7 @@ export const keyboardNavigation = (Base: ModuleType<KeyboardNavigationController
     }
     if (this.isCellFocusType()) {
       this.setRowFocusType();
-      this._focus(this.getCellElementFromTarget(eventArgs.originalEvent.target), true);
+      this.applyFocus(this.getCellElementFromTarget(eventArgs.originalEvent.target), true);
 
       return true;
     }
@@ -641,7 +642,7 @@ export const focusEditorFactoryViewControllerExtender = (
     ) {
       super.renderFocusOverlay($element, isHideBorder);
     } else if (focusedRowEnabled) {
-      const isRowElement = this.keyboardNavigationController._getElementType($element) === 'row';
+      const isRowElement = this.keyboardNavigationController.getElementType($element) === 'row';
 
       if (isRowElement && !$element.hasClass(ROW_FOCUSED_CLASS)) {
         const $cell = this.keyboardNavigationController.getFirstValidCellInRow($element);
@@ -712,6 +713,20 @@ export const focusDataControllerExtender = (
 
     // @ts-expect-error
     return super._applyChange.apply(this, arguments);
+  }
+
+  protected _endUpdateCore(): void {
+    const focusedRowChanges = this.changes.filter((change) => change.changeType === 'updateFocusedRow');
+    const hasOnlyFocusOrSelectionChanges = this.changes.every(
+      (change) => change.changeType === 'updateFocusedRow' || change.changeType === 'updateSelection',
+    );
+
+    if (focusedRowChanges.length && hasOnlyFocusOrSelectionChanges) {
+      this.changes = this.changes.filter((change) => change.changeType !== 'updateFocusedRow');
+      this.updateItems(focusedRowChanges[focusedRowChanges.length - 1]);
+    }
+
+    super._endUpdateCore();
   }
 
   protected _fireChanged(e: DataChange): void {

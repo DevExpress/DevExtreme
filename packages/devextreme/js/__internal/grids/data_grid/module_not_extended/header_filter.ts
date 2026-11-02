@@ -1,4 +1,4 @@
-import { headerFilterModule } from '@ts/grids/grid_core/header_filter/m_header_filter';
+import { headerFilterModule } from '@ts/grids/grid_core/header_filter/header_filter';
 
 import core from '../core';
 

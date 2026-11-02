@@ -4,7 +4,7 @@ import dateLocalization from '@js/common/core/localization/date';
 import numberLocalization from '@js/common/core/localization/number';
 import { isDate, isDefined, isNumeric } from '@js/core/utils/type';
 import { getWindow } from '@js/core/utils/window';
-import type { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/m_column_headers';
+import type { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/column_headers';
 import gridCoreUtils from '@ts/grids/grid_core/utils';
 import type TreeList from '@ts/grids/tree_list/widget_base';
 import type Gantt from '@ts/ui/gantt/ui.gantt';

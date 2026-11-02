@@ -2,3 +2,12 @@
 @use "../../base/map" with (
   $map-marker-tooltip-margin: mapSizes.$map-marker-tooltip-margin,
 );
+
+.dx-map-marker-default-body {
+  fill: var(--dx-map-marker-bg);
+  stroke: var(--dx-map-marker-content);
+}
+
+.dx-map-marker-default-center {
+  fill: var(--dx-map-marker-content);
+}

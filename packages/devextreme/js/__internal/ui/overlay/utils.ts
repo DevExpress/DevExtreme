@@ -2,7 +2,7 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { getInnerHeight, getOuterHeight } from '@js/core/utils/size';
 import { isNumeric } from '@js/core/utils/type';
-import { getWindow } from '@ts/core/utils/m_window';
+import { getWindow } from '@ts/core/utils/window';
 
 const WINDOW_HEIGHT_PERCENT = 0.9;
 
@@ -25,7 +25,7 @@ export const getElementMaxHeightByWindow = (
 
   // @ts-expect-error scrollTop should be typed correctly with return type
   const windowScrollTop: number = $window.scrollTop();
-  const windowHeight = getInnerHeight($window);
+  const windowHeight = Number(getInnerHeight($window));
 
   if (isNumeric(startLocation)) {
     if (startLocation < elementOffset) {
@@ -35,7 +35,7 @@ export const getElementMaxHeightByWindow = (
     actualOffset = windowHeight - startLocation + windowScrollTop;
   } else {
     const offsetTop = elementOffset - windowScrollTop;
-    const offsetBottom = windowHeight - offsetTop - getOuterHeight($element);
+    const offsetBottom = windowHeight - offsetTop - Number(getOuterHeight($element));
 
     actualOffset = Math.max(offsetTop, offsetBottom);
   }

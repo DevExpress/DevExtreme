@@ -7,7 +7,7 @@ import path from 'node:path';
 import { addHashes } from '@devexpress/sbom-toolkit';
 import type { AddHashesEntry, CycloneDXBom, Hash } from '@devexpress/sbom-toolkit';
 
-const INTERNAL_PACKAGES: Record<string, string> = {
+export const INTERNAL_PACKAGES: Record<string, string> = {
   'devextreme-metadata': 'packages/devextreme-metadata',
   'eslint-migration-utils': 'packages/eslint-migration-utils/src',
 };

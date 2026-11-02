@@ -1,6 +1,5 @@
 import js from "@eslint/js";
 import tsParser from "@typescript-eslint/parser";
-import babelParser from '@babel/eslint-parser';
 import importPlugin from "eslint-plugin-import";
 import spellcheck from "eslint-plugin-spellcheck";
 import i18N from "eslint-plugin-i18n";
@@ -47,10 +46,6 @@ export default [
     {
         files: ["**/*.js"],
         languageOptions: {
-            parser: babelParser,
-            parserOptions: {
-                requireConfigFile: false,
-            },
             globals: {
                 setInterval: true,
                 setTimeout: true,

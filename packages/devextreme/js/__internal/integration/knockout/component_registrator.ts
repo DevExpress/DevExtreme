@@ -9,7 +9,7 @@ import { ComponentWrapper } from '@ts/core/r1/component_wrapper';
 import Callbacks from '@ts/core/utils/callbacks';
 import type { Lock } from '@ts/core/utils/locker';
 import { Locker } from '@ts/core/utils/locker';
-import { isPlainObject } from '@ts/core/utils/m_type';
+import { isPlainObject } from '@ts/core/utils/type';
 import Draggable from '@ts/draggable';
 import Editor from '@ts/ui/editor/editor';
 import ScrollView from '@ts/ui/scroll_view/scroll_view';
@@ -129,7 +129,7 @@ if (ko) {
 
         // eslint-disable-next-line func-names
         const applyModelValueToOption = function (optionName: string, modelValue, unwrap): void {
-          const locks = $element.data(LOCKS_DATA_KEY) as unknown as Lock;
+          const locks = $element.data<Lock>(LOCKS_DATA_KEY);
           const optionValue = unwrap ? ko.unwrap(modelValue) : modelValue;
 
           if (ko.isWriteableObservable(modelValue)) {
@@ -167,7 +167,7 @@ if (ko) {
 
           // eslint-disable-next-line @typescript-eslint/no-shadow
           const $element = this._$element as unknown as dxElementWrapper;
-          const locks = $element.data(LOCKS_DATA_KEY) as unknown as Lock;
+          const locks = $element.data<Lock>(LOCKS_DATA_KEY);
 
           if (locks.locked(optionName)) {
             return;

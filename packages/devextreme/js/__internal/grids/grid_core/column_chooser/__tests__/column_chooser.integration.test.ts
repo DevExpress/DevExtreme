@@ -260,3 +260,42 @@ describe('Bugs', () => {
     });
   });
 });
+
+describe('ColumnChooserController', () => {
+  beforeEach(() => {
+    beforeTest();
+    jest.spyOn(errors, 'log').mockImplementation(jest.fn());
+    jest.spyOn(errors, 'Error').mockImplementation(() => ({}) as ReturnType<typeof errors.Error>);
+  });
+  afterEach(afterTest);
+
+  describe('getPosition', () => {
+    it('should return the default position when columnChooser.position is not set', async () => {
+      const { instance } = await createDataGrid({
+        dataSource: [],
+        columns: ['id'],
+        columnChooser: { enabled: true },
+      });
+
+      expect(instance.getController('columnChooser').getPosition()).toEqual({
+        my: 'right bottom',
+        at: 'right bottom',
+        of: instance.getView('rowsView').element(),
+        collision: 'fit',
+        offset: '-2 -2',
+        boundaryOffset: '2 2',
+      });
+    });
+
+    it('should return columnChooser.position when it is set', async () => {
+      const position = { my: 'left top', at: 'left top', of: '#gridContainer' } as const;
+      const { instance } = await createDataGrid({
+        dataSource: [],
+        columns: ['id'],
+        columnChooser: { enabled: true, position },
+      });
+
+      expect(instance.getController('columnChooser').getPosition()).toEqual(position);
+    });
+  });
+});

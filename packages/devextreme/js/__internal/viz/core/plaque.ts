@@ -11,8 +11,8 @@
 /* eslint-disable prefer-destructuring */
 /* eslint-disable no-else-return */
 
-import { extend } from '@ts/core/utils/m_extend';
-import { isDefined } from '@ts/core/utils/m_type';
+import { extend } from '@ts/core/utils/extend';
+import { isDefined } from '@ts/core/utils/type';
 
 const math = Math;
 const round = math.round;
@@ -352,16 +352,15 @@ export let Plaque = class {
         } else {
           const y_top = anchorY - options.arrowLength - size.height / 2 - offset;
           const y_bottom = anchorY + options.arrowLength + size.height / 2 + offset;
+          const topOverflows = y_top - size.height / 2 - tm < bounds.yt;
 
           if (bounds.height < size.height + options.arrowLength) {
             y = round(bounds.yt + size.height / 2);
-          } else if (y_top - size.height / 2 - tm < bounds.yt) {
-            if (y_bottom + size.height / 2 + bm < bounds.yb) {
-              y = y_bottom;
-              anchorY += offset;
-            } else {
-              y = round(bounds.yt + size.height / 2);
-            }
+          } else if (topOverflows && y_bottom + size.height / 2 + bm < bounds.yb) {
+            y = y_bottom;
+            anchorY += offset;
+          } else if (topOverflows) {
+            y = round(bounds.yt + size.height / 2);
           } else {
             y = y_top;
             anchorY -= offset;

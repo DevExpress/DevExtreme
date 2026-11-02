@@ -404,8 +404,7 @@ class ResponsiveBox extends CollectionWidget<ResponsiveBoxProperties> {
   _linkNodeToItem(): void {
     each(this._itemElements(), (_, itemNode) => {
       const $item = $(itemNode);
-      // @ts-expect-error ts-error
-      const item: BoxItemData = $item.data(BOX_ITEM_DATA_KEY);
+      const item = $item.data<BoxItemData>(BOX_ITEM_DATA_KEY);
       if (!item.box) {
         item.node = $item.children();
       }

@@ -45,10 +45,17 @@ interface DelayedRendererOptions {
 function createDelayedRenderer({ delay = 20, onRender }: DelayedRendererOptions) {
   let queue: string[] = [];
   let rendering = false;
+  let idleResolve: (() => void) | null = null;
+
+  function notifyIdle() {
+    idleResolve?.();
+    idleResolve = null;
+  }
 
   function processQueue() {
     if (!queue.length) {
       rendering = false;
+      notifyIdle();
       return;
     }
 
@@ -72,9 +79,20 @@ function createDelayedRenderer({ delay = 20, onRender }: DelayedRendererOptions)
   function stop() {
     queue = [];
     rendering = false;
+    notifyIdle();
   }
 
-  return { pushChunk, stop };
+  function waitForIdle(): Promise<void> {
+    if (!rendering) {
+      return Promise.resolve();
+    }
+
+    return new Promise((resolve) => {
+      idleResolve = resolve;
+    });
+  }
+
+  return { pushChunk, stop, waitForIdle };
 }
 
 const getErrorMessage = (err: unknown): string => {
@@ -162,6 +180,8 @@ export const useApi = () => {
       delayedRenderer.stop();
     };
 
+    abortControllerRef.current.signal.addEventListener('abort', delayedRenderer.stop);
+
     try {
       await getAIResponseStream(messages, {
         onAborted,
@@ -169,8 +189,11 @@ export const useApi = () => {
         signal: abortControllerRef.current.signal,
       });
 
+      await delayedRenderer.waitForIdle();
+
       setTypingUsers([]);
     } catch (e: unknown) {
+      delayedRenderer.stop();
       setTypingUsers([]);
 
       if (!abortControllerRef.current?.signal.aborted) {
@@ -185,6 +208,13 @@ export const useApi = () => {
     }
   }, [alertError, insertAssistantPlaceholder, updateMessageText]);
 
+  const clearMessages = useCallback((): void => {
+    store.length = 0;
+    setAlerts([]);
+    setTypingUsers([]);
+    dataSource.reload();
+  }, []);
+
   return {
     alerts,
     typingUsers,
@@ -192,5 +222,6 @@ export const useApi = () => {
     insertMessage,
     fetchAIResponse,
     stopStreaming,
+    clearMessages,
   };
 };

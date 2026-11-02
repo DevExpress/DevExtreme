@@ -3,6 +3,7 @@ import type { DxElement } from '@js/core/element';
 import type { dxElementWrapper } from '@js/core/renderer';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import type { DxEvent } from '@js/events';
+import type { Item as ContextMenuItem, ItemClickEvent } from '@js/ui/context_menu';
 import type { Properties as DataGridProperties } from '@js/ui/data_grid';
 import type { Properties as LoadPanelProperties } from '@js/ui/load_panel';
 import type { dxScrollableOptions, ScrollEventInfo } from '@js/ui/scroll_view/ui.scrollable';
@@ -14,7 +15,9 @@ import type {
   Cell, DataChange, RowChangeType, RowUpdate, RowWatch, UpdateChange,
 } from '@ts/grids/grid_core/data_controller/types';
 import type { RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
-import type { InternalGrid, InternalGridOptions, RowKey } from '@ts/grids/grid_core/types';
+import type {
+  InternalGrid, InternalGridOptions, RowKey, SummaryTextItem,
+} from '@ts/grids/grid_core/types';
 import type Scrollable from '@ts/ui/scroll_view/scrollable';
 
 export type RowsViewScrollEvent = Partial<ScrollEventInfo<Scrollable>> & {
@@ -90,7 +93,7 @@ export interface ViewRow {
   oldValues?: unknown[];
   cells?: ViewRowCell[];
   /** @architectureLeak data_grid: core passes the summary items of a group row to its group cell */
-  summaryCells?: unknown[][];
+  summaryCells?: SummaryTextItem[][];
   /** @architectureLeak data_grid: core picks the column and the value of a group cell by it */
   groupIndex?: number;
   visible?: boolean;
@@ -129,7 +132,8 @@ export interface ViewCellOptions {
   displayValue?: unknown;
   text?: string;
   values?: unknown[];
-  summaryItems?: unknown[];
+  /** @architectureLeak data_grid/summary: core renders summary items of group and footer cells */
+  summaryItems?: SummaryTextItem[];
   resized?: Column['resizedCallbacks'];
   groupContinuesMessage?: string | false;
   groupContinuedMessage?: string | false;
@@ -215,6 +219,17 @@ export interface GroupContinuationData {
 /** @architectureLeak data_grid: group cells show the grouping continuation texts */
 export type RowsViewOptions = InternalGridOptions & Pick<DataGridProperties, 'grouping'>;
 
+/** @architectureLeak data_grid/summary: core extenders adjust the group summary cells */
+export interface SummaryRowsViewExtension {
+  // eslint-disable-next-line @typescript-eslint/method-signature-style -- overridden by methods
+  renderGroupSummaryCellsCore(
+    $groupCell: dxElementWrapper,
+    options: RowRenderOptions,
+    groupCellColSpan: number,
+    alignByColumnCellCount: number,
+  ): void;
+}
+
 // the grid passes loadPanel options to the LoadPanel widget, so its animation applies too
 export type RowsViewLoadPanelOptions = LoadPanel & Pick<LoadPanelProperties, 'animation'>;
 
@@ -232,6 +247,12 @@ export type RowsModuleOptions = Pick<InternalGridOptions,
 | 'activeStateEnabled'
 | 'twoWayBindingEnabled'
 >;
+
+export interface GridContextMenuItem extends ContextMenuItem {
+  name?: string;
+  value?: string;
+  onItemClick?: (e: ItemClickEvent) => void;
+}
 
 export interface ContextMenuItemsOptions {
   event: DxEvent;

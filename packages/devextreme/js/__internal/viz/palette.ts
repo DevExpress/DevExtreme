@@ -18,8 +18,8 @@
 
 import { Color } from '@ts/color';
 import { fallbackOf } from '@ts/core/utils/css_variables';
-import { extend } from '@ts/core/utils/m_extend';
-import { isString } from '@ts/core/utils/m_type';
+import { extend } from '@ts/core/utils/extend';
+import { isString } from '@ts/core/utils/type';
 import { mixColors, shiftChannels, shiftLightness } from '@ts/viz/color_math';
 import { normalizeEnum } from '@ts/viz/core/utils';
 

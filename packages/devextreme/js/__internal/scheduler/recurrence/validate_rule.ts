@@ -1,7 +1,7 @@
 /* eslint-disable spellcheck/spell-checker */
 
 import errors from '@js/core/errors';
-import { each } from '@ts/core/utils/m_iterator';
+import { each } from '@ts/core/utils/iterator';
 
 import { parseRecurrenceRule } from './base';
 import { daysFromByDayRule } from './days_from_by_day_rule';

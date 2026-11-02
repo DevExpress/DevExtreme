@@ -671,6 +671,20 @@ test('Column headers should have the correct scroll position after refreshing th
 }));
 
 [false, true].forEach((useNative) => {
+  const createRtlVirtualScrollingGrid = async (): Promise<void> => createWidget('dxDataGrid', {
+    width: 700,
+    height: 400,
+    rtlEnabled: true,
+    dataSource: getData(1000, 10),
+    columnWidth: 200,
+    scrolling: {
+      mode: 'virtual',
+      useNative,
+      // @ts-expect-error private option
+      updateTimeout: 0,
+    },
+  });
+
   test(`Horizontal scroll position should not change during vertical scrolling when RTL and virtual scrolling are enabled (useNative = ${useNative}) (T1335898)`, async (t) => {
     // arrange
     const dataGrid = new DataGrid('#container');
@@ -700,19 +714,32 @@ test('Column headers should have the correct scroll position after refreshing th
       .ok()
       .expect(dataGrid.getScrollLeft())
       .eql(initialScrollLeft - 150);
-  }).before(async () => createWidget('dxDataGrid', {
-    width: 700,
-    height: 400,
-    rtlEnabled: true,
-    dataSource: getData(1000, 10),
-    columnWidth: 200,
-    scrolling: {
-      mode: 'virtual',
-      useNative,
-      // @ts-expect-error private option
-      updateTimeout: 0,
-    },
-  }));
+  }).before(createRtlVirtualScrollingGrid);
+
+  test(`Horizontal scroll position should not change when scrolling horizontally and vertically at once with RTL and virtual scrolling enabled (useNative = ${useNative}) (T1335898)`, async (t) => {
+    // arrange
+    const dataGrid = new DataGrid('#container');
+
+    await t
+      .expect(dataGrid.isReady())
+      .ok();
+
+    const initialScrollLeft = await dataGrid.getScrollLeft();
+
+    // act
+    await dataGrid.scrollTo(t, { left: initialScrollLeft - 150, top: 1500 });
+
+    // assert
+    await t
+      .expect(dataGrid.isReady())
+      .ok()
+      .expect(dataGrid.apiPageIndex())
+      .eql(1)
+      .expect(dataGrid.getDataRow(30).element.exists)
+      .ok()
+      .expect(dataGrid.getScrollLeft())
+      .eql(initialScrollLeft - 150);
+  }).before(createRtlVirtualScrollingGrid);
 });
 
 test('Header container should have padding-right after expanding the master row with a detail grid when using native scrolling (T1004507)', async (t) => {
@@ -2036,7 +2063,15 @@ test('Last group should not disappear after collapsing another subgroup with vir
     // act
     await dataGrid.scrollTo(t, { top: 200 });
     await dataGrid.scrollTo(t, { top: 600 });
-    await t.expect(dataGrid.isReady()).ok();
+    await t
+      .expect(dataGrid.isReady())
+      .ok()
+      .expect(dataGrid.isVirtualRowIntersectViewport())
+      .notOk()
+      .expect(dataGrid.getFixedDataCell(12, 0).element.textContent)
+      .eql('12')
+      .expect(dataGrid.getFixedDataCell(19, 0).element.textContent)
+      .eql('19');
 
     // assert
     await testScreenshot(t, takeScreenshot, `grid-${scrollingMode}-scrolling-T1152498.png`, { element: '#container' });
@@ -2187,14 +2222,24 @@ test.meta({ browserSize: [800, 200] })('Editing buttons should rerender correctl
 });
 
 // T1181439
+type ContentReadyWindow = typeof window & { contentReadyFired?: boolean };
+
 test('Restoring focus on re-rendering should be done without unexpected scrolling to the focused element', async (t) => {
   const dataGrid = new DataGrid('#container');
+  const resetContentReadyFlag = ClientFunction(() => {
+    (window as ContentReadyWindow).contentReadyFired = false;
+  });
+  const isContentReadyFired = ClientFunction(
+    () => (window as ContentReadyWindow).contentReadyFired,
+  );
 
   await t.expect(dataGrid.isReady()).ok();
 
   await dataGrid.scrollBy(t, { left: 1000 });
 
+  await resetContentReadyFlag();
   await t.click(dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(19).element);
+  await t.expect(isContentReadyFired()).ok();
 
   await dataGrid.scrollBy(t, { left: -1000 });
   await dataGrid.scrollBy(t, { top: 50 });
@@ -2218,8 +2263,13 @@ test('Restoring focus on re-rendering should be done without unexpected scrollin
       width: 75,
     })),
     masterDetail: { enabled: true },
+    onContentReady: () => {
+      (window as ContentReadyWindow).contentReadyFired = true;
+    },
   });
-});
+}).after(async (t) => t.eval(() => {
+  delete (window as ContentReadyWindow).contentReadyFired;
+}));
 
 // T1194796
 test('The row alternation should display correctly when grouping and virtual scrolling are enabled', async (t) => {

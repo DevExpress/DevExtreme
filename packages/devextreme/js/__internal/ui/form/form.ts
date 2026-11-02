@@ -46,7 +46,7 @@ import type { ValidationResult } from '@js/ui/validation_group';
 import errors from '@js/ui/widget/ui.errors';
 import type { IntegrationOptions } from '@ts/core/template_manager';
 import { invokeConditionally } from '@ts/core/utils/conditional_invoke';
-import { logger } from '@ts/core/utils/m_console';
+import { logger } from '@ts/core/utils/console';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { SupportedKeyHandler } from '@ts/core/widget/widget';
 import Widget, { FOCUSED_STATE_CLASS } from '@ts/core/widget/widget';

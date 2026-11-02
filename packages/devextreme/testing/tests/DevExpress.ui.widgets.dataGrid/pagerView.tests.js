@@ -70,7 +70,7 @@ QUnit.module('Pager', {
 
         // act
         pagerView.render(testElement);
-        const pager = pagerView.getPager();
+        const pager = Pager.getInstance(pagerView.element());
 
         // assert
         assert.ok(!pager);
@@ -86,7 +86,7 @@ QUnit.module('Pager', {
 
         // act
         pagerView.render(testElement);
-        const pager = pagerView.getPager();
+        const pager = Pager.getInstance(pagerView.element());
 
         // assert
         assert.equal(testElement.find('.dx-pager').length, 1, 'pager element');
@@ -145,7 +145,7 @@ QUnit.module('Pager', {
         this.dataController.pageIndex(13);
 
         // assert
-        assert.equal(pagerView.getPager().option('pageIndex'), 14, 'page index');
+        assert.equal(Pager.getInstance(pagerView.element()).option('pageIndex'), 14, 'page index');
     });
 
     // T211403
@@ -161,7 +161,7 @@ QUnit.module('Pager', {
         this.clock.tick(10);
 
         // assert
-        assert.equal(pagerView.getPager().option('pageIndex'), 15, 'page index');
+        assert.equal(Pager.getInstance(pagerView.element()).option('pageIndex'), 15, 'page index');
     });
 
     // T220755
@@ -176,7 +176,7 @@ QUnit.module('Pager', {
         this.clock.tick(10);
 
         // assert
-        assert.equal(pagerView.getPager().option('pageIndex'), 15, 'page index changed');
+        assert.equal(Pager.getInstance(pagerView.element()).option('pageIndex'), 15, 'page index changed');
     });
 
     QUnit.test('Page size is changed from dataController', function(assert) {
@@ -189,7 +189,7 @@ QUnit.module('Pager', {
         this.dataController.pageSize(9);
 
         // assert
-        assert.equal(pagerView.getPager().option('pageSize'), 9, 'pageSize');
+        assert.equal(Pager.getInstance(pagerView.element()).option('pageSize'), 9, 'pageSize');
     });
 
     QUnit.test('HasKnownLastPage is changed from dataController', function(assert) {
@@ -266,7 +266,7 @@ QUnit.module('Pager', {
 
         pagerView.render(testElement);
 
-        sinon.spy(pagerView.getPager(), 'option');
+        sinon.spy(Pager.getInstance(pagerView.element()), 'option');
 
         assert.equal(pagerView._createComponent.callCount, 1, '_createComponent call count before partial update');
 
@@ -277,8 +277,8 @@ QUnit.module('Pager', {
         assert.equal(pagerView._createComponent.callCount, 1, '_createComponent call count after partial update');
 
         // call count increased because the component should check if it need to perform the validation
-        assert.equal(pagerView.getPager().option.callCount, 2, 'pager option call count after partial update');
-        assert.deepEqual(pagerView.getPager().option.getCall(0).args, [{
+        assert.equal(Pager.getInstance(pagerView.element()).option.callCount, 2, 'pager option call count after partial update');
+        assert.deepEqual(Pager.getInstance(pagerView.element()).option.getCall(0).args, [{
             hasKnownLastPage: true, // T697587
             itemCount: 143, // #7259
             pageCount: 21,

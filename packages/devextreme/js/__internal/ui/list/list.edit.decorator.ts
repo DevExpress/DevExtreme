@@ -50,7 +50,7 @@ class EditDecorator {
     const swipeConfig = {
       itemSizeFunc: (): number => {
         if (this._clearSwipeCache) {
-          this._itemWidthCache = getWidth(this._list.$element());
+          this._itemWidthCache = getWidth(this._list.$element().get(0));
           this._clearSwipeCache = false;
         }
         return this._itemWidthCache;

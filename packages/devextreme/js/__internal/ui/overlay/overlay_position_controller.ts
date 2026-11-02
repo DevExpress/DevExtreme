@@ -14,8 +14,9 @@ import type {
   DxEvent,
   PointerInteractionEvent,
 } from '@js/events';
-import windowUtils from '@ts/core/utils/m_window';
+import type { PositionResult } from '@ts/common/core/animation/types';
 import swatch from '@ts/core/utils/swatch_container';
+import windowUtils from '@ts/core/utils/window';
 import type {
   OverlayActions,
   OverlayProperties,
@@ -142,7 +143,7 @@ export class OverlayPositionController<
 
   _visualPosition?: Coordinates;
 
-  _initialPosition?: OverlayPosition;
+  _initialPosition?: Coordinates | PositionResult;
 
   _previousVisualPosition?: Coordinates;
 

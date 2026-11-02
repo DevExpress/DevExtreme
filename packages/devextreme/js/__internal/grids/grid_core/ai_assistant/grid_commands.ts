@@ -2,7 +2,7 @@ import type { ExecuteGridAssistantAction } from '@js/common/ai-integration';
 import messageLocalization from '@js/common/core/localization/message';
 import type { CommandInfo } from '@js/common/grids';
 import { isDefined, isObject } from '@js/core/utils/type';
-import { logger } from '@ts/core/utils/m_console';
+import { logger } from '@ts/core/utils/console';
 import {
   DEFAULT_FAILURE_MESSAGE,
   DEFAULT_SUCCESS_MESSAGE,

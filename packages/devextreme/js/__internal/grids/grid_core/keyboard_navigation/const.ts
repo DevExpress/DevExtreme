@@ -1,3 +1,5 @@
+export const KEYBOARD_NAVIGATION_NAMESPACE = 'dxDataGridKeyboardNavigation';
+
 export const ATTRIBUTES = {
   ariaColIndex: 'aria-colindex',
   dragCell: 'dx-drag-cell',

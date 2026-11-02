@@ -2,12 +2,17 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { GridBase } from '@js/common/grids';
 import type { DxPromise } from '@js/core/utils/deferred';
+import { PagerModel } from '@ts/pagination/__tests__/__mock__/model/pager';
 
 import { GridCoreModel } from './grid_core';
 
 export abstract class DataGridBaseModel<
   TInstance extends GridBase = GridBase,
 > extends GridCoreModel<TInstance> {
+  public getPager(): PagerModel {
+    return new PagerModel(this.root, `.${this.addWidgetPrefix('pager')}`);
+  }
+
   public apiColumnOption(id: string, name?: string, value?: any): any {
     const instance = this.getInstance();
 

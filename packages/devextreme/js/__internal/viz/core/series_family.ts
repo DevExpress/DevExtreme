@@ -18,15 +18,15 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 
-import { noop as _noop } from '@ts/core/utils/m_common';
+import { noop as _noop } from '@ts/core/utils/common';
 /// #DEBUG
-import { debug } from '@ts/core/utils/m_console';
+import { debug } from '@ts/core/utils/console';
 /// #ENDDEBUG
-import { dateUtils } from '@ts/core/utils/m_date';
-import { extend } from '@ts/core/utils/m_extend';
-import { each as _each } from '@ts/core/utils/m_iterator';
-import { isDefined, isNumeric } from '@ts/core/utils/m_type';
+import { dateUtils } from '@ts/core/utils/date';
+import { extend } from '@ts/core/utils/extend';
+import { each as _each } from '@ts/core/utils/iterator';
 import { sign } from '@ts/core/utils/math';
+import { isDefined, isNumeric } from '@ts/core/utils/type';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 
 import { map as _map, normalizeEnum as _normalizeEnum } from './utils';

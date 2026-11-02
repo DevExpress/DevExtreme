@@ -6,6 +6,7 @@ import { each } from 'core/utils/iterator';
 
 import PointerMock from '../../../helpers/pointerMock.js';
 import resizeCallbacks from 'core/utils/resize_callbacks';
+import TableResizing from '__internal/ui/html_editor/modules/tableResizing';
 import { getWindow } from 'core/utils/window.js';
 
 const { test, module } = QUnit;
@@ -177,6 +178,39 @@ module('Table resizing integration', {
     }
 }, () => {
     module('module cleanup', {}, () => {
+        test('disabling tableResizing removes its content scroll handler', function(assert) {
+            const updateFramesPositionsSpy = sinon.spy(TableResizing.prototype, '_updateFramesPositions');
+
+            try {
+                this.createWidget();
+                this.instance.option('tableResizing.enabled', false);
+                updateFramesPositionsSpy.resetHistory();
+
+                $(this.instance._getContent()).trigger('scroll');
+
+                assert.strictEqual(updateFramesPositionsSpy.callCount, 0, 'the scroll handler is removed');
+            } finally {
+                updateFramesPositionsSpy.restore();
+            }
+        });
+
+        test('re-enabling tableResizing keeps one content scroll handler', function(assert) {
+            const updateFramesPositionsSpy = sinon.spy(TableResizing.prototype, '_updateFramesPositions');
+
+            try {
+                this.createWidget();
+                this.instance.option('tableResizing.enabled', false);
+                this.instance.option('tableResizing.enabled', true);
+                updateFramesPositionsSpy.resetHistory();
+
+                $(this.instance._getContent()).trigger('scroll');
+
+                assert.strictEqual(updateFramesPositionsSpy.callCount, 1, 'the scroll handler runs once');
+            } finally {
+                updateFramesPositionsSpy.restore();
+            }
+        });
+
         test('disabling tableResizing keeps the other text-change subscribers of Quill', function(assert) {
             this.createWidget();
             const textChangeSpy = sinon.spy();

@@ -12,10 +12,10 @@
 /* eslint-disable prefer-destructuring */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 
-import { debug } from '@ts/core/utils/m_console';
-import { each } from '@ts/core/utils/m_iterator';
-import { isDefined, isNumeric } from '@ts/core/utils/m_type';
+import { debug } from '@ts/core/utils/console';
+import { each } from '@ts/core/utils/iterator';
 import { adjust } from '@ts/core/utils/math';
+import { isDefined, isNumeric } from '@ts/core/utils/type';
 import { getLogExt, raiseToExt } from '@ts/viz/core/utils';
 
 const _math = Math;

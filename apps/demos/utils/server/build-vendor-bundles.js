@@ -1,5 +1,5 @@
 // CLI: node utils/server/build-vendor-bundles.js [React|Vue ...]
-// Defaults to both. Angular isn't supported here — see csp-bundle-angular.js's splitting: true batch build instead.
+// Defaults to both. Angular isn't supported here — see demo-bundle-angular.js's splitting: true batch build instead.
 
 const path = require('path');
 const fs = require('fs');
@@ -11,7 +11,7 @@ const FRAMEWORKS = REQUESTED.length > 0 ? REQUESTED : ['React', 'Vue'];
 
 function reactVueOptions(framework) {
   // eslint-disable-next-line global-require
-  const { getSharedOptions } = require('./csp-bundle');
+  const { getSharedOptions } = require('./demo-bundle');
   const options = getSharedOptions(framework);
   return {
     ...options,

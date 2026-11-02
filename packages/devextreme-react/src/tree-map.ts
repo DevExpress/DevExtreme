@@ -163,10 +163,10 @@ const Export = Object.assign<typeof _componentExport, NestedComponentMeta>(_comp
 // owners:
 // GroupLabel
 // TileLabel
-// Tooltip
-// LoadingIndicator
 // Title
 // Subtitle
+// Tooltip
+// LoadingIndicator
 type IFontProps = React.PropsWithChildren<{
   color?: string;
   family?: string;

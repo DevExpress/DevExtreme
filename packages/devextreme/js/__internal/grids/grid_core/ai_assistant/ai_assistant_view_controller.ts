@@ -6,8 +6,8 @@ import {
   CLASSES,
 } from '@ts/grids/grid_core/ai_assistant/const';
 import type { HeaderPanel } from '@ts/grids/grid_core/header_panel/header_panel';
+import type { ToolbarItem } from '@ts/grids/grid_core/header_panel/types';
 import type { OptionChanged } from '@ts/grids/grid_core/types';
-import type { ToolbarItem } from '@ts/grids/new/grid_core/toolbar/types';
 
 import { ViewController } from '../modules/modules';
 import type { AIAssistantView } from './ai_assistant_view';

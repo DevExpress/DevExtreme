@@ -1,4 +1,4 @@
-// Exposes the devextreme widgets test-code.js needs as window.DevExpress, matching React/Vue demos by identity via vendorGlobalPlugin (Angular does this inline in its own bundle instead, see csp-bundle-angular.js).
+// Exposes the devextreme widgets test-code.js needs as window.DevExpress, matching React/Vue demos by identity via vendorGlobalPlugin (Angular does this inline in its own bundle instead, see demo-bundle-angular.js).
 
 const fs = require('fs');
 const path = require('path');
@@ -18,7 +18,7 @@ function parseList(raw) {
   return [raw.replace(/'/g, '')];
 }
 
-// Shared with csp-bundle-angular.js, which runs this per-demo instead of globbing every demo.
+// Shared with demo-bundle-angular.js, which runs this per-demo instead of globbing every demo.
 function discoverTestGlobalsFromContent(content, specifierToPath = new Map()) {
   IMPORT_AND_RE.lastIndex = 0;
   let match = IMPORT_AND_RE.exec(content);
@@ -52,7 +52,7 @@ function outputPath(framework) {
   return path.join(DEMOS_ROOT, 'bundles', 'vendor', `test-globals-${framework.toLowerCase()}.js`);
 }
 
-// Requires csp-bundle/vendor-bundle lazily so importing this module doesn't pull them into Jest's coverage run.
+// Requires demo-bundle/vendor-bundle lazily so importing this module doesn't pull them into Jest's coverage run.
 async function buildTestGlobalsScript(framework) {
   if (!SUPPORTED_FRAMEWORKS.has(framework)) return null;
 
@@ -84,7 +84,7 @@ async function buildTestGlobalsScript(framework) {
   fs.mkdirSync(path.dirname(outFile), { recursive: true });
 
   // eslint-disable-next-line global-require
-  const { getSharedOptions } = require('../server/csp-bundle');
+  const { getSharedOptions } = require('../server/demo-bundle');
   const shared = getSharedOptions(framework);
   await esbuild.build({
     ...shared,

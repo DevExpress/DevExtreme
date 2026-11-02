@@ -1,4 +1,4 @@
-import { addOffsets } from '@ts/core/utils/m_date';
+import { addOffsets } from '@ts/core/utils/date';
 import { RRule, RRuleSet } from 'rrule';
 
 import { parseRecurrenceRule } from '../../../../recurrence/base';

@@ -2,7 +2,7 @@ import devices from '@js/core/devices';
 import domAdapter from '@js/core/dom_adapter';
 import { noop } from '@js/core/utils/common';
 import { isDefined } from '@js/core/utils/type';
-import windowUtils from '@ts/core/utils/m_window';
+import windowUtils from '@ts/core/utils/window';
 
 export interface OverflowManager {
   setOverflow: () => void;

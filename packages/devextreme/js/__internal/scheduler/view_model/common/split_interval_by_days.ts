@@ -1,4 +1,4 @@
-import { dateUtils } from '@ts/core/utils/m_date';
+import { dateUtils } from '@ts/core/utils/date';
 
 import type { CompareOptions, DateInterval } from '../types';
 

@@ -205,7 +205,7 @@ class TextArea<
     }
 
     this._resetDimensions();
-    this.$element().css('height', getOuterHeight(this.$element()));
+    this.$element().css('height', getOuterHeight(this.$element().get(0)));
     $input.css('height', 0);
 
     const heightDifference = this._getHeightDifference($input);
@@ -247,20 +247,55 @@ class TextArea<
     return this._getBoundaryHeight('maxHeight');
   }
 
-  _getBoundaryHeight(optionName: string): number | undefined {
-    const boundaryValue = this.option(optionName);
+  _getBoundaryHeight(optionName: 'minHeight' | 'maxHeight'): number | undefined {
+    const { [optionName]: boundaryValue } = this.option();
 
-    if (isDefined(boundaryValue)) {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-      return typeof boundaryValue === 'number'
-        ? boundaryValue : parseHeight(
-          boundaryValue,
-          this.$element().get(0).parentElement,
-          this.$element().get(0),
-        );
+    if (!isDefined(boundaryValue)) {
+      return undefined;
     }
 
-    return undefined;
+    if (typeof boundaryValue === 'number') {
+      return boundaryValue;
+    }
+
+    const element = this.$element().get(0);
+    // _renderDimensions has applied the option, so the browser resolves calc(), rem and inherit
+    const cssValue = getWindow().getComputedStyle(element)[optionName];
+
+    if (cssValue === 'none' || cssValue === 'auto') {
+      return undefined;
+    }
+
+    if (cssValue.endsWith('px')) {
+      return parseFloat(cssValue);
+    }
+
+    const height = cssValue.includes('(')
+      ? this._getPercentageFunctionHeight(cssValue)
+      : Number(parseHeight(
+        boundaryValue,
+        // @ts-expect-error no parent when detached; read only for a percentage, as before
+        element.parentElement,
+        element,
+      ));
+
+    return Number.isFinite(height) ? height : undefined;
+  }
+
+  _getPercentageFunctionHeight(cssValue: string): number {
+    const $element = this.$element();
+    const $probe = $('<div>')
+      .css({
+        position: 'absolute',
+        visibility: 'hidden',
+        height: $element.get(0).parentElement?.offsetHeight,
+      })
+      .appendTo($element);
+    const height = String($('<div>').css('height', cssValue).appendTo($probe).css('height'));
+
+    $probe.remove();
+
+    return height.endsWith('px') ? parseFloat(height) : NaN;
   }
 
   _renderInputType(): void {}

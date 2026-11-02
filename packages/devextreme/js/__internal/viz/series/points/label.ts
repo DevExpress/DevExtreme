@@ -11,8 +11,9 @@
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 
 import formatHelper from '@ts/core/format_helper';
-import { extend } from '@ts/core/utils/m_extend';
-import { each } from '@ts/core/utils/m_iterator';
+import { getNumberFormatLocale, withFormatLocale } from '@ts/core/global_format_config';
+import { extend } from '@ts/core/utils/extend';
+import { each } from '@ts/core/utils/iterator';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 import type { BBox, Coords } from '@ts/viz/core/types';
 import {
@@ -299,7 +300,10 @@ function formatText(data: ThemeValue, options: ThemeValue): string {
   data.valueText = _format(data.value, format);
   data.argumentText = _format(data.argument, options.argumentFormat);
   if (data.percent !== undefined) {
-    data.percentText = _format(data.percent, { type: 'percent', precision: format && format.percentPrecision });
+    data.percentText = _format(data.percent, withFormatLocale(
+      { type: 'percent', precision: format && format.percentPrecision },
+      getNumberFormatLocale(format),
+    ));
   }
   if (data.total !== undefined) {
     data.totalText = _format(data.total, format);

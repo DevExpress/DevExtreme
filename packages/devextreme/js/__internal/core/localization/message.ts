@@ -1,8 +1,8 @@
 import coreLocalization from '@ts/core/localization/core';
 import { defaultMessages } from '@ts/core/localization/default_messages';
 import { injector as dependencyInjector } from '@ts/core/utils/dependency_injector';
+import { extend } from '@ts/core/utils/extend';
 import { humanize } from '@ts/core/utils/inflector';
-import { extend } from '@ts/core/utils/m_extend';
 import { format as stringFormat } from '@ts/core/utils/string';
 
 export type MessageFormatter = (...values: unknown[]) => string;

@@ -74,8 +74,6 @@ function findChrome() {
 
 const CHROME_PATH = findChrome();
 
-// Must use the same shard partition as csp-bundle.js, or a demo bundled by
-// another shard has no bundle.js on disk and burns its render deadline + retry.
 const { SHARD_TOTAL, SHARD_INDEX } = readShardConfig();
 
 const DEBUG_PORT = (() => {
@@ -172,8 +170,6 @@ async function waitForDebugger(port, maxWaitMs = 15000) {
   throw new Error(`Chrome debugger did not start on port ${port}`);
 }
 
-// Same round-robin split as csp-bundle.js's applyShard(), on the same sort key,
-// so shard k checks exactly the demos shard k bundled.
 function applyShard(demos) {
   return applyShardGeneric(demos, (d) => `${d.widget}/${d.demo}`, { SHARD_TOTAL, SHARD_INDEX });
 }
@@ -297,8 +293,8 @@ async function collectViolations(tab, demo, renderDeadlineMs) {
   }
   await tab.send('Page.navigate', { url });
 
-  // Matches UI widgets (.dx-widget), viz widgets (<svg>) and new-gen widgets.
-  const READY_SELECTOR = '.dx-widget, svg, .dx-cardview, .dx-pagination';
+  // Matches UI widgets (.dx-widget), viz widgets (root <svg class="dxc ...">) and new-gen widgets.
+  const READY_SELECTOR = '.dx-widget, svg[class^="dx"], .dx-cardview, .dx-pagination';
   const deadline = Date.now() + renderDeadlineMs;
   let rendered = false;
   while (Date.now() < deadline) {

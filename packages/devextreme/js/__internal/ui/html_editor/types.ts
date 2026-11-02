@@ -154,7 +154,7 @@ export interface FormatHandlerArgs {
 
 export type FormatHandler = (args: FormatHandlerArgs) => void;
 
-/** A click on an AI toolbar menu item (modules/m_toolbar.ts). */
+/** A click on an AI toolbar menu item (modules/toolbar.ts). */
 export interface AITextTransformOptions {
   command: string;
   commandsMap: CommandsMap;
