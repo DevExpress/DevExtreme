@@ -4,7 +4,7 @@
   keyExpr="ID"
   [showBorders]="true"
 >
-  <dxo-data-grid-grouping [autoExpandAll]="expandAll"></dxo-data-grid-grouping>
+  <dxo-data-grid-grouping [autoExpandAll]="expandAll()"></dxo-data-grid-grouping>
   <dxo-data-grid-column-chooser [enabled]="true"></dxo-data-grid-column-chooser>
   <dxo-data-grid-load-panel [enabled]="true"></dxo-data-grid-load-panel>
 
@@ -32,7 +32,7 @@
   <dxo-data-grid-toolbar>
     <dxi-data-grid-item location="before">
       <div *dxTemplate class="informer">
-        <div class="count">{{ totalCount }}</div>
+        <div class="count">{{ totalCount() }}</div>
         <span>Total Count</span>
       </div>
     </dxi-data-grid-item>
@@ -44,7 +44,7 @@
           [inputAttr]="{ 'aria-label': 'Value' }"
           displayExpr="text"
           valueExpr="value"
-          value="CustomerStoreState"
+          [value]="groupField()"
           (onValueChanged)="toggleGroupColumn($event)"
         >
         </dx-select-box>
@@ -54,7 +54,7 @@
       location="before"
       locateInMenu="auto"
       widget="dxButton"
-      [options]="toggleButtonOptions"
+      [options]="toggleButtonOptions()"
     >
     </dxi-data-grid-item>
     <dxi-data-grid-item

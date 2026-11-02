@@ -1,7 +1,9 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, ChangeDetectionStrategy } from '@angular/core';
+import {
+  Component, enableProdMode, ChangeDetectionStrategy, inject, signal,
+} from '@angular/core';
 import { DxDataGridModule, DxSliderModule } from 'devextreme-angular';
-import { DataSource, ArrayStore } from 'devextreme-angular/common/data';
+import { DataSource } from 'devextreme-angular/common/data';
 import { Product, Order, Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -20,27 +22,25 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  productsDataSource: DataSource;
+  private readonly service = inject(Service);
 
-  orders: ArrayStore;
+  readonly productsDataSource = new DataSource({
+    store: this.service.getProducts(),
+    reshapeOnPush: true,
+  });
 
-  updatesPerSecond = 100;
+  private readonly orders = this.service.getOrders();
 
-  constructor(service: Service) {
-    this.productsDataSource = new DataSource({
-      store: service.getProducts(),
-      reshapeOnPush: true,
-    });
+  readonly updatesPerSecond = signal(100);
 
-    this.orders = service.getOrders();
-
+  constructor() {
     setInterval(() => {
-      if (service.getOrderCount() > 500000) {
+      if (this.service.getOrderCount() > 500000) {
         return;
       }
 
-      for (let i = 0; i < this.updatesPerSecond / 20; i += 1) {
-        service.addOrder();
+      for (let i = 0; i < this.updatesPerSecond() / 20; i += 1) {
+        this.service.addOrder();
       }
     }, 50);
   }

@@ -1,5 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, Pipe, PipeTransform, enableProdMode } from '@angular/core';
+import {
+  Component, Pipe, PipeTransform, enableProdMode, inject, signal,
+} from '@angular/core';
 import { DxDataGridModule, DxButtonModule, DxSelectBoxModule } from 'devextreme-angular';
 import { Service, Employee } from './app.service';
 
@@ -28,19 +30,15 @@ export class StringifyEmployeesPipe implements PipeTransform {
   ],
 })
 export class AppComponent {
-  employees: Employee[];
+  readonly employees = inject(Service).getEmployees();
 
-  prefix: string;
+  readonly prefix = signal<string | null>(null);
 
-  prefixOptions: string[] = ['All', 'Dr.', 'Mr.', 'Mrs.', 'Ms.'];
+  readonly prefixOptions: string[] = ['All', 'Dr.', 'Mr.', 'Mrs.', 'Ms.'];
 
-  selectedRows: number[] = [];
+  readonly selectedRows = signal<number[]>([]);
 
-  selectionChangedBySelectBox: boolean;
-
-  constructor(service: Service) {
-    this.employees = service.getEmployees();
-  }
+  private selectionChangedBySelectBox = false;
 
   filterSelected(event) {
     this.selectionChangedBySelectBox = true;
@@ -48,16 +46,16 @@ export class AppComponent {
     const prefix = event.value;
 
     if (!prefix) { return; }
-    if (prefix === 'All') { this.selectedRows = this.employees.map((employee) => employee.ID); } else {
-      this.selectedRows = this.employees.filter((employee) => employee.Prefix === prefix).map((employee) => employee.ID);
+    if (prefix === 'All') { this.selectedRows.set(this.employees.map((employee) => employee.ID)); } else {
+      this.selectedRows.set(this.employees.filter((employee) => employee.Prefix === prefix).map((employee) => employee.ID));
     }
 
-    this.prefix = prefix;
+    this.prefix.set(prefix);
   }
 
   selectionChangedHandler() {
     if (!this.selectionChangedBySelectBox) {
-      this.prefix = null;
+      this.prefix.set(null);
     }
 
     this.selectionChangedBySelectBox = false;

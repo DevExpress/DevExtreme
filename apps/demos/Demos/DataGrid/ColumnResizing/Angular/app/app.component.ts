@@ -1,7 +1,9 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode } from '@angular/core';
+import {
+  Component, enableProdMode, inject, signal,
+} from '@angular/core';
 import { DxDataGridModule, DxSelectBoxModule } from 'devextreme-angular';
-import { Customer, Service } from './app.service';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -19,15 +21,11 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  customers: Customer[];
+  readonly customers = inject(Service).getCustomers();
 
-  resizingModes = ['nextColumn', 'widget'];
+  readonly resizingModes = ['nextColumn', 'widget'];
 
-  columnResizingMode = this.resizingModes[0];
-
-  constructor(service: Service) {
-    this.customers = service.getCustomers();
-  }
+  readonly columnResizingMode = signal(this.resizingModes[0]);
 }
 
 bootstrapApplication(AppComponent);

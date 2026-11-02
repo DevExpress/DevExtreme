@@ -24,11 +24,7 @@ Instructions: The output must be in plain text and should not exceed 2000 charac
   providedIn: 'root',
 })
 export class AiService {
-  chatService: AzureOpenAI;
-
-  constructor() {
-    this.chatService = new AzureOpenAI(AzureOpenAIConfig);
-  }
+  private readonly chatService = new AzureOpenAI(AzureOpenAIConfig);
 
   async getAIResponse(messages: AIMessage[], signal?: AbortSignal) {
     const params = {

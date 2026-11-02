@@ -1,7 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode } from '@angular/core';
+import { Component, enableProdMode, inject } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { DxDataGridModule, DxTextBoxModule } from 'devextreme-angular';
-import { CustomStore } from 'devextreme-angular/common/data';
 import { CollaborativeEditingService } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -20,19 +20,20 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  dataSources: CustomStore[];
+  private readonly service = inject(CollaborativeEditingService);
 
-  stateDataSource: CustomStore;
+  readonly dataSources = [this.service.createStore(), this.service.createStore()];
 
-  maxDate: Date = new Date(3000, 0);
+  readonly stateDataSource = this.service.createStatesStore();
 
-  constructor(private service: CollaborativeEditingService) {
-    this.dataSources = [this.service.createStore(), this.service.createStore()];
-    this.stateDataSource = this.service.createStatesStore();
+  readonly maxDate = new Date(3000, 0);
 
-    this.service.getStoreChangedObservable().subscribe((events) => {
-      this.dataSources.forEach((store) => store.push(events));
-    });
+  constructor() {
+    this.service.getStoreChangedObservable()
+      .pipe(takeUntilDestroyed())
+      .subscribe((events) => {
+        this.dataSources.forEach((store) => store.push(events));
+      });
   }
 }
 

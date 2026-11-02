@@ -1,9 +1,9 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode } from '@angular/core';
+import { Component, enableProdMode, inject } from '@angular/core';
 import { jsPDF } from 'jspdf';
 import { exportDataGrid } from 'devextreme-angular/common/export/pdf';
 import { DxDataGridModule, DxDataGridTypes } from 'devextreme-angular/ui/data-grid';
-import { Service, Employee } from './app.service';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -20,11 +20,7 @@ if (!/localhost/.test(document.location.host)) {
 })
 
 export class AppComponent {
-  employees: Employee[];
-
-  constructor(private service: Service) {
-    this.employees = service.getEmployees();
-  }
+  readonly employees = inject(Service).getEmployees();
 
   onExporting({ component }: DxDataGridTypes.ExportingEvent) {
     const doc = new jsPDF();

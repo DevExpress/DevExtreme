@@ -1,10 +1,10 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode } from '@angular/core';
+import { Component, enableProdMode, inject } from '@angular/core';
 import {
   DxDataGridModule, DxListModule, DxDropDownBoxModule, DxTagBoxModule,
 } from 'devextreme-angular';
-import { createStore, CustomStore } from 'devextreme-aspnet-data-nojquery';
-import { Service, Status } from './app.service';
+import { createStore } from 'devextreme-aspnet-data-nojquery';
+import { Service } from './app.service';
 import 'anti-forgery';
 
 if (!/localhost/.test(document.location.host)) {
@@ -25,39 +25,33 @@ if (!/localhost/.test(document.location.host)) {
 })
 
 export class AppComponent {
-  employees: CustomStore;
+  private readonly url = 'https://js.devexpress.com/Demos/NetCore/api/DataGridCustomEditors';
 
-  tasks: CustomStore;
+  readonly statuses = inject(Service).getStatuses();
 
-  statuses: Status[];
+  readonly dropDownOptions = { width: 500 };
 
-  dropDownOptions = { width: 500 };
-
-  editorOptions = {
+  readonly editorOptions = {
     itemTemplate: 'statusTemplate',
   };
 
-  url = 'https://js.devexpress.com/Demos/NetCore/api/DataGridCustomEditors';
+  readonly tasks = createStore({
+    key: 'ID',
+    loadUrl: `${this.url}/Tasks`,
+    updateUrl: `${this.url}/UpdateTask`,
+    insertUrl: `${this.url}/InsertTask`,
+    onBeforeSend(method, ajaxOptions) {
+      ajaxOptions.xhrFields = { withCredentials: true };
+    },
+  });
 
-  constructor(service: Service) {
-    this.statuses = service.getStatuses();
-    this.tasks = createStore({
-      key: 'ID',
-      loadUrl: `${this.url}/Tasks`,
-      updateUrl: `${this.url}/UpdateTask`,
-      insertUrl: `${this.url}/InsertTask`,
-      onBeforeSend(method, ajaxOptions) {
-        ajaxOptions.xhrFields = { withCredentials: true };
-      },
-    });
-    this.employees = createStore({
-      key: 'ID',
-      loadUrl: `${this.url}/Employees`,
-      onBeforeSend(method, ajaxOptions) {
-        ajaxOptions.xhrFields = { withCredentials: true };
-      },
-    });
-  }
+  readonly employees = createStore({
+    key: 'ID',
+    loadUrl: `${this.url}/Employees`,
+    onBeforeSend(method, ajaxOptions) {
+      ajaxOptions.xhrFields = { withCredentials: true };
+    },
+  });
 
   getSelectedRowKeys<T>(value: T): T[] {
     return value !== null && value !== undefined ? [value] : [];

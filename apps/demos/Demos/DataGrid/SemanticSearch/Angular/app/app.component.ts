@@ -1,5 +1,5 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode } from '@angular/core';
+import { Component, enableProdMode, signal } from '@angular/core';
 import { DxDataGridModule, type DxDataGridTypes } from 'devextreme-angular/ui/data-grid';
 import { DxNumberBoxModule, type DxNumberBoxTypes } from 'devextreme-angular/ui/number-box';
 import { DataSource } from 'devextreme-angular/common/data';
@@ -20,30 +20,26 @@ const url = 'https://js.devexpress.com/Demos/NetCore/api/DataGridSemanticSearch'
   ],
 })
 export class AppComponent {
-  searchValue = '';
+  private searchValue = '';
 
-  similarityFactor = 0.31;
+  readonly similarityFactor = signal(0.31);
 
-  dataSource: DataSource;
-
-  constructor() {
-    this.dataSource = new DataSource({
-      store: AspNetData.createStore({
-        key: 'ID',
-        loadUrl: `${url}/Get`,
-        loadParams: {
-          searchValue: () => this.searchValue,
-          similarityFactor: () => this.similarityFactor,
-        },
-        onBeforeSend: (method, ajaxOptions) => {
-          ajaxOptions.xhrFields = { withCredentials: true };
-        },
-      }),
-    });
-  }
+  readonly dataSource = new DataSource({
+    store: AspNetData.createStore({
+      key: 'ID',
+      loadUrl: `${url}/Get`,
+      loadParams: {
+        searchValue: () => this.searchValue,
+        similarityFactor: () => this.similarityFactor(),
+      },
+      onBeforeSend: (method, ajaxOptions) => {
+        ajaxOptions.xhrFields = { withCredentials: true };
+      },
+    }),
+  });
 
   onSimilarityFactorChanged(e: DxNumberBoxTypes.ValueChangedEvent): void {
-    this.similarityFactor = e.value;
+    this.similarityFactor.set(e.value);
     if (this.searchValue !== '') {
       this.dataSource.reload();
     }

@@ -1,8 +1,8 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode } from '@angular/core';
+import { Component, enableProdMode, inject, signal } from '@angular/core';
 import { DxDataGridModule, DxSelectBoxModule } from 'devextreme-angular';
 import themes from 'devextreme/ui/themes';
-import { Service, Sale } from './app.service';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -20,17 +20,11 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  sales: Sale[];
+  readonly sales = inject(Service).getSales();
 
-  allMode: string;
+  readonly allMode = signal<string>('allPages');
 
-  checkBoxesMode: string;
-
-  constructor(service: Service) {
-    this.sales = service.getSales();
-    this.allMode = 'allPages';
-    this.checkBoxesMode = themes.current().startsWith('generic') ? 'onClick' : 'always';
-  }
+  readonly checkBoxesMode = signal<string>(themes.current().startsWith('generic') ? 'onClick' : 'always');
 }
 
 bootstrapApplication(AppComponent);

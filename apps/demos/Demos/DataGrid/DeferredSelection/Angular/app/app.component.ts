@@ -1,9 +1,9 @@
 import {
   Component,
-  ViewChild,
   AfterViewInit,
   enableProdMode,
-  ChangeDetectorRef,
+  signal,
+  viewChild,
 } from '@angular/core';
 import { DxDataGridModule, DxDataGridComponent, DxButtonModule } from 'devextreme-angular';
 import { query } from 'devextreme-angular/common/data';
@@ -13,6 +13,9 @@ import * as AspNetData from 'devextreme-aspnet-data-nojquery';
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
 }
+
+const MILLISECONDS_IN_DAY = 1000 * 60 * 60 * 24;
+const url = 'https://js.devexpress.com/Demos/NetCore/api/TreeListTasks';
 
 @Component({
   selector: 'demo-app',
@@ -25,46 +28,32 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent implements AfterViewInit {
-  @ViewChild(DxDataGridComponent, { static: false }) dataGrid: DxDataGridComponent;
+  private readonly dataGrid = viewChild.required(DxDataGridComponent);
 
-  MILLISECONDS_IN_DAY = 1000 * 60 * 60 * 24;
+  readonly tasksDataSource = AspNetData.createStore({
+    key: 'Task_ID',
+    loadUrl: `${url}/Tasks`,
+    onBeforeSend(method, ajaxOptions) {
+      ajaxOptions.xhrFields = { withCredentials: true };
+    },
+  });
 
-  tasksDataSource: AspNetData.CustomStore;
+  readonly employeesDataSource = AspNetData.createStore({
+    key: 'ID',
+    loadUrl: `${url}/TaskEmployees`,
+    onBeforeSend(method, ajaxOptions) {
+      ajaxOptions.xhrFields = { withCredentials: true };
+    },
+  });
 
-  employeesDataSource: AspNetData.CustomStore;
-
-  taskCount = 0;
-
-  peopleCount = 0;
-
-  avgDuration = 0;
-
-  constructor(private changeDetectorRef: ChangeDetectorRef) {
-    const url = 'https://js.devexpress.com/Demos/NetCore/api/TreeListTasks';
-
-    this.tasksDataSource = AspNetData.createStore({
-      key: 'Task_ID',
-      loadUrl: `${url}/Tasks`,
-      onBeforeSend(method, ajaxOptions) {
-        ajaxOptions.xhrFields = { withCredentials: true };
-      },
-    });
-
-    this.employeesDataSource = AspNetData.createStore({
-      key: 'ID',
-      loadUrl: `${url}/TaskEmployees`,
-      onBeforeSend(method, ajaxOptions) {
-        ajaxOptions.xhrFields = { withCredentials: true };
-      },
-    });
-  }
+  readonly statistics = signal({ taskCount: 0, peopleCount: 0, avgDuration: 0 });
 
   ngAfterViewInit() {
     this.calculateStatistics();
   }
 
   async calculateStatistics() {
-    const selectedItems = await this.dataGrid.instance.getSelectedRowsData();
+    const selectedItems = await this.dataGrid().instance.getSelectedRowsData();
 
     const totalDuration = selectedItems.reduce((currentValue, item) => {
       const dueDateTime = new Date(item.Task_Due_Date).getTime();
@@ -73,14 +62,15 @@ export class AppComponent implements AfterViewInit {
 
       return currentValue + duration;
     }, 0);
-    const averageDurationInDays = totalDuration / this.MILLISECONDS_IN_DAY / selectedItems.length;
+    const averageDurationInDays = totalDuration / MILLISECONDS_IN_DAY / selectedItems.length;
 
-    this.taskCount = selectedItems.length;
-    this.peopleCount = query(selectedItems)
-      .groupBy('Task_Assigned_Employee_ID')
-      .toArray().length;
-    this.avgDuration = Math.round(averageDurationInDays) || 0;
-    this.changeDetectorRef.markForCheck();
+    this.statistics.set({
+      taskCount: selectedItems.length,
+      peopleCount: query(selectedItems)
+        .groupBy('Task_Assigned_Employee_ID')
+        .toArray().length,
+      avgDuration: Math.round(averageDurationInDays) || 0,
+    });
   }
 }
 

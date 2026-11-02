@@ -1,9 +1,8 @@
 import {
-  ChangeDetectorRef, Component, enableProdMode,
+  Component, enableProdMode, inject, signal,
 } from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
 import Guid from 'devextreme/core/guid';
-import { CustomStore } from 'devextreme-angular/common/data';
 import { DxSelectBoxModule } from 'devextreme-angular';
 import { DxDataGridModule, DxDataGridTypes } from 'devextreme-angular/ui/data-grid';
 import { Service } from './app.service';
@@ -25,33 +24,28 @@ type FirstArgument<T> = T extends (...args: any) => any ? Parameters<T>[0] : nev
   ],
 })
 export class AppComponent {
-  dataSource: CustomStore;
+  readonly dataSource = inject(Service).getDataSource();
 
-  newRowPosition: DxDataGridTypes.NewRowPosition = 'viewportTop';
+  readonly newRowPosition = signal<DxDataGridTypes.NewRowPosition>('viewportTop');
 
-  scrollingMode: DxDataGridTypes.DataGridScrollMode = 'standard';
+  readonly scrollingMode = signal<DxDataGridTypes.DataGridScrollMode>('standard');
 
-  changes = [];
+  readonly changes = signal<Partial<DxDataGridTypes.DataChange>[]>([]);
 
-  editRowKey = null;
+  readonly editRowKey = signal<number | string | null>(null);
 
-  newRowPositionOptions: DxDataGridTypes.NewRowPosition[] = ['first', 'last', 'pageTop', 'pageBottom', 'viewportTop', 'viewportBottom'];
+  readonly newRowPositionOptions: DxDataGridTypes.NewRowPosition[] = ['first', 'last', 'pageTop', 'pageBottom', 'viewportTop', 'viewportBottom'];
 
-  scrollingModeOptions: DxDataGridTypes.DataGridScrollMode[] = ['standard', 'virtual'];
+  readonly scrollingModeOptions: DxDataGridTypes.DataGridScrollMode[] = ['standard', 'virtual'];
 
-  constructor(service: Service, private changeDetectorRef: ChangeDetectorRef) {
-    this.dataSource = service.getDataSource();
-  }
-
-  onAddButtonClick = ({ row }: DxDataGridTypes.ColumnButtonClickEvent) => {
+  readonly onAddButtonClick = ({ row }: DxDataGridTypes.ColumnButtonClickEvent) => {
     const key = new Guid().toString();
-    this.changes = [{
+    this.changes.set([{
       key,
       type: 'insert',
       insertAfterKey: row.key,
-    }];
-    this.editRowKey = key;
-    this.changeDetectorRef.markForCheck();
+    }]);
+    this.editRowKey.set(key);
   };
 
   isAddButtonVisible({ row }: FirstArgument<DxDataGridTypes.ColumnButton['visible']>) {

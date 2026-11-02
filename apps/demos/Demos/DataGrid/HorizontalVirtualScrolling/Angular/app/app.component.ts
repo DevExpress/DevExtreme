@@ -1,6 +1,6 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode } from '@angular/core';
-import { DxDataGridModule, DxDataGridTypes } from 'devextreme-angular/ui/data-grid';
+import { Component, enableProdMode, inject } from '@angular/core';
+import { DxDataGridModule } from 'devextreme-angular/ui/data-grid';
 import { DataSourceOptions } from 'devextreme-angular/common/data';
 import { Service } from './app.service';
 
@@ -18,16 +18,11 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  columns: DxDataGridTypes.Column[];
+  private readonly columnCount = 500;
 
-  dataSource: DataSourceOptions;
+  private readonly rowCount = 50;
 
-  constructor(service: Service) {
-    const columnCount = 500;
-    const rowCount = 50;
-
-    this.dataSource = service.getData(rowCount, columnCount);
-  }
+  readonly dataSource: DataSourceOptions = inject(Service).getData(this.rowCount, this.columnCount);
 }
 
 bootstrapApplication(AppComponent);

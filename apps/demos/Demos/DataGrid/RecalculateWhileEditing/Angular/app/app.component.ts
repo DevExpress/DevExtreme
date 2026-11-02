@@ -1,7 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode } from '@angular/core';
+import { Component, enableProdMode, inject } from '@angular/core';
 import { DxDataGridModule, DxDataGridTypes } from 'devextreme-angular/ui/data-grid';
-import { Order, Service } from './app.service';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -17,16 +17,11 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  orders: Order[];
+  readonly orders = inject(Service).getOrders();
 
-  editorOptions: DxDataGridTypes.Column['editorOptions'];
-
-  constructor(private service: Service) {
-    this.orders = service.getOrders();
-    this.editorOptions = {
-      format: 'currency',
-    };
-  }
+  readonly editorOptions: DxDataGridTypes.Column['editorOptions'] = {
+    format: 'currency',
+  };
 }
 
 bootstrapApplication(AppComponent);

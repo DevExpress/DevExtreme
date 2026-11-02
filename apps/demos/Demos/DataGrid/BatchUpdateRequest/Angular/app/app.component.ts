@@ -1,5 +1,5 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode } from '@angular/core';
+import { Component, enableProdMode, inject } from '@angular/core';
 import { HttpClient, provideHttpClient, withFetch } from '@angular/common/http';
 import { lastValueFrom } from 'rxjs';
 import * as AspNetData from 'devextreme-aspnet-data-nojquery';
@@ -21,17 +21,15 @@ const URL = 'https://js.devexpress.com/Demos/NetCore/api/DataGridBatchUpdateWebA
   ],
 })
 export class AppComponent {
-  ordersStore: AspNetData.CustomStore;
+  private readonly http = inject(HttpClient);
 
-  constructor(private http: HttpClient) {
-    this.ordersStore = AspNetData.createStore({
-      key: 'OrderID',
-      loadUrl: `${URL}/Orders`,
-      onBeforeSend(method, ajaxOptions) {
-        ajaxOptions.xhrFields = { withCredentials: true };
-      },
-    });
-  }
+  readonly ordersStore = AspNetData.createStore({
+    key: 'OrderID',
+    loadUrl: `${URL}/Orders`,
+    onBeforeSend(method, ajaxOptions) {
+      ajaxOptions.xhrFields = { withCredentials: true };
+    },
+  });
 
   onSaving(e: DxDataGridTypes.SavingEvent) {
     e.cancel = true;

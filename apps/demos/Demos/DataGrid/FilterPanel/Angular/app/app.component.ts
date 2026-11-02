@@ -1,10 +1,10 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode } from '@angular/core';
+import { Component, enableProdMode, inject } from '@angular/core';
 import { PositionConfig } from 'devextreme-angular/common/core/animation';
 import { DxFilterBuilderTypes } from 'devextreme-angular/ui/filter-builder';
 import { DxoHeaderFilterComponent } from 'devextreme-angular/ui/nested/header-filter';
 import { DxDataGridModule } from 'devextreme-angular/ui/data-grid';
-import { Order, Service } from './app.service';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -25,19 +25,19 @@ const getOrderDay = function ({ OrderDate }): number {
 })
 
 export class AppComponent {
-  dataSource: Order[];
+  readonly dataSource = inject(Service).getOrders();
 
-  popupPosition: PositionConfig = {
+  readonly popupPosition: PositionConfig = {
     of: window, at: 'top', my: 'top', offset: { y: 10 },
   };
 
-  filterValue = [
+  readonly filterValue = [
     ['Employee', '=', 'Clark Morgan'],
     'and',
     ['OrderDate', 'weekends'],
   ];
 
-  customOperations: DxFilterBuilderTypes.CustomOperation[] = [{
+  readonly customOperations: DxFilterBuilderTypes.CustomOperation[] = [{
     name: 'weekends',
     caption: 'Weekends',
     dataTypes: ['date'],
@@ -48,7 +48,7 @@ export class AppComponent {
     },
   }];
 
-  saleAmountHeaderFilter: DxoHeaderFilterComponent['dataSource'] = [{
+  readonly saleAmountHeaderFilter: DxoHeaderFilterComponent['dataSource'] = [{
     text: 'Less than $3000',
     value: ['SaleAmount', '<', 3000],
   }, {
@@ -73,10 +73,6 @@ export class AppComponent {
     text: 'Greater than $20000',
     value: ['SaleAmount', '>=', 20000],
   }];
-
-  constructor(service: Service) {
-    this.dataSource = service.getOrders();
-  }
 }
 
 bootstrapApplication(AppComponent);

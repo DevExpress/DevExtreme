@@ -1,9 +1,8 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode } from '@angular/core';
+import { Component, enableProdMode, inject } from '@angular/core';
 import { HttpClient, provideHttpClient, withFetch } from '@angular/common/http';
 import { DxDataGridModule } from 'devextreme-angular';
 import * as AspNetData from 'devextreme-aspnet-data-nojquery';
-import { CustomStore } from 'devextreme-angular/common/data';
 import { lastValueFrom } from 'rxjs';
 import 'anti-forgery';
 
@@ -19,28 +18,26 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  dataSource: CustomStore;
+  private readonly httpClient = inject(HttpClient);
 
-  pattern = /^\(\d{3}\) \d{3}-\d{4}$/i;
+  private readonly baseUrl = 'https://js.devexpress.com/Demos/NetCore';
 
-  baseUrl = 'https://js.devexpress.com/Demos/NetCore';
+  private readonly url = `${this.baseUrl}/api/DataGridEmployeesValidation`;
 
-  constructor(private httpClient: HttpClient) {
-    const url = `${this.baseUrl}/api/DataGridEmployeesValidation`;
+  readonly dataSource = AspNetData.createStore({
+    key: 'ID',
+    loadUrl: this.url,
+    insertUrl: this.url,
+    updateUrl: this.url,
+    deleteUrl: this.url,
+    onBeforeSend(method, ajaxOptions) {
+      ajaxOptions.xhrFields = { withCredentials: true };
+    },
+  });
 
-    this.dataSource = AspNetData.createStore({
-      key: 'ID',
-      loadUrl: url,
-      insertUrl: url,
-      updateUrl: url,
-      deleteUrl: url,
-      onBeforeSend(method, ajaxOptions) {
-        ajaxOptions.xhrFields = { withCredentials: true };
-      },
-    });
-  }
+  readonly pattern = /^\(\d{3}\) \d{3}-\d{4}$/i;
 
-  asyncValidation = async (params: Record<string, unknown> & { data: Record<string, unknown> }) => {
+  readonly asyncValidation = async (params: Record<string, unknown> & { data: Record<string, unknown> }) => {
     const emailValidationUrl = `${this.baseUrl}/RemoteValidation/CheckUniqueEmailAddress`;
 
     const result = await lastValueFrom(this.httpClient.get(emailValidationUrl, {

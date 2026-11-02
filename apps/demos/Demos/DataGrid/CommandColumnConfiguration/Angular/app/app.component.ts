@@ -1,9 +1,9 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import {
-  ChangeDetectorRef, Component, enableProdMode,
+  Component, enableProdMode, inject, signal,
 } from '@angular/core';
 import { DxDataGridModule, DxDataGridTypes } from 'devextreme-angular/ui/data-grid';
-import { Service, Employee, State } from './app.service';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -20,14 +20,11 @@ type FirstArgument<T> = T extends (...args: any) => any ? Parameters<T>[0] : nev
   ],
 })
 export class AppComponent {
-  employees: Employee[];
+  private readonly service = inject(Service);
 
-  states: State[];
+  readonly employees = signal(this.service.getEmployees());
 
-  constructor(private service: Service, private changeDetectorRef: ChangeDetectorRef) {
-    this.employees = service.getEmployees();
-    this.states = service.getStates();
-  }
+  readonly states = this.service.getStates();
 
   private static isChief(position: string) {
     return position && ['CEO', 'CMO'].indexOf(position.trim().toUpperCase()) >= 0;
@@ -60,13 +57,15 @@ export class AppComponent {
     }
   }
 
-  onCloneIconClick = (e: DxDataGridTypes.ColumnButtonClickEvent) => {
+  readonly onCloneIconClick = (e: DxDataGridTypes.ColumnButtonClickEvent) => {
     const clonedItem = { ...e.row.data, ID: this.service.getMaxID() };
 
-    this.employees.splice(e.row.rowIndex, 0, clonedItem);
+    this.employees.update((employees) => [
+      ...employees.slice(0, e.row.rowIndex),
+      clonedItem,
+      ...employees.slice(e.row.rowIndex),
+    ]);
     e.event.preventDefault();
-
-    this.changeDetectorRef.detectChanges();
   };
 }
 

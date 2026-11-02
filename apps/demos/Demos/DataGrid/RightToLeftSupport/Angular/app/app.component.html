@@ -2,35 +2,35 @@
   id="gridContainer"
   [dataSource]="dataSource"
   keyExpr="nameEn"
-  [rtlEnabled]="rtlEnabled"
+  [rtlEnabled]="rtlEnabled()"
   [showBorders]="true"
 >
   <dxo-data-grid-paging [pageSize]="15"></dxo-data-grid-paging>
   <dxo-data-grid-pager [visible]="true"></dxo-data-grid-pager>
   <dxo-data-grid-search-panel
     [visible]="true"
-    [placeholder]="placeholder"
+    [placeholder]="placeholder()"
   ></dxo-data-grid-search-panel>
 
   <dxi-data-grid-column
-    [dataField]="rtlEnabled ? 'nameAr' : 'nameEn'"
-    [caption]="rtlEnabled ? 'الدولة' : 'Name'"
+    [dataField]="rtlEnabled() ? 'nameAr' : 'nameEn'"
+    [caption]="rtlEnabled() ? 'الدولة' : 'Name'"
   >
   </dxi-data-grid-column>
   <dxi-data-grid-column
-    [dataField]="rtlEnabled ? 'capitalAr' : 'capitalEn'"
-    [caption]="rtlEnabled ? 'عاصمة' : 'Capital'"
+    [dataField]="rtlEnabled() ? 'capitalAr' : 'capitalEn'"
+    [caption]="rtlEnabled() ? 'عاصمة' : 'Capital'"
   >
   </dxi-data-grid-column>
   <dxi-data-grid-column
     dataField="population"
-    [caption]="rtlEnabled ? 'عدد السكان (نسمة) 2013' : 'Population'"
+    [caption]="rtlEnabled() ? 'عدد السكان (نسمة) 2013' : 'Population'"
     [format]="{ type: 'fixedPoint', precision: 0 }"
   >
   </dxi-data-grid-column>
   <dxi-data-grid-column
     dataField="area"
-    [headerCellTemplate]="rtlEnabled ? 'arabicTemplate' : 'englishTemplate'"
+    [headerCellTemplate]="rtlEnabled() ? 'arabicTemplate' : 'englishTemplate'"
     [format]="{ type: 'fixedPoint', precision: 0 }"
   >
   </dxi-data-grid-column>

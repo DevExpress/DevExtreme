@@ -1,9 +1,9 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode } from '@angular/core';
+import { Component, enableProdMode, inject } from '@angular/core';
 import { exportDataGrid } from 'devextreme-angular/common/export/pdf';
 import { jsPDF } from 'jspdf';
 import { DxDataGridModule, DxDataGridTypes } from 'devextreme-angular/ui/data-grid';
-import { Service, Country } from './app.service';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -19,11 +19,7 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  countries: Country[];
-
-  constructor(service: Service) {
-    this.countries = service.getCountries();
-  }
+  readonly countries = inject(Service).getCountries();
 
   onExporting(e: DxDataGridTypes.ExportingEvent) {
     const doc = new jsPDF();

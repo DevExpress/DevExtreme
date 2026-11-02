@@ -1,7 +1,9 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, ViewChild } from '@angular/core';
+import {
+  Component, enableProdMode, inject, viewChild,
+} from '@angular/core';
 import { DxDataGridModule, DxDataGridComponent } from 'devextreme-angular';
-import { Order, Service } from './app.service';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -17,16 +19,12 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  @ViewChild(DxDataGridComponent, { static: false }) dataGrid: DxDataGridComponent;
+  private readonly dataGrid = viewChild.required(DxDataGridComponent);
 
-  orders: Order[];
-
-  constructor(private service: Service) {
-    this.orders = service.getOrders();
-  }
+  readonly orders = inject(Service).getOrders();
 
   onStateResetClick() {
-    this.dataGrid.instance.state(null);
+    this.dataGrid().instance.state(null);
   }
 
   onRefreshClick() {

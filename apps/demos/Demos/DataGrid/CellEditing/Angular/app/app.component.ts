@@ -1,9 +1,11 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, ViewChild, enableProdMode } from '@angular/core';
+import {
+  Component, enableProdMode, inject, signal, viewChild,
+} from '@angular/core';
 import { DxButtonModule } from 'devextreme-angular';
 import { ArrayStore } from 'devextreme-angular/common/data';
 import { DxDataGridModule, DxDataGridComponent, DxDataGridTypes } from 'devextreme-angular/ui/data-grid';
-import { Service, State } from './app.service';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -20,31 +22,28 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  @ViewChild(DxDataGridComponent, { static: false }) dataGrid: DxDataGridComponent;
+  private readonly dataGrid = viewChild.required(DxDataGridComponent);
 
-  dataSource: ArrayStore;
+  private readonly service = inject(Service);
 
-  states: State[];
+  readonly dataSource = new ArrayStore({
+    key: 'ID',
+    data: this.service.getEmployees(),
+  });
 
-  selectedItemKeys: string[] = [];
+  readonly states = this.service.getStates();
 
-  constructor(service: Service) {
-    this.dataSource = new ArrayStore({
-      key: 'ID',
-      data: service.getEmployees(),
-    });
-    this.states = service.getStates();
-  }
+  readonly selectedItemKeys = signal<string[]>([]);
 
   onSelectionChanged({ selectedRowKeys }: DxDataGridTypes.SelectionChangedEvent) {
-    this.selectedItemKeys = selectedRowKeys;
+    this.selectedItemKeys.set(selectedRowKeys);
   }
 
   deleteRecords() {
-    this.selectedItemKeys.forEach((key) => {
+    this.selectedItemKeys().forEach((key) => {
       this.dataSource.remove(key);
     });
-    this.dataGrid.instance.refresh();
+    this.dataGrid().instance.refresh();
   }
 }
 

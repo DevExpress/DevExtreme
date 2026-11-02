@@ -24,18 +24,14 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  url = 'https://js.devexpress.com/Demos/NetCore/api/DataGridAdvancedMasterDetailView';
+  private readonly url = 'https://js.devexpress.com/Demos/NetCore/api/DataGridAdvancedMasterDetailView';
 
-  suppliersData: DataSource;
-
-  constructor() {
-    this.suppliersData = new DataSource({
-      store: AspNetData.createStore({
-        key: 'SupplierID',
-        loadUrl: `${this.url}/GetSuppliers`,
-      }),
-    });
-  }
+  readonly suppliersData = new DataSource({
+    store: AspNetData.createStore({
+      key: 'SupplierID',
+      loadUrl: `${this.url}/GetSuppliers`,
+    }),
+  });
 }
 
 bootstrapApplication(AppComponent);

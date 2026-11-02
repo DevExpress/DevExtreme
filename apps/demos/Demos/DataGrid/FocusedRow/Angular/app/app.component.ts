@@ -1,10 +1,12 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, ViewChild, enableProdMode } from '@angular/core';
+import {
+  Component, computed, enableProdMode, inject, signal,
+} from '@angular/core';
 
-import { DxNumberBoxComponent, DxNumberBoxModule, DxCheckBoxModule } from 'devextreme-angular';
+import { DxNumberBoxModule, DxCheckBoxModule } from 'devextreme-angular';
 import { DataSource, ArrayStore } from 'devextreme-angular/common/data';
 
-import { DxDataGridComponent, DxDataGridModule, DxDataGridTypes } from 'devextreme-angular/ui/data-grid';
+import { DxDataGridModule, DxDataGridTypes } from 'devextreme-angular/ui/data-grid';
 import { type Task, Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -24,25 +26,26 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  @ViewChild(DxDataGridComponent, { static: false }) dataGrid: DxDataGridComponent;
+  readonly focusedTask = signal<Task | undefined>(undefined);
 
-  @ViewChild(DxNumberBoxComponent, { static: false }) numberBox: DxNumberBoxComponent;
+  readonly taskProgress = computed(() => {
+    const completion = this.focusedTask()?.Task_Completion;
 
-  taskSubject: string;
+    return completion ? `${completion}%` : '';
+  });
 
-  taskDetails: string;
+  readonly focusedRowKey = signal(117);
 
-  taskStatus: string;
+  readonly autoNavigateToFocusedRow = signal(true);
 
-  taskProgress: string;
+  readonly dataSource = new DataSource({
+    store: new ArrayStore({
+      data: inject(Service).getTasks(),
+      key: 'Task_ID',
+    }),
+  });
 
-  focusedRowKey = 117;
-
-  autoNavigateToFocusedRow = true;
-
-  dataSource: DataSource;
-
-  columns: DxDataGridTypes.Column[] = [
+  readonly columns: DxDataGridTypes.Column[] = [
     {
       dataField: 'Task_ID',
       width: 80,
@@ -65,15 +68,6 @@ export class AppComponent {
     },
   ];
 
-  constructor(service: Service) {
-    this.dataSource = new DataSource({
-      store: new ArrayStore({
-        data: service.getTasks(),
-        key: 'Task_ID',
-      }),
-    });
-  }
-
   onFocusedRowChanging(e: DxDataGridTypes.FocusedRowChangingEvent) {
     const rowsCount = e.component.getVisibleRows().length;
     const pageCount = e.component.pageCount();
@@ -94,11 +88,7 @@ export class AppComponent {
   }
 
   onFocusedRowChanged(e: DxDataGridTypes.FocusedRowChangedEvent<Task, number>) {
-    const data = e.row?.data;
-    this.taskSubject = data?.Task_Subject ?? '';
-    this.taskDetails = data?.Task_Description ?? '';
-    this.taskStatus = data?.Task_Status ?? '';
-    this.taskProgress = data?.Task_Completion ? `${data?.Task_Completion}%` : '';
+    this.focusedTask.set(e.row?.data);
   }
 }
 

@@ -1,5 +1,5 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode } from '@angular/core';
+import { Component, enableProdMode, inject } from '@angular/core';
 import { formatMessage } from 'devextreme/localization';
 import { DxDataGridModule, DxDataGridTypes } from 'devextreme-angular/ui/data-grid';
 import { Service, type Vehicle, type AbortRequest } from './app.service';
@@ -22,13 +22,9 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  activeAbortRequest?: AbortRequest;
+  readonly vehicles = inject(Service).getVehicles();
 
-  vehicles: Vehicle[];
-
-  constructor(service: Service) {
-    this.vehicles = service.getVehicles();
-  }
+  private activeAbortRequest?: AbortRequest;
 
   calculateModel(data: Vehicle) {
     return `${data.TrademarkName} ${data.Name}`;

@@ -1,7 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode } from '@angular/core';
+import { Component, enableProdMode, inject, signal } from '@angular/core';
 import { DxDataGridModule, DxCheckBoxModule } from 'devextreme-angular';
-import { Service, Customer } from './app.service';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -18,11 +18,9 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  customers: Customer[];
+  readonly customers = inject(Service).getCustomers();
 
-  constructor(service: Service) {
-    this.customers = service.getCustomers();
-  }
+  readonly autoExpandAll = signal(true);
 }
 
 bootstrapApplication(AppComponent);

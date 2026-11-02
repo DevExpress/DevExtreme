@@ -1,5 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, ViewChild, enableProdMode } from '@angular/core';
+import {
+  Component, enableProdMode, inject, viewChild,
+} from '@angular/core';
 import { jsPDF } from 'jspdf';
 import {
   DxButtonModule, DxTabPanelModule, DxDataGridModule, DxDataGridComponent,
@@ -25,33 +27,26 @@ if (!/localhost/.test(document.location.host)) {
 })
 
 export class AppComponent {
-  @ViewChild('priceDataGrid', { static: false }) priceDataGrid: DxDataGridComponent;
+  private readonly priceDataGrid = viewChild.required<DxDataGridComponent>('priceDataGrid');
 
-  @ViewChild('ratingDataGrid', { static: false }) ratingDataGrid: DxDataGridComponent;
+  private readonly ratingDataGrid = viewChild.required<DxDataGridComponent>('ratingDataGrid');
 
-  priceDataSource: DataSource<Product, number>;
+  private readonly store = new ArrayStore<Product, number>({
+    key: 'Product_ID',
+    data: inject(Service).getProducts(),
+  });
 
-  ratingDataSource: DataSource<Product, number>;
+  readonly priceDataSource = new DataSource<Product, number>({
+    store: this.store,
+    select: ['Product_ID', 'Product_Name', 'Product_Sale_Price', 'Product_Retail_Price'],
+    filter: ['Product_ID', '<', 10],
+  });
 
-  store: ArrayStore<Product, number>;
-
-  constructor(service: Service) {
-    this.store = new ArrayStore<Product, number>({
-      key: 'Product_ID',
-      data: service.getProducts(),
-    });
-    this.priceDataSource = new DataSource<Product, number>({
-      store: this.store,
-      select: ['Product_ID', 'Product_Name', 'Product_Sale_Price', 'Product_Retail_Price'],
-      filter: ['Product_ID', '<', 10],
-    });
-
-    this.ratingDataSource = new DataSource<Product, number>({
-      store: this.store,
-      select: ['Product_ID', 'Product_Name', 'Product_Consumer_Rating', 'Product_Category'],
-      filter: ['Product_ID', '<', 10],
-    });
-  }
+  readonly ratingDataSource = new DataSource<Product, number>({
+    store: this.store,
+    select: ['Product_ID', 'Product_Name', 'Product_Consumer_Rating', 'Product_Category'],
+    filter: ['Product_ID', '<', 10],
+  });
 
   setAlternatingRowsBackground(dataGrid, gridCell, pdfCell) {
     if (gridCell.rowType === 'data') {
@@ -63,26 +58,25 @@ export class AppComponent {
   }
 
   exportGrids() {
-    const context = this;
     const doc = new jsPDF();
 
     exportDataGrid({
       jsPDFDocument: doc,
-      component: context.priceDataGrid.instance,
+      component: this.priceDataGrid().instance,
       topLeft: { x: 7, y: 5 },
       columnWidths: [20, 50, 50, 50],
       customizeCell: ({ gridCell, pdfCell }) => {
-        context.setAlternatingRowsBackground(context.priceDataGrid.instance, gridCell, pdfCell);
+        this.setAlternatingRowsBackground(this.priceDataGrid().instance, gridCell, pdfCell);
       },
     }).then(() => {
       doc.addPage();
       exportDataGrid({
         jsPDFDocument: doc,
-        component: context.ratingDataGrid.instance,
+        component: this.ratingDataGrid().instance,
         topLeft: { x: 7, y: 5 },
         columnWidths: [20, 50, 50, 50],
         customizeCell: ({ gridCell, pdfCell }) => {
-          context.setAlternatingRowsBackground(context.ratingDataGrid.instance, gridCell, pdfCell);
+          this.setAlternatingRowsBackground(this.ratingDataGrid().instance, gridCell, pdfCell);
         },
       }).then(() => {
         doc.save('MultipleGrids.pdf');

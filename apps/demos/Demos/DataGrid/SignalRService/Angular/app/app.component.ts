@@ -1,7 +1,5 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import {
-  ChangeDetectorRef, Component, enableProdMode,
-} from '@angular/core';
+import { Component, enableProdMode, signal } from '@angular/core';
 import { HubConnectionBuilder, HttpTransportType } from '@aspnet/signalr';
 import { DxDataGridModule } from 'devextreme-angular';
 import { CustomStore } from 'devextreme-angular/common/data';
@@ -19,13 +17,9 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  dataSource: CustomStore;
+  readonly dataSource = signal<CustomStore | null>(null);
 
-  connectionStarted: boolean;
-
-  constructor(private changeDetectorRef: ChangeDetectorRef) {
-    this.connectionStarted = false;
-
+  constructor() {
     const hubConnection = new HubConnectionBuilder()
       .withUrl('https://js.devexpress.com/Demos/NetCore/liveUpdateSignalRHub', {
         skipNegotiation: true,
@@ -44,9 +38,7 @@ export class AppComponent {
         hubConnection.on('updateStockPrice', (data: Record<string, unknown>) => {
           store.push([{ type: 'update', key: data.symbol, data }]);
         });
-        this.dataSource = store;
-        this.connectionStarted = true;
-        this.changeDetectorRef.detectChanges();
+        this.dataSource.set(store);
       });
   }
 }

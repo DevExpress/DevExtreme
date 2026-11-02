@@ -20,8 +20,7 @@
   <dxo-data-grid-pager [visible]="true"></dxo-data-grid-pager>
   <dxo-data-grid-group-panel [visible]="true"></dxo-data-grid-group-panel>
   <dxo-data-grid-grouping
-    #expand
-    [autoExpandAll]="true"
+    [autoExpandAll]="autoExpandAll()"
   ></dxo-data-grid-grouping>
 </dx-data-grid>
 <div class="options">
@@ -29,7 +28,7 @@
   <div class="option">
     <dx-check-box
       id="autoExpand"
-      [(value)]="expand.autoExpandAll"
+      [(value)]="autoExpandAll"
       text="Expand All Groups"
     >
     </dx-check-box>

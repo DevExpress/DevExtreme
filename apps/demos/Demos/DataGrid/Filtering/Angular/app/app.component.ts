@@ -1,5 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, ViewChild, enableProdMode } from '@angular/core';
+import {
+  Component, enableProdMode, inject, signal, viewChild,
+} from '@angular/core';
 import {
   DxDataGridComponent,
   DxDataGridModule,
@@ -7,7 +9,7 @@ import {
   DxCheckBoxModule,
 } from 'devextreme-angular';
 import { DxoHeaderFilterComponent } from 'devextreme-angular/ui/nested/header-filter';
-import { Order, Service } from './app.service';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -27,15 +29,15 @@ if (!/localhost/.test(document.location.host)) {
 })
 
 export class AppComponent {
-  @ViewChild(DxDataGridComponent, { static: false }) dataGrid: DxDataGridComponent;
+  private readonly dataGrid = viewChild.required(DxDataGridComponent);
 
-  orders: Order[];
+  readonly orders = inject(Service).getOrders();
 
-  showFilterRow = true;
+  readonly showFilterRow = signal(true);
 
-  showHeaderFilter = true;
+  readonly showHeaderFilter = signal(true);
 
-  applyFilterTypes = [{
+  readonly applyFilterTypes = [{
     key: 'auto',
     name: 'Immediately',
   }, {
@@ -43,7 +45,7 @@ export class AppComponent {
     name: 'On Button Click',
   }];
 
-  saleAmountHeaderFilter: DxoHeaderFilterComponent['dataSource'] = [{
+  readonly saleAmountHeaderFilter: DxoHeaderFilterComponent['dataSource'] = [{
     text: 'Less than $3000',
     value: ['SaleAmount', '<', 3000],
   }, {
@@ -69,11 +71,7 @@ export class AppComponent {
     value: ['SaleAmount', '>=', 20000],
   }];
 
-  currentFilter = this.applyFilterTypes[0].key;
-
-  constructor(service: Service) {
-    this.orders = service.getOrders();
-  }
+  readonly currentFilter = signal(this.applyFilterTypes[0].key);
 
   private static getOrderDay({ OrderDate }) {
     return (new Date(OrderDate)).getDay();
@@ -89,7 +87,7 @@ export class AppComponent {
     return column.defaultCalculateFilterExpression.apply(this, [value, _, target, ...args]);
   }
 
-  orderHeaderFilter = ({ dataSource }) => {
+  readonly orderHeaderFilter = ({ dataSource }) => {
     dataSource.postProcess = (results: unknown[]) => {
       results.push({
         text: 'Weekends',
@@ -100,7 +98,7 @@ export class AppComponent {
   };
 
   clearFilter() {
-    this.dataGrid.instance.clearFilter();
+    this.dataGrid().instance.clearFilter();
   }
 }
 

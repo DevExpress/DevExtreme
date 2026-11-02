@@ -1,7 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode } from '@angular/core';
+import { Component, enableProdMode, computed, inject, signal } from '@angular/core';
 import { DxDataGridModule, DxSelectBoxModule } from 'devextreme-angular';
-import { Service, EuropeanUnion } from './app.service';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -19,21 +19,16 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  dataSource: EuropeanUnion[];
+  readonly dataSource = inject(Service).getEuropeanUnion();
 
-  placeholder = 'Search...';
+  readonly rtlEnabled = signal(false);
 
-  rtlEnabled = false;
+  readonly placeholder = computed(() => (this.rtlEnabled() ? 'بحث' : 'Search...'));
 
-  languages: string[] = ['Arabic (Right-to-Left direction)', 'English (Left-to-Right direction)'];
-
-  constructor(service: Service) {
-    this.dataSource = service.getEuropeanUnion();
-  }
+  readonly languages: string[] = ['Arabic (Right-to-Left direction)', 'English (Left-to-Right direction)'];
 
   onSelectLanguage(data) {
-    this.rtlEnabled = data.value === this.languages[0];
-    this.placeholder = this.rtlEnabled ? 'بحث' : 'Search...';
+    this.rtlEnabled.set(data.value === this.languages[0]);
   }
 }
 

@@ -1,10 +1,9 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode } from '@angular/core';
+import { Component, enableProdMode, inject } from '@angular/core';
 import { DxDataGridModule } from 'devextreme-angular';
 import type { DxChatTypes } from 'devextreme-angular/ui/chat';
 import type { DxButtonGroupTypes } from 'devextreme-angular/ui/button-group';
-import type { AIIntegration } from 'devextreme-angular/common/ai-integration';
-import { Service, type Sale } from './app.service';
+import { Service } from './app.service';
 import { AiService } from './ai/ai.service';
 
 interface SuggestionItem extends DxButtonGroupTypes.Item {
@@ -23,28 +22,22 @@ if (!/localhost/.test(document.location.host)) {
   imports: [DxDataGridModule],
 })
 export class AppComponent {
-  sales: Sale[];
+  readonly sales = inject(Service).getSales();
 
-  aiIntegration: AIIntegration;
-
-  chatConfig: DxChatTypes.Properties;
+  readonly aiIntegration = inject(AiService).getAiIntegration();
 
   private chatInstance: DxChatTypes.InitializedEvent['component'] | null = null;
 
-  constructor(service: Service, aiService: AiService) {
-    this.sales = service.getSales();
-    this.aiIntegration = aiService.getAiIntegration();
-
-    this.chatConfig = {
-      onInitialized: (e: DxChatTypes.InitializedEvent) => {
-        this.chatInstance = e.component;
-      },
-      user: { id: 'user' },
-      suggestions: {
-        items: [
-          {
-            text: '💡 Help',
-            prompt: `💡 The DataGrid AI Assistant allows you to control the component using natural language. You can execute commands such as the following:
+  readonly chatConfig: DxChatTypes.Properties = {
+    onInitialized: (e: DxChatTypes.InitializedEvent) => {
+      this.chatInstance = e.component;
+    },
+    user: { id: 'user' },
+    suggestions: {
+      items: [
+        {
+          text: '💡 Help',
+          prompt: `💡 The DataGrid AI Assistant allows you to control the component using natural language. You can execute commands such as the following:
 • Sort records
 • Apply a filter
 • Search for a specific value
@@ -54,27 +47,26 @@ export class AppComponent {
 • Pin, resize, and reorder columns
 • Configure data summaries
 • Pick a suggestion or enter a custom request to get started.`,
-          },
-          {
-            text: '🔍 Filter Sector by Health',
-            prompt: 'Filter Sector by Health',
-          },
-          {
-            text: '↕️ Sort by Region',
-            prompt: 'Sort by Region',
-          },
-          {
-            text: '🧩 Group by Product',
-            prompt: 'Group by Product',
-            width: 170,
-          },
-        ] as SuggestionItem[],
-        onItemClick: (e: DxButtonGroupTypes.ItemClickEvent) => {
-          this.onSuggestionItemClick(e);
         },
+        {
+          text: '🔍 Filter Sector by Health',
+          prompt: 'Filter Sector by Health',
+        },
+        {
+          text: '↕️ Sort by Region',
+          prompt: 'Sort by Region',
+        },
+        {
+          text: '🧩 Group by Product',
+          prompt: 'Group by Product',
+          width: 170,
+        },
+      ] as SuggestionItem[],
+      onItemClick: (e: DxButtonGroupTypes.ItemClickEvent) => {
+        this.onSuggestionItemClick(e);
       },
-    };
-  }
+    },
+  };
 
   onSuggestionItemClick(e: DxButtonGroupTypes.ItemClickEvent) {
     const { prompt, text } = e.itemData as SuggestionItem;
