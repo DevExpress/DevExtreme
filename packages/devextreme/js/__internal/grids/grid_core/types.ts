@@ -1,6 +1,6 @@
 /* eslint-disable spellcheck/spell-checker */
 import type {
-  ColumnCustomizeTextArg, GridBase, GridBaseOptions, SelectionBase,
+  ColumnCustomizeTextArg, GridBase, GridBaseOptions, SelectionBase, SelectionColumnDisplayMode,
 } from '@js/common/grids';
 import type { PropertyType } from '@js/core';
 import type { Component } from '@js/core/component';
@@ -53,8 +53,8 @@ export interface FormatOptions {
 }
 
 /** @architectureLeak data_grid/summary: core renders summary texts in group rows */
-export interface SummaryTextItem extends Pick<SummaryTotalItem, 'displayFormat' | 'valueFormat' | 'customizeText'> {
-  summaryType: string;
+export interface SummaryTextItem extends Pick<SummaryTotalItem, 'alignment' | 'cssClass' | 'displayFormat' | 'valueFormat' | 'customizeText'> {
+  summaryType?: string;
   value?: unknown;
   columnCaption?: string;
 }
@@ -208,6 +208,7 @@ type TemporarlyOptionsTakenFromTreeList = Pick<TreeListdOptions<unknown, RowKey>
 >;
 interface InternalSelection extends SelectionBase {
   alwaysSelectByShift?: boolean;
+  showCheckBoxesMode?: SelectionColumnDisplayMode;
 }
 
 export interface InternalGridOptions extends

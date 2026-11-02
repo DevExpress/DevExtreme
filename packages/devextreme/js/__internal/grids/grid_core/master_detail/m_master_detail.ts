@@ -280,7 +280,7 @@ const resizing = (Base: ModuleType<ResizingController>) => class ResizingMasterD
     return undefined;
   }
 
-  private _updateMasterDataGridCore(masterDataGrid, masterRowOptions) {
+  public _updateMasterDataGridCore(masterDataGrid, masterRowOptions) {
     const d = Deferred();
 
     if (masterDataGrid.getView('rowsView')?.isFixedColumns?.()) {

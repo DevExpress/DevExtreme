@@ -83,7 +83,7 @@ export const getAppointmentColor = async (
 };
 
 const LIGHT_TEXT_COLOR = '#fff';
-const DARK_TEXT_COLOR = '#000';
+export const DARK_TEXT_COLOR = '#000';
 // The luminance at which white and black text have the same contrast ratio (4.58:1),
 // so picking the text color by this threshold always clears the WCAG AA 4.5:1 ratio.
 const TEXT_COLOR_LUMINANCE_THRESHOLD = Math.sqrt(1.05 * 0.05) - 0.05;
