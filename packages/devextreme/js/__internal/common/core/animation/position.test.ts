@@ -3,7 +3,7 @@ import {
 } from '@jest/globals';
 import $ from '@js/core/renderer';
 
-import positionUtils from './m_position';
+import positionUtils from './position';
 
 describe('position (setup)', () => {
   describe('when called with an element that does not exist in the DOM', () => {
