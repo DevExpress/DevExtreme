@@ -142,15 +142,8 @@ $fileuploader-input-wrapper-vertical-padding: 1em !default;
   }
 }
 
-.dx-fileuploader-button-container,
-.dx-fileuploader-input-container {
-  display: table-cell;
-  vertical-align: middle;
-}
-
 .dx-fileuploader-input-container {
   height: 100%;
-  width: 100%;
   position: relative;
   overflow: hidden;
 }
