@@ -1,1 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 -938.667 1024 1024"><title>stopoutline</title><path d="M768 -171L256 -171L256 -683L768 -683ZM341 -597L341 -256L683 -256L683 -597Z"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 1024 1024">
+<title>stopoutline</title>
+<path d="M768 768h-512v-512h512v512zM341.333 341.333v341.333h341.333v-341.333h-341.333z"/>
+</svg>

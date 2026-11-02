@@ -1,1 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 -938.667 1024 1024"><title>strike</title><path d="M427 -128L597 -128L597 -256L427 -256L427 -128ZM213 -768L213 -640L427 -640L427 -512L597 -512L597 -640L811 -640L811 -768L213 -768ZM128 -341L896 -341L896 -427L128 -427Z"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 1024 1024">
+<title>strike</title>
+<path d="M426.667 810.667h170.667v-128h-170.667v128zM213.333 170.667v128h213.333v128h170.667v-128h213.333v-128h-597.333zM128 597.333h768v-85.333h-768v85.333z"/>
+</svg>

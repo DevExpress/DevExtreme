@@ -1,1 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 -938.667 1024 1024"><title>header</title><path d="M256 -768L384 -768L384 -512L640 -512L640 -768L768 -768L768 -171L640 -171L640 -384L384 -384L384 -171L256 -171Z"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 1024 1024">
+<title>header</title>
+<path d="M256 170.667h128v256h256v-256h128v597.333h-128v-213.333h-256v213.333h-128v-597.333z"/>
+</svg>

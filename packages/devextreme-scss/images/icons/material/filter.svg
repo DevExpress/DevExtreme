@@ -1,1 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 -938.667 1024 1024"><title>filter</title><path d="M427 -171L597 -171L597 -256L427 -256L427 -171ZM128 -683L128 -597L896 -597L896 -683ZM256 -384L768 -384L768 -469L256 -469Z"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 1024 1024">
+<title>filter</title>
+<path d="M426.667 768h170.667v-85.333h-170.667v85.333zM128 256v85.333h768v-85.333h-768zM256 554.667h512v-85.333h-512v85.333z"/>
+</svg>

@@ -1,1 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 -938.667 1024 1024"><title>showpanel</title><path d="M128 -256L683 -256L683 -171L128 -171ZM128 -683L683 -683L683 -597L128 -597ZM939 -427L768 -597L768 -469L128 -469L128 -384L768 -384L768 -256L939 -427Z"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 1024 1024">
+<title>showpanel</title>
+<path d="M128 682.667h554.667v85.333h-554.667v-85.333z"/>
+<path d="M128 256h554.667v85.333h-554.667v-85.333z"/>
+<path d="M938.667 512l-170.667-170.667v128h-640v85.333h640v128l170.667-170.667z"/>
+</svg>

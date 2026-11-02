@@ -1,1 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 -938.667 1024 1024"><title>chevrondoubleright</title><path d="M299 -683L239 -623L434 -427L239 -231L299 -171L555 -427ZM555 -683L495 -623L690 -427L495 -231L555 -171L811 -427Z"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 1024 1024">
+<title>chevrondoubleright</title>
+<path d="M298.667 256l-60.16 60.16 195.413 195.84-195.413 195.84 60.16 60.16 256-256z"/>
+<path d="M554.667 256l-60.16 60.16 195.413 195.84-195.413 195.84 60.16 60.16 256-256z"/>
+</svg>

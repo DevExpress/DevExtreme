@@ -1,12 +1,9 @@
 /* eslint-disable no-bitwise */
 import { compress } from 'wawoff2';
 
-import type { Contour } from './truetype.ts';
-
-// The layout below reproduces the IcoMoon output the icon fonts were made with, byte for byte.
-export const UNITS_PER_EM = 1024;
-export const ASCENT = 960;
-export const DESCENT = -64;
+import {
+  ASCENT, DESCENT, UNITS_PER_EM, type Contour,
+} from './outline.ts';
 
 export interface Version {
   major: number;
@@ -55,15 +52,7 @@ interface EncodedGlyph {
   bounds: Bounds | null;
 }
 
-const origin = (): Contour => [0, 1, 2].map(() => ({ x: 0, y: 0, onCurve: true }));
-
-// .notdef (also mapped from U+FFFD), U+0000, U+0001 and the space, as in every IcoMoon font.
-const serviceGlyphs = (): Glyph[] => [
-  { codes: [0xfffd], advance: UNITS_PER_EM, contours: [] },
-  { codes: [0x0000], advance: 0, contours: [origin()] },
-  { codes: [0x0001], advance: 0, contours: [origin()] },
-  { codes: [0x0020], advance: UNITS_PER_EM / 2, contours: [origin()] },
-];
+const SPACE = 0x20;
 
 const uint16 = (value: number): Buffer => {
   const buffer = Buffer.alloc(2);
@@ -106,19 +95,18 @@ const checksum = (data: Buffer): number => {
 
 const encodeDelta = (
   delta: number,
-  isFirst: boolean,
   bytes: number[],
   shortBit: number,
   sameOrPositiveBit: number,
 ): number => {
-  if (delta === 0 && !isFirst) {
+  if (delta === 0) {
     return sameOrPositiveBit;
   }
 
   if (Math.abs(delta) < 256) {
     bytes.push(Math.abs(delta));
 
-    return shortBit | (delta >= 0 ? sameOrPositiveBit : 0);
+    return shortBit | (delta > 0 ? sameOrPositiveBit : 0);
   }
 
   bytes.push((delta >> 8) & 0xff, delta & 0xff);
@@ -126,29 +114,25 @@ const encodeDelta = (
   return 0;
 };
 
-const compactFlags = (flags: number[], endPoints: number[]): number[] => {
+const compactFlags = (flags: number[]): number[] => {
   const bytes: number[] = [];
 
-  endPoints.forEach((end, contourIndex) => {
-    let index = contourIndex === 0 ? 0 : endPoints[contourIndex - 1] + 1;
+  for (let index = 0; index < flags.length;) {
+    let repeat = 0;
 
-    while (index <= end) {
-      let repeat = 0;
+    const flag = flags[index];
 
-      while (index + repeat < end && flags[index + repeat + 1] === flags[index] && repeat < 255) {
-        repeat += 1;
-      }
-
-      bytes.push(...(repeat ? [flags[index] | 0x08, repeat] : [flags[index]]));
-      index += repeat + 1;
+    while (repeat < 255 && flags[index + repeat + 1] === flag) {
+      repeat += 1;
     }
-  });
+
+    bytes.push(...(repeat ? [flag | 0x08, repeat] : [flag]));
+    index += repeat + 1;
+  }
 
   return bytes;
 };
 
-// IcoMoon specifics: the header bounds take on-curve points only, widened to x = 0 and to
-// the ascent/descent box; a zero first delta is a one-byte short; flag runs stay in a contour.
 const encodeGlyph = (contours: Contour[]): EncodedGlyph => {
   if (contours.length === 0) {
     return {
@@ -157,13 +141,11 @@ const encodeGlyph = (contours: Contour[]): EncodedGlyph => {
   }
 
   const points = contours.flat();
-  const xs = points.filter(({ onCurve }) => onCurve).map(({ x }) => x);
-  const ys = points.filter(({ onCurve }) => onCurve).map(({ y }) => y);
   const bounds = {
-    xMin: Math.min(0, ...xs),
-    yMin: Math.min(DESCENT, ...ys),
-    xMax: Math.max(0, ...xs),
-    yMax: Math.max(ASCENT, ...ys),
+    xMin: Math.min(...points.map(({ x }) => x)),
+    yMin: Math.min(...points.map(({ y }) => y)),
+    xMax: Math.max(...points.map(({ x }) => x)),
+    yMax: Math.max(...points.map(({ y }) => y)),
   };
   const endPoints = contours.reduce<number[]>(
     (ends, contour) => [...ends, (ends.at(-1) ?? -1) + contour.length],
@@ -175,14 +157,14 @@ const encodeGlyph = (contours: Contour[]): EncodedGlyph => {
     const previous = index === 0 ? { x: 0, y: 0 } : points[index - 1];
 
     return (point.onCurve ? 0x01 : 0)
-      | encodeDelta(point.x - previous.x, index === 0, xBytes, 0x02, 0x10)
-      | encodeDelta(point.y - previous.y, index === 0, yBytes, 0x04, 0x20);
+      | encodeDelta(point.x - previous.x, xBytes, 0x02, 0x10)
+      | encodeDelta(point.y - previous.y, yBytes, 0x04, 0x20);
   });
   const data = pad4(Buffer.concat([
     int16(contours.length),
     int16(bounds.xMin), int16(bounds.yMin), int16(bounds.xMax), int16(bounds.yMax),
     ...endPoints.map(uint16), uint16(0),
-    Buffer.from(compactFlags(flags, endPoints)), Buffer.from(xBytes), Buffer.from(yBytes),
+    Buffer.from(compactFlags(flags)), Buffer.from(xBytes), Buffer.from(yBytes),
   ]));
 
   return {
@@ -219,8 +201,8 @@ const buildCmap = (glyphs: Glyph[]): Buffer => {
     ...segments.map(({ delta }) => uint16(delta)),
     ...segments.map(() => uint16(0)),
   ]);
-  // One format 4 subtable shared by the Unicode, Macintosh and Windows records.
-  const records = [[0, 3], [1, 3], [3, 1]];
+  // One format 4 subtable shared by the Unicode and the Windows records.
+  const records = [[0, 3], [3, 1]];
   const subtableOffset = 4 + records.length * 8;
 
   return Buffer.concat([
@@ -231,8 +213,6 @@ const buildCmap = (glyphs: Glyph[]): Buffer => {
     subtable,
   ]);
 };
-
-const NAME_STORAGE_ORDER = [1, 0, 8, 10, 14, 13, 11, 5, 3, 6, 2, 4];
 
 const encodeMacRoman = (text: string): Buffer => Buffer.from([...text].map((char) => {
   if (char === '©') {
@@ -265,45 +245,39 @@ const buildName = (names: FontNames, version: Version): Buffer => {
     [13, names.license],
     [14, names.licenseUrl],
   ]);
-  const platforms = [
+  const records = [
     {
       platformId: 1, encodingId: 0, languageId: 0, encode: encodeMacRoman,
     },
     {
       platformId: 3, encodingId: 1, languageId: 0x409, encode: encodeUtf16,
     },
-  ];
-  const stored = NAME_STORAGE_ORDER.flatMap((nameId) => platforms.map(({ platformId, encode }) => ({
-    key: `${platformId}:${nameId}`,
-    bytes: encode(texts.get(nameId) ?? ''),
+  ].flatMap((platform) => [...texts].map(([nameId, text]) => ({
+    ...platform, nameId, bytes: platform.encode(text),
   })));
-  const offsets = new Map<string, { offset: number; length: number }>();
+  let offset = 0;
+  const headers = records.map(({
+    platformId, encodingId, languageId, nameId, bytes,
+  }) => {
+    const header = Buffer.concat([
+      uint16(platformId), uint16(encodingId), uint16(languageId), uint16(nameId),
+      uint16(bytes.length), uint16(offset),
+    ]);
 
-  stored.reduce((offset, { key, bytes }) => {
-    offsets.set(key, { offset, length: bytes.length });
+    offset += bytes.length;
 
-    return offset + bytes.length;
-  }, 0);
-
-  const records = platforms.flatMap(({ platformId, encodingId, languageId }) => [...texts.keys()]
-    .map((nameId) => {
-      const { offset, length } = offsets.get(`${platformId}:${nameId}`) ?? { offset: 0, length: 0 };
-
-      return Buffer.concat([
-        uint16(platformId), uint16(encodingId), uint16(languageId), uint16(nameId),
-        uint16(length), uint16(offset),
-      ]);
-    }));
+    return header;
+  });
 
   return Buffer.concat([
     uint16(0), uint16(records.length), uint16(6 + 12 * records.length),
-    ...records,
-    ...stored.map(({ bytes }) => bytes),
+    ...headers,
+    ...records.map(({ bytes }) => bytes),
   ]);
 };
 
 const buildOs2 = (glyphs: Glyph[]): Buffer => {
-  const codes = glyphs.slice(1).flatMap((glyph) => glyph.codes);
+  const codes = glyphs.flatMap((glyph) => glyph.codes);
   const advances = glyphs.map(({ advance }) => advance).filter((advance) => advance > 0);
   const averageAdvance = advances.reduce((sum, advance) => sum + advance, 0) / advances.length;
 
@@ -318,7 +292,7 @@ const buildOs2 = (glyphs: Glyph[]): Buffer => {
     uint16(0x40), uint16(Math.min(...codes)), uint16(Math.max(...codes)),
     int16(ASCENT), int16(DESCENT), int16(-DESCENT), uint16(ASCENT), uint16(-DESCENT),
     uint32(1), uint32(0),
-    int16(0), int16(0), uint16(0), uint16(0x20), uint16(0),
+    int16(0), int16(0), uint16(0), uint16(SPACE), uint16(0),
   ]);
 };
 
@@ -371,7 +345,11 @@ export const buildTrueType = (source: IconFontSource): Buffer => {
   const icons = [...source.icons]
     .sort((a, b) => a.code - b.code)
     .map(({ code, contours }) => ({ codes: [code], advance: UNITS_PER_EM, contours }));
-  const glyphs = [...serviceGlyphs(), ...icons];
+  const glyphs: Glyph[] = [
+    { codes: [], advance: UNITS_PER_EM, contours: [] },
+    { codes: [SPACE], advance: UNITS_PER_EM / 2, contours: [] },
+    ...icons,
+  ];
   const encoded = glyphs.map(({ contours }) => encodeGlyph(contours));
   const outlined = encoded.flatMap(({ bounds }, glyphId) => (bounds
     ? [{ ...bounds, advance: glyphs[glyphId].advance }]
@@ -421,7 +399,7 @@ export const buildTrueType = (source: IconFontSource): Buffer => {
   ]));
 };
 
-// WOFF 1.0 keeps every table uncompressed and carries the release in the header version.
+// WOFF keeps the tables uncompressed, so the file does not depend on the zlib version.
 export const buildWoff = (font: Buffer, version: Version): Buffer => {
   const tableCount = font.readUInt16BE(4);
   const directory: Buffer[] = [];
@@ -432,13 +410,14 @@ export const buildWoff = (font: Buffer, version: Version): Buffer => {
     const entry = 12 + index * 16;
     const length = font.readUInt32BE(entry + 12);
     const start = font.readUInt32BE(entry + 8);
+    const data = pad4(font.subarray(start, start + length));
 
     directory.push(Buffer.concat([
       font.subarray(entry, entry + 4), uint32(offset), uint32(length), uint32(length),
       font.subarray(entry + 4, entry + 8),
     ]));
-    bodies.push(pad4(font.subarray(start, start + length)));
-    offset += pad4(font.subarray(start, start + length)).length;
+    bodies.push(data);
+    offset += data.length;
   }
 
   return Buffer.concat([
@@ -453,8 +432,15 @@ export const buildWoff = (font: Buffer, version: Version): Buffer => {
 // so the calls run one at a time and each result is copied at once.
 let compression: Promise<unknown> = Promise.resolve();
 
-export const buildWoff2 = (font: Buffer): Promise<Buffer> => {
-  const result = compression.then(async () => Buffer.from(await compress(font)));
+export const buildWoff2 = (font: Buffer, version: Version): Promise<Buffer> => {
+  const result = compression.then(async () => {
+    const woff2 = Buffer.from(await compress(font));
+
+    woff2.writeUInt16BE(version.major, 24);
+    woff2.writeUInt16BE(version.minor, 26);
+
+    return woff2;
+  });
 
   compression = result.catch(() => undefined);
 

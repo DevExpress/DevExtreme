@@ -1860,6 +1860,9 @@ importers:
       clean-css:
         specifier: 5.3.3
         version: 5.3.3
+      cubic2quad:
+        specifier: 1.2.1
+        version: 1.2.1
       eslint:
         specifier: 'catalog:'
         version: 9.39.5(jiti@2.6.1)
@@ -10098,6 +10101,9 @@ packages:
 
   csstype@3.2.3:
     resolution: {integrity: sha512-z1HGKcYy2xA8AGQfwrn0PAy+PB7X/GSj3UVJW9qKyn43xWa+gl5nXmU4qqLMRzWVLFC8KusUX8T/0kCiOYpAIQ==}
+
+  cubic2quad@1.2.1:
+    resolution: {integrity: sha512-wT5Y7mO8abrV16gnssKdmIhIbA9wSkeMzhh27jAguKrV82i24wER0vL5TGhUJ9dbJNDcigoRZ0IAHFEEEI4THQ==}
 
   custom-event@1.0.1:
     resolution: {integrity: sha512-GAj5FOq0Hd+RsCGVJxZuKaIDXDf3h6GQoNEjFgbLLI/trgtavwUbSnZ5pVfg27DVCaWjIohryS0JFwIJyT2cMg==}
@@ -27204,6 +27210,8 @@ snapshots:
   csstype@2.6.21: {}
 
   csstype@3.2.3: {}
+
+  cubic2quad@1.2.1: {}
 
   custom-event@1.0.1: {}
 

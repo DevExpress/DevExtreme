@@ -1,1 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 -938.667 1024 1024"><title>databarfilled</title><path d="M683 -85L683 -384L853 -384L853 -85L683 -85ZM427 -85L427 -768L597 -768L597 -85L427 -85ZM171 -85L171 -555L341 -555L341 -85Z"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 1024 1024">
+<title>databarfilled</title>
+<path d="M682.667 853.333v-298.667h170.667v298.667h-170.667zM426.667 853.333v-682.667h170.667v682.667h-170.667zM170.667 853.333v-469.333h170.667v469.333h-170.667z"/>
+</svg>

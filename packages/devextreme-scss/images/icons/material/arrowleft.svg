@@ -1,1 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 -938.667 1024 1024"><title>arrowleft</title><path d="M853 -469L334 -469L573 -708L512 -768L171 -427L512 -85L572 -145L334 -384L853 -384L853 -469Z"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 1024 1024">
+<title>arrowleft</title>
+<path d="M853.333 469.333h-519.253l238.507-238.507-60.587-60.16-341.333 341.333 341.333 341.333 60.16-60.16-238.080-238.507h519.253v-85.333z"/>
+</svg>

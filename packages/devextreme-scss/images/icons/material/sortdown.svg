@@ -1,1 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 -938.667 1024 1024"><title>sortdown</title><path d="M512 -68L751 -273L698 -326L546 -205L546 -819L478 -819L478 -205L325 -324L273 -273Z"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 1024 1024">
+<title>sortdown</title>
+<path d="M512 887.467l238.933-204.8-53.248-53.248-151.552 121.515v-614.4h-68.267v614.4l-152.917-119.467-51.883 51.2z"/>
+</svg>

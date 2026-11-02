@@ -4,7 +4,7 @@ import path from 'node:path';
 import {
   ATTRIBUTION, copyright, FONT_FORMATS, ICON_FONTS, type IconFontConfig,
 } from './config.ts';
-import { pathToContours } from './glyph-path.ts';
+import { iconContours, type IconDrawing } from './outline.ts';
 import {
   buildTrueType, buildWoff, buildWoff2, type IconGlyph, type Version,
 } from './writer.ts';
@@ -35,13 +35,6 @@ export const readIconCodes = (packageRoot: string): Map<string, number> => {
     .map(([, name, code]) => [name, parseInt(code, 16)]));
 };
 
-export const readVersion = (packageRoot: string): Version => {
-  const { version } = JSON.parse(readFileSync(path.join(packageRoot, 'package.json'), 'utf8')) as { version: string };
-  const [major, minor] = version.split('.').map(Number);
-
-  return { major, minor };
-};
-
 // Every glyph is drawn by one svg named after the first name of its code in the $icons map.
 export const readIconNames = (codes: Map<string, number>): Map<number, string> => {
   const names = new Map<number, string>();
@@ -53,6 +46,42 @@ export const readIconNames = (codes: Map<string, number>): Map<number, string> =
   });
 
   return names;
+};
+
+export const readVersion = (packageRoot: string): Version => {
+  const { version } = JSON.parse(readFileSync(path.join(packageRoot, 'package.json'), 'utf8')) as { version: string };
+  const [major, minor] = version.split('.').map(Number);
+
+  return { major, minor };
+};
+
+const attribute = (tag: string, name: string): string | undefined => new RegExp(`\\s${name}="([^"]*)"`).exec(tag)?.[1];
+
+export const parseIconSvg = (svg: string): IconDrawing => {
+  const root = /<svg\b[^>]*>/.exec(svg)?.[0] ?? '';
+  const [width, height] = ['width', 'height'].map((name) => Number(attribute(root, name)));
+  const viewBox = (attribute(root, 'viewBox') ?? '').trim().split(/[\s,]+/).map(Number);
+  const tags = [...svg.matchAll(/<([a-zA-Z][\w:-]*)\b[^>]*>/g)];
+  const unsupported = tags.map(([, name]) => name).filter((name) => !['svg', 'title', 'path'].includes(name));
+  const paths = tags.filter(([, name]) => name === 'path').map(([tag]) => tag);
+
+  if (!width || width !== height || viewBox.length !== 4 || viewBox.some(Number.isNaN)) {
+    throw new Error('expected a square width/height and a viewBox');
+  }
+
+  if (unsupported.length) {
+    throw new Error(`only <path> elements are supported, found <${unsupported.join('>, <')}>`);
+  }
+
+  if (paths.some((tag) => attribute(tag, 'transform') !== undefined || attribute(tag, 'fill-rule') === 'evenodd')) {
+    throw new Error('paths with a transform or the evenodd fill rule are not supported');
+  }
+
+  return {
+    size: height,
+    viewBox: viewBox as IconDrawing['viewBox'],
+    paths: paths.map((tag) => attribute(tag, 'd') ?? '').filter(Boolean),
+  };
 };
 
 const readIconGlyphs = (
@@ -75,14 +104,8 @@ const readIconGlyphs = (
       throw new Error(`${where}: name the file ${names.get(code)}.svg, the first name of \\${code.toString(16)} in $icons`);
     }
 
-    const paths = [...readFileSync(path.join(directory, file), 'utf8').matchAll(/<path\b[^>]*\sd="([^"]*)"/g)];
-
-    if (paths.length !== 1) {
-      throw new Error(`${where}: expected exactly one <path>, found ${paths.length}`);
-    }
-
     try {
-      return { code, contours: pathToContours(paths[0][1]) };
+      return { code, contours: iconContours(parseIconSvg(readFileSync(path.join(directory, file), 'utf8'))) };
     } catch (error) {
       throw new Error(`${where}: ${(error as Error).message}`);
     }
@@ -111,7 +134,7 @@ export const buildIconFonts = async (packageRoot: string): Promise<BuiltFontFile
     return [
       { fileName: `${font.fileName}.ttf`, data: ttf },
       { fileName: `${font.fileName}.woff`, data: buildWoff(ttf, version) },
-      { fileName: `${font.fileName}.woff2`, data: await buildWoff2(ttf) },
+      { fileName: `${font.fileName}.woff2`, data: await buildWoff2(ttf, version) },
     ];
   }));
 

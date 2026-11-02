@@ -1,1 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 -938.667 1024 1024"><title>ratingfilled</title><path d="M512 -150L828 43L744 -320L1024 -565L656 -597L512 -939L368 -597L0 -565L279 -320L196 43Z"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 1024 1024">
+<title>ratingfilled</title>
+<path d="M512 788.681l316.416 192.653-83.968-363.093 279.552-244.3-368.128-32.023-143.872-341.917-143.872 341.917-368.128 32.023 279.040 244.3-83.456 363.093 316.416-192.653z"/>
+</svg>

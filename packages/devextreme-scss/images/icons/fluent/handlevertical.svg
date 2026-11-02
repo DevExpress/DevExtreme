@@ -1,1 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 -972.8 1024 1024"><title>handlevertical</title><path d="M512 -922Q533 -922 548 -907T563 -870L563 -51Q563 -30 548 -15T512 0Q491 0 476 -15T461 -51L461 -870Q461 -892 476 -907T512 -922"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 1024 1024">
+<title>handlevertical</title>
+<path d="M512 51.2c28.277 0 51.2 22.923 51.2 51.2v819.2c0 28.277-22.923 51.2-51.2 51.2s-51.2-22.923-51.2-51.2v-819.2c0-28.277 22.923-51.2 51.2-51.2z"/>
+</svg>

@@ -1,1 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 -967.111 1024 1024"><title>equal</title><path d="M146 -512L146 -585L878 -585L878 -512L146 -512ZM146 -293L146 -366L878 -366L878 -293L146 -293Z"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 1024 1024">
+<title>equal</title>
+<path d="M146.286 438.857v-73.143l731.429 0v73.143l-731.429-0z"/>
+<path d="M146.286 658.286v-73.143h731.429v73.143h-731.429z"/>
+</svg>

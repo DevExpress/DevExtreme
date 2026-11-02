@@ -1,1 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 -967.111 1024 1024"><title>chart</title><path d="M114 -398L341 -398L341 -57L114 -57L114 -398ZM398 -853L626 -853L626 -57L398 -57ZM683 -626L910 -626L910 -57L683 -57Z"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 1024 1024">
+<title>chart</title>
+<path d="M113.778 568.889h227.556v341.333h-227.556v-341.333z"/>
+<path d="M398.222 113.778h227.556v796.444h-227.556v-796.444z"/>
+<path d="M682.667 341.333h227.556v568.889h-227.556v-568.889z"/>
+</svg>

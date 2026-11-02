@@ -1,1 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 -967.111 1024 1024"><title>greaterorequal</title><path d="M171 -358L652 -569L171 -780L245 -853L796 -569L245 -284L171 -358ZM171 -130L740 -398L796 -341L245 -57L171 -130Z"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 1024 1024">
+<title>greaterorequal</title>
+<path d="M170.667 609.28l481.28-211.058-481.28-211.058 73.956-73.387 551.822 284.444-551.822 284.444-73.956-73.387z"/>
+<path d="M170.667 836.836l568.889-267.947 56.889 56.889-551.822 284.444-73.956-73.387z"/>
+</svg>

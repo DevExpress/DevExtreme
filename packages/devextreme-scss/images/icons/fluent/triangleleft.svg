@@ -1,1 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 -972.8 1024 1024"><title>triangleleft</title><path d="M423 -471L594 -599Q600 -604 607 -600.5T614 -589L614 -333Q614 -325 607 -321.5T594 -323L423 -451Q418 -454 418 -460.5T423 -471Z"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 1024 1024">
+<title>triangleleft</title>
+<path d="M423.254 501.76l170.666-128c8.438-6.329 20.48-0.308 20.48 10.24v256c0 10.547-12.042 16.568-20.48 10.24l-170.666-128c-6.827-5.12-6.827-15.36 0-20.48z"/>
+</svg>

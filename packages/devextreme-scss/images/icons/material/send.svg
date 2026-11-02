@@ -1,1 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 -938.667 1024 1024"><title>send</title><path d="M85 -43L981 -427L85 -811L85 -512L725 -427L85 -341L85 -43Z"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 1024 1024">
+<title>send</title>
+<path d="M85.333 896l896-384-896-384v298.667l640 85.333-640 85.333v298.667z"/>
+</svg>
