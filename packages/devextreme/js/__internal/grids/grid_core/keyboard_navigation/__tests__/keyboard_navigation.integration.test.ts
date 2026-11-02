@@ -1244,7 +1244,7 @@ describe('Keyboard Navigation', () => {
         });
         const controller = getKeyboardNavigationController(instance);
 
-        expect(controller._isCellValid(getCell(instance, rowIndex, cellIndex))).toBe(expected);
+        expect(controller.isCellValid(getCell(instance, rowIndex, cellIndex))).toBe(expected);
       },
     );
 
@@ -1256,7 +1256,30 @@ describe('Keyboard Navigation', () => {
       });
       const controller = getKeyboardNavigationController(instance);
 
-      expect(controller._isCellValid($('<td>'))).toBe(false);
+      expect(controller.isCellValid($('<td>'))).toBe(false);
+    });
+
+    it('a detached spanning cell is not valid', async () => {
+      const { instance } = await createDataGrid({
+        dataSource: DATA_SOURCE,
+        keyExpr: 'id',
+        ...GROUPED,
+      });
+      const controller = getKeyboardNavigationController(instance);
+
+      expect(controller.isCellValid($('<td>').attr('colspan', '2'))).toBe(false);
+    });
+
+    it('a spanning cell past the last column is not valid', async () => {
+      const { instance } = await createDataGrid({
+        dataSource: DATA_SOURCE,
+        keyExpr: 'id',
+        ...GROUPED,
+      });
+      const controller = getKeyboardNavigationController(instance);
+      const $cell = $('<td>').attr('colspan', '2').appendTo($(instance.getRowElement(1)?.[0]));
+
+      expect(controller.isCellValid($cell)).toBe(false);
     });
   });
 
@@ -1323,6 +1346,154 @@ describe('Keyboard Navigation', () => {
       });
 
       expect(getKeyboardNavigationController(instance).isCellFocusType()).toBe(true);
+    });
+  });
+
+  describe('focus while editing in cell mode', () => {
+    afterEach(() => {
+      jest.restoreAllMocks();
+    });
+
+    const createEditableGrid = (
+      options: DataGridProperties = {},
+    ): ReturnType<typeof createDataGrid> => createDataGrid({
+      dataSource: DATA_SOURCE.slice(0, 3),
+      keyExpr: 'id',
+      columns: ['id', 'name'],
+      editing: { mode: 'cell', allowUpdating: true },
+      keyboardNavigation: { editOnKeyPress: true },
+      ...options,
+    });
+
+    const cancelEditing = (e: { cancel?: boolean }): void => {
+      e.cancel = true;
+    };
+
+    it('arrow keys stay in an editor opened after a fast-editing editor was closed', async () => {
+      const { instance, component } = await createEditableGrid();
+      triggerPointerDown(component.getDataCell(0, 1).getElement() as HTMLElement);
+      jest.runAllTimers();
+      triggerKeyDown(instance, 'a');
+      jest.runAllTimers();
+      instance.closeEditCell();
+      jest.runAllTimers();
+
+      instance.editCell(1, 1);
+      jest.runAllTimers();
+      triggerKeyDown(instance, 'leftArrow', instance.getCellElement(1, 1)?.querySelector('input'));
+      jest.runAllTimers();
+
+      expect(component.getDataCell(1, 1).isEditCell).toBe(true);
+    });
+
+    it('the cell of an editor opened by the API is scrolled into view', async () => {
+      // JSDOM has no layout: without client rects the cell isn't :visible
+      jest.spyOn(Element.prototype, 'getClientRects').mockReturnValue([{}] as unknown as DOMRectList);
+      const { instance } = await createEditableGrid({ height: 100 });
+      const scrollToElement = jest.spyOn(instance.getView('rowsView'), '_scrollToElement');
+
+      instance.editCell(1, 1);
+      jest.runAllTimers();
+
+      expect(scrollToElement.mock.calls.map(([$element]) => $element.get(0)))
+        .toContain(instance.getCellElement(1, 1));
+    });
+
+    it('a clicked cell gets focus when onEditingStart cancels editing', async () => {
+      const { instance, component } = await createEditableGrid({ onEditingStart: cancelEditing });
+      const cell = component.getDataCell(1, 1).getElement() as HTMLElement;
+
+      triggerPointerDown(cell);
+      instance.editCell(1, 1);
+      jest.runAllTimers();
+
+      expect(document.activeElement).toBe(cell);
+      expect(cell.classList.contains('dx-cell-focus-disabled')).toBe(true);
+    });
+
+    it('a cell keeps its visible focus when onEditingStart cancels editing on Enter', async () => {
+      const { instance, component } = await createEditableGrid({ onEditingStart: cancelEditing });
+      const cell = component.getDataCell(1, 1).getElement() as HTMLElement;
+      instance.focus(cell);
+      jest.runAllTimers();
+
+      triggerKeyDown(instance, 'enter');
+      jest.runAllTimers();
+
+      expect(document.activeElement).toBe(cell);
+      expect(cell.classList.contains('dx-cell-focus-disabled')).toBe(false);
+    });
+  });
+
+  describe('editor focus after editing starts in row mode', () => {
+    const createRowEditingGrid = (
+      options: DataGridProperties = {},
+    ): ReturnType<typeof createDataGrid> => createDataGrid({
+      dataSource: DATA_SOURCE.slice(0, 3),
+      keyExpr: 'id',
+      columns: ['id', 'name'],
+      editing: { mode: 'row', allowUpdating: true },
+      ...options,
+    });
+
+    const getEditor = (
+      instance: DataGridInstance,
+      rowIndex: number,
+      columnIndex: number,
+    ): Element | null | undefined => instance.getCellElement(rowIndex, columnIndex)?.querySelector('.dx-texteditor-input');
+
+    it('the editor of the focused cell gets focus', async () => {
+      const { instance } = await createRowEditingGrid();
+      triggerPointerDown(instance.getCellElement(1, 1) as HTMLElement);
+      jest.runAllTimers();
+
+      instance.editRow(1);
+      jest.runAllTimers();
+
+      expect(document.activeElement).toBe(getEditor(instance, 1, 1));
+    });
+
+    it('the editor of the focused cell gets focus when the rows are scrolled', async () => {
+      const { instance } = await createRowEditingGrid({
+        dataSource: Array.from({ length: 200 }, (_, index) => ({ id: index, name: `Row ${index}` })),
+        height: 400,
+        scrolling: { mode: 'virtual' },
+      });
+      const dataController = instance.getController('data');
+      // @ts-expect-error
+      dataController.setViewportPosition(60);
+      jest.runAllTimers();
+      expect(dataController.getRowIndexOffset()).toBeGreaterThan(0);
+
+      triggerPointerDown(instance.getCellElement(1, 1) as HTMLElement);
+      jest.runAllTimers();
+
+      instance.editRow(1);
+      jest.runAllTimers();
+
+      expect(document.activeElement).toBe(getEditor(instance, 1, 1));
+    });
+
+    it('the first editor gets focus when the edit command cell is focused', async () => {
+      const { instance } = await createRowEditingGrid();
+      instance.focus(instance.getCellElement(1, 2) as HTMLElement);
+      jest.runAllTimers();
+
+      instance.option('editing.editRowKey', 2);
+      jest.runAllTimers();
+
+      expect(document.activeElement).toBe(getEditor(instance, 1, 0));
+    });
+
+    it('the first editor gets focus when keyboard navigation is disabled', async () => {
+      const { instance } = await createRowEditingGrid({ keyboardNavigation: { enabled: false } });
+      instance.focus(instance.getCellElement(1, 1) as HTMLElement);
+      jest.runAllTimers();
+
+      instance.editRow(1);
+      jest.runAllTimers();
+
+      expect(document.activeElement).toBe(getEditor(instance, 1, 0));
     });
   });
 });

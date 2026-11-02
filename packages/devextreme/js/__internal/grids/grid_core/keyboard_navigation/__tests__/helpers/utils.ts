@@ -7,9 +7,16 @@ import type { DataGridInstance } from '@ts/grids/grid_core/__tests__/__mock__/he
 
 import { CLICK_EVENT, NAV_KEYS } from './const';
 
+type KeyDownEventInit = Partial<Pick<KeyboardEvent, 'ctrlKey' | 'shiftKey' | 'altKey' | 'metaKey' | 'which'>>;
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function getKeyboardNavigationController(instance: DataGridInstance): any {
   return instance.getController('keyboardNavigation');
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function getHeadersKeyboardNavigationController(instance: DataGridInstance): any {
+  return instance.getController('headersKeyboardNavigation');
 }
 
 export function triggerPointerDown(element: HTMLElement): void {
@@ -22,15 +29,12 @@ export interface KeyDownEventSpies {
   stopPropagation: jest.Mock<() => void>;
 }
 
-export function triggerKeyDown(
-  instance: DataGridInstance,
+function processKeyDown(
+  listenerId: string,
   keyName: string,
-  target?: Element | null,
-  modifiers: Partial<Pick<KeyboardEvent, 'ctrlKey' | 'shiftKey' | 'altKey' | 'metaKey'>> = {},
+  target: Element | null,
+  modifiers: KeyDownEventInit,
 ): KeyDownEventSpies {
-  const controller = getKeyboardNavigationController(instance);
-  const listenerId = controller.keyDownListener;
-
   const processor = keyboard._getProcessor(listenerId);
 
   if (!processor) {
@@ -47,7 +51,7 @@ export function triggerKeyDown(
     altKey: false,
     metaKey: false,
     ...modifiers,
-    target: target ?? controller._getFocusedCell()?.get(0) ?? null,
+    target,
     type: 'keydown',
     preventDefault,
     isDefaultPrevented() { return false; },
@@ -57,4 +61,31 @@ export function triggerKeyDown(
   processor.process(event);
 
   return { preventDefault, stopPropagation };
+}
+
+export function triggerKeyDown(
+  instance: DataGridInstance,
+  keyName: string,
+  target?: Element | null,
+  modifiers: KeyDownEventInit = {},
+): KeyDownEventSpies {
+  const controller = getKeyboardNavigationController(instance);
+
+  return processKeyDown(
+    controller.keyDownListener,
+    keyName,
+    target ?? controller._getFocusedCell()?.get(0) ?? null,
+    modifiers,
+  );
+}
+
+export function triggerHeadersKeyDown(
+  instance: DataGridInstance,
+  keyName: string,
+  target: Element | null,
+  modifiers: KeyDownEventInit = {},
+): KeyDownEventSpies {
+  const controller = getHeadersKeyboardNavigationController(instance);
+
+  return processKeyDown(controller.keyDownListener, keyName, target, modifiers);
 }
