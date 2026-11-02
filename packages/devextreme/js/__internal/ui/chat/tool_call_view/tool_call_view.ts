@@ -35,7 +35,6 @@ const stringifyValue = (value: unknown): string => {
   try {
     return JSON.stringify(value, null, 2);
   } catch {
-    // a circular structure or a BigInt cannot be serialized
     return String(value);
   }
 };
