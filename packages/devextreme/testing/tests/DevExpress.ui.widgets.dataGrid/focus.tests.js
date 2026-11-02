@@ -3463,7 +3463,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         // act
         const $cell = keyboardController._getNextCell('downArrow');
         // assert
-        assert.ok(keyboardController._isCellValid($cell), 'Found valid cell');
+        assert.ok(keyboardController.isCellValid($cell), 'Found valid cell');
     });
 
     QUnit.testInActiveWindow('DataGrid should focus the row bellow by arrowDown key if grid focused and if selection multiple', function(assert) {
