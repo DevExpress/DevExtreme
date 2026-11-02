@@ -134,7 +134,6 @@ catalogs:
 allowBuilds:
   '@parcel/watcher': true
   '@swc/core': true
-  cldr-data: true
   core-js: true
   es5-ext: true
   esbuild: true
