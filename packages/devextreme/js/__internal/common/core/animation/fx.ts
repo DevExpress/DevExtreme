@@ -30,7 +30,7 @@ import {
   getEasing,
 } from '@ts/common/core/animation/easing';
 import type { TranslateVector } from '@ts/common/core/animation/translator';
-import supportUtils from '@ts/core/utils/m_support';
+import supportUtils from '@ts/core/utils/support';
 
 const window = getWindow();
 const removeEventName = addNamespace(removeEvent, 'dxFX');
@@ -871,8 +871,7 @@ function pushInAnimationQueue($element: dxElementWrapper, animation: Animation):
 }
 
 function getAnimQueueData($element: dxElementWrapper): Animation[] {
-  // @ts-expect-error
-  return $element.data(ANIM_QUEUE_KEY) || [];
+  return $element.data<Animation[] | undefined>(ANIM_QUEUE_KEY) || [];
 }
 
 function writeAnimQueueData($element: dxElementWrapper, queueData: Animation[]): void {
@@ -979,7 +978,7 @@ const stop = function (element: dxElementWrapper | Element | undefined, jumpToEn
   if (!isAnimating($element)) {
     shiftFromAnimationQueue($element, queueData);
   }
-  const animation = $element.data(ANIM_DATA_KEY) as unknown as Animation;
+  const animation = $element.data<Animation | undefined>(ANIM_DATA_KEY);
 
   if (animation) {
     animation.stop(jumpToEnd);

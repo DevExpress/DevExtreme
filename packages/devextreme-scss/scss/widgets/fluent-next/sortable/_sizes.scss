@@ -1,0 +1,8 @@
+@use "../../../_design-system/variables/ds" as ds;
+
+$sortable-clone-opacity: ds.$opacity-90 !default;
+
+$sortable-source-opacity: ds.$opacity-65 !default;
+
+$sortable-placeholder-border-width: ds.$border-width-10 !default;
+$sortable-placeholder-inside-border-width: ds.$border-width-20 !default;

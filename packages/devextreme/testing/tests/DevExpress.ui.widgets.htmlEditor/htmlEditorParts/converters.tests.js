@@ -1,6 +1,6 @@
 import $ from 'jquery';
 
-import DeltaConverter from '__internal/ui/html_editor/converters/m_delta';
+import DeltaConverter from '__internal/ui/html_editor/converters/delta';
 import { getQuill } from 'ui/html_editor/quill_importer';
 
 const { test, module: testModule } = QUnit;

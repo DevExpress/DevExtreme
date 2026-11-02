@@ -40,12 +40,13 @@ import type {
 import type { dxOverlayAnimation, Properties } from '@js/ui/overlay';
 import uiErrors from '@js/ui/widget/ui.errors';
 import documentSizeCallbacks from '@ts/core/utils/document_size_callbacks';
-import domUtils from '@ts/core/utils/m_dom';
-import windowUtils from '@ts/core/utils/m_window';
+import domUtils from '@ts/core/utils/dom';
 import selectors from '@ts/core/utils/selectors';
+import windowUtils from '@ts/core/utils/window';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { SupportedKeys } from '@ts/core/widget/widget';
 import Widget from '@ts/core/widget/widget';
+import { themeModeChangedCallback } from '@ts/ui/m_themes_callback';
 import type {
   BaseControllerProperties,
   ControllerOverlayElements,
@@ -273,6 +274,8 @@ class Overlay<
 
   _viewPortChangeHandle?: () => void;
 
+  _themeModeChangeHandle?: () => void;
+
   _proxiedDocumentDownHandler?: EventHandler;
 
   _supportedKeys(): SupportedKeys {
@@ -414,6 +417,7 @@ class Overlay<
 
     this._$wrapper.attr('data-bind', 'dxControlsDescendantBindings: true');
     this._toggleViewPortSubscription(true);
+    this._toggleThemeModeSubscription(true);
 
     const { hideTopOverlayHandler } = this.option();
 
@@ -629,6 +633,42 @@ class Overlay<
 
     this._positionController.updateContainer(container);
     this._refresh();
+  }
+
+  _toggleThemeModeSubscription(toggle: boolean): void {
+    if (this._themeModeChangeHandle) {
+      themeModeChangedCallback.remove(this._themeModeChangeHandle);
+    }
+
+    if (toggle) {
+      this._themeModeChangeHandle = (): void => {
+        this._themeModeChangeHandler();
+      };
+
+      themeModeChangedCallback.add(this._themeModeChangeHandle);
+    }
+  }
+
+  _themeModeChangeHandler(): void {
+    if (!this._isVisible()) {
+      return;
+    }
+
+    const { $container } = this._positionController;
+    const wrapper = this._$wrapper?.get(0) as HTMLElement | undefined;
+
+    if (!$container || $container.get(0) === wrapper?.parentElement) {
+      return;
+    }
+
+    const focused = domAdapter.getActiveElement(wrapper) as HTMLElement | null;
+    const shouldRestoreFocus = !!wrapper && !!focused && domUtils.contains(wrapper, focused);
+
+    this._moveToContainer();
+
+    if (shouldRestoreFocus) {
+      focused?.focus();
+    }
   }
 
   _renderWrapperAttributes(): void {
@@ -1049,7 +1089,6 @@ class Overlay<
       const $reverseElement = $elements?.eq(elementsCount - i) ?? null;
 
       if (!$first && $currentElement) {
-        // @ts-expect-error is should can get function as callback
         const isTabbableAndNotOverlay = $currentElement?.not(`.${OVERLAY_CONTENT_CLASS}`).is(selectors.tabbable);
         if (isTabbableAndNotOverlay) {
           $first = $currentElement;
@@ -1057,7 +1096,6 @@ class Overlay<
       }
 
       if (!$last && $reverseElement) {
-        // @ts-expect-error is should can get function as callback
         const isTabbableAndNotOverlay = $reverseElement?.not(`.${OVERLAY_CONTENT_CLASS}`).is(selectors.tabbable);
         if (isTabbableAndNotOverlay) {
           $last = $reverseElement;
@@ -1246,7 +1284,6 @@ class Overlay<
 
     let isHidden = false;
 
-    // @ts-expect-error add should can get dxElementWrapper
     $parent.add($parent.parents()).each((index, element) => {
       const $element = $(element);
 
@@ -1583,6 +1620,7 @@ class Overlay<
     }
 
     this._toggleViewPortSubscription(false);
+    this._toggleThemeModeSubscription(false);
     this._toggleSubscriptions(false);
     this._updateZIndexStackPosition(false);
 

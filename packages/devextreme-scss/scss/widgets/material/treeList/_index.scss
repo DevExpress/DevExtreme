@@ -1,12 +1,8 @@
-@use "sass:math";
 @use "colors" as *;
 @use "../colors" as *;
-@use "sizes" as *;
-@use "../../base/mixins" as *;
-@use "../../base/icon_fonts" as *;
+@use "sizes";
 @use "../gridBase" as *;
 @use "../gridBase/colors" as *;
-@use "../gridBase/sizes" as *;
 @use "../../base/treeList" as baseTreeList with (
   $datagrid-border: $datagrid-border,
   $datagrid-drag-header-border-color: $datagrid-drag-header-border-color,

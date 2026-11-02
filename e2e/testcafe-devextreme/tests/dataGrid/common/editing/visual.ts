@@ -300,7 +300,7 @@ test('DataGrid cell with checkbox should have outline on focused', async (t) => 
       const headerPanel = dataGrid.getHeaderPanel();
 
       const scrollTo = async (y) => {
-        await dataGrid.scrollTo(t, { y });
+        await dataGrid.scrollTo(t, { top: y });
         // eslint-disable-next-line local/no-is-ready-without-expect
         return dataGrid.isReady();
       };

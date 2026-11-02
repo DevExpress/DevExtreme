@@ -20,9 +20,9 @@ import { getWidth, setWidth } from '@js/core/utils/size';
 import type { DxEvent, PointerInteractionEvent } from '@js/events';
 import type { dxSliderBaseOptions } from '@js/ui/slider';
 import { current as currentTheme, isMaterial } from '@js/ui/themes';
+import { applyServerDecimalSeparator } from '@ts/core/utils/common';
 import type { InkRipple } from '@ts/core/utils/ink_ripple';
 import { render } from '@ts/core/utils/ink_ripple';
-import { applyServerDecimalSeparator } from '@ts/core/utils/m_common';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { SupportedKeys } from '@ts/core/widget/widget';
 import type { SwipeEndEvent, SwipeStartEvent, SwipeUpdateEvent } from '@ts/events/swipe';
@@ -497,7 +497,7 @@ class Slider<
     e.event.maxLeftOffset = rtlEnabled ? endOffset : startOffset;
     e.event.maxRightOffset = rtlEnabled ? startOffset : endOffset;
 
-    this._itemWidthRatio = getWidth(this.$element()) / swipePixelRatio;
+    this._itemWidthRatio = getWidth(this.$element().get(0)) / swipePixelRatio;
 
     this._needPreventAnimation = true;
   }
@@ -640,7 +640,8 @@ class Slider<
     const e = args.event;
     const { rtlEnabled } = this.option();
 
-    this._currentRatio = (eventData(e).x - (this._$bar.offset()?.left ?? 0)) / getWidth(this._$bar);
+    this._currentRatio = (eventData(e).x - (this._$bar.offset()?.left ?? 0))
+      / Number(getWidth(this._$bar));
 
     if (rtlEnabled) {
       this._currentRatio = 1 - this._currentRatio;
@@ -655,6 +656,7 @@ class Slider<
 
     const value = this._getActualValue();
 
+    // @ts-expect-error the value of a slider is a number
     this._getSubmitElement().val(applyServerDecimalSeparator(value));
     SliderHandle.getInstance<SliderHandle>(this._activeHandle()).option('value', value);
   }

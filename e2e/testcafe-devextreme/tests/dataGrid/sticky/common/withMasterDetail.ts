@@ -21,10 +21,10 @@ test.meta({ browserSize: [900, 800] })('Sticky columns with master-detail', asyn
 
   await testScreenshot(t, takeScreenshot, 'masterdetail-scroll-begin.png', { element: dataGrid.element });
 
-  await dataGrid.scrollTo(t, { x: 100 });
+  await dataGrid.scrollTo(t, { left: 100 });
   await testScreenshot(t, takeScreenshot, 'masterdetail-scroll-center.png', { element: dataGrid.element });
 
-  await dataGrid.scrollTo(t, { x: 10000 });
+  await dataGrid.scrollTo(t, { left: 10000 });
   await testScreenshot(t, takeScreenshot, 'masterdetail-scroll-end.png', { element: dataGrid.element });
 
   await t

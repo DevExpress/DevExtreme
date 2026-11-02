@@ -16,6 +16,9 @@ const TEXTBOX_CLASS = 'dx-textbox';
 const FORM_CLASS = 'dx-form';
 const POPUP_TITLE_CLASS = 'dx-popup-title';
 const FILEUPLOADER_INPUT_CLASS = 'dx-fileuploader-input';
+const HIDDEN_FILE_UPLOADER_CLASS = 'dx-htmleditor-hidden-content';
+const QUILL_CONTAINER_CLASS = 'dx-quill-container';
+const HTML_EDITOR_CONTENT_CLASS = 'dx-htmleditor-content';
 
 const DIALOG_OK_BUTTON_SELECTOR = '.dx-formdialog .dx-toolbar .dx-button';
 const ASPECT_RATIO_BUTTON_SELECTOR = '.dx-buttongroup .dx-button';
@@ -499,6 +502,48 @@ module('Image uploading integration', {
                 .change()
                 .press('enter');
         });
+
+        test('selected second of two adjacent images is updated in place', function(assert) {
+            const done = assert.async();
+            const $container = $('#htmlEditor');
+            const instance = $container.dxHtmlEditor({
+                toolbar: { items: ['image'] },
+                value: `<img src=${WHITE_PIXEL} width="10" height="10"><img src=${BLACK_PIXEL} width="20" height="20">`,
+                onValueChanged: ({ value }) => {
+                    const whiteIndex = value.indexOf(WHITE_PIXEL);
+                    const orangeIndex = value.indexOf(ORANGE_PIXEL);
+
+                    assert.strictEqual(value.indexOf(BLACK_PIXEL), -1, 'the selected black image is replaced');
+                    assert.notStrictEqual(whiteIndex, -1, 'the white image is kept');
+                    assert.ok(whiteIndex < orangeIndex, 'the new image is placed after the white one');
+                    done();
+                }
+            }).dxHtmlEditor('instance');
+
+            instance.focus();
+
+            setTimeout(() => {
+                instance.setSelection(1, 1);
+            }, 100);
+
+            this.clock.tick(100);
+
+            $container
+                .find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`)
+                .trigger('dxclick');
+
+            const { widthEditor, heightEditor } = this.getSizeEditors($(`.${FORM_CLASS}`));
+
+            assert.strictEqual(Number(widthEditor.option('value')), 20, 'the width of the selected image');
+            assert.strictEqual(Number(heightEditor.option('value')), 20, 'the height of the selected image');
+
+            const $srcInput = $(`.${FIELD_ITEM_CLASS} .${TEXTEDITOR_INPUT_CLASS}`).first().val('');
+
+            keyboardMock($srcInput.eq(0))
+                .type(ORANGE_PIXEL)
+                .change()
+                .press('enter');
+        });
     });
 
     test('Enter in the width editor applies the dialog and passes the key event to valueChanged', function(assert) {
@@ -517,6 +562,35 @@ module('Image uploading integration', {
         assert.strictEqual(valueChangedSpy.callCount, 1, 'valueChanged is raised once');
         const { event } = valueChangedSpy.firstCall.args[0];
         assert.strictEqual(event && event.type, 'keyup', 'the Enter key event is passed to valueChanged');
+    });
+
+    test('changing imageUpload.fileUploaderOptions in the base64 mode does not throw', function(assert) {
+        this.createWidget({ imageUpload: { tabs: ['file'], fileUploadMode: 'base64' } });
+
+        this.instance.option('imageUpload.fileUploaderOptions', { multiple: true });
+
+        assert.ok(true, 'the option is accepted without a file uploader');
+    });
+
+    test('a nested fileUploaderOptions change in the base64 mode keeps the other fileUploaderOptions for the server mode', function(assert) {
+        const testHandler = () => {};
+        this.createWidget({ imageUpload: {
+            tabs: ['file'],
+            fileUploadMode: 'base64',
+            uploadUrl: '/Upload/',
+            fileUploaderOptions: {
+                onBeforeSend: testHandler
+            }
+        } });
+
+        this.instance.option('imageUpload.fileUploaderOptions.multiple', true);
+        this.instance.option('imageUpload.fileUploadMode', 'server');
+        this.clock.tick(TIME_TO_WAIT);
+
+        const fileUploader = this.$element.find(`.${FILE_UPLOADER_CLASS}`).dxFileUploader('instance');
+
+        assert.strictEqual(fileUploader.option('multiple'), true, 'the changed option is applied');
+        assert.strictEqual(fileUploader.option('onBeforeSend'), testHandler, 'the other options are kept');
     });
 
     test('check file uploading by url dimention editors default value', function(assert) {
@@ -883,6 +957,208 @@ module('Image uploading integration', {
             delete this.xhrMock;
             delete this.formDataMock;
         });
+    });
+
+    test('check upload to the server after drop if uploadDirectory is changed at runtime', function(assert) {
+        this.createWidget();
+        this.clock.tick(TIME_TO_WAIT);
+
+        this.instance.option('imageUpload.uploadDirectory', '/newDirectory/');
+
+        this.xhrMock = new window.XMLHttpRequestMock();
+        this._nativeXhr = XMLHttpRequest;
+        window.XMLHttpRequest = this.xhrMock.XMLHttpRequest;
+
+        this.formDataMock = new window.FormDataMock();
+        this._nativeFormData = window.FormData;
+        window.FormData = this.formDataMock.FormData;
+
+        const event = $.Event($.Event('drop', { dataTransfer: { files: [fakeFile] } }));
+        $(this.quillInstance.root).trigger(event);
+
+        const request = this.xhrMock.getInstanceAt();
+        this.clock.tick(this.xhrMock.LOAD_TIMEOUT);
+
+        assert.strictEqual(request && request.uploaded, true, 'upload is called');
+        assert.strictEqual(this.instance.option('value'), '<p>test text</p><p><br></p><p><img src="/newDirectory/fakefile1.jpeg"></p>', 'image is inserted from the new directory');
+
+        window.XMLHttpRequest = this._nativeXhr;
+        window.FormData = this._nativeFormData;
+
+        this.xhrMock.dispose();
+        delete this.xhrMock;
+        delete this.formDataMock;
+    });
+
+    test('drop uploads to the uploadUrl changed at runtime', function(assert) {
+        this.createWidget({ imageUpload: { fileUploadMode: 'server', uploadUrl: '/', uploadDirectory: '/uploadDirectory/' } });
+        this.clock.tick(TIME_TO_WAIT);
+
+        this.instance.option('imageUpload.uploadUrl', '/newUrl/');
+
+        this.xhrMock = new window.XMLHttpRequestMock();
+        this._nativeXhr = XMLHttpRequest;
+        window.XMLHttpRequest = this.xhrMock.XMLHttpRequest;
+
+        this.formDataMock = new window.FormDataMock();
+        this._nativeFormData = window.FormData;
+        window.FormData = this.formDataMock.FormData;
+
+        const event = $.Event($.Event('drop', { dataTransfer: { files: [fakeFile] } }));
+        $(this.quillInstance.root).trigger(event);
+
+        const request = this.xhrMock.getInstanceAt();
+        this.clock.tick(this.xhrMock.LOAD_TIMEOUT);
+
+        assert.strictEqual(request && request.url, '/newUrl/', 'the new uploadUrl is used');
+
+        window.XMLHttpRequest = this._nativeXhr;
+        window.FormData = this._nativeFormData;
+
+        this.xhrMock.dispose();
+        delete this.xhrMock;
+        delete this.formDataMock;
+    });
+
+    test('a runtime uploadUrl does not override fileUploaderOptions.uploadUrl for the drop upload', function(assert) {
+        this.createWidget({
+            imageUpload: {
+                fileUploadMode: 'server',
+                uploadUrl: '/',
+                uploadDirectory: '/uploadDirectory/',
+                fileUploaderOptions: { uploadUrl: '/fromOptions/' },
+            },
+        });
+        this.clock.tick(TIME_TO_WAIT);
+
+        this.instance.option('imageUpload.uploadUrl', '/newUrl/');
+
+        this.xhrMock = new window.XMLHttpRequestMock();
+        this._nativeXhr = XMLHttpRequest;
+        window.XMLHttpRequest = this.xhrMock.XMLHttpRequest;
+
+        this.formDataMock = new window.FormDataMock();
+        this._nativeFormData = window.FormData;
+        window.FormData = this.formDataMock.FormData;
+
+        const event = $.Event($.Event('drop', { dataTransfer: { files: [fakeFile] } }));
+        $(this.quillInstance.root).trigger(event);
+
+        const request = this.xhrMock.getInstanceAt();
+        this.clock.tick(this.xhrMock.LOAD_TIMEOUT);
+
+        assert.strictEqual(request && request.url, '/fromOptions/', 'fileUploaderOptions.uploadUrl wins, as on init');
+
+        window.XMLHttpRequest = this._nativeXhr;
+        window.FormData = this._nativeFormData;
+
+        this.xhrMock.dispose();
+        delete this.xhrMock;
+        delete this.formDataMock;
+    });
+
+    test('drop is not handled by the server upload after fileUploadMode is changed from server to base64', function(assert) {
+        this.createWidget({ imageUpload: { fileUploadMode: 'server', uploadUrl: '/', uploadDirectory: '/uploadDirectory/' } });
+        this.clock.tick(TIME_TO_WAIT);
+
+        this.instance.option('imageUpload.fileUploadMode', 'base64');
+
+        this.xhrMock = new window.XMLHttpRequestMock();
+        this._nativeXhr = XMLHttpRequest;
+        window.XMLHttpRequest = this.xhrMock.XMLHttpRequest;
+
+        this.formDataMock = new window.FormDataMock();
+        this._nativeFormData = window.FormData;
+        window.FormData = this.formDataMock.FormData;
+
+        const event = $.Event($.Event('drop', { dataTransfer: { files: [fakeFile] } }));
+        $(this.quillInstance.root).trigger(event);
+        this.clock.tick(this.xhrMock.LOAD_TIMEOUT);
+
+        assert.notOk(event.isDefaultPrevented(), 'drop is not prevented');
+        assert.strictEqual(this.xhrMock.getInstanceAt(), undefined, 'upload is not called');
+
+        window.XMLHttpRequest = this._nativeXhr;
+        window.FormData = this._nativeFormData;
+
+        this.xhrMock.dispose();
+        delete this.xhrMock;
+        delete this.formDataMock;
+    });
+
+    test('dropped image is uploaded once after fileUploadMode is changed from server to base64 and back', function(assert) {
+        this.createWidget({ imageUpload: { fileUploadMode: 'server', uploadUrl: '/', uploadDirectory: '/uploadDirectory/' } });
+        this.clock.tick(TIME_TO_WAIT);
+
+        this.instance.option('imageUpload.fileUploadMode', 'base64');
+        this.instance.option('imageUpload.fileUploadMode', 'server');
+
+        this.xhrMock = new window.XMLHttpRequestMock();
+        this._nativeXhr = XMLHttpRequest;
+        window.XMLHttpRequest = this.xhrMock.XMLHttpRequest;
+
+        this.formDataMock = new window.FormDataMock();
+        this._nativeFormData = window.FormData;
+        window.FormData = this.formDataMock.FormData;
+
+        const event = $.Event($.Event('drop', { dataTransfer: { files: [fakeFile] } }));
+        $(this.quillInstance.root).trigger(event);
+        this.clock.tick(this.xhrMock.LOAD_TIMEOUT);
+
+        assert.strictEqual(this.xhrMock.getInstanceAt(1), undefined, 'upload is called once');
+        assert.strictEqual(this.instance.option('value'), serverUploadMarkup, 'image is inserted once');
+
+        window.XMLHttpRequest = this._nativeXhr;
+        window.FormData = this._nativeFormData;
+
+        this.xhrMock.dispose();
+        delete this.xhrMock;
+        delete this.formDataMock;
+    });
+
+    test('dropped image is uploaded once after fileUploadMode is changed from server to both', function(assert) {
+        this.createWidget({ imageUpload: { fileUploadMode: 'server', uploadUrl: '/', uploadDirectory: '/uploadDirectory/' } });
+        this.clock.tick(TIME_TO_WAIT);
+
+        this.instance.option('imageUpload.fileUploadMode', 'both');
+
+        this.xhrMock = new window.XMLHttpRequestMock();
+        this._nativeXhr = XMLHttpRequest;
+        window.XMLHttpRequest = this.xhrMock.XMLHttpRequest;
+
+        this.formDataMock = new window.FormDataMock();
+        this._nativeFormData = window.FormData;
+        window.FormData = this.formDataMock.FormData;
+
+        const event = $.Event($.Event('drop', { dataTransfer: { files: [fakeFile] } }));
+        $(this.quillInstance.root).trigger(event);
+        this.clock.tick(this.xhrMock.LOAD_TIMEOUT);
+
+        assert.strictEqual(this.$element.find(`.${HIDDEN_FILE_UPLOADER_CLASS}`).length, 1, 'there is one file uploader');
+        assert.strictEqual(this.xhrMock.getInstanceAt(1), undefined, 'upload is called once');
+        assert.strictEqual(this.instance.option('value'), serverUploadMarkup, 'image is inserted once');
+
+        window.XMLHttpRequest = this._nativeXhr;
+        window.FormData = this._nativeFormData;
+
+        this.xhrMock.dispose();
+        delete this.xhrMock;
+        delete this.formDataMock;
+    });
+
+    test('file uploader container is removed in the base64 mode and rendered once after fileUploadMode is changed back to server', function(assert) {
+        this.createWidget({ imageUpload: { fileUploadMode: 'server', uploadUrl: '/' } });
+        const getUploaderContainers = () => this.$element
+            .find(`.${QUILL_CONTAINER_CLASS}`)
+            .children()
+            .not(`.${HTML_EDITOR_CONTENT_CLASS}`);
+
+        this.instance.option('imageUpload.fileUploadMode', 'base64');
+        const containersCountInBase64Mode = getUploaderContainers().length;
+        this.instance.option('imageUpload.fileUploadMode', 'server');
+
+        assert.strictEqual(containersCountInBase64Mode, 0, 'there is no file uploader container in the base64 mode');
+        assert.strictEqual(getUploaderContainers().length, 1, 'there is one file uploader container in the server mode');
     });
 
     test('file uploading to the server with drop should not raise error if uploadDirectory is not set', function(assert) {

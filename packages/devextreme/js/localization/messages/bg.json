@@ -124,6 +124,7 @@
         "dxDataGrid-aiAssistantAbortConfirmText": "Затварянето на чата на AI асистента прекъсва текущите заявки. Искате ли да затворите чата?",
         "dxDataGrid-aiAChatEmptyViewMessage": "Чатът е празен",
         "dxDataGrid-aiChatEmptyViewPrompt": "AI асистентът е готов да отговори на вашите въпроси.",
+        "dxDataGrid-aiChatTextareaPlaceholder": "Ask AI Assistant...",
         "dxDataGrid-aiPromptEditorTitle": "AI редактор на подсказки",
         "dxDataGrid-aiPromptEditorPlaceholder": "Инструктирайте AI да генерира стойности за колоната...",
         "dxDataGrid-aiPromptEditorApplyButton": "Прилагане",
@@ -919,6 +920,8 @@
         "dxGantt-showDependencies": "Показване на зависимости",
         "dxGantt-dialogStartDateValidation": "Началната дата трябва да е след {0}",
         "dxGantt-dialogEndDateValidation": "Крайната дата трябва да е след {0}",
+
+        "dxMap-markerAriaLabel": "Map marker",
 
         "dxGallery-itemName": "Елемент от галерия",
 

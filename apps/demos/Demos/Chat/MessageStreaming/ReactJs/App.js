@@ -1,5 +1,6 @@
 import React, { useCallback, useMemo } from 'react';
 import Chat from 'devextreme-react/chat';
+import Toolbar, { Item } from 'devextreme-react/toolbar';
 import { loadMessages } from 'devextreme-react/common/core/localization';
 import { user } from './data.js';
 import Message from './Message.js';
@@ -15,9 +16,14 @@ loadMessages({
 });
 export default function App() {
   const {
-    alerts, typingUsers, isStreaming, insertMessage, fetchAIResponse, stopStreaming,
-  } =
-    useApi();
+    alerts,
+    typingUsers,
+    isStreaming,
+    insertMessage,
+    fetchAIResponse,
+    stopStreaming,
+    clearMessages,
+  } = useApi();
   const onMessageEntered = useCallback(
     async ({ message }) => {
       insertMessage({ id: Date.now(), ...message });
@@ -67,21 +73,45 @@ export default function App() {
         },
     [isStreaming, stopStreaming],
   );
+  const clearButtonOptions = useMemo(
+    () => ({
+      icon: 'clearhistory',
+      stylingMode: 'text',
+      hint: 'Clear chat',
+      disabled: isStreaming,
+      onClick: clearMessages,
+    }),
+    [isStreaming, clearMessages],
+  );
   return (
-    <Chat
-      dataSource={dataSource}
-      reloadOnChange={false}
-      showAvatar={false}
-      showDayHeaders={false}
-      user={user}
-      height={710}
-      onMessageEntered={onMessageEntered}
-      alerts={alerts}
-      typingUsers={typingUsers}
-      messageRender={messageRender}
-      emptyViewRender={emptyViewRender}
-      sendButtonOptions={sendButtonOptions}
-      speechToTextEnabled={true}
-    />
+    <div className="ai-chat-card">
+      <Toolbar>
+        <Item
+          location="before"
+          text="AI Assistant"
+          cssClass="ai-chat-title"
+        />
+        <Item
+          location="after"
+          widget="dxButton"
+          options={clearButtonOptions}
+        />
+      </Toolbar>
+      <Chat
+        dataSource={dataSource}
+        reloadOnChange={false}
+        showAvatar={false}
+        showDayHeaders={false}
+        user={user}
+        height={710}
+        onMessageEntered={onMessageEntered}
+        alerts={alerts}
+        typingUsers={typingUsers}
+        messageRender={messageRender}
+        emptyViewRender={emptyViewRender}
+        sendButtonOptions={sendButtonOptions}
+        speechToTextEnabled={true}
+      />
+    </div>
   );
 }

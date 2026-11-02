@@ -96,7 +96,7 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
       startDate,
       this.option().currentDate,
       this.option().intervalCount,
-      startDate ? dateUtils.getFirstMonthDate(startDate) as Date : undefined,
+      startDate ? dateUtils.getFirstMonthDate(startDate) : undefined,
     );
   }
 

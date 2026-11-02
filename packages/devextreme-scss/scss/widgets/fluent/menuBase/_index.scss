@@ -2,10 +2,7 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../menu/colors" as *;
-@use "../button/sizes" as *;
-@use "../common/mixins" as *;
 @use "../../base/icon_fonts" as *;
-@use "../../base/mixins" as *;
 @use "../../base/menuBase";
 
 .dx-menu-item {

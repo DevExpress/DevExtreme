@@ -45,10 +45,14 @@ import MessageList from '@ts/ui/chat/messagelist';
 import Suggestions, { type SuggestionsOptions } from '@ts/ui/chat/suggestions';
 import type { DataChange } from '@ts/ui/collection/collection_widget.base';
 
+export interface Properties extends ChatProperties {
+  _inputFieldPlaceholder?: string;
+}
+
 const CHAT_CLASS = 'dx-chat';
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 
-class Chat extends Widget<ChatProperties> {
+class Chat extends Widget<Properties> {
   _messageBox!: MessageBox;
 
   _messageList!: MessageList;
@@ -87,7 +91,7 @@ class Chat extends Widget<ChatProperties> {
 
   _sendButtonAction?: (e: Partial<SendButtonClickEvent>) => void;
 
-  _getDefaultOptions(): ChatProperties {
+  _getDefaultOptions(): Properties {
     return {
       ...super._getDefaultOptions(),
       activeStateEnabled: true,
@@ -130,6 +134,7 @@ class Chat extends Widget<ChatProperties> {
       onTypingStart: undefined,
       onAttachmentDownloadClick: undefined,
       onInputFieldTextChanged: undefined,
+      _inputFieldPlaceholder: undefined,
     };
   }
 
@@ -517,6 +522,7 @@ class Chat extends Widget<ChatProperties> {
       inputFieldText,
       speechToTextEnabled,
       speechToTextOptions,
+      _inputFieldPlaceholder: inputFieldPlaceholder,
     } = this.option();
 
     const sendButtonOptions = this._getSendButtonOptionsWithAction();
@@ -531,6 +537,7 @@ class Chat extends Widget<ChatProperties> {
       focusStateEnabled,
       hoverStateEnabled,
       text: inputFieldText,
+      placeholder: inputFieldPlaceholder,
       speechToTextEnabled,
       speechToTextOptions,
       sendButtonOptions,
@@ -718,7 +725,7 @@ class Chat extends Widget<ChatProperties> {
     return $input;
   }
 
-  _optionChanged(args: OptionChanged<ChatProperties>): void {
+  _optionChanged(args: OptionChanged<Properties>): void {
     const { name, fullName, value } = args;
 
     switch (name) {
@@ -744,6 +751,9 @@ class Chat extends Widget<ChatProperties> {
         break;
       case 'inputFieldText':
         this._messageBox.option('text', value);
+        break;
+      case '_inputFieldPlaceholder':
+        this._messageBox.option('placeholder', value);
         break;
       case 'items':
         this._messageList.option(name, this.option('items'));

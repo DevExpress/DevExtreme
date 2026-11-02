@@ -334,6 +334,27 @@ describe('AI Assistant error handling', () => {
         }),
       ]);
     });
+
+    it('should fail when buildResponseSchema throws', async () => {
+      buildResponseSchemaSpy.mockImplementation(() => {
+        throw new Error('Unsupported schema type');
+      });
+
+      const { model } = await createDataGridWithAiAndPopup();
+
+      model.sendAiRequest('Sort by name');
+      jest.runAllTimers();
+      await flushAsync();
+
+      const messages = await model.loadMessages();
+
+      expect(messages).toEqual([
+        expect.objectContaining({
+          status: MessageStatus.Failure,
+          errorText: 'An unexpected error occurred. Please try again.',
+        }),
+      ]);
+    });
   });
 
   describe('request abort', () => {

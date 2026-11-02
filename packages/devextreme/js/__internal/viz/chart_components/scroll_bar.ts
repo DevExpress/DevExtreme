@@ -5,9 +5,9 @@
 /* eslint-disable no-multi-assign */
 /* eslint-disable prefer-destructuring */
 
-import { noop } from '@ts/core/utils/m_common';
-import { extend } from '@ts/core/utils/m_extend';
-import { isDefined } from '@ts/core/utils/m_type';
+import { noop } from '@ts/core/utils/common';
+import { extend } from '@ts/core/utils/extend';
+import { isDefined } from '@ts/core/utils/type';
 import type { EngineEvent } from '@ts/events/core/events_engine';
 import eventsEngine from '@ts/events/core/events_engine';
 import { end as dragEventEnd, move as dragEventMove, start as dragEventStart } from '@ts/events/drag';

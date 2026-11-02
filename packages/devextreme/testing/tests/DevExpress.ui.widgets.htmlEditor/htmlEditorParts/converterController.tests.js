@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import 'ui/html_editor';
 
-import ConverterController from '__internal/ui/html_editor/m_converterController';
+import ConverterController from '__internal/ui/html_editor/converterController';
 
 const { test } = QUnit;
 

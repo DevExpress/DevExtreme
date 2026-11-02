@@ -15,7 +15,7 @@ export interface HeaderOptions {
   tabIndex?: number;
   focusStateEnabled?: boolean;
   useDropDownViewSwitcher: boolean;
-  firstDayOfWeek?: DayOfWeek;
+  firstDayOfWeek: DayOfWeek;
   toolbar: SafeSchedulerOptions['toolbar'];
   onCurrentViewChange: (name: string) => void;
   onCurrentDateChange: (date: Date) => void;
@@ -28,7 +28,7 @@ export type Step = 'day' | 'week' | 'month' | 'agenda';
 export interface IntervalOptions {
   date: Date;
   step: Step;
-  firstDayOfWeek?: number;
+  firstDayOfWeek: number;
   intervalCount: number;
   agendaDuration?: number;
   skippedDays: number[];

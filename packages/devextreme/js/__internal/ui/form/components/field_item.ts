@@ -79,9 +79,8 @@ function subscribeWrapperInvalidClassToggle(
 function tryGetValidationTargetInstance(
   $validationTarget: dxElementWrapper,
 ): Editor | undefined {
-  // @ts-expect-error ts-error
-  return $validationTarget?.data(VALIDATION_TARGET_CLASS)
-    || $validationTarget?.parent?.()?.data(VALIDATION_TARGET_CLASS);
+  return $validationTarget?.data<Editor | undefined>(VALIDATION_TARGET_CLASS)
+    || $validationTarget?.parent?.()?.data<Editor | undefined>(VALIDATION_TARGET_CLASS);
 }
 
 function getTemplateData(

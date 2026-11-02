@@ -1,6 +1,6 @@
-import '@ts/ui/html_editor/converters/m_delta';
+import '@ts/ui/html_editor/converters/delta';
 
-// @ts-expect-error ts-error
+// @ts-expect-error events.d.ts does not declare Event
 import { Event as dxEvent } from '@js/common/core/events';
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import scrollEvents from '@js/common/core/events/gesture/emitter.gesture.scroll';
@@ -18,7 +18,7 @@ import type { Callback } from '@js/core/utils/callbacks';
 import Callbacks from '@js/core/utils/callbacks';
 import {
   deferRender,
-  // @ts-expect-error ts-error
+  // @ts-expect-error common.d.ts does not declare executeAsync
   executeAsync,
   noop,
 } from '@js/core/utils/common';
@@ -33,15 +33,17 @@ import type { Properties as PopupProperties } from '@js/ui/popup';
 import { getNextFocusableElement, getPreviousFocusableElement } from '@ts/core/utils/focus';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Editor from '@ts/ui/editor/editor';
-import ConverterController, { type BaseConverter } from '@ts/ui/html_editor/m_converterController';
-import { getQuill } from '@ts/ui/html_editor/m_quill_importer';
-import QuillRegistrator from '@ts/ui/html_editor/m_quill_registrator';
-import getWordMatcher from '@ts/ui/html_editor/matchers/m_wordLists';
+import ConverterController, { type BaseConverter } from '@ts/ui/html_editor/converterController';
+import getWordMatcher from '@ts/ui/html_editor/matchers/wordLists';
+import { getQuill } from '@ts/ui/html_editor/quill_importer';
+import QuillRegistrator from '@ts/ui/html_editor/quill_registrator';
 import type { DialogPromise } from '@ts/ui/html_editor/types';
 import FormDialog from '@ts/ui/html_editor/ui/formDialog';
 import { sanitizeHtml } from '@ts/ui/html_editor/utils/html_sanitizer';
 import { prepareScrollData } from '@ts/ui/text_box/utils.scroll';
 
+import type { BaseHtmlEditorModule } from './modules/base';
+import type { TableModule, UploaderModule } from './types/quill';
 import type { AIDialogResult, AIDialogShowPayload } from './ui/aiDialog';
 import AIDialog from './ui/aiDialog';
 
@@ -53,11 +55,20 @@ const HTML_EDITOR_CONTENT_CLASS = 'dx-htmleditor-content';
 
 const ANONYMOUS_TEMPLATE_NAME = 'htmlContent';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- clipboard/enable are untyped
 export type QuillInstance = any;
 
 type ModulesConfig = Record<string, unknown>;
 type FocusEvent = DxEvent & { relatedTarget?: Element };
+
+type OptionModuleName = 'imageUpload' | 'resizing' | 'tableContextMenu' | 'tableResizing';
+type OptionModule = BaseHtmlEditorModule & Required<Pick<BaseHtmlEditorModule, 'option'>>;
+
+interface ToolbarModuleMethods {
+  focusFirstItem: () => boolean;
+  repaint: () => void;
+  updateHistoryWidgets: () => void;
+}
 
 interface TextSelection {
   index: number;
@@ -101,7 +112,7 @@ class HtmlEditor extends Editor<Properties> {
 
   _$htmlContainer!: dxElementWrapper;
 
-  _contentRenderedDeferred?: DeferredObj<unknown>;
+  _contentRenderedDeferred?: DeferredObj<void>;
 
   _$templateResult?: dxElementWrapper;
 
@@ -111,7 +122,7 @@ class HtmlEditor extends Editor<Properties> {
 
   _getDefaultOptions(): Properties {
     const { editorStylingMode } = config();
-    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing -- '' falls back too
     const stylingMode = editorStylingMode || 'outlined';
 
     return {
@@ -313,13 +324,12 @@ class HtmlEditor extends Editor<Properties> {
     }
   }
 
-  // @ts-expect-error ts-error
-  _renderContentImpl(): Promise<unknown> {
+  _renderContentImpl(): Promise<void> {
     this._contentRenderedDeferred = Deferred();
 
     const renderContentPromise = this._contentRenderedDeferred.promise();
 
-    // eslint-disable-next-line @typescript-eslint/no-floating-promises
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises -- result not used
     super._renderContentImpl();
 
     this._renderHtmlEditor();
@@ -338,7 +348,7 @@ class HtmlEditor extends Editor<Properties> {
   }
 
   _attachFocusEvents(): void {
-    // eslint-disable-next-line @typescript-eslint/no-floating-promises
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises -- result not used
     deferRender(super._attachFocusEvents.bind(this));
   }
 
@@ -420,7 +430,7 @@ class HtmlEditor extends Editor<Properties> {
 
     eventsEngine.on(
       $scrollContainer,
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- NAME is always set
       addNamespace(scrollEvents.init, this.NAME!),
       initScrollData,
       noop,
@@ -428,7 +438,7 @@ class HtmlEditor extends Editor<Properties> {
 
     eventsEngine.on(
       $scrollContainer,
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- NAME is always set
       addNamespace(pointerEvents.move, this.NAME!),
       this._pointerMoveHandler.bind(this),
     );
@@ -618,7 +628,7 @@ class HtmlEditor extends Editor<Properties> {
     if (shouldRenderAIDialog) {
       const { aiIntegration } = this.option();
 
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- checked just above
       this._aiDialog = new AIDialog(this.$element(), aiIntegration!);
     }
   }
@@ -645,9 +655,9 @@ class HtmlEditor extends Editor<Properties> {
     return [optionName, value];
   }
 
-  _moduleOptionChanged(moduleName: string, args: OptionChanged<Properties>): void {
+  _moduleOptionChanged(moduleName: OptionModuleName, args: OptionChanged<Properties>): void {
     const moduleInstance = this.getModule(moduleName);
-    const shouldPassOptionsToModule = Boolean(moduleInstance);
+    const shouldPassOptionsToModule = !!moduleInstance;
 
     if (shouldPassOptionsToModule) {
       moduleInstance.option(...this._prepareModuleOptions(args));
@@ -676,8 +686,7 @@ class HtmlEditor extends Editor<Properties> {
     if (isDefined(this._aiDialog)) {
       const { aiIntegration } = this.option();
 
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      this._aiDialog.updateAIIntegration(aiIntegration!);
+      this._aiDialog.updateAIIntegration(aiIntegration);
 
       return;
     }
@@ -796,8 +805,8 @@ class HtmlEditor extends Editor<Properties> {
     }
   }
 
-  _applyToolbarMethod(methodName: string): unknown {
-    return this.getModule('toolbar')?.[methodName]();
+  _applyToolbarMethod(methodName: keyof ToolbarModuleMethods): unknown {
+    return this.getModule<ToolbarModuleMethods>('toolbar')?.[methodName]();
   }
 
   addCleanCallback(callback: () => unknown): void {
@@ -820,8 +829,12 @@ class HtmlEditor extends Editor<Properties> {
     return this._getRegistrator().getQuill().import(componentPath);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  getModule(moduleName: string): any {
+  getModule(moduleName: OptionModuleName): OptionModule | undefined;
+  getModule(moduleName: 'table'): TableModule | undefined;
+  getModule(moduleName: 'uploader'): UploaderModule | undefined;
+  getModule<T = unknown>(moduleName: string): T | undefined;
+  getModule(moduleName: string): unknown {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return -- _quillInstance is any
     return this._applyQuillMethod('getModule', moduleName);
   }
 

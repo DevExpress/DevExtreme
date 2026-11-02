@@ -8,6 +8,8 @@ import {
 import type { Message } from '@js/ui/chat';
 import { custom } from '@js/ui/dialog';
 import * as themes from '@js/ui/themes';
+import { themeLength } from '@ts/core/utils/theme_length';
+import type { z } from 'zod';
 
 import {
   AI_ASSISTANT_AUTHOR_ID,
@@ -28,6 +30,7 @@ import {
   isPopupOptions,
   isTitleOption,
   isUserMessage,
+  makeOpenAICompatible,
 } from '../utils';
 
 jest.mock('@js/ui/dialog', () => ({
@@ -41,6 +44,10 @@ jest.mock('@js/ui/themes', () => ({
   current: jest.fn().mockReturnValue('generic.light'),
   isFluent: jest.fn().mockReturnValue(false),
   isCompact: jest.fn().mockReturnValue(false),
+}));
+
+jest.mock('@ts/core/utils/theme_length', () => ({
+  themeLength: jest.fn(),
 }));
 
 describe('isAIMessage', () => {
@@ -456,6 +463,68 @@ describe('expandTypeArraysToAnyOf', () => {
   });
 });
 
+describe('makeOpenAICompatible', () => {
+  it('lists every object property in required', () => {
+    const jsonSchema: z.core.JSONSchema.BaseSchema = {
+      type: 'object',
+      properties: { a: { type: 'string' }, b: { type: 'number' } },
+      required: ['a'],
+      additionalProperties: false,
+    };
+
+    makeOpenAICompatible({ jsonSchema });
+
+    expect(jsonSchema.required).toEqual(['a', 'b']);
+  });
+
+  it('does not add required to an object without properties', () => {
+    const jsonSchema: z.core.JSONSchema.BaseSchema = {
+      type: 'object',
+      properties: {},
+      additionalProperties: false,
+    };
+
+    makeOpenAICompatible({ jsonSchema });
+
+    expect(jsonSchema).toEqual({
+      type: 'object',
+      properties: {},
+      additionalProperties: false,
+    });
+  });
+
+  it('adds additionalProperties false when it is missing', () => {
+    const jsonSchema: z.core.JSONSchema.BaseSchema = {
+      type: 'object',
+      properties: { a: { type: 'string' } },
+    };
+
+    makeOpenAICompatible({ jsonSchema });
+
+    expect(jsonSchema.additionalProperties).toBe(false);
+  });
+
+  it('keeps existing additionalProperties', () => {
+    const jsonSchema: z.core.JSONSchema.BaseSchema = {
+      type: 'object',
+      properties: { a: { type: 'string' } },
+      additionalProperties: { type: 'string' },
+    };
+
+    makeOpenAICompatible({ jsonSchema });
+
+    expect(jsonSchema.additionalProperties).toEqual({ type: 'string' });
+  });
+
+  it('leaves other schemas unchanged', () => {
+    const jsonSchema: z.core.JSONSchema.BaseSchema = { type: 'string' };
+
+    makeOpenAICompatible({ jsonSchema });
+
+    expect(jsonSchema).toEqual({ type: 'string' });
+  });
+});
+
 describe('hoistSchemaRefs', () => {
   it('returns empty object when no schemas have $ref', () => {
     const schema: JsonSchema = {
@@ -605,102 +674,6 @@ describe('hoistSchemaRefs', () => {
     });
   });
 
-  describe('inline-path refs', () => {
-    it('hoists an inline $ref to root-level $defs', () => {
-      const schema: JsonSchema = {
-        type: 'object',
-        properties: {
-          expr: {
-            anyOf: [
-              { type: 'string' },
-              {
-                type: 'object',
-                properties: {
-                  child: { $ref: '#/properties/expr' },
-                },
-              },
-            ],
-          },
-        },
-      };
-
-      const result = hoistSchemaRefs([
-        { prefix: 'test', schema },
-      ]);
-
-      expect(result.test_properties_expr).toBeDefined();
-
-      const props = schema.properties as JsonSchema;
-      const exprNode = props.expr as JsonSchema;
-      const branches = exprNode.anyOf as JsonSchema[];
-      expect(branches[1].properties).toEqual({
-        child: { $ref: '#/$defs/test_properties_expr' },
-      });
-    });
-
-    it('handles recursive inline $ref', () => {
-      const schema: JsonSchema = {
-        type: 'object',
-        properties: {
-          expression: {
-            anyOf: [
-              {
-                anyOf: [
-                  {
-                    type: 'object',
-                    properties: {
-                      type: { type: 'string', const: 'basic' },
-                      field: { type: 'string' },
-                    },
-                    additionalProperties: false,
-                  },
-                  {
-                    type: 'object',
-                    properties: {
-                      type: { type: 'string', const: 'combined' },
-                      left: { $ref: '#/properties/expression/anyOf/0' },
-                      right: { $ref: '#/properties/expression/anyOf/0' },
-                    },
-                    additionalProperties: false,
-                  },
-                ],
-              },
-              { type: 'null' },
-            ],
-          },
-        },
-      };
-
-      const result = hoistSchemaRefs([
-        { prefix: 'filter', schema },
-      ]);
-
-      const defName = 'filter_properties_expression_anyOf_0';
-      expect(result[defName]).toBeDefined();
-
-      const props = schema.properties as JsonSchema;
-      const exprNode = props.expression as JsonSchema;
-      const exprAnyOf = exprNode.anyOf as JsonSchema[];
-      const innerAnyOf = exprAnyOf[0].anyOf as JsonSchema[];
-      expect(innerAnyOf[1].properties).toEqual(
-        expect.objectContaining({
-          left: { $ref: `#/$defs/${defName}` },
-          right: { $ref: `#/$defs/${defName}` },
-        }),
-      );
-
-      const hoistedDef = result[defName] as JsonSchema;
-      const hoistedInner = hoistedDef.anyOf as JsonSchema[];
-      const hoistedProps = hoistedInner[1].properties as JsonSchema;
-      expect(hoistedProps.left).toEqual({
-        $ref: `#/$defs/${defName}`,
-      });
-      expect(hoistedProps.right).toEqual({
-        $ref: `#/$defs/${defName}`,
-      });
-    });
-  });
-
   it('skips schemas without $ref', () => {
     const schemaWithRefs: JsonSchema = {
       type: 'object',
@@ -803,6 +776,35 @@ describe('createConfirmDialog', () => {
     expect(custom).toHaveBeenCalledWith(
       expect.objectContaining({
         width: AI_ASSISTANT_CONFIRM_DIALOG_WIDTH,
+      }),
+    );
+  });
+
+  it('should take the width the theme declares on the grid element', () => {
+    (themes.isCompact as jest.Mock).mockReturnValue(true);
+    (themeLength as jest.Mock).mockReturnValue(333);
+    const gridElement = document.createElement('div');
+
+    createConfirmDialog(undefined, gridElement);
+
+    expect((themeLength as jest.Mock).mock.calls[0])
+      .toEqual([gridElement, '--dx-grid-ai-confirm-dialog-width']);
+    expect(custom).toHaveBeenCalledWith(
+      expect.objectContaining({
+        width: 333,
+      }),
+    );
+  });
+
+  it('should keep the legacy width when the theme declares nothing on the grid element', () => {
+    (themes.isCompact as jest.Mock).mockReturnValue(true);
+    (themeLength as jest.Mock).mockReturnValue(undefined);
+
+    createConfirmDialog(undefined, document.createElement('div'));
+
+    expect(custom).toHaveBeenCalledWith(
+      expect.objectContaining({
+        width: AI_ASSISTANT_CONFIRM_DIALOG_COMPACT_WIDTH,
       }),
     );
   });

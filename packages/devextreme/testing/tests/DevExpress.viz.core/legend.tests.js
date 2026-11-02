@@ -2369,6 +2369,44 @@ QUnit.test('Simple title; legend options by default', function(assert) {
     }]);
 });
 
+QUnit.test('The title is erased when no item is visible', function(assert) {
+    this.options.title = {
+        text: 'Simple title',
+        margin: 0
+    };
+    this.data[0].visible = false;
+
+    this.createSimpleLegend().draw(200, 200);
+
+    const titleGroup = this.renderer.g.firstCall.returnValue;
+
+    assert.strictEqual(titleGroup.linkAppend.callCount, 1, 'the title is appended once, by update');
+    assert.strictEqual(titleGroup.linkRemove.callCount, 1, 'the title is removed');
+    assert.ok(titleGroup.linkRemove.lastCall.calledAfter(titleGroup.linkAppend.lastCall), 'the title is removed after it is appended');
+    assert.strictEqual(this.renderer.g.callCount, 1, 'no legend group is created');
+});
+
+QUnit.test('The title is drawn again when an item becomes visible after an empty draw', function(assert) {
+    this.options.title = {
+        text: 'Simple title',
+        margin: 0
+    };
+    this.data[0].visible = false;
+
+    const legend = this.createSimpleLegend();
+    legend.draw(200, 200);
+
+    this.data[0].visible = true;
+    legend.draw(200, 200);
+
+    this.checkTitle(assert, {
+        expectedOffset: {
+            x: 0,
+            y: 0
+        }
+    });
+});
+
 QUnit.test('Simple title with subtitle; legend options by default', function(assert) {
     this.options.title = {
         text: 'Simple title',

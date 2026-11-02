@@ -1,0 +1,8 @@
+@use "colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../../base/box";
+
+.dx-box-item-content {
+  font-size: $global-font-size;
+}

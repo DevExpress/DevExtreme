@@ -15,7 +15,7 @@ import $ from 'jquery';
 import fx from 'common/core/animation/fx';
 import { setupTreeListModules } from '../../helpers/treeListMocks.js';
 import ArrayStore from 'common/data/array_store';
-import gridCoreUtils from '__internal/grids/grid_core/m_utils';
+import gridCoreUtils from '__internal/grids/grid_core/utils';
 
 fx.off = true;
 

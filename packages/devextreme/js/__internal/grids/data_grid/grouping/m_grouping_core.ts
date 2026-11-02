@@ -2,7 +2,7 @@ import { normalizeSortingInfo } from '@js/common/data/utils';
 import $ from '@js/core/renderer';
 import { when } from '@js/core/utils/deferred';
 import { combineFilters } from '@ts/grids/grid_core/filter/utils';
-import gridCoreUtils from '@ts/grids/grid_core/m_utils';
+import gridCoreUtils from '@ts/grids/grid_core/utils';
 
 import gridCore from '../core';
 import type { GroupingDataSourceAdapter } from './m_grouping';

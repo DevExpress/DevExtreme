@@ -12,6 +12,7 @@ import numberLocalization from 'common/core/localization/number';
 import dateLocalization from 'common/core/localization/date';
 import messageLocalization from 'common/core/localization/message';
 import config from 'core/config';
+import coreLocalization from 'common/core/localization/core';
 
 import ExcelJSLocalizationFormatTests from '../DevExpress.exporter/exceljsParts/exceljs.format.tests.js';
 
@@ -928,6 +929,356 @@ QUnit.module('Format helper', () => {
 
             // cleanup
             delete String.prototype.format;
+        });
+    });
+
+    QUnit.module('Global formatting config - format locale (spec, globalize)', () => {
+        const saveGlobalFormats = () => {
+            const globalConfig = config();
+
+            return {
+                dateFormat: globalConfig.dateFormat,
+                timeFormat: globalConfig.timeFormat,
+                dateTimeFormat: globalConfig.dateTimeFormat,
+                numberFormat: globalConfig.numberFormat,
+                dateTimeFormatPresets: globalConfig.dateTimeFormatPresets,
+            };
+        };
+        const restoreGlobalFormats = (saved) => {
+            const globalConfig = config();
+
+            Object.keys(saved).forEach((key) => {
+                const value = saved[key];
+                if(value === undefined) {
+                    delete globalConfig[key];
+                } else {
+                    globalConfig[key] = value;
+                }
+            });
+        };
+
+        QUnit.test('numberFormat locale overrides message locale for Globalize formatting', function(assert) {
+            const saved = saveGlobalFormats();
+            const savedLocale = coreLocalization.locale();
+            const savedGlobalizeLocale = Globalize.locale().locale;
+
+            try {
+                Globalize.locale('de');
+                coreLocalization.locale('de');
+                config({
+                    ...config(),
+                    numberFormat: {
+                        default: {
+                            locale: 'en-US',
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2,
+                        },
+                    },
+                });
+
+                assert.strictEqual(numberLocalization.format(1234.56), '1,234.56');
+            } finally {
+                Globalize.locale(savedGlobalizeLocale);
+                coreLocalization.locale(savedLocale);
+                restoreGlobalFormats(saved);
+            }
+        });
+
+        QUnit.test('preset override that Globalize does not support keeps the preset', function(assert) {
+            const saved = saveGlobalFormats();
+            const savedLocale = coreLocalization.locale();
+            const savedGlobalizeLocale = Globalize.locale().locale;
+            const date = new Date(2020, 0, 2, 14, 5);
+            const setShortDateOverride = (override) => {
+                config({
+                    ...config(),
+                    dateTimeFormatPresets: { shortDate: { default: override } },
+                });
+            };
+
+            try {
+                Globalize.locale('en');
+                coreLocalization.locale('en');
+
+                const expected = dateLocalization.format(date, 'shortDate');
+
+                setShortDateOverride({ year: 'numeric', month: 'long' });
+                assert.strictEqual(dateLocalization.format(date, 'shortDate'), expected, 'Intl options');
+
+                setShortDateOverride({ year: 'numeric', month: 'long', locale: 'de' });
+                assert.strictEqual(dateLocalization.format(date, 'shortDate'), '2.1.2020', 'Intl options with a locale');
+
+                setShortDateOverride({ skeleton: 'yMMM' });
+                assert.strictEqual(dateLocalization.format(date, 'shortDate'), 'Jan 2020', 'skeleton');
+
+                setShortDateOverride({ type: 'longDate' });
+                assert.strictEqual(dateLocalization.format(date, 'shortDate'), dateLocalization.format(date, 'longDate'), 'typed preset');
+            } finally {
+                Globalize.locale(savedGlobalizeLocale);
+                coreLocalization.locale(savedLocale);
+                restoreGlobalFormats(saved);
+            }
+        });
+
+        QUnit.test('explicit number formats without a locale keep the message locale', function(assert) {
+            const saved = saveGlobalFormats();
+            const savedLocale = coreLocalization.locale();
+            const savedGlobalizeLocale = Globalize.locale().locale;
+
+            try {
+                Globalize.locale('de');
+                coreLocalization.locale('de');
+                config({
+                    ...config(),
+                    numberFormat: {
+                        default: {
+                            locale: 'en',
+                        },
+                    },
+                });
+
+                [
+                    '#,##0.00',
+                    { type: '#,##0.00' },
+                    { type: 'fixedPoint', precision: 2 },
+                ].forEach((format) => {
+                    const text = numberLocalization.format(1234.5, format);
+
+                    assert.strictEqual(text, '1.234,50', `format ${JSON.stringify(format)}`);
+                    assert.strictEqual(numberLocalization.parse(text, format), 1234.5, `parse ${JSON.stringify(format)}`);
+                });
+
+                const currencyFormat = { type: 'currency', precision: 2 };
+                const currencyText = numberLocalization.format(1234.5, currencyFormat);
+
+                assert.strictEqual(currencyText, `1.234,50${NBSP}$`, 'format currency');
+                assert.strictEqual(numberLocalization.parse(currencyText, currencyFormat), 1234.5, 'parse currency');
+                assert.strictEqual(numberLocalization.getDecimalSeparator(currencyFormat), ',', 'currency decimal separator');
+
+                assert.strictEqual(numberLocalization.format(1234.5, { type: '#,##0.00', locale: 'en' }), '1,234.50');
+                assert.strictEqual(numberLocalization.getDecimalSeparator(), '.');
+            } finally {
+                Globalize.locale(savedGlobalizeLocale);
+                coreLocalization.locale(savedLocale);
+                restoreGlobalFormats(saved);
+            }
+        });
+
+        QUnit.test('explicit shortDate preset keeps the message locale', function(assert) {
+            const saved = saveGlobalFormats();
+            const savedLocale = coreLocalization.locale();
+            const savedGlobalizeLocale = Globalize.locale().locale;
+
+            try {
+                Globalize.locale('en');
+                coreLocalization.locale('en');
+                config({
+                    ...config(),
+                    dateFormat: {
+                        default: {
+                            locale: 'de-DE',
+                            type: 'shortDate',
+                        },
+                    },
+                });
+
+                assert.strictEqual(
+                    dateLocalization.format(new Date(2020, 0, 2), 'shortDate'),
+                    '1/2/2020',
+                );
+                assert.strictEqual(
+                    dateLocalization.format(new Date(2020, 0, 2), {
+                        locale: 'de-DE',
+                        type: 'shortDate',
+                    }),
+                    '2.1.2020',
+                );
+
+                config({
+                    ...config(),
+                    timeFormat: {
+                        default: {
+                            locale: 'de-DE',
+                            type: 'shortTime',
+                        },
+                    },
+                    dateTimeFormat: {
+                        default: {
+                            locale: 'de-DE',
+                            type: 'shortDateShortTime',
+                        },
+                    },
+                });
+
+                const date = new Date(2020, 0, 2, 14, 5);
+
+                assert.strictEqual(
+                    dateLocalization.format(date, 'shortTime'),
+                    dateLocalization.format(date, { locale: 'en', type: 'shortTime' }),
+                );
+                assert.strictEqual(
+                    dateLocalization.format(date, { locale: 'de-DE', type: 'shortTime' }),
+                    '14:05',
+                );
+                assert.strictEqual(
+                    dateLocalization.format(date, 'shortDateShortTime'),
+                    dateLocalization.format(date, { locale: 'en', type: 'shortDateShortTime' }),
+                );
+                assert.strictEqual(
+                    dateLocalization.format(date, { locale: 'de-DE', type: 'shortDateShortTime' }),
+                    '2.1.2020, 14:05',
+                );
+            } finally {
+                Globalize.locale(savedGlobalizeLocale);
+                coreLocalization.locale(savedLocale);
+                restoreGlobalFormats(saved);
+            }
+        });
+
+        QUnit.test('getTimeSeparator uses the passed locale', function(assert) {
+            const saved = saveGlobalFormats();
+            const savedLocale = coreLocalization.locale();
+            const savedGlobalizeLocale = Globalize.locale().locale;
+
+            try {
+                Globalize.locale('en');
+                coreLocalization.locale('en');
+                config({
+                    ...config(),
+                    timeFormat: {
+                        default: {
+                            locale: 'en',
+                            type: 'shortTime',
+                        },
+                    },
+                });
+
+                assert.strictEqual(dateLocalization.getTimeSeparator('da'), '.');
+                assert.strictEqual(dateLocalization.getTimeSeparator('en'), ':');
+            } finally {
+                Globalize.locale(savedGlobalizeLocale);
+                coreLocalization.locale(savedLocale);
+                restoreGlobalFormats(saved);
+            }
+        });
+
+        QUnit.test('getTimeSeparator without a locale uses the timeFormat locale', function(assert) {
+            const saved = saveGlobalFormats();
+            const savedLocale = coreLocalization.locale();
+            const savedGlobalizeLocale = Globalize.locale().locale;
+
+            try {
+                Globalize.locale('en');
+                coreLocalization.locale('en');
+
+                assert.strictEqual(dateLocalization.getTimeSeparator(), ':');
+
+                config({
+                    ...config(),
+                    timeFormat: {
+                        default: {
+                            locale: 'da',
+                            type: 'shortTime',
+                        },
+                    },
+                });
+
+                assert.strictEqual(dateLocalization.getTimeSeparator(), '.');
+            } finally {
+                Globalize.locale(savedGlobalizeLocale);
+                coreLocalization.locale(savedLocale);
+                restoreGlobalFormats(saved);
+            }
+        });
+
+        QUnit.test('parse with a function format does not take the time separator from timeFormat', function(assert) {
+            const saved = saveGlobalFormats();
+            const savedLocale = coreLocalization.locale();
+            const savedGlobalizeLocale = Globalize.locale().locale;
+
+            try {
+                Globalize.locale('en');
+                coreLocalization.locale('en');
+                config({
+                    ...config(),
+                    timeFormat: {
+                        default: {
+                            locale: 'da',
+                            type: 'shortTime',
+                        },
+                    },
+                });
+
+                const format = (date) => dateLocalization.format(date, 'HH:mm');
+                const parsed = dateLocalization.parse('14:05', format);
+
+                assert.ok(parsed instanceof Date, 'parsed');
+                assert.strictEqual(parsed.getHours(), 14, 'hours');
+                assert.strictEqual(parsed.getMinutes(), 5, 'minutes');
+            } finally {
+                Globalize.locale(savedGlobalizeLocale);
+                coreLocalization.locale(savedLocale);
+                restoreGlobalFormats(saved);
+            }
+        });
+
+        QUnit.test('locale map selects entry by message locale and applies format locale', function(assert) {
+            const saved = saveGlobalFormats();
+            const savedLocale = coreLocalization.locale();
+            const savedGlobalizeLocale = Globalize.locale().locale;
+
+            try {
+                Globalize.locale('de');
+                coreLocalization.locale('de');
+                config({
+                    ...config(),
+                    numberFormat: {
+                        de: {
+                            locale: 'en-US',
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2,
+                        },
+                        default: {
+                            locale: 'de-DE',
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2,
+                        },
+                    },
+                });
+
+                assert.strictEqual(numberLocalization.format(1234.56), '1,234.56');
+            } finally {
+                Globalize.locale(savedGlobalizeLocale);
+                coreLocalization.locale(savedLocale);
+                restoreGlobalFormats(saved);
+            }
+        });
+
+        QUnit.test('locale-only date format uses the Globalize default date', function(assert) {
+            const savedLocale = coreLocalization.locale();
+            const savedGlobalizeLocale = Globalize.locale().locale;
+            const date = new Date(2020, 0, 2);
+
+            try {
+                Globalize.locale('en');
+                coreLocalization.locale('en');
+
+                const localizedDate = Globalize('de').dateFormatter()(date);
+
+                assert.strictEqual(dateLocalization.format(date, { locale: 'de' }), localizedDate);
+                assert.strictEqual(
+                    dateLocalization.format(date, { locale: 'de', type: undefined }),
+                    localizedDate,
+                );
+                assert.notEqual(localizedDate, Globalize('en').dateFormatter()(date));
+                assert.strictEqual(
+                    dateLocalization.format(date, { locale: 'de', day: 'numeric' }),
+                    undefined,
+                );
+            } finally {
+                Globalize.locale(savedGlobalizeLocale);
+                coreLocalization.locale(savedLocale);
+            }
         });
     });
 });

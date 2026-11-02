@@ -5,7 +5,6 @@
 @use "../menu/colors" as *;
 @use "../common/mixins" as *;
 @use "../../base/icon_fonts" as *;
-@use "../../base/mixins" as *;
 @use "../../base/menuBase";
 
 $generic-menu-item-padding-increased: $generic-menu-item-padding-base + 2px !default;

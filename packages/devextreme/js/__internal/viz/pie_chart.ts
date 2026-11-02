@@ -1,10 +1,10 @@
 /* eslint-disable */
 
 import { registerComponent } from '@ts/core/component_registrator';
-import { noop as _noop } from '@ts/core/utils/m_common';
-import { extend as _extend } from '@ts/core/utils/m_extend';
-import { each as _each } from '@ts/core/utils/m_iterator';
-import { isNumeric } from '@ts/core/utils/m_type';
+import { noop as _noop } from '@ts/core/utils/common';
+import { extend as _extend } from '@ts/core/utils/extend';
+import { each as _each } from '@ts/core/utils/iterator';
+import { isNumeric } from '@ts/core/utils/type';
 import consts from '@ts/viz/components/consts';
 import { plugins as annotationsPlugins } from '@ts/viz/core/annotations';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';

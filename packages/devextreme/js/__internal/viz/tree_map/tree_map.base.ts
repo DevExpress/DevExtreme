@@ -4,7 +4,7 @@ import '@ts/viz/tree_map/tiling.squarified';
 import '@ts/viz/tree_map/colorizing.discrete';
 
 import { registerComponent as componentRegistrator } from '@ts/core/component_registrator';
-import { noop } from '@ts/core/utils/m_common';
+import { noop } from '@ts/core/utils/common';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 // PLUGINS_SECTION
 import BaseWidget from '@ts/viz/core/base_widget';

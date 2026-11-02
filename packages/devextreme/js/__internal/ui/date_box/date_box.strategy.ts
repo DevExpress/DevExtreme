@@ -5,6 +5,7 @@ import $ from '@js/core/renderer';
 import type { DxEvent, InteractionEvent } from '@js/events';
 import type { Format } from '@js/localization';
 import type { ToolbarItem } from '@js/ui/popup';
+import { applyDataTypePreset } from '@ts/core/global_format_config';
 import type Calendar from '@ts/ui/calendar/calendar';
 import type { DateBoxBaseProperties } from '@ts/ui/date_box/date_box.base';
 import type DateBox from '@ts/ui/date_box/date_box.base';
@@ -62,8 +63,11 @@ class DateBoxStrategy<
   }
 
   getDisplayFormat(displayFormat?: Format | null): Format {
+    const { type = 'date' } = this.dateBox.option();
     // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-    return displayFormat || 'shortdate';
+    const format = displayFormat || 'shortdate';
+
+    return applyDataTypePreset(format, type) ?? format;
   }
 
   supportedKeys(): Record<string, (e: DxEvent<KeyboardEvent>) => void> {

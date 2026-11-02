@@ -1,11 +1,11 @@
-import domUtils from '__internal/core/utils/m_dom';
-import type from '__internal/core/utils/m_type';
+import domUtils from '__internal/core/utils/dom';
+import type from '__internal/core/utils/type';
 import renderer from '__internal/core/renderer';
 import {
     findTemplates, suitableTemplatesByName, addOneRenderedCall, templateKey,
     getNormalizedTemplateArgs, validateTemplateSource, addPublicElementNormalization,
     defaultCreateElement, acquireIntegrationTemplate, acquireTemplate,
-} from '__internal/core/utils/m_template_manager';
+} from '__internal/core/utils/template_manager';
 import { Template } from '__internal/core/templates/template';
 import { TemplateBase } from '__internal/core/templates/template_base';
 import { EmptyTemplate } from '__internal/core/templates/empty_template';

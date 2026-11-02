@@ -14,8 +14,8 @@ export const calculateStartViewDate: CalculateStartViewDate = (
     startDate,
     currentDate,
     intervalCount,
-    dateUtils.getFirstMonthDate(startDate) as Date,
-  )) as Date;
+    dateUtils.getFirstMonthDate(startDate),
+  ));
 
   return setOptionHour(firstViewDate, startDayHour);
 };

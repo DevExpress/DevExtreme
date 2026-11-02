@@ -1,9 +1,9 @@
 import $ from 'jquery';
 import gridCoreModule from '__internal/grids/data_grid/core';
 import columnResizingReorderingModule from '__internal/grids/data_grid/module_not_extended/columns_resizing_reordering';
-import domUtilsModule from '__internal/core/utils/m_dom';
-import commonUtilsModule from '__internal/core/utils/m_common';
-import typeUtilsModule from '__internal/core/utils/m_type';
+import domUtilsModule from '__internal/core/utils/dom';
+import commonUtilsModule from '__internal/core/utils/common';
+import typeUtilsModule from '__internal/core/utils/type';
 import ArrayStoreModule from 'common/data/array_store';
 import gridBaseMockModule from './gridBaseMocks.js';
 

@@ -1,4 +1,4 @@
-import { dateUtils } from '@ts/core/utils/m_date';
+import { dateUtils } from '@ts/core/utils/date';
 
 import type { DateInterval, ListEntity } from '../../types';
 
@@ -81,7 +81,7 @@ export const expandAllDayRegularPanel = <T extends Pick<ListEntity, 'startDateUT
 
   const startDate = new Date(entity.startDateUTC);
   const endDate = new Date(entity.endDateUTC);
-  endDate.setDate(endDate.getDate() + 1);
+  endDate.setUTCDate(endDate.getUTCDate() + 1);
 
   return {
     ...entity,

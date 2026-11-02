@@ -144,7 +144,7 @@ export interface BaseLegend {
     };
     /**
      * @docid
-     * @default 20
+     * @default 12
      * @public
      */
     markerSize?: number;

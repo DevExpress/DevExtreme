@@ -108,7 +108,7 @@ Browser modules that the import map (and/or `static.ts` artifact redirects) subs
 - **Custom composition** — e.g. `themes.js`, which the import map and `static.ts` both point at. Stubbing is *not* a reason to add a shim; use a `DEBUG_set_*` seam instead.
 - **Globals bridge** — e.g. `jquery.js` / `knockout.js` re-export the classic `<script>` globals after `noConflict()`.
 - **CSS plugin imports** — suites still write `import 'fluent_blue_light.css!'`; `*.css.js` shims call `injectStylesheet.js` to append `<link>` tags.
-- **Vendor / interop quirks** — thin adapters (`jspdf_autotable.js`, `tslib.js`, `zod.js`, …) when the stock ESM build is awkward for the runner.
+- **Vendor / interop quirks** — thin adapters (`jspdf_autotable.js`, `tslib.js`, …) when the stock ESM build is awkward for the runner.
 - **Shared helpers** — `injectStylesheet.js` for theme CSS.
 
 Do **not** put product fixes in these shims — they are test-runner adapters only.

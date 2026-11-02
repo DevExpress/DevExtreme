@@ -4,7 +4,7 @@ import 'ui/data_grid';
 import 'common/data/odata/store';
 
 import $ from 'jquery';
-import gridCoreUtils from '__internal/grids/grid_core/m_utils';
+import gridCoreUtils from '__internal/grids/grid_core/utils';
 import ArrayStore from 'common/data/array_store';
 import pointerEvents from 'common/core/events/pointer';
 import clickEvent from 'common/core/events/click';
@@ -2938,7 +2938,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         that.clock.tick(10);
 
         // act
-        scrollable.scrollBy({ y: 400 });
+        scrollable.scrollBy({ top: 400 });
         that.clock.tick(10);
         const visibleRow = that.getVisibleRows()[0];
         $(that.getCellElement(0, 1)).trigger(CLICK_EVENT);
@@ -2992,7 +2992,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         that.clock.tick(10);
 
         // act
-        scrollable.scrollBy({ y: 400 });
+        scrollable.scrollBy({ top: 400 });
         that.clock.tick(10);
         const visibleRow = that.getVisibleRows()[0];
         $(that.getCellElement(0, 1)).trigger(CLICK_EVENT);
@@ -4095,7 +4095,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         assert.equal(this.option('focusedRowIndex'), 1, 'focusedRowIndex');
 
         // act
-        scrollTo(this, { y: 1000 });
+        scrollTo(this, { top: 1000 });
         this.clock.tick(10);
 
         // assert

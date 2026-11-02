@@ -7,6 +7,7 @@ import {
   allowSearch,
   createLookupFilterExpressions,
   createSearchExpression,
+  getFormattedSearchText,
   parseValue,
 } from '../utils';
 
@@ -64,6 +65,25 @@ describe('parseValue', () => {
 
       expect(parseValue(column, 'Berlin')).toBe('string:Berlin');
     });
+  });
+});
+
+describe('getFormattedSearchText', () => {
+  it('should format the parsed value with the column format', () => {
+    const column = createColumn({
+      parseValue: (text: string) => Number(text),
+      format: { type: 'fixedPoint', precision: 2 },
+    });
+
+    expect(getFormattedSearchText(column, '15')).toBe('15.00');
+  });
+
+  it('should pass the search target to customizeText', () => {
+    const column = createColumn({
+      customizeText: ({ target, valueText }) => `${target}:${valueText}`,
+    });
+
+    expect(getFormattedSearchText(column, '15')).toBe('search:15');
   });
 });
 

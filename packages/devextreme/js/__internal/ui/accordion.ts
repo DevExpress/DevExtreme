@@ -183,8 +183,7 @@ class Accordion extends CollectionWidgetLiveUpdate<AccordionProperties, Item, Co
   }
 
   _getItemData(target: Element | dxElementWrapper): Item {
-    // @ts-expect-error ts-error
-    const itemData = $(target).parent().data(this._itemDataKey()) as Item | undefined;
+    const itemData = $(target).parent().data<Item | undefined>(this._itemDataKey());
 
     return itemData ?? super._getItemData(target);
   }
@@ -329,16 +328,16 @@ class Accordion extends CollectionWidgetLiveUpdate<AccordionProperties, Item, Co
       fx.stop($item.get(0), false);
     }
 
-    const startItemHeight: number = getOuterHeight($item);
+    const startItemHeight: number = getOuterHeight($item.get(0));
     // eslint-disable-next-line @typescript-eslint/init-declarations
-    let finalItemHeight: number;
+    let finalItemHeight: number | undefined;
 
     if ($item.hasClass(ACCORDION_ITEM_OPENED_CLASS)) {
-      finalItemHeight = itemHeight + getOuterHeight($title);
+      finalItemHeight = Number(itemHeight) + Number(getOuterHeight($title));
 
       if (!finalItemHeight) {
         setHeight($item, 'auto');
-        finalItemHeight = getOuterHeight($item);
+        finalItemHeight = getOuterHeight($item.get(0));
       }
     } else {
       finalItemHeight = getOuterHeight($title);
@@ -353,7 +352,7 @@ class Accordion extends CollectionWidgetLiveUpdate<AccordionProperties, Item, Co
   _animateItem(
     $element: dxElementWrapper,
     startHeight: number,
-    endHeight: number,
+    endHeight: number | undefined,
     skipAnimation: boolean,
     fixedHeight: boolean,
   ): DeferredObj<unknown> {
@@ -361,7 +360,7 @@ class Accordion extends CollectionWidgetLiveUpdate<AccordionProperties, Item, Co
     let deferred: DeferredObj<unknown> | Promise<void>;
 
     if (skipAnimation || startHeight === endHeight) {
-      $element.css('height', endHeight);
+      $element.css({ height: endHeight });
       deferred = Deferred().resolve();
     } else {
       const { animationDuration, _animationEasing: easing } = this.option();
@@ -422,7 +421,7 @@ class Accordion extends CollectionWidgetLiveUpdate<AccordionProperties, Item, Co
       itemsHeight += getOuterHeight(title);
     });
 
-    const elementHeight: number = getHeight(this.$element());
+    const elementHeight: number = getHeight(this.$element().get(0));
 
     return elementHeight - itemsHeight;
   }

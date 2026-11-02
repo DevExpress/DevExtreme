@@ -18,8 +18,8 @@ import type { ChangingEvent, StoreLoadOptions } from '@ts/data/data_source/types
 import type { BeforePushEvent } from '@ts/data/types';
 import type { RowKey } from '@ts/grids/grid_core/types';
 
-import gridCoreUtils from '../m_utils';
 import modules from '../modules/modules';
+import gridCoreUtils from '../utils';
 import { CustomLoader } from './custom_loader';
 import {
   calculateOperationTypes,

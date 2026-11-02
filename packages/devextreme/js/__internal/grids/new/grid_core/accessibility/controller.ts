@@ -15,7 +15,6 @@ export class AccessibilityController {
   private readonly firstRender = signal(true);
 
   private readonly description = computed(
-    // @ts-expect-error ts-error
     () => messageLocalization.format('dxCardView-ariaCardView', this.dataController.totalCount.value, this.columnsController.visibleColumns.value.length),
   );
 

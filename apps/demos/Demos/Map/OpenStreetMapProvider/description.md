@@ -1,1 +1,0 @@
-We expect to add [OpenStreetMap](https://www.openstreetmap.org/) (OSM) support to the DevExtreme [Map](/Documentation/Guide/UI_Components/Map/Overview/) component. The new provider will allow you to connect the Map to OSM-compatible tile, geocoding, and routing services, including commercial providers and self-hosted infrastructure.

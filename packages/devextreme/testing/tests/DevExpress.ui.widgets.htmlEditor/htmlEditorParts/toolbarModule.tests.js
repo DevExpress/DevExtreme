@@ -6,7 +6,7 @@ import 'ui/select_box';
 import '__internal/ui/color_box/color_view';
 import 'ui/drop_down_button';
 
-import Toolbar from '__internal/ui/html_editor/modules/m_toolbar';
+import Toolbar from '__internal/ui/html_editor/modules/toolbar';
 import FormDialog from '__internal/ui/html_editor/ui/formDialog';
 import { noop } from 'core/utils/common';
 import keyboardMock from '../../../helpers/keyboardMock.js';
@@ -118,6 +118,7 @@ const simpleModuleConfig = {
                 _saveValueChangeEvent: noop,
                 option: noop,
                 on: noop,
+                off: noop,
             }
         };
     },
@@ -675,6 +676,21 @@ testModule('Active formats', simpleModuleConfig, () => {
         toolbar.updateFormatWidgets();
 
         assert.notOk($clearFormat.hasClass(DISABLED_STATE_CLASS), 'Clear formats button is active because there is active format');
+    });
+
+    test('clear formatting is disabled after the only active format is toggled off', function(assert) {
+        this.quillMock.getFormat = () => { return { bold: true }; };
+        this.options.items = ['bold', 'clear'];
+
+        const toolbar = new Toolbar(this.quillMock, this.options);
+        const $clearFormat = this.$element.find(`.${CLEAR_FORMAT_CLASS}`);
+
+        toolbar.updateFormatWidgets();
+        assert.notOk($clearFormat.hasClass(DISABLED_STATE_CLASS), 'Clear formats button is active while bold is applied');
+
+        this.$element.find(`.${BOLD_FORMAT_CLASS}`).trigger('dxclick');
+
+        assert.ok($clearFormat.hasClass(DISABLED_STATE_CLASS), 'Clear formats button is disabled once bold is toggled off');
     });
 
     test('clear formatting with a selected range greater than 1 character long [T947981]', function(assert) {
@@ -1340,6 +1356,57 @@ testModule('Toolbar dialogs', dialogModuleConfig, () => {
 
         assert.notOk(isFieldsVisible, 'insertTable dialog is hidden');
     });
+
+    [
+        { rowsText: '', message: 'Required' },
+        { rowsText: '2.5', message: 'Value is invalid' },
+    ].forEach(({ rowsText, message }) => {
+        test(`insertTable dialog stays open and inserts no table when Rows is "${rowsText}"`, function(assert) {
+            this.options.items = ['insertTable'];
+            this.options.editorInstance._formDialog = this.formDialog;
+            new Toolbar(this.quillMock, this.options);
+            this.$element
+                .find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`)
+                .trigger('dxclick');
+
+            $(`.${FORM_CLASS} .${TEXTEDITOR_INPUT_CLASS}`)
+                .first()
+                .val(rowsText)
+                .change();
+
+            $(`.${DIALOG_CLASS} .${BUTTON_WITH_TEXT_CLASS}`)
+                .first()
+                .trigger('dxclick');
+
+            const rowsEditor = this.formDialog._form.getEditor('rows');
+
+            assert.ok(this.quillMock.table.insertTable.notCalled, 'no table is inserted');
+            assert.strictEqual(this.formDialog._popup.option('visible'), true, 'dialog stays open');
+            assert.strictEqual(rowsEditor.option('isValid'), false, 'Rows is invalid');
+            assert.strictEqual(rowsEditor.option('validationError').message, message, 'validation message');
+        });
+    });
+
+    test('insertTable dialog inserts a table when Rows and Columns are whole numbers', function(assert) {
+        this.options.items = ['insertTable'];
+        this.options.editorInstance._formDialog = this.formDialog;
+        new Toolbar(this.quillMock, this.options);
+        this.$element
+            .find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`)
+            .trigger('dxclick');
+
+        $(`.${FORM_CLASS} .${TEXTEDITOR_INPUT_CLASS}`)
+            .first()
+            .val('2')
+            .change();
+
+        $(`.${DIALOG_CLASS} .${BUTTON_WITH_TEXT_CLASS}`)
+            .first()
+            .trigger('dxclick');
+
+        assert.ok(this.quillMock.table.insertTable.calledOnceWithExactly(2, 1), 'table with 2 rows and 1 column is inserted');
+        assert.strictEqual(this.formDialog._popup.option('visible'), false, 'dialog is closed');
+    });
 });
 
 testModule('Toolbar with multiline mode', simpleModuleConfig, function() {
@@ -1639,6 +1706,20 @@ testModule('Toolbar items state update', {
             });
         }
     }, () => {
+        test('toolbar state is updated once on each menu opening', function(assert) {
+            this.options.items = this.mapToMenuItems(['bold']);
+            const toolbar = new Toolbar(this.quillMock, this.options);
+            const updateToolbarSpy = sinon.spy(toolbar, '_updateToolbar');
+
+            this.openDropDownMenu();
+            this.openDropDownMenu();
+            this.openDropDownMenu();
+            this.openDropDownMenu();
+            this.openDropDownMenu();
+
+            assert.strictEqual(updateToolbarSpy.callCount, 3, 'toolbar state is updated on each of three openings');
+        });
+
         test('table formats in menu on table focus (t1117604)', function(assert) {
             this.options.items = this.mapToMenuItems(TABLE_OPERATIONS);
             const toolbar = new Toolbar(this.quillMock, this.options);

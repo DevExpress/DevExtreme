@@ -1,15 +1,47 @@
 /* eslint-disable spellcheck/spell-checker */
 import type { Format } from '@ts/core/localization/date';
-import { escapeRegExp } from '@ts/core/utils/m_common';
-import { logger } from '@ts/core/utils/m_console';
+import { escapeRegExp } from '@ts/core/utils/common';
+import { logger } from '@ts/core/utils/console';
 
 export interface LdlmDateLocalization {
-  getTimeSeparator?: () => string;
+  formatLocale?: string;
+  getTimeSeparator?: (locale?: string) => string;
   getMonthNames: (format: Format, type?: string) => string[];
   getQuarterNames: (format: Format, type?: string) => string[];
   getPeriodNames: (format: Format, type?: string) => string[];
   getDayNames: (format: Format, type?: string) => string[];
 }
+
+type LocaleDateNamesGetter = (format: Format, type?: string, locale?: string) => string[];
+
+export interface LocaleAwareDateLocalization extends LdlmDateLocalization {
+  getMonthNames: LocaleDateNamesGetter;
+  getPeriodNames: LocaleDateNamesGetter;
+  getDayNames: LocaleDateNamesGetter;
+}
+
+export const bindDatePartsToLocale = (
+  dateParts: LocaleAwareDateLocalization,
+  locale: string,
+): LdlmDateLocalization => {
+  const result = Object.create(dateParts) as LdlmDateLocalization;
+
+  result.formatLocale = locale;
+  result.getMonthNames = (format, type): string[] => dateParts
+    .getMonthNames(format, type, locale);
+  result.getPeriodNames = (format, type): string[] => dateParts
+    .getPeriodNames(format, type, locale);
+  result.getDayNames = (format, type): string[] => dateParts
+    .getDayNames(format, type, locale);
+
+  if (dateParts.getTimeSeparator) {
+    const timeSeparatorSource = dateParts as Required<Pick<LdlmDateLocalization, 'getTimeSeparator'>>;
+
+    result.getTimeSeparator = (): string => timeSeparatorSource.getTimeSeparator(locale);
+  }
+
+  return result;
+};
 
 const FORMAT_TYPES: Record<number, Format> = {
   3: 'abbreviated',
@@ -32,6 +64,7 @@ const monthRegExpGenerator = (count: number, dateParts: LdlmDateLocalization): s
 const PATTERN_REGEXPS = {
   ':': (count: number, dateParts: LdlmDateLocalization): string => {
     const countSuffix = count > 1 ? `{${count}}` : '';
+    // @ts-expect-error the localization defines getTimeSeparator
     let timeSeparator: string = escapeRegExp(dateParts.getTimeSeparator?.());
     if (timeSeparator !== ':') {
       timeSeparator = `${timeSeparator}|:`;

@@ -1248,7 +1248,7 @@ QUnit.module('Expand/Collapse rows', () => {
         const isNativeScrolling = devices.real().deviceType !== 'desktop' || devices.real().mac;
 
         try {
-            scrollable.scrollTo({ y: 300 }); // scroll to the last page
+            scrollable.scrollTo({ top: 300 }); // scroll to the last page
             isNativeScrolling && $(scrollable.container()).trigger('scroll');
             clock.tick(10);
 
@@ -1286,7 +1286,7 @@ QUnit.module('Expand/Collapse rows', () => {
             dataSource: generateData(100)
         });
 
-        treeList.getScrollable().scrollTo({ y: 1000 });
+        treeList.getScrollable().scrollTo({ top: 1000 });
 
         setTimeout(function() {
             // act
@@ -1993,8 +1993,8 @@ QUnit.module('Scroll', defaultModuleConfig, () => {
         const scrollable = treeList.getScrollable();
 
         // act
-        scrollable.scrollTo({ y: 200 });
-        scrollable.scrollTo({ y: 500 });
+        scrollable.scrollTo({ top: 200 });
+        scrollable.scrollTo({ top: 500 });
 
         setTimeout(function() {
             // assert
@@ -2099,7 +2099,7 @@ QUnit.module('Scroll', defaultModuleConfig, () => {
         this.clock.tick(100);
 
         // act
-        treeList.getScrollable().scrollTo({ y: 10 });
+        treeList.getScrollable().scrollTo({ top: 10 });
         this.clock.tick(100);
 
         treeList.expandRow(2);

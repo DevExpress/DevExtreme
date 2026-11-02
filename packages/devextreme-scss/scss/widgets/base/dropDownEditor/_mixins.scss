@@ -1,5 +1,4 @@
 @use "../icon_fonts" as *;
-@use "../mixins" as *;
 
 @function badge-input-padding($invalid-badge-size, $input-horizontal-padding) {
   @if $input-horizontal-padding == 0 {

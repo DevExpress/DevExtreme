@@ -36,7 +36,7 @@
   unicode-bidi: embed;
 }
 
-@mixin disabled-widget($opacity: 0.3) { // stylelint-disable-line selector-class-pattern
+@mixin disabled-widget($opacity: 0.3) {
   opacity: $opacity;
 
   @include user-select(none);

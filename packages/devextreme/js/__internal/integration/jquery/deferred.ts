@@ -1,5 +1,5 @@
 import type { DeferredObj } from '@js/core/utils/deferred';
-import { setStrategy } from '@ts/core/utils/m_deferred';
+import { setStrategy } from '@ts/core/utils/deferred';
 import { compare as compareVersion } from '@ts/core/utils/version';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import jQuery from 'jquery';
@@ -34,5 +34,6 @@ if (useJQuery) {
       return jQuery.when.apply(jQuery, arguments);
     };
 
+  // @ts-expect-error when is set after the literal; @types/jquery has no new for Deferred
   setStrategy(strategy);
 }

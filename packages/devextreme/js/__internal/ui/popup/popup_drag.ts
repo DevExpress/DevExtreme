@@ -202,8 +202,8 @@ export default class PopupDrag<TPositionController extends PopupPositionControll
     const document = domAdapter.getDocument();
     const container = this._positionController?.$dragResizeContainer?.get(0);
 
-    let containerWidth = getOuterWidth(container);
-    let containerHeight = getOuterHeight(container);
+    let containerWidth = Number(getOuterWidth(container));
+    let containerHeight = Number(getOuterHeight(container));
 
     if (isWindow(container)) {
       containerHeight = Math.max(document.body.clientHeight, containerHeight);
@@ -221,10 +221,12 @@ export default class PopupDrag<TPositionController extends PopupPositionControll
 
     return isWindow(container)
       ? { top: 0, left: 0 }
+      // @ts-expect-error set until clean(); getOffset of undefined throws, as before
       : getOffset(container);
   }
 
   _getElementPosition(): ElementPosition {
+    // @ts-expect-error set from the config; getOffset of undefined throws, as before
     return getOffset(this._draggableElement);
   }
 

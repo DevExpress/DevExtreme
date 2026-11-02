@@ -10,8 +10,8 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 
-import { extend as _extend } from '@ts/core/utils/m_extend';
-import { isFunction } from '@ts/core/utils/m_type';
+import { extend as _extend } from '@ts/core/utils/extend';
+import { isFunction } from '@ts/core/utils/type';
 
 const defaultCustomizeLinkTooltip = (formatter) => function (info) {
   return { html: `<strong>${info.source} > ${info.target}</strong><br/>Weight: ${formatter(info.weight)}` };
@@ -24,6 +24,7 @@ const generateCustomCallback = function (customCallback, defaultCallback) {
     let res = isFunction(customCallback) ? customCallback.call(objectInfo, objectInfo) : {};
     const hasOwnProperty = Object.prototype.hasOwnProperty.bind(res);
     if (!hasOwnProperty('html') && !hasOwnProperty('text')) {
+      // @ts-expect-error a customize callback returns an object
       res = _extend(res, defaultCallback.call(objectInfo, objectInfo));
     }
     return res;

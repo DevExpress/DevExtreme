@@ -1,4 +1,4 @@
-import { headerPanelModule } from '@ts/grids/grid_core/header_panel/m_header_panel';
+import { headerPanelModule } from '@ts/grids/grid_core/header_panel/header_panel';
 
 import treeListCore from '../core';
 

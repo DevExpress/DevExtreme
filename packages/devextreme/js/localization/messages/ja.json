@@ -124,6 +124,7 @@
         "dxDataGrid-aiAssistantAbortConfirmText": "AI アシスタントのチャットを閉じると、進行中のリクエストが中止されます。チャットを閉じますか？",
         "dxDataGrid-aiAChatEmptyViewMessage": "チャットは空です",
         "dxDataGrid-aiChatEmptyViewPrompt": "AI アシスタントはご質問にお答えする準備ができています。",
+        "dxDataGrid-aiChatTextareaPlaceholder": "Ask AI Assistant...",
         "dxDataGrid-aiPromptEditorTitle": "AI プロンプト エディター",
         "dxDataGrid-aiPromptEditorPlaceholder": "AI に列の値の生成を依頼する",
         "dxDataGrid-aiPromptEditorApplyButton": "適用",
@@ -919,6 +920,8 @@
         "dxGantt-showDependencies": "依存関係を表示",
         "dxGantt-dialogStartDateValidation": "開始日を {0} 以降にする必要があります",
         "dxGantt-dialogEndDateValidation": "終了日は {0} より後にする必要があります",
+
+        "dxMap-markerAriaLabel": "Map marker",
 
         "dxGallery-itemName": "ギャラリー アイテム",
 

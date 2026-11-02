@@ -94,7 +94,6 @@ class TypingIndicator extends DOMComponent<TypingIndicator, Properties> {
 
       return messageLocalization.format(
         'dxChat-typingMessageSingleUser',
-        // @ts-expect-error
         username,
       );
     }
@@ -104,7 +103,6 @@ class TypingIndicator extends DOMComponent<TypingIndicator, Properties> {
 
       return messageLocalization.format(
         'dxChat-typingMessageTwoUsers',
-        // @ts-expect-error
         usernameFirst,
         usernameSecond,
       );
@@ -119,7 +117,6 @@ class TypingIndicator extends DOMComponent<TypingIndicator, Properties> {
 
       return messageLocalization.format(
         'dxChat-typingMessageThreeUsers',
-        // @ts-expect-error
         usernameFirst,
         usernameSecond,
         usernameThird,
@@ -130,7 +127,6 @@ class TypingIndicator extends DOMComponent<TypingIndicator, Properties> {
 
     return messageLocalization.format(
       'dxChat-typingMessageMultipleUsers',
-      // @ts-expect-error
       usernameString,
     );
   }

@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import TableUI from '__internal/ui/html_editor/modules/m_tableContextMenu';
+import TableUI from '__internal/ui/html_editor/modules/tableContextMenu';
 
 
 const moduleConfig = {

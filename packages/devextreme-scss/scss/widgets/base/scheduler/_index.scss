@@ -36,7 +36,6 @@ $scheduler-appointment-popup-repeat-end-item-vertical-margin: null !default;
 $agenda-appointment-recurrence-icon-color: null !default;
 
 @use "./layout/header" as *;
-@use "./mixins" as *;
 @use "../mixins" as *;
 @use "../icon_fonts" as *;
 $scheduler-common-collector-margin: 0 3px !default;
@@ -101,6 +100,11 @@ $scheduler-grouped-appointment-month-text-size: 12px !default;
 
 $scheduler-border-width: 1px !default;
 $scheduler-workspace-info-font-size: 20px !default;
+$scheduler-header-panel-table-cell-height: null !default;
+$scheduler-header-panel-current-time-cell-color: null !default;
+$scheduler-views-all-day-border: null !default;
+$scheduler-timepanel-cell-offset: null !default;
+$scheduler-timepanel-cell-small-offset: null !default;
 $scheduler-small-font-size: 14px !default;
 $scheduler-group-header-table-cell-height: 30px !default;
 $scheduler-month-date-text-size: 16px !default;
@@ -121,6 +125,7 @@ $scheduler-small-size-element-offset: $scheduler-left-column-width * $scheduler-
 
 $scheduler-time-indicator-font-size: 30px !default;
 $scheduler-time-indicator-size: 1px !default;
+$scheduler-time-indicator-height: $scheduler-time-indicator-size !default;
 $scheduler-time-indicator-top: 14px !default;
 $scheduler-time-indicator-left: 12px !default;
 
@@ -213,6 +218,11 @@ $scheduler-agenda-date-table-padding-top: 10px !default;
 $scheduler-renovation-virtual-row-height: 50px !default;
 
 @use "./views" with (
+  $scheduler-header-panel-table-cell-height: $scheduler-header-panel-table-cell-height,
+  $scheduler-header-panel-current-time-cell-color: $scheduler-header-panel-current-time-cell-color,
+  $scheduler-views-all-day-border: $scheduler-views-all-day-border,
+  $scheduler-timepanel-cell-offset: $scheduler-timepanel-cell-offset,
+  $scheduler-timepanel-cell-small-offset: $scheduler-timepanel-cell-small-offset,
   $scheduler-workspace-info-font-size: $scheduler-workspace-info-font-size,
   $scheduler-small-font-size: $scheduler-small-font-size,
   $scheduler-group-header-table-cell-height: $scheduler-group-header-table-cell-height,
@@ -344,7 +354,7 @@ $scheduler-appointment-content-padding-right: 5px !default;
 
     .dx-scheduler-date-time-indicator {
       margin-left: $scheduler-left-column-width;
-      height: $scheduler-time-indicator-size;
+      height: $scheduler-time-indicator-height;
 
       @include dx-icon(spinright);
 
@@ -530,7 +540,7 @@ $scheduler-appointment-content-padding-right: 5px !default;
     box-shadow: $scheduler-horizontal-appointment-resizing-shadow, $scheduler-appointment-dragging-shadow;
   }
 
-  .dx-scheduler-appointment { // stylelint-disable-line no-duplicate-selectors
+  .dx-scheduler-appointment {
     &.dx-scheduler-appointment-body,
     &.dx-scheduler-appointment-tail {
       box-shadow: none;

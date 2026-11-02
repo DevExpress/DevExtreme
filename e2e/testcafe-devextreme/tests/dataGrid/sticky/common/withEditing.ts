@@ -22,7 +22,7 @@ test.meta({ browserSize: [800, 800] })('The row edit mode: Edit row when there a
 
   await testScreenshot(t, takeScreenshot, 'edit_row_with_sticky_columns_1.png', { element: dataGrid.element });
 
-  await dataGrid.scrollTo(t, { x: 10000 });
+  await dataGrid.scrollTo(t, { left: 10000 });
 
   await testScreenshot(t, takeScreenshot, 'edit_row_with_sticky_columns_2.png', { element: dataGrid.element });
 
@@ -50,7 +50,7 @@ test.meta({ browserSize: [800, 800] })('The form edit mode: Edit row when there 
 
   await testScreenshot(t, takeScreenshot, 'edit_form_with_sticky_columns_1.png', { element: dataGrid.element });
 
-  await dataGrid.scrollTo(t, { x: 10000 });
+  await dataGrid.scrollTo(t, { left: 10000 });
 
   await testScreenshot(t, takeScreenshot, 'edit_form_with_sticky_columns_2.png', { element: dataGrid.element });
 
@@ -82,7 +82,7 @@ test.meta({ browserSize: [800, 800] })('The batch edit mode: Edit cell when ther
 
   await testScreenshot(t, takeScreenshot, 'edit_cell_with_sticky_columns_1.png', { element: dataGrid.element });
 
-  await dataGrid.scrollTo(t, { x: 10000 });
+  await dataGrid.scrollTo(t, { left: 10000 });
 
   await testScreenshot(t, takeScreenshot, 'edit_cell_with_sticky_columns_2.png', { element: dataGrid.element });
 
@@ -114,7 +114,7 @@ test.meta({ browserSize: [800, 800] })('The batch edit mode: Edit fixed cell', a
 
   await testScreenshot(t, takeScreenshot, 'edit_fixed_cell_1.png', { element: dataGrid.element });
 
-  await dataGrid.scrollTo(t, { x: 10000 });
+  await dataGrid.scrollTo(t, { left: 10000 });
 
   await testScreenshot(t, takeScreenshot, 'edit_fixed_cell_2.png', { element: dataGrid.element });
 
@@ -146,7 +146,7 @@ test.meta({ browserSize: [800, 800] })('The batch edit mode: Edit fixed cell wit
 
   await testScreenshot(t, takeScreenshot, 'edit_fixed_cell_with_sticky_position_1.png', { element: dataGrid.element });
 
-  await dataGrid.scrollTo(t, { x: 10000 });
+  await dataGrid.scrollTo(t, { left: 10000 });
 
   await testScreenshot(t, takeScreenshot, 'edit_fixed_cell_with_sticky_position_2.png', { element: dataGrid.element });
 
@@ -181,7 +181,7 @@ test.meta({ browserSize: [800, 800] })('The cell edit mode: Edit fixed cell with
 
   await testScreenshot(t, takeScreenshot, 'edit_fixed_cell_with_validation_rule_1.png', { element: dataGrid.element });
 
-  await dataGrid.scrollTo(t, { x: 10000 });
+  await dataGrid.scrollTo(t, { left: 10000 });
 
   await testScreenshot(t, takeScreenshot, 'edit_fixed_cell_with_validation_rule_2.png', { element: dataGrid.element });
 
@@ -214,7 +214,7 @@ test.meta({ browserSize: [800, 800] })('The cell edit mode: Edit fixed cell with
 
   await testScreenshot(t, takeScreenshot, 'edit_fixed_cell_with_sticky_position_and_validation_rule_1.png', { element: dataGrid.element });
 
-  await dataGrid.scrollTo(t, { x: 10000 });
+  await dataGrid.scrollTo(t, { left: 10000 });
 
   await testScreenshot(t, takeScreenshot, 'edit_fixed_cell_with_sticky_position_and_validation_rule_2.png', { element: dataGrid.element });
 
@@ -249,7 +249,7 @@ test.meta({ browserSize: [800, 800] })('The cell edit mode: Edit cell with valid
 
   await testScreenshot(t, takeScreenshot, 'edit_cell_with_validation_rule_and_fixed_columns_1.png', { element: dataGrid.element });
 
-  await dataGrid.scrollTo(t, { x: 200 });
+  await dataGrid.scrollTo(t, { left: 200 });
 
   await testScreenshot(t, takeScreenshot, 'edit_cell_with_validation_rule_and_fixed_columns_2.png', { element: dataGrid.element });
 
@@ -277,13 +277,13 @@ test.meta({ browserSize: [800, 800] })('The cell edit mode: Edit last unfixed ce
 
   await t.expect(dataGrid.isReady()).ok();
 
-  await dataGrid.scrollTo(t, { x: 10000 });
+  await dataGrid.scrollTo(t, { left: 10000 });
   await dataGrid.apiCellValue(0, 5, '');
   await t.click(dataGrid.getDataCell(0, 5).element);
 
   await testScreenshot(t, takeScreenshot, 'edit_last_unfixed_cell_with_validation_rule_1.png', { element: dataGrid.element });
 
-  await dataGrid.scrollTo(t, { x: 350 });
+  await dataGrid.scrollTo(t, { left: 350 });
 
   await testScreenshot(t, takeScreenshot, 'edit_last_unfixed_cell_with_validation_rule_2.png', { element: dataGrid.element });
 
@@ -316,7 +316,7 @@ test.meta({ browserSize: [800, 800] })('The cell edit mode: The validation messa
 
   await testScreenshot(t, takeScreenshot, 'vertical_scroll_and_fixed_column_with_validation_message_and_revert_button_1.png', { element: dataGrid.element });
 
-  await dataGrid.scrollTo(t, { y: 10000 });
+  await dataGrid.scrollTo(t, { top: 10000 });
 
   await testScreenshot(t, takeScreenshot, 'vertical_scroll_and_fixed_column_with_validation_message_and_revert_button_2.png', { element: dataGrid.element });
 
@@ -349,7 +349,7 @@ test.meta({ browserSize: [800, 800] })('The cell edit mode: The validation messa
 
     await testScreenshot(t, takeScreenshot, 'vertical_scroll_and_focused_fixed_column_1.png', { element: dataGrid.element });
 
-    await dataGrid.scrollTo(t, { y: 10000 });
+    await dataGrid.scrollTo(t, { top: 10000 });
 
     await testScreenshot(t, takeScreenshot, 'vertical_scroll_and_focused_fixed_column_2.png', { element: dataGrid.element });
 

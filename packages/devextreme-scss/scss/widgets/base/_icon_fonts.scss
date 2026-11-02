@@ -198,7 +198,8 @@
 .dx-icon-gridkanban,
 .dx-icon-chatdismiss,
 .dx-icon-listbartreeoffset,
-.dx-icon-clearhistory {
+.dx-icon-clearhistory,
+.dx-icon-wrench {
   background-position: 0 0;
   background-repeat: no-repeat;
 }
@@ -285,7 +286,6 @@
   }
 }
 
-// stylelint-disable property-no-unknown
 $icons: (
     "add": "\f00b",
     "airplane": "\f000",
@@ -616,9 +616,8 @@ $icons: (
     "gridkanban": "\f240",
     "listbartreeoffset": "\f241",
     "clearhistory": "\f242",
+    "wrench": "\f243",
 ) !default;
-
-// stylelint-enable
 
 @mixin dx-icon($name) {
   @include dx-font-icon(map.get($icons, $name));

@@ -24,7 +24,7 @@ test.meta({ browserSize: [1000, 800] })('The simulated scrollbar should display 
   await testScreenshot(t, takeScreenshot, 'simulated_scrollbar_with_sticky_columns_1.png', { element: dataGrid.element });
 
   // act
-  await dataGrid.scrollTo(t, { x: 1500 });
+  await dataGrid.scrollTo(t, { left: 1500 });
 
   await testScreenshot(t, takeScreenshot, 'simulated_scrollbar_with_sticky_columns_2.png', { element: dataGrid.element });
 
@@ -228,7 +228,7 @@ test('Boolean column checkboxes should display correctly when there are fixed co
   await t.expect(dataGrid.isReady()).ok();
 
   // act
-  await dataGrid.scrollTo(t, { x: 100 });
+  await dataGrid.scrollTo(t, { left: 100 });
 
   await testScreenshot(t, takeScreenshot, 'T1303134_boolean_column_checkboxes_with_fixed_columns.png', { element: dataGrid.element });
 

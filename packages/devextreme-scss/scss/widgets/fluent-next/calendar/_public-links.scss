@@ -1,0 +1,7 @@
+@mixin publish {
+  --dx-calendar-cell-border-hovered: var(--dx-calendar-bg-hovered);
+  --dx-calendar-cell-content-hovered: var(--dx-calendar-content);
+  --dx-calendar-cell-contoured-border: var(--dx-calendar-cell-bg-active);
+  --dx-calendar-cell-other-content-hovered: var(--dx-calendar-cell-other-content);
+  --dx-calendar-header-content: var(--dx-calendar-content);
+}

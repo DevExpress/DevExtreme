@@ -153,7 +153,7 @@ export class MonthView extends BaseView<MonthViewProperties> {
   }
 
   _getWeekNumber(date: Date): number {
-    const { weekNumberRule = 'auto', firstDayOfWeek } = this.option();
+    const { weekNumberRule = 'auto', firstDayOfWeek = 0 } = this.option();
 
     if (weekNumberRule === 'auto') {
       return dateUtils.getWeekNumber(
@@ -215,7 +215,7 @@ export class MonthView extends BaseView<MonthViewProperties> {
 
   _getFirstCellData(): Date {
     const { firstDayOfWeek = 0, date } = this.option();
-    const firstDay = dateUtils.getFirstMonthDate(date) as Date;
+    const firstDay = dateUtils.getFirstMonthDate(date);
     let firstMonthDayOffset = firstDayOfWeek - firstDay.getDay();
     const { colCount: daysInWeek } = this.option();
 
@@ -238,7 +238,7 @@ export class MonthView extends BaseView<MonthViewProperties> {
     return this._$table.find(`td[data-value='${dateSerialization.serializeDate(date, dateUtils.getShortDateFormat())}']`);
   }
 
-  isBoundary(date: Date): boolean {
+  isBoundary(date: Date): boolean | null | undefined {
     return dateUtils.sameMonthAndYear(date, this.option('min')) || dateUtils.sameMonthAndYear(date, this.option('max'));
   }
 
@@ -314,7 +314,7 @@ export class YearView extends BaseView {
     return `${dateLocalization.format(date, 'yyyy')}`;
   }
 
-  isBoundary(date: Date): boolean {
+  isBoundary(date: Date): boolean | null | undefined {
     return dateUtils.sameYear(date, this.option('min')) || dateUtils.sameYear(date, this.option('max'));
   }
 

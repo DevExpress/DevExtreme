@@ -5,7 +5,7 @@ const STATE_MANAGER_PATH = '/core/state_manager/';
 const VALID_IMPORT = '"@ts/core/state_manager/index"';
 
 function validate(context, node, sourceNode) {
-    const filename = context.getFilename();
+    const { filename } = context;
     const isStateManagerModule = filename.includes(STATE_MANAGER_PATH);
 
     if(!isStateManagerModule) {

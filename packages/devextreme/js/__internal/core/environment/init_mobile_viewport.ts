@@ -1,12 +1,12 @@
 import $ from '@js/core/renderer';
 import devices from '@ts/core/devices';
 import domAdapter from '@ts/core/dom_adapter';
-import { extend } from '@ts/core/utils/m_extend';
-import { getWidth, setWidth } from '@ts/core/utils/m_size';
-import supportUtils from '@ts/core/utils/m_support';
-import { getWindow } from '@ts/core/utils/m_window';
+import { extend } from '@ts/core/utils/extend';
 import resizeCallbacks from '@ts/core/utils/resize_callbacks';
+import { getWidth, setWidth } from '@ts/core/utils/size';
 import { styleProp } from '@ts/core/utils/style';
+import supportUtils from '@ts/core/utils/support';
+import { getWindow } from '@ts/core/utils/window';
 import eventsEngine from '@ts/events/core/events_engine';
 import type { ScrollEvent } from '@ts/events/gesture/emitter.gesture.scroll';
 

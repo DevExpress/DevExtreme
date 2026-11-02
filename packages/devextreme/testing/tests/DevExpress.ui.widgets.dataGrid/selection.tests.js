@@ -2,7 +2,7 @@ import 'ui/data_grid';
 import 'common/data/odata/store';
 
 import $ from 'jquery';
-import gridCoreUtils from '__internal/grids/grid_core/m_utils';
+import gridCoreUtils from '__internal/grids/grid_core/utils';
 import { setupDataGridModules, generateItems } from '../../helpers/dataGridMocks.js';
 import { DataSource } from 'common/data/data_source/data_source';
 import ArrayStore from 'common/data/array_store';

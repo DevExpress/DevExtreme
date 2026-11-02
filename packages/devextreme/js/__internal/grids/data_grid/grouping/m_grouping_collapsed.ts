@@ -8,7 +8,7 @@ import type { RawItemData } from '@ts/grids/grid_core/data_source_adapter/types'
 import { combineFilters } from '@ts/grids/grid_core/filter/utils';
 
 import dataGridCore from '../core';
-import { createGroupFilter } from '../m_utils';
+import { createGroupFilter } from '../utils';
 import { createOffsetFilter, GroupingHelper as GroupingHelperCore } from './m_grouping_core';
 
 function getContinuationGroupCount(groupOffset, pageSize, groupSize, groupIndex) {

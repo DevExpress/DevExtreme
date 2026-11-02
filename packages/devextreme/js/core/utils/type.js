@@ -17,4 +17,4 @@ export {
     isString,
     isWindow,
     type,
-} from '../../__internal/core/utils/m_type';
+} from '../../__internal/core/utils/type';

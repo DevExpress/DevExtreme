@@ -1,7 +1,7 @@
 import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred } from '@js/core/utils/deferred';
 import { isDefined, isFunction } from '@js/core/utils/type';
-import { fromPromise } from '@ts/core/utils/m_deferred';
+import { fromPromise } from '@ts/core/utils/deferred';
 import type FileUploader from '@ts/ui/file_uploader/file_uploader';
 import type {
   FileUploaderItem,
@@ -48,7 +48,7 @@ export class FileUploadStrategyBase {
         deferred = Deferred().reject(error).promise();
       }
 
-      if (deferred && 'done' in deferred) {
+      if (deferred !== null && 'done' in deferred) {
         deferred
           ?.done(() => file.onAbort.fire())
           .fail((error) => this._handleFileError(file, error));

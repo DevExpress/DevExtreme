@@ -3,10 +3,15 @@ import $ from '@js/core/renderer';
 import dateUtils from '@js/core/utils/date';
 import { extend } from '@js/core/utils/extend';
 import { getWidth } from '@js/core/utils/size';
+import { isDate } from '@js/core/utils/type';
 import { getWindow } from '@js/core/utils/window';
 import type { DxEvent } from '@js/events';
 import type { Format } from '@js/localization';
-import { getGlobalFormatByDataType } from '@ts/core/global_format_config';
+import {
+  applyDataTypePreset,
+  getDateFormatLocale,
+  getGlobalFormatByDataType,
+} from '@ts/core/global_format_config';
 import type { BoxItemData } from '@ts/ui/box';
 import Box from '@ts/ui/box';
 import type { DateBoxBaseProperties } from '@ts/ui/date_box/date_box.base';
@@ -46,19 +51,30 @@ class CalendarWithTimeStrategy extends CalendarStrategy {
   }
 
   _closeDropDownByEnter(): boolean {
-    return dateUtils.sameDate(this._getContouredValue(), this.widgetOption('value'));
+    const contouredValue = this._getContouredValue();
+    const { value } = this.getWidget().option();
+
+    return isDate(value) && dateUtils.sameDate(contouredValue, value);
   }
 
   getDisplayFormat(displayFormat?: Format | null): Format {
     const globalDateTimeFormat: Format = getGlobalFormatByDataType('datetime');
     // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-    return displayFormat || globalDateTimeFormat || 'shortdateshorttime';
+    const format = displayFormat || globalDateTimeFormat || 'shortdateshorttime';
+
+    return applyDataTypePreset(format, 'datetime') ?? format;
   }
 
   _is24HourFormat(): boolean {
     const { displayFormat } = this.dateBox.option();
     // @ts-expect-error ts-error
     return dateLocalization.is24HourFormat(this.getDisplayFormat(displayFormat)) as boolean;
+  }
+
+  _getFormatLocale(): string {
+    const { displayFormat } = this.dateBox.option();
+
+    return getDateFormatLocale(this.getDisplayFormat(displayFormat));
   }
 
   _getContouredValue(): Date {
@@ -74,6 +90,7 @@ class CalendarWithTimeStrategy extends CalendarStrategy {
       value: this.dateBoxValue() as Date,
       _showClock: !this._isShrinkView(),
       use24HourFormat: this._is24HourFormat(),
+      _formatLocale: this._getFormatLocale(),
       onValueChanged: this._valueChangedHandler.bind(this),
       stylingMode,
     });
@@ -121,7 +138,10 @@ class CalendarWithTimeStrategy extends CalendarStrategy {
       if (date) {
         this._timeView.option('value', date);
       }
-      this._timeView.option('use24HourFormat', this._is24HourFormat());
+      this._timeView.option({
+        use24HourFormat: this._is24HourFormat(),
+        _formatLocale: this._getFormatLocale(),
+      });
     }
   }
 

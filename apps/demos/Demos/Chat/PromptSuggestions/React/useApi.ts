@@ -82,9 +82,16 @@ export const useApi = () => {
     }
   }, [alertError, insertMessage]);
 
+  const clearMessages = useCallback((): void => {
+    store.length = 0;
+    setAlerts([]);
+    dataSource.reload();
+  }, []);
+
   return {
     alerts,
     insertMessage,
     fetchAIResponse,
+    clearMessages,
   };
 };

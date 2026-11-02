@@ -18,8 +18,11 @@ const mockEscapedStubs = (format: string): string => format.replace(
   (stub) => stub.split('').map(() => ' ').join('').substr(2),
 );
 
-const getDigitCountBeforeIndex = (index: number, text: string): number => {
-  const decimalSeparator: string = number.getDecimalSeparator();
+const getDigitCountBeforeIndex = (
+  index: number,
+  text: string,
+  decimalSeparator: string,
+): number => {
   const regExp = new RegExp(`[^0-9${escapeRegExp(decimalSeparator)}]`, 'g');
   const textBeforePosition = text.slice(0, index);
 
@@ -106,10 +109,11 @@ export const getCaretAfterFormat = (
   formatted: string,
   caret: CaretPosition,
   format: Format,
+  decimalSeparator: string = number.getDecimalSeparator(),
 ): CaretBoundaries => {
   const normalizedCaret = getCaretWithOffset(caret, 0);
 
-  const point: string = number.getDecimalSeparator();
+  const point = decimalSeparator;
   const realSeparatorOccurrenceIndex = getRealSeparatorIndex(format).occurrence;
   const pointPosition = isSeparatorBasedString(text)
     ? 0
@@ -121,7 +125,7 @@ export const getCaretAfterFormat = (
 
   if (isCaretOnFloat) {
     const relativeIndex = normalizedCaret.start - pointPosition - 1;
-    const digitsBefore = getDigitCountBeforeIndex(relativeIndex, textParts[1]);
+    const digitsBefore = getDigitCountBeforeIndex(relativeIndex, textParts[1], point);
     const newPosition = formattedParts[1]
       ? newPointPosition + 1 + getDigitPositionByIndex(digitsBefore, formattedParts[1]) + 1
       : formatted.length;
@@ -131,7 +135,7 @@ export const getCaretAfterFormat = (
 
   const formattedIntPart = trimNonNumericCharsFromEnd(formattedParts[0]);
   const positionFromEnd = textParts[0].length - normalizedCaret.start;
-  const digitsFromEnd = getDigitCountBeforeIndex(positionFromEnd, reverseText(textParts[0]));
+  const digitsFromEnd = getDigitCountBeforeIndex(positionFromEnd, reverseText(textParts[0]), point);
   const newPositionFromEnd = getDigitPositionByIndex(digitsFromEnd, reverseText(formattedIntPart));
   const newPositionFromBegin = formattedIntPart.length - (newPositionFromEnd + 1);
 

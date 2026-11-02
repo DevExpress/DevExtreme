@@ -124,6 +124,7 @@
         "dxDataGrid-aiAssistantAbortConfirmText": "Το κλείσιμο του chat του Βοηθού AI θα διακόψει τα αιτήματα σε εξέλιξη. Θέλετε να κλείσετε το chat;",
         "dxDataGrid-aiAChatEmptyViewMessage": "Το chat είναι άδειο",
         "dxDataGrid-aiChatEmptyViewPrompt": "Ο Βοηθός AI είναι έτοιμος να απαντήσει στις ερωτήσεις σας.",
+        "dxDataGrid-aiChatTextareaPlaceholder": "Ask AI Assistant...",
         "dxDataGrid-aiPromptEditorTitle": "Επεξεργαστής προτροπών AI",
         "dxDataGrid-aiPromptEditorPlaceholder": "Δώστε εντολή στο AI για δημιουργία τιμών στήλης...",
         "dxDataGrid-aiPromptEditorApplyButton": "Εφαρμογή",
@@ -919,6 +920,8 @@
         "dxGantt-showDependencies": "Εμφάνιση εξαρτήσεων",
         "dxGantt-dialogStartDateValidation": "Η ημερομηνία έναρξης πρέπει να είναι μετά την {0}",
         "dxGantt-dialogEndDateValidation": "Η ημερομηνία λήξης πρέπει να είναι μετά την {0}",
+
+        "dxMap-markerAriaLabel": "Map marker",
 
         "dxGallery-itemName": "Στοιχείο γκαλερί",
 

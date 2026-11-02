@@ -7,7 +7,7 @@ import { sessionStorage } from '@js/core/utils/storage';
 import { isDefined, isEmptyObject, isPlainObject } from '@js/core/utils/type';
 import { getWindow } from '@js/core/utils/window';
 import errors from '@js/ui/widget/ui.errors';
-import { fromPromise } from '@ts/core/utils/m_deferred';
+import { fromPromise } from '@ts/core/utils/deferred';
 import type { ExportController } from '@ts/grids/data_grid/export/m_export';
 import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/columns_controller';
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';

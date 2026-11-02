@@ -17,27 +17,27 @@ import { setWidth } from '@js/core/utils/style';
 import { isDefined } from '@js/core/utils/type';
 import Scrollable from '@js/ui/scroll_view/ui.scrollable';
 import type { DataChange } from '@ts/grids/grid_core/data_controller/types';
-import type { EditorFactory } from '@ts/grids/grid_core/editor_factory/m_editor_factory';
+import type { EditorFactory } from '@ts/grids/grid_core/editor_factory/editor_factory';
 import { CLASSES as MASTER_DETAIL_CLASSES } from '@ts/grids/grid_core/master_detail/const';
 import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
 
-import type { ColumnHeadersView } from '../column_headers/m_column_headers';
+import type { ColumnHeadersView } from '../column_headers/column_headers';
 import type {
   ColumnsResizerViewController,
   DraggingHeaderViewController,
-} from '../columns_resizing_reordering/m_columns_resizing_reordering';
+} from '../columns_resizing_reordering/columns_resizing_reordering';
 import type { Coordinates } from '../columns_resizing_reordering/types';
+import type { ResizingController } from '../grid_view/grid_view';
 import type { KeyboardNavigationController } from '../keyboard_navigation/m_keyboard_navigation';
-import gridCoreUtils from '../m_utils';
 import type { ColumnPoint, ModuleType } from '../types';
+import gridCoreUtils from '../utils';
 import type { ColumnsView } from '../views/columns_view';
 import { normalizeWidth } from '../views/columns_view';
-import type { ResizingController } from '../views/m_grid_view';
-import type { RowsView } from '../views/m_rows_view';
-import type { RowsViewScrollEvent } from '../views/types';
+import type { RowsView } from '../views/rows_view';
+import type { RowsViewScrollEvent, SummaryRowsViewExtension } from '../views/types';
 import { CLASSES } from './const';
+import type { ColumnFixingRowsViewExtension } from './types';
 
-const MASTER_DETAIL_CELL_CLASS = 'dx-master-detail-cell';
 const FIRST_CELL_CLASS = 'dx-first-cell';
 const LAST_CELL_CLASS = 'dx-last-cell';
 const HOVER_STATE_CLASS = 'dx-state-hover';
@@ -92,7 +92,7 @@ const normalizeColumnWidths = function (fixedColumns, widths: number[], fixedWid
 
 // View
 const baseFixedColumns = <T extends ModuleType<ColumnsView>>(Base: T) => class BaseFixedColumnsExtender extends Base {
-  protected _isFixedTableRendering!: boolean;
+  public _isFixedTableRendering!: boolean;
 
   protected _isFixedColumns!: boolean;
 
@@ -402,7 +402,7 @@ const baseFixedColumns = <T extends ModuleType<ColumnsView>>(Base: T) => class B
 
           if (fixedColumn) {
             if (fixedColumn.command === COMMAND_TRANSPARENT) {
-              if (fixedCellElements.eq(columnIndex).hasClass(MASTER_DETAIL_CELL_CLASS)) {
+              if (fixedCellElements.eq(columnIndex).hasClass(MASTER_DETAIL_CLASSES.detailCell)) {
                 cellElements[columnIndex] = cell || cellElements[columnIndex];
               }
             } else {
@@ -486,7 +486,7 @@ const baseFixedColumns = <T extends ModuleType<ColumnsView>>(Base: T) => class B
 
       offset = {
         left: positionTransparentColumn.left,
-        right: getOuterWidth(this.element(), true) - (getOuterWidth($transparentColumn, true) + positionTransparentColumn.left),
+        right: Number(getOuterWidth(this.element(), true)) - (getOuterWidth($transparentColumn, true) + positionTransparentColumn.left),
       };
     }
 
@@ -682,7 +682,11 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
   }
 };
 
-const rowsView = (Base: ModuleType<RowsView>) => class RowsViewFixedColumnsExtender extends baseFixedColumns(Base) {
+const rowsView = (
+  Base: ModuleType<RowsView & SummaryRowsViewExtension>,
+): ModuleType<
+  RowsView & ColumnFixingRowsViewExtension
+> => class RowsViewFixedColumnsExtender extends baseFixedColumns(Base) {
   protected _fixedScrollTimeout: any;
 
   public dispose() {
@@ -756,7 +760,7 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewFixedColumnsExten
           clearTimeout(this._fixedScrollTimeout);
           this._fixedScrollTimeout = setTimeout(() => {
             scrollTop = $(target).scrollTop();
-            scrollable.scrollTo({ y: scrollTop });
+            scrollable.scrollTo({ top: scrollTop });
           }, scrollDelay);
         });
         eventsEngine.on($content, wheelEventName, (e) => {
@@ -776,7 +780,7 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewFixedColumnsExten
 
           if (shouldScroll) {
             scrollTop = scrollable.scrollTop();
-            scrollable.scrollTo({ y: scrollTop - e.delta });
+            scrollable.scrollTo({ top: scrollTop - e.delta });
 
             const scrollableTop = scrollable.scrollTop() + scrollable.clientHeight();
             const scrollableHeight = scrollable.scrollHeight() + this.getScrollbarWidth();
@@ -857,7 +861,7 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewFixedColumnsExten
     return result && (!this._isFixedColumns || !column.fixed);
   }
 
-  private _renderGroupSummaryCellsCore($groupCell, options, groupCellColSpan, alignByColumnCellCount) {
+  public renderGroupSummaryCellsCore($groupCell, options, groupCellColSpan, alignByColumnCellCount) {
     let alignByFixedColumnCellCount;
 
     if (this._isFixedTableRendering) {
@@ -879,8 +883,7 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewFixedColumnsExten
       alignByColumnCellCount = alignByFixedColumnCellCount;
     }
 
-    // @ts-expect-error DataGrid's method
-    super._renderGroupSummaryCellsCore($groupCell, options, groupCellColSpan, alignByColumnCellCount);
+    super.renderGroupSummaryCellsCore($groupCell, options, groupCellColSpan, alignByColumnCellCount);
   }
 
   private _getSummaryCellIndex(columnIndex, columns) {

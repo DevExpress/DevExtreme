@@ -124,6 +124,7 @@
         "dxDataGrid-aiAssistantAbortConfirmText": "Tancar el xat de l'assistent d'IA interromp les sol·licituds en curs. Voleu tancar el xat?",
         "dxDataGrid-aiAChatEmptyViewMessage": "El xat és buit",
         "dxDataGrid-aiChatEmptyViewPrompt": "L'assistent d'IA està llest per respondre a les vostres preguntes.",
+        "dxDataGrid-aiChatTextareaPlaceholder": "Ask AI Assistant...",
         "dxDataGrid-aiPromptEditorTitle": "Editor de prompt d'IA",
         "dxDataGrid-aiPromptEditorPlaceholder": "Escriviu un prompt a la IA per generar els valors de la columna",
         "dxDataGrid-aiPromptEditorApplyButton": "Aplica",
@@ -919,6 +920,8 @@
         "dxGantt-showDependencies": "Mostra les dependències",
         "dxGantt-dialogStartDateValidation": "La data d'inici ha de ser després de {0}",
         "dxGantt-dialogEndDateValidation": "La data de finalització ha de ser després de {0}",
+
+        "dxMap-markerAriaLabel": "Map marker",
 
         "dxGallery-itemName": "Element de galeria",
 

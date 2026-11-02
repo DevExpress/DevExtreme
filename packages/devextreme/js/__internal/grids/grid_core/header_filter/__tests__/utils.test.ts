@@ -1,8 +1,15 @@
-import { describe, expect, it } from '@jest/globals';
+import {
+  describe,
+  expect,
+  it,
+  jest,
+} from '@jest/globals';
 import filterUtils from '@js/ui/shared/filtering';
+import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 
-import gridCoreUtils from '../../m_utils';
-import { getFormatOptions } from '../m_header_filter';
+import { getFormatOptions } from '../header_filter';
+import type { DateIntervalFormat, HeaderFilterGroupSelector } from '../types';
+import { getHeaderFilterGroupParameters } from '../utils';
 
 describe('getGroupInterval', () => {
   describe('headerFilter.groupInterval normalization', () => {
@@ -66,26 +73,30 @@ describe('getGroupInterval', () => {
   });
 });
 
+type HeaderFilterColumn = Parameters<typeof getHeaderFilterGroupParameters>[0];
+
+const asHeaderFilterColumn = (column: object): HeaderFilterColumn => column as HeaderFilterColumn;
+
 describe('getHeaderFilterGroupParameters', () => {
   it('builds one remote group parameter per level, expanding all but the last', () => {
-    const column = {
+    const column = asHeaderFilterColumn({
       dataField: 'Price', dataType: 'number', headerFilter: { groupInterval: [100, 10] },
-    };
+    });
 
-    expect(gridCoreUtils.getHeaderFilterGroupParameters(column, true)).toEqual([
+    expect(getHeaderFilterGroupParameters(column, true)).toEqual([
       { selector: 'Price', groupInterval: 100, isExpanded: true },
       { selector: 'Price', groupInterval: 10, isExpanded: false },
     ]);
   });
 
   it('supports an arbitrary number of levels', () => {
-    const column = {
+    const column = asHeaderFilterColumn({
       dataField: 'Population',
       dataType: 'number',
       headerFilter: { groupInterval: [100000, 10000, 1000] },
-    };
+    });
 
-    expect(gridCoreUtils.getHeaderFilterGroupParameters(column, true)).toEqual([
+    expect(getHeaderFilterGroupParameters(column, true)).toEqual([
       { selector: 'Population', groupInterval: 100000, isExpanded: true },
       { selector: 'Population', groupInterval: 10000, isExpanded: true },
       { selector: 'Population', groupInterval: 1000, isExpanded: false },
@@ -93,39 +104,95 @@ describe('getHeaderFilterGroupParameters', () => {
   });
 
   it('builds a local interval selector per level that buckets the cell value', () => {
-    const column = {
+    const column = asHeaderFilterColumn({
       dataField: 'Price',
       dataType: 'number',
       headerFilter: { groupInterval: [100, 10] },
-      calculateCellValue: (data) => data.Price,
-    };
+      calculateCellValue: (data: { Price: number }) => data.Price,
+    });
 
-    const params = gridCoreUtils.getHeaderFilterGroupParameters(column);
+    const params = getHeaderFilterGroupParameters(
+      column,
+    ) as HeaderFilterGroupSelector[];
 
     expect(params).toHaveLength(2);
     // 753 -> floor(753 / 100) * 100 on the outer level, floor(753 / 10) * 10 on the inner level
     expect(params[0]({ Price: 753 })).toBe(700);
     expect(params[1]({ Price: 753 })).toBe(750);
   });
+
+  describe('when the column has no group interval', () => {
+    it('should group remotely by the data field', () => {
+      const column = asHeaderFilterColumn({ dataField: 'Name', dataType: 'string' });
+
+      expect(getHeaderFilterGroupParameters(column, true)).toEqual([
+        { selector: 'Name', isExpanded: false },
+      ]);
+    });
+
+    it('should group remotely by the column name when there is no data field', () => {
+      const column = asHeaderFilterColumn({ name: 'nameColumn', dataType: 'string' });
+
+      expect(getHeaderFilterGroupParameters(column, true)).toEqual([
+        { selector: 'nameColumn', isExpanded: false },
+      ]);
+    });
+
+    it('should return a local selector that turns empty values into null', () => {
+      const column = asHeaderFilterColumn({
+        dataField: 'Name',
+        dataType: 'string',
+        calculateCellValue: (data: { Name?: unknown }) => data.Name,
+      });
+
+      const selector = getHeaderFilterGroupParameters(
+        column,
+      ) as HeaderFilterGroupSelector;
+
+      expect(selector({ Name: 'a' })).toBe('a');
+      expect(selector({ Name: 0 })).toBe(0);
+      expect(selector({ Name: '' })).toBeNull();
+      expect(selector({})).toBeNull();
+    });
+
+    it('should pair the local selector with the bound sorting method', () => {
+      const sortingMethod = jest.fn((value1: number, value2: number) => value1 - value2);
+      const column = asHeaderFilterColumn({
+        dataField: 'Name',
+        dataType: 'string',
+        calculateCellValue: (data: { Name?: unknown }) => data.Name,
+        sortingMethod,
+      });
+
+      const [descriptor] = getHeaderFilterGroupParameters(column) as {
+        selector: HeaderFilterGroupSelector;
+        compare: (value1: unknown, value2: unknown) => number;
+      }[];
+
+      expect(descriptor.selector({ Name: '' })).toBeNull();
+      expect(descriptor.compare(3, 1)).toBe(2);
+      expect(sortingMethod.mock.contexts[0]).toBe(column);
+    });
+  });
 });
 
 describe('getFormatOptions', () => {
   it('selects the interval of the requested level for a number[]', () => {
-    const column = { dataType: 'number', headerFilter: { groupInterval: [100, 10] } };
+    const column: Column = { dataType: 'number', headerFilter: { groupInterval: [100, 10] } };
 
     expect(getFormatOptions(700, column, 0).groupInterval).toBe(100);
     expect(getFormatOptions(750, column, 1).groupInterval).toBe(10);
   });
 
   it('formats a numeric bucket as a "<value> - <value + interval>" range', () => {
-    const column = { dataType: 'number', headerFilter: { groupInterval: [100, 10] } };
+    const column: Column = { dataType: 'number', headerFilter: { groupInterval: [100, 10] } };
 
-    expect(getFormatOptions(700, column, 0).getDisplayFormat()).toBe('700 - 800');
-    expect(getFormatOptions(750, column, 1).getDisplayFormat()).toBe('750 - 760');
+    expect(getFormatOptions(700, column, 0).getDisplayFormat?.('')).toBe('700 - 800');
+    expect(getFormatOptions(750, column, 1).getDisplayFormat?.('')).toBe('750 - 760');
   });
 
   it('selects the hierarchy level name for a string[]', () => {
-    const column = { dataType: 'string', headerFilter: { groupInterval: ['Country', 'State', 'City'] } };
+    const column: Column = { dataType: 'string', headerFilter: { groupInterval: ['Country', 'State', 'City'] } };
 
     expect(getFormatOptions('USA', column, 0).groupInterval).toBe('Country');
     expect(getFormatOptions('Arkansas', column, 1).groupInterval).toBe('State');
@@ -133,24 +200,24 @@ describe('getFormatOptions', () => {
   });
 
   it('selects the date interval and its format per level for a date column', () => {
-    const column = { dataType: 'date', headerFilter: { groupInterval: 'month' } };
+    const column: Column = { dataType: 'date', headerFilter: { groupInterval: 'month' } };
 
     const yearLevel = getFormatOptions(2024, column, 0);
     expect(yearLevel.groupInterval).toBe('year');
-    expect(yearLevel.format(2024)).toBe('2024');
+    expect((yearLevel.format as DateIntervalFormat)(2024)).toBe('2024');
 
     const monthLevel = getFormatOptions(3, column, 1);
     expect(monthLevel.groupInterval).toBe('month');
-    expect(monthLevel.format(3)).toBe('March');
+    expect((monthLevel.format as DateIntervalFormat)(3)).toBe('March');
   });
 
   it('selects the date interval and its format per level for a datetime column', () => {
-    const column = { dataType: 'datetime', headerFilter: { groupInterval: 'hour' } };
+    const column: Column = { dataType: 'datetime', headerFilter: { groupInterval: 'hour' } };
 
     expect(getFormatOptions(2024, column, 0).groupInterval).toBe('year');
 
     const hourLevel = getFormatOptions(14, column, 3);
     expect(hourLevel.groupInterval).toBe('hour');
-    expect(hourLevel.format(14)).toBe('14');
+    expect((hourLevel.format as DateIntervalFormat)(14)).toBe('14');
   });
 });

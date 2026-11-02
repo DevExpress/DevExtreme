@@ -1,5 +1,5 @@
 import {
-  afterEach, beforeAll, describe, expect, it,
+  afterAll, afterEach, beforeAll, describe, expect, it,
 } from '@jest/globals';
 import fx from '@js/common/core/animation/fx';
 import $ from '@js/core/renderer';
@@ -54,6 +54,29 @@ describe('Tooltip overlay content aria role', () => {
       const model = await createTooltip(options);
 
       expect(model.getRole()).toBe(role);
+    });
+  });
+
+  describe('on a shown tooltip with focusable toolbar elements', () => {
+    const originalGetClientRects = Element.prototype.getClientRects;
+
+    beforeAll(() => {
+      // jsdom performs no layout, so without this stub nothing counts as visible
+      // and the toolbar buttons are never tabbable.
+      Element.prototype.getClientRects = () => [{}] as unknown as DOMRectList;
+    });
+
+    afterAll(() => {
+      Element.prototype.getClientRects = originalGetClientRects;
+    });
+
+    it('sets the role on the overlay content, not on the toolbar button, when toolbar items with a button are added', async () => {
+      const model = await createTooltip({});
+
+      model.getInstance().option('toolbarItems', [{ widget: 'dxButton', options: { text: 'OK' } }]);
+
+      expect(model.getRole()).toBe('dialog');
+      expect(model.getToolbarButtons().map((button) => button.getAttribute('role'))).toEqual(['button']);
     });
   });
 });

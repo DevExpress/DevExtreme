@@ -1,6 +1,6 @@
 import { equalByValue, getKeyHash } from '@js/core/utils/common';
 import { isDefined } from '@js/core/utils/type';
-import { extend } from '@ts/core/utils/m_extend';
+import { extend } from '@ts/core/utils/extend';
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
 import type { FilterSyncController } from '@ts/grids/grid_core/filter_sync/filter_sync';
 import type { InternalGridOptions } from '@ts/grids/grid_core/types';

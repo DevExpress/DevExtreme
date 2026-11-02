@@ -99,7 +99,7 @@ test.meta({ browserSize: [800, 800] })('Fixed to the right columns should appear
   // act
   await testScreenshot(t, takeScreenshot, 'T1177143-right-fixed-column-with-no-width-columns-1.png', { element: dataGrid.element });
 
-  await dataGrid.scrollTo(t, { x: 5000 });
+  await dataGrid.scrollTo(t, { left: 5000 });
 
   await testScreenshot(t, takeScreenshot, 'T1177143-right-fixed-column-with-no-width-columns-2.png', { element: dataGrid.element });
 
@@ -162,7 +162,7 @@ test('Hovering over a row should work correctly after scrolling when there is a 
     .ok();
 
   // act
-  await dataGrid.scrollTo(t, { y: 300 });
+  await dataGrid.scrollTo(t, { top: 300 });
   dataRow = dataGrid.getDataRow(10);
   await t.hover(dataRow.element);
 
@@ -324,7 +324,7 @@ test('Expand columns headers offsets should be correct with fixed band columns a
 
   await testScreenshot(t, takeScreenshot, 'T1317623-expand-columns-with-band-columns.png', { element: dataGrid.element });
 
-  await dataGrid.scrollTo(t, { x: 5000 });
+  await dataGrid.scrollTo(t, { left: 5000 });
 
   await testScreenshot(t, takeScreenshot, 'T1317623-horizontal-scroll-with-fixed-band-columns.png', { element: dataGrid.element });
 

@@ -189,6 +189,7 @@ export namespace Core {
     export namespace Localization {
         export type Format = CoreLocalizationModule.Format;
         export const formatDate = CoreLocalizationModule.formatDate;
+        export type FormatLocale = CoreLocalizationModule.FormatLocale;
         export const formatMessage = CoreLocalizationModule.formatMessage;
         export const formatNumber = CoreLocalizationModule.formatNumber;
         export const loadMessages = CoreLocalizationModule.loadMessages;

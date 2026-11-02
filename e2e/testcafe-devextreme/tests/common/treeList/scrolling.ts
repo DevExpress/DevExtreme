@@ -125,7 +125,7 @@ test.meta({ browserSize: [800, 800] })('All items should be selected after selec
   await testScreenshot(t, takeScreenshot, 'T1189118-treelist-select-all-with-virtual-scrolling-1', { element: treeList.element });
 
   // act
-  await treeList.scrollTo(t, { y: 300 });
+  await treeList.scrollTo(t, { top: 300 });
 
   await testScreenshot(t, takeScreenshot, 'T1189118-treelist-select-all-with-virtual-scrolling-2', { element: treeList.element });
 

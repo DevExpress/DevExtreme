@@ -1,7 +1,7 @@
 /* eslint-disable class-methods-use-this */
 import $ from '@js/core/renderer';
 import { setTabIndex } from '@js/ui/shared/accessibility';
-import supportUtils from '@ts/core/utils/m_support';
+import supportUtils from '@ts/core/utils/support';
 
 import { AreaItem } from '../area_item/m_area_item';
 import { calculateScrollbarWidth } from '../m_widget_utils';
@@ -61,8 +61,8 @@ class DataArea extends AreaItem {
   }
 
   _moveFakeTable(scrollPos) {
-    this._moveFakeTableHorizontally(scrollPos.x);
-    this._moveFakeTableTop(scrollPos.y);
+    this._moveFakeTableHorizontally(scrollPos.left);
+    this._moveFakeTableTop(scrollPos.top);
     super._moveFakeTable();
   }
 

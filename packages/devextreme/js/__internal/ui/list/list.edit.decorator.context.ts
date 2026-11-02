@@ -45,7 +45,7 @@ class EditDecoratorContext extends EditDecorator {
             opacity: 1,
           },
           to: {
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+            // @ts-expect-error the menu list is rendered before the show animation
             height: (): number => getOuterHeight(this._$menuList),
             opacity: 1,
           },
@@ -63,9 +63,9 @@ class EditDecoratorContext extends EditDecorator {
       },
       _ignoreFunctionValueDeprecation: true,
       // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-      height: (): number => (this._$menuList ? getOuterHeight(this._$menuList) : 0),
+      height: (): number => (this._$menuList ? getOuterHeight(this._$menuList.get(0)) : 0),
       // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-      width: (): number => getOuterWidth(this._list.$element()),
+      width: (): number => getOuterWidth(this._list.$element().get(0)),
       onContentReady: (e): void => {
         this._renderMenuContent(e);
       },

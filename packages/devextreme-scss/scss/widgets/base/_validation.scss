@@ -17,17 +17,12 @@ $validation-summary-item-border-bottom-width: 1px !default;
 }
 
 @mixin dx-modern-styles-validation(
-  $validation-message-font-size,
   $validation-message-line-height,
   $filled-texteditor-input-horizontal-padding,
   $validationsummary-item-margin,
-  $validation-message-vertical-padding,
-  $validation-message-horizontal-padding,
 ) {
   .dx-invalid-message > .dx-overlay-content {
-    padding: $validation-message-vertical-padding $validation-message-horizontal-padding;
     line-height: $validation-message-line-height;
-    font-size: $validation-message-font-size;
 
     .dx-invalid-message-top &,
     .dx-invalid-message-bottom & {

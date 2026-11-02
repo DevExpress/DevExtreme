@@ -155,6 +155,26 @@
                 "DemoType": "Web"
               }
             ]
+          },
+          {
+            "Name": "Page-Level AI Assistant",
+            "Equivalents": "AI-Powered Assistant, Page-Level Copilot, Smart Chat Orchestrator, UI Automation Chat, Contextual AI Assistant, Page-level AI Assistant",
+            "Demos": [
+              {
+                "Title": "Page-Level AI Assistant",
+                "Name": "PageLevelAIAssistant",
+                "Widget": "Chat",
+                "Badge": "AI",
+                "TopLevel": true,
+                "Modules": "openai",
+                "DemoType": "Web",
+                "MvcAdditionalFiles": [
+                  "/Views/Chat/PageLevelAIAssistantForm.cshtml",
+                  "/Views/Chat/PageLevelAIAssistantGrid.cshtml",
+                  "/Views/Chat/PageLevelAIAssistantChat.cshtml"
+                ]
+              }
+            ]
           }
         ]
       },
@@ -4462,6 +4482,25 @@
             ]
           },
           {
+            "Name": "Page-Level AI Assistant",
+            "Equivalents": "AI-Powered Assistant, Page-Level Copilot, Smart Chat Orchestrator, UI Automation Chat, Contextual AI Assistant, Page-level AI Assistant",
+            "Demos": [
+              {
+                "Title": "Page-Level AI Assistant",
+                "Name": "PageLevelAIAssistant",
+                "Widget": "Chat",
+                "Badge": "AI",
+                "Modules": "openai",
+                "DemoType": "Web",
+                "MvcAdditionalFiles": [
+                  "/Views/Chat/PageLevelAIAssistantForm.cshtml",
+                  "/Views/Chat/PageLevelAIAssistantGrid.cshtml",
+                  "/Views/Chat/PageLevelAIAssistantChat.cshtml"
+                ]
+              }
+            ]
+          },
+          {
             "Name": "AI and Chatbot Integration",
             "Equivalents": "AI, Chatbot, Assistant",
             "Demos": [
@@ -6526,8 +6565,7 @@
             "Name": "OpenStreetMapProvider",
             "Widget": "Map",
             "DemoType": "Web",
-            "Badge": "Roadmap",
-            "RoadmapSurveyUrl": "https://www.devexpress.com/support/surveys/devextreme-wg-roadmap-openstreetmap-provider.xml"
+            "Badge": "New"
           },
           {
             "Title": "Markers",

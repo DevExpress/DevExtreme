@@ -1,0 +1,9 @@
+#form-container {
+  border: 1px solid var(--dx-color-border);
+  padding: 16px;
+  background-color: var(--dx-component-color-bg);
+}
+
+::ng-deep .dx-layout-manager .dx-field-item.save-button {
+  padding-bottom: 0;
+}

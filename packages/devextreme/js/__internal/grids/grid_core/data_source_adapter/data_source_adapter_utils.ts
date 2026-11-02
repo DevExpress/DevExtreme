@@ -1,10 +1,10 @@
 import { extend } from '@js/core/utils/extend';
 import { isDefined } from '@js/core/utils/type';
-import commonUtils from '@ts/core/utils/m_common';
+import commonUtils from '@ts/core/utils/common';
 import type { StoreLoadOptions } from '@ts/data/data_source/types';
 
 import { equalFilterParameters } from '../filter/utils';
-import gridCoreUtils from '../m_utils';
+import gridCoreUtils from '../utils';
 import type {
   LoadOperation, OperationTypes, RawItemData,
 } from './types';

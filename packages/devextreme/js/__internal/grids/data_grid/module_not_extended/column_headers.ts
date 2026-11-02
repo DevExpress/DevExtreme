@@ -1,4 +1,4 @@
-import { columnHeadersModule } from '@ts/grids/grid_core/column_headers/m_column_headers';
+import { columnHeadersModule } from '@ts/grids/grid_core/column_headers/column_headers';
 
 import gridCore from '../core';
 

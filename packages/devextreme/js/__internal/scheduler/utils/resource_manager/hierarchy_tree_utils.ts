@@ -1,4 +1,4 @@
-import { getKeyHash } from '@ts/core/utils/m_common';
+import { getKeyHash } from '@ts/core/utils/common';
 
 import type { ResourceData } from '../loader/types';
 

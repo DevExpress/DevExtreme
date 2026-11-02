@@ -702,7 +702,7 @@ QUnit.module('Master Detail', baseModuleConfig, () => {
         // act
         dataGrid.expandRow(1);
         this.clock.tick(10);
-        dataGrid.getScrollable().scrollTo({ x: 0, y: 1000 });
+        dataGrid.getScrollable().scrollTo({ left: 0, top: 1000 });
 
         // assert
         assert.ok(dataGrid.getScrollable().scrollTop() > 100, 'vertical scroll is exists');

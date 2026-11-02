@@ -3,7 +3,7 @@ import $ from 'jquery';
 import 'ui/data_grid';
 
 import { keyboardNavigationModule } from '__internal/grids/grid_core/keyboard_navigation/m_keyboard_navigation';
-import { headersKeyboardNavigationModule } from '__internal/grids/grid_core/keyboard_navigation/m_headers_keyboard_navigation';
+import { headersKeyboardNavigationModule } from '__internal/grids/grid_core/keyboard_navigation/headers_keyboard_navigation';
 import commonUtils from 'core/utils/common';
 import typeUtils from 'core/utils/type';
 import publicComponentUtils from 'core/utils/public_component';

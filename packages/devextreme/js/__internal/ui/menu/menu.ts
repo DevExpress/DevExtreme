@@ -335,7 +335,7 @@ class Menu extends MenuBase<MenuProperties> {
       return;
     }
 
-    const containerWidth: number = getOuterWidth(this.$element());
+    const containerWidth: number = getOuterWidth(this.$element().get(0));
 
     this._toggleAdaptiveMode(this._menuItemsWidth > containerWidth);
     this._overlay?.option('maxHeight', getElementMaxHeightByWindow(this.$element()));

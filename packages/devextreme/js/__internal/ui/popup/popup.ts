@@ -45,7 +45,7 @@ import {
   isMaterialBased,
 } from '@js/ui/themes';
 import type { Properties as ToolbarProperties } from '@js/ui/toolbar';
-import windowUtils from '@ts/core/utils/m_window';
+import windowUtils from '@ts/core/utils/window';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { SupportedKeys } from '@ts/core/widget/widget';
 import type { KeyboardKeyDownEvent } from '@ts/events/core/keyboard_processor';
@@ -792,6 +792,10 @@ class Popup<
     });
   }
 
+  _getAriaTarget(): dxElementWrapper {
+    return this.$overlayContent();
+  }
+
   protected _getAriaRole(): string {
     return 'dialog';
   }
@@ -1109,8 +1113,8 @@ class Popup<
     }
 
     this._renderedDimensions = {
-      width: parseInt(getWidth(this._$content), 10),
-      height: parseInt(getHeight(this._$content), 10),
+      width: parseInt(String(getWidth(this._$content)), 10),
+      height: parseInt(String(getHeight(this._$content)), 10),
     };
   }
 
@@ -1374,7 +1378,7 @@ class Popup<
   }
 
   _renderFullscreenWidthClass(): void {
-    const isFullScreen = getOuterWidth(this.$overlayContent()) === getWidth(window);
+    const isFullScreen = getOuterWidth(this.$overlayContent().get(0)) === getWidth(window);
     this.$overlayContent().toggleClass(POPUP_FULL_SCREEN_WIDTH_CLASS, isFullScreen);
   }
 

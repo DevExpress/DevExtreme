@@ -1,7 +1,10 @@
-@use "colors" as *;
 @use "sizes" as *;
 @use "../../base/radioGroup/mixins" as *;
-@use "../../base/radioGroup";
+@use "../radioButton/sizes" as radioButtonSizes;
+@use "../../base/radioGroup" with (
+  $radiogroup-radio-value-container-padding-inline-end: radioButtonSizes.$fluent-radio-value-container-padding,
+  $radiogroup-collection-column-gap: 16px,
+);
 @use "../radioButton";
 @include dx-radiogroup-mixin(
   $fluent-radio-button-vertical-margin,
@@ -11,11 +14,5 @@
 .dx-radiogroup {
   &.dx-state-disabled {
     opacity: 1;
-  }
-}
-
-.dx-radiogroup-horizontal {
-  .dx-collection {
-    column-gap: 16px;
   }
 }

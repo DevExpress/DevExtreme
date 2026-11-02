@@ -2803,6 +2803,34 @@ QUnit.module('Chat', () => {
         });
     });
 
+    QUnit.module('_inputFieldPlaceholder', moduleConfig, () => {
+        const DEFAULT_PLACEHOLDER = 'Type a message';
+
+        QUnit.test('textarea should have the default placeholder if _inputFieldPlaceholder is not set', function(assert) {
+            assert.strictEqual(this.textArea.option('placeholder'), DEFAULT_PLACEHOLDER, 'default placeholder is kept');
+        });
+
+        QUnit.test('_inputFieldPlaceholder should be passed to textarea on init', function(assert) {
+            this.reinit({ _inputFieldPlaceholder: 'Ask AI' });
+
+            assert.strictEqual(this.textArea.option('placeholder'), 'Ask AI', 'placeholder is passed to textarea');
+        });
+
+        QUnit.test('_inputFieldPlaceholder should be updated in textarea at runtime', function(assert) {
+            this.instance.option('_inputFieldPlaceholder', 'Ask AI');
+
+            assert.strictEqual(this.textArea.option('placeholder'), 'Ask AI', 'placeholder is updated in textarea');
+        });
+
+        QUnit.test('textarea should get the default placeholder back when _inputFieldPlaceholder is reset at runtime', function(assert) {
+            this.reinit({ _inputFieldPlaceholder: 'Ask AI' });
+
+            this.instance.resetOption('_inputFieldPlaceholder');
+
+            assert.strictEqual(this.textArea.option('placeholder'), DEFAULT_PLACEHOLDER, 'default placeholder is restored');
+        });
+    });
+
     QUnit.module('Suggestions integration', moduleConfig, () => {
         QUnit.test('should render suggestions element if option is not passed', function(assert) {
             assert.strictEqual(this.getSuggestionsElement().length, 1, 'suggestions element is rendered without options');

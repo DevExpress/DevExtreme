@@ -32,7 +32,7 @@ test('DataGrid should scroll to the first cell of the next row and focus it when
     .ok();
 
   // act
-  await dataGrid.scrollTo(t, { x: 10000 });
+  await dataGrid.scrollTo(t, { left: 10000 });
 
   // assert
   await t
@@ -164,7 +164,7 @@ test('DataGrid should scroll to the last cell of the previous row and focus it w
         .ok();
 
       // act
-      await dataGrid.scrollTo(t, { x: rtlEnabled ? 0 : 10000 });
+      await dataGrid.scrollTo(t, { left: rtlEnabled ? 0 : 10000 });
 
       // assert
       await t
@@ -273,7 +273,7 @@ test('DataGrid should scroll to the last cell of the previous row and focus it w
         .ok();
 
       // act
-      await dataGrid.scrollTo(t, { x: rtlEnabled ? 0 : 10000 });
+      await dataGrid.scrollTo(t, { left: rtlEnabled ? 0 : 10000 });
 
       // assert
       await t

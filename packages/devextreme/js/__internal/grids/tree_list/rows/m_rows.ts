@@ -3,12 +3,12 @@ import { removeEvent } from '@js/common/core/events/remove';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { isDefined } from '@js/core/utils/type';
-import { rowsModule, RowsView } from '@ts/grids/grid_core/views/m_rows_view';
+import { rowsModule, RowsView } from '@ts/grids/grid_core/views/rows_view';
 
 import treeListCore from '../core';
+import { CLASSES } from './const';
 
 const TREELIST_TEXT_CONTENT = 'dx-treelist-text-content';
-const TREELIST_EXPAND_ICON_CONTAINER_CLASS = 'dx-treelist-icon-container';
 const TREELIST_CELL_EXPANDABLE_CLASS = 'dx-treelist-cell-expandable';
 const TREELIST_EMPTY_SPACE_CLASS = 'dx-treelist-empty-space';
 const TREELIST_EMPTY_SPACE_LAST_CLASS = 'dx-treelist-empty-space--last';
@@ -39,10 +39,10 @@ const createIcon = (
   return $iconElement;
 };
 
-class TreeListRowsView extends RowsView {
+export class TreeListRowsView extends RowsView {
   private _renderIconContainer($container, options) {
     const $iconContainer = $('<div>')
-      .addClass(TREELIST_EXPAND_ICON_CONTAINER_CLASS)
+      .addClass(CLASSES.expandIconContainer)
       .appendTo($container);
 
     if (options.watch) {
@@ -80,7 +80,7 @@ class TreeListRowsView extends RowsView {
     return $iconContainer;
   }
 
-  private _renderCellCommandContent(container, model) {
+  protected _renderCellCommandContent(container, model): boolean {
     this._renderIconContainer(container, model);
     return true;
   }
@@ -137,7 +137,7 @@ class TreeListRowsView extends RowsView {
     if (node) {
       this.setAria('level', row.level + 1, $rowElement);
       if (node.hasChildren) {
-        this.setAriaExpandedAttribute($rowElement, row);
+        this.setAriaExpandedAttribute($rowElement, row.isExpanded);
       }
     }
 
@@ -152,9 +152,8 @@ class TreeListRowsView extends RowsView {
     return !!$targetElement.closest(`.${TREELIST_EXPANDED_CLASS}, .${TREELIST_COLLAPSED_CLASS}`).length;
   }
 
-  public setAriaExpandedAttribute($row, row) {
-    const isRowExpanded = row.isExpanded;
-    this.setAria('expanded', isDefined(isRowExpanded) && isRowExpanded.toString(), $row);
+  public setAriaExpandedAttribute($row, isExpanded) {
+    this.setAria('expanded', isDefined(isExpanded) && isExpanded.toString(), $row);
   }
 }
 

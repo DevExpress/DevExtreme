@@ -1,6 +1,5 @@
 @use "sass:color";
 @use "../colors" as *;
-@use "../button/colors" as *;
 @use "../loadIndicator/colors" as *;
 
 $diagram-border-color: $base-border-color !default;

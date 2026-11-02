@@ -17,6 +17,7 @@ import {
   current, isCompact, isFluent, isMaterial,
 } from '@js/ui/themes';
 import Toolbar from '@js/ui/toolbar';
+import { themeLength } from '@ts/core/utils/theme_length';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { WidgetProperties } from '@ts/core/widget/widget';
 import Widget from '@ts/core/widget/widget';
@@ -433,6 +434,22 @@ class FileManagerToolbar extends Widget<FileManagerToolbarOptions> {
     };
   }
 
+  _getViewModePopupWidth(): number | undefined {
+    const fromTheme = themeLength(this.$element(), '--dx-file-manager-toolbar-viewmode-popup-width');
+
+    if (isDefined(fromTheme)) {
+      return fromTheme;
+    }
+    if (isMaterial(current())) {
+      return isCompact(current()) ? 28 : 36;
+    }
+    if (isFluent(current())) {
+      return isCompact(current()) ? 34 : 40;
+    }
+
+    return undefined;
+  }
+
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   _createViewModeItem() {
     const commandItems: Command[] = ['details', 'thumbnails'].map((name: string) => {
@@ -447,11 +464,10 @@ class FileManagerToolbar extends Widget<FileManagerToolbarOptions> {
     const dropDownOptions: any = {
       container: this._$viewSwitcherPopup,
     };
+    const width = this._getViewModePopupWidth();
 
-    if (isMaterial(current())) {
-      dropDownOptions.width = isCompact(current()) ? 28 : 36;
-    } else if (isFluent(current())) {
-      dropDownOptions.width = isCompact(current()) ? 34 : 40;
+    if (isDefined(width)) {
+      dropDownOptions.width = width;
     }
 
     return {

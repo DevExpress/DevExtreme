@@ -364,7 +364,6 @@ class CollectionWidget<
     }
 
     const items = rawItems.map(({ element, options }) => {
-      // @ts-expect-error ts-error
       const isTemplateRequired = /\S/.test(element.innerHTML) && !options.template;
 
       if (isTemplateRequired) {
@@ -373,7 +372,6 @@ class CollectionWidget<
         $(element).remove();
       }
 
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       return options;
     });
 
@@ -697,7 +695,6 @@ class CollectionWidget<
 
   _resetItemFocus($item: dxElementWrapper): void {
     const { focusedElement } = this.option();
-    // @ts-expect-error ts-error
     if ($item.is(focusedElement)) {
       this._resetFocusedElement();
     }
@@ -714,7 +711,6 @@ class CollectionWidget<
   ): void {
     const itemData = this._getItemData($item);
     const index = $item.data(this._itemIndexKey());
-    // @ts-expect-error ts-error
     // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
     this._renderItem(this._renderedItemsCount + index, itemData, null, $item);
   }
@@ -1067,7 +1063,6 @@ class CollectionWidget<
   _closestFocusable(
     $target: dxElementWrapper,
   ): dxElementWrapper | undefined {
-    // @ts-expect-error ts-error
     if ($target.is(focusable)) {
       return $target;
     }
@@ -1076,7 +1071,6 @@ class CollectionWidget<
         && !domAdapter.isDocument($nextTarget.get(0))
         && !domAdapter.isDocumentFragment($nextTarget.get(0))
     ) {
-      // @ts-expect-error ts-error
       if ($nextTarget.is(focusable)) {
         return $nextTarget;
       }
@@ -1533,7 +1527,7 @@ class CollectionWidget<
   }
 
   _getItemData(itemElement: Element | dxElementWrapper): TItem {
-    return $(itemElement).data(this._itemDataKey()) as TItem;
+    return $(itemElement).data<TItem>(this._itemDataKey());
   }
 
   _getSummaryItemsSize(
@@ -1546,9 +1540,9 @@ class CollectionWidget<
     if (items) {
       each(items, (_index, item) => {
         if (dimension === 'width') {
-          result += getOuterWidth(item, includeMargin ?? false);
+          result += Number(getOuterWidth($(item), includeMargin ?? false));
         } else if (dimension === 'height') {
-          result += getOuterHeight(item, includeMargin ?? false);
+          result += Number(getOuterHeight($(item), includeMargin ?? false));
         }
       });
     }

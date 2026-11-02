@@ -1,6 +1,6 @@
 import type { Callback } from '@js/core/utils/callbacks';
 import type { StoreChange } from '@js/data/store';
-import { isDefined } from '@ts/core/utils/m_type';
+import { isDefined } from '@ts/core/utils/type';
 import type Store from '@ts/data/abstract_store';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 
@@ -9,9 +9,9 @@ import type { DataController } from '../../data_controller/data_controller';
 import type { DataSourceController } from '../../data_source/data_source_controller';
 import type DataSourceAdapter from '../../data_source_adapter/data_source_adapter';
 import type { ChangedEvent, RawItemData } from '../../data_source_adapter/types';
-import gridCoreUtils from '../../m_utils';
 import { Controller } from '../../modules/modules';
 import type { RowKey } from '../../types';
+import gridCoreUtils from '../../utils';
 import type { InternalRequestCallbacks } from '../types';
 import { getAICommandColumnDefaultOptions, isAIColumnAutoMode, isPromptOption } from '../utils';
 import { AIColumnIntegrationController } from './ai_column_integration_controller';

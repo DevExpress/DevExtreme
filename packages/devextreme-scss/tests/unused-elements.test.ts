@@ -23,7 +23,7 @@ const getImagesFromContent = (content: string): string[] => {
 };
 
 const getFilesFromDirectory = (directoryName: string, extensions: string[] = []): string[] => {
-  const fullDirName = join(process.cwd(), directoryName);
+  const fullDirName = join(__dirname, '..', directoryName);
   const result: string[] = [];
 
   const walkDirectory = (directory: string): void => {
@@ -100,7 +100,7 @@ test('There are no unused images in repository', () => {
   expect(fullImagesFileList).toEqual(usedImagesFileList);
 });
 
-const themes = ['generic', 'material', 'fluent'];
+const themes = ['generic', 'material', 'fluent', 'fluent-next'];
 const readAnywhere = variableUsageOf(['base', ...themes]).read;
 
 themes.forEach((themeName) => {

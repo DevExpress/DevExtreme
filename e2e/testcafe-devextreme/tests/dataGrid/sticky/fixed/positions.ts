@@ -23,7 +23,7 @@ borderConfigs.forEach(({ showColumnLines, showBorders }) => {
       await testScreenshot(t, takeScreenshot, `left-position-1(cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}).png`, { element: dataGrid.element });
 
       // act
-      await dataGrid.scrollTo(t, { x: rtlEnabled ? 0 : 10000 });
+      await dataGrid.scrollTo(t, { left: rtlEnabled ? 0 : 10000 });
 
       await testScreenshot(t, takeScreenshot, `left-position-2(cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}).png`, { element: dataGrid.element });
 
@@ -55,7 +55,7 @@ borderConfigs.forEach(({ showColumnLines, showBorders }) => {
       await testScreenshot(t, takeScreenshot, `right-position-1(cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}).png`, { element: dataGrid.element });
 
       // act
-      await dataGrid.scrollTo(t, { x: rtlEnabled ? 0 : 10000 });
+      await dataGrid.scrollTo(t, { left: rtlEnabled ? 0 : 10000 });
 
       await testScreenshot(t, takeScreenshot, `right-position-2(cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}).png`, { element: dataGrid.element });
 
@@ -87,7 +87,7 @@ borderConfigs.forEach(({ showColumnLines, showBorders }) => {
       await testScreenshot(t, takeScreenshot, `left-right-positions-1(cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}).png`, { element: dataGrid.element });
 
       // act
-      await dataGrid.scrollTo(t, { x: rtlEnabled ? 0 : 10000 });
+      await dataGrid.scrollTo(t, { left: rtlEnabled ? 0 : 10000 });
 
       await testScreenshot(t, takeScreenshot, `left-right-positions-2(cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}).png`, { element: dataGrid.element });
 
@@ -123,7 +123,7 @@ borderConfigs.forEach(({ showColumnLines, showBorders }) => {
       await testScreenshot(t, takeScreenshot, `left-right-sticky-positions-1(cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}).png`, { element: dataGrid.element });
 
       // act
-      await dataGrid.scrollTo(t, { x: rtlEnabled ? 0 : 10000 });
+      await dataGrid.scrollTo(t, { left: rtlEnabled ? 0 : 10000 });
 
       await testScreenshot(t, takeScreenshot, `left-right-sticky-positions-2(cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}).png`, { element: dataGrid.element });
 
@@ -167,7 +167,7 @@ borderConfigs.forEach(({ showColumnLines, showBorders }) => {
       await testScreenshot(t, takeScreenshot, `sticky-position-1-(case-1)(cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}).png`, { element: dataGrid.element });
 
       // act
-      await dataGrid.scrollTo(t, { x: rtlEnabled ? 0 : 10000 });
+      await dataGrid.scrollTo(t, { left: rtlEnabled ? 0 : 10000 });
 
       await testScreenshot(t, takeScreenshot, `sticky-position-2-(case-1)(cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}).png`, { element: dataGrid.element });
 
@@ -203,7 +203,7 @@ borderConfigs.forEach(({ showColumnLines, showBorders }) => {
       await testScreenshot(t, takeScreenshot, `sticky-position-1-(case-2)(cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}).png`, { element: dataGrid.element });
 
       // act
-      await dataGrid.scrollTo(t, { x: rtlEnabled ? 0 : 10000 });
+      await dataGrid.scrollTo(t, { left: rtlEnabled ? 0 : 10000 });
 
       await testScreenshot(t, takeScreenshot, `sticky-position-2-(case-2)(cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}).png`, { element: dataGrid.element });
 
@@ -245,7 +245,7 @@ borderConfigs.forEach(({ showColumnLines, showBorders }) => {
       await testScreenshot(t, takeScreenshot, `sticky-position-1-(case-3)(cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}).png`, { element: dataGrid.element });
 
       // act
-      await dataGrid.scrollTo(t, { x: rtlEnabled ? 0 : 10000 });
+      await dataGrid.scrollTo(t, { left: rtlEnabled ? 0 : 10000 });
 
       await testScreenshot(t, takeScreenshot, `sticky-position-2-(case-3)(cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}).png`, { element: dataGrid.element });
 

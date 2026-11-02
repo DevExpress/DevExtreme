@@ -1,10 +1,8 @@
-/* stylelint-disable no-duplicate-selectors */
 @use "sass:math";
 @use "../colors" as *;
 @use "../sizes" as *;
 @use "../../sizes" as *;
 @use "../../textEditor" as *;
-@use "../../textEditor/sizes" as *;
 @use "../variables" as *;
 
 @mixin fluent-grid-base-cell($widget-name) {
@@ -28,12 +26,6 @@
   // #endregion
 
   // #region sizing
-
-  // (0,1,0)
-  .dx-command-adaptive {
-    width: 2 * $fluent-grid-base-cell-horizontal-padding + $fluent-base-icon-size;
-    min-width: 2 * $fluent-grid-base-cell-horizontal-padding + $fluent-base-icon-size;
-  }
 
   // (0,2,0)
   .dx-#{$widget-name} .dx-command-drag {

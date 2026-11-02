@@ -3,7 +3,9 @@
 @use "../colors" as *;
 @use "sizes" as *;
 @use "../../base/icon_fonts" as *;
-@use "../../base/gallery";
+@use "../../base/gallery" with (
+  $gallery-indicator-item-margin: 5px - math.div($material-gallery-indicator-size, 2) 6px,
+);
 
 .dx-gallery {
   .dx-gallery-nav-button-prev,
@@ -84,7 +86,6 @@
   border: 1px solid;
   border-color: $gallery-indicator-item-border-color;
   pointer-events: auto;
-  margin: 5px - math.div($material-gallery-indicator-size, 2) 6px;
   width: $material-gallery-indicator-size;
   height: $material-gallery-indicator-size;
   background: $gallery-indicator-bg;

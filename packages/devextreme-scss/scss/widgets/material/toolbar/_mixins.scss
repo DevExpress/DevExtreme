@@ -1,5 +1,4 @@
 @use "sizes" as *;
-@use "../typography/sizes" as *;
 
 @mixin dx-toolbar-sizing($height, $padding, $label-font-size, $item-spacing) {
   padding: $padding;

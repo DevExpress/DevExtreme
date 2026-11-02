@@ -1,5 +1,6 @@
 import type { NativeEventInfo } from '@js/common/core/events';
 import $, { type dxElementWrapper } from '@js/core/renderer';
+import { isDefined } from '@js/core/utils/type';
 import type { InteractionEvent } from '@js/events';
 import type { Attachment, InputFieldTextChangedEvent, SendButtonProperties } from '@js/ui/chat';
 import type { Properties as FileUploaderProperties } from '@js/ui/file_uploader';
@@ -31,6 +32,8 @@ export interface Properties extends DOMComponentProperties<MessageBox> {
   hoverStateEnabled?: boolean;
 
   fileUploaderOptions?: FileUploaderProperties;
+
+  placeholder?: string;
 
   previewText?: string;
 
@@ -81,6 +84,7 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
       focusStateEnabled: true,
       hoverStateEnabled: true,
       fileUploaderOptions: undefined,
+      placeholder: undefined,
       previewText: '',
       speechToTextEnabled: false,
       speechToTextOptions: undefined,
@@ -174,6 +178,7 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
       fileUploaderOptions,
       focusStateEnabled,
       hoverStateEnabled,
+      placeholder,
       previewText,
       speechToTextEnabled,
       speechToTextOptions,
@@ -186,6 +191,7 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
       fileUploaderOptions,
       focusStateEnabled,
       hoverStateEnabled,
+      ...isDefined(placeholder) && { placeholder },
       // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
       value: previewText || text,
       speechToTextEnabled,
@@ -323,6 +329,14 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
 
       case 'text':
         this._textArea.option('value', value);
+        break;
+
+      case 'placeholder':
+        if (isDefined(value)) {
+          this._textArea.option('placeholder', value);
+        } else {
+          this._textArea.resetOption('placeholder');
+        }
         break;
 
       case 'sendButtonOptions':

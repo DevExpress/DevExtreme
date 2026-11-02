@@ -5,6 +5,7 @@
   $pagination-padding-block-fallback: 8px,
   $pagination-info-opacity: 0.7,
   $pagination-nav-disabled-opacity: 0.3,
+  $pagination-page-size-first-child-margin-left: 0,
 );
 @use "../gridBase/sizes" as *;
 
@@ -76,11 +77,6 @@
   }
 
   .dx-page-sizes .dx-page-size {
-    &:first-child,
-    &.dx-first-child {
-      margin-left: 0;
-    }
-
     padding: $fluent-pagination-page-padding;
     line-height: $fluent-pagination-page-line-height;
   }

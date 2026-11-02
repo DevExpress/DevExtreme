@@ -3,12 +3,10 @@
 @use "../colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
-@use "../../base/toast";
+@use "../../base/toast" with (
+  $toast-stack-gap: $fluent-toast-item-gap,
+);
 @use "../overlay";
-
-.dx-toast-stack {
-  gap: $fluent-toast-item-gap;
-}
 
 .dx-toast-content {
   font-size: $fluent-base-font-size;

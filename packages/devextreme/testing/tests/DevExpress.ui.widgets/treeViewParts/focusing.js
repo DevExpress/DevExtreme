@@ -194,11 +194,11 @@ QUnit.test('Scroll should not jump down when focusing on item (T492496)', functi
     const clock = sinon.useFakeTimers();
 
     try {
-        scrollable.scrollTo({ y: 56 });
+        scrollable.scrollTo({ top: 56 });
         $items.last().trigger('dxpointerdown');
         assert.equal(scrollable.scrollTop(), 56, 'scroll top position');
 
-        scrollable.scrollTo({ y: 0 });
+        scrollable.scrollTo({ top: 0 });
         $treeView.trigger('focusin');
         assert.equal(scrollable.scrollTop(), 0, 'scroll top position');
 
@@ -247,11 +247,11 @@ QUnit.test('Scroll should not jump down when focusing on Select All (T517945)', 
     const clock = sinon.useFakeTimers();
 
     try {
-        scrollable.scrollTo({ y: 99 });
+        scrollable.scrollTo({ top: 99 });
         $lastItem.trigger('dxpointerdown');
         assert.equal(scrollable.scrollTop(), 99, 'scroll top position');
 
-        scrollable.scrollTo({ y: 0 });
+        scrollable.scrollTo({ top: 0 });
         assert.equal(scrollable.scrollTop(), 0, 'scroll top position');
 
         $treeView.trigger('focusin');

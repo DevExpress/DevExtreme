@@ -287,16 +287,16 @@ class NativeStrategy<
 
   _updateDimensions(): void {
     this._containerSize = {
-      height: getHeight(this._$container),
-      width: getWidth(this._$container),
+      height: getHeight(this._$container.get(0)),
+      width: getWidth(this._$container.get(0)),
     };
     this._componentContentSize = {
-      height: getHeight(this._component.$content()),
-      width: getWidth(this._component.$content()),
+      height: getHeight(this._component.$content().get(0)),
+      width: getWidth(this._component.$content().get(0)),
     };
     this._contentSize = {
-      height: getHeight(this._$content),
-      width: getWidth(this._$content),
+      height: getHeight(this._$content.get(0)),
+      width: getWidth(this._$content.get(0)),
     };
   }
 

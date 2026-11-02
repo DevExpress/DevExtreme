@@ -1,6 +1,6 @@
 @use "../sizes" as *;
 @use "../colors" as *;
-@use "colors" as *;
+@use "colors";
 
 $generic-checkbox-icon-font-size: null !default;
 

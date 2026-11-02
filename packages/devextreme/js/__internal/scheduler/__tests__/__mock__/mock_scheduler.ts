@@ -1,5 +1,5 @@
 import { jest } from '@jest/globals';
-import { logger } from '@ts/core/utils/m_console';
+import { logger } from '@ts/core/utils/console';
 import DOMComponent from '@ts/core/widget/dom_component';
 
 import SchedulerWorkSpace from '../../workspaces/work_space';

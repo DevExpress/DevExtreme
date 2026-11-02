@@ -996,10 +996,13 @@ class DropDownList<
     const windowHeight = getOuterHeight(window);
 
     const containerHeight = $customBoundaryContainer
-      ? Math.min(getOuterHeight($customBoundaryContainer), windowHeight)
+      ? Math.min(getOuterHeight($customBoundaryContainer.get(0)), windowHeight)
       : windowHeight;
 
-    const maxHeight = Math.max(offsetTop, containerHeight - offsetTop - getOuterHeight($element));
+    const maxHeight = Math.max(
+      offsetTop,
+      containerHeight - offsetTop - getOuterHeight($element.get(0)),
+    );
 
     return Math.min(containerHeight * 0.5, maxHeight);
   }

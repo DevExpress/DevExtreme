@@ -20,6 +20,8 @@ export const isMaterial = (): boolean => (process.env.theme ?? defaultThemeName)
 
 export const isFluent = (): boolean => (process.env.theme ?? defaultThemeName).startsWith('fluent');
 
+export const isFluentNext = (): boolean => (process.env.theme ?? defaultThemeName).startsWith('fluent-next');
+
 export const isMaterialBased = (): boolean => isMaterial() || isFluent();
 
 export const getFullThemeName = (): string => process.env.theme ?? defaultThemeName;

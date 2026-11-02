@@ -3,5 +3,4 @@ export const CLASSES = {
   detailCell: 'dx-master-detail-cell',
   detailContainer: 'master-detail-container',
   cellFocusDisabledClass: 'dx-cell-focus-disabled',
-  rowLines: 'dx-row-lines',
 };

@@ -29,8 +29,6 @@ import { skippedTests } from './skipped-tests';
 import { widgetsGalleryServiceMock } from './apiMocks/widgetsGalleryServiceMock';
 import { xmlaServiceMock } from './apiMocks/xmlaServiceMock';
 
-import { gitHubIgnored } from '../utils/visual-tests/github-ignored-list';
-
 const execTestCafeCode = (t, code) => {
   // eslint-disable-next-line no-eval
   const testCafeFunction = eval(code);
@@ -113,15 +111,6 @@ const getIgnoredRules = (testName) => {
     ...(specificRules[testName] || []),
   ];
 };
-
-// The appointment title and date do not reach the AA contrast ratio: the date line is dimmed
-// to 70% opacity and the appointments are painted with the resource colors.
-const getAxeContext = (testName) => (testName.startsWith('Scheduler-')
-  ? {
-    include: ['.demo-container'],
-    exclude: ['.dx-scheduler-appointment-title', '.dx-scheduler-appointment-content-date'],
-  }
-  : '.demo-container');
 
 const getClientScripts = (approach: string) => {
   const scripts = [
@@ -206,21 +195,16 @@ Object.values(FRAMEWORKS).forEach((approach) => {
       }
     }
 
-    const isGitHubDemos = process.env.ISGITHUBDEMOS;
-    let pageURL = '';
-    const theme = process.env.THEME.replace('generic.', '');
-    if (isGitHubDemos) {
-      pageURL = `http://127.0.0.1:8080/Demos/${widgetName}/${demoName}/${approach}/?theme=dx.${theme}`;
-    } else {
-      changeTheme(__dirname, `../${demoPath}/index.html`, process.env.THEME);
-      pageURL = `http://127.0.0.1:8080/apps/demos/Demos/${widgetName}/${demoName}/${approach}/`;
-    }
-    // remove when tests enabled not only for datagrid
-    if (isGitHubDemos && (widgetName !== 'DataGrid' || gitHubIgnored.includes(demoName))) {
+    changeTheme(__dirname, `../${demoPath}/index.html`, process.env.THEME);
+    const pageURL = `http://127.0.0.1:8080/apps/demos/Demos/${widgetName}/${demoName}/${approach}/`;
+
+    if (shouldSkipDemo(approach, widgetName, demoName, skippedTests) && process.env.STRATEGY !== 'accessibility') {
       return;
     }
 
-    if (shouldSkipDemo(approach, widgetName, demoName, skippedTests) && process.env.STRATEGY !== 'accessibility') {
+    if (process.env.STRATEGY === 'accessibility'
+      && process.env.THEME?.startsWith('fluent-next')
+      && getIgnoredRules(testName).includes('color-contrast')) {
       return;
     }
 
@@ -248,13 +232,18 @@ Object.values(FRAMEWORKS).forEach((approach) => {
 
         if (process.env.STRATEGY === 'accessibility') {
           const ignoredRules = getIgnoredRules(testName);
-          const options = { rules: {} };
+          const isDesignSystemFluent = process.env.THEME?.startsWith('fluent-next');
+          const colorContrastIgnored = ignoredRules.includes('color-contrast');
+          const options = isDesignSystemFluent
+            ? { runOnly: { type: 'rule' as const, values: colorContrastIgnored ? [] : ['color-contrast'] }, rules: {} }
+            : { rules: {} };
 
           ignoredRules.forEach((ruleName) => {
+            if (isDesignSystemFluent && ruleName === 'color-contrast') return;
             options.rules[ruleName] = { enabled: false };
           });
 
-          const axeResult = await axeCheck(t, getAxeContext(testName), options);
+          const axeResult = await axeCheck(t, '.demo-container', options);
           const { error, results } = axeResult;
 
           if (results.violations.length > 0) {

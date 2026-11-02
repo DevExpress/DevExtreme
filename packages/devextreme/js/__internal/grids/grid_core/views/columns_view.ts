@@ -28,25 +28,28 @@ import {
 import { getWindow, hasWindow } from '@js/core/utils/window';
 import type { DxEvent } from '@js/events';
 import type { ActionEvent } from '@ts/core/action';
-import supportUtils from '@ts/core/utils/m_support';
-import type { AdaptiveColumnsController } from '@ts/grids/grid_core/adaptivity/m_adaptivity';
-import type { ColumnChooserController, ColumnChooserView } from '@ts/grids/grid_core/column_chooser/m_column_chooser';
+import supportUtils from '@ts/core/utils/support';
+import type { AdaptiveColumnsViewController } from '@ts/grids/grid_core/adaptivity/adaptivity';
+import { HIDDEN_COLUMNS_WIDTH } from '@ts/grids/grid_core/adaptivity/const';
+import type { ColumnChooserController, ColumnChooserView } from '@ts/grids/grid_core/column_chooser/column_chooser';
 import { CLASSES as COLUMN_FIXING_CLASSES } from '@ts/grids/grid_core/column_fixing/const';
 import { CLASSES as COLUMN_HEADERS_CLASSES } from '@ts/grids/grid_core/column_headers/const';
 import { ColumnStateMixin } from '@ts/grids/grid_core/column_state_mixin/column_state_mixin';
 import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/columns_controller';
 import { CLASSES as COLUMNS_CONTROLLER_CLASSES } from '@ts/grids/grid_core/columns_controller/const';
-import type { Column, ColumnsChanges } from '@ts/grids/grid_core/columns_controller/types';
+import type {
+  Column, ColumnRenderTemplate, ColumnsChanges, ColumnTemplateSource, TemplateModel,
+} from '@ts/grids/grid_core/columns_controller/types';
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
 import type { DataChange, ProcessedItem } from '@ts/grids/grid_core/data_controller/types';
-import type { EditorFactory } from '@ts/grids/grid_core/editor_factory/m_editor_factory';
+import type { EditorFactory } from '@ts/grids/grid_core/editor_factory/editor_factory';
 import { CLASSES as ERROR_HANDLING_CLASSES } from '@ts/grids/grid_core/error_handling/const';
 import { CLASSES as FILTER_ROW_CLASSES } from '@ts/grids/grid_core/filter_row/const';
-import gridCoreUtils from '@ts/grids/grid_core/m_utils';
 import { CLASSES as MASTER_DETAIL_CLASSES } from '@ts/grids/grid_core/master_detail/const';
 import modules from '@ts/grids/grid_core/modules/modules';
 import type { SelectionController } from '@ts/grids/grid_core/selection/m_selection';
 import type { OptionChanged } from '@ts/grids/grid_core/types';
+import gridCoreUtils from '@ts/grids/grid_core/utils';
 import { FIELD_ITEM_CONTENT_CLASS } from '@ts/ui/form/constants';
 
 import { CLASSES } from './const';
@@ -56,20 +59,18 @@ import type {
   CellEventOptions,
   CellPosition,
   CellRenderOptions,
-  ColumnRenderTemplate,
-  ColumnTemplateSource,
   ColumnViewTemplate,
   ColumnViewTemplateOptions,
   ColumnWidthsOptions,
   ContextMenuItemsOptions,
   DelayedTemplate,
+  GridContextMenuItem,
   HintColumn,
   RowPreparedOptions,
   RowRenderOptions,
   ScrollableOptions,
   ScrollPosition,
   TableRenderOptions,
-  TemplateModel,
   ViewCellOptions,
   ViewDataChange,
   ViewRow,
@@ -78,7 +79,7 @@ import type {
 } from './types';
 import { isRowElementVisible } from './utils';
 
-const HIDDEN_COLUMNS_WIDTH = '0.0001px';
+const HIDDEN_COLUMN_CSS_WIDTH = '0.0001px';
 
 const CELL_HINT_VISIBLE = 'dxCellHintVisible';
 
@@ -126,7 +127,7 @@ const copyAttributes = (
 };
 
 const isRenderTemplate = <TModel extends TemplateModel>(
-  template: ColumnTemplateSource<TModel>,
+  template: ColumnTemplateSource<TModel> | undefined,
 ): template is ColumnRenderTemplate<TModel> => !!template
   && !!(template as Partial<ColumnRenderTemplate<TModel>>).render
   && !isRenderer(template);
@@ -136,8 +137,8 @@ export const normalizeWidth = (width: string | number | undefined): string | und
     return `${width.toFixed(3)}px`;
   }
 
-  if (width === 'adaptiveHidden') {
-    return HIDDEN_COLUMNS_WIDTH;
+  if (width === HIDDEN_COLUMNS_WIDTH) {
+    return HIDDEN_COLUMN_CSS_WIDTH;
   }
 
   return width;
@@ -164,7 +165,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
 
   protected _dataController!: DataController;
 
-  protected adaptiveColumnsController!: AdaptiveColumnsController;
+  protected adaptiveColumnsController!: AdaptiveColumnsViewController;
 
   protected _columnChooserController!: ColumnChooserController;
 
@@ -379,11 +380,10 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
         const $cell = $(e.currentTarget);
         const $row = $cell.parent();
         const visibleColumns = this._columnsController.getVisibleColumns();
-        // @ts-expect-error data(key) is typed as returning the wrapper
-        const rowOptions: RowPreparedOptions | undefined = $row.data('options');
+        const rowOptions = $row.data<RowPreparedOptions | undefined>('options');
         const columnIndex = $cell.index();
 
-        const cellOptions = rowOptions && rowOptions.cells && rowOptions.cells[columnIndex];
+        const cellOptions = rowOptions?.cells?.[columnIndex];
         const column: HintColumn | undefined = cellOptions
           ? cellOptions.column
           : visibleColumns[columnIndex];
@@ -423,9 +423,8 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
       const $cell = $(event.currentTarget);
       const $fieldItemContent = $(event.target).closest(`.${FIELD_ITEM_CONTENT_CLASS}`);
       const $row = $cell.parent();
-      // @ts-expect-error data(key) is typed as returning the wrapper
-      const rowOptions: RowPreparedOptions | undefined = $row.data('options');
-      const options = rowOptions && rowOptions.cells && rowOptions.cells[$cell.index()];
+      const rowOptions = $row.data<RowPreparedOptions | undefined>('options');
+      const options = rowOptions?.cells?.[$cell.index()];
 
       if (!$cell.closest('table').is(event.delegateTarget)) {
         return undefined;
@@ -440,8 +439,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
       resultOptions.rowIndex = this.getRowIndex($row);
 
       if ($fieldItemContent.length) {
-        // @ts-expect-error data(key) is typed as returning the wrapper
-        const formItemOptions: { column?: Column } = $fieldItemContent.data('dx-form-item');
+        const formItemOptions = $fieldItemContent.data<{ column?: Column }>('dx-form-item');
         if (formItemOptions.column) {
           resultOptions.column = formItemOptions.column;
           resultOptions.columnIndex = this._columnsController
@@ -598,8 +596,8 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing -- 0 falls back
     let width = column.visibleWidth || column.width;
 
-    if (width === 'adaptiveHidden') {
-      width = HIDDEN_COLUMNS_WIDTH;
+    if (width === HIDDEN_COLUMNS_WIDTH) {
+      width = HIDDEN_COLUMN_CSS_WIDTH;
     }
 
     const col = $('<col>');
@@ -670,7 +668,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
   }
 
   protected _processTemplate<TModel extends TemplateModel>(
-    template: ColumnTemplateSource<TModel>,
+    template: ColumnTemplateSource<TModel> | undefined,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     options?: TModel,
   ): ColumnViewTemplate<TModel> {
@@ -715,7 +713,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
 
   public renderTemplate<TModel extends TemplateModel>(
     container: dxElementWrapper,
-    template: ColumnTemplateSource<TModel>,
+    template: ColumnTemplateSource<TModel> | undefined,
     options: TModel,
     allowRenderToDetachedContainer?: boolean,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -1609,7 +1607,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     return undefined;
   }
 
-  private getRowsCount(): number {
+  public getRowsCount(): number {
     const tableElement = this.getTableElement();
 
     if (tableElement?.length === 1) {
@@ -1620,7 +1618,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     return 0;
   }
 
-  protected _getRowElementsCore(tableElement?: dxElementWrapper): dxElementWrapper {
+  protected _getRowElementsCore(tableElement?: dxElementWrapper | null): dxElementWrapper {
     const $table = tableElement ?? this.getTableElement();
 
     if ($table) {
@@ -1634,7 +1632,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     return $();
   }
 
-  public _getRowElements(tableElement?: dxElementWrapper): dxElementWrapper {
+  public _getRowElements(tableElement?: dxElementWrapper | null): dxElementWrapper {
     return this._getRowElementsCore(tableElement);
   }
 
@@ -1645,11 +1643,13 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     return this._getRowElements().index($row);
   }
 
-  protected getBoundingRect(): BoundingRect | null | undefined {
+  public getBoundingRect(): BoundingRect | null | undefined {
     return undefined;
   }
 
-  public getContextMenuItems?(options: ContextMenuItemsOptions): unknown;
+  public getContextMenuItems?(
+    options: ContextMenuItemsOptions,
+  ): GridContextMenuItem[] | undefined;
 
   public getName(): string | undefined {
     return undefined;
@@ -1672,8 +1672,8 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
 
     if ($element && $tableElement) {
       return isHorizontal
-        ? getOuterWidth($tableElement) - getWidth($element) > 0
-        : getOuterHeight($tableElement) - getHeight($element) > 0;
+        ? Number(getOuterWidth($tableElement)) - Number(getWidth($element)) > 0
+        : Number(getOuterHeight($tableElement)) - Number(getHeight($element)) > 0;
     }
 
     return false;

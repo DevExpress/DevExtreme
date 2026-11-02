@@ -13,7 +13,7 @@ import type {
   TransitionType,
 } from '@ts/common/core/animation/presets/presets';
 import { presets } from '@ts/common/core/animation/presets/presets';
-import commonUtils from '@ts/core/utils/m_common';
+import commonUtils from '@ts/core/utils/common';
 
 import type { Animation } from '../fx';
 

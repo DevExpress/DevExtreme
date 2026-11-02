@@ -1,4 +1,3 @@
-@use "../../mixins" as *;
 @use "../../../mixins" as *;
 @use "../../../icon_fonts" as *;
 
@@ -20,6 +19,7 @@ $hovered-appointment-top-shadow-size: null !default;
 $fill-focused-appointment: null !default;
 $is-shadow-color-for-focused-state: null !default;
 $appointment-start-color: null !default;
+$appointment-dark-text-start-color: rgba(255, 255, 255, 0.3) !default;
 $appointment-active-color: null !default;
 
 $appointment-dragging-shadow: null !default;
@@ -76,6 +76,10 @@ $appointment-reduced-icon-rtl-left: null !default;
           @include dx-scheduler-appointment-shadow-color-mixin();
         }
       }
+
+      &.dx-scheduler-appointment-has-dark-text:not(.dx-scheduler-appointment-drag-source)::before {
+        background-color: $appointment-dark-text-start-color;
+      }
     }
   }
 }
@@ -89,6 +93,10 @@ $appointment-reduced-icon-rtl-left: null !default;
   opacity: $appointment-date-opacity;
   display: inline-block;
   white-space: pre-wrap;
+}
+
+.dx-scheduler-appointment-has-resource-color .dx-scheduler-appointment-content-date {
+  opacity: 1;
 }
 
 .dx-scheduler-appointment-content-details {

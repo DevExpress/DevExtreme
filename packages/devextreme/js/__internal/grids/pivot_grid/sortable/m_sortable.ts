@@ -33,8 +33,8 @@ function elementHasPoint(element, x, y) {
   const $item = $(element);
   const offset = $item.offset()!;
 
-  if (x >= offset.left && x <= offset.left + getOuterWidth($item, true)) {
-    if (y >= offset.top && y <= offset.top + getOuterHeight($item, true)) {
+  if (x >= offset.left && x <= offset.left + Number(getOuterWidth($item, true))) {
+    if (y >= offset.top && y <= offset.top + Number(getOuterHeight($item, true))) {
       return true;
     }
   }

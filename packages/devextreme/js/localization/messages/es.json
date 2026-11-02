@@ -124,6 +124,7 @@
         "dxDataGrid-aiAssistantAbortConfirmText": "Cerrar el chat del Asistente de IA interrumpe las solicitudes en curso. ¿Desea cerrar el chat?",
         "dxDataGrid-aiAChatEmptyViewMessage": "El chat está vacío",
         "dxDataGrid-aiChatEmptyViewPrompt": "El Asistente de IA está listo para responder sus preguntas.",
+        "dxDataGrid-aiChatTextareaPlaceholder": "Ask AI Assistant...",
         "dxDataGrid-aiPromptEditorTitle": "Editor de indicaciones de IA",
         "dxDataGrid-aiPromptEditorPlaceholder": "Solicitar a la IA que genere valores de columna...",
         "dxDataGrid-aiPromptEditorApplyButton": "Aplicar",
@@ -919,6 +920,8 @@
         "dxGantt-showDependencies": "Mostrar Dependencias",
         "dxGantt-dialogStartDateValidation": "La fecha de inicio debe ser anterior {0}",
         "dxGantt-dialogEndDateValidation": "La fecha de finalización debe ser posterior {0}",
+
+        "dxMap-markerAriaLabel": "Map marker",
 
         "dxGallery-itemName": "Elemento de galería",
 

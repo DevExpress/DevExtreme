@@ -204,13 +204,13 @@ class DiagramToolbox extends DiagramFloatingPanel<DiagramToolboxProperties> {
     let maxHeight = 6;
     if (this._popup) {
       const $title = this._getPopupTitle();
-      maxHeight += getOuterHeight($title);
+      maxHeight += Number(getOuterHeight($title));
     }
     if (this._accordion) {
-      maxHeight += getOuterHeight(this._accordion.$element());
+      maxHeight += getOuterHeight(this._accordion.$element().get(0));
     }
     if (this._searchInput) {
-      maxHeight += getOuterHeight(this._searchInput.$element());
+      maxHeight += getOuterHeight(this._searchInput.$element().get(0));
     }
     this.option('maxHeight', maxHeight);
   }
@@ -324,7 +324,6 @@ class DiagramToolbox extends DiagramFloatingPanel<DiagramToolboxProperties> {
       `[data-toggle="${DIAGRAM_TOOLTIP_DATATOGGLE}"]`,
     );
     const $container = this.$element();
-    // @ts-expect-error ts-error
     targets.each((_: number, element: Element) => {
       const $target = $(element);
       const title = $target.attr('title');

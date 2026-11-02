@@ -6,7 +6,7 @@ import {
 import { SlidersController } from 'viz/range_selector/sliders_controller';
 import rendererModule from 'viz/core/renderers/renderer_default';
 import translator2DModule from 'viz/translators/translator2d';
-import support from '__internal/core/utils/m_support';
+import support from '__internal/core/utils/support';
 
 const environment = {
     beforeEach: function() {

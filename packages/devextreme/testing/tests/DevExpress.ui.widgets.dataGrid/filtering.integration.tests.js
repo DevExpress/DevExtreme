@@ -3,7 +3,7 @@ import { EdmLiteral } from 'common/data/odata/utils';
 import commonUtils from 'core/utils/common';
 import devices from '__internal/core/devices';
 import ArrayStore from 'common/data/array_store';
-import gridCoreUtils from '__internal/grids/grid_core/m_utils';
+import gridCoreUtils from '__internal/grids/grid_core/utils';
 import fx from 'common/core/animation/fx';
 import DataGridWrapper from '../../helpers/wrappers/dataGridWrappers.js';
 import { createDataGrid, baseModuleConfig } from '../../helpers/dataGridHelper.js';

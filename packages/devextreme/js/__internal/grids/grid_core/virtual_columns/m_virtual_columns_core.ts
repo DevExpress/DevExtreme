@@ -1,35 +1,49 @@
-import { extend } from '@js/core/utils/extend';
+import type { ColumnInfoCallback, ColumnInfoCell } from './types';
 
-export function foreachColumnInfo(info, callback, rowIndex?, offsets?, columnCount?, lastProcessedIndexes?) {
-  rowIndex = rowIndex || 0;
-  offsets = offsets || [];
-  lastProcessedIndexes = lastProcessedIndexes || [];
+// eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing -- 0 falls back
+const normalizeSpan = (span?: number): number => span || 1;
+
+export function foreachColumnInfo<T extends ColumnInfoCell>(
+  info: T[][],
+  callback: ColumnInfoCallback<T>,
+  rowIndex = 0,
+  offsets: number[] = [],
+  columnCount?: number,
+  lastProcessedIndexes: number[] = [],
+): void {
   offsets[rowIndex] = offsets[rowIndex] || 0;
 
   const row = info[rowIndex];
   const startIndex = lastProcessedIndexes[rowIndex] + 1 || 0;
   let processedColumnCount = 0;
-  let colIndex;
+  let colIndex = startIndex;
 
   if (!row) {
     return;
   }
 
-  for (colIndex = startIndex; colIndex < row.length; colIndex++) {
+  for (; colIndex < row.length; colIndex += 1) {
     const cell = row[colIndex];
     const visibleIndex = colIndex + offsets[rowIndex];
-    const colspan = cell.colspan || 1;
+    const colspan = normalizeSpan(cell.colspan);
 
-    foreachColumnInfo(info, callback, rowIndex + (cell.rowspan || 1), offsets, colspan, lastProcessedIndexes);
+    foreachColumnInfo(
+      info,
+      callback,
+      rowIndex + normalizeSpan(cell.rowspan),
+      offsets,
+      colspan,
+      lastProcessedIndexes,
+    );
 
     offsets[rowIndex] += colspan - 1;
 
     processedColumnCount += colspan;
 
     if (cell.rowspan) {
-      for (let i = rowIndex + 1; i < rowIndex + cell.rowspan; i++) {
+      for (let i = rowIndex + 1; i < rowIndex + cell.rowspan; i += 1) {
         offsets[i] = offsets[i] || 0;
-        offsets[i] += cell.colspan || 1;
+        offsets[i] += normalizeSpan(cell.colspan);
       }
     }
 
@@ -44,33 +58,35 @@ export function foreachColumnInfo(info, callback, rowIndex?, offsets?, columnCou
   lastProcessedIndexes[rowIndex] = colIndex;
 }
 
-export function createColumnsInfo(info, startIndex, endIndex) {
-  const newInfo: any = [];
+export function createColumnsInfo<T extends ColumnInfoCell>(
+  info: T[][],
+  startIndex: number,
+  endIndex: number,
+): T[][] {
+  const newInfo: T[][] = [];
 
   foreachColumnInfo(info, (columnInfo, visibleIndex, rowIndex) => {
     let cell = columnInfo;
-    let colspan;
-    const cellColspan = cell.colspan || 1;
+    const cellColspan = normalizeSpan(cell.colspan);
     const isVisible = visibleIndex + cellColspan - 1 >= startIndex && visibleIndex < endIndex;
 
     newInfo[rowIndex] = newInfo[rowIndex] || [];
 
     if (isVisible) {
+      let cellVisibleIndex = visibleIndex;
+      let colspan = cellColspan;
+
       if (visibleIndex < startIndex) {
         colspan = cellColspan - (startIndex - visibleIndex);
-        visibleIndex = startIndex;
-      } else {
-        colspan = cellColspan;
+        cellVisibleIndex = startIndex;
       }
 
-      if (visibleIndex + colspan > endIndex) {
-        colspan = endIndex - visibleIndex;
+      if (cellVisibleIndex + colspan > endIndex) {
+        colspan = endIndex - cellVisibleIndex;
       }
 
       if (colspan !== cellColspan) {
-        cell = extend({}, cell, {
-          colspan,
-        });
+        cell = { ...cell, colspan };
       }
 
       newInfo[rowIndex].push(cell);
@@ -81,7 +97,7 @@ export function createColumnsInfo(info, startIndex, endIndex) {
     return undefined;
   });
 
-  for (let i = 0; i < newInfo.length; i++) {
+  for (let i = 0; i < newInfo.length; i += 1) {
     newInfo[i] = newInfo[i] || [];
   }
 
