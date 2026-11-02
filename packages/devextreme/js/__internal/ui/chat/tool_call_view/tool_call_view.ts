@@ -27,9 +27,18 @@ export const CHAT_TOOL_CALL_CLASSES = {
   error: 'dx-chat-tool-call-error',
 };
 
-const stringifyValue = (value: unknown): string => (typeof value === 'string'
-  ? value
-  : JSON.stringify(value, null, 2));
+const stringifyValue = (value: unknown): string => {
+  if (typeof value === 'string') {
+    return value;
+  }
+
+  try {
+    return JSON.stringify(value, null, 2);
+  } catch {
+    // a circular structure or a BigInt cannot be serialized
+    return String(value);
+  }
+};
 
 class ToolCallView extends DOMComponent<ToolCallView, ToolCallViewProperties> {
   _getDefaultOptions(): ToolCallViewProperties {
@@ -83,11 +92,11 @@ class ToolCallView extends DOMComponent<ToolCallView, ToolCallViewProperties> {
       .appendTo($header);
 
     if (errorCount) {
-      const errorKey = errorCount === 1
-        ? 'dxChat-toolCallsErrorSingle'
-        : 'dxChat-toolCallsErrorMultiple';
+      const errorText = errorCount === 1
+        ? `${errorCount} ${messageLocalization.format('dxChat-toolCallError')}`
+        : messageLocalization.format('dxChat-toolCallsErrorMultiple', errorCount);
 
-      this._renderErrorTag(messageLocalization.format(errorKey, errorCount), $header);
+      this._renderErrorTag(errorText, $header);
     }
   }
 
