@@ -4,7 +4,6 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred, when } from '@js/core/utils/deferred';
-import { each } from '@js/core/utils/iterator';
 import { getHeight, getWidth } from '@js/core/utils/size';
 import { isDefined } from '@js/core/utils/type';
 import type { MasterDetail, Properties as DataGridProperties } from '@js/ui/data_grid';
@@ -152,19 +151,17 @@ export const dataMasterDetailExtenderMixin = (
     processedItem.isExpanded = this.isRowExpanded(processedItem.key);
 
     if (options.detailColumnIndex === undefined) {
-      options.detailColumnIndex = -1;
-      each(options.visibleColumns, (index, column) => {
-        if (column.command === 'expand' && !isDefined(column.groupIndex)) {
-          options.detailColumnIndex = index;
-          return false;
-        }
+      const detailColumnIndex = options.visibleColumns.findIndex(
+        (column) => column.command === 'expand' && !isDefined(column.groupIndex),
+      );
 
-        return undefined;
-      });
+      options.detailColumnIndex = detailColumnIndex;
     }
+
     if (options.detailColumnIndex >= 0) {
       processedItem.values[options.detailColumnIndex] = processedItem.isExpanded;
     }
+
     return processedItem;
   }
 
