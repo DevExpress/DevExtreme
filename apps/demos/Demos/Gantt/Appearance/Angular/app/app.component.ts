@@ -1,5 +1,5 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, ViewEncapsulation, provideZoneChangeDetection } from '@angular/core';
+import { Component, enableProdMode, ViewEncapsulation } from '@angular/core';
 import { DxCheckBoxModule, DxSelectBoxModule, DxDateBoxModule } from 'devextreme-angular';
 import { DxGanttModule, DxGanttTypes } from 'devextreme-angular/ui/gantt';
 import {
@@ -68,8 +68,4 @@ export class AppComponent {
   }
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);
