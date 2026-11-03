@@ -115,6 +115,10 @@ jobs:
       working-directory: ./packages/devextreme-scss
       run: pnpm exec stylelint --config tests/bundles-stylelint-config.json "../devextreme/artifacts/**/dx.material.blue.light.css"
 
+    - name: Measure nx cache (temporary)
+      if: always()
+      run: node "$GITHUB_WORKSPACE/.github/nx-cache-size.js" || true
+
     - name: Save nx cache
       if: github.event_name != 'pull_request' && github.event_name != 'merge_group'
       uses: actions/cache/save@v5

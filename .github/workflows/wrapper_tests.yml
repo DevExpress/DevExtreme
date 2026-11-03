@@ -96,6 +96,10 @@ jobs:
       - name: Build devextreme package
         run: pnpm exec nx build devextreme -c testing
 
+      - name: Measure nx cache (temporary)
+        if: always()
+        run: node "$GITHUB_WORKSPACE/.github/nx-cache-size.js" || true
+
   test:
     timeout-minutes: 15
     needs: build

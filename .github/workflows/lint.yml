@@ -125,6 +125,10 @@ jobs:
       working-directory: ./e2e/playwright
       run: pnpm exec nx type-check
 
+    - name: Measure nx cache (temporary)
+      if: always()
+      run: node "$GITHUB_WORKSPACE/.github/nx-cache-size.js" || true
+
     - name: Save nx cache
       if: github.event_name != 'pull_request' && github.event_name != 'merge_group'
       uses: actions/cache/save@v5
@@ -224,6 +228,10 @@ jobs:
         DEBUG: eslint:cli-engine
       run: pnpm exec nx lint-js
 
+    - name: Measure nx cache (temporary)
+      if: always()
+      run: node "$GITHUB_WORKSPACE/.github/nx-cache-size.js" || true
+
     - name: Save nx cache
       if: github.event_name != 'pull_request' && github.event_name != 'merge_group'
       uses: actions/cache/save@v5
@@ -316,6 +324,10 @@ jobs:
     - name: Check texts
       working-directory: ./packages/devextreme
       run: pnpm exec nx lint-texts
+
+    - name: Measure nx cache (temporary)
+      if: always()
+      run: node "$GITHUB_WORKSPACE/.github/nx-cache-size.js" || true
 
     - name: Save nx cache
       if: github.event_name != 'pull_request' && github.event_name != 'merge_group'
@@ -455,6 +467,10 @@ jobs:
 
     - name: Lint wrappers
       run: pnpm exec nx run-many -t lint -p devextreme-angular devextreme-react devextreme-vue
+
+    - name: Measure nx cache (temporary)
+      if: always()
+      run: node "$GITHUB_WORKSPACE/.github/nx-cache-size.js" || true
 
     - name: Save nx cache
       if: github.event_name != 'pull_request' && github.event_name != 'merge_group'
