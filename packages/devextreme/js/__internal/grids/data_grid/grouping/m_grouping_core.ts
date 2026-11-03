@@ -150,7 +150,9 @@ export abstract class GroupingHelper {
 
   private _totalCountCorrection!: number;
 
-  protected declare _group: StoreLoadOptions['group'];
+  protected _group?: StoreLoadOptions['group'];
+
+  private isGroupInitialized = false;
 
   constructor(dataSourceAdapter: GroupingDataSourceAdapter) {
     this.dataSourceAdapter = dataSourceAdapter;
@@ -326,10 +328,11 @@ export abstract class GroupingHelper {
   ): ForeachGroupsResult {
     const { storeLoadOptions } = options;
     const groups = normalizeSortingInfo(storeLoadOptions.group || []);
-    const oldGroups = '_group' in this ? normalizeSortingInfo(this._group || []) : groups;
+    const oldGroups = this.isGroupInitialized ? normalizeSortingInfo(this._group || []) : groups;
     let groupsCount = Math.min(oldGroups.length, groups.length);
 
     this._group = storeLoadOptions.group;
+    this.isGroupInitialized = true;
 
     for (let groupIndex = 0; groupIndex < groupsCount; groupIndex += 1) {
       if (!gridCoreUtils.isEqualSelectors(

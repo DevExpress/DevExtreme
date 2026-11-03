@@ -1,6 +1,41 @@
 import { describe, expect, it } from '@jest/globals';
+import type { LoadOperation } from '@ts/grids/grid_core/data_source_adapter/types';
 
 import { createOffsetFilter } from '../m_grouping_core';
+import { GroupingHelper } from '../m_grouping_expanded';
+import { createDataSourceAdapterStub } from './grouping_expanded.mock';
+
+const refresh = (grouping: GroupingHelper, group: unknown): void => {
+  const options = { storeLoadOptions: { group } } as unknown as LoadOperation;
+
+  grouping.refresh(options, {});
+};
+
+describe('refresh', () => {
+  it('should keep group infos added before the first refresh', () => {
+    const grouping = new GroupingHelper(createDataSourceAdapterStub());
+    grouping.addGroupInfo({
+      offset: 0, count: 2, isExpanded: false, path: ['A'],
+    });
+
+    refresh(grouping, [{ selector: 'g' }]);
+
+    expect(grouping.findGroupInfo(['A'])).toMatchObject({ isExpanded: false, count: 2 });
+  });
+
+  it('should reset group infos when grouping is applied after it was cleared', () => {
+    const grouping = new GroupingHelper(createDataSourceAdapterStub());
+    refresh(grouping, [{ selector: 'g' }]);
+    refresh(grouping, undefined);
+    grouping.addGroupInfo({
+      offset: 0, count: 2, isExpanded: false, path: ['A'],
+    });
+
+    refresh(grouping, [{ selector: 'g' }]);
+
+    expect(grouping.findGroupInfo(['A'])).toBeUndefined();
+  });
+});
 
 describe('createOffsetFilter', () => {
   it.each([
