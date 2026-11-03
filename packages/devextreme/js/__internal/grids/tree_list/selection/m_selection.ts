@@ -24,7 +24,11 @@ import type { TreeListRowsView } from '@ts/grids/tree_list/rows/m_rows';
 import type { SelectionOptions } from '@ts/ui/selection/types';
 
 import treeListCore from '../core';
-import type { SelectionStateByKey, TreeListSelectionControllerExtension } from './types';
+import type {
+  NormalizedSelectionArgs,
+  SelectionStateByKey,
+  TreeListSelectionControllerExtension,
+} from './types';
 
 const TREELIST_SELECT_CHECKBOX_WRAPPER_CLASS = 'dx-treelist-select-checkbox-container';
 const TREELIST_SELECT_ALL_CLASS = 'dx-treelist-select-all';
@@ -181,7 +185,7 @@ SelectionController & TreeListSelectionControllerExtension
     preserve?: boolean,
     isDeselect?: boolean,
     isSelectAll?: boolean,
-  ): DeferredObj<unknown> {
+  ): DeferredObj<unknown[]> {
     const selectedRowKeys = this.option('selectedRowKeys');
     const isRecursiveSelection = this.isRecursiveSelection();
     const normalizedArgs = isRecursiveSelection && this._normalizeSelectionArgs({
@@ -224,52 +228,56 @@ SelectionController & TreeListSelectionControllerExtension
     return super.changeItemSelection(itemIndex, keyboardKeys, setFocusOnly);
   }
 
-  private _updateParentSelectionState(node, isSelected) {
-    const that = this;
+  private _updateParentSelectionState(node: TreeNode, isSelected: boolean | undefined): void {
     let state = isSelected;
     const parentNode = node.parent;
 
     if (parentNode) {
       if (parentNode.children.length > 1) {
         if (isSelected === false) {
-          const hasSelectedState = parentNode.children.some((childNode) => that._selectionStateByKey[childNode.key]);
+          const hasSelectedState = parentNode.children.some(
+            (childNode) => this._selectionStateByKey[childNode.key as string],
+          );
 
           state = hasSelectedState ? undefined : false;
         } else if (isSelected === true) {
-          const hasNonSelectedState = parentNode.children.some((childNode) => !that._selectionStateByKey[childNode.key]);
+          const hasNonSelectedState = parentNode.children.some(
+            (childNode) => !this._selectionStateByKey[childNode.key as string],
+          );
 
           state = hasNonSelectedState ? undefined : true;
         }
       }
 
-      this._selectionStateByKey[parentNode.key] = state;
+      this._selectionStateByKey[parentNode.key as string] = state;
 
-      if (parentNode.parent && parentNode.parent.level >= 0) {
+      if (parentNode.parent?.level !== undefined && parentNode.parent.level >= 0) {
         this._updateParentSelectionState(parentNode, state);
       }
     }
   }
 
-  private _updateChildrenSelectionState(node, isSelected) {
-    const that = this;
+  private _updateChildrenSelectionState(node: TreeNode, isSelected: boolean): void {
     const { children } = node;
 
-    children && children.forEach((childNode) => {
-      that._selectionStateByKey[childNode.key] = isSelected;
+    if (children) {
+      children.forEach((childNode) => {
+        this._selectionStateByKey[childNode.key as string] = isSelected;
 
-      if (childNode.children.length > 0) {
-        that._updateChildrenSelectionState(childNode, isSelected);
-      }
-    });
+        if (childNode.children.length > 0) {
+          this._updateChildrenSelectionState(childNode, isSelected);
+        }
+      });
+    }
   }
 
-  private _updateSelectionStateCore(keys, isSelected) {
+  private _updateSelectionStateCore(keys: RowKey[], isSelected: boolean): void {
     const dataController = this._dataController;
 
     this._selectionStateByKey = {};
-    for (let i = 0; i < keys.length; i++) {
-      this._selectionStateByKey[keys[i]] = isSelected;
-      const node = dataController.getNodeByKey(keys[i]);
+    for (const key of keys) {
+      this._selectionStateByKey[key as string] = isSelected;
+      const node = dataController.getNodeByKey(key);
 
       if (node) {
         this._updateParentSelectionState(node, isSelected);
@@ -278,90 +286,104 @@ SelectionController & TreeListSelectionControllerExtension
     }
   }
 
-  private _getSelectedParentKeys(key, selectedItemKeys, useCash?) {
-    let selectedParentNode;
+  private _getSelectedParentKeys(
+    key: RowKey,
+    selectedItemKeys: RowKey[],
+    useCash?: boolean,
+  ): RowKey[] {
     const node = this._dataController.getNodeByKey(key);
-    let parentNode = node && node.parent;
-    let result: any[] = [];
+    let parentNode = node?.parent;
+    const result: RowKey[] = [];
 
     while (parentNode?.level !== undefined && parentNode.level >= 0) {
       result.unshift(parentNode.key);
-      const isSelected = useCash ? !nodeExists(selectedItemKeys, parentNode.key) && this.isRowSelected(parentNode.key) : selectedItemKeys.indexOf(parentNode.key) >= 0;
+      const isSelected = useCash
+        ? !nodeExists(selectedItemKeys, parentNode.key) && this.isRowSelected(parentNode.key)
+        : nodeExists(selectedItemKeys, parentNode.key);
 
       if (isSelected) {
-        selectedParentNode = parentNode;
-        result = this._getSelectedParentKeys(selectedParentNode.key, selectedItemKeys, useCash).concat(result);
-        break;
-      } else if (useCash) {
+        return this._getSelectedParentKeys(parentNode.key, selectedItemKeys, useCash)
+          .concat(result);
+      }
+
+      if (useCash) {
         break;
       }
 
       parentNode = parentNode.parent;
     }
 
-    return selectedParentNode && result || [];
+    return [];
   }
 
-  private _getSelectedChildKeys(key, keysToIgnore) {
-    const childKeys: any[] = [];
+  private _getSelectedChildKeys(key: RowKey, keysToIgnore: RowKey[]): RowKey[] {
+    const childKeys: RowKey[] = [];
     const node = this._dataController.getNodeByKey(key);
 
-    node && treeListCore.foreachNodes(node.children, (childNode) => {
-      const ignoreKeyIndex = keysToIgnore.indexOf(childNode.key);
+    if (node) {
+      treeListCore.foreachNodes(node.children, (childNode: TreeNode) => {
+        const ignoreKeyIndex = keysToIgnore.indexOf(childNode.key);
 
-      if (ignoreKeyIndex < 0) {
-        childKeys.push(childNode.key);
-      }
+        if (ignoreKeyIndex < 0) {
+          childKeys.push(childNode.key);
+        }
 
-      return ignoreKeyIndex > 0 || ignoreKeyIndex < 0 && this._selectionStateByKey[childNode.key] === undefined;
-    });
+        return ignoreKeyIndex > 0 || (
+          ignoreKeyIndex < 0 && this._selectionStateByKey[childNode.key as string] === undefined
+        );
+      });
+    }
 
     return childKeys;
   }
 
-  private _normalizeParentKeys(key, args) {
-    const that = this;
+  private _normalizeParentKeys(key: RowKey, args: NormalizedSelectionArgs): void {
     let keysToIgnore = [key];
-    const parentNodeKeys = that._getSelectedParentKeys(key, args.selectedRowKeys);
+    const parentNodeKeys = this._getSelectedParentKeys(key, args.selectedRowKeys);
 
     if (parentNodeKeys.length) {
       keysToIgnore = keysToIgnore.concat(parentNodeKeys);
 
-      keysToIgnore.forEach((key) => {
-        const index = args.selectedRowKeys.indexOf(key);
+      keysToIgnore.forEach((keyToIgnore) => {
+        const index = args.selectedRowKeys.indexOf(keyToIgnore);
 
         if (index >= 0) {
           args.selectedRowKeys.splice(index, 1);
         }
       });
 
-      const childKeys = that._getSelectedChildKeys(parentNodeKeys[0], keysToIgnore);
+      const childKeys = this._getSelectedChildKeys(parentNodeKeys[0], keysToIgnore);
       args.selectedRowKeys = args.selectedRowKeys.concat(childKeys);
     }
   }
 
-  private _normalizeChildrenKeys(key, args) {
+  private _normalizeChildrenKeys(key: RowKey, args: NormalizedSelectionArgs): void {
     const node = this._dataController.getNodeByKey(key);
 
-    node && node.children.forEach((childNode) => {
-      const index = args.selectedRowKeys.indexOf(childNode.key);
-      if (index >= 0) {
-        args.selectedRowKeys.splice(index, 1);
-      }
+    if (node) {
+      node.children.forEach((childNode) => {
+        const index = args.selectedRowKeys.indexOf(childNode.key);
+        if (index >= 0) {
+          args.selectedRowKeys.splice(index, 1);
+        }
 
-      this._normalizeChildrenKeys(childNode.key, args);
-    });
+        this._normalizeChildrenKeys(childNode.key, args);
+      });
+    }
   }
 
-  private _normalizeSelectedRowKeysCore(keys, args, preserve, isSelect) {
-    const that = this;
-
+  private _normalizeSelectedRowKeysCore(
+    keys: RowKey[],
+    args: NormalizedSelectionArgs,
+    preserve: boolean | undefined,
+    isSelect: boolean,
+  ): void {
     keys.forEach((key) => {
-      if (preserve && that.isRowSelected(key) === isSelect) {
+      if (preserve && this.isRowSelected(key) === isSelect) {
         return;
       }
 
-      that._normalizeChildrenKeys(key, args);
+      this._normalizeChildrenKeys(key, args);
       const index = args.selectedRowKeys.indexOf(key);
 
       if (isSelect) {
@@ -374,26 +396,30 @@ SelectionController & TreeListSelectionControllerExtension
           args.selectedRowKeys.splice(index, 1);
         }
         args.currentDeselectedRowKeys.push(key);
-        that._normalizeParentKeys(key, args);
+        this._normalizeParentKeys(key, args);
       }
     });
   }
 
-  private _normalizeSelectionArgs(args, preserve, isSelect) {
-    let result;
+  private _normalizeSelectionArgs(
+    args: { keys: RowKey | RowKey[] },
+    preserve: boolean | undefined,
+    isSelect: boolean,
+  ): NormalizedSelectionArgs | undefined {
     const keys = Array.isArray(args.keys) ? args.keys : [args.keys];
-    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-    const selectedRowKeys = this.option('selectedRowKeys') || [];
+    const selectedRowKeys = this.option('selectedRowKeys') ?? [];
 
-    if (keys.length) {
-      result = {
-        currentSelectedRowKeys: [],
-        currentDeselectedRowKeys: [],
-        selectedRowKeys: preserve ? selectedRowKeys.slice(0) : [],
-      };
-
-      this._normalizeSelectedRowKeysCore(keys, result, preserve, isSelect);
+    if (!keys.length) {
+      return undefined;
     }
+
+    const result: NormalizedSelectionArgs = {
+      currentSelectedRowKeys: [],
+      currentDeselectedRowKeys: [],
+      selectedRowKeys: preserve ? selectedRowKeys.slice(0) : [],
+    };
+
+    this._normalizeSelectedRowKeysCore(keys, result, preserve, isSelect);
 
     return result;
   }

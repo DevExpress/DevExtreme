@@ -582,7 +582,7 @@ export class SelectionController extends modules.Controller {
     preserve?: boolean,
     isDeselect?: boolean,
     isSelectAll?: boolean,
-  ): DeferredObj<unknown> {
+  ): DeferredObj<unknown[]> {
     return this._selection.selectedItemKeys(value, preserve, isDeselect, isSelectAll);
   }
 
