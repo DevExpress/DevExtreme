@@ -295,7 +295,7 @@ export interface Controllers {
   filterBuilder: import('./filter_builder/filter_builder').FilterBuilderController;
   focus: import('./focus/m_focus').FocusController;
   headerFilter: import('./header_filter/header_filter').HeaderFilterController;
-  keyboardNavigation: import('./keyboard_navigation/m_keyboard_navigation').KeyboardNavigationController;
+  keyboardNavigation: import('./keyboard_navigation/keyboard_navigation').KeyboardNavigationController;
   columnFocusDispatcher: import('./keyboard_navigation/column_focus_dispatcher').ColumnFocusDispatcher;
   headersKeyboardNavigation: import('./keyboard_navigation/headers_keyboard_navigation').HeadersKeyboardNavigationController;
   resizing: import('./grid_view/grid_view').ResizingController;

@@ -1,7 +1,7 @@
 import { extend } from '@js/core/utils/extend';
 import type { KeyboardKeyDownEvent } from '@ts/events/core/keyboard_processor';
-import type { KeyboardNavigationController } from '@ts/grids/grid_core/keyboard_navigation/m_keyboard_navigation';
-import { keyboardNavigationModule } from '@ts/grids/grid_core/keyboard_navigation/m_keyboard_navigation';
+import type { KeyboardNavigationController } from '@ts/grids/grid_core/keyboard_navigation/keyboard_navigation';
+import { keyboardNavigationModule } from '@ts/grids/grid_core/keyboard_navigation/keyboard_navigation';
 import { keyboardNavigationScrollableA11yExtender } from '@ts/grids/grid_core/keyboard_navigation/scrollable_a11y';
 import type { KeyboardNavigationDataController } from '@ts/grids/grid_core/keyboard_navigation/types';
 import type { ModuleType } from '@ts/grids/grid_core/types';
