@@ -136,7 +136,7 @@ const rangeMin = dataMin - dayMs / 2;
 const rangeMax = dataMax + dayMs / 2;
 const initialStart = new Date(rangeMin);
 
-const exportFormats = ['PNG', 'PDF', 'JPEG', 'GIF', 'SVG'] as const;
+const exportFormats = ['PNG', 'PDF', 'JPEG', 'SVG'] as const;
 const exportItems = [
   { text: 'Print' },
   ...exportFormats.map((format) => ({ text: `${format} file`, format })),

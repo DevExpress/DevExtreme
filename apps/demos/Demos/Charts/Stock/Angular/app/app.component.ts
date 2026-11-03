@@ -22,7 +22,7 @@ const zoomFactor = 0.75;
 const minVisualRangeLength = { days: 3 };
 const minVisibleSpanMs = minVisualRangeLength.days * dayMs;
 
-const exportFormats = ['PNG', 'PDF', 'JPEG', 'GIF', 'SVG'] as const;
+const exportFormats = ['PNG', 'PDF', 'JPEG', 'SVG'] as const;
 const exportItems = [
   { text: 'Print' },
   ...exportFormats.map((format) => ({ text: `${format} file`, format })),
