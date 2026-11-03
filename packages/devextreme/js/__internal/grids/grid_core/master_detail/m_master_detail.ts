@@ -8,8 +8,8 @@ import { each } from '@js/core/utils/iterator';
 import { getHeight, getWidth } from '@js/core/utils/size';
 import { isDefined } from '@js/core/utils/type';
 import type { MasterDetail, Properties as DataGridProperties } from '@js/ui/data_grid';
-import { grep } from '@ts/core/utils/common';
 import type { GroupingDataControllerExtension } from '@ts/grids/data_grid/grouping/types';
+import type { ColumnFixingRowsViewExtension } from '@ts/grids/grid_core/column_fixing/types';
 import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/columns_controller';
 import type { Column, ColumnTemplateSource } from '@ts/grids/grid_core/columns_controller/types';
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
@@ -115,30 +115,26 @@ export const dataMasterDetailExtenderMixin = (
   }
 
   public changeRowExpandCore(key: RowKey): DeferredObj<unknown> {
-    // eslint-disable-next-line @typescript-eslint/init-declarations -- assigned in both branches
-    let result: DeferredObj<unknown>;
     if (Array.isArray(key)) {
-      result = super.changeRowExpandCore(key);
-    } else {
-      const expandIndex = gridCoreUtils.getIndexByKey(key, this._expandedItems);
-      if (expandIndex >= 0) {
-        const { visible } = this._expandedItems[expandIndex];
-
-        this._expandedItems[expandIndex].visible = !visible;
-      } else {
-        this._expandedItems.push({ key, visible: true });
-      }
-
-      this.updateItems({
-        changeType: 'update',
-        rowIndices: this.getRowIndicesForExpand(key),
-      });
-      this.resetCachedProcessedItems();
-
-      result = Deferred<unknown>().resolve();
+      return super.changeRowExpandCore(key);
     }
 
-    return result;
+    const expandIndex = gridCoreUtils.getIndexByKey(key, this._expandedItems);
+    if (expandIndex >= 0) {
+      const { visible } = this._expandedItems[expandIndex];
+
+      this._expandedItems[expandIndex].visible = !visible;
+    } else {
+      this._expandedItems.push({ key, visible: true });
+    }
+
+    this.updateItems({
+      changeType: 'update',
+      rowIndices: this.getRowIndicesForExpand(key),
+    });
+    this.resetCachedProcessedItems();
+
+    return Deferred<unknown>().resolve();
   }
 
   public _processDataItemHack(
@@ -187,7 +183,7 @@ export const dataMasterDetailExtenderMixin = (
     }
 
     if (changeType === 'refresh') {
-      this._expandedItems = grep(this._expandedItems, (item) => item.visible);
+      this._expandedItems = this._expandedItems.filter((item) => item.visible);
     }
 
     processedItems.forEach((item) => {
@@ -211,37 +207,24 @@ export const dataMasterDetailExtenderMixin = (
   public optionChanged(
     args: OptionChanged | OptionChangedFor<Pick<DataGridProperties, 'masterDetail'>>,
   ): void {
-    // eslint-disable-next-line @typescript-eslint/init-declarations -- assigned in the switch below
-    let isEnabledChanged: boolean | undefined;
-    // eslint-disable-next-line @typescript-eslint/init-declarations -- assigned in the switch below
-    let isAutoExpandAllChanged: boolean | undefined;
-
     if (args.name === 'masterDetail') {
       switch (args.fullName) {
         case 'masterDetail': {
-          const value = args.value ?? {};
-          const previousValue = args.previousValue ?? {};
-          isEnabledChanged = value.enabled !== previousValue.enabled;
-          isAutoExpandAllChanged = value.autoExpandAll !== previousValue.autoExpandAll;
-          break;
-        }
-        case 'masterDetail.template': {
-          this.initMasterDetail();
-          break;
-        }
-        case 'masterDetail.enabled':
-          isEnabledChanged = true;
-          break;
+          const { value, previousValue } = args;
 
+          if (value?.enabled !== previousValue?.enabled
+            || value?.autoExpandAll !== previousValue?.autoExpandAll) {
+            this.initMasterDetail();
+          }
+          break;
+        }
+        case 'masterDetail.template':
+        case 'masterDetail.enabled':
         case 'masterDetail.autoExpandAll':
-          isAutoExpandAllChanged = true;
+          this.initMasterDetail();
           break;
         default:
           break;
-      }
-
-      if (isEnabledChanged || isAutoExpandAllChanged) {
-        this.initMasterDetail();
       }
 
       args.handled = true;
@@ -295,9 +278,9 @@ const resizing = (
     masterRowOptions: RowPreparedOptions,
   ): DeferredObj<unknown> | undefined {
     const d = Deferred();
+    const masterRowsView: RowsView & Partial<ColumnFixingRowsViewExtension> = masterDataGrid.getView('rowsView');
 
-    // @ts-expect-error isFixedColumns is added by column fixing
-    if (masterDataGrid.getView('rowsView')?.isFixedColumns?.()) {
+    if (masterRowsView?.isFixedColumns?.()) {
       this._updateFixedMasterDetailGrids(
         masterDataGrid,
         // @ts-expect-error the row options of a rendered row have a rowIndex
@@ -350,8 +333,7 @@ const resizing = (
 
         if (isDetailHorizontalScrollCanBeShown && isDetailGridWidthChanged) {
           // @ts-expect-error updateDimensions() returns undefined only for an invisible grid
-          // eslint-disable-next-line @typescript-eslint/no-misused-promises -- ignores the result
-          this.updateDimensions().done(() => d.resolve(true));
+          this.updateDimensions().done(() => { d.resolve(true); });
         } else {
           d.resolve(true);
         }
@@ -394,51 +376,48 @@ const rowsView = (
     options: ViewCellOptions,
   ): ColumnTemplateSource<ViewCellOptions> | undefined {
     const { column } = options;
-    const editingController = this._editingController;
-    const isEditRow = editingController?.isEditRow(options.rowIndex);
-    // eslint-disable-next-line @typescript-eslint/init-declarations -- assigned in both branches
-    let template: ColumnTemplateSource<ViewCellOptions> | undefined;
+    const isEditRow = this._editingController?.isEditRow(options.rowIndex);
 
     if (column.command === 'detail' && !isEditRow) {
-      template = this.option('masterDetail.template') || {
+      return this.option('masterDetail.template') || {
         allowRenderToDetachedContainer: false,
         render: this._getDefaultTemplate(column),
       };
-    } else {
-      template = super._getCellTemplate(options);
     }
 
-    return template;
+    return super._getCellTemplate(options);
   }
 
   protected _createRow(row?: ViewRow, tag?: string): dxElementWrapper {
     const $row = super._createRow(row, tag);
-    const isDetailRowResult = isDetailRow(row);
 
-    if (isDetailRowResult) {
-      const showRowLines = this.option('showRowLines');
-
-      $row
-        .addClass(CLASSES.detailRow)
-        .toggleClass(VIEW_CLASSES.rowLines, showRowLines);
-
-      if (isDefined(row.visible)) {
-        $row.toggle(row.visible);
-      }
+    if (!isDetailRow(row)) {
+      return $row;
     }
+
+    const showRowLines = this.option('showRowLines');
+
+    $row
+      .addClass(CLASSES.detailRow)
+      .toggleClass(VIEW_CLASSES.rowLines, showRowLines);
+
+    if (isDefined(row.visible)) {
+      $row.toggle(row.visible);
+    }
+
     return $row;
   }
 
   protected _renderCells($row: dxElementWrapper, options: RowRenderOptions): void {
     const { row } = options;
-    const isDetailRowResult = isDetailRow(row);
 
-    if (isDetailRowResult) {
-      if (this._needRenderCell(0, options.columnIndices)) {
-        this.renderMasterDetailCell($row, row, options);
-      }
-    } else {
+    if (!isDetailRow(row)) {
       super._renderCells($row, options);
+      return;
+    }
+
+    if (this._needRenderCell(0, options.columnIndices)) {
+      this.renderMasterDetailCell($row, row, options);
     }
   }
 
