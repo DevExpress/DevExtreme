@@ -9,10 +9,12 @@ export interface NormalizedSelectionArgs {
   selectedRowsData?: unknown[];
 }
 
+export interface SelectionStateArgs {
+  selectedItemKeys?: RowKey[];
+  removedItemKeys?: RowKey[];
+}
+
 export interface TreeListSelectionControllerExtension {
-  isRecursiveSelection: () => boolean | undefined;
-  updateSelectionState: (options: {
-    selectedItemKeys?: unknown[];
-    removedItemKeys?: unknown[];
-  }) => void;
+  isRecursiveSelection: () => boolean;
+  updateSelectionState: (options: SelectionStateArgs) => void;
 }

@@ -21,11 +21,12 @@ import type { ViewRowEvent } from '@ts/grids/grid_core/views/types';
 import type { TreeListDataController } from '@ts/grids/tree_list/data_controller/data_controller';
 import type { TreeNode } from '@ts/grids/tree_list/data_source_adapter/types';
 import type { TreeListRowsView } from '@ts/grids/tree_list/rows/m_rows';
-import type { SelectionOptions } from '@ts/ui/selection/types';
+import type { SelectionChangeEvent, SelectionOptions } from '@ts/ui/selection/types';
 
 import treeListCore from '../core';
 import type {
   NormalizedSelectionArgs,
+  SelectionStateArgs,
   SelectionStateByKey,
   TreeListSelectionControllerExtension,
 } from './types';
@@ -424,7 +425,7 @@ SelectionController & TreeListSelectionControllerExtension
     return result;
   }
 
-  protected _updateSelectedItems(args) {
+  protected _updateSelectedItems(args: SelectionChangeEvent<unknown, unknown>): void {
     this.updateSelectionState(args);
     super._updateSelectedItems(args);
   }
@@ -510,14 +511,14 @@ SelectionController & TreeListSelectionControllerExtension
     return result;
   }
 
-  public isRecursiveSelection() {
+  public isRecursiveSelection(): boolean {
     const selectionMode = this.option('selection.mode');
     const isRecursive = this.option('selection.recursive');
 
-    return selectionMode === 'multiple' && isRecursive;
+    return selectionMode === 'multiple' && !!isRecursive;
   }
 
-  public updateSelectionState(options): void {
+  public updateSelectionState(options: SelectionStateArgs): void {
     const removedItemKeys = options.removedItemKeys || [];
     const selectedItemKeys = options.selectedItemKeys || [];
 
@@ -527,13 +528,13 @@ SelectionController & TreeListSelectionControllerExtension
     }
   }
 
-  public isRowSelected(key, isRecursive?: boolean): boolean | undefined {
+  public isRowSelected(key: RowKey, isRecursive?: boolean): boolean | undefined {
     const result = super.isRowSelected(key);
     const isRecursiveSelection = isRecursive ?? this.isRecursiveSelection();
 
     if (!result && isRecursiveSelection) {
-      if (key in this._selectionStateByKey) {
-        return this._selectionStateByKey[key];
+      if ((key as string) in this._selectionStateByKey) {
+        return this._selectionStateByKey[key as string];
       }
       return false;
     }
@@ -566,23 +567,26 @@ SelectionController & TreeListSelectionControllerExtension
     return selectedRowKeys;
   }
 
-  public getSelectedRowsData(mode) {
-    const that = this;
-    const dataController = that._dataController;
+  public getSelectedRowsData(mode?: string): RawItemData[] {
+    const dataController = this._dataController;
     const selectedKeys = this.getSelectedRowKeys(mode) || [];
-    const selectedRowsData: any[] = [];
+    const selectedRowsData: RawItemData[] = [];
 
     selectedKeys.forEach((key) => {
       const node = dataController.getNodeByKey(key);
-      node && selectedRowsData.push(node.data);
+
+      if (node) {
+        // @ts-expect-error data is undefined for a parent node that isn't loaded
+        selectedRowsData.push(node.data);
+      }
     });
 
     return selectedRowsData;
   }
 
-  public refresh() {
+  public refresh(): DeferredObj<unknown> {
     this._selectionStateByKey = {};
-    return super.refresh.apply(this, arguments as any);
+    return super.refresh();
   }
 };
 
