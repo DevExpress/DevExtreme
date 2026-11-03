@@ -448,7 +448,8 @@ class Splitter extends CollectionWidgetLiveUpdate<Properties> {
         const $nestedSplitter = this._findItemElementByItem(item).find(`.${SPLITTER_CLASS}`).eq(0);
 
         if ($nestedSplitter.length) {
-          getComponentInstance<Splitter>($nestedSplitter)?.option(optionName, optionValue);
+          // @ts-expect-error a nested splitter element always holds its instance
+          getComponentInstance<Splitter>($nestedSplitter).option(optionName, optionValue);
         }
       }
     });
@@ -1171,11 +1172,8 @@ class Splitter extends CollectionWidgetLiveUpdate<Properties> {
 
   _iterateResizeHandles(callback: (instance: ResizeHandle) => void): void {
     this._getResizeHandleItems().each((index, element) => {
-      const resizeHandle = getComponentInstance<ResizeHandle>($(element));
-
-      if (resizeHandle) {
-        callback(resizeHandle);
-      }
+      // @ts-expect-error a resize handle element always holds its instance
+      callback(getComponentInstance<ResizeHandle>($(element)));
 
       return true;
     });
@@ -1401,7 +1399,8 @@ class Splitter extends CollectionWidgetLiveUpdate<Properties> {
 
   registerKeyHandler(key: string, handler: SupportedKeyHandler): void {
     $(this.element()).find(`.${RESIZE_HANDLE_CLASS}`).each((index, element) => {
-      getComponentInstance<ResizeHandle>($(element))?.registerKeyHandler(key, handler);
+      // @ts-expect-error a resize handle element always holds its instance
+      getComponentInstance<ResizeHandle>($(element)).registerKeyHandler(key, handler);
 
       return true;
     });

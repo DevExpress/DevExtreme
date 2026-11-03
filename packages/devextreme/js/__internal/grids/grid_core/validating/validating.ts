@@ -1034,9 +1034,11 @@ export const validatingEditingExtender = (
 
     if (this.getEditMode() === EDIT_MODE.cell) {
       const $cell = this._rowsView._getCellElement(rowIndex, columnIndex);
-      const validator = $cell?.data('dxValidator');
+      const validator = findInstanceByElement($cell, InternalValidator);
       const rowOptions = getData($cell?.closest(`.${VIEW_CLASSES.row}`), ROW_OPTIONS_KEY);
-      const value = validator?.option('adapter').getValue();
+      // the grid always creates the cell validator with an adapter that has getValue
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      const value = validator?.option('adapter')!.getValue!();
       if (validator && cellValueShouldBeValidated(value, rowOptions)) {
         const deferred = Deferred<boolean>();
         when<unknown>(this._validatingController.validateCell(validator), result)

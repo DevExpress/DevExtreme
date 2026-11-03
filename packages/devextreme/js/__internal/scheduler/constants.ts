@@ -1,5 +1,5 @@
 import type { DataKey } from '@ts/core/element_data';
-import { LIST_ITEM_DATA_KEY as LIST_ITEM_DATA_KEY_NAME } from '@ts/ui/list/list.base';
+import { LIST_ITEM_DATA_KEY as LIST_ITEM_DATA_KEY_NAME } from '@ts/ui/list/constants';
 
 import type { AppointmentTooltipItem } from './types';
 

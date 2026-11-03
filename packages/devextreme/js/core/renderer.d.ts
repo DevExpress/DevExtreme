@@ -93,8 +93,8 @@ export interface dxElementWrapper {
 
   prev(): this;
 
+  prop<T = any>(propertyName: string): T;
   prop(propertyName: string, value: string | number | boolean): this;
-  prop<T = any>(propertyName: string, value?: string | number | boolean): T;
 
   remove(element?: Element | dxElementWrapper): this;
 

@@ -263,8 +263,12 @@ const columnHeadersView = (
     if (optionNames.filterValue || optionNames.bufferedFilterValue) {
       this._updateEditorValue(column, $editorContainer);
 
-      const overlayInstance = $cell.find(`.${this.addWidgetPrefix(CLASSES.filterRangeOverlay)}`).data('dxOverlay');
+      const overlayInstance = findInstanceByElement(
+        $cell.find(`.${this.addWidgetPrefix(CLASSES.filterRangeOverlay)}`),
+        Overlay,
+      );
       if (overlayInstance) {
+        // @ts-expect-error the filter range overlay is rendered together with its content
         const $editorRangeElements = overlayInstance.$content().find(`.${CLASSES.editorContainer}`);
 
         this._updateEditorValue(column, $editorRangeElements.first());
