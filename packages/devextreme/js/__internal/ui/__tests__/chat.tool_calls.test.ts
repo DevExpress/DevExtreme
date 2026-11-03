@@ -406,7 +406,7 @@ describe('Chat tool calls', () => {
       const bubble = getBubble(chat);
 
       expect(bubble.getToolCalls().map((call) => call.getErrorTagText())).toEqual([null, null]);
-      expect(bubble.getToolCallsTitleErrorTagText()).toBeNull();
+      expect(bubble.hasToolCallsTitleErrorTag()).toBe(false);
     });
 
     it('should treat a call without status as successful', () => {
@@ -433,26 +433,13 @@ describe('Chat tool calls', () => {
       expect(failed.getResultText()).toBe('Service is not available');
     });
 
-    it('should show the "Error" tag for a single failed call and no tag in the title', () => {
-      const chat = createChat({ items: [createMessage({ toolCalls: [FAILED] })] });
+    it('should show the "Error" tag only for the failed calls and not in the title', () => {
+      const chat = createChat({ items: [createMessage({ toolCalls: [FAILED, WEATHER, FAILED] })] });
       const bubble = getBubble(chat);
 
-      expect(bubble.getToolCalls()[0].getErrorTagText()).toBe('Error');
-      expect(bubble.getToolCallsTitleText()).toBeNull();
-      expect(bubble.getToolCallsTitleErrorTagText()).toBeNull();
-    });
-
-    it('should show "1 Error" in the title for one failed call', () => {
-      const chat = createChat({ items: [createMessage({ toolCalls: [WEATHER, FAILED] })] });
-
-      expect(getBubble(chat).getToolCallsTitleErrorTagText()).toBe('1 Error');
-    });
-
-    it('should show "N errors" in the title for several failed calls', () => {
-      const chat = createChat({ items: [createMessage({ toolCalls: [FAILED, WEATHER, FAILED] })] });
-
-      expect(getBubble(chat).getToolCallsTitleText()).toBe('3 tools');
-      expect(getBubble(chat).getToolCallsTitleErrorTagText()).toBe('2 errors');
+      expect(bubble.getToolCalls().map((call) => call.getErrorTagText()))
+        .toEqual(['Error', null, 'Error']);
+      expect(bubble.hasToolCallsTitleErrorTag()).toBe(false);
     });
   });
 
@@ -792,7 +779,7 @@ describe('Chat tool calls', () => {
 
       expect(bubble.getToolCallsElement()).not.toBe(blockBefore);
       expect(bubble.getToolCalls().map((call) => call.getName())).toEqual(['getCurrentTime', 'getRate']);
-      expect(bubble.getToolCallsTitleErrorTagText()).toBe('1 Error');
+      expect(bubble.getToolCallsTitleText()).toBe('2 tools');
     });
 
     it('should render the block again even when the same toolCalls are passed', () => {
@@ -1138,7 +1125,6 @@ describe('Chat tool calls', () => {
       expect(chat.getMessageBubbles().map((bubble) => bubble.hasToolCalls()))
         .toEqual([true, false]);
       expect(getBubble(chat).getToolCallsTitleText()).toBe('2 tools');
-      expect(getBubble(chat).getToolCallsTitleErrorTagText()).toBe('1 Error');
     });
 
     it('should update the block of a loaded message', async () => {
@@ -1184,25 +1170,19 @@ describe('Chat tool calls', () => {
           'dxChat-toolCallArgumentsLabel': 'Input',
           'dxChat-toolCallResultLabel': 'Output',
           'dxChat-toolCallError': 'Failed',
-          'dxChat-toolCallsErrorMultiple': '{0} failures',
         },
       });
       locale('xx');
 
       const chat = createChat({
-        items: [
-          createMessage({ toolCalls: [WEATHER, FAILED] }),
-          createMessage({ toolCalls: [FAILED, FAILED] }),
-        ],
+        items: [createMessage({ toolCalls: [WEATHER, FAILED] })],
       });
-      const [first, second] = chat.getMessageBubbles();
-      const [success, failed] = first.getToolCalls();
+      const bubble = getBubble(chat);
+      const [success, failed] = bubble.getToolCalls();
 
       success.toggle();
 
-      expect(first.getToolCallsTitleText()).toBe('Tools used: 2');
-      expect(first.getToolCallsTitleErrorTagText()).toBe('1 Failed');
-      expect(second.getToolCallsTitleErrorTagText()).toBe('2 failures');
+      expect(bubble.getToolCallsTitleText()).toBe('Tools used: 2');
       expect(failed.getErrorTagText()).toBe('Failed');
       expect(success.getFieldLabels()).toEqual(['Input', 'Output']);
     });
