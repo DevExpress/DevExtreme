@@ -136,7 +136,7 @@ export class SelectionController extends modules.Controller {
 
   private _selectionMode!: string;
 
-  private _isSelectionWithCheckboxes?: boolean;
+  private _isSelectionWithCheckboxes!: boolean;
 
   private _selection!: Selection;
 
@@ -535,7 +535,7 @@ export class SelectionController extends modules.Controller {
     return this._selection.isItemSelected(arg);
   }
 
-  public isSelectColumnVisible(): boolean | undefined {
+  public isSelectColumnVisible(): boolean {
     return this.option(SELECTION_MODE) === 'multiple' && (this.option(SHOW_CHECKBOXES_MODE) === 'always' || this.option(SHOW_CHECKBOXES_MODE) === 'onClick' || this._isSelectionWithCheckboxes);
   }
 
@@ -661,7 +661,7 @@ export class SelectionController extends modules.Controller {
     return undefined;
   }
 
-  public isSelectionWithCheckboxes(): boolean | undefined {
+  public isSelectionWithCheckboxes(): boolean {
     return this.option(SELECTION_MODE) === 'multiple' && (this.option(SHOW_CHECKBOXES_MODE) === 'always' || this._isSelectionWithCheckboxes);
   }
 
@@ -812,9 +812,9 @@ export const selectionColumnHeadersViewExtender = (
   }
 };
 
-export const selectionRowsViewExtender = <TBase extends ModuleType<RowsView>>(
-  Base: TBase,
-): TBase & ModuleType<SelectionRowsView> => class SelectionRowsViewExtender extends Base {
+export const selectionRowsViewExtender = (
+  Base: ModuleType<RowsView>,
+): ModuleType<SelectionRowsView> => class SelectionRowsViewExtender extends Base {
   public renderSelectCheckBoxContainer(
     $container: dxElementWrapper,
     options: SelectionCellOptions,

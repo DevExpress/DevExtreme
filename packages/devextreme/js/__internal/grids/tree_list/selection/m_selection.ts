@@ -15,6 +15,7 @@ import {
   selectionRowsViewExtender,
 } from '@ts/grids/grid_core/selection/m_selection';
 import { selectionModule } from '@ts/grids/grid_core/selection/selection_module';
+import type { SelectionRowsView } from '@ts/grids/grid_core/selection/types';
 import type { ModuleType } from '@ts/grids/grid_core/types';
 import type { RowsView } from '@ts/grids/grid_core/views/rows_view';
 import type { SelectionOptions } from '@ts/ui/selection/types';
@@ -112,16 +113,14 @@ SelectionController & TreeListSelectionControllerExtension
 
   private renderSelectCheckBoxContainer($container, model) {
     const that = this;
-    const rowsView = that.component.getView('rowsView');
+    const rowsView = that.component.getView('rowsView') as SelectionRowsView;
 
-    // @ts-expect-error
     const $checkbox = rowsView.renderSelectCheckBox($container, {
       value: model.row.isSelected,
       row: model.row,
       column: model.column,
     });
 
-    // @ts-expect-error
     rowsView.attachCheckBoxClickEvent($checkbox);
   }
 
