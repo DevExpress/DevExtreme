@@ -152,6 +152,6 @@ $chat-messagelist-contextmenu-delete-button-focused-bg: $base-hover-bg !default;
 
 $chat-tool-call-color: $base-text-color !default;
 $chat-tool-call-subtle-color: $base-label-color !default;
-$chat-tool-call-border-color: $base-border-color !default;
+$chat-tool-call-border-color: color.change($base-text-color, $alpha: 0.12) !default;
 $chat-tool-call-error-color: $base-danger !default;
 $chat-tool-call-error-background-color: color.change($base-danger, $alpha: 0.08) !default;

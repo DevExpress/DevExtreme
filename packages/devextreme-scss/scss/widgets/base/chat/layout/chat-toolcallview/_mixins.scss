@@ -29,9 +29,38 @@
   $field-border-radius,
   $field-border-width,
   $text-padding,
+  $bubble-padding: null,
+  $bubble-border-radius: null,
 ) {
   .dx-chat-messagebubble:has(> .dx-chat-tool-call-view) {
     gap: $gap;
+    padding: $bubble-padding;
+  }
+
+  .dx-chat-messagebubble:where(:has(> .dx-chat-tool-call-view)) {
+    border-radius: $bubble-border-radius;
+  }
+
+  @if $bubble-border-radius {
+    .dx-chat-messagegroup-alignment-start .dx-chat-messagebubble:has(> .dx-chat-tool-call-view) {
+      &:first-child {
+        border-start-start-radius: $bubble-border-radius;
+      }
+
+      &:last-child {
+        border-end-start-radius: $bubble-border-radius;
+      }
+    }
+
+    .dx-chat-messagegroup-alignment-end .dx-chat-messagebubble:has(> .dx-chat-tool-call-view) {
+      &:first-child {
+        border-start-end-radius: $bubble-border-radius;
+      }
+
+      &:last-child {
+        border-end-end-radius: $bubble-border-radius;
+      }
+    }
   }
 
   .dx-chat-tool-call-view {
@@ -49,7 +78,6 @@
       gap: $items-gap;
     }
 
-    // The title of the group is as high as the title of a call: the line is as high as the icon
     .dx-chat-tool-call-header {
       padding: $padding;
       font-weight: $header-font-weight;
@@ -94,7 +122,6 @@
       background-color: $error-background-color;
     }
 
-    // The vertical line of an opened item is the left border of the body
     .dx-accordion-item-body {
       gap: $fields-gap;
       margin-inline-start: $body-margin-inline-start;
@@ -103,7 +130,6 @@
       border-inline-start: $body-border-width solid $border-color;
     }
 
-    // The message text under the block lines up with the title and the icons of the block
     & + .dx-chat-messagebubble-content {
       padding: $text-padding;
     }
@@ -123,6 +149,7 @@
       &.dx-state-active,
       &.dx-state-readonly {
         border: $field-border-width solid $border-color;
+        box-shadow: none;
         background-color: transparent;
       }
 

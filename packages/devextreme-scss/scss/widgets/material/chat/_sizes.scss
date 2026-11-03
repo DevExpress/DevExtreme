@@ -107,10 +107,14 @@ $chat-tool-call-field-line-height: 1.4286 !default; // 20px/14px
 $chat-tool-call-field-border-radius: $base-border-radius !default;
 $chat-tool-call-text-padding: 4px 6px 10px !default;
 $chat-tool-call-field-border-width: $material-base-border-width !default;
+$chat-tool-call-bubble-padding: null !default;
+$chat-tool-call-bubble-border-radius: null !default;
 
 @if $size == "default" {
   $chat-bubble-border-radius: 8px !default;
   $chat-bubble-padding: 8px 16px !default;
+  $chat-tool-call-bubble-padding: 8px 12px !default;
+  $chat-tool-call-bubble-border-radius: 12px !default;
   $chat-bubble-delete-gap: 4px !default;
   $chat-bubble-delete-icon-size: 20px !default;
   $chat-messagebox-padding: 20px !default;
