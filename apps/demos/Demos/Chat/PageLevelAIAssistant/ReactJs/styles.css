@@ -29,22 +29,22 @@
 }
 
 #form-container {
-  border: 1px solid var(--dxds-color-border, var(--dx-color-border));
+  border: 1px solid var(--dx-color-border);
   padding: 16px;
   background-color: var(--dx-component-color-bg);
 }
 
 .ai-chat-empty-message {
-  font-size: var(--dx-chat-message-list-empty-message-font-size, 18px);
+  font-size: var(--dxds-font-size-180, 18px);
   font-weight: 400;
   text-align: center;
-  color: var(--dx-chat-message-list-empty-message-content, var(--dx-color-text));
+  color: var(--dx-color-text);
   margin-bottom: 8px;
 }
 
 .ai-chat-empty-prompt {
-  font-size: var(--dx-chat-message-list-empty-prompt-font-size, 14px);
-  color: var(--dx-chat-message-list-empty-prompt-content, #616161);
+  font-size: var(--dxds-font-size-base-md, 14px);
+  color: var(--dxds-color-content-subtle, #616161);
   text-align: center;
   padding: 0 24px;
   white-space: pre-line;
