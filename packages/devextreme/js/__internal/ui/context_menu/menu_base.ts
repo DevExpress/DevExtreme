@@ -9,8 +9,8 @@ import { isDefined, isObject, isPlainObject } from '@js/core/utils/type';
 import type {
   DxEvent, ItemInfo, NativeEventInfo, PointerInteractionEvent,
 } from '@js/events';
-import type { dxMenuBaseOptions } from '@js/ui/context_menu/ui.menu_base';
 import type dxMenuBase from '@js/ui/context_menu/ui.menu_base';
+import type { dxMenuBaseOptions } from '@js/ui/context_menu/ui.menu_base';
 import type {
   dxMenuBaseItem,
   Item,

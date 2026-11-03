@@ -6,12 +6,12 @@ import type { DxEvent, InteractionEvent } from '@js/events';
 import type { Format } from '@js/localization';
 import type { ToolbarItem } from '@js/ui/popup';
 import type Calendar from '@ts/ui/calendar/calendar';
-import type { DateBoxBaseProperties } from '@ts/ui/date_box/date_box.base';
 import type DateBox from '@ts/ui/date_box/date_box.base';
+import type { DateBoxBaseProperties } from '@ts/ui/date_box/date_box.base';
 import type DateView from '@ts/ui/date_box/date_view';
 import type List from '@ts/ui/list/list.edit.search';
-import type { PopupProperties } from '@ts/ui/popup/popup';
 import type Popup from '@ts/ui/popup/popup';
+import type { PopupProperties } from '@ts/ui/popup/popup';
 
 class DateBoxStrategy<
   TValue = Date | null,

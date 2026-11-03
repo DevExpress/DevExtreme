@@ -6,8 +6,8 @@ import type { DxEvent } from '@js/events';
 import type { Item as ContextMenuItem, ItemClickEvent } from '@js/ui/context_menu';
 import type { Properties as DataGridProperties } from '@js/ui/data_grid';
 import type { Properties as LoadPanelProperties } from '@js/ui/load_panel';
-import type { dxScrollableOptions, ScrollEventInfo } from '@js/ui/scroll_view/ui.scrollable';
 import type dxScrollable from '@js/ui/scroll_view/ui.scrollable';
+import type { dxScrollableOptions, ScrollEventInfo } from '@js/ui/scroll_view/ui.scrollable';
 import type {
   Column, ColumnsChanges, ColumnTemplateSource, TemplateModel,
 } from '@ts/grids/grid_core/columns_controller/types';

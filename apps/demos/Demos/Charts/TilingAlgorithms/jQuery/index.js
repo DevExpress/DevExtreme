@@ -16,7 +16,7 @@ $(() => {
       customizeTooltip(arg) {
         const { data } = arg.node;
         const parentData = arg.node.getParent().data;
-        let result = '';
+        let result;
 
         if (arg.node.isLeaf()) {
           result = `<span class='country'>${parentData.name}</span><br />${

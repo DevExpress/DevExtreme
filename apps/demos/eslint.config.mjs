@@ -423,6 +423,7 @@ export default [
     rules: {
       'no-useless-escape': 0,
       'no-unused-vars': 0,
+      'no-useless-assignment': 0,
 
       '@stylistic/quotes': 0,
       '@stylistic/quote-props': 0,

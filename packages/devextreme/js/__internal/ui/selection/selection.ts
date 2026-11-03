@@ -78,12 +78,6 @@ export default class Selection<
       : TKey[];
   }
 
-  _isStandardStrategy(
-    strategy: StandardStrategy<TItem, TKey> | DeferredStrategy<TItem, TKey>,
-  ): strategy is StandardStrategy<TItem, TKey> {
-    return this.options.deferred;
-  }
-
   getSelectedItems(): TDeferred extends true ? Promise<TItem[]> : TItem[] {
     return this._selectionStrategy.getSelectedItems() as TDeferred extends true
       ? Promise<TItem[]>

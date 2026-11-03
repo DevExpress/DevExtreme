@@ -73,10 +73,10 @@ catalog:
   devexpress-gantt: 4.1.71
   devextreme-exceljs-fork: 4.4.13
   devextreme-quill: 1.7.10
-  "@eslint/js": 9.39.4
-  eslint: 9.39.4
+  "@eslint/js": 10.0.1
+  eslint: 10.14.0
   eslint-config-airbnb-typescript: 18.0.0
-  eslint-config-devextreme: 1.1.12
+  eslint-config-devextreme: 2.0.0
   eslint-plugin-i18n: 2.4.0
   eslint-plugin-import: 2.32.0
   eslint-plugin-jsx-a11y: 6.10.2
@@ -94,8 +94,8 @@ catalog:
   "@eslint/eslintrc": 3.3.5
   "@stylistic/eslint-plugin": 5.10.0
   "@types/jquery": 4.0.1
-  "@typescript-eslint/eslint-plugin": 8.52.0
-  "@typescript-eslint/parser": 8.52.0
+  "@typescript-eslint/eslint-plugin": 8.58.2
+  "@typescript-eslint/parser": 8.58.2
 
 catalogs:
   angular:
@@ -137,6 +137,8 @@ allowBuilds:
   unrs-resolver: true
 
 patchedDependencies:
+  eslint-plugin-import@2.32.0: patches/eslint-plugin-import@2.32.0.patch
+  eslint-plugin-spellcheck@0.0.20: patches/eslint-plugin-spellcheck@0.0.20.patch
   testcafe-hammerhead@31.7.8: patches/testcafe-hammerhead@31.7.8.patch
   testcafe@3.7.5: patches/testcafe@3.7.5.patch
 

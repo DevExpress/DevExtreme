@@ -44,8 +44,8 @@ import {
   isMaterial,
   isMaterialBased,
 } from '@js/ui/themes';
-import type { Properties as ToolbarProperties } from '@js/ui/toolbar';
 import type Toolbar from '@js/ui/toolbar';
+import type { Properties as ToolbarProperties } from '@js/ui/toolbar';
 import windowUtils from '@ts/core/utils/window';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { SupportedKeys } from '@ts/core/widget/widget';

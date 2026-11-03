@@ -1,9 +1,9 @@
+import type dxDataGrid from '@js/ui/data_grid';
 import type {
   CustomSummaryInfo,
   SortByGroupSummaryInfoItem,
   Summary,
 } from '@js/ui/data_grid';
-import type dxDataGrid from '@js/ui/data_grid';
 import { noop } from '@ts/core/utils/common';
 import { compileGetter } from '@ts/core/utils/data';
 import { isDefined } from '@ts/core/utils/type';
