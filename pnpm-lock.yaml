@@ -227,7 +227,7 @@ overrides:
 patchedDependencies:
   babel-core@6.26.3: c0f53059bb7026b811209ee3af7fd4c700c900c615d0a0b14981ce911fcf3392
   systemjs-builder@0.16.15: c78b3d7eb812436aa2d80299b3d3f2738f0366b53f710a25956a3762edf73014
-  testcafe-hammerhead@31.7.8: 8655c07786177d3b611a05abf6b0ea87d32796eb2601f92a800ef041095f264c
+  testcafe-hammerhead@31.7.8: c10994572bb1743e8dc67d03f283d4a48e1b4468d467be55e011c613c3604d88
 
 importers:
 
@@ -34243,7 +34243,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  testcafe-hammerhead@31.7.8(patch_hash=8655c07786177d3b611a05abf6b0ea87d32796eb2601f92a800ef041095f264c):
+  testcafe-hammerhead@31.7.8(patch_hash=c10994572bb1743e8dc67d03f283d4a48e1b4468d467be55e011c613c3604d88):
     dependencies:
       '@adobe/css-tools': 4.5.0
       '@electron/asar': 3.4.1
@@ -34289,7 +34289,7 @@ snapshots:
       pinkie: 2.0.4
       read-file-relative: 1.2.0
       strip-bom: 2.0.0
-      testcafe-hammerhead: 31.7.8(patch_hash=8655c07786177d3b611a05abf6b0ea87d32796eb2601f92a800ef041095f264c)
+      testcafe-hammerhead: 31.7.8(patch_hash=c10994572bb1743e8dc67d03f283d4a48e1b4468d467be55e011c613c3604d88)
     transitivePeerDependencies:
       - bufferutil
       - supports-color
@@ -34393,7 +34393,7 @@ snapshots:
       source-map-support: 0.5.21
       strip-bom: 2.0.0
       testcafe-browser-tools: 2.0.26(supports-color@7.2.0)
-      testcafe-hammerhead: 31.7.8(patch_hash=8655c07786177d3b611a05abf6b0ea87d32796eb2601f92a800ef041095f264c)
+      testcafe-hammerhead: 31.7.8(patch_hash=c10994572bb1743e8dc67d03f283d4a48e1b4468d467be55e011c613c3604d88)
       testcafe-legacy-api: 5.1.8
       testcafe-reporter-json: 2.2.0
       testcafe-reporter-list: 2.2.0
