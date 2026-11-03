@@ -1,4 +1,5 @@
 /* eslint-disable max-classes-per-file */
+import type { SingleMultipleOrNone } from '@js/common';
 import { name as clickEventName } from '@js/common/core/events/click';
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import holdEvent from '@js/common/core/events/hold';
@@ -134,7 +135,7 @@ export class SelectionController extends modules.Controller {
 
   protected _stateStoringController!: StateStoringController;
 
-  private _selectionMode!: string;
+  private _selectionMode?: SingleMultipleOrNone;
 
   private _isSelectionWithCheckboxes!: boolean;
 
@@ -156,8 +157,7 @@ export class SelectionController extends modules.Controller {
     this.dataSourceController = this.getController('dataSource');
     this._columnsController = this.getController('columns');
     this._stateStoringController = this.getController('stateStoring');
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- mode has a default value
-    this._selectionMode = mode!;
+    this._selectionMode = mode;
     this._isSelectionWithCheckboxes = false;
 
     this._selection = this._createSelection();
@@ -400,8 +400,6 @@ export class SelectionController extends modules.Controller {
    * @extended: TreeList's selection
    */
   protected _updateSelectedItems(e: SelectionChangeEvent<unknown, unknown>): void {
-    // eslint-disable-next-line @typescript-eslint/init-declarations -- assigned in the if-chain
-    let selectionChangedOptions: SelectionChangedOptions | undefined;
     const isDeferredMode = this.option('selection.deferred');
     const selectionFilter = this._selection.selectionFilter();
     const dataController = this._dataController;
@@ -432,20 +430,20 @@ export class SelectionController extends modules.Controller {
 
     if (isDeferredMode) {
       this.option('selectionFilter', selectionFilter);
-      selectionChangedOptions = {};
+      this._fireSelectionChanged({});
     } else if (e.addedItemKeys.length || e.removedItemKeys.length) {
       this._selectedItemsInternalChange = true;
       this.option('selectedRowKeys', e.selectedItemKeys.slice(0));
       this._selectedItemsInternalChange = false;
-      selectionChangedOptions = {
+      this._fireSelectionChanged({
         selectedRowsData: e.selectedItems.slice(0),
         selectedRowKeys: e.selectedItemKeys.slice(0),
         currentSelectedRowKeys: e.addedItemKeys.slice(0),
         currentDeselectedRowKeys: e.removedItemKeys.slice(0),
-      };
+      });
+    } else {
+      this._fireSelectionChanged();
     }
-
-    this._fireSelectionChanged(selectionChangedOptions);
   }
 
   private getChangedItemIndexes(items: ProcessedItem[]): number[] {
