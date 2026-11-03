@@ -2,6 +2,7 @@ import {
   afterEach, beforeEach, describe, expect, it,
 } from '@jest/globals';
 import $ from '@js/core/renderer';
+import Calendar from '@ts/ui/calendar/calendar';
 
 import { createScheduler } from './__mock__/create_scheduler';
 import { setupSchedulerTestEnvironment } from './__mock__/mock_scheduler';
@@ -38,6 +39,71 @@ describe('Header', () => {
     scheduler.option('tabIndex', 1);
 
     expect(POM.getHeader().hasAttribute('tabindex')).toBe(false);
+  });
+
+  describe('firstDayOfWeek runtime change', () => {
+    const getCaption = (header: HTMLElement): string | null | undefined => header
+      .querySelector('.dx-scheduler-navigator-caption')?.textContent;
+
+    it('should fall back to the locale first day when reset to undefined', async () => {
+      const { scheduler, POM } = await createScheduler({
+        dataSource: [],
+        currentView: 'week',
+        currentDate: new Date(2021, 4, 24),
+        firstDayOfWeek: 1,
+      });
+
+      scheduler.option('firstDayOfWeek', undefined);
+
+      expect(getCaption(POM.getHeader())).toBe('23-29 May 2021');
+      expect(scheduler.getStartViewDate()).toEqual(new Date(2021, 4, 23));
+    });
+
+    it('should keep the view firstDayOfWeek when the root option changes', async () => {
+      const { scheduler, POM } = await createScheduler({
+        dataSource: [],
+        views: [{ type: 'week', firstDayOfWeek: 3 }],
+        currentView: 'week',
+        currentDate: new Date(2021, 4, 24),
+        firstDayOfWeek: 1,
+      });
+
+      scheduler.option('firstDayOfWeek', 0);
+
+      expect(getCaption(POM.getHeader())).toBe('19-25 May 2021');
+      expect(scheduler.getStartViewDate()).toEqual(new Date(2021, 4, 19));
+    });
+
+    it('should apply the root option when the view has no firstDayOfWeek', async () => {
+      const { scheduler, POM } = await createScheduler({
+        dataSource: [],
+        currentView: 'week',
+        currentDate: new Date(2021, 4, 24),
+        firstDayOfWeek: 1,
+      });
+
+      scheduler.option('firstDayOfWeek', 3);
+
+      expect(getCaption(POM.getHeader())).toBe('19-25 May 2021');
+      expect(scheduler.getStartViewDate()).toEqual(new Date(2021, 4, 19));
+    });
+
+    it('should update the date navigator calendar after it was opened', async () => {
+      const { scheduler, POM } = await createScheduler({
+        dataSource: [],
+        currentView: 'week',
+        currentDate: new Date(2021, 4, 24),
+        firstDayOfWeek: 1,
+      });
+
+      POM.getHeader().querySelector<HTMLElement>('.dx-scheduler-navigator-caption')?.click();
+      const calendar = Calendar.getInstance<Calendar>($('.dx-calendar'));
+      expect(calendar.option('firstDayOfWeek')).toBe(1);
+
+      scheduler.option('firstDayOfWeek', 3);
+
+      expect(calendar.option('firstDayOfWeek')).toBe(3);
+    });
   });
 
   describe('Toolbar', () => {
