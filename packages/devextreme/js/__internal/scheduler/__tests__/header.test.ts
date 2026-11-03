@@ -2,6 +2,7 @@ import {
   afterEach, beforeEach, describe, expect, it,
 } from '@jest/globals';
 import $ from '@js/core/renderer';
+import Calendar from '@ts/ui/calendar/calendar';
 
 import { createScheduler } from './__mock__/create_scheduler';
 import { setupSchedulerTestEnvironment } from './__mock__/mock_scheduler';
@@ -85,6 +86,23 @@ describe('Header', () => {
 
       expect(getCaption(POM.getHeader())).toBe('19-25 May 2021');
       expect(scheduler.getStartViewDate()).toEqual(new Date(2021, 4, 19));
+    });
+
+    it('should update the date navigator calendar after it was opened', async () => {
+      const { scheduler, POM } = await createScheduler({
+        dataSource: [],
+        currentView: 'week',
+        currentDate: new Date(2021, 4, 24),
+        firstDayOfWeek: 1,
+      });
+
+      POM.getHeader().querySelector<HTMLElement>('.dx-scheduler-navigator-caption')?.click();
+      const calendar = Calendar.getInstance<Calendar>($('.dx-calendar'));
+      expect(calendar.option('firstDayOfWeek')).toBe(1);
+
+      scheduler.option('firstDayOfWeek', 3);
+
+      expect(calendar.option('firstDayOfWeek')).toBe(3);
     });
   });
 
