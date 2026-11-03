@@ -809,9 +809,9 @@ export const selectionColumnHeadersViewExtender = (
   }
 };
 
-export const selectionRowsViewExtender = (
-  Base: ModuleType<RowsView>,
-): ModuleType<SelectionRowsView> => class SelectionRowsViewExtender extends Base {
+export const selectionRowsViewExtender = <TBase extends ModuleType<RowsView>>(
+  Base: TBase,
+): TBase & ModuleType<SelectionRowsView> => class SelectionRowsViewExtender extends Base {
   public renderSelectCheckBoxContainer(
     $container: dxElementWrapper,
     options: SelectionCellOptions,

@@ -163,7 +163,7 @@ export class TreeListRowsView extends RowsView {
     return 'treegrid';
   }
 
-  private isExpandIcon($targetElement: dxElementWrapper): boolean {
+  protected isExpandIcon($targetElement: dxElementWrapper): boolean {
     return !!$targetElement.closest(`.${CLASSES.expanded}, .${CLASSES.collapsed}`).length;
   }
 

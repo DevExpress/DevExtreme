@@ -186,7 +186,7 @@ export class TreeListDataController extends DataController {
     }
   }
 
-  private getNodeByKey(key: RowKey): TreeNode | undefined {
+  public getNodeByKey(key: RowKey): TreeNode | undefined {
     return this.dataSourceController.getAdapter()?.getNodeByKey(key);
   }
 

@@ -16,27 +16,21 @@ import {
 } from '@ts/grids/grid_core/selection/m_selection';
 import { selectionModule } from '@ts/grids/grid_core/selection/selection_module';
 import type { SelectionRowsView } from '@ts/grids/grid_core/selection/types';
-import type { ModuleType } from '@ts/grids/grid_core/types';
-import type { RowsView } from '@ts/grids/grid_core/views/rows_view';
+import type { ModuleType, RowKey } from '@ts/grids/grid_core/types';
+import type { TreeListDataController } from '@ts/grids/tree_list/data_controller/data_controller';
+import type { TreeListRowsView } from '@ts/grids/tree_list/rows/m_rows';
 import type { SelectionOptions } from '@ts/ui/selection/types';
 
 import treeListCore from '../core';
+import type { TreeListSelectionControllerExtension } from './types';
 
 const TREELIST_SELECT_CHECKBOX_WRAPPER_CLASS = 'dx-treelist-select-checkbox-container';
 const TREELIST_SELECT_ALL_CLASS = 'dx-treelist-select-all';
 const SELECT_CHECKBOX_CLASS = 'dx-select-checkbox';
 
-const nodeExists = function (array, currentKey) {
+const nodeExists = function (array: RowKey[], currentKey: RowKey): boolean {
   return !!array.filter((key) => key === currentKey).length;
 };
-
-interface TreeListSelectionControllerExtension {
-  isRecursiveSelection: () => boolean | undefined;
-  updateSelectionState: (options: {
-    selectedItemKeys?: unknown[];
-    removedItemKeys?: unknown[];
-  }) => void;
-}
 
 const data = (
   Base: ModuleType<DataController>,
@@ -79,6 +73,8 @@ const selection = (
 ): ModuleType<
 SelectionController & TreeListSelectionControllerExtension
 > => class SelectionControllerTreeListExtender extends Base {
+  protected declare _dataController: TreeListDataController;
+
   private _selectionStateByKey: any;
 
   private _isSelectionNormalizing: any;
@@ -276,7 +272,6 @@ SelectionController & TreeListSelectionControllerExtension
     this._selectionStateByKey = {};
     for (let i = 0; i < keys.length; i++) {
       this._selectionStateByKey[keys[i]] = isSelected;
-      // @ts-expect-error
       const node = dataController.getNodeByKey(keys[i]);
 
       if (node) {
@@ -288,12 +283,11 @@ SelectionController & TreeListSelectionControllerExtension
 
   private _getSelectedParentKeys(key, selectedItemKeys, useCash?) {
     let selectedParentNode;
-    // @ts-expect-error
     const node = this._dataController.getNodeByKey(key);
     let parentNode = node && node.parent;
     let result: any[] = [];
 
-    while (parentNode && parentNode.level >= 0) {
+    while (parentNode?.level !== undefined && parentNode.level >= 0) {
       result.unshift(parentNode.key);
       const isSelected = useCash ? !nodeExists(selectedItemKeys, parentNode.key) && this.isRowSelected(parentNode.key) : selectedItemKeys.indexOf(parentNode.key) >= 0;
 
@@ -313,7 +307,6 @@ SelectionController & TreeListSelectionControllerExtension
 
   private _getSelectedChildKeys(key, keysToIgnore) {
     const childKeys: any[] = [];
-    // @ts-expect-error
     const node = this._dataController.getNodeByKey(key);
 
     node && treeListCore.foreachNodes(node.children, (childNode) => {
@@ -351,7 +344,6 @@ SelectionController & TreeListSelectionControllerExtension
   }
 
   private _normalizeChildrenKeys(key, args) {
-    // @ts-expect-error
     const node = this._dataController.getNodeByKey(key);
 
     node && node.children.forEach((childNode) => {
@@ -440,7 +432,6 @@ SelectionController & TreeListSelectionControllerExtension
 
   private _getAllChildKeys(key) {
     const childKeys: any[] = [];
-    // @ts-expect-error
     const node = this._dataController.getNodeByKey(key);
 
     node && treeListCore.foreachNodes(node.children, (childNode) => {
@@ -483,7 +474,6 @@ SelectionController & TreeListSelectionControllerExtension
     const dataController = that._dataController;
 
     keys.forEach((key) => {
-      // @ts-expect-error
       const node = dataController.getNodeByKey(key);
       node && !node.hasChildren && result.push(key);
     });
@@ -557,7 +547,6 @@ SelectionController & TreeListSelectionControllerExtension
     // @ts-expect-error selection may be deferred only in DataGrid,
     // we need to improve GridCore types to take it into account
     selectedKeys.forEach((key) => {
-      // @ts-expect-error
       const node = dataController.getNodeByKey(key);
       node && selectedRowsData.push(node.data);
     });
@@ -627,8 +616,9 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
 };
 
 const rowsView = (
-  Base: ModuleType<RowsView>,
-): ModuleType<RowsView> => class TreeListSelectionRowsViewExtender extends selectionRowsViewExtender(Base) {
+  Base: ModuleType<TreeListRowsView>,
+): ModuleType<TreeListRowsView> => class TreeListSelectionRowsViewExtender
+  extends selectionRowsViewExtender(Base) {
   protected _renderIcons(
     $container: dxElementWrapper,
     options,
@@ -650,7 +640,6 @@ const rowsView = (
   protected _rowClick(e) {
     const $targetElement = $(e.event.target);
 
-    // @ts-expect-error
     if (this.isExpandIcon($targetElement)) {
       // @ts-expect-error
       super._rowClickForTreeList.apply(this, arguments as any);
