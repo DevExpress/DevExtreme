@@ -2,59 +2,92 @@ import dataQuery from '@js/common/data/query';
 import storeHelper from '@js/common/data/store_helper';
 import { keysEqual } from '@js/common/data/utils';
 import { toComparable } from '@js/core/utils/data';
+import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred, when } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
-import { each } from '@js/core/utils/iterator';
+import type { StoreLoadOptions } from '@ts/data/data_source/types';
+import type { SortingInfo } from '@ts/data/utils';
 import type DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/data_source_adapter';
+import type { LoadOperation, OperationTypes } from '@ts/grids/grid_core/data_source_adapter/types';
+import type { DataFilter } from '@ts/grids/grid_core/filter/types';
 import { combineFilters } from '@ts/grids/grid_core/filter/utils';
 
 import dataGridCore from '../core';
 import { createGroupFilter } from '../utils';
 import { createOffsetFilter, GroupingHelper as GroupingHelperCore } from './m_grouping_core';
-import type { DataItem, GroupInfoData, GroupItemData } from './types';
+import type {
+  DataItem,
+  ForeachGroupsCallback,
+  ForeachGroupsResult,
+  GroupInfoData,
+  GroupingLoadOperation,
+  GroupItemData,
+} from './types';
 
-const loadTotalCount = function (dataSourceAdapter: DataSourceAdapter, options) {
-  // @ts-expect-error
-  const d = new Deferred();
+const loadTotalCount = function loadTotalCount(
+  dataSourceAdapter: DataSourceAdapter,
+  options: StoreLoadOptions,
+): DeferredObj<number> {
+  const d = Deferred<number>();
   const loadOptions = extend({ skip: 0, take: 1, requireTotalCount: true }, options);
 
   dataSourceAdapter.customLoader.load(loadOptions).done(({ extra }) => {
-    d.resolve(extra!.totalCount);
+    // @ts-expect-error extra is loaded with requireTotalCount
+    d.resolve(extra.totalCount);
+    // @ts-expect-error badly typed Deferred.reject
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises -- ignores the result
   }).fail(d.reject.bind(d));
   return d;
 };
 
-const foreachCollapsedGroups = function (that, callback, updateOffsets?) {
-  return that.foreachGroups((groupInfo) => {
+const foreachCollapsedGroups = function foreachCollapsedGroups(
+  that: GroupingHelperCore,
+  callback: ForeachGroupsCallback,
+  updateOffsets?: boolean,
+): ForeachGroupsResult {
+  return that.foreachGroups((groupInfo, parents) => {
     if (!groupInfo.isExpanded) {
-      return callback(groupInfo);
+      return callback(groupInfo, parents);
     }
+    return undefined;
   }, false, false, updateOffsets, true);
 };
 
-const correctSkipLoadOption = function (that, skip) {
+const correctSkipLoadOption = function correctSkipLoadOption(
+  that: GroupingHelperCore,
+  skip: number | undefined,
+): number {
   let skipCorrection = 0;
   let resultSkip = skip || 0;
 
   if (skip) {
-    // @ts-expect-error
     foreachCollapsedGroups(that, (groupInfo) => {
       if (groupInfo.offset - skipCorrection >= skip) {
         return false;
       }
       skipCorrection += groupInfo.count - 1;
+      return undefined;
     });
     resultSkip += skipCorrection;
   }
   return resultSkip;
 };
 
-const processGroupItems = function (that, items, path, offset, skipFirstItem, take) {
+const processGroupItems = function processGroupItems(
+  that: GroupingHelperCore,
+  items: GroupItemData[],
+  path: unknown[],
+  offset: number,
+  skipFirstItem: boolean | undefined,
+  take: number,
+): { offset: number; take: number } {
+  let currentOffset = offset;
+  let currentTake = take;
+  let isFirstItemSkipped = skipFirstItem;
   let removeLastItemsCount = 0;
   let needRemoveFirstItem = false;
 
-  for (let i = 0; i < items.length; i++) {
-    const item = items[i];
+  for (const item of items) {
     if (item.items !== undefined) {
       path.push(item.key);
       const groupInfo = that.findGroupInfo(path);
@@ -62,45 +95,52 @@ const processGroupItems = function (that, items, path, offset, skipFirstItem, ta
       if (groupInfo && !groupInfo.isExpanded) {
         item.collapsedItems = item.items;
         item.items = null;
-        offset += groupInfo.count;
-        take--;
-        if (take < 0) {
-          removeLastItemsCount++;
+        currentOffset += groupInfo.count;
+        currentTake -= 1;
+        if (currentTake < 0) {
+          removeLastItemsCount += 1;
         }
-        if (skipFirstItem) {
+        if (isFirstItemSkipped) {
           needRemoveFirstItem = true;
         }
       } else if (item.items) {
-        const offsetInfo = processGroupItems(that, item.items, path, offset, skipFirstItem, take);
-        if (skipFirstItem) {
-          if (offsetInfo.offset - offset > 1) {
+        const offsetInfo = processGroupItems(
+          that,
+          item.items,
+          path,
+          currentOffset,
+          isFirstItemSkipped,
+          currentTake,
+        );
+        if (isFirstItemSkipped) {
+          if (offsetInfo.offset - currentOffset > 1) {
             item.isContinuation = true;
           } else {
             needRemoveFirstItem = true;
           }
         }
-        offset = offsetInfo.offset;
-        take = offsetInfo.take;
-        if (take < 0) {
+        currentOffset = offsetInfo.offset;
+        currentTake = offsetInfo.take;
+        if (currentTake < 0) {
           if (item.items.length) {
             item.isContinuationOnNextPage = true;
           } else {
-            removeLastItemsCount++;
+            removeLastItemsCount += 1;
           }
         }
       }
       path.pop();
     } else {
-      if (skipFirstItem) {
+      if (isFirstItemSkipped) {
         needRemoveFirstItem = true;
       }
-      offset++;
-      take--;
-      if (take < 0) {
-        removeLastItemsCount++;
+      currentOffset += 1;
+      currentTake -= 1;
+      if (currentTake < 0) {
+        removeLastItemsCount += 1;
       }
     }
-    skipFirstItem = false;
+    isFirstItemSkipped = false;
   }
   if (needRemoveFirstItem) {
     items.splice(0, 1);
@@ -109,14 +149,14 @@ const processGroupItems = function (that, items, path, offset, skipFirstItem, ta
     items.splice(-removeLastItemsCount, removeLastItemsCount);
   }
   return {
-    offset,
-    take,
+    offset: currentOffset,
+    take: currentTake,
   };
 };
 
-const pathEquals = function (path1, path2) {
+const pathEquals = function pathEquals(path1: unknown[], path2: unknown[]): boolean {
   if (path1.length !== path2.length) return false;
-  for (let i = 0; i < path1.length; i++) {
+  for (let i = 0; i < path1.length; i += 1) {
     if (!keysEqual(null, path1[i], path2[i])) {
       return false;
     }
@@ -193,39 +233,48 @@ export { loadTotalCount, updateGroupOffsets };
 
 /// #ENDDEBUG
 
-const removeGroupLoadOption = function (storeLoadOptions, loadOptions) {
+const removeGroupLoadOption = function removeGroupLoadOption(
+  storeLoadOptions: StoreLoadOptions,
+  loadOptions: StoreLoadOptions,
+): void {
   if (loadOptions.group) {
     const groups = dataGridCore.normalizeSortingInfo(loadOptions.group);
     const sorts = dataGridCore.normalizeSortingInfo(storeLoadOptions.sort);
+    // @ts-expect-error arrangeSortingInfo() types selector wider than public KeySelector
     storeLoadOptions.sort = storeHelper.arrangeSortingInfo(groups, sorts);
     delete loadOptions.group;
   }
 };
 
-const createNotGroupFilter = function (path, storeLoadOptions, group) {
+const createNotGroupFilter = function createNotGroupFilter(
+  path: unknown[],
+  storeLoadOptions: StoreLoadOptions,
+  group: StoreLoadOptions['group'],
+): DataFilter {
   const groups = dataGridCore.normalizeSortingInfo(group || storeLoadOptions.group);
-  let filter: any[] = [];
+  const filters: DataFilter[] = [];
 
-  for (let i = 0; i < path.length; i++) {
-    const filterElement: any[] = [];
-    for (let j = 0; j <= i; j++) {
+  for (let i = 0; i < path.length; i += 1) {
+    const filterElement: unknown[] = [];
+    for (let j = 0; j <= i; j += 1) {
       filterElement.push([groups[j].selector, i === j ? '<>' : '=', path[j]]);
     }
-    filter.push(combineFilters(filterElement));
+    filters.push(combineFilters(filterElement));
   }
-  // @ts-expect-error
-  filter = combineFilters(filter, 'or');
+  const filter = combineFilters(filters, 'or');
 
   return combineFilters([filter, storeLoadOptions.filter]);
 };
 
-const getGroupCount = function (item, groupCount) {
-  let count = item.count || item.items.length;
+const getGroupCount = function getGroupCount(item: GroupItemData, groupCount: number): number {
+  // @ts-expect-error a group without a count has loaded items
+  const { items }: { items: GroupItemData[] } = item;
+  let count = item.count || items.length;
 
   if (!item.count && groupCount > 1) {
     count = 0;
-    for (let i = 0; i < item.items.length; i++) {
-      count += getGroupCount(item.items[i], groupCount - 1);
+    for (const childItem of items) {
+      count += getGroupCount(childItem, groupCount - 1);
     }
   }
 
@@ -233,17 +282,19 @@ const getGroupCount = function (item, groupCount) {
 };
 
 export class GroupingHelper extends GroupingHelperCore {
-  protected handleDataLoading(options?) {
-    const that = this;
+  public handleDataLoading(options: GroupingLoadOperation): void {
     const { storeLoadOptions } = options;
-    const collapsedGroups: any[] = [];
+    const collapsedGroups: GroupInfoData[] = [];
     let collapsedItemsCount = 0;
     let skipFirstItem = false;
-    let take;
-    const { group } = options.loadOptions;
+    // eslint-disable-next-line @typescript-eslint/init-declarations -- assigned in the if
+    let take: number | undefined;
+    // @ts-expect-error loadOptions is set before load
+    const localLoadOptions: StoreLoadOptions = options.loadOptions;
+    const { group } = localLoadOptions;
     let skipCorrection = 0;
 
-    removeGroupLoadOption(storeLoadOptions, options.loadOptions);
+    removeGroupLoadOption(storeLoadOptions, localLoadOptions);
 
     options.group = options.group || group;
 
@@ -251,24 +302,24 @@ export class GroupingHelper extends GroupingHelperCore {
       return;
     }
 
-    const loadOptions = extend({}, storeLoadOptions);
+    const loadOptions: StoreLoadOptions = extend({}, storeLoadOptions);
 
-    loadOptions.skip = correctSkipLoadOption(that, storeLoadOptions.skip);
+    loadOptions.skip = correctSkipLoadOption(this, storeLoadOptions.skip);
 
     if (loadOptions.skip && loadOptions.take && group) {
-      loadOptions.skip--;
-      loadOptions.take++;
+      loadOptions.skip -= 1;
+      loadOptions.take += 1;
       skipFirstItem = true;
     }
 
     if (loadOptions.take && group) {
       take = loadOptions.take;
-      loadOptions.take++;
+      loadOptions.take += 1;
     }
 
-    let loadEndOffset: number = loadOptions.skip + loadOptions.take;
+    let loadEndOffset = Number(loadOptions.skip) + Number(loadOptions.take);
 
-    this.foreachGroups((groupInfo: GroupInfoData) => {
+    this.foreachGroups((groupInfo) => {
       // loadEndOffset should be corrected for expanding group to properly calculate group filter
       if (groupInfo.isPending && groupInfo.isExpanded && groupInfo.count) {
         loadEndOffset += groupInfo.count;
@@ -279,7 +330,7 @@ export class GroupingHelper extends GroupingHelperCore {
           return false;
         }
 
-        if (groupInfo.offset >= loadOptions.skip + skipCorrection && groupInfo.count) {
+        if (groupInfo.offset >= Number(loadOptions.skip) + skipCorrection && groupInfo.count) {
           skipCorrection += groupInfo.count - 1;
           collapsedGroups.push(groupInfo);
           collapsedItemsCount += groupInfo.count;
@@ -293,8 +344,8 @@ export class GroupingHelper extends GroupingHelperCore {
       return undefined;
     }, false, false, undefined, true);
 
-    each(collapsedGroups, function () {
-      loadOptions.filter = createNotGroupFilter(this.path, loadOptions, group);
+    collapsedGroups.forEach((collapsedGroup) => {
+      loadOptions.filter = createNotGroupFilter(collapsedGroup.path, loadOptions, group);
     });
 
     options.storeLoadOptions = loadOptions;
@@ -305,92 +356,127 @@ export class GroupingHelper extends GroupingHelperCore {
     options.take = take;
   }
 
-  protected handleDataLoaded(options, callBase) {
-    const that = this;
-    const { collapsedGroups } = options;
+  public handleDataLoaded(
+    options: GroupingLoadOperation,
+    callBase: (options: LoadOperation) => void,
+  ): void {
+    const { collapsedGroups, collapsedItemsCount, extra } = options;
     const groups = dataGridCore.normalizeSortingInfo(options.group);
     const groupCount = groups.length;
 
-    function appendCollapsedPath(data, path, groups, collapsedGroup, offset) {
-      if (!data || !path.length || !groups.length) return;
+    function appendCollapsedPath(
+      data: GroupItemData[] | null,
+      path: unknown[],
+      levelGroups: SortingInfo[],
+      collapsedGroup: GroupInfoData,
+      offset: number,
+    ): void {
+      if (!data || !path.length || !levelGroups.length) return;
 
-      let keyValue;
-      let i;
+      // eslint-disable-next-line @typescript-eslint/init-declarations -- assigned in the loop
+      let keyValue: unknown;
+      let i = 0;
+      let currentOffset = offset;
       const pathValue = toComparable(path[0], true);
 
-      for (i = 0; i < data.length; i++) {
+      for (; i < data.length; i += 1) {
         keyValue = toComparable(data[i].key, true);
-        if (offset >= collapsedGroup.offset || pathValue === keyValue) {
+        if (currentOffset >= collapsedGroup.offset || pathValue === keyValue) {
           break;
         } else {
-          offset += getGroupCount(data[i], groups.length);
+          currentOffset += getGroupCount(data[i], levelGroups.length);
         }
       }
 
       if (!data.length || pathValue !== keyValue) {
-        data.splice(i, 0, { key: path[0], items: [], count: path.length === 1 ? collapsedGroup.count : undefined });
+        data.splice(i, 0, {
+          key: path[0],
+          items: [],
+          count: path.length === 1 ? collapsedGroup.count : undefined,
+        });
       }
-      appendCollapsedPath(data[i].items, path.slice(1), groups.slice(1), collapsedGroup, offset);
+      appendCollapsedPath(
+        data[i].items,
+        path.slice(1),
+        levelGroups.slice(1),
+        collapsedGroup,
+        currentOffset,
+      );
     }
 
-    if (options.collapsedItemsCount && options.extra && options.extra.totalCount >= 0) {
-      if (!options.extra._totalCountWasIncreasedByCollapsedItems) {
-        options.extra.totalCount += options.collapsedItemsCount;
-        options.extra._totalCountWasIncreasedByCollapsedItems = true;
+    if (collapsedItemsCount && extra?.totalCount !== undefined && extra.totalCount >= 0) {
+      if (!extra._totalCountWasIncreasedByCollapsedItems) {
+        extra.totalCount += collapsedItemsCount;
+        extra._totalCountWasIncreasedByCollapsedItems = true;
       }
     }
 
     callBase(options);
 
     if (groupCount) {
-      let { data } = options;
+      // @ts-expect-error data is loaded here
+      let { data }: { data: GroupItemData[] } = options;
       const query = dataQuery(data);
       storeHelper.multiLevelGroup(query, groups).enumerate().done((groupedData) => {
+        // @ts-expect-error multiLevelGroup() resolves group items
         data = groupedData;
       });
       if (collapsedGroups) {
-        for (let pathIndex = 0; pathIndex < collapsedGroups.length; pathIndex++) {
-          appendCollapsedPath(data, collapsedGroups[pathIndex].path, groups, collapsedGroups[pathIndex], options.skip);
+        for (const collapsedGroup of collapsedGroups) {
+          appendCollapsedPath(
+            data,
+            collapsedGroup.path,
+            groups,
+            collapsedGroup,
+            Number(options.skip),
+          );
         }
       }
       if (!options.isCustomLoading) {
-        processGroupItems(that, data, [], options.skip, options.skipFirstItem, options.take);
+        processGroupItems(
+          this,
+          data,
+          [],
+          Number(options.skip),
+          options.skipFirstItem,
+          Number(options.take),
+        );
       }
       options.data = data;
     }
   }
 
-  protected isGroupItemCountable(item) {
+  public isGroupItemCountable(item: GroupItemData): boolean {
     return item.items === null;
   }
 
-  protected updateTotalItemsCount() {
+  protected updateTotalItemsCount(): void {
     let itemsCountCorrection = 0;
 
     foreachCollapsedGroups(this, (groupInfo) => {
       if (groupInfo.count) {
         itemsCountCorrection -= groupInfo.count - 1;
       }
+      return undefined;
     });
     super.updateTotalItemsCount(itemsCountCorrection);
   }
 
-  private changeRowExpand(path) {
-    const that = this;
-    const { dataSourceAdapter } = that;
-    // @ts-expect-error badly typedDataSourceAdapter.beginPageIndex
-    const beginPageIndex = dataSourceAdapter.beginPageIndex
-      // @ts-expect-error badly typedDataSourceAdapter.beginPageIndex
+  public changeRowExpand(path: unknown[]): DeferredObj<unknown> {
+    const { dataSourceAdapter } = this;
+    // @ts-expect-error beginPageIndex is defined by virtual scrolling
+    const beginPageIndex: number = dataSourceAdapter.beginPageIndex
+      // @ts-expect-error beginPageIndex is defined by virtual scrolling
       ? dataSourceAdapter.beginPageIndex()
       : dataSourceAdapter.pageIndex();
     const dataSourceItems = dataSourceAdapter.items();
-    const offset = correctSkipLoadOption(that, beginPageIndex * dataSourceAdapter.pageSize());
-    const groupInfo = that.findGroupInfo(path);
-    let groupCountQuery;
+    const offset = correctSkipLoadOption(this, beginPageIndex * dataSourceAdapter.pageSize());
+    const groupInfo = this.findGroupInfo(path);
+    // eslint-disable-next-line @typescript-eslint/init-declarations -- assigned in the if/else
+    let groupCountQuery: DeferredObj<number>;
 
     if (groupInfo && !groupInfo.isExpanded) {
-      // @ts-expect-error
-      groupCountQuery = new Deferred().resolve(groupInfo.count);
+      groupCountQuery = Deferred<number>().resolve(groupInfo.count);
     } else {
       groupCountQuery = loadTotalCount(dataSourceAdapter, {
         filter: createGroupFilter(path, {
@@ -401,6 +487,7 @@ export class GroupingHelper extends GroupingHelperCore {
     }
 
     return when(groupCountQuery).done((count) => {
+      // @ts-expect-error parseInt() takes a count that when() may wrap in an array
       const normalizedCount = parseInt(count.length ? count[0] : count, 10);
       const pendingGroupInfo: GroupInfoData = {
         offset: groupInfo ? groupInfo.offset : -1,
@@ -410,51 +497,57 @@ export class GroupingHelper extends GroupingHelperCore {
         isPending: true,
       };
 
-      updateGroupOffsets(that, dataSourceItems, [], offset, pendingGroupInfo);
+      updateGroupOffsets(this, dataSourceItems, [], offset, pendingGroupInfo);
 
       if (groupInfo) {
         groupInfo.isExpanded = !groupInfo.isExpanded;
         groupInfo.count = normalizedCount;
         groupInfo.isPending = true;
       } else if (pendingGroupInfo.offset >= 0) {
-        that.addGroupInfo(pendingGroupInfo);
+        this.addGroupInfo(pendingGroupInfo);
       }
-      that.updateTotalItemsCount();
-    }).fail(function () {
-      // @ts-expect-error badly typedDataSourceAdapter._eventsStrategy
-      dataSourceAdapter._eventsStrategy.fireEvent('loadError', arguments);
+      this.updateTotalItemsCount();
+    }).fail((...args: unknown[]) => {
+      // @ts-expect-error _eventsStrategy is private to the data source adapter
+      dataSourceAdapter._eventsStrategy.fireEvent('loadError', args);
     });
   }
 
-  protected allowCollapseAll() {
+  public allowCollapseAll(): boolean {
     return false;
   }
 
-  protected refresh(options, operationTypes?) {
-    const that = this;
+  public refresh(options: LoadOperation, operationTypes: OperationTypes): ForeachGroupsResult {
     const { storeLoadOptions } = options;
-    const { dataSourceAdapter } = that;
+    const { dataSourceAdapter } = this;
 
-    // @ts-expect-error
-    super.refresh.apply(this, arguments);
+    super.refresh(options, operationTypes);
 
     if (operationTypes.reload) {
-      return foreachCollapsedGroups(that, (groupInfo) => {
-        const groupCountQuery = loadTotalCount(dataSourceAdapter, { filter: createGroupFilter(groupInfo.path, storeLoadOptions) });
-        const groupOffsetQuery = loadTotalCount(dataSourceAdapter, { filter: createOffsetFilter(groupInfo.path, storeLoadOptions) });
+      return foreachCollapsedGroups(this, (groupInfo) => {
+        const groupCountQuery = loadTotalCount(dataSourceAdapter, {
+          filter: createGroupFilter(groupInfo.path, storeLoadOptions),
+        });
+        const groupOffsetQuery = loadTotalCount(dataSourceAdapter, {
+          filter: createOffsetFilter(groupInfo.path, storeLoadOptions),
+        });
 
         return when(groupOffsetQuery, groupCountQuery).done((offset, count) => {
+          // @ts-expect-error parseInt() takes a count that when() may wrap in an array
           // eslint-disable-next-line radix
-          offset = parseInt(offset.length ? offset[0] : offset);
+          const loadedOffset = parseInt(offset.length ? offset[0] : offset);
+          // @ts-expect-error parseInt() takes a count that when() may wrap in an array
           // eslint-disable-next-line radix
-          count = parseInt(count.length ? count[0] : count);
-          groupInfo.offset = offset;
-          if (groupInfo.count !== count) {
-            groupInfo.count = count;
-            that.updateTotalItemsCount();
+          const loadedCount = parseInt(count.length ? count[0] : count);
+          groupInfo.offset = loadedOffset;
+          if (groupInfo.count !== loadedCount) {
+            groupInfo.count = loadedCount;
+            this.updateTotalItemsCount();
           }
         });
       }, true);
     }
+
+    return undefined;
   }
 }

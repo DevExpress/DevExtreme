@@ -1,20 +1,36 @@
 import { normalizeSortingInfo } from '@js/common/data/utils';
 import $ from '@js/core/renderer';
+import type { DeferredObj } from '@js/core/utils/deferred';
 import { when } from '@js/core/utils/deferred';
+import type { StoreLoadOptions } from '@ts/data/data_source/types';
+import type { LoadOperation, OperationTypes } from '@ts/grids/grid_core/data_source_adapter/types';
+import type { DataFilter } from '@ts/grids/grid_core/filter/types';
 import { combineFilters } from '@ts/grids/grid_core/filter/utils';
 import gridCoreUtils, { isVirtualPaging } from '@ts/grids/grid_core/utils';
 
 import gridCore from '../core';
 import type { GroupingDataSourceAdapter } from './m_grouping';
-import type { GroupInfoData } from './types';
+import type {
+  ForeachGroupsCallback,
+  ForeachGroupsResult,
+  GroupInfo,
+  GroupInfoData,
+  GroupInfoLevel,
+  GroupingLoadOperation,
+  GroupItemData,
+} from './types';
 
-export function createOffsetFilter(path, storeLoadOptions, lastLevelOnly?) {
+export function createOffsetFilter(
+  path: unknown[],
+  storeLoadOptions: StoreLoadOptions,
+  lastLevelOnly?: boolean,
+): DataFilter {
   const groups = normalizeSortingInfo(storeLoadOptions.group);
-  let filter: any[] = [];
+  const filters: DataFilter[] = [];
 
-  for (let i = lastLevelOnly ? path.length - 1 : 0; i < path.length; i++) {
-    const filterElement: any[] = [];
-    for (let j = 0; j <= i; j++) {
+  for (let i = lastLevelOnly ? path.length - 1 : 0; i < path.length; i += 1) {
+    const filterElement: unknown[] = [];
+    for (let j = 0; j <= i; j += 1) {
       const { selector } = groups[j];
       if (i === j && (path[j] === null || path[j] === false || path[j] === true)) {
         if (path[j] === false) {
@@ -34,22 +50,27 @@ export function createOffsetFilter(path, storeLoadOptions, lastLevelOnly?) {
         }
       }
     }
-    filter.push(combineFilters(filterElement));
+    filters.push(combineFilters(filterElement));
   }
 
-  // @ts-expect-error
-  filter = combineFilters(filter, 'or');
+  const filter = combineFilters(filters, 'or');
 
   return combineFilters([filter, storeLoadOptions.filter]);
 }
 
-const findGroupInfoByKey = function (groupsInfo, key) {
+const findGroupInfoByKey = function findGroupInfoByKey(
+  groupsInfo: GroupInfoLevel,
+  key: unknown,
+): GroupInfo | undefined {
   const { hash } = groupsInfo;
 
-  return hash && hash[JSON.stringify(key)];
+  return hash?.[JSON.stringify(key)];
 };
 
-const getGroupInfoIndexByOffset = function (groupsInfo, offset) {
+const getGroupInfoIndexByOffset = function getGroupInfoIndexByOffset(
+  groupsInfo: GroupInfoLevel,
+  offset: number,
+): number {
   let leftIndex = 0;
   let rightIndex = groupsInfo.length - 1;
 
@@ -58,7 +79,7 @@ const getGroupInfoIndexByOffset = function (groupsInfo, offset) {
   }
 
   do {
-    const middleIndex = (rightIndex + leftIndex) >> 1;
+    const middleIndex = Math.floor((rightIndex + leftIndex) / 2);
     if (groupsInfo[middleIndex].offset > offset) {
       rightIndex = middleIndex;
     } else {
@@ -66,8 +87,8 @@ const getGroupInfoIndexByOffset = function (groupsInfo, offset) {
     }
   } while (rightIndex - leftIndex > 1);
 
-  let index;
-  for (index = leftIndex; index <= rightIndex; index++) {
+  let index = leftIndex;
+  for (; index <= rightIndex; index += 1) {
     if (groupsInfo[index].offset > offset) {
       break;
     }
@@ -75,127 +96,161 @@ const getGroupInfoIndexByOffset = function (groupsInfo, offset) {
   return index;
 };
 
-const cleanGroupsInfo = function (groupsInfo, groupIndex, groupsCount) {
-  for (let i = 0; i < groupsInfo.length; i++) {
+const cleanGroupsInfo = function cleanGroupsInfo(
+  groupsInfo: GroupInfoLevel,
+  groupIndex: number,
+  groupsCount: number,
+): void {
+  for (const groupInfo of groupsInfo) {
     if (groupIndex + 1 >= groupsCount) {
-      groupsInfo[i].children = [];
+      groupInfo.children = [];
     } else {
-      cleanGroupsInfo(groupsInfo[i].children, groupIndex + 1, groupsCount);
+      cleanGroupsInfo(groupInfo.children, groupIndex + 1, groupsCount);
     }
   }
 };
 
-const calculateItemsCount = function (that, items, groupsCount) {
-  let result = 0;
+const calculateItemsCount = function calculateItemsCount(
+  that: GroupingHelper,
+  items: GroupItemData[] | null | undefined,
+  groupsCount: number,
+): number {
+  if (!items) {
+    return 0;
+  }
 
-  if (items) {
-    if (!groupsCount) {
-      result = items.length;
-    } else {
-      for (let i = 0; i < items.length; i++) {
-        if (that.isGroupItemCountable(items[i])) {
-          result++;
-        }
-        result += calculateItemsCount(that, items[i].items, groupsCount - 1);
-      }
+  if (!groupsCount) {
+    return items.length;
+  }
+
+  let result = 0;
+  for (const item of items) {
+    if (that.isGroupItemCountable(item)) {
+      result += 1;
     }
+    result += calculateItemsCount(that, item.items, groupsCount - 1);
   }
   return result;
 };
 
-export class GroupingHelper {
+export abstract class GroupingHelper {
   public readonly dataSourceAdapter: GroupingDataSourceAdapter;
 
-  private _groupsInfo: any;
+  public _groupsInfo!: GroupInfoLevel;
 
-  private _totalCountCorrection: any;
+  private _totalCountCorrection!: number;
 
-  protected _group: any;
+  protected declare _group: StoreLoadOptions['group'];
 
   constructor(dataSourceAdapter: GroupingDataSourceAdapter) {
     this.dataSourceAdapter = dataSourceAdapter;
     this.reset();
   }
 
-  private reset() {
+  private reset(): void {
     this._groupsInfo = [];
     this._totalCountCorrection = 0;
   }
 
-  private totalCountCorrection() {
+  public totalCountCorrection(): number {
     return this._totalCountCorrection;
   }
 
-  protected updateTotalItemsCount(totalCountCorrection) {
+  protected updateTotalItemsCount(totalCountCorrection: number): void {
     this._totalCountCorrection = totalCountCorrection || 0;
   }
 
-  protected isGroupItemCountable(item) {
+  public isGroupItemCountable(item: GroupItemData): boolean {
     return !isVirtualPaging(this.dataSourceAdapter.option('scrolling')) || !item.isContinuation;
   }
 
-  private itemsCount() {
+  public itemsCount(): number {
     const dataSource = this.dataSourceAdapter._dataSource;
     const groupCount = gridCore.normalizeSortingInfo(dataSource.group() || []).length;
-    const itemsCount = calculateItemsCount(this, dataSource.items(), groupCount);
+    // @ts-expect-error DataSource.items() is typed as unknown[]
+    const items: GroupItemData[] = dataSource.items();
+    const itemsCount = calculateItemsCount(this, items, groupCount);
 
     return itemsCount;
   }
 
-  public foreachGroups(callback, childrenAtFirst?, foreachCollapsedGroups?, updateOffsets?, updateParentOffsets?) {
-    const that = this;
+  public foreachGroups(
+    callback: ForeachGroupsCallback,
+    childrenAtFirst?: boolean,
+    foreachCollapsedGroups?: boolean,
+    updateOffsets?: boolean,
+    updateParentOffsets?: boolean,
+  ): ForeachGroupsResult {
+    let needUpdateOffsets = updateOffsets;
 
-    function foreachGroupsCore(groupsInfo, callback, childrenAtFirst, parents) {
-      const callbackResults: any[] = [];
-
-      function executeCallback(callback, data, parents, callbackResults) {
-        const callbackResult = data && callback(data, parents);
-        callbackResult && callbackResults.push(callbackResult);
-        return callbackResult;
+    const executeCallback = (
+      data: GroupInfoData,
+      parents: GroupInfoData[],
+      callbackResults: DeferredObj<unknown>[],
+    ): ReturnType<ForeachGroupsCallback> => {
+      const callbackResult = data && callback(data, parents);
+      if (callbackResult) {
+        callbackResults.push(callbackResult);
       }
+      return callbackResult;
+    };
 
-      for (let i = 0; i < groupsInfo.length; i++) {
+    const foreachGroupsCore = (
+      groupsInfo: GroupInfoLevel,
+      parents: GroupInfoData[],
+    ): ForeachGroupsResult => {
+      const callbackResults: DeferredObj<unknown>[] = [];
+
+      // eslint-disable-next-line @typescript-eslint/prefer-for-of -- callbacks may grow the level
+      for (let i = 0; i < groupsInfo.length; i += 1) {
         parents.push(groupsInfo[i].data);
-        if (!childrenAtFirst && executeCallback(callback, groupsInfo[i].data, parents, callbackResults) === false) {
+        if (
+          !childrenAtFirst
+          && executeCallback(groupsInfo[i].data, parents, callbackResults) === false
+        ) {
           return false;
         }
         if (!groupsInfo[i].data || groupsInfo[i].data.isExpanded || foreachCollapsedGroups) {
           const { children } = groupsInfo[i];
-          const callbackResult = children.length && foreachGroupsCore(children, callback, childrenAtFirst, parents);
-          callbackResult && callbackResults.push(callbackResult);
+          const callbackResult = children.length && foreachGroupsCore(children, parents);
+          if (callbackResult) {
+            callbackResults.push(callbackResult);
+          }
           if (callbackResult === false) {
             return false;
           }
         }
-        if (childrenAtFirst && executeCallback(callback, groupsInfo[i].data, parents, callbackResults) === false) {
+        if (
+          childrenAtFirst
+          && executeCallback(groupsInfo[i].data, parents, callbackResults) === false
+        ) {
           return false;
         }
         if (!groupsInfo[i].data || groupsInfo[i].data.offset !== groupsInfo[i].offset) {
-          updateOffsets = true;
+          needUpdateOffsets = true;
         }
         parents.pop();
       }
 
-      const currentParents = updateParentOffsets && parents.slice(0);
-      return updateOffsets && when.apply($, callbackResults).always(() => {
-        that._updateGroupInfoOffsets(groupsInfo, currentParents);
+      const currentParents = updateParentOffsets ? parents.slice(0) : undefined;
+      return needUpdateOffsets && when.apply($, callbackResults).always(() => {
+        this._updateGroupInfoOffsets(groupsInfo, currentParents);
       });
-    }
+    };
 
-    return foreachGroupsCore(that._groupsInfo, callback, childrenAtFirst, []);
+    return foreachGroupsCore(this._groupsInfo, []);
   }
 
-  private _updateGroupInfoOffsets(groupsInfo, parents?) {
-    parents = parents || [];
-
-    for (let index = 0; index < groupsInfo.length; index++) {
-      const groupInfo = groupsInfo[index];
-
+  private _updateGroupInfoOffsets(
+    groupsInfo: GroupInfoLevel,
+    parents: GroupInfoData[] = [],
+  ): void {
+    for (const groupInfo of groupsInfo) {
       if (groupInfo.data && groupInfo.data.offset !== groupInfo.offset) {
         groupInfo.offset = groupInfo.data.offset;
 
-        for (let parentIndex = 0; parentIndex < parents.length; parentIndex++) {
-          parents[parentIndex].offset = groupInfo.offset;
+        for (const parent of parents) {
+          parent.offset = groupInfo.offset;
         }
       }
     }
@@ -203,84 +258,103 @@ export class GroupingHelper {
     groupsInfo.sort((a, b) => a.offset - b.offset);
   }
 
-  public findGroupInfo(path): GroupInfoData | undefined {
-    const that = this;
-    let groupInfo;
-    let groupsInfo = that._groupsInfo;
+  public findGroupInfo(path: unknown[]): GroupInfoData | undefined {
+    // eslint-disable-next-line @typescript-eslint/init-declarations -- assigned in the loop
+    let groupInfo: GroupInfo | undefined;
+    let groupsInfo: GroupInfoLevel | undefined = this._groupsInfo;
 
-    for (let pathIndex = 0; groupsInfo && pathIndex < path.length; pathIndex++) {
+    for (let pathIndex = 0; groupsInfo && pathIndex < path.length; pathIndex += 1) {
       groupInfo = findGroupInfoByKey(groupsInfo, path[pathIndex]);
-      groupsInfo = groupInfo && groupInfo.children;
+      groupsInfo = groupInfo?.children;
     }
 
-    return groupInfo && groupInfo.data;
+    return groupInfo?.data;
   }
 
-  public addGroupInfo(groupInfoData) {
-    const that = this;
-    let groupInfo;
+  public addGroupInfo(groupInfoData: GroupInfoData): void {
     const { path } = groupInfoData;
-    let groupsInfo = that._groupsInfo;
+    let groupsInfo = this._groupsInfo;
 
-    for (let pathIndex = 0; pathIndex < path.length; pathIndex++) {
-      groupInfo = findGroupInfoByKey(groupsInfo, path[pathIndex]);
+    for (let pathIndex = 0; pathIndex < path.length; pathIndex += 1) {
+      let groupInfo = findGroupInfoByKey(groupsInfo, path[pathIndex]);
       if (!groupInfo) {
+        // @ts-expect-error a parent group has no count until its own group info is added
+        const parentGroupInfoData: GroupInfoData = {
+          offset: groupInfoData.offset,
+          isExpanded: true,
+          path: path.slice(0, pathIndex + 1),
+        };
         groupInfo = {
           key: path[pathIndex],
           offset: groupInfoData.offset,
-          data: { offset: groupInfoData.offset, isExpanded: true, path: path.slice(0, pathIndex + 1) },
+          data: parentGroupInfoData,
           children: [],
         };
         const index = getGroupInfoIndexByOffset(groupsInfo, groupInfoData.offset);
         groupsInfo.splice(index, 0, groupInfo);
-        groupsInfo.hash = groupsInfo.hash || {};
+        groupsInfo.hash ??= {};
         groupsInfo.hash[JSON.stringify(groupInfo.key)] = groupInfo;
       }
       if (pathIndex === path.length - 1) {
         groupInfo.data = groupInfoData;
         if (groupInfo.offset !== groupInfoData.offset) {
-          that._updateGroupInfoOffsets(groupsInfo);
+          this._updateGroupInfoOffsets(groupsInfo);
         }
       }
       groupsInfo = groupInfo.children;
     }
   }
 
-  protected allowCollapseAll() {
+  public allowCollapseAll(): boolean {
     return true;
   }
 
-  protected refresh(options) {
-    const that = this;
+  public refresh(
+    options: LoadOperation,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars -- used by overrides
+    operationTypes: OperationTypes,
+  ): ForeachGroupsResult {
     const { storeLoadOptions } = options;
     const groups = normalizeSortingInfo(storeLoadOptions.group || []);
-    const oldGroups = '_group' in that ? normalizeSortingInfo(that._group || []) : groups;
+    const oldGroups = '_group' in this ? normalizeSortingInfo(this._group || []) : groups;
     let groupsCount = Math.min(oldGroups.length, groups.length);
 
-    that._group = storeLoadOptions.group;
+    this._group = storeLoadOptions.group;
 
-    for (let groupIndex = 0; groupIndex < groupsCount; groupIndex++) {
-      if (!gridCoreUtils.isEqualSelectors(oldGroups[groupIndex].selector, groups[groupIndex].selector)) {
+    for (let groupIndex = 0; groupIndex < groupsCount; groupIndex += 1) {
+      if (!gridCoreUtils.isEqualSelectors(
+        oldGroups[groupIndex].selector,
+        groups[groupIndex].selector,
+      )) {
         groupsCount = groupIndex;
         break;
       }
     }
 
     if (!groupsCount) {
-      that.reset();
+      this.reset();
     } else {
-      cleanGroupsInfo(that._groupsInfo, 0, groupsCount);
+      cleanGroupsInfo(this._groupsInfo, 0, groupsCount);
     }
+
+    return undefined;
   }
 
-  protected handleDataLoading() {
-  }
+  public abstract handleDataLoading(options: GroupingLoadOperation): void;
 
-  protected handleDataLoaded(options, callBase) {
+  public handleDataLoaded(
+    options: GroupingLoadOperation,
+    callBase: (options: LoadOperation) => void,
+  ): void {
     callBase(options);
   }
 
-  protected handleDataLoadedCore(options, callBase) {
+  public handleDataLoadedCore(
+    options: GroupingLoadOperation,
+    callBase: (options: LoadOperation) => void,
+  ): void {
     callBase(options);
   }
+
+  public abstract changeRowExpand(path: unknown[]): DeferredObj<unknown>;
 }
