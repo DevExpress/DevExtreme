@@ -6,6 +6,7 @@ import type { DeferredObj } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { isDefined } from '@js/core/utils/type';
 import type { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/column_headers';
+import type { ColumnTemplateSource, TemplateModel } from '@ts/grids/grid_core/columns_controller/types';
 import type { ProcessedItem } from '@ts/grids/grid_core/data_controller/types';
 import type { ChangedEvent, RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
 import { selectionDataControllerExtender } from '@ts/grids/grid_core/selection/extenders/selection_data_controller';
@@ -15,12 +16,23 @@ import {
   selectionRowsViewExtender,
 } from '@ts/grids/grid_core/selection/m_selection';
 import { selectionModule } from '@ts/grids/grid_core/selection/selection_module';
-import type { SelectionChangedOptions, SelectionModifierKeys } from '@ts/grids/grid_core/selection/types';
+import type {
+  SelectionCellOptions,
+  SelectionChangedOptions,
+  SelectionColumnHeadersView,
+  SelectionModifierKeys,
+} from '@ts/grids/grid_core/selection/types';
 import type { ModuleType, RowKey } from '@ts/grids/grid_core/types';
-import type { ViewRowEvent } from '@ts/grids/grid_core/views/types';
+import type {
+  ColumnViewTemplate,
+  ColumnViewTemplateOptions,
+  ViewRowEvent,
+} from '@ts/grids/grid_core/views/types';
+import type { TreeListColumnsController } from '@ts/grids/tree_list/columns_controller';
 import type { TreeListDataController } from '@ts/grids/tree_list/data_controller/data_controller';
 import type { TreeNode } from '@ts/grids/tree_list/data_source_adapter/types';
 import type { TreeListRowsView } from '@ts/grids/tree_list/rows/m_rows';
+import type { TreeListNodeCellOptions } from '@ts/grids/tree_list/rows/types';
 import type { SelectionChangeEvent, SelectionOptions } from '@ts/ui/selection/types';
 
 import treeListCore from '../core';
@@ -590,33 +602,35 @@ SelectionController & TreeListSelectionControllerExtension
   }
 };
 
-const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnHeaderViewSelectionTreeListExtender extends selectionColumnHeadersViewExtender(Base) {
-  protected _processTemplate(template, options) {
-    const that = this;
-    let resultTemplate;
+const columnHeadersView = (
+  Base: ModuleType<ColumnHeadersView>,
+): ModuleType<SelectionColumnHeadersView> => class ColumnHeaderViewSelectionTreeListExtender
+  extends selectionColumnHeadersViewExtender(Base) {
+  protected declare _columnsController: TreeListColumnsController;
+
+  protected _processTemplate(
+    template: ColumnTemplateSource,
+    options: TemplateModel,
+  ): ColumnViewTemplate {
     const renderingTemplate = super._processTemplate(template, options);
+    const firstDataColumnIndex = this._columnsController.getFirstDataColumnIndex();
 
-    // @ts-expect-error
-    const firstDataColumnIndex = that._columnsController.getFirstDataColumnIndex();
-
-    if (renderingTemplate && options.rowType === 'header' && options.column.index === firstDataColumnIndex) {
-      resultTemplate = {
-        render(options) {
+    if (renderingTemplate && options.rowType === 'header' && options.column?.index === firstDataColumnIndex) {
+      return {
+        render: (templateOptions: ColumnViewTemplateOptions): void => {
           // NOTE: Template may be attached with "prepend"
           // Therefore, to have "select all" checkbox as first element
           // We should render template first
-          renderingTemplate.render(options);
+          renderingTemplate.render(templateOptions);
 
-          if (that.option('selection.mode') === 'multiple') {
-            that.renderSelectAll(options.container, options.model);
+          if (this.option('selection.mode') === 'multiple') {
+            this.renderSelectAll(templateOptions.container, templateOptions.model);
           }
         },
       };
-    } else {
-      resultTemplate = renderingTemplate;
     }
 
-    return resultTemplate;
+    return renderingTemplate;
   }
 
   public override renderSelectAllCheckBox(
@@ -634,13 +648,13 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  private renderSelectAll($cell, options) {
+  private renderSelectAll($cell: dxElementWrapper, options: TemplateModel): void {
     $cell.addClass(TREELIST_SELECT_ALL_CLASS);
 
     this.renderSelectAllCheckBox($cell);
   }
 
-  protected _isSortableElement($target) {
+  protected _isSortableElement($target: dxElementWrapper): boolean {
     return super._isSortableElement($target) && !$target.closest(`.${SELECT_CHECKBOX_CLASS}`).length;
   }
 };
@@ -651,7 +665,7 @@ const rowsView = (
   extends selectionRowsViewExtender(Base) {
   protected _renderIcons(
     $container: dxElementWrapper,
-    options,
+    options: SelectionCellOptions & TreeListNodeCellOptions,
   ): dxElementWrapper {
     const $iconContainer = super._renderIcons($container, options);
     const isMultipleSelection = this.option('selection.mode') === 'multiple';
