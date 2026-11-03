@@ -18,17 +18,22 @@ const LAUNCH_RETRY_ATTEMPTS = 3;
 const LAUNCH_RETRY_TIMEOUT = 10000;
 const FAILED_TESTS_RETRY_ATTEMPTS = 0;
 const TEST_EXECUTION_TIMEOUT = 3 * 60 * 1000;
+const NO_TESTS_MATCH_FILTER_ERROR_CODE = 'E1030';
 
 const wait = async (
   timeout: number,
 // eslint-disable-next-line no-promise-executor-return
 ): Promise<void> => new Promise((resolve) => setTimeout(resolve, timeout));
 
+const isNoTestsMatchFilterError = (error: unknown): boolean => (
+  (error as { code?: string } | undefined)?.code === NO_TESTS_MATCH_FILTER_ERROR_CODE
+);
+
 const retry = async <T>(action: () => Promise<T>, attempt: number): Promise<T> => {
   try {
     return await action();
   } catch (error) {
-    if (attempt <= 1) {
+    if (attempt <= 1 || isNoTestsMatchFilterError(error)) {
       throw error;
     }
 
@@ -410,7 +415,16 @@ async function main() {
     }
 
     const runner = createRunner(false);
-    let failedCount = await retry(() => runner.run(runOptions), LAUNCH_RETRY_ATTEMPTS);
+    let failedCount = await retry(() => runner.run(runOptions), LAUNCH_RETRY_ATTEMPTS)
+      .catch((error: unknown) => {
+        if (!onlyQuarantined || !isNoTestsMatchFilterError(error)) {
+          throw error;
+        }
+
+        // eslint-disable-next-line no-console
+        console.info('No quarantined tests to run.');
+        return 0;
+      });
 
     if (args.retryFailed && failedTests.size > 0 && failedCount > 0) {
       const initialFailedCount = failedTests.size;

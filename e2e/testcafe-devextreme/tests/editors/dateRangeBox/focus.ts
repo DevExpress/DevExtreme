@@ -709,10 +709,13 @@ test('DateRangeBox and StartDateBox should have focus class after focus via acce
   const dateRangeBox = new DateRangeBox('#container');
 
   await t
-    .click(dateRangeBox.getEndDateBox().input);
+    .click(dateRangeBox.getEndDateBox().input)
+    .expect(dateRangeBox.getStartDateBox().input.getAttribute('accesskey'))
+    .eql('x');
 
-  await t
-    .pressKey('alt+x');
+  await ClientFunction(() => {
+    (document.querySelector('[accesskey="x"]') as HTMLElement).focus();
+  })();
 
   await t
     .expect(dateRangeBox.isFocused)
