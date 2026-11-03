@@ -271,8 +271,12 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
       if (optionNames.filterValue || optionNames.bufferedFilterValue) {
         that._updateEditorValue(column, $editorContainer);
 
-        const overlayInstance = $cell.find(`.${that.addWidgetPrefix(FILTER_RANGE_OVERLAY_CLASS)}`).data('dxOverlay');
+        const overlayInstance = findInstanceByElement(
+          $cell.find(`.${that.addWidgetPrefix(FILTER_RANGE_OVERLAY_CLASS)}`),
+          Overlay,
+        );
         if (overlayInstance) {
+          // @ts-expect-error the filter range overlay is rendered together with its content
           $editorRangeElements = overlayInstance.$content().find(`.${EDITOR_CONTAINER_CLASS}`);
 
           that._updateEditorValue(column, $editorRangeElements.first());

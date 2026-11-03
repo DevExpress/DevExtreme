@@ -440,11 +440,12 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
       resultOptions.rowIndex = this.getRowIndex($row);
 
       if ($fieldItemContent.length) {
-        const formItemOptions: EditFormItem | undefined = getData(
+        // @ts-expect-error a field item content always stores its form item
+        const formItemOptions: EditFormItem = getData(
           $fieldItemContent,
           FIELD_ITEM_DATA_KEY,
         );
-        if (formItemOptions?.column) {
+        if (formItemOptions.column) {
           resultOptions.column = formItemOptions.column;
           resultOptions.columnIndex = this._columnsController
             .getVisibleIndex(resultOptions.column.index);

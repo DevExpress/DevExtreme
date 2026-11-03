@@ -15,7 +15,9 @@ const ANONYMOUS_COMPONENT_DATA_KEY = 'dxPrivateComponent';
 const componentNames = new WeakMap<object, string>();
 let nextAnonymousComponent = 0;
 
-const getName = function getName(componentClass: object, newName?: string): string | undefined {
+function getName(componentClass: object): string;
+function getName(componentClass: object, newName: string): undefined;
+function getName(componentClass: object, newName?: string): string | undefined {
   if (isDefined(newName)) {
     componentNames.set(componentClass, newName);
     return undefined;
@@ -29,7 +31,7 @@ const getName = function getName(componentClass: object, newName?: string): stri
   }
 
   return componentNames.get(componentClass);
-};
+}
 
 export function attachInstanceToElement(
   $element: dxElementWrapper,
@@ -37,7 +39,7 @@ export function attachInstanceToElement(
   disposeFn?: () => void,
 ): void {
   const data = elementData<ComponentsData>($element.get(0));
-  const name = getName(componentInstance.constructor) as string;
+  const name = getName(componentInstance.constructor);
 
   data[name] = componentInstance;
 
@@ -67,9 +69,7 @@ export function findInstanceByElement<T>(
   target: Node | dxElementWrapper | null | undefined,
   componentClass: abstract new (...args: never[]) => T,
 ): T | undefined {
-  const name = getName(componentClass);
-
-  return name === undefined ? undefined : getData<T>(target, name);
+  return getData<T>(target, getName(componentClass));
 }
 
 export function getComponentInstance<T = unknown>($element: dxElementWrapper): T | undefined {
