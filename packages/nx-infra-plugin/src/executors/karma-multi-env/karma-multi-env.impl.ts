@@ -88,6 +88,8 @@ function createExecutionOrder(
     'hydration',
     'zone',
     'zoneless',
+    'server-zoneless',
+    'hydration-zoneless',
   ];
 
   for (const environment of validEnvironments) {
