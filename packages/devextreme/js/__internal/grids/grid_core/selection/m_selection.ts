@@ -259,7 +259,7 @@ export class SelectionController extends modules.Controller {
       load(options): DeferredObj<CustomLoadResult | RawItemData[]> {
         // @ts-expect-error the custom loader is typed for StoreLoadOptions
         return dataSourceController.getAdapter()?.customLoader.load(options)
-          || Deferred<CustomLoadResult | RawItemData[]>().resolve([]);
+          ?? Deferred<CustomLoadResult | RawItemData[]>().resolve([]);
       },
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       plainItems(cached?): ProcessedItem[] {
@@ -272,7 +272,7 @@ export class SelectionController extends modules.Controller {
         return item?.rowType === 'data' && !item.isNewRow;
       },
       getItemData(item?: ProcessedItem): RawItemData | ProcessedItem | undefined {
-        return isDefined(item?.rowType) ? item?.oldData || item?.data : item;
+        return isDefined(item?.rowType) ? item?.oldData ?? item?.data : item;
       },
       // @ts-expect-error poorly typed SelectionOptions
       filter(): DataFilter {
@@ -615,7 +615,7 @@ export class SelectionController extends modules.Controller {
 
     each(itemIndexes, (_, itemIndex) => {
       const item = items[itemIndex];
-      if (item && item.rowType === 'data') {
+      if (item?.rowType === 'data') {
         keys.push(item.key);
       }
     });
@@ -639,7 +639,7 @@ export class SelectionController extends modules.Controller {
     keys?: SelectionModifierKeys,
     setFocusOnly?: boolean,
   ): boolean | DeferredObj<unknown> | undefined {
-    const modifierKeys = keys || {};
+    const modifierKeys = keys ?? {};
     if (this.isSelectionWithCheckboxes()) {
       modifierKeys.control = true;
     }
