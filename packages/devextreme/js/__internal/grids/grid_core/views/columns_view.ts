@@ -1581,13 +1581,13 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
    * @extended: adaptivity
    */
   public getCell(
-    cellPosition: CellPosition,
+    cellPosition: Partial<CellPosition>,
     rows?: dxElementWrapper,
     cells?: dxElementWrapper,
   ): dxElementWrapper | undefined {
     const $rows = rows ?? this._getRowElements();
 
-    if ($rows.length > 0 && cellPosition.rowIndex >= 0) {
+    if ($rows.length > 0 && cellPosition.rowIndex !== undefined && cellPosition.rowIndex >= 0) {
       if (
         this.option('scrolling.mode') !== 'virtual'
         && this.option('scrolling.rowRenderingMode') !== 'virtual'
@@ -1598,8 +1598,12 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
       }
       const $cells = cells ?? this.getCellElements(cellPosition.rowIndex);
       if ($cells && $cells.length > 0) {
+        const { columnIndex } = cellPosition;
+
         return $cells.eq(
-          $cells.length > cellPosition.columnIndex ? cellPosition.columnIndex : $cells.length - 1,
+          columnIndex !== undefined && $cells.length > columnIndex
+            ? columnIndex
+            : $cells.length - 1,
         );
       }
     }
