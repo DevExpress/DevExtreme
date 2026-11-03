@@ -503,11 +503,11 @@ export class SelectionController extends modules.Controller {
     }
   }
 
-  public publicMethods() {
+  public publicMethods(): string[] {
     return ['selectRows', 'deselectRows', 'selectRowsByIndexes', 'getSelectedRowKeys', 'getSelectedRowsData', 'clearSelection', 'selectAll', 'deselectAll', 'startSelectionWithCheckboxes', 'stopSelectionWithCheckboxes', 'isRowSelected'];
   }
 
-  public isRowSelected(arg) {
+  public isRowSelected(arg: RowKey | RawItemData): boolean {
     return this._selection.isItemSelected(arg);
   }
 
@@ -515,18 +515,18 @@ export class SelectionController extends modules.Controller {
     return this.option(SELECTION_MODE) === 'multiple' && (this.option(SHOW_CHECKBOXES_MODE) === 'always' || this.option(SHOW_CHECKBOXES_MODE) === 'onClick' || this._isSelectionWithCheckboxes);
   }
 
-  private _isOnePageSelectAll() {
+  private _isOnePageSelectAll(): boolean {
     return this.option('selection.selectAllMode') === 'page';
   }
 
-  public isSelectAll() {
+  public isSelectAll(): boolean | undefined {
     return this._selection.getSelectAllState(this._isOnePageSelectAll());
   }
 
   /**
    * @extended: TreeList's selection
    */
-  public selectAll() {
+  public selectAll(): DeferredObj<unknown> {
     if (this.option(SHOW_CHECKBOXES_MODE) === 'onClick') {
       this.startSelectionWithCheckboxes();
     }
@@ -537,55 +537,60 @@ export class SelectionController extends modules.Controller {
   /**
    * @extended: TreeList's selection
    */
-  public deselectAll() {
+  public deselectAll(): DeferredObj<unknown> {
     return this._selection.deselectAll(this._isOnePageSelectAll());
   }
 
-  private clearSelection() {
+  private clearSelection(): DeferredObj<unknown> {
     return this.selectedItemKeys([]);
   }
 
-  public refresh() {
+  public refresh(): DeferredObj<unknown> {
     const selectedRowKeys = this.option('selectedRowKeys') ?? [];
 
     if (!this.option('selection.deferred') && selectedRowKeys.length) {
       return this.selectedItemKeys(selectedRowKeys);
     }
 
-    // @ts-expect-error
-    return new Deferred().resolve().promise();
+    // @ts-expect-error promise() is typed as Promise but returns a Deferred-like value at runtime
+    return Deferred().resolve().promise();
   }
 
-  protected selectedItemKeys(value, preserve?, isDeselect?, isSelectAll?) {
+  protected selectedItemKeys(
+    value: RowKey[],
+    preserve?: boolean,
+    isDeselect?: boolean,
+    isSelectAll?: boolean,
+  ): DeferredObj<unknown> {
     return this._selection.selectedItemKeys(value, preserve, isDeselect, isSelectAll);
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  protected getSelectedRowKeys(mode?) {
+  protected getSelectedRowKeys(mode?: string): RowKey[] | Promise<RowKey[]> {
     return this._selection.getSelectedItemKeys();
   }
 
   /**
    * @extended: TreeList's selection
    */
-  protected selectRows(keys, preserve?) {
+  protected selectRows(keys: RowKey[], preserve?: boolean): DeferredObj<unknown> {
     return this.selectedItemKeys(keys, preserve);
   }
 
-  protected deselectRows(keys) {
+  protected deselectRows(keys: RowKey[]): DeferredObj<unknown> {
     return this.selectedItemKeys(keys, true, true);
   }
 
-  private selectRowsByIndexes(indexes) {
+  private selectRowsByIndexes(
+    indexes: number[] | number,
+    ...restIndexes: number[]
+  ): DeferredObj<unknown> {
     const items = this._dataController.items();
-    const keys: any[] = [];
+    const keys: RowKey[] = [];
+    const itemIndexes = Array.isArray(indexes) ? indexes : [indexes, ...restIndexes];
 
-    if (!Array.isArray(indexes)) {
-      indexes = Array.prototype.slice.call(arguments, 0);
-    }
-
-    each(indexes, function () {
-      const item = items[this];
+    each(itemIndexes, (_, itemIndex) => {
+      const item = items[itemIndex];
       if (item && item.rowType === 'data') {
         keys.push(item.key);
       }
@@ -597,11 +602,11 @@ export class SelectionController extends modules.Controller {
    * @extended: TreeList's selection
    */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  public getSelectedRowsData(mode?) {
+  public getSelectedRowsData(mode?: string): RawItemData[] | Promise<RawItemData[]> {
     return this._selection.getSelectedItems();
   }
 
-  public loadSelectedItemsWithFilter() {
+  public loadSelectedItemsWithFilter(): DeferredObj<unknown> {
     return this._selection.loadSelectedItemsWithFilter();
   }
 
