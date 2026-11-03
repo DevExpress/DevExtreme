@@ -15,6 +15,7 @@ import {
   selectionRowsViewExtender,
 } from '@ts/grids/grid_core/selection/m_selection';
 import { selectionModule } from '@ts/grids/grid_core/selection/selection_module';
+import type { SelectionChangedOptions, SelectionModifierKeys } from '@ts/grids/grid_core/selection/types';
 import type { ModuleType, RowKey } from '@ts/grids/grid_core/types';
 import type { ViewRowEvent } from '@ts/grids/grid_core/views/types';
 import type { TreeListDataController } from '@ts/grids/tree_list/data_controller/data_controller';
@@ -133,9 +134,8 @@ SelectionController & TreeListSelectionControllerExtension
     return keys;
   }
 
-  public isSelectAll() {
-    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-    const selectedRowKeys = this.option('selectedRowKeys') || [];
+  public isSelectAll(): boolean | undefined {
+    const selectedRowKeys = this.option('selectedRowKeys') ?? [];
     if (selectedRowKeys.length === 0) return false;
 
     const visibleKeys = this._getSelectAllNodeKeys();
@@ -160,7 +160,7 @@ SelectionController & TreeListSelectionControllerExtension
     return undefined;
   }
 
-  public selectAll() {
+  public selectAll(): DeferredObj<unknown> {
     const visibleKeys = this._getSelectAllNodeKeys().filter((key) => !this.isRowSelected(key));
 
     this.focusedItemIndex(-1);
@@ -168,7 +168,7 @@ SelectionController & TreeListSelectionControllerExtension
     return this.selectRows(visibleKeys, true);
   }
 
-  public deselectAll() {
+  public deselectAll(): DeferredObj<unknown> {
     const visibleKeys = this._getSelectAllNodeKeys();
 
     this.focusedItemIndex(-1);
@@ -176,43 +176,52 @@ SelectionController & TreeListSelectionControllerExtension
     return this.deselectRows(visibleKeys);
   }
 
-  protected selectedItemKeys(value, preserve, isDeselect, isSelectAll?) {
-    const that = this;
-    const selectedRowKeys = that.option('selectedRowKeys');
+  protected selectedItemKeys(
+    value: RowKey | RowKey[],
+    preserve?: boolean,
+    isDeselect?: boolean,
+    isSelectAll?: boolean,
+  ): DeferredObj<unknown> {
+    const selectedRowKeys = this.option('selectedRowKeys');
     const isRecursiveSelection = this.isRecursiveSelection();
-    const normalizedArgs: any = isRecursiveSelection && that._normalizeSelectionArgs({
+    const normalizedArgs = isRecursiveSelection && this._normalizeSelectionArgs({
       keys: isDefined(value) ? value : [],
     }, preserve, !isDeselect);
 
     if (normalizedArgs && !equalByValue(normalizedArgs.selectedRowKeys, selectedRowKeys)) {
-      that._isSelectionNormalizing = true;
+      this._isSelectionNormalizing = true;
       return super.selectedItemKeys(normalizedArgs.selectedRowKeys, false, false, false)
         .always(() => {
-          that._isSelectionNormalizing = false;
+          this._isSelectionNormalizing = false;
         })
         .done((items) => {
           normalizedArgs.selectedRowsData = items;
-          // @ts-expect-error
-          that._fireSelectionChanged(normalizedArgs);
+          this._fireSelectionChanged(normalizedArgs);
         });
     }
 
+    // @ts-expect-error Selection also accepts a single key
     return super.selectedItemKeys(value, preserve, isDeselect, isSelectAll);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  public changeItemSelection(itemIndex, keyboardKeys, setFocusOnly?: boolean): boolean | DeferredObj<unknown> | undefined {
+  public changeItemSelection(
+    itemIndex: number,
+    keyboardKeys?: SelectionModifierKeys,
+    setFocusOnly?: boolean,
+  ): boolean | DeferredObj<unknown> | undefined {
     const isRecursiveSelection = this.isRecursiveSelection();
     const callBase = super.changeItemSelection.bind(this);
 
-    if (isRecursiveSelection && !keyboardKeys.shift) {
+    if (isRecursiveSelection && !keyboardKeys?.shift) {
       const key = this._dataController.getKeyByRowIndex(itemIndex);
       return this.selectedItemKeys(key, true, this.isRowSelected(key)).done(() => {
-        this.isRowSelected(key) && callBase(itemIndex, keyboardKeys, true);
+        if (this.isRowSelected(key)) {
+          callBase(itemIndex, keyboardKeys, true);
+        }
       });
     }
 
-    return super.changeItemSelection.apply(this, arguments as any);
+    return super.changeItemSelection(itemIndex, keyboardKeys, setFocusOnly);
   }
 
   private _updateParentSelectionState(node, isSelected) {
@@ -394,9 +403,9 @@ SelectionController & TreeListSelectionControllerExtension
     super._updateSelectedItems(args);
   }
 
-  protected _fireSelectionChanged() {
+  protected _fireSelectionChanged(options?: SelectionChangedOptions): void {
     if (!this._isSelectionNormalizing) {
-      super._fireSelectionChanged.apply(this, arguments as any);
+      super._fireSelectionChanged(options);
     }
   }
 
