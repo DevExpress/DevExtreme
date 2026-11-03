@@ -22,6 +22,8 @@ import type {
   GroupInfoData,
   GroupingLoadOperation,
   GroupItemData,
+  GroupItemsPosition,
+  GroupItemsProcessingState,
 } from './types';
 
 const loadTotalCount = function loadTotalCount(
@@ -73,6 +75,58 @@ const correctSkipLoadOption = function correctSkipLoadOption(
   return resultSkip;
 };
 
+const processCollapsedGroupItem = function processCollapsedGroupItem(
+  item: GroupItemData,
+  count: number,
+  state: GroupItemsProcessingState,
+): void {
+  item.collapsedItems = item.items;
+  item.items = null;
+  state.offset += count;
+  state.take -= 1;
+  if (state.take < 0) {
+    state.removeLastItemsCount += 1;
+  }
+  if (state.skipFirstItem) {
+    state.needRemoveFirstItem = true;
+  }
+};
+
+const processExpandedGroupItem = function processExpandedGroupItem(
+  item: GroupItemData,
+  childItems: GroupItemData[],
+  childItemsPosition: GroupItemsPosition,
+  state: GroupItemsProcessingState,
+): void {
+  if (state.skipFirstItem) {
+    if (childItemsPosition.offset - state.offset > 1) {
+      item.isContinuation = true;
+    } else {
+      state.needRemoveFirstItem = true;
+    }
+  }
+  state.offset = childItemsPosition.offset;
+  state.take = childItemsPosition.take;
+  if (state.take < 0) {
+    if (childItems.length) {
+      item.isContinuationOnNextPage = true;
+    } else {
+      state.removeLastItemsCount += 1;
+    }
+  }
+};
+
+const processDataItem = function processDataItem(state: GroupItemsProcessingState): void {
+  if (state.skipFirstItem) {
+    state.needRemoveFirstItem = true;
+  }
+  state.offset += 1;
+  state.take -= 1;
+  if (state.take < 0) {
+    state.removeLastItemsCount += 1;
+  }
+};
+
 const processGroupItems = function processGroupItems(
   that: GroupingHelperCore,
   items: GroupItemData[],
@@ -80,12 +134,14 @@ const processGroupItems = function processGroupItems(
   offset: number,
   skipFirstItem: boolean | undefined,
   take: number,
-): { offset: number; take: number } {
-  let currentOffset = offset;
-  let currentTake = take;
-  let isFirstItemSkipped = skipFirstItem;
-  let removeLastItemsCount = 0;
-  let needRemoveFirstItem = false;
+): GroupItemsPosition {
+  const state: GroupItemsProcessingState = {
+    offset,
+    take,
+    skipFirstItem,
+    needRemoveFirstItem: false,
+    removeLastItemsCount: 0,
+  };
 
   for (const item of items) {
     if (item.items !== undefined) {
@@ -93,64 +149,33 @@ const processGroupItems = function processGroupItems(
       const groupInfo = that.findGroupInfo(path);
 
       if (groupInfo && !groupInfo.isExpanded) {
-        item.collapsedItems = item.items;
-        item.items = null;
-        currentOffset += groupInfo.count;
-        currentTake -= 1;
-        if (currentTake < 0) {
-          removeLastItemsCount += 1;
-        }
-        if (isFirstItemSkipped) {
-          needRemoveFirstItem = true;
-        }
+        processCollapsedGroupItem(item, groupInfo.count, state);
       } else if (item.items) {
-        const offsetInfo = processGroupItems(
+        const childItemsPosition = processGroupItems(
           that,
           item.items,
           path,
-          currentOffset,
-          isFirstItemSkipped,
-          currentTake,
+          state.offset,
+          state.skipFirstItem,
+          state.take,
         );
-        if (isFirstItemSkipped) {
-          if (offsetInfo.offset - currentOffset > 1) {
-            item.isContinuation = true;
-          } else {
-            needRemoveFirstItem = true;
-          }
-        }
-        currentOffset = offsetInfo.offset;
-        currentTake = offsetInfo.take;
-        if (currentTake < 0) {
-          if (item.items.length) {
-            item.isContinuationOnNextPage = true;
-          } else {
-            removeLastItemsCount += 1;
-          }
-        }
+        processExpandedGroupItem(item, item.items, childItemsPosition, state);
       }
       path.pop();
     } else {
-      if (isFirstItemSkipped) {
-        needRemoveFirstItem = true;
-      }
-      currentOffset += 1;
-      currentTake -= 1;
-      if (currentTake < 0) {
-        removeLastItemsCount += 1;
-      }
+      processDataItem(state);
     }
-    isFirstItemSkipped = false;
+    state.skipFirstItem = false;
   }
-  if (needRemoveFirstItem) {
+  if (state.needRemoveFirstItem) {
     items.splice(0, 1);
   }
-  if (removeLastItemsCount) {
-    items.splice(-removeLastItemsCount, removeLastItemsCount);
+  if (state.removeLastItemsCount) {
+    items.splice(-state.removeLastItemsCount, state.removeLastItemsCount);
   }
   return {
-    offset: currentOffset,
-    take: currentTake,
+    offset: state.offset,
+    take: state.take,
   };
 };
 

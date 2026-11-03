@@ -3,6 +3,7 @@ import $ from '@js/core/renderer';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import { when } from '@js/core/utils/deferred';
 import type { StoreLoadOptions } from '@ts/data/data_source/types';
+import type { SortingSelector } from '@ts/data/utils';
 import type { LoadOperation, OperationTypes } from '@ts/grids/grid_core/data_source_adapter/types';
 import type { DataFilter } from '@ts/grids/grid_core/filter/types';
 import { combineFilters } from '@ts/grids/grid_core/filter/utils';
@@ -20,6 +21,20 @@ import type {
   GroupItemData,
 } from './types';
 
+const createBooleanKeyFilters = function createBooleanKeyFilters(
+  selector: SortingSelector | undefined,
+  key: boolean | null,
+  desc: boolean,
+): unknown[] {
+  if (key === false) {
+    return [[selector, '=', desc ? true : null]];
+  }
+  if (key ? !desc : desc) {
+    return [[selector, '<>', key]];
+  }
+  return [[selector, '<>', null], [selector, '=', null]];
+};
+
 export function createOffsetFilter(
   path: unknown[],
   storeLoadOptions: StoreLoadOptions,
@@ -31,23 +46,18 @@ export function createOffsetFilter(
   for (let i = lastLevelOnly ? path.length - 1 : 0; i < path.length; i += 1) {
     const filterElement: unknown[] = [];
     for (let j = 0; j <= i; j += 1) {
-      const { selector } = groups[j];
-      if (i === j && (path[j] === null || path[j] === false || path[j] === true)) {
-        if (path[j] === false) {
-          filterElement.push([selector, '=', groups[j].desc ? true : null]);
-        } else if (path[j] ? !groups[j].desc : groups[j].desc) {
-          filterElement.push([selector, '<>', path[j]]);
-        } else {
-          filterElement.push([selector, '<>', null]);
-          filterElement.push([selector, '=', null]);
-        }
+      const { selector, desc } = groups[j];
+      const key = path[j];
+      const isLastLevel = i === j;
+      if (isLastLevel && (key === null || key === false || key === true)) {
+        filterElement.push(...createBooleanKeyFilters(selector, key, desc));
       } else {
-        const currentFilter = [selector, i === j ? groups[j].desc ? '>' : '<' : '=', path[j]];
-        if (currentFilter[1] === '<') {
-          filterElement.push([currentFilter, 'or', [selector, '=', null]]);
-        } else {
-          filterElement.push(currentFilter);
-        }
+        const lastLevelOperation = desc ? '>' : '<';
+        const operation = isLastLevel ? lastLevelOperation : '=';
+        const currentFilter = [selector, operation, key];
+        filterElement.push(
+          operation === '<' ? [currentFilter, 'or', [selector, '=', null]] : currentFilter,
+        );
       }
     }
     filters.push(combineFilters(filterElement));

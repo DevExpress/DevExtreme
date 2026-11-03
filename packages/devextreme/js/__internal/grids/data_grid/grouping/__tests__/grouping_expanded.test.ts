@@ -1,5 +1,8 @@
 import { describe, expect, it } from '@jest/globals';
+import { noop } from '@js/core/utils/common';
 
+import { GroupingHelper } from '../m_grouping_expanded';
+import type { GroupingLoadOperation } from '../types';
 import type { GroupConfig } from './grouping_expanded.helpers';
 import { GroupingTestHelper } from './grouping_expanded.helpers';
 import { createDataSourceAdapterStub, GroupingHelperMock } from './grouping_expanded.mock';
@@ -331,5 +334,113 @@ describe('isPending logic', () => {
 
       expect(grouping.findGroupInfo(['A'])?.isPending).toBeUndefined();
     });
+  });
+});
+
+describe('handleDataLoaded: group items processing', () => {
+  const ROWS = [
+    { g: 'A', id: 'a1' },
+    { g: 'A', id: 'a2' },
+    { g: 'B', id: 'b1' },
+    { g: 'B', id: 'b2' },
+    { g: 'B', id: 'b3' },
+    { g: 'C', id: 'c1' },
+  ];
+
+  const loadGroupedData = (
+    grouping: GroupingHelper,
+    rows: Record<string, unknown>[],
+    { take, skipFirstItem = false }: { take?: number; skipFirstItem?: boolean },
+  ): unknown => {
+    const options = {
+      group: [{ selector: 'g' }],
+      data: rows,
+      skip: 0,
+      take,
+      skipFirstItem,
+    } as unknown as GroupingLoadOperation;
+
+    grouping.handleDataLoaded(options, noop);
+
+    return options.data;
+  };
+
+  it('should hide the items of a collapsed group', () => {
+    const grouping = new GroupingHelper(createDataSourceAdapterStub());
+    grouping.addGroupInfo({
+      offset: 2, count: 3, isExpanded: false, path: ['B'],
+    });
+
+    const data = loadGroupedData(grouping, ROWS, { take: 10 });
+
+    expect(data).toEqual([
+      { key: 'A', items: [ROWS[0], ROWS[1]] },
+      { key: 'B', items: null, collapsedItems: [ROWS[2], ROWS[3], ROWS[4]] },
+      { key: 'C', items: [ROWS[5]] },
+    ]);
+  });
+
+  it('should cut the items that do not fit into take', () => {
+    const grouping = new GroupingHelper(createDataSourceAdapterStub());
+
+    const data = loadGroupedData(grouping, ROWS, { take: 3 });
+
+    expect(data).toEqual([
+      { key: 'A', items: [ROWS[0], ROWS[1]] },
+      { key: 'B', items: [ROWS[2]], isContinuationOnNextPage: true },
+    ]);
+  });
+
+  it('should cut collapsed groups that do not fit into take', () => {
+    const grouping = new GroupingHelper(createDataSourceAdapterStub());
+    grouping.addGroupInfo({
+      offset: 0, count: 2, isExpanded: false, path: ['A'],
+    });
+    grouping.addGroupInfo({
+      offset: 2, count: 3, isExpanded: false, path: ['B'],
+    });
+
+    const data = loadGroupedData(grouping, ROWS, { take: 1 });
+
+    expect(data).toEqual([
+      { key: 'A', items: null, collapsedItems: [ROWS[0], ROWS[1]] },
+    ]);
+  });
+
+  it('should mark the first group as a continuation when the first item is skipped', () => {
+    const grouping = new GroupingHelper(createDataSourceAdapterStub());
+
+    const data = loadGroupedData(grouping, ROWS, { take: 10, skipFirstItem: true });
+
+    expect(data).toEqual([
+      { key: 'A', items: [ROWS[1]], isContinuation: true },
+      { key: 'B', items: [ROWS[2], ROWS[3], ROWS[4]] },
+      { key: 'C', items: [ROWS[5]] },
+    ]);
+  });
+
+  it('should remove the first group when its only item is skipped', () => {
+    const grouping = new GroupingHelper(createDataSourceAdapterStub());
+
+    const data = loadGroupedData(grouping, ROWS.slice(1), { take: 10, skipFirstItem: true });
+
+    expect(data).toEqual([
+      { key: 'B', items: [ROWS[2], ROWS[3], ROWS[4]] },
+      { key: 'C', items: [ROWS[5]] },
+    ]);
+  });
+
+  it('should remove a collapsed first group when the first item is skipped', () => {
+    const grouping = new GroupingHelper(createDataSourceAdapterStub());
+    grouping.addGroupInfo({
+      offset: 0, count: 2, isExpanded: false, path: ['A'],
+    });
+
+    const data = loadGroupedData(grouping, ROWS, { take: 10, skipFirstItem: true });
+
+    expect(data).toEqual([
+      { key: 'B', items: [ROWS[2], ROWS[3], ROWS[4]] },
+      { key: 'C', items: [ROWS[5]] },
+    ]);
   });
 });

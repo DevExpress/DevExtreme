@@ -62,6 +62,17 @@ export type GroupInfoLevel = GroupInfo[] & {
 
 export type ForeachGroupsResult = false | DeferredObj<unknown> | undefined;
 
+export interface GroupItemsPosition {
+  offset: number;
+  take: number;
+}
+
+export interface GroupItemsProcessingState extends GroupItemsPosition {
+  skipFirstItem: boolean | undefined;
+  needRemoveFirstItem: boolean;
+  removeLastItemsCount: number;
+}
+
 export interface GroupingLoadOperation extends LoadOperation {
   collapsedGroups?: GroupInfoData[];
   collapsedItemsCount?: number;
