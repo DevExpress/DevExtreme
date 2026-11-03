@@ -42,14 +42,11 @@ import type {
   SelectionStateByKey,
   TreeListSelectionControllerExtension,
 } from './types';
+import { nodeExists } from './utils';
 
 const TREELIST_SELECT_CHECKBOX_WRAPPER_CLASS = 'dx-treelist-select-checkbox-container';
 const TREELIST_SELECT_ALL_CLASS = 'dx-treelist-select-all';
 const SELECT_CHECKBOX_CLASS = 'dx-select-checkbox';
-
-const nodeExists = function (array: RowKey[], currentKey: RowKey): boolean {
-  return !!array.filter((key) => key === currentKey).length;
-};
 
 const data = (
   Base: ModuleType<TreeListDataController>,
@@ -531,8 +528,8 @@ SelectionController & TreeListSelectionControllerExtension
   }
 
   public updateSelectionState(options: SelectionStateArgs): void {
-    const removedItemKeys = options.removedItemKeys || [];
-    const selectedItemKeys = options.selectedItemKeys || [];
+    const removedItemKeys = options.removedItemKeys ?? [];
+    const selectedItemKeys = options.selectedItemKeys ?? [];
 
     if (this.isRecursiveSelection()) {
       this._updateSelectionStateCore(removedItemKeys, false);
