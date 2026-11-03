@@ -26,7 +26,7 @@
     "eslint-plugin-i18n": "catalog:",
     "eslint-plugin-import": "catalog:",
     "eslint-plugin-no-only-tests": "catalog:",
-    "glob": "11.1.0",
+    "glob": "14.0.3",
     "minimist": "1.2.8",
     "mockdate": "3.0.5",
     "nconf": "0.12.1",

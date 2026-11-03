@@ -110,7 +110,7 @@
     "eslint-plugin-spellcheck": "0.0.20",
     "eslint-plugin-unicorn": "60.0.0",
     "file-saver": "2.0.5",
-    "glob": "11.1.0",
+    "glob": "14.0.3",
     "globalize": "1.7.1",
     "globals": "catalog:",
     "gulp": "4.0.2",
