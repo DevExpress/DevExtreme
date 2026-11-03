@@ -107,6 +107,7 @@ import {
 } from './editing_utils';
 import { editingDataControllerExtender } from './extenders/editing_data_controller';
 import type {
+  AddChangeOptions,
   AllowEditActionValue,
   CellBasedEditingController,
   EditActionOptions,
@@ -2449,7 +2450,7 @@ export class EditingController extends modules.ViewController {
    */
   protected _addChange(
     changeParams: EditingChangeParams,
-    options?: { row?: ProcessedItem; forceUpdateRow?: boolean },
+    options?: AddChangeOptions,
   ): EditingChange {
     const row = options?.row;
     const changes = [...this.getChanges()];
@@ -2718,7 +2719,7 @@ export class EditingController extends modules.ViewController {
   /**
    * @extended: validating, TreeList's editing
    */
-  protected _beforeSaveEditData(change?: EditingChange): boolean {
+  protected _beforeSaveEditData(change?: EditingChange): boolean | DeferredObj<boolean> {
     return !!change && !isDefined(change.key) && isDefined(change.type);
   }
 

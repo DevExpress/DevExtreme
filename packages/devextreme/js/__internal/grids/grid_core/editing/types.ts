@@ -224,6 +224,11 @@ export type EditingOptions = EditingBase<RawItemData, RowKey> & {
 
 export type EditingChangeParams = Partial<EditingChange> & { oldData?: RawItemData };
 
+export interface AddChangeOptions {
+  row?: ProcessedItem;
+  forceUpdateRow?: boolean;
+}
+
 export interface EditingModuleOptions {
   useLegacyColumnButtonTemplate?: boolean;
 }
