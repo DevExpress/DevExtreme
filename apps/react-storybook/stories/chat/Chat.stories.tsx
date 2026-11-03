@@ -1115,8 +1115,6 @@ export const Suggestions: Story = {
 
 interface ToolCallsStoryArgs {
     expandAll: boolean;
-    showInMessageTemplate: boolean;
-    useMessageTemplate: boolean;
 }
 
 const ALERT_TIMEOUT = 1000 * 60;
@@ -1137,15 +1135,11 @@ export const ToolCallsVisualization: StoryObj<ToolCallsStoryArgs> = {
     name: 'Tool Calls Visualization',
     args: {
         expandAll: false,
-        showInMessageTemplate: false,
-        useMessageTemplate: false,
     },
     argTypes: {
         expandAll: { name: 'toolCallOptions.expandAll', control: 'boolean' },
-        showInMessageTemplate: { name: 'toolCallOptions.showInMessageTemplate', control: 'boolean' },
-        useMessageTemplate: { name: 'messageTemplate', control: 'boolean' },
     },
-    render: ({ expandAll, showInMessageTemplate, useMessageTemplate }) => {
+    render: ({ expandAll }) => {
         const storeRef = useRef<ToolCallsMessage[]>([]);
         const historyRef = useRef<ModelMessage[]>(createHistory());
         const [alerts, setAlerts] = useState<ChatTypes.Alert[]>([]);
@@ -1246,14 +1240,6 @@ export const ToolCallsVisualization: StoryObj<ToolCallsStoryArgs> = {
             </div>
         ), [sendSuggestion]);
 
-        // The template shows how the tool calls behave next to a custom message template
-        const renderMessage = useCallback(({ message }: { message: ToolCallsMessage }) => (
-            <>
-                <div className="custom-template-label">messageTemplate</div>
-                <div className="chat-messagebubble-text">{message.text}</div>
-            </>
-        ), []);
-
         return (
             <div className="tool-calls-demo">
                 <div className="ai-chat-card">
@@ -1280,10 +1266,9 @@ export const ToolCallsVisualization: StoryObj<ToolCallsStoryArgs> = {
                         speechToTextEnabled
                         alerts={alerts}
                         typingUsers={typingUsers}
-                        toolCallOptions={{ expandAll, showInMessageTemplate }}
+                        toolCallOptions={{ expandAll }}
                         onMessageEntered={onMessageEntered}
                         emptyViewRender={renderEmptyView}
-                        messageRender={useMessageTemplate ? renderMessage : undefined}
                     />
                 </div>
             </div>

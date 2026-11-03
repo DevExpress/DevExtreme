@@ -110,13 +110,6 @@
     pointer-events: none;
 }
 
-.tool-calls-demo .custom-template-label {
-    margin-bottom: 4px;
-    opacity: 0.6;
-    font-family: monospace;
-    font-size: 11px;
-}
-
 /* Only for the story: the bubble with tool calls is as wide as in the design (320px of the block + the padding of the bubble) */
 .tool-calls-demo .dx-chat-messagebubble:has(> .dx-chat-tool-call-view) {
     min-width: 344px;
