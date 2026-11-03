@@ -49,10 +49,11 @@
       gap: $items-gap;
     }
 
+    // The title of the group is as high as the title of a call: the line is as high as the icon
     .dx-chat-tool-call-header {
-      gap: $gap;
       padding: $padding;
       font-weight: $header-font-weight;
+      line-height: $icon-size;
     }
 
     .dx-accordion-item-title {
