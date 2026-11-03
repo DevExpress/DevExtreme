@@ -58,6 +58,7 @@ import type {
 import type { CollectionItemIndex } from '@ts/ui/collection/collection_widget.edit.strategy';
 import type { CollectionWidgetLiveUpdateProperties } from '@ts/ui/collection/collection_widget.live_update';
 import CollectionWidget from '@ts/ui/collection/collection_widget.live_update';
+import { LIST_ITEM_DATA_KEY } from '@ts/ui/list/constants';
 import ListItem from '@ts/ui/list/item';
 import type { GroupedItem } from '@ts/ui/list/list.edit.strategy.grouped';
 import type {
@@ -87,7 +88,6 @@ const LIST_SELECT_RADIOBUTTON = 'dx-list-select-radiobutton';
 const WRAP_ITEM_TEXT_CLASS = 'dx-wrap-item-text';
 const SELECT_ALL_ITEM_SELECTOR = '.dx-list-select-all';
 
-export const LIST_ITEM_DATA_KEY = 'dxListItemData';
 const LIST_FEEDBACK_SHOW_TIMEOUT = 70;
 
 type ScrollViewConstructor = Constructor<ScrollViewType>;

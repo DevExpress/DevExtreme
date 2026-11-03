@@ -33,8 +33,8 @@ import eventsEngine from '@ts/events/core/events_engine';
 import type DataController from '@ts/ui/collection/data_controller';
 import type { DropDownEditorInternalProperties } from '@ts/ui/drop_down_editor/drop_down_editor';
 import DropDownEditor from '@ts/ui/drop_down_editor/drop_down_editor';
+import { LIST_ITEM_DATA_KEY } from '@ts/ui/list/constants';
 import type { ListBaseProperties } from '@ts/ui/list/list.base';
-import { LIST_ITEM_DATA_KEY } from '@ts/ui/list/list.base';
 import List from '@ts/ui/list/list.edit.search';
 import type { PopupProperties } from '@ts/ui/popup/popup';
 

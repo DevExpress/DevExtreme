@@ -156,6 +156,20 @@ describe('Public component utils', () => {
       expect(findInstanceByElement($(document.createElement('div')), Widget)).toBeUndefined();
     });
 
+    it('should return undefined for a class that was never registered and give it an anonymous name', () => {
+      const Registered = createComponentClass();
+      const Unregistered = createComponentClass();
+      const element = document.createElement('div');
+      const instance = new Registered();
+
+      getComponentName(Registered, 'dxRegistered');
+      attachInstanceToElement($(element), instance);
+
+      expect(findInstanceByElement($(element), Unregistered)).toBeUndefined();
+      expect(getComponentName(Unregistered)).toMatch(ANONYMOUS_NAME);
+      expect(findInstanceByElement($(element), Registered)).toBe(instance);
+    });
+
     it('should return undefined for an empty set or no element', () => {
       const Widget = createComponentClass();
 
