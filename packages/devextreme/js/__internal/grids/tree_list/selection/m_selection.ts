@@ -435,17 +435,17 @@ SelectionController & TreeListSelectionControllerExtension
     }
   }
 
-  private _isModeLeavesOnly(mode) {
+  private _isModeLeavesOnly(mode?: string): boolean {
     return mode === 'leavesOnly';
   }
 
-  private _removeDuplicatedKeys(keys) {
-    const result: any[] = [];
-    const processedKeys = {};
+  private _removeDuplicatedKeys(keys: RowKey[]): RowKey[] {
+    const result: RowKey[] = [];
+    const processedKeys: Record<string, boolean> = {};
 
     keys.forEach((key) => {
-      if (!processedKeys[key]) {
-        processedKeys[key] = true;
+      if (!processedKeys[key as string]) {
+        processedKeys[key as string] = true;
         result.push(key);
       }
     });
@@ -453,25 +453,27 @@ SelectionController & TreeListSelectionControllerExtension
     return result;
   }
 
-  private _getAllChildKeys(key) {
-    const childKeys: any[] = [];
+  private _getAllChildKeys(key: RowKey): RowKey[] {
+    const childKeys: RowKey[] = [];
     const node = this._dataController.getNodeByKey(key);
 
-    node && treeListCore.foreachNodes(node.children, (childNode) => {
-      childKeys.push(childNode.key);
-    }, true);
+    if (node) {
+      treeListCore.foreachNodes(node.children, (childNode: TreeNode) => {
+        childKeys.push(childNode.key);
+      }, true);
+    }
 
     return childKeys;
   }
 
-  private _getAllSelectedRowKeys(keys) {
-    let result: any = [];
+  private _getAllSelectedRowKeys(keys: RowKey[]): RowKey[] {
+    let result: RowKey[] = [];
 
     keys.forEach((key) => {
       const parentKeys = this._getSelectedParentKeys(key, [], true);
       const childKeys = this._getAllChildKeys(key);
 
-      result.push.apply(result, parentKeys.concat([key], childKeys));
+      result.push(...parentKeys.concat([key], childKeys));
     });
 
     result = this._removeDuplicatedKeys(result);
@@ -479,26 +481,30 @@ SelectionController & TreeListSelectionControllerExtension
     return result;
   }
 
-  private _getParentSelectedRowKeys(keys) {
-    const that = this;
-    const result: any[] = [];
+  private _getParentSelectedRowKeys(keys: RowKey[]): RowKey[] {
+    const result: RowKey[] = [];
 
     keys.forEach((key) => {
-      const parentKeys = that._getSelectedParentKeys(key, keys);
-      !parentKeys.length && result.push(key);
+      const parentKeys = this._getSelectedParentKeys(key, keys);
+
+      if (!parentKeys.length) {
+        result.push(key);
+      }
     });
 
     return result;
   }
 
-  private _getLeafSelectedRowKeys(keys) {
-    const that = this;
-    const result: any[] = [];
-    const dataController = that._dataController;
+  private _getLeafSelectedRowKeys(keys: RowKey[]): RowKey[] {
+    const result: RowKey[] = [];
+    const dataController = this._dataController;
 
     keys.forEach((key) => {
       const node = dataController.getNodeByKey(key);
-      node && !node.hasChildren && result.push(key);
+
+      if (node && !node.hasChildren) {
+        result.push(key);
+      }
     });
 
     return result;
@@ -535,14 +541,14 @@ SelectionController & TreeListSelectionControllerExtension
     return result;
   }
 
-  protected getSelectedRowKeys(mode) {
-    const that = this;
-
-    if (!that._dataController) {
+  protected getSelectedRowKeys(mode?: string): RowKey[] {
+    if (!this._dataController) {
       return [];
     }
 
-    let selectedRowKeys = super.getSelectedRowKeys.apply(that, arguments as any);
+    // @ts-expect-error selection may be deferred only in DataGrid,
+    // we need to improve GridCore types to take it into account
+    let selectedRowKeys: RowKey[] = super.getSelectedRowKeys(mode);
 
     if (mode) {
       if (this.isRecursiveSelection()) {
@@ -551,9 +557,9 @@ SelectionController & TreeListSelectionControllerExtension
 
       if (mode !== 'all') {
         if (mode === 'excludeRecursive') {
-          selectedRowKeys = that._getParentSelectedRowKeys(selectedRowKeys);
-        } else if (that._isModeLeavesOnly(mode)) {
-          selectedRowKeys = that._getLeafSelectedRowKeys(selectedRowKeys);
+          selectedRowKeys = this._getParentSelectedRowKeys(selectedRowKeys);
+        } else if (this._isModeLeavesOnly(mode)) {
+          selectedRowKeys = this._getLeafSelectedRowKeys(selectedRowKeys);
         }
       }
     }
@@ -566,8 +572,6 @@ SelectionController & TreeListSelectionControllerExtension
     const selectedKeys = this.getSelectedRowKeys(mode) || [];
     const selectedRowsData: any[] = [];
 
-    // @ts-expect-error selection may be deferred only in DataGrid,
-    // we need to improve GridCore types to take it into account
     selectedKeys.forEach((key) => {
       const node = dataController.getNodeByKey(key);
       node && selectedRowsData.push(node.data);
