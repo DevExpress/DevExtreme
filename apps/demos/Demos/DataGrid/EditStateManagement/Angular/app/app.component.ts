@@ -1,6 +1,6 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import {
-  Component, OnInit, computed, enableProdMode, inject, signal,
+  Component, OnInit, afterNextRender, computed, enableProdMode, inject, signal,
 } from '@angular/core';
 import { provideHttpClient, withFetch } from '@angular/common/http';
 import { DxLoadPanelModule } from 'devextreme-angular';
@@ -41,8 +41,10 @@ export class AppComponent implements OnInit {
 
   readonly loadPanelPosition = { of: '#gridContainer' };
 
-  ngOnInit() {
-    this.showLoadPanelWhile(this.service.loadOrders());
+  constructor() {
+    afterNextRender(() => {
+      this.showLoadPanelWhile(this.service.loadOrders());
+    });
   }
 
   onSaving(e: DxDataGridTypes.SavingEvent) {
