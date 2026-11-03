@@ -15,8 +15,8 @@ import {
   selectionRowsViewExtender,
 } from '@ts/grids/grid_core/selection/m_selection';
 import { selectionModule } from '@ts/grids/grid_core/selection/selection_module';
-import type { SelectionRowsView } from '@ts/grids/grid_core/selection/types';
 import type { ModuleType, RowKey } from '@ts/grids/grid_core/types';
+import type { ViewRowEvent } from '@ts/grids/grid_core/views/types';
 import type { TreeListDataController } from '@ts/grids/tree_list/data_controller/data_controller';
 import type { TreeListRowsView } from '@ts/grids/tree_list/rows/m_rows';
 import type { SelectionOptions } from '@ts/ui/selection/types';
@@ -105,19 +105,6 @@ SelectionController & TreeListSelectionControllerExtension
     config.allowLoadByRange = undefined;
 
     return config;
-  }
-
-  private renderSelectCheckBoxContainer($container, model) {
-    const that = this;
-    const rowsView = that.component.getView('rowsView') as SelectionRowsView;
-
-    const $checkbox = rowsView.renderSelectCheckBox($container, {
-      value: model.row.isSelected,
-      row: model.row,
-      column: model.column,
-    });
-
-    rowsView.attachCheckBoxClickEvent($checkbox);
   }
 
   private _getSelectAllNodeKeys() {
@@ -630,21 +617,21 @@ const rowsView = (
       const $checkboxWrapper = $('<div>').addClass(TREELIST_SELECT_CHECKBOX_WRAPPER_CLASS);
       $checkboxWrapper.appendTo($iconContainer);
 
-      // @ts-expect-error This method added only in TreeList's selection module
-      this._selectionController.renderSelectCheckBoxContainer($checkboxWrapper, options);
+      const $checkbox = this.renderSelectCheckBox($checkboxWrapper, {
+        value: options.row.isSelected,
+        row: options.row,
+        column: options.column,
+      });
+
+      this.attachCheckBoxClickEvent($checkbox);
     }
 
     return $iconContainer;
   }
 
-  protected _rowClick(e) {
-    const $targetElement = $(e.event.target);
-
-    if (this.isExpandIcon($targetElement)) {
-      // @ts-expect-error
-      super._rowClickForTreeList.apply(this, arguments as any);
-    } else {
-      super._rowClick.apply(this, arguments as any);
+  public override handleRowClickBySelection(e: ViewRowEvent): void {
+    if (!this.isExpandIcon($(e.event.target))) {
+      super.handleRowClickBySelection(e);
     }
   }
 };

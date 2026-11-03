@@ -952,24 +952,27 @@ export const selectionRowsViewExtender = <TBase extends ModuleType<RowsView>>(
     return $row;
   }
 
-  public _rowClickForTreeList(e: ViewRowEvent): void {
-    super._rowClick(e);
-  }
-
-  protected _rowClick(e: ViewRowEvent): void {
+  /**
+   * @extended: TreeList's selection
+   */
+  public handleRowClickBySelection(e: ViewRowEvent): void {
     const dxEvent = e.event;
     const isSelectionDisabled = $(dxEvent.target).closest(`.${SELECTION_DISABLED_CLASS}`).length;
 
-    if (!this.isClickableElement($(dxEvent.target))) {
-      if (!isSelectionDisabled && (this.option(SELECTION_MODE) !== 'multiple' || this.option(SHOW_CHECKBOXES_MODE) !== 'always')) {
-        if (this._selectionController.changeItemSelection(e.rowIndex, {
-          control: isCommandKeyPressed(dxEvent),
-          shift: dxEvent.shiftKey,
-        })) {
-          dxEvent.preventDefault();
-          e.handled = true;
-        }
+    if (!isSelectionDisabled && (this.option(SELECTION_MODE) !== 'multiple' || this.option(SHOW_CHECKBOXES_MODE) !== 'always')) {
+      if (this._selectionController.changeItemSelection(e.rowIndex, {
+        control: isCommandKeyPressed(dxEvent),
+        shift: dxEvent.shiftKey,
+      })) {
+        dxEvent.preventDefault();
+        e.handled = true;
       }
+    }
+  }
+
+  protected _rowClick(e: ViewRowEvent): void {
+    if (!this.isClickableElement($(e.event.target))) {
+      this.handleRowClickBySelection(e);
       super._rowClick(e);
     }
   }
