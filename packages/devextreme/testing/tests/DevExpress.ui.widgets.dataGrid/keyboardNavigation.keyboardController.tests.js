@@ -2,7 +2,7 @@ import $ from 'jquery';
 
 import 'ui/data_grid';
 
-import { keyboardNavigationModule } from '__internal/grids/grid_core/keyboard_navigation/m_keyboard_navigation';
+import { keyboardNavigationModule } from '__internal/grids/grid_core/keyboard_navigation/keyboard_navigation';
 import { headersKeyboardNavigationModule } from '__internal/grids/grid_core/keyboard_navigation/headers_keyboard_navigation';
 import commonUtils from 'core/utils/common';
 import typeUtils from 'core/utils/type';
@@ -558,7 +558,7 @@ QUnit.module('Keyboard controller', {
         navigationController._getNextCell = function() {
             return $([{ cellIndex: 0 }]);
         };
-        navigationController._focus = function() {
+        navigationController.applyFocus = function() {
             isFocused = true;
         };
         navigationController._isLegacyNavigation = () => true;
@@ -593,7 +593,7 @@ QUnit.module('Keyboard controller', {
         navigationController._getNextCell = function() {
             return $([{ cellIndex: 0 }]);
         };
-        navigationController._focus = function() {
+        navigationController.applyFocus = function() {
             isFocused = true;
         };
         navigationController._isLegacyNavigation = () => true;
@@ -685,7 +685,7 @@ QUnit.module('Keyboard controller', {
         const navigationController = new KeyboardNavigationController(this.component);
         navigationController.init();
         navigationController._focusedView = rowsView;
-        navigationController._focus = function() {
+        navigationController.applyFocus = function() {
             isFocused = true;
         };
 
@@ -718,7 +718,7 @@ QUnit.module('Keyboard controller', {
         const navigationController = new KeyboardNavigationController(this.component);
         navigationController.init();
         navigationController._focusedView = rowsView;
-        navigationController._focus($('<div>'));
+        navigationController.applyFocus($('<div>'));
 
         // assert
         assert.ok(!_$focusElement, 'element has not focused');

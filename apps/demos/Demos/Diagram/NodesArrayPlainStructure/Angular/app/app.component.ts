@@ -1,5 +1,5 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import { Component, enableProdMode } from '@angular/core';
 import { provideHttpClient, withFetch } from '@angular/common/http';
 import { DxDiagramModule } from 'devextreme-angular';
 import { ArrayStore } from 'devextreme-angular/common/data';
@@ -32,7 +32,6 @@ export class AppComponent {
 
 bootstrapApplication(AppComponent, {
   providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
     provideHttpClient(withFetch()),
   ],
 });

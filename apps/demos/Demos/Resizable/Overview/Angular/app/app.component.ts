@@ -1,5 +1,5 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, ViewEncapsulation, provideZoneChangeDetection } from '@angular/core';
+import { Component, enableProdMode, ViewEncapsulation } from '@angular/core';
 import {
   DxResizableModule,
   DxDataGridModule,
@@ -48,8 +48,4 @@ export class AppComponent {
   }
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

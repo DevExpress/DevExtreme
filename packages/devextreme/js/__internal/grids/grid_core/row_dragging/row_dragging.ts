@@ -164,7 +164,7 @@ const rowsView = (
       }, rowDragging, {
         onDragStart: (e: RowDraggingStartEvent) => {
           // TODO getController
-          this.getController('keyboardNavigation')?._resetFocusedCell();
+          this.getController('keyboardNavigation')?.resetFocusedCell();
           const row = e.component.getVisibleRows()[e.fromIndex];
           e.itemData = row?.data;
 

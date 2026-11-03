@@ -1,5 +1,5 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, ViewChild, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import { Component, ViewChild, enableProdMode } from '@angular/core';
 import { DxPieChartModule, DxPieChartComponent, DxPieChartTypes } from 'devextreme-angular/ui/pie-chart';
 import { DxSelectBoxModule, DxSelectBoxTypes } from 'devextreme-angular/ui/select-box';
 import { Service, Population } from './app.service';
@@ -45,8 +45,4 @@ export class AppComponent {
   }
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

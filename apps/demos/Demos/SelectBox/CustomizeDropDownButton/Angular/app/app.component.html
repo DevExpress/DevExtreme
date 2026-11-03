@@ -25,8 +25,8 @@
         [inputAttr]="{ 'aria-label': 'Deferred Product' }"
       >
         <div *dxTemplate="let data of 'dropDownButton'">
-          <dx-load-indicator [visible]="!isLoaded"></dx-load-indicator>
-          <span [hidden]="!isLoaded">
+          <dx-load-indicator [visible]="!isLoaded()"></dx-load-indicator>
+          <span [hidden]="!isLoaded()">
             <img
               alt="Custom icon"
               src="../../../../images/icons/custom-dropbutton-icon.svg"

@@ -1,8 +1,10 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import {
+  Component, enableProdMode, inject, signal,
+} from '@angular/core';
 import { DxButtonModule, DxCheckBoxModule, DxSelectBoxModule } from 'devextreme-angular';
 import { DxDataGridModule, DxDataGridTypes } from 'devextreme-angular/ui/data-grid';
-import { Service, Employee, State } from './app.service';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -21,34 +23,25 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  states: State[];
+  private readonly service = inject(Service);
 
-  employees: Employee[];
+  readonly states = this.service.getStates();
 
-  enterKeyActions: string[];
+  readonly employees = this.service.getEmployees();
 
-  enterKeyDirections: string[];
+  readonly enterKeyActions = this.service.getEnterKeyActions();
 
-  editOnKeyPress = true;
+  readonly enterKeyDirections = this.service.getEnterKeyDirections();
 
-  enterKeyAction: DxDataGridTypes.EnterKeyAction = 'moveFocus';
+  readonly editOnKeyPress = signal(true);
 
-  enterKeyDirection: DxDataGridTypes.EnterKeyDirection = 'column';
+  readonly enterKeyAction = signal<DxDataGridTypes.EnterKeyAction>('moveFocus');
 
-  constructor(service: Service) {
-    this.employees = service.getEmployees();
-    this.states = service.getStates();
-    this.enterKeyActions = service.getEnterKeyActions();
-    this.enterKeyDirections = service.getEnterKeyDirections();
-  }
+  readonly enterKeyDirection = signal<DxDataGridTypes.EnterKeyDirection>('column');
 
   onFocusedCellChanging(e: DxDataGridTypes.FocusedCellChangingEvent) {
     e.isHighlighted = true;
   }
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

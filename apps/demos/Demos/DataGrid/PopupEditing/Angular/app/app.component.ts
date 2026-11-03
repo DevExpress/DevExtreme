@@ -1,8 +1,8 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import { Component, enableProdMode, inject } from '@angular/core';
 import { DxDataGridModule } from 'devextreme-angular';
 import 'devextreme/ui/text_area';
-import { Service, Employee, State } from './app.service';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -18,18 +18,11 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  dataSource: Employee[];
+  private readonly service = inject(Service);
 
-  states: State[];
+  readonly dataSource = this.service.getEmployees();
 
-  constructor(service: Service) {
-    this.dataSource = service.getEmployees();
-    this.states = service.getStates();
-  }
+  readonly states = this.service.getStates();
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);
