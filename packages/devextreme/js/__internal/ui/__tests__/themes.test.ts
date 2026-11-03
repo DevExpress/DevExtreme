@@ -3,10 +3,10 @@ import {
 } from '@jest/globals';
 import $ from '@js/core/renderer';
 import errors from '@js/ui/widget/ui.errors';
-import { themeModeChangedCallback } from '@ts/ui/m_themes_callback';
 import {
   customAccentColor, init, isFluentNext, mode, refreshMode, resetTheme,
 } from '@ts/ui/themes';
+import { themeModeChangedCallback } from '@ts/ui/themes_callback';
 
 const style = (css: string): void => { document.head.innerHTML = `<style>${css}</style>`; };
 

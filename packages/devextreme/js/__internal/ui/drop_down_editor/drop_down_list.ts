@@ -29,7 +29,7 @@ import type { Item, ItemClickEvent } from '@js/ui/list';
 import errors from '@js/ui/widget/ui.errors';
 import type { OptionChanged } from '@ts/core/widget/types';
 import { getDataSourceOptions } from '@ts/data/data_converter/grouped';
-import type DataController from '@ts/ui/collection/m_data_controller';
+import type DataController from '@ts/ui/collection/data_controller';
 import type { DropDownEditorInternalProperties } from '@ts/ui/drop_down_editor/drop_down_editor';
 import DropDownEditor from '@ts/ui/drop_down_editor/drop_down_editor';
 import type { ListBaseProperties } from '@ts/ui/list/list.base';
@@ -740,7 +740,7 @@ class DropDownList<
     const isMinSearchLengthExceeded = this._isMinSearchLengthExceeded();
     const { showDataBeforeSearch, minSearchLength } = this.option();
 
-    return this._dataController.isLoaded() as boolean
+    return this._dataController.isLoaded()
       && Boolean(showDataBeforeSearch)
       && Boolean(minSearchLength)
       && !isMinSearchLengthExceeded
@@ -877,7 +877,6 @@ class DropDownList<
   _clearFilter(): void {
     const dataController = this._dataController;
 
-    // @ts-expect-error fix argument type in m_data_controller.ts
     if (dataController.searchValue()) {
       dataController.searchValue(null);
     }
@@ -963,7 +962,7 @@ class DropDownList<
     const dataController = this._dataController;
     const currentPageIndex = dataController.pageIndex();
     const needRepaint = (isDefined(this._pageIndex) && currentPageIndex <= this._pageIndex)
-      || (dataController.isLastPage() as boolean && !this._list?._scrollViewIsFull());
+      || (dataController.isLastPage() && !this._list?._scrollViewIsFull());
 
     this._pageIndex = currentPageIndex;
 
