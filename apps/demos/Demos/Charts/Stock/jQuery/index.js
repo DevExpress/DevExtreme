@@ -110,7 +110,7 @@ $(() => {
 
   const exportItems = [
     { text: 'Print' },
-    ...['PNG', 'PDF', 'JPEG', 'GIF', 'SVG'].map((format) => ({
+    ...['PNG', 'PDF', 'JPEG', 'SVG'].map((format) => ({
       text: `${format} file`,
       format,
     })),

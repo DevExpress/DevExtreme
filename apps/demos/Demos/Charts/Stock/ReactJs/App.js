@@ -26,7 +26,7 @@ const zoomFactor = 0.75;
 const minVisualRangeLength = { days: 3 };
 const minVisibleSpanMs = minVisualRangeLength.days * dayMs;
 const tooltipFormat = { type: 'currency', precision: 2 };
-const exportFormats = ['PNG', 'PDF', 'JPEG', 'GIF', 'SVG'];
+const exportFormats = ['PNG', 'PDF', 'JPEG', 'SVG'];
 const exportItems = [
   { text: 'Print' },
   ...exportFormats.map((format) => ({ text: `${format} file`, format })),
