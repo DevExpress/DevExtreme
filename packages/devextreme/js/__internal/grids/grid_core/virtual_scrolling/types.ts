@@ -10,7 +10,7 @@ import type {
 } from '@ts/grids/grid_core/virtual_data_loader/types';
 import type Scrollable from '@ts/ui/scroll_view/scrollable';
 
-import type { VirtualScrollController } from './m_virtual_scrolling_core';
+import type { VirtualScrollController } from './virtual_scrolling_core';
 
 export interface ChangedLoadParams {
   pageIndex: number;

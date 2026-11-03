@@ -1,7 +1,7 @@
 import type { ScrollingBase } from '@js/common/grids';
 
 import { virtualScrollingDataControllerExtender } from './extenders/virtual_scrolling_data_controller';
-import { resizing, rowsView } from './m_virtual_scrolling';
+import { resizing, rowsView } from './virtual_scrolling';
 
 interface VirtualScrollingModuleOptions {
   scrolling: ScrollingBase & {
