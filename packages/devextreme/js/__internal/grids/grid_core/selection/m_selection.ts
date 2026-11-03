@@ -50,7 +50,7 @@ import {
   SELECTION_MODE,
   SHOW_CHECKBOXES_MODE,
 } from './const';
-import type { SelectionChangedArgs, SelectionChangedOptions } from './types';
+import type { SelectionChangedArgs, SelectionChangedOptions, SelectionModifierKeys } from './types';
 
 const processLongTap = function (that, dxEvent) {
   // TODO getView
@@ -511,7 +511,7 @@ export class SelectionController extends modules.Controller {
     return this._selection.isItemSelected(arg);
   }
 
-  public isSelectColumnVisible() {
+  public isSelectColumnVisible(): boolean | undefined {
     return this.option(SELECTION_MODE) === 'multiple' && (this.option(SHOW_CHECKBOXES_MODE) === 'always' || this.option(SHOW_CHECKBOXES_MODE) === 'onClick' || this._isSelectionWithCheckboxes);
   }
 
@@ -610,48 +610,50 @@ export class SelectionController extends modules.Controller {
     return this._selection.loadSelectedItemsWithFilter();
   }
 
-  public changeItemSelection(visibleItemIndex, keys, setFocusOnly?: boolean): boolean | DeferredObj<unknown> | undefined {
-    keys = keys || {};
+  public changeItemSelection(
+    visibleItemIndex: number,
+    keys?: SelectionModifierKeys,
+    setFocusOnly?: boolean,
+  ): boolean | DeferredObj<unknown> | undefined {
+    const modifierKeys = keys || {};
     if (this.isSelectionWithCheckboxes()) {
-      keys.control = true;
+      modifierKeys.control = true;
     }
-    const loadedItemIndex = visibleItemIndex + this._dataController.getRowIndexOffset() - this._dataController.getRowIndexOffset(true);
-    return this._selection.changeItemSelection(loadedItemIndex, keys, setFocusOnly);
+    const loadedItemIndex = visibleItemIndex
+      + this._dataController.getRowIndexOffset()
+      - this._dataController.getRowIndexOffset(true);
+    return this._selection.changeItemSelection(loadedItemIndex, modifierKeys, setFocusOnly);
   }
 
-  public focusedItemIndex(itemIndex) {
-    const that = this;
-
+  public focusedItemIndex(): number;
+  public focusedItemIndex(itemIndex: number): void;
+  public focusedItemIndex(itemIndex?: number): number | undefined {
     if (isDefined(itemIndex)) {
-      that._selection._focusedItemIndex = itemIndex;
+      this._selection._focusedItemIndex = itemIndex;
     } else {
-      return that._selection._focusedItemIndex;
+      return this._selection._focusedItemIndex;
     }
 
     return undefined;
   }
 
-  public isSelectionWithCheckboxes() {
+  public isSelectionWithCheckboxes(): boolean | undefined {
     return this.option(SELECTION_MODE) === 'multiple' && (this.option(SHOW_CHECKBOXES_MODE) === 'always' || this._isSelectionWithCheckboxes);
   }
 
-  public startSelectionWithCheckboxes() {
-    const that = this;
-
-    if (that.option(SELECTION_MODE) === 'multiple' && !that.isSelectionWithCheckboxes()) {
-      that._isSelectionWithCheckboxes = true;
-      that._updateSelectColumn();
+  public startSelectionWithCheckboxes(): boolean {
+    if (this.option(SELECTION_MODE) === 'multiple' && !this.isSelectionWithCheckboxes()) {
+      this._isSelectionWithCheckboxes = true;
+      this._updateSelectColumn();
       return true;
     }
     return false;
   }
 
-  private stopSelectionWithCheckboxes() {
-    const that = this;
-
-    if (that._isSelectionWithCheckboxes) {
-      that._isSelectionWithCheckboxes = false;
-      that._updateSelectColumn();
+  public stopSelectionWithCheckboxes(): boolean {
+    if (this._isSelectionWithCheckboxes) {
+      this._isSelectionWithCheckboxes = false;
+      this._updateSelectColumn();
       return true;
     }
     return false;
