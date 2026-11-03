@@ -68,11 +68,10 @@
       vertical-alignment="bottom"
       horizontal-alignment="center"
     />
-    <DxArgumentAxis :min-visual-range-length="minVisualRangeLength">
-      <DxVisualRange
-        v-model:start-value="startValue"
-        v-model:end-value="endValue"
-      />
+    <DxArgumentAxis
+      v-model:visual-range="visualRange"
+      :min-visual-range-length="minVisualRangeLength"
+    >
       <DxLabel
         :rotation-angle="30"
         :customize-text="customizeLabelText"
@@ -106,7 +105,6 @@ import DxChart, {
   DxSeries,
   DxReduction,
   DxArgumentAxis,
-  DxVisualRange,
   DxLabel,
   DxFormat,
   DxValueAxis,
@@ -146,14 +144,13 @@ const exportItems = [
 
 const chart = ref();
 
-const startValue = ref(initialStart);
-const endValue = ref(initialEnd);
+const visualRange = ref({ startValue: initialStart, endValue: initialEnd });
 
 const clamp = (value: number, min: number, max: number) => Math.min(Math.max(value, min), max);
 
 const getRange = () => ({
-  start: startValue.value.getTime(),
-  end: endValue.value.getTime(),
+  start: new Date(visualRange.value.startValue).getTime(),
+  end: new Date(visualRange.value.endValue).getTime(),
 });
 
 const setRange = (start: number, end: number) => {
@@ -161,8 +158,10 @@ const setRange = (start: number, end: number) => {
   const center = (start + end) / 2;
   const newStart = clamp(center - span / 2, rangeMin, rangeMax - span);
 
-  startValue.value = new Date(newStart);
-  endValue.value = new Date(newStart + span);
+  visualRange.value = {
+    startValue: new Date(newStart),
+    endValue: new Date(newStart + span),
+  };
 };
 
 const pan = (direction: number) => {
