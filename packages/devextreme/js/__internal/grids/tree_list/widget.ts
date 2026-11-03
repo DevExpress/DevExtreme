@@ -11,7 +11,7 @@ import './module_not_extended/editing_row_based';
 import './module_not_extended/editing_form_based';
 import './module_not_extended/editing_cell_based';
 import './m_validating';
-import './m_virtual_scrolling';
+import './virtual_scrolling';
 import './module_not_extended/filter_row';
 import './module_not_extended/header_filter';
 import './module_not_extended/filter_sync';
