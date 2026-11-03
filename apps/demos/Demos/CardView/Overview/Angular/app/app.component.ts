@@ -1,5 +1,5 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, ViewChild, provideZoneChangeDetection } from '@angular/core';
+import { Component, enableProdMode, ViewChild } from '@angular/core';
 import { DxCardViewModule, DxCardViewComponent, DxButtonModule } from 'devextreme-angular';
 import notify from 'devextreme/ui/notify';
 import { AppService, Employee } from './app.service';
@@ -52,7 +52,6 @@ export class AppComponent {
 
 bootstrapApplication(AppComponent, {
   providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
     AppService,
   ],
 });

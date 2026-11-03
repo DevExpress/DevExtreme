@@ -451,7 +451,7 @@ QUnit.module('Master Detail', baseModuleConfig, () => {
 
         $($(dataGrid.$element()).find('td').eq(14)).trigger(pointerEvents.up); // check that error is not raised
 
-        assert.ok(dataGrid.getController('keyboardNavigation')._isCellValid($(dataGrid.$element()).find('td').eq(14)), 'detail-grid cell with cellIndex greater than number of parent columns causes no errors');
+        assert.ok(dataGrid.getController('keyboardNavigation').isCellValid($(dataGrid.$element()).find('td').eq(14)), 'detail-grid cell with cellIndex greater than number of parent columns causes no errors');
     });
 
     // T454990

@@ -1,5 +1,5 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, Pipe, PipeTransform, provideZoneChangeDetection } from '@angular/core';
+import { Component, enableProdMode, Pipe, PipeTransform } from '@angular/core';
 import { NgClass } from '@angular/common';
 import { DxSchedulerModule } from 'devextreme-angular';
 import { DataSource } from 'devextreme-angular/common/data';
@@ -63,8 +63,4 @@ export class AppComponent {
   static getCurrentTraining = (date: number, employeeID: number) => `training-background-${(date + employeeID) % 3}`;
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

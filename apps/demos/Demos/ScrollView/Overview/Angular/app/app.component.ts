@@ -5,7 +5,6 @@ import {
   ViewChild,
   AfterViewInit,
   enableProdMode,
-  provideZoneChangeDetection,
 } from '@angular/core';
 import { DxSelectBoxModule } from 'devextreme-angular';
 import { DxCheckBoxModule, DxCheckBoxTypes } from 'devextreme-angular/ui/check-box';
@@ -102,8 +101,4 @@ export class AppComponent implements AfterViewInit {
   };
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

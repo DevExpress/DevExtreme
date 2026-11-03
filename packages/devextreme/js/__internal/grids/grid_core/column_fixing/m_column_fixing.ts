@@ -28,7 +28,7 @@ import type {
 } from '../columns_resizing_reordering/columns_resizing_reordering';
 import type { Coordinates } from '../columns_resizing_reordering/types';
 import type { ResizingController } from '../grid_view/grid_view';
-import type { KeyboardNavigationController } from '../keyboard_navigation/m_keyboard_navigation';
+import type { KeyboardNavigationController } from '../keyboard_navigation/keyboard_navigation';
 import type { ColumnPoint, ModuleType } from '../types';
 import gridCoreUtils from '../utils';
 import type { ColumnsView } from '../views/columns_view';

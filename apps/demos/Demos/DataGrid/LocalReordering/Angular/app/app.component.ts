@@ -1,12 +1,10 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import {
-  ChangeDetectorRef, Component, enableProdMode, provideZoneChangeDetection,
+  Component, enableProdMode, inject, signal,
 } from '@angular/core';
 import { DxCheckBoxModule } from 'devextreme-angular';
 import { DxDataGridModule, type DxDataGridTypes } from 'devextreme-angular/ui/data-grid';
-import {
-  Service, type Employee, type Task, type Status,
-} from './app.service';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -23,36 +21,27 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  tasks: Task[];
+  private readonly service = inject(Service);
 
-  employees: Employee[];
+  readonly tasks = signal(this.service.getTasks());
 
-  statuses: Status[];
+  readonly employees = this.service.getEmployees();
 
-  showDragIcons = true;
+  readonly showDragIcons = signal(true);
 
-  constructor(service: Service, private changeDetectorRef: ChangeDetectorRef) {
-    this.tasks = service.getTasks();
-
-    this.employees = service.getEmployees();
-
-    this.statuses = service.getStatuses();
-  }
-
-  onReorder = (e: DxDataGridTypes.RowDraggingReorderEvent) => {
+  readonly onReorder = (e: DxDataGridTypes.RowDraggingReorderEvent) => {
     const visibleRows = e.component.getVisibleRows();
-    const toIndex = this.tasks.findIndex((item) => item.ID === visibleRows[e.toIndex].data.ID);
-    const fromIndex = this.tasks.findIndex((item) => item.ID === e.itemData.ID);
 
-    this.tasks.splice(fromIndex, 1);
-    this.tasks.splice(toIndex, 0, e.itemData);
+    this.tasks.update((tasks) => {
+      const toIndex = tasks.findIndex((item) => item.ID === visibleRows[e.toIndex].data.ID);
+      const fromIndex = tasks.findIndex((item) => item.ID === e.itemData.ID);
+      const result = tasks.filter((_, index) => index !== fromIndex);
 
-    this.changeDetectorRef.detectChanges();
+      result.splice(toIndex, 0, e.itemData);
+
+      return result;
+    });
   };
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

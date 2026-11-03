@@ -25,7 +25,7 @@ import { AI_COLUMN_NAME } from '../ai_column/const';
 import type { ColumnsController } from '../columns_controller/columns_controller';
 import type { ProcessedItem } from '../data_controller/types';
 import { EDIT_MODE } from '../editing/const';
-import type { KeyboardNavigationController } from '../keyboard_navigation/m_keyboard_navigation';
+import type { KeyboardNavigationController } from '../keyboard_navigation/keyboard_navigation';
 import { CLASSES as MASTER_DETAIL_CLASSES } from '../master_detail/const';
 import modules from '../modules/modules';
 import type { OptionChanged, RowKey } from '../types';

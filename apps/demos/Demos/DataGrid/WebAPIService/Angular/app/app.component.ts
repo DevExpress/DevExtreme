@@ -1,5 +1,5 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import { Component, enableProdMode } from '@angular/core';
 import { DxDataGridModule } from 'devextreme-angular';
 import * as AspNetData from 'devextreme-aspnet-data-nojquery';
 import 'anti-forgery';
@@ -18,48 +18,34 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  customersData: AspNetData.CustomStore;
+  private readonly url = 'https://js.devexpress.com/Demos/NetCore/api/DataGridWebApi';
 
-  shippersData: AspNetData.CustomStore;
+  readonly dataSource = AspNetData.createStore({
+    key: 'OrderID',
+    loadUrl: `${this.url}/Orders`,
+    insertUrl: `${this.url}/InsertOrder`,
+    updateUrl: `${this.url}/UpdateOrder`,
+    deleteUrl: `${this.url}/DeleteOrder`,
+    onBeforeSend(method, ajaxOptions) {
+      ajaxOptions.xhrFields = { withCredentials: true };
+    },
+  });
 
-  dataSource: AspNetData.CustomStore;
+  readonly customersData = AspNetData.createStore({
+    key: 'Value',
+    loadUrl: `${this.url}/CustomersLookup`,
+    onBeforeSend(method, ajaxOptions) {
+      ajaxOptions.xhrFields = { withCredentials: true };
+    },
+  });
 
-  url: string;
-
-  constructor() {
-    this.url = 'https://js.devexpress.com/Demos/NetCore/api/DataGridWebApi';
-
-    this.dataSource = AspNetData.createStore({
-      key: 'OrderID',
-      loadUrl: `${this.url}/Orders`,
-      insertUrl: `${this.url}/InsertOrder`,
-      updateUrl: `${this.url}/UpdateOrder`,
-      deleteUrl: `${this.url}/DeleteOrder`,
-      onBeforeSend(method, ajaxOptions) {
-        ajaxOptions.xhrFields = { withCredentials: true };
-      },
-    });
-
-    this.customersData = AspNetData.createStore({
-      key: 'Value',
-      loadUrl: `${this.url}/CustomersLookup`,
-      onBeforeSend(method, ajaxOptions) {
-        ajaxOptions.xhrFields = { withCredentials: true };
-      },
-    });
-
-    this.shippersData = AspNetData.createStore({
-      key: 'Value',
-      loadUrl: `${this.url}/ShippersLookup`,
-      onBeforeSend(method, ajaxOptions) {
-        ajaxOptions.xhrFields = { withCredentials: true };
-      },
-    });
-  }
+  readonly shippersData = AspNetData.createStore({
+    key: 'Value',
+    loadUrl: `${this.url}/ShippersLookup`,
+    onBeforeSend(method, ajaxOptions) {
+      ajaxOptions.xhrFields = { withCredentials: true };
+    },
+  });
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);
