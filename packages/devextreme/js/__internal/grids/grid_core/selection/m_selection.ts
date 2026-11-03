@@ -36,6 +36,7 @@ import type {
 } from '@ts/grids/grid_core/types';
 import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
 import type { RowsView } from '@ts/grids/grid_core/views/rows_view';
+import type { ViewRowEvent } from '@ts/grids/grid_core/views/types';
 import Selection from '@ts/ui/selection/selection';
 import type { SelectionChangeEvent, SelectionFilter, SelectionOptions } from '@ts/ui/selection/types';
 
@@ -56,11 +57,14 @@ import {
   SHOW_CHECKBOXES_MODE,
 } from './const';
 import type {
+  SelectCheckBoxOptions,
+  SelectionCellOptions,
   SelectionChangedArgs,
   SelectionChangedOptions,
   SelectionColumnHeadersView,
   SelectionHeaderCellOptions,
   SelectionModifierKeys,
+  SelectionRowsView,
 } from './types';
 
 const processLongTap = (
@@ -92,10 +96,13 @@ const processLongTap = (
   }
 };
 
-const selectionCellTemplate = (container, options) => {
+const selectionCellTemplate = (
+  container: DxElement,
+  options: SelectionCellOptions,
+): void => {
   const { component } = options;
   // TODO getView
-  const rowsView = component.getView('rowsView');
+  const rowsView = component.getView('rowsView') as SelectionRowsView;
 
   if (component.option('renderAsync') && !component.option('selection.deferred')) {
     options.value = component.isRowSelected(options.row.key);
@@ -805,21 +812,27 @@ export const selectionColumnHeadersViewExtender = (
   }
 };
 
-export const selectionRowsViewExtender = (
-  Base: ModuleType<RowsView>,
-): ModuleType<RowsView> => class SelectionRowsViewExtender extends Base {
-  private renderSelectCheckBoxContainer($container, options) {
+export const selectionRowsViewExtender = <TBase extends ModuleType<RowsView>>(
+  Base: TBase,
+): TBase & ModuleType<SelectionRowsView> => class SelectionRowsViewExtender extends Base {
+  public renderSelectCheckBoxContainer(
+    $container: dxElementWrapper,
+    options: SelectionCellOptions,
+  ): void {
     if (options.rowType === 'data' && !options.row.isNewRow) {
       $container.addClass(EDITOR_CELL_CLASS);
-      this._attachCheckBoxClickEvent($container);
+      this.attachCheckBoxClickEvent($container);
 
-      this._renderSelectCheckBox($container, options);
+      this.renderSelectCheckBox($container, options);
     } else {
       gridCoreUtils.setEmptyText($container);
     }
   }
 
-  private _renderSelectCheckBox(container, options) {
+  public renderSelectCheckBox(
+    container: dxElementWrapper,
+    options: SelectCheckBoxOptions,
+  ): dxElementWrapper {
     const groupElement = $('<div>')
       .addClass(SELECT_CHECKBOX_CLASS)
       .appendTo(container);
@@ -833,7 +846,7 @@ export const selectionRowsViewExtender = (
       value: options.value,
       setValue(value, e) {
         if (e?.event?.type === 'keydown') {
-          // @ts-expect-error
+          // @ts-expect-error eventsEngine.trigger is not fully typed
           eventsEngine.trigger(e.element, clickEventName, e);
         }
       },
@@ -843,8 +856,8 @@ export const selectionRowsViewExtender = (
     return groupElement;
   }
 
-  private _attachCheckBoxClickEvent($element) {
-    eventsEngine.on($element, clickEventName, this.createAction(function (e) {
+  public attachCheckBoxClickEvent($element: dxElementWrapper): void {
+    eventsEngine.on($element, clickEventName, this.createAction((e) => {
       const { event } = e;
       const rowIndex = this.getRowIndex($(event.currentTarget).closest(`.${VIEW_CLASSES.row}`));
 
@@ -863,8 +876,7 @@ export const selectionRowsViewExtender = (
   }
 
   protected _update(change: DataChange): void {
-    const that = this;
-    const tableElements = that.getTableElements();
+    const tableElements = this.getTableElements();
 
     if (change.changeType === 'updateSelection') {
       if (tableElements.length === 0 || !change.items) {
@@ -876,7 +888,7 @@ export const selectionRowsViewExtender = (
       each(tableElements, (_, tableElement) => {
         change.itemIndexes.forEach((index) => {
           const changeItem = changeItems[index];
-          const $row = that._getRowElements($(tableElement)).eq(index);
+          const $row = this._getRowElements($(tableElement)).eq(index);
 
           // T108078
           if (!changeItem || !$row.length) {
@@ -890,31 +902,30 @@ export const selectionRowsViewExtender = (
             .toggleClass(ROW_SELECTION_CLASS, needSelectionClass)
             // @ts-expect-error dxCheckBox is added to the renderer at runtime
             .find(`.${SELECT_CHECKBOX_CLASS}`).dxCheckBox('option', 'value', isSelected);
-          that.setAria('selected', String(isSelected), $row);
+          this.setAria('selected', String(isSelected), $row);
         });
       });
 
-      that._updateCheckboxesClass();
+      this._updateCheckboxesClass();
     } else {
       super._update(change);
     }
   }
 
-  protected _createTable() {
-    const that = this;
-    const selectionMode = that.option('selection.mode');
-    const $table = super._createTable.apply(that, arguments as any);
+  protected _createTable(columns?: Column[], isAppend?: boolean): dxElementWrapper {
+    const selectionMode = this.option('selection.mode');
+    const $table = super._createTable(columns, isAppend);
 
     if (selectionMode !== 'none') {
-      if (that.option(SHOW_CHECKBOXES_MODE) === 'onLongTap' || !supportUtils.touch) {
+      if (this.option(SHOW_CHECKBOXES_MODE) === 'onLongTap' || !supportUtils.touch) {
         // TODO Not working timeout by hold when it is larger than other timeouts by hold
-        eventsEngine.on($table, addNamespace(holdEvent.name, 'dxDataGridRowsView'), `.${VIEW_CLASSES.dataRow}`, that.createAction((e) => {
-          processLongTap(that.component, e.event);
+        eventsEngine.on($table, addNamespace(holdEvent.name, 'dxDataGridRowsView'), `.${VIEW_CLASSES.dataRow}`, this.createAction((e) => {
+          processLongTap(this.component, e.event);
 
           e.event.stopPropagation();
         }));
       }
-      eventsEngine.on($table, 'mousedown selectstart', that.createAction((e) => {
+      eventsEngine.on($table, 'mousedown selectstart', this.createAction((e) => {
         const { event } = e;
 
         if (event.shiftKey) {
@@ -926,8 +937,8 @@ export const selectionRowsViewExtender = (
     return $table;
   }
 
-  protected _createRow(row) {
-    const $row = super._createRow.apply(this, arguments as any);
+  protected _createRow(row?: ProcessedItem, tag?: string): dxElementWrapper {
+    const $row = super._createRow(row, tag);
 
     if (row) {
       const { isSelected } = row;
@@ -944,18 +955,17 @@ export const selectionRowsViewExtender = (
     return $row;
   }
 
-  public _rowClickForTreeList(e): void {
+  public _rowClickForTreeList(e: ViewRowEvent): void {
     super._rowClick(e);
   }
 
-  protected _rowClick(e) {
-    const that = this;
+  protected _rowClick(e: ViewRowEvent): void {
     const dxEvent = e.event;
     const isSelectionDisabled = $(dxEvent.target).closest(`.${SELECTION_DISABLED_CLASS}`).length;
 
-    if (!that.isClickableElement($(dxEvent.target))) {
-      if (!isSelectionDisabled && (that.option(SELECTION_MODE) !== 'multiple' || that.option(SHOW_CHECKBOXES_MODE) !== 'always')) {
-        if (that._selectionController.changeItemSelection(e.rowIndex, {
+    if (!this.isClickableElement($(dxEvent.target))) {
+      if (!isSelectionDisabled && (this.option(SELECTION_MODE) !== 'multiple' || this.option(SHOW_CHECKBOXES_MODE) !== 'always')) {
+        if (this._selectionController.changeItemSelection(e.rowIndex, {
           control: isCommandKeyPressed(dxEvent),
           shift: dxEvent.shiftKey,
         })) {
@@ -967,7 +977,7 @@ export const selectionRowsViewExtender = (
     }
   }
 
-  private isClickableElement($target) {
+  private isClickableElement($target: dxElementWrapper): boolean {
     const isCommandSelect = $target.closest(`.${COMMAND_SELECT_CLASS}`).length;
 
     return !!isCommandSelect;
@@ -979,7 +989,7 @@ export const selectionRowsViewExtender = (
     return deferred;
   }
 
-  private _updateCheckboxesClass() {
+  private _updateCheckboxesClass(): void {
     const tableElements = this.getTableElements();
     const isCheckBoxesHidden = this._selectionController.isSelectColumnVisible()
       && !this._selectionController.isSelectionWithCheckboxes();

@@ -4,6 +4,7 @@ import type { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/colum
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import type { ProcessedItem } from '@ts/grids/grid_core/data_controller/types';
 import type { InternalGrid, InternalGridOptions, RowKey } from '@ts/grids/grid_core/types';
+import type { RowsView } from '@ts/grids/grid_core/views/rows_view';
 import type { ViewCellOptions } from '@ts/grids/grid_core/views/types';
 
 export interface SelectionModifierKeys {
@@ -43,6 +44,8 @@ export interface SelectionRowsViewExtension {
   ) => dxElementWrapper;
   attachCheckBoxClickEvent: ($element: dxElementWrapper) => void;
 }
+
+export type SelectionRowsView = RowsView & SelectionRowsViewExtension;
 
 export interface SelectionColumnHeadersViewExtension {
   attachSelectAllCheckBoxClickEvent: ($element: dxElementWrapper) => void;

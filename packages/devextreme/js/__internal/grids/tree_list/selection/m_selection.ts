@@ -115,14 +115,14 @@ SelectionController & TreeListSelectionControllerExtension
     const rowsView = that.component.getView('rowsView');
 
     // @ts-expect-error
-    const $checkbox = rowsView._renderSelectCheckBox($container, {
+    const $checkbox = rowsView.renderSelectCheckBox($container, {
       value: model.row.isSelected,
       row: model.row,
       column: model.column,
     });
 
     // @ts-expect-error
-    rowsView._attachCheckBoxClickEvent($checkbox);
+    rowsView.attachCheckBoxClickEvent($checkbox);
   }
 
   private _getSelectAllNodeKeys() {
