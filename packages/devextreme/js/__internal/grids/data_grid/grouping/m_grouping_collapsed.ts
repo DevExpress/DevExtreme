@@ -6,6 +6,7 @@ import errors from '@js/ui/widget/ui.errors';
 import type DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/data_source_adapter';
 import type { RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
 import { combineFilters } from '@ts/grids/grid_core/filter/utils';
+import { isVirtualPaging } from '@ts/grids/grid_core/utils';
 
 import dataGridCore from '../core';
 import { createGroupFilter } from '../utils';
@@ -353,17 +354,17 @@ export class GroupingHelper extends GroupingHelperCore {
     const totalCount = options.extra && options.extra.totalCount || 0;
     const groupCount = options.extra && options.extra.groupCount || 0;
     const pageSize = this.dataSourceAdapter.pageSize();
-    const isVirtualPaging = this._isVirtualPaging();
+    const virtualPaging = isVirtualPaging(this.dataSourceAdapter.option('scrolling'));
 
     foreachExpandedGroups(this, (groupInfo) => {
       groupInfo.childrenTotalCount = 0;
     });
 
     foreachExpandedGroups(this, (groupInfo, parents) => {
-      const totalOffset = getTotalOffset(parents, isVirtualPaging ? 0 : pageSize, totalItemsCount);
+      const totalOffset = getTotalOffset(parents, virtualPaging ? 0 : pageSize, totalItemsCount);
       let count = groupInfo.count + groupInfo.childrenTotalCount;
 
-      if (!isVirtualPaging) {
+      if (!virtualPaging) {
         count += getContinuationGroupCount(totalOffset, pageSize, count, parents.length - 1);
       }
       if (parents[parents.length - 2]) {
@@ -382,7 +383,7 @@ export class GroupingHelper extends GroupingHelperCore {
 
   private _updatePagingOptions(options, callback?) {
     const that = this;
-    const isVirtualPaging = that._isVirtualPaging();
+    const virtualPaging = isVirtualPaging(that.dataSourceAdapter.option('scrolling'));
     const pageSize = that.dataSourceAdapter.pageSize();
     const skips: any[] = [];
     const takes: any[] = [];
@@ -398,7 +399,7 @@ export class GroupingHelper extends GroupingHelperCore {
         let take;
         let takeCorrection = 0;
         let parentTakeCorrection = 0;
-        const totalOffset = getTotalOffset(parents, isVirtualPaging ? 0 : pageSize, childrenTotalCount);
+        const totalOffset = getTotalOffset(parents, virtualPaging ? 0 : pageSize, childrenTotalCount);
         let continuationGroupCount = 0;
         let skipContinuationGroupCount = 0;
         let groupInfoCount = groupInfo.count + groupInfo.childrenTotalCount;
@@ -410,7 +411,7 @@ export class GroupingHelper extends GroupingHelperCore {
         if (totalOffset <= options.skip + options.take && groupInfoCount) {
           take = options.take;
 
-          if (!isVirtualPaging) {
+          if (!virtualPaging) {
             continuationGroupCount = getContinuationGroupCount(totalOffset, pageSize, groupInfoCount, parents.length - 1);
             groupInfoCount += continuationGroupCount * parents.length;
             childrenGroupInfoCount += continuationGroupCount;

@@ -30,7 +30,7 @@ import type {
   RawItemData,
 } from '../data_source_adapter/types';
 import type { StateStoringDataControllerExtension } from '../state_storing/extenders/state_storing_data_controller';
-import gridCoreUtils from '../utils';
+import gridCoreUtils, { isInfiniteMode, isVirtualMode, isVirtualPaging } from '../utils';
 import type { RowsViewScrollEvent } from '../views/types';
 import {
   CLASSES,
@@ -49,12 +49,11 @@ import type {
   VirtualScrollingRowsView,
 } from './types';
 import { isItemCountableByDataSource } from './utils/items';
-import { isInfiniteMode, isVirtualMode, isVirtualPaging } from './utils/scrolling_mode';
 
 const updateLoading = (that: VirtualScrollingDataSourceAdapter): void => {
   const beginPageIndex = that._virtualScrollController.beginPageIndex(-1);
 
-  if (isVirtualMode(that)) {
+  if (isVirtualMode(that.option('scrolling'))) {
     const viewportSize = that.viewportSize();
     const viewportItemIndex = that.getViewportItemIndex();
     const beginItemIndex = beginPageIndex * that.pageSize();
@@ -176,7 +175,7 @@ export const dataSourceAdapterExtender = (
       return;
     }
 
-    if (!isVirtualMode(this) || this.customLoader.isLoadingAll()) {
+    if (!isVirtualMode(this.option('scrolling')) || this.customLoader.isLoadingAll()) {
       this._isLoading = isLoading;
       super.loadingChangedHandler(isLoading);
     }
@@ -222,7 +221,9 @@ export const dataSourceAdapterExtender = (
       renderAsync = this._renderTime >= this.option('scrolling.renderingThreshold');
     }
 
-    const isVirtualOrNewInfiniteMode = isVirtualMode(this) || (isInfiniteMode(this) && newMode);
+    const scrolling = this.option('scrolling');
+    const isVirtualOrNewInfiniteMode = isVirtualMode(scrolling)
+      || (isInfiniteMode(scrolling) && newMode);
 
     if (
       isVirtualOrNewInfiniteMode
@@ -241,7 +242,10 @@ export const dataSourceAdapterExtender = (
   }
 
   protected _dataSourceTotalCount(isBase?: boolean): number {
-    return this.option(LEGACY_SCROLLING_MODE) === false && isVirtualMode(this) && !isBase
+    const isNewVirtualMode = this.option(LEGACY_SCROLLING_MODE) === false
+      && isVirtualMode(this.option('scrolling'));
+
+    return isNewVirtualMode && !isBase
       ? this._totalCount
       : super._dataSourceTotalCount();
   }
@@ -318,6 +322,7 @@ export const dataSourceAdapterExtender = (
 
     const { storeLoadOptions } = options;
     const dataSource = this._dataSource;
+    const infiniteMode = isInfiniteMode(this.option('scrolling'));
 
     if (operationTypes.reload) {
       this._virtualScrollController.reset();
@@ -327,7 +332,7 @@ export const dataSourceAdapterExtender = (
       updateLoading(this);
       this._isLoaded = true;
 
-      if (isInfiniteMode(this)) {
+      if (infiniteMode) {
         this.pageIndex(0);
         dataSource.pageIndex(0);
         storeLoadOptions.pageIndex = 0;
@@ -340,7 +345,7 @@ export const dataSourceAdapterExtender = (
           storeLoadOptions.skip = this.pageIndex() * this.pageSize();
         }
       }
-    } else if (isInfiniteMode(this) && storeLoadOptions.skip && this._totalCountCorrection < 0) {
+    } else if (infiniteMode && storeLoadOptions.skip && this._totalCountCorrection < 0) {
       storeLoadOptions.skip += this._totalCountCorrection;
     }
 
@@ -486,7 +491,7 @@ export const resizing = (
       // @ts-expect-error _updateMasterDataGridCore is defined by masterDetail
       super._updateMasterDataGridCore(masterDataGrid, masterRowOptions),
     ).done((masterDataGridUpdated) => {
-      const isNewVirtualMode = isVirtualMode(masterDataGrid)
+      const isNewVirtualMode = isVirtualMode(masterDataGrid.option('scrolling'))
         && masterDataGrid.option(LEGACY_SCROLLING_MODE) === false;
 
       if (!masterDataGridUpdated && isNewVirtualMode) {
@@ -508,7 +513,7 @@ export const resizing = (
   }
 
   public resize(): DeferredObj<unknown> {
-    if (!isVirtualMode(this) && !gridCoreUtils.isVirtualRowRendering(this)) {
+    if (!isVirtualMode(this.option('scrolling')) && !gridCoreUtils.isVirtualRowRendering(this)) {
       return super.resize();
     }
 
@@ -602,7 +607,7 @@ export const rowsView = (
     // eslint-disable-next-line @typescript-eslint/init-declarations -- assigned in branches
     let scrollPosition: number;
 
-    if (isVirtualMode(this) || isInfiniteMode(this)) {
+    if (isVirtualPaging(this.option('scrolling'))) {
       const itemSize = Number(this._dataController.getItemSize());
       const itemSizes = this._dataController.getItemSizes() ?? {};
       const itemIndex = pageIndex * pageSize;
@@ -822,7 +827,7 @@ export const rowsView = (
 
     this._dataController.viewportItemSize(rowHeight);
 
-    if (isVirtualMode(this) || gridCoreUtils.isVirtualRowRendering(this)) {
+    if (isVirtualMode(this.option('scrolling')) || gridCoreUtils.isVirtualRowRendering(this)) {
       const isEmptyRows = this._dataController.isEmpty();
       if (isEmptyRows) {
         return;
@@ -864,7 +869,7 @@ export const rowsView = (
   private _updateBottomLoading(): void {
     const showBottomLoading = !this.dataSourceController.hasKnownLastPage()
       && this._dataController.isLoaded()
-      && isVirtualPaging(this);
+      && isVirtualPaging(this.option('scrolling'));
     const $contentElement = this._findContentElement();
     const bottomLoadPanelElement = this._findBottomLoadPanel($contentElement);
 
@@ -900,7 +905,8 @@ export const rowsView = (
         this._saveHorizontalScrollPosition(e.scrollOffset.left);
       }
 
-      const isVirtualRowRendering = isVirtualMode(this) || this.option('scrolling.rowRenderingMode') !== 'standard';
+      const scrolling = this.option('scrolling');
+      const isVirtualRowRendering = isVirtualMode(scrolling) || scrolling?.rowRenderingMode !== 'standard';
 
       if (isVirtualRowRendering && this.option(LEGACY_SCROLLING_MODE) === false) {
         this._updateContentItemSizes();
@@ -914,7 +920,7 @@ export const rowsView = (
 
   protected _needUpdateRowHeight(itemsCount: number): boolean {
     return Boolean(super._needUpdateRowHeight(itemsCount)) || (itemsCount > 0
-      && (isInfiniteMode(this) && !gridCoreUtils.isVirtualRowRendering(this))
+      && (isInfiniteMode(this.option('scrolling')) && !gridCoreUtils.isVirtualRowRendering(this))
     );
   }
 
@@ -974,7 +980,7 @@ export const rowsView = (
       return;
     }
 
-    const needToThrow = !this._hasHeight && isVirtualPaging(this);
+    const needToThrow = !this._hasHeight && isVirtualPaging(this.option('scrolling'));
     if (needToThrow && !this._heightWarningIsThrown) {
       this._heightWarningIsThrown = true;
       errors.log('W1025');

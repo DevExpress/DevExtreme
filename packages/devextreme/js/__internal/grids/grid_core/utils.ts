@@ -42,9 +42,9 @@ import type {
   ExpandCellTemplate,
   ExpandCellTemplateOptions,
   FormatOptions,
+  InternalGridOptions,
   LoadPanelPosition,
   LookupDataSource,
-  OptionsReader,
   RowKey,
   SelectionRange,
   SummaryTextItem,
@@ -73,13 +73,24 @@ const NO_DATA_CLASS = 'nodata';
 const SCROLLING_MODE_INFINITE = 'infinite';
 const SCROLLING_MODE_VIRTUAL = 'virtual';
 const LEGACY_SCROLLING_MODE = 'scrolling.legacyMode';
-const SCROLLING_MODE_OPTION = 'scrolling.mode';
 const ROW_RENDERING_MODE_OPTION = 'scrolling.rowRenderingMode';
 
 const DEFAULT_COLUMN_WIDTH = 50;
 
 export function isDateType(dataType: string | undefined): boolean {
   return dataType === 'date' || dataType === 'datetime';
+}
+
+export function isVirtualMode(scrolling: InternalGridOptions['scrolling']): boolean {
+  return scrolling?.mode === SCROLLING_MODE_VIRTUAL;
+}
+
+export function isInfiniteMode(scrolling: InternalGridOptions['scrolling']): boolean {
+  return scrolling?.mode === SCROLLING_MODE_INFINITE;
+}
+
+export function isVirtualPaging(scrolling: InternalGridOptions['scrolling']): boolean {
+  return isVirtualMode(scrolling) || isInfiniteMode(scrolling);
 }
 
 const getGlobalFormat = (dataType: string): Format | undefined => {
@@ -650,12 +661,10 @@ export default {
     return false;
   },
 
-  isVirtualRowRendering(that: OptionsReader): boolean {
+  isVirtualRowRendering(that: ModuleItem): boolean {
     const rowRenderingMode = that.option(ROW_RENDERING_MODE_OPTION);
-    const isVirtualMode = that.option(SCROLLING_MODE_OPTION) === SCROLLING_MODE_VIRTUAL;
-    const isAppendMode = that.option(SCROLLING_MODE_OPTION) === SCROLLING_MODE_INFINITE;
 
-    if (that.option(LEGACY_SCROLLING_MODE) === false && (isVirtualMode || isAppendMode)) {
+    if (that.option(LEGACY_SCROLLING_MODE) === false && isVirtualPaging(that.option('scrolling'))) {
       return true;
     }
 
