@@ -1,6 +1,6 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import {
-  ChangeDetectorRef, Component, enableProdMode, provideZoneChangeDetection,
+  ChangeDetectorRef, Component, enableProdMode,
 } from '@angular/core';
 import { DxFormModule } from 'devextreme-angular';
 import { DxCheckBoxTypes } from 'devextreme-angular/ui/check-box';
@@ -77,8 +77,4 @@ export class AppComponent {
   }
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);
