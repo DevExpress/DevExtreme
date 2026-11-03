@@ -149,7 +149,6 @@ function App() {
     () => ({
       icon: 'export',
       hint: 'Exporting/Printing',
-      elementAttr: { 'aria-label': 'Exporting/Printing' },
       stylingMode: 'text',
       useSelectMode: false,
       dropDownOptions: { width: 100 },
