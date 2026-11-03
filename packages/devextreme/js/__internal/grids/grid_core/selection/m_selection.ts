@@ -16,6 +16,7 @@ import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { isDefined } from '@js/core/utils/type';
 import type { StoreChange } from '@js/data/store';
+import type { DxEvent } from '@js/events';
 import errors from '@js/ui/widget/ui.errors';
 import supportUtils from '@ts/core/utils/support';
 import type { StoreKey } from '@ts/data/abstract_store';
@@ -24,11 +25,14 @@ import type { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/colum
 import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/columns_controller';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import type { ContextMenuController } from '@ts/grids/grid_core/context_menu/context_menu';
+import type { ContextMenuPreparingOptions } from '@ts/grids/grid_core/context_menu/types';
 import type { CustomLoadResult } from '@ts/grids/grid_core/data_source_adapter/custom_loader';
 import type { RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
 import type { DataFilter } from '@ts/grids/grid_core/filter/types';
 import type { StateStoringController } from '@ts/grids/grid_core/state_storing/state_storing_controller_core';
-import type { ModuleType, OptionChanged, RowKey } from '@ts/grids/grid_core/types';
+import type {
+  InternalGrid, ModuleType, OptionChanged, RowKey,
+} from '@ts/grids/grid_core/types';
 import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
 import type { RowsView } from '@ts/grids/grid_core/views/rows_view';
 import Selection from '@ts/ui/selection/selection';
@@ -52,7 +56,10 @@ import {
 } from './const';
 import type { SelectionChangedArgs, SelectionChangedOptions, SelectionModifierKeys } from './types';
 
-const processLongTap = function (that, dxEvent) {
+const processLongTap = (
+  that: Pick<InternalGrid, 'getView' | 'getController' | 'option'>,
+  dxEvent: DxEvent,
+): void => {
   // TODO getView
   const rowsView = that.getView('rowsView');
   // TODO getController
@@ -660,13 +667,20 @@ export class SelectionController extends modules.Controller {
   }
 }
 
-export const selectionContextMenuControllerExtender = (Base: ModuleType<ContextMenuController>) => class SelectionContextMenuControllerExtender extends Base {
-  protected _contextMenuPrepared(options) {
-    const dxEvent = options.event;
+export const selectionContextMenuControllerExtender = (
+  Base: ModuleType<ContextMenuController>,
+): ModuleType<ContextMenuController> => class SelectionContextMenuControllerExtender extends Base {
+  protected _contextMenuPrepared(options: ContextMenuPreparingOptions): void {
+    const { event, items } = options;
 
-    if (dxEvent.originalEvent && dxEvent.originalEvent.type !== 'dxhold' || options.items && options.items.length > 0) return;
+    if (
+      (event.originalEvent && event.originalEvent.type !== 'dxhold')
+      || !!items?.length
+    ) {
+      return;
+    }
 
-    processLongTap(this, dxEvent);
+    processLongTap(this, event);
   }
 };
 
