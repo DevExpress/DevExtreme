@@ -352,7 +352,9 @@
           "server",
           "hydration",
           "zone",
-          "zoneless"
+          "zoneless",
+          "server-zoneless",
+          "hydration-zoneless"
         ]
       },
       "dependsOn": [
@@ -400,7 +402,9 @@
         "karmaConfig": "karma.conf.js",
         "environments": [
           "server",
-          "hydration"
+          "hydration",
+          "server-zoneless",
+          "hydration-zoneless"
         ]
       },
       "dependsOn": [
@@ -428,6 +432,19 @@
         "default",
         "test",
         "{projectRoot}/tests/dist/**/*"
+      ]
+    },
+    "test:components-server-zoneless-debug": {
+      "executor": "devextreme-nx-infra-plugin:karma-multi-env",
+      "options": {
+        "karmaConfig": "karma.conf.js",
+        "environments": [
+          "server-zoneless"
+        ],
+        "debug": true
+      },
+      "dependsOn": [
+        "build:tests"
       ]
     },
     "test:components-zone-modes": {
@@ -501,7 +518,9 @@
           "server",
           "hydration",
           "zone",
-          "zoneless"
+          "zoneless",
+          "server-zoneless",
+          "hydration-zoneless"
         ]
       },
       "dependsOn": [
@@ -550,6 +569,8 @@
       "{projectRoot}/karma.zone-polyfills.test.shim.js",
       "{projectRoot}/karma.zone.test.shim.js",
       "{projectRoot}/karma.zoneless.test.shim.js",
+      "{projectRoot}/karma.server-zoneless.test.shim.js",
+      "{projectRoot}/karma.hydration-zoneless.test.shim.js",
       "{projectRoot}/karma.zone-testing.module.js",
       "{projectRoot}/karma.zoneless-testing.module.js",
       "{projectRoot}/webpack.test.js",
