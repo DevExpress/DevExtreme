@@ -1,3 +1,5 @@
+export type SelectionStateByKey = Record<string, boolean | undefined>;
+
 export interface TreeListSelectionControllerExtension {
   isRecursiveSelection: () => boolean | undefined;
   updateSelectionState: (options: {

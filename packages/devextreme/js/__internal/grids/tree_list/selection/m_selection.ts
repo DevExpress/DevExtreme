@@ -6,7 +6,8 @@ import type { DeferredObj } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { isDefined } from '@js/core/utils/type';
 import type { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/column_headers';
-import type { ChangedEvent } from '@ts/grids/grid_core/data_source_adapter/types';
+import type { ProcessedItem } from '@ts/grids/grid_core/data_controller/types';
+import type { ChangedEvent, RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
 import { selectionDataControllerExtender } from '@ts/grids/grid_core/selection/extenders/selection_data_controller';
 import type { SelectionController } from '@ts/grids/grid_core/selection/m_selection';
 import {
@@ -17,11 +18,12 @@ import { selectionModule } from '@ts/grids/grid_core/selection/selection_module'
 import type { ModuleType, RowKey } from '@ts/grids/grid_core/types';
 import type { ViewRowEvent } from '@ts/grids/grid_core/views/types';
 import type { TreeListDataController } from '@ts/grids/tree_list/data_controller/data_controller';
+import type { TreeNode } from '@ts/grids/tree_list/data_source_adapter/types';
 import type { TreeListRowsView } from '@ts/grids/tree_list/rows/m_rows';
 import type { SelectionOptions } from '@ts/ui/selection/types';
 
 import treeListCore from '../core';
-import type { TreeListSelectionControllerExtension } from './types';
+import type { SelectionStateByKey, TreeListSelectionControllerExtension } from './types';
 
 const TREELIST_SELECT_CHECKBOX_WRAPPER_CLASS = 'dx-treelist-select-checkbox-container';
 const TREELIST_SELECT_ALL_CLASS = 'dx-treelist-select-all';
@@ -75,14 +77,14 @@ SelectionController & TreeListSelectionControllerExtension
 > => class SelectionControllerTreeListExtender extends Base {
   protected declare _dataController: TreeListDataController;
 
-  private _selectionStateByKey: any;
+  private _selectionStateByKey!: SelectionStateByKey;
 
-  private _isSelectionNormalizing: any;
+  private _isSelectionNormalizing?: boolean;
 
   protected _updateSelectColumn = noop;
 
-  public init() {
-    super.init.apply(this, arguments as any);
+  public init(): void {
+    super.init();
     this._selectionStateByKey = {};
   }
 
@@ -90,43 +92,43 @@ SelectionController & TreeListSelectionControllerExtension
     const config = super._getSelectionConfig();
     const { plainItems } = config;
 
-    config.plainItems = (cached) => {
+    config.plainItems = (cached): RawItemData[] => {
       const cachedStoreData = cached ? this.dataSourceController.getCachedStoreData() : undefined;
 
-      return cachedStoreData ?? plainItems?.().map((item) => item.data) ?? [];
+      return cachedStoreData ?? plainItems?.().map((item: ProcessedItem) => item.data) ?? [];
     };
-    config.isItemSelected = (item) => {
+    config.isItemSelected = (item): boolean => {
       const key = this.dataSourceController.keyOf(item);
 
+      // @ts-expect-error isRowSelected returns undefined for a partially selected node
       return this.isRowSelected(key);
     };
-    config.isSelectableItem = (item) => !!item;
-    config.getItemData = (item) => item;
+    config.isSelectableItem = (item): boolean => !!item;
+    config.getItemData = (item: RawItemData): RawItemData => item;
     config.allowLoadByRange = undefined;
 
     return config;
   }
 
-  private _getSelectAllNodeKeys() {
-    const { component } = this;
-    // @ts-expect-error
-    const root = component.getRootNode();
+  private _getSelectAllNodeKeys(): RowKey[] {
+    const root = this._dataController.getRootNode();
     const cache = {};
-    const keys: any[] = [];
+    const keys: RowKey[] = [];
     const isRecursiveSelection = this.isRecursiveSelection();
 
-    root && treeListCore.foreachNodes(root.children, (node) => {
-      if (node.key !== undefined && (node.visible || isRecursiveSelection)) {
-        keys.push(node.key);
-      }
+    if (root) {
+      treeListCore.foreachNodes(root.children, (node: TreeNode) => {
+        if (node.key !== undefined && (node.visible || isRecursiveSelection)) {
+          keys.push(node.key);
+        }
 
-      if (!node.visible) {
-        return true;
-      }
+        if (!node.visible) {
+          return true;
+        }
 
-      // @ts-expect-error
-      return isRecursiveSelection ? false : component.isRowExpanded(node.key, cache);
-    });
+        return isRecursiveSelection ? false : this._dataController.isRowExpanded(node.key, cache);
+      });
+    }
 
     return keys;
   }
@@ -136,14 +138,13 @@ SelectionController & TreeListSelectionControllerExtension
     const selectedRowKeys = this.option('selectedRowKeys') || [];
     if (selectedRowKeys.length === 0) return false;
 
-    const { component } = this;
     const visibleKeys = this._getSelectAllNodeKeys();
     const isRecursiveSelection = this.isRecursiveSelection();
     let hasIndeterminateState = false;
 
     const selectedVisibleKeys = visibleKeys.filter((key) => {
-      // @ts-expect-error
-      const isRowSelected = component.isRowSelected(key, isRecursiveSelection);
+      const isRowSelected = this.isRowSelected(key, isRecursiveSelection);
+
       if (isRowSelected === undefined) {
         hasIndeterminateState = true;
       }
@@ -485,10 +486,9 @@ SelectionController & TreeListSelectionControllerExtension
     }
   }
 
-  public isRowSelected(key, isRecursiveSelection?) {
-    const result = super.isRowSelected.apply(this, arguments as any);
-
-    isRecursiveSelection = isRecursiveSelection ?? this.isRecursiveSelection();
+  public isRowSelected(key, isRecursive?: boolean): boolean | undefined {
+    const result = super.isRowSelected(key);
+    const isRecursiveSelection = isRecursive ?? this.isRecursiveSelection();
 
     if (!result && isRecursiveSelection) {
       if (key in this._selectionStateByKey) {

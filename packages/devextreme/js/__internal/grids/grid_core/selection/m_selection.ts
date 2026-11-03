@@ -528,7 +528,7 @@ export class SelectionController extends modules.Controller {
     return ['selectRows', 'deselectRows', 'selectRowsByIndexes', 'getSelectedRowKeys', 'getSelectedRowsData', 'clearSelection', 'selectAll', 'deselectAll', 'startSelectionWithCheckboxes', 'stopSelectionWithCheckboxes', 'isRowSelected'];
   }
 
-  public isRowSelected(arg: RowKey | RawItemData): boolean {
+  public isRowSelected(arg: RowKey | RawItemData): boolean | undefined {
     return this._selection.isItemSelected(arg);
   }
 

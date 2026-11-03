@@ -146,7 +146,7 @@ export class TreeListDataController extends DataController {
     return Deferred<unknown>().resolve();
   }
 
-  private getRootNode(): TreeNode | undefined {
+  public getRootNode(): TreeNode | undefined {
     return this.dataSourceController.getAdapter()?.getRootNode();
   }
 
