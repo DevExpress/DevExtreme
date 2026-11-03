@@ -2,7 +2,6 @@ import {
   afterEach, beforeEach, describe, expect, it, jest,
 } from '@jest/globals';
 import type { Properties as DataGridProperties } from '@js/ui/data_grid';
-import { ALL_FOCUSABLE_ELEMENTS_SELECTOR } from '@ts/core/utils/selectors';
 import eventsEngine from '@ts/events/core/events_engine';
 import type { DataGridInstance } from '@ts/grids/grid_core/__tests__/__mock__/helpers/utils';
 import {
@@ -10,6 +9,7 @@ import {
 } from '@ts/grids/grid_core/__tests__/__mock__/helpers/utils';
 import type { KeyDownEventSpies } from '@ts/grids/grid_core/keyboard_navigation/__tests__/helpers/utils';
 import { triggerKeyDown } from '@ts/grids/grid_core/keyboard_navigation/__tests__/helpers/utils';
+import { ALL_FOCUSABLE_ELEMENTS_SELECTOR } from '@ts/grids/new/grid_core/keyboard_navigation/const';
 
 const ALEX = {
   name: 'Alex', phone: '555555', text: 'aaaaaa', room: 1,
