@@ -191,9 +191,7 @@ function findDemos() {
 
   for (const widget of widgets) {
     const widgetDir = join(demosDir, widget.name);
-    let demos = [];
-
-    demos = readdirSync(widgetDir, { withFileTypes: true })
+    const demos = readdirSync(widgetDir, { withFileTypes: true })
       .filter((d) => d.isDirectory());
 
     for (const demo of demos) {

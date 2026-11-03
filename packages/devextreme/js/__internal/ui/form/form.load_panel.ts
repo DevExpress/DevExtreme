@@ -5,8 +5,8 @@ import {
   FORM_LOAD_PANEL_WRAPPER_CLASS,
 } from '@ts/ui/form/constants';
 import { AnimationType } from '@ts/ui/load_indicator';
-import type { LoadPanelProperties } from '@ts/ui/load_panel';
 import type LoadPanel from '@ts/ui/load_panel';
+import type { LoadPanelProperties } from '@ts/ui/load_panel';
 
 export const FORM_LOAD_INDICATOR_SIZE = 120;
 

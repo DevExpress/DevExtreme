@@ -1,5 +1,5 @@
-import type { Properties as ContextMenuProperties } from '@js/ui/context_menu';
 import type dxContextMenu from '@js/ui/context_menu';
+import type { Properties as ContextMenuProperties } from '@js/ui/context_menu';
 import type { RefObject } from 'inferno';
 
 import { CLASSES } from '../const';

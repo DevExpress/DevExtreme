@@ -1,0 +1,35 @@
+diff --git a/lib/core/sourceType.js b/lib/core/sourceType.js
+index fa34d3424eb7789346b185a8f50481193ea05376..99d487a6d93edaf118fee8dc4c92fb50fa24081f 100644
+--- a/lib/core/sourceType.js
++++ b/lib/core/sourceType.js
+@@ -5,7 +5,7 @@
+ sourceType; /**
+              * @param {import('eslint').Rule.RuleContext} context
+              * @returns 'module' | 'script' | 'commonjs' | undefined
+-             */function sourceType(context) {if ('sourceType' in context.parserOptions) {return context.parserOptions.sourceType;}
++             */function sourceType(context) {if (context.parserOptions && 'sourceType' in context.parserOptions) {return context.parserOptions.sourceType;}
+   if ('languageOptions' in context && context.languageOptions) {
+     return context.languageOptions.sourceType;
+   }
+diff --git a/lib/rules/order.js b/lib/rules/order.js
+index 578709bf0b90c1c794ed7f8c046d9b3edaf0ff0a..82e0b88eda73c0769b641dff6467a7cd05394202 100644
+--- a/lib/rules/order.js
++++ b/lib/rules/order.js
+@@ -28,7 +28,7 @@ function getTokensOrCommentsAfter(sourceCode, node, count) {
+   var currentNodeOrToken = node;
+   var result = [];
+   for (var i = 0; i < count; i++) {
+-    currentNodeOrToken = sourceCode.getTokenOrCommentAfter(currentNodeOrToken);
++    currentNodeOrToken = sourceCode.getTokenAfter(currentNodeOrToken, { includeComments: true });
+     if (currentNodeOrToken == null) {
+       break;
+     }
+@@ -41,7 +41,7 @@ function getTokensOrCommentsBefore(sourceCode, node, count) {
+   var currentNodeOrToken = node;
+   var result = [];
+   for (var i = 0; i < count; i++) {
+-    currentNodeOrToken = sourceCode.getTokenOrCommentBefore(currentNodeOrToken);
++    currentNodeOrToken = sourceCode.getTokenBefore(currentNodeOrToken, { includeComments: true });
+     if (currentNodeOrToken == null) {
+       break;
+     }
