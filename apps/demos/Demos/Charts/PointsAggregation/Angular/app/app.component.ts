@@ -1,5 +1,5 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { enableProdMode, Component, provideZoneChangeDetection } from '@angular/core';
+import { enableProdMode, Component } from '@angular/core';
 import { DxChartModule, DxCheckBoxModule, DxSelectBoxModule } from 'devextreme-angular';
 import {
   Service, WeatherIndicators, AggregationInterval, AggregationFunction,
@@ -94,8 +94,4 @@ export class AppComponent {
   }
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);
