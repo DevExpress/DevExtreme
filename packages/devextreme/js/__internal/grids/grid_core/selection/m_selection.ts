@@ -28,7 +28,7 @@ import type { CustomLoadResult } from '@ts/grids/grid_core/data_source_adapter/c
 import type { RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
 import type { DataFilter } from '@ts/grids/grid_core/filter/types';
 import type { StateStoringController } from '@ts/grids/grid_core/state_storing/state_storing_controller_core';
-import type { ModuleType, RowKey } from '@ts/grids/grid_core/types';
+import type { ModuleType, OptionChanged, RowKey } from '@ts/grids/grid_core/types';
 import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
 import type { RowsView } from '@ts/grids/grid_core/views/rows_view';
 import Selection from '@ts/ui/selection/selection';
@@ -50,7 +50,7 @@ import {
   SELECTION_MODE,
   SHOW_CHECKBOXES_MODE,
 } from './const';
-import type { SelectionChangedArgs } from './types';
+import type { SelectionChangedArgs, SelectionChangedOptions } from './types';
 
 const processLongTap = function (that, dxEvent) {
   // TODO getView
@@ -76,30 +76,6 @@ const processLongTap = function (that, dxEvent) {
       selectionController.changeItemSelection(rowIndex, { control: true });
     }
   }
-};
-
-const isSeveralRowsSelected = function (that, selectionFilter) {
-  let keyIndex = 0;
-  const key = that.dataSourceController.store()?.key();
-  const isComplexKey = Array.isArray(key);
-
-  if (!selectionFilter.length) {
-    return false;
-  }
-
-  if (isComplexKey && Array.isArray(selectionFilter[0]) && selectionFilter[1] === 'and') {
-    for (let i = 0; i < selectionFilter.length; i++) {
-      if (Array.isArray(selectionFilter[i])) {
-        if (selectionFilter[i][0] !== key[keyIndex] || selectionFilter[i][1] !== '=') {
-          return true;
-        }
-        keyIndex++;
-      }
-    }
-    return false;
-  }
-
-  return key !== selectionFilter[0];
 };
 
 const selectionCellTemplate = (container, options) => {
@@ -331,7 +307,7 @@ export class SelectionController extends modules.Controller {
   /**
    * @extended: state_storing, TreeList's selection
    */
-  protected _fireSelectionChanged(options?) {
+  protected _fireSelectionChanged(options?: SelectionChangedOptions): void {
     const argument = this.option('selection.deferred')
       ? { selectionFilter: this.option('selectionFilter') }
       : { selectedRowKeys: this.option('selectedRowKeys') };
@@ -358,7 +334,7 @@ export class SelectionController extends modules.Controller {
     const removedItemKeysLength = options.removedItemKeys?.length ?? 0;
 
     const hasSeveralItemsSelected = isDeferredMode
-      ? !!selectionFilter && isSeveralRowsSelected(this, selectionFilter)
+      ? !!selectionFilter && this.isSeveralRowsSelected(selectionFilter)
       : selectedItemKeysLength > 1;
 
     const hasNoItemsSelected = isDeferredMode
@@ -372,15 +348,39 @@ export class SelectionController extends modules.Controller {
     }
   }
 
+  private isSeveralRowsSelected(selectionFilter: SelectionFilter): boolean {
+    let keyIndex = 0;
+    const key = this.dataSourceController.store()?.key();
+    const isComplexKey = Array.isArray(key);
+
+    if (!selectionFilter.length) {
+      return false;
+    }
+
+    if (!isComplexKey || !Array.isArray(selectionFilter[0]) || selectionFilter[1] !== 'and') {
+      return key !== selectionFilter[0];
+    }
+
+    for (const condition of selectionFilter) {
+      if (Array.isArray(condition)) {
+        if (condition[0] !== key[keyIndex] || condition[1] !== '=') {
+          return true;
+        }
+        keyIndex += 1;
+      }
+    }
+    return false;
+  }
+
   /**
    * @extended: TreeList's selection
    */
   protected _updateSelectedItems(e: SelectionChangeEvent<unknown, unknown>): void {
-    const that = this;
-    let selectionChangedOptions;
-    const isDeferredMode = that.option('selection.deferred');
-    const selectionFilter = that._selection.selectionFilter();
-    const dataController = that._dataController;
+    // eslint-disable-next-line @typescript-eslint/init-declarations -- assigned in the if-chain
+    let selectionChangedOptions: SelectionChangedOptions | undefined;
+    const isDeferredMode = this.option('selection.deferred');
+    const selectionFilter = this._selection.selectionFilter();
+    const dataController = this._dataController;
     const items = dataController.items(true);
     const visibleItems = dataController.items();
 
@@ -388,17 +388,18 @@ export class SelectionController extends modules.Controller {
       return;
     }
 
-    const isSelectionWithCheckboxes = that.isSelectionWithCheckboxes();
-    const changedItemIndexes = that.getChangedItemIndexes(items);
-    const visibleChangedItemIndexes = that.getChangedItemIndexes(visibleItems);
+    const isSelectionWithCheckboxes = this.isSelectionWithCheckboxes();
+    const changedItemIndexes = this.getChangedItemIndexes(items);
+    const visibleChangedItemIndexes = this.getChangedItemIndexes(visibleItems);
 
-    that._updateCheckboxesState({
+    this._updateCheckboxesState({
       selectedItemKeys: e.selectedItemKeys,
       removedItemKeys: e.removedItemKeys,
       selectionFilter,
     });
 
-    if (changedItemIndexes.length || (isSelectionWithCheckboxes !== that.isSelectionWithCheckboxes())) {
+    if (changedItemIndexes.length
+      || (isSelectionWithCheckboxes !== this.isSelectionWithCheckboxes())) {
       dataController.updateItems({
         changeType: 'updateSelection',
         itemIndexes: visibleChangedItemIndexes,
@@ -406,12 +407,12 @@ export class SelectionController extends modules.Controller {
     }
 
     if (isDeferredMode) {
-      that.option('selectionFilter', selectionFilter);
+      this.option('selectionFilter', selectionFilter);
       selectionChangedOptions = {};
     } else if (e.addedItemKeys.length || e.removedItemKeys.length) {
-      that._selectedItemsInternalChange = true;
-      that.option('selectedRowKeys', e.selectedItemKeys.slice(0));
-      that._selectedItemsInternalChange = false;
+      this._selectedItemsInternalChange = true;
+      this.option('selectedRowKeys', e.selectedItemKeys.slice(0));
+      this._selectedItemsInternalChange = false;
       selectionChangedOptions = {
         selectedRowsData: e.selectedItems.slice(0),
         selectedRowKeys: e.selectedItemKeys.slice(0),
@@ -420,19 +421,18 @@ export class SelectionController extends modules.Controller {
       };
     }
 
-    that._fireSelectionChanged(selectionChangedOptions);
+    this._fireSelectionChanged(selectionChangedOptions);
   }
 
-  private getChangedItemIndexes(items) {
-    const that = this;
-    const itemIndexes: any[] = [];
+  private getChangedItemIndexes(items: ProcessedItem[]): number[] {
+    const itemIndexes: number[] = [];
     const isDeferredSelection = this.option('selection.deferred');
 
-    for (let i = 0, { length } = items; i < length; i++) {
+    for (let i = 0, { length } = items; i < length; i += 1) {
       const row = items[i];
-      const isItemSelected = that.isRowSelected(isDeferredSelection ? row.data : row.key);
+      const isItemSelected = this.isRowSelected(isDeferredSelection ? row.data : row.key);
 
-      if (that._selection.isDataItem(row) && row.isSelected !== isItemSelected) {
+      if (this._selection.isDataItem(row) && row.isSelected !== isItemSelected) {
         itemIndexes.push(i);
       }
     }
@@ -440,16 +440,15 @@ export class SelectionController extends modules.Controller {
     return itemIndexes;
   }
 
-  protected callbackNames() {
+  protected callbackNames(): string[] {
     return ['selectionChanged'];
   }
 
-  public optionChanged(args) {
+  public optionChanged(args: OptionChanged): void {
     super.optionChanged(args);
 
     const selectionOptionsExists = !!this._selection?.options;
 
-    // eslint-disable-next-line default-case
     switch (args.name) {
       case 'selection': {
         const oldSelectionMode = this._selectionMode;
@@ -462,16 +461,14 @@ export class SelectionController extends modules.Controller {
 
         if (args.fullName !== 'selection.showCheckBoxesMode') {
           const selectionMode = this._selectionMode;
-          let selectedRowKeys: any = this.option('selectedRowKeys');
+          const isModeChanged = oldSelectionMode !== selectionMode;
+          let selectedRowKeys = this.option('selectedRowKeys') ?? [];
 
-          if (oldSelectionMode !== selectionMode) {
-            if (selectionMode === 'single') {
-              if (selectedRowKeys.length > 1) {
-                selectedRowKeys = [selectedRowKeys[0]];
-              }
-            } else if (selectionMode !== 'multiple') {
-              selectedRowKeys = [];
-            }
+          if (isModeChanged && selectionMode === 'single' && selectedRowKeys.length > 1) {
+            selectedRowKeys = [selectedRowKeys[0]];
+          }
+          if (isModeChanged && selectionMode !== 'single' && selectionMode !== 'multiple') {
+            selectedRowKeys = [];
           }
 
           this.selectRows(selectedRowKeys).always(() => {
@@ -488,17 +485,21 @@ export class SelectionController extends modules.Controller {
         break;
       }
       case 'selectionFilter':
+        // @ts-expect-error poorly typed SelectionOptions
         this._selection.selectionFilter(args.value);
         args.handled = true;
         break;
       case 'selectedRowKeys': {
         const value = args.value || [];
-        if (Array.isArray(value) && !this._selectedItemsInternalChange && (this.component.getDataSource() || !value.length)) {
+        if (Array.isArray(value) && !this._selectedItemsInternalChange
+          && (this.component.getDataSource() || !value.length)) {
           this.selectRows(value);
         }
         args.handled = true;
         break;
       }
+      default:
+        break;
     }
   }
 
