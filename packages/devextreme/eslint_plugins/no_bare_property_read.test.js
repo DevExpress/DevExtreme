@@ -20,7 +20,6 @@ const tsRuleTester = new RuleTester({
 
 const bareRead = (count = 1) => new Array(count).fill({
     messageId: 'bareRead',
-    type: 'MemberExpression',
 });
 
 ruleTester.run('no-bare-property-read', rule, {
