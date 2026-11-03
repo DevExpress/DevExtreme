@@ -91,8 +91,8 @@ QUnit.module('Headers', {
             const $cellElement = $(container);
 
             $cellElement.addClass('dx-editor-cell');
-            this.columnHeadersView._renderSelectAllCheckBox($cellElement, column);
-            this.columnHeadersView._attachSelectAllCheckBoxClickEvent($cellElement);
+            this.columnHeadersView.renderSelectAllCheckBox($cellElement, column);
+            this.columnHeadersView.attachSelectAllCheckBoxClickEvent($cellElement);
         }.bind(this);
     },
     afterEach: function() {

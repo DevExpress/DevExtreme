@@ -1,4 +1,5 @@
 /* eslint-disable spellcheck/spell-checker */
+import type { SelectAllMode } from '@js/common';
 import type {
   ColumnCustomizeTextArg, GridBase, GridBaseOptions, SelectionBase, SelectionColumnDisplayMode,
 } from '@js/common/grids';
@@ -10,6 +11,7 @@ import type { Format } from '@js/localization';
 import type {
   Properties as DataGridOptions,
   Scrolling as DataGridScrolling,
+  SelectionSensitivity,
   SummaryTotalItem,
 } from '@js/ui/data_grid';
 import type { Properties as TreeListdOptions, Scrolling as TreeListScrolling } from '@js/ui/tree_list';
@@ -209,6 +211,11 @@ type TemporarlyOptionsTakenFromTreeList = Pick<TreeListdOptions<unknown, RowKey>
 interface InternalSelection extends SelectionBase {
   alwaysSelectByShift?: boolean;
   showCheckBoxesMode?: SelectionColumnDisplayMode;
+  deferred?: boolean;
+  selectAllMode?: SelectAllMode;
+  sensitivity?: SelectionSensitivity;
+  recursive?: boolean;
+  maxFilterLengthInRequest?: number;
 }
 
 export interface InternalGridOptions extends
