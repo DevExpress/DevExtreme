@@ -108,7 +108,8 @@ export default class SchedulerCalendar extends Widget<HeaderCalendarOptions> {
 
     switch (name) {
       case 'value':
-        this.calendar?.option('value', value);
+      case 'firstDayOfWeek':
+        this.calendar?.option(name, value);
         break;
       default:
         break;
