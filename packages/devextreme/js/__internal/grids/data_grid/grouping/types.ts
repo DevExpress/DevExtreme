@@ -1,6 +1,6 @@
 import type { DeferredObj } from '@js/core/utils/deferred';
 import type { RowExpandingEvent } from '@js/ui/data_grid';
-import type { RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
+import type { LoadOperation, RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
 import type { ExecuteActionArgs } from '@ts/grids/grid_core/modules/types';
 import type { RowKey } from '@ts/grids/grid_core/types';
 
@@ -19,12 +19,15 @@ export interface GroupingDataControllerExtension {
   collapseAll(groupIndex: number): void;
 }
 
-export interface GroupItemData {
+// eslint-disable-next-line @typescript-eslint/consistent-type-definitions -- fits RawItemData
+export type GroupItemData = {
   key: unknown;
   items: GroupItemData[] | null;
   isContinuation?: boolean;
+  isContinuationOnNextPage?: boolean;
+  collapsedItems?: GroupItemData[] | null;
   count?: number;
-}
+};
 
 // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
 export type GroupItem = {
@@ -45,6 +48,34 @@ export interface GroupInfoData {
   isExpanded: boolean;
   isPending?: boolean;
 }
+
+export interface GroupInfo {
+  key: unknown;
+  offset: number;
+  data: GroupInfoData;
+  children: GroupInfoLevel;
+}
+
+export type GroupInfoLevel = GroupInfo[] & {
+  hash?: Record<string, GroupInfo>;
+};
+
+export type ForeachGroupsResult = false | DeferredObj<unknown> | undefined;
+
+export interface GroupingLoadOperation extends LoadOperation {
+  collapsedGroups?: GroupInfoData[];
+  collapsedItemsCount?: number;
+  skipFirstItem?: boolean;
+  extra?: LoadOperation['extra'] & {
+    _totalCountWasIncreasedByCollapsedItems?: boolean;
+  };
+}
+
+export type ForeachGroupsCallback = (
+  groupInfo: GroupInfoData,
+  parents: GroupInfoData[],
+  // eslint-disable-next-line @typescript-eslint/no-invalid-void-type -- may return nothing
+) => ForeachGroupsResult | void;
 
 export interface ProcessGroupItemsOptions {
   data?: RawItemData;

@@ -1,5 +1,6 @@
 import type { GroupingDataSourceAdapter } from '../m_grouping';
 import { GroupingHelper } from '../m_grouping_expanded';
+import type { GroupingLoadOperation } from '../types';
 
 export const createDataSourceAdapterStub = (): GroupingDataSourceAdapter => ({
   option: (): undefined => undefined,
@@ -8,6 +9,6 @@ export const createDataSourceAdapterStub = (): GroupingDataSourceAdapter => ({
 /** Subclass that exposes the protected handleDataLoading method for testing. */
 export class GroupingHelperMock extends GroupingHelper {
   public testHandleDataLoading(options: unknown): void {
-    this.handleDataLoading(options);
+    this.handleDataLoading(options as GroupingLoadOperation);
   }
 }
