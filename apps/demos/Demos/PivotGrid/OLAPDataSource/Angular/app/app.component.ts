@@ -1,5 +1,5 @@
 import {
-  Component, enableProdMode, provideZoneChangeDetection,
+  Component, enableProdMode,
 } from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
 import { DxPivotGridModule } from 'devextreme-angular';
@@ -47,8 +47,4 @@ export class AppComponent {
   }
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);
