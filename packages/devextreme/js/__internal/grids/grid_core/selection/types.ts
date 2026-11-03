@@ -1,5 +1,6 @@
 import type { SelectionChangedInfo } from '@js/common/grids';
 import type { dxElementWrapper } from '@js/core/renderer';
+import type { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/column_headers';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import type { ProcessedItem } from '@ts/grids/grid_core/data_controller/types';
 import type { InternalGrid, InternalGridOptions, RowKey } from '@ts/grids/grid_core/types';
@@ -49,3 +50,5 @@ export interface SelectionColumnHeadersViewExtension {
   // eslint-disable-next-line @typescript-eslint/method-signature-style -- overridden by methods
   renderSelectAllCheckBox($container: dxElementWrapper, column?: Column): dxElementWrapper;
 }
+
+export type SelectionColumnHeadersView = ColumnHeadersView & SelectionColumnHeadersViewExtension;

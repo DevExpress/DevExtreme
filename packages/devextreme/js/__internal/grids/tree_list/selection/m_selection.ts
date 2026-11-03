@@ -601,12 +601,12 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
     return resultTemplate;
   }
 
-  protected _renderSelectAllCheckBox(
+  public override renderSelectAllCheckBox(
     $container: dxElementWrapper,
   ): dxElementWrapper {
     const $checkboxWrapper = $('<div>')
       .addClass(TREELIST_SELECT_CHECKBOX_WRAPPER_CLASS);
-    const $checkbox = this._createSelectAllCheckboxElement();
+    const $checkbox = this.createSelectAllCheckboxElement();
 
     $checkbox.appendTo($checkboxWrapper);
     // NOTE: It's important to have checkbox as first child inside <td>
@@ -619,7 +619,7 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
   private renderSelectAll($cell, options) {
     $cell.addClass(TREELIST_SELECT_ALL_CLASS);
 
-    this._renderSelectAllCheckBox($cell);
+    this.renderSelectAllCheckBox($cell);
   }
 
   protected _isSortableElement($target) {

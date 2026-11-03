@@ -6,6 +6,7 @@ import { addNamespace, isCommandKeyPressed } from '@js/common/core/events/utils/
 import messageLocalization from '@js/common/core/localization/message';
 import type { LoadOptions } from '@js/common/data.types';
 import { applyBatch } from '@js/common/data/array_utils';
+import type { DxElement } from '@js/core/element';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import type { Callback } from '@js/core/utils/callbacks';
@@ -54,7 +55,13 @@ import {
   SELECTION_MODE,
   SHOW_CHECKBOXES_MODE,
 } from './const';
-import type { SelectionChangedArgs, SelectionChangedOptions, SelectionModifierKeys } from './types';
+import type {
+  SelectionChangedArgs,
+  SelectionChangedOptions,
+  SelectionColumnHeadersView,
+  SelectionHeaderCellOptions,
+  SelectionModifierKeys,
+} from './types';
 
 const processLongTap = (
   that: Pick<InternalGrid, 'getView' | 'getController' | 'option'>,
@@ -97,15 +104,18 @@ const selectionCellTemplate = (container, options) => {
   rowsView.renderSelectCheckBoxContainer($(container), options);
 };
 
-const selectionHeaderTemplate = (container, options) => {
-  const { column } = options;
+const selectionHeaderTemplate = (
+  container: DxElement,
+  options: SelectionHeaderCellOptions,
+): void => {
+  const { column, component } = options;
   const $cellElement = $(container);
   // TODO getView
-  const columnHeadersView = options.component.getView('columnHeadersView');
+  const columnHeadersView = component.getView('columnHeadersView') as SelectionColumnHeadersView;
 
   $cellElement.addClass(EDITOR_CELL_CLASS);
-  columnHeadersView._renderSelectAllCheckBox($cellElement, column);
-  columnHeadersView._attachSelectAllCheckBoxClickEvent($cellElement);
+  columnHeadersView.renderSelectAllCheckBox($cellElement, column);
+  columnHeadersView.attachSelectAllCheckBoxClickEvent($cellElement);
 };
 
 export class SelectionController extends modules.Controller {
@@ -684,13 +694,15 @@ export const selectionContextMenuControllerExtender = (
   }
 };
 
-export const selectionColumnHeadersViewExtender = (Base: ModuleType<ColumnHeadersView>) => class SelectionColumnHeadersViewExtender extends Base {
-  public init() {
+export const selectionColumnHeadersViewExtender = (
+  Base: ModuleType<ColumnHeadersView>,
+): ModuleType<SelectionColumnHeadersView> => class SelectionColumnHeadersViewExtender extends Base {
+  public init(): void {
     super.init();
     this._selectionController.selectionChanged.add(this._updateSelectAllValue.bind(this));
   }
 
-  private _isSelectAllCheckBoxVisible() {
+  private _isSelectAllCheckBoxVisible(): boolean {
     const isEmptyData = this._dataController.isEmpty();
     const allowSelectAll = this.option('selection.allowSelectAll');
     const isSelectAll = this._selectionController.isSelectAll();
@@ -698,13 +710,11 @@ export const selectionColumnHeadersViewExtender = (Base: ModuleType<ColumnHeader
     return !isEmptyData && (allowSelectAll || isSelectAll !== false);
   }
 
-  private _updateSelectAllValue() {
-    const that = this;
-    const $element = that.element();
+  private _updateSelectAllValue(): void {
+    const $element = this.element();
     const $editor = $element?.find(`.${SELECT_CHECKBOX_CLASS}`);
 
-    // @ts-expect-error $editor is set whenever $element is
-    if ($element && $editor.length && this.option('selection.mode') === 'multiple') {
+    if ($element && $editor?.length && this.option('selection.mode') === 'multiple') {
       const selectAllValue = this._selectionController.isSelectAll();
       const isVisible = this._isSelectAllCheckBoxVisible();
 
@@ -716,7 +726,7 @@ export const selectionColumnHeadersViewExtender = (Base: ModuleType<ColumnHeader
     }
   }
 
-  protected _handleDataChanged(e) {
+  protected _handleDataChanged(e: DataChange): void {
     super._handleDataChanged(e);
 
     if (!e || e.changeType === 'refresh' || (e.repaintChangesOnly && e.changeType === 'update')) {
@@ -726,17 +736,17 @@ export const selectionColumnHeadersViewExtender = (Base: ModuleType<ColumnHeader
     }
   }
 
-  protected _renderSelectAllCheckBox(
+  public renderSelectAllCheckBox(
     $container: dxElementWrapper,
     column?: Column,
   ): dxElementWrapper {
-    const $checkbox = this._createSelectAllCheckboxElement(column);
+    const $checkbox = this.createSelectAllCheckboxElement(column);
     $checkbox.appendTo($container);
 
     return $checkbox;
   }
 
-  protected _createSelectAllCheckboxElement(
+  public createSelectAllCheckboxElement(
     column?: Column,
   ): dxElementWrapper {
     const $groupElement = $('<div>')
@@ -764,8 +774,10 @@ export const selectionColumnHeadersViewExtender = (Base: ModuleType<ColumnHeader
 
         if (e.value && !allowSelectAll) {
           e.component.option('value', false);
+        } else if (e.value) {
+          this._selectionController.selectAll();
         } else {
-          e.value ? this._selectionController.selectAll() : this._selectionController.deselectAll();
+          this._selectionController.deselectAll();
         }
 
         e.event.preventDefault();
@@ -775,7 +787,7 @@ export const selectionColumnHeadersViewExtender = (Base: ModuleType<ColumnHeader
     return $groupElement;
   }
 
-  private _attachSelectAllCheckBoxClickEvent($element) {
+  public attachSelectAllCheckBoxClickEvent($element: dxElementWrapper): void {
     eventsEngine.on($element, clickEventName, this.createAction((e) => {
       const { event } = e;
 
@@ -785,7 +797,7 @@ export const selectionColumnHeadersViewExtender = (Base: ModuleType<ColumnHeader
       }
 
       if (!$(event.target).closest(`.${SELECT_CHECKBOX_CLASS}`).length) {
-        // @ts-expect-error
+        // @ts-expect-error eventsEngine.trigger is not fully typed
         eventsEngine.trigger($(event.currentTarget).children(`.${SELECT_CHECKBOX_CLASS}`), clickEventName);
       }
       event.preventDefault();
