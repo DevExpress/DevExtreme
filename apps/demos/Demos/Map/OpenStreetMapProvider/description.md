@@ -1,4 +1,4 @@
-The DevExtreme [Map](/Documentation/Guide/UI_Components/Map/Overview/) supports [OpenStreetMap](https://www.openstreetmap.org/) provider (OSM). This [provider](/Documentation/ApiReference/UI_Components/dxMap/Configuration/#provider) allows you to connect the Map to OSM-based tile, geocoding, and routing services. The provider supports core Map features such as markers, routes, and tooltips.
+The DevExtreme [Map](/Documentation/Guide/UI_Components/Map/Overview/) supports the [OpenStreetMap](https://www.openstreetmap.org/) provider (OSM). This [provider](/Documentation/ApiReference/UI_Components/dxMap/Configuration/#provider) allows you to connect the Map to OSM-based tile, geocoding, and routing services. The provider supports core Map features such as markers, routes, and tooltips.
 
 This demo uses [Stadia Maps](https://stadiamaps.com/) services to display map tiles and calculate a route between four markers.
 
