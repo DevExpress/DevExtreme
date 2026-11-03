@@ -1,5 +1,5 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { ViewChild, Component, enableProdMode, Pipe, PipeTransform, provideZoneChangeDetection } from '@angular/core';
+import { ViewChild, Component, enableProdMode, Pipe, PipeTransform } from '@angular/core';
 import {
   DxSchedulerModule,
   DxSchedulerComponent,
@@ -74,8 +74,4 @@ export class AppComponent {
   getMovieById = (id: string | number) => Query(this.moviesData).filter(['id', '=', id]).toArray()[0] as MovieData;
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

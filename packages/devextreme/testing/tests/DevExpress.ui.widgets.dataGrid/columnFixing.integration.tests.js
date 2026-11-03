@@ -439,7 +439,7 @@ QUnit.module('Fixed columns', baseModuleConfig, () => {
 
             // assert
             const isValidEditCommandCell = !useLegacyKeyboardNavigation;
-            assert.equal(navigationController._isCellValid(commandCell.getElement()), isValidEditCommandCell, 'editCommand cell validation');
+            assert.equal(navigationController.isCellValid(commandCell.getElement()), isValidEditCommandCell, 'editCommand cell validation');
         });
     });
 

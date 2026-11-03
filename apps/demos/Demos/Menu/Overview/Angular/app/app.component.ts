@@ -1,5 +1,5 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import { Component, enableProdMode } from '@angular/core';
 import { DxSelectBoxModule, DxCheckBoxModule } from 'devextreme-angular';
 import { DxMenuModule, type DxMenuTypes } from 'devextreme-angular/ui/menu';
 
@@ -51,8 +51,4 @@ export class AppComponent {
   }
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

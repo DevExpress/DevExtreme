@@ -1,5 +1,5 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import { Component, enableProdMode } from '@angular/core';
 import { DxButtonGroupModule, type DxButtonGroupTypes } from 'devextreme-angular/ui/button-group';
 import { DxCheckBoxModule, type DxCheckBoxTypes } from 'devextreme-angular/ui/check-box';
 import { DxStepperModule, type DxStepperTypes } from 'devextreme-angular/ui/stepper';
@@ -63,7 +63,6 @@ export class AppComponent {
 
 bootstrapApplication(AppComponent, {
   providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
     AppService,
   ],
 });

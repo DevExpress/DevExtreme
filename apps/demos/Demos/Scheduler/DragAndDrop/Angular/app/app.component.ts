@@ -1,5 +1,5 @@
 import {
-  ChangeDetectorRef, Component, enableProdMode, provideZoneChangeDetection,
+  Component, enableProdMode, signal, WritableSignal,
 } from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
 import { DxSchedulerModule, DxDraggableModule, DxScrollViewModule } from 'devextreme-angular';
@@ -25,33 +25,28 @@ if (!/localhost/.test(document.location.host)) {
 export class AppComponent {
   draggingGroupName = 'appointmentsGroup';
 
-  tasks: Task[];
+  tasks: WritableSignal<Task[]>;
 
-  appointments: Appointment[];
+  appointments: WritableSignal<Appointment[]>;
 
   currentDate: Date = new Date(2021, 3, 26);
 
-  constructor(service: Service, private changeDetectorRef: ChangeDetectorRef) {
-    this.tasks = service.getTasks();
-    this.appointments = service.getAppointments();
+  constructor(service: Service) {
+    this.tasks = signal(service.getTasks());
+    this.appointments = signal(service.getAppointments());
   }
 
   onAppointmentRemove = (e: DxSchedulerTypes.AppointmentDraggingRemoveEvent) => {
-    const index = this.appointments.indexOf(e.itemData);
-
-    if (index >= 0) {
-      this.appointments.splice(index, 1);
-      this.tasks.push(e.itemData);
-      this.changeDetectorRef.markForCheck();
+    if (this.appointments().includes(e.itemData)) {
+      this.appointments.update((items) => items.filter((item) => item !== e.itemData));
+      this.tasks.update((items) => [...items, e.itemData]);
     }
   };
 
   onAppointmentAdd = (e: DxSchedulerTypes.AppointmentDraggingAddEvent) => {
-    const index = this.tasks.indexOf(e.fromData);
-
-    if (index >= 0) {
-      this.tasks.splice(index, 1);
-      this.appointments.push(e.itemData);
+    if (this.tasks().includes(e.fromData)) {
+      this.tasks.update((items) => items.filter((item) => item !== e.fromData));
+      this.appointments.update((items) => [...items, e.itemData]);
     }
   };
 
@@ -70,8 +65,4 @@ export class AppComponent {
   }
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

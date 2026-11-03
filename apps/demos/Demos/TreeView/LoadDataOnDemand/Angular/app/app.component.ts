@@ -1,4 +1,4 @@
-import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import { Component, enableProdMode } from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
 import { HttpClient, provideHttpClient, withFetch } from '@angular/common/http';
 import { lastValueFrom } from 'rxjs';
@@ -31,7 +31,6 @@ export class AppComponent {
 
 bootstrapApplication(AppComponent, {
   providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
     provideHttpClient(withFetch()),
   ],
 });

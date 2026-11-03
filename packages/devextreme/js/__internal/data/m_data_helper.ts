@@ -1,7 +1,7 @@
 import { DataSource } from '@js/common/data/data_source/data_source';
 import { normalizeDataSourceOptions } from '@js/common/data/data_source/utils';
 import { extend } from '@js/core/utils/extend';
-import DataController from '@ts/ui/collection/m_data_controller';
+import DataController from '@ts/ui/collection/data_controller';
 
 const DATA_SOURCE_OPTIONS_METHOD = '_dataSourceOptions';
 const DATA_SOURCE_CHANGED_METHOD = '_dataSourceChangedHandler';

@@ -1,7 +1,6 @@
 import type { dxElementWrapper } from '@js/core/renderer';
 import type { DxEvent } from '@js/events';
 import type { KeyboardKeyDownEvent } from '@ts/events/core/keyboard_processor';
-import type { GroupingDataControllerExtension } from '@ts/grids/data_grid/grouping/types';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
 import type { ProcessedItem } from '@ts/grids/grid_core/data_controller/types';
@@ -15,11 +14,6 @@ export type NavigationKeyCode = NavigationDirection | 'upArrow' | 'downArrow';
 export type NavigationElementType = 'cell' | 'row';
 
 export type DirectionCode = 'prevRow' | 'nextRow' | 'nextInRow' | 'previousInRow';
-
-export interface FocusedCellPosition {
-  columnIndex: number;
-  rowIndex: number;
-}
 
 export interface ScrollOffset {
   left?: number;
@@ -39,10 +33,8 @@ export interface KeyDownEvent {
 
 export type StartEditingEvent = KeyboardKeyDownEvent | DxEvent<KeyboardEvent>;
 
-/** @architectureLeak data_grid/grouping: Enter expands rows with changeRowExpand() */
 export type KeyboardNavigationDataController = DataController
-  & Partial<VirtualScrollingDataControllerExtension>
-  & GroupingDataControllerExtension;
+  & Partial<VirtualScrollingDataControllerExtension>;
 
 export type RenderCompletedChange = ViewDataChange & {
   virtualColumnsScrolling?: boolean;

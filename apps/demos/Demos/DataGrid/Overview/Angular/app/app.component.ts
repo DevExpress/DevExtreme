@@ -1,8 +1,8 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode } from '@angular/core';
+import { Component, enableProdMode, inject } from '@angular/core';
 import { DxBulletModule } from 'devextreme-angular';
 import { DxDataGridModule, DxDataGridTypes } from 'devextreme-angular/ui/data-grid';
-import { Sale, Service } from './app.service';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -19,22 +19,18 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  sales: Sale[];
+  readonly sales = inject(Service).getSales();
 
-  collapsed = false;
+  private collapsed = false;
 
-  contentReady = (e: DxDataGridTypes.ContentReadyEvent) => {
+  readonly contentReady = (e: DxDataGridTypes.ContentReadyEvent) => {
     if (!this.collapsed) {
       this.collapsed = true;
       e.component.expandRow(['EnviroCare']);
     }
   };
 
-  customizeTooltip = ({ originalValue }: Record<string, string>) => ({ text: `${parseInt(originalValue)}%` });
-
-  constructor(service: Service) {
-    this.sales = service.getSales();
-  }
+  readonly customizeTooltip = ({ originalValue }: Record<string, string>) => ({ text: `${parseInt(originalValue)}%` });
 }
 
 bootstrapApplication(AppComponent);

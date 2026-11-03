@@ -1,5 +1,5 @@
 import {
-  AfterViewInit, Component, Pipe, PipeTransform, enableProdMode, ViewChild, provideZoneChangeDetection, ChangeDetectorRef,
+  AfterViewInit, Component, Pipe, PipeTransform, enableProdMode, ViewChild, ChangeDetectorRef,
 } from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
 import { DxListModule, DxCheckBoxModule } from 'devextreme-angular';
@@ -106,8 +106,4 @@ export class AppComponent implements AfterViewInit {
   }
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

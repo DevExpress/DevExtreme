@@ -1,5 +1,5 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, ViewChild, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import { Component, ViewChild, enableProdMode } from '@angular/core';
 import { DxRangeSelectorModule } from 'devextreme-angular';
 import { VisualRange } from 'devextreme-angular/common/charts';
 import { DxChartModule, DxChartComponent } from 'devextreme-angular/ui/chart';
@@ -31,8 +31,4 @@ export class AppComponent {
   }
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

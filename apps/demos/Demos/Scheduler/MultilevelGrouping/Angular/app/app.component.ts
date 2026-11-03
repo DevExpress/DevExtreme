@@ -1,5 +1,5 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import { Component, enableProdMode } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DxSchedulerModule } from 'devextreme-angular';
 import { DxSchedulerTypes } from 'devextreme-angular/ui/scheduler';
@@ -18,16 +18,10 @@ if (!/localhost/.test(document.location.host)) {
   enableProdMode();
 }
 
-let modulePrefix = '';
-// @ts-ignore
-if (window && window.config?.packageConfigPaths) {
-  modulePrefix = '/app';
-}
-
 @Component({
   selector: 'demo-app',
-  templateUrl: `.${modulePrefix}/app.component.html`,
-  styleUrls: [`.${modulePrefix}/app.component.css`],
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css'],
   providers: [Service],
   imports: [
     CommonModule,
@@ -208,8 +202,4 @@ export class AppComponent {
   }
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

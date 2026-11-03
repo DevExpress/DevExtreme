@@ -488,7 +488,6 @@ class SelectBox<
   }
 
   _getActualSearchValue(): string | null {
-    // @ts-expect-error fix argument type in m_data_controller.ts
     return this._dataController.searchValue() as string | null;
   }
 
