@@ -1,5 +1,5 @@
 import {
-  ChangeDetectorRef, Component, enableProdMode, provideZoneChangeDetection,
+  ChangeDetectorRef, Component, enableProdMode,
 } from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
 import { DxPopupModule, DxScrollViewModule } from 'devextreme-angular';
@@ -48,8 +48,4 @@ export class AppComponent {
   }
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

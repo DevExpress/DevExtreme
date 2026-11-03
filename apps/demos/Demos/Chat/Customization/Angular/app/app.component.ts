@@ -1,5 +1,5 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import { Component, enableProdMode } from '@angular/core';
 import { AsyncPipe } from '@angular/common';
 import { DxChatModule, DxCheckBoxModule, DxSelectBoxModule } from 'devextreme-angular';
 import { DxChatTypes } from 'devextreme-angular/ui/chat';
@@ -48,7 +48,6 @@ export class AppComponent {
 
 bootstrapApplication(AppComponent, {
   providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
     AppService,
   ],
 });
