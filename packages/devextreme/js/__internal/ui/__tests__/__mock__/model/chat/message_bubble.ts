@@ -59,15 +59,13 @@ export class MessageBubbleModel {
     const title = this.getToolCallsElement()
       ?.querySelector(`.${CHAT_TOOL_CALL_CLASSES.header}`);
 
-    return title?.firstElementChild?.textContent ?? null;
+    return title?.textContent ?? null;
   }
 
-  public getToolCallsTitleErrorTagText(): string | null {
-    const tag = this.getToolCallsElement()?.querySelector(
+  public hasToolCallsTitleErrorTag(): boolean {
+    return !!this.getToolCallsElement()?.querySelector(
       `.${CHAT_TOOL_CALL_CLASSES.header} .${CHAT_TOOL_CALL_CLASSES.errorTag}`,
     );
-
-    return tag?.textContent ?? null;
   }
 
   public getToolCalls(): ToolCallModel[] {
