@@ -194,7 +194,7 @@ export class TreeListDataController extends DataController {
     return this.dataSourceController.getAdapter()?.getChildNodeKeys(parentKey);
   }
 
-  private loadDescendants(
+  public loadDescendants(
     keys?: RowKey | RowKey[],
     childrenOnly?: boolean,
   ): DeferredObj<unknown> | undefined {

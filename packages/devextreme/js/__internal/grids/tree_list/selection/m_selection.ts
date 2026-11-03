@@ -6,7 +6,6 @@ import type { DeferredObj } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { isDefined } from '@js/core/utils/type';
 import type { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/column_headers';
-import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
 import type { ChangedEvent } from '@ts/grids/grid_core/data_source_adapter/types';
 import { selectionDataControllerExtender } from '@ts/grids/grid_core/selection/extenders/selection_data_controller';
 import type { SelectionController } from '@ts/grids/grid_core/selection/m_selection';
@@ -33,8 +32,8 @@ const nodeExists = function (array: RowKey[], currentKey: RowKey): boolean {
 };
 
 const data = (
-  Base: ModuleType<DataController>,
-): ModuleType<DataController> => class DataSelectionTreeListExtender
+  Base: ModuleType<TreeListDataController>,
+): ModuleType<TreeListDataController> => class DataSelectionTreeListExtender
   extends selectionDataControllerExtender(Base) {
   // eslint-disable-next-line @typescript-eslint/prefer-readonly
   private _selectionController!: SelectionController & TreeListSelectionControllerExtension;
@@ -50,16 +49,17 @@ const data = (
     super.dataChangedHandler(e);
   }
 
-  private loadDescendants() {
-    const that = this;
-    // @ts-expect-error
-    const d = super.loadDescendants.apply(that, arguments);
+  public override loadDescendants(
+    keys?: RowKey | RowKey[],
+    childrenOnly?: boolean,
+  ): DeferredObj<unknown> | undefined {
+    const d = super.loadDescendants(keys, childrenOnly);
     const isRecursiveSelection = this._selectionController.isRecursiveSelection();
 
     if (isRecursiveSelection) {
-      d.done(() => {
+      d?.done(() => {
         this._selectionController.updateSelectionState({
-          selectedItemKeys: that.option('selectedRowKeys'),
+          selectedItemKeys: this.option('selectedRowKeys'),
         });
       });
     }
