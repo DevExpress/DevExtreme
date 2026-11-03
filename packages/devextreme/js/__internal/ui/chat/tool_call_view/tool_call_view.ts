@@ -81,22 +81,10 @@ class ToolCallView extends DOMComponent<ToolCallView, ToolCallViewProperties> {
   }
 
   _renderHeader(toolCalls: ToolCall[]): void {
-    const errorCount = toolCalls.filter(({ status }) => status === 'error').length;
-    const $header = $('<div>')
+    $('<div>')
       .addClass(CHAT_TOOL_CALL_CLASSES.header)
-      .appendTo(this.$element());
-
-    $('<span>')
       .text(messageLocalization.format('dxChat-toolCallsTitle', toolCalls.length))
-      .appendTo($header);
-
-    if (errorCount) {
-      const errorText = errorCount === 1
-        ? `${errorCount} ${messageLocalization.format('dxChat-toolCallError')}`
-        : messageLocalization.format('dxChat-toolCallsErrorMultiple', errorCount);
-
-      this._renderErrorTag(errorText, $header);
-    }
+      .appendTo(this.$element());
   }
 
   _renderTitle(call: ToolCall, container: Element): void {

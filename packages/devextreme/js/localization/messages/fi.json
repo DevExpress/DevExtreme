@@ -452,7 +452,6 @@
         "dxChat-toolCallResultLabel": "Result",
         "dxChat-toolCallsTitle": "{0} tools",
         "dxChat-toolCallError": "Error",
-        "dxChat-toolCallsErrorMultiple": "{0} errors",
 
         "dxColorView-ariaRed": "Punainen",
         "dxColorView-ariaGreen": "Vihreä",
