@@ -792,14 +792,6 @@ export const validatingEditingExtender = (
     this._errorHandlingController = this.getController('errorHandling');
   }
 
-  public processDataItemTreeListHack(item: GeneratedItem, options: ItemProcessingOptions): void {
-    super.processDataItem(item, options);
-  }
-
-  public processItemsTreeListHack(items: RawItemData[], e: DataChange): RawItemData[] {
-    return super.processItems(items, e);
-  }
-
   protected _addChange(
     changeParams: EditingChangeParams,
     options?: AddChangeOptions,
@@ -876,6 +868,10 @@ export const validatingEditingExtender = (
     return isNotCanceled;
   }
 
+  public shouldMoveInvalidRowsToPage(): boolean {
+    return this.getEditMode() === EDIT_MODE.batch;
+  }
+
   public processItems(items: RawItemData[], change: DataChange): RawItemData[] {
     const changes = this.getChanges();
     const getIndexByChange = (
@@ -914,7 +910,7 @@ export const validatingEditingExtender = (
     };
 
     // @ts-expect-error change is the DataChange object, so it never equals a string
-    if (this.getEditMode() === EDIT_MODE.batch && change !== 'prepend' && change !== 'append') {
+    if (this.shouldMoveInvalidRowsToPage() && change !== 'prepend' && change !== 'append') {
       changes.forEach((editingChange) => {
         const { key } = editingChange;
         const validationData = this._validatingController.getValidationData(key);
@@ -935,9 +931,8 @@ export const validatingEditingExtender = (
   public processDataItem(item: GeneratedItem, options: ItemProcessingOptions): void {
     const isInserted = item.data[INSERT_INDEX];
     const key = isInserted ? item.data.key : item.key;
-    const editMode = this.getEditMode();
 
-    if (editMode === EDIT_MODE.batch && isInserted && key) {
+    if (this.shouldMoveInvalidRowsToPage() && isInserted && key) {
       const changes = this.getChanges();
       const editIndex = gridCoreUtils.getIndexByKey(key, changes);
 

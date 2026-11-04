@@ -240,3 +240,49 @@ describe('DataGrid Form Editing', () => {
     expect(data[0].name).toBe('Item 1');
   });
 });
+
+describe('DataGrid Batch Editing', () => {
+  beforeEach(beforeTest);
+  afterEach(afterTest);
+
+  it('should move an invalid row from another page to the current page with its data after a failed save', async () => {
+    const { instance, component } = await createDataGrid({
+      dataSource: [
+        { id: 1, name: 'Name 1', age: 10 },
+        { id: 2, name: 'Name 2', age: 20 },
+        { id: 3, name: 'Name 3', age: 30 },
+        { id: 4, name: 'Name 4', age: 40 },
+        { id: 5, name: 'Name 5', age: 50 },
+      ],
+      keyExpr: 'id',
+      paging: { pageSize: 2 },
+      editing: {
+        mode: 'batch',
+        allowUpdating: true,
+      },
+      columns: [
+        'name',
+        { dataField: 'age', validationRules: [{ type: 'range', min: 1, max: 100 }] },
+      ],
+    });
+
+    instance.cellValue(0, 'age', 101);
+    jest.runAllTimers();
+
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises -- settled by runAllTimers
+    instance.pageIndex(1);
+    jest.runAllTimers();
+
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises -- settled by runAllTimers
+    instance.saveEditData();
+    jest.runAllTimers();
+
+    const rowIndex = instance.getRowIndexByKey(1);
+
+    expect(instance.hasEditData()).toBe(true);
+    expect(instance.getVisibleRows()).toHaveLength(3);
+    expect(instance.cellValue(rowIndex, 'name')).toBe('Name 1');
+    expect(instance.cellValue(rowIndex, 'age')).toBe(101);
+    expect(component.getDataCell(rowIndex, 1).isValidCell).toBe(false);
+  });
+});
