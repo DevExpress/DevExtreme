@@ -28,7 +28,8 @@
   padding: 0;
 }
 
-::ng-deep .dx-chat-messagebox {
+::ng-deep .dx-chat-messagebox,
+::ng-deep .dx-chat.dx-state-disabled .dx-chat-messagebox {
   border-top-color: transparent;
 }
 

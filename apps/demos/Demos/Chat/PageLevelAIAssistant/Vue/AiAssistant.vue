@@ -188,7 +188,7 @@ defineExpose({ pushMessage });
   padding: 0;
 }
 
-.dx-chat-messagebox {
+.dx-chat-messagebox, .dx-chat.dx-state-disabled .dx-chat-messagebox {
   border-top-color: transparent;
 }
 
