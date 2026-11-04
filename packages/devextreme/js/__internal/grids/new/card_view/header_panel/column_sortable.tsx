@@ -45,6 +45,11 @@ export interface Props extends Omit<SortableProps, 'onAdd' | 'onReorder' | 'drag
 
 const ALLOWED_DRAGGING_DISTANCE = 20;
 
+const canInsertBetween = (
+  columnBefore: Column | undefined,
+  columnAfter: Column | undefined,
+): boolean => !!columnBefore?.allowReordering || !!columnAfter?.allowReordering;
+
 const CLASS = {
   widget: 'dx-widget',
   columnSortable: 'dx-cardview-column-sortable',
@@ -111,6 +116,14 @@ export class ColumnSortable extends Component<Props> {
       ...e.itemData,
       ...this.getNeighborColumns(e),
     };
+    const {
+      source, destination, columnBefore, columnAfter,
+    } = draggingData;
+    const isHeaderPanelReorder = source === 'header-panel-main' && destination === 'header-panel-main';
+
+    if (isHeaderPanelReorder && !canInsertBetween(columnBefore, columnAfter)) {
+      return;
+    }
 
     this.props.onColumnMove?.(draggingData.column, e.toIndex, draggingData);
   };
@@ -222,7 +235,7 @@ export class ColumnSortable extends Component<Props> {
     if (source === 'header-panel-main' && destination === 'header-panel-main') {
       const isDragCloseEnough = yDistance <= ALLOWED_DRAGGING_DISTANCE;
       const canReorder = column.allowReordering;
-      const canInsert = !!columnBefore?.allowReordering || !!columnAfter?.allowReordering;
+      const canInsert = canInsertBetween(columnBefore, columnAfter);
 
       const isMoving = isDragCloseEnough && canInsert && canReorder;
 
