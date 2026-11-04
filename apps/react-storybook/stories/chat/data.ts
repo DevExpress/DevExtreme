@@ -223,3 +223,221 @@ export const assistantReplies: ChatTypes.Message[] = [
                 ethical, societal, and technological challenges.</p>`.replace(/\s{2,}/gm, ''),
     }
 ];
+
+type ToolCall = NonNullable<ChatTypes.Message['toolCalls']>[number];
+
+interface ModelToolCall {
+    id: string;
+    function: { name: string; arguments?: string };
+}
+
+interface ModelMessage {
+    role: 'system' | 'user' | 'assistant' | 'tool';
+    content?: string | null;
+    tool_calls?: ModelToolCall[];
+    tool_call_id?: string;
+}
+
+const deployment = 'demo-mini';
+const apiVersion = '2024-02-01';
+const endpoint = 'https://public-api.devexpress.com/demo-openai';
+const apiKey = 'DEMO';
+
+const MAX_TOOL_ROUNDS = 3;
+const TOOL_DELAY = 700;
+const TOOL_ERROR_TEXT = 'Failed to execute the tool';
+
+export const toolCallsUser = { id: 'user' };
+export const toolCallsAssistant = { id: 'assistant', name: 'AI Assistant' };
+
+export const suggestionCards = [
+    {
+        title: 'Single Tool',
+        description: 'Find out the current time in the Barcelona and Los Angeles offices.',
+        prompt: 'Check the current time in Barcelona, Spain and Los Angeles, US.',
+    },
+    {
+        title: 'Multiple Tools',
+        description: 'Get the current weather and time in Barcelona and the USD to EUR rate.',
+        prompt: 'Check the current weather conditions in Barcelona, Spain, the current time in Barcelona, Spain and the exchange rate from USD to EUR.',
+    },
+    {
+        title: 'Error State',
+        description: 'Check the weather in London and in Atlantis: one of the tools fails.',
+        prompt: 'Check the current weather conditions in London, UK and in Atlantis, Atlantis.',
+    },
+];
+
+export const systemPrompt = 'You are a helpful assistant. Use the tools to answer questions about the weather, the current time in offices and exchange rates. '
+    + 'Always call a tool instead of guessing. Pass the country as a short name (for example UK or US), cities without the country, and currencies as ISO codes. '
+    + 'When several tools are needed, call all of them at once. If a tool fails, say so briefly. Keep the answers short.';
+
+const tools = [{
+    type: 'function',
+    function: {
+        name: 'getWeather',
+        description: 'Get the current weather for a city',
+        parameters: {
+            type: 'object',
+            properties: {
+                country: { type: 'string', description: 'The short country name, for example UK or US' },
+                city: { type: 'string', description: 'The city name' },
+            },
+            required: ['country', 'city'],
+        },
+    },
+}, {
+    type: 'function',
+    function: {
+        name: 'getCurrentTime',
+        description: 'Get the current local time in the offices of one or several cities',
+        parameters: {
+            type: 'object',
+            properties: {
+                locations: { type: 'array', items: { type: 'string' }, description: 'City names without the country, for example Barcelona' },
+            },
+            required: ['locations'],
+        },
+    },
+}, {
+    type: 'function',
+    function: {
+        name: 'getExchangeRate',
+        description: 'Get the exchange rate between two currencies',
+        parameters: {
+            type: 'object',
+            properties: {
+                fromCurrency: { type: 'string', description: 'The ISO code of the source currency' },
+                toCurrency: { type: 'string', description: 'The ISO code of the target currency' },
+            },
+            required: ['fromCurrency', 'toCurrency'],
+        },
+    },
+}];
+
+const weatherByCity: Record<string, string> = {
+    london: '15°C (59°F)',
+    barcelona: '21°C (70°F)',
+    'los angeles': '24°C (75°F)',
+    'new york': '12°C (54°F)',
+};
+
+const timeByCity: Record<string, string> = {
+    london: '09:18 (UTC+00:00) Greenwich Mean Time',
+    barcelona: '10:18 (UTC+01:00) Central European Time',
+    'los angeles': '01:18 (UTC−08:00) Pacific Time (US & Canada)',
+    'new york': '04:18 (UTC−05:00) Eastern Time (US & Canada)',
+};
+
+const ratesToUsd: Record<string, number> = {
+    USD: 1,
+    EUR: 0.92,
+    GBP: 0.79,
+    JPY: 149.5,
+};
+
+const toolImplementations: Record<string, (args: any) => string> = {
+    getWeather: ({ city }) => {
+        const weather = weatherByCity[String(city).toLowerCase()];
+
+        if (!weather) {
+            throw new Error(TOOL_ERROR_TEXT);
+        }
+
+        return weather;
+    },
+    getCurrentTime: ({ locations }) => (locations ?? [])
+        .map((location: string) => `${location}: ${timeByCity[String(location).toLowerCase()] ?? 'unknown time zone'}`)
+        .join('\n'),
+    getExchangeRate: ({ fromCurrency, toCurrency }) => {
+        const from = ratesToUsd[String(fromCurrency).toUpperCase()];
+        const to = ratesToUsd[String(toCurrency).toUpperCase()];
+
+        if (!from || !to) {
+            throw new Error(TOOL_ERROR_TEXT);
+        }
+
+        const rate = Math.round((to / from) * 10000) / 10000;
+
+        return `1 ${String(fromCurrency).toUpperCase()} = ${rate} ${String(toCurrency).toUpperCase()}`;
+    },
+};
+
+const delay = (ms: number) => new Promise<void>((resolve) => { setTimeout(resolve, ms); });
+
+async function requestModel(messages: ModelMessage[]): Promise<ModelMessage> {
+    const url = `${endpoint}/openai/deployments/${deployment}/chat/completions?api-version=${apiVersion}`;
+    const response = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'api-key': apiKey },
+        body: JSON.stringify({
+            messages,
+            tools,
+            tool_choice: 'auto',
+            max_completion_tokens: 1000,
+        }),
+    });
+
+    if (!response.ok) {
+        throw new Error(`The AI service returned an error (${response.status}).`);
+    }
+
+    const data = await response.json();
+
+    return data.choices[0].message;
+}
+
+async function runTool(call: ModelToolCall): Promise<ToolCall> {
+    const { name } = call.function;
+    let args: Record<string, unknown> = {};
+
+    try {
+        args = JSON.parse(call.function.arguments || '{}');
+    } catch {
+        args = {};
+    }
+
+    await delay(TOOL_DELAY + Math.random() * 600);
+
+    try {
+        const implementation = toolImplementations[name];
+
+        if (!implementation) {
+            throw new Error(TOOL_ERROR_TEXT);
+        }
+
+        return { name, arguments: args, status: 'success', result: implementation(args) };
+    } catch (error) {
+        return { name, arguments: args, status: 'error', result: (error as Error).message };
+    }
+}
+
+// Asks the model; while it asks for tools, runs them (in parallel) and gives it the results
+export async function getAIResponse(messages: ModelMessage[]): Promise<{ text: string; toolCalls: ToolCall[] }> {
+    const toolCalls: ToolCall[] = [];
+
+    for (let round = 0; round < MAX_TOOL_ROUNDS; round += 1) {
+        const answer = await requestModel(messages);
+
+        if (!answer.tool_calls?.length) {
+            return { text: answer.content ?? '', toolCalls };
+        }
+
+        messages.push(answer);
+
+        const results = await Promise.all(answer.tool_calls.map(runTool));
+
+        results.forEach((result, index) => {
+            toolCalls.push(result);
+            messages.push({
+                role: 'tool',
+                tool_call_id: answer.tool_calls![index].id,
+                content: result.status === 'error' ? `Error: ${result.result}` : String(result.result),
+            });
+        });
+    }
+
+    return { text: '', toolCalls };
+}
+
+export type { ModelMessage };
