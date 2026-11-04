@@ -5,7 +5,12 @@ import type { ProcessedItem } from '@ts/grids/grid_core/data_controller/types';
 import type { RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
 
 import {
-  getGroupColumnIndices, isGroupNode, isGroupRow, isSameContinuationState, isSameExpandedState,
+  createOffsetFilter,
+  getGroupColumnIndices,
+  isGroupNode,
+  isGroupRow,
+  isSameContinuationState,
+  isSameExpandedState,
 } from '../utils';
 
 const groupRow = (partial: Partial<ProcessedItem> = {}): ProcessedItem => ({
@@ -170,5 +175,57 @@ describe('getGroupColumnIndices', () => {
     });
 
     expect(getGroupColumnIndices(oldItem, newItem)).toBeUndefined();
+  });
+});
+
+describe('createOffsetFilter', () => {
+  it.each([
+    {
+      name: 'an ascending group key',
+      path: ['A'],
+      group: [{ selector: 'g' }],
+      expected: [['g', '<', 'A'], 'or', ['g', '=', null]],
+    },
+    {
+      name: 'a descending group key',
+      path: ['A'],
+      group: [{ selector: 'g', desc: true }],
+      expected: ['g', '>', 'A'],
+    },
+    {
+      name: 'a two-level path',
+      path: ['A', 'B'],
+      group: [{ selector: 'g1' }, { selector: 'g2', desc: true }],
+      expected: [
+        [['g1', '<', 'A'], 'or', ['g1', '=', null]],
+        'or',
+        [['g1', '=', 'A'], 'and', ['g2', '>', 'B']],
+      ],
+    },
+  ])('should create the offset filter for $name', ({ path, group, expected }) => {
+    expect(createOffsetFilter(path, { group })).toEqual(expected);
+  });
+
+  it('should create the filter for the last level only', () => {
+    const filter = createOffsetFilter(
+      ['A', 'B'],
+      { group: [{ selector: 'g1' }, { selector: 'g2' }] },
+      true,
+    );
+
+    expect(filter).toEqual([
+      ['g1', '=', 'A'],
+      'and',
+      [['g2', '<', 'B'], 'or', ['g2', '=', null]],
+    ]);
+  });
+
+  it('should combine the offset filter with the load filter', () => {
+    const filter = createOffsetFilter(
+      ['A'],
+      { group: [{ selector: 'g', desc: true }], filter: ['f', '=', 1] },
+    );
+
+    expect(filter).toEqual([['g', '>', 'A'], 'and', ['f', '=', 1]]);
   });
 });
