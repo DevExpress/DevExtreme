@@ -38,7 +38,6 @@ import {
   LOAD_TIMEOUT,
 } from './const';
 import type { VirtualScrollingDataControllerExtension } from './extenders/virtual_scrolling_data_controller';
-import { subscribeToExternalScrollers, VirtualScrollController } from './m_virtual_scrolling_core';
 import type {
   ContentOffsetType,
   ExternalScrollers,
@@ -49,6 +48,7 @@ import type {
   VirtualScrollingRowsView,
 } from './types';
 import { isItemCountableByDataSource } from './utils/items';
+import { subscribeToExternalScrollers, VirtualScrollController } from './virtual_scrolling_core';
 
 const updateLoading = (that: VirtualScrollingDataSourceAdapter): void => {
   const beginPageIndex = that._virtualScrollController.beginPageIndex(-1);
