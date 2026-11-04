@@ -908,12 +908,6 @@ importers:
 
   e2e/bundlers:
     devDependencies:
-      '@eslint/eslintrc':
-        specifier: 'catalog:'
-        version: 3.3.7
-      '@eslint/js':
-        specifier: 'catalog:'
-        version: 9.39.5
       '@rollup/plugin-alias':
         specifier: 3.1.9
         version: 3.1.9(rollup@4.59.0)
@@ -923,12 +917,6 @@ importers:
       '@rollup/plugin-node-resolve':
         specifier: 13.3.0
         version: 13.3.0(rollup@4.59.0)
-      '@stylistic/eslint-plugin':
-        specifier: 'catalog:'
-        version: 5.10.0(eslint@9.39.5(jiti@2.6.1))
-      '@typescript-eslint/parser':
-        specifier: 'catalog:'
-        version: 8.52.0(eslint@9.39.5(jiti@2.6.1))(typescript@5.9.3)
       browserify:
         specifier: 17.0.1
         version: 17.0.1
@@ -944,24 +932,6 @@ importers:
       devextreme-cldr-data:
         specifier: 1.0.3
         version: 1.0.3
-      eslint:
-        specifier: 'catalog:'
-        version: 9.39.5(jiti@2.6.1)
-      eslint-config-devextreme:
-        specifier: 'catalog:'
-        version: 1.1.13(60e043f553f8ee4c17333fb30010de12)
-      eslint-plugin-i18n:
-        specifier: 'catalog:'
-        version: 2.4.0
-      eslint-plugin-import:
-        specifier: 'catalog:'
-        version: 2.32.0(@typescript-eslint/parser@8.52.0(eslint@9.39.5(jiti@2.6.1))(typescript@5.9.3))(eslint@9.39.5(jiti@2.6.1))
-      eslint-plugin-no-only-tests:
-        specifier: 'catalog:'
-        version: 3.3.0
-      eslint-plugin-spellcheck:
-        specifier: 0.0.20
-        version: 0.0.20(eslint@9.39.5(jiti@2.6.1))
       globalize:
         specifier: 1.7.1
         version: 1.7.1
@@ -995,45 +965,12 @@ importers:
       '@angular/common':
         specifier: catalog:angular
         version: 21.2.25(@angular/core@21.2.25(@angular/compiler@21.2.25)(rxjs@7.8.2)(zone.js@0.16.2))(rxjs@7.8.2)
-      '@eslint/eslintrc':
-        specifier: 'catalog:'
-        version: 3.3.7
-      '@eslint/js':
-        specifier: 'catalog:'
-        version: 9.39.5
-      '@stylistic/eslint-plugin':
-        specifier: 'catalog:'
-        version: 5.10.0(eslint@9.39.5(jiti@2.6.1))
       '@types/jquery':
         specifier: 'catalog:'
         version: 4.0.1
-      '@typescript-eslint/eslint-plugin':
-        specifier: 'catalog:'
-        version: 8.52.0(@typescript-eslint/parser@8.52.0(eslint@9.39.5(jiti@2.6.1))(typescript@5.9.3))(eslint@9.39.5(jiti@2.6.1))(typescript@5.9.3)
-      '@typescript-eslint/parser':
-        specifier: 'catalog:'
-        version: 8.52.0(eslint@9.39.5(jiti@2.6.1))(typescript@5.9.3)
       devextreme:
         specifier: workspace:*
         version: link:../../packages/devextreme/artifacts/npm/devextreme
-      eslint:
-        specifier: 'catalog:'
-        version: 9.39.5(jiti@2.6.1)
-      eslint-config-devextreme:
-        specifier: 'catalog:'
-        version: 1.1.13(ca88627957d43b26049ace418378ed08)
-      eslint-migration-utils:
-        specifier: workspace:*
-        version: link:../../packages/eslint-migration-utils
-      eslint-plugin-i18n:
-        specifier: 'catalog:'
-        version: 2.4.0
-      eslint-plugin-import:
-        specifier: 'catalog:'
-        version: 2.32.0(@typescript-eslint/parser@8.52.0(eslint@9.39.5(jiti@2.6.1))(typescript@5.9.3))(eslint@9.39.5(jiti@2.6.1))
-      eslint-plugin-no-only-tests:
-        specifier: 'catalog:'
-        version: 3.3.0
       jquery:
         specifier: 'catalog:'
         version: 4.0.0
@@ -1992,9 +1929,6 @@ importers:
       '@eslint-stylistic/metadata':
         specifier: 'catalog:'
         version: 2.13.0
-      '@eslint/js':
-        specifier: 'catalog:'
-        version: 9.39.5
       '@stylistic/eslint-plugin':
         specifier: 'catalog:'
         version: 5.10.0(eslint@9.39.5(jiti@2.6.1))
@@ -2630,6 +2564,7 @@ packages:
   '@angular/platform-browser-dynamic@22.2.3':
     resolution: {integrity: sha512-+WBe2JjaEeK0NpMlBzV7UBkO+ltUBYTDtMfGYkew2xHdIviITnzXX7yUXijB1Y6jxALgz3jEuJa9iLid8s11rg==}
     engines: {node: ^22.22.3 || ^24.15.0 || >=26.0.0}
+    deprecated: '@angular/platform-browser-dynamic is deprecated. Use `@angular/platform-browser` instead.'
     peerDependencies:
       '@angular/common': 22.2.3
       '@angular/compiler': 22.2.3
