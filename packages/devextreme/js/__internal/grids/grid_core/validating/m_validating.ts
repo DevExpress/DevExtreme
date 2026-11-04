@@ -620,20 +620,14 @@ export class ValidatingController extends modules.Controller {
       columnIndex: getValidatorData(validator).column.index,
       validationResult: null,
     };
-    // @ts-expect-error validationResultIsValid() checks the restored result before it is read
-    let validationResult: ValidationResultInternal = this.getCellValidationResult(cellParams);
-    const stateRestored = validationResultIsValid(validationResult);
+    const storedResult = this.getCellValidationResult(cellParams);
+    const stateRestored = validationResultIsValid(storedResult);
 
     // @ts-expect-error the grid's validators always have an adapter
     const adapter: CellValidationAdapter = validator.option('adapter');
-    if (!stateRestored) {
-      validationResult = validator.validate();
-    } else {
-      const currentCellValue = adapter.getValue();
-      if (!equalByValue(currentCellValue, validationResult.value)) {
-        validationResult = validator.validate();
-      }
-    }
+    const validationResult = stateRestored && equalByValue(adapter.getValue(), storedResult.value)
+      ? storedResult
+      : validator.validate();
 
     const deferred = Deferred<ValidationResultInternal>();
 

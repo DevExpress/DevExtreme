@@ -6,9 +6,12 @@ import {
   afterTest,
   beforeTest,
   createDataGrid,
+  flushAsync,
 } from '@ts/grids/grid_core/__tests__/__mock__/helpers/utils';
 import { TextAreaModel } from '@ts/ui/__tests__/__mock__/model/text_area';
 import { TextBoxModel } from '@ts/ui/__tests__/__mock__/model/textbox';
+import type { ValidationResultInternal } from '@ts/ui/validation_engine';
+import type InternalValidator from '@ts/ui/validator';
 
 describe('DataGrid Cell Editing', () => {
   beforeEach(beforeTest);
@@ -284,5 +287,83 @@ describe('DataGrid Batch Editing', () => {
     expect(instance.cellValue(rowIndex, 'name')).toBe('Name 1');
     expect(instance.cellValue(rowIndex, 'age')).toBe(101);
     expect(component.getDataCell(rowIndex, 1).isValidCell).toBe(false);
+  });
+
+  describe('when a cell has a stored validation result', () => {
+    const cellParams = { rowKey: 1, columnIndex: 0 };
+
+    const createGridWithInvalidCell = async (): ReturnType<typeof createDataGrid> => {
+      const grid = await createDataGrid({
+        dataSource: [{ id: 1, name: 'Name 1' }],
+        keyExpr: 'id',
+        editing: {
+          mode: 'batch',
+          allowUpdating: true,
+        },
+        columns: [{ dataField: 'name', validationRules: [{ type: 'required' }] }],
+      });
+
+      grid.instance.cellValue(0, 'name', '');
+      jest.runAllTimers();
+
+      return grid;
+    };
+
+    it('should reuse the stored result when the cell value has not changed', async () => {
+      const { instance } = await createGridWithInvalidCell();
+      const validatingController = instance.getController('validating');
+      const validator = validatingController.getCellValidator(cellParams) as InternalValidator;
+      const validateSpy = jest.spyOn(validator, 'validate');
+      const results: ValidationResultInternal[] = [];
+
+      validatingController.validateCell(validator).done((validationResult) => {
+        results.push(validationResult);
+      });
+      jest.runAllTimers();
+
+      expect(validateSpy).not.toHaveBeenCalled();
+      expect(results).toHaveLength(1);
+      expect(results[0]).toBe(validatingController.getCellValidationResult(cellParams));
+      expect(results[0].status).toBe('invalid');
+    });
+
+    it('should validate the cell again when its value is changed through editing.changes (T1152491)', async () => {
+      const { instance, component } = await createGridWithInvalidCell();
+
+      expect(component.getDataCell(0, 0).isValidCell).toBe(false);
+
+      instance.option('editing.changes', [{ type: 'update', key: 1, data: { name: 'Name 2' } }]);
+      jest.runAllTimers();
+
+      expect(component.getDataCell(0, 0).isValidCell).toBe(true);
+    });
+
+    it('should validate the cell again after a repaint cancelled its pending validation', async () => {
+      const { instance, component } = await createDataGrid({
+        dataSource: [{ id: 1, name: 'Name 1' }],
+        keyExpr: 'id',
+        editing: {
+          mode: 'batch',
+          allowUpdating: true,
+        },
+        columns: [{
+          dataField: 'name',
+          validationRules: [{ type: 'async', validationCallback: (): Promise<boolean> => Promise.resolve(false) }],
+        }],
+      });
+
+      instance.cellValue(0, 'name', 'Name 2');
+      instance.repaint();
+      await flushAsync();
+
+      expect(instance.getController('validating').getCellValidationResult(cellParams)).toBe('cancel');
+
+      instance.repaint();
+      await flushAsync();
+      await flushAsync();
+      await flushAsync();
+
+      expect(component.getDataCell(0, 0).isValidCell).toBe(false);
+    });
   });
 });
