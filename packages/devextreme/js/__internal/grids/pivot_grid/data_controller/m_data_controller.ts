@@ -6,8 +6,8 @@ import { each, map } from '@js/core/utils/iterator';
 import { format } from '@js/core/utils/string';
 import { isDefined, isString } from '@js/core/utils/type';
 import stateStoring from '@ts/grids/grid_core/state_storing/state_storing_controller_core';
-import { createColumnsInfo, foreachColumnInfo } from '@ts/grids/grid_core/virtual_columns/m_virtual_columns_core';
-import VirtualScrollControllerModule from '@ts/grids/grid_core/virtual_scrolling/m_virtual_scrolling_core';
+import { createColumnsInfo, foreachColumnInfo } from '@ts/grids/grid_core/virtual_columns/virtual_columns_core';
+import VirtualScrollControllerModule from '@ts/grids/grid_core/virtual_scrolling/virtual_scrolling_core';
 
 import { PivotGridDataSource } from '../data_source/m_data_source';
 import {

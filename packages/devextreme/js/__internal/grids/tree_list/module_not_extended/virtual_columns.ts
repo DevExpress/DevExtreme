@@ -1,4 +1,4 @@
-import { virtualColumnsModule } from '@ts/grids/grid_core/virtual_columns/m_virtual_columns';
+import { virtualColumnsModule } from '@ts/grids/grid_core/virtual_columns/virtual_columns';
 
 import treeListCore from '../core';
 

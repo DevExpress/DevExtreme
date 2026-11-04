@@ -93,10 +93,6 @@ export type TextSelectionElement = Element & {
   setSelectionRange?: (start: number, end: number) => void;
 };
 
-export interface OptionsReader {
-  option: (name: string) => unknown;
-}
-
 export type WrappedLookupDataSource = NormalizedDataSourceOptions & {
   __dataGridSourceFilter: unknown;
   load: (loadOptions: StoreLoadOptions) => DeferredObj<unknown>;

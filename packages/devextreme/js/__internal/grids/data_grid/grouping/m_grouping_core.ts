@@ -2,7 +2,7 @@ import { normalizeSortingInfo } from '@js/common/data/utils';
 import $ from '@js/core/renderer';
 import { when } from '@js/core/utils/deferred';
 import { combineFilters } from '@ts/grids/grid_core/filter/utils';
-import gridCoreUtils from '@ts/grids/grid_core/utils';
+import gridCoreUtils, { isVirtualPaging } from '@ts/grids/grid_core/utils';
 
 import gridCore from '../core';
 import type { GroupingDataSourceAdapter } from './m_grouping';
@@ -131,13 +131,7 @@ export class GroupingHelper {
   }
 
   protected isGroupItemCountable(item) {
-    return !this._isVirtualPaging() || !item.isContinuation;
-  }
-
-  public _isVirtualPaging() {
-    const scrollingMode = this.dataSourceAdapter.option('scrolling.mode');
-
-    return scrollingMode === 'virtual' || scrollingMode === 'infinite';
+    return !isVirtualPaging(this.dataSourceAdapter.option('scrolling')) || !item.isContinuation;
   }
 
   private itemsCount() {
