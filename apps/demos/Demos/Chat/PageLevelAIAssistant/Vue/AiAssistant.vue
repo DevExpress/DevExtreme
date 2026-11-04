@@ -44,7 +44,9 @@
         />
         <template #empty-view>
           <div class="dx-chat-messagelist-empty-image dx-ai-chat__empty-image"/>
-          <div class="dx-chat-messagelist-empty-message ai-chat-empty-message">{{ EMPTY_VIEW_MESSAGE }}</div>
+          <div class="dx-chat-messagelist-empty-message ai-chat-empty-message">
+            {{ EMPTY_VIEW_MESSAGE }}
+          </div>
           <div
             class="dx-chat-messagelist-empty-prompt ai-chat-empty-prompt"
             v-html="EMPTY_VIEW_PROMPT"
