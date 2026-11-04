@@ -6,7 +6,8 @@ This demo uses [Stadia Maps](https://stadiamaps.com/) services to display map ti
 
 [note]
 
-Map tiles and routes in this demo are provided by [Stadia Maps](https://stadiamaps.com/) under Developer Express Inc.'s own subscription and used for demonstration purposes only. This subscription works only on our website. The product does not include map tiles, map data, or tile and routing service licenses.
+- Map tiles and routes in this demo are provided by [Stadia Maps](https://stadiamaps.com/) under Developer Express Inc.'s own subscription and are used for demonstration purposes only. The product does not include map tiles, map data, or tile and routing service licenses.
+- Our Stadia Maps subscription works only on our website. Configure your own mapping services when you copy this demo.
 
 [/note]
 
