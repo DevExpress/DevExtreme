@@ -5,7 +5,7 @@ import { GroupingHelper } from '../m_grouping_expanded';
 import type { GroupingLoadOperation } from '../types';
 import type { GroupConfig } from './grouping_expanded.helpers';
 import { GroupingTestHelper } from './grouping_expanded.helpers';
-import { createDataSourceAdapterStub, GroupingHelperMock } from './grouping_expanded.mock';
+import { createDataSourceAdapterStub } from './grouping_expanded.mock';
 
 // ---------------------------------------------------------------------------
 // Test data
@@ -250,7 +250,7 @@ describe('isPending logic', () => {
 
   describe('handleDataLoading: expandCorrection', () => {
     it('should widen the load window for collapsed groups after the expanding one', () => {
-      const grouping = new GroupingHelperMock(createDataSourceAdapterStub());
+      const grouping = new GroupingHelper(createDataSourceAdapterStub());
 
       // Group A was just expanded — isPending + isExpanded, count=100
       grouping.addGroupInfo({
@@ -261,11 +261,11 @@ describe('isPending logic', () => {
         offset: 100, count: 30, isExpanded: false, path: ['B'],
       });
 
-      const options: Record<string, unknown> = {
+      const options = {
         storeLoadOptions: { skip: 0, take: 50 },
         loadOptions: { group: [{ selector: 'category' }] },
-      };
-      grouping.testHandleDataLoading(options);
+      } as unknown as GroupingLoadOperation;
+      grouping.handleDataLoading(options);
 
       // expandCorrection = A.count (100) shifts boundary from 51 to 151,
       // so B (offset = A.count = 100) falls inside the load window
@@ -278,7 +278,7 @@ describe('isPending logic', () => {
     });
 
     it('should NOT widen the load window for previously expanded groups (not pending)', () => {
-      const grouping = new GroupingHelperMock(createDataSourceAdapterStub());
+      const grouping = new GroupingHelper(createDataSourceAdapterStub());
 
       // Group A is expanded but NOT pending (normal steady state)
       grouping.addGroupInfo({
@@ -289,11 +289,11 @@ describe('isPending logic', () => {
         offset: 100, count: 30, isExpanded: false, path: ['B'],
       });
 
-      const options: Record<string, unknown> = {
+      const options = {
         storeLoadOptions: { skip: 0, take: 50 },
         loadOptions: { group: [{ selector: 'category' }] },
-      };
-      grouping.testHandleDataLoading(options);
+      } as unknown as GroupingLoadOperation;
+      grouping.handleDataLoading(options);
 
       // Without expandCorrection boundary stays at 51;
       // B (offset = A.count = 100) is past it and therefore excluded
@@ -304,33 +304,33 @@ describe('isPending logic', () => {
 
   describe('handleDataLoading: isPending cleanup', () => {
     it('should delete isPending from an expanded group after processing', () => {
-      const grouping = new GroupingHelperMock(createDataSourceAdapterStub());
+      const grouping = new GroupingHelper(createDataSourceAdapterStub());
 
       grouping.addGroupInfo({
         offset: 0, count: 100, isExpanded: true, isPending: true, path: ['A'],
       });
 
-      const options: Record<string, unknown> = {
+      const options = {
         storeLoadOptions: { skip: 0, take: 50 },
         loadOptions: { group: [{ selector: 'category' }] },
-      };
-      grouping.testHandleDataLoading(options);
+      } as unknown as GroupingLoadOperation;
+      grouping.handleDataLoading(options);
 
       expect(grouping.findGroupInfo(['A'])?.isPending).toBeUndefined();
     });
 
     it('should delete isPending from a collapsed group after processing', () => {
-      const grouping = new GroupingHelperMock(createDataSourceAdapterStub());
+      const grouping = new GroupingHelper(createDataSourceAdapterStub());
 
       grouping.addGroupInfo({
         offset: 0, count: 10, isExpanded: false, isPending: true, path: ['A'],
       });
 
-      const options: Record<string, unknown> = {
+      const options = {
         storeLoadOptions: { skip: 0, take: 50 },
         loadOptions: { group: [{ selector: 'category' }] },
-      };
-      grouping.testHandleDataLoading(options);
+      } as unknown as GroupingLoadOperation;
+      grouping.handleDataLoading(options);
 
       expect(grouping.findGroupInfo(['A'])?.isPending).toBeUndefined();
     });
