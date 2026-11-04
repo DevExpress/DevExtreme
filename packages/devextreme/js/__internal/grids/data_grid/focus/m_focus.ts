@@ -125,7 +125,7 @@ const data = (
 
     const group = dataSourceAdapter.group();
 
-    if (!dataSourceAdapter._grouping._updatePagingOptions) {
+    if (!dataSourceAdapter._grouping.updatePagingOptions) {
       this._calculateGlobalRowIndexByFlatData(key, null, true)
         // eslint-disable-next-line @typescript-eslint/no-misused-promises -- ignores the result
         .done(deferred.resolve)
@@ -179,7 +179,7 @@ const data = (
     // eslint-disable-next-line @typescript-eslint/init-declarations -- assigned in the callback
     let groupOffset: number;
 
-    dataSourceAdapter._grouping._updatePagingOptions(
+    dataSourceAdapter._grouping.updatePagingOptions(
       { skip: 0, take: Number.MAX_SAFE_INTEGER },
       (groupInfo: GroupInfoData, totalOffset: number) => {
         if (equalByValue(groupInfo.path, groupPath)) {
