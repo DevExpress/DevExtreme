@@ -1,3 +1,4 @@
+import type { SelectionController } from '@ts/grids/grid_core/selection/m_selection';
 import type { RowKey } from '@ts/grids/grid_core/types';
 
 export type SelectionStateByKey = Record<string, boolean | undefined>;
@@ -18,3 +19,6 @@ export interface TreeListSelectionControllerExtension {
   isRecursiveSelection: () => boolean;
   updateSelectionState: (options: SelectionStateArgs) => void;
 }
+
+export type TreeListSelectionController = SelectionController
+  & TreeListSelectionControllerExtension;

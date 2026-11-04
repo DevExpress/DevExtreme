@@ -9,6 +9,7 @@ import type { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/colum
 import type { ColumnTemplateSource, TemplateModel } from '@ts/grids/grid_core/columns_controller/types';
 import type { ProcessedItem } from '@ts/grids/grid_core/data_controller/types';
 import type { ChangedEvent, RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
+import { SELECT_CHECKBOX_CLASS } from '@ts/grids/grid_core/selection/const';
 import { selectionDataControllerExtender } from '@ts/grids/grid_core/selection/extenders/selection_data_controller';
 import type { SelectionController } from '@ts/grids/grid_core/selection/m_selection';
 import {
@@ -36,24 +37,21 @@ import type { TreeListNodeCellOptions } from '@ts/grids/tree_list/rows/types';
 import type { SelectionChangeEvent, SelectionOptions } from '@ts/ui/selection/types';
 
 import treeListCore from '../core';
+import { CLASSES } from './const';
 import type {
   NormalizedSelectionArgs,
   SelectionStateArgs,
   SelectionStateByKey,
-  TreeListSelectionControllerExtension,
+  TreeListSelectionController,
 } from './types';
 import { nodeExists } from './utils';
-
-const TREELIST_SELECT_CHECKBOX_WRAPPER_CLASS = 'dx-treelist-select-checkbox-container';
-const TREELIST_SELECT_ALL_CLASS = 'dx-treelist-select-all';
-const SELECT_CHECKBOX_CLASS = 'dx-select-checkbox';
 
 const data = (
   Base: ModuleType<TreeListDataController>,
 ): ModuleType<TreeListDataController> => class DataSelectionTreeListExtender
   extends selectionDataControllerExtender(Base) {
   // eslint-disable-next-line @typescript-eslint/prefer-readonly
-  private _selectionController!: SelectionController & TreeListSelectionControllerExtension;
+  private _selectionController!: TreeListSelectionController;
 
   protected dataChangedHandler(e?: ChangedEvent): void {
     const isRecursiveSelection = this._selectionController.isRecursiveSelection();
@@ -87,9 +85,8 @@ const data = (
 
 const selection = (
   Base: ModuleType<SelectionController>,
-): ModuleType<
-SelectionController & TreeListSelectionControllerExtension
-> => class SelectionControllerTreeListExtender extends Base {
+): ModuleType<TreeListSelectionController> => class SelectionControllerTreeListExtender
+  extends Base {
   protected declare _dataController: TreeListDataController;
 
   private _selectionStateByKey!: SelectionStateByKey;
@@ -115,8 +112,7 @@ SelectionController & TreeListSelectionControllerExtension
     config.isItemSelected = (item): boolean => {
       const key = this.dataSourceController.keyOf(item);
 
-      // @ts-expect-error isRowSelected returns undefined for a partially selected node
-      return this.isRowSelected(key);
+      return !!this.isRowSelected(key);
     };
     config.isSelectableItem = (item): boolean => !!item;
     config.getItemData = (item: RawItemData): RawItemData => item;
@@ -150,7 +146,10 @@ SelectionController & TreeListSelectionControllerExtension
 
   public isSelectAll(): boolean | undefined {
     const selectedRowKeys = this.option('selectedRowKeys') ?? [];
-    if (selectedRowKeys.length === 0) return false;
+
+    if (selectedRowKeys.length === 0) {
+      return false;
+    }
 
     const visibleKeys = this._getSelectAllNodeKeys();
     const isRecursiveSelection = this.isRecursiveSelection();
@@ -167,7 +166,9 @@ SelectionController & TreeListSelectionControllerExtension
 
     if (!selectedVisibleKeys.length) {
       return hasIndeterminateState ? undefined : false;
-    } if (selectedVisibleKeys.length === visibleKeys.length) {
+    }
+
+    if (selectedVisibleKeys.length === visibleKeys.length) {
       return true;
     }
 
@@ -529,7 +530,7 @@ SelectionController & TreeListSelectionControllerExtension
 
   public updateSelectionState(options: SelectionStateArgs): void {
     const removedItemKeys = options.removedItemKeys ?? [];
-    const selectedItemKeys = options.selectedItemKeys ?? [];
+    const selectedItemKeys = options.selectedItemKeys || [];
 
     if (this.isRecursiveSelection()) {
       this._updateSelectionStateCore(removedItemKeys, false);
@@ -634,7 +635,7 @@ const columnHeadersView = (
     $container: dxElementWrapper,
   ): dxElementWrapper {
     const $checkboxWrapper = $('<div>')
-      .addClass(TREELIST_SELECT_CHECKBOX_WRAPPER_CLASS);
+      .addClass(CLASSES.selectCheckboxContainer);
     const $checkbox = this.createSelectAllCheckboxElement();
 
     $checkbox.appendTo($checkboxWrapper);
@@ -646,7 +647,7 @@ const columnHeadersView = (
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   private renderSelectAll($cell: dxElementWrapper, options: TemplateModel): void {
-    $cell.addClass(TREELIST_SELECT_ALL_CLASS);
+    $cell.addClass(CLASSES.selectAll);
 
     this.renderSelectAllCheckBox($cell);
   }
@@ -668,7 +669,7 @@ const rowsView = (
     const isMultipleSelection = this.option('selection.mode') === 'multiple';
 
     if (!options.row.isNewRow && isMultipleSelection) {
-      const $checkboxWrapper = $('<div>').addClass(TREELIST_SELECT_CHECKBOX_WRAPPER_CLASS);
+      const $checkboxWrapper = $('<div>').addClass(CLASSES.selectCheckboxContainer);
       $checkboxWrapper.appendTo($iconContainer);
 
       const $checkbox = this.renderSelectCheckBox($checkboxWrapper, {
