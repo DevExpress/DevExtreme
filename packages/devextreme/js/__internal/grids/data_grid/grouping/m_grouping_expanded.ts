@@ -11,9 +11,11 @@ import type DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/data
 import type { LoadOperation, OperationTypes } from '@ts/grids/grid_core/data_source_adapter/types';
 import type { DataFilter } from '@ts/grids/grid_core/filter/types';
 import { combineFilters } from '@ts/grids/grid_core/filter/utils';
+import type { VirtualScrollingDataSourceAdapterExtension } from '@ts/grids/grid_core/virtual_scrolling/types';
 
 import dataGridCore from '../core';
 import { createGroupFilter } from '../utils';
+import type { GroupingDataSourceAdapter } from './m_grouping';
 import { createOffsetFilter, GroupingHelper as GroupingHelperCore } from './m_grouping_core';
 import type {
   DataItem,
@@ -38,9 +40,10 @@ const loadTotalCount = function loadTotalCount(
       // @ts-expect-error extra is loaded with requireTotalCount
       d.resolve(extra.totalCount);
     })
-    // @ts-expect-error badly typed Deferred.reject
-    // eslint-disable-next-line @typescript-eslint/no-misused-promises -- ignores the result
-    .fail(d.reject.bind(d));
+    .fail((...args: unknown[]) => {
+      // @ts-expect-error badly typed Deferred.reject
+      d.reject(...args);
+    });
   return d;
 };
 
@@ -192,7 +195,7 @@ const pathEquals = function pathEquals(path1: unknown[], path2: unknown[]): bool
 };
 
 const isGroupItem = (item: DataItem): item is GroupItemData => (
-  'key' in item && (item as GroupItemData).items !== undefined
+  'key' in item && item.items !== undefined
 );
 
 /**
@@ -290,15 +293,19 @@ const createNotGroupFilter = function createNotGroupFilter(
 };
 
 const getGroupCount = function getGroupCount(item: GroupItemData, groupCount: number): number {
-  // @ts-expect-error a group without a count has loaded items
-  let count = item.count || item.items.length;
+  if (item.count) {
+    return item.count;
+  }
 
-  if (!item.count && groupCount > 1) {
-    count = 0;
-    // @ts-expect-error a group without a count has loaded items
-    for (const childItem of item.items) {
-      count += getGroupCount(childItem, groupCount - 1);
-    }
+  const items = item.items ?? [];
+
+  if (groupCount <= 1) {
+    return items.length;
+  }
+
+  let count = 0;
+  for (const childItem of items) {
+    count += getGroupCount(childItem, groupCount - 1);
   }
 
   return count;
@@ -310,12 +317,14 @@ export class GroupingHelper extends GroupingHelperCore {
     const collapsedGroups: GroupInfoData[] = [];
     let collapsedItemsCount = 0;
     let skipFirstItem = false;
-    // eslint-disable-next-line @typescript-eslint/init-declarations -- assigned in the if
-    let take: number | undefined;
-    // @ts-expect-error loadOptions is set before load
-    const localLoadOptions: StoreLoadOptions = options.loadOptions;
-    const { group } = localLoadOptions;
+    const { loadOptions: localLoadOptions } = options;
     let skipCorrection = 0;
+
+    if (!localLoadOptions) {
+      return;
+    }
+
+    const { group } = localLoadOptions;
 
     removeGroupLoadOption(storeLoadOptions, localLoadOptions);
 
@@ -335,9 +344,10 @@ export class GroupingHelper extends GroupingHelperCore {
       skipFirstItem = true;
     }
 
-    if (loadOptions.take && group) {
-      take = loadOptions.take;
-      loadOptions.take += 1;
+    const take = loadOptions.take && group ? loadOptions.take : undefined;
+
+    if (take !== undefined) {
+      loadOptions.take = take + 1;
     }
 
     let loadEndOffset = Number(loadOptions.skip) + Number(loadOptions.take);
@@ -486,28 +496,24 @@ export class GroupingHelper extends GroupingHelperCore {
   }
 
   public changeRowExpand(path: unknown[]): DeferredObj<unknown> {
-    const { dataSourceAdapter } = this;
-    // @ts-expect-error beginPageIndex is defined by virtual scrolling
-    const beginPageIndex: number = dataSourceAdapter.beginPageIndex
-      // @ts-expect-error beginPageIndex is defined by virtual scrolling
+    const { dataSourceAdapter }: {
+      dataSourceAdapter: GroupingDataSourceAdapter
+      & Partial<VirtualScrollingDataSourceAdapterExtension>;
+    } = this;
+    const beginPageIndex = dataSourceAdapter.beginPageIndex
       ? dataSourceAdapter.beginPageIndex()
       : dataSourceAdapter.pageIndex();
     const dataSourceItems = dataSourceAdapter.items();
     const offset = correctSkipLoadOption(this, beginPageIndex * dataSourceAdapter.pageSize());
     const groupInfo = this.findGroupInfo(path);
-    // eslint-disable-next-line @typescript-eslint/init-declarations -- assigned in the if/else
-    let groupCountQuery: DeferredObj<number>;
-
-    if (groupInfo && !groupInfo.isExpanded) {
-      groupCountQuery = Deferred<number>().resolve(groupInfo.count);
-    } else {
-      groupCountQuery = loadTotalCount(dataSourceAdapter, {
+    const groupCountQuery = groupInfo && !groupInfo.isExpanded
+      ? Deferred<number>().resolve(groupInfo.count)
+      : loadTotalCount(dataSourceAdapter, {
         filter: createGroupFilter(path, {
           filter: dataSourceAdapter.filter(),
           group: dataSourceAdapter.group(),
         }),
       });
-    }
 
     return when(groupCountQuery).done((count) => {
       // @ts-expect-error parseInt() takes a value that when() may wrap in an array
@@ -531,8 +537,7 @@ export class GroupingHelper extends GroupingHelperCore {
       }
       this.updateTotalItemsCount();
     }).fail((...args: unknown[]) => {
-      // @ts-expect-error _eventsStrategy is private to the data source adapter
-      dataSourceAdapter._eventsStrategy.fireEvent('loadError', args);
+      dataSourceAdapter._dataSource._eventsStrategy.fireEvent('loadError', args);
     });
   }
 

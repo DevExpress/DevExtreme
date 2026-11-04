@@ -261,10 +261,10 @@ describe('isPending logic', () => {
         offset: 100, count: 30, isExpanded: false, path: ['B'],
       });
 
-      const options = {
+      const options: GroupingLoadOperation = {
         storeLoadOptions: { skip: 0, take: 50 },
         loadOptions: { group: [{ selector: 'category' }] },
-      } as unknown as GroupingLoadOperation;
+      };
       grouping.handleDataLoading(options);
 
       // expandCorrection = A.count (100) shifts boundary from 51 to 151,
@@ -289,10 +289,10 @@ describe('isPending logic', () => {
         offset: 100, count: 30, isExpanded: false, path: ['B'],
       });
 
-      const options = {
+      const options: GroupingLoadOperation = {
         storeLoadOptions: { skip: 0, take: 50 },
         loadOptions: { group: [{ selector: 'category' }] },
-      } as unknown as GroupingLoadOperation;
+      };
       grouping.handleDataLoading(options);
 
       // Without expandCorrection boundary stays at 51;
@@ -310,10 +310,10 @@ describe('isPending logic', () => {
         offset: 0, count: 100, isExpanded: true, isPending: true, path: ['A'],
       });
 
-      const options = {
+      const options: GroupingLoadOperation = {
         storeLoadOptions: { skip: 0, take: 50 },
         loadOptions: { group: [{ selector: 'category' }] },
-      } as unknown as GroupingLoadOperation;
+      };
       grouping.handleDataLoading(options);
 
       expect(grouping.findGroupInfo(['A'])?.isPending).toBeUndefined();
@@ -326,10 +326,10 @@ describe('isPending logic', () => {
         offset: 0, count: 10, isExpanded: false, isPending: true, path: ['A'],
       });
 
-      const options = {
+      const options: GroupingLoadOperation = {
         storeLoadOptions: { skip: 0, take: 50 },
         loadOptions: { group: [{ selector: 'category' }] },
-      } as unknown as GroupingLoadOperation;
+      };
       grouping.handleDataLoading(options);
 
       expect(grouping.findGroupInfo(['A'])?.isPending).toBeUndefined();
@@ -352,13 +352,14 @@ describe('handleDataLoaded: group items processing', () => {
     rows: Record<string, unknown>[],
     { take, skipFirstItem = false }: { take?: number; skipFirstItem?: boolean },
   ): unknown => {
-    const options = {
+    const options: GroupingLoadOperation = {
+      storeLoadOptions: {},
       group: [{ selector: 'g' }],
       data: rows,
       skip: 0,
       take,
       skipFirstItem,
-    } as unknown as GroupingLoadOperation;
+    };
 
     grouping.handleDataLoaded(options, noop);
 
