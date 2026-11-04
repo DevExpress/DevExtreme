@@ -35,7 +35,6 @@ import {
   LOAD_TIMEOUT,
   VISIBLE_PAGE_INDEX,
 } from '../const';
-import { VirtualScrollController } from '../m_virtual_scrolling_core';
 import type {
   ChangedLoadParams,
   ContentOffsetType,
@@ -47,6 +46,7 @@ import {
   isItemCountableByDataSource,
   updateItemIndices,
 } from '../utils/items';
+import { VirtualScrollController } from '../virtual_scrolling_core';
 
 export interface VirtualScrollingDataControllerExtension {
   virtualItemsCount: () => VirtualItemsCount | undefined;
