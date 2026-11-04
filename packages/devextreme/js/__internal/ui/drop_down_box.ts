@@ -361,7 +361,6 @@ class DropDownBox<
   }
 }
 
-// @ts-expect-error DataExpressionMixin is not typed
 DropDownBox.include(DataExpressionMixin);
 
 registerComponent('dxDropDownBox', DropDownBox);
