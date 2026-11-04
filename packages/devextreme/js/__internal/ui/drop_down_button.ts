@@ -603,9 +603,10 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
       haspopup: 'listbox',
     };
     const firstButtonAria: AriaAttributes = {};
+    const { text, hint } = this.option();
 
-    if (!this.option('text')) {
-      firstButtonAria.label = 'dropdownbutton';
+    if (!text) {
+      firstButtonAria.label = hint || 'dropdownbutton';
     }
 
     this._getButtons().each((index, $button) => {
@@ -896,6 +897,12 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
       case 'template':
         this._renderButtonGroup();
         break;
+      case 'hint': {
+        super._optionChanged(args);
+        const { opened } = this.option();
+        this._updateAriaAttributes(opened ?? false);
+        break;
+      }
       case '_cached_buttonGroupOptions':
       case '_cached_dropDownOptions':
         break;

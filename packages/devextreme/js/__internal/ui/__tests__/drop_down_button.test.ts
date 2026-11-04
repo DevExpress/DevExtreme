@@ -1,0 +1,63 @@
+import {
+  afterEach, describe, expect, it,
+} from '@jest/globals';
+import $ from '@js/core/renderer';
+import type { Properties } from '@js/ui/drop_down_button';
+import DropDownButton from '@js/ui/drop_down_button';
+
+import { DropDownButtonModel } from '../drop_down_editor/__tests__/__mock__/model/drop_down_button';
+
+const HINT = 'Exporting/Printing';
+
+const instances: DropDownButton[] = [];
+
+const createDropDownButton = (
+  options: Partial<Properties> = {},
+): { instance: DropDownButton; model: DropDownButtonModel } => {
+  const $element = $('<div>').appendTo(document.body);
+
+  const instance = new DropDownButton($element.get(0) as HTMLElement, options);
+
+  instances.push(instance);
+
+  return { instance, model: new DropDownButtonModel($element.get(0) as HTMLElement) };
+};
+
+describe('DropDownButton', () => {
+  afterEach(() => {
+    instances.forEach((instance) => instance.dispose());
+    instances.length = 0;
+    document.body.innerHTML = '';
+  });
+
+  describe('action button aria-label (T1337649)', () => {
+    it('should be taken from the hint when the text is empty', () => {
+      const { model } = createDropDownButton({ icon: 'export', hint: HINT });
+
+      expect(model.getButtonElement()?.getAttribute('aria-label')).toBe(HINT);
+    });
+
+    it('should stay the hint after the drop-down list is opened and closed', () => {
+      const { instance, model } = createDropDownButton({ icon: 'export', hint: HINT });
+
+      instance.option('opened', true);
+      instance.option('opened', false);
+
+      expect(model.getButtonElement()?.getAttribute('aria-label')).toBe(HINT);
+    });
+
+    it('should follow a hint change at runtime', () => {
+      const { instance, model } = createDropDownButton({ icon: 'export', hint: HINT });
+
+      instance.option('hint', 'Print or export');
+
+      expect(model.getButtonElement()?.getAttribute('aria-label')).toBe('Print or export');
+    });
+
+    it('should be the visible text when both the text and the hint are set', () => {
+      const { model } = createDropDownButton({ icon: 'export', text: 'Export', hint: HINT });
+
+      expect(model.getButtonElement()?.getAttribute('aria-label')).toBe('Export');
+    });
+  });
+});
