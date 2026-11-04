@@ -27,7 +27,7 @@ export function addInfoHeader(
   const source = css.toString();
   const encoding = '@charset "UTF-8";';
   const charsetPrefix = /^@charset\s+"utf-8";\s*/i;
-  const match = source.match(charsetPrefix);
+  const match = charsetPrefix.exec(source);
 
   if (match) {
     const rest = source.slice(match[0].length).trimStart();

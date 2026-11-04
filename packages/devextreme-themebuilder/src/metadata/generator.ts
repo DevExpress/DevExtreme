@@ -87,10 +87,15 @@ export default class MetadataGenerator {
   }
 
   fillMetaData(item: MetaItem, filePath: string): void {
-    const target =
-        filePath.includes('generic') ? this.metadata.generic :
-        filePath.includes('material') ? this.metadata.material :
-        filePath.includes('fluent') ? this.metadata.fluent : [];
+    let target: MetaItem[] = [];
+
+    if (filePath.includes('generic')) {
+      target = this.metadata.generic;
+    } else if (filePath.includes('material')) {
+      target = this.metadata.material;
+    } else if (filePath.includes('fluent')) {
+      target = this.metadata.fluent;
+    }
 
     target.push(item);
   }
@@ -113,7 +118,7 @@ export default class MetadataGenerator {
 
     const overriddenVariables = MetadataGenerator.getOverriddenVariables(metaItems);
     const collector = `$_never-used: collector(${MetadataGenerator.getMapFromMeta(metaItems)});\n`;
-    modifiedContent = overriddenVariables + '\n\n' + modifiedContent + collector;
+    modifiedContent = `${overriddenVariables}\n\n${modifiedContent}${collector}`;
 
     return modifiedContent;
   }

@@ -68,7 +68,7 @@ const simpleDependencies: ScriptsDependencyTree = {
               widget: '',
             },
             'grid_column.ts': {
-              dependencies : {},
+              dependencies: {},
               widget: 'column',
             },
           },
@@ -128,11 +128,8 @@ const sortDependencies = (dependencies: Record<string, string[]>): void => {
 };
 
 jest.mock('fs', () => ({
-  readFileSync: jest.fn().mockImplementation((path: string): string => {
-    return filesContent[path] || ''
-  }),
-  existsSync: (path: string): boolean => filesContent[path] !== undefined,
-  // eslint-disable-next-line spellcheck/spell-checker
+  readFileSync: jest.fn().mockImplementation((filePath: string): string => filesContent[filePath] || ''),
+  existsSync: (filePath: string): boolean => filesContent[filePath] !== undefined,
   realpathSync: (): void => { }, // https://github.com/facebook/jest/issues/10012
   readFile: (): void => { }, // The "original" argument must be of type function. Received undefined
 }));
@@ -330,4 +327,3 @@ describe('Integration test', () => {
     expect(builtDependenciesCopy).toEqual(idealDependenciesCopy);
   });
 });
-

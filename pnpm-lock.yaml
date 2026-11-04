@@ -1916,6 +1916,9 @@ importers:
         specifier: 1.105.1
         version: 1.105.1
     devDependencies:
+      '@stylistic/eslint-plugin':
+        specifier: 'catalog:'
+        version: 5.10.0(eslint@9.39.5(jiti@2.6.1))
       '@types/clean-css':
         specifier: 4.2.11
         version: 4.2.11
@@ -1949,6 +1952,9 @@ importers:
       eslint-config-devextreme:
         specifier: 'catalog:'
         version: 1.1.13(ca88627957d43b26049ace418378ed08)
+      eslint-migration-utils:
+        specifier: workspace:*
+        version: link:../eslint-migration-utils
       eslint-plugin-import:
         specifier: 'catalog:'
         version: 2.32.0(@typescript-eslint/parser@8.52.0(eslint@9.39.5(jiti@2.6.1))(typescript@5.9.3))(eslint@9.39.5(jiti@2.6.1))
@@ -2630,6 +2636,7 @@ packages:
   '@angular/platform-browser-dynamic@22.2.3':
     resolution: {integrity: sha512-+WBe2JjaEeK0NpMlBzV7UBkO+ltUBYTDtMfGYkew2xHdIviITnzXX7yUXijB1Y6jxALgz3jEuJa9iLid8s11rg==}
     engines: {node: ^22.22.3 || ^24.15.0 || >=26.0.0}
+    deprecated: '@angular/platform-browser-dynamic is deprecated. Use `@angular/platform-browser` instead.'
     peerDependencies:
       '@angular/common': 22.2.3
       '@angular/compiler': 22.2.3

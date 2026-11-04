@@ -1,14 +1,12 @@
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { FlatCompat } from '@eslint/eslintrc';
 import { changeRulesToStylistic } from 'eslint-migration-utils';
 import stylistic from '@stylistic/eslint-plugin';
+import typescriptConfig from 'eslint-config-devextreme/typescript';
+import jestConfig from 'eslint-config-devextreme/jest';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const compat = new FlatCompat({
-    baseDirectory: __dirname,
-});
 
 export default [
     {
@@ -19,10 +17,10 @@ export default [
             "jest.config.js",
         ],
     },
-    ...compat.extends('devextreme/typescript').map(config => {
+    ...typescriptConfig.map(config => {
         const newConfig = {
             ...config,
-            files: ["src/**/*.ts"],
+            files: ["src/**/*.ts", "tests/**/*.ts"],
         }
 
         if (config.rules) {
@@ -35,7 +33,7 @@ export default [
         files: ["src/**/*.ts"],
         languageOptions: {
             parserOptions: {
-                project: "./tsconfig.json",
+                project: "./tsconfig.eslint.json",
                 tsconfigRootDir: __dirname,
             },
         },
@@ -55,9 +53,10 @@ export default [
             "@typescript-eslint/member-ordering": "warn",
             "@typescript-eslint/ban-types": "off",
             "@typescript-eslint/no-unnecessary-boolean-literal-compare": "off",
+            "require-await": "warn",
         },
     },
-    ...compat.extends("devextreme/jest").map((config) => ({
+    ...jestConfig.map((config) => ({
         ...config,
         files: ["tests/**/*.ts"],
     })),
@@ -76,6 +75,7 @@ export default [
             "jest/valid-title": "warn",
             "jest/no-alias-methods": "warn",
             "@typescript-eslint/no-non-null-assertion": "warn",
+            "@typescript-eslint/no-unnecessary-boolean-literal-compare": "off",
         },
     },
 ];
