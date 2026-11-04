@@ -224,6 +224,11 @@ export type EditingOptions = EditingBase<RawItemData, RowKey> & {
 
 export type EditingChangeParams = Partial<EditingChange> & { oldData?: RawItemData };
 
+export interface AddChangeOptions {
+  row?: ProcessedItem;
+  forceUpdateRow?: boolean;
+}
+
 export interface EditingModuleOptions {
   useLegacyColumnButtonTemplate?: boolean;
 }
@@ -288,4 +293,7 @@ export interface EditingFormBasedRowsViewExtension {
     $cells: dxElementWrapper | undefined,
     column: Column | undefined,
   ) => number;
+
+  // eslint-disable-next-line @typescript-eslint/method-signature-style -- overridden by methods
+  _formItemPrepared(cellOptions: EditorCellOptions, $container: dxElementWrapper): void;
 }
