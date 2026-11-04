@@ -49,7 +49,22 @@ export interface GroupInfoData {
   path: unknown[];
   isExpanded: boolean;
   isPending?: boolean;
+  childrenTotalCount?: number;
+  skipChildrenTotalCount?: number;
 }
+
+export interface ExpandedGroupsInfo {
+  items: GroupItemData[];
+  paths: unknown[][];
+  count: number;
+  lastCount: number;
+  skip?: number;
+  take?: number;
+}
+
+export type GroupPagingOptions = Pick<LoadOperation, 'skip' | 'take' | 'skips' | 'takes'>;
+
+export type GroupPagingCallback = (groupInfo: GroupInfoData, totalOffset: number) => void;
 
 export interface GroupInfo {
   key: RowKey;
