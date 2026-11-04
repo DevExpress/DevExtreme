@@ -35,16 +35,12 @@
 }
 
 .ai-chat-empty-message {
-  font-size: var(--dxds-font-size-180, 18px);
   font-weight: 400;
   text-align: center;
-  color: var(--dx-color-text);
   margin-bottom: 8px;
 }
 
 .ai-chat-empty-prompt {
-  font-size: var(--dxds-font-size-base-md, 14px);
-  color: var(--dxds-color-content-subtle, #616161);
   text-align: center;
   padding: 0 24px;
   white-space: pre-line;
