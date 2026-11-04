@@ -21,6 +21,7 @@ import eventsEngine from '@ts/events/core/events_engine';
 import type { DataChange } from '@ts/grids/grid_core/data_controller/types';
 import type { EditorFactory } from '@ts/grids/grid_core/editor_factory/editor_factory';
 import { CLASSES as MASTER_DETAIL_CLASSES } from '@ts/grids/grid_core/master_detail/const';
+import type { ValidatingEditorFactoryExtension } from '@ts/grids/grid_core/validating/types';
 import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
 
 import type { ColumnHeadersView } from '../column_headers/column_headers';
@@ -28,7 +29,11 @@ import type {
   ColumnsResizerViewController,
   DraggingHeaderViewController,
 } from '../columns_resizing_reordering/columns_resizing_reordering';
-import type { Coordinates } from '../columns_resizing_reordering/types';
+import type {
+  Coordinates,
+  DraggingPointCreatedOptions,
+  DraggingPointsOptions,
+} from '../columns_resizing_reordering/types';
 import type { ResizingController } from '../grid_view/grid_view';
 import type { KeyboardNavigationController } from '../keyboard_navigation/keyboard_navigation';
 import type { ColumnPoint, ModuleType } from '../types';
@@ -37,12 +42,20 @@ import type { ColumnsView } from '../views/columns_view';
 import { normalizeWidth } from '../views/columns_view';
 import type { RowsView } from '../views/rows_view';
 import type { RowsViewScrollEvent, SummaryRowsViewExtension } from '../views/types';
-import { CLASSES } from './const';
+import { CLASSES, COMMAND_TRANSPARENT } from './const';
 import type {
+  ColumnFixingColumnHeadersView,
   ColumnFixingColumnHeadersViewExtension,
   ColumnFixingColumnsViewExtension,
+  ColumnFixingFooterView,
   ColumnFixingRowsView,
 } from './types';
+import {
+  getTransparentColumnIndex,
+  isColumnHeadersPanel,
+  normalizeColumnIndicesByPoints,
+  normalizeColumnWidths,
+} from './utils';
 
 const FIRST_CELL_CLASS = 'dx-first-cell';
 const LAST_CELL_CLASS = 'dx-last-cell';
@@ -50,7 +63,6 @@ const HOVER_STATE_CLASS = 'dx-state-hover';
 const FIXED_COL_CLASS = 'dx-col-fixed';
 const FIXED_COLUMNS_CLASS = 'dx-fixed-columns';
 const POINTER_EVENTS_NONE_CLASS = 'dx-pointer-events-none';
-const COMMAND_TRANSPARENT = 'transparent';
 const FIXED_COLUMN_ICON_CLASS = 'fix-column';
 const FIXED_COLUMN_LEFT_ICON_CLASS = 'fix-column-left';
 const FIXED_COLUMN_RIGHT_ICON_CLASS = 'fix-column-right';
@@ -62,39 +74,6 @@ const UNFIXED_COLUMN_ICON_CLASS = 'unfix-column';
 // can be 1px past the computed max. An elastic offset within this range is that
 // rounding noise, not a real elastic scroll (always larger), so it is ignored.
 const ELASTIC_SCROLL_TOLERANCE = 1;
-
-const getTransparentColumnIndex = function (fixedColumns: any[]) {
-  let transparentColumnIndex = -1;
-
-  each(fixedColumns, (index, column) => {
-    if (column.command === COMMAND_TRANSPARENT) {
-      transparentColumnIndex = index;
-      return false;
-    }
-    return undefined;
-  });
-
-  return transparentColumnIndex;
-};
-
-const normalizeColumnWidths = function (fixedColumns, widths: number[], fixedWidths): number[] {
-  let fixedColumnIndex = 0;
-
-  if (fixedColumns && widths && fixedWidths) {
-    for (let i = 0; i < fixedColumns.length; i++) {
-      if (fixedColumns[i].command === COMMAND_TRANSPARENT) {
-        fixedColumnIndex += fixedColumns[i].colspan;
-      } else {
-        if (widths[fixedColumnIndex] < fixedWidths[i]) {
-          widths[fixedColumnIndex] = fixedWidths[i];
-        }
-        fixedColumnIndex++;
-      }
-    }
-  }
-
-  return widths;
-};
 
 // View
 const baseFixedColumns = <T extends ModuleType<ColumnsView>>(
@@ -1075,32 +1054,29 @@ const footerView = <T extends ModuleType<ColumnsView>>(
   ColumnsView & ColumnFixingColumnsViewExtension
 > => class FooterViewFixedColumnsExtender extends baseFixedColumns(Base) {};
 
-const normalizeColumnIndicesByPoints = function (columns, fixedColumns, pointsByColumns) {
-  const transparentColumnIndex = getTransparentColumnIndex(fixedColumns);
-  const correctIndex = columns.length - fixedColumns.length;
-
-  each(pointsByColumns, (_, point) => {
-    if (point.index > transparentColumnIndex) {
-      point.columnIndex += correctIndex;
-      point.index += correctIndex;
-    }
-  });
-
-  return pointsByColumns;
-};
-
 const draggingHeader = (
   Base: ModuleType<DraggingHeaderViewController>,
 ): ModuleType<DraggingHeaderViewController> => class DraggingHeaderColumnFixingExtender
   extends Base {
-  public _generatePointsByColumns(options, needToCheckPrevPoint) {
+  protected declare _columnHeadersView: ColumnFixingColumnHeadersView;
+
+  public _generatePointsByColumns(
+    options: DraggingPointsOptions,
+    needToCheckPrevPoint?: boolean,
+  ): ColumnPoint[] {
     const visibleColumns = options.columns;
     const { targetDraggingPanel } = options;
 
-    if (targetDraggingPanel && targetDraggingPanel.getName() === 'headers' && targetDraggingPanel.isFixedColumns()) {
+    if (
+      targetDraggingPanel
+      && isColumnHeadersPanel(targetDraggingPanel)
+      && targetDraggingPanel.isFixedColumns()
+    ) {
       if (options.sourceColumn.fixed) {
         if (!options.rowIndex) {
-          options.columnElements = targetDraggingPanel.getFixedColumnElements(0);
+          const fixedColumnElements = targetDraggingPanel.getFixedColumnElements(0);
+
+          options.columnElements = fixedColumnElements ?? $();
         }
         options.columns = targetDraggingPanel.getFixedColumns(options.rowIndex);
 
@@ -1115,12 +1091,11 @@ const draggingHeader = (
 
   protected _pointCreated({
     point, columns, location, sourceColumn, cells,
-  }) {
+  }: DraggingPointCreatedOptions): boolean {
     const result = super._pointCreated({
       point, columns, location, sourceColumn, cells,
     });
     const targetColumn = columns[point.columnIndex];
-    // @ts-expect-error
     const $transparentColumn = this._columnHeadersView.getTransparentColumnElement();
 
     if (!result && location === 'headers' && $transparentColumn && $transparentColumn.length) {
@@ -1144,28 +1119,27 @@ const columnsResizer = (
   Base: ModuleType<ColumnsResizerViewController>,
 ): ModuleType<ColumnsResizerViewController> => class ColumnResizerColumnFixingExtender
   extends Base {
-  private _pointsByFixedColumns: any;
+  protected declare _columnHeadersView: ColumnFixingColumnHeadersView;
 
-  protected _generatePointsByColumns(needToCheckPrevPoint) {
-    const that = this;
-    const columnsController = that._columnsController;
-    const columns = columnsController && that._columnsController.getVisibleColumns();
-    const fixedColumns = columnsController && that._columnsController.getFixedColumns();
+  private _pointsByFixedColumns?: ColumnPoint[];
+
+  protected _generatePointsByColumns(needToCheckPrevPoint?: boolean): void {
+    const columns = this._columnsController.getVisibleColumns();
+    const fixedColumns = this._columnsController.getFixedColumns();
     const transparentColumnIndex = getTransparentColumnIndex(fixedColumns);
     const correctIndex = columns.length - fixedColumns.length;
-    // @ts-expect-error
-    const cells = that._columnHeadersView.getFixedColumnElements();
+    const cells = this._columnHeadersView.getFixedColumnElements();
 
     super._generatePointsByColumns(needToCheckPrevPoint);
 
     if (cells && cells.length > 0) {
-      that._pointsByFixedColumns = gridCoreUtils.getPointsByColumns(cells, (point) => {
+      this._pointsByFixedColumns = gridCoreUtils.getPointsByColumns(cells, (point) => {
         if (point.index > transparentColumnIndex) {
           point.columnIndex += correctIndex;
           point.index += correctIndex;
         }
 
-        return that._pointCreated(point, columns);
+        return this._pointCreated(point, columns);
       });
     }
   }
@@ -1175,7 +1149,6 @@ const columnsResizer = (
     currentPoint: Coordinates,
     deltaX: number,
   ): ColumnPoint | null {
-    // @ts-expect-error
     const $transparentColumn = this._columnHeadersView.getTransparentColumnElement();
 
     if ($transparentColumn && $transparentColumn.length) {
@@ -1193,12 +1166,14 @@ const columnsResizer = (
 const resizing = (
   Base: ModuleType<ResizingController>,
 ): ModuleType<ResizingController> => class ResizingColumnFixingExtender extends Base {
-  protected _setAriaOwns() {
-    super._setAriaOwns.apply(this, arguments as any);
+  protected declare _columnHeadersView: ColumnFixingColumnHeadersView;
 
-    // @ts-expect-error
+  protected declare _footerView: ColumnFixingFooterView;
+
+  protected _setAriaOwns(): void {
+    super._setAriaOwns();
+
     const headerFixedTable = this._columnHeadersView?.getFixedTableElement();
-    // @ts-expect-error
     const footerFixedTable = this._footerView?.getFixedTableElement();
     this._rowsView?.setAriaOwns(headerFixedTable?.attr('id'), footerFixedTable?.attr('id'), true);
   }
@@ -1219,17 +1194,19 @@ const keyboardNavigation = (
 };
 
 const editorFactory = (
-  Base: ModuleType<EditorFactory>,
+  Base: ModuleType<EditorFactory & ValidatingEditorFactoryExtension>,
 ): ModuleType<EditorFactory> => class EditorFactoryFixedColumnsExtender extends Base {
-  protected getValidationMessageContainer($cell: dxElementWrapper): dxElementWrapper {
-    // @ts-expect-error RowsView's method
+  protected declare _rowsView: ColumnFixingRowsView;
+
+  public override getValidationMessageContainer($cell: dxElementWrapper): dxElementWrapper {
     const isFixedColumns = this._rowsView.isFixedColumns();
 
     if (isFixedColumns) {
-      return this._rowsView.element() as dxElementWrapper;
+      const $rowsViewElement = this._rowsView.element();
+
+      return $rowsViewElement?.length ? $rowsViewElement : $();
     }
 
-    // @ts-expect-error EditorFactory's method
     return super.getValidationMessageContainer($cell);
   }
 };
