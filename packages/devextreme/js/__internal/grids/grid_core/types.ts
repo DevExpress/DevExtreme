@@ -171,6 +171,8 @@ export interface InternalGrid extends GridBaseType {
   _createAction: (actionSource: unknown, config?: ActionConfig) => ModuleItemAction;
 
   _createActionByOption: (optionName: string, config?: ActionConfig) => ModuleItemAction;
+
+  hasActionSubscription: (actionName: string) => boolean;
   isReady: () => boolean;
 
   getVisibleRows: () => ProcessedItem[];
