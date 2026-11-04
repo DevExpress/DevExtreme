@@ -34,13 +34,17 @@ const foreachExpandedGroups = function (that, callback, updateGroups?) {
   }, true, false, updateGroups, updateGroups);
 };
 
+const createExpandedGroupsInfo = function () {
+  return {
+    items: [],
+    paths: [],
+    count: 0,
+    lastCount: 0,
+  };
+};
+
 const processGroupItems = function (that, items, groupsCount, expandedInfo, path, isCustomLoading?, isLastGroupExpanded?) {
   let isExpanded;
-
-  expandedInfo.items = expandedInfo.items || [];
-  expandedInfo.paths = expandedInfo.paths || [];
-  expandedInfo.count = expandedInfo.count || 0;
-  expandedInfo.lastCount = expandedInfo.lastCount || 0;
 
   if (!groupsCount) return;
 
@@ -201,23 +205,29 @@ function makeDataDeferred(options) {
   }
 }
 
+function collectExpandedGroupsInfo(that: GroupingHelper, options, loadedGroupCount, data) {
+  const expandedInfo = createExpandedGroupsInfo();
+
+  processGroupItems(that, data, loadedGroupCount, expandedInfo, []);
+
+  fillSkipTakeInExpandedInfo(options, expandedInfo, loadedGroupCount);
+
+  return expandedInfo;
+}
+
 function loadGroupItems(that: GroupingHelper, options, loadedGroupCount, expandedInfo, groupLevel, data) {
-  if (!options.isCustomLoading) {
-    expandedInfo = {};
-
-    processGroupItems(that, data, loadedGroupCount, expandedInfo, []);
-
-    fillSkipTakeInExpandedInfo(options, expandedInfo, loadedGroupCount);
-  }
+  const currentExpandedInfo = options.isCustomLoading
+    ? expandedInfo
+    : collectExpandedGroupsInfo(that, options, loadedGroupCount, data);
 
   const groupCount = options.group ? options.group.length : 0;
 
-  if (expandedInfo.paths.length && (groupCount - loadedGroupCount > 0)) {
+  if (currentExpandedInfo.paths.length && (groupCount - loadedGroupCount > 0)) {
     makeDataDeferred(options);
-    loadExpandedGroups(that, options, expandedInfo, loadedGroupCount, groupLevel, data);
-  } else if (expandedInfo.paths.length && options.storeLoadOptions.group) {
+    loadExpandedGroups(that, options, currentExpandedInfo, loadedGroupCount, groupLevel, data);
+  } else if (currentExpandedInfo.paths.length && options.storeLoadOptions.group) {
     makeDataDeferred(options);
-    loadLastLevelGroupItems(that, options, expandedInfo, data);
+    loadLastLevelGroupItems(that, options, currentExpandedInfo, data);
   } else if (isDataDeferred(options.data)) {
     options.data.resolve(data);
   }
@@ -530,7 +540,7 @@ export class GroupingHelper extends GroupingHelperCore {
     const loadedGroupCount = dataGridCore.normalizeSortingInfo(options.storeLoadOptions.group || options.loadOptions.group).length;
     const groupCount = options.group ? options.group.length : 0;
     let totalCount;
-    const expandedInfo = {};
+    const expandedInfo = createExpandedGroupsInfo();
 
     if (options.isCustomLoading) {
       callBase(options);
