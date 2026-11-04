@@ -10,7 +10,8 @@ import { isVirtualPaging } from '@ts/grids/grid_core/utils';
 
 import dataGridCore from '../core';
 import { createGroupFilter } from '../utils';
-import { createOffsetFilter, GroupingHelper as GroupingHelperCore } from './m_grouping_core';
+import { GroupingHelper as GroupingHelperCore } from './m_grouping_core';
+import { createOffsetFilter } from './utils';
 
 function getContinuationGroupCount(groupOffset, pageSize, groupSize, groupIndex) {
   groupIndex = groupIndex || 0;

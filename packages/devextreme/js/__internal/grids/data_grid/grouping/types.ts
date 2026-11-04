@@ -50,7 +50,7 @@ export interface GroupInfoData {
 }
 
 export interface GroupInfo {
-  key: unknown;
+  key: RowKey;
   offset: number;
   data: GroupInfoData;
   children: GroupInfoLevel;

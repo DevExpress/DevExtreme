@@ -3,10 +3,7 @@ import $ from '@js/core/renderer';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import { when } from '@js/core/utils/deferred';
 import type { StoreLoadOptions } from '@ts/data/data_source/types';
-import type { SortingSelector } from '@ts/data/utils';
 import type { LoadOperation, OperationTypes } from '@ts/grids/grid_core/data_source_adapter/types';
-import type { DataFilter } from '@ts/grids/grid_core/filter/types';
-import { combineFilters } from '@ts/grids/grid_core/filter/utils';
 import gridCoreUtils, { isVirtualPaging } from '@ts/grids/grid_core/utils';
 
 import gridCore from '../core';
@@ -20,129 +17,7 @@ import type {
   GroupingLoadOperation,
   GroupItemData,
 } from './types';
-
-const createNullOrBooleanKeyFilters = function createNullOrBooleanKeyFilters(
-  selector: SortingSelector | undefined,
-  key: boolean | null,
-  desc: boolean,
-): unknown[] {
-  if (key === false) {
-    return [[selector, '=', desc ? true : null]];
-  }
-  if (key ? !desc : desc) {
-    return [[selector, '<>', key]];
-  }
-  return [[selector, '<>', null], [selector, '=', null]];
-};
-
-export function createOffsetFilter(
-  path: unknown[],
-  storeLoadOptions: StoreLoadOptions,
-  lastLevelOnly?: boolean,
-): DataFilter {
-  const groups = normalizeSortingInfo(storeLoadOptions.group);
-  const filters: DataFilter[] = [];
-
-  for (let i = lastLevelOnly ? path.length - 1 : 0; i < path.length; i += 1) {
-    const filterElement: unknown[] = [];
-    for (let j = 0; j <= i; j += 1) {
-      const { selector, desc } = groups[j];
-      const key = path[j];
-      const isLastLevel = i === j;
-      const isNullOrBooleanKey = key === null || key === false || key === true;
-      if (isLastLevel && isNullOrBooleanKey) {
-        filterElement.push(...createNullOrBooleanKeyFilters(selector, key, desc));
-      } else {
-        const lastLevelOperation = desc ? '>' : '<';
-        const operation = isLastLevel ? lastLevelOperation : '=';
-        const currentFilter = [selector, operation, key];
-        filterElement.push(
-          operation === '<' ? [currentFilter, 'or', [selector, '=', null]] : currentFilter,
-        );
-      }
-    }
-    filters.push(combineFilters(filterElement));
-  }
-
-  const filter = combineFilters(filters, 'or');
-
-  return combineFilters([filter, storeLoadOptions.filter]);
-}
-
-const findGroupInfoByKey = function findGroupInfoByKey(
-  groupsInfo: GroupInfoLevel,
-  key: unknown,
-): GroupInfo | undefined {
-  const { hash } = groupsInfo;
-
-  return hash?.[JSON.stringify(key)];
-};
-
-const getGroupInfoIndexByOffset = function getGroupInfoIndexByOffset(
-  groupsInfo: GroupInfoLevel,
-  offset: number,
-): number {
-  let leftIndex = 0;
-  let rightIndex = groupsInfo.length - 1;
-
-  if (!groupsInfo.length) {
-    return 0;
-  }
-
-  do {
-    const middleIndex = Math.floor((rightIndex + leftIndex) / 2);
-    if (groupsInfo[middleIndex].offset > offset) {
-      rightIndex = middleIndex;
-    } else {
-      leftIndex = middleIndex;
-    }
-  } while (rightIndex - leftIndex > 1);
-
-  let index = leftIndex;
-  for (; index <= rightIndex; index += 1) {
-    if (groupsInfo[index].offset > offset) {
-      break;
-    }
-  }
-  return index;
-};
-
-const cleanGroupsInfo = function cleanGroupsInfo(
-  groupsInfo: GroupInfoLevel,
-  groupIndex: number,
-  groupsCount: number,
-): void {
-  for (const groupInfo of groupsInfo) {
-    if (groupIndex + 1 >= groupsCount) {
-      groupInfo.children = [];
-    } else {
-      cleanGroupsInfo(groupInfo.children, groupIndex + 1, groupsCount);
-    }
-  }
-};
-
-const calculateItemsCount = function calculateItemsCount(
-  that: GroupingHelper,
-  items: GroupItemData[] | null | undefined,
-  groupsCount: number,
-): number {
-  if (!items) {
-    return 0;
-  }
-
-  if (!groupsCount) {
-    return items.length;
-  }
-
-  let result = 0;
-  for (const item of items) {
-    if (that.isGroupItemCountable(item)) {
-      result += 1;
-    }
-    result += calculateItemsCount(that, item.items, groupsCount - 1);
-  }
-  return result;
-};
+import { cleanGroupsInfo, findGroupInfoByKey, getGroupInfoIndexByOffset } from './utils';
 
 export abstract class GroupingHelper {
   public readonly dataSourceAdapter: GroupingDataSourceAdapter;
@@ -182,9 +57,31 @@ export abstract class GroupingHelper {
     const groupCount = gridCore.normalizeSortingInfo(dataSource.group() || []).length;
     // @ts-expect-error DataSource.items() is typed as unknown[]
     const items: GroupItemData[] = dataSource.items();
-    const itemsCount = calculateItemsCount(this, items, groupCount);
+    const itemsCount = this.calculateItemsCount(items, groupCount);
 
     return itemsCount;
+  }
+
+  private calculateItemsCount(
+    items: GroupItemData[] | null | undefined,
+    groupsCount: number,
+  ): number {
+    if (!items) {
+      return 0;
+    }
+
+    if (!groupsCount) {
+      return items.length;
+    }
+
+    let result = 0;
+    for (const item of items) {
+      if (this.isGroupItemCountable(item)) {
+        result += 1;
+      }
+      result += this.calculateItemsCount(item.items, groupsCount - 1);
+    }
+    return result;
   }
 
   public foreachGroups(
@@ -358,16 +255,16 @@ export abstract class GroupingHelper {
 
   public handleDataLoaded(
     options: GroupingLoadOperation,
-    callBase: (options: LoadOperation) => void,
+    customizeLoadResult: (options: LoadOperation) => void,
   ): void {
-    callBase(options);
+    customizeLoadResult(options);
   }
 
   public handleDataLoadedCore(
     options: GroupingLoadOperation,
-    callBase: (options: LoadOperation) => void,
+    customizeLoadResult: (options: LoadOperation) => void,
   ): void {
-    callBase(options);
+    customizeLoadResult(options);
   }
 
   public abstract changeRowExpand(path: unknown[]): DeferredObj<unknown>;
