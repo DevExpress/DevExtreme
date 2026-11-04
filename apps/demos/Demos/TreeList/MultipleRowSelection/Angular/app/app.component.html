@@ -12,7 +12,7 @@
 >
   <dxo-tree-list-selection
     mode="multiple"
-    [recursive]="recursiveSelectionEnabled"
+    [recursive]="recursiveSelectionEnabled()"
   >
   </dxo-tree-list-selection>
   <dxi-tree-list-column
@@ -56,7 +56,7 @@
   <div class="selected-data">
     <span class="caption">Selected Records:</span>
     <span>
-      {{ selectedEmployeeNames }}
+      {{ selectedEmployeeNames() }}
     </span>
   </div>
 </div>

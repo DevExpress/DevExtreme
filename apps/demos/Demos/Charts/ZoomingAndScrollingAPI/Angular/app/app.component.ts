@@ -1,9 +1,11 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode } from '@angular/core';
+import {
+  Component, enableProdMode, inject, signal,
+} from '@angular/core';
 import { DxRangeSelectorModule } from 'devextreme-angular';
 import { VisualRange } from 'devextreme-angular/common/charts';
 import { DxChartModule } from 'devextreme-angular/ui/chart';
-import { Service, ZoomingData } from './app.service';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -19,13 +21,9 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  zoomingData: ZoomingData[];
+  readonly zoomingData = inject(Service).getZoomingData();
 
-  visualRange: VisualRange = {};
-
-  constructor(service: Service) {
-    this.zoomingData = service.getZoomingData();
-  }
+  readonly visualRange = signal<VisualRange>({});
 }
 
 bootstrapApplication(AppComponent);

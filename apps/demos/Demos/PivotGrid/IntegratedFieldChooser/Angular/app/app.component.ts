@@ -1,7 +1,7 @@
-import { Component, enableProdMode } from '@angular/core';
+import { Component, enableProdMode, signal } from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
 import { DxSelectBoxModule } from 'devextreme-angular';
-import { Options as DataSourceConfig } from 'devextreme/ui/pivot_grid/data_source';
+import type { Options as DataSourceConfig } from 'devextreme/ui/pivot_grid/data_source';
 import { DxPivotGridModule, DxPivotGridTypes } from 'devextreme-angular/ui/pivot-grid';
 
 if (!/localhost/.test(document.location.host)) {
@@ -18,7 +18,7 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  dataSource: DataSourceConfig = {
+  readonly dataSource: DataSourceConfig = {
     fields: [
       { dataField: '[Product].[Category]', area: 'row' },
       {
@@ -42,9 +42,9 @@ export class AppComponent {
     },
   };
 
-  applyChangesModes: DxPivotGridTypes.ApplyChangesMode[] = ['instantly', 'onDemand'];
+  readonly applyChangesModes: DxPivotGridTypes.ApplyChangesMode[] = ['instantly', 'onDemand'];
 
-  applyChangesMode = this.applyChangesModes[0];
+  readonly applyChangesMode = signal(this.applyChangesModes[0]);
 }
 
 bootstrapApplication(AppComponent);

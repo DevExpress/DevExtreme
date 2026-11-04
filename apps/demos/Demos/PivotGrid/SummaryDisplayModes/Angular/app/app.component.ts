@@ -1,5 +1,5 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode } from '@angular/core';
+import { Component, enableProdMode, inject } from '@angular/core';
 import { DxPivotGridModule } from 'devextreme-angular';
 import PivotGridDataSource from 'devextreme/ui/pivot_grid/data_source';
 import { DxPivotGridTypes } from 'devextreme-angular/ui/pivot-grid';
@@ -19,9 +19,37 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  pivotGridDataSource: PivotGridDataSource;
+  readonly pivotGridDataSource = new PivotGridDataSource({
+    fields: [{
+      caption: 'Region',
+      width: 120,
+      dataField: 'region',
+      area: 'row',
+    }, {
+      caption: 'City',
+      dataField: 'city',
+      width: 150,
+      area: 'row',
+    }, {
+      dataField: 'date',
+      dataType: 'date',
+      area: 'column',
+    }, {
+      groupName: 'date',
+      groupInterval: 'year',
+      expanded: true,
+    }, {
+      caption: 'Relative Sales',
+      dataField: 'amount',
+      dataType: 'number',
+      summaryType: 'sum',
+      area: 'data',
+      summaryDisplayMode: 'percentOfColumnGrandTotal',
+    }],
+    store: inject(Service).getSales(),
+  });
 
-  summaryDisplayModes = [
+  private readonly summaryDisplayModes = [
     { text: 'None', value: 'none' },
     { text: 'Absolute Variation', value: 'absoluteVariation' },
     { text: 'Percent Variation', value: 'percentVariation' },
@@ -31,38 +59,6 @@ export class AppComponent {
     { text: 'Percent of Row Grand Total', value: 'percentOfRowGrandTotal' },
     { text: 'Percent of Grand Total', value: 'percentOfGrandTotal' },
   ];
-
-  constructor(service: Service) {
-    this.pivotGridDataSource = new PivotGridDataSource({
-      fields: [{
-        caption: 'Region',
-        width: 120,
-        dataField: 'region',
-        area: 'row',
-      }, {
-        caption: 'City',
-        dataField: 'city',
-        width: 150,
-        area: 'row',
-      }, {
-        dataField: 'date',
-        dataType: 'date',
-        area: 'column',
-      }, {
-        groupName: 'date',
-        groupInterval: 'year',
-        expanded: true,
-      }, {
-        caption: 'Relative Sales',
-        dataField: 'amount',
-        dataType: 'number',
-        summaryType: 'sum',
-        area: 'data',
-        summaryDisplayMode: 'percentOfColumnGrandTotal',
-      }],
-      store: service.getSales(),
-    });
-  }
 
   prepareContextMenu(e: DxPivotGridTypes.ContextMenuPreparingEvent) {
     if (e.field?.dataField === 'amount') {

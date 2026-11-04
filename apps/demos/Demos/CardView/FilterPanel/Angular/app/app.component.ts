@@ -1,7 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode } from '@angular/core';
+import { Component, enableProdMode, inject } from '@angular/core';
 import { DxCardViewModule } from 'devextreme-angular/ui/card-view';
-import { Order, Service } from './app.service';
+import { type Order, Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -20,9 +20,9 @@ function getOrderDay({ OrderDate }: Order): number {
   ],
 })
 export class AppComponent {
-  filterValue = [['Employee', '=', 'Clark Morgan'], 'and', ['DeliveryDate', 'weekends']];
+  readonly filterValue = [['Employee', '=', 'Clark Morgan'], 'and', ['DeliveryDate', 'weekends']];
 
-  customOperations = [{
+  readonly customOperations = [{
     name: 'weekends',
     caption: 'Weekends',
     dataTypes: ['date'],
@@ -33,7 +33,7 @@ export class AppComponent {
     },
   }];
 
-  saleAmountHeaderFilterDataSource = [
+  readonly saleAmountHeaderFilterDataSource = [
     {
       text: 'Less than $3000',
       value: ['SaleAmount', '<', 3000],
@@ -65,11 +65,7 @@ export class AppComponent {
     },
   ];
 
-  orders: Order[];
-
-  constructor(service: Service) {
-    this.orders = service.getOrders();
-  }
+  readonly orders = inject(Service).getOrders();
 }
 
 bootstrapApplication(AppComponent);

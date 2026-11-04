@@ -1,7 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode } from '@angular/core';
+import { Component, enableProdMode, inject } from '@angular/core';
 import { DxChartModule, DxSelectBoxModule } from 'devextreme-angular';
-import { ArchitectureInfo, Service } from './app.service';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -19,13 +19,9 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  types: string[] = ['spline', 'stackedspline', 'fullstackedspline'];
+  readonly types: string[] = ['spline', 'stackedspline', 'fullstackedspline'];
 
-  architecturesInfo: ArchitectureInfo[];
-
-  constructor(service: Service) {
-    this.architecturesInfo = service.getArchitecturesInfo();
-  }
+  readonly architecturesInfo = inject(Service).getArchitecturesInfo();
 }
 
 bootstrapApplication(AppComponent);

@@ -2,24 +2,24 @@
   <div class="vehicle__img-wrapper">
     <img
       class="vehicle__img"
-      src="../../../../images/vehicles/image_{{ id }}.png"
-      alt="{{ model }}"
+      src="../../../../images/vehicles/image_{{ id() }}.png"
+      alt="{{ model() }}"
     />
   </div>
   <div class="vehicle__info">
-    <div class="vehicle__name" title="{{ model }}">
-      {{ model }}
+    <div class="vehicle__name" title="{{ model() }}">
+      {{ model() }}
     </div>
-    <div class="vehicle__price">{{ price }}</div>
+    <div class="vehicle__price">{{ price() }}</div>
     <div class="vehicle__type-container">
-      <div class="vehicle__type">{{ categoryName }}</div>
+      <div class="vehicle__type">{{ categoryName() }}</div>
     </div>
     <div class="vehicle__spec-container">
-      <div class="vehicle__modification">{{ modification }}</div>
+      <div class="vehicle__modification">{{ modification() }}</div>
       <div class="vehicle__modification">
-        {{ bodyStyleName }}
+        {{ bodyStyleName() }}
       </div>
-      <div class="vehicle__modification">{{ horsepower }} h.p.</div>
+      <div class="vehicle__modification">{{ horsepower() }} h.p.</div>
     </div>
     <div class="vehicle__footer-container">
       <dx-button

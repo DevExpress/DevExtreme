@@ -1,7 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode } from '@angular/core';
+import { Component, enableProdMode, inject } from '@angular/core';
 import { DxChartModule } from 'devextreme-angular';
-import { MaleAgeStructure, Service } from './app.service';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -17,13 +17,9 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  dataSource: MaleAgeStructure[];
+  readonly dataSource = inject(Service).getMaleAgeData();
 
-  constructor(service: Service) {
-    this.dataSource = service.getMaleAgeData();
-  }
-
-  customizeTooltip = ({ valueText, seriesName }) => ({
+  readonly customizeTooltip = ({ valueText, seriesName }) => ({
     text: `${seriesName} years: ${valueText}`,
   });
 }

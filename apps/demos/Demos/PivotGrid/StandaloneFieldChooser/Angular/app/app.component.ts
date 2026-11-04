@@ -1,5 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode } from '@angular/core';
+import {
+  Component, enableProdMode, inject, signal,
+} from '@angular/core';
 import {
   DxRadioGroupComponent,
   DxButtonComponent,
@@ -15,7 +17,7 @@ import {
   DxPivotGridFieldChooserComponent,
   DxoPivotGridFieldChooserTextsComponent,
 } from 'devextreme-angular/ui/pivot-grid-field-chooser';
-import { Service, Layout, Sale } from './app.service';
+import { Service, Sale } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -38,69 +40,63 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  pivotGridDataSource: PivotGridDataSource;
+  private readonly service = inject(Service);
 
-  layouts: Layout[];
-
-  layout = 0;
-
-  applyChangesModes: DxPivotGridTypes.ApplyChangesMode[] = ['instantly', 'onDemand'];
-
-  applyChangesMode = this.applyChangesModes[0];
-
-  state: Record<string, unknown>;
-
-  constructor(service: Service) {
-    this.pivotGridDataSource = new PivotGridDataSource({
-      fields: [{
-        caption: 'Region',
-        width: 120,
-        dataField: 'region',
-        area: 'row',
-        headerFilter: {
-          search: {
-            enabled: true,
-          },
+  readonly pivotGridDataSource = new PivotGridDataSource({
+    fields: [{
+      caption: 'Region',
+      width: 120,
+      dataField: 'region',
+      area: 'row',
+      headerFilter: {
+        search: {
+          enabled: true,
         },
-      }, {
-        caption: 'City',
-        dataField: 'city',
-        width: 150,
-        area: 'row',
-        headerFilter: {
-          search: {
-            enabled: true,
-          },
+      },
+    }, {
+      caption: 'City',
+      dataField: 'city',
+      width: 150,
+      area: 'row',
+      headerFilter: {
+        search: {
+          enabled: true,
         },
-        selector(data: Sale) {
-          return `${data.city} (${data.country})`;
-        },
-      }, {
-        dataField: 'date',
-        dataType: 'date',
-        area: 'column',
-      }, {
-        caption: 'Sales',
-        dataField: 'amount',
-        dataType: 'number',
-        summaryType: 'sum',
-        format: 'currency',
-        area: 'data',
-      }],
-      store: service.getSales(),
-    });
+      },
+      selector(data: Sale) {
+        return `${data.city} (${data.country})`;
+      },
+    }, {
+      dataField: 'date',
+      dataType: 'date',
+      area: 'column',
+    }, {
+      caption: 'Sales',
+      dataField: 'amount',
+      dataType: 'number',
+      summaryType: 'sum',
+      format: 'currency',
+      area: 'data',
+    }],
+    store: this.service.getSales(),
+  });
 
-    this.state = this.pivotGridDataSource.state();
+  readonly layouts = this.service.getLayouts();
 
-    this.layouts = service.getLayouts();
-  }
+  readonly layout = signal(0);
+
+  readonly applyChangesModes: DxPivotGridTypes.ApplyChangesMode[] = ['instantly', 'onDemand'];
+
+  readonly applyChangesMode = signal(this.applyChangesModes[0]);
+
+  readonly state = signal<Record<string, unknown>>(this.pivotGridDataSource.state());
 
   applyClick() {
-    this.pivotGridDataSource.state(this.state);
+    this.pivotGridDataSource.state(this.state());
   }
 
   cancelClick() {
-    this.state = this.pivotGridDataSource.state();
+    this.state.set(this.pivotGridDataSource.state());
   }
 }
 

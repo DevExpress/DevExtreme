@@ -1,8 +1,10 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode } from '@angular/core';
+import {
+  Component, enableProdMode, inject, signal,
+} from '@angular/core';
 import { DxChartModule, DxButtonModule } from 'devextreme-angular';
 
-import { Service, DataItem } from './app.service';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -20,38 +22,31 @@ if (!/localhost/.test(document.location.host)) {
 })
 
 export class AppComponent {
-  dataSource: DataItem[];
+  private readonly service = inject(Service);
 
-  colors: string[];
+  readonly dataSource = signal(this.service.filterData(''));
 
-  service: Service;
+  readonly colors = this.service.getColors();
 
-  isFirstLevel: boolean;
-
-  constructor(service: Service) {
-    this.dataSource = service.filterData('');
-    this.colors = service.getColors();
-    this.service = service;
-    this.isFirstLevel = true;
-  }
+  readonly isFirstLevel = signal(true);
 
   onButtonClick() {
-    if (!this.isFirstLevel) {
-      this.isFirstLevel = true;
-      this.dataSource = this.service.filterData('');
+    if (!this.isFirstLevel()) {
+      this.isFirstLevel.set(true);
+      this.dataSource.set(this.service.filterData(''));
     }
   }
 
   onPointClick(e) {
-    if (this.isFirstLevel) {
-      this.isFirstLevel = false;
-      this.dataSource = this.service.filterData(e.target.originalArgument);
+    if (this.isFirstLevel()) {
+      this.isFirstLevel.set(false);
+      this.dataSource.set(this.service.filterData(e.target.originalArgument));
     }
   }
 
-  customizePoint = () => ({
-    color: this.colors[Number(this.isFirstLevel)],
-    ...this.isFirstLevel ? {} : {
+  readonly customizePoint = () => ({
+    color: this.colors[Number(this.isFirstLevel())],
+    ...this.isFirstLevel() ? {} : {
       hoverStyle: {
         hatching: 'none',
       },

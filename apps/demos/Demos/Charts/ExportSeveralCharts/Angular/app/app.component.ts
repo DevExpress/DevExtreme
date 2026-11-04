@@ -1,10 +1,12 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, ViewChild, enableProdMode } from '@angular/core';
+import {
+  Component, enableProdMode, inject, viewChild,
+} from '@angular/core';
 import {
   DxChartModule, DxPieChartModule, DxChartComponent, DxPieChartComponent, DxButtonModule,
 } from 'devextreme-angular';
 import { exportWidgets } from 'devextreme/viz/export';
-import { Service, Medals } from './app.service';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -22,24 +24,21 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  @ViewChild(DxChartComponent, { static: false }) chart: DxChartComponent;
+  private readonly chart = viewChild.required(DxChartComponent);
 
-  @ViewChild(DxPieChartComponent, { static: false }) pieChart: DxPieChartComponent;
+  private readonly pieChart = viewChild.required(DxPieChartComponent);
 
-  title = 'Total Olympic Medals\n in 2008';
+  private readonly service = inject(Service);
 
-  allMedals: Medals[];
+  readonly title = 'Total Olympic Medals\n in 2008';
 
-  goldMedals: Medals[];
+  readonly allMedals = this.service.getAllMedals();
 
-  constructor(service: Service) {
-    this.allMedals = service.getAllMedals();
-    this.goldMedals = service.getGoldMedals();
-  }
+  readonly goldMedals = this.service.getGoldMedals();
 
   export() {
-    const chartInstance = this.chart.instance;
-    const pieChartInstance = this.pieChart.instance;
+    const chartInstance = this.chart().instance;
+    const pieChartInstance = this.pieChart().instance;
 
     exportWidgets([[chartInstance, pieChartInstance]], {
       fileName: 'chart',

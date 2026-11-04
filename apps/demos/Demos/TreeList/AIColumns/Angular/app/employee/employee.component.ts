@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, input } from '@angular/core';
 
 @Component({
   selector: 'employee',
@@ -6,7 +6,7 @@ import { Component, Input } from '@angular/core';
   styleUrls: ['./employee.component.css'],
 })
 export class Employee {
-  @Input() firstName!: string;
+  readonly firstName = input.required<string>();
 
-  @Input() lastName!: string;
+  readonly lastName = input.required<string>();
 }

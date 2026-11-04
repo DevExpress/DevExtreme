@@ -1,5 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, ViewChild, enableProdMode } from '@angular/core';
+import {
+  Component, enableProdMode, inject, signal, viewChild,
+} from '@angular/core';
 import { CurrencyPipe } from '@angular/common';
 import {
   DxListModule,
@@ -9,7 +11,7 @@ import {
   DxFilterBuilderModule,
 } from 'devextreme-angular';
 import { DataSource } from 'devextreme-angular/common/data';
-import { Fields, Filter, Service } from './app.service';
+import { type Filter, Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -30,24 +32,20 @@ if (!/localhost/.test(document.location.host)) {
 })
 
 export class AppComponent {
-  @ViewChild(DxFilterBuilderComponent, { static: false }) filterBuilder: DxFilterBuilderComponent;
+  private readonly filterBuilder = viewChild.required(DxFilterBuilderComponent);
 
-  dataSource: DataSource;
+  private readonly service = inject(Service);
 
-  fields: Fields;
+  readonly fields = this.service.getFields();
 
-  filter: Filter;
+  readonly filter = signal<Filter>(this.service.getFilter());
 
-  constructor(service: Service) {
-    this.fields = service.getFields();
-    this.filter = service.getFilter();
-    this.dataSource = new DataSource({
-      store: service.getProducts(),
-    });
-  }
+  readonly dataSource = new DataSource({
+    store: this.service.getProducts(),
+  });
 
   refreshDataSource() {
-    this.dataSource.filter(this.filterBuilder.instance.getFilterExpression());
+    this.dataSource.filter(this.filterBuilder().instance.getFilterExpression());
     this.dataSource.load();
   }
 }
