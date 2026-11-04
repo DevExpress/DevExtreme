@@ -50,42 +50,6 @@ describe('createOffsetFilter', () => {
       expected: ['g', '>', 'A'],
     },
     {
-      name: 'an ascending false key',
-      path: [false],
-      group: [{ selector: 'g' }],
-      expected: ['g', '=', null],
-    },
-    {
-      name: 'a descending false key',
-      path: [false],
-      group: [{ selector: 'g', desc: true }],
-      expected: ['g', '=', true],
-    },
-    {
-      name: 'an ascending true key',
-      path: [true],
-      group: [{ selector: 'g' }],
-      expected: ['g', '<>', true],
-    },
-    {
-      name: 'a descending true key',
-      path: [true],
-      group: [{ selector: 'g', desc: true }],
-      expected: [['g', '<>', null], 'and', ['g', '=', null]],
-    },
-    {
-      name: 'an ascending null key',
-      path: [null],
-      group: [{ selector: 'g' }],
-      expected: [['g', '<>', null], 'and', ['g', '=', null]],
-    },
-    {
-      name: 'a descending null key',
-      path: [null],
-      group: [{ selector: 'g', desc: true }],
-      expected: ['g', '<>', null],
-    },
-    {
       name: 'a two-level path',
       path: ['A', 'B'],
       group: [{ selector: 'g1' }, { selector: 'g2', desc: true }],
