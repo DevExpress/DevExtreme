@@ -1,13 +1,43 @@
-<dx-chart id="chart" [dataSource]="dataSource">
-  <dxo-chart-title text="Production of Crude Oil">
-    <dxo-chart-subtitle text="(in Barrels)"></dxo-chart-subtitle>
-  </dxo-chart-title>
-  <dxo-chart-common-series-settings
-    argumentField="state"
-    valueField="value"
-    type="bar"
-  >
-    <dxo-chart-aggregation enabled="true" method="sum"></dxo-chart-aggregation>
-  </dxo-chart-common-series-settings>
-  <dxo-chart-series-template nameField="year"></dxo-chart-series-template>
-</dx-chart>
+<div id="chart-demo">
+  <dx-chart id="chart" [dataSource]="dataSource">
+    <dxo-chart-title text="Production of Crude Oil">
+      <dxo-chart-subtitle text="(in Barrels)"></dxo-chart-subtitle>
+    </dxo-chart-title>
+    <dxo-chart-common-series-settings
+      argumentField="state"
+      valueField="value"
+      type="bar"
+    >
+      <dxo-chart-aggregation
+        [enabled]="useAggregation"
+        [method]="currentFunction"
+      ></dxo-chart-aggregation>
+    </dxo-chart-common-series-settings>
+    <dxo-chart-series-template
+      nameField="series"
+      [customizeSeries]="customizeSeries"
+    ></dxo-chart-series-template>
+    <dxo-chart-tooltip [enabled]="true" [customizeTooltip]="customizeTooltip">
+      <dxo-chart-format type="millions" [precision]="1"></dxo-chart-format>
+    </dxo-chart-tooltip>
+  </dx-chart>
+  <div class="options">
+    <div class="caption">Options</div>
+    <div class="option">
+      <dx-check-box text="Aggregation enabled" [(value)]="useAggregation">
+      </dx-check-box>
+    </div>
+    <div class="option">
+      <span>Method:</span>
+      <dx-select-box
+        [dataSource]="functions"
+        displayExpr="displayName"
+        valueExpr="func"
+        [(value)]="currentFunction"
+        [disabled]="!useAggregation"
+        [inputAttr]="{ 'aria-label': 'Method' }"
+      >
+      </dx-select-box>
+    </div>
+  </div>
+</div>
