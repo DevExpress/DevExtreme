@@ -181,7 +181,7 @@ Fields typed as `any` (part 1 of a file, or a whole file):
 
 - A bound for "any component" is `TComponent extends Component<object>`.
 - A public `template` type exists in `@js/common` (`string | Function | UserDefinedElement`), and `ActionConfig` in `@ts/core/widget/component`.
-- An inline type that appears twice or more gets a name in the module's `types.ts` (for example `export type RegisteredModule = Module & { name: string };`). Type aliases already declared in the file you type move to `types.ts` as well.
+- An inline type that appears twice or more gets a name in the module's `types.ts` (for example `export type RegisteredModule = Module & { name: string };`). Exported types already declared in the file you type move to `types.ts` as well; a type that only that file uses may stay (SKILL.md, Where types go).
 - A fake object passed where a real type is expected (a test mock, a compatibility shim) gets `as unknown as <Type>` where it's passed. Don't widen the receiving constructor or param for it.
 
 ## Untyped sources

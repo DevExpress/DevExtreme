@@ -99,7 +99,11 @@ Not counted at all: `max-classes-per-file`, `simple-import-sort/imports` and `sp
 
 **Where types go**
 - Reuse before creating: public types from the `js/**/*.d.ts` files (`@js/common`, `@js/core/utils/callbacks`, the component's own `@js/ui/<component>`, …), then the module's own `types.ts`.
+- Every type a module exports lives in its `types.ts`. Implementation files export only values: classes, extenders, functions, the module object. Other modules import types from `types.ts`, never from an implementation file, so a rename ([rename.md](rename.md)) doesn't touch their imports.
 - A new type goes into the module's own `types.ts`. Other modules import it from there.
+- An exported type that the file you type still declares moves to the module's `types.ts` (with a range, only one declared in the range), and its importers' import lines follow. It stays inside the module, so it isn't a move between modules (Scope), and the built JS doesn't change.
+- A type that only its own file uses, and doesn't export, may stay there. Move it to `types.ts` once a second file needs it.
+- A type derived from a value (`InstanceType<ReturnType<typeof extender>>`) stays next to the value until it's replaced; in grids, by an extension interface (grids.md).
 - A property of a type that another module owns goes into that module's `types.ts` (see Scope).
 
 **Disables**
