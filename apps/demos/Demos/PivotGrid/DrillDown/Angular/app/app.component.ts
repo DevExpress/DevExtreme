@@ -1,5 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, ViewChild } from '@angular/core';
+import {
+  Component, enableProdMode, inject, signal, viewChild,
+} from '@angular/core';
 import {
   DxDataGridComponent,
   DxDataGridModule,
@@ -26,57 +28,53 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  @ViewChild('drillDownDataGrid') drillDownDataGrid: DxDataGridComponent;
+  private readonly drillDownDataGrid = viewChild.required<DxDataGridComponent>('drillDownDataGrid');
 
-  pivotGridDataSource: PivotGridDataSource;
+  readonly pivotGridDataSource = new PivotGridDataSource({
+    fields: [{
+      caption: 'Region',
+      width: 120,
+      dataField: 'region',
+      area: 'row',
+    }, {
+      caption: 'City',
+      dataField: 'city',
+      width: 150,
+      area: 'row',
+    }, {
+      dataField: 'date',
+      dataType: 'date',
+      area: 'column',
+    }, {
+      caption: 'Total',
+      dataField: 'amount',
+      dataType: 'number',
+      summaryType: 'sum',
+      format: 'currency',
+      area: 'data',
+    }],
+    store: inject(Service).getSales(),
+  });
 
-  drillDownDataSource: DataSource;
+  readonly drillDownDataSource = signal<DataSource | undefined>(undefined);
 
-  salesPopupVisible = false;
+  readonly salesPopupVisible = signal(false);
 
-  salesPopupTitle = '';
-
-  constructor(service: Service) {
-    this.pivotGridDataSource = new PivotGridDataSource({
-      fields: [{
-        caption: 'Region',
-        width: 120,
-        dataField: 'region',
-        area: 'row',
-      }, {
-        caption: 'City',
-        dataField: 'city',
-        width: 150,
-        area: 'row',
-      }, {
-        dataField: 'date',
-        dataType: 'date',
-        area: 'column',
-      }, {
-        caption: 'Total',
-        dataField: 'amount',
-        dataType: 'number',
-        summaryType: 'sum',
-        format: 'currency',
-        area: 'data',
-      }],
-      store: service.getSales(),
-    });
-  }
+  readonly salesPopupTitle = signal('');
 
   onPivotCellClick(e: DxPivotGridTypes.CellClickEvent) {
     if (e.area === 'data') {
       const rowPathLength = e.cell.rowPath.length;
       const rowPathName = e.cell.rowPath[rowPathLength - 1];
 
-      this.drillDownDataSource = this.pivotGridDataSource.createDrillDownDataSource(e.cell);
-      this.salesPopupTitle = `${rowPathName || 'Total'} Drill Down Data`;
-      this.salesPopupVisible = true;
+      this.drillDownDataSource.set(this.pivotGridDataSource.createDrillDownDataSource(e.cell));
+      this.salesPopupTitle.set(`${rowPathName || 'Total'} Drill Down Data`);
+      this.salesPopupVisible.set(true);
     }
   }
 
   onPopupShown() {
-    this.drillDownDataGrid.instance.updateDimensions();
+    this.drillDownDataGrid().instance.updateDimensions();
   }
 }
 

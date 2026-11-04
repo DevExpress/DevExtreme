@@ -3,7 +3,6 @@ import {
   Component,
   ViewChild,
   enableProdMode,
-  provideZoneChangeDetection,
 } from '@angular/core';
 import {
   DxCheckBoxModule,
@@ -229,8 +228,4 @@ export class AppComponent {
   };
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

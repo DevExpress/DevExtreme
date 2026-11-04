@@ -1,8 +1,8 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, ViewChild } from '@angular/core';
-import { DxCardViewModule, DxCardViewComponent, DxButtonModule } from 'devextreme-angular';
+import { Component, enableProdMode, inject } from '@angular/core';
+import { DxCardViewModule, DxButtonModule } from 'devextreme-angular';
 import notify from 'devextreme/ui/notify';
-import { AppService, Employee } from './app.service';
+import { AppService, type Employee } from './app.service';
 
 if (!document.location.host.includes('localhost')) {
   enableProdMode();
@@ -18,13 +18,7 @@ if (!document.location.host.includes('localhost')) {
   ],
 })
 export class AppComponent {
-  @ViewChild(DxCardViewComponent, { static: true }) cardView: DxCardViewComponent;
-
-  employees: Employee[];
-
-  constructor(service: AppService) {
-    this.employees = service.getEmployees();
-  }
+  readonly employees = inject(AppService).getEmployees();
 
   imageExpr({ First_Name, Last_Name }: Employee): string {
     return `../../../../images/employees/new/${First_Name} ${Last_Name}.jpg`;

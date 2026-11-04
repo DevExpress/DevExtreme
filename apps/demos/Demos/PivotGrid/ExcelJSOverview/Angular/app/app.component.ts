@@ -1,12 +1,12 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode } from '@angular/core';
+import { Component, enableProdMode, inject } from '@angular/core';
 import { Workbook } from 'devextreme-exceljs-fork';
 import { saveAs } from 'file-saver-es';
 // Our demo infrastructure requires us to use 'file-saver-es'. We recommend that you use the official 'file-saver' package in your applications.
 import { exportPivotGrid } from 'devextreme/excel_exporter';
-import { Options as DataSourceConfig } from 'devextreme/ui/pivot_grid/data_source';
+import type { Options as DataSourceConfig } from 'devextreme/ui/pivot_grid/data_source';
 import { DxPivotGridModule, DxPivotGridTypes } from 'devextreme-angular/ui/pivot-grid';
-import { Service, Sale } from './app.service';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -22,38 +22,32 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  sales: Sale[];
-
-  dataSource: DataSourceConfig;
-
-  constructor(service: Service) {
-    this.dataSource = {
-      fields: [{
-        caption: 'Region',
-        dataField: 'region',
-        area: 'row',
-        expanded: true,
-      }, {
-        caption: 'City',
-        dataField: 'city',
-        area: 'row',
-        width: 150,
-      }, {
-        dataField: 'date',
-        dataType: 'date',
-        area: 'column',
-        expanded: true,
-      }, {
-        caption: 'Sales',
-        dataField: 'amount',
-        dataType: 'number',
-        area: 'data',
-        summaryType: 'sum',
-        format: 'currency',
-      }],
-      store: service.getSales(),
-    };
-  }
+  readonly dataSource: DataSourceConfig = {
+    fields: [{
+      caption: 'Region',
+      dataField: 'region',
+      area: 'row',
+      expanded: true,
+    }, {
+      caption: 'City',
+      dataField: 'city',
+      area: 'row',
+      width: 150,
+    }, {
+      dataField: 'date',
+      dataType: 'date',
+      area: 'column',
+      expanded: true,
+    }, {
+      caption: 'Sales',
+      dataField: 'amount',
+      dataType: 'number',
+      area: 'data',
+      summaryType: 'sum',
+      format: 'currency',
+    }],
+    store: inject(Service).getSales(),
+  };
 
   onExporting(e: DxPivotGridTypes.ExportingEvent) {
     const workbook = new Workbook();

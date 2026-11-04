@@ -3,7 +3,6 @@ import {
   Component,
   ViewChild,
   enableProdMode,
-  provideZoneChangeDetection,
 } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { DxTextBoxModule, DxFileUploaderModule, DxButtonModule } from 'devextreme-angular';
@@ -32,8 +31,4 @@ export class AppComponent {
   }
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);
