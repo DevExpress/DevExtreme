@@ -1145,6 +1145,7 @@ export const ToolCallsVisualization: StoryObj<ToolCallsStoryArgs> = {
         const [alerts, setAlerts] = useState<ChatTypes.Alert[]>([]);
         const [typingUsers, setTypingUsers] = useState<ChatTypes.User[]>([]);
         const [busy, setBusy] = useState(false);
+        const busyRef = useRef(false);
 
         const dataSource = useMemo(() => new DataSource({
             store: new CustomStore({
@@ -1171,6 +1172,7 @@ export const ToolCallsVisualization: StoryObj<ToolCallsStoryArgs> = {
         const sendToAI = useCallback(async (text: string) => {
             const history = historyRef.current.length;
 
+            busyRef.current = true;
             setBusy(true);
             historyRef.current.push({ role: 'user', content: text });
             setTypingUsers([toolCallsAssistant]);
@@ -1192,11 +1194,16 @@ export const ToolCallsVisualization: StoryObj<ToolCallsStoryArgs> = {
                 showError(getErrorMessage(error));
             } finally {
                 setTypingUsers([]);
+                busyRef.current = false;
                 setBusy(false);
             }
         }, [pushMessage, showError]);
 
         const onMessageEntered = useCallback(({ message }: { message: ToolCallsMessage }) => {
+            if (busyRef.current) {
+                return;
+            }
+
             pushMessage({ id: Date.now(), ...message });
 
             if (!alerts.length) {
@@ -1205,6 +1212,10 @@ export const ToolCallsVisualization: StoryObj<ToolCallsStoryArgs> = {
         }, [pushMessage, sendToAI, alerts.length]);
 
         const sendSuggestion = useCallback((prompt: string) => {
+            if (busyRef.current) {
+                return;
+            }
+
             pushMessage({ id: Date.now(), timestamp: new Date(), author: toolCallsUser, text: prompt });
 
             if (!alerts.length) {

@@ -173,7 +173,13 @@
   .dx-chat-tool-call-view,
   .dx-chat-tool-call-field-label,
   .dx-chat-tool-call-error-tag,
-  .dx-chat-tool-call-field .dx-texteditor {
+  .dx-chat-tool-call-field .dx-texteditor.dx-editor-outlined {
+    color: var(--dx-chat-content-disabled);
+  }
+
+  .dx-chat-tool-call-view .dx-accordion-item-title,
+  .dx-chat-tool-call-view .dx-accordion-item-title::before,
+  .dx-chat-tool-call-field .dx-texteditor.dx-editor-outlined.dx-chat-tool-call-error.dx-state-readonly {
     color: var(--dx-chat-content-disabled);
   }
 
