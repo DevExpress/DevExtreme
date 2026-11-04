@@ -259,9 +259,8 @@
     border-radius: var(--dx-html-editor-file-uploader-input-wrapper-border-radius);
     background-color: var(--dx-html-editor-file-uploader-input-wrapper-bg);
 
-    &::after,
-    &::before {
-      content: none;
+    .dx-fileuploader-input-container {
+      width: 100%;
     }
 
     .dx-fileuploader-input-label {
