@@ -37,7 +37,10 @@ const loadTotalCount = function loadTotalCount(
 
   dataSourceAdapter.customLoader.load(loadOptions)
     .done(({ extra }) => {
-      // @ts-expect-error extra is loaded with requireTotalCount
+      if (extra?.totalCount === undefined) {
+        d.reject();
+        return;
+      }
       d.resolve(extra.totalCount);
     })
     .fail((...args: unknown[]) => {
@@ -446,10 +449,11 @@ export class GroupingHelper extends GroupingHelperCore {
 
     callBase(options);
 
-    if (groupCount) {
-      // @ts-expect-error data is loaded here
-      let { data }: { data: GroupItemData[] } = options;
-      const query = dataQuery(data);
+    const { data: loadedData } = options;
+
+    if (groupCount && Array.isArray(loadedData)) {
+      let data: GroupItemData[] = [];
+      const query = dataQuery(loadedData);
       storeHelper.multiLevelGroup(query, groups).enumerate().done((groupedData) => {
         // @ts-expect-error multiLevelGroup() resolves group items
         data = groupedData;
