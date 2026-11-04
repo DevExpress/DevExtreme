@@ -1,6 +1,5 @@
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { changeRulesToStylistic } from 'eslint-migration-utils';
 import stylistic from '@stylistic/eslint-plugin';
 import typescriptConfig from 'eslint-config-devextreme/typescript';
 import jestConfig from 'eslint-config-devextreme/jest';
@@ -17,18 +16,10 @@ export default [
             "jest.config.js",
         ],
     },
-    ...typescriptConfig.map(config => {
-        const newConfig = {
-            ...config,
-            files: ["src/**/*.ts", "tests/**/*.ts"],
-        }
-
-        if (config.rules) {
-            newConfig.rules = changeRulesToStylistic(config.rules);
-        }
-
-        return newConfig;
-    }),
+    ...typescriptConfig.map(config => ({
+        ...config,
+        files: ["src/**/*.ts", "tests/**/*.ts"],
+    })),
     {
         files: ["src/**/*.ts"],
         languageOptions: {

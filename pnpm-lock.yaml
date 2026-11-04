@@ -1952,9 +1952,6 @@ importers:
       eslint-config-devextreme:
         specifier: 'catalog:'
         version: 1.1.13(ca88627957d43b26049ace418378ed08)
-      eslint-migration-utils:
-        specifier: workspace:*
-        version: link:../eslint-migration-utils
       eslint-plugin-import:
         specifier: 'catalog:'
         version: 2.32.0(@typescript-eslint/parser@8.52.0(eslint@9.39.5(jiti@2.6.1))(typescript@5.9.3))(eslint@9.39.5(jiti@2.6.1))

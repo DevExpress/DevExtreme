@@ -59,8 +59,11 @@ export async function autoPrefix(css: string): Promise<string> {
   })).css;
 }
 
-// eslint-disable-next-line @stylistic/max-len
-export function fixSwatchCss(css: string | Buffer, swatchClass: string, colorScheme: string): string {
+export function fixSwatchCss(
+  css: string | Buffer,
+  swatchClass: string,
+  colorScheme: string,
+): string {
   let result = css.toString();
 
   const escapedSelector = swatchClass.replace('.', '\\.');

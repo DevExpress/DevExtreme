@@ -47,7 +47,6 @@
     "eslint-config-airbnb-base": "15.0.0",
     "eslint-config-airbnb-typescript": "catalog:",
     "eslint-config-devextreme": "catalog:",
-    "eslint-migration-utils": "workspace:*",
     "eslint-plugin-import": "catalog:",
     "eslint-plugin-no-only-tests": "catalog:",
     "express": "4.22.1",
