@@ -1,8 +1,10 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode } from '@angular/core';
+import {
+  Component, enableProdMode, inject, signal,
+} from '@angular/core';
 import { DxSelectBoxModule } from 'devextreme-angular';
 import { DxTreeMapModule, DxTreeMapTypes } from 'devextreme-angular/ui/tree-map';
-import { SalesAmount, Service } from './app.service';
+import { Service } from './app.service';
 
 interface ColorizationOption {
   name: string;
@@ -31,11 +33,9 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  salesAmount: SalesAmount[];
+  readonly salesAmount = inject(Service).getSalesAmount();
 
-  options: ColorizationOption['options'];
-
-  colorizationOptions: ColorizationOption[] = [{
+  readonly colorizationOptions: ColorizationOption[] = [{
     name: 'Discrete',
     options: {
       type: 'discrete',
@@ -69,12 +69,9 @@ export class AppComponent {
     },
   }];
 
-  constructor(service: Service) {
-    this.salesAmount = service.getSalesAmount();
-    this.options = this.colorizationOptions[2].options;
-  }
+  readonly options = signal(this.colorizationOptions[2].options);
 
-  customizeTooltip = ({ node, valueText }) => (
+  readonly customizeTooltip = ({ node, valueText }) => (
     {
       text: node.isLeaf()
         ? (`<span class='product'>${node.data.name}</span><br/>Sales Amount: ${valueText}`)

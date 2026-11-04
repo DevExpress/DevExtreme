@@ -1,7 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode } from '@angular/core';
+import { Component, enableProdMode, inject } from '@angular/core';
 import { DxChartModule, DxChartTypes } from 'devextreme-angular/ui/chart';
-import { Service, Statistics } from './app.service';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -17,11 +17,7 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  statisticsData: Statistics[];
-
-  constructor(service: Service) {
-    this.statisticsData = service.getStatisticsData();
-  }
+  readonly statisticsData = inject(Service).getStatisticsData();
 
   seriesClick({ target: series }: DxChartTypes.SeriesClickEvent) {
     if (series.isSelected()) {

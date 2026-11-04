@@ -1,7 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode } from '@angular/core';
+import { Component, enableProdMode, inject } from '@angular/core';
 import { DxChartModule, DxSelectBoxModule } from 'devextreme-angular';
-import { CountryInfo, EnergyDescription, Service } from './app.service';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -19,16 +19,13 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  types: string[] = ['line', 'stackedline', 'fullstackedline'];
+  private readonly service = inject(Service);
 
-  countriesInfo: CountryInfo[];
+  readonly types: string[] = ['line', 'stackedline', 'fullstackedline'];
 
-  energySources: EnergyDescription[];
+  readonly countriesInfo = this.service.getCountriesInfo();
 
-  constructor(service: Service) {
-    this.countriesInfo = service.getCountriesInfo();
-    this.energySources = service.getEnergySources();
-  }
+  readonly energySources = this.service.getEnergySources();
 }
 
 bootstrapApplication(AppComponent);

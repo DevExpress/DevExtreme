@@ -1,7 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode } from '@angular/core';
+import { Component, enableProdMode, inject } from '@angular/core';
 import { DxChartModule, DxChartTypes } from 'devextreme-angular/ui/chart';
-import { Service, Temperature } from './app.service';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -17,17 +17,13 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  highAverage = 77;
+  readonly highAverage = 77;
 
-  lowAverage = 58;
+  readonly lowAverage = 58;
 
-  temperaturesData: Temperature[];
+  readonly temperaturesData = inject(Service).getTemperaturesData();
 
-  constructor(service: Service) {
-    this.temperaturesData = service.getTemperaturesData();
-  }
-
-  customizePoint: DxChartTypes.Properties['customizePoint'] = ({ value }) => {
+  readonly customizePoint: DxChartTypes.Properties['customizePoint'] = ({ value }) => {
     if (value > this.highAverage) {
       return { color: '#ff7c7c', hoverStyle: { color: '#ff7c7c' } };
     }
@@ -37,7 +33,7 @@ export class AppComponent {
       : null;
   };
 
-  customizeLabel: DxChartTypes.Properties['customizeLabel'] = ({ value }) => {
+  readonly customizeLabel: DxChartTypes.Properties['customizeLabel'] = ({ value }) => {
     if (value > this.highAverage) {
       return {
         visible: true,
@@ -48,7 +44,7 @@ export class AppComponent {
     return null;
   };
 
-  customizeText: DxChartTypes.ValueAxisLabel['customizeText'] = ({ valueText }) => `${valueText}&#176F`;
+  readonly customizeText: DxChartTypes.ValueAxisLabel['customizeText'] = ({ valueText }) => `${valueText}&#176F`;
 }
 
 bootstrapApplication(AppComponent);

@@ -1,8 +1,8 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode } from '@angular/core';
+import { Component, enableProdMode, inject } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 import { DxChartModule } from 'devextreme-angular';
-import { Service, State } from './app.service';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -19,11 +19,7 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  populationData: State[];
-
-  constructor(service: Service) {
-    this.populationData = service.getPopulationData();
-  }
+  readonly populationData = inject(Service).getPopulationData();
 
   getImagePath(annotation) {
     const name = annotation.argument.replace(/\s/, '');
