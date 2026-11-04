@@ -5,7 +5,7 @@ import {
   afterTest, beforeTest, createDataGrid, flushAsync,
 } from '@ts/grids/grid_core/__tests__/__mock__/helpers/utils';
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
-import type { MasterDetailDataControllerExtension } from '@ts/grids/grid_core/master_detail/m_master_detail';
+import type { MasterDetailDataControllerExtension } from '@ts/grids/grid_core/master_detail/types';
 import {
   afterTest as afterTreeListTest,
   beforeTest as beforeTreeListTest,

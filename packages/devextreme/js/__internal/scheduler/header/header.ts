@@ -86,6 +86,7 @@ export class SchedulerHeader extends Widget<HeaderOptions> {
       ['currentDate', [this.getCalendarOptionUpdater('value')]],
       ['min', [this.getCalendarOptionUpdater('min')]],
       ['max', [this.getCalendarOptionUpdater('max')]],
+      ['firstDayOfWeek', [this.getCalendarOptionUpdater('firstDayOfWeek')]],
       ['tabIndex', [this.repaint.bind(this)]],
       ['focusStateEnabled', [this.repaint.bind(this)]],
       ['useDropDownViewSwitcher', [this.repaint.bind(this)]],
