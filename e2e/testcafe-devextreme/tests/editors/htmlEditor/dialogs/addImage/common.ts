@@ -37,7 +37,7 @@ test('TabPanel in HtmlEditor must have correct borders', async (t) => {
   });
 });
 
-test('File uploader label in the image dialog should take the whole dialog width (T1337565)', async (t) => {
+test('File uploader label container should keep the full dialog width', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const htmlEditor = new HtmlEditor('#container');
 
