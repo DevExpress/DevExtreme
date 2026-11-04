@@ -1,5 +1,5 @@
 import {
-  afterEach, beforeEach, describe, expect, it,
+  afterEach, beforeEach, describe, expect, it, jest,
 } from '@jest/globals';
 
 import {
@@ -58,6 +58,79 @@ describe('GridCore master_detail', () => {
       expect(containerElement?.parentElement?.classList).toContain(SELECTORS.detailCell);
       expect(containerElement?.tagName).toBe('DIV');
       expect(containerElement?.classList).toContain(SELECTORS.detailContainer);
+    });
+  });
+
+  describe('expanded state', () => {
+    const template = (): void => {};
+    const dataSource = [{ id: 1 }, { id: 2 }];
+
+    it('expands every row when autoExpandAll is true', async () => {
+      const { instance } = await createDataGrid({
+        dataSource,
+        masterDetail: { enabled: true, autoExpandAll: true, template },
+      });
+
+      expect(instance.isRowExpanded(1)).toBe(true);
+      expect(instance.isRowExpanded(2)).toBe(true);
+    });
+
+    it('collapses every row when autoExpandAll is set to false', async () => {
+      const { instance } = await createDataGrid({
+        dataSource,
+        masterDetail: { enabled: true, autoExpandAll: true, template },
+      });
+
+      instance.option('masterDetail.autoExpandAll', false);
+      jest.runAllTimers();
+
+      expect(instance.isRowExpanded(1)).toBe(false);
+      expect(instance.isRowExpanded(2)).toBe(false);
+    });
+
+    it('collapses an expanded row when the template changes', async () => {
+      const { instance } = await createDataGrid({
+        dataSource,
+        masterDetail: { enabled: true, template },
+      });
+
+      await instance.expandRow(1);
+      jest.runAllTimers();
+      expect(instance.isRowExpanded(1)).toBe(true);
+
+      instance.option('masterDetail.template', (): void => {});
+      jest.runAllTimers();
+
+      expect(instance.isRowExpanded(1)).toBe(false);
+    });
+
+    it('collapses an expanded row when enabled changes', async () => {
+      const { instance } = await createDataGrid({
+        dataSource,
+        masterDetail: { enabled: true, template },
+      });
+
+      await instance.expandRow(1);
+      jest.runAllTimers();
+      instance.option('masterDetail.enabled', false);
+      jest.runAllTimers();
+
+      expect(instance.isRowExpanded(1)).toBe(false);
+    });
+
+    it('keeps an expanded row when the masterDetail object keeps enabled and autoExpandAll', async () => {
+      const { instance } = await createDataGrid({
+        dataSource,
+        masterDetail: { enabled: true, template },
+      });
+
+      await instance.expandRow(1);
+      jest.runAllTimers();
+      instance.option('masterDetail', { enabled: true, autoExpandAll: false, template });
+      jest.runAllTimers();
+
+      expect(instance.isRowExpanded(1)).toBe(true);
+      expect(instance.isRowExpanded(2)).toBe(false);
     });
   });
 });

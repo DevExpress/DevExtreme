@@ -13,3 +13,4 @@ overrides:
   undici@>=7.0.0 <7.30.1: ^7.30.1
   compression@<1.8.2: ^1.8.2
   http-cache-semantics@<4.3.0: ^4.3.0
+  glob@>=9.0.0 <14.0.2: ^14.0.3
