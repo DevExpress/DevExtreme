@@ -107,7 +107,12 @@ export class ColumnSortable extends Component<Props> {
       return;
     }
 
-    this.props.onColumnMove?.(e.itemData.column, e.toIndex, e.itemData);
+    const draggingData: DraggingColumnData = {
+      ...e.itemData,
+      ...this.getNeighborColumns(e),
+    };
+
+    this.props.onColumnMove?.(draggingData.column, e.toIndex, draggingData);
   };
 
   // TODO: move all none-native approaches to sortable wrapper
@@ -234,7 +239,10 @@ export class ColumnSortable extends Component<Props> {
   }
 
   private getNeighborColumns(
-    e: SortableTypes.DragStartEvent | SortableTypes.DragMoveEvent,
+    e: SortableTypes.DragStartEvent
+    | SortableTypes.DragMoveEvent
+    | SortableTypes.AddEvent
+    | SortableTypes.ReorderEvent,
   ): { columnBefore: Column | undefined; columnAfter: Column | undefined } {
     const { source, destination } = e.itemData as DraggingColumnData;
 
