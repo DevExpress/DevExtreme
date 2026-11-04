@@ -1,7 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode } from '@angular/core';
+import { Component, enableProdMode, inject } from '@angular/core';
 import { DxPieChartModule } from 'devextreme-angular';
-import { ExportImportEntry, Service } from './app.service';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -18,11 +18,7 @@ if (!/localhost/.test(document.location.host)) {
 })
 
 export class AppComponent {
-  exportImportData: ExportImportEntry[];
-
-  constructor(service: Service) {
-    this.exportImportData = service.getExportImportData();
-  }
+  readonly exportImportData = inject(Service).getExportImportData();
 
   customizeTooltip(arg) {
     return { text: `${arg.argumentText}<br>${arg.seriesName}: ${arg.valueText}B` };

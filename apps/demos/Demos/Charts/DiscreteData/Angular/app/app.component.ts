@@ -1,7 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode } from '@angular/core';
+import { Component, enableProdMode, inject } from '@angular/core';
 import { DxPolarChartModule, DxSelectBoxModule } from 'devextreme-angular';
-import { Temperature, Service } from './app.service';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -18,13 +18,9 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  temperaturesData: Temperature[];
+  readonly temperaturesData = inject(Service).getTemperaturesData();
 
-  types = ['scatter', 'line', 'area', 'bar', 'stackedbar'];
-
-  constructor(service: Service) {
-    this.temperaturesData = service.getTemperaturesData();
-  }
+  readonly types = ['scatter', 'line', 'area', 'bar', 'stackedbar'];
 }
 
 bootstrapApplication(AppComponent);

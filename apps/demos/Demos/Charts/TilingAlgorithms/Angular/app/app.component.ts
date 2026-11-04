@@ -1,7 +1,9 @@
-import { Component, enableProdMode } from '@angular/core';
+import {
+  Component, computed, enableProdMode, inject, signal,
+} from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
 import { DxTreeMapModule, DxSelectBoxModule } from 'devextreme-angular';
-import { PopulationByAge, Service } from './app.service';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -19,15 +21,15 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  getPopulationsByAge: PopulationByAge[];
+  readonly getPopulationsByAge = inject(Service).getPopulationsByAge();
 
-  algorithms = ['sliceAndDice', 'squarified', 'strip', 'custom'];
+  readonly algorithms = ['sliceAndDice', 'squarified', 'strip', 'custom'];
 
-  algorithm = this.algorithms[2];
+  readonly algorithm = signal(this.algorithms[2]);
 
-  constructor(service: Service) {
-    this.getPopulationsByAge = service.getPopulationsByAge();
-  }
+  readonly layoutAlgorithm = computed(() => (
+    this.algorithm() === 'custom' ? this.customAlgorithm : this.algorithm()
+  ));
 
   customizeTooltip(arg) {
     const data = arg.node.data;

@@ -1,7 +1,9 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode } from '@angular/core';
+import {
+  Component, enableProdMode, inject, signal,
+} from '@angular/core';
 import { DxChartModule, DxSelectBoxModule } from 'devextreme-angular';
-import { Service, PopulationData } from './app.service';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -19,17 +21,13 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  population: PopulationData[];
+  private readonly service = inject(Service);
 
-  currentMode: string;
+  readonly population = this.service.getPopulation();
 
-  overlappingModes: string[];
+  readonly overlappingModes = this.service.getOverlappingModes();
 
-  constructor(service: Service) {
-    this.population = service.getPopulation();
-    this.currentMode = service.getOverlappingModes()[0];
-    this.overlappingModes = service.getOverlappingModes();
-  }
+  readonly currentMode = signal(this.overlappingModes[0]);
 }
 
 bootstrapApplication(AppComponent);

@@ -25,15 +25,15 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  temperature: number[] = [2, 4, 6, 8, 9, 10, 11];
+  readonly temperature = [2, 4, 6, 8, 9, 10, 11];
 
-  palette: string[] = ['#c3a2cc', '#b7b5e0', '#e48cba'];
+  private readonly palette = ['#c3a2cc', '#b7b5e0', '#e48cba'];
 
-  paletteIndex = 0;
+  private paletteIndex = 0;
 
-  http = inject(HttpClient);
+  private readonly http = inject(HttpClient);
 
-  monthWeather = new DataSource({
+  readonly monthWeather = new DataSource({
     store: new CustomStore({
       load: () => lastValueFrom(this.http.get('../../../../data/monthWeather.json'))
         .catch(() => { throw new Error('Data Loading Error'); }),
@@ -43,7 +43,7 @@ export class AppComponent {
     paginate: false,
   });
 
-  customizePoint = () => {
+  readonly customizePoint = () => {
     const color = this.palette[this.paletteIndex];
     this.paletteIndex = this.paletteIndex === 2 ? 0 : this.paletteIndex + 1;
 

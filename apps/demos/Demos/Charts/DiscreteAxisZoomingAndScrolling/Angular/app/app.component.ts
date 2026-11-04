@@ -1,8 +1,8 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode } from '@angular/core';
+import { Component, enableProdMode, inject } from '@angular/core';
 import { DxRangeSelectorModule } from 'devextreme-angular';
 import { DxChartModule, DxChartTypes } from 'devextreme-angular/ui/chart';
-import { Service, ChemicalComposition, SeriesDescription } from './app.service';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -19,16 +19,13 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  chemicalComposition: ChemicalComposition[];
+  private readonly service = inject(Service);
 
-  seriesSource: SeriesDescription[];
+  readonly chemicalComposition = this.service.getChemicalComposition();
 
-  constructor(service: Service) {
-    this.chemicalComposition = service.getChemicalComposition();
-    this.seriesSource = service.getSeries();
-  }
+  readonly seriesSource = this.service.getSeries();
 
-  customizeText: DxChartTypes.ValueAxisLabel['customizeText'] = ({ valueText }) => `${valueText}%`;
+  readonly customizeText: DxChartTypes.ValueAxisLabel['customizeText'] = ({ valueText }) => `${valueText}%`;
 }
 
 bootstrapApplication(AppComponent);
