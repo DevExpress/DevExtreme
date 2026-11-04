@@ -4199,27 +4199,25 @@ test('Adaptive with batch edit mode - Adaptive cells should be focused by tab ke
     .expect(secondDataRow.getDataCell(0).isFocused)
     .ok()
     .expect(secondDataRow.getDataCell(0).isEditCell)
-    .ok();
+    .ok()
 
-  // NOTE: Shift+Tab skips adaptive detail row in native automation mode (DOM order issue)
-  // adaptive detail row
-  // second item
-  // .pressKey('shift+tab')
-  // .expect(adaptiveDetailRow.getAdaptiveCell(1).isFocused)
-  // .ok()
-  // .expect(adaptiveDetailRow.getAdaptiveCell(1).isEditCell)
-  // .ok()
+    // adaptive detail row
+    // second item
+    .pressKey('shift+tab')
+    .expect(adaptiveDetailRow.getAdaptiveCell(1).isFocused)
+    .ok()
+    .expect(adaptiveDetailRow.getAdaptiveCell(1).isEditCell)
+    .ok()
 
-  // // first item
-  // .pressKey('shift+tab')
-  // .expect(adaptiveDetailRow.getAdaptiveCell(0).isFocused)
-  // .ok()
-  // .expect(adaptiveDetailRow.getAdaptiveCell(0).isEditCell)
-  // .ok()
+    // first item
+    .pressKey('shift+tab')
+    .expect(adaptiveDetailRow.getAdaptiveCell(0).isFocused)
+    .ok()
+    .expect(adaptiveDetailRow.getAdaptiveCell(0).isEditCell)
+    .ok()
 
-  // first data row
-  // fifth cell
-  await t
+    // first data row
+    // fifth cell
     .pressKey('shift+tab')
     .expect(firstDataRow.getDataCell(3).isFocused)
     .ok()
