@@ -3101,9 +3101,6 @@ const rowsView = <TBase extends ModuleType<RowsView>>(
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars -- used by overrides
   public editCellPrepared($cell: dxElementWrapper): void {}
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars -- used by overrides
-  public _formItemPrepared(cellOptions: ViewCellOptions, $container: dxElementWrapper): void {}
 };
 
 const headerPanel = (

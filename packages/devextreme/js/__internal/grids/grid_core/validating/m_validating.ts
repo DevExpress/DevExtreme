@@ -47,7 +47,7 @@ import type {
   EditingChange,
   EditingChangeParams,
   EditingChangesOptionChanged,
-  EditingRowsViewExtension,
+  EditingFormBasedRowsViewExtension,
   EditorCellOptions,
   FormBasedEditingControllerExtension,
   PrepareEditCellOptions,
@@ -1747,7 +1747,7 @@ export const validatingEditorFactoryExtender = (
 };
 
 export const validatingRowsViewExtender = (
-  Base: ModuleType<RowsView & EditingRowsViewExtension>,
+  Base: ModuleType<RowsView & EditingFormBasedRowsViewExtension>,
 ): ModuleType<RowsView> => class ValidatingRowsViewExtender extends Base {
   public declare _editingController: ValidatingEditingController;
 

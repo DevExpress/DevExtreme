@@ -246,9 +246,6 @@ export interface EditingRowsViewExtension {
 
   // eslint-disable-next-line @typescript-eslint/method-signature-style -- overridden by methods
   editCellPrepared($cell: dxElementWrapper): void;
-
-  // eslint-disable-next-line @typescript-eslint/method-signature-style -- overridden by methods
-  _formItemPrepared(cellOptions: ViewCellOptions, $container: dxElementWrapper): void;
 }
 
 export interface EditingDataControllerExtension {
@@ -296,4 +293,7 @@ export interface EditingFormBasedRowsViewExtension {
     $cells: dxElementWrapper | undefined,
     column: Column | undefined,
   ) => number;
+
+  // eslint-disable-next-line @typescript-eslint/method-signature-style -- overridden by methods
+  _formItemPrepared(cellOptions: EditorCellOptions, $container: dxElementWrapper): void;
 }

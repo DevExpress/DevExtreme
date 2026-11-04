@@ -649,12 +649,14 @@ const rowsView = (
 
   public _updateCell($cell: dxElementWrapper, parameters: EditorCellOptions): void {
     if (this._isFormItem(parameters)) {
-      // @ts-expect-error added by the editing extender, applied later in TreeList
       this._formItemPrepared(parameters, $cell);
     } else {
       super._updateCell($cell, parameters);
     }
   }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars -- used by overrides
+  public _formItemPrepared(cellOptions: EditorCellOptions, $container: dxElementWrapper): void {}
 
   protected _updateContent(
     newTableElement: dxElementWrapper,
