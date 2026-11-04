@@ -4,6 +4,7 @@
 import { move } from '@js/common/core/animation/translator';
 import { name as wheelEventName } from '@js/common/core/events/core/wheel';
 import messageLocalization from '@js/common/core/localization/message';
+import type { ColumnFixing } from '@js/common/grids';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import browser from '@js/core/utils/browser';
@@ -37,7 +38,11 @@ import { normalizeWidth } from '../views/columns_view';
 import type { RowsView } from '../views/rows_view';
 import type { RowsViewScrollEvent, SummaryRowsViewExtension } from '../views/types';
 import { CLASSES } from './const';
-import type { ColumnFixingRowsViewExtension } from './types';
+import type {
+  ColumnFixingColumnHeadersViewExtension,
+  ColumnFixingColumnsViewExtension,
+  ColumnFixingRowsView,
+} from './types';
 
 const FIRST_CELL_CLASS = 'dx-first-cell';
 const LAST_CELL_CLASS = 'dx-last-cell';
@@ -92,7 +97,10 @@ const normalizeColumnWidths = function (fixedColumns, widths: number[], fixedWid
 };
 
 // View
-const baseFixedColumns = <T extends ModuleType<ColumnsView>>(Base: T) => class BaseFixedColumnsExtender extends Base {
+const baseFixedColumns = <T extends ModuleType<ColumnsView>>(
+  Base: T,
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type -- protected members
+) => class BaseFixedColumnsExtender extends Base {
   public _isFixedTableRendering!: boolean;
 
   protected _isFixedColumns!: boolean;
@@ -473,7 +481,7 @@ const baseFixedColumns = <T extends ModuleType<ColumnsView>>(Base: T) => class B
     return result;
   }
 
-  protected getFixedColumns(rowIndex?) {
+  public getFixedColumns(rowIndex?) {
     return this._columnsController.getFixedColumns(rowIndex);
   }
 
@@ -494,11 +502,11 @@ const baseFixedColumns = <T extends ModuleType<ColumnsView>>(Base: T) => class B
     return offset;
   }
 
-  protected getTransparentColumnElement() {
+  public getTransparentColumnElement() {
     return this._fixedTableElement && this._fixedTableElement.find(`.${POINTER_EVENTS_NONE_CLASS}`).first();
   }
 
-  protected getFixedTableElement() {
+  public getFixedTableElement() {
     return this._fixedTableElement;
   }
 
@@ -626,7 +634,11 @@ const baseFixedColumns = <T extends ModuleType<ColumnsView>>(Base: T) => class B
   }
 };
 
-const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnHeadersViewFixedColumnsExtender extends baseFixedColumns(Base) {
+const columnHeadersView = (
+  Base: ModuleType<ColumnHeadersView>,
+): ModuleType<
+  ColumnHeadersView & ColumnFixingColumnHeadersViewExtension
+> => class ColumnHeadersViewFixedColumnsExtender extends baseFixedColumns(Base) {
   private _getRowVisibleColumns(rowIndex) {
     if (this._isFixedTableRendering) {
       return this.getFixedColumns(rowIndex);
@@ -636,7 +648,7 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
     return super._getRowVisibleColumns(rowIndex);
   }
 
-  private getFixedColumnElements(rowIndex?) {
+  public getFixedColumnElements(rowIndex?) {
     const that = this;
 
     if (!this._isFixedColumns) {
@@ -686,7 +698,7 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
 const rowsView = (
   Base: ModuleType<RowsView & SummaryRowsViewExtension>,
 ): ModuleType<
-  RowsView & ColumnFixingRowsViewExtension
+  ColumnFixingRowsView
 > => class RowsViewFixedColumnsExtender extends baseFixedColumns(Base) {
   protected _fixedScrollTimeout: any;
 
@@ -1057,7 +1069,11 @@ const rowsView = (
 };
 
 // TODO Move this view to the DataGrid
-const footerView = (Base: ModuleType<any>) => class FooterViewFixedColumnsExtender extends baseFixedColumns(Base) {};
+const footerView = <T extends ModuleType<ColumnsView>>(
+  Base: T,
+): T & ModuleType<
+  ColumnsView & ColumnFixingColumnsViewExtension
+> => class FooterViewFixedColumnsExtender extends baseFixedColumns(Base) {};
 
 const normalizeColumnIndicesByPoints = function (columns, fixedColumns, pointsByColumns) {
   const transparentColumnIndex = getTransparentColumnIndex(fixedColumns);
@@ -1073,7 +1089,10 @@ const normalizeColumnIndicesByPoints = function (columns, fixedColumns, pointsBy
   return pointsByColumns;
 };
 
-const draggingHeader = (Base: ModuleType<DraggingHeaderViewController>) => class DraggingHeaderColumnFixingExtender extends Base {
+const draggingHeader = (
+  Base: ModuleType<DraggingHeaderViewController>,
+): ModuleType<DraggingHeaderViewController> => class DraggingHeaderColumnFixingExtender
+  extends Base {
   public _generatePointsByColumns(options, needToCheckPrevPoint) {
     const visibleColumns = options.columns;
     const { targetDraggingPanel } = options;
@@ -1121,7 +1140,10 @@ const draggingHeader = (Base: ModuleType<DraggingHeaderViewController>) => class
   }
 };
 
-const columnsResizer = (Base: ModuleType<ColumnsResizerViewController>) => class ColumnResizerColumnFixingExtender extends Base {
+const columnsResizer = (
+  Base: ModuleType<ColumnsResizerViewController>,
+): ModuleType<ColumnsResizerViewController> => class ColumnResizerColumnFixingExtender
+  extends Base {
   private _pointsByFixedColumns: any;
 
   protected _generatePointsByColumns(needToCheckPrevPoint) {
@@ -1168,7 +1190,9 @@ const columnsResizer = (Base: ModuleType<ColumnsResizerViewController>) => class
   }
 };
 
-const resizing = (Base: ModuleType<ResizingController>) => class ResizingColumnFixingExtender extends Base {
+const resizing = (
+  Base: ModuleType<ResizingController>,
+): ModuleType<ResizingController> => class ResizingColumnFixingExtender extends Base {
   protected _setAriaOwns() {
     super._setAriaOwns.apply(this, arguments as any);
 
@@ -1180,7 +1204,9 @@ const resizing = (Base: ModuleType<ResizingController>) => class ResizingColumnF
   }
 };
 
-const keyboardNavigation = (Base: ModuleType<KeyboardNavigationController>) => class KeyboardNavigationExtender extends Base {
+const keyboardNavigation = (
+  Base: ModuleType<KeyboardNavigationController>,
+): ModuleType<KeyboardNavigationController> => class KeyboardNavigationExtender extends Base {
   protected _toggleInertAttr(value: boolean): void {
     const $fixedContent = this._rowsView?.getFixedContentElement();
 
@@ -1192,7 +1218,9 @@ const keyboardNavigation = (Base: ModuleType<KeyboardNavigationController>) => c
   }
 };
 
-const editorFactory = (Base: ModuleType<EditorFactory>) => class EditorFactoryFixedColumnsExtender extends Base {
+const editorFactory = (
+  Base: ModuleType<EditorFactory>,
+): ModuleType<EditorFactory> => class EditorFactoryFixedColumnsExtender extends Base {
   protected getValidationMessageContainer($cell: dxElementWrapper): dxElementWrapper {
     // @ts-expect-error RowsView's method
     const isFixedColumns = this._rowsView.isFixedColumns();
@@ -1207,7 +1235,7 @@ const editorFactory = (Base: ModuleType<EditorFactory>) => class EditorFactoryFi
 };
 
 export const columnFixingModule = {
-  defaultOptions() {
+  defaultOptions(): { columnFixing: ColumnFixing & { legacyMode: boolean } } {
     return {
       columnFixing: {
         enabled: false,

@@ -8,7 +8,7 @@ import { getHeight, getWidth } from '@js/core/utils/size';
 import { isDefined } from '@js/core/utils/type';
 import type { MasterDetail, Properties as DataGridProperties } from '@js/ui/data_grid';
 import type { GroupingDataControllerExtension } from '@ts/grids/data_grid/grouping/types';
-import type { ColumnFixingRowsViewExtension } from '@ts/grids/grid_core/column_fixing/types';
+import type { ColumnFixingColumnsViewExtension } from '@ts/grids/grid_core/column_fixing/types';
 import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/columns_controller';
 import type { Column, ColumnTemplateSource } from '@ts/grids/grid_core/columns_controller/types';
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
@@ -276,7 +276,7 @@ const resizing = (
     masterRowOptions: RowPreparedOptions,
   ): DeferredObj<unknown> | undefined {
     const d = Deferred();
-    const masterRowsView: RowsView & Partial<ColumnFixingRowsViewExtension> = masterDataGrid.getView('rowsView');
+    const masterRowsView: RowsView & Partial<ColumnFixingColumnsViewExtension> = masterDataGrid.getView('rowsView');
 
     if (masterRowsView?.isFixedColumns?.()) {
       this._updateFixedMasterDetailGrids(
