@@ -138,9 +138,7 @@ $chat-suggestions-box-shadow: null !default;
   $chat-bubble-background-color-primary: rgba($base-accent, 0.08) !default;
   $chat-file-container-box-shadow: 0 1px 1px 0 color.change($base-shadow-color, $alpha: 0.14), 0 1px 1px 0 color.change($base-shadow-color, $alpha: 0.12), 0 1px 3px 0 color.change($base-shadow-color, $alpha: 0.2) !default;
   $chat-suggestions-box-shadow: 0 4px 12px 0 color.change($base-shadow-color, $alpha: 0.04), 0 4px 24px 0 color.change($base-shadow-color, $alpha: 0.02) !default;
-}
-
-@else if $mode == "dark" {
+} @else if $mode == "dark" {
   $chat-bubble-background-color-primary: rgba(color.adjust($base-accent, $lightness: 19.22%, $space: hsl), 0.08) !default;
   $chat-file-container-box-shadow: 0 1px 1px 0 color.change($base-shadow-color, $alpha: 0.28), 0 1px 1px 0 color.change($base-shadow-color, $alpha: 0.24), 0 1px 3px 0 color.change($base-shadow-color, $alpha: 0.4) !default;
   $chat-suggestions-box-shadow: 0 4px 24px 0 color.change($base-shadow-color, $alpha: 0.02), 0 4px 12px 0 color.change($base-shadow-color, $alpha: 0.04) !default;
@@ -153,5 +151,15 @@ $chat-messagelist-contextmenu-delete-button-focused-bg: $base-hover-bg !default;
 $chat-tool-call-color: $base-text-color !default;
 $chat-tool-call-subtle-color: $base-label-color !default;
 $chat-tool-call-border-color: color.change($base-text-color, $alpha: 0.12) !default;
-$chat-tool-call-error-color: $base-danger !default;
+$chat-tool-call-error-color-light: #bc160a !default;
+$chat-tool-call-error-color-dark: #f99b94 !default;
+$chat-tool-call-error-color: null !default;
+
+@if $color == "blue" and $mode == "light" {
+  $chat-tool-call-error-color: $chat-tool-call-error-color-light !default;
+} @else if $color == "blue" and $mode == "dark" {
+  $chat-tool-call-error-color: $chat-tool-call-error-color-dark !default;
+} @else {
+  $chat-tool-call-error-color: $base-danger !default;
+}
 $chat-tool-call-error-background-color: color.change($base-danger, $alpha: 0.08) !default;

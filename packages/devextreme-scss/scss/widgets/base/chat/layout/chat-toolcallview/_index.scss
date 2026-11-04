@@ -3,7 +3,6 @@
   flex-direction: column;
   min-width: 0;
 
-  // The Accordion gives only the behavior here: its theme look is reset
   .dx-accordion {
     margin: 0;
     background-color: transparent;
@@ -33,11 +32,21 @@
     background-color: transparent;
   }
 
-  // The chevron of the Accordion follows the content instead of sticking to the edge
   .dx-accordion-item-title::before {
     position: static;
     order: 1;
     flex: none;
+    transform: rotate(-90deg);
+  }
+
+  .dx-rtl .dx-accordion-item-title::before {
+    transform: rotate(90deg);
+  }
+
+  .dx-accordion-item.dx-accordion-item-opened > .dx-accordion-item-title::before,
+  .dx-rtl .dx-accordion-item.dx-accordion-item-opened > .dx-accordion-item-title::before {
+    content: "\f016";
+    transform: none;
   }
 
   .dx-accordion-item-title-caption {
@@ -75,7 +84,6 @@
       width: 100%;
     }
 
-    // The TextArea theme puts a margin around the input and a minimum height on it
     .dx-texteditor > .dx-texteditor-container > .dx-texteditor-input-container {
       margin: 0;
     }

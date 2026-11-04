@@ -190,7 +190,18 @@ $chat-messagelist-contextmenu-delete-button-focused-color: $base-danger !default
 $chat-messagelist-contextmenu-delete-button-focused-bg: $base-hover-bg !default;
 
 $chat-tool-call-color: $base-text-color !default;
-$chat-tool-call-subtle-color: $base-label-color !default;
+$chat-tool-call-subtle-color: null !default;
 $chat-tool-call-border-color: $base-border-color !default;
-$chat-tool-call-error-color: $base-danger !default;
+$chat-tool-call-error-color: null !default;
+
+@if $color == "blue" and $mode == "light" {
+  $chat-tool-call-subtle-color: $base-icon-color !default;
+  $chat-tool-call-error-color: $base-danger-hover !default;
+} @else if $color == "blue" {
+  $chat-tool-call-subtle-color: $base-icon-color !default;
+  $chat-tool-call-error-color: $base-danger !default;
+} @else {
+  $chat-tool-call-subtle-color: $base-label-color !default;
+  $chat-tool-call-error-color: $base-danger !default;
+}
 $chat-tool-call-error-background-color: color.change($base-danger, $alpha: 0.1) !default;
