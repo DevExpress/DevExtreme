@@ -112,5 +112,21 @@ describe('CardView', () => {
 
       expect(getHeaderCaptions()).toEqual(expected);
     });
+
+    it('does not drop a column between columns that cannot be reordered when the last drag move reported another index', () => {
+      setup({
+        dataSource: [{ a: 1, b: 2, c: 3 }],
+        columns: [
+          'a',
+          { dataField: 'b', allowReordering: false },
+          { dataField: 'c', allowReordering: false },
+        ],
+        allowColumnReordering: true,
+      });
+
+      dragHeader(0, 0, 1);
+
+      expect(getHeaderCaptions()).toEqual(['A', 'B', 'C']);
+    });
   });
 });
