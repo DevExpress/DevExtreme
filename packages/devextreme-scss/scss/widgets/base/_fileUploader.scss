@@ -23,25 +23,10 @@
 }
 
 .dx-fileuploader-input-wrapper {
-  @include dx-clearfix-mixin();
-
-  &::before,
-  &::after {
-    width: 100%;
-  }
-
-  &::before {
-    padding-top: 1em;
-    margin-top: -1em;
-  }
-
-  &::after {
-    padding-bottom: 1em;
-    margin-bottom: -1em;
-  }
+  display: flex;
 
   .dx-button {
-    float: left;
+    flex-shrink: 0;
   }
 
   .dx-button + .dx-button {
@@ -122,15 +107,8 @@
   }
 }
 
-.dx-fileuploader-button-container,
 .dx-fileuploader-input-container {
-  display: table-cell;
-  vertical-align: middle;
-}
-
-.dx-fileuploader-input-container {
-  height: 100%;
-  width: 100%;
+  flex-grow: 1;
   position: relative;
   overflow: hidden;
 }
