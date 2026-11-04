@@ -1,9 +1,11 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode } from '@angular/core';
+import {
+  Component, enableProdMode, inject, signal,
+} from '@angular/core';
 import { DxCheckBoxModule } from 'devextreme-angular';
-import { DxTreeListModule, DxTreeListTypes } from 'devextreme-angular/ui/tree-list';
+import { DxTreeListModule, type DxTreeListTypes } from 'devextreme-angular/ui/tree-list';
 import { DxSelectBoxModule } from 'devextreme-angular/ui/select-box';
-import { Service, Employee } from './app.service';
+import { Service, type Employee } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -21,30 +23,26 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  employees: Employee[];
+  readonly employees = inject(Service).getEmployees();
 
-  selectedRowKeys: number[] = [];
+  readonly selectedRowKeys = signal<number[]>([]);
 
-  recursiveSelectionEnabled = false;
+  readonly recursiveSelectionEnabled = signal(false);
 
-  selectedEmployeeNames = 'Nobody has been selected';
+  readonly selectedEmployeeNames = signal('Nobody has been selected');
 
-  selectionMode = 'all';
-
-  constructor(service: Service) {
-    this.employees = service.getEmployees();
-  }
+  readonly selectionMode = signal('all');
 
   onSelectionChanged(e: DxTreeListTypes.SelectionChangedEvent) {
-    const selectedData: Employee[] = e.component.getSelectedRowsData(this.selectionMode);
-    this.selectedEmployeeNames = this.getEmployeeNames(selectedData);
+    const selectedData: Employee[] = e.component.getSelectedRowsData(this.selectionMode());
+    this.selectedEmployeeNames.set(this.getEmployeeNames(selectedData));
   }
 
   onOptionsChanged() {
-    this.selectedRowKeys = [];
+    this.selectedRowKeys.set([]);
   }
 
-  getEmployeeNames = (employees: Employee[]) => (employees.length > 0
+  private readonly getEmployeeNames = (employees: Employee[]) => (employees.length > 0
     ? employees.map((employee) => employee.Full_Name).join(', ')
     : 'Nobody has been selected');
 }

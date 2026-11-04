@@ -17,37 +17,31 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  tasksData: AspNetData.CustomStore;
+  private readonly url = 'https://js.devexpress.com/Demos/NetCore/api/TreeListTasks';
 
-  employeesData: AspNetData.CustomStore;
+  readonly tasksData = AspNetData.createStore({
+    key: 'Task_ID',
+    loadUrl: `${this.url}/Tasks`,
+    insertUrl: `${this.url}/InsertTask`,
+    updateUrl: `${this.url}/UpdateTask`,
+    deleteUrl: `${this.url}/DeleteTask`,
+    onBeforeSend(method, ajaxOptions) {
+      ajaxOptions.xhrFields = { withCredentials: true };
+    },
+  });
 
-  statusesData = [
+  readonly employeesData = AspNetData.createStore({
+    key: 'ID',
+    loadUrl: `${this.url}/TaskEmployees`,
+  });
+
+  readonly statusesData = [
     'Not Started',
     'Need Assistance',
     'In Progress',
     'Deferred',
     'Completed',
   ];
-
-  constructor() {
-    const url = 'https://js.devexpress.com/Demos/NetCore/api/TreeListTasks';
-
-    this.tasksData = AspNetData.createStore({
-      key: 'Task_ID',
-      loadUrl: `${url}/Tasks`,
-      insertUrl: `${url}/InsertTask`,
-      updateUrl: `${url}/UpdateTask`,
-      deleteUrl: `${url}/DeleteTask`,
-      onBeforeSend(method, ajaxOptions) {
-        ajaxOptions.xhrFields = { withCredentials: true };
-      },
-    });
-
-    this.employeesData = AspNetData.createStore({
-      key: 'ID',
-      loadUrl: `${url}/TaskEmployees`,
-    });
-  }
 
   initNewRow(e: DxTreeListTypes.InitNewRowEvent) {
     e.data.Task_Status = 'Not Started';

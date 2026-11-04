@@ -19,7 +19,7 @@ const url = 'https://js.devexpress.com/Demos/NetCore/api/TreeListTasks';
   ],
 })
 export class AppComponent {
-  dataSource = AspNetData.createStore({
+  readonly dataSource = AspNetData.createStore({
     key: 'Task_ID',
     loadUrl: `${url}/Tasks`,
     insertUrl: `${url}/InsertTask`,

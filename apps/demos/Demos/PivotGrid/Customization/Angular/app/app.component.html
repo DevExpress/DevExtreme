@@ -1,7 +1,7 @@
 <dx-pivot-grid
-  [showTotalsPrior]="showTotalsPrior ? 'both' : 'none'"
-  [dataFieldArea]="rowsDataFieldArea ? 'row' : 'column'"
-  [rowHeaderLayout]="treeHeaderLayout ? 'tree' : 'standard'"
+  [showTotalsPrior]="showTotalsPrior() ? 'both' : 'none'"
+  [dataFieldArea]="rowsDataFieldArea() ? 'row' : 'column'"
+  [rowHeaderLayout]="treeHeaderLayout() ? 'tree' : 'standard'"
   [wordWrapEnabled]="false"
   [dataSource]="pivotGridDataSource"
   [showBorders]="true"

@@ -1,7 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import { Component, enableProdMode } from '@angular/core';
 import { DxPivotGridModule } from 'devextreme-angular';
-import { Options as DataSourceConfig } from 'devextreme/ui/pivot_grid/data_source';
+import type { Options as DataSourceConfig } from 'devextreme/ui/pivot_grid/data_source';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -16,7 +16,7 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  dataSource: DataSourceConfig = {
+  readonly dataSource: DataSourceConfig = {
     paginate: true,
     fields: [
       { dataField: '[Customer].[Customer]', area: 'row' },

@@ -11,10 +11,10 @@
   <dxo-pivot-grid-field-chooser [height]="500"></dxo-pivot-grid-field-chooser>
 
   <dxo-pivot-grid-field-panel
-    [showDataFields]="showDataFields"
-    [showRowFields]="showRowFields"
-    [showColumnFields]="showColumnFields"
-    [showFilterFields]="showFilterFields"
+    [showDataFields]="showDataFields()"
+    [showRowFields]="showRowFields()"
+    [showColumnFields]="showColumnFields()"
+    [showFilterFields]="showFilterFields()"
     [allowFieldDragging]="true"
     [visible]="true"
   >
