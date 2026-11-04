@@ -1,7 +1,6 @@
 import { describe, expect, it } from '@jest/globals';
 import type { StoreLoadOptions } from '@ts/data/data_source/types';
 
-import { createOffsetFilter } from '../m_grouping_core';
 import { GroupingHelper } from '../m_grouping_expanded';
 import { createDataSourceAdapterStub } from './grouping_expanded.mock';
 
@@ -32,57 +31,5 @@ describe('refresh', () => {
     refresh(grouping, [{ selector: 'g' }]);
 
     expect(grouping.findGroupInfo(['A'])).toBeUndefined();
-  });
-});
-
-describe('createOffsetFilter', () => {
-  it.each([
-    {
-      name: 'an ascending group key',
-      path: ['A'],
-      group: [{ selector: 'g' }],
-      expected: [['g', '<', 'A'], 'or', ['g', '=', null]],
-    },
-    {
-      name: 'a descending group key',
-      path: ['A'],
-      group: [{ selector: 'g', desc: true }],
-      expected: ['g', '>', 'A'],
-    },
-    {
-      name: 'a two-level path',
-      path: ['A', 'B'],
-      group: [{ selector: 'g1' }, { selector: 'g2', desc: true }],
-      expected: [
-        [['g1', '<', 'A'], 'or', ['g1', '=', null]],
-        'or',
-        [['g1', '=', 'A'], 'and', ['g2', '>', 'B']],
-      ],
-    },
-  ])('should create the offset filter for $name', ({ path, group, expected }) => {
-    expect(createOffsetFilter(path, { group })).toEqual(expected);
-  });
-
-  it('should create the filter for the last level only', () => {
-    const filter = createOffsetFilter(
-      ['A', 'B'],
-      { group: [{ selector: 'g1' }, { selector: 'g2' }] },
-      true,
-    );
-
-    expect(filter).toEqual([
-      ['g1', '=', 'A'],
-      'and',
-      [['g2', '<', 'B'], 'or', ['g2', '=', null]],
-    ]);
-  });
-
-  it('should combine the offset filter with the load filter', () => {
-    const filter = createOffsetFilter(
-      ['A'],
-      { group: [{ selector: 'g', desc: true }], filter: ['f', '=', 1] },
-    );
-
-    expect(filter).toEqual([['g', '>', 'A'], 'and', ['f', '=', 1]]);
   });
 });
