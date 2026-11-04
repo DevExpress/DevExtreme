@@ -53,7 +53,7 @@ const summaryDataController = (Base: ModuleType<DataController>): ModuleType<Dat
 `ModuleType<T>` itself keeps `new (...args: any[]) => T`, with the directive reason `mixin constructors need any[]` (see fixes.md).
 
 **Cross-extender access.** When a class calls a member that another extender adds:
-- The extender's module exports `interface <Module><Base>Extension` with that member from its `types.ts` (Where types go), and the extender returns `ModuleType<Base & <Module><Base>Extension>`. Examples: `EditingDataControllerExtension`, `CellBasedEditingControllerExtension` (`grid_core/editing/types.ts`). Older ones still sit next to their extender (`FocusDataSourceControllerExtension`, `StateStoringDataControllerExtension`, `VirtualScrollingDataControllerExtension`, each in its module's `extenders/`); move one when you work on its file (typing it, or removing its file-level disables).
+- The extender's module exports `interface <Module><Base>Extension` with that member from its `types.ts` (Where types go), and the extender returns `ModuleType<Base & <Module><Base>Extension>`. Examples: `EditingDataControllerExtension`, `CellBasedEditingControllerExtension` (`grid_core/editing/types.ts`). Older ones still sit next to their extender (`FocusDataSourceControllerExtension`, `StateStoringDataControllerExtension`, `VirtualScrollingDataControllerExtension`, each in its module's `extenders/`); move one to its module's `types.ts` when you type a file of that module that uses it (`m_focus.ts`, `m_state_storing.ts`) or remove the file-level disables of its own file (`virtual_scrolling_data_controller.ts`), and update the module's re-exports too (`virtual_scrolling/index.ts`).
 - The implementing member is `public`, and so are its overrides.
 - Declare members property-style, except a member that a subclass overrides: a property there makes the subclass fail with TS2425. That one gets a method signature and `// eslint-disable-next-line @typescript-eslint/method-signature-style -- a subclass overrides it as a method`. The older disables of this kind have no reason; don't copy them.
 - The consumer narrows its own field (`protected _rowsView!: RowsView & EditingFormBasedRowsViewExtension;`) or its extender's `Base` (`Base: ModuleType<DataController & GroupingDataControllerExtension>`). A core module that does this gets `@architectureLeak`. When the registry can't prove the extension, the registration gets `// @ts-expect-error the extender assumes the <feature> extension of <Base>` (`adaptivity_module.ts`).
@@ -63,14 +63,24 @@ const summaryDataController = (Base: ModuleType<DataController>): ModuleType<Dat
 
 **Views**
 - `_$element` and `_$parent` are optional (`?:`), because `render()` sets them. `element()` returns `dxElementWrapper | undefined`, and so does `_parentElement()`.
-- **Code that assumes the view is rendered gets a guard**, not a `@ts-expect-error` or a `!`. The same goes for anything else that is set only later in the lifecycle: a scrollable that `render()` creates, an option a base method fills in. A directive whose reason says "X is rendered here", "X is defined here" or "X is set by the base method" is the kind reviewers ask to replace.
-  - A call chain whose result isn't used: `?.`, as in `this.element()?.empty().addClass(DATAGRID_TOTAL_FOOTER_CLASS)`.
-  - A block that needs the value: wrap it, as in `if ($row && columnIndices) { this._updateCells($row, $newRow, columnIndices); }`, or return early from a `void` method.
-  - A field read for a flag: `options.cachedData?.extra`.
-  - Often the guard behaves exactly the same, for example `$target.closest($focusedViewElement)`, since `closest(undefined)` matches nothing (fixes.md). Otherwise, the old code threw a `TypeError` where the view isn't rendered, and the guard turns that into a no-op. That state doesn't happen in a real flow, and this is the one body edit where the team accepts the difference. List each such guard in the report, saying which of the two it is.
-  - Keep the directive only where the guard would have to make up a value that the code then uses: a method that must return the element, a size or a promise, or a fallback that flows into a computation. Then put it on one typed declaration (fixes.md, `@ts-expect-error`), with exactly `// @ts-expect-error the view is rendered here` (or `the <x> is rendered here`), so `grep -rn "is rendered here"` finds them all.
-  - When you type a file, rewrite its existing directives of this kind by the same rule.
+- Code that assumes the view is rendered gets a guard (Guards for assumed values, below).
 - `_renderCore()` returns `DeferredObj<unknown> | void`, with a `no-invalid-void-type` disable: a view that renders synchronously returns nothing. `| undefined` breaks every override that returns nothing (7 of them).
+
+**Guards for assumed values.** Code that assumes a value is set gets a guard, not a `@ts-expect-error` or a `!`. That covers:
+- a view that isn't rendered yet (`element()`, `getTableElement()`), and anything else set later in the lifecycle: a scrollable that `render()` creates, an option a base method fills in;
+- a value an invariant guarantees: `summaryCells` on a row that renders summary cells, `items` of a group above the last group level, `columnIndices[0]` of the one footer row, an option that has a default value.
+
+A directive whose reason says "X is rendered here", "X is defined here", "X is set by …", "X exists" or "X has a default value" is the kind reviewers ask to replace. The guard forms:
+- A call chain whose result isn't used: `?.`, as in `this.element()?.empty().addClass(DATAGRID_TOTAL_FOOTER_CLASS)`.
+- A block that needs the value: wrap it, as in `if ($row && columnIndices) { this._updateCells($row, $newRow, columnIndices); }`, or return early from a `void` method.
+- A read whose result may be `undefined` where it goes: `options.cachedData?.extra`, `options.row.summaryCells?.[options.columnIndex]`, `this.option('selection') ?? {}` when only its fields are read.
+- A list that must hold only set items: `.filter(isDefined)`.
+
+Often the guard behaves exactly the same, for example `!!$rowsView && $relatedTarget.closest($rowsView).length > 0`, since `closest(undefined)` matches nothing. Otherwise, where the value isn't set, the old code threw or passed `undefined` on, and the guard skips that work instead. That state doesn't happen in a real flow, and this is the one body edit where the team accepts the difference. List each such guard in the report, saying which of the two it is.
+
+Keep the directive only where the guard would have to make up a value that the code then uses: a method that must return the element, a size or a promise, or a fallback that flows into a computation. Then put it on one typed declaration (fixes.md, `@ts-expect-error`). For a view, the reason is exactly `the view is rendered here` (or `the <x> is rendered here`), so `grep -rn "is rendered here"` finds them all.
+
+When you type a file, rewrite its existing directives of this kind by the same rule.
 
 **Fake components.** CardView passes its `WidgetMock`, PivotGrid's field chooser passes itself, and Jest tests pass partial mocks to classic module items. They get `as unknown as InternalGrid` where they're passed. The `ModuleItem` constructor stays `component: InternalGrid`.
 

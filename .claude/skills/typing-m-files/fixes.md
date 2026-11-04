@@ -148,7 +148,7 @@ Call `super` with named params, when the method declares exactly those params an
 | `prefer-for-of` | `for (const column of this._columns)`, when the index is only used to read the item and the loop doesn't add or remove items. The rule doesn't report a loop whose bound has `?.` (`i < changes?.length`); leave such a loop as it is |
 | `no-use-before-define` | move the declaration above its first use, when that doesn't change evaluation order |
 | `no-multi-assign` | two statements; `x = o.x = o.x === undefined ? d : o.x` becomes `o.x ??= d;` then `x = o.x`, only if `o.x` can't be `null` |
-| `no-non-null-assertion` | a narrowing TypeScript can see, when the value provably isn't `null` or `undefined` there. If it can be, the old code threw or read a key named `'undefined'`, so a check with a new fallback (`oldItem ? map[getRowKey(oldItem)] : undefined`) changes behaviour. Ask, or keep a line disable with a reason. In grids, a value that is unset only before a lifecycle step (render, a base method) gets a guard instead (grids.md, Views) |
+| `no-non-null-assertion` | a narrowing TypeScript can see, when the value provably isn't `null` or `undefined` there. If it can be, the old code threw or read a key named `'undefined'`, so a check with a new fallback (`oldItem ? map[getRowKey(oldItem)] : undefined`) changes behaviour. Ask, or keep a line disable with a reason. In grids, a value the code assumes is set (a rendered view, a lifecycle step, an invariant) gets a guard instead (grids.md, Guards for assumed values) |
 | `no-invalid-this` | a typed `this` param, which changes nothing: `function (this: ColumnBase, e: ColumnCustomizeTextArg): string`. An arrow changes what `this` is, so use one only after replacing every `this` with what it was. Core `each(items, function () {…})` calls the callback with `this` set to the item, and stops when it returns `false`. Switch to `forEach` only under the conditions in traps.md |
 | `no-floating-promises` | a line disable with a reason. `void promise` is not an option: `no-void` forbids it |
 | `no-unused-vars` (a param only the overrides use) | keep the line disable. Or declare the param in an overload signature and leave the implementation without it; this changes `Function.length`, so only where nothing reads it. `argsIgnorePattern` isn't configured, so a `_` prefix doesn't help |
@@ -175,7 +175,7 @@ Fields typed as `any` (part 1 of a file, or a whole file):
   // @ts-expect-error offset() is typed as possibly undefined
   const offset: Coordinates = $element.offset();
   ```
-  In grids, a value that is `undefined` only until the view is rendered gets a guard first; the directive is for the cases a guard can't cover (grids.md, Views).
+  In grids, a value the code assumes is set gets a guard first; the directive is for the cases a guard can't cover (grids.md, Guards for assumed values).
 
 ## Types to reuse or name
 
@@ -201,7 +201,7 @@ Fields typed as `any` (part 1 of a file, or a whole file):
 | `filter()` takes only a selector, but callers pass `(i, node) => …` | `// @ts-expect-error filter() is typed for selectors only` |
 | `$el.dxTextBox('instance')` and similar accessors are added at runtime by `registerComponent` | `// @ts-expect-error dxTextBox is added to the renderer at runtime` |
 | `fx.*` and `Scrollable.getInstance()` take an `Element`; `getInstance()` returns `DOMComponent` | `// @ts-expect-error fx is typed for Element`, `getInstance() is typed for Element`, `getInstance() returns a DOMComponent` |
-| `closest()` doesn't accept `undefined`, although `closest(undefined)` matches nothing | `// @ts-expect-error closest(undefined) matches nothing` |
+| `closest()` doesn't accept `undefined`, although `closest(undefined)` matches nothing | a guard, which gives the same result: `!!$rowsView && $relatedTarget.closest($rowsView).length > 0` |
 | `$el[0]` has no index signature, so it's `any` (`noImplicitAny` is off) | annotate the local with the DOM type: `const table: HTMLTableElement = $table[0];`, `const cellIndex: number = $cell[0].cellIndex;`. It isn't a cast: tsc checks it once the d.ts gets an index signature |
 | `css(name, value)` doesn't accept `null`, although `css(name, null)` clears the style | `// @ts-expect-error css() is typed without null` |
 | `data(key)` is typed as returning the wrapper, but the getter returns the stored value | one directive on a typed declaration: `// @ts-expect-error data(key) is typed as returning the wrapper` above `const rowOptions: RowPreparedOptions \| undefined = $row.data('options');` |

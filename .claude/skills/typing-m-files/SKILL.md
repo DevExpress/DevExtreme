@@ -59,11 +59,11 @@ Not counted at all: `max-classes-per-file`, `simple-import-sort/imports` and `sp
    4. Warnings, one at a time, only where the fix provably behaves the same (see Warnings below).
 
    [fixes.md](fixes.md) has the team's fix for each rule, most frequent first, and a section on warnings.
-3. **Review your own diff against [traps.md](traps.md).** Every body edit must keep behaviour exactly the same.
+3. **Review your own diff against [traps.md](traps.md).** Every body edit must keep behaviour exactly the same. The one exception, in grids, is a guard for an assumed value (grids.md, Guards for assumed values).
 4. **Checks** (below).
 5. **Report:**
    - strict errors and warnings, before and after, for each file or range in the input format;
-   - every body edit, one line each, with why it behaves the same;
+   - every body edit, one line each, with why it behaves the same; for a grids guard that doesn't, what it now skips;
    - what was added to the module's `types.ts`;
    - every change in other files, file by file: declarations added, and directives added at callers;
    - the warnings left, grouped by rule, with the reason each was left.
@@ -86,7 +86,7 @@ Not counted at all: `max-classes-per-file`, `simple-import-sort/imports` and `sp
 
 **Typing only**
 - Annotate params, locals, returns and fields.
-- Change a body only where a new type makes it fail to compile (a guard, a `?? fallback`, a narrowing), or where a strict rule needs it (`fixes.md`). Either way, the edit must provably behave the same for every value the code can get. In grids, the one exception is a guard for a view that isn't rendered yet, or for another value that is set later in the lifecycle (grids.md, Views). A value from a source that isn't typed yet gets a directive, not a cast (see Disables).
+- Change a body only where a new type makes it fail to compile (a guard, a `?? fallback`, a narrowing), or where a strict rule needs it (`fixes.md`). Either way, the edit must provably behave the same for every value the code can get. In grids, the one exception is a guard for a value the code assumes is set: a rendered view, or a value the lifecycle or an invariant guarantees (grids.md, Guards for assumed values). A value from a source that isn't typed yet gets a directive, not a cast (see Disables).
 - Don't refactor. That means no extracting functions, rewriting loops, renaming members or functions, removing dead code or dropping unused params, unless the developer agrees for that one function. Renaming a local variable to fix `no-shadow` is fine.
 - An agreed refactor gets tests first: written and passing on the old code, then the change, then a mutation check that the tests catch a broken version. The test file is outside the task: name it when you ask for the agreement.
 - A bug found while typing is not fixed in the typing PR. Tell the developer, with file, line and why it's a bug.
@@ -99,15 +99,15 @@ Not counted at all: `max-classes-per-file`, `simple-import-sort/imports` and `sp
 
 **Where types go**
 - Reuse before creating: public types from the `js/**/*.d.ts` files (`@js/common`, `@js/core/utils/callbacks`, the component's own `@js/ui/<component>`, …), then the module's own `types.ts`.
-- Every type a module exports lives in its `types.ts`. Implementation files export only values: classes, extenders, functions, the module object. Other modules import types from `types.ts`, never from an implementation file, so a rename ([rename.md](rename.md)) doesn't touch their imports.
+- A type a module exports belongs in its `types.ts`, and other modules import it from there. Implementation files export only values: classes, extenders, functions, the module object. That way a rename ([rename.md](rename.md)) doesn't touch those type imports. A class used as a type is still imported from its own file, through `import type`. Older files don't all follow this yet; change only the file you type.
 - A new type goes into the module's own `types.ts`. Other modules import it from there.
-- An exported type that the file you type still declares moves to the module's `types.ts` (with a range, only one declared in the range), and its importers' import lines follow. It stays inside the module, so it isn't a move between modules (Scope), and the built JS doesn't change.
+- An exported type that the file you type still declares moves to the module's `types.ts` (with a range, only those declared in the range), and its importers' import lines follow. It stays inside the module, so it isn't a move between modules (Scope), and the built JS doesn't change.
 - A type that only its own file uses, and doesn't export, may stay there. Move it to `types.ts` once a second file needs it.
-- A type derived from a value (`InstanceType<ReturnType<typeof extender>>`) stays next to the value until it's replaced; in grids, by an extension interface (grids.md).
+- A type derived from a value (`InstanceType<ReturnType<typeof extender>>`) stays next to the value. In grids, when you type its file, replace it with an extension interface in `types.ts` (grids.md, Cross-extender access).
 - A property of a type that another module owns goes into that module's `types.ts` (see Scope).
 
 **Disables**
-- Existing inline `eslint-disable` comments and `@ts-expect-error` may stay.
+- Existing inline `eslint-disable` comments and `@ts-expect-error` may stay. In grids, a directive for an assumed value is rewritten as a guard (grids.md, Guards for assumed values).
 - **A value from a source that isn't typed yet gets a directive, not a cast.** A cast stays silent once the source gets typed. A directive is then reported as unused, so someone sees it and removes it.
   - The value is `any`, which is what `no-unsafe-return` reports: use `// eslint-disable-next-line @typescript-eslint/no-unsafe-return -- <what isn't typed yet>`. Don't use `@ts-expect-error` here: TypeScript sees no error on an `any` value, so tsc fails at once with TS2578 (unused directive).
   - TypeScript rejects the value, because it is `unknown` or has a wider or wrong type: use `// @ts-expect-error <what isn't typed yet>`. Keep that line short, because the directive hides every error on it.
