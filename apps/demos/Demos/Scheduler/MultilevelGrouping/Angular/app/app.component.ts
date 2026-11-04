@@ -1,9 +1,8 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, enableProdMode, inject } from '@angular/core';
 import { DxSchedulerModule } from 'devextreme-angular';
-import { DxSchedulerTypes } from 'devextreme-angular/ui/scheduler';
-import { Appointment, Assignee, Service } from './app.service';
+import type { DxSchedulerTypes } from 'devextreme-angular/ui/scheduler';
+import { type Assignee, Service } from './app.service';
 
 type Form = DxSchedulerTypes.AppointmentFormOpeningEvent['form'];
 type FormItem = {
@@ -24,36 +23,31 @@ if (!/localhost/.test(document.location.host)) {
   styleUrls: ['./app.component.css'],
   providers: [Service],
   imports: [
-    CommonModule,
     DxSchedulerModule,
   ],
 })
 export class AppComponent {
-  appointments: Appointment[];
+  private readonly service = inject(Service);
 
-  assignees: Assignee[];
+  readonly appointments = this.service.getAppointments();
 
-  rooms: Assignee[];
+  readonly assignees = this.service.getAssignees();
 
-  groups: string[] = ['assigneeId'];
+  private readonly rooms = this.assignees.filter((item) => item.parentId === null);
 
-  currentDate: Date = new Date(2026, 6, 13);
+  readonly groups = ['assigneeId'];
 
-  constructor(service: Service) {
-    this.appointments = service.getAppointments();
-    this.assignees = service.getAssignees();
-    this.rooms = this.assignees.filter((item) => item.parentId === null);
-  }
+  readonly currentDate = new Date(2026, 6, 13);
 
-  employeesOf(roomId: string | null): Assignee[] {
+  private employeesOf(roomId: string | null): Assignee[] {
     return this.assignees.filter((item) => item.parentId === roomId);
   }
 
-  roomOf(assigneeId: number | undefined): string | null {
+  private roomOf(assigneeId: number | undefined): string | null {
     return this.assignees.find((item) => item.id === assigneeId)?.parentId ?? null;
   }
 
-  findItem(items: FormItem[], predicate: (item: FormItem) => boolean): FoundItem {
+  private findItem(items: FormItem[], predicate: (item: FormItem) => boolean): FoundItem {
     for (let i = 0; i < items.length; i += 1) {
       if (predicate(items[i])) {
         return { list: items, index: i };
@@ -73,7 +67,7 @@ export class AppComponent {
     return null;
   }
 
-  createRoomGroup(form: Form, roomId: string | null): FormItem {
+  private createRoomGroup(form: Form, roomId: string | null): FormItem {
     return {
       itemType: 'group',
       name: 'roomGroup',
@@ -112,7 +106,7 @@ export class AppComponent {
     };
   }
 
-  renderEmployeeTag(data: { text: string; color?: string }) {
+  private renderEmployeeTag(data: { text: string; color?: string }) {
     const tag = document.createElement('div');
 
     tag.className = 'dx-tag-content';
@@ -128,7 +122,7 @@ export class AppComponent {
     return tag;
   }
 
-  hideLabels(items: FormItem[]) {
+  private hideLabels(items: FormItem[]) {
     items.forEach((item) => {
       if (item.items) {
         this.hideLabels(item.items);
@@ -138,7 +132,7 @@ export class AppComponent {
     });
   }
 
-  roomIdOf(
+  private roomIdOf(
     appointmentData: DxSchedulerTypes.AppointmentFormOpeningEvent['appointmentData'],
   ): string | null {
     const assigneeIds = appointmentData?.assigneeId as number | number[] | undefined;
@@ -147,7 +141,7 @@ export class AppComponent {
     return this.roomOf(assigneeId);
   }
 
-  requireEmployee(items: FormItem[]) {
+  private requireEmployee(items: FormItem[]) {
     const found = this.findItem(items, (item) => item.dataField === 'assigneeId');
 
     if (!found) {
@@ -163,7 +157,7 @@ export class AppComponent {
     };
   }
 
-  hideGroup(items: FormItem[], name: string) {
+  private hideGroup(items: FormItem[], name: string) {
     const found = this.findItem(items, (item) => item.name === name);
 
     if (found) {

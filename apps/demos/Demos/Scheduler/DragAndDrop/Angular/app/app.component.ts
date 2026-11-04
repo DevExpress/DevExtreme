@@ -1,11 +1,11 @@
 import {
-  Component, enableProdMode, signal, WritableSignal,
+  Component, enableProdMode, inject, signal,
 } from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
 import { DxSchedulerModule, DxDraggableModule, DxScrollViewModule } from 'devextreme-angular';
-import { DxSchedulerTypes } from 'devextreme-angular/ui/scheduler';
-import { DxDraggableTypes } from 'devextreme-angular/ui/draggable';
-import { Appointment, Task, Service } from './app.service';
+import type { DxSchedulerTypes } from 'devextreme-angular/ui/scheduler';
+import type { DxDraggableTypes } from 'devextreme-angular/ui/draggable';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -23,18 +23,15 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  draggingGroupName = 'appointmentsGroup';
+  private readonly service = inject(Service);
 
-  tasks: WritableSignal<Task[]>;
+  readonly draggingGroupName = 'appointmentsGroup';
 
-  appointments: WritableSignal<Appointment[]>;
+  readonly tasks = signal(this.service.getTasks());
 
-  currentDate: Date = new Date(2021, 3, 26);
+  readonly appointments = signal(this.service.getAppointments());
 
-  constructor(service: Service) {
-    this.tasks = signal(service.getTasks());
-    this.appointments = signal(service.getAppointments());
-  }
+  readonly currentDate = new Date(2021, 3, 26);
 
   onAppointmentRemove = (e: DxSchedulerTypes.AppointmentDraggingRemoveEvent) => {
     if (this.appointments().includes(e.itemData)) {

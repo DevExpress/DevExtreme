@@ -12,7 +12,7 @@
     fieldExpr="roomId"
     label="Room"
     [dataSource]="rooms"
-    [useColorAsDefault]="currentResource === 'Room'"
+    [useColorAsDefault]="currentResource() === 'Room'"
     icon="conferenceroomoutline"
   >
   </dxi-scheduler-resource>
@@ -20,7 +20,7 @@
     fieldExpr="priorityId"
     label="Priority"
     [dataSource]="priorities"
-    [useColorAsDefault]="currentResource === 'Priority'"
+    [useColorAsDefault]="currentResource() === 'Priority'"
     icon="tags"
   >
   </dxi-scheduler-resource>
@@ -29,7 +29,7 @@
     label="Assignee"
     [allowMultiple]="true"
     [dataSource]="assignees"
-    [useColorAsDefault]="currentResource === 'Assignee'"
+    [useColorAsDefault]="currentResource() === 'Assignee'"
     icon="user"
   >
   </dxi-scheduler-resource>

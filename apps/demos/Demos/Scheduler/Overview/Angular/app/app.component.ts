@@ -1,9 +1,11 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, Pipe, PipeTransform } from '@angular/core';
+import {
+  Component, enableProdMode, inject, Pipe, type PipeTransform,
+} from '@angular/core';
 import { NgClass } from '@angular/common';
 import { DxSchedulerModule } from 'devextreme-angular';
 import { DataSource } from 'devextreme-angular/common/data';
-import { Service, Employee, Data } from './app.service';
+import { Service, type Data } from './app.service';
 
 @Pipe({ name: 'apply', standalone: true })
 export class ApplyPipe<TArgs, TReturn> implements PipeTransform {
@@ -26,21 +28,17 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  dataSource: DataSource;
+  private readonly service = inject(Service);
 
-  currentDate: Date = new Date(2021, 5, 2, 11, 30);
+  readonly dataSource = new DataSource({
+    store: this.service.getData(),
+  });
 
-  resourcesDataSource: Employee[];
+  readonly currentDate = new Date(2021, 5, 2, 11, 30);
 
-  constructor(service: Service) {
-    this.dataSource = new DataSource({
-      store: service.getData(),
-    });
+  readonly resourcesDataSource = this.service.getEmployees();
 
-    this.resourcesDataSource = service.getEmployees();
-  }
-
-  markWeekEnd = (cellData: Data & { groups: Data }) => {
+  readonly markWeekEnd = (cellData: Data & { groups: Data }) => {
     function isWeekEnd(date: Date) {
       const day = date.getDay();
       return day === 0 || day === 6;
@@ -51,7 +49,7 @@ export class AppComponent {
     return classObject;
   };
 
-  markTraining = (cellData: Data & { groups: Data }) => {
+  readonly markTraining = (cellData: Data & { groups: Data }) => {
     const classObject = {
       'day-cell': true,
     };

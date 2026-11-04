@@ -1,7 +1,9 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, ViewChild, enableProdMode } from '@angular/core';
 import {
-  DxPopupModule, DxDiagramModule, DxDiagramComponent, DxTextBoxModule, DxButtonModule,
+  Component, enableProdMode, inject, signal,
+} from '@angular/core';
+import {
+  DxPopupModule, DxDiagramModule, DxTextBoxModule, DxButtonModule,
 } from 'devextreme-angular';
 import { ArrayStore } from 'devextreme-angular/common/data';
 import { Service, Employee } from './app.service';
@@ -24,31 +26,21 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  @ViewChild(DxDiagramComponent, { static: false }) diagram: DxDiagramComponent;
+  readonly currentEmployee = signal<Employee>(new Employee());
 
-  currentEmployee: Employee = new Employee();
+  readonly popupVisible = signal(false);
 
-  employees: Employee[];
+  private generatedID = 100;
 
-  dataSource: ArrayStore;
-
-  popupVisible = false;
-
-  generatedID = 100;
-
-  constructor(service: Service) {
-    const that = this;
-    this.employees = service.getEmployees();
-    this.dataSource = new ArrayStore({
-      key: 'ID',
-      data: service.getEmployees(),
-      onInserting(values) {
-        values.ID = values.ID || (that.generatedID += 1);
-        values.Full_Name = values.Full_Name || "Employee's Name";
-        values.Title = values.Title || "Employee's Title";
-      },
-    });
-  }
+  readonly dataSource = new ArrayStore({
+    key: 'ID',
+    data: inject(Service).getEmployees(),
+    onInserting: (values) => {
+      values.ID = values.ID || (this.generatedID += 1);
+      values.Full_Name = values.Full_Name || "Employee's Name";
+      values.Title = values.Title || "Employee's Title";
+    },
+  });
 
   itemTypeExpr(obj, value) {
     if (value === undefined) {
@@ -88,9 +80,9 @@ export class AppComponent {
     }
   }
 
-  editEmployee(employee) {
-    this.currentEmployee = { ...employee };
-    this.popupVisible = true;
+  editEmployee(employee: Employee) {
+    this.currentEmployee.set({ ...employee });
+    this.popupVisible.set(true);
   }
 
   deleteEmployee(employee) {
@@ -98,25 +90,26 @@ export class AppComponent {
   }
 
   updateEmployee() {
+    const employee = this.currentEmployee();
     this.dataSource.push([{
       type: 'update',
-      key: this.currentEmployee.ID,
+      key: employee.ID,
       data: {
-        Full_Name: this.currentEmployee.Full_Name,
-        Title: this.currentEmployee.Title,
-        City: this.currentEmployee.City,
-        State: this.currentEmployee.State,
-        Email: this.currentEmployee.Email,
-        Skype: this.currentEmployee.Skype,
-        Mobile_Phone: this.currentEmployee.Mobile_Phone,
+        Full_Name: employee.Full_Name,
+        Title: employee.Title,
+        City: employee.City,
+        State: employee.State,
+        Email: employee.Email,
+        Skype: employee.Skype,
+        Mobile_Phone: employee.Mobile_Phone,
       },
     }]);
-    this.popupVisible = false;
+    this.popupVisible.set(false);
   }
 
   cancelEditEmployee() {
-    this.currentEmployee = new Employee();
-    this.popupVisible = false;
+    this.currentEmployee.set(new Employee());
+    this.popupVisible.set(false);
   }
 }
 

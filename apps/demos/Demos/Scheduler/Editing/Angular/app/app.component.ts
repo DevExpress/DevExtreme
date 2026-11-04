@@ -1,9 +1,9 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode } from '@angular/core';
+import { Component, enableProdMode, inject } from '@angular/core';
 import { DxSchedulerModule, DxCheckBoxModule } from 'devextreme-angular';
 import notify from 'devextreme/ui/notify';
-import { DxSchedulerTypes } from 'devextreme-angular/ui/scheduler';
-import { Appointment, Service } from './app.service';
+import type { DxSchedulerTypes } from 'devextreme-angular/ui/scheduler';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -21,15 +21,11 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  appointmentsData: Appointment[];
+  readonly appointmentsData = inject(Service).getAppointments();
 
-  currentDate: Date = new Date(2021, 3, 29);
+  readonly currentDate = new Date(2021, 3, 29);
 
-  constructor(service: Service) {
-    this.appointmentsData = service.getAppointments();
-  }
-
-  showToast(event: string, value: string, type: string) {
+  private showToast(event: string, value: string, type: string) {
     notify(`${event} "${value}" task`, type, 800);
   }
 
