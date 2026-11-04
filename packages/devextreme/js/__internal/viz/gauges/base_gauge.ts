@@ -38,11 +38,9 @@ export interface BaseGauge extends TooltipPluginMembers {
   _title: ThemeValue;
   _updateExtraElements: () => void;
 
-  /// #DEBUG
   _DEBUG_change_title?: () => void;
   _DEBUG_rootRect?: number[];
   _debug_rendered?: () => void;
-  /// #ENDDEBUG
 }
 
 export abstract class BaseGauge extends BaseWidget {
