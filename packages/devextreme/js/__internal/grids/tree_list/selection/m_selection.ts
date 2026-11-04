@@ -225,13 +225,12 @@ const selection = (
     setFocusOnly?: boolean,
   ): boolean | DeferredObj<unknown> | undefined {
     const isRecursiveSelection = this.isRecursiveSelection();
-    const callBase = super.changeItemSelection.bind(this);
 
     if (isRecursiveSelection && !keyboardKeys?.shift) {
       const key = this._dataController.getKeyByRowIndex(itemIndex);
       return this.selectedItemKeys(key, true, this.isRowSelected(key)).done(() => {
         if (this.isRowSelected(key)) {
-          callBase(itemIndex, keyboardKeys, true);
+          super.changeItemSelection(itemIndex, keyboardKeys, true);
         }
       });
     }
@@ -247,20 +246,20 @@ const selection = (
       if (parentNode.children.length > 1) {
         if (isSelected === false) {
           const hasSelectedState = parentNode.children.some(
-            (childNode) => this._selectionStateByKey[childNode.key as string],
+            (childNode) => this._selectionStateByKey[String(childNode.key)],
           );
 
           state = hasSelectedState ? undefined : false;
         } else if (isSelected === true) {
           const hasNonSelectedState = parentNode.children.some(
-            (childNode) => !this._selectionStateByKey[childNode.key as string],
+            (childNode) => !this._selectionStateByKey[String(childNode.key)],
           );
 
           state = hasNonSelectedState ? undefined : true;
         }
       }
 
-      this._selectionStateByKey[parentNode.key as string] = state;
+      this._selectionStateByKey[String(parentNode.key)] = state;
 
       if (parentNode.parent?.level !== undefined && parentNode.parent.level >= 0) {
         this._updateParentSelectionState(parentNode, state);
@@ -269,17 +268,13 @@ const selection = (
   }
 
   private _updateChildrenSelectionState(node: TreeNode, isSelected: boolean): void {
-    const { children } = node;
+    node.children.forEach((childNode) => {
+      this._selectionStateByKey[String(childNode.key)] = isSelected;
 
-    if (children) {
-      children.forEach((childNode) => {
-        this._selectionStateByKey[childNode.key as string] = isSelected;
-
-        if (childNode.children.length > 0) {
-          this._updateChildrenSelectionState(childNode, isSelected);
-        }
-      });
-    }
+      if (childNode.children.length > 0) {
+        this._updateChildrenSelectionState(childNode, isSelected);
+      }
+    });
   }
 
   private _updateSelectionStateCore(keys: RowKey[], isSelected: boolean): void {
@@ -287,7 +282,7 @@ const selection = (
 
     this._selectionStateByKey = {};
     for (const key of keys) {
-      this._selectionStateByKey[key as string] = isSelected;
+      this._selectionStateByKey[String(key)] = isSelected;
       const node = dataController.getNodeByKey(key);
 
       if (node) {
@@ -340,7 +335,7 @@ const selection = (
         }
 
         return ignoreKeyIndex > 0 || (
-          ignoreKeyIndex < 0 && this._selectionStateByKey[childNode.key as string] === undefined
+          ignoreKeyIndex < 0 && this._selectionStateByKey[String(childNode.key)] === undefined
         );
       });
     }
@@ -455,8 +450,8 @@ const selection = (
     const processedKeys: Record<string, boolean> = {};
 
     keys.forEach((key) => {
-      if (!processedKeys[key as string]) {
-        processedKeys[key as string] = true;
+      if (!processedKeys[String(key)]) {
+        processedKeys[String(key)] = true;
         result.push(key);
       }
     });
@@ -478,47 +473,25 @@ const selection = (
   }
 
   private _getAllSelectedRowKeys(keys: RowKey[]): RowKey[] {
-    let result: RowKey[] = [];
+    const allKeys = keys.flatMap((key) => [
+      ...this._getSelectedParentKeys(key, [], true),
+      key,
+      ...this._getAllChildKeys(key),
+    ]);
 
-    keys.forEach((key) => {
-      const parentKeys = this._getSelectedParentKeys(key, [], true);
-      const childKeys = this._getAllChildKeys(key);
-
-      result.push(...parentKeys.concat([key], childKeys));
-    });
-
-    result = this._removeDuplicatedKeys(result);
-
-    return result;
+    return this._removeDuplicatedKeys(allKeys);
   }
 
   private _getParentSelectedRowKeys(keys: RowKey[]): RowKey[] {
-    const result: RowKey[] = [];
-
-    keys.forEach((key) => {
-      const parentKeys = this._getSelectedParentKeys(key, keys);
-
-      if (!parentKeys.length) {
-        result.push(key);
-      }
-    });
-
-    return result;
+    return keys.filter((key) => !this._getSelectedParentKeys(key, keys).length);
   }
 
   private _getLeafSelectedRowKeys(keys: RowKey[]): RowKey[] {
-    const result: RowKey[] = [];
-    const dataController = this._dataController;
+    return keys.filter((key) => {
+      const node = this._dataController.getNodeByKey(key);
 
-    keys.forEach((key) => {
-      const node = dataController.getNodeByKey(key);
-
-      if (node && !node.hasChildren) {
-        result.push(key);
-      }
+      return !!node && !node.hasChildren;
     });
-
-    return result;
   }
 
   public isRecursiveSelection(): boolean {
@@ -543,8 +516,8 @@ const selection = (
     const isRecursiveSelection = isRecursive ?? this.isRecursiveSelection();
 
     if (!result && isRecursiveSelection) {
-      if ((key as string) in this._selectionStateByKey) {
-        return this._selectionStateByKey[key as string];
+      if (String(key) in this._selectionStateByKey) {
+        return this._selectionStateByKey[String(key)];
       }
       return false;
     }
@@ -559,22 +532,25 @@ const selection = (
 
     // @ts-expect-error selection may be deferred only in DataGrid,
     // we need to improve GridCore types to take it into account
-    let selectedRowKeys: RowKey[] = super.getSelectedRowKeys(mode);
+    const selectedRowKeys: RowKey[] = super.getSelectedRowKeys(mode);
 
-    if (mode) {
-      if (this.isRecursiveSelection()) {
-        selectedRowKeys = this._getAllSelectedRowKeys(selectedRowKeys);
-      }
-
-      if (mode !== 'all') {
-        if (mode === 'excludeRecursive') {
-          selectedRowKeys = this._getParentSelectedRowKeys(selectedRowKeys);
-        } else if (this._isModeLeavesOnly(mode)) {
-          selectedRowKeys = this._getLeafSelectedRowKeys(selectedRowKeys);
-        }
-      }
+    if (!mode) {
+      return selectedRowKeys;
     }
-    return selectedRowKeys;
+
+    const allSelectedRowKeys = this.isRecursiveSelection()
+      ? this._getAllSelectedRowKeys(selectedRowKeys)
+      : selectedRowKeys;
+
+    if (mode === 'excludeRecursive') {
+      return this._getParentSelectedRowKeys(allSelectedRowKeys);
+    }
+
+    if (this._isModeLeavesOnly(mode)) {
+      return this._getLeafSelectedRowKeys(allSelectedRowKeys);
+    }
+
+    return allSelectedRowKeys;
   }
 
   public getSelectedRowsData(mode?: string): RawItemData[] {
