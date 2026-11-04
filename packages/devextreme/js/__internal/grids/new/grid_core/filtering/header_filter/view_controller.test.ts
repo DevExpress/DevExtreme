@@ -1,4 +1,3 @@
-/* eslint-disable no-spaced-func */
 import { describe, expect, it } from '@jest/globals';
 import { ColumnsController } from '@ts/grids/new/grid_core/columns_controller';
 import type { Column } from '@ts/grids/new/grid_core/columns_controller/types';
