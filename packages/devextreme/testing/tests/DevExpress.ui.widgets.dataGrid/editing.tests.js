@@ -15081,7 +15081,7 @@ QUnit.module('Editing with validation', {
         this.editCell(0, 0);
         this.clock.tick(10);
         const rowKey = this.getKeyByRowIndex(0);
-        this.validatingController.setDisableApplyValidationResults(true);
+        this.validatingController._disableApplyValidationResults = true;
         const deferred = new Deferred();
         const validationResult = {
             status: 'pending',

@@ -39,7 +39,7 @@ export interface ValidationData {
   key: RowKey;
   isValid?: boolean;
   validated?: boolean;
-  brokenRules?: BrokenRule[] | null;
+  brokenRules?: BrokenRule[];
   errorText?: string;
   validationResults?: Record<number, CellValidationResultValue>;
   pageIndex?: number;
@@ -59,7 +59,7 @@ export interface CellValidationParams {
 }
 
 export interface RowValidatingParams {
-  brokenRules: BrokenRule[] | null | undefined;
+  brokenRules: BrokenRule[] | undefined;
   isValid: boolean | undefined;
   key: RowKey;
   newData: EditingChange['data'];
