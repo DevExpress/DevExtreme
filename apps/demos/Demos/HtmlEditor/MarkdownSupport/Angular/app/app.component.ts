@@ -1,5 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode } from '@angular/core';
+import {
+  Component, enableProdMode, inject, signal,
+} from '@angular/core';
 import { unified } from 'unified';
 import remarkParse from 'remark-parse';
 import remarkRehype from 'remark-rehype';
@@ -30,36 +32,30 @@ if (!/localhost/.test(document.location.host)) {
 })
 
 export class AppComponent {
-  valueContent: string;
+  readonly valueContent = signal(inject(Service).getMarkup());
 
-  converter: Converter;
+  readonly converter: Converter = {
+    toHtml(value) {
+      const result = unified()
+        .use(remarkParse)
+        .use(remarkRehype)
+        .use(rehypeStringify)
+        .processSync(value)
+        .toString();
 
-  constructor(service: Service) {
-    this.valueContent = service.getMarkup();
+      return result;
+    },
+    fromHtml(value) {
+      const result = unified()
+        .use(rehypeParse)
+        .use(rehypeRemark)
+        .use(remarkStringify)
+        .processSync(value)
+        .toString();
 
-    this.converter = {
-      toHtml(value) {
-        const result = unified()
-          .use(remarkParse)
-          .use(remarkRehype)
-          .use(rehypeStringify)
-          .processSync(value)
-          .toString();
-
-        return result;
-      },
-      fromHtml(value) {
-        const result = unified()
-          .use(rehypeParse)
-          .use(rehypeRemark)
-          .use(remarkStringify)
-          .processSync(value)
-          .toString();
-
-        return result;
-      },
-    };
-  }
+      return result;
+    },
+  };
 }
 
 bootstrapApplication(AppComponent);

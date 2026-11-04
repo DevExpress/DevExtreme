@@ -1,8 +1,8 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode } from '@angular/core';
+import { Component, enableProdMode, inject } from '@angular/core';
 import { DxFormModule } from 'devextreme-angular';
 
-import { Employee, Service } from './app.service';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -18,21 +18,15 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  employee: Employee;
+  readonly employee = inject(Service).getEmployee();
 
-  groupCaptionTemplates: { name: string; icon: string }[];
-
-  constructor(service: Service) {
-    this.employee = service.getEmployee();
-
-    this.groupCaptionTemplates = [
-      { name: 'user', icon: 'dx-icon-user' },
-      { name: 'info', icon: 'dx-icon-info' },
-      { name: 'personal', icon: 'dx-icon-card' },
-      { name: 'address', icon: 'dx-icon-home' },
-      { name: 'contact', icon: 'dx-icon-tel' },
-    ];
-  }
+  readonly groupCaptionTemplates: { name: string; icon: string }[] = [
+    { name: 'user', icon: 'dx-icon-user' },
+    { name: 'info', icon: 'dx-icon-info' },
+    { name: 'personal', icon: 'dx-icon-card' },
+    { name: 'address', icon: 'dx-icon-home' },
+    { name: 'contact', icon: 'dx-icon-tel' },
+  ];
 }
 
 bootstrapApplication(AppComponent);

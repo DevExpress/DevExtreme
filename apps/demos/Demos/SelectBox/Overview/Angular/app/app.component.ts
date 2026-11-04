@@ -1,10 +1,10 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode } from '@angular/core';
+import { Component, enableProdMode, inject } from '@angular/core';
 import notify from 'devextreme/ui/notify';
 import { DxSelectBoxModule, DxTextBoxModule } from 'devextreme-angular';
 import { ArrayStore } from 'devextreme-angular/common/data';
-import { DxSelectBoxTypes } from 'devextreme-angular/ui/select-box';
-import { Product, Service } from './app.service';
+import type { DxSelectBoxTypes } from 'devextreme-angular/ui/select-box';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -21,20 +21,16 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  simpleProducts: string[];
+  private readonly service = inject(Service);
 
-  products: Product[];
+  readonly simpleProducts = this.service.getSimpleProducts();
 
-  data: ArrayStore;
+  readonly products = this.service.getProducts();
 
-  constructor(service: Service) {
-    this.products = service.getProducts();
-    this.simpleProducts = service.getSimpleProducts();
-    this.data = new ArrayStore({
-      data: this.products,
-      key: 'ID',
-    });
-  }
+  readonly data = new ArrayStore({
+    data: this.products,
+    key: 'ID',
+  });
 
   onValueChanged({ value }: DxSelectBoxTypes.ValueChangedEvent) {
     notify(`The value is changed to: "${value}"`);

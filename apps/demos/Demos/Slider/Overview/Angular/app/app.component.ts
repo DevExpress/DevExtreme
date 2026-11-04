@@ -1,5 +1,5 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode } from '@angular/core';
+import { Component, enableProdMode, signal } from '@angular/core';
 import { DxSliderModule, DxNumberBoxModule } from 'devextreme-angular';
 
 if (!/localhost/.test(document.location.host)) {
@@ -17,9 +17,9 @@ if (!/localhost/.test(document.location.host)) {
 })
 
 export class AppComponent {
-  value = 10;
+  readonly value = signal(10);
 
-  format = (value: string) => `${value}%`;
+  readonly format = (value: string) => `${value}%`;
 }
 
 bootstrapApplication(AppComponent);

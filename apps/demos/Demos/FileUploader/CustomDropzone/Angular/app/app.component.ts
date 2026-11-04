@@ -1,7 +1,5 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import {
-  ChangeDetectorRef, Component, enableProdMode,
-} from '@angular/core';
+import { Component, enableProdMode, signal } from '@angular/core';
 import { DxFileUploaderModule, DxProgressBarModule } from 'devextreme-angular';
 import 'anti-forgery';
 
@@ -19,25 +17,17 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  isDropZoneActive = false;
+  readonly isDropZoneActive = signal(false);
 
-  imageSource = '';
+  readonly imageSource = signal('');
 
-  textVisible = true;
+  readonly textVisible = signal(true);
 
-  progressVisible = false;
+  readonly progressVisible = signal(false);
 
-  progressValue = 0;
+  readonly progressValue = signal(0);
 
-  allowedFileExtensions: string[] = ['.jpg', '.jpeg', '.gif', '.png'];
-
-  constructor(private changeDetectorRef: ChangeDetectorRef) {
-    this.onDropZoneEnter = this.onDropZoneEnter.bind(this);
-    this.onDropZoneLeave = this.onDropZoneLeave.bind(this);
-    this.onUploaded = this.onUploaded.bind(this);
-    this.onProgress = this.onProgress.bind(this);
-    this.onUploadStarted = this.onUploadStarted.bind(this);
-  }
+  readonly allowedFileExtensions: string[] = ['.jpg', '.jpeg', '.gif', '.png'];
 
   onDropZoneEnter({ component, dropZoneElement, event }) {
     if (dropZoneElement.id === 'dropzone-external') {
@@ -50,36 +40,35 @@ export class AppComponent {
       const isValidFileExtension = allowedFileExtensions.includes(draggedFileExtension);
 
       if (isSingleFileDragged && isValidFileExtension) {
-        this.isDropZoneActive = true;
+        this.isDropZoneActive.set(true);
       }
     }
   }
 
   onDropZoneLeave(e) {
-    if (e.dropZoneElement.id === 'dropzone-external') { this.isDropZoneActive = false; }
+    if (e.dropZoneElement.id === 'dropzone-external') { this.isDropZoneActive.set(false); }
   }
 
   onUploaded(e) {
     const file = e.file;
     const fileReader = new FileReader();
     fileReader.onload = () => {
-      this.isDropZoneActive = false;
-      this.imageSource = fileReader.result as string;
-      this.changeDetectorRef.detectChanges();
+      this.isDropZoneActive.set(false);
+      this.imageSource.set(fileReader.result as string);
     };
     fileReader.readAsDataURL(file);
-    this.textVisible = false;
-    this.progressVisible = false;
-    this.progressValue = 0;
+    this.textVisible.set(false);
+    this.progressVisible.set(false);
+    this.progressValue.set(0);
   }
 
   onProgress(e) {
-    this.progressValue = e.bytesLoaded / e.bytesTotal * 100;
+    this.progressValue.set(e.bytesLoaded / e.bytesTotal * 100);
   }
 
   onUploadStarted() {
-    this.imageSource = '';
-    this.progressVisible = true;
+    this.imageSource.set('');
+    this.progressVisible.set(true);
   }
 }
 

@@ -1,5 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode } from '@angular/core';
+import {
+  Component, computed, enableProdMode, inject, signal,
+} from '@angular/core';
 import { DxDateBoxModule } from 'devextreme-angular';
 import { Service } from './app.service';
 
@@ -18,25 +20,19 @@ if (!/localhost/.test(document.location.host)) {
 })
 
 export class AppComponent {
-  value: Date = new Date(1981, 3, 27);
+  readonly value = signal(new Date(1981, 3, 27));
 
-  now: Date = new Date();
+  readonly now = new Date();
 
-  firstWorkDay2017: Date = new Date(2017, 0, 3);
+  readonly firstWorkDay2017 = new Date(2017, 0, 3);
 
-  min: Date = new Date(1900, 0, 1);
+  readonly min = new Date(1900, 0, 1);
 
-  dateClear = new Date(2015, 11, 1, 6);
+  readonly dateClear = new Date(2015, 11, 1, 6);
 
-  disabledDates: Date[];
+  readonly disabledDates = inject(Service).getFederalHolidays();
 
-  constructor(service: Service) {
-    this.disabledDates = service.getFederalHolidays();
-  }
-
-  get diffInDay() {
-    return `${Math.floor(Math.abs(((new Date()).getTime() - this.value.getTime()) / (24 * 60 * 60 * 1000)))} days`;
-  }
+  readonly diffInDay = computed(() => `${Math.floor(Math.abs(((new Date()).getTime() - this.value().getTime()) / (24 * 60 * 60 * 1000)))} days`);
 }
 
 bootstrapApplication(AppComponent);

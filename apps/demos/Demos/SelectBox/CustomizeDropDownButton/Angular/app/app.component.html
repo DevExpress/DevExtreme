@@ -51,7 +51,7 @@
         valueExpr="ID"
       >
         <div *dxTemplate="let data of 'dropDownButton'">
-          @if (selectedItem) {
+          @if (selectedItem(); as selectedItem) {
           <img
             alt="Custom icon"
             src="../../../../images/icons/{{ selectedItem.IconSrc }}"

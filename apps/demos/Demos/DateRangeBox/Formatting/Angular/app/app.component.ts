@@ -19,9 +19,9 @@ const now = new Date();
 })
 
 export class AppComponent {
-  startDate: Date = new Date(now.getTime() - msInDay * 3);
+  readonly startDate = new Date(now.getTime() - msInDay * 3);
 
-  endDate: Date = new Date(now.getTime() + msInDay * 3);
+  readonly endDate = new Date(now.getTime() + msInDay * 3);
 }
 
 bootstrapApplication(AppComponent);

@@ -1,10 +1,12 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { enableProdMode, Component, ViewChild } from '@angular/core';
+import {
+  enableProdMode, Component, inject, signal, viewChild,
+} from '@angular/core';
 import { HttpClient, provideHttpClient, withFetch } from '@angular/common/http';
 import { lastValueFrom } from 'rxjs';
 import { CustomStore } from 'devextreme-angular/common/data';
 import { DxDropDownBoxModule, DxDataGridModule } from 'devextreme-angular';
-import { DxTreeViewComponent, DxTreeViewModule, DxTreeViewTypes } from 'devextreme-angular/ui/tree-view';
+import { DxTreeViewComponent, DxTreeViewModule, type DxTreeViewTypes } from 'devextreme-angular/ui/tree-view';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -21,22 +23,21 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  @ViewChild(DxTreeViewComponent, { static: false }) treeView: DxTreeViewComponent;
+  private readonly treeView = viewChild(DxTreeViewComponent);
 
-  treeDataSource: any;
+  private readonly http = inject(HttpClient);
 
-  gridDataSource: any;
+  readonly treeDataSource = this.makeAsyncDataSource('treeProducts.json');
 
-  treeBoxValue = ['1_1'];
+  readonly gridDataSource = this.makeAsyncDataSource('customers.json');
 
-  gridBoxValue = [3];
+  readonly treeBoxValue = signal<string[]>(['1_1']);
 
-  constructor(http: HttpClient) {
-    this.treeDataSource = this.makeAsyncDataSource(http, 'treeProducts.json');
-    this.gridDataSource = this.makeAsyncDataSource(http, 'customers.json');
-  }
+  readonly gridBoxValue = signal([3]);
 
-  makeAsyncDataSource(http: HttpClient, jsonFile: string) {
+  private makeAsyncDataSource(jsonFile: string) {
+    const http = this.http;
+
     return new CustomStore({
       loadMode: 'raw',
       key: 'ID',
@@ -47,27 +48,29 @@ export class AppComponent {
   }
 
   onDropDownBoxValueChanged() {
-    this.updateSelection(this.treeView?.instance);
+    this.updateSelection(this.treeView()?.instance);
   }
 
   onTreeViewReady(e: DxTreeViewTypes.ContentReadyEvent) {
     this.updateSelection(e.component);
   }
 
-  updateSelection(treeView: DxTreeViewComponent['instance']) {
+  private updateSelection(treeView: DxTreeViewComponent['instance']) {
     if (!treeView) return;
 
-    if (!this.treeBoxValue) {
+    const treeBoxValue = this.treeBoxValue();
+
+    if (!treeBoxValue) {
       treeView.unselectAll();
     }
 
-    this.treeBoxValue?.forEach(((value) => {
+    treeBoxValue?.forEach(((value) => {
       treeView.selectItem(value);
     }));
   }
 
   onTreeViewSelectionChanged(e: DxTreeViewTypes.ItemSelectionChangedEvent) {
-    this.treeBoxValue = e.component.getSelectedNodeKeys();
+    this.treeBoxValue.set(e.component.getSelectedNodeKeys());
   }
 }
 
