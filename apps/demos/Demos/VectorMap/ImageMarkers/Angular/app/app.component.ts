@@ -1,8 +1,8 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode } from '@angular/core';
+import { Component, enableProdMode, inject } from '@angular/core';
 import { DxVectorMapModule } from 'devextreme-angular';
 import * as mapsData from 'devextreme-dist/js/vectormap-data/usa.js';
-import { FeatureCollection, Service } from './app.service';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -19,13 +19,9 @@ if (!/localhost/.test(document.location.host)) {
 })
 
 export class AppComponent {
-  usaMap = mapsData.usa;
+  readonly usaMap = mapsData.usa;
 
-  weather: FeatureCollection;
-
-  constructor(service: Service) {
-    this.weather = service.getWeatherData();
-  }
+  readonly weather = inject(Service).getWeatherData();
 }
 
 bootstrapApplication(AppComponent);

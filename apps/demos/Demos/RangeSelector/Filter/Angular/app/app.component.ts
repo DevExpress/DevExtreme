@@ -1,8 +1,10 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode } from '@angular/core';
+import {
+  Component, enableProdMode, inject, signal,
+} from '@angular/core';
 import { DxDataGridModule } from 'devextreme-angular';
-import { DxRangeSelectorModule, DxRangeSelectorTypes } from 'devextreme-angular/ui/range-selector';
-import { Service, Employee } from './app.service';
+import { DxRangeSelectorModule, type DxRangeSelectorTypes } from 'devextreme-angular/ui/range-selector';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -19,23 +21,18 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  employees: Employee[];
+  readonly employees = inject(Service).getEmployees();
 
-  selectedEmployees: Employee[];
-
-  constructor(service: Service) {
-    this.employees = service.getEmployees();
-    this.selectedEmployees = this.employees;
-  }
+  readonly selectedEmployees = signal(this.employees);
 
   onValueChanged(e: DxRangeSelectorTypes.ValueChangedEvent) {
-    this.selectedEmployees = this.employees.map(
+    this.selectedEmployees.set(this.employees.map(
       (item) => (
         (item.BirthYear >= (e.value[0] as number) && item.BirthYear <= (e.value[1] as number))
           ? item
           : undefined
       ),
-    ).filter(Boolean);
+    ).filter(Boolean));
   }
 }
 

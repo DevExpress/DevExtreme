@@ -1,5 +1,5 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode } from '@angular/core';
+import { Component, enableProdMode, inject } from '@angular/core';
 import { DxVectorMapModule } from 'devextreme-angular';
 import * as mapsData from 'devextreme-dist/js/vectormap-data/world.js';
 import { Service } from './app.service';
@@ -19,14 +19,9 @@ if (!/localhost/.test(document.location.host)) {
 })
 
 export class AppComponent {
-  worldMap = mapsData.world;
+  readonly worldMap = mapsData.world;
 
-  populations: Object;
-
-  constructor(service: Service) {
-    this.populations = service.getPopulations();
-    this.customizeLayers = this.customizeLayers.bind(this);
-  }
+  private readonly populations: Object = inject(Service).getPopulations();
 
   customizeTooltip({ attribute }: { attribute: Function }) {
     if (attribute('population')) {
@@ -37,11 +32,11 @@ export class AppComponent {
     return null;
   }
 
-  customizeLayers(elements: { attribute: Function }[]) {
+  readonly customizeLayers = (elements: { attribute: Function }[]) => {
     elements.forEach((element) => {
       element.attribute('population', this.populations[element.attribute('name')]);
     });
-  }
+  };
 
   customizeText({ index, start, end }: Record<string, number>) {
     const text = (index === 0) ? '< 0.5%' : `${start}% to ${end}%`;

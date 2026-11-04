@@ -1,7 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode } from '@angular/core';
+import { Component, enableProdMode, inject } from '@angular/core';
 import { DxVectorMapModule } from 'devextreme-angular';
-import { FeatureCollection, Service } from './app.service';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -18,11 +18,13 @@ if (!/localhost/.test(document.location.host)) {
 })
 
 export class AppComponent {
-  pangaeaBorders: FeatureCollection;
+  private readonly service = inject(Service);
 
-  pangaeaContinents: FeatureCollection;
+  readonly pangaeaBorders = this.service.getPangaeaBorders();
 
-  projection = {
+  readonly pangaeaContinents = this.service.getPangaeaContinents();
+
+  readonly projection = {
     to(coordinates: number[]) {
       return [coordinates[0] / 100, coordinates[1] / 100];
     },
@@ -30,11 +32,6 @@ export class AppComponent {
       return [coordinates[0] * 100, coordinates[1] * 100];
     },
   };
-
-  constructor(service: Service) {
-    this.pangaeaBorders = service.getPangaeaBorders();
-    this.pangaeaContinents = service.getPangaeaContinents();
-  }
 
   customizeLayer(elements: { attribute: Function, applySettings: Function }[]) {
     elements.forEach((element) => {
