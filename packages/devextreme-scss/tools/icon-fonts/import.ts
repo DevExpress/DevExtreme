@@ -14,8 +14,8 @@ interface IcoMoonSelection {
 const packageRoot = path.resolve(import.meta.dirname, '..', '..');
 const [exportDirectory, ...requested] = process.argv.slice(2);
 
-if (!exportDirectory) {
-  console.error('Usage: pnpm run icon-fonts:import <unzipped IcoMoon svg export> [icon name ...]');
+if (!exportDirectory || !requested.length) {
+  console.error('Usage: pnpm run icon-fonts:import <unzipped IcoMoon svg export> <icon name> [icon name ...]');
   process.exit(1);
 }
 
@@ -30,7 +30,7 @@ if (!font) {
 const names = readIconNames(readIconCodes(packageRoot));
 const icons = selection.icons
   .map(({ properties }) => ({ exported: properties.name, name: names.get(properties.code) }))
-  .filter(({ name }) => name && (!requested.length || requested.includes(name)));
+  .filter(({ name }) => name && requested.includes(name));
 const unknown = requested.filter((name) => !icons.some((icon) => icon.name === name));
 
 if (unknown.length) {

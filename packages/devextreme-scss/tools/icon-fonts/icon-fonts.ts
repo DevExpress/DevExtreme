@@ -64,6 +64,9 @@ export const parseIconSvg = (svg: string): IconDrawing => {
   const tags = [...svg.matchAll(/<([a-zA-Z][\w:-]*)\b[^>]*>/g)];
   const unsupported = tags.map(([, name]) => name).filter((name) => !['svg', 'title', 'path'].includes(name));
   const paths = tags.filter(([, name]) => name === 'path').map(([tag]) => tag);
+  const paint = (tag: string, name: string): string | undefined => (
+    attribute(tag, name) ?? attribute(root, name)
+  );
 
   if (!height || viewBox.length !== 4 || viewBox.some(Number.isNaN)) {
     throw new Error('expected a height and a viewBox');
@@ -75,6 +78,22 @@ export const parseIconSvg = (svg: string): IconDrawing => {
 
   if (paths.some((tag) => attribute(tag, 'transform') !== undefined)) {
     throw new Error('paths with a transform are not supported');
+  }
+
+  if ([root, ...paths].some((tag) => attribute(tag, 'style') !== undefined)) {
+    throw new Error('style attributes are not supported');
+  }
+
+  if (paths.some((tag) => (paint(tag, 'stroke') ?? 'none') !== 'none')) {
+    throw new Error('strokes are not supported, outline them');
+  }
+
+  if (paths.some((tag) => paint(tag, 'fill') === 'none')) {
+    throw new Error('paths with fill="none" are not supported');
+  }
+
+  if ([root, ...paths].some((tag) => ['opacity', 'fill-opacity'].some((name) => Number(attribute(tag, name) ?? 1) !== 1))) {
+    throw new Error('opacity and fill-opacity are not supported');
   }
 
   return {

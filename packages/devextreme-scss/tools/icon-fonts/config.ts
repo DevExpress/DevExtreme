@@ -2,19 +2,18 @@ export interface IconFontConfig {
   fileName: string;
   family: string;
   theme: string;
-  grid: number;
   created: string;
 }
 
 export const ICON_FONTS: IconFontConfig[] = [
   {
-    fileName: 'dxicons', family: 'dxiconsgeneric', theme: 'generic', grid: 18, created: '2026-04-13T11:44:41Z',
+    fileName: 'dxicons', family: 'dxiconsgeneric', theme: 'generic', created: '2026-04-13T11:44:41Z',
   },
   {
-    fileName: 'dxiconsmaterial', family: 'dxiconsmaterial', theme: 'material', grid: 24, created: '2026-04-13T11:41:48Z',
+    fileName: 'dxiconsmaterial', family: 'dxiconsmaterial', theme: 'material', created: '2026-04-13T11:41:48Z',
   },
   {
-    fileName: 'dxiconsfluent', family: 'dxiconsfluent', theme: 'fluent', grid: 20, created: '2026-04-13T11:39:04Z',
+    fileName: 'dxiconsfluent', family: 'dxiconsfluent', theme: 'fluent', created: '2026-04-13T11:39:04Z',
   },
 ];
 

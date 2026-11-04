@@ -13,6 +13,8 @@ const sha256 = (data: Buffer | undefined): string => (data ? createHash('sha256'
 
 const icon = (paths: string[], fillRule = 'nonzero'): string => `<svg width="16" height="16" viewBox="0 0 1024 1024">${paths.map((d) => `<path fill-rule="${fillRule}" d="${d}"/>`).join('')}</svg>`;
 
+const drawing = (svgAttributes: string, pathAttributes: string): string => `<svg width="16" height="16" viewBox="0 0 1024 1024" ${svgAttributes}><path ${pathAttributes} d="M100 100h400v400h-400z"/></svg>`;
+
 const area = (contour: Contour): number => contour.reduce((sum, point, index) => {
   const next = contour[(index + 1) % contour.length];
 
@@ -71,5 +73,19 @@ describe('Icon outlines', () => {
 
   test('shapes other than paths are rejected', () => {
     expect(() => parseIconSvg('<svg width="16" height="16" viewBox="0 0 1024 1024"><circle r="5"/></svg>')).toThrow('only <path>');
+  });
+
+  test.each([
+    ['a stroked path', drawing('', 'stroke="#000"'), 'strokes'],
+    ['a path with fill="none"', drawing('', 'fill="none"'), 'fill="none"'],
+    ['a path that takes fill="none" from the svg', drawing('fill="none"', ''), 'fill="none"'],
+    ['a transparent path', drawing('', 'opacity="0.87"'), 'opacity'],
+    ['a style attribute', drawing('', 'style="fill: none"'), 'style'],
+  ])('%s is rejected', (_, svg, message) => {
+    expect(() => parseIconSvg(svg)).toThrow(message);
+  });
+
+  test('a path with its own fill under <svg fill="none"> is drawn', () => {
+    expect(parseIconSvg(drawing('fill="none"', 'fill="#333"')).paths).toHaveLength(1);
   });
 });
