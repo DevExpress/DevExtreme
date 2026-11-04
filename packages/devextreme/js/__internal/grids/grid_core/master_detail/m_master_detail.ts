@@ -2,33 +2,46 @@
 import messageLocalization from '@js/common/core/localization/message';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
-// @ts-expect-error
-import { grep } from '@js/core/utils/common';
+import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred, when } from '@js/core/utils/deferred';
-import { each } from '@js/core/utils/iterator';
 import { getHeight, getWidth } from '@js/core/utils/size';
 import { isDefined } from '@js/core/utils/type';
+import type { MasterDetail, Properties as DataGridProperties } from '@js/ui/data_grid';
+import type { GroupingDataControllerExtension } from '@ts/grids/data_grid/grouping/types';
+import type { ColumnFixingRowsViewExtension } from '@ts/grids/grid_core/column_fixing/types';
 import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/columns_controller';
+import type { Column, ColumnTemplateSource } from '@ts/grids/grid_core/columns_controller/types';
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
-import type { ResizingController } from '@ts/grids/grid_core/grid_view/grid_view';
-import type { ModuleType, RowKey } from '@ts/grids/grid_core/types';
-import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
-import type { RowsView } from '@ts/grids/grid_core/views/rows_view';
-
 import type {
   DataChange,
   GeneratedItem,
   ItemProcessingOptions,
   ProcessedItem,
-} from '../data_controller/types';
-import type { RawItemData } from '../data_source_adapter/types';
-import gridCoreUtils from '../utils';
+} from '@ts/grids/grid_core/data_controller/types';
+import type { RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
+import type { ResizingController } from '@ts/grids/grid_core/grid_view/grid_view';
+import type {
+  InternalGrid, ModuleType, OptionChanged, OptionChangedFor, RowKey,
+} from '@ts/grids/grid_core/types';
+import gridCoreUtils from '@ts/grids/grid_core/utils';
+import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
+import type { RowsView } from '@ts/grids/grid_core/views/rows_view';
+import type {
+  RowPreparedOptions, RowRenderOptions, ViewCellOptions, ViewRow,
+} from '@ts/grids/grid_core/views/types';
+
 import { CLASSES } from './const';
-import type { MasterDetailRowsViewExtension } from './types';
+import type {
+  MasterDetailDataControllerExtension,
+  MasterDetailExpandedItem,
+  MasterDetailRowsViewExtension,
+} from './types';
 import { isDetailRow } from './utils';
 
-const columns = (Base: ModuleType<ColumnsController>) => class ColumnsMasterDetailExtender extends Base {
-  protected _getExpandColumnsCore() {
+const columns = (
+  Base: ModuleType<ColumnsController>,
+): ModuleType<ColumnsController> => class ColumnsMasterDetailExtender extends Base {
+  protected _getExpandColumnsCore(): Column[] {
     const expandColumns = super._getExpandColumnsCore();
 
     if (this.option('masterDetail.enabled')) {
@@ -41,70 +54,57 @@ const columns = (Base: ModuleType<ColumnsController>) => class ColumnsMasterDeta
   }
 };
 
-const initMasterDetail = function (that) {
-  that._expandedItems = [];
-  that._isExpandAll = that.option('masterDetail.autoExpandAll');
-};
-
-export interface MasterDetailDataControllerExtension {
-  // eslint-disable-next-line @typescript-eslint/method-signature-style
-  getRowIndicesForExpand(key: RowKey): number[];
-}
-
 export const dataMasterDetailExtenderMixin = (
-  Base: ModuleType<DataController>,
-): ModuleType<DataController & MasterDetailDataControllerExtension> => class DataMasterDetailExtender extends Base {
-  private _isExpandAll: any;
+  Base: ModuleType<DataController & GroupingDataControllerExtension>,
+): ModuleType<
+  DataController & MasterDetailDataControllerExtension
+> => class DataMasterDetailExtender extends Base {
+  private _isExpandAll?: boolean;
 
-  private _expandedItems: any;
+  private _expandedItems!: MasterDetailExpandedItem[];
 
-  public init() {
-    const that = this;
-
-    initMasterDetail(that);
+  public init(): void {
+    this.initMasterDetail();
     super.init();
   }
 
-  private expandAll(groupIndex) {
-    const that = this;
+  private initMasterDetail(): void {
+    this._expandedItems = [];
+    this._isExpandAll = this.option('masterDetail.autoExpandAll');
+  }
 
+  public expandAll(groupIndex: number): void {
     if (groupIndex < 0) {
-      that._isExpandAll = true;
-      that._expandedItems = [];
-      that.updateItems();
+      this._isExpandAll = true;
+      this._expandedItems = [];
+      this.updateItems();
     } else {
-      // @ts-expect-error
-      super.expandAll.apply(that, arguments);
+      super.expandAll(groupIndex);
     }
   }
 
-  private collapseAll(groupIndex) {
-    const that = this;
-
+  public collapseAll(groupIndex: number): void {
     if (groupIndex < 0) {
-      that._isExpandAll = false;
-      that._expandedItems = [];
-      that.updateItems();
+      this._isExpandAll = false;
+      this._expandedItems = [];
+      this.updateItems();
     } else {
-      // @ts-expect-error
-      super.collapseAll.apply(that, arguments);
+      super.collapseAll(groupIndex);
     }
   }
 
-  protected isRowExpandedHack() {
-    // @ts-expect-error
-    return super.isRowExpanded.apply(this, arguments);
+  public isRowExpandedHack(...args: unknown[]): boolean | undefined {
+    // @ts-expect-error TreeList forwards isRowExpanded(key, cache)
+    return super.isRowExpanded(...args);
   }
 
-  protected isRowExpanded(key) {
-    const that = this;
-    const expandIndex = gridCoreUtils.getIndexByKey(key, that._expandedItems);
+  public isRowExpanded(key: RowKey): boolean {
+    const expandIndex = gridCoreUtils.getIndexByKey(key, this._expandedItems);
 
     if (Array.isArray(key)) {
-      // @ts-expect-error
-      return super.isRowExpanded.apply(that, arguments);
+      return super.isRowExpanded(key);
     }
-    return !!(that._isExpandAll ^ (expandIndex >= 0 && that._expandedItems[expandIndex].visible));
+    return !!this._isExpandAll !== (expandIndex >= 0 && this._expandedItems[expandIndex].visible);
   }
 
   public getRowIndicesForExpand(key: RowKey): number[] {
@@ -113,68 +113,60 @@ export const dataMasterDetailExtenderMixin = (
     return [rowIndex, rowIndex + 1];
   }
 
-  private changeRowExpandCore(key) {
-    const that = this;
-
-    let result;
+  public changeRowExpandCore(key: RowKey): DeferredObj<unknown> {
     if (Array.isArray(key)) {
-      // @ts-expect-error
-      result = super.changeRowExpandCore.apply(that, arguments);
-    } else {
-      const expandIndex = gridCoreUtils.getIndexByKey(key, that._expandedItems);
-      if (expandIndex >= 0) {
-        const { visible } = that._expandedItems[expandIndex];
-
-        that._expandedItems[expandIndex].visible = !visible;
-      } else {
-        that._expandedItems.push({ key, visible: true });
-      }
-
-      that.updateItems({
-        changeType: 'update',
-        rowIndices: that.getRowIndicesForExpand(key),
-      });
-      that.resetCachedProcessedItems();
-
-      // @ts-expect-error
-      result = new Deferred().resolve();
+      return super.changeRowExpandCore(key);
     }
 
-    return result;
+    const expandIndex = gridCoreUtils.getIndexByKey(key, this._expandedItems);
+    if (expandIndex >= 0) {
+      const { visible } = this._expandedItems[expandIndex];
+
+      this._expandedItems[expandIndex].visible = !visible;
+    } else {
+      this._expandedItems.push({ key, visible: true });
+    }
+
+    this.updateItems({
+      changeType: 'update',
+      rowIndices: this.getRowIndicesForExpand(key),
+    });
+    this.resetCachedProcessedItems();
+
+    return Deferred<unknown>().resolve();
   }
 
-  private _processDataItemHack() {
-    return super._processDataItem.apply(this, arguments as any);
+  public _processDataItemHack(
+    ...args: [GeneratedItem, ItemProcessingOptions]
+  ): ProcessedItem {
+    return super._processDataItem(...args);
   }
 
   protected _processDataItem(
     generatedItem: GeneratedItem,
     options: ItemProcessingOptions,
   ): ProcessedItem {
-    const that = this;
     const processedItem = super._processDataItem(generatedItem, options);
 
-    processedItem.isExpanded = that.isRowExpanded(processedItem.key);
+    processedItem.isExpanded = this.isRowExpanded(processedItem.key);
 
     if (options.detailColumnIndex === undefined) {
-      options.detailColumnIndex = -1;
-      each(options.visibleColumns, (index, column) => {
-        if (column.command === 'expand' && !isDefined(column.groupIndex)) {
-          options.detailColumnIndex = index;
-          return false;
-        }
+      const detailColumnIndex = options.visibleColumns.findIndex(
+        (column) => column.command === 'expand' && !isDefined(column.groupIndex),
+      );
 
-        return undefined;
-      });
+      options.detailColumnIndex = detailColumnIndex;
     }
+
     if (options.detailColumnIndex >= 0) {
       processedItem.values[options.detailColumnIndex] = processedItem.isExpanded;
     }
+
     return processedItem;
   }
 
-  protected _processItemsHack() {
-    return super._processItems.apply(this, arguments as any);
+  public _processItemsHack(...args: [RawItemData[], DataChange]): ProcessedItem[] {
+    return super._processItems(...args);
   }
 
   protected _processItems(items: RawItemData[], change: DataChange): ProcessedItem[] {
@@ -188,7 +180,7 @@ export const dataMasterDetailExtenderMixin = (
     }
 
     if (changeType === 'refresh') {
-      this._expandedItems = grep(this._expandedItems, (item) => item.visible);
+      this._expandedItems = this._expandedItems.filter((item) => item.visible);
     }
 
     processedItems.forEach((item) => {
@@ -209,37 +201,27 @@ export const dataMasterDetailExtenderMixin = (
     return result;
   }
 
-  public optionChanged(args) {
-    const that = this;
-    let isEnabledChanged;
-    let isAutoExpandAllChanged;
-
+  public optionChanged(
+    args: OptionChanged | OptionChangedFor<Pick<DataGridProperties, 'masterDetail'>>,
+  ): void {
     if (args.name === 'masterDetail') {
       switch (args.fullName) {
         case 'masterDetail': {
-          const value = args.value || {};
-          const previousValue = args.previousValue || {};
-          isEnabledChanged = value.enabled !== previousValue.enabled;
-          isAutoExpandAllChanged = value.autoExpandAll !== previousValue.autoExpandAll;
-          break;
-        }
-        case 'masterDetail.template': {
-          initMasterDetail(that);
-          break;
-        }
-        case 'masterDetail.enabled':
-          isEnabledChanged = true;
-          break;
+          const { value, previousValue } = args;
 
+          if (value?.enabled !== previousValue?.enabled
+            || value?.autoExpandAll !== previousValue?.autoExpandAll) {
+            this.initMasterDetail();
+          }
+          break;
+        }
+        case 'masterDetail.template':
+        case 'masterDetail.enabled':
         case 'masterDetail.autoExpandAll':
-          isAutoExpandAllChanged = true;
+          this.initMasterDetail();
           break;
         default:
           break;
-      }
-
-      if (isEnabledChanged || isAutoExpandAllChanged) {
-        initMasterDetail(that);
       }
 
       args.handled = true;
@@ -251,14 +233,16 @@ export const dataMasterDetailExtenderMixin = (
   }
 };
 
-const resizing = (Base: ModuleType<ResizingController>) => class ResizingMasterDetailExtender extends Base {
-  public fireContentReadyAction() {
-    super.fireContentReadyAction.apply(this, arguments as any);
+const resizing = (
+  Base: ModuleType<ResizingController>,
+): ModuleType<ResizingController> => class ResizingMasterDetailExtender extends Base {
+  public fireContentReadyAction(): void {
+    super.fireContentReadyAction();
 
     this._updateParentDataGrids(this.component.$element());
   }
 
-  private _updateParentDataGrids($element) {
+  private _updateParentDataGrids($element: dxElementWrapper): void {
     const $masterDetailRow = $element.closest(`.${CLASSES.detailRow}`);
 
     if ($masterDetailRow.length) {
@@ -268,10 +252,16 @@ const resizing = (Base: ModuleType<ResizingController>) => class ResizingMasterD
     }
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  private _updateMasterDataGrid($masterDetailRow, $detailElement) {
-    const masterRowOptions = $($masterDetailRow).data('options');
-    const masterDataGrid = $($masterDetailRow).closest(`.${this.getWidgetContainerClass()}`).parent().data('dxDataGrid');
+  private _updateMasterDataGrid(
+    $masterDetailRow: dxElementWrapper,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    $detailElement: dxElementWrapper,
+  ): DeferredObj<unknown> | undefined {
+    const masterRowOptions = $($masterDetailRow).data<RowPreparedOptions | undefined>('options');
+    const masterDataGrid = $($masterDetailRow)
+      .closest(`.${this.getWidgetContainerClass()}`)
+      .parent()
+      .data<InternalGrid | undefined>('dxDataGrid');
 
     if (masterRowOptions && masterDataGrid) {
       return this._updateMasterDataGridCore(masterDataGrid, masterRowOptions);
@@ -280,61 +270,81 @@ const resizing = (Base: ModuleType<ResizingController>) => class ResizingMasterD
     return undefined;
   }
 
-  public _updateMasterDataGridCore(masterDataGrid, masterRowOptions) {
+  public _updateMasterDataGridCore(
+    masterDataGrid: InternalGrid,
+    masterRowOptions: RowPreparedOptions,
+  ): DeferredObj<unknown> | undefined {
     const d = Deferred();
+    const masterRowsView: RowsView & Partial<ColumnFixingRowsViewExtension> = masterDataGrid.getView('rowsView');
 
-    if (masterDataGrid.getView('rowsView')?.isFixedColumns?.()) {
-      // @ts-expect-error
-      this._updateFixedMasterDetailGrids(masterDataGrid, masterRowOptions.rowIndex, $(masterRowOptions.rowElement)).done(d.resolve);
+    if (masterRowsView?.isFixedColumns?.()) {
+      this._updateFixedMasterDetailGrids(
+        masterDataGrid,
+        // @ts-expect-error the row options of a rendered row have a rowIndex
+        masterRowOptions.rowIndex,
+        $(masterRowOptions.rowElement),
+      // eslint-disable-next-line @typescript-eslint/no-misused-promises -- ignores the result
+      ).done(d.resolve);
     } else {
       if (masterDataGrid.option('scrolling.useNative') === true) {
+        // @ts-expect-error updateDimensions() is typed as void
         masterDataGrid.updateDimensions().done(() => d.resolve(true));
-        return;
+        return undefined;
       }
 
       const scrollable = masterDataGrid.getScrollable();
 
       if (scrollable) {
         // T607490
+        // @ts-expect-error update() is typed as Promise but returns a Deferred at runtime
         scrollable?.update().done(() => d.resolve());
       } else {
         d.resolve();
       }
     }
 
+    // @ts-expect-error promise() is typed as Promise but returns a Deferred-like value at runtime
     return d.promise();
   }
 
-  private _updateFixedMasterDetailGrids(masterDataGrid, masterRowIndex, $detailElement) {
+  private _updateFixedMasterDetailGrids(
+    masterDataGrid: InternalGrid,
+    masterRowIndex: number,
+    $detailElement: dxElementWrapper,
+  ): DeferredObj<unknown> {
     const d = Deferred();
     const $rows = $(masterDataGrid.getRowElement(masterRowIndex));
     const $tables = $(masterDataGrid.getView('rowsView').getTableElements());
     const rowsNotEqual = $rows?.length === 2 && getHeight($rows.eq(0)) !== getHeight($rows.eq(1));
-    const tablesNotEqual = $tables?.length === 2 && getHeight($tables.eq(0)) !== getHeight($tables.eq(1));
+    const tablesNotEqual = $tables?.length === 2
+      && getHeight($tables.eq(0)) !== getHeight($tables.eq(1));
 
     if (rowsNotEqual || tablesNotEqual) {
       const detailElementWidth = getWidth($detailElement);
+      // @ts-expect-error updateDimensions() is typed as void
       masterDataGrid.updateDimensions().done(() => {
-        const isDetailHorizontalScrollCanBeShown = this.option('columnAutoWidth') && masterDataGrid.option('scrolling.useNative') === true;
-        const isDetailGridWidthChanged = isDetailHorizontalScrollCanBeShown && detailElementWidth !== getWidth($detailElement);
+        const isDetailHorizontalScrollCanBeShown = this.option('columnAutoWidth')
+          && masterDataGrid.option('scrolling.useNative') === true;
+        const isDetailGridWidthChanged = isDetailHorizontalScrollCanBeShown
+          && detailElementWidth !== getWidth($detailElement);
 
         if (isDetailHorizontalScrollCanBeShown && isDetailGridWidthChanged) {
           // @ts-expect-error updateDimensions() returns undefined only for an invisible grid
-          // eslint-disable-next-line @typescript-eslint/no-misused-promises -- ignores the result
-          this.updateDimensions().done(() => d.resolve(true));
+          this.updateDimensions().done(() => { d.resolve(true); });
         } else {
           d.resolve(true);
         }
       });
 
+      // @ts-expect-error promise() is typed as Promise but returns a Deferred-like value at runtime
       return d.promise();
     }
 
     return Deferred().resolve();
   }
 
-  protected _toggleBestFitMode(isBestFit) {
-    super._toggleBestFitMode.apply(this, arguments as any);
+  protected _toggleBestFitMode(isBestFit: boolean): void {
+    super._toggleBestFitMode(isBestFit);
 
     const hasMasterDetailTemplate = this.option('masterDetail.template');
 
@@ -359,54 +369,60 @@ const rowsView = (
 ): ModuleType<
   RowsView & MasterDetailRowsViewExtension
 > => class RowsViewMasterDetailExtender extends Base {
-  protected _getCellTemplate(options) {
-    const that = this;
+  protected _getCellTemplate(
+    options: ViewCellOptions,
+  ): ColumnTemplateSource<ViewCellOptions> | undefined {
     const { column } = options;
-    const editingController = this._editingController;
-    const isEditRow = editingController && editingController.isEditRow(options.rowIndex);
-    let template;
+    const isEditRow = this._editingController?.isEditRow(options.rowIndex);
 
     if (column.command === 'detail' && !isEditRow) {
-      template = that.option('masterDetail.template') || { allowRenderToDetachedContainer: false, render: that._getDefaultTemplate(column) };
-    } else {
-      template = super._getCellTemplate.apply(that, arguments as any);
+      return this.option('masterDetail.template') || {
+        allowRenderToDetachedContainer: false,
+        render: this._getDefaultTemplate(column),
+      };
     }
 
-    return template;
+    return super._getCellTemplate(options);
   }
 
-  protected _createRow(row) {
-    const $row = super._createRow.apply(this, arguments as any);
-    const isDetailRowResult = isDetailRow(row);
+  protected _createRow(row?: ViewRow, tag?: string): dxElementWrapper {
+    const $row = super._createRow(row, tag);
 
-    if (isDetailRowResult) {
-      const showRowLines = this.option('showRowLines');
-
-      $row
-        .addClass(CLASSES.detailRow)
-        .toggleClass(VIEW_CLASSES.rowLines, showRowLines);
-
-      if (isDefined(row.visible)) {
-        $row.toggle(row.visible);
-      }
+    if (!isDetailRow(row)) {
+      return $row;
     }
+
+    const showRowLines = this.option('showRowLines');
+
+    $row
+      .addClass(CLASSES.detailRow)
+      .toggleClass(VIEW_CLASSES.rowLines, showRowLines);
+
+    if (isDefined(row.visible)) {
+      $row.toggle(row.visible);
+    }
+
     return $row;
   }
 
-  protected _renderCells($row, options) {
+  protected _renderCells($row: dxElementWrapper, options: RowRenderOptions): void {
     const { row } = options;
-    const isDetailRowResult = isDetailRow(row);
 
-    if (isDetailRowResult) {
-      if (this._needRenderCell(0, options.columnIndices)) {
-        this.renderMasterDetailCell($row, row, options);
-      }
-    } else {
-      super._renderCells.apply(this, arguments as any);
+    if (!isDetailRow(row)) {
+      super._renderCells($row, options);
+      return;
+    }
+
+    if (this._needRenderCell(0, options.columnIndices)) {
+      this.renderMasterDetailCell($row, row, options);
     }
   }
 
-  public renderMasterDetailCell($row, row, options): dxElementWrapper {
+  public renderMasterDetailCell(
+    $row: dxElementWrapper,
+    row: ViewRow,
+    options: RowRenderOptions,
+  ): dxElementWrapper {
     const visibleColumns = this._columnsController.getVisibleColumns();
 
     const $detailCell = this._renderCell($row, {
@@ -434,11 +450,12 @@ const rowsView = (
 };
 
 export const masterDetailModule = {
-  defaultOptions() {
+  defaultOptions(): { masterDetail: MasterDetail } {
     return {
       masterDetail: {
         enabled: false,
         autoExpandAll: false,
+        // @ts-expect-error masterDetail.template is typed without null
         template: null,
       },
     };
