@@ -72,7 +72,7 @@
         "{projectRoot}/js/localization/messages/**/*.json",
         "{projectRoot}/build/localization-templates/localization-template.jst",
         "{projectRoot}/build/localization-templates/generated_js.jst",
-        { "externalDependencies": ["cldrjs", "cldr-core", "cldr-numbers-full", "devextreme-cldr-data"] }
+        { "externalDependencies": ["cldrjs", "cldr-core", "devextreme-cldr-data"] }
       ],
       "outputs": [
         "{projectRoot}/artifacts/js/localization",

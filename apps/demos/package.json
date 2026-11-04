@@ -28,6 +28,7 @@
         "@preact/signals-core": "^1.8.0",
         "@vue/compiler-sfc": "3.4.27",
         "canvg": "4.0.3",
+        "cldr-numbers-full": "40.0.0",
         "cldrjs": "0.5.5",
         "devexpress-diagram": "catalog:",
         "devexpress-gantt": "catalog:",

@@ -385,6 +385,9 @@ importers:
       canvg:
         specifier: 4.0.3
         version: 4.0.3
+      cldr-numbers-full:
+        specifier: 40.0.0
+        version: 40.0.0(cldr-core@40.0.0)
       cldrjs:
         specifier: 0.5.5
         version: 0.5.5
@@ -1378,9 +1381,6 @@ importers:
       cldr-core:
         specifier: 41.0.0
         version: 41.0.0
-      cldr-numbers-full:
-        specifier: 40.0.0
-        version: 40.0.0(cldr-core@41.0.0)
       cldrjs:
         specifier: 0.5.5
         version: 0.5.5
@@ -9364,6 +9364,9 @@ packages:
 
   cjs-module-lexer@2.2.0:
     resolution: {integrity: sha512-4bHTS2YuzUvtoLjdy+98ykbNB5jS0+07EvFNXerqZQJ89F7DI6ET7OQo/HJuW6K0aVsKA9hj9/RVb2kQVOrPDQ==}
+
+  cldr-core@40.0.0:
+    resolution: {integrity: sha512-0nmiOR9I2ImfspRTvFhzF7uXYtVCnHMYULrIncArrsnICUxNnZVEJ6pHPRUtB3J8i4VkwQQMRcs9yl4+wxVP4g==}
 
   cldr-core@41.0.0:
     resolution: {integrity: sha512-8UL/NVueD9BeyrYGjZWrAvhowmQt4THriUB04jxRHWST9Lmc9K1pISPjnbh0kIfRueslZ37EvQ53dxOm5w8pjQ==}
@@ -26074,11 +26077,13 @@ snapshots:
 
   cjs-module-lexer@2.2.0: {}
 
+  cldr-core@40.0.0: {}
+
   cldr-core@41.0.0: {}
 
-  cldr-numbers-full@40.0.0(cldr-core@41.0.0):
+  cldr-numbers-full@40.0.0(cldr-core@40.0.0):
     dependencies:
-      cldr-core: 41.0.0
+      cldr-core: 40.0.0
 
   cldrjs@0.5.5: {}
 
