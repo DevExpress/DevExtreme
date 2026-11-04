@@ -133,8 +133,4 @@ const customizeTooltip = ({
   margin-right: 10px;
 }
 
-.option > .dx-selectbox {
-  display: inline-block;
-  vertical-align: middle;
-}
 </style>

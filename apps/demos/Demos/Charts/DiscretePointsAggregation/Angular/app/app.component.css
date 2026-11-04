@@ -29,8 +29,3 @@
   display: inline-block;
   margin-right: 10px;
 }
-
-::ng-deep .option > .dx-selectbox {
-  display: inline-block;
-  vertical-align: middle;
-}
