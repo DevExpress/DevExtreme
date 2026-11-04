@@ -8,7 +8,7 @@ import { setWidth } from '@js/core/utils/size';
 import { setStyle } from '@js/core/utils/style';
 import { isDefined } from '@js/core/utils/type';
 import { getMemoizeScrollTo } from '@ts/core/utils/scroll';
-import { foreachColumnInfo } from '@ts/grids/grid_core/virtual_columns/m_virtual_columns_core';
+import { foreachColumnInfo } from '@ts/grids/grid_core/virtual_columns/virtual_columns_core';
 
 import { FAKE_TABLE_CLASS } from '../keyboard_navigation/const';
 

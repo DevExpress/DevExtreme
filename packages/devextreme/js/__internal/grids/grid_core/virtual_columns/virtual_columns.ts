@@ -15,8 +15,8 @@ import gridCoreUtils from '../utils';
 import type { ColumnsView } from '../views/columns_view';
 import type { RowsView } from '../views/rows_view';
 import type { RowsViewScrollEvent } from '../views/types';
-import { createColumnsInfo } from './m_virtual_columns_core';
 import type { VirtualColumnsController, VirtualColumnsOptions } from './types';
+import { createColumnsInfo } from './virtual_columns_core';
 
 const baseView = <T extends ModuleType<ColumnsView>>(
   Base: T,
