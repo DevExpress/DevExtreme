@@ -392,7 +392,7 @@ export class GroupingHelper extends GroupingHelperCore {
     return isGroupExpanded(groups, groupIndex);
   }
 
-  public _updatePagingOptions(options: GroupPagingOptions, callback?: GroupPagingCallback): void {
+  public updatePagingOptions(options: GroupPagingOptions, callback?: GroupPagingCallback): void {
     const virtualPaging = isVirtualPaging(this.dataSourceAdapter.option('scrolling'));
     const pageSize = this.dataSourceAdapter.pageSize();
     const skips: number[] = [];
@@ -552,14 +552,14 @@ export class GroupingHelper extends GroupingHelperCore {
       options.take = storeLoadOptions.take;
       storeLoadOptions.requireGroupCount = true;
       storeLoadOptions.group = groups.slice(0, 1);
-      this._updatePagingOptions(options);
+      this.updatePagingOptions(options);
 
       storeLoadOptions.skip = options.skip;
       storeLoadOptions.take = options.take;
     } else {
       options.skip = options.loadOptions?.skip;
       options.take = options.loadOptions?.take;
-      this._updatePagingOptions(options);
+      this.updatePagingOptions(options);
     }
   }
 
@@ -618,7 +618,7 @@ export class GroupingHelper extends GroupingHelperCore {
       this.updateTotalItemsCount(options);
 
       if (!options.remoteOperations?.paging) {
-        this._updatePagingOptions(options);
+        this.updatePagingOptions(options);
         if (options.lastLoadOptions) {
           options.lastLoadOptions.skips = options.skips;
           options.lastLoadOptions.takes = options.takes;
