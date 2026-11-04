@@ -629,14 +629,6 @@ export class GroupingHelper extends GroupingHelperCore {
     this._processTakes(options.data, options.skips, options.takes, groupCount);
   }
 
-  private isLastLevelGroupItemsPagingLocal() {
-    return false;
-  }
-
-  private sortLastLevelGroupItems(items) {
-    return items;
-  }
-
   public refresh(options, operationTypes?) {
     const that = this;
     const { dataSourceAdapter } = that;
