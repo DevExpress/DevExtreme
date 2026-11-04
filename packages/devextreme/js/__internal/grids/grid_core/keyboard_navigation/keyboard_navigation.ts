@@ -172,6 +172,8 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
 
   private focusRestoreScrollTop = 0;
 
+  private needToRestorePageFocus = false;
+
   // #region Initialization
   public init(): void {
     this._dataController = this.getController('data') as KeyboardNavigationDataController;
@@ -328,6 +330,11 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
 
     if (!$rowsView) {
       return;
+    }
+
+    if (this.needToRestorePageFocus && this._rowsView.isTopVisibleRowRendered()) {
+      this.needToRestorePageFocus = false;
+      this.restoreFocusableElement();
     }
 
     const isFullUpdate = !e || e.changeType === 'refresh';
@@ -2044,6 +2051,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     }
     this._isNeedFocus = false;
     this._isNeedScroll = false;
+    this.needToRestorePageFocus = false;
     this._focusedCellPosition = {};
     clearTimeout(this._updateFocusTimeout);
     this._focusedView?.renderFocusState({ preventScroll });
@@ -2893,11 +2901,22 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     if (this._focusedCellPosition) {
       const scrollHandler = (): void => {
         scrollable.off('scroll', scrollHandler);
-        setTimeout(this.restoreFocusableElement.bind(this, rowIndex, $event));
+        setTimeout(this.restoreFocusAfterScroll.bind(this, rowIndex, $event));
       };
       scrollable.on('scroll', scrollHandler);
     }
     return scrollable.scrollBy({ left, top });
+  }
+
+  private restoreFocusAfterScroll(rowIndex?: number, $event?: Event): void {
+    const isPageScroll = !isDefined(rowIndex);
+
+    if (isPageScroll && this._isVirtualRowRender() && !this._rowsView.isTopVisibleRowRendered()) {
+      this.needToRestorePageFocus = true;
+      return;
+    }
+
+    this.restoreFocusableElement(rowIndex, $event);
   }
 
   protected _isInsideEditForm(element: EventTarget | dxElementWrapper | null): boolean {

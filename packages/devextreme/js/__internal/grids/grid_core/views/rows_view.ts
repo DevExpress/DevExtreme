@@ -1592,6 +1592,29 @@ export class RowsView extends ColumnsView {
     return this._getBoundaryVisibleItemIndex(false, isFloor);
   }
 
+  public isTopVisibleRowRendered(): boolean {
+    const tableElement = this.getTableElement();
+    const contentElementOffset = this._findContentElement()?.offset();
+
+    if (!tableElement || !contentElementOffset) {
+      return false;
+    }
+
+    const rowElements = this._getRowElements(tableElement).filter(':visible');
+
+    if (!rowElements.length) {
+      return false;
+    }
+
+    const $firstRow = $(rowElements).eq(0);
+    const $lastRow = $(rowElements).eq(rowElements.length - 1);
+    const top = Number($firstRow.offset()?.top) - contentElementOffset.top;
+    const bottom = Number($lastRow.offset()?.top) + Number(getOuterHeight($lastRow))
+      - contentElementOffset.top;
+
+    return top - 1 <= this._scrollTop && bottom > this._scrollTop;
+  }
+
   private getTopVisibleRowData(): RawItemData | undefined {
     const itemIndex = this.getTopVisibleItemIndex();
     const items = this._dataController.items();
