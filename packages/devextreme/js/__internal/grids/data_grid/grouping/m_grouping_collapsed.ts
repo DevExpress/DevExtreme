@@ -81,7 +81,7 @@ const updateGroupInfoItem = function (that, item, isLastGroupLevel, path, offset
 
   if (!groupInfo) {
     if (isLastGroupLevel) {
-      count = item.count > 0 ? item.count : item.items.length;
+      count = item.count > 0 ? item.count : item.items?.length ?? 0;
     }
 
     that.addGroupInfo({
@@ -617,7 +617,7 @@ export class GroupingHelper extends GroupingHelperCore {
     const skip = skips[0];
 
     if (lastItem) {
-      const maxTakeCount = (lastItem.count - (lastItem.isContinuation && skip || 0)) || children.length;
+      const maxTakeCount = (lastItem.count - (lastItem.isContinuation && skip || 0)) || (children?.length ?? 0);
 
       if (take !== undefined && maxTakeCount > take) {
         lastItem.isContinuationOnNextPage = true;
