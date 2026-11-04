@@ -1,7 +1,9 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode } from '@angular/core';
+import {
+  Component, enableProdMode, inject, signal,
+} from '@angular/core';
 import { DxCircularGaugeModule, DxSelectBoxModule } from 'devextreme-angular';
-import { Data, Service } from './app.service';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -19,14 +21,9 @@ if (!/localhost/.test(document.location.host)) {
 })
 
 export class AppComponent {
-  dataSource: Data[];
+  readonly dataSource = inject(Service).getData();
 
-  value: Data;
-
-  constructor(service: Service) {
-    this.dataSource = service.getData();
-    this.value = this.dataSource[0];
-  }
+  readonly value = signal(this.dataSource[0]);
 
   customizeText(arg) {
     return `${arg.valueText} °C`;

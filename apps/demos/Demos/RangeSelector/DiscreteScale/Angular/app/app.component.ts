@@ -1,8 +1,10 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode } from '@angular/core';
+import {
+  Component, enableProdMode, inject, signal,
+} from '@angular/core';
 import { DecimalPipe } from '@angular/common';
-import { DxRangeSelectorModule, DxRangeSelectorTypes } from 'devextreme-angular/ui/range-selector';
-import { Service, ProductionData } from './app.service';
+import { DxRangeSelectorModule, type DxRangeSelectorTypes } from 'devextreme-angular/ui/range-selector';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -19,13 +21,9 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  dataSource: ProductionData[];
+  readonly dataSource = inject(Service).getData();
 
-  totalResult = 12809000;
-
-  constructor(service: Service) {
-    this.dataSource = service.getData();
-  }
+  readonly totalResult = signal(12809000);
 
   onValueChanged(e: DxRangeSelectorTypes.ValueChangedEvent) {
     const data = this.dataSource;
@@ -51,7 +49,7 @@ export class AppComponent {
       total = data[startIndex].copper;
     }
 
-    this.totalResult = total;
+    this.totalResult.set(total);
   }
 }
 

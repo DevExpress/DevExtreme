@@ -1,7 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode } from '@angular/core';
+import { Component, enableProdMode, signal } from '@angular/core';
 import { DxNumberBoxModule, DxButtonModule } from 'devextreme-angular';
-import { DxCircularGaugeModule, DxCircularGaugeTypes } from 'devextreme-angular/ui/circular-gauge';
+import { DxCircularGaugeModule, type DxCircularGaugeTypes } from 'devextreme-angular/ui/circular-gauge';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -18,19 +18,21 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  mainGenerator = 34;
+  readonly mainGenerator = signal(34);
 
-  additionalGenerator = [12, 23];
+  readonly additionalGenerator1 = signal(12);
 
-  gaugeValue = 34;
+  readonly additionalGenerator2 = signal(23);
 
-  gaugeSubvalues = [12, 23];
+  readonly gaugeValue = signal(34);
 
-  customizeText: DxCircularGaugeTypes.ScaleLabel['customizeText'] = ({ valueText }) => `${valueText} kV`;
+  readonly gaugeSubvalues = signal([12, 23]);
+
+  readonly customizeText: DxCircularGaugeTypes.ScaleLabel['customizeText'] = ({ valueText }) => `${valueText} kV`;
 
   updateValues() {
-    this.gaugeValue = this.mainGenerator;
-    this.gaugeSubvalues = this.additionalGenerator.slice();
+    this.gaugeValue.set(this.mainGenerator());
+    this.gaugeSubvalues.set([this.additionalGenerator1(), this.additionalGenerator2()]);
   }
 }
 
