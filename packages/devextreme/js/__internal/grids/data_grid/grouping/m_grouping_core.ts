@@ -44,7 +44,7 @@ export abstract class GroupingHelper {
     return this._totalCountCorrection;
   }
 
-  protected updateTotalItemsCount(totalCountCorrection: number): void {
+  protected setTotalCountCorrection(totalCountCorrection: number): void {
     this._totalCountCorrection = totalCountCorrection || 0;
   }
 

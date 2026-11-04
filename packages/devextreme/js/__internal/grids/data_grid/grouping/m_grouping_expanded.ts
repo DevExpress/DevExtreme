@@ -332,7 +332,7 @@ export class GroupingHelper extends GroupingHelperCore {
     return item.items === null;
   }
 
-  protected updateTotalItemsCount(): void {
+  private updateTotalItemsCount(): void {
     let itemsCountCorrection = 0;
 
     this.foreachCollapsedGroups((groupInfo) => {
@@ -341,7 +341,7 @@ export class GroupingHelper extends GroupingHelperCore {
       }
       return undefined;
     });
-    super.updateTotalItemsCount(itemsCountCorrection);
+    this.setTotalCountCorrection(itemsCountCorrection);
   }
 
   public changeRowExpand(path: unknown[]): DeferredObj<unknown> {
