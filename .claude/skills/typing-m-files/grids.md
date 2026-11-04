@@ -62,7 +62,13 @@ const summaryDataController = (Base: ModuleType<DataController>): ModuleType<Dat
 
 **Views**
 - `_$element` and `_$parent` are optional (`?:`), because `render()` sets them. `element()` returns `dxElementWrapper | undefined`, and so does `_parentElement()`.
-- Code that assumes the view is rendered gets `// @ts-expect-error the view is rendered here`. Use exactly this reason, so `grep -rn "the view is rendered here"` finds every such place when its file is typed. A guard would turn today's `TypeError` into a silent no-op, so it isn't behaviour-neutral.
+- **Code that assumes the view is rendered gets a guard**, not a `@ts-expect-error` or a `!`. The same goes for anything else that is set only later in the lifecycle: a scrollable that `render()` creates, an option a base method fills in. A directive whose reason says "X is rendered here", "X is defined here" or "X is set by the base method" is the kind reviewers ask to replace.
+  - A call chain whose result isn't used: `?.`, as in `this.element()?.empty().addClass(DATAGRID_TOTAL_FOOTER_CLASS)`.
+  - A block that needs the value: wrap it, as in `if ($row && columnIndices) { this._updateCells($row, $newRow, columnIndices); }`, or return early from a `void` method.
+  - A field read for a flag: `options.cachedData?.extra`.
+  - Often the guard behaves exactly the same, for example `$target.closest($focusedViewElement)`, since `closest(undefined)` matches nothing (fixes.md). Otherwise, the old code threw a `TypeError` where the view isn't rendered, and the guard turns that into a no-op. That state doesn't happen in a real flow, and this is the one body edit where the team accepts the difference. List each such guard in the report, saying which of the two it is.
+  - Keep the directive only where the guard would have to make up a value that the code then uses: a method that must return the element, a size or a promise, or a fallback that flows into a computation. Then put it on one typed declaration (fixes.md, `@ts-expect-error`), with exactly `// @ts-expect-error the view is rendered here` (or `the <x> is rendered here`), so `grep -rn "is rendered here"` finds them all.
+  - When you type a file, rewrite its existing directives of this kind by the same rule.
 - `_renderCore()` returns `DeferredObj<unknown> | void`, with a `no-invalid-void-type` disable: a view that renders synchronously returns nothing. `| undefined` breaks every override that returns nothing (7 of them).
 
 **Fake components.** CardView passes its `WidgetMock`, PivotGrid's field chooser passes itself, and Jest tests pass partial mocks to classic module items. They get `as unknown as InternalGrid` where they're passed. The `ModuleItem` constructor stays `component: InternalGrid`.

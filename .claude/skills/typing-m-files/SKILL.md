@@ -86,7 +86,7 @@ Not counted at all: `max-classes-per-file`, `simple-import-sort/imports` and `sp
 
 **Typing only**
 - Annotate params, locals, returns and fields.
-- Change a body only where a new type makes it fail to compile (a guard, a `?? fallback`, a narrowing), or where a strict rule needs it (`fixes.md`). Either way, the edit must provably behave the same for every value the code can get. A value from a source that isn't typed yet gets a directive, not a cast (see Disables).
+- Change a body only where a new type makes it fail to compile (a guard, a `?? fallback`, a narrowing), or where a strict rule needs it (`fixes.md`). Either way, the edit must provably behave the same for every value the code can get. In grids, the one exception is a guard for a view that isn't rendered yet, or for another value that is set later in the lifecycle (grids.md, Views). A value from a source that isn't typed yet gets a directive, not a cast (see Disables).
 - Don't refactor. That means no extracting functions, rewriting loops, renaming members or functions, removing dead code or dropping unused params, unless the developer agrees for that one function. Renaming a local variable to fix `no-shadow` is fine.
 - An agreed refactor gets tests first: written and passing on the old code, then the change, then a mutation check that the tests catch a broken version. The test file is outside the task: name it when you ask for the agreement.
 - A bug found while typing is not fixed in the typing PR. Tell the developer, with file, line and why it's a bug.

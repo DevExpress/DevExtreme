@@ -148,7 +148,7 @@ Call `super` with named params, when the method declares exactly those params an
 | `prefer-for-of` | `for (const column of this._columns)`, when the index is only used to read the item and the loop doesn't add or remove items. The rule doesn't report a loop whose bound has `?.` (`i < changes?.length`); leave such a loop as it is |
 | `no-use-before-define` | move the declaration above its first use, when that doesn't change evaluation order |
 | `no-multi-assign` | two statements; `x = o.x = o.x === undefined ? d : o.x` becomes `o.x ??= d;` then `x = o.x`, only if `o.x` can't be `null` |
-| `no-non-null-assertion` | a narrowing TypeScript can see, when the value provably isn't `null` or `undefined` there. If it can be, the old code threw or read a key named `'undefined'`, so a check with a new fallback (`oldItem ? map[getRowKey(oldItem)] : undefined`) changes behaviour. Ask, or keep a line disable with a reason |
+| `no-non-null-assertion` | a narrowing TypeScript can see, when the value provably isn't `null` or `undefined` there. If it can be, the old code threw or read a key named `'undefined'`, so a check with a new fallback (`oldItem ? map[getRowKey(oldItem)] : undefined`) changes behaviour. Ask, or keep a line disable with a reason. In grids, a value that is unset only before a lifecycle step (render, a base method) gets a guard instead (grids.md, Views) |
 | `no-invalid-this` | a typed `this` param, which changes nothing: `function (this: ColumnBase, e: ColumnCustomizeTextArg): string`. An arrow changes what `this` is, so use one only after replacing every `this` with what it was. Core `each(items, function () {…})` calls the callback with `this` set to the item, and stops when it returns `false`. Switch to `forEach` only under the conditions in traps.md |
 | `no-floating-promises` | a line disable with a reason. `void promise` is not an option: `no-void` forbids it |
 | `no-unused-vars` (a param only the overrides use) | keep the line disable. Or declare the param in an overload signature and leave the implementation without it; this changes `Function.length`, so only where nothing reads it. `argsIgnorePattern` isn't configured, so a `_` prefix doesn't help |
@@ -172,9 +172,10 @@ Fields typed as `any` (part 1 of a file, or a whole file):
 - TypeScript skips comment lines when it matches a directive to its line. So `@ts-expect-error` can sit above an `eslint-disable-next-line` for the same code line. Put the TypeScript directive first: ESLint's directive must be directly above the code.
 - When a local holding an untyped or possibly-`undefined` value is used several times, put one directive on its declaration with the type, instead of one on each use:
   ```ts
-  // @ts-expect-error the view is rendered here
-  const $element: dxElementWrapper = this.element();
+  // @ts-expect-error offset() is typed as possibly undefined
+  const offset: Coordinates = $element.offset();
   ```
+  In grids, a value that is `undefined` only until the view is rendered gets a guard first; the directive is for the cases a guard can't cover (grids.md, Views).
 
 ## Types to reuse or name
 
