@@ -7,3 +7,115 @@
         border: none;
     }
 }
+
+.tool-calls-demo {
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+}
+
+.tool-calls-demo .ai-chat-card {
+    position: relative;
+    width: 100%;
+    max-width: 900px;
+}
+
+.tool-calls-demo .ai-chat-card > .dx-toolbar {
+    position: absolute;
+    height: var(--dxds-spacing-480, 48px);
+    padding-inline: var(--dxds-spacing-240, 24px);
+    border-bottom: var(--dx-border-width) solid var(--dx-color-border);
+    background-color: transparent;
+}
+
+.tool-calls-demo .ai-chat-card > .dx-toolbar .dx-toolbar-items-container {
+    height: 100%;
+}
+
+.tool-calls-demo .ai-chat-title .dx-toolbar-item-content {
+    font-size: var(--dxds-font-size-title-md, 20px);
+    font-weight: var(--dxds-font-weight-title-default, 600);
+}
+
+.tool-calls-demo .ai-chat-card > .dx-chat {
+    padding-top: var(--dxds-spacing-480, 48px);
+}
+
+.tool-calls-demo .dx-chat-messagelist-empty-image {
+    display: none;
+}
+
+.tool-calls-demo .dx-chat-messagelist-empty-message {
+    font-size: var(--dx-font-size-heading-5, 20px);
+}
+
+.tool-calls-demo .dx-chat-messagelist-empty-prompt {
+    margin-top: 4px;
+}
+
+.tool-calls-demo .dx-chat-messagebubble-content,
+.tool-calls-demo .chat-messagebubble-text {
+    display: flex;
+    flex-direction: column;
+}
+
+.tool-calls-demo .chat-suggestion-cards {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 16px;
+    margin-top: 32px;
+    width: 100%;
+}
+
+.tool-calls-demo .chat-suggestion-card {
+    border-radius: calc(var(--dx-border-radius) * 3);
+    padding: 16px;
+    border: var(--dx-border-width) solid var(--dx-color-border);
+    background: color-mix(in srgb, var(--dx-color-text) 4%, var(--dx-component-color-bg));
+    color: var(--dx-color-text);
+    font-family: inherit;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    flex: 0 1 230px;
+    max-width: 230px;
+    width: 230px;
+    text-align: start;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.tool-calls-demo .chat-suggestion-card:hover {
+    background: color-mix(in srgb, var(--dx-color-text) 10%, var(--dx-component-color-bg));
+    box-shadow: 0 4px 12px 0 color-mix(in srgb, var(--dx-color-shadow) 12%, transparent);
+}
+
+.tool-calls-demo .chat-suggestion-card-title {
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 16px;
+}
+
+.tool-calls-demo .chat-suggestion-card-prompt {
+    color: color-mix(in srgb, var(--dx-color-text) 70%, var(--dx-component-color-bg));
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 16px;
+}
+
+.tool-calls-demo .chat-disabled .dx-chat-messagebox {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+/* Only for the story: the bubble with tool calls is as wide as in the design (320px of the block + the padding of the bubble) */
+.tool-calls-demo .dx-chat-messagebubble:has(> .dx-chat-tool-call-view) {
+    min-width: 344px;
+}
+
+.dx-theme-fluent-typography .tool-calls-demo .dx-chat-messagebubble:has(> .dx-chat-tool-call-view),
+.dx-theme-fluent-next-typography .tool-calls-demo .dx-chat-messagebubble:has(> .dx-chat-tool-call-view) {
+    min-width: 320px;
+}

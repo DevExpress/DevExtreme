@@ -1,0 +1,95 @@
+.dx-chat-tool-call-view {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+
+  .dx-accordion {
+    margin: 0;
+    background-color: transparent;
+  }
+
+  .dx-accordion-item,
+  .dx-accordion-item:first-child,
+  .dx-accordion-item:last-child,
+  .dx-accordion-item.dx-state-hover,
+  .dx-accordion-item.dx-state-active,
+  .dx-accordion-item.dx-state-focused,
+  .dx-accordion-item.dx-accordion-item-opened,
+  .dx-accordion-item.dx-accordion-item-opened + .dx-accordion-item {
+    margin: 0;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    background-color: transparent;
+  }
+
+  .dx-accordion-item-title,
+  .dx-accordion-item.dx-state-hover > .dx-accordion-item-title,
+  .dx-accordion-item.dx-state-active > .dx-accordion-item-title,
+  .dx-accordion-item.dx-state-focused > .dx-accordion-item-title,
+  .dx-accordion-item.dx-accordion-item-opened > .dx-accordion-item-title {
+    min-height: 0;
+    background-color: transparent;
+  }
+
+  .dx-accordion-item-title::before {
+    position: static;
+    order: 1;
+    flex: none;
+    transform: rotate(-90deg);
+  }
+
+  .dx-rtl .dx-accordion-item-title::before {
+    transform: rotate(90deg);
+  }
+
+  .dx-accordion-item.dx-accordion-item-opened > .dx-accordion-item-title::before,
+  .dx-rtl .dx-accordion-item.dx-accordion-item-opened > .dx-accordion-item-title::before {
+    content: "\f016";
+    transform: none;
+  }
+
+  .dx-accordion-item-title-caption {
+    margin-inline-end: 0;
+  }
+
+  .dx-accordion-item-body {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .dx-chat-tool-call-icon {
+    display: inline-flex;
+    flex: none;
+  }
+
+  .dx-chat-tool-call-name {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .dx-chat-tool-call-error-tag {
+    flex: none;
+    white-space: nowrap;
+  }
+
+  .dx-chat-tool-call-field {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+
+    .dx-texteditor {
+      width: 100%;
+    }
+
+    .dx-texteditor > .dx-texteditor-container > .dx-texteditor-input-container {
+      margin: 0;
+    }
+
+    .dx-texteditor .dx-texteditor-input {
+      min-height: 0;
+    }
+  }
+}
