@@ -23,6 +23,10 @@ import type { EditorFactory } from '@ts/grids/grid_core/editor_factory/editor_fa
 import { CLASSES as MASTER_DETAIL_CLASSES } from '@ts/grids/grid_core/master_detail/const';
 import type { ValidatingEditorFactoryExtension } from '@ts/grids/grid_core/validating/types';
 import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
+import type {
+  VirtualScrollingResizingController,
+  VirtualScrollingRowsViewExtension,
+} from '@ts/grids/grid_core/virtual_scrolling/types';
 
 import type { ColumnHeadersView } from '../column_headers/column_headers';
 import type {
@@ -675,11 +679,18 @@ const columnHeadersView = (
 };
 
 const rowsView = (
-  Base: ModuleType<RowsView & SummaryRowsViewExtension>,
+  Base: ModuleType<RowsView & SummaryRowsViewExtension & VirtualScrollingRowsViewExtension>,
 ): ModuleType<
   ColumnFixingRowsView
 > => class RowsViewFixedColumnsExtender extends baseFixedColumns(Base) {
   protected _fixedScrollTimeout: any;
+
+  private _resizingController!: VirtualScrollingResizingController;
+
+  public init(): void {
+    super.init();
+    this._resizingController = this.getController('resizing') as VirtualScrollingResizingController;
+  }
 
   public dispose() {
     super.dispose.apply(this, arguments as any);
@@ -719,8 +730,7 @@ const rowsView = (
     }
   }
 
-  private _getScrollDelay() {
-    // @ts-expect-error m_virtual_scrolling method
+  private _getScrollDelay(): number | undefined {
     const hasResizeTimeout = this._resizingController?.hasResizeTimeout();
 
     if (hasResizeTimeout) {
@@ -1027,9 +1037,8 @@ const rowsView = (
     super._handleScroll(e);
   }
 
-  protected _updateContentPosition(isRender) {
-    // @ts-expect-error m_virtual_scrolling method
-    super._updateContentPosition.apply(this, arguments);
+  public _updateContentPosition(isRender?: boolean): void {
+    super._updateContentPosition(isRender);
     if (!isRender) {
       this._updateFixedTablePosition(this._scrollTop);
     }

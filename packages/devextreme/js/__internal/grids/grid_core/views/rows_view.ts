@@ -38,7 +38,6 @@ import { generateRowValues } from '@ts/grids/grid_core/data_controller/utils/row
 import type { DataSourceController } from '@ts/grids/grid_core/data_source/data_source_controller';
 import type { RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
 import type { FocusController } from '@ts/grids/grid_core/focus/m_focus';
-import type { ResizingController } from '@ts/grids/grid_core/grid_view/grid_view';
 import type {
   KeyboardNavigationController,
 } from '@ts/grids/grid_core/keyboard_navigation/keyboard_navigation';
@@ -132,8 +131,6 @@ export class RowsView extends ColumnsView {
 
   public _editingController!: EditingController;
 
-  private _resizingController!: ResizingController;
-
   protected _columnsResizerController!: ColumnsResizerViewController;
 
   protected _focusController!: FocusController;
@@ -172,7 +169,6 @@ export class RowsView extends ColumnsView {
     super.init();
 
     this._editingController = this.getController('editing');
-    this._resizingController = this.getController('resizing');
     this._columnsResizerController = this.getController('columnsResizer');
     this._focusController = this.getController('focus');
     this._keyboardNavigationController = this.getController('keyboardNavigation');
