@@ -1,61 +1,92 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable max-classes-per-file */
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import pointerEvents from '@js/common/core/events/pointer';
 import messageLocalization from '@js/common/core/localization/message';
 import { createObjectWithChanges } from '@js/common/data/array_utils';
 import type { GridsEditMode } from '@js/common/grids';
-import type { dxElementWrapper } from '@js/core/renderer';
+import type { DxElement } from '@js/core/element';
+import type { Coordinates, dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import browser from '@js/core/utils/browser';
 import { deferUpdate, equalByValue, getKeyHash } from '@js/core/utils/common';
 import type { DeferredObj } from '@js/core/utils/deferred';
-// @ts-expect-error
-import { Deferred, fromPromise, when } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
-import { each } from '@js/core/utils/iterator';
 import {
   getOuterHeight, getOuterWidth, getWidth, setHeight,
 } from '@js/core/utils/size';
 import { encodeHtml } from '@js/core/utils/string';
 import { isDefined, isEmptyObject, isObject } from '@js/core/utils/type';
+import type { EventInfo } from '@js/events';
 import Button from '@js/ui/button';
 import LoadIndicator from '@js/ui/load_indicator';
 import Overlay from '@js/ui/overlay/ui.overlay';
 import { current, isFluent } from '@js/ui/themes';
 import ValidationEngine from '@js/ui/validation_engine';
+import type { ValidationResult as GroupValidationResult } from '@js/ui/validation_group';
+import type { InitializedEvent } from '@js/ui/validator';
 import Validator from '@js/ui/validator';
 import errors from '@js/ui/widget/ui.errors';
+import { Deferred, fromPromise, when } from '@ts/core/utils/deferred';
 import { focused } from '@ts/core/utils/selectors';
+import type Widget from '@ts/core/widget/widget';
 import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/columns_controller';
-import type { ProcessedItem } from '@ts/grids/grid_core/data_controller/types';
-import { isCellBasedEditMode, isFormBasedEditMode } from '@ts/grids/grid_core/editing/editing_utils';
-import type { EditorFactory } from '@ts/grids/grid_core/editor_factory/editor_factory';
-import type { ErrorHandlingViewController } from '@ts/grids/grid_core/error_handling/error_handling_view_controller';
-import { CLASSES as MASTER_DETAIL_CLASSES } from '@ts/grids/grid_core/master_detail/const';
-import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
-import type { RowsView } from '@ts/grids/grid_core/views/rows_view';
-
-import {
-  EDIT_MODE, EDITORS_INPUT_SELECTOR, EDITORS_TEXTAREA_SELECTOR, INSERT_INDEX,
-} from '../editing/const';
+import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import type {
+  DataChange, GeneratedItem, ItemProcessingOptions, ProcessedItem,
+} from '@ts/grids/grid_core/data_controller/types';
+import type { RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
+import {
+  DATA_CHANGE_TYPE, EDIT_MODE, EDITORS_INPUT_SELECTOR, EDITORS_TEXTAREA_SELECTOR, INSERT_INDEX,
+} from '@ts/grids/grid_core/editing/const';
+import { isCellBasedEditMode, isFormBasedEditMode } from '@ts/grids/grid_core/editing/editing_utils';
+import type {
+  AddChangeOptions,
   CellBasedEditingController,
   EditFormDetailOptions,
   EditFormOptions,
+  EditingChange,
+  EditingChangeParams,
+  EditingChangesOptionChanged,
+  EditingFormBasedRowsViewExtension,
+  EditorCellOptions,
   FormBasedEditingControllerExtension,
   PrepareEditCellOptions,
-} from '../editing/types';
-import modules from '../modules/modules';
-import type { ModuleType } from '../types';
-import gridCoreUtils from '../utils';
+} from '@ts/grids/grid_core/editing/types';
+import type { EditorFactory } from '@ts/grids/grid_core/editor_factory/editor_factory';
+import type { ErrorHandlingViewController } from '@ts/grids/grid_core/error_handling/error_handling_view_controller';
+import { CLASSES as MASTER_DETAIL_CLASSES } from '@ts/grids/grid_core/master_detail/const';
+import modules from '@ts/grids/grid_core/modules/modules';
+import type { ModuleType, RowKey } from '@ts/grids/grid_core/types';
+import gridCoreUtils from '@ts/grids/grid_core/utils';
+import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
+import type { RowsView } from '@ts/grids/grid_core/views/rows_view';
+import type { PositioningEvent } from '@ts/ui/overlay/overlay';
+import type { ValidationResultInternal } from '@ts/ui/validation_engine';
+import type InternalValidator from '@ts/ui/validator';
+
 import {
   INVALIDATE_CLASS,
   VALIDATION_CANCELLED,
   VALIDATION_STATUS,
   validationResultIsValid,
 } from './const';
-import type { ValidatingEditorFactoryExtension } from './types';
+import type {
+  BrokenRule,
+  CellValidationAdapter,
+  CellValidationParams,
+  CellValidationResultData,
+  CellValidationResultValue,
+  RowValidatingParams,
+  ValidatingCellOptions,
+  ValidatingEditingController,
+  ValidatingEditingControllerExtension,
+  ValidatingEditorFactory,
+  ValidatingEditorFactoryExtension,
+  ValidationData,
+  ValidationMessagePosition,
+  ValidatorDataGetterResult,
+  ValidatorResult,
+} from './types';
 
 const REVERT_TOOLTIP_CLASS = 'revert-tooltip';
 const INVALID_MESSAGE_CLASS = 'dx-invalid-message';
@@ -72,11 +103,21 @@ const PADDING_BETWEEN_TOOLTIPS = 2;
 
 const COMMAND_TRANSPARENT = 'transparent';
 
-const EDIT_DATA_INSERT_TYPE = 'insert';
-const EDIT_DATA_REMOVE_TYPE = 'remove';
+const cellValueShouldBeValidated = (
+  value: unknown,
+  rowOptions: ProcessedItem | undefined,
+): boolean => value !== undefined || (!!rowOptions && !rowOptions.isNewRow);
 
-const cellValueShouldBeValidated = function (value, rowOptions) {
-  return value !== undefined || (value === undefined && rowOptions && !rowOptions.isNewRow);
+const getValidationGroup = (validator: InternalValidator): ValidationData => {
+  // @ts-expect-error the grid's validators get a ValidationData group
+  const validationGroup: ValidationData = validator.option('validationGroup');
+  return validationGroup;
+};
+
+const getValidatorData = (validator: InternalValidator): ValidatorDataGetterResult => {
+  // @ts-expect-error the grid's validators get a dataGetter that returns the column
+  const validatorData: ValidatorDataGetterResult = validator.option('dataGetter')();
+  return validatorData;
 };
 
 export class ValidatingController extends modules.Controller {
@@ -84,21 +125,21 @@ export class ValidatingController extends modules.Controller {
 
   private _disableApplyValidationResults = false;
 
-  private _editingController!: CellBasedEditingController;
+  private _editingController!: ValidatingEditingController;
 
-  private _editorFactoryController!: EditorFactory;
+  private _editorFactoryController!: ValidatingEditorFactory;
 
   private _columnsController!: ColumnsController;
 
-  public _validationState: any;
+  public _validationState!: ValidationData[];
 
-  private _validationStateCache: any;
+  private _validationStateCache!: Record<string, ValidationData>;
 
-  private _currentCellValidator: any;
+  private _currentCellValidator?: InternalValidator | null;
 
-  public init() {
-    this._editingController = this.getController('editing') as CellBasedEditingController;
-    this._editorFactoryController = this.getController('editorFactory');
+  public init(): void {
+    this._editingController = this.getController('editing') as ValidatingEditingController;
+    this._editorFactoryController = this.getController('editorFactory') as ValidatingEditorFactory;
     this._columnsController = this.getController('columns');
     this.createAction('onRowValidating');
 
@@ -107,12 +148,12 @@ export class ValidatingController extends modules.Controller {
     }
   }
 
-  public initValidationState() {
+  public initValidationState(): void {
     this._validationState = [];
     this._validationStateCache = {};
   }
 
-  public resetValidationStateForChanges(changes) {
+  public resetValidationStateForChanges(changes: EditingChange[]): void {
     if (!changes?.length) {
       return;
     }
@@ -122,7 +163,7 @@ export class ValidatingController extends modules.Controller {
     });
   }
 
-  private _removeValidationData(key) {
+  private _removeValidationData(key: RowKey): void {
     if (!this._validationState?.length) {
       return;
     }
@@ -140,27 +181,20 @@ export class ValidatingController extends modules.Controller {
     ));
   }
 
-  public _rowIsValidated(change) {
-    const validationData = this._getValidationData(change?.key);
+  public _rowIsValidated(change: EditingChange | null | undefined): boolean {
+    const validationData = this.getValidationData(change?.key);
 
     return !!validationData && !!validationData.validated;
   }
 
-  public getValidationData(key) {
-    return this._getValidationData(key);
-  }
-
-  public _getValidationData(key, create?) {
+  public getValidationData(key: RowKey, create: true): ValidationData;
+  public getValidationData(key: RowKey, create?: boolean): ValidationData | undefined;
+  public getValidationData(key: RowKey, create?: boolean): ValidationData | undefined {
     const keyHash = getKeyHash(key);
     const isObjectKeyHash = isObject(keyHash);
-    let validationData;
-
-    if (isObjectKeyHash) {
-      // eslint-disable-next-line prefer-destructuring
-      validationData = this._validationState.filter((data) => equalByValue(data.key, key))[0];
-    } else {
-      validationData = this._validationStateCache[keyHash];
-    }
+    let validationData: ValidationData | undefined = isObjectKeyHash
+      ? this._validationState.find((data) => equalByValue(data.key, key))
+      : this._validationStateCache[keyHash];
 
     if (!validationData && create) {
       validationData = { key, isValid: true };
@@ -173,26 +207,25 @@ export class ValidatingController extends modules.Controller {
     return validationData;
   }
 
-  private _getBrokenRules(validationData, validationResults) {
-    let brokenRules;
-
-    if (validationResults) {
-      brokenRules = validationResults.brokenRules || validationResults.brokenRule && [validationResults.brokenRule];
-    } else {
-      brokenRules = validationData.brokenRules || [];
-    }
-
-    return brokenRules;
+  private _getBrokenRules(
+    validationData: ValidationData,
+    validationResults: GroupValidationResult | undefined,
+  ): BrokenRule[] | undefined {
+    return validationResults
+      ? validationResults.brokenRules
+      : validationData.brokenRules ?? [];
   }
 
-  private _rowValidating(validationData, validationResults) {
-    // @ts-expect-error
-    const deferred = new Deferred();
-    // @ts-expect-error
-    const change = this._editingController.getChangeByKey(validationData?.key);
+  private _rowValidating(
+    validationData: ValidationData,
+    validationResults: GroupValidationResult | undefined,
+  ): DeferredObj<RowValidatingParams> {
+    const deferred = Deferred<RowValidatingParams>();
+    // @ts-expect-error the validated row always has a change
+    const change: EditingChange = this._editingController.getChangeByKey(validationData?.key);
     const brokenRules = this._getBrokenRules(validationData, validationResults);
     const isValid = validationResults ? validationResults.isValid : validationData.isValid;
-    const parameters = {
+    const parameters: RowValidatingParams = {
       brokenRules,
       isValid,
       key: change.key,
@@ -202,7 +235,7 @@ export class ValidatingController extends modules.Controller {
       errorText: this.getHiddenValidatorsErrorText(brokenRules),
     };
 
-    this.executeAction('onRowValidating', parameters as any);
+    this.executeAction('onRowValidating', parameters);
 
     when(fromPromise(parameters.promise)).always(() => {
       validationData.isValid = parameters.isValid;
@@ -210,58 +243,60 @@ export class ValidatingController extends modules.Controller {
       deferred.resolve(parameters);
     });
 
+    // @ts-expect-error promise() is typed as Promise but returns a Deferred-like value at runtime
     return deferred.promise();
   }
 
-  private getHiddenValidatorsErrorText(brokenRules) {
-    const brokenRulesMessages: any[] = [];
-
-    each(brokenRules, (_, brokenRule) => {
+  private getHiddenValidatorsErrorText(brokenRules: BrokenRule[] | undefined): string {
+    const hiddenBrokenRules = (brokenRules ?? []).filter((brokenRule) => {
       const { column } = brokenRule;
-      const isGroupExpandColumn = column && column.groupIndex !== undefined && !column.showWhenGrouped;
+      const isGroupExpandColumn = column
+        && column.groupIndex !== undefined
+        && !column.showWhenGrouped;
       const isVisibleColumn = column && column.visible;
 
-      if (!brokenRule.validator.$element().parent().length && (!isVisibleColumn || isGroupExpandColumn)) {
-        brokenRulesMessages.push(brokenRule.message);
-      }
+      // @ts-expect-error the grid's broken rules come from its dxValidator instances
+      return !brokenRule.validator.$element().parent().length
+        && (!isVisibleColumn || isGroupExpandColumn);
     });
-    return brokenRulesMessages.join(', ');
+
+    return hiddenBrokenRules.map((brokenRule) => brokenRule.message).join(', ');
   }
 
-  public validate(isFull) {
-    let isValid = true;
-    const editingController = this._editingController;
-    // @ts-expect-error
-    const deferred = new Deferred();
-    const completeList: any[] = [];
+  public validate(isFull?: boolean): DeferredObj<boolean | undefined> {
+    let isValid: boolean | undefined = true;
+    const deferred = Deferred<boolean | undefined>();
+    const completeList: DeferredObj<RowValidatingParams>[] = [];
 
-    const editMode = editingController.getEditMode();
-    isFull = isFull || editMode === EDIT_MODE.row;
+    const editMode = this._editingController.getEditMode();
+    const isFullValidation = !!isFull || editMode === EDIT_MODE.row;
 
     if (this._isValidationInProgress) {
+      // @ts-expect-error promise() is typed as Promise but returns a Deferred-like value at runtime
       return deferred.resolve(false).promise();
     }
 
     this._isValidationInProgress = true;
-    if (isFull) {
-      editingController.addDeferred(deferred);
-      const changes = editingController.getChanges();
-      each(changes, (index, { type, key }) => {
-        if (type !== 'remove') {
-          const validationData = this._getValidationData(key, true);
+    if (isFullValidation) {
+      this._editingController.addDeferred(deferred);
+      const changes = this._editingController.getChanges();
+      changes.forEach(({ type, key }) => {
+        if (type !== DATA_CHANGE_TYPE.remove) {
+          const validationData = this.getValidationData(key, true);
           const validationResult = this.validateGroup(validationData);
           completeList.push(validationResult);
-          validationResult.done((validationResult) => {
+          validationResult.done((rowValidatingParams) => {
             validationData.validated = true;
-            isValid = isValid && validationResult.isValid;
+            isValid = isValid && rowValidatingParams.isValid;
           });
         }
       });
     } else if (this._currentCellValidator) {
+      // @ts-expect-error the grid's validators get a ValidationData group
       const validationResult = this.validateGroup(this._currentCellValidator._findGroup());
       completeList.push(validationResult);
-      validationResult.done((validationResult) => {
-        isValid = validationResult.isValid;
+      validationResult.done((rowValidatingParams) => {
+        isValid = rowValidatingParams.isValid;
       });
     }
 
@@ -270,67 +305,72 @@ export class ValidatingController extends modules.Controller {
       deferred.resolve(isValid);
     });
 
+    // @ts-expect-error promise() is typed as Promise but returns a Deferred-like value at runtime
     return deferred.promise();
   }
 
-  private validateGroup(validationData) {
-    // @ts-expect-error
-    const result = new Deferred();
+  private validateGroup(validationData: ValidationData): DeferredObj<RowValidatingParams> {
+    const result = Deferred<RowValidatingParams>();
     const validateGroup = validationData && ValidationEngine.getGroupConfig(validationData);
-    let validationResult;
+    // eslint-disable-next-line @typescript-eslint/init-declarations -- assigned in the if below
+    let validationResult: GroupValidationResult | undefined;
 
     if (validateGroup?.validators.length) {
       this.resetRowValidationResults(validationData);
       validationResult = ValidationEngine.validateGroup(validationData);
     }
 
-    when(validationResult?.complete || validationResult).done((validationResult) => {
-      when(this._rowValidating(validationData, validationResult)).done(result.resolve);
-    });
+    // @ts-expect-error complete is typed as Promise but is a Deferred at runtime
+    when<GroupValidationResult | undefined>(validationResult?.complete ?? validationResult)
+      .done((completedResult) => {
+        // eslint-disable-next-line @typescript-eslint/no-misused-promises -- ignores the result
+        when(this._rowValidating(validationData, completedResult)).done(result.resolve);
+      });
 
+    // @ts-expect-error promise() is typed as Promise but returns a Deferred-like value at runtime
     return result.promise();
   }
 
-  private isRowDataModified(change) {
+  private isRowDataModified(change: Partial<EditingChange>): boolean {
     return !isEmptyObject(change.data);
   }
 
-  public updateValidationState(change) {
+  public updateValidationState(change: Partial<EditingChange>): void {
     const editMode = this._editingController.getEditMode();
     const { key } = change;
-    const validationData = this._getValidationData(key, true);
+    const validationData = this.getValidationData(key, true);
 
     if (!isFormBasedEditMode(editMode)) {
-      if (change.type === EDIT_DATA_INSERT_TYPE && !this.isRowDataModified(change)) {
+      if (change.type === DATA_CHANGE_TYPE.insert && !this.isRowDataModified(change)) {
         validationData.isValid = true;
         return;
       }
 
-      this.setDisableApplyValidationResults(true);
+      this._disableApplyValidationResults = true;
       const groupConfig = ValidationEngine.getGroupConfig(validationData);
       if (groupConfig) {
         const validationResult = ValidationEngine.validateGroup(validationData);
+        // @ts-expect-error complete is typed as Promise but is a Deferred at runtime
         // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-        when(validationResult.complete || validationResult).done((validationResult) => {
-          // @ts-expect-error
-          validationData.isValid = validationResult.isValid;
-          // @ts-expect-error
-          validationData.brokenRules = validationResult.brokenRules;
-        });
-      } else if (!validationData.brokenRules || !validationData.brokenRules.length) {
+        when<GroupValidationResult>(validationResult.complete || validationResult)
+          .done((completedResult) => {
+            validationData.isValid = completedResult.isValid;
+            validationData.brokenRules = completedResult.brokenRules;
+          });
+      } else if (!validationData.brokenRules?.length) {
         validationData.isValid = true;
       }
-      this.setDisableApplyValidationResults(false);
+      this._disableApplyValidationResults = false;
     } else {
       validationData.isValid = true;
     }
   }
 
-  public setValidator(validator) {
+  public setValidator(validator: InternalValidator | null): void {
     this._currentCellValidator = validator;
   }
 
-  private renderCellPendingIndicator($container) {
+  private renderCellPendingIndicator($container: dxElementWrapper): void {
     let $indicator = $container.find(`.${PENDING_INDICATOR_CLASS}`);
     if (!$indicator.length) {
       const $indicatorContainer = $container;
@@ -341,9 +381,10 @@ export class ValidatingController extends modules.Controller {
     }
   }
 
-  private disposeCellPendingIndicator($container) {
+  private disposeCellPendingIndicator($container: dxElementWrapper): void {
     const $indicator = $container.find(`.${PENDING_INDICATOR_CLASS}`);
     if ($indicator.length) {
+      // @ts-expect-error getInstance() is typed for Element
       const indicator = LoadIndicator.getInstance($indicator);
       if (indicator) {
         indicator.dispose();
@@ -353,10 +394,10 @@ export class ValidatingController extends modules.Controller {
     }
   }
 
-  private validationStatusChanged(result) {
+  private validationStatusChanged(result: ValidatorResult): void {
     const { validator } = result;
-    const validationGroup = validator.option('validationGroup');
-    const { column } = validator.option('dataGetter')();
+    const validationGroup = getValidationGroup(validator);
+    const { column } = getValidatorData(validator);
 
     this.updateCellValidationResult({
       rowKey: validationGroup.key,
@@ -365,15 +406,17 @@ export class ValidatingController extends modules.Controller {
     });
   }
 
-  private validatorInitialized(arg) {
+  private validatorInitialized(arg: InitializedEvent): void {
+    // @ts-expect-error onInitialized always gets the component
     arg.component.on('validating', this.validationStatusChanged.bind(this));
+    // @ts-expect-error onInitialized always gets the component
     arg.component.on('validated', this.validationStatusChanged.bind(this));
   }
 
-  private validatorDisposing(arg) {
+  private validatorDisposing(arg: EventInfo<InternalValidator>): void {
     const validator = arg.component;
-    const validationGroup = validator.option('validationGroup');
-    const { column } = validator.option('dataGetter')();
+    const validationGroup: ValidationData | undefined = getValidationGroup(validator);
+    const { column } = getValidatorData(validator);
 
     const result = this.getCellValidationResult({
       rowKey: validationGroup?.key,
@@ -387,35 +430,41 @@ export class ValidatingController extends modules.Controller {
     }
   }
 
-  private applyValidationResult($container, result) {
+  private applyValidationResult(
+    $container: dxElementWrapper | undefined,
+    result: ValidatorResult,
+  ): void {
     const { validator } = result;
-    const validationGroup = validator.option('validationGroup');
-    const { column } = validator.option('dataGetter')();
+    const validationGroup = getValidationGroup(validator);
+    const { column } = getValidatorData(validator);
 
-    result.brokenRules && result.brokenRules.forEach((rule) => {
-      rule.columnIndex = column.index;
-      rule.column = column;
-    });
+    if (result.brokenRules) {
+      result.brokenRules.forEach((rule) => {
+        rule.columnIndex = column.index;
+        rule.column = column;
+      });
+    }
     if ($container) {
       const validationResult = this.getCellValidationResult({
         rowKey: validationGroup.key,
         columnIndex: column.index,
       });
-      const requestIsDisabled = validationResultIsValid(validationResult) && validationResult.disabledPendingId === result.id;
+      const requestIsDisabled = validationResultIsValid(validationResult)
+        && validationResult.disabledPendingId === result.id;
       if (this._disableApplyValidationResults || requestIsDisabled) {
         return;
       }
       if (result.status === VALIDATION_STATUS.invalid) {
         const $focus = $container.find(':focus');
         if (!focused($focus)) {
-          // @ts-expect-error
+          // @ts-expect-error eventsEngine.trigger is not fully typed
           eventsEngine.trigger($focus, 'focus');
-          // @ts-expect-error
+          // @ts-expect-error eventsEngine.trigger is not fully typed
           eventsEngine.trigger($focus, pointerEvents.down);
         }
       }
-      // @ts-expect-error
-      const editor = !column.editCellTemplate && this._editorFactoryController.getEditorInstance($container);
+      const editor = !column.editCellTemplate
+        && this._editorFactoryController.getEditorInstance($container);
       if (result.status === VALIDATION_STATUS.pending) {
         if (editor) {
           editor.option('validationStatus', VALIDATION_STATUS.pending);
@@ -427,134 +476,156 @@ export class ValidatingController extends modules.Controller {
       } else {
         this.disposeCellPendingIndicator($container);
       }
-      $container.toggleClass(this.addWidgetPrefix(INVALIDATE_CLASS), result.status === VALIDATION_STATUS.invalid);
+      $container.toggleClass(
+        this.addWidgetPrefix(INVALIDATE_CLASS),
+        result.status === VALIDATION_STATUS.invalid,
+      );
     }
   }
 
-  private _syncInternalEditingData(parameters) {
-    const editingController = this._editingController;
-    // @ts-expect-error
-    const change = editingController.getChangeByKey(parameters.key);
-    const oldDataFromState = editingController._getOldData(parameters.key);
+  private _syncInternalEditingData(parameters: EditorCellOptions): void {
+    const change = this._editingController.getChangeByKey(parameters.key);
+    const oldDataFromState = this._editingController._getOldData(parameters.key);
     const oldData = parameters.row?.oldData;
 
     if (change && oldData && !oldDataFromState) {
-      editingController._addInternalData({ key: parameters.key, oldData });
+      this._editingController._addInternalData({ key: parameters.key, oldData });
     }
   }
 
-  public createValidator(parameters, $container?) {
-    const editingController = this._editingController;
+  public createValidator(
+    parameters: EditorCellOptions,
+    $container?: dxElementWrapper,
+  ): Validator | undefined {
     const { column } = parameters;
-    let { showEditorAlways } = column;
 
-    if (isDefined(column.command) || !column.validationRules || !Array.isArray(column.validationRules) || !column.validationRules.length) return;
+    if (
+      isDefined(column.command)
+      || !column.validationRules
+      || !Array.isArray(column.validationRules)
+      || !column.validationRules.length
+    ) {
+      return undefined;
+    }
 
-    const editIndex = editingController.getIndexByKey(parameters.key, editingController.getChanges());
-    let needCreateValidator = editIndex > -1;
+    const editIndex = this._editingController.getIndexByKey(
+      parameters.key,
+      this._editingController.getChanges(),
+    );
 
-    if (!needCreateValidator) {
+    if (editIndex === -1) {
+      let { showEditorAlways } = column;
+
       if (!showEditorAlways) {
-        const visibleColumns = this._columnsController?.getVisibleColumns() || [];
-        showEditorAlways = visibleColumns.some((column) => column.showEditorAlways);
+        const visibleColumns = this._columnsController?.getVisibleColumns() ?? [];
+        showEditorAlways = visibleColumns.some((visibleColumn) => visibleColumn.showEditorAlways);
       }
 
       const isEditRow = equalByValue(this.option('editing.editRowKey'), parameters.key);
-      const isCellOrBatchEditingAllowed = isCellBasedEditMode(editingController.getEditMode())
-        && editingController.allowUpdating({ row: parameters.row });
+      const isCellOrBatchEditingAllowed = isCellBasedEditMode(this._editingController.getEditMode())
+        && this._editingController.allowUpdating({ row: parameters.row });
 
-      needCreateValidator = isEditRow || isCellOrBatchEditingAllowed && showEditorAlways;
+      const needCreateValidator = isEditRow || (isCellOrBatchEditingAllowed && showEditorAlways);
 
       if (isCellOrBatchEditingAllowed && showEditorAlways) {
-        editingController._addInternalData({ key: parameters.key, oldData: parameters.row?.oldData ?? parameters.data });
+        this._editingController._addInternalData({
+          key: parameters.key,
+          oldData: parameters.row?.oldData ?? parameters.data,
+        });
+      }
+
+      if (!needCreateValidator) {
+        return undefined;
       }
     }
 
-    if (needCreateValidator) {
-      if ($container && !$container.length) {
-        errors.log('E1050');
-        return;
-      }
-
-      this._syncInternalEditingData(parameters);
-      const validationData = this._getValidationData(parameters.key, true);
-
-      const getValue = () => {
-        // @ts-expect-error
-        const change = editingController.getChangeByKey(validationData?.key);
-        const value = column.calculateCellValue(change?.data || {});
-        return value !== undefined ? value : parameters.value;
-      };
-
-      const useDefaultValidator = $container && $container.hasClass('dx-widget');
-      $container && $container.addClass(this.addWidgetPrefix(VALIDATOR_CLASS));
-      const validator = new Validator($container || $('<div>'), {
-        name: column.caption,
-        validationRules: extend(true, [], column.validationRules),
-        validationGroup: validationData,
-        // @ts-expect-error
-        adapter: useDefaultValidator ? null : {
-          getValue,
-          applyValidationResults: (result) => {
-            this.applyValidationResult($container, result);
-          },
-        },
-        dataGetter() {
-          const key = validationData?.key;
-          // @ts-expect-error
-          const change = editingController.getChangeByKey(key);
-          const oldData = editingController._getOldData(key);
-          return {
-            data: change
-              ? createObjectWithChanges(oldData, change.data)
-              : { ...(oldData ?? parameters.data) },
-            column,
-          };
-        },
-        onInitialized: this.validatorInitialized.bind(this),
-        onDisposing: this.validatorDisposing.bind(this),
-      });
-      if (useDefaultValidator) {
-        const adapter = validator.option('adapter');
-        if (adapter) {
-          const originBypass = adapter.bypass;
-          const defaultAdapterBypass = () => parameters.row.isNewRow && !this._isValidationInProgress && !editingController.isCellModified(parameters);
-
-          adapter.getValue = getValue;
-          adapter.validationRequestsCallbacks = [];
-          // @ts-expect-error
-          adapter.bypass = () => originBypass.call(adapter) || defaultAdapterBypass();
-        }
-      }
-
-      return validator;
+    if ($container && !$container.length) {
+      errors.log('E1050');
+      return undefined;
     }
 
-    return undefined;
+    this._syncInternalEditingData(parameters);
+    const validationData = this.getValidationData(parameters.key, true);
+
+    const getValue = (): unknown => {
+      const change = this._editingController.getChangeByKey(validationData?.key);
+      // @ts-expect-error createColumn initializes calculateCellValue
+      const value: unknown = column.calculateCellValue(change?.data ?? {});
+      return value !== undefined ? value : parameters.value;
+    };
+
+    const useDefaultValidator = $container?.hasClass('dx-widget');
+
+    if ($container) {
+      $container.addClass(this.addWidgetPrefix(VALIDATOR_CLASS));
+    }
+
+    // @ts-expect-error the Validator constructor is typed for Element
+    const validator = new Validator($container ?? $('<div>'), {
+      name: column.caption,
+      validationRules: extend(true, [], column.validationRules),
+      validationGroup: validationData,
+      adapter: useDefaultValidator ? null : {
+        getValue,
+        applyValidationResults: (result: ValidatorResult): void => {
+          this.applyValidationResult($container, result);
+        },
+      },
+      dataGetter: (): ValidatorDataGetterResult => {
+        const key = validationData?.key;
+        const change = this._editingController.getChangeByKey(key);
+        const oldData = this._editingController._getOldData(key);
+        return {
+          data: change
+            ? createObjectWithChanges(oldData, change.data)
+            : { ...(oldData ?? parameters.data) },
+          // @ts-expect-error a grid column always has an index
+          column,
+        };
+      },
+      onInitialized: this.validatorInitialized.bind(this),
+      onDisposing: this.validatorDisposing.bind(this),
+    });
+
+    if (useDefaultValidator) {
+      const adapter = validator.option('adapter');
+      if (adapter) {
+        const originBypass = adapter.bypass;
+        const defaultAdapterBypass = (): boolean | undefined => parameters.row?.isNewRow
+          && !this._isValidationInProgress
+          && !this._editingController.isCellModified(parameters);
+
+        adapter.getValue = getValue;
+        adapter.validationRequestsCallbacks = [];
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-return -- bypass is a Function
+        adapter.bypass = (): boolean | undefined => originBypass?.call(adapter)
+          || defaultAdapterBypass();
+      }
+    }
+
+    return validator;
   }
 
-  private setDisableApplyValidationResults(flag) {
-    this._disableApplyValidationResults = flag;
+  public isCurrentValidatorProcessing(
+    { rowKey, columnIndex }: CellValidationParams,
+  ): boolean | null | undefined {
+    return this._currentCellValidator
+      && equalByValue(getValidationGroup(this._currentCellValidator).key, rowKey)
+      && getValidatorData(this._currentCellValidator).column.index === columnIndex;
   }
 
-  private getDisableApplyValidationResults() {
-    return this._disableApplyValidationResults;
-  }
-
-  public isCurrentValidatorProcessing({ rowKey, columnIndex }) {
-    return this._currentCellValidator && equalByValue(this._currentCellValidator.option('validationGroup').key, rowKey)
-                && this._currentCellValidator.option('dataGetter')().column.index === columnIndex;
-  }
-
-  public validateCell(validator) {
+  public validateCell(validator: InternalValidator): DeferredObj<ValidationResultInternal> {
     const cellParams = {
-      rowKey: validator.option('validationGroup').key,
-      columnIndex: validator.option('dataGetter')().column.index,
+      rowKey: getValidationGroup(validator).key,
+      columnIndex: getValidatorData(validator).column.index,
       validationResult: null,
     };
-    let validationResult = this.getCellValidationResult(cellParams);
+    // @ts-expect-error validationResultIsValid() checks the restored result before it is read
+    let validationResult: ValidationResultInternal = this.getCellValidationResult(cellParams);
     const stateRestored = validationResultIsValid(validationResult);
-    const adapter = validator.option('adapter');
+
+    // @ts-expect-error the grid's validators always have an adapter
+    const adapter: CellValidationAdapter = validator.option('adapter');
     if (!stateRestored) {
       validationResult = validator.validate();
     } else {
@@ -563,88 +634,113 @@ export class ValidatingController extends modules.Controller {
         validationResult = validator.validate();
       }
     }
-    // @ts-expect-error
-    const deferred = new Deferred();
+
+    const deferred = Deferred<ValidationResultInternal>();
+
     if (stateRestored && validationResult.status === VALIDATION_STATUS.pending) {
       this.updateCellValidationResult(cellParams);
       adapter.applyValidationResults(validationResult);
     }
-    when(validationResult.complete || validationResult).done((validationResult) => {
-      stateRestored && adapter.applyValidationResults(validationResult);
-      deferred.resolve(validationResult);
-    });
+
+    // @ts-expect-error complete is typed as Promise but is a Deferred at runtime
+    when<ValidationResultInternal>(validationResult.complete ?? validationResult)
+      .done((completedResult) => {
+        if (stateRestored) {
+          adapter.applyValidationResults(completedResult);
+        }
+        deferred.resolve(completedResult);
+      });
+
+    // @ts-expect-error promise() is typed as Promise but returns a Deferred-like value at runtime
     return deferred.promise();
   }
 
-  private updateCellValidationResult({ rowKey, columnIndex, validationResult }) {
-    const validationData = this._getValidationData(rowKey);
+  private updateCellValidationResult({
+    rowKey, columnIndex, validationResult,
+  }: CellValidationParams & { validationResult: ValidationResultInternal | null }): void {
+    const validationData = this.getValidationData(rowKey);
+
     if (!validationData) {
       return;
     }
-    if (!validationData.validationResults) {
-      validationData.validationResults = {};
-    }
-    let result;
-    if (validationResult) {
-      result = extend({}, validationResult);
-      validationData.validationResults[columnIndex] = result;
-      if (validationResult.status === VALIDATION_STATUS.pending) {
-        if (this._editingController.getEditMode() === EDIT_MODE.cell) {
-          // @ts-expect-error
-          result.deferred = new Deferred();
-          result.complete.always(() => {
-            result.deferred.resolve();
-          });
-          this._editingController.addDeferred(result.deferred);
-        }
-        if (this._disableApplyValidationResults) {
-          result.disabledPendingId = validationResult.id;
-          return;
-        }
+
+    validationData.validationResults ??= {};
+
+    if (!validationResult) {
+      const storedResult = validationData.validationResults[columnIndex];
+
+      if (validationResultIsValid(storedResult) && storedResult.disabledPendingId) {
+        delete storedResult.disabledPendingId;
       }
-    } else {
-      result = validationData.validationResults[columnIndex];
+      return;
     }
-    if (result && result.disabledPendingId) {
-      delete result.disabledPendingId;
+
+    const result: CellValidationResultData = extend({}, validationResult);
+    validationData.validationResults[columnIndex] = result;
+
+    if (validationResult.status === VALIDATION_STATUS.pending) {
+      if (this._editingController.getEditMode() === EDIT_MODE.cell) {
+        result.deferred = Deferred<unknown>();
+        // @ts-expect-error a pending result's complete is a Deferred
+        result.complete.always(() => {
+          // @ts-expect-error result is still the pending result here
+          result.deferred.resolve();
+        });
+        this._editingController.addDeferred(result.deferred);
+      }
+
+      if (this._disableApplyValidationResults) {
+        result.disabledPendingId = validationResult.id;
+      }
     }
   }
 
-  public getCellValidationResult({ rowKey, columnIndex }) {
-    const validationData = this._getValidationData(rowKey, true);
+  public getCellValidationResult(
+    { rowKey, columnIndex }: CellValidationParams,
+  ): CellValidationResultValue | undefined {
+    const validationData = this.getValidationData(rowKey, true);
     return validationData?.validationResults?.[columnIndex];
   }
 
-  public removeCellValidationResult({ change, columnIndex }) {
-    const validationData = this._getValidationData(change?.key);
+  public removeCellValidationResult({ change, columnIndex }: {
+    change: EditingChange | undefined;
+    columnIndex: number;
+  }): void {
+    const validationData = this.getValidationData(change?.key);
 
-    if (validationData && validationData.validationResults) {
+    if (validationData?.validationResults) {
       this.cancelCellValidationResult({ change, columnIndex });
       // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
       delete validationData.validationResults[columnIndex];
     }
   }
 
-  private cancelCellValidationResult({ change, columnIndex }) {
-    const validationData = this._getValidationData(change.key);
+  private cancelCellValidationResult({ change, columnIndex }: {
+    change: { key: RowKey } | undefined;
+    columnIndex: number;
+  }): void {
+    // @ts-expect-error callers cancel a result of a row that has validation data
+    const validationData: ValidationData = this.getValidationData(change.key);
 
     if (change && validationData.validationResults) {
       const result = validationData.validationResults[columnIndex];
-      if (result) {
-        result.deferred && result.deferred.reject(VALIDATION_CANCELLED);
+      if (validationResultIsValid(result)) {
+        result.deferred?.reject(VALIDATION_CANCELLED);
         validationData.validationResults[columnIndex] = VALIDATION_CANCELLED;
       }
     }
   }
 
-  private resetRowValidationResults(validationData) {
+  private resetRowValidationResults(validationData: ValidationData | undefined): void {
     if (validationData) {
-      validationData.validationResults && delete validationData.validationResults;
+      if (validationData.validationResults) {
+        delete validationData.validationResults;
+      }
       delete validationData.validated;
     }
   }
 
-  public isInvalidCell({ rowKey, columnIndex }) {
+  public isInvalidCell({ rowKey, columnIndex }: CellValidationParams): boolean {
     const result = this.getCellValidationResult({
       rowKey,
       columnIndex,
@@ -652,24 +748,29 @@ export class ValidatingController extends modules.Controller {
     return validationResultIsValid(result) && result.status === VALIDATION_STATUS.invalid;
   }
 
-  public getCellValidator({ rowKey, columnIndex }) {
-    const validationData = this._getValidationData(rowKey);
+  public getCellValidator(
+    { rowKey, columnIndex }: CellValidationParams,
+  ): InternalValidator | undefined {
+    const validationData = this.getValidationData(rowKey);
     const groupConfig = validationData && ValidationEngine.getGroupConfig(validationData);
-    const validators = groupConfig && groupConfig.validators;
-    return validators && validators.filter((v) => {
-      const { column } = v.option('dataGetter')();
+    const validators: InternalValidator[] | undefined = groupConfig?.validators;
+    return validators?.find((v) => {
+      const { column }: Partial<ValidatorDataGetterResult> = getValidatorData(v);
       return column ? column.index === columnIndex : false;
-    })[0];
+    });
   }
 
-  public setCellValidationStatus(cellOptions) {
+  public setCellValidationStatus(cellOptions: ValidatingCellOptions): void {
     const validationResult = this.getCellValidationResult({
       rowKey: cellOptions.key,
+      // @ts-expect-error a grid column always has an index
       columnIndex: cellOptions.column.index,
     });
 
     if (isDefined(validationResult)) {
-      cellOptions.validationStatus = validationResult !== VALIDATION_CANCELLED ? validationResult.status : VALIDATION_CANCELLED;
+      cellOptions.validationStatus = validationResult !== VALIDATION_CANCELLED
+        ? validationResult.status
+        : VALIDATION_CANCELLED;
     } else {
       delete cellOptions.validationStatus;
     }
@@ -678,7 +779,11 @@ export class ValidatingController extends modules.Controller {
 
 export const validatingEditingExtender = (
   Base: ModuleType<CellBasedEditingController & FormBasedEditingControllerExtension>,
-) => class ValidateEditingControllerExtender extends Base {
+): ModuleType<
+  CellBasedEditingController
+  & FormBasedEditingControllerExtension
+  & ValidatingEditingControllerExtension
+> => class ValidateEditingControllerExtender extends Base {
   protected _errorHandlingController!: ErrorHandlingViewController;
 
   public init(): void {
@@ -687,74 +792,81 @@ export const validatingEditingExtender = (
     this._errorHandlingController = this.getController('errorHandling');
   }
 
-  protected processDataItemTreeListHack(item) {
-    // @ts-expect-error
-    super.processDataItem.apply(this, arguments);
+  public processDataItemTreeListHack(item: GeneratedItem, options: ItemProcessingOptions): void {
+    super.processDataItem(item, options);
   }
 
-  protected processItemsTreeListHack(items, e) {
-    // @ts-expect-error
-    return super.processItems.apply(this, arguments);
+  public processItemsTreeListHack(items: RawItemData[], e: DataChange): RawItemData[] {
+    return super.processItems(items, e);
   }
 
-  protected _addChange(changeParams) {
-    const change = super._addChange.apply(this, arguments as any);
+  protected _addChange(
+    changeParams: EditingChangeParams,
+    options?: AddChangeOptions,
+  ): EditingChange {
+    const change = super._addChange(changeParams, options);
 
-    if (change && changeParams.type !== EDIT_DATA_REMOVE_TYPE) {
+    if (change && changeParams.type !== DATA_CHANGE_TYPE.remove) {
       this._validatingController.updateValidationState(change);
     }
 
     return change;
   }
 
-  protected _handleChangesChange(args) {
-    super._handleChangesChange.apply(this, arguments as any);
+  protected _handleChangesChange(args: EditingChangesOptionChanged): void {
+    super._handleChangesChange(args);
 
     args.value.forEach((change) => {
-      if (this._validatingController._getValidationData(change.key) === undefined) {
+      if (this._validatingController.getValidationData(change.key) === undefined) {
         this._validatingController.updateValidationState(change);
       }
     });
   }
 
-  private _updateRowAndPageIndices() {
-    const that = this;
-    const startInsertIndex = that.getView('rowsView').getTopVisibleItemIndex();
+  private _updateRowAndPageIndices(): void {
+    const startInsertIndex = this.getView('rowsView').getTopVisibleItemIndex();
     let rowIndex = startInsertIndex;
 
-    each(that.getChanges(), (_, { key, type }) => {
-      const validationData = this._validatingController._getValidationData(key);
-      if (validationData && !validationData.isValid && validationData.pageIndex !== that._pageIndex) {
-        validationData.pageIndex = that._pageIndex;
-        if (type === EDIT_DATA_INSERT_TYPE) {
+    this.getChanges().forEach(({ key, type }) => {
+      const validationData = this._validatingController.getValidationData(key);
+      if (
+        validationData
+        && !validationData.isValid
+        && validationData.pageIndex !== this._pageIndex
+      ) {
+        validationData.pageIndex = this._pageIndex;
+        if (type === DATA_CHANGE_TYPE.insert) {
           validationData.rowIndex = startInsertIndex;
         } else {
           validationData.rowIndex = rowIndex;
         }
-        rowIndex++;
+        rowIndex += 1;
       }
     });
   }
 
   public override getEditFormOptions(detailOptions: EditFormDetailOptions): EditFormOptions {
     return {
-      validationGroup: this._validatingController._getValidationData(detailOptions.key, true),
+      validationGroup: this._validatingController.getValidationData(detailOptions.key, true),
       ...super.getEditFormOptions(detailOptions),
     };
   }
 
-  protected _validateEditFormAfterUpdate(row?, isCustomSetCellValue?) {
+  protected _validateEditFormAfterUpdate(
+    row: ProcessedItem,
+    isCustomSetCellValue?: boolean,
+  ): void {
     // T816256, T844143
     if (isCustomSetCellValue && this._editForm) {
       this._editForm.validate();
     }
 
-    super._validateEditFormAfterUpdate.apply(this, arguments as any);
+    super._validateEditFormAfterUpdate(row, isCustomSetCellValue);
   }
 
   protected _prepareEditCell(parameters: PrepareEditCellOptions): boolean {
     const { column, item } = parameters;
-    const isNotCanceled: boolean = super._prepareEditCell(parameters);
+    const isNotCanceled = super._prepareEditCell(parameters);
     const key = !item.isNewRow ? item.key : undefined;
 
     if (isNotCanceled && column.showEditorAlways) {
@@ -764,57 +876,63 @@ export const validatingEditingExtender = (
     return isNotCanceled;
   }
 
-  public processItems(items, changeType) {
+  public processItems(items: RawItemData[], change: DataChange): RawItemData[] {
     const changes = this.getChanges();
-    const getIndexByChange = (change, items: any[]) => {
-      let index = -1;
-      const isInsert = change.type === EDIT_DATA_INSERT_TYPE;
-      const { key } = change;
+    const getIndexByChange = (
+      editingChange: EditingChange,
+      itemsToSearch: RawItemData[],
+    ): number => {
+      const isInsert = editingChange.type === DATA_CHANGE_TYPE.insert;
+      const { key } = editingChange;
 
-      each(items, (i, item) => {
-        if (equalByValue(key, isInsert ? item.key : this.dataSourceController.keyOf(item))) {
-          index = i;
-          return false;
-        }
-
-        return undefined;
-      });
-
-      return index;
+      return itemsToSearch.findIndex(
+        (item) => equalByValue(key, isInsert ? item.key : this.dataSourceController.keyOf(item)),
+      );
     };
 
-    items = super.processItems(items, changeType);
-    const itemsCount = items.length;
+    const processedItems = super.processItems(items, change);
+    const itemsCount = processedItems.length;
 
-    const addInValidItem = function (change, validationData) {
-      const data = { key: change.key };
-      const index = getIndexByChange(change, items);
+    const addInValidItem = (
+      editingChange: EditingChange,
+      validationData: ValidationData,
+    ): void => {
+      const data: RawItemData = { key: editingChange.key };
+      const index = getIndexByChange(editingChange, processedItems);
 
-      if (index >= 0) {
+      if (index >= 0 || validationData.rowIndex === undefined) {
         return;
       }
 
-      validationData.rowIndex = validationData.rowIndex > itemsCount ? validationData.rowIndex % itemsCount : validationData.rowIndex;
+      validationData.rowIndex = validationData.rowIndex > itemsCount
+        ? validationData.rowIndex % itemsCount
+        : validationData.rowIndex;
       const { rowIndex } = validationData;
 
       data[INSERT_INDEX] = 1;
-      items.splice(rowIndex, 0, data);
+      processedItems.splice(rowIndex, 0, data);
     };
 
-    if (this.getEditMode() === EDIT_MODE.batch && changeType !== 'prepend' && changeType !== 'append') {
-      changes.forEach((change) => {
-        const { key } = change;
-        const validationData = this._validatingController._getValidationData(key);
-        if (validationData && change.type && validationData.pageIndex === this._pageIndex && this._pageIndex !== undefined) {
-          addInValidItem(change, validationData);
+    // @ts-expect-error change is the DataChange object, so it never equals a string
+    if (this.getEditMode() === EDIT_MODE.batch && change !== 'prepend' && change !== 'append') {
+      changes.forEach((editingChange) => {
+        const { key } = editingChange;
+        const validationData = this._validatingController.getValidationData(key);
+        if (
+          validationData
+          && editingChange.type
+          && validationData.pageIndex === this._pageIndex
+          && this._pageIndex !== undefined
+        ) {
+          addInValidItem(editingChange, validationData);
         }
       });
     }
 
-    return items;
+    return processedItems;
   }
 
-  public processDataItem(item) {
+  public processDataItem(item: GeneratedItem, options: ItemProcessingOptions): void {
     const isInserted = item.data[INSERT_INDEX];
     const key = isInserted ? item.data.key : item.key;
     const editMode = this.getEditMode();
@@ -826,7 +944,7 @@ export const validatingEditingExtender = (
       if (editIndex >= 0) {
         const change = changes[editIndex];
 
-        if (change.type !== EDIT_DATA_INSERT_TYPE) {
+        if (change.type !== DATA_CHANGE_TYPE.insert) {
           const oldData = this._getOldData(change.key);
           item.data = extend(true, {}, oldData, change.data);
           item.key = key;
@@ -834,31 +952,35 @@ export const validatingEditingExtender = (
       }
     }
 
-    super.processDataItem.apply(this, arguments as any);
+    super.processDataItem(item, options);
   }
 
-  private _createInvisibleColumnValidators(changes) {
-    const that = this;
+  private _createInvisibleColumnValidators(changes: EditingChange[]): () => void {
     const columns = this._columnsController.getColumns();
-    const invisibleColumns = this._columnsController.getInvisibleColumns().filter((column) => !column.isBand);
-    const groupColumns = this._columnsController.getGroupColumns().filter((column) => !column.showWhenGrouped && !invisibleColumns.includes(column));
-    const invisibleColumnValidators: any[] = [];
-    const isCellVisible = (column, rowKey) => this._dataController.getRowIndexByKey(rowKey) >= 0 && !invisibleColumns.includes(column);
+    const invisibleColumns = this._columnsController.getInvisibleColumns()
+      .filter((column) => !column.isBand);
+    const groupColumns = this._columnsController.getGroupColumns()
+      .filter((column) => !column.showWhenGrouped && !invisibleColumns.includes(column));
+    const invisibleColumnValidators: Validator[] = [];
+    const isCellVisible = (column: Column, rowKey: RowKey): boolean => (
+      this._dataController.getRowIndexByKey(rowKey) >= 0 && !invisibleColumns.includes(column)
+    );
 
     invisibleColumns.push(...groupColumns);
 
     if (!isFormBasedEditMode(this.getEditMode())) {
-      each(columns, (_, column) => {
+      columns.forEach((column) => {
         changes.forEach((change) => {
-          let data;
+          // eslint-disable-next-line @typescript-eslint/init-declarations -- set in the if-else
+          let data: RawItemData | undefined;
           if (isCellVisible(column, change.key)) {
             return;
           }
 
-          if (change.type === EDIT_DATA_INSERT_TYPE) {
+          if (change.type === DATA_CHANGE_TYPE.insert) {
             data = change.data;
-          } else if (change.type === 'update') {
-            const oldData = that._getOldData(change.key);
+          } else if (change.type === DATA_CHANGE_TYPE.update) {
+            const oldData = this._getOldData(change.key);
 
             if (!isDefined(oldData)) {
               return;
@@ -867,6 +989,7 @@ export const validatingEditingExtender = (
             data = createObjectWithChanges(oldData, change.data);
           }
           if (data) {
+            // @ts-expect-error invisible columns get validators without cell options
             const validator = this._validatingController.createValidator({
               column,
               key: change.key,
@@ -880,54 +1003,51 @@ export const validatingEditingExtender = (
         });
       });
     }
-    return function () {
+    return function disposeInvisibleColumnValidators(): void {
       invisibleColumnValidators.forEach((validator) => { validator.dispose(); });
     };
   }
 
-  protected _beforeSaveEditData(change) {
-    let result: any = super._beforeSaveEditData(change);
-    const validationData = this._validatingController._getValidationData(change?.key, true);
+  protected _beforeSaveEditData(change?: EditingChange): boolean | DeferredObj<boolean> {
+    let result = super._beforeSaveEditData(change);
+    const validationData = this._validatingController.getValidationData(change?.key, true);
 
     if (change) {
-      const isValid = change.type === 'remove' || validationData.isValid;
+      const isValid = change.type === DATA_CHANGE_TYPE.remove || validationData.isValid;
       result = result || !isValid;
     } else {
       const disposeValidators = this._createInvisibleColumnValidators(this.getChanges());
-      // @ts-expect-error
-      result = new Deferred();
-      this.executeOperation(result, () => {
+      const deferred = Deferred<boolean>();
+      result = deferred;
+      this.executeOperation(deferred, () => {
         this._validatingController.validate(true).done((isFullValid) => {
           disposeValidators();
           this._updateRowAndPageIndices();
 
-          // eslint-disable-next-line default-case, @typescript-eslint/switch-exhaustiveness-check
-          switch (this.getEditMode()) {
-            case EDIT_MODE.cell:
-              if (!isFullValid) {
-                this._focusEditingCell();
-              }
-              break;
-            case EDIT_MODE.batch:
-              if (!isFullValid) {
-                this._resetEditRowKey();
-                this._resetEditColumnName();
-                this._dataController.updateItems();
-              }
-              break;
+          const editMode = this.getEditMode();
+
+          if (editMode === EDIT_MODE.cell && !isFullValid) {
+            this._focusEditingCell();
+          } else if (editMode === EDIT_MODE.batch && !isFullValid) {
+            this._resetEditRowKey();
+            this._resetEditColumnName();
+            this._dataController.updateItems();
           }
-          result.resolve(!isFullValid);
+          deferred.resolve(!isFullValid);
         });
       });
     }
-    return result.promise ? result.promise() : result;
+    // @ts-expect-error result is a boolean or a Deferred whose promise() is typed as Promise
+    const saveResult: boolean | DeferredObj<boolean> = result.promise ? result.promise() : result;
+    return saveResult;
   }
 
   /**
    * @param rowIndex Row index
    * @param columnIndex Column index
    * @param item Data item
-   * @returns A deferred object that resolves to a boolean or just a boolean to determine whether to cancel cell editing
+   * @returns A deferred object that resolves to a boolean or just a boolean
+   * to determine whether to cancel cell editing
    */
   public override beforeEditCell(
     rowIndex: number,
@@ -938,15 +1058,19 @@ export const validatingEditingExtender = (
 
     if (this.getEditMode() === EDIT_MODE.cell) {
       const $cell = this._rowsView._getCellElement(rowIndex, columnIndex);
-      const validator = $cell && $cell.data('dxValidator');
-      const rowOptions = $cell && $cell.closest(`.${VIEW_CLASSES.row}`).data('options');
-      const value = validator && validator.option('adapter').getValue();
+      const validator = $cell?.data('dxValidator');
+      const rowOptions = $cell?.closest(`.${VIEW_CLASSES.row}`).data('options');
+      const value = validator?.option('adapter').getValue();
       if (validator && cellValueShouldBeValidated(value, rowOptions)) {
-        // @ts-expect-error
-        const deferred = new Deferred();
-        when(this._validatingController.validateCell(validator), result).done((validationResult, result) => {
-          deferred.resolve(validationResult.status === VALIDATION_STATUS.valid && result);
-        });
+        const deferred = Deferred<boolean>();
+        when<unknown>(this._validatingController.validateCell(validator), result)
+          // @ts-expect-error when() resolves with the cell validation result and the base result
+          .done((validationResult: ValidationResultInternal, isEditingAllowed: boolean) => {
+            deferred.resolve(
+              validationResult.status === VALIDATION_STATUS.valid && isEditingAllowed,
+            );
+          });
+        // @ts-expect-error promise() is typed as Promise but returns a Deferred-like value
         return deferred.promise();
       } if (!validator) {
         return result;
@@ -955,14 +1079,12 @@ export const validatingEditingExtender = (
     return false;
   }
 
-  protected _afterSaveEditData(cancel?) {
-    let $firstErrorRow;
+  protected _afterSaveEditData(cancel?: boolean): void {
     const isCellEditMode = this.getEditMode() === EDIT_MODE.cell;
+    const $firstErrorRow = this.getChanges()
+      .map((change) => this._showErrorRow(change))
+      .find(isDefined);
 
-    each(this.getChanges(), (_, change) => {
-      const $errorRow = this._showErrorRow(change);
-      $firstErrorRow = $firstErrorRow || $errorRow;
-    });
     if ($firstErrorRow) {
       const scrollable = this._rowsView.getScrollable();
       if (scrollable) {
@@ -988,7 +1110,7 @@ export const validatingEditingExtender = (
     }
   }
 
-  protected _handleDataChanged(args) {
+  protected _handleDataChanged(args: DataChange): void {
     const validationState = this._validatingController._validationState;
 
     if (this.option('scrolling.mode') === 'standard') {
@@ -996,7 +1118,8 @@ export const validatingEditingExtender = (
     }
 
     if (args.changeType === 'prepend') {
-      each(validationState, (_, validationData) => {
+      validationState.forEach((validationData) => {
+        // @ts-expect-error a prepend change has items; an unset rowIndex becomes NaN
         validationData.rowIndex += args.items.length;
       });
     }
@@ -1004,10 +1127,10 @@ export const validatingEditingExtender = (
     super._handleDataChanged(args);
   }
 
-  private resetRowAndPageIndices() {
+  private resetRowAndPageIndices(): void {
     const validationState = this._validatingController._validationState;
 
-    each(validationState, (_, validationData) => {
+    validationState.forEach((validationData) => {
       if (validationData.pageIndex !== this._pageIndex) {
         delete validationData.pageIndex;
         delete validationData.rowIndex;
@@ -1015,7 +1138,7 @@ export const validatingEditingExtender = (
     });
   }
 
-  protected _beforeCancelEditData() {
+  protected _beforeCancelEditData(): void {
     const validatingController = this._validatingController;
     const shouldResetValidationState = this._shouldResetValidationState();
 
@@ -1044,31 +1167,40 @@ export const validatingEditingExtender = (
     return true;
   }
 
-  private _showErrorRow(change) {
-    let $popupContent;
+  public _showErrorRow(change: EditingChange): dxElementWrapper | undefined {
     const items = this._dataController.items();
     const rowIndex = this.getIndexByKey(change.key, items);
-    const validationData = this._validatingController._getValidationData(change.key);
+    const validationData = this._validatingController.getValidationData(change.key);
 
     if (!validationData?.isValid && validationData?.errorText && rowIndex >= 0) {
-      $popupContent = this.getPopupContent();
-      return this._errorHandlingController && this._errorHandlingController.renderErrorRow(validationData?.errorText, rowIndex, $popupContent);
+      const $popupContent = this.getPopupContent();
+      return this._errorHandlingController?.renderErrorRow(
+        validationData?.errorText,
+        rowIndex,
+        $popupContent,
+      );
     }
 
     return undefined;
   }
 
-  public updateFieldValue(e) {
-    // @ts-expect-error
-    const deferred = new Deferred();
+  public updateFieldValue(
+    e: EditorCellOptions,
+    value: unknown,
+    text?: string,
+    forceUpdateRow?: boolean,
+  ): DeferredObj<unknown> {
+    const deferred = Deferred<unknown>();
     this._validatingController.removeCellValidationResult({
       change: this.getChangeByKey(e.key),
+      // @ts-expect-error a grid column always has an index
       columnIndex: e.column.index,
     });
 
-    super.updateFieldValue.apply(this, arguments as any).done(() => {
+    super.updateFieldValue(e, value, text, forceUpdateRow).done(() => {
       const currentValidator = this._validatingController.getCellValidator({
         rowKey: e.key,
+        // @ts-expect-error a grid column always has an index
         columnIndex: e.column.index,
       });
       when(currentValidator && this._validatingController.validateCell(currentValidator))
@@ -1077,18 +1209,20 @@ export const validatingEditingExtender = (
           deferred.resolve(validationResult);
         });
     });
+    // @ts-expect-error promise() is typed as Promise but returns a Deferred-like value at runtime
     return deferred.promise();
   }
 
-  public highlightDataCell($cell, parameters) {
-    super.highlightDataCell.apply(this, arguments as any);
+  public highlightDataCell($cell: dxElementWrapper, parameters: ValidatingCellOptions): void {
+    super.highlightDataCell($cell, parameters);
 
     this._validatingController.setCellValidationStatus(parameters);
 
     const isEditableCell = !!parameters.setValue;
     const cellModified = this.isCellModified(parameters);
     const isValidated = isDefined(parameters.validationStatus);
-    const needValidation = (cellModified && parameters.column.setCellValue) || (isEditableCell && !cellModified && !(parameters.row.isNewRow || !isValidated));
+    const needValidation = (cellModified && parameters.column.setCellValue)
+      || (isEditableCell && !cellModified && !(!!parameters.row?.isNewRow || !isValidated));
     if (needValidation) {
       const validator = $cell.data('dxValidator');
       if (validator) {
@@ -1099,46 +1233,40 @@ export const validatingEditingExtender = (
     }
   }
 
-  private getChangeByKey(key) {
+  public getChangeByKey(key: RowKey): EditingChange | undefined {
     const changes = this.getChanges();
     return changes[gridCoreUtils.getIndexByKey(key, changes)];
   }
 
-  public isCellModified(parameters) {
+  public isCellModified(parameters: EditorCellOptions): boolean {
     const cellModified = super.isCellModified(parameters);
     const change = this.getChangeByKey(parameters.key);
     const isCellInvalid = !!parameters.row && this._validatingController.isInvalidCell({
       rowKey: parameters.key,
+      // @ts-expect-error a grid column always has an index
       columnIndex: parameters.column.index,
     });
     return cellModified || (this._validatingController._rowIsValidated(change) && isCellInvalid);
   }
 };
 
-const getWidthOfVisibleCells = function (that, element) {
-  const rowIndex = $(element).closest('tr').index();
-  const $cellElements = $(that._rowsView.getRowElement(rowIndex)).first().children().filter(':not(.dx-hidden-cell)');
+const getBoundaryNonFixedColumnsInfo = (
+  fixedColumns: Column[],
+): { startColumnIndex: number | undefined; endColumnIndex: number | undefined } => {
+  const index = fixedColumns.findIndex((column) => column.command === COMMAND_TRANSPARENT);
 
-  return that._rowsView._getWidths($cellElements).reduce((w1, w2) => w1 + w2, 0);
-};
+  if (index === -1) {
+    return { startColumnIndex: undefined, endColumnIndex: undefined };
+  }
 
-const getBoundaryNonFixedColumnsInfo = function (fixedColumns) {
-  let firstNonFixedColumnIndex;
-  let lastNonFixedColumnIndex;
-
-  fixedColumns.some((column, index) => {
-    if (column.command === COMMAND_TRANSPARENT) {
-      firstNonFixedColumnIndex = index === 0 ? -1 : index;
-      lastNonFixedColumnIndex = index === fixedColumns.length - 1 ? -1 : index + column.colspan - 1;
-      return true;
-    }
-
-    return undefined;
-  });
+  const transparentColumn = fixedColumns[index];
 
   return {
-    startColumnIndex: firstNonFixedColumnIndex,
-    endColumnIndex: lastNonFixedColumnIndex,
+    startColumnIndex: index === 0 ? -1 : index,
+    endColumnIndex: index === fixedColumns.length - 1
+      ? -1
+      // @ts-expect-error the transparent column always has a colspan
+      : index + transparentColumn.colspan - 1,
   };
 };
 
@@ -1147,19 +1275,21 @@ export const validatingEditorFactoryExtender = (
 ): ModuleType<
   EditorFactory & ValidatingEditorFactoryExtension
 > => class ValidatingEditorFactoryExtender extends Base {
-  private _revertTooltip: any;
+  protected declare _editingController: ValidatingEditingController;
 
-  private _showRevertButton($container) {
+  private _revertTooltip?: Overlay;
+
+  private _showRevertButton($container: dxElementWrapper | null | undefined): void {
     let $tooltipElement = this._revertTooltip?.$element();
 
-    if (!$container || !$container.length) {
+    if (!$container?.length) {
       $tooltipElement?.remove();
       this._revertTooltip = undefined;
       return;
     }
 
     // do not recreate tooltip if it is already created
-    if ($container.find($tooltipElement).length) {
+    if ($tooltipElement && $container.find($tooltipElement).length) {
       this._revertTooltip?.repaint();
       return;
     }
@@ -1182,7 +1312,7 @@ export const validatingEditorFactoryExtender = (
       propagateOutsideClick: true,
       hideOnOutsideClick: false,
       wrapperAttr: { class: revertTooltipClass },
-      contentTemplate: () => {
+      contentTemplate: (): dxElementWrapper => {
         const $buttonElement = $('<div>').addClass(REVERT_BUTTON_CLASS);
         const buttonOptions = {
           icon: 'revert',
@@ -1191,12 +1321,13 @@ export const validatingEditorFactoryExtender = (
             id: REVERT_BUTTON_ID,
             'aria-label': messageLocalization.format('dxDataGrid-ariaRevertButton'),
           },
-          onClick: () => {
+          onClick: (): void => {
             this._editingController.cancelEditData();
           },
         };
-        // @ts-expect-error
-        return new Button($buttonElement, buttonOptions).$element();
+        // @ts-expect-error the Button constructor is typed for Element
+        const button = new Button($buttonElement, buttonOptions);
+        return button.$element();
       },
       position: {
         my: 'left top',
@@ -1210,27 +1341,32 @@ export const validatingEditorFactoryExtender = (
       onPositioned: this.overlayPositionedHandler.bind(this),
     };
 
-    // @ts-expect-error ts-error
+    // @ts-expect-error Overlay from ui.overlay.js is typed without constructor arguments
     this._revertTooltip = new Overlay($tooltipElement, tooltipOptions);
   }
 
-  private _hideFixedGroupCell($cell, overlayOptions) {
-    let $nextFixedRowElement;
-    let $groupCellElement;
-    // @ts-expect-error
+  private _hideFixedGroupCell(
+    $cell: dxElementWrapper,
+    overlayOptions: Record<string, unknown> & { onDisposing?: () => void },
+  ): void {
+    // @ts-expect-error the column fixing extender adds isFixedColumns to the rows view
     const isFixedColumns = this._rowsView?.isFixedColumns?.();
 
     if (isFixedColumns && !isFormBasedEditMode(this._editingController.getEditMode())) {
       const nextRowOptions = $cell.closest(`.${VIEW_CLASSES.row}`).next().data('options');
 
-      if (nextRowOptions && nextRowOptions.rowType === 'group') {
-        $nextFixedRowElement = $(this._rowsView.getRowElement(nextRowOptions.rowIndex)).last();
-        $groupCellElement = $nextFixedRowElement.find(`.${VIEW_CLASSES.groupCell}`);
+      if (nextRowOptions?.rowType === 'group') {
+        const $nextFixedRowElement = $(this._rowsView.getRowElement(nextRowOptions.rowIndex))
+          .last();
+        const $groupCellElement = $nextFixedRowElement.find(`.${VIEW_CLASSES.groupCell}`);
 
-        if ($groupCellElement.length && $groupCellElement.get(0).style.visibility !== 'hidden') {
+        if (
+          $groupCellElement.length
+          && ($groupCellElement.get(0) as HTMLElement).style.visibility !== 'hidden'
+        ) {
           $groupCellElement.css('visibility', 'hidden');
 
-          overlayOptions.onDisposing = function () {
+          overlayOptions.onDisposing = (): void => {
             $groupCellElement.css('visibility', '');
           };
         }
@@ -1238,7 +1374,11 @@ export const validatingEditorFactoryExtender = (
     }
   }
 
-  private _showValidationMessage($cell, messages, alignment) {
+  private _showValidationMessage(
+    $cell: dxElementWrapper,
+    messages: string[],
+    alignment: string,
+  ): void {
     const editorPopup = $cell.find('.dx-dropdowneditor-overlay').data('dxPopup');
     const isOverlayVisible = editorPopup && editorPopup.option('visible');
     const myPosition = isOverlayVisible ? 'top right' : `top ${alignment}`;
@@ -1247,9 +1387,11 @@ export const validatingEditorFactoryExtender = (
     const $overlayContainer = this.getValidationMessageContainer($cell);
 
     let errorMessageText = '';
-    messages && messages.forEach((message) => {
-      errorMessageText += (errorMessageText.length ? '<br/>' : '') + encodeHtml(message);
-    });
+    if (messages) {
+      messages.forEach((message) => {
+        errorMessageText += (errorMessageText.length ? '<br/>' : '') + encodeHtml(message);
+      });
+    }
 
     const invalidMessageClass = this.addWidgetPrefix(WIDGET_INVALID_MESSAGE_CLASS);
 
@@ -1289,16 +1431,17 @@ export const validatingEditorFactoryExtender = (
         at: atPosition,
         of: $cell,
       },
-      onPositioned: (e) => {
+      onPositioned: (e: PositioningEvent): void => {
         this.overlayPositionedHandler(e, isOverlayVisible);
+        // @ts-expect-error a positioned overlay has its content
         this._shiftValidationMessageIfNeed(e.component.$content(), $cell);
       },
     };
 
     this._hideFixedGroupCell($cell, overlayOptions);
 
-    // @ts-expect-error
-    // eslint-disable-next-line no-new
+    // @ts-expect-error Overlay from ui.overlay.js is typed without constructor arguments
+    // eslint-disable-next-line no-new -- the overlay renders itself
     new Overlay($overlayElement, overlayOptions);
   }
 
@@ -1311,27 +1454,46 @@ export const validatingEditorFactoryExtender = (
     return $(this._revertTooltip?.element());
   }
 
-  private _hideValidationMessage() {
-    const validationMessages = this._rowsView.element()?.find(this._getValidationMessagesSelector());
+  private _hideValidationMessage(): void {
+    const validationMessages = this._rowsView.element()
+      ?.find(this._getValidationMessagesSelector());
     validationMessages?.remove();
   }
 
-  private _normalizeValidationMessagePositionAndMaxWidth(options, isRevertButton, isOverlayVisible) {
+  private getWidthOfVisibleCells(element: DxElement): number {
+    const rowIndex = $(element).closest('tr').index();
+    const $cellElements = $(this._rowsView.getRowElement(rowIndex)).first().children().filter(':not(.dx-hidden-cell)');
+
+    return this._rowsView._getWidths($cellElements).reduce((w1, w2) => w1 + w2, 0);
+  }
+
+  private _normalizeValidationMessagePositionAndMaxWidth(
+    options: PositioningEvent,
+    isRevertButton: boolean,
+    isOverlayVisible: boolean | undefined,
+  ): { position: ValidationMessagePosition; maxWidth: number | undefined } | undefined {
     const fixedColumns = this._columnsController.getFixedColumns();
 
-    if (!fixedColumns || !fixedColumns.length) {
-      return;
+    if (!fixedColumns?.length) {
+      return undefined;
     }
 
-    let position;
-    const visibleTableWidth = !isRevertButton && getWidthOfVisibleCells(this, options.element);
-    const $overlayContentElement = options.component.$content();
-    const validationMessageWidth = getOuterWidth($overlayContentElement, true);
+    // eslint-disable-next-line @typescript-eslint/init-declarations -- assigned in the if-else
+    let position: ValidationMessagePosition | undefined;
+    // @ts-expect-error the width is read only for a validation message, not the revert button
+    const visibleTableWidth: number = !isRevertButton
+      && this.getWidthOfVisibleCells(options.element);
+    // @ts-expect-error a positioned overlay has its content
+    const $overlayContentElement: dxElementWrapper = options.component.$content();
+    const validationMessageWidth = Number(getOuterWidth($overlayContentElement, true));
     const needMaxWidth = !isRevertButton && validationMessageWidth > visibleTableWidth;
     const columnIndex = this._rowsView.getCellIndex($(options.element).closest('td'));
     const boundaryNonFixedColumnsInfo = getBoundaryNonFixedColumnsInfo(fixedColumns);
 
-    if (!isRevertButton && (columnIndex === boundaryNonFixedColumnsInfo.startColumnIndex || needMaxWidth)) {
+    if (
+      !isRevertButton
+      && (columnIndex === boundaryNonFixedColumnsInfo.startColumnIndex || needMaxWidth)
+    ) {
       position = {
         collision: 'none flip',
         my: 'top left',
@@ -1352,16 +1514,24 @@ export const validatingEditorFactoryExtender = (
     return position && { position, maxWidth: needMaxWidth ? visibleTableWidth - 2 : undefined };
   }
 
-  private _shiftValidationMessageIfNeed($content, $cell) {
-    const $revertContent = this._revertTooltip && this._revertTooltip.$content();
+  private _shiftValidationMessageIfNeed($content: dxElementWrapper, $cell: dxElementWrapper): void {
+    const $revertContent = this._revertTooltip?.$content();
 
-    if (!$revertContent) return;
+    if (!$revertContent) {
+      return;
+    }
 
-    const contentOffset = $content.offset();
-    const revertContentOffset = $revertContent.offset();
+    // @ts-expect-error offset() is typed as possibly undefined
+    const contentOffset: Coordinates = $content.offset();
+    // @ts-expect-error offset() is typed as possibly undefined
+    const revertContentOffset: Coordinates = $revertContent.offset();
 
-    if (contentOffset.top === revertContentOffset.top && contentOffset.left + getWidth($content) > revertContentOffset.left) {
-      const left = getWidth($revertContent) + PADDING_BETWEEN_TOOLTIPS;
+    if (
+      contentOffset.top === revertContentOffset.top
+      && contentOffset.left + Number(getWidth($content)) > revertContentOffset.left
+    ) {
+      const left = Number(getWidth($revertContent)) + PADDING_BETWEEN_TOOLTIPS;
+      // @ts-expect-error offset() is typed as possibly undefined
       $content.css('left', revertContentOffset.left < $cell.offset().left ? -left : left);
     }
   }
@@ -1370,13 +1540,19 @@ export const validatingEditorFactoryExtender = (
     return Overlay.baseZIndex();
   }
 
-  public overlayPositionedHandler(e, isOverlayVisible) {
+  public overlayPositionedHandler(e: PositioningEvent, isOverlayVisible?: boolean): void {
+    // @ts-expect-error the grid marks the overlay with __skipPositionProcessing
     if (!e.component.__skipPositionProcessing) {
       const isRevertButton = $(e.element).hasClass(this.addWidgetPrefix(REVERT_TOOLTIP_CLASS));
       const needRepaint = !isRevertButton && this._rowsView.updateFreeSpaceRowHeight();
-      const normalizedPosition = this._normalizeValidationMessagePositionAndMaxWidth(e, isRevertButton, isOverlayVisible);
+      const normalizedPosition = this._normalizeValidationMessagePositionAndMaxWidth(
+        e,
+        isRevertButton,
+        isOverlayVisible,
+      );
 
-      e.component.__skipPositionProcessing = !!(needRepaint || normalizedPosition);
+      // @ts-expect-error the grid marks the overlay with __skipPositionProcessing
+      e.component.__skipPositionProcessing = !!needRepaint || !!normalizedPosition;
 
       if (normalizedPosition) {
         e.component.option(normalizedPosition);
@@ -1389,46 +1565,51 @@ export const validatingEditorFactoryExtender = (
   /**
    * interface override
    */
-  public _getRevertTooltipsSelector() {
+  public _getRevertTooltipsSelector(): string {
     const revertTooltipClass = this.addWidgetPrefix(REVERT_TOOLTIP_CLASS);
     return `.dx-editor-cell .${revertTooltipClass}`;
   }
 
-  private _getValidationMessagesSelector() {
+  private _getValidationMessagesSelector(): string {
     const invalidMessageClass = this.addWidgetPrefix(WIDGET_INVALID_MESSAGE_CLASS);
     return `.dx-editor-cell .${invalidMessageClass}, .dx-cell-modified .${invalidMessageClass}`;
   }
 
-  public loseFocus(skipValidator) {
+  public loseFocus(skipValidator?: boolean): void {
     if (!skipValidator) {
       this._validatingController.setValidator(null);
     }
     super.loseFocus();
   }
 
-  private updateCellState($element, validationResult, isHideBorder) {
+  private updateCellState(
+    $element: dxElementWrapper | null | undefined,
+    validationResult: ValidationResultInternal | undefined,
+    isHideBorder: boolean | undefined,
+  ): void {
     const $focus = $element?.closest(this._getFocusCellSelector());
     const $cell = $focus?.is('td') ? $focus : null;
     const rowOptions = $focus?.closest(`.${VIEW_CLASSES.row}`).data('options');
-    // @ts-expect-error
     const change = rowOptions ? this._editingController.getChangeByKey(rowOptions.key) : null;
     const column = $cell && this._columnsController.getVisibleColumns()[$cell.index()];
-    const isCellModified = (change?.data?.[column?.name] !== undefined) && !this._editingController.isSaving();
+    // @ts-expect-error a column without a name reads the undefined key
+    const isCellModified = (change?.data?.[column?.name] !== undefined)
+      && !this._editingController.isSaving();
     const validationDescriptionValues: string[] = [];
 
     if (this._editingController.getEditMode() === EDIT_MODE.cell) {
       if ((validationResult?.status === VALIDATION_STATUS.invalid) || isCellModified) {
         this._showRevertButton($focus);
         validationDescriptionValues.push(REVERT_BUTTON_ID);
-      } else {
-        this._revertTooltip && this._revertTooltip.$element().remove();
+      } else if (this._revertTooltip) {
+        this._revertTooltip.$element().remove();
       }
     }
 
-    const showValidationMessage = validationResult && validationResult.status === VALIDATION_STATUS.invalid;
+    const showValidationMessage = validationResult?.status === VALIDATION_STATUS.invalid;
 
-    if (showValidationMessage && $cell && column && validationResult && validationResult.brokenRules) {
-      const errorMessages: any[] = [];
+    if (showValidationMessage && $cell && column && validationResult?.brokenRules) {
+      const errorMessages: string[] = [];
       validationResult.brokenRules.forEach((rule) => {
         if (rule.message) {
           errorMessages.push(rule.message);
@@ -1436,16 +1617,22 @@ export const validatingEditorFactoryExtender = (
       });
 
       if (errorMessages.length) {
-        this._showValidationMessage($focus, errorMessages, column.alignment || 'left');
+        this._showValidationMessage($cell, errorMessages, column.alignment ?? 'left');
         validationDescriptionValues.push(INVALID_MESSAGE_ID);
       }
     }
 
+    // @ts-expect-error descriptions are added for a focused cell only
     this._updateAriaValidationAttributes($focus, validationDescriptionValues);
-    !isHideBorder && this._rowsView.element() && this._rowsView.updateFreeSpaceRowHeight();
+    if (!isHideBorder && this._rowsView.element()) {
+      this._rowsView.updateFreeSpaceRowHeight();
+    }
   }
 
-  private _updateAriaValidationAttributes($focus, inputDescriptionValues) {
+  private _updateAriaValidationAttributes(
+    $focus: dxElementWrapper,
+    inputDescriptionValues: string[],
+  ): void {
     if (inputDescriptionValues.length === 0) { return; }
 
     const editMode = this._editingController.getEditMode();
@@ -1460,7 +1647,7 @@ export const validatingEditorFactoryExtender = (
     }
   }
 
-  private _getCurrentFocusElement($focus) {
+  private _getCurrentFocusElement($focus: dxElementWrapper): dxElementWrapper {
     if (this._editingController.isEditing()) {
       const selector = [EDITORS_INPUT_SELECTOR, EDITORS_TEXTAREA_SELECTOR].join(', ');
       return $focus.find(selector).first();
@@ -1468,8 +1655,13 @@ export const validatingEditorFactoryExtender = (
     return $focus;
   }
 
-  public focus($element, isHideBorder) {
-    if (!arguments.length) return super.focus();
+  public focus(
+    $element?: dxElementWrapper | null,
+    isHideBorder?: boolean,
+  ): dxElementWrapper | null | undefined {
+    if (!arguments.length) {
+      return super.focus();
+    }
 
     this._hideValidationMessage();
 
@@ -1481,16 +1673,19 @@ export const validatingEditorFactoryExtender = (
     }
 
     const $focus = $element?.closest(this._getFocusCellSelector());
-    const validator = $focus && ($focus.data('dxValidator') || $element.find(`.${this.addWidgetPrefix(VALIDATOR_CLASS)}`).eq(0).data('dxValidator'));
+    const validator = $focus && ($focus.data('dxValidator') || $element?.find(`.${this.addWidgetPrefix(VALIDATOR_CLASS)}`).eq(0).data('dxValidator'));
     const rowOptions = $focus && $focus.closest(`.${VIEW_CLASSES.row}`).data('options');
-    // @ts-expect-error
     const change = rowOptions ? this._editingController.getChangeByKey(rowOptions.key) : null;
-    let validationResult;
+    // eslint-disable-next-line @typescript-eslint/init-declarations -- assigned in a callback below
+    let validationResult: ValidationResultInternal | undefined;
 
-    if (validator) {
+    if (validator && $element) {
       this._validatingController.setValidator(validator);
       const value = validator.option('adapter').getValue();
-      if (cellValueShouldBeValidated(value, rowOptions) || this._validatingController._rowIsValidated(change)) {
+      if (
+        cellValueShouldBeValidated(value, rowOptions)
+        || this._validatingController._rowIsValidated(change)
+      ) {
         this._editingController.waitForDeferredOperations().done(() => {
           // NOTE: after waiting for deferred operations another rerender may occur.
           // In this case this validating is outdated
@@ -1500,11 +1695,20 @@ export const validatingEditorFactoryExtender = (
           }
           when(this._validatingController.validateCell(validator)).done((result) => {
             validationResult = result;
-            const { column } = validationResult.validator.option('dataGetter')();
-            if (change && column && !this._validatingController.isCurrentValidatorProcessing({ rowKey: change.key, columnIndex: column.index })) {
+            // @ts-expect-error validateCell results carry their validator
+            const { column } = getValidatorData(validationResult.validator);
+            if (
+              change
+              && column
+              && !this._validatingController.isCurrentValidatorProcessing({
+                rowKey: change.key,
+                columnIndex: column.index,
+              })
+            ) {
               return;
             }
             if (!isFluent(current()) && validationResult.status === VALIDATION_STATUS.invalid) {
+              // eslint-disable-next-line no-param-reassign -- the outer focus() reads it if sync
               isHideBorder = true;
             }
             this.updateCellState($element, validationResult, isHideBorder);
@@ -1519,7 +1723,7 @@ export const validatingEditorFactoryExtender = (
     return super.focus($element, isHideBorder);
   }
 
-  private getEditorInstance($container) {
+  public getEditorInstance($container: dxElementWrapper): Widget | undefined {
     const $editor = $container.find('.dx-texteditor').eq(0);
     return gridCoreUtils.getWidgetInstance($editor);
   }
@@ -1536,25 +1740,27 @@ export const validatingEditorFactoryExtender = (
     const $validationMessageElements = this.getValidationMessages();
     const $revertButtonElement = this.getRevertButton();
 
-    return super.hasOverlayElements() || !!$validationMessageElements?.length || !!$revertButtonElement?.length;
+    return super.hasOverlayElements()
+      || !!$validationMessageElements?.length
+      || !!$revertButtonElement?.length;
   }
 };
 
-export const validatingRowsViewExtender = (Base: ModuleType<RowsView>) => class ValidatingRowsViewExtender extends Base {
-  public updateFreeSpaceRowHeight($table) {
-    const that = this;
-    let $rowElements;
-    let $freeSpaceRowElement;
-    let $freeSpaceRowElements;
-    const $element = that.element();
-    const $tooltipContent = $element && $element.find(`.${that.addWidgetPrefix(WIDGET_INVALID_MESSAGE_CLASS)} .dx-overlay-content`);
+export const validatingRowsViewExtender = (
+  Base: ModuleType<RowsView & EditingFormBasedRowsViewExtension>,
+): ModuleType<RowsView> => class ValidatingRowsViewExtender extends Base {
+  public declare _editingController: ValidatingEditingController;
+
+  public updateFreeSpaceRowHeight($table?: dxElementWrapper): boolean | undefined {
+    const $element = this.element();
+    const $tooltipContent = $element?.find(`.${this.addWidgetPrefix(WIDGET_INVALID_MESSAGE_CLASS)} .dx-overlay-content`);
 
     super.updateFreeSpaceRowHeight($table);
 
-    if ($tooltipContent && $tooltipContent.length) {
-      $rowElements = that._getRowElements().filter(':visible');
-      $freeSpaceRowElements = that._getFreeSpaceRowElements($table);
-      $freeSpaceRowElement = $freeSpaceRowElements.first();
+    if ($tooltipContent?.length) {
+      const $rowElements = this._getRowElements().filter(':visible');
+      const $freeSpaceRowElements = this._getFreeSpaceRowElements($table);
+      const $freeSpaceRowElement = $freeSpaceRowElements.first();
 
       const rowElementsHasFocusInside = $rowElements.find(':focus').length > 0;
 
@@ -1563,7 +1769,7 @@ export const validatingRowsViewExtender = (Base: ModuleType<RowsView>) => class 
         && $rowElements.length === 1
         && (
           !$freeSpaceRowElement.is(':visible')
-          || Number(getOuterHeight($tooltipContent)) > getOuterHeight($freeSpaceRowElement)
+          || Number(getOuterHeight($tooltipContent)) > Number(getOuterHeight($freeSpaceRowElement))
         )
         && rowElementsHasFocusInside
       ) {
@@ -1576,9 +1782,12 @@ export const validatingRowsViewExtender = (Base: ModuleType<RowsView>) => class 
     return undefined;
   }
 
-  private _formItemPrepared(cellOptions, $container) {
-    // @ts-expect-error
-    super._formItemPrepared.apply(this, arguments);
+  public override _formItemPrepared(
+    cellOptions: EditorCellOptions,
+    $container: dxElementWrapper,
+  ): void {
+    super._formItemPrepared(cellOptions, $container);
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises -- fire-and-forget
     deferUpdate(() => {
       const $editor = $container.find('.dx-widget').first();
       const isEditorDisposed = $editor.length && !$editor.children().length;
@@ -1590,23 +1799,25 @@ export const validatingRowsViewExtender = (Base: ModuleType<RowsView>) => class 
     });
   }
 
-  public _cellPrepared($cell, parameters) {
+  public _cellPrepared($cell: dxElementWrapper, parameters: EditorCellOptions): void {
     if (!isFormBasedEditMode(this._editingController.getEditMode())) {
       this._validatingController.createValidator(parameters, $cell);
     }
 
-    super._cellPrepared.apply(this, arguments as any);
+    super._cellPrepared($cell, parameters);
   }
 
-  protected _restoreErrorRow(contentTable?) {
-    this._editingController && this._editingController.hasChanges() && this._getRowElements(contentTable).each((_, item) => {
-      const rowOptions = $(item).data('options');
-      if (rowOptions) {
-        // @ts-expect-error
-        const change = this._editingController.getChangeByKey(rowOptions.key);
-        // @ts-expect-error
-        change && this._editingController._showErrorRow(change);
-      }
-    });
+  protected _restoreErrorRow(contentTable?: dxElementWrapper): void {
+    if (this._editingController?.hasChanges()) {
+      this._getRowElements(contentTable).each((_, item) => {
+        const rowOptions = $(item).data('options');
+        if (rowOptions) {
+          const change = this._editingController.getChangeByKey(rowOptions.key);
+          if (change) {
+            this._editingController._showErrorRow(change);
+          }
+        }
+      });
+    }
   }
 };

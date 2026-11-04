@@ -1,8 +1,26 @@
+import storeHelper from '@js/common/data/store_helper';
+import { keysEqual, normalizeSortingInfo } from '@js/common/data/utils';
+import { toComparable } from '@js/core/utils/data';
 import { isDefined, isString } from '@js/core/utils/type';
+import type { StoreLoadOptions } from '@ts/data/data_source/types';
+import type { SortingInfo, SortingSelector } from '@ts/data/utils';
 import type { ProcessedItem } from '@ts/grids/grid_core/data_controller/types';
 import type { RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
+import type { DataFilter } from '@ts/grids/grid_core/filter/types';
+import { combineFilters } from '@ts/grids/grid_core/filter/utils';
+import type { RowKey } from '@ts/grids/grid_core/types';
 
-import type { GroupItem } from './types';
+import dataGridCore from '../core';
+import type {
+  DataItem,
+  GroupInfo,
+  GroupInfoData,
+  GroupInfoLevel,
+  GroupItem,
+  GroupItemData,
+  GroupItemsPosition,
+  GroupItemsProcessingState,
+} from './types';
 
 export function isGroupNode(
   item: RawItemData,
@@ -40,4 +58,259 @@ export function getGroupColumnIndices(
   return oldItem.cells
     .map((cell, index) => (cell.column?.type !== 'groupExpand' ? index : -1))
     .filter((index) => index >= 0);
+}
+
+function createNullOrBooleanKeyFilters(
+  selector: SortingSelector | undefined,
+  key: boolean | null,
+  desc: boolean,
+): unknown[] {
+  if (key === false) {
+    return [[selector, '=', desc ? true : null]];
+  }
+  if (key ? !desc : desc) {
+    return [[selector, '<>', key]];
+  }
+  return [[selector, '<>', null], [selector, '=', null]];
+}
+
+export function createOffsetFilter(
+  path: unknown[],
+  storeLoadOptions: StoreLoadOptions,
+  lastLevelOnly?: boolean,
+): DataFilter {
+  const groups = normalizeSortingInfo(storeLoadOptions.group);
+  const filters: DataFilter[] = [];
+
+  for (let i = lastLevelOnly ? path.length - 1 : 0; i < path.length; i += 1) {
+    const filterElement: unknown[] = [];
+    for (let j = 0; j <= i; j += 1) {
+      const { selector, desc } = groups[j];
+      const key = path[j];
+      const isLastLevel = i === j;
+      const isNullOrBooleanKey = key === null || key === false || key === true;
+      if (isLastLevel && isNullOrBooleanKey) {
+        filterElement.push(...createNullOrBooleanKeyFilters(selector, key, desc));
+      } else {
+        const lastLevelOperation = desc ? '>' : '<';
+        const operation = isLastLevel ? lastLevelOperation : '=';
+        const currentFilter = [selector, operation, key];
+        filterElement.push(
+          operation === '<' ? [currentFilter, 'or', [selector, '=', null]] : currentFilter,
+        );
+      }
+    }
+    filters.push(combineFilters(filterElement));
+  }
+
+  const filter = combineFilters(filters, 'or');
+
+  return combineFilters([filter, storeLoadOptions.filter]);
+}
+
+export function createNotGroupFilter(
+  path: unknown[],
+  storeLoadOptions: StoreLoadOptions,
+  group: StoreLoadOptions['group'],
+): DataFilter {
+  const groups = dataGridCore.normalizeSortingInfo(group || storeLoadOptions.group);
+  const filters: DataFilter[] = [];
+
+  for (let i = 0; i < path.length; i += 1) {
+    const filterElement: unknown[] = [];
+    for (let j = 0; j <= i; j += 1) {
+      filterElement.push([groups[j].selector, i === j ? '<>' : '=', path[j]]);
+    }
+    filters.push(combineFilters(filterElement));
+  }
+  const filter = combineFilters(filters, 'or');
+
+  return combineFilters([filter, storeLoadOptions.filter]);
+}
+
+export function removeGroupLoadOption(
+  storeLoadOptions: StoreLoadOptions,
+  loadOptions: StoreLoadOptions,
+): void {
+  if (loadOptions.group) {
+    const groups = dataGridCore.normalizeSortingInfo(loadOptions.group);
+    const sorts = dataGridCore.normalizeSortingInfo(storeLoadOptions.sort);
+    // @ts-expect-error arrangeSortingInfo() types selector wider than public KeySelector
+    storeLoadOptions.sort = storeHelper.arrangeSortingInfo(groups, sorts);
+    delete loadOptions.group;
+  }
+}
+
+export function findGroupInfoByKey(
+  groupsInfo: GroupInfoLevel,
+  key: RowKey,
+): GroupInfo | undefined {
+  const { hash } = groupsInfo;
+
+  return hash?.[JSON.stringify(key)];
+}
+
+export function getGroupInfoIndexByOffset(groupsInfo: GroupInfoLevel, offset: number): number {
+  let leftIndex = 0;
+  let rightIndex = groupsInfo.length - 1;
+
+  if (!groupsInfo.length) {
+    return 0;
+  }
+
+  do {
+    const middleIndex = Math.floor((rightIndex + leftIndex) / 2);
+    if (groupsInfo[middleIndex].offset > offset) {
+      rightIndex = middleIndex;
+    } else {
+      leftIndex = middleIndex;
+    }
+  } while (rightIndex - leftIndex > 1);
+
+  let index = leftIndex;
+  for (; index <= rightIndex; index += 1) {
+    if (groupsInfo[index].offset > offset) {
+      break;
+    }
+  }
+  return index;
+}
+
+export function cleanGroupsInfo(
+  groupsInfo: GroupInfoLevel,
+  groupIndex: number,
+  groupsCount: number,
+): void {
+  for (const groupInfo of groupsInfo) {
+    if (groupIndex + 1 >= groupsCount) {
+      groupInfo.children = [];
+    } else {
+      cleanGroupsInfo(groupInfo.children, groupIndex + 1, groupsCount);
+    }
+  }
+}
+
+export function pathEquals(path1: unknown[], path2: unknown[]): boolean {
+  if (path1.length !== path2.length) return false;
+  for (let i = 0; i < path1.length; i += 1) {
+    if (!keysEqual(null, path1[i], path2[i])) {
+      return false;
+    }
+  }
+  return true;
+}
+
+export function isGroupItem(item: DataItem): item is GroupItemData {
+  return 'key' in item && item.items !== undefined;
+}
+
+export function getGroupCount(item: GroupItemData, groupCount: number): number {
+  if (item.count) {
+    return item.count;
+  }
+
+  const items = item.items ?? [];
+
+  if (groupCount <= 1) {
+    return items.length;
+  }
+
+  let count = 0;
+  for (const childItem of items) {
+    count += getGroupCount(childItem, groupCount - 1);
+  }
+
+  return count;
+}
+
+export function appendCollapsedPath(
+  data: GroupItemData[] | null,
+  path: unknown[],
+  levelGroups: SortingInfo[],
+  collapsedGroup: GroupInfoData,
+  offset: number,
+): void {
+  if (!data || !path.length || !levelGroups.length) return;
+
+  // eslint-disable-next-line @typescript-eslint/init-declarations -- assigned in the loop
+  let keyValue: unknown;
+  let i = 0;
+  let currentOffset = offset;
+  const pathValue = toComparable(path[0], true);
+
+  for (; i < data.length; i += 1) {
+    keyValue = toComparable(data[i].key, true);
+    if (currentOffset >= collapsedGroup.offset || pathValue === keyValue) {
+      break;
+    } else {
+      currentOffset += getGroupCount(data[i], levelGroups.length);
+    }
+  }
+
+  if (!data.length || pathValue !== keyValue) {
+    data.splice(i, 0, {
+      key: path[0],
+      items: [],
+      count: path.length === 1 ? collapsedGroup.count : undefined,
+    });
+  }
+  appendCollapsedPath(
+    data[i].items,
+    path.slice(1),
+    levelGroups.slice(1),
+    collapsedGroup,
+    currentOffset,
+  );
+}
+
+export function processCollapsedGroupItem(
+  item: GroupItemData,
+  count: number,
+  state: GroupItemsProcessingState,
+): void {
+  item.collapsedItems = item.items;
+  item.items = null;
+  state.offset += count;
+  state.take -= 1;
+  if (state.take < 0) {
+    state.removeLastItemsCount += 1;
+  }
+  if (state.skipFirstItem) {
+    state.needRemoveFirstItem = true;
+  }
+}
+
+export function processExpandedGroupItem(
+  item: GroupItemData,
+  childItems: GroupItemData[],
+  childItemsPosition: GroupItemsPosition,
+  state: GroupItemsProcessingState,
+): void {
+  if (state.skipFirstItem) {
+    if (childItemsPosition.offset - state.offset > 1) {
+      item.isContinuation = true;
+    } else {
+      state.needRemoveFirstItem = true;
+    }
+  }
+  state.offset = childItemsPosition.offset;
+  state.take = childItemsPosition.take;
+  if (state.take < 0) {
+    if (childItems.length) {
+      item.isContinuationOnNextPage = true;
+    } else {
+      state.removeLastItemsCount += 1;
+    }
+  }
+}
+
+export function processDataItem(state: GroupItemsProcessingState): void {
+  if (state.skipFirstItem) {
+    state.needRemoveFirstItem = true;
+  }
+  state.offset += 1;
+  state.take -= 1;
+  if (state.take < 0) {
+    state.removeLastItemsCount += 1;
+  }
 }

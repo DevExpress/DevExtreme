@@ -141,8 +141,6 @@ export interface Properties extends PublicProperties {
 
   allowCanceling?: boolean;
 
-  useNativeInputClick?: boolean;
-
   nativeDropSupported?: boolean;
 
   useDragOver?: boolean;

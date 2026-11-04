@@ -335,6 +335,7 @@ async function collectViolations(tab, demo, renderDeadlineMs) {
 async function visitPage(demo, renderDeadlineMs = RENDER_DEADLINE_MS) {
   const { targetId } = await browserCdp.send('Target.createTarget', { url: 'about:blank' });
   const tab = openCdp(`ws://127.0.0.1:${DEBUG_PORT}/devtools/page/${targetId}`);
+  let timeoutId;
 
   try {
     return await Promise.race([
@@ -342,9 +343,15 @@ async function visitPage(demo, renderDeadlineMs = RENDER_DEADLINE_MS) {
       new Promise((resolve, reject) => {
         tab.onError(() => reject(new Error(`Chrome WebSocket error for ${demo.url}`)));
       }),
-      delay(renderDeadlineMs + 10000).then(() => { throw new Error(`Timed out loading ${demo.url}`); }),
+      new Promise((resolve, reject) => {
+        timeoutId = setTimeout(
+          () => reject(new Error(`Timed out loading ${demo.url}`)),
+          renderDeadlineMs + 10000,
+        );
+      }),
     ]);
   } finally {
+    clearTimeout(timeoutId);
     tab.close();
     await browserCdp.send('Target.closeTarget', { targetId });
   }
