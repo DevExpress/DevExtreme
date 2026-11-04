@@ -1116,7 +1116,6 @@ class DropDownList<
   }
 }
 
-// @ts-expect-error refactor DataExpressionMixin
 DropDownList.include(DataExpressionMixin);
 
 registerComponent('dxDropDownList', DropDownList);

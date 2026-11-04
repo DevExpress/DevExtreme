@@ -1569,7 +1569,6 @@ class CollectionWidget<
 // @ts-expect-error ts-error
 CollectionWidget.ItemClass = CollectionWidgetItem;
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-(CollectionWidget as any).include(DataHelperMixin);
+CollectionWidget.include(DataHelperMixin);
 
 export default CollectionWidget;
