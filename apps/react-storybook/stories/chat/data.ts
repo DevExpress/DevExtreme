@@ -252,24 +252,14 @@ export const toolCallsAssistant = { id: 'assistant', name: 'AI Assistant' };
 
 export const suggestionCards = [
     {
-        title: 'Weather',
-        description: 'Check the current weather conditions in London.',
-        prompt: 'Check the current weather conditions in London.',
-    },
-    {
-        title: 'Current Time',
+        title: 'Single Tool',
         description: 'Find out the current time in the Barcelona and Los Angeles offices.',
         prompt: 'Check the current time in Barcelona, Spain and Los Angeles, US.',
     },
     {
-        title: 'Exchange Rate',
-        description: 'Find out the current exchange rate from USD to EUR.',
-        prompt: 'Check the current exchange rate from USD to EUR.',
-    },
-    {
-        title: 'Several Tools',
-        description: 'Get the weather in London, the time in Barcelona and the USD to EUR rate at once.',
-        prompt: 'Check the weather in London, the current time in Barcelona, Spain and the exchange rate from USD to EUR.',
+        title: 'Multiple Tools',
+        description: 'Get the current weather and time in Barcelona and the USD to EUR rate.',
+        prompt: 'Check the current weather conditions in Barcelona, Spain, the current time in Barcelona, Spain and the exchange rate from USD to EUR.',
     },
     {
         title: 'Error State',
