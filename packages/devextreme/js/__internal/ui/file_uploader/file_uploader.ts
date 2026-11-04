@@ -232,7 +232,6 @@ class FileUploader extends Editor<FileUploaderProperties> {
         abortUpload: null,
         validationMessageOffset: { h: 0, v: 0 },
         hoverStateEnabled: true,
-        useNativeInputClick: false,
         useDragOver: true,
         nativeDropSupported: true,
         _uploadButtonType: 'normal',
@@ -353,10 +352,7 @@ class FileUploader extends Editor<FileUploaderProperties> {
 
         this._resetInputValue();
 
-        const { useNativeInputClick } = this.option();
-
-        // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-        return useNativeInputClick || this._isCustomClickEvent;
+        return this._isCustomClickEvent;
       });
     }
 
@@ -1008,9 +1004,7 @@ class FileUploader extends Editor<FileUploaderProperties> {
   }
 
   _selectFileDialogClickHandler(): void {
-    const { useNativeInputClick } = this.option();
-
-    if (useNativeInputClick || this._isInteractionDisabled()) {
+    if (this._isInteractionDisabled()) {
       return;
     }
 
@@ -1116,28 +1110,10 @@ class FileUploader extends Editor<FileUploaderProperties> {
   }
 
   _renderInput(): void {
-    const { useNativeInputClick, inputAttr } = this.option();
-    if (useNativeInputClick) {
-      this._selectButton.option({ template: this._selectButtonInputTemplate.bind(this) });
-    } else {
-      // @ts-expect-error dxElementWrapper should be extdened
-      this._$fileInput.appendTo(this._$inputContainer);
-      this._selectButton.option({ template: 'content' });
-    }
+    const { inputAttr } = this.option();
+    // @ts-expect-error dxElementWrapper should be extdened
+    this._$fileInput.appendTo(this._$inputContainer);
     this._applyInputAttributes(inputAttr);
-  }
-
-  _selectButtonInputTemplate(data: { text: string }, content: HTMLElement): dxElementWrapper {
-    const $content = $(content);
-    const $text = $('<span>')
-      .addClass('dx-button-text')
-      .text(data.text);
-
-    $content
-      .append($text)
-      .append(this._$fileInput);
-
-    return $content;
   }
 
   _renderInputWrapper(): void {
@@ -1752,9 +1728,6 @@ class FileUploader extends Editor<FileUploaderProperties> {
         break;
       case 'onFileLimitReached':
         this._createFileLimitReachedAction();
-        break;
-      case 'useNativeInputClick':
-        this._renderInput();
         break;
       case 'useDragOver':
         this._attachDragEventHandlers(this._$inputWrapper);
