@@ -1517,8 +1517,7 @@ class FileUploader extends Editor<FileUploaderProperties> {
   ): boolean {
     if (!element) return false;
 
-    const x = getOffset(element).left;
-    const y = getOffset(element).top;
+    const { left: x, top: y } = getOffset(element);
     const w = element.offsetWidth;
     const h = element.offsetHeight;
     const eventX = this._getEventX(mouseEvent);
