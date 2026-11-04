@@ -182,18 +182,14 @@ export class ValidatingController extends modules.Controller {
   }
 
   public _rowIsValidated(change: EditingChange | null | undefined): boolean {
-    const validationData = this._getValidationData(change?.key);
+    const validationData = this.getValidationData(change?.key);
 
     return !!validationData && !!validationData.validated;
   }
 
-  public getValidationData(key: RowKey): ValidationData | undefined {
-    return this._getValidationData(key);
-  }
-
-  public _getValidationData(key: RowKey, create: true): ValidationData;
-  public _getValidationData(key: RowKey, create?: boolean): ValidationData | undefined;
-  public _getValidationData(key: RowKey, create?: boolean): ValidationData | undefined {
+  public getValidationData(key: RowKey, create: true): ValidationData;
+  public getValidationData(key: RowKey, create?: boolean): ValidationData | undefined;
+  public getValidationData(key: RowKey, create?: boolean): ValidationData | undefined {
     const keyHash = getKeyHash(key);
     const isObjectKeyHash = isObject(keyHash);
     let validationData: ValidationData | undefined = isObjectKeyHash
@@ -286,7 +282,7 @@ export class ValidatingController extends modules.Controller {
       const changes = this._editingController.getChanges();
       changes.forEach(({ type, key }) => {
         if (type !== DATA_CHANGE_TYPE.remove) {
-          const validationData = this._getValidationData(key, true);
+          const validationData = this.getValidationData(key, true);
           const validationResult = this.validateGroup(validationData);
           completeList.push(validationResult);
           validationResult.done((rowValidatingParams) => {
@@ -342,7 +338,7 @@ export class ValidatingController extends modules.Controller {
   public updateValidationState(change: Partial<EditingChange>): void {
     const editMode = this._editingController.getEditMode();
     const { key } = change;
-    const validationData = this._getValidationData(key, true);
+    const validationData = this.getValidationData(key, true);
 
     if (!isFormBasedEditMode(editMode)) {
       if (change.type === DATA_CHANGE_TYPE.insert && !this.isRowDataModified(change)) {
@@ -549,7 +545,7 @@ export class ValidatingController extends modules.Controller {
     }
 
     this._syncInternalEditingData(parameters);
-    const validationData = this._getValidationData(parameters.key, true);
+    const validationData = this.getValidationData(parameters.key, true);
 
     const getValue = (): unknown => {
       const change = this._editingController.getChangeByKey(validationData?.key);
@@ -662,7 +658,7 @@ export class ValidatingController extends modules.Controller {
   private updateCellValidationResult({
     rowKey, columnIndex, validationResult,
   }: CellValidationParams & { validationResult: ValidationResultInternal | null }): void {
-    const validationData = this._getValidationData(rowKey);
+    const validationData = this.getValidationData(rowKey);
 
     if (!validationData) {
       return;
@@ -702,7 +698,7 @@ export class ValidatingController extends modules.Controller {
   public getCellValidationResult(
     { rowKey, columnIndex }: CellValidationParams,
   ): CellValidationResultValue | undefined {
-    const validationData = this._getValidationData(rowKey, true);
+    const validationData = this.getValidationData(rowKey, true);
     return validationData?.validationResults?.[columnIndex];
   }
 
@@ -710,7 +706,7 @@ export class ValidatingController extends modules.Controller {
     change: EditingChange | undefined;
     columnIndex: number;
   }): void {
-    const validationData = this._getValidationData(change?.key);
+    const validationData = this.getValidationData(change?.key);
 
     if (validationData?.validationResults) {
       this.cancelCellValidationResult({ change, columnIndex });
@@ -724,7 +720,7 @@ export class ValidatingController extends modules.Controller {
     columnIndex: number;
   }): void {
     // @ts-expect-error callers cancel a result of a row that has validation data
-    const validationData: ValidationData = this._getValidationData(change.key);
+    const validationData: ValidationData = this.getValidationData(change.key);
 
     if (change && validationData.validationResults) {
       const result = validationData.validationResults[columnIndex];
@@ -755,7 +751,7 @@ export class ValidatingController extends modules.Controller {
   public getCellValidator(
     { rowKey, columnIndex }: CellValidationParams,
   ): InternalValidator | undefined {
-    const validationData = this._getValidationData(rowKey);
+    const validationData = this.getValidationData(rowKey);
     const groupConfig = validationData && ValidationEngine.getGroupConfig(validationData);
     const validators: InternalValidator[] | undefined = groupConfig?.validators;
     return validators?.find((v) => {
@@ -821,7 +817,7 @@ export const validatingEditingExtender = (
     super._handleChangesChange(args);
 
     args.value.forEach((change) => {
-      if (this._validatingController._getValidationData(change.key) === undefined) {
+      if (this._validatingController.getValidationData(change.key) === undefined) {
         this._validatingController.updateValidationState(change);
       }
     });
@@ -832,7 +828,7 @@ export const validatingEditingExtender = (
     let rowIndex = startInsertIndex;
 
     this.getChanges().forEach(({ key, type }) => {
-      const validationData = this._validatingController._getValidationData(key);
+      const validationData = this._validatingController.getValidationData(key);
       if (
         validationData
         && !validationData.isValid
@@ -851,7 +847,7 @@ export const validatingEditingExtender = (
 
   public override getEditFormOptions(detailOptions: EditFormDetailOptions): EditFormOptions {
     return {
-      validationGroup: this._validatingController._getValidationData(detailOptions.key, true),
+      validationGroup: this._validatingController.getValidationData(detailOptions.key, true),
       ...super.getEditFormOptions(detailOptions),
     };
   }
@@ -921,7 +917,7 @@ export const validatingEditingExtender = (
     if (this.getEditMode() === EDIT_MODE.batch && change !== 'prepend' && change !== 'append') {
       changes.forEach((editingChange) => {
         const { key } = editingChange;
-        const validationData = this._validatingController._getValidationData(key);
+        const validationData = this._validatingController.getValidationData(key);
         if (
           validationData
           && editingChange.type
@@ -1014,7 +1010,7 @@ export const validatingEditingExtender = (
 
   protected _beforeSaveEditData(change?: EditingChange): boolean | DeferredObj<boolean> {
     let result = super._beforeSaveEditData(change);
-    const validationData = this._validatingController._getValidationData(change?.key, true);
+    const validationData = this._validatingController.getValidationData(change?.key, true);
 
     if (change) {
       const isValid = change.type === DATA_CHANGE_TYPE.remove || validationData.isValid;
@@ -1174,7 +1170,7 @@ export const validatingEditingExtender = (
   public _showErrorRow(change: EditingChange): dxElementWrapper | undefined {
     const items = this._dataController.items();
     const rowIndex = this.getIndexByKey(change.key, items);
-    const validationData = this._validatingController._getValidationData(change.key);
+    const validationData = this._validatingController.getValidationData(change.key);
 
     if (!validationData?.isValid && validationData?.errorText && rowIndex >= 0) {
       const $popupContent = this.getPopupContent();

@@ -15231,7 +15231,7 @@ QUnit.module('Editing with validation', {
 
         let result1 = this.validatingController.getCellValidationResult({ rowKey, columnIndex: 0 });
         let result2 = this.validatingController.getCellValidationResult({ rowKey, columnIndex: 1 });
-        const validationData = this.validatingController._getValidationData(rowKey);
+        const validationData = this.validatingController.getValidationData(rowKey);
 
         // assert
         assert.ok(result1.status, 'result1 should be restored from cache');
