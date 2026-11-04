@@ -33,23 +33,25 @@ const loadTotalCount = function loadTotalCount(
   const d = Deferred<number>();
   const loadOptions = extend({ skip: 0, take: 1, requireTotalCount: true }, options);
 
-  dataSourceAdapter.customLoader.load(loadOptions).done(({ extra }) => {
-    // @ts-expect-error extra is loaded with requireTotalCount
-    d.resolve(extra.totalCount);
+  dataSourceAdapter.customLoader.load(loadOptions)
+    .done(({ extra }) => {
+      // @ts-expect-error extra is loaded with requireTotalCount
+      d.resolve(extra.totalCount);
+    })
     // @ts-expect-error badly typed Deferred.reject
     // eslint-disable-next-line @typescript-eslint/no-misused-promises -- ignores the result
-  }).fail(d.reject.bind(d));
+    .fail(d.reject.bind(d));
   return d;
 };
 
 const foreachCollapsedGroups = function foreachCollapsedGroups(
   that: GroupingHelperCore,
-  callback: ForeachGroupsCallback,
+  callback: (groupInfo: GroupInfoData) => ReturnType<ForeachGroupsCallback>,
   updateOffsets?: boolean,
 ): ForeachGroupsResult {
-  return that.foreachGroups((groupInfo, parents) => {
+  return that.foreachGroups((groupInfo) => {
     if (!groupInfo.isExpanded) {
-      return callback(groupInfo, parents);
+      return callback(groupInfo);
     }
     return undefined;
   }, false, false, updateOffsets, true);
@@ -211,9 +213,9 @@ const updateGroupOffsets = (
     return offset;
   }
 
-  // eslint-disable-next-line @typescript-eslint/prefer-for-of
-  for (let i = 0; i < items.length; i += 1) {
-    const item = items[i];
+  let currentOffset = offset;
+
+  for (const item of items) {
     if (isGroupItem(item)) {
       path.push(item.key);
 
@@ -222,35 +224,31 @@ const updateGroupOffsets = (
 
       // Only update offset for the first occurrence; continuation parts keep the original offset
       if (isPendingGroup && !item.isContinuation) {
-        pendingGroupInfo.offset = offset;
+        pendingGroupInfo.offset = currentOffset;
       }
 
       if (groupInfo && !item.isContinuation) {
-        groupInfo.offset = offset;
+        groupInfo.offset = currentOffset;
       }
 
       if (groupInfo && !groupInfo.isExpanded) {
         // Collapsed group: skip over all its children in the flat index
-        // eslint-disable-next-line no-param-reassign
-        offset += groupInfo.count;
+        currentOffset += groupInfo.count;
       } else if (isPendingGroup && !pendingGroupInfo.isExpanded) {
         // Pending collapse: the group isn't persisted yet, but we already need its count
-        // eslint-disable-next-line no-param-reassign
-        offset += pendingGroupInfo.count;
+        currentOffset += pendingGroupInfo.count;
       } else if (item.items) {
         // Expanded group: recurse into children to accumulate their offsets
-        // eslint-disable-next-line no-param-reassign
-        offset = updateGroupOffsets(that, item.items, path, offset, pendingGroupInfo);
+        currentOffset = updateGroupOffsets(that, item.items, path, currentOffset, pendingGroupInfo);
       }
 
       path.pop();
     } else {
-      // eslint-disable-next-line no-param-reassign
-      offset += 1;
+      currentOffset += 1;
     }
   }
 
-  return offset;
+  return currentOffset;
 };
 
 /// #DEBUG
@@ -293,12 +291,12 @@ const createNotGroupFilter = function createNotGroupFilter(
 
 const getGroupCount = function getGroupCount(item: GroupItemData, groupCount: number): number {
   // @ts-expect-error a group without a count has loaded items
-  const { items }: { items: GroupItemData[] } = item;
-  let count = item.count || items.length;
+  let count = item.count || item.items.length;
 
   if (!item.count && groupCount > 1) {
     count = 0;
-    for (const childItem of items) {
+    // @ts-expect-error a group without a count has loaded items
+    for (const childItem of item.items) {
       count += getGroupCount(childItem, groupCount - 1);
     }
   }
@@ -512,7 +510,7 @@ export class GroupingHelper extends GroupingHelperCore {
     }
 
     return when(groupCountQuery).done((count) => {
-      // @ts-expect-error parseInt() takes a count that when() may wrap in an array
+      // @ts-expect-error parseInt() takes a value that when() may wrap in an array
       const normalizedCount = parseInt(count.length ? count[0] : count, 10);
       const pendingGroupInfo: GroupInfoData = {
         offset: groupInfo ? groupInfo.offset : -1,
@@ -558,10 +556,10 @@ export class GroupingHelper extends GroupingHelperCore {
         });
 
         return when(groupOffsetQuery, groupCountQuery).done((offset, count) => {
-          // @ts-expect-error parseInt() takes a count that when() may wrap in an array
+          // @ts-expect-error parseInt() takes a value that when() may wrap in an array
           // eslint-disable-next-line radix
           const loadedOffset = parseInt(offset.length ? offset[0] : offset);
-          // @ts-expect-error parseInt() takes a count that when() may wrap in an array
+          // @ts-expect-error parseInt() takes a value that when() may wrap in an array
           // eslint-disable-next-line radix
           const loadedCount = parseInt(count.length ? count[0] : count);
           groupInfo.offset = loadedOffset;

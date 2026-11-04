@@ -21,7 +21,7 @@ import type {
   GroupItemData,
 } from './types';
 
-const createBooleanKeyFilters = function createBooleanKeyFilters(
+const createNullOrBooleanKeyFilters = function createNullOrBooleanKeyFilters(
   selector: SortingSelector | undefined,
   key: boolean | null,
   desc: boolean,
@@ -49,8 +49,9 @@ export function createOffsetFilter(
       const { selector, desc } = groups[j];
       const key = path[j];
       const isLastLevel = i === j;
-      if (isLastLevel && (key === null || key === false || key === true)) {
-        filterElement.push(...createBooleanKeyFilters(selector, key, desc));
+      const isNullOrBooleanKey = key === null || key === false || key === true;
+      if (isLastLevel && isNullOrBooleanKey) {
+        filterElement.push(...createNullOrBooleanKeyFilters(selector, key, desc));
       } else {
         const lastLevelOperation = desc ? '>' : '<';
         const operation = isLastLevel ? lastLevelOperation : '=';
