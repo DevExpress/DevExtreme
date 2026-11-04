@@ -1,14 +1,12 @@
 import { describe, expect, it } from '@jest/globals';
-import type { LoadOperation } from '@ts/grids/grid_core/data_source_adapter/types';
+import type { StoreLoadOptions } from '@ts/data/data_source/types';
 
 import { createOffsetFilter } from '../m_grouping_core';
 import { GroupingHelper } from '../m_grouping_expanded';
 import { createDataSourceAdapterStub } from './grouping_expanded.mock';
 
-const refresh = (grouping: GroupingHelper, group: unknown): void => {
-  const options = { storeLoadOptions: { group } } as unknown as LoadOperation;
-
-  grouping.refresh(options, {});
+const refresh = (grouping: GroupingHelper, group: StoreLoadOptions['group']): void => {
+  grouping.refresh({ storeLoadOptions: { group } }, {});
 };
 
 describe('refresh', () => {
