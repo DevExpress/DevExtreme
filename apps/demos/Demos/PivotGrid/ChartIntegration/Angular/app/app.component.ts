@@ -1,5 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, ViewChild, AfterViewInit, enableProdMode } from '@angular/core';
+import {
+  Component, type AfterViewInit, enableProdMode, inject, viewChild,
+} from '@angular/core';
 import { CurrencyPipe } from '@angular/common';
 import {
   DxPivotGridModule,
@@ -7,7 +9,7 @@ import {
   DxChartModule,
   DxChartComponent,
 } from 'devextreme-angular';
-import { Options as DataSourceConfig } from 'devextreme/ui/pivot_grid/data_source';
+import type { Options as DataSourceConfig } from 'devextreme/ui/pivot_grid/data_source';
 import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -25,58 +27,52 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent implements AfterViewInit {
-  @ViewChild(DxPivotGridComponent, { static: false }) pivotGrid: DxPivotGridComponent;
+  private readonly pivotGrid = viewChild.required(DxPivotGridComponent);
 
-  @ViewChild(DxChartComponent, { static: false }) chart: DxChartComponent;
+  private readonly chart = viewChild.required(DxChartComponent);
 
-  pivotGridDataSource: DataSourceConfig;
-
-  constructor(service: Service) {
-    this.customizeTooltip = this.customizeTooltip.bind(this);
-
-    this.pivotGridDataSource = {
-      fields: [{
-        caption: 'Region',
-        width: 120,
-        dataField: 'region',
-        area: 'row',
-        sortBySummaryField: 'Total',
-      }, {
-        caption: 'City',
-        dataField: 'city',
-        width: 150,
-        area: 'row',
-      }, {
-        dataField: 'date',
-        dataType: 'date',
-        area: 'column',
-      }, {
-        groupName: 'date',
-        groupInterval: 'month',
-        visible: false,
-      }, {
-        caption: 'Total',
-        dataField: 'amount',
-        dataType: 'number',
-        summaryType: 'sum',
-        format: 'currency',
-        area: 'data',
-      }, {
-        summaryType: 'count',
-        area: 'data',
-      }],
-      store: service.getSales(),
-    };
-  }
+  readonly pivotGridDataSource: DataSourceConfig = {
+    fields: [{
+      caption: 'Region',
+      width: 120,
+      dataField: 'region',
+      area: 'row',
+      sortBySummaryField: 'Total',
+    }, {
+      caption: 'City',
+      dataField: 'city',
+      width: 150,
+      area: 'row',
+    }, {
+      dataField: 'date',
+      dataType: 'date',
+      area: 'column',
+    }, {
+      groupName: 'date',
+      groupInterval: 'month',
+      visible: false,
+    }, {
+      caption: 'Total',
+      dataField: 'amount',
+      dataType: 'number',
+      summaryType: 'sum',
+      format: 'currency',
+      area: 'data',
+    }, {
+      summaryType: 'count',
+      area: 'data',
+    }],
+    store: inject(Service).getSales(),
+  };
 
   ngAfterViewInit() {
-    this.pivotGrid.instance.bindChart(this.chart.instance, {
+    this.pivotGrid().instance.bindChart(this.chart().instance, {
       dataFieldsDisplayMode: 'splitPanes',
       alternateDataFields: false,
     });
   }
 
-  customizeTooltip(args) {
+  readonly customizeTooltip = (args) => {
     const valueText = (args.seriesName.indexOf('Total') !== -1)
       ? new Intl.NumberFormat('en-EN', { style: 'currency', currency: 'USD' }).format(args.originalValue)
       : args.originalValue;
@@ -84,7 +80,7 @@ export class AppComponent implements AfterViewInit {
     return {
       html: `${args.seriesName}<div class='currency'>${valueText}</div>`,
     };
-  }
+  };
 }
 
 bootstrapApplication(AppComponent);

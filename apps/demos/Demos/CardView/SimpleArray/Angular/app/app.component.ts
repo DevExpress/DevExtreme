@@ -1,7 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode } from '@angular/core';
+import { Component, enableProdMode, inject } from '@angular/core';
 import { DxCardViewModule } from 'devextreme-angular';
-import { Customer, Service } from './app.service';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -16,13 +16,9 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  customers: Customer[];
+  readonly customers = inject(Service).getCustomers();
 
-  columns = ['Company', 'Address', 'City', 'State', 'Zipcode', 'Phone'];
-
-  constructor(service: Service) {
-    this.customers = service.getCustomers();
-  }
+  readonly columns = ['Company', 'Address', 'City', 'State', 'Zipcode', 'Phone'];
 }
 
 bootstrapApplication(AppComponent);

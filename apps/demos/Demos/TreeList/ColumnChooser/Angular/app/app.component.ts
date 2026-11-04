@@ -1,9 +1,11 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode } from '@angular/core';
+import {
+  Component, enableProdMode, inject, signal,
+} from '@angular/core';
 import { DxSelectBoxModule, DxCheckBoxModule } from 'devextreme-angular';
 import { DxTextBoxTypes } from 'devextreme-angular/ui/text-box';
 import { DxTreeListModule, DxTreeListTypes } from 'devextreme-angular/ui/tree-list';
-import { Employee, Service } from './app.service';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -22,29 +24,25 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  employees: Employee[];
+  readonly employees = inject(Service).getEmployees();
 
-  searchEnabled = true;
+  readonly searchEnabled = signal(true);
 
-  allowSelectAll = true;
+  readonly allowSelectAll = signal(true);
 
-  selectByClick = true;
+  readonly selectByClick = signal(true);
 
-  recursive = true;
+  readonly recursive = signal(true);
 
-  editorOptions: DxTextBoxTypes.Properties = { placeholder: 'Search column' };
+  readonly editorOptions: DxTextBoxTypes.Properties = { placeholder: 'Search column' };
 
-  columnChooserModes: { key: DxTreeListTypes.ColumnChooser['mode'], name: string }[] = [{
+  readonly columnChooserModes: { key: DxTreeListTypes.ColumnChooser['mode'], name: string }[] = [{
     key: 'dragAndDrop',
     name: 'Drag and drop',
   }, {
     key: 'select',
     name: 'Select',
   }];
-
-  constructor(service: Service) {
-    this.employees = service.getEmployees();
-  }
 }
 
 bootstrapApplication(AppComponent);

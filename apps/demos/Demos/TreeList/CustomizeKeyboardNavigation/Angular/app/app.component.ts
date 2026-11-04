@@ -1,8 +1,10 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode } from '@angular/core';
+import {
+  Component, enableProdMode, inject, signal,
+} from '@angular/core';
 import { DxButtonModule, DxCheckBoxModule, DxSelectBoxModule } from 'devextreme-angular';
 import { DxTreeListModule, DxTreeListTypes } from 'devextreme-angular/ui/tree-list';
-import { Service, Employee } from './app.service';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -21,23 +23,19 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  employees: Employee[];
+  private readonly service = inject(Service);
 
-  editOnKeyPress = true;
+  readonly employees = this.service.getEmployees();
 
-  enterKeyActions: DxTreeListTypes.EnterKeyAction[];
+  readonly enterKeyActions = this.service.getEnterKeyActions();
 
-  enterKeyDirections: DxTreeListTypes.EnterKeyDirection[];
+  readonly enterKeyDirections = this.service.getEnterKeyDirections();
 
-  enterKeyAction: DxTreeListTypes.EnterKeyAction = 'moveFocus';
+  readonly editOnKeyPress = signal(true);
 
-  enterKeyDirection: DxTreeListTypes.EnterKeyDirection = 'column';
+  readonly enterKeyAction = signal<DxTreeListTypes.EnterKeyAction>('moveFocus');
 
-  constructor(service: Service) {
-    this.employees = service.getEmployees();
-    this.enterKeyActions = service.getEnterKeyActions();
-    this.enterKeyDirections = service.getEnterKeyDirections();
-  }
+  readonly enterKeyDirection = signal<DxTreeListTypes.EnterKeyDirection>('column');
 
   onFocusedCellChanging(e: DxTreeListTypes.FocusedCellChangingEvent) {
     e.isHighlighted = true;

@@ -1,5 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode } from '@angular/core';
+import {
+  Component, enableProdMode, inject, signal,
+} from '@angular/core';
 import {
   DxDataGridModule,
   DxButtonModule,
@@ -7,7 +9,6 @@ import {
 } from 'devextreme-angular';
 
 import { Service } from './app.service';
-import type { Fields, Columns, Condition, Product } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -26,26 +27,20 @@ if (!/localhost/.test(document.location.host)) {
 })
 
 export class AppComponent {
-  dataSource: Product[];
+  private readonly service = inject(Service);
 
-  fields: Fields;
+  readonly fields = this.service.getFields();
 
-  columns: Columns;
+  readonly columns = this.service.getColumns();
 
-  filter: Condition;
+  readonly filter = signal(this.service.getFilter());
 
-  gridFilterValue: Condition;
+  readonly gridFilterValue = signal(this.filter());
 
-  constructor(service: Service) {
-    this.fields = service.getFields();
-    this.columns = service.getColumns();
-    this.filter = service.getFilter();
-    this.gridFilterValue = this.filter;
-    this.dataSource = service.getProducts();
-  }
+  readonly dataSource = this.service.getProducts();
 
   buttonClick() {
-    this.gridFilterValue = this.filter;
+    this.gridFilterValue.set(this.filter());
   }
 }
 

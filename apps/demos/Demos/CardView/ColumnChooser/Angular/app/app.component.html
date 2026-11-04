@@ -19,14 +19,14 @@
       <dx-check-box
         text="Allow Select All"
         [(value)]="allowSelectAll"
-        [disabled]="columnChooserMode !== 'select'"
+        [disabled]="columnChooserMode() !== 'select'"
       ></dx-check-box>
     </div>
     <div class="option">
       <dx-check-box
         text="Select By Click On Item"
         [(value)]="selectByClick"
-        [disabled]="columnChooserMode !== 'select'"
+        [disabled]="columnChooserMode() !== 'select'"
       ></dx-check-box>
     </div>
     <div class="option">
@@ -42,19 +42,19 @@
   keyExpr="ID"
   cardsPerRow="auto"
   [cardMinWidth]="300"
-  [allowColumnReordering]="allowColumnReordering"
+  [allowColumnReordering]="allowColumnReordering()"
 >
   <dxo-card-view-search-panel [visible]="true"></dxo-card-view-search-panel>
   <dxo-card-view-column-chooser
     [enabled]="true"
-    [mode]="columnChooserMode"
+    [mode]="columnChooserMode()"
     height="340px"
   >
-    <dxo-card-view-column-chooser-search [enabled]="searchEnabled">
+    <dxo-card-view-column-chooser-search [enabled]="searchEnabled()">
     </dxo-card-view-column-chooser-search>
     <dxo-card-view-column-chooser-selection
-      [allowSelectAll]="allowSelectAll"
-      [selectByClick]="selectByClick"
+      [allowSelectAll]="allowSelectAll()"
+      [selectByClick]="selectByClick()"
     ></dxo-card-view-column-chooser-selection>
   </dxo-card-view-column-chooser>
   <dxo-card-view-card-cover
