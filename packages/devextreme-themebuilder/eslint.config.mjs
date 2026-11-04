@@ -32,8 +32,6 @@ export default [
             "@stylistic": stylistic,
         },
         rules: {
-            // TODO Vinogradov: remove after eslint-config-devextreme rc2 will be released:
-            "@stylistic/function-paren-newline": "off",
             "import/extensions": "off",
             "import/no-relative-packages": "off",
             "class-methods-use-this": "warn",
