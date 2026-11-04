@@ -13,20 +13,12 @@ import vuePlugin from 'eslint-plugin-vue';
 import vueParser from 'vue-eslint-parser';
 import tsParser from '@typescript-eslint/parser';
 import js from '@eslint/js';
-import { FlatCompat } from '@eslint/eslintrc';
 import stylistic from '@stylistic/eslint-plugin';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
-import { changeRulesToStylistic } from 'eslint-migration-utils';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-  recommendedConfig: js.configs.recommended,
-  allConfig: js.configs.all
-});
 
 const spellcheckRule = spellcheckDevextreme[0].rules['spellcheck/spell-checker'];
 
@@ -67,14 +59,10 @@ export default [
 
   js.configs.recommended,
   ...spellcheckDevextreme,
-  ...javascriptConfig.map(config => ({
-    ...config,
-    rules: changeRulesToStylistic(config.rules || {}),
-  })),
+  ...javascriptConfig,
   ...typescriptConfig.map(config => ({
     ...config,
     files: ['**/*.ts', '**/*.tsx'],
-    rules: changeRulesToStylistic(config.rules || {}),
   })),
 
   // General rules
@@ -220,11 +208,9 @@ export default [
       '@typescript-eslint/no-deprecated': 'error',
 
       '@typescript-eslint/naming-convention': 0,
-      '@typescript-eslint/no-throw-literal': 0,
       '@typescript-eslint/no-use-before-define': 0,
       '@typescript-eslint/no-shadow': 0,
       '@typescript-eslint/no-loop-func': 0,
-      '@typescript-eslint/ban-types': 0,
       '@typescript-eslint/no-this-alias': 0,
       '@typescript-eslint/no-empty-function': 0,
       '@typescript-eslint/no-explicit-any': 0,
@@ -253,7 +239,6 @@ export default [
       '@typescript-eslint/consistent-type-definitions': 0,
       '@typescript-eslint/prefer-nullish-coalescing': 0,
       '@typescript-eslint/explicit-function-return-type': 0,
-      '@typescript-eslint/prefer-ts-expect-error': 0,
       '@typescript-eslint/prefer-includes': 0,
       '@typescript-eslint/ban-ts-comment': 0,
       '@typescript-eslint/no-extraneous-class': 0,
@@ -454,7 +439,7 @@ export default [
   ...testcafeConfig.map(config => ({
     ...config,
     rules: {
-      ...changeRulesToStylistic(config.rules || {}),
+      ...config.rules,
       'require-await': 'warn',
 
     },
@@ -490,7 +475,7 @@ export default [
   },
 
   // jest tests
-  ...compat.extends('plugin:jest/recommended', 'plugin:jest/style').map(config => ({
+  ...[jest.configs['flat/recommended'], jest.configs['flat/style']].map(config => ({
     ...config,
     files: ['utils/tests/**/*.*'],
   })),
