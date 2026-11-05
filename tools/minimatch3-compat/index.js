@@ -1,6 +1,7 @@
 'use strict';
 
 const mm = require('minimatch');
+const picomatch = require('picomatch');
 
 const Matcher = new mm.Minimatch('*').set[0][0].constructor;
 if (!Object.prototype.hasOwnProperty.call(Matcher.prototype, '_glob')) {
@@ -22,13 +23,48 @@ const legacyOptions = (options) => (process.platform === 'win32'
   ? { windowsPathsNoEscape: true, ...options }
   : options);
 
-function makeRe(pattern, options) {
-  const m = new mm.Minimatch(pattern, legacyOptions(options));
-  return {
-    source: pattern,
-    test: (s) => m.match(s),
-    [Symbol.match]: (s) => (m.match(s) ? [s] : null),
-  };
+class MinimatchRegExp extends RegExp {
+  #matcher;
+
+  static get [Symbol.species]() {
+    return RegExp;
+  }
+
+  constructor(matcher, source, flags) {
+    super(source, flags);
+    this.#matcher = matcher;
+  }
+
+  exec(input) {
+    const str = String(input);
+    if (!this.#matcher.match(str)) {
+      return null;
+    }
+    return Object.assign([str], { index: 0, input: str, groups: undefined });
+  }
+}
+
+function makeRe(pattern, options = {}) {
+  if (typeof pattern !== 'string') {
+    throw new TypeError('glob pattern string required');
+  }
+  try {
+    const matcher = new mm.Minimatch(pattern, legacyOptions({ ...options, matchBase: false }));
+    const { source, flags } = picomatch.makeRe(
+      process.platform === 'win32' ? pattern.split('\\').join('/') : pattern,
+      {
+        dot: options.dot,
+        nocase: options.nocase,
+        nonegate: options.nonegate,
+        nobrace: options.nobrace,
+        noglobstar: options.noglobstar,
+        noextglob: options.noext,
+      },
+    );
+    return new MinimatchRegExp(matcher, source, flags);
+  } catch {
+    return false;
+  }
 }
 
 class Minimatch extends mm.Minimatch {
@@ -37,7 +73,10 @@ class Minimatch extends mm.Minimatch {
   }
 
   makeRe() {
-    return makeRe(this.pattern, this.options);
+    if (this.regexp === undefined) {
+      this.regexp = makeRe(this.pattern, this.options);
+    }
+    return this.regexp;
   }
 }
 

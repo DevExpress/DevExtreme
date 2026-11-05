@@ -6,6 +6,7 @@
   "license": "MIT",
   "main": "index.js",
   "dependencies": {
-    "minimatch": "^11.0.4"
+    "minimatch": "^11.0.4",
+    "picomatch": "^4.0.7"
   }
 }
