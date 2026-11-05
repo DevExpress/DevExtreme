@@ -268,8 +268,9 @@ const columnHeadersView = (
         Overlay,
       );
       if (overlayInstance) {
-        // @ts-expect-error the filter range overlay is rendered together with its content
-        const $editorRangeElements = overlayInstance.$content().find(`.${CLASSES.editorContainer}`);
+        // the filter range overlay is rendered together with its content
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        const $editorRangeElements = overlayInstance.$content()!.find(`.${CLASSES.editorContainer}`);
 
         this._updateEditorValue(column, $editorRangeElements.first());
         this._updateEditorValue(column, $editorRangeElements.last());

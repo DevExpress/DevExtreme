@@ -25,13 +25,14 @@ import type { RowsView } from '@ts/grids/grid_core/views/rows_view';
 import type {
   CellRenderOptions, ViewCellOptions, ViewDataChange,
 } from '@ts/grids/grid_core/views/types';
-import { FIELD_ITEM_CONTENT_CLASS, FIELD_ITEM_DATA_KEY } from '@ts/ui/form/constants';
+import { FIELD_ITEM_CONTENT_CLASS } from '@ts/ui/form/constants';
 
 import type { ModuleType, OptionChanged, RowKey } from '../types';
 import gridCoreUtils from '../utils';
 import {
   CLASSES,
   DATA_CHANGE_TYPE,
+  EDIT_FORM_ITEM_DATA_KEY,
   EDIT_MODE,
   EDITING_EDITROWKEY_OPTION_NAME,
   EDITING_FORM_OPTION_NAME,
@@ -633,9 +634,9 @@ const rowsView = (
     column: Column | undefined,
   ): number {
     return $cells?.toArray().findIndex((cellElement) => {
-      const item: EditFormItem | undefined = getData(
+      const item = getData(
         $(cellElement).find(`.${FIELD_ITEM_CONTENT_CLASS}`),
-        FIELD_ITEM_DATA_KEY,
+        EDIT_FORM_ITEM_DATA_KEY,
       );
 
       return Boolean(item?.column && column && item.column.index === column.index);

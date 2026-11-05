@@ -1,7 +1,8 @@
 import type { CellClickEvent } from '@js/ui/pivot_grid';
 import type { DataKey } from '@ts/core/element_data';
 
-// The public Field type lives in ui/pivot_grid/data_source, which internal code does not import
+// Field is not exported from @js/ui/pivot_grid, and @typescript-eslint/no-restricted-imports
+// forbids @js/ui/pivot_grid/* in internal code, so take it from a type the root exports
 type Field = NonNullable<CellClickEvent['columnFields']>[number];
 
 export type FieldChooserField = Field & { index: number };
