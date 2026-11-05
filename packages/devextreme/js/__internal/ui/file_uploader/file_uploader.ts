@@ -1193,7 +1193,7 @@ class FileUploader extends Editor<FileUploaderProperties> {
     dropZoneElement?: Element,
   ): boolean | string | undefined {
     return this._activeDropZone === null
-      && this.isMouseOverElement(e, dropZoneElement as HTMLElement, false)
+      && this.isMouseOverElement(e, dropZoneElement as HTMLElement)
       && e.originalEvent.dataTransfer.types.find((item) => item === 'Files');
   }
 
@@ -1203,12 +1203,12 @@ class FileUploader extends Editor<FileUploaderProperties> {
     }
     e.originalEvent.dataTransfer.dropEffect = 'copy';
 
-    if (!isCustomTarget) { // only default dropzone has pseudoelements
+    if (!isCustomTarget) {
       const dropZoneElement = this._getDropZoneElement(false, e);
       if (this._shouldRaiseDragOver(e, dropZoneElement)) {
         this._dragEnterHandler(false, e);
       }
-      if (this._shouldRaiseDragLeave(e, false)) {
+      if (this._shouldRaiseDragLeave(e)) {
         this._dragLeaveHandler(false, e);
       }
     }
@@ -1219,18 +1219,17 @@ class FileUploader extends Editor<FileUploaderProperties> {
       e.preventDefault();
     }
 
-    if (this._shouldRaiseDragLeave(e, isCustomTarget)) {
+    if (this._shouldRaiseDragLeave(e)) {
       this._tryToggleDropZoneActive(false, isCustomTarget, e);
       this._activeDropZone = null;
     }
   }
 
-  _shouldRaiseDragLeave(e: MouseLikeEvent, isCustomTarget: boolean): boolean {
+  _shouldRaiseDragLeave(e: MouseLikeEvent): boolean {
     return this._activeDropZone !== null
     && !this.isMouseOverElement(
       e,
       this._activeDropZone as HTMLElement,
-      !isCustomTarget,
       -DRAG_EVENT_DELTA,
     );
   }
@@ -1490,17 +1489,13 @@ class FileUploader extends Editor<FileUploaderProperties> {
   isMouseOverElement(
     mouseEvent: MouseLikeEvent,
     element?: HTMLElement,
-    correctPseudoElements?: boolean,
     dragEventDelta: number = DRAG_EVENT_DELTA,
   ): boolean {
     if (!element) return false;
 
-    const beforeHeight = correctPseudoElements ? parseFloat(window.getComputedStyle(element, ':before').height) : 0;
-    const afterHeight = correctPseudoElements ? parseFloat(window.getComputedStyle(element, ':after').height) : 0;
-    const x = getOffset(element).left;
-    const y = getOffset(element).top + beforeHeight;
+    const { left: x, top: y } = getOffset(element);
     const w = element.offsetWidth;
-    const h = element.offsetHeight - beforeHeight - afterHeight;
+    const h = element.offsetHeight;
     const eventX = this._getEventX(mouseEvent);
     const eventY = this._getEventY(mouseEvent);
 

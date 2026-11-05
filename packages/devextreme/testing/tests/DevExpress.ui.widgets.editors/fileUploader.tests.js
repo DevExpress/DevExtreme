@@ -4033,6 +4033,28 @@ QUnit.module('Drag and drop', moduleConfig, () => {
         assert.strictEqual(onDropZoneLeaveSpy.args[0][0].dropZoneElement, $inputWrapper[0], 'dropZone argument is correct');
     });
 
+    QUnit.test('default drop zone should stay active while a file is dragged over it', function(assert) {
+        const onDropZoneLeaveSpy = sinon.spy();
+        const $fileUploader = $('#fileuploader').dxFileUploader({
+            uploadMode: 'useButtons',
+            onDropZoneLeave: onDropZoneLeaveSpy
+        });
+        const $inputWrapper = $fileUploader.find('.' + FILEUPLOADER_INPUT_WRAPPER_CLASS);
+        const { left, top } = $inputWrapper.offset();
+
+        triggerDragEvent($inputWrapper, 'dragenter');
+        assert.ok($fileUploader.hasClass('dx-fileuploader-dragover'), 'drop zone is active after dragenter');
+
+        $inputWrapper.trigger($.Event('dragover', {
+            clientX: left + $inputWrapper.outerWidth() / 2,
+            clientY: top + $inputWrapper.outerHeight() / 2,
+            originalEvent: $.Event('dragover', { dataTransfer: { types: ['Files'] } })
+        }));
+
+        assert.ok($fileUploader.hasClass('dx-fileuploader-dragover'), 'drop zone is still active after dragover');
+        assert.ok(onDropZoneLeaveSpy.notCalled, 'dropZoneLeave not called');
+    });
+
     QUnit.test('dropZoneEnter and dropZoneLeave events should not fire if dragged item is not file', function(assert) {
         const onDropZoneEnterSpy = sinon.spy();
         const onDropZoneLeaveSpy = sinon.spy();
