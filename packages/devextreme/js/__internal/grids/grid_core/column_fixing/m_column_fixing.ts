@@ -18,6 +18,7 @@ import { isDefined } from '@js/core/utils/type';
 import Scrollable from '@js/ui/scroll_view/ui.scrollable';
 import type { EngineEvent } from '@ts/events/core/events_engine';
 import eventsEngine from '@ts/events/core/events_engine';
+import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import type { DataChange } from '@ts/grids/grid_core/data_controller/types';
 import type { EditorFactory } from '@ts/grids/grid_core/editor_factory/editor_factory';
 import { CLASSES as MASTER_DETAIL_CLASSES } from '@ts/grids/grid_core/master_detail/const';
@@ -45,13 +46,19 @@ import gridCoreUtils from '../utils';
 import type { ColumnsView } from '../views/columns_view';
 import { normalizeWidth } from '../views/columns_view';
 import type { RowsView } from '../views/rows_view';
-import type { RowsViewScrollEvent, SummaryRowsViewExtension } from '../views/types';
+import type {
+  GroupCellOptions,
+  RowRenderOptions,
+  RowsViewScrollEvent,
+  SummaryRowsViewExtension,
+} from '../views/types';
 import { CLASSES, COMMAND_TRANSPARENT } from './const';
 import type {
   ColumnFixingColumnHeadersView,
   ColumnFixingColumnHeadersViewExtension,
   ColumnFixingColumnsViewExtension,
   ColumnFixingFooterView,
+  ColumnFixingRowRenderOptions,
   ColumnFixingRowsView,
 } from './types';
 import {
@@ -180,7 +187,7 @@ const baseFixedColumns = <T extends ModuleType<ColumnsView>>(
       const hasSummary = row.summaryCells.length > 0;
       if (hasSummary) {
         // @ts-expect-error RowsView's method
-        const alignByColumnCellCount = this._getAlignByColumnCellCount(groupCellOptions.colspan, {
+        const alignByColumnCellCount = this.getAlignByColumnCellCount(groupCellOptions.colspan, {
           columns: this._columnsController.getVisibleColumns(),
           row,
           isFixed: true,
@@ -338,7 +345,7 @@ const baseFixedColumns = <T extends ModuleType<ColumnsView>>(
         if (options.row.summaryCells && options.row.summaryCells.length) {
           const columns = this._columnsController.getVisibleColumns();
           // @ts-expect-error DataGrid's method
-          const alignByFixedColumnCellCount = this._getAlignByColumnCellCount?.(
+          const alignByFixedColumnCellCount = this.getAlignByColumnCellCount?.(
             column.colspan,
             {
               columns,
@@ -829,78 +836,97 @@ const rowsView = (
     return super._renderContent(contentElement, tableElement);
   }
 
-  protected _getGroupCellOptions(options) {
+  protected _getGroupCellOptions(options: RowRenderOptions): GroupCellOptions {
     if (this._isFixedTableRendering) {
-      return super._getGroupCellOptions(extend({}, options, { columns: this._columnsController.getVisibleColumns() }));
+      return super._getGroupCellOptions(extend({}, options, {
+        columns: this._columnsController.getVisibleColumns(),
+      }));
     }
 
     return super._getGroupCellOptions(options);
   }
 
-  protected _renderGroupedCells($row, options) {
-    return super._renderGroupedCells($row, extend({}, options, { columns: this._columnsController.getVisibleColumns() }));
+  protected _renderGroupedCells($row: dxElementWrapper, options: RowRenderOptions): void {
+    return super._renderGroupedCells($row, extend({}, options, {
+      columns: this._columnsController.getVisibleColumns(),
+    }));
   }
 
-  private _renderGroupSummaryCells($row, options) {
+  public override renderGroupSummaryCells($row: dxElementWrapper, options: RowRenderOptions): void {
     if (this._isFixedTableRendering) {
-      // @ts-expect-error DataGrid's method
-      super._renderGroupSummaryCells($row, extend({}, options, { columns: this._columnsController.getVisibleColumns() }));
+      super.renderGroupSummaryCells($row, extend({}, options, {
+        columns: this._columnsController.getVisibleColumns(),
+      }));
     } else {
-      // @ts-expect-error DataGrid's method
-      super._renderGroupSummaryCells($row, options);
+      super.renderGroupSummaryCells($row, options);
     }
   }
 
-  private _hasAlignByColumnSummaryItems(columnIndex, options) {
-    // @ts-expect-error DataGrid's method
-    const result = super._hasAlignByColumnSummaryItems.apply(this, arguments);
+  public override hasAlignByColumnSummaryItems(
+    columnIndex: number,
+    options: ColumnFixingRowRenderOptions,
+  ): boolean {
+    const result = super.hasAlignByColumnSummaryItems(columnIndex, options);
     const column = options.columns[columnIndex];
 
     if (options.isFixed) {
-      return column.fixed && (result || column.fixedPosition === 'right');
+      return !!column.fixed && (result || column.fixedPosition === 'right');
     }
 
     return result && (!this._isFixedColumns || !column.fixed);
   }
 
-  public renderGroupSummaryCellsCore($groupCell, options, groupCellColSpan, alignByColumnCellCount) {
-    let alignByFixedColumnCellCount;
-
-    if (this._isFixedTableRendering) {
-      options.isFixed = true;
-      // @ts-expect-error DataGrid's method
-      alignByFixedColumnCellCount = this._getAlignByColumnCellCount(groupCellColSpan, options);
-      options.isFixed = false;
-
-      const startColumnIndex = options.columns.length - alignByFixedColumnCellCount;
-      options = extend({}, options, { columns: this.getFixedColumns() });
-      const transparentColumnIndex = getTransparentColumnIndex(options.columns);
-
-      if (startColumnIndex < transparentColumnIndex) {
-        alignByFixedColumnCellCount -= (options.columns[transparentColumnIndex].colspan - 1) || 0;
-        groupCellColSpan -= (options.columns[transparentColumnIndex].colspan - 1) || 0;
-      } else if (alignByColumnCellCount > 0) {
-        $groupCell.css('visibility', 'hidden');
-      }
-      alignByColumnCellCount = alignByFixedColumnCellCount;
+  public override renderGroupSummaryCellsCore(
+    $groupCell: dxElementWrapper,
+    options: ColumnFixingRowRenderOptions,
+    groupCellColSpan: number,
+    alignByColumnCellCount: number,
+  ): void {
+    if (!this._isFixedTableRendering) {
+      super.renderGroupSummaryCellsCore($groupCell, options, groupCellColSpan, alignByColumnCellCount);
+      return;
     }
 
-    super.renderGroupSummaryCellsCore($groupCell, options, groupCellColSpan, alignByColumnCellCount);
+    options.isFixed = true;
+    let alignByFixedColumnCellCount = this.getAlignByColumnCellCount(groupCellColSpan, options);
+    options.isFixed = false;
+
+    const startColumnIndex = options.columns.length - alignByFixedColumnCellCount;
+    const fixedOptions = extend({}, options, { columns: this.getFixedColumns() });
+    const transparentColumnIndex = getTransparentColumnIndex(fixedOptions.columns);
+    let fixedGroupCellColSpan = groupCellColSpan;
+
+    if (startColumnIndex < transparentColumnIndex) {
+      const transparentColumn = fixedOptions.columns[transparentColumnIndex];
+      const colspanCorrection = ((transparentColumn.colspan ?? 1) - 1) || 0;
+
+      alignByFixedColumnCellCount -= colspanCorrection;
+      fixedGroupCellColSpan -= colspanCorrection;
+    } else if (alignByColumnCellCount > 0) {
+      $groupCell.css('visibility', 'hidden');
+    }
+
+    super.renderGroupSummaryCellsCore(
+      $groupCell,
+      fixedOptions,
+      fixedGroupCellColSpan,
+      alignByFixedColumnCellCount,
+    );
   }
 
-  private _getSummaryCellIndex(columnIndex, columns) {
+  public override getSummaryCellIndex(columnIndex: number, columns: Column[]): number {
     if (this._isFixedTableRendering) {
       const transparentColumnIndex = getTransparentColumnIndex(columns);
 
       if (columnIndex > transparentColumnIndex) {
-        columnIndex += columns[transparentColumnIndex].colspan - 1;
+        // @ts-expect-error the transparent column always has a colspan
+        return columnIndex + (columns[transparentColumnIndex].colspan - 1);
       }
 
       return columnIndex;
     }
 
-    // @ts-expect-error DataGrid's method
-    return super._getSummaryCellIndex.apply(this, arguments);
+    return super.getSummaryCellIndex(columnIndex, columns);
   }
 
   protected _renderCore(change?: DataChange): DeferredObj<unknown> {

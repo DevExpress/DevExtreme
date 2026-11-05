@@ -218,12 +218,24 @@ export type RowsViewOptions = InternalGridOptions & Pick<DataGridProperties, 'gr
 /** @architectureLeak data_grid/summary: core extenders adjust the group summary cells */
 export interface SummaryRowsViewExtension {
   // eslint-disable-next-line @typescript-eslint/method-signature-style -- overridden by methods
+  renderGroupSummaryCells($row: dxElementWrapper, options: RowRenderOptions): void;
+
+  // eslint-disable-next-line @typescript-eslint/method-signature-style -- overridden by methods
+  hasAlignByColumnSummaryItems(columnIndex: number, options: RowRenderOptions): boolean;
+
+  // eslint-disable-next-line @typescript-eslint/method-signature-style -- DataGrid narrows options
+  getAlignByColumnCellCount(groupCellColSpan: number, options: RowRenderOptions): number;
+
+  // eslint-disable-next-line @typescript-eslint/method-signature-style -- overridden by methods
   renderGroupSummaryCellsCore(
     $groupCell: dxElementWrapper,
     options: RowRenderOptions,
     groupCellColSpan: number,
     alignByColumnCellCount: number,
   ): void;
+
+  // eslint-disable-next-line @typescript-eslint/method-signature-style -- overridden by methods
+  getSummaryCellIndex(columnIndex: number, columns: Column[]): number;
 }
 
 // the grid passes loadPanel options to the LoadPanel widget, so its animation applies too
