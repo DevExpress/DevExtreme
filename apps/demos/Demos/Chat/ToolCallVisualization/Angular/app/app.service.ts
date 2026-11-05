@@ -259,8 +259,12 @@ export class AppService {
     const answer = await this.aiService.requestModel(messageList, tools);
     const calls = (answer.tool_calls ?? []).filter(({ type }) => type === 'function') as any[];
 
-    if (!calls.length || round === MAX_TOOL_ROUNDS) {
+    if (!calls.length) {
       return { text: answer.content ?? '', toolCalls };
+    }
+
+    if (round === MAX_TOOL_ROUNDS) {
+      throw new Error('The model requested too many tool calls. Try rephrasing your request.');
     }
 
     messageList.push({

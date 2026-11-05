@@ -122,8 +122,3 @@
   font-weight: 400;
   line-height: 16px;
 }
-
-.chat-disabled .dx-chat-messagebox {
-  opacity: 0.5;
-  pointer-events: none;
-}

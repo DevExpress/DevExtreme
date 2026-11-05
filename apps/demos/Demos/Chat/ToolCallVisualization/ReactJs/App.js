@@ -5,9 +5,7 @@ import Chat from 'devextreme-react/chat';
 import Toolbar, { Item } from 'devextreme-react/toolbar';
 import CheckBox from 'devextreme-react/check-box';
 import { loadMessages } from 'devextreme-react/common/core/localization';
-import {
-  user, assistant, suggestionCards, CHAT_DISABLED_CLASS,
-} from './data.js';
+import { user, assistant, suggestionCards } from './data.js';
 import { dataSource, useApi } from './useApi.js';
 
 loadMessages({
@@ -59,7 +57,7 @@ export default function App() {
       if (!alerts.length) {
         (event?.target).blur();
         await processAIRequest(message);
-        (event?.target).focus();
+        setTimeout(() => (event?.target).focus());
       }
     },
     [insertMessage, alerts.length, processAIRequest],
@@ -130,7 +128,7 @@ export default function App() {
           />
         </Toolbar>
         <Chat
-          className={isProcessing ? CHAT_DISABLED_CLASS : ''}
+          disabled={isProcessing}
           dataSource={dataSource}
           reloadOnChange={false}
           showAvatar={true}
