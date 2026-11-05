@@ -251,7 +251,7 @@ const columnHeadersView = (
     const columnOptionName = isOnClickApplyFilterMode(this) ? 'bufferedFilterValue' : 'filterValue';
     const normalizedValue = this.normalizeFilterValue(value, column, $editorContainer);
     const isBetween = this.getColumnSelectedFilterOperation(column) === 'between';
-    const notFireEvent = options.notFireEvent
+    const notFireEvent = !!options.notFireEvent
       || (isBetween && Array.isArray(normalizedValue) && normalizedValue.includes(undefined));
 
     this._columnsController.columnOption(
@@ -718,7 +718,7 @@ const columnHeadersView = (
 
         if (!selectedFilterOperation) {
           const editor = getEditorInstance($editorContainer);
-          if (editor && editor.NAME === 'dxDateBox' && !editor.option('isValid')) {
+          if (editor?.NAME === 'dxDateBox' && !editor.option('isValid')) {
             editor.clear();
             editor.option('isValid', true);
           }
@@ -809,7 +809,7 @@ const columnHeadersView = (
     super._handleDataChanged(e);
 
     if (e.operationTypes?.filtering || e.operationTypes?.fullReload) {
-      this.updateLookupDataSource(e.operationTypes?.filtering || lastLoadOptions?.filter);
+      this.updateLookupDataSource(!!e.operationTypes?.filtering || lastLoadOptions?.filter);
     }
   }
 
