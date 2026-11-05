@@ -116,8 +116,8 @@ const baseFixedColumns = <T extends ModuleType<ColumnsView>>(
   protected _createCol(column: Column): dxElementWrapper {
     return super._createCol(column).toggleClass(
       FIXED_COL_CLASS,
-      !!(this._isFixedTableRendering
-        && (column.fixed || (column.command && column.command !== COMMAND_TRANSPARENT))),
+      this._isFixedTableRendering
+        && (!!column.fixed || (!!column.command && column.command !== COMMAND_TRANSPARENT)),
     );
   }
 
@@ -140,7 +140,7 @@ const baseFixedColumns = <T extends ModuleType<ColumnsView>>(
         return columnIndices;
       }
 
-      const isGroupRow = rowTypes && rowTypes[idx] === 'group';
+      const isGroupRow = rowTypes?.[idx] === 'group';
 
       if (isGroupRow) {
         return [...columnIndices];
@@ -272,9 +272,9 @@ const baseFixedColumns = <T extends ModuleType<ColumnsView>>(
 
     super._renderRow($table, options);
 
-    if (this._isFixedTableRendering && cells && cells.length) {
+    if (this._isFixedTableRendering && cells?.length) {
       let fixedCorrection = 0;
-      const fixedCells = options.row.cells || [];
+      const fixedCells = options.row.cells ?? [];
       cells = cells.slice();
       options.row.cells = cells;
 
@@ -363,7 +363,7 @@ const baseFixedColumns = <T extends ModuleType<ColumnsView>>(
     if (!isFixedTableRendering && this._isFixedColumns) {
       const isEmptyCell = isGroupCell
         ? this.isEmptyGroupCell?.(options)
-        : column.fixed || (column.command && column.fixed !== false);
+        : !!column.fixed || (!!column.command && column.fixed !== false);
 
       if (isEmptyCell) {
         if ((column.command && column.type !== 'buttons') || options.rowType === 'group') {
@@ -469,7 +469,7 @@ const baseFixedColumns = <T extends ModuleType<ColumnsView>>(
   public getRowIndex($row: Element | dxElementWrapper): number {
     const $fixedTable = this._fixedTableElement;
 
-    if ($fixedTable && $fixedTable.find($row).length) {
+    if ($fixedTable?.find($row).length) {
       return this._getRowElements($fixedTable).index($row);
     }
 
@@ -522,7 +522,7 @@ const baseFixedColumns = <T extends ModuleType<ColumnsView>>(
     const { widths } = options;
 
     const visibleColumns = this._columnsController.getVisibleColumns();
-    const isColumnWidthsSynced = widths?.length
+    const isColumnWidthsSynced = !!widths?.length
       && visibleColumns.some((column) => isDefined(column.visibleWidth));
     const isColumnWidthChanged = options.optionNames?.width;
 
@@ -768,8 +768,8 @@ const rowsView = (
 
     if (element && isTableRendering) {
       let $content = element.children(`.${contentClass}`);
-
       const scrollable = this.getScrollable();
+
       if (!$content.length && scrollable) {
         $content = $('<div>').addClass(contentClass);
 
@@ -786,7 +786,7 @@ const rowsView = (
           const $nearestScrollable = $(e.target).closest('.dx-scrollable');
           let shouldScroll = false;
 
-          if (scrollable && scrollable.$element().is($nearestScrollable)) {
+          if (scrollable?.$element().is($nearestScrollable)) {
             shouldScroll = true;
           } else {
             const nearestScrollableInstance = $nearestScrollable.length
@@ -835,7 +835,7 @@ const rowsView = (
       return;
     }
 
-    const scrollTop = scrollable && scrollable.scrollOffset().top;
+    const scrollTop = scrollable?.scrollOffset().top;
 
     this._updateFixedTablePosition(scrollTop);
   }
@@ -1090,7 +1090,7 @@ const rowsView = (
       styles[this.option('rtlEnabled') ? 'marginLeft' : 'marginRight'] = vWidth;
       styles.marginBottom = hWidth;
 
-      const useNativeScrolling = this._scrollable && this._scrollable.option('useNative');
+      const useNativeScrolling = this._scrollable?.option('useNative');
       (useNativeScrolling ? $fixedContent : this._fixedTableElement).css(styles);
     }
   }
@@ -1202,7 +1202,7 @@ const draggingHeader = (
     const targetColumn = columns[point.columnIndex];
     const $transparentColumn = this._columnHeadersView.getTransparentColumnElement();
 
-    if (!result && location === 'headers' && $transparentColumn && $transparentColumn.length) {
+    if (!result && location === 'headers' && $transparentColumn?.length) {
       const boundingRect = getBoundingRect($transparentColumn.get(0));
 
       if (sourceColumn && sourceColumn.fixed) {
@@ -1255,7 +1255,7 @@ const columnsResizer = (
   ): ColumnPoint | null {
     const $transparentColumn = this._columnHeadersView.getTransparentColumnElement();
 
-    if ($transparentColumn && $transparentColumn.length) {
+    if ($transparentColumn?.length) {
       const boundingRect = getBoundingRect($transparentColumn.get(0));
 
       if (currentPoint.x <= boundingRect.left || currentPoint.x >= boundingRect.right) {
