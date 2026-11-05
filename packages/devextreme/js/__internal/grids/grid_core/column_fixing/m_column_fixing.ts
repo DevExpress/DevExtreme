@@ -643,48 +643,44 @@ const columnHeadersView = (
 ): ModuleType<
   ColumnHeadersView & ColumnFixingColumnHeadersViewExtension
 > => class ColumnHeadersViewFixedColumnsExtender extends baseFixedColumns(Base) {
-  public getFixedColumnElements(rowIndex?) {
-    const that = this;
-
+  public getFixedColumnElements(rowIndex?: number): dxElementWrapper | null | undefined {
     if (!this._isFixedColumns) {
-      return;
+      return undefined;
     }
 
     if (isDefined(rowIndex)) {
-      return this._fixedTableElement && this._getRowElements(this._fixedTableElement).eq(rowIndex).children();
+      return this._fixedTableElement
+        && this._getRowElements(this._fixedTableElement).eq(rowIndex).children();
     }
 
-    const columnElements: any = that.getColumnElements();
-    const $transparentColumnElement = that.getTransparentColumnElement();
-    if (columnElements && $transparentColumnElement && $transparentColumnElement.length) {
-      const transparentColumnIndex = getTransparentColumnIndex(that.getFixedColumns());
-      [].splice.apply(
-        columnElements,
-        [
-          transparentColumnIndex,
-          ($transparentColumnElement.get(0) as HTMLTableCellElement)?.colSpan,
-          $transparentColumnElement.get(0) as never,
-        ],
-      );
+    const columnElements = this.getColumnElements();
+    const $transparentColumnElement = this.getTransparentColumnElement();
+
+    if (columnElements && $transparentColumnElement?.length) {
+      const transparentColumnIndex = getTransparentColumnIndex(this.getFixedColumns());
+      const transparentCell = $transparentColumnElement.get(0) as HTMLTableCellElement;
+      const elements = columnElements.toArray();
+
+      elements.splice(transparentColumnIndex, transparentCell.colSpan, transparentCell);
+
+      return $(elements);
     }
 
     return columnElements;
   }
 
-  public getColumnWidths(fixedTableElement?: any, rowIndex?: number) {
-    const that = this;
-    let fixedWidths;
+  public getColumnWidths(fixedTableElement?: dxElementWrapper, rowIndex?: number): number[] {
     const result = super.getColumnWidths(fixedTableElement, rowIndex);
-    const $fixedColumnElements = that.getFixedColumnElements();
-    const fixedColumns = that.getFixedColumns();
+    const $fixedColumnElements = this.getFixedColumnElements();
+    const fixedColumns = this.getFixedColumns();
 
-    if (that._fixedTableElement) {
-      if ($fixedColumnElements && $fixedColumnElements.length) {
-        fixedWidths = that._getWidths($fixedColumnElements);
-      } else {
-        fixedWidths = super.getColumnWidths(that._fixedTableElement);
-      }
+    if (!this._fixedTableElement) {
+      return normalizeColumnWidths(fixedColumns, result, undefined);
     }
+
+    const fixedWidths = $fixedColumnElements?.length
+      ? this._getWidths($fixedColumnElements)
+      : super.getColumnWidths(this._fixedTableElement);
 
     return normalizeColumnWidths(fixedColumns, result, fixedWidths);
   }
