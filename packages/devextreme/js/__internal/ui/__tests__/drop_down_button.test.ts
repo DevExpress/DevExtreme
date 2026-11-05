@@ -37,6 +37,12 @@ describe('DropDownButton', () => {
       expect(model.getButtonElement()?.getAttribute('aria-label')).toBe(HINT);
     });
 
+    it('should stay "dropdownbutton" when the hint is an empty string', () => {
+      const { model } = createDropDownButton({ icon: 'export', hint: '' });
+
+      expect(model.getButtonElement()?.getAttribute('aria-label')).toBe('dropdownbutton');
+    });
+
     it('should stay the hint while the drop-down list is opened and after it is closed', async () => {
       const { instance, model } = createDropDownButton({ icon: 'export', hint: HINT });
 
