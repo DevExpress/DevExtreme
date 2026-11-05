@@ -982,7 +982,6 @@ export const validatingEditingExtender = (
             const validator = this._validatingController.createValidator({
               column,
               key: change.key,
-              // @ts-expect-error createColumn initializes calculateCellValue
               value: column.calculateCellValue(data),
             });
             if (validator) {
