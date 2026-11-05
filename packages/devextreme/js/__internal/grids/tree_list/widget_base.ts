@@ -4,7 +4,7 @@ import './data_source/data_source_module';
 import './module_not_extended/filter';
 import './data_controller/data_controller';
 import './module_not_extended/sorting';
-import './rows/m_rows';
+import './rows/rows';
 import './module_not_extended/context_menu';
 import './module_not_extended/error_handling';
 import './grid_view';

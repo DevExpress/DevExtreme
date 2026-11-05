@@ -6,7 +6,7 @@ import type {
   DataChange, GeneratedItem, ItemProcessingOptions, ProcessedItem, RefreshOptions,
 } from '@ts/grids/grid_core/data_controller/types';
 import type { ChangedEvent } from '@ts/grids/grid_core/data_source_adapter/types';
-import type { SelectionController } from '@ts/grids/grid_core/selection/m_selection';
+import type { SelectionController } from '@ts/grids/grid_core/selection/selection';
 import { getSelectColumnIndex, updateSelectCellValue } from '@ts/grids/grid_core/selection/utils';
 import type { ModuleType } from '@ts/grids/grid_core/types';
 import type { SelectionFilter } from '@ts/ui/selection/types';
