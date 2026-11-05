@@ -15,8 +15,10 @@ import {
   selectionRowsViewExtender,
 } from '@ts/grids/grid_core/selection/m_selection';
 import { selectionModule } from '@ts/grids/grid_core/selection/selection_module';
+import type { SelectionRowsView } from '@ts/grids/grid_core/selection/types';
 import type { ModuleType } from '@ts/grids/grid_core/types';
 import type { RowsView } from '@ts/grids/grid_core/views/rows_view';
+import type { SelectionOptions } from '@ts/ui/selection/types';
 
 import treeListCore from '../core';
 
@@ -29,7 +31,7 @@ const nodeExists = function (array, currentKey) {
 };
 
 interface TreeListSelectionControllerExtension {
-  isRecursiveSelection: () => boolean;
+  isRecursiveSelection: () => boolean | undefined;
   updateSelectionState: (options: {
     selectedItemKeys?: unknown[];
     removedItemKeys?: unknown[];
@@ -88,18 +90,14 @@ SelectionController & TreeListSelectionControllerExtension
     this._selectionStateByKey = {};
   }
 
-  protected _getSelectionConfig() {
-    const config = super._getSelectionConfig.apply(this, arguments as any);
-
+  protected _getSelectionConfig(): Partial<SelectionOptions> {
+    const config = super._getSelectionConfig();
     const { plainItems } = config;
-    config.plainItems = (cached) => {
-      let result;
-      if (cached) {
-        result = this.dataSourceController.getCachedStoreData();
-      }
 
-      result ||= plainItems.apply(this, arguments as any).map((item) => item.data);
-      return result || [];
+    config.plainItems = (cached) => {
+      const cachedStoreData = cached ? this.dataSourceController.getCachedStoreData() : undefined;
+
+      return cachedStoreData ?? plainItems?.().map((item) => item.data) ?? [];
     };
     config.isItemSelected = (item) => {
       const key = this.dataSourceController.keyOf(item);
@@ -109,22 +107,21 @@ SelectionController & TreeListSelectionControllerExtension
     config.isSelectableItem = (item) => !!item;
     config.getItemData = (item) => item;
     config.allowLoadByRange = undefined;
+
     return config;
   }
 
   private renderSelectCheckBoxContainer($container, model) {
     const that = this;
-    const rowsView = that.component.getView('rowsView');
+    const rowsView = that.component.getView('rowsView') as SelectionRowsView;
 
-    // @ts-expect-error
-    const $checkbox = rowsView._renderSelectCheckBox($container, {
+    const $checkbox = rowsView.renderSelectCheckBox($container, {
       value: model.row.isSelected,
       row: model.row,
       column: model.column,
     });
 
-    // @ts-expect-error
-    rowsView._attachCheckBoxClickEvent($checkbox);
+    rowsView.attachCheckBoxClickEvent($checkbox);
   }
 
   private _getSelectAllNodeKeys() {
@@ -603,12 +600,12 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
     return resultTemplate;
   }
 
-  protected _renderSelectAllCheckBox(
+  public override renderSelectAllCheckBox(
     $container: dxElementWrapper,
   ): dxElementWrapper {
     const $checkboxWrapper = $('<div>')
       .addClass(TREELIST_SELECT_CHECKBOX_WRAPPER_CLASS);
-    const $checkbox = this._createSelectAllCheckboxElement();
+    const $checkbox = this.createSelectAllCheckboxElement();
 
     $checkbox.appendTo($checkboxWrapper);
     // NOTE: It's important to have checkbox as first child inside <td>
@@ -621,7 +618,7 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
   private renderSelectAll($cell, options) {
     $cell.addClass(TREELIST_SELECT_ALL_CLASS);
 
-    this._renderSelectAllCheckBox($cell);
+    this.renderSelectAllCheckBox($cell);
   }
 
   protected _isSortableElement($target) {
