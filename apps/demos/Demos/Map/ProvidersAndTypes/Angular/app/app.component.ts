@@ -1,8 +1,9 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode } from '@angular/core';
+import { Component, enableProdMode, inject } from '@angular/core';
 import { DxMapModule, DxSelectBoxModule } from 'devextreme-angular';
 
-import { MapSetting, APIKey, Service } from './app.service';
+import { Service } from './app.service';
+import type { APIKey } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -21,21 +22,17 @@ if (!/localhost/.test(document.location.host)) {
 })
 
 export class AppComponent {
-  mapTypes: MapSetting[];
+  private readonly service = inject(Service);
 
-  mapProviders: MapSetting[];
+  readonly mapTypes = this.service.getMapTypes();
 
-  apiKey: APIKey = {};
+  readonly mapProviders = this.service.getMapProviders();
 
-  constructor(service: Service) {
-    this.mapTypes = service.getMapTypes();
-    this.mapProviders = service.getMapProviders();
-    this.apiKey = {
-      azure: '6N8zuPkBsnfwniNAJkldM3cUgm3lXg3y9gkIKy59benICnnepK4DJQQJ99AIACYeBjFllM6LAAAgAZMPGFXE',
-      bing: 'Aq3LKP2BOmzWY47TZoT1YdieypN_rB6RY9FqBfx-MDCKjvvWBbT68R51xwbL-AqC',
-      google: 'AIzaSyBIw1-l1otL9v1bY-OR4p9w21l1VLu9L2k',
-    };
-  }
+  readonly apiKey: APIKey = {
+    azure: '6N8zuPkBsnfwniNAJkldM3cUgm3lXg3y9gkIKy59benICnnepK4DJQQJ99AIACYeBjFllM6LAAAgAZMPGFXE',
+    bing: 'Aq3LKP2BOmzWY47TZoT1YdieypN_rB6RY9FqBfx-MDCKjvvWBbT68R51xwbL-AqC',
+    google: 'AIzaSyBIw1-l1otL9v1bY-OR4p9w21l1VLu9L2k',
+  };
 }
 
 bootstrapApplication(AppComponent);

@@ -1,6 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import { Component, enableProdMode } from '@angular/core';
 import { DxButtonModule } from 'devextreme-angular';
+import type { DxButtonTypes } from 'devextreme-angular/ui/button';
 import notify from 'devextreme/ui/notify';
 
 if (!/localhost/.test(document.location.host)) {
@@ -17,14 +18,12 @@ if (!/localhost/.test(document.location.host)) {
 })
 
 export class AppComponent {
-  capitalize = (text) => text.charAt(0).toUpperCase() + text.slice(1);
+  private readonly capitalize = (text: string) => text.charAt(0).toUpperCase() + text.slice(1);
 
-  click = (e) => {
+  readonly click = (e: DxButtonTypes.ClickEvent) => {
     const buttonText = e.component.option('text');
     notify(`The ${this.capitalize(buttonText)} button was clicked`);
   };
-
-  constructor() { }
 }
 
 bootstrapApplication(AppComponent);

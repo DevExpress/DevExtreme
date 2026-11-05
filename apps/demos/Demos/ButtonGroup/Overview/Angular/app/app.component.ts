@@ -1,9 +1,9 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode } from '@angular/core';
+import { Component, enableProdMode, inject } from '@angular/core';
 import { DxButtonGroupModule } from 'devextreme-angular';
 import notify from 'devextreme/ui/notify';
 
-import { Alignment, FontStyle, Service } from './app.service';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -21,14 +21,11 @@ if (!/localhost/.test(document.location.host)) {
 })
 
 export class AppComponent {
-  alignments: Alignment[];
+  private readonly service = inject(Service);
 
-  fontStyles: FontStyle[];
+  readonly alignments = this.service.getAlignments();
 
-  constructor(service: Service) {
-    this.alignments = service.getAlignments();
-    this.fontStyles = service.getFontStyles();
-  }
+  readonly fontStyles = this.service.getFontStyles();
 
   itemClick(e) {
     notify({ message: `The "${e.itemData.hint}" button was clicked`, width: 320 }, 'success', 1000);

@@ -1,7 +1,10 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, ViewChild, enableProdMode } from '@angular/core';
-import { DxFileManagerModule, DxFileManagerComponent, DxFileManagerTypes } from 'devextreme-angular/ui/file-manager';
-import { Service, FileItem } from './app.service';
+import {
+  Component, enableProdMode, inject, viewChild,
+} from '@angular/core';
+import { DxFileManagerModule, DxFileManagerComponent } from 'devextreme-angular/ui/file-manager';
+import type { DxFileManagerTypes } from 'devextreme-angular/ui/file-manager';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -18,11 +21,28 @@ if (!/localhost/.test(document.location.host)) {
 })
 
 export class AppComponent {
-  @ViewChild(DxFileManagerComponent, { static: false }) fileManager: DxFileManagerComponent;
+  private readonly fileManager = viewChild.required(DxFileManagerComponent);
 
-  fileItems: FileItem[];
+  private readonly service = inject(Service);
 
-  newFileMenuOptions = {
+  readonly fileItems = this.service.getFileItems();
+
+  readonly onItemClick = ({ itemData, viewArea, fileSystemItem }: DxFileManagerTypes.ContextMenuItemClickEvent): void => {
+    let updated = false;
+    const { extension, category } = this.service.getItemInfo(itemData.text);
+
+    if (extension) {
+      updated = this.createFile(extension, fileSystemItem);
+    } else if (category !== undefined) {
+      updated = this.updateCategory(category, fileSystemItem, viewArea);
+    }
+
+    if (updated) {
+      this.fileManager().instance.refresh();
+    }
+  };
+
+  readonly newFileMenuOptions = {
     items: [
       {
         text: 'Create new file',
@@ -40,10 +60,10 @@ export class AppComponent {
         ],
       },
     ],
-    onItemClick: this.onItemClick.bind(this),
+    onItemClick: this.onItemClick,
   };
 
-  changeCategoryMenuOptions = {
+  readonly changeCategoryMenuOptions = {
     items: [
       {
         text: 'Category',
@@ -65,35 +85,12 @@ export class AppComponent {
         ],
       },
     ],
-    onItemClick: this.onItemClick.bind(this),
+    onItemClick: this.onItemClick,
   };
 
-  private service: Service;
-
-  constructor(service: Service) {
-    this.service = service;
-    this.fileItems = service.getFileItems();
-    this.onItemClick = this.onItemClick.bind(this);
-  }
-
-  onItemClick({ itemData, viewArea, fileSystemItem }: DxFileManagerTypes.ContextMenuItemClickEvent): void {
-    let updated = false;
-    const { extension, category } = this.service.getItemInfo(itemData.text);
-
-    if (extension) {
-      updated = this.createFile(extension, fileSystemItem);
-    } else if (category !== undefined) {
-      updated = this.updateCategory(category, fileSystemItem, viewArea);
-    }
-
-    if (updated) {
-      this.fileManager.instance.refresh();
-    }
-  }
-
-  createFile(
+  private createFile(
     fileExtension,
-    directory = this.fileManager.instance.getCurrentDirectory()
+    directory = this.fileManager().instance.getCurrentDirectory()
   ) {
     const newItem = {
       __KEY__: Date.now(),
@@ -121,13 +118,13 @@ export class AppComponent {
     return true;
   }
 
-  updateCategory(newCategory, directory, viewArea) {
+  private updateCategory(newCategory, directory, viewArea) {
     let items = null;
 
     if (viewArea === 'navPane') {
       items = [directory];
     } else {
-      items = this.fileManager.instance.getSelectedItems();
+      items = this.fileManager().instance.getSelectedItems();
     }
 
     items.forEach((item) => {

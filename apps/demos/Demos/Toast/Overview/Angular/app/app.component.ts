@@ -1,8 +1,11 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode } from '@angular/core';
+import {
+  Component, enableProdMode, inject, signal,
+} from '@angular/core';
 import { DxCheckBoxModule, DxToastModule } from 'devextreme-angular';
-import { DxCheckBoxTypes } from 'devextreme-angular/ui/check-box';
-import { Product, Service } from './app.service';
+import type { DxCheckBoxTypes } from 'devextreme-angular/ui/check-box';
+import { Service } from './app.service';
+import type { Product } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -19,22 +22,18 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  products: Product[];
+  readonly products = inject(Service).getProducts();
 
-  isVisible = false;
+  readonly isVisible = signal(false);
 
-  type = 'info';
+  readonly type = signal('info');
 
-  message = '';
-
-  constructor(service: Service) {
-    this.products = service.getProducts();
-  }
+  readonly message = signal('');
 
   checkAvailable({ value }: DxCheckBoxTypes.ValueChangedEvent, product: Product) {
-    this.type = value ? 'success' : 'error';
-    this.message = product.Name + (value ? ' is available' : ' is not available');
-    this.isVisible = true;
+    this.type.set(value ? 'success' : 'error');
+    this.message.set(product.Name + (value ? ' is available' : ' is not available'));
+    this.isVisible.set(true);
   }
 }
 

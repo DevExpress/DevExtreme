@@ -22,8 +22,8 @@
       [showDayHeaders]="false"
       [user]="user"
       height="520"
-      [typingUsers]="typingUsers$ | async"
-      [alerts]="alerts$ | async"
+      [typingUsers]="typingUsers()"
+      [alerts]="alerts()"
       [speechToTextEnabled]="true"
       [inputFieldText]="inputFieldText()"
       [suggestions]="suggestions()"
@@ -45,14 +45,14 @@
     <div class="suggestions-options">
       <div class="option">
         <dx-switch
-          [value]="sendImmediately"
+          [value]="sendImmediately()"
           (onValueChanged)="onSendImmediatelyChanged($event)"
         ></dx-switch>
         <span>Send Immediately</span>
       </div>
       <div class="option">
         <dx-switch
-          [value]="hideAfterUse"
+          [value]="hideAfterUse()"
           (onValueChanged)="onHideAfterUseChanged($event)"
         ></dx-switch>
         <span>Hide After Use</span>

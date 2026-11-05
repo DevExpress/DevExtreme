@@ -1,10 +1,8 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import {
-  enableProdMode, ChangeDetectorRef, Component,
-} from '@angular/core';
+import { enableProdMode, Component, signal } from '@angular/core';
 import { DxNumberBoxModule, DxDateBoxModule } from 'devextreme-angular';
-import { DxButtonTypes } from 'devextreme-angular/ui/button';
-import { DxTextBoxModule, DxTextBoxTypes } from 'devextreme-angular/ui/text-box';
+import type { DxButtonTypes } from 'devextreme-angular/ui/button';
+import { DxTextBoxModule, type DxTextBoxTypes } from 'devextreme-angular/ui/text-box';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -24,26 +22,25 @@ if (!/localhost/.test(document.location.host)) {
 })
 
 export class AppComponent {
-  millisecondsInDay = 24 * 60 * 60 * 1000;
+  private readonly millisecondsInDay = 24 * 60 * 60 * 1000;
 
-  currencyFormat = '$ #.##';
+  readonly currencyFormat = signal('$ #.##');
 
-  priceValue = 14500.55;
+  private priceValue = 14500.55;
 
-  passwordMode: DxTextBoxTypes.TextBoxType = 'password';
+  readonly passwordMode = signal<DxTextBoxTypes.TextBoxType>('password');
 
-  dateValue = new Date().getTime();
+  readonly dateValue = signal(new Date().getTime());
 
-  passwordButton: DxButtonTypes.Properties = {
+  readonly passwordButton: DxButtonTypes.Properties = {
     icon: 'eyeopen',
     stylingMode: 'text',
     onClick: () => {
-      this.passwordMode = this.passwordMode === 'text' ? 'password' : 'text';
-      this.changeDetectorRef.detectChanges();
+      this.passwordMode.update((mode) => (mode === 'text' ? 'password' : 'text'));
     },
   };
 
-  currencyButton: DxButtonTypes.Properties = {
+  readonly currencyButton: DxButtonTypes.Properties = {
     text: '€',
     stylingMode: 'text',
     width: 32,
@@ -53,45 +50,39 @@ export class AppComponent {
     onClick: (e) => {
       if (e.component.option('text') === '$') {
         e.component.option('text', '€');
-        this.currencyFormat = '$ #.##';
+        this.currencyFormat.set('$ #.##');
         this.priceValue /= 0.836;
       } else {
         e.component.option('text', '$');
-        this.currencyFormat = '€ #.##';
+        this.currencyFormat.set('€ #.##');
         this.priceValue *= 0.836;
       }
-      this.changeDetectorRef.detectChanges();
     },
   };
 
-  todayButton: DxButtonTypes.Properties = {
+  readonly todayButton: DxButtonTypes.Properties = {
     text: 'Today',
     stylingMode: 'text',
     onClick: () => {
-      this.dateValue = new Date().getTime();
-      this.changeDetectorRef.detectChanges();
+      this.dateValue.set(new Date().getTime());
     },
   };
 
-  prevDateButton: DxButtonTypes.Properties = {
+  readonly prevDateButton: DxButtonTypes.Properties = {
     icon: 'spinprev',
     stylingMode: 'text',
     onClick: () => {
-      this.dateValue -= this.millisecondsInDay;
-      this.changeDetectorRef.detectChanges();
+      this.dateValue.update((value) => value - this.millisecondsInDay);
     },
   };
 
-  nextDateButton: DxButtonTypes.Properties = {
+  readonly nextDateButton: DxButtonTypes.Properties = {
     icon: 'spinnext',
     stylingMode: 'text',
     onClick: () => {
-      this.dateValue += this.millisecondsInDay;
-      this.changeDetectorRef.detectChanges();
+      this.dateValue.update((value) => value + this.millisecondsInDay);
     },
   };
-
-  constructor(private changeDetectorRef: ChangeDetectorRef) {}
 }
 
 bootstrapApplication(AppComponent);

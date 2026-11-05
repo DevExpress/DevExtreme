@@ -1,14 +1,11 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import {
-  ChangeDetectorRef, Component, enableProdMode,
+  Component, enableProdMode, inject, signal,
 } from '@angular/core';
-import { AsyncPipe } from '@angular/common';
 import { DxChatModule, DxButtonModule, DxToolbarModule } from 'devextreme-angular';
 import type { DxChatTypes } from 'devextreme-angular/ui/chat';
 import type { DxButtonTypes } from 'devextreme-angular/ui/button';
-import { Observable } from 'rxjs';
 import { loadMessages } from 'devextreme-angular/common/core/localization';
-import { DataSource } from 'devextreme-angular/common/data';
 import { AppService } from './app.service';
 import { AiService } from './ai/ai.service';
 
@@ -24,66 +21,53 @@ if (!/localhost/.test(document.location.host)) {
     DxChatModule,
     DxButtonModule,
     DxToolbarModule,
-    AsyncPipe,
   ],
 })
 export class AppComponent {
-  dataSource: DataSource;
+  private readonly appService = inject(AppService);
 
-  user: DxChatTypes.User;
+  readonly dataSource = this.appService.dataSource;
 
-  typingUsers$: Observable<DxChatTypes.User[]>;
+  readonly user = this.appService.user;
 
-  alerts$: Observable<DxChatTypes.Alert[]>;
+  readonly typingUsers = this.appService.typingUsers;
 
-  regenerationText: string;
+  readonly alerts = this.appService.alerts;
 
-  copyButtonIcon: string;
+  readonly regenerationText = this.appService.REGENERATION_TEXT;
 
-  isDisabled: boolean;
+  readonly copyButtonIcon = signal('copy');
 
-  clearButtonOptions: DxButtonTypes.Properties;
+  readonly isDisabled = signal(false);
 
-  constructor(
-    private readonly appService: AppService,
-    private readonly changeDetectorRef: ChangeDetectorRef,
-  ) {
+  readonly clearButtonOptions = signal<DxButtonTypes.Properties>({
+    icon: 'clearhistory',
+    stylingMode: 'text',
+    hint: 'Clear chat',
+    onClick: () => this.appService.clearMessages(),
+  });
+
+  constructor() {
     loadMessages(this.appService.getDictionary());
-
-    this.dataSource = this.appService.dataSource;
-    this.user = this.appService.user;
-    this.alerts$ = this.appService.alerts$;
-    this.typingUsers$ = this.appService.typingUsers$;
-    this.regenerationText = this.appService.REGENERATION_TEXT;
-    this.copyButtonIcon = 'copy';
-    this.isDisabled = false;
-    this.clearButtonOptions = {
-      icon: 'clearhistory',
-      stylingMode: 'text',
-      hint: 'Clear chat',
-      onClick: () => this.appService.clearMessages(),
-    };
   }
 
   convertToHtml(message: DxChatTypes.Message): string {
     return this.appService.convertToHtml(message.text);
   }
 
-  toggleDisabledState(disabled: boolean, event = undefined) {
-    this.isDisabled = disabled;
-    this.clearButtonOptions = { ...this.clearButtonOptions, disabled };
+  private toggleDisabledState(disabled: boolean, event = undefined) {
+    this.isDisabled.set(disabled);
+    this.clearButtonOptions.update((options) => ({ ...options, disabled }));
 
     if (disabled) {
       event?.target.blur();
     } else {
       event?.target.focus();
     }
-
-    this.changeDetectorRef.detectChanges();
   }
 
   async onMessageEntered(e: DxChatTypes.MessageEnteredEvent) {
-    if (!this.appService.alerts.length) {
+    if (!this.appService.alerts().length) {
       this.toggleDisabledState(true, e.event);
     }
 
@@ -97,11 +81,10 @@ export class AppComponent {
   onCopyButtonClick(message: DxChatTypes.Message) {
     navigator.clipboard?.writeText(message.text);
 
-    this.copyButtonIcon = 'check';
+    this.copyButtonIcon.set('check');
 
     setTimeout(() => {
-      this.copyButtonIcon = 'copy';
-      this.changeDetectorRef.detectChanges();
+      this.copyButtonIcon.set('copy');
     }, 2500);
   }
 

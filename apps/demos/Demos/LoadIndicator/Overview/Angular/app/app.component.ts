@@ -1,6 +1,6 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import {
-  ChangeDetectorRef, Component, enableProdMode,
+  Component, computed, enableProdMode, signal,
 } from '@angular/core';
 import { DxButtonModule, DxLoadIndicatorModule } from 'devextreme-angular';
 
@@ -18,20 +18,15 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  loadIndicatorVisible = false;
+  readonly loadIndicatorVisible = signal(false);
 
-  buttonText = 'Send';
-
-  constructor(private changeDetectorRef: ChangeDetectorRef) {}
+  readonly buttonText = computed(() => (this.loadIndicatorVisible() ? 'Sending' : 'Send'));
 
   onClick() {
-    this.buttonText = 'Sending';
-    this.loadIndicatorVisible = true;
+    this.loadIndicatorVisible.set(true);
 
     setTimeout(() => {
-      this.buttonText = 'Send';
-      this.loadIndicatorVisible = false;
-      this.changeDetectorRef.detectChanges();
+      this.loadIndicatorVisible.set(false);
     }, 2000);
   }
 }

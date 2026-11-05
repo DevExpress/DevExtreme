@@ -1,9 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode } from '@angular/core';
-import { AsyncPipe } from '@angular/common';
+import { Component, enableProdMode, inject } from '@angular/core';
 import { DxChatModule } from 'devextreme-angular';
-import { DxChatTypes } from 'devextreme-angular/ui/chat';
-import { Observable } from 'rxjs';
+import { type DxChatTypes } from 'devextreme-angular/ui/chat';
 import { AppService } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -16,26 +14,20 @@ if (!/localhost/.test(document.location.host)) {
   styleUrls: ['./app.component.css'],
   imports: [
     DxChatModule,
-    AsyncPipe,
   ],
 })
 export class AppComponent {
-  currentUser: DxChatTypes.User;
+  private readonly appService = inject(AppService);
 
-  supportAgent: DxChatTypes.User;
+  readonly currentUser = this.appService.currentUser;
 
-  messages$: Observable<DxChatTypes.Message[]>;
+  readonly supportAgent = this.appService.supportAgent;
 
-  userChatTypingUsers$: Observable<DxChatTypes.User[]>;
+  readonly messages = this.appService.messages;
 
-  supportChatTypingUsers$: Observable<DxChatTypes.User[]>;
+  readonly userChatTypingUsers = this.appService.userChatTypingUsers;
 
-  constructor(private readonly appService: AppService) {
-    [this.currentUser, this.supportAgent] = this.appService.getUsers();
-    this.messages$ = this.appService.messages$;
-    this.userChatTypingUsers$ = this.appService.userChatTypingUsers$;
-    this.supportChatTypingUsers$ = this.appService.supportChatTypingUsers$;
-  }
+  readonly supportChatTypingUsers = this.appService.supportChatTypingUsers;
 
   onMessageEntered(event: DxChatTypes.MessageEnteredEvent) {
     this.appService.onMessageEntered(event);

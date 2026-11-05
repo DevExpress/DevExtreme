@@ -29,7 +29,7 @@
 
   <div class="ai-chat-content">
     <dx-chat
-      [disabled]="disabled"
+      [disabled]="disabled()"
       height="100%"
       [showAvatar]="false"
       width="auto"
@@ -63,6 +63,6 @@
 <dx-speed-dial-action
   icon="sparkle"
   label="AI Assistant"
-  [visible]="fabVisible"
+  [visible]="fabVisible()"
   (onClick)="toggle()"
 ></dx-speed-dial-action>

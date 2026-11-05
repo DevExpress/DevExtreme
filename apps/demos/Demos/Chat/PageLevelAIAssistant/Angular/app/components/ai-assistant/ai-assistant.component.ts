@@ -1,6 +1,4 @@
-import {
-  ChangeDetectorRef, Component, EventEmitter, Input, Output,
-} from '@angular/core';
+import { Component, output, signal } from '@angular/core';
 import { DxPopupModule } from 'devextreme-angular/ui/popup';
 import { DxChatModule } from 'devextreme-angular/ui/chat';
 import { type DxButtonTypes } from 'devextreme-angular/ui/button';
@@ -23,9 +21,9 @@ import {
   styleUrls: ['./ai-assistant.component.css'],
 })
 export class AiAssistantComponent {
-  @Input() disabled = false;
+  readonly messageSubmitted = output<DxChatTypes.TextMessage>();
 
-  @Output() messageSubmitted = new EventEmitter<DxChatTypes.TextMessage>();
+  readonly disabled = signal(false);
 
   readonly CLASSES = CLASSES;
 
@@ -35,11 +33,9 @@ export class AiAssistantComponent {
 
   readonly suggestions = chatSuggestions;
 
-  popupVisible = false;
+  readonly popupVisible = signal(false);
 
-  fabVisible = true;
-
-  constructor(private readonly changeDetectorRef: ChangeDetectorRef) {}
+  readonly fabVisible = signal(true);
 
   private readonly store = new ArrayStore({ key: 'id' });
 
@@ -61,12 +57,11 @@ export class AiAssistantComponent {
   };
 
   toggle(): void {
-    this.popupVisible = !this.popupVisible;
+    this.popupVisible.update((visible) => !visible);
   }
 
   setDisabled(value: boolean): void {
-    this.disabled = value;
-    this.changeDetectorRef.detectChanges();
+    this.disabled.set(value);
     if (value) {
       this.clearButtonInstance?.option('disabled', true);
     } else {
@@ -75,11 +70,11 @@ export class AiAssistantComponent {
   }
 
   onPopupShowing(): void {
-    this.fabVisible = false;
+    this.fabVisible.set(false);
   }
 
   onPopupHiding(): void {
-    this.fabVisible = true;
+    this.fabVisible.set(true);
   }
 
   pushMessage(message: Partial<DxChatTypes.TextMessage>): void {
@@ -95,13 +90,13 @@ export class AiAssistantComponent {
     ]);
   }
 
-  clearChat(): void {
+  private clearChat(): void {
     this.store.clear();
     this.dataSource.reload();
     this.updateClearButtonState();
   }
 
-  onSuggestionClick = ({ itemData }: DxButtonGroupTypes.ItemClickEvent): void => {
+  readonly onSuggestionClick = ({ itemData }: DxButtonGroupTypes.ItemClickEvent): void => {
     if (!itemData?.prompt) {
       return;
     }
