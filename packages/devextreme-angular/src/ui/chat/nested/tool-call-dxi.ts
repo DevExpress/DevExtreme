@@ -55,10 +55,10 @@ export class DxiChatToolCallComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get result(): object | string {
+    get result(): Record<string, any> | string {
         return this._getOption('result');
     }
-    set result(value: object | string) {
+    set result(value: Record<string, any> | string) {
         this._setOption('result', value);
     }
 
