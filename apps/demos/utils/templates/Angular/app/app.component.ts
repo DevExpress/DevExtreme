@@ -11,14 +11,10 @@ if (!/localhost/.test(document.location.host)) {
   selector: 'demo-app',
   templateUrl: './app.component.html',
   providers: [Service],
-  imports: [DxDataGridModule]
+  imports: [DxDataGridModule],
 })
 export class AppComponent {
   readonly customers = inject(Service).getCustomers();
-
-  constructor() {
-  }
 }
-
 
 bootstrapApplication(AppComponent);
