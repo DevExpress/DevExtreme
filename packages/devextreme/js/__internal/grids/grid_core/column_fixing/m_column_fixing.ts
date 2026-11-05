@@ -41,7 +41,7 @@ import type {
 } from '../columns_resizing_reordering/types';
 import type { ResizingController } from '../grid_view/grid_view';
 import type { KeyboardNavigationController } from '../keyboard_navigation/keyboard_navigation';
-import type { ColumnPoint, ModuleType } from '../types';
+import type { ColumnPoint, ModuleType, OptionChanged } from '../types';
 import gridCoreUtils from '../utils';
 import type { ColumnsView } from '../views/columns_view';
 import { normalizeWidth } from '../views/columns_view';
@@ -691,7 +691,7 @@ const rowsView = (
 ): ModuleType<
   ColumnFixingRowsView
 > => class RowsViewFixedColumnsExtender extends baseFixedColumns(Base) {
-  protected _fixedScrollTimeout: any;
+  protected _fixedScrollTimeout?: ReturnType<typeof setTimeout>;
 
   private _resizingController!: VirtualScrollingResizingController;
 
@@ -700,22 +700,24 @@ const rowsView = (
     this._resizingController = this.getController('resizing') as VirtualScrollingResizingController;
   }
 
-  public dispose() {
-    super.dispose.apply(this, arguments as any);
+  public dispose(): void {
+    super.dispose();
     clearTimeout(this._fixedScrollTimeout);
   }
 
-  public optionChanged(args) {
-    const that = this;
-
+  public optionChanged(args: OptionChanged): void {
     super.optionChanged(args);
 
-    if (args.name === 'hoverStateEnabled' && that._isFixedColumns) {
-      args.value ? this._attachHoverEvents() : this._detachHoverEvents();
+    if (args.name === 'hoverStateEnabled' && this._isFixedColumns) {
+      if (args.value) {
+        this._attachHoverEvents();
+      } else {
+        this._detachHoverEvents();
+      }
     }
   }
 
-  private _detachHoverEvents() {
+  private _detachHoverEvents(): void {
     const element = this.element();
 
     if (this._fixedTableElement && this._tableElement) {
@@ -723,7 +725,7 @@ const rowsView = (
     }
   }
 
-  private _attachHoverEvents() {
+  private _attachHoverEvents(): void {
     if (this._fixedTableElement && this._tableElement) {
       eventsEngine.on(this.element(), 'mouseover mouseout', `.${VIEW_CLASSES.dataRow}`, this.createAction((args) => {
         const { event } = args;
@@ -731,8 +733,17 @@ const rowsView = (
         const isHover = event.type === 'mouseover';
 
         if (rowIndex >= 0) {
-          this._tableElement && this._getRowElements(this._tableElement).eq(rowIndex).toggleClass(HOVER_STATE_CLASS, isHover);
-          this._fixedTableElement && this._getRowElements(this._fixedTableElement).eq(rowIndex).toggleClass(HOVER_STATE_CLASS, isHover);
+          if (this._tableElement) {
+            this._getRowElements(this._tableElement)
+              .eq(rowIndex)
+              .toggleClass(HOVER_STATE_CLASS, isHover);
+          }
+
+          if (this._fixedTableElement) {
+            this._getRowElements(this._fixedTableElement)
+              .eq(rowIndex)
+              .toggleClass(HOVER_STATE_CLASS, isHover);
+          }
         }
       }));
     }
@@ -748,16 +759,13 @@ const rowsView = (
     return browser.mozilla ? 60 : 0;
   }
 
-  public _findContentElement(isFixedTableRendering) {
-    let $content;
-    let scrollTop;
+  public _findContentElement(isFixedTableRendering?: boolean): dxElementWrapper | undefined {
     const contentClass = this.addWidgetPrefix(VIEW_CLASSES.content);
     const element = this.element();
+    const isTableRendering = this._isFixedTableRendering || isFixedTableRendering;
 
-    isFixedTableRendering = this._isFixedTableRendering || isFixedTableRendering;
-
-    if (element && isFixedTableRendering) {
-      $content = element.children(`.${contentClass}`);
+    if (element && isTableRendering) {
+      let $content = element.children(`.${contentClass}`);
 
       const scrollable = this.getScrollable();
       if (!$content.length && scrollable) {
@@ -769,8 +777,7 @@ const rowsView = (
 
           clearTimeout(this._fixedScrollTimeout);
           this._fixedScrollTimeout = setTimeout(() => {
-            scrollTop = $(target).scrollTop();
-            scrollable.scrollTo({ top: scrollTop });
+            scrollable.scrollTo({ top: (target as Element).scrollTop });
           }, scrollDelay);
         });
         eventsEngine.on($content, wheelEventName, (e: EngineEvent & { delta: number }) => {
@@ -793,7 +800,8 @@ const rowsView = (
           }
 
           if (shouldScroll) {
-            scrollTop = scrollable.scrollTop();
+            const scrollTop = scrollable.scrollTop();
+
             scrollable.scrollTo({ top: scrollTop - e.delta });
 
             const scrollableTop = scrollable.scrollTop() + scrollable.clientHeight();
@@ -816,7 +824,7 @@ const rowsView = (
     return super._findContentElement();
   }
 
-  protected _updateScrollable() {
+  protected _updateScrollable(): void {
     super._updateScrollable();
 
     const scrollable = this.getScrollable();
@@ -830,7 +838,11 @@ const rowsView = (
     this._updateFixedTablePosition(scrollTop);
   }
 
-  protected _renderContent(contentElement, tableElement, isFixedTableRendering) {
+  protected _renderContent(
+    contentElement: dxElementWrapper,
+    tableElement: dxElementWrapper,
+    isFixedTableRendering?: boolean,
+  ): dxElementWrapper | undefined {
     if (this._isFixedTableRendering || isFixedTableRendering) {
       return contentElement
         .empty()
@@ -927,7 +939,12 @@ const rowsView = (
     alignByColumnCellCount: number,
   ): void {
     if (!this._isFixedTableRendering) {
-      super.renderGroupSummaryCellsCore($groupCell, options, groupCellColSpan, alignByColumnCellCount);
+      super.renderGroupSummaryCellsCore(
+        $groupCell,
+        options,
+        groupCellColSpan,
+        alignByColumnCellCount,
+      );
       return;
     }
 
