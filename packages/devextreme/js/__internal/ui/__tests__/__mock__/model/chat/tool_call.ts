@@ -1,10 +1,13 @@
+import { ICON_CLASS } from '@ts/core/utils/icon';
 import {
   ACCORDION_ITEM_BODY_CLASS,
   ACCORDION_ITEM_OPENED_CLASS,
   ACCORDION_ITEM_TITLE_CLASS,
 } from '@ts/ui/accordion';
 import { CHAT_TOOL_CALL_CLASSES } from '@ts/ui/chat/tool_call_view/tool_call_view';
-import { TEXTEDITOR_INPUT_CLASS } from '@ts/ui/text_box/text_editor.base';
+import { TEXTEDITOR_CLASS, TEXTEDITOR_INPUT_CLASS } from '@ts/ui/text_box/text_editor.base';
+
+const EDITOR_OUTLINED_CLASS = 'dx-editor-outlined';
 
 export class ToolCallModel {
   constructor(protected readonly root: HTMLElement) {}
@@ -19,6 +22,18 @@ export class ToolCallModel {
 
   public hasIcon(): boolean {
     return !!this.root.querySelector(`.${CHAT_TOOL_CALL_CLASSES.icon}`);
+  }
+
+  public getIconClasses(): string[] {
+    const icon = this.root.querySelector(`.${CHAT_TOOL_CALL_CLASSES.icon}`);
+
+    return Array.from(icon?.classList ?? []);
+  }
+
+  public hasWrenchIcon(): boolean {
+    const classes = this.getIconClasses();
+
+    return classes.includes(ICON_CLASS) && classes.includes(`${ICON_CLASS}-wrench`);
   }
 
   public getErrorTagText(): string | null {
@@ -47,10 +62,23 @@ export class ToolCallModel {
     return this.getFieldValue(CHAT_TOOL_CALL_CLASSES.result);
   }
 
+  public getResultInput(): HTMLTextAreaElement {
+    return this.root.querySelector(
+      `.${CHAT_TOOL_CALL_CLASSES.result} .${TEXTEDITOR_INPUT_CLASS}`,
+    ) as HTMLTextAreaElement;
+  }
+
   public areFieldsReadOnly(): boolean {
     const inputs = this.getFieldInputs();
 
     return inputs.length > 0 && inputs.every((input) => input.readOnly);
+  }
+
+  public areFieldsOutlined(): boolean {
+    const editors = this.getFieldEditors();
+
+    return editors.length > 0
+      && editors.every((editor) => editor.classList.contains(EDITOR_OUTLINED_CLASS));
   }
 
   public getFieldInputLabels(): string[] {
@@ -71,6 +99,12 @@ export class ToolCallModel {
 
   private getFields(): HTMLElement[] {
     return Array.from(this.root.querySelectorAll(`.${CHAT_TOOL_CALL_CLASSES.field}`));
+  }
+
+  private getFieldEditors(): HTMLElement[] {
+    return Array.from(this.root.querySelectorAll<HTMLElement>(
+      `.${CHAT_TOOL_CALL_CLASSES.field} .${TEXTEDITOR_CLASS}`,
+    ));
   }
 
   private getFieldInputs(): HTMLTextAreaElement[] {
