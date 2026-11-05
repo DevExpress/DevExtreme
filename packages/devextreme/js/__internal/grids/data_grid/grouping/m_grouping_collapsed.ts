@@ -97,7 +97,9 @@ export class GroupingHelper extends GroupingHelperCore {
       return;
     }
 
-    for (const item of items) {
+    // eslint-disable-next-line @typescript-eslint/prefer-for-of -- store items may be non-array
+    for (let i = 0; i < items.length; i += 1) {
+      const item = items[i];
       if (item.items !== undefined) {
         path.push(item.key);
 
