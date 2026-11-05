@@ -71,6 +71,19 @@ describe('DropDownButton', () => {
       expect(model.getButtonElement()?.getAttribute('aria-label')).toBe('Print or export');
     });
 
+    it('should follow a hint change while the drop-down list is opened and keep it expanded', async () => {
+      const { instance, model } = createDropDownButton({ icon: 'export', hint: HINT });
+
+      await instance.open();
+
+      expect(model.getButtonElement()?.getAttribute('aria-expanded')).toBe('true');
+
+      instance.option('hint', 'Print or export');
+
+      expect(model.getButtonElement()?.getAttribute('aria-label')).toBe('Print or export');
+      expect(model.getButtonElement()?.getAttribute('aria-expanded')).toBe('true');
+    });
+
     it('should be the visible text when both the text and the hint are set', () => {
       const { model } = createDropDownButton({ icon: 'export', text: 'Export', hint: HINT });
 
