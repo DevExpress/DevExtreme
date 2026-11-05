@@ -70,7 +70,7 @@ export default dependencyInjector({
       return formatParts[0];
     }
 
-    return function(date): string {
+    return function (date): string {
       return formatParts.map((formatPart) => dateLocalization.format(date, formatPart)).join(' ');
     };
   },
@@ -81,7 +81,7 @@ export default dependencyInjector({
       && !(dateDifferences.year || dateDifferences.month || dateDifferences.day);
 
     if (needSpecialSecondFormatter) {
-      const secondFormatter = function(date): string {
+      const secondFormatter = function (date): string {
         return `${date.getSeconds() + date.getMilliseconds() / 1000}s`;
       };
       resultFormat.push(secondFormatter);
@@ -118,7 +118,7 @@ export default dependencyInjector({
 
     if (dateDifferences.month && dateDifferences.day) {
       if (intervalFormat) {
-        const monthDayFormatter = function(date): string {
+        const monthDayFormatter = function (date): string {
           const monthName = dateLocalization.getMonthNames('abbreviated')[date.getMonth()];
           return `${monthName} ${dateLocalization.format(date, 'day')}`;
         };
@@ -136,7 +136,7 @@ export default dependencyInjector({
       if (intervalFormat) {
         resultFormat.unshift('day');
       } else {
-        const dayFormatter = function(date): string {
+        const dayFormatter = function (date): string {
           const dayOfWeek = dateLocalization.format(date, 'dayofweek');
           return `${dayOfWeek}, ${dateLocalization.format(date, 'day')}`;
         };
@@ -180,7 +180,7 @@ export default dependencyInjector({
 
   getDateFormatByTickInterval(startValue, endValue, tickInterval) {
     const dateDifferencesConverter = { week: 'day' };
-    const correctDateDifferences = function(dateDifferences, unitInterval, value): void {
+    const correctDateDifferences = function (dateDifferences, unitInterval, value): void {
       switch (unitInterval) {
         case 'year':
         case 'quarter':
@@ -206,7 +206,7 @@ export default dependencyInjector({
           break;
       }
     };
-    const correctDifferencesByMaxDate = function(differences, minDate, maxDate): void {
+    const correctDifferencesByMaxDate = function (differences, minDate, maxDate): void {
       if (!maxDate.getMilliseconds() && maxDate.getSeconds()) {
         if (maxDate.getSeconds() - minDate.getSeconds() === 1) {
           differences.millisecond = true;

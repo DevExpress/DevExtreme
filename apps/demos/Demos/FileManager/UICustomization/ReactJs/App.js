@@ -39,7 +39,7 @@ export default function App() {
     return true;
   }, []);
   const updateCategory = useCallback((newCategory, directory, viewArea) => {
-    let items = null;
+    let items;
     if (viewArea === 'navPane') {
       items = [directory];
     } else {

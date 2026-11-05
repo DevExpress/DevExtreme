@@ -9,8 +9,8 @@ import CalendarStrategy from '@ts/ui/date_box/date_box.strategy.calendar';
 import { getDeserializedDate, isSameDateArrays, isSameDates } from '@ts/ui/date_range_box/date_range.utils';
 import type DateRangeBox from '@ts/ui/date_range_box/date_range_box';
 import type MultiselectDateBox from '@ts/ui/date_range_box/multiselect_date_box';
-import type { PopupProperties } from '@ts/ui/popup/popup';
 import type Popup from '@ts/ui/popup/popup';
+import type { PopupProperties } from '@ts/ui/popup/popup';
 
 interface RangeValueChangedEvent extends Omit<ValueChangedEvent, 'value' | 'previousValue'> {
   value: (DateLike | undefined)[];
