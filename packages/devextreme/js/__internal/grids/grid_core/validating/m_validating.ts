@@ -263,13 +263,10 @@ export class ValidatingController extends modules.Controller {
     return hiddenBrokenRules.map((brokenRule) => brokenRule.message).join(', ');
   }
 
-  public validate(isFull?: boolean): DeferredObj<boolean | undefined> {
+  public validate(): DeferredObj<boolean | undefined> {
     let isValid: boolean | undefined = true;
     const deferred = Deferred<boolean | undefined>();
     const completeList: DeferredObj<RowValidatingParams>[] = [];
-
-    const editMode = this._editingController.getEditMode();
-    const isFullValidation = !!isFull || editMode === EDIT_MODE.row;
 
     if (this._isValidationInProgress) {
       // @ts-expect-error promise() is typed as Promise but returns a Deferred-like value at runtime
@@ -277,28 +274,19 @@ export class ValidatingController extends modules.Controller {
     }
 
     this._isValidationInProgress = true;
-    if (isFullValidation) {
-      this._editingController.addDeferred(deferred);
-      const changes = this._editingController.getChanges();
-      changes.forEach(({ type, key }) => {
-        if (type !== DATA_CHANGE_TYPE.remove) {
-          const validationData = this.getValidationData(key, true);
-          const validationResult = this.validateGroup(validationData);
-          completeList.push(validationResult);
-          validationResult.done((rowValidatingParams) => {
-            validationData.validated = true;
-            isValid = isValid && rowValidatingParams.isValid;
-          });
-        }
-      });
-    } else if (this._currentCellValidator) {
-      // @ts-expect-error the grid's validators get a ValidationData group
-      const validationResult = this.validateGroup(this._currentCellValidator._findGroup());
-      completeList.push(validationResult);
-      validationResult.done((rowValidatingParams) => {
-        isValid = rowValidatingParams.isValid;
-      });
-    }
+    this._editingController.addDeferred(deferred);
+    const changes = this._editingController.getChanges();
+    changes.forEach(({ type, key }) => {
+      if (type !== DATA_CHANGE_TYPE.remove) {
+        const validationData = this.getValidationData(key, true);
+        const validationResult = this.validateGroup(validationData);
+        completeList.push(validationResult);
+        validationResult.done((rowValidatingParams) => {
+          validationData.validated = true;
+          isValid = isValid && rowValidatingParams.isValid;
+        });
+      }
+    });
 
     when(...completeList).done(() => {
       this._isValidationInProgress = false;
@@ -1020,7 +1008,7 @@ export const validatingEditingExtender = (
       const deferred = Deferred<boolean>();
       result = deferred;
       this.executeOperation(deferred, () => {
-        this._validatingController.validate(true).done((isFullValid) => {
+        this._validatingController.validate().done((isFullValid) => {
           disposeValidators();
           this._updateRowAndPageIndices();
 
