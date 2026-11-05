@@ -29,19 +29,21 @@
         @message-entered="onMessageEntered($event)"
       >
         <template #empty-view>
-          <div class="dx-chat-messagelist-empty-message">{{ dictionary.en['dxChat-emptyListMessage'] }}</div>
-          <div class="dx-chat-messagelist-empty-prompt">{{ dictionary.en['dxChat-emptyListPrompt'] }}</div>
-          <div class="chat-suggestion-cards">
-            <button
-              v-for="card in suggestionCards"
-              :key="card.title"
-              type="button"
-              class="chat-suggestion-card"
-              @click="sendSuggestion(card.prompt)"
-            >
-              <div class="chat-suggestion-card-title">{{ card.title }}</div>
-              <div class="chat-suggestion-card-description">{{ card.description }}</div>
-            </button>
+          <div>
+            <div class="dx-chat-messagelist-empty-message">{{ dictionary.en['dxChat-emptyListMessage'] }}</div>
+            <div class="dx-chat-messagelist-empty-prompt">{{ dictionary.en['dxChat-emptyListPrompt'] }}</div>
+            <div class="chat-suggestion-cards">
+              <button
+                v-for="card in suggestionCards"
+                :key="card.title"
+                type="button"
+                class="chat-suggestion-card"
+                @click="sendSuggestion(card.prompt)"
+              >
+                <div class="chat-suggestion-card-title">{{ card.title }}</div>
+                <div class="chat-suggestion-card-description">{{ card.description }}</div>
+              </button>
+            </div>
           </div>
         </template>
       </DxChat>
