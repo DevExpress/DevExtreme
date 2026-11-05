@@ -3029,6 +3029,7 @@ test('New mode. A cell should be focused when the PageDow/Up key is pressed (T89
     height: 300,
     scrolling: {
       mode: 'virtual',
+      renderAsync: false,
       // @ts-expect-error private option
       legacyMode: false,
     },
