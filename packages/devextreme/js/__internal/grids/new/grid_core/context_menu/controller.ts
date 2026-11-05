@@ -1,5 +1,5 @@
-import type { Item as ContextMenuItem, PositioningEvent } from '@js/ui/context_menu';
 import type dxContextMenu from '@js/ui/context_menu';
+import type { Item as ContextMenuItem, PositioningEvent } from '@js/ui/context_menu';
 import { createRef } from 'inferno';
 
 export abstract class BaseContextMenuController<TTargetView = unknown, TContextInfo = unknown> {

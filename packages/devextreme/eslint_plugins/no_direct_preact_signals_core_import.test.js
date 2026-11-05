@@ -40,7 +40,6 @@ ruleTester.run('no-direct-preact-signals-core-import', rule, {
             errors: [
                 {
                     messageId: 'noDirectImport',
-                    type: 'Literal',
                 },
             ],
             output: 'import { signal } from "@ts/core/state_manager/index";',
@@ -51,7 +50,6 @@ ruleTester.run('no-direct-preact-signals-core-import', rule, {
             errors: [
                 {
                     messageId: 'noDirectImport',
-                    type: 'Literal',
                 },
             ],
             output: 'import * as SignalsCore from "@ts/core/state_manager/index";',
@@ -62,7 +60,6 @@ ruleTester.run('no-direct-preact-signals-core-import', rule, {
             errors: [
                 {
                     messageId: 'noDirectImport',
-                    type: 'Literal',
                 },
             ],
             output: 'const signals = import("@ts/core/state_manager/index");',
@@ -73,7 +70,6 @@ ruleTester.run('no-direct-preact-signals-core-import', rule, {
             errors: [
                 {
                     messageId: 'noDirectImport',
-                    type: 'Literal',
                 },
             ],
             output: 'const signals = require("@ts/core/state_manager/index");',

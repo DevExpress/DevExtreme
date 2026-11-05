@@ -21,6 +21,7 @@ minimumReleaseAgeExclude:
   - "devexpress-diagram"
   - "devexpress-gantt"
   - "@devexpress/utils"
+  - "eslint-config-devextreme@2.0.2"
 
 overrides:
   "js-yaml@<4.3.2": "^4.3.2"
@@ -82,10 +83,9 @@ catalog:
   devexpress-gantt: 4.1.72
   devextreme-exceljs-fork: 4.4.13
   devextreme-quill: 1.8.0
-  "@eslint/js": 9.39.5
-  eslint: 9.39.5
-  eslint-config-airbnb-typescript: 18.0.0
-  eslint-config-devextreme: 1.1.13
+  "@eslint/js": 10.0.1
+  eslint: 10.14.0
+  eslint-config-devextreme: 2.0.2
   eslint-plugin-i18n: 2.4.0
   eslint-plugin-import: 2.32.0
   eslint-plugin-jsx-a11y: 6.10.2
@@ -100,12 +100,10 @@ catalog:
   testcafe: 3.7.5
   zod: 4.6.7
   "@playwright/test": 1.62.1
-  "@eslint-stylistic/metadata": ^2.13.0
-  "@eslint/eslintrc": 3.3.7
   "@stylistic/eslint-plugin": 5.10.0
   "@types/jquery": 4.0.1
-  "@typescript-eslint/eslint-plugin": 8.52.0
-  "@typescript-eslint/parser": 8.52.0
+  "@typescript-eslint/eslint-plugin": 8.58.2
+  "@typescript-eslint/parser": 8.58.2
 
 catalogs:
   angular:

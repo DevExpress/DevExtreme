@@ -63,7 +63,7 @@ export const mapBundles = <T>(
 const contextOf = (rule: Rule): string | null => {
   let context = '';
   let { parent } = rule;
-  while (parent && parent.type === 'atrule') {
+  while (parent?.type === 'atrule') {
     const { name, params } = parent as postcss.AtRule;
     if (name.includes('keyframes')) return null;
     context = `@${name} ${params} ${context}`;

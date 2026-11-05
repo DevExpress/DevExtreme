@@ -47,7 +47,7 @@ test('Drag-n-drop between a scheduler table cell and the appointment tooltip', a
   width: 1000,
 }));
 
-test.meta({ unstable: true })('Drag-n-drop to the cell on the left should work in week view (T1005115)', async (t) => {
+test('Drag-n-drop to the cell on the left should work in week view (T1005115)', async (t) => {
   const scheduler = new Scheduler('#container');
   const collector = scheduler.collectors.find('1');
   const { appointmentTooltip } = scheduler;
@@ -55,8 +55,9 @@ test.meta({ unstable: true })('Drag-n-drop to the cell on the left should work i
 
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
+  await collector.click();
+
   await t
-    .click(collector.element)
     .dragToElement(
       appointmentTooltipItem.element,
       scheduler.getDateTableCell(2, 2),
@@ -90,16 +91,21 @@ test.meta({ unstable: true })('Drag-n-drop to the cell on the left should work i
   startDayHour: 9,
 }));
 
-test.meta({ unstable: true })('Drag-n-drop in the same table cell', async (t) => {
+test('Drag-n-drop in the same table cell', async (t) => {
   const scheduler = new Scheduler('#container');
+  const collector = scheduler.collectors.find('2');
   const { appointmentTooltip } = scheduler;
   const appointmentTooltipItem = appointmentTooltip.getListItem('Approve Personal Computer Upgrade Plan');
 
+  await collector.click();
+
   await t
-    .click(scheduler.collectors.find('2').element)
     .expect(appointmentTooltip.isVisible()).ok()
-    .drag(appointmentTooltipItem.element, 0, -90)
-    .click(scheduler.collectors.find('2').element)
+    .drag(appointmentTooltipItem.element, 0, -90);
+
+  await collector.click();
+
+  await t
     .expect(appointmentTooltip.isVisible())
     .ok()
     .expect(appointmentTooltipItem.element.exists)

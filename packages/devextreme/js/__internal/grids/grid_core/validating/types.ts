@@ -3,9 +3,6 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import type Widget from '@ts/core/widget/widget';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
-import type {
-  DataChange, GeneratedItem, ItemProcessingOptions,
-} from '@ts/grids/grid_core/data_controller/types';
 import type { RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
 import type { EditingController } from '@ts/grids/grid_core/editing/editing';
 import type {
@@ -15,8 +12,8 @@ import type { EditorFactory } from '@ts/grids/grid_core/editor_factory/editor_fa
 import type { RowKey } from '@ts/grids/grid_core/types';
 import type { PositioningEvent } from '@ts/ui/overlay/overlay';
 import type { ValidationResultInternal, ValidationRuleInternal } from '@ts/ui/validation_engine';
-import type { ValidationAdapter } from '@ts/ui/validator';
 import type Validator from '@ts/ui/validator';
+import type { ValidationAdapter } from '@ts/ui/validator';
 
 import type { VALIDATION_CANCELLED } from './const';
 
@@ -82,8 +79,9 @@ export type ValidatingCellOptions = EditorCellOptions & {
 export interface ValidatingEditingControllerExtension {
   getChangeByKey: (key: RowKey) => EditingChange | undefined;
   _showErrorRow: (change: EditingChange) => dxElementWrapper | undefined;
-  processDataItemTreeListHack: (item: GeneratedItem, options: ItemProcessingOptions) => void;
-  processItemsTreeListHack: (items: RawItemData[], e: DataChange) => RawItemData[];
+
+  // eslint-disable-next-line @typescript-eslint/method-signature-style -- overridden by methods
+  shouldMoveInvalidRowsToPage(): boolean;
 }
 
 export type ValidatingEditingController = EditingController & ValidatingEditingControllerExtension;

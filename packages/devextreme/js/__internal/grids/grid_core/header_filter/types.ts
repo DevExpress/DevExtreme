@@ -11,14 +11,12 @@ import type { DeferredObj } from '@js/core/utils/deferred';
 import type { DataSourceLike, DataSourceOptionsStub } from '@js/data/data_source';
 import type { ShowingEvent } from '@js/ui/popup';
 import type { NormalizedDataSourceOptions, StoreLoadOptions } from '@ts/data/data_source/types';
-import type { Column } from '@ts/grids/grid_core/columns_controller/types';
+import type { Column, WithCellValueCalculator } from '@ts/grids/grid_core/columns_controller/types';
 import type { InternalGrid } from '@ts/grids/grid_core/types';
 
 export type EmptyDateValue = '' | false;
 
 export type DateIntervalFormat = (value: number) => string;
-
-export type HeaderFilterColumn = Column & Required<Pick<Column, 'calculateCellValue'>>;
 
 export type HeaderFilterGroupSelector = (data: unknown) => unknown;
 
@@ -62,7 +60,7 @@ export interface HeaderFilterMenuOptions
     'apply' | 'onHidden' | 'isFilterBuilder' | 'dataSource' | 'dataField'
   > {
   columnElement: dxElementWrapper;
-  column?: HeaderFilterColumn;
+  column?: WithCellValueCalculator<Column>;
   applyFilter?: boolean;
 }
 
