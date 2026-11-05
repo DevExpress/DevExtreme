@@ -1,8 +1,10 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode } from '@angular/core';
+import {
+  Component, enableProdMode, inject, signal,
+} from '@angular/core';
 import { DxHtmlEditorModule, DxCheckBoxModule, DxSelectBoxModule } from 'devextreme-angular';
 
-import { Service, TabConfig } from './app.service';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -21,19 +23,15 @@ if (!/localhost/.test(document.location.host)) {
 })
 
 export class AppComponent {
-  isMultiline = true;
+  private readonly service = inject(Service);
 
-  valueContent: string;
+  readonly isMultiline = signal(true);
 
-  tabs: TabConfig[];
+  readonly valueContent = this.service.getMarkup();
 
-  currentTab: string[];
+  readonly tabs = this.service.getTabsData();
 
-  constructor(service: Service) {
-    this.valueContent = service.getMarkup();
-    this.tabs = service.getTabsData();
-    this.currentTab = this.tabs[2].value;
-  }
+  readonly currentTab = signal(this.tabs[2].value);
 }
 
 bootstrapApplication(AppComponent);

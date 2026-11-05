@@ -1,9 +1,11 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode } from '@angular/core';
+import {
+  Component, enableProdMode, inject, signal,
+} from '@angular/core';
 import { DxTagBoxModule, DxPopoverModule } from 'devextreme-angular';
 import { ArrayStore } from 'devextreme-angular/common/data';
-import { DxTagBoxTypes } from 'devextreme-angular/ui/tag-box';
-import { Service, Product } from './app.service';
+import type { DxTagBoxTypes } from 'devextreme-angular/ui/tag-box';
+import { Service, type Product } from './app.service';
 
 if (!document.location.host.includes('localhost')) {
   enableProdMode();
@@ -21,29 +23,24 @@ if (!document.location.host.includes('localhost')) {
 })
 
 export class AppComponent {
-  simpleProducts: string[];
+  private readonly service = inject(Service);
 
-  editableProducts: string[];
+  readonly dataSource = new ArrayStore({
+    data: this.service.getProducts(),
+    key: 'Id',
+  });
 
-  dataSource: ArrayStore;
+  readonly simpleProducts = this.service.getSimpleProducts();
 
-  product: Product;
+  readonly editableProducts = this.simpleProducts.slice();
 
-  value: number[];
+  readonly value = [1, 2];
 
-  target: EventTarget;
+  readonly product = signal<Product>(null);
 
-  visible = false;
+  readonly target = signal<EventTarget>(null);
 
-  constructor(service: Service) {
-    this.dataSource = new ArrayStore({
-      data: service.getProducts(),
-      key: 'Id',
-    });
-    this.simpleProducts = service.getSimpleProducts();
-    this.editableProducts = this.simpleProducts.slice();
-    this.value = [1, 2];
-  }
+  readonly visible = signal(false);
 
   onCustomItemCreating(args: DxTagBoxTypes.CustomItemCreatingEvent) {
     const newValue = args.text;
@@ -55,14 +52,14 @@ export class AppComponent {
   }
 
   onMouseEnter({ target }: MouseEvent, product: Product) {
-    this.target = target;
-    this.product = product;
-    this.visible = true;
+    this.target.set(target);
+    this.product.set(product);
+    this.visible.set(true);
   }
 
   onMouseLeave() {
-    this.target = null;
-    this.visible = false;
+    this.target.set(null);
+    this.visible.set(false);
   }
 
   isDisabled(product: Product) {

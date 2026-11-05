@@ -1,5 +1,5 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode } from '@angular/core';
+import { Component, enableProdMode, signal } from '@angular/core';
 import { DxRangeSliderModule, DxNumberBoxModule } from 'devextreme-angular';
 
 if (!/localhost/.test(document.location.host)) {
@@ -16,26 +16,26 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  start = 10;
+  readonly start = signal(10);
 
-  end = 90;
+  readonly end = signal(90);
 
-  format = (value: unknown) => `${value}%`;
+  private readonly format = (value: unknown) => `${value}%`;
 
-  label = {
+  readonly label = {
     visible: true,
     format: (value: unknown) => this.format(value),
     position: 'top',
   };
 
-  tooltip = {
+  readonly tooltip = {
     enabled: true,
     format: (value: unknown) => this.format(value),
     showMode: 'always',
     position: 'bottom',
   };
 
-  tooltipEnabled = {
+  readonly tooltipEnabled = {
     enabled: true,
   };
 }

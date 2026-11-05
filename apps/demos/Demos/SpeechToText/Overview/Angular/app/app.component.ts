@@ -1,5 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode } from '@angular/core';
+import {
+  Component, computed, enableProdMode, inject, signal,
+} from '@angular/core';
 import { DxSpeechToTextModule } from 'devextreme-angular/ui/speech-to-text';
 import { DxTextAreaModule } from 'devextreme-angular/ui/text-area';
 import { DxButtonModule } from 'devextreme-angular/ui/button';
@@ -33,65 +35,49 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  state: 'initial' | 'listening';
+  private readonly appService = inject(AppService);
 
-  startText: string;
+  private state: 'initial' | 'listening' = 'initial';
 
-  stopText: string;
+  readonly startText = signal('');
 
-  displayMode: string;
+  readonly stopText = signal('');
 
-  displayModes: string[];
+  readonly displayModes = this.appService.getDisplayModes();
 
-  stylingMode: string;
+  readonly displayMode = signal(this.displayModes[0]);
 
-  stylingModes: { displayValue: string; value: string }[];
+  readonly stylingModes = this.appService.getStylingModes();
 
-  type: string;
+  readonly stylingMode = signal(this.stylingModes[0].value);
 
-  types: { displayValue: string; value: string }[];
+  readonly types = this.appService.getTypes();
 
-  hint: string;
+  readonly type = signal(this.types[2].value);
 
-  disabled: boolean;
+  readonly hint = signal('Start voice recognition');
 
-  textAreaValue: string;
+  readonly disabled = signal(false);
 
-  language: string;
+  readonly textAreaValue = signal('');
 
-  languages: string[];
+  readonly languages = this.appService.getLanguages();
 
-  langMap: { [key: string]: string };
+  readonly language = signal(this.languages[0]);
 
-  interimResults: boolean;
+  private readonly langMap = this.appService.getLangMap();
 
-  continuous: boolean;
+  readonly interimResults = signal(true);
 
-  animation: boolean;
+  readonly continuous = signal(false);
 
-  speechRecognitionConfig: Record<string, unknown>;
+  readonly animation = signal(true);
 
-  constructor(private readonly appService: AppService) {
-    this.state = 'initial';
-    this.startText = '';
-    this.stopText = '';
-    this.displayModes = this.appService.getDisplayModes();
-    this.displayMode = this.displayModes[0];
-    this.stylingModes = this.appService.getStylingModes();
-    this.stylingMode = this.stylingModes[0].value;
-    this.types = this.appService.getTypes();
-    this.type = this.types[2].value;
-    this.hint = 'Start voice recognition';
-    this.disabled = false;
-    this.textAreaValue = '';
-    this.languages = this.appService.getLanguages();
-    this.language = this.languages[0];
-    this.langMap = this.appService.getLangMap();
-    this.interimResults = true;
-    this.continuous = false;
-    this.animation = true;
-    this.updateSpeechRecognitionConfig();
-  }
+  readonly speechRecognitionConfig = computed<Record<string, unknown>>(() => ({
+    lang: this.langMap[this.language()],
+    interimResults: this.interimResults(),
+    continuous: this.continuous(),
+  }));
 
   onStartClick() {
     if (!window.SpeechRecognition && !window.webkitSpeechRecognition) {
@@ -106,12 +92,12 @@ export class AppComponent {
     }
 
     this.state = 'listening';
-    this.hint = 'Stop voice recognition';
-    if (this.displayMode !== 'Custom') {
+    this.hint.set('Stop voice recognition');
+    if (this.displayMode() !== 'Custom') {
       return;
     }
 
-    this.type = 'danger';
+    this.type.set('danger');
   }
 
   onResult({ event }) {
@@ -119,47 +105,39 @@ export class AppComponent {
     const resultText = Object.values(results)
       .map((resultItem) => resultItem[0].transcript.trim())
       .join(' ');
-    this.textAreaValue = resultText;
+    this.textAreaValue.set(resultText);
   }
 
   onEnd() {
     this.state = 'initial';
-    this.hint = 'Start voice recognition';
+    this.hint.set('Start voice recognition');
 
-    if (this.displayMode !== 'Custom') {
+    if (this.displayMode() !== 'Custom') {
       return;
     }
 
-    this.type = 'default';
+    this.type.set('default');
   }
 
   onClearButtonClick() {
-    this.textAreaValue = '';
+    this.textAreaValue.set('');
   }
 
   onDisplayModeChanged({ value }) {
     if (value === 'Text and Icon') {
-      this.startText = 'Dictate';
-      this.stopText = 'Stop';
+      this.startText.set('Dictate');
+      this.stopText.set('Stop');
 
       return;
     }
 
-    this.startText = '';
-    this.stopText = '';
+    this.startText.set('');
+    this.stopText.set('');
 
     if (value === 'Custom') {
-      this.stylingMode = 'contained';
-      this.type = this.state === 'initial' ? 'default' : 'danger';
+      this.stylingMode.set('contained');
+      this.type.set(this.state === 'initial' ? 'default' : 'danger');
     }
-  }
-
-  updateSpeechRecognitionConfig() {
-    this.speechRecognitionConfig = {
-      lang: this.langMap[this.language],
-      interimResults: this.interimResults,
-      continuous: this.continuous,
-    };
   }
 }
 

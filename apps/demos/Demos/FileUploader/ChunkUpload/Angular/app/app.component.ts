@@ -23,7 +23,7 @@ export class AppComponent {
     this.getChunkPanel().appendChild(this.addChunkInfo(e.segmentSize, e.bytesLoaded, e.bytesTotal));
   }
 
-  addChunkInfo(segmentSize, loaded, total) {
+  private addChunkInfo(segmentSize, loaded, total) {
     const result = document.createElement('DIV');
 
     result.appendChild(this.createSpan('Chunk size:'));
@@ -36,18 +36,18 @@ export class AppComponent {
     return result;
   }
 
-  getValueInKb(value) {
+  private getValueInKb(value) {
     return `${(value / 1024).toFixed(0)}kb`;
   }
 
-  createSpan(text, className = null) {
+  private createSpan(text, className = null) {
     const result = document.createElement('SPAN');
     if (className) { result.className = className; }
     result.innerText = text;
     return result;
   }
 
-  getChunkPanel() {
+  private getChunkPanel() {
     return document.querySelector('.chunk-panel');
   }
 }
