@@ -58,7 +58,7 @@ import type { ResizingController } from '@ts/grids/grid_core/grid_view/grid_view
 import { CLASSES as MASTER_DETAIL_CLASSES } from '@ts/grids/grid_core/master_detail/const';
 import type { SearchPanelViewController } from '@ts/grids/grid_core/search/search';
 import { COMMAND_SELECT_CLASS } from '@ts/grids/grid_core/selection/const';
-import type { SelectionController } from '@ts/grids/grid_core/selection/m_selection';
+import type { SelectionController } from '@ts/grids/grid_core/selection/selection';
 import type { Module, ModuleType, RowKey } from '@ts/grids/grid_core/types';
 import gridCoreUtils, { isVirtualPaging } from '@ts/grids/grid_core/utils';
 import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';

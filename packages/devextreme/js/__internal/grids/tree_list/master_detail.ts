@@ -4,7 +4,7 @@ import type {
   DataChange, GeneratedItem, ItemProcessingOptions, ProcessedItem,
 } from '@ts/grids/grid_core/data_controller/types';
 import type { RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
-import { dataMasterDetailExtenderMixin, masterDetailModule } from '@ts/grids/grid_core/master_detail/m_master_detail';
+import { dataMasterDetailExtenderMixin, masterDetailModule } from '@ts/grids/grid_core/master_detail/master_detail';
 import type { MasterDetailDataControllerExtension } from '@ts/grids/grid_core/master_detail/types';
 import type { ModuleType, RowKey } from '@ts/grids/grid_core/types';
 import type { ExpandedKeysCache } from '@ts/grids/tree_list/data_controller/types';

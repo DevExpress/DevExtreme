@@ -11,11 +11,11 @@ import type { ProcessedItem } from '@ts/grids/grid_core/data_controller/types';
 import type { ChangedEvent, RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
 import { SELECT_CHECKBOX_CLASS } from '@ts/grids/grid_core/selection/const';
 import { selectionDataControllerExtender } from '@ts/grids/grid_core/selection/extenders/selection_data_controller';
-import type { SelectionController } from '@ts/grids/grid_core/selection/m_selection';
+import type { SelectionController } from '@ts/grids/grid_core/selection/selection';
 import {
   selectionColumnHeadersViewExtender,
   selectionRowsViewExtender,
-} from '@ts/grids/grid_core/selection/m_selection';
+} from '@ts/grids/grid_core/selection/selection';
 import { selectionModule } from '@ts/grids/grid_core/selection/selection_module';
 import type {
   SelectionCellOptions,
@@ -32,7 +32,7 @@ import type {
 import type { TreeListColumnsController } from '@ts/grids/tree_list/columns_controller';
 import type { TreeListDataController } from '@ts/grids/tree_list/data_controller/data_controller';
 import type { TreeNode } from '@ts/grids/tree_list/data_source_adapter/types';
-import type { TreeListRowsView } from '@ts/grids/tree_list/rows/m_rows';
+import type { TreeListRowsView } from '@ts/grids/tree_list/rows/rows';
 import type { TreeListNodeCellOptions } from '@ts/grids/tree_list/rows/types';
 import type { SelectionChangeEvent, SelectionOptions } from '@ts/ui/selection/types';
 
