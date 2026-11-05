@@ -261,7 +261,7 @@ $(() => {
     height: 710,
     dataSource,
     reloadOnChange: false,
-    showAvatar: false,
+    showAvatar: true,
     showDayHeaders: false,
     speechToTextEnabled: true,
     onMessageEntered: (e) => {
