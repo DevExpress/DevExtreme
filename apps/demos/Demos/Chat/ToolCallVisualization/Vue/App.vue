@@ -1,5 +1,5 @@
 <template>
-  <div class="demo-container">
+  <div class="tool-calls-demo">
     <div class="ai-chat-card">
       <DxToolbar>
         <DxItem
@@ -14,7 +14,7 @@
         />
       </DxToolbar>
       <DxChat
-        :class="{ 'chat-disabled': isDisabled }"
+        :disabled="isDisabled"
         :height="710"
         :data-source="dataSource"
         :reload-on-change="false"
@@ -61,7 +61,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onBeforeMount } from 'vue';
+import {
+  ref, computed, nextTick, onBeforeMount,
+} from 'vue';
 import DxChat, { type DxChatTypes } from 'devextreme-vue/chat';
 import DxCheckBox from 'devextreme-vue/check-box';
 import { type DxButtonTypes } from 'devextreme-vue/button';
@@ -154,8 +156,12 @@ async function getAIResponse(
   const calls = (answer.tool_calls ?? []).filter(({ type }) => type === 'function') as
     { id: string; type: 'function'; function: { name: string; arguments: string } }[];
 
-  if (!calls.length || round === MAX_TOOL_ROUNDS) {
+  if (!calls.length) {
     return { text: answer.content ?? '', toolCalls };
+  }
+
+  if (round === MAX_TOOL_ROUNDS) {
+    throw new Error('The model requested too many tool calls. Try rephrasing your request.');
   }
 
   messageList.push({
@@ -197,7 +203,7 @@ function toggleDisabledState(disabled: boolean, event?: Events.EventObject): voi
   if (disabled) {
     (event?.target as HTMLElement)?.blur();
   } else {
-    (event?.target as HTMLElement)?.focus();
+    nextTick(() => (event?.target as HTMLElement)?.focus());
   }
 }
 
@@ -284,7 +290,7 @@ function onClearButtonClick(): void {
 </script>
 
 <style>
-.demo-container {
+.tool-calls-demo {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -407,10 +413,5 @@ function onClearButtonClick(): void {
   font-size: 12px;
   font-weight: 400;
   line-height: 16px;
-}
-
-.chat-disabled .dx-chat-messagebox {
-  opacity: 0.5;
-  pointer-events: none;
 }
 </style>

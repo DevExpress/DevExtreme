@@ -70,13 +70,13 @@ export class AppComponent {
     this.isDisabled = disabled;
     this.clearButtonOptions = { ...this.clearButtonOptions, disabled };
 
+    this.changeDetectorRef.detectChanges();
+
     if (disabled) {
       event?.target.blur();
     } else {
       event?.target.focus();
     }
-
-    this.changeDetectorRef.detectChanges();
   }
 
   async onMessageEntered(e: DxChatTypes.MessageEnteredEvent) {

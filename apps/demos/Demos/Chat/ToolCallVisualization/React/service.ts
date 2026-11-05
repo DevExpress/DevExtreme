@@ -184,8 +184,12 @@ export async function getAIResponse(
     (call): call is OpenAI.ChatCompletionMessageFunctionToolCall => call.type === 'function',
   );
 
-  if (!calls.length || round === MAX_TOOL_ROUNDS) {
+  if (!calls.length) {
     return { text: answer.content ?? '', toolCalls };
+  }
+
+  if (round === MAX_TOOL_ROUNDS) {
+    throw new Error('The model requested too many tool calls. Try rephrasing your request.');
   }
 
   messages.push({
