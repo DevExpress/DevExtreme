@@ -2,7 +2,7 @@ import { describe, expect, it } from '@jest/globals';
 import { noop } from '@js/core/utils/common';
 
 import { GroupingHelper } from '../m_grouping_expanded';
-import type { GroupInfoData, GroupingLoadOperation } from '../types';
+import type { GroupInfoData, GroupingLoadOperation, GroupItemData } from '../types';
 import type { GroupConfig } from './grouping_expanded.helpers';
 import { GroupingTestHelper } from './grouping_expanded.helpers';
 import { createDataSourceAdapterStub } from './grouping_expanded.mock';
@@ -441,5 +441,31 @@ describe('handleDataLoaded: group items processing', () => {
     grouping.handleDataLoaded(options, noop);
 
     expect(options.data).toEqual(expected);
+  });
+});
+
+describe('non-array items', () => {
+  it('should keep the offset when a group holds non-array items', () => {
+    const grouping = new GroupingHelper(createDataSourceAdapterStub());
+    const items = { key: 'B', items: null } as unknown as GroupItemData[];
+
+    expect(grouping.updateGroupOffsets([{ key: 'A', items }], [], 0)).toBe(0);
+  });
+
+  it('should keep a row whose items field is an object', () => {
+    const grouping = new GroupingHelper(createDataSourceAdapterStub());
+    const row = { g: 'A', items: { id: 1 } };
+    const options: GroupingLoadOperation = {
+      storeLoadOptions: {},
+      group: [{ selector: 'g' }],
+      data: [row],
+      skip: 0,
+      take: 10,
+      skipFirstItem: false,
+    };
+
+    grouping.handleDataLoaded(options, noop);
+
+    expect(options.data).toEqual([{ key: 'A', items: [row] }]);
   });
 });

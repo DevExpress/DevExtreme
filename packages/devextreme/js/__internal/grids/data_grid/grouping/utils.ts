@@ -220,8 +220,9 @@ export function getGroupCount(item: GroupItemData, groupCount: number): number {
   }
 
   let count = 0;
-  for (const childItem of items) {
-    count += getGroupCount(childItem, groupCount - 1);
+  // eslint-disable-next-line @typescript-eslint/prefer-for-of -- store items may be non-array
+  for (let i = 0; i < items.length; i += 1) {
+    count += getGroupCount(items[i], groupCount - 1);
   }
 
   return count;

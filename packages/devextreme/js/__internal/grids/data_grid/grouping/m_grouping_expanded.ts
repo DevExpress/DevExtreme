@@ -106,7 +106,9 @@ export class GroupingHelper extends GroupingHelperCore {
       removeLastItemsCount: 0,
     };
 
-    for (const item of items) {
+    // eslint-disable-next-line @typescript-eslint/prefer-for-of -- store items may be non-array
+    for (let i = 0; i < items.length; i += 1) {
+      const item = items[i];
       if (item.items !== undefined) {
         path.push(item.key);
         const groupInfo = this.findGroupInfo(path);
@@ -160,7 +162,9 @@ export class GroupingHelper extends GroupingHelperCore {
 
     let currentOffset = offset;
 
-    for (const item of items) {
+    // eslint-disable-next-line @typescript-eslint/prefer-for-of -- store items may be non-array
+    for (let i = 0; i < items.length; i += 1) {
+      const item = items[i];
       if (isGroupItem(item)) {
         path.push(item.key);
 
