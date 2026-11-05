@@ -1,6 +1,7 @@
 /* eslint-disable max-classes-per-file */
 import { normalizeKeyName } from '@js/common/core/events/utils/index';
 import messageLocalization from '@js/common/core/localization/message';
+import type { DxElement } from '@js/core/element';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { equalByValue } from '@js/core/utils/common';
@@ -18,9 +19,10 @@ import { isObject } from '@ts/core/utils/type';
 import eventsEngine from '@ts/events/core/events_engine';
 import type { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/column_headers';
 import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/columns_controller';
-import type { Column } from '@ts/grids/grid_core/columns_controller/types';
+import type { Column, ColumnsChanges } from '@ts/grids/grid_core/columns_controller/types';
 import type { ColumnsResizerViewController } from '@ts/grids/grid_core/columns_resizing_reordering/columns_resizing_reordering';
 import type { PointerEventArgs } from '@ts/grids/grid_core/columns_resizing_reordering/types';
+import type { DataChange } from '@ts/grids/grid_core/data_controller/types';
 import type { DataSourceController } from '@ts/grids/grid_core/data_source/data_source_controller';
 import type { EditingController } from '@ts/grids/grid_core/editing/editing';
 import type { EditorCellOptions } from '@ts/grids/grid_core/editing/types';
@@ -33,6 +35,7 @@ import type { ToolbarItem } from '@ts/grids/grid_core/header_panel/types';
 import modules from '@ts/grids/grid_core/modules/modules';
 import type { ModuleType, OptionChanged } from '@ts/grids/grid_core/types';
 import gridCoreUtils from '@ts/grids/grid_core/utils';
+import type { CellRenderOptions, ViewCellOptions, ViewRow } from '@ts/grids/grid_core/views/types';
 import type MenuInternal from '@ts/ui/menu/menu';
 
 import { CLASSES } from './const';
@@ -107,14 +110,14 @@ const columnHeadersView = (
 
   private dataSourceController!: DataSourceController;
 
-  public init() {
+  public init(): void {
     this.dataSourceController = this.getController('dataSource');
 
     super.init();
     this._applyFilterViewController = this.getController('applyFilter');
   }
 
-  public optionChanged(args) {
+  public optionChanged(args: OptionChanged): void {
     switch (args.name) {
       case 'filterRow':
       case 'showColumnLines':
@@ -254,80 +257,83 @@ const columnHeadersView = (
     );
   }
 
-  private _updateEditorValue(column, $editorContainer) {
+  private _updateEditorValue(column: Column, $editorContainer: dxElementWrapper): void {
     const editor = getEditorInstance($editorContainer);
 
-    editor && editor.option('value', this.getFilterValue(column.index, $editorContainer));
+    editor?.option('value', this.getFilterValue(column.index, $editorContainer));
   }
 
-  protected _columnOptionChanged(e) {
+  protected _columnOptionChanged(e: ColumnsChanges): void {
     const { optionNames } = e;
+    const isFilterChanged = gridCoreUtils.checkChanges(optionNames, ['filterValue', 'bufferedFilterValue', 'selectedFilterOperation', 'bufferedSelectedFilterOperation', 'filterValues', 'filterType']);
 
-    if (gridCoreUtils.checkChanges(optionNames, ['filterValue', 'bufferedFilterValue', 'selectedFilterOperation', 'bufferedSelectedFilterOperation', 'filterValues', 'filterType']) && e.columnIndex !== undefined) {
-      const visibleIndex = this._columnsController.getVisibleIndex(e.columnIndex);
-      const column = this._columnsController.columnOption(e.columnIndex);
-      const $element = this.element();
-
-      if (!column || !$element?.length) {
-        return;
-      }
-
-      const $cell = this._getCellElement($element.find(`.${this.addWidgetPrefix(CLASSES.filterRow)}`).index(), visibleIndex) ?? $();
-      const $editorContainer = $cell.find(`.${EDITOR_CONTAINER_CLASS}`).first();
-
-      if (optionNames.filterValue || optionNames.bufferedFilterValue) {
-        this._updateEditorValue(column, $editorContainer);
-
-        const overlayInstance = $cell.find(`.${this.addWidgetPrefix(FILTER_RANGE_OVERLAY_CLASS)}`).data('dxOverlay');
-        if (overlayInstance) {
-          const $editorRangeElements = overlayInstance.$content().find(`.${EDITOR_CONTAINER_CLASS}`);
-
-          this._updateEditorValue(column, $editorRangeElements.first());
-          this._updateEditorValue(column, $editorRangeElements.last());
-        }
-        if (!overlayInstance?.option('visible')) {
-          this._updateFilterRangeContent($cell, this.getRangeTextByFilterValue(column));
-        }
-      }
-      if (optionNames.selectedFilterOperation || optionNames.bufferedSelectedFilterOperation) {
-        if (visibleIndex >= 0 && column) {
-          const $menu = $cell.find(`.${MENU_CLASS}`);
-
-          if ($menu.length) {
-            this._updateFilterOperationChooser($menu, column, $editorContainer);
-
-            if (this.getColumnSelectedFilterOperation(column) === 'between') {
-              this._renderFilterRangeContent($cell, column);
-            } else if ($editorContainer.find(`.${CLASSES.filterRangeContent}`).length) {
-              this._renderEditor($editorContainer, this.getEditorOptions($editorContainer, column));
-              this._hideFilterRange();
-            }
-          }
-        }
-      }
+    if (!isFilterChanged || e.columnIndex === undefined) {
+      super._columnOptionChanged(e);
       return;
     }
 
-    super._columnOptionChanged(e);
+    const visibleIndex = this._columnsController.getVisibleIndex(e.columnIndex);
+    const column = this._columnsController.columnOption(e.columnIndex);
+    const $element = this.element();
+
+    if (!column || !$element?.length) {
+      return;
+    }
+
+    const rowIndex = $element.find(`.${this.addWidgetPrefix(CLASSES.filterRow)}`).index();
+    const $cell = this._getCellElement(rowIndex, visibleIndex) ?? $();
+    const $editorContainer = $cell.find(`.${EDITOR_CONTAINER_CLASS}`).first();
+
+    if (optionNames.filterValue || optionNames.bufferedFilterValue) {
+      this._updateEditorValue(column, $editorContainer);
+
+      const overlayInstance = $cell.find(`.${this.addWidgetPrefix(FILTER_RANGE_OVERLAY_CLASS)}`).data('dxOverlay');
+      if (overlayInstance) {
+        const $editorRangeElements = overlayInstance.$content().find(`.${EDITOR_CONTAINER_CLASS}`);
+
+        this._updateEditorValue(column, $editorRangeElements.first());
+        this._updateEditorValue(column, $editorRangeElements.last());
+      }
+      if (!overlayInstance?.option('visible')) {
+        this._updateFilterRangeContent($cell, this.getRangeTextByFilterValue(column));
+      }
+    }
+
+    if (
+      (optionNames.selectedFilterOperation || optionNames.bufferedSelectedFilterOperation)
+      && visibleIndex >= 0
+    ) {
+      const $menu = $cell.find(`.${MENU_CLASS}`);
+
+      if ($menu.length) {
+        this._updateFilterOperationChooser($menu, column, $editorContainer);
+
+        if (this.getColumnSelectedFilterOperation(column) === 'between') {
+          this._renderFilterRangeContent($cell, column);
+        } else if ($editorContainer.find(`.${CLASSES.filterRangeContent}`).length) {
+          this._renderEditor($editorContainer, this.getEditorOptions($editorContainer, column));
+          this._hideFilterRange();
+        }
+      }
+    }
   }
 
-  protected _renderCore() {
+  protected _renderCore(options?: DataChange): DeferredObj<unknown> {
     this._filterRangeOverlayInstance = null;
-    // @ts-expect-error
-    return super._renderCore.apply(this, arguments);
+
+    return super._renderCore(options);
   }
 
-  protected _resizeCore() {
-    // @ts-expect-error
-    super._resizeCore.apply(this, arguments);
+  protected _resizeCore(): void {
+    super._resizeCore();
     this._filterRangeOverlayInstance?.repaint();
   }
 
-  private isFilterRowVisible() {
+  private isFilterRowVisible(): boolean {
     return this._isElementVisible(this.option('filterRow'));
   }
 
-  public isVisible() {
+  public isVisible(): boolean {
     return super.isVisible() || this.isFilterRowVisible();
   }
 
@@ -444,7 +450,7 @@ const columnHeadersView = (
     return this._filterRangeOverlayInstance;
   }
 
-  protected _createRow(row) {
+  protected _createRow(row: ViewRow): dxElementWrapper {
     const $row = super._createRow(row);
 
     if (row.rowType === 'filter') {
@@ -458,7 +464,7 @@ const columnHeadersView = (
     return $row;
   }
 
-  public _getRows() {
+  public _getRows(): ViewRow[] {
     const result = super._getRows();
 
     if (this.isFilterRowVisible()) {
@@ -468,54 +474,55 @@ const columnHeadersView = (
     return result;
   }
 
-  private _renderFilterCell(cell, options) {
-    const that = this;
+  private _renderFilterCell(cell: DxElement, options: ViewCellOptions): void {
     const { column } = options;
     const $cell = $(cell);
 
-    if (that.component.option('showColumnHeaders')) {
-      that.setAria('describedby', column.headerId, $cell);
+    if (this.component.option('showColumnHeaders')) {
+      this.setAria('describedby', column.headerId, $cell);
     }
-    that.setAria('label', messageLocalization.format('dxDataGrid-ariaFilterCell'), $cell);
+    this.setAria('label', messageLocalization.format('dxDataGrid-ariaFilterCell'), $cell);
 
     $cell.addClass(EDITOR_CELL_CLASS);
     const $container = $('<div>').appendTo($cell);
     const $editorContainer = $('<div>').addClass(EDITOR_CONTAINER_CLASS).appendTo($container);
 
-    if (that.getColumnSelectedFilterOperation(column) === 'between') {
-      that._renderFilterRangeContent($cell, column);
+    if (this.getColumnSelectedFilterOperation(column) === 'between') {
+      this._renderFilterRangeContent($cell, column);
     } else {
-      const editorOptions = that.getEditorOptions($editorContainer, column);
-      that._renderEditor($editorContainer, editorOptions);
+      const editorOptions = this.getEditorOptions($editorContainer, column);
+      this._renderEditor($editorContainer, editorOptions);
     }
 
     const { alignment } = column;
     if (alignment && alignment !== 'center') {
-      $cell.find(EDITORS_INPUT_SELECTOR).first().css('textAlign', column.alignment);
+      $cell.find(EDITORS_INPUT_SELECTOR).first().css('textAlign', alignment);
     }
 
     if (column.filterOperations?.length) {
-      that._renderFilterOperationChooser($container, column, $editorContainer);
+      this._renderFilterOperationChooser($container, column, $editorContainer);
     }
   }
 
-  protected _renderCellContent($cell, options) { // TODO _getCellTemplate
-    const that = this;
+  protected _renderCellContent( // TODO _getCellTemplate
+    $cell: dxElementWrapper,
+    options: ViewCellOptions,
+    renderOptions: CellRenderOptions,
+  ): void {
     const { column } = options;
 
     if (options.rowType === 'filter') {
       if (column.command) {
         $cell.html('&nbsp;');
       } else if (column.allowFiltering) {
-        that.renderTemplate($cell, that._renderFilterCell.bind(that), options).done(() => {
-          that._updateCell($cell, options);
+        this.renderTemplate($cell, this._renderFilterCell.bind(this), options).done(() => {
+          this._updateCell($cell, options);
         });
         return;
       }
     }
 
-    // @ts-expect-error
-    super._renderCellContent.apply(this, arguments);
+    super._renderCellContent($cell, options, renderOptions);
   }
 
   private getEditorOptions(
