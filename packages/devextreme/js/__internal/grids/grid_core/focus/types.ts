@@ -1,35 +1,16 @@
 import type { SearchOperation } from '@js/common/data';
+import type { ScalarFilterValue } from '@js/common/grids';
 import type { dxElementWrapper } from '@js/core/renderer';
 import type { Callback } from '@js/core/utils/callbacks';
 import type { DeferredObj } from '@js/core/utils/deferred';
-import type { ColumnDataSourceParameter } from '@ts/grids/grid_core/columns_controller/types';
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
 import type { DataChange } from '@ts/grids/grid_core/data_controller/types';
 import type { DataSourceController } from '@ts/grids/grid_core/data_source/data_source_controller';
 import type { RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
-import type {
-  DataFilter,
-  DataFilterPredicate,
-  FilterCombiner,
-} from '@ts/grids/grid_core/filter/types';
+import type { DataFilter, DataFilterExpression } from '@ts/grids/grid_core/filter/types';
 import type { RowKey } from '@ts/grids/grid_core/types';
 import type { RowsView } from '@ts/grids/grid_core/views/rows_view';
 import type { VirtualScrollingDataControllerExtension } from '@ts/grids/grid_core/virtual_scrolling';
-
-export type RowKeyFilterCondition = [
-  ColumnDataSourceParameter['selector'],
-  SearchOperation,
-  unknown,
-];
-
-export type RowKeyFilterGroup = (RowKeyFilter | FilterCombiner)[];
-
-/**
- * A filter built from a row key: it selects that row, or the rows sorted before it.
- * Unlike `DataFilter`, a selector can be a getter, a clause can be a predicate
- * (both only with local operations), and a group can be empty.
- */
-export type RowKeyFilter = RowKeyFilterCondition | DataFilterPredicate | RowKeyFilterGroup;
 
 export interface FocusDataControllerExtension {
   _updatePageIndexes: () => void;
@@ -42,8 +23,8 @@ export interface FocusDataControllerExtension {
     groupFilter?: DataFilter,
     useGroup?: boolean,
   ) => DeferredObj<number>;
-  _concatWithCombinedFilter: (filter: RowKeyFilter, groupFilter?: DataFilter) => DataFilter;
-  _generateFilterByKey: (key: RowKey, operation?: SearchOperation) => RowKeyFilter;
+  _concatWithCombinedFilter: (filter: DataFilter, groupFilter?: DataFilter) => DataFilter;
+  _generateFilterByKey: (key: RowKey, operation?: SearchOperation) => DataFilterExpression;
   // eslint-disable-next-line @typescript-eslint/method-signature-style -- overridden by methods
   getPageIndexByKey(key: RowKey): DeferredObj<number>;
   // eslint-disable-next-line @typescript-eslint/method-signature-style -- overridden by methods
@@ -79,5 +60,5 @@ export interface SortFilterValueOptions {
 export interface SortFilterValue {
   getter: ValueGetter;
   rawValue: unknown;
-  safeValue: unknown;
+  safeValue: ScalarFilterValue;
 }

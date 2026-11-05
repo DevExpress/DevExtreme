@@ -1,11 +1,13 @@
 /* eslint-disable max-classes-per-file */
 import type { SearchOperation } from '@js/common/data';
+import type { ScalarFilterValue } from '@js/common/grids';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import type { Callback } from '@js/core/utils/callbacks';
 import { equalByValue } from '@js/core/utils/common';
 import { Deferred, type DeferredObj, when } from '@js/core/utils/deferred';
 import { isBoolean, isDefined } from '@js/core/utils/type';
+import type { StoreKey } from '@ts/data/abstract_store';
 import type { KeyboardKeyDownEvent } from '@ts/events/core/keyboard_processor';
 import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/columns_controller';
 import type { ColumnDataSourceParameter } from '@ts/grids/grid_core/columns_controller/types';
@@ -16,7 +18,14 @@ import type { OperationTypes, RawItemData } from '@ts/grids/grid_core/data_sourc
 import type { EditingController } from '@ts/grids/grid_core/editing/editing';
 import { isNewRowTempKey } from '@ts/grids/grid_core/editing/editing_utils';
 import type { EditorFactory } from '@ts/grids/grid_core/editor_factory/editor_factory';
-import type { DataFilter } from '@ts/grids/grid_core/filter/types';
+import type {
+  BinaryDataFilterExpression,
+  DataFilter,
+  DataFilterExpression,
+  DataFilterPredicate,
+  DataFilterSelector,
+  FilterCombiner,
+} from '@ts/grids/grid_core/filter/types';
 import { combineFilters } from '@ts/grids/grid_core/filter/utils';
 import type { KeyboardNavigationController } from '@ts/grids/grid_core/keyboard_navigation/keyboard_navigation';
 import type { KeyboardNavigationRowsViewExtension, NavigationDirection } from '@ts/grids/grid_core/keyboard_navigation/types';
@@ -35,9 +44,6 @@ import type {
   FocusDataSourceController,
   FocusRowsView,
   FocusRowsViewExtension,
-  RowKeyFilter,
-  RowKeyFilterCondition,
-  RowKeyFilterGroup,
 } from './types';
 
 const ROW_FOCUSED_CLASS = 'dx-row-focused';
@@ -849,16 +855,16 @@ export const focusDataControllerExtender = <
     return deferred.promise();
   }
 
-  public _concatWithCombinedFilter(filter: RowKeyFilter, groupFilter?: DataFilter): DataFilter {
+  public _concatWithCombinedFilter(filter: DataFilter, groupFilter?: DataFilter): DataFilter {
     const combinedFilter = this.getCombinedFilter();
     return combineFilters([filter, combinedFilter, groupFilter]);
   }
 
   private _generateBooleanFilter(
-    selector: ColumnDataSourceParameter['selector'],
-    value: unknown,
+    selector: DataFilterSelector,
+    value: ScalarFilterValue,
     sortInfo: Pick<ColumnDataSourceParameter, 'desc'>,
-  ): RowKeyFilterCondition | undefined {
+  ): BinaryDataFilterExpression | undefined {
     const { desc } = sortInfo;
 
     switch (true) {
@@ -880,7 +886,7 @@ export const focusDataControllerExtender = <
     key: RowKey,
     rowData: RawItemData,
     useGroup?: boolean,
-  ): RowKeyFilter {
+  ): DataFilterExpression {
     const dateSerializationFormat = this.option('dateSerializationFormat');
     const remoteOperations = this.dataSourceController.remoteOperations();
     const isRemoteFiltering = Boolean(remoteOperations.filtering);
@@ -899,6 +905,11 @@ export const focusDataControllerExtender = <
     if (sort) {
       sort.slice().reverse().forEach((sortInfo) => {
         const { selector, desc, compare } = sortInfo;
+
+        if (!selector) {
+          return;
+        }
+
         const { getter, rawValue, safeValue } = UiGridCoreFocusUtils.getSortFilterValue(
           // @ts-expect-error column selectors can be undefined; focus requires a selector
           sortInfo,
@@ -923,7 +934,7 @@ export const focusDataControllerExtender = <
           const filterOperation = desc ? '>' : '<';
 
           // eslint-disable-next-line @typescript-eslint/init-declarations -- assigned in branches
-          let sortFilter: RowKeyFilter;
+          let sortFilter: DataFilterExpression | DataFilterPredicate;
           if (compare && !isRemoteSorting) {
             sortFilter = (data: RawItemData): boolean => {
               if (filterOperation === '<') {
@@ -946,19 +957,21 @@ export const focusDataControllerExtender = <
     return filter;
   }
 
-  public _generateFilterByKey(key: RowKey, operation?: SearchOperation): RowKeyFilter {
-    const dataSourceKey = this.dataSourceController.getAdapter()?.key();
+  public _generateFilterByKey(key: RowKey, operation?: SearchOperation): DataFilterExpression {
+    // @ts-expect-error focus needs a store key (E1042)
+    const dataSourceKey: StoreKey = this.dataSourceController.getAdapter()?.key();
     const filterOperation = operation ?? '=';
 
     if (!Array.isArray(dataSourceKey)) {
+      // @ts-expect-error row keys are untyped
       return [dataSourceKey, filterOperation, key];
     }
 
-    const filter: RowKeyFilterGroup = [];
+    const filter: (DataFilterExpression | FilterCombiner)[] = [];
 
     for (const keyField of dataSourceKey) {
-      // @ts-expect-error a compound key is an object
-      const keyPart: unknown = key[keyField];
+      // @ts-expect-error row keys are untyped; a compound key is an object
+      const keyPart: ScalarFilterValue = key[keyField];
       if (keyPart) {
         if (filter.length > 0) {
           filter.push('and');
@@ -967,6 +980,7 @@ export const focusDataControllerExtender = <
       }
     }
 
+    // @ts-expect-error a group built by push may be empty
     return filter;
   }
 
