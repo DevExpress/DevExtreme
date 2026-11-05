@@ -30,6 +30,7 @@ import {
   createOffsetFilter,
   fillSkipTakeInExpandedInfo,
   getContinuationGroupCount,
+  getGroupLevelCount,
   getTotalOffset,
   isDataDeferred,
   isGroupExpanded,
@@ -41,7 +42,7 @@ const loadGroupTotalCount = function loadGroupTotalCount(
   options: StoreLoadOptions,
 ): DeferredObj<number> {
   const d = Deferred<number>();
-  const isGrouping = Array.isArray(options.group) && !!options.group.length;
+  const isGrouping = getGroupLevelCount(options.group) > 0;
   // @ts-expect-error StoreLoadOptions.group is typed without null
   const loadOptions: StoreLoadOptions = extend({
     skip: 0, take: 1, requireGroupCount: isGrouping, requireTotalCount: !isGrouping,
@@ -161,7 +162,7 @@ export class GroupingHelper extends GroupingHelperCore {
     path: unknown[] = [],
     parentIndex?: number,
   ): number {
-    const groupCount = Array.isArray(options.group) ? options.group.length : 0;
+    const groupCount = getGroupLevelCount(options.group);
     const isLastGroupLevel = groupCount === loadedGroupCount;
     const remotePaging = options.remoteOperations?.paging;
     let offset = 0;
@@ -224,7 +225,7 @@ export class GroupingHelper extends GroupingHelperCore {
       ? expandedInfo
       : this.collectExpandedGroupsInfo(options, loadedGroupCount, data);
 
-    const groupCount = Array.isArray(options.group) ? options.group.length : 0;
+    const groupCount = getGroupLevelCount(options.group);
 
     if (currentExpandedInfo.paths.length && (groupCount - loadedGroupCount > 0)) {
       makeDataDeferred(options);
@@ -570,7 +571,7 @@ export class GroupingHelper extends GroupingHelperCore {
     const loadedGroupCount = dataGridCore.normalizeSortingInfo(
       options.storeLoadOptions.group || options.loadOptions?.group,
     ).length;
-    const groupCount = Array.isArray(options.group) ? options.group.length : 0;
+    const groupCount = getGroupLevelCount(options.group);
     const expandedInfo = createExpandedGroupsInfo();
 
     if (options.isCustomLoading) {

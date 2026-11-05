@@ -308,6 +308,10 @@ export function processExpandedGroupItem(
   }
 }
 
+export function getGroupLevelCount(group: StoreLoadOptions['group']): number {
+  return Array.isArray(group) ? group.length : 0;
+}
+
 export function getContinuationGroupCount(
   groupOffset: number,
   pageSize: number,
@@ -393,7 +397,7 @@ export function fillSkipTakeInExpandedInfo(
   currentGroupCount: number,
 ): void {
   const currentGroupIndex = currentGroupCount - 1;
-  const groupCount = Array.isArray(options.group) ? options.group.length : 0;
+  const groupCount = getGroupLevelCount(options.group);
   const take = options.takes?.[currentGroupIndex];
 
   expandedInfo.skip = options.skips?.[currentGroupIndex];
