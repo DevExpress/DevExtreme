@@ -22,9 +22,9 @@ interface PaneContentTemplate {
   ],
 })
 export class AppComponent {
-  dimensionOptions = new Set(['size', 'minSize', 'maxSize', 'collapsedSize']);
+  private readonly dimensionOptions = new Set(['size', 'minSize', 'maxSize', 'collapsedSize']);
 
-  paneContentTemplates: PaneContentTemplate[] = [
+  readonly paneContentTemplates: PaneContentTemplate[] = [
     { name: 'Left Pane' },
     { name: 'Central Pane' },
     { name: 'Right Pane' },

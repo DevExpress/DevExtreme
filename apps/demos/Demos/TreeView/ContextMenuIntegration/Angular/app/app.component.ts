@@ -1,5 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, ViewChild } from '@angular/core';
+import {
+  Component, enableProdMode, inject, signal, viewChild,
+} from '@angular/core';
 import { DxListModule } from 'devextreme-angular';
 import { DxTreeViewComponent, DxTreeViewModule, type DxTreeViewTypes } from 'devextreme-angular/ui/tree-view';
 import { DxContextMenuModule, DxContextMenuComponent, type DxContextMenuTypes } from 'devextreme-angular/ui/context-menu';
@@ -22,28 +24,25 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  @ViewChild(DxTreeViewComponent<Product>, { static: false }) treeView: DxTreeViewComponent<Product>;
+  private readonly treeView = viewChild.required<DxTreeViewComponent<Product>>(DxTreeViewComponent);
 
-  @ViewChild(DxContextMenuComponent<Product>, { static: false }) contextMenu: DxContextMenuComponent<Product>;
+  private readonly contextMenu = viewChild.required<DxContextMenuComponent<Product>>(DxContextMenuComponent);
 
-  products: Product[];
+  private readonly service = inject(Service);
 
-  selectedTreeItem: Product;
+  readonly products: Product[] = this.service.getProducts();
 
-  logItems: string[] = [];
+  private selectedTreeItem: Product;
 
-  menuItems: MenuItem[];
+  readonly logItems = signal<string[]>([]);
 
-  constructor(service: Service) {
-    this.products = service.getProducts();
-    this.menuItems = service.getMenuItems();
-  }
+  readonly menuItems: MenuItem[] = this.service.getMenuItems();
 
   treeViewItemContextMenu(e: DxTreeViewTypes.ItemContextMenuEvent<Product>) {
     this.selectedTreeItem = e.itemData;
 
     const isProductItem = !e.itemData.items;
-    const contextMenu = this.contextMenu.instance;
+    const contextMenu = this.contextMenu().instance;
 
     contextMenu.option('items[0].visible', !isProductItem);
     contextMenu.option('items[1].visible', !isProductItem);
@@ -55,7 +54,7 @@ export class AppComponent {
 
   contextMenuItemClick(e: DxContextMenuTypes.ItemClickEvent<Product>) {
     let logEntry = '';
-    const treeView = this.treeView.instance;
+    const treeView = this.treeView().instance;
     switch (e.itemData.id) {
       case 'expand': {
         logEntry = `The '${this.selectedTreeItem.text}' group was expanded`;
@@ -76,7 +75,7 @@ export class AppComponent {
         break;
       }
     }
-    this.logItems.push(logEntry);
+    this.logItems.update((items) => [...items, logEntry]);
   }
 }
 

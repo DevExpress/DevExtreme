@@ -1,9 +1,9 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import {
-  ChangeDetectorRef, Component, enableProdMode,
+  Component, enableProdMode, inject, signal,
 } from '@angular/core';
 import { DxTabPanelModule, DxCheckBoxModule } from 'devextreme-angular';
-import { Company, Service } from './app.service';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -21,18 +21,17 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  companies: Company[];
+  readonly companies = inject(Service).getCompanies();
 
-  itemCount: number;
+  readonly itemCount = this.companies.length;
 
-  constructor(service: Service, private changeDetectorRef: ChangeDetectorRef) {
-    this.companies = service.getCompanies();
-    this.itemCount = this.companies.length;
-  }
+  readonly selectedIndex = signal(0);
 
-  onSelectedIndexChange() {
-    this.changeDetectorRef.detectChanges();
-  }
+  readonly loop = signal(false);
+
+  readonly animationEnabled = signal(true);
+
+  readonly swipeEnabled = signal(true);
 }
 
 bootstrapApplication(AppComponent);

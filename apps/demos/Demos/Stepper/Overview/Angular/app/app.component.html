@@ -1,16 +1,16 @@
 <div class="stepper-demo">
   <div class="widget-container">
-    <div class="widget-wrapper" [class]="'widget-wrapper-' + orientation">
+    <div class="widget-wrapper" [class]="'widget-wrapper-' + orientation()">
       <div class="stepper-wrapper">
         <div id="iconsLabel" class="stepper-label">Icons and Labels</div>
         <dx-stepper
           id="icons"
           [elementAttr]="{ 'aria-labelledby': 'iconsLabel' }"
           [selectedIndex]="2"
-          [orientation]="orientation"
-          [linear]="navigationMode"
-          [selectOnFocus]="selectOnFocus"
-          [rtlEnabled]="rtlMode"
+          [orientation]="orientation()"
+          [linear]="navigationMode()"
+          [selectOnFocus]="selectOnFocus()"
+          [rtlEnabled]="rtlMode()"
         >
           @for (step of steps; track step) {
           <dxi-stepper-item
@@ -28,10 +28,10 @@
           id="numbers"
           [elementAttr]="{ 'aria-labelledby': 'numbersLabel' }"
           [selectedIndex]="2"
-          [orientation]="orientation"
-          [linear]="navigationMode"
-          [selectOnFocus]="selectOnFocus"
-          [rtlEnabled]="rtlMode"
+          [orientation]="orientation()"
+          [linear]="navigationMode()"
+          [selectOnFocus]="selectOnFocus()"
+          [rtlEnabled]="rtlMode()"
         >
           @for (step of steps; track step) {
           <dxi-stepper-item
@@ -48,10 +48,10 @@
           id="customText"
           [elementAttr]="{ 'aria-labelledby': 'customTextLabel' }"
           [selectedIndex]="2"
-          [orientation]="orientation"
-          [linear]="navigationMode"
-          [selectOnFocus]="selectOnFocus"
-          [rtlEnabled]="rtlMode"
+          [orientation]="orientation()"
+          [linear]="navigationMode()"
+          [selectOnFocus]="selectOnFocus()"
+          [rtlEnabled]="rtlMode()"
         >
           @for (step of steps; track step) {
           <dxi-stepper-item [text]="step.text"></dxi-stepper-item>
@@ -70,7 +70,7 @@
         id="orientation"
         keyExpr="value"
         [items]="orientations"
-        [selectedItemKeys]="[orientation]"
+        [selectedItemKeys]="[orientation()]"
         (onItemClick)="onOrientationClick($event)"
       />
     </div>
@@ -80,7 +80,7 @@
         id="navigationMode"
         keyExpr="value"
         [items]="navigationModes"
-        [selectedItemKeys]="[navigationMode]"
+        [selectedItemKeys]="[navigationMode()]"
         (onItemClick)="onNavigationModeClick($event)"
       />
     </div>
@@ -89,7 +89,7 @@
       <dx-check-box
         id="selectOnFocus"
         text="Select step on focus"
-        [value]="selectOnFocus"
+        [value]="selectOnFocus()"
         (onValueChanged)="onSelectOnFocusChanged($event)"
       />
     </div>
@@ -97,7 +97,7 @@
       <dx-check-box
         id="rtlMode"
         text="Right-to-left mode"
-        [value]="rtlMode"
+        [value]="rtlMode()"
         (onValueChanged)="onRtlModeChanged($event)"
       />
     </div>

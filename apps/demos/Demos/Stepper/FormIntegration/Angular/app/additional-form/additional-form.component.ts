@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, input } from '@angular/core';
 import { DxFormModule } from 'devextreme-angular';
 import { type DxFormTypes } from 'devextreme-angular/ui/form';
 import { type DxTextAreaTypes } from 'devextreme-angular/ui/text-area';
@@ -13,14 +13,14 @@ import type { BookingFormData } from '../app.types';
   ],
 })
 export class AdditionalFormComponent {
-  @Input() formData: BookingFormData;
+  readonly formData = input.required<BookingFormData>();
 
-  textAreaOptions: DxTextAreaTypes.Properties = {
+  readonly textAreaOptions: DxTextAreaTypes.Properties = {
     height: 160,
     elementAttr: { id: 'additionalRequest' },
   };
 
-  labelOptions: DxFormTypes.SimpleItem['label'] = {
+  readonly labelOptions: DxFormTypes.SimpleItem['label'] = {
     visible: false,
   };
 }

@@ -1,7 +1,10 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode } from '@angular/core';
+import {
+  Component, enableProdMode, inject, signal,
+} from '@angular/core';
 import { DxTileViewModule, DxSelectBoxModule } from 'devextreme-angular';
-import { Home, Service } from './app.service';
+import type { DxTileViewTypes } from 'devextreme-angular/ui/tile-view';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -19,11 +22,9 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  homes: Home[];
+  readonly homes = inject(Service).getHomes();
 
-  constructor(service: Service) {
-    this.homes = service.getHomes();
-  }
+  readonly direction = signal<DxTileViewTypes.Orientation>('horizontal');
 }
 
 bootstrapApplication(AppComponent);

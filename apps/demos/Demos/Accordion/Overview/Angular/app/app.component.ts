@@ -1,14 +1,15 @@
 import {
-  ChangeDetectorRef,
   Component,
   enableProdMode,
+  inject,
+  signal,
 } from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
 import {
   DxAccordionModule, DxCheckBoxModule, DxSliderModule, DxTagBoxModule,
 } from 'devextreme-angular';
 
-import { Company, Service } from './app.service';
+import { type Company, Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -28,24 +29,18 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  companies: Company[];
+  readonly companies = inject(Service).getCompanies();
 
-  selectedItems: Company[];
+  readonly selectedItems = signal<Company[]>([this.companies[0]]);
 
-  multiple = false;
+  readonly multiple = signal(false);
 
-  collapsible = false;
+  readonly collapsible = signal(false);
 
-  animationDuration = 300;
-
-  constructor(service: Service, private changeDetectorRef: ChangeDetectorRef) {
-    this.companies = service.getCompanies();
-    this.selectedItems = [this.companies[0]];
-  }
+  readonly animationDuration = signal(300);
 
   onSelectedItemsChange(items: Company[]) {
-    this.selectedItems = items;
-    this.changeDetectorRef.detectChanges();
+    this.selectedItems.set(items);
   }
 }
 

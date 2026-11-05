@@ -2,20 +2,20 @@
   <div class="widget-container">
     <dx-scroll-view
       id="scroll"
-      [class.horizontal]="itemOrientation === 'horizontal'"
-      [direction]="itemOrientation"
+      [class.horizontal]="itemOrientation() === 'horizontal'"
+      [direction]="itemOrientation()"
       showScrollbar="always"
     >
       <dx-sortable
         id="list"
-        [dropFeedbackMode]="dropFeedbackMode"
-        [itemOrientation]="itemOrientation"
-        [dragDirection]="dragDirection"
-        [scrollSpeed]="scrollSpeed"
-        [scrollSensitivity]="scrollSensitivity"
-        [handle]="handle"
-        [dragTemplate]="dragTemplate"
-        [cursorOffset]="cursorOffset"
+        [dropFeedbackMode]="dropFeedbackMode()"
+        [itemOrientation]="itemOrientation()"
+        [dragDirection]="dragDirection()"
+        [scrollSpeed]="scrollSpeed()"
+        [scrollSensitivity]="scrollSensitivity()"
+        [handle]="handle()"
+        [dragTemplate]="dragTemplate()"
+        [cursorOffset]="cursorOffset()"
         (onDragStart)="onDragStart($event)"
         (onReorder)="onReorder($event)"
       >
@@ -26,9 +26,9 @@
         >
           {{ dragInfo.itemData }}
         </div>
-        @for(item of items; track item) {
-        <div class="item dx-card" [class.item-with-handle]="handle">
-          @if(handle) {
+        @for(item of items(); track item) {
+        <div class="item dx-card" [class.item-with-handle]="handle()">
+          @if(handle()) {
           <i class="handle dx-icon dx-icon-dragvertical"></i>
           }
           {{ item }}
@@ -59,7 +59,7 @@
     <div class="option">
       <span>Drag Direction:</span>
       <dx-select-box
-        [items]="dragDirections"
+        [items]="dragDirections()"
         [inputAttr]="{ 'aria-label': 'Drag Direction' }"
         [(value)]="dragDirection"
       ></dx-select-box>

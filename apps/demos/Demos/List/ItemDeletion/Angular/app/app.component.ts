@@ -1,5 +1,5 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode } from '@angular/core';
+import { Component, enableProdMode, inject, signal } from '@angular/core';
 import { DxSelectBoxModule, DxCheckBoxModule } from 'devextreme-angular';
 import { DxListModule } from 'devextreme-angular/ui/list';
 import type { DxListTypes } from 'devextreme-angular/ui/list';
@@ -22,15 +22,11 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  allowDeletion = false;
+  readonly allowDeletion = signal(false);
 
-  itemDeleteMode: DxListTypes.ItemDeleteMode = 'toggle';
+  readonly itemDeleteMode = signal<DxListTypes.ItemDeleteMode>('toggle');
 
-  tasks: string[];
-
-  constructor(service: Service) {
-    this.tasks = service.getTasks();
-  }
+  readonly tasks = inject(Service).getTasks();
 }
 
 bootstrapApplication(AppComponent);

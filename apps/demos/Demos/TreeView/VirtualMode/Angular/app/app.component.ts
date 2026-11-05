@@ -13,7 +13,7 @@ if (!/localhost/.test(document.location.host)) {
   imports: [DxTreeViewModule],
 })
 export class AppComponent {
-  dataSource = AspNetData.createStore({
+  readonly dataSource = AspNetData.createStore({
     loadUrl: 'https://js.devexpress.com/Demos/NetCore/api/TreeViewPlainData',
     key: 'ID',
   });

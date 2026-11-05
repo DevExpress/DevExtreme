@@ -1,10 +1,12 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode } from '@angular/core';
+import {
+  Component, enableProdMode, inject, signal,
+} from '@angular/core';
 import { DxScrollViewModule, DxNumberBoxModule } from 'devextreme-angular';
-import { DxSortableModule, DxSortableTypes } from 'devextreme-angular/ui/sortable';
-import { DxSelectBoxModule, DxSelectBoxTypes } from 'devextreme-angular/ui/select-box';
-import { DxCheckBoxModule, DxCheckBoxTypes } from 'devextreme-angular/ui/check-box';
-import { DragDirection } from 'devextreme-angular/common';
+import { DxSortableModule, type DxSortableTypes } from 'devextreme-angular/ui/sortable';
+import { DxSelectBoxModule, type DxSelectBoxTypes } from 'devextreme-angular/ui/select-box';
+import { DxCheckBoxModule, type DxCheckBoxTypes } from 'devextreme-angular/ui/check-box';
+import type { DragDirection } from 'devextreme-angular/common';
 import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -25,51 +27,51 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  items: string[];
+  readonly items = signal(inject(Service).getTasks().map((task) => task.Task_Subject));
 
-  dropFeedbackMode: DxSortableTypes.DragHighlight = 'push';
+  readonly dropFeedbackMode = signal<DxSortableTypes.DragHighlight>('push');
 
-  itemOrientation: DxSortableTypes.Orientation = 'vertical';
+  readonly itemOrientation = signal<DxSortableTypes.Orientation>('vertical');
 
-  dragDirection: DragDirection = 'both';
+  readonly dragDirection = signal<DragDirection>('both');
 
-  dragDirections: DragDirection[] = ['both', 'vertical'];
+  readonly dragDirections = signal<DragDirection[]>(['both', 'vertical']);
 
-  scrollSpeed = 30;
+  readonly scrollSpeed = signal(30);
 
-  scrollSensitivity = 60;
+  readonly scrollSensitivity = signal(60);
 
-  handle = '';
+  readonly handle = signal('');
 
-  dragTemplate = '';
+  readonly dragTemplate = signal('');
 
-  cursorOffset: { x: number, y: number } = null;
-
-  constructor(service: Service) {
-    this.items = service.getTasks().map((task) => task.Task_Subject);
-  }
+  readonly cursorOffset = signal<{ x: number, y: number }>(null);
 
   onDragStart(e: DxSortableTypes.DragStartEvent) {
-    e.itemData = this.items[e.fromIndex];
+    e.itemData = this.items()[e.fromIndex];
   }
 
   onReorder(e: DxSortableTypes.ReorderEvent) {
-    this.items.splice(e.fromIndex, 1);
-    this.items.splice(e.toIndex, 0, e.itemData);
+    this.items.update((items) => {
+      const result = [...items];
+      result.splice(e.fromIndex, 1);
+      result.splice(e.toIndex, 0, e.itemData);
+      return result;
+    });
   }
 
   onItemOrientationChanged(e: DxSelectBoxTypes.ValueChangedEvent) {
-    this.dragDirections = ['both', e.value];
-    this.dragDirection = 'both';
+    this.dragDirections.set(['both', e.value]);
+    this.dragDirection.set('both');
   }
 
   onHandleChanged(e: DxCheckBoxTypes.ValueChangedEvent) {
-    this.handle = e.value ? '.handle' : '';
+    this.handle.set(e.value ? '.handle' : '');
   }
 
   onDragTemplateChanged(e: DxCheckBoxTypes.ValueChangedEvent) {
-    this.dragTemplate = e.value ? 'drag' : '';
-    this.cursorOffset = e.value ? { x: 10, y: 20 } : null;
+    this.dragTemplate.set(e.value ? 'drag' : '');
+    this.cursorOffset.set(e.value ? { x: 10, y: 20 } : null);
   }
 }
 

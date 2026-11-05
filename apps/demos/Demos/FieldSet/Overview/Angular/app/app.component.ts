@@ -16,8 +16,6 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  constructor() {
-  }
 }
 
 bootstrapApplication(AppComponent);
