@@ -329,7 +329,6 @@ const editingControllerExtender = (
     const $container = $(container);
     const row = detailCellOptions?.row;
 
-    // @ts-expect-error createColumn initializes calculateCellValue
     const value = item.column.calculateCellValue(row?.data);
     const displayValue = gridCoreUtils.getDisplayValue(item.column, value, row?.data, row?.rowType);
     const text = !item.column.command ? gridCoreUtils.formatValue(displayValue, item.column) : '';

@@ -337,6 +337,7 @@ class Calendar<
     this._setDateOption('value', value);
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   _isArrayValue(optionName: 'value' | 'min' | 'max', value: DateLike | DateLike[] | undefined): value is DateLike[] {
     return optionName === 'value' && !this._isSingleMode();
   }

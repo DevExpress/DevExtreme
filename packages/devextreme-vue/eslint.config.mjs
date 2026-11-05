@@ -3,7 +3,6 @@ import importPlugin from "eslint-plugin-import";
 import spellcheck from "eslint-plugin-spellcheck";
 import i18N from "eslint-plugin-i18n";
 import noOnlyTests from "eslint-plugin-no-only-tests";
-import { rules as stylisticRules } from '@eslint-stylistic/metadata';
 import stylistic from '@stylistic/eslint-plugin';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
@@ -12,24 +11,6 @@ import typescriptConfig from 'eslint-config-devextreme/typescript';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-
-const REMOVED_TYPESCRIPT_RULES = ['@typescript-eslint/no-throw-literal', '@typescript-eslint/ban-types'];
-
-// TODO Salimov: We need to remove this function after updating eslint-config-devextreme
-const processDevExtremeRules = devExtremeRules => (
-    {
-        ...Object.fromEntries(Object
-            .entries(devExtremeRules)
-            .filter(([key]) => !REMOVED_TYPESCRIPT_RULES.includes(key))
-            .map(([key, value]) => {
-                const rule = stylisticRules.find((r) => key.includes(r.name));
-                const newKey = rule ? `@stylistic/${rule.name}` : key;
-
-                return [newKey, value];
-            })
-        )
-    }
-);
 
 export default [
     ...spellCheckConfig,
@@ -42,19 +23,11 @@ export default [
             i18n: i18N,
         },
     },
-    ...typescriptConfig.map(config => {
-      const newConfig = {
+    ...typescriptConfig.map(config => ({
         ...config,
         files: ['**/*.ts?(x)'],
         ignores: ['**/*.d.ts'],
-      };
-
-      if (config.rules) {
-        newConfig.rules = processDevExtremeRules(config.rules);
-      }
-
-      return newConfig;
-    }),
+    })),
     {
         files: ['**/*.ts?(x)'],
         ignores: ['**/*.d.ts'],
@@ -95,18 +68,10 @@ export default [
             "@typescript-eslint/no-unused-vars": "warn",
         },
     },
-    ...typescriptConfig.map(config => {
-        const newConfig = {
-            ...config,
-            files: ["**/*.d.ts"],
-        };
-
-        if (config.rules) {
-          newConfig.rules = processDevExtremeRules(config.rules);
-        }
-
-        return newConfig;
-    }),
+    ...typescriptConfig.map(config => ({
+        ...config,
+        files: ["**/*.d.ts"],
+    })),
     {
         files: ["**/*.d.ts"],
         languageOptions: {

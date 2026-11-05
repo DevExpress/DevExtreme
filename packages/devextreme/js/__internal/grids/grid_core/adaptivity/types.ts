@@ -1,6 +1,6 @@
 import type { dxElementWrapper } from '@js/core/renderer';
 
-import type { Column } from '../columns_controller/types';
+import type { Column, WithCellValueCalculator } from '../columns_controller/types';
 import type { DataController } from '../data_controller/data_controller';
 import type { CellBasedEditingController, FormBasedEditingControllerExtension } from '../editing/types';
 import type { RowKey } from '../types';
@@ -26,7 +26,7 @@ export interface AdaptiveDetailCellOptions extends ViewCellOptions {
 }
 
 export interface AdaptiveFormItem {
-  column: Column;
+  column: WithCellValueCalculator<Column>;
   name?: string;
   dataField?: string;
   visibleIndex?: number;

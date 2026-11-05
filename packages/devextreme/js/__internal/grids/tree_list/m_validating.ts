@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { validatingModule } from '@ts/grids/grid_core/validating/validating_module';
 
 import type { CellBasedEditingController, FormBasedEditingControllerExtension } from '../grid_core/editing/types';
@@ -8,12 +7,8 @@ import treeListCore from './core';
 const editingControllerExtender = (
   Base: ModuleType<CellBasedEditingController & FormBasedEditingControllerExtension>,
 ) => class TreeListEditingControllerExtender extends validatingModule.extenders.controllers.editing(Base) {
-  public processDataItem(item) {
-    super.processDataItemTreeListHack.apply(this, arguments as any);
-  }
-
-  public processItems(items, e) {
-    return super.processItemsTreeListHack.apply(this, arguments as any);
+  public override shouldMoveInvalidRowsToPage(): boolean {
+    return false;
   }
 };
 

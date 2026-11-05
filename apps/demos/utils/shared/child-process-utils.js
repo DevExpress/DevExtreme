@@ -4,7 +4,7 @@ const systemSync = (command) => {
   try {
     childProcess.execSync(command, { stdio: 'inherit' });
   } catch (error) {
-    throw new Error(error);
+    throw new Error(error, { cause: error });
   }
 };
 

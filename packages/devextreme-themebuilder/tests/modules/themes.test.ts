@@ -1,9 +1,9 @@
 /* eslint no-console: 0 */
 import themes from '../../src/modules/themes';
 
-/* eslint-disable @typescript-eslint/no-require-imports, @typescript-eslint/no-var-requires */
+/* eslint-disable @typescript-eslint/no-require-imports */
 const { getThemes } = require('../../../devextreme-scss/build/theme-options.ts');
-/* eslint-enable @typescript-eslint/no-require-imports, @typescript-eslint/no-var-requires */
+/* eslint-enable @typescript-eslint/no-require-imports */
 
 describe('Themes', () => {
   test('check components and theme builder themes', () => {
