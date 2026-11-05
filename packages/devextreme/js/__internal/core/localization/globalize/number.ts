@@ -141,7 +141,7 @@ if (Globalize?.formatNumber) {
 
       if (!format && globalNumberFormat) {
         // eslint-disable-next-line no-param-reassign
-        format = globalNumberFormat as LocalizationFormat;
+        format = globalNumberFormat;
       }
 
       // eslint-disable-next-line no-param-reassign

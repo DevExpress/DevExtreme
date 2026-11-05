@@ -31,7 +31,7 @@ export class AIAssistantDataGridModel extends DataGridBaseModel<DataGrid> {
         author: { id: 'user', name: 'User' },
         text,
         timestamp: new Date().toISOString(),
-      } as Message)
+      })
       .catch(() => {});
   }
 
@@ -44,7 +44,7 @@ export class AIAssistantDataGridModel extends DataGridBaseModel<DataGrid> {
   }
 
   public loadMessages(): Promise<Message[]> {
-    return this.getMessageStore().load() as Promise<Message[]>;
+    return this.getMessageStore().load();
   }
 
   public getAiChatModel(): AIChatModel {

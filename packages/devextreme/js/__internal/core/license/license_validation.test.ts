@@ -804,7 +804,7 @@ describe('trial expired', () => {
       ['a trial that is not expired', { kind: TokenKind.corrupted, error: 'product-kind', licenseId: LICENSE_ID }],
       ['an incompatible version', { kind: TokenKind.verified, payload: { licenseId: LICENSE_ID, maxVersionAllowed: 251 } }],
     ] as const)('passes the license id to the banner (%s)', (_, token) => {
-      jest.spyOn(productKeyValidator, 'parseDevExpressProductKey').mockReturnValue(token as never);
+      jest.spyOn(productKeyValidator, 'parseDevExpressProductKey').mockReturnValue(token);
 
       validateLicense(LCP_LICENSE, '26.2.0');
 

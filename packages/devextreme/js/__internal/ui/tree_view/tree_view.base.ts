@@ -53,7 +53,6 @@ import type {
   PublicNode,
 } from '@ts/ui/hierarchical_collection/data_converter';
 import HierarchicalCollectionWidget from '@ts/ui/hierarchical_collection/hierarchical_collection_widget';
-import type { LoadIndicatorProperties } from '@ts/ui/load_indicator';
 import LoadIndicator from '@ts/ui/load_indicator';
 import { DIRECTION_HORIZONTAL, DIRECTION_VERTICAL, SCROLLABLE_CONTENT_CLASS } from '@ts/ui/scroll_view/consts';
 import Scrollable from '@ts/ui/scroll_view/scrollable';
@@ -564,7 +563,7 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
     this._createComponent(
       this._treeViewLoadIndicator,
       LoadIndicator,
-      {} as LoadIndicatorProperties,
+      {},
     );
     return this._treeViewLoadIndicator;
   }
@@ -1086,7 +1085,7 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
   }
 
   _expandEventHandler(e: DxEvent): void {
-    const $nodeElement = $(e.currentTarget.parentNode as Element);
+    const $nodeElement = $(e.currentTarget.parentNode);
 
     if (!$nodeElement.hasClass(IS_LEAF)) {
       // eslint-disable-next-line @typescript-eslint/no-floating-promises
@@ -1224,7 +1223,7 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
     this._createComponent(
       $('<div>').addClass(NODE_LOAD_INDICATOR_CLASS),
       LoadIndicator,
-      {} as LoadIndicatorProperties,
+      {},
     ).$element().appendTo($treeviewItem);
 
     const $icon = $treeviewItem.children(`.${TOGGLE_ITEM_VISIBILITY_CLASS},.${CUSTOM_EXPAND_ICON_CLASS}`);

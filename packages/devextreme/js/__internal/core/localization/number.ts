@@ -312,7 +312,7 @@ const numberLocalizationBase = {
     let negativeEtalon = this.convertDigits(
       this.format(-1, format),
       true,
-      getNumberFormatLocale(format as FormatConfig),
+      getNumberFormatLocale(format),
     ).replace(digitalRegExp, '1');
     specialCharacters.forEach((char) => {
       negativeEtalon = negativeEtalon.replace(new RegExp(`\\${char}`, 'g'), `\\${char}`);
@@ -350,7 +350,7 @@ const numberLocalizationBase = {
     const globalNumberFormat = getGlobalFormatByDataType('number');
 
     if (!format && globalNumberFormat) {
-      format = globalNumberFormat as LocalizationFormat;
+      format = globalNumberFormat;
     }
 
     // @ts-expect-error
@@ -379,7 +379,7 @@ const numberLocalizationBase = {
       return this.convertDigits(
         formattedValue,
         false,
-        getNumberFormatLocale(format as FormatConfig),
+        getNumberFormatLocale(format),
       ) as string | number;
     }
 

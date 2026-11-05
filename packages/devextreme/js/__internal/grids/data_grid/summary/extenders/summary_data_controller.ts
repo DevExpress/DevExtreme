@@ -243,7 +243,7 @@ export const summaryDataControllerExtender = (
 
         const aggregate = aggregates[summaryIndex];
 
-        if (!Number.isNaN(aggregate as number)) {
+        if (!Number.isNaN(aggregate)) {
           summaryCellsByColumns[columnIndex].push(extend({}, summaryItem, {
             value: isString(aggregate) && column?.deserializeValue
               ? column.deserializeValue(aggregate)

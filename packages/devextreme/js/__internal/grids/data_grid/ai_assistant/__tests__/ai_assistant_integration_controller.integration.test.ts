@@ -60,7 +60,7 @@ const createMockAIIntegration = (
       return abortFn;
     }
     return originalExecute(params, callbacks);
-  }) as typeof integration.executeGridAssistant;
+  });
 
   return integration;
 };
@@ -124,7 +124,7 @@ describe('DataGridAIAssistantIntegrationController', () => {
     it('should include summary in context', async () => {
       let capturedParams: GridContext = {};
       const aiIntegration = createMockAIIntegration((params) => {
-        capturedParams = params as GridContext;
+        capturedParams = params;
       });
 
       const controller = await createController({
@@ -148,7 +148,7 @@ describe('DataGridAIAssistantIntegrationController', () => {
     it('should include summary with undefined totalItems when not set', async () => {
       let capturedParams: GridContext = {};
       const aiIntegration = createMockAIIntegration((params) => {
-        capturedParams = params as GridContext;
+        capturedParams = params;
       });
 
       const controller = await createController({
@@ -168,7 +168,7 @@ describe('DataGridAIAssistantIntegrationController', () => {
     it('should include groupIndex in column context', async () => {
       let capturedParams: GridContext = {};
       const aiIntegration = createMockAIIntegration((params) => {
-        capturedParams = params as GridContext;
+        capturedParams = params;
       });
 
       const controller = await createController({
@@ -198,7 +198,7 @@ describe('DataGridAIAssistantIntegrationController', () => {
     it('should include undefined groupIndex when column is not grouped', async () => {
       let capturedParams: GridContext = {};
       const aiIntegration = createMockAIIntegration((params) => {
-        capturedParams = params as GridContext;
+        capturedParams = params;
       });
 
       const controller = await createController({
@@ -223,7 +223,7 @@ describe('DataGridAIAssistantIntegrationController', () => {
     it('should include base context properties alongside summary', async () => {
       let capturedParams: GridContext = {};
       const aiIntegration = createMockAIIntegration((params) => {
-        capturedParams = params as GridContext;
+        capturedParams = params;
       });
 
       const controller = await createController({
@@ -246,7 +246,7 @@ describe('DataGridAIAssistantIntegrationController', () => {
     it('should include base column context properties alongside summary', async () => {
       let capturedParams: GridContext = {};
       const aiIntegration = createMockAIIntegration((params) => {
-        capturedParams = params as GridContext;
+        capturedParams = params;
       });
 
       const controller = await createController({
@@ -279,7 +279,7 @@ describe('DataGridAIAssistantIntegrationController', () => {
     it('should exclude command columns', async () => {
       let capturedParams: GridContext = {};
       const aiIntegration = createMockAIIntegration((params) => {
-        capturedParams = params as GridContext;
+        capturedParams = params;
       });
 
       const controller = await createController({
@@ -310,7 +310,7 @@ describe('DataGridAIAssistantIntegrationController', () => {
 
       aiIntegration.executeGridAssistant = jest.fn(
         (): (() => void) => abortSpy,
-      ) as typeof aiIntegration.executeGridAssistant;
+      );
 
       const controller = await createController({
         aiAssistant: { enabled: true, aiIntegration },
@@ -332,7 +332,7 @@ describe('DataGridAIAssistantIntegrationController', () => {
 
       aiIntegration.executeGridAssistant = jest.fn(
         (): (() => void) => abortSpy,
-      ) as typeof aiIntegration.executeGridAssistant;
+      );
 
       const controller = await createController({
         aiAssistant: { enabled: true, aiIntegration },

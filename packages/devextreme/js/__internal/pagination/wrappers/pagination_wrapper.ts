@@ -43,15 +43,15 @@ export class PaginationWrapper extends ComponentWrapper {
     } = initialOptions;
 
     if (pageSize === undefined) {
-      pageSize = this.option('pageSize') as number;
+      pageSize = this.option('pageSize');
     }
 
     if (pageIndex === undefined) {
-      pageIndex = this.option('pageIndex') as number;
+      pageIndex = this.option('pageIndex');
     }
 
     if (itemCount === undefined) {
-      itemCount = this.option('itemCount') as number;
+      itemCount = this.option('itemCount');
     }
 
     const validatedOptions = validateOptions(

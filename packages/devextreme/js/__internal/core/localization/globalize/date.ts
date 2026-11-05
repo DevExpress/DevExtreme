@@ -285,10 +285,10 @@ if (Globalize?.formatDate) {
             return (presetOverride as DateFormatter)(date);
           }
 
-          localeSourceFormat = presetOverride as LocalizationFormat;
+          localeSourceFormat = presetOverride;
 
           if (!this._isUnsupportedPresetOverride(presetOverride)) {
-            resolvedFormat = presetOverride as LocalizationFormat;
+            resolvedFormat = presetOverride;
           }
         }
       }

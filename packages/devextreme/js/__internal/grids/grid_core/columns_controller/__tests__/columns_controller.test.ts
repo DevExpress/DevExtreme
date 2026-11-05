@@ -55,7 +55,7 @@ describe('Column Controller', () => {
           ],
         });
 
-        component.apiColumnOption('AItest', 'type', columnType as DataGridCommandColumnType | undefined);
+        component.apiColumnOption('AItest', 'type', columnType);
 
         const groupRow = component.getGroupRows();
         expect(groupRow.length).toBe(0);

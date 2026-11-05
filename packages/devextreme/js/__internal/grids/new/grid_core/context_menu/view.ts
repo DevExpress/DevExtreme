@@ -26,16 +26,16 @@ export abstract class BaseContextMenuView extends View<ContextMenuProps> {
     return computed(() => ({
       componentRef: this.controller.contextMenuRef,
       cssClass: this.getWidgetContainerClass(),
-      onInitialized: (e: InitializedEvent) => {
+      onInitialized: (e: InitializedEvent): void => {
         // @ts-expect-error
         e.component?.setAria('role', 'presentation');
         e.component?.$element().addClass(CLASS.contextMenu);
       },
-      onItemClick: (e: ItemClickEvent) => {
+      onItemClick: (e: ItemClickEvent): void => {
         e.itemData?.onItemClick?.(e);
       },
       onPositioning: this.controller.onPositioning,
-    }) as ContextMenuProps);
+    }));
   }
 
   // TODO: move this to another place

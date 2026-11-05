@@ -753,7 +753,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   }
 
   _focusInHandler(e: DxEvent): void {
-    const $target = $(e.target as Element | null);
+    const $target = $(e.target);
     const $focusTarget = this._focusTarget();
     // T1312256: On macOS, e.target can be a child element of the workspace root
     const isTargetInsideWorkspace = $target.is($focusTarget)
@@ -1201,9 +1201,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     optionName: K,
     config?: ActionConfig,
   ): (args: WorkspaceOptionActionMap[K]) => void {
-    return this._createActionByOption(optionName, config) as (
-      args: WorkspaceOptionActionMap[K],
-    ) => void;
+    return this._createActionByOption(optionName, config);
   }
 
   private createCellClickAction(): void {
@@ -1229,7 +1227,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   }
 
   private pointerDownHandler(e: { target: EventTarget | null; which?: number }): void {
-    const $target = $(e.target as Element | null);
+    const $target = $(e.target);
 
     if (!$target.hasClass(DATE_TABLE_CELL_CLASS) && !$target.hasClass(ALL_DAY_TABLE_CELL_CLASS)) {
       this.isCellClick = false;
@@ -1287,7 +1285,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   }
 
   private contextMenuHandler(e: DxEvent): void {
-    const $cell = $(e.target as Element | null);
+    const $cell = $(e.target);
     this.contextMenuAction?.(
       {
         event: e as CellContextMenuEvent['event'],
@@ -1463,7 +1461,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   }
 
   protected getFormat(): string | ((date: Date) => string) {
-    return abstract() as string;
+    return abstract();
   }
 
   getWorkArea(): dxElementWrapper {
@@ -3490,7 +3488,7 @@ const createDragBehaviorConfig = (
     }
 
     const canceled = e.cancel;
-    const $itemElement = $(e.itemElement as Element | null);
+    const $itemElement = $(e.itemElement);
     // @ts-expect-error
     const appointments = (e.component)._appointments as AppointmentsList;
 
@@ -3569,7 +3567,7 @@ const createDragBehaviorConfig = (
     });
 
     if (droppableCell) {
-      if (!getDroppableCell().is(droppableCell as unknown as dxElementWrapper)) {
+      if (!getDroppableCell().is(droppableCell)) {
         removeDroppableCellClass();
       }
 
@@ -3598,7 +3596,7 @@ const createDragBehaviorConfig = (
     }
 
     removeDroppableCellClass();
-    $(e.itemElement as Element).removeClass(APPOINTMENT_DRAG_SOURCE_CLASS);
+    $(e.itemElement).removeClass(APPOINTMENT_DRAG_SOURCE_CLASS);
   };
 
   const cursorOffset = options.isSetCursorOffset

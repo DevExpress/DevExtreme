@@ -916,7 +916,7 @@ class Menu extends MenuBase<MenuProperties> {
   }
 
   _submenuMouseLeaveHandler($rootItem: dxElementWrapper, eventArgs: HoverEvent): void {
-    const target: dxElementWrapper = $(eventArgs.relatedTarget as Element).parents(`.${DX_CONTEXT_MENU_CLASS}`)[0];
+    const target: dxElementWrapper = $(eventArgs.relatedTarget).parents(`.${DX_CONTEXT_MENU_CLASS}`)[0];
     const submenu = this._getSubmenuByRootElement($rootItem);
     const contextMenu: dxElementWrapper | undefined = submenu?.getOverlayContent()?.[0];
     const { hideSubmenuOnMouseLeave } = this.option();
@@ -1047,7 +1047,7 @@ class Menu extends MenuBase<MenuProperties> {
 
   _hoverEndHandler(eventArg: HoverEvent): void {
     const $item = this._getItemElementByEventArgs(eventArg);
-    const relatedTarget = $(eventArg.relatedTarget as Element);
+    const relatedTarget = $(eventArg.relatedTarget);
 
     super._hoverEndHandler(eventArg);
     this._clearTimeouts();

@@ -1299,9 +1299,9 @@ export class BaseChart extends BaseWidget {
 
       const curSeries = this.series?.find(findSeries);
       if (curSeries && curSeries.type === theme.type) {
-        seriesBasis.push({ series: curSeries, options: theme } as never);
+        seriesBasis.push({ series: curSeries, options: theme });
       } else {
-        seriesBasis.push({ options: theme } as never);
+        seriesBasis.push({ options: theme });
         disposeSeriesFamilies = true;
       }
     });

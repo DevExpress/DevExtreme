@@ -102,7 +102,7 @@ describe('ViewDataGenerator hiddenWeekDays support', () => {
       const timelineWeekGen = new ViewDataGeneratorWeek('timelineWeek');
       timelineWeekGen.skippedDays = [0, 6];
 
-      const timelineWeek = timelineWeekGen as unknown as ViewDataGeneratorWeek;
+      const timelineWeek = timelineWeekGen;
 
       // 2 cells per day, first visible week day is Monday (firstDayOfWeek=1)
       // Both cells of the first day must have the same offset.
@@ -118,7 +118,7 @@ describe('ViewDataGenerator hiddenWeekDays support', () => {
       const weekGen = new ViewDataGeneratorWeek('week');
       weekGen.skippedDays = [0, 6];
 
-      const verticalWeek = weekGen as unknown as ViewDataGeneratorWeek;
+      const verticalWeek = weekGen;
 
       expect(callGetVisibleDayOffset(verticalWeek, 0, 0, 3, 24)).toBe(0);
       expect(callGetVisibleDayOffset(verticalWeek, 0, 1, 3, 24)).toBe(0);

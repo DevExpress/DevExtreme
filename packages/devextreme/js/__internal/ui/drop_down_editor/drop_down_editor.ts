@@ -853,7 +853,7 @@ class DropDownEditor<
   }
 
   _popupTabHandler(e: DxEvent<KeyboardEvent>): void {
-    const $target = $(e.target as Element);
+    const $target = $(e.target);
     const moveBackward = e.shiftKey && $target.is(this._getFirstPopupElement());
     const moveForward = !e.shiftKey && $target.is(this._getLastPopupElement());
 

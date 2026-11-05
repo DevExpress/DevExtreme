@@ -197,7 +197,7 @@ export class FileUploadStrategyBase {
       const totalLoadedFilesSize = this.fileUploader._getTotalLoadedFilesSize();
 
       // ProgressEvent from XMLHttpRequest or FileReader
-      const loaded = (e as ProgressEvent & { loaded?: number }).loaded ?? 0;
+      const loaded = (e).loaded ?? 0;
       const loadedSize = Math.min(loaded, file.value.size);
       const segmentSize = loadedSize - file.loadedSize;
       file.loadedSize = loadedSize;

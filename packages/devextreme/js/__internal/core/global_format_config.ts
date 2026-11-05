@@ -148,7 +148,7 @@ export const withFormatLocale = (format: Format, locale?: FormatLocale): Format 
     ...format,
     ...formatter && { formatter: formatter.withLocale?.(locale) },
     locale,
-  } as FormatObject;
+  };
 };
 
 const getOwnFormatLocale = (format: Format | undefined): string | undefined => (

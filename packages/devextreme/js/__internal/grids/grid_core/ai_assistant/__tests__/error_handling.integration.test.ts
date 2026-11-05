@@ -62,7 +62,7 @@ const createMockAIIntegration = (): MockAIIntegrationResult => {
   ): (() => void) => {
     lastCallbacks = callbacks;
     return abortSpy;
-  }) as typeof aiIntegration.executeGridAssistant;
+  });
 
   return {
     aiIntegration,
@@ -317,7 +317,7 @@ describe('AI Assistant error handling', () => {
 
   describe('schema build failure', () => {
     it('should fail when buildResponseSchema returns undefined', async () => {
-      buildResponseSchemaSpy.mockReturnValue(undefined as never);
+      buildResponseSchemaSpy.mockReturnValue(undefined);
 
       const { model } = await createDataGridWithAiAndPopup();
 

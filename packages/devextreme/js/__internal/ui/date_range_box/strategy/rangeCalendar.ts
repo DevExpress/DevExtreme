@@ -40,7 +40,7 @@ class RangeCalendarStrategy extends CalendarStrategy<
   popupConfig(popupConfig: PopupProperties): PopupProperties {
     return extend(true, super.popupConfig(popupConfig), {
       position: { of: this.getDateRangeBox().$element() },
-    }) as PopupProperties;
+    });
   }
 
   popupShowingHandler(): void {
@@ -138,7 +138,7 @@ class RangeCalendarStrategy extends CalendarStrategy<
       viewsCount: multiView ? 2 : 1,
       allowChangeSelectionOrder: true,
       currentSelection: this.getCurrentSelection(),
-    }) as Record<string, unknown>;
+    });
   }
 
   _refreshActiveDescendant(e: DxEvent & { actionValue: string }): void {

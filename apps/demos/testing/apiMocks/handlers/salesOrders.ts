@@ -77,7 +77,7 @@ const groupedPage = (url: string): GroupPayload => {
       const parent = categorySubcategoryYears.data.find((item) => item.key === categoryFilter);
       return parent ? { data: [parent], totalCount: 1, summary: parent.summary } : emptyGroups;
     }
-    return pageGroups(categorySubcategoryYears as GroupPayload, url);
+    return pageGroups(categorySubcategoryYears, url);
   }
 
   if (bySubcategory && byDate && categoryFilter) {
@@ -89,19 +89,19 @@ const groupedPage = (url: string): GroupPayload => {
       const parent = categoryYears.data.find((item) => item.key === categoryFilter);
       return parent ? { data: [parent], totalCount: 1, summary: parent.summary } : emptyGroups;
     }
-    return pageGroups(categoryYears as GroupPayload, url);
+    return pageGroups(categoryYears, url);
   }
 
   if (byCategory && bySubcategory && !byDate) {
-    return pageGroups(categorySubcategories as GroupPayload, url);
+    return pageGroups(categorySubcategories, url);
   }
 
   if (byCategory && !bySubcategory && !byDate) {
-    return pageGroups(categories as GroupPayload, url);
+    return pageGroups(categories, url);
   }
 
   if (byDate && !byCategory && !bySubcategory) {
-    return pageGroups(yearColumns as GroupPayload, url);
+    return pageGroups(yearColumns, url);
   }
 
   return emptyGroups;

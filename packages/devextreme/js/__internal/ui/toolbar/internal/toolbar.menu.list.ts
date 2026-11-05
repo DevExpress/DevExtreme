@@ -54,7 +54,7 @@ export default class ToolbarMenuList extends ListBase {
   _refreshItemId(): void { }
 
   _getItemData(itemElement: Element | dxElementWrapper): Item {
-    return super._getItemData(itemElement) as Item;
+    return super._getItemData(itemElement);
   }
 
   _initMarkup(): void {

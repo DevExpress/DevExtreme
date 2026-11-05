@@ -25,16 +25,16 @@ describe('PopupPositionController drag and resize area', () => {
   };
 
   const owner = (): dxElementWrapper => $(
-    appended('<div class="owner"></div>').querySelector('.owner') as Element,
+    appended('<div class="owner"></div>').querySelector('.owner'),
   );
 
   const ownerInSwatch = (): dxElementWrapper => $(
     appended(`<div class="${SWATCH_CLASS}"><div class="owner"></div></div>`)
-      .querySelector('.owner') as Element,
+      .querySelector('.owner'),
   );
 
   const ownerInMode = (): dxElementWrapper => $(
-    appended('<div class="owner mode-dark"></div>').querySelector('.owner') as Element,
+    appended('<div class="owner mode-dark"></div>').querySelector('.owner'),
   );
 
   const controllerFor = (

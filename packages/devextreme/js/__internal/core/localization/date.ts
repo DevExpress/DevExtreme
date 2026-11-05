@@ -172,7 +172,7 @@ const dateLocalization = dependencyInjector({
     if (typeof format === 'function') {
       formatter = format as DateFormatter;
     } else if ((format as FormatObject).formatter) {
-      formatter = (format as FormatObject).formatter as DateFormatter;
+      formatter = (format as FormatObject).formatter;
     } else {
       // eslint-disable-next-line no-param-reassign
       format = (format as FormatObject).type ?? format;

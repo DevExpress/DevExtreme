@@ -176,7 +176,7 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
   protected _renderCommandSelectBox($container: dxElementWrapper): void {
     const $commandSelectBox = $('<div>').appendTo($container);
 
-    this._commandSelectBox = new SelectBox($commandSelectBox.get(0), {
+    this._commandSelectBox = new SelectBox<SelectBoxProperties>($commandSelectBox.get(0), {
       value: this._currentCommand,
       displayExpr: 'text',
       valueExpr: 'name',
@@ -202,13 +202,13 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
           this._executeAICommand();
         }
       },
-    } as SelectBoxProperties);
+    });
   }
 
   protected _renderOptionSelectBox($container: dxElementWrapper): void {
     const $optionSelectBox = $('<div>').appendTo($container);
 
-    this._optionSelectBox = new SelectBox($optionSelectBox.get(0), {
+    this._optionSelectBox = new SelectBox<SelectBoxProperties>($optionSelectBox.get(0), {
       items: this._commandOptionsList,
       value: this._currentOption ?? this._commandOptionsList?.[0],
       visible: this._isCommandWithOptionsSelected(),
@@ -225,7 +225,7 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
           this._executeAICommand();
         }
       },
-    } as SelectBoxProperties);
+    });
   }
 
   protected _renderPromptTextArea($container: dxElementWrapper): void {

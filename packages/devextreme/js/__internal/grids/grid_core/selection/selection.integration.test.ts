@@ -24,7 +24,7 @@ const createDataGrid = async (
     .attr('id', GRID_CONTAINER_ID)
     .appendTo(document.body);
 
-  const instance = new DataGrid($container.get(0) as HTMLDivElement, options);
+  const instance = new DataGrid($container.get(0), options);
 
   const contentReadyHandler = (): void => {
     resolve({ $container, instance });

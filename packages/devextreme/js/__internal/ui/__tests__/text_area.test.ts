@@ -24,7 +24,7 @@ const createTextArea = (options: Properties): TextAreaModel => {
 
   const $element = $('<div>').appendTo($container);
 
-  instances.push(new TextArea($element.get(0) as HTMLElement, options));
+  instances.push(new TextArea($element.get(0), options));
 
   return new TextAreaModel($element.get(0) as HTMLElement);
 };

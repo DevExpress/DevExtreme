@@ -102,8 +102,8 @@ catalog:
   "@playwright/test": 1.62.1
   "@stylistic/eslint-plugin": 5.10.0
   "@types/jquery": 4.0.1
-  "@typescript-eslint/eslint-plugin": 8.58.2
-  "@typescript-eslint/parser": 8.58.2
+  "@typescript-eslint/eslint-plugin": 8.72.1
+  "@typescript-eslint/parser": 8.72.1
 
 catalogs:
   angular:

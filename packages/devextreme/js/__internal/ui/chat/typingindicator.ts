@@ -25,7 +25,7 @@ class TypingIndicator extends DOMComponent<TypingIndicator, Properties> {
     return {
       ...super._getDefaultOptions(),
       typingUsers: [],
-    } as Properties;
+    };
   }
 
   _init(): void {

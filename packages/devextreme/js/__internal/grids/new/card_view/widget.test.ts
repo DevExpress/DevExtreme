@@ -83,7 +83,7 @@ describe('card template container', () => {
       keyExpr: 'id',
       dataSource: [{ id: 1, name: 'Audi' }],
       cardTemplate,
-    } as CardViewOptions);
+    });
 
     cardView.option('dataSource', [{ id: 1, name: 'BMW' }]);
 
@@ -106,7 +106,7 @@ describe('card template container', () => {
       keyExpr: 'id',
       dataSource,
       cardTemplate,
-    } as CardViewOptions);
+    });
 
     cardView.option('dataSource', [dataSource[0]]);
 
@@ -138,7 +138,7 @@ describe('absence of multiple re-render', () => {
         sorting: {
           mode: 'single',
         },
-      } as CardViewOptions);
+      });
 
       cardTemplate.mockClear();
       cardView.columnOption('name', 'sortOrder', 'asc');
@@ -164,7 +164,7 @@ describe('absence of multiple re-render', () => {
         headerFilter: {
           visible: true,
         },
-      } as CardViewOptions);
+      });
 
       cardTemplate.mockClear();
       cardView.clearFilter();
@@ -187,7 +187,7 @@ describe('absence of multiple re-render', () => {
         searchPanel: {
           visible: true,
         },
-      } as CardViewOptions);
+      });
 
       cardTemplate.mockClear();
       cardView.searchByText(searchValue);
@@ -205,7 +205,7 @@ describe('absence of multiple re-render', () => {
         dataSource,
         columns,
         cardTemplate,
-      } as CardViewOptions);
+      });
 
       cardTemplate.mockClear();
       cardView.option('integrationOptions.templates', {});
@@ -227,7 +227,7 @@ describe('absence of multiple re-render', () => {
         sorting: {
           mode: 'single',
         },
-      } as CardViewOptions);
+      });
 
       cardFooterTemplate.mockClear();
       cardView.columnOption('name', 'sortOrder', 'asc');
@@ -253,7 +253,7 @@ describe('absence of multiple re-render', () => {
         headerFilter: {
           visible: true,
         },
-      } as CardViewOptions);
+      });
 
       cardFooterTemplate.mockClear();
       cardView.clearFilter();
@@ -276,7 +276,7 @@ describe('absence of multiple re-render', () => {
         searchPanel: {
           visible: true,
         },
-      } as CardViewOptions);
+      });
 
       cardFooterTemplate.mockClear();
       cardView.searchByText(searchValue);
@@ -310,7 +310,7 @@ describe('reactivity to column option changes', () => {
       sorting: {
         mode: 'single',
       },
-    } as CardViewOptions);
+    });
 
     cardTemplate.mockClear();
     cardView.columnOption('name', 'sortOrder', 'asc');

@@ -11,7 +11,7 @@ fixture.disablePageReloads`Toolbar_keyboard_navigation`
 
 const itemHasFocus = (item: Selector): Selector => item.filter(
   (node) => node === document.activeElement
-    || node.contains(document.activeElement as Node | null),
+    || node.contains(document.activeElement),
 );
 
 const toolbarWidgets = [

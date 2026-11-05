@@ -129,7 +129,7 @@ class RemoteFilterCombiner {
     const dateFilter = this.makeDateFilter(trimMin, trimMax);
     const userFilter = this.getUserFilter(dateFilter);
 
-    const combinedFilter = this.combineFilters(dateFilter, userFilter as unknown[]);
+    const combinedFilter = this.combineFilters(dateFilter, userFilter);
 
     return combinedFilter;
   }

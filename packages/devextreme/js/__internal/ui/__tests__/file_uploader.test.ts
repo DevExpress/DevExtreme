@@ -11,7 +11,7 @@ const instances: FileUploader[] = [];
 const createFileUploader = (options: Partial<Properties> = {}): FileUploader => {
   const $element = $('<div>').appendTo(document.body);
 
-  const instance = new FileUploader($element.get(0) as HTMLElement, options);
+  const instance = new FileUploader($element.get(0), options);
 
   instances.push(instance);
 

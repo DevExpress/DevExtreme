@@ -418,7 +418,7 @@ export class Scroller {
       return;
     }
 
-    const $target = $(e.originalEvent.target as Element);
+    const $target = $(e.originalEvent.target);
     const scrollbarClicked = this._isScrollbar($target);
 
     if (scrollbarClicked) {
@@ -640,7 +640,7 @@ export class Scroller {
   }
 
   _validateEvent(e: DxMouseEvent): boolean {
-    const $target = $(e.originalEvent.target as Element);
+    const $target = $(e.originalEvent.target);
 
     return this._isThumb($target) || this._isScrollbar($target);
   }
@@ -852,7 +852,7 @@ export class SimulatedStrategy<
 
     this._prepareDirections();
     this._eachScroller(function suppressDirections(scroller, direction) {
-      const $target = $(e.originalEvent.target as Element);
+      const $target = $(e.originalEvent.target);
 
       // eslint-disable-next-line @typescript-eslint/no-invalid-this
       const isValid = scroller._validateEvent(e) || (this.option('scrollByContent') && this._isContent($target));
@@ -1206,7 +1206,7 @@ export class SimulatedStrategy<
       return;
     }
 
-    const $target = $(target as Element);
+    const $target = $(target);
     const $scrollable = $target.closest(`.${SCROLLABLE_SIMULATED_CLASS}:not(.dx-state-disabled)`);
     const targetScrollable = $scrollable.length && $scrollable.data(SCROLLABLE_STRATEGY);
     if (hoveredScrollable && hoveredScrollable !== targetScrollable) {
@@ -1373,7 +1373,7 @@ export class SimulatedStrategy<
 
   _validateMove(e: DxMouseEvent): boolean | string | null {
     const { scrollByContent } = this.option();
-    if (!scrollByContent && !$(e.target as Element).closest(`.${SCROLLABLE_SCROLLBAR_CLASS}`).length) {
+    if (!scrollByContent && !$(e.target).closest(`.${SCROLLABLE_SCROLLBAR_CLASS}`).length) {
       return false;
     }
 

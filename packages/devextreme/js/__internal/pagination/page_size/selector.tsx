@@ -55,7 +55,7 @@ export class PageSizeSelector extends InfernoComponent<PageSizeSelectorPropsType
       rootElementRef,
     } = this.props;
     if (rootElementRef) {
-      rootElementRef.current = this.htmlRef.current as HTMLDivElement;
+      rootElementRef.current = this.htmlRef.current;
     }
   }
 

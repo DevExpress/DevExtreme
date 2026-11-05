@@ -919,7 +919,7 @@ class TagBox<
     const selectedItems = (listSelectedItems ?? optionSelectedItems) as unknown[];
     // @ts-expect-error _valueGetter is injected by DataExpressionMixin
     const clientFilterFunction = creator.getLocalFilter(this._valueGetter);
-    const filteredItems = selectedItems.filter(clientFilterFunction as (item: unknown) => boolean);
+    const filteredItems = selectedItems.filter(clientFilterFunction);
     const selectedItemsAlreadyLoaded = filteredItems.length === values.length;
     const d = Deferred<unknown>();
     const dataController = this._dataController;
@@ -952,7 +952,7 @@ class TagBox<
 
         const { data: items } = normalizeLoadResult(data, extra);
         const mappedItems = dataController.applyMapFunction(items);
-        d.resolve(mappedItems.filter(clientFilterFunction as (item: unknown) => boolean));
+        d.resolve(mappedItems.filter(clientFilterFunction));
       })
       // eslint-disable-next-line @typescript-eslint/no-misused-promises -- ignores the result
       .fail(d.reject);
@@ -1446,7 +1446,7 @@ class TagBox<
     e.stopPropagation();
     this._saveValueChangeEvent(e);
 
-    const $tag = $(e.target as Element).closest(`.${TAGBOX_TAG_CLASS}`);
+    const $tag = $(e.target).closest(`.${TAGBOX_TAG_CLASS}`);
     this._removeTagElement($tag);
   }
 

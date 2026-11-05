@@ -24,7 +24,6 @@ import { RovingTabIndex } from '../keyboard_navigation/roving_tab_index';
 import { createPath, foreachTree } from '../m_widget_utils';
 import SortableModule from '../sortable/m_sortable';
 import { getFieldItemA11yLabel } from './a11y';
-import type { SortOrderType } from './const';
 import { ATTRIBUTES, CLASSES } from './const';
 import { dragAndDropItemRender } from './dom';
 import { reverseSortOrder, shouldCancelDragging } from './utils';
@@ -261,7 +260,7 @@ export class FieldChooserBase extends mixinWidget {
     // The sort indicator is rendered for every sortable non-data field, with
     // ascending shown by default, so the label mirrors the visible state.
     const sortOrder = field.allowSorting && field.area !== 'data'
-      ? (field.sortOrder === 'desc' ? 'desc' : 'asc') as SortOrderType
+      ? (field.sortOrder === 'desc' ? 'desc' : 'asc')
       : undefined;
     const hasHeaderFilterValue = fieldHasHeaderFilter(this._dataSource, field)
       && !!getMainGroupField(this._dataSource, field).filterValues?.length;

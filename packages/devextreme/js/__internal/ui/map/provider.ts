@@ -190,7 +190,7 @@ abstract class Provider {
     } else if (Array.isArray(location) && location.length === 2) {
       return { lat: location[0], lng: location[1] };
     } else if (isPlainObject(location) && isNumeric(location.lat) && isNumeric(location.lng)) {
-      return location as { lat: number; lng: number };
+      return location;
     }
 
     return null;

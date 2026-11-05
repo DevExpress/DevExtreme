@@ -34,7 +34,7 @@ export default function App() {
         />
       ))}
       <Toolbox>
-        <Group category={'employees' as any} title="Employees" displayMode="texts" />
+        <Group category="employees" title="Employees" displayMode="texts" />
       </Toolbox>
     </Diagram>
   );

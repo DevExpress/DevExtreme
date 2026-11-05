@@ -51,7 +51,7 @@ describe('trial panel client', () => {
       'https://example.com/buy',
       'https://example.com/docs',
       '25.2.0',
-      null as any, // Actual null value
+      null, // Actual null value
     );
 
     const triggerElement = document.querySelector('dx-license-trigger');
