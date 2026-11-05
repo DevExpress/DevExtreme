@@ -13,7 +13,7 @@
         position="top"
         [width]="300"
       >
-        <div *dxTemplate="let data = model; of: 'content'">
+        <div *dxTemplate="let data = model of 'content'">
           Make final decision on whether we are going to increase our Google
           AdWord spend based on our 2013 marketing plan.
         </div>
@@ -39,7 +39,7 @@
         [showTitle]="true"
         title="Details"
       >
-        <div *dxTemplate="let data = model; of: 'content'">
+        <div *dxTemplate="let data = model of 'content'">
           The designs for new brochures and website have been approved. Launch
           date is set for Feb 28.
         </div>
@@ -69,7 +69,7 @@
           ></dxo-popover-show>
           <dxo-popover-hide type="fade" [from]="1" [to]="0"></dxo-popover-hide>
         </dxo-popover-animation>
-        <div *dxTemplate="let data = model; of: 'content'">
+        <div *dxTemplate="let data = model of 'content'">
           2012 Sales Report has to be completed so we can determine if major
           changes are required to sales strategy.
         </div>

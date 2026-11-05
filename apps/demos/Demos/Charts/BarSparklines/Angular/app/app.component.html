@@ -9,57 +9,57 @@
       <th>Nickel (USD/ton)</th>
       <th>Palladium (USD/troy ounce)</th>
     </tr>
-    @for(year of years; track year) {
-    <tr>
-      <th>{{ year }}</th>
-      <td>
-        <dx-sparkline
-          class="sparkline"
-          [dataSource]="source"
-          argumentField="month"
-          valueField="copper{{ year }}"
-          type="bar"
-          [showMinMax]="true"
-        >
-          <dxo-sparkline-tooltip
-            [format]="{ type: 'currency', precision: 2 }"
-          ></dxo-sparkline-tooltip>
-        </dx-sparkline>
-      </td>
-      <td>
-        <dx-sparkline
-          class="sparkline"
-          [dataSource]="source"
-          argumentField="month"
-          valueField="nickel{{ year }}"
-          type="bar"
-          [showMinMax]="true"
-          [showFirstLast]="false"
-          barPositiveColor="#6babac"
-          minColor="#9ab57e"
-          maxColor="#8076bb"
-        >
-          <dxo-sparkline-tooltip
-            [format]="{ type: 'currency', precision: 2 }"
-          ></dxo-sparkline-tooltip>
-        </dx-sparkline>
-      </td>
-      <td>
-        <dx-sparkline
-          class="sparkline"
-          [dataSource]="source"
-          argumentField="month"
-          valueField="palladium{{ year }}"
-          type="bar"
-          barPositiveColor="#e55253"
-          firstLastColor="#ebdd8f"
-        >
-          <dxo-sparkline-tooltip
-            [format]="{ type: 'currency', precision: 2 }"
-          ></dxo-sparkline-tooltip>
-        </dx-sparkline>
-      </td>
-    </tr>
+    @for (year of years; track year) {
+      <tr>
+        <th>{{ year }}</th>
+        <td>
+          <dx-sparkline
+            class="sparkline"
+            [dataSource]="source"
+            argumentField="month"
+            valueField="copper{{ year }}"
+            type="bar"
+            [showMinMax]="true"
+          >
+            <dxo-sparkline-tooltip
+              [format]="{ type: 'currency', precision: 2 }"
+            ></dxo-sparkline-tooltip>
+          </dx-sparkline>
+        </td>
+        <td>
+          <dx-sparkline
+            class="sparkline"
+            [dataSource]="source"
+            argumentField="month"
+            valueField="nickel{{ year }}"
+            type="bar"
+            [showMinMax]="true"
+            [showFirstLast]="false"
+            barPositiveColor="#6babac"
+            minColor="#9ab57e"
+            maxColor="#8076bb"
+          >
+            <dxo-sparkline-tooltip
+              [format]="{ type: 'currency', precision: 2 }"
+            ></dxo-sparkline-tooltip>
+          </dx-sparkline>
+        </td>
+        <td>
+          <dx-sparkline
+            class="sparkline"
+            [dataSource]="source"
+            argumentField="month"
+            valueField="palladium{{ year }}"
+            type="bar"
+            barPositiveColor="#e55253"
+            firstLastColor="#ebdd8f"
+          >
+            <dxo-sparkline-tooltip
+              [format]="{ type: 'currency', precision: 2 }"
+            ></dxo-sparkline-tooltip>
+          </dx-sparkline>
+        </td>
+      </tr>
     }
   </table>
   <div class="action">

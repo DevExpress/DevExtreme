@@ -1,57 +1,57 @@
 <div>
   <div class="long-title"><h3>Energy Production (GWh, 2024)</h3></div>
   <div class="pies-container">
-    @for(country of countries; track country) {
-    <dx-pie-chart
-      class="pie"
-      sizeGroup="piesGroup"
-      [dataSource]="service.getData(country)"
-      [animation]="false"
-      resolveLabelOverlapping="shift"
-      type="doughnut"
-      centerTemplate="centerTemplate"
-      [innerRadius]="0.65"
-    >
-      <dxi-pie-chart-series argumentField="commodity" valueField="total">
-        <dxo-pie-chart-label
-          backgroundColor="none"
-          [visible]="true"
-          format="fixedPoint"
-          [customizeText]="customizeLabel"
-        >
-          <dxo-pie-chart-connector [visible]="true"></dxo-pie-chart-connector>
-        </dxo-pie-chart-label>
-      </dxi-pie-chart-series>
-      <dxo-pie-chart-legend [visible]="false"> </dxo-pie-chart-legend>
-      <svg *dxTemplate="let pieChart of 'centerTemplate'">
-        <circle
-          cx="100"
-          cy="100"
-          [attr.r]="pieChart.getInnerRadius() - 6"
-          fill="#eee"
-        ></circle>
-        <image
-          attr.href="{{ getImagePath(country) }}"
-          x="70"
-          y="58"
-          width="60"
-          height="40"
-        />
-        <text
-          class="center-label"
-          text-anchor="middle"
-          x="100"
-          y="120"
-          fill="var(--dxds-color-content-subtle, #494949)"
-        >
-          <tspan x="100">{{ country }}</tspan>
-          <!-- display: inline -->
-          <tspan class="center-label-total" x="100" dy="20px">{{
-            calculateTotal(pieChart)
-          }}</tspan>
-        </text>
-      </svg>
-    </dx-pie-chart>
+    @for (country of countries; track country) {
+      <dx-pie-chart
+        class="pie"
+        sizeGroup="piesGroup"
+        [dataSource]="service.getData(country)"
+        [animation]="false"
+        resolveLabelOverlapping="shift"
+        type="doughnut"
+        centerTemplate="centerTemplate"
+        [innerRadius]="0.65"
+      >
+        <dxi-pie-chart-series argumentField="commodity" valueField="total">
+          <dxo-pie-chart-label
+            backgroundColor="none"
+            [visible]="true"
+            format="fixedPoint"
+            [customizeText]="customizeLabel"
+          >
+            <dxo-pie-chart-connector [visible]="true"></dxo-pie-chart-connector>
+          </dxo-pie-chart-label>
+        </dxi-pie-chart-series>
+        <dxo-pie-chart-legend [visible]="false"> </dxo-pie-chart-legend>
+        <svg *dxTemplate="let pieChart of 'centerTemplate'">
+          <circle
+            cx="100"
+            cy="100"
+            [attr.r]="pieChart.getInnerRadius() - 6"
+            fill="#eee"
+          ></circle>
+          <image
+            attr.href="{{ getImagePath(country) }}"
+            x="70"
+            y="58"
+            width="60"
+            height="40"
+          />
+          <text
+            class="center-label"
+            text-anchor="middle"
+            x="100"
+            y="120"
+            fill="var(--dxds-color-content-subtle, #494949)"
+          >
+            <tspan x="100">{{ country }}</tspan>
+            <!-- display: inline -->
+            <tspan class="center-label-total" x="100" dy="20px">{{
+              calculateTotal(pieChart)
+            }}</tspan>
+          </text>
+        </svg>
+      </dx-pie-chart>
     }
   </div>
 </div>

@@ -10,13 +10,12 @@ import Form, {
 import GroupCaption from './GroupCaption.js';
 import { employee } from './data.js';
 
-const groupCaptionNamedRender = (iconName) => (data) =>
-  (
-    <GroupCaption
-      {...data}
-      iconName={iconName}
-    />
-  );
+const groupCaptionNamedRender = (iconName) => (data) => (
+  <GroupCaption
+    {...data}
+    iconName={iconName}
+  />
+);
 export default function App() {
   return (
     <>

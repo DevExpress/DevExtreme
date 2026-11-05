@@ -35,16 +35,16 @@
         >
         </dx-radio-group>
       </div>
-      @if (selectedOpenMode() !== 'push') {
-      <div class="option">
-        <label>Reveal mode</label>
-        <dx-radio-group
-          [(value)]="selectedRevealMode"
-          [items]="showSubmenuModes"
-          layout="horizontal"
-        >
-        </dx-radio-group>
-      </div>
+      @if (selectedOpenMode() !== "push") {
+        <div class="option">
+          <label>Reveal mode</label>
+          <dx-radio-group
+            [(value)]="selectedRevealMode"
+            [items]="showSubmenuModes"
+            layout="horizontal"
+          >
+          </dx-radio-group>
+        </div>
       }
     </div>
   </div>

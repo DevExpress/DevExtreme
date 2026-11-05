@@ -9,19 +9,21 @@
     <dxo-pie-chart-image [height]="60" [width]="90"></dxo-pie-chart-image>
     <dxo-pie-chart-border color="transparent"></dxo-pie-chart-border>
   </dxo-pie-chart-common-annotation-settings>
-  @for(item of annotations; track item.country) {
-  <dxi-pie-chart-annotation
-    [argument]="item.country"
-    [data]="item.data"
-    [location]="item.location"
-    [offsetX]="item.offsetX"
-    [offsetY]="item.offsetY"
-    [color]="item.color"
-  >
-    <dxo-pie-chart-image [url]="item.image"></dxo-pie-chart-image>
-    <dxo-pie-chart-border [color]="item.borderColor"></dxo-pie-chart-border>
-    <dxo-pie-chart-shadow [opacity]="item.shadowOpacity"></dxo-pie-chart-shadow>
-  </dxi-pie-chart-annotation>
+  @for (item of annotations; track item.country) {
+    <dxi-pie-chart-annotation
+      [argument]="item.country"
+      [data]="item.data"
+      [location]="item.location"
+      [offsetX]="item.offsetX"
+      [offsetY]="item.offsetY"
+      [color]="item.color"
+    >
+      <dxo-pie-chart-image [url]="item.image"></dxo-pie-chart-image>
+      <dxo-pie-chart-border [color]="item.borderColor"></dxo-pie-chart-border>
+      <dxo-pie-chart-shadow
+        [opacity]="item.shadowOpacity"
+      ></dxo-pie-chart-shadow>
+    </dxi-pie-chart-annotation>
   }
   <dxi-pie-chart-series argumentField="country" valueField="gold">
     <dxo-pie-chart-label
@@ -44,8 +46,8 @@
   <div *dxTemplate="let annotation of 'tooltipTemplate'" class="medal-tooltip">
     <div class="country-name"
       >{{ annotation.data.country }}
-      @if(annotation.data.oldCountryName) {
-      <br />{{ annotation.data.oldCountryName }}
+      @if (annotation.data.oldCountryName) {
+        <br />{{ annotation.data.oldCountryName }}
       }
     </div>
     <div class="gold">

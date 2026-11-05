@@ -28,10 +28,10 @@
     <div *dxTemplate="let content of 'title'">
       <span>{{ content.FirstName }} {{ content.LastName }}</span>
       @if (showCloseButton()) {
-      <i
-        class="dx-icon dx-icon-close"
-        (click)="closeButtonHandler(content)"
-      ></i>
+        <i
+          class="dx-icon dx-icon-close"
+          (click)="closeButtonHandler(content)"
+        ></i>
       }
     </div>
     <div *dxTemplate="let employee of 'item'">

@@ -5,9 +5,9 @@
     [dataSource]="chemicalComposition"
     title="The Chemical Composition of the Earth Layers"
   >
-    @for(item of seriesSource; track item.name) {
-    <dxi-chart-series [valueField]="item.valueField" [name]="item.name">
-    </dxi-chart-series>
+    @for (item of seriesSource; track item.name) {
+      <dxi-chart-series [valueField]="item.valueField" [name]="item.name">
+      </dxi-chart-series>
     }
     <dxo-chart-common-series-settings type="bar" [ignoreEmptyPoints]="true">
     </dxo-chart-common-series-settings>
@@ -40,12 +40,12 @@
         [ignoreEmptyPoints]="true"
       >
       </dxo-range-selector-common-series-settings>
-      @for(item of seriesSource; track item.name) {
-      <dxi-range-selector-series
-        [valueField]="item.valueField"
-        [name]="item.name"
-      >
-      </dxi-range-selector-series>
+      @for (item of seriesSource; track item.name) {
+        <dxi-range-selector-series
+          [valueField]="item.valueField"
+          [name]="item.name"
+        >
+        </dxi-range-selector-series>
       }
     </dxo-range-selector-chart>
   </dx-range-selector>

@@ -54,8 +54,8 @@
     <dx-button id="clear" text="Clear" (onClick)="clearEvents()"></dx-button>
   </div>
   <ul>
-    @for(event of events(); track $index) {
-    <li>{{ event }}</li>
+    @for (event of events(); track $index) {
+      <li>{{ event }}</li>
     }
   </ul>
 </div>
