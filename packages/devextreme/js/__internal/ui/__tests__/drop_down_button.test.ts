@@ -84,6 +84,16 @@ describe('DropDownButton', () => {
       expect(model.getButtonElement()?.getAttribute('aria-expanded')).toBe('true');
     });
 
+    it('should return to "dropdownbutton" when the hint is cleared at runtime', () => {
+      const { instance, model } = createDropDownButton({ icon: 'export', hint: HINT });
+
+      expect(model.getButtonElement()?.getAttribute('aria-label')).toBe(HINT);
+
+      instance.option('hint', '');
+
+      expect(model.getButtonElement()?.getAttribute('aria-label')).toBe('dropdownbutton');
+    });
+
     it('should be the visible text when both the text and the hint are set', () => {
       const { model } = createDropDownButton({ icon: 'export', text: 'Export', hint: HINT });
 
