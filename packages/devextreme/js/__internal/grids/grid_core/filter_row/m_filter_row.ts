@@ -4,11 +4,13 @@ import messageLocalization from '@js/common/core/localization/message';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { equalByValue } from '@js/core/utils/common';
+import type { DeferredObj } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { map } from '@js/core/utils/iterator';
 import { getOuterWidth } from '@js/core/utils/size';
 import { isDefined } from '@js/core/utils/type';
 import type { DxEvent } from '@js/events';
+import type { InitializedEvent as ButtonInitializedEvent } from '@js/ui/button';
 import Menu from '@js/ui/menu';
 import Overlay from '@js/ui/overlay/ui.overlay';
 import { selectView } from '@js/ui/shared/accessibility';
@@ -17,8 +19,10 @@ import type { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/colum
 import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/columns_controller';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import type { ColumnsResizerViewController } from '@ts/grids/grid_core/columns_resizing_reordering/columns_resizing_reordering';
+import type { PointerEventArgs } from '@ts/grids/grid_core/columns_resizing_reordering/types';
 import type { DataSourceController } from '@ts/grids/grid_core/data_source/data_source_controller';
 import type { EditingController } from '@ts/grids/grid_core/editing/editing';
+import type { EditorCellOptions } from '@ts/grids/grid_core/editing/types';
 import { CLASSES as EDITOR_FACTORY_CLASSES } from '@ts/grids/grid_core/editor_factory/const';
 import type {
   DataFilter, FilterSourceContext,
@@ -26,7 +30,7 @@ import type {
 import type { HeaderPanel } from '@ts/grids/grid_core/header_panel/header_panel';
 import type { ToolbarItem } from '@ts/grids/grid_core/header_panel/types';
 import modules from '@ts/grids/grid_core/modules/modules';
-import type { ModuleType } from '@ts/grids/grid_core/types';
+import type { ModuleType, OptionChanged } from '@ts/grids/grid_core/types';
 import gridCoreUtils from '@ts/grids/grid_core/utils';
 import Editor from '@ts/ui/editor/editor';
 import type MenuInternal from '@ts/ui/menu/menu';
@@ -836,11 +840,11 @@ const columnHeadersView = (
 };
 
 export class ApplyFilterViewController extends modules.ViewController {
-  private _headerPanel: any;
+  private _headerPanel?: FilterRowHeaderPanel;
 
   private _columnsController!: ColumnsController;
 
-  public init() {
+  public init(): void {
     this._columnsController = this.getController('columns');
   }
 
@@ -857,27 +861,27 @@ export class ApplyFilterViewController extends modules.ViewController {
     return createFilterRowExpressions(columns, excludedColumn);
   }
 
-  private _getHeaderPanel() {
-    if (!this._headerPanel) {
-      // TODO getView
-      this._headerPanel = this.getView('headerPanel');
-    }
+  private _getHeaderPanel(): FilterRowHeaderPanel {
+    // TODO getView
+    this._headerPanel ??= this.getView('headerPanel') as FilterRowHeaderPanel;
+
     return this._headerPanel;
   }
 
-  public setHighLight($element, value) {
+  public setHighLight($element: dxElementWrapper | undefined, value: boolean): void {
     if (isOnClickApplyFilterMode(this)) {
-      $element?.toggleClass(HIGHLIGHT_OUTLINE_CLASS, value)
-      && $element.closest(`.${EDITOR_CELL_CLASS}`).toggleClass(FILTER_MODIFIED_CLASS, value);
+      if ($element?.toggleClass(HIGHLIGHT_OUTLINE_CLASS, value)) {
+        $element.closest(`.${EDITOR_CELL_CLASS}`).toggleClass(FILTER_MODIFIED_CLASS, value);
+      }
       this._getHeaderPanel().enableApplyButton(value);
     }
   }
 
-  public applyFilter() {
+  public applyFilter(): void {
     const columns = this._columnsController.getColumns();
 
     this._columnsController.beginUpdate();
-    for (let i = 0; i < columns.length; i++) {
+    for (let i = 0; i < columns.length; i += 1) {
       const column = columns[i];
       const { bufferedFilterValue, bufferedSelectedFilterOperation } = column;
       if (bufferedFilterValue !== undefined) {
@@ -893,13 +897,12 @@ export class ApplyFilterViewController extends modules.ViewController {
     this.removeHighLights();
   }
 
-  private removeHighLights() {
+  private removeHighLights(): void {
     if (isOnClickApplyFilterMode(this)) {
       // TODO getView
-      // @ts-expect-error the view is rendered here
-      const columnHeadersViewElement: dxElementWrapper = this.getView('columnHeadersView').element();
-      columnHeadersViewElement.find(`.${this.addWidgetPrefix(CLASSES.filterRow)} .${HIGHLIGHT_OUTLINE_CLASS}`).removeClass(HIGHLIGHT_OUTLINE_CLASS);
-      columnHeadersViewElement.find(`.${this.addWidgetPrefix(CLASSES.filterRow)} .${FILTER_MODIFIED_CLASS}`).removeClass(FILTER_MODIFIED_CLASS);
+      const columnHeadersViewElement = this.getView('columnHeadersView').element();
+      columnHeadersViewElement?.find(`.${this.addWidgetPrefix(CLASSES.filterRow)} .${HIGHLIGHT_OUTLINE_CLASS}`).removeClass(HIGHLIGHT_OUTLINE_CLASS);
+      columnHeadersViewElement?.find(`.${this.addWidgetPrefix(CLASSES.filterRow)} .${FILTER_MODIFIED_CLASS}`).removeClass(FILTER_MODIFIED_CLASS);
       this._getHeaderPanel().enableApplyButton(false);
     }
   }
@@ -908,13 +911,14 @@ export class ApplyFilterViewController extends modules.ViewController {
 const columnsResizer = (
   Base: ModuleType<ColumnsResizerViewController>,
 ): ModuleType<ColumnsResizerViewController> => class FilterRowColumnsResizerExtender extends Base {
-  protected _startResizing(): void {
-    // @ts-expect-error
-    super._startResizing.apply(this, arguments);
+  protected declare _columnHeadersView: FilterRowColumnHeadersView;
+
+  protected _startResizing(args: PointerEventArgs<ColumnsResizerViewController>): void {
+    super._startResizing(args);
 
     if (this.isResizing()) {
-      // @ts-expect-error
       const overlayInstance = this._columnHeadersView.getFilterRangeOverlayInstance();
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises -- fire-and-forget
       overlayInstance?.hide();
     }
   }
@@ -923,33 +927,39 @@ const columnsResizer = (
 const editing = (
   Base: ModuleType<EditingController>,
 ): ModuleType<EditingController> => class FilterRowEditingController extends Base {
-  private _needUpdateLookupDataSource: any;
+  private _needUpdateLookupDataSource?: boolean;
 
-  public updateFieldValue(options) {
+  public updateFieldValue(
+    options: EditorCellOptions,
+    value: unknown,
+    text?: string,
+    forceUpdateRow?: boolean,
+  ): DeferredObj<unknown> {
     if (options.column.lookup) {
       this._needUpdateLookupDataSource = true;
     }
 
-    // @ts-expect-error
-    return super.updateFieldValue.apply(this, arguments);
+    return super.updateFieldValue(options, value, text, forceUpdateRow);
   }
 
-  protected _afterSaveEditData(cancel?) {
+  protected _afterSaveEditData(
+    cancel?: boolean,
+    // eslint-disable-next-line @typescript-eslint/no-invalid-void-type -- the base returns void
+  ): DeferredObj<unknown> | void {
     if (this._needUpdateLookupDataSource && !cancel) {
       // TODO getView
-      // @ts-expect-error
-      this.getView('columnHeadersView')?.updateLookupDataSource();
+      const headersView = this.getView('columnHeadersView') as FilterRowColumnHeadersView | undefined;
+
+      headersView?.updateLookupDataSource();
     }
     this._needUpdateLookupDataSource = false;
 
-    // @ts-expect-error
-    return super._afterSaveEditData.apply(this, arguments);
+    return super._afterSaveEditData(cancel);
   }
 
-  protected _afterCancelEditData() {
+  protected _afterCancelEditData(rowIndex: number): void {
     this._needUpdateLookupDataSource = false;
-    // @ts-expect-error
-    return super._afterCancelEditData.apply(this, arguments);
+    super._afterCancelEditData(rowIndex);
   }
 };
 
@@ -958,13 +968,13 @@ const headerPanel = (
 ): ModuleType<FilterRowHeaderPanel> => class FilterRowHeaderPanel extends Base {
   private _applyFilterViewController!: ApplyFilterViewController;
 
-  public init() {
+  public init(): void {
     super.init();
     this._dataController = this.getController('data');
     this._applyFilterViewController = this.getController('applyFilter');
   }
 
-  public optionChanged(args) {
+  public optionChanged(args: OptionChanged): void {
     if (args.name === 'filterRow') {
       this._invalidate();
       args.handled = true;
@@ -981,18 +991,17 @@ const headerPanel = (
   }
 
   private _prepareFilterItem(): ToolbarItem[] {
-    const that = this;
     const filterItem: ToolbarItem[] = [];
 
-    if (that._isShowApplyFilterButton()) {
-      const hintText = that.option('filterRow.applyFilterText');
-      const columns = that._columnsController.getColumns();
+    if (this._isShowApplyFilterButton()) {
+      const hintText = this.option('filterRow.applyFilterText');
+      const columns = this._columnsController.getColumns();
       const disabled = !columns.filter((column) => column.bufferedFilterValue !== undefined).length;
-      const onInitialized = function (e) {
-        $(e.element).addClass(that.getToolbarButtonClass(APPLY_BUTTON_CLASS));
+      const onInitialized = (e: ButtonInitializedEvent): void => {
+        $(e.element).addClass(this.getToolbarButtonClass(APPLY_BUTTON_CLASS));
       };
-      const onClickHandler = function () {
-        that._applyFilterViewController.applyFilter();
+      const onClickHandler = (): void => {
+        this._applyFilterViewController.applyFilter();
       };
       const toolbarItem: ToolbarItem = {
         widget: 'dxButton',
@@ -1017,7 +1026,7 @@ const headerPanel = (
     return filterItem;
   }
 
-  private _isShowApplyFilterButton() {
+  private _isShowApplyFilterButton(): boolean {
     const filterRowOptions = this.option('filterRow');
     return !!filterRowOptions?.visible && filterRowOptions.applyFilter === 'onClick';
   }
