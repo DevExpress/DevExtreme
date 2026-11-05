@@ -2776,10 +2776,10 @@
                 "Name": "Stock",
                 "Widget": "Charts",
                 "MvcAdditionalFiles": [
-                  "/Models/SampleData/FinancialData.cs"
+                  "/Models/SampleData/StockChartData.cs"
                 ],
                 "DemoType": "Viz",
-                "Equivalents": "workdaysOnly, tickInterval, stock price, reduction"
+                "Equivalents": "zoomAndPan, scrollBar, visualRange, tickInterval, stock price, reduction"
               },
               {
                 "Title": "Candlestick",

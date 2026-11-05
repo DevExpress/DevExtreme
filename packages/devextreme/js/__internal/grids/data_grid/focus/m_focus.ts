@@ -6,8 +6,9 @@ import type { DataController } from '@ts/grids/grid_core/data_controller/data_co
 import type { DataSourceController } from '@ts/grids/grid_core/data_source/data_source_controller';
 import type { FocusDataSourceControllerExtension } from '@ts/grids/grid_core/focus/extenders/focus_data_source_controller';
 import { focusModule } from '@ts/grids/grid_core/focus/focus_module';
-import type { KeyboardNavigationController } from '@ts/grids/grid_core/keyboard_navigation/m_keyboard_navigation';
+import type { KeyboardNavigationController } from '@ts/grids/grid_core/keyboard_navigation/keyboard_navigation';
 import type { ModuleType } from '@ts/grids/grid_core/types';
+import { isVirtualPaging } from '@ts/grids/grid_core/utils';
 
 import gridCore from '../core';
 import type { GroupingDataSourceAdapter } from '../grouping/m_grouping';
@@ -148,8 +149,7 @@ const data = (Base: DataControllerBase) => class FocusDataControllerExtender ext
     }
 
     const groupFilter = createGroupFilter(groupPath, { group });
-    const scrollingMode = this.option('scrolling.mode');
-    const isVirtualScrolling = scrollingMode === 'virtual' || scrollingMode === 'infinite';
+    const isVirtualScrolling = isVirtualPaging(this.option('scrolling'));
     const pageSize = dataSourceAdapter.pageSize();
     let groupOffset;
 

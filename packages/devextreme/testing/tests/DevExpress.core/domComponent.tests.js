@@ -1295,3 +1295,132 @@ QUnit.module('License check', {
         }
     });
 });
+
+QUnit.module('construction order', {
+    afterEach: function() {
+        delete $.fn.dxConstructionOrder;
+    }
+}, () => {
+    QUnit.test('the element and the instance are attached before the options are created, rendering completes before the derived constructor body', function(assert) {
+        const log = [];
+        const element = $('#component').get(0);
+
+        class TestComponent extends DOMComponent {
+            _init() {
+                log.push('_init: element ' + (this.$element().get(0) === element) + ', instance ' + ($(element).dxConstructionOrder('instance') === this));
+                super._init();
+            }
+
+            _initMarkup() {
+                log.push('_initMarkup');
+                super._initMarkup();
+            }
+
+            _render() {
+                log.push('_render');
+                super._render();
+            }
+
+            _useTemplates() {
+                return false;
+            }
+        }
+
+        class Derived extends TestComponent {
+            constructor(el, options) {
+                super(el, options);
+                log.push('derived constructor body: width ' + this.option('width'));
+            }
+        }
+        registerComponent('dxConstructionOrder', Derived);
+
+        const instance = new Derived(element, {
+            width: 100,
+            onInitializing() {
+                log.push('onInitializing: instance ' + ($(element).dxConstructionOrder('instance') === this));
+            },
+            onInitialized() {
+                log.push('onInitialized');
+            }
+        });
+        log.push('constructed');
+
+        assert.deepEqual(log, [
+            'onInitializing: instance true',
+            '_init: element true, instance true',
+            'onInitialized',
+            '_initMarkup',
+            '_render',
+            'derived constructor body: width 100',
+            'constructed'
+        ]);
+
+        instance.dispose();
+    });
+
+    QUnit.test('the postCtor of an included mixin runs after rendering', function(assert) {
+        const log = [];
+
+        class TestComponent extends DOMComponent {
+            _render() {
+                log.push('_render');
+                super._render();
+            }
+
+            _useTemplates() {
+                return false;
+            }
+        }
+        TestComponent.include({
+            postCtor() {
+                log.push('postCtor');
+            }
+        });
+
+        const instance = new TestComponent($('#component'), {
+            onInitialized() {
+                log.push('onInitialized');
+            }
+        });
+
+        assert.deepEqual(log, ['onInitialized', '_render', 'postCtor']);
+
+        instance.dispose();
+    });
+
+    QUnit.test('disposing order on element removal', function(assert) {
+        const log = [];
+        const $element = $('#component');
+
+        class TestComponent extends DOMComponent {
+            _dispose() {
+                log.push('_dispose begin');
+                super._dispose();
+                log.push('_dispose end');
+            }
+
+            _clean() {
+                log.push('_clean');
+                super._clean();
+            }
+
+            _useTemplates() {
+                return false;
+            }
+        }
+
+        const instance = new TestComponent($element, {
+            onDisposing() {
+                log.push('onDisposing');
+            }
+        });
+        instance.on('disposing', () => {
+            log.push('disposing event');
+        });
+
+        $element.remove();
+
+        assert.deepEqual(log, ['_dispose begin', 'disposing event', 'onDisposing', '_clean', '_dispose end']);
+        assert.strictEqual(instance._disposed, true);
+    });
+});

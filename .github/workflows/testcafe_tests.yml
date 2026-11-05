@@ -23,11 +23,28 @@ jobs:
     outputs:
       should-run: ${{ steps.check.outputs.should-run }}
       styles-changed: ${{ steps.changes.outputs.styles }}
+      has-quarantined-tests: ${{ steps.quarantined-tests.outputs.has-tests }}
     steps:
       - uses: actions/checkout@v6
       - name: Check RUN_TESTS flag
         id: check
         run: echo "should-run=${{ env.RUN_TESTS }}" >> $GITHUB_OUTPUT
+
+      - name: Check quarantined tests
+        id: quarantined-tests
+        working-directory: ./e2e/testcafe-devextreme
+        run: |
+          listed=0
+          [ -f quarantine.json ] && listed=$(jq '.tests | length' quarantine.json)
+          # Matches the meta key: test.meta({ unstable: true }) or test.meta('unstable', true).
+          marked=$(grep -rlE --include='*.ts' --include='*.js' "unstable['\"]?[[:space:]]*[:,]" tests helpers || true)
+          echo "Tests in quarantine.json: $listed"
+          echo "Files with unstable tests: ${marked:-(none)}"
+          if [ "$listed" -gt 0 ] || [ -n "$marked" ]; then
+            echo "has-tests=true" >> $GITHUB_OUTPUT
+          else
+            echo "has-tests=false" >> $GITHUB_OUTPUT
+          fi
 
       - uses: dorny/paths-filter@v4
         id: changes
@@ -416,13 +433,51 @@ jobs:
         path: ${{ github.workspace }}/e2e/testcafe-devextreme/artifacts/failedtests/**/*
         if-no-files-found: ignore
 
-  testcafe-quarantine:
-    name: quarantine
+  check-quarantine:
+    name: Check if quarantine should run
     needs: [check-should-run, build, testcafe]
     if: |
       !cancelled() &&
       needs.check-should-run.outputs.should-run == 'true' &&
       needs.build.result == 'success'
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    outputs:
+      should-run: ${{ steps.check.outputs.should-run }}
+
+    steps:
+    - name: Check flaky test reports and quarantined tests
+      id: check
+      uses: actions/github-script@v9
+      env:
+        HAS_QUARANTINED_TESTS: ${{ needs.check-should-run.outputs.has-quarantined-tests }}
+      with:
+        script: |
+          const artifacts = await github.paginate(github.rest.actions.listWorkflowRunArtifacts, {
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            run_id: context.runId,
+            per_page: 100,
+          });
+
+          // Same pattern as the "Download flaky test reports" step of the quarantine job.
+          const flakyReports = artifacts
+            .map((artifact) => artifact.name)
+            .filter((name) => name.startsWith('flaky-report'));
+          const hasQuarantinedTests = process.env.HAS_QUARANTINED_TESTS !== 'false';
+
+          core.info(`Flaky test reports: ${flakyReports.length ? flakyReports.join(', ') : '(none)'}`);
+          core.info(`Quarantined tests: ${hasQuarantinedTests ? 'yes' : 'none'}`);
+          core.setOutput('should-run', flakyReports.length > 0 || hasQuarantinedTests ? 'true' : 'false');
+
+  testcafe-quarantine:
+    name: quarantine
+    needs: [check-should-run, build, testcafe, check-quarantine]
+    if: |
+      !cancelled() &&
+      needs.check-should-run.outputs.should-run == 'true' &&
+      needs.build.result == 'success' &&
+      needs.check-quarantine.outputs.should-run != 'false'
     runs-on: ${{ github.event_name == 'merge_group' && 'devextreme-shr2-ondemand' || 'devextreme-shr2' }}
     timeout-minutes: 8
 
@@ -600,9 +655,15 @@ jobs:
         echo "============================================================"
         echo " [QUARANTINED] Run of all quarantined tests (quarantine.json)"
         echo "============================================================"
-        run_tests --onlyQuarantined true
-        quarantined_failed=$last_failed
-        meta_failed_names=$(jq -r '.tests[]' "$result")
+        if [ "${{ needs.check-should-run.outputs.has-quarantined-tests }}" = "false" ]; then
+          echo "No quarantined tests."
+          quarantined_failed=0
+          meta_failed_names=""
+        else
+          run_tests --onlyQuarantined true
+          quarantined_failed=$last_failed
+          meta_failed_names=$(jq -r '.tests[]' "$result")
+        fi
 
         echo ""
         echo "============================================================"

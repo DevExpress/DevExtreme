@@ -45,14 +45,14 @@ describe('PostCompiler', () => {
 
   test('addInfoHeader - append after body, @charset glued to :root (CompileManager parity)', () => {
     expect(addInfoHeader('@charset "utf-8";:root{}', '1.1.1', true))
-      .toBe('@charset "UTF-8";:root{}\n'
-      + themeBuilderInfoHeader);
+      .toBe(`@charset "UTF-8";:root{}\n${
+        themeBuilderInfoHeader}`);
   });
 
   test('addInfoHeader - append after body, strips newline between @charset and @import', () => {
     expect(addInfoHeader('@charset "UTF-8";\n@import url(https://example.com/a.css);', '1.1.1', true))
-      .toBe('@charset "UTF-8";@import url(https://example.com/a.css);\n'
-      + themeBuilderInfoHeader);
+      .toBe(`@charset "UTF-8";@import url(https://example.com/a.css);\n${
+        themeBuilderInfoHeader}`);
   });
 
   test('cleanCss', async () => {

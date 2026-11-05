@@ -52,7 +52,7 @@ import type { EditorFactory } from '@ts/grids/grid_core/editor_factory/editor_fa
 import type { FocusController } from '@ts/grids/grid_core/focus/m_focus';
 import type { HeaderPanel } from '@ts/grids/grid_core/header_panel/header_panel';
 import type { ToolbarItem } from '@ts/grids/grid_core/header_panel/types';
-import type { KeyboardNavigationController } from '@ts/grids/grid_core/keyboard_navigation/m_keyboard_navigation';
+import type { KeyboardNavigationController } from '@ts/grids/grid_core/keyboard_navigation/keyboard_navigation';
 import { CLASSES as MASTER_DETAIL_CLASSES } from '@ts/grids/grid_core/master_detail/const';
 import modules from '@ts/grids/grid_core/modules/modules';
 import { ROW_SELECTION_CLASS } from '@ts/grids/grid_core/selection/const';
@@ -107,6 +107,7 @@ import {
 } from './editing_utils';
 import { editingDataControllerExtender } from './extenders/editing_data_controller';
 import type {
+  AddChangeOptions,
   AllowEditActionValue,
   CellBasedEditingController,
   EditActionOptions,
@@ -2449,7 +2450,7 @@ export class EditingController extends modules.ViewController {
    */
   protected _addChange(
     changeParams: EditingChangeParams,
-    options?: { row?: ProcessedItem; forceUpdateRow?: boolean },
+    options?: AddChangeOptions,
   ): EditingChange {
     const row = options?.row;
     const changes = [...this.getChanges()];
@@ -2718,7 +2719,7 @@ export class EditingController extends modules.ViewController {
   /**
    * @extended: validating, TreeList's editing
    */
-  protected _beforeSaveEditData(change?: EditingChange): boolean {
+  protected _beforeSaveEditData(change?: EditingChange): boolean | DeferredObj<boolean> {
     return !!change && !isDefined(change.key) && isDefined(change.type);
   }
 
@@ -3100,9 +3101,6 @@ const rowsView = <TBase extends ModuleType<RowsView>>(
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars -- used by overrides
   public editCellPrepared($cell: dxElementWrapper): void {}
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars -- used by overrides
-  protected _formItemPrepared(cellOptions: ViewCellOptions, $container: dxElementWrapper): void {}
 };
 
 const headerPanel = (

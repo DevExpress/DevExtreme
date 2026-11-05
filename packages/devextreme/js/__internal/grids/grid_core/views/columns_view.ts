@@ -47,7 +47,7 @@ import { CLASSES as ERROR_HANDLING_CLASSES } from '@ts/grids/grid_core/error_han
 import { CLASSES as FILTER_ROW_CLASSES } from '@ts/grids/grid_core/filter_row/const';
 import { CLASSES as MASTER_DETAIL_CLASSES } from '@ts/grids/grid_core/master_detail/const';
 import modules from '@ts/grids/grid_core/modules/modules';
-import type { SelectionController } from '@ts/grids/grid_core/selection/m_selection';
+import type { SelectionController } from '@ts/grids/grid_core/selection/selection';
 import type { OptionChanged } from '@ts/grids/grid_core/types';
 import gridCoreUtils from '@ts/grids/grid_core/utils';
 import { FIELD_ITEM_CONTENT_CLASS } from '@ts/ui/form/constants';
@@ -1581,13 +1581,13 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
    * @extended: adaptivity
    */
   public getCell(
-    cellPosition: CellPosition,
+    cellPosition: Partial<CellPosition>,
     rows?: dxElementWrapper,
     cells?: dxElementWrapper,
   ): dxElementWrapper | undefined {
     const $rows = rows ?? this._getRowElements();
 
-    if ($rows.length > 0 && cellPosition.rowIndex >= 0) {
+    if ($rows.length > 0 && cellPosition.rowIndex !== undefined && cellPosition.rowIndex >= 0) {
       if (
         this.option('scrolling.mode') !== 'virtual'
         && this.option('scrolling.rowRenderingMode') !== 'virtual'
@@ -1598,8 +1598,12 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
       }
       const $cells = cells ?? this.getCellElements(cellPosition.rowIndex);
       if ($cells && $cells.length > 0) {
+        const { columnIndex } = cellPosition;
+
         return $cells.eq(
-          $cells.length > cellPosition.columnIndex ? cellPosition.columnIndex : $cells.length - 1,
+          columnIndex !== undefined && $cells.length > columnIndex
+            ? columnIndex
+            : $cells.length - 1,
         );
       }
     }

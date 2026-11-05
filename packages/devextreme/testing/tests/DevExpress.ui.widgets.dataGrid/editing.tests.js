@@ -15081,7 +15081,7 @@ QUnit.module('Editing with validation', {
         this.editCell(0, 0);
         this.clock.tick(10);
         const rowKey = this.getKeyByRowIndex(0);
-        this.validatingController.setDisableApplyValidationResults(true);
+        this.validatingController._disableApplyValidationResults = true;
         const deferred = new Deferred();
         const validationResult = {
             status: 'pending',
@@ -15231,7 +15231,7 @@ QUnit.module('Editing with validation', {
 
         let result1 = this.validatingController.getCellValidationResult({ rowKey, columnIndex: 0 });
         let result2 = this.validatingController.getCellValidationResult({ rowKey, columnIndex: 1 });
-        const validationData = this.validatingController._getValidationData(rowKey);
+        const validationData = this.validatingController.getValidationData(rowKey);
 
         // assert
         assert.ok(result1.status, 'result1 should be restored from cache');
@@ -20955,7 +20955,7 @@ QUnit.module('Editing - new row position', {
                     keyboardNavigation: {
                         setFocusedRowIndex: () => {},
                         focus: () => {},
-                        _fireFocusedRowChanged: () => {},
+                        fireFocusedRowChanged: () => {},
                     },
                 },
             });

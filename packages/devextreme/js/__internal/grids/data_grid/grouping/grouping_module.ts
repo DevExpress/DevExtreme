@@ -5,6 +5,7 @@ import gridCore from '@ts/grids/data_grid/core';
 import { groupingColumnsControllerExtender } from './extenders/grouping_columns_controller';
 import { groupingDataControllerExtender } from './extenders/grouping_data_controller';
 import { groupingEditingControllerExtender } from './extenders/grouping_editing_controller';
+import { groupingKeyboardNavigationControllerExtender } from './extenders/grouping_keyboard_navigation_controller';
 import {
   columnHeadersViewExtender,
   GroupingHeaderPanelExtender,
@@ -39,6 +40,7 @@ gridCore.registerModule('grouping', {
       data: groupingDataControllerExtender,
       columns: groupingColumnsControllerExtender,
       editing: groupingEditingControllerExtender,
+      keyboardNavigation: groupingKeyboardNavigationControllerExtender,
     },
     views: {
       headerPanel: GroupingHeaderPanelExtender,
