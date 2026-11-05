@@ -1,5 +1,6 @@
 import type { DeferredObj } from '@js/core/utils/deferred';
 import type { RowExpandingEvent } from '@js/ui/data_grid';
+import type { CustomLoadResult } from '@ts/grids/grid_core/data_source_adapter/custom_loader';
 import type { LoadOperation, RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
 import type { ExecuteActionArgs } from '@ts/grids/grid_core/modules/types';
 import type { RowKey } from '@ts/grids/grid_core/types';
@@ -65,6 +66,8 @@ export interface ExpandedGroupsInfo {
 export type GroupPagingOptions = Pick<LoadOperation, 'skip' | 'take' | 'skips' | 'takes'>;
 
 export type GroupPagingCallback = (groupInfo: GroupInfoData, totalOffset: number) => void;
+
+export type GroupItemsLoadResult = CustomLoadResult | DeferredObj<CustomLoadResult>;
 
 export interface GroupInfo {
   key: RowKey;
