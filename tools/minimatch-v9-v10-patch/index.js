@@ -30,6 +30,9 @@ function makeRe(pattern, options = {}) {
   }
   try {
     const matcher = new mm.Minimatch(pattern, { ...options, matchBase: false });
+    if (!matcher.set.length) {
+      return false;
+    }
     const { source, flags } = picomatch.makeRe(
       options.windowsPathsNoEscape ? pattern.split('\\').join('/') : pattern,
       {
