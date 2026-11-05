@@ -29,9 +29,7 @@ export default function App() {
     setHouses(updatedHouses);
     notify(
       {
-        message: `This item has been ${
-          updatedCurrentHouse?.Favorite ? 'added to' : 'removed from'
-        } the Favorites list!`,
+        message: `This item has been ${updatedCurrentHouse?.Favorite ? 'added to' : 'removed from'} the Favorites list!`,
         width: 450,
       },
       updatedCurrentHouse?.Favorite ? 'success' : 'error',

@@ -13,11 +13,11 @@
           [rtlEnabled]="rtlMode()"
         >
           @for (step of steps; track step) {
-          <dxi-stepper-item
-            [label]="step.label"
-            [icon]="step.icon"
-            [optional]="step.optional"
-          ></dxi-stepper-item>
+            <dxi-stepper-item
+              [label]="step.label"
+              [icon]="step.icon"
+              [optional]="step.optional"
+            ></dxi-stepper-item>
           }
         </dx-stepper>
       </div>
@@ -34,10 +34,10 @@
           [rtlEnabled]="rtlMode()"
         >
           @for (step of steps; track step) {
-          <dxi-stepper-item
-            [label]="step.label"
-            [optional]="step.optional"
-          ></dxi-stepper-item>
+            <dxi-stepper-item
+              [label]="step.label"
+              [optional]="step.optional"
+            ></dxi-stepper-item>
           }
         </dx-stepper>
       </div>
@@ -54,7 +54,7 @@
           [rtlEnabled]="rtlMode()"
         >
           @for (step of steps; track step) {
-          <dxi-stepper-item [text]="step.text"></dxi-stepper-item>
+            <dxi-stepper-item [text]="step.text"></dxi-stepper-item>
           }
         </dx-stepper>
       </div>

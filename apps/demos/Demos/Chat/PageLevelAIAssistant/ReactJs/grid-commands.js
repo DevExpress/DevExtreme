@@ -51,9 +51,7 @@ To filter a date column by a year and/or month (the same thing the grid's own he
         const parsedDate = new Date(value);
         if (Number.isNaN(parsedDate.getTime())) {
           return fail(
-            `I couldn't apply that filter to '${
-              column.caption ?? args.column
-            }'. Check that the value matches the column's type.`,
+            `I couldn't apply that filter to '${column.caption ?? args.column}'. Check that the value matches the column's type.`,
           );
         }
         value = parsedDate;
@@ -79,9 +77,7 @@ To filter a date column by a year and/or month (the same thing the grid's own he
         };
       } catch {
         return fail(
-          `I couldn't apply that filter to '${
-            column.caption ?? args.column
-          }'. Check that the value matches the column's type.`,
+          `I couldn't apply that filter to '${column.caption ?? args.column}'. Check that the value matches the column's type.`,
         );
       }
     },

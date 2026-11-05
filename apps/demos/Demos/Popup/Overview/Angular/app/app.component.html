@@ -2,23 +2,23 @@
   <div class="header">Employees</div>
   <ul>
     @for (employee of employees; track employee.ID) {
-    <li>
-      <img
-        [id]="'image' + employee.ID"
-        [alt]="employee.FirstName + ' ' + employee.LastName"
-        [src]="employee.Picture"
-      />
-      <br />
-      <i>{{ employee.FirstName }} {{ employee.LastName }}</i
-      ><br />
-      <dx-button
-        class="button-info"
-        text="Details"
-        (mouseenter)="detailsButtonMouseEnter(employee.ID)"
-        (onClick)="showInfo(employee)"
-      >
-      </dx-button>
-    </li>
+      <li>
+        <img
+          [id]="'image' + employee.ID"
+          [alt]="employee.FirstName + ' ' + employee.LastName"
+          [src]="employee.Picture"
+        />
+        <br />
+        <i>{{ employee.FirstName }} {{ employee.LastName }}</i
+        ><br />
+        <dx-button
+          class="button-info"
+          text="Details"
+          (mouseenter)="detailsButtonMouseEnter(employee.ID)"
+          (onClick)="showInfo(employee)"
+        >
+        </dx-button>
+      </li>
     }
   </ul>
   <dx-popup

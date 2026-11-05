@@ -1,25 +1,25 @@
 <div class="pies-container">
-  @for(options of pies; track options.title) {
-  <dx-pie-chart
-    class="pie"
-    [title]="options.title"
-    [palette]="options.palette"
-    [dataSource]="options.dataSource"
-    sizeGroup="piesGroup"
-  >
-    <dxi-pie-chart-series argumentField="name" valueField="area">
-      <dxo-pie-chart-label
-        [visible]="true"
-        format="percent"
-      ></dxo-pie-chart-label>
-    </dxi-pie-chart-series>
-    <dxo-pie-chart-legend
-      verticalAlignment="bottom"
-      horizontalAlignment="center"
-      itemTextPosition="right"
-      [rowCount]="2"
+  @for (options of pies; track options.title) {
+    <dx-pie-chart
+      class="pie"
+      [title]="options.title"
+      [palette]="options.palette"
+      [dataSource]="options.dataSource"
+      sizeGroup="piesGroup"
     >
-    </dxo-pie-chart-legend>
-  </dx-pie-chart>
+      <dxi-pie-chart-series argumentField="name" valueField="area">
+        <dxo-pie-chart-label
+          [visible]="true"
+          format="percent"
+        ></dxo-pie-chart-label>
+      </dxi-pie-chart-series>
+      <dxo-pie-chart-legend
+        verticalAlignment="bottom"
+        horizontalAlignment="center"
+        itemTextPosition="right"
+        [rowCount]="2"
+      >
+      </dxo-pie-chart-legend>
+    </dx-pie-chart>
   }
 </div>

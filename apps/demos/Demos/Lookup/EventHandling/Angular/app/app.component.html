@@ -13,12 +13,12 @@
   </dx-lookup>
 </div>
 @if (selectedEmployee(); as selectedEmployee) {
-<div class="selected">
-  <div class="frame">
-    <img src="{{ selectedEmployee.Picture }}" alt="" />
+  <div class="selected">
+    <div class="frame">
+      <img src="{{ selectedEmployee.Picture }}" alt="" />
+    </div>
+    <div id="selected-employee-notes">{{ selectedEmployee.Notes }}</div>
   </div>
-  <div id="selected-employee-notes">{{ selectedEmployee.Notes }}</div>
-</div>
 }
 <div class="options">
   <div class="caption">Options</div>

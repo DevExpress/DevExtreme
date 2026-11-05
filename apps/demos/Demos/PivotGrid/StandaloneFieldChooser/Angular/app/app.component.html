@@ -28,17 +28,17 @@
     >
     </dxo-pivot-grid-field-chooser-texts>
   </dx-pivot-grid-field-chooser>
-  @if (applyChangesMode() === 'onDemand') {
-  <div class="bottom-bar">
-    <dx-button
-      id="applyButton"
-      text="Apply"
-      type="default"
-      (onClick)="applyClick()"
-    >
-    </dx-button>
-    <dx-button text="Cancel" (onClick)="cancelClick()"> </dx-button>
-  </div>
+  @if (applyChangesMode() === "onDemand") {
+    <div class="bottom-bar">
+      <dx-button
+        id="applyButton"
+        text="Apply"
+        type="default"
+        (onClick)="applyClick()"
+      >
+      </dx-button>
+      <dx-button text="Cancel" (onClick)="cancelClick()"> </dx-button>
+    </div>
   }
 
   <div class="options">

@@ -56,11 +56,11 @@
     </dxi-form-item>
 
     @for (label of labelTemplates; track label.name) {
-    <ng-container>
-      <div *dxTemplate="let data of label.name">
-        <div><i class="dx-icon {{ label.icon }}"></i>{{ data.text }}</div>
-      </div>
-    </ng-container>
+      <ng-container>
+        <div *dxTemplate="let data of label.name">
+          <div><i class="dx-icon {{ label.icon }}"></i>{{ data.text }}</div>
+        </div>
+      </ng-container>
     }
 
     <div *dxTemplate="let data of 'notes'">
@@ -76,7 +76,7 @@
         showEvent="mouseenter"
         hideEvent="mouseleave"
       >
-        <div *dxTemplate="let data = data; of: 'content'">
+        <div *dxTemplate="let data = data of 'content'">
           <div id="tooltip-content">
             This field must not exceed 200 characters
           </div>

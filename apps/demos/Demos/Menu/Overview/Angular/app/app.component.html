@@ -12,11 +12,11 @@
     >
     </dx-menu>
     @if (currentProduct(); as product) {
-    <div id="product-details">
-      <img src="{{ product.icon }}" />
-      <div class="name">{{ product.name }}</div>
-      <div class="price">{{ "$" + product.price }}</div>
-    </div>
+      <div id="product-details">
+        <img src="{{ product.icon }}" />
+        <div class="name">{{ product.name }}</div>
+        <div class="price">{{ "$" + product.price }}</div>
+      </div>
     }
   </div>
   <div class="options">

@@ -1,10 +1,10 @@
 <dx-list (onItemClick)="itemClick($event)">
   @for (contact of contacts; track contact.name) {
-  <dxi-list-item>
-    <div>{{ contact.name }}</div>
-    <div>{{ contact.phone }}</div>
-    <div>{{ contact.email }}</div>
-  </dxi-list-item>
+    <dxi-list-item>
+      <div>{{ contact.name }}</div>
+      <div>{{ contact.phone }}</div>
+      <div>{{ contact.email }}</div>
+    </dxi-list-item>
   }
 </dx-list>
 <dx-action-sheet
