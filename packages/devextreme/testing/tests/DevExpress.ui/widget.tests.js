@@ -1592,6 +1592,32 @@ QUnit.module('dataHelperMixin', {}, () => {
         assert.ok(events.loadError.has(loadErrorHandler), 'external \'loadError\' handler still attached');
         assert.ok(events.loadingChanged.has(loadingChangedHandler), 'external \'loadingChanged\' handler still attached');
     });
+
+    QUnit.test('the data source created by the widget is disposed with the widget', function(assert) {
+        const $container = $('#widget');
+        class TestWidget extends Widget {
+            _getDefaultOptions() {
+                return $.extend(super._getDefaultOptions(), { dataSource: null });
+            }
+
+            _init() {
+                super._init();
+                this._refreshDataSource();
+            }
+        }
+        TestWidget.include(DataHelperMixin);
+
+        const widget = new TestWidget($container, { dataSource: [1, 2, 3] });
+        const dataSource = widget.getDataSource();
+        const disposeSpy = sinon.spy(dataSource, 'dispose');
+
+        assert.ok(dataSource instanceof DataSource, 'the widget created its own data source');
+
+        $container.remove();
+
+        assert.strictEqual(disposeSpy.callCount, 1, 'the data source is disposed');
+        assert.strictEqual(widget.getDataSource(), null, 'the widget no longer references it');
+    });
 });
 
 QUnit.module('aria accessibility', {}, () => {
