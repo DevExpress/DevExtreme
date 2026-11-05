@@ -43,6 +43,12 @@ describe('DropDownButton', () => {
       expect(model.getButtonElement()?.getAttribute('aria-label')).toBe('dropdownbutton');
     });
 
+    it('should stay "dropdownbutton" when the hint contains only spaces', () => {
+      const { model } = createDropDownButton({ icon: 'export', hint: '   ' });
+
+      expect(model.getButtonElement()?.getAttribute('aria-label')).toBe('dropdownbutton');
+    });
+
     it('should stay the hint while the drop-down list is opened and after it is closed', async () => {
       const { instance, model } = createDropDownButton({ icon: 'export', hint: HINT });
 
