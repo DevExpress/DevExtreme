@@ -1,7 +1,9 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode } from '@angular/core';
+import {
+  Component, computed, enableProdMode, inject, signal,
+} from '@angular/core';
 import { DxPaginationModule } from 'devextreme-angular';
-import { Employee, Service } from './app.service';
+import { Service } from './app.service';
 import { EmployeeCard } from './employee-card/employee-card.component';
 
 if (!/localhost/.test(document.location.host)) {
@@ -19,41 +21,24 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  employees: Employee[];
+  private readonly employees = inject(Service).getEmployees();
 
-  pageEmployees: Employee[];
-
-  itemCount: number;
+  readonly itemCount = this.employees.length;
 
   readonly allowedPageSizes = [4, 6];
 
-  showInfo = true;
+  readonly showInfo = true;
 
-  showNavigationButtons = true;
+  readonly showNavigationButtons = true;
 
-  pageIndex = 1;
+  readonly pageIndex = signal(1);
 
-  pageSize = 4;
+  readonly pageSize = signal(4);
 
-  onPageIndexChange(val) {
-    this.pageIndex = val;
-    this.setPageEmployees();
-  }
-
-  onPageSizeChange(val) {
-    this.pageSize = val;
-    this.setPageEmployees();
-  }
-
-  setPageEmployees() {
-    this.pageEmployees = this.employees.slice((this.pageIndex - 1) * this.pageSize, this.pageIndex * this.pageSize);
-  }
-
-  constructor(service: Service) {
-    this.employees = service.getEmployees();
-    this.itemCount = this.employees.length;
-    this.setPageEmployees();
-  }
+  readonly pageEmployees = computed(() => this.employees.slice(
+    (this.pageIndex() - 1) * this.pageSize(),
+    this.pageIndex() * this.pageSize(),
+  ));
 }
 
 bootstrapApplication(AppComponent);

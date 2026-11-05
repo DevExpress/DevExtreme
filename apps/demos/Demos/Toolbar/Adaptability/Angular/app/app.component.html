@@ -7,7 +7,7 @@
     handles="right"
     area=".widget-container"
   >
-    <dx-toolbar #toolbar [multiline]="true">
+    <dx-toolbar [multiline]="multiline()">
       <dxi-toolbar-item location="before" widget="dxButton">
         <div *dxTemplate>
           <dx-button
@@ -327,7 +327,7 @@
           keyExpr="alignment"
           stylingMode="outlined"
           [items]="textAlignItemsExtended"
-          [selectedItemKeys]="selectedTextAlign"
+          [selectedItemKeys]="selectedTextAlign()"
           (onItemClick)="onTextAlignChanged($event)"
         ></dx-button-group>
       </div>
@@ -338,8 +338,5 @@
 <div class="options-container">
   <div class="caption">Options</div>
 
-  <dx-check-box
-    [(value)]="toolbar.multiline"
-    text="Multiline mode"
-  ></dx-check-box>
+  <dx-check-box [(value)]="multiline" text="Multiline mode"></dx-check-box>
 </div>

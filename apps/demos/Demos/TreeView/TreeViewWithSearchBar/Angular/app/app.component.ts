@@ -1,9 +1,9 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode } from '@angular/core';
+import { Component, enableProdMode, inject } from '@angular/core';
 import { DxSelectBoxModule } from 'devextreme-angular';
 import { DxTreeViewModule } from 'devextreme-angular/ui/tree-view';
 import type { DxTreeViewTypes } from 'devextreme-angular/ui/tree-view';
-import { Product, Service } from './app.service';
+import { type Product, Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -20,14 +20,9 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  products: Product[];
+  readonly products: Product[] = inject(Service).getProducts();
 
-  currentItem: Product;
-
-  constructor(service: Service) {
-    this.products = service.getProducts();
-    this.currentItem = this.products[0];
-  }
+  currentItem: Product = this.products[0];
 
   selectItem(e: DxTreeViewTypes.ItemClickEvent<Product>) {
     this.currentItem = e.itemData;

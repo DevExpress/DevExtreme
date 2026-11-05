@@ -1,8 +1,11 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode } from '@angular/core';
+import {
+  Component, enableProdMode, inject, signal,
+} from '@angular/core';
 import { DxButtonGroupModule, type DxButtonGroupTypes } from 'devextreme-angular/ui/button-group';
 import { DxCheckBoxModule, type DxCheckBoxTypes } from 'devextreme-angular/ui/check-box';
 import { DxStepperModule, type DxStepperTypes } from 'devextreme-angular/ui/stepper';
+import type { Orientation } from 'devextreme/common';
 
 import { AppService } from './app.service';
 
@@ -21,43 +24,36 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  steps: DxStepperTypes.Item[];
+  private readonly appService = inject(AppService);
 
-  orientations: any[];
+  readonly steps: DxStepperTypes.Item[] = this.appService.getSteps();
 
-  navigationModes: any[];
+  readonly orientations: any[] = this.appService.getOrientations();
 
-  orientation: string;
+  readonly navigationModes: any[] = this.appService.getNavigationModes();
 
-  navigationMode: boolean;
+  readonly orientation = signal<Orientation>(this.orientations[0].value);
 
-  selectOnFocus: boolean = true;
+  readonly navigationMode = signal<boolean>(this.navigationModes[0].value);
 
-  rtlMode: boolean = false;
+  readonly selectOnFocus = signal(true);
 
-  constructor(private readonly appService: AppService) {
-    this.steps = this.appService.getSteps();
-    this.orientations = this.appService.getOrientations();
-    this.navigationModes = this.appService.getNavigationModes();
-
-    this.orientation = this.orientations[0].value;
-    this.navigationMode = this.navigationModes[0].value;
-  }
+  readonly rtlMode = signal(false);
 
   onOrientationClick(e: DxButtonGroupTypes.ItemClickEvent) {
-    this.orientation = e.itemData.value;
+    this.orientation.set(e.itemData.value);
   }
 
   onNavigationModeClick(e: DxButtonGroupTypes.ItemClickEvent) {
-    this.navigationMode = e.itemData.value;
+    this.navigationMode.set(e.itemData.value);
   }
 
   onSelectOnFocusChanged(e: DxCheckBoxTypes.ValueChangedEvent) {
-    this.selectOnFocus = e.value;
+    this.selectOnFocus.set(e.value);
   }
 
   onRtlModeChanged(e: DxCheckBoxTypes.ValueChangedEvent) {
-    this.rtlMode = e.value;
+    this.rtlMode.set(e.value);
   }
 }
 

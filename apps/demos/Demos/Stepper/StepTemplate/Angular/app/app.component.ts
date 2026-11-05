@@ -1,5 +1,5 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode } from '@angular/core';
+import { Component, enableProdMode, inject } from '@angular/core';
 import { DxStepperModule } from 'devextreme-angular';
 import { type DxStepperTypes } from 'devextreme-angular/ui/stepper';
 import { AppService } from './app.service';
@@ -17,11 +17,7 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  steps: DxStepperTypes.Item[];
-
-  constructor(private readonly appService: AppService) {
-    this.steps = this.appService.getSteps();
-  }
+  readonly steps: DxStepperTypes.Item[] = inject(AppService).getSteps();
 }
 
 bootstrapApplication(AppComponent, {

@@ -1,5 +1,5 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode } from '@angular/core';
+import { Component, enableProdMode, inject } from '@angular/core';
 import notify from 'devextreme/ui/notify'; // Import notify correctly
 import { DxContextMenuModule, type DxContextMenuTypes } from 'devextreme-angular/ui/context-menu';
 
@@ -19,11 +19,7 @@ if (!document.location.host.includes('localhost')) {
   ],
 })
 export class AppComponent {
-  items: ContextMenuItems[];
-
-  constructor(service: Service) {
-    this.items = service.getMenuItems();
-  }
+  readonly items = inject(Service).getMenuItems();
 
   itemClick({ itemData }: DxContextMenuTypes.ItemClickEvent<ContextMenuItems>) {
     if (!itemData.items) {

@@ -1,11 +1,11 @@
 import {
-  AfterViewInit, Component, Pipe, PipeTransform, enableProdMode, ViewChild, ChangeDetectorRef,
+  type AfterViewInit, Component, Pipe, type PipeTransform, enableProdMode, inject, signal, viewChild,
 } from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
 import { DxListModule, DxCheckBoxModule } from 'devextreme-angular';
-import { DxTreeViewModule, DxTreeViewComponent, DxTreeViewTypes } from 'devextreme-angular/ui/tree-view';
-import { DxSelectBoxModule, DxSelectBoxTypes } from 'devextreme-angular/ui/select-box';
-import { Service, Employee } from './app.service';
+import { DxTreeViewModule, DxTreeViewComponent, type DxTreeViewTypes } from 'devextreme-angular/ui/tree-view';
+import { DxSelectBoxModule, type DxSelectBoxTypes } from 'devextreme-angular/ui/select-box';
+import { Service, type Employee } from './app.service';
 
 @Pipe({ name: 'title', standalone: true })
 export class TitlePipe implements PipeTransform {
@@ -33,39 +33,34 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent implements AfterViewInit {
-  @ViewChild(DxTreeViewComponent, { static: false }) treeView: DxTreeViewComponent<Employee>;
+  private readonly treeView = viewChild.required<DxTreeViewComponent<Employee>>(DxTreeViewComponent);
 
-  employees: Employee[];
+  readonly employees: Employee[] = inject(Service).getEmployees();
 
-  selectedEmployees: Employee[] = [];
+  readonly selectedEmployees = signal<Employee[]>([]);
 
-  checkboxVisibilityOptions: DxTreeViewTypes.TreeViewCheckBoxMode[] = ['normal', 'selectAll', 'none'];
+  readonly checkboxVisibilityOptions: DxTreeViewTypes.TreeViewCheckBoxMode[] = ['normal', 'selectAll', 'none'];
 
-  checkboxVisibility = this.checkboxVisibilityOptions[0];
+  readonly checkboxVisibility = signal(this.checkboxVisibilityOptions[0]);
 
-  selectionModes: DxTreeViewTypes.SingleOrMultiple[] = ['multiple', 'single'];
+  readonly selectionModes: DxTreeViewTypes.SingleOrMultiple[] = ['multiple', 'single'];
 
-  selectionMode = this.selectionModes[0];
+  readonly selectionMode = signal(this.selectionModes[0]);
 
-  disabledNodeSelectionModes: DxTreeViewTypes.DisabledNodeSelectionMode[] = ['never', 'recursiveAndAll'];
+  readonly disabledNodeSelectionModes: DxTreeViewTypes.DisabledNodeSelectionMode[] = ['never', 'recursiveAndAll'];
 
-  disabledNodeSelectionMode = this.disabledNodeSelectionModes[0];
+  readonly disabledNodeSelectionMode = signal(this.disabledNodeSelectionModes[0]);
 
-  recursiveSelection = true;
+  readonly recursiveSelection = signal(true);
 
-  selectOnClick = false;
+  readonly selectOnClick = signal(false);
 
-  isRecursiveDisabled = false;
+  readonly isRecursiveDisabled = signal(false);
 
-  isSelectionModeDisabled = false;
-
-  constructor(service: Service, private changeDetectorRef: ChangeDetectorRef) {
-    this.employees = service.getEmployees();
-  }
+  readonly isSelectionModeDisabled = signal(false);
 
   ngAfterViewInit() {
-    this.syncSelection(this.treeView.instance);
-    this.changeDetectorRef.detectChanges();
+    this.syncSelection(this.treeView().instance);
   }
 
   treeViewSelectionChanged(e: DxTreeViewTypes.SelectionChangedEvent<Employee>) {
@@ -76,33 +71,33 @@ export class AppComponent implements AfterViewInit {
     this.syncSelection(e.component);
   }
 
-  syncSelection(treeView: DxTreeViewComponent<Employee>['instance']) {
+  private syncSelection(treeView: DxTreeViewComponent<Employee>['instance']) {
     const selectedEmployees = treeView.getSelectedNodes()
       .map((node) => node.itemData);
 
-    this.selectedEmployees = selectedEmployees;
+    this.selectedEmployees.set(selectedEmployees);
   }
 
   checkboxVisibilityValueChanged(e: DxSelectBoxTypes.ValueChangedEvent) {
-    this.checkboxVisibility = e.value;
-    this.isSelectionModeDisabled = e.value === 'selectAll';
+    this.checkboxVisibility.set(e.value);
+    this.isSelectionModeDisabled.set(e.value === 'selectAll');
     if (e.value === 'selectAll') {
-      this.selectionMode = 'multiple';
-      this.isRecursiveDisabled = false;
+      this.selectionMode.set('multiple');
+      this.isRecursiveDisabled.set(false);
     }
   }
 
   selectionModeValueChanged(e: DxSelectBoxTypes.ValueChangedEvent) {
-    this.selectionMode = e.value;
-    this.isRecursiveDisabled = e.value === 'single';
+    this.selectionMode.set(e.value);
+    this.isRecursiveDisabled.set(e.value === 'single');
     if (e.value === 'single') {
-      this.recursiveSelection = false;
-      this.treeView.instance.unselectAll();
+      this.recursiveSelection.set(false);
+      this.treeView().instance.unselectAll();
     }
   }
 
   disabledNodeSelectionModeValueChanged(e: DxSelectBoxTypes.ValueChangedEvent) {
-    this.disabledNodeSelectionMode = e.value;
+    this.disabledNodeSelectionMode.set(e.value);
   }
 }
 

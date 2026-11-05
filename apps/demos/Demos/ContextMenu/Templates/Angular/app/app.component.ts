@@ -24,7 +24,7 @@ class ContextMenuItem {
   ],
 })
 export class AppComponent {
-  dataSource: ContextMenuItem[] = [{
+  readonly dataSource: ContextMenuItem[] = [{
     text: 'Share',
     icon: 'dx-icon-globe',
     items: [
