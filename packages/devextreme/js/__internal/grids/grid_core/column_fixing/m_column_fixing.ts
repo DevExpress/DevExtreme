@@ -16,6 +16,7 @@ import { getOuterWidth } from '@js/core/utils/size';
 import { setWidth } from '@js/core/utils/style';
 import { isDefined } from '@js/core/utils/type';
 import type { ActionEvent } from '@ts/core/action';
+import { HOVER_STATE_CLASS } from '@ts/core/widget/widget';
 import type { EngineEvent } from '@ts/events/core/events_engine';
 import eventsEngine from '@ts/events/core/events_engine';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
@@ -62,7 +63,7 @@ import type {
   ViewDataChange,
   ViewRow,
 } from '../views/types';
-import { CLASSES, COMMAND_TRANSPARENT } from './const';
+import { CLASSES, COMMAND_TRANSPARENT, ICONS } from './const';
 import type {
   ColumnFixingColumnHeadersView,
   ColumnFixingColumnHeadersViewExtension,
@@ -77,18 +78,6 @@ import {
   normalizeColumnIndicesByPoints,
   normalizeColumnWidths,
 } from './utils';
-
-const FIRST_CELL_CLASS = 'dx-first-cell';
-const LAST_CELL_CLASS = 'dx-last-cell';
-const HOVER_STATE_CLASS = 'dx-state-hover';
-const FIXED_COL_CLASS = 'dx-col-fixed';
-const FIXED_COLUMNS_CLASS = 'dx-fixed-columns';
-const POINTER_EVENTS_NONE_CLASS = 'dx-pointer-events-none';
-const FIXED_COLUMN_ICON_CLASS = 'fix-column';
-const FIXED_COLUMN_LEFT_ICON_CLASS = 'fix-column-left';
-const FIXED_COLUMN_RIGHT_ICON_CLASS = 'fix-column-right';
-const STICKY_COLUMN_ICON_CLASS = 'stick-column';
-const UNFIXED_COLUMN_ICON_CLASS = 'unfix-column';
 
 // The browser can report the scroll maximum up to ~1px away from the integer
 // (content.clientHeight - container.clientHeight), so at the bottom scrollOffset.top
@@ -115,7 +104,7 @@ const baseFixedColumns = <T extends ModuleType<ColumnsView>>(
 
   protected _createCol(column: Column): dxElementWrapper {
     return super._createCol(column).toggleClass(
-      FIXED_COL_CLASS,
+      CLASSES.colFixed,
       this._isFixedTableRendering
         && (!!column.fixed || (!!column.command && column.command !== COMMAND_TRANSPARENT)),
     );
@@ -303,13 +292,13 @@ const baseFixedColumns = <T extends ModuleType<ColumnsView>>(
     if (this._isFixedTableRendering) {
       if (columnCommand === COMMAND_TRANSPARENT) {
         $cell
-          .addClass(POINTER_EVENTS_NONE_CLASS)
+          .addClass(CLASSES.pointerEventsNone)
           .toggleClass(
-            FIRST_CELL_CLASS,
+            CLASSES.firstCell,
             transparentColumnIndex === 0 || (prevFixedColumn && prevFixedColumn.command === 'expand'),
           )
           .toggleClass(
-            LAST_CELL_CLASS,
+            CLASSES.lastCell,
             !!fixedColumns.length && transparentColumnIndex === (fixedColumns.length - 1),
           );
 
@@ -318,14 +307,14 @@ const baseFixedColumns = <T extends ModuleType<ColumnsView>>(
         }
       }
     } else if (rowType === 'filter') {
-      $cell.toggleClass(FIRST_CELL_CLASS, options.columnIndex === transparentColumnIndex);
+      $cell.toggleClass(CLASSES.firstCell, options.columnIndex === transparentColumnIndex);
     }
 
     const isRowAltStyle = this.option('rowAlternationEnabled') && options.isAltRow;
     const isSelectAllCell = this.option('selection.mode') === 'multiple' && options.columnIndex === 0 && options.rowType === 'header';
     // T823783, T852898, T865179, T875201, T1120812
     if (browser.mozilla && options.column.fixed && options.rowType !== 'group' && !isRowAltStyle && !isSelectAllCell) {
-      $cell.addClass(FIXED_COL_CLASS);
+      $cell.addClass(CLASSES.colFixed);
     }
 
     return $cell;
@@ -450,7 +439,7 @@ const baseFixedColumns = <T extends ModuleType<ColumnsView>>(
     isFixedTableRendering?: boolean,
   ): void {
     if (this._isFixedTableRendering || isFixedTableRendering) {
-      this._fixedTableElement = tableElement?.addClass(POINTER_EVENTS_NONE_CLASS);
+      this._fixedTableElement = tableElement?.addClass(CLASSES.pointerEventsNone);
     } else {
       super.setTableElement(tableElement);
     }
@@ -506,7 +495,7 @@ const baseFixedColumns = <T extends ModuleType<ColumnsView>>(
   }
 
   public getTransparentColumnElement(): dxElementWrapper | null | undefined {
-    return this._fixedTableElement?.find(`.${POINTER_EVENTS_NONE_CLASS}`).first();
+    return this._fixedTableElement?.find(`.${CLASSES.pointerEventsNone}`).first();
   }
 
   public getFixedTableElement(): dxElementWrapper | null | undefined {
@@ -998,7 +987,7 @@ const rowsView = (
 
     const isFixedColumns = this._isFixedColumns;
 
-    this.element()?.toggleClass(FIXED_COLUMNS_CLASS, isFixedColumns);
+    this.element()?.toggleClass(CLASSES.fixedColumns, isFixedColumns);
 
     if (this.option('hoverStateEnabled') && isFixedColumns) {
       this._attachHoverEvents();
@@ -1329,11 +1318,11 @@ export const columnFixingModule = {
           stickyPosition: messageLocalization.format('dxDataGrid-columnFixingStickyPosition'),
         },
         icons: {
-          fix: FIXED_COLUMN_ICON_CLASS,
-          unfix: UNFIXED_COLUMN_ICON_CLASS,
-          leftPosition: FIXED_COLUMN_LEFT_ICON_CLASS,
-          rightPosition: FIXED_COLUMN_RIGHT_ICON_CLASS,
-          stickyPosition: STICKY_COLUMN_ICON_CLASS,
+          fix: ICONS.fixColumn,
+          unfix: ICONS.unfixColumn,
+          leftPosition: ICONS.fixColumnLeft,
+          rightPosition: ICONS.fixColumnRight,
+          stickyPosition: ICONS.stickColumn,
         },
       },
     };
