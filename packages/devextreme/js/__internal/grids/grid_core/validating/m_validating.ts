@@ -266,7 +266,6 @@ export class ValidatingController extends modules.Controller {
   public validate(): DeferredObj<boolean | undefined> {
     let isValid: boolean | undefined = true;
     const deferred = Deferred<boolean | undefined>();
-    const completeList: DeferredObj<RowValidatingParams>[] = [];
 
     if (this._isValidationInProgress) {
       // @ts-expect-error promise() is typed as Promise but returns a Deferred-like value at runtime
@@ -275,18 +274,17 @@ export class ValidatingController extends modules.Controller {
 
     this._isValidationInProgress = true;
     this._editingController.addDeferred(deferred);
-    const changes = this._editingController.getChanges();
-    changes.forEach(({ type, key }) => {
-      if (type !== DATA_CHANGE_TYPE.remove) {
+    const completeList = this._editingController.getChanges()
+      .filter(({ type }) => type !== DATA_CHANGE_TYPE.remove)
+      .map(({ key }) => {
         const validationData = this.getValidationData(key, true);
         const validationResult = this.validateGroup(validationData);
-        completeList.push(validationResult);
         validationResult.done((rowValidatingParams) => {
           validationData.validated = true;
           isValid = isValid && rowValidatingParams.isValid;
         });
-      }
-    });
+        return validationResult;
+      });
 
     when(...completeList).done(() => {
       this._isValidationInProgress = false;
@@ -1008,20 +1006,20 @@ export const validatingEditingExtender = (
       const deferred = Deferred<boolean>();
       result = deferred;
       this.executeOperation(deferred, () => {
-        this._validatingController.validate().done((isFullValid) => {
+        this._validatingController.validate().done((isValid) => {
           disposeValidators();
           this._updateRowAndPageIndices();
 
           const editMode = this.getEditMode();
 
-          if (editMode === EDIT_MODE.cell && !isFullValid) {
+          if (editMode === EDIT_MODE.cell && !isValid) {
             this._focusEditingCell();
-          } else if (editMode === EDIT_MODE.batch && !isFullValid) {
+          } else if (editMode === EDIT_MODE.batch && !isValid) {
             this._resetEditRowKey();
             this._resetEditColumnName();
             this._dataController.updateItems();
           }
-          deferred.resolve(!isFullValid);
+          deferred.resolve(!isValid);
         });
       });
     }
