@@ -19,14 +19,13 @@ import { isMaterial } from '@js/ui/themes';
 import { getData } from '@ts/core/element_data';
 import type { Column, WithCellValueCalculator } from '@ts/grids/grid_core/columns_controller/types';
 import { isCellBasedEditMode, isFormBasedEditMode } from '@ts/grids/grid_core/editing/editing_utils';
-import type { EditFormItem } from '@ts/grids/grid_core/editing/types';
 import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
-import { FIELD_ITEM_CONTENT_CLASS, FIELD_ITEM_DATA_KEY } from '@ts/ui/form/constants';
+import { FIELD_ITEM_CONTENT_CLASS } from '@ts/ui/form/constants';
 
 import { AI_COLUMN_NAME } from '../ai_column/const';
 import type { ColumnsController } from '../columns_controller/columns_controller';
 import type { ProcessedItem } from '../data_controller/types';
-import { EDIT_MODE } from '../editing/const';
+import { EDIT_FORM_ITEM_DATA_KEY, EDIT_MODE } from '../editing/const';
 import type { KeyboardNavigationController } from '../keyboard_navigation/keyboard_navigation';
 import { CLASSES as MASTER_DETAIL_CLASSES } from '../master_detail/const';
 import modules from '../modules/modules';
@@ -740,7 +739,7 @@ export class AdaptiveColumnsViewController extends modules.ViewController {
 
     for (let i = 0; i < $itemContents.length; i += 1) {
       const $itemContent = $itemContents.eq(i);
-      const item: EditFormItem | undefined = getData($itemContent, FIELD_ITEM_DATA_KEY);
+      const item = getData($itemContent, EDIT_FORM_ITEM_DATA_KEY);
       if (
         item?.column
         && this._columnsController.getVisibleIndex(item.column.index) === visibleColumnIndex

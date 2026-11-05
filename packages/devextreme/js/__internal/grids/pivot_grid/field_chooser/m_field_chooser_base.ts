@@ -715,8 +715,9 @@ export class FieldChooserBase extends mixinWidget {
     fieldElements?.forEach((fieldElement) => {
       const field = getData($(fieldElement), FIELD_DATA_KEY);
 
-      // @ts-expect-error a field element always stores its field
-      if (field.index === fieldIndex) {
+      // a field element always stores its field
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      if (field!.index === fieldIndex) {
         fieldElement.focus();
       }
     });

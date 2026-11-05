@@ -64,7 +64,9 @@ export function getInstanceByElement<T = any>(
   return elementData<T>($element.get(0), name);
 }
 
-// Unlike getInstanceByElement, accepts an empty set or no element and returns undefined for them
+// Infers the type from the class and returns undefined when there is no instance.
+// getInstanceByElement keeps its loose signature for the static getInstance() methods,
+// where the caller picks the type
 export function findInstanceByElement<T>(
   target: Node | dxElementWrapper | null | undefined,
   componentClass: abstract new (...args: never[]) => T,

@@ -276,8 +276,9 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
           Overlay,
         );
         if (overlayInstance) {
-          // @ts-expect-error the filter range overlay is rendered together with its content
-          $editorRangeElements = overlayInstance.$content().find(`.${EDITOR_CONTAINER_CLASS}`);
+          // the filter range overlay is rendered together with its content
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+          $editorRangeElements = overlayInstance.$content()!.find(`.${EDITOR_CONTAINER_CLASS}`);
 
           that._updateEditorValue(column, $editorRangeElements.first());
           that._updateEditorValue(column, $editorRangeElements.last());
