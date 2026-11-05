@@ -1,0 +1,70 @@
+<div class="demo-container">
+  <div class="ai-chat-card">
+    <dx-toolbar>
+      <dxi-toolbar-item
+        location="before"
+        text="AI Assistant"
+        cssClass="ai-chat-title"
+      >
+      </dxi-toolbar-item>
+      <dxi-toolbar-item
+        location="after"
+        widget="dxButton"
+        [options]="clearButtonOptions"
+      >
+      </dxi-toolbar-item>
+    </dx-toolbar>
+    <dx-chat
+      [class.chat-disabled]="isDisabled"
+      [dataSource]="dataSource"
+      [reloadOnChange]="false"
+      [showAvatar]="true"
+      [showDayHeaders]="false"
+      [user]="user"
+      [height]="710"
+      [typingUsers]="typingUsers$ | async"
+      [alerts]="alerts$ | async"
+      [speechToTextEnabled]="true"
+      emptyViewTemplate="emptyViewTemplate"
+      (onMessageEntered)="onMessageEntered($event)"
+    >
+      <dxo-chat-tool-call-options
+        [expandAll]="expandAll"
+      ></dxo-chat-tool-call-options>
+
+      <div *dxTemplate="let data of 'emptyViewTemplate'">
+        <div class="dx-chat-messagelist-empty-message">{{
+          data.texts.message
+        }}</div>
+        <div class="dx-chat-messagelist-empty-prompt">{{
+          data.texts.prompt
+        }}</div>
+        <div class="chat-suggestion-cards">
+          @for (card of suggestionCards; track card.title) {
+          <button
+            type="button"
+            class="chat-suggestion-card"
+            (click)="onSuggestionClick(card.prompt)"
+          >
+            <div class="chat-suggestion-card-title">{{ card.title }}</div>
+            <div class="chat-suggestion-card-description">{{
+              card.description
+            }}</div>
+          </button>
+          }
+        </div>
+      </div>
+    </dx-chat>
+  </div>
+
+  <div class="options">
+    <div class="caption">Options</div>
+
+    <div class="option">
+      <dx-check-box
+        text="Expand all tool calls"
+        [(value)]="expandAll"
+      ></dx-check-box>
+    </div>
+  </div>
+</div>
