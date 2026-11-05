@@ -1,8 +1,8 @@
 import { Deferred } from '@js/core/utils/deferred';
 import { focusModule } from '@ts/grids/grid_core/focus/focus_module';
+import type { FocusDataSourceControllerExtension } from '@ts/grids/grid_core/focus/types';
 
 import type { DataController } from '../grid_core/data_controller/data_controller';
-import type { FocusDataSourceControllerExtension } from '../grid_core/focus/extenders/focus_data_source_controller';
 import type { ModuleType } from '../grid_core/types';
 import core from './core';
 import type { TreeListDataSourceController } from './data_source/data_source_controller';
@@ -102,7 +102,7 @@ const data = (
     return d.promise();
   }
 
-  protected getPageIndexByKey(key) {
+  public getPageIndexByKey(key) {
     const dataSourceAdapter = this.dataSourceController.getAdapter()!;
     // @ts-expect-error
     const d = new Deferred();

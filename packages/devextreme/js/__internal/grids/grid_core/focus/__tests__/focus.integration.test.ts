@@ -1,6 +1,7 @@
 import {
-  afterEach, beforeEach, describe, expect, it,
+  afterEach, beforeEach, describe, expect, it, jest,
 } from '@jest/globals';
+import $ from '@js/core/renderer';
 import type { Properties as DataGridProperties } from '@js/ui/data_grid';
 
 import {
@@ -9,6 +10,7 @@ import {
   createDataGrid,
   flushAsync,
 } from '../../__tests__/__mock__/helpers/utils';
+import type { FocusRowsView } from '../types';
 
 const DATA = [
   { id: 1, name: 'Alex' },
@@ -68,6 +70,40 @@ describe('Focus columns extender', () => {
       expect(result).toEqual([{ selector: 'id', desc: false }]);
     });
 
+    it('appends the key after the sorted columns', async () => {
+      const { columnsController } = await setup({
+        dataSource: DATA,
+        columns: ['id', { dataField: 'name', sortOrder: 'asc' }],
+        remoteOperations: true,
+      });
+
+      expect(columnsController.getSortDataSourceParameters()).toEqual([
+        { selector: 'name', desc: false },
+        { selector: 'id', desc: false },
+      ]);
+    });
+
+    it('adds nothing when the key column is already sorted', async () => {
+      const { columnsController } = await setup({
+        dataSource: DATA,
+        columns: [{ dataField: 'id', sortOrder: 'desc' }, 'name'],
+      });
+
+      expect(columnsController.getSortDataSourceParameters()).toEqual([
+        { selector: 'id', desc: true },
+      ]);
+    });
+
+    it('does not sort by key when autoNavigateToFocusedRow is off', async () => {
+      const { columnsController } = await setup({
+        dataSource: DATA,
+        autoNavigateToFocusedRow: false,
+        remoteOperations: true,
+      });
+
+      expect(columnsController.getSortDataSourceParameters()).toBeNull();
+    });
+
     it('leaves the base sort parameters alone when there is no data source', async () => {
       const { columnsController, dataSourceController } = await setup({
         columns: [{ dataField: 'name', sortOrder: 'asc' }],
@@ -77,6 +113,114 @@ describe('Focus columns extender', () => {
       expect(columnsController.getSortDataSourceParameters()).toEqual([
         { selector: 'name', desc: false },
       ]);
+    });
+  });
+});
+
+describe('FocusController', () => {
+  beforeEach(beforeTest);
+  afterEach(afterTest);
+
+  describe('isRowFocused', () => {
+    it('returns false when no row is focused', async () => {
+      const { instance } = await createDataGrid({
+        dataSource: DATA,
+        keyExpr: 'id',
+        focusedRowEnabled: true,
+      });
+      await flushAsync();
+
+      expect(instance.isRowFocused(1)).toBe(false);
+    });
+
+    it('returns true only for the focused row key', async () => {
+      const { instance } = await createDataGrid({
+        dataSource: DATA,
+        keyExpr: 'id',
+        focusedRowEnabled: true,
+        focusedRowKey: 2,
+      });
+      await flushAsync();
+
+      expect(instance.isRowFocused(2)).toBe(true);
+      expect(instance.isRowFocused(1)).toBe(false);
+    });
+  });
+
+  describe('updateFocusedRow', () => {
+    it('marks the row in every table and scrolls to the main table row', async () => {
+      const { instance } = await createDataGrid({
+        dataSource: DATA,
+        keyExpr: 'id',
+        focusedRowEnabled: true,
+        // @ts-expect-error private option
+        columnFixing: { legacyMode: true },
+        customizeColumns: (columns): void => { columns[0].fixed = true; },
+      });
+      await flushAsync();
+      const rowsView = instance.getView('rowsView') as FocusRowsView;
+      const scrollToElementVertically = jest.spyOn(rowsView, 'scrollToElementVertically');
+      const [mainRow, fixedRow] = $(rowsView.getRowElement(1)).toArray();
+
+      instance.getController('focus').updateFocusedRow({ focusedRowKey: 2 });
+
+      expect(rowsView.getTableElements()).toHaveLength(2);
+      expect(rowsView.getTableElements().find('.dx-row-focused')).toHaveLength(2);
+      expect($(mainRow).hasClass('dx-row-focused')).toBe(true);
+      expect($(fixedRow).hasClass('dx-row-focused')).toBe(true);
+      expect(scrollToElementVertically).toHaveBeenCalledTimes(1);
+      expect(scrollToElementVertically.mock.calls[0][0].get(0)).toBe(mainRow);
+    });
+
+    it('marks the row without scrolling when preventScroll is set', async () => {
+      const { instance } = await createDataGrid({
+        dataSource: DATA,
+        keyExpr: 'id',
+        focusedRowEnabled: true,
+      });
+      await flushAsync();
+      const rowsView = instance.getView('rowsView') as FocusRowsView;
+      const scrollToElementVertically = jest.spyOn(rowsView, 'scrollToElementVertically');
+      const [row] = $(rowsView.getRowElement(1)).toArray();
+
+      instance.getController('focus').updateFocusedRow({ focusedRowKey: 2, preventScroll: true });
+
+      expect(rowsView.getTableElements().find('.dx-row-focused')).toHaveLength(1);
+      expect($(row).hasClass('dx-row-focused')).toBe(true);
+      expect(scrollToElementVertically).not.toHaveBeenCalled();
+    });
+
+    it('marks a group row', async () => {
+      const { instance } = await createDataGrid({
+        dataSource: DATA,
+        keyExpr: 'id',
+        focusedRowEnabled: true,
+        columns: ['id', { dataField: 'name', groupIndex: 0 }],
+      });
+      await flushAsync();
+      const rowsView = instance.getView('rowsView') as FocusRowsView;
+      const [groupRow] = $(rowsView.getRowElement(instance.getRowIndexByKey(['Dan']))).toArray();
+
+      instance.getController('focus').updateFocusedRow({ focusedRowKey: ['Dan'] });
+
+      expect($(groupRow).hasClass('dx-group-row')).toBe(true);
+      expect($(groupRow).hasClass('dx-row-focused')).toBe(true);
+    });
+
+    it('marks nothing and does not scroll when the key has no row', async () => {
+      const { instance } = await createDataGrid({
+        dataSource: DATA,
+        keyExpr: 'id',
+        focusedRowEnabled: true,
+      });
+      await flushAsync();
+      const rowsView = instance.getView('rowsView') as FocusRowsView;
+      const scrollToElementVertically = jest.spyOn(rowsView, 'scrollToElementVertically');
+
+      instance.getController('focus').updateFocusedRow({ focusedRowKey: 3 });
+
+      expect(rowsView.getTableElements().find('.dx-row-focused')).toHaveLength(0);
+      expect(scrollToElementVertically).not.toHaveBeenCalled();
     });
   });
 });

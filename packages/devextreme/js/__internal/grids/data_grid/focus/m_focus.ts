@@ -1,13 +1,13 @@
 import { equalByValue } from '@js/core/utils/common';
 import { compileGetter } from '@js/core/utils/data';
-import { Deferred } from '@js/core/utils/deferred';
+import { Deferred, type DeferredObj } from '@js/core/utils/deferred';
 import type { GroupingDataControllerExtension } from '@ts/grids/data_grid/grouping/types';
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
 import type { DataSourceController } from '@ts/grids/grid_core/data_source/data_source_controller';
-import type { FocusDataSourceControllerExtension } from '@ts/grids/grid_core/focus/extenders/focus_data_source_controller';
 import { focusModule } from '@ts/grids/grid_core/focus/focus_module';
+import type { FocusDataSourceControllerExtension } from '@ts/grids/grid_core/focus/types';
 import type { KeyboardNavigationController } from '@ts/grids/grid_core/keyboard_navigation/keyboard_navigation';
-import type { ModuleType } from '@ts/grids/grid_core/types';
+import type { ModuleType, RowKey } from '@ts/grids/grid_core/types';
 import { isVirtualPaging } from '@ts/grids/grid_core/utils';
 
 import gridCore from '../core';
@@ -39,15 +39,13 @@ const data = (Base: DataControllerBase) => class FocusDataControllerExtender ext
     super.init();
   }
 
-  private changeRowExpand(path, isRowClick) {
-    // @ts-expect-error
+  public changeRowExpand(path, isRowClick) {
     if (this.option('focusedRowEnabled') && Array.isArray(path) && this.isRowExpanded(path)) {
       if ((!isRowClick || !this.keyboardNavigationController.isKeyboardEnabled()) && this._isFocusedRowInsideGroup(path)) {
         this.option('focusedRowKey', path);
       }
     }
 
-    // @ts-expect-error
     return super.changeRowExpand(path, isRowClick);
   }
 
@@ -100,6 +98,15 @@ const data = (Base: DataControllerBase) => class FocusDataControllerExtender ext
     }).fail(d.reject);
 
     return d.promise();
+  }
+
+  public getGlobalRowIndexByKey(key: RowKey): DeferredObj<number> {
+    if (this.dataSourceController.getAdapter()?.group()) {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return -- grouped lookup isn't typed
+      return this._calculateGlobalRowIndexByGroupedData(key);
+    }
+
+    return super.getGlobalRowIndexByKey(key);
   }
 
   private _calculateGlobalRowIndexByGroupedData(key) {
@@ -159,7 +166,6 @@ const data = (Base: DataControllerBase) => class FocusDataControllerExtender ext
       }
     });
 
-    // @ts-expect-error
     this._calculateGlobalRowIndexByFlatData(key, groupFilter).done((dataOffset) => {
       let count;
       let groupContinuationCount;
