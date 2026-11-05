@@ -287,7 +287,7 @@ class FileManagerFileUploader extends Widget<FileManagerFileUploaderOptions> {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return (
       uploaderInstance.isMouseOverElement(e, this.option('splitterElement'))
-      || uploaderInstance._shouldRaiseDragLeaveBase(e, true)
+      || uploaderInstance._shouldRaiseDragLeaveBase(e)
     );
   }
 
