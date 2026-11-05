@@ -1,4 +1,5 @@
 @use "sass:color";
+@use "../../base/contrast";
 @use "../colors" as *;
 @use "../textEditor/colors" as *;
 @use "../button/colors" as *;
@@ -160,6 +161,13 @@ $chat-tool-call-error-color: null !default;
 } @else if $color == "blue" and $mode == "dark" {
   $chat-tool-call-error-color: $chat-tool-call-error-color-dark !default;
 } @else {
-  $chat-tool-call-error-color: $base-danger !default;
+  $chat-tool-call-error-color: contrast.readable(
+    $base-danger,
+    color.mix(
+      $base-danger,
+      contrast.flatten($chat-bubble-background-color-secondary, $base-bg),
+      8%
+    )
+  ) !default;
 }
 $chat-tool-call-error-background-color: color.change($base-danger, $alpha: 0.08) !default;

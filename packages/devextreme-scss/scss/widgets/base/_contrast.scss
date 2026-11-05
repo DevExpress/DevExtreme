@@ -1,0 +1,53 @@
+@use "sass:color";
+@use "sass:math";
+
+$min-text-contrast: 4.6 !default;
+
+@function channel-luminance($value) {
+  $normalized: math.div($value, 255);
+
+  @if $normalized <= 0.03928 {
+    @return math.div($normalized, 12.92);
+  }
+
+  @return math.pow(math.div($normalized + 0.055, 1.055), 2.4);
+}
+
+@function luminance($color) {
+  $red: channel-luminance(color.channel($color, "red", $space: rgb));
+  $green: channel-luminance(color.channel($color, "green", $space: rgb));
+  $blue: channel-luminance(color.channel($color, "blue", $space: rgb));
+
+  @return 0.2126 * $red + 0.7152 * $green + 0.0722 * $blue;
+}
+
+@function contrast-ratio($foreground, $background) {
+  $lighter: math.max(luminance($foreground), luminance($background));
+  $darker: math.min(luminance($foreground), luminance($background));
+
+  @return math.div($lighter + 0.05, $darker + 0.05);
+}
+
+@function flatten($color, $backdrop) {
+  $alpha: color.channel($color, "alpha");
+
+  @return color.mix(color.change($color, $alpha: 1), $backdrop, $alpha * 100%);
+}
+
+@function readable($color, $background, $minimum: $min-text-contrast) {
+  $pole: black;
+
+  @if contrast-ratio(white, $background) > contrast-ratio(black, $background) {
+    $pole: white;
+  }
+
+  @for $step from 0 through 20 {
+    $candidate: color.mix($pole, $color, $step * 5%);
+
+    @if contrast-ratio($candidate, $background) >= $minimum {
+      @return $candidate;
+    }
+  }
+
+  @return $pole;
+}

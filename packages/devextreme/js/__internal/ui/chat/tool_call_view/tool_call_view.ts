@@ -4,11 +4,11 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import Accordion from '@js/ui/accordion';
 import type { ToolCall } from '@js/ui/chat';
-import TextArea from '@js/ui/text_area';
 import { ICON_CLASS } from '@ts/core/utils/icon';
 import type { DOMComponentProperties } from '@ts/core/widget/dom_component';
 import DOMComponent from '@ts/core/widget/dom_component';
 import type { OptionChanged } from '@ts/core/widget/types';
+import ToolCallTextArea from '@ts/ui/chat/tool_call_view/tool_call_text_area';
 
 export interface ToolCallViewProperties extends DOMComponentProperties<ToolCallView> {
   toolCalls?: ToolCall[];
@@ -157,7 +157,7 @@ class ToolCallView extends DOMComponent<ToolCallView, ToolCallViewProperties> {
       .text(labelText)
       .appendTo($field);
 
-    this._createComponent($('<div>').appendTo($field), TextArea, {
+    this._createComponent($('<div>').appendTo($field), ToolCallTextArea, {
       value,
       readOnly: true,
       stylingMode: 'outlined',
