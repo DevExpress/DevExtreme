@@ -1,5 +1,6 @@
 import type { FilterRow, FilterRowOperationDescriptions } from '@js/common/grids';
 import type { dxElementWrapper } from '@js/core/renderer';
+import type { Item as MenuItem } from '@js/ui/menu';
 import type { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/column_headers';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import type { HeaderPanel } from '@ts/grids/grid_core/header_panel/header_panel';
@@ -14,7 +15,6 @@ export type FilterRowEditorOptions = Omit<Column, 'width'> & {
   parentType: 'filterRow';
   showAllText?: string;
   updateValueTimeout: number;
-  width: null;
   setValue: (value: unknown, notFireEvent?: boolean) => void;
   placeholder?: string;
   sharedData?: FilterRangeSharedData;
@@ -39,6 +39,11 @@ export interface FilterRowHeaderPanelExtension {
 }
 
 export type FilterRowHeaderPanel = HeaderPanel & FilterRowHeaderPanelExtension;
+
+export interface FilterOperationMenuItem extends MenuItem {
+  name?: string | null;
+  items?: FilterOperationMenuItem[];
+}
 
 export interface FilterValueUpdateOptions {
   column: Column;

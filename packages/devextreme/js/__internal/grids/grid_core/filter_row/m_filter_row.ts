@@ -1,6 +1,7 @@
 /* eslint-disable max-classes-per-file */
 import { normalizeKeyName } from '@js/common/core/events/utils/index';
 import messageLocalization from '@js/common/core/localization/message';
+import type { FilterRowOperationDescriptions } from '@js/common/grids';
 import type { DxElement } from '@js/core/element';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
@@ -12,6 +13,7 @@ import { getOuterWidth } from '@js/core/utils/size';
 import { isDefined } from '@js/core/utils/type';
 import type { DxEvent } from '@js/events';
 import type { InitializedEvent as ButtonInitializedEvent } from '@js/ui/button';
+import type { ItemClickEvent, ItemRenderedEvent } from '@js/ui/menu';
 import Menu from '@js/ui/menu';
 import Overlay from '@js/ui/overlay/ui.overlay';
 import { selectView } from '@js/ui/shared/accessibility';
@@ -41,6 +43,7 @@ import type { OverlayProperties } from '@ts/ui/overlay/overlay';
 
 import { CLASSES } from './const';
 import type {
+  FilterOperationMenuItem,
   FilterRangeSharedData,
   FilterRowColumnHeadersView,
   FilterRowEditorOptions,
@@ -55,7 +58,7 @@ import {
   isValidFilterValue,
 } from './utils';
 
-const OPERATION_ICONS = {
+const OPERATION_ICONS: Partial<Record<string, string>> = {
   '=': 'filter-operation-equals',
   '<>': 'filter-operation-not-equals',
   '<': 'filter-operation-less',
@@ -71,7 +74,7 @@ const OPERATION_ICONS = {
   between: 'filter-operation-between',
 };
 
-const OPERATION_DESCRIPTORS = {
+const OPERATION_DESCRIPTORS: Partial<Record<string, keyof FilterRowOperationDescriptions>> = {
   '=': 'equal',
   '<>': 'notEqual',
   '<': 'lessThan',
@@ -572,7 +575,9 @@ const columnHeadersView = (
     return editorOptions;
   }
 
-  private _getFilterInputAccessibilityAttributes(column) {
+  private _getFilterInputAccessibilityAttributes(
+    column: Column,
+  ): { 'aria-label': string; 'aria-describedby'?: string } {
     const columnAriaLabel = messageLocalization.format('dxDataGrid-ariaFilterCell');
     if (this.component.option('showColumnHeaders')) {
       return {
@@ -583,7 +588,7 @@ const columnHeadersView = (
     return { 'aria-label': columnAriaLabel };
   }
 
-  private _renderEditor($editorContainer, options) {
+  private _renderEditor($editorContainer: dxElementWrapper, options: FilterRowEditorOptions): void {
     $editorContainer.empty();
     const $element = $('<div>').appendTo($editorContainer);
     const dataSourceAdapter = this.dataSourceController.getAdapter();
@@ -591,7 +596,11 @@ const columnHeadersView = (
     if (options.lookup && this.option('syncLookupFilterValues')) {
       const filter = this._dataController.getCombinedFilterWithExcludedColumn(options);
 
-      const lookupDataSource = gridCoreUtils.getWrappedLookupDataSource(options, dataSourceAdapter, filter);
+      const lookupDataSource = gridCoreUtils.getWrappedLookupDataSource(
+        options,
+        dataSourceAdapter,
+        filter,
+      );
       const lookupOptions = {
         ...options,
         lookup: {
@@ -604,25 +613,24 @@ const columnHeadersView = (
     return this._editorFactoryController.createEditor($element, options);
   }
 
-  private _renderFilterRangeContent($cell, column) {
-    const that = this;
+  private _renderFilterRangeContent($cell: dxElementWrapper, column: Column): void {
     const $editorContainer = $cell.find(`.${EDITOR_CONTAINER_CLASS}`).first();
 
     $editorContainer.empty();
     const $filterRangeContent = $('<div>')
       .addClass(CLASSES.filterRangeContent)
-      .attr('tabindex', this.option('tabIndex')!);
+      .attr('tabindex', this.option('tabIndex') ?? null);
 
     eventsEngine.on($filterRangeContent, 'focusin', () => {
-      that._showFilterRange($cell, column);
+      this._showFilterRange($cell, column);
     });
 
     $filterRangeContent.appendTo($editorContainer);
 
-    that._updateFilterRangeContent($cell, that.getRangeTextByFilterValue(column));
+    this._updateFilterRangeContent($cell, this.getRangeTextByFilterValue(column));
   }
 
-  private _updateFilterRangeContent($cell, value) {
+  private _updateFilterRangeContent($cell: dxElementWrapper, value: string): void {
     const $filterRangeContent = $cell.find(`.${CLASSES.filterRangeContent}`);
 
     if ($filterRangeContent.length) {
@@ -634,46 +642,60 @@ const columnHeadersView = (
     }
   }
 
-  private _updateFilterOperationChooser($menu, column, $editorContainer) {
-    const that = this;
-    let isCellWasFocused;
-    const restoreFocus = function () {
-      const menu = Menu.getInstance($menu);
-      menu && menu.option('focusedElement', null);
-      isCellWasFocused && that._focusEditor($editorContainer);
+  private _updateFilterOperationChooser(
+    $menu: dxElementWrapper,
+    column: Column,
+    $editorContainer: dxElementWrapper,
+  ): void {
+    let isCellWasFocused = false;
+    const restoreFocus = (): void => {
+      const menu = Menu.getInstance($menu.get(0));
+      menu?.option('focusedElement', null);
+
+      if (isCellWasFocused) {
+        this._focusEditor($editorContainer);
+      }
     };
 
     const editorFactoryController = this._editorFactoryController;
     const ariaSearchBox = messageLocalization.format('dxDataGrid-ariaSearchBox');
 
-    that._createComponent($menu, Menu, {
+    this._createComponent($menu, Menu, {
       integrationOptions: {},
       activeStateEnabled: false,
       selectionMode: 'single',
-      cssClass: `${that.getWidgetContainerClass()} ${EDITOR_FACTORY_CLASSES.cellFocusDisabled} ${FILTER_MENU}`,
+      cssClass: `${this.getWidgetContainerClass()} ${EDITOR_FACTORY_CLASSES.cellFocusDisabled} ${FILTER_MENU}`,
       showFirstSubmenuMode: 'onHover',
       hideSubmenuOnMouseLeave: true,
       items: [{
-        name: that.getColumnSelectedFilterOperation(column) || ariaSearchBox,
+        name: this.getColumnSelectedFilterOperation(column) || ariaSearchBox,
         disabled: !column.filterOperations?.length,
-        icon: OPERATION_ICONS[that.getColumnSelectedFilterOperation(column) || 'default'],
+        icon: OPERATION_ICONS[this.getColumnSelectedFilterOperation(column) || 'default'],
         selectable: false,
-        items: that._getFilterOperationMenuItems(column),
+        items: this._getFilterOperationMenuItems(column),
       }],
-      onItemRendered: ({ itemElement, itemData }) => {
+      onItemRendered: ({ itemElement, itemData }: ItemRenderedEvent<FilterOperationMenuItem>) => {
         if (itemData?.items && itemData?.name) {
-          const labelText = that._getOperationDescriptionFromDescriptor(itemData.name) || ariaSearchBox;
+          const labelText = this._getOperationDescriptionFromDescriptor(itemData.name)
+            || ariaSearchBox;
           this.setAria('label', labelText, $(itemElement));
         }
       },
-      onItemClick(properties) {
-        const selectedFilterOperation = properties.itemData.name;
-        const columnSelectedFilterOperation = that.getColumnSelectedFilterOperation(column);
-        let notFocusEditor = false;
-        const isOnClickMode = isOnClickApplyFilterMode(that);
-        const options = {};
+      onItemClick: ({ itemData }: ItemClickEvent<FilterOperationMenuItem>): void => {
+        if (!itemData) {
+          return;
+        }
 
-        if (properties.itemData.items || (selectedFilterOperation && selectedFilterOperation === columnSelectedFilterOperation)) {
+        const selectedFilterOperation = itemData.name;
+        const columnSelectedFilterOperation = this.getColumnSelectedFilterOperation(column);
+        let notFocusEditor = false;
+        const isOnClickMode = isOnClickApplyFilterMode(this);
+        const options: Record<string, unknown> = {};
+
+        if (
+          itemData.items
+          || (selectedFilterOperation && selectedFilterOperation === columnSelectedFilterOperation)
+        ) {
           return;
         }
 
@@ -689,10 +711,10 @@ const columnHeadersView = (
           options[isOnClickMode ? 'bufferedSelectedFilterOperation' : 'selectedFilterOperation'] = column.defaultSelectedFilterOperation || null;
         }
 
-        const isResetFilterOperation = !properties.itemData?.name;
+        const isResetFilterOperation = !itemData.name;
         const isNotFireEvent = isResetFilterOperation ? false : undefined;
-        that._columnsController.columnOption(column.index, options, undefined, isNotFireEvent);
-        that._applyFilterViewController.setHighLight($editorContainer, true);
+        this._columnsController.columnOption(column.index, options, undefined, isNotFireEvent);
+        this._applyFilterViewController.setHighLight($editorContainer, true);
 
         if (!selectedFilterOperation) {
           const editor = getEditorInstance($editorContainer);
@@ -703,13 +725,13 @@ const columnHeadersView = (
         }
 
         if (!notFocusEditor) {
-          that._focusEditor($editorContainer);
+          this._focusEditor($editorContainer);
         } else {
-          that._showFilterRange($editorContainer.closest(`.${EDITOR_CELL_CLASS}`), column);
+          this._showFilterRange($editorContainer.closest(`.${EDITOR_CELL_CLASS}`), column);
         }
       },
-      onSubmenuShowing() {
-        isCellWasFocused = that._isEditorFocused($editorContainer);
+      onSubmenuShowing: (): void => {
+        isCellWasFocused = this._isEditorFocused($editorContainer);
         editorFactoryController.loseFocus();
       },
       onSubmenuHiding() {
@@ -721,41 +743,46 @@ const columnHeadersView = (
           restoreFocus();
         });
       },
-      rtlEnabled: that.option('rtlEnabled'),
+      rtlEnabled: this.option('rtlEnabled'),
     });
   }
 
-  private _isEditorFocused($container) {
-    return $container.hasClass(FOCUSED_CLASS) || $container.parents(`.${FOCUSED_CLASS}`).length;
+  private _isEditorFocused($container: dxElementWrapper): boolean {
+    return $container.hasClass(FOCUSED_CLASS) || $container.parents(`.${FOCUSED_CLASS}`).length > 0;
   }
 
-  private _focusEditor($container) {
+  private _focusEditor($container: dxElementWrapper): void {
     this._editorFactoryController.focus($container);
     eventsEngine.trigger($container.find(EDITORS_INPUT_SELECTOR), 'focus');
   }
 
-  private _renderFilterOperationChooser($container, column, $editorContainer) {
-    const that = this;
-    let $menu;
-
-    if (that.option('filterRow.showOperationChooser')) {
+  private _renderFilterOperationChooser(
+    $container: dxElementWrapper,
+    column: Column,
+    $editorContainer: dxElementWrapper,
+  ): void {
+    if (this.option('filterRow.showOperationChooser')) {
       $container.addClass(EDITOR_WITH_MENU_CLASS);
-      $menu = $('<div>').prependTo($container);
-      that._updateFilterOperationChooser($menu, column, $editorContainer);
+      const $menu = $('<div>').prependTo($container);
+      this._updateFilterOperationChooser($menu, column, $editorContainer);
     }
   }
 
-  private _getFilterOperationMenuItems(column) {
-    const that = this;
-    let result: any = [{}];
-    const filterRowOptions = that.option('filterRow');
+  private _getFilterOperationMenuItems(column: Column): FilterOperationMenuItem[] {
+    let result: FilterOperationMenuItem[] = [{}];
+    const filterRowOptions = this.option('filterRow');
 
     if (column.filterOperations?.length) {
-      const availableFilterOperations = column.filterOperations.filter((value) => isDefined(OPERATION_DESCRIPTORS[value]));
+      const availableFilterOperations = column.filterOperations.filter(
+        (value) => isDefined(OPERATION_DESCRIPTORS[value]),
+      );
+      const selectedFilterOperation = this.getColumnSelectedFilterOperation(column)
+        || column.defaultFilterOperation;
+
       result = map(availableFilterOperations, (value) => ({
         name: value,
-        selected: (that.getColumnSelectedFilterOperation(column) || column.defaultFilterOperation) === value,
-        text: that._getOperationDescriptionFromDescriptor(value),
+        selected: selectedFilterOperation === value,
+        text: this._getOperationDescriptionFromDescriptor(value),
         icon: OPERATION_ICONS[value],
       }));
 
@@ -769,13 +796,11 @@ const columnHeadersView = (
     return result;
   }
 
-  private _getOperationDescriptionFromDescriptor(value) {
-    const filterRowOptions = this.option('filterRow');
-    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-    const operationDescriptions = filterRowOptions?.operationDescriptions || {};
+  private _getOperationDescriptionFromDescriptor(value: string): string | undefined {
+    const operationDescriptions = this.option('filterRow')?.operationDescriptions;
     const descriptionName = OPERATION_DESCRIPTORS[value];
 
-    return operationDescriptions[descriptionName];
+    return descriptionName && operationDescriptions?.[descriptionName];
   }
 
   protected _handleDataChanged(e) {
