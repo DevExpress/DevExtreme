@@ -15,6 +15,7 @@ import { getBoundingRect } from '@js/core/utils/position';
 import { getOuterWidth } from '@js/core/utils/size';
 import { setWidth } from '@js/core/utils/style';
 import { isDefined } from '@js/core/utils/type';
+import type { ActionEvent } from '@ts/core/action';
 import type { EngineEvent } from '@ts/events/core/events_engine';
 import eventsEngine from '@ts/events/core/events_engine';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
@@ -28,6 +29,7 @@ import type {
   VirtualScrollingRowsViewExtension,
 } from '@ts/grids/grid_core/virtual_scrolling/types';
 import Scrollable from '@ts/ui/scroll_view/scrollable';
+import type { ElementOffset } from '@ts/ui/scroll_view/types';
 
 import type { ColumnHeadersView } from '../column_headers/column_headers';
 import type {
@@ -1005,7 +1007,11 @@ const rowsView = (
     return deferred;
   }
 
-  public setAriaOwns(headerTableId, footerTableId, isFixed) {
+  public setAriaOwns(
+    headerTableId: string | undefined,
+    footerTableId: string | undefined,
+    isFixed?: boolean,
+  ): void {
     if (isFixed) {
       const contentFixedClass = this.addWidgetPrefix(CLASSES.contentFixed);
       const $contentFixedElement = this.element()?.children(`.${contentFixedClass}`);
@@ -1015,11 +1021,11 @@ const rowsView = (
         this.setAria('owns', `${headerTableId ?? ''} ${$fixedTableElement.attr('id') ?? ''} ${footerTableId ?? ''}`.trim(), $contentFixedElement);
       }
     } else {
-      super.setAriaOwns.apply(this, arguments as any);
+      super.setAriaOwns(headerTableId, footerTableId, isFixed);
     }
   }
 
-  public toggleDraggableColumnClass(columnIndex, value) {
+  public toggleDraggableColumnClass(columnIndex: number, value: boolean): void {
     super.toggleDraggableColumnClass(columnIndex, value);
 
     if (this.isFixedColumns()) {
@@ -1028,7 +1034,7 @@ const rowsView = (
     }
   }
 
-  public getCellIndex($cell) {
+  public getCellIndex($cell: dxElementWrapper, rowIndex?: number): number {
     const $fixedTable = this._fixedTableElement;
     let cellIndex = 0;
 
@@ -1042,34 +1048,39 @@ const rowsView = (
 
         if (column.colspan) {
           cellIndex += column.colspan;
-          return;
+          return undefined;
         }
 
-        cellIndex++;
+        cellIndex += 1;
         return undefined;
       });
 
       return cellIndex;
     }
 
-    return super.getCellIndex.apply(this, arguments as any);
+    return super.getCellIndex($cell, rowIndex);
   }
 
-  private _updateFixedTablePosition(scrollTop, needFocus?) {
+  private _updateFixedTablePosition(scrollTop: number | undefined, needFocus?: boolean): void {
     if (this._fixedTableElement && this._tableElement) {
-      let $focusedElement;
+      const fixedContent = this._fixedTableElement.parent().get(0);
 
-      this._fixedTableElement.parent().scrollTop(scrollTop);
+      if (fixedContent && scrollTop !== undefined) {
+        fixedContent.scrollTop = scrollTop;
+      }
 
       if (needFocus && this._editorFactoryController) {
-        $focusedElement = this._editorFactoryController.focus();
-        $focusedElement && this._editorFactoryController.focus($focusedElement);
+        const $focusedElement = this._editorFactoryController.focus();
+
+        if ($focusedElement) {
+          this._editorFactoryController.focus($focusedElement);
+        }
       }
     }
   }
 
-  public setScrollerSpacing(vWidth, hWidth) {
-    const styles = { marginBottom: 0 };
+  public setScrollerSpacing(vWidth: number, hWidth: number): void {
+    const styles: Record<string, number> = { marginBottom: 0 };
     const $fixedContent = this.element()?.children(`.${this.addWidgetPrefix(CLASSES.contentFixed)}`);
 
     if ($fixedContent?.length && this._fixedTableElement) {
@@ -1084,7 +1095,7 @@ const rowsView = (
     }
   }
 
-  private _getElasticScrollTop(e) {
+  private _getElasticScrollTop(e: RowsViewScrollEvent): number {
     let elasticScrollTop = 0;
 
     if (e.scrollOffset.top < 0) {
@@ -1092,7 +1103,10 @@ const rowsView = (
     } else if (e.reachedBottom) {
       const $scrollableContent = $(e.component.content());
       const $scrollableContainer = $(e.component.container());
-      const maxScrollTop = Math.max($scrollableContent.get(0).clientHeight - $scrollableContainer.get(0).clientHeight, 0);
+      const maxScrollTop = Math.max(
+        $scrollableContent.get(0).clientHeight - $scrollableContainer.get(0).clientHeight,
+        0,
+      );
 
       elasticScrollTop = Math.min(maxScrollTop - e.scrollOffset.top, 0);
     }
@@ -1100,7 +1114,7 @@ const rowsView = (
     return Math.floor(elasticScrollTop);
   }
 
-  private _applyElasticScrolling(e) {
+  private _applyElasticScrolling(e: RowsViewScrollEvent): void {
     if (this._fixedTableElement) {
       const elasticScrollTop = this._getElasticScrollTop(e);
 
@@ -1125,12 +1139,12 @@ const rowsView = (
     }
   }
 
-  protected _afterRowPrepared(e) {
+  protected _afterRowPrepared(e: ActionEvent): void {
     if (this._isFixedTableRendering) return;
     super._afterRowPrepared(e);
   }
 
-  public _scrollToElement($element, offset?) {
+  public _scrollToElement($element: dxElementWrapper, offset?: ElementOffset): void {
     const scrollOffset = this.isFixedColumns() ? this.getFixedColumnsOffset() : offset;
 
     super._scrollToElement($element, scrollOffset);
