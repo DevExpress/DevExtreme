@@ -32,7 +32,12 @@ import Editor from '@ts/ui/editor/editor';
 import type MenuInternal from '@ts/ui/menu/menu';
 
 import { CLASSES } from './const';
-import type { FilterRowEditorOptions } from './types';
+import type {
+  FilterRowColumnHeadersView,
+  FilterRowEditorOptions,
+  FilterRowHeaderPanel,
+  FilterRowOptions,
+} from './types';
 import { createFilterRowExpressions } from './utils';
 
 const OPERATION_ICONS = {
@@ -211,8 +216,10 @@ const updateFilterValue = function (that, options) {
   that._columnsController.columnOption(column.index, columnOptionName, normalizedValue, notFireEvent);
 };
 
-const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnHeadersViewFilterRowExtender extends Base {
-  private _filterRangeOverlayInstance: any;
+const columnHeadersView = (
+  Base: ModuleType<ColumnHeadersView>,
+): ModuleType<FilterRowColumnHeadersView> => class ColumnHeadersViewFilterRowExtender extends Base {
+  private _filterRangeOverlayInstance?: Overlay | null;
 
   private _applyFilterViewController!: ApplyFilterViewController;
 
@@ -433,7 +440,7 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
     overlayInstance?.hide();
   }
 
-  private getFilterRangeOverlayInstance() {
+  public getFilterRangeOverlayInstance(): Overlay | null | undefined {
     return this._filterRangeOverlayInstance;
   }
 
@@ -766,7 +773,7 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
     }
   }
 
-  private updateLookupDataSource(filterChanged?) {
+  public updateLookupDataSource(filterChanged?: unknown): void {
     if (!this.option('syncLookupFilterValues')) {
       return;
     }
@@ -898,7 +905,9 @@ export class ApplyFilterViewController extends modules.ViewController {
   }
 }
 
-const columnsResizer = (Base: ModuleType<ColumnsResizerViewController>) => class FilterRowColumnsResizerExtender extends Base {
+const columnsResizer = (
+  Base: ModuleType<ColumnsResizerViewController>,
+): ModuleType<ColumnsResizerViewController> => class FilterRowColumnsResizerExtender extends Base {
   protected _startResizing(): void {
     // @ts-expect-error
     super._startResizing.apply(this, arguments);
@@ -911,7 +920,9 @@ const columnsResizer = (Base: ModuleType<ColumnsResizerViewController>) => class
   }
 };
 
-const editing = (Base: ModuleType<EditingController>) => class FilterRowEditingController extends Base {
+const editing = (
+  Base: ModuleType<EditingController>,
+): ModuleType<EditingController> => class FilterRowEditingController extends Base {
   private _needUpdateLookupDataSource: any;
 
   public updateFieldValue(options) {
@@ -942,7 +953,9 @@ const editing = (Base: ModuleType<EditingController>) => class FilterRowEditingC
   }
 };
 
-const headerPanel = (Base: ModuleType<HeaderPanel>) => class FilterRowHeaderPanel extends Base {
+const headerPanel = (
+  Base: ModuleType<HeaderPanel>,
+): ModuleType<FilterRowHeaderPanel> => class FilterRowHeaderPanel extends Base {
   private _applyFilterViewController!: ApplyFilterViewController;
 
   public init() {
@@ -1009,13 +1022,13 @@ const headerPanel = (Base: ModuleType<HeaderPanel>) => class FilterRowHeaderPane
     return !!filterRowOptions?.visible && filterRowOptions.applyFilter === 'onClick';
   }
 
-  private enableApplyButton(value) {
+  public enableApplyButton(value: boolean): void {
     this.setToolbarItemDisabled('applyFilterButton', !value);
   }
 };
 
 export const filterRowModule = {
-  defaultOptions() {
+  defaultOptions(): { syncLookupFilterValues: boolean; filterRow: FilterRowOptions } {
     return {
       syncLookupFilterValues: true,
       filterRow: {
