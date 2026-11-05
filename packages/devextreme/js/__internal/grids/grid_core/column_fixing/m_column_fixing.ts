@@ -270,7 +270,7 @@ const baseFixedColumns = <T extends ModuleType<ColumnsView>>(
       for (let i = 0; i < fixedCells.length; i += 1) {
         const fixedCell = fixedCells[i];
 
-        if (fixedCell.column && fixedCell.column.command === COMMAND_TRANSPARENT) {
+        if (fixedCell.column?.command === COMMAND_TRANSPARENT) {
           fixedCorrection = (fixedCell.column.colspan ?? 1) - 1;
         } else {
           cells[i + fixedCorrection] = fixedCell;
@@ -281,7 +281,7 @@ const baseFixedColumns = <T extends ModuleType<ColumnsView>>(
 
   protected _createCell(options: ViewCellOptions): dxElementWrapper {
     const { column } = options;
-    const columnCommand = column && column.command;
+    const columnCommand = column?.command;
     const { rowType } = options;
     const $cell = super._createCell(options);
     const needFixedColumns = this._isFixedTableRendering || rowType === 'filter';
@@ -1194,7 +1194,7 @@ const draggingHeader = (
     if (!result && location === 'headers' && $transparentColumn?.length) {
       const boundingRect = getBoundingRect($transparentColumn.get(0));
 
-      if (sourceColumn && sourceColumn.fixed) {
+      if (sourceColumn?.fixed) {
         return sourceColumn.fixedPosition === 'right' ? point.x < boundingRect.right : point.x > boundingRect.left;
       }
       if (targetColumn && targetColumn.fixed && targetColumn.fixedPosition !== 'right') {
