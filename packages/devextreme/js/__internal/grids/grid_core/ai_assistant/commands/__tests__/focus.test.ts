@@ -205,7 +205,7 @@ describe('focusRowByKeyCommand', () => {
           throw new Error('Error');
         }
         return (realOption as (...a: unknown[]) => unknown)(...callArgs);
-      }) as never);
+      }));
       const callbacks = createCallbacks();
 
       const result = await focusRowByKeyCommand.execute(instance, callbacks)({ key: 2 });
@@ -321,7 +321,7 @@ describe('focusRowByIndexCommand', () => {
           throw new Error('Error');
         }
         return (realOption as (...a: unknown[]) => unknown)(...callArgs);
-      }) as never);
+      }));
       const callbacks = createCallbacks();
 
       const result = await focusRowByIndexCommand.execute(instance, callbacks)({ index: 1 });

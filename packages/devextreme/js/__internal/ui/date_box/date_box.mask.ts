@@ -18,7 +18,6 @@ import dateLocalization from '@ts/core/localization/date';
 import {
   bindDatePartsToLocale,
   getParser as getLDMLDateParser,
-  type LocaleAwareDateLocalization,
 } from '@ts/core/localization/ldml/date.parser';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { KeyboardKeyDownEvent } from '@ts/events/core/keyboard_processor';
@@ -523,7 +522,7 @@ class DateBoxMask<
     const format = this._resolveDisplayFormat(displayFormat);
     const formatLocale = getDateFormatLocale(format);
     const dateParts = bindDatePartsToLocale(
-      dateLocalization as LocaleAwareDateLocalization,
+      dateLocalization,
       formatLocale,
     );
 
@@ -676,6 +675,7 @@ class DateBoxMask<
   }
 
   _getActivePartValue(dateValue?: Date | null): number {
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
     const date = dateValue ?? this._maskValue as Date;
     const getter = this._getActivePartProp('getter');
     const isGetterFunction = isFunction(getter);

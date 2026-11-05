@@ -1,5 +1,4 @@
 import registerComponent from '@js/core/component_registrator';
-import type { dxElementWrapper } from '@js/core/renderer';
 import { getImageSourceType } from '@js/core/utils/icon';
 import type { ClickEvent } from '@js/ui/button';
 import ValidationEngine from '@js/ui/validation_engine';
@@ -112,7 +111,7 @@ export default class Button extends ComponentWrapper {
   _initMarkup(): void {
     super._initMarkup();
 
-    const $content = (this.$element() as unknown as dxElementWrapper).find('.dx-button-content').first();
+    const $content = (this.$element()).find('.dx-button-content').first();
     const $template = $content.children().filter('.dx-template-wrapper');
     const $input = $content.children().filter('.dx-button-submit-input');
 

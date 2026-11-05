@@ -707,7 +707,7 @@ class SelectBox<
   }
 
   _isOverlayNestedTarget(target?: EventTarget | null): boolean {
-    return !!$(target as Element).closest(`.${SELECTBOX_POPUP_WRAPPER_CLASS}`).length;
+    return !!$(target).closest(`.${SELECTBOX_POPUP_WRAPPER_CLASS}`).length;
   }
 
   _clearTextValue(): void {

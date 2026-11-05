@@ -71,7 +71,7 @@ const customizeFormItems = (
       removeItemFromGroups(itemName, defaultItemsMap);
 
       return shouldMergeWithExisting(customItems)
-        ? extend(true, {}, defaultItem, customItems) as FormItem
+        ? extend(true, {}, defaultItem, customItems)
         : defaultItem;
     }
 

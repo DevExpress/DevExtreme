@@ -30,7 +30,7 @@ const createTreeList = (
 ): Promise<InternalGrid> => new Promise((resolve) => {
   const $container = $('<div>').attr('id', CONTAINER_ID).appendTo(document.body);
 
-  const instance = new TreeList($container.get(0) as HTMLDivElement, {
+  const instance = new TreeList($container.get(0), {
     dataSource: items,
     keyExpr: 'id',
     parentIdExpr: 'parentId',
@@ -58,7 +58,7 @@ describe('selectionByIndexesCommand on TreeList — "allPages" scope', () => {
 
   it('resolves keys by walking the node tree (no loadAllItems pipeline crash)', async () => {
     const instance = await createTreeList();
-    const selectSpy = jest.spyOn(instance, 'selectRows').mockReturnValue(Promise.resolve([]) as never);
+    const selectSpy = jest.spyOn(instance, 'selectRows').mockReturnValue(Promise.resolve([]));
     const callbacks = createCallbacks();
 
     const result = await selectionByIndexesCommand.execute(instance, callbacks)({

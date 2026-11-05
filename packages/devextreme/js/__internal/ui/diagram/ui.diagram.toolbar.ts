@@ -812,6 +812,7 @@ class DiagramToolbar extends DiagramPanel {
   _getDefaultOptions() {
     return extend(super._getDefaultOptions(), {
       isMobileView: false,
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
       export: {
         fileName: 'Diagram',
       } as { fileName?: string },

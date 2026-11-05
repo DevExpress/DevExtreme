@@ -174,7 +174,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
 
   // #region Initialization
   public init(): void {
-    this._dataController = this.getController('data') as KeyboardNavigationDataController;
+    this._dataController = this.getController('data');
     this.dataSourceController = this.getController('dataSource');
     this._selectionController = this.getController('selection');
     this._editingController = this.getController('editing') as CellBasedEditingController;
@@ -515,7 +515,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
   ): void {
     const isEditing = this._editingController.isEditing();
     const direction: NavigationDirection = event.shift ? 'previous' : 'next';
-    const eventTarget = event.originalEvent.target as Element;
+    const eventTarget = event.originalEvent.target;
     const { hasEditingOptions, isLastValidCell } = options;
     let originalHandlerRequired = options.isOriginalHandlerRequired;
 

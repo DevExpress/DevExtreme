@@ -624,7 +624,7 @@ describe('Appointment Form', () => {
         { text: 'Owner 2', id: 2 },
       ]));
       const resourceDataSource = new CustomStore({
-        load: loadFn as any,
+        load: loadFn,
         byKey: () => {},
       });
 

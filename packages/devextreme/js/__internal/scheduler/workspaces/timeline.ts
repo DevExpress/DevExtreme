@@ -95,7 +95,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
 
     return extend(config, {
       scrollByContent: true,
-    }) as ScrollableProperties;
+    });
   }
 
   supportAllDayRow(): boolean {

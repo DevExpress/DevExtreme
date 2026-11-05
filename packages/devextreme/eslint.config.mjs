@@ -389,6 +389,9 @@ export default [
             'class-methods-use-this': 'off',
             '@typescript-eslint/ban-ts-comment': 'off',
             '@typescript-eslint/prefer-ts-expect-error': 'off',
+            '@typescript-eslint/no-unnecessary-type-assertion': ['error', {
+                typesToIgnore: ['(...args: unknown[]) => void', '(...a: unknown[]) => void'],
+            }],
         },
     },
     // Rules for a new TS files

@@ -125,7 +125,7 @@ const tryCreateItemOptionAction = (
     case 'buttonOptions': // ButtonItem/#buttonOptions
       return new WidgetOptionItemOptionAction(itemActionOptions);
     case 'validationRules': // SimpleItem/#validationRules
-      return new ValidationRulesItemOptionAction(itemActionOptions) as ItemOptionActionType;
+      return new ValidationRulesItemOptionAction(itemActionOptions);
     case 'cssClass': // ButtonItem/#cssClass or EmptyItem/#cssClass or GroupItem/#cssClass or SimpleItem/#cssClass or TabbedItem/#cssClass
       return new CssClassItemOptionAction(itemActionOptions);
     case 'badge': // TabbedItem/tabs/#badge

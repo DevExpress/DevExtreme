@@ -335,7 +335,7 @@ export default {
           return (presetOverride as DateFormatter)(date);
         }
 
-        resolvedFormat = presetOverride as LocalizationFormat;
+        resolvedFormat = presetOverride;
       }
     }
 
@@ -355,7 +355,7 @@ export default {
     }
 
     if (typeof resolvedFormat === 'object') {
-      return formatWithIntlOptions(date, resolvedFormat as FormatObject, formatLocale);
+      return formatWithIntlOptions(date, resolvedFormat, formatLocale);
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return

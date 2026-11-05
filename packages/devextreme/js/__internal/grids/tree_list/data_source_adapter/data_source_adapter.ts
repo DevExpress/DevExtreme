@@ -113,7 +113,7 @@ export class DataSourceAdapterTreeList extends DataSourceAdapter {
     const parentIdExpr = this.option('parentIdExpr');
 
     if (isFunction(parentIdExpr)) {
-      return parentIdExpr as DataSetter;
+      return parentIdExpr;
     }
 
     return compileSetter(parentIdExpr) as DataSetter;
@@ -135,7 +135,7 @@ export class DataSourceAdapterTreeList extends DataSourceAdapter {
     const hasItemsExpr = this.option('hasItemsExpr');
 
     if (isFunction(hasItemsExpr)) {
-      return hasItemsExpr as DataSetter;
+      return hasItemsExpr;
     }
 
     return hasItemsExpr

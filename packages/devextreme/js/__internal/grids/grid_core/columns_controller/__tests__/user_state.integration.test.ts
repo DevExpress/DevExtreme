@@ -96,7 +96,7 @@ const expectedGroupFields = (
 
 const entryWithout = (...fields: StateField[]): ColumnUserState => Object.fromEntries(
   Object.entries(SAVED_ENTRY).filter(([field]) => !fields.some((omitted) => omitted === field)),
-) as ColumnUserState;
+);
 
 const pickEntryFields = (...groups: FieldGroup[]): ColumnUserState => entryWithout(
   ...ALL_GROUPS

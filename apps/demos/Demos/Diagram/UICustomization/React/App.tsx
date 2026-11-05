@@ -85,7 +85,7 @@ export default function App() {
         <Command name="lineColor" />
         <Command name="fillColor" />
         <Command name="separator" />
-        <Command name={'clear' as any} icon="clearsquare" text="Clear Diagram" />
+        <Command name="clear" icon="clearsquare" text="Clear Diagram" />
       </MainToolbar>
       <Toolbox
         visibility="visible"

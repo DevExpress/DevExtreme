@@ -317,7 +317,7 @@ class MessageList extends Widget<Properties> {
         // @ts-expect-error itemElement
         onClick: (e: ItemClick): void => {
           const onMessageEditStarted = onMessageEditingStart?.({
-            event: e.event, message: message as TextMessage,
+            event: e.event, message,
           });
 
           const onContextMenuHidden = (): void => {

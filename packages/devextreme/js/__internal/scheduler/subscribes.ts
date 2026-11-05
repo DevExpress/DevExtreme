@@ -147,7 +147,7 @@ const subscribes = {
     const targetedAppointment = {
       ...appointment,
       ...targetedAppointmentRaw,
-    } as TargetedAppointment;
+    };
 
     const adapter = new AppointmentAdapter(targetedAppointment, this._dataAccessors);
     // pull out time zone converting from appointment adapter for knockout (T947938)

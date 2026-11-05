@@ -24,7 +24,7 @@ function createContainer({
   const container = new ResizableContainer({
     paginationProps: {},
     contentTemplate: (): null => null,
-  } as never);
+  });
 
   jest.spyOn(container, 'setState').mockImplementation((updater): void => {
     const update = typeof updater === 'function' ? updater(container.state, container.props) : updater;

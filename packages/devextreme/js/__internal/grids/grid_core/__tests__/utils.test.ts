@@ -125,7 +125,7 @@ const createLookupColumn = (overrides: Record<string, unknown> = {}): Column => 
   defaultCalculateCellValue: calculateCellValue,
   lookup: { dataSource: LOOKUP_ITEMS, valueExpr: 'id', displayExpr: 'text' },
   ...overrides,
-}) as unknown as Column;
+});
 
 const createDataSourceAdapter = (
   groupItems: { key: unknown }[],

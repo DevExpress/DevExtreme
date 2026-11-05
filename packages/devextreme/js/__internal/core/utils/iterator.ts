@@ -58,7 +58,6 @@ function each<TValues extends ArrayLike<unknown> | dxElementWrapper | null | und
 ): Each<TValues>;
 function each<TValues extends object | null | undefined>(
   values: TValues,
-  // eslint-disable-next-line @typescript-eslint/unified-signatures -- union: no contextual types
   callback: EachCallback<Value<NonNullable<TValues>>, Key<NonNullable<TValues>>>,
 ): Each<TValues>;
 function each(values: Collection | null | undefined, callback: Callback): unknown {

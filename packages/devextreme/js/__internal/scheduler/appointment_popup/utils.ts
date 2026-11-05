@@ -4,7 +4,6 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import dateUtils from '@js/core/utils/date';
 import { isDefined } from '@js/core/utils/type';
-import type { Properties as DateBoxProperties } from '@js/ui/date_box';
 import type { SimpleItem } from '@js/ui/form';
 
 import { getImageContainer } from '../../core/utils/icon';
@@ -28,7 +27,7 @@ export const getStartDateCommonConfig = (firstDayOfWeek: DayOfWeek): SimpleItem 
       firstDayOfWeek,
       showTodayButton: true,
     },
-  } as unknown as DateBoxProperties,
+  },
 });
 
 export class RecurrenceRule {

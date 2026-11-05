@@ -129,7 +129,7 @@ export class RecurrenceForm {
           this.recurrenceRule.byMonthDay = e.value;
         },
       } as NumberBoxProperties,
-    } as SimpleItem;
+    };
   }
 
   get dxForm(): dxForm {
@@ -155,7 +155,7 @@ export class RecurrenceForm {
         this.createRecurrenceSettingsGroup(),
         this.createRecurrenceEndGroup(),
       ],
-    } as GroupItem;
+    };
   }
 
   private createRecurrenceStartDateGroup(): GroupItem {
@@ -186,11 +186,11 @@ export class RecurrenceForm {
               onValueChanged: (e): void => {
                 this.recurrenceRule.startDate = e.value;
               },
-            } as DateBoxProperties,
+            },
           },
-        ) as SimpleItem,
+        ),
       ],
-    } as GroupItem;
+    };
   }
 
   private createRecurrenceSettingsGroup(): GroupItem {
@@ -221,7 +221,7 @@ export class RecurrenceForm {
           ],
         },
       ],
-    } as GroupItem;
+    };
   }
 
   private createRecurrenceRuleGroup(): GroupItem {
@@ -351,7 +351,7 @@ export class RecurrenceForm {
 
         return $container;
       },
-    } as SimpleItem;
+    };
   }
 
   private createDayOfMonthGroup(): SimpleItem {
@@ -391,10 +391,10 @@ export class RecurrenceForm {
               this.recurrenceRule.byMonth = e.value;
             },
           } as SelectBoxProperties,
-        } as SimpleItem,
+        },
         this.createByMonthDayNumberBoxItem(EDITOR_NAMES.recurrenceDayOfYearDayEditor, false),
       ],
-    } as GroupItem;
+    };
   }
 
   private createRecurrenceEndGroup(): GroupItem {
@@ -424,7 +424,7 @@ export class RecurrenceForm {
           ],
         },
       ],
-    } as GroupItem;
+    };
   }
 
   private createRecurrenceEndRadioGroup(): SimpleItem {
@@ -453,7 +453,7 @@ export class RecurrenceForm {
           this.updateRepeatEndEditors();
         },
       } as RadioGroupProperties,
-    } as SimpleItem;
+    };
   }
 
   private createRecurrenceEndEditors(): GroupItem {
@@ -522,7 +522,7 @@ export class RecurrenceForm {
           } as NumberBoxProperties,
         },
       ],
-    } as GroupItem;
+    };
   }
 
   updateRecurrenceFormValues(

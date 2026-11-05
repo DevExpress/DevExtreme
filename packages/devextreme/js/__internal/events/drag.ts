@@ -199,7 +199,7 @@ class DragEmitter extends GestureEmitter {
       offset: dragOffset,
     });
 
-    this._processDropTargets(moveEvent as GestureEvent);
+    this._processDropTargets(moveEvent);
 
     if (!moveEvent._cancelPreventDefault) {
       moveEvent.preventDefault();

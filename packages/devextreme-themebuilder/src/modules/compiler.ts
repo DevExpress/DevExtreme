@@ -75,7 +75,7 @@ export default class Compiler {
   load = (): sass.ImporterResult => ({
     contents: this.indexFileContent,
     syntax: 'scss',
-  } as sass.ImporterResult);
+  });
 
   getCustomVar = (values: sass.Value[]): sass.Value => {
     const customVariable = values[0].get(0);

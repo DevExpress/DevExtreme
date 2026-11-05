@@ -17,7 +17,7 @@ export const createContext = function<T>(defaultValue: T) {
       getChildContext() {
         return {
           ...this.context,
-          [id]: this.props.value || (defaultValue as unknown as T),
+          [id]: this.props.value || (defaultValue),
         };
       }
 

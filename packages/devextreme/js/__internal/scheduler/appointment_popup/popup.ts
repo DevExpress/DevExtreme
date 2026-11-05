@@ -218,7 +218,7 @@ export class AppointmentPopup {
       onHiding: defaultPopupConfig.onHiding,
       onShowing: defaultPopupConfig.onShowing,
       onShown: defaultPopupConfig.onShown,
-    }) as PopupProperties;
+    });
   }
 
   private onShowing(e): void {

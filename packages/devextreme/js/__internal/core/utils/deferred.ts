@@ -92,7 +92,7 @@ const deferredConfig: DeferredConfig[] = [{
 
 const isDeferredLike = (value: unknown): value is DeferredLike => isDeferred(value);
 
-const DeferredObj = function DeferredObj(this: DeferredInternal): void {
+const NativeDeferred = function DeferredObj(this: DeferredInternal): void {
   // eslint-disable-next-line @typescript-eslint/no-this-alias -- the handlers return their receiver
   const that = this;
   this._state = 'pending';
@@ -185,7 +185,7 @@ deferredConfig.forEach((config) => {
   const methodName = config.method;
   const { state } = config;
 
-  DeferredObj.prototype[`${methodName}With`] = function triggerWith(
+  NativeDeferred.prototype[`${methodName}With`] = function triggerWith(
     this: DeferredInternal,
     context: unknown,
     args?: unknown[],
@@ -209,7 +209,7 @@ deferredConfig.forEach((config) => {
   };
 });
 
-let StrategyDeferred: DeferredConstructor = DeferredObj;
+let StrategyDeferred: DeferredConstructor = NativeDeferred;
 
 export function fromPromise<T>(
   promise: PromiseLike<T> | DeferredInstance<T> | T,

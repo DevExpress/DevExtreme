@@ -11,7 +11,6 @@ import { HeaderFilterViewController } from '../../grid_core/filtering/header_fil
 import { SortingController } from '../../grid_core/sorting_controller/index';
 import { ContextMenuController } from '../context_menu/index';
 import { OptionsController } from '../options_controller';
-import type { Props as ColumnSortableProps } from './column_sortable';
 import { HeaderPanelController } from './controller';
 import type { HeaderPanelProps } from './header_panel';
 import { HeaderPanel } from './header_panel';
@@ -84,7 +83,7 @@ export class HeaderPanelView extends View<HeaderPanelProps> {
         showDropzone: this.showDropzone.value,
         isColumnDraggable: this.headerPanelController.isColumnDraggable,
         onPlaceholderPrepared: this.headerPanelController.onPlaceholderPrepared,
-      } as Partial<ColumnSortableProps>,
+      },
       showContextMenu: this.showContextMenu.bind(this),
       openColumnChooser: (): void => { this.columnChooserView.show(); },
       filterSyncValue: this.filterController.filterSyncValue.value,
