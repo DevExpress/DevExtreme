@@ -1,4 +1,5 @@
 /* eslint-disable max-classes-per-file */
+import type { SearchOperation } from '@js/common/data';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import type { Callback } from '@js/core/utils/callbacks';
@@ -34,6 +35,9 @@ import type {
   FocusDataSourceController,
   FocusRowsView,
   FocusRowsViewExtension,
+  RowKeyFilter,
+  RowKeyFilterCondition,
+  RowKeyFilterGroup,
 } from './types';
 
 const ROW_FOCUSED_CLASS = 'dx-row-focused';
@@ -796,7 +800,7 @@ export const focusDataControllerExtender = <
     return this._calculateGlobalRowIndexByFlatData(key);
   }
 
-  protected _calculateGlobalRowIndexByFlatData(
+  public _calculateGlobalRowIndexByFlatData(
     key: RowKey,
     groupFilter?: DataFilter,
     useGroup?: boolean,
@@ -845,7 +849,7 @@ export const focusDataControllerExtender = <
     return deferred.promise();
   }
 
-  protected _concatWithCombinedFilter(filter: unknown[], groupFilter?: DataFilter): DataFilter {
+  public _concatWithCombinedFilter(filter: RowKeyFilter, groupFilter?: DataFilter): DataFilter {
     const combinedFilter = this.getCombinedFilter();
     return combineFilters([filter, combinedFilter, groupFilter]);
   }
@@ -854,7 +858,7 @@ export const focusDataControllerExtender = <
     selector: ColumnDataSourceParameter['selector'],
     value: unknown,
     sortInfo: Pick<ColumnDataSourceParameter, 'desc'>,
-  ): unknown[] | undefined {
+  ): RowKeyFilterCondition | undefined {
     const { desc } = sortInfo;
 
     switch (true) {
@@ -876,7 +880,7 @@ export const focusDataControllerExtender = <
     key: RowKey,
     rowData: RawItemData,
     useGroup?: boolean,
-  ): unknown[] {
+  ): RowKeyFilter {
     const dateSerializationFormat = this.option('dateSerializationFormat');
     const remoteOperations = this.dataSourceController.remoteOperations();
     const isRemoteFiltering = Boolean(remoteOperations.filtering);
@@ -919,7 +923,7 @@ export const focusDataControllerExtender = <
           const filterOperation = desc ? '>' : '<';
 
           // eslint-disable-next-line @typescript-eslint/init-declarations -- assigned in branches
-          let sortFilter: ((data: RawItemData) => boolean) | unknown[];
+          let sortFilter: RowKeyFilter;
           if (compare && !isRemoteSorting) {
             sortFilter = (data: RawItemData): boolean => {
               if (filterOperation === '<') {
@@ -942,15 +946,15 @@ export const focusDataControllerExtender = <
     return filter;
   }
 
-  protected _generateFilterByKey(key: RowKey, operation?: string): unknown[] {
+  public _generateFilterByKey(key: RowKey, operation?: SearchOperation): RowKeyFilter {
     const dataSourceKey = this.dataSourceController.getAdapter()?.key();
-    const filterOperation = operation || '=';
+    const filterOperation = operation ?? '=';
 
     if (!Array.isArray(dataSourceKey)) {
       return [dataSourceKey, filterOperation, key];
     }
 
-    const filter: unknown[] = [];
+    const filter: RowKeyFilterGroup = [];
 
     for (const keyField of dataSourceKey) {
       // @ts-expect-error a compound key is an object

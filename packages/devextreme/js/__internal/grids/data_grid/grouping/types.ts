@@ -8,6 +8,7 @@ export type ChangeRowExpandArgs = ExecuteActionArgs<RowExpandingEvent<unknown, R
   & { expanded: boolean };
 
 export interface GroupingDataControllerExtension {
+  expandRow: (key: RowKey) => DeferredObj<unknown>;
   // eslint-disable-next-line @typescript-eslint/method-signature-style -- overridden by methods
   changeRowExpand(key: RowKey, isRowClick?: boolean): DeferredObj<unknown>;
   // eslint-disable-next-line @typescript-eslint/method-signature-style -- overridden by methods

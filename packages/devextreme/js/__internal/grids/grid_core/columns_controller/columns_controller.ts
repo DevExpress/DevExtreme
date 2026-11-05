@@ -108,7 +108,6 @@ import {
   DETAIL_COMMAND_COLUMN_NAME,
   GROUP_COMMAND_COLUMN_NAME,
   GROUP_LOCATION,
-  MAX_SAFE_INTEGER,
   USER_STATE_FIELD_NAMES,
 } from './const';
 import { UserStateApplier } from './user_state_applier';
@@ -1108,9 +1107,9 @@ export class ColumnsController extends modules.Controller {
         const targetColumn = this._columns[toIndex];
 
         if (!targetColumn || column.ownerBand !== targetColumn.ownerBand) {
-          options.visibleIndex = MAX_SAFE_INTEGER;
+          options.visibleIndex = Number.MAX_SAFE_INTEGER;
         } else if (isColumnFixed(this, column) !== isColumnFixed(this, targetColumn)) {
-          options.visibleIndex = MAX_SAFE_INTEGER;
+          options.visibleIndex = Number.MAX_SAFE_INTEGER;
         } else {
           options.visibleIndex = targetColumn.visibleIndex;
         }
