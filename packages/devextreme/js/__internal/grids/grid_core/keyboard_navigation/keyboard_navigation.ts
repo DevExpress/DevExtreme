@@ -60,7 +60,7 @@ import type { SearchPanelViewController } from '@ts/grids/grid_core/search/searc
 import { COMMAND_SELECT_CLASS } from '@ts/grids/grid_core/selection/const';
 import type { SelectionController } from '@ts/grids/grid_core/selection/m_selection';
 import type { Module, ModuleType, RowKey } from '@ts/grids/grid_core/types';
-import gridCoreUtils from '@ts/grids/grid_core/utils';
+import gridCoreUtils, { isVirtualPaging } from '@ts/grids/grid_core/utils';
 import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
 import type { RowsView } from '@ts/grids/grid_core/views/rows_view';
 import type {
@@ -1095,7 +1095,16 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     );
     const $nextCell = nextCellInfo.$cell;
 
-    if (!$nextCell || this.handleTabKeyOnMasterDetailCell($nextCell, direction)) {
+    if (!$nextCell) {
+      return false;
+    }
+
+    if (this.handleTabKeyOnMasterDetailCell($nextCell, direction)) {
+      // An adaptive detail row focuses its editor itself; native Tab would move focus once more
+      if (!focused(eventTarget)) {
+        eventArgs.originalEvent.preventDefault();
+      }
+
       return false;
     }
 
@@ -2868,8 +2877,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
   }
 
   public isVirtualScrolling(): boolean {
-    const scrollingMode = this.option('scrolling.mode');
-    return scrollingMode === 'virtual' || scrollingMode === 'infinite';
+    return isVirtualPaging(this.option('scrolling'));
   }
 
   private _isVirtualRowRender(): boolean {

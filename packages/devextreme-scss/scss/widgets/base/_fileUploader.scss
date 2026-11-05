@@ -21,8 +21,6 @@ $fileuploader-cancel-button-margin-top: 5px !default;
 $fileuploader-status-message-font-size: 12px !default;
 $fileuploader-file-size-font-size: 10px !default;
 
-$fileuploader-input-wrapper-vertical-padding: 1em !default;
-
 .dx-fileuploader {
   &.dx-state-disabled .dx-fileuploader-input {
     display: none;
@@ -43,25 +41,10 @@ $fileuploader-input-wrapper-vertical-padding: 1em !default;
 }
 
 .dx-fileuploader-input-wrapper {
-  @include dx-clearfix-mixin();
-
-  &::before,
-  &::after {
-    width: 100%;
-  }
-
-  &::before {
-    padding-top: $fileuploader-input-wrapper-vertical-padding;
-    margin-top: -1em;
-  }
-
-  &::after {
-    padding-bottom: $fileuploader-input-wrapper-vertical-padding;
-    margin-bottom: -1em;
-  }
+  display: flex;
 
   .dx-button {
-    float: left;
+    flex-shrink: 0;
   }
 
   .dx-button + .dx-button {
@@ -71,19 +54,6 @@ $fileuploader-input-wrapper-vertical-padding: 1em !default;
 
 .dx-fileuploader-button {
   position: relative;
-
-  .dx-fileuploader-input {
-    position: absolute;
-    height: 100%;
-    width: 100%;
-    top: 0;
-    left: 0;
-    cursor: pointer;
-
-    &::-webkit-file-upload-button {
-      cursor: pointer;
-    }
-  }
 }
 
 .dx-fileuploader-dragover {
@@ -142,15 +112,8 @@ $fileuploader-input-wrapper-vertical-padding: 1em !default;
   }
 }
 
-.dx-fileuploader-button-container,
 .dx-fileuploader-input-container {
-  display: table-cell;
-  vertical-align: middle;
-}
-
-.dx-fileuploader-input-container {
-  height: 100%;
-  width: 100%;
+  flex-grow: 1;
   position: relative;
   overflow: hidden;
 }

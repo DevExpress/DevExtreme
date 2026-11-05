@@ -55,7 +55,8 @@ overrides:
   body-parser@>=2.0.0 <2.4.0: ^2.4.0
   compression@<1.8.2: ^1.8.2
   dompurify@<=3.4.16: ^3.4.17
-  follow-redirects@>=1.16.0 <1.16.1: ^1.16.1
+  follow-redirects@>=1.16.0 <1.16.2: ^1.16.2
+  glob@>=9.0.0 <14.0.2: ^14.0.3
   hono@<4.13.11: ^4.13.11
   http-cache-semantics@<=4.2.0: ^4.3.0
   launch-editor@<2.14.2: ^2.14.2
@@ -134,7 +135,6 @@ catalogs:
 allowBuilds:
   '@parcel/watcher': true
   '@swc/core': true
-  cldr-data: true
   core-js: true
   es5-ext: true
   esbuild: true
