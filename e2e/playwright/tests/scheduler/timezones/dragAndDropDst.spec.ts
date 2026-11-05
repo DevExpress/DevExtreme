@@ -174,11 +174,6 @@ test.describe('Scheduler render during DST', () => {
 
         await dragToElement(page, appointment.element, cell, { offsetY: DRAG_Y_OFFSET_PX });
 
-        // The TestCafe test also compared the appointment height with the initial one, but it read
-        // both from the same Selector promise, which TestCafe resolves once — the check compared a
-        // value with itself. Measured for real, the appointment dropped at 01:00 on the
-        // spring-forward day spans the 01:00 and 02:00 rows (50px), so only its position is
-        // checked.
         await expect
           .poll(async () => (await getTop(appointment.element)) - firstCellTop)
           .toBe(expectedTopPosition[idx]);

@@ -10,8 +10,6 @@ export const MACHINE_TIMEZONES = {
 
 export type MachineTimezone = typeof MACHINE_TIMEZONES[keyof typeof MACHINE_TIMEZONES];
 
-// The timezone of the run: the job passes it in TIMEZONE, and the config hands it to the browser
-// context and to this process alike.
 export const getTimezone = (): string => readEnv(process.env.TIMEZONE, 'GMT');
 
 type TestDeclaration = (
@@ -19,8 +17,6 @@ type TestDeclaration = (
   body: (args: TestOptions & { page: Page }) => Promise<void>,
 ) => void;
 
-// A test of one timezone is declared skipped in the jobs of the others, the way the TestCafe
-// "getTimezoneTest" turned it into "test.skip" on an agent set to another zone.
 export const getTimezoneTest = (timezone: MachineTimezone): TestDeclaration => (
   getTimezone() === timezone ? test : test.skip
 );

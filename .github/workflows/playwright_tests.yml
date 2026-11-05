@@ -293,9 +293,6 @@ jobs:
         path: ${{ github.workspace }}/e2e/playwright/artifacts/test-results
         if-no-files-found: ignore
 
-    # A test without an etalon fails, and Playwright writes what it rendered in the etalon's place.
-    # Those files are collected at their paths in the repository, so a new test takes its etalons
-    # from the renderer that is going to check them.
     - name: Collect new etalons
       if: ${{ failure() }}
       run: |
@@ -397,7 +394,6 @@ jobs:
         separate-directories: true
         delete-merged: true
 
-    # Every job writes the etalons of its own tests, so the trees merge without collisions.
     - name: Merge new etalons
       if: steps.mergeable-artifacts.outputs.etalons == 'true'
       uses: actions/upload-artifact/merge@v7

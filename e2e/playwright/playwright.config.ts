@@ -7,11 +7,6 @@ import {
 const baseURL = `http://localhost:${SERVER_PORT}`;
 const [width, height] = DEFAULT_BROWSER_SIZE;
 
-// The TestCafe run changes the machine timezone on the CI agent; the browser context takes it per
-// run instead, so the same agent can serve any timezone job. The tests also build dates in Node —
-// "new Date(2021, 2, 1)" — that TestCafe read in the agent timezone, so this process is pointed at
-// the same zone before any test file is loaded. It also keeps the zone a previous job left on a
-// shared agent out of the run.
 const timezone = readEnv(process.env.TIMEZONE, 'GMT');
 
 process.env.TZ = timezone;
@@ -43,6 +38,8 @@ export default defineConfig<TestOptions>({
   },
   use: {
     theme: readEnv(process.env.THEME, DEFAULT_THEME),
+    // The TestCafe run changes the machine timezone on the CI agent; the browser context
+    // takes it per run instead, so the same agent can serve any timezone job.
     timezoneId: timezone,
     baseURL,
     channel: 'chrome',

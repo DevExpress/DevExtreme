@@ -4,8 +4,6 @@ import { DEFAULT_SELECTOR } from './const';
 
 export interface CreateWidgetOptions<TArg = undefined> {
   disableFxAnimation?: boolean;
-  // The factory runs in the page and cannot see the variables of the test, so whatever it needs
-  // from them travels here, as the argument "page.evaluateHandle" serializes for it.
   arg?: TArg;
 }
 

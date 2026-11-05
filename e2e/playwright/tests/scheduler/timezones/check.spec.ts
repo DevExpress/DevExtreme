@@ -14,8 +14,6 @@ test.describe('Runner machine timezone checks', () => {
       const dateFromBrowser = await page.evaluate(() => new Date(2024, 0, 1, 10).toString());
 
       expect(dateFromBrowser).toBe(expectedResult);
-      // The browser and this process no longer share the machine clock, and the tests build dates
-      // on both sides, so both have to be in the timezone of the job.
       expect(new Date(2024, 0, 1, 10).toString()).toBe(expectedResult);
     });
   });

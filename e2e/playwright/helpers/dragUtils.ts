@@ -1,13 +1,8 @@
 import type { Locator, Page } from '@playwright/test';
 
 export interface DragOptions {
-  // Where the source is taken hold of, as the "offsetX" and "offsetY" of "t.drag" and
-  // "t.dragToElement" read: from the top-left corner, or from the bottom-right one when negative.
-  // Left out, the drag starts at the centre.
   offsetX?: number;
   offsetY?: number;
-  // One jump does not cover the distance after which the DevExtreme draggable tells a drag from a
-  // click, so the cursor passes intermediate points, as the TestCafe one did.
   steps?: number;
 }
 
@@ -23,8 +18,6 @@ const offsetWithin = (size: number, offset: number | undefined): number => {
   return offset < 0 ? size + offset : offset;
 };
 
-// The TestCafe automation scrolled an element into view before it pointed at it, and pointed in
-// whole pixels: half a pixel decides which cell a drop lands in.
 const pointWithin = async (
   element: Locator,
   offsetX?: number,
@@ -58,8 +51,6 @@ const press = async (
   return start;
 };
 
-// Moves the source with the button held and leaves it held: the state the TestCafe tests reached by
-// switching off the automation mouse-up, so the drag can be checked before "finishDrag" drops it.
 export const startDragToOffset = async (
   page: Page,
   source: Locator,
@@ -72,7 +63,6 @@ export const startDragToOffset = async (
   await page.mouse.move(start.x + deltaX, start.y + deltaY, { steps });
 };
 
-// The point taken on the source travels to the centre of the target.
 export const startDragToElement = async (
   page: Page,
   source: Locator,
