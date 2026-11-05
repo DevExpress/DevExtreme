@@ -21,6 +21,7 @@ import type {
   ForeachGroupsResult,
   GroupingLoadOperation,
   GroupItemData,
+  GroupItemsLoadResult,
   GroupPagingCallback,
   GroupPagingOptions,
 } from './types';
@@ -249,7 +250,7 @@ export class GroupingHelper extends GroupingHelperCore {
   ): void {
     const groups = Array.isArray(options.group) ? options.group : [];
     const currentGroup = groups[groupLevel + 1];
-    const deferreds: (DeferredObj<unknown> | { data: RawItemData[] })[] = [];
+    const deferreds: GroupItemsLoadResult[] = [];
 
     expandedInfo.paths.forEach((expandedPath, expandedItemIndex) => {
       const loadOptions: StoreLoadOptions = {
@@ -273,8 +274,8 @@ export class GroupingHelper extends GroupingHelperCore {
         loadOptions.take = expandedInfo.take;
       }
 
-      const loadDeferred = loadOptions.take === 0
-        ? { data: [] as RawItemData[] }
+      const loadDeferred: GroupItemsLoadResult = loadOptions.take === 0
+        ? { data: [] }
         : this.dataSourceAdapter.customLoader.loadFromStore(loadOptions);
 
       when(loadDeferred)
@@ -331,8 +332,8 @@ export class GroupingHelper extends GroupingHelperCore {
       loadOptions.take = expandedInfo.take;
     }
 
-    const loadDeferred = expandedInfo.take === 0
-      ? { data: [] as RawItemData[] }
+    const loadDeferred: GroupItemsLoadResult = expandedInfo.take === 0
+      ? { data: [] }
       : dataSourceAdapter.customLoader.loadFromStore(loadOptions);
 
     when(loadDeferred)
@@ -389,8 +390,7 @@ export class GroupingHelper extends GroupingHelperCore {
   }
 
   private _isGroupExpanded(groupIndex: number): boolean {
-    const groups = this.dataSourceAdapter.group();
-    return isGroupExpanded(groups, groupIndex);
+    return isGroupExpanded(this.dataSourceAdapter.group(), groupIndex);
   }
 
   public updatePagingOptions(options: GroupPagingOptions, callback?: GroupPagingCallback): void {
@@ -702,7 +702,6 @@ export class GroupingHelper extends GroupingHelperCore {
   }
 
   public refresh(options: LoadOperation, operationTypes: OperationTypes): ForeachGroupsResult {
-    const { dataSourceAdapter } = this;
     const { storeLoadOptions } = options;
     const group = options.group || storeLoadOptions.group;
     const oldGroups = dataGridCore.normalizeSortingInfo(this._group);
@@ -722,7 +721,7 @@ export class GroupingHelper extends GroupingHelperCore {
 
     if (Array.isArray(group) && options.remoteOperations?.paging && operationTypes.reload) {
       return this.foreachExpandedGroups((groupInfo) => {
-        const groupCountQuery = loadGroupTotalCount(dataSourceAdapter, {
+        const groupCountQuery = loadGroupTotalCount(this.dataSourceAdapter, {
           filter: createGroupFilter(groupInfo.path, {
             filter: storeLoadOptions.filter,
             group,
@@ -730,7 +729,7 @@ export class GroupingHelper extends GroupingHelperCore {
           group: group.slice(groupInfo.path.length),
           select: storeLoadOptions.select,
         });
-        const groupOffsetQuery = loadGroupTotalCount(dataSourceAdapter, {
+        const groupOffsetQuery = loadGroupTotalCount(this.dataSourceAdapter, {
           filter: createOffsetFilter(groupInfo.path, {
             filter: storeLoadOptions.filter,
             group,
