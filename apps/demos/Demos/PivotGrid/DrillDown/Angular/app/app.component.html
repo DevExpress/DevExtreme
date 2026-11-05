@@ -15,7 +15,7 @@
 
 <dx-popup
   [(visible)]="salesPopupVisible"
-  [title]="salesPopupTitle"
+  [title]="salesPopupTitle()"
   [width]="600"
   [height]="400"
   (onShown)="onPopupShown()"
@@ -26,7 +26,7 @@
       #drillDownDataGrid
       [width]="560"
       [height]="300"
-      [dataSource]="drillDownDataSource"
+      [dataSource]="drillDownDataSource()"
       [columns]="['region', 'city', 'amount', 'date']"
     >
     </dx-data-grid>

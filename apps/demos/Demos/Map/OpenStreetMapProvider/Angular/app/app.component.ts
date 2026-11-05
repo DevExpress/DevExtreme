@@ -1,7 +1,10 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, provideZoneChangeDetection, ViewEncapsulation } from '@angular/core';
+import {
+  Component, enableProdMode, inject, signal, ViewEncapsulation,
+} from '@angular/core';
 import { DxMapModule, type DxMapTypes } from 'devextreme-angular/ui/map';
-import { DxSelectBoxModule, DxSelectBoxTypes } from 'devextreme-angular/ui/select-box';
+import { DxSelectBoxModule } from 'devextreme-angular/ui/select-box';
+import type { DxSelectBoxTypes } from 'devextreme-angular/ui/select-box';
 import 'devextreme/ui/map/openlayers';
 import type OpenLayersMap from 'ol/Map.js';
 import type LineString from 'ol/geom/LineString.js';
@@ -57,11 +60,15 @@ if (!/localhost/.test(document.location.host)) {
   imports: [DxMapModule, DxSelectBoxModule],
 })
 export class AppComponent {
-  markers: DxMapTypes.Properties['markers'];
+  private readonly service = inject(Service);
 
-  routes: DxMapTypes.Properties['routes'];
+  readonly markers: DxMapTypes.Properties['markers'] = this.service.getMarkers().map((marker) => (marker.iconSrc
+    ? { ...marker, onClick: this.onMarkerClick }
+    : marker));
 
-  tileServer: DxMapTypes.OsmTileServerConfig = {
+  readonly routes = signal<DxMapTypes.Properties['routes']>(this.service.getRoutes());
+
+  readonly tileServer: DxMapTypes.OsmTileServerConfig = {
     // Demo only: tiles are served under Developer Express Inc's Stadia Maps subscription via domain-based authentication.
     // This configuration will not work on your domain. Configure your own tile provider here.
     url: 'https://tiles-eu.stadiamaps.com/tiles/alidade_bright/{z}/{x}/{y}.png',
@@ -71,16 +78,9 @@ export class AppComponent {
     maxZoom: 20,
   };
 
-  calculateRoute = calculateRoute;
+  readonly calculateRoute = calculateRoute;
 
-  constructor(service: Service) {
-    this.markers = service.getMarkers().map((marker) => (marker.iconSrc
-      ? { ...marker, onClick: this.onMarkerClick }
-      : marker));
-    this.routes = service.getRoutes();
-  }
-
-  onMarkerClick({ tooltip }: DxMapTypes.MarkerClickEvent) {
+  private onMarkerClick({ tooltip }: DxMapTypes.MarkerClickEvent) {
     tooltip?.option({
       showTitle: true,
       showCloseButton: true,
@@ -102,16 +102,12 @@ export class AppComponent {
   }
 
   setMode({ value }: DxSelectBoxTypes.ValueChangedEvent) {
-    this.routes = this.routes.map((route) => ({ ...route, mode: value }));
+    this.routes.update((routes) => routes.map((route) => ({ ...route, mode: value })));
   }
 
   selectColor({ value }: DxSelectBoxTypes.ValueChangedEvent) {
-    this.routes = this.routes.map((route) => ({ ...route, color: value }));
+    this.routes.update((routes) => routes.map((route) => ({ ...route, color: value })));
   }
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

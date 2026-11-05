@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, computed, input } from '@angular/core';
 import { Vehicle } from '../app.service';
 
 @Component({
@@ -6,11 +6,7 @@ import { Vehicle } from '../app.service';
   templateUrl: './license-info.component.html',
 })
 export class LicenseInfo {
-  vehicleLink = '';
+  readonly vehicle = input.required<Vehicle>();
 
-  @Input() vehicle!: Vehicle;
-
-  ngOnChanges(): void {
-    this.vehicleLink = `https://${this.vehicle.Source}`;
-  }
+  readonly vehicleLink = computed(() => `https://${this.vehicle().Source}`);
 }

@@ -1,7 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import { Component, enableProdMode, inject } from '@angular/core';
 import { DxPolarChartModule } from 'devextreme-angular';
-import { Coordinate, Service } from './app.service';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -17,15 +17,7 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  coordinates: Coordinate[];
-
-  constructor(service: Service) {
-    this.coordinates = service.getCoordinates();
-  }
+  readonly coordinates = inject(Service).getCoordinates();
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

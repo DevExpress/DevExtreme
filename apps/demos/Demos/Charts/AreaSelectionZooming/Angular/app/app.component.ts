@@ -1,9 +1,11 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, ViewChild, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import {
+  Component, enableProdMode, inject, viewChild,
+} from '@angular/core';
 import { DxChartModule, DxChartComponent, DxButtonModule } from 'devextreme-angular';
 import type { DxChartTypes } from 'devextreme-angular/ui/chart';
 
-import { Service, BirthLife } from './app.service';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -20,16 +22,12 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  @ViewChild(DxChartComponent, { static: false }) component: DxChartComponent;
+  private readonly component = viewChild.required(DxChartComponent);
 
-  data: BirthLife[];
-
-  constructor(service: Service) {
-    this.data = service.getData();
-  }
+  readonly data = inject(Service).getData();
 
   resetZoom() {
-    this.component.instance.resetVisualRange();
+    this.component().instance.resetVisualRange();
   }
 
   customizeTooltip(pointInfo: DxChartTypes.CommonPointInfo) {
@@ -40,8 +38,4 @@ export class AppComponent {
   }
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

@@ -19,11 +19,7 @@ const AzureOpenAIConfig = {
 
 @Injectable()
 export class AiService {
-  chatService: AzureOpenAI;
-
-  constructor() {
-    this.chatService = new AzureOpenAI(AzureOpenAIConfig);
-  }
+  private readonly chatService = new AzureOpenAI(AzureOpenAIConfig);
 
   async getAIResponse(messages: AIMessage[]): Promise<AIResponse> {
     const params = {

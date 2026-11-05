@@ -1,5 +1,5 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import { Component, enableProdMode } from '@angular/core';
 import { HubConnectionBuilder, HttpTransportType } from '@aspnet/signalr';
 import { DxSchedulerModule } from 'devextreme-angular';
 import * as AspNetData from 'devextreme-aspnet-data-nojquery';
@@ -60,15 +60,11 @@ connection
   ],
 })
 export class AppComponent {
-  store1: AspNetData.CustomStore = store1;
+  readonly store1 = store1;
 
-  store2: AspNetData.CustomStore = store2;
+  readonly store2 = store2;
 
-  currentDate = new Date(2021, 3, 27);
+  readonly currentDate = new Date(2021, 3, 27);
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

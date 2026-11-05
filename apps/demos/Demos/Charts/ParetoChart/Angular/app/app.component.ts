@@ -1,7 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import { Component, enableProdMode, inject } from '@angular/core';
 import { DxChartModule } from 'devextreme-angular';
-import { Service, ComplaintsWithPercent } from './app.service';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -17,13 +17,9 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  dataSource: ComplaintsWithPercent[];
+  readonly dataSource = inject(Service).getComplaintsData();
 
-  constructor(service: Service) {
-    this.dataSource = service.getComplaintsData();
-  }
-
-  customizeTooltip = ({ points, argumentText }) => ({
+  readonly customizeTooltip = ({ points, argumentText }) => ({
     html: `<div><div class='tooltip-header'>${
       argumentText}</div>`
                 + '<div class=\'tooltip-body\'><div class=\'series-name\'>'
@@ -37,11 +33,7 @@ export class AppComponent {
                 + '% </div></div></div>',
   });
 
-  customizeLabelText = ({ valueText }) => `${valueText}%`;
+  readonly customizeLabelText = ({ valueText }) => `${valueText}%`;
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

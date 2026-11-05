@@ -1,4 +1,4 @@
-export type KarmaEnvironment = 'client' | 'server' | 'hydration';
+export type KarmaEnvironment = 'client' | 'server' | 'hydration' | 'zone' | 'zoneless';
 
 export interface EnvironmentConfig {
   shimPath: string;
@@ -13,6 +13,12 @@ export const ENVIRONMENT_CONFIGS: Record<KarmaEnvironment, EnvironmentConfig> = 
   },
   hydration: {
     shimPath: 'karma.hydration.test.shim.js',
+  },
+  zone: {
+    shimPath: 'karma.zone.test.shim.js',
+  },
+  zoneless: {
+    shimPath: 'karma.zoneless.test.shim.js',
   },
 };
 

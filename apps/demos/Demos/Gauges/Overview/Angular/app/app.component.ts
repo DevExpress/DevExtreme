@@ -1,5 +1,5 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import { Component, enableProdMode, signal } from '@angular/core';
 import { DxCircularGaugeModule, DxLinearGaugeModule, DxSliderModule } from 'devextreme-angular';
 
 if (!/localhost/.test(document.location.host)) {
@@ -19,13 +19,9 @@ if (!/localhost/.test(document.location.host)) {
 })
 
 export class AppComponent {
-  speedValue = 40;
+  readonly speedValue = signal(40);
 
-  color = '#f05b41';
+  readonly color = '#f05b41';
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

@@ -1,9 +1,9 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import { Component, enableProdMode, inject } from '@angular/core';
 import * as AspNetData from 'devextreme-aspnet-data-nojquery';
 import { DataSourceOptions } from 'devextreme-angular/common/data';
 import { DxDataGridModule, type DxDataGridTypes } from 'devextreme-angular/ui/data-grid';
-import { Priority, Service } from './app.service';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -20,34 +20,27 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  dataSource: DataSourceOptions;
+  private readonly url = 'https://js.devexpress.com/Demos/NetCore/api/DnDBetweenGrids';
 
-  priorities: Priority[];
+  private readonly tasksStore = AspNetData.createStore({
+    key: 'ID',
+    loadUrl: `${this.url}/Tasks`,
+    updateUrl: `${this.url}/UpdateTask`,
+    onBeforeSend(method, ajaxOptions) {
+      ajaxOptions.xhrFields = { withCredentials: true };
+    },
+  });
 
-  tasksStore: AspNetData.CustomStore;
+  readonly dataSource: DataSourceOptions = {
+    store: this.tasksStore,
+    reshapeOnPush: true,
+  };
 
-  url = 'https://js.devexpress.com/Demos/NetCore/api/DnDBetweenGrids';
+  readonly priorities = inject(Service).getPriorities();
 
-  statuses = [1, 2];
+  readonly statuses = [1, 2];
 
-  constructor(service: Service) {
-    this.priorities = service.getPriorities();
-    this.tasksStore = AspNetData.createStore({
-      key: 'ID',
-      loadUrl: `${this.url}/Tasks`,
-      updateUrl: `${this.url}/UpdateTask`,
-      onBeforeSend(method, ajaxOptions) {
-        ajaxOptions.xhrFields = { withCredentials: true };
-      },
-    });
-
-    this.dataSource = {
-      store: this.tasksStore,
-      reshapeOnPush: true,
-    };
-  }
-
-  onAdd = (e: DxDataGridTypes.RowDraggingAddEvent) => {
+  readonly onAdd = (e: DxDataGridTypes.RowDraggingAddEvent) => {
     const key = e.itemData.ID;
     const values = { Status: e.toData };
 
@@ -59,8 +52,4 @@ export class AppComponent {
   };
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

@@ -2,7 +2,7 @@
 <div id="gauge-demo">
   <dx-bar-gauge
     id="gauge"
-    [values]="getBasicColors(currentColor)"
+    [values]="basicColors()"
     [startValue]="0"
     [endValue]="255"
     [palette]="['#ff0000', '#00ff00', '#0000ff']"
@@ -20,6 +20,6 @@
       [(value)]="currentColor"
     >
     </dx-select-box>
-    <div class="color-box" [style.backgroundColor]="currentColor"></div>
+    <div class="color-box" [style.backgroundColor]="currentColor()"></div>
   </div>
 </div>

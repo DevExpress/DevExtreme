@@ -3,15 +3,15 @@
     <span>Use voice recognition (speech to text)</span>
     <dx-speech-to-text
       id="speech-to-text"
-      [class.animation-disabled]="!animation"
-      [class.custom-button]="displayMode === 'Custom'"
-      [startText]="startText"
-      [stopText]="stopText"
-      [stylingMode]="stylingMode"
-      [type]="type"
-      [hint]="hint"
-      [disabled]="disabled"
-      [speechRecognitionConfig]="speechRecognitionConfig"
+      [class.animation-disabled]="!animation()"
+      [class.custom-button]="displayMode() === 'Custom'"
+      [startText]="startText()"
+      [stopText]="stopText()"
+      [stylingMode]="stylingMode()"
+      [type]="type()"
+      [hint]="hint()"
+      [disabled]="disabled()"
+      [speechRecognitionConfig]="speechRecognitionConfig()"
       (onStartClick)="onStartClick()"
       (onResult)="onResult($event)"
       (onEnd)="onEnd()"
@@ -26,7 +26,7 @@
     ></dx-text-area>
     <dx-button
       text="Clear"
-      [disabled]="textAreaValue === ''"
+      [disabled]="textAreaValue() === ''"
       (onClick)="onClearButtonClick()"
     ></dx-button>
   </div>
@@ -48,7 +48,7 @@
         [dataSource]="stylingModes"
         displayExpr="displayValue"
         valueExpr="value"
-        [disabled]="displayMode === 'Custom'"
+        [disabled]="displayMode() === 'Custom'"
         [inputAttr]="{ 'aria-label': 'Styling Mode' }"
       ></dx-select-box>
     </div>
@@ -59,7 +59,7 @@
         [dataSource]="types"
         displayExpr="displayValue"
         valueExpr="value"
-        [disabled]="displayMode === 'Custom'"
+        [disabled]="displayMode() === 'Custom'"
         [inputAttr]="{ 'aria-label': 'Type' }"
       ></dx-select-box>
     </div>
@@ -74,21 +74,14 @@
         [(value)]="language"
         [dataSource]="languages"
         [inputAttr]="{ 'aria-label': 'Language' }"
-        (onValueChanged)="updateSpeechRecognitionConfig()"
       ></dx-select-box>
     </div>
     <div class="switch">
-      <dx-switch
-        [(value)]="interimResults"
-        (onValueChanged)="updateSpeechRecognitionConfig()"
-      ></dx-switch>
+      <dx-switch [(value)]="interimResults"></dx-switch>
       <span>Interim Results</span>
     </div>
     <div class="switch">
-      <dx-switch
-        [(value)]="continuous"
-        (onValueChanged)="updateSpeechRecognitionConfig()"
-      ></dx-switch>
+      <dx-switch [(value)]="continuous"></dx-switch>
       <span>Continuous Recognition</span>
     </div>
     <div class="option-separator"></div>

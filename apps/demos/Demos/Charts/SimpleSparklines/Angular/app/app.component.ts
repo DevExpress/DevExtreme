@@ -1,7 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import { Component, enableProdMode, inject } from '@angular/core';
 import { DxSparklineModule } from 'devextreme-angular';
-import { CostInfo, Service } from './app.service';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -17,24 +17,15 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  oilCosts: CostInfo[];
+  private readonly service = inject(Service);
 
-  goldCosts: CostInfo[];
+  readonly oilCosts = this.service.getOilCosts();
 
-  silverCosts: CostInfo[];
+  readonly goldCosts = this.service.getGoldCosts();
 
-  years: number[];
+  readonly silverCosts = this.service.getSilverCosts();
 
-  constructor(service: Service) {
-    this.oilCosts = service.getOilCosts();
-    this.goldCosts = service.getGoldCosts();
-    this.silverCosts = service.getSilverCosts();
-    this.years = [2021, 2022, 2023];
-  }
+  readonly years = [2021, 2022, 2023];
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

@@ -1,10 +1,10 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import {
   Component,
-  ViewChild,
   enableProdMode,
-  AfterViewInit,
-  provideZoneChangeDetection,
+  inject,
+  viewChild,
+  type AfterViewInit,
 } from '@angular/core';
 import {
   DxFormModule,
@@ -14,7 +14,7 @@ import {
 import 'devextreme/ui/select_box';
 import 'devextreme/ui/text_area';
 
-import { Employee, Service } from './app.service';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -32,63 +32,45 @@ if (!/localhost/.test(document.location.host)) {
 })
 
 export class AppComponent implements AfterViewInit {
-  @ViewChild(DxFormComponent, { static: false }) form: DxFormComponent;
+  private readonly service = inject(Service);
 
-  employee: Employee;
+  private readonly form = viewChild.required(DxFormComponent);
 
-  positions: string[];
+  readonly employee = this.service.getEmployee();
 
-  nameEditorOptions: Object;
+  readonly nameEditorOptions: Object = { disabled: true };
 
-  positionEditorOptions: Object;
+  readonly positionEditorOptions: Object = { items: this.service.getPositions(), searchEnabled: true, value: '' };
 
-  validationRules: Object;
+  readonly validationRules: Object = {
+    position: [
+      { type: 'required', message: 'Position is required.' },
+    ],
+    hireDate: [
+      { type: 'required', message: 'Hire Date is required.' },
+    ],
+  };
 
-  hireDateEditorOptions: Object;
+  readonly hireDateEditorOptions: Object = { width: '100%', value: null };
 
-  birthDateEditorOptions: Object;
+  readonly birthDateEditorOptions: Object = { width: '100%', disabled: true };
 
-  notesEditorOptions: Object;
+  readonly notesEditorOptions: Object = { height: 90, maxLength: 200 };
 
-  phoneEditorOptions: Object;
+  readonly phoneEditorOptions: Object = { mask: '(X00) 000-0000', maskRules: { X: /[02-9]/ } };
 
-  labelTemplates: { name: string; icon: string }[];
-
-  constructor(service: Service) {
-    this.employee = service.getEmployee();
-
-    this.nameEditorOptions = { disabled: true };
-    this.positionEditorOptions = { items: service.getPositions(), searchEnabled: true, value: '' };
-    this.validationRules = {
-      position: [
-        { type: 'required', message: 'Position is required.' },
-      ],
-      hireDate: [
-        { type: 'required', message: 'Hire Date is required.' },
-      ],
-    };
-    this.hireDateEditorOptions = { width: '100%', value: null };
-    this.birthDateEditorOptions = { width: '100%', disabled: true };
-    this.notesEditorOptions = { height: 90, maxLength: 200 };
-    this.phoneEditorOptions = { mask: '(X00) 000-0000', maskRules: { X: /[02-9]/ } };
-
-    this.labelTemplates = [
-      { name: 'name', icon: 'dx-icon-user' },
-      { name: 'position', icon: 'dx-icon-info' },
-      { name: 'date', icon: 'dx-icon-event' },
-      { name: 'address', icon: 'dx-icon-home' },
-      { name: 'phone', icon: 'dx-icon-tel' },
-      { name: 'email', icon: 'dx-icon-email' },
-    ];
-  }
+  readonly labelTemplates: { name: string; icon: string }[] = [
+    { name: 'name', icon: 'dx-icon-user' },
+    { name: 'position', icon: 'dx-icon-info' },
+    { name: 'date', icon: 'dx-icon-event' },
+    { name: 'address', icon: 'dx-icon-home' },
+    { name: 'phone', icon: 'dx-icon-tel' },
+    { name: 'email', icon: 'dx-icon-email' },
+  ];
 
   ngAfterViewInit() {
-    this.form.instance.validate();
+    this.form().instance.validate();
   }
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

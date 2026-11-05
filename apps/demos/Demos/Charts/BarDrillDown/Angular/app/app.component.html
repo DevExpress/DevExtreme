@@ -1,7 +1,7 @@
 <dx-chart
   id="chart"
-  [class]="isFirstLevel ? 'pointer-on-bars' : ''"
-  [dataSource]="dataSource"
+  [class]="isFirstLevel() ? 'pointer-on-bars' : ''"
+  [dataSource]="dataSource()"
   (onPointClick)="onPointClick($event)"
   title="The Most Populated Countries by Continents"
   [customizePoint]="customizePoint"
@@ -14,7 +14,7 @@
   class="button-container"
   text="Back"
   icon="chevronleft"
-  [visible]="!isFirstLevel"
+  [visible]="!isFirstLevel()"
   (onClick)="onButtonClick()"
 >
 </dx-button>

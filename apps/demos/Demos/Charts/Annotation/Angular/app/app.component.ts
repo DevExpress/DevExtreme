@@ -1,8 +1,8 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import { Component, enableProdMode, inject } from '@angular/core';
 import { DxChartModule } from 'devextreme-angular';
 
-import { Data, Service } from './app.service';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -18,21 +18,17 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  dataSource: Data[];
+  readonly dataSource = inject(Service).getData();
 
-  appleWWDCDate = new Date(2017, 5, 5);
+  readonly appleWWDCDate = new Date(2017, 5, 5);
 
-  appleTVAnnouncementDate = new Date(2019, 2, 25);
+  readonly appleTVAnnouncementDate = new Date(2019, 2, 25);
 
-  watchReleaseDate = new Date(2015, 3, 24);
+  readonly watchReleaseDate = new Date(2015, 3, 24);
 
-  xReleaseDate = new Date(2017, 10, 3);
+  readonly xReleaseDate = new Date(2017, 10, 3);
 
-  seReleaseDate = new Date(2016, 2, 31);
-
-  constructor(service: Service) {
-    this.dataSource = service.getData();
-  }
+  readonly seReleaseDate = new Date(2016, 2, 31);
 
   customizeTooltip(e) {
     return {
@@ -41,8 +37,4 @@ export class AppComponent {
   }
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

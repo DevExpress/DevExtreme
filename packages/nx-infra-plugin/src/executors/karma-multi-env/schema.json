@@ -12,7 +12,7 @@
       "type": "array",
       "items": {
         "type": "string",
-        "enum": ["client", "server", "hydration"]
+        "enum": ["client", "server", "hydration", "zone", "zoneless"]
       },
       "default": ["client", "server", "hydration"]
     },

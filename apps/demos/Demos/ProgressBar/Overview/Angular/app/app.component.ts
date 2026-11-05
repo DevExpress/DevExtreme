@@ -1,6 +1,6 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import {
-  ChangeDetectorRef, Component, Pipe, PipeTransform, enableProdMode, provideZoneChangeDetection,
+  Component, Pipe, type PipeTransform, enableProdMode, signal,
 } from '@angular/core';
 import { DxButtonModule, DxProgressBarModule } from 'devextreme-angular';
 
@@ -26,27 +26,25 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  buttonText = 'Start progress';
+  readonly buttonText = signal('Start progress');
 
-  inProgress = false;
+  private inProgress = false;
 
-  seconds = 10;
+  readonly seconds = signal(10);
 
-  maxValue = 10;
+  readonly maxValue = 10;
 
-  intervalId: number;
-
-  constructor(private changeDetectorRef: ChangeDetectorRef) {}
+  private intervalId: number;
 
   onButtonClick() {
     if (this.inProgress) {
-      this.buttonText = 'Continue progress';
+      this.buttonText.set('Continue progress');
       clearInterval(this.intervalId);
     } else {
-      this.buttonText = 'Stop progress';
+      this.buttonText.set('Stop progress');
 
-      if (this.seconds === 0) {
-        this.seconds = 10;
+      if (this.seconds() === 0) {
+        this.seconds.set(10);
       }
 
       this.intervalId = window.setInterval(() => this.timer(), 1000);
@@ -54,24 +52,18 @@ export class AppComponent {
     this.inProgress = !this.inProgress;
   }
 
-  timer() {
-    this.seconds -= 1;
-    if (this.seconds === 0) {
-      this.buttonText = 'Restart progress';
+  private timer() {
+    this.seconds.update((seconds) => seconds - 1);
+    if (this.seconds() === 0) {
+      this.buttonText.set('Restart progress');
       this.inProgress = !this.inProgress;
       clearInterval(this.intervalId);
     }
-
-    this.changeDetectorRef.detectChanges();
   }
 
-  format(ratio) {
+  format(ratio: number) {
     return `Loading: ${ratio * 100}%`;
   }
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

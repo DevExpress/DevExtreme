@@ -1,6 +1,6 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import {
-  ChangeDetectorRef, Component, ViewChild, enableProdMode, provideZoneChangeDetection,
+  Component, computed, enableProdMode, inject, signal, viewChild,
 } from '@angular/core';
 import {
   DxDataGridModule,
@@ -9,7 +9,7 @@ import {
 import { DxButtonTypes } from 'devextreme-angular/ui/button';
 import { query } from 'devextreme-angular/common/data';
 import { DxSelectBoxModule, DxSelectBoxTypes } from 'devextreme-angular/ui/select-box';
-import { Service, Order } from './app.service';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -26,15 +26,19 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  @ViewChild(DxDataGridComponent, { static: false }) dataGrid: DxDataGridComponent;
+  private readonly dataGrid = viewChild.required(DxDataGridComponent);
 
-  orders: Order[];
+  readonly orders = inject(Service).getOrders();
 
-  totalCount: number;
+  readonly expandAll = signal(true);
 
-  expandAll = true;
+  readonly groupField = signal('CustomerStoreState');
 
-  groupingValues = [{
+  readonly totalCount = computed(() => query(this.orders)
+    .groupBy(this.groupField())
+    .toArray().length);
+
+  readonly groupingValues = [{
     value: 'CustomerStoreState',
     text: 'Grouping by State',
   }, {
@@ -42,51 +46,29 @@ export class AppComponent {
     text: 'Grouping by Employee',
   }];
 
-  refreshButtonOptions: DxButtonTypes.Properties = {
+  readonly refreshButtonOptions: DxButtonTypes.Properties = {
     icon: 'refresh',
     text: 'Refresh',
     onClick: () => {
-      this.dataGrid.instance.refresh();
+      this.dataGrid().instance.refresh();
     },
   };
 
-  toggleButtonOptions: DxButtonTypes.Properties = {
-    text: this.expandAll ? 'Collapse All' : 'Expand All',
+  readonly toggleButtonOptions = computed<DxButtonTypes.Properties>(() => ({
+    text: this.expandAll() ? 'Collapse All' : 'Expand All',
     width: 136,
     onClick: () => {
-      this.toggleExpandAll();
-      this.toggleButtonOptions = {
-        ...this.toggleButtonOptions,
-        text: this.expandAll ? 'Collapse All' : 'Expand All',
-      };
-      this.changeDetectorRef.detectChanges();
+      this.expandAll.update((expandAll) => !expandAll);
     },
-  };
-
-  constructor(service: Service, private changeDetectorRef: ChangeDetectorRef) {
-    this.orders = service.getOrders();
-    this.totalCount = this.getGroupCount('CustomerStoreState');
-  }
-
-  getGroupCount(groupField: string) {
-    return query(this.orders)
-      .groupBy(groupField)
-      .toArray().length;
-  }
+  }));
 
   toggleGroupColumn(e: DxSelectBoxTypes.ValueChangedEvent) {
-    this.dataGrid.instance.clearGrouping();
-    this.dataGrid.instance.columnOption(e.value, 'groupIndex', 0);
-    this.totalCount = this.getGroupCount(e.value);
-  }
+    const { instance } = this.dataGrid();
 
-  toggleExpandAll() {
-    this.expandAll = !this.expandAll;
+    instance.clearGrouping();
+    instance.columnOption(e.value, 'groupIndex', 0);
+    this.groupField.set(e.value);
   }
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

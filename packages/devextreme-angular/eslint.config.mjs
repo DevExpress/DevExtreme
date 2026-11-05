@@ -59,7 +59,7 @@ export default [
     rules: {
       'import/no-cycle': 'warn',
       'no-param-reassign': 'warn',
-      'no-underscore-dangle': 'warn',
+      'no-underscore-dangle': 'off',
       'spellcheck/spell-checker': [1, {
         lang: 'en_US',
         comments: false,

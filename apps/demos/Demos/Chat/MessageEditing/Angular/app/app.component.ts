@@ -1,8 +1,9 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import {
+  Component, enableProdMode, inject, signal,
+} from '@angular/core';
 import { DxChatModule, DxSelectBoxModule } from 'devextreme-angular';
 import { type DxChatTypes } from 'devextreme-angular/ui/chat';
-import { DataSource } from 'devextreme-angular/common/data';
 import { AppService } from './app.service';
 
 if (!document.location.host.includes('localhost')) {
@@ -19,29 +20,23 @@ if (!document.location.host.includes('localhost')) {
   ],
 })
 export class AppComponent {
-  currentUser: DxChatTypes.User;
+  private readonly appService = inject(AppService);
 
-  allowUpdating = true;
+  readonly currentUser = this.appService.currentUser;
 
-  allowDeleting = true;
+  readonly dataSource = this.appService.dataSource;
 
-  editingStrategies = [
+  readonly allowEditingLabel = this.appService.allowEditingLabel;
+
+  readonly allowDeletingLabel = this.appService.allowDeletingLabel;
+
+  readonly editingStrategies = [
     { key: 'enabled', text: 'Enabled' },
     { key: 'disabled', text: 'Disabled' },
     { key: 'custom', text: 'Only the last message (custom)' },
   ];
 
-  dataSource: DataSource;
-
-  selectedEditingStrategy = 'enabled';
-
-  selectedDeletingStrategy = 'enabled';
-
-  allowEditingLabel = this.appService.allowEditingLabel;
-
-  allowDeletingLabel = this.appService.allowDeletingLabel;
-
-  editingStrategy: Record<string, any> = {
+  private readonly editingStrategy: Record<string, any> = {
     enabled: true,
     disabled: false,
     custom: ({ component, message }: any) => {
@@ -56,10 +51,13 @@ export class AppComponent {
     },
   };
 
-  constructor(private readonly appService: AppService) {
-    [this.currentUser] = this.appService.getUsers();
-    this.dataSource = this.appService.dataSource;
-  }
+  readonly allowUpdating = signal(this.editingStrategy.enabled);
+
+  readonly allowDeleting = signal(this.editingStrategy.enabled);
+
+  readonly selectedEditingStrategy = signal('enabled');
+
+  readonly selectedDeletingStrategy = signal('enabled');
 
   onMessageEntered(e: DxChatTypes.MessageEnteredEvent): void {
     this.appService.onMessageEntered(e);
@@ -74,19 +72,18 @@ export class AppComponent {
   }
 
   onAllowUpdatingChange(event: any): void {
-    this.allowUpdating = this.editingStrategy[event.value];
-    this.selectedEditingStrategy = event.value;
+    this.allowUpdating.set(this.editingStrategy[event.value]);
+    this.selectedEditingStrategy.set(event.value);
   }
 
   onAllowDeletingChange(event: any): void {
-    this.allowDeleting = this.editingStrategy[event.value];
-    this.selectedDeletingStrategy = event.value;
+    this.allowDeleting.set(this.editingStrategy[event.value]);
+    this.selectedDeletingStrategy.set(event.value);
   }
 }
 
 bootstrapApplication(AppComponent, {
   providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
     AppService,
   ],
 });

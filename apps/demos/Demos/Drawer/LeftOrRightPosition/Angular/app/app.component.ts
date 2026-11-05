@@ -1,11 +1,11 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import {
-  ChangeDetectorRef, Component, ViewChild, enableProdMode, provideZoneChangeDetection,
+  Component, enableProdMode, inject, signal,
 } from '@angular/core';
 import { DxListModule, DxRadioGroupModule, DxToolbarModule } from 'devextreme-angular';
-import { DxDrawerModule, DxDrawerComponent } from 'devextreme-angular/ui/drawer';
+import { DxDrawerModule } from 'devextreme-angular/ui/drawer';
 import type { DxDrawerTypes } from 'devextreme-angular/ui/drawer';
-import { List, Service } from './app.service';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -25,47 +25,37 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  @ViewChild(DxDrawerComponent, { static: false }) drawer: DxDrawerComponent;
+  private readonly service = inject(Service);
 
-  navigation: List[];
+  readonly navigation = this.service.getNavigationList();
 
-  text: string;
+  readonly text = this.service.getContent();
 
-  showSubmenuModes: DxDrawerTypes.RevealMode[] = ['slide', 'expand'];
+  readonly showSubmenuModes: DxDrawerTypes.RevealMode[] = ['slide', 'expand'];
 
-  positionModes: DxDrawerTypes.PanelLocation[] = ['left', 'right'];
+  readonly positionModes: DxDrawerTypes.PanelLocation[] = ['left', 'right'];
 
-  showModes: DxDrawerTypes.OpenedStateMode[] = ['push', 'shrink', 'overlap'];
+  readonly showModes: DxDrawerTypes.OpenedStateMode[] = ['push', 'shrink', 'overlap'];
 
-  selectedOpenMode: DxDrawerTypes.OpenedStateMode = 'shrink';
+  readonly selectedOpenMode = signal<DxDrawerTypes.OpenedStateMode>('shrink');
 
-  selectedPosition: DxDrawerTypes.PanelLocation = 'left';
+  readonly selectedPosition = signal<DxDrawerTypes.PanelLocation>('left');
 
-  selectedRevealMode: DxDrawerTypes.RevealMode = 'slide';
+  readonly selectedRevealMode = signal<DxDrawerTypes.RevealMode>('slide');
 
-  isDrawerOpen = true;
+  readonly isDrawerOpen = signal(true);
 
-  constructor(service: Service, private changeDetectorRef: ChangeDetectorRef) {
-    this.text = service.getContent();
-    this.navigation = service.getNavigationList();
-  }
-
-  toolbarContent = [{
+  readonly toolbarContent = [{
     widget: 'dxButton',
     location: 'before',
     options: {
       icon: 'menu',
       stylingMode: 'text',
       onClick: () => {
-        this.isDrawerOpen = !this.isDrawerOpen;
-        this.changeDetectorRef.detectChanges();
+        this.isDrawerOpen.update((isOpen) => !isOpen);
       },
     },
   }];
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);
