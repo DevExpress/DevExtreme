@@ -15,11 +15,10 @@ import { getBoundingRect } from '@js/core/utils/position';
 import { getOuterWidth } from '@js/core/utils/size';
 import { setWidth } from '@js/core/utils/style';
 import { isDefined } from '@js/core/utils/type';
-import Scrollable from '@js/ui/scroll_view/ui.scrollable';
 import type { EngineEvent } from '@ts/events/core/events_engine';
 import eventsEngine from '@ts/events/core/events_engine';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
-import type { DataChange } from '@ts/grids/grid_core/data_controller/types';
+import type { DataChange, ProcessedItem } from '@ts/grids/grid_core/data_controller/types';
 import type { EditorFactory } from '@ts/grids/grid_core/editor_factory/editor_factory';
 import { CLASSES as MASTER_DETAIL_CLASSES } from '@ts/grids/grid_core/master_detail/const';
 import type { ValidatingEditorFactoryExtension } from '@ts/grids/grid_core/validating/types';
@@ -28,6 +27,7 @@ import type {
   VirtualScrollingResizingController,
   VirtualScrollingRowsViewExtension,
 } from '@ts/grids/grid_core/virtual_scrolling/types';
+import Scrollable from '@ts/ui/scroll_view/scrollable';
 
 import type { ColumnHeadersView } from '../column_headers/column_headers';
 import type {
@@ -47,10 +47,16 @@ import type { ColumnsView } from '../views/columns_view';
 import { normalizeWidth } from '../views/columns_view';
 import type { RowsView } from '../views/rows_view';
 import type {
+  CellRenderOptions,
   GroupCellOptions,
+  HintColumn,
   RowRenderOptions,
   RowsViewScrollEvent,
   SummaryRowsViewExtension,
+  TableRenderOptions,
+  ViewCellOptions,
+  ViewDataChange,
+  ViewRow,
 } from '../views/types';
 import { CLASSES, COMMAND_TRANSPARENT } from './const';
 import type {
@@ -95,7 +101,7 @@ const baseFixedColumns = <T extends ModuleType<ColumnsView>>(
 
   protected _isFixedColumns!: boolean;
 
-  protected _fixedTableElement: any;
+  protected _fixedTableElement?: dxElementWrapper | null;
 
   public init(): void {
     super.init();
@@ -103,27 +109,30 @@ const baseFixedColumns = <T extends ModuleType<ColumnsView>>(
     this._isFixedColumns = false;
   }
 
-  protected _createCol(column) {
-    return super._createCol(column).toggleClass(FIXED_COL_CLASS, !!(this._isFixedTableRendering && (column.fixed || column.command && column.command !== COMMAND_TRANSPARENT)));
+  protected _createCol(column: Column): dxElementWrapper {
+    return super._createCol(column).toggleClass(
+      FIXED_COL_CLASS,
+      !!(this._isFixedTableRendering
+        && (column.fixed || (column.command && column.command !== COMMAND_TRANSPARENT))),
+    );
   }
 
-  private isIndicesArray(arr): boolean {
-    return Array.isArray(arr) && arr.length > 0;
-  }
-
-  private _correctColumnIndicesForFixedColumns(fixedColumns, change) {
+  private _correctColumnIndicesForFixedColumns(
+    fixedColumns: Column[],
+    change: ViewDataChange | undefined,
+  ): void {
     const columnIndicesArray = change?.columnIndices;
-    if (!this.isIndicesArray(columnIndicesArray)) {
+    if (!change || !columnIndicesArray?.length) {
       return;
     }
 
     const transparentColumnIndex = getTransparentColumnIndex(fixedColumns);
-    const transparentColspan = fixedColumns[transparentColumnIndex].colspan;
+    const transparentColspan: number = fixedColumns[transparentColumnIndex].colspan ?? 1;
     const transparentOffset = transparentColumnIndex + transparentColspan;
     const rowTypes = change?.items?.map(({ rowType }) => rowType);
 
     change.columnIndices = columnIndicesArray.map((columnIndices, idx) => {
-      if (!this.isIndicesArray(columnIndices)) {
+      if (!columnIndices?.length) {
         return columnIndices;
       }
 
@@ -133,7 +142,7 @@ const baseFixedColumns = <T extends ModuleType<ColumnsView>>(
         return [...columnIndices];
       }
 
-      return columnIndices.reduce((result, colIdx) => {
+      return columnIndices.reduce<number[]>((result, colIdx) => {
         switch (true) {
           case colIdx < transparentColumnIndex:
             result.push(colIdx);
@@ -150,71 +159,68 @@ const baseFixedColumns = <T extends ModuleType<ColumnsView>>(
     });
   }
 
-  private _partialUpdateFixedTable(fixedColumns, rows) {
+  private _partialUpdateFixedTable(fixedColumns: Column[], rows: ProcessedItem[]): void {
     const fixedTableElement = this._fixedTableElement;
+
+    if (!fixedTableElement) {
+      return;
+    }
+
     const $rows = this._getRowElementsCore(fixedTableElement);
     const $colgroup = fixedTableElement.children('colgroup');
 
     $colgroup.replaceWith(this._createColGroup(fixedColumns));
 
-    for (let i = 0; i < rows.length; i++) {
+    for (let i = 0; i < rows.length; i += 1) {
       this._partialUpdateFixedRow($($rows[i]), fixedColumns, rows[i]);
     }
   }
 
-  private _partialUpdateFixedRow($row, fixedColumns, row) {
-    const cellElements = $row.get(0).childNodes;
+  protected getFixedGroupCellOptions?(row: ViewRow, cellCount: number): GroupCellOptions;
+
+  private _partialUpdateFixedRow(
+    $row: dxElementWrapper,
+    fixedColumns: Column[],
+    row: ProcessedItem,
+  ): void {
+    const cellElements: NodeListOf<HTMLTableCellElement> = $row[0].childNodes;
     const transparentColumnIndex = getTransparentColumnIndex(fixedColumns);
     const transparentColumn = fixedColumns[transparentColumnIndex];
     const columnIndexOffset = this._columnsController.getColumnIndexOffset();
-    let groupCellOptions;
     let colIndex = columnIndexOffset + 1;
-    let { colspan } = transparentColumn;
+    let { colspan = 1 } = transparentColumn;
 
     if ($row.hasClass(MASTER_DETAIL_CLASSES.detailRow)) {
-      cellElements[0].setAttribute('colspan', this._columnsController.getVisibleColumns()?.length);
+      cellElements[0].setAttribute('colspan', String(this._columnsController.getVisibleColumns()?.length));
 
       return;
     }
 
-    if ($row.hasClass(VIEW_CLASSES.groupRow)) {
-      // @ts-expect-error RowsView's method
-      groupCellOptions = this._getGroupCellOptions({
-        row,
-        columns: this._columnsController.getVisibleColumns(),
-      });
+    const groupCellOptions = $row.hasClass(VIEW_CLASSES.groupRow)
+      ? this.getFixedGroupCellOptions?.(row, cellElements.length)
+      : undefined;
 
-      const hasSummary = row.summaryCells.length > 0;
-      if (hasSummary) {
-        // @ts-expect-error RowsView's method
-        const alignByColumnCellCount = this.getAlignByColumnCellCount(groupCellOptions.colspan, {
-          columns: this._columnsController.getVisibleColumns(),
-          row,
-          isFixed: true,
-        });
-
-        colspan = groupCellOptions.colspan - alignByColumnCellCount;
-      } else {
-        colspan = groupCellOptions.colspan - Math.max(0, cellElements.length - (groupCellOptions.columnIndex + 2));
-      }
+    if (groupCellOptions) {
+      colspan = groupCellOptions.colspan;
     }
 
-    for (let j = 0; j < cellElements.length; j++) {
-      const needUpdateColspan = groupCellOptions ? j === (groupCellOptions.columnIndex + 1) : j === transparentColumnIndex;
+    for (let j = 0; j < cellElements.length; j += 1) {
+      const needUpdateColspan = groupCellOptions
+        ? j === (groupCellOptions.columnIndex + 1)
+        : j === transparentColumnIndex;
 
-      cellElements[j].setAttribute('aria-colindex', colIndex);
+      cellElements[j].setAttribute('aria-colindex', String(colIndex));
 
       if (needUpdateColspan) {
-        cellElements[j].setAttribute('colspan', colspan);
+        cellElements[j].setAttribute('colspan', String(colspan));
         colIndex += colspan;
       } else {
-        colIndex++;
+        colIndex += 1;
       }
     }
   }
 
-  protected _renderTable(options) {
-    let $fixedTable;
+  protected _renderTable(options?: TableRenderOptions): dxElementWrapper {
     const fixedColumns = this.getFixedColumns();
 
     this._isFixedColumns = this.isFixedColumns();
@@ -222,81 +228,86 @@ const baseFixedColumns = <T extends ModuleType<ColumnsView>>(
 
     if (this._isFixedColumns) {
       const change = options?.change;
+      const items = change?.items;
       const $fixedDataRows = this._getRowElements(this._fixedTableElement);
-      const needPartialUpdate = change?.virtualColumnsScrolling && $fixedDataRows.length === change?.items?.length;
+      const isVirtualColumnsScrolling = !!change && 'virtualColumnsScrolling' in change
+        && change.virtualColumnsScrolling;
+      const needPartialUpdate = isVirtualColumnsScrolling
+        && $fixedDataRows.length === items?.length;
 
       this._isFixedTableRendering = true;
 
-      if (needPartialUpdate && this.option('scrolling.legacyMode') !== true) {
-        this._partialUpdateFixedTable(fixedColumns, options?.change?.items);
+      if (needPartialUpdate && items && this.option('scrolling.legacyMode') !== true) {
+        this._partialUpdateFixedTable(fixedColumns, items);
         this._isFixedTableRendering = false;
       } else {
         const columnIndices = change?.columnIndices;
 
         this._correctColumnIndicesForFixedColumns(fixedColumns, change);
 
-        $fixedTable = this._createTable(fixedColumns);
+        const $fixedTable = this._createTable(fixedColumns);
         this._renderRows($fixedTable, extend({}, options, { columns: fixedColumns }));
         this._updateContent($fixedTable, change, true);
 
-        if (columnIndices) {
+        if (change && columnIndices) {
           change.columnIndices = columnIndices;
         }
 
         this._isFixedTableRendering = false;
       }
     } else {
-      this._fixedTableElement && this._fixedTableElement.parent().remove();
+      this._fixedTableElement?.parent().remove();
       this._fixedTableElement = null;
     }
 
     return $table;
   }
 
-  protected _renderRow($table, options) {
-    let fixedCorrection;
+  protected _renderRow($table: dxElementWrapper, options: RowRenderOptions): void {
     let { cells } = options.row;
 
-    super._renderRow.apply(this, arguments as any);
+    super._renderRow($table, options);
 
     if (this._isFixedTableRendering && cells && cells.length) {
-      fixedCorrection = 0;
+      let fixedCorrection = 0;
       const fixedCells = options.row.cells || [];
       cells = cells.slice();
       options.row.cells = cells;
 
-      for (let i = 0; i < fixedCells.length; i++) {
-        if (fixedCells[i].column && fixedCells[i].column.command === COMMAND_TRANSPARENT) {
-          fixedCorrection = (fixedCells[i].column.colspan || 1) - 1;
-          continue;
+      for (let i = 0; i < fixedCells.length; i += 1) {
+        const fixedCell = fixedCells[i];
+
+        if (fixedCell.column && fixedCell.column.command === COMMAND_TRANSPARENT) {
+          fixedCorrection = (fixedCell.column.colspan ?? 1) - 1;
+        } else {
+          cells[i + fixedCorrection] = fixedCell;
         }
-        cells[i + fixedCorrection] = fixedCells[i];
       }
     }
   }
 
-  protected _createCell(options) {
-    const that = this;
+  protected _createCell(options: ViewCellOptions): dxElementWrapper {
     const { column } = options;
     const columnCommand = column && column.command;
     const { rowType } = options;
-    const $cell = super._createCell.apply(that, arguments as any);
-    let fixedColumns;
-    let prevFixedColumn;
-    let transparentColumnIndex;
+    const $cell = super._createCell(options);
+    const needFixedColumns = this._isFixedTableRendering || rowType === 'filter';
+    const fixedColumns = needFixedColumns ? this.getFixedColumns() : [];
+    const transparentColumnIndex = getTransparentColumnIndex(fixedColumns);
+    const prevFixedColumn = fixedColumns[transparentColumnIndex - 1];
 
-    if (that._isFixedTableRendering || rowType === 'filter') {
-      fixedColumns = that.getFixedColumns();
-      transparentColumnIndex = getTransparentColumnIndex(fixedColumns);
-      prevFixedColumn = fixedColumns[transparentColumnIndex - 1];
-    }
-
-    if (that._isFixedTableRendering) {
+    if (this._isFixedTableRendering) {
       if (columnCommand === COMMAND_TRANSPARENT) {
         $cell
           .addClass(POINTER_EVENTS_NONE_CLASS)
-          .toggleClass(FIRST_CELL_CLASS, transparentColumnIndex === 0 || prevFixedColumn && prevFixedColumn.command === 'expand')
-          .toggleClass(LAST_CELL_CLASS, fixedColumns.length && transparentColumnIndex === (fixedColumns.length - 1));
+          .toggleClass(
+            FIRST_CELL_CLASS,
+            transparentColumnIndex === 0 || (prevFixedColumn && prevFixedColumn.command === 'expand'),
+          )
+          .toggleClass(
+            LAST_CELL_CLASS,
+            !!fixedColumns.length && transparentColumnIndex === (fixedColumns.length - 1),
+          );
 
         if (rowType !== 'freeSpace') {
           gridCoreUtils.setEmptyText($cell);
@@ -306,8 +317,8 @@ const baseFixedColumns = <T extends ModuleType<ColumnsView>>(
       $cell.toggleClass(FIRST_CELL_CLASS, options.columnIndex === transparentColumnIndex);
     }
 
-    const isRowAltStyle = that.option('rowAlternationEnabled') && options.isAltRow;
-    const isSelectAllCell = that.option('selection.mode') === 'multiple' && options.columnIndex === 0 && options.rowType === 'header';
+    const isRowAltStyle = this.option('rowAlternationEnabled') && options.isAltRow;
+    const isSelectAllCell = this.option('selection.mode') === 'multiple' && options.columnIndex === 0 && options.rowType === 'header';
     // T823783, T852898, T865179, T875201, T1120812
     if (browser.mozilla && options.column.fixed && options.rowType !== 'group' && !isRowAltStyle && !isSelectAllCell) {
       $cell.addClass(FIXED_COL_CLASS);
@@ -316,8 +327,11 @@ const baseFixedColumns = <T extends ModuleType<ColumnsView>>(
     return $cell;
   }
 
-  protected _wrapTableInScrollContainer($table, isFixedTableRendering) {
-    const $scrollContainer = super._wrapTableInScrollContainer.apply(this, arguments as any);
+  protected _wrapTableInScrollContainer(
+    $table: dxElementWrapper,
+    isFixedTableRendering?: boolean,
+  ): dxElementWrapper {
+    const $scrollContainer = super._wrapTableInScrollContainer($table, isFixedTableRendering);
 
     if (this._isFixedTableRendering || isFixedTableRendering) {
       $scrollContainer.addClass(this.addWidgetPrefix(CLASSES.contentFixed));
@@ -326,9 +340,14 @@ const baseFixedColumns = <T extends ModuleType<ColumnsView>>(
     return $scrollContainer;
   }
 
-  protected _renderCellContent($cell, options) {
-    let isEmptyCell;
-    const { column } = options;
+  protected isEmptyGroupCell?(options: ViewCellOptions): boolean;
+
+  protected _renderCellContent(
+    $cell: dxElementWrapper,
+    options: ViewCellOptions,
+    renderOptions: CellRenderOptions,
+  ): void {
+    const { column }: { column: HintColumn } = options;
     const isFixedTableRendering = this._isFixedTableRendering;
     const isGroupCell = options.rowType === 'group' && isDefined(column.groupIndex);
 
@@ -338,34 +357,15 @@ const baseFixedColumns = <T extends ModuleType<ColumnsView>>(
     }
 
     if (!isFixedTableRendering && this._isFixedColumns) {
-      isEmptyCell = column.fixed || (column.command && column.fixed !== false);
-
-      if (isGroupCell) {
-        isEmptyCell = false;
-        if (options.row.summaryCells && options.row.summaryCells.length) {
-          const columns = this._columnsController.getVisibleColumns();
-          // @ts-expect-error DataGrid's method
-          const alignByFixedColumnCellCount = this.getAlignByColumnCellCount?.(
-            column.colspan,
-            {
-              columns,
-              row: options.row,
-              isFixed: true,
-            },
-          ) ?? 0;
-
-          if (alignByFixedColumnCellCount > 0) {
-            const transparentColumnIndex = getTransparentColumnIndex(this._columnsController.getFixedColumns());
-            isEmptyCell = (columns.length - alignByFixedColumnCellCount) < transparentColumnIndex;
-          }
-        }
-      }
+      const isEmptyCell = isGroupCell
+        ? this.isEmptyGroupCell?.(options)
+        : column.fixed || (column.command && column.fixed !== false);
 
       if (isEmptyCell) {
-        if (column.command && column.type !== 'buttons' || options.rowType === 'group') {
+        if ((column.command && column.type !== 'buttons') || options.rowType === 'group') {
           $cell
             .html('&nbsp;')
-            .addClass(column.cssClass);
+            .addClass(column.cssClass ?? '');
           return;
         }
         $cell.addClass('dx-hidden-cell');
@@ -373,7 +373,7 @@ const baseFixedColumns = <T extends ModuleType<ColumnsView>>(
     }
 
     if (column.command !== COMMAND_TRANSPARENT) {
-      super._renderCellContent.apply(this, arguments as any);
+      super._renderCellContent($cell, options, renderOptions);
     }
   }
 
@@ -609,8 +609,7 @@ const baseFixedColumns = <T extends ModuleType<ColumnsView>>(
     const rtlEnabled = this.option('rtlEnabled');
 
     super.setScrollerSpacing(width);
-    // @ts-expect-error the view is rendered here
-    this.element().children(`.${this.addWidgetPrefix(CLASSES.contentFixed)}`).css({
+    this.element()?.children(`.${this.addWidgetPrefix(CLASSES.contentFixed)}`).css({
       paddingLeft: rtlEnabled ? width : '',
       paddingRight: !rtlEnabled ? width : '',
     });
@@ -629,15 +628,6 @@ const columnHeadersView = (
 ): ModuleType<
   ColumnHeadersView & ColumnFixingColumnHeadersViewExtension
 > => class ColumnHeadersViewFixedColumnsExtender extends baseFixedColumns(Base) {
-  private _getRowVisibleColumns(rowIndex) {
-    if (this._isFixedTableRendering) {
-      return this.getFixedColumns(rowIndex);
-    }
-    // TODO Check that this method exists in runtime
-    // @ts-expect-error A method with this name doesn't exist in js folder at all
-    return super._getRowVisibleColumns(rowIndex);
-  }
-
   public getFixedColumnElements(rowIndex?) {
     const that = this;
 
@@ -657,7 +647,7 @@ const columnHeadersView = (
         columnElements,
         [
           transparentColumnIndex,
-          $transparentColumnElement.get(0)?.colSpan,
+          ($transparentColumnElement.get(0) as HTMLTableCellElement)?.colSpan,
           $transparentColumnElement.get(0) as never,
         ],
       );
@@ -779,12 +769,16 @@ const rowsView = (
           if (scrollable && scrollable.$element().is($nearestScrollable)) {
             shouldScroll = true;
           } else {
-            const nearestScrollableInstance = $nearestScrollable.length && Scrollable.getInstance($nearestScrollable.get(0));
-            // @ts-expect-error
-            const nearestScrollableHasVerticalScrollbar = nearestScrollableInstance && (nearestScrollableInstance.scrollHeight() - nearestScrollableInstance.clientHeight() > 0);
+            const nearestScrollableInstance = $nearestScrollable.length
+              ? Scrollable.getInstance<Scrollable | undefined>($nearestScrollable.get(0))
+              : undefined;
 
-            // @ts-expect-error
-            shouldScroll = nearestScrollableInstance && !nearestScrollableHasVerticalScrollbar;
+            if (nearestScrollableInstance) {
+              const hasVerticalScrollbar = nearestScrollableInstance.scrollHeight()
+                - nearestScrollableInstance.clientHeight() > 0;
+
+              shouldScroll = !hasVerticalScrollbar;
+            }
           }
 
           if (shouldScroll) {
@@ -850,6 +844,45 @@ const rowsView = (
     return super._renderGroupedCells($row, extend({}, options, {
       columns: this._columnsController.getVisibleColumns(),
     }));
+  }
+
+  protected override getFixedGroupCellOptions(row: ViewRow, cellCount: number): GroupCellOptions {
+    const columns = this._columnsController.getVisibleColumns();
+    const { columnIndex, colspan } = this._getGroupCellOptions({ row, columns });
+
+    if (row.summaryCells?.length) {
+      const summaryOptions: ColumnFixingRowRenderOptions = { columns, row, isFixed: true };
+      const alignByColumnCellCount = this.getAlignByColumnCellCount(colspan, summaryOptions);
+
+      return { columnIndex, colspan: colspan - alignByColumnCellCount };
+    }
+
+    return { columnIndex, colspan: colspan - Math.max(0, cellCount - (columnIndex + 2)) };
+  }
+
+  protected override isEmptyGroupCell(options: ViewCellOptions): boolean {
+    const { row, column } = options;
+
+    if (!row?.summaryCells?.length) {
+      return false;
+    }
+
+    const columns = this._columnsController.getVisibleColumns();
+    const summaryOptions: ColumnFixingRowRenderOptions = { columns, row, isFixed: true };
+    const alignByFixedColumnCellCount = this.getAlignByColumnCellCount(
+      column.colspan ?? 1,
+      summaryOptions,
+    );
+
+    if (alignByFixedColumnCellCount > 0) {
+      const transparentColumnIndex = getTransparentColumnIndex(
+        this._columnsController.getFixedColumns(),
+      );
+
+      return (columns.length - alignByFixedColumnCellCount) < transparentColumnIndex;
+    }
+
+    return false;
   }
 
   public override renderGroupSummaryCells($row: dxElementWrapper, options: RowRenderOptions): void {
@@ -919,8 +952,7 @@ const rowsView = (
       const transparentColumnIndex = getTransparentColumnIndex(columns);
 
       if (columnIndex > transparentColumnIndex) {
-        // @ts-expect-error the transparent column always has a colspan
-        return columnIndex + (columns[transparentColumnIndex].colspan - 1);
+        return columnIndex + ((columns[transparentColumnIndex].colspan ?? 1) - 1);
       }
 
       return columnIndex;
@@ -936,8 +968,7 @@ const rowsView = (
 
     const isFixedColumns = this._isFixedColumns;
 
-    // @ts-expect-error the view is rendered here
-    this.element().toggleClass(FIXED_COLUMNS_CLASS, isFixedColumns);
+    this.element()?.toggleClass(FIXED_COLUMNS_CLASS, isFixedColumns);
 
     if (this.option('hoverStateEnabled') && isFixedColumns) {
       this._attachHoverEvents();
@@ -952,9 +983,7 @@ const rowsView = (
       const $contentFixedElement = this.element()?.children(`.${contentFixedClass}`);
       const $fixedTableElement = this.getFixedTableElement();
 
-      // @ts-expect-error the view is rendered here
-      if ($contentFixedElement.length && $fixedTableElement?.length) {
-        // @ts-expect-error the view is rendered here
+      if ($contentFixedElement?.length && $fixedTableElement?.length) {
         this.setAria('owns', `${headerTableId ?? ''} ${$fixedTableElement.attr('id') ?? ''} ${footerTableId ?? ''}`.trim(), $contentFixedElement);
       }
     } else {
@@ -1012,20 +1041,18 @@ const rowsView = (
   }
 
   public setScrollerSpacing(vWidth, hWidth) {
-    const that = this;
     const styles = { marginBottom: 0 };
-    // @ts-expect-error the view is rendered here
-    const $fixedContent = that.element().children(`.${this.addWidgetPrefix(CLASSES.contentFixed)}`);
+    const $fixedContent = this.element()?.children(`.${this.addWidgetPrefix(CLASSES.contentFixed)}`);
 
-    if ($fixedContent.length && that._fixedTableElement) {
+    if ($fixedContent?.length && this._fixedTableElement) {
       $fixedContent.css(styles);
-      that._fixedTableElement.css(styles);
+      this._fixedTableElement.css(styles);
 
-      styles[that.option('rtlEnabled') ? 'marginLeft' : 'marginRight'] = vWidth;
+      styles[this.option('rtlEnabled') ? 'marginLeft' : 'marginRight'] = vWidth;
       styles.marginBottom = hWidth;
 
-      const useNativeScrolling = that._scrollable && that._scrollable.option('useNative');
-      (useNativeScrolling ? $fixedContent : that._fixedTableElement).css(styles);
+      const useNativeScrolling = this._scrollable && this._scrollable.option('useNative');
+      (useNativeScrolling ? $fixedContent : this._fixedTableElement).css(styles);
     }
   }
 

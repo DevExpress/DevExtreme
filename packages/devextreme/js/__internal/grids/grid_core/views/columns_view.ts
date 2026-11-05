@@ -1573,7 +1573,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  public getColumns(rowIndex?: number | null, $tableElement?: dxElementWrapper): Column[] {
+  public getColumns(rowIndex?: number | null, $tableElement?: dxElementWrapper | null): Column[] {
     return this._columnsController.getVisibleColumns(rowIndex);
   }
 
