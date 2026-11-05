@@ -26,11 +26,13 @@
   $label-padding-block-end,
   $field-padding,
   $field-line-height,
+  $field-max-height,
   $field-border-radius,
   $field-border-width,
   $text-padding,
   $bubble-padding: null,
   $bubble-border-radius: null,
+  $error-border-color: null,
 ) {
   .dx-chat-messagebubble:has(> .dx-chat-tool-call-view) {
     gap: $gap;
@@ -106,10 +108,10 @@
     }
 
     .dx-chat-tool-call-icon.dx-icon {
-      width: $icon-size;
-      height: $icon-size;
+      width: 1em;
+      height: 1em;
       font-size: $icon-size;
-      line-height: $icon-size;
+      line-height: 1em;
     }
 
     .dx-chat-tool-call-error-tag {
@@ -158,6 +160,7 @@
         font-family: $monospace-font-family;
         font-size: $font-size;
         line-height: $field-line-height;
+        max-height: $field-max-height;
         color: inherit;
       }
 
@@ -166,9 +169,14 @@
       &.dx-chat-tool-call-error.dx-state-focused,
       &.dx-chat-tool-call-error.dx-state-active,
       &.dx-chat-tool-call-error.dx-state-readonly {
-        border-width: 0;
         background-color: $error-background-color;
         color: $error-color;
+
+        @if $error-border-color {
+          border-color: $error-border-color;
+        } @else {
+          border-width: 0;
+        }
       }
     }
   }

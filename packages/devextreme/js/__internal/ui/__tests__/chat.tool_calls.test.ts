@@ -3,6 +3,7 @@ import {
 } from '@jest/globals';
 import fx from '@js/common/core/animation/fx';
 import { loadMessages, locale } from '@js/common/core/localization';
+import config from '@js/core/config';
 import $ from '@js/core/renderer';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred } from '@js/core/utils/deferred';
@@ -128,6 +129,14 @@ describe('Chat tool calls', () => {
       expect(calls[0].getName()).toBe('getWeather');
       expect(calls[0].hasIcon()).toBe(true);
       expect(bubble.getToolCallsTitleText()).toBeNull();
+    });
+
+    it('should show the wrench icon in the title of every call', () => {
+      const chat = createChat({ items: [createMessage({ toolCalls: [WEATHER, FAILED] })] });
+
+      getBubble(chat).getToolCalls().forEach((call) => {
+        expect(call.hasWrenchIcon()).toBe(true);
+      });
     });
 
     it('should render the title "N tools" and one Accordion with an item per call for several calls', () => {
@@ -333,6 +342,60 @@ describe('Chat tool calls', () => {
 
     it('should make the fields read-only', () => {
       expect(openCall(WEATHER).areFieldsReadOnly()).toBe(true);
+    });
+
+    describe('with the filled editors by default (Material)', () => {
+      beforeEach(() => {
+        config({ editorStylingMode: 'filled' });
+      });
+
+      afterEach(() => {
+        config({ editorStylingMode: undefined });
+      });
+
+      it('should render the fields as outlined editors', () => {
+        expect(openCall(WEATHER).areFieldsOutlined()).toBe(true);
+        expect(openCall({ name: 'getTime', result: '14:30' }).areFieldsOutlined()).toBe(true);
+      });
+
+      it('should render the highlighted result of a failed call as an outlined editor', () => {
+        expect(openCall(FAILED).areFieldsOutlined()).toBe(true);
+      });
+    });
+
+    describe('the height of a field', () => {
+      const LONG_RESULT = Array.from({ length: 40 }, (_, index) => `line ${index}`).join('\n');
+
+      const growInput = (input: HTMLTextAreaElement, scrollHeight: number): void => {
+        Object.defineProperty(input, 'scrollHeight', { configurable: true, value: scrollHeight });
+        input.dispatchEvent(new Event('input'));
+      };
+
+      it('should stop growing at the max-height of the input', () => {
+        const input = openCall({ name: 'getLog', result: LONG_RESULT }).getResultInput();
+
+        input.style.maxHeight = '100px';
+        growInput(input, 800);
+
+        expect(input.style.height).toBe('100px');
+      });
+
+      it('should grow with the text while it is lower than the max-height', () => {
+        const input = openCall({ name: 'getLog', result: 'line' }).getResultInput();
+
+        input.style.maxHeight = '100px';
+        growInput(input, 40);
+
+        expect(input.style.height).toBe('40px');
+      });
+
+      it('should not limit the height when the theme sets no max-height', () => {
+        const input = openCall({ name: 'getLog', result: LONG_RESULT }).getResultInput();
+
+        growInput(input, 800);
+
+        expect(input.style.height).toBe('800px');
+      });
     });
 
     it('should label every field input with its own label', () => {
