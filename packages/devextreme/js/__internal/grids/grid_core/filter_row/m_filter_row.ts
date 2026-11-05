@@ -803,11 +803,10 @@ const columnHeadersView = (
     return descriptionName && operationDescriptions?.[descriptionName];
   }
 
-  protected _handleDataChanged(e) {
+  protected _handleDataChanged(e: DataChange): void {
     const lastLoadOptions = this.dataSourceController.lastLoadOptions();
 
-    // @ts-expect-error
-    super._handleDataChanged.apply(this, arguments);
+    super._handleDataChanged(e);
 
     if (e.operationTypes?.filtering || e.operationTypes?.fullReload) {
       this.updateLookupDataSource(e.operationTypes?.filtering || lastLoadOptions?.filter);
@@ -819,14 +818,15 @@ const columnHeadersView = (
       return;
     }
 
-    if (!this.element()) {
+    const $element = this.element();
+
+    if (!$element) {
       return;
     }
 
     const columns = this._columnsController.getVisibleColumns();
     const dataSourceAdapter = this.dataSourceController.getAdapter();
-    // @ts-expect-error the view is rendered here
-    const rowIndex = this.element().find(`.${this.addWidgetPrefix(CLASSES.filterRow)}`).index();
+    const rowIndex = $element.find(`.${this.addWidgetPrefix(CLASSES.filterRow)}`).index();
 
     if (rowIndex === -1) {
       return;
@@ -859,24 +859,28 @@ const columnHeadersView = (
             editor.option('items', [...items, selectedItem]);
           }
 
-          const lookupDataSource = gridCoreUtils.getWrappedLookupDataSource(column, dataSourceAdapter, filter);
+          const lookupDataSource = gridCoreUtils.getWrappedLookupDataSource(
+            column,
+            dataSourceAdapter,
+            filter,
+          );
           editor.option('dataSource', lookupDataSource);
         }
       }
     });
   }
 
-  public getColumnElements(index?, bandColumnIndex?) {
+  public getColumnElements(index?: number, bandColumnIndex?: number): dxElementWrapper | undefined {
     const rows = this._getRows();
 
-    if (rows?.[index]?.rowType === 'filter' && arguments.length < 2) {
+    if (isDefined(index) && rows?.[index]?.rowType === 'filter' && arguments.length < 2) {
       return this.getCellElements(index);
     }
 
     return super.getColumnElements(index, bandColumnIndex);
   }
 
-  public isFilterRowCell($cell): boolean {
+  public isFilterRowCell($cell: dxElementWrapper): boolean {
     return !!$cell.closest(`.${this.addWidgetPrefix(CLASSES.filterRow)}`).length;
   }
 };
