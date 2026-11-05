@@ -1146,6 +1146,21 @@ export const ToolCallsVisualization: StoryObj<ToolCallsStoryArgs> = {
         const [typingUsers, setTypingUsers] = useState<ChatTypes.User[]>([]);
         const [busy, setBusy] = useState(false);
         const busyRef = useRef(false);
+        const cardRef = useRef<HTMLDivElement>(null);
+        const wasBusyRef = useRef(false);
+
+        useEffect(() => {
+            const messageBox = cardRef.current?.querySelector('.dx-chat-messagebox');
+
+            // inert closes the keyboard too: pointer-events alone leaves Enter working in the focused input
+            messageBox?.toggleAttribute('inert', busy);
+
+            if (wasBusyRef.current && !busy) {
+                messageBox?.querySelector('textarea')?.focus();
+            }
+
+            wasBusyRef.current = busy;
+        }, [busy]);
 
         const dataSource = useMemo(() => new DataSource({
             store: new CustomStore({
@@ -1253,7 +1268,7 @@ export const ToolCallsVisualization: StoryObj<ToolCallsStoryArgs> = {
 
         return (
             <div className="tool-calls-demo">
-                <div className="ai-chat-card">
+                <div className="ai-chat-card" ref={cardRef}>
                     <ToolCallsToolbar>
                         <ToolCallsToolbarItem location="before" text="AI Assistant" cssClass="ai-chat-title" />
                         <ToolCallsToolbarItem location="after">
