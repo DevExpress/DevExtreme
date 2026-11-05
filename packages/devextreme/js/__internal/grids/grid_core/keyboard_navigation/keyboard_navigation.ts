@@ -1095,7 +1095,16 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     );
     const $nextCell = nextCellInfo.$cell;
 
-    if (!$nextCell || this.handleTabKeyOnMasterDetailCell($nextCell, direction)) {
+    if (!$nextCell) {
+      return false;
+    }
+
+    if (this.handleTabKeyOnMasterDetailCell($nextCell, direction)) {
+      // An adaptive detail row focuses its editor itself; native Tab would move focus once more
+      if (!focused(eventTarget)) {
+        eventArgs.originalEvent.preventDefault();
+      }
+
       return false;
     }
 

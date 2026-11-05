@@ -36,7 +36,7 @@ jest.mock('../../src/modules/post-compiler', () => ({
 }));
 
 describe('Compile manager - integration test on test sass', () => {
-  test('compile test bundle without swatch', async () => {
+  test('compile test bundle without swatch', () => {
     const manager = new CompileManager();
     return manager.compile({}).then((result) => {
       expect(result.css).toBe(noModificationsResult);
@@ -44,7 +44,7 @@ describe('Compile manager - integration test on test sass', () => {
     });
   });
 
-  test('compile test bundle with swatch', async () => {
+  test('compile test bundle with swatch', () => {
     const manager = new CompileManager();
     return manager.compile({
       makeSwatch: true,
@@ -63,7 +63,7 @@ describe('Compile manager - integration test on test sass', () => {
     });
   });
 
-  test('compile test bundle with assetsBasePath', async () => {
+  test('compile test bundle with assetsBasePath', () => {
     const manager = new CompileManager();
     return manager.compile({
       assetsBasePath: 'base-path',
@@ -81,27 +81,27 @@ describe('Compile manager - integration test on test sass', () => {
     });
   });
 
-  test('compile test bundle with widgets option', async () => {
+  test('compile test bundle with widgets option', () => {
     const manager = new CompileManager();
     return manager.compile({
       widgets: ['datebox'],
     }).then((result) => {
       expect(result.css).toBe('');
       expect(result.compiledMetadata).toEqual({
-        "$base-font-family": "-apple-system, BlinkMacSystemFont, \"avenir next\", avenir, \"segoe ui\", \"helvetica neue\", \"adwaita sans\", cantarell, ubuntu, roboto, noto, helvetica, arial, sans-serif",
+        '$base-font-family': '-apple-system, BlinkMacSystemFont, "avenir next", avenir, "segoe ui", "helvetica neue", "adwaita sans", cantarell, ubuntu, roboto, noto, helvetica, arial, sans-serif',
         '$base-accent': '#337ab7',
         '$float-channel-color': '#2d6da3',
       });
     });
   });
 
-  test('compile test bundle with noClean option', async () => {
+  test('compile test bundle with noClean option', () => {
     const manager = new CompileManager();
     return manager.compile({
       noClean: true,
     }).then((result) => {
       expect(result.css).toBe(`.dx-accordion {
-  font-family: -apple-system, BlinkMacSystemFont, \"avenir next\", avenir, \"segoe ui\", \"helvetica neue\", \"adwaita sans\", cantarell, ubuntu, roboto, noto, helvetica, arial, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "avenir next", avenir, "segoe ui", "helvetica neue", "adwaita sans", cantarell, ubuntu, roboto, noto, helvetica, arial, sans-serif;
   color: #337ab7;
   background-image: url(icons/icons.woff2);
 }
@@ -113,7 +113,7 @@ describe('Compile manager - integration test on test sass', () => {
     });
   });
 
-  test('compile test bundle with error', async () => {
+  test('compile test bundle with error', () => {
     const manager = new CompileManager();
     return expect(manager.compile({
       makeSwatch: true,
@@ -121,7 +121,7 @@ describe('Compile manager - integration test on test sass', () => {
     })).rejects.toThrow(Error);
   });
 
-  test('compile test bundle with removeExternalResources option', async () => {
+  test('compile test bundle with removeExternalResources option', () => {
     const manager = new CompileManager();
     return manager.compile({
       themeName: 'material',
