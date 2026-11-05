@@ -37,9 +37,11 @@ import type { ModuleType, OptionChanged } from '@ts/grids/grid_core/types';
 import gridCoreUtils from '@ts/grids/grid_core/utils';
 import type { CellRenderOptions, ViewCellOptions, ViewRow } from '@ts/grids/grid_core/views/types';
 import type MenuInternal from '@ts/ui/menu/menu';
+import type { OverlayProperties } from '@ts/ui/overlay/overlay';
 
 import { CLASSES } from './const';
 import type {
+  FilterRangeSharedData,
   FilterRowColumnHeadersView,
   FilterRowEditorOptions,
   FilterRowHeaderPanel,
@@ -337,14 +339,13 @@ const columnHeadersView = (
     return super.isVisible() || this.isFilterRowVisible();
   }
 
-  private _initFilterRangeOverlay($cell, column) {
-    const that = this;
-    const sharedData = {};
+  private _initFilterRangeOverlay($cell: dxElementWrapper, column: Column): Overlay {
+    const sharedData: FilterRangeSharedData = {};
     const $editorContainer = $cell.find('.dx-editor-container');
-    const filterRangeOverlayClass = that.addWidgetPrefix(FILTER_RANGE_OVERLAY_CLASS);
+    const filterRangeOverlayClass = this.addWidgetPrefix(FILTER_RANGE_OVERLAY_CLASS);
     const $overlay = $('<div>').addClass(filterRangeOverlayClass).appendTo($cell);
 
-    return that._createComponent($overlay, Overlay, {
+    return this._createComponent($overlay, Overlay, {
       height: 'auto',
       shading: false,
       focusStateEnabled: false,
@@ -357,23 +358,27 @@ const columnHeadersView = (
       position: {
         my: 'top',
         at: 'top',
-        of: $editorContainer.length && $editorContainer || $cell,
+        of: $editorContainer.length ? $editorContainer : $cell,
         offset: '0 -1',
       },
-      contentTemplate(contentElement) {
-        let editorOptions;
-        let $editor = $('<div>').addClass(`${EDITOR_CONTAINER_CLASS} ${that.addWidgetPrefix(FILTER_RANGE_START_CLASS)}`).appendTo(contentElement);
+      contentTemplate: (contentElement: DxElement): dxElementWrapper => {
+        const currentColumn = this._columnsController.columnOption(column.index);
 
-        column = that._columnsController.columnOption(column.index);
-        editorOptions = that.getEditorOptions($editor, column);
+        if (!currentColumn) {
+          return $(contentElement).addClass(this.getWidgetContainerClass());
+        }
+
+        let $editor = $('<div>').addClass(`${EDITOR_CONTAINER_CLASS} ${this.addWidgetPrefix(FILTER_RANGE_START_CLASS)}`).appendTo(contentElement);
+        let editorOptions = this.getEditorOptions($editor, currentColumn);
+
         editorOptions.sharedData = sharedData;
-        that._renderEditor($editor, editorOptions);
+        this._renderEditor($editor, editorOptions);
         eventsEngine.on($editor.find(EDITORS_INPUT_SELECTOR), 'keydown', (e: DxEvent<KeyboardEvent>) => {
           let $prevElement = $cell.find('[tabindex]').not(e.target).first();
 
           if (normalizeKeyName(e) === 'tab' && e.shiftKey) {
             e.preventDefault();
-            that._hideFilterRange();
+            this._hideFilterRange();
 
             if (!$prevElement.length) {
               $prevElement = $cell.prev().find('[tabindex]').last();
@@ -382,14 +387,14 @@ const columnHeadersView = (
           }
         });
 
-        $editor = $('<div>').addClass(`${EDITOR_CONTAINER_CLASS} ${that.addWidgetPrefix(FILTER_RANGE_END_CLASS)}`).appendTo(contentElement);
-        editorOptions = that.getEditorOptions($editor, column);
+        $editor = $('<div>').addClass(`${EDITOR_CONTAINER_CLASS} ${this.addWidgetPrefix(FILTER_RANGE_END_CLASS)}`).appendTo(contentElement);
+        editorOptions = this.getEditorOptions($editor, currentColumn);
 
         editorOptions.sharedData = sharedData;
-        that._renderEditor($editor, editorOptions);
+        this._renderEditor($editor, editorOptions);
         eventsEngine.on($editor.find(EDITORS_INPUT_SELECTOR), 'keydown', (e: DxEvent<KeyboardEvent>) => {
           if (normalizeKeyName(e) === 'tab' && !e.shiftKey) {
-            that._hideFilterRange();
+            this._hideFilterRange();
 
             if ($cell.next().length) {
               e.preventDefault();
@@ -398,51 +403,55 @@ const columnHeadersView = (
           }
         });
 
-        return $(contentElement).addClass(that.getWidgetContainerClass());
+        return $(contentElement).addClass(this.getWidgetContainerClass());
       },
       onShown(e) {
         const $editor = $(e.component.content()).find(`.${EDITOR_CONTAINER_CLASS}`).first();
         eventsEngine.trigger($editor.find(EDITORS_INPUT_SELECTOR), 'focus');
       },
-      onHidden() {
-        column = that._columnsController.columnOption(column.index);
+      onHidden: (): void => {
+        const currentColumn = this._columnsController.columnOption(column.index);
 
         $cell.find(`.${MENU_CLASS}`).parent().addClass(EDITOR_WITH_MENU_CLASS);
-        if (that.getColumnSelectedFilterOperation(column) === 'between') {
-          that._updateFilterRangeContent($cell, that.getRangeTextByFilterValue(column));
-          that.component.updateDimensions();
+        if (currentColumn && this.getColumnSelectedFilterOperation(currentColumn) === 'between') {
+          this._updateFilterRangeContent($cell, this.getRangeTextByFilterValue(currentColumn));
+          this.component.updateDimensions();
         }
       },
     });
   }
 
-  private _updateFilterRangeOverlay(options) {
+  private _updateFilterRangeOverlay(options: Partial<OverlayProperties>): void {
     const overlayInstance = this._filterRangeOverlayInstance;
 
     overlayInstance?.option(options);
   }
 
-  private _showFilterRange($cell, column) {
-    const that = this;
-    const $overlay = $cell.children(`.${that.addWidgetPrefix(FILTER_RANGE_OVERLAY_CLASS)}`);
-    let overlayInstance = $overlay.length && $overlay.data('dxOverlay');
+  private _showFilterRange($cell: dxElementWrapper, column: Column): void {
+    const $overlay = $cell.children(`.${this.addWidgetPrefix(FILTER_RANGE_OVERLAY_CLASS)}`);
+    let overlayInstance = $overlay.length && $overlay.data<Overlay | undefined>('dxOverlay');
 
     if (!overlayInstance && column) {
-      overlayInstance = that._initFilterRangeOverlay($cell, column);
+      overlayInstance = this._initFilterRangeOverlay($cell, column);
     }
 
-    if (!overlayInstance.option('visible')) {
-      that._filterRangeOverlayInstance?.hide();
-      that._filterRangeOverlayInstance = overlayInstance;
+    if (overlayInstance && !overlayInstance.option('visible')) {
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises -- fire-and-forget
+      this._filterRangeOverlayInstance?.hide();
+      this._filterRangeOverlayInstance = overlayInstance;
 
-      that._updateFilterRangeOverlay({ width: getOuterWidth($cell, true) + CORRECT_FILTER_RANGE_OVERLAY_WIDTH });
-      that._filterRangeOverlayInstance?.show();
+      this._updateFilterRangeOverlay({
+        width: Number(getOuterWidth($cell, true)) + CORRECT_FILTER_RANGE_OVERLAY_WIDTH,
+      });
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises -- fire-and-forget
+      this._filterRangeOverlayInstance?.show();
     }
   }
 
-  private _hideFilterRange() {
+  private _hideFilterRange(): void {
     const overlayInstance = this._filterRangeOverlayInstance;
 
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises -- fire-and-forget
     overlayInstance?.hide();
   }
 

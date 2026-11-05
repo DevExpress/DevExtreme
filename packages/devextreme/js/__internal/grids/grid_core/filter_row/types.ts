@@ -5,6 +5,10 @@ import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import type { HeaderPanel } from '@ts/grids/grid_core/header_panel/header_panel';
 import type Overlay from '@ts/ui/overlay/overlay';
 
+export interface FilterRangeSharedData {
+  valueChangeTimeout?: ReturnType<typeof setTimeout>;
+}
+
 export type FilterRowEditorOptions = Omit<Column, 'width'> & {
   value: unknown;
   parentType: 'filterRow';
@@ -13,6 +17,7 @@ export type FilterRowEditorOptions = Omit<Column, 'width'> & {
   width: null;
   setValue: (value: unknown, notFireEvent?: boolean) => void;
   placeholder?: string;
+  sharedData?: FilterRangeSharedData;
 };
 
 export type FilterRowOptions = FilterRow & {
