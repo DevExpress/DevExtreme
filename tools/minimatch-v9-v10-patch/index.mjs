@@ -1,4 +1,4 @@
-import minimatch from './index.js';
+import patch from './index.js';
 
 export const {
   sep,
@@ -11,6 +11,5 @@ export const {
   Minimatch,
   escape,
   unescape,
-} = minimatch;
-
-export { minimatch };
+  minimatch,
+} = patch;

@@ -13,6 +13,7 @@
     "./package.json": "./package.json"
   },
   "dependencies": {
-    "minimatch-pre9-patch": "workspace:*"
+    "minimatch": "^11.0.4",
+    "picomatch": "^4.0.7"
   }
 }
