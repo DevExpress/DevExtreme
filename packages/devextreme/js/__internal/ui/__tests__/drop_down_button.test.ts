@@ -37,12 +37,17 @@ describe('DropDownButton', () => {
       expect(model.getButtonElement()?.getAttribute('aria-label')).toBe(HINT);
     });
 
-    it('should stay the hint after the drop-down list is opened and closed', () => {
+    it('should stay the hint while the drop-down list is opened and after it is closed', async () => {
       const { instance, model } = createDropDownButton({ icon: 'export', hint: HINT });
 
-      instance.option('opened', true);
-      instance.option('opened', false);
+      await instance.open();
 
+      expect(model.getButtonElement()?.getAttribute('aria-expanded')).toBe('true');
+      expect(model.getButtonElement()?.getAttribute('aria-label')).toBe(HINT);
+
+      await instance.close();
+
+      expect(model.getButtonElement()?.getAttribute('aria-expanded')).toBe('false');
       expect(model.getButtonElement()?.getAttribute('aria-label')).toBe(HINT);
     });
 
