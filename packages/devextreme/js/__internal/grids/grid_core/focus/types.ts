@@ -16,7 +16,7 @@ export interface FocusDataControllerExtension {
   _updatePageIndexes: () => void;
   afterChanged: Callback<[DataChange]>;
   getLastChange: () => DataChange | undefined;
-  isPagingByRendering: () => boolean | undefined;
+  isPagingByRendering: () => boolean;
   _getLastItemIndex: () => number;
   _calculateGlobalRowIndexByFlatData: (
     key: RowKey,

@@ -45,9 +45,10 @@ const data = (
   private _isFocusedRowInside(parentKey: RowKey): boolean {
     const focusedRowKey = this.option('focusedRowKey');
     const rowIndex = this.getRowIndexByKey(focusedRowKey);
-    const focusedRow: TreeListProcessedItem | false = rowIndex >= 0
-      && this.getVisibleRows()[rowIndex];
-    let parent = focusedRow && focusedRow.node?.parent;
+    const focusedRow: TreeListProcessedItem | undefined = rowIndex >= 0
+      ? this.getVisibleRows()[rowIndex]
+      : undefined;
+    let parent = focusedRow?.node?.parent;
 
     while (parent) {
       if (parent.key === parentKey) {

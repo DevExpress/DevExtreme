@@ -1,6 +1,6 @@
 import { equalByValue } from '@js/core/utils/common';
 import { Deferred, type DeferredObj } from '@js/core/utils/deferred';
-import { compileGetter, type Getter } from '@ts/core/utils/data';
+import { compileGetter } from '@ts/core/utils/data';
 import type { StoreLoadOptions } from '@ts/data/data_source/types';
 import type {
   GroupInfoData,
@@ -53,13 +53,13 @@ const data = (
   private _isFocusedRowInsideGroup(path: unknown[]): boolean {
     const focusedRowKey = this.option('focusedRowKey');
     const rowIndex = this.getRowIndexByKey(focusedRowKey);
-    const focusedRow = rowIndex >= 0 && this.getVisibleRows()[rowIndex];
+    const focusedRow = rowIndex >= 0 ? this.getVisibleRows()[rowIndex] : undefined;
     const groups = this._columnsController.getGroupDataSourceParameters(true);
 
     if (focusedRow && groups) {
       for (let i = 0; i < path.length; i += 1) {
-        // @ts-expect-error no compileGetter overload takes a path-or-function union
-        const getter: Getter = compileGetter(groups[i]?.selector);
+        const selector = groups[i]?.selector;
+        const getter = typeof selector === 'function' ? selector : compileGetter(selector);
 
         if (getter(focusedRow.data) !== path[i]) {
           return false;
@@ -189,28 +189,18 @@ const data = (
     );
 
     this._calculateGlobalRowIndexByFlatData(key, groupFilter).done((dataOffset) => {
-      // eslint-disable-next-line @typescript-eslint/init-declarations -- assigned in branches
-      let groupContinuationCount: number;
-
       if (dataOffset < 0) {
         deferred.resolve(-1);
         return;
       }
 
       const currentPageOffset = (groupOffset % pageSize) || pageSize;
+      const offsetFromPageStart = currentPageOffset + dataOffset - groupPath.length;
+      const groupContinuationCount = isVirtualScrolling
+        ? 0
+        : Math.floor(offsetFromPageStart / (pageSize - groupPath.length)) * groupPath.length;
 
-      let count = currentPageOffset + dataOffset - groupPath.length;
-
-      if (isVirtualScrolling) {
-        groupContinuationCount = 0;
-      } else {
-        groupContinuationCount = Math.floor(count / (pageSize - groupPath.length))
-          * groupPath.length;
-      }
-
-      count = groupOffset + dataOffset + groupContinuationCount;
-
-      deferred.resolve(count);
+      deferred.resolve(groupOffset + dataOffset + groupContinuationCount);
       // eslint-disable-next-line @typescript-eslint/no-misused-promises -- ignores the result
     }).fail(deferred.reject);
   }

@@ -726,9 +726,9 @@ export const focusDataControllerExtender = <
 ): TBase & ModuleType<
   DataController & FocusDataControllerExtension
 > => class FocusDataControllerExtender extends Base {
-  private _lastRenderingPageIndex?: number;
+  private _lastRenderingPageIndex = 0;
 
-  private _isPagingByRendering?: boolean;
+  private _isPagingByRendering = false;
 
   private lastChange?: DataChange;
 
@@ -771,7 +771,7 @@ export const focusDataControllerExtender = <
   }
 
   public _updatePageIndexes(): void {
-    const prevRenderingPageIndex = this._lastRenderingPageIndex || 0;
+    const prevRenderingPageIndex = this._lastRenderingPageIndex;
     const renderingPageIndex = this._rowsScrollController
       ? this._rowsScrollController.pageIndex()
       : 0;
@@ -780,7 +780,7 @@ export const focusDataControllerExtender = <
     this._isPagingByRendering = renderingPageIndex !== prevRenderingPageIndex;
   }
 
-  public isPagingByRendering(): boolean | undefined {
+  public isPagingByRendering(): boolean {
     return this._isPagingByRendering;
   }
 
