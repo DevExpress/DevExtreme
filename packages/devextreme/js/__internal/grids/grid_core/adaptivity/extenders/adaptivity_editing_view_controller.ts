@@ -86,7 +86,7 @@ export const adaptivityEditingViewControllerExtender = (
     // @ts-expect-error
     const deferred = new Deferred();
     if (this.getEditMode() === EDIT_MODE.row && this.adaptiveColumnsController.hasHiddenColumns()) {
-      when(this._validatingController.validate(true)).done((isValid) => {
+      when(this._validatingController.validate()).done((isValid) => {
         if (isValid) {
           this._cancelEditAdaptiveDetailRow();
         }
