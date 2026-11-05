@@ -1,0 +1,11 @@
+{
+  "name": "minimatch3-compat",
+  "version": "1.0.0",
+  "private": true,
+  "description": "minimatch 3.x/5.x compatible API on top of minimatch 11",
+  "license": "MIT",
+  "main": "index.js",
+  "dependencies": {
+    "minimatch": "^11.0.4"
+  }
+}

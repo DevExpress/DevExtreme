@@ -17,6 +17,7 @@ overrides:
   qs: ">=6.16.1"
   "vite@>=7.0.0 <=7.3.6": ^7.3.7
   "vite@>=8.3.0 <=8.3.2": ^8.3.3
+  "minimatch@<9.0.0": file:./tools/minimatch3-compat
   "minimatch@>=9.0.0 <11.0.1": ^11.0.4
   "picomatch@>=4.0.0 <4.0.4": 4.0.4
   "micromatch@<4.0.8": ^4.0.8
