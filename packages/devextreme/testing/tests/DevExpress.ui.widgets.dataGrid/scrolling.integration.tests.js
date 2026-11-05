@@ -1460,7 +1460,7 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
         dataGrid.addRow();
         this.clock.tick(10);
 
-        dataGrid.getController('validating').validate(true);
+        dataGrid.getController('validating').validate();
         this.clock.tick(10);
 
         $('td').trigger('focus');
