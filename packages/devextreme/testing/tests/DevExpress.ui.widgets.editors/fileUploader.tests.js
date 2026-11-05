@@ -1626,49 +1626,6 @@ QUnit.module('files rendering', moduleConfig, () => {
         assert.notOk($fileUploader.hasClass('dx-fileuploader-dragover'), 'FileUploader hasn\'t the dragover class');
     });
 
-    QUnit.test('T286111 - input click should not be prevented if the \'useNativeInputClick\' option is set to true', function(assert) {
-        const $fileUploader = $('#fileuploader').dxFileUploader({ uploadMode: 'useButtons', useNativeInputClick: true });
-        const $input = $fileUploader.find('.' + FILEUPLOADER_INPUT_CLASS);
-        const clickSpy = sinon.spy();
-
-        $input
-            .on('click', clickSpy)
-            .click();
-
-        assert.ok(clickSpy.calledOnce, 'input click event handler is called once');
-        assert.ok(!clickSpy.args[0][0].isDefaultPrevented(), 'click event is not prevented');
-    });
-
-    QUnit.test('T286111 - input should be rendered in select button if form is used and native click should be', function(assert) {
-        const $fileUploader = $('#fileuploader').dxFileUploader({
-            uploadMode: 'useForm',
-            useNativeInputClick: true
-        });
-        const $selectButton = $fileUploader.find('.' + FILEUPLOADER_INPUT_WRAPPER_CLASS).children('.' + FILEUPLOADER_BUTTON_CLASS);
-
-        assert.equal($selectButton.find('.' + FILEUPLOADER_INPUT_CLASS).length, 1, 'input is rendered in select button');
-    });
-
-    [false, true].forEach((useNativeInputClick) => {
-        QUnit.test(`Input click should ${useNativeInputClick ? 'not' : ''} be prevented on runtime useNativeInputClick set to ${useNativeInputClick}`, function(assert) {
-            const $fileUploader = $('#fileuploader').dxFileUploader({
-                useNativeInputClick: !useNativeInputClick
-            });
-            const fileUploader = $fileUploader.dxFileUploader('instance');
-
-            fileUploader.option('useNativeInputClick', useNativeInputClick);
-
-            const $input = $fileUploader.find('.' + FILEUPLOADER_INPUT_CLASS);
-            const clickSpy = sinon.spy();
-
-            $input
-                .on('click', clickSpy)
-                .click();
-
-            assert.strictEqual(clickSpy.args[0][0].isDefaultPrevented(), !useNativeInputClick);
-        });
-    });
-
     QUnit.test('files count in list is correct if the \'extendSelection\' option is false', function(assert) {
         const $fileUploader = $('#fileuploader').dxFileUploader({
             extendSelection: false,
@@ -3753,8 +3710,7 @@ QUnit.module('keyboard navigation', moduleConfig, () => {
     QUnit.test('T328503 - \'enter\' press on select button should lead to input click', function(assert) {
         const $fileUploader = $('#fileuploader').dxFileUploader({
             uploadMode: 'instantly',
-            focusStateEnabled: true,
-            useNativeInputClick: false
+            focusStateEnabled: true
         });
         const $selectButton = $fileUploader.find('.' + FILEUPLOADER_INPUT_WRAPPER_CLASS + ' .' + FILEUPLOADER_BUTTON_CLASS);
         const keyboard = keyboardMock($selectButton);
@@ -3774,8 +3730,7 @@ QUnit.module('keyboard navigation', moduleConfig, () => {
         assert.expect(1);
 
         const $fileUploader = $('#fileuploader').dxFileUploader({
-            uploadMode: 'instantly',
-            useNativeInputClick: false
+            uploadMode: 'instantly'
         });
         const $selectButton = $fileUploader.find('.' + FILEUPLOADER_INPUT_WRAPPER_CLASS + ' .' + FILEUPLOADER_BUTTON_CLASS);
         const $input = $fileUploader.find('.' + FILEUPLOADER_INPUT_CLASS);
@@ -4078,6 +4033,28 @@ QUnit.module('Drag and drop', moduleConfig, () => {
         assert.strictEqual(onDropZoneLeaveSpy.args[0][0].dropZoneElement, $inputWrapper[0], 'dropZone argument is correct');
     });
 
+    QUnit.test('default drop zone should stay active while a file is dragged over it', function(assert) {
+        const onDropZoneLeaveSpy = sinon.spy();
+        const $fileUploader = $('#fileuploader').dxFileUploader({
+            uploadMode: 'useButtons',
+            onDropZoneLeave: onDropZoneLeaveSpy
+        });
+        const $inputWrapper = $fileUploader.find('.' + FILEUPLOADER_INPUT_WRAPPER_CLASS);
+        const { left, top } = $inputWrapper.offset();
+
+        triggerDragEvent($inputWrapper, 'dragenter');
+        assert.ok($fileUploader.hasClass('dx-fileuploader-dragover'), 'drop zone is active after dragenter');
+
+        $inputWrapper.trigger($.Event('dragover', {
+            clientX: left + $inputWrapper.outerWidth() / 2,
+            clientY: top + $inputWrapper.outerHeight() / 2,
+            originalEvent: $.Event('dragover', { dataTransfer: { types: ['Files'] } })
+        }));
+
+        assert.ok($fileUploader.hasClass('dx-fileuploader-dragover'), 'drop zone is still active after dragover');
+        assert.ok(onDropZoneLeaveSpy.notCalled, 'dropZoneLeave not called');
+    });
+
     QUnit.test('dropZoneEnter and dropZoneLeave events should not fire if dragged item is not file', function(assert) {
         const onDropZoneEnterSpy = sinon.spy();
         const onDropZoneLeaveSpy = sinon.spy();
@@ -4160,32 +4137,19 @@ QUnit.module('Drag and drop', moduleConfig, () => {
 });
 
 QUnit.module('files selection', moduleConfig, () => {
-    QUnit.test('T328503 - input is in input container if you should not use native input click', function(assert) {
+    QUnit.test('T328503 - input is in input container', function(assert) {
         const $fileUploader = $('#fileuploader').dxFileUploader({
             uploadMode: 'useButtons',
-            nativeDropSupported: true,
-            useNativeInputClick: false
+            nativeDropSupported: true
         });
         const $input = $fileUploader.find('.' + FILEUPLOADER_INPUT_CONTAINER_CLASS + ' .' + FILEUPLOADER_INPUT_CLASS);
 
         assert.equal($input.length, 1, 'input is in input container');
     });
 
-    QUnit.test('T328503 - input is in select button if you should use native input click', function(assert) {
-        const $fileUploader = $('#fileuploader').dxFileUploader({
-            uploadMode: 'useForm',
-            nativeDropSupported: true,
-            useNativeInputClick: false
-        });
-        const $input = $fileUploader.find('.' + FILEUPLOADER_INPUT_WRAPPER_CLASS + '.' + FILEUPLOADER_BUTTON_CLASS + ' .' + FILEUPLOADER_INPUT_CLASS);
-
-        assert.equal($input.length, 0, 'input is in select button');
-    });
-
     QUnit.test('T323019 - click on the \'Drop\' field should not lead to file choosing', function(assert) {
         const $fileUploader = $('#fileuploader').dxFileUploader({
-            uploadMode: 'useButtons',
-            useNativeInputClick: false
+            uploadMode: 'useButtons'
         });
         const $input = $fileUploader.find('.' + FILEUPLOADER_INPUT_CLASS);
         let event;
@@ -4201,8 +4165,7 @@ QUnit.module('files selection', moduleConfig, () => {
     QUnit.test('T346021 - upload is not started after file drop if the \'uploadMode\' is \'instantly\'', function(assert) {
         const $fileUploader = $('#fileuploader').dxFileUploader({
             uploadMode: 'instantly',
-            useDragOver: true,
-            useNativeInputClick: false
+            useDragOver: true
         });
         const event = $.Event('drop', {
             originalEvent: $.Event('drop', { dataTransfer: { files: [fakeFile] } })
@@ -4261,7 +4224,6 @@ QUnit.module('disabled option', () => {
     QUnit.test('file input should be hidden when widget is disabled', function(assert) {
         const $fileUploader = $('#fileuploader').dxFileUploader({
             disabled: false,
-            useNativeInputClick: false,
             useDragOver: true,
             uploadMode: 'useButtons'
         });

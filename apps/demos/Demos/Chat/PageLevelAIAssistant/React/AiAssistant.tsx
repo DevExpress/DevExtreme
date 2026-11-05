@@ -20,8 +20,8 @@ function EmptyView(): React.JSX.Element {
   return (
     <>
       <div className="dx-chat-messagelist-empty-image dx-ai-chat__empty-image" />
-      <div className="ai-chat-empty-message">{emptyViewMessage}</div>
-      <div className="ai-chat-empty-prompt">
+      <div className="dx-chat-messagelist-empty-message ai-chat-empty-message">{emptyViewMessage}</div>
+      <div className="dx-chat-messagelist-empty-prompt ai-chat-empty-prompt">
         <div>Update employee information in the <b>Form</b>.</div>
         <div>Change task presentation in the <b>DataGrid</b>: filter and sort data, change column visibility.</div>
       </div>

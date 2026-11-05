@@ -131,7 +131,7 @@ class EditingController extends editingModule.controllers.editing {
     return buttons;
   }
 
-  protected _beforeSaveEditData(change?: EditingChange): boolean {
+  protected _beforeSaveEditData(change?: EditingChange): boolean | DeferredObj<boolean> {
     const result = super._beforeSaveEditData(change);
 
     if (change && change.type !== DATA_CHANGE_TYPE.insert) {
