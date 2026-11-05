@@ -5,7 +5,7 @@
     [grouped]="true"
     [searchEnabled]="true"
     selectionMode="single"
-    [selectedItemKeys]="[currentHotel.Id]"
+    [selectedItemKeys]="[currentHotel().Id]"
     (onSelectionChanged)="listSelectionChanged($event)"
   >
     <div *dxTemplate="let item of 'item'">
@@ -33,19 +33,22 @@
 <div class="right">
   <div class="header">
     <div class="name-container">
-      <div class="name">{{ currentHotel.Hotel_Name }}</div>
-      <div class="type" [class]="currentHotel.Hotel_Class.toLowerCase()"></div>
+      <div class="name">{{ currentHotel().Hotel_Name }}</div>
+      <div
+        class="type"
+        [class]="currentHotel().Hotel_Class.toLowerCase()"
+      ></div>
     </div>
     <div class="price-container">
       <div class="price">{{
-        currentHotel.Price | currency : "USD" : "symbol" : "1.0-0"
+        currentHotel().Price | currency : "USD" : "symbol" : "1.0-0"
       }}</div>
       <div class="caption">per<br />night</div>
     </div>
   </div>
   <dx-tile-view
     class="tile"
-    [dataSource]="currentHotel.Images"
+    [dataSource]="currentHotel().Images"
     noDataText=""
     [height]="224"
     [baseItemHeight]="100"
@@ -61,7 +64,7 @@
     </div>
   </dx-tile-view>
   <div class="address"
-    >{{ currentHotel.Postal_Code }}, {{ currentHotel.Address }}</div
+    >{{ currentHotel().Postal_Code }}, {{ currentHotel().Address }}</div
   >
-  <div class="description">{{ currentHotel.Description }}</div>
+  <div class="description">{{ currentHotel().Description }}</div>
 </div>

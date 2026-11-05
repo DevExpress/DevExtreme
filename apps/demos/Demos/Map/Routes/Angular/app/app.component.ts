@@ -1,10 +1,12 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode } from '@angular/core';
-import { DxMapModule } from 'devextreme-angular';
-import { DxSelectBoxModule, DxSelectBoxTypes } from 'devextreme-angular/ui/select-box';
 import {
-  Marker, APIKey, Route, Service,
-} from './app.service';
+  Component, enableProdMode, inject, signal,
+} from '@angular/core';
+import { DxMapModule } from 'devextreme-angular';
+import { DxSelectBoxModule } from 'devextreme-angular/ui/select-box';
+import type { DxSelectBoxTypes } from 'devextreme-angular/ui/select-box';
+import { Service } from './app.service';
+import type { APIKey } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -23,29 +25,26 @@ if (!/localhost/.test(document.location.host)) {
 })
 
 export class AppComponent {
-  routes: Route[];
+  private readonly service = inject(Service);
 
-  markers: Marker[];
+  readonly routes = signal(this.service.getRoutes());
 
-  apiKey: APIKey = { azure: '6N8zuPkBsnfwniNAJkldM3cUgm3lXg3y9gkIKy59benICnnepK4DJQQJ99AIACYeBjFllM6LAAAgAZMPGFXE' };
+  readonly markers = this.service.getMarkers();
 
-  constructor(service: Service) {
-    this.markers = service.getMarkers();
-    this.routes = service.getRoutes();
-  }
+  readonly apiKey: APIKey = { azure: '6N8zuPkBsnfwniNAJkldM3cUgm3lXg3y9gkIKy59benICnnepK4DJQQJ99AIACYeBjFllM6LAAAgAZMPGFXE' };
 
   setMode(e: DxSelectBoxTypes.ValueChangedEvent) {
-    this.routes = this.routes.map((item) => {
+    this.routes.update((routes) => routes.map((item) => {
       item.mode = e.value;
       return item;
-    });
+    }));
   }
 
   selectColor(e: DxSelectBoxTypes.ValueChangedEvent) {
-    this.routes = this.routes.map((item) => {
+    this.routes.update((routes) => routes.map((item) => {
       item.color = e.value;
       return item;
-    });
+    }));
   }
 }
 

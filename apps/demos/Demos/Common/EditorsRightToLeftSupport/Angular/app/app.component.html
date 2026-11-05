@@ -1,4 +1,4 @@
-<div [class]="{ 'dx-rtl': rtlEnabled }">
+<div [class]="{ 'dx-rtl': rtlEnabled() }">
   <div class="options">
     <div class="caption">Options</div>
     <div class="dx-fieldset">
@@ -9,7 +9,7 @@
             [items]="languages"
             [inputAttr]="{ 'aria-label': 'Language' }"
             [value]="languages[1]"
-            [rtlEnabled]="rtlEnabled"
+            [rtlEnabled]="rtlEnabled()"
             (onValueChanged)="onLanguageChanged($event)"
           ></dx-select-box>
         </div>
@@ -23,8 +23,8 @@
         <dx-text-box
           [showClearButton]="true"
           [inputAttr]="{ 'aria-label': 'Text Box' }"
-          [value]="textValue"
-          [rtlEnabled]="rtlEnabled"
+          [value]="textValue()"
+          [rtlEnabled]="rtlEnabled()"
         >
         </dx-text-box>
       </div>
@@ -35,7 +35,7 @@
         <dx-number-box
           [showSpinButtons]="true"
           [value]="123"
-          [rtlEnabled]="rtlEnabled"
+          [rtlEnabled]="rtlEnabled()"
           [inputAttr]="{ 'aria-label': 'Number Box' }"
         >
         </dx-number-box>
@@ -48,8 +48,8 @@
           [items]="europeanUnion"
           [inputAttr]="{ 'aria-label': 'European Union Data' }"
           [value]="europeanUnion[0]"
-          [displayExpr]="displayExpr"
-          [rtlEnabled]="rtlEnabled"
+          [displayExpr]="displayExpr()"
+          [rtlEnabled]="rtlEnabled()"
         >
         </dx-select-box>
       </div>
@@ -63,8 +63,8 @@
           placeholder="..."
           valueExpr="id"
           [inputAttr]="{ 'aria-label': 'Name' }"
-          [displayExpr]="displayExpr"
-          [rtlEnabled]="rtlEnabled"
+          [displayExpr]="displayExpr()"
+          [rtlEnabled]="rtlEnabled()"
         ></dx-tag-box>
       </div>
     </div>
@@ -72,8 +72,8 @@
       <div class="dx-field-label">Text Area</div>
       <div class="dx-field-value">
         <dx-text-area
-          [value]="textValue"
-          [rtlEnabled]="rtlEnabled"
+          [value]="textValue()"
+          [rtlEnabled]="rtlEnabled()"
           [inputAttr]="{ 'aria-label': 'Notes' }"
         >
         </dx-text-area>
@@ -84,8 +84,8 @@
       <div class="dx-field-value">
         <dx-autocomplete
           [items]="europeanUnion"
-          [valueExpr]="displayExpr"
-          [rtlEnabled]="rtlEnabled"
+          [valueExpr]="displayExpr()"
+          [rtlEnabled]="rtlEnabled()"
           [inputAttr]="{ 'aria-label': 'Autocomplete' }"
         >
         </dx-autocomplete>
@@ -96,8 +96,8 @@
       <div class="dx-field-value">
         <dx-check-box
           [value]="true"
-          [text]="textValue"
-          [rtlEnabled]="rtlEnabled"
+          [text]="textValue()"
+          [rtlEnabled]="rtlEnabled()"
         >
         </dx-check-box>
       </div>
@@ -105,7 +105,7 @@
     <div class="dx-field">
       <div class="dx-field-label">Switch</div>
       <div class="dx-field-value">
-        <dx-switch [rtlEnabled]="rtlEnabled"></dx-switch>
+        <dx-switch [rtlEnabled]="rtlEnabled()"></dx-switch>
       </div>
     </div>
   </div>

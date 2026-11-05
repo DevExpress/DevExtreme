@@ -1,9 +1,8 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode } from '@angular/core';
+import { Component, enableProdMode, inject } from '@angular/core';
 import { DxChatModule } from 'devextreme-angular';
-import { DxChatTypes } from 'devextreme-angular/ui/chat';
+import { type DxChatTypes } from 'devextreme-angular/ui/chat';
 import { type DxFileUploaderTypes } from 'devextreme-angular/ui/file-uploader';
-import { DataSource } from 'devextreme-angular/common/data';
 import { AppService } from './app.service';
 
 if (!document.location.host.includes('localhost')) {
@@ -19,14 +18,11 @@ if (!document.location.host.includes('localhost')) {
   ],
 })
 export class AppComponent {
-  dataSource: DataSource;
+  private readonly appService = inject(AppService);
 
-  user: DxChatTypes.User;
+  readonly dataSource = this.appService.dataSource;
 
-  constructor(private readonly appService: AppService) {
-    this.dataSource = this.appService.dataSource;
-    this.user = this.appService.currentUser;
-  }
+  readonly user = this.appService.currentUser;
 
   onMessageEntered(e: DxChatTypes.MessageEnteredEvent): void {
     this.appService.onMessageEntered(e);
@@ -38,11 +34,11 @@ export class AppComponent {
     }
   }
 
-  onUploaded = (e: DxFileUploaderTypes.UploadedEvent): void => {
+  readonly onUploaded = (e: DxFileUploaderTypes.UploadedEvent): void => {
     this.appService.onUploaded(e.file);
   };
 
-  uploadFile = () => {};
+  readonly uploadFile = () => {};
 }
 
 bootstrapApplication(AppComponent, {

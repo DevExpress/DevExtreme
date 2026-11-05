@@ -18,7 +18,7 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  commands: { text: string }[] = [
+  readonly commands: { text: string }[] = [
     { text: 'Call' },
     { text: 'Send message' },
     { text: 'Edit' },

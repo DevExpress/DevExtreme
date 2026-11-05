@@ -1,11 +1,13 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode } from '@angular/core';
+import {
+  Component, enableProdMode, inject, signal,
+} from '@angular/core';
 import { CurrencyPipe } from '@angular/common';
 import {
   DxButtonModule, DxPopupModule, DxPopoverModule,
 } from 'devextreme-angular';
 import notify from 'devextreme/ui/notify';
-import { Service, House } from './app.service';
+import { Service, type House } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -24,32 +26,28 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  houses: House[];
+  readonly houses = inject(Service).getHouses();
 
-  currentHouse: House;
+  readonly currentHouse = signal(this.houses[0]);
 
-  popupVisible = false;
+  readonly popupVisible = signal(false);
 
-  ADD_TO_FAVORITES = 'Add to Favorites';
+  readonly ADD_TO_FAVORITES = 'Add to Favorites';
 
-  REMOVE_FROM_FAVORITES = 'Remove from Favorites';
-
-  constructor(service: Service) {
-    this.houses = service.getHouses();
-    this.currentHouse = this.houses[0];
-  }
+  readonly REMOVE_FROM_FAVORITES = 'Remove from Favorites';
 
   showHouse(house: House) {
-    this.currentHouse = house;
-    this.popupVisible = true;
+    this.currentHouse.set(house);
+    this.popupVisible.set(true);
   }
 
   changeFavoriteState() {
-    const favoriteState = !this.currentHouse.Favorite;
+    const currentHouse = this.currentHouse();
+    const favoriteState = !currentHouse.Favorite;
     const message = `This item has been ${
       favoriteState ? 'added to' : 'removed from'
     } the Favorites list!`;
-    this.currentHouse.Favorite = favoriteState;
+    currentHouse.Favorite = favoriteState;
 
     notify({
       message,
