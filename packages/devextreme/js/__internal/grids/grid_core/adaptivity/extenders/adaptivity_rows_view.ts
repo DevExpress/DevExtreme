@@ -8,10 +8,10 @@
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { getData } from '@ts/core/element_data';
-import type { EditFormItem } from '@ts/grids/grid_core/editing/types';
+import { EDIT_FORM_ITEM_DATA_KEY } from '@ts/grids/grid_core/editing/const';
 import type { ModuleType } from '@ts/grids/grid_core/types';
 import type { RowsView } from '@ts/grids/grid_core/views/rows_view';
-import { FIELD_ITEM_CONTENT_CLASS, FIELD_ITEM_DATA_KEY } from '@ts/ui/form/constants';
+import { FIELD_ITEM_CONTENT_CLASS } from '@ts/ui/form/constants';
 
 import {
   ADAPTIVE_ROW_TYPE, CLASSES, EXPAND_ARIA_NAME, HIDDEN_COLUMNS_WIDTH,
@@ -66,8 +66,8 @@ export const adaptivityRowsViewExtender = (
   private _getColumnIndexByElementCore($element) {
     const $itemContent = $element.closest(`.${FIELD_ITEM_CONTENT_CLASS}`);
     if ($itemContent.length && $itemContent.closest(this.component.$element()).length) {
-      const formItem: EditFormItem | null | undefined = $itemContent.length
-        ? getData($itemContent.first(), FIELD_ITEM_DATA_KEY)
+      const formItem = $itemContent.length
+        ? getData($itemContent.first(), EDIT_FORM_ITEM_DATA_KEY)
         : null;
       return formItem?.column && this._columnsController.getVisibleIndex(formItem.column.index);
     }
@@ -106,9 +106,9 @@ export const adaptivityRowsViewExtender = (
   public getContextMenuItems(options) {
     if (options.row?.rowType === 'detailAdaptive') {
       const view = this._columnHeadersView;
-      const formItem: EditFormItem | undefined = getData(
+      const formItem = getData(
         $(options.targetElement).closest('.dx-field-item-label').next(),
-        FIELD_ITEM_DATA_KEY,
+        EDIT_FORM_ITEM_DATA_KEY,
       );
       options.column = formItem ? formItem.column : options.column;
       return view.getContextMenuItems?.(options);

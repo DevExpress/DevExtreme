@@ -165,8 +165,9 @@ class ScrollHelper {
 
   isScrollable($element: dxElementWrapper): boolean {
     return ($element.css(this._overFlowAttr) === 'auto' || $element.hasClass('dx-scrollable-container'))
-            // @ts-expect-error prop is declared without the getter form
-            && $element.prop(this._scrollSizeProp) > Math.ceil(this._sizeAttr === 'width' ? getWidth($element) : getHeight($element));
+            // getWidth()/getHeight() return a number for an element
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+            && $element.prop<number>(this._scrollSizeProp) > Math.ceil((this._sizeAttr === 'width' ? getWidth($element) : getHeight($element))!);
   }
 
   _trySetScrollable(element: Element, mousePosition: MousePosition): boolean {

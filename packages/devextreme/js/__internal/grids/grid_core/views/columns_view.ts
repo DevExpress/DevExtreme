@@ -42,7 +42,7 @@ import type {
 } from '@ts/grids/grid_core/columns_controller/types';
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
 import type { DataChange, ProcessedItem } from '@ts/grids/grid_core/data_controller/types';
-import type { EditFormItem } from '@ts/grids/grid_core/editing/types';
+import { EDIT_FORM_ITEM_DATA_KEY } from '@ts/grids/grid_core/editing/const';
 import type { EditorFactory } from '@ts/grids/grid_core/editor_factory/editor_factory';
 import { CLASSES as ERROR_HANDLING_CLASSES } from '@ts/grids/grid_core/error_handling/const';
 import { CLASSES as FILTER_ROW_CLASSES } from '@ts/grids/grid_core/filter_row/const';
@@ -51,7 +51,7 @@ import modules from '@ts/grids/grid_core/modules/modules';
 import type { SelectionController } from '@ts/grids/grid_core/selection/selection';
 import type { OptionChanged } from '@ts/grids/grid_core/types';
 import gridCoreUtils from '@ts/grids/grid_core/utils';
-import { FIELD_ITEM_CONTENT_CLASS, FIELD_ITEM_DATA_KEY } from '@ts/ui/form/constants';
+import { FIELD_ITEM_CONTENT_CLASS } from '@ts/ui/form/constants';
 
 import { CLASSES, ROW_OPTIONS_KEY } from './const';
 import type {
@@ -440,11 +440,9 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
       resultOptions.rowIndex = this.getRowIndex($row);
 
       if ($fieldItemContent.length) {
-        // @ts-expect-error a field item content always stores its form item
-        const formItemOptions: EditFormItem = getData(
-          $fieldItemContent,
-          FIELD_ITEM_DATA_KEY,
-        );
+        // a field item content always stores its form item
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        const formItemOptions = getData($fieldItemContent, EDIT_FORM_ITEM_DATA_KEY)!;
         if (formItemOptions.column) {
           resultOptions.column = formItemOptions.column;
           resultOptions.columnIndex = this._columnsController
