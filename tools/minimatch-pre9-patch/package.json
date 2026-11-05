@@ -8,5 +8,10 @@
   "dependencies": {
     "minimatch": "^11.0.4",
     "picomatch": "^4.0.7"
+  },
+  "exports": {
+    ".": "./index.js",
+    "./create": "./create.js",
+    "./package.json": "./package.json"
   }
 }
