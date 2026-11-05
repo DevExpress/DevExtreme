@@ -178,10 +178,11 @@ export interface CellRenderOptions extends Omit<RowRenderOptions, 'columns'> {
 }
 
 export interface ViewRowEvent {
-  event: DxEvent;
+  event: DxEvent<MouseEvent>;
   rowIndex: number;
   rowElement?: DxElement<Element>;
   columns?: Column[];
+  handled?: boolean;
 }
 
 export interface ColumnWidthsOptions {
