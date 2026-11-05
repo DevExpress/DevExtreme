@@ -1,11 +1,11 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode } from '@angular/core';
+import {
+  Component, enableProdMode, inject, signal,
+} from '@angular/core';
 import { DxSchedulerModule, DxSelectBoxModule } from 'devextreme-angular';
 import type { DxSchedulerTypes } from 'devextreme-angular/ui/scheduler';
 import type { DxSelectBoxTypes } from 'devextreme-angular/ui/select-box';
-import {
-  Priority, Resource, Appointment, Service,
-} from './app.service';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -22,26 +22,22 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  appointmentsData: Appointment[];
+  private readonly service = inject(Service);
 
-  resourcesData: Resource[];
+  readonly appointmentsData = this.service.getAppointments();
 
-  prioritiesData: Priority[];
+  readonly resourcesData = this.service.getResources();
 
-  currentDate: Date = new Date(2021, 1, 2);
+  readonly prioritiesData = this.service.getPriorities();
 
-  snapToCellsMode: DxSchedulerTypes.SnapToCellsMode = 'always';
+  readonly currentDate = new Date(2021, 1, 2);
 
-  snapToCellsModeItems: DxSchedulerTypes.SnapToCellsMode[] = ['auto', 'always', 'never'];
+  readonly snapToCellsMode = signal<DxSchedulerTypes.SnapToCellsMode>('always');
 
-  constructor(service: Service) {
-    this.appointmentsData = service.getAppointments();
-    this.resourcesData = service.getResources();
-    this.prioritiesData = service.getPriorities();
-  }
+  readonly snapToCellsModeItems: DxSchedulerTypes.SnapToCellsMode[] = ['auto', 'always', 'never'];
 
   onSnapToCellsModeChanged(e: DxSelectBoxTypes.ValueChangedEvent): void {
-    this.snapToCellsMode = e.value;
+    this.snapToCellsMode.set(e.value);
   }
 }
 

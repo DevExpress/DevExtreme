@@ -21,12 +21,12 @@
       taskListWidth="500"
       scaleType="weeks"
       height="700"
-      [showResources]="showResources"
+      [showResources]="showResources()"
       (onCustomCommand)="onCustomCommandClick($event)"
       (onContextMenuPreparing)="onContextMenuPreparing($event)"
     >
       <dxo-gantt-context-menu
-        [items]="contextMenuItems"
+        [items]="contextMenuItems()"
       ></dxo-gantt-context-menu>
       <dxo-gantt-tasks [dataSource]="tasks"></dxo-gantt-tasks>
       <dxo-gantt-dependencies

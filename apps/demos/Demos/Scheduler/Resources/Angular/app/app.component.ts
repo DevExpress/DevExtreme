@@ -1,9 +1,9 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode } from '@angular/core';
-import { DxSchedulerModule, DxRadioGroupModule } from 'devextreme-angular';
 import {
-  Appointment, Service, Assignee, Room, Priority,
-} from './app.service';
+  Component, enableProdMode, inject, signal,
+} from '@angular/core';
+import { DxSchedulerModule, DxRadioGroupModule } from 'devextreme-angular';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -21,26 +21,21 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  appointmentsData: Appointment[];
+  private readonly service = inject(Service);
 
-  assignees: Assignee[];
+  readonly appointmentsData = this.service.getAppointments();
 
-  rooms: Room[];
+  readonly assignees = this.service.getAssignees();
 
-  priorities: Priority[];
+  readonly rooms = this.service.getRooms();
 
-  resourcesList: string[] = ['Assignee', 'Room', 'Priority'];
+  readonly priorities = this.service.getPriorities();
 
-  currentDate: Date = new Date(2021, 3, 27);
+  readonly resourcesList = ['Assignee', 'Room', 'Priority'];
 
-  currentResource: string = this.resourcesList[0];
+  readonly currentDate = new Date(2021, 3, 27);
 
-  constructor(service: Service) {
-    this.appointmentsData = service.getAppointments();
-    this.assignees = service.getAssignees();
-    this.rooms = service.getRooms();
-    this.priorities = service.getPriorities();
-  }
+  readonly currentResource = signal(this.resourcesList[0]);
 }
 
 bootstrapApplication(AppComponent);

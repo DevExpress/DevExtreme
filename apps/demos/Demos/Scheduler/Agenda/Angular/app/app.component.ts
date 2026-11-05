@@ -1,10 +1,8 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode } from '@angular/core';
+import { Component, enableProdMode, inject } from '@angular/core';
 import { DxSchedulerModule } from 'devextreme-angular';
 import { ArrayStore } from 'devextreme-angular/common/data';
-import {
-  Service, Priority, Assignee,
-} from './app.service';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -19,23 +17,18 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  appointmentsData: ArrayStore;
+  private readonly service = inject(Service);
 
-  assignees: Assignee[];
+  readonly appointmentsData = new ArrayStore({
+    key: 'id',
+    data: this.service.getAppointments(),
+  });
 
-  priorities: Priority[];
+  readonly assignees = this.service.getAssignees();
 
-  currentDate: Date = new Date(2021, 4, 11);
+  readonly priorities = this.service.getPriorities();
 
-  constructor(service: Service) {
-    this.assignees = service.getAssignees();
-    this.priorities = service.getPriorities();
-
-    this.appointmentsData = new ArrayStore({
-      key: 'id',
-      data: service.getAppointments(),
-    });
-  }
+  readonly currentDate = new Date(2021, 4, 11);
 }
 
 bootstrapApplication(AppComponent);

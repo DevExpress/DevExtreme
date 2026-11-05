@@ -1,24 +1,21 @@
 import {
-  ChangeDetectorRef,
   Component,
-  ViewChild,
   enableProdMode,
   Pipe,
-  PipeTransform,
+  type PipeTransform,
   inject,
+  signal,
 } from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
 import { formatDate } from 'devextreme-angular/common/core/localization';
 import { query } from 'devextreme-angular/common/data';
 import themes from 'devextreme/ui/themes';
-import { DxSchedulerModule, DxSchedulerComponent } from 'devextreme-angular/ui/scheduler';
+import { DxSchedulerModule } from 'devextreme-angular/ui/scheduler';
 import { DxSelectBoxTypes } from 'devextreme-angular/ui/select-box';
 import { DxFormTypes } from 'devextreme-angular/ui/form';
 import { DxPopupTypes } from 'devextreme-angular/ui/popup';
 
-import {
-  Service, MovieData, TheatreData, Data,
-} from './app.service';
+import { Service, type MovieData } from './app.service';
 
 type dxForm = NonNullable<DxFormTypes.InitializedEvent['component']>;
 
@@ -42,65 +39,39 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  @ViewChild(DxSchedulerComponent, { static: false }) scheduler: DxSchedulerComponent;
+  private readonly service = inject(Service);
 
-  private formatDate = formatDate;
+  readonly formatDate = formatDate;
 
-  private service = inject(Service);
+  readonly data = this.service.getData();
 
-  private changeDetectorRef = inject(ChangeDetectorRef);
+  readonly currentDate = new Date(2025, 3, 27);
 
-  data: Data[] = this.service.getData();
+  readonly moviesData = this.service.getMoviesData();
 
-  currentDate: Date = new Date(2025, 3, 27);
+  readonly theatreData = this.service.getTheatreData();
 
-  moviesData: MovieData[] = this.service.getMoviesData();
+  readonly views = ['day', 'week', 'timelineDay'];
 
-  theatreData: TheatreData[] = this.service.getTheatreData();
+  readonly groups = ['theatreId'];
 
-  views: string[] = ['day', 'week', 'timelineDay'];
+  private formInstance: dxForm | null = null;
 
-  groups: string[] = ['theatreId'];
+  readonly currentSelectedMovie = signal<MovieData | null>(null);
 
-  formInstance: dxForm | null = null;
-
-  currentSelectedMovie: MovieData | null = null;
-
-  movieEditorOptions: DxSelectBoxTypes.Properties;
-
-  priceEditorOptions: DxSelectBoxTypes.Properties;
-
-  constructor() {
-    this.movieEditorOptions = {
-      items: this.moviesData,
-      displayExpr: 'text',
-      valueExpr: 'id',
-      stylingMode: this.getEditorStylingMode(),
-      onValueChanged: this.onMovieValueChanged,
-      onContentReady: this.onCustomEditorContentReady,
-    };
-
-    this.priceEditorOptions = {
-      items: [5, 10, 15, 20],
-      displayExpr: this.priceDisplayExpr,
-      stylingMode: this.getEditorStylingMode(),
-      onContentReady: this.onCustomEditorContentReady,
-    };
-  }
-
-  getMovieById = (id: number | undefined): MovieData | null => id
+  readonly getMovieById = (id: number | undefined): MovieData | null => id
     ? query(this.moviesData).filter(['id', '=', id]).toArray()[0] ?? null
     : null;
 
-  getEditorStylingMode = (): 'filled' | 'outlined' => (
+  private readonly getEditorStylingMode = (): 'filled' | 'outlined' => (
     themes.current().startsWith('generic') ? 'outlined' : 'filled'
   );
 
-  priceDisplayExpr = (value: number): string => `$${value}`;
+  private readonly priceDisplayExpr = (value: number): string => `$${value}`;
 
-  colCountByScreen = { xs: 2 };
+  readonly colCountByScreen = { xs: 2 };
 
-  onPopupOptionChanged = (e: DxPopupTypes.OptionChangedEvent): void => {
+  private readonly onPopupOptionChanged = (e: DxPopupTypes.OptionChangedEvent): void => {
     if (e.fullName === 'toolbarItems' && e.value) {
       e.value.forEach((item, index) => {
         if (item.shortcut === 'done' || item.shortcut === 'cancel') {
@@ -110,12 +81,12 @@ export class AppComponent {
     }
   };
 
-  popupOptions: DxPopupTypes.Properties = {
+  readonly popupOptions: DxPopupTypes.Properties = {
     maxWidth: 440,
     onOptionChanged: this.onPopupOptionChanged,
   };
 
-  updateEndDate = (movie: MovieData): void => {
+  private readonly updateEndDate = (movie: MovieData): void => {
     const form = this.formInstance;
     const formData = form.option('formData');
     const { startDate } = formData;
@@ -126,12 +97,12 @@ export class AppComponent {
     }
   };
 
-  onFormInitialized = (e: DxFormTypes.InitializedEvent): void => {
+  readonly onFormInitialized = (e: DxFormTypes.InitializedEvent): void => {
     const form = e.component;
     const formData = form.option('formData');
 
     this.formInstance = form;
-    this.currentSelectedMovie = this.getMovieById(formData?.movieId);
+    this.currentSelectedMovie.set(this.getMovieById(formData?.movieId));
 
     form.on('fieldDataChanged', (fieldEvent: DxFormTypes.FieldDataChangedEvent) => {
       if (fieldEvent.dataField === 'startDate') {
@@ -145,21 +116,35 @@ export class AppComponent {
     });
   };
 
-  onMovieValueChanged = (e: DxSelectBoxTypes.ValueChangedEvent): void => {
+  private readonly onMovieValueChanged = (e: DxSelectBoxTypes.ValueChangedEvent): void => {
     const form = this.formInstance;
     const movie = this.getMovieById(e.value);
-    this.currentSelectedMovie = movie;
+    this.currentSelectedMovie.set(movie);
 
     if (movie) {
       form.updateData('director', movie.director);
       this.updateEndDate(movie);
     }
-
-    this.changeDetectorRef.detectChanges();
   };
 
-  onCustomEditorContentReady = (e: DxSelectBoxTypes.ContentReadyEvent): void => {
+  private readonly onCustomEditorContentReady = (e: DxSelectBoxTypes.ContentReadyEvent): void => {
     e.component.option('stylingMode', this.getEditorStylingMode());
+  };
+
+  readonly movieEditorOptions: DxSelectBoxTypes.Properties = {
+    items: this.moviesData,
+    displayExpr: 'text',
+    valueExpr: 'id',
+    stylingMode: this.getEditorStylingMode(),
+    onValueChanged: this.onMovieValueChanged,
+    onContentReady: this.onCustomEditorContentReady,
+  };
+
+  readonly priceEditorOptions: DxSelectBoxTypes.Properties = {
+    items: [5, 10, 15, 20],
+    displayExpr: this.priceDisplayExpr,
+    stylingMode: this.getEditorStylingMode(),
+    onContentReady: this.onCustomEditorContentReady,
   };
 }
 

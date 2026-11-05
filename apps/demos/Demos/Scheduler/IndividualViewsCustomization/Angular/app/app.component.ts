@@ -1,8 +1,8 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode } from '@angular/core';
+import { Component, enableProdMode, inject } from '@angular/core';
 import { DxSchedulerModule } from 'devextreme-angular';
 import { DataSource } from 'devextreme-angular/common/data';
-import { Service, PriorityData, TypeData } from './app.service';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -18,22 +18,17 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  dataSource: DataSource;
+  private readonly service = inject(Service);
 
-  currentDate: Date = new Date(2021, 3, 27);
+  readonly dataSource = new DataSource({
+    store: this.service.getData(),
+  });
 
-  priorityData: PriorityData[];
+  readonly currentDate = new Date(2021, 3, 27);
 
-  typeData: TypeData[];
+  readonly priorityData = this.service.getPriorityData();
 
-  constructor(service: Service) {
-    this.dataSource = new DataSource({
-      store: service.getData(),
-    });
-
-    this.priorityData = service.getPriorityData();
-    this.typeData = service.getTypeData();
-  }
+  readonly typeData = this.service.getTypeData();
 }
 
 bootstrapApplication(AppComponent);

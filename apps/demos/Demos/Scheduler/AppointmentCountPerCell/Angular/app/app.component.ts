@@ -1,7 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { ViewChild, Component, enableProdMode } from '@angular/core';
-import { DxSchedulerModule, DxSchedulerComponent } from 'devextreme-angular';
-import { Appointment, Resource, Service } from './app.service';
+import { Component, enableProdMode, inject } from '@angular/core';
+import { DxSchedulerModule } from 'devextreme-angular';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -16,18 +16,13 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  @ViewChild(DxSchedulerComponent, { static: false }) scheduler: DxSchedulerComponent;
+  private readonly service = inject(Service);
 
-  appointmentsData: Appointment[];
+  readonly appointmentsData = this.service.getAppointments();
 
-  currentDate: Date = new Date(2021, 2, 25);
+  readonly currentDate = new Date(2021, 2, 25);
 
-  resourcesData: Resource[];
-
-  constructor(service: Service) {
-    this.appointmentsData = service.getAppointments();
-    this.resourcesData = service.getResources();
-  }
+  readonly resourcesData = this.service.getResources();
 }
 
 bootstrapApplication(AppComponent);

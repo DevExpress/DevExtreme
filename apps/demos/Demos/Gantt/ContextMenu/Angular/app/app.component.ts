@@ -1,10 +1,10 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode } from '@angular/core';
-import { DxGanttModule, DxGanttTypes } from 'devextreme-angular/ui/gantt';
-import { DxCheckBoxModule, DxCheckBoxTypes } from 'devextreme-angular/ui/check-box';
 import {
-  Service, Task, Dependency, Resource, ResourceAssignment,
-} from './app.service';
+  Component, enableProdMode, inject, signal,
+} from '@angular/core';
+import { DxGanttModule, type DxGanttTypes } from 'devextreme-angular/ui/gantt';
+import { DxCheckBoxModule, type DxCheckBoxTypes } from 'devextreme-angular/ui/check-box';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -22,33 +22,28 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  tasks: Task[];
+  private readonly service = inject(Service);
 
-  dependencies: Dependency[];
+  readonly tasks = this.service.getTasks();
 
-  resources: Resource[];
+  readonly dependencies = this.service.getDependencies();
 
-  resourceAssignments: ResourceAssignment[];
+  readonly resources = this.service.getResources();
 
-  showResources = true;
+  readonly resourceAssignments = this.service.getResourceAssignments();
 
-  disableContextMenu = false;
+  readonly showResources = signal(true);
 
-  contextMenuItems = this.getContextMenuItems();
+  private disableContextMenu = false;
 
-  constructor(service: Service) {
-    this.tasks = service.getTasks();
-    this.dependencies = service.getDependencies();
-    this.resources = service.getResources();
-    this.resourceAssignments = service.getResourceAssignments();
-  }
+  readonly contextMenuItems = signal(this.getContextMenuItems());
 
   onContextMenuPreparing(e: DxGanttTypes.ContextMenuPreparingEvent) {
     e.cancel = this.disableContextMenu;
   }
 
   onCustomizeContextMenu(e: DxCheckBoxTypes.ValueChangedEvent) {
-    this.contextMenuItems = e.value ? this.getContextMenuItems() : undefined;
+    this.contextMenuItems.set(e.value ? this.getContextMenuItems() : undefined);
   }
 
   onPreventContextMenuShowing(e: DxCheckBoxTypes.ValueChangedEvent) {
@@ -57,11 +52,11 @@ export class AppComponent {
 
   onCustomCommandClick(e: DxGanttTypes.CustomCommandEvent) {
     if (e.name === 'ToggleDisplayOfResources') {
-      this.showResources = !this.showResources;
+      this.showResources.update((value) => !value);
     }
   }
 
-  getContextMenuItems() {
+  private getContextMenuItems() {
     return [
       'addTask',
       'taskdetails',
