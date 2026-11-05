@@ -528,7 +528,7 @@ export class SelectionController extends modules.Controller {
     return ['selectRows', 'deselectRows', 'selectRowsByIndexes', 'getSelectedRowKeys', 'getSelectedRowsData', 'clearSelection', 'selectAll', 'deselectAll', 'startSelectionWithCheckboxes', 'stopSelectionWithCheckboxes', 'isRowSelected'];
   }
 
-  public isRowSelected(arg: RowKey | RawItemData): boolean {
+  public isRowSelected(arg: RowKey | RawItemData): boolean | undefined {
     return this._selection.isItemSelected(arg);
   }
 
@@ -582,7 +582,7 @@ export class SelectionController extends modules.Controller {
     preserve?: boolean,
     isDeselect?: boolean,
     isSelectAll?: boolean,
-  ): DeferredObj<unknown> {
+  ): DeferredObj<unknown[]> {
     return this._selection.selectedItemKeys(value, preserve, isDeselect, isSelectAll);
   }
 
@@ -809,9 +809,9 @@ export const selectionColumnHeadersViewExtender = (
   }
 };
 
-export const selectionRowsViewExtender = (
-  Base: ModuleType<RowsView>,
-): ModuleType<SelectionRowsView> => class SelectionRowsViewExtender extends Base {
+export const selectionRowsViewExtender = <TBase extends ModuleType<RowsView>>(
+  Base: TBase,
+): TBase & ModuleType<SelectionRowsView> => class SelectionRowsViewExtender extends Base {
   public renderSelectCheckBoxContainer(
     $container: dxElementWrapper,
     options: SelectionCellOptions,
@@ -952,24 +952,27 @@ export const selectionRowsViewExtender = (
     return $row;
   }
 
-  public _rowClickForTreeList(e: ViewRowEvent): void {
-    super._rowClick(e);
-  }
-
-  protected _rowClick(e: ViewRowEvent): void {
+  /**
+   * @extended: TreeList's selection
+   */
+  public handleRowClickBySelection(e: ViewRowEvent): void {
     const dxEvent = e.event;
     const isSelectionDisabled = $(dxEvent.target).closest(`.${SELECTION_DISABLED_CLASS}`).length;
 
-    if (!this.isClickableElement($(dxEvent.target))) {
-      if (!isSelectionDisabled && (this.option(SELECTION_MODE) !== 'multiple' || this.option(SHOW_CHECKBOXES_MODE) !== 'always')) {
-        if (this._selectionController.changeItemSelection(e.rowIndex, {
-          control: isCommandKeyPressed(dxEvent),
-          shift: dxEvent.shiftKey,
-        })) {
-          dxEvent.preventDefault();
-          e.handled = true;
-        }
+    if (!isSelectionDisabled && (this.option(SELECTION_MODE) !== 'multiple' || this.option(SHOW_CHECKBOXES_MODE) !== 'always')) {
+      if (this._selectionController.changeItemSelection(e.rowIndex, {
+        control: isCommandKeyPressed(dxEvent),
+        shift: dxEvent.shiftKey,
+      })) {
+        dxEvent.preventDefault();
+        e.handled = true;
       }
+    }
+  }
+
+  protected _rowClick(e: ViewRowEvent): void {
+    if (!this.isClickableElement($(e.event.target))) {
+      this.handleRowClickBySelection(e);
       super._rowClick(e);
     }
   }
