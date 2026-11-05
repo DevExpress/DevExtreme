@@ -14,6 +14,7 @@ import type { InitializedEvent as ButtonInitializedEvent } from '@js/ui/button';
 import Menu from '@js/ui/menu';
 import Overlay from '@js/ui/overlay/ui.overlay';
 import { selectView } from '@js/ui/shared/accessibility';
+import { isObject } from '@ts/core/utils/type';
 import eventsEngine from '@ts/events/core/events_engine';
 import type { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/column_headers';
 import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/columns_controller';
@@ -32,7 +33,6 @@ import type { ToolbarItem } from '@ts/grids/grid_core/header_panel/types';
 import modules from '@ts/grids/grid_core/modules/modules';
 import type { ModuleType, OptionChanged } from '@ts/grids/grid_core/types';
 import gridCoreUtils from '@ts/grids/grid_core/utils';
-import Editor from '@ts/ui/editor/editor';
 import type MenuInternal from '@ts/ui/menu/menu';
 
 import { CLASSES } from './const';
@@ -41,8 +41,14 @@ import type {
   FilterRowEditorOptions,
   FilterRowHeaderPanel,
   FilterRowOptions,
+  FilterValueUpdateOptions,
 } from './types';
-import { createFilterRowExpressions } from './utils';
+import {
+  createFilterRowExpressions,
+  getEditorInstance,
+  isOnClickApplyFilterMode,
+  isValidFilterValue,
+} from './utils';
 
 const OPERATION_ICONS = {
   '=': 'filter-operation-equals',
@@ -88,137 +94,9 @@ const FILTER_MENU = 'dx-filter-menu';
 const APPLY_BUTTON_CLASS = 'dx-apply-button';
 const HIGHLIGHT_OUTLINE_CLASS = 'dx-highlight-outline';
 const FOCUSED_CLASS = 'dx-focused';
-const FILTER_RANGE_CONTENT_CLASS = 'dx-filter-range-content';
 const FILTER_MODIFIED_CLASS = 'dx-filter-modified';
 
 const EDITORS_INPUT_SELECTOR = 'input:not([type=\'hidden\'])';
-
-const BETWEEN_OPERATION_DATA_TYPES = ['date', 'datetime', 'number'];
-const MULTISELECT_EDITOR_NAMES = ['dxTagBox', 'dxDateRangeBox', 'dxCalendar', 'dxRangeSlider'];
-
-function isOnClickApplyFilterMode(that) {
-  return that.option('filterRow.applyFilter') === 'onClick';
-}
-
-const getEditorInstance = function ($editorContainer) {
-  const $editor = $editorContainer?.children();
-  const componentNames = $editor?.data('dxComponents');
-  const editor = componentNames?.length && $editor.data(componentNames[0]);
-
-  if (editor instanceof Editor) {
-    return editor;
-  }
-  return null;
-};
-
-const getRangeTextByFilterValue = function (that, column) {
-  let result = '';
-  let rangeEnd = '';
-  const filterValue = getColumnFilterValue(that, column);
-  const formatOptions = gridCoreUtils.getFormatOptionsByColumn(column, 'filterRow');
-
-  if (Array.isArray(filterValue)) {
-    result = gridCoreUtils.formatValue(filterValue[0], formatOptions);
-    rangeEnd = gridCoreUtils.formatValue(filterValue[1], formatOptions);
-
-    if (rangeEnd !== '') {
-      result += ` - ${rangeEnd}`;
-    }
-  } else if (isDefined(filterValue)) {
-    result = gridCoreUtils.formatValue(filterValue, formatOptions);
-  }
-
-  return result;
-};
-
-function getColumnFilterValue(that, column) {
-  if (column) {
-    return isOnClickApplyFilterMode(that) && column.bufferedFilterValue !== undefined ? column.bufferedFilterValue : column.filterValue;
-  }
-}
-
-const getColumnSelectedFilterOperation = function (that, column) {
-  if (column) {
-    return isOnClickApplyFilterMode(that) && column.bufferedSelectedFilterOperation !== undefined ? column.bufferedSelectedFilterOperation : column.selectedFilterOperation;
-  }
-};
-
-const hasMultiselectEditor = function ($editorContainer: dxElementWrapper): boolean {
-  const editor = getEditorInstance($editorContainer);
-
-  if (editor) {
-    return MULTISELECT_EDITOR_NAMES.includes(editor.NAME ?? '');
-  }
-
-  return !$editorContainer.find(`.${FILTER_RANGE_CONTENT_CLASS}`).length;
-};
-
-const isValidFilterValue = function (
-  filterValue: any,
-  column: Column,
-  $editorContainer: dxElementWrapper,
-): boolean {
-  if (Array.isArray(filterValue)) {
-    if (hasMultiselectEditor($editorContainer)) {
-      return true;
-    }
-    if (BETWEEN_OPERATION_DATA_TYPES.includes(column?.dataType ?? '')) {
-      return false;
-    }
-  }
-
-  return filterValue !== undefined;
-};
-
-const getFilterValue = function (that, columnIndex, $editorContainer) {
-  const column = that._columnsController.columnOption(columnIndex);
-  const filterValue = getColumnFilterValue(that, column);
-  const isFilterRange = $editorContainer.closest(`.${that.addWidgetPrefix(FILTER_RANGE_OVERLAY_CLASS)}`).length;
-  const isRangeStart = $editorContainer.hasClass(that.addWidgetPrefix(FILTER_RANGE_START_CLASS));
-  const isBetween = getColumnSelectedFilterOperation(that, column) === 'between';
-
-  if (filterValue && Array.isArray(filterValue) && isBetween) {
-    if (isRangeStart) {
-      return filterValue[0];
-    }
-    return filterValue[1];
-  }
-
-  if (isFilterRange || !isValidFilterValue(filterValue, column, $editorContainer)) {
-    return null;
-  }
-
-  return filterValue;
-};
-
-const normalizeFilterValue = function (that, filterValue, column, $editorContainer) {
-  if (getColumnSelectedFilterOperation(that, column) === 'between') {
-    const columnFilterValue = getColumnFilterValue(that, column);
-    if ($editorContainer.hasClass(that.addWidgetPrefix(FILTER_RANGE_START_CLASS))) {
-      return [filterValue, Array.isArray(columnFilterValue) ? columnFilterValue[1] : undefined];
-    }
-    return [Array.isArray(columnFilterValue) ? columnFilterValue[0] : columnFilterValue, filterValue];
-  }
-
-  return filterValue;
-};
-
-const updateFilterValue = function (that, options) {
-  const value = options.value === '' ? null : options.value;
-  const $editorContainer = options.container;
-  const column = that._columnsController.columnOption(options.column.index);
-  const filterValue = getFilterValue(that, column.index, $editorContainer);
-
-  if (!isDefined(filterValue) && !isDefined(value)) return;
-
-  that._applyFilterViewController.setHighLight($editorContainer, filterValue !== value);
-
-  const columnOptionName = isOnClickApplyFilterMode(that) ? 'bufferedFilterValue' : 'filterValue';
-  const normalizedValue = normalizeFilterValue(that, value, column, $editorContainer);
-  const isBetween = getColumnSelectedFilterOperation(that, column) === 'between';
-  const notFireEvent = options.notFireEvent || isBetween && Array.isArray(normalizedValue) && normalizedValue.includes(undefined);
-  that._columnsController.columnOption(column.index, columnOptionName, normalizedValue, notFireEvent);
-};
 
 const columnHeadersView = (
   Base: ModuleType<ColumnHeadersView>,
@@ -257,54 +135,172 @@ const columnHeadersView = (
     }
   }
 
+  private getRangeTextByFilterValue(column: Column): string {
+    let result = '';
+    let rangeEnd = '';
+    const filterValue = this.getColumnFilterValue(column);
+    const formatOptions = gridCoreUtils.getFormatOptionsByColumn(column, 'filterRow');
+
+    if (Array.isArray(filterValue)) {
+      result = gridCoreUtils.formatValue(filterValue[0], formatOptions);
+      rangeEnd = gridCoreUtils.formatValue(filterValue[1], formatOptions);
+
+      if (rangeEnd !== '') {
+        result += ` - ${rangeEnd}`;
+      }
+    } else if (isDefined(filterValue)) {
+      result = gridCoreUtils.formatValue(filterValue, formatOptions);
+    }
+
+    return result;
+  }
+
+  private getColumnFilterValue(column: Column | undefined): unknown {
+    if (!column) {
+      return undefined;
+    }
+
+    return isOnClickApplyFilterMode(this) && column.bufferedFilterValue !== undefined
+      ? column.bufferedFilterValue
+      : column.filterValue;
+  }
+
+  private getColumnSelectedFilterOperation(
+    column: Column | undefined,
+  ): Column['selectedFilterOperation'] {
+    if (!column) {
+      return undefined;
+    }
+
+    return isOnClickApplyFilterMode(this) && column.bufferedSelectedFilterOperation !== undefined
+      ? column.bufferedSelectedFilterOperation
+      : column.selectedFilterOperation;
+  }
+
+  private getFilterValue(
+    columnIndex: number | undefined,
+    $editorContainer: dxElementWrapper,
+  ): unknown {
+    const column = this._columnsController.columnOption(columnIndex);
+    const filterValue = this.getColumnFilterValue(column);
+    const isFilterRange = $editorContainer
+      .closest(`.${this.addWidgetPrefix(FILTER_RANGE_OVERLAY_CLASS)}`)
+      .length;
+    const isRangeStart = $editorContainer.hasClass(this.addWidgetPrefix(FILTER_RANGE_START_CLASS));
+    const isBetween = this.getColumnSelectedFilterOperation(column) === 'between';
+
+    if (filterValue && Array.isArray(filterValue) && isBetween) {
+      if (isRangeStart) {
+        return filterValue[0];
+      }
+
+      return filterValue[1];
+    }
+
+    if (isFilterRange || !isValidFilterValue(filterValue, column, $editorContainer)) {
+      return null;
+    }
+
+    return filterValue;
+  }
+
+  private normalizeFilterValue(
+    filterValue: unknown,
+    column: Column | undefined,
+    $editorContainer: dxElementWrapper,
+  ): unknown {
+    if (this.getColumnSelectedFilterOperation(column) === 'between') {
+      const columnFilterValue = this.getColumnFilterValue(column);
+
+      if ($editorContainer.hasClass(this.addWidgetPrefix(FILTER_RANGE_START_CLASS))) {
+        return [filterValue, Array.isArray(columnFilterValue) ? columnFilterValue[1] : undefined];
+      }
+
+      return [
+        Array.isArray(columnFilterValue) ? columnFilterValue[0] : columnFilterValue,
+        filterValue,
+      ];
+    }
+
+    return filterValue;
+  }
+
+  private updateFilterValue(options: FilterValueUpdateOptions): void {
+    const value = options.value === '' ? null : options.value;
+    const $editorContainer = options.container;
+    const column = this._columnsController.columnOption(options.column.index);
+
+    if (!column) {
+      return;
+    }
+
+    const filterValue = this.getFilterValue(column.index, $editorContainer);
+
+    if (!isDefined(filterValue) && !isDefined(value)) return;
+
+    this._applyFilterViewController.setHighLight($editorContainer, filterValue !== value);
+
+    const columnOptionName = isOnClickApplyFilterMode(this) ? 'bufferedFilterValue' : 'filterValue';
+    const normalizedValue = this.normalizeFilterValue(value, column, $editorContainer);
+    const isBetween = this.getColumnSelectedFilterOperation(column) === 'between';
+    const notFireEvent = options.notFireEvent
+      || (isBetween && Array.isArray(normalizedValue) && normalizedValue.includes(undefined));
+
+    this._columnsController.columnOption(
+      column.index,
+      columnOptionName,
+      normalizedValue,
+      notFireEvent,
+    );
+  }
+
   private _updateEditorValue(column, $editorContainer) {
-    const that = this;
     const editor = getEditorInstance($editorContainer);
 
-    editor && editor.option('value', getFilterValue(that, column.index, $editorContainer));
+    editor && editor.option('value', this.getFilterValue(column.index, $editorContainer));
   }
 
   protected _columnOptionChanged(e) {
-    const that = this;
     const { optionNames } = e;
-    let $cell;
-    let $editorContainer;
-    let $editorRangeElements;
-    let $menu;
 
     if (gridCoreUtils.checkChanges(optionNames, ['filterValue', 'bufferedFilterValue', 'selectedFilterOperation', 'bufferedSelectedFilterOperation', 'filterValues', 'filterType']) && e.columnIndex !== undefined) {
-      const visibleIndex = that._columnsController.getVisibleIndex(e.columnIndex);
-      const column = that._columnsController.columnOption(e.columnIndex);
-      // @ts-expect-error the view is rendered here
-      $cell = that._getCellElement(that.element().find(`.${that.addWidgetPrefix(CLASSES.filterRow)}`).index(), visibleIndex) ?? $();
-      $editorContainer = $cell.find(`.${EDITOR_CONTAINER_CLASS}`).first();
+      const visibleIndex = this._columnsController.getVisibleIndex(e.columnIndex);
+      const column = this._columnsController.columnOption(e.columnIndex);
+      const $element = this.element();
+
+      if (!column || !$element?.length) {
+        return;
+      }
+
+      const $cell = this._getCellElement($element.find(`.${this.addWidgetPrefix(CLASSES.filterRow)}`).index(), visibleIndex) ?? $();
+      const $editorContainer = $cell.find(`.${EDITOR_CONTAINER_CLASS}`).first();
 
       if (optionNames.filterValue || optionNames.bufferedFilterValue) {
-        that._updateEditorValue(column, $editorContainer);
+        this._updateEditorValue(column, $editorContainer);
 
-        const overlayInstance = $cell.find(`.${that.addWidgetPrefix(FILTER_RANGE_OVERLAY_CLASS)}`).data('dxOverlay');
+        const overlayInstance = $cell.find(`.${this.addWidgetPrefix(FILTER_RANGE_OVERLAY_CLASS)}`).data('dxOverlay');
         if (overlayInstance) {
-          $editorRangeElements = overlayInstance.$content().find(`.${EDITOR_CONTAINER_CLASS}`);
+          const $editorRangeElements = overlayInstance.$content().find(`.${EDITOR_CONTAINER_CLASS}`);
 
-          that._updateEditorValue(column, $editorRangeElements.first());
-          that._updateEditorValue(column, $editorRangeElements.last());
+          this._updateEditorValue(column, $editorRangeElements.first());
+          this._updateEditorValue(column, $editorRangeElements.last());
         }
         if (!overlayInstance?.option('visible')) {
-          that._updateFilterRangeContent($cell, getRangeTextByFilterValue(that, column));
+          this._updateFilterRangeContent($cell, this.getRangeTextByFilterValue(column));
         }
       }
       if (optionNames.selectedFilterOperation || optionNames.bufferedSelectedFilterOperation) {
         if (visibleIndex >= 0 && column) {
-          $menu = $cell.find(`.${MENU_CLASS}`);
+          const $menu = $cell.find(`.${MENU_CLASS}`);
 
           if ($menu.length) {
-            that._updateFilterOperationChooser($menu, column, $editorContainer);
+            this._updateFilterOperationChooser($menu, column, $editorContainer);
 
-            if (getColumnSelectedFilterOperation(that, column) === 'between') {
-              that._renderFilterRangeContent($cell, column);
-            } else if ($editorContainer.find(`.${FILTER_RANGE_CONTENT_CLASS}`).length) {
-              that._renderEditor($editorContainer, that.getEditorOptions($editorContainer, column));
-              that._hideFilterRange();
+            if (this.getColumnSelectedFilterOperation(column) === 'between') {
+              this._renderFilterRangeContent($cell, column);
+            } else if ($editorContainer.find(`.${CLASSES.filterRangeContent}`).length) {
+              this._renderEditor($editorContainer, this.getEditorOptions($editorContainer, column));
+              this._hideFilterRange();
             }
           }
         }
@@ -406,8 +402,8 @@ const columnHeadersView = (
         column = that._columnsController.columnOption(column.index);
 
         $cell.find(`.${MENU_CLASS}`).parent().addClass(EDITOR_WITH_MENU_CLASS);
-        if (getColumnSelectedFilterOperation(that, column) === 'between') {
-          that._updateFilterRangeContent($cell, getRangeTextByFilterValue(that, column));
+        if (that.getColumnSelectedFilterOperation(column) === 'between') {
+          that._updateFilterRangeContent($cell, that.getRangeTextByFilterValue(column));
           that.component.updateDimensions();
         }
       },
@@ -486,7 +482,7 @@ const columnHeadersView = (
     const $container = $('<div>').appendTo($cell);
     const $editorContainer = $('<div>').addClass(EDITOR_CONTAINER_CLASS).appendTo($container);
 
-    if (getColumnSelectedFilterOperation(that, column) === 'between') {
+    if (that.getColumnSelectedFilterOperation(column) === 'between') {
       that._renderFilterRangeContent($cell, column);
     } else {
       const editorOptions = that.getEditorOptions($editorContainer, column);
@@ -534,13 +530,13 @@ const columnHeadersView = (
           ...column.editorOptions?.inputAttr,
         },
       },
-      value: getFilterValue(this, column.index, $editorContainer),
+      value: this.getFilterValue(column.index, $editorContainer),
       parentType: 'filterRow' as const,
       showAllText: this.option('filterRow.showAllText'),
       updateValueTimeout: this.option('filterRow.applyFilter') === 'onClick' ? 0 : FILTERING_TIMEOUT,
       width: null,
       setValue: (value: unknown, notFireEvent?: boolean): void => {
-        updateFilterValue(this, {
+        this.updateFilterValue({
           column,
           value,
           container: $editorContainer,
@@ -549,7 +545,7 @@ const columnHeadersView = (
       },
     });
 
-    if (getColumnSelectedFilterOperation(this, column) === 'between') {
+    if (this.getColumnSelectedFilterOperation(column) === 'between') {
       if ($editorContainer.hasClass(this.addWidgetPrefix(FILTER_RANGE_START_CLASS))) {
         editorOptions.placeholder = this.option('filterRow.betweenStartText');
       } else {
@@ -598,7 +594,7 @@ const columnHeadersView = (
 
     $editorContainer.empty();
     const $filterRangeContent = $('<div>')
-      .addClass(FILTER_RANGE_CONTENT_CLASS)
+      .addClass(CLASSES.filterRangeContent)
       .attr('tabindex', this.option('tabIndex')!);
 
     eventsEngine.on($filterRangeContent, 'focusin', () => {
@@ -607,11 +603,11 @@ const columnHeadersView = (
 
     $filterRangeContent.appendTo($editorContainer);
 
-    that._updateFilterRangeContent($cell, getRangeTextByFilterValue(that, column));
+    that._updateFilterRangeContent($cell, that.getRangeTextByFilterValue(column));
   }
 
   private _updateFilterRangeContent($cell, value) {
-    const $filterRangeContent = $cell.find(`.${FILTER_RANGE_CONTENT_CLASS}`);
+    const $filterRangeContent = $cell.find(`.${CLASSES.filterRangeContent}`);
 
     if ($filterRangeContent.length) {
       if (value === '') {
@@ -642,9 +638,9 @@ const columnHeadersView = (
       showFirstSubmenuMode: 'onHover',
       hideSubmenuOnMouseLeave: true,
       items: [{
-        name: getColumnSelectedFilterOperation(that, column) || ariaSearchBox,
+        name: that.getColumnSelectedFilterOperation(column) || ariaSearchBox,
         disabled: !column.filterOperations?.length,
-        icon: OPERATION_ICONS[getColumnSelectedFilterOperation(that, column) || 'default'],
+        icon: OPERATION_ICONS[that.getColumnSelectedFilterOperation(column) || 'default'],
         selectable: false,
         items: that._getFilterOperationMenuItems(column),
       }],
@@ -656,7 +652,7 @@ const columnHeadersView = (
       },
       onItemClick(properties) {
         const selectedFilterOperation = properties.itemData.name;
-        const columnSelectedFilterOperation = getColumnSelectedFilterOperation(that, column);
+        const columnSelectedFilterOperation = that.getColumnSelectedFilterOperation(column);
         let notFocusEditor = false;
         const isOnClickMode = isOnClickApplyFilterMode(that);
         const options = {};
@@ -742,7 +738,7 @@ const columnHeadersView = (
       const availableFilterOperations = column.filterOperations.filter((value) => isDefined(OPERATION_DESCRIPTORS[value]));
       result = map(availableFilterOperations, (value) => ({
         name: value,
-        selected: (getColumnSelectedFilterOperation(that, column) || column.defaultFilterOperation) === value,
+        selected: (that.getColumnSelectedFilterOperation(column) || column.defaultFilterOperation) === value,
         text: that._getOperationDescriptionFromDescriptor(value),
         icon: OPERATION_ICONS[value],
       }));
@@ -807,11 +803,16 @@ const columnHeadersView = (
         const filter = this._dataController.getCombinedFilterWithExcludedColumn(column) || null;
 
         const editorDataSource = editor.option('dataSource');
+        const editorDataSourceFilter = isObject(editorDataSource)
+          ? editorDataSource.__dataGridSourceFilter
+          : undefined;
         const shouldUpdateFilter = !filterChanged
-          || !equalByValue(editorDataSource.__dataGridSourceFilter || null, filter);
+          || !equalByValue(editorDataSourceFilter || null, filter);
 
         if (shouldUpdateFilter) {
-          const { selectedItem, items = [] } = editor.option();
+          const selectedItem = editor.option('selectedItem');
+          const editorItems = editor.option('items');
+          const items = Array.isArray(editorItems) ? editorItems : [];
           const hasSelectedItem = items.some((item) => equalByValue(item, selectedItem));
           if (!hasSelectedItem) {
             editor.option('items', [...items, selectedItem]);
@@ -870,9 +871,10 @@ export class ApplyFilterViewController extends modules.ViewController {
 
   public setHighLight($element: dxElementWrapper | undefined, value: boolean): void {
     if (isOnClickApplyFilterMode(this)) {
-      if ($element?.toggleClass(HIGHLIGHT_OUTLINE_CLASS, value)) {
-        $element.closest(`.${EDITOR_CELL_CLASS}`).toggleClass(FILTER_MODIFIED_CLASS, value);
-      }
+      $element
+        ?.toggleClass(HIGHLIGHT_OUTLINE_CLASS, value)
+        .closest(`.${EDITOR_CELL_CLASS}`)
+        .toggleClass(FILTER_MODIFIED_CLASS, value);
       this._getHeaderPanel().enableApplyButton(value);
     }
   }

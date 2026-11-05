@@ -1,4 +1,5 @@
 import type { FilterRow, FilterRowOperationDescriptions } from '@js/common/grids';
+import type { dxElementWrapper } from '@js/core/renderer';
 import type { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/column_headers';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import type { HeaderPanel } from '@ts/grids/grid_core/header_panel/header_panel';
@@ -33,3 +34,10 @@ export interface FilterRowHeaderPanelExtension {
 }
 
 export type FilterRowHeaderPanel = HeaderPanel & FilterRowHeaderPanelExtension;
+
+export interface FilterValueUpdateOptions {
+  column: Column;
+  value: unknown;
+  container: dxElementWrapper;
+  notFireEvent?: boolean;
+}
