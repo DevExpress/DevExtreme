@@ -100,4 +100,16 @@ describe('DropDownButton', () => {
       expect(model.getButtonElement()?.getAttribute('aria-label')).toBe('Export');
     });
   });
+
+  describe('hint tooltip (T1337649)', () => {
+    it('should follow a hint change at runtime', () => {
+      const { instance, model } = createDropDownButton({ icon: 'export', hint: HINT });
+
+      expect(model.getElement()?.getAttribute('title')).toBe(HINT);
+
+      instance.option('hint', 'Print or export');
+
+      expect(model.getElement()?.getAttribute('title')).toBe('Print or export');
+    });
+  });
 });
