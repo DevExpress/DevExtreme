@@ -6,7 +6,7 @@ import {
   selectionContextMenuControllerExtender,
   SelectionController,
   selectionRowsViewExtender,
-} from './m_selection';
+} from './selection';
 
 interface SelectionModuleOptions {
   selection: {

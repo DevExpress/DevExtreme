@@ -1,6 +1,6 @@
 /* eslint-disable max-classes-per-file */
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
-import type { SelectionController } from '@ts/grids/grid_core/selection/m_selection';
+import type { SelectionController } from '@ts/grids/grid_core/selection/selection';
 import type { SelectionChangedOptions } from '@ts/grids/grid_core/selection/types';
 import type { ModuleType } from '@ts/grids/grid_core/types';
 import type { RowsView } from '@ts/grids/grid_core/views/rows_view';
