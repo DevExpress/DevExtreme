@@ -12,7 +12,6 @@ import {
   user,
   assistant,
   suggestionCards,
-  CHAT_DISABLED_CLASS,
 } from './data.ts';
 import { dataSource, useApi } from './useApi.ts';
 
@@ -79,7 +78,7 @@ export default function App() {
 
       await processAIRequest(message);
 
-      (event?.target as HTMLElement).focus();
+      setTimeout(() => (event?.target as HTMLElement).focus());
     }
   }, [insertMessage, alerts.length, processAIRequest]);
 
@@ -147,7 +146,7 @@ export default function App() {
           />
         </Toolbar>
         <Chat
-          className={isProcessing ? CHAT_DISABLED_CLASS : ''}
+          disabled={isProcessing}
           dataSource={dataSource}
           reloadOnChange={false}
           showAvatar={true}

@@ -78,8 +78,12 @@ $(() => {
     const answer = await requestModel(messageList);
     const calls = (answer.tool_calls ?? []).filter(({ type }) => type === 'function');
 
-    if (!calls.length || round === MAX_TOOL_ROUNDS) {
+    if (!calls.length) {
       return { text: answer.content ?? '', toolCalls };
+    }
+
+    if (round === MAX_TOOL_ROUNDS) {
+      throw new Error('The model requested too many tool calls. Try rephrasing your request.');
     }
 
     messageList.push({
@@ -120,7 +124,7 @@ $(() => {
   }
 
   function toggleDisabledState(disabled, event) {
-    instance.element().toggleClass(CHAT_DISABLED_CLASS, disabled);
+    instance.option('disabled', disabled);
     toolbar.option('items[1].options.disabled', disabled);
 
     if (disabled) {

@@ -1,6 +1,5 @@
 import type { ChatTypes } from 'devextreme-react/chat';
 
-export const CHAT_DISABLED_CLASS = 'chat-disabled';
 export const ALERT_TIMEOUT = 1000 * 60;
 export const MAX_TOOL_ROUNDS = 3;
 export const TOOL_DELAY = 700;
