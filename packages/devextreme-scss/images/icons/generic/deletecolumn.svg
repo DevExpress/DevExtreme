@@ -1,5 +1,5 @@
 <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18">
-<title>table-remove-column</title>
+<title>deletecolumn</title>
 <path d="M0 2v13h5v-13zM4 14h-3v-3h3zM4 10h-3v-3h3zM4 6h-3v-3h3z"></path>
 <path d="M12 2v13h5v-13zM16 14h-3v-3h3zM16 10h-3v-3h3zM16 6h-3v-3h3z"></path>
 <path d="M6 0h5v4h-5v-4z"></path>
