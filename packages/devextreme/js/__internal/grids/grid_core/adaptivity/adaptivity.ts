@@ -16,7 +16,7 @@ import { isDefined } from '@js/core/utils/type';
 import type { Properties as FormProperties, SimpleItemTemplateData } from '@js/ui/form';
 import Form from '@js/ui/form';
 import { isMaterial } from '@js/ui/themes';
-import type { Column } from '@ts/grids/grid_core/columns_controller/types';
+import type { Column, WithCellValueCalculator } from '@ts/grids/grid_core/columns_controller/types';
 import { isCellBasedEditMode, isFormBasedEditMode } from '@ts/grids/grid_core/editing/editing_utils';
 import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
 import { FIELD_ITEM_CONTENT_CLASS } from '@ts/ui/form/constants';
@@ -88,13 +88,13 @@ export class AdaptiveColumnsViewController extends modules.ViewController {
 
   protected _rowsView!: RowsView;
 
-  private _hiddenColumns!: Column[];
+  private _hiddenColumns!: WithCellValueCalculator<Column>[];
 
   private _$itemContents?: dxElementWrapper | null;
 
   private _form?: Form;
 
-  private _hidingColumnsQueue!: Column[];
+  private _hidingColumnsQueue!: WithCellValueCalculator<Column>[];
 
   protected _keyboardNavigationController!: KeyboardNavigationController;
 
@@ -177,7 +177,6 @@ export class AdaptiveColumnsViewController extends modules.ViewController {
 
     const value = column.type === AI_COLUMN_NAME
       ? this._getValueFromCellOptions(columnIndex, cellOptions)
-      // @ts-expect-error createColumn initializes calculateCellValue
       : column.calculateCellValue(rowData);
 
     const displayValue = gridCoreUtils.getDisplayValue(column, value, rowData, cellOptions.rowType);
@@ -454,7 +453,9 @@ export class AdaptiveColumnsViewController extends modules.ViewController {
     return undefined;
   }
 
-  private _getFormItemsByHiddenColumns(hiddenColumns: Column[]): AdaptiveFormItem[] {
+  private _getFormItemsByHiddenColumns(
+    hiddenColumns: WithCellValueCalculator<Column>[],
+  ): AdaptiveFormItem[] {
     const items: AdaptiveFormItem[] = [];
     each(hiddenColumns, (_, column) => {
       items.push({
@@ -637,7 +638,7 @@ export class AdaptiveColumnsViewController extends modules.ViewController {
   public hideRedundantColumns(
     resultWidths: (number | string | undefined)[],
     visibleColumns: Column[],
-    hiddenQueue: Column[],
+    hiddenQueue: WithCellValueCalculator<Column>[],
   ): void {
     this._hiddenColumns = [];
 
@@ -703,7 +704,7 @@ export class AdaptiveColumnsViewController extends modules.ViewController {
       needHideColumn = needHideColumn || totalWidth > availableWidth;
 
       if (needHideColumn) {
-        const column = hiddenQueue.pop() as Column;
+        const column = hiddenQueue.pop() as WithCellValueCalculator<Column>;
         const visibleIndex = this._columnsController.getVisibleIndex(column.index);
 
         // @ts-expect-error _calculateColumnWidth returns undefined when bestFitWidth is absent
@@ -807,7 +808,7 @@ export class AdaptiveColumnsViewController extends modules.ViewController {
     return isDefined(this._dataController.getAdaptiveExpandedKey());
   }
 
-  public updateForm(hiddenColumns?: Column[]): void {
+  public updateForm(hiddenColumns?: WithCellValueCalculator<Column>[]): void {
     if (this.hasAdaptiveDetailRowExpanded()) {
       // @ts-expect-error _contentReadyAction isn't in the public Form type
       if (this._form && isDefined(this._form._contentReadyAction)) {
@@ -820,7 +821,9 @@ export class AdaptiveColumnsViewController extends modules.ViewController {
     }
   }
 
-  public updateHidingQueue(columns: Column[]): Column[] {
+  public updateHidingQueue(
+    columns: WithCellValueCalculator<Column>[],
+  ): WithCellValueCalculator<Column>[] {
     const hideableColumns = getHideableColumns(columns);
     // eslint-disable-next-line @typescript-eslint/init-declarations -- assigned conditionally below
     let columnsHasHidingPriority: boolean | undefined;
@@ -851,7 +854,7 @@ export class AdaptiveColumnsViewController extends modules.ViewController {
     return this._hidingColumnsQueue;
   }
 
-  public getHiddenColumns(): Column[] {
+  public getHiddenColumns(): WithCellValueCalculator<Column>[] {
     return this._hiddenColumns;
   }
 
@@ -859,7 +862,7 @@ export class AdaptiveColumnsViewController extends modules.ViewController {
     return this._hiddenColumns.length > 0;
   }
 
-  public getHidingColumnsQueue(): Column[] {
+  public getHidingColumnsQueue(): WithCellValueCalculator<Column>[] {
     return this._hidingColumnsQueue;
   }
 

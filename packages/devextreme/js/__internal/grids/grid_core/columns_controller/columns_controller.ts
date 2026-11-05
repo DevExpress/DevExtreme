@@ -117,7 +117,7 @@ export class ColumnsController extends modules.Controller {
 
   public _commandColumns!: Column[];
 
-  public _columns!: Column[];
+  public _columns!: WithCellValueCalculator<Column>[];
 
   private _isColumnsFromOptions!: boolean;
 
@@ -549,7 +549,7 @@ export class ColumnsController extends modules.Controller {
     return true;
   }
 
-  public getColumns(): Column[] {
+  public getColumns(): WithCellValueCalculator<Column>[] {
     return this._columns;
   }
 
@@ -565,7 +565,9 @@ export class ColumnsController extends modules.Controller {
     const result: GroupColumn[] = [];
 
     this._columns
-      .filter((column): column is GroupColumn => isDefined(column.groupIndex) && !column.type)
+      .filter((column): column is WithCellValueCalculator<GroupColumn> => (
+        isDefined(column.groupIndex) && !column.type
+      ))
       .forEach((column) => {
         result[column.groupIndex] = column;
       });
@@ -1274,8 +1276,7 @@ export class ColumnsController extends modules.Controller {
     });
   }
 
-  private _updateColumnOptions(column: Column, columnIndex: number): void {
-    // @ts-expect-error createColumn initializes calculateCellValue
+  private _updateColumnOptions(column: WithCellValueCalculator<Column>, columnIndex: number): void {
     const defaultSelector = (data: RawItemData): unknown => column.calculateCellValue(data);
     const shouldTakeOriginalCallbackFromPrevious = this._reinitAfterLookupChanges
       && this._previousColumns?.[columnIndex];
@@ -1683,7 +1684,8 @@ export class ColumnsController extends modules.Controller {
     value?: unknown,
     notFireEvent?: boolean,
   ): unknown {
-    const columns = this._columns.concat(this._commandColumns);
+    const columnsWithoutCommands: Column[] = this._columns;
+    const columns = columnsWithoutCommands.concat(this._commandColumns);
     const column = findColumn(columns, identifier);
 
     if (!column) {
@@ -1784,7 +1786,7 @@ export class ColumnsController extends modules.Controller {
   }
 
   private addColumn(options: Column | string): void {
-    let column = createColumn(this, options) as Column;
+    let column = createColumn(this, options) as WithCellValueCalculator<Column>;
     const index = this._columns.length;
 
     this._columns.push(column);
@@ -1843,7 +1845,7 @@ export class ColumnsController extends modules.Controller {
       columnsUserState,
       ignoreColumnOptionNames: this._ignoreColumnOptionNames ?? [],
       hasUserState: this._hasUserState,
-      createColumn: (columnOptions): Column => createColumn(
+      createColumn: (columnOptions): WithCellValueCalculator<Column> => createColumn(
         this,
         isString(columnOptions) ? { dataField: columnOptions } : columnOptions,
       ),
