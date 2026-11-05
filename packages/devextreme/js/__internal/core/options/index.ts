@@ -276,9 +276,10 @@ export class Options<TProperties extends OptionsProperties = OptionsProperties> 
 
   reset(name: string): void {
     if (name) {
-      const value = getPathParts(name).reduce(
+      const [rootName, ...path] = getPathParts(name);
+      const value = path.reduce(
         (currentValue: unknown, field: string): unknown => currentValue?.[field],
-        this._initial,
+        this.initial(rootName),
       );
 
       const defaultValue = isObject(value) ? { ...value } : value;

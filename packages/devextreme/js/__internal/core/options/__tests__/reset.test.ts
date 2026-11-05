@@ -1,8 +1,13 @@
-import { describe, expect, it } from '@jest/globals';
+import {
+  afterEach, describe, expect, it,
+} from '@jest/globals';
 import { Options } from '@ts/core/options/index';
+import { variableWrapper } from '@ts/core/utils/variable_wrapper';
 
-const createOptions = (getDefaults: () => Record<string, unknown>): Options => {
-  const options = new Options(getDefaults(), getDefaults(), {}, {});
+type Factory = () => Record<string, unknown>;
+
+const createOptions = (getOptions: Factory, getDefaults: Factory = getOptions): Options => {
+  const options = new Options(getOptions(), getDefaults(), {}, {});
   options.onChanging(() => {});
   options.onChanged(() => {});
   options.onStartChange(() => {});
@@ -11,6 +16,10 @@ const createOptions = (getDefaults: () => Record<string, unknown>): Options => {
 };
 
 describe('Options.reset', () => {
+  afterEach(() => {
+    variableWrapper.resetInjection();
+  });
+
   it('restores a nested value from its initial parent', () => {
     const options = createOptions(() => ({ a: { b: 1 }, b: 'root' }));
 
@@ -58,5 +67,30 @@ describe('Options.reset', () => {
     options.reset('a.b.c');
 
     expect(options.option('a.b.c')).toBeUndefined();
+  });
+
+  it('unwraps an observable initial parent', () => {
+    const observables = new WeakMap<object, unknown>();
+    const observable = (value: unknown): () => unknown => {
+      const wrapper = (): unknown => value;
+      observables.set(wrapper, value);
+      return wrapper;
+    };
+    const isWrapped = (value: unknown): value is object => typeof value === 'function' && observables.has(value);
+
+    variableWrapper.inject({
+      isWrapped,
+      unwrap: (value: unknown): unknown => (isWrapped(value) ? observables.get(value) : value),
+    });
+
+    const options = createOptions(
+      () => ({ a: { b: 1 } }),
+      () => ({ a: observable({ b: 1 }) }),
+    );
+
+    options.option('a.b', 42);
+    options.reset('a.b');
+
+    expect(options.option('a.b')).toBe(1);
   });
 });
