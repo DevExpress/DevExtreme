@@ -10,7 +10,8 @@ import { isVirtualPaging } from '@ts/grids/grid_core/utils';
 
 import dataGridCore from '../core';
 import { createGroupFilter } from '../utils';
-import { createOffsetFilter, GroupingHelper as GroupingHelperCore } from './m_grouping_core';
+import { GroupingHelper as GroupingHelperCore } from './m_grouping_core';
+import { createOffsetFilter } from './utils';
 
 function getContinuationGroupCount(groupOffset, pageSize, groupSize, groupIndex) {
   groupIndex = groupIndex || 0;
@@ -458,7 +459,7 @@ export class GroupingHelper extends GroupingHelperCore {
     options.takes = takes;
   }
 
-  private changeRowExpand(path) {
+  public changeRowExpand(path) {
     const that = this;
     const groupInfo = that.findGroupInfo(path);
     const { dataSourceAdapter } = that;
@@ -487,7 +488,7 @@ export class GroupingHelper extends GroupingHelperCore {
     return new Deferred().reject();
   }
 
-  protected handleDataLoading(options?) {
+  public handleDataLoading(options?) {
     const that = this;
     const { storeLoadOptions } = options;
     const groups = dataGridCore.normalizeSortingInfo(storeLoadOptions.group || options.loadOptions.group);
@@ -524,7 +525,7 @@ export class GroupingHelper extends GroupingHelperCore {
     }
   }
 
-  protected handleDataLoadedCore(options, callBase) {
+  public handleDataLoadedCore(options, callBase) {
     const that = this;
     const loadedGroupCount = dataGridCore.normalizeSortingInfo(options.storeLoadOptions.group || options.loadOptions.group).length;
     const groupCount = options.group ? options.group.length : 0;
@@ -636,7 +637,7 @@ export class GroupingHelper extends GroupingHelperCore {
     return items;
   }
 
-  protected refresh(options, operationTypes?) {
+  public refresh(options, operationTypes?) {
     const that = this;
     const { dataSourceAdapter } = that;
     const { storeLoadOptions } = options;
