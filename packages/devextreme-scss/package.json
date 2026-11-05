@@ -12,7 +12,6 @@
     "@typescript-eslint/parser": "catalog:",
     "autoprefixer": "10.5.0",
     "clean-css": "5.3.3",
-    "cubic2quad": "1.2.1",
     "eslint": "catalog:",
     "eslint-config-devextreme": "catalog:",
     "eslint-migration-utils": "workspace:*",
@@ -24,7 +23,10 @@
     "stylelint": "catalog:",
     "stylelint-config-standard-scss": "14.0.0",
     "stylelint-scss": "6.10.0",
+    "svg2ttf": "6.1.0",
+    "svgpath": "2.6.0",
     "ts-jest": "29.4.12",
+    "ttf2woff": "3.0.0",
     "typescript": "catalog:tools",
     "wawoff2": "2.0.1"
   },

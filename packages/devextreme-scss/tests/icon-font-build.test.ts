@@ -3,23 +3,16 @@ import { readFileSync } from 'fs';
 import { join } from 'path';
 
 import {
-  buildIconFonts, fontFileNames, fontPath, parseIconSvg,
+  buildIconFonts, fontFileNames, fontPath, glyphPath, parseIconSvg,
 } from '../tools/icon-fonts/icon-fonts';
-import { iconContours, type Contour } from '../tools/icon-fonts/outline';
 
 const PACKAGE_ROOT = join(__dirname, '..');
 
 const sha256 = (data: Buffer | undefined): string => (data ? createHash('sha256').update(data).digest('hex') : 'not built');
 
-const icon = (paths: string[], fillRule = 'nonzero'): string => `<svg width="16" height="16" viewBox="0 0 1024 1024">${paths.map((d) => `<path fill-rule="${fillRule}" d="${d}"/>`).join('')}</svg>`;
+const icon = (paths: string[]): string => `<svg width="16" height="16" viewBox="0 0 1024 1024">${paths.map((d) => `<path d="${d}"/>`).join('')}</svg>`;
 
 const drawing = (svgAttributes: string, pathAttributes: string): string => `<svg width="16" height="16" viewBox="0 0 1024 1024" ${svgAttributes}><path ${pathAttributes} d="M100 100h400v400h-400z"/></svg>`;
-
-const area = (contour: Contour): number => contour.reduce((sum, point, index) => {
-  const next = contour[(index + 1) % contour.length];
-
-  return sum + point.x * next.y - next.x * point.y;
-}, 0) / 2;
 
 describe('Icon fonts build', () => {
   let built = new Map<string, Buffer>();
@@ -37,38 +30,28 @@ describe('Icon fonts build', () => {
   });
 });
 
-describe('Icon outlines', () => {
-  test('overlapping paths drawn in opposite directions both stay filled', () => {
-    const contours = iconContours(parseIconSvg(icon(['M100 100h400v400h-400z', 'M100 100v400h400v-400z'])));
-
-    expect(contours.map((contour) => Math.sign(area(contour)))).toEqual([-1, -1]);
+describe('Icon svg files', () => {
+  test.each([
+    ['a 16 px drawing', icon(['M100 100h400v400h-400z']), 'M100,860L500,860L500,460L100,460Z'],
+    ['an 18 px drawing', '<svg width="18" height="18" viewBox="0 0 18 18"><path d="M0 17H18"/></svg>', 'M0,0L1024,0Z'],
+    ['a 24 px drawing', '<svg width="24" height="24" viewBox="0 0 24 24"><path d="M0 22H24"/></svg>', 'M0,0L1024,0Z'],
+  ])('%s is scaled to the em square with the baseline on its pixel grid', (_, svg, d) => {
+    expect(glyphPath(parseIconSvg(svg))).toBe(d);
   });
 
-  test('a hole inside a path keeps the opposite direction', () => {
-    const contours = iconContours(parseIconSvg(icon(['M100 100h800v800h-800zM300 300v400h400v-400z'])));
-
-    expect(contours.map((contour) => Math.sign(area(contour)))).toEqual([-1, 1]);
+  test('overlapping paths drawn in opposite directions both turn clockwise', () => {
+    expect(glyphPath(parseIconSvg(icon(['M100 100h400v400h-400z', 'M100 100v400h400v-400z']))))
+      .toBe('M100,860L500,860L500,460L100,460ZM500,860L500,460L100,460L100,860Z');
   });
 
-  test('a contour inside an evenodd path is a hole whatever its direction', () => {
-    const contours = iconContours(parseIconSvg(icon(['M100 100h800v800h-800zM300 300h400v400h-400z'], 'evenodd')));
-
-    expect(contours.map((contour) => Math.sign(area(contour)))).toEqual([-1, 1]);
+  test('a path keeps its holes when it turns clockwise', () => {
+    expect(glyphPath(parseIconSvg(icon(['M100 100v800h800v-800zM300 300h400v400h-400z']))))
+      .toBe('M900,860L900,60L100,60L100,860ZM300,260L700,260L700,660L300,660Z');
   });
 
-  test('curves stay on the drawn circle', () => {
-    const handle = 0.5523 * 400;
-    const [contour] = iconContours(parseIconSvg(icon([`M512 112c${handle} 0 400 ${400 - handle} 400 400h-400z`])));
-    const center = { x: 512, y: 960 - 512 };
-    const onArc = contour
-      .filter(({ onCurve }) => onCurve)
-      .map(({ x, y }) => Math.hypot(x - center.x, y - center.y))
-      .filter((radius) => radius > 100);
-
-    expect(contour.filter(({ onCurve }) => !onCurve).length).toBeGreaterThan(1);
-    onArc.forEach((radius) => {
-      expect(Math.abs(radius - 400)).toBeLessThanOrEqual(1.5);
-    });
+  test('a curve that turns clockwise swaps its control points', () => {
+    expect(glyphPath(parseIconSvg(icon(['M512 448v400c221 0 400-179 400-400z']))))
+      .toBe('M912,512C912,291 733,112 512,112L512,512Z');
   });
 
   test('shapes other than paths are rejected', () => {
@@ -81,6 +64,8 @@ describe('Icon outlines', () => {
     ['a path that takes fill="none" from the svg', drawing('fill="none"', ''), 'fill="none"'],
     ['a transparent path', drawing('', 'opacity="0.87"'), 'opacity'],
     ['a style attribute', drawing('', 'style="fill: none"'), 'style'],
+    ['an evenodd path', drawing('', 'fill-rule="evenodd"'), 'evenodd'],
+    ['a path that takes fill-rule="evenodd" from the svg', drawing('fill-rule="evenodd"', ''), 'evenodd'],
   ])('%s is rejected', (_, svg, message) => {
     expect(() => parseIconSvg(svg)).toThrow(message);
   });

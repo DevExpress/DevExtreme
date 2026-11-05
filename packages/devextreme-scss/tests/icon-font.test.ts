@@ -1,16 +1,17 @@
 import { readdirSync, readFileSync } from 'fs';
 import { join, extname } from 'path';
 
-import { readGlyphCount } from './font-tables';
+import { readCodePoints } from './font-tables';
 
 const BASE_PATH = join(__dirname, '..');
 const SVG_ICONS_ROOT = `${BASE_PATH}/images/icons`;
 
 describe('Equals svg to font', () => {
+  // svg2ttf stores identical drawings as one glyph, so the icons are counted by their characters.
   const getCountElementInFont = (pathToFont: string): number => {
-    const countEmptySvg = 2;
+    const space = 1;
 
-    return readGlyphCount(readFileSync(pathToFont)) - countEmptySvg;
+    return readCodePoints(readFileSync(pathToFont)).length - space;
   };
 
   const getCountElementInSvg = (pathToSvg: string): number => {
