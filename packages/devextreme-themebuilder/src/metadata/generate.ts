@@ -10,7 +10,7 @@ const stylesDestinationDirectory = './src/data/scss';
 const metadataDestinationFile = './src/data/metadata/dx-theme-builder-metadata.ts';
 const commentsRegex = /\s*\/\*[\S\s]*?\*\//g;
 
-const sourceHandler = (content: string): string => resolveDataUri(content.replace(commentsRegex, '')) as string;
+const sourceHandler = (content: string): string => resolveDataUri(content.replace(commentsRegex, ''));
 
 const generate = async (): Promise<void> => {
   const collector = new MetadataCollector();

@@ -1853,6 +1853,9 @@ importers:
         specifier: 1.105.1
         version: 1.105.1
     devDependencies:
+      '@stylistic/eslint-plugin':
+        specifier: 'catalog:'
+        version: 5.10.0(eslint@9.39.5(jiti@2.6.1))
       '@types/clean-css':
         specifier: 4.2.11
         version: 4.2.11

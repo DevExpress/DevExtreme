@@ -289,13 +289,13 @@ describe('Metadata generator - generate files content', () => {
   });
 
   test('getBundleContent', () => {
-    const bundleContent = (theme: Theme) => `
+    const bundleContent = (theme: Theme): string => `
     @use "../widgets/${theme}/colors" with ($color: "carmine");
     @use "../widgets/${theme}/sizes" with ($size: "compact");
     @use "../widgets/${theme}/typography";
     @use "../widgets/${theme}";`;
 
-    const expectedBundleContent = (theme: Theme) => `
+    const expectedBundleContent = (theme: Theme): string => `
     @use "../widgets/${theme}/colors" with ($color: "carmine");
     @use "../widgets/${theme}/sizes" with ($size: "compact");
     @use "../widgets/${theme}/typography";
@@ -304,7 +304,7 @@ describe('Metadata generator - generate files content', () => {
     const commonBundleContent = '@use "../widgets/common/ui"';
 
     ['material', 'generic', 'fluent'].forEach((theme: Theme) => expect(MetadataGenerator.getBundleContent(bundleContent(theme)))
-        .toBe(expectedBundleContent(theme)));
+      .toBe(expectedBundleContent(theme)));
 
     expect(MetadataGenerator.getBundleContent(commonBundleContent))
       .toBe(commonBundleContent);

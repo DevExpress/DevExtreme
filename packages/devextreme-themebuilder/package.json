@@ -18,6 +18,7 @@
   "license": "SEE LICENSE IN README.md",
   "scripts": {
     "test": "jest --coverage --verbose --runInBand",
+    "lint": "eslint .",
     "copy-resources": "ts-node --files=true src/tools/copy-resources.ts",
     "generate-metadata": "ts-node --files=true src/metadata/generate.ts",
     "build-ts": "tsc",
@@ -39,6 +40,7 @@
     "@types/filing-cabinet": "2.5.3",
     "@types/fs-extra": "11.0.4",
     "@types/node": "catalog:tools",
+    "@stylistic/eslint-plugin": "catalog:",
     "@typescript-eslint/eslint-plugin": "catalog:",
     "@typescript-eslint/parser": "catalog:",
     "eslint": "catalog:",
