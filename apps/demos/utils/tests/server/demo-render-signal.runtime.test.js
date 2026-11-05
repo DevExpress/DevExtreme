@@ -11,7 +11,6 @@ let warnings;
 function loadRuntime() {
   let runtime;
   jest.isolateModules(() => {
-    // eslint-disable-next-line global-require
     runtime = require('../../server/demo-render-signal.runtime');
   });
   return runtime;

@@ -1,6 +1,0 @@
-{
-  "name": "eslint-migration-utils",
-  "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "packages/eslint-migration-utils",
-  "projectType": "library"
-}

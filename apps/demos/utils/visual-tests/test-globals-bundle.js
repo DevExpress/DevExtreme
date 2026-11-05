@@ -62,7 +62,6 @@ async function buildTestGlobalsScript(framework) {
   const entries = Array.from(specifierToPath.entries());
   const namespaces = new Set(entries.map(([, accessorPath]) => accessorPath.split('.')[0]));
 
-  // eslint-disable-next-line global-require
   const { getVendorManifest } = require('../server/vendor-bundle');
   const manifest = getVendorManifest(framework);
   if (!manifest) return null;
@@ -83,7 +82,6 @@ async function buildTestGlobalsScript(framework) {
   const outFile = outputPath(framework);
   fs.mkdirSync(path.dirname(outFile), { recursive: true });
 
-  // eslint-disable-next-line global-require
   const { getSharedOptions } = require('../server/demo-bundle');
   const shared = getSharedOptions(framework);
   await esbuild.build({

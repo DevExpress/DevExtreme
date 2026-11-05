@@ -12,8 +12,8 @@ import type { EditorFactory } from '@ts/grids/grid_core/editor_factory/editor_fa
 import type { RowKey } from '@ts/grids/grid_core/types';
 import type { PositioningEvent } from '@ts/ui/overlay/overlay';
 import type { ValidationResultInternal, ValidationRuleInternal } from '@ts/ui/validation_engine';
-import type { ValidationAdapter } from '@ts/ui/validator';
 import type Validator from '@ts/ui/validator';
+import type { ValidationAdapter } from '@ts/ui/validator';
 
 import type { VALIDATION_CANCELLED } from './const';
 
