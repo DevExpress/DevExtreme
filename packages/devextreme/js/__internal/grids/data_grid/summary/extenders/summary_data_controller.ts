@@ -4,7 +4,7 @@ import {
 } from '@js/core/utils/type';
 import type { Format } from '@js/localization';
 import type { SummaryGroupItem as SummaryGroupItemOption } from '@js/ui/data_grid';
-import type { Column } from '@ts/grids/data_grid/types';
+import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
 import type {
   DataChange, ItemProcessingOptions, LoadAllItemsDeferred, ProcessedItem,
@@ -67,7 +67,6 @@ export const summaryDataControllerExtender = (
       const columnName = groupItem.showInColumn ?? groupItem.column;
       const column = this._columnsController.columnOption(columnName);
 
-      // @ts-expect-error GridCore and DataGrid column types are not aligned
       if (groupItem.showInGroupFooter && isDataColumn(column)) {
         return true;
       }
@@ -108,7 +107,7 @@ export const summaryDataControllerExtender = (
 
   protected processGroupItem(
     groupItem: SummaryGroupItem,
-    options: ItemProcessingOptions<Column> & {
+    options: ItemProcessingOptions & {
       summaryGroupItems?: SummaryGroupItemOption[];
       summaryColumnMap?: ColumnMap;
     },
@@ -134,7 +133,7 @@ export const summaryDataControllerExtender = (
         }
       });
 
-      groupItem.summaryCells = this._calculateSummaryCells({
+      groupItem.summaryCells = this.calculateSummaryCells({
         summaryItems: options.summaryGroupItems,
         aggregates: getGroupAggregates(groupItem.data),
         visibleColumns: options.visibleColumns,
@@ -159,7 +158,7 @@ export const summaryDataControllerExtender = (
     }
 
     if (groupItem.rowType === DATAGRID_GROUP_FOOTER_ROW_TYPE) {
-      groupItem.summaryCells = this._calculateSummaryCells({
+      groupItem.summaryCells = this.calculateSummaryCells({
         summaryItems: options.summaryGroupItems,
         aggregates: getGroupAggregates(groupItem.data),
         visibleColumns: options.visibleColumns,
@@ -177,7 +176,7 @@ export const summaryDataControllerExtender = (
   // The map is built once per _processItems cycle (via options) and discarded after.
   private _buildColumnLookupMap(): ColumnMap {
     const columnMap: ColumnMap = new Map();
-    const allColumns = this._columnsController.getColumns() as Column[];
+    const allColumns = this._columnsController.getColumns();
 
     for (const column of allColumns) {
       const copiedColumn = { ...column };
@@ -201,7 +200,7 @@ export const summaryDataControllerExtender = (
     return columnMap;
   }
 
-  private _calculateSummaryCells({
+  public calculateSummaryCells({
     summaryItems,
     aggregates,
     visibleColumns,
@@ -215,7 +214,7 @@ export const summaryDataControllerExtender = (
     const getColumnByKey = (key?: string): Column | undefined => (
       columnMap
         ? getColumnFromMap(key, columnMap)
-        : (this._columnsController.columnOption(key) as Column | undefined)
+        : this._columnsController.columnOption(key)
     );
     const getValueFormat = (summaryItem: SummaryCellItem, column?: Column): Format | undefined => {
       if (isDefined(summaryItem.valueFormat)) {
@@ -270,10 +269,10 @@ export const summaryDataControllerExtender = (
   private _getSummaryCells(summaryTotalItems, totalAggregates): SummaryCellItem[][] {
     const columnsController = this._columnsController;
 
-    return this._calculateSummaryCells({
+    return this.calculateSummaryCells({
       summaryItems: summaryTotalItems,
       aggregates: totalAggregates,
-      visibleColumns: columnsController.getVisibleColumns() as Column[],
+      visibleColumns: columnsController.getVisibleColumns(),
       calculateTargetColumnIndex: (_, column): number => (
         isDataColumn(column) ? (column?.index ?? -1) : -1
       ),

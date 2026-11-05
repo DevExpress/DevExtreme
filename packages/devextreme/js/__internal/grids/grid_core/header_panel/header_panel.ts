@@ -12,7 +12,7 @@ import Toolbar from '@js/ui/toolbar';
 import type { EditingController } from '@ts/grids/grid_core/editing/editing';
 import type { HeaderFilterController } from '@ts/grids/grid_core/header_filter/header_filter';
 
-import type { Column } from '../columns_controller/types';
+import type { Column, ColumnsChanges } from '../columns_controller/types';
 import type { ResizingController } from '../grid_view/grid_view';
 import type { InternalGridOptions, ModuleType, OptionChanged } from '../types';
 import { ColumnsView } from '../views/columns_view';
@@ -180,7 +180,8 @@ export class HeaderPanel extends ColumnsView {
     return Deferred<unknown>().resolve();
   }
 
-  protected _columnOptionChanged(): void {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  protected _columnOptionChanged(e?: ColumnsChanges): void {
 
   }
 
