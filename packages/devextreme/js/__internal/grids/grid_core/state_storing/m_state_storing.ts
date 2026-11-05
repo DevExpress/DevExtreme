@@ -1,15 +1,18 @@
 /* eslint-disable max-classes-per-file */
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
 import type { SelectionController } from '@ts/grids/grid_core/selection/m_selection';
+import type { SelectionChangedOptions } from '@ts/grids/grid_core/selection/types';
 import type { ModuleType } from '@ts/grids/grid_core/types';
 import type { RowsView } from '@ts/grids/grid_core/views/rows_view';
 
 import type { StateStoringDataControllerExtension } from './extenders/state_storing_data_controller';
 
-export const rowsView = (Base: ModuleType<RowsView>) => class StateStoringRowsViewExtender extends Base {
+export const rowsView = (
+  Base: ModuleType<RowsView>,
+): ModuleType<RowsView> => class StateStoringRowsViewExtender extends Base {
   protected _dataController!: DataController & StateStoringDataControllerExtension;
 
-  public init() {
+  public init(): void {
     super.init();
 
     this._dataController.stateLoaded.add(() => {
@@ -18,21 +21,23 @@ export const rowsView = (Base: ModuleType<RowsView>) => class StateStoringRowsVi
         this.renderNoDataText();
         // TODO getView
         const columnHeadersView = this.component.getView('columnHeadersView');
-        columnHeadersView && columnHeadersView.render();
+
+        columnHeadersView?.render();
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises -- fire-and-forget
         this.component._fireContentReadyAction();
       }
     });
   }
 };
 
-export const selection = (Base: ModuleType<SelectionController>) => class StateStoringSelectionExtender extends Base {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  protected _fireSelectionChanged(options) {
+export const selection = (
+  Base: ModuleType<SelectionController>,
+): ModuleType<SelectionController> => class StateStoringSelectionExtender extends Base {
+  protected _fireSelectionChanged(options?: SelectionChangedOptions): void {
     const isDeferredSelection = this.option('selection.deferred');
     if (this._stateStoringController.isLoading() && isDeferredSelection) {
       return;
     }
-    // @ts-expect-error
-    super._fireSelectionChanged.apply(this, arguments);
+    super._fireSelectionChanged(options);
   }
 };

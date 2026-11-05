@@ -5,7 +5,7 @@ import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import type { ProcessedItem } from '@ts/grids/grid_core/data_controller/types';
 import type { InternalGrid, InternalGridOptions, RowKey } from '@ts/grids/grid_core/types';
 import type { RowsView } from '@ts/grids/grid_core/views/rows_view';
-import type { ViewCellOptions } from '@ts/grids/grid_core/views/types';
+import type { ViewCellOptions, ViewRowEvent } from '@ts/grids/grid_core/views/types';
 
 export interface SelectionModifierKeys {
   control?: boolean;
@@ -43,6 +43,8 @@ export interface SelectionRowsViewExtension {
     options: SelectCheckBoxOptions,
   ) => dxElementWrapper;
   attachCheckBoxClickEvent: ($element: dxElementWrapper) => void;
+  // eslint-disable-next-line @typescript-eslint/method-signature-style -- overridden by methods
+  handleRowClickBySelection(e: ViewRowEvent): void;
 }
 
 export type SelectionRowsView = RowsView & SelectionRowsViewExtension;

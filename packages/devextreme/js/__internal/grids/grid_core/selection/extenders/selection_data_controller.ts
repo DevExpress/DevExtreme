@@ -11,9 +11,9 @@ import { getSelectColumnIndex, updateSelectCellValue } from '@ts/grids/grid_core
 import type { ModuleType } from '@ts/grids/grid_core/types';
 import type { SelectionFilter } from '@ts/ui/selection/types';
 
-export const selectionDataControllerExtender = (
-  Base: ModuleType<DataController>,
-): ModuleType<DataController> => class SelectionDataControllerExtender extends Base {
+export const selectionDataControllerExtender = <TBase extends ModuleType<DataController>>(
+  Base: TBase,
+): TBase => class SelectionDataControllerExtender extends Base {
   private _selectionController!: SelectionController;
 
   public init(): void {

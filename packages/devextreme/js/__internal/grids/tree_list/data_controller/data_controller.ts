@@ -146,7 +146,7 @@ export class TreeListDataController extends DataController {
     return Deferred<unknown>().resolve();
   }
 
-  private getRootNode(): TreeNode | undefined {
+  public getRootNode(): TreeNode | undefined {
     return this.dataSourceController.getAdapter()?.getRootNode();
   }
 
@@ -186,7 +186,7 @@ export class TreeListDataController extends DataController {
     }
   }
 
-  private getNodeByKey(key: RowKey): TreeNode | undefined {
+  public getNodeByKey(key: RowKey): TreeNode | undefined {
     return this.dataSourceController.getAdapter()?.getNodeByKey(key);
   }
 
@@ -194,7 +194,7 @@ export class TreeListDataController extends DataController {
     return this.dataSourceController.getAdapter()?.getChildNodeKeys(parentKey);
   }
 
-  private loadDescendants(
+  public loadDescendants(
     keys?: RowKey | RowKey[],
     childrenOnly?: boolean,
   ): DeferredObj<unknown> | undefined {
