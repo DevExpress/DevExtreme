@@ -3,7 +3,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable prefer-rest-params */
-import { Deferred, when } from '@js/core/utils/deferred';
+import { Deferred } from '@js/core/utils/deferred';
 import type { EditingController } from '@ts/grids/grid_core/editing/editing';
 import { isFormBasedEditMode } from '@ts/grids/grid_core/editing/editing_utils';
 import type { CellBasedEditingController } from '@ts/grids/grid_core/editing/types';
@@ -86,7 +86,7 @@ export const adaptivityEditingViewControllerExtender = (
     // @ts-expect-error
     const deferred = new Deferred();
     if (this.getEditMode() === EDIT_MODE.row && this.adaptiveColumnsController.hasHiddenColumns()) {
-      when(this._validatingController.validate()).done((isValid) => {
+      this._validatingController.validate().done((isValid) => {
         if (isValid) {
           this._cancelEditAdaptiveDetailRow();
         }
