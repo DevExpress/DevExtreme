@@ -1,5 +1,4 @@
 import type { PositionConfig } from '@js/common/core/animation';
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import { end as hoverEventEnd } from '@js/common/core/events/hover';
 import pointerEvents from '@js/common/core/events/pointer';
 import { addNamespace } from '@js/common/core/events/utils';
@@ -37,6 +36,7 @@ import type {
 } from '@js/ui/tree_view';
 import TreeView from '@js/ui/tree_view';
 import type { OptionChanged } from '@ts/core/widget/types';
+import eventsEngine from '@ts/events/core/events_engine';
 import type { KeyboardKeyDownEvent } from '@ts/events/core/keyboard_processor';
 import type {
   ClickEvent,
@@ -335,7 +335,7 @@ class Menu extends MenuBase<MenuProperties> {
       return;
     }
 
-    const containerWidth: number = getOuterWidth(this.$element());
+    const containerWidth: number = getOuterWidth(this.$element().get(0));
 
     this._toggleAdaptiveMode(this._menuItemsWidth > containerWidth);
     this._overlay?.option('maxHeight', getElementMaxHeightByWindow(this.$element()));

@@ -1,6 +1,5 @@
 import type { template } from '@js/common';
 import { name as clickEventName } from '@js/common/core/events/click';
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import { start as hoverStartEventName } from '@js/common/core/events/hover';
 import { addNamespace } from '@js/common/core/events/utils/index';
 import dateLocalization from '@js/common/core/localization/date';
@@ -20,6 +19,7 @@ import type { DefaultActionArgs } from '@ts/core/widget/component';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { WidgetProperties } from '@ts/core/widget/widget';
 import Widget from '@ts/core/widget/widget';
+import eventsEngine from '@ts/events/core/events_engine';
 
 const CALENDAR_OTHER_VIEW_CLASS = 'dx-calendar-other-view';
 const CALENDAR_CELL_CLASS = 'dx-calendar-cell';
@@ -119,11 +119,11 @@ class BaseView<
 
   _disabledDatesHandler!: ((data: DisabledDate) => boolean);
 
-  _cellClickAction!: (e: CellEvent) => void;
+  _cellClickAction!: (e: Omit<CellEvent, 'component'>) => void;
 
-  _cellHoverAction!: (e: CellEvent) => void;
+  _cellHoverAction!: (e: Omit<CellEvent, 'component'>) => void;
 
-  _weekNumberCellClickAction!: (e: WeekNumberClickEvent) => void;
+  _weekNumberCellClickAction!: (e: Omit<WeekNumberClickEvent, 'component'>) => void;
 
   _$rangeEndHoverCell!: dxElementWrapper;
 
@@ -190,7 +190,6 @@ class BaseView<
     const localizedWidgetName = this._getLocalizedWidgetName();
     const formattedDate = dateLocalization
       .format(value as Date | undefined, ARIA_LABEL_DATE_FORMAT);
-    // @ts-expect-error ts-error
     const selectedDatesText = messageLocalization.format('dxCalendar-selectedDate', formattedDate);
 
     const ariaLabel = `${localizedWidgetName}. ${selectedDatesText}`;
@@ -208,9 +207,7 @@ class BaseView<
     const formattedEndDate = dateLocalization.format(endDate, ARIA_LABEL_DATE_FORMAT);
 
     const selectedDatesText = startDate && endDate
-      // @ts-expect-error ts-error
       ? messageLocalization.format('dxCalendar-selectedDateRange', formattedStartDate, formattedEndDate)
-      // @ts-expect-error ts-error
       : messageLocalization.format('dxCalendar-selectedDate', formattedStartDate ?? formattedEndDate);
 
     const ariaLabel = `${localizedWidgetName}. ${selectedDatesText}`;
@@ -233,7 +230,6 @@ class BaseView<
     const ranges = coreDateUtils.getRangesByDates(rangeValue.map((date) => new Date(date)));
 
     if (ranges.length > 2) {
-      // @ts-expect-error ts-error
       const dateRangeCountText = messageLocalization.format('dxCalendar-selectedDateRangeCount', ranges.length);
 
       return dateRangeCountText;
@@ -256,7 +252,6 @@ class BaseView<
     const formattedEndDate = dateLocalization.format(endDate, ARIA_LABEL_DATE_FORMAT);
 
     const selectedDatesText = startDate && endDate
-      // @ts-expect-error ts-error
       ? messageLocalization.format('dxCalendar-selectedMultipleDateRange', formattedStartDate, formattedEndDate)
       : formattedStartDate;
 
@@ -440,15 +435,19 @@ class BaseView<
     this._createCellClickAction();
 
     eventsEngine.off(this._$table, CALENDAR_DXCLICK_EVENT_NAME);
-    eventsEngine.on(this._$table, CALENDAR_DXCLICK_EVENT_NAME, NOT_WEEK_CELL_SELECTOR, (e) => {
-      if (!$(e.currentTarget).hasClass(CALENDAR_EMPTY_CELL_CLASS)) {
-        this._cellClickAction({
-          event: e,
-          // @ts-expect-error ts-error
-          value: $(e.currentTarget).data(CALENDAR_DATE_VALUE_KEY),
-        });
-      }
-    });
+    eventsEngine.on(
+      this._$table,
+      CALENDAR_DXCLICK_EVENT_NAME,
+      NOT_WEEK_CELL_SELECTOR,
+      (e: DxEvent<MouseEvent | PointerEvent>) => {
+        if (!$(e.currentTarget).hasClass(CALENDAR_EMPTY_CELL_CLASS)) {
+          this._cellClickAction({
+            event: e,
+            value: $(e.currentTarget).data<Date>(CALENDAR_DATE_VALUE_KEY),
+          });
+        }
+      },
+    );
 
     const { selectionMode } = this.option();
 
@@ -460,12 +459,11 @@ class BaseView<
         this._$table,
         CALENDAR_DXHOVERSTART_EVENT_NAME,
         NOT_WEEK_CELL_SELECTOR,
-        (e) => {
+        (e: DxEvent<MouseEvent | PointerEvent>) => {
           if (!$(e.currentTarget).hasClass(CALENDAR_EMPTY_CELL_CLASS)) {
             this._cellHoverAction({
               event: e,
-              // @ts-expect-error ts-error
-              value: $(e.currentTarget).data(CALENDAR_DATE_VALUE_KEY),
+              value: $(e.currentTarget).data<Date>(CALENDAR_DATE_VALUE_KEY),
             });
           }
         },
@@ -475,20 +473,18 @@ class BaseView<
     if (selectionMode !== SELECTION_MODE.single) {
       this._createWeekNumberCellClickAction();
 
-      eventsEngine.on(this._$table, CALENDAR_DXCLICK_EVENT_NAME, `.${CALENDAR_WEEK_NUMBER_CELL_CLASS}`, (e) => {
+      eventsEngine.on(this._$table, CALENDAR_DXCLICK_EVENT_NAME, `.${CALENDAR_WEEK_NUMBER_CELL_CLASS}`, (e: DxEvent<MouseEvent | PointerEvent>) => {
         const $row = $(e.currentTarget).closest('tr');
 
-        const firstDateInRow = $row.find(`.${CALENDAR_CELL_CLASS}`).first().data(CALENDAR_DATE_VALUE_KEY);
-        const lastDateInRow = $row.find(`.${CALENDAR_CELL_CLASS}`).last().data(CALENDAR_DATE_VALUE_KEY);
+        const firstDateInRow = $row.find(`.${CALENDAR_CELL_CLASS}`).first().data<Date>(CALENDAR_DATE_VALUE_KEY);
+        const lastDateInRow = $row.find(`.${CALENDAR_CELL_CLASS}`).last().data<Date>(CALENDAR_DATE_VALUE_KEY);
         const rowDates = [
-          // @ts-expect-error renderer.d.ts types data(key) as the wrapper, not the stored value
           ...coreDateUtils.getDatesOfInterval(firstDateInRow, lastDateInRow, DAY_INTERVAL),
           lastDateInRow,
         ];
 
         this._weekNumberCellClickAction({
           event: e,
-          // @ts-expect-error ts-error
           rowDates,
         });
       });

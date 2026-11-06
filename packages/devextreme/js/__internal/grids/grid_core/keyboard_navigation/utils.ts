@@ -1,18 +1,20 @@
+import type { GridsEditMode } from '@js/common/grids';
 import devices from '@js/core/devices';
 import type { dxElementWrapper } from '@js/core/renderer';
 import { isDefined } from '@js/core/utils/type';
 import { CLASSES as COLUMN_HEADERS_CLASSES } from '@ts/grids/grid_core/column_headers/const';
+import { CLASSES as COLUMNS_CONTROLLER_CLASSES } from '@ts/grids/grid_core/columns_controller/const';
 import { CLASSES as MASTER_DETAIL_CLASSES } from '@ts/grids/grid_core/master_detail/const';
 import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
 
 import { CLASSES as ADAPTIVITY_CLASSES } from '../adaptivity/const';
 import type { Column } from '../columns_controller/types';
-import { EDIT_FORM_CLASS, EDIT_ROW, EDITOR_CELL_CLASS } from '../editing/const';
+import { CLASSES as EDITING_CLASSES, EDIT_MODE } from '../editing/const';
 import { COMMAND_SELECT_CLASS } from '../selection/const';
-import { VIRTUAL_ROW_CLASS } from '../virtual_scrolling/const';
+import { CLASSES as VIRTUAL_SCROLLING_CLASSES } from '../virtual_scrolling/const';
 import { INTERACTIVE_ELEMENTS_SELECTOR } from './const';
+import type { KeyboardNavigationController } from './keyboard_navigation';
 import type { KeyboardNavigationController as KeyboardNavigationControllerCore } from './keyboard_navigation_core';
-import type { KeyboardNavigationController } from './m_keyboard_navigation';
 import type { NavigationDirection } from './types';
 
 const DATAGRID_GROUP_FOOTER_CLASS = 'dx-datagrid-group-footer';
@@ -34,11 +36,14 @@ export const isAdaptiveItem = (
   $element: dxElementWrapper,
 ): boolean => $element?.hasClass(ADAPTIVITY_CLASSES.adaptiveItemText);
 
-export const isEditRow = ($row: dxElementWrapper): boolean => $row?.hasClass(EDIT_ROW);
+export const isEditRow = (
+  $row: dxElementWrapper,
+): boolean => $row?.hasClass(EDITING_CLASSES.editRow);
 
 export const isEditForm = (
   $row: dxElementWrapper,
-): boolean => $row?.hasClass(MASTER_DETAIL_CLASSES.detailRow) && $row.hasClass(EDIT_FORM_CLASS);
+): boolean => $row?.hasClass(MASTER_DETAIL_CLASSES.detailRow)
+  && $row.hasClass(EDITING_CLASSES.editForm);
 
 // TODO remove null and undefined from types
 export const isDataRow = (
@@ -47,14 +52,20 @@ export const isDataRow = (
 
 export const isNotFocusedRow = (
   $row: dxElementWrapper,
-): boolean => !$row || $row.hasClass(VIEW_CLASSES.freeSpaceRow) || $row.hasClass(VIRTUAL_ROW_CLASS);
+): boolean => !$row
+  || $row.hasClass(VIEW_CLASSES.freeSpaceRow)
+  || $row.hasClass(VIRTUAL_SCROLLING_CLASSES.virtualRow);
+
+export const isRowOrFormEditMode = (
+  editMode: GridsEditMode,
+): boolean => editMode === EDIT_MODE.row || editMode === EDIT_MODE.form;
 
 export const isEditorCell = (
-  that: KeyboardNavigationController,
+  editMode: GridsEditMode,
   $cell: dxElementWrapper,
-): boolean => !that.isRowEditMode()
+): boolean => !isRowOrFormEditMode(editMode)
   && $cell && !$cell.hasClass(COMMAND_SELECT_CLASS)
-  && $cell.hasClass(EDITOR_CELL_CLASS);
+  && $cell.hasClass(EDITING_CLASSES.editorCell);
 
 // TODO remove null and undefined from types
 export const isElementDefined = (
@@ -77,9 +88,23 @@ export const isFixedColumnIndexOffsetRequired = (
   return !(!isDefined(column.fixedPosition) || column.fixedPosition === 'left');
 };
 
+export const isNavigableColumnCell = (
+  $cell: dxElementWrapper,
+  column: Column | undefined,
+): boolean => {
+  const $row = $cell.parent();
+  const isDataCell = !$cell.hasClass(COLUMNS_CONTROLLER_CLASSES.commandExpand) && isDataRow($row);
+  const isShownGroupedCell = !!column?.showWhenGrouped && isDataCell;
+  const isGroupSpaceCell = isDefined(column?.groupIndex) && !isShownGroupedCell;
+  const isColumnCell = !!column && !isDetailRow($row);
+  const isSpanningCell = parseInt($cell.attr('colspan') ?? '', 10) > 1;
+
+  return (isColumnCell && !isGroupSpaceCell) || isSpanningCell;
+};
+
 export const shouldPreventScroll = (
   that: KeyboardNavigationController,
-): boolean => (that._isVirtualScrolling()
+): boolean => (that.isVirtualScrolling()
   ? that.option('focusedRowIndex') === that.getRowIndex()
   : false);
 
@@ -89,7 +114,7 @@ export const getInteractiveElements = ($cell: dxElementWrapper): dxElementWrappe
 
 export const getInteractiveElement = (
   $cell: dxElementWrapper,
-  isLast: boolean,
+  isLast?: boolean,
 ): dxElementWrapper => {
   const $focusedElement = getInteractiveElements($cell);
 

@@ -1,5 +1,4 @@
 import type { EditorStyle, LabelMode } from '@js/common';
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import pointerEvents from '@js/common/core/events/pointer';
 import { addNamespace, normalizeKeyName } from '@js/common/core/events/utils/index';
 import type { DeepPartial } from '@js/core';
@@ -26,6 +25,7 @@ import { current, isFluent, isMaterial } from '@js/ui/themes';
 import errors from '@js/ui/widget/ui.errors';
 import { focused } from '@ts/core/utils/selectors';
 import type { OptionChanged } from '@ts/core/widget/types';
+import eventsEngine from '@ts/events/core/events_engine';
 import type { EditorInternalProperties, ValueChangedEvent, WithValidationMessageMode } from '@ts/ui/editor/editor';
 import Editor from '@ts/ui/editor/editor';
 
@@ -612,13 +612,13 @@ class TextEditorBase<
     return this._input();
   }
 
-  _getLabelContainerWidth(): number {
-    return getWidth(this._getLabelContainer()) as number;
+  _getLabelContainerWidth(): number | undefined {
+    return getWidth(this._getLabelContainer());
   }
 
   _getLabelBeforeWidth(): number {
     const buttonsBeforeWidth = this._$beforeButtonsContainer
-      && getWidth(this._$beforeButtonsContainer) as number;
+      && getWidth(this._$beforeButtonsContainer);
 
     return buttonsBeforeWidth ?? 0;
   }
@@ -666,7 +666,7 @@ class TextEditorBase<
       mark: labelMark,
       mode: labelMode,
       containsButtonsBefore: !!this._$beforeButtonsContainer,
-      getContainerWidth: (): number => this._getLabelContainerWidth(),
+      getContainerWidth: (): number | undefined => this._getLabelContainerWidth(),
       getBeforeWidth: (): number => this._getLabelBeforeWidth(),
       onActiveHandler: (e: MouseEvent | PointerEvent): void => { e.stopPropagation(); },
       onClickHandler: (): void => { this.focus(); },
@@ -716,7 +716,6 @@ class TextEditorBase<
     const startEvent = addNamespace(pointerEvents.up, this.NAME);
 
     eventsEngine.on(this._$placeholder, startEvent, () => {
-      // @ts-expect-error eventsEngine typification
       eventsEngine.trigger(this._input(), 'focus');
     });
 
@@ -736,11 +735,9 @@ class TextEditorBase<
     this._clearValue();
 
     if (!this._isFocused()) {
-      // @ts-expect-error eventsEngine typification
       eventsEngine.trigger($input, 'focus');
     }
 
-    // @ts-expect-error eventsEngine typification
     eventsEngine.trigger($input, 'input');
   }
 
@@ -797,7 +794,6 @@ class TextEditorBase<
     const isNewValue = $input.val() !== value;
 
     if (isCtrlEnter && isNewValue) {
-      // @ts-expect-error eventsEngine typification
       eventsEngine.trigger($input, 'change');
     }
   }
@@ -816,9 +812,10 @@ class TextEditorBase<
 
     const $input = this._input();
 
-    eventsEngine.on($input, keyPressEvent, this._keyPressHandler.bind(this));
+    eventsEngine.on<DxEvent>($input, keyPressEvent, this._keyPressHandler.bind(this));
+    // @ts-expect-error the handler is typed with the onValueChanged event, not the DOM event
     eventsEngine.on($input, valueChangeEvent, this._valueChangeEventHandler.bind(this));
-    eventsEngine.on($input, keyDownEvent, this._keyDownHandler.bind(this));
+    eventsEngine.on<DxEvent<KeyboardEvent>>($input, keyDownEvent, this._keyDownHandler.bind(this));
   }
 
   _cleanValueChangeEvent(): void {
@@ -1107,7 +1104,6 @@ class TextEditorBase<
   }
 
   focus(): void {
-    // @ts-expect-error ts-error
     eventsEngine.trigger(this._input(), 'focus');
   }
 

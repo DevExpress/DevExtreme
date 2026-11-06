@@ -1,6 +1,6 @@
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import { addNamespace } from '@js/common/core/events/utils/index';
 import type { DxEvent } from '@js/events';
+import eventsEngine from '@ts/events/core/events_engine';
 import Quill from 'devextreme-quill';
 
 import type { QuillInstance } from '../types/quill';

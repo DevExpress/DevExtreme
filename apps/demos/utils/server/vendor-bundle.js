@@ -37,6 +37,7 @@ const VENDOR_PREFIXES = {
 // bundle is shared by every demo of a framework. Excluded specifiers fall through to normal
 // per-demo bundling.
 const VENDOR_EXCLUDE_PATTERNS = [
+  /^devextreme\/ui\/map\/openlayers$/,
   /^devextreme(-react|-vue)?\/(.*\/)?localization\/(globalize|intl)(\/.*)?$/,
   /^globalize$/,
 ];

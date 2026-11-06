@@ -1,4 +1,3 @@
-/* eslint-env node */
 const TerserPlugin = require('terser-webpack-plugin');
 
 module.exports = {

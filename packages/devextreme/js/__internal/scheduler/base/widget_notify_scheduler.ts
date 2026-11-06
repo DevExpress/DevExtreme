@@ -1,5 +1,5 @@
-import type { SubscribeKey, SubscribeMethods } from '../m_subscribes';
 import type Scheduler from '../scheduler';
+import type { SubscribeKey, SubscribeMethods } from '../subscribes';
 
 class NotifyScheduler {
   scheduler: Scheduler;

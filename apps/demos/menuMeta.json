@@ -2776,10 +2776,10 @@
                 "Name": "Stock",
                 "Widget": "Charts",
                 "MvcAdditionalFiles": [
-                  "/Models/SampleData/FinancialData.cs"
+                  "/Models/SampleData/StockChartData.cs"
                 ],
                 "DemoType": "Viz",
-                "Equivalents": "workdaysOnly, tickInterval, stock price, reduction"
+                "Equivalents": "zoomAndPan, scrollBar, visualRange, tickInterval, stock price, reduction"
               },
               {
                 "Title": "Candlestick",
@@ -6565,8 +6565,7 @@
             "Name": "OpenStreetMapProvider",
             "Widget": "Map",
             "DemoType": "Web",
-            "Badge": "Roadmap",
-            "RoadmapSurveyUrl": "https://www.devexpress.com/support/surveys/devextreme-wg-roadmap-openstreetmap-provider.xml"
+            "Badge": "New"
           },
           {
             "Title": "Markers",

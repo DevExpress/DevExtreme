@@ -4,7 +4,6 @@ import tsParser from '@typescript-eslint/parser';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import stylistic from '@stylistic/eslint-plugin';
-import { changeRulesToStylistic } from 'eslint-migration-utils';
 import spellCheckConfig from 'eslint-config-devextreme/spell-check';
 import typescriptConfig from 'eslint-config-devextreme/typescript';
 
@@ -31,18 +30,10 @@ export default [
       },
     },
   },
-  ...typescriptConfig.map((config) => {
-    const newConfig = {
-      ...config,
-      files: ['**/*.ts'],
-    };
-
-    if (config.rules) {
-      newConfig.rules = changeRulesToStylistic(config.rules);
-    }
-
-    return newConfig;
-  }),
+  ...typescriptConfig.map((config) => ({
+    ...config,
+    files: ['**/*.ts'],
+  })),
   {
     files: ['**/*.ts'],
     plugins: {

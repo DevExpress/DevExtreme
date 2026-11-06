@@ -33,7 +33,7 @@ const openDemoInEditor = (demoPath) => spawn('code', [demoPath], { shell: true }
 const addDemo = async (meta, pathParts) => {
   const demo = await promptsQuestions.askDemo(meta, pathParts);
   let demoPath;
-  let missingApproaches = [];
+  let missingApproaches;
 
   if (demo.name === 'new') {
     const equivalents = await promptsQuestions.askEquivalents();

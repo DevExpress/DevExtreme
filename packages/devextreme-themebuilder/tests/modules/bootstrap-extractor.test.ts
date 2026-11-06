@@ -19,7 +19,7 @@ describe('BootstrapExtractor', () => {
     return expect(await BootstrapExtractor.sassRender(sass)).toBe(css);
   });
 
-  test('sassRender (error)', async () => expect(BootstrapExtractor.sassRender('0'))
+  test('sassRender (error)', () => expect(BootstrapExtractor.sassRender('0'))
     .rejects
     .toMatch(/^Error: expected "{"\./));
 
@@ -60,7 +60,7 @@ ${collectorServiceCode}`;
     const variablesPath = require.resolve('bootstrap/scss/_variables.scss');
     const functions = readFileSync(functionsPath);
     const variables = readFileSync(variablesPath);
-    const resolveFilePath = extractor.getFilePath.bind(extractor);
+    const resolveFilePath: (fileName: string) => string = extractor.getFilePath.bind(extractor);
 
     // Emulate a Bootstrap version that ships no _variables-dark.scss.
     extractor.getFilePath = (fileName: string): string => (fileName === '_variables-dark.scss'

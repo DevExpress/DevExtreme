@@ -1393,6 +1393,8 @@
       "--dx-lookup-search-padding-block",
       "--dx-lookup-search-padding-block-start",
       "--dx-lookup-search-padding-inline",
+      "--dx-map-marker-bg",
+      "--dx-map-marker-content",
       "--dx-map-marker-tooltip-margin",
       "--dx-mention-bg",
       "--dx-mention-border-radius",

@@ -72,6 +72,7 @@ const ignoreMissingCssPlugin = {
   name: 'demo-bundle:ignore-missing-css',
   setup(build) {
     build.onResolve({ filter: /\.css$/ }, (args) => {
+      if (!args.path.startsWith('.') && !path.isAbsolute(args.path)) return null;
       const fullPath = path.resolve(args.resolveDir, args.path);
       if (!fs.existsSync(fullPath)) {
         return { path: fullPath, namespace: 'demo-bundle-empty-css' };
@@ -132,7 +133,6 @@ const devextremeDedupePlugin = {
 let vuePluginInstance = null;
 function getVuePlugin() {
   if (!vuePluginInstance) {
-    // eslint-disable-next-line global-require
     const mod = require('esbuild-plugin-vue3');
     const factory = typeof mod === 'function' ? mod : (mod.default || mod);
     vuePluginInstance = factory();
@@ -141,12 +141,12 @@ function getVuePlugin() {
 }
 
 function getSharedOptions(framework) {
-  // eslint-disable-next-line global-require
   const { vendorGlobalPlugin } = require('./vendor-bundle');
   return {
     bundle: true,
     minify: false,
     format: 'iife',
+    nodePaths: [NODE_MODULES],
     loader: {
       '.js': 'jsx',
       '.png': 'dataurl',
@@ -192,7 +192,6 @@ function buildHtml({
 
   const bodyInner = extractDemoBodyInner(srcDir) || DEFAULT_BODY_INNER;
 
-  // eslint-disable-next-line global-require
   const { vendorScriptTag } = require('./vendor-bundle');
   const vendorTag = vendorScriptTag(framework);
 
@@ -216,7 +215,6 @@ function buildHtml({
 function writeDemoManifest({
   srcDir, destDir, framework,
 }) {
-  // eslint-disable-next-line global-require
   const { discoverDemoSpecifiers, resolvePackageVersions } = require('./vendor-bundle');
   const packages = resolvePackageVersions([
     ...discoverDemoSpecifiers(srcDir),
@@ -343,7 +341,6 @@ async function main() {
 }
 
 if (require.main === module) {
-  // eslint-disable-next-line global-require
   const entrypoint = IS_ANGULAR ? require('./demo-bundle-angular').main : main;
 
   entrypoint().then(() => {

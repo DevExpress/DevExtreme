@@ -1,4 +1,3 @@
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import { addNamespace } from '@js/common/core/events/utils';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
@@ -11,7 +10,8 @@ import type {
   SelectionChangedEvent as ListSelectionChangedEvent,
 } from '@js/ui/list';
 import type { Properties as PopupProperties } from '@js/ui/popup';
-import windowUtils from '@ts/core/utils/m_window';
+import windowUtils from '@ts/core/utils/window';
+import eventsEngine from '@ts/events/core/events_engine';
 import List from '@ts/ui/list/list.edit.search';
 import Popup from '@ts/ui/popup/popup.full';
 import Quill from 'devextreme-quill';

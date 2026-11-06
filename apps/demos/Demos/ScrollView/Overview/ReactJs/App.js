@@ -1,4 +1,6 @@
-import React, { useCallback, useRef, useState } from 'react';
+import React, {
+  useCallback, useEffect, useRef, useState,
+} from 'react';
 import CheckBox from 'devextreme-react/check-box';
 import ScrollView from 'devextreme-react/scroll-view';
 import SelectBox from 'devextreme-react/select-box';
@@ -8,6 +10,7 @@ const showScrollBarModeLabel = { 'aria-label': 'Show Scrollbar Mode' };
 let updateContentTimer;
 const App = () => {
   const [showScrollBarMode, setShowScrollBarMode] = useState('onScroll');
+  const [useNative, setUseNative] = useState(false);
   const [pullDown, setPullDown] = useState(false);
   const [scrollByContent, setScrollByContent] = useState(true);
   const [scrollByThumb, setScrollByThumb] = useState(true);
@@ -41,6 +44,16 @@ const App = () => {
     },
     [updateContent],
   );
+  useEffect(() => {
+    setUseNative(scrollViewRef.current?.instance().option('useNative'));
+  }, []);
+  const useNativeValueChanged = useCallback((args) => {
+    setUseNative(args.value);
+    scrollViewRef.current?.instance().option('useNative', args.value);
+    if (args.value) {
+      setShowScrollBarMode((mode) => (mode === 'never' ? 'onScroll' : mode));
+    }
+  }, []);
   const pullDownValueChanged = useCallback((args) => {
     setPullDown(args.value);
   }, []);
@@ -72,7 +85,15 @@ const App = () => {
             inputAttr={showScrollBarModeLabel}
             displayExpr="text"
             value={showScrollBarMode}
+            disabled={!!useNative}
             onValueChange={setShowScrollBarMode}
+          />
+        </div>
+        <div className="option">
+          <CheckBox
+            text="Use browser scrolling logic"
+            value={useNative}
+            onValueChanged={useNativeValueChanged}
           />
         </div>
         <div className="option">
@@ -93,6 +114,7 @@ const App = () => {
           <CheckBox
             text="Scroll by content"
             value={scrollByContent}
+            disabled={!!useNative}
             onValueChange={setScrollByContent}
           />
         </div>
@@ -100,6 +122,7 @@ const App = () => {
           <CheckBox
             text="Scroll by thumb"
             value={scrollByThumb}
+            disabled={!!useNative}
             onValueChange={setScrollByThumb}
           />
         </div>

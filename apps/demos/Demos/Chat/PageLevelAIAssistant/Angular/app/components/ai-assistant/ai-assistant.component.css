@@ -9,16 +9,12 @@
 }
 
 ::ng-deep .ai-chat-empty-message {
-  font-size: 18px;
   font-weight: 400;
   text-align: center;
-  color: var(--dx-color-text);
   margin-bottom: 8px;
 }
 
 ::ng-deep .ai-chat-empty-prompt {
-  font-size: 14px;
-  color: #616161;
   text-align: center;
   padding: 0 24px;
   white-space: pre-line;
@@ -32,7 +28,8 @@
   padding: 0;
 }
 
-::ng-deep .dx-chat-messagebox {
+::ng-deep .dx-chat-messagebox,
+::ng-deep .dx-chat.dx-state-disabled .dx-chat-messagebox {
   border-top-color: transparent;
 }
 

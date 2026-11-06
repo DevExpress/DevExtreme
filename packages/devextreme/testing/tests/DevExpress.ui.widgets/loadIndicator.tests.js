@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import support from '__internal/core/utils/m_support';
+import support from '__internal/core/utils/support';
 import messageLocalization from 'common/core/localization/message';
 
 import {

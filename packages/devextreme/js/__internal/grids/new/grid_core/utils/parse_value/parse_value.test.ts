@@ -1,4 +1,8 @@
-import { describe, expect } from '@jest/globals';
+import {
+  afterEach, describe, expect, it,
+} from '@jest/globals';
+import coreLocalization from '@js/common/core/localization/core';
+import config from '@js/core/config';
 import each from 'jest-each';
 
 import {
@@ -140,4 +144,35 @@ describe('parseValue', () => {
       const result = parseValue(column, text);
       expect(result).toEqual(expectedResult);
     });
+});
+
+describe('parseNumberValue with format locales', () => {
+  afterEach(() => {
+    coreLocalization.locale('en');
+    delete config().numberFormat;
+  });
+
+  it.each([
+    {
+      name: 'the global numberFormat locale',
+      messageLocale: 'de',
+      globalLocale: 'en-US',
+      format: { type: 'fixedPoint', precision: 1 },
+    },
+    {
+      name: 'an explicit format locale',
+      messageLocale: 'en',
+      globalLocale: undefined,
+      format: { type: 'fixedPoint', precision: 1, locale: 'de' },
+    },
+  ])('should parse the cell text of a format with $name', ({ messageLocale, globalLocale, format }) => {
+    coreLocalization.locale(messageLocale);
+    if (globalLocale) {
+      config({ ...config(), numberFormat: { default: { locale: globalLocale } } });
+    }
+
+    expect(parseNumberValue('1.234,5', format)).toBe(1234.5);
+    expect(parseNumberValue('1234,5', format)).toBe(1234.5);
+    expect(parseNumberValue('1,234.5', format)).toBeUndefined();
+  });
 });

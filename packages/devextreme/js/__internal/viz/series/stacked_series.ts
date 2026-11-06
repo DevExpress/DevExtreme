@@ -12,9 +12,9 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 
-import { noop as _noop } from '@ts/core/utils/m_common';
-import { extend as _extend } from '@ts/core/utils/m_extend';
-import { each } from '@ts/core/utils/m_iterator';
+import { noop as _noop } from '@ts/core/utils/common';
+import { extend as _extend } from '@ts/core/utils/extend';
+import { each } from '@ts/core/utils/iterator';
 import { clone } from '@ts/core/utils/object';
 import { map } from '@ts/viz/core/utils';
 

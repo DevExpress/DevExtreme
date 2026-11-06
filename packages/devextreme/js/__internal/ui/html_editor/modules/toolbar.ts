@@ -4,7 +4,6 @@ import '@js/ui/number_box';
 import '@js/ui/menu';
 
 import type { ToolbarItemComponent } from '@js/common';
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import { addNamespace } from '@js/common/core/events/utils/index';
 import localizationMessage from '@js/common/core/localization/message';
 import type { DxElement } from '@js/core/element';
@@ -31,6 +30,7 @@ import type { Item } from '@js/ui/toolbar';
 import errors from '@js/ui/widget/ui.errors';
 import { getPublicElement } from '@ts/core/element';
 import { capitalize } from '@ts/core/utils/capitalize';
+import eventsEngine from '@ts/events/core/events_engine';
 import { DX_MENU_ITEM_CLASS } from '@ts/ui/menu/menu';
 import { DROP_DOWN_MENU_BUTTON_CLASS } from '@ts/ui/toolbar/constants';
 import { applyItemTabIndex } from '@ts/ui/toolbar/internal/roving.utils';
@@ -262,8 +262,7 @@ if (Quill) {
 
       eventsEngine.on(
         this._$toolbarContainer,
-        // @ts-expect-error NAME is typed optional (component.ts); the constructor always sets it
-        addNamespace('mousedown', this.editorInstance.NAME),
+        this._getContainerMouseDownEvent(),
         (e: DxEvent<MouseEvent>): void => {
           // @ts-expect-error target is typed Element; focus() is declared on HTMLElement
           e.target.focus();
@@ -295,6 +294,11 @@ if (Quill) {
       this.editorInstance.on('optionChanged', this.editorOptionChangedHandler);
     }
 
+    _getContainerMouseDownEvent(): string {
+      // @ts-expect-error NAME is typed optional (component.ts); the constructor always sets it
+      return addNamespace('mousedown', this.editorInstance.NAME);
+    }
+
     get toolbarConfig(): Partial<ToolbarProperties> {
       return {
         dataSource: this._prepareToolbarItems(),
@@ -317,6 +321,7 @@ if (Quill) {
       this._toolbarWidgets.clear();
 
       if (this._$toolbarContainer) {
+        eventsEngine.off(this._$toolbarContainer, this._getContainerMouseDownEvent());
         this._$toolbarContainer
           .empty()
           .removeClass(TOOLBAR_WRAPPER_CLASS);

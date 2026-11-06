@@ -297,11 +297,13 @@ class UpdateUrlStrategy extends AddUrlStrategy {
   }
 
   modifyFormData(): void {
-    const { imageSrc } = this.quill.getFormat(this.selection.index - 1, 1);
+    const { index, length } = this.selection;
+    const isImageSelected = length > 0 && isDefined(this.quill.getFormat(index, 1).imageSrc);
+    const { imageSrc } = this.quill.getFormat(index - 1, 1);
 
-    if (!imageSrc || this.selection.index === 0) {
+    if (isImageSelected || !imageSrc || index === 0) {
       this.selection = {
-        index: this.selection.index + 1,
+        index: index + 1,
         length: 0,
       };
       this.quill.setSelection(this.selection.index, this.selection.length, SILENT_ACTION);

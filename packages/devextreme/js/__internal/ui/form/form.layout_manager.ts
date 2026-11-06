@@ -3,7 +3,6 @@ import '@js/ui/number_box';
 import '@js/ui/check_box';
 import '@js/ui/date_box';
 
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import { removeEvent } from '@js/common/core/events/remove';
 import messageLocalization from '@js/common/core/localization/message';
 import registerComponent from '@js/core/component_registrator';
@@ -29,6 +28,7 @@ import type {
 } from '@js/ui/form';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
+import eventsEngine from '@ts/events/core/events_engine';
 import Button from '@ts/ui/button/wrapper';
 import type Editor from '@ts/ui/editor/editor';
 import type { EditorProperties } from '@ts/ui/editor/editor';
@@ -44,8 +44,8 @@ import {
   SIMPLE_ITEM_TYPE,
   SINGLE_COLUMN_ITEM_CONTENT,
 } from '@ts/ui/form/constants';
-import type { FormProperties } from '@ts/ui/form/form';
 import type Form from '@ts/ui/form/form';
+import type { FormProperties } from '@ts/ui/form/form';
 import type { FormItemRuntimeInfo, FormWidgetInstance, PreparedItem } from '@ts/ui/form/form.items_runtime_info';
 import FormItemsRunTimeInfo from '@ts/ui/form/form.items_runtime_info';
 import type { LabelMarkOptions } from '@ts/ui/form/form.layout_manager.utils';
@@ -589,7 +589,7 @@ class LayoutManager extends Widget<LayoutManagerProperties> {
     }
 
     const { minColWidth = MIN_COLUMN_WIDTH } = this.option();
-    const width = getWidth(this.$element());
+    const width = getWidth(this.$element().get(0));
     // @ts-expect-error ts-error
     const itemsCount = this._items.length;
 

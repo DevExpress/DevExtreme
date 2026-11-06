@@ -3,7 +3,6 @@ import type { AnimationConfig, AnimationState, PositionConfig } from '@js/common
 import { fx } from '@js/common/core/animation';
 import { hideCallback as hideTopOverlayCallback } from '@js/common/core/environment/hide_callback';
 import type { NativeEventInfo } from '@js/common/core/events';
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import {
   move as dragEventMove,
 } from '@js/common/core/events/drag';
@@ -40,13 +39,13 @@ import type {
 import type { dxOverlayAnimation, Properties } from '@js/ui/overlay';
 import uiErrors from '@js/ui/widget/ui.errors';
 import documentSizeCallbacks from '@ts/core/utils/document_size_callbacks';
-import domUtils from '@ts/core/utils/m_dom';
-import windowUtils from '@ts/core/utils/m_window';
+import domUtils from '@ts/core/utils/dom';
 import selectors from '@ts/core/utils/selectors';
+import windowUtils from '@ts/core/utils/window';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { SupportedKeys } from '@ts/core/widget/widget';
 import Widget from '@ts/core/widget/widget';
-import { themeModeChangedCallback } from '@ts/ui/m_themes_callback';
+import eventsEngine from '@ts/events/core/events_engine';
 import type {
   BaseControllerProperties,
   ControllerOverlayElements,
@@ -58,6 +57,7 @@ import {
   OverlayPositionController,
 } from '@ts/ui/overlay/overlay_position_controller';
 import * as zIndexPool from '@ts/ui/overlay/z_index';
+import { themeModeChangedCallback } from '@ts/ui/themes_callback';
 
 const ready = readyCallbacks.add;
 const window = windowUtils.getWindow();
@@ -83,7 +83,7 @@ type AnimationDirection = 'to' | 'from';
 
 type EventHandler = (e: DxEvent<PointerInteractionEvent>) => boolean | undefined;
 
-type TabTerminatorHandler = (e: KeyboardEvent) => void;
+type TabTerminatorHandler = (e: DxEvent<KeyboardEvent>) => void;
 
 type DragLikeEvent = DxEvent & {
   originalEvent: DxEvent & { originalEvent?: Event };
@@ -213,7 +213,6 @@ ready(() => {
     }
   };
 
-  // @ts-expect-error subscribeGlobal should be described in .d.ts
   eventsEngine.subscribeGlobal(
     domAdapter.getDocument(),
     pointerEvents.down,
@@ -250,7 +249,7 @@ class Overlay<
 
   _parentsScrollSubscriptionInfo?: ParentsScrollSubscriptionInfo;
 
-  _proxiedTabTerminatorHandler?: TabTerminatorHandler;
+  _proxiedTabTerminatorHandler!: TabTerminatorHandler;
 
   _zIndex!: number;
 
@@ -720,7 +719,6 @@ class Overlay<
       const { focusStateEnabled } = this.option();
 
       if (focusStateEnabled) {
-        // @ts-expect-error trigger should be typed on type 'EventsEngineType'
         eventsEngine.trigger(this._focusTarget(), 'focus');
       }
 
@@ -1089,7 +1087,6 @@ class Overlay<
       const $reverseElement = $elements?.eq(elementsCount - i) ?? null;
 
       if (!$first && $currentElement) {
-        // @ts-expect-error is should can get function as callback
         const isTabbableAndNotOverlay = $currentElement?.not(`.${OVERLAY_CONTENT_CLASS}`).is(selectors.tabbable);
         if (isTabbableAndNotOverlay) {
           $first = $currentElement;
@@ -1097,7 +1094,6 @@ class Overlay<
       }
 
       if (!$last && $reverseElement) {
-        // @ts-expect-error is should can get function as callback
         const isTabbableAndNotOverlay = $reverseElement?.not(`.${OVERLAY_CONTENT_CLASS}`).is(selectors.tabbable);
         if (isTabbableAndNotOverlay) {
           $last = $reverseElement;
@@ -1136,9 +1132,7 @@ class Overlay<
 
       const $focusElement = e.shiftKey ? $lastTabbable : $firstTabbable;
 
-      // @ts-expect-error trigger should be typed on type 'EventsEngineType'
       eventsEngine.trigger($focusElement, 'focusin');
-      // @ts-expect-error trigger should be typed on type 'EventsEngineType'
       eventsEngine.trigger($focusElement, 'focus');
     }
   }
@@ -1182,7 +1176,7 @@ class Overlay<
 
     const { prevTargets, handler } = info;
 
-    eventsEngine.off(prevTargets, scrollEvent, handler);
+    eventsEngine.off<DxEvent>(prevTargets, scrollEvent, handler);
 
     const { hideOnParentScroll } = this.option();
 
@@ -1193,7 +1187,9 @@ class Overlay<
         $parents = $parents?.add(window);
       }
 
-      eventsEngine.on($parents, scrollEvent, handler);
+      if (handler) {
+        eventsEngine.on<DxEvent>($parents, scrollEvent, handler);
+      }
 
       this._parentsScrollSubscriptionInfo = {
         ...info,
@@ -1286,7 +1282,6 @@ class Overlay<
 
     let isHidden = false;
 
-    // @ts-expect-error add should can get dxElementWrapper
     $parent.add($parent.parents()).each((index, element) => {
       const $element = $(element);
 

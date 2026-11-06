@@ -16,15 +16,15 @@ import graphicObject from '@ts/common/charts';
 import devices from '@ts/core/devices';
 import { domAdapter } from '@ts/core/dom_adapter';
 import { renderer as $ } from '@ts/core/renderer';
+import { noop } from '@ts/core/utils/common';
 import { when } from '@ts/core/utils/deferred';
-import { noop } from '@ts/core/utils/m_common';
-import { extend } from '@ts/core/utils/m_extend';
-import { each } from '@ts/core/utils/m_iterator';
-import { getHeight, getWidth } from '@ts/core/utils/m_size';
+import { extend } from '@ts/core/utils/extend';
+import { each } from '@ts/core/utils/iterator';
+import { getHeight, getWidth } from '@ts/core/utils/size';
 import {
   isDefined, isNumeric, isObject as _isObject, type,
-} from '@ts/core/utils/m_type';
-import { getWindow, hasWindow } from '@ts/core/utils/m_window';
+} from '@ts/core/utils/type';
+import { getWindow, hasWindow } from '@ts/core/utils/window';
 import DOMComponent from '@ts/core/widget/dom_component';
 import eventsEngine from '@ts/events/core/events_engine';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';

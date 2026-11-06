@@ -1,3 +1,3 @@
 // deprecated
-import { dateUtils } from '../../__internal/core/utils/m_date';
+import { dateUtils } from '../../__internal/core/utils/date';
 export default dateUtils;

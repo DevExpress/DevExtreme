@@ -44,6 +44,7 @@ export interface TimeViewProperties extends Omit<EditorProperties, 'value'> {
   value: Date;
   _showClock?: boolean;
   _arrowOffset?: number;
+  _formatLocale?: string;
 }
 
 class TimeView extends Editor<TimeViewProperties> {
@@ -151,7 +152,7 @@ class TimeView extends Editor<TimeViewProperties> {
       shrink: 0,
       baseSize: 'auto',
       // @ts-expect-error core/DateLocalization type should be fixed
-      template: (): dxElementWrapper => $('<div>').addClass(TIMEVIEW_TIME_SEPARATOR_CLASS).text(dateLocalization.getTimeSeparator()),
+      template: (): dxElementWrapper => $('<div>').addClass(TIMEVIEW_TIME_SEPARATOR_CLASS).text(dateLocalization.getTimeSeparator(this.option('_formatLocale'))),
     }, {
       ratio: 0,
       shrink: 0,
@@ -379,6 +380,7 @@ class TimeView extends Editor<TimeViewProperties> {
       case '_arrowOffset':
         break;
       case 'use24HourFormat':
+      case '_formatLocale':
       case '_showClock':
       case 'stylingMode':
         this._invalidate();

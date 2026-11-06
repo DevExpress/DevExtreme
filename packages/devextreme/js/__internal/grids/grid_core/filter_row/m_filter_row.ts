@@ -1,5 +1,4 @@
 /* eslint-disable max-classes-per-file */
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import { normalizeKeyName } from '@js/common/core/events/utils/index';
 import messageLocalization from '@js/common/core/localization/message';
 import type { dxElementWrapper } from '@js/core/renderer';
@@ -9,23 +8,26 @@ import { extend } from '@js/core/utils/extend';
 import { map } from '@js/core/utils/iterator';
 import { getOuterWidth } from '@js/core/utils/size';
 import { isDefined } from '@js/core/utils/type';
+import type { DxEvent } from '@js/events';
 import Menu from '@js/ui/menu';
 import Overlay from '@js/ui/overlay/ui.overlay';
 import { selectView } from '@js/ui/shared/accessibility';
-import type { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/m_column_headers';
+import eventsEngine from '@ts/events/core/events_engine';
+import type { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/column_headers';
 import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/columns_controller';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
-import type { ColumnsResizerViewController } from '@ts/grids/grid_core/columns_resizing_reordering/m_columns_resizing_reordering';
+import type { ColumnsResizerViewController } from '@ts/grids/grid_core/columns_resizing_reordering/columns_resizing_reordering';
 import type { DataSourceController } from '@ts/grids/grid_core/data_source/data_source_controller';
-import type { EditingController } from '@ts/grids/grid_core/editing/m_editing';
+import type { EditingController } from '@ts/grids/grid_core/editing/editing';
+import { CLASSES as EDITOR_FACTORY_CLASSES } from '@ts/grids/grid_core/editor_factory/const';
 import type {
   DataFilter, FilterSourceContext,
 } from '@ts/grids/grid_core/filter/types';
 import type { HeaderPanel } from '@ts/grids/grid_core/header_panel/header_panel';
+import type { ToolbarItem } from '@ts/grids/grid_core/header_panel/types';
 import modules from '@ts/grids/grid_core/modules/modules';
 import type { ModuleType } from '@ts/grids/grid_core/types';
 import gridCoreUtils from '@ts/grids/grid_core/utils';
-import type { ToolbarItem } from '@ts/grids/new/grid_core/toolbar/types';
 import Editor from '@ts/ui/editor/editor';
 import type MenuInternal from '@ts/ui/menu/menu';
 
@@ -77,7 +79,6 @@ const FILTER_MENU = 'dx-filter-menu';
 const APPLY_BUTTON_CLASS = 'dx-apply-button';
 const HIGHLIGHT_OUTLINE_CLASS = 'dx-highlight-outline';
 const FOCUSED_CLASS = 'dx-focused';
-const CELL_FOCUS_DISABLED_CLASS = 'dx-cell-focus-disabled';
 const FILTER_RANGE_CONTENT_CLASS = 'dx-filter-range-content';
 const FILTER_MODIFIED_CLASS = 'dx-filter-modified';
 
@@ -135,7 +136,12 @@ const getColumnSelectedFilterOperation = function (that, column) {
 
 const hasMultiselectEditor = function ($editorContainer: dxElementWrapper): boolean {
   const editor = getEditorInstance($editorContainer);
-  return !editor || MULTISELECT_EDITOR_NAMES.includes(editor.NAME ?? '');
+
+  if (editor) {
+    return MULTISELECT_EDITOR_NAMES.includes(editor.NAME ?? '');
+  }
+
+  return !$editorContainer.find(`.${FILTER_RANGE_CONTENT_CLASS}`).length;
 };
 
 const isValidFilterValue = function (
@@ -349,7 +355,7 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
         editorOptions = that.getEditorOptions($editor, column);
         editorOptions.sharedData = sharedData;
         that._renderEditor($editor, editorOptions);
-        eventsEngine.on($editor.find(EDITORS_INPUT_SELECTOR), 'keydown', (e) => {
+        eventsEngine.on($editor.find(EDITORS_INPUT_SELECTOR), 'keydown', (e: DxEvent<KeyboardEvent>) => {
           let $prevElement = $cell.find('[tabindex]').not(e.target).first();
 
           if (normalizeKeyName(e) === 'tab' && e.shiftKey) {
@@ -359,7 +365,6 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
             if (!$prevElement.length) {
               $prevElement = $cell.prev().find('[tabindex]').last();
             }
-            // @ts-expect-error
             eventsEngine.trigger($prevElement, 'focus');
           }
         });
@@ -369,13 +374,12 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
 
         editorOptions.sharedData = sharedData;
         that._renderEditor($editor, editorOptions);
-        eventsEngine.on($editor.find(EDITORS_INPUT_SELECTOR), 'keydown', (e) => {
+        eventsEngine.on($editor.find(EDITORS_INPUT_SELECTOR), 'keydown', (e: DxEvent<KeyboardEvent>) => {
           if (normalizeKeyName(e) === 'tab' && !e.shiftKey) {
             that._hideFilterRange();
 
             if ($cell.next().length) {
               e.preventDefault();
-              // @ts-expect-error
               eventsEngine.trigger($cell.next().find('[tabindex]').first(), 'focus');
             }
           }
@@ -385,7 +389,6 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
       },
       onShown(e) {
         const $editor = $(e.component.content()).find(`.${EDITOR_CONTAINER_CLASS}`).first();
-        // @ts-expect-error
         eventsEngine.trigger($editor.find(EDITORS_INPUT_SELECTOR), 'focus');
       },
       onHidden() {
@@ -624,7 +627,7 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
       integrationOptions: {},
       activeStateEnabled: false,
       selectionMode: 'single',
-      cssClass: `${that.getWidgetContainerClass()} ${CELL_FOCUS_DISABLED_CLASS} ${FILTER_MENU}`,
+      cssClass: `${that.getWidgetContainerClass()} ${EDITOR_FACTORY_CLASSES.cellFocusDisabled} ${FILTER_MENU}`,
       showFirstSubmenuMode: 'onHover',
       hideSubmenuOnMouseLeave: true,
       items: [{
@@ -652,12 +655,12 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
         }
 
         if (selectedFilterOperation) {
-          options[isOnClickMode ? 'bufferedSelectedFilterOperation' : 'selectedFilterOperation'] = selectedFilterOperation;
-
           if (selectedFilterOperation === 'between' || columnSelectedFilterOperation === 'between') {
             notFocusEditor = selectedFilterOperation === 'between';
             options[isOnClickMode ? 'bufferedFilterValue' : 'filterValue'] = null;
           }
+
+          options[isOnClickMode ? 'bufferedSelectedFilterOperation' : 'selectedFilterOperation'] = selectedFilterOperation;
         } else {
           options[isOnClickMode ? 'bufferedFilterValue' : 'filterValue'] = null;
           options[isOnClickMode ? 'bufferedSelectedFilterOperation' : 'selectedFilterOperation'] = column.defaultSelectedFilterOperation || null;
@@ -705,7 +708,6 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
 
   private _focusEditor($container) {
     this._editorFactoryController.focus($container);
-    // @ts-expect-error
     eventsEngine.trigger($container.find(EDITORS_INPUT_SELECTOR), 'focus');
   }
 
@@ -870,12 +872,13 @@ export class ApplyFilterViewController extends modules.ViewController {
     this._columnsController.beginUpdate();
     for (let i = 0; i < columns.length; i++) {
       const column = columns[i];
-      if (column.bufferedFilterValue !== undefined) {
-        this._columnsController.columnOption(i, 'filterValue', column.bufferedFilterValue);
+      const { bufferedFilterValue, bufferedSelectedFilterOperation } = column;
+      if (bufferedFilterValue !== undefined) {
+        this._columnsController.columnOption(i, 'filterValue', bufferedFilterValue);
         column.bufferedFilterValue = undefined;
       }
-      if (column.bufferedSelectedFilterOperation !== undefined) {
-        this._columnsController.columnOption(i, 'selectedFilterOperation', column.bufferedSelectedFilterOperation);
+      if (bufferedSelectedFilterOperation !== undefined) {
+        this._columnsController.columnOption(i, 'selectedFilterOperation', bufferedSelectedFilterOperation);
         column.bufferedSelectedFilterOperation = undefined;
       }
     }

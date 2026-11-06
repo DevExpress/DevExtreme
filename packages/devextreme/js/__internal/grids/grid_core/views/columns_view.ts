@@ -1,5 +1,4 @@
 import { name as clickEventName } from '@js/common/core/events/click';
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import { name as dblclickEvent } from '@js/common/core/events/double_click';
 import pointerEvents from '@js/common/core/events/pointer';
 import { removeEvent } from '@js/common/core/events/remove';
@@ -28,10 +27,11 @@ import {
 import { getWindow, hasWindow } from '@js/core/utils/window';
 import type { DxEvent } from '@js/events';
 import type { ActionEvent } from '@ts/core/action';
-import supportUtils from '@ts/core/utils/m_support';
+import supportUtils from '@ts/core/utils/support';
+import eventsEngine from '@ts/events/core/events_engine';
 import type { AdaptiveColumnsViewController } from '@ts/grids/grid_core/adaptivity/adaptivity';
 import { HIDDEN_COLUMNS_WIDTH } from '@ts/grids/grid_core/adaptivity/const';
-import type { ColumnChooserController, ColumnChooserView } from '@ts/grids/grid_core/column_chooser/m_column_chooser';
+import type { ColumnChooserController, ColumnChooserView } from '@ts/grids/grid_core/column_chooser/column_chooser';
 import { CLASSES as COLUMN_FIXING_CLASSES } from '@ts/grids/grid_core/column_fixing/const';
 import { CLASSES as COLUMN_HEADERS_CLASSES } from '@ts/grids/grid_core/column_headers/const';
 import { ColumnStateMixin } from '@ts/grids/grid_core/column_state_mixin/column_state_mixin';
@@ -47,7 +47,7 @@ import { CLASSES as ERROR_HANDLING_CLASSES } from '@ts/grids/grid_core/error_han
 import { CLASSES as FILTER_ROW_CLASSES } from '@ts/grids/grid_core/filter_row/const';
 import { CLASSES as MASTER_DETAIL_CLASSES } from '@ts/grids/grid_core/master_detail/const';
 import modules from '@ts/grids/grid_core/modules/modules';
-import type { SelectionController } from '@ts/grids/grid_core/selection/m_selection';
+import type { SelectionController } from '@ts/grids/grid_core/selection/selection';
 import type { OptionChanged } from '@ts/grids/grid_core/types';
 import gridCoreUtils from '@ts/grids/grid_core/utils';
 import { FIELD_ITEM_CONTENT_CLASS } from '@ts/ui/form/constants';
@@ -380,8 +380,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
         const $cell = $(e.currentTarget);
         const $row = $cell.parent();
         const visibleColumns = this._columnsController.getVisibleColumns();
-        // @ts-expect-error data(key) is typed as returning the wrapper
-        const rowOptions: RowPreparedOptions | undefined = $row.data('options');
+        const rowOptions = $row.data<RowPreparedOptions | undefined>('options');
         const columnIndex = $cell.index();
 
         const cellOptions = rowOptions?.cells?.[columnIndex];
@@ -424,8 +423,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
       const $cell = $(event.currentTarget);
       const $fieldItemContent = $(event.target).closest(`.${FIELD_ITEM_CONTENT_CLASS}`);
       const $row = $cell.parent();
-      // @ts-expect-error data(key) is typed as returning the wrapper
-      const rowOptions: RowPreparedOptions | undefined = $row.data('options');
+      const rowOptions = $row.data<RowPreparedOptions | undefined>('options');
       const options = rowOptions?.cells?.[$cell.index()];
 
       if (!$cell.closest('table').is(event.delegateTarget)) {
@@ -441,8 +439,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
       resultOptions.rowIndex = this.getRowIndex($row);
 
       if ($fieldItemContent.length) {
-        // @ts-expect-error data(key) is typed as returning the wrapper
-        const formItemOptions: { column?: Column } = $fieldItemContent.data('dx-form-item');
+        const formItemOptions = $fieldItemContent.data<{ column?: Column }>('dx-form-item');
         if (formItemOptions.column) {
           resultOptions.column = formItemOptions.column;
           resultOptions.columnIndex = this._columnsController
@@ -1584,13 +1581,13 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
    * @extended: adaptivity
    */
   public getCell(
-    cellPosition: CellPosition,
+    cellPosition: Partial<CellPosition>,
     rows?: dxElementWrapper,
     cells?: dxElementWrapper,
   ): dxElementWrapper | undefined {
     const $rows = rows ?? this._getRowElements();
 
-    if ($rows.length > 0 && cellPosition.rowIndex >= 0) {
+    if ($rows.length > 0 && cellPosition.rowIndex !== undefined && cellPosition.rowIndex >= 0) {
       if (
         this.option('scrolling.mode') !== 'virtual'
         && this.option('scrolling.rowRenderingMode') !== 'virtual'
@@ -1601,8 +1598,12 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
       }
       const $cells = cells ?? this.getCellElements(cellPosition.rowIndex);
       if ($cells && $cells.length > 0) {
+        const { columnIndex } = cellPosition;
+
         return $cells.eq(
-          $cells.length > cellPosition.columnIndex ? cellPosition.columnIndex : $cells.length - 1,
+          columnIndex !== undefined && $cells.length > columnIndex
+            ? columnIndex
+            : $cells.length - 1,
         );
       }
     }
@@ -1646,7 +1647,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     return this._getRowElements().index($row);
   }
 
-  protected getBoundingRect(): BoundingRect | null | undefined {
+  public getBoundingRect(): BoundingRect | null | undefined {
     return undefined;
   }
 
@@ -1675,8 +1676,8 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
 
     if ($element && $tableElement) {
       return isHorizontal
-        ? getOuterWidth($tableElement) - getWidth($element) > 0
-        : getOuterHeight($tableElement) - getHeight($element) > 0;
+        ? Number(getOuterWidth($tableElement)) - Number(getWidth($element)) > 0
+        : Number(getOuterHeight($tableElement)) - Number(getHeight($element)) > 0;
     }
 
     return false;

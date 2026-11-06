@@ -7,7 +7,7 @@ import type { ReadonlySignal } from '@ts/core/state_manager/index';
 import {
   computed, effect, signal, track,
 } from '@ts/core/state_manager/index';
-import { equalByValue } from '@ts/core/utils/m_common';
+import { equalByValue } from '@ts/core/utils/common';
 import type { PromiseWithResolvers } from '@ts/core/utils/promise';
 import { createPromise } from '@ts/core/utils/promise';
 import type { StoreLoadOptions } from '@ts/data/abstract_store';

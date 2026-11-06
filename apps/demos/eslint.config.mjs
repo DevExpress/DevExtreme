@@ -1,12 +1,10 @@
 import globals from 'globals';
-import babelParser from '@babel/eslint-parser';
 import spellcheckDevextreme from 'eslint-config-devextreme/spell-check';
 import testcafeConfig from 'eslint-config-devextreme/testcafe';
 import typescriptConfig from 'eslint-config-devextreme/typescript';
 import javascriptConfig from 'eslint-config-devextreme/javascript';
 import spellcheckPlugin from 'eslint-plugin-spellcheck';
 import noOnlyTests from 'eslint-plugin-no-only-tests';
-import deprecation from 'eslint-plugin-deprecation';
 import reactPlugin from 'eslint-plugin-react';
 import reactHooks from 'eslint-plugin-react-hooks';
 import reactPerf from 'eslint-plugin-react-perf';
@@ -15,21 +13,12 @@ import vuePlugin from 'eslint-plugin-vue';
 import vueParser from 'vue-eslint-parser';
 import tsParser from '@typescript-eslint/parser';
 import js from '@eslint/js';
-import { fixupPluginRules } from '@eslint/compat';
-import { FlatCompat } from '@eslint/eslintrc';
 import stylistic from '@stylistic/eslint-plugin';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
-import { changeRulesToStylistic } from 'eslint-migration-utils';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-  recommendedConfig: js.configs.recommended,
-  allConfig: js.configs.all
-});
 
 const spellcheckRule = spellcheckDevextreme[0].rules['spellcheck/spell-checker'];
 
@@ -39,7 +28,6 @@ export default [
       'node_modules',
       'bundles',
       'coverage',
-      'publish-demos',
       'Demos/**/testcafe-test-code.js',
       'shared/empty-file.ts',
       'Demos/**/Vue/**/*.html',
@@ -51,42 +39,30 @@ export default [
     ],
   },
 
-  // Plugins and parser
+  // Plugins and language options
   {
     plugins: {
       spellcheck: spellcheckPlugin,
       'no-only-tests': noOnlyTests,
       '@stylistic': stylistic,
       jest,
-      'deprecation': fixupPluginRules(deprecation),
     },
     languageOptions: {
       globals: {
         ...globals.browser,
         ...globals.es6,
       },
-      parser: babelParser,
       ecmaVersion: 2018,
       sourceType: 'module',
-      parserOptions: {
-        requireConfigFile: false,
-        babelOptions: {
-          presets: ['@babel/preset-react'],
-        },
-      },
     },
   },
 
   js.configs.recommended,
   ...spellcheckDevextreme,
-  ...javascriptConfig.map(config => ({
-    ...config,
-    rules: changeRulesToStylistic(config.rules || {}),
-  })),
+  ...javascriptConfig,
   ...typescriptConfig.map(config => ({
     ...config,
     files: ['**/*.ts', '**/*.tsx'],
-    rules: changeRulesToStylistic(config.rules || {}),
   })),
 
   // General rules
@@ -108,7 +84,6 @@ export default [
           'timestamps',
           'urls',
           'whitespace',
-          'yargs',
           'treshold', // should be updated to 'threshold' in the codebase
           'callstack',
           'Deprecations',
@@ -191,6 +166,14 @@ export default [
   // .js and .jsx files
   {
     files: ['**/*.js', '**/*.jsx'],
+    languageOptions: {
+      ecmaVersion: 'latest',
+      parserOptions: {
+        ecmaFeatures: {
+          jsx: true,
+        },
+      },
+    },
     rules: {
       'no-unused-vars': 'error',
     }
@@ -222,14 +205,12 @@ export default [
       'no-underscore-dangle': 0,
       'operator-assignment': 0,
 
-      'deprecation/deprecation': 'error',
+      '@typescript-eslint/no-deprecated': 'error',
 
       '@typescript-eslint/naming-convention': 0,
-      '@typescript-eslint/no-throw-literal': 0,
       '@typescript-eslint/no-use-before-define': 0,
       '@typescript-eslint/no-shadow': 0,
       '@typescript-eslint/no-loop-func': 0,
-      '@typescript-eslint/ban-types': 0,
       '@typescript-eslint/no-this-alias': 0,
       '@typescript-eslint/no-empty-function': 0,
       '@typescript-eslint/no-explicit-any': 0,
@@ -258,7 +239,6 @@ export default [
       '@typescript-eslint/consistent-type-definitions': 0,
       '@typescript-eslint/prefer-nullish-coalescing': 0,
       '@typescript-eslint/explicit-function-return-type': 0,
-      '@typescript-eslint/prefer-ts-expect-error': 0,
       '@typescript-eslint/prefer-includes': 0,
       '@typescript-eslint/ban-ts-comment': 0,
       '@typescript-eslint/no-extraneous-class': 0,
@@ -351,7 +331,7 @@ export default [
       'react-perf/jsx-no-new-object-as-prop': 'error',
       'react-perf/jsx-no-new-array-as-prop': 'error',
       'react-perf/jsx-no-new-function-as-prop': 'error',
-      'react/jsx-tag-spacing': ['error', { beforeClosing: 'never' }],
+      '@stylistic/jsx-tag-spacing': ['error', { beforeClosing: 'never' }],
       'react/jsx-no-undef': ['error', { allowGlobals: true }],
       'react/jsx-no-target-blank': ['error', { enforceDynamicLinks: 'never' }],
 
@@ -431,6 +411,7 @@ export default [
     rules: {
       'no-useless-escape': 0,
       'no-unused-vars': 0,
+      'no-useless-assignment': 0,
 
       '@stylistic/quotes': 0,
       '@stylistic/quote-props': 0,
@@ -458,7 +439,7 @@ export default [
   ...testcafeConfig.map(config => ({
     ...config,
     rules: {
-      ...changeRulesToStylistic(config.rules || {}),
+      ...config.rules,
       'require-await': 'warn',
 
     },
@@ -494,7 +475,7 @@ export default [
   },
 
   // jest tests
-  ...compat.extends('plugin:jest/recommended', 'plugin:jest/style').map(config => ({
+  ...[jest.configs['flat/recommended'], jest.configs['flat/style']].map(config => ({
     ...config,
     files: ['utils/tests/**/*.*'],
   })),

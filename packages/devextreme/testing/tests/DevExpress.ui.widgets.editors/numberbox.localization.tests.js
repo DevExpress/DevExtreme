@@ -271,7 +271,7 @@ QUnit.module('localization: global number format locale', localizationModuleHook
         assert.strictEqual($element.find(TEXTEDITOR_INPUT_CLASS).val(), '99.50', 'new value re-evaluates the locale function');
     });
 
-    QUnit.test('local format option keeps type; global numberFormat locale applies to culture', function(assert) {
+    QUnit.test('explicit fixedPoint preset keeps the message locale', function(assert) {
         localization.locale('de');
         config({
             ...config(),
@@ -294,7 +294,7 @@ QUnit.module('localization: global number format locale', localizationModuleHook
         });
         const $input = $element.find(TEXTEDITOR_INPUT_CLASS);
 
-        assert.strictEqual($input.val(), '1,235', 'precision from local format; en-US from global numberFormat');
+        assert.strictEqual($input.val(), '1.235', 'precision from local format; message locale, not global numberFormat');
     });
 
     QUnit.test('typed format keeps its explicit locale when the mask is generated', function(assert) {

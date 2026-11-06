@@ -19,12 +19,10 @@ class FileManagerDeleteItemDialog extends FileManagerDialogBase {
     const text = itemCount === 1
       ? messageLocalization.format(
         'dxFileManager-dialogDeleteItemSingleItemConfirmation',
-        // @ts-expect-error ts-error
         itemName,
       )
       : messageLocalization.format(
         'dxFileManager-dialogDeleteItemMultipleItemsConfirmation',
-        // @ts-expect-error ts-error
         itemCount,
       );
 

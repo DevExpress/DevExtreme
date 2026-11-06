@@ -15,14 +15,6 @@ type GlobalFormatOptionName = 'dateFormat' | 'dateTimeFormat' | 'timeFormat' | '
 
 const hasOwn = Object.prototype.hasOwnProperty;
 
-const GLOBAL_FORMAT_DATA_TYPES = ['time', 'datetime', 'date'];
-
-const DEFAULT_IMPLICIT_PRESET_BY_DATA_TYPE = {
-  date: 'shortdate',
-  datetime: 'shortdateshorttime',
-  time: 'shorttime',
-};
-
 const DATA_TYPE_FORMAT_PRESET: Record<string, string> = {
   datetime: 'shortDateShortTime',
   time: 'shortTime',
@@ -167,59 +159,6 @@ const getFormatType = (format: Format | undefined): string | undefined => (
   isPlainObject(format) ? (format as FormatObject).type : undefined
 );
 
-const resolveDataTypeFromGlobalConfig = (presetName: string | undefined): string | undefined => {
-  if (!presetName) {
-    return undefined;
-  }
-
-  const lowerPreset = String(presetName).toLowerCase();
-
-  for (const dataType of GLOBAL_FORMAT_DATA_TYPES) {
-    const globalFormatType = getFormatType(getGlobalFormatByDataType(dataType));
-
-    if (globalFormatType?.toLowerCase() === lowerPreset) {
-      return dataType;
-    }
-  }
-
-  for (const dataType of GLOBAL_FORMAT_DATA_TYPES) {
-    if (DEFAULT_IMPLICIT_PRESET_BY_DATA_TYPE[dataType] === lowerPreset) {
-      return dataType;
-    }
-  }
-
-  return undefined;
-};
-
-const inferDataTypeFromFormatObject = (format: Format): string | undefined => {
-  if (!isPlainObject(format)) {
-    return undefined;
-  }
-
-  const {
-    hour, minute, second, year, month, day, weekday,
-  } = format as Intl.DateTimeFormatOptions;
-  const hasTime = hour !== undefined || minute !== undefined || second !== undefined;
-  const hasDate = year !== undefined
-    || month !== undefined
-    || day !== undefined
-    || weekday !== undefined;
-
-  if (hasTime && hasDate) {
-    return 'datetime';
-  }
-
-  if (hasTime) {
-    return 'time';
-  }
-
-  if (hasDate) {
-    return 'date';
-  }
-
-  return undefined;
-};
-
 export const getFormatterOptions = (format: Format): Format => {
   if (!isPlainObject(format) || !Object.hasOwnProperty.call(format, 'locale')) {
     return format;
@@ -234,7 +173,6 @@ export const getFormatterOptions = (format: Format): Format => {
 export const getEffectiveFormatLocale = (
   format: Format,
   dataType?: string,
-  presetName?: string,
 ): string => {
   const ownLocale = getOwnFormatLocale(format);
 
@@ -242,12 +180,8 @@ export const getEffectiveFormatLocale = (
     return ownLocale;
   }
 
-  const resolvedDataType = dataType
-    ?? resolveDataTypeFromGlobalConfig(presetName ?? getFormatType(format))
-    ?? inferDataTypeFromFormatObject(format);
-
-  if (resolvedDataType) {
-    const globalFormatLocale = getOwnFormatLocale(getGlobalFormatByDataType(resolvedDataType));
+  if (dataType) {
+    const globalFormatLocale = getOwnFormatLocale(getGlobalFormatByDataType(dataType));
 
     if (globalFormatLocale) {
       return globalFormatLocale;
@@ -256,6 +190,12 @@ export const getEffectiveFormatLocale = (
 
   return coreLocalization.locale();
 };
+
+export const getNumberFormatLocale = (format?: Format | null): string => (
+  format
+    ? getEffectiveFormatLocale(format)
+    : getEffectiveFormatLocale(undefined, 'number')
+);
 
 export const resolvePresetOverride = (presetName: string): Format | undefined => {
   const { dateTimeFormatPresets: presets } = config();
@@ -288,22 +228,17 @@ export const getDateFormatLocale = (
   resolvedFormat?: Format,
 ): string => {
   const effectiveResolved = resolvedFormat ?? resolveFormatWhenOmitted(sourceFormat);
-  const localeSource = getOwnFormatLocale(sourceFormat) ? sourceFormat : effectiveResolved;
-  const sourcePresetName = isString(sourceFormat)
-    ? sourceFormat
-    : getFormatType(sourceFormat) ?? (isString(effectiveResolved) ? effectiveResolved : undefined);
 
-  return getEffectiveFormatLocale(
-    isPlainObject(localeSource) ? localeSource : undefined,
-    undefined,
-    sourcePresetName,
-  );
+  return getOwnFormatLocale(sourceFormat)
+    ?? getOwnFormatLocale(effectiveResolved)
+    ?? coreLocalization.locale();
 };
 
 export default {
   getGlobalFormatByDataType,
   resolvePresetOverride,
   getEffectiveFormatLocale,
+  getNumberFormatLocale,
   getDateFormatLocale,
   getFormatterOptions,
 };

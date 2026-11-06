@@ -1,6 +1,5 @@
 /* eslint-disable max-classes-per-file */
 import { name as clickEventName } from '@js/common/core/events/click';
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import { addNamespace } from '@js/common/core/events/utils/index';
 import localizationMessage from '@js/common/core/localization/message';
 import ArrayStore from '@js/common/data/array_store';
@@ -11,12 +10,13 @@ import { extend } from '@js/core/utils/extend';
 import { each, map } from '@js/core/utils/iterator';
 import { isDefined } from '@js/core/utils/type';
 import Widget from '@js/ui/widget/ui.widget';
+import eventsEngine from '@ts/events/core/events_engine';
 import columnStateMixin from '@ts/grids/grid_core/column_state_mixin/column_state_mixin';
 import {
   HeaderFilterView as HeaderFilterViewBase,
   updateHeaderFilterItemSelectionState,
-} from '@ts/grids/grid_core/header_filter/m_header_filter_core';
-import sortingMixin from '@ts/grids/grid_core/sorting/m_sorting_mixin';
+} from '@ts/grids/grid_core/header_filter/header_filter_core';
+import sortingMixin from '@ts/grids/grid_core/sorting/sorting_mixin';
 import type { InternalGrid } from '@ts/grids/grid_core/types';
 
 import type { RovingTabIndexComponent } from '../keyboard_navigation/roving_tab_index';

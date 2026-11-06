@@ -14,7 +14,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 
 import { paintedColor } from '@ts/core/utils/css_variables';
-import { extend as _extend } from '@ts/core/utils/m_extend';
+import { extend as _extend } from '@ts/core/utils/extend';
 import barPoint from '@ts/viz/series/points/bar_point';
 import symbolPoint from '@ts/viz/series/points/symbol_point';
 

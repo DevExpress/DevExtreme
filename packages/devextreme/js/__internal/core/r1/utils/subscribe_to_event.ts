@@ -1,5 +1,6 @@
+import eventsEngine from '@ts/events/core/events_engine';
+
 import * as clickEvent from '../../../../common/core/events/click';
-import eventsEngine from '../../../../common/core/events/core/events_engine';
 import scrollEvents from '../../../../common/core/events/gesture/emitter.gesture.scroll';
 import pointerEvents from '../../../../common/core/events/pointer';
 import { addNamespace } from '../../../../common/core/events/utils/index';
@@ -14,8 +15,10 @@ export function subscribeToEvent(eventName: string) {
   ): EffectReturn => {
     const event = namespace ? addNamespace(eventName, namespace) : eventName;
     if (handler) {
+      // @ts-expect-error the r1 helpers take untyped handlers and event data
       eventsEngine.on(element, event, eventData, handler);
       return (): void => {
+        // @ts-expect-error the r1 helpers take untyped handlers
         eventsEngine.off(element, event, handler);
       };
     }

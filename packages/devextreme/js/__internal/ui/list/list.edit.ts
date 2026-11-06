@@ -9,7 +9,7 @@ import type { DxEvent } from '@js/events';
 import type {
   Item,
 } from '@js/ui/list';
-import { isNumeric, isObject } from '@ts/core/utils/m_type';
+import { isNumeric, isObject } from '@ts/core/utils/type';
 import type { ActionConfig } from '@ts/core/widget/component';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { SupportedKeys } from '@ts/core/widget/widget';

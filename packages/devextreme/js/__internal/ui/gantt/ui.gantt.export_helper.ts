@@ -4,13 +4,13 @@ import dateLocalization from '@js/common/core/localization/date';
 import numberLocalization from '@js/common/core/localization/number';
 import { isDate, isDefined, isNumeric } from '@js/core/utils/type';
 import { getWindow } from '@js/core/utils/window';
-import type { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/m_column_headers';
+import type { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/column_headers';
 import gridCoreUtils from '@ts/grids/grid_core/utils';
+import { CLASSES as TREELIST_ROWS_CLASSES } from '@ts/grids/tree_list/rows/const';
 import type TreeList from '@ts/grids/tree_list/widget_base';
 import type Gantt from '@ts/ui/gantt/ui.gantt';
 
 const window = getWindow();
-const TREELIST_EMPTY_SPACE = 'dx-treelist-empty-space';
 const TREELIST_TABLE = 'dx-treelist-table';
 
 export class GanttExportHelper {
@@ -127,7 +127,7 @@ export class GanttExportHelper {
 
   _getEmptySpaceWidth(level) {
     if (!this._cache.emptyWidth) {
-      const element = this._getTreeListElement(TREELIST_EMPTY_SPACE);
+      const element = this._getTreeListElement(TREELIST_ROWS_CLASSES.emptySpace);
       // @ts-expect-error ts-error
       this._cache.emptyWidth ??= element?.offsetWidth ?? 0;
     }

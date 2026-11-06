@@ -4,7 +4,6 @@ import type { AnimationConfig } from '@js/common/core/animation';
 import { fx } from '@js/common/core/animation';
 import { move } from '@js/common/core/animation/translator';
 import { name as clickEventName } from '@js/common/core/events/click';
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import Swipeable from '@js/common/core/events/gesture/swipeable';
 import { addNamespace } from '@js/common/core/events/utils';
 import { triggerResizeEvent } from '@js/common/core/events/visibility_change';
@@ -31,6 +30,7 @@ import type { Item, Properties } from '@js/ui/gallery';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { SupportedKeys, WidgetProperties } from '@ts/core/widget/widget';
 import Widget from '@ts/core/widget/widget';
+import eventsEngine from '@ts/events/core/events_engine';
 import type { SwipeEndEvent, SwipeStartEvent, SwipeUpdateEvent } from '@ts/events/swipe';
 import type { CollectionWidgetEditProperties } from '@ts/ui/collection/collection_widget.edit';
 import CollectionWidget from '@ts/ui/collection/collection_widget.edit';
@@ -256,7 +256,7 @@ class Gallery extends CollectionWidget<GalleryProperties, Item, CollectionItemKe
   }
 
   _itemPercentWidth(): number {
-    const elementWidth: number = getOuterWidth(this.$element());
+    const elementWidth: number = getOuterWidth(this.$element().get(0));
     const { initialItemWidth } = this.option();
 
     if (initialItemWidth && initialItemWidth <= elementWidth) {
@@ -977,7 +977,7 @@ class Gallery extends CollectionWidget<GalleryProperties, Item, CollectionItemKe
 
   _elementWidth(): number | undefined {
     if (!this._cacheElementWidth) {
-      this._cacheElementWidth = getWidth(this.$element());
+      this._cacheElementWidth = getWidth(this.$element().get(0));
     }
 
     return this._cacheElementWidth;

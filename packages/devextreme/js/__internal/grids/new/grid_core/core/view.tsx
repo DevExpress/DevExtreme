@@ -7,7 +7,7 @@ import { infernoRenderer } from '@ts/core/inferno_renderer';
 import { BaseInfernoComponent } from '@ts/core/r1/runtime/inferno/base_component';
 import type { ReadonlySignal } from '@ts/core/state_manager/index';
 import { effect } from '@ts/core/state_manager/index';
-import { hasWindow } from '@ts/core/utils/m_window';
+import { hasWindow } from '@ts/core/utils/window';
 import { type ComponentType } from 'inferno';
 
 export abstract class View<T extends {}> {

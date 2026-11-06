@@ -22,4 +22,4 @@ export {
     setInnerHeight,
     getWindowByElement,
     getOffset,
-} from '../../__internal/core/utils/m_size';
+} from '../../__internal/core/utils/size';

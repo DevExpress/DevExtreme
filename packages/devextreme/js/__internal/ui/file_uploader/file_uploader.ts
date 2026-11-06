@@ -1,5 +1,4 @@
 import type { DefaultOptionsRule } from '@js/common';
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import { addNamespace, isTouchEvent, normalizeKeyName } from '@js/common/core/events/utils/index';
 import messageLocalization from '@js/common/core/localization/message';
 import registerComponent from '@js/core/component_registrator';
@@ -20,6 +19,7 @@ import ProgressBar from '@js/ui/progress_bar';
 import { current, isFluent, isMaterial } from '@js/ui/themes';
 import { ICON_CLASS } from '@ts/core/utils/icon';
 import type { OptionChanged } from '@ts/core/widget/types';
+import eventsEngine from '@ts/events/core/events_engine';
 import Editor from '@ts/ui/editor/editor';
 import { CustomChunksFileUploadStrategy } from '@ts/ui/file_uploader/file_upload_strategy.chunks.custom';
 import { DefaultChunksFileUploadStrategy } from '@ts/ui/file_uploader/file_upload_strategy.chunks.default';
@@ -232,7 +232,6 @@ class FileUploader extends Editor<FileUploaderProperties> {
         abortUpload: null,
         validationMessageOffset: { h: 0, v: 0 },
         hoverStateEnabled: true,
-        useNativeInputClick: false,
         useDragOver: true,
         nativeDropSupported: true,
         _uploadButtonType: 'normal',
@@ -348,15 +347,12 @@ class FileUploader extends Editor<FileUploaderProperties> {
       this._$fileInput = renderFileUploaderInput();
 
       eventsEngine.on(this._$fileInput, 'change', () => { this._inputChangeHandler(); });
-      eventsEngine.on(this._$fileInput, 'click', (e: Event): boolean | undefined => {
+      eventsEngine.on(this._$fileInput, 'click', (e: DxEvent): boolean | undefined => {
         e.stopPropagation();
 
         this._resetInputValue();
 
-        const { useNativeInputClick } = this.option();
-
-        // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-        return useNativeInputClick || this._isCustomClickEvent;
+        return this._isCustomClickEvent;
       });
     }
 
@@ -791,18 +787,19 @@ class FileUploader extends Editor<FileUploaderProperties> {
 
     const cancelButtonsCount = allowCanceling && uploadMode !== 'useForm' ? 1 : 0;
     const uploadButtonsCount = uploadMode === 'useButtons' ? 1 : 0;
-    const filesContainerWidth = getWidth(
+    const filesContainerWidth = Number(getWidth(
       this._$filesContainer?.find(`.${FILEUPLOADER_FILE_CONTAINER_CLASS}`).first(),
-    ) || getWidth(this._$filesContainer);
+    ) || getWidth(this._$filesContainer));
     const $buttonContainer = this._$filesContainer?.find(`.${FILEUPLOADER_BUTTON_CONTAINER_CLASS}`).eq(0);
-    const buttonsWidth = getWidth($buttonContainer) * (cancelButtonsCount + uploadButtonsCount);
+    const buttonsWidth = (getWidth($buttonContainer) ?? 0)
+      * (cancelButtonsCount + uploadButtonsCount);
     const $fileSize = this._$filesContainer?.find(`.${FILEUPLOADER_FILE_SIZE_CLASS}`).eq(0);
     const $icon = this._$filesContainer?.find(`.${FILEUPLOADER_FILE_ICON_CLASS}`).eq(0);
-    const iconWidth = _showFileIcon ? getOuterWidth($icon) : 0;
+    const iconWidth = _showFileIcon ? Number(getOuterWidth($icon)) : 0;
 
     const prevFileSize = $fileSize?.text();
     $fileSize?.text('1000 Mb');
-    const fileSizeWidth = getWidth($fileSize);
+    const fileSizeWidth = Number(getWidth($fileSize));
     $fileSize?.text(prevFileSize ?? '');
 
     const maxWidth = filesContainerWidth - buttonsWidth - fileSizeWidth - iconWidth;
@@ -874,7 +871,6 @@ class FileUploader extends Editor<FileUploaderProperties> {
         hoverStateEnabled,
         stylingMode: _buttonStylingMode,
         elementAttr: {
-          // @ts-expect-error format params should be extended
           'aria-label': messageLocalization.format('dxFileUploader-removeFileButtonLabel', file?.value?.name ?? ''),
         },
       },
@@ -907,7 +903,6 @@ class FileUploader extends Editor<FileUploaderProperties> {
         hoverStateEnabled,
         stylingMode: _buttonStylingMode,
         elementAttr: {
-          // @ts-expect-error format params should be extended
           'aria-label': messageLocalization.format('dxFileUploader-uploadFileButtonLabel', file?.value?.name ?? ''),
         },
       },
@@ -1007,14 +1002,11 @@ class FileUploader extends Editor<FileUploaderProperties> {
   }
 
   _selectFileDialogClickHandler(): void {
-    const { useNativeInputClick } = this.option();
-
-    if (useNativeInputClick || this._isInteractionDisabled()) {
+    if (this._isInteractionDisabled()) {
       return;
     }
 
     this._isCustomClickEvent = true;
-    // @ts-expect-error update events_engine interface to support trigger method
     eventsEngine.trigger(this._$fileInput, 'click');
     this._isCustomClickEvent = false;
   }
@@ -1034,7 +1026,7 @@ class FileUploader extends Editor<FileUploaderProperties> {
     eventsEngine.on(
       $target,
       addNamespace(keyUpEventName, DIALOG_TRIGGER_EVENT_NAMESPACE),
-      (e: KeyboardEvent) => {
+      (e: DxEvent<KeyboardEvent>) => {
         const normalizedKeyName = normalizeKeyName(e);
 
         if (normalizedKeyName === ENTER_KEY || normalizedKeyName === SPACE_KEY) {
@@ -1115,28 +1107,10 @@ class FileUploader extends Editor<FileUploaderProperties> {
   }
 
   _renderInput(): void {
-    const { useNativeInputClick, inputAttr } = this.option();
-    if (useNativeInputClick) {
-      this._selectButton.option({ template: this._selectButtonInputTemplate.bind(this) });
-    } else {
-      // @ts-expect-error dxElementWrapper should be extdened
-      this._$fileInput.appendTo(this._$inputContainer);
-      this._selectButton.option({ template: 'content' });
-    }
+    const { inputAttr } = this.option();
+    // @ts-expect-error dxElementWrapper should be extdened
+    this._$fileInput.appendTo(this._$inputContainer);
     this._applyInputAttributes(inputAttr);
-  }
-
-  _selectButtonInputTemplate(data: { text: string }, content: HTMLElement): dxElementWrapper {
-    const $content = $(content);
-    const $text = $('<span>')
-      .addClass('dx-button-text')
-      .text(data.text);
-
-    $content
-      .append($text)
-      .append(this._$fileInput);
-
-    return $content;
   }
 
   _renderInputWrapper(): void {
@@ -1218,7 +1192,7 @@ class FileUploader extends Editor<FileUploaderProperties> {
     dropZoneElement?: Element,
   ): boolean | string | undefined {
     return this._activeDropZone === null
-      && this.isMouseOverElement(e, dropZoneElement as HTMLElement, false)
+      && this.isMouseOverElement(e, dropZoneElement as HTMLElement)
       && e.originalEvent.dataTransfer.types.find((item) => item === 'Files');
   }
 
@@ -1228,12 +1202,12 @@ class FileUploader extends Editor<FileUploaderProperties> {
     }
     e.originalEvent.dataTransfer.dropEffect = 'copy';
 
-    if (!isCustomTarget) { // only default dropzone has pseudoelements
+    if (!isCustomTarget) {
       const dropZoneElement = this._getDropZoneElement(false, e);
       if (this._shouldRaiseDragOver(e, dropZoneElement)) {
         this._dragEnterHandler(false, e);
       }
-      if (this._shouldRaiseDragLeave(e, false)) {
+      if (this._shouldRaiseDragLeave(e)) {
         this._dragLeaveHandler(false, e);
       }
     }
@@ -1244,18 +1218,17 @@ class FileUploader extends Editor<FileUploaderProperties> {
       e.preventDefault();
     }
 
-    if (this._shouldRaiseDragLeave(e, isCustomTarget)) {
+    if (this._shouldRaiseDragLeave(e)) {
       this._tryToggleDropZoneActive(false, isCustomTarget, e);
       this._activeDropZone = null;
     }
   }
 
-  _shouldRaiseDragLeave(e: MouseLikeEvent, isCustomTarget: boolean): boolean {
+  _shouldRaiseDragLeave(e: MouseLikeEvent): boolean {
     return this._activeDropZone !== null
     && !this.isMouseOverElement(
       e,
       this._activeDropZone as HTMLElement,
-      !isCustomTarget,
       -DRAG_EVENT_DELTA,
     );
   }
@@ -1515,17 +1488,13 @@ class FileUploader extends Editor<FileUploaderProperties> {
   isMouseOverElement(
     mouseEvent: MouseLikeEvent,
     element?: HTMLElement,
-    correctPseudoElements?: boolean,
     dragEventDelta: number = DRAG_EVENT_DELTA,
   ): boolean {
     if (!element) return false;
 
-    const beforeHeight = correctPseudoElements ? parseFloat(window.getComputedStyle(element, ':before').height) : 0;
-    const afterHeight = correctPseudoElements ? parseFloat(window.getComputedStyle(element, ':after').height) : 0;
-    const x = getOffset(element).left;
-    const y = getOffset(element).top + beforeHeight;
+    const { left: x, top: y } = getOffset(element);
     const w = element.offsetWidth;
-    const h = element.offsetHeight - beforeHeight - afterHeight;
+    const h = element.offsetHeight;
     const eventX = this._getEventX(mouseEvent);
     const eventY = this._getEventY(mouseEvent);
 
@@ -1750,9 +1719,6 @@ class FileUploader extends Editor<FileUploaderProperties> {
         break;
       case 'onFileLimitReached':
         this._createFileLimitReachedAction();
-        break;
-      case 'useNativeInputClick':
-        this._renderInput();
         break;
       case 'useDragOver':
         this._attachDragEventHandlers(this._$inputWrapper);

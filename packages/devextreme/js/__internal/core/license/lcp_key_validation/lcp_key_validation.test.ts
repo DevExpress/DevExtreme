@@ -180,4 +180,78 @@ describe('LCP key validation', () => {
       expect(token.payload.maxVersionAllowed).toBe(251);
     }
   });
+
+  it('returns the trial-expired token for an expired trial of the current version', () => {
+    const { parseDevExpressProductKey, TokenKind } = loadParserWithBypassedSignatureCheck();
+    const expired = msToDotNetTicks(Date.now() - 10 * 24 * 60 * 60 * 1000);
+    const payload = `meta;262,0,0,${expired},${expired};`;
+
+    const token = parseDevExpressProductKey(createLcpSource(payload), false, 262);
+
+    expect(token).toEqual({ kind: TokenKind.corrupted, error: 'trial-expired', licenseId: 'meta' });
+  });
+
+  it('does not return trial-expired without the version, within the tolerance or for another version', () => {
+    const { parseDevExpressProductKey } = loadParserWithBypassedSignatureCheck();
+    const recent = msToDotNetTicks(Date.now() - 1 * 24 * 60 * 60 * 1000);
+    const old = msToDotNetTicks(Date.now() - 10 * 24 * 60 * 60 * 1000);
+
+    expect(parseDevExpressProductKey(createLcpSource(`meta;262,0,0,${old},${old};`)).error)
+      .toBe('product-kind');
+    expect(parseDevExpressProductKey(createLcpSource(`meta;262,0,0,${recent},${recent};`), false, 262).error)
+      .toBe('product-kind');
+    expect(parseDevExpressProductKey(createLcpSource(`meta;261,0,0,${old},${old};`), false, 262).error)
+      .toBe('product-kind');
+  });
+
+  it('prefers trial-expired over a version mismatch with an older DevExtreme license', () => {
+    const { parseDevExpressProductKey, TokenKind } = loadParserWithBypassedSignatureCheck();
+    const old = msToDotNetTicks(Date.now() - 10 * 24 * 60 * 60 * 1000);
+    const payload = `meta;252,${DEVEXTREME_HTML_JS_BIT};262,0,0,${old},${old};`;
+
+    const token = parseDevExpressProductKey(createLcpSource(payload), false, 262);
+
+    expect(token).toEqual({ kind: TokenKind.corrupted, error: 'trial-expired', licenseId: 'meta' });
+  });
+
+  it('reads the license id from the key', () => {
+    const { parseDevExpressProductKey, TokenKind } = loadParserWithBypassedSignatureCheck();
+    const payload = `0123456789ABCDEF0123456789ABCDEF;251,${DEVEXTREME_HTML_JS_BIT};`;
+
+    const token = parseDevExpressProductKey(createLcpSource(payload));
+
+    expect(token.kind).toBe(TokenKind.verified);
+    if (token.kind === TokenKind.verified) {
+      expect(token.payload.licenseId).toBe('0123456789ABCDEF0123456789ABCDEF');
+    }
+  });
+
+  it.each([
+    { acceptAspNetEntitlement: false, expected: 'trial-expired' },
+    { acceptAspNetEntitlement: true, expected: 'verified' },
+  ])('treats an AspNet-only license with an old trial date by the entitlement (acceptAspNetEntitlement=$acceptAspNetEntitlement)', ({
+    acceptAspNetEntitlement,
+    expected,
+  }) => {
+    const { parseDevExpressProductKey, TokenKind } = loadParserWithBypassedSignatureCheck();
+    const old = msToDotNetTicks(Date.now() - 100 * 24 * 60 * 60 * 1000);
+    const payload = `meta;262,${DEVEXTREME_ASPNET_BIT},0,${old},${old};`;
+
+    const token = parseDevExpressProductKey(createLcpSource(payload), acceptAspNetEntitlement, 262);
+
+    if (expected === 'verified') {
+      expect(token.kind).toBe(TokenKind.verified);
+    } else {
+      expect(token).toEqual({ kind: TokenKind.corrupted, error: expected, licenseId: 'meta' });
+    }
+  });
+
+  it('does not treat a zero Expiration (no trial date) as an expired trial', () => {
+    const { parseDevExpressProductKey } = loadParserWithBypassedSignatureCheck();
+    const payload = `meta;262,${DEVEXTREME_ASPNET_BIT},0,0,0;262,0,0,0,0;`;
+
+    const token = parseDevExpressProductKey(createLcpSource(payload), false, 262);
+
+    expect(token.error).toBe('product-kind');
+  });
 });

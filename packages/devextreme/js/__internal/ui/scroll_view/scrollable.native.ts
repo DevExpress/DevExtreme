@@ -1,5 +1,4 @@
 import type { Orientation } from '@js/common';
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import { isDxMouseWheelEvent } from '@js/common/core/events/utils/index';
 import devices from '@js/core/devices';
 import type { dxElementWrapper } from '@js/core/renderer';
@@ -8,6 +7,7 @@ import { each } from '@js/core/utils/iterator';
 import { getHeight, getWidth } from '@js/core/utils/size';
 import type { ScrollEvent } from '@js/ui/scroll_view';
 import type { ActionConfig } from '@ts/core/widget/component';
+import eventsEngine from '@ts/events/core/events_engine';
 import type Scrollable from '@ts/ui/scroll_view/scrollable';
 import type { ScrollableProperties } from '@ts/ui/scroll_view/scrollable';
 import Scrollbar from '@ts/ui/scroll_view/scrollbar';
@@ -287,16 +287,16 @@ class NativeStrategy<
 
   _updateDimensions(): void {
     this._containerSize = {
-      height: getHeight(this._$container),
-      width: getWidth(this._$container),
+      height: getHeight(this._$container.get(0)),
+      width: getWidth(this._$container.get(0)),
     };
     this._componentContentSize = {
-      height: getHeight(this._component.$content()),
-      width: getWidth(this._component.$content()),
+      height: getHeight(this._component.$content().get(0)),
+      width: getWidth(this._component.$content().get(0)),
     };
     this._contentSize = {
-      height: getHeight(this._$content),
-      width: getWidth(this._$content),
+      height: getHeight(this._$content.get(0)),
+      width: getWidth(this._$content.get(0)),
     };
   }
 

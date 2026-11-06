@@ -1,6 +1,7 @@
 import {
   afterEach, beforeEach, describe, expect, it,
 } from '@jest/globals';
+import type { DataGridScrollMode } from '@js/ui/data_grid';
 
 import type { DataGridInstance } from '../../__tests__/__mock__/helpers/utils';
 import {
@@ -10,14 +11,6 @@ import {
 } from '../../__tests__/__mock__/helpers/utils';
 
 const ITEMS = [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }, { id: 5 }];
-
-interface Pagination {
-  option: (name: string) => unknown;
-}
-
-const getPagination = (instance: DataGridInstance): Pagination => (
-  instance.getView('pagerView') as unknown as { getPager: () => Pagination }
-).getPager();
 
 const isPagerVisible = (instance: DataGridInstance): boolean => instance
   .getView('pagerView')
@@ -29,13 +22,14 @@ describe('PagerView', () => {
 
   describe('without a data source', () => {
     it('reports one page and no items', async () => {
-      const { instance } = await createDataGrid({
+      const { component } = await createDataGrid({
         pager: { visible: true },
       });
+      const pagination = component.getPager().getInstance();
 
-      expect(getPagination(instance).option('pageCount')).toBe(1);
-      expect(getPagination(instance).option('itemCount')).toBe(0);
-      expect(getPagination(instance).option('hasKnownLastPage')).toBe(true);
+      expect(pagination.option('pageCount')).toBe(1);
+      expect(pagination.option('itemCount')).toBe(0);
+      expect(pagination.option('hasKnownLastPage')).toBe(true);
     });
 
     it('is hidden in auto mode', async () => {
@@ -49,15 +43,16 @@ describe('PagerView', () => {
 
   describe('with a data source', () => {
     it('reports the page count and the item count', async () => {
-      const { instance } = await createDataGrid({
+      const { component } = await createDataGrid({
         dataSource: ITEMS,
         paging: { pageSize: 2 },
         pager: { visible: true },
       });
+      const pagination = component.getPager().getInstance();
 
-      expect(getPagination(instance).option('pageCount')).toBe(3);
-      expect(getPagination(instance).option('itemCount')).toBe(5);
-      expect(getPagination(instance).option('hasKnownLastPage')).toBe(true);
+      expect(pagination.option('pageCount')).toBe(3);
+      expect(pagination.option('itemCount')).toBe(5);
+      expect(pagination.option('hasKnownLastPage')).toBe(true);
     });
 
     it('is visible in auto mode when there is more than one page', async () => {
@@ -75,6 +70,17 @@ describe('PagerView', () => {
         dataSource: ITEMS,
         paging: { pageSize: 10 },
         pager: { visible: 'auto' },
+      });
+
+      expect(isPagerVisible(instance)).toBe(false);
+    });
+
+    it.each<DataGridScrollMode>(['virtual', 'infinite'])('is hidden in auto mode in the %s scrolling mode when there is more than one page', async (mode) => {
+      const { instance } = await createDataGrid({
+        dataSource: ITEMS,
+        paging: { pageSize: 2 },
+        pager: { visible: 'auto' },
+        scrolling: { mode },
       });
 
       expect(isPagerVisible(instance)).toBe(false);

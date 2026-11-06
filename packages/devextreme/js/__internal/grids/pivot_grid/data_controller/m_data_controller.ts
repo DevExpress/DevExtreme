@@ -6,13 +6,14 @@ import { each, map } from '@js/core/utils/iterator';
 import { format } from '@js/core/utils/string';
 import { isDefined, isString } from '@js/core/utils/type';
 import stateStoring from '@ts/grids/grid_core/state_storing/state_storing_controller_core';
-import { createColumnsInfo, foreachColumnInfo } from '@ts/grids/grid_core/virtual_columns/m_virtual_columns_core';
-import VirtualScrollControllerModule from '@ts/grids/grid_core/virtual_scrolling/m_virtual_scrolling_core';
+import { createColumnsInfo, foreachColumnInfo } from '@ts/grids/grid_core/virtual_columns/virtual_columns_core';
+import VirtualScrollControllerModule from '@ts/grids/grid_core/virtual_scrolling/virtual_scrolling_core';
 
 import { PivotGridDataSource } from '../data_source/m_data_source';
 import {
   createPath, findField, foreachTree, foreachTreeAsync, formatValue,
 } from '../m_widget_utils';
+import type { PivotGridColumnInfo } from './types';
 
 const math = Math;
 const GRAND_TOTAL_TYPE = 'GT';
@@ -622,13 +623,16 @@ class DataController {
           : data.grandTotalRowIndex
       ] || [];
 
-      rowInfo.isLast && foreachColumnInfo(columnsInfo, (columnInfo, columnIndex) => {
+      rowInfo.isLast && foreachColumnInfo(columnsInfo, (
+        columnInfo: PivotGridColumnInfo,
+        columnIndex: number,
+      ) => {
         const dataIndex = (dataFieldAreaInRows ? rowInfo.dataIndex : columnInfo.dataIndex) || 0;
         const dataField = dataFields[dataIndex];
 
         if (columnInfo.isLast && dataField && dataField.visible !== false) {
           let cell = dataRow[
-            columnInfo.dataSourceIndex >= 0
+            Number(columnInfo.dataSourceIndex) >= 0
               ? columnInfo.dataSourceIndex
               : data.grandTotalColumnIndex
           ];
@@ -832,7 +836,7 @@ class DataController {
     const skipByPath = {};
     const takeByPath = {};
 
-    foreachColumnInfo(this._columnsInfo, (columnInfo, columnIndex) => {
+    foreachColumnInfo(this._columnsInfo, (columnInfo: PivotGridColumnInfo, columnIndex: number) => {
       if (columnInfo.type === 'D' && columnInfo.path && columnInfo.dataIndex === undefined) {
         const colspan = columnInfo.colspan || 1;
         const path = columnInfo.path.slice(0, -1).toString();

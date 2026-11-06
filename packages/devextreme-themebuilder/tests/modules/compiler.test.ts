@@ -18,10 +18,10 @@ const includePaths = [path.join(dataPath, 'scss', 'widgets', 'generic'), path.jo
 const file = path.join(dataPath, 'scss', 'bundles', 'dx.light.scss');
 
 const expectedCss = ({
-                       fontFamily = '-apple-system, BlinkMacSystemFont, "avenir next", avenir, "segoe ui", "helvetica neue", "adwaita sans", cantarell, ubuntu, roboto, noto, helvetica, arial, sans-serif',
-                       color = '#337ab7',
-                       bgColor = 'transparent'
-} = {}) => `.dx-accordion {
+  fontFamily = '-apple-system, BlinkMacSystemFont, "avenir next", avenir, "segoe ui", "helvetica neue", "adwaita sans", cantarell, ubuntu, roboto, noto, helvetica, arial, sans-serif',
+  color = '#337ab7',
+  bgColor = 'transparent',
+} = {}): string => `.dx-accordion {
   font-family: ${fontFamily};
   color: ${color};
   background-image: url(icons/icons.woff2);
@@ -29,10 +29,10 @@ const expectedCss = ({
 .dx-accordion .from-base {
   background-color: ${bgColor};
   color: ${color};
-}`
+}`;
 
 describe('compile', () => {
-  test('Compile with empty modifications (check that items can be undefined)', async () => {
+  test('Compile with empty modifications (check that items can be undefined)', () => {
     const compiler = new Compiler();
     compiler.indexFileContent = defaultIndexFileContent;
     return compiler.compile(file, [], {
@@ -45,7 +45,7 @@ describe('compile', () => {
     });
   });
 
-  test('Compile with base and one accordion items modified (wrong value)', async () => {
+  test('Compile with base and one accordion items modified (wrong value)', () => {
     const compiler = new Compiler();
     compiler.indexFileContent = defaultIndexFileContent;
     return compiler.compile(file, [
@@ -63,7 +63,7 @@ describe('compile', () => {
     });
   });
 
-  test('Compile with base and one accordion items modified', async () => {
+  test('Compile with base and one accordion items modified', () => {
     const compiler = new Compiler();
     compiler.indexFileContent = defaultIndexFileContent;
     return compiler.compile(file, [
@@ -75,11 +75,11 @@ describe('compile', () => {
     }).then((data) => {
       // compiled css
       expect(data.result.css.toString()).toBe(expectedCss(
-          {
-            fontFamily: '"Segoe UI", helvetica, verdana, sans-serif',
-            color: 'red',
-            bgColor: 'green'
-          }
+        {
+          fontFamily: '"Segoe UI", helvetica, verdana, sans-serif',
+          color: 'red',
+          bgColor: 'green',
+        },
       ));
       // collected variables
       expect(data.changedVariables).toEqual({
@@ -92,7 +92,7 @@ describe('compile', () => {
     });
   });
 
-  test('Compile with error', async () => {
+  test('Compile with error', () => {
     const compiler = new Compiler();
     compiler.indexFileContent = defaultIndexFileContent;
     return compiler.compile('dx.error.scss', [], { }).then(
@@ -104,7 +104,7 @@ describe('compile', () => {
     );
   });
 
-  test('Compile with custom sass compiler options (try to compile with custom data)', async () => {
+  test('Compile with custom sass compiler options (try to compile with custom data)', () => {
     const compiler = new Compiler();
     compiler.indexFileContent = defaultIndexFileContent;
     const bundleContent = fs.readFileSync(file, 'utf8');

@@ -12,8 +12,8 @@
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 
 import { paintedColor } from '@ts/core/utils/css_variables';
-import { extend } from '@ts/core/utils/m_extend';
-import { each } from '@ts/core/utils/m_iterator';
+import { extend } from '@ts/core/utils/extend';
+import { each } from '@ts/core/utils/iterator';
 import type { LegendDataItem } from '@ts/viz/components/legend';
 import { Legend as _BaseLegend } from '@ts/viz/components/legend';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';

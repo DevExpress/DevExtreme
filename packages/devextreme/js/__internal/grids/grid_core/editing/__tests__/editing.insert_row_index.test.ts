@@ -219,13 +219,13 @@ describe('EditingController _getInsertRowIndex', () => {
       ]);
     });
 
-    it('should return the anchor row index when the anchor row is followed by the edited row', async () => {
+    it('should insert after the anchor row when it is followed by the edited row', async () => {
       const instance = await createGridWithEditedRow(2);
 
-      expect(getInsertRowIndex(instance, getRows(instance), { insertAfterKey: 1 }, true)).toBe(0);
+      expect(getInsertRowIndex(instance, getRows(instance), { insertAfterKey: 1 }, true)).toBe(1);
     });
 
-    it('should return the last anchor row index when its detail row is followed by the edited row', async () => {
+    it('should insert after the detail row of the anchor row when it is followed by the edited row', async () => {
       const instance = await createGridWithEditedRow(2, 1);
 
       expect(getRowShapes(instance)).toEqual([
@@ -234,7 +234,27 @@ describe('EditingController _getInsertRowIndex', () => {
         { rowType: 'detail', key: 2 },
         { rowType: 'data', key: 3 },
       ]);
-      expect(getInsertRowIndex(instance, getRows(instance), { insertAfterKey: 1 }, true)).toBe(1);
+      expect(getInsertRowIndex(instance, getRows(instance), { insertAfterKey: 1 }, true)).toBe(2);
+    });
+
+    it('should not re-render the anchor row when a row is added after it', async () => {
+      const { instance } = await createDataGrid({
+        dataSource: DATA,
+        editing: { mode: 'form', allowAdding: true, newRowPosition: 'pageBottom' },
+      });
+      await flushAsync();
+      const added = instance.addRow();
+      await flushAsync();
+      await added;
+      const lastRowIndex = DATA.length - 1;
+      const lastRowElement = instance.getRowElement(lastRowIndex)?.[0];
+
+      const addedAgain = instance.addRow();
+      await flushAsync();
+      await addedAgain;
+
+      expect(getRowShapes(instance).at(-1)).toEqual({ rowType: 'detail', key: expect.any(String) });
+      expect(instance.getRowElement(lastRowIndex)?.[0]).toBe(lastRowElement);
     });
   });
 

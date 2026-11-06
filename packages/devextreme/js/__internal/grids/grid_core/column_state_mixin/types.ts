@@ -27,8 +27,8 @@ export interface ColumnStateOptions {
 
 export interface IndicatorOptions extends ColumnStateOptions {
   columnAlignment: string;
-  container?: dxElementWrapper;
-  indicator?: dxElementWrapper;
+  container: dxElementWrapper;
+  indicator: dxElementWrapper;
 }
 
 export interface IndicatorRowOptions {

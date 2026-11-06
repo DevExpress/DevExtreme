@@ -2,7 +2,8 @@ import type { DataController } from '@ts/grids/grid_core/data_controller/data_co
 import type { ProcessedItem } from '@ts/grids/grid_core/data_controller/types';
 import type { ModuleType } from '@ts/grids/grid_core/types';
 
-import type { EditingController } from '../m_editing';
+import type { EditingController } from '../editing';
+import { isRowBasedEditMode } from '../editing_utils';
 
 export const editingRowBasedDataControllerExtender = (
   Base: ModuleType<DataController>,
@@ -20,7 +21,9 @@ export const editingRowBasedDataControllerExtender = (
     visibleRowIndex: number,
     isLiveUpdate?: boolean,
   ): number[] | undefined {
-    if (this._editingController.isRowBasedEditMode() && oldItem.isEditing !== newItem.isEditing) {
+    const isRowBasedMode = isRowBasedEditMode(this._editingController.getEditMode());
+
+    if (isRowBasedMode && oldItem.isEditing !== newItem.isEditing) {
       return undefined;
     }
 

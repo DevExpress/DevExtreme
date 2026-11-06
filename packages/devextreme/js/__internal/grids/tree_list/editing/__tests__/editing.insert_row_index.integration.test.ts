@@ -42,4 +42,23 @@ describe('TreeList adds a child row in form edit mode', () => {
     expect(rows.map((row) => (row.isNewRow ? 'new' : row.key))).toEqual([1, 'new', 2, 3]);
     expect(rows[1].isEditing).toBe(true);
   });
+
+  it('does not re-render the parent row while another child row is being edited', async () => {
+    const { instance } = await createTreeList({
+      dataSource: DATA,
+      expandedRowKeys: [1],
+      editing: { mode: 'form', allowAdding: true, allowUpdating: true },
+      columns: ['id'],
+    });
+    await flushAsync();
+    instance.editRow(instance.getRowIndexByKey(2));
+    await flushAsync();
+    const parentRowElement = instance.getRowElement(0)?.[0];
+
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
+    instance.addRow(1);
+    await flushAsync();
+
+    expect(instance.getRowElement(0)?.[0]).toBe(parentRowElement);
+  });
 });

@@ -117,6 +117,37 @@ module('Table context menu integration', {
             assert.strictEqual(contextMenuPosition.offset.y, clickCoordinates.clientY - startPosition.top, 'vertical offset is correct');
         });
 
+        test('re-enabling the context menu does not leave the old menu container in the editor', function(assert) {
+            this.createWidget();
+            const childrenCount = this.$element.children().length;
+
+            this.instance.option('tableContextMenu.enabled', false);
+            this.instance.option('tableContextMenu.enabled', true);
+            this.instance.option('tableContextMenu.enabled', false);
+            this.instance.option('tableContextMenu.enabled', true);
+
+            assert.strictEqual(this.$element.children().length, childrenCount, 'no extra containers');
+        });
+
+        test('changing the context menu items does not leave the old menu container in the editor', function(assert) {
+            this.createWidget();
+            const childrenCount = this.$element.children().length;
+
+            this.instance.option('tableContextMenu.items', ['insertTable']);
+
+            assert.strictEqual(this.$element.children().length, childrenCount, 'no extra containers');
+        });
+
+        test('enabling an enabled context menu shows it once per contextmenu event', function(assert) {
+            this.createWidget();
+            this.instance.option('tableContextMenu', { enabled: true });
+            const showSpy = sinon.spy(this.instance.getModule('tableContextMenu')._contextMenu, 'show');
+
+            this.getContextMenu();
+
+            assert.strictEqual(showSpy.callCount, 1, 'show is called once');
+        });
+
         test('Context menu should be created on table click if tableContextMenu enabled option is enabled at runtime', function(assert) {
             this.createWidget({ tableContextMenu: { enabled: false } });
 

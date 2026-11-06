@@ -9,10 +9,8 @@ import { isDefined } from '@js/core/utils/type';
 import type { ToolbarItem as DataGridToolbarItem } from '@js/ui/data_grid';
 import type { Properties as ToolbarProperties } from '@js/ui/toolbar';
 import Toolbar from '@js/ui/toolbar';
-import type { EditingController } from '@ts/grids/grid_core/editing/m_editing';
-import type { HeaderFilterController } from '@ts/grids/grid_core/header_filter/m_header_filter';
-import type { ToolbarItem } from '@ts/grids/new/grid_core/toolbar/types';
-import { normalizeToolbarItems } from '@ts/grids/new/grid_core/toolbar/utils';
+import type { EditingController } from '@ts/grids/grid_core/editing/editing';
+import type { HeaderFilterController } from '@ts/grids/grid_core/header_filter/header_filter';
 
 import type { Column } from '../columns_controller/types';
 import type { ResizingController } from '../grid_view/grid_view';
@@ -20,6 +18,8 @@ import type { InternalGridOptions, ModuleType, OptionChanged } from '../types';
 import { ColumnsView } from '../views/columns_view';
 import type { ContextMenuItemsOptions, GridContextMenuItem } from '../views/types';
 import { CLASSES, DEFAULT_TOOLBAR_ITEM_NAMES, TOOLBAR_ARIA_LABEL } from './const';
+import type { ToolbarItem } from './types';
+import { normalizeToolbarItems } from './utils';
 
 export class HeaderPanel extends ColumnsView {
   private _toolbar?: Toolbar<ToolbarItem>;
@@ -111,7 +111,6 @@ export class HeaderPanel extends ColumnsView {
     return Array.from(this.registeredToolbarItems.values());
   }
 
-  // eslint-disable-next-line class-methods-use-this
   private sortToolbarItems(items: ToolbarItem[]): ToolbarItem[] {
     return [...items].sort((a, b) => (a.sortIndex ?? 0) - (b.sortIndex ?? 0));
   }

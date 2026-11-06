@@ -12,10 +12,10 @@
 /* eslint-disable no-nested-ternary */
 /* eslint-disable no-param-reassign */
 
-import { noop as _noop } from '@ts/core/utils/m_common';
-import { extend as _extend } from '@ts/core/utils/m_extend';
-import { reverseEach as _reverseEach } from '@ts/core/utils/m_iterator';
-import { isDefined as _isDefined, type } from '@ts/core/utils/m_type';
+import { noop as _noop } from '@ts/core/utils/common';
+import { extend as _extend } from '@ts/core/utils/extend';
+import { reverseEach as _reverseEach } from '@ts/core/utils/iterator';
+import { isDefined as _isDefined, type } from '@ts/core/utils/type';
 import { Axis } from '@ts/viz/axes/base_axis';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 import { setupWidgetPrototype } from '@ts/viz/core/helpers';

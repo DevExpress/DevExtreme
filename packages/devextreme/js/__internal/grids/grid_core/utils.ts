@@ -1,6 +1,5 @@
 // @ts-check
 
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import dateLocalization from '@js/common/core/localization/date';
 import type { GroupDescriptor } from '@js/common/data';
 import DataSource from '@js/common/data/data_source';
@@ -24,9 +23,11 @@ import formatHelper from '@js/format_helper';
 import type { Format } from '@js/localization';
 import LoadPanel from '@js/ui/load_panel';
 import { getGlobalFormatByDataType } from '@ts/core/global_format_config';
-import { isNumeric } from '@ts/core/utils/m_type';
+import { isNumeric } from '@ts/core/utils/type';
+import type Widget from '@ts/core/widget/widget';
 import type { NormalizedDataSourceOptions, StoreLoadOptions } from '@ts/data/data_source/types';
 import type { SortingInfo } from '@ts/data/utils';
+import eventsEngine from '@ts/events/core/events_engine';
 import type {
   Column,
   ColumnsChanges,
@@ -41,9 +42,9 @@ import type {
   ExpandCellTemplate,
   ExpandCellTemplateOptions,
   FormatOptions,
+  InternalGridOptions,
   LoadPanelPosition,
   LookupDataSource,
-  OptionsReader,
   RowKey,
   SelectionRange,
   SummaryTextItem,
@@ -72,13 +73,24 @@ const NO_DATA_CLASS = 'nodata';
 const SCROLLING_MODE_INFINITE = 'infinite';
 const SCROLLING_MODE_VIRTUAL = 'virtual';
 const LEGACY_SCROLLING_MODE = 'scrolling.legacyMode';
-const SCROLLING_MODE_OPTION = 'scrolling.mode';
 const ROW_RENDERING_MODE_OPTION = 'scrolling.rowRenderingMode';
 
 const DEFAULT_COLUMN_WIDTH = 50;
 
 export function isDateType(dataType: string | undefined): boolean {
   return dataType === 'date' || dataType === 'datetime';
+}
+
+export function isVirtualMode(scrolling: InternalGridOptions['scrolling']): boolean {
+  return scrolling?.mode === SCROLLING_MODE_VIRTUAL;
+}
+
+export function isInfiniteMode(scrolling: InternalGridOptions['scrolling']): boolean {
+  return scrolling?.mode === SCROLLING_MODE_INFINITE;
+}
+
+export function isVirtualPaging(scrolling: InternalGridOptions['scrolling']): boolean {
+  return isVirtualMode(scrolling) || isInfiniteMode(scrolling);
 }
 
 const getGlobalFormat = (dataType: string): Format | undefined => {
@@ -147,7 +159,7 @@ const getSummaryText = (
   summaryItem: SummaryTextItem,
   summaryTexts: Record<string, string | undefined>,
 ): string => {
-  const displayFormat = summaryItem.displayFormat || (summaryItem.columnCaption && summaryTexts[`${summaryItem.summaryType}OtherColumn`]) || summaryTexts[summaryItem.summaryType];
+  const displayFormat = summaryItem.displayFormat || (summaryItem.columnCaption && summaryTexts[`${summaryItem.summaryType}OtherColumn`]) || summaryTexts[String(summaryItem.summaryType)];
 
   return formatValue(summaryItem.value, {
     format: summaryItem.valueFormat,
@@ -160,14 +172,15 @@ const getSummaryText = (
   });
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- callers use their editor's API
-const getWidgetInstance = ($element: dxElementWrapper | undefined): any => {
+const getWidgetInstance = <TWidget = Widget>(
+  $element: dxElementWrapper | undefined,
+): TWidget | undefined => {
   const element = $element?.get(0);
   const editorData: WidgetElementData | undefined = element && elementData(element);
   const dxComponents = editorData?.dxComponents;
   const widgetName = dxComponents?.[0];
 
-  return widgetName && editorData?.[widgetName];
+  return (widgetName && editorData?.[widgetName]) as TWidget | undefined;
 };
 
 const createPoint = <T extends ColumnPoint>(options: T): ColumnPoint => ({
@@ -305,7 +318,7 @@ export default {
 
   calculateLoadPanelPosition($element: dxElementWrapper | undefined): LoadPanelPosition {
     const $window = $(getWindow());
-    if (getHeight($element) > getHeight($window)) {
+    if (Number(getHeight($element)) > getHeight($window.get(0))) {
       return {
         of: $window,
         boundary: $element,
@@ -597,7 +610,6 @@ export default {
 
   focusAndSelectElement(component: ModuleItem, $element: dxElementWrapper): void {
     const isFocused = $element.is(':focus');
-    // @ts-expect-error
     eventsEngine.trigger($element, 'focus');
 
     const isSelectTextOnEditingStart = component.option('editing.selectTextOnEditStart');
@@ -605,8 +617,11 @@ export default {
     if (!isFocused && isSelectTextOnEditingStart && $element.is('.dx-texteditor-input') && !$element.is('[readonly]')) {
       const element = $element.get(0) as HTMLInputElement | HTMLTextAreaElement;
       const editor = getWidgetInstance($element.closest('.dx-texteditor'));
+      const loadItemDeferred = editor && '_loadItemDeferred' in editor
+        ? editor._loadItemDeferred
+        : undefined;
 
-      when(editor && editor._loadItemDeferred).done(() => {
+      when(loadItemDeferred).done(() => {
         element.select();
       });
     }
@@ -645,12 +660,10 @@ export default {
     return false;
   },
 
-  isVirtualRowRendering(that: OptionsReader): boolean {
+  isVirtualRowRendering(that: ModuleItem): boolean {
     const rowRenderingMode = that.option(ROW_RENDERING_MODE_OPTION);
-    const isVirtualMode = that.option(SCROLLING_MODE_OPTION) === SCROLLING_MODE_VIRTUAL;
-    const isAppendMode = that.option(SCROLLING_MODE_OPTION) === SCROLLING_MODE_INFINITE;
 
-    if (that.option(LEGACY_SCROLLING_MODE) === false && (isVirtualMode || isAppendMode)) {
+    if (that.option(LEGACY_SCROLLING_MODE) === false && isVirtualPaging(that.option('scrolling'))) {
       return true;
     }
 
@@ -796,7 +809,7 @@ export default {
     $rowsViewElement: dxElementWrapper | undefined,
   ): number {
     const borderWidth = that.option('showBorders')
-      ? Math.ceil(getOuterWidth($rowsViewElement) - getInnerWidth($rowsViewElement))
+      ? Math.ceil(Number(getOuterWidth($rowsViewElement)) - Number(getInnerWidth($rowsViewElement)))
       : 0;
 
     return borderWidth;

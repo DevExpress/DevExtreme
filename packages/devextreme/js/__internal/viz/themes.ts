@@ -15,8 +15,8 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 
-import { extend } from '@ts/core/utils/m_extend';
-import { isEmptyObject } from '@ts/core/utils/m_type';
+import { extend } from '@ts/core/utils/extend';
+import { isEmptyObject } from '@ts/core/utils/type';
 import { current as getCurrentTheme } from '@ts/ui/themes';
 import fluentThemes from '@ts/viz/core/themes/fluent/index';
 import fluentNextThemes from '@ts/viz/core/themes/fluent-next/index';

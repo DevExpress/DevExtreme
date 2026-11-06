@@ -1,5 +1,5 @@
 import devices from '@js/core/devices';
-import { getCurrentScreenFactor, hasWindow } from '@ts/core/utils/m_window';
+import { getCurrentScreenFactor, hasWindow } from '@ts/core/utils/window';
 
 export const isSmallScreen = (): boolean => {
   const screenFactor = hasWindow() ? getCurrentScreenFactor() : null;

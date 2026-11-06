@@ -7,7 +7,7 @@ import { data as elementData } from '@js/core/element_data';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import readyCallbacks from '@js/core/utils/ready_callbacks';
-import { getParentNode } from '@ts/core/utils/m_dom';
+import { getParentNode } from '@ts/core/utils/dom';
 import type Emitter from '@ts/events/core/emitter';
 import type { EmitterEvent } from '@ts/events/core/emitter';
 import type { HandleObject } from '@ts/events/core/events_engine';

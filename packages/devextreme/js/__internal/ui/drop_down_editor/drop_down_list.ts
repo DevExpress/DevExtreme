@@ -1,5 +1,4 @@
 import type { SingleMultipleAllOrNone } from '@js/common';
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import { addNamespace } from '@js/common/core/events/utils';
 import messageLocalization from '@js/common/core/localization/message';
 import type { DataSource, GroupItem } from '@js/common/data';
@@ -23,13 +22,15 @@ import { getOuterHeight } from '@js/core/utils/size';
 import { isDefined, isObject, isWindow } from '@js/core/utils/type';
 import { getWindow } from '@js/core/utils/window';
 import type { DataSourceLike, DataSourceOptions } from '@js/data/data_source';
+import type { DxEvent } from '@js/events';
 import type { dxDropDownListOptions } from '@js/ui/drop_down_editor/ui.drop_down_list';
 import DataExpressionMixin from '@js/ui/editor/ui.data_expression';
 import type { Item, ItemClickEvent } from '@js/ui/list';
 import errors from '@js/ui/widget/ui.errors';
 import type { OptionChanged } from '@ts/core/widget/types';
 import { getDataSourceOptions } from '@ts/data/data_converter/grouped';
-import type DataController from '@ts/ui/collection/m_data_controller';
+import eventsEngine from '@ts/events/core/events_engine';
+import type DataController from '@ts/ui/collection/data_controller';
 import type { DropDownEditorInternalProperties } from '@ts/ui/drop_down_editor/drop_down_editor';
 import DropDownEditor from '@ts/ui/drop_down_editor/drop_down_editor';
 import type { ListBaseProperties } from '@ts/ui/list/list.base';
@@ -559,7 +560,7 @@ class DropDownList<
     const eventName = addNamespace('mousedown', 'dxDropDownList');
 
     eventsEngine.off(this._$list, eventName);
-    eventsEngine.on(this._$list, eventName, (e: MouseEvent) => e.preventDefault());
+    eventsEngine.on(this._$list, eventName, (e: DxEvent<MouseEvent>) => e.preventDefault());
   }
 
   _getControlsAria(): string | undefined {
@@ -740,7 +741,7 @@ class DropDownList<
     const isMinSearchLengthExceeded = this._isMinSearchLengthExceeded();
     const { showDataBeforeSearch, minSearchLength } = this.option();
 
-    return this._dataController.isLoaded() as boolean
+    return this._dataController.isLoaded()
       && Boolean(showDataBeforeSearch)
       && Boolean(minSearchLength)
       && !isMinSearchLengthExceeded
@@ -779,7 +780,7 @@ class DropDownList<
       eventsEngine.on(
         this._input(),
         this._getSearchEvent(),
-        (e: InputEvent) => { this._searchHandler(e); },
+        (e: DxEvent<InputEvent>) => { this._searchHandler(e); },
       );
       if (useCompositionEvents) {
         eventsEngine.on(
@@ -790,7 +791,7 @@ class DropDownList<
         eventsEngine.on(
           this._input(),
           this._getCompositionEndEvent(),
-          (e: CompositionEvent) => {
+          (e: DxEvent<CompositionEvent>) => {
             this._isTextCompositionInProgress(undefined);
             this._searchHandler(e, this._searchValue());
           },
@@ -877,7 +878,6 @@ class DropDownList<
   _clearFilter(): void {
     const dataController = this._dataController;
 
-    // @ts-expect-error fix argument type in m_data_controller.ts
     if (dataController.searchValue()) {
       dataController.searchValue(null);
     }
@@ -963,7 +963,7 @@ class DropDownList<
     const dataController = this._dataController;
     const currentPageIndex = dataController.pageIndex();
     const needRepaint = (isDefined(this._pageIndex) && currentPageIndex <= this._pageIndex)
-      || (dataController.isLastPage() as boolean && !this._list?._scrollViewIsFull());
+      || (dataController.isLastPage() && !this._list?._scrollViewIsFull());
 
     this._pageIndex = currentPageIndex;
 
@@ -996,10 +996,13 @@ class DropDownList<
     const windowHeight = getOuterHeight(window);
 
     const containerHeight = $customBoundaryContainer
-      ? Math.min(getOuterHeight($customBoundaryContainer), windowHeight)
+      ? Math.min(getOuterHeight($customBoundaryContainer.get(0)), windowHeight)
       : windowHeight;
 
-    const maxHeight = Math.max(offsetTop, containerHeight - offsetTop - getOuterHeight($element));
+    const maxHeight = Math.max(
+      offsetTop,
+      containerHeight - offsetTop - getOuterHeight($element.get(0)),
+    );
 
     return Math.min(containerHeight * 0.5, maxHeight);
   }

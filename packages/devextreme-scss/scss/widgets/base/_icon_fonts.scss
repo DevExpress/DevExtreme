@@ -198,7 +198,8 @@
 .dx-icon-gridkanban,
 .dx-icon-chatdismiss,
 .dx-icon-listbartreeoffset,
-.dx-icon-clearhistory {
+.dx-icon-clearhistory,
+.dx-icon-wrench {
   background-position: 0 0;
   background-repeat: no-repeat;
 }
@@ -615,6 +616,7 @@ $icons: (
     "gridkanban": "\f240",
     "listbartreeoffset": "\f241",
     "clearhistory": "\f242",
+    "wrench": "\f243",
 ) !default;
 
 @mixin dx-icon($name) {

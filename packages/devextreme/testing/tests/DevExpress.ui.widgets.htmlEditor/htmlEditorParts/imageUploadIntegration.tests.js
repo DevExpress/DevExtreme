@@ -502,6 +502,48 @@ module('Image uploading integration', {
                 .change()
                 .press('enter');
         });
+
+        test('selected second of two adjacent images is updated in place', function(assert) {
+            const done = assert.async();
+            const $container = $('#htmlEditor');
+            const instance = $container.dxHtmlEditor({
+                toolbar: { items: ['image'] },
+                value: `<img src=${WHITE_PIXEL} width="10" height="10"><img src=${BLACK_PIXEL} width="20" height="20">`,
+                onValueChanged: ({ value }) => {
+                    const whiteIndex = value.indexOf(WHITE_PIXEL);
+                    const orangeIndex = value.indexOf(ORANGE_PIXEL);
+
+                    assert.strictEqual(value.indexOf(BLACK_PIXEL), -1, 'the selected black image is replaced');
+                    assert.notStrictEqual(whiteIndex, -1, 'the white image is kept');
+                    assert.ok(whiteIndex < orangeIndex, 'the new image is placed after the white one');
+                    done();
+                }
+            }).dxHtmlEditor('instance');
+
+            instance.focus();
+
+            setTimeout(() => {
+                instance.setSelection(1, 1);
+            }, 100);
+
+            this.clock.tick(100);
+
+            $container
+                .find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`)
+                .trigger('dxclick');
+
+            const { widthEditor, heightEditor } = this.getSizeEditors($(`.${FORM_CLASS}`));
+
+            assert.strictEqual(Number(widthEditor.option('value')), 20, 'the width of the selected image');
+            assert.strictEqual(Number(heightEditor.option('value')), 20, 'the height of the selected image');
+
+            const $srcInput = $(`.${FIELD_ITEM_CLASS} .${TEXTEDITOR_INPUT_CLASS}`).first().val('');
+
+            keyboardMock($srcInput.eq(0))
+                .type(ORANGE_PIXEL)
+                .change()
+                .press('enter');
+        });
     });
 
     test('Enter in the width editor applies the dialog and passes the key event to valueChanged', function(assert) {
@@ -939,6 +981,73 @@ module('Image uploading integration', {
 
         assert.strictEqual(request && request.uploaded, true, 'upload is called');
         assert.strictEqual(this.instance.option('value'), '<p>test text</p><p><br></p><p><img src="/newDirectory/fakefile1.jpeg"></p>', 'image is inserted from the new directory');
+
+        window.XMLHttpRequest = this._nativeXhr;
+        window.FormData = this._nativeFormData;
+
+        this.xhrMock.dispose();
+        delete this.xhrMock;
+        delete this.formDataMock;
+    });
+
+    test('drop uploads to the uploadUrl changed at runtime', function(assert) {
+        this.createWidget({ imageUpload: { fileUploadMode: 'server', uploadUrl: '/', uploadDirectory: '/uploadDirectory/' } });
+        this.clock.tick(TIME_TO_WAIT);
+
+        this.instance.option('imageUpload.uploadUrl', '/newUrl/');
+
+        this.xhrMock = new window.XMLHttpRequestMock();
+        this._nativeXhr = XMLHttpRequest;
+        window.XMLHttpRequest = this.xhrMock.XMLHttpRequest;
+
+        this.formDataMock = new window.FormDataMock();
+        this._nativeFormData = window.FormData;
+        window.FormData = this.formDataMock.FormData;
+
+        const event = $.Event($.Event('drop', { dataTransfer: { files: [fakeFile] } }));
+        $(this.quillInstance.root).trigger(event);
+
+        const request = this.xhrMock.getInstanceAt();
+        this.clock.tick(this.xhrMock.LOAD_TIMEOUT);
+
+        assert.strictEqual(request && request.url, '/newUrl/', 'the new uploadUrl is used');
+
+        window.XMLHttpRequest = this._nativeXhr;
+        window.FormData = this._nativeFormData;
+
+        this.xhrMock.dispose();
+        delete this.xhrMock;
+        delete this.formDataMock;
+    });
+
+    test('a runtime uploadUrl does not override fileUploaderOptions.uploadUrl for the drop upload', function(assert) {
+        this.createWidget({
+            imageUpload: {
+                fileUploadMode: 'server',
+                uploadUrl: '/',
+                uploadDirectory: '/uploadDirectory/',
+                fileUploaderOptions: { uploadUrl: '/fromOptions/' },
+            },
+        });
+        this.clock.tick(TIME_TO_WAIT);
+
+        this.instance.option('imageUpload.uploadUrl', '/newUrl/');
+
+        this.xhrMock = new window.XMLHttpRequestMock();
+        this._nativeXhr = XMLHttpRequest;
+        window.XMLHttpRequest = this.xhrMock.XMLHttpRequest;
+
+        this.formDataMock = new window.FormDataMock();
+        this._nativeFormData = window.FormData;
+        window.FormData = this.formDataMock.FormData;
+
+        const event = $.Event($.Event('drop', { dataTransfer: { files: [fakeFile] } }));
+        $(this.quillInstance.root).trigger(event);
+
+        const request = this.xhrMock.getInstanceAt();
+        this.clock.tick(this.xhrMock.LOAD_TIMEOUT);
+
+        assert.strictEqual(request && request.url, '/fromOptions/', 'fileUploaderOptions.uploadUrl wins, as on init');
 
         window.XMLHttpRequest = this._nativeXhr;
         window.FormData = this._nativeFormData;

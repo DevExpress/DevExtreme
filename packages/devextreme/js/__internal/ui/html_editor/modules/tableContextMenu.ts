@@ -1,4 +1,3 @@
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import { addNamespace } from '@js/common/core/events/utils/index';
 import localizationMessage from '@js/common/core/localization/message';
 import type { dxElementWrapper } from '@js/core/renderer';
@@ -15,6 +14,7 @@ import type {
   dxHtmlEditorTableContextMenu,
   HtmlEditorPredefinedContextMenuItem,
 } from '@js/ui/html_editor';
+import eventsEngine from '@ts/events/core/events_engine';
 import Quill from 'devextreme-quill';
 
 import type { FormatHandlers } from '../types';
@@ -84,13 +84,18 @@ if (Quill) {
     }
 
     _enableContextMenu(items?: ContextMenuItems): void {
-      this._contextMenu?.dispose();
+      this._removeContextMenu();
       this._contextMenu = this._createContextMenu(items);
 
       this._attachEvents();
     }
 
+    _removeContextMenu(): void {
+      this._contextMenu?.$element().remove();
+    }
+
     _attachEvents(): void {
+      this._detachEvents();
       eventsEngine.on(
         this.editorInstance._getContent(),
         CONTEXT_MENU_EVENT,
@@ -261,7 +266,7 @@ if (Quill) {
           this.clean();
         }
       } else if (option === 'items') {
-        this._contextMenu?.dispose();
+        this._removeContextMenu();
         // @ts-expect-error the option value is untyped (HtmlEditor._moduleOptionChanged)
         this._contextMenu = this._createContextMenu(value);
       }

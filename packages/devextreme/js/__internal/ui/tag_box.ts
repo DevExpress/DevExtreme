@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/prefer-nullish-coalescing */
 import { name as clickEvent } from '@js/common/core/events/click';
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import { addNamespace, isCommandKeyPressed, normalizeKeyName } from '@js/common/core/events/utils';
 import messageLocalization from '@js/common/core/localization/message';
 import { normalizeLoadResult } from '@js/common/data/data_source/utils';
@@ -29,6 +28,7 @@ import type { ItemClickEvent, SelectionChangedEvent as ListSelectionChangedEvent
 import type { Properties } from '@js/ui/tag_box';
 import errors from '@js/ui/widget/ui.errors';
 import type { OptionChanged } from '@ts/core/widget/types';
+import eventsEngine from '@ts/events/core/events_engine';
 import type { KeyboardKeyDownEvent } from '@ts/events/core/keyboard_processor';
 import type { ItemCache } from '@ts/ui/drop_down_editor/drop_down_list';
 import type { ListBaseProperties } from '@ts/ui/list/list.base';
@@ -370,7 +370,7 @@ class TagBox<
 
     return xor(isScrollLeft, !rtlEnabled)
       ? 0
-      : scrollSign * (containerScrollWidth - getOuterWidth(this._$tagsContainer));
+      : scrollSign * (containerScrollWidth - Number(getOuterWidth(this._$tagsContainer)));
   }
 
   _getFocusedTagPosition(direction: 'next' | 'prev'): number {
@@ -386,7 +386,8 @@ class TagBox<
     let scrollLeft = this._$tagsContainer.scrollLeft() as number;
 
     if (isScrollLeft) {
-      scrollOffset += getOuterWidth(this._$focusedTag, true) - getOuterWidth(this._$tagsContainer);
+      scrollOffset += Number(getOuterWidth(this._$focusedTag, true))
+        - Number(getOuterWidth(this._$tagsContainer));
     }
 
     if (xor(isScrollLeft, scrollOffset < 0)) {
@@ -455,11 +456,9 @@ class TagBox<
     const { length: selectedCount } = this._getValue();
     const { showMultiTagOnly, maxDisplayedTags } = this.option();
 
-    if (!showMultiTagOnly) {
-      // @ts-expect-error getFormatter return type not typed as callable
+    if (!showMultiTagOnly && isDefined(maxDisplayedTags)) {
       args.text = messageLocalization.getFormatter('dxTagBox-moreSelected')(selectedCount - maxDisplayedTags + 1);
     } else {
-      // @ts-expect-error getFormatter return type not typed as callable
       args.text = messageLocalization.getFormatter('dxTagBox-selected')(selectedCount);
     }
   }
@@ -665,7 +664,7 @@ class TagBox<
 
     const input = this._input();
     const namespace = addNamespace('keydown', this.NAME as string);
-    eventsEngine.on(input, namespace, (e: KeyboardEvent) => {
+    eventsEngine.on(input, namespace, (e: DxEvent<KeyboardEvent>) => {
       const keyName = normalizeKeyName(e) ?? '';
 
       if (!this._isControlKey(keyName) && this._isEditable()) {
@@ -687,7 +686,7 @@ class TagBox<
     const eventName = addNamespace('mousedown', 'dxTagBox');
 
     eventsEngine.off(this._inputWrapper(), eventName);
-    eventsEngine.on(this._inputWrapper(), eventName, (e: MouseEvent) => {
+    eventsEngine.on(this._inputWrapper(), eventName, (e: DxEvent<MouseEvent>) => {
       if (e.target !== this._input()[0] && this._isFocused()) {
         e.preventDefault();
       }
@@ -809,7 +808,7 @@ class TagBox<
     const value = $input.val();
     const isEmptyInput = isString(value) && value;
     const cursorWidth = 5;
-    let width = '';
+    let width: number | string = '';
     let size: string | number = '';
     const { searchEnabled, acceptCustomValue } = this.option();
     const canTypeText = searchEnabled || acceptCustomValue;
@@ -821,7 +820,7 @@ class TagBox<
       );
 
       $calculationElement.insertAfter($input);
-      width = getOuterWidth($calculationElement) + cursorWidth;
+      width = getOuterWidth($calculationElement.get(0)) + cursorWidth;
 
       $calculationElement.remove();
     } else if (!value) {
@@ -886,7 +885,6 @@ class TagBox<
   }
 
   _getFilter(creator: FilterCreator): unknown[] | undefined {
-    // @ts-expect-error fix argument type in m_data_controller.ts
     const dataSourceFilter: unknown[] | null = this._dataController.filter();
     const { valueExpr, maxFilterQueryLength } = this.option();
     const filterExpr = creator.getCombinedFilter(valueExpr, dataSourceFilter);
@@ -944,6 +942,7 @@ class TagBox<
         const mappedItems = dataController.applyMapFunction(items);
         d.resolve(mappedItems.filter(clientFilterFunction as (item: unknown) => boolean));
       })
+      // eslint-disable-next-line @typescript-eslint/no-misused-promises -- ignores the result
       .fail(d.reject);
 
     this._loadFilteredItemsPromise = d;
@@ -1604,11 +1603,11 @@ class TagBox<
 
   _updateWidgetHeight(): void {
     const element = this.$element();
-    const originalHeight = getHeight(element);
+    const originalHeight = getHeight(element.get(0));
 
     this._renderInputSize();
 
-    const currentHeight = getHeight(element);
+    const currentHeight = getHeight(element.get(0));
     const { opened } = this.option();
 
     if (this._popup && opened && this._isEditable() && currentHeight !== originalHeight) {

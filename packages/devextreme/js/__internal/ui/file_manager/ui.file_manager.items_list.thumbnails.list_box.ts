@@ -1,6 +1,5 @@
 // eslint-disable-next-line @stylistic/max-len
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types,@typescript-eslint/no-unused-vars,max-classes-per-file */
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import holdEvent from '@js/common/core/events/hold';
 import {
   addNamespace,
@@ -19,9 +18,11 @@ import {
   getOuterWidth,
 } from '@js/core/utils/size';
 import { isDefined } from '@js/core/utils/type';
+import type { DxEvent } from '@js/events';
 import type { SelectionChangeInfo } from '@js/ui/collection/ui.collection_widget.base';
 import CollectionWidget from '@js/ui/collection/ui.collection_widget.edit';
 import ScrollView from '@js/ui/scroll_view';
+import eventsEngine from '@ts/events/core/events_engine';
 import type { CollectionWidgetEditProperties, SelectOption } from '@ts/ui/collection/collection_widget.edit';
 import Selection from '@ts/ui/selection/selection';
 
@@ -82,15 +83,15 @@ class ListBoxLayoutUtils {
       return null;
     }
 
-    const itemWidth = getOuterWidth(this._$item, true);
+    const itemWidth = Number(getOuterWidth(this._$item, true));
     if (itemWidth === 0) {
       return null;
     }
 
-    const itemHeight = getOuterHeight(this._$item, true);
+    const itemHeight = Number(getOuterHeight(this._$item, true));
 
-    const viewPortWidth = getInnerWidth(this._$itemContainer);
-    const viewPortHeight = getInnerHeight(this._$viewPort);
+    const viewPortWidth = Number(getInnerWidth(this._$itemContainer));
+    const viewPortHeight = Number(getInnerHeight(this._$viewPort));
     const viewPortScrollTop = this._scrollView.scrollTop();
     const viewPortScrollBottom = viewPortScrollTop + viewPortHeight;
 
@@ -409,7 +410,7 @@ class FileManagerThumbnailListBox extends CollectionWidget<FileManagerThumbnailL
         },
       );
     }
-    eventsEngine.on(this._itemContainer(), 'mousedown selectstart', (e) => {
+    eventsEngine.on(this._itemContainer(), 'mousedown selectstart', (e: DxEvent<MouseEvent>) => {
       if (e.shiftKey) {
         e.preventDefault();
       }

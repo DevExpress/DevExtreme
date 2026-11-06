@@ -1,7 +1,6 @@
 import type { LabelMode } from '@js/common';
 import { name as click } from '@js/common/core/events/click';
 import { active } from '@js/common/core/events/core/emitter.feedback';
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import { start as hoverStart } from '@js/common/core/events/hover';
 import { addNamespace } from '@js/common/core/events/utils/index';
 import Guid from '@js/core/guid';
@@ -9,6 +8,8 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { getWidth } from '@js/core/utils/size';
 import { getWindow } from '@js/core/utils/window';
+import type { DxEvent } from '@js/events';
+import eventsEngine from '@ts/events/core/events_engine';
 
 const TEXTEDITOR_LABEL_CLASS = 'dx-texteditor-label';
 const TEXTEDITOR_WITH_LABEL_CLASS = 'dx-texteditor-with-label';
@@ -29,7 +30,7 @@ export interface TextEditorLabelProperties {
   containsButtonsBefore?: boolean;
   beforeWidth?: number;
   containerWidth?: number;
-  getContainerWidth: () => number;
+  getContainerWidth: () => number | undefined;
   getBeforeWidth: () => number;
   onClickHandler: () => void;
   onHoverHandler: (e: MouseEvent | PointerEvent) => void;
@@ -114,7 +115,7 @@ export class TextEditorLabel {
     eventsEngine.off(this._$labelSpan, activeEventName);
 
     if (this._isVisible() && this._isOutsideMode()) {
-      eventsEngine.on(this._$labelSpan, clickEventName, (e: MouseEvent) => {
+      eventsEngine.on(this._$labelSpan, clickEventName, (e: DxEvent<MouseEvent>) => {
         const selectedText = getWindow()?.getSelection()?.toString();
 
         if (selectedText === '') {
@@ -122,10 +123,10 @@ export class TextEditorLabel {
           e.preventDefault();
         }
       });
-      eventsEngine.on(this._$labelSpan, hoverStartEventName, (e: MouseEvent) => {
+      eventsEngine.on(this._$labelSpan, hoverStartEventName, (e: DxEvent<MouseEvent>) => {
         this._props.onHoverHandler(e);
       });
-      eventsEngine.on(this._$labelSpan, activeEventName, (e: MouseEvent) => {
+      eventsEngine.on(this._$labelSpan, activeEventName, (e: DxEvent<MouseEvent>) => {
         this._props.onActiveHandler(e);
       });
     }
@@ -189,7 +190,7 @@ export class TextEditorLabel {
     if (this._isVisible() && this._isOutsideMode()) {
       const sign = this._props.rtlEnabled ? 1 : -1;
 
-      const labelTranslateX = sign * (getWidth(this._$before) + offset);
+      const labelTranslateX = sign * (Number(getWidth(this._$before)) + offset);
 
       this._$labelSpan.css('transform', `translateX(${labelTranslateX}px)`);
     }
@@ -248,7 +249,7 @@ export class TextEditorLabel {
     this._updateBeforeWidth();
   }
 
-  updateMaxWidth(containerWidth: number): void {
+  updateMaxWidth(containerWidth: number | undefined): void {
     this._props.containerWidth = containerWidth;
     this._updateMaxWidth();
   }

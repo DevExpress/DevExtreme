@@ -2,12 +2,20 @@ import type { HeaderFilterGroupInterval } from '@js/common/grids';
 import { each } from '@js/core/utils/iterator';
 import { isDefined, isString } from '@js/core/utils/type';
 import sharedFiltering from '@js/ui/shared/filtering';
-import type { Column } from '@ts/grids/grid_core/columns_controller/types';
+import type { Column, WithCellValueCalculator } from '@ts/grids/grid_core/columns_controller/types';
 import type { DataFilter } from '@ts/grids/grid_core/filter/types';
 import { combineFilters, isColumnExcluded } from '@ts/grids/grid_core/filter/utils';
 import gridCoreUtils from '@ts/grids/grid_core/utils';
+import type { TreeViewBaseProperties } from '@ts/ui/tree_view/tree_view.base';
+import type TreeView from '@ts/ui/tree_view/tree_view.search';
 
-import type { EmptyDateValue, HeaderFilterGroup, HeaderFilterGroupItem } from './types';
+import type {
+  EmptyDateValue,
+  HeaderFilterGroup,
+  HeaderFilterGroupItem,
+  HeaderFilterItem,
+  HeaderFilterValues,
+} from './types';
 
 export const allowHeaderFiltering = (
   column: Column,
@@ -94,7 +102,7 @@ const DATE_INTERVAL_SELECTORS = {
 };
 
 const getIntervalSelector = function getIntervalSelector(
-  this: Column & Required<Pick<Column, 'calculateCellValue'>>,
+  this: WithCellValueCalculator<Column>,
   interval: HeaderFilterGroupInterval | number,
   data: unknown,
 ): number | EmptyDateValue | null | undefined {
@@ -117,7 +125,7 @@ const getIntervalSelector = function getIntervalSelector(
 };
 
 export function getHeaderFilterGroupParameters(
-  column: Column & Required<Pick<Column, 'calculateCellValue'>>,
+  column: WithCellValueCalculator<Column>,
   remoteGrouping?: boolean,
 ): HeaderFilterGroup {
   const dataField = column.dataField || column.name;
@@ -156,4 +164,31 @@ export function getHeaderFilterGroupParameters(
   }
 
   return selector;
+}
+
+export function fillSelectedItemKeys(
+  treeView: TreeView,
+  searchValue: TreeViewBaseProperties,
+  selectedValues: HeaderFilterValues,
+  items: HeaderFilterItem[] | undefined,
+  isExclude: boolean,
+): void {
+  each(items, (_, item) => {
+    if (item.selected !== undefined && !!item.selected !== isExclude) {
+      const node = treeView._getNode(item);
+      // @ts-expect-error every item of the tree has a node
+      const hasChildren = treeView._hasChildren(node);
+      const hasChildrenWithSelection = hasChildren
+        && item.items?.some((childItem) => childItem.selected);
+
+      if (!searchValue || !hasChildrenWithSelection) {
+        selectedValues.push(item.value);
+        return;
+      }
+    }
+
+    if (item.items?.length) {
+      fillSelectedItemKeys(treeView, searchValue, selectedValues, item.items, isExclude);
+    }
+  });
 }

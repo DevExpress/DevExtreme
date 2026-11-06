@@ -4,7 +4,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 
-import { noop } from '@ts/core/utils/m_common';
+import { noop } from '@ts/core/utils/common';
 import { plugin as pluginTooltip } from '@ts/viz/core/tooltip';
 
 function getCoords(coords, figureCoords, renderer) {

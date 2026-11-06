@@ -10,7 +10,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 
-import { extend } from '@ts/core/utils/m_extend';
+import { extend } from '@ts/core/utils/extend';
 import { clone } from '@ts/core/utils/object';
 import { extractColor, map as _map } from '@ts/viz/core/utils';
 

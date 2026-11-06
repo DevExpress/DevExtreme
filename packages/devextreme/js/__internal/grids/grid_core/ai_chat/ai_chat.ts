@@ -1,14 +1,14 @@
 import { name as clickEventName } from '@js/common/core/events/click';
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import messageLocalization from '@js/common/core/localization/message';
 import type { ArrayStore, DataSource } from '@js/common/data';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
-import type { InitializedEvent } from '@js/ui/button';
 import type dxButton from '@js/ui/button';
+import type { InitializedEvent } from '@js/ui/button';
 import type { Message } from '@js/ui/chat';
 import Chat from '@js/ui/chat';
 import type { Properties as PopupProperties, ToolbarItem } from '@js/ui/popup';
+import eventsEngine from '@ts/events/core/events_engine';
 import { MessageStatus } from '@ts/grids/grid_core/ai_assistant/const';
 import type { Properties as ChatProperties } from '@ts/ui/chat/chat';
 import {

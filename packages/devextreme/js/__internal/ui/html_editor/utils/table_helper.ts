@@ -81,7 +81,6 @@ function getAutoSizedElements(
   const isHorizontal = direction === 'horizontal';
   const $lineElements = isHorizontal ? getColumnElements($table) : getRowElements($table);
 
-  // @ts-expect-error each requires a boolean callback result (renderer.d.ts); none is returned
   $lineElements.each((index, element) => {
     const $element = $(element);
     // @ts-expect-error get(0) is typed Element (renderer.d.ts); the cells are HTMLElements

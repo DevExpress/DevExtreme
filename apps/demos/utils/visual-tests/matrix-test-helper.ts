@@ -2,7 +2,6 @@ import { readFileSync, existsSync, writeFileSync } from 'fs';
 import { join } from 'path';
 import { ClientFunction } from 'testcafe';
 import { THEME } from './helpers/theme-utils';
-import { gitHubIgnored } from './github-ignored-list';
 import { getTestGlobalsScriptPath } from './test-globals-bundle';
 import { widgetsGalleryServiceMock } from '../../testing/apiMocks/widgetsGalleryServiceMock';
 import { xmlaServiceMock } from '../../testing/apiMocks/xmlaServiceMock';
@@ -274,7 +273,7 @@ export function runTestAtPage(test, demoUrl) {
 
   if (settings.explicitTests) {
     // eslint-disable-next-line no-only-tests/no-only-tests
-    executor = shouldRunTestExplicitly(demoUrl) ? test.only : executor = test.skip;
+    executor = shouldRunTestExplicitly(demoUrl) ? test.only : test.skip;
   }
   return executor.page(demoUrl);
 }
@@ -286,8 +285,6 @@ export function runManualTestCore(
   framework,
   callback,
 ) {
-  const isGitHubDemos = process.env.ISGITHUBDEMOS;
-
   settings.manualTestIndex += 1;
   const index = settings.manualTestIndex;
 
@@ -298,19 +295,8 @@ export function runManualTestCore(
   const clientScriptSource = globalReadFrom(__dirname, `../../Demos/${widget}/${demo}/client-script.js`, (x) => [{ content: x }]) || [];
   const testCodeSource = globalReadFrom(__dirname, `../../Demos/${widget}/${demo}/test-code.js`, (x) => x) || '';
 
-  let testURL = '';
-
-  if (isGitHubDemos) {
-    if (widget !== 'DataGrid' || gitHubIgnored.includes(demo)) {
-      return;
-    }
-
-    const theme = process.env.THEME.replace('generic.', '');
-    testURL = `http://127.0.0.1:8080/${widget}/${demo}/${FRAMEWORKS[framework]}/?theme=dx.${theme}`;
-  } else {
-    changeTheme(__dirname, `../../Demos/${widget}/${demo}/${FRAMEWORKS[framework]}/index.html`, process.env.THEME);
-    testURL = `http://127.0.0.1:8080/apps/demos/Demos/${widget}/${demo}/${FRAMEWORKS[framework]}/`;
-  }
+  changeTheme(__dirname, `../../Demos/${widget}/${demo}/${FRAMEWORKS[framework]}/index.html`, process.env.THEME);
+  const testURL = `http://127.0.0.1:8080/apps/demos/Demos/${widget}/${demo}/${FRAMEWORKS[framework]}/`;
 
   const getTestStyles = (demoName) => {
     switch (demoName) {

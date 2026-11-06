@@ -1,5 +1,4 @@
 import type { PositionConfig } from '@js/common/core/animation';
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import { getPublicElement } from '@js/core/element';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
@@ -10,6 +9,7 @@ import type { DxEvent } from '@js/events';
 import type { dxHtmlEditorMention } from '@js/ui/html_editor';
 import type { Properties as ListProperties } from '@js/ui/list';
 import type { Properties as PopupProperties } from '@js/ui/popup';
+import eventsEngine from '@ts/events/core/events_engine';
 import type List from '@ts/ui/list/list.edit.search';
 import Quill from 'devextreme-quill';
 
@@ -491,12 +491,12 @@ if (Quill) {
       } = this.quill.getBounds(position ? position - 1 : position);
       // @ts-expect-error offset() is typed as possibly undefined
       const { left: leftOffset, top: topOffset } = $(this.quill.root).offset();
-      // @ts-expect-error Event is not in the events_engine d.ts
       const positionEvent = eventsEngine.Event('positionEvent', {
         pageX: leftOffset + mentionLeft,
         pageY: topOffset + mentionTop,
       });
       return {
+        // @ts-expect-error the engine's Event() isn't typed as a DxEvent
         of: positionEvent,
         offset: {
           v: mentionHeight,

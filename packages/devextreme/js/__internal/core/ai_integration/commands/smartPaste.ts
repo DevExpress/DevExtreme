@@ -9,7 +9,7 @@ import type {
 import errors from '@js/ui/widget/ui.errors';
 import { BaseCommand } from '@ts/core/ai_integration/commands/base';
 import type { PromptData, PromptTemplateName } from '@ts/core/ai_integration/core/prompt_manager';
-import { isValidDate } from '@ts/core/utils/m_date';
+import { isValidDate } from '@ts/core/utils/date';
 
 export class SmartPasteCommand extends BaseCommand<
   SmartPasteCommandParams,

@@ -355,6 +355,6 @@ const LANGUAGE_CODES: Record<string, number> = {
   'ha-Latn': 31848,
 };
 
-export function getLanguageId(): number | undefined {
-  return LANGUAGE_CODES[localizationCoreUtils.locale()];
+export function getLanguageId(locale?: string): number | undefined {
+  return LANGUAGE_CODES[locale ?? localizationCoreUtils.locale()];
 }

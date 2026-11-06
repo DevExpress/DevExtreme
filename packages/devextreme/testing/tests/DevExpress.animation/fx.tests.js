@@ -6,7 +6,7 @@ import translator from 'common/core/animation/translator';
 import animationFrame from '__internal/common/core/animation/frameModule';
 import { stubSeam } from '../../helpers/moduleSeam.js';
 import positionUtils from 'common/core/animation/position';
-import support from '__internal/core/utils/m_support';
+import support from '__internal/core/utils/support';
 
 QUnit.testStart(function() {
     const markup =

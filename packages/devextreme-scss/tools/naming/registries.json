@@ -924,6 +924,7 @@
       "text"
     ],
     "map": [
+      "marker",
       "marker-tooltip"
     ],
     "toast": [

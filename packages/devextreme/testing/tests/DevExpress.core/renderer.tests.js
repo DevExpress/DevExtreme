@@ -442,3 +442,56 @@ QUnit.test('Remove an attribute from the whole set of elements (T1261932)', func
     });
 });
 
+QUnit.module('each method');
+
+QUnit.test('each should return the same wrapper to allow chaining', function(assert) {
+    const $elements = renderer('<div>').html('<div></div><div></div>').find('div');
+
+    const result = $elements.each(function() {});
+
+    assert.strictEqual(result, $elements, 'the wrapper is returned');
+
+    result.addClass('chained');
+
+    assert.ok($elements.eq(0).hasClass('chained'), 'chained call is applied to the first element');
+    assert.ok($elements.eq(1).hasClass('chained'), 'chained call is applied to the second element');
+});
+
+QUnit.test('each should stop iterating when the callback returns false', function(assert) {
+    const $elements = renderer('<div>').html('<div></div><div></div><div></div>').find('div');
+    const visitedIndexes = [];
+
+    $elements.each(function(index) {
+        visitedIndexes.push(index);
+
+        return index < 1;
+    });
+
+    assert.deepEqual(visitedIndexes, [0, 1], 'iteration stops after the callback returns false');
+});
+
+QUnit.module('data method');
+
+QUnit.test('data setter should return the same wrapper for an empty set', function(assert) {
+    const $empty = renderer('<div>').find('span');
+
+    const result = $empty.data('key', 'value');
+
+    assert.strictEqual(result, $empty, 'the wrapper is returned');
+    assert.strictEqual(result.addClass('chained'), $empty, 'a chained call does not throw');
+});
+
+QUnit.test('data getter should return undefined for an empty set', function(assert) {
+    const $empty = renderer('<div>').find('span');
+
+    assert.strictEqual($empty.data('key'), undefined, 'no value for a missing element');
+});
+
+QUnit.test('data setter and getter should store the value on an element', function(assert) {
+    const $element = renderer('<div>');
+
+    const result = $element.data('key', 'value');
+
+    assert.strictEqual(result, $element, 'the setter returns the wrapper');
+    assert.strictEqual($element.data('key'), 'value', 'the getter returns the stored value');
+});

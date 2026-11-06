@@ -2,7 +2,6 @@ import type { PositionConfig } from '@js/common/core/animation';
 import animationPosition from '@js/common/core/animation/position';
 import { locate, move } from '@js/common/core/animation/translator';
 import { name as clickEventName } from '@js/common/core/events/click';
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import { addNamespace, isCommandKeyPressed, normalizeKeyName } from '@js/common/core/events/utils/index';
 import messageLocalization from '@js/common/core/localization/message';
 import registerComponent from '@js/core/component_registrator';
@@ -36,6 +35,7 @@ import { getComponentInstance } from '@ts/core/utils/public_component';
 import { focused } from '@ts/core/utils/selectors';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
+import eventsEngine from '@ts/events/core/events_engine';
 import type { PositioningEvent } from '@ts/ui/overlay/overlay';
 import type { PopoverProperties as InternalPopoverProperties } from '@ts/ui/popover/popover';
 import type { PopupProperties as InternalPopupProperties } from '@ts/ui/popup/popup';
@@ -148,7 +148,6 @@ class DropDownEditor<
         if ($focusableElement) {
           const $target = getComponentInstance<Widget>($focusableElement)?._focusTarget?.();
           const $focusTarget = $target?.length ? $target : $focusableElement;
-          // @ts-expect-error ts-error should be added on EventsEngine level
           eventsEngine.trigger($focusTarget, 'focus');
           // @ts-expect-error ts-error should be added on dxElementWrapper level
           $focusTarget.select();
@@ -578,7 +577,6 @@ class DropDownEditor<
 
     if (focusStateEnabled && !focused(this._input())) {
       this._resetCaretPosition();
-      // @ts-expect-error should be added on EventsEngine level
       eventsEngine.trigger(this._input(), 'focus');
     }
 
@@ -704,14 +702,12 @@ class DropDownEditor<
     const moveForward = !e.shiftKey && $target.is(this._getLastPopupElement());
 
     if (moveForward || moveBackward) {
-      // @ts-expect-error should be added on EventsEngine level
       eventsEngine.trigger(this.field(), 'focus');
       e.preventDefault();
     }
   }
 
   _popupEscHandler(): void {
-    // @ts-expect-error should be added on EventsEngine level
     eventsEngine.trigger(this._input(), 'focus');
     this.close();
   }
@@ -850,12 +846,15 @@ class DropDownEditor<
     let positionSide = 'bottom';
 
     if (this._popup?.option('visible')) {
-      const { top: myTop } = animationPosition.setup(this.$element());
+      const myOffset = animationPosition.setup(this.$element());
 
-      const { top: popupTop } = animationPosition.setup(this._popup.$content());
-      const { popupPosition } = this.option();
-      // @ts-expect-error Should be updated on PositionConfig level
-      positionSide = (myTop + popupPosition.offset.v) > popupTop ? 'bottom' : 'top';
+      const popupOffset = animationPosition.setup(this._popup.$content());
+
+      if (myOffset && popupOffset) {
+        const { popupPosition } = this.option();
+        // @ts-expect-error Should be updated on PositionConfig level
+        positionSide = (myOffset.top + popupPosition.offset.v) > popupOffset.top ? 'bottom' : 'top';
+      }
     }
 
     return positionSide;

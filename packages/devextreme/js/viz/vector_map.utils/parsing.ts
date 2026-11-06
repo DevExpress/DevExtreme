@@ -70,16 +70,16 @@ function wrapSource(source: ArrayBuffer): ParserStream {
   var buffer = wrapBuffer(source);
   var position = 0;
   var stream: ParserStream = {
-    pos: function() {
+    pos: function () {
       return position;
     },
 
-    skip: function(count) {
+    skip: function (count) {
       position += count;
       return stream;
     },
 
-    ui8arr: function(length) {
+    ui8arr: function (length) {
       var i = 0;
       var list: number[] = [];
       list.length = length;
@@ -89,31 +89,31 @@ function wrapSource(source: ArrayBuffer): ParserStream {
       return list;
     },
 
-    ui8: function() {
+    ui8: function () {
       var val = ui8(buffer, position);
       position += 1;
       return val;
     },
 
-    ui16LE: function() {
+    ui16LE: function () {
       var val = ui16LE(buffer, position);
       position += 2;
       return val;
     },
 
-    ui32LE: function() {
+    ui32LE: function () {
       var val = ui32LE(buffer, position);
       position += 4;
       return val;
     },
 
-    ui32BE: function() {
+    ui32BE: function () {
       var val = ui32BE(buffer, position);
       position += 4;
       return val;
     },
 
-    f64LE: function() {
+    f64LE: function () {
       var val = f64LE(buffer, position);
       position += 8;
       return val;
@@ -146,7 +146,7 @@ function parseCore(
       type: 'FeatureCollection',
       features: features,
     };
-    // eslint-disable-next-line dot-notation, @typescript-eslint/dot-notation
+    // eslint-disable-next-line @typescript-eslint/dot-notation
     result['bbox'] = shapeData.bBox;
   } else {
     result = null;
@@ -192,13 +192,13 @@ function createCoordinatesRounder(precision: number): CoordinatesRounder {
 
 function buildParseArgs(source: ParseSource): ParseAction[] {
   source = source || {};
-  return ['shp', 'dbf'].map(function(key) {
-    return function(done: ParseActionDone) {
+  return ['shp', 'dbf'].map(function (key) {
+    return function (done: ParseActionDone) {
       if (source.substr) {
         key = '.' + key;
         sendRequest(
           source + (source.substr(-key.length).toLowerCase() === key ? '' : key),
-          function(e, response) {
+          function (e, response) {
             done(e, response);
           },
         );
@@ -215,11 +215,11 @@ function parse(
   callback?: ParseCallback,
 ): GeoJsonFeatureCollection | null | undefined {
   var result: GeoJsonFeatureCollection | null | undefined;
-  when(buildParseArgs(source), function(errorArray, dataArray) {
+  when(buildParseArgs(source), function (errorArray, dataArray) {
     callback = (isFunction(parameters) && parameters) || (isFunction(callback) && callback) || noop;
     parameters = (!isFunction(parameters) && parameters) || {};
     var errors: string[] = [];
-    errorArray.forEach(function(e) {
+    errorArray.forEach(function (e) {
       // eslint-disable-next-line @typescript-eslint/no-unused-expressions
       e && errors.push(e);
     });
@@ -245,9 +245,9 @@ function when(
   var dataArray: (ArrayBuffer | null)[] = [];
   var counter = 1;
   var lock = true;
-  actions.forEach(function(action, i) {
+  actions.forEach(function (action, i) {
     ++counter;
-    action(function(e, data) {
+    action(function (e, data) {
       errorArray[i] = e;
       dataArray[i] = data;
       massDone();

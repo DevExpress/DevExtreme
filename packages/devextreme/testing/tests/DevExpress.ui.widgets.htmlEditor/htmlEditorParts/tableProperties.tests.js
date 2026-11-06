@@ -1223,6 +1223,56 @@ module('Table properties forms', {
             assert.roughEqual(parseInt($verticalCells.eq(1).get(0).style.height), 20, 2, 'second row cell height style is applied');
         });
 
+        test('Cell Properties form shows a one-value padding shorthand as both paddings (TableLite)', function(assert) {
+            this.createWidget({
+                value: '<table><tr><td style="padding: 6px;">0_0</td></tr></table><br>',
+                onInitialized: ({ component }) => {
+                    const liteTableModule = component.get('tableModules/lite');
+                    component.register({ 'modules/table': liteTableModule });
+                },
+                onDisposing: ({ component }) => {
+                    const mainTableModule = component.get('tableModules/main');
+                    component.register({ 'modules/table': mainTableModule });
+                }
+            });
+
+            const $targetCell = this.$element.find('td').eq(0);
+
+            this.quillInstance.setSelection(0, 3);
+
+            showCellPropertiesForm(this.instance, $targetCell);
+            this.clock.tick(10);
+
+            const formInstance = this.getFormInstance();
+
+            assert.strictEqual(formInstance.getEditor('verticalPadding').option('value'), 6, 'vertical padding');
+            assert.strictEqual(formInstance.getEditor('horizontalPadding').option('value'), 6, 'horizontal padding');
+        });
+
+        test('Width and height typed and cleared again in the table form keep the table dimensions', function(assert) {
+            this.createWidget({ value: tableWithFixedDimensionsMarkup });
+
+            const $tableElement = this.$element.find('table').eq(0);
+
+            this.quillInstance.setSelection(5, 1);
+            showTablePropertiesForm(this.instance, $tableElement);
+            this.clock.tick(10);
+            const formInstance = this.getFormInstance();
+
+            ['width', 'height'].forEach((dataField) => {
+                const $input = $(formInstance.getEditor(dataField).$element()).find('.dx-texteditor-input');
+                $input.val('50').change();
+                $input.val('').change();
+            });
+
+            this.applyFormChanges();
+
+            const $cell = $tableElement.find('td').eq(0);
+
+            assert.strictEqual($cell.get(0).style.width, '300px', 'cell width is kept');
+            assert.strictEqual($cell.get(0).style.height, '24px', 'cell height is kept');
+        });
+
         test('Applying the table form without a height keeps the fixed row heights', function(assert) {
             this.createWidget({ value: tableWithFixedDimensionsMarkup });
 

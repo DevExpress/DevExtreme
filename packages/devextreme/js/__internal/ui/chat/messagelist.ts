@@ -16,8 +16,8 @@ import type { DxEvent } from '@js/events';
 import type {
   AttachmentDownloadClickEvent, Message, TextMessage, User,
 } from '@js/ui/chat';
-import type { Item as ContextMenuItem } from '@js/ui/context_menu';
 import type dxContextMenu from '@js/ui/context_menu';
+import type { Item as ContextMenuItem } from '@js/ui/context_menu';
 import type { WidgetOptions } from '@js/ui/widget/ui.widget';
 import { getPublicElement } from '@ts/core/element';
 import type { OptionChanged } from '@ts/core/widget/types';
@@ -615,7 +615,7 @@ class MessageList extends Widget<Properties> {
   }
 
   _getMessageData(message: Element): Message {
-    return $(message).data(MESSAGE_DATA_KEY);
+    return $(message).data<Message>(MESSAGE_DATA_KEY);
   }
 
   _findMessageElementByKey(key: string | number): dxElementWrapper {

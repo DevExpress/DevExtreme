@@ -35,13 +35,11 @@ export const sanitizeHtml = (quill: QuillStatic, value: Properties['value']): st
 
   const removeInlineHandlers = (element): void => {
     if (element.attributes) {
-      // eslint-disable-next-line @typescript-eslint/prefer-for-of, no-plusplus
-      for (let i = 0; i < element.attributes.length; i++) {
-        const { name } = element.attributes[i];
+      Array.from<Attr>(element.attributes).forEach(({ name }) => {
         if (name.startsWith('on')) {
           element.removeAttribute(name);
         }
-      }
+      });
     }
     if (element.childNodes) {
       // eslint-disable-next-line @typescript-eslint/prefer-for-of, no-plusplus

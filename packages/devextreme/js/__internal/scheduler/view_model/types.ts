@@ -202,7 +202,7 @@ export interface AppointmentAgendaViewModel extends BaseAppointmentViewModel {
 }
 
 export interface AppointmentItemViewModel extends BaseAppointmentViewModel, AppointmentInfo {
-  direction: string;
+  direction: Orientation;
   skipResizing: boolean;
   level: number;
   maxLevel: number;

@@ -6,20 +6,28 @@ These apply on top of `SKILL.md` to files under `js/__internal/grids/`: `grid_co
 
 - `data_grid`, `tree_list`, `pivot_grid` and CardView are built on `grid_core`. **`grid_core` never imports from them.**
 - Inside `grid_core`, a module never adds an import from a module that depends on it.
-- Reach another module's controllers and views the way the code already does: through `getController('x')`/`getView('x')`. The `Controllers`/`Views` registry in `grid_core/types.ts` types them, and no new import is needed.
+- Reach another module's controllers and views the way the code already does: through `getController('x')`/`getView('x')`, not a value import. The `Controllers`/`Views` registry in `grid_core/types.ts` types what they return. A field that holds one still gets its class through `import type` (Where types go).
 
 ## Where types go
 
-- Files directly in `grid_core/` (`m_utils.ts`, `m_widget_base.ts`, …) put their types in `grid_core/types.ts`, the shared hub. `grid_core/modules/modules.ts` has its own `modules/types.ts`.
+- Files directly in `grid_core/` (`utils.ts`, `widget_base.ts`, …) put their types in `grid_core/types.ts`, the shared hub. `grid_core/modules/modules.ts` has its own `modules/types.ts`.
 - Reuse before creating:
-  - `Controllers['x']`/`Views['x']`, `ModuleType`, `OptionChanged`/`OptionChangedFor` from `grid_core/types.ts`;
+  - `ModuleType`, `OptionChanged`/`OptionChangedFor` from `grid_core/types.ts`;
   - public types from `@js/common/grids` and `@js/ui/data_grid` (`ColumnBase`, `FixedPosition`, `Properties as DataGridProperties`, …).
 - **Leaks.** Sometimes feature logic has leaked into core: core code reads a row field that editing or grouping sets, or handles a view only `data_grid` registers. Declare the type core needs in the core module's `types.ts`, not by importing it from the feature, and mark it:
   ```ts
   /** @architectureLeak <owner module>: <why core needs it> */
   ```
   `grep -rn "@architectureLeak" js/__internal/grids` lists them all. Moving one to its owner is a separate architecture task.
-- `Controllers['x']` or a direct `import type` of the class: both work, and the direct import is the more common style. `grid_core/types.ts` itself uses inline `import('…')` types so that it has no import cycles. Don't add a regular import to it.
+- Don't add a new leak to drop a directive. A feature hook moved onto a base class (editing's `_editCellPrepared` onto `RowsView`) makes the base know about the feature. Type the consumer against the feature's extension instead (Typing idioms, "Cross-extender access"), or keep the directive.
+- Extension interfaces (Typing idioms, "Cross-extender access") and their combined types (`CellBasedEditingController = EditingController & CellBasedEditingControllerExtension`) go in the `types.ts` of the module that owns the extender, also when the extender is in `extenders/`. The combined type gets the class through `import type { EditingController } from './editing'`; that cycle is type-only (next bullet). `grid_core/editing/types.ts` holds all of editing's: `EditingRowsViewExtension`, `EditingDataControllerExtension`, `CellBasedEditingControllerExtension`, `FormBasedEditingControllerExtension`, `EditingFormBasedRowsViewExtension` and the two combined types.
+- Type a controller or view field with its class through `import type`, not with `Controllers['x']`/`Views['x']`. Switch the map-typed fields of the file you type. A type-only import cycle is fine: `import type` is erased from the built JS, and `import/no-cycle` skips it. `grid_core/types.ts` itself uses inline `import('…')` types; don't add a value import to it.
+
+## Constants and imports
+
+- A CSS class that several modules use is defined once, in the `const.ts` of the module that adds it to the DOM, as a flat `CLASSES` object. Others import it under an alias that names the owner: `import { CLASSES as ROWS_CLASSES } from '@ts/grids/tree_list/rows/const';`. A `const.ts` value-imports no grid module, so importing it can't close a cycle. Keep it that way.
+- Replacing a local copy of such a class with that import is a refactor: do it only when the developer asks. Grep for the class value first. If the owner has no `const.ts`, create one with just the shared class, and leave the owner's other local constants where they are.
+- A new import uses `./x` inside the module and an absolute `@ts/grids/…` path across modules, never `../other_module/x`. Existing paths stay.
 
 ## Style enforced here
 
@@ -31,20 +39,52 @@ In `grid_core`, `data_grid` and `tree_list`, ESLint requires explicit `public`/`
 ```ts
 const summaryDataController = (Base: ModuleType<DataController>): ModuleType<DataController> => class SummaryDataControllerExtender extends Base {
 ```
-A generic mixin `<T extends ModuleType<Controller>>(Base: T) => class extends Base` can't name its return type. It keeps `// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/explicit-function-return-type`.
+- A component's extender takes the component's class as `Base` (`Base: ModuleType<TreeListDataController>`), so `super` sees the component's methods without a directive. A base method that a subclass calls through `super` must be at least `protected` (a `private` one fails with TS2341), and one that another class calls must be `public` (a `protected` one fails with TS2445). An override can't be less visible than what it overrides (TS2415).
+- A component extender that wraps a shared one (`class X extends editingDataControllerExtender(Base)`) loses its narrowed `Base` unless the shared extender is generic. A generic extender can name its return type: `TBase` when it adds nothing that others call, `TBase & ModuleType<X & XExtension>` when it does:
+  ```ts
+  export const editingDataControllerExtender = <TBase extends ModuleType<DataController>>(
+    Base: TBase,
+  ): TBase & ModuleType<
+    DataController & EditingDataControllerExtension
+  > => class EditingDataControllerExtender extends Base {
+  ```
+  Older generic mixins (`column_state_mixin.ts`) disable `explicit-module-boundary-types` and `explicit-function-return-type` instead. Do that only when neither return type fits.
 
 `ModuleType<T>` itself keeps `new (...args: any[]) => T`, with the directive reason `mixin constructors need any[]` (see fixes.md).
 
-**Controller fields.** `public _columnsController!: Controllers['columns'];`
+**Cross-extender access.** When a class calls a member that another extender adds:
+- The extender's module exports `interface <Module><Base>Extension` with that member from its `types.ts` (Where types go), and the extender returns `ModuleType<Base & <Module><Base>Extension>`. Examples: `EditingDataControllerExtension`, `CellBasedEditingControllerExtension` (`grid_core/editing/types.ts`). Older ones still sit next to their extender (`FocusDataSourceControllerExtension`, `StateStoringDataControllerExtension`, `VirtualScrollingDataControllerExtension`, each in its module's `extenders/`); move one to its module's `types.ts` when you type a file of that module that uses it (`m_focus.ts`, `m_state_storing.ts`) or remove the file-level disables of its own file (`virtual_scrolling_data_controller.ts`), and update the module's re-exports too (`virtual_scrolling/index.ts`).
+- The implementing member is `public`, and so are its overrides.
+- Declare members property-style, except a member that a subclass overrides: a property there makes the subclass fail with TS2425. That one gets a method signature and `// eslint-disable-next-line @typescript-eslint/method-signature-style -- a subclass overrides it as a method`. The older disables of this kind have no reason; don't copy them.
+- The consumer narrows its own field (`protected _rowsView!: RowsView & EditingFormBasedRowsViewExtension;`) or its extender's `Base` (`Base: ModuleType<DataController & GroupingDataControllerExtension>`). A core module that does this gets `@architectureLeak`. When the registry can't prove the extension, the registration gets `// @ts-expect-error the extender assumes the <feature> extension of <Base>` (`adaptivity_module.ts`).
+- One interface per extender: no second `I…Extender` interface, no `…Impl` class with a type alias, no `InstanceType<ReturnType<typeof extender>>`, and no feature members added to the base controller's type.
+
+**Controller fields.** `public _columnsController!: ColumnsController;`
 
 **Views**
 - `_$element` and `_$parent` are optional (`?:`), because `render()` sets them. `element()` returns `dxElementWrapper | undefined`, and so does `_parentElement()`.
-- Code that assumes the view is rendered gets `// @ts-expect-error the view is rendered here`. Use exactly this reason, so `grep -rn "the view is rendered here"` finds every such place when its file is typed. A guard would turn today's `TypeError` into a silent no-op, so it isn't behaviour-neutral.
+- Code that assumes the view is rendered gets a guard (Guards for assumed values, below).
 - `_renderCore()` returns `DeferredObj<unknown> | void`, with a `no-invalid-void-type` disable: a view that renders synchronously returns nothing. `| undefined` breaks every override that returns nothing (7 of them).
+
+**Guards for assumed values.** Code that assumes a value is set gets a guard, not a `@ts-expect-error` or a `!`. That covers:
+- a view that isn't rendered yet (`element()`, `getTableElement()`), and anything else set later in the lifecycle: a scrollable that `render()` creates, an option a base method fills in;
+- a value an invariant guarantees: `summaryCells` on a row that renders summary cells, `items` of a group above the last group level, `columnIndices[0]` of the one footer row, an option that has a default value.
+
+A directive whose reason says "X is rendered here", "X is defined here", "X is set by …", "X exists" or "X has a default value" is the kind reviewers ask to replace. The guard forms:
+- A call chain whose result isn't used: `?.`, as in `this.element()?.empty().addClass(DATAGRID_TOTAL_FOOTER_CLASS)`.
+- A block that needs the value: wrap it, as in `if ($row && columnIndices) { this._updateCells($row, $newRow, columnIndices); }`, or return early from a `void` method.
+- A read whose result may be `undefined` where it goes: `options.cachedData?.extra`, `options.row.summaryCells?.[options.columnIndex]`, `this.option('selection') ?? {}` when only its fields are read.
+- A list that must hold only set items: `.filter(isDefined)`.
+
+Often the guard behaves exactly the same, for example `!!$rowsView && $relatedTarget.closest($rowsView).length > 0`, since `closest(undefined)` matches nothing. Otherwise, where the value isn't set, the old code threw or passed `undefined` on, and the guard skips that work instead. That state doesn't happen in a real flow, and this is the one body edit where the team accepts the difference. List each such guard in the report, saying which of the two it is.
+
+Keep the directive only where the guard would have to make up a value that the code then uses: a method that must return the element, a size or a promise, or a fallback that flows into a computation. Then put it on one typed declaration (fixes.md, `@ts-expect-error`). For a view, the reason is exactly `the view is rendered here` (or `the <x> is rendered here`), so `grep -rn "is rendered here"` finds them all.
+
+When you type a file, rewrite its existing directives of this kind by the same rule.
 
 **Fake components.** CardView passes its `WidgetMock`, PivotGrid's field chooser passes itself, and Jest tests pass partial mocks to classic module items. They get `as unknown as InternalGrid` where they're passed. The `ModuleItem` constructor stays `component: InternalGrid`.
 
-**The widget instance as a param** (`callModuleItemsMethod(that, …)`): type it `Partial<Pick<InternalGrid, '_controllers' | '_views'>>`. The widget class declares `_controllers` and `_views` as private, so the typed DataGrid caller needs `// @ts-expect-error the widget's _controllers and _views are private`, like the `processModules` call next to it.
+**The widget instance as a param** (`callModuleItemsMethod(that, …)`): type it `Partial<Pick<InternalGrid, '_controllers' | '_views'>>`.
 
 **Options**
 - `this.option('a.b')` is already typed from the public options through `InternalGridOptions`, so delete the casts: `this.option('summary.groupItems') ?? []`.
@@ -55,13 +95,14 @@ A generic mixin `<T extends ModuleType<Controller>>(Base: T) => class extends Ba
     | ColumnOptionChanged;
   ```
   Declare only the options the `optionChanged` switch handles. An unhandled one falls through to `super.optionChanged(args: OptionChanged)` and doesn't compile.
+- `defaultOptions()` in a module registration: a simple return type stays inline (`defaultOptions(): { stateStoring: StateStoring }`). Name it in the module's `types.ts` when another module builds on it. For example, `editing/types.ts` names `EditingDefaultOptions`, and TreeList extends it: `TreeListEditingDefaultOptions = EditingDefaultOptions & { editing: { texts?: EditingTexts } };`.
 - Known limit: `this.option('<module option>')` still returns `never`, because `option()` knows only `InternalGridOptions`. Leave it; it is separate work.
 - TS can't narrow by comparing two fields: `args.name === args.fullName` becomes `args.fullName === 'columns'`.
 
 ## Traps
 
 - **Same method names on different chains.** `_changeRowExpandCore`, `_processGroupItems` and others exist on both the `DataController` chain and the `DataSourceAdapter` chain. Before typing or changing an override, check which class the enclosing extender extends. Also, an option-object property named like a method (`pageCount()` inside an options object) is a delegate, not an override.
-- **Extender order is inheritance order.** `registerModulesOrder([...])` in `data_grid/m_widget_base.ts` and `tree_list/m_widget_base.ts` decides which extender wraps which. A later module is more derived. A type that assumes one extender runs before another has to follow that order.
+- **Extender order is inheritance order.** `registerModulesOrder([...])` in `data_grid/widget_base.ts` and `tree_list/widget_base.ts` decides which extender wraps which. A later module is more derived. A type that assumes one extender runs before another has to follow that order.
 - **Widely used returns.** The columns controller's public getters (`getColumns`, `getVisibleColumns`, `getFixedColumns`, …) are called from 51 files outside `columns_controller/`. Check the callers before narrowing one of them.
 - **Grid column objects inherit fields**, so a `for…in` over a column also walks inherited keys (see traps.md).
 
@@ -75,15 +116,8 @@ A generic mixin `<T extends ModuleType<Controller>>(Base: T) => class extends Ba
 
 On top of [rename.md](rename.md):
 - **Hub files** are imported from more than 20 places outside their module. Rename them only at a moment the team has agreed and announced, so everyone merges or rebases first. Ask the developer before renaming one of these:
-  - `grid_core/m_utils.ts`
-  - `grid_core/views/m_rows_view.ts`, `grid_core/column_headers/m_column_headers.ts`
+  - `grid_core/column_headers/m_column_headers.ts`
   - `pivot_grid/m_widget_utils.ts`
-- `grid_core/types.ts` imports most controllers and views with inline `import('./…/m_x')` types. Update that line too.
+- `grid_core/types.ts` refers to controllers and views with inline `import('./…')` types, and some still point to `m_` files. Update the renamed file's line there too.
 - Diagram scripts: `grids/__docs__/scripts/data_grid/constants.ts` maps `m_*` file names to feature areas. Rename the entry.
-- **`module_not_extended/` folders** have no `m_` prefix, so there is nothing to rename. They get the relaxed rules only through the `'js/__internal/**/module*/**.ts'` glob of the "Rules for migrated from JS files" block in `packages/devextreme/eslint.config.mjs`. That glob also matches `ui/html_editor/modules/` and `ui/list/modules/`, so don't delete it. Once a folder has 0 strict errors, add it to that block's `ignores`:
-  ```js
-  // Rules for migrated from JS files
-  {
-      files: ['js/__internal/**/m_*.ts', 'js/__internal/**/module*/**.ts'],
-      ignores: ['js/__internal/grids/**/module_not_extended/**'],
-  ```
+- **`module_not_extended/` folders and `grid_core/modules/`** have no `m_` prefix, so there is nothing to rename. They are already strict: the "Rules for migrated from JS files" block in `packages/devextreme/eslint.config.mjs` matches them through its `'js/__internal/**/module*/**.ts'` glob but lists them in `ignores`. Keep that glob: `ui/list/modules/` still needs it.

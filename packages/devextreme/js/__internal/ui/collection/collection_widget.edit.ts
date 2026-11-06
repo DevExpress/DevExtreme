@@ -1,5 +1,4 @@
 import type { SingleMultipleAllOrNone, SingleMultipleOrNone } from '@js/common';
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import { DataSource } from '@js/common/data/data_source/data_source';
 import { normalizeLoadResult } from '@js/common/data/data_source/utils';
 import type { dxElementWrapper } from '@js/core/renderer';
@@ -20,6 +19,7 @@ import type { ItemLike, SelectionChangeInfo } from '@js/ui/collection/ui.collect
 import errors from '@js/ui/widget/ui.errors';
 import type { ActionConfig } from '@ts/core/widget/component';
 import type { OptionChanged } from '@ts/core/widget/types';
+import eventsEngine from '@ts/events/core/events_engine';
 import type {
   CollectionItemInfo,
   CollectionItemKey,
@@ -28,7 +28,7 @@ import type {
 } from '@ts/ui/collection/collection_widget.base';
 import BaseCollectionWidget from '@ts/ui/collection/collection_widget.base';
 import PlainEditStrategy from '@ts/ui/collection/collection_widget.edit.strategy.plain';
-import type DataController from '@ts/ui/collection/m_data_controller';
+import type DataController from '@ts/ui/collection/data_controller';
 import Selection from '@ts/ui/selection/selection';
 
 import type { CollectionItemIndex } from './collection_widget.edit.strategy';
@@ -192,7 +192,6 @@ class CollectionWidget<
   }
 
   _getCombinedFilter(): unknown {
-    // @ts-expect-error arguments
     return this._dataController.filter();
   }
 
@@ -272,7 +271,7 @@ class CollectionWidget<
         options.userData = dataController.userData();
 
         if (dataController.store()) {
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+          // @ts-expect-error the store is typed for StoreLoadOptions and unknown items
           return dataController.loadFromStore(options).done((loadResult) => {
             if (that._disposed) {
               return;
@@ -284,8 +283,7 @@ class CollectionWidget<
         }
         return Deferred<TItem[]>().resolve(this.plainItems());
       },
-      // eslint-disable-next-line @stylistic/max-len
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/explicit-function-return-type
+      // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
       dataFields: () => this._dataController.select(),
       plainItems: itemsGetter.bind(this._editStrategy),
     });
@@ -641,7 +639,6 @@ class CollectionWidget<
 
     if (indexExists(normalizedIndex)) {
       this._processSelectableItem($itemElement, false);
-      // @ts-expect-error arguments
       eventsEngine.triggerHandler($itemElement, 'stateChanged', false);
     }
   }
@@ -651,7 +648,6 @@ class CollectionWidget<
 
     if (indexExists(normalizedIndex)) {
       this._processSelectableItem($itemElement, true);
-      // @ts-expect-error arguments
       eventsEngine.triggerHandler($itemElement, 'stateChanged', true);
     }
   }
@@ -816,7 +812,6 @@ class CollectionWidget<
   _refreshLastPage(): DeferredObj<unknown> {
     this._expectLastItemLoading();
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return this._dataController.load();
   }
 

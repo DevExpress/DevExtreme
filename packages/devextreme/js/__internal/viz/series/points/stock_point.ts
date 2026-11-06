@@ -8,8 +8,8 @@
 /* eslint-disable prefer-destructuring */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 
-import { extend } from '@ts/core/utils/m_extend';
-import { isNumeric } from '@ts/core/utils/m_type';
+import { extend } from '@ts/core/utils/extend';
+import { isNumeric } from '@ts/core/utils/type';
 import candlestickPoint from '@ts/viz/series/points/candlestick_point';
 
 const _extend = extend;

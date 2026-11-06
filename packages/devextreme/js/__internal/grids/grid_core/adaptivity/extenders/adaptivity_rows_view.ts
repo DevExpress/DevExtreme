@@ -103,7 +103,6 @@ export const adaptivityRowsViewExtender = (
     if (options.row?.rowType === 'detailAdaptive') {
       const view = this._columnHeadersView;
       const formItem = $(options.targetElement).closest('.dx-field-item-label').next().data('dx-form-item');
-      // @ts-expect-error
       options.column = formItem ? formItem.column : options.column;
       return view.getContextMenuItems?.(options);
     }

@@ -15,8 +15,6 @@ declare global {
 
 runManualTest('Charts', 'ExportCustomMarkup', (test) => {
   test('Export', async (t) => {
-    let isFileCreateForDownload = false;
-
     const checkFn = ClientFunction(() => {
       window.originalCreateObjectURL = URL.createObjectURL;
       window.testedValue = '';
@@ -34,7 +32,7 @@ runManualTest('Charts', 'ExportCustomMarkup', (test) => {
 
     await t.click('#export,.dx-button[icon=export]');
 
-    isFileCreateForDownload = await ClientFunction(() => {
+    const isFileCreateForDownload = await ClientFunction(() => {
       URL.createObjectURL = window.originalCreateObjectURL;
       const result = window.testedValue === 'image/png';
       delete window.testedValue;

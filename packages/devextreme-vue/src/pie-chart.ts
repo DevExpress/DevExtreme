@@ -444,7 +444,7 @@ const DxArgumentFormatConfig = {
   props: {
     currency: String,
     formatter: Function as PropType<((value: number | Date) => string)>,
-    locale: [Function, String] as PropType<FormatLocale>,
+    locale: [Object, Function, String] as PropType<FormatLocale | ((() => string)) | string>,
     parser: Function as PropType<((value: string) => number | Date)>,
     precision: Number,
     type: String as PropType<Format | string>,
@@ -728,7 +728,7 @@ const DxFormatConfig = {
   props: {
     currency: String,
     formatter: Function as PropType<((value: number | Date) => string)>,
-    locale: [Function, String] as PropType<FormatLocale>,
+    locale: [Object, Function, String] as PropType<FormatLocale | ((() => string)) | string>,
     parser: Function as PropType<((value: string) => number | Date)>,
     precision: Number,
     type: String as PropType<Format | string>,

@@ -40,7 +40,7 @@ test('Drag-n-drop in the "month" view', async (t) => {
   height: 834,
 }));
 
-test.meta({ unstable: true })('Drag-n-drop when browser has horizontal scroll', async (t) => {
+test('Drag-n-drop when browser has horizontal scroll', async (t) => {
   const scheduler = new Scheduler('#container');
   const draggableAppointment = scheduler.getAppointment('Staff Productivity Report');
 
@@ -86,8 +86,9 @@ test('Drag recurrent appointment occurrence from collector (T832887)', async (t)
   const appointmentTooltipItem = appointmentTooltip.getListItem('Recurrence two');
   const popup = Scheduler.getDeleteRecurrenceDialog();
 
+  await collector.click();
+
   await t
-    .click(collector.element)
     .expect(appointmentTooltip.isVisible()).ok()
     .dragToElement(appointmentTooltipItem.element, scheduler.getDateTableCell(2, 2))
     .expect(appointmentTooltipItem.element.exists)

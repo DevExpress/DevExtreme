@@ -1,4 +1,3 @@
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import { addNamespace } from '@js/common/core/events/utils/index';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
@@ -8,6 +7,7 @@ import type { DxEvent } from '@js/events';
 import type { UploadedEvent } from '@js/ui/file_uploader';
 import FileUploader from '@js/ui/file_uploader';
 import type { dxHtmlEditorImageUpload } from '@js/ui/html_editor';
+import eventsEngine from '@ts/events/core/events_engine';
 import Quill from 'devextreme-quill';
 
 import type { QuillInstance, UploaderModule } from '../types/quill';
@@ -166,6 +166,13 @@ if (Quill) {
         case 'uploadDirectory':
           // @ts-expect-error the option value is untyped (HtmlEditor._moduleOptionChanged)
           this.options.uploadDirectory = value;
+          break;
+        case 'uploadUrl':
+          // @ts-expect-error the option value is untyped (HtmlEditor._moduleOptionChanged)
+          this.options.uploadUrl = value;
+          if (!isDefined(this.options.fileUploaderOptions?.uploadUrl)) {
+            this._fileUploader?.option('uploadUrl', this.options.uploadUrl);
+          }
           break;
         case 'fileUploaderOptions':
           this.options.fileUploaderOptions = extend(

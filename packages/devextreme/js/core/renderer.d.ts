@@ -36,17 +36,19 @@ export interface dxElementWrapper {
   css(properties: Record<string, any>): this;
   css(propertyName: string): string | undefined;
 
-  data(key: string, value?: any): this;
+  data(key: string, value: any): this;
+
+  data<T = any>(key?: string): T;
 
   detach(): this;
 
-  each(func: (this: Element, index: number, element: Element) => boolean): this;
+  each(func: (this: Element, index: number, element: Element) => unknown): this;
 
   empty(): this;
 
   eq(index: number): this;
 
-  filter(selector: string): this;
+  filter(selector: string | Element | Element[] | dxElementWrapper | ((this: Element, index: number, element: Element) => unknown) | null | undefined): this;
 
   find(selector_element: string | Element | dxElementWrapper): this;
 
@@ -66,13 +68,13 @@ export interface dxElementWrapper {
 
   insertBefore(element: Element | dxElementWrapper): this;
 
-  is(selector: string | dxElementWrapper | Element): boolean;
+  is(selector: string | Element | Element[] | dxElementWrapper | ((this: Element, index: number, element: Element) => unknown) | null | undefined): boolean;
 
   last(): this;
 
   next(selector?: string): this;
 
-  not(selector: string): this;
+  not(selector: string | Element | Element[] | dxElementWrapper | ((this: Element, index: number, element: Element) => unknown) | null | undefined): this;
 
   offset(): Coordinates | undefined;
 

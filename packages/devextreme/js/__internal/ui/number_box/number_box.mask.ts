@@ -1,4 +1,3 @@
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import { name as dxDblClickEvent } from '@js/common/core/events/double_click';
 import {
   addNamespace, getChar, isCommandKeyPressed, normalizeKeyName,
@@ -15,11 +14,12 @@ import type { DxEvent, NativeEventInfo } from '@js/events';
 import type { Format, FormatObject } from '@js/localization';
 import type { Properties } from '@js/ui/number_box';
 import {
-  getEffectiveFormatLocale, getFormatterOptions, getGlobalFormatByDataType,
+  getFormatterOptions, getGlobalFormatByDataType, getNumberFormatLocale,
 } from '@ts/core/global_format_config';
 import { getFormat as getLDMLFormat } from '@ts/core/localization/ldml/number';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { SupportedKeys } from '@ts/core/widget/widget';
+import eventsEngine from '@ts/events/core/events_engine';
 import type { KeyboardKeyDownEvent } from '@ts/events/core/keyboard_processor';
 import type { TextEditorInternalProperties } from '@ts/ui/text_box/text_editor.base';
 import type { CaretRange } from '@ts/ui/text_box/utils.caret';
@@ -129,6 +129,10 @@ class NumberBoxMask extends NumberBoxBase<NumberBoxMaskProperties> {
       : getGlobalFormatByDataType('number');
   }
 
+  _getFormatLocale(): string {
+    return getNumberFormatLocale(this._getEffectiveFormatOption());
+  }
+
   _usesIntlFormatOption(formatOption: Format | undefined): boolean {
     const formatObject = asFormatObject(formatOption);
 
@@ -172,12 +176,32 @@ class NumberBoxMask extends NumberBoxBase<NumberBoxMaskProperties> {
     return { locale: formatObject.locale };
   }
 
+  _getSeparatorFormat(): FormatObject | string | undefined {
+    const explicitLocaleFormat = this._getExplicitLocaleFormat();
+
+    if (explicitLocaleFormat) {
+      return explicitLocaleFormat;
+    }
+
+    if (!isDefined(this.option('format'))) {
+      return undefined;
+    }
+
+    const formatOption = this._getEffectiveFormatOption();
+
+    if (isString(formatOption)) {
+      return formatOption;
+    }
+
+    return asFormatObject(formatOption) ?? {};
+  }
+
   _getDecimalSeparator(): string {
-    return number.getDecimalSeparator(this._getExplicitLocaleFormat());
+    return number.getDecimalSeparator(this._getSeparatorFormat());
   }
 
   _getThousandsSeparator(): string {
-    return number.getThousandsSeparator(this._getExplicitLocaleFormat());
+    return number.getThousandsSeparator(this._getSeparatorFormat());
   }
 
   _invalidateFormatPatternIfIntlLocaleChanged(): void {
@@ -190,7 +214,7 @@ class NumberBoxMask extends NumberBoxBase<NumberBoxMaskProperties> {
       return;
     }
 
-    const locale = getEffectiveFormatLocale(formatOption, 'number');
+    const locale = getNumberFormatLocale(formatOption);
 
     if (locale !== this._intlFormatLocaleCache) {
       this._intlFormatLocaleCache = locale;
@@ -264,7 +288,6 @@ class NumberBoxMask extends NumberBoxBase<NumberBoxMaskProperties> {
       if (this._parsedValue !== value) {
         // https://developer.microsoft.com/en-us/microsoft-edge/platform/issues/15181565/
         // https://bugreport.apple.com/web/?problemID=38133794 but this bug tracker is private
-        // @ts-expect-error
         eventsEngine.trigger(this._input(), 'change');
       }
     }
@@ -341,7 +364,11 @@ class NumberBoxMask extends NumberBoxBase<NumberBoxMaskProperties> {
   }
 
   _getInputVal(): string {
-    const inputValue: string = number.convertDigits(this._input().val(), true);
+    const inputValue: string = number.convertDigits(
+      this._input().val(),
+      true,
+      this._getFormatLocale(),
+    );
 
     return inputValue;
   }
@@ -349,7 +376,7 @@ class NumberBoxMask extends NumberBoxBase<NumberBoxMaskProperties> {
   _keyboardHandler(e: KeyboardKeyDownEvent): boolean {
     this.clearCaretTimeout();
 
-    this._lastKey = number.convertDigits(getChar(e), true);
+    this._lastKey = number.convertDigits(getChar(e), true, this._getFormatLocale());
     this._lastKeyName = normalizeKeyName(e);
 
     if (!this._shouldHandleKey(e.originalEvent)) {
@@ -429,7 +456,6 @@ class NumberBoxMask extends NumberBoxBase<NumberBoxMaskProperties> {
         const { valueChangeEvent } = this.option();
         const shouldTriggerInputEvent = valueChangeEvent?.split(' ').includes('input');
         if (shouldTriggerInputEvent) {
-          // @ts-expect-error ts-error
           eventsEngine.trigger(this._input(), 'input');
         }
       }
@@ -536,7 +562,7 @@ class NumberBoxMask extends NumberBoxBase<NumberBoxMaskProperties> {
       ? format
       : getLDMLFormat((value: number): string => {
         const text = this._format(value, format) ?? '';
-        const convertedText: string = number.convertDigits(text, true);
+        const convertedText: string = number.convertDigits(text, true, this._getFormatLocale());
 
         return convertedText;
       });
@@ -713,7 +739,7 @@ class NumberBoxMask extends NumberBoxBase<NumberBoxMaskProperties> {
   }
 
   _setInputText(text: string): void {
-    const normalizedText: string = number.convertDigits(text, true);
+    const normalizedText: string = number.convertDigits(text, true, this._getFormatLocale());
     const caret = this._caret();
     const newCaret = caret && getCaretAfterFormat(
       this._getInputVal(),
@@ -873,7 +899,7 @@ class NumberBoxMask extends NumberBoxBase<NumberBoxMaskProperties> {
 
     if (this._usesIntlFormatOption(formatOption) && typeof Intl !== 'undefined') {
       const formatObject = asFormatObject(formatOption) ?? {};
-      const locale = getEffectiveFormatLocale(formatOption, 'number');
+      const locale = getNumberFormatLocale(formatOption);
       const {
         minimumFractionDigits,
         maximumFractionDigits,
@@ -982,7 +1008,11 @@ class NumberBoxMask extends NumberBoxBase<NumberBoxMaskProperties> {
       return;
     }
 
-    const formattedValue: string | undefined = number.convertDigits(this._formattedValue, true);
+    const formattedValue: string | undefined = number.convertDigits(
+      this._formattedValue,
+      true,
+      this._getFormatLocale(),
+    );
     const textWasChanged = formattedValue !== normalizedText;
 
     if (textWasChanged) {

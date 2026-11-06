@@ -1,14 +1,10 @@
-export const BOTTOM_LOAD_PANEL_CLASS = 'bottom-load-panel';
-export const VIRTUAL_ROW_CLASS = 'dx-virtual-row';
-export const ROW_INSERTED = 'dx-row-inserted';
+export const CLASSES = {
+  bottomLoadPanel: 'bottom-load-panel',
+  virtualRow: 'dx-virtual-row',
+};
 
 export const SCROLLING_MODE_INFINITE = 'infinite';
 export const SCROLLING_MODE_VIRTUAL = 'virtual';
 export const LOAD_TIMEOUT = 300;
 export const LEGACY_SCROLLING_MODE = 'scrolling.legacyMode';
 export const VISIBLE_PAGE_INDEX = 'paging.pageIndex';
-export const PAGING_METHOD_NAMES = [
-  'beginPageIndex',
-  'endPageIndex',
-  'pageIndex',
-];

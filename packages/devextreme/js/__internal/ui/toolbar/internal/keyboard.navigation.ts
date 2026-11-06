@@ -75,8 +75,7 @@ export class RovingTabIndexController {
   }
 
   private getItemIndex($item: dxElementWrapper): number {
-    const index = $item.data(this.host._itemIndexKey());
-    // @ts-expect-error ts-error
+    const index = $item.data<number>(this.host._itemIndexKey());
     return index;
   }
 

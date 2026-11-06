@@ -4,6 +4,7 @@ import gridCoreUtils from '@ts/grids/grid_core/utils';
 import { HIDDEN_COLUMNS_WIDTH } from '../adaptivity/const';
 import type { ColumnsController } from '../columns_controller/columns_controller';
 import { STICKY_BORDER_WIDTH, StickyPosition } from './const';
+import type { StickyOffsets } from './types';
 
 export const getColumnFixedPosition = (
   that: ColumnsController,
@@ -69,7 +70,7 @@ const getStickyOffsetCore = function (
   widths: number[],
   columnIndex: number,
   fixedPosition: StickyPosition,
-  offsets?: Record<number, Record<string, number>>,
+  offsets?: StickyOffsets,
 ): number {
   const column = columns[columnIndex];
   const isChildColumn = isDefined(column.ownerBand);
@@ -115,9 +116,8 @@ const getStickyOffsetCore = function (
 
 const isFirstOrLastColumn = function (
   that: ColumnsController,
-  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   column,
-  rowIndex: number,
+  rowIndex: number | null,
   onlyWithinBandColumn = false,
   isLast = false,
   fixedPosition?: StickyPosition,
@@ -156,7 +156,7 @@ export const getStickyOffset = function (
   columns: any[],
   widths: number[],
   columnIndex: number,
-  offsets?: Record<number, Record<string, number>>,
+  offsets?: StickyOffsets,
 ): Record<string, number> {
   const result: Record<string, number> = {};
   const column = columns[columnIndex];
@@ -274,7 +274,7 @@ export const isFirstFixedColumn = function (
   that: ColumnsController,
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   column,
-  rowIndex: number,
+  rowIndex: number | null,
   onlyWithinBandColumn = false,
   fixedPosition?: StickyPosition,
 ): boolean {
@@ -285,7 +285,7 @@ export const isLastFixedColumn = function (
   that: ColumnsController,
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   column,
-  rowIndex: number,
+  rowIndex: number | null,
   onlyWithinBandColumn = false,
   fixedPosition?: StickyPosition,
 ): boolean {

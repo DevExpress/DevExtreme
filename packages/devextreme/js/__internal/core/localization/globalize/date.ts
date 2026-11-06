@@ -6,14 +6,15 @@ import 'globalize/date';
 import type { Format as LocalizationFormat, FormatObject } from '@js/localization';
 import {
   getDateFormatLocale,
+  getEffectiveFormatLocale,
   getFormatterOptions,
   resolvePresetOverride,
 } from '@ts/core/global_format_config';
 import type { DateFormatter, DateParser, Format } from '@ts/core/localization/date';
 import dateLocalization from '@ts/core/localization/date';
 import { bindDatePartsToLocale } from '@ts/core/localization/ldml/date.parser';
-import * as iteratorUtils from '@ts/core/utils/m_iterator';
-import { isObject } from '@ts/core/utils/m_type';
+import * as iteratorUtils from '@ts/core/utils/iterator';
+import { isObject } from '@ts/core/utils/type';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import Globalize from 'globalize';
 
@@ -244,9 +245,10 @@ if (Globalize?.formatDate) {
       return iteratorUtils.map(days, (day: string): string => day);
     },
 
-    getTimeSeparator(): string {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-      return Globalize.locale().main('numbers/symbols-numberSystem-latn/timeSeparator');
+    getTimeSeparator(locale?: string): string {
+      const formatLocale = locale ?? getEffectiveFormatLocale(undefined, 'time');
+
+      return getCldrMain<string>('numbers/symbols-numberSystem-latn/timeSeparator', formatLocale);
     },
 
     removeRtlMarks(text: string): string {
@@ -273,6 +275,7 @@ if (Globalize?.formatDate) {
 
       const sourceFormat = format;
       let resolvedFormat: LocalizationFormat = (format as FormatObject).type ?? format;
+      let localeSourceFormat: LocalizationFormat = resolvedFormat;
 
       if (typeof resolvedFormat === 'string') {
         const presetOverride = resolvePresetOverride(resolvedFormat);
@@ -282,7 +285,11 @@ if (Globalize?.formatDate) {
             return (presetOverride as DateFormatter)(date);
           }
 
-          resolvedFormat = presetOverride as LocalizationFormat;
+          localeSourceFormat = presetOverride as LocalizationFormat;
+
+          if (!this._isUnsupportedPresetOverride(presetOverride)) {
+            resolvedFormat = presetOverride as LocalizationFormat;
+          }
         }
       }
 
@@ -290,7 +297,7 @@ if (Globalize?.formatDate) {
       let formatter: DateFormatter;
       // eslint-disable-next-line @typescript-eslint/init-declarations
       let formatCacheKey: string;
-      const formatLocale = getDateFormatLocale(sourceFormat, resolvedFormat);
+      const formatLocale = getDateFormatLocale(sourceFormat, localeSourceFormat);
 
       if (typeof resolvedFormat === 'string') {
         const resolvedLocale = resolveGlobalizeLocale(formatLocale);
@@ -348,7 +355,11 @@ if (Globalize?.formatDate) {
       }
 
       if (typeof format === 'function') {
-        const parsedValue: Date | null | undefined = this.callBase(text, format);
+        const dateParts = bindDatePartsToLocale(
+          this,
+          getDateFormatLocale(format as unknown as LocalizationFormat),
+        );
+        const parsedValue: Date | null | undefined = this.callBase(text, format, dateParts);
 
         // eslint-disable-next-line @typescript-eslint/no-unsafe-return
         return parsedValue ?? Globalize.parseDate(text);
@@ -399,6 +410,22 @@ if (Globalize?.formatDate) {
       }
 
       return false;
+    },
+
+    _isUnsupportedPresetOverride(presetOverride: unknown): boolean {
+      if (!isObject(presetOverride)) {
+        return false;
+      }
+
+      const formatObject = presetOverride as FormatObject;
+
+      if (typeof formatObject.type === 'string') {
+        return false;
+      }
+
+      const strippedOptions = getFormatterOptions(formatObject) as FormatObject;
+
+      return !this._isAcceptableFormat(strippedOptions) && hasDefinedOption(strippedOptions);
     },
 
     firstDayOfWeekIndex(): number {

@@ -9,8 +9,8 @@ import { routeMessage } from './chat-router.js';
 import { emptyViewMessage } from './data.js';
 
 const chatSuggestionItems = [
-  { text: 'Show Completed Tasks', prompt: 'Show Completed Tasks' },
   { text: 'Change State to Texas', prompt: 'Change State to Texas' },
+  { text: 'Filter Completed Tasks', prompt: 'Filter Completed Tasks' },
 ];
 const chatUser = { id: 'user' };
 const popupWrapperAttr = { class: 'chat-popup' };
@@ -18,14 +18,16 @@ function EmptyView() {
   return (
     <>
       <div className="dx-chat-messagelist-empty-image dx-ai-chat__empty-image" />
-      <div className="ai-chat-empty-message">{emptyViewMessage}</div>
-      <div className="ai-chat-empty-prompt">
+      <div className="dx-chat-messagelist-empty-message ai-chat-empty-message">
+        {emptyViewMessage}
+      </div>
+      <div className="dx-chat-messagelist-empty-prompt ai-chat-empty-prompt">
         <div>
-          Update employee <b>Form</b> fields.
+          Update employee information in the <b>Form</b>.
         </div>
         <div>
-          Filter or sort tasks, display or hide <b>DataGrid</b> columns, or clear all filters and
-          sorting.
+          Change task presentation in the <b>DataGrid</b>: filter and sort data, change column
+          visibility.
         </div>
       </div>
     </>
