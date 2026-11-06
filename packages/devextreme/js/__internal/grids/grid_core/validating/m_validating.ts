@@ -29,6 +29,7 @@ import { Deferred, fromPromise, when } from '@ts/core/utils/deferred';
 import { focused } from '@ts/core/utils/selectors';
 import type Widget from '@ts/core/widget/widget';
 import eventsEngine from '@ts/events/core/events_engine';
+import type { ColumnFixingRowsView } from '@ts/grids/grid_core/column_fixing/types';
 import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/columns_controller';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import type {
@@ -1249,6 +1250,8 @@ export const validatingEditorFactoryExtender = (
 > => class ValidatingEditorFactoryExtender extends Base {
   protected declare _editingController: ValidatingEditingController;
 
+  protected declare _rowsView: ColumnFixingRowsView;
+
   private _revertTooltip?: Overlay;
 
   private _showRevertButton($container: dxElementWrapper | null | undefined): void {
@@ -1321,7 +1324,6 @@ export const validatingEditorFactoryExtender = (
     $cell: dxElementWrapper,
     overlayOptions: Record<string, unknown> & { onDisposing?: () => void },
   ): void {
-    // @ts-expect-error the column fixing extender adds isFixedColumns to the rows view
     const isFixedColumns = this._rowsView?.isFixedColumns?.();
 
     if (isFixedColumns && !isFormBasedEditMode(this._editingController.getEditMode())) {
