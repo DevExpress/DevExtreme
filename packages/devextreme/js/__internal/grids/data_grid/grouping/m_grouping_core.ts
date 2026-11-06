@@ -22,7 +22,7 @@ import { cleanGroupsInfo, findGroupInfoByKey, getGroupInfoIndexByOffset } from '
 export abstract class GroupingHelper {
   public readonly dataSourceAdapter: GroupingDataSourceAdapter;
 
-  public _groupsInfo!: GroupInfoLevel;
+  public groupsInfo!: GroupInfoLevel;
 
   private _totalCountCorrection!: number;
 
@@ -36,7 +36,7 @@ export abstract class GroupingHelper {
   }
 
   private reset(): void {
-    this._groupsInfo = [];
+    this.groupsInfo = [];
     this._totalCountCorrection = 0;
   }
 
@@ -150,7 +150,7 @@ export abstract class GroupingHelper {
       });
     };
 
-    return foreachGroupsCore(this._groupsInfo, []);
+    return foreachGroupsCore(this.groupsInfo, []);
   }
 
   private _updateGroupInfoOffsets(
@@ -173,11 +173,11 @@ export abstract class GroupingHelper {
   public findGroupInfo(path: unknown[]): GroupInfoData | undefined {
     // eslint-disable-next-line @typescript-eslint/init-declarations -- assigned in the loop
     let groupInfo: GroupInfo | undefined;
-    let groupsInfo: GroupInfoLevel | undefined = this._groupsInfo;
+    let level: GroupInfoLevel | undefined = this.groupsInfo;
 
-    for (let pathIndex = 0; groupsInfo && pathIndex < path.length; pathIndex += 1) {
-      groupInfo = findGroupInfoByKey(groupsInfo, path[pathIndex]);
-      groupsInfo = groupInfo?.children;
+    for (let pathIndex = 0; level && pathIndex < path.length; pathIndex += 1) {
+      groupInfo = findGroupInfoByKey(level, path[pathIndex]);
+      level = groupInfo?.children;
     }
 
     return groupInfo?.data;
@@ -185,10 +185,10 @@ export abstract class GroupingHelper {
 
   public addGroupInfo(groupInfoData: GroupInfoData): void {
     const { path } = groupInfoData;
-    let groupsInfo = this._groupsInfo;
+    let level = this.groupsInfo;
 
     for (let pathIndex = 0; pathIndex < path.length; pathIndex += 1) {
-      let groupInfo = findGroupInfoByKey(groupsInfo, path[pathIndex]);
+      let groupInfo = findGroupInfoByKey(level, path[pathIndex]);
       if (!groupInfo) {
         // @ts-expect-error a parent group has no count until its own group info is added
         const parentGroupInfoData: GroupInfoData = {
@@ -202,18 +202,18 @@ export abstract class GroupingHelper {
           data: parentGroupInfoData,
           children: [],
         };
-        const index = getGroupInfoIndexByOffset(groupsInfo, groupInfoData.offset);
-        groupsInfo.splice(index, 0, groupInfo);
-        groupsInfo.hash ??= {};
-        groupsInfo.hash[JSON.stringify(groupInfo.key)] = groupInfo;
+        const index = getGroupInfoIndexByOffset(level, groupInfoData.offset);
+        level.splice(index, 0, groupInfo);
+        level.hash ??= {};
+        level.hash[JSON.stringify(groupInfo.key)] = groupInfo;
       }
       if (pathIndex === path.length - 1) {
         groupInfo.data = groupInfoData;
         if (groupInfo.offset !== groupInfoData.offset) {
-          this._updateGroupInfoOffsets(groupsInfo);
+          this._updateGroupInfoOffsets(level);
         }
       }
-      groupsInfo = groupInfo.children;
+      level = groupInfo.children;
     }
   }
 
@@ -247,7 +247,7 @@ export abstract class GroupingHelper {
     if (!groupsCount) {
       this.reset();
     } else {
-      cleanGroupsInfo(this._groupsInfo, 0, groupsCount);
+      cleanGroupsInfo(this.groupsInfo, 0, groupsCount);
     }
 
     return undefined;
