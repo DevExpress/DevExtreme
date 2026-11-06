@@ -34,54 +34,6 @@ template reads and that changes at runtime must be a signal. New demos start fro
     declared above it. Keep a constructor (without parameters) only for real work at startup.
 11. **Type imports.** Import types with `import type { ... }` (`verbatimModuleSyntax` is on).
 
-## Example
-
-```ts
-import { Component, computed, enableProdMode, inject, signal } from '@angular/core';
-import { bootstrapApplication } from '@angular/platform-browser';
-import { DxCheckBoxModule, DxDataGridModule } from 'devextreme-angular';
-import type { DxDataGridTypes } from 'devextreme-angular/ui/data-grid';
-import { Service } from './app.service';
-
-if (!/localhost/.test(document.location.host)) {
-  enableProdMode();
-}
-
-@Component({
-  selector: 'demo-app',
-  templateUrl: './app.component.html',
-  providers: [Service],
-  imports: [DxCheckBoxModule, DxDataGridModule],
-})
-export class AppComponent {
-  readonly customers = inject(Service).getCustomers();
-
-  readonly showBorders = signal(true);
-
-  readonly selectedCount = signal(0);
-
-  readonly summary = computed(() => `Selected: ${this.selectedCount()}`);
-
-  onSelectionChanged({ selectedRowKeys }: DxDataGridTypes.SelectionChangedEvent) {
-    this.selectedCount.set(selectedRowKeys.length);
-  }
-}
-
-bootstrapApplication(AppComponent);
-```
-
-```html
-<dx-check-box text="Show borders" [(value)]="showBorders"></dx-check-box>
-<dx-data-grid
-  [dataSource]="customers"
-  [showBorders]="showBorders()"
-  (onSelectionChanged)="onSelectionChanged($event)"
->
-  <dxo-data-grid-selection mode="multiple"></dxo-data-grid-selection>
-</dx-data-grid>
-<div>{{ summary() }}</div>
-```
-
 ## Checks
 
 From `apps/demos`:
