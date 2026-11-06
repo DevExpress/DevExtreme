@@ -82,7 +82,6 @@ const data = (
   }
 
   private _expandGroupByPath(
-    that: this,
     groupPath: unknown[],
     level: number,
   ): DeferredObj<unknown> {
@@ -90,12 +89,12 @@ const data = (
 
     const nextLevel = level + 1;
 
-    that.expandRow(groupPath.slice(0, nextLevel)).done(() => {
+    this.expandRow(groupPath.slice(0, nextLevel)).done(() => {
       if (nextLevel === groupPath.length) {
         d.resolve();
       } else {
         // eslint-disable-next-line @typescript-eslint/no-misused-promises -- ignores the result
-        that._expandGroupByPath(that, groupPath, nextLevel).done(d.resolve).fail(d.reject);
+        this._expandGroupByPath(groupPath, nextLevel).done(d.resolve).fail(d.reject);
       }
       // eslint-disable-next-line @typescript-eslint/no-misused-promises -- ignores the result
     }).fail(d.reject);
@@ -148,7 +147,7 @@ const data = (
       // @ts-expect-error customLoader returns groups here, but types them as rows
       const groupPath = this._getGroupPath(groupItems, gridCore.normalizeSortingInfo(group).length);
 
-      this._expandGroupByPath(this, groupPath, 0).done(() => {
+      this._expandGroupByPath(groupPath, 0).done(() => {
         this._calculateExpandedRowGlobalIndex(deferred, key, groupPath, group, dataSourceAdapter);
         // @ts-expect-error fail() gets the error, but is typed with the resolve value
         // eslint-disable-next-line @typescript-eslint/no-misused-promises -- ignores the result
