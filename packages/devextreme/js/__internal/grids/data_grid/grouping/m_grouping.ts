@@ -64,10 +64,6 @@ const dataSourceAdapterExtender = (Base: ModuleType<DataSourceAdapter>) => class
     return this._dataSource.group() ? this._grouping.itemsCount() || 0 : super.itemsCount.apply(this, arguments as any);
   }
 
-  protected allowCollapseAll() {
-    return this._grouping.allowCollapseAll();
-  }
-
   protected isGroupItemCountable(item) {
     return this._grouping.isGroupItemCountable(item);
   }
@@ -197,16 +193,13 @@ const onGroupingMenuItemClick = function (column, rowIndex, params) {
   // eslint-disable-next-line default-case
   switch (params.itemData.value) {
     case 'group': {
-      this.isNeedToFocusColumn = true;
       keyboardNavigationController?.groupColumn?.(column, rowIndex);
       break;
     }
     case 'ungroup':
-      this.isNeedToFocusColumn = true;
       keyboardNavigationController?.ungroupColumn?.(column, rowIndex);
       break;
     case 'ungroupAll':
-      this.isNeedToFocusColumn = true;
       keyboardNavigationController?.ungroupAllColumns();
       break;
   }
