@@ -126,7 +126,9 @@ import SchedulerTimelineDay from './workspaces/timeline_day';
 import SchedulerTimelineMonth from './workspaces/timeline_month';
 import SchedulerTimelineWeek from './workspaces/timeline_week';
 import type ViewDataProvider from './workspaces/view_model/view_data_provider';
-import type { DroppableCellData, WorkspaceCoordinates, WorkspaceOptionsInternal } from './workspaces/work_space';
+import type {
+  DroppableCellData, SelectedCellsClickResult, WorkspaceCoordinates, WorkspaceOptionsInternal,
+} from './workspaces/work_space';
 import SchedulerWorkSpaceDay from './workspaces/work_space_day';
 import SchedulerWorkSpaceMonth from './workspaces/work_space_month';
 import SchedulerWorkSpaceWeek from './workspaces/work_space_week';
@@ -334,14 +336,6 @@ interface AppointmentDeletingOptions {
   appointmentData: SafeAppointment;
   targetedAppointmentData?: SafeAppointment | AppointmentAdapter;
   cancel: SchedulerActionCancel;
-}
-
-interface SelectedCellsClickCellData {
-  startDate?: Date;
-  endDate?: Date;
-  startDateUTC: number;
-  endDateUTC: number;
-  allDay?: boolean;
 }
 
 interface SchedulerEditing {
@@ -1765,7 +1759,6 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       currentDate: this.getViewOption('currentDate'),
     }, currentViewOptions);
 
-    // @ts-expect-error the workspace types the selected cells as object, the popup reads dates
     const onSelectedCellsClick: WorkspaceConfig['onSelectedCellsClick'] = this.showAddAppointmentPopup
       .bind(this);
 
@@ -2362,12 +2355,12 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     return this._workSpace.getEndViewDate();
   }
 
-  showAddAppointmentPopup(cellData: SelectedCellsClickCellData, cellGroups: GroupValues): void {
+  showAddAppointmentPopup(cellData: SelectedCellsClickResult, cellGroups: GroupValues): void {
     const appointmentAdapter = new AppointmentAdapter({}, this._dataAccessors);
 
     appointmentAdapter.allDay = Boolean(cellData.allDay);
-    appointmentAdapter.startDate = new Date(cellData.startDateUTC);
-    appointmentAdapter.endDate = new Date(cellData.endDateUTC);
+    appointmentAdapter.startDate = new Date(cellData.startDateUTC ?? cellData.startDate);
+    appointmentAdapter.endDate = new Date(cellData.endDateUTC ?? cellData.endDate);
 
     const resultAppointment = extend(appointmentAdapter.source, cellGroups);
     this.showAppointmentPopup(resultAppointment, true);
