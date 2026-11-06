@@ -4,7 +4,6 @@ import { fileURLToPath } from 'node:url';
 import tsParser from '@typescript-eslint/parser';
 import stylistic from '@stylistic/eslint-plugin';
 import importPlugin from 'eslint-plugin-import';
-import { changeRulesToStylistic } from 'eslint-migration-utils';
 import spellCheckConfig from 'eslint-config-devextreme/spell-check';
 import javascriptConfig from 'eslint-config-devextreme/javascript';
 import typescriptConfig from 'eslint-config-devextreme/typescript';
@@ -50,9 +49,6 @@ export default [
   })),
   ...typescriptConfig.map((config) => ({
     ...config,
-    rules: config.rules
-      ? changeRulesToStylistic(config.rules)
-      : {},
     files: ['**/*.ts'],
   })),
   {
@@ -87,7 +83,6 @@ export default [
   {
     files: ['**/*.js', '**/*.mjs'],
     rules: {
-      'global-require': 'off',
       'import/no-unresolved': 'off',
       'import/no-extraneous-dependencies': 'off',
       'import/no-dynamic-require': 'warn',

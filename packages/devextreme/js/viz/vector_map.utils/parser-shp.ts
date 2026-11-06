@@ -51,7 +51,7 @@ function parseShape(stream: ParserStream, errors: string[]): ShapeParseResult | 
   try {
     timeStart = new Date();
     header = parseShapeHeader(stream);
-  } catch(e) {
+  } catch (e) {
     errors.push('shp: header parsing error: ' + e.message + ' / ' + e.description);
     return;
   }
@@ -74,7 +74,7 @@ function parseShape(stream: ParserStream, errors: string[]): ShapeParseResult | 
       errors.push('shp: file length: ' + header.fileLength + ' / actual: ' + stream.pos());
     }
     timeEnd = new Date();
-  } catch(e) {
+  } catch (e) {
     errors.push('shp: records parsing error: ' + e.message + ' / ' + e.description);
   }
 

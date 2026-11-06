@@ -29,7 +29,7 @@ function f64LE(stream: DataView, position: number): number {
 
 function sendRequest(url: string, callback: RequestCallback): void {
   var request = new XMLHttpRequest();
-  request.addEventListener('load', function() {
+  request.addEventListener('load', function () {
     callback(this.response ? null : this.statusText, this.response);
   });
   request.open('GET', url);

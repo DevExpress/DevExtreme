@@ -44,8 +44,8 @@ import {
   SIMPLE_ITEM_TYPE,
   SINGLE_COLUMN_ITEM_CONTENT,
 } from '@ts/ui/form/constants';
-import type { FormProperties } from '@ts/ui/form/form';
 import type Form from '@ts/ui/form/form';
+import type { FormProperties } from '@ts/ui/form/form';
 import type { FormItemRuntimeInfo, FormWidgetInstance, PreparedItem } from '@ts/ui/form/form.items_runtime_info';
 import FormItemsRunTimeInfo from '@ts/ui/form/form.items_runtime_info';
 import type { LabelMarkOptions } from '@ts/ui/form/form.layout_manager.utils';

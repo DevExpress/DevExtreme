@@ -31,6 +31,7 @@ import type {
 } from '@js/events';
 import type { Properties as ButtonProperties } from '@js/ui/button';
 import Button from '@js/ui/button';
+import type dxList from '@js/ui/list';
 import type {
   GroupRenderedEvent,
   Item,
@@ -38,7 +39,6 @@ import type {
   Properties,
   PullRefreshEvent,
 } from '@js/ui/list';
-import type dxList from '@js/ui/list';
 import type { ReachBottomEvent, ScrollEvent } from '@js/ui/scroll_view';
 import { current, isMaterial, isMaterialBased } from '@js/ui/themes';
 import { render } from '@ts/core/utils/ink_ripple';

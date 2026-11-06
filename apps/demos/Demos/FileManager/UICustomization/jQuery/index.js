@@ -175,7 +175,7 @@ $(() => {
       return false;
     }
 
-    let array = null;
+    let array;
     if (!directory.dataItem) {
       array = fileSystem;
     } else {
@@ -191,7 +191,7 @@ $(() => {
   }
 
   function updateCategory(newCategory, directory, viewArea) {
-    let items = null;
+    let items;
 
     if (viewArea === 'navPane') {
       items = [directory];

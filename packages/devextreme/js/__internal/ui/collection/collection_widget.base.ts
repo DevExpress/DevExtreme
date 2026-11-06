@@ -42,8 +42,8 @@ import type { OptionChanged } from '@ts/core/widget/types';
 import type { SupportedKeys, WidgetProperties } from '@ts/core/widget/widget';
 import Widget from '@ts/core/widget/widget';
 import DataHelperMixin from '@ts/data/m_data_helper';
-import type { ClickableCollectionWidgetItem, ItemClickEvent } from '@ts/ui/collection/item';
 import type CollectionItem from '@ts/ui/collection/item';
+import type { ClickableCollectionWidgetItem, ItemClickEvent } from '@ts/ui/collection/item';
 import CollectionWidgetItem from '@ts/ui/collection/item';
 
 import type { PublicNode } from '../hierarchical_collection/data_converter';

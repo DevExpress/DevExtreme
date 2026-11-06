@@ -24,7 +24,7 @@ export declare function isPlainObject(object: any): object is { [key: string]: a
 
 export declare function isPrimitive(value: any): value is string | number | boolean | symbol | null | undefined;
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment, @typescript-eslint/prefer-ts-expect-error
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore: globalThis was introduced in TypeScript 3.4
 export declare function isWindow(object: any): object is (Window & typeof globalThis);
 

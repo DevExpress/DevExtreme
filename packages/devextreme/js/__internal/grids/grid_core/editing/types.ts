@@ -11,7 +11,7 @@ import type Form from '@js/ui/form';
 import type {
   FormItemComponent, Item as FormItem, SimpleItem, SimpleItemTemplateData,
 } from '@js/ui/form';
-import type { Column } from '@ts/grids/grid_core/columns_controller/types';
+import type { Column, WithCellValueCalculator } from '@ts/grids/grid_core/columns_controller/types';
 
 import type { ProcessedItem } from '../data_controller/types';
 import type { RawItemData } from '../data_source_adapter/types';
@@ -94,7 +94,7 @@ export interface EditingButtonTexts {
 }
 
 export interface EditFormColumnItem {
-  column: Column;
+  column: WithCellValueCalculator<Column>;
   name?: string;
   dataField?: string;
   editorType?: FormItemComponent;

@@ -11,7 +11,9 @@
       },
       "inputs": [
         "{projectRoot}/**/*.js",
-        "{projectRoot}/**/*.ts"
+        "{projectRoot}/**/*.ts",
+        "{projectRoot}/eslint.config.mjs",
+        "{workspaceRoot}/tools/eslint/js-style-rules.mjs"
       ]
     },
     "test": {
