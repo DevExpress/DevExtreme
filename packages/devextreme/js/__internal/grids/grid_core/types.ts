@@ -281,7 +281,7 @@ export type OptionChanged = OptionChangedFor<InternalGridOptions>;
 
 export interface Controllers {
   adaptiveColumns: import('./adaptivity/adaptivity').AdaptiveColumnsViewController;
-  applyFilter: import('./filter_row/m_filter_row').ApplyFilterViewController;
+  applyFilter: import('./filter_row/filter_row').ApplyFilterViewController;
   columnChooser: import('./column_chooser/column_chooser').ColumnChooserController;
   columns: import('./columns_controller/columns_controller').ColumnsController;
   columnsResizer: import('./columns_resizing_reordering/columns_resizing_reordering').ColumnsResizerViewController;
