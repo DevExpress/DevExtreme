@@ -1,3 +1,4 @@
+import type { ScalarFilterValue } from '@js/common/grids';
 import dateSerialization from '@js/core/utils/date_serialization';
 import { isDate } from '@js/core/utils/type';
 import type { OrderingDescriptor } from '@js/data/data.types';
@@ -21,7 +22,8 @@ const getSortFilterValue = (
     : getSelector(selector) ?? ((data): unknown => data[selector]);
   const rawValue = getter(rowData);
 
-  const safeValue = isRemoteFiltering && isDate(rawValue)
+  // @ts-expect-error row data is untyped
+  const safeValue: ScalarFilterValue = isRemoteFiltering && isDate(rawValue)
     ? dateSerialization.serializeDate(rawValue, dateSerializationFormat)
     : rawValue;
 
