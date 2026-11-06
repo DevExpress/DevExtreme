@@ -19,7 +19,7 @@ import {
 } from '@angular/core';
 
 
-import type { default as dxChat, Alert, Message, AttachmentDownloadClickEvent, DisposingEvent, InitializedEvent, InputFieldTextChangedEvent, MessageDeletedEvent, MessageDeletingEvent, MessageEditCanceledEvent, MessageEditingStartEvent, MessageEnteredEvent, MessageUpdatedEvent, MessageUpdatingEvent, OptionChangedEvent, TypingEndEvent, TypingStartEvent, SendButtonProperties, User } from 'devextreme/ui/chat';
+import type { default as dxChat, Alert, Message, AttachmentDownloadClickEvent, DisposingEvent, InitializedEvent, InputFieldTextChangedEvent, MessageDeletedEvent, MessageDeletingEvent, MessageEditCanceledEvent, MessageEditingStartEvent, MessageEnteredEvent, MessageUpdatedEvent, MessageUpdatingEvent, OptionChangedEvent, TypingEndEvent, TypingStartEvent, SendButtonProperties, ToolCallOptions, User } from 'devextreme/ui/chat';
 import type { default as DataSource, DataSourceOptions } from 'devextreme/data/data_source';
 import type { Store } from 'devextreme/data/store';
 import type { Format } from 'devextreme/common/core/localization';
@@ -64,12 +64,15 @@ import { DxoChatSpeechRecognitionConfigModule } from 'devextreme-angular/ui/chat
 import { DxoChatSpeechToTextOptionsModule } from 'devextreme-angular/ui/chat/nested';
 import { DxoChatSuggestionsModule } from 'devextreme-angular/ui/chat/nested';
 import { DxiChatSuggestionsItemModule } from 'devextreme-angular/ui/chat/nested';
+import { DxiChatToolCallModule } from 'devextreme-angular/ui/chat/nested';
+import { DxoChatToolCallOptionsModule } from 'devextreme-angular/ui/chat/nested';
 import { DxiChatTypingUserModule } from 'devextreme-angular/ui/chat/nested';
 import { DxoChatUserModule } from 'devextreme-angular/ui/chat/nested';
 import { 
     PROPERTY_TOKEN_alerts,
     PROPERTY_TOKEN_attachments,
     PROPERTY_TOKEN_items,
+    PROPERTY_TOKEN_toolCalls,
     PROPERTY_TOKEN_typingUsers,
 } from 'devextreme-angular/core/tokens';
 
@@ -104,6 +107,11 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
     @ContentChildren(PROPERTY_TOKEN_items)
     set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
         this.setChildren('items', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_toolCalls)
+    set _toolCallsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('toolCalls', value);
     }
 
     @ContentChildren(PROPERTY_TOKEN_typingUsers)
@@ -411,6 +419,15 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
         this._setOption('suggestions', value);
     }
 
+    
+    @Input()
+    get toolCallOptions(): ToolCallOptions {
+        return this._getOption('toolCallOptions');
+    }
+    set toolCallOptions(value: ToolCallOptions) {
+        this._setOption('toolCallOptions', value);
+    }
+
     /**
      * [descr:dxChatOptions.typingUsers]
      */
@@ -668,6 +685,11 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
     /**
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
      */
+    @Output() toolCallOptionsChange: EventEmitter<ToolCallOptions>;
+
+    /**
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+     */
     @Output() typingUsersChange: EventEmitter<Array<User>>;
 
     /**
@@ -737,6 +759,7 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
             { emit: 'speechToTextEnabledChange' },
             { emit: 'speechToTextOptionsChange' },
             { emit: 'suggestionsChange' },
+            { emit: 'toolCallOptionsChange' },
             { emit: 'typingUsersChange' },
             { emit: 'userChange' },
             { emit: 'visibleChange' },
@@ -817,6 +840,8 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
     DxoChatSpeechToTextOptionsModule,
     DxoChatSuggestionsModule,
     DxiChatSuggestionsItemModule,
+    DxiChatToolCallModule,
+    DxoChatToolCallOptionsModule,
     DxiChatTypingUserModule,
     DxoChatUserModule,
     DxIntegrationModule,
@@ -847,6 +872,8 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
     DxoChatSpeechToTextOptionsModule,
     DxoChatSuggestionsModule,
     DxiChatSuggestionsItemModule,
+    DxiChatToolCallModule,
+    DxoChatToolCallOptionsModule,
     DxiChatTypingUserModule,
     DxoChatUserModule,
     DxTemplateModule
