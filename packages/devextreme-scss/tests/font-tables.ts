@@ -226,4 +226,39 @@ export const readNames = (font: Buffer): Map<number, string> => {
 
 export const readGlyphCount = (font: Buffer): number => readTable(font, 'maxp').readUInt16BE(4);
 
+// Characters the Windows Unicode cmap (format 4) maps to a glyph.
+export const readCodePoints = (font: Buffer): number[] => {
+  const cmap = readTable(font, 'cmap');
+  const record = Array.from({ length: cmap.readUInt16BE(2) }, (_, index) => 4 + index * 8)
+    .find((offset) => cmap.readUInt16BE(offset) === 3 && cmap.readUInt16BE(offset + 2) === 1);
+
+  if (record === undefined) {
+    throw new Error('The font has no Windows Unicode cmap');
+  }
+
+  const subtable = cmap.subarray(cmap.readUInt32BE(record + 4));
+  const segments = subtable.readUInt16BE(6) / 2;
+  const codes: number[] = [];
+
+  for (let segment = 0; segment < segments; segment += 1) {
+    const end = subtable.readUInt16BE(14 + 2 * segment);
+    const start = subtable.readUInt16BE(16 + 2 * segments + 2 * segment);
+    const delta = subtable.readUInt16BE(16 + 4 * segments + 2 * segment);
+    const rangeOffsetAt = 16 + 6 * segments + 2 * segment;
+    const rangeOffset = subtable.readUInt16BE(rangeOffsetAt);
+
+    for (let code = start; code <= end && code !== 0xffff; code += 1) {
+      const glyph = rangeOffset
+        ? subtable.readUInt16BE(rangeOffsetAt + rangeOffset + 2 * (code - start))
+        : (code + delta) % 0x10000;
+
+      if (glyph) {
+        codes.push(code);
+      }
+    }
+  }
+
+  return codes;
+};
+
 export const readFontRevision = (font: Buffer): number => Math.round((readTable(font, 'head').readInt32BE(4) / 65536) * 1000) / 1000;
