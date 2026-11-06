@@ -57,6 +57,10 @@ export interface SortFilterValueOptions {
   getSelector: (selector: string) => ValueGetter | undefined;
 }
 
+export interface OperationFilterOptions extends SortFilterValueOptions {
+  isRemoteSorting: boolean;
+}
+
 export interface SortFilterValue {
   getter: ValueGetter;
   rawValue: unknown;

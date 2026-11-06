@@ -1,11 +1,23 @@
 import type { ScalarFilterValue } from '@js/common/grids';
 import dateSerialization from '@js/core/utils/date_serialization';
-import { isDate } from '@js/core/utils/type';
+import { isBoolean, isDate } from '@js/core/utils/type';
+import type { ColumnDataSourceParameter } from '@ts/grids/grid_core/columns_controller/types';
+import type { RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
+import type {
+  BinaryDataFilterExpression,
+  DataFilterExpression,
+  DataFilterPredicate,
+  DataFilterSelector,
+} from '@ts/grids/grid_core/filter/types';
 
-import type { RawItemData } from '../data_source_adapter/types';
-import type { SortFilterValue, SortFilterValueOptions, ValueGetter } from './types';
+import type {
+  OperationFilterOptions,
+  SortFilterValue,
+  SortFilterValueOptions,
+  ValueGetter,
+} from './types';
 
-export const getSortFilterValue = (
+const getSortFilterValue = (
   selector: string | ValueGetter,
   rowData: RawItemData,
   {
@@ -29,4 +41,80 @@ export const getSortFilterValue = (
     rawValue,
     safeValue,
   };
+};
+
+const generateBooleanFilter = (
+  selector: DataFilterSelector,
+  value: ScalarFilterValue,
+  desc: boolean,
+): BinaryDataFilterExpression | undefined => {
+  switch (true) {
+    case value === false && desc:
+      return [selector, '=', true];
+    case value === false && !desc:
+      return [selector, '=', null];
+    case value === true && !desc:
+    case !isBoolean(value) && desc:
+      return [selector, '<>', value];
+    default:
+      return undefined;
+  }
+};
+
+const generateSortFilter = (
+  selector: string | ValueGetter,
+  { desc, compare }: ColumnDataSourceParameter,
+  { getter, rawValue, safeValue }: SortFilterValue,
+  isRemoteSorting: boolean,
+): DataFilterExpression | DataFilterPredicate => {
+  if (compare && !isRemoteSorting) {
+    return (data: RawItemData): boolean => (desc
+      ? compare(rawValue, getter(data)) <= -1
+      : compare(rawValue, getter(data)) >= 1);
+  }
+
+  const filter: DataFilterExpression = [selector, desc ? '>' : '<', safeValue];
+
+  return desc ? filter : [filter, 'or', [selector, '=', null]];
+};
+
+export const generateOperationFilterByKey = (
+  keyFilter: DataFilterExpression,
+  rowData: RawItemData,
+  sort: ColumnDataSourceParameter[] | null,
+  options: OperationFilterOptions,
+): DataFilterExpression => {
+  if (!sort) {
+    return keyFilter;
+  }
+
+  const { isRemoteSorting } = options;
+  let filter = keyFilter;
+
+  sort.slice().reverse().forEach((sortInfo) => {
+    const { selector, desc } = sortInfo;
+
+    if (!selector) {
+      return;
+    }
+
+    const sortValue = getSortFilterValue(selector, rowData, options);
+    const { rawValue, safeValue } = sortValue;
+
+    filter = [[selector, '=', safeValue], 'and', filter];
+
+    if (rawValue === null || isBoolean(rawValue)) {
+      const booleanFilter = generateBooleanFilter(selector, safeValue, desc);
+
+      if (booleanFilter) {
+        filter = [booleanFilter, 'or', filter];
+      }
+    } else {
+      const sortFilter = generateSortFilter(selector, sortInfo, sortValue, isRemoteSorting);
+
+      filter = [sortFilter, 'or', filter];
+    }
+  });
+
+  return filter;
 };

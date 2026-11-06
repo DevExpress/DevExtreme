@@ -6,7 +6,7 @@ import $ from '@js/core/renderer';
 import type { Callback } from '@js/core/utils/callbacks';
 import { equalByValue } from '@js/core/utils/common';
 import { Deferred, type DeferredObj, when } from '@js/core/utils/deferred';
-import { isBoolean, isDefined } from '@js/core/utils/type';
+import { isDefined } from '@js/core/utils/type';
 import type { StoreKey } from '@ts/data/abstract_store';
 import type { KeyboardKeyDownEvent } from '@ts/events/core/keyboard_processor';
 import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/columns_controller';
@@ -20,11 +20,8 @@ import { isNewRowTempKey } from '@ts/grids/grid_core/editing/editing_utils';
 import { CLASSES as EDITOR_FACTORY_CLASSES } from '@ts/grids/grid_core/editor_factory/const';
 import type { EditorFactory } from '@ts/grids/grid_core/editor_factory/editor_factory';
 import type {
-  BinaryDataFilterExpression,
   DataFilter,
   DataFilterExpression,
-  DataFilterPredicate,
-  DataFilterSelector,
   FilterCombiner,
 } from '@ts/grids/grid_core/filter/types';
 import { combineFilters } from '@ts/grids/grid_core/filter/utils';
@@ -39,7 +36,7 @@ import type { CellPosition, ViewDataChange, ViewRow } from '@ts/grids/grid_core/
 import type { VirtualScrollingDataControllerExtension } from '@ts/grids/grid_core/virtual_scrolling';
 
 import { CLASSES } from './const';
-import { getSortFilterValue } from './focus_utils';
+import { generateOperationFilterByKey } from './focus_utils';
 import type {
   FocusDataController,
   FocusDataControllerExtension,
@@ -831,7 +828,7 @@ export const focusDataControllerExtender = <
         return;
       }
       if (data.length > 0) {
-        filter = this._generateOperationFilterByKey(key, data[0], useGroup);
+        filter = this.getOperationFilterByKey(key, data[0], useGroup);
 
         dataSourceAdapter.customLoader.load({
           filter: this._concatWithCombinedFilter(filter, groupFilter),
@@ -860,37 +857,13 @@ export const focusDataControllerExtender = <
     return combineFilters([filter, combinedFilter, groupFilter]);
   }
 
-  private _generateBooleanFilter(
-    selector: DataFilterSelector,
-    value: ScalarFilterValue,
-    desc: boolean,
-  ): BinaryDataFilterExpression | undefined {
-    switch (true) {
-      case value === false && desc:
-        return [selector, '=', true];
-      case value === false && !desc:
-        return [selector, '=', null];
-      case value === true && !desc:
-      case !isBoolean(value) && desc:
-        return [selector, '<>', value];
-      default:
-        return undefined;
-    }
-  }
-
-  // TODO Vinogradov: Move this method implementation to the UiGridCoreFocusUtils
-  // and cover with unit tests.
-  private _generateOperationFilterByKey(
+  private getOperationFilterByKey(
     key: RowKey,
     rowData: RawItemData,
     useGroup?: boolean,
   ): DataFilterExpression {
-    const dateSerializationFormat = this.option('dateSerializationFormat');
     const remoteOperations = this.dataSourceController.remoteOperations();
     const isRemoteFiltering = Boolean(remoteOperations.filtering);
-    const isRemoteSorting = Boolean(remoteOperations.sorting);
-
-    let filter = this._generateFilterByKey(key, '<');
     let sort = this._columnsController.getSortDataSourceParameters(!isRemoteFiltering, true);
 
     if (useGroup) {
@@ -900,57 +873,12 @@ export const focusDataControllerExtender = <
       }
     }
 
-    if (sort) {
-      sort.slice().reverse().forEach((sortInfo) => {
-        const { selector, desc, compare } = sortInfo;
-
-        if (!selector) {
-          return;
-        }
-
-        const { getter, rawValue, safeValue } = getSortFilterValue(
-          selector,
-          rowData,
-          {
-            isRemoteFiltering,
-            dateSerializationFormat,
-            getSelector: (name) => this._columnsController.columnOption(name, 'selector'),
-          },
-        );
-
-        filter = [[selector, '=', safeValue], 'and', filter];
-
-        if (rawValue === null || isBoolean(rawValue)) {
-          const booleanFilter = this._generateBooleanFilter(selector, safeValue, desc);
-
-          if (booleanFilter) {
-            filter = [booleanFilter, 'or', filter];
-          }
-        } else {
-          const filterOperation = desc ? '>' : '<';
-
-          // eslint-disable-next-line @typescript-eslint/init-declarations -- assigned in branches
-          let sortFilter: DataFilterExpression | DataFilterPredicate;
-          if (compare && !isRemoteSorting) {
-            sortFilter = (data: RawItemData): boolean => {
-              if (filterOperation === '<') {
-                return compare(rawValue, getter(data)) >= 1;
-              }
-              return compare(rawValue, getter(data)) <= -1;
-            };
-          } else {
-            sortFilter = [selector, filterOperation, safeValue];
-            if (!desc) {
-              sortFilter = [sortFilter, 'or', [selector, '=', null]];
-            }
-          }
-
-          filter = [sortFilter, 'or', filter];
-        }
-      });
-    }
-
-    return filter;
+    return generateOperationFilterByKey(this._generateFilterByKey(key, '<'), rowData, sort, {
+      isRemoteFiltering,
+      isRemoteSorting: Boolean(remoteOperations.sorting),
+      dateSerializationFormat: this.option('dateSerializationFormat'),
+      getSelector: (name) => this._columnsController.columnOption(name, 'selector'),
+    });
   }
 
   public _generateFilterByKey(key: RowKey, operation?: SearchOperation): DataFilterExpression {
