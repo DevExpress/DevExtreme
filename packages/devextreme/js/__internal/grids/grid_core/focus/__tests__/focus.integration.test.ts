@@ -4,12 +4,14 @@ import {
 import $ from '@js/core/renderer';
 import type { Properties as DataGridProperties } from '@js/ui/data_grid';
 
+import type { DataGridInstance } from '../../__tests__/__mock__/helpers/utils';
 import {
   afterTest,
   beforeTest,
   createDataGrid,
   flushAsync,
 } from '../../__tests__/__mock__/helpers/utils';
+import { triggerKeyDown } from '../../keyboard_navigation/__tests__/helpers/utils';
 import type { FocusRowsView } from '../types';
 
 const DATA = [
@@ -221,6 +223,56 @@ describe('FocusController', () => {
 
       expect(rowsView.getTableElements().find('.dx-row-focused')).toHaveLength(0);
       expect(scrollToElementVertically).not.toHaveBeenCalled();
+    });
+  });
+});
+
+describe('Focus rows view extender', () => {
+  beforeEach(beforeTest);
+  afterEach(afterTest);
+
+  describe('an undefined focusedColumnIndex', () => {
+    const THREE_COLUMN_DATA = [
+      { id: 1, name: 'Alex', city: 'Rome' },
+      { id: 2, name: 'Dan', city: 'Oslo' },
+    ];
+
+    const setupWithUndefinedColumn = async (setAt: 'creation' | 'runtime'): Promise<DataGridInstance> => {
+      const { instance } = await createDataGrid({
+        dataSource: THREE_COLUMN_DATA,
+        keyExpr: 'id',
+        focusedRowEnabled: true,
+        focusedRowKey: 2,
+        ...setAt === 'creation' ? { focusedColumnIndex: undefined } : {},
+      });
+      await flushAsync();
+
+      if (setAt === 'runtime') {
+        instance.option('focusedColumnIndex', undefined);
+        const refreshed = instance.refresh();
+        await flushAsync();
+        await refreshed;
+      }
+
+      return instance;
+    };
+
+    it.each(['creation', 'runtime'] as const)('acts as -1 when the focused row is rendered, set at %s', async (setAt) => {
+      const instance = await setupWithUndefinedColumn(setAt);
+
+      expect(instance.option('focusedColumnIndex')).toBe(0);
+    });
+
+    it('lets Right Arrow on the focused row move to the second column', async () => {
+      const instance = await setupWithUndefinedColumn('runtime');
+      document.querySelector<HTMLElement>('.dx-row-focused')?.focus();
+      await flushAsync();
+
+      triggerKeyDown(instance, 'rightArrow', document.activeElement);
+      await flushAsync();
+
+      expect(instance.option('focusedColumnIndex')).toBe(1);
+      expect(document.activeElement?.textContent).toBe('Dan');
     });
   });
 });

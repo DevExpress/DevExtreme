@@ -19,6 +19,7 @@ import type {
   ProcessedItem,
 } from '@ts/grids/grid_core/data_controller/types';
 import type { RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
+import { CLASSES as EDITOR_FACTORY_CLASSES } from '@ts/grids/grid_core/editor_factory/const';
 import type { ResizingController } from '@ts/grids/grid_core/grid_view/grid_view';
 import type {
   InternalGrid, ModuleType, OptionChanged, OptionChangedFor, RowKey,
@@ -435,7 +436,7 @@ const rowsView = (
     });
 
     $detailCell
-      .addClass(CLASSES.cellFocusDisabledClass)
+      .addClass(EDITOR_FACTORY_CLASSES.cellFocusDisabled)
       .addClass(CLASSES.detailCell)
       .attr('colSpan', visibleColumns.length);
 

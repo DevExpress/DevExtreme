@@ -6,7 +6,7 @@ import $ from '@js/core/renderer';
 import type { Callback } from '@js/core/utils/callbacks';
 import { equalByValue } from '@js/core/utils/common';
 import { Deferred, type DeferredObj, when } from '@js/core/utils/deferred';
-import { isBoolean, isDefined } from '@js/core/utils/type';
+import { isDefined } from '@js/core/utils/type';
 import type { StoreKey } from '@ts/data/abstract_store';
 import type { KeyboardKeyDownEvent } from '@ts/events/core/keyboard_processor';
 import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/columns_controller';
@@ -17,13 +17,11 @@ import type { DataSourceController } from '@ts/grids/grid_core/data_source/data_
 import type { OperationTypes, RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
 import type { EditingController } from '@ts/grids/grid_core/editing/editing';
 import { isNewRowTempKey } from '@ts/grids/grid_core/editing/editing_utils';
+import { CLASSES as EDITOR_FACTORY_CLASSES } from '@ts/grids/grid_core/editor_factory/const';
 import type { EditorFactory } from '@ts/grids/grid_core/editor_factory/editor_factory';
 import type {
-  BinaryDataFilterExpression,
   DataFilter,
   DataFilterExpression,
-  DataFilterPredicate,
-  DataFilterSelector,
   FilterCombiner,
 } from '@ts/grids/grid_core/filter/types';
 import { combineFilters } from '@ts/grids/grid_core/filter/utils';
@@ -37,7 +35,8 @@ import type { RowsView } from '@ts/grids/grid_core/views/rows_view';
 import type { CellPosition, ViewDataChange, ViewRow } from '@ts/grids/grid_core/views/types';
 import type { VirtualScrollingDataControllerExtension } from '@ts/grids/grid_core/virtual_scrolling';
 
-import { UiGridCoreFocusUtils } from './focus_utils';
+import { CLASSES } from './const';
+import { generateOperationFilterByKey } from './focus_utils';
 import type {
   FocusDataController,
   FocusDataControllerExtension,
@@ -46,9 +45,7 @@ import type {
   FocusRowsViewExtension,
 } from './types';
 
-const ROW_FOCUSED_CLASS = 'dx-row-focused';
-const FOCUSED_ROW_SELECTOR = `.${VIEW_CLASSES.row}.${ROW_FOCUSED_CLASS}`;
-const CELL_FOCUS_DISABLED_CLASS = 'dx-cell-focus-disabled';
+const FOCUSED_ROW_SELECTOR = `.${VIEW_CLASSES.row}.${CLASSES.rowFocused}`;
 
 export class FocusController extends core.ViewController {
   // TODO getController
@@ -549,13 +546,13 @@ export class FocusController extends core.ViewController {
       .filter(isNotMasterDetailFocusedRow);
 
     $prevRowFocusedElement
-      .removeClass(ROW_FOCUSED_CLASS)
-      .removeClass(CELL_FOCUS_DISABLED_CLASS)
+      .removeClass(CLASSES.rowFocused)
+      .removeClass(EDITOR_FACTORY_CLASSES.cellFocusDisabled)
       .removeAttr('tabindex');
     $prevRowFocusedElement.children('td').removeAttr('tabindex');
     if (focusedRowIndex !== 0) {
       const $firstRow = $(this.getView('rowsView').getRowElement(0));
-      $firstRow.removeClass(CELL_FOCUS_DISABLED_CLASS).removeAttr('tabIndex');
+      $firstRow.removeClass(EDITOR_FACTORY_CLASSES.cellFocusDisabled).removeAttr('tabIndex');
     }
   }
 
@@ -574,7 +571,7 @@ export class FocusController extends core.ViewController {
     const rowsView = this.getView('rowsView');
     const $row = $(rowsView._getRowElements($tableElement).eq(focusedRowIndex));
 
-    $row.addClass(ROW_FOCUSED_CLASS).attr('tabindex', tabIndex);
+    $row.addClass(CLASSES.rowFocused).attr('tabindex', tabIndex);
 
     return $row;
   }
@@ -667,7 +664,7 @@ export const focusEditorFactoryViewControllerExtender = (
     } else if (focusedRowEnabled) {
       const isRowElement = this.keyboardNavigationController.getElementType($element) === 'row';
 
-      if (isRowElement && !$element.hasClass(ROW_FOCUSED_CLASS)) {
+      if (isRowElement && !$element.hasClass(CLASSES.rowFocused)) {
         const $cell = this.keyboardNavigationController.getFirstValidCellInRow($element);
         this.keyboardNavigationController.focus($cell);
       }
@@ -831,7 +828,7 @@ export const focusDataControllerExtender = <
         return;
       }
       if (data.length > 0) {
-        filter = this._generateOperationFilterByKey(key, data[0], useGroup);
+        filter = this.getOperationFilterByKey(key, data[0], useGroup);
 
         dataSourceAdapter.customLoader.load({
           filter: this._concatWithCombinedFilter(filter, groupFilter),
@@ -860,39 +857,13 @@ export const focusDataControllerExtender = <
     return combineFilters([filter, combinedFilter, groupFilter]);
   }
 
-  private _generateBooleanFilter(
-    selector: DataFilterSelector,
-    value: ScalarFilterValue,
-    sortInfo: Pick<ColumnDataSourceParameter, 'desc'>,
-  ): BinaryDataFilterExpression | undefined {
-    const { desc } = sortInfo;
-
-    switch (true) {
-      case value === false && desc:
-        return [selector, '=', true];
-      case value === false && !desc:
-        return [selector, '=', null];
-      case value === true && !desc:
-      case !isBoolean(value) && desc:
-        return [selector, '<>', value];
-      default:
-        return undefined;
-    }
-  }
-
-  // TODO Vinogradov: Move this method implementation to the UiGridCoreFocusUtils
-  // and cover with unit tests.
-  private _generateOperationFilterByKey(
+  private getOperationFilterByKey(
     key: RowKey,
     rowData: RawItemData,
     useGroup?: boolean,
   ): DataFilterExpression {
-    const dateSerializationFormat = this.option('dateSerializationFormat');
     const remoteOperations = this.dataSourceController.remoteOperations();
     const isRemoteFiltering = Boolean(remoteOperations.filtering);
-    const isRemoteSorting = Boolean(remoteOperations.sorting);
-
-    let filter = this._generateFilterByKey(key, '<');
     let sort = this._columnsController.getSortDataSourceParameters(!isRemoteFiltering, true);
 
     if (useGroup) {
@@ -902,59 +873,12 @@ export const focusDataControllerExtender = <
       }
     }
 
-    if (sort) {
-      sort.slice().reverse().forEach((sortInfo) => {
-        const { selector, desc, compare } = sortInfo;
-
-        if (!selector) {
-          return;
-        }
-
-        const { getter, rawValue, safeValue } = UiGridCoreFocusUtils.getSortFilterValue(
-          // @ts-expect-error column selectors can be undefined; focus requires a selector
-          sortInfo,
-          rowData,
-          {
-            isRemoteFiltering,
-            dateSerializationFormat,
-            getSelector: (name) => this._columnsController.columnOption(name, 'selector'),
-          },
-        );
-
-        filter = [[selector, '=', safeValue], 'and', filter];
-
-        if (rawValue === null || isBoolean(rawValue)) {
-          // @ts-expect-error passes desc where sortInfo is expected
-          const booleanFilter = this._generateBooleanFilter(selector, safeValue, desc);
-
-          if (booleanFilter) {
-            filter = [booleanFilter, 'or', filter];
-          }
-        } else {
-          const filterOperation = desc ? '>' : '<';
-
-          // eslint-disable-next-line @typescript-eslint/init-declarations -- assigned in branches
-          let sortFilter: DataFilterExpression | DataFilterPredicate;
-          if (compare && !isRemoteSorting) {
-            sortFilter = (data: RawItemData): boolean => {
-              if (filterOperation === '<') {
-                return compare(rawValue, getter(data)) >= 1;
-              }
-              return compare(rawValue, getter(data)) <= -1;
-            };
-          } else {
-            sortFilter = [selector, filterOperation, safeValue];
-            if (!desc) {
-              sortFilter = [sortFilter, 'or', [selector, '=', null]];
-            }
-          }
-
-          filter = [sortFilter, 'or', filter];
-        }
-      });
-    }
-
-    return filter;
+    return generateOperationFilterByKey(this._generateFilterByKey(key, '<'), rowData, sort, {
+      isRemoteFiltering,
+      isRemoteSorting: Boolean(remoteOperations.sorting),
+      dateSerializationFormat: this.option('dateSerializationFormat'),
+      getSelector: (name) => this._columnsController.columnOption(name, 'selector'),
+    });
   }
 
   public _generateFilterByKey(key: RowKey, operation?: SearchOperation): DataFilterExpression {
@@ -972,7 +896,7 @@ export const focusDataControllerExtender = <
     for (const keyField of dataSourceKey) {
       // @ts-expect-error row keys are untyped; a compound key is an object
       const keyPart: ScalarFilterValue = key[keyField];
-      if (keyPart) {
+      if (isDefined(keyPart)) {
         if (filter.length > 0) {
           filter.push('and');
         }
@@ -1021,7 +945,7 @@ export const rowsView = (
 
     if (this.option('focusedRowEnabled') && row) {
       if (this._focusController.isRowFocused(row.key)) {
-        $row.addClass(ROW_FOCUSED_CLASS);
+        $row.addClass(CLASSES.rowFocused);
       }
     }
 
@@ -1065,7 +989,7 @@ export const rowsView = (
     const tabIndex = this.option('tabIndex') ?? 0;
     const columnsController = this._columnsController;
     let rowIndex = this._dataController.getRowIndexByKey(focusedRowKey);
-    let columnIndex = Number(this.option('focusedColumnIndex'));
+    let columnIndex = this.option('focusedColumnIndex') ?? -1;
     const $row = this._findRowElementForTabIndex();
 
     const operationTypes = this.dataSourceController.operationTypes();
