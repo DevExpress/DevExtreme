@@ -1,4 +1,3 @@
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import type { SwipeEndEvent, SwipeStartEvent, SwipeUpdateEvent } from '@js/common/core/events/swipe';
 import {
   end as swipeEventEnd,
@@ -11,6 +10,7 @@ import type { NativeEventInfo } from '@js/events';
 import type { DOMComponentProperties } from '@ts/core/widget/dom_component';
 import DOMComponent from '@ts/core/widget/dom_component';
 import type { OptionChanged } from '@ts/core/widget/types';
+import eventsEngine from '@ts/events/core/events_engine';
 
 const DX_SWIPEABLE = 'dxSwipeable';
 const SWIPEABLE_CLASS = 'dx-swipeable';

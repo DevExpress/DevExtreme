@@ -1,6 +1,5 @@
 import type { Mode, Position } from '@js/common';
 import type { NativeEventInfo } from '@js/common/core/events';
-import EventsEngine from '@js/common/core/events/core/events_engine';
 import { addNamespace, normalizeKeyName } from '@js/common/core/events/utils/index';
 import { data } from '@js/core/element_data';
 import Guid from '@js/core/guid';
@@ -23,6 +22,7 @@ import domUtils from '@ts/core/utils/dom';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { WidgetProperties } from '@ts/core/widget/widget';
 import Widget from '@ts/core/widget/widget';
+import EventsEngine from '@ts/events/core/events_engine';
 
 const INVALID_MESSAGE_AUTO = 'dx-invalid-message-auto';
 const READONLY_STATE_CLASS = 'dx-state-readonly';

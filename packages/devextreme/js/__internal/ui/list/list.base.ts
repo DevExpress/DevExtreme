@@ -1,6 +1,5 @@
 import { fx } from '@js/common/core/animation';
 import { name as clickEventName } from '@js/common/core/events/click';
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import pointerEvents from '@js/common/core/events/pointer';
 import { end as swipeEventEnd } from '@js/common/core/events/swipe';
 import { addNamespace } from '@js/common/core/events/utils';
@@ -47,6 +46,7 @@ import type { OptionChanged } from '@ts/core/widget/types';
 import type { SupportedKeys } from '@ts/core/widget/widget';
 import { SCREEN_READER_ONLY_CLASS } from '@ts/core/widget/widget';
 import { getDataSourceOptions } from '@ts/data/data_converter/grouped';
+import eventsEngine from '@ts/events/core/events_engine';
 import type {
   CollectionItemInfo,
   CollectionItemKey,
@@ -1113,7 +1113,7 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item> {
     eventsEngine.off($itemElement, endEventName);
 
     if (this.hasActionSubscription('onItemSwipe')) {
-      eventsEngine.on($itemElement, endEventName, (e) => {
+      eventsEngine.on($itemElement, endEventName, (e: DxEvent & { offset: number }) => {
         this._itemSwipeEndHandler(e);
       });
     }
@@ -1278,10 +1278,8 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item> {
     this._downInkRippleHandler = this._downInkRippleHandler ?? this.downInkRippleHandler.bind(this);
     this._upInkRippleHandler = this._upInkRippleHandler ?? this.upInkRippleHandler.bind(this);
 
-    // @ts-expect-error ts-error
     eventsEngine.off($element, pointerEvents.down, selector, this._downInkRippleHandler);
     eventsEngine.on($element, pointerEvents.down, selector, this._downInkRippleHandler);
-    // @ts-expect-error ts-error
     eventsEngine.off($element, [pointerEvents.up, pointerEvents.out].join(' '), selector, this._upInkRippleHandler);
     eventsEngine.on($element, [pointerEvents.up, pointerEvents.out].join(' '), selector, this._upInkRippleHandler);
   }

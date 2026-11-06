@@ -1,5 +1,4 @@
 import { lock } from '@js/common/core/events/core/emitter.feedback';
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import holdEvent from '@js/common/core/events/hold';
 import pointerEvents from '@js/common/core/events/pointer';
 import { addNamespace } from '@js/common/core/events/utils/index';
@@ -12,6 +11,7 @@ import type { DxEvent, PointerInteractionEvent } from '@js/events/events.types';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { WidgetProperties } from '@ts/core/widget/widget';
 import Widget from '@ts/core/widget/widget';
+import eventsEngine from '@ts/events/core/events_engine';
 
 const SPIN_CLASS = 'dx-numberbox-spin';
 const SPIN_BUTTON_CLASS = 'dx-numberbox-spin-button';

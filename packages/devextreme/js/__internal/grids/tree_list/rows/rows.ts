@@ -1,8 +1,8 @@
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import { removeEvent } from '@js/common/core/events/remove';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { isDefined } from '@js/core/utils/type';
+import eventsEngine from '@ts/events/core/events_engine';
 import type { ColumnTemplateSource, TemplateModel } from '@ts/grids/grid_core/columns_controller/types';
 import { rowsModule, RowsView } from '@ts/grids/grid_core/views/rows_view';
 import type {
