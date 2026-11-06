@@ -19,6 +19,7 @@ import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import type { ColumnsResizerViewController } from '@ts/grids/grid_core/columns_resizing_reordering/columns_resizing_reordering';
 import type { DataSourceController } from '@ts/grids/grid_core/data_source/data_source_controller';
 import type { EditingController } from '@ts/grids/grid_core/editing/editing';
+import { CLASSES as EDITOR_FACTORY_CLASSES } from '@ts/grids/grid_core/editor_factory/const';
 import type {
   DataFilter, FilterSourceContext,
 } from '@ts/grids/grid_core/filter/types';
@@ -77,7 +78,6 @@ const FILTER_MENU = 'dx-filter-menu';
 const APPLY_BUTTON_CLASS = 'dx-apply-button';
 const HIGHLIGHT_OUTLINE_CLASS = 'dx-highlight-outline';
 const FOCUSED_CLASS = 'dx-focused';
-const CELL_FOCUS_DISABLED_CLASS = 'dx-cell-focus-disabled';
 const FILTER_RANGE_CONTENT_CLASS = 'dx-filter-range-content';
 const FILTER_MODIFIED_CLASS = 'dx-filter-modified';
 
@@ -622,7 +622,7 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
       integrationOptions: {},
       activeStateEnabled: false,
       selectionMode: 'single',
-      cssClass: `${that.getWidgetContainerClass()} ${CELL_FOCUS_DISABLED_CLASS} ${FILTER_MENU}`,
+      cssClass: `${that.getWidgetContainerClass()} ${EDITOR_FACTORY_CLASSES.cellFocusDisabled} ${FILTER_MENU}`,
       showFirstSubmenuMode: 'onHover',
       hideSubmenuOnMouseLeave: true,
       items: [{

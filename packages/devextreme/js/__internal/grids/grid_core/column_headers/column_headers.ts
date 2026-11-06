@@ -15,6 +15,7 @@ import type {
 } from '@ts/grids/grid_core/columns_controller/types';
 import { ColumnContextMenuMixin } from '@ts/grids/grid_core/context_menu/column_context_menu_mixin';
 import type { DataChange } from '@ts/grids/grid_core/data_controller/types';
+import { CLASSES as EDITOR_FACTORY_CLASSES } from '@ts/grids/grid_core/editor_factory/const';
 import type { HeaderFilterController } from '@ts/grids/grid_core/header_filter/header_filter';
 import type { HeaderPanel } from '@ts/grids/grid_core/header_panel/header_panel';
 import type { InternalGridOptions, OptionChanged } from '@ts/grids/grid_core/types';
@@ -243,7 +244,7 @@ export class ColumnHeadersView extends ColumnContextMenuMixin(ColumnsView) {
     const $cell = super._renderCell($row, options);
 
     if (options.row.rowType === 'header') {
-      $cell.addClass(EDITING_CLASSES.cellFocusDisabled);
+      $cell.addClass(EDITOR_FACTORY_CLASSES.cellFocusDisabled);
       if (!this._isLegacyKeyboardNavigation()) {
         const { column } = options;
         const isCustomCommandColumn = this._columnsController.isCustomCommandColumn(column);

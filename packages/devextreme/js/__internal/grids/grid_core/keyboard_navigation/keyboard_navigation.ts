@@ -51,6 +51,7 @@ import type {
   EditingRowsViewExtension,
   EditingStartOptions,
 } from '@ts/grids/grid_core/editing/types';
+import { CLASSES as EDITOR_FACTORY_CLASSES } from '@ts/grids/grid_core/editor_factory/const';
 import type { EditorFactory } from '@ts/grids/grid_core/editor_factory/editor_factory';
 import { CLASSES as FILTER_ROW_CLASSES } from '@ts/grids/grid_core/filter_row/const';
 import type { FocusController } from '@ts/grids/grid_core/focus/m_focus';
@@ -1889,7 +1890,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
           .find(`.${VIEW_CLASSES.row}[tabindex], .${VIEW_CLASSES.row} > td[tabindex]`)
           .filter((i, node) => gridCoreUtils.isElementInCurrentGrid(this, $(node)))
           .not($focusElement)
-          .removeClass(EDITING_CLASSES.cellFocusDisabled)
+          .removeClass(EDITOR_FACTORY_CLASSES.cellFocusDisabled)
           .removeClass(CLASSES.focused)
           .removeAttr('tabindex');
       }
@@ -1897,7 +1898,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
       eventsEngine.one($focusElement, 'blur', (e) => {
         if (e.relatedTarget) {
           $focusElement
-            .removeClass(EDITING_CLASSES.cellFocusDisabled)
+            .removeClass(EDITOR_FACTORY_CLASSES.cellFocusDisabled)
             .removeClass(CLASSES.focused);
         }
       });
@@ -1910,9 +1911,9 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
         }
       }
       if (disableFocus) {
-        $focusElement.addClass(EDITING_CLASSES.cellFocusDisabled);
+        $focusElement.addClass(EDITOR_FACTORY_CLASSES.cellFocusDisabled);
         if (isRowFocus) {
-          $cell.addClass(EDITING_CLASSES.cellFocusDisabled);
+          $cell.addClass(EDITOR_FACTORY_CLASSES.cellFocusDisabled);
         }
       } else {
         this._editorFactory.focus($focusElement);
@@ -2039,7 +2040,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     const $cell = this._getFocusedCell();
 
     if (isElementDefined($cell)) {
-      $cell.removeAttr('tabindex').removeClass(EDITING_CLASSES.cellFocusDisabled);
+      $cell.removeAttr('tabindex').removeClass(EDITOR_FACTORY_CLASSES.cellFocusDisabled);
     }
     this._isNeedFocus = false;
     this._isNeedScroll = false;
