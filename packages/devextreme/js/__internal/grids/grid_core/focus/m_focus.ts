@@ -17,6 +17,7 @@ import type { DataSourceController } from '@ts/grids/grid_core/data_source/data_
 import type { OperationTypes, RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
 import type { EditingController } from '@ts/grids/grid_core/editing/editing';
 import { isNewRowTempKey } from '@ts/grids/grid_core/editing/editing_utils';
+import { CLASSES as EDITOR_FACTORY_CLASSES } from '@ts/grids/grid_core/editor_factory/const';
 import type { EditorFactory } from '@ts/grids/grid_core/editor_factory/editor_factory';
 import type {
   BinaryDataFilterExpression,
@@ -37,7 +38,8 @@ import type { RowsView } from '@ts/grids/grid_core/views/rows_view';
 import type { CellPosition, ViewDataChange, ViewRow } from '@ts/grids/grid_core/views/types';
 import type { VirtualScrollingDataControllerExtension } from '@ts/grids/grid_core/virtual_scrolling';
 
-import { UiGridCoreFocusUtils } from './focus_utils';
+import { CLASSES } from './const';
+import { getSortFilterValue } from './focus_utils';
 import type {
   FocusDataController,
   FocusDataControllerExtension,
@@ -46,9 +48,7 @@ import type {
   FocusRowsViewExtension,
 } from './types';
 
-const ROW_FOCUSED_CLASS = 'dx-row-focused';
-const FOCUSED_ROW_SELECTOR = `.${VIEW_CLASSES.row}.${ROW_FOCUSED_CLASS}`;
-const CELL_FOCUS_DISABLED_CLASS = 'dx-cell-focus-disabled';
+const FOCUSED_ROW_SELECTOR = `.${VIEW_CLASSES.row}.${CLASSES.rowFocused}`;
 
 export class FocusController extends core.ViewController {
   // TODO getController
@@ -549,13 +549,13 @@ export class FocusController extends core.ViewController {
       .filter(isNotMasterDetailFocusedRow);
 
     $prevRowFocusedElement
-      .removeClass(ROW_FOCUSED_CLASS)
-      .removeClass(CELL_FOCUS_DISABLED_CLASS)
+      .removeClass(CLASSES.rowFocused)
+      .removeClass(EDITOR_FACTORY_CLASSES.cellFocusDisabled)
       .removeAttr('tabindex');
     $prevRowFocusedElement.children('td').removeAttr('tabindex');
     if (focusedRowIndex !== 0) {
       const $firstRow = $(this.getView('rowsView').getRowElement(0));
-      $firstRow.removeClass(CELL_FOCUS_DISABLED_CLASS).removeAttr('tabIndex');
+      $firstRow.removeClass(EDITOR_FACTORY_CLASSES.cellFocusDisabled).removeAttr('tabIndex');
     }
   }
 
@@ -574,7 +574,7 @@ export class FocusController extends core.ViewController {
     const rowsView = this.getView('rowsView');
     const $row = $(rowsView._getRowElements($tableElement).eq(focusedRowIndex));
 
-    $row.addClass(ROW_FOCUSED_CLASS).attr('tabindex', tabIndex);
+    $row.addClass(CLASSES.rowFocused).attr('tabindex', tabIndex);
 
     return $row;
   }
@@ -667,7 +667,7 @@ export const focusEditorFactoryViewControllerExtender = (
     } else if (focusedRowEnabled) {
       const isRowElement = this.keyboardNavigationController.getElementType($element) === 'row';
 
-      if (isRowElement && !$element.hasClass(ROW_FOCUSED_CLASS)) {
+      if (isRowElement && !$element.hasClass(CLASSES.rowFocused)) {
         const $cell = this.keyboardNavigationController.getFirstValidCellInRow($element);
         this.keyboardNavigationController.focus($cell);
       }
@@ -908,9 +908,8 @@ export const focusDataControllerExtender = <
           return;
         }
 
-        const { getter, rawValue, safeValue } = UiGridCoreFocusUtils.getSortFilterValue(
-          // @ts-expect-error column selectors can be undefined; focus requires a selector
-          sortInfo,
+        const { getter, rawValue, safeValue } = getSortFilterValue(
+          selector,
           rowData,
           {
             isRemoteFiltering,
@@ -1018,7 +1017,7 @@ export const rowsView = (
 
     if (this.option('focusedRowEnabled') && row) {
       if (this._focusController.isRowFocused(row.key)) {
-        $row.addClass(ROW_FOCUSED_CLASS);
+        $row.addClass(CLASSES.rowFocused);
       }
     }
 

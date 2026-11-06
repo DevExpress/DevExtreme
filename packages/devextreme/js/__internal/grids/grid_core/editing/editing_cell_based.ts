@@ -20,6 +20,7 @@ import type {
   ProcessedItem,
   RefreshOptions,
 } from '@ts/grids/grid_core/data_controller/types';
+import { CLASSES as EDITOR_FACTORY_CLASSES } from '@ts/grids/grid_core/editor_factory/const';
 import type { HeaderPanel } from '@ts/grids/grid_core/header_panel/header_panel';
 import type { ToolbarItem } from '@ts/grids/grid_core/header_panel/types';
 import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
@@ -118,7 +119,9 @@ const editingControllerExtender = (
     const isAddRowWhileCellEditing = isAddRowButton
       && editMode === EDIT_MODE.cell
       && this.isEditing();
-    const isFocusOverlay = $target.hasClass(this.addWidgetPrefix(CLASSES.focusOverlay));
+    const isFocusOverlay = $target.hasClass(
+      this.addWidgetPrefix(EDITOR_FACTORY_CLASSES.focusOverlay),
+    );
 
     if (isFocusOverlay || isAddRowWhileCellEditing) {
       return;
