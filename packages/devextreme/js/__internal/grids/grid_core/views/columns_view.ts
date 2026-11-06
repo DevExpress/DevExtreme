@@ -65,7 +65,6 @@ import type {
   ContextMenuItemsOptions,
   DelayedTemplate,
   GridContextMenuItem,
-  HintColumn,
   RowPreparedOptions,
   RowRenderOptions,
   ScrollableOptions,
@@ -76,6 +75,7 @@ import type {
   ViewRow,
   ViewRowEvent,
   WatchableOptions,
+  WithGroupCellTemplate,
 } from './types';
 import { isRowElementVisible } from './utils';
 
@@ -384,7 +384,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
         const columnIndex = $cell.index();
 
         const cellOptions = rowOptions?.cells?.[columnIndex];
-        const column: HintColumn | undefined = cellOptions
+        const column: WithGroupCellTemplate<Column> | undefined = cellOptions
           ? cellOptions.column
           : visibleColumns[columnIndex];
 

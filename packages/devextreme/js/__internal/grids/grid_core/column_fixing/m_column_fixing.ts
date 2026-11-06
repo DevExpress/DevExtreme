@@ -9,7 +9,6 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import browser from '@js/core/utils/browser';
 import type { DeferredObj } from '@js/core/utils/deferred';
-import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { getBoundingRect } from '@js/core/utils/position';
 import { getOuterWidth } from '@js/core/utils/size';
@@ -54,7 +53,6 @@ import type {
   ColumnWidth,
   ColumnWidthsOptions,
   GroupCellOptions,
-  HintColumn,
   RowRenderOptions,
   RowsViewScrollEvent,
   SummaryRowsViewExtension,
@@ -239,7 +237,7 @@ const baseFixedColumns = <T extends ModuleType<ColumnsView>>(
         this._correctColumnIndicesForFixedColumns(fixedColumns, change);
 
         const $fixedTable = this._createTable(fixedColumns);
-        this._renderRows($fixedTable, extend({}, options, { columns: fixedColumns }));
+        this._renderRows($fixedTable, { ...options, columns: fixedColumns });
         this._updateContent($fixedTable, change, true);
 
         if (change && columnIndices) {
@@ -280,9 +278,8 @@ const baseFixedColumns = <T extends ModuleType<ColumnsView>>(
   }
 
   protected _createCell(options: ViewCellOptions): dxElementWrapper {
-    const { column } = options;
+    const { column, rowType } = options;
     const columnCommand = column?.command;
-    const { rowType } = options;
     const $cell = super._createCell(options);
     const needFixedColumns = this._isFixedTableRendering || rowType === 'filter';
     const fixedColumns = needFixedColumns ? this.getFixedColumns() : [];
@@ -340,7 +337,7 @@ const baseFixedColumns = <T extends ModuleType<ColumnsView>>(
     options: ViewCellOptions,
     renderOptions: CellRenderOptions,
   ): void {
-    const { column }: { column: HintColumn } = options;
+    const { column } = options;
     const isFixedTableRendering = this._isFixedTableRendering;
     const isGroupCell = options.rowType === 'group' && isDefined(column.groupIndex);
 
@@ -494,7 +491,7 @@ const baseFixedColumns = <T extends ModuleType<ColumnsView>>(
     };
   }
 
-  public getTransparentColumnElement(): dxElementWrapper | null | undefined {
+  public getTransparentColumnElement(): dxElementWrapper | undefined {
     return this._fixedTableElement?.find(`.${CLASSES.pointerEventsNone}`).first();
   }
 
@@ -564,7 +561,8 @@ const baseFixedColumns = <T extends ModuleType<ColumnsView>>(
   private _getClientHeight(element: Element): number {
     const boundingClientRect: DOMRect | undefined = getBoundingRect(element);
 
-    return boundingClientRect?.height ?? element.clientHeight;
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing -- 0 falls back
+    return boundingClientRect?.height || element.clientHeight;
   }
 
   private synchronizeRows(): void {
@@ -634,14 +632,15 @@ const columnHeadersView = (
 ): ModuleType<
   ColumnHeadersView & ColumnFixingColumnHeadersViewExtension
 > => class ColumnHeadersViewFixedColumnsExtender extends baseFixedColumns(Base) {
-  public getFixedColumnElements(rowIndex?: number): dxElementWrapper | null | undefined {
+  public getFixedColumnElements(rowIndex?: number): dxElementWrapper | undefined {
     if (!this._isFixedColumns) {
       return undefined;
     }
 
     if (isDefined(rowIndex)) {
       return this._fixedTableElement
-        && this._getRowElements(this._fixedTableElement).eq(rowIndex).children();
+        ? this._getRowElements(this._fixedTableElement).eq(rowIndex).children()
+        : undefined;
     }
 
     const columnElements = this.getColumnElements();
@@ -662,12 +661,13 @@ const columnHeadersView = (
 
   public getColumnWidths(fixedTableElement?: dxElementWrapper, rowIndex?: number): number[] {
     const result = super.getColumnWidths(fixedTableElement, rowIndex);
-    const $fixedColumnElements = this.getFixedColumnElements();
-    const fixedColumns = this.getFixedColumns();
 
     if (!this._fixedTableElement) {
-      return normalizeColumnWidths(fixedColumns, result, undefined);
+      return result;
     }
+
+    const $fixedColumnElements = this.getFixedColumnElements();
+    const fixedColumns = this.getFixedColumns();
 
     const fixedWidths = $fixedColumnElements?.length
       ? this._getWidths($fixedColumnElements)
@@ -740,11 +740,11 @@ const rowsView = (
     }
   }
 
-  private _getScrollDelay(): number | undefined {
+  private _getScrollDelay(): number {
     const hasResizeTimeout = this._resizingController?.hasResizeTimeout();
 
     if (hasResizeTimeout) {
-      return this.option('scrolling.updateTimeout');
+      return this.option('scrolling.updateTimeout') ?? 0;
     }
 
     return browser.mozilla ? 60 : 0;
@@ -846,18 +846,20 @@ const rowsView = (
 
   protected _getGroupCellOptions(options: RowRenderOptions): GroupCellOptions {
     if (this._isFixedTableRendering) {
-      return super._getGroupCellOptions(extend({}, options, {
+      return super._getGroupCellOptions({
+        ...options,
         columns: this._columnsController.getVisibleColumns(),
-      }));
+      });
     }
 
     return super._getGroupCellOptions(options);
   }
 
   protected _renderGroupedCells($row: dxElementWrapper, options: RowRenderOptions): void {
-    return super._renderGroupedCells($row, extend({}, options, {
+    return super._renderGroupedCells($row, {
+      ...options,
       columns: this._columnsController.getVisibleColumns(),
-    }));
+    });
   }
 
   protected override getFixedGroupCellOptions(row: ViewRow, cellCount: number): GroupCellOptions {
@@ -901,9 +903,10 @@ const rowsView = (
 
   public override renderGroupSummaryCells($row: dxElementWrapper, options: RowRenderOptions): void {
     if (this._isFixedTableRendering) {
-      super.renderGroupSummaryCells($row, extend({}, options, {
+      super.renderGroupSummaryCells($row, {
+        ...options,
         columns: this._columnsController.getVisibleColumns(),
-      }));
+      });
     } else {
       super.renderGroupSummaryCells($row, options);
     }
@@ -939,12 +942,14 @@ const rowsView = (
       return;
     }
 
-    options.isFixed = true;
-    let alignByFixedColumnCellCount = this.getAlignByColumnCellCount(groupCellColSpan, options);
-    options.isFixed = false;
+    const summaryOptions: ColumnFixingRowRenderOptions = { ...options, isFixed: true };
+    let alignByFixedColumnCellCount = this.getAlignByColumnCellCount(
+      groupCellColSpan,
+      summaryOptions,
+    );
 
     const startColumnIndex = options.columns.length - alignByFixedColumnCellCount;
-    const fixedOptions = extend({}, options, { columns: this.getFixedColumns() });
+    const fixedOptions = { ...options, columns: this.getFixedColumns() };
     const transparentColumnIndex = getTransparentColumnIndex(fixedOptions.columns);
     let fixedGroupCellColSpan = groupCellColSpan;
 

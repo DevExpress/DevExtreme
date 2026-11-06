@@ -10,11 +10,11 @@ export interface ColumnFixingColumnsViewExtension {
   isFixedColumns: () => boolean;
   getFixedColumns: (rowIndex?: number) => Column[];
   getFixedTableElement: () => dxElementWrapper | null | undefined;
-  getTransparentColumnElement: () => dxElementWrapper | null | undefined;
+  getTransparentColumnElement: () => dxElementWrapper | undefined;
 }
 
 export interface ColumnFixingColumnHeadersViewExtension extends ColumnFixingColumnsViewExtension {
-  getFixedColumnElements: (rowIndex?: number) => dxElementWrapper | null | undefined;
+  getFixedColumnElements: (rowIndex?: number) => dxElementWrapper | undefined;
 }
 
 export type ColumnFixingColumnHeadersView = ColumnHeadersView

@@ -77,7 +77,9 @@ export type ViewDataChange = DataChange
   & Partial<Pick<UpdateChange, 'columnIndices' | 'changeTypes'>>;
 
 /** @architectureLeak data_grid: group cells render this template, and the cell hint skips them */
-export type HintColumn = Column & { groupCellTemplate?: ColumnTemplateSource<ViewCellOptions> };
+export type WithGroupCellTemplate<T> = T & {
+  groupCellTemplate?: ColumnTemplateSource<ViewCellOptions>;
+};
 
 export interface ViewRowCell extends Cell {
   columnIndex?: number;
@@ -118,7 +120,7 @@ export interface WatchableOptions {
 }
 
 export interface ViewCellOptions extends Pick<ViewRow, 'rowType' | 'rowIndex' | 'key' | 'data' | 'values'> {
-  column: Column;
+  column: WithGroupCellTemplate<Column>;
   columnIndex: number;
   isAltRow?: boolean;
   columns?: Column[];

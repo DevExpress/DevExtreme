@@ -58,7 +58,6 @@ import type {
   FocusStateParams,
   GroupCellOptions,
   GroupContinuationData,
-  HintColumn,
   RowPreparedOptions,
   RowRenderOptions,
   RowsModuleOptions,
@@ -273,7 +272,7 @@ export class RowsView extends ColumnsView {
   protected _getCellTemplate(
     options: ViewCellOptions,
   ): ColumnTemplateSource<ViewCellOptions> | undefined {
-    const { column }: { column: HintColumn } = options;
+    const { column } = options;
 
     if (isGroupRow(options)) {
       // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing -- '' falls back
