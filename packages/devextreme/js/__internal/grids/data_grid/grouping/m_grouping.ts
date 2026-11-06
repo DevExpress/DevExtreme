@@ -1,5 +1,4 @@
 /* eslint-disable max-classes-per-file */
-import devices from '@js/core/devices';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import type { DeferredObj } from '@js/core/utils/deferred';
@@ -51,11 +50,11 @@ import type {
   GroupInfoLevel,
   GroupingDataControllerExtension,
   GroupingDataSourceAdapter,
-  GroupingKeyboardNavigationController,
   GroupingLoadOperation,
   GroupItem,
   GroupItemData,
 } from './types';
+import { allowDragging, isGroupPanelVisible, onGroupingMenuItemClick } from './utils';
 
 const DATAGRID_EXPAND_CLASS = 'dx-datagrid-expand';
 const HEADER_FILTER_CLASS_SELECTOR = '.dx-header-filter';
@@ -250,53 +249,12 @@ const dataSourceAdapterExtender = (
 
 dataSourceAdapterProvider.extend(dataSourceAdapterExtender);
 
-const onGroupingMenuItemClick = (
-  keyboardNavigationController: GroupingKeyboardNavigationController | undefined,
-  column: Column,
-  rowIndex: number,
-  e: ItemClickEvent<GridContextMenuItem>,
-): void => {
-  switch (e.itemData?.value) {
-    case 'group':
-      keyboardNavigationController?.groupColumn?.(column, rowIndex);
-      break;
-    case 'ungroup':
-      keyboardNavigationController?.ungroupColumn?.(column, rowIndex);
-      break;
-    case 'ungroupAll':
-      keyboardNavigationController?.ungroupAllColumns?.();
-      break;
-    default:
-      break;
-  }
-};
-
-const isGroupPanelVisible = (groupPanelOptions: GroupPanel | undefined): boolean => {
-  const visible = groupPanelOptions?.visible;
-
-  return visible === 'auto'
-    ? devices.current().deviceType === 'desktop'
-    : !!visible;
-};
-
-const allowDragging = (
-  groupPanelOptions: GroupPanel | undefined,
-  column: Column | undefined,
-): boolean => {
-  const isVisible = isGroupPanelVisible(groupPanelOptions);
-  const canDrag = groupPanelOptions?.allowColumnDragging && column?.allowGrouping;
-
-  return isVisible && !!canDrag;
-};
-
 export const GroupingHeaderPanelExtender = (
   Base: ModuleType<HeaderPanel>,
 ): ModuleType<HeaderPanel> => class HeaderPanelGroupingExtender
   extends ColumnContextMenuMixin(Base) {
   protected _getToolbarItems(): ToolbarItem[] {
-    const items = super._getToolbarItems();
-
-    return this._appendGroupingItem(items);
+    return this._appendGroupingItem(super._getToolbarItems());
   }
 
   private _appendGroupingItem(items: ToolbarItem[]): ToolbarItem[] {
@@ -416,8 +374,7 @@ export const GroupingHeaderPanelExtender = (
       && !this._requireReady
       && !gridCore.checkChanges(e.optionNames, ['width', 'visibleWidth'])
     ) {
-      const $toolbarElement = this.element();
-      const $groupPanel = $toolbarElement?.find(`.${CLASSES.groupPanel}`);
+      const $groupPanel = this.element()?.find(`.${CLASSES.groupPanel}`);
 
       if ($groupPanel?.length) {
         this._updateGroupPanelContent($groupPanel);
@@ -446,14 +403,11 @@ export const GroupingHeaderPanelExtender = (
   }
 
   public allowDragging(column: Column): boolean {
-    const groupPanelOptions = this.option('groupPanel');
-
-    return allowDragging(groupPanelOptions, column);
+    return allowDragging(this.option('groupPanel'), column);
   }
 
   public getColumnElements(): dxElementWrapper | undefined {
-    const $element = this.element();
-    return $element?.find(`.${CLASSES.groupPanelItem}`);
+    return this.element()?.find(`.${CLASSES.groupPanelItem}`);
   }
 
   public getColumns(): Column[] {
@@ -670,8 +624,6 @@ export const columnHeadersViewExtender = (
   }
 
   public allowDragging(column: Column): boolean | undefined {
-    const groupPanelOptions = this.option('groupPanel');
-
-    return allowDragging(groupPanelOptions, column) || super.allowDragging(column);
+    return allowDragging(this.option('groupPanel'), column) || super.allowDragging(column);
   }
 };
