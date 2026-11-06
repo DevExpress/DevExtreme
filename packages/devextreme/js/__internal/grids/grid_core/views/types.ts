@@ -101,6 +101,8 @@ export interface ViewRow {
   isExpanded?: boolean;
   /** @architectureLeak editing: the cell hint skips rows that are being edited */
   isEditing?: boolean;
+  /** @architectureLeak editing, validating: validation skips the empty cells of a new row */
+  isNewRow?: boolean;
   /** @architectureLeak tree_list: core sets aria-expanded for rows of a tree node */
   node?: { hasChildren?: boolean };
   watch?: RowWatch;
@@ -150,7 +152,7 @@ export interface CellEventOptions extends Partial<ViewCellOptions> {
 }
 
 export interface RowPreparedOptions extends ViewRow {
-  columns?: Column[];
+  columns: Column[];
   rowElement?: DxElement<Element>;
 }
 

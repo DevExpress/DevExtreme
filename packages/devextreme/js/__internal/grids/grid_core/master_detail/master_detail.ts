@@ -7,6 +7,7 @@ import { Deferred, when } from '@js/core/utils/deferred';
 import { getHeight, getWidth } from '@js/core/utils/size';
 import { isDefined } from '@js/core/utils/type';
 import type { MasterDetail, Properties as DataGridProperties } from '@js/ui/data_grid';
+import { getData } from '@ts/core/element_data';
 import type { GroupingDataControllerExtension } from '@ts/grids/data_grid/grouping/types';
 import type { ColumnFixingRowsViewExtension } from '@ts/grids/grid_core/column_fixing/types';
 import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/columns_controller';
@@ -24,7 +25,7 @@ import type {
   InternalGrid, ModuleType, OptionChanged, OptionChangedFor, RowKey,
 } from '@ts/grids/grid_core/types';
 import gridCoreUtils from '@ts/grids/grid_core/utils';
-import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
+import { CLASSES as VIEW_CLASSES, ROW_OPTIONS_KEY } from '@ts/grids/grid_core/views/const';
 import type { RowsView } from '@ts/grids/grid_core/views/rows_view';
 import type {
   RowPreparedOptions, RowRenderOptions, ViewCellOptions, ViewRow,
@@ -257,7 +258,7 @@ const resizing = (
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     $detailElement: dxElementWrapper,
   ): DeferredObj<unknown> | undefined {
-    const masterRowOptions = $($masterDetailRow).data<RowPreparedOptions | undefined>('options');
+    const masterRowOptions = getData($($masterDetailRow), ROW_OPTIONS_KEY);
     const masterDataGrid = $($masterDetailRow)
       .closest(`.${this.getWidgetContainerClass()}`)
       .parent()

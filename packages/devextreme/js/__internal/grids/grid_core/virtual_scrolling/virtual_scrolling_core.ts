@@ -38,7 +38,7 @@ import type {
   VirtualScrollDataOptions,
 } from './types';
 
-// @ts-expect-error scrollTop() is typed as a setter only
+// @ts-expect-error scrollTop can't be called through the Scrollable | dxElementWrapper union
 const getScrollTop = (scrollable: ExternalScrollable): number => scrollable.scrollTop();
 
 function subscribeToExternalScrollers(

@@ -386,10 +386,8 @@ const calculatePosition = function calculatePosition(
     const win = $(window);
     const windowWidth = getWidth(win.get(0));
     const windowHeight = getHeight(win.get(0));
-    // @ts-expect-error scrollLeft() is typed as a setter only
-    let left: number = win.scrollLeft();
-    // @ts-expect-error scrollTop() is typed as a setter only
-    let top: number = win.scrollTop();
+    let left = win.scrollLeft<number>();
+    let top = win.scrollTop<number>();
     const documentElement = domAdapter.getDocumentElement();
     const hZoomLevel = touch ? documentElement.clientWidth / windowWidth : 1;
     const vZoomLevel = touch ? documentElement.clientHeight / windowHeight : 1;

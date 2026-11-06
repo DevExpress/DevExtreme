@@ -12,6 +12,7 @@ import { isDefined } from '@js/core/utils/type';
 import Menu from '@js/ui/menu';
 import Overlay from '@js/ui/overlay/ui.overlay';
 import { selectView } from '@js/ui/shared/accessibility';
+import { findInstanceByElement } from '@ts/core/utils/public_component';
 import type { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/column_headers';
 import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/columns_controller';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
@@ -270,9 +271,14 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
       if (optionNames.filterValue || optionNames.bufferedFilterValue) {
         that._updateEditorValue(column, $editorContainer);
 
-        const overlayInstance = $cell.find(`.${that.addWidgetPrefix(FILTER_RANGE_OVERLAY_CLASS)}`).data('dxOverlay');
+        const overlayInstance = findInstanceByElement(
+          $cell.find(`.${that.addWidgetPrefix(FILTER_RANGE_OVERLAY_CLASS)}`),
+          Overlay,
+        );
         if (overlayInstance) {
-          $editorRangeElements = overlayInstance.$content().find(`.${EDITOR_CONTAINER_CLASS}`);
+          // the filter range overlay is rendered together with its content
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+          $editorRangeElements = overlayInstance.$content()!.find(`.${EDITOR_CONTAINER_CLASS}`);
 
           that._updateEditorValue(column, $editorRangeElements.first());
           that._updateEditorValue(column, $editorRangeElements.last());
@@ -414,7 +420,7 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
   private _showFilterRange($cell, column) {
     const that = this;
     const $overlay = $cell.children(`.${that.addWidgetPrefix(FILTER_RANGE_OVERLAY_CLASS)}`);
-    let overlayInstance = $overlay.length && $overlay.data('dxOverlay');
+    let overlayInstance = $overlay.length && findInstanceByElement($overlay, Overlay);
 
     if (!overlayInstance && column) {
       overlayInstance = that._initFilterRangeOverlay($cell, column);

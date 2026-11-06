@@ -32,6 +32,7 @@ import { getDataSourceOptions } from '@ts/data/data_converter/grouped';
 import type DataController from '@ts/ui/collection/data_controller';
 import type { DropDownEditorInternalProperties } from '@ts/ui/drop_down_editor/drop_down_editor';
 import DropDownEditor from '@ts/ui/drop_down_editor/drop_down_editor';
+import { LIST_ITEM_DATA_KEY } from '@ts/ui/list/constants';
 import type { ListBaseProperties } from '@ts/ui/list/list.base';
 import List from '@ts/ui/list/list.edit.search';
 import type { PopupProperties } from '@ts/ui/popup/popup';
@@ -39,7 +40,6 @@ import type { PopupProperties } from '@ts/ui/popup/popup';
 const window = getWindow();
 
 const LIST_ITEM_SELECTOR = '.dx-list-item';
-const LIST_ITEM_DATA_KEY = 'dxListItemData';
 const DROPDOWNLIST_POPUP_WRAPPER_CLASS = 'dx-dropdownlist-popup-wrapper';
 
 const SEARCH_EVENT = 'input';
