@@ -85,15 +85,24 @@ This applies to every `get x(): T` / `set x(value: T)`, to every `EventEmitter<T
   `dxTabsItem`.
 - A member `(() => void)` or `(() => any)` becomes `Function`. Other functions are written
   wrapped in parentheses: `((item: any) => any) | null | string`.
-- An option whose **name contains `template`** (any case) is typed `any`.
+- An option whose **name contains `template`** (any case) **and** whose type includes
+  `template` from `devextreme/common` is typed `any`. The name alone doesn't make an option
+  a template: `showFooTemplate?: boolean` is typed `boolean`, by the rules below. Older
+  wrappers still type a few such options `any`, because the generator checked only the
+  name: `seriesTemplate` in Chart, PieChart, PolarChart and the RangeSelector `chart`, and
+  `templateHeight`, `templateLeft`, `templateTop`, `templateWidth` in Diagram
+  `customShapes`. Narrowing them is a breaking change; leave them as they are.
 - An **anonymous object literal** type is written inline, with fields sorted A→Z, all
   optional, and separated by commas: `{ hide?: AnimationConfig, show?: AnimationConfig }`.
   An array of such literals gets `[]`. It can sit in a union:
   `PositionAlignment | { x?: HorizontalAlignment, y?: VerticalAlignment }`.
 - Named types (interfaces, aliases, widget options) are written by name:
   `PositionConfig`, `dxButtonOptions`, `AnimationConfig`.
-- `{ [key: string]: any }` becomes `Record<string, any>`. Element types
-  (`UserDefinedElement`, `DxElement`, …) become `any`.
+- `{ [key: string]: any }` and a bare `object` become `Record<string, any>`, sorted with
+  the other members:
+  `Array<any> | DataSource | DataSourceOptions | null | Record<string, any> | Store | string`
+  (VectorMap `layers.dataSource`, `@type object|Store|DataSource|DataSourceOptions|string|Array<any>|null`).
+  Element types (`UserDefinedElement`, `DxElement`, …) become `any`.
 
 ```ts
 height: number | string | undefined
