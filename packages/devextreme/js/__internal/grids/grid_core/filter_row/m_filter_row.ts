@@ -56,6 +56,7 @@ import type {
   FilterRowEditorOptions,
   FilterRowHeaderPanel,
   FilterRowOptions,
+  FilterRowValue,
   FilterValueUpdateOptions,
 } from './types';
 import {
@@ -104,13 +105,12 @@ const columnHeadersView = (
 
   private getRangeTextByFilterValue(column: Column): string {
     let result = '';
-    let rangeEnd = '';
     const filterValue = this.getColumnFilterValue(column);
     const formatOptions = gridCoreUtils.getFormatOptionsByColumn(column, 'filterRow');
 
     if (Array.isArray(filterValue)) {
       result = gridCoreUtils.formatValue(filterValue[0], formatOptions);
-      rangeEnd = gridCoreUtils.formatValue(filterValue[1], formatOptions);
+      const rangeEnd = gridCoreUtils.formatValue(filterValue[1], formatOptions);
 
       if (rangeEnd !== '') {
         result += ` - ${rangeEnd}`;
@@ -122,14 +122,23 @@ const columnHeadersView = (
     return result;
   }
 
-  private getColumnFilterValue(column: Column | undefined): unknown {
+  private getColumnFilterValue(column: Column | undefined): FilterRowValue {
     if (!column) {
       return undefined;
     }
 
-    return isOnClickApplyFilterMode(this) && column.bufferedFilterValue !== undefined
-      ? column.bufferedFilterValue
-      : column.filterValue;
+    const {
+      bufferedFilterValue,
+      filterValue,
+    }: {
+      bufferedFilterValue?: FilterRowValue;
+      filterValue?: FilterRowValue
+    } = column;
+
+    return isOnClickApplyFilterMode(this)
+      && bufferedFilterValue !== undefined
+      ? bufferedFilterValue
+      : filterValue;
   }
 
   private getColumnSelectedFilterOperation(
@@ -147,7 +156,7 @@ const columnHeadersView = (
   private getFilterValue(
     columnIndex: number | undefined,
     $editorContainer: dxElementWrapper,
-  ): unknown {
+  ): FilterRowValue {
     const column = this._columnsController.columnOption(columnIndex);
     const filterValue = this.getColumnFilterValue(column);
     const isFilterRange = $editorContainer
@@ -172,10 +181,10 @@ const columnHeadersView = (
   }
 
   private normalizeFilterValue(
-    filterValue: unknown,
+    filterValue: FilterRowValue,
     column: Column | undefined,
     $editorContainer: dxElementWrapper,
-  ): unknown {
+  ): FilterRowValue {
     if (this.getColumnSelectedFilterOperation(column) === 'between') {
       const columnFilterValue = this.getColumnFilterValue(column);
 
@@ -203,7 +212,9 @@ const columnHeadersView = (
 
     const filterValue = this.getFilterValue(column.index, $editorContainer);
 
-    if (!isDefined(filterValue) && !isDefined(value)) return;
+    if (!isDefined(filterValue) && !isDefined(value)) {
+      return;
+    }
 
     this._applyFilterViewController.setHighLight($editorContainer, filterValue !== value);
 
@@ -513,7 +524,7 @@ const columnHeadersView = (
       showAllText: this.option('filterRow.showAllText'),
       updateValueTimeout: this.option('filterRow.applyFilter') === 'onClick' ? 0 : FILTERING_TIMEOUT,
       width: null,
-      setValue: (value: unknown, notFireEvent?: boolean): void => {
+      setValue: (value: FilterRowValue, notFireEvent?: boolean): void => {
         this.updateFilterValue({
           column,
           value,
@@ -772,7 +783,7 @@ const columnHeadersView = (
     }
   }
 
-  public updateLookupDataSource(filterChanged?: unknown): void {
+  public updateLookupDataSource(filterChanged?: boolean | DataFilter): void {
     if (!this.option('syncLookupFilterValues')) {
       return;
     }
