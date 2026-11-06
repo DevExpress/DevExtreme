@@ -90,7 +90,7 @@ export class GroupingTestHelper {
       count,
     };
 
-    this.grouping.updateGroupOffsets(this.items, [], 0, pendingGroupInfo);
+    this.grouping.updateGroupOffsets(this.items, 1, [], 0, pendingGroupInfo);
 
     if (groupInfo) {
       groupInfo.isExpanded = !groupInfo.isExpanded;

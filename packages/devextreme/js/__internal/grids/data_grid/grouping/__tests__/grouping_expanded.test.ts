@@ -449,23 +449,36 @@ describe('non-array items', () => {
     const grouping = new GroupingHelper(createDataSourceAdapterStub());
     const items = { key: 'B', items: null } as unknown as GroupItemData[];
 
-    expect(grouping.updateGroupOffsets([{ key: 'A', items }], [], 0)).toBe(0);
+    expect(grouping.updateGroupOffsets([{ key: 'A', items }], 2, [], 0)).toBe(0);
   });
+});
 
-  it('should keep a row whose items field is an object', () => {
+describe('rows with an items field', () => {
+  it('should count rows of the last group level toward the page take', () => {
     const grouping = new GroupingHelper(createDataSourceAdapterStub());
-    const row = { g: 'A', items: { id: 1 } };
+    const rows = [
+      { g: 'A', id: 'a1', items: { id: 1 } },
+      { g: 'A', id: 'a2', items: { id: 2 } },
+    ];
     const options: GroupingLoadOperation = {
       storeLoadOptions: {},
       group: [{ selector: 'g' }],
-      data: [row],
+      data: rows,
       skip: 0,
-      take: 10,
+      take: 1,
       skipFirstItem: false,
     };
 
     grouping.handleDataLoaded(options, noop);
 
-    expect(options.data).toEqual([{ key: 'A', items: [row] }]);
+    expect(options.data).toEqual([{ key: 'A', items: [rows[0]], isContinuationOnNextPage: true }]);
+  });
+
+  it('should count rows of the last group level in group offsets', () => {
+    const grouping = new GroupingHelper(createDataSourceAdapterStub());
+    const rows = [{ key: 1, items: { id: 1 } }, { key: 2, items: { id: 2 } }];
+    const items = rows as unknown as GroupItemData[];
+
+    expect(grouping.updateGroupOffsets([{ key: 'A', items }], 1, [], 0)).toBe(2);
   });
 });
