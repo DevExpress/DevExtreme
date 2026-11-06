@@ -93,6 +93,7 @@ export class GroupingHelper extends GroupingHelperCore {
 
   private processGroupItems(
     items: GroupItemData[],
+    groupCount: number,
     path: unknown[],
     offset: number,
     skipFirstItem: boolean | undefined,
@@ -109,7 +110,7 @@ export class GroupingHelper extends GroupingHelperCore {
     // eslint-disable-next-line @typescript-eslint/prefer-for-of -- store items may be non-array
     for (let i = 0; i < items.length; i += 1) {
       const item = items[i];
-      if (item.items !== undefined) {
+      if (groupCount > 0 && item.items !== undefined) {
         path.push(item.key);
         const groupInfo = this.findGroupInfo(path);
 
@@ -118,6 +119,7 @@ export class GroupingHelper extends GroupingHelperCore {
         } else if (item.items) {
           const childItemsPosition = this.processGroupItems(
             item.items,
+            groupCount - 1,
             path,
             state.offset,
             state.skipFirstItem,
@@ -152,6 +154,7 @@ export class GroupingHelper extends GroupingHelperCore {
    */
   public updateGroupOffsets(
     items: DataItem[] | null,
+    groupCount: number,
     path: unknown[],
     offset: number,
     pendingGroupInfo?: GroupInfoData,
@@ -165,7 +168,7 @@ export class GroupingHelper extends GroupingHelperCore {
     // eslint-disable-next-line @typescript-eslint/prefer-for-of -- store items may be non-array
     for (let i = 0; i < items.length; i += 1) {
       const item = items[i];
-      if (isGroupItem(item)) {
+      if (groupCount > 0 && isGroupItem(item)) {
         path.push(item.key);
 
         const isPendingGroup = pendingGroupInfo && pathEquals(pendingGroupInfo.path, path);
@@ -190,6 +193,7 @@ export class GroupingHelper extends GroupingHelperCore {
           // Expanded group: recurse into children to accumulate their offsets
           currentOffset = this.updateGroupOffsets(
             item.items,
+            groupCount - 1,
             path,
             currentOffset,
             pendingGroupInfo,
@@ -322,6 +326,7 @@ export class GroupingHelper extends GroupingHelperCore {
       if (!options.isCustomLoading) {
         this.processGroupItems(
           data,
+          groupCount,
           [],
           Number(options.skip),
           options.skipFirstItem,
@@ -357,6 +362,7 @@ export class GroupingHelper extends GroupingHelperCore {
       ? dataSourceAdapter.beginPageIndex()
       : dataSourceAdapter.pageIndex();
     const dataSourceItems = dataSourceAdapter.items();
+    const groupCount = dataGridCore.normalizeSortingInfo(dataSourceAdapter.group()).length;
     const offset = this.correctSkipLoadOption(beginPageIndex * dataSourceAdapter.pageSize());
     const groupInfo = this.findGroupInfo(path);
     const groupCountQuery = groupInfo && !groupInfo.isExpanded
@@ -379,7 +385,7 @@ export class GroupingHelper extends GroupingHelperCore {
         isPending: true,
       };
 
-      this.updateGroupOffsets(dataSourceItems, [], offset, pendingGroupInfo);
+      this.updateGroupOffsets(dataSourceItems, groupCount, [], offset, pendingGroupInfo);
 
       if (groupInfo) {
         groupInfo.isExpanded = !groupInfo.isExpanded;
