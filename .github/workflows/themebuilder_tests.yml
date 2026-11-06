@@ -103,6 +103,10 @@ jobs:
       working-directory: ./packages/devextreme-themebuilder
       run: pnpm exec nx build
 
+    - name: Lint
+      working-directory: ./packages/devextreme-themebuilder
+      run: pnpm exec nx lint
+
     - name: Run themebuilder tests (full set, node)
       working-directory: ./packages/devextreme-themebuilder
       run: pnpm exec nx test

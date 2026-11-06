@@ -1,5 +1,4 @@
 import { name as clickEventName } from '@js/common/core/events/click';
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import { addNamespace } from '@js/common/core/events/utils';
 import messageLocalization from '@js/common/core/localization/message';
 import { getPublicElement } from '@js/core/element';
@@ -10,6 +9,7 @@ import type { DxEvent } from '@js/events';
 import type { ValueChangedEvent as CheckBoxValueChangedEvent } from '@js/ui/check_box';
 import CheckBox from '@js/ui/check_box';
 import errors from '@js/ui/widget/ui.errors';
+import eventsEngine from '@ts/events/core/events_engine';
 import type Editor from '@ts/ui/editor/editor';
 import type { BagConfig } from '@ts/ui/list/list.edit.decorator';
 import EditDecorator from '@ts/ui/list/list.edit.decorator';
@@ -92,7 +92,7 @@ class EditDecoratorSelection extends EditDecorator {
     const { $itemElement } = config;
     const control = this._controlWidget.getInstance($itemElement.find(`.${this._controlClass}`).get(0));
 
-    eventsEngine.on($itemElement, 'stateChanged', (_e: DxEvent, state: boolean): void => {
+    eventsEngine.on($itemElement, 'stateChanged', (_e: DxEvent, state: unknown): void => {
       control.option('value', state);
     });
   }
@@ -202,7 +202,7 @@ class EditDecoratorSelection extends EditDecorator {
     });
 
     eventsEngine.off(this._$selectAll, CLICK_EVENT_NAME);
-    eventsEngine.on(this._$selectAll, CLICK_EVENT_NAME, (e) => {
+    eventsEngine.on(this._$selectAll, CLICK_EVENT_NAME, (e: DxEvent) => {
       this._selectAllHandler(e);
     });
   }
@@ -224,7 +224,7 @@ class EditDecoratorSelection extends EditDecorator {
     this._$selectAll.attr({ 'aria-label': label });
   }
 
-  _selectAllHandler(event: DxEvent<KeyboardEvent>): DeferredObj<unknown> {
+  _selectAllHandler(event: DxEvent): DeferredObj<unknown> {
     event.stopPropagation();
     event.preventDefault(); // to prevent scrolling on space key press
     this._list._saveSelectionChangeEvent(event);

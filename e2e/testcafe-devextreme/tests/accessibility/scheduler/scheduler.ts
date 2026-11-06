@@ -45,6 +45,7 @@ test('Scheduler table elements have right aria attributes', async (t) => {
   await createWidget('dxScheduler', {
     dataSource: [],
     currentView: 'month',
+    currentDate: new Date(2021, 3, 29),
   });
 });
 

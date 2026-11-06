@@ -1,4 +1,3 @@
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import scrollEvents from '@js/common/core/events/gesture/emitter.gesture.scroll';
 import pointerEvents from '@js/common/core/events/pointer';
 import { addNamespace, eventData } from '@js/common/core/events/utils/index';
@@ -11,8 +10,10 @@ import {
 } from '@js/core/utils/size';
 import { isDefined } from '@js/core/utils/type';
 import { getWindow, hasWindow } from '@js/core/utils/window';
+import type { DxEvent } from '@js/events';
 import type { Properties } from '@js/ui/text_area';
 import type { OptionChanged } from '@ts/core/widget/types';
+import eventsEngine from '@ts/events/core/events_engine';
 import TextBox from '@ts/ui/text_box/text_box';
 import { allowScroll, prepareScrollData } from '@ts/ui/text_box/utils.scroll';
 
@@ -91,13 +92,13 @@ class TextArea<
 
     // @ts-expect-error addNamespace
     eventsEngine.on($input, addNamespace(scrollEvents.init, this.NAME), initScrollData, noop);
-    eventsEngine.on(
+    eventsEngine.on<DxEvent<MouseEvent | PointerEvent>>(
       $input,
       // @ts-expect-error addNamespace
       addNamespace(pointerEvents.down, this.NAME),
       this._pointerDownHandler.bind(this),
     );
-    eventsEngine.on(
+    eventsEngine.on<DxEvent<MouseEvent | PointerEvent>>(
       $input,
       // @ts-expect-error addNamespace
       addNamespace(pointerEvents.move, this.NAME),

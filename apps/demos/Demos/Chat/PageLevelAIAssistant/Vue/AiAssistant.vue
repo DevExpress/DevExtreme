@@ -44,9 +44,11 @@
         />
         <template #empty-view>
           <div class="dx-chat-messagelist-empty-image dx-ai-chat__empty-image"/>
-          <div class="ai-chat-empty-message">{{ EMPTY_VIEW_MESSAGE }}</div>
+          <div class="dx-chat-messagelist-empty-message ai-chat-empty-message">
+            {{ EMPTY_VIEW_MESSAGE }}
+          </div>
           <div
-            class="ai-chat-empty-prompt"
+            class="dx-chat-messagelist-empty-prompt ai-chat-empty-prompt"
             v-html="EMPTY_VIEW_PROMPT"
           />
         </template>
@@ -169,16 +171,12 @@ defineExpose({ pushMessage });
 }
 
 .ai-chat-empty-message {
-  font-size: 18px;
   font-weight: 400;
   text-align: center;
-  color: var(--dx-color-text);
   margin-bottom: 8px;
 }
 
 .ai-chat-empty-prompt {
-  font-size: 14px;
-  color: #616161;
   text-align: center;
   padding: 0 24px;
   white-space: pre-line;
@@ -192,7 +190,7 @@ defineExpose({ pushMessage });
   padding: 0;
 }
 
-.dx-chat-messagebox {
+.dx-chat-messagebox, .dx-chat.dx-state-disabled .dx-chat-messagebox {
   border-top-color: transparent;
 }
 

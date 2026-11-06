@@ -1,6 +1,7 @@
 import type { DeferredObj } from '@js/core/utils/deferred';
 import type { RowExpandingEvent } from '@js/ui/data_grid';
-import type { RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
+import type { CustomLoadResult } from '@ts/grids/grid_core/data_source_adapter/custom_loader';
+import type { LoadOperation, RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
 import type { ExecuteActionArgs } from '@ts/grids/grid_core/modules/types';
 import type { RowKey } from '@ts/grids/grid_core/types';
 
@@ -8,18 +9,28 @@ export type ChangeRowExpandArgs = ExecuteActionArgs<RowExpandingEvent<unknown, R
   & { expanded: boolean };
 
 export interface GroupingDataControllerExtension {
-  isRowExpanded: (key: RowKey) => boolean;
-  changeRowExpand: (key: RowKey, isRowClick?: boolean) => DeferredObj<unknown>;
+  expandRow: (key: RowKey) => DeferredObj<unknown>;
+  // eslint-disable-next-line @typescript-eslint/method-signature-style -- overridden by methods
+  changeRowExpand(key: RowKey, isRowClick?: boolean): DeferredObj<unknown>;
+  // eslint-disable-next-line @typescript-eslint/method-signature-style -- overridden by methods
+  isRowExpanded(key: RowKey): boolean;
   // eslint-disable-next-line @typescript-eslint/method-signature-style -- overridden by methods
   changeRowExpandCore(key: RowKey): DeferredObj<unknown>;
+  // eslint-disable-next-line @typescript-eslint/method-signature-style -- overridden by methods
+  expandAll(groupIndex: number): void;
+  // eslint-disable-next-line @typescript-eslint/method-signature-style -- overridden by methods
+  collapseAll(groupIndex: number): void;
 }
 
-export interface GroupItemData {
+// eslint-disable-next-line @typescript-eslint/consistent-type-definitions -- fits RawItemData
+export type GroupItemData = {
   key: unknown;
   items: GroupItemData[] | null;
   isContinuation?: boolean;
+  isContinuationOnNextPage?: boolean;
+  collapsedItems?: GroupItemData[] | null;
   count?: number;
-}
+};
 
 // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
 export type GroupItem = {
@@ -39,7 +50,63 @@ export interface GroupInfoData {
   path: unknown[];
   isExpanded: boolean;
   isPending?: boolean;
+  childrenTotalCount?: number;
+  skipChildrenTotalCount?: number;
 }
+
+export interface ExpandedGroupsInfo {
+  items: GroupItemData[];
+  paths: unknown[][];
+  count: number;
+  lastCount: number;
+  skip?: number;
+  take?: number;
+}
+
+export type GroupPagingOptions = Pick<LoadOperation, 'skip' | 'take' | 'skips' | 'takes'>;
+
+export type GroupPagingCallback = (groupInfo: GroupInfoData, totalOffset: number) => void;
+
+export type GroupItemsLoadResult = CustomLoadResult | DeferredObj<CustomLoadResult>;
+
+export interface GroupInfo {
+  key: RowKey;
+  offset: number;
+  data: GroupInfoData;
+  children: GroupInfoLevel;
+}
+
+export type GroupInfoLevel = GroupInfo[] & {
+  hash?: Record<string, GroupInfo>;
+};
+
+export type ForeachGroupsResult = false | DeferredObj<unknown> | undefined;
+
+export interface GroupItemsPosition {
+  offset: number;
+  take: number;
+}
+
+export interface GroupItemsProcessingState extends GroupItemsPosition {
+  skipFirstItem: boolean | undefined;
+  needRemoveFirstItem: boolean;
+  removeLastItemsCount: number;
+}
+
+export interface GroupingLoadOperation extends LoadOperation {
+  collapsedGroups?: GroupInfoData[];
+  collapsedItemsCount?: number;
+  skipFirstItem?: boolean;
+  extra?: LoadOperation['extra'] & {
+    _totalCountWasIncreasedByCollapsedItems?: boolean;
+  };
+}
+
+export type ForeachGroupsCallback = (
+  groupInfo: GroupInfoData,
+  parents: GroupInfoData[],
+  // eslint-disable-next-line @typescript-eslint/no-invalid-void-type -- may return nothing
+) => ForeachGroupsResult | void;
 
 export interface ProcessGroupItemsOptions {
   data?: RawItemData;

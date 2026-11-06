@@ -1,5 +1,4 @@
 diff --git a/lib/client/hammerhead.js b/lib/client/hammerhead.js
-index 0ba2f29..b291413 100644
 --- a/lib/client/hammerhead.js
 +++ b/lib/client/hammerhead.js
 @@ -3578,7 +3578,7 @@
@@ -11,7 +10,28 @@ index 0ba2f29..b291413 100644
  	}
  	function isWindow(instance) {
  	    try {
-@@ -40365,6 +40365,10 @@
+@@ -39292,7 +39292,8 @@
+ 	            // NOTE: We should guarantee that activeElement will be changed, therefore we need to call the native
+ 	            // focus/blur event.
+ 	            if (!options.focusedOnChange)
+-	                FocusBlurSandbox._getNativeMeth(el, type).call(el);
++	                // Pass preventScroll through: the native focus must not scroll ancestors, like in the browser.
++	                FocusBlurSandbox._getNativeMeth(el, type).call(el, options.preventScrolling ? { preventScroll: true } : undefined);
+ 	            if (isSafari && parseFloat(fullVersion) >= 15 && options.preventScrolling) {
+ 	                nextTick()
+ 	                    .then(function () {
+@@ -40346,8 +40347,8 @@
+ 	            select: function () {
+ 	                return selection.selectWrapper.call(this);
+ 	            },
+-	            focus: function () {
+-	                return focusBlurSandbox.focus(this, null, false, false, true);
++	            focus: function (options) {
++	                return focusBlurSandbox.focus(this, null, false, false, true, !!(options && options.preventScroll));
+ 	            },
+ 	            blur: function () {
+ 	                return focusBlurSandbox.blur(this, null, false, true);
+@@ -40365,6 +40366,10 @@
  	        this._onFocus = function (e) {
  	            var focusedEl = nativeMethods.eventTargetGetter.call(e);
  	            var activeEl = getActiveElement(document);

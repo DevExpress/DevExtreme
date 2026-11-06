@@ -22,7 +22,6 @@ import { extend } from '@js/core/utils/extend';
 import { each, map } from '@js/core/utils/iterator';
 import { isFunction, isPlainObject } from '@js/core/utils/type';
 import { getWindow } from '@js/core/utils/window';
-import eventsEngine from '@js/events/core/events_engine';
 import { removeEvent } from '@js/events/remove';
 import { addNamespace } from '@js/events/utils/index';
 import {
@@ -31,6 +30,7 @@ import {
 } from '@ts/common/core/animation/easing';
 import type { TranslateVector } from '@ts/common/core/animation/translator';
 import supportUtils from '@ts/core/utils/support';
+import eventsEngine from '@ts/events/core/events_engine';
 
 const window = getWindow();
 const removeEventName = addNamespace(removeEvent, 'dxFX');

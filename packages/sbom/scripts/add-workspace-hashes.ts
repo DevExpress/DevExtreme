@@ -9,7 +9,6 @@ import type { AddHashesEntry, CycloneDXBom, Hash } from '@devexpress/sbom-toolki
 
 export const INTERNAL_PACKAGES: Record<string, string> = {
   'devextreme-metadata': 'packages/devextreme-metadata',
-  'eslint-migration-utils': 'packages/eslint-migration-utils/src',
 };
 
 let contentHashes: Record<string, Hash> | undefined;

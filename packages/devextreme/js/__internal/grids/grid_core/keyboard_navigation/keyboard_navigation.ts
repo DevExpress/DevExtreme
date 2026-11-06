@@ -1,6 +1,5 @@
 /* eslint-disable max-classes-per-file */
 import { name as clickEventName } from '@js/common/core/events/click';
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import pointerEvents from '@js/common/core/events/pointer';
 import {
   addNamespace,
@@ -26,6 +25,7 @@ import type { DxEvent } from '@js/events';
 import * as accessibility from '@js/ui/shared/accessibility';
 import { isElementInDom } from '@ts/core/utils/dom';
 import { focused } from '@ts/core/utils/selectors';
+import eventsEngine from '@ts/events/core/events_engine';
 import type { KeyboardKeyDownEvent } from '@ts/events/core/keyboard_processor';
 import type { AdaptiveColumnsViewController } from '@ts/grids/grid_core/adaptivity/adaptivity';
 import { CLASSES as ADAPTIVITY_CLASSES } from '@ts/grids/grid_core/adaptivity/const';
@@ -51,6 +51,7 @@ import type {
   EditingRowsViewExtension,
   EditingStartOptions,
 } from '@ts/grids/grid_core/editing/types';
+import { CLASSES as EDITOR_FACTORY_CLASSES } from '@ts/grids/grid_core/editor_factory/const';
 import type { EditorFactory } from '@ts/grids/grid_core/editor_factory/editor_factory';
 import { CLASSES as FILTER_ROW_CLASSES } from '@ts/grids/grid_core/filter_row/const';
 import type { FocusController } from '@ts/grids/grid_core/focus/m_focus';
@@ -58,9 +59,9 @@ import type { ResizingController } from '@ts/grids/grid_core/grid_view/grid_view
 import { CLASSES as MASTER_DETAIL_CLASSES } from '@ts/grids/grid_core/master_detail/const';
 import type { SearchPanelViewController } from '@ts/grids/grid_core/search/search';
 import { COMMAND_SELECT_CLASS } from '@ts/grids/grid_core/selection/const';
-import type { SelectionController } from '@ts/grids/grid_core/selection/m_selection';
+import type { SelectionController } from '@ts/grids/grid_core/selection/selection';
 import type { Module, ModuleType, RowKey } from '@ts/grids/grid_core/types';
-import gridCoreUtils from '@ts/grids/grid_core/utils';
+import gridCoreUtils, { isVirtualPaging } from '@ts/grids/grid_core/utils';
 import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
 import type { RowsView } from '@ts/grids/grid_core/views/rows_view';
 import type {
@@ -96,6 +97,7 @@ import type {
   FocusedCellChangingArgs,
   FocusedRowChangingArgs,
   KeyboardNavigationDataController,
+  KeyboardNavigationRowsViewExtension,
   KeyDownEvent,
   NavigationDirection,
   NavigationElementType,
@@ -267,7 +269,6 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
 
       if (!$element.closest($focusedCell).length) {
         event.preventDefault();
-        // @ts-expect-error eventsEngine.trigger is not fully typed
         eventsEngine.trigger($focusedCell, 'focus');
       }
     }
@@ -460,12 +461,14 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     const $rowsView = this._getRowsViewElement();
     const clickSelector = `.${VIEW_CLASSES.row} > td, .${VIEW_CLASSES.row}`;
 
-    eventsEngine.on(
-      $rowsView,
-      addNamespace(pointerEventName, KEYBOARD_NAVIGATION_NAMESPACE),
-      clickSelector,
-      this._pointerEventAction,
-    );
+    if (this._pointerEventAction) {
+      eventsEngine.on(
+        $rowsView,
+        addNamespace(pointerEventName, KEYBOARD_NAVIGATION_NAMESPACE),
+        clickSelector,
+        this._pointerEventAction,
+      );
+    }
   }
 
   private initPointerEventHandler(): void {
@@ -1095,7 +1098,16 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     );
     const $nextCell = nextCellInfo.$cell;
 
-    if (!$nextCell || this.handleTabKeyOnMasterDetailCell($nextCell, direction)) {
+    if (!$nextCell) {
+      return false;
+    }
+
+    if (this.handleTabKeyOnMasterDetailCell($nextCell, direction)) {
+      // An adaptive detail row focuses its editor itself; native Tab would move focus once more
+      if (!focused(eventTarget)) {
+        eventArgs.originalEvent.preventDefault();
+      }
+
       return false;
     }
 
@@ -1360,7 +1372,6 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
       setTimeout(() => { this._editingController.saveEditData(); });
       d.resolve();
     } else {
-      // @ts-expect-error eventsEngine.trigger is not fully typed
       eventsEngine.trigger($(event.target), 'change');
       // eslint-disable-next-line @typescript-eslint/no-misused-promises
       this._closeEditCell().always(d.resolve);
@@ -1879,7 +1890,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
           .find(`.${VIEW_CLASSES.row}[tabindex], .${VIEW_CLASSES.row} > td[tabindex]`)
           .filter((i, node) => gridCoreUtils.isElementInCurrentGrid(this, $(node)))
           .not($focusElement)
-          .removeClass(EDITING_CLASSES.cellFocusDisabled)
+          .removeClass(EDITOR_FACTORY_CLASSES.cellFocusDisabled)
           .removeClass(CLASSES.focused)
           .removeAttr('tabindex');
       }
@@ -1887,7 +1898,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
       eventsEngine.one($focusElement, 'blur', (e) => {
         if (e.relatedTarget) {
           $focusElement
-            .removeClass(EDITING_CLASSES.cellFocusDisabled)
+            .removeClass(EDITOR_FACTORY_CLASSES.cellFocusDisabled)
             .removeClass(CLASSES.focused);
         }
       });
@@ -1896,14 +1907,13 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
         if (preventScroll) {
           ($focusElement.get(0) as HTMLElement | undefined)?.focus({ preventScroll });
         } else {
-          // @ts-expect-error eventsEngine.trigger is not fully typed
           eventsEngine.trigger($focusElement, 'focus');
         }
       }
       if (disableFocus) {
-        $focusElement.addClass(EDITING_CLASSES.cellFocusDisabled);
+        $focusElement.addClass(EDITOR_FACTORY_CLASSES.cellFocusDisabled);
         if (isRowFocus) {
-          $cell.addClass(EDITING_CLASSES.cellFocusDisabled);
+          $cell.addClass(EDITOR_FACTORY_CLASSES.cellFocusDisabled);
         }
       } else {
         this._editorFactory.focus($focusElement);
@@ -1979,7 +1989,6 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
           this._focusInteractiveElement.bind(this)($cell);
         }
       } else {
-        // @ts-expect-error eventsEngine.trigger is not fully typed
         eventsEngine.trigger($cell, 'focus');
       }
     });
@@ -2031,7 +2040,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     const $cell = this._getFocusedCell();
 
     if (isElementDefined($cell)) {
-      $cell.removeAttr('tabindex').removeClass(EDITING_CLASSES.cellFocusDisabled);
+      $cell.removeAttr('tabindex').removeClass(EDITOR_FACTORY_CLASSES.cellFocusDisabled);
     }
     this._isNeedFocus = false;
     this._isNeedScroll = false;
@@ -2060,7 +2069,6 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     if (!isUpArrow) {
       this._editorFactory.loseFocus();
       this.applyTabIndexToElement($rowsViewElement);
-      // @ts-expect-error eventsEngine.trigger is not fully typed
       eventsEngine.trigger($rowsViewElement, 'focus');
     } else {
       // @ts-expect-error getRow() is typed as possibly undefined
@@ -2548,11 +2556,9 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     }
 
     ($inputElement as HTMLInputElement).select?.();
-    // @ts-expect-error eventsEngine.trigger is not fully typed
     eventsEngine.trigger($input, keyDownEvent);
 
     if (!keyDownEvent.isDefaultPrevented()) {
-      // @ts-expect-error eventsEngine.trigger is not fully typed
       eventsEngine.trigger($input, keyPressEvent);
       if (!keyPressEvent.isDefaultPrevented()) {
         const timeout = browser.mozilla ? 25 : 0; // T882996
@@ -2563,10 +2569,8 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
           const $widgetContainer = $input.closest(`.${CLASSES.widget}`);
           eventsEngine.off($widgetContainer, 'focusout'); // for NumberBox to save entered symbol
           eventsEngine.one($widgetContainer, 'focusout', () => {
-            // @ts-expect-error eventsEngine.trigger is not fully typed
             eventsEngine.trigger($input, 'change');
           });
-          // @ts-expect-error eventsEngine.trigger is not fully typed
           eventsEngine.trigger($input, inputEvent);
         }, timeout);
       }
@@ -2868,8 +2872,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
   }
 
   public isVirtualScrolling(): boolean {
-    const scrollingMode = this.option('scrolling.mode');
-    return scrollingMode === 'virtual' || scrollingMode === 'infinite';
+    return isVirtualPaging(this.option('scrolling'));
   }
 
   private _isVirtualRowRender(): boolean {
@@ -3040,7 +3043,8 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
 
 const rowsView = (
   Base: ModuleType<RowsView & EditingRowsViewExtension>,
-): ModuleType<RowsView> => class RowsViewKeyboardExtender extends Base {
+): ModuleType<RowsView & KeyboardNavigationRowsViewExtension> => class RowsViewKeyboardExtender
+  extends Base {
   protected _resizeController!: ResizingController;
 
   protected _rowClick(e: ViewRowEvent): void {
@@ -3104,7 +3108,7 @@ const rowsView = (
     }
   }
 
-  private updateFocusElementTabIndex(
+  public updateFocusElementTabIndex(
     cellElements: dxElementWrapper,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     preventScroll?: boolean,

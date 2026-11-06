@@ -13,7 +13,7 @@ function isHideableColumn(column: Column): boolean {
     && !isGroup;
 }
 
-export function getHideableColumns(columns: Column[]): Column[] {
+export function getHideableColumns<T extends Column>(columns: T[]): T[] {
   return columns.filter(isHideableColumn);
 }
 

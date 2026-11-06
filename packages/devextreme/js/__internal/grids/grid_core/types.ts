@@ -1,4 +1,5 @@
 /* eslint-disable spellcheck/spell-checker */
+import type { SelectAllMode } from '@js/common';
 import type {
   ColumnCustomizeTextArg, GridBase, GridBaseOptions, SelectionBase, SelectionColumnDisplayMode,
 } from '@js/common/grids';
@@ -10,6 +11,7 @@ import type { Format } from '@js/localization';
 import type {
   Properties as DataGridOptions,
   Scrolling as DataGridScrolling,
+  SelectionSensitivity,
   SummaryTotalItem,
 } from '@js/ui/data_grid';
 import type { Properties as TreeListdOptions, Scrolling as TreeListScrolling } from '@js/ui/tree_list';
@@ -90,10 +92,6 @@ export type TextSelectionElement = Element & {
   selectionEnd?: number | null;
   setSelectionRange?: (start: number, end: number) => void;
 };
-
-export interface OptionsReader {
-  option: (name: string) => unknown;
-}
 
 export type WrappedLookupDataSource = NormalizedDataSourceOptions & {
   __dataGridSourceFilter: unknown;
@@ -209,6 +207,11 @@ type TemporarlyOptionsTakenFromTreeList = Pick<TreeListdOptions<unknown, RowKey>
 interface InternalSelection extends SelectionBase {
   alwaysSelectByShift?: boolean;
   showCheckBoxesMode?: SelectionColumnDisplayMode;
+  deferred?: boolean;
+  selectAllMode?: SelectAllMode;
+  sensitivity?: SelectionSensitivity;
+  recursive?: boolean;
+  maxFilterLengthInRequest?: number;
 }
 
 export interface InternalGridOptions extends
@@ -299,7 +302,7 @@ export interface Controllers {
   columnFocusDispatcher: import('./keyboard_navigation/column_focus_dispatcher').ColumnFocusDispatcher;
   headersKeyboardNavigation: import('./keyboard_navigation/headers_keyboard_navigation').HeadersKeyboardNavigationController;
   resizing: import('./grid_view/grid_view').ResizingController;
-  selection: import('./selection/m_selection').SelectionController;
+  selection: import('./selection/selection').SelectionController;
   validating: import('./validating/m_validating').ValidatingController;
   searchPanel: import('./search/search').SearchPanelViewController;
   stateStoring: import('./state_storing/state_storing_controller_core').StateStoringController;

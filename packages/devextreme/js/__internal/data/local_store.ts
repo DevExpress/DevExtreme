@@ -1,11 +1,11 @@
 /* eslint-disable max-classes-per-file */
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import ArrayStore from '@js/common/data/array_store';
 import { errors } from '@js/common/data/errors';
 import domAdapter from '@js/core/dom_adapter';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import { getWindow } from '@js/core/utils/window';
 import type { ArrayStoreOptions } from '@ts/data/array_store';
+import eventsEngine from '@ts/events/core/events_engine';
 
 import Store from './abstract_store';
 

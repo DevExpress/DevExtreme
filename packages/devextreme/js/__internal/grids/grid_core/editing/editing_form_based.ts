@@ -1,5 +1,4 @@
 /* eslint-disable max-classes-per-file */
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import { removeEvent } from '@js/common/core/events/remove';
 import devices from '@js/core/devices';
 import type { DxElement } from '@js/core/element';
@@ -18,6 +17,7 @@ import Form from '@js/ui/form';
 import Popup from '@js/ui/popup/ui.popup';
 import Scrollable from '@js/ui/scroll_view/ui.scrollable';
 import { WIDGET_CLASS } from '@ts/core/widget/widget';
+import eventsEngine from '@ts/events/core/events_engine';
 import type { Column, ColumnTemplateSource } from '@ts/grids/grid_core/columns_controller/types';
 import type { GeneratedItem, ProcessedItem } from '@ts/grids/grid_core/data_controller/types';
 import type { RowsView } from '@ts/grids/grid_core/views/rows_view';
@@ -212,7 +212,6 @@ const editingControllerExtender = (
           .find(FOCUSABLE_ELEMENT_SELECTOR)
           .not(`.${CLASSES.focusableElement}`)
           .first();
-        // @ts-expect-error eventsEngine.trigger is not fully typed
         eventsEngine.trigger($focusableElement, 'focus');
 
         if (repaintForm) {
@@ -329,7 +328,6 @@ const editingControllerExtender = (
     const $container = $(container);
     const row = detailCellOptions?.row;
 
-    // @ts-expect-error createColumn initializes calculateCellValue
     const value = item.column.calculateCellValue(row?.data);
     const displayValue = gridCoreUtils.getDisplayValue(item.column, value, row?.data, row?.rowType);
     const text = !item.column.command ? gridCoreUtils.formatValue(displayValue, item.column) : '';
@@ -649,12 +647,14 @@ const rowsView = (
 
   public _updateCell($cell: dxElementWrapper, parameters: EditorCellOptions): void {
     if (this._isFormItem(parameters)) {
-      // @ts-expect-error Badly typed based class
       this._formItemPrepared(parameters, $cell);
     } else {
       super._updateCell($cell, parameters);
     }
   }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars -- used by overrides
+  public _formItemPrepared(cellOptions: EditorCellOptions, $container: dxElementWrapper): void {}
 
   protected _updateContent(
     newTableElement: dxElementWrapper,

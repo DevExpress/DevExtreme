@@ -16,8 +16,8 @@ import type { DxEvent } from '@js/events';
 import type {
   AttachmentDownloadClickEvent, Message, TextMessage, User,
 } from '@js/ui/chat';
-import type { Item as ContextMenuItem } from '@js/ui/context_menu';
 import type dxContextMenu from '@js/ui/context_menu';
+import type { Item as ContextMenuItem } from '@js/ui/context_menu';
 import type { WidgetOptions } from '@js/ui/widget/ui.widget';
 import { getPublicElement } from '@ts/core/element';
 import type { OptionChanged } from '@ts/core/widget/types';

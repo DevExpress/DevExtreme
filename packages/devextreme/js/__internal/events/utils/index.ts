@@ -1,8 +1,8 @@
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { focused } from '@ts/core/utils/selectors';
+import eventsEngine from '@ts/events/core/events_engine';
 
 import mappedAddNamespace from './add_namespace';
 /* eslint-disable spellcheck/spell-checker */
@@ -92,7 +92,6 @@ export const eventSource = ({ type }) => {
 };
 
 let fixMethod = (e) => e;
-// @ts-expect-error
 const getEvent = (originalEvent) => eventsEngine.Event(originalEvent, originalEvent);
 // @ts-expect-error
 const copyEvent = (originalEvent) => fixMethod(getEvent(originalEvent), originalEvent);
@@ -201,7 +200,6 @@ export const createEvent = (originalEvent, args) => {
 export const fireEvent = (props) => {
   const { originalEvent, delegateTarget } = props;
   const event = createEvent(originalEvent, props);
-  // @ts-expect-error
   eventsEngine.trigger(delegateTarget || event.target, event);
 
   return event;

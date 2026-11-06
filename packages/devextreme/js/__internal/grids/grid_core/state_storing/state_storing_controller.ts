@@ -4,6 +4,7 @@ import { extend } from '@ts/core/utils/extend';
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
 import type { FilterSyncController } from '@ts/grids/grid_core/filter_sync/filter_sync';
 import type { InternalGridOptions } from '@ts/grids/grid_core/types';
+import { isVirtualPaging } from '@ts/grids/grid_core/utils';
 
 import type { StateStoringDataControllerExtension } from './extenders/state_storing_data_controller';
 import { StateStoringController } from './state_storing_controller_core';
@@ -158,7 +159,7 @@ export class GridStateStoringController extends StateStoringController<GridState
   protected applyState(state: GridState): void {
     const { scrolling, pager } = this.option();
 
-    const isVirtualScrollingMode = scrolling?.mode === 'virtual' || scrolling?.mode === 'infinite';
+    const isVirtualScrollingMode = isVirtualPaging(scrolling);
     const showPageSizeSelector = pager?.visible === true && !!pager.showPageSizeSelector;
     // TODO getView
     const hasHeight = this.getView('rowsView')?.hasHeight();

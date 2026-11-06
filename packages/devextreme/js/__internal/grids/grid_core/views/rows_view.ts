@@ -1,4 +1,3 @@
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import { removeEvent } from '@js/common/core/events/remove';
 import messageLocalization from '@js/common/core/localization/message';
 import { data as elementData } from '@js/core/element_data';
@@ -22,6 +21,7 @@ import type dxLoadPanel from '@js/ui/load_panel';
 import type { Properties as LoadPanelProperties } from '@js/ui/load_panel';
 import type { ActionEvent } from '@ts/core/action';
 import { compileGetter } from '@ts/core/utils/data';
+import eventsEngine from '@ts/events/core/events_engine';
 import { CLASSES as COLUMN_FIXING_CLASSES } from '@ts/grids/grid_core/column_fixing/const';
 import type { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/column_headers';
 import type {
@@ -51,7 +51,7 @@ import { CLASSES as REORDERING_CLASSES } from '../columns_resizing_reordering/co
 import { isLocalStore } from '../data_source_adapter/utils/store';
 import type { EditingController } from '../editing/editing';
 import { CLASSES } from '../sticky_columns/const';
-import gridCoreUtils from '../utils';
+import gridCoreUtils, { isVirtualPaging } from '../utils';
 import { ColumnsView } from './columns_view';
 import { CLASSES as VIEW_CLASSES } from './const';
 import type {
@@ -1098,9 +1098,7 @@ export class RowsView extends ColumnsView {
   ): Pick<ViewCellOptions, 'groupContinuesMessage' | 'groupContinuedMessage'> {
     const { grouping, scrolling } = this.option() as RowsViewOptions;
     const isGroupCell = isDefined(column.groupIndex) && !column.command;
-    const virtualPaging = scrolling?.mode === 'virtual' || scrolling?.mode === 'infinite';
-
-    if (!isGroupCell || virtualPaging) {
+    if (!isGroupCell || isVirtualPaging(scrolling)) {
       return {};
     }
 
@@ -1216,13 +1214,11 @@ export class RowsView extends ColumnsView {
     if (itemCount > 0) {
       if (!this._hasHeight) {
         const freeSpaceRowCount = this._dataController.pageSize() - itemCount;
-        const scrollingMode = this.option('scrolling.mode');
 
         if (
           freeSpaceRowCount > 0
           && this.dataSourceController.pageCount() > 1
-          && scrollingMode !== 'virtual'
-          && scrollingMode !== 'infinite'
+          && !isVirtualPaging(this.option('scrolling'))
         ) {
           setHeight(freeSpaceRowElements, freeSpaceRowCount * Number(this._rowHeight));
           isFreeSpaceRowVisible = true;

@@ -8,8 +8,8 @@ import errors from '@js/ui/widget/ui.errors';
 import { isFunction } from '@ts/core/utils/type';
 import type { PostprocessRenderItemInfo } from '@ts/ui/collection/collection_widget.base';
 import type List from '@ts/ui/list/list.edit';
-import type { BagConfig } from '@ts/ui/list/list.edit.decorator';
 import type EditDecorator from '@ts/ui/list/list.edit.decorator';
+import type { BagConfig } from '@ts/ui/list/list.edit.decorator';
 import type { DecoratorClass } from '@ts/ui/list/list.edit.decorator_registry';
 import { registry } from '@ts/ui/list/list.edit.decorator_registry';
 

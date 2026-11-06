@@ -174,10 +174,10 @@ $(() => {
               'dx-chat-messagelist-empty-image dx-ai-chat__empty-image',
             );
             const $message = $('<div>')
-              .addClass('ai-chat-empty-message')
+              .addClass('dx-chat-messagelist-empty-message ai-chat-empty-message')
               .text(emptyViewMessage);
             const $prompt = $('<div>')
-              .addClass('ai-chat-empty-prompt')
+              .addClass('dx-chat-messagelist-empty-prompt ai-chat-empty-prompt')
               .html(emptyViewPrompt);
 
             $(container).append($icon).append($message).append($prompt);

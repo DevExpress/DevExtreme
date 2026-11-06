@@ -1,5 +1,4 @@
 import { name as clickEventName } from '@js/common/core/events/click';
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import { name as dblclickEvent } from '@js/common/core/events/double_click';
 import pointerEvents from '@js/common/core/events/pointer';
 import { removeEvent } from '@js/common/core/events/remove';
@@ -29,6 +28,7 @@ import { getWindow, hasWindow } from '@js/core/utils/window';
 import type { DxEvent } from '@js/events';
 import type { ActionEvent } from '@ts/core/action';
 import supportUtils from '@ts/core/utils/support';
+import eventsEngine from '@ts/events/core/events_engine';
 import type { AdaptiveColumnsViewController } from '@ts/grids/grid_core/adaptivity/adaptivity';
 import { HIDDEN_COLUMNS_WIDTH } from '@ts/grids/grid_core/adaptivity/const';
 import type { ColumnChooserController, ColumnChooserView } from '@ts/grids/grid_core/column_chooser/column_chooser';
@@ -47,7 +47,7 @@ import { CLASSES as ERROR_HANDLING_CLASSES } from '@ts/grids/grid_core/error_han
 import { CLASSES as FILTER_ROW_CLASSES } from '@ts/grids/grid_core/filter_row/const';
 import { CLASSES as MASTER_DETAIL_CLASSES } from '@ts/grids/grid_core/master_detail/const';
 import modules from '@ts/grids/grid_core/modules/modules';
-import type { SelectionController } from '@ts/grids/grid_core/selection/m_selection';
+import type { SelectionController } from '@ts/grids/grid_core/selection/selection';
 import type { OptionChanged } from '@ts/grids/grid_core/types';
 import gridCoreUtils from '@ts/grids/grid_core/utils';
 import { FIELD_ITEM_CONTENT_CLASS } from '@ts/ui/form/constants';

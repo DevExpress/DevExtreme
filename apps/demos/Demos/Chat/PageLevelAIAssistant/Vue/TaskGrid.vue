@@ -92,14 +92,14 @@ defineExpose({
 }
 
 .priority-badge--high {
-  background: #f1bbbc;
+  background: var(--dxds-color-bg-red-subtle, #f1bbbc);
 }
 
 .priority-badge--normal {
-  background: #f9e2ae;
+  background: var(--dxds-color-bg-yellow-subtle, #f9e2ae);
 }
 
 .priority-badge--low {
-  background: #9fd89f;
+  background: var(--dxds-color-bg-green-subtle, #9fd89f);
 }
 </style>

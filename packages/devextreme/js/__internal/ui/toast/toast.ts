@@ -1,5 +1,4 @@
 import type { PositionAlignment } from '@js/common';
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import pointerEvents from '@js/common/core/events/pointer';
 import type { DeepPartial } from '@js/core';
 import registerComponent from '@js/core/component_registrator';
@@ -18,6 +17,7 @@ import Overlay from '@js/ui/overlay/ui.overlay';
 import { current, isMaterialBased } from '@js/ui/themes';
 import type { Properties } from '@js/ui/toast';
 import type { OptionChanged } from '@ts/core/widget/types';
+import eventsEngine from '@ts/events/core/events_engine';
 import type { OverlayProperties } from '@ts/ui/overlay/overlay';
 
 const ready = readyCallbacks.add;
@@ -66,7 +66,6 @@ ready(() => {
     }
   };
 
-  // @ts-expect-error subscribeGlobal should be described in .d.ts
   eventsEngine.subscribeGlobal(
     element,
     pointerEvents.down,

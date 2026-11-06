@@ -1,6 +1,5 @@
 // @ts-check
 
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import dateLocalization from '@js/common/core/localization/date';
 import type { GroupDescriptor } from '@js/common/data';
 import DataSource from '@js/common/data/data_source';
@@ -28,6 +27,7 @@ import { isNumeric } from '@ts/core/utils/type';
 import type Widget from '@ts/core/widget/widget';
 import type { NormalizedDataSourceOptions, StoreLoadOptions } from '@ts/data/data_source/types';
 import type { SortingInfo } from '@ts/data/utils';
+import eventsEngine from '@ts/events/core/events_engine';
 import type {
   Column,
   ColumnsChanges,
@@ -42,9 +42,9 @@ import type {
   ExpandCellTemplate,
   ExpandCellTemplateOptions,
   FormatOptions,
+  InternalGridOptions,
   LoadPanelPosition,
   LookupDataSource,
-  OptionsReader,
   RowKey,
   SelectionRange,
   SummaryTextItem,
@@ -73,13 +73,24 @@ const NO_DATA_CLASS = 'nodata';
 const SCROLLING_MODE_INFINITE = 'infinite';
 const SCROLLING_MODE_VIRTUAL = 'virtual';
 const LEGACY_SCROLLING_MODE = 'scrolling.legacyMode';
-const SCROLLING_MODE_OPTION = 'scrolling.mode';
 const ROW_RENDERING_MODE_OPTION = 'scrolling.rowRenderingMode';
 
 const DEFAULT_COLUMN_WIDTH = 50;
 
 export function isDateType(dataType: string | undefined): boolean {
   return dataType === 'date' || dataType === 'datetime';
+}
+
+export function isVirtualMode(scrolling: InternalGridOptions['scrolling']): boolean {
+  return scrolling?.mode === SCROLLING_MODE_VIRTUAL;
+}
+
+export function isInfiniteMode(scrolling: InternalGridOptions['scrolling']): boolean {
+  return scrolling?.mode === SCROLLING_MODE_INFINITE;
+}
+
+export function isVirtualPaging(scrolling: InternalGridOptions['scrolling']): boolean {
+  return isVirtualMode(scrolling) || isInfiniteMode(scrolling);
 }
 
 const getGlobalFormat = (dataType: string): Format | undefined => {
@@ -599,7 +610,6 @@ export default {
 
   focusAndSelectElement(component: ModuleItem, $element: dxElementWrapper): void {
     const isFocused = $element.is(':focus');
-    // @ts-expect-error
     eventsEngine.trigger($element, 'focus');
 
     const isSelectTextOnEditingStart = component.option('editing.selectTextOnEditStart');
@@ -650,12 +660,10 @@ export default {
     return false;
   },
 
-  isVirtualRowRendering(that: OptionsReader): boolean {
+  isVirtualRowRendering(that: ModuleItem): boolean {
     const rowRenderingMode = that.option(ROW_RENDERING_MODE_OPTION);
-    const isVirtualMode = that.option(SCROLLING_MODE_OPTION) === SCROLLING_MODE_VIRTUAL;
-    const isAppendMode = that.option(SCROLLING_MODE_OPTION) === SCROLLING_MODE_INFINITE;
 
-    if (that.option(LEGACY_SCROLLING_MODE) === false && (isVirtualMode || isAppendMode)) {
+    if (that.option(LEGACY_SCROLLING_MODE) === false && isVirtualPaging(that.option('scrolling'))) {
       return true;
     }
 

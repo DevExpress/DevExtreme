@@ -6,8 +6,8 @@ import type { DxEvent } from '@js/events';
 import type { Item as ContextMenuItem, ItemClickEvent } from '@js/ui/context_menu';
 import type { Properties as DataGridProperties } from '@js/ui/data_grid';
 import type { Properties as LoadPanelProperties } from '@js/ui/load_panel';
-import type { dxScrollableOptions, ScrollEventInfo } from '@js/ui/scroll_view/ui.scrollable';
 import type dxScrollable from '@js/ui/scroll_view/ui.scrollable';
+import type { dxScrollableOptions, ScrollEventInfo } from '@js/ui/scroll_view/ui.scrollable';
 import type {
   Column, ColumnsChanges, ColumnTemplateSource, TemplateModel,
 } from '@ts/grids/grid_core/columns_controller/types';
@@ -117,21 +117,16 @@ export interface WatchableOptions {
   update?: RowUpdate;
 }
 
-export interface ViewCellOptions {
+export interface ViewCellOptions extends Pick<ViewRow, 'rowType' | 'rowIndex' | 'key' | 'data' | 'values'> {
   column: Column;
   columnIndex: number;
-  rowType: string;
-  rowIndex?: number;
   isAltRow?: boolean;
   columns?: Column[];
   row?: ViewRow;
-  key?: RowKey;
-  data?: RawItemData;
   value?: unknown;
   oldValue?: unknown;
   displayValue?: unknown;
   text?: string;
-  values?: unknown[];
   /** @architectureLeak data_grid/summary: core renders summary items of group and footer cells */
   summaryItems?: SummaryTextItem[];
   resized?: Column['resizedCallbacks'];
@@ -183,10 +178,11 @@ export interface CellRenderOptions extends Omit<RowRenderOptions, 'columns'> {
 }
 
 export interface ViewRowEvent {
-  event: DxEvent;
+  event: DxEvent<MouseEvent>;
   rowIndex: number;
   rowElement?: DxElement<Element>;
   columns?: Column[];
+  handled?: boolean;
 }
 
 export interface ColumnWidthsOptions {
