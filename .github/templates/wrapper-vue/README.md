@@ -71,7 +71,7 @@ first: when it is present it overrides the TS type, just as in React. For exampl
 | `Date` / `RegExp` | `Date` / `RegExp` |
 | `Array<…>` / `T[]` | `Array` |
 | function type | `Function` |
-| interface, object literal, `Record<…>`, widget options (`dxButtonOptions`), `PositionConfig`, … | `Object` |
+| interface, object literal, `object`, `Record<…>`, widget options (`dxButtonOptions`), `PositionConfig`, … | `Object` |
 | `DataSource` (default import from `devextreme/data/data_source`), `DataSourceOptions` (`devextreme/common/data`), `Store` (`devextreme/data/store`) | `Object` |
 | `null`, `undefined` | *(dropped)* |
 | **top-level** `any`, `unknown`, `template`, `UserDefinedElement`/`DxElement`, a bare type param (`TItem`) | the whole prop becomes **`{}`** |
@@ -98,6 +98,11 @@ become `any`: `keyExpr` gives `(((item: any) => any))`.
 `[Number, String]`.
 
 - The TS members keep `null` and drop only `undefined`.
+- `{ [key: string]: any }` and a bare `object` are written `Record<string, any>`, sorted with
+  the other members. The `| Record<string, any>` appended for a documented object type
+  (next rule) is then not repeated:
+  `[Array, Object, String] as PropType<Array<any> | DataSource | DataSourceOptions | null | Record<string, any> | Store | string>`
+  (VectorMap `layers.dataSource`, `@type object|Store|DataSource|DataSourceOptions|string|Array<any>|null`).
 - Type args of the component's own generics are dropped from event and item types
   (`ItemClickEvent`, not `ItemClickEvent<TItem, TKey>`). For widget-options types they
   become `<any>` (`dxTextBoxOptions<any>`).
