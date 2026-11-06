@@ -96,6 +96,7 @@ import type {
   FocusedCellChangingArgs,
   FocusedRowChangingArgs,
   KeyboardNavigationDataController,
+  KeyboardNavigationRowsViewExtension,
   KeyDownEvent,
   NavigationDirection,
   NavigationElementType,
@@ -3048,7 +3049,8 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
 
 const rowsView = (
   Base: ModuleType<RowsView & EditingRowsViewExtension>,
-): ModuleType<RowsView> => class RowsViewKeyboardExtender extends Base {
+): ModuleType<RowsView & KeyboardNavigationRowsViewExtension> => class RowsViewKeyboardExtender
+  extends Base {
   protected _resizeController!: ResizingController;
 
   protected _rowClick(e: ViewRowEvent): void {
@@ -3112,7 +3114,7 @@ const rowsView = (
     }
   }
 
-  private updateFocusElementTabIndex(
+  public updateFocusElementTabIndex(
     cellElements: dxElementWrapper,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     preventScroll?: boolean,
