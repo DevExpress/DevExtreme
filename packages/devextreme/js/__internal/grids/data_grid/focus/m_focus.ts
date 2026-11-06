@@ -2,9 +2,12 @@ import { equalByValue } from '@js/core/utils/common';
 import { Deferred, type DeferredObj } from '@js/core/utils/deferred';
 import { compileGetter } from '@ts/core/utils/data';
 import type { StoreLoadOptions } from '@ts/data/data_source/types';
+import type { GroupingHelper as CollapsedGroupingHelper } from '@ts/grids/data_grid/grouping/m_grouping_collapsed';
+import type { GroupingHelper } from '@ts/grids/data_grid/grouping/m_grouping_core';
 import type {
   GroupInfoData,
   GroupingDataControllerExtension,
+  GroupingDataSourceAdapter,
   GroupItemData,
 } from '@ts/grids/data_grid/grouping/types';
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
@@ -19,8 +22,10 @@ import type { ModuleType, RowKey } from '@ts/grids/grid_core/types';
 import { isVirtualPaging } from '@ts/grids/grid_core/utils';
 
 import gridCore from '../core';
-import type { GroupingDataSourceAdapter } from '../grouping/m_grouping';
 import { createGroupFilter } from '../utils';
+
+type PagingGroupingHelper = GroupingHelper
+  & Partial<Pick<CollapsedGroupingHelper, 'updatePagingOptions'>>;
 
 const data = (
   Base: ModuleType<DataController & GroupingDataControllerExtension>,
@@ -124,8 +129,9 @@ const data = (
     }
 
     const group = dataSourceAdapter.group();
+    const grouping: PagingGroupingHelper = dataSourceAdapter._grouping;
 
-    if (!dataSourceAdapter._grouping.updatePagingOptions) {
+    if (!grouping.updatePagingOptions) {
       this._calculateGlobalRowIndexByFlatData(key, null, true)
         // eslint-disable-next-line @typescript-eslint/no-misused-promises -- ignores the result
         .done(deferred.resolve)
@@ -178,8 +184,9 @@ const data = (
     const pageSize = dataSourceAdapter.pageSize();
     // eslint-disable-next-line @typescript-eslint/init-declarations -- assigned in the callback
     let groupOffset: number;
+    const grouping: PagingGroupingHelper = dataSourceAdapter._grouping;
 
-    dataSourceAdapter._grouping.updatePagingOptions(
+    grouping.updatePagingOptions?.(
       { skip: 0, take: Number.MAX_SAFE_INTEGER },
       (groupInfo: GroupInfoData, totalOffset: number) => {
         if (equalByValue(groupInfo.path, groupPath)) {
