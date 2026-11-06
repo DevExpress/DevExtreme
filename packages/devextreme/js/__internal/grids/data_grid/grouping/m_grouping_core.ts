@@ -7,13 +7,13 @@ import type { LoadOperation, OperationTypes } from '@ts/grids/grid_core/data_sou
 import gridCoreUtils, { isVirtualPaging } from '@ts/grids/grid_core/utils';
 
 import gridCore from '../core';
-import type { GroupingDataSourceAdapter } from './m_grouping';
 import type {
   ForeachGroupsCallback,
   ForeachGroupsResult,
   GroupInfo,
   GroupInfoData,
   GroupInfoLevel,
+  GroupingDataSourceAdapter,
   GroupingLoadOperation,
   GroupItemData,
 } from './types';
