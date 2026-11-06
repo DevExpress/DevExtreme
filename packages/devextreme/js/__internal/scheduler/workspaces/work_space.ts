@@ -167,11 +167,19 @@ interface ScrollSync {
   sidebar: ScrollToFunc;
 }
 
+export interface SelectedCellsClickResult {
+  startDate: Date;
+  endDate: Date;
+  startDateUTC?: Date;
+  endDateUTC?: Date;
+  allDay?: boolean;
+}
+
 interface NormalizedCellData {
   startDate: Date;
   endDate: Date;
-  startDateUTC?: Date | false | undefined;
-  endDateUTC?: Date | false | undefined;
+  startDateUTC?: Date;
+  endDateUTC?: Date;
   groups?: ViewCellData['groups'];
   groupIndex: ViewCellData['groupIndex'];
   allDay?: ViewCellData['allDay'];
@@ -317,7 +325,7 @@ export interface WorkspaceOptionsInternal extends WidgetProperties<SchedulerWork
   schedulerHeight: string | number | undefined;
   schedulerWidth: string | number | undefined;
   allDayPanelMode: AllDayPanelMode;
-  onSelectedCellsClick: (result: object, groups: GroupValues) => void;
+  onSelectedCellsClick: (result: SelectedCellsClickResult, groups: GroupValues) => void;
   renderAppointments: () => void;
   onShowAllDayPanel: (isVisible: boolean) => void;
   getHeaderHeight?: (() => number);
@@ -1255,13 +1263,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     const firstCellData = selectedCells[0];
     const lastCellData = selectedCells[selectedCells.length - 1];
 
-    const result: {
-      startDate: Date;
-      endDate: Date;
-      startDateUTC: NormalizedCellData['startDateUTC'];
-      endDateUTC: NormalizedCellData['endDateUTC'];
-      allDay?: NormalizedCellData['allDay'];
-    } = {
+    const result: SelectedCellsClickResult = {
       startDate: firstCellData.startDate,
       endDate: lastCellData.endDate,
       startDateUTC: firstCellData.startDateUTC,
