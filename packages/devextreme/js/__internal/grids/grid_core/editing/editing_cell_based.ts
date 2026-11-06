@@ -1,6 +1,5 @@
 /* eslint-disable max-classes-per-file */
 import { name as clickEventName } from '@js/common/core/events/click';
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import holdEvent from '@js/common/core/events/hold';
 import pointerEvents from '@js/common/core/events/pointer';
 import { addNamespace } from '@js/common/core/events/utils';
@@ -14,6 +13,7 @@ import { Deferred, when } from '@js/core/utils/deferred';
 import { isElementInDom } from '@js/core/utils/dom';
 import { isDefined, isString } from '@js/core/utils/type';
 import type { DxEvent } from '@js/events';
+import eventsEngine from '@ts/events/core/events_engine';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import type {
   GeneratedItem,

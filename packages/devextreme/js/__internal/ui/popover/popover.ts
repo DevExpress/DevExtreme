@@ -2,7 +2,6 @@ import type { Position } from '@js/common';
 import type { AnimationConfig } from '@js/common/core/animation';
 import positionUtils from '@js/common/core/animation/position';
 import { move } from '@js/common/core/animation/translator';
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import { addNamespace, normalizeKeyName } from '@js/common/core/events/utils';
 import type { DeepPartial } from '@js/core';
 import registerComponent from '@js/core/component_registrator';
@@ -25,6 +24,7 @@ import { current, isMaterial, isMaterialBased } from '@js/ui/themes';
 import errors from '@js/ui/widget/ui.errors';
 import type { PositionResult } from '@ts/common/core/animation/types';
 import type { OptionChanged } from '@ts/core/widget/types';
+import eventsEngine from '@ts/events/core/events_engine';
 import type { InternalPositionConfig, OverlayInternalProperties } from '@ts/ui/overlay/overlay';
 import type {
   DisplaySide,
@@ -110,7 +110,7 @@ class Popover<
 
   _$arrow!: dxElementWrapper;
 
-  _documentEscapeKeyHandler!: (e: KeyboardEvent) => void;
+  _documentEscapeKeyHandler!: (e: DxEvent<KeyboardEvent>) => void;
 
   _timeouts!: Record<string, ReturnType<typeof setTimeout>>;
 
@@ -305,7 +305,7 @@ class Popover<
     });
 
     eventsEngine.off($overlayContent, hoverOutEventName);
-    eventsEngine.on($overlayContent, hoverOutEventName, (e: PointerEvent | MouseEvent) => {
+    eventsEngine.on($overlayContent, hoverOutEventName, (e: DxEvent<PointerEvent | MouseEvent>) => {
       const { target } = this.option();
       const { relatedTarget } = e;
 
@@ -411,7 +411,6 @@ class Popover<
     const isSelector = isString(target);
 
     if (isSelector) {
-      // @ts-expect-error eventsEngine typing
       eventsEngine.off(domAdapter.getDocument(), eventName, target, this[EVENT_HANDLER_NAME]);
     } else {
       eventsEngine.off(getPublicElement($(target)), eventName, this[EVENT_HANDLER_NAME]);

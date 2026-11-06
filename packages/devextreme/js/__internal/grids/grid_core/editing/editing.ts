@@ -1,5 +1,4 @@
 /* eslint-disable max-classes-per-file */
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import { removeEvent } from '@js/common/core/events/remove';
 import { addNamespace } from '@js/common/core/events/utils';
 import messageLocalization from '@js/common/core/localization/message';
@@ -32,6 +31,7 @@ import { current, isFluent } from '@js/ui/themes';
 import { Deferred, fromPromise, when } from '@ts/core/utils/deferred';
 import domUtils from '@ts/core/utils/dom';
 import type Store from '@ts/data/abstract_store';
+import eventsEngine from '@ts/events/core/events_engine';
 import type { AdaptiveColumnsViewController } from '@ts/grids/grid_core/adaptivity/adaptivity';
 import { HIDDEN_COLUMNS_WIDTH } from '@ts/grids/grid_core/adaptivity/const';
 import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/columns_controller';

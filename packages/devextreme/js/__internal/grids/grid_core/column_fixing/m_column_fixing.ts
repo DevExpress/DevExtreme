@@ -2,7 +2,6 @@
 // TODO Move DataGrid's summary methods to the DataGrid
 // TODO Move virtual scrolling related methods to the virtual_scrolling
 import { move } from '@js/common/core/animation/translator';
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import { name as wheelEventName } from '@js/common/core/events/core/wheel';
 import messageLocalization from '@js/common/core/localization/message';
 import type { dxElementWrapper } from '@js/core/renderer';
@@ -16,6 +15,8 @@ import { getOuterWidth } from '@js/core/utils/size';
 import { setWidth } from '@js/core/utils/style';
 import { isDefined } from '@js/core/utils/type';
 import Scrollable from '@js/ui/scroll_view/ui.scrollable';
+import type { EngineEvent } from '@ts/events/core/events_engine';
+import eventsEngine from '@ts/events/core/events_engine';
 import type { DataChange } from '@ts/grids/grid_core/data_controller/types';
 import type { EditorFactory } from '@ts/grids/grid_core/editor_factory/editor_factory';
 import { CLASSES as MASTER_DETAIL_CLASSES } from '@ts/grids/grid_core/master_detail/const';
@@ -763,7 +764,7 @@ const rowsView = (
             scrollable.scrollTo({ top: scrollTop });
           }, scrollDelay);
         });
-        eventsEngine.on($content, wheelEventName, (e) => {
+        eventsEngine.on($content, wheelEventName, (e: EngineEvent & { delta: number }) => {
           const $nearestScrollable = $(e.target).closest('.dx-scrollable');
           let shouldScroll = false;
 

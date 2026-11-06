@@ -1,6 +1,5 @@
 /* eslint-disable max-classes-per-file */
 import { name as clickEventName } from '@js/common/core/events/click';
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import pointerEvents from '@js/common/core/events/pointer';
 import {
   addNamespace,
@@ -26,6 +25,7 @@ import type { DxEvent } from '@js/events';
 import * as accessibility from '@js/ui/shared/accessibility';
 import { isElementInDom } from '@ts/core/utils/dom';
 import { focused } from '@ts/core/utils/selectors';
+import eventsEngine from '@ts/events/core/events_engine';
 import type { KeyboardKeyDownEvent } from '@ts/events/core/keyboard_processor';
 import type { AdaptiveColumnsViewController } from '@ts/grids/grid_core/adaptivity/adaptivity';
 import { CLASSES as ADAPTIVITY_CLASSES } from '@ts/grids/grid_core/adaptivity/const';
@@ -268,7 +268,6 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
 
       if (!$element.closest($focusedCell).length) {
         event.preventDefault();
-        // @ts-expect-error eventsEngine.trigger is not fully typed
         eventsEngine.trigger($focusedCell, 'focus');
       }
     }
@@ -461,12 +460,14 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     const $rowsView = this._getRowsViewElement();
     const clickSelector = `.${VIEW_CLASSES.row} > td, .${VIEW_CLASSES.row}`;
 
-    eventsEngine.on(
-      $rowsView,
-      addNamespace(pointerEventName, KEYBOARD_NAVIGATION_NAMESPACE),
-      clickSelector,
-      this._pointerEventAction,
-    );
+    if (this._pointerEventAction) {
+      eventsEngine.on(
+        $rowsView,
+        addNamespace(pointerEventName, KEYBOARD_NAVIGATION_NAMESPACE),
+        clickSelector,
+        this._pointerEventAction,
+      );
+    }
   }
 
   private initPointerEventHandler(): void {
@@ -1370,7 +1371,6 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
       setTimeout(() => { this._editingController.saveEditData(); });
       d.resolve();
     } else {
-      // @ts-expect-error eventsEngine.trigger is not fully typed
       eventsEngine.trigger($(event.target), 'change');
       // eslint-disable-next-line @typescript-eslint/no-misused-promises
       this._closeEditCell().always(d.resolve);
@@ -1906,7 +1906,6 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
         if (preventScroll) {
           ($focusElement.get(0) as HTMLElement | undefined)?.focus({ preventScroll });
         } else {
-          // @ts-expect-error eventsEngine.trigger is not fully typed
           eventsEngine.trigger($focusElement, 'focus');
         }
       }
@@ -1989,7 +1988,6 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
           this._focusInteractiveElement.bind(this)($cell);
         }
       } else {
-        // @ts-expect-error eventsEngine.trigger is not fully typed
         eventsEngine.trigger($cell, 'focus');
       }
     });
@@ -2070,7 +2068,6 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     if (!isUpArrow) {
       this._editorFactory.loseFocus();
       this.applyTabIndexToElement($rowsViewElement);
-      // @ts-expect-error eventsEngine.trigger is not fully typed
       eventsEngine.trigger($rowsViewElement, 'focus');
     } else {
       // @ts-expect-error getRow() is typed as possibly undefined
@@ -2558,11 +2555,9 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     }
 
     ($inputElement as HTMLInputElement).select?.();
-    // @ts-expect-error eventsEngine.trigger is not fully typed
     eventsEngine.trigger($input, keyDownEvent);
 
     if (!keyDownEvent.isDefaultPrevented()) {
-      // @ts-expect-error eventsEngine.trigger is not fully typed
       eventsEngine.trigger($input, keyPressEvent);
       if (!keyPressEvent.isDefaultPrevented()) {
         const timeout = browser.mozilla ? 25 : 0; // T882996
@@ -2573,10 +2568,8 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
           const $widgetContainer = $input.closest(`.${CLASSES.widget}`);
           eventsEngine.off($widgetContainer, 'focusout'); // for NumberBox to save entered symbol
           eventsEngine.one($widgetContainer, 'focusout', () => {
-            // @ts-expect-error eventsEngine.trigger is not fully typed
             eventsEngine.trigger($input, 'change');
           });
-          // @ts-expect-error eventsEngine.trigger is not fully typed
           eventsEngine.trigger($input, inputEvent);
         }, timeout);
       }

@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/method-signature-style */
 import positionUtils from '@js/common/core/animation/position';
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import { addNamespace, normalizeKeyName } from '@js/common/core/events/utils/index';
 import domAdapter from '@js/core/dom_adapter';
 import type { dxElementWrapper } from '@js/core/renderer';
@@ -15,6 +14,7 @@ import {
 } from '@js/core/utils/size';
 import type { DxEvent } from '@js/events';
 import EditorFactoryMixin from '@js/ui/shared/ui.editor_factory_mixin';
+import eventsEngine from '@ts/events/core/events_engine';
 import type { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/column_headers';
 import type {
   ColumnsResizerViewController,
@@ -342,7 +342,7 @@ export class EditorFactory extends ViewControllerWithMixin {
 
     if ($container) {
       // T179518
-      eventsEngine.on($container, addNamespace('keydown', MODULE_NAMESPACE), (e) => {
+      eventsEngine.on($container, addNamespace('keydown', MODULE_NAMESPACE), (e: DxEvent<KeyboardEvent>) => {
         if (normalizeKeyName(e) === 'tab') {
           this._updateFocusHandler(e);
         }

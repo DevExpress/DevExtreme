@@ -1,5 +1,4 @@
 import { name as clickEventName } from '@js/common/core/events/click';
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import { removeEvent } from '@js/common/core/events/remove';
 import { addNamespace } from '@js/common/core/events/utils/index';
 import messageLocalization from '@js/common/core/localization/message';
@@ -16,6 +15,7 @@ import { isDefined } from '@js/core/utils/type';
 import type { Properties as FormProperties, SimpleItemTemplateData } from '@js/ui/form';
 import Form from '@js/ui/form';
 import { isMaterial } from '@js/ui/themes';
+import eventsEngine from '@ts/events/core/events_engine';
 import type { Column, WithCellValueCalculator } from '@ts/grids/grid_core/columns_controller/types';
 import { isCellBasedEditMode, isFormBasedEditMode } from '@ts/grids/grid_core/editing/editing_utils';
 import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
@@ -168,7 +168,6 @@ export class AdaptiveColumnsViewController extends modules.ViewController {
     const { column } = item;
     const focusAction = this.createAction(() => {
       if (this._editingController.isEditing()) {
-        // @ts-expect-error eventsEngine.trigger is not fully typed
         eventsEngine.trigger($container, clickEventName);
       }
     });

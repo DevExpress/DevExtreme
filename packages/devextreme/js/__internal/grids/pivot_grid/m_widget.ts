@@ -1,5 +1,4 @@
 import { name as clickEventName } from '@js/common/core/events/click';
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import { addNamespace } from '@js/common/core/events/utils/index';
 import localizationMessage from '@js/common/core/localization/message';
 import registerComponent from '@js/core/component_registrator';
@@ -26,6 +25,7 @@ import Popup from '@js/ui/popup/ui.popup';
 import { restoreFocus, saveFocusedElementInfo } from '@js/ui/shared/accessibility';
 import { current, isGeneric } from '@js/ui/themes';
 import Widget from '@ts/core/widget/widget';
+import eventsEngine from '@ts/events/core/events_engine';
 import gridCoreUtils from '@ts/grids/grid_core/utils';
 
 import { ChartIntegrationMixin } from './chart_integration/m_chart_integration';

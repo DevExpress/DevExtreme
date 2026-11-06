@@ -1,9 +1,9 @@
 import { name as clickEventName } from '@js/common/core/events/click';
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import messageLocalization from '@js/common/core/localization/message';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { each } from '@js/core/utils/iterator';
+import eventsEngine from '@ts/events/core/events_engine';
 import type { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/column_headers';
 import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/columns_controller';
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';

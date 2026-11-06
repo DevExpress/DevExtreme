@@ -1,5 +1,4 @@
 import type { DefaultOptionsRule } from '@js/common';
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import { addNamespace, isTouchEvent, normalizeKeyName } from '@js/common/core/events/utils/index';
 import messageLocalization from '@js/common/core/localization/message';
 import registerComponent from '@js/core/component_registrator';
@@ -20,6 +19,7 @@ import ProgressBar from '@js/ui/progress_bar';
 import { current, isFluent, isMaterial } from '@js/ui/themes';
 import { ICON_CLASS } from '@ts/core/utils/icon';
 import type { OptionChanged } from '@ts/core/widget/types';
+import eventsEngine from '@ts/events/core/events_engine';
 import Editor from '@ts/ui/editor/editor';
 import { CustomChunksFileUploadStrategy } from '@ts/ui/file_uploader/file_upload_strategy.chunks.custom';
 import { DefaultChunksFileUploadStrategy } from '@ts/ui/file_uploader/file_upload_strategy.chunks.default';
@@ -347,7 +347,7 @@ class FileUploader extends Editor<FileUploaderProperties> {
       this._$fileInput = renderFileUploaderInput();
 
       eventsEngine.on(this._$fileInput, 'change', () => { this._inputChangeHandler(); });
-      eventsEngine.on(this._$fileInput, 'click', (e: Event): boolean | undefined => {
+      eventsEngine.on(this._$fileInput, 'click', (e: DxEvent): boolean | undefined => {
         e.stopPropagation();
 
         this._resetInputValue();
@@ -1007,7 +1007,6 @@ class FileUploader extends Editor<FileUploaderProperties> {
     }
 
     this._isCustomClickEvent = true;
-    // @ts-expect-error update events_engine interface to support trigger method
     eventsEngine.trigger(this._$fileInput, 'click');
     this._isCustomClickEvent = false;
   }
@@ -1027,7 +1026,7 @@ class FileUploader extends Editor<FileUploaderProperties> {
     eventsEngine.on(
       $target,
       addNamespace(keyUpEventName, DIALOG_TRIGGER_EVENT_NAMESPACE),
-      (e: KeyboardEvent) => {
+      (e: DxEvent<KeyboardEvent>) => {
         const normalizedKeyName = normalizeKeyName(e);
 
         if (normalizedKeyName === ENTER_KEY || normalizedKeyName === SPACE_KEY) {

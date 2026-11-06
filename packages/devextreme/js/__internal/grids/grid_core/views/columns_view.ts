@@ -1,5 +1,4 @@
 import { name as clickEventName } from '@js/common/core/events/click';
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import { name as dblclickEvent } from '@js/common/core/events/double_click';
 import pointerEvents from '@js/common/core/events/pointer';
 import { removeEvent } from '@js/common/core/events/remove';
@@ -29,6 +28,7 @@ import { getWindow, hasWindow } from '@js/core/utils/window';
 import type { DxEvent } from '@js/events';
 import type { ActionEvent } from '@ts/core/action';
 import supportUtils from '@ts/core/utils/support';
+import eventsEngine from '@ts/events/core/events_engine';
 import type { AdaptiveColumnsViewController } from '@ts/grids/grid_core/adaptivity/adaptivity';
 import { HIDDEN_COLUMNS_WIDTH } from '@ts/grids/grid_core/adaptivity/const';
 import type { ColumnChooserController, ColumnChooserView } from '@ts/grids/grid_core/column_chooser/column_chooser';

@@ -1,5 +1,4 @@
 import { Guid } from '@js/common';
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import ajax from '@js/core/utils/ajax';
@@ -11,6 +10,7 @@ import { isDefined, isEmptyObject, isFunction } from '@js/core/utils/type';
 import { getWindow } from '@js/core/utils/window';
 import type { Options } from '@js/file_management/remote_provider';
 import type UploadInfo from '@js/file_management/upload_info';
+import eventsEngine from '@ts/events/core/events_engine';
 import type FileSystemItem from '@ts/file_management/file_system_item';
 import FileSystemProviderBase from '@ts/file_management/provider_base';
 
@@ -200,7 +200,6 @@ class RemoteFileSystemProvider extends FileSystemProviderBase {
     // @ts-expect-error ts-error
     $form.appendTo('body');
 
-    // @ts-expect-error ts-error
     eventsEngine.trigger($form, 'submit');
 
     // eslint-disable-next-line no-restricted-globals

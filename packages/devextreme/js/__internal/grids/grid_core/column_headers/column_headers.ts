@@ -1,4 +1,3 @@
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import messageLocalization from '@js/common/core/localization/message';
 import domAdapter from '@js/core/dom_adapter';
 import type { dxElementWrapper } from '@js/core/renderer';
@@ -10,6 +9,7 @@ import { getHeight } from '@js/core/utils/size';
 import { isDefined, isString } from '@js/core/utils/type';
 import type { DxEvent } from '@js/events';
 import type { ItemClickEvent } from '@js/ui/context_menu';
+import eventsEngine from '@ts/events/core/events_engine';
 import type {
   Column, ColumnsChanges, ColumnTemplateSource, TemplateModel,
 } from '@ts/grids/grid_core/columns_controller/types';

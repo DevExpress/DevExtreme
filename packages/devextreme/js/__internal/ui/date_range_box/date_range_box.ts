@@ -1,5 +1,4 @@
 import type { DateLike, Position } from '@js/common';
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import { addNamespace } from '@js/common/core/events/utils/index';
 import messageLocalization from '@js/common/core/localization/message';
 import registerComponent from '@js/core/component_registrator';
@@ -19,6 +18,7 @@ import type { Properties } from '@js/ui/date_range_box';
 import { current, isFluent, isMaterial } from '@js/ui/themes';
 import { FunctionTemplate } from '@ts/core/templates/function_template';
 import type { OptionChanged } from '@ts/core/widget/types';
+import eventsEngine from '@ts/events/core/events_engine';
 import {
   getDeserializedDate, isSameDateArrays, isSameDates, sortDatesArray,
 } from '@ts/ui/date_range_box/date_range.utils';
@@ -483,7 +483,6 @@ class DateRangeBox extends Editor<DateRangeBoxProperties> {
       this.focus();
     }
 
-    // @ts-expect-error the trigger method is not declared on EventsEngineType
     eventsEngine.trigger($(this.startDateField()), 'input');
   }
 

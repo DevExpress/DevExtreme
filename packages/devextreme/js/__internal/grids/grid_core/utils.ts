@@ -1,6 +1,5 @@
 // @ts-check
 
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import dateLocalization from '@js/common/core/localization/date';
 import type { GroupDescriptor } from '@js/common/data';
 import DataSource from '@js/common/data/data_source';
@@ -28,6 +27,7 @@ import { isNumeric } from '@ts/core/utils/type';
 import type Widget from '@ts/core/widget/widget';
 import type { NormalizedDataSourceOptions, StoreLoadOptions } from '@ts/data/data_source/types';
 import type { SortingInfo } from '@ts/data/utils';
+import eventsEngine from '@ts/events/core/events_engine';
 import type {
   Column,
   ColumnsChanges,
@@ -610,7 +610,6 @@ export default {
 
   focusAndSelectElement(component: ModuleItem, $element: dxElementWrapper): void {
     const isFocused = $element.is(':focus');
-    // @ts-expect-error
     eventsEngine.trigger($element, 'focus');
 
     const isSelectTextOnEditingStart = component.option('editing.selectTextOnEditStart');
