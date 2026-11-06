@@ -969,7 +969,7 @@ export const focusDataControllerExtender = <
     for (const keyField of dataSourceKey) {
       // @ts-expect-error row keys are untyped; a compound key is an object
       const keyPart: ScalarFilterValue = key[keyField];
-      if (keyPart) {
+      if (isDefined(keyPart)) {
         if (filter.length > 0) {
           filter.push('and');
         }

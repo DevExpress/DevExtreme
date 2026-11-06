@@ -196,6 +196,45 @@ describe('Focus — navigating to the focused row', () => {
     });
   });
 
+  describe.each([false, true])('composite key with a 0 part, remoteOperations: %s', (remoteOperations) => {
+    // Store order differs from the grid order (by name: 2/5, 1/1, 3/3, 2/0, 0/1, 0/0), and each
+    // 0-part key shares its other part with a row stored before it.
+    const ZERO_KEY_DATA = [
+      { a: 2, b: 5, name: 'A' },
+      { a: 1, b: 1, name: 'B' },
+      { a: 0, b: 1, name: 'E' },
+      { a: 2, b: 0, name: 'D' },
+      { a: 0, b: 0, name: 'F' },
+      { a: 3, b: 3, name: 'C' },
+    ];
+
+    it.each([
+      {
+        title: 'the first part is 0', key: { a: 0, b: 1 }, pageIndex: 2, focusedRowIndex: 0,
+      },
+      {
+        title: 'the second part is 0', key: { a: 2, b: 0 }, pageIndex: 1, focusedRowIndex: 1,
+      },
+      {
+        title: 'every part is 0', key: { a: 0, b: 0 }, pageIndex: 2, focusedRowIndex: 1,
+      },
+    ])('moves the page to the focused row when $title', async ({ key, pageIndex, focusedRowIndex }) => {
+      const { instance } = await createDataGrid({
+        dataSource: ZERO_KEY_DATA,
+        keyExpr: ['a', 'b'],
+        remoteOperations,
+        focusedRowEnabled: true,
+        focusedRowKey: key,
+        columns: ['a', 'b', { dataField: 'name', sortOrder: 'asc' }],
+        paging: { pageSize: 2 },
+      });
+      await flushAsync();
+
+      expect(instance.pageIndex()).toBe(pageIndex);
+      expect(instance.option('focusedRowIndex')).toBe(focusedRowIndex);
+    });
+  });
+
   describe('grouped data', () => {
     it('expands the group holding the focused row and moves to its page', async () => {
       const { instance } = await createDataGrid({
