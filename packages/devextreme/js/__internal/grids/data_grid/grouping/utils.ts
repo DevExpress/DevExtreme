@@ -1,12 +1,15 @@
+import { errors as dataErrors } from '@js/common/data/errors';
 import storeHelper from '@js/common/data/store_helper';
 import { keysEqual, normalizeSortingInfo } from '@js/common/data/utils';
 import { toComparable } from '@js/core/utils/data';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred } from '@js/core/utils/deferred';
+import { extend } from '@js/core/utils/extend';
 import { isDefined, isString } from '@js/core/utils/type';
 import type { StoreLoadOptions } from '@ts/data/data_source/types';
 import type { SortingInfo, SortingSelector } from '@ts/data/utils';
 import type { ProcessedItem } from '@ts/grids/grid_core/data_controller/types';
+import type DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/data_source_adapter';
 import type { LoadOperation, RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
 import type { DataFilter } from '@ts/grids/grid_core/filter/types';
 import { combineFilters } from '@ts/grids/grid_core/filter/utils';
@@ -423,6 +426,38 @@ export function makeDataDeferred(options: LoadOperation): DeferredObj<RawItemDat
     options.data = Deferred<RawItemData[]>();
   }
   return options.data;
+}
+
+export function getLoadedGroupItems(options: Pick<LoadOperation, 'data'>): GroupItemData[] {
+  // @ts-expect-error grouped load results hold group items
+  return options.data;
+}
+
+export function loadGroupTotalCount(
+  dataSourceAdapter: DataSourceAdapter,
+  options: StoreLoadOptions,
+): DeferredObj<number> {
+  const d = Deferred<number>();
+  const isGrouping = getGroupLevelCount(options.group) > 0;
+  // @ts-expect-error StoreLoadOptions.group is typed without null
+  const loadOptions: StoreLoadOptions = extend({
+    skip: 0, take: 1, requireGroupCount: isGrouping, requireTotalCount: !isGrouping,
+  }, options, { group: isGrouping ? options.group : null });
+
+  dataSourceAdapter.customLoader.load(loadOptions).done(({ extra }) => {
+    const count = extra && (isGrouping ? extra.groupCount : extra.totalCount);
+
+    if (count === undefined || !isFinite(count)) {
+      // @ts-expect-error badly typed Deferred.reject
+      d.reject(dataErrors.Error(isGrouping ? 'E4022' : 'E4021'));
+      return;
+    }
+    d.resolve(count);
+  }).fail((...args: unknown[]) => {
+    // @ts-expect-error badly typed Deferred.reject
+    d.reject(...args);
+  });
+  return d;
 }
 
 export function processDataItem(state: GroupItemsProcessingState): void {

@@ -6,7 +6,6 @@ import { extend } from '@js/core/utils/extend';
 import errors from '@js/ui/widget/ui.errors';
 import type { StoreLoadOptions } from '@ts/data/data_source/types';
 import type { SummaryDataSourceAdapterExtension } from '@ts/grids/data_grid/summary/types';
-import type DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/data_source_adapter';
 import type { LoadOperation, OperationTypes, RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
 import { combineFilters } from '@ts/grids/grid_core/filter/utils';
 import { isVirtualPaging } from '@ts/grids/grid_core/utils';
@@ -32,45 +31,13 @@ import {
   fillSkipTakeInExpandedInfo,
   getContinuationGroupCount,
   getGroupLevelCount,
+  getLoadedGroupItems,
   getTotalOffset,
   isDataDeferred,
   isGroupExpanded,
+  loadGroupTotalCount,
   makeDataDeferred,
 } from './utils';
-
-const loadGroupTotalCount = function loadGroupTotalCount(
-  dataSourceAdapter: DataSourceAdapter,
-  options: StoreLoadOptions,
-): DeferredObj<number> {
-  const d = Deferred<number>();
-  const isGrouping = getGroupLevelCount(options.group) > 0;
-  // @ts-expect-error StoreLoadOptions.group is typed without null
-  const loadOptions: StoreLoadOptions = extend({
-    skip: 0, take: 1, requireGroupCount: isGrouping, requireTotalCount: !isGrouping,
-  }, options, { group: isGrouping ? options.group : null });
-
-  dataSourceAdapter.customLoader.load(loadOptions).done(({ extra }) => {
-    const count = extra && (isGrouping ? extra.groupCount : extra.totalCount);
-
-    if (count === undefined || !isFinite(count)) {
-      // @ts-expect-error badly typed Deferred.reject
-      d.reject(dataErrors.Error(isGrouping ? 'E4022' : 'E4021'));
-      return;
-    }
-    d.resolve(count);
-  }).fail((...args: unknown[]) => {
-    // @ts-expect-error badly typed Deferred.reject
-    d.reject(...args);
-  });
-  return d;
-};
-
-const getLoadedGroupItems = function getLoadedGroupItems(
-  options: Pick<LoadOperation, 'data'>,
-): GroupItemData[] {
-  // @ts-expect-error grouped load results hold group items
-  return options.data;
-};
 
 export class GroupingHelper extends GroupingHelperCore {
   private foreachExpandedGroups(
