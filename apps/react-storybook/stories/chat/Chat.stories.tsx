@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect, useMemo } from 'react';
+import React, { useState, useCallback, useEffect, useMemo, useRef } from 'react';
 import { Chat, ChatTypes } from 'devextreme-react/chat'
 import { Button, Toast } from 'devextreme-react';
 import type { Meta, StoryObj } from '@storybook/react-webpack5';
@@ -16,11 +16,18 @@ import {
     userRequest,
     regenerationMessage, 
     assistant,
+    toolCallsUser,
+    toolCallsAssistant,
+    suggestionCards,
+    systemPrompt,
+    getAIResponse,
+    type ModelMessage,
 } from './data';
 import { Popup, ToolbarItem } from 'devextreme-react/popup';
 import HTMLReactParser from 'html-react-parser';
 
 import './styles.css';
+import { Toolbar as ToolCallsToolbar, Item as ToolCallsToolbarItem } from 'devextreme-react/toolbar';
 import { Guid } from 'devextreme-react/cjs/common';
 import { Message } from 'devextreme/artifacts/npm/devextreme/ui/chat';
 import type { ItemClickEvent as ButtonGroupItemClickEvent, Item as ButtonGroupItem } from 'devextreme/ui/button_group';
@@ -1101,6 +1108,195 @@ export const Suggestions: Story = {
                     onMessageEntered={onMessageEntered}
                     suggestions={suggestions}
                 />
+            </div>
+        );
+    },
+};
+
+interface ToolCallsStoryArgs {
+    expandAll: boolean;
+}
+
+const ALERT_TIMEOUT = 1000 * 60;
+
+type ToolCallsMessage = ChatTypes.Message;
+
+const getErrorMessage = (error: unknown): string => {
+    if (error instanceof Error) return error.message;
+    if (typeof error === 'string') return error;
+
+    return 'Unknown error';
+};
+
+// The messages of the AI service (the first one is the system prompt) are kept apart from the Chat messages
+const createHistory = (): ModelMessage[] => [{ role: 'system', content: systemPrompt }];
+
+export const ToolCallsVisualization: StoryObj<ToolCallsStoryArgs> = {
+    name: 'Tool Calls Visualization',
+    args: {
+        expandAll: false,
+    },
+    argTypes: {
+        expandAll: { name: 'toolCallOptions.expandAll', control: 'boolean' },
+    },
+    render: ({ expandAll }) => {
+        const storeRef = useRef<ToolCallsMessage[]>([]);
+        const historyRef = useRef<ModelMessage[]>(createHistory());
+        const [alerts, setAlerts] = useState<ChatTypes.Alert[]>([]);
+        const [typingUsers, setTypingUsers] = useState<ChatTypes.User[]>([]);
+        const [busy, setBusy] = useState(false);
+        const busyRef = useRef(false);
+        const cardRef = useRef<HTMLDivElement>(null);
+        const wasBusyRef = useRef(false);
+
+        useEffect(() => {
+            const messageBox = cardRef.current?.querySelector('.dx-chat-messagebox');
+
+            // inert closes the keyboard too: pointer-events alone leaves Enter working in the focused input
+            messageBox?.toggleAttribute('inert', busy);
+
+            if (wasBusyRef.current && !busy) {
+                messageBox?.querySelector('textarea')?.focus();
+            }
+
+            wasBusyRef.current = busy;
+        }, [busy]);
+
+        const dataSource = useMemo(() => new DataSource({
+            store: new CustomStore({
+                key: 'id',
+                load: () => Promise.resolve([...storeRef.current]),
+                insert: (message: ToolCallsMessage) => {
+                    storeRef.current.push(message);
+
+                    return Promise.resolve(message);
+                },
+            }),
+            paginate: false,
+        }), []);
+
+        const pushMessage = useCallback((message: ToolCallsMessage) => {
+            dataSource.store().push([{ type: 'insert', data: message }]);
+        }, [dataSource]);
+
+        const showError = useCallback((message: string) => {
+            setAlerts([{ message }]);
+            setTimeout(() => setAlerts([]), ALERT_TIMEOUT);
+        }, []);
+
+        const sendToAI = useCallback(async (text: string) => {
+            const history = historyRef.current.length;
+
+            busyRef.current = true;
+            setBusy(true);
+            historyRef.current.push({ role: 'user', content: text });
+            setTypingUsers([toolCallsAssistant]);
+
+            try {
+                const { text: answer, toolCalls } = await getAIResponse(historyRef.current);
+
+                historyRef.current.push({ role: 'assistant', content: answer });
+
+                pushMessage({
+                    id: Date.now(),
+                    timestamp: new Date(),
+                    author: toolCallsAssistant,
+                    text: answer,
+                    ...(toolCalls.length ? { toolCalls } : {}),
+                });
+            } catch (error) {
+                historyRef.current.length = history;
+                showError(getErrorMessage(error));
+            } finally {
+                setTypingUsers([]);
+                busyRef.current = false;
+                setBusy(false);
+            }
+        }, [pushMessage, showError]);
+
+        const onMessageEntered = useCallback(({ message }: { message: ToolCallsMessage }) => {
+            if (busyRef.current) {
+                return;
+            }
+
+            pushMessage({ id: Date.now(), ...message });
+
+            if (!alerts.length) {
+                sendToAI(message.text ?? '');
+            }
+        }, [pushMessage, sendToAI, alerts.length]);
+
+        const sendSuggestion = useCallback((prompt: string) => {
+            if (busyRef.current) {
+                return;
+            }
+
+            pushMessage({ id: Date.now(), timestamp: new Date(), author: toolCallsUser, text: prompt });
+
+            if (!alerts.length) {
+                sendToAI(prompt);
+            }
+        }, [pushMessage, sendToAI, alerts.length]);
+
+        const clear = useCallback(() => {
+            storeRef.current.length = 0;
+            historyRef.current = createHistory();
+            setAlerts([]);
+            setTypingUsers([]);
+            dataSource.reload();
+        }, [dataSource]);
+
+        const renderEmptyView = useCallback(() => (
+            <div>
+                <div className="dx-chat-messagelist-empty-message">Chat is Empty</div>
+                <div className="dx-chat-messagelist-empty-prompt">Click a tile below to call a function.</div>
+                <div className="chat-suggestion-cards">
+                    {suggestionCards.map((card) => (
+                        <button
+                            key={card.title}
+                            type="button"
+                            className="chat-suggestion-card"
+                            onClick={() => sendSuggestion(card.prompt)}
+                        >
+                            <div className="chat-suggestion-card-title">{card.title}</div>
+                            <div className="chat-suggestion-card-prompt">{card.description}</div>
+                        </button>
+                    ))}
+                </div>
+            </div>
+        ), [sendSuggestion]);
+
+        return (
+            <div className="tool-calls-demo">
+                <div className="ai-chat-card" ref={cardRef}>
+                    <ToolCallsToolbar>
+                        <ToolCallsToolbarItem location="before" text="AI Assistant" cssClass="ai-chat-title" />
+                        <ToolCallsToolbarItem location="after">
+                            <Button
+                                icon="clearhistory"
+                                stylingMode="text"
+                                hint="Clear chat"
+                                disabled={busy}
+                                onClick={clear}
+                            />
+                        </ToolCallsToolbarItem>
+                    </ToolCallsToolbar>
+                    <Chat
+                        className={busy ? 'chat-disabled' : undefined}
+                        user={toolCallsUser}
+                        height={710}
+                        dataSource={dataSource}
+                        reloadOnChange={false}
+                        showAvatar={false}
+                        showDayHeaders={false}
+                        speechToTextEnabled
+                        alerts={alerts}
+                        typingUsers={typingUsers}
+                        toolCallOptions={{ expandAll }}
+                        onMessageEntered={onMessageEntered}
+                        emptyViewRender={renderEmptyView}
+                    />
+                </div>
             </div>
         );
     },
