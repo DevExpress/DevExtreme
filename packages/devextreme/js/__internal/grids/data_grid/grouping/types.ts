@@ -12,10 +12,9 @@ import type { GroupingHelper } from './m_grouping_core';
 
 export interface GroupingDataSourceAdapterExtension {
   _grouping: GroupingHelper;
+  isRowExpanded: (key: RowKey) => boolean;
   collapseAll: (groupIndex?: number) => boolean;
   expandAll: (groupIndex?: number) => boolean;
-  // eslint-disable-next-line @typescript-eslint/method-signature-style -- takes group paths
-  isRowExpanded(key: RowKey): boolean;
 }
 
 export type GroupingDataSourceAdapter = DataSourceAdapter & GroupingDataSourceAdapterExtension;
