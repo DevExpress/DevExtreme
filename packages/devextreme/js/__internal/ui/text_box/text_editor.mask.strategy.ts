@@ -254,11 +254,13 @@ export default class MaskStrategy {
     // @ts-expect-error dxElementWrapper.val() should return string
     const selectedText = inputVal.substring(caret?.start, caret?.end);
 
-    this.editor._maskKeyHandler(
-      event,
-      // @ts-expect-error with a text, clipboardText sets the data and returns nothing
-      () => getClipboardText(event, selectedText),
-    );
+    this.editor._maskKeyHandler(event, () => {
+      if (selectedText) {
+        getClipboardText(event, selectedText);
+      }
+
+      return undefined;
+    });
   }
 
   _dropHandler(): void {
