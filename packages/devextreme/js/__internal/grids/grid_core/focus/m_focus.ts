@@ -1062,7 +1062,7 @@ export const rowsView = (
     const tabIndex = this.option('tabIndex') ?? 0;
     const columnsController = this._columnsController;
     let rowIndex = this._dataController.getRowIndexByKey(focusedRowKey);
-    let columnIndex = Number(this.option('focusedColumnIndex'));
+    let columnIndex = this.option('focusedColumnIndex') ?? -1;
     const $row = this._findRowElementForTabIndex();
 
     const operationTypes = this.dataSourceController.operationTypes();
