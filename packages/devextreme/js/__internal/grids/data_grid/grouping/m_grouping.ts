@@ -21,7 +21,9 @@ import type { ProcessedItem } from '@ts/grids/grid_core/data_controller/types';
 import type DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/data_source_adapter';
 import type { LoadOperation, OperationTypes } from '@ts/grids/grid_core/data_source_adapter/types';
 import type { ToolbarItem } from '@ts/grids/grid_core/header_panel/types';
-import type { ModuleType, OptionChanged, OptionChangedFor } from '@ts/grids/grid_core/types';
+import type {
+  ModuleType, OptionChanged, OptionChangedFor, RowKey,
+} from '@ts/grids/grid_core/types';
 import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
 import type {
   BoundingRect,
@@ -111,7 +113,8 @@ const dataSourceAdapterExtender = (
     return this._grouping.isGroupItemCountable(item);
   }
 
-  public isRowExpanded(key: unknown[]): boolean {
+  public isRowExpanded(key: RowKey): boolean {
+    // @ts-expect-error group row keys are paths
     const groupInfo = this._grouping.findGroupInfo(key);
     return groupInfo ? groupInfo.isExpanded : !this._grouping.allowCollapseAll();
   }
@@ -157,7 +160,7 @@ const dataSourceAdapterExtender = (
     return this._grouping.refresh(options, operationTypes);
   }
 
-  public changeRowExpand(path: unknown[]): DeferredObj<unknown> | undefined {
+  public changeRowExpand(path: RowKey): DeferredObj<unknown> | undefined {
     const dataSource = this._dataSource;
 
     if (!dataSource.group()) {
@@ -174,7 +177,8 @@ const dataSourceAdapterExtender = (
   }
 
   // eslint-disable-next-line @typescript-eslint/no-misused-promises -- callers wait on the result
-  protected _changeRowExpandCore(path: unknown[]): DeferredObj<unknown> {
+  protected _changeRowExpandCore(path: RowKey): DeferredObj<unknown> {
+    // @ts-expect-error group row keys are paths
     return this._grouping.changeRowExpand(path);
   }
 
@@ -355,7 +359,7 @@ export const GroupingHeaderPanelExtender = (
     restoreFocus(this);
   }
 
-  private _createGroupPanelItem(
+  protected _createGroupPanelItem(
     $rootElement: dxElementWrapper,
     groupColumn: Column,
   ): dxElementWrapper {
