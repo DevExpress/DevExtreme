@@ -22,6 +22,7 @@ import type {
   OperationTypes, RawItemData, RemoteOperationsOptions,
 } from '@ts/grids/grid_core/data_source_adapter/types';
 import type { EditingChange, EditingChangeParams } from '@ts/grids/grid_core/editing/types';
+import { CLASSES as EDITOR_FACTORY_CLASSES } from '@ts/grids/grid_core/editor_factory/const';
 import type { ModuleType } from '@ts/grids/grid_core/types';
 import { ColumnsView } from '@ts/grids/grid_core/views/columns_view';
 import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
@@ -40,7 +41,6 @@ import type { RowsView } from '../../grid_core/views/rows_view';
 import AggregateCalculator from '../aggregate_calculator';
 import gridCore from '../core';
 import {
-  DATAGRID_CELL_DISABLED,
   DATAGRID_FOOTER_ROW_CLASS,
   DATAGRID_GROUP_FOOTER_CLASS,
   DATAGRID_GROUP_FOOTER_ROW_TYPE,
@@ -309,7 +309,7 @@ export class FooterView extends ColumnsView {
 
     if (row.rowType === DATAGRID_TOTAL_FOOTER_ROW_TYPE) {
       $row.addClass(DATAGRID_FOOTER_ROW_CLASS);
-      $row.addClass(DATAGRID_CELL_DISABLED);
+      $row.addClass(EDITOR_FACTORY_CLASSES.cellFocusDisabled);
       $row.attr('tabindex', 0);
     }
 

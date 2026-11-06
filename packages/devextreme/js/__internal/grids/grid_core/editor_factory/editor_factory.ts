@@ -137,10 +137,10 @@ export class EditorFactory extends ViewControllerWithMixin {
       let isHideBorder: boolean | undefined;
 
       if (
-        !$focus.hasClass(EDITING_CLASSES.cellFocusDisabled)
+        !$focus.hasClass(CLASSES.cellFocusDisabled)
         && !$focus.hasClass(VIEW_CLASSES.row)
       ) {
-        const $focusCell = $focus.closest(`${this._getFocusCellSelector()}, .${EDITING_CLASSES.cellFocusDisabled}`);
+        const $focusCell = $focus.closest(`${this._getFocusCellSelector()}, .${CLASSES.cellFocusDisabled}`);
 
         if ($focusCell.get(0) !== $focus.get(0)) {
           isHideBorder = this._needHideBorder($focusCell);
@@ -148,7 +148,7 @@ export class EditorFactory extends ViewControllerWithMixin {
         }
       }
 
-      if ($focus.length && !$focus.hasClass(EDITING_CLASSES.cellFocusDisabled)) {
+      if ($focus.length && !$focus.hasClass(CLASSES.cellFocusDisabled)) {
         this.focus($focus, isHideBorder);
         return;
       }
@@ -170,7 +170,7 @@ export class EditorFactory extends ViewControllerWithMixin {
 
   private _updateFocus(e: { event?: DxEvent }): void {
     const isFocusOverlay = e?.event
-      && $(e.event.target).hasClass(this.addWidgetPrefix(EDITING_CLASSES.focusOverlay));
+      && $(e.event.target).hasClass(this.addWidgetPrefix(CLASSES.focusOverlay));
 
     this._isFocusOverlay = !!this._isFocusOverlay || isFocusOverlay;
 
@@ -264,7 +264,7 @@ export class EditorFactory extends ViewControllerWithMixin {
       return;
     }
 
-    this._$focusOverlay ??= $('<div>').addClass(this.addWidgetPrefix(EDITING_CLASSES.focusOverlay));
+    this._$focusOverlay ??= $('<div>').addClass(this.addWidgetPrefix(CLASSES.focusOverlay));
 
     this.updateFocusOverlay($element, isHideBorder);
   }
