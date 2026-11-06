@@ -180,7 +180,7 @@ const dataSourceAdapterExtender = (
 
   /// #DEBUG
   private getGroupsInfo(): GroupInfoLevel {
-    return this._grouping._groupsInfo;
+    return this._grouping.groupsInfo;
   }
 
   /// #ENDDEBUG
