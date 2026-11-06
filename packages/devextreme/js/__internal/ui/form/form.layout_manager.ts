@@ -3,7 +3,6 @@ import '@js/ui/number_box';
 import '@js/ui/check_box';
 import '@js/ui/date_box';
 
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import { removeEvent } from '@js/common/core/events/remove';
 import messageLocalization from '@js/common/core/localization/message';
 import registerComponent from '@js/core/component_registrator';
@@ -29,6 +28,7 @@ import type {
 } from '@js/ui/form';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
+import eventsEngine from '@ts/events/core/events_engine';
 import Button from '@ts/ui/button/wrapper';
 import type Editor from '@ts/ui/editor/editor';
 import type { EditorProperties } from '@ts/ui/editor/editor';

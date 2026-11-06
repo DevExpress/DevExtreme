@@ -2,7 +2,6 @@ import type { ScrollDirection } from '@js/common';
 import { locate, resetPosition } from '@js/common/core/animation/translator';
 import { name as clickEventName } from '@js/common/core/events/click';
 import { name as contextMenuEventName } from '@js/common/core/events/contextmenu';
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import {
   drop as dragEventDrop,
   enter as dragEventEnter,
@@ -49,6 +48,7 @@ import type { ActionConfig } from '@ts/core/widget/component';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { SupportedKeys, WidgetProperties } from '@ts/core/widget/widget';
 import Widget from '@ts/core/widget/widget';
+import eventsEngine from '@ts/events/core/events_engine';
 import {
   AllDayPanelTitleComponent,
   AllDayTableComponent,
@@ -1173,23 +1173,32 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
 
     eventsEngine.off($element, SCHEDULER_WORKSPACE_DXPOINTERDOWN_EVENT_NAME);
     eventsEngine.off($element, SCHEDULER_CELL_DXCLICK_EVENT_NAME);
-    eventsEngine.on($element, SCHEDULER_WORKSPACE_DXPOINTERDOWN_EVENT_NAME, (e) => {
-      if (isMouseEvent(e) && e.which > 1) {
-        e.preventDefault();
-        return;
-      }
-      pointerDownAction({ event: e });
-    });
-    eventsEngine.on($element, SCHEDULER_CELL_DXCLICK_EVENT_NAME, cellSelector, (e) => {
-      const $cell = $(e.target as Element | null);
-      this.cellClickAction?.(
-        {
-          event: e,
-          cellElement: getPublicElement($cell),
-          cellData: this.getCellData($cell),
-        },
-      );
-    });
+    eventsEngine.on(
+      $element,
+      SCHEDULER_WORKSPACE_DXPOINTERDOWN_EVENT_NAME,
+      (e: DxEvent<MouseEvent | PointerEvent>) => {
+        if (isMouseEvent(e) && e.which > 1) {
+          e.preventDefault();
+          return;
+        }
+        pointerDownAction({ event: e });
+      },
+    );
+    eventsEngine.on(
+      $element,
+      SCHEDULER_CELL_DXCLICK_EVENT_NAME,
+      cellSelector,
+      (e: DxEvent<MouseEvent | PointerEvent>) => {
+        const $cell = $(e.target as Element | null);
+        this.cellClickAction?.(
+          {
+            event: e,
+            cellElement: getPublicElement($cell),
+            cellData: this.getCellData($cell),
+          },
+        );
+      },
+    );
 
     if (this.documentPointerUpHandler) {
       eventsEngine.off(
@@ -1436,12 +1445,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       element,
       SCHEDULER_CELL_DXPOINTERDOWN_EVENT_NAME,
       DRAG_AND_DROP_SELECTOR,
-      (e: {
-        type: string;
-        target: Element;
-        originalEvent: Event;
-        which: number;
-      }): void => {
+      (e: DxEvent & { which: number }): void => {
         if ((
           isMouseEvent(e) || (e.originalEvent && isMouseEvent(e.originalEvent))
         ) && e.which === 1) {

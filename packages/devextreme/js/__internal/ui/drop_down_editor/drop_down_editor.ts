@@ -2,7 +2,6 @@ import type { PositionConfig } from '@js/common/core/animation';
 import animationPosition from '@js/common/core/animation/position';
 import { locate, move } from '@js/common/core/animation/translator';
 import { name as clickEventName } from '@js/common/core/events/click';
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import { addNamespace, isCommandKeyPressed, normalizeKeyName } from '@js/common/core/events/utils/index';
 import messageLocalization from '@js/common/core/localization/message';
 import registerComponent from '@js/core/component_registrator';
@@ -37,6 +36,7 @@ import Widget from '@js/ui/widget/ui.widget';
 import { FunctionTemplate } from '@ts/core/templates/function_template';
 import { focused } from '@ts/core/utils/selectors';
 import type { OptionChanged } from '@ts/core/widget/types';
+import eventsEngine from '@ts/events/core/events_engine';
 import type { PositioningEvent } from '@ts/ui/overlay/overlay';
 import type { PopoverProperties as InternalPopoverProperties } from '@ts/ui/popover/popover';
 import type { PopupProperties as InternalPopupProperties } from '@ts/ui/popup/popup';
@@ -166,7 +166,6 @@ class DropDownEditor<
           : this._getFirstPopupElement();
 
         if ($focusableElement) {
-          // @ts-expect-error should be added on EventsEngine level
           eventsEngine.trigger($focusableElement, 'focus');
           // @ts-expect-error should be added on dxElementWrapper level
           $focusableElement.select();
@@ -551,7 +550,6 @@ class DropDownEditor<
           const inputElement = $input.get(0) as HTMLInputElement;
           inputElement.focus({ preventScroll: true });
         } else {
-          // @ts-expect-error should be added on EventsEngine level
           eventsEngine.trigger($input, 'focus');
         }
       },
@@ -729,7 +727,6 @@ class DropDownEditor<
 
     if (focusStateEnabled && !focused(this._input())) {
       this._resetCaretPosition();
-      // @ts-expect-error should be added on EventsEngine level
       eventsEngine.trigger(this._input(), 'focus');
     }
 
@@ -855,14 +852,12 @@ class DropDownEditor<
     const moveForward = !e.shiftKey && $target.is(this._getLastPopupElement());
 
     if (moveForward || moveBackward) {
-      // @ts-expect-error should be added on EventsEngine level
       eventsEngine.trigger(this.field(), 'focus');
       e.preventDefault();
     }
   }
 
   _popupEscHandler(): void {
-    // @ts-expect-error should be added on EventsEngine level
     eventsEngine.trigger(this._input(), 'focus');
     this.close();
   }

@@ -4,7 +4,6 @@ import { fx } from '@js/common/core/animation';
 import animationPosition from '@js/common/core/animation/position';
 import type { Cancelable, EventInfo } from '@js/common/core/events';
 import { name as contextMenuEventName } from '@js/common/core/events/contextmenu';
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import holdEvent from '@js/common/core/events/hold';
 import { addNamespace } from '@js/common/core/events/utils';
 import registerComponent from '@js/core/component_registrator';
@@ -45,6 +44,7 @@ import type {
 import { current as currentTheme, isGeneric } from '@js/ui/themes';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { SupportedKeys } from '@ts/core/widget/widget';
+import eventsEngine from '@ts/events/core/events_engine';
 import type {
   ClickEvent, HoverEvent, ItemClickActionArguments, MenuBaseProperties,
 } from '@ts/ui/context_menu/menu_base';
@@ -561,7 +561,6 @@ class ContextMenu<
         domAdapter.getDocument(),
         eventName,
         target,
-        // @ts-expect-error ts-error
         this._showContextMenuEventHandler,
       );
     } else {
@@ -573,7 +572,7 @@ class ContextMenu<
     const { showEvent: showEventOption, disabled } = this.option();
     const showEvent = this.getShowEvent(showEventOption);
 
-    if (!showEvent || disabled) {
+    if (!showEvent || disabled || !this._showContextMenuEventHandler) {
       return;
     }
 

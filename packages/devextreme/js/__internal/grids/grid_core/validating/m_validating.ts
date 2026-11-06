@@ -1,5 +1,4 @@
 /* eslint-disable max-classes-per-file */
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import pointerEvents from '@js/common/core/events/pointer';
 import messageLocalization from '@js/common/core/localization/message';
 import { createObjectWithChanges } from '@js/common/data/array_utils';
@@ -29,6 +28,7 @@ import errors from '@js/ui/widget/ui.errors';
 import { Deferred, fromPromise, when } from '@ts/core/utils/deferred';
 import { focused } from '@ts/core/utils/selectors';
 import type Widget from '@ts/core/widget/widget';
+import eventsEngine from '@ts/events/core/events_engine';
 import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/columns_controller';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import type {
@@ -443,9 +443,7 @@ export class ValidatingController extends modules.Controller {
       if (result.status === VALIDATION_STATUS.invalid) {
         const $focus = $container.find(':focus');
         if (!focused($focus)) {
-          // @ts-expect-error eventsEngine.trigger is not fully typed
           eventsEngine.trigger($focus, 'focus');
-          // @ts-expect-error eventsEngine.trigger is not fully typed
           eventsEngine.trigger($focus, pointerEvents.down);
         }
       }

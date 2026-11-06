@@ -1,5 +1,4 @@
 import { locate, move, resetPosition } from '@js/common/core/animation/translator';
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import messageLocalization from '@js/common/core/localization/message';
 import registerComponent from '@js/core/component_registrator';
 import devices from '@js/core/devices';
@@ -34,6 +33,7 @@ import type { TextBoxType } from '@js/ui/text_box';
 import { current, isMaterial } from '@js/ui/themes';
 import supportUtils from '@ts/core/utils/support';
 import type { OptionChanged } from '@ts/core/widget/types';
+import eventsEngine from '@ts/events/core/events_engine';
 import type { KeyboardKeyDownEvent } from '@ts/events/core/keyboard_processor';
 import type { DropDownEditorInternalProperties } from '@ts/ui/drop_down_editor/drop_down_editor';
 import DropDownList from '@ts/ui/drop_down_editor/drop_down_list';
@@ -1288,7 +1288,6 @@ class Lookup extends DropDownList<LookupProperties> {
       return;
     }
 
-    // @ts-expect-error EventsEngine
     eventsEngine.trigger(this._focusTarget(), 'focus');
   }
 

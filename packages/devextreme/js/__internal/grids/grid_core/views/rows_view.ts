@@ -1,4 +1,3 @@
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import { removeEvent } from '@js/common/core/events/remove';
 import messageLocalization from '@js/common/core/localization/message';
 import { data as elementData } from '@js/core/element_data';
@@ -22,6 +21,7 @@ import type dxLoadPanel from '@js/ui/load_panel';
 import type { Properties as LoadPanelProperties } from '@js/ui/load_panel';
 import type { ActionEvent } from '@ts/core/action';
 import { compileGetter } from '@ts/core/utils/data';
+import eventsEngine from '@ts/events/core/events_engine';
 import { CLASSES as COLUMN_FIXING_CLASSES } from '@ts/grids/grid_core/column_fixing/const';
 import type { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/column_headers';
 import type {

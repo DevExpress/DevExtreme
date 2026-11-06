@@ -1,8 +1,8 @@
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import { removeEvent } from '@js/common/core/events/remove';
 import { data as elementData } from '@js/core/element_data';
 import type { dxElementWrapper } from '@js/core/renderer';
 import { isDefined } from '@js/core/utils/type';
+import eventsEngine from '@ts/events/core/events_engine';
 
 const COMPONENT_NAMES_DATA_KEY = 'dxComponents';
 

@@ -1,4 +1,3 @@
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import { name as dxDblClickEvent } from '@js/common/core/events/double_click';
 import {
   addNamespace, getChar, isCommandKeyPressed, normalizeKeyName,
@@ -18,6 +17,7 @@ import { getGlobalFormatByDataType } from '@ts/core/global_format_config';
 import { getFormat as getLDMLFormat } from '@ts/core/localization/ldml/number';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { SupportedKeys } from '@ts/core/widget/widget';
+import eventsEngine from '@ts/events/core/events_engine';
 import type { KeyboardKeyDownEvent } from '@ts/events/core/keyboard_processor';
 import type { TextEditorInternalProperties } from '@ts/ui/text_box/text_editor.base';
 import type { CaretRange } from '@ts/ui/text_box/utils.caret';
@@ -191,7 +191,6 @@ class NumberBoxMask extends NumberBoxBase<NumberBoxMaskProperties> {
       if (this._parsedValue !== value) {
         // https://developer.microsoft.com/en-us/microsoft-edge/platform/issues/15181565/
         // https://bugreport.apple.com/web/?problemID=38133794 but this bug tracker is private
-        // @ts-expect-error
         eventsEngine.trigger(this._input(), 'change');
       }
     }
@@ -356,7 +355,6 @@ class NumberBoxMask extends NumberBoxBase<NumberBoxMaskProperties> {
         const { valueChangeEvent } = this.option();
         const shouldTriggerInputEvent = valueChangeEvent?.split(' ').includes('input');
         if (shouldTriggerInputEvent) {
-          // @ts-expect-error ts-error
           eventsEngine.trigger(this._input(), 'input');
         }
       }

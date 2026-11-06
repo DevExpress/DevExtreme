@@ -1,11 +1,11 @@
 import {
   afterEach, beforeEach, describe, expect, it, jest,
 } from '@jest/globals';
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import { loadMessages, locale } from '@js/localization';
 import type { GroupItem } from '@js/ui/form';
 import { fireEvent } from '@testing-library/dom';
 import DOMComponent from '@ts/core/widget/dom_component';
+import eventsEngine from '@ts/events/core/events_engine';
 
 import fx from '../../../common/core/animation/fx';
 import {

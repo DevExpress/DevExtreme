@@ -1,10 +1,10 @@
 import {
   afterEach, beforeEach, describe, expect, it, jest,
 } from '@jest/globals';
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import $ from '@js/core/renderer';
 import { isDefined } from '@js/core/utils/type';
 import type { Properties as DataGridProperties } from '@js/ui/data_grid';
+import eventsEngine from '@ts/events/core/events_engine';
 import type { DataGridInstance } from '@ts/grids/grid_core/__tests__/__mock__/helpers/utils';
 import {
   afterTest,
@@ -34,7 +34,6 @@ const getGroupedDataFields = (instance: DataGridInstance): string[] => ['id', 'g
   .filter((dataField) => isDefined(instance.columnOption(dataField, 'groupIndex')));
 
 const focusHeaderCell = (cell: HTMLElement | null): void => {
-  // @ts-expect-error - eventsEngine.trigger is not fully typed
   eventsEngine.trigger($(cell), 'focusin');
 };
 

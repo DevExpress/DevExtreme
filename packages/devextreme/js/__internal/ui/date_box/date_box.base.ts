@@ -1,4 +1,3 @@
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import dateLocalization from '@js/common/core/localization/date';
 import messageLocalization from '@js/common/core/localization/message';
 import config from '@js/core/config';
@@ -24,6 +23,7 @@ import type {
 } from '@js/ui/date_box';
 import type { ToolbarItem } from '@js/ui/popup';
 import type { OptionChanged, OwnLeafOptions } from '@ts/core/widget/types';
+import eventsEngine from '@ts/events/core/events_engine';
 import Calendar from '@ts/ui/date_box/date_box.strategy.calendar';
 import CalendarWithTime from '@ts/ui/date_box/date_box.strategy.calendar_with_time';
 import DateView from '@ts/ui/date_box/date_box.strategy.date_view';
