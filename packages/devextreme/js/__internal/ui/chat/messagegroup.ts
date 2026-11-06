@@ -42,6 +42,8 @@ export interface Properties extends WidgetOptions<MessageGroup> {
   showMessageTimestamp: boolean;
   messageTimestampFormat?: Format;
   messageTemplate?: MessageTemplate;
+  // SPIKE: no public option yet
+  renderToolsInMessageTemplate?: boolean;
   onAttachmentDownloadClick?: (e: AttachmentDownloadClickEvent) => void;
 }
 
@@ -123,7 +125,7 @@ class MessageGroup extends Widget<Properties> {
   }
 
   _getMessageBubbleOptions(message: Message): MessageBubbleProperties {
-    const { messageTemplate, onAttachmentDownloadClick } = this.option();
+    const { messageTemplate, renderToolsInMessageTemplate, onAttachmentDownloadClick } = this.option();
 
     const { isDeleted, type, attachments } = message;
 
@@ -139,6 +141,9 @@ class MessageGroup extends Widget<Properties> {
       options.src = (message as ImageMessage).src;
     } else {
       options.text = (message as TextMessage).text;
+      options.toolCalls = (message as TextMessage).toolCalls;
+      // the built-in block is drawn when there is no messageTemplate, or when the application asks for it
+      options.isToolCallsEnabled = !messageTemplate || !!renderToolsInMessageTemplate;
     }
 
     if (messageTemplate) {
@@ -312,6 +317,7 @@ class MessageGroup extends Widget<Properties> {
       case 'showUserName':
       case 'showMessageTimestamp':
       case 'messageTemplate':
+      case 'renderToolsInMessageTemplate':
       case 'messageTimestampFormat':
       case 'onAttachmentDownloadClick':
         this._invalidate();

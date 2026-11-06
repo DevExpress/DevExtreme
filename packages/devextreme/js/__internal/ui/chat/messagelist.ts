@@ -96,6 +96,7 @@ export interface Properties extends WidgetOptions<MessageList> {
   currentUserId: number | string | undefined;
   showDayHeaders: boolean;
   messageTemplate?: MessageTemplate;
+  renderToolsInMessageTemplate?: boolean;
   emptyViewTemplate?: EmptyViewTemplate;
   dayHeaderFormat?: Format;
   messageTimestampFormat?: Format;
@@ -143,6 +144,7 @@ class MessageList extends Widget<Properties> {
       showMessageTimestamp: true,
       emptyViewTemplate: null,
       messageTemplate: null,
+      renderToolsInMessageTemplate: false,
     };
   }
 
@@ -278,6 +280,7 @@ class MessageList extends Widget<Properties> {
       showMessageTimestamp,
       messageTimestampFormat,
       messageTemplate,
+      renderToolsInMessageTemplate,
       onAttachmentDownloadClick,
     } = this.option();
 
@@ -291,6 +294,7 @@ class MessageList extends Widget<Properties> {
       showMessageTimestamp,
       messageTimestampFormat,
       messageTemplate,
+      renderToolsInMessageTemplate,
       onAttachmentDownloadClick,
     });
   }
@@ -847,6 +851,7 @@ class MessageList extends Widget<Properties> {
       case 'showUserName':
       case 'showMessageTimestamp':
       case 'messageTemplate':
+      case 'renderToolsInMessageTemplate':
       case 'emptyViewTemplate':
       case 'dayHeaderFormat':
       case 'messageTimestampFormat':
