@@ -44,7 +44,7 @@ import type {
   VirtualScrollDataOptions,
   VirtualScrollingDataChange,
   VirtualScrollingDataSourceAdapter,
-  VirtualScrollingResizingControllerExtension,
+  VirtualScrollingResizingController,
   VirtualScrollingRowsView,
 } from './types';
 import { isItemCountableByDataSource } from './utils/items';
@@ -472,7 +472,7 @@ export const dataSourceAdapterExtender = (
 export const resizing = (
   Base: ModuleType<ResizingController>,
 ): ModuleType<
-  ResizingController & VirtualScrollingResizingControllerExtension
+  VirtualScrollingResizingController
 > => class VirtualScrollingResizingControllerExtender extends Base {
   private _resizeTimeout?: ReturnType<typeof setTimeout>;
 
