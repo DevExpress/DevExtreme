@@ -12,6 +12,7 @@
     "@typescript-eslint/parser": "catalog:",
     "autoprefixer": "10.5.0",
     "clean-css": "5.3.3",
+    "cubic2quad": "1.2.1",
     "eslint": "catalog:",
     "eslint-config-devextreme": "catalog:",
     "eslint-plugin-import": "catalog:",
@@ -23,11 +24,15 @@
     "stylelint-config-standard-scss": "14.0.0",
     "stylelint-scss": "6.10.0",
     "ts-jest": "29.4.12",
-    "typescript": "catalog:tools"
+    "typescript": "catalog:tools",
+    "wawoff2": "2.0.1"
   },
   "scripts": {
     "build": "pnpm --workspace-root nx build devextreme-scss",
     "check-naming-registries": "pnpm run naming:check",
+    "icon-fonts:build": "node tools/icon-fonts/build.ts",
+    "icon-fonts:check": "node tools/icon-fonts/build.ts --check",
+    "icon-fonts:import": "node tools/icon-fonts/import.ts",
     "lint": "pnpm run lint-css && pnpm run lint-js",
     "lint-css": "stylelint scss/widgets build",
     "lint-js": "eslint",
