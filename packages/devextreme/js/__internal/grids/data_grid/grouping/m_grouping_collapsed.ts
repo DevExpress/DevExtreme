@@ -12,12 +12,12 @@ import { isVirtualPaging } from '@ts/grids/grid_core/utils';
 
 import dataGridCore from '../core';
 import { createGroupFilter } from '../utils';
-import type { GroupingDataSourceAdapter } from './m_grouping';
 import { GroupingHelper as GroupingHelperCore } from './m_grouping_core';
 import type {
   ExpandedGroupsInfo,
   ForeachGroupsCallback,
   ForeachGroupsResult,
+  GroupingDataSourceAdapter,
   GroupingLoadOperation,
   GroupItemData,
   GroupItemsLoadResult,
