@@ -1,7 +1,6 @@
 import React, { useCallback, useState } from "react";
-import { SelectBoxTypes } from "devextreme-react/select-box";
+import { FieldAddons, SelectBoxTypes } from "devextreme-react/select-box";
 import { SelectBox } from "devextreme-react";
-import { TextBox } from "devextreme-react";
 
 const products = [{
     ID: 1,
@@ -24,7 +23,6 @@ const products = [{
 }];
 
 const templatedProductLabel = { "aria-label": "Templated Product" };
-const nameLabel = { "aria-label": "Name" };
 function Item(data) {
     return (
         <div className="custom-item">
@@ -39,18 +37,10 @@ function Item(data) {
 
 function Field(data: { ImageSrc: any; Name: any }) {
     return (
-        <div className="custom-item">
-            <div className="value">{data.Name}</div>
+        <div className="custom-addon">
             <img
                 alt="Product name"
-                src={data && data.ImageSrc} />
-            <TextBox
-                value= {data?.Name || ''}
-                className="product-name"
-                inputAttr={nameLabel}
-                defaultValue={data && data.Name}
-                readOnly={true}
-            />
+                src={data?.ImageSrc} />
         </div>
     );
 }
@@ -74,9 +64,10 @@ function SelectBoxCustomExample() {
                 inputAttr={templatedProductLabel}
                 valueExpr="ID"
                 defaultValue={products[0].ID}
-                fieldRender={Field}
                 itemRender={Item}
-            />
+            >
+                <FieldAddons beforeRender={Field} />
+            </SelectBox>
         </div>
     );
 }

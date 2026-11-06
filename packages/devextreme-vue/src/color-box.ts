@@ -97,7 +97,6 @@ type AccessibleOptions = Pick<Properties,
   "editAlphaChannel" |
   "elementAttr" |
   "fieldAddons" |
-  "fieldTemplate" |
   "focusStateEnabled" |
   "height" |
   "hint" |
@@ -165,7 +164,6 @@ const componentConfig = {
     editAlphaChannel: Boolean,
     elementAttr: Object as PropType<Record<string, any>>,
     fieldAddons: Object as PropType<FieldAddons | null | Record<string, any>>,
-    fieldTemplate: {},
     focusStateEnabled: Boolean,
     height: [Number, String],
     hint: String,
@@ -229,7 +227,6 @@ const componentConfig = {
     "update:editAlphaChannel": null,
     "update:elementAttr": null,
     "update:fieldAddons": null,
-    "update:fieldTemplate": null,
     "update:focusStateEnabled": null,
     "update:height": null,
     "update:hint": null,
