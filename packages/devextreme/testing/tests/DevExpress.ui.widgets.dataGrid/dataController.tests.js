@@ -943,27 +943,27 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
     // T755462
     QUnit.test('Check the filter generator for the boolean field', function(assert) {
     // act, assert
-        let filter = this.dataController._generateBooleanFilter('isRoom', true, { desc: false });
+        let filter = this.dataController._generateBooleanFilter('isRoom', true, false);
         assert.strictEqual(JSON.stringify(filter), '["isRoom","<>",true]', 'filter');
 
         // act, assert
-        filter = this.dataController._generateBooleanFilter('isRoom', false, { desc: false });
+        filter = this.dataController._generateBooleanFilter('isRoom', false, false);
         assert.strictEqual(JSON.stringify(filter), '["isRoom","=",null]', 'filter');
 
         // act, assert
-        filter = this.dataController._generateBooleanFilter('isRoom', true, { desc: true });
+        filter = this.dataController._generateBooleanFilter('isRoom', true, true);
         assert.strictEqual(JSON.stringify(filter), undefined, 'filter');
 
         // act, assert
-        filter = this.dataController._generateBooleanFilter('isRoom', false, { desc: true });
+        filter = this.dataController._generateBooleanFilter('isRoom', false, true);
         assert.strictEqual(JSON.stringify(filter), '["isRoom","=",true]', 'filter');
 
         // act, assert
-        filter = this.dataController._generateBooleanFilter('isRoom', null, { desc: true });
+        filter = this.dataController._generateBooleanFilter('isRoom', null, true);
         assert.strictEqual(JSON.stringify(filter), '["isRoom","<>",null]', 'filter');
 
         // act, assert
-        filter = this.dataController._generateBooleanFilter('isRoom', null, { desc: false });
+        filter = this.dataController._generateBooleanFilter('isRoom', null, false);
         assert.strictEqual(JSON.stringify(filter), undefined, 'filter');
     });
 

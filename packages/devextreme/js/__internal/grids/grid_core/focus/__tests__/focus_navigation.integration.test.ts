@@ -98,6 +98,104 @@ describe('Focus — navigating to the focused row', () => {
     });
   });
 
+  describe.each([false, true])('boolean sort column, remoteOperations: %s', (remoteOperations) => {
+    // Ascending: 3, 2, 6, 1, 4, 5 (null < false < true). Descending: 1, 4, 5, 2, 6, 3.
+    const BOOLEAN_DATA = [
+      { id: 1, completed: true },
+      { id: 2, completed: false },
+      { id: 3, completed: null },
+      { id: 4, completed: true },
+      { id: 5, completed: true },
+      { id: 6, completed: false },
+    ];
+
+    it.each<{
+      sortOrder: 'asc' | 'desc';
+      value: boolean | null;
+      key: number;
+      pageIndex: number;
+      focusedRowIndex: number;
+    }>([
+      {
+        sortOrder: 'asc', value: null, key: 3, pageIndex: 0, focusedRowIndex: 0,
+      },
+      {
+        sortOrder: 'asc', value: false, key: 6, pageIndex: 1, focusedRowIndex: 0,
+      },
+      {
+        sortOrder: 'asc', value: true, key: 5, pageIndex: 2, focusedRowIndex: 1,
+      },
+      {
+        sortOrder: 'desc', value: true, key: 5, pageIndex: 1, focusedRowIndex: 0,
+      },
+      {
+        sortOrder: 'desc', value: false, key: 6, pageIndex: 2, focusedRowIndex: 0,
+      },
+      {
+        sortOrder: 'desc', value: null, key: 3, pageIndex: 2, focusedRowIndex: 1,
+      },
+    ])('moves the page to a focused $value row sorted $sortOrder', async ({
+      sortOrder, key, pageIndex, focusedRowIndex,
+    }) => {
+      const { instance } = await createDataGrid({
+        dataSource: BOOLEAN_DATA,
+        remoteOperations,
+        focusedRowEnabled: true,
+        focusedRowKey: key,
+        columns: ['id', { dataField: 'completed', dataType: 'boolean', sortOrder }],
+        paging: { pageSize: 2 },
+      });
+      await flushAsync();
+
+      expect(instance.pageIndex()).toBe(pageIndex);
+      expect(instance.option('focusedRowIndex')).toBe(focusedRowIndex);
+    });
+  });
+
+  describe.each([false, true])('nullable string sort column, remoteOperations: %s', (remoteOperations) => {
+    // Ascending: 2, 5, 3, 1, 4, 6 (null first). Descending: 6, 4, 1, 3, 2, 5 (null last).
+    const NULLABLE_DATA = [
+      { id: 1, name: 'b' },
+      { id: 2, name: null },
+      { id: 3, name: 'a' },
+      { id: 4, name: 'c' },
+      { id: 5, name: null },
+      { id: 6, name: 'd' },
+    ];
+
+    it.each<{
+      sortOrder: 'asc' | 'desc';
+      key: number;
+      pageIndex: number;
+      focusedRowIndex: number;
+    }>([
+      {
+        sortOrder: 'asc', key: 5, pageIndex: 0, focusedRowIndex: 1,
+      },
+      {
+        sortOrder: 'desc', key: 2, pageIndex: 2, focusedRowIndex: 0,
+      },
+      {
+        sortOrder: 'desc', key: 5, pageIndex: 2, focusedRowIndex: 1,
+      },
+    ])('moves the page to focused row $key with a null value sorted $sortOrder', async ({
+      sortOrder, key, pageIndex, focusedRowIndex,
+    }) => {
+      const { instance } = await createDataGrid({
+        dataSource: NULLABLE_DATA,
+        remoteOperations,
+        focusedRowEnabled: true,
+        focusedRowKey: key,
+        columns: ['id', { dataField: 'name', dataType: 'string', sortOrder }],
+        paging: { pageSize: 2 },
+      });
+      await flushAsync();
+
+      expect(instance.pageIndex()).toBe(pageIndex);
+      expect(instance.option('focusedRowIndex')).toBe(focusedRowIndex);
+    });
+  });
+
   describe('grouped data', () => {
     it('expands the group holding the focused row and moves to its page', async () => {
       const { instance } = await createDataGrid({

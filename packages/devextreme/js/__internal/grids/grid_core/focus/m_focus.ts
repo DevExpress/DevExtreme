@@ -863,10 +863,8 @@ export const focusDataControllerExtender = <
   private _generateBooleanFilter(
     selector: DataFilterSelector,
     value: ScalarFilterValue,
-    sortInfo: Pick<ColumnDataSourceParameter, 'desc'>,
+    desc: boolean,
   ): BinaryDataFilterExpression | undefined {
-    const { desc } = sortInfo;
-
     switch (true) {
       case value === false && desc:
         return [selector, '=', true];
@@ -924,7 +922,6 @@ export const focusDataControllerExtender = <
         filter = [[selector, '=', safeValue], 'and', filter];
 
         if (rawValue === null || isBoolean(rawValue)) {
-          // @ts-expect-error passes desc where sortInfo is expected
           const booleanFilter = this._generateBooleanFilter(selector, safeValue, desc);
 
           if (booleanFilter) {
