@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/prefer-nullish-coalescing */
 import { name as clickEvent } from '@js/common/core/events/click';
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import { addNamespace, isCommandKeyPressed, normalizeKeyName } from '@js/common/core/events/utils';
 import messageLocalization from '@js/common/core/localization/message';
 import { normalizeLoadResult } from '@js/common/data/data_source/utils';
@@ -29,6 +28,7 @@ import type { ItemClickEvent, SelectionChangedEvent as ListSelectionChangedEvent
 import type { Properties } from '@js/ui/tag_box';
 import errors from '@js/ui/widget/ui.errors';
 import type { OptionChanged } from '@ts/core/widget/types';
+import eventsEngine from '@ts/events/core/events_engine';
 import type { KeyboardKeyDownEvent } from '@ts/events/core/keyboard_processor';
 import type { ItemCache } from '@ts/ui/drop_down_editor/drop_down_list';
 import type { ListBaseProperties } from '@ts/ui/list/list.base';
@@ -676,7 +676,7 @@ class TagBox<
 
     const input = this._input();
     const namespace = addNamespace('keydown', this.NAME as string);
-    eventsEngine.on(input, namespace, (e: KeyboardEvent) => {
+    eventsEngine.on(input, namespace, (e: DxEvent<KeyboardEvent>) => {
       const keyName = normalizeKeyName(e) ?? '';
 
       if (!this._isControlKey(keyName) && this._isEditable()) {
@@ -698,7 +698,7 @@ class TagBox<
     const eventName = addNamespace('mousedown', 'dxTagBox');
 
     eventsEngine.off(this._inputWrapper(), eventName);
-    eventsEngine.on(this._inputWrapper(), eventName, (e: MouseEvent) => {
+    eventsEngine.on(this._inputWrapper(), eventName, (e: DxEvent<MouseEvent>) => {
       if (e.target !== this._input()[0] && this._isFocused()) {
         e.preventDefault();
       }

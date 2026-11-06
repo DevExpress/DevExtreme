@@ -1,7 +1,6 @@
 import type { DefaultOptionsRule } from '@js/common';
 import { fx } from '@js/common/core/animation';
 import { name as clickEventName } from '@js/common/core/events/click';
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import { addNamespace } from '@js/common/core/events/utils';
 import registerComponent from '@js/core/component_registrator';
 import devices from '@js/core/devices';
@@ -21,6 +20,7 @@ import type { DxEvent } from '@js/events';
 import type { Item, Properties } from '@js/ui/accordion';
 import { current, isMaterialBased } from '@js/ui/themes';
 import type { OptionChanged } from '@ts/core/widget/types';
+import eventsEngine from '@ts/events/core/events_engine';
 import type { CollectionItemInfo, CollectionItemKey, ItemRenderInfo } from '@ts/ui/collection/collection_widget.base';
 import type { CollectionWidgetLiveUpdateProperties } from '@ts/ui/collection/collection_widget.live_update';
 import CollectionWidgetLiveUpdate from '@ts/ui/collection/collection_widget.live_update';

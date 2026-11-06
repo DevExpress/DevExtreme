@@ -1,7 +1,7 @@
 /* eslint-disable @stylistic/max-len */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
-import eventsEngine from '@js/common/core/events/core/events_engine';
+import eventsEngine from '@ts/events/core/events_engine';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import { isCellBasedEditMode } from '@ts/grids/grid_core/editing/editing_utils';
 import type { KeyboardNavigationController } from '@ts/grids/grid_core/keyboard_navigation/keyboard_navigation';
@@ -13,7 +13,6 @@ function focusCellHandler(e): void {
   const $nextCell = e.data?.$nextCell;
 
   eventsEngine.off($nextCell, 'focus', focusCellHandler);
-  // @ts-expect-error
   eventsEngine.trigger($nextCell, 'dxclick');
 }
 
@@ -44,7 +43,6 @@ export const adaptivityKeyboardNavigationViewControllerExtender = (
       eventsEngine.off($nextCell, 'focus', focusCellHandler);
       eventsEngine.on($nextCell, 'focus', { $nextCell }, focusCellHandler);
 
-      // @ts-expect-error
       eventsEngine.trigger($cell, 'focus');
     }
   }

@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import positionUtils from '@js/common/core/animation/position';
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import { addNamespace } from '@js/common/core/events/utils';
 import messageLocalization from '@js/common/core/localization/message';
 import numberLocalization from '@js/common/core/localization/number';
@@ -34,6 +33,7 @@ import type {
 } from '@js/ui/diagram';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
+import eventsEngine from '@ts/events/core/events_engine';
 import DiagramCommandsManager from '@ts/ui/diagram/diagram.commands_manager';
 import EdgesOption from '@ts/ui/diagram/diagram.edges_option';
 import { getDiagram } from '@ts/ui/diagram/diagram.importer';

@@ -1,7 +1,6 @@
 /* eslint-disable max-classes-per-file */
 import type { Orientation, ScrollDirection } from '@js/common';
 import { locate, move, resetPosition } from '@js/common/core/animation/translator';
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import {
   addNamespace as addEventNamespace,
   isCommandKeyPressed,
@@ -28,9 +27,11 @@ import { getBoundingRect } from '@js/core/utils/position';
 import { getHeight, getWidth } from '@js/core/utils/size';
 import { isDefined } from '@js/core/utils/type';
 import { getWindow, hasWindow } from '@js/core/utils/window';
+import type { DxEvent } from '@js/events';
 import type { ScrollEvent } from '@js/ui/scroll_view';
 import { logger } from '@ts/core/utils/console';
 import type { ActionConfig } from '@ts/core/widget/component';
+import eventsEngine from '@ts/events/core/events_engine';
 import Animator from '@ts/ui/scroll_view/animator';
 import type { ScrollViewScroller } from '@ts/ui/scroll_view/scroll_view.simulated';
 import type Scrollable from '@ts/ui/scroll_view/scrollable';
@@ -968,7 +969,7 @@ export class SimulatedStrategy<
     eventsEngine.off(this._$element, `.${SCROLLABLE_SIMULATED_KEYBOARD}`);
 
     if (!this.option('disabled') && this.option('useKeyboard')) {
-      eventsEngine.on(this._$element, addEventNamespace('keydown', SCROLLABLE_SIMULATED_KEYBOARD), this._keyDownHandler.bind(this));
+      eventsEngine.on<DxEvent<KeyboardEvent>>(this._$element, addEventNamespace('keydown', SCROLLABLE_SIMULATED_KEYBOARD), this._keyDownHandler.bind(this));
     }
   }
 
@@ -1162,7 +1163,7 @@ export class SimulatedStrategy<
 
     if (!disabled && this._isHoverMode()) {
       eventsEngine.on(this._$element, addEventNamespace('mouseenter', SCROLLABLE_SIMULATED_CURSOR), this._cursorEnterHandler.bind(this));
-      eventsEngine.on(this._$element, addEventNamespace('mouseleave', SCROLLABLE_SIMULATED_CURSOR), this._cursorLeaveHandler.bind(this));
+      eventsEngine.on<DxMouseEvent>(this._$element, addEventNamespace('mouseleave', SCROLLABLE_SIMULATED_CURSOR), this._cursorLeaveHandler.bind(this));
     }
   }
 
