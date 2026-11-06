@@ -27,7 +27,7 @@ overrides:
   "js-yaml@<4.3.2": "^4.3.2"
   "rollup@<4.59.0": "^4.59.0"
   qs: ">=6.16.1"
-  "minimatch@>=9.0.0 <11.0.1": file:./tools/minimatch-v9-v10-patch
+  "minimatch@>=7.0.0 <11.0.1": file:./tools/minimatch-v7-v10-patch
   "micromatch@<4.0.8": ^4.0.8
   "esbuild@<0.28.1": ^0.28.1
   "tmp@<0.2.7": "^0.2.7"

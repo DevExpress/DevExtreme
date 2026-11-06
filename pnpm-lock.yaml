@@ -163,7 +163,7 @@ overrides:
   js-yaml@<4.3.2: ^4.3.2
   rollup@<4.59.0: ^4.59.0
   qs: '>=6.16.1'
-  minimatch@>=9.0.0 <11.0.1: file:./tools/minimatch-v9-v10-patch
+  minimatch@>=7.0.0 <11.0.1: file:./tools/minimatch-v7-v10-patch
   micromatch@<4.0.8: ^4.0.8
   esbuild@<0.28.1: ^0.28.1
   tmp@<0.2.7: ^0.2.7
@@ -2011,7 +2011,7 @@ importers:
         specifier: catalog:tools
         version: 5.9.3
 
-  tools/minimatch-v9-v10-patch:
+  tools/minimatch-v7-v10-patch:
     dependencies:
       minimatch:
         specifier: ^11.0.4
@@ -13053,8 +13053,8 @@ packages:
   minimalistic-crypto-utils@1.0.1:
     resolution: {integrity: sha512-JIYlbt6g8i5jKfJ3xz7rF0LXmv2TkDxBLUkiBeZ7bAx4GnnNMr8xFpGnOxn6GhTEHx3SjRrZEoU+j04prX1ktg==}
 
-  minimatch-v9-v10-patch@file:tools/minimatch-v9-v10-patch:
-    resolution: {directory: tools/minimatch-v9-v10-patch, type: directory}
+  minimatch-v7-v10-patch@file:tools/minimatch-v7-v10-patch:
+    resolution: {directory: tools/minimatch-v7-v10-patch, type: directory}
 
   minimatch@11.0.3:
     resolution: {integrity: sha512-iny/40PEGkNJQ5/Pv6z3nm6FbRAby32GeZRjCUJk2WnNDbgPSTcdI+DDvLqsgBdD4cD5sMtMheqPPnehCCa8Nw==}
@@ -20466,7 +20466,7 @@ snapshots:
     dependencies:
       '@eslint/object-schema': 3.0.5
       debug: 4.4.3(supports-color@7.2.0)
-      minimatch: minimatch-v9-v10-patch@file:tools/minimatch-v9-v10-patch
+      minimatch: minimatch-v7-v10-patch@file:tools/minimatch-v7-v10-patch
     transitivePeerDependencies:
       - supports-color
 
@@ -21766,7 +21766,7 @@ snapshots:
   '@nx/devkit@23.2.1(nx@23.2.1(@swc/core@1.15.30(@swc/helpers@0.5.21)))':
     dependencies:
       ejs: 5.0.1
-      minimatch: minimatch-v9-v10-patch@file:tools/minimatch-v9-v10-patch
+      minimatch: minimatch-v7-v10-patch@file:tools/minimatch-v7-v10-patch
       nx: 23.2.1(@swc/core@1.15.30(@swc/helpers@0.5.21))
       semver: 7.8.5
       tslib: 2.8.1
@@ -21784,7 +21784,7 @@ snapshots:
       jest-resolve: 30.4.1
       jest-util: 30.4.1
       jsonc-parser: 3.3.1
-      minimatch: minimatch-v9-v10-patch@file:tools/minimatch-v9-v10-patch
+      minimatch: minimatch-v7-v10-patch@file:tools/minimatch-v7-v10-patch
       picocolors: 1.1.1
       resolve.exports: 2.0.3
       semver: 7.8.5
@@ -23649,7 +23649,7 @@ snapshots:
   '@tufjs/models@4.1.0':
     dependencies:
       '@tufjs/canonical-json': 2.0.0
-      minimatch: minimatch-v9-v10-patch@file:tools/minimatch-v9-v10-patch
+      minimatch: minimatch-v7-v10-patch@file:tools/minimatch-v7-v10-patch
 
   '@tybys/wasm-util@0.10.3':
     dependencies:
@@ -24222,7 +24222,7 @@ snapshots:
       '@typescript-eslint/types': 8.58.2
       '@typescript-eslint/visitor-keys': 8.58.2
       debug: 4.4.3(supports-color@7.2.0)
-      minimatch: minimatch-v9-v10-patch@file:tools/minimatch-v9-v10-patch
+      minimatch: minimatch-v7-v10-patch@file:tools/minimatch-v7-v10-patch
       semver: 7.8.5
       tinyglobby: 0.2.17
       ts-api-utils: 2.5.0(typescript@5.8.3)
@@ -24237,7 +24237,7 @@ snapshots:
       '@typescript-eslint/types': 8.58.2
       '@typescript-eslint/visitor-keys': 8.58.2
       debug: 4.4.3(supports-color@7.2.0)
-      minimatch: minimatch-v9-v10-patch@file:tools/minimatch-v9-v10-patch
+      minimatch: minimatch-v7-v10-patch@file:tools/minimatch-v7-v10-patch
       semver: 7.8.5
       tinyglobby: 0.2.17
       ts-api-utils: 2.5.0(typescript@5.9.3)
@@ -24252,7 +24252,7 @@ snapshots:
       '@typescript-eslint/types': 8.58.2
       '@typescript-eslint/visitor-keys': 8.58.2
       debug: 4.4.3(supports-color@7.2.0)
-      minimatch: minimatch-v9-v10-patch@file:tools/minimatch-v9-v10-patch
+      minimatch: minimatch-v7-v10-patch@file:tools/minimatch-v7-v10-patch
       semver: 7.8.5
       tinyglobby: 0.2.17
       ts-api-utils: 2.5.0(typescript@6.0.3)
@@ -24267,7 +24267,7 @@ snapshots:
       '@typescript-eslint/types': 8.62.0
       '@typescript-eslint/visitor-keys': 8.62.0
       debug: 4.4.3(supports-color@7.2.0)
-      minimatch: minimatch-v9-v10-patch@file:tools/minimatch-v9-v10-patch
+      minimatch: minimatch-v7-v10-patch@file:tools/minimatch-v7-v10-patch
       semver: 7.8.5
       tinyglobby: 0.2.17
       ts-api-utils: 2.5.0(typescript@5.9.3)
@@ -26946,7 +26946,7 @@ snapshots:
     dependencies:
       '@one-ini/wasm': 0.1.1
       commander: 10.0.1
-      minimatch: minimatch-v9-v10-patch@file:tools/minimatch-v9-v10-patch
+      minimatch: minimatch-v7-v10-patch@file:tools/minimatch-v7-v10-patch
       semver: 7.8.5
 
   ee-first@1.1.1: {}
@@ -27839,7 +27839,7 @@ snapshots:
       imurmurhash: 0.1.4
       is-glob: 4.0.3
       json-stable-stringify-without-jsonify: 1.0.1
-      minimatch: minimatch-v9-v10-patch@file:tools/minimatch-v9-v10-patch
+      minimatch: minimatch-v7-v10-patch@file:tools/minimatch-v7-v10-patch
       natural-compare: 1.4.0
       optionator: 0.9.4
     optionalDependencies:
@@ -27876,7 +27876,7 @@ snapshots:
       imurmurhash: 0.1.4
       is-glob: 4.0.3
       json-stable-stringify-without-jsonify: 1.0.1
-      minimatch: minimatch-v9-v10-patch@file:tools/minimatch-v9-v10-patch
+      minimatch: minimatch-v7-v10-patch@file:tools/minimatch-v7-v10-patch
       natural-compare: 1.4.0
       optionator: 0.9.4
     optionalDependencies:
@@ -29103,7 +29103,7 @@ snapshots:
 
   ignore-walk@8.0.0:
     dependencies:
-      minimatch: minimatch-v9-v10-patch@file:tools/minimatch-v9-v10-patch
+      minimatch: minimatch-v7-v10-patch@file:tools/minimatch-v7-v10-patch
 
   ignore@5.3.2: {}
 
@@ -30356,7 +30356,7 @@ snapshots:
   karma-webpack@5.0.1(webpack@5.105.4(@swc/core@1.15.30(@swc/helpers@0.5.21))):
     dependencies:
       glob: 7.2.3
-      minimatch: minimatch-v9-v10-patch@file:tools/minimatch-v9-v10-patch
+      minimatch: minimatch-v7-v10-patch@file:tools/minimatch-v7-v10-patch
       webpack: 5.105.4(@swc/core@1.15.30(@swc/helpers@0.5.21))
       webpack-merge: 4.2.2
 
@@ -31191,7 +31191,7 @@ snapshots:
 
   minimalistic-crypto-utils@1.0.1: {}
 
-  minimatch-v9-v10-patch@file:tools/minimatch-v9-v10-patch:
+  minimatch-v7-v10-patch@file:tools/minimatch-v7-v10-patch:
     dependencies:
       minimatch: 11.0.4
       picomatch: 4.0.7
@@ -31732,7 +31732,7 @@ snapshots:
       mime-db: 1.52.0
       mime-types: 2.1.35
       mimic-fn: 2.1.0
-      minimatch: minimatch-v9-v10-patch@file:tools/minimatch-v9-v10-patch
+      minimatch: minimatch-v7-v10-patch@file:tools/minimatch-v7-v10-patch
       minimist: 1.2.8
       ms: 2.1.3
       npm-run-path: 4.0.1
@@ -32850,7 +32850,7 @@ snapshots:
 
   readdir-glob@3.0.0:
     dependencies:
-      minimatch: minimatch-v9-v10-patch@file:tools/minimatch-v9-v10-patch
+      minimatch: minimatch-v7-v10-patch@file:tools/minimatch-v7-v10-patch
 
   readdirp@3.6.0:
     dependencies:
