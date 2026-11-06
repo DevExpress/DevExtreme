@@ -159,6 +159,11 @@ const CSP_DEMO_ALLOWLIST = {
   'Chat/PromptSuggestions': {
     'connect-src': DEMO_OPENAI_CONNECT_SRC,
   },
+  'Chat/ToolCallVisualization': {
+    'connect-src': DEMO_OPENAI_CONNECT_SRC,
+    // The assistant avatar is a data: SVG (all frameworks).
+    'img-src': ['data:'],
+  },
   'Scheduler/CellTemplates': {
     'img-src': ['data:'],
   },
@@ -239,6 +244,9 @@ const CSP_FRAMEWORK_ALLOWLIST = {
       'script-src': ["'unsafe-inline'"],
     },
     'Chat/PromptSuggestions': {
+      'script-src': ["'unsafe-inline'"],
+    },
+    'Chat/ToolCallVisualization': {
       'script-src': ["'unsafe-inline'"],
     },
     'TreeList/AIColumns': {
