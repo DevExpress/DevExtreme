@@ -89,32 +89,26 @@ export const generateOperationFilterByKey = (
   }
 
   const { isRemoteSorting } = options;
-  let filter = keyFilter;
 
-  sort.slice().reverse().forEach((sortInfo) => {
+  return sort.reduceRight<DataFilterExpression>((filter, sortInfo) => {
     const { selector, desc } = sortInfo;
 
     if (!selector) {
-      return;
+      return filter;
     }
 
     const sortValue = getSortFilterValue(selector, rowData, options);
     const { rawValue, safeValue } = sortValue;
-
-    filter = [[selector, '=', safeValue], 'and', filter];
+    const sameValueFilter: DataFilterExpression = [[selector, '=', safeValue], 'and', filter];
 
     if (rawValue === null || isBoolean(rawValue)) {
       const booleanFilter = generateBooleanFilter(selector, safeValue, desc);
 
-      if (booleanFilter) {
-        filter = [booleanFilter, 'or', filter];
-      }
-    } else {
-      const sortFilter = generateSortFilter(selector, sortInfo, sortValue, isRemoteSorting);
-
-      filter = [sortFilter, 'or', filter];
+      return booleanFilter ? [booleanFilter, 'or', sameValueFilter] : sameValueFilter;
     }
-  });
 
-  return filter;
+    const sortFilter = generateSortFilter(selector, sortInfo, sortValue, isRemoteSorting);
+
+    return [sortFilter, 'or', sameValueFilter];
+  }, keyFilter);
 };

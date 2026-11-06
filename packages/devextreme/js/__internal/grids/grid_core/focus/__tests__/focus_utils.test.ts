@@ -16,10 +16,9 @@ const OPTIONS: OperationFilterOptions = {
   getSelector: () => undefined,
 };
 
-const getPredicate = (filter: DataFilterExpression): DataFilterPredicate => {
-  const [predicate] = filter as unknown as [DataFilterPredicate];
-  return predicate;
-};
+const getPredicate = (filter: DataFilterExpression): DataFilterPredicate => (
+  filter[0] as DataFilterPredicate
+);
 
 describe('generateOperationFilterByKey', () => {
   it('returns the key filter when nothing is sorted', () => {
