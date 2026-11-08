@@ -72,7 +72,7 @@
     "@babel/plugin-transform-nullish-coalescing-operator": "7.29.7",
     "@babel/plugin-transform-optional-chaining": "7.29.7",
     "@babel/plugin-transform-runtime": "7.29.7",
-    "@babel/plugin-transform-typescript": "7.29.7",
+    "@babel/plugin-transform-typescript": "7.29.9",
     "@babel/preset-env": "7.29.7",
     "@eslint/js": "catalog:",
     "@jest/globals": "30.4.1",
