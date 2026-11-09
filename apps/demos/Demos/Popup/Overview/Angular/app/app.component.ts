@@ -1,6 +1,6 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import {
-  ChangeDetectorRef, Component, enableProdMode,
+  Component, enableProdMode, inject, signal,
 } from '@angular/core';
 import { DxPopupModule, DxButtonModule } from 'devextreme-angular';
 import notify from 'devextreme/ui/notify';
@@ -22,68 +22,62 @@ if (!/localhost/.test(document.location.host)) {
 })
 
 export class AppComponent {
-  currentEmployee: Employee = new Employee();
+  readonly currentEmployee = signal<Employee>(new Employee());
 
-  employees: Employee[];
+  readonly employees = inject(Service).getEmployees();
 
-  popupVisible = false;
+  readonly popupVisible = signal(false);
 
-  moreInfoButtonOptions: Record<string, unknown>;
+  readonly positionOf = signal<string>(undefined);
 
-  emailButtonOptions: Record<string, unknown>;
+  readonly moreInfoButtonOptions: Record<string, unknown> = {
+    text: 'More info',
+    onClick: () => {
+      const { FirstName, LastName } = this.currentEmployee();
+      const message = `More info about ${FirstName} ${LastName}`;
+      notify({
+        message,
+        position: {
+          my: 'center top',
+          at: 'center top',
+        },
+      }, 'success', 3000);
+    },
+  };
 
-  closeButtonOptions: Record<string, unknown>;
+  readonly emailButtonOptions: Record<string, unknown> = {
+    icon: 'email',
+    stylingMode: 'contained',
+    text: 'Send',
+    onClick: () => {
+      const { FirstName, LastName } = this.currentEmployee();
+      const message = `Email is sent to ${FirstName} ${LastName}`;
+      notify({
+        message,
+        position: {
+          my: 'center top',
+          at: 'center top',
+        },
+      }, 'success', 3000);
+    },
+  };
 
-  positionOf: string;
-
-  constructor(service: Service, private changeDetectorRef: ChangeDetectorRef) {
-    this.employees = service.getEmployees();
-    this.moreInfoButtonOptions = {
-      text: 'More info',
-      onClick: () => {
-        const message = `More info about ${this.currentEmployee.FirstName} ${this.currentEmployee.LastName}`;
-        notify({
-          message,
-          position: {
-            my: 'center top',
-            at: 'center top',
-          },
-        }, 'success', 3000);
-      },
-    };
-    this.emailButtonOptions = {
-      icon: 'email',
-      stylingMode: 'contained',
-      text: 'Send',
-      onClick: () => {
-        const message = `Email is sent to ${this.currentEmployee.FirstName} ${this.currentEmployee.LastName}`;
-        notify({
-          message,
-          position: {
-            my: 'center top',
-            at: 'center top',
-          },
-        }, 'success', 3000);
-      },
-    };
-    this.closeButtonOptions = {
-      text: 'Close',
-      stylingMode: 'outlined',
-      type: 'normal',
-      onClick: () => {
-        this.popupVisible = false;
-        this.changeDetectorRef.detectChanges();
-      },
-    };
-  }
+  readonly closeButtonOptions: Record<string, unknown> = {
+    text: 'Close',
+    stylingMode: 'outlined',
+    type: 'normal',
+    onClick: () => {
+      this.popupVisible.set(false);
+    },
+  };
 
   detailsButtonMouseEnter(id: number) {
-    this.positionOf = `#image${id}`;
+    this.positionOf.set(`#image${id}`);
   }
 
   showInfo(employee: Employee) {
-    this.currentEmployee = employee;
-    this.popupVisible = true;
+    this.currentEmployee.set(employee);
+    this.popupVisible.set(true);
   }
 }
 

@@ -57,7 +57,6 @@ const SHARED_TSCONFIG_TEMPLATE = path.join(__dirname, 'tsconfig.demo-bundle-angu
 const GENERATED_TSCONFIG_DIR = path.join(__dirname, '.demo-bundle-angular-tsconfigs');
 // Under apps/demos so the shim's bare devextreme import resolves through node_modules.
 const GENERATED_SHIM_DIR = path.join(__dirname, '.demo-bundle-angular-shims');
-const ANGULAR_ZONE_SCRIPT = '../../../../node_modules/zone.js/bundles/zone.umd.js';
 // esbuild's code-splitting output (shared chunks across a batch) — wiped and regenerated each run.
 const CHUNKS_DIRNAME = '_chunks';
 
@@ -154,8 +153,7 @@ function buildHtml({ jsFiles, cssFiles, srcDir }) {
   const scripts = jsFiles
     .map((f) => {
       const src = f.startsWith('.') ? f : `./${f}`;
-      const type = f === ANGULAR_ZONE_SCRIPT ? '' : ' type="module"';
-      return `<script src="${src}"${type}></script>`;
+      return `<script src="${src}" type="module"></script>`;
     })
     .join('\n    ');
   return `<!DOCTYPE html>
@@ -527,10 +525,6 @@ function makeCompilerPlugin(createCompilerPlugin, tsconfig, fileReplacements) {
   );
 }
 
-function demoUsesZone(demo) {
-  return /\bprovideZoneChangeDetection\b/.test(fs.readFileSync(demo.entry, 'utf8'));
-}
-
 function prepareDemo(demo) {
   const fileReplacements = {};
   for (const tsFile of findDemoTsFiles(path.join(demo.srcDir, 'app'))) {
@@ -540,7 +534,7 @@ function prepareDemo(demo) {
   const effectiveEntry = fileReplacements[demo.entry] || demo.entry;
   const shimEntry = writeEntryShim(demo, effectiveEntry);
   return {
-    ...demo, effectiveEntry, shimEntry, fileReplacements, usesZone: demoUsesZone(demo),
+    ...demo, effectiveEntry, shimEntry, fileReplacements,
   };
 }
 
@@ -550,7 +544,6 @@ function writeDemoManifest(demo, destDir) {
   const packages = resolvePackageVersions([
     ...discoverDemoSpecifiers(demo.srcDir),
     ...ANGULAR_IMPLICIT_PACKAGES,
-    ...(demo.usesZone ? ['zone.js'] : []),
   ]);
   fs.writeFileSync(
     path.join(destDir, 'demo.manifest.json'),
@@ -680,10 +673,6 @@ async function emitDemoResources(demoDestDirs, outputFiles) {
   }));
 }
 
-function demoJsFiles(demo, localJsFiles) {
-  return demo.usesZone ? [ANGULAR_ZONE_SCRIPT, ...localJsFiles] : localJsFiles;
-}
-
 async function bundleDemo(demo, createCompilerPlugin, destDirOverride) {
   const prepared = demo.effectiveEntry ? demo : prepareDemo(demo);
   const destDir = destDirOverride || path.join(SRC_DEMOS_DIR, prepared.widget, prepared.name, FRAMEWORK);
@@ -716,10 +705,9 @@ async function bundleDemo(demo, createCompilerPlugin, destDirOverride) {
   const localJsFiles = sortJsFiles(outputs.filter((o) => o.endsWith('.js')).map((o) => path.basename(o)));
   if (localJsFiles.length === 0) return { ok: false, reason: 'no JS output produced' };
 
-  const jsFiles = demoJsFiles(prepared, localJsFiles);
   const cssFiles = outputs.filter((o) => o.endsWith('.css')).map((o) => path.basename(o));
 
-  fs.writeFileSync(path.join(destDir, 'index.html'), buildHtml({ jsFiles, cssFiles, srcDir: prepared.srcDir }));
+  fs.writeFileSync(path.join(destDir, 'index.html'), buildHtml({ jsFiles: localJsFiles, cssFiles, srcDir: prepared.srcDir }));
   if (IS_GENERATE_MANIFESTS) writeDemoManifest(prepared, destDir);
   return { ok: true };
 }
@@ -759,10 +747,7 @@ async function bundleDemoBatch(batch, createCompilerPlugin) {
       return { ok: false, reason: `no JS output produced for ${demo.widget}/${demo.name}` };
     }
 
-    const jsFiles = [
-      ...demoJsFiles(demo, localJsFiles),
-    ];
-    fs.writeFileSync(path.join(destDir, 'index.html'), buildHtml({ jsFiles, cssFiles, srcDir: demo.srcDir }));
+    fs.writeFileSync(path.join(destDir, 'index.html'), buildHtml({ jsFiles: localJsFiles, cssFiles, srcDir: demo.srcDir }));
     if (IS_GENERATE_MANIFESTS) writeDemoManifest(demo, destDir);
   }
 
@@ -931,7 +916,6 @@ module.exports = {
   cleanupEntryShims,
   bundleDemo,
   buildHtml,
-  ANGULAR_ZONE_SCRIPT,
   angularSingleCopyPlugin,
   antiForgeryPlugin,
   globalizePlugin,

@@ -16,16 +16,11 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  allowedFileExtensions: string[];
+  readonly allowedFileExtensions: string[] = ['.js', '.json', '.css'];
 
-  remoteProvider: RemoteFileSystemProvider;
-
-  constructor() {
-    this.allowedFileExtensions = ['.js', '.json', '.css'];
-    this.remoteProvider = new RemoteFileSystemProvider({
-      endpointUrl: 'https://js.devexpress.com/Demos/NetCore/api/file-manager-file-system',
-    });
-  }
+  readonly remoteProvider = new RemoteFileSystemProvider({
+    endpointUrl: 'https://js.devexpress.com/Demos/NetCore/api/file-manager-file-system',
+  });
 }
 
 bootstrapApplication(AppComponent);

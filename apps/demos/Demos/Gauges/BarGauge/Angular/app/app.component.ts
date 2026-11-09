@@ -1,7 +1,9 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode } from '@angular/core';
+import {
+  Component, computed, enableProdMode, inject, signal,
+} from '@angular/core';
 import { DxBarGaugeModule, DxSelectBoxModule } from 'devextreme-angular';
-import { Color, Service } from './app.service';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -19,25 +21,19 @@ if (!/localhost/.test(document.location.host)) {
 })
 
 export class AppComponent {
-  colors: Color[];
+  readonly colors = inject(Service).getColors();
 
-  values: number[] = [];
+  readonly currentColor = signal(this.colors[0].code);
 
-  currentColor: string;
+  readonly basicColors = computed(() => {
+    const code = Number(`0x${this.currentColor().slice(1)}`);
 
-  constructor(service: Service) {
-    this.colors = service.getColors();
-    this.currentColor = this.colors[0].code;
-  }
-
-  getBasicColors(value) {
-    const code = Number(`0x${value.slice(1)}`);
-
-    this.values[0] = (code >> 16) & 0xff;
-    this.values[1] = (code >> 8) & 0xff;
-    this.values[2] = code & 0xff;
-    return this.values;
-  }
+    return [
+      (code >> 16) & 0xff,
+      (code >> 8) & 0xff,
+      code & 0xff,
+    ];
+  });
 }
 
 bootstrapApplication(AppComponent);

@@ -1,13 +1,13 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode } from '@angular/core';
+import {
+  Component, computed, enableProdMode, inject, signal,
+} from '@angular/core';
 import {
   DxTabPanelModule,
   DxTreeViewModule,
 } from 'devextreme-angular';
 
-import {
-  Continent, City, Country, Service,
-} from './app.service';
+import { type Country, Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -25,28 +25,20 @@ if (!/localhost/.test(document.location.host)) {
 })
 
 export class AppComponent {
-  continents: Continent[];
+  readonly continents = inject(Service).getContinents();
 
-  countryData: Country;
+  readonly countryData = signal<Country>(this.continents[0].items[0]);
 
-  citiesData: City[];
+  readonly citiesData = computed(() => this.countryData().cities);
 
-  tabPanelIndex: number;
+  readonly tabPanelIndex = signal(0);
 
   changeSelection(e) {
     const countryData = e.itemData;
     if (countryData.cities) {
-      this.countryData = e.itemData;
-      this.citiesData = countryData.cities;
-      this.tabPanelIndex = 0;
+      this.countryData.set(e.itemData);
+      this.tabPanelIndex.set(0);
     }
-  }
-
-  constructor(service: Service) {
-    this.continents = service.getContinents();
-    this.countryData = this.continents[0].items[0];
-    this.citiesData = this.countryData.cities;
-    this.tabPanelIndex = 0;
   }
 }
 

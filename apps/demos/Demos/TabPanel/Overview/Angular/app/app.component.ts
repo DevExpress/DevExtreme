@@ -1,10 +1,12 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode } from '@angular/core';
+import {
+  Component, enableProdMode, inject, signal,
+} from '@angular/core';
 import {
   DxTabPanelModule, DxCheckBoxModule, DxSelectBoxModule,
 } from 'devextreme-angular';
 import type { DxTabPanelTypes } from 'devextreme-angular/ui/tab-panel';
-import { TabPanelItem, Service } from './app.service';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -24,27 +26,23 @@ if (!/localhost/.test(document.location.host)) {
 })
 
 export class AppComponent {
-  dataSource: TabPanelItem[];
+  readonly dataSource = inject(Service).getItems();
 
-  tabsPositions: DxTabPanelTypes.Position[] = [
+  readonly tabsPositions: DxTabPanelTypes.Position[] = [
     'left', 'top', 'right', 'bottom',
   ];
 
-  tabsPosition: DxTabPanelTypes.Position = this.tabsPositions[0];
+  readonly tabsPosition = signal<DxTabPanelTypes.Position>(this.tabsPositions[0]);
 
-  stylingModes: DxTabPanelTypes.TabsStyle[] = ['secondary', 'primary'];
+  readonly stylingModes: DxTabPanelTypes.TabsStyle[] = ['secondary', 'primary'];
 
-  stylingMode: DxTabPanelTypes.TabsStyle = this.stylingModes[0];
+  readonly stylingMode = signal<DxTabPanelTypes.TabsStyle>(this.stylingModes[0]);
 
-  iconPositions: DxTabPanelTypes.TabsIconPosition[] = [
+  readonly iconPositions: DxTabPanelTypes.TabsIconPosition[] = [
     'top', 'start', 'end', 'bottom',
   ];
 
-  iconPosition: DxTabPanelTypes.TabsIconPosition = this.iconPositions[0];
-
-  constructor(service: Service) {
-    this.dataSource = service.getItems();
-  }
+  readonly iconPosition = signal<DxTabPanelTypes.TabsIconPosition>(this.iconPositions[0]);
 
   getTaskItemClasses(priority: string) {
     return `task-item task-item-priority-${priority}`;

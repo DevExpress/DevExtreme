@@ -1,9 +1,9 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode } from '@angular/core';
+import { Component, enableProdMode, inject } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 import { DxVectorMapModule } from 'devextreme-angular';
 import * as mapsData from 'devextreme-dist/js/vectormap-data/usa.js';
-import { StatesCollection, Service } from './app.service';
+import { type StatesCollection, Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -21,15 +21,11 @@ if (!/localhost/.test(document.location.host)) {
 })
 
 export class AppComponent {
-  usaMap = mapsData.usa;
+  readonly usaMap = mapsData.usa;
 
-  states: StatesCollection[];
+  readonly states = inject(Service).getStatesData();
 
-  constructor(service: Service) {
-    this.states = service.getStatesData();
-  }
-
-  getImagePath = (annotation: StatesCollection) => {
+  readonly getImagePath = (annotation: StatesCollection) => {
     const name = annotation.data.name.replace(/\s/, '');
     return `../../../../images/flags/${name}.svg`;
   };

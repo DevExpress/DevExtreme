@@ -1,8 +1,10 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode } from '@angular/core';
+import {
+  Component, enableProdMode, inject, signal,
+} from '@angular/core';
 import { DxScrollViewModule, DxSortableModule } from 'devextreme-angular';
-import { DxSortableTypes } from 'devextreme-angular/ui/sortable';
-import { Employee, Task, Service } from './app.service';
+import type { DxSortableTypes } from 'devextreme-angular/ui/sortable';
+import { type Task, Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -20,39 +22,38 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  lists: Task[][] = [];
+  private readonly service = inject(Service);
 
-  statuses = ['Not Started', 'Need Assistance', 'In Progress', 'Deferred', 'Completed'];
+  readonly statuses = signal(['Not Started', 'Need Assistance', 'In Progress', 'Deferred', 'Completed']);
 
-  employees: Record<'ID', Employee> = {};
+  readonly employees: Record<number, string> = Object.fromEntries(
+    this.service.getEmployees().map((employee) => [employee.ID, employee.Name]),
+  );
 
-  constructor(service: Service) {
-    const tasks = service.getTasks();
-
-    service.getEmployees().forEach((employee) => {
-      this.employees[employee.ID] = employee.Name;
-    });
-
-    this.statuses.forEach((status) => {
-      this.lists.push(tasks.filter((task) => task.Task_Status === status));
-    });
-  }
+  readonly lists = signal<Task[][]>(this.statuses().map(
+    (status) => this.service.getTasks().filter((task) => task.Task_Status === status),
+  ));
 
   onListReorder(e: DxSortableTypes.ReorderEvent) {
-    const list = this.lists.splice(e.fromIndex, 1)[0];
-    this.lists.splice(e.toIndex, 0, list);
-
-    const status = this.statuses.splice(e.fromIndex, 1)[0];
-    this.statuses.splice(e.toIndex, 0, status);
+    this.lists.update((lists) => AppComponent.moveItem(lists, e.fromIndex, e.toIndex));
+    this.statuses.update((statuses) => AppComponent.moveItem(statuses, e.fromIndex, e.toIndex));
   }
 
   onTaskDragStart(e: DxSortableTypes.DragStartEvent) {
     e.itemData = e.fromData[e.fromIndex];
   }
 
-  onTaskDrop(e: DxSortableTypes.AddEvent) {
+  onTaskDrop(e: DxSortableTypes.AddEvent | DxSortableTypes.ReorderEvent) {
     e.fromData.splice(e.fromIndex, 1);
     e.toData.splice(e.toIndex, 0, e.itemData);
+    this.lists.update((lists) => [...lists]);
+  }
+
+  private static moveItem<T>(items: T[], fromIndex: number, toIndex: number) {
+    const result = [...items];
+    const [item] = result.splice(fromIndex, 1);
+    result.splice(toIndex, 0, item);
+    return result;
   }
 }
 

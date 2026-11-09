@@ -18,9 +18,9 @@ const url = 'https://js.devexpress.com/Demos/NetCore/api/SchedulerData';
   ],
 })
 export class AppComponent {
-  currentDate = new Date(2021, 3, 27);
+  readonly currentDate = new Date(2021, 3, 27);
 
-  appointmentsData: AspNetData.CustomStore = AspNetData.createStore({
+  readonly appointmentsData = AspNetData.createStore({
     key: 'AppointmentId',
     loadUrl: url,
     insertUrl: url,

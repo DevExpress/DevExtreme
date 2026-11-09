@@ -1,9 +1,9 @@
-import { Component, enableProdMode } from '@angular/core';
+import { Component, enableProdMode, inject } from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
 import { HttpClient, provideHttpClient, withFetch } from '@angular/common/http';
 import { lastValueFrom } from 'rxjs';
 
-import { DxTreeViewComponent, DxTreeViewModule } from 'devextreme-angular';
+import { type DxTreeViewComponent, DxTreeViewModule } from 'devextreme-angular';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -16,17 +16,15 @@ if (!/localhost/.test(document.location.host)) {
   imports: [DxTreeViewModule],
 })
 export class AppComponent {
-  createChildren: DxTreeViewComponent['createChildren'];
+  private readonly http = inject(HttpClient);
 
-  constructor(http: HttpClient) {
-    this.createChildren = (parent: Record<string, { id: unknown }>) => {
-      const parentId = parent ? parent.itemData.id : '';
+  readonly createChildren: DxTreeViewComponent['createChildren'] = (parent: Record<string, { id: unknown }>) => {
+    const parentId = parent ? parent.itemData.id : '';
 
-      return lastValueFrom(
-        http.get(`https://js.devexpress.com/Demos/NetCore/api/TreeViewData?parentId=${parentId}`),
-      );
-    };
-  }
+    return lastValueFrom(
+      this.http.get(`https://js.devexpress.com/Demos/NetCore/api/TreeViewData?parentId=${parentId}`),
+    );
+  };
 }
 
 bootstrapApplication(AppComponent, {

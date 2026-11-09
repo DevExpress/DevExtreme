@@ -1,5 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode } from '@angular/core';
+import {
+  Component, enableProdMode, inject, signal,
+} from '@angular/core';
 import {
   DxAccordionModule,
   DxSelectBoxModule,
@@ -7,7 +9,7 @@ import {
   DxTreeViewModule,
 } from 'devextreme-angular';
 
-import { Continent, EuropeCountry, Service } from './app.service';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -26,24 +28,21 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  continents: Continent[];
+  private readonly service = inject(Service);
 
-  europeCountries: EuropeCountry[];
+  readonly continents = this.service.getContinents();
 
-  languages: string[] = [
+  readonly europeCountries = this.service.getEuropeCountries();
+
+  readonly languages: string[] = [
     'Arabic: Right-to-Left direction',
     'English: Left-to-Right direction',
   ];
 
-  rtlEnabled = false;
-
-  constructor(service: Service) {
-    this.continents = service.getContinents();
-    this.europeCountries = service.getEuropeCountries();
-  }
+  readonly rtlEnabled = signal(false);
 
   selectLanguage(e) {
-    this.rtlEnabled = e.value === this.languages[0];
+    this.rtlEnabled.set(e.value === this.languages[0]);
   }
 }
 

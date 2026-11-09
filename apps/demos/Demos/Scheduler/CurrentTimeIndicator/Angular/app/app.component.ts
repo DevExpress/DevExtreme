@@ -1,15 +1,16 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { ViewChild, Component, enableProdMode, Pipe, PipeTransform } from '@angular/core';
+import {
+  Component, enableProdMode, inject, Pipe, signal, type PipeTransform,
+} from '@angular/core';
 import {
   DxSchedulerModule,
-  DxSchedulerComponent,
   DxSwitchModule,
   DxNumberBoxModule,
 } from 'devextreme-angular';
 import { query as Query } from 'devextreme-angular/common/data';
-import { DxSchedulerTypes } from 'devextreme-angular/ui/scheduler';
-import { DxNumberBoxTypes } from 'devextreme-angular/ui/number-box';
-import { Appointment, Service, MovieData } from './app.service';
+import type { DxSchedulerTypes } from 'devextreme-angular/ui/scheduler';
+import type { DxNumberBoxTypes } from 'devextreme-angular/ui/number-box';
+import { Service, type MovieData } from './app.service';
 
 @Pipe({ name: 'apply' })
 export class ApplyPipe<TArgs, TReturn> implements PipeTransform {
@@ -34,44 +35,39 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  @ViewChild(DxSchedulerComponent, { static: false }) scheduler: DxSchedulerComponent;
+  private readonly service = inject(Service);
 
-  appointmentsData: Appointment[];
+  readonly appointmentsData = this.service.getAppointments();
 
-  moviesData: MovieData[];
+  readonly moviesData = this.service.getMoviesData();
 
-  currentDate: Date = new Date();
+  readonly currentDate = new Date();
 
-  showCurrentTimeIndicator = true;
+  readonly showCurrentTimeIndicator = signal(true);
 
-  shadeUntilCurrentTime = true;
+  readonly shadeUntilCurrentTime = signal(true);
 
-  intervalValue = 10;
+  readonly intervalValue = signal(10);
 
-  indicatorUpdateInterval = 10000;
+  readonly indicatorUpdateInterval = signal(10000);
 
-  constructor(service: Service) {
-    this.appointmentsData = service.getAppointments();
-    this.moviesData = service.getMoviesData();
-  }
-
-  onContentReady = (e: DxSchedulerTypes.ContentReadyEvent) => {
+  readonly onContentReady = (e: DxSchedulerTypes.ContentReadyEvent) => {
     e.component.scrollTo(new Date());
   };
 
-  onAppointmentClick = (e: DxSchedulerTypes.AppointmentClickEvent) => {
+  readonly onAppointmentClick = (e: DxSchedulerTypes.AppointmentClickEvent) => {
     e.cancel = true;
   };
 
-  onAppointmentDblClick = (e: DxSchedulerTypes.AppointmentDblClickEvent) => {
+  readonly onAppointmentDblClick = (e: DxSchedulerTypes.AppointmentDblClickEvent) => {
     e.cancel = true;
   };
 
-  changeIndicatorUpdateInterval = (e: DxNumberBoxTypes.ValueChangedEvent) => {
-    this.indicatorUpdateInterval = e.value * 1000;
+  readonly changeIndicatorUpdateInterval = (e: DxNumberBoxTypes.ValueChangedEvent) => {
+    this.indicatorUpdateInterval.set(e.value * 1000);
   };
 
-  getMovieById = (id: string | number) => Query(this.moviesData).filter(['id', '=', id]).toArray()[0] as MovieData;
+  readonly getMovieById = (id: string | number) => Query(this.moviesData).filter(['id', '=', id]).toArray()[0] as MovieData;
 }
 
 bootstrapApplication(AppComponent);

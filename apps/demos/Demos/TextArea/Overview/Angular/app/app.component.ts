@@ -1,7 +1,9 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode } from '@angular/core';
+import {
+  Component, enableProdMode, inject, signal,
+} from '@angular/core';
 import { DxTextAreaModule, DxCheckBoxModule, DxSelectBoxModule } from 'devextreme-angular';
-import { DxCheckBoxTypes } from 'devextreme-angular/ui/check-box';
+import type { DxCheckBoxTypes } from 'devextreme-angular/ui/check-box';
 import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -21,7 +23,9 @@ if (!/localhost/.test(document.location.host)) {
 })
 
 export class AppComponent {
-  valueChangeEvents = [{
+  private readonly service = inject(Service);
+
+  readonly valueChangeEvents = [{
     title: 'On Change',
     name: 'change',
   }, {
@@ -29,33 +33,26 @@ export class AppComponent {
     name: 'keyup',
   }];
 
-  eventValue: string;
+  readonly eventValue = signal(this.valueChangeEvents[0].name);
 
-  maxLength = null;
+  readonly maxLength = signal<number | null>(null);
 
-  value: string;
+  readonly value = signal(this.service.getContent());
 
-  valueForEditableTextArea: string;
+  readonly valueForEditableTextArea = signal(this.service.getContent());
 
-  height = 90;
+  readonly height = signal<number | undefined>(90);
 
-  autoResizeEnabled: boolean;
-
-  constructor(private service: Service) {
-    this.valueForEditableTextArea = this.service.getContent();
-    this.value = this.service.getContent();
-    this.eventValue = this.valueChangeEvents[0].name;
-    this.autoResizeEnabled = false;
-  }
+  readonly autoResizeEnabled = signal(false);
 
   onCheckboxValueChanged({ value }: DxCheckBoxTypes.ValueChangedEvent) {
     const str = this.service.getContent();
-    this.value = value ? str.substring(0, 100) : str;
-    this.maxLength = value ? 100 : null;
+    this.value.set(value ? str.substring(0, 100) : str);
+    this.maxLength.set(value ? 100 : null);
   }
 
   onAutoResizeChanged({ value }: DxCheckBoxTypes.ValueChangedEvent) {
-    this.height = value ? undefined : 90;
+    this.height.set(value ? undefined : 90);
   }
 }
 

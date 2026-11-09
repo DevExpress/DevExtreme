@@ -1,11 +1,11 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import {
-  Component, ViewChild, enableProdMode,
+  Component, enableProdMode, inject, viewChild,
 } from '@angular/core';
 import { DxButtonModule } from 'devextreme-angular';
-import { DxVectorMapModule, DxVectorMapComponent, DxVectorMapTypes } from 'devextreme-angular/ui/vector-map';
+import { DxVectorMapModule, DxVectorMapComponent, type DxVectorMapTypes } from 'devextreme-angular/ui/vector-map';
 import * as mapsData from 'devextreme-dist/js/vectormap-data/world.js';
-import { Marker, Service } from './app.service';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -23,15 +23,11 @@ if (!/localhost/.test(document.location.host)) {
 })
 
 export class AppComponent {
-  @ViewChild(DxVectorMapComponent, { static: false }) vectorMap: DxVectorMapComponent;
+  private readonly vectorMap = viewChild.required(DxVectorMapComponent);
 
-  worldMap = mapsData.world;
+  readonly worldMap = mapsData.world;
 
-  markers: Marker[];
-
-  constructor(service: Service) {
-    this.markers = service.getMarkers();
-  }
+  readonly markers = inject(Service).getMarkers();
 
   customizeTooltip(arg) {
     if (arg.layer.type === 'marker') {
@@ -50,8 +46,8 @@ export class AppComponent {
   }
 
   resetClick() {
-    this.vectorMap.instance.center(null);
-    this.vectorMap.instance.zoomFactor(null);
+    this.vectorMap().instance.center(null);
+    this.vectorMap().instance.zoomFactor(null);
   }
 }
 

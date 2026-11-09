@@ -1,7 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode } from '@angular/core';
+import { Component, enableProdMode, inject } from '@angular/core';
 import { DxPieChartModule } from 'devextreme-angular';
-import { Area, Service } from './app.service';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -18,11 +18,7 @@ if (!/localhost/.test(document.location.host)) {
 })
 
 export class AppComponent {
-  areas: Area[];
-
-  constructor(service: Service) {
-    this.areas = service.getAreas();
-  }
+  readonly areas = inject(Service).getAreas();
 
   pointClickHandler(e) {
     this.toggleVisibility(e.target);

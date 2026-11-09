@@ -1,5 +1,5 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode } from '@angular/core';
+import { Component, enableProdMode, signal } from '@angular/core';
 import {
   DxSelectBoxModule,
   DxTextBoxModule,
@@ -28,37 +28,19 @@ if (!/localhost/.test(document.location.host)) {
 })
 
 export class AppComponent {
-  color = '#f05b41';
+  readonly color = signal('#f05b41');
 
-  text = 'UI Superhero';
+  readonly text = signal('UI Superhero');
 
-  _width = 370;
+  readonly width = signal(370);
 
-  _height = 260;
+  readonly height = signal(260);
 
-  transform = 'scaleX(1)';
+  readonly transform = signal('scaleX(1)');
 
-  border = false;
+  readonly border = signal(false);
 
-  get width() {
-    return this._width;
-  }
-
-  set width(value: number) {
-    this._width = value;
-    Promise.resolve().then(() => { this._height = value * 26 / 37; });
-  }
-
-  get height() {
-    return this._height;
-  }
-
-  set height(value: number) {
-    this._height = value;
-    Promise.resolve().then(() => { this._width = value * 37 / 26; });
-  }
-
-  transformations = [
+  readonly transformations = [
     {
       key: 'Flip',
       items: [
@@ -78,7 +60,15 @@ export class AppComponent {
     },
   ];
 
-  constructor() { }
+  onWidthChange(value: number) {
+    this.width.set(value);
+    Promise.resolve().then(() => { this.height.set(value * 26 / 37); });
+  }
+
+  onHeightChange(value: number) {
+    this.height.set(value);
+    Promise.resolve().then(() => { this.width.set(value * 37 / 26); });
+  }
 }
 
 bootstrapApplication(AppComponent);

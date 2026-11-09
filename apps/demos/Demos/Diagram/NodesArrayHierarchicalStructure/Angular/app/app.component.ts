@@ -1,5 +1,5 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode } from '@angular/core';
+import { Component, enableProdMode, inject } from '@angular/core';
 import { provideHttpClient, withFetch } from '@angular/common/http';
 
 import { DxDiagramModule } from 'devextreme-angular';
@@ -21,14 +21,10 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  dataSource: ArrayStore;
-
-  constructor(service: Service) {
-    this.dataSource = new ArrayStore({
-      key: 'this',
-      data: service.getEmployees(),
-    });
-  }
+  readonly dataSource = new ArrayStore({
+    key: 'this',
+    data: inject(Service).getEmployees(),
+  });
 }
 
 bootstrapApplication(AppComponent, {

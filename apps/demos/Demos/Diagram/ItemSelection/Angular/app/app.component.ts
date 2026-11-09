@@ -1,9 +1,10 @@
 import {
-  ChangeDetectorRef,
   Component,
   Pipe,
-  PipeTransform,
+  type PipeTransform,
   enableProdMode,
+  inject,
+  signal,
 } from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
 import { ArrayStore } from 'devextreme-angular/common/data';
@@ -35,18 +36,14 @@ export class StringifyItemsPipe implements PipeTransform {
   ],
 })
 export class AppComponent {
-  dataSource: ArrayStore;
+  readonly dataSource = new ArrayStore({
+    key: 'ID',
+    data: inject(Service).getEmployees(),
+  });
 
-  selectedItems: DxDiagramTypes.Item[];
+  readonly selectedItems = signal<DxDiagramTypes.Item[]>([]);
 
-  textExpression = 'Full_Name';
-
-  constructor(service: Service, private changeDetectorRef: ChangeDetectorRef) {
-    this.dataSource = new ArrayStore({
-      key: 'ID',
-      data: service.getEmployees(),
-    });
-  }
+  readonly textExpression = 'Full_Name';
 
   contentReadyHandler(e: DxDiagramTypes.ContentReadyEvent) {
     const diagram = e.component;
@@ -60,8 +57,7 @@ export class AppComponent {
   }
 
   selectionChangedHandler(e: DxDiagramTypes.SelectionChangedEvent) {
-    this.selectedItems = e.items.filter((item) => item.itemType === 'shape');
-    this.changeDetectorRef.detectChanges();
+    this.selectedItems.set(e.items.filter((item) => item.itemType === 'shape'));
   }
 }
 

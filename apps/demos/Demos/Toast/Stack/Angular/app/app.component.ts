@@ -1,5 +1,5 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode } from '@angular/core';
+import { Component, enableProdMode, signal } from '@angular/core';
 import {
   DxButtonModule,
   DxRadioGroupModule,
@@ -28,37 +28,45 @@ type Direction = Parameters<typeof notify>[1]['direction'];
   ],
 })
 export class AppComponent {
-  types: string[] = ['error', 'info', 'success', 'warning'];
+  private readonly types: string[] = ['error', 'info', 'success', 'warning'];
 
-  positions: Position[] = [
+  readonly positions: Position[] = [
     'top left', 'top center', 'top right',
     'bottom left', 'bottom center', 'bottom right',
     'left center', 'center', 'right center',
   ];
 
-  directions: Direction[] = [
+  readonly directions: Direction[] = [
     'down-push', 'down-stack', 'up-push', 'up-stack',
     'left-push', 'left-stack', 'right-push', 'right-stack',
   ];
 
-  id = 1;
+  private id = 1;
 
-  isPredefined = true;
+  readonly isPredefined = signal(true);
 
-  predefinedPosition: Position = 'bottom center';
+  readonly predefinedPosition = signal<Position>('bottom center');
 
-  coordinatePosition = {
-    top: undefined,
-    bottom: undefined,
-    left: undefined,
-    right: undefined,
-  };
+  readonly top = signal<number>(undefined);
 
-  direction: Direction = 'up-push';
+  readonly bottom = signal<number>(undefined);
+
+  readonly left = signal<number>(undefined);
+
+  readonly right = signal<number>(undefined);
+
+  readonly direction = signal<Direction>('up-push');
 
   show() {
-    const position = this.isPredefined ? this.predefinedPosition : this.coordinatePosition;
-    const direction = this.direction;
+    const position = this.isPredefined()
+      ? this.predefinedPosition()
+      : {
+        top: this.top(),
+        bottom: this.bottom(),
+        left: this.left(),
+        right: this.right(),
+      };
+    const direction = this.direction();
 
     notify({
       message: `Toast ${this.id}`,
@@ -83,7 +91,7 @@ export class AppComponent {
   }
 
   radioGroupValueChanged({ value }) {
-    this.isPredefined = value === 'predefined';
+    this.isPredefined.set(value === 'predefined');
   }
 }
 

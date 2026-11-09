@@ -1,12 +1,12 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import {
-  ChangeDetectorRef, Component, enableProdMode,
+  Component, enableProdMode, inject, signal,
 } from '@angular/core';
 import { DxFormModule } from 'devextreme-angular';
-import { DxCheckBoxTypes } from 'devextreme-angular/ui/check-box';
-import { DxButtonTypes } from 'devextreme-angular/ui/button';
-import { DxTextBoxTypes } from 'devextreme-angular/ui/text-box';
-import { Employee, Service } from './app.service';
+import type { DxCheckBoxTypes } from 'devextreme-angular/ui/check-box';
+import type { DxButtonTypes } from 'devextreme-angular/ui/button';
+import type { DxTextBoxTypes } from 'devextreme-angular/ui/text-box';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -23,40 +23,34 @@ if (!/localhost/.test(document.location.host)) {
 })
 
 export class AppComponent {
-  employee: Employee;
+  readonly employee = inject(Service).getEmployee();
 
-  isHomeAddressVisible = true;
+  readonly isHomeAddressVisible = signal(true);
 
-  phoneOptions: DxTextBoxTypes.Properties[] = [];
+  readonly phoneOptions = signal<DxTextBoxTypes.Properties[]>(this.getPhonesOptions(this.employee.Phones));
 
-  checkBoxOptions: DxCheckBoxTypes.Properties = {
+  readonly checkBoxOptions: DxCheckBoxTypes.Properties = {
     text: 'Show Address',
     value: true,
     onValueChanged: (e: DxCheckBoxTypes.ValueChangedEvent) => {
-      this.isHomeAddressVisible = e.component.option('value');
-      this.changeDetectorRef.detectChanges();
+      this.isHomeAddressVisible.set(e.component.option('value'));
     },
   };
 
-  addPhoneButtonOptions: DxButtonTypes.Properties = {
+  readonly addPhoneButtonOptions: DxButtonTypes.Properties = {
     icon: 'add',
     text: 'Add phone',
     onClick: () => {
       this.employee.Phones.push('');
-      this.phoneOptions = this.getPhonesOptions(this.employee.Phones);
-      this.changeDetectorRef.detectChanges();
+      this.phoneOptions.set(this.getPhonesOptions(this.employee.Phones));
     },
   };
 
-  constructor(service: Service, private changeDetectorRef: ChangeDetectorRef) {
-    this.employee = service.getEmployee();
-
-    this.phoneOptions = this.getPhonesOptions(this.employee.Phones);
+  private getPhonesOptions(phones: string[]) {
+    return phones.map((_, index) => this.generateNewPhoneOptions(index));
   }
 
-  getPhonesOptions = (phones: string[]) => phones.map((_, index) => this.generateNewPhoneOptions(index));
-
-  generateNewPhoneOptions(index: number): DxTextBoxTypes.Properties {
+  private generateNewPhoneOptions(index: number): DxTextBoxTypes.Properties {
     return {
       mask: '(X00) 000-0000',
       maskRules: { X: /[01-9]/ },
@@ -68,8 +62,7 @@ export class AppComponent {
           icon: 'trash',
           onClick: () => {
             this.employee.Phones.splice(index, 1);
-            this.phoneOptions = this.getPhonesOptions(this.employee.Phones);
-            this.changeDetectorRef.detectChanges();
+            this.phoneOptions.set(this.getPhonesOptions(this.employee.Phones));
           },
         },
       }],

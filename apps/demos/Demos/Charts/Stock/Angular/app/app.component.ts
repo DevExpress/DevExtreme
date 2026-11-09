@@ -1,6 +1,6 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import {
-  ChangeDetectorRef, Component, enableProdMode, ViewChild,
+  Component, enableProdMode, inject, signal, viewChild,
 } from '@angular/core';
 import {
   DxChartComponent, DxChartModule, DxDropDownButtonModule, DxToolbarModule,
@@ -10,7 +10,7 @@ import type { DxButtonTypes } from 'devextreme-angular/ui/button';
 import type { DxDropDownButtonTypes } from 'devextreme-angular/ui/drop-down-button';
 import type { VisualRange } from 'devextreme-angular/common/charts';
 import { formatDate } from 'devextreme/localization';
-import { StockPrice, Service } from './app.service';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -44,62 +44,65 @@ function clamp(value: number, min: number, max: number): number {
   ],
 })
 export class AppComponent {
-  @ViewChild(DxChartComponent, { static: false }) chart: DxChartComponent;
+  private readonly chart = viewChild.required(DxChartComponent);
 
-  minVisualRange = minVisualRangeLength;
+  readonly minVisualRange = minVisualRangeLength;
 
-  stockPrices: StockPrice[];
+  readonly stockPrices = inject(Service).getStockPrices();
 
-  initialStart: Date;
+  private readonly dataMin = this.stockPrices[0].date.getTime();
 
-  initialEnd = new Date(1994, 3, 29, 12);
+  private readonly dataMax = this.stockPrices[this.stockPrices.length - 1].date.getTime();
 
-  visualRange: VisualRange;
+  private readonly rangeMin = this.dataMin - dayMs / 2;
 
-  dataMin: number;
+  private readonly rangeMax = this.dataMax + dayMs / 2;
 
-  dataMax: number;
+  private readonly initialStart = new Date(this.rangeMin);
 
-  rangeMin: number;
+  private readonly initialEnd = new Date(1994, 3, 29, 12);
 
-  rangeMax: number;
+  readonly visualRange = signal<VisualRange>({
+    startValue: this.initialStart,
+    endValue: this.initialEnd,
+  });
 
-  panLeftButtonOptions: DxButtonTypes.Properties = {
+  readonly panLeftButtonOptions: DxButtonTypes.Properties = {
     icon: 'arrowleft',
     hint: 'Pan Left',
     elementAttr: { 'aria-label': 'Pan Left' },
     onClick: () => this.pan(-1),
   };
 
-  panRightButtonOptions: DxButtonTypes.Properties = {
+  readonly panRightButtonOptions: DxButtonTypes.Properties = {
     icon: 'arrowright',
     hint: 'Pan Right',
     elementAttr: { 'aria-label': 'Pan Right' },
     onClick: () => this.pan(1),
   };
 
-  zoomInButtonOptions: DxButtonTypes.Properties = {
+  readonly zoomInButtonOptions: DxButtonTypes.Properties = {
     icon: 'zoominoutline',
     hint: 'Zoom In',
     elementAttr: { 'aria-label': 'Zoom In' },
     onClick: () => this.zoom(zoomFactor),
   };
 
-  zoomOutButtonOptions: DxButtonTypes.Properties = {
+  readonly zoomOutButtonOptions: DxButtonTypes.Properties = {
     icon: 'zoomoutoutline',
     hint: 'Zoom Out',
     elementAttr: { 'aria-label': 'Zoom Out' },
     onClick: () => this.zoom(1 / zoomFactor),
   };
 
-  resetZoomButtonOptions: DxButtonTypes.Properties = {
+  readonly resetZoomButtonOptions: DxButtonTypes.Properties = {
     icon: 'refresh',
     hint: 'Reset Zoom',
     elementAttr: { 'aria-label': 'Reset Zoom' },
     onClick: () => this.resetZoom(),
   };
 
-  exportButtonOptions: DxDropDownButtonTypes.Properties = {
+  readonly exportButtonOptions: DxDropDownButtonTypes.Properties = {
     icon: 'export',
     hint: 'Exporting/Printing',
     stylingMode: 'text',
@@ -109,59 +112,47 @@ export class AppComponent {
     items: exportItems,
     onItemClick: ({ itemData }) => {
       if (itemData.format) {
-        this.chart.instance.exportTo('file', itemData.format);
+        this.chart().instance.exportTo('file', itemData.format);
       } else {
-        this.chart.instance.print();
+        this.chart().instance.print();
       }
     },
   };
 
-  constructor(service: Service, private changeDetectorRef: ChangeDetectorRef) {
-    this.stockPrices = service.getStockPrices();
-    this.dataMin = this.stockPrices[0].date.getTime();
-    this.dataMax = this.stockPrices[this.stockPrices.length - 1].date.getTime();
-    this.rangeMin = this.dataMin - dayMs / 2;
-    this.rangeMax = this.dataMax + dayMs / 2;
-    this.initialStart = new Date(this.rangeMin);
-    this.visualRange = {
-      startValue: this.initialStart,
-      endValue: this.initialEnd,
-    };
-  }
+  private getRange() {
+    const { startValue, endValue } = this.visualRange();
 
-  getRange() {
     return {
-      start: (this.visualRange.startValue as Date).getTime(),
-      end: (this.visualRange.endValue as Date).getTime(),
+      start: (startValue as Date).getTime(),
+      end: (endValue as Date).getTime(),
     };
   }
 
-  setRange(start: number, end: number) {
+  private setRange(start: number, end: number) {
     const span = clamp(end - start, minVisibleSpanMs, this.rangeMax - this.rangeMin);
     const center = (start + end) / 2;
     const newStart = clamp(center - span / 2, this.rangeMin, this.rangeMax - span);
 
-    this.visualRange = {
+    this.visualRange.set({
       startValue: new Date(newStart),
       endValue: new Date(newStart + span),
-    };
-    this.changeDetectorRef.detectChanges();
+    });
   }
 
-  pan(direction: number) {
+  private pan(direction: number) {
     const { start, end } = this.getRange();
     const shift = (end - start) * panStepFraction * direction;
     this.setRange(start + shift, end + shift);
   }
 
-  zoom(factor: number) {
+  private zoom(factor: number) {
     const { start, end } = this.getRange();
     const center = (start + end) / 2;
     const half = ((end - start) * factor) / 2;
     this.setRange(center - half, center + half);
   }
 
-  resetZoom() {
+  private resetZoom() {
     this.setRange(this.initialStart.getTime(), this.initialEnd.getTime());
   }
 

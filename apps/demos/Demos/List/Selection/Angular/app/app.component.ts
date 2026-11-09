@@ -1,5 +1,5 @@
 import {
-  ChangeDetectorRef, Component, enableProdMode,
+  Component, enableProdMode, inject, signal,
 } from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
 import { DataSource, ArrayStore } from 'devextreme-angular/common/data';
@@ -26,29 +26,20 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  tasks: DataSource;
+  readonly tasks = new DataSource({
+    store: new ArrayStore({
+      key: 'id',
+      data: inject(Service).getTasks(),
+    }),
+  });
 
-  selectAllModeValue: DxListTypes.SelectAllMode = 'page';
+  readonly selectAllModeValue = signal<DxListTypes.SelectAllMode>('page');
 
-  selectionModeValue: SingleMultipleAllOrNone = 'all';
+  readonly selectionModeValue = signal<SingleMultipleAllOrNone>('all');
 
-  selectByClick = false;
+  readonly selectByClick = signal(false);
 
-  selectedItemKeys: number[] = [];
-
-  constructor(service: Service, private changeDetectorRef: ChangeDetectorRef) {
-    this.tasks = new DataSource({
-      store: new ArrayStore({
-        key: 'id',
-        data: service.getTasks(),
-      }),
-    });
-  }
-
-  onSelectedItemKeysChange(keys: number[]) {
-    this.selectedItemKeys = keys;
-    this.changeDetectorRef.detectChanges();
-  }
+  readonly selectedItemKeys = signal<number[]>([]);
 }
 
 bootstrapApplication(AppComponent);

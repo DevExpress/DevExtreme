@@ -1,11 +1,11 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode } from '@angular/core';
+import { Component, enableProdMode, inject } from '@angular/core';
 import {
   DxFormModule,
 } from 'devextreme-angular';
 import 'devextreme/ui/select_box';
 import 'devextreme/ui/text_area';
-import { Service, Employee } from './app.service';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -22,17 +22,13 @@ if (!/localhost/.test(document.location.host)) {
 })
 
 export class AppComponent {
-  employee: Employee;
+  private readonly service = inject(Service);
 
-  positions: string[];
+  readonly employee = this.service.getEmployee();
 
-  states: string[];
+  readonly positions = this.service.getPositions();
 
-  constructor(service: Service) {
-    this.employee = service.getEmployee();
-    this.positions = service.getPositions();
-    this.states = service.getStates();
-  }
+  readonly states = this.service.getStates();
 }
 
 bootstrapApplication(AppComponent);

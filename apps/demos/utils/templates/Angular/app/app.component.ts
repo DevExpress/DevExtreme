@@ -1,8 +1,7 @@
-import { NgModule, Component, enableProdMode } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+import { Component, enableProdMode, inject } from '@angular/core';
+import { bootstrapApplication } from '@angular/platform-browser';
 import { DxDataGridModule } from 'devextreme-angular';
-import { Service, type Customer } from './app.service';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -12,24 +11,10 @@ if (!/localhost/.test(document.location.host)) {
   selector: 'demo-app',
   templateUrl: './app.component.html',
   providers: [Service],
+  imports: [DxDataGridModule],
 })
 export class AppComponent {
-  customers: Customer[];
-
-  constructor(service: Service) {
-    this.customers = service.getCustomers();
-  }
+  readonly customers = inject(Service).getCustomers();
 }
 
-@NgModule({
-  imports: [
-    BrowserModule,
-    DxDataGridModule,
-  ],
-  declarations: [AppComponent],
-  bootstrap: [AppComponent],
-})
-export class AppModule { }
-
-// eslint-disable-next-line deprecation/deprecation
-platformBrowserDynamic().bootstrapModule(AppModule);
+bootstrapApplication(AppComponent);

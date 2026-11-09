@@ -1,8 +1,10 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode } from '@angular/core';
+import {
+  Component, enableProdMode, inject, signal,
+} from '@angular/core';
 import { DxGalleryModule } from 'devextreme-angular';
-import { DxCheckBoxModule, DxCheckBoxTypes } from 'devextreme-angular/ui/check-box';
-import { Service, Image } from './app.service';
+import { DxCheckBoxModule, type DxCheckBoxTypes } from 'devextreme-angular/ui/check-box';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -19,16 +21,12 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  dataSource: Image[];
+  readonly dataSource = inject(Service).getImages();
 
-  slideshowDelay = 2000;
-
-  constructor(service: Service) {
-    this.dataSource = service.getImages();
-  }
+  readonly slideshowDelay = signal(2000);
 
   valueChanged(e: DxCheckBoxTypes.ValueChangedEvent) {
-    this.slideshowDelay = e.value ? 2000 : 0;
+    this.slideshowDelay.set(e.value ? 2000 : 0);
   }
 }
 

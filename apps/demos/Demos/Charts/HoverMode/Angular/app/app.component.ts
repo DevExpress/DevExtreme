@@ -1,7 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode } from '@angular/core';
+import { Component, enableProdMode, inject } from '@angular/core';
 import { DxChartModule } from 'devextreme-angular';
-import { Service, GrossProduct } from './app.service';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -17,11 +17,7 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  grossProductData: GrossProduct[];
-
-  constructor(service: Service) {
-    this.grossProductData = service.getGrossProductData();
-  }
+  readonly grossProductData = inject(Service).getGrossProductData();
 }
 
 bootstrapApplication(AppComponent);

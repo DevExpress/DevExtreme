@@ -1,7 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode } from '@angular/core';
+import { Component, enableProdMode, inject } from '@angular/core';
 import { DxSchedulerModule } from 'devextreme-angular';
-import { Resource, Appointment, Service } from './app.service';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -17,22 +17,13 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  resources: Resource[];
+  private readonly service = inject(Service);
 
-  appointments: Appointment[];
+  readonly resources = this.service.resources;
 
-  currentDate: Date = new Date(2021, 1, 2);
+  readonly appointments = this.service.generateAppointments(new Date(2021, 1, 1), new Date(2021, 1, 28), 8, 20);
 
-  constructor(service: Service) {
-    const startDay = new Date(2021, 1, 1);
-    const endDay = new Date(2021, 1, 28);
-    const startDayHour = 8;
-    const endDayHour = 20;
-
-    this.appointments = service.generateAppointments(startDay, endDay, startDayHour, endDayHour);
-
-    this.resources = service.resources;
-  }
+  readonly currentDate = new Date(2021, 1, 2);
 }
 
 bootstrapApplication(AppComponent);

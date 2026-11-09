@@ -1,5 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode } from '@angular/core';
+import {
+  Component, enableProdMode, inject, signal,
+} from '@angular/core';
 import {
   DxPopupModule, DxDiagramModule,
 } from 'devextreme-angular';
@@ -22,21 +24,18 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  currentEmployee: Employee = new Employee();
+  private readonly service = inject(Service);
 
-  employees: Employee[];
+  readonly currentEmployee = signal<Employee>(new Employee());
 
-  dataSource: ArrayStore;
+  readonly employees: Employee[] = this.service.getEmployees();
 
-  popupVisible = false;
+  readonly dataSource = new ArrayStore({
+    key: 'ID',
+    data: this.service.getEmployees(),
+  });
 
-  constructor(service: Service) {
-    this.employees = service.getEmployees();
-    this.dataSource = new ArrayStore({
-      key: 'ID',
-      data: service.getEmployees(),
-    });
-  }
+  readonly popupVisible = signal(false);
 
   itemTypeExpr(obj, value) {
     if (value === undefined) {
@@ -46,9 +45,9 @@ export class AppComponent {
     return null;
   }
 
-  showInfo(employee) {
-    this.currentEmployee = employee;
-    this.popupVisible = true;
+  showInfo(employee: Employee) {
+    this.currentEmployee.set(employee);
+    this.popupVisible.set(true);
   }
 }
 

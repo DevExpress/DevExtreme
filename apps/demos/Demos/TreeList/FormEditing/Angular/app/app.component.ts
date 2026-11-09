@@ -1,7 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode } from '@angular/core';
+import { Component, enableProdMode, inject } from '@angular/core';
 import { DxTreeListModule, DxTreeListTypes } from 'devextreme-angular/ui/tree-list';
-import { Employee, Service } from './app.service';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -17,17 +17,12 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  employees: Employee[];
+  readonly employees = inject(Service).getEmployees();
 
-  lookupData: { store: Employee[], sort: string };
-
-  constructor(service: Service) {
-    this.employees = service.getEmployees();
-    this.lookupData = {
-      store: this.employees,
-      sort: 'Full_Name',
-    };
-  }
+  readonly lookupData = {
+    store: this.employees,
+    sort: 'Full_Name',
+  };
 
   editorPreparing(e: DxTreeListTypes.EditorPreparingEvent) {
     if (e.dataField === 'Head_ID' && e.row.data.ID === 1) {
@@ -40,7 +35,7 @@ export class AppComponent {
     e.data.Head_ID = 1;
   }
 
-  allowDeleting = ({ row }) => row.data.ID !== 1;
+  readonly allowDeleting = ({ row }) => row.data.ID !== 1;
 }
 
 bootstrapApplication(AppComponent);

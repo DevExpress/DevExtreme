@@ -18,7 +18,7 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  listData = new DataSource({
+  readonly listData = new DataSource({
     store: AspNetData.createStore({
       key: 'ProductID',
       loadUrl: 'https://js.devexpress.com/Demos/NetCore/api/ListData',

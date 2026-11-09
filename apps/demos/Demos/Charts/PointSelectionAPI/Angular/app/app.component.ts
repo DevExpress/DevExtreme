@@ -1,7 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode } from '@angular/core';
+import { Component, enableProdMode, inject } from '@angular/core';
 import { DxChartModule, type DxChartTypes } from 'devextreme-angular/ui/chart';
-import { Service, CatBreed } from './app.service';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -17,11 +17,7 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  catBreedsData: CatBreed[];
-
-  constructor(service: Service) {
-    this.catBreedsData = service.getCatBreedsData();
-  }
+  readonly catBreedsData = inject(Service).getCatBreedsData();
 
   done(e: DxChartTypes.DoneEvent) {
     e.component.getSeriesByPos(0).getPointsByArg('Siamese')[0].select();

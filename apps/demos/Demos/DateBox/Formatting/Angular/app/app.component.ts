@@ -16,7 +16,7 @@ if (!/localhost/.test(document.location.host)) {
 })
 
 export class AppComponent {
-  date: Date = new Date(2025, 9, 16, 15, 8, 12);
+  readonly date = new Date(2025, 9, 16, 15, 8, 12);
 }
 
 bootstrapApplication(AppComponent);

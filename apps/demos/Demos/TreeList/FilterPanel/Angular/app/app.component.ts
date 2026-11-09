@@ -1,5 +1,5 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode } from '@angular/core';
+import { Component, enableProdMode, inject } from '@angular/core';
 import { DataSource } from 'devextreme-angular/common/data';
 import { DxTreeListModule, DxTreeListTypes } from 'devextreme-angular/ui/tree-list';
 import { Service } from './app.service';
@@ -19,15 +19,11 @@ if (!/localhost/.test(document.location.host)) {
 })
 
 export class AppComponent {
-  dataSource: DataSource;
+  readonly dataSource = new DataSource({
+    store: inject(Service).getEmployees(),
+  });
 
-  filterValue: DxTreeListTypes.Properties['filterValue'] = ['City', '=', 'Bentonville'];
-
-  constructor(service: Service) {
-    this.dataSource = new DataSource({
-      store: service.getEmployees(),
-    });
-  }
+  readonly filterValue: DxTreeListTypes.Properties['filterValue'] = ['City', '=', 'Bentonville'];
 }
 
 bootstrapApplication(AppComponent);

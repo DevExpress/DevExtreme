@@ -1,7 +1,9 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode } from '@angular/core';
+import {
+  Component, enableProdMode, inject, signal,
+} from '@angular/core';
 import { DxSchedulerModule, DxRadioGroupModule } from 'devextreme-angular';
-import { Service, Appointment, Shift } from './app.service';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -18,20 +20,15 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  appointments: Appointment[];
+  private readonly service = inject(Service);
 
-  shifts: Shift[];
+  readonly appointments = this.service.getAppointments();
 
-  currentShift: Shift;
+  readonly shifts = this.service.getShifts();
 
-  currentDate: Date = new Date(2021, 2, 30);
+  readonly currentShift = signal(this.shifts[0]);
 
-  constructor(service: Service) {
-    this.appointments = service.getAppointments();
-    this.shifts = service.getShifts();
-
-    this.currentShift = this.shifts[0];
-  }
+  readonly currentDate = new Date(2021, 2, 30);
 }
 
 bootstrapApplication(AppComponent);

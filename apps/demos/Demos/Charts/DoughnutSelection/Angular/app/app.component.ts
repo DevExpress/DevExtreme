@@ -1,7 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode } from '@angular/core';
+import { Component, enableProdMode, inject } from '@angular/core';
 import { DxPieChartModule } from 'devextreme-angular';
-import { MedalsInfo, Service } from './app.service';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -18,11 +18,7 @@ if (!/localhost/.test(document.location.host)) {
 })
 
 export class AppComponent {
-  olympicMedals: MedalsInfo[];
-
-  constructor(service: Service) {
-    this.olympicMedals = service.getMedalsData();
-  }
+  readonly olympicMedals = inject(Service).getMedalsData();
 
   pointClickHandler(arg) {
     arg.target.select();

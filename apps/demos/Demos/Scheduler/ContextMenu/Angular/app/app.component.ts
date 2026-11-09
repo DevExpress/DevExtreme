@@ -1,5 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, ViewChild } from '@angular/core';
+import {
+  Component, enableProdMode, inject, signal, viewChild,
+} from '@angular/core';
 import {
   DxSchedulerModule,
   DxSchedulerComponent,
@@ -7,7 +9,7 @@ import {
 } from 'devextreme-angular/ui/scheduler';
 import { DxContextMenuModule, type DxContextMenuTypes } from 'devextreme-angular/ui/context-menu';
 
-import { Service, type Appointment, type Resource, type ContextMenuItem } from './app.service';
+import { Service, type Resource, type ContextMenuItem } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -25,24 +27,21 @@ if (!/localhost/.test(document.location.host)) {
 })
 
 export class AppComponent {
-  @ViewChild(DxSchedulerComponent, { static: false }) scheduler!: DxSchedulerComponent;
+  private readonly scheduler = viewChild.required(DxSchedulerComponent);
 
-  appointmentsData!: Appointment[];
+  private readonly service = inject(Service);
 
-  currentDate: Date = new Date(2020, 10, 25);
+  readonly appointmentsData = this.service.getAppointments();
 
-  resourcesData: Resource[];
+  readonly currentDate = signal(new Date(2020, 10, 25));
 
-  groups: string[] = [];
+  readonly resourcesData = this.service.getResources();
 
-  crossScrollingEnabled = false;
+  readonly groups = signal<string[]>([]);
 
-  contextMenuItems: ContextMenuItem[] = [];
+  readonly crossScrollingEnabled = signal(false);
 
-  constructor(service: Service) {
-    this.resourcesData = service.getResources();
-    this.appointmentsData = service.getAppointments();
-  }
+  readonly contextMenuItems = signal<ContextMenuItem[]>([]);
 
   onContextMenuItemClick(e: DxContextMenuTypes.ItemClickEvent<ContextMenuItem>) {
     e.itemData.onItemClick(e);
@@ -50,24 +49,24 @@ export class AppComponent {
 
   onAppointmentContextMenu(e: DxSchedulerTypes.AppointmentContextMenuEvent) {
     const items = this.getAppointmentContextMenuItems(e);
-    this.contextMenuItems = items;
+    this.contextMenuItems.set(items);
   }
 
   onCellContextMenu(e: DxSchedulerTypes.CellContextMenuEvent) {
     const items = this.getCellContextMenuItems(e);
-    this.contextMenuItems = items;
+    this.contextMenuItems.set(items);
   }
 
   onContextMenuHiding() {
-    this.contextMenuItems = [];
+    this.contextMenuItems.set([]);
   }
 
-  getAppointmentContextMenuItems(e: DxSchedulerTypes.AppointmentContextMenuEvent): ContextMenuItem[] {
+  private getAppointmentContextMenuItems(e: DxSchedulerTypes.AppointmentContextMenuEvent): ContextMenuItem[] {
     const {
       appointmentData: appointment,
       targetedAppointmentData: targetedAppointment,
     } = e;
-    const scheduler = this.scheduler.instance;
+    const scheduler = this.scheduler().instance;
 
     return [
       {
@@ -102,9 +101,9 @@ export class AppComponent {
     ];
   }
 
-  getCellContextMenuItems(e: DxSchedulerTypes.CellContextMenuEvent): ContextMenuItem[] {
+  private getCellContextMenuItems(e: DxSchedulerTypes.CellContextMenuEvent): ContextMenuItem[] {
     const { cellData } = e;
-    const scheduler = this.scheduler.instance;
+    const scheduler = this.scheduler().instance;
 
     return [
       {
@@ -128,19 +127,19 @@ export class AppComponent {
         text: 'Group by Room/Ungroup',
         beginGroup: true,
         onItemClick: () => {
-          if (this.groups.length) {
-            this.crossScrollingEnabled = false;
-            this.groups = [];
+          if (this.groups().length) {
+            this.crossScrollingEnabled.set(false);
+            this.groups.set([]);
           } else {
-            this.crossScrollingEnabled = true;
-            this.groups = ['roomId'];
+            this.crossScrollingEnabled.set(true);
+            this.groups.set(['roomId']);
           }
         },
       },
       {
         text: 'Go to Today',
         onItemClick: () => {
-          this.currentDate = new Date();
+          this.currentDate.set(new Date());
         },
       },
     ];

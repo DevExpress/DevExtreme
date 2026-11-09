@@ -1,10 +1,10 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import {
-  ChangeDetectorRef, Component, enableProdMode,
+  Component, enableProdMode, inject, signal,
 } from '@angular/core';
 import { DxCheckBoxModule } from 'devextreme-angular';
 import { DxTreeListModule, type DxTreeListTypes } from 'devextreme-angular/ui/tree-list';
-import { Service, type Employee } from './app.service';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -22,19 +22,15 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  employees: Employee[];
+  readonly employees = signal(inject(Service).getEmployees());
 
-  allowDropInsideItem = true;
+  readonly allowDropInsideItem = signal(true);
 
-  allowReordering = true;
+  readonly allowReordering = signal(true);
 
-  showDragIcons = true;
+  readonly showDragIcons = signal(true);
 
-  expandedRowKeys: number[] = [1];
-
-  constructor(service: Service, private changeDetectorRef: ChangeDetectorRef) {
-    this.employees = service.getEmployees();
-  }
+  readonly expandedRowKeys = [1];
 
   onDragChange(e: DxTreeListTypes.RowDraggingChangeEvent) {
     const visibleRows = e.component.getVisibleRows();
@@ -50,7 +46,7 @@ export class AppComponent {
     }
   }
 
-  onReorder = (e: DxTreeListTypes.RowDraggingReorderEvent) => {
+  readonly onReorder = (e: DxTreeListTypes.RowDraggingReorderEvent) => {
     const visibleRows = e.component.getVisibleRows();
 
     if (e.dropInsideItem) {
@@ -69,13 +65,14 @@ export class AppComponent {
         sourceData.Head_ID = targetData ? targetData.Head_ID : -1;
       }
 
-      const sourceIndex = this.employees.indexOf(sourceData);
-      this.employees.splice(sourceIndex, 1);
+      this.employees.update((employees) => {
+        const result = employees.filter((employee) => employee !== sourceData);
+        const targetIndex = result.indexOf(targetData) + 1;
 
-      const targetIndex = this.employees.indexOf(targetData) + 1;
-      this.employees.splice(targetIndex, 0, sourceData);
+        result.splice(targetIndex, 0, sourceData);
 
-      this.changeDetectorRef.detectChanges();
+        return result;
+      });
     }
   };
 }

@@ -1,7 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode } from '@angular/core';
+import { Component, enableProdMode, inject } from '@angular/core';
 import { DxTreeMapModule } from 'devextreme-angular';
-import { CitiesPopulation, Service } from './app.service';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -17,11 +17,7 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  citiesPopulations: CitiesPopulation[];
-
-  constructor(service: Service) {
-    this.citiesPopulations = service.getCitiesPopulations();
-  }
+  readonly citiesPopulations = inject(Service).getCitiesPopulations();
 
   customizeTooltip(arg) {
     const data = arg.node.data;

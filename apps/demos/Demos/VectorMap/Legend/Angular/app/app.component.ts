@@ -1,8 +1,8 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode } from '@angular/core';
+import { Component, enableProdMode, inject } from '@angular/core';
 import { DxVectorMapModule } from 'devextreme-angular';
 import * as mapsData from 'devextreme-dist/js/vectormap-data/world.js';
-import { FeatureCollection, Service } from './app.service';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -19,17 +19,13 @@ if (!/localhost/.test(document.location.host)) {
 })
 
 export class AppComponent {
-  worldMap = mapsData.world;
+  private readonly service = inject(Service);
 
-  markers: FeatureCollection;
+  readonly worldMap = mapsData.world;
 
-  populations: Object;
+  readonly markers = this.service.getMarkers();
 
-  constructor(service: Service) {
-    this.markers = service.getMarkers();
-    this.populations = service.getPopulations();
-    this.customizeLayers = this.customizeLayers.bind(this);
-  }
+  private readonly populations: Object = this.service.getPopulations();
 
   customizeText({ index, start, end }) {
     if (index === 0) {
@@ -41,13 +37,13 @@ export class AppComponent {
       : `${start}% to ${end}%`;
   }
 
-  customizeTooltip = (arg: { attribute: Function }) => ({
+  readonly customizeTooltip = (arg: { attribute: Function }) => ({
     text: arg.attribute('text'),
   });
 
-  customizeItems = (items: unknown[]) => items.reverse();
+  readonly customizeItems = (items: unknown[]) => items.reverse();
 
-  customizeLayers(elements: { attribute: Function }[]) {
+  readonly customizeLayers = (elements: { attribute: Function }[]) => {
     elements.forEach((element) => {
       const name = element.attribute('name');
       const population = this.populations[name];
@@ -55,9 +51,9 @@ export class AppComponent {
         element.attribute('population', population);
       }
     });
-  }
+  };
 
-  customizeMarkers = ({ index }) => ['< 8000K', '8000K to 10000K', '> 10000K'][index];
+  readonly customizeMarkers = ({ index }) => ['< 8000K', '8000K to 10000K', '> 10000K'][index];
 }
 
 bootstrapApplication(AppComponent);

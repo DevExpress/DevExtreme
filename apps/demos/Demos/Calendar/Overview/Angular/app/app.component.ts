@@ -1,11 +1,9 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import {
-  ChangeDetectorRef, Component, enableProdMode,
-} from '@angular/core';
+import { Component, enableProdMode, signal } from '@angular/core';
 import {
   DxCheckBoxModule, DxDateBoxModule, DxSelectBoxModule,
 } from 'devextreme-angular';
-import { DxCalendarModule, DxCalendarTypes } from 'devextreme-angular/ui/calendar';
+import { DxCalendarModule, type DxCalendarTypes } from 'devextreme-angular/ui/calendar';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -24,15 +22,17 @@ if (!/localhost/.test(document.location.host)) {
 })
 
 export class AppComponent {
-  now = new Date();
+  readonly now = new Date();
 
-  currentValue = new Date();
+  readonly currentValue = signal(new Date());
 
-  zoomLevels: DxCalendarTypes.CalendarZoomLevel[] = [
+  readonly zoomLevels: DxCalendarTypes.CalendarZoomLevel[] = [
     'month', 'year', 'decade', 'century',
   ];
 
-  weekDays: { id: number; text: string }[] = [
+  readonly zoomLevel = signal(this.zoomLevels[0]);
+
+  readonly weekDays: { id: number; text: string }[] = [
     { id: 0, text: 'Sunday' },
     { id: 1, text: 'Monday' },
     { id: 2, text: 'Tuesday' },
@@ -42,32 +42,26 @@ export class AppComponent {
     { id: 6, text: 'Saturday' },
   ];
 
-  weekNumberRules: DxCalendarTypes.WeekNumberRule[] = [
+  readonly weekNumberRules: DxCalendarTypes.WeekNumberRule[] = [
     'auto', 'firstDay', 'firstFourDays', 'fullWeek',
   ];
 
-  cellTemplate = 'cell';
+  readonly cellTemplate = signal('cell');
 
-  holidays = [[1, 0], [4, 6], [25, 11]];
+  private readonly holidays = [[1, 0], [4, 6], [25, 11]];
 
-  constructor(private changeDetectorRef: ChangeDetectorRef) {}
-
-  onZoomLevelChange() {
-    this.changeDetectorRef.detectChanges();
-  }
-
-  isWeekend(date: Date) {
+  private isWeekend(date: Date) {
     const day = date.getDay();
 
     return day === 0 || day === 6;
   }
 
-  isHoliday(date: Date) {
+  private isHoliday(date: Date) {
     return this.holidays.some((item) => date.getDate() === item[0] && date.getMonth() === item[1]);
   }
 
   useCellTemplate({ value }) {
-    this.cellTemplate = value ? 'custom' : 'cell';
+    this.cellTemplate.set(value ? 'custom' : 'cell');
   }
 
   getCellCssClass({ date, view }) {

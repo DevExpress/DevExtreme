@@ -1,8 +1,10 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode } from '@angular/core';
+import {
+  Component, enableProdMode, inject, signal,
+} from '@angular/core';
 import { DxChartModule, DxCheckBoxModule, DxSelectBoxModule } from 'devextreme-angular';
 import type { ChartSeriesAggregationMethod, CommonPointInfo } from 'devextreme/viz/chart';
-import { MAX_SUFFIX, Service, OilProductionItem } from './app.service';
+import { MAX_SUFFIX, Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -20,17 +22,17 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  dataSource: OilProductionItem[];
+  readonly dataSource = inject(Service).getOilProductionData();
 
-  functions: { displayName: string; func: ChartSeriesAggregationMethod }[] = [
+  readonly functions: { displayName: string; func: ChartSeriesAggregationMethod }[] = [
     { displayName: 'Average', func: 'avg' },
     { displayName: 'Sum', func: 'sum' },
     { displayName: 'Minimum', func: 'min' },
   ];
 
-  useAggregation = true;
+  readonly useAggregation = signal(true);
 
-  currentFunction: ChartSeriesAggregationMethod = 'avg';
+  readonly currentFunction = signal<ChartSeriesAggregationMethod>('avg');
 
   customizeSeries(seriesName: string) {
     const isMaxSeries = seriesName.endsWith(MAX_SUFFIX);
@@ -54,10 +56,6 @@ export class AppComponent {
     return {
       text: `<b>${argumentText}</b><br/>${seriesName}${month ? ` (${month})` : ''}: ${valueText}`,
     };
-  }
-
-  constructor(service: Service) {
-    this.dataSource = service.getOilProductionData();
   }
 }
 

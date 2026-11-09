@@ -1,8 +1,10 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, ViewChild, enableProdMode } from '@angular/core';
+import {
+  Component, enableProdMode, inject, viewChild,
+} from '@angular/core';
 import { DxButtonModule } from 'devextreme-angular';
 import { DxChartComponent, DxChartModule, DxChartTypes } from 'devextreme-angular/ui/chart';
-import { Service, Mountain } from './app.service';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -20,29 +22,25 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  @ViewChild(DxChartComponent, { static: false }) chart: DxChartComponent;
+  private readonly chart = viewChild.required(DxChartComponent);
 
-  mountains: Mountain[];
+  readonly mountains = inject(Service).getMountains();
 
-  constructor(service: Service) {
-    this.mountains = service.getMountains();
-  }
-
-  customizeTooltip = ({ argumentText, valueText, point: { data: { system } } }) => (
+  readonly customizeTooltip = ({ argumentText, valueText, point: { data: { system } } }) => (
     {
       text: `<span class='title'>${argumentText}</span><br />&nbsp;<br />System: ${
         system}<br />Height: ${valueText} m`,
     }
   );
 
-  customizeLabel: DxChartTypes.ValueAxisLabel['customizeText'] = ({ value }) => `${value} m`;
+  readonly customizeLabel: DxChartTypes.ValueAxisLabel['customizeText'] = ({ value }) => `${value} m`;
 
   print() {
-    this.chart.instance.print();
+    this.chart().instance.print();
   }
 
   export() {
-    this.chart.instance.exportTo('Example', 'png');
+    this.chart().instance.exportTo('Example', 'png');
   }
 }
 

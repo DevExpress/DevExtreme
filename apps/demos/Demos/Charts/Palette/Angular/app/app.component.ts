@@ -1,9 +1,11 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode } from '@angular/core';
+import {
+  Component, computed, enableProdMode, inject, signal,
+} from '@angular/core';
 import { getPalette } from 'devextreme/viz/palette';
 import { DxPieChartModule, DxSelectBoxModule } from 'devextreme-angular';
-import { Palette, PaletteExtensionMode } from 'devextreme-angular/common/charts';
-import { DataItem, Service } from './app.service';
+import { PaletteExtensionMode } from 'devextreme-angular/common/charts';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -22,26 +24,19 @@ if (!/localhost/.test(document.location.host)) {
 })
 
 export class AppComponent {
-  data: DataItem[];
+  private readonly service = inject(Service);
 
-  paletteCollection: Palette[];
+  readonly data = this.service.getData();
 
-  paletteExtensionModes: PaletteExtensionMode[];
+  readonly paletteCollection = this.service.getPaletteCollection();
 
-  palette: Palette;
+  readonly paletteExtensionModes = this.service.getPaletteExtensionModes();
 
-  paletteExtensionMode: PaletteExtensionMode = 'blend';
+  readonly palette = signal(this.paletteCollection[0]);
 
-  constructor(service: Service) {
-    this.data = service.getData();
-    this.paletteExtensionModes = service.getPaletteExtensionModes();
-    this.paletteCollection = service.getPaletteCollection();
-    this.palette = this.paletteCollection[0];
-  }
+  readonly paletteExtensionMode = signal<PaletteExtensionMode>('blend');
 
-  get baseColors() {
-    return getPalette(this.palette as string).simpleSet;
-  }
+  readonly baseColors = computed(() => getPalette(this.palette() as string).simpleSet);
 }
 
 bootstrapApplication(AppComponent);

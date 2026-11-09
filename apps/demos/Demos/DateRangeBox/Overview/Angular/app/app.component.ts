@@ -1,5 +1,5 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode } from '@angular/core';
+import { Component, enableProdMode, signal } from '@angular/core';
 import { DxDateRangeBoxModule } from 'devextreme-angular';
 
 if (!/localhost/.test(document.location.host)) {
@@ -29,22 +29,17 @@ function convertRangeToDays([startDate, endDate]) {
 })
 
 export class AppComponent {
-  currentValue: [Date, Date] = initialValue;
+  readonly currentValue = signal<[Date, Date]>(initialValue);
 
-  initialValue: [Date, Date] = initialValue;
+  readonly initialValue = initialValue;
 
-  min: Date = null;
+  private readonly lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
 
-  max: Date = null;
+  readonly min = new Date(now.setDate(1));
 
-  selectedDays: number = convertRangeToDays(initialValue);
+  readonly max = new Date(now.setDate(this.lastDay));
 
-  constructor() {
-    const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
-
-    this.min = new Date(now.setDate(1));
-    this.max = new Date(now.setDate(lastDay));
-  }
+  readonly selectedDays = signal(convertRangeToDays(initialValue));
 
   currentValueChanged({ value: [startDate, endDate] }) {
     let daysCount = 0;
@@ -53,7 +48,7 @@ export class AppComponent {
       daysCount = convertRangeToDays([startDate, endDate]);
     }
 
-    this.selectedDays = daysCount;
+    this.selectedDays.set(daysCount);
   }
 }
 

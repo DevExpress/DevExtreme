@@ -1,8 +1,10 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode } from '@angular/core';
+import {
+  Component, enableProdMode, inject, signal,
+} from '@angular/core';
 import { DxRadioGroupModule } from 'devextreme-angular';
-import { DxRadioGroupTypes } from 'devextreme-angular/ui/radio-group';
-import { PriorityEntity, Service, Task } from './app.service';
+import type { DxRadioGroupTypes } from 'devextreme-angular/ui/radio-group';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -18,39 +20,35 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  priorityEntities: PriorityEntity[];
+  private readonly service = inject(Service);
 
-  selectionPriorityId: number;
+  private readonly tasks = this.service.getTasks();
 
-  colorPriority: string;
+  readonly priorityEntities = this.service.getPriorityEntities();
 
-  tasks: Task[];
-
-  currentData: string[] = [];
-
-  priorities = [
+  readonly priorities = [
     'Low',
     'Normal',
     'Urgent',
     'High',
   ];
 
-  constructor(service: Service) {
-    this.tasks = service.getTasks();
-    this.priorityEntities = service.getPriorityEntities();
-    this.colorPriority = this.priorities[2];
-    this.currentData[0] = this.tasks[1].subject;
-    this.selectionPriorityId = this.priorityEntities[0].id;
-  }
+  readonly colorPriority = signal(this.priorities[2]);
+
+  readonly selectionPriorityId = signal(this.priorityEntities[0].id);
+
+  readonly currentData = signal<string[]>([this.tasks[1].subject]);
 
   onValueChanged({ value }: DxRadioGroupTypes.ValueChangedEvent) {
-    this.currentData = [];
+    const currentData: string[] = [];
 
     this.tasks.forEach((item, index) => {
       if (item.priority === value) {
-        this.currentData.push(this.tasks[index].subject);
+        currentData.push(this.tasks[index].subject);
       }
     });
+
+    this.currentData.set(currentData);
   }
 }
 

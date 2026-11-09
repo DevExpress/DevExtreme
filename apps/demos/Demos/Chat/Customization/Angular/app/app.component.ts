@@ -1,9 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode } from '@angular/core';
-import { AsyncPipe } from '@angular/common';
+import { Component, enableProdMode, inject } from '@angular/core';
 import { DxChatModule, DxCheckBoxModule, DxSelectBoxModule } from 'devextreme-angular';
-import { DxChatTypes } from 'devextreme-angular/ui/chat';
-import { Observable } from 'rxjs';
+import { type DxChatTypes } from 'devextreme-angular/ui/chat';
 import { AppService } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -18,28 +16,22 @@ if (!/localhost/.test(document.location.host)) {
     DxChatModule,
     DxCheckBoxModule,
     DxSelectBoxModule,
-    AsyncPipe,
   ],
 })
 export class AppComponent {
-  currentUser: DxChatTypes.User;
+  private readonly appService = inject(AppService);
 
-  supportAgent: DxChatTypes.User;
+  readonly currentUser = this.appService.currentUser;
 
-  messages$: Observable<DxChatTypes.Message[]>;
+  readonly messages = this.appService.messages;
 
-  dayHeaderFormats = this.appService.dayHeaderFormats;
+  readonly dayHeaderFormats = this.appService.dayHeaderFormats;
 
-  messageTimestampFormats = this.appService.messageTimestampFormats;
+  readonly messageTimestampFormats = this.appService.messageTimestampFormats;
 
-  dayHeaderLabel = this.appService.dayHeaderLabel;
+  readonly dayHeaderLabel = this.appService.dayHeaderLabel;
 
-  messageTimestampLabel = this.appService.messageTimestampLabel;
-
-  constructor(private readonly appService: AppService) {
-    [this.currentUser, this.supportAgent] = this.appService.getUsers();
-    this.messages$ = this.appService.messages$;
-  }
+  readonly messageTimestampLabel = this.appService.messageTimestampLabel;
 
   onMessageEntered(event: DxChatTypes.MessageEnteredEvent) {
     this.appService.onMessageEntered(event);

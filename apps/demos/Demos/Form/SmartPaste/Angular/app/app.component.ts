@@ -1,11 +1,13 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, ViewChild, enableProdMode } from '@angular/core';
+import {
+  Component, enableProdMode, inject, viewChild,
+} from '@angular/core';
 import { AzureOpenAI, type OpenAI } from 'openai';
 import { DxTextAreaModule } from 'devextreme-angular';
 import {
   AIIntegration,
-  RequestParams,
-  Response,
+  type RequestParams,
+  type Response,
 } from 'devextreme-angular/common/ai-integration';
 import { DxButtonModule, type DxButtonTypes } from 'devextreme-angular/ui/button';
 import { DxFormModule, DxFormComponent } from 'devextreme-angular/ui/form';
@@ -50,68 +52,59 @@ const showNotification = (message: string, of: string, isError?: boolean, offset
   ],
 })
 export class AppComponent {
-  @ViewChild(DxFormComponent, { static: false }) form: DxFormComponent;
+  private readonly service = inject(Service);
 
-  colCountByScreen = {
+  private readonly form = viewChild.required(DxFormComponent);
+
+  readonly colCountByScreen = {
     xs: 2,
     sm: 2,
     md: 2,
     lg: 2,
   };
 
-  amountDueEditorOptions = { placeholder: '$0.00', stylingMode };
+  readonly amountDueEditorOptions = { placeholder: '$0.00', stylingMode };
 
-  amountDueAIOptions = { instruction: 'Format as the following: $0.00' };
+  readonly amountDueAIOptions = { instruction: 'Format as the following: $0.00' };
 
-  statementDueEditorOptions = { placeholder: 'MM/DD/YYYY', stylingMode };
+  readonly statementDueEditorOptions = { placeholder: 'MM/DD/YYYY', stylingMode };
 
-  statementDueAIOptions = { instruction: 'Format as the following: MM/DD/YYYY' };
+  readonly statementDueAIOptions = { instruction: 'Format as the following: MM/DD/YYYY' };
 
-  textEditorOptions = { stylingMode };
+  readonly textEditorOptions = { stylingMode };
 
-  phoneEditorOptions = { placeholder: '(000) 000-0000', stylingMode };
+  readonly phoneEditorOptions = { placeholder: '(000) 000-0000', stylingMode };
 
-  phoneAIOptions = { instruction: 'Format as the following: (000) 000-0000' };
+  readonly phoneAIOptions = { instruction: 'Format as the following: (000) 000-0000' };
 
-  emailAIOptions = { instruction: 'Do not fill this field if the text contains an invalid email address. A valid email is in the following format: email@example.com' };
+  readonly emailAIOptions = { instruction: 'Do not fill this field if the text contains an invalid email address. A valid email is in the following format: email@example.com' };
 
-  zipEditorOptions = { stylingMode, mode: 'text' };
+  readonly zipEditorOptions = { stylingMode, mode: 'text' };
 
-  zipAIOptions = { instruction: 'If the text does not contain a ZIP, determine the ZIP code from the provided address.' };
+  readonly zipAIOptions = { instruction: 'If the text does not contain a ZIP, determine the ZIP code from the provided address.' };
 
-  resetButtonOptions: DxButtonTypes.Properties = {
+  readonly resetButtonOptions: DxButtonTypes.Properties = {
     stylingMode: 'outlined',
     type: 'normal',
   };
 
-  smartPasteButtonOptions: DxButtonTypes.Properties = {
+  readonly smartPasteButtonOptions: DxButtonTypes.Properties = {
     stylingMode: 'contained',
     type: 'default',
   };
 
-  azureOpenAIConfig: any;
+  private readonly azureOpenAIConfig = this.service.getAzureOpenAIConfig();
 
-  aiService: AzureOpenAI;
+  private readonly aiService = new AzureOpenAI(this.azureOpenAIConfig);
 
-  aiIntegration: AIIntegration;
+  readonly aiIntegration = new AIIntegration({
+    sendRequest: this.sendRequest.bind(this),
+  });
 
-  valueContent: string;
-
-  text: string;
-
-  constructor(service: Service) {
-    this.azureOpenAIConfig = service.getAzureOpenAIConfig();
-
-    this.aiService = new AzureOpenAI(this.azureOpenAIConfig);
-    this.aiIntegration = new AIIntegration({
-      sendRequest: this.sendRequest.bind(this),
-    });
-
-    this.text = service.getDefaultText();
-  }
+  text = this.service.getDefaultText();
 
   ngAfterViewInit() {
-    const form = this.form.instance;
+    const form = this.form().instance;
 
     form.registerKeyHandler('V', (event: KeyboardEvent) => {
       if (event.ctrlKey && event.shiftKey) {
@@ -130,7 +123,7 @@ export class AppComponent {
     });
   }
 
-  sendRequest({ prompt }: RequestParams): Response {
+  private sendRequest({ prompt }: RequestParams): Response {
     const controller = new AbortController();
     const signal = controller.signal;
 
@@ -154,7 +147,7 @@ export class AppComponent {
     return result;
   }
 
-  async getAIResponse(messages: AIMessage[], signal: AbortSignal) {
+  private async getAIResponse(messages: AIMessage[], signal: AbortSignal) {
     const params = {
       messages,
       model: this.azureOpenAIConfig.deployment,

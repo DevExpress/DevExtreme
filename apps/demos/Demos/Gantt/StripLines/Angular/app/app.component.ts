@@ -1,7 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode } from '@angular/core';
+import { Component, enableProdMode, inject } from '@angular/core';
 import { DxGanttModule } from 'devextreme-angular';
-import { Service, Task } from './app.service';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -18,14 +18,9 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  tasks: Task[];
+  readonly tasks = inject(Service).getTasks();
 
-  currentTime: Date;
-
-  constructor(service: Service) {
-    this.tasks = service.getTasks();
-    this.currentTime = new Date();
-  }
+  readonly currentTime = new Date();
 }
 
 bootstrapApplication(AppComponent);

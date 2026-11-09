@@ -1,7 +1,10 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import {
   Component,
+  computed,
   enableProdMode,
+  inject,
+  signal,
 } from '@angular/core';
 import {
   DxButtonModule,
@@ -10,7 +13,6 @@ import {
 import { DxStepperModule, type DxStepperTypes } from 'devextreme-angular/ui/stepper';
 import validationEngine from 'devextreme/ui/validation_engine';
 import { AppService } from './app.service';
-import type { BookingFormData } from './app.types';
 import { DatesFormComponent } from './dates-form/dates-form.component';
 import { GuestsFormComponent } from './guests-form/guests-form.component';
 import { RoomMealPlanFormComponent } from './room-meal-plan-form/room-meal-plan-form.component';
@@ -37,30 +39,31 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  steps: DxStepperTypes.Item[];
+  private readonly appService = inject(AppService);
 
-  formData: BookingFormData;
+  readonly steps = signal(this.appService.getInitialSteps());
 
-  confirmationData: BookingFormData;
+  readonly formData = signal(this.appService.getInitialFormData());
 
-  selectedIndex: number;
+  readonly confirmationData = signal(this.formData());
 
-  isConfirmed: boolean;
+  readonly selectedIndex = signal(0);
 
-  isStepperReadonly: boolean;
+  readonly isConfirmed = signal(false);
 
-  validationGroups = ['dates', 'guests', 'roomAndMealPlan'];
+  readonly isStepperReadonly = signal(false);
 
-  constructor(private readonly appService: AppService) {
-    this.steps = this.appService.getInitialSteps();
-    this.formData = this.appService.getInitialFormData();
-    this.confirmationData = this.formData;
-    this.selectedIndex = 0;
-    this.isConfirmed = false;
-    this.isStepperReadonly = false;
-  }
+  readonly validationGroups = ['dates', 'guests', 'roomAndMealPlan'];
 
-  getValidationResult(index: number) {
+  readonly nextButtonText = computed(() => {
+    if (this.selectedIndex() < this.steps().length - 1) {
+      return 'Next';
+    }
+
+    return this.isConfirmed() ? 'Reset' : 'Confirm';
+  });
+
+  private getValidationResult(index: number) {
     if (index >= this.validationGroups.length) {
       return true;
     }
@@ -68,8 +71,8 @@ export class AppComponent {
     return validationEngine.validateGroup(this.validationGroups[index]).isValid;
   }
 
-  setStepValidationResult(index: number, isValid: boolean | undefined) {
-    this.steps[index].isValid = isValid;
+  private setStepValidationResult(index: number, isValid: boolean | undefined) {
+    this.steps()[index].isValid = isValid;
   }
 
   onSelectionChanging(e: DxStepperTypes.SelectionChangingEvent) {
@@ -91,51 +94,44 @@ export class AppComponent {
     }
 
     if (!e.cancel && addedIndex === items.length - 1) {
-      this.confirmationData = { ...this.formData };
+      this.confirmationData.set({ ...this.formData() });
     }
-  }
-
-  getNextButtonText() {
-    if (this.selectedIndex < this.steps.length - 1) {
-      return 'Next';
-    }
-
-    return this.isConfirmed ? 'Reset' : 'Confirm';
   }
 
   onPrevButtonClick() {
-    this.selectedIndex -= 1;
+    this.selectedIndex.update((index) => index - 1);
   }
 
-  moveNext() {
-    const isValid = this.getValidationResult(this.selectedIndex);
+  private moveNext() {
+    const isValid = this.getValidationResult(this.selectedIndex());
 
-    this.setStepValidationResult(this.selectedIndex, isValid);
+    this.setStepValidationResult(this.selectedIndex(), isValid);
 
     if (isValid) {
-      this.selectedIndex += 1;
+      this.selectedIndex.update((index) => index + 1);
     }
   }
 
-  reset() {
-    this.isConfirmed = false;
-    this.selectedIndex = 0;
-    this.steps = this.appService.getInitialSteps();
-    this.formData = this.appService.getInitialFormData();
-    this.confirmationData = this.formData;
-    this.isStepperReadonly = false;
+  private reset() {
+    this.isConfirmed.set(false);
+    this.selectedIndex.set(0);
+    this.steps.set(this.appService.getInitialSteps());
+    const formData = this.appService.getInitialFormData();
+    this.formData.set(formData);
+    this.confirmationData.set(formData);
+    this.isStepperReadonly.set(false);
   }
 
-  confirm() {
-    this.isConfirmed = true;
-    this.setStepValidationResult(this.selectedIndex, true);
-    this.isStepperReadonly = true;
+  private confirm() {
+    this.isConfirmed.set(true);
+    this.setStepValidationResult(this.selectedIndex(), true);
+    this.isStepperReadonly.set(true);
   }
 
   onNextButtonClick() {
-    if (this.selectedIndex < this.steps.length - 1) {
+    if (this.selectedIndex() < this.steps().length - 1) {
       this.moveNext();
-    } else if (this.isConfirmed) {
+    } else if (this.isConfirmed()) {
       this.reset();
     } else {
       this.confirm();

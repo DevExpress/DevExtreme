@@ -1,8 +1,10 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode } from '@angular/core';
+import {
+  Component, computed, enableProdMode, inject, signal,
+} from '@angular/core';
 import { DxCheckBoxModule, DxNumberBoxModule, DxSelectBoxModule } from 'devextreme-angular';
-import { DxFormModule, DxFormTypes } from 'devextreme-angular/ui/form';
-import { Company, Service } from './app.service';
+import { DxFormModule, type DxFormTypes } from 'devextreme-angular/ui/form';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -21,31 +23,25 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  companies: Company[];
+  companies = inject(Service).getCompanies();
 
-  width: number;
+  readonly width = signal<number>(undefined);
 
-  labelMode: DxFormTypes.FormLabelMode = 'floating';
+  readonly labelMode = signal<DxFormTypes.FormLabelMode>('floating');
 
-  labelLocation: DxFormTypes.LabelLocation = 'left';
+  readonly labelLocation = signal<DxFormTypes.LabelLocation>('left');
 
-  readOnly = false;
+  readonly readOnly = signal(false);
 
-  showColon = true;
+  readonly showColon = signal(true);
 
-  minColWidth = 300;
+  readonly minColWidth = signal(300);
 
-  colCount = 2;
+  readonly colCount = signal(2);
 
-  constructor(service: Service) {
-    this.companies = service.getCompanies();
-  }
-
-  getCompanySelectorLabelMode() {
-    return this.labelMode === 'outside'
-      ? 'hidden'
-      : this.labelMode;
-  }
+  readonly companySelectorLabelMode = computed(() => (this.labelMode() === 'outside'
+    ? 'hidden'
+    : this.labelMode()));
 }
 
 bootstrapApplication(AppComponent);

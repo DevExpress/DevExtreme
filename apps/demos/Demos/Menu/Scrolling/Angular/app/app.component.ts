@@ -1,5 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode } from '@angular/core';
+import {
+  Component, enableProdMode, inject, signal,
+} from '@angular/core';
 import { DxCheckBoxModule } from 'devextreme-angular';
 import { DxMenuModule, type DxMenuTypes } from 'devextreme-angular/ui/menu';
 import notify from 'devextreme/ui/notify';
@@ -21,15 +23,11 @@ if (!document.location.host.includes('localhost')) {
   ],
 })
 export class AppComponent {
-  products: Product[];
+  readonly products = inject(Service).getProducts();
 
-  SUBMENU_HEIGHT = 200;
+  readonly SUBMENU_HEIGHT = 200;
 
-  limitSubmenuHeight = false;
-
-  constructor(service: Service) {
-    this.products = service.getProducts();
-  }
+  readonly limitSubmenuHeight = signal(false);
 
   itemClick(e: DxMenuTypes.ItemClickEvent<Product>) {
     if (!e.itemData.items) {
@@ -38,7 +36,7 @@ export class AppComponent {
   }
 
   onSubmenuShowing({ submenuContainer }: DxMenuTypes.SubmenuShowingEvent) {
-    submenuContainer.style.maxHeight = this.limitSubmenuHeight ? `${this.SUBMENU_HEIGHT}px` : '';
+    submenuContainer.style.maxHeight = this.limitSubmenuHeight() ? `${this.SUBMENU_HEIGHT}px` : '';
   }
 }
 
