@@ -21,12 +21,12 @@ const AzureOpenAIConfig = {
 
 export const SYSTEM_PROMPT = `
 You are a helpful assistant.
-Use the tools to answer questions about the weather, the current time in offices and exchange rates.
+Use the tools to answer questions about the weather, the current time in offices, and exchange rates.
 Always call a tool instead of guessing.
-Pass the country as a short name (for example UK or US), cities without the country, and currencies as ISO codes.
-When several tools are needed, call all of them at once.
+Pass the country as a short name (such as UK or US), cities without the country, and currencies as ISO codes.
+When a question needs several tools, call all of them at once.
 If a tool fails, say so briefly.
-Keep the answers short.
+Keep answers short.
 `;
 
 const tools: OpenAI.ChatCompletionTool[] = [
@@ -38,7 +38,7 @@ const tools: OpenAI.ChatCompletionTool[] = [
       parameters: {
         type: 'object',
         properties: {
-          country: { type: 'string', description: 'The short country name, for example UK or US' },
+          country: { type: 'string', description: 'The short country name, such as UK or US' },
           city: { type: 'string', description: 'The city name' },
         },
         required: ['country', 'city'],
@@ -53,7 +53,7 @@ const tools: OpenAI.ChatCompletionTool[] = [
       parameters: {
         type: 'object',
         properties: {
-          locations: { type: 'array', items: { type: 'string' }, description: 'City names without the country, for example Barcelona' },
+          locations: { type: 'array', items: { type: 'string' }, description: 'City names without the country, such as Barcelona' },
         },
         required: ['locations'],
       },

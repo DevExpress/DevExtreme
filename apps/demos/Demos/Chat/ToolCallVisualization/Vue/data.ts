@@ -41,24 +41,24 @@ export const suggestionCards = [
   },
   {
     title: 'Multiple Tools',
-    description: 'Get the current weather and time in Barcelona and the USD to EUR rate.',
-    prompt: 'Check the current weather conditions in Barcelona, Spain, the current time in Barcelona, Spain and the exchange rate from USD to EUR.',
+    description: 'Check the current weather and time in Barcelona and the USD-to-EUR exchange rate.',
+    prompt: 'Check the current weather conditions in Barcelona, Spain, the current time in Barcelona, Spain, and the exchange rate from USD to EUR.',
   },
   {
     title: 'Error State',
-    description: 'Check the weather in London and in Atlantis: one of the calls fails.',
+    description: 'Check the weather in London and in Atlantis. The request for Atlantis fails.',
     prompt: 'Check the current weather conditions in London, UK and in Atlantis, Atlantis.',
   },
 ];
 
 export const SYSTEM_PROMPT = `
 You are a helpful assistant.
-Use the tools to answer questions about the weather, the current time in offices and exchange rates.
+Use the tools to answer questions about the weather, the current time in offices, and exchange rates.
 Always call a tool instead of guessing.
-Pass the country as a short name (for example UK or US), cities without the country, and currencies as ISO codes.
-When several tools are needed, call all of them at once.
+Pass the country as a short name (such as UK or US), cities without the country, and currencies as ISO codes.
+When a question needs several tools, call all of them at once.
 If a tool fails, say so briefly.
-Keep the answers short.
+Keep answers short.
 `;
 
 export const tools = [
@@ -70,7 +70,7 @@ export const tools = [
       parameters: {
         type: 'object',
         properties: {
-          country: { type: 'string', description: 'The short country name, for example UK or US' },
+          country: { type: 'string', description: 'The short country name, such as UK or US' },
           city: { type: 'string', description: 'The city name' },
         },
         required: ['country', 'city'],
@@ -85,7 +85,7 @@ export const tools = [
       parameters: {
         type: 'object',
         properties: {
-          locations: { type: 'array', items: { type: 'string' }, description: 'City names without the country, for example Barcelona' },
+          locations: { type: 'array', items: { type: 'string' }, description: 'City names without the country, such as Barcelona' },
         },
         required: ['locations'],
       },
