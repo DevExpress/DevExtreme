@@ -414,36 +414,38 @@ async function runTool(call: ModelToolCall): Promise<ToolCall> {
     }
 }
 
-// Asks the model; while it asks for tools, runs them (in parallel) and gives it the results
 export async function getAIResponse(messages: ModelMessage[]): Promise<{ text: string; toolCalls: ToolCall[] }> {
     const toolCalls: ToolCall[] = [];
+    let toolRounds = 0;
 
-    for (let round = 0; round <= MAX_TOOL_ROUNDS; round += 1) {
+    while (true) {
         const answer = await requestModel(messages);
+        const calls = answer.tool_calls;
 
-        if (!answer.tool_calls?.length) {
+        if (!calls?.length) {
             return { text: answer.content ?? '', toolCalls };
         }
 
-        if (round === MAX_TOOL_ROUNDS) {
-            break;
+        if (toolRounds >= MAX_TOOL_ROUNDS) {
+            throw new Error('The model requested too many tool calls. Try rephrasing your request.');
         }
 
+        toolRounds += 1;
         messages.push(answer);
 
-        const results = await Promise.all(answer.tool_calls.map(runTool));
+        const results = await Promise.all(calls.map(runTool));
 
-        results.forEach((result, index) => {
+        calls.forEach((call, index) => {
+            const result = results[index];
+
             toolCalls.push(result);
             messages.push({
                 role: 'tool',
-                tool_call_id: answer.tool_calls![index].id,
+                tool_call_id: call.id,
                 content: result.status === 'error' ? `Error: ${result.result}` : String(result.result),
             });
         });
     }
-
-    throw new Error('The model requested too many tool calls. Try rephrasing your request.');
 }
 
 export type { ModelMessage };
