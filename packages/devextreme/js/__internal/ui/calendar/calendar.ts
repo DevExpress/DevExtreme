@@ -17,6 +17,7 @@ import dateSerialization from '@js/core/utils/date_serialization';
 import { inRange, sign } from '@js/core/utils/math';
 import { getWidth } from '@js/core/utils/size';
 import {
+  isDate,
   isDefined,
   isFunction,
   isNumeric,
@@ -322,8 +323,9 @@ class Calendar<
   }
 
   _convertToDate(value: DateLike | undefined): Date | null {
-    // @ts-expect-error a string that cannot be parsed and undefined are returned as is
-    return dateSerialization.deserializeDate(value);
+    const date = dateSerialization.deserializeDate(value);
+
+    return isDate(date) && !isNaN(date.getTime()) ? date : null;
   }
 
   _dateValue(value: Date | (Date | null)[] | null, event: DxEvent): void {

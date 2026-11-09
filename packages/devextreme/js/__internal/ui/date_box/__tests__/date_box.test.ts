@@ -163,3 +163,60 @@ describe('DateBox commits the input text on focus out when the browser fires no 
     expect(dateBox.getInstance().option('value')).toEqual(pickedValue);
   });
 });
+
+describe('DateBox with a date option that cannot be parsed', () => {
+  beforeAll(() => {
+    fx.off = true;
+  });
+
+  afterEach(() => {
+    dateBoxes.forEach((instance) => instance.dispose());
+    dateBoxes.length = 0;
+    document.body.innerHTML = '';
+  });
+
+  it.each([
+    { type: 'date', pickerType: 'calendar' },
+    { type: 'time', pickerType: 'list' },
+    { type: 'date', pickerType: 'rollers' },
+    { type: 'date', pickerType: 'native' },
+  ] as const)('renders an empty input for value: abc ($type, $pickerType)', ({ type, pickerType }) => {
+    const dateBox = createDateBox({ type, pickerType, value: 'abc' });
+
+    expect(dateBox.getInputElement().value).toBe('');
+    expect(dateBox.getInstance().option('value')).toBe('abc');
+  });
+
+  it('renders an empty input when the value is set to abc on a live widget', () => {
+    const dateBox = createDateBox({ value: new Date(2020, 0, 2) });
+
+    dateBox.getInstance().option('value', 'abc');
+
+    expect(dateBox.getInputElement().value).toBe('');
+  });
+
+  it('renders an empty input for an invalid Date', () => {
+    const dateBox = createDateBox({ value: new Date(NaN) });
+
+    expect(dateBox.getInputElement().value).toBe('');
+  });
+
+  it.each(['min', 'max'] as const)('ignores %s: abc', (optionName) => {
+    const dateBox = createDateBox({ value: new Date(2020, 0, 2), [optionName]: 'abc' });
+
+    expect(dateBox.getInputElement().value).not.toBe('');
+    expect(dateBox.getInstance().option('isValid')).toBe(true);
+  });
+
+  it('opens the calendar for value: abc', () => {
+    const dateBox = createDateBox({ value: 'abc' });
+
+    expect(() => dateBox.open()).not.toThrow();
+  });
+
+  it('still parses a valid date string', () => {
+    const dateBox = createDateBox({ value: '2020-01-02' });
+
+    expect(dateBox.getInputElement().value).not.toBe('');
+  });
+});

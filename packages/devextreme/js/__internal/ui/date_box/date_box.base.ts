@@ -552,7 +552,7 @@ class DateBox<
     const value = this.getDateOption('value');
 
     this._committedText = undefined;
-    this.option('text', this._getDisplayedText(value));
+    this.option('text', this._getDisplayedText(value) ?? '');
     this._strategy.renderValue();
 
     return super._renderValue();
@@ -923,10 +923,9 @@ class DateBox<
   getDateOption(optionName: 'value' | 'min' | 'max'): Date | null {
     const { [optionName]: optionValue } = this.option();
 
-    // @ts-expect-error a string that cannot be parsed and undefined are returned as is
-    const deserializedDate: Date | null = dateSerialization.deserializeDate(optionValue);
+    const date = dateSerialization.deserializeDate(optionValue);
 
-    return deserializedDate;
+    return isDateType(date) && !isNaN(date.getTime()) ? date : null;
   }
 
   setDateOption(optionName: 'value' | 'min' | 'max', value: DateLike | undefined): void {
