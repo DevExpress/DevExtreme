@@ -31,7 +31,7 @@ import './module_not_extended/column_fixing';
 import './adaptivity/adaptivity_module';
 import './module_not_extended/virtual_columns';
 import './export/m_export';
-import './focus/m_focus';
+import './focus/focus';
 import './module_not_extended/row_dragging';
 import './module_not_extended/toast';
 import './ai_assistant/ai_assistant';

@@ -19,7 +19,7 @@ import type { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/colum
 import type {
   ColumnsResizerViewController,
 } from '@ts/grids/grid_core/columns_resizing_reordering/columns_resizing_reordering';
-import type { ValidatingController } from '@ts/grids/grid_core/validating/m_validating';
+import type { ValidatingController } from '@ts/grids/grid_core/validating/validating';
 import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
 
 import type { ColumnsController } from '../columns_controller/columns_controller';
