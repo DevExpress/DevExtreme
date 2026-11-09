@@ -1015,7 +1015,7 @@ class FilterBuilder extends Widget<FilterBuilderProperties> implements EditorFac
     const positionOf = typeof position === 'object' ? position.of : undefined;
 
     if (positionOf) {
-      this._popupWithTreeView?.option('maxHeight', getElementMaxHeightByWindow($(positionOf)));
+      this._popupWithTreeView?.option('maxHeight', getElementMaxHeightByWindow($(positionOf as Element)));
     }
   }
 

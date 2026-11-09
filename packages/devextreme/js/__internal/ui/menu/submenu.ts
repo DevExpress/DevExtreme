@@ -174,7 +174,7 @@ class Submenu extends ContextMenu<SubmenuProperties> {
 
     const $submenu = this._itemContainer().children(`.${DX_SUBMENU_CLASS}`).eq(0);
 
-    const $rootItem = $(positionOption?.of).find('.dx-context-menu-container-border');
+    const $rootItem = $(positionOption?.of as Element | undefined).find('.dx-context-menu-container-border');
     const position: PositionConfig = {
       // @ts-expect-error ts-error
       of: $submenu,
