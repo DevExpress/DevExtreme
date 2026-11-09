@@ -16,6 +16,7 @@ import type { ItemClickEvent, ItemRenderedEvent } from '@js/ui/menu';
 import Menu from '@js/ui/menu';
 import Overlay from '@js/ui/overlay/ui.overlay';
 import { selectView } from '@js/ui/shared/accessibility';
+import { findInstanceByElement } from '@ts/core/utils/public_component';
 import { isObject } from '@ts/core/utils/type';
 import eventsEngine from '@ts/events/core/events_engine';
 import type { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/column_headers';
@@ -262,9 +263,13 @@ const columnHeadersView = (
     if (optionNames.filterValue || optionNames.bufferedFilterValue) {
       this._updateEditorValue(column, $editorContainer);
 
-      const overlayInstance = $cell.find(`.${this.addWidgetPrefix(CLASSES.filterRangeOverlay)}`).data('dxOverlay');
-      if (overlayInstance) {
-        const $editorRangeElements = overlayInstance.$content().find(`.${CLASSES.editorContainer}`);
+      const overlayInstance = findInstanceByElement(
+        $cell.find(`.${this.addWidgetPrefix(CLASSES.filterRangeOverlay)}`),
+        Overlay,
+      );
+      const $overlayContent = overlayInstance?.$content();
+      if ($overlayContent) {
+        const $editorRangeElements = $overlayContent.find(`.${CLASSES.editorContainer}`);
 
         this._updateEditorValue(column, $editorRangeElements.first());
         this._updateEditorValue(column, $editorRangeElements.last());
@@ -402,7 +407,7 @@ const columnHeadersView = (
 
   private _showFilterRange($cell: dxElementWrapper, column: Column): void {
     const $overlay = $cell.children(`.${this.addWidgetPrefix(CLASSES.filterRangeOverlay)}`);
-    let overlayInstance = $overlay.length && $overlay.data<Overlay | undefined>('dxOverlay');
+    let overlayInstance = $overlay.length && findInstanceByElement($overlay, Overlay);
 
     if (!overlayInstance && column) {
       overlayInstance = this._initFilterRangeOverlay($cell, column);
