@@ -1,7 +1,7 @@
 import { describe, expect, it } from '@jest/globals';
 import { noop } from '@js/core/utils/common';
 
-import { GroupingHelper } from '../m_grouping_expanded';
+import { GroupingHelper } from '../grouping_expanded';
 import type { GroupInfoData, GroupingLoadOperation, GroupItemData } from '../types';
 import type { GroupConfig } from './grouping_expanded.helpers';
 import { GroupingTestHelper } from './grouping_expanded.helpers';
