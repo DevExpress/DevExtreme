@@ -29,8 +29,7 @@ describe('ContextMenu', () => {
       clientY: 25,
     }));
 
-    const { event } = onContextMenuPreparing.mock.calls[0][0];
-
-    expect(event).toMatchObject({ target: cellElement, pageX: 15, pageY: 25 });
+    expect(onContextMenuPreparing.mock.calls[0][0].event)
+      .toMatchObject({ target: cellElement, pageX: 15, pageY: 25 });
   });
 });
