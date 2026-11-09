@@ -18,8 +18,8 @@ import ContextMenu from '@ts/ui/context_menu/context_menu';
 import type { HoverEvent } from '@ts/ui/context_menu/menu_base';
 import type DataAdapter from '@ts/ui/hierarchical_collection/data_adapter';
 import type { ItemKey } from '@ts/ui/hierarchical_collection/data_converter';
-import type { OverlayProperties, PositioningEvent as OverlayPositioningEvent } from '@ts/ui/overlay/overlay';
 import type Overlay from '@ts/ui/overlay/overlay';
+import type { OverlayProperties, PositioningEvent as OverlayPositioningEvent } from '@ts/ui/overlay/overlay';
 
 const DX_CONTEXT_MENU_CONTENT_DELIMITER_CLASS = 'dx-context-menu-content-delimiter';
 const DX_SUBMENU_CLASS = 'dx-submenu';
@@ -142,26 +142,26 @@ class Submenu extends ContextMenu<SubmenuProperties> {
     });
   }
 
-  _getDelimiterWidth($rootItem: dxElementWrapper, $submenu: dxElementWrapper): number {
+  _getDelimiterWidth($rootItem: dxElementWrapper, $submenu: dxElementWrapper): number | undefined {
     if (this._isMenuHorizontal()) {
-      const rootWidth: number = getWidth($rootItem);
-      const submenuWidth: number = getWidth($submenu);
+      const rootWidth = getWidth($rootItem);
+      const submenuWidth = getWidth($submenu);
 
-      return rootWidth < submenuWidth ? rootWidth : submenuWidth;
+      return Number(rootWidth) < Number(submenuWidth) ? rootWidth : submenuWidth;
     }
 
     return 3;
   }
 
-  _getDelimiterHeight($rootItem: dxElementWrapper, $submenu: dxElementWrapper): number {
+  _getDelimiterHeight($rootItem: dxElementWrapper, $submenu: dxElementWrapper): number | undefined {
     if (this._isMenuHorizontal()) {
       return 3;
     }
 
-    const rootHeight: number = getHeight($rootItem);
-    const submenuHeight: number = getHeight($submenu);
+    const rootHeight = getHeight($rootItem);
+    const submenuHeight = getHeight($submenu);
 
-    return rootHeight < submenuHeight ? rootHeight : submenuHeight;
+    return Number(rootHeight) < Number(submenuHeight) ? rootHeight : submenuHeight;
   }
 
   // TODO: try to simplify it

@@ -1,4 +1,3 @@
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import messageLocalization from '@js/common/core/localization/message';
 import Action from '@js/core/action';
 import config from '@js/core/config';
@@ -20,7 +19,8 @@ import type {
 import type { dxPopupAnimation, ToolbarItem } from '@js/ui/popup';
 import { current, isFluent } from '@js/ui/themes';
 import errors from '@js/ui/widget/ui.errors';
-import domUtils from '@ts/core/utils/m_dom';
+import domUtils from '@ts/core/utils/dom';
+import eventsEngine from '@ts/events/core/events_engine';
 import type { PopupProperties } from '@ts/ui/popup/popup';
 import Popup from '@ts/ui/popup/popup';
 
@@ -148,7 +148,6 @@ export const custom = (params: DialogParams): BaseDialog => {
       ?.find(`.${DX_BUTTON_CLASSNAME}`)
       .first();
 
-    // @ts-expect-error trigger should be typed on type 'EventsEngineType'
     eventsEngine.trigger($firstButton, 'focus');
   };
 

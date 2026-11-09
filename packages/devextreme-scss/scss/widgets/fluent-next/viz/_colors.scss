@@ -1,0 +1,17 @@
+@use "../../../_design-system/variables/ds" as ds;
+
+$viz-blue: ds.$color-bg-blue !default;
+$viz-gray: ds.$color-bg-gray !default;
+$viz-green: ds.$color-bg-green !default;
+$viz-orange: ds.$color-bg-orange !default;
+$viz-pink: ds.$color-bg-pink !default;
+$viz-primary: ds.$color-bg-primary !default;
+$viz-purple: ds.$color-bg-purple !default;
+$viz-red: ds.$color-bg-red !default;
+$viz-yellow: ds.$color-bg-yellow !default;
+
+$viz-danger: ds.$color-bg-danger !default;
+$viz-success: ds.$color-bg-success !default;
+$viz-warning: ds.$color-bg-warning !default;
+
+$viz-tile-border: ds.$color-content-static-dark !default;

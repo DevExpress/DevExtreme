@@ -28,6 +28,8 @@ const CSP_LISTENER_SOURCE = readFileSync(
   join(__dirname, '..', 'visual-tests', 'inject', 'csp-listener.js'),
   'utf8',
 );
+// The TestCafe runner loads mockdate ahead of a demo's client-script.js, which may call MockDate.
+const MOCKDATE_SOURCE = readFileSync(require.resolve('mockdate'), 'utf8');
 
 const RENDER_DEADLINE_MS = 30000;
 const RETRY_DEADLINE_MS = (() => {
@@ -72,8 +74,6 @@ function findChrome() {
 
 const CHROME_PATH = findChrome();
 
-// Must use the same shard partition as csp-bundle.js, or a demo bundled by
-// another shard has no bundle.js on disk and burns its render deadline + retry.
 const { SHARD_TOTAL, SHARD_INDEX } = readShardConfig();
 
 const DEBUG_PORT = (() => {
@@ -170,8 +170,6 @@ async function waitForDebugger(port, maxWaitMs = 15000) {
   throw new Error(`Chrome debugger did not start on port ${port}`);
 }
 
-// Same round-robin split as csp-bundle.js's applyShard(), on the same sort key,
-// so shard k checks exactly the demos shard k bundled.
 function applyShard(demos) {
   return applyShardGeneric(demos, (d) => `${d.widget}/${d.demo}`, { SHARD_TOTAL, SHARD_INDEX });
 }
@@ -186,19 +184,20 @@ function findDemos() {
     return result;
   }
 
+  const filter = (process.env.CSP_CHECK_FILTER || '').trim();
+
   const widgets = readdirSync(demosDir, { withFileTypes: true })
     .filter((d) => d.isDirectory());
 
   for (const widget of widgets) {
     const widgetDir = join(demosDir, widget.name);
-    let demos = [];
-
-    demos = readdirSync(widgetDir, { withFileTypes: true })
+    const demos = readdirSync(widgetDir, { withFileTypes: true })
       .filter((d) => d.isDirectory());
 
     for (const demo of demos) {
       const fwDir = join(widgetDir, demo.name, FRAMEWORK);
-      if (existsSync(join(fwDir, 'index.html'))) {
+      const matchesFilter = !filter || `${widget.name}/${demo.name}`.includes(filter);
+      if (matchesFilter && existsSync(join(fwDir, 'index.html'))) {
         result.push({
           url: `${SERVER_URL}/apps/demos/${demosDirName}/${widget.name}/${demo.name}/${FRAMEWORK}/`,
           widget: widget.name,
@@ -210,6 +209,11 @@ function findDemos() {
   }
 
   return applyShard(result);
+}
+
+function readDemoClientScript(demo) {
+  const file = join(DEMO_ROOT, 'Demos', demo.widget, demo.demo, 'client-script.js');
+  return existsSync(file) ? readFileSync(file, 'utf8') : null;
 }
 
 // Waits until the DOM is quiet so late-rendered resources fire their CSP violations first.
@@ -250,7 +254,8 @@ function waitForDomIdle(tab) {
   });
 }
 
-async function collectViolations(tab, url, renderDeadlineMs) {
+async function collectViolations(tab, demo, renderDeadlineMs) {
+  const { url } = demo;
   await tab.ready;
   await tab.send('Page.enable');
   await tab.send('Runtime.enable');
@@ -279,10 +284,15 @@ async function collectViolations(tab, url, renderDeadlineMs) {
   });
 
   await tab.send('Page.addScriptToEvaluateOnNewDocument', { source: CSP_LISTENER_SOURCE });
+  const clientScript = readDemoClientScript(demo);
+  if (clientScript) {
+    await tab.send('Page.addScriptToEvaluateOnNewDocument', { source: MOCKDATE_SOURCE });
+    await tab.send('Page.addScriptToEvaluateOnNewDocument', { source: clientScript });
+  }
   await tab.send('Page.navigate', { url });
 
-  // Matches UI widgets (.dx-widget), viz widgets (<svg>) and new-gen widgets.
-  const READY_SELECTOR = '.dx-widget, svg, .dx-cardview, .dx-pagination';
+  // Matches UI widgets (.dx-widget), viz widgets (root <svg class="dxc ...">) and new-gen widgets.
+  const READY_SELECTOR = '.dx-widget, svg[class^="dx"], .dx-cardview, .dx-pagination';
   const deadline = Date.now() + renderDeadlineMs;
   let rendered = false;
   while (Date.now() < deadline) {
@@ -322,19 +332,26 @@ async function collectViolations(tab, url, renderDeadlineMs) {
   });
 }
 
-async function visitPage(url, renderDeadlineMs = RENDER_DEADLINE_MS) {
+async function visitPage(demo, renderDeadlineMs = RENDER_DEADLINE_MS) {
   const { targetId } = await browserCdp.send('Target.createTarget', { url: 'about:blank' });
   const tab = openCdp(`ws://127.0.0.1:${DEBUG_PORT}/devtools/page/${targetId}`);
+  let timeoutId;
 
   try {
     return await Promise.race([
-      collectViolations(tab, url, renderDeadlineMs),
+      collectViolations(tab, demo, renderDeadlineMs),
       new Promise((resolve, reject) => {
-        tab.onError(() => reject(new Error(`Chrome WebSocket error for ${url}`)));
+        tab.onError(() => reject(new Error(`Chrome WebSocket error for ${demo.url}`)));
       }),
-      delay(renderDeadlineMs + 10000).then(() => { throw new Error(`Timed out loading ${url}`); }),
+      new Promise((resolve, reject) => {
+        timeoutId = setTimeout(
+          () => reject(new Error(`Timed out loading ${demo.url}`)),
+          renderDeadlineMs + 10000,
+        );
+      }),
     ]);
   } finally {
+    clearTimeout(timeoutId);
     tab.close();
     await browserCdp.send('Target.closeTarget', { targetId });
   }
@@ -421,7 +438,7 @@ async function main() {
     await runPool(demos, CONCURRENCY, async (demo, i) => {
       const idx = i + 1;
       try {
-        const violations = await visitPage(demo.url);
+        const violations = await visitPage(demo);
         recordResult(demo, `[${idx}/${demos.length}]`, violations);
       } catch (err) {
         console.log(`  ⚠️ [${idx}/${demos.length}] ${demo.widget}/${demo.demo}/${demo.framework} — ${err.message} (will retry)`);
@@ -436,7 +453,7 @@ async function main() {
       await runPool(toRetry, 1, async (demo, i) => {
         const label = `[retry ${i + 1}/${toRetry.length}]`;
         try {
-          const violations = await visitPage(demo.url, RETRY_DEADLINE_MS);
+          const violations = await visitPage(demo, RETRY_DEADLINE_MS);
           recordResult(demo, label, violations);
         } catch (err) {
           console.log(`  ❌ ${label} ${demo.widget}/${demo.demo}/${demo.framework} — ${err.message}`);

@@ -7,13 +7,13 @@ import type { DefaultOptionsRule } from '@js/core/options/utils';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import type { DxEvent, NativeEventInfo } from '@js/events';
+import type Button from '@js/ui/button';
 import type {
   ButtonStyle,
   ButtonType,
   ClickEvent,
   InitializedEvent,
 } from '@js/ui/button';
-import type Button from '@js/ui/button';
 import type { Attachment, SendButtonProperties } from '@js/ui/chat';
 import type {
   UploadedEvent,
@@ -562,7 +562,6 @@ class ChatTextArea extends TextArea<Properties> {
   _fileUploaderFileLimitReached(): void {
     this._showInformer(messageLocalization.format(
       ERROR_MESSAGE_NAME.fileLimit,
-      // @ts-expect-error format params should be extended
       MAX_ATTACHMENTS_COUNT,
     ));
     this._updateInputHeight();

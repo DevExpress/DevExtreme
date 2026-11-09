@@ -255,9 +255,8 @@
     border-radius: $fluent-html-editor-fileuploader-input-wrapper-border-radius;
     background-color: $htmleditor-fileuploader-input-wrapper-bg-color;
 
-    &::after,
-    &::before {
-      content: none;
+    .dx-fileuploader-input-container {
+      width: 100%;
     }
 
     .dx-fileuploader-input-label {

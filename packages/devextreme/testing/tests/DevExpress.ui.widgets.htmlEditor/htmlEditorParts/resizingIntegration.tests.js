@@ -35,6 +35,15 @@ module('Resizing integration', {
         this.clock.restore();
     }
 }, () => {
+    test('resetting the mediaResizing option while resizing is disabled does not throw', function(assert) {
+        this.options.mediaResizing = { enabled: false };
+        this.createWidget();
+
+        this.instance.option('mediaResizing', undefined);
+
+        assert.ok(true, 'the module is cleaned without an exception');
+    });
+
     test('Click on an image with default resize module config', function(assert) {
         this.createWidget();
 
@@ -89,6 +98,56 @@ module('Resizing integration', {
         const $resizeFrame = this.$element.find(`.${RESIZE_FRAME_CLASS}`);
 
         assert.strictEqual($resizeFrame.length, 0, 'There is resize frame');
+    });
+
+    test('Click on an image after the mediaResizing option is reset and enabled again', function(assert) {
+        this.options.mediaResizing = { enabled: true };
+        this.createWidget();
+
+        this.instance.option('mediaResizing', undefined);
+        this.instance.option('mediaResizing', { enabled: true });
+
+        this.$element
+            .find('img')
+            .trigger(clickEvent);
+
+        const $resizeFrame = this.$element.find(`.${RESIZE_FRAME_CLASS}`);
+
+        assert.strictEqual($resizeFrame.length, 1, 'There is resize frame');
+        assert.ok($resizeFrame.is(':visible'), 'Resize frame is visible');
+    });
+
+    test('Click on the same image after resizing is disabled and enabled again via optionChange', function(assert) {
+        this.options.mediaResizing = { enabled: true };
+        this.createWidget();
+        const $image = this.$element.find('img');
+
+        $image.trigger(clickEvent);
+        this.instance.option('mediaResizing.enabled', false);
+        this.instance.option('mediaResizing.enabled', true);
+        $image.trigger(clickEvent);
+
+        const $resizeFrame = this.$element.find(`.${RESIZE_FRAME_CLASS}`);
+
+        assert.strictEqual($resizeFrame.length, 1, 'There is resize frame');
+        assert.ok($resizeFrame.is(':visible'), 'Resize frame is visible');
+    });
+
+    test('resizing module of a previous render should not handle focusOut after repaint', function(assert) {
+        this.options.mediaResizing = { enabled: true };
+        this.createWidget();
+        const previousFrameHideSpy = sinon.spy(this.instance.getModule('resizing')._$resizeFrame, 'hide');
+
+        this.instance.repaint();
+        const currentFrameHideSpy = sinon.spy(this.instance.getModule('resizing')._$resizeFrame, 'hide');
+
+        this.instance.focus();
+        $('<input>')
+            .appendTo('#qunit-fixture')
+            .trigger('focus');
+
+        assert.ok(currentFrameHideSpy.called, 'focusOut hides the frame of the current render');
+        assert.ok(previousFrameHideSpy.notCalled, 'focusOut is not handled by the module of the previous render');
     });
 
     test('Click on an image with enabled resizing but remove \'image\' from allowed resizing targets', function(assert) {

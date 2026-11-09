@@ -21,6 +21,7 @@ import { format as stringFormat } from '@js/core/utils/string';
 import {
   isDefined, isNumeric, isObject, isString,
 } from '@js/core/utils/type';
+import { withFormatLocale } from '@ts/core/global_format_config';
 
 const ARABIC_ZERO_CODE = 1632;
 const DEFINED_NUMBER_FORMTATS = {
@@ -68,20 +69,25 @@ function _hasArabicDigits(text) {
   return false;
 }
 
-function _convertDateFormat(format) {
-  const formattedValue = (dateLocalization.format(new Date(2009, 8, 8, 6, 5, 4), format) || '').toString();
-  let result = getFormat((value) => dateLocalization.format(value, format) as string);
+function _convertDateFormat(format, locale?: string) {
+  const localizedFormat = isString(format) ? withFormatLocale(format, locale) : format;
+  const formattedValue = (dateLocalization.format(new Date(2009, 8, 8, 6, 5, 4), localizedFormat) || '').toString();
+  let result = getFormat((value) => {
+    const text = dateLocalization.format(value, localizedFormat) as string;
+
+    return numberFormatter.convertDigits(numberFormatter.convertDigits(text, true, locale), false);
+  });
 
   if (result) {
     result = _convertDateFormatToOpenXml(result);
-    result = _getLanguageInfo(formattedValue) + result;
+    result = _getLanguageInfo(formattedValue, locale) + result;
   }
 
   return result;
 }
 
-function _getLanguageInfo(defaultPattern) {
-  const languageID = getLanguageId();
+function _getLanguageInfo(defaultPattern, locale?: string) {
+  const languageID = getLanguageId(locale);
   let languageIDStr = languageID ? languageID.toString(16) : '';
   let languageInfo = '';
 
@@ -118,12 +124,12 @@ function _convertDateFormatToOpenXml(format) {
     .join('');
 }
 
-function _convertNumberFormat(format, precision, currency) {
+function _convertNumberFormat(format, precision, currency, locale?: string) {
   let result;
   let excelFormat;
 
   if (format === 'currency') {
-    excelFormat = numberFormatter.getOpenXmlCurrencyFormat(currency);
+    excelFormat = numberFormatter.getOpenXmlCurrencyFormat(currency, locale);
   } else {
     excelFormat = DEFINED_NUMBER_FORMTATS[format.toLowerCase()];
   }
@@ -196,13 +202,13 @@ export const ExportFormat = {
     return result;
   },
 
-  convertFormat(format, precision, type, currency) {
+  convertFormat(format, precision, type, currency, locale?: string) {
     if (isDefined(format)) {
       if (type === 'date') {
-        return _convertDateFormat(format);
+        return _convertDateFormat(format, locale);
       }
       if (isString(format) && DEFINED_NUMBER_FORMTATS[format.toLowerCase()]) {
-        return _convertNumberFormat(format, precision, currency);
+        return _convertNumberFormat(format, precision, currency, locale);
       }
     }
   },

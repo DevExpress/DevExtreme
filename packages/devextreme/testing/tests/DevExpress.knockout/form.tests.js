@@ -72,11 +72,9 @@ QUnit.test('Generate items from layoutData with unacceptable data', function(ass
             dataField: 'firstName',
             editorType: 'dxTextBox',
             itemType: 'simple',
-            visibleIndex: 0,
-            col: 0
+            visibleIndex: 0
         },
         {
-            col: 0,
             dataField: 'mark',
             editorType: 'dxNumberBox',
             itemType: 'simple',

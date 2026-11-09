@@ -6,7 +6,7 @@ import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred } from '@js/core/utils/deferred';
 import type { ValueChangedEvent } from '@js/ui/text_box';
 import type { SearchBoxMixinOptions } from '@js/ui/widget/ui.search_box_mixin';
-import { stubComponent } from '@ts/core/utils/m_stubs';
+import { stubComponent } from '@ts/core/utils/stubs';
 import type TextBox from '@ts/ui/text_box/text_box';
 import type { TextBoxProperties } from '@ts/ui/text_box/text_box';
 

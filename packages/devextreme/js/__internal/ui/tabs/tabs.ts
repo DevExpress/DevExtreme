@@ -1,5 +1,4 @@
 import type { DefaultOptionsRule, Position } from '@js/common';
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import holdEvent from '@js/common/core/events/hold';
 import pointerEvents from '@js/common/core/events/pointer';
 import { addNamespace } from '@js/common/core/events/utils';
@@ -28,6 +27,7 @@ import { current as currentTheme, isFluent, isMaterial } from '@js/ui/themes';
 import { getImageAriaLabel, getImageContainer } from '@ts/core/utils/icon';
 import { render } from '@ts/core/utils/ink_ripple';
 import type { OptionChanged } from '@ts/core/widget/types';
+import eventsEngine from '@ts/events/core/events_engine';
 import type {
   CollectionItemInfo,
   InkRippleEvent,
@@ -399,7 +399,7 @@ class Tabs extends CollectionWidgetLiveUpdate<TabsProperties> {
   _isItemsWidthExceeded(): boolean {
     const $visibleItems = this._getVisibleItems();
     const tabItemTotalWidth = this._getSummaryItemsSize('width', $visibleItems, true);
-    const elementWidth = getWidth(this.$element());
+    const elementWidth = getWidth(this.$element().get(0));
 
     if ([tabItemTotalWidth, elementWidth].includes(0)) {
       return false;
@@ -411,14 +411,14 @@ class Tabs extends CollectionWidgetLiveUpdate<TabsProperties> {
   _isItemsHeightExceeded(): boolean {
     const $visibleItems = this._getVisibleItems();
     const itemsHeight = this._getSummaryItemsSize('height', $visibleItems, true);
-    const elementHeight = getHeight(this.$element());
+    const elementHeight = getHeight(this.$element().get(0));
 
     return itemsHeight - 1 > elementHeight;
   }
 
   _needStretchItems(): boolean {
     const $visibleItems = this._getVisibleItems();
-    const elementWidth = getWidth(this.$element());
+    const elementWidth = getWidth(this.$element().get(0));
     const itemsWidth = [];
 
     each($visibleItems, (_, item) => {

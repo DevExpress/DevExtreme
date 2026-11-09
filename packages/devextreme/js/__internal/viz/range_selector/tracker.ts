@@ -7,9 +7,9 @@
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 
 import { domAdapter } from '@ts/core/dom_adapter';
-import { each } from '@ts/core/utils/m_iterator';
-import { pointerEvents as msPointerEnabled } from '@ts/core/utils/m_support';
-import { getWindow } from '@ts/core/utils/m_window';
+import { each } from '@ts/core/utils/iterator';
+import { pointerEvents as msPointerEnabled } from '@ts/core/utils/support';
+import { getWindow } from '@ts/core/utils/window';
 import eventsEngine from '@ts/events/core/events_engine';
 import pointerEvents from '@ts/events/pointer';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';

@@ -100,7 +100,7 @@ test('Accessibility: DataGrid general status should contains correct text after 
   const searchInput = dataGrid.getSearchBox();
   await t.typeText(searchInput.input(), 'A')
     // NOTE: Unfortunately DataGrid has hardcoded filter's timeout 700ms
-    // (grid_core/search/m_search FILTERING_TIMEOUT)
+    // (grid_core/search/search FILTERING_TIMEOUT)
     // So, we only can waiting 1s here
     .wait(1000);
 

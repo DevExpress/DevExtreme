@@ -9,7 +9,7 @@ import { current, isGeneric, isMaterialBased } from '@js/ui/themes';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
 
-import supportUtils from '../core/utils/m_support';
+import supportUtils from '../core/utils/support';
 
 export const LOADINDICATOR_CLASS = 'dx-loadindicator';
 export const LOADINDICATOR_WRAPPER_CLASS = 'dx-loadindicator-wrapper';
@@ -206,8 +206,8 @@ class LoadIndicator extends Widget<LoadIndicatorProperties> {
     const { width, height } = this.option();
 
     if (width || height) {
-      const elementWidth = getWidth(this.$element());
-      const elementHeight = getHeight(this.$element());
+      const elementWidth = getWidth(this.$element().get(0));
+      const elementHeight = getHeight(this.$element().get(0));
 
       const minDimension = Math.min(elementHeight, elementWidth);
 

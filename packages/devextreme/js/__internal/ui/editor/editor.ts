@@ -1,13 +1,14 @@
 import type { Mode, Position } from '@js/common';
 import type { NativeEventInfo } from '@js/common/core/events';
-import EventsEngine from '@js/common/core/events/core/events_engine';
 import { addNamespace, normalizeKeyName } from '@js/common/core/events/utils/index';
 import { data } from '@js/core/element_data';
 import Guid from '@js/core/guid';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import Callbacks from '@js/core/utils/callbacks';
+import { equalByValue } from '@js/core/utils/common';
 import { extend } from '@js/core/utils/extend';
+import { isPlainObject } from '@js/core/utils/type';
 import { hasWindow } from '@js/core/utils/window';
 import type { DxEvent } from '@js/events';
 import type PublicEditor from '@js/ui/editor/editor';
@@ -17,10 +18,11 @@ import type {
 } from '@js/ui/editor/editor';
 import ValidationEngine from '@js/ui/validation_engine';
 import ValidationMessage from '@js/ui/validation_message';
-import domUtils from '@ts/core/utils/m_dom';
+import domUtils from '@ts/core/utils/dom';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { WidgetProperties } from '@ts/core/widget/widget';
 import Widget from '@ts/core/widget/widget';
+import EventsEngine from '@ts/events/core/events_engine';
 
 const INVALID_MESSAGE_AUTO = 'dx-invalid-message-auto';
 const READONLY_STATE_CLASS = 'dx-state-readonly';
@@ -440,7 +442,7 @@ class Editor<
         break;
       case 'value':
         if (value != previousValue) { // eslint-disable-line eqeqeq
-          this.option('isDirty', this._initialValue !== value);
+          this.option('isDirty', !this._isSameAsInitialValue(value));
 
           this.validationRequest.fire({
             value,
@@ -488,6 +490,27 @@ class Editor<
         break;
       default:
         super._optionChanged(args);
+    }
+  }
+
+  _isSameAsInitialValue(value: unknown): boolean {
+    const initialValue = this._initialValue;
+
+    if (initialValue === value) {
+      return true;
+    }
+
+    if (isPlainObject(initialValue) || isPlainObject(value)) {
+      return false;
+    }
+
+    try {
+      return equalByValue(initialValue, value, {
+        maxDepth: Infinity,
+        comparePlainObjectsOnly: true,
+      });
+    } catch {
+      return initialValue === value;
     }
   }
 

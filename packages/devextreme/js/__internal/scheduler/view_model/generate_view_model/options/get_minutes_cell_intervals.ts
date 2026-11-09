@@ -1,4 +1,4 @@
-import { dateUtils } from '@ts/core/utils/m_date';
+import { dateUtils } from '@ts/core/utils/date';
 
 import timeZoneUtils from '../../../utils_time_zone';
 import { splitIntervalByDay } from '../../common/split_interval_by_days';

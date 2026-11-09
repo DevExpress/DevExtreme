@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import Color from '@js/color';
 import { name as clickEventName } from '@js/common/core/events/click';
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import { getHeight, getWidth } from '@js/core/utils/size';
+import type { DxEvent } from '@js/events';
+import eventsEngine from '@ts/events/core/events_engine';
 
 import Provider from './provider';
 import type { LocationOption, MarkerOptions, RouteOptions } from './provider.dynamic';
@@ -111,7 +112,7 @@ class GoogleStaticProvider extends Provider {
 
     const requestOptions = [
       'sensor=false',
-      `size=${Math.round(getWidth($container))}x${Math.round(getHeight($container))}`,
+      `size=${Math.round(Number(getWidth($container)))}x${Math.round(Number(getHeight($container)))}`,
 
       `maptype=${this._option('type')}`,
       `center=${this._locationToString(this._option('center'))}`,
@@ -177,7 +178,7 @@ class GoogleStaticProvider extends Provider {
     const eventName = this._addEventNamespace(clickEventName);
 
     eventsEngine.off(this._$container, eventName);
-    eventsEngine.on(this._$container, eventName, (e) => {
+    eventsEngine.on(this._$container, eventName, (e: DxEvent) => {
       this._fireClickAction({ event: e });
     });
   }

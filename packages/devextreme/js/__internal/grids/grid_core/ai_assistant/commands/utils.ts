@@ -3,9 +3,9 @@ import type {
   ScalarFilterValue,
 } from '@js/common/grids';
 import { isString } from '@js/core/utils/type';
-import { dateUtilsTs } from '@ts/core/utils/date';
-import { z } from '@ts/grids/grid_core/ai_assistant/zod';
-import { isDateType } from '@ts/grids/grid_core/m_utils';
+import { isValidDate } from '@ts/core/utils/date';
+import * as z from '@ts/grids/grid_core/ai_assistant/zod';
+import { isDateType } from '@ts/grids/grid_core/utils';
 
 type RowKey = string | number | Record<string, string | number>;
 
@@ -116,7 +116,7 @@ export function resolveFilterValue(
   value: ScalarFilterValue,
 ): ScalarFilterValue {
   if (typeof value === 'string' && isDateType(dataType)) {
-    if (!dateUtilsTs.isValidDate(value)) {
+    if (!isValidDate(value)) {
       return value;
     }
     return new Date(value);

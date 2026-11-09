@@ -1,0 +1,6 @@
+@use "../../../_design-system/variables/ds" as ds;
+
+$informer-error-content: ds.$color-content-danger !default;
+$informer-error-bg: ds.$color-bg-danger-subtler !default;
+$informer-info-content: ds.$color-content !default;
+$informer-info-bg: ds.$color-bg-canvas !default;

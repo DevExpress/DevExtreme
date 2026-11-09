@@ -1,5 +1,5 @@
 import { describe, expect, it } from '@jest/globals';
-import type { DataSourceLike } from '@js/data/data_source';
+import type { ColumnHeaderFilter } from '@js/common/grids';
 import type { Column } from '@ts/grids/new/grid_core/columns_controller/types';
 import type {
   HeaderFilterRootOptions,
@@ -68,13 +68,13 @@ describe('HeaderFilter', () => {
           root: {},
           col: {
             headerFilter: {
-              dataSource: { test: 'TEST_DS' } as DataSourceLike<unknown>,
+              dataSource: { test: 'TEST_DS' } as ColumnHeaderFilter['dataSource'],
             },
             filterValues: ['A', 'B', 'C'],
           },
           result: {
             headerFilter: {
-              dataSource: { test: 'TEST_DS' } as DataSourceLike<unknown>,
+              dataSource: { test: 'TEST_DS' } as ColumnHeaderFilter['dataSource'],
               search: {},
             },
             filterValues: ['A', 'B', 'C'],

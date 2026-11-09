@@ -6,6 +6,7 @@ import { bundleName, compileBundle } from './compiled-bundles';
 jest.setTimeout(600000);
 
 const baselinePath = join(__dirname, 'public-surface.baseline.json');
+const journalPath = join(__dirname, '..', 'tools', 'naming', 'public-renames.json');
 
 interface Surface { theme: string; name: string; names: string[] }
 
@@ -44,6 +45,8 @@ const outside = (
 
 describe('names the themes publish as custom properties', () => {
   const baseline: Group[] = JSON.parse(readFileSync(baselinePath, 'utf8'));
+  const journal: { retired: { name: string }[] } = JSON.parse(readFileSync(journalPath, 'utf8'));
+  const retired = new Set(journal.retired.map(({ name }) => name));
   const current: Record<string, string[]> = {};
   const expected: Record<string, string[]> = {};
   let surfaces: Surface[] = [];
@@ -71,8 +74,17 @@ describe('names the themes publish as custom properties', () => {
     expect(differing).toEqual([]);
   });
 
+  const undocumented = (): string[] => outside(expected, current)
+    .filter((entry) => !retired.has(entry.slice(entry.indexOf(': ') + 2)));
+
+  test('no name leaves the published surface without a journal entry', () => {
+    expect(undocumented()).toEqual([]);
+  });
+
   if (process.env.UPDATE_NAMING_BASELINE === '1') {
     test('baseline regenerated', () => {
+      expect(undocumented()).toEqual([]);
+
       writeFileSync(baselinePath, `${JSON.stringify(grouped(current), null, 2)}\n`);
 
       expect(Object.values(current).flat().length).toBeGreaterThan(0);

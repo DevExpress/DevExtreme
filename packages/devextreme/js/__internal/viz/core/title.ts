@@ -12,8 +12,8 @@
 /* eslint-disable prefer-destructuring */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 
-import { extend } from '@ts/core/utils/m_extend';
-import { isString as _isString } from '@ts/core/utils/m_type';
+import { extend } from '@ts/core/utils/extend';
+import { isString as _isString } from '@ts/core/utils/type';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 import type { LayoutTargetOptions } from '@ts/viz/core/layout';
 import type { AlignedLayoutRect } from '@ts/viz/core/layout_element';
@@ -219,6 +219,12 @@ export let Title = class Title extends LayoutElement {
     return this;
   }
 
+  erase(): this {
+    this._group.linkRemove();
+
+    return this;
+  }
+
   _correctTitleLength(width: number): void {
     const options = this._options;
     const margin = options.margin;
@@ -317,7 +323,7 @@ export let Title = class Title extends LayoutElement {
 
   freeSpace(): void {
     this._params.incidentOccurred('W2103');
-    this._group.linkRemove();
+    this.erase();
     this._boundingRect.width = this._boundingRect.height = 0;
   }
 

@@ -9,7 +9,7 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable prefer-destructuring */
 
-import { isFunction as _isFunction } from '@ts/core/utils/m_type';
+import { isFunction as _isFunction } from '@ts/core/utils/type';
 import { normalizeEnum as _normalizeEnum } from '@ts/viz/core/utils';
 
 const _round = Math.round;

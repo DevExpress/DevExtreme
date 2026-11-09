@@ -13,7 +13,7 @@ test('Editing should start by pressing enter after scrolling content with scroll
 
   await t.expect(dataGrid.isReady()).ok();
 
-  await dataGrid.scrollBy(t, { y: 10000 });
+  await dataGrid.scrollBy(t, { top: 10000 });
 
   await t.click(dataGrid.getDataCell(49, 1).element);
   await t.pressKey('enter');
@@ -44,7 +44,7 @@ test('editing.allowUpdating callback should receive correct row on tab key on fi
 
   await t.expect(dataGrid.isReady()).ok();
 
-  await dataGrid.scrollBy(t, { y: 10000 });
+  await dataGrid.scrollBy(t, { top: 10000 });
 
   await t
     .click(dataGrid.getDataCell(49, 0).element)
@@ -86,7 +86,7 @@ test('editing.allowUpdating callback should receive correct row on tab key on la
 
   await t.expect(dataGrid.isReady()).ok();
 
-  await dataGrid.scrollBy(t, { y: 10000 });
+  await dataGrid.scrollBy(t, { top: 10000 });
 
   await t
     .click(dataGrid.getDataCell(48, 1).element)

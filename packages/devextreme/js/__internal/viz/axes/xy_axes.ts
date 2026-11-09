@@ -25,10 +25,10 @@
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 
 import formatHelper from '@ts/core/format_helper';
-import { noop } from '@ts/core/utils/m_common';
-import { dateUtils } from '@ts/core/utils/m_date';
-import { extend } from '@ts/core/utils/m_extend';
-import { isDefined } from '@ts/core/utils/m_type';
+import { noop } from '@ts/core/utils/common';
+import { dateUtils } from '@ts/core/utils/date';
+import { extend } from '@ts/core/utils/extend';
+import { isDefined } from '@ts/core/utils/type';
 import constants from '@ts/viz/axes/axes_constants';
 import { generateDateBreaks } from '@ts/viz/axes/datetime_breaks';
 import { getCosAndSin, getLog, patchFontOptions } from '@ts/viz/core/utils';
@@ -123,10 +123,8 @@ function getStripVerticalAlignmentPosition(alignment) {
 }
 
 function getMarkerInterval(tickInterval) {
-  // @ts-expect-error
   let markerInterval = getNextDateUnit(tickInterval);
   if (markerInterval === 'quarter') {
-    // @ts-expect-error
     markerInterval = getNextDateUnit(markerInterval);
   }
   return markerInterval;

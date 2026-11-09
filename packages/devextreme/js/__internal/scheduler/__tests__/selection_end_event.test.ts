@@ -3,7 +3,7 @@ import {
 } from '@jest/globals';
 import type { SelectionEndEvent } from '@js/ui/scheduler';
 import { fireEvent } from '@testing-library/dom';
-import support from '@ts/core/utils/m_support';
+import support from '@ts/core/utils/support';
 
 import fx from '../../../common/core/animation/fx';
 import { createScheduler } from './__mock__/create_scheduler';

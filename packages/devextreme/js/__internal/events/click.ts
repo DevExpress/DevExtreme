@@ -8,7 +8,7 @@ import domAdapter from '@js/core/dom_adapter';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import devices from '@ts/core/devices';
-import domUtils from '@ts/core/utils/m_dom';
+import domUtils from '@ts/core/utils/dom';
 import type { EmitterEvent } from '@ts/events/core/emitter';
 import Emitter from '@ts/events/core/emitter';
 import registerEmitter from '@ts/events/core/emitter_registrator';

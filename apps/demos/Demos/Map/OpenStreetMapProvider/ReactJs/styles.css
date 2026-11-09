@@ -1,0 +1,44 @@
+.options {
+  padding: 20px;
+  background-color: var(--dx-color-options-panel-bg);
+  margin-top: 20px;
+}
+
+.caption {
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.option {
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+}
+
+.option > span {
+  display: inline-block;
+  width: 90px;
+}
+
+.option > .dx-selectbox {
+  width: 100%;
+  max-width: 350px;
+}
+
+.compact-marker-tooltip .dx-popup-title {
+  padding: 4px 8px;
+}
+
+.compact-marker-tooltip .dx-popup-title .dx-toolbar-items-container {
+  height: 24px;
+}
+
+.compact-marker-tooltip .dx-popup-title .dx-closebutton {
+  width: 24px;
+  min-width: 24px;
+  height: 24px;
+}
+
+.compact-marker-tooltip .dx-closebutton .dx-button-content {
+  padding: 1px;
+}

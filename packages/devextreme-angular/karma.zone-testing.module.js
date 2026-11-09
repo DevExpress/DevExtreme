@@ -1,7 +1,9 @@
 const { NgModule, provideZoneChangeDetection } = require('@angular/core');
 
-const ZoneTestingModule = NgModule({
+class ZoneTestingModule {}
+
+NgModule({
   providers: [provideZoneChangeDetection()],
-})(class ZoneTestingModule {});
+})(ZoneTestingModule);
 
 module.exports = { ZoneTestingModule };

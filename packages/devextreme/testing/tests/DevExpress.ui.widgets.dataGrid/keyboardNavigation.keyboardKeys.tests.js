@@ -4,7 +4,7 @@ import $ from 'jquery';
 
 import 'ui/data_grid';
 
-import gridCoreUtils from '__internal/grids/grid_core/m_utils';
+import gridCoreUtils from '__internal/grids/grid_core/utils';
 import devices from '__internal/core/devices';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import commonUtils from 'core/utils/common';
@@ -619,7 +619,7 @@ QUnit.module('Keyboard keys', {
         this.keyboardNavigationController._focusedView = this.rowsView;
 
         const $row = $(this.rowsView.element().find('tbody > tr')[6]);
-        this.keyboardNavigationController._focus($($row.find('td')[1]));
+        this.keyboardNavigationController.applyFocus($($row.find('td')[1]));
 
         // assert
         assert.ok($row.hasClass('dx-group-row'), 'row is focused');
@@ -3950,16 +3950,16 @@ QUnit.module('Keyboard keys', {
         const $cell = $(this.getCellElement(0, 0));
         this.triggerKeyDown('tab', false, false, $cell);
         this.clock.tick(10);
-        this.keyboardNavigationController._updateFocus = function() {
+        this.keyboardNavigationController.updateFocus = function() {
             // assert
-            assert.ok(false, 'keyboardNavigation._updateFocus should not be called');
+            assert.ok(false, 'keyboardNavigation.updateFocus should not be called');
         };
         this.clock.tick(10);
         this.dataController.changed.fire({ changeType: 'append' });
         this.clock.tick(10);
 
         // assert
-        assert.ok(true, 'keyboardNavigation._updateFocus was not called');
+        assert.ok(true, 'keyboardNavigation.updateFocus was not called');
     });
 
     // T680076

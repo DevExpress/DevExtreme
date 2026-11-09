@@ -3,7 +3,8 @@ import { ClientFunction, Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import Lookup from 'devextreme-testcafe-models/lookup';
 import Guid from 'devextreme/core/guid';
-import { isMaterial, isMaterialBased, testScreenshot } from '../../../helpers/themeUtils';
+import { testScreenshot } from '../../../helpers/themeUtils';
+import { Themes } from '../../../helpers/themes';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 import {
@@ -45,51 +46,47 @@ test('Popup should not be closed if lookup is placed at the page bottom (T101803
   usePopover: false,
 }));
 
-if (isMaterial()) {
-  test('Popup should be flipped if lookup is placed at the page bottom', async (t) => {
-    const popupWrapper = Selector('.dx-overlay-wrapper');
-    const popupContent = Selector('.dx-overlay-content');
+test.meta({ runInTheme: Themes.materialBlue })('Popup should be flipped if lookup is placed at the page bottom', async (t) => {
+  const popupWrapper = Selector('.dx-overlay-wrapper');
+  const popupContent = Selector('.dx-overlay-content');
 
-    const popupWrapperTop = await popupWrapper.getBoundingClientRectProperty('top');
-    const popupContentTop = await popupContent.getBoundingClientRectProperty('top');
+  const popupWrapperTop = await popupWrapper.getBoundingClientRectProperty('top');
+  const popupContentTop = await popupContent.getBoundingClientRectProperty('top');
 
-    await t
-      .expect(popupContentTop)
-      .lt(popupWrapperTop);
-  }).before(async () => {
-    await ClientFunction(() => {
-      const $element = $('#container');
-      $element.css({ top: $(window).height() - $element.height() });
-    })();
+  await t
+    .expect(popupContentTop)
+    .lt(popupWrapperTop);
+}).before(async () => {
+  await ClientFunction(() => {
+    const $element = $('#container');
+    $element.css({ top: $(window).height() - $element.height() });
+  })();
 
-    return createWidget('dxLookup', {
-      items: [1, 2, 3],
-      usePopover: false,
-      opened: true,
-      dropDownOptions: {
-        hideOnParentScroll: false,
-      },
-    });
+  return createWidget('dxLookup', {
+    items: [1, 2, 3],
+    usePopover: false,
+    opened: true,
+    dropDownOptions: {
+      hideOnParentScroll: false,
+    },
   });
-}
+});
 
-if (!isMaterialBased()) {
-  test('Popover should have correct vertical position (T1048128)', async (t) => {
-    const lookup = new Lookup('#container');
-    await lookup.open();
+test.meta({ runInTheme: Themes.genericLight })('Popover should have correct vertical position (T1048128)', async (t) => {
+  const lookup = new Lookup('#container');
+  await lookup.open();
 
-    const popoverArrow = Selector('.dx-popover-arrow');
+  const popoverArrow = Selector('.dx-popover-arrow');
 
-    const lookupElementBottom = await lookup.element.getBoundingClientRectProperty('bottom');
-    const popoverArrowTop = await popoverArrow.getBoundingClientRectProperty('top');
+  const lookupElementBottom = await lookup.element.getBoundingClientRectProperty('bottom');
+  const popoverArrowTop = await popoverArrow.getBoundingClientRectProperty('top');
 
-    await t
-      .expect(lookupElementBottom)
-      .eql(popoverArrowTop);
-  }).before(async () => createWidget('dxLookup', {
-    items: Array.from(Array(100).keys()),
-  }));
-}
+  await t
+    .expect(lookupElementBottom)
+    .eql(popoverArrowTop);
+}).before(async () => createWidget('dxLookup', {
+  items: Array.from(Array(100).keys()),
+}));
 
 test.meta({ browserSize: [300, 400] })('Check popup height with no found data option', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -126,13 +123,7 @@ test.meta({ browserSize: [300, 400] })('Check popup height in loading state', as
 
   return createWidget('dxLookup', {
     dataSource: {
-      load() {
-        return new Promise((resolve) => {
-          setTimeout(() => {
-            resolve([1, 2, 3]);
-          }, 5000);
-        });
-      },
+      load: () => new Promise(() => {}),
     },
     valueExpr: 'id',
     displayExpr: 'text',

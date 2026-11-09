@@ -1,6 +1,6 @@
 import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred } from '@js/core/utils/deferred';
-import { fromPromise } from '@ts/core/utils/m_deferred';
+import { fromPromise } from '@ts/core/utils/deferred';
 import { WholeFileUploadStrategyBase } from '@ts/ui/file_uploader/file_upload_strategy.whole.base';
 import type { FileUploaderItem } from '@ts/ui/file_uploader/file_uploader.types';
 

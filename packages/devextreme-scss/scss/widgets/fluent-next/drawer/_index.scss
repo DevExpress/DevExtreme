@@ -1,0 +1,6 @@
+@use "sizes" as *;
+@use "../../base/drawer";
+
+.dx-drawer-shader {
+  background-color: var(--dx-drawer-backdrop);
+}

@@ -21,6 +21,7 @@ import Store from '@js/data/abstract_store';
 import type { Grouping, GroupPanel } from '@js/ui/data_grid';
 import filterUtils from '@js/ui/shared/filtering';
 import errors from '@js/ui/widget/ui.errors';
+import { applyDataTypePreset } from '@ts/core/global_format_config';
 import inflector from '@ts/core/utils/inflector';
 import type { SortingInfo } from '@ts/data/utils';
 import type {
@@ -53,9 +54,9 @@ import type { DataFilter } from '@ts/grids/grid_core/filter/types';
 import type { Module } from '@ts/grids/grid_core/types';
 
 import { AI_COLUMN_NAME } from '../ai_column/const';
-import gridCoreUtils from '../m_utils';
 import modules from '../modules/modules';
 import { StickyPosition } from '../sticky_columns/const';
+import gridCoreUtils from '../utils';
 import {
   addExpandColumn,
   assignColumns,
@@ -107,7 +108,6 @@ import {
   DETAIL_COMMAND_COLUMN_NAME,
   GROUP_COMMAND_COLUMN_NAME,
   GROUP_LOCATION,
-  MAX_SAFE_INTEGER,
   USER_STATE_FIELD_NAMES,
 } from './const';
 import { UserStateApplier } from './user_state_applier';
@@ -117,7 +117,7 @@ export class ColumnsController extends modules.Controller {
 
   public _commandColumns!: Column[];
 
-  public _columns!: Column[];
+  public _columns!: WithCellValueCalculator<Column>[];
 
   private _isColumnsFromOptions!: boolean;
 
@@ -549,7 +549,7 @@ export class ColumnsController extends modules.Controller {
     return true;
   }
 
-  public getColumns(): Column[] {
+  public getColumns(): WithCellValueCalculator<Column>[] {
     return this._columns;
   }
 
@@ -565,7 +565,9 @@ export class ColumnsController extends modules.Controller {
     const result: GroupColumn[] = [];
 
     this._columns
-      .filter((column): column is GroupColumn => isDefined(column.groupIndex) && !column.type)
+      .filter((column): column is WithCellValueCalculator<GroupColumn> => (
+        isDefined(column.groupIndex) && !column.type
+      ))
       .forEach((column) => {
         result[column.groupIndex] = column;
       });
@@ -1107,9 +1109,9 @@ export class ColumnsController extends modules.Controller {
         const targetColumn = this._columns[toIndex];
 
         if (!targetColumn || column.ownerBand !== targetColumn.ownerBand) {
-          options.visibleIndex = MAX_SAFE_INTEGER;
+          options.visibleIndex = Number.MAX_SAFE_INTEGER;
         } else if (isColumnFixed(this, column) !== isColumnFixed(this, targetColumn)) {
-          options.visibleIndex = MAX_SAFE_INTEGER;
+          options.visibleIndex = Number.MAX_SAFE_INTEGER;
         } else {
           options.visibleIndex = targetColumn.visibleIndex;
         }
@@ -1274,8 +1276,7 @@ export class ColumnsController extends modules.Controller {
     });
   }
 
-  private _updateColumnOptions(column: Column, columnIndex: number): void {
-    // @ts-expect-error createColumn initializes calculateCellValue
+  private _updateColumnOptions(column: WithCellValueCalculator<Column>, columnIndex: number): void {
     const defaultSelector = (data: RawItemData): unknown => column.calculateCellValue(data);
     const shouldTakeOriginalCallbackFromPrevious = this._reinitAfterLookupChanges
       && this._previousColumns?.[columnIndex];
@@ -1327,7 +1328,10 @@ export class ColumnsController extends modules.Controller {
         // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing -- skip empty text
         || getAlignmentByDataType(dataType, this.option('rtlEnabled'));
       // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing -- skip falsy format
-      column.format = column.format || gridCoreUtils.getFormatByDataType(dataType);
+      column.format = applyDataTypePreset(
+        column.format || gridCoreUtils.getFormatByDataType(dataType),
+        dataType,
+      );
       column.customizeText = column.customizeText ?? getCustomizeTextByDataType(dataType);
       column.defaultFilterOperations = column.defaultFilterOperations
         ?? (lookup ? [] : (DATATYPE_OPERATIONS[dataType] ?? []));
@@ -1683,7 +1687,8 @@ export class ColumnsController extends modules.Controller {
     value?: unknown,
     notFireEvent?: boolean,
   ): unknown {
-    const columns = this._columns.concat(this._commandColumns);
+    const columnsWithoutCommands: Column[] = this._columns;
+    const columns = columnsWithoutCommands.concat(this._commandColumns);
     const column = findColumn(columns, identifier);
 
     if (!column) {
@@ -1784,7 +1789,7 @@ export class ColumnsController extends modules.Controller {
   }
 
   private addColumn(options: Column | string): void {
-    let column = createColumn(this, options) as Column;
+    let column = createColumn(this, options) as WithCellValueCalculator<Column>;
     const index = this._columns.length;
 
     this._columns.push(column);
@@ -1843,7 +1848,7 @@ export class ColumnsController extends modules.Controller {
       columnsUserState,
       ignoreColumnOptionNames: this._ignoreColumnOptionNames ?? [],
       hasUserState: this._hasUserState,
-      createColumn: (columnOptions): Column => createColumn(
+      createColumn: (columnOptions): WithCellValueCalculator<Column> => createColumn(
         this,
         isString(columnOptions) ? { dataField: columnOptions } : columnOptions,
       ),
@@ -2336,7 +2341,7 @@ export class ColumnsController extends modules.Controller {
   }
 
   /**
-   * @extended: m_adaptivity
+   * @extended: adaptivity
    */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public isAdaptiveHiddenColumn(column: Column): boolean {

@@ -3,6 +3,7 @@ import {
   isClient,
   registerCustomComponents,
   renderTrialPanel,
+  type TrialPanelOptions,
 } from './trial_panel.client';
 
 export function showTrialPanel(
@@ -11,9 +12,17 @@ export function showTrialPanel(
   version: string,
   subscriptions?: string | null,
   customStyles?: CustomTrialPanelStyles,
+  options?: TrialPanelOptions,
 ): void {
   if (isClient()) {
-    renderTrialPanel(buyNowUrl, licensingDocUrl, version, subscriptions, customStyles);
+    renderTrialPanel(
+      buyNowUrl,
+      licensingDocUrl,
+      version,
+      subscriptions,
+      customStyles,
+      options,
+    );
   }
 }
 

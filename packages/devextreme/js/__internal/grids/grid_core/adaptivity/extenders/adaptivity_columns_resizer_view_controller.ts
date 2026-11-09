@@ -3,7 +3,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable no-plusplus */
 import type { dxElementWrapper } from '@js/core/renderer';
-import type { ColumnsResizerViewController } from '@ts/grids/grid_core/columns_resizing_reordering/m_columns_resizing_reordering';
+import type { ColumnsResizerViewController } from '@ts/grids/grid_core/columns_resizing_reordering/columns_resizing_reordering';
 import type { ModuleType } from '@ts/grids/grid_core/types';
 
 import { HIDDEN_COLUMNS_WIDTH } from '../const';

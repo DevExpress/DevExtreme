@@ -135,7 +135,7 @@ class AnimationPresetCollection
 
     return {
       enter: ($element, configModifier): Animation => {
-        const width = getWidth($element.parent()) * widthMultiplier;
+        const width = Number(getWidth($element.parent())) * widthMultiplier;
         const { direction } = configModifier;
         const config = createBaseConfig(configModifier);
         config.to = {
@@ -163,7 +163,7 @@ class AnimationPresetCollection
         return fx.createAnimation($element, config);
       },
       leave: ($element, configModifier): Animation => {
-        const width = getWidth($element.parent()) * widthMultiplier;
+        const width = Number(getWidth($element.parent())) * widthMultiplier;
         const { direction } = configModifier;
         const config = createBaseConfig(configModifier);
 

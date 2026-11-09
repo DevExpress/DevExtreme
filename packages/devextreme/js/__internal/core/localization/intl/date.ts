@@ -1,9 +1,15 @@
 /* eslint-disable spellcheck/spell-checker */
 import type { Format as LocalizationFormat, FormatObject } from '@js/localization';
-import { resolvePresetOverride } from '@ts/core/global_format_config';
+import {
+  getDateFormatLocale,
+  getEffectiveFormatLocale,
+  getFormatterOptions,
+  resolvePresetOverride,
+} from '@ts/core/global_format_config';
 import localizationCoreUtils from '@ts/core/localization/core';
 import type { DateFormatter, Format } from '@ts/core/localization/date';
-import { extend } from '@ts/core/utils/m_extend';
+import { bindDatePartsToLocale } from '@ts/core/localization/ldml/date.parser';
+import { extend } from '@ts/core/utils/extend';
 
 interface DateArgs {
   year: number;
@@ -18,23 +24,36 @@ interface DateArgs {
 const SYMBOLS_TO_REMOVE_REGEX = /[\u200E\u200F]/g;
 const NARROW_NO_BREAK_SPACE_REGEX = /[\u202F]/g;
 
+const DEFAULT_TIME_SEPARATOR = ':';
+
 const formattersCache: Record<string, DateFormatter> = {};
-const getFormatter = (format: Intl.DateTimeFormatOptions): DateFormatter => {
-  const key = `${localizationCoreUtils.locale()}/${JSON.stringify(format)}`;
+const timeSeparatorsCache: Record<string, string> = {};
+const getFormatter = (
+  format: Intl.DateTimeFormatOptions,
+  formatLocale = localizationCoreUtils.locale(),
+): DateFormatter => {
+  const key = `${formatLocale}/${JSON.stringify(format)}`;
   if (!formattersCache[key]) {
-    formattersCache[key] = new Intl.DateTimeFormat(localizationCoreUtils.locale(), format).format;
+    formattersCache[key] = new Intl.DateTimeFormat(formatLocale, format).format;
   }
 
   return formattersCache[key];
 };
 
-function formatDateTime(date: Date, format: Intl.DateTimeFormatOptions): string {
-  return getFormatter(format)(date)
+function formatDateTime(
+  date: Date,
+  format: Intl.DateTimeFormatOptions,
+  formatLocale = localizationCoreUtils.locale(),
+): string {
+  return getFormatter(format, formatLocale)(date)
     .replace(SYMBOLS_TO_REMOVE_REGEX, '')
     .replace(NARROW_NO_BREAK_SPACE_REGEX, ' ');
 }
 
-const getIntlFormatter = (format: Intl.DateTimeFormatOptions) => (date: Date): string => {
+const getIntlFormatter = (
+  format: Intl.DateTimeFormatOptions,
+  formatLocale = localizationCoreUtils.locale(),
+) => (date: Date): string => {
   // NOTE: Intl in some browsers formates dates with timezone offset
   // which was at the moment for this date.
   // But the method "new Date" creates date using current offset.
@@ -61,14 +80,16 @@ const getIntlFormatter = (format: Intl.DateTimeFormatOptions) => (date: Date): s
     }
     const utcFormat = extend({ timeZone: 'UTC' }, format);
 
-    return formatDateTime(utcDate, utcFormat);
+    return formatDateTime(utcDate, utcFormat, formatLocale);
   }
 
-  return formatDateTime(date, format);
+  return formatDateTime(date, format, formatLocale);
 };
 
-// eslint-disable-next-line @stylistic/max-len
-const formatNumber = (number: number): string => new Intl.NumberFormat(localizationCoreUtils.locale()).format(number);
+const formatNumber = (
+  number: number,
+  locale = localizationCoreUtils.locale(),
+): string => new Intl.NumberFormat(locale).format(number);
 
 const getAlternativeNumeralsMap = (() => {
   const numeralsMapCache: Record<string, false | Record<string, number>> = {};
@@ -131,28 +152,76 @@ const intlFormats = {
   year: { year: 'numeric' },
 };
 
-Object.defineProperty(intlFormats, 'shortdateshorttime', {
-  get() {
-    const defaultOptions = Intl.DateTimeFormat(localizationCoreUtils.locale()).resolvedOptions();
+const getShortDateShortTimeFormat = (formatLocale: string): Intl.DateTimeFormatOptions => {
+  const defaultOptions = Intl.DateTimeFormat(formatLocale).resolvedOptions();
 
-    return {
-      year: defaultOptions.year, month: defaultOptions.month, day: defaultOptions.day, hour: 'numeric', minute: 'numeric',
-    };
-  },
-});
+  return {
+    year: defaultOptions.year,
+    month: defaultOptions.month,
+    day: defaultOptions.day,
+    hour: 'numeric',
+    minute: 'numeric',
+  } as Intl.DateTimeFormatOptions;
+};
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-return
 const getIntlFormat = (format): Intl.DateTimeFormatOptions => typeof format === 'string' && intlFormats[format.toLowerCase()];
 
+const formatWithIntlPreset = (
+  date: Date,
+  presetName: string,
+  formatLocale: string,
+): string | undefined => {
+  const intlFormat = presetName.toLowerCase() === 'shortdateshorttime'
+    ? getShortDateShortTimeFormat(formatLocale)
+    : getIntlFormat(presetName);
+
+  if (!intlFormat) {
+    return undefined;
+  }
+
+  return getIntlFormatter(intlFormat, formatLocale)(date);
+};
+
+const formatWithIntlOptions = (
+  date: Date,
+  format: FormatObject | Intl.DateTimeFormatOptions,
+  formatLocale: string,
+): string => {
+  const typeFormat = (format as FormatObject).type;
+
+  if (typeFormat && typeof typeFormat === 'string') {
+    const intlPresetResult = formatWithIntlPreset(date, typeFormat, formatLocale);
+
+    if (intlPresetResult !== undefined) {
+      return intlPresetResult;
+    }
+  }
+
+  const formatterOptions = getFormatterOptions(format) as Intl.DateTimeFormatOptions;
+
+  return getIntlFormatter(formatterOptions, formatLocale)(date);
+};
+
 const monthNameStrategies = {
-  standalone(monthIndex: number, monthFormat: Intl.DateTimeFormatOptions['month']): string {
+  standalone(
+    monthIndex: number,
+    monthFormat: Intl.DateTimeFormatOptions['month'],
+    locale: string,
+  ): string {
     const date = new Date(1999, monthIndex, 13, 1);
 
-    return getIntlFormatter({ month: monthFormat })(date);
+    return getIntlFormatter({ month: monthFormat }, locale)(date);
   },
-  format(monthIndex: number, monthFormat: Intl.DateTimeFormatOptions['month']): string {
+  format(
+    monthIndex: number,
+    monthFormat: Intl.DateTimeFormatOptions['month'],
+    locale: string,
+  ): string {
     const date = new Date(0, monthIndex, 13, 1);
-    const dateString = normalizeMonth(getIntlFormatter({ day: 'numeric', month: monthFormat })(date));
+    const dateString = normalizeMonth(
+      getIntlFormatter({ day: 'numeric', month: monthFormat }, locale)(date),
+    );
     const parts = dateString.split(' ').filter((part) => !part.includes('13'));
 
     if (parts.length === 1) {
@@ -161,7 +230,7 @@ const monthNameStrategies = {
       return parts[0].length > parts[1].length ? parts[0] : parts[1]; // NOTE: For "lt" locale
     }
 
-    return monthNameStrategies.standalone(monthIndex, monthFormat);
+    return monthNameStrategies.standalone(monthIndex, monthFormat, locale);
   },
 };
 
@@ -169,7 +238,11 @@ export default {
   engine(): string {
     return 'intl';
   },
-  getMonthNames(format: Format, type?: string): string[] {
+  getMonthNames(
+    format: Format,
+    type?: string,
+    locale = localizationCoreUtils.locale(),
+  ): string[] {
     // eslint-disable-next-line @typescript-eslint/no-shadow
     const intlFormats: Record<Exclude<Format, 'short'>, Intl.DateTimeFormatOptions['month']> = {
       wide: 'long',
@@ -183,33 +256,45 @@ export default {
     return Array.from(
       { length: 12 },
       // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-      (_, monthIndex): string => monthNameStrategies[nameType](monthIndex, monthFormat),
+      (_, monthIndex): string => monthNameStrategies[nameType](monthIndex, monthFormat, locale),
     );
   },
 
-  getDayNames(format: Format): string[] {
-    // eslint-disable-next-line @typescript-eslint/no-shadow
-    const intlFormats: Record<Format, Intl.DateTimeFormatOptions['weekday']> = {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  getDayNames(format: Format, type?: string, locale = localizationCoreUtils.locale()): string[] {
+    const intlDayFormats: Record<Format, Intl.DateTimeFormatOptions['weekday']> = {
       wide: 'long',
       abbreviated: 'short',
       short: 'narrow',
       narrow: 'narrow',
     };
 
-    // eslint-disable-next-line @typescript-eslint/no-shadow
-    const getIntlDayNames = (format: Intl.DateTimeFormatOptions['weekday']): string[] => Array.from(
+    const getIntlDayNames = (
+      dayFormat: Intl.DateTimeFormatOptions['weekday'],
+    ): string[] => Array.from(
       { length: 7 },
-      (_, dayIndex) => getIntlFormatter({ weekday: format })(new Date(0, 0, dayIndex)),
+      (_, dayIndex) => getIntlFormatter(
+        { weekday: dayFormat },
+        locale,
+      )(new Date(0, 0, dayIndex)),
     );
 
-    return getIntlDayNames(intlFormats[format || 'wide']);
+    return getIntlDayNames(intlDayFormats[format || 'wide']);
   },
 
-  getPeriodNames(): string[] {
-    const hour12Formatter = getIntlFormatter({ hour: 'numeric', hour12: true });
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  getPeriodNames(
+    format?: Format,
+    type?: string,
+    locale = localizationCoreUtils.locale(),
+  ): string[] {
+    const hour12Formatter = getIntlFormatter(
+      { hour: 'numeric', hour12: true },
+      locale,
+    );
 
     return [1, 13].map((hours) => {
-      const hourNumberText = formatNumber(1); // NOTE: For "bn" locale
+      const hourNumberText = formatNumber(1, locale); // NOTE: For "bn" locale
       const timeParts = hour12Formatter(new Date(0, 0, 1, hours)).split(hourNumberText);
 
       if (timeParts.length !== 2) {
@@ -231,38 +316,50 @@ export default {
       return date;
     }
 
-    // TODO: refactor (extract code form base)
-    if (typeof format !== 'function' && !(format as FormatObject).formatter) {
-      // eslint-disable-next-line no-param-reassign
-      format = (format as FormatObject).type ?? format;
+    if (typeof format === 'function') {
+      return (format as DateFormatter)(date);
     }
 
-    if (typeof format === 'string') {
-      const presetOverride = resolvePresetOverride(format);
+    if ((format as FormatObject).formatter) {
+      return ((format as FormatObject).formatter as DateFormatter)(date);
+    }
+
+    const sourceFormat = format;
+    let resolvedFormat: LocalizationFormat = (format as FormatObject).type ?? format;
+
+    if (typeof resolvedFormat === 'string') {
+      const presetOverride = resolvePresetOverride(resolvedFormat);
 
       if (presetOverride !== undefined) {
         if (typeof presetOverride === 'function') {
           return (presetOverride as DateFormatter)(date);
         }
-        // eslint-disable-next-line no-param-reassign
-        format = presetOverride as LocalizationFormat;
+
+        resolvedFormat = presetOverride as LocalizationFormat;
       }
     }
 
-    const intlFormat = getIntlFormat(format);
+    const formatLocale = getDateFormatLocale(sourceFormat, resolvedFormat);
 
-    if (intlFormat) {
-      return getIntlFormatter(intlFormat)(date);
-    }
+    if (typeof resolvedFormat === 'string') {
+      const intlPresetResult = formatWithIntlPreset(date, resolvedFormat, formatLocale);
 
-    const formatType = typeof format;
-    if ((format as FormatObject).formatter || formatType === 'function' || formatType === 'string') {
+      if (intlPresetResult !== undefined) {
+        return intlPresetResult;
+      }
+
+      const dateParts = bindDatePartsToLocale(this, formatLocale);
+
       // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-      return this.callBase.apply(this, [date, format]);
+      return this.callBase(date, resolvedFormat, dateParts);
     }
 
-    // @ts-expect-error
-    return getIntlFormatter(format)(date);
+    if (typeof resolvedFormat === 'object') {
+      return formatWithIntlOptions(date, resolvedFormat as FormatObject, formatLocale);
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+    return this.callBase.apply(this, [date, resolvedFormat]);
   },
 
   parse(dateString: string, format?: FormatObject | string): Date | null | undefined {
@@ -275,8 +372,12 @@ export default {
       formatter = (date: Date): string => normalizeMonth(this.format(date, format));
     }
 
+    const formatLocale = format ? getDateFormatLocale(format) : localizationCoreUtils.locale();
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+    const dateParts = bindDatePartsToLocale(this, formatLocale);
+
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    return this.callBase(dateString, formatter ?? format);
+    return this.callBase(dateString, formatter ?? format, dateParts);
   },
 
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -295,16 +396,15 @@ export default {
 
     const dateArgs: DateArgs = this._generateDateArgs(formatParts, dateParts);
 
-    // eslint-disable-next-line @typescript-eslint/no-shadow
-    const constructDate = (dateArgs: DateArgs, ampmShift: boolean): Date => {
+    const constructDate = (args: DateArgs, ampmShift: boolean): Date => {
       const hoursShift = ampmShift ? 12 : 0;
       return new Date(
-        dateArgs.year,
-        dateArgs.month,
-        dateArgs.day,
-        (dateArgs.hours + hoursShift) % 24,
-        dateArgs.minutes,
-        dateArgs.seconds,
+        args.year,
+        args.month,
+        args.day,
+        (args.hours + hoursShift) % 24,
+        args.minutes,
+        args.seconds,
       );
     };
     const constructValidDate = (ampmShift: boolean): Date | undefined => {
@@ -363,15 +463,25 @@ export default {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return this.callBase.apply(this, [format]);
   },
-  getTimeSeparator(): string {
-    const formatOptions: Intl.DateTimeFormatOptions = {
-      hour: 'numeric',
-      minute: 'numeric',
-      hour12: false,
-    };
-    return normalizeNumerals(
-      formatDateTime(new Date(2001, 1, 1, 11, 11), formatOptions),
-    ).replace(/\d/g, '');
+  getTimeSeparator(locale?: string): string {
+    const formatLocale = locale ?? getEffectiveFormatLocale(undefined, 'time');
+
+    if (!timeSeparatorsCache[formatLocale]) {
+      const parts = new Intl.DateTimeFormat(formatLocale, {
+        hour: 'numeric',
+        minute: 'numeric',
+        hour12: false,
+      }).formatToParts(new Date(2001, 1, 1, 11, 11));
+      const hourIndex = parts.findIndex(({ type }) => type === 'hour');
+      const separatorPart = parts[hourIndex + 1];
+      const separator = separatorPart?.type === 'literal'
+        ? separatorPart.value.replace(SYMBOLS_TO_REMOVE_REGEX, '')
+        : '';
+
+      timeSeparatorsCache[formatLocale] = separator || DEFAULT_TIME_SEPARATOR;
+    }
+
+    return timeSeparatorsCache[formatLocale];
   },
 
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -381,8 +491,9 @@ export default {
       return this.callBase(format);
     }
     const intlFormat = extend({}, intlFormats[format.toLowerCase()]);
+    const messageLocale = localizationCoreUtils.locale();
     const date = new Date(2001, 2, 4, 5, 6, 7);
-    let formattedDate = getIntlFormatter(intlFormat)(date);
+    let formattedDate = getIntlFormatter(intlFormat, messageLocale)(date);
 
     formattedDate = normalizeNumerals(formattedDate);
 

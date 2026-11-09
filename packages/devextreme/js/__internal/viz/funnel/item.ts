@@ -3,7 +3,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 
 import { paintedColor } from '@ts/core/utils/css_variables';
-import { isDefined } from '@ts/core/utils/m_type';
+import { isDefined } from '@ts/core/utils/type';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 
 const states = ['normal', 'hover', 'selection', 'selection'];

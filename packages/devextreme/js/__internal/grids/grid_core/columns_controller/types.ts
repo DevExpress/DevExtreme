@@ -1,7 +1,12 @@
+import type { template } from '@js/common';
 import type { ColumnAIOptions, ColumnBase, ColumnLookup } from '@js/common/grids';
+import type { dxElementWrapper } from '@js/core/renderer';
 import type { Callback } from '@js/core/utils/callbacks';
 import type { DeferredObj } from '@js/core/utils/deferred';
+import type { DxEvent } from '@js/events';
 import type { Properties as DataGridProperties } from '@js/ui/data_grid';
+import type { StoreLoadOptions } from '@ts/data/data_source/types';
+import type { SortingInfo } from '@ts/data/utils';
 import type { RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
 
 import type { DataFilter } from '../filter/types';
@@ -9,6 +14,23 @@ import type { InternalGrid, OptionChanged, OptionChangedFor } from '../types';
 import type {
   COLUMN_CHOOSER_LOCATION, GROUP_LOCATION, HEADERS_LOCATION, USER_STATE_FIELD_NAMES,
 } from './const';
+
+export interface TemplateModel {
+  column?: Column;
+  rowType?: string;
+  renderAsync?: boolean;
+  component?: InternalGrid;
+}
+
+export interface ColumnRenderTemplate<TModel extends TemplateModel = TemplateModel> {
+  allowRenderToDetachedContainer?: boolean;
+  // DataChange can't be imported here: data_controller depends on columns_controller.
+  // No { render } template reads it; function templates (editing's) type their own param.
+  render: (container: dxElementWrapper, model: TModel, change?: unknown) => void;
+}
+
+export type ColumnTemplateSource<TModel extends TemplateModel = TemplateModel> = template
+  | ColumnRenderTemplate<TModel>;
 
 export interface ValueSerializers {
   serializationFormat?: string | null;
@@ -41,16 +63,16 @@ export type SavedColumnState = ColumnUserState & { initialIndex?: number };
 
 export type AddedColumn = string | (Column & { columns?: (Column | string)[] });
 
-export interface UserStateApplierOptions {
-  columns: Column[];
+export interface UserStateApplierOptions<TColumn extends Column = Column> {
+  columns: TColumn[];
   columnsUserState: SavedColumnState[];
   ignoreColumnOptionNames: string[];
   hasUserState: boolean;
-  createColumn: (columnOptions: AddedColumn) => Column;
+  createColumn: (columnOptions: AddedColumn) => TColumn;
 }
 
-export interface UserStateApplyResult {
-  columns: Column[];
+export interface UserStateApplyResult<TColumn extends Column = Column> {
+  columns: TColumn[];
   hasAddedBands: boolean;
 }
 
@@ -65,6 +87,9 @@ export type ColumnFilterExpression = (unknown[] | ColumnSelector)
   & Pick<ColumnSelector, 'columnIndex' | 'filterValue' | 'selectedFilterOperation'>;
 
 type FilterTargets = 'filterRow' | 'headerFilter' | 'filterBuilder' | 'search';
+
+// Besides pixels: 'auto', 'adaptiveHidden', and null/undefined while widths are reset
+export type VisibleWidth = ColumnBase['width'] | null;
 
 export interface InternalColumnOptions extends ValueSerializers {
   parseValue?: (text: string) => unknown;
@@ -86,7 +111,7 @@ export interface InternalColumnOptions extends ValueSerializers {
   defaultFilterOperation?: string;
   defaultSelectedFilterOperation?: ColumnBase['selectedFilterOperation'] | null;
   bestFitWidth?: number;
-  visibleWidth?: ColumnBase['width'] | null;
+  visibleWidth?: VisibleWidth;
   hidingPriority?: number;
   ai?: ColumnAIOptions;
   command?: string;
@@ -94,12 +119,12 @@ export interface InternalColumnOptions extends ValueSerializers {
   showWhenGrouped?: boolean;
   allowGrouping?: boolean;
   allowCollapsing?: boolean;
-  resizedCallbacks?: Callback<[number]>;
-  resized?: (width: number) => void;
+  resizedCallbacks?: Callback<[VisibleWidth]>;
+  resized?: (width: VisibleWidth) => void;
   adaptiveHidden?: boolean;
   elementAttr?: { name: string; value: string }[];
-  cellTemplate?: unknown;
-  headerCellTemplate?: unknown;
+  cellTemplate?: ColumnTemplateSource | null;
+  headerCellTemplate?: ColumnTemplateSource | null;
   rowspan?: number;
   colspan?: number;
   lastSortOrder?: ColumnBase['sortOrder'];
@@ -132,13 +157,28 @@ export interface ColumnDataSourceParameter {
   isExpanded?: boolean;
 }
 
+export type SortParameters = StoreLoadOptions['sort']
+  | ColumnDataSourceParameter[]
+  | SortingInfo[]
+  | null;
+
+export type GroupParameters = StoreLoadOptions['group']
+  | ColumnDataSourceParameter[]
+  | SortingInfo[]
+  | null;
+
 export interface ColumnsDataSourceParameters {
-  sorting: unknown;
-  grouping: unknown;
+  sorting: SortParameters;
+  grouping: GroupParameters;
   filtering?: DataFilter;
 }
 
 export type GroupColumn = Column & { groupIndex: number };
+
+export type DisplayValueColumn = Pick<
+  Column,
+  'displayValueMap' | 'calculateDisplayValue' | 'type' | 'calculateGroupValue'
+> & { lookup?: Pick<NonNullable<Column['lookup']>, 'calculateCellValue'> };
 
 export interface ColumnsChanges {
   changeTypes: {
@@ -147,7 +187,7 @@ export interface ColumnsChanges {
     groupExpanding?: boolean;
     columns?: boolean;
     filtering?: boolean;
-    event?: unknown;
+    event?: DxEvent;
     virtualColumnsScrolling?: boolean;
     length: number;
   };
@@ -162,7 +202,7 @@ export interface ColumnsChanges {
   appliedFilters?: DataFilter[];
 }
 
-export type ColumnChangeType = Exclude<keyof ColumnsChanges['changeTypes'], 'length'>;
+export type ColumnChangeType = Exclude<keyof ColumnsChanges['changeTypes'], 'length' | 'event'>;
 
 export type ColumnsOptionChanged = Extract<OptionChanged, { name: 'columns' }>;
 

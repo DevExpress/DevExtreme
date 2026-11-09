@@ -1,3 +1,5 @@
+import { UserDefinedElement } from '../core/element';
+
 /**
  * @docid ui.themes
  * @namespace DevExpress.ui
@@ -33,6 +35,38 @@ export default class themes {
      * @public
      */
     static initialized(callback: Function): void;
+    /**
+     * @docid ui.themes.mode
+     * @publicName mode(element)
+     * @param1 element:Element|jQuery
+     * @return String
+     * @static
+     * @public
+     */
+    static mode(element: UserDefinedElement): 'light' | 'dark';
+    /**
+     * @docid ui.themes.refreshMode
+     * @publicName refreshMode()
+     * @static
+     * @public
+     */
+    static refreshMode(): void;
+    /**
+     * @docid ui.themes.customAccentColor
+     * @publicName customAccentColor()
+     * @return String
+     * @static
+     * @public
+     */
+    static customAccentColor(): string;
+    /**
+     * @docid ui.themes.customAccentColor
+     * @publicName customAccentColor(color)
+     * @param1 color:String|null
+     * @static
+     * @public
+     */
+    static customAccentColor(color: string | null): void;
 }
 
 export function current(): string;
@@ -41,3 +75,8 @@ export function isFluent(theme: string): boolean;
 export function isMaterial(theme: string): boolean;
 export function isGeneric(theme: string): boolean;
 export function isCompact(theme: string): boolean;
+
+export function mode(element: UserDefinedElement): 'light' | 'dark';
+export function refreshMode(): void;
+export function customAccentColor(): string;
+export function customAccentColor(color: string | null): void;

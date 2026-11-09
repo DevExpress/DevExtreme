@@ -1,7 +1,6 @@
 import type { template } from '@js/common';
 import { name as clickEventName } from '@js/common/core/events/click';
 import { name as contextMenuEventName } from '@js/common/core/events/contextmenu';
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import holdEvent from '@js/common/core/events/hold';
 import pointerEvents from '@js/common/core/events/pointer';
 import { addNamespace, isCommandKeyPressed } from '@js/common/core/events/utils';
@@ -42,8 +41,9 @@ import type { OptionChanged } from '@ts/core/widget/types';
 import type { SupportedKeys, WidgetProperties } from '@ts/core/widget/widget';
 import Widget from '@ts/core/widget/widget';
 import DataHelperMixin from '@ts/data/m_data_helper';
-import type { ClickableCollectionWidgetItem, ItemClickEvent } from '@ts/ui/collection/item';
+import eventsEngine from '@ts/events/core/events_engine';
 import type CollectionItem from '@ts/ui/collection/item';
+import type { ClickableCollectionWidgetItem, ItemClickEvent } from '@ts/ui/collection/item';
 import CollectionWidgetItem from '@ts/ui/collection/item';
 
 import type { PublicNode } from '../hierarchical_collection/data_converter';
@@ -695,7 +695,6 @@ class CollectionWidget<
 
   _resetItemFocus($item: dxElementWrapper): void {
     const { focusedElement } = this.option();
-    // @ts-expect-error ts-error
     if ($item.is(focusedElement)) {
       this._resetFocusedElement();
     }
@@ -712,7 +711,6 @@ class CollectionWidget<
   ): void {
     const itemData = this._getItemData($item);
     const index = $item.data(this._itemIndexKey());
-    // @ts-expect-error ts-error
     // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
     this._renderItem(this._renderedItemsCount + index, itemData, null, $item);
   }
@@ -1065,7 +1063,6 @@ class CollectionWidget<
   _closestFocusable(
     $target: dxElementWrapper,
   ): dxElementWrapper | undefined {
-    // @ts-expect-error ts-error
     if ($target.is(focusable)) {
       return $target;
     }
@@ -1074,7 +1071,6 @@ class CollectionWidget<
         && !domAdapter.isDocument($nextTarget.get(0))
         && !domAdapter.isDocumentFragment($nextTarget.get(0))
     ) {
-      // @ts-expect-error ts-error
       if ($nextTarget.is(focusable)) {
         return $nextTarget;
       }
@@ -1108,7 +1104,6 @@ class CollectionWidget<
       eventName,
       itemSelector,
       { timeout: this._getHoldTimeout() },
-      // @ts-expect-error ts-error
       this._itemHoldHandler.bind(this),
     );
   }
@@ -1531,7 +1526,7 @@ class CollectionWidget<
   }
 
   _getItemData(itemElement: Element | dxElementWrapper): TItem {
-    return $(itemElement).data(this._itemDataKey()) as TItem;
+    return $(itemElement).data<TItem>(this._itemDataKey());
   }
 
   _getSummaryItemsSize(
@@ -1544,9 +1539,9 @@ class CollectionWidget<
     if (items) {
       each(items, (_index, item) => {
         if (dimension === 'width') {
-          result += getOuterWidth(item, includeMargin ?? false);
+          result += Number(getOuterWidth($(item), includeMargin ?? false));
         } else if (dimension === 'height') {
-          result += getOuterHeight(item, includeMargin ?? false);
+          result += Number(getOuterHeight($(item), includeMargin ?? false));
         }
       });
     }

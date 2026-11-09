@@ -1,17 +1,18 @@
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import dateLocalization from '@js/common/core/localization/date';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import type { DxEvent, InteractionEvent } from '@js/events';
 import type { Format } from '@js/localization';
 import type { ToolbarItem } from '@js/ui/popup';
+import { applyDataTypePreset } from '@ts/core/global_format_config';
+import eventsEngine from '@ts/events/core/events_engine';
 import type Calendar from '@ts/ui/calendar/calendar';
-import type { DateBoxBaseProperties } from '@ts/ui/date_box/date_box.base';
 import type DateBox from '@ts/ui/date_box/date_box.base';
+import type { DateBoxBaseProperties } from '@ts/ui/date_box/date_box.base';
 import type DateView from '@ts/ui/date_box/date_view';
 import type List from '@ts/ui/list/list.edit.search';
-import type { PopupProperties } from '@ts/ui/popup/popup';
 import type Popup from '@ts/ui/popup/popup';
+import type { PopupProperties } from '@ts/ui/popup/popup';
 
 class DateBoxStrategy<
   TValue = Date | null,
@@ -62,8 +63,11 @@ class DateBoxStrategy<
   }
 
   getDisplayFormat(displayFormat?: Format | null): Format {
+    const { type = 'date' } = this.dateBox.option();
     // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-    return displayFormat || 'shortdate';
+    const format = displayFormat || 'shortdate';
+
+    return applyDataTypePreset(format, type) ?? format;
   }
 
   supportedKeys(): Record<string, (e: DxEvent<KeyboardEvent>) => void> {

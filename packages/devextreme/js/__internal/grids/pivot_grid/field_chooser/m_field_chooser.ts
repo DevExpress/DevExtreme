@@ -306,7 +306,7 @@ export class FieldChooser extends FieldChooserBase {
     let area;
 
     if (targetFieldElement.length) {
-      const fieldCopy = targetFieldElement.data('field');
+      const fieldCopy = targetFieldElement.data<{ index: number } | undefined>('field');
       if (fieldCopy) {
         field = this.getDataSource().field(fieldCopy.index) || fieldCopy;
       }
@@ -532,7 +532,7 @@ export class FieldChooser extends FieldChooserBase {
       treeView.option({ dataSource: that._createFieldsDataSource(dataSource) });
       scrollable = getScrollable(container);
       if (scrollable) {
-        scrollable.scrollTo({ y: scrollTop });
+        scrollable.scrollTo({ top: scrollTop });
         scrollable.update();
       }
     };

@@ -1,10 +1,8 @@
-import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
 import type { DxEvent } from '@js/events';
 import type { RouteMode } from '@js/ui/map';
 
-import type Map from './map';
 import Provider from './provider';
 import type { AzureLocation } from './provider.dynamic.azure';
 import type { BingLocation } from './provider.dynamic.bing';
@@ -55,7 +53,9 @@ export interface RouteObject {
   southWest?: [number, number];
 }
 
-abstract class DynamicProvider extends Provider {
+abstract class DynamicProvider<
+  TLocation = GoogleLocation | BingLocation | AzureLocation,
+> extends Provider {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   _bounds?: any;
 
@@ -63,37 +63,51 @@ abstract class DynamicProvider extends Provider {
 
   _routes!: (RouteObject & { options: RouteOptions })[];
 
-  _geocodedLocations: Record<string, GoogleLocation | BingLocation | AzureLocation>;
+  _geocodedLocations = new Map<string, TLocation>();
+
+  _pendingGeocodedLocations = new Map<string, Promise<TLocation>>();
 
   _mapsLoader?: Promise<void>;
 
-  constructor(map: Map, $container: dxElementWrapper) {
-    super(map, $container);
-
-    this._geocodedLocations = {};
-  }
-
   _geocodeLocation(
     location: string,
-  ): Promise<GoogleLocation | BingLocation | AzureLocation> {
-    return new Promise((resolve) => {
-      const cache = this._geocodedLocations;
-      const cachedLocation = cache[location];
-      if (cachedLocation) {
-        resolve(cachedLocation);
-      } else {
-        // eslint-disable-next-line @typescript-eslint/no-floating-promises
-        this._geocodeLocationImpl(location)
-          .then((geocodedLocation) => {
-            cache[location] = geocodedLocation;
-            resolve(geocodedLocation);
-          });
-      }
-    });
+  ): Promise<TLocation> {
+    if (this._geocodedLocations.has(location)) {
+      return Promise.resolve(this._geocodedLocations.get(location) as TLocation);
+    }
+
+    const pendingLocation = this._pendingGeocodedLocations.get(location);
+    if (pendingLocation) {
+      return pendingLocation;
+    }
+
+    const geocoding = this._geocodeLocationImpl(location).then(
+      (geocodedLocation) => {
+        this._pendingGeocodedLocations.delete(location);
+        if (this._isGeocodedLocationValid(geocodedLocation)) {
+          this._geocodedLocations.set(location, geocodedLocation);
+        }
+
+        return geocodedLocation;
+      },
+      (error) => {
+        this._pendingGeocodedLocations.delete(location);
+
+        return Promise.reject(error);
+      },
+    );
+
+    this._pendingGeocodedLocations.set(location, geocoding);
+
+    return geocoding;
+  }
+
+  _isGeocodedLocationValid(location: TLocation): boolean {
+    return location !== undefined && location !== null;
   }
 
   _renderImpl(): Promise<void> {
-    return this._load().then(() => this._init()).then(() => Promise.all([
+    return this._load().then(() => this._init()).then(() => this._waitForAll([
       this.updateMapType(),
       this._areBoundsSet() ? this.updateBounds() : this.updateCenter(),
     ])).then(() => {
@@ -132,8 +146,7 @@ abstract class DynamicProvider extends Provider {
   abstract _attachHandlers(): void;
 
   addMarkers(markers: MarkerOptions[]): Promise<[boolean, unknown[]]> {
-    return Promise
-      .all(markers.map((options) => this._addMarker(options)))
+    return this._waitForAll(markers.map(async (options) => this._addMarker(options)))
       .then((markerObjects: MarkerObject[]) => {
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
         this._fitBounds();
@@ -211,12 +224,13 @@ abstract class DynamicProvider extends Provider {
   }
 
   addRoutes(routes: RouteOptions[]): Promise<[boolean, unknown[]]> {
-    return Promise.all(routes.map((options) => this._addRoute(options))).then((routeObjects) => {
-      // eslint-disable-next-line @typescript-eslint/no-floating-promises
-      this._fitBounds();
+    return this._waitForAll(routes.map(async (options) => this._addRoute(options)))
+      .then((routeObjects) => {
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
+        this._fitBounds();
 
-      return [false, routeObjects.map((routeObject) => routeObject.instance)];
-    });
+        return [false, routeObjects.map((routeObject) => routeObject.instance)];
+      });
   }
 
   _addRoute(options: RouteOptions): Promise<RouteObject> {
@@ -275,8 +289,8 @@ abstract class DynamicProvider extends Provider {
   _geocodeLocationImpl(
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     location: string,
-  ): Promise<GoogleLocation | BingLocation | AzureLocation> {
-    return Promise.resolve([0, 0]);
+  ): Promise<TLocation> {
+    return Promise.resolve([0, 0] as TLocation);
   }
 
   _clearRoutes(): void {

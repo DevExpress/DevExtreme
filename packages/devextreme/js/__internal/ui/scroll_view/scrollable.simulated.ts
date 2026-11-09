@@ -1,7 +1,6 @@
 /* eslint-disable max-classes-per-file */
 import type { Orientation, ScrollDirection } from '@js/common';
 import { locate, move, resetPosition } from '@js/common/core/animation/translator';
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import {
   addNamespace as addEventNamespace,
   isCommandKeyPressed,
@@ -28,9 +27,11 @@ import { getBoundingRect } from '@js/core/utils/position';
 import { getHeight, getWidth } from '@js/core/utils/size';
 import { isDefined } from '@js/core/utils/type';
 import { getWindow, hasWindow } from '@js/core/utils/window';
+import type { DxEvent } from '@js/events';
 import type { ScrollEvent } from '@js/ui/scroll_view';
-import { logger } from '@ts/core/utils/m_console';
+import { logger } from '@ts/core/utils/console';
 import type { ActionConfig } from '@ts/core/widget/component';
+import eventsEngine from '@ts/events/core/events_engine';
 import Animator from '@ts/ui/scroll_view/animator';
 import type { ScrollViewScroller } from '@ts/ui/scroll_view/scroll_view.simulated';
 import type Scrollable from '@ts/ui/scroll_view/scrollable';
@@ -441,7 +442,7 @@ export class Scroller {
     // @ts-expect-error ts-error
     const mouseLocation = e[`page${this._axis.toUpperCase()}`] - this._$element.offset()[this._prop];
     const location = this._location
-      + mouseLocation / this._containerToContentRatio() - getHeight(this._$container) / 2;
+      + mouseLocation / this._containerToContentRatio() - Number(getHeight(this._$container)) / 2;
 
     this._scrollStep(-Math.round(location));
   }
@@ -968,7 +969,7 @@ export class SimulatedStrategy<
     eventsEngine.off(this._$element, `.${SCROLLABLE_SIMULATED_KEYBOARD}`);
 
     if (!this.option('disabled') && this.option('useKeyboard')) {
-      eventsEngine.on(this._$element, addEventNamespace('keydown', SCROLLABLE_SIMULATED_KEYBOARD), this._keyDownHandler.bind(this));
+      eventsEngine.on<DxEvent<KeyboardEvent>>(this._$element, addEventNamespace('keydown', SCROLLABLE_SIMULATED_KEYBOARD), this._keyDownHandler.bind(this));
     }
   }
 
@@ -1043,7 +1044,7 @@ export class SimulatedStrategy<
 
     const distance = {};
     const getter = dimension === 'width' ? getWidth : getHeight;
-    distance[prop] = page * -getter(this._$container);
+    distance[prop] = page * -getter(this._$container.get(0));
     this.scrollBy(distance);
   }
 
@@ -1069,7 +1070,7 @@ export class SimulatedStrategy<
 
     const distance = {};
     const getter = dimension === 'width' ? getWidth : getHeight;
-    distance[prop] = getter(this._$content) - getter(this._$container);
+    distance[prop] = getter(this._$content.get(0)) - getter(this._$container.get(0));
     this._component.scrollTo(distance);
   }
 
@@ -1162,7 +1163,7 @@ export class SimulatedStrategy<
 
     if (!disabled && this._isHoverMode()) {
       eventsEngine.on(this._$element, addEventNamespace('mouseenter', SCROLLABLE_SIMULATED_CURSOR), this._cursorEnterHandler.bind(this));
-      eventsEngine.on(this._$element, addEventNamespace('mouseleave', SCROLLABLE_SIMULATED_CURSOR), this._cursorLeaveHandler.bind(this));
+      eventsEngine.on<DxMouseEvent>(this._$element, addEventNamespace('mouseleave', SCROLLABLE_SIMULATED_CURSOR), this._cursorLeaveHandler.bind(this));
     }
   }
 
@@ -1209,13 +1210,11 @@ export class SimulatedStrategy<
     const $target = $(target as Element);
     const $scrollable = $target.closest(`.${SCROLLABLE_SIMULATED_CLASS}:not(.dx-state-disabled)`);
     const targetScrollable = $scrollable.length && $scrollable.data(SCROLLABLE_STRATEGY);
-    // @ts-expect-error ts-error
     if (hoveredScrollable && hoveredScrollable !== targetScrollable) {
       hoveredScrollable._cursorLeaveHandler();
     }
 
     if (targetScrollable) {
-      // @ts-expect-error ts-error
       targetScrollable._cursorEnterHandler();
     }
   }

@@ -3,7 +3,7 @@ import {
 } from '@jest/globals';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred } from '@js/core/utils/deferred';
-import { logger } from '@ts/core/utils/m_console';
+import { logger } from '@ts/core/utils/console';
 import CustomStore from '@ts/data/custom_store';
 import { DataSource } from '@ts/data/data_source/data_source';
 import type { StoreLoadOptions } from '@ts/data/data_source/types';

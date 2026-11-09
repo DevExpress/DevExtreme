@@ -1,0 +1,5 @@
+@mixin publish {
+  --dx-list-expanded-group-content: var(--dx-list-group-content);
+  --dx-list-hold-menu-border: var(--dx-list-border);
+  --dx-list-item-content-selected: var(--dx-list-normal-content);
+}

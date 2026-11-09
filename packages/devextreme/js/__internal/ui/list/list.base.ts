@@ -1,6 +1,5 @@
 import { fx } from '@js/common/core/animation';
 import { name as clickEventName } from '@js/common/core/events/click';
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import pointerEvents from '@js/common/core/events/pointer';
 import { end as swipeEventEnd } from '@js/common/core/events/swipe';
 import { addNamespace } from '@js/common/core/events/utils';
@@ -31,6 +30,7 @@ import type {
 } from '@js/events';
 import type { Properties as ButtonProperties } from '@js/ui/button';
 import Button from '@js/ui/button';
+import type dxList from '@js/ui/list';
 import type {
   GroupRenderedEvent,
   Item,
@@ -38,15 +38,15 @@ import type {
   Properties,
   PullRefreshEvent,
 } from '@js/ui/list';
-import type dxList from '@js/ui/list';
 import type { ReachBottomEvent, ScrollEvent } from '@js/ui/scroll_view';
 import { current, isMaterial, isMaterialBased } from '@js/ui/themes';
 import { render } from '@ts/core/utils/ink_ripple';
-import supportUtils from '@ts/core/utils/m_support';
+import supportUtils from '@ts/core/utils/support';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { SupportedKeys } from '@ts/core/widget/widget';
 import { SCREEN_READER_ONLY_CLASS } from '@ts/core/widget/widget';
 import { getDataSourceOptions } from '@ts/data/data_converter/grouped';
+import eventsEngine from '@ts/events/core/events_engine';
 import type {
   CollectionItemInfo,
   CollectionItemKey,
@@ -222,7 +222,7 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item> {
 
   _getEdgeVisibleItem(direction: Direction): dxElementWrapper {
     const scrollTop = this.scrollTop();
-    const containerHeight = getHeight(this.$element());
+    const containerHeight = getHeight(this.$element().get(0));
 
     const { focusedElement } = this.option();
     let $item = $(focusedElement);
@@ -239,7 +239,8 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item> {
         break;
       }
 
-      const nextItemLocation = ($nextItem.position()?.top ?? 0) + getOuterHeight($nextItem) / 2;
+      const nextItemLocation = ($nextItem.position()?.top ?? 0)
+        + Number(getOuterHeight($nextItem)) / 2;
       isItemVisible = nextItemLocation < containerHeight + scrollTop
         && nextItemLocation > scrollTop;
 
@@ -255,7 +256,9 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item> {
     if (direction === 'prev') {
       // @ts-expect-error ts-error
       // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-      return $item.position().top - getHeight(this.$element()) + getOuterHeight($item);
+      return $item.position().top
+        - getHeight(this.$element().get(0))
+        + Number(getOuterHeight($item));
     }
 
     // @ts-expect-error ts-error
@@ -424,8 +427,7 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item> {
       const $elements = this._getItemAndHeaderElements();
 
       return $elements
-        // @ts-expect-error ts-error
-        .filter((_index: number, element: dxElementWrapper): boolean => {
+        .filter((_index: number, element: Element): boolean => {
           if ($(element).hasClass(LIST_GROUP_HEADER_CLASS)) {
             return true;
           }
@@ -930,7 +932,7 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item> {
     const $groupBody = $group.children(`.${LIST_GROUP_BODY_CLASS}`);
     const startHeight = getOuterHeight($groupBody);
 
-    let endHeight = 0;
+    let endHeight: number | undefined = 0;
 
     if (collapsed) {
       setHeight($groupBody, 'auto');
@@ -1111,7 +1113,7 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item> {
     eventsEngine.off($itemElement, endEventName);
 
     if (this.hasActionSubscription('onItemSwipe')) {
-      eventsEngine.on($itemElement, endEventName, (e) => {
+      eventsEngine.on($itemElement, endEventName, (e: DxEvent & { offset: number }) => {
         this._itemSwipeEndHandler(e);
       });
     }
@@ -1276,10 +1278,8 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item> {
     this._downInkRippleHandler = this._downInkRippleHandler ?? this.downInkRippleHandler.bind(this);
     this._upInkRippleHandler = this._upInkRippleHandler ?? this.upInkRippleHandler.bind(this);
 
-    // @ts-expect-error ts-error
     eventsEngine.off($element, pointerEvents.down, selector, this._downInkRippleHandler);
     eventsEngine.on($element, pointerEvents.down, selector, this._downInkRippleHandler);
-    // @ts-expect-error ts-error
     eventsEngine.off($element, [pointerEvents.up, pointerEvents.out].join(' '), selector, this._upInkRippleHandler);
     eventsEngine.on($element, [pointerEvents.up, pointerEvents.out].join(' '), selector, this._upInkRippleHandler);
   }

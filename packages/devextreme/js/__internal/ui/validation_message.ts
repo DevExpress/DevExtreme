@@ -19,7 +19,7 @@ const VALIDATION_MESSAGE_MIN_WIDTH = 100;
 type NarrowedProperty = 'mode' | 'positionSide' | 'offset' | 'validationErrors';
 
 export interface ValidationMessageProperties extends Omit<Properties, NarrowedProperty> {
-  target?: string | Element | null;
+  target?: Element | dxElementWrapper | null;
 
   container?: dxElementWrapper;
 

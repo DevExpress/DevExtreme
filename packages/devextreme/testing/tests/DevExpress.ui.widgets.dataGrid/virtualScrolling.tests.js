@@ -3,8 +3,8 @@ import 'ui/scroll_view/ui.scrollable';
 
 import $ from 'jquery';
 import memoryLeaksHelper from '../../helpers/memoryLeaksHelper.js';
-import { VirtualScrollController } from '__internal/grids/grid_core/virtual_scrolling/m_virtual_scrolling_core';
-import gridCoreUtils from '__internal/grids/grid_core/m_utils';
+import { VirtualScrollController } from '__internal/grids/grid_core/virtual_scrolling/virtual_scrolling_core';
+import gridCoreUtils from '__internal/grids/grid_core/utils';
 import browser from 'core/utils/browser';
 import devices from '__internal/core/devices';
 import renderer from 'core/renderer';

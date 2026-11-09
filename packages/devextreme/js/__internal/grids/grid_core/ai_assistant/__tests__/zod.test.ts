@@ -2,7 +2,7 @@ import {
   afterEach, describe, expect, it, jest,
 } from '@jest/globals';
 
-import { z } from '../zod';
+import * as z from '../zod';
 
 describe('zod', () => {
   afterEach(() => {

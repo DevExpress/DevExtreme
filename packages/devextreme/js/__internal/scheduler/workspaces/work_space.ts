@@ -2,7 +2,6 @@ import type { ScrollDirection } from '@js/common';
 import { locate, resetPosition } from '@js/common/core/animation/translator';
 import { name as clickEventName } from '@js/common/core/events/click';
 import { name as contextMenuEventName } from '@js/common/core/events/contextmenu';
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import {
   drop as dragEventDrop,
   enter as dragEventEnter,
@@ -49,6 +48,7 @@ import type { ActionConfig } from '@ts/core/widget/component';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { SupportedKeys, WidgetProperties } from '@ts/core/widget/widget';
 import Widget from '@ts/core/widget/widget';
+import eventsEngine from '@ts/events/core/events_engine';
 import {
   AllDayPanelTitleComponent,
   AllDayTableComponent,
@@ -70,6 +70,7 @@ import {
 import type { GroupOrientation, ViewType } from '@ts/scheduler/types';
 import Scrollable, { type ScrollableProperties } from '@ts/ui/scroll_view/scrollable';
 
+import AppointmentDragBehavior from '../appointment_drag_behavior';
 import type NotifyScheduler from '../base/widget_notify_scheduler';
 import {
   APPOINTMENT_DRAG_SOURCE_CLASS,
@@ -80,13 +81,13 @@ import {
   TIME_PANEL_CLASS,
   VIRTUAL_CELL_CLASS,
 } from '../classes';
+import { CompactAppointmentsHelper } from '../compact_appointments_helper';
 import { APPOINTMENT_SETTINGS_KEY } from '../constants';
 import { Cache } from '../global_cache';
-import AppointmentDragBehavior from '../m_appointment_drag_behavior';
-import { CompactAppointmentsHelper } from '../m_compact_appointments_helper';
-import type { SubscribeKey, SubscribeMethods } from '../m_subscribes';
+import type Scheduler from '../scheduler';
 import type HorizontalCurrentTimeShader from '../shaders/current_time_shader_horizontal';
 import VerticalShader from '../shaders/current_time_shader_vertical';
+import type { SubscribeKey, SubscribeMethods } from '../subscribes';
 import tableCreatorModule, { type GroupRows } from '../table_creator';
 import type {
   CellPositionData,
@@ -166,11 +167,19 @@ interface ScrollSync {
   sidebar: ScrollToFunc;
 }
 
+export interface SelectedCellsClickResult {
+  startDate: Date;
+  endDate: Date;
+  startDateUTC?: Date;
+  endDateUTC?: Date;
+  allDay?: boolean;
+}
+
 interface NormalizedCellData {
   startDate: Date;
   endDate: Date;
-  startDateUTC?: Date | false | undefined;
-  endDateUTC?: Date | false | undefined;
+  startDateUTC?: Date;
+  endDateUTC?: Date;
   groups?: ViewCellData['groups'];
   groupIndex: ViewCellData['groupIndex'];
   allDay?: ViewCellData['allDay'];
@@ -316,7 +325,7 @@ export interface WorkspaceOptionsInternal extends WidgetProperties<SchedulerWork
   schedulerHeight: string | number | undefined;
   schedulerWidth: string | number | undefined;
   allDayPanelMode: AllDayPanelMode;
-  onSelectedCellsClick: (result: object, groups: GroupValues) => void;
+  onSelectedCellsClick: (result: SelectedCellsClickResult, groups: GroupValues) => void;
   renderAppointments: () => void;
   onShowAllDayPanel: (isVisible: boolean) => void;
   getHeaderHeight?: (() => number);
@@ -556,7 +565,6 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       return undefined;
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return notifyScheduler.invoke(funcName, ...args);
   }
 
@@ -1159,23 +1167,32 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
 
     eventsEngine.off($element, SCHEDULER_WORKSPACE_DXPOINTERDOWN_EVENT_NAME);
     eventsEngine.off($element, SCHEDULER_CELL_DXCLICK_EVENT_NAME);
-    eventsEngine.on($element, SCHEDULER_WORKSPACE_DXPOINTERDOWN_EVENT_NAME, (e) => {
-      if (isMouseEvent(e) && e.which > 1) {
-        e.preventDefault();
-        return;
-      }
-      pointerDownAction({ event: e });
-    });
-    eventsEngine.on($element, SCHEDULER_CELL_DXCLICK_EVENT_NAME, cellSelector, (e) => {
-      const $cell = $(e.target as Element | null);
-      this.cellClickAction?.(
-        {
-          event: e,
-          cellElement: getPublicElement($cell),
-          cellData: this.getCellData($cell),
-        },
-      );
-    });
+    eventsEngine.on(
+      $element,
+      SCHEDULER_WORKSPACE_DXPOINTERDOWN_EVENT_NAME,
+      (e: DxEvent<MouseEvent | PointerEvent>) => {
+        if (isMouseEvent(e) && e.which > 1) {
+          e.preventDefault();
+          return;
+        }
+        pointerDownAction({ event: e });
+      },
+    );
+    eventsEngine.on(
+      $element,
+      SCHEDULER_CELL_DXCLICK_EVENT_NAME,
+      cellSelector,
+      (e: DxEvent<MouseEvent | PointerEvent>) => {
+        const $cell = $(e.target as Element | null);
+        this.cellClickAction?.(
+          {
+            event: e,
+            cellElement: getPublicElement($cell),
+            cellData: this.getCellData($cell),
+          },
+        );
+      },
+    );
 
     if (this.documentPointerUpHandler) {
       eventsEngine.off(
@@ -1255,13 +1272,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     const firstCellData = selectedCells[0];
     const lastCellData = selectedCells[selectedCells.length - 1];
 
-    const result: {
-      startDate: Date;
-      endDate: Date;
-      startDateUTC: NormalizedCellData['startDateUTC'];
-      endDateUTC: NormalizedCellData['endDateUTC'];
-      allDay?: NormalizedCellData['allDay'];
-    } = {
+    const result: SelectedCellsClickResult = {
       startDate: firstCellData.startDate,
       endDate: lastCellData.endDate,
       startDateUTC: firstCellData.startDateUTC,
@@ -1428,12 +1439,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       element,
       SCHEDULER_CELL_DXPOINTERDOWN_EVENT_NAME,
       DRAG_AND_DROP_SELECTOR,
-      (e: {
-        type: string;
-        target: Element;
-        originalEvent: Event;
-        which: number;
-      }): void => {
+      (e: DxEvent & { which: number }): void => {
         if ((
           isMouseEvent(e) || (e.originalEvent && isMouseEvent(e.originalEvent))
         ) && e.which === 1) {
@@ -1495,7 +1501,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   }
 
   getHeaderPanelHeight(): number | false {
-    return this.$headerPanel && getOuterHeight(this.$headerPanel, true) as number;
+    return this.$headerPanel && getOuterHeight(this.$headerPanel.get(0), true);
   }
 
   getTimePanelWidth(): number {
@@ -1503,7 +1509,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   }
 
   getGroupTableWidth(): number {
-    return this.$groupTable ? getOuterWidth(this.$groupTable) as number : 0;
+    return this.$groupTable ? getOuterWidth(this.$groupTable.get(0)) : 0;
   }
 
   getWorkSpaceLeftOffset(): number {
@@ -1938,7 +1944,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
 
     return {
       left: dateTableOffset.left,
-      right: dateTableOffset.left + (getOuterWidth($dateTable) as number),
+      right: dateTableOffset.left + Number(getOuterWidth($dateTable)),
       top: dateTableOffset.top + top,
       bottom: dateTableOffset.top + top + height,
     };
@@ -1991,7 +1997,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     const $scrollable = this.getScrollable().$element();
     const cellHeight = this.getCellHeight();
     const scrolledCellCount = this.getScrollableScrollTop() / cellHeight;
-    const totalCellCount = scrolledCellCount + getHeight($scrollable) / cellHeight;
+    const totalCellCount = scrolledCellCount + getHeight($scrollable.get(0)) / cellHeight;
 
     const result = {
       top: {
@@ -2073,8 +2079,10 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       scrolledColumnCount += 1;
     }
 
-    const rowCount = Math.floor(fullScrolledRowCount + getHeight($scrollable) / cellHeight);
-    const columnCount = Math.floor(fullScrolledColumnCount + getWidth($scrollable) / cellWidth);
+    const rowCount = Math.floor(fullScrolledRowCount + getHeight($scrollable.get(0)) / cellHeight);
+    const columnCount = Math.floor(
+      fullScrolledColumnCount + getWidth($scrollable.get(0)) / cellWidth,
+    );
 
     const $cells = this.getAllCells(inAllDayRow);
     const result: dxElementWrapper[] = [];
@@ -2118,8 +2126,8 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     const offset = this.option().rtlEnabled
       ? cellWidth
       : 0;
-    const scrollableHeight = getHeight($scrollable);
-    const scrollableWidth = getWidth($scrollable);
+    const scrollableHeight = getHeight($scrollable.get(0));
+    const scrollableWidth = getWidth($scrollable.get(0));
     const cellHeight = this.getCellHeight();
 
     const xShift = align === 'start' ? 0 : (scrollableWidth - cellWidth) / 2;
@@ -2542,7 +2550,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   // DnD should be removed from work-space
   // ------------
 
-  initDragBehavior(scheduler: { element: () => Element }): void {
+  initDragBehavior(scheduler: Scheduler): void {
     if (!this.dragBehavior && scheduler) {
       this.dragBehavior = new AppointmentDragBehavior(scheduler);
 
@@ -2566,8 +2574,8 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
 
     const getItemSettings = (
       $itemElement: dxElementWrapper,
-    ): AppointmentViewModelPlain => (
-      $itemElement.data(APPOINTMENT_SETTINGS_KEY) as unknown as AppointmentViewModelPlain);
+    ): AppointmentViewModelPlain => $itemElement
+      .data<AppointmentViewModelPlain>(APPOINTMENT_SETTINGS_KEY);
 
     const options = {
       getItemData,
@@ -2792,8 +2800,8 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       isRTL: this.isRTL.bind(this),
       getSchedulerHeight: () => this.option().schedulerHeight,
       getSchedulerWidth: () => this.option().schedulerWidth,
-      getViewHeight: () => getHeight(this.$element()) as number,
-      getViewWidth: () => getWidth(this.$element()) as number,
+      getViewHeight: () => getHeight(this.$element().get(0)),
+      getViewWidth: () => getWidth(this.$element().get(0)),
       getWindowHeight: () => getWindow().innerHeight,
       getWindowWidth: () => getWindow().innerWidth,
       getScrolling: (): WorkspaceOptionsInternal['scrolling'] => this.option().scrolling,
@@ -3418,6 +3426,17 @@ interface DragBehaviorOptions {
   filter?: string;
 }
 
+export interface DragBehaviorConfig {
+  container: dxElementWrapper;
+  dragTemplate: () => dxElementWrapper | undefined;
+  onDragStart: (e: AppointmentDraggingStartEvent) => void;
+  onDragMove: () => void;
+  onDragEnd: (e: AppointmentDraggingEndEvent) => void;
+  onDragCancel: (e: AppointmentDraggingRemoveEvent) => void;
+  cursorOffset: (() => TranslateVector) | undefined;
+  filter: string | undefined;
+}
+
 const createDragBehaviorConfig = (
   container: dxElementWrapper,
   rootElement: dxElementWrapper,
@@ -3430,16 +3449,7 @@ const createDragBehaviorConfig = (
   removeDroppableCellClass: () => void,
   getCellWidthCallback: () => number,
   options: DragBehaviorOptions,
-): {
-  container: dxElementWrapper;
-  dragTemplate: () => dxElementWrapper | undefined;
-  onDragStart: (e: AppointmentDraggingStartEvent) => void;
-  onDragMove: () => void;
-  onDragEnd: (e: AppointmentDraggingEndEvent) => void;
-  onDragCancel: (e: AppointmentDraggingRemoveEvent) => void;
-  cursorOffset: (() => TranslateVector) | undefined;
-  filter: string | undefined;
-} => {
+): DragBehaviorConfig => {
   const state: {
     dragElement: dxElementWrapper | undefined;
     itemData: unknown;
@@ -3517,7 +3527,7 @@ const createDragBehaviorConfig = (
   };
 
   const getElementsFromPoint = (): Element[] => {
-    const appointmentWidth = getWidth(state.dragElement);
+    const appointmentWidth = Number(getWidth(state.dragElement));
     const cellWidth = getCellWidthCallback();
     const isWideAppointment = appointmentWidth > cellWidth;
     const isNarrowAppointment = appointmentWidth <= DRAGGING_MOUSE_FAULT;
@@ -3601,8 +3611,8 @@ const createDragBehaviorConfig = (
     ? (): TranslateVector => {
       const $dragElement = $(state.dragElement);
       return {
-        x: getWidth($dragElement) / 2,
-        y: getHeight($dragElement) / 2,
+        x: Number(getWidth($dragElement)) / 2,
+        y: Number(getHeight($dragElement)) / 2,
       };
     }
     : undefined;

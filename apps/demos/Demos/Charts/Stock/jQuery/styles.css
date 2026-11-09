@@ -1,3 +1,8 @@
+#toolbar .chart-title {
+  font-size: 20px;
+  font-weight: 600;
+}
+
 #chart {
   height: 440px;
 }

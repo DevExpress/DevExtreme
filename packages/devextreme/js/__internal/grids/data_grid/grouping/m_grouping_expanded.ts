@@ -1,249 +1,229 @@
 import dataQuery from '@js/common/data/query';
 import storeHelper from '@js/common/data/store_helper';
-import { keysEqual } from '@js/common/data/utils';
-import { toComparable } from '@js/core/utils/data';
+import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred, when } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
-import { each } from '@js/core/utils/iterator';
+import type { StoreLoadOptions } from '@ts/data/data_source/types';
 import type DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/data_source_adapter';
-import { combineFilters } from '@ts/grids/grid_core/filter/utils';
+import type { LoadOperation, OperationTypes } from '@ts/grids/grid_core/data_source_adapter/types';
+import type { VirtualScrollingDataSourceAdapterExtension } from '@ts/grids/grid_core/virtual_scrolling/types';
 
 import dataGridCore from '../core';
-import { createGroupFilter } from '../m_utils';
-import { createOffsetFilter, GroupingHelper as GroupingHelperCore } from './m_grouping_core';
-import type { DataItem, GroupInfoData, GroupItemData } from './types';
+import { createGroupFilter } from '../utils';
+import { GroupingHelper as GroupingHelperCore } from './m_grouping_core';
+import type {
+  DataItem,
+  ForeachGroupsCallback,
+  ForeachGroupsResult,
+  GroupInfoData,
+  GroupingDataSourceAdapter,
+  GroupingLoadOperation,
+  GroupItemData,
+  GroupItemsPosition,
+  GroupItemsProcessingState,
+} from './types';
+import {
+  appendCollapsedPath,
+  createNotGroupFilter,
+  createOffsetFilter,
+  isGroupItem,
+  pathEquals,
+  processCollapsedGroupItem,
+  processDataItem,
+  processExpandedGroupItem,
+  removeGroupLoadOption,
+} from './utils';
 
-const loadTotalCount = function (dataSourceAdapter: DataSourceAdapter, options) {
-  // @ts-expect-error
-  const d = new Deferred();
+const loadTotalCount = function loadTotalCount(
+  dataSourceAdapter: DataSourceAdapter,
+  options: StoreLoadOptions,
+): DeferredObj<number> {
+  const d = Deferred<number>();
   const loadOptions = extend({ skip: 0, take: 1, requireTotalCount: true }, options);
 
-  dataSourceAdapter.customLoader.load(loadOptions).done(({ extra }) => {
-    d.resolve(extra!.totalCount);
-  }).fail(d.reject.bind(d));
+  dataSourceAdapter.customLoader.load(loadOptions)
+    .done(({ extra }) => {
+      if (extra?.totalCount === undefined) {
+        d.reject();
+        return;
+      }
+      d.resolve(extra.totalCount);
+    })
+    .fail((...args: unknown[]) => {
+      // @ts-expect-error badly typed Deferred.reject
+      d.reject(...args);
+    });
   return d;
 };
 
-const foreachCollapsedGroups = function (that, callback, updateOffsets?) {
-  return that.foreachGroups((groupInfo) => {
-    if (!groupInfo.isExpanded) {
-      return callback(groupInfo);
-    }
-  }, false, false, updateOffsets, true);
-};
-
-const correctSkipLoadOption = function (that, skip) {
-  let skipCorrection = 0;
-  let resultSkip = skip || 0;
-
-  if (skip) {
-    // @ts-expect-error
-    foreachCollapsedGroups(that, (groupInfo) => {
-      if (groupInfo.offset - skipCorrection >= skip) {
-        return false;
-      }
-      skipCorrection += groupInfo.count - 1;
-    });
-    resultSkip += skipCorrection;
-  }
-  return resultSkip;
-};
-
-const processGroupItems = function (that, items, path, offset, skipFirstItem, take) {
-  let removeLastItemsCount = 0;
-  let needRemoveFirstItem = false;
-
-  for (let i = 0; i < items.length; i++) {
-    const item = items[i];
-    if (item.items !== undefined) {
-      path.push(item.key);
-      const groupInfo = that.findGroupInfo(path);
-
-      if (groupInfo && !groupInfo.isExpanded) {
-        item.collapsedItems = item.items;
-        item.items = null;
-        offset += groupInfo.count;
-        take--;
-        if (take < 0) {
-          removeLastItemsCount++;
-        }
-        if (skipFirstItem) {
-          needRemoveFirstItem = true;
-        }
-      } else if (item.items) {
-        const offsetInfo = processGroupItems(that, item.items, path, offset, skipFirstItem, take);
-        if (skipFirstItem) {
-          if (offsetInfo.offset - offset > 1) {
-            item.isContinuation = true;
-          } else {
-            needRemoveFirstItem = true;
-          }
-        }
-        offset = offsetInfo.offset;
-        take = offsetInfo.take;
-        if (take < 0) {
-          if (item.items.length) {
-            item.isContinuationOnNextPage = true;
-          } else {
-            removeLastItemsCount++;
-          }
-        }
-      }
-      path.pop();
-    } else {
-      if (skipFirstItem) {
-        needRemoveFirstItem = true;
-      }
-      offset++;
-      take--;
-      if (take < 0) {
-        removeLastItemsCount++;
-      }
-    }
-    skipFirstItem = false;
-  }
-  if (needRemoveFirstItem) {
-    items.splice(0, 1);
-  }
-  if (removeLastItemsCount) {
-    items.splice(-removeLastItemsCount, removeLastItemsCount);
-  }
-  return {
-    offset,
-    take,
-  };
-};
-
-const pathEquals = function (path1, path2) {
-  if (path1.length !== path2.length) return false;
-  for (let i = 0; i < path1.length; i++) {
-    if (!keysEqual(null, path1[i], path2[i])) {
-      return false;
-    }
-  }
-  return true;
-};
-
-const isGroupItem = (item: DataItem): item is GroupItemData => (
-  'key' in item && (item as GroupItemData).items !== undefined
-);
-
-/**
- * Recalculates flat-data offsets for all known groups after an expand/collapse operation.
- * Walks the item tree recursively, updating stored offsets so that subsequent
- * paging and rendering use correct row positions.
- * The optional pendingGroupInfo carries offset data for a group whose expand state
- * is about to change but hasn't been persisted yet.
- */
-const updateGroupOffsets = (
-  that: GroupingHelperCore,
-  items: DataItem[] | null,
-  path: unknown[],
-  offset: number,
-  pendingGroupInfo?: GroupInfoData,
-): number => {
-  if (!items) {
-    return offset;
-  }
-
-  // eslint-disable-next-line @typescript-eslint/prefer-for-of
-  for (let i = 0; i < items.length; i += 1) {
-    const item = items[i];
-    if (isGroupItem(item)) {
-      path.push(item.key);
-
-      const isPendingGroup = pendingGroupInfo && pathEquals(pendingGroupInfo.path, path);
-      const groupInfo = that.findGroupInfo(path);
-
-      // Only update offset for the first occurrence; continuation parts keep the original offset
-      if (isPendingGroup && !item.isContinuation) {
-        pendingGroupInfo.offset = offset;
-      }
-
-      if (groupInfo && !item.isContinuation) {
-        groupInfo.offset = offset;
-      }
-
-      if (groupInfo && !groupInfo.isExpanded) {
-        // Collapsed group: skip over all its children in the flat index
-        // eslint-disable-next-line no-param-reassign
-        offset += groupInfo.count;
-      } else if (isPendingGroup && !pendingGroupInfo.isExpanded) {
-        // Pending collapse: the group isn't persisted yet, but we already need its count
-        // eslint-disable-next-line no-param-reassign
-        offset += pendingGroupInfo.count;
-      } else if (item.items) {
-        // Expanded group: recurse into children to accumulate their offsets
-        // eslint-disable-next-line no-param-reassign
-        offset = updateGroupOffsets(that, item.items, path, offset, pendingGroupInfo);
-      }
-
-      path.pop();
-    } else {
-      // eslint-disable-next-line no-param-reassign
-      offset += 1;
-    }
-  }
-
-  return offset;
-};
-
 /// #DEBUG
-export { loadTotalCount, updateGroupOffsets };
+export { loadTotalCount };
 
 /// #ENDDEBUG
 
-const removeGroupLoadOption = function (storeLoadOptions, loadOptions) {
-  if (loadOptions.group) {
-    const groups = dataGridCore.normalizeSortingInfo(loadOptions.group);
-    const sorts = dataGridCore.normalizeSortingInfo(storeLoadOptions.sort);
-    storeLoadOptions.sort = storeHelper.arrangeSortingInfo(groups, sorts);
-    delete loadOptions.group;
-  }
-};
-
-const createNotGroupFilter = function (path, storeLoadOptions, group) {
-  const groups = dataGridCore.normalizeSortingInfo(group || storeLoadOptions.group);
-  let filter: any[] = [];
-
-  for (let i = 0; i < path.length; i++) {
-    const filterElement: any[] = [];
-    for (let j = 0; j <= i; j++) {
-      filterElement.push([groups[j].selector, i === j ? '<>' : '=', path[j]]);
-    }
-    filter.push(combineFilters(filterElement));
-  }
-  // @ts-expect-error
-  filter = combineFilters(filter, 'or');
-
-  return combineFilters([filter, storeLoadOptions.filter]);
-};
-
-const getGroupCount = function (item, groupCount) {
-  let count = item.count || item.items.length;
-
-  if (!item.count && groupCount > 1) {
-    count = 0;
-    for (let i = 0; i < item.items.length; i++) {
-      count += getGroupCount(item.items[i], groupCount - 1);
-    }
-  }
-
-  return count;
-};
-
 export class GroupingHelper extends GroupingHelperCore {
-  protected handleDataLoading(options?) {
-    const that = this;
+  private foreachCollapsedGroups(
+    callback: (groupInfo: GroupInfoData) => ReturnType<ForeachGroupsCallback>,
+    updateOffsets?: boolean,
+  ): ForeachGroupsResult {
+    return this.foreachGroups((groupInfo) => {
+      if (!groupInfo.isExpanded) {
+        return callback(groupInfo);
+      }
+      return undefined;
+    }, false, false, updateOffsets, true);
+  }
+
+  private correctSkipLoadOption(skip: number | undefined): number {
+    let skipCorrection = 0;
+    let resultSkip = skip || 0;
+
+    if (skip) {
+      this.foreachCollapsedGroups((groupInfo) => {
+        if (groupInfo.offset - skipCorrection >= skip) {
+          return false;
+        }
+        skipCorrection += groupInfo.count - 1;
+        return undefined;
+      });
+      resultSkip += skipCorrection;
+    }
+    return resultSkip;
+  }
+
+  private processGroupItems(
+    items: GroupItemData[],
+    groupCount: number,
+    path: unknown[],
+    offset: number,
+    skipFirstItem: boolean | undefined,
+    take: number,
+  ): GroupItemsPosition {
+    const state: GroupItemsProcessingState = {
+      offset,
+      take,
+      skipFirstItem,
+      needRemoveFirstItem: false,
+      removeLastItemsCount: 0,
+    };
+
+    // eslint-disable-next-line @typescript-eslint/prefer-for-of -- store items may be non-array
+    for (let i = 0; i < items.length; i += 1) {
+      const item = items[i];
+      if (groupCount > 0 && item.items !== undefined) {
+        path.push(item.key);
+        const groupInfo = this.findGroupInfo(path);
+
+        if (groupInfo && !groupInfo.isExpanded) {
+          processCollapsedGroupItem(item, groupInfo.count, state);
+        } else if (item.items) {
+          const childItemsPosition = this.processGroupItems(
+            item.items,
+            groupCount - 1,
+            path,
+            state.offset,
+            state.skipFirstItem,
+            state.take,
+          );
+          processExpandedGroupItem(item, item.items, childItemsPosition, state);
+        }
+        path.pop();
+      } else {
+        processDataItem(state);
+      }
+      state.skipFirstItem = false;
+    }
+    if (state.needRemoveFirstItem) {
+      items.splice(0, 1);
+    }
+    if (state.removeLastItemsCount) {
+      items.splice(-state.removeLastItemsCount, state.removeLastItemsCount);
+    }
+    return {
+      offset: state.offset,
+      take: state.take,
+    };
+  }
+
+  /**
+   * Recalculates flat-data offsets for all known groups after an expand/collapse operation.
+   * Walks the item tree recursively, updating stored offsets so that subsequent
+   * paging and rendering use correct row positions.
+   * The optional pendingGroupInfo carries offset data for a group whose expand state
+   * is about to change but hasn't been persisted yet.
+   */
+  public updateGroupOffsets(
+    items: DataItem[] | null,
+    groupCount: number,
+    path: unknown[],
+    offset: number,
+    pendingGroupInfo?: GroupInfoData,
+  ): number {
+    if (!items) {
+      return offset;
+    }
+
+    let currentOffset = offset;
+
+    // eslint-disable-next-line @typescript-eslint/prefer-for-of -- store items may be non-array
+    for (let i = 0; i < items.length; i += 1) {
+      const item = items[i];
+      if (groupCount > 0 && isGroupItem(item)) {
+        path.push(item.key);
+
+        const isPendingGroup = pendingGroupInfo && pathEquals(pendingGroupInfo.path, path);
+        const groupInfo = this.findGroupInfo(path);
+
+        // Only update offset for the first occurrence; continuation parts keep the original offset
+        if (isPendingGroup && !item.isContinuation) {
+          pendingGroupInfo.offset = currentOffset;
+        }
+
+        if (groupInfo && !item.isContinuation) {
+          groupInfo.offset = currentOffset;
+        }
+
+        if (groupInfo && !groupInfo.isExpanded) {
+          // Collapsed group: skip over all its children in the flat index
+          currentOffset += groupInfo.count;
+        } else if (isPendingGroup && !pendingGroupInfo.isExpanded) {
+          // Pending collapse: the group isn't persisted yet, but we already need its count
+          currentOffset += pendingGroupInfo.count;
+        } else if (item.items) {
+          // Expanded group: recurse into children to accumulate their offsets
+          currentOffset = this.updateGroupOffsets(
+            item.items,
+            groupCount - 1,
+            path,
+            currentOffset,
+            pendingGroupInfo,
+          );
+        }
+
+        path.pop();
+      } else {
+        currentOffset += 1;
+      }
+    }
+
+    return currentOffset;
+  }
+
+  public handleDataLoading(options: GroupingLoadOperation): void {
     const { storeLoadOptions } = options;
-    const collapsedGroups: any[] = [];
+    const collapsedGroups: GroupInfoData[] = [];
     let collapsedItemsCount = 0;
     let skipFirstItem = false;
-    let take;
-    const { group } = options.loadOptions;
+    const { loadOptions: localLoadOptions } = options;
     let skipCorrection = 0;
 
-    removeGroupLoadOption(storeLoadOptions, options.loadOptions);
+    if (!localLoadOptions) {
+      return;
+    }
+
+    const { group } = localLoadOptions;
+
+    removeGroupLoadOption(storeLoadOptions, localLoadOptions);
 
     options.group = options.group || group;
 
@@ -251,24 +231,25 @@ export class GroupingHelper extends GroupingHelperCore {
       return;
     }
 
-    const loadOptions = extend({}, storeLoadOptions);
+    const loadOptions: StoreLoadOptions = extend({}, storeLoadOptions);
 
-    loadOptions.skip = correctSkipLoadOption(that, storeLoadOptions.skip);
+    loadOptions.skip = this.correctSkipLoadOption(storeLoadOptions.skip);
 
     if (loadOptions.skip && loadOptions.take && group) {
-      loadOptions.skip--;
-      loadOptions.take++;
+      loadOptions.skip -= 1;
+      loadOptions.take += 1;
       skipFirstItem = true;
     }
 
-    if (loadOptions.take && group) {
-      take = loadOptions.take;
-      loadOptions.take++;
+    const take = loadOptions.take && group ? loadOptions.take : undefined;
+
+    if (take !== undefined) {
+      loadOptions.take = take + 1;
     }
 
-    let loadEndOffset: number = loadOptions.skip + loadOptions.take;
+    let loadEndOffset = Number(loadOptions.skip) + Number(loadOptions.take);
 
-    this.foreachGroups((groupInfo: GroupInfoData) => {
+    this.foreachGroups((groupInfo) => {
       // loadEndOffset should be corrected for expanding group to properly calculate group filter
       if (groupInfo.isPending && groupInfo.isExpanded && groupInfo.count) {
         loadEndOffset += groupInfo.count;
@@ -279,7 +260,7 @@ export class GroupingHelper extends GroupingHelperCore {
           return false;
         }
 
-        if (groupInfo.offset >= loadOptions.skip + skipCorrection && groupInfo.count) {
+        if (groupInfo.offset >= Number(loadOptions.skip) + skipCorrection && groupInfo.count) {
           skipCorrection += groupInfo.count - 1;
           collapsedGroups.push(groupInfo);
           collapsedItemsCount += groupInfo.count;
@@ -293,8 +274,8 @@ export class GroupingHelper extends GroupingHelperCore {
       return undefined;
     }, false, false, undefined, true);
 
-    each(collapsedGroups, function () {
-      loadOptions.filter = createNotGroupFilter(this.path, loadOptions, group);
+    collapsedGroups.forEach((collapsedGroup) => {
+      loadOptions.filter = createNotGroupFilter(collapsedGroup.path, loadOptions, group);
     });
 
     options.storeLoadOptions = loadOptions;
@@ -305,102 +286,96 @@ export class GroupingHelper extends GroupingHelperCore {
     options.take = take;
   }
 
-  protected handleDataLoaded(options, callBase) {
-    const that = this;
-    const { collapsedGroups } = options;
+  public handleDataLoaded(
+    options: GroupingLoadOperation,
+    customizeLoadResult: (options: LoadOperation) => void,
+  ): void {
+    const { collapsedGroups, collapsedItemsCount, extra } = options;
     const groups = dataGridCore.normalizeSortingInfo(options.group);
     const groupCount = groups.length;
 
-    function appendCollapsedPath(data, path, groups, collapsedGroup, offset) {
-      if (!data || !path.length || !groups.length) return;
-
-      let keyValue;
-      let i;
-      const pathValue = toComparable(path[0], true);
-
-      for (i = 0; i < data.length; i++) {
-        keyValue = toComparable(data[i].key, true);
-        if (offset >= collapsedGroup.offset || pathValue === keyValue) {
-          break;
-        } else {
-          offset += getGroupCount(data[i], groups.length);
-        }
-      }
-
-      if (!data.length || pathValue !== keyValue) {
-        data.splice(i, 0, { key: path[0], items: [], count: path.length === 1 ? collapsedGroup.count : undefined });
-      }
-      appendCollapsedPath(data[i].items, path.slice(1), groups.slice(1), collapsedGroup, offset);
-    }
-
-    if (options.collapsedItemsCount && options.extra && options.extra.totalCount >= 0) {
-      if (!options.extra._totalCountWasIncreasedByCollapsedItems) {
-        options.extra.totalCount += options.collapsedItemsCount;
-        options.extra._totalCountWasIncreasedByCollapsedItems = true;
+    if (collapsedItemsCount && extra?.totalCount !== undefined && extra.totalCount >= 0) {
+      if (!extra._totalCountWasIncreasedByCollapsedItems) {
+        extra.totalCount += collapsedItemsCount;
+        extra._totalCountWasIncreasedByCollapsedItems = true;
       }
     }
 
-    callBase(options);
+    customizeLoadResult(options);
 
-    if (groupCount) {
-      let { data } = options;
-      const query = dataQuery(data);
+    const { data: loadedData } = options;
+
+    if (groupCount && Array.isArray(loadedData)) {
+      let data: GroupItemData[] = [];
+      const query = dataQuery(loadedData);
       storeHelper.multiLevelGroup(query, groups).enumerate().done((groupedData) => {
+        // @ts-expect-error multiLevelGroup() resolves group items
         data = groupedData;
       });
       if (collapsedGroups) {
-        for (let pathIndex = 0; pathIndex < collapsedGroups.length; pathIndex++) {
-          appendCollapsedPath(data, collapsedGroups[pathIndex].path, groups, collapsedGroups[pathIndex], options.skip);
+        for (const collapsedGroup of collapsedGroups) {
+          appendCollapsedPath(
+            data,
+            collapsedGroup.path,
+            groups,
+            collapsedGroup,
+            Number(options.skip),
+          );
         }
       }
       if (!options.isCustomLoading) {
-        processGroupItems(that, data, [], options.skip, options.skipFirstItem, options.take);
+        this.processGroupItems(
+          data,
+          groupCount,
+          [],
+          Number(options.skip),
+          options.skipFirstItem,
+          Number(options.take),
+        );
       }
       options.data = data;
     }
   }
 
-  protected isGroupItemCountable(item) {
+  public isGroupItemCountable(item: GroupItemData): boolean {
     return item.items === null;
   }
 
-  protected updateTotalItemsCount() {
+  private updateTotalItemsCount(): void {
     let itemsCountCorrection = 0;
 
-    foreachCollapsedGroups(this, (groupInfo) => {
+    this.foreachCollapsedGroups((groupInfo) => {
       if (groupInfo.count) {
         itemsCountCorrection -= groupInfo.count - 1;
       }
+      return undefined;
     });
-    super.updateTotalItemsCount(itemsCountCorrection);
+    this.setTotalCountCorrection(itemsCountCorrection);
   }
 
-  private changeRowExpand(path) {
-    const that = this;
-    const { dataSourceAdapter } = that;
-    // @ts-expect-error badly typedDataSourceAdapter.beginPageIndex
+  public changeRowExpand(path: unknown[]): DeferredObj<unknown> {
+    const { dataSourceAdapter }: {
+      dataSourceAdapter: GroupingDataSourceAdapter
+      & Partial<VirtualScrollingDataSourceAdapterExtension>;
+    } = this;
     const beginPageIndex = dataSourceAdapter.beginPageIndex
-      // @ts-expect-error badly typedDataSourceAdapter.beginPageIndex
       ? dataSourceAdapter.beginPageIndex()
       : dataSourceAdapter.pageIndex();
     const dataSourceItems = dataSourceAdapter.items();
-    const offset = correctSkipLoadOption(that, beginPageIndex * dataSourceAdapter.pageSize());
-    const groupInfo = that.findGroupInfo(path);
-    let groupCountQuery;
-
-    if (groupInfo && !groupInfo.isExpanded) {
-      // @ts-expect-error
-      groupCountQuery = new Deferred().resolve(groupInfo.count);
-    } else {
-      groupCountQuery = loadTotalCount(dataSourceAdapter, {
+    const groupCount = dataGridCore.normalizeSortingInfo(dataSourceAdapter.group()).length;
+    const offset = this.correctSkipLoadOption(beginPageIndex * dataSourceAdapter.pageSize());
+    const groupInfo = this.findGroupInfo(path);
+    const groupCountQuery = groupInfo && !groupInfo.isExpanded
+      ? Deferred<number>().resolve(groupInfo.count)
+      : loadTotalCount(dataSourceAdapter, {
         filter: createGroupFilter(path, {
           filter: dataSourceAdapter.filter(),
           group: dataSourceAdapter.group(),
         }),
       });
-    }
 
     return when(groupCountQuery).done((count) => {
+      // @ts-expect-error parseInt() takes a value that when() may wrap in an array
       const normalizedCount = parseInt(count.length ? count[0] : count, 10);
       const pendingGroupInfo: GroupInfoData = {
         offset: groupInfo ? groupInfo.offset : -1,
@@ -410,51 +385,55 @@ export class GroupingHelper extends GroupingHelperCore {
         isPending: true,
       };
 
-      updateGroupOffsets(that, dataSourceItems, [], offset, pendingGroupInfo);
+      this.updateGroupOffsets(dataSourceItems, groupCount, [], offset, pendingGroupInfo);
 
       if (groupInfo) {
         groupInfo.isExpanded = !groupInfo.isExpanded;
         groupInfo.count = normalizedCount;
         groupInfo.isPending = true;
       } else if (pendingGroupInfo.offset >= 0) {
-        that.addGroupInfo(pendingGroupInfo);
+        this.addGroupInfo(pendingGroupInfo);
       }
-      that.updateTotalItemsCount();
-    }).fail(function () {
-      // @ts-expect-error badly typedDataSourceAdapter._eventsStrategy
-      dataSourceAdapter._eventsStrategy.fireEvent('loadError', arguments);
+      this.updateTotalItemsCount();
+    }).fail((...args: unknown[]) => {
+      dataSourceAdapter._dataSource._eventsStrategy.fireEvent('loadError', args);
     });
   }
 
-  protected allowCollapseAll() {
+  public allowCollapseAll(): boolean {
     return false;
   }
 
-  protected refresh(options, operationTypes?) {
-    const that = this;
+  public refresh(options: LoadOperation, operationTypes: OperationTypes): ForeachGroupsResult {
     const { storeLoadOptions } = options;
-    const { dataSourceAdapter } = that;
 
-    // @ts-expect-error
-    super.refresh.apply(this, arguments);
+    super.refresh(options, operationTypes);
 
     if (operationTypes.reload) {
-      return foreachCollapsedGroups(that, (groupInfo) => {
-        const groupCountQuery = loadTotalCount(dataSourceAdapter, { filter: createGroupFilter(groupInfo.path, storeLoadOptions) });
-        const groupOffsetQuery = loadTotalCount(dataSourceAdapter, { filter: createOffsetFilter(groupInfo.path, storeLoadOptions) });
+      return this.foreachCollapsedGroups((groupInfo) => {
+        const groupCountQuery = loadTotalCount(this.dataSourceAdapter, {
+          filter: createGroupFilter(groupInfo.path, storeLoadOptions),
+        });
+        const groupOffsetQuery = loadTotalCount(this.dataSourceAdapter, {
+          filter: createOffsetFilter(groupInfo.path, storeLoadOptions),
+        });
 
         return when(groupOffsetQuery, groupCountQuery).done((offset, count) => {
+          // @ts-expect-error parseInt() takes a value that when() may wrap in an array
           // eslint-disable-next-line radix
-          offset = parseInt(offset.length ? offset[0] : offset);
+          const loadedOffset = parseInt(offset.length ? offset[0] : offset);
+          // @ts-expect-error parseInt() takes a value that when() may wrap in an array
           // eslint-disable-next-line radix
-          count = parseInt(count.length ? count[0] : count);
-          groupInfo.offset = offset;
-          if (groupInfo.count !== count) {
-            groupInfo.count = count;
-            that.updateTotalItemsCount();
+          const loadedCount = parseInt(count.length ? count[0] : count);
+          groupInfo.offset = loadedOffset;
+          if (groupInfo.count !== loadedCount) {
+            groupInfo.count = loadedCount;
+            this.updateTotalItemsCount();
           }
         });
       }, true);
     }
+
+    return undefined;
   }
 }

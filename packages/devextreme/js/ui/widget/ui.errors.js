@@ -165,6 +165,9 @@
     * @name ErrorsUIWidgets.E1068
     */
 /**
+    * @name ErrorsUIWidgets.E1069
+    */
+/**
     * @name ErrorsUIWidgets.W1001
     */
 /**
@@ -241,6 +244,18 @@
     */
 /**
     * @name ErrorsUIWidgets.W1029
+    */
+/**
+    * @name ErrorsUIWidgets.W1030
+    */
+/**
+    * @name ErrorsUIWidgets.W1031
+    */
+/**
+    * @name ErrorsUIWidgets.W1032
+    */
+/**
+    * @name ErrorsUIWidgets.W1033
     */
 import errors from '../../__internal/ui/errors';
 

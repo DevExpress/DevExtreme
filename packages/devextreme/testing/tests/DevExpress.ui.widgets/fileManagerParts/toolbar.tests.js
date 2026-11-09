@@ -444,6 +444,20 @@ QUnit.module('Toolbar', moduleConfig, () => {
         assert.equal($dropDownButton.attr('title'), 'Thumbnails View', 'Thumbnails View');
     });
 
+    test('itemView dropDownButton is named after the current view mode (T1337649)', function(assert) {
+        createFileManager(false);
+        this.clock.tick(400);
+
+        const getViewSwitcherLabel = () => this.wrapper.getToolbarDropDownButton().find(`.${Consts.BUTTON_CLASS}`).attr('aria-label');
+
+        assert.strictEqual(getViewSwitcherLabel(), 'Details View', 'details view');
+
+        this.wrapper.getInstance().option('itemView.mode', 'thumbnails');
+        this.clock.tick(400);
+
+        assert.strictEqual(getViewSwitcherLabel(), 'Thumbnails View', 'thumbnails view');
+    });
+
     test('Raise the ToolbarItemClick event on default toolbar', function(assert) {
         createFileManager(false);
         this.clock.tick(400);
@@ -1121,4 +1135,29 @@ QUnit.module('Toolbar', moduleConfig, () => {
         assert.strictEqual(this.wrapper.getToolbarElements().length, 4, 'file selection toolbar has 4 visible items');
     });
 
+});
+
+QUnit.module('Toolbar sizes declared by the theme', {
+    beforeEach: function() {
+        this.clock = sinon.useFakeTimers();
+        fx.off = true;
+        this.$style = $('<style nonce="qunit-test">')
+            .text('.dx-filemanager { --dx-file-manager-toolbar-viewmode-popup-width: 77px; }')
+            .appendTo('head');
+        this.$element = $('<div>').appendTo('#qunit-fixture');
+    },
+
+    afterEach: function() {
+        this.clock.tick(5000);
+        this.clock.restore();
+        this.$element.remove();
+        this.$style.remove();
+        fx.off = false;
+    }
+}, () => {
+    test('view-mode popup width comes from the theme', function(assert) {
+        const instance = this.$element.dxFileManager({ fileSystemProvider: [] }).dxFileManager('instance');
+
+        assert.strictEqual(instance._toolbar._getViewModePopupWidth(), 77);
+    });
 });

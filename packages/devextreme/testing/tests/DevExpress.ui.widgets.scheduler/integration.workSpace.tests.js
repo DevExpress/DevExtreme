@@ -1189,7 +1189,7 @@ module('Integration: Work space', { ...moduleConfig }, () => {
 
         const dateTableScrollable = scheduler.workSpace.getDateTableScrollable().dxScrollable('instance');
 
-        dateTableScrollable.scrollTo({ y: 400 });
+        dateTableScrollable.scrollTo({ top: 400 });
 
         setTimeout(() => {
             assert.deepEqual(scheduler.option('selectedCellData'), selectedCells, 'Correct selected cells');
@@ -1225,7 +1225,7 @@ module('Integration: Work space', { ...moduleConfig }, () => {
 
         const dateTableScrollable = scheduler.workSpace.getDateTableScrollable().dxScrollable('instance');
 
-        dateTableScrollable.scrollTo({ y: 400 });
+        dateTableScrollable.scrollTo({ top: 400 });
 
         setTimeout(() => {
             const keyboard = keyboardMock(instance.getWorkSpace().$element());

@@ -3,7 +3,6 @@ import { locate, move } from '@js/common/core/animation/translator';
 import type { Cancelable, ItemInfo, NativeEventInfo } from '@js/common/core/events';
 import { name as clickEventName } from '@js/common/core/events/click';
 import { active } from '@js/common/core/events/core/emitter.feedback';
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import { addNamespace } from '@js/common/core/events/utils';
 import messageLocalization from '@js/common/core/localization/message';
 import type { dxElementWrapper } from '@js/core/renderer';
@@ -14,6 +13,7 @@ import type { DxEvent } from '@js/events';
 import type dxActionSheet from '@js/ui/action_sheet';
 import type { Item } from '@js/ui/list';
 import { current, isMaterialBased } from '@js/ui/themes';
+import eventsEngine from '@ts/events/core/events_engine';
 import ActionSheet from '@ts/ui/action_sheet';
 import type { BagConfig, SwipeEndArgs, SwipeUpdateArgs } from '@ts/ui/list/list.edit.decorator';
 import SwitchableEditDecorator from '@ts/ui/list/list.edit.decorator.switchable';
@@ -257,8 +257,8 @@ class SwitchableEditDecoratorSlide extends SwitchableEditDecorator {
     }
 
     this._$cachedContent = $itemElement.find(`.${SLIDE_MENU_CONTENT_CLASS}`);
-    this._cachedItemWidth = getOuterWidth($itemElement);
-    this._cachedButtonWidth = this._cachedButtonWidth || getOuterWidth(this._$buttons);
+    this._cachedItemWidth = Number(getOuterWidth($itemElement));
+    this._cachedButtonWidth = this._cachedButtonWidth || getOuterWidth(this._$buttons.get(0));
     setWidth(this._$buttonsContainer, this._cachedButtonWidth);
 
     if (this._$cachedContent?.length) {

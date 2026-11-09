@@ -1,4 +1,3 @@
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import { eventData } from '@js/common/core/events/utils/index';
 import messageLocalization from '@js/common/core/localization/message';
 import registerComponent from '@js/core/component_registrator';
@@ -7,9 +6,10 @@ import $ from '@js/core/renderer';
 import { getWidth } from '@js/core/utils/size';
 import type { DxEvent } from '@js/events';
 import type { Properties } from '@js/ui/range_slider';
-import { applyServerDecimalSeparator } from '@ts/core/utils/m_common';
+import { applyServerDecimalSeparator } from '@ts/core/utils/common';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { SupportedKeys } from '@ts/core/widget/widget';
+import eventsEngine from '@ts/events/core/events_engine';
 import type { SwipeUpdateEvent } from '@ts/events/swipe';
 import type { SliderPointerEvent } from '@ts/ui/slider/slider';
 import Slider from '@ts/ui/slider/slider';
@@ -62,7 +62,6 @@ class RangeSlider extends Slider<RangeSliderProperties> {
       if (start === end) {
         this._capturedHandle = capturedHandle;
         e.target = capturedHandle.get(0);
-        // @ts-expect-error trigger is not declared in the public events engine type
         eventsEngine.trigger(capturedHandle, 'focus');
       }
     };
@@ -200,7 +199,7 @@ class RangeSlider extends Slider<RangeSliderProperties> {
   _startHandler(args: { event: SliderPointerEvent }): void {
     const e = args.event;
     const $range = this._$range;
-    const rangeWidth = getWidth($range);
+    const rangeWidth = Number(getWidth($range));
     const eventOffsetX = eventData(e).x - (this._$bar.offset()?.left ?? 0);
     const startHandleX = $range.position()?.left ?? 0;
     const endHandleX = ($range.position()?.left ?? 0) + rangeWidth;
@@ -214,8 +213,8 @@ class RangeSlider extends Slider<RangeSliderProperties> {
   }
 
   _updateHandleAriaLabels(): void {
-    const ariaFromFormatter: (value?: unknown) => string = messageLocalization.getFormatter('dxRangeSlider-ariaFrom');
-    const ariaTillFormatter: (value?: unknown) => string = messageLocalization.getFormatter('dxRangeSlider-ariaTill');
+    const ariaFromFormatter = messageLocalization.getFormatter('dxRangeSlider-ariaFrom');
+    const ariaTillFormatter = messageLocalization.getFormatter('dxRangeSlider-ariaTill');
 
     this.setAria('label', ariaFromFormatter(this.option('dxRangeSlider-ariaFrom')), this._$handleStart);
     this.setAria('label', ariaTillFormatter(this.option('dxRangeSlider-ariaTill')), this._$handleEnd);
@@ -248,7 +247,6 @@ class RangeSlider extends Slider<RangeSliderProperties> {
       } else {
         $nextHandle = this._$handleEnd;
       }
-      // @ts-expect-error trigger is not declared in the public events engine type
       eventsEngine.trigger($nextHandle, 'focus');
 
       if ($nextHandle && $nextHandle !== this._capturedHandle) {

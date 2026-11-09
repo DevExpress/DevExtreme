@@ -1,6 +1,6 @@
-import { z } from 'zod';
+import { config } from 'zod';
 
 // eslint-disable-next-line spellcheck/spell-checker
-z.config({ jitless: true });
+config({ jitless: true });
 
-export { z };
+export * from 'zod';

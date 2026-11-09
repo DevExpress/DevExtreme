@@ -124,6 +124,7 @@
         "dxDataGrid-aiAssistantAbortConfirmText": "關閉 AI 助理對話將中止進行中的請求。是否關閉對話？",
         "dxDataGrid-aiAChatEmptyViewMessage": "對話為空",
         "dxDataGrid-aiChatEmptyViewPrompt": "AI 助理已準備好回答您的問題。",
+        "dxDataGrid-aiChatTextareaPlaceholder": "Ask AI Assistant...",
         "dxDataGrid-aiPromptEditorTitle": "AI 提示編輯器",
         "dxDataGrid-aiPromptEditorPlaceholder": "請輸入提示以讓 AI 生成此欄位的值",
         "dxDataGrid-aiPromptEditorApplyButton": "應用",
@@ -919,6 +920,8 @@
         "dxGantt-showDependencies": "顯示依賴項",
         "dxGantt-dialogStartDateValidation": "開始日期必須晚於 {0}",
         "dxGantt-dialogEndDateValidation": "結束日期必須晚於 {0}",
+
+        "dxMap-markerAriaLabel": "Map marker",
 
         "dxGallery-itemName": "圖庫項目",
 

@@ -5,4 +5,4 @@ export {
     legacyAssign,
     newAssign,
     orderEach,
-} from '../../__internal/core/utils/m_object';
+} from '../../__internal/core/utils/object';

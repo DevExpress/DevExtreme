@@ -1,6 +1,8 @@
 import React, { useCallback, useMemo, useState, useRef } from 'react';
 import Chat from 'devextreme-react/chat';
 import type { ChatTypes } from 'devextreme-react/chat';
+import Toolbar, { Item } from 'devextreme-react/toolbar';
+import type { ButtonTypes } from 'devextreme-react/button';
 import { Switch, type SwitchTypes } from 'devextreme-react/switch';
 import { loadMessages } from 'devextreme-react/common/core/localization';
 import {
@@ -25,6 +27,7 @@ export default function App() {
     alerts,
     insertMessage,
     fetchAIResponse,
+    clearMessages,
   } = useApi();
 
   const [typingUsers, setTypingUsers] = useState<ChatTypes.User[]>([]);
@@ -85,27 +88,53 @@ export default function App() {
     setInputFieldText(e?.value ?? '');
   }, []);
 
+  const clearButtonOptions = useMemo((): ButtonTypes.Properties => ({
+    icon: 'clearhistory',
+    stylingMode: 'text',
+    hint: 'Clear chat',
+    disabled: isDisabled,
+    onClick: () => {
+      setTypingUsers([]);
+      setSuggestionList(suggestionItems);
+      clearMessages();
+    },
+  }), [isDisabled, clearMessages]);
+
   const messageRender = useCallback(({ message }: { message: ChatTypes.Message }) => <Message text={message.text} />, []);
 
   return (
     <>
-      <Chat
-        className={isDisabled ? CHAT_DISABLED_CLASS : ''}
-        dataSource={dataSource}
-        reloadOnChange={false}
-        showAvatar={false}
-        showDayHeaders={false}
-        user={user}
-        height={520}
-        alerts={alerts}
-        typingUsers={typingUsers}
-        speechToTextEnabled={true}
-        inputFieldText={inputFieldText}
-        suggestions={suggestions}
-        messageRender={messageRender}
-        onMessageEntered={onMessageEntered}
-        onInputFieldTextChanged={onInputFieldTextChanged}
-      />
+      <div className="ai-chat-card">
+        <Toolbar>
+          <Item
+            location="before"
+            text="AI Assistant"
+            cssClass="ai-chat-title"
+          />
+          <Item
+            location="after"
+            widget="dxButton"
+            options={clearButtonOptions}
+          />
+        </Toolbar>
+        <Chat
+          className={isDisabled ? CHAT_DISABLED_CLASS : ''}
+          dataSource={dataSource}
+          reloadOnChange={false}
+          showAvatar={false}
+          showDayHeaders={false}
+          user={user}
+          height={520}
+          alerts={alerts}
+          typingUsers={typingUsers}
+          speechToTextEnabled={true}
+          inputFieldText={inputFieldText}
+          suggestions={suggestions}
+          messageRender={messageRender}
+          onMessageEntered={onMessageEntered}
+          onInputFieldTextChanged={onInputFieldTextChanged}
+        />
+      </div>
       <div className='options'>
         <div className='caption'>Suggestion Options</div>
         <div className='suggestions-options'>

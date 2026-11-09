@@ -19,6 +19,7 @@ jobs:
   check-should-run-all:
     name: Check if all tests should run
     runs-on: ubuntu-latest
+    timeout-minutes: 6
     outputs:
       should-run: ${{ steps.check.outputs.should-run }}
     steps:
@@ -29,14 +30,14 @@ jobs:
   build:
     runs-on: devextreme-shr2
     name: Build
-    timeout-minutes: 60
+    timeout-minutes: 9
 
     steps:
     - name: Get sources
       uses: actions/checkout@v6
 
     - name: Use Node.js
-      uses: actions/setup-node@v6
+      uses: actions/setup-node@v7
       with:
         node-version-file: '.node-version'
 
@@ -49,8 +50,8 @@ jobs:
       run: |
         echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
 
-    - uses: actions/cache@v5
-      name: Setup pnpm cache
+    - uses: actions/cache/restore@v5
+      name: Restore pnpm cache
       with:
         path: ${{ env.STORE_PATH }}
         key: ${{ runner.os }}-pnpm-cache-${{ hashFiles('**/pnpm-lock.yaml') }}
@@ -91,9 +92,9 @@ jobs:
     - name: Install dependencies
       run: pnpm install --frozen-lockfile
 
-    - name: Setup nx cache
-      id: setup-nx-cache
-      uses: actions/cache@v5
+    - name: Restore nx cache
+      id: restore-nx-cache
+      uses: actions/cache/restore@v5
       with:
         path: |
           .nx/cache
@@ -125,11 +126,22 @@ jobs:
         path: packages/devextreme/artifacts.zip
         retention-days: 1
 
+    - name: Save nx cache
+      if: github.event_name != 'pull_request' && github.event_name != 'merge_group'
+      uses: actions/cache/save@v5
+      with:
+        path: |
+          .nx/cache
+          .nx/workspace-data/*.db
+          .nx/workspace-data/*.db-wal
+          .nx/workspace-data/*.db-shm
+        key: ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-${{ github.sha }}
+
   qunit-tests:
     needs: build
     runs-on: ${{ github.event_name == 'merge_group' && 'devextreme-shr2-ondemand' || 'devextreme-shr2' }}
     name: Constel ${{ matrix.CONSTEL }}${{ matrix.TIMEZONE != '' && format('-{0}', matrix.TIMEZONE) || '' }}${{ matrix.CSP == 'false' && '-no-csp' || '' }}
-    timeout-minutes: 25
+    timeout-minutes: 11
     strategy:
       fail-fast: false
       matrix:
@@ -183,7 +195,7 @@ jobs:
     if: needs.check-should-run-all.outputs.should-run == 'true'
     runs-on: devextreme-shr2
     name: ${{ matrix.constel }}-shadow-dom
-    timeout-minutes: 25
+    timeout-minutes: 11
     strategy:
       fail-fast: false
       matrix:

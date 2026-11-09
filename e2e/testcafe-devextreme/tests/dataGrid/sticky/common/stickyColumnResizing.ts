@@ -31,7 +31,7 @@ fixture.disablePageReloads`Resize columns - nextColumn mode`
     await testScreenshot(t, takeScreenshot, `resize_first_fixed_column_with_left_position_1_(nextColumn_mode_and_rtl_=_${rtlEnabled}).png`, { element: dataGrid.element });
 
     // act
-    await dataGrid.scrollTo(t, { x: scrollLeft });
+    await dataGrid.scrollTo(t, { left: scrollLeft });
 
     await testScreenshot(t, takeScreenshot, `resize_first_fixed_column_with_left_position_2_(nextColumn_mode_and_rtl_=_${rtlEnabled}).png`, { element: dataGrid.element });
 
@@ -69,7 +69,7 @@ fixture.disablePageReloads`Resize columns - nextColumn mode`
     await testScreenshot(t, takeScreenshot, `resize_second_fixed_column_with_right_position_1_(nextColumn_mode_and_rtl_=_${rtlEnabled}).png`, { element: dataGrid.element });
 
     // act
-    await dataGrid.scrollTo(t, { x: scrollLeft });
+    await dataGrid.scrollTo(t, { left: scrollLeft });
 
     await testScreenshot(t, takeScreenshot, `resize_second_fixed_column_with_right_position_2_(nextColumn_mode_and_rtl_=_${rtlEnabled}).png`, { element: dataGrid.element });
 
@@ -169,7 +169,7 @@ fixture.disablePageReloads`Resize columns - widget mode`
     await testScreenshot(t, takeScreenshot, `resize_first_fixed_column_with_left_position_1_(widget_mode_and_rtl_=_${rtlEnabled}).png`, { element: dataGrid.element });
 
     // act
-    await dataGrid.scrollTo(t, { x: scrollLeft });
+    await dataGrid.scrollTo(t, { left: scrollLeft });
 
     await testScreenshot(t, takeScreenshot, `resize_first_fixed_column_with_left_position_2_(widget_mode_and_rtl_=_${rtlEnabled}).png`, { element: dataGrid.element });
 
@@ -207,7 +207,7 @@ fixture.disablePageReloads`Resize columns - widget mode`
     await testScreenshot(t, takeScreenshot, `resize_second_fixed_column_with_right_position_1_(widget_mode_and_rtl_=_${rtlEnabled}).png`, { element: dataGrid.element });
 
     // act
-    await dataGrid.scrollTo(t, { x: scrollLeft });
+    await dataGrid.scrollTo(t, { left: scrollLeft });
 
     await testScreenshot(t, takeScreenshot, `resize_second_fixed_column_with_right_position_2_(widget_mode_and_rtl_=_${rtlEnabled}).png`, { element: dataGrid.element });
 
@@ -245,7 +245,7 @@ fixture.disablePageReloads`Resize columns - widget mode`
     await testScreenshot(t, takeScreenshot, `resize_first_fixed_column_with_right_position_1_(widget_mode_and_rtl_=_${rtlEnabled}).png`, { element: dataGrid.element });
 
     // act
-    await dataGrid.scrollTo(t, { x: scrollLeft });
+    await dataGrid.scrollTo(t, { left: scrollLeft });
 
     await testScreenshot(t, takeScreenshot, `resize_first_fixed_column_with_right_position_2_(widget_mode_and_rtl_=_${rtlEnabled}).png`, { element: dataGrid.element });
 

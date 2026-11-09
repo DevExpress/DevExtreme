@@ -3,7 +3,7 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import type {
   ContentReadyEvent, ItemContextMenuEvent, Properties as ListProperties,
 } from '@js/ui/list';
-import supportUtils from '@ts/core/utils/m_support';
+import supportUtils from '@ts/core/utils/support';
 import Tooltip from '@ts/ui/tooltip';
 
 import type { AppointmentTooltipItem } from '../types';

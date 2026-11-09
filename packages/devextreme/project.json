@@ -510,6 +510,7 @@
         "srcDir": "./js",
         "excludePatterns": [
           "__internal/**/*",
+          "ui/map/openlayers.register.js",
           "viz/docs/**/*",
           "bundles/**/*"
         ],
@@ -1257,7 +1258,8 @@
       "inputs": [
         "{workspaceRoot}/packages/devextreme-scss/scss/**/*",
         "{workspaceRoot}/packages/devextreme-scss/fonts/**/*",
-        "{workspaceRoot}/packages/devextreme-scss/icons/**/*"
+        "{workspaceRoot}/packages/devextreme-scss/icons/**/*",
+        "{workspaceRoot}/packages/devextreme-scss/build/internal-scss-paths.json"
       ],
       "outputs": [
         "{projectRoot}/artifacts/npm/devextreme/scss/**/*",

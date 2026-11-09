@@ -1,0 +1,68 @@
+.dx-chat {
+  max-width: 900px;
+  border-radius: 0;
+  min-height: 20em;
+}
+
+#grid-container {
+  margin-top: 20px;
+  min-height: 360px;
+}
+
+.priority-badge {
+  border-radius: 24px;
+  padding: 2px 8px;
+  display: inline-block;
+  text-align: center;
+}
+
+.priority-badge--high {
+  background: var(--dxds-color-bg-red-subtle, #f1bbbc);
+}
+
+.priority-badge--normal {
+  background: var(--dxds-color-bg-yellow-subtle, #f9e2ae);
+}
+
+.priority-badge--low {
+  background: var(--dxds-color-bg-green-subtle, #9fd89f);
+}
+
+#form-container {
+  border: 1px solid var(--dx-color-border);
+  padding: 16px;
+  background-color: var(--dx-component-color-bg);
+}
+
+.ai-chat-empty-message {
+  font-weight: 400;
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+.ai-chat-empty-prompt {
+  text-align: center;
+  padding: 0 24px;
+  white-space: pre-line;
+}
+
+.ai-chat-clear-button {
+  margin-right: 8px;
+}
+
+.chat-popup .dx-popup-content {
+  padding: 0;
+}
+
+.dx-chat-messagebox, .dx-chat.dx-state-disabled .dx-chat-messagebox {
+  border-top-color: transparent;
+}
+
+.dx-chat-messagelist-empty-view,
+.dx-chat-messagebox {
+  padding-top: 0;
+}
+
+.dx-layout-manager .dx-field-item.save-button {
+  padding-bottom: 0;
+}

@@ -554,7 +554,7 @@ test('The draggable element should be displayed correctly after horizontal scrol
   await t
     .expect(dataGrid.isReady())
     .ok();
-  await dataGrid.scrollTo(t, { x: 2500 });
+  await dataGrid.scrollTo(t, { left: 2500 });
 
   await t
     .expect(dataGrid.getScrollLeft())
@@ -713,7 +713,7 @@ test('toIndex should not be corrected when source item gets removed from DOM', a
   await t.expect(dataGrid.isReady()).ok();
 
   // act - scroll to the bottom to make the last row visible
-  await dataGrid.scrollTo(t, { y: 3000 });
+  await dataGrid.scrollTo(t, { top: 3000 });
 
   // assert
   await t

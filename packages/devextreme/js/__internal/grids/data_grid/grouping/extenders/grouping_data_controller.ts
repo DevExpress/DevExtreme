@@ -12,10 +12,10 @@ import type {
   OptionChangedFor,
   RowKey,
 } from '@ts/grids/grid_core/types';
+import { isVirtualPaging } from '@ts/grids/grid_core/utils';
 
-import type { GroupingDataSourceAdapter } from '../m_grouping';
 import type {
-  ChangeRowExpandArgs, GroupItem, ProcessGroupItemsOptions,
+  ChangeRowExpandArgs, GroupingDataSourceAdapter, GroupItem, ProcessGroupItemsOptions,
 } from '../types';
 import {
   getGroupColumnIndices, isGroupNode, isGroupRow, isSameContinuationState, isSameExpandedState,
@@ -69,10 +69,8 @@ export const groupingDataControllerExtender = (
   }
 
   private getDefaultProcessGroupItemsOptions(): ProcessGroupItemsOptions {
-    const scrollingMode = this.option('scrolling.mode');
-
     return {
-      collectContinuationItems: scrollingMode !== 'virtual' && scrollingMode !== 'infinite',
+      collectContinuationItems: !isVirtualPaging(this.option('scrolling')),
       resultItems: [],
       path: [],
       values: [],

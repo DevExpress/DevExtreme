@@ -66,6 +66,10 @@ export default errorUtils({
 
   E0123: 'Disallowed property name in expression: \'{0}\'',
 
+  E0124: 'Your 30-day trial has expired (v{0}). Use and Redistribution prohibited. '
+        + 'Please register a valid license (https://devexpress.com/DX1004) or purchase a new license (https://devexpress.com/BUY) '
+        + 'to continue use of the following DevExpress product libraries: {1} - Included in Subscriptions: {2}.{3}',
+
   W0000: '\'{0}\' is deprecated in {1}. {2}',
 
   W0001: '{0} - \'{1}\' option is deprecated in {2}. {3}',
@@ -126,4 +130,8 @@ export default errorUtils({
   W0023: 'DevExtreme: the following \'devextreme\' package version does not match versions of other DevExpress products used in this application:\n\n'
         + '{0}\n\n'
         + 'Interoperability between different versions of the products listed herein cannot be guaranteed.\n\n',
+
+  W0024: 'Invalid accent color: \'{0}\'. The previous accent color remains in effect.',
+
+  W0025: 'The \'{0}\' theme does not support custom accent colors. Apply a Fluent Next theme to use the \'customAccentColor\' method.',
 });

@@ -57,6 +57,21 @@ test together with its etalon. The two sets must never cover the same case at on
 left behind gets updated by whoever touches the component next and starts asserting a render
 nobody checks.
 
+### Etalons from CI
+
+Without a container, CI records the etalons. A test whose etalon does not exist fails, and
+Playwright writes what it rendered in the etalon's place; the workflow collects those files at
+their repository paths into the `playwright-etalons` artifact:
+
+```bash
+gh run download <run-id> -n playwright-etalons -D ci-etalons
+cp -R ci-etalons/. ../..                 # from e2e/playwright: the paths start at the repository root
+```
+
+Look through them before committing — a new etalon is only as right as the render it captured. On
+the host, run such tests with `--ignore-snapshots`: a host run writes missing etalons too, and a
+macOS or Windows render must not end up among them.
+
 ## Themes
 
 A test runs in the default theme unless it says otherwise. The jobs that run the whole suite in
@@ -68,6 +83,10 @@ test('PivotGrid renders its areas', { tag: ['@generic.light'] }, async ({ page }
 ```
 
 Tag a test when its result does not depend on the theme, or when it has an etalon for that theme.
+
+Every folder job also runs in `fluent-next.blue.light` (the `- fluent-next` jobs). These take the
+whole folder like the default jobs do, so a screenshot test needs a `(fluent-next.blue.light)` etalon
+next to its `(fluent.blue.light)` one.
 
 A tag opts a test into a themed job; it does not change the theme of a run. To pin the theme of one
 test or one file, set the fixture option — the same way the browser size is set:

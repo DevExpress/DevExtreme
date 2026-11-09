@@ -13,8 +13,9 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { isDefined, isEmptyObject } from '@js/core/utils/type';
 import type { ModuleType } from '@ts/grids/grid_core/types';
+import type { ViewDataChange } from '@ts/grids/grid_core/views/types';
 
-import type { KeyboardNavigationController } from './m_keyboard_navigation';
+import type { KeyboardNavigationController } from './keyboard_navigation';
 import type { KeyDownEvent } from './types';
 
 // eslint-disable-next-line @stylistic/max-len
@@ -46,30 +47,29 @@ export const keyboardNavigationScrollableA11yExtender = (Base: ModuleType<Keyboa
     const $firstCell: dxElementWrapper = this._rowsView.getCell({ rowIndex: 0, columnIndex: 0 });
     const firstCellHasTabIndex = !!$firstCell.attr('tabindex');
 
-    // @ts-expect-error dxElementWrapper doesn't have overload for 'is' method
     const notFixedCellIsTarget = $target.is(this._$firstNotFixedCell);
 
     if (firstCellHasTabIndex && notFixedCellIsTarget) {
       event.preventDefault();
 
-      this._focus($firstCell);
+      this.applyFocus($firstCell);
     }
   }
 
-  protected renderCompleted(e: any): void {
+  protected renderCompleted(e?: ViewDataChange): void {
     this._$firstNotFixedCell = this.getFirstNotFixedCell();
     this.makeScrollableFocusableIfNeed();
 
     super.renderCompleted(e);
   }
 
-  public _focus(
+  protected applyFocus(
     $cell: dxElementWrapper,
     disableFocus?: boolean,
     skipFocusEvent?: boolean,
     preventScroll?: boolean,
   ): void {
-    super._focus($cell, disableFocus, skipFocusEvent, preventScroll);
+    super.applyFocus($cell, disableFocus, skipFocusEvent, preventScroll);
 
     this.makeScrollableFocusableIfNeed();
   }
@@ -115,6 +115,6 @@ export const keyboardNavigationScrollableA11yExtender = (Base: ModuleType<Keyboa
       return;
     }
 
-    this._applyTabIndexToElement(this._$firstNotFixedCell);
+    this.applyTabIndexToElement(this._$firstNotFixedCell);
   }
 };

@@ -91,14 +91,14 @@ test('The updateDimensions method should render the grid if a container was hidd
       .ok();
 
     // act
-    await dataGrid.scrollTo(t, { y: 5000 });
+    await dataGrid.scrollTo(t, { top: 5000 });
 
     // assert
     await testScreenshot(t, takeScreenshot, `T1176160-master-detail-with-virtual-columns-and-useNative=${useNative}-1.png`, { element: dataGrid.element });
 
     // act
-    await dataGrid.scrollTo(t, { x: 1000 });
-    await dataGrid.scrollTo(t, { x: 2000 });
+    await dataGrid.scrollTo(t, { left: 1000 });
+    await dataGrid.scrollTo(t, { left: 2000 });
 
     // assert
     await testScreenshot(t, takeScreenshot, `T1176160-master-detail-with-virtual-columns-and-useNative=${useNative}-2.png`, { element: dataGrid.element });
@@ -148,9 +148,9 @@ test('The markup should be correct after horizontal scrolling and collapse of th
   await t.wait(100);
 
   // act
-  await dataGrid.scrollTo(t, { x: 2000 });
+  await dataGrid.scrollTo(t, { left: 2000 });
   await t.wait(300);
-  await dataGrid.scrollTo(t, { x: 4000 });
+  await dataGrid.scrollTo(t, { left: 4000 });
 
   // assert
   await testScreenshot(t, takeScreenshot, 'T1176161-master-detail-with-virtual-columns-1.png', { element: dataGrid.element });
@@ -204,7 +204,7 @@ test('Columns should be rendered correctly after reinit of columns controller', 
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  await dataGrid.scrollTo(t, { x: 1000 });
+  await dataGrid.scrollTo(t, { left: 1000 });
   await t.expect(dataGrid.getScrollLeft()).eql(1000);
 
   const columns = generateColumns(500);
@@ -234,7 +234,7 @@ test('Columns reordering should work with virtual columns', async (t) => {
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  await dataGrid.scrollTo(t, { x: 100000 });
+  await dataGrid.scrollTo(t, { left: 100000 });
 
   await t.drag(
     dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(499).element,
@@ -261,7 +261,7 @@ test('Grouping should work with virtual columns', async (t) => {
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  await dataGrid.scrollTo(t, { x: 100000 });
+  await dataGrid.scrollTo(t, { left: 100000 });
 
   await t.dragToElement(
     dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(499).element,
@@ -289,7 +289,7 @@ test('Column chooser should work with virtual columns', async (t) => {
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  await dataGrid.scrollTo(t, { x: 100000 });
+  await dataGrid.scrollTo(t, { left: 100000 });
 
   await t.click(dataGrid.getColumnChooserButton());
   await t.expect(
@@ -325,12 +325,12 @@ test('Group row should have right colspan with summary, virtual columns and fixe
 
   // NOTE: There is an issue with Scrollable
   // So, we should scroll two times to reach maximum right scroll position
-  await grid.scrollTo(t, { x: 10000 });
-  await grid.scrollTo(t, { x: 10000 });
+  await grid.scrollTo(t, { left: 10000 });
+  await grid.scrollTo(t, { left: 10000 });
 
   await testScreenshot(t, takeScreenshot, 'T1221369_fixed-summary-with-virtual-cols_1.png', { element: grid.element });
 
-  await grid.scrollTo(t, { x: 0 });
+  await grid.scrollTo(t, { left: 0 });
 
   await testScreenshot(t, takeScreenshot, 'T1221369_fixed-summary-with-virtual-cols_2.png', { element: grid.element });
 
@@ -386,7 +386,7 @@ test('Header, fixed columns and virtual scroll bar should have stable position d
 
   await t.expect(dataGrid.getDataRow(0).element.exists).ok(); // wait for initial render
   await ClientFunction(() => { (window as any).deferred = $.Deferred(); })();
-  await dataGrid.scrollTo(t, { x: 2000 });
+  await dataGrid.scrollTo(t, { left: 2000 });
   await testScreenshot(t, takeScreenshot, 'T1260472-async-render-during-horizontal-scrolling.png', { element: dataGrid.element });
   await ClientFunction(() => {
     (window as any).deferred.resolve();
@@ -476,7 +476,7 @@ test('Virtual columns should render correctly with repaintChangesOnly and groupi
     .eql('0');
 
   // act
-  await dataGrid.scrollTo(t, { x: 10000 });
+  await dataGrid.scrollTo(t, { left: 10000 });
 
   // assert
   await t

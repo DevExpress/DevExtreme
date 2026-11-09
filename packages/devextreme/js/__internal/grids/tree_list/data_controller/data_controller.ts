@@ -107,7 +107,7 @@ export class TreeListDataController extends DataController {
     return super.needUpdateDimensions(operationTypes) || Boolean(operationTypes?.nodeExpanding);
   }
 
-  private changeRowExpand(key: RowKey): DeferredObj<unknown> {
+  public changeRowExpand(key: RowKey): DeferredObj<unknown> {
     const dataSourceAdapter = this.dataSourceController.getAdapter();
 
     if (dataSourceAdapter) {
@@ -128,25 +128,25 @@ export class TreeListDataController extends DataController {
     return Deferred<unknown>().resolve();
   }
 
-  private isRowExpanded(key: RowKey, cache?: ExpandedKeysCache): boolean | undefined {
+  public isRowExpanded(key: RowKey, cache?: ExpandedKeysCache): boolean | undefined {
     return this.dataSourceController.getAdapter()?.isRowExpanded(key, cache);
   }
 
-  private expandRow(key: RowKey): DeferredObj<unknown> {
+  public expandRow(key: RowKey): DeferredObj<unknown> {
     if (!this.isRowExpanded(key)) {
       return this.changeRowExpand(key);
     }
     return Deferred<unknown>().resolve();
   }
 
-  private collapseRow(key: RowKey): DeferredObj<unknown> {
+  public collapseRow(key: RowKey): DeferredObj<unknown> {
     if (this.isRowExpanded(key)) {
       return this.changeRowExpand(key);
     }
     return Deferred<unknown>().resolve();
   }
 
-  private getRootNode(): TreeNode | undefined {
+  public getRootNode(): TreeNode | undefined {
     return this.dataSourceController.getAdapter()?.getRootNode();
   }
 
@@ -186,7 +186,7 @@ export class TreeListDataController extends DataController {
     }
   }
 
-  private getNodeByKey(key: RowKey): TreeNode | undefined {
+  public getNodeByKey(key: RowKey): TreeNode | undefined {
     return this.dataSourceController.getAdapter()?.getNodeByKey(key);
   }
 
@@ -194,7 +194,7 @@ export class TreeListDataController extends DataController {
     return this.dataSourceController.getAdapter()?.getChildNodeKeys(parentKey);
   }
 
-  private loadDescendants(
+  public loadDescendants(
     keys?: RowKey | RowKey[],
     childrenOnly?: boolean,
   ): DeferredObj<unknown> | undefined {

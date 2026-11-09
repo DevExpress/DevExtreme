@@ -26,7 +26,7 @@ const getFilePath = (text: string): string => `../../../../images/flags/3x2/${te
 </script>
 <style scoped>
 .template-text {
-  fill: #767676;
+  fill: var(--dxds-color-border-gray, #767676);
   font-family: "Segoe UI", "Helvetica Neue", "Trebuchet MS", Verdana, sans-serif;
   font-weight: 400;
   font-size: 13px;

@@ -130,7 +130,7 @@ export class ModuleItem {
     return this.component._setOptionWithoutOptionChange(name, value);
   }
 
-  protected localize(name: string): string {
+  public localize(name: string): string {
     const optionCache = this.component._optionCache;
 
     if (optionCache) {
@@ -338,7 +338,7 @@ export class View extends ModuleItem {
     return true;
   }
 
-  public getTemplate(name: template): FunctionTemplate {
+  public getTemplate(name: template | undefined): FunctionTemplate {
     return this.component._getTemplate(name);
   }
 

@@ -174,7 +174,7 @@ class HorizontalHeadersArea extends AreaItem {
   }
 
   _moveFakeTable(scrollPos) {
-    this._moveFakeTableHorizontally(scrollPos);
+    this._moveFakeTableHorizontally(scrollPos.left);
     super._moveFakeTable();
   }
 }
@@ -282,9 +282,8 @@ class VerticalHeadersArea extends HorizontalHeadersArea {
   }
 
   _moveFakeTable(scrollPos) {
-    this._moveFakeTableTop(scrollPos);
-    // @ts-expect-error
-    super._moveFakeTable();
+    this._moveFakeTableTop(scrollPos.top);
+    super._moveFakeTable(scrollPos);
   }
 
   _getRowClassNames(rowIndex, cell, rowClassNames) {

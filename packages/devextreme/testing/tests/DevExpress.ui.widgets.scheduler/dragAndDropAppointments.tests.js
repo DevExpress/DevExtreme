@@ -777,7 +777,7 @@ module('Common', commonModuleConfig, () => {
         });
 
         const scrollable = scheduler.workSpace.getScrollable();
-        scrollable.scrollTo({ y: 270 });
+        scrollable.scrollTo({ top: 270 });
 
         const $appointment = scheduler.appointments.find('Task 2').first();
         const positionBeforeDrag = getAbsolutePosition($appointment);
@@ -1204,8 +1204,8 @@ module('appointmentDragging customization', $.extend({}, {
                 };
 
                 const scrollPos = {
-                    x: 10000,
-                    y: 0
+                    left: 10000,
+                    top: 0
                 };
 
                 await testAppointmentDraggingFromSchedulerWithScroll(assert, this, dataSource, pointerMove, draggablePosition, schedulerPos, scrollPos);
@@ -1256,8 +1256,8 @@ module('appointmentDragging customization', $.extend({}, {
                 };
 
                 const scrollPos = {
-                    x: 0,
-                    y: 10000
+                    left: 0,
+                    top: 10000
                 };
 
                 await testAppointmentDraggingFromSchedulerWithScroll(assert, this, dataSource, pointerMove, draggablePosition, schedulerPos, scrollPos);

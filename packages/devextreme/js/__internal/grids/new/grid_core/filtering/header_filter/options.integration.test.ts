@@ -1,4 +1,4 @@
-/* eslint-disable spellcheck/spell-checker, no-spaced-func */
+/* eslint-disable spellcheck/spell-checker */
 import {
   afterEach, describe, expect, it,
 } from '@jest/globals';

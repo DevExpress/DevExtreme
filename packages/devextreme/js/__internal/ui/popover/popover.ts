@@ -2,7 +2,6 @@ import type { Position } from '@js/common';
 import type { AnimationConfig } from '@js/common/core/animation';
 import positionUtils from '@js/common/core/animation/position';
 import { move } from '@js/common/core/animation/translator';
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import { addNamespace, normalizeKeyName } from '@js/common/core/events/utils';
 import type { DeepPartial } from '@js/core';
 import registerComponent from '@js/core/component_registrator';
@@ -24,8 +23,10 @@ import type { DxEvent, PointerInteractionEvent } from '@js/events';
 import type { dxPopoverAnimation, Properties } from '@js/ui/popover';
 import { current, isMaterial, isMaterialBased } from '@js/ui/themes';
 import errors from '@js/ui/widget/ui.errors';
-import { addAriaDescriptionId, removeAriaDescriptionId } from '@ts/core/utils/m_dom';
+import type { PositionResult } from '@ts/common/core/animation/types';
+import { addAriaDescriptionId, removeAriaDescriptionId } from '@ts/core/utils/dom';
 import type { OptionChanged } from '@ts/core/widget/types';
+import eventsEngine from '@ts/events/core/events_engine';
 import type { InternalPositionConfig, OverlayInternalProperties } from '@ts/ui/overlay/overlay';
 import type {
   DisplaySide,
@@ -74,15 +75,6 @@ const ESC_KEY_NAME = 'escape';
 type PopoverTarget = string | dxElementWrapper | Element | undefined;
 type PopoverEventOption = 'showEvent' | 'hideEvent';
 
-interface PositionAxisResult {
-  flip: boolean;
-}
-
-interface PositionCalculationResult {
-  h: PositionAxisResult;
-  v: PositionAxisResult;
-}
-
 export interface PopoverProperties extends Omit<Properties,
 'onTitleRendered' | 'onHidden' | 'onHiding' | 'onShowing' | 'onShown'
 | 'onContentReady' | 'onDisposing' | 'onOptionChanged' | 'onInitialized'
@@ -126,7 +118,7 @@ class Popover<
 
   _$arrow!: dxElementWrapper;
 
-  _documentEscapeKeyHandler!: (e: KeyboardEvent) => void;
+  _documentEscapeKeyHandler!: (e: DxEvent<KeyboardEvent>) => void;
 
   _timeouts!: Record<string, ReturnType<typeof setTimeout>>;
 
@@ -312,7 +304,6 @@ class Popover<
     const targetElement = $targets.first().get(0);
 
     if (targetElement && domAdapter.getBody().contains(targetElement)) {
-      // @ts-expect-error trigger should be typed on type 'EventsEngineType'
       eventsEngine.trigger($targets.first(), 'focus');
     }
   }
@@ -490,7 +481,7 @@ class Popover<
     });
 
     eventsEngine.off($overlayContent, hoverOutEventName);
-    eventsEngine.on($overlayContent, hoverOutEventName, (e: PointerEvent | MouseEvent) => {
+    eventsEngine.on($overlayContent, hoverOutEventName, (e: DxEvent<PointerEvent | MouseEvent>) => {
       const { target } = this.option();
       const { relatedTarget } = e;
 
@@ -596,7 +587,6 @@ class Popover<
     const isSelector = isString(target);
 
     if (isSelector) {
-      // @ts-expect-error eventsEngine typing
       eventsEngine.off(domAdapter.getDocument(), eventName, target, this[EVENT_HANDLER_NAME]);
     } else {
       eventsEngine.off(getPublicElement($(target)), eventName, this[EVENT_HANDLER_NAME]);
@@ -688,6 +678,10 @@ class Popover<
     const contentPosition = this._getContainerPosition();
     const resultLocation = positionUtils.setup(this.$overlayContent(), contentPosition);
 
+    if (!resultLocation) {
+      return;
+    }
+
     const positionSide = this._getSideByLocation(resultLocation);
 
     this._togglePositionClass(`dx-position-${positionSide}`);
@@ -726,14 +720,15 @@ class Popover<
       && this._isHorizontalSide()
       && !containerLocation.h.fit
     ) {
-      const newContainerWidth = getWidth(this.$overlayContent()) - containerLocation.h.oversize;
+      const newContainerWidth = getWidth(this.$overlayContent().get(0))
+        - containerLocation.h.oversize;
 
       setWidth(this.$overlayContent(), newContainerWidth);
     }
 
     if ((containerLocation.v.oversize > 0) && this._isVerticalSide() && !containerLocation.v.fit) {
-      const overlayContentHeight = getHeight(this.$overlayContent());
-      const contentHeight = getHeight(this.$content());
+      const overlayContentHeight = getHeight(this.$overlayContent().get(0));
+      const contentHeight = Number(getHeight(this.$content()));
 
       const newOverlayContentHeight = overlayContentHeight - containerLocation.v.oversize;
       const newPopupContentHeight = contentHeight - containerLocation.v.oversize;
@@ -752,7 +747,7 @@ class Popover<
     return $(this._positionController._position?.of || super._getHideOnParentScrollTarget());
   }
 
-  _getSideByLocation(location: PositionCalculationResult): DisplaySide | undefined {
+  _getSideByLocation(location: PositionResult): DisplaySide | undefined {
     const isFlippedByVertical = location.v.flip;
     const isFlippedByHorizontal = location.h.flip;
 
@@ -802,7 +797,7 @@ class Popover<
     const contentOffset = positionUtils.offset(this.$overlayContent());
 
     const arrowSize = arrowRect[sizeProperty];
-    const contentLocation = contentOffset?.[axis];
+    const contentLocation = contentOffset?.[axis] ?? NaN;
     const contentSize = getBoundingRect(this.$overlayContent().get(0))[sizeProperty];
     const targetLocation = targetOffset[axis];
     const targetElement = $target.get(0);

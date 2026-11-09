@@ -5,13 +5,13 @@ import { extend } from '@js/core/utils/extend';
 import type { ClickEvent } from '@js/ui/button';
 import type { EditorEnterKeyEvent, Item, SimpleItem } from '@js/ui/form';
 import Form from '@js/ui/form';
-import type { InitializedEvent, Properties as PopupProperties } from '@js/ui/popup';
 import type Popup from '@js/ui/popup';
+import type { InitializedEvent, Properties as PopupProperties } from '@js/ui/popup';
 import { current, isFluent, isMaterialBased } from '@js/ui/themes';
 import type { FormProperties } from '@ts/ui/form/form';
 import type { DialogPromise } from '@ts/ui/html_editor/types';
 
-import BaseDialog from './m_baseDialog';
+import BaseDialog from './baseDialog';
 
 interface ButtonConfig {
   stylingMode?: string;
@@ -96,7 +96,7 @@ export default class FormDialog extends BaseDialog<unknown, Event | undefined> {
             onInitialized: this._addEscapeHandler.bind(this),
             text: localizationMessage.format('Cancel'),
             onClick: (): void => {
-              // eslint-disable-next-line @typescript-eslint/no-floating-promises
+              // eslint-disable-next-line @typescript-eslint/no-floating-promises -- result not used
               this._popup.hide();
             },
             ...getCancelButtonConfig(),
@@ -112,7 +112,7 @@ export default class FormDialog extends BaseDialog<unknown, Event | undefined> {
 
     this._renderForm($formContainer, {
       onEditorEnterKey: (e: EditorEnterKeyEvent): void => {
-        // @ts-expect-error 'event' does not exist in EditorEnterKeyEvent
+        // @ts-expect-error EditorEnterKeyEvent does not declare the event Form forwards
         this.callAddButtonAction(e.event);
       },
       customizeItem: (item: Item) => {
@@ -194,7 +194,7 @@ export default class FormDialog extends BaseDialog<unknown, Event | undefined> {
   }
 
   public formOption(...args: unknown[]): unknown {
-    // @ts-expect-error args
+    // @ts-expect-error option() is overloaded; apply() cannot pick one for unknown[]
     // eslint-disable-next-line prefer-spread
     return this._form.option.apply(this._form, args);
   }

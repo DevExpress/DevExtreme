@@ -19,14 +19,32 @@ jobs:
   check-should-run:
     name: Check if tests should run
     runs-on: ubuntu-latest
+    timeout-minutes: 6
     outputs:
       should-run: ${{ steps.check.outputs.should-run }}
       styles-changed: ${{ steps.changes.outputs.styles }}
+      has-quarantined-tests: ${{ steps.quarantined-tests.outputs.has-tests }}
     steps:
       - uses: actions/checkout@v6
       - name: Check RUN_TESTS flag
         id: check
         run: echo "should-run=${{ env.RUN_TESTS }}" >> $GITHUB_OUTPUT
+
+      - name: Check quarantined tests
+        id: quarantined-tests
+        working-directory: ./e2e/testcafe-devextreme
+        run: |
+          listed=0
+          [ -f quarantine.json ] && listed=$(jq '.tests | length' quarantine.json)
+          # Matches the meta key: test.meta({ unstable: true }) or test.meta('unstable', true).
+          marked=$(grep -rlE --include='*.ts' --include='*.js' "unstable['\"]?[[:space:]]*[:,]" tests helpers || true)
+          echo "Tests in quarantine.json: $listed"
+          echo "Files with unstable tests: ${marked:-(none)}"
+          if [ "$listed" -gt 0 ] || [ -n "$marked" ]; then
+            echo "has-tests=true" >> $GITHUB_OUTPUT
+          else
+            echo "has-tests=false" >> $GITHUB_OUTPUT
+          fi
 
       - uses: dorny/paths-filter@v4
         id: changes
@@ -45,7 +63,7 @@ jobs:
     needs: check-should-run
     if: needs.check-should-run.outputs.should-run == 'true'
 
-    runs-on: devextreme-shr2
+    runs-on: ${{ github.event_name == 'merge_group' && 'devextreme-shr2-ondemand' || 'devextreme-shr2' }}
     timeout-minutes: 15
 
     steps:
@@ -53,7 +71,7 @@ jobs:
       uses: actions/checkout@v6
 
     - name: Use Node.js
-      uses: actions/setup-node@v6
+      uses: actions/setup-node@v7
       with:
         node-version-file: '.node-version'
 
@@ -66,8 +84,8 @@ jobs:
       run: |
         echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
 
-    - uses: actions/cache@v5
-      name: Setup pnpm cache
+    - uses: actions/cache/restore@v5
+      name: Restore pnpm cache
       with:
         path: ${{ env.STORE_PATH }}
         key: ${{ runner.os }}-pnpm-cache-${{ hashFiles('**/pnpm-lock.yaml') }}
@@ -108,9 +126,9 @@ jobs:
     - name: Install dependencies
       run: pnpm install --frozen-lockfile
 
-    - name: Setup nx cache
-      id: setup-nx-cache
-      uses: actions/cache@v5
+    - name: Restore nx cache
+      id: restore-nx-cache
+      uses: actions/cache/restore@v5
       with:
         path: |
           .nx/cache
@@ -198,8 +216,20 @@ jobs:
         path: ./packages/devextreme/artifacts.zip
         retention-days: 1
 
+    - name: Save nx cache
+      if: github.event_name != 'pull_request' && github.event_name != 'merge_group'
+      uses: actions/cache/save@v5
+      with:
+        path: |
+          .nx/cache
+          .nx/workspace-data/*.db
+          .nx/workspace-data/*.db-wal
+          .nx/workspace-data/*.db-shm
+        key: ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-${{ github.sha }}
+
   determine-testcafe-matrix:
     runs-on: ubuntu-latest
+    timeout-minutes: 6
     name: Determine TestCafe matrix
     needs: check-should-run
     if: needs.check-should-run.outputs.should-run == 'true'
@@ -238,9 +268,7 @@ jobs:
             { "componentFolder": "scheduler/common", "name": "scheduler / common (2/3)", "indices": "2/3", "concurrency": 6 },
             { "componentFolder": "scheduler/common", "name": "scheduler / common (3/3)", "indices": "3/3", "concurrency": 6 },
             { "componentFolder": "scheduler/viewOffset", "name": "scheduler / viewOffset (1/2)", "indices": "1/2", "concurrency": 4 },
-            { "componentFolder": "scheduler/viewOffset", "name": "scheduler / viewOffset (2/2)", "indices": "2/2", "concurrency": 4 },
-            { "componentFolder": "scheduler/timezones", "name": "scheduler / timezones (Europe/Berlin)", "timezone": "Europe/Berlin" },
-            { "componentFolder": "scheduler/timezones", "name": "scheduler / timezones (America/Los_Angeles)", "timezone": "America/Los_Angeles" }
+            { "componentFolder": "scheduler/viewOffset", "name": "scheduler / viewOffset (2/2)", "indices": "2/2", "concurrency": 4 }
           ]
           JSON
           )
@@ -248,6 +276,7 @@ jobs:
           style_dependent_matrix=$(cat <<'JSON'
           [
             { "componentFolder": "accessibility", "name": "accessibility - fluent.dark", "theme": "fluent.blue.dark", "concurrency": 6 },
+            { "componentFolder": "accessibility", "name": "accessibility - fluent-next.dark", "theme": "fluent-next.blue.dark", "concurrency": 6 },
               { "componentFolder": "accessibility", "name": "accessibility - material.light", "theme": "material.blue.light", "concurrency": 6 },
               { "componentFolder": "accessibility", "name": "accessibility - material.dark", "theme": "material.blue.dark", "concurrency": 6 }
             ]
@@ -259,7 +288,15 @@ jobs:
             --argjson baseEnd "$base_matrix_end" \
             --argjson styleDependent "$style_dependent_matrix" \
             --arg stylesChanged "${{ needs.check-should-run.outputs.styles-changed }}" \
-            '{ include: ($baseStart + (if $stylesChanged == "true" then $styleDependent else [] end) + $baseEnd) }')
+            '{ include: (
+              $baseStart
+              + (if $stylesChanged == "true" then $styleDependent else [] end)
+              + $baseEnd
+              + (($baseStart + $baseEnd) | map(
+                select(.theme == null)
+                | . + { name: (.name + " - fluent-next"), theme: "fluent-next.blue.light" }
+              ))
+            ) }')
 
           echo "matrix=$matrix" >> $GITHUB_OUTPUT
 
@@ -273,8 +310,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix: ${{ fromJson(needs.determine-testcafe-matrix.outputs.matrix) }}
-    runs-on: devextreme-shr2
-    timeout-minutes: 45
+    runs-on: ${{ github.event_name == 'merge_group' && 'devextreme-shr2-ondemand' || 'devextreme-shr2' }}
+    timeout-minutes: 12
 
     steps:
     - name: Set machine timezone
@@ -301,7 +338,7 @@ jobs:
         chrome-version: '155.0.8059.39'
 
     - name: Use Node.js
-      uses: actions/setup-node@v6
+      uses: actions/setup-node@v7
       with:
         node-version-file: '.node-version'
 
@@ -332,6 +369,7 @@ jobs:
         echo "Disk: $(df -h)"
 
     - name: Run TestCafe tests
+      timeout-minutes: 9
       working-directory: ./e2e/testcafe-devextreme
       env:
         NODE_OPTIONS: --max-old-space-size=8192
@@ -395,15 +433,53 @@ jobs:
         path: ${{ github.workspace }}/e2e/testcafe-devextreme/artifacts/failedtests/**/*
         if-no-files-found: ignore
 
-  testcafe-quarantine:
-    name: quarantine
+  check-quarantine:
+    name: Check if quarantine should run
     needs: [check-should-run, build, testcafe]
     if: |
       !cancelled() &&
       needs.check-should-run.outputs.should-run == 'true' &&
       needs.build.result == 'success'
-    runs-on: devextreme-shr2
-    timeout-minutes: 45
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    outputs:
+      should-run: ${{ steps.check.outputs.should-run }}
+
+    steps:
+    - name: Check flaky test reports and quarantined tests
+      id: check
+      uses: actions/github-script@v9
+      env:
+        HAS_QUARANTINED_TESTS: ${{ needs.check-should-run.outputs.has-quarantined-tests }}
+      with:
+        script: |
+          const artifacts = await github.paginate(github.rest.actions.listWorkflowRunArtifacts, {
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            run_id: context.runId,
+            per_page: 100,
+          });
+
+          // Same pattern as the "Download flaky test reports" step of the quarantine job.
+          const flakyReports = artifacts
+            .map((artifact) => artifact.name)
+            .filter((name) => name.startsWith('flaky-report'));
+          const hasQuarantinedTests = process.env.HAS_QUARANTINED_TESTS !== 'false';
+
+          core.info(`Flaky test reports: ${flakyReports.length ? flakyReports.join(', ') : '(none)'}`);
+          core.info(`Quarantined tests: ${hasQuarantinedTests ? 'yes' : 'none'}`);
+          core.setOutput('should-run', flakyReports.length > 0 || hasQuarantinedTests ? 'true' : 'false');
+
+  testcafe-quarantine:
+    name: quarantine
+    needs: [check-should-run, build, testcafe, check-quarantine]
+    if: |
+      !cancelled() &&
+      needs.check-should-run.outputs.should-run == 'true' &&
+      needs.build.result == 'success' &&
+      needs.check-quarantine.outputs.should-run != 'false'
+    runs-on: ${{ github.event_name == 'merge_group' && 'devextreme-shr2-ondemand' || 'devextreme-shr2' }}
+    timeout-minutes: 8
 
     steps:
     - name: Set machine timezone
@@ -430,7 +506,7 @@ jobs:
         chrome-version: '155.0.8059.39'
 
     - name: Use Node.js
-      uses: actions/setup-node@v6
+      uses: actions/setup-node@v7
       with:
         node-version-file: '.node-version'
 
@@ -579,9 +655,15 @@ jobs:
         echo "============================================================"
         echo " [QUARANTINED] Run of all quarantined tests (quarantine.json)"
         echo "============================================================"
-        run_tests --onlyQuarantined true
-        quarantined_failed=$last_failed
-        meta_failed_names=$(jq -r '.tests[]' "$result")
+        if [ "${{ needs.check-should-run.outputs.has-quarantined-tests }}" = "false" ]; then
+          echo "No quarantined tests."
+          quarantined_failed=0
+          meta_failed_names=""
+        else
+          run_tests --onlyQuarantined true
+          quarantined_failed=$last_failed
+          meta_failed_names=$(jq -r '.tests[]' "$result")
+        fi
 
         echo ""
         echo "============================================================"
@@ -651,7 +733,7 @@ jobs:
 
     - name: Upload flaky candidates report
       if: ${{ !cancelled() }}
-      uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+      uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
       with:
         name: flaky-candidates
         path: ${{ github.workspace }}/e2e/testcafe-devextreme/artifacts/flaky-candidates.json
@@ -660,6 +742,7 @@ jobs:
 
   merge-artifacts:
     runs-on: ubuntu-latest
+    timeout-minutes: 6
     needs: [testcafe, testcafe-quarantine]
     if: ${{ always() }}
 

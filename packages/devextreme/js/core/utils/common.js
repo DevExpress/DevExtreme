@@ -18,4 +18,4 @@ export {
     asyncNoop,
     grep,
     equalByValue
-} from '../../__internal/core/utils/m_common';
+} from '../../__internal/core/utils/common';

@@ -1,5 +1,5 @@
 import DataGrid from 'ui/data_grid';
-import gridCoreUtils from '__internal/grids/grid_core/m_utils';
+import gridCoreUtils from '__internal/grids/grid_core/utils';
 
 import $ from 'jquery';
 

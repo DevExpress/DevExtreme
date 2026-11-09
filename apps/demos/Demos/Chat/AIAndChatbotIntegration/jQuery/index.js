@@ -52,6 +52,7 @@ $(() => {
 
   function toggleDisabledState(disabled, event) {
     instance.element().toggleClass(CHAT_DISABLED_CLASS, disabled);
+    toolbar.option('items[1].options.disabled', disabled);
 
     if (disabled) {
       event?.target.blur();
@@ -69,13 +70,15 @@ $(() => {
     try {
       const aiResponse = await getAIResponse(messages);
 
-      setTimeout(() => {
-        instance.option({ typingUsers: [] });
+      await new Promise((resolve) => {
+        setTimeout(resolve, 200);
+      });
 
-        messages.push({ role: 'assistant', content: aiResponse });
+      instance.option({ typingUsers: [] });
 
-        renderAssistantMessage(aiResponse);
-      }, 200);
+      messages.push({ role: 'assistant', content: aiResponse });
+
+      renderAssistantMessage(aiResponse);
     } catch (err) {
       instance.option({ typingUsers: [] });
       messages.pop();
@@ -154,6 +157,13 @@ $(() => {
     regenerate();
   }
 
+  function onClearButtonClick() {
+    store.length = 0;
+    messages.length = 0;
+    instance.option({ alerts: [], typingUsers: [] });
+    dataSource.reload();
+  }
+
   function renderMessageContent(message, element) {
     $('<div>')
       .addClass('chat-messagebubble-text')
@@ -213,6 +223,23 @@ $(() => {
     store: customStore,
     paginate: false,
   });
+
+  const toolbar = $('#dx-ai-chat-toolbar').dxToolbar({
+    items: [{
+      location: 'before',
+      text: 'AI Assistant',
+      cssClass: 'ai-chat-title',
+    }, {
+      location: 'after',
+      widget: 'dxButton',
+      options: {
+        icon: 'clearhistory',
+        stylingMode: 'text',
+        hint: 'Clear chat',
+        onClick: onClearButtonClick,
+      },
+    }],
+  }).dxToolbar('instance');
 
   const instance = $('#dx-ai-chat').dxChat({
     user,

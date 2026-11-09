@@ -7,6 +7,7 @@ import parseArgs from 'minimist';
 import { DEFAULT_BROWSER_SIZE } from './helpers/const';
 import {
   addShadowRootTree,
+  applyViewportEnvironment,
   clearTestPage,
   loadAxeCore,
   loadShadowDomExtension,
@@ -17,17 +18,22 @@ const LAUNCH_RETRY_ATTEMPTS = 3;
 const LAUNCH_RETRY_TIMEOUT = 10000;
 const FAILED_TESTS_RETRY_ATTEMPTS = 0;
 const TEST_EXECUTION_TIMEOUT = 3 * 60 * 1000;
+const NO_TESTS_MATCH_FILTER_ERROR_CODE = 'E1030';
 
 const wait = async (
   timeout: number,
 // eslint-disable-next-line no-promise-executor-return
 ): Promise<void> => new Promise((resolve) => setTimeout(resolve, timeout));
 
+const isNoTestsMatchFilterError = (error: unknown): boolean => (
+  (error as { code?: string } | undefined)?.code === NO_TESTS_MATCH_FILTER_ERROR_CODE
+);
+
 const retry = async <T>(action: () => Promise<T>, attempt: number): Promise<T> => {
   try {
     return await action();
   } catch (error) {
-    if (attempt <= 1) {
+    if (attempt <= 1 || isNoTestsMatchFilterError(error)) {
       throw error;
     }
 
@@ -100,8 +106,15 @@ const getTestCafeConfig = (cache: boolean): Partial<TestCafeConfigurationOptions
 
 const changeTheme = async (t: TestController, themeName: string): Promise<void> => {
   const changeThemeClientFn = ClientFunction(() => new Promise<void>((resolve) => {
-    (window as any).DevExpress.ui.themes.ready(resolve);
-    (window as any).DevExpress.ui.themes.current(themeName);
+    const dxUi = (window as any).DevExpress?.ui;
+
+    if (!dxUi) {
+      resolve();
+      return;
+    }
+
+    dxUi.themes.ready(resolve);
+    dxUi.themes.current(themeName);
   }), { dependencies: { themeName } });
 
   return changeThemeClientFn.with({ boundTestRun: t })();
@@ -114,6 +127,15 @@ function setTestingPlatform(args: ParsedArgs): void {
 function setTestingTheme(args: ParsedArgs): void {
   process.env.theme = args.theme || 'fluent.blue.light';
 }
+
+const normalizeThemeForMatching = (themeName?: string): string | undefined => themeName?.replace(/^fluent-next/, 'fluent');
+
+const matchTheme = (
+  actualTheme: string | undefined,
+  expectedTheme: string | undefined,
+): boolean => (
+  normalizeThemeForMatching(actualTheme) === normalizeThemeForMatching(expectedTheme)
+);
 
 function setShadowDom(args: ParsedArgs): void {
   process.env.shadowDom = args.shadowDom.toString();
@@ -288,7 +310,7 @@ async function main() {
         testMeta?: any,
       ) => {
         if (testMeta?.runInTheme) {
-          return testMeta.runInTheme === process.env.theme;
+          return matchTheme(testMeta.runInTheme, process.env.theme);
         }
         return true;
       });
@@ -300,7 +322,7 @@ async function main() {
           _fixturePath: string,
           testMeta?: any,
         ) => {
-          if (testMeta?.runInTheme === process.env.theme) {
+          if (matchTheme(testMeta?.runInTheme, process.env.theme)) {
             return true;
           }
 
@@ -308,7 +330,7 @@ async function main() {
             return false;
           }
 
-          return testMeta.themes.includes(args.theme);
+          return testMeta.themes.some((themeName: string) => matchTheme(themeName, args.theme));
         });
       }
 
@@ -365,6 +387,7 @@ async function main() {
               await t.resizeWindow(width, height);
             } else {
               await loadAxeCore(t);
+              await applyViewportEnvironment(t);
             }
 
             const currentTheme = await getCurrentTheme(t) || 'fluent.blue.light';
@@ -392,7 +415,16 @@ async function main() {
     }
 
     const runner = createRunner(false);
-    let failedCount = await retry(() => runner.run(runOptions), LAUNCH_RETRY_ATTEMPTS);
+    let failedCount = await retry(() => runner.run(runOptions), LAUNCH_RETRY_ATTEMPTS)
+      .catch((error: unknown) => {
+        if (!onlyQuarantined || !isNoTestsMatchFilterError(error)) {
+          throw error;
+        }
+
+        // eslint-disable-next-line no-console
+        console.info('No quarantined tests to run.');
+        return 0;
+      });
 
     if (args.retryFailed && failedTests.size > 0 && failedCount > 0) {
       const initialFailedCount = failedTests.size;

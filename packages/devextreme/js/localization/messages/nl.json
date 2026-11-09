@@ -124,6 +124,7 @@
         "dxDataGrid-aiAssistantAbortConfirmText": "Door de AI-assistent-chat te sluiten worden actieve verzoeken afgebroken. Wilt u de chat sluiten?",
         "dxDataGrid-aiAChatEmptyViewMessage": "Chat is leeg",
         "dxDataGrid-aiChatEmptyViewPrompt": "De AI-assistent staat klaar om uw vragen te beantwoorden.",
+        "dxDataGrid-aiChatTextareaPlaceholder": "Ask AI Assistant...",
         "dxDataGrid-aiPromptEditorTitle": "AI-prompteditor",
         "dxDataGrid-aiPromptEditorPlaceholder": "Verzoek AI om kolomwaarden te genereren...",
         "dxDataGrid-aiPromptEditorApplyButton": "Toepassen",
@@ -919,6 +920,8 @@
         "dxGantt-showDependencies": "Afhankelijkheden tonen",
         "dxGantt-dialogStartDateValidation": "Startdatum moet na {0} vallen",
         "dxGantt-dialogEndDateValidation": "Einddatum moet na {0} vallen",
+
+        "dxMap-markerAriaLabel": "Map marker",
 
         "dxGallery-itemName": "Galerij-item",
 

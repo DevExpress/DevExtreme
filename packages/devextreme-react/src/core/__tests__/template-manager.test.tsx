@@ -601,4 +601,72 @@ describe('Template Manager', () => {
     expect(document.querySelector('.render-template-container')?.innerHTML)
       .toBe('<div class="render-template">Render template text-1</div><div style="display: none;" class="__dx_react_guard_node__"></div>');
   });
+
+  it('template is not rendered if the container was removed before the template manager re-rendered (T1336765)', () => {
+    let createDXTemplates;
+
+    const init = ({ createDXTemplates: createDXTemplatesFn }: InitArgument) => {
+      createDXTemplates = createDXTemplatesFn;
+    };
+
+    const templateOptions = getTemplateOptions([{ type: 'render' }]);
+
+    render(
+      <React.Fragment>
+        <div className='render-template-container'></div>
+        <TemplateManager init={init} onTemplatesRendered={() => undefined} />
+      </React.Fragment>
+    );
+
+    let dxTemplates;
+
+    act(() => { dxTemplates = createDXTemplates(templateOptions); });
+
+    const container = document.querySelector('.render-template-container')!;
+
+    act(() => {
+      dxTemplates.renderKey.render({
+        model: { text: 'Render template text' },
+        index: 1,
+        container,
+      });
+      events.triggerHandler(container, 'dxremove');
+    });
+
+    expect(container.innerHTML).toBe('');
+  });
+
+  it('does not keep a container removal handler of a replaced template registration (T1336765)', () => {
+    let createDXTemplates;
+
+    const init = ({ createDXTemplates: createDXTemplatesFn }: InitArgument) => {
+      createDXTemplates = createDXTemplatesFn;
+    };
+
+    const templateOptions = getTemplateOptions([{ type: 'render' }]);
+
+    render(
+      <React.Fragment>
+        <div className='render-template-container'></div>
+        <TemplateManager init={init} onTemplatesRendered={() => undefined} />
+      </React.Fragment>
+    );
+
+    let dxTemplates;
+
+    act(() => { dxTemplates = createDXTemplates(templateOptions); });
+
+    const container = document.querySelector('.render-template-container')!;
+    const model = { text: 'Render template text' };
+
+    act(() => {
+      dxTemplates.renderKey.render({ model, index: 1, container });
+      dxTemplates.renderKey.render({ model, index: 1, container });
+    });
+
+    act(() => { events.triggerHandler(container, 'dxremove'); });
+
+    expect(container.innerHTML)
+      .toBe('<div class="render-template">Render template text-1</div><div style="display: none;" class="__dx_react_guard_node__"></div>');
+  });
 });

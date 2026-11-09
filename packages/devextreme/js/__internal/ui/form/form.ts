@@ -8,7 +8,6 @@ import type {
   SmartPasteCommandResult,
   SmartPasteResultFieldType,
 } from '@js/common/ai-integration';
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import { triggerResizeEvent, triggerShownEvent } from '@js/common/core/events/visibility_change';
 import messageLocalization from '@js/common/core/localization/message';
 import registerComponent from '@js/core/component_registrator';
@@ -46,10 +45,11 @@ import type { ValidationResult } from '@js/ui/validation_group';
 import errors from '@js/ui/widget/ui.errors';
 import type { IntegrationOptions } from '@ts/core/template_manager';
 import { invokeConditionally } from '@ts/core/utils/conditional_invoke';
-import { logger } from '@ts/core/utils/m_console';
+import { logger } from '@ts/core/utils/console';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { SupportedKeyHandler } from '@ts/core/widget/widget';
 import Widget, { FOCUSED_STATE_CLASS } from '@ts/core/widget/widget';
+import eventsEngine from '@ts/events/core/events_engine';
 import { DROP_DOWN_EDITOR_CLASS } from '@ts/ui/drop_down_editor/drop_down_editor';
 import Editor from '@ts/ui/editor/editor';
 import { setLabelWidthByMaxLabelWidth } from '@ts/ui/form/components/label';
@@ -1614,7 +1614,6 @@ class Form extends Widget<FormProperties> {
 
   _refresh(): void {
     const editorSelector = `.${TEXTEDITOR_CLASS}.${FOCUSED_STATE_CLASS}:not(.${DROP_DOWN_EDITOR_CLASS}) .${TEXTEDITOR_INPUT_CLASS}`;
-    // @ts-expect-error ts-error
     eventsEngine.trigger(this.$element().find(editorSelector), 'change');
 
     if (this._isDimensionChangeRefresh) {

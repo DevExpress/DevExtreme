@@ -2,13 +2,14 @@ import type { ExecuteGridAssistantAction } from '@js/common/ai-integration';
 import messageLocalization from '@js/common/core/localization/message';
 import type { CommandInfo } from '@js/common/grids';
 import { isDefined, isObject } from '@js/core/utils/type';
-import { logger } from '@ts/core/utils/m_console';
+import { logger } from '@ts/core/utils/console';
 import {
   DEFAULT_FAILURE_MESSAGE,
   DEFAULT_SUCCESS_MESSAGE,
   EXECUTION_ABORT_MESSAGE,
+  MAX_COMMAND_ARGS_LENGTH,
 } from '@ts/grids/grid_core/ai_assistant/const';
-import { z } from '@ts/grids/grid_core/ai_assistant/zod';
+import * as z from '@ts/grids/grid_core/ai_assistant/zod';
 
 import type { InternalGrid } from '../types';
 import type {
@@ -54,6 +55,14 @@ export class GridCommands {
       status: 'failure',
       message: message ?? messageLocalization.format(DEFAULT_FAILURE_MESSAGE),
     };
+  }
+
+  private static getArgsJsonLength(args: unknown): number | undefined {
+    try {
+      return JSON.stringify(args).length;
+    } catch {
+      return undefined;
+    }
   }
 
   private static applyCustomizedResponseText(
@@ -165,6 +174,17 @@ export class GridCommands {
       const command = this.commands.get(action.name);
 
       if (!command || !isDefined(action.args) || !isObject(action.args)) {
+        return null;
+      }
+
+      const argsLength = GridCommands.getArgsJsonLength(action.args);
+
+      if (!isDefined(argsLength)) {
+        return null;
+      }
+
+      if (argsLength > MAX_COMMAND_ARGS_LENGTH) {
+        logger.warn(`Arguments of the "${action.name}" command are ${argsLength} characters long as JSON and exceed the ${MAX_COMMAND_ARGS_LENGTH}-character limit`);
         return null;
       }
 

@@ -3,12 +3,12 @@ import $ from '@js/core/renderer';
 import { isDefined } from '@js/core/utils/type';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import { KEY_CODES } from '@ts/grids/grid_core/keyboard_navigation/const';
-import type { HeadersKeyboardNavigationController } from '@ts/grids/grid_core/keyboard_navigation/m_headers_keyboard_navigation';
-import { headersKeyboardNavigationModule } from '@ts/grids/grid_core/keyboard_navigation/m_headers_keyboard_navigation';
+import type { HeadersKeyboardNavigationController } from '@ts/grids/grid_core/keyboard_navigation/headers_keyboard_navigation';
+import { headersKeyboardNavigationModule } from '@ts/grids/grid_core/keyboard_navigation/headers_keyboard_navigation';
 import type { ModuleType } from '@ts/grids/grid_core/types';
 
 import gridCore from '../core';
-import { ColumnKeyboardNavigationMixin } from './m_column_keyboard_navigation_mixin';
+import { ColumnKeyboardNavigationMixin } from './column_keyboard_navigation_mixin';
 
 const headersKeyboardNavigation: (
   Base: ModuleType<HeadersKeyboardNavigationController>,
@@ -81,8 +81,8 @@ const headersKeyboardNavigation: (
     return isHandled;
   }
 
-  public groupColumn(column, rowIndex = 0): void {
-    if (!isDefined(column.groupIndex) && column?.allowGrouping) {
+  public groupColumn(column: Column | undefined, rowIndex = 0): void {
+    if (column && !isDefined(column.groupIndex) && column.allowGrouping) {
       const newGroupIndex = this._columnsController.getGroupColumns()?.length ?? 0;
       const newFocusedColumn = this.getNewFocusedColumnBeforeGrouping(
         column,
@@ -100,13 +100,17 @@ const headersKeyboardNavigation: (
     this._columnsController.beginUpdate();
     super.ungroupAllColumns();
 
-    const rowIndex = this._columnsController.getRowIndex(focusedColumn.index ?? -1, true);
-    const newVisibleIndex = this.getVisibleIndex(focusedColumn);
+    if (focusedColumn) {
+      const rowIndex = this._columnsController.getRowIndex(focusedColumn.index ?? -1, true);
+      const newVisibleIndex = this.getVisibleIndex(focusedColumn);
 
-    this.updateFocusPosition({
-      rowIndex,
-      columnIndex: newVisibleIndex,
-    });
+      this.updateFocusPosition({
+        rowIndex,
+        columnIndex: newVisibleIndex,
+      });
+    } else {
+      this.updateFocusPosition();
+    }
     this._columnsController.endUpdate();
   }
 };

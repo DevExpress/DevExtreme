@@ -2,14 +2,24 @@ import '@ts/core/localization/globalize/core';
 import 'globalize/number';
 
 import errors from '@js/core/errors';
-import type {
-  FormatConfig, LocalizationFormat, NormalizedConfig, NumberFormatter,
+import {
+  getFormatterOptions,
+  getGlobalFormatByDataType,
+  getNumberFormatLocale,
+  isLocaleOnlyFormat,
+} from '@ts/core/global_format_config';
+import numberLocalization, {
+  type FormatConfig,
+  isLdmlPatternFormat,
+  type LocalizationFormat,
+  type NormalizedConfig,
+  type NumberFormatter,
 } from '@ts/core/localization/number';
-import numberLocalization from '@ts/core/localization/number';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import Globalize from 'globalize';
 
 const MAX_FRACTION_DIGITS = 20;
+const NUMBER_DATA_TYPE = 'number';
 
 if (Globalize?.formatNumber) {
   if (Globalize.locale().locale === 'en') {
@@ -18,20 +28,23 @@ if (Globalize?.formatNumber) {
 
   const formattersCache: Record<string, NumberFormatter> = {};
 
-  const getFormatter = (format: string | NormalizedConfig | undefined): NumberFormatter => {
+  const getFormatter = (
+    formatLocale: string,
+    format: string | NormalizedConfig | undefined,
+  ): NumberFormatter => {
     // eslint-disable-next-line @typescript-eslint/init-declarations
     let formatter: NumberFormatter;
     // eslint-disable-next-line @typescript-eslint/init-declarations
     let formatCacheKey: string;
 
     if (typeof format === 'object') {
-      formatCacheKey = `${Globalize.locale().locale}:${JSON.stringify(format)}`;
+      formatCacheKey = `${formatLocale}:${JSON.stringify(format)}`;
     } else {
-      formatCacheKey = `${Globalize.locale().locale}:${format}`;
+      formatCacheKey = `${formatLocale}:${format}`;
     }
     formatter = formattersCache[formatCacheKey];
     if (!formatter) {
-      formatter = Globalize.numberFormatter(format);
+      formatter = Globalize(formatLocale).numberFormatter(format);
       formattersCache[formatCacheKey] = formatter;
     }
 
@@ -49,8 +62,27 @@ if (Globalize?.formatNumber) {
         return this.callBase.apply(this, [value, format, formatConfig]);
       }
 
-      return getFormatter(this._normalizeFormatConfig(format, formatConfig, value))(value);
+      return getFormatter(
+        getNumberFormatLocale(formatConfig),
+        this._normalizeFormatConfig(format, formatConfig, value),
+      )(value);
     },
+
+    getDecimalSeparator(format?: FormatConfig | string): string {
+      const formatLocale = getNumberFormatLocale(format);
+
+      return getFormatter(formatLocale, {
+        minimumFractionDigits: 1,
+        maximumFractionDigits: 1,
+      })(1.2)[1];
+    },
+
+    getThousandsSeparator(format?: FormatConfig | string): string {
+      const formatLocale = getNumberFormatLocale(format);
+
+      return getFormatter(formatLocale, {})(10000)[2];
+    },
+
     _normalizeFormatConfig(
       format: string,
       formatConfig: FormatConfig,
@@ -105,13 +137,22 @@ if (Globalize?.formatNumber) {
         return value;
       }
 
+      const globalNumberFormat = getGlobalFormatByDataType(NUMBER_DATA_TYPE);
+
+      if (!format && globalNumberFormat) {
+        // eslint-disable-next-line no-param-reassign
+        format = globalNumberFormat as LocalizationFormat;
+      }
+
       // eslint-disable-next-line no-param-reassign
       format = this._normalizeFormat(format);
 
       // eslint-disable-next-line @stylistic/no-mixed-operators
       if (!format || typeof format !== 'function' && !(format as FormatConfig).type && !(format as FormatConfig).formatter) {
-        // @ts-expect-error
-        return getFormatter(format)(value);
+        const formatLocale = getNumberFormatLocale(format);
+        const formatterOptions = getFormatterOptions(format) as NormalizedConfig;
+
+        return getFormatter(formatLocale, formatterOptions)(value);
       }
 
       // eslint-disable-next-line @typescript-eslint/no-unsafe-return
@@ -126,18 +167,20 @@ if (Globalize?.formatNumber) {
         return undefined;
       }
 
-      if (format && (typeof format === 'string' || format.parser)) {
+      if (format && (typeof format === 'string' || format.parser || isLdmlPatternFormat(format))) {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-return
         return this.callBase.apply(this, [text, format]);
       }
 
-      if (format) {
+      if (format && !isLocaleOnlyFormat(format)) {
         // Current parser functionality provided as-is and
         // is independent of the most of capabilities of formatter.
         errors.log('W0011');
       }
 
-      let result: number = Globalize.parseNumber(text);
+      let result: number = Globalize(
+        getNumberFormatLocale(format),
+      ).parseNumber(text);
 
       if (isNaN(result)) {
         result = this.callBase.apply(this, [text, format]);

@@ -7,6 +7,7 @@ import {
 
 import {
     template,
+    HorizontalAlignment,
     SingleMultipleOrNone,
 } from '../common';
 
@@ -20,6 +21,7 @@ import {
 import BaseWidget, {
     BaseWidgetMargin,
     BaseWidgetOptions,
+    BaseWidgetTitle,
     BaseWidgetTooltip,
     FileSavingEventInfo,
     ExportInfo,
@@ -575,6 +577,12 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
     };
     /**
      * @docid
+     * @type object|string
+     * @public
+     */
+    title?: Title | string;
+    /**
+     * @docid
      * @type object
      * @public
      */
@@ -586,6 +594,21 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
      */
     valueField?: string;
 }
+/**
+ * @public
+ * @docid dxTreeMapTitle
+ * @type object
+ */
+export type Title = Omit<BaseWidgetTitle, 'horizontalAlignment'> & {
+    /**
+     * @docid dxTreeMapOptions.title.horizontalAlignment
+     * @default 'center'
+     * @default 'left' &for(Material)
+     * @default 'left' &for(Fluent)
+     * @public
+     */
+    horizontalAlignment?: HorizontalAlignment;
+};
 /**
  * @public
  * @docid dxTreeMapTooltip

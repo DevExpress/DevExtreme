@@ -23,10 +23,10 @@
 /* eslint-disable max-classes-per-file */
 
 import { domAdapter } from '@ts/core/dom_adapter';
-import { noop as _noop } from '@ts/core/utils/m_common';
-import { extend } from '@ts/core/utils/m_extend';
-import { each as _each } from '@ts/core/utils/m_iterator';
-import { isDefined } from '@ts/core/utils/m_type';
+import { noop as _noop } from '@ts/core/utils/common';
+import { extend } from '@ts/core/utils/extend';
+import { each as _each } from '@ts/core/utils/iterator';
+import { isDefined } from '@ts/core/utils/type';
 import { name as clickEventName } from '@ts/events/click';
 import eventsEngine from '@ts/events/core/events_engine';
 import pointerEvents from '@ts/events/pointer';

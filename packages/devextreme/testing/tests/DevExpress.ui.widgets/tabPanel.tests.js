@@ -1,7 +1,7 @@
 import fx from 'common/core/animation/fx';
 import config from 'core/config';
 import { deferUpdate } from 'core/utils/common';
-import support from '__internal/core/utils/m_support';
+import support from '__internal/core/utils/support';
 import { isRenderer } from 'core/utils/type';
 import 'fluent_blue_light.css!';
 import $ from 'jquery';

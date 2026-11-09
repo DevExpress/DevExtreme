@@ -17,7 +17,7 @@ import type { DxEvent } from '@js/events';
 import type { Item, Properties } from '@js/ui/tab_panel';
 import { current as currentTheme, isFluent, isMaterialBased } from '@js/ui/themes';
 import { getImageAriaLabel, getImageContainer } from '@ts/core/utils/icon';
-import supportUtils from '@ts/core/utils/m_support';
+import supportUtils from '@ts/core/utils/support';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { MultiViewProperties } from '@ts/ui/multi_view/multi_view';
 import MultiView from '@ts/ui/multi_view/multi_view';

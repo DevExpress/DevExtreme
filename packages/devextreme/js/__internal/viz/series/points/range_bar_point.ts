@@ -4,8 +4,8 @@
 /* eslint-disable prefer-destructuring */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 
-import { noop } from '@ts/core/utils/m_common';
-import { extend } from '@ts/core/utils/m_extend';
+import { noop } from '@ts/core/utils/common';
+import { extend } from '@ts/core/utils/extend';
 import barPoint from '@ts/viz/series/points/bar_point';
 import rangeSymbolPointMethods from '@ts/viz/series/points/range_symbol_point';
 

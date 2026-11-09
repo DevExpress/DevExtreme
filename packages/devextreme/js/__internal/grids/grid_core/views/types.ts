@@ -1,19 +1,23 @@
-import type { template } from '@js/common';
-import type { GridsContextMenuTarget } from '@js/common/grids';
+import type { GridsContextMenuTarget, LoadPanel } from '@js/common/grids';
 import type { DxElement } from '@js/core/element';
 import type { dxElementWrapper } from '@js/core/renderer';
-import type { Callback } from '@js/core/utils/callbacks';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import type { DxEvent } from '@js/events';
+import type { Item as ContextMenuItem, ItemClickEvent } from '@js/ui/context_menu';
 import type { Properties as DataGridProperties } from '@js/ui/data_grid';
-import type { dxScrollableOptions, ScrollEventInfo } from '@js/ui/scroll_view/ui.scrollable';
+import type { Properties as LoadPanelProperties } from '@js/ui/load_panel';
 import type dxScrollable from '@js/ui/scroll_view/ui.scrollable';
-import type { Column, ColumnsChanges } from '@ts/grids/grid_core/columns_controller/types';
+import type { dxScrollableOptions, ScrollEventInfo } from '@js/ui/scroll_view/ui.scrollable';
+import type {
+  Column, ColumnsChanges, ColumnTemplateSource, TemplateModel,
+} from '@ts/grids/grid_core/columns_controller/types';
 import type {
   Cell, DataChange, RowChangeType, RowUpdate, RowWatch, UpdateChange,
 } from '@ts/grids/grid_core/data_controller/types';
 import type { RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
-import type { InternalGrid, InternalGridOptions, RowKey } from '@ts/grids/grid_core/types';
+import type {
+  InternalGrid, InternalGridOptions, RowKey, SummaryTextItem,
+} from '@ts/grids/grid_core/types';
 import type Scrollable from '@ts/ui/scroll_view/scrollable';
 
 export type RowsViewScrollEvent = Partial<ScrollEventInfo<Scrollable>> & {
@@ -37,14 +41,6 @@ export interface ColumnViewTemplate<TModel extends TemplateModel = TemplateModel
   render: (options: ColumnViewTemplateOptions<TModel>) => void;
 }
 
-export interface ColumnRenderTemplate<TModel extends TemplateModel = TemplateModel> {
-  allowRenderToDetachedContainer?: boolean;
-  render: (container: dxElementWrapper, model: TModel, change?: DataChange) => void;
-}
-
-export type ColumnTemplateSource<TModel extends TemplateModel = TemplateModel> = template
-  | ColumnRenderTemplate<TModel>;
-
 export interface DelayedTemplate {
   template: ColumnViewTemplate;
   options: ColumnViewTemplateOptions;
@@ -53,13 +49,6 @@ export interface DelayedTemplate {
 
 export interface AppendRowTemplate {
   render: (options: { content: dxElementWrapper; container: dxElementWrapper }) => void;
-}
-
-export interface TemplateModel {
-  column?: Column;
-  rowType?: string;
-  renderAsync?: boolean;
-  component?: InternalGrid;
 }
 
 export type ScrollableOptions = Omit<dxScrollableOptions<dxScrollable>, 'onScroll'> & {
@@ -84,10 +73,13 @@ export interface CellPosition {
   columnIndex: number;
 }
 
-export type ViewDataChange = DataChange & Partial<Pick<UpdateChange, 'columnIndices' | 'changeTypes'>>;
+export type ViewDataChange = DataChange
+  & Partial<Pick<UpdateChange, 'columnIndices' | 'changeTypes'>>;
 
 /** @architectureLeak data_grid: group cells render this template, and the cell hint skips them */
-export type HintColumn = Column & { groupCellTemplate?: ColumnTemplateSource<ViewCellOptions> };
+export type WithGroupCellTemplate<T> = T & {
+  groupCellTemplate?: ColumnTemplateSource<ViewCellOptions>;
+};
 
 export interface ViewRowCell extends Cell {
   columnIndex?: number;
@@ -103,7 +95,7 @@ export interface ViewRow {
   oldValues?: unknown[];
   cells?: ViewRowCell[];
   /** @architectureLeak data_grid: core passes the summary items of a group row to its group cell */
-  summaryCells?: unknown[][];
+  summaryCells?: SummaryTextItem[][];
   /** @architectureLeak data_grid: core picks the column and the value of a group cell by it */
   groupIndex?: number;
   visible?: boolean;
@@ -127,23 +119,19 @@ export interface WatchableOptions {
   update?: RowUpdate;
 }
 
-export interface ViewCellOptions {
-  column: Column;
+export interface ViewCellOptions extends Pick<ViewRow, 'rowType' | 'rowIndex' | 'key' | 'data' | 'values'> {
+  column: WithGroupCellTemplate<Column>;
   columnIndex: number;
-  rowType: string;
-  rowIndex?: number;
   isAltRow?: boolean;
   columns?: Column[];
   row?: ViewRow;
-  key?: RowKey;
-  data?: RawItemData;
   value?: unknown;
   oldValue?: unknown;
   displayValue?: unknown;
   text?: string;
-  values?: unknown[];
-  summaryItems?: unknown[];
-  resized?: Callback<[number]>;
+  /** @architectureLeak data_grid/summary: core renders summary items of group and footer cells */
+  summaryItems?: SummaryTextItem[];
+  resized?: Column['resizedCallbacks'];
   groupContinuesMessage?: string | false;
   groupContinuedMessage?: string | false;
   /** @architectureLeak editing: the cell hint skips cells that are being edited */
@@ -192,10 +180,11 @@ export interface CellRenderOptions extends Omit<RowRenderOptions, 'columns'> {
 }
 
 export interface ViewRowEvent {
-  event: DxEvent;
+  event: DxEvent<MouseEvent>;
   rowIndex: number;
   rowElement?: DxElement<Element>;
   columns?: Column[];
+  handled?: boolean;
 }
 
 export interface ColumnWidthsOptions {
@@ -228,6 +217,32 @@ export interface GroupContinuationData {
 /** @architectureLeak data_grid: group cells show the grouping continuation texts */
 export type RowsViewOptions = InternalGridOptions & Pick<DataGridProperties, 'grouping'>;
 
+/** @architectureLeak data_grid/summary: core extenders adjust the group summary cells */
+export interface SummaryRowsViewExtension {
+  // eslint-disable-next-line @typescript-eslint/method-signature-style -- overridden by methods
+  renderGroupSummaryCells($row: dxElementWrapper, options: RowRenderOptions): void;
+
+  // eslint-disable-next-line @typescript-eslint/method-signature-style -- overridden by methods
+  hasAlignByColumnSummaryItems(columnIndex: number, options: RowRenderOptions): boolean;
+
+  // eslint-disable-next-line @typescript-eslint/method-signature-style -- DataGrid narrows options
+  getAlignByColumnCellCount(groupCellColSpan: number, options: RowRenderOptions): number;
+
+  // eslint-disable-next-line @typescript-eslint/method-signature-style -- overridden by methods
+  renderGroupSummaryCellsCore(
+    $groupCell: dxElementWrapper,
+    options: RowRenderOptions,
+    groupCellColSpan: number,
+    alignByColumnCellCount: number,
+  ): void;
+
+  // eslint-disable-next-line @typescript-eslint/method-signature-style -- overridden by methods
+  getSummaryCellIndex(columnIndex: number, columns: Column[]): number;
+}
+
+// the grid passes loadPanel options to the LoadPanel widget, so its animation applies too
+export type RowsViewLoadPanelOptions = LoadPanel & Pick<LoadPanelProperties, 'animation'>;
+
 export type RowsModuleOptions = Pick<InternalGridOptions,
 | 'hoverStateEnabled'
 | 'scrolling'
@@ -242,6 +257,12 @@ export type RowsModuleOptions = Pick<InternalGridOptions,
 | 'activeStateEnabled'
 | 'twoWayBindingEnabled'
 >;
+
+export interface GridContextMenuItem extends ContextMenuItem {
+  name?: string;
+  value?: string;
+  onItemClick?: (e: ItemClickEvent) => void;
+}
 
 export interface ContextMenuItemsOptions {
   event: DxEvent;

@@ -124,6 +124,7 @@
         "dxDataGrid-aiAssistantAbortConfirmText": "Închiderea chat-ului Asistentului AI anulează solicitările în curs. Doriți să închideți chat-ul?",
         "dxDataGrid-aiAChatEmptyViewMessage": "Chat-ul este gol",
         "dxDataGrid-aiChatEmptyViewPrompt": "Asistentul AI este pregătit să vă răspundă la întrebări.",
+        "dxDataGrid-aiChatTextareaPlaceholder": "Ask AI Assistant...",
         "dxDataGrid-aiPromptEditorTitle": "Editor prompturi AI",
         "dxDataGrid-aiPromptEditorPlaceholder": "Solicită AI să genereze valorile coloanei...",
         "dxDataGrid-aiPromptEditorApplyButton": "Aplicare",
@@ -919,6 +920,8 @@
         "dxGantt-showDependencies": "Afișare dependențe",
         "dxGantt-dialogStartDateValidation": "Data de început trebuie să fie după {0}",
         "dxGantt-dialogEndDateValidation": "Data de sfârșit trebuie să fie după {0}",
+
+        "dxMap-markerAriaLabel": "Map marker",
 
         "dxGallery-itemName": "Element galerie",
 

@@ -15,14 +15,15 @@ import {
 import variableWrapper from '@js/core/utils/variable_wrapper';
 import type { DataGridCommandColumnType } from '@js/ui/data_grid';
 import errors from '@js/ui/widget/ui.errors';
+import { getNumberFormatLocale } from '@ts/core/global_format_config';
 import { CLASSES as COLUMN_HEADERS_CLASSES } from '@ts/grids/grid_core/column_headers/const';
 
 import { AI_COLUMN_NAME } from '../ai_column/const';
 import type DataSourceAdapter from '../data_source_adapter/data_source_adapter';
 import type { RawItemData } from '../data_source_adapter/types';
-import gridCoreUtils from '../m_utils';
 import { StickyPosition } from '../sticky_columns/const';
 import { getColumnFixedPosition } from '../sticky_columns/utils';
+import gridCoreUtils from '../utils';
 import type { ColumnsController } from './columns_controller';
 import {
   COLUMN_CHOOSER_LOCATION,
@@ -79,19 +80,19 @@ export function createColumn(
   columnOptions: Column,
   userStateColumnOptions?: ColumnUserState,
   bandColumn?: Column,
-): Column;
+): WithCellValueCalculator<Column>;
 export function createColumn(
   that: ColumnsController,
   columnOptions: Column | string | undefined,
   userStateColumnOptions?: ColumnUserState,
   bandColumn?: Column,
-): Column | undefined;
+): WithCellValueCalculator<Column> | undefined;
 export function createColumn(
   that: ColumnsController,
   columnOptions: Column | string | undefined,
   userStateColumnOptions?: ColumnUserState,
   bandColumn?: Column,
-): Column | undefined {
+): WithCellValueCalculator<Column> | undefined {
   if (!columnOptions) {
     return undefined;
   }
@@ -130,6 +131,7 @@ export function createColumn(
     setFilterOperationsAsDefaultValues(result);
   }
 
+  // @ts-expect-error the calculated options set calculateCellValue; command options are internal
   return result;
 }
 
@@ -153,12 +155,12 @@ export const createColumnsFromOptions = (
   columnsOptions: (Column | string | undefined)[] | undefined,
   bandColumn?: Column,
   createdColumnCount = 0,
-): Column[] => {
+): WithCellValueCalculator<Column>[] => {
   if (!columnsOptions) {
     return [];
   }
 
-  const result: Column[] = [];
+  const result: WithCellValueCalculator<Column>[] = [];
 
   columnsOptions.forEach((columnOptions) => {
     const currentIndex = createdColumnCount + result.length;
@@ -272,7 +274,8 @@ export const getColumnFullPath = (that: ColumnsController, column: Column): stri
   const bandColumnsCache = that.getBandColumnsCache();
 
   if (bandColumnsCache.isPlain) {
-    const columnIndex = that._columns.indexOf(column);
+    const columns: Column[] = that._columns;
+    const columnIndex = columns.indexOf(column);
 
     return columnIndex >= 0 ? `columns[${columnIndex}]` : '';
   }
@@ -462,7 +465,7 @@ export const getCustomizeTextByDataType = (dataType: string | undefined): Column
 export const createColumnsFromDataSourceAdapter = (
   that: ColumnsController,
   dataSourceAdapter: DataSourceAdapter,
-): Column[] => {
+): WithCellValueCalculator<Column>[] => {
   const fieldNames: Record<string, true> = {};
 
   that._getFirstItems(dataSourceAdapter).forEach((item) => {
@@ -482,7 +485,7 @@ export const createColumnsFromDataSourceAdapter = (
 
   return Object.keys(fieldNames)
     .filter((fieldName) => !fieldName.startsWith('__'))
-    .map((fieldName) => createColumn(that, fieldName) as Column);
+    .map((fieldName) => createColumn(that, fieldName) as WithCellValueCalculator<Column>);
 };
 
 export const updateColumnIndexes = (that: ColumnsController): void => {
@@ -675,7 +678,10 @@ export const updateIndexes = (that: ColumnsController, column?: Column): void =>
   updateColumnVisibleIndexes(that, column);
 };
 
-export function assignColumns(that: ColumnsController, columns: Column[]): void {
+export function assignColumns(
+  that: ColumnsController,
+  columns: WithCellValueCalculator<Column>[],
+): void {
   that._previousColumns = that._columns;
   that._columns = columns;
   that.resetColumnsCache();
@@ -1164,11 +1170,15 @@ export const sortColumnsByCaption = (
 };
 
 export const strictParseNumber = (text: string, format: Format): number | undefined => {
-  const parsedValue = numberLocalization.parse(text);
+  const locale = getNumberFormatLocale(format);
+  const parsedValue = numberLocalization.parse(text, { locale });
 
   if (isNumeric(parsedValue)) {
     const formattedValue = numberLocalization.format(parsedValue, format);
-    const formattedValueWithDefaultFormat = numberLocalization.format(parsedValue, 'decimal');
+    const formattedValueWithDefaultFormat = numberLocalization.format(
+      parsedValue,
+      { type: 'decimal', locale },
+    );
 
     if (formattedValue === text || formattedValueWithDefaultFormat === text) {
       return parsedValue;

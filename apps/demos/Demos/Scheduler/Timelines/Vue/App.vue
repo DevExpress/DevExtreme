@@ -74,7 +74,7 @@ function onSnapToCellsModeChanged(e: DxSelectBoxTypes.ValueChangedEvent) {
 
 .dx-scheduler-appointment-title,
 .dx-scheduler-appointment-content-date {
-  color: white;
+  color: var(--dxds-color-content-on-color, white);
 }
 
 .options {

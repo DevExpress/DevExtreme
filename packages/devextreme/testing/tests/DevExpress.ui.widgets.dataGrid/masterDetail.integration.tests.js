@@ -451,7 +451,7 @@ QUnit.module('Master Detail', baseModuleConfig, () => {
 
         $($(dataGrid.$element()).find('td').eq(14)).trigger(pointerEvents.up); // check that error is not raised
 
-        assert.ok(dataGrid.getController('keyboardNavigation')._isCellValid($(dataGrid.$element()).find('td').eq(14)), 'detail-grid cell with cellIndex greater than number of parent columns causes no errors');
+        assert.ok(dataGrid.getController('keyboardNavigation').isCellValid($(dataGrid.$element()).find('td').eq(14)), 'detail-grid cell with cellIndex greater than number of parent columns causes no errors');
     });
 
     // T454990
@@ -702,7 +702,7 @@ QUnit.module('Master Detail', baseModuleConfig, () => {
         // act
         dataGrid.expandRow(1);
         this.clock.tick(10);
-        dataGrid.getScrollable().scrollTo({ x: 0, y: 1000 });
+        dataGrid.getScrollable().scrollTo({ left: 0, top: 1000 });
 
         // assert
         assert.ok(dataGrid.getScrollable().scrollTop() > 100, 'vertical scroll is exists');

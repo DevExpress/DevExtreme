@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unsafe-declaration-merging */
 import formatHelper from '@ts/core/format_helper';
+import { noop } from '@ts/core/utils/common';
 import { paintedColor } from '@ts/core/utils/css_variables';
-import { noop } from '@ts/core/utils/m_common';
-import { extend } from '@ts/core/utils/m_extend';
+import { extend } from '@ts/core/utils/extend';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 import BaseWidget from '@ts/viz/core/base_widget';
 import { plugin as exportPlugin } from '@ts/viz/core/export';
@@ -38,11 +38,9 @@ export interface BaseGauge extends TooltipPluginMembers {
   _title: ThemeValue;
   _updateExtraElements: () => void;
 
-  /// #DEBUG
   _DEBUG_change_title?: () => void;
   _DEBUG_rootRect?: number[];
   _debug_rendered?: () => void;
-  /// #ENDDEBUG
 }
 
 export abstract class BaseGauge extends BaseWidget {

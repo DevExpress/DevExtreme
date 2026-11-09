@@ -1,6 +1,5 @@
 import { fx } from '@js/common/core/animation';
 import { move } from '@js/common/core/animation/translator';
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import Swipeable from '@js/common/core/events/gesture/swipeable';
 import { end as hoverEndEventName } from '@js/common/core/events/hover';
 import { addNamespace, isCommandKeyPressed } from '@js/common/core/events/utils/index';
@@ -32,6 +31,7 @@ import type {
 import { current, isFluent } from '@js/ui/themes';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { SupportedKeys } from '@ts/core/widget/widget';
+import eventsEngine from '@ts/events/core/events_engine';
 import type { SwipeEndEvent, SwipeStartEvent, SwipeUpdateEvent } from '@ts/events/swipe';
 import Button from '@ts/ui/button/wrapper';
 import Editor from '@ts/ui/editor/editor';
@@ -337,6 +337,7 @@ class Calendar<
     this._setDateOption('value', value);
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   _isArrayValue(optionName: 'value' | 'min' | 'max', value: DateLike | DateLike[] | undefined): value is DateLike[] {
     return optionName === 'value' && !this._isSingleMode();
   }
@@ -799,12 +800,12 @@ class Calendar<
     const date = this._getDate(initialDate ?? currentDate);
 
     const currentDay = date.getDate();
-    const difference = dateUtils.getDifferenceInMonth(this.option('zoomLevel')) * offset;
+    const { zoomLevel } = this.option();
+    const difference = dateUtils.getDifferenceInMonth(zoomLevel) * offset;
 
     date.setDate(1);
     date.setMonth(date.getMonth() + difference);
 
-    // @ts-expect-error ts-error
     const lastDay = dateUtils.getLastMonthDate(date).getDate();
     date.setDate(currentDay > lastDay ? lastDay : currentDay);
 
@@ -1021,7 +1022,7 @@ class Calendar<
   }
 
   _cellClickHandler(e: CellEvent): void {
-    const zoomLevel = this.option('zoomLevel');
+    const { zoomLevel } = this.option();
     const nextView = dateUtils.getViewDown(zoomLevel);
 
     const isMaxZoomLevel = this._isMaxZoomLevel();
@@ -1070,8 +1071,7 @@ class Calendar<
     let newCurrentDate = contouredDate ?? date;
 
     if (cell) {
-      // @ts-expect-error ts-error
-      newCurrentDate = $(cell).data(CALENDAR_DATE_VALUE_KEY);
+      newCurrentDate = $(cell).data<Date>(CALENDAR_DATE_VALUE_KEY);
     }
 
     this._isOtherViewCellClicked = true;
@@ -1242,7 +1242,7 @@ class Calendar<
     if (!this._viewWidthValue) {
       const { viewsCount } = this.option();
 
-      this._viewWidthValue = getWidth(this.$element()) / viewsCount;
+      this._viewWidthValue = getWidth(this.$element().get(0)) / viewsCount;
     }
 
     return this._viewWidthValue;

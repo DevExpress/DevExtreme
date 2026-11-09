@@ -87,7 +87,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
         // act
         $(dataGrid.getRowElement(0)).trigger('dxclick');
-        dataGrid.getScrollable().scrollTo({ y: 200 });
+        dataGrid.getScrollable().scrollTo({ top: 200 });
 
         $lastRowElement = $(dataGrid.getRowElement(4));
         const offset = $lastRowElement.offset();
@@ -810,7 +810,7 @@ QUnit.module('Virtual row rendering', baseModuleConfig, () => {
         this.clock.tick(300);
 
         // act
-        dataGrid.getScrollable().scrollTo({ y: 10000 });
+        dataGrid.getScrollable().scrollTo({ top: 10000 });
 
         $(dataGrid.getRowElement(0)).trigger('dxclick');
 
@@ -847,7 +847,7 @@ QUnit.module('Virtual row rendering', baseModuleConfig, () => {
         this.clock.tick(300);
 
         // act
-        dataGrid.getScrollable().scrollTo({ y: 440 });
+        dataGrid.getScrollable().scrollTo({ top: 440 });
 
         $(dataGrid.getRowElement(1)).trigger('dxclick');
 

@@ -8,8 +8,8 @@ import { each } from '@js/core/utils/iterator';
 import { getWidth } from '@js/core/utils/size';
 import type { Item } from '@js/ui/toolbar';
 import DropDownMenu from '@ts/ui/toolbar/internal/toolbar.menu';
-import type { Properties } from '@ts/ui/toolbar/toolbar';
 import type Toolbar from '@ts/ui/toolbar/toolbar';
+import type { Properties } from '@ts/ui/toolbar/toolbar';
 
 const INVISIBLE_STATE_CLASS = 'dx-state-invisible';
 export const TOOLBAR_DROP_DOWN_MENU_CONTAINER_CLASS = 'dx-toolbar-menu-container';
@@ -205,7 +205,7 @@ export class SingleLineStrategy {
     });
     this._restoreItems = [];
 
-    const elementWidth: number = getWidth(this._toolbar.$element());
+    const elementWidth: number = getWidth(this._toolbar.$element().get(0));
     this._hideOverflowItems(elementWidth);
 
     return elementWidth;
@@ -222,7 +222,7 @@ export class SingleLineStrategy {
       return;
     }
 
-    const elementWidth = width ?? getWidth(this._toolbar.$element());
+    const elementWidth = width ?? getWidth(this._toolbar.$element().get(0));
     $(overflowItems).removeClass(TOOLBAR_HIDDEN_ITEM);
 
     let itemsWidth = this._getItemsWidth();

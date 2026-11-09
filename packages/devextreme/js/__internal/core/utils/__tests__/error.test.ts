@@ -1,10 +1,10 @@
 import {
   beforeEach, describe, expect, it, jest,
 } from '@jest/globals';
+import consoleUtils from '@ts/core/utils/console';
 import errorFactory from '@ts/core/utils/error';
-import consoleUtils from '@ts/core/utils/m_console';
 
-jest.mock('@ts/core/utils/m_console', () => {
+jest.mock('@ts/core/utils/console', () => {
   const logger = {
     log: jest.fn(), info: jest.fn(), warn: jest.fn(), error: jest.fn(),
   };

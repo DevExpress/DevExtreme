@@ -17,11 +17,11 @@ export default {
     return this.callBase.apply(this, [value, format, formatConfig]);
   },
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  getCurrencySymbol(currency?: string): { symbol: string } {
+  getCurrencySymbol(currency?: string, locale?: string): { symbol: string } {
     return { symbol: '$' };
   },
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  getOpenXmlCurrencyFormat(currency?: string): string | undefined {
+  getOpenXmlCurrencyFormat(currency?: string, locale?: string): string | undefined {
     return '$#,##0{0}_);\\($#,##0{0}\\)';
   },
 };

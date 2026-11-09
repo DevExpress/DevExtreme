@@ -11,7 +11,7 @@ import type { Properties } from '@js/ui/gantt';
 import SplitterControl from '@js/ui/splitter_control';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
-import type TreeList from '@ts/grids/tree_list/m_widget_base';
+import type TreeList from '@ts/grids/tree_list/widget_base';
 import { GanttActionsManager } from '@ts/ui/gantt/ui.gantt.actions';
 import { GanttContextMenuBar, GanttToolbar } from '@ts/ui/gantt/ui.gantt.bars';
 import { GanttCustomFieldsManager } from '@ts/ui/gantt/ui.gantt.custom_fields';
@@ -1354,7 +1354,7 @@ class Gantt extends Widget<GanttProperties> {
         break;
       case 'height':
         super._optionChanged(args);
-        this._sizeHelper?.setGanttHeight(getHeight(this.$element()));
+        this._sizeHelper?.setGanttHeight(getHeight(this.$element().get(0)));
         break;
       case 'sorting':
         this._ganttTreeList?.setOption('sorting', this.option(name));

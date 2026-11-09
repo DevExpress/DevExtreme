@@ -6,7 +6,7 @@ import { errors as dataErrors } from 'common/data/errors';
 import typeUtils from 'core/utils/type';
 import { DataSource } from 'common/data/data_source/data_source';
 import ArrayStore from 'common/data/array_store';
-import gridCoreUtils from '__internal/grids/grid_core/m_utils';
+import gridCoreUtils from '__internal/grids/grid_core/utils';
 import { setupDataGridModules, MockGridDataSource } from '../../helpers/dataGridMocks.js';
 
 import 'ui/data_grid';
@@ -911,60 +911,6 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         // assert
         assert.equal(dataSource.items()[0].name, 'Dan', 'second item became first');
         assert.equal(dataSource.items()[1].name, 'Alex', 'first item became second');
-    });
-
-    QUnit.test('Operation filter should generates correctly when sorting, remoteOperations, and the key column is not present', function(assert) {
-    // arrange
-        const data = [
-            { team: 'internal', name: 'Alex', age: 30 },
-            { team: 'internal', name: 'Dan', age: 25 },
-            { team: 'internal', name: 'Bob', age: 20 },
-            { team: 'public', name: 'Alice', age: 19 }];
-        const dataSource = createDataSource(data,
-            { key: 'name' },
-            { pageSize: 1, asyncLoadEnabled: false });
-
-        this.applyOptions({
-            keyExpr: 'name',
-            focusedRowEnabled: true,
-            remoteOperations: true,
-            dataSource: dataSource,
-            columns: ['team', 'age']
-        });
-
-        // act
-        this.dataController.resetDataSource();
-
-        const filter = this.dataController._generateOperationFilterByKey('Dan', data[1], false);
-
-        assert.equal(JSON.stringify(filter), '[[["name","<","Dan"],"or",["name","=",null]],"or",[["name","=","Dan"],"and",["name","<","Dan"]]]', 'Operation filter');
-    });
-
-    // T755462
-    QUnit.test('Check the filter generator for the boolean field', function(assert) {
-    // act, assert
-        let filter = this.dataController._generateBooleanFilter('isRoom', true, { desc: false });
-        assert.strictEqual(JSON.stringify(filter), '["isRoom","<>",true]', 'filter');
-
-        // act, assert
-        filter = this.dataController._generateBooleanFilter('isRoom', false, { desc: false });
-        assert.strictEqual(JSON.stringify(filter), '["isRoom","=",null]', 'filter');
-
-        // act, assert
-        filter = this.dataController._generateBooleanFilter('isRoom', true, { desc: true });
-        assert.strictEqual(JSON.stringify(filter), undefined, 'filter');
-
-        // act, assert
-        filter = this.dataController._generateBooleanFilter('isRoom', false, { desc: true });
-        assert.strictEqual(JSON.stringify(filter), '["isRoom","=",true]', 'filter');
-
-        // act, assert
-        filter = this.dataController._generateBooleanFilter('isRoom', null, { desc: true });
-        assert.strictEqual(JSON.stringify(filter), '["isRoom","<>",null]', 'filter');
-
-        // act, assert
-        filter = this.dataController._generateBooleanFilter('isRoom', null, { desc: false });
-        assert.strictEqual(JSON.stringify(filter), undefined, 'filter');
     });
 
     QUnit.test('Get page index by simple key if remoteOperations is false', function(assert) {

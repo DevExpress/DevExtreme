@@ -1,7 +1,6 @@
 import { fx } from '@js/common/core/animation';
 import { name as clickEventName } from '@js/common/core/events/click';
 import { lock } from '@js/common/core/events/core/emitter.feedback';
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import Swipeable from '@js/common/core/events/gesture/swipeable';
 import { addNamespace } from '@js/common/core/events/utils/index';
 import messageLocalization from '@js/common/core/localization/message';
@@ -14,10 +13,11 @@ import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred } from '@js/core/utils/deferred';
 import { getBoundingRect } from '@js/core/utils/position';
 import { getOuterWidth } from '@js/core/utils/size';
-import type { NativeEventInfo } from '@js/events';
+import type { DxEvent, NativeEventInfo } from '@js/events';
 import type { Properties } from '@js/ui/switch';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { SupportedKeys } from '@ts/core/widget/widget';
+import eventsEngine from '@ts/events/core/events_engine';
 import type { SwipeEndEvent, SwipeStartEvent, SwipeUpdateEvent } from '@ts/events/swipe';
 import Editor from '@ts/ui/editor/editor';
 
@@ -206,7 +206,7 @@ class Switch extends Editor<Properties> {
   }
 
   _getItemSizeFunc(): number {
-    return getOuterWidth(this._$switchContainer, true)
+    return getOuterWidth(this._$switchContainer.get(0), true)
     - getBoundingRect(this._$handle.get(0)).width;
   }
 
@@ -246,7 +246,7 @@ class Switch extends Editor<Properties> {
     this._clickAction = this._createAction(this._clickHandler.bind(this));
 
     eventsEngine.off($element, eventName);
-    eventsEngine.on($element, eventName, (e: Event): void => {
+    eventsEngine.on($element, eventName, (e: DxEvent): void => {
       this._clickAction?.({ event: e });
     });
   }

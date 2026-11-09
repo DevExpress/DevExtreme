@@ -1,17 +1,17 @@
-/* eslint-disable consistent-return */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import $ from '@js/core/renderer';
+import { CLASSES as EDITOR_FACTORY_CLASSES } from '@ts/grids/grid_core/editor_factory/const';
+import gridCoreUtils from '@ts/grids/grid_core/utils';
 
-// eslint-disable-next-line @typescript-eslint/no-restricted-imports,
-import gridCoreUtils from '../m_utils';
 import { CLASSES } from './const';
+import type { HandleCellTemplate } from './types';
 
-const createHandleTemplateFunc = (addWidgetPrefix) => (container, options) => {
+const createHandleTemplateFunc = (
+  addWidgetPrefix: (className: string) => string,
+): HandleCellTemplate => (container, options) => {
   const $container = $(container);
 
   if (options.rowType === 'data') {
-    $container.addClass(CLASSES.cellFocusDisabled);
+    $container.addClass(EDITOR_FACTORY_CLASSES.cellFocusDisabled);
     return $('<span>').addClass(addWidgetPrefix(CLASSES.handleIcon));
   }
   gridCoreUtils.setEmptyText($container);

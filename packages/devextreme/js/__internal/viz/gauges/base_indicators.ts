@@ -1,8 +1,8 @@
 /* eslint-disable max-classes-per-file */
 
 import type { Font } from '@js/common/charts';
-import { extend } from '@ts/core/utils/m_extend';
-import { each } from '@ts/core/utils/m_iterator';
+import { extend } from '@ts/core/utils/extend';
+import { each } from '@ts/core/utils/iterator';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 import type { Coords, Size } from '@ts/viz/core/types';
 import { extractColor, patchFontOptions } from '@ts/viz/core/utils';

@@ -1654,9 +1654,6 @@ QUnit.module('Columns resizing', {
     QUnit.test('Update height of separator by headers and rows height with pager', function(assert) {
         // arrange
         this.component._controllers.tablePosition = new columnsResizingReordering.TablePositionViewController(this.component);
-        this.component._views.pagerView.getHeight = function() {
-            return 1;
-        };
 
         const testElement = $('#container').css({
             height: 500,

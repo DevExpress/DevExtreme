@@ -2,15 +2,20 @@
 import type { Format, FormatObject as PublicFormatConfig } from '@js/common/core/localization';
 import config from '@js/core/config';
 import errors from '@js/core/errors';
-import { getGlobalFormatByDataType } from '@ts/core/global_format_config';
+import {
+  getGlobalFormatByDataType,
+  getNumberFormatLocale,
+  isLocaleOnlyFormat,
+} from '@ts/core/global_format_config';
+import localizationCore from '@ts/core/localization/core';
 import currencyLocalization from '@ts/core/localization/currency';
 import intlNumberLocalization from '@ts/core/localization/intl/number';
 import { getFormatter } from '@ts/core/localization/ldml/number';
 import { toFixed } from '@ts/core/localization/utils';
+import { escapeRegExp } from '@ts/core/utils/common';
 import { injector as dependencyInjector } from '@ts/core/utils/dependency_injector';
-import { escapeRegExp } from '@ts/core/utils/m_common';
-import { each } from '@ts/core/utils/m_iterator';
-import { isPlainObject } from '@ts/core/utils/m_type';
+import { each } from '@ts/core/utils/iterator';
+import { isPlainObject } from '@ts/core/utils/type';
 
 const hasIntl = typeof Intl !== 'undefined';
 const MAX_LARGE_NUMBER_POWER = 4;
@@ -46,6 +51,12 @@ export type FormatConfig = PublicFormatConfig & {
 };
 
 export type LocalizationFormat = Format | FormatConfig;
+
+export const isLdmlPatternFormat = (format?: FormatConfig | string): boolean => {
+  const formatType = typeof format === 'string' ? format : format?.type;
+
+  return typeof formatType === 'string' && (formatType.includes('0') || formatType.includes('#'));
+};
 
 export interface NormalizedConfig {
   minimumFractionDigits?: number;
@@ -252,26 +263,33 @@ const numberLocalizationBase = {
     return format;
   },
 
-  _getSeparators(): FormatterConfig {
+  _getSeparators(format?: LocalizationFormat): FormatterConfig {
+    const separatorFormat = typeof format === 'function' ? undefined : format;
+
     return {
-      decimalSeparator: this.getDecimalSeparator(),
-      thousandsSeparator: this.getThousandsSeparator(),
+      decimalSeparator: this.getDecimalSeparator(separatorFormat),
+      thousandsSeparator: this.getThousandsSeparator(separatorFormat),
     };
   },
 
-  getThousandsSeparator(): string {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  getThousandsSeparator(format?: FormatConfig | string): string {
     return this.format(10000, 'fixedPoint')[2] as string;
   },
 
-  getDecimalSeparator(): string {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  getDecimalSeparator(format?: FormatConfig | string): string {
     return this.format(1.2, { type: 'fixedPoint', precision: 1 })[1] as string;
   },
 
   convertDigits<TValue extends string | number | Date | null | undefined>(
     value: TValue,
     toStandard?: boolean,
+    locale?: string,
   ): TValue {
-    const digits: string = this.format(90, 'decimal');
+    const digits: string = locale && locale !== localizationCore.locale()
+      ? this.format(90, { type: 'decimal', locale })
+      : this.format(90, 'decimal');
 
     if (typeof value !== 'string' || digits[1] === '0') {
       return value;
@@ -287,11 +305,15 @@ const numberLocalizationBase = {
   },
 
   getNegativeEtalonRegExp(format: LocalizationFormat): RegExp {
-    const separators: FormatterConfig = this._getSeparators();
+    const separators: FormatterConfig = this._getSeparators(format);
     const digitalRegExp = new RegExp(`[0-9${escapeRegExp(separators.decimalSeparator + separators.thousandsSeparator)}]+`, 'g');
     const specialCharacters = ['\\', '(', ')', '[', ']', '*', '+', '$', '^', '?', '|', '{', '}'];
 
-    let negativeEtalon = this.format(-1, format).replace(digitalRegExp, '1');
+    let negativeEtalon = this.convertDigits(
+      this.format(-1, format),
+      true,
+      getNumberFormatLocale(format as FormatConfig),
+    ).replace(digitalRegExp, '1');
     specialCharacters.forEach((char) => {
       negativeEtalon = negativeEtalon.replace(new RegExp(`\\${char}`, 'g'), `\\${char}`);
     });
@@ -348,13 +370,17 @@ const numberLocalizationBase = {
     const numberConfig: FormatObject | undefined = this._parseNumberFormatString((format as FormatConfig).type);
 
     if (!numberConfig) {
-      const formatterConfig: FormatterConfig = this._getSeparators();
+      const formatterConfig: FormatterConfig = this._getSeparators(format);
       formatterConfig.unlimitedIntegerDigits = (format as FormatConfig).unlimitedIntegerDigits;
 
       // @ts-expect-error
       const formattedValue = getFormatter((format as FormatConfig).type, formatterConfig)(value);
 
-      return this.convertDigits(formattedValue) as string | number;
+      return this.convertDigits(
+        formattedValue,
+        false,
+        getNumberFormatLocale(format as FormatConfig),
+      ) as string | number;
     }
 
     return this._formatNumber(value, numberConfig, format) as string;
@@ -369,15 +395,21 @@ const numberLocalizationBase = {
       return format.parser(text) as number;
     }
 
-    text = this.convertDigits(text, true);
+    text = this.convertDigits(text, true, getNumberFormatLocale(format));
 
-    if (format && typeof format !== 'string') {
+    if (
+      format
+      && typeof format !== 'string'
+      && !isLdmlPatternFormat(format)
+      && !isLocaleOnlyFormat(format)
+    ) {
       // Current parser functionality provided as-is and
       // is independent of the most of capabilities of formatter.
+      // An LDML pattern object is the string pattern plus locale, which this parser does apply.
       errors.log('W0011');
     }
 
-    const decimalSeparator: string = this.getDecimalSeparator();
+    const decimalSeparator: string = this.getDecimalSeparator(format);
     const regExp = new RegExp(`[^0-9${escapeRegExp(decimalSeparator)}]`, 'g');
     const cleanedText = text
       .replace(regExp, '')

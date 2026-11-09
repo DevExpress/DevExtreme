@@ -3,7 +3,7 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { ClientFunction } from 'testcafe';
 import Guid from 'devextreme/core/guid';
-import { getThemeName, testScreenshot } from '../../helpers/themeUtils';
+import { getThemeName, isFluent, testScreenshot } from '../../helpers/themeUtils';
 import url from '../../helpers/getPageUrl';
 import {
   appendElementTo,
@@ -341,6 +341,7 @@ const iconSet = {
   gridkanban: '\f240',
   listbartreeoffset: '\f241',
   clearhistory: '\f242',
+  wrench: '\f243',
 };
 
 fixture.disablePageReloads`Icons`
@@ -406,11 +407,11 @@ test.meta({ themes: [Themes.materialBlue, Themes.genericLight] })('SVG icon set'
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => {
-  const themeName = getThemeName();
+  const iconSetName = isFluent() ? 'fluent' : getThemeName();
   const icons = Object.keys(iconSet).map((iconName) => ({
     id: `dx-${new Guid()}`,
     iconName,
-    src: `../../../packages/devextreme-scss/images/icons/${themeName}/${iconName}.svg`,
+    src: `../../../packages/devextreme-scss/images/icons/${iconSetName}/${iconName}.svg`,
   }));
 
   // eslint-disable-next-line @typescript-eslint/no-shadow
