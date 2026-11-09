@@ -159,24 +159,7 @@ test('Accessibility: TreeList general status should contains correct text after 
 
   const statusText = await treeList.getGeneralStatusContainer().textContent;
 
-  // Temporary commented
-  // Fails with following errors:
-  //   1) Certain ARIA roles must be contained by particular parents
-  //   * https://dequeuniversity.com/rules/axe/4.8/aria-required-parent?application=axeAPI
-  //   * cat.aria, wcag2a, wcag131, EN-301-549, EN-9.1.3.1
-  //   * critical
-  //   * aria-required-parent
-  //   ".dx-header-row"
-  //   2) ARIA attributes must conform to valid values
-  //   * https://dequeuniversity.com/rules/axe/4.8/aria-valid-attr-value?application=axeAPI
-  //   * cat.aria, wcag2a, wcag412, EN-301-549, EN-9.4.1.2
-  //   * critical
-  //   * aria-valid-attr-value
-  //   "div[role="treegrid"]"
-  //
-  //   {}
-  // : expected false to be truthy
-  // await a11yCheck(t);
+  await a11yCheck(t);
   await t.expect(statusText).eql(expectedStatusText);
 }).before(async () => createWidget('dxTreeList', {
   dataSource: DATA_SOURCE,

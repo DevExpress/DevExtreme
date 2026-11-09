@@ -10,7 +10,6 @@ export const IGNORE_COLUMN_OPTION_NAMES = { visibleWidth: true, bestFitWidth: tr
 export const CLASSES = {
   commandExpand: 'dx-command-expand',
 };
-export const MAX_SAFE_INTEGER = Number.MAX_SAFE_INTEGER || 9007199254740991/* IE11 */;
 export const GROUP_COMMAND_COLUMN_NAME = 'groupExpand';
 export const VIRTUAL_COMMAND_COLUMN_NAME = 'virtual';
 export const DETAIL_COMMAND_COLUMN_NAME = 'detailExpand';

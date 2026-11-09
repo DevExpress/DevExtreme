@@ -19,7 +19,7 @@ import type { DataController } from '../../grid_core/data_controller/data_contro
 import type { DataSourceController } from '../../grid_core/data_source/data_source_controller';
 import type { EditingController } from '../../grid_core/editing/editing';
 import type { HeaderPanel } from '../../grid_core/header_panel/header_panel';
-import type { SelectionController } from '../../grid_core/selection/m_selection';
+import type { SelectionController } from '../../grid_core/selection/selection';
 import type { ModuleType } from '../../grid_core/types';
 import type { RowsView } from '../../grid_core/views/rows_view';
 import dataGridCore from '../core';

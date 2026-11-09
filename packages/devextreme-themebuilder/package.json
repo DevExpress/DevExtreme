@@ -44,8 +44,6 @@
     "@typescript-eslint/eslint-plugin": "catalog:",
     "@typescript-eslint/parser": "catalog:",
     "eslint": "catalog:",
-    "eslint-config-airbnb-base": "15.0.0",
-    "eslint-config-airbnb-typescript": "catalog:",
     "eslint-config-devextreme": "catalog:",
     "eslint-plugin-import": "catalog:",
     "eslint-plugin-no-only-tests": "catalog:",

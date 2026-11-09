@@ -1,7 +1,6 @@
 /* eslint-disable max-classes-per-file */
 import type { SingleMultipleOrNone } from '@js/common';
 import { name as clickEventName } from '@js/common/core/events/click';
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import holdEvent from '@js/common/core/events/hold';
 import { addNamespace, isCommandKeyPressed } from '@js/common/core/events/utils/index';
 import messageLocalization from '@js/common/core/localization/message';
@@ -23,6 +22,7 @@ import errors from '@js/ui/widget/ui.errors';
 import supportUtils from '@ts/core/utils/support';
 import type { StoreKey } from '@ts/data/abstract_store';
 import type { StoreLoadOptions } from '@ts/data/data_source/types';
+import eventsEngine from '@ts/events/core/events_engine';
 import type { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/column_headers';
 import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/columns_controller';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
@@ -801,7 +801,6 @@ export const selectionColumnHeadersViewExtender = (
       }
 
       if (!$(event.target).closest(`.${SELECT_CHECKBOX_CLASS}`).length) {
-        // @ts-expect-error eventsEngine.trigger is not fully typed
         eventsEngine.trigger($(event.currentTarget).children(`.${SELECT_CHECKBOX_CLASS}`), clickEventName);
       }
       event.preventDefault();
@@ -843,7 +842,6 @@ export const selectionRowsViewExtender = <TBase extends ModuleType<RowsView>>(
       value: options.value,
       setValue(value, e) {
         if (e?.event?.type === 'keydown') {
-          // @ts-expect-error eventsEngine.trigger is not fully typed
           eventsEngine.trigger(e.element, clickEventName, e);
         }
       },

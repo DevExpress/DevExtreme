@@ -1,4 +1,4 @@
-import type { SelectionController } from '@ts/grids/grid_core/selection/m_selection';
+import type { SelectionController } from '@ts/grids/grid_core/selection/selection';
 import type { RowKey } from '@ts/grids/grid_core/types';
 
 export type SelectionStateByKey = Record<string, boolean | undefined>;

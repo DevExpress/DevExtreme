@@ -1,5 +1,4 @@
 import positionUtils from '@js/common/core/animation/position';
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import browser from '@js/core/utils/browser';
@@ -10,6 +9,7 @@ import { Deferred } from '@js/core/utils/deferred';
 import { each } from '@js/core/utils/iterator';
 import { isDefined } from '@js/core/utils/type';
 import { getWindow } from '@js/core/utils/window';
+import eventsEngine from '@ts/events/core/events_engine';
 import type { ChangedEvent } from '@ts/grids/grid_core/data_source_adapter/types';
 import type {
   GridPropertyType,
@@ -88,6 +88,7 @@ function subscribeToExternalScrollers(
     if (widget) {
       widget.on('scroll', handler);
     } else {
+      // @ts-expect-error without a widget, scrollable is the element
       eventsEngine.on(scrollable, 'scroll', handler);
     }
 
@@ -104,6 +105,7 @@ function subscribeToExternalScrollers(
       if (widget) {
         widget.off('scroll', handler);
       } else {
+        // @ts-expect-error without a widget, scrollable is the element
         eventsEngine.off(scrollable, 'scroll', handler);
       }
     });

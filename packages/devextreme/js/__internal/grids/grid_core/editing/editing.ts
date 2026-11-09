@@ -1,5 +1,4 @@
 /* eslint-disable max-classes-per-file */
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import { removeEvent } from '@js/common/core/events/remove';
 import { addNamespace } from '@js/common/core/events/utils';
 import messageLocalization from '@js/common/core/localization/message';
@@ -32,6 +31,7 @@ import { current, isFluent } from '@js/ui/themes';
 import { Deferred, fromPromise, when } from '@ts/core/utils/deferred';
 import domUtils from '@ts/core/utils/dom';
 import type Store from '@ts/data/abstract_store';
+import eventsEngine from '@ts/events/core/events_engine';
 import type { AdaptiveColumnsViewController } from '@ts/grids/grid_core/adaptivity/adaptivity';
 import { HIDDEN_COLUMNS_WIDTH } from '@ts/grids/grid_core/adaptivity/const';
 import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/columns_controller';
@@ -48,6 +48,7 @@ import type {
 import { generateRowValues } from '@ts/grids/grid_core/data_controller/utils/row_values';
 import type { DataSourceController } from '@ts/grids/grid_core/data_source/data_source_controller';
 import type { RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
+import { CLASSES as EDITOR_FACTORY_CLASSES } from '@ts/grids/grid_core/editor_factory/const';
 import type { EditorFactory } from '@ts/grids/grid_core/editor_factory/editor_factory';
 import type { FocusController } from '@ts/grids/grid_core/focus/m_focus';
 import type { HeaderPanel } from '@ts/grids/grid_core/header_panel/header_panel';
@@ -2978,7 +2979,7 @@ const rowsView = <TBase extends ModuleType<RowsView>>(
 
       $cell
         .toggleClass(this.addWidgetPrefix(CLASSES.readonly), !isEditableCell)
-        .toggleClass(CLASSES.cellFocusDisabled, !isEditableCell);
+        .toggleClass(EDITOR_FACTORY_CLASSES.cellFocusDisabled, !isEditableCell);
 
       if (alignment) {
         $cell.find(EDITORS_INPUT_SELECTOR).first().css('textAlign', alignment);

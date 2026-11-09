@@ -22,6 +22,7 @@ import type {
   OperationTypes, RawItemData, RemoteOperationsOptions,
 } from '@ts/grids/grid_core/data_source_adapter/types';
 import type { EditingChange, EditingChangeParams } from '@ts/grids/grid_core/editing/types';
+import { CLASSES as EDITOR_FACTORY_CLASSES } from '@ts/grids/grid_core/editor_factory/const';
 import type { ModuleType } from '@ts/grids/grid_core/types';
 import { ColumnsView } from '@ts/grids/grid_core/views/columns_view';
 import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
@@ -40,7 +41,6 @@ import type { RowsView } from '../../grid_core/views/rows_view';
 import AggregateCalculator from '../aggregate_calculator';
 import gridCore from '../core';
 import {
-  DATAGRID_CELL_DISABLED,
   DATAGRID_FOOTER_ROW_CLASS,
   DATAGRID_GROUP_FOOTER_CLASS,
   DATAGRID_GROUP_FOOTER_ROW_TYPE,
@@ -309,7 +309,7 @@ export class FooterView extends ColumnsView {
 
     if (row.rowType === DATAGRID_TOTAL_FOOTER_ROW_TYPE) {
       $row.addClass(DATAGRID_FOOTER_ROW_CLASS);
-      $row.addClass(DATAGRID_CELL_DISABLED);
+      $row.addClass(EDITOR_FACTORY_CLASSES.cellFocusDisabled);
       $row.attr('tabindex', 0);
     }
 
@@ -577,11 +577,11 @@ export const summaryRowsViewExtender = (
     super._renderCells($row, options);
 
     if (options.row.rowType === 'group' && hasGroupSummaryCells(options)) {
-      this._renderGroupSummaryCells($row, options);
+      this.renderGroupSummaryCells($row, options);
     }
   }
 
-  private _hasAlignByColumnSummaryItems(
+  public hasAlignByColumnSummaryItems(
     columnIndex: number,
     options: GroupSummaryRenderOptions,
   ): boolean {
@@ -592,15 +592,15 @@ export const summaryRowsViewExtender = (
     return !isGrouped && (isVirtual || hasSummaryCells);
   }
 
-  private _getAlignByColumnCellCount(
-    groupCellColSpan,
+  public getAlignByColumnCellCount(
+    groupCellColSpan: number,
     options: GroupSummaryRenderOptions,
   ): number {
     let alignByColumnCellCount = 0;
 
     for (let i = 1; i < groupCellColSpan; i += 1) {
       const columnIndex = options.row.summaryCells.length - i;
-      const hasAlignBySummary = this._hasAlignByColumnSummaryItems(columnIndex, options);
+      const hasAlignBySummary = this.hasAlignByColumnSummaryItems(columnIndex, options);
       if (hasAlignBySummary) {
         alignByColumnCellCount = i;
       }
@@ -609,13 +609,13 @@ export const summaryRowsViewExtender = (
     return alignByColumnCellCount;
   }
 
-  private _renderGroupSummaryCells(
+  public renderGroupSummaryCells(
     $row: dxElementWrapper,
     options: GroupSummaryRenderOptions,
   ): void {
     const $groupCell = $row.children().last();
     const groupCellColSpan = Number($groupCell.attr('colSpan')) || 1;
-    const alignByColumnCellCount = this._getAlignByColumnCellCount(groupCellColSpan, options);
+    const alignByColumnCellCount = this.getAlignByColumnCellCount(groupCellColSpan, options);
 
     this.renderGroupSummaryCellsCore(
       $groupCell,
@@ -639,14 +639,14 @@ export const summaryRowsViewExtender = (
 
         this._renderCell($groupCell.parent(), extend({
           column: options.columns[columnIndex],
-          columnIndex: this._getSummaryCellIndex(columnIndex, options.columns),
+          columnIndex: this.getSummaryCellIndex(columnIndex, options.columns),
         }, options));
       }
     }
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  private _getSummaryCellIndex(columnIndex: number, columns: Column[]): number {
+  public getSummaryCellIndex(columnIndex: number, columns: Column[]): number {
     return columnIndex;
   }
 

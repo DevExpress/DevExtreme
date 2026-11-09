@@ -1,6 +1,5 @@
 /* eslint-disable spellcheck/spell-checker */
 import { locate, move } from '@js/common/core/animation/translator';
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import { name as dblclickEvent } from '@js/common/core/events/double_click';
 import { addNamespace, isFakeClickEvent } from '@js/common/core/events/utils/index';
 import registerComponent from '@js/core/component_registrator';
@@ -23,6 +22,7 @@ import type { TemplateBase } from '@ts/core/templates/template_base';
 import { addOffsets } from '@ts/core/utils/date';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { SupportedKeys } from '@ts/core/widget/widget';
+import eventsEngine from '@ts/events/core/events_engine';
 import type { ItemRenderInfo, PostprocessRenderItemInfo } from '@ts/ui/collection/collection_widget.base';
 import type { CollectionWidgetEditProperties } from '@ts/ui/collection/collection_widget.edit';
 import CollectionWidget from '@ts/ui/collection/collection_widget.edit';
@@ -686,7 +686,7 @@ class SchedulerAppointments extends CollectionWidget<AppointmentCollectionProper
     const itemContainer = this._itemContainer();
 
     eventsEngine.off(itemContainer, DBLCLICK_EVENT_NAME, itemSelector);
-    eventsEngine.on(itemContainer, DBLCLICK_EVENT_NAME, itemSelector, (e) => {
+    eventsEngine.on(itemContainer, DBLCLICK_EVENT_NAME, itemSelector, (e: DxEvent) => {
       that._itemDXEventHandler(e, 'onAppointmentDblClick', {}, {
         afterExecute(actionInfo): void {
           // @ts-expect-error args holds the arguments of the dblclick action

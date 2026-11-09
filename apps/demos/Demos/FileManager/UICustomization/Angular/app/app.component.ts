@@ -103,7 +103,7 @@ export class AppComponent {
       return false;
     }
 
-    let array = null;
+    let array;
     if (!directory.dataItem) {
       array = this.fileItems;
     } else {
@@ -119,8 +119,7 @@ export class AppComponent {
   }
 
   private updateCategory(newCategory, directory, viewArea) {
-    let items = null;
-
+    let items;
     if (viewArea === 'navPane') {
       items = [directory];
     } else {

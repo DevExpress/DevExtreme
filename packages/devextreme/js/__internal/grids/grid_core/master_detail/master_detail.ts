@@ -8,7 +8,7 @@ import { getHeight, getWidth } from '@js/core/utils/size';
 import { isDefined } from '@js/core/utils/type';
 import type { MasterDetail, Properties as DataGridProperties } from '@js/ui/data_grid';
 import type { GroupingDataControllerExtension } from '@ts/grids/data_grid/grouping/types';
-import type { ColumnFixingRowsViewExtension } from '@ts/grids/grid_core/column_fixing/types';
+import type { ColumnFixingColumnsViewExtension } from '@ts/grids/grid_core/column_fixing/types';
 import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/columns_controller';
 import type { Column, ColumnTemplateSource } from '@ts/grids/grid_core/columns_controller/types';
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
@@ -19,6 +19,7 @@ import type {
   ProcessedItem,
 } from '@ts/grids/grid_core/data_controller/types';
 import type { RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
+import { CLASSES as EDITOR_FACTORY_CLASSES } from '@ts/grids/grid_core/editor_factory/const';
 import type { ResizingController } from '@ts/grids/grid_core/grid_view/grid_view';
 import type {
   InternalGrid, ModuleType, OptionChanged, OptionChangedFor, RowKey,
@@ -275,7 +276,7 @@ const resizing = (
     masterRowOptions: RowPreparedOptions,
   ): DeferredObj<unknown> | undefined {
     const d = Deferred();
-    const masterRowsView: RowsView & Partial<ColumnFixingRowsViewExtension> = masterDataGrid.getView('rowsView');
+    const masterRowsView: RowsView & Partial<ColumnFixingColumnsViewExtension> = masterDataGrid.getView('rowsView');
 
     if (masterRowsView?.isFixedColumns?.()) {
       this._updateFixedMasterDetailGrids(
@@ -435,7 +436,7 @@ const rowsView = (
     });
 
     $detailCell
-      .addClass(CLASSES.cellFocusDisabledClass)
+      .addClass(EDITOR_FACTORY_CLASSES.cellFocusDisabled)
       .addClass(CLASSES.detailCell)
       .attr('colSpan', visibleColumns.length);
 

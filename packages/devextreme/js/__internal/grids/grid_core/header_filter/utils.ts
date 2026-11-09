@@ -2,7 +2,7 @@ import type { HeaderFilterGroupInterval } from '@js/common/grids';
 import { each } from '@js/core/utils/iterator';
 import { isDefined, isString } from '@js/core/utils/type';
 import sharedFiltering from '@js/ui/shared/filtering';
-import type { Column } from '@ts/grids/grid_core/columns_controller/types';
+import type { Column, WithCellValueCalculator } from '@ts/grids/grid_core/columns_controller/types';
 import type { DataFilter } from '@ts/grids/grid_core/filter/types';
 import { combineFilters, isColumnExcluded } from '@ts/grids/grid_core/filter/utils';
 import gridCoreUtils from '@ts/grids/grid_core/utils';
@@ -11,7 +11,6 @@ import type TreeView from '@ts/ui/tree_view/tree_view.search';
 
 import type {
   EmptyDateValue,
-  HeaderFilterColumn,
   HeaderFilterGroup,
   HeaderFilterGroupItem,
   HeaderFilterItem,
@@ -103,7 +102,7 @@ const DATE_INTERVAL_SELECTORS = {
 };
 
 const getIntervalSelector = function getIntervalSelector(
-  this: HeaderFilterColumn,
+  this: WithCellValueCalculator<Column>,
   interval: HeaderFilterGroupInterval | number,
   data: unknown,
 ): number | EmptyDateValue | null | undefined {
@@ -126,7 +125,7 @@ const getIntervalSelector = function getIntervalSelector(
 };
 
 export function getHeaderFilterGroupParameters(
-  column: HeaderFilterColumn,
+  column: WithCellValueCalculator<Column>,
   remoteGrouping?: boolean,
 ): HeaderFilterGroup {
   const dataField = column.dataField || column.name;

@@ -28,7 +28,7 @@ import type { ModuleType, RowKey } from '@ts/grids/grid_core/types';
 import gridCoreUtils from '@ts/grids/grid_core/utils';
 import type { ViewRowEvent } from '@ts/grids/grid_core/views/types';
 import { CLASSES as ROWS_CLASSES } from '@ts/grids/tree_list/rows/const';
-import type { TreeListRowsView } from '@ts/grids/tree_list/rows/m_rows';
+import type { TreeListRowsView } from '@ts/grids/tree_list/rows/rows';
 
 import treeListCore from '../core';
 import type { TreeListDataController } from '../data_controller/data_controller';

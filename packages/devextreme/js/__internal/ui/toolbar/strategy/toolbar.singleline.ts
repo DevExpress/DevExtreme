@@ -8,8 +8,8 @@ import { each } from '@js/core/utils/iterator';
 import { getWidth } from '@js/core/utils/size';
 import type { Item } from '@js/ui/toolbar';
 import DropDownMenu from '@ts/ui/toolbar/internal/toolbar.menu';
-import type { Properties } from '@ts/ui/toolbar/toolbar';
 import type Toolbar from '@ts/ui/toolbar/toolbar';
+import type { Properties } from '@ts/ui/toolbar/toolbar';
 
 const INVISIBLE_STATE_CLASS = 'dx-state-invisible';
 export const TOOLBAR_DROP_DOWN_MENU_CONTAINER_CLASS = 'dx-toolbar-menu-container';

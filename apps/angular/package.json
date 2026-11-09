@@ -13,7 +13,6 @@
     "@angular/forms": "catalog:angular",
     "@angular/platform-browser": "catalog:angular",
     "@angular/platform-browser-dynamic": "catalog:angular",
-    "@angular/router": "catalog:angular",
     "core-js": "^2.6.12",
     "devextreme": "workspace:*",
     "devextreme-angular": "workspace:*",
@@ -26,7 +25,6 @@
     "@types/jasmine": "5.1.4",
     "@types/node": "20.11.17",
     "cross-env": "7.0.3",
-    "ts-node": "10.9.2",
     "typescript": "catalog:angular"
   },
   "scripts": {

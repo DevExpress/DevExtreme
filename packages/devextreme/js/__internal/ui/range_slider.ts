@@ -1,4 +1,3 @@
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import { eventData } from '@js/common/core/events/utils/index';
 import messageLocalization from '@js/common/core/localization/message';
 import registerComponent from '@js/core/component_registrator';
@@ -10,6 +9,7 @@ import type { Properties } from '@js/ui/range_slider';
 import { applyServerDecimalSeparator } from '@ts/core/utils/common';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { SupportedKeys } from '@ts/core/widget/widget';
+import eventsEngine from '@ts/events/core/events_engine';
 import type { SwipeUpdateEvent } from '@ts/events/swipe';
 import type { SliderPointerEvent } from '@ts/ui/slider/slider';
 import Slider from '@ts/ui/slider/slider';
@@ -62,7 +62,6 @@ class RangeSlider extends Slider<RangeSliderProperties> {
       if (start === end) {
         this._capturedHandle = capturedHandle;
         e.target = capturedHandle.get(0);
-        // @ts-expect-error trigger is not declared in the public events engine type
         eventsEngine.trigger(capturedHandle, 'focus');
       }
     };
@@ -248,7 +247,6 @@ class RangeSlider extends Slider<RangeSliderProperties> {
       } else {
         $nextHandle = this._$handleEnd;
       }
-      // @ts-expect-error trigger is not declared in the public events engine type
       eventsEngine.trigger($nextHandle, 'focus');
 
       if ($nextHandle && $nextHandle !== this._capturedHandle) {
