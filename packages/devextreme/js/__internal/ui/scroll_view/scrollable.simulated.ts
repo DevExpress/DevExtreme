@@ -295,7 +295,6 @@ export class Scroller {
 
   _moveContent(): void {
     const location = this._location;
-    // @ts-expect-error ts-error
     this._$container[this._scrollProp](-location / this._getScaleRatio());
     this._moveContentByTranslator(location);
   }
@@ -544,8 +543,8 @@ export class Scroller {
   }
 
   _updateLocation(): void {
-    // @ts-expect-error ts-error
-    this._location = (locate(this._$content)[this._prop] - this._$container[this._scrollProp]())
+    const contentLocation = locate(this._$content)[this._prop];
+    this._location = (contentLocation - this._$container[this._scrollProp]<number>())
       * this._getScaleRatio();
   }
 
@@ -1145,10 +1144,8 @@ export class SimulatedStrategy<
 
   location(): ScrollOffset {
     const location = locate(this._$content);
-    // @ts-expect-error ts-error
-    location.top -= this._$container.scrollTop();
-    // @ts-expect-error ts-error
-    location.left -= this._$container.scrollLeft();
+    location.top -= this._$container.scrollTop<number>();
+    location.left -= this._$container.scrollLeft<number>();
     return location;
   }
 
