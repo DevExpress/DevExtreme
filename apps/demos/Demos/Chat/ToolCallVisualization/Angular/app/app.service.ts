@@ -225,7 +225,7 @@ export class AppService {
 
   async runTool(call: { id: string; function: { name: string; arguments: string } }): Promise<DxChatTypes.ToolCall> {
     const { name } = call.function;
-    let args: Record<string, unknown> = {};
+    let args: Record<string, unknown>;
 
     try {
       args = JSON.parse(call.function.arguments || '{}');

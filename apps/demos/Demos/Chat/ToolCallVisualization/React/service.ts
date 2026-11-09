@@ -147,7 +147,7 @@ async function requestModel(messages: AIMessage[]): Promise<OpenAI.ChatCompletio
 
 async function runTool(call: OpenAI.ChatCompletionMessageFunctionToolCall): Promise<ChatTypes.ToolCall> {
   const { name } = call.function;
-  let args: ToolArguments = {};
+  let args: ToolArguments;
 
   try {
     args = JSON.parse(call.function.arguments || '{}') as ToolArguments;
