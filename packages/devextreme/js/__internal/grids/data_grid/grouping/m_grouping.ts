@@ -420,12 +420,12 @@ export const GroupingHeaderPanelExtender = (
     if ($element?.find(`.${CLASSES.groupPanel}`).length) {
       const offset = $element.offset();
 
-      return {
-        // @ts-expect-error offset() is typed as possibly undefined
-        top: offset.top,
-        // @ts-expect-error offset() is typed as possibly undefined
-        bottom: offset.top + getHeight($element),
-      };
+      if (offset) {
+        return {
+          top: offset.top,
+          bottom: offset.top + Number(getHeight($element)),
+        };
+      }
     }
     return null;
   }
