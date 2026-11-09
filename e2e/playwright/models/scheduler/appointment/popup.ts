@@ -92,14 +92,14 @@ export default class AppointmentPopup {
   constructor(page: Page) {
     this.page = page;
     this.popup = new Popup(page, SELECTORS.appointmentPopup);
-    this.contentElement = page.locator(SELECTORS.content);
+    this.contentElement = page.locator(SELECTORS.content).first();
     this.toolbarElement = page.locator(SELECTORS.toolbar);
     this.saveButton = new Button(page, this.toolbarElement.locator(SELECTORS.doneButton));
     this.cancelButton = new Button(page, this.toolbarElement.locator(SELECTORS.cancelButton));
     this.form = this.contentElement.locator(SELECTORS.form);
 
     const editor = (selector: string): PopupEditor => {
-      const element = this.contentElement.locator(selector);
+      const element = this.contentElement.locator(selector).first();
 
       return { element, input: element.locator(SELECTORS.editorInput) };
     };

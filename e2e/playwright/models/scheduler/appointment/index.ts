@@ -50,7 +50,13 @@ export default class Appointment {
   constructor(scheduler: Locator, index = 0, title?: string) {
     const appointments = scheduler.locator(`.${CLASS.appointment}`);
 
-    this.element = (title ? appointments.filter({ hasText: textMatcher(title) }) : appointments)
+    // Hidden text does not count, as with TestCafe's "withText": every appointment also holds a
+    // hidden aria description ("Press Delete to…") that would match short titles.
+    const visibleText = (text: string): Locator => scheduler.page()
+      .getByText(textMatcher(text))
+      .and(scheduler.page().locator(':not([hidden])'));
+
+    this.element = (title ? appointments.filter({ has: visibleText(title) }) : appointments)
       .nth(index);
 
     this.date = this.element.locator(`.${CLASS.contentDate}`).first();
