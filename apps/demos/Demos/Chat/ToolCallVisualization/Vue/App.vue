@@ -122,7 +122,7 @@ type FunctionCall = { id: string; function: { name: string; arguments: string } 
 
 async function runTool(call: FunctionCall): Promise<ToolCall> {
   const { name } = call.function;
-  let args: Record<string, any> = {};
+  let args: Record<string, any>;
 
   try {
     args = JSON.parse(call.function.arguments || '{}');

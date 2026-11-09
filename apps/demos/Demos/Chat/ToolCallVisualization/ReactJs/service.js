@@ -129,7 +129,7 @@ async function requestModel(messages) {
 }
 async function runTool(call) {
   const { name } = call.function;
-  let args = {};
+  let args;
   try {
     args = JSON.parse(call.function.arguments || '{}');
   } catch {
