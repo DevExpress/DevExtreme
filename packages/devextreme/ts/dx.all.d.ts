@@ -24893,7 +24893,10 @@ declare module DevExpress.ui {
      * [descr:_ui_pivot_grid_ContextMenuPreparingEvent]
      */
     export type ContextMenuPreparingEvent =
-      DevExpress.common.core.events.EventInfo<dxPivotGrid> & {
+      DevExpress.common.core.events.NativeEventInfo<
+        dxPivotGrid,
+        DevExpress.events.InteractionEvent
+      > & {
         /**
          * [descr:_ui_pivot_grid_ContextMenuPreparingEvent.area]
          */
