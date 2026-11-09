@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { type DxChatTypes } from 'devextreme-angular/ui/chat';
 import { DataSource, CustomStore } from 'devextreme-angular/common/data';
+import type { OpenAI } from 'openai';
 import { AiService, type AIMessage } from './ai/ai.service';
 
 const ALERT_TIMEOUT = 1000 * 60;
@@ -25,7 +26,7 @@ interface SuggestionCard {
   prompt: string;
 }
 
-const tools = [
+const tools: OpenAI.ChatCompletionTool[] = [
   {
     type: 'function',
     function: {
@@ -229,7 +230,9 @@ export class AppService {
     try {
       args = JSON.parse(call.function.arguments || '{}');
     } catch {
-      args = {};
+      return {
+        name, arguments: {}, status: 'error', result: 'Invalid tool arguments',
+      };
     }
 
     await AppService.wait(TOOL_DELAY);

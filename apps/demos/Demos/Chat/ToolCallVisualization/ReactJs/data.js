@@ -20,13 +20,14 @@ export const suggestionCards = [
   },
   {
     title: 'Multiple Tools',
-    description: 'Get the current weather and time in Barcelona and the USD to EUR rate.',
+    description:
+      'Check the current weather and time in Barcelona and the USD-to-EUR exchange rate.',
     prompt:
-      'Check the current weather conditions in Barcelona, Spain, the current time in Barcelona, Spain and the exchange rate from USD to EUR.',
+      'Check the current weather conditions in Barcelona, Spain, the current time in Barcelona, Spain, and the exchange rate from USD to EUR.',
   },
   {
     title: 'Error State',
-    description: 'Check the weather in London and in Atlantis: one of the calls fails.',
+    description: 'Check the weather in London and in Atlantis. The request for Atlantis fails.',
     prompt: 'Check the current weather conditions in London, UK and in Atlantis, Atlantis.',
   },
 ];

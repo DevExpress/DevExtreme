@@ -68,15 +68,6 @@
   flex-direction: column;
 }
 
-.dx-chat-messagebubble:has(> .dx-chat-tool-call-view) {
-  min-width: 344px;
-}
-
-.dx-theme-fluent-typography .dx-chat-messagebubble:has(> .dx-chat-tool-call-view),
-.dx-theme-fluent-next-typography .dx-chat-messagebubble:has(> .dx-chat-tool-call-view) {
-  min-width: 320px;
-}
-
 .chat-suggestion-cards {
   display: flex;
   flex-wrap: wrap;

@@ -127,7 +127,9 @@ async function runTool(call: FunctionCall): Promise<ToolCall> {
   try {
     args = JSON.parse(call.function.arguments || '{}');
   } catch {
-    args = {};
+    return {
+      name, arguments: {}, status: 'error', result: 'Invalid tool arguments',
+    };
   }
 
   await wait(TOOL_DELAY);
@@ -360,15 +362,6 @@ function onClearButtonClick(): void {
 .dx-chat-messagebubble-content {
   display: flex;
   flex-direction: column;
-}
-
-.dx-chat-messagebubble:has(> .dx-chat-tool-call-view) {
-  min-width: 344px;
-}
-
-.dx-theme-fluent-typography .dx-chat-messagebubble:has(> .dx-chat-tool-call-view),
-.dx-theme-fluent-next-typography .dx-chat-messagebubble:has(> .dx-chat-tool-call-view) {
-  min-width: 320px;
 }
 
 .chat-suggestion-cards {
