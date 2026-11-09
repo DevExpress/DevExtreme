@@ -97,9 +97,10 @@ const BORDER_WIDTH = 1;
 const window = getWindow();
 
 type ContextMenuTarget = string | dxElementWrapper | Element | Window | undefined;
+type ContextMenuAnchor = ContextMenuTarget | DxEvent;
 
 const isRendererTarget = (
-  target: ContextMenuTarget | DxEvent,
+  target: ContextMenuAnchor,
 ): target is dxElementWrapper => isRenderer(target);
 type ContextMenuNode = InternalNode & Item;
 
@@ -812,7 +813,7 @@ class ContextMenu<
     return windowHeight;
   }
 
-  _getMaxHeight($anchor: ContextMenuTarget | DxEvent, considerAnchorHeight = true): number {
+  _getMaxHeight($anchor: ContextMenuAnchor, considerAnchorHeight = true): number {
     const windowHeight: number = getOuterHeight(window);
     const isAnchorRenderer = isRendererTarget($anchor);
     const document = domAdapter.getDocument();
@@ -1229,8 +1230,9 @@ class ContextMenu<
   _getTarget(): ContextMenuTarget {
     const { target, position } = this.option();
 
+    // @ts-expect-error position.of is used as the target element, an event is not expected here
     // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-    return target || position?.of as ContextMenuTarget || $(domAdapter.getDocument());
+    return target || position?.of || $(domAdapter.getDocument());
   }
 
   _getContextMenuPosition(): PositionConfig | undefined {

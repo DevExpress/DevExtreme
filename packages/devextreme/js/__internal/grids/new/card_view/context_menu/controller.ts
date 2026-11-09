@@ -59,7 +59,7 @@ export class ContextMenuController
       items.push(...this.getSortingItems(contextInfo.column));
     }
 
-    // @ts-expect-error
+    // @ts-expect-error component and element are added by the action
     const preparingEvent: ContextMenuPreparingEvent<CardInfo> = {
       event: event as DxEvent<InteractionEvent>,
       items: items.length > 0 ? items : undefined,
