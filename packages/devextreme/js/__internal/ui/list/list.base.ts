@@ -87,7 +87,7 @@ const LIST_SELECT_RADIOBUTTON = 'dx-list-select-radiobutton';
 const WRAP_ITEM_TEXT_CLASS = 'dx-wrap-item-text';
 const SELECT_ALL_ITEM_SELECTOR = '.dx-list-select-all';
 
-const LIST_ITEM_DATA_KEY = 'dxListItemData';
+export const LIST_ITEM_DATA_KEY = 'dxListItemData';
 const LIST_FEEDBACK_SHOW_TIMEOUT = 70;
 
 type ScrollViewConstructor = Constructor<ScrollViewType>;
