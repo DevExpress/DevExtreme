@@ -37,12 +37,12 @@ import {
   LEGACY_SCROLLING_MODE,
   LOAD_TIMEOUT,
 } from './const';
-import type { VirtualScrollingDataControllerExtension } from './extenders/virtual_scrolling_data_controller';
 import type {
   ContentOffsetType,
   ExternalScrollers,
   VirtualScrollDataOptions,
   VirtualScrollingDataChange,
+  VirtualScrollingDataControllerExtension,
   VirtualScrollingDataSourceAdapter,
   VirtualScrollingResizingController,
   VirtualScrollingRowsView,

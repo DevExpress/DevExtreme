@@ -18,6 +18,16 @@ export interface ChangedLoadParams {
   loadPageCount: number;
 }
 
+export interface LoadPageParams extends ChangedLoadParams {
+  skipForCurrentPage: number;
+}
+
+export interface LoadViewportOptions {
+  checkLoadedParamsOnly?: boolean;
+  checkLoading?: boolean;
+  viewportIsNotFilled?: boolean;
+}
+
 export interface VirtualScrollingResizingControllerExtension {
   hasResizeTimeout: () => boolean;
 }
@@ -35,9 +45,11 @@ export interface ViewportParams {
 export interface VirtualScrollDataOptions extends VirtualDataLoaderDataOptions {
   changingDuration: () => number;
   loadedOffset?: () => number;
-  loadedItemCount?: () => number;
+  loadedItemCount?: () => number | undefined;
   renderedItemsRange?: () => ViewportParams | undefined;
 }
+
+export type RowsScrollDataOptions = Required<VirtualScrollDataOptions>;
 
 export type ExternalScrollable = Scrollable | dxElementWrapper;
 
@@ -74,6 +86,22 @@ export type VirtualScrollingDataSourceAdapter = DataSourceAdapter
 & VirtualScrollingDataSourceAdapterExtension;
 
 export type VirtualScrollingDataChange = ViewDataChange & { removeCount?: number };
+
+export interface VirtualScrollingDataControllerExtension {
+  virtualItemsCount: () => VirtualItemsCount | undefined;
+  // TODO public controller
+  _rowsScrollController?: VirtualScrollController | null;
+  viewportSize: (size?: number) => number | undefined;
+  viewportHeight: (height: number, scrollTop?: number) => void;
+  viewportItemSize: (size?: number) => number | undefined;
+  setViewportPosition: (position: number) => void;
+  setContentItemSizes: (sizes: number[]) => void;
+  getItemSize: () => number | undefined;
+  getItemSizes: () => ItemSizes | undefined;
+  getContentOffset: (type?: ContentOffsetType) => number | undefined;
+  updateViewport: () => void;
+  loadIfNeed: () => void;
+}
 
 export interface VirtualScrollingRowsViewExtension {
   // eslint-disable-next-line @typescript-eslint/method-signature-style -- overridden by methods
