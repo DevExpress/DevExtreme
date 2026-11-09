@@ -107,7 +107,7 @@ export const dataSourceAdapterExtender = (
 
   private _loadPageCount!: number;
 
-  public _virtualScrollController!: VirtualScrollController;
+  public _virtualScrollController!: VirtualScrollController<RawItemData>;
 
   public _renderTime = 0;
 
@@ -134,7 +134,7 @@ export const dataSourceAdapterExtender = (
     super.dispose(isSharedDataSource);
   }
 
-  private _getVirtualScrollDataOptions(): VirtualScrollDataOptions {
+  private _getVirtualScrollDataOptions(): VirtualScrollDataOptions<RawItemData> {
     return {
       pageSize: (): number => this.pageSize(),
       totalItemsCount: (): number => this.totalItemsCount(),
@@ -148,10 +148,10 @@ export const dataSourceAdapterExtender = (
         updateLoading(this);
       },
       itemsCount: (): number => this.itemsCount(true),
-      items: (): unknown[] => this._dataSource.items(),
-      viewportItems: (items?: unknown[]): unknown[] => {
+      // @ts-expect-error DataSource items are typed as unknown
+      items: (): RawItemData[] => this._dataSource.items(),
+      viewportItems: (items?: RawItemData[]): RawItemData[] => {
         if (items) {
-          // @ts-expect-error the loader passes back the items it got from items()
           this._items = items;
         }
         return this._items;

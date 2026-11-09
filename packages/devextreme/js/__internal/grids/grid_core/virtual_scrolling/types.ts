@@ -1,6 +1,8 @@
 import type { dxElementWrapper } from '@js/core/renderer';
 import type { DeferredObj } from '@js/core/utils/deferred';
+import type { ProcessedItem } from '@ts/grids/grid_core/data_controller/types';
 import type DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/data_source_adapter';
+import type { RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
 import type { ResizingController } from '@ts/grids/grid_core/grid_view/grid_view';
 import type { RowsView } from '@ts/grids/grid_core/views/rows_view';
 import type { ViewDataChange } from '@ts/grids/grid_core/views/types';
@@ -42,14 +44,15 @@ export interface ViewportParams {
   take: number;
 }
 
-export interface VirtualScrollDataOptions extends VirtualDataLoaderDataOptions {
+export interface VirtualScrollDataOptions<TItem = unknown>
+  extends VirtualDataLoaderDataOptions<TItem> {
   changingDuration: () => number;
   loadedOffset?: () => number;
   loadedItemCount?: () => number | undefined;
   renderedItemsRange?: () => ViewportParams | undefined;
 }
 
-export type RowsScrollDataOptions = Required<VirtualScrollDataOptions>;
+export type RowsScrollDataOptions = Required<VirtualScrollDataOptions<ProcessedItem>>;
 
 export type ExternalScrollable = Scrollable | dxElementWrapper;
 
@@ -59,7 +62,7 @@ export interface ExternalScrollers {
 }
 
 export interface VirtualScrollingDataSourceAdapterExtension {
-  _virtualScrollController: VirtualScrollController;
+  _virtualScrollController: VirtualScrollController<RawItemData>;
   _renderTime: number;
   _isLoading: boolean;
   loadPageCount: {
@@ -89,7 +92,7 @@ export type VirtualScrollingDataChange = ViewDataChange & { removeCount?: number
 export interface VirtualScrollingDataControllerExtension {
   virtualItemsCount: () => VirtualItemsCount | undefined;
   // TODO public controller
-  _rowsScrollController?: VirtualScrollController | null;
+  _rowsScrollController?: VirtualScrollController<ProcessedItem> | null;
   viewportSize: (size?: number) => number | undefined;
   viewportHeight: (height: number, scrollTop?: number) => void;
   viewportItemSize: (size?: number) => number | undefined;

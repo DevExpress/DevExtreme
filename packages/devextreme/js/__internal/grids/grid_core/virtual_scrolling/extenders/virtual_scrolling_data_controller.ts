@@ -45,7 +45,7 @@ export const virtualScrollingDataControllerExtender = (
   protected declare dataSourceController: DataSourceController<VirtualScrollingDataSourceAdapter>;
 
   // TODO public controller
-  public _rowsScrollController?: VirtualScrollController | null;
+  public _rowsScrollController?: VirtualScrollController<ProcessedItem> | null;
 
   private _loadViewportParams?: ViewportParams | null;
 
@@ -265,8 +265,7 @@ export const virtualScrollingDataControllerExtender = (
       itemsCount(this: RowsScrollDataOptions): number {
         return this.items(true).length;
       },
-      correctCount(items: unknown[], count: number, fromEnd = false): number {
-        // @ts-expect-error the loader passes back the items it got from items()
+      correctCount(items: ProcessedItem[], count: number, fromEnd = false): number {
         return correctCount(items, count, fromEnd, (item, isNextAfterLast, isFromEnd) => {
           if (item.isNewRow) {
             return isNextAfterLast && !isFromEnd;
@@ -307,9 +306,8 @@ export const virtualScrollingDataControllerExtender = (
 
         return countableOnly ? result.filter(isItemCountable) : result;
       },
-      viewportItems(items?: unknown[]): unknown[] {
+      viewportItems(items?: ProcessedItem[]): ProcessedItem[] {
         if (items && that.option(LEGACY_SCROLLING_MODE) !== false) {
-          // @ts-expect-error the loader passes back the items it got from items()
           that._visibleItems = items;
         }
         // @ts-expect-error the loader changes the visible items in legacy mode only
@@ -691,7 +689,7 @@ export const virtualScrollingDataControllerExtender = (
     const loadedTake = lastLoadOptions?.take || 0;
 
     // @ts-expect-error the rows scroll controller exists while the viewport params are loaded
-    const rowsScrollController: VirtualScrollController = this._rowsScrollController;
+    const rowsScrollController: VirtualScrollController<ProcessedItem> = this._rowsScrollController;
     const isScrollingBack = rowsScrollController.isScrollingBack();
     const topPreloadCount = isScrollingBack ? this.getPreloadedRowCount() : 0;
     const bottomPreloadCount = isScrollingBack ? 0 : this.getPreloadedRowCount();
