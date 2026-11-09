@@ -1,6 +1,5 @@
 import type { dxElementWrapper } from '@js/core/renderer';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
-import type { Cell } from '@ts/grids/grid_core/data_controller/types';
 import type { View } from '@ts/grids/grid_core/modules/modules';
 import type { InternalGrid } from '@ts/grids/grid_core/types';
 
@@ -29,8 +28,4 @@ export interface IndicatorOptions extends ColumnStateOptions {
   columnAlignment: string;
   container: dxElementWrapper;
   indicator: dxElementWrapper;
-}
-
-export interface IndicatorRowOptions {
-  cells?: Cell[];
 }

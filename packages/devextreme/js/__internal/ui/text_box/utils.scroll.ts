@@ -19,15 +19,14 @@ export const allowScroll = (
   shiftKey?: boolean,
 ): boolean | undefined => {
   const $container = $(container);
-  // @ts-expect-error scrollLeft, scrollTop should be correctly typed in renderer.d.ts
-  const scrollTopPos = parseFloat(shiftKey ? $container.scrollLeft() : $container.scrollTop());
+  const scrollTopPos = Number(shiftKey
+    ? $container.scrollLeft<number | undefined>()
+    : $container.scrollTop<number | undefined>());
 
   const prop = shiftKey ? 'Width' : 'Height';
 
-  // @ts-expect-error prop should be correctly typed in renderer.d.ts
-  const scrollSize = parseFloat($container.prop(`scroll${prop}`));
-  // @ts-expect-error prop should be correctly typed in renderer.d.ts
-  const clientSize = parseFloat($container.prop(`client${prop}`));
+  const scrollSize = Number($container.prop<unknown>(`scroll${prop}`));
+  const clientSize = Number($container.prop<unknown>(`client${prop}`));
 
   // NOTE: round to the nearest integer towards zero
   const scrollBottomPos = Math.trunc(scrollSize - clientSize - scrollTopPos);
