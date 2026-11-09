@@ -1547,8 +1547,7 @@ class Popup<
 
     return $wrapper
       .find('[tabindex]')
-      // @ts-expect-error ts-error
-      .filter((_, item) => item.getAttribute('tabindex') >= 0);
+      .filter((_, item) => Number(item.getAttribute('tabindex')) >= 0);
   }
 }
 
