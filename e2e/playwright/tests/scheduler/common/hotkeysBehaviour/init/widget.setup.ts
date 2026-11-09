@@ -1,7 +1,7 @@
-import { extend } from 'devextreme/core/utils/extend';
+import type { Page } from '@playwright/test';
 import { createWidget } from '../../../../../helpers/createWidget';
 
-export default async (options = {}): Promise<void> => createWidget('dxScheduler', extend({
+export default async (page: Page, options: Record<string, unknown> = {}): Promise<void> => createWidget(page, 'dxScheduler', {
   views: ['month'],
   dataSource: [],
   width: 1402,
@@ -11,4 +11,5 @@ export default async (options = {}): Promise<void> => createWidget('dxScheduler'
   maxAppointmentsPerCell: 5,
   currentView: 'month',
   currentDate: new Date(2019, 3, 1),
-}, options));
+  ...options,
+});
