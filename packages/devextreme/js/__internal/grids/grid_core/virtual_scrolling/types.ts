@@ -69,7 +69,6 @@ export interface VirtualScrollingDataSourceAdapterExtension {
   beginPageIndex: () => number;
   virtualItemsCount: () => VirtualItemsCount | undefined;
   getContentOffset: (type?: ContentOffsetType) => number;
-  getVirtualContentSize: () => number;
   setContentItemSizes: (sizes: number[]) => void;
   setViewportPosition: (position: number) => DeferredObj<unknown>;
   getViewportItemIndex: () => number;

@@ -424,10 +424,6 @@ export const dataSourceAdapterExtender = (
     return this._virtualScrollController.getContentOffset(type);
   }
 
-  public getVirtualContentSize(): number {
-    return this._virtualScrollController.getVirtualContentSize();
-  }
-
   public setContentItemSizes(sizes: number[]): void {
     return this._virtualScrollController.setContentItemSizes(sizes);
   }
