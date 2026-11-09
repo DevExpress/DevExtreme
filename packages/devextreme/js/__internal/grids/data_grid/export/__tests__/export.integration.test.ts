@@ -117,3 +117,21 @@ describe('ExportController', () => {
     });
   });
 });
+
+describe('Export button (T1337649)', () => {
+  beforeEach(beforeTest);
+  afterEach(afterTest);
+
+  it('should be named after export.texts.exportTo when several formats are offered', async () => {
+    const { component } = await createDataGrid({
+      dataSource: DATA,
+      export: {
+        enabled: true,
+        formats: ['xlsx', 'pdf'],
+        texts: { exportTo: 'Download the grid' },
+      },
+    });
+
+    expect(component.getExportButton().getButtonElement()?.getAttribute('aria-label')).toBe('Download the grid');
+  });
+});
