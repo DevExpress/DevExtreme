@@ -1,7 +1,7 @@
 @use "sass:color";
 @use "sass:math";
 
-$min-text-contrast: 4.6 !default;
+$min-text-contrast: 4.5 !default;
 
 @function channel-luminance($value) {
   $max-channel-value: 255;
