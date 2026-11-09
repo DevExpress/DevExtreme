@@ -1,10 +1,10 @@
 import {
   afterEach, beforeEach, describe, expect, it, jest,
 } from '@jest/globals';
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import { removeEvent } from '@js/common/core/events/remove';
 import type { dxElementWrapper } from '@js/core/renderer';
 import type { Properties as DataGridProperties, RowPreparedEvent } from '@js/ui/data_grid';
+import eventsEngine from '@ts/events/core/events_engine';
 
 import {
   afterTest,

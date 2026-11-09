@@ -1,5 +1,4 @@
 /* eslint-disable max-classes-per-file */
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import pointerEvents from '@js/common/core/events/pointer';
 import messageLocalization from '@js/common/core/localization/message';
 import { createObjectWithChanges } from '@js/common/data/array_utils';
@@ -29,6 +28,8 @@ import errors from '@js/ui/widget/ui.errors';
 import { Deferred, fromPromise, when } from '@ts/core/utils/deferred';
 import { focused } from '@ts/core/utils/selectors';
 import type Widget from '@ts/core/widget/widget';
+import eventsEngine from '@ts/events/core/events_engine';
+import type { ColumnFixingRowsView } from '@ts/grids/grid_core/column_fixing/types';
 import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/columns_controller';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import type {
@@ -263,13 +264,9 @@ export class ValidatingController extends modules.Controller {
     return hiddenBrokenRules.map((brokenRule) => brokenRule.message).join(', ');
   }
 
-  public validate(isFull?: boolean): DeferredObj<boolean | undefined> {
+  public validate(): DeferredObj<boolean | undefined> {
     let isValid: boolean | undefined = true;
     const deferred = Deferred<boolean | undefined>();
-    const completeList: DeferredObj<RowValidatingParams>[] = [];
-
-    const editMode = this._editingController.getEditMode();
-    const isFullValidation = !!isFull || editMode === EDIT_MODE.row;
 
     if (this._isValidationInProgress) {
       // @ts-expect-error promise() is typed as Promise but returns a Deferred-like value at runtime
@@ -277,28 +274,18 @@ export class ValidatingController extends modules.Controller {
     }
 
     this._isValidationInProgress = true;
-    if (isFullValidation) {
-      this._editingController.addDeferred(deferred);
-      const changes = this._editingController.getChanges();
-      changes.forEach(({ type, key }) => {
-        if (type !== DATA_CHANGE_TYPE.remove) {
-          const validationData = this.getValidationData(key, true);
-          const validationResult = this.validateGroup(validationData);
-          completeList.push(validationResult);
-          validationResult.done((rowValidatingParams) => {
-            validationData.validated = true;
-            isValid = isValid && rowValidatingParams.isValid;
-          });
-        }
+    this._editingController.addDeferred(deferred);
+    const completeList = this._editingController.getChanges()
+      .filter(({ type }) => type !== DATA_CHANGE_TYPE.remove)
+      .map(({ key }) => {
+        const validationData = this.getValidationData(key, true);
+        const validationResult = this.validateGroup(validationData);
+        validationResult.done((rowValidatingParams) => {
+          validationData.validated = true;
+          isValid = isValid && rowValidatingParams.isValid;
+        });
+        return validationResult;
       });
-    } else if (this._currentCellValidator) {
-      // @ts-expect-error the grid's validators get a ValidationData group
-      const validationResult = this.validateGroup(this._currentCellValidator._findGroup());
-      completeList.push(validationResult);
-      validationResult.done((rowValidatingParams) => {
-        isValid = rowValidatingParams.isValid;
-      });
-    }
 
     when(...completeList).done(() => {
       this._isValidationInProgress = false;
@@ -457,9 +444,7 @@ export class ValidatingController extends modules.Controller {
       if (result.status === VALIDATION_STATUS.invalid) {
         const $focus = $container.find(':focus');
         if (!focused($focus)) {
-          // @ts-expect-error eventsEngine.trigger is not fully typed
           eventsEngine.trigger($focus, 'focus');
-          // @ts-expect-error eventsEngine.trigger is not fully typed
           eventsEngine.trigger($focus, pointerEvents.down);
         }
       }
@@ -1008,20 +993,20 @@ export const validatingEditingExtender = (
       const deferred = Deferred<boolean>();
       result = deferred;
       this.executeOperation(deferred, () => {
-        this._validatingController.validate(true).done((isFullValid) => {
+        this._validatingController.validate().done((isValid) => {
           disposeValidators();
           this._updateRowAndPageIndices();
 
           const editMode = this.getEditMode();
 
-          if (editMode === EDIT_MODE.cell && !isFullValid) {
+          if (editMode === EDIT_MODE.cell && !isValid) {
             this._focusEditingCell();
-          } else if (editMode === EDIT_MODE.batch && !isFullValid) {
+          } else if (editMode === EDIT_MODE.batch && !isValid) {
             this._resetEditRowKey();
             this._resetEditColumnName();
             this._dataController.updateItems();
           }
-          deferred.resolve(!isFullValid);
+          deferred.resolve(!isValid);
         });
       });
     }
@@ -1265,6 +1250,8 @@ export const validatingEditorFactoryExtender = (
 > => class ValidatingEditorFactoryExtender extends Base {
   protected declare _editingController: ValidatingEditingController;
 
+  protected declare _rowsView: ColumnFixingRowsView;
+
   private _revertTooltip?: Overlay;
 
   private _showRevertButton($container: dxElementWrapper | null | undefined): void {
@@ -1337,7 +1324,6 @@ export const validatingEditorFactoryExtender = (
     $cell: dxElementWrapper,
     overlayOptions: Record<string, unknown> & { onDisposing?: () => void },
   ): void {
-    // @ts-expect-error the column fixing extender adds isFixedColumns to the rows view
     const isFixedColumns = this._rowsView?.isFixedColumns?.();
 
     if (isFixedColumns && !isFormBasedEditMode(this._editingController.getEditMode())) {

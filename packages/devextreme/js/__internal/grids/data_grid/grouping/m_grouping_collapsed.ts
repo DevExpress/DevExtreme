@@ -1,419 +1,412 @@
+import type { GroupDescriptor } from '@js/common/data';
 import { errors as dataErrors } from '@js/common/data/errors';
+import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred, when } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
-import { each } from '@js/core/utils/iterator';
 import errors from '@js/ui/widget/ui.errors';
-import type DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/data_source_adapter';
-import type { RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
+import type { StoreLoadOptions } from '@ts/data/data_source/types';
+import type { SummaryDataSourceAdapterExtension } from '@ts/grids/data_grid/summary/types';
+import type { LoadOperation, OperationTypes, RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
 import { combineFilters } from '@ts/grids/grid_core/filter/utils';
 import { isVirtualPaging } from '@ts/grids/grid_core/utils';
 
 import dataGridCore from '../core';
 import { createGroupFilter } from '../utils';
+import type { GroupingDataSourceAdapter } from './m_grouping';
 import { GroupingHelper as GroupingHelperCore } from './m_grouping_core';
-import { createOffsetFilter } from './utils';
+import type {
+  ExpandedGroupsInfo,
+  ForeachGroupsCallback,
+  ForeachGroupsResult,
+  GroupingLoadOperation,
+  GroupItemData,
+  GroupItemsLoadResult,
+  GroupPagingCallback,
+  GroupPagingOptions,
+} from './types';
+import {
+  applyContinuationToGroupItem,
+  createExpandedGroupsInfo,
+  createOffsetFilter,
+  fillSkipTakeInExpandedInfo,
+  getContinuationGroupCount,
+  getGroupLevelCount,
+  getLoadedGroupItems,
+  getTotalOffset,
+  isDataDeferred,
+  isGroupExpanded,
+  loadGroupTotalCount,
+  makeDataDeferred,
+} from './utils';
 
-function getContinuationGroupCount(groupOffset, pageSize, groupSize, groupIndex) {
-  groupIndex = groupIndex || 0;
-  if (pageSize > 1 && groupSize > 0) {
-    let pageOffset = (groupOffset - Math.floor(groupOffset / pageSize) * pageSize) || pageSize;
-    pageOffset += groupSize - groupIndex - 2;
-    if (pageOffset < 0) {
-      pageOffset += pageSize;
-    }
-    return Math.floor(pageOffset / (pageSize - groupIndex - 1));
+export class GroupingHelper extends GroupingHelperCore {
+  private foreachExpandedGroups(
+    callback: ForeachGroupsCallback,
+    updateGroups?: boolean,
+  ): ForeachGroupsResult {
+    return this.foreachGroups((groupInfo, parents) => {
+      if (groupInfo.isExpanded) {
+        return callback(groupInfo, parents);
+      }
+      return undefined;
+    }, true, false, updateGroups, updateGroups);
   }
-  return 0;
-}
 
-const foreachExpandedGroups = function (that, callback, updateGroups?) {
-  return that.foreachGroups((groupInfo, parents) => {
-    if (groupInfo.isExpanded) {
-      return callback(groupInfo, parents);
+  private processGroupItems(
+    items: GroupItemData[],
+    groupsCount: number,
+    expandedInfo: ExpandedGroupsInfo,
+    path: unknown[],
+    isCustomLoading?: boolean,
+    isLastGroupExpanded?: boolean,
+  ): void {
+    if (!groupsCount) {
+      return;
     }
-  }, true, false, updateGroups, updateGroups);
-};
 
-const processGroupItems = function (that, items, groupsCount, expandedInfo, path, isCustomLoading?, isLastGroupExpanded?) {
-  let isExpanded;
+    // eslint-disable-next-line @typescript-eslint/prefer-for-of -- store items may be non-array
+    for (let i = 0; i < items.length; i += 1) {
+      const item = items[i];
+      if (item.items !== undefined) {
+        path.push(item.key);
 
-  expandedInfo.items = expandedInfo.items || [];
-  expandedInfo.paths = expandedInfo.paths || [];
-  expandedInfo.count = expandedInfo.count || 0;
-  expandedInfo.lastCount = expandedInfo.lastCount || 0;
+        const isExpanded = isCustomLoading ? true : this.findGroupInfo(path)?.isExpanded;
 
-  if (!groupsCount) return;
+        if (!isExpanded) {
+          item.collapsedItems = item.items;
+          item.items = null;
+        } else if (item.items) {
+          this.processGroupItems(
+            item.items,
+            groupsCount - 1,
+            expandedInfo,
+            path,
+            isCustomLoading,
+            isLastGroupExpanded,
+          );
+        } else if (
+          groupsCount === 1 && item.count && (!isCustomLoading || isLastGroupExpanded)
+        ) {
+          expandedInfo.items.push(item);
+          expandedInfo.paths.push(path.slice(0));
+          expandedInfo.count += expandedInfo.lastCount;
+          expandedInfo.lastCount = item.count;
+        }
+        path.pop();
+      }
+    }
+  }
 
-  for (let i = 0; i < items.length; i++) {
-    const item = items[i];
-    if (item.items !== undefined) {
-      path.push(item.key);
+  private updateGroupInfoItem(
+    item: GroupItemData,
+    isLastGroupLevel: boolean,
+    path: unknown[],
+    offset: number,
+  ): void {
+    const groupInfo = this.findGroupInfo(path);
+    const itemCount = item.count ?? 0;
+    const lastLevelCount = itemCount > 0 ? itemCount : item.items?.length ?? 0;
 
-      if (isCustomLoading) {
-        isExpanded = true;
+    if (!groupInfo) {
+      this.addGroupInfo({
+        isExpanded: this._isGroupExpanded(path.length - 1),
+        path: path.slice(0),
+        offset,
+        count: isLastGroupLevel ? lastLevelCount : 0,
+      });
+    } else {
+      if (isLastGroupLevel) {
+        groupInfo.count = lastLevelCount;
       } else {
-        const groupInfo = that.findGroupInfo(path);
-        isExpanded = groupInfo && groupInfo.isExpanded;
+        item.count = groupInfo.count || item.count;
       }
-      if (!isExpanded) {
-        item.collapsedItems = item.items;
-        item.items = null;
-      } else if (item.items) {
-        processGroupItems(that, item.items, groupsCount - 1, expandedInfo, path, isCustomLoading, isLastGroupExpanded);
-      } else if (groupsCount === 1 && item.count && (!isCustomLoading || isLastGroupExpanded)) {
-        expandedInfo.items.push(item);
-        expandedInfo.paths.push(path.slice(0));
-        expandedInfo.count += expandedInfo.lastCount;
-        expandedInfo.lastCount = item.count;
-      }
-      path.pop();
+      groupInfo.offset = offset;
     }
   }
-};
 
-const updateGroupInfoItem = function (that, item, isLastGroupLevel, path, offset) {
-  const groupInfo = that.findGroupInfo(path);
-  let count;
+  private updateGroupInfos(
+    options: GroupingLoadOperation,
+    items: GroupItemData[],
+    loadedGroupCount: number,
+    groupIndex = 0,
+    path: unknown[] = [],
+    parentIndex?: number,
+  ): number {
+    const groupCount = getGroupLevelCount(options.group);
+    const isLastGroupLevel = groupCount === loadedGroupCount;
+    const remotePaging = options.remoteOperations?.paging;
+    let offset = 0;
+    let totalCount = 0;
 
-  if (!groupInfo) {
-    if (isLastGroupLevel) {
-      count = item.count > 0 ? item.count : item.items.length;
+    if (remotePaging && !parentIndex) {
+      offset = groupIndex === 0 ? options.skip || 0 : options.skips?.[groupIndex - 1] || 0;
     }
 
-    that.addGroupInfo({
-      isExpanded: that._isGroupExpanded(path.length - 1),
-      path: path.slice(0),
-      offset,
-      count: count || 0,
-    });
-  } else {
-    if (isLastGroupLevel) {
-      groupInfo.count = item.count > 0 ? item.count : item.items && item.items.length || 0;
-    } else {
-      item.count = groupInfo.count || item.count;
+    if (groupIndex >= loadedGroupCount) {
+      return items.length;
     }
-    groupInfo.offset = offset;
-  }
-};
 
-const updateGroupInfos = function (that, options, items, loadedGroupCount, groupIndex?, path?, parentIndex?) {
-  const groupCount = options.group ? options.group.length : 0;
-  const isLastGroupLevel = groupCount === loadedGroupCount;
-  const remotePaging = options.remoteOperations.paging;
-  let offset = 0;
-  let totalCount = 0;
-  let count;
+    for (let i = 0; i < items.length; i += 1) {
+      const item = items[i];
+      if (item) {
+        path.push(item.key);
 
-  groupIndex = groupIndex || 0;
-  path = path || [];
+        if ((!item.count && !item.items) || item.items === undefined) {
+          return -1;
+        }
 
-  if (remotePaging && !parentIndex) {
-    offset = groupIndex === 0 ? options.skip || 0 : options.skips[groupIndex - 1] || 0;
-  }
+        this.updateGroupInfoItem(item, isLastGroupLevel, path, offset + i);
 
-  if (groupIndex >= loadedGroupCount) return items.length;
-
-  for (let i = 0; i < items.length; i++) {
-    const item = items[i];
-    if (item) {
-      path.push(item.key);
-
-      if ((!item.count && !item.items) || item.items === undefined) {
-        return -1;
-      }
-
-      updateGroupInfoItem(that, item, isLastGroupLevel, path, offset + i);
-
-      count = item.items ? updateGroupInfos(that, options, item.items, loadedGroupCount, groupIndex + 1, path, i) : item.count || -1;
-      if (count < 0) {
-        return -1;
-      }
-      totalCount += count;
-      path.pop();
-    }
-  }
-  return totalCount;
-};
-
-const isGroupExpanded = function (groups, groupIndex) {
-  return groups && groups.length && groups[groupIndex] && !!groups[groupIndex].isExpanded;
-};
-
-const getTotalOffset = function (groupInfos, pageSize, offset) {
-  let groupSize;
-  let totalOffset = offset;
-
-  for (let groupIndex = 0; groupIndex < groupInfos.length; groupIndex++) {
-    groupSize = groupInfos[groupIndex].offset + 1;
-    if (groupIndex > 0) {
-      groupSize += groupInfos[groupIndex - 1].childrenTotalCount;
-      if (pageSize) {
-        groupSize += getContinuationGroupCount(totalOffset, pageSize, groupSize, groupIndex - 1) * groupIndex;
+        const count = item.items
+          ? this.updateGroupInfos(options, item.items, loadedGroupCount, groupIndex + 1, path, i)
+          : item.count || -1;
+        if (count < 0) {
+          return -1;
+        }
+        totalCount += count;
+        path.pop();
       }
     }
-    totalOffset += groupSize;
+    return totalCount;
   }
 
-  return totalOffset;
-};
+  private collectExpandedGroupsInfo(
+    options: GroupingLoadOperation,
+    loadedGroupCount: number,
+    data: GroupItemData[],
+  ): ExpandedGroupsInfo {
+    const expandedInfo = createExpandedGroupsInfo();
 
-function applyContinuationToGroupItem(options, expandedInfo, groupLevel, expandedItemIndex) {
-  const item = expandedInfo.items[expandedItemIndex];
-  const skip = options.skips && options.skips[groupLevel];
-  const take = options.takes && options.takes[groupLevel];
-  const isLastExpandedItem = expandedItemIndex === expandedInfo.items.length - 1;
-  const isFirstExpandedItem = expandedItemIndex === 0;
-  const lastExpandedItemSkip = isFirstExpandedItem && skip || 0;
-  const isItemsTruncatedByTake = item.count > take + lastExpandedItemSkip;
-
-  if (isFirstExpandedItem && skip !== undefined) {
-    item.isContinuation = true;
-  }
-
-  if (isLastExpandedItem && take !== undefined && isItemsTruncatedByTake) {
-    item.isContinuationOnNextPage = true;
-  }
-}
-
-function fillSkipTakeInExpandedInfo(options, expandedInfo, currentGroupCount) {
-  const currentGroupIndex = currentGroupCount - 1;
-  const groupCount = options.group ? options.group.length : 0;
-
-  expandedInfo.skip = options.skips && options.skips[currentGroupIndex];
-  if (options.takes && options.takes[currentGroupIndex] !== undefined) {
-    if (groupCount === currentGroupCount) {
-      expandedInfo.take = expandedInfo.count ? expandedInfo.count - (expandedInfo.skip || 0) : 0;
-    } else {
-      expandedInfo.take = 0;
-    }
-    expandedInfo.take += options.takes[currentGroupIndex];
-  }
-}
-
-function isDataDeferred(data) {
-  return !Array.isArray(data);
-}
-
-function makeDataDeferred(options) {
-  if (!isDataDeferred(options.data)) {
-    // @ts-expect-error
-    options.data = new Deferred();
-  }
-}
-
-function loadGroupItems(that: GroupingHelper, options, loadedGroupCount, expandedInfo, groupLevel, data) {
-  if (!options.isCustomLoading) {
-    expandedInfo = {};
-
-    processGroupItems(that, data, loadedGroupCount, expandedInfo, []);
+    this.processGroupItems(data, loadedGroupCount, expandedInfo, []);
 
     fillSkipTakeInExpandedInfo(options, expandedInfo, loadedGroupCount);
+
+    return expandedInfo;
   }
 
-  const groupCount = options.group ? options.group.length : 0;
+  private loadGroupItems(
+    options: GroupingLoadOperation,
+    loadedGroupCount: number,
+    expandedInfo: ExpandedGroupsInfo,
+    groupLevel: number,
+    data: GroupItemData[],
+  ): void {
+    const currentExpandedInfo = options.isCustomLoading
+      ? expandedInfo
+      : this.collectExpandedGroupsInfo(options, loadedGroupCount, data);
 
-  if (expandedInfo.paths.length && (groupCount - loadedGroupCount > 0)) {
-    makeDataDeferred(options);
-    loadExpandedGroups(that, options, expandedInfo, loadedGroupCount, groupLevel, data);
-  } else if (expandedInfo.paths.length && options.storeLoadOptions.group) {
-    makeDataDeferred(options);
-    loadLastLevelGroupItems(that, options, expandedInfo, data);
-  } else if (isDataDeferred(options.data)) {
-    options.data.resolve(data);
-  }
-}
+    const groupCount = getGroupLevelCount(options.group);
 
-function loadExpandedGroups(that: GroupingHelper, options, expandedInfo, loadedGroupCount, groupLevel, data) {
-  const groups = options.group || [];
-  const currentGroup = groups[groupLevel + 1];
-  const deferreds: any[] = [];
-
-  each(expandedInfo.paths, (expandedItemIndex) => {
-    const loadOptions: any = {
-      requireTotalCount: false,
-      requireGroupCount: true,
-      group: [currentGroup],
-      groupSummary: options.storeLoadOptions.groupSummary,
-      filter: createGroupFilter(expandedInfo.paths[expandedItemIndex], {
-        filter: options.storeLoadOptions.filter,
-        group: groups,
-      }),
-      select: options.storeLoadOptions.select,
-      langParams: options.storeLoadOptions?.langParams,
-    };
-
-    if (expandedItemIndex === 0) {
-      loadOptions.skip = expandedInfo.skip || 0;
+    if (currentExpandedInfo.paths.length && (groupCount - loadedGroupCount > 0)) {
+      makeDataDeferred(options);
+      this.loadExpandedGroups(options, currentExpandedInfo, loadedGroupCount, groupLevel, data);
+    } else if (currentExpandedInfo.paths.length && options.storeLoadOptions.group) {
+      const dataDeferred = makeDataDeferred(options);
+      if (dataDeferred) {
+        this.loadLastLevelGroupItems(options, currentExpandedInfo, data, dataDeferred);
+      }
+    } else if (isDataDeferred(options.data)) {
+      options.data?.resolve(data);
     }
+  }
 
-    if (expandedItemIndex === expandedInfo.paths.length - 1) {
+  private loadExpandedGroups(
+    options: GroupingLoadOperation,
+    expandedInfo: ExpandedGroupsInfo,
+    loadedGroupCount: number,
+    groupLevel: number,
+    data: GroupItemData[],
+  ): void {
+    const groups = Array.isArray(options.group) ? options.group : [];
+    const currentGroup = groups[groupLevel + 1];
+    const deferreds: GroupItemsLoadResult[] = [];
+
+    expandedInfo.paths.forEach((expandedPath, expandedItemIndex) => {
+      const loadOptions: StoreLoadOptions = {
+        requireTotalCount: false,
+        requireGroupCount: true,
+        group: [currentGroup],
+        groupSummary: options.storeLoadOptions.groupSummary,
+        filter: createGroupFilter(expandedPath, {
+          filter: options.storeLoadOptions.filter,
+          group: groups,
+        }),
+        select: options.storeLoadOptions.select,
+        langParams: options.storeLoadOptions?.langParams,
+      };
+
+      if (expandedItemIndex === 0) {
+        loadOptions.skip = expandedInfo.skip || 0;
+      }
+
+      if (expandedItemIndex === expandedInfo.paths.length - 1) {
+        loadOptions.take = expandedInfo.take;
+      }
+
+      const loadDeferred: GroupItemsLoadResult = loadOptions.take === 0
+        ? { data: [] }
+        : this.dataSourceAdapter.customLoader.loadFromStore(loadOptions);
+
+      when(loadDeferred)
+        .done((loadResult) => {
+          const item = expandedInfo.items[expandedItemIndex];
+
+          applyContinuationToGroupItem(options, expandedInfo, groupLevel, expandedItemIndex);
+
+          item.items = getLoadedGroupItems(loadResult);
+        });
+
+      deferreds.push(loadDeferred);
+    });
+
+    when(...deferreds).done(() => {
+      this.updateGroupInfos(options, data, loadedGroupCount + 1);
+
+      this.loadGroupItems(options, loadedGroupCount + 1, expandedInfo, groupLevel + 1, data);
+    });
+  }
+
+  private loadLastLevelGroupItems(
+    options: GroupingLoadOperation,
+    expandedInfo: ExpandedGroupsInfo,
+    data: GroupItemData[],
+    dataDeferred: DeferredObj<RawItemData[]>,
+  ): void {
+    const { dataSourceAdapter }: {
+      dataSourceAdapter: GroupingDataSourceAdapter & Partial<SummaryDataSourceAdapterExtension>;
+    } = this;
+    const groups = Array.isArray(options.group) ? options.group : [];
+    const expandedFilters = expandedInfo.paths.map((expandedPath) => createGroupFilter(
+      expandedPath,
+      { group: options.isCustomLoading ? options.storeLoadOptions.group : groups },
+    ));
+
+    const filter = options.storeLoadOptions.isLoadingAll
+      ? options.storeLoadOptions.filter
+      : combineFilters([options.storeLoadOptions.filter, combineFilters(expandedFilters, 'or')]);
+
+    // @ts-expect-error normalized sort and a null group don't fit StoreLoadOptions
+    const loadOptions: StoreLoadOptions = extend({}, options.storeLoadOptions, {
+      requireTotalCount: false,
+      requireGroupCount: false,
+      group: null,
+      sort: [...groups, ...dataGridCore.normalizeSortingInfo(options.storeLoadOptions.sort || [])],
+      filter,
+    });
+
+    const isPagingLocal = dataSourceAdapter.isLastLevelGroupItemsPagingLocal?.();
+
+    if (!isPagingLocal) {
+      loadOptions.skip = expandedInfo.skip;
       loadOptions.take = expandedInfo.take;
     }
 
-    const loadDeferred = loadOptions.take === 0
-      ? { data: [] as RawItemData[] }
-      : that.dataSourceAdapter.customLoader.loadFromStore(loadOptions);
+    const loadDeferred: GroupItemsLoadResult = expandedInfo.take === 0
+      ? { data: [] }
+      : dataSourceAdapter.customLoader.loadFromStore(loadOptions);
 
     when(loadDeferred)
       .done((loadResult) => {
-        const item = expandedInfo.items[expandedItemIndex];
+        let items = loadResult.data;
 
-        applyContinuationToGroupItem(options, expandedInfo, groupLevel, expandedItemIndex);
+        if (isPagingLocal && dataSourceAdapter.sortLastLevelGroupItems) {
+          // @ts-expect-error sortLastLevelGroupItems() takes normalized groups, returns unknown[]
+          items = dataSourceAdapter.sortLastLevelGroupItems(items, groups, expandedInfo.paths);
+          items = expandedInfo.skip ? items.slice(expandedInfo.skip) : items;
+          items = expandedInfo.take ? items.slice(0, expandedInfo.take) : items;
+        }
+        expandedInfo.items.forEach((item, index) => {
+          const itemCount = Number(item.count) - ((index === 0 && expandedInfo.skip) || 0);
+          const expandedItems = items.splice(0, itemCount);
 
-        item.items = loadResult.data;
-      });
-
-    deferreds.push(loadDeferred);
-  });
-
-  when.apply(null, deferreds).done(() => {
-    updateGroupInfos(that, options, data, loadedGroupCount + 1);
-
-    loadGroupItems(that, options, loadedGroupCount + 1, expandedInfo, groupLevel + 1, data);
-  });
-}
-
-function loadLastLevelGroupItems(that: GroupingHelper, options, expandedInfo, data) {
-  const expandedFilters: any[] = [];
-  const groups = options.group || [];
-
-  each(expandedInfo.paths, (_, expandedPath) => {
-    expandedFilters.push(createGroupFilter(expandedPath, {
-      group: options.isCustomLoading ? options.storeLoadOptions.group : groups,
-    }));
-  });
-
-  let { filter } = options.storeLoadOptions;
-
-  if (!options.storeLoadOptions.isLoadingAll) {
-    filter = combineFilters([filter, combineFilters(expandedFilters, 'or')]);
+          applyContinuationToGroupItem(options, expandedInfo, groups.length - 1, index);
+          // @ts-expect-error last-level group items hold data rows
+          item.items = expandedItems;
+        });
+        dataDeferred.resolve(data);
+      })
+      // @ts-expect-error badly typed Deferred.reject
+      // eslint-disable-next-line @typescript-eslint/no-misused-promises -- ignores the result
+      .fail(dataDeferred.reject);
   }
 
-  const loadOptions = extend({}, options.storeLoadOptions, {
-    requireTotalCount: false,
-    requireGroupCount: false,
-    group: null,
-    sort: groups.concat(dataGridCore.normalizeSortingInfo(options.storeLoadOptions.sort || [])),
-    filter,
-  });
-
-  // @ts-expect-error badly typed GroupingHelper.dataSourceAdapter
-  const isPagingLocal = that.dataSourceAdapter.isLastLevelGroupItemsPagingLocal();
-
-  if (!isPagingLocal) {
-    loadOptions.skip = expandedInfo.skip;
-    loadOptions.take = expandedInfo.take;
-  }
-
-  const loadDeferred = expandedInfo.take === 0
-    ? { data: [] as RawItemData[] }
-    : that.dataSourceAdapter.customLoader.loadFromStore(loadOptions);
-
-  when(loadDeferred).done((loadResult) => {
-    let items = loadResult.data;
-
-    if (isPagingLocal) {
-      // @ts-expect-error badly typed GroupingHelper.dataSourceAdapter
-      items = that.dataSourceAdapter.sortLastLevelGroupItems(items, groups, expandedInfo.paths);
-      items = expandedInfo.skip ? items.slice(expandedInfo.skip) : items;
-      items = expandedInfo.take ? items.slice(0, expandedInfo.take) : items;
-    }
-    each(expandedInfo.items, (index, item) => {
-      const itemCount = item.count - (index === 0 && expandedInfo.skip || 0);
-      const expandedItems = items.splice(0, itemCount);
-
-      applyContinuationToGroupItem(options, expandedInfo, groups.length - 1, index);
-      item.items = expandedItems;
-    });
-    options.data.resolve(data);
-  }).fail(options.data.reject);
-}
-
-const loadGroupTotalCount = function (dataSourceAdapter: DataSourceAdapter, options) {
-  // @ts-expect-error
-  const d = new Deferred();
-  const isGrouping = !!(options.group && options.group.length);
-  const loadOptions = extend({
-    skip: 0, take: 1, requireGroupCount: isGrouping, requireTotalCount: !isGrouping,
-  }, options, { group: isGrouping ? options.group : null });
-
-  dataSourceAdapter.customLoader.load(loadOptions).done(({ extra }) => {
-    const count: number | undefined = extra && (isGrouping ? extra.groupCount : extra.totalCount);
-
-    if (count === undefined || !isFinite(count)) {
-      d.reject(dataErrors.Error(isGrouping ? 'E4022' : 'E4021'));
-      return;
-    }
-    d.resolve(count);
-  }).fail(d.reject.bind(d));
-  return d;
-};
-
-export class GroupingHelper extends GroupingHelperCore {
-  public updateTotalItemsCount(options) {
+  private updateTotalItemsCount(options: LoadOperation): void {
     let totalItemsCount = 0;
-    const totalCount = options.extra && options.extra.totalCount || 0;
-    const groupCount = options.extra && options.extra.groupCount || 0;
+    const totalCount = options.extra?.totalCount || 0;
+    const groupCount = options.extra?.groupCount || 0;
     const pageSize = this.dataSourceAdapter.pageSize();
     const virtualPaging = isVirtualPaging(this.dataSourceAdapter.option('scrolling'));
 
-    foreachExpandedGroups(this, (groupInfo) => {
+    this.foreachExpandedGroups((groupInfo) => {
       groupInfo.childrenTotalCount = 0;
     });
 
-    foreachExpandedGroups(this, (groupInfo, parents) => {
+    this.foreachExpandedGroups((groupInfo, parents) => {
       const totalOffset = getTotalOffset(parents, virtualPaging ? 0 : pageSize, totalItemsCount);
-      let count = groupInfo.count + groupInfo.childrenTotalCount;
+      const parent = parents[parents.length - 2];
+      let count = groupInfo.count + (groupInfo.childrenTotalCount ?? 0);
 
       if (!virtualPaging) {
         count += getContinuationGroupCount(totalOffset, pageSize, count, parents.length - 1);
       }
-      if (parents[parents.length - 2]) {
-        parents[parents.length - 2].childrenTotalCount += count;
+      if (parent) {
+        parent.childrenTotalCount = (parent.childrenTotalCount ?? 0) + count;
       } else {
         totalItemsCount += count;
       }
     });
-    super.updateTotalItemsCount(totalItemsCount - totalCount + groupCount);
+    this.setTotalCountCorrection(totalItemsCount - totalCount + groupCount);
   }
 
-  private _isGroupExpanded(groupIndex) {
-    const groups = this.dataSourceAdapter.group();
-    return isGroupExpanded(groups, groupIndex);
+  private _isGroupExpanded(groupIndex: number): boolean {
+    return isGroupExpanded(this.dataSourceAdapter.group(), groupIndex);
   }
 
-  private _updatePagingOptions(options, callback?) {
-    const that = this;
-    const virtualPaging = isVirtualPaging(that.dataSourceAdapter.option('scrolling'));
-    const pageSize = that.dataSourceAdapter.pageSize();
-    const skips: any[] = [];
-    const takes: any[] = [];
+  public updatePagingOptions(options: GroupPagingOptions, callback?: GroupPagingCallback): void {
+    const virtualPaging = isVirtualPaging(this.dataSourceAdapter.option('scrolling'));
+    const pageSize = this.dataSourceAdapter.pageSize();
+    const skips: number[] = [];
+    const takes: number[] = [];
     let skipChildrenTotalCount = 0;
     let childrenTotalCount = 0;
 
     if (options.take) {
-      foreachExpandedGroups(this, (groupInfo) => {
+      const optionsSkip = Number(options.skip);
+      const optionsTake = options.take;
+
+      this.foreachExpandedGroups((groupInfo) => {
         groupInfo.childrenTotalCount = 0;
         groupInfo.skipChildrenTotalCount = 0;
       });
-      foreachExpandedGroups(that, (groupInfo, parents) => {
-        let take;
+      this.foreachExpandedGroups((groupInfo, parents) => {
         let takeCorrection = 0;
         let parentTakeCorrection = 0;
-        const totalOffset = getTotalOffset(parents, virtualPaging ? 0 : pageSize, childrenTotalCount);
+        const totalOffset = getTotalOffset(
+          parents,
+          virtualPaging ? 0 : pageSize,
+          childrenTotalCount,
+        );
+        const parent = parents[parents.length - 2];
+        const groupChildrenTotalCount = groupInfo.childrenTotalCount ?? 0;
+        const groupSkipChildrenTotalCount = groupInfo.skipChildrenTotalCount ?? 0;
         let continuationGroupCount = 0;
         let skipContinuationGroupCount = 0;
-        let groupInfoCount = groupInfo.count + groupInfo.childrenTotalCount;
+        let groupInfoCount = groupInfo.count + groupChildrenTotalCount;
         let childrenGroupInfoCount = groupInfoCount;
 
-        callback && callback(groupInfo, totalOffset);
+        callback?.(groupInfo, totalOffset);
 
-        const skip = options.skip - totalOffset;
-        if (totalOffset <= options.skip + options.take && groupInfoCount) {
-          take = options.take;
+        const skip = optionsSkip - totalOffset;
+        const isInTakeRange = totalOffset <= optionsSkip + optionsTake && !!groupInfoCount;
 
+        if (isInTakeRange) {
           if (!virtualPaging) {
-            continuationGroupCount = getContinuationGroupCount(totalOffset, pageSize, groupInfoCount, parents.length - 1);
+            continuationGroupCount = getContinuationGroupCount(
+              totalOffset,
+              pageSize,
+              groupInfoCount,
+              parents.length - 1,
+            );
             groupInfoCount += continuationGroupCount * parents.length;
             childrenGroupInfoCount += continuationGroupCount;
             if (pageSize && skip >= 0) {
@@ -424,47 +417,60 @@ export class GroupingHelper extends GroupingHelperCore {
           }
 
           if (skip >= 0) {
-            if (totalOffset + groupInfoCount > options.skip) {
-              skips.unshift(skip - skipContinuationGroupCount * takeCorrection - groupInfo.skipChildrenTotalCount);
+            if (totalOffset + groupInfoCount > optionsSkip) {
+              skips.unshift(
+                skip - skipContinuationGroupCount * takeCorrection - groupSkipChildrenTotalCount,
+              );
             }
-            if (totalOffset + groupInfoCount >= options.skip + take) {
-              takes.unshift(take - takeCorrection - groupInfo.childrenTotalCount + groupInfo.skipChildrenTotalCount);
+            if (totalOffset + groupInfoCount >= optionsSkip + optionsTake) {
+              takes.unshift(
+                optionsTake - takeCorrection
+                - groupChildrenTotalCount + groupSkipChildrenTotalCount,
+              );
             }
-          } else if (totalOffset + groupInfoCount >= options.skip + take) {
-            takes.unshift(take + skip - groupInfo.childrenTotalCount);
+          } else if (totalOffset + groupInfoCount >= optionsSkip + optionsTake) {
+            takes.unshift(optionsTake + skip - groupChildrenTotalCount);
           }
         }
 
-        if (totalOffset <= options.skip) {
-          if (parents[parents.length - 2]) {
-            parents[parents.length - 2].skipChildrenTotalCount += Math.min(childrenGroupInfoCount, skip + 1 - skipContinuationGroupCount * parentTakeCorrection);
+        if (totalOffset <= optionsSkip) {
+          if (parent) {
+            parent.skipChildrenTotalCount = (parent.skipChildrenTotalCount ?? 0) + Math.min(
+              childrenGroupInfoCount,
+              skip + 1 - skipContinuationGroupCount * parentTakeCorrection,
+            );
           } else {
             skipChildrenTotalCount += Math.min(childrenGroupInfoCount, skip + 1);
           }
         }
-        if (totalOffset <= options.skip + take) {
-          groupInfoCount = Math.min(childrenGroupInfoCount, skip + take - (skipContinuationGroupCount + 1) * parentTakeCorrection);
-          if (parents[parents.length - 2]) {
-            parents[parents.length - 2].childrenTotalCount += groupInfoCount;
+        if (isInTakeRange) {
+          groupInfoCount = Math.min(
+            childrenGroupInfoCount,
+            skip + optionsTake - (skipContinuationGroupCount + 1) * parentTakeCorrection,
+          );
+          if (parent) {
+            parent.childrenTotalCount = (parent.childrenTotalCount ?? 0) + groupInfoCount;
           } else {
             childrenTotalCount += groupInfoCount;
           }
         }
       });
-      options.skip -= skipChildrenTotalCount;
-      options.take -= childrenTotalCount - skipChildrenTotalCount;
+      options.skip = optionsSkip - skipChildrenTotalCount;
+      options.take = optionsTake - (childrenTotalCount - skipChildrenTotalCount);
     }
 
     options.skips = skips;
     options.takes = takes;
   }
 
-  public changeRowExpand(path) {
-    const that = this;
-    const groupInfo = that.findGroupInfo(path);
-    const { dataSourceAdapter } = that;
+  public changeRowExpand(path: unknown[]): DeferredObj<unknown> {
+    const groupInfo = this.findGroupInfo(path);
+    const { dataSourceAdapter } = this;
     const remoteGroupPaging = dataSourceAdapter.remoteOperations().groupPaging;
-    const groups = dataGridCore.normalizeSortingInfo(dataSourceAdapter.group());
+    // @ts-expect-error normalizeSortingInfo() types selector wider than public KeySelector
+    const groups: GroupDescriptor<unknown>[] = dataGridCore.normalizeSortingInfo(
+      dataSourceAdapter.group(),
+    );
 
     if (groupInfo) {
       groupInfo.isExpanded = !groupInfo.isExpanded;
@@ -481,110 +487,135 @@ export class GroupingHelper extends GroupingHelperCore {
           groupInfo.count = groupCount;
         });
       }
-      // @ts-expect-error
-      return new Deferred().resolve();
+      return Deferred<unknown>().resolve();
     }
-    // @ts-expect-error
-    return new Deferred().reject();
+    return Deferred<unknown>().reject();
   }
 
-  public handleDataLoading(options?) {
-    const that = this;
+  public handleDataLoading(options: GroupingLoadOperation): void {
     const { storeLoadOptions } = options;
-    const groups = dataGridCore.normalizeSortingInfo(storeLoadOptions.group || options.loadOptions.group);
+    // @ts-expect-error normalizeSortingInfo() types selector wider than public KeySelector
+    const groups: GroupDescriptor<unknown>[] = dataGridCore.normalizeSortingInfo(
+      storeLoadOptions.group || options.loadOptions?.group,
+    );
 
     if (options.isCustomLoading || !groups.length) {
       return;
     }
 
-    if (options.remoteOperations.grouping) {
-      const remotePaging = that.dataSourceAdapter.remoteOperations().paging;
+    if (options.remoteOperations?.grouping) {
+      const remotePaging = this.dataSourceAdapter.remoteOperations().paging;
+      const normalizedGroups = dataGridCore.normalizeSortingInfo(storeLoadOptions.group);
 
-      storeLoadOptions.group = dataGridCore.normalizeSortingInfo(storeLoadOptions.group);
-      storeLoadOptions.group.forEach((group, index) => {
-        const isLastGroup = index === storeLoadOptions.group.length - 1;
+      normalizedGroups.forEach((group, index) => {
+        const isLastGroup = index === normalizedGroups.length - 1;
         group.isExpanded = !remotePaging || !isLastGroup;
       });
+      // @ts-expect-error normalizeSortingInfo() types selector wider than public KeySelector
+      storeLoadOptions.group = normalizedGroups;
     }
 
     options.group = options.group || groups;
 
-    if (options.remoteOperations.paging) {
+    if (options.remoteOperations?.paging) {
       options.skip = storeLoadOptions.skip;
       options.take = storeLoadOptions.take;
       storeLoadOptions.requireGroupCount = true;
       storeLoadOptions.group = groups.slice(0, 1);
-      that._updatePagingOptions(options);
+      this.updatePagingOptions(options);
 
       storeLoadOptions.skip = options.skip;
       storeLoadOptions.take = options.take;
     } else {
-      options.skip = options.loadOptions.skip;
-      options.take = options.loadOptions.take;
-      that._updatePagingOptions(options);
+      options.skip = options.loadOptions?.skip;
+      options.take = options.loadOptions?.take;
+      this.updatePagingOptions(options);
     }
   }
 
-  public handleDataLoadedCore(options, callBase) {
-    const that = this;
-    const loadedGroupCount = dataGridCore.normalizeSortingInfo(options.storeLoadOptions.group || options.loadOptions.group).length;
-    const groupCount = options.group ? options.group.length : 0;
-    let totalCount;
-    const expandedInfo = {};
+  public handleDataLoadedCore(
+    options: GroupingLoadOperation,
+    customizeLoadResult: (options: LoadOperation) => void,
+  ): void {
+    const loadedGroupCount = dataGridCore.normalizeSortingInfo(
+      options.storeLoadOptions.group || options.loadOptions?.group,
+    ).length;
+    const groupCount = getGroupLevelCount(options.group);
+    const expandedInfo = createExpandedGroupsInfo();
 
     if (options.isCustomLoading) {
-      callBase(options);
+      customizeLoadResult(options);
 
-      processGroupItems(that, options.data, loadedGroupCount, expandedInfo, [], options.isCustomLoading, options.storeLoadOptions.isLoadingAll);
+      this.processGroupItems(
+        getLoadedGroupItems(options),
+        loadedGroupCount,
+        expandedInfo,
+        [],
+        options.isCustomLoading,
+        options.storeLoadOptions.isLoadingAll,
+      );
     } else {
-      if (!options.remoteOperations.paging) {
-        that.foreachGroups((groupInfo) => { groupInfo.count = 0; });
+      if (!options.remoteOperations?.paging) {
+        this.foreachGroups((groupInfo) => { groupInfo.count = 0; });
       }
 
-      totalCount = updateGroupInfos(that, options, options.data, loadedGroupCount);
+      const loadedItems = getLoadedGroupItems(options);
+      const totalCount = this.updateGroupInfos(options, loadedItems, loadedGroupCount);
 
       if (totalCount < 0) {
-        // @ts-expect-error
-        options.data = new Deferred().reject(errors.Error('E1037'));
+        // @ts-expect-error badly typed Deferred.reject
+        options.data = Deferred<RawItemData[]>().reject(errors.Error('E1037'));
         return;
       }
 
-      if (!options.remoteOperations.paging) {
-        if (loadedGroupCount && options.extra && options.loadOptions.requireTotalCount) {
+      if (!options.remoteOperations?.paging) {
+        if (loadedGroupCount && options.extra && options.loadOptions?.requireTotalCount) {
           options.extra.totalCount = totalCount;
-          options.extra.groupCount = options.data.length;
+          options.extra.groupCount = loadedItems.length;
         }
       }
 
-      if (groupCount && options.storeLoadOptions.requireGroupCount && !isFinite(options.extra.groupCount)) {
-        // @ts-expect-error
-        options.data = new Deferred().reject(dataErrors.Error('E4022'));
+      if (
+        groupCount
+        && options.storeLoadOptions.requireGroupCount
+        && !isFinite(Number(options.extra?.groupCount))
+      ) {
+        // @ts-expect-error badly typed Deferred.reject
+        options.data = Deferred<RawItemData[]>().reject(dataErrors.Error('E4022'));
         return;
       }
 
-      that.updateTotalItemsCount(options);
+      this.updateTotalItemsCount(options);
 
-      if (!options.remoteOperations.paging) {
-        that._updatePagingOptions(options);
-        options.lastLoadOptions.skips = options.skips;
-        options.lastLoadOptions.takes = options.takes;
+      if (!options.remoteOperations?.paging) {
+        this.updatePagingOptions(options);
+        if (options.lastLoadOptions) {
+          options.lastLoadOptions.skips = options.skips;
+          options.lastLoadOptions.takes = options.takes;
+        }
       }
-      callBase(options);
+      customizeLoadResult(options);
 
-      if (!options.remoteOperations.paging) {
-        that._processPaging(options, loadedGroupCount);
+      if (!options.remoteOperations?.paging) {
+        this._processPaging(options, loadedGroupCount);
       }
     }
 
-    loadGroupItems(that, options, loadedGroupCount, expandedInfo, 0, options.data);
+    this.loadGroupItems(options, loadedGroupCount, expandedInfo, 0, getLoadedGroupItems(options));
   }
 
-  private _processSkips(items, skips, groupCount) {
-    if (!groupCount) return;
+  private _processSkips(
+    items: GroupItemData[],
+    skips: (number | undefined)[],
+    groupCount: number,
+  ): void {
+    if (!groupCount) {
+      return;
+    }
 
     const firstItem = items[0];
     const skip = skips[0];
-    const children = firstItem && firstItem.items;
+    const children = firstItem?.items;
 
     if (skip !== undefined) {
       firstItem.isContinuation = true;
@@ -596,18 +627,25 @@ export class GroupingHelper extends GroupingHelperCore {
     }
   }
 
-  private _processTakes(items, skips, takes, groupCount, parents?) {
-    if (!groupCount || !items) return;
-
-    parents = parents || [];
+  private _processTakes(
+    items: GroupItemData[] | null | undefined,
+    skips: (number | undefined)[],
+    takes: (number | undefined)[],
+    groupCount: number,
+    parents: GroupItemData[] = [],
+  ): void {
+    if (!groupCount || !items) {
+      return;
+    }
 
     const lastItem = items[items.length - 1];
-    let children = lastItem && lastItem.items;
+    let children = lastItem?.items;
     const take = takes[0];
     const skip = skips[0];
 
     if (lastItem) {
-      const maxTakeCount = (lastItem.count - (lastItem.isContinuation && skip || 0)) || children.length;
+      const skippedCount = (lastItem.isContinuation && skip) || 0;
+      const maxTakeCount = (Number(lastItem.count) - skippedCount) || (children?.length ?? 0);
 
       if (take !== undefined && maxTakeCount > take) {
         lastItem.isContinuationOnNextPage = true;
@@ -624,47 +662,35 @@ export class GroupingHelper extends GroupingHelperCore {
     }
   }
 
-  private _processPaging(options, groupCount) {
-    this._processSkips(options.data, options.skips, groupCount);
-    this._processTakes(options.data, options.skips, options.takes, groupCount);
+  private _processPaging(options: GroupingLoadOperation, groupCount: number): void {
+    const { skips = [], takes = [] } = options;
+    const items = getLoadedGroupItems(options);
+
+    this._processSkips(items, skips, groupCount);
+    this._processTakes(items, skips, takes, groupCount);
   }
 
-  private isLastLevelGroupItemsPagingLocal() {
-    return false;
-  }
-
-  private sortLastLevelGroupItems(items) {
-    return items;
-  }
-
-  public refresh(options, operationTypes?) {
-    const that = this;
-    const { dataSourceAdapter } = that;
+  public refresh(options: LoadOperation, operationTypes: OperationTypes): ForeachGroupsResult {
     const { storeLoadOptions } = options;
-    const group = options.group || options.storeLoadOptions.group;
-    const oldGroups = dataGridCore.normalizeSortingInfo(that._group);
-    let isExpanded;
-    let groupIndex;
+    const group = options.group || storeLoadOptions.group;
+    const oldGroups = dataGridCore.normalizeSortingInfo(this._group);
 
-    function handleGroup(groupInfo, parents) {
-      if (parents.length === groupIndex + 1) {
-        groupInfo.isExpanded = isExpanded;
+    for (let groupIndex = 0; groupIndex < oldGroups.length; groupIndex += 1) {
+      const isExpanded = isGroupExpanded(group, groupIndex);
+      if (isGroupExpanded(this._group, groupIndex) !== isExpanded) {
+        this.foreachGroups((groupInfo, parents) => {
+          if (parents.length === groupIndex + 1) {
+            groupInfo.isExpanded = isExpanded;
+          }
+        });
       }
     }
 
-    for (groupIndex = 0; groupIndex < oldGroups.length; groupIndex++) {
-      isExpanded = isGroupExpanded(group, groupIndex);
-      if (isGroupExpanded(that._group, groupIndex) !== isExpanded) {
-        that.foreachGroups(handleGroup);
-      }
-    }
+    super.refresh(options, operationTypes);
 
-    // @ts-expect-error
-    super.refresh.apply(this, arguments);
-
-    if (group && options.remoteOperations.paging && operationTypes.reload) {
-      return foreachExpandedGroups(that, (groupInfo) => {
-        const groupCountQuery = loadGroupTotalCount(dataSourceAdapter, {
+    if (Array.isArray(group) && options.remoteOperations?.paging && operationTypes.reload) {
+      return this.foreachExpandedGroups((groupInfo) => {
+        const groupCountQuery = loadGroupTotalCount(this.dataSourceAdapter, {
           filter: createGroupFilter(groupInfo.path, {
             filter: storeLoadOptions.filter,
             group,
@@ -672,7 +698,7 @@ export class GroupingHelper extends GroupingHelperCore {
           group: group.slice(groupInfo.path.length),
           select: storeLoadOptions.select,
         });
-        const groupOffsetQuery = loadGroupTotalCount(dataSourceAdapter, {
+        const groupOffsetQuery = loadGroupTotalCount(this.dataSourceAdapter, {
           filter: createOffsetFilter(groupInfo.path, {
             filter: storeLoadOptions.filter,
             group,
@@ -682,21 +708,21 @@ export class GroupingHelper extends GroupingHelperCore {
         });
 
         return when(groupOffsetQuery, groupCountQuery).done((offset, count) => {
+          // @ts-expect-error parseInt() takes a value that when() may wrap in an array
           // eslint-disable-next-line radix
-          offset = parseInt(offset.length ? offset[0] : offset);
+          const loadedOffset = parseInt(offset.length ? offset[0] : offset);
+          // @ts-expect-error parseInt() takes a value that when() may wrap in an array
           // eslint-disable-next-line radix
-          count = parseInt(count.length ? count[0] : count);
-          groupInfo.offset = offset;
-          if (groupInfo.count !== count) {
-            groupInfo.count = count;
-            that.updateTotalItemsCount(options);
+          const loadedCount = parseInt(count.length ? count[0] : count);
+          groupInfo.offset = loadedOffset;
+          if (groupInfo.count !== loadedCount) {
+            groupInfo.count = loadedCount;
+            this.updateTotalItemsCount(options);
           }
         });
       }, true);
     }
+
+    return undefined;
   }
 }
-
-/// #DEBUG
-export { getContinuationGroupCount };
-/// #ENDDEBUG

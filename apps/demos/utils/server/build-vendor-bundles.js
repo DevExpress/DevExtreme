@@ -10,7 +10,6 @@ const REQUESTED = process.argv.slice(2);
 const FRAMEWORKS = REQUESTED.length > 0 ? REQUESTED : ['React', 'Vue'];
 
 function reactVueOptions(framework) {
-  // eslint-disable-next-line global-require
   const { getSharedOptions } = require('./demo-bundle');
   const options = getSharedOptions(framework);
   return {

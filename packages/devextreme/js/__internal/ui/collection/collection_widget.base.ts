@@ -1,7 +1,6 @@
 import type { template } from '@js/common';
 import { name as clickEventName } from '@js/common/core/events/click';
 import { name as contextMenuEventName } from '@js/common/core/events/contextmenu';
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import holdEvent from '@js/common/core/events/hold';
 import pointerEvents from '@js/common/core/events/pointer';
 import { addNamespace, isCommandKeyPressed } from '@js/common/core/events/utils';
@@ -42,8 +41,9 @@ import type { OptionChanged } from '@ts/core/widget/types';
 import type { SupportedKeys, WidgetProperties } from '@ts/core/widget/widget';
 import Widget from '@ts/core/widget/widget';
 import DataHelperMixin from '@ts/data/m_data_helper';
-import type { ClickableCollectionWidgetItem, ItemClickEvent } from '@ts/ui/collection/item';
+import eventsEngine from '@ts/events/core/events_engine';
 import type CollectionItem from '@ts/ui/collection/item';
+import type { ClickableCollectionWidgetItem, ItemClickEvent } from '@ts/ui/collection/item';
 import CollectionWidgetItem from '@ts/ui/collection/item';
 
 import type { PublicNode } from '../hierarchical_collection/data_converter';
@@ -1104,7 +1104,6 @@ class CollectionWidget<
       eventName,
       itemSelector,
       { timeout: this._getHoldTimeout() },
-      // @ts-expect-error ts-error
       this._itemHoldHandler.bind(this),
     );
   }

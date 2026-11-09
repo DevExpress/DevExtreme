@@ -1,6 +1,5 @@
 import type { Cancelable, NativeEventInfo } from '@js/common/core/events';
 import { active } from '@js/common/core/events/core/emitter.feedback';
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import pointerEvents from '@js/common/core/events/pointer';
 import { addNamespace } from '@js/common/core/events/utils';
 import type { dxElementWrapper } from '@js/core/renderer';
@@ -9,6 +8,7 @@ import { noop } from '@js/core/utils/common';
 import { getOuterHeight, setHeight } from '@js/core/utils/size';
 import type { DxEvent } from '@js/events';
 import type { ScrollInfo } from '@js/ui/list';
+import eventsEngine from '@ts/events/core/events_engine';
 import type List from '@ts/ui/list/list.edit';
 import EditDecorator from '@ts/ui/list/list.edit.decorator';
 

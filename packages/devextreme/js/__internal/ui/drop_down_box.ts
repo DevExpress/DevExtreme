@@ -1,5 +1,4 @@
 import type { PositionConfig } from '@js/common/core/animation';
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import { normalizeKeyName } from '@js/common/core/events/utils/index';
 import registerComponent from '@js/core/component_registrator';
 import devices from '@js/core/devices';
@@ -17,6 +16,7 @@ import DataExpressionMixin from '@js/ui/editor/ui.data_expression';
 import { grep } from '@ts/core/utils/common';
 import { tabbable } from '@ts/core/utils/selectors';
 import type { OptionChanged } from '@ts/core/widget/types';
+import eventsEngine from '@ts/events/core/events_engine';
 import DropDownEditor, { type DropDownEditorInternalProperties } from '@ts/ui/drop_down_editor/drop_down_editor';
 import type { PositioningEvent } from '@ts/ui/overlay/overlay';
 import { getElementMaxHeightByWindow } from '@ts/ui/overlay/utils';
@@ -60,7 +60,6 @@ class DropDownBox<
         const $focusableElement = e.shiftKey ? $tabbableElements.last() : $tabbableElements.first();
 
         if ($focusableElement) {
-          // @ts-expect-error should be added on EventsEngine level
           eventsEngine.trigger($focusableElement, 'focus');
         }
 
@@ -219,7 +218,6 @@ class DropDownBox<
 
     if (moveBackward || moveForward) {
       this.close();
-      // @ts-expect-error should be added on EventsEngine level
       eventsEngine.trigger(this._input(), 'focus');
 
       if (moveBackward) {
@@ -329,7 +327,6 @@ class DropDownBox<
   _popupShownHandler(): void {
     super._popupShownHandler();
     const $firstElement = this._getTabbableElements().first();
-    // @ts-expect-error should be added on EventsEngine level
     eventsEngine.trigger($firstElement, 'focus');
   }
 

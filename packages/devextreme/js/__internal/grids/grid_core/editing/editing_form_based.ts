@@ -1,5 +1,4 @@
 /* eslint-disable max-classes-per-file */
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import { removeEvent } from '@js/common/core/events/remove';
 import devices from '@js/core/devices';
 import type { DxElement } from '@js/core/element';
@@ -18,6 +17,7 @@ import Form from '@js/ui/form';
 import Popup from '@js/ui/popup/ui.popup';
 import Scrollable from '@js/ui/scroll_view/ui.scrollable';
 import { WIDGET_CLASS } from '@ts/core/widget/widget';
+import eventsEngine from '@ts/events/core/events_engine';
 import type { Column, ColumnTemplateSource } from '@ts/grids/grid_core/columns_controller/types';
 import type { GeneratedItem, ProcessedItem } from '@ts/grids/grid_core/data_controller/types';
 import type { RowsView } from '@ts/grids/grid_core/views/rows_view';
@@ -212,7 +212,6 @@ const editingControllerExtender = (
           .find(FOCUSABLE_ELEMENT_SELECTOR)
           .not(`.${CLASSES.focusableElement}`)
           .first();
-        // @ts-expect-error eventsEngine.trigger is not fully typed
         eventsEngine.trigger($focusableElement, 'focus');
 
         if (repaintForm) {

@@ -1,5 +1,4 @@
 import { move } from '@js/common/core/animation/translator';
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import { addNamespace } from '@js/common/core/events/utils/index';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
@@ -14,6 +13,7 @@ import type { DragMoveEvent } from '@js/ui/draggable';
 import Draggable from '@js/ui/draggable';
 import type { dxHtmlEditorTableResizing } from '@js/ui/html_editor';
 import type { DraggableProperties } from '@ts/draggable.types';
+import eventsEngine from '@ts/events/core/events_engine';
 
 import type { LineDirection } from '../types';
 import type { Delta, QuillInstance } from '../types/quill';

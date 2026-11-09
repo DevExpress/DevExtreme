@@ -1,6 +1,5 @@
 import type { DragDirection } from '@js/common';
 import { name as CLICK_EVENT } from '@js/common/core/events/click';
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import { name as DOUBLE_CLICK_EVENT } from '@js/common/core/events/double_click';
 import { end as dragEventEnd, move as dragEventMove, start as dragEventStart } from '@js/common/core/events/drag';
 import { addNamespace, isCommandKeyPressed } from '@js/common/core/events/utils';
@@ -23,6 +22,7 @@ import type {
 import type { WidgetOptions } from '@js/ui/widget/ui.widget';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
+import eventsEngine from '@ts/events/core/events_engine';
 
 import {
   COLLAPSE_EVENT,
@@ -75,15 +75,15 @@ class ResizeHandle extends Widget<ResizeHandleProperties> {
 
   private _$collapseNextButton?: dxElementWrapper;
 
-  private RESIZE_START_EVENT_NAME?: string;
+  private RESIZE_START_EVENT_NAME!: string;
 
-  private RESIZE_EVENT_NAME?: string;
+  private RESIZE_EVENT_NAME!: string;
 
-  private RESIZE_END_EVENT_NAME?: string;
+  private RESIZE_END_EVENT_NAME!: string;
 
-  private CLICK_EVENT_NAME?: string;
+  private CLICK_EVENT_NAME!: string;
 
-  private DOUBLE_CLICK_EVENT_NAME?: string;
+  private DOUBLE_CLICK_EVENT_NAME!: string;
 
   // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
   _supportedKeys(): Record<string, (e: KeyboardEvent) => boolean | void> {

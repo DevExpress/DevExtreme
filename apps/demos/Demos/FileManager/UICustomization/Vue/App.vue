@@ -149,7 +149,7 @@ function createFile(
   return true;
 }
 function updateCategory(newCategory: string, directory: FileSystemItem, viewArea: string) {
-  let items: FileSystemItem[] = [];
+  let items: FileSystemItem[];
 
   if (viewArea === 'navPane') {
     items = [directory];

@@ -44,7 +44,7 @@ export abstract class GroupingHelper {
     return this._totalCountCorrection;
   }
 
-  protected updateTotalItemsCount(totalCountCorrection: number): void {
+  protected setTotalCountCorrection(totalCountCorrection: number): void {
     this._totalCountCorrection = totalCountCorrection || 0;
   }
 
@@ -75,7 +75,9 @@ export abstract class GroupingHelper {
     }
 
     let result = 0;
-    for (const item of items) {
+    // eslint-disable-next-line @typescript-eslint/prefer-for-of -- store items may be non-array
+    for (let i = 0; i < items.length; i += 1) {
+      const item = items[i];
       if (this.isGroupItemCountable(item)) {
         result += 1;
       }

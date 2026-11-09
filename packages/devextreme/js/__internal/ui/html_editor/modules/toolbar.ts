@@ -4,7 +4,6 @@ import '@js/ui/number_box';
 import '@js/ui/menu';
 
 import type { ToolbarItemComponent } from '@js/common';
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import { addNamespace } from '@js/common/core/events/utils/index';
 import localizationMessage from '@js/common/core/localization/message';
 import type { DxElement } from '@js/core/element';
@@ -31,6 +30,7 @@ import type { Item } from '@js/ui/toolbar';
 import errors from '@js/ui/widget/ui.errors';
 import { getPublicElement } from '@ts/core/element';
 import { capitalize } from '@ts/core/utils/capitalize';
+import eventsEngine from '@ts/events/core/events_engine';
 import { DX_MENU_ITEM_CLASS } from '@ts/ui/menu/menu';
 import { DROP_DOWN_MENU_BUTTON_CLASS } from '@ts/ui/toolbar/constants';
 import { applyItemTabIndex } from '@ts/ui/toolbar/internal/roving.utils';

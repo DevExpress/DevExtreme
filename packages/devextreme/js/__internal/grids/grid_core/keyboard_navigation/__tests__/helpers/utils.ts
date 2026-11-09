@@ -1,7 +1,7 @@
 import { jest } from '@jest/globals';
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import $ from '@js/core/renderer';
 import type { DxEvent } from '@js/events';
+import eventsEngine from '@ts/events/core/events_engine';
 import { keyboard } from '@ts/events/short';
 import type { DataGridInstance } from '@ts/grids/grid_core/__tests__/__mock__/helpers/utils';
 
@@ -20,7 +20,6 @@ export function getHeadersKeyboardNavigationController(instance: DataGridInstanc
 }
 
 export function triggerPointerDown(element: HTMLElement): void {
-  // @ts-expect-error - eventsEngine.trigger is not fully typed
   eventsEngine.trigger($(element), CLICK_EVENT);
 }
 
