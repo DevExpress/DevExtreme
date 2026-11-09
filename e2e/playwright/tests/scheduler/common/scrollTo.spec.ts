@@ -35,8 +35,13 @@ const getWorkSpaceScrollTop = async (scheduler: Scheduler): Promise<number> => (
   await scheduler.getWorkSpaceScroll()
 ).top;
 
-const getWSLeft = (page: Page): Promise<number> => page.evaluate(() => ($('#container') as any).dxScheduler('instance').getWorkSpaceScrollable().scrollLeft());
-const getHeaderLeft = (page: Page): Promise<number> => page.evaluate(() => $('.dx-scheduler-header-scrollable .dx-scrollable-container').scrollLeft() as number);
+// "+ 0" turns the -0 of a simulated scrollable into 0, which "toBe" tells apart and "eql" did not.
+const getWSLeft = async (page: Page): Promise<number> => (await page.evaluate(
+  () => ($('#container') as any).dxScheduler('instance').getWorkSpaceScrollable().scrollLeft(),
+)) + 0;
+const getHeaderLeft = async (page: Page): Promise<number> => (await page.evaluate(
+  () => $('.dx-scheduler-header-scrollable .dx-scrollable-container').scrollLeft() as number,
+)) + 0;
 
 test.describe('Scheduler: ScrollTo', () => {
   test('ScrollTo works correctly with week and day views', async ({ page }) => {

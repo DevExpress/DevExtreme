@@ -1,11 +1,17 @@
 import { test } from '../../../../fixtures';
 import { createWidget } from '../../../../helpers/createWidget';
+import { mockDate } from '../../../../helpers/mockDate';
 import { testScreenshot } from '../../../../helpers/screenshots';
 import Scheduler from '../../../../models/scheduler';
 
 const SCHEDULER_SELECTOR = '#container';
 
 test.describe('Appointment Form: Recurrence Form', () => {
+  // The recurrence editors default to today's date; a strict comparison fails on every new day.
+  test.beforeEach(async ({ page }) => {
+    await mockDate(page, '2024-01-01T12:00:00');
+  });
+
   // visual: generic.light
   // visual: fluent.blue.light
   // visual: material.blue.light
