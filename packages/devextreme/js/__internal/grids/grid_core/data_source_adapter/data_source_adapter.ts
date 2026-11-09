@@ -442,7 +442,7 @@ export default class DataSourceAdapter extends modules.Controller {
   }
 
   /**
-   * @extended: virtual_scrolling, TreeLists's data_source_adapter, DataGrid's m_grouping
+   * @extended: virtual_scrolling, TreeLists's data_source_adapter, DataGrid's grouping
    */
   protected _customizeRemoteOperations(
     options: LoadOperation,
