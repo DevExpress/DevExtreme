@@ -20,6 +20,18 @@ export const encodeHtml = (function createEncodeHtml() {
   };
 }());
 
+export const stringifyValue = (value: unknown): string => {
+  if (typeof value === 'string') {
+    return value;
+  }
+
+  try {
+    return JSON.stringify(value, null, 2) ?? String(value);
+  } catch {
+    return String(value);
+  }
+};
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- the parts, or the raw value itself
 const splitQuad = function splitQuad(raw): any {
   switch (typeof raw) {

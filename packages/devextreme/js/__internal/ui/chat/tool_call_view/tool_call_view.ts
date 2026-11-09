@@ -5,6 +5,7 @@ import $ from '@js/core/renderer';
 import Accordion from '@js/ui/accordion';
 import type { ToolCall } from '@js/ui/chat';
 import { ICON_CLASS } from '@ts/core/utils/icon';
+import { stringifyValue } from '@ts/core/utils/string';
 import type { DOMComponentProperties } from '@ts/core/widget/dom_component';
 import DOMComponent from '@ts/core/widget/dom_component';
 import type { OptionChanged } from '@ts/core/widget/types';
@@ -26,18 +27,6 @@ export const CHAT_TOOL_CALL_CLASSES = {
   arguments: 'dx-chat-tool-call-arguments',
   result: 'dx-chat-tool-call-result',
   error: 'dx-chat-tool-call-error',
-};
-
-const stringifyValue = (value: unknown): string => {
-  if (typeof value === 'string') {
-    return value;
-  }
-
-  try {
-    return JSON.stringify(value, null, 2);
-  } catch {
-    return String(value);
-  }
 };
 
 class ToolCallView extends DOMComponent<ToolCallView, ToolCallViewProperties> {
