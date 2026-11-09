@@ -10,7 +10,6 @@ export const CLASSES = {
 
   editorCell: 'dx-editor-cell',
   cellModified: 'dx-cell-modified',
-  cellFocusDisabled: 'dx-cell-focus-disabled',
   readonly: 'readonly',
 
   commandEdit: 'dx-command-edit',
@@ -27,7 +26,6 @@ export const CLASSES = {
   editPopupForm: 'edit-popup-form',
   formButtonsContainer: 'form-buttons-container',
 
-  focusOverlay: 'focus-overlay',
   focusableElement: 'dx-scrollable-container',
   dropDownEditorOverlay: 'dx-dropdowneditor-overlay',
 };

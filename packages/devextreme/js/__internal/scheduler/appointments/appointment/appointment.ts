@@ -1,5 +1,4 @@
 import { move } from '@js/common/core/animation/translator';
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import pointerEvents from '@js/common/core/events/pointer';
 import { addNamespace } from '@js/common/core/events/utils/index';
 import registerComponent from '@js/core/component_registrator';
@@ -9,6 +8,7 @@ import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
 import DOMComponent from '@ts/core/widget/dom_component';
 import type { OptionChanged } from '@ts/core/widget/types';
+import eventsEngine from '@ts/events/core/events_engine';
 import Resizable from '@ts/ui/resizable/resizable';
 import { hide, show } from '@ts/ui/tooltip/tooltip';
 

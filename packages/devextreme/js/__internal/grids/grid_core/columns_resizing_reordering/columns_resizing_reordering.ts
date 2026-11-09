@@ -1,6 +1,5 @@
 /* eslint-disable max-classes-per-file */
 import { fx } from '@js/common/core/animation';
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import {
   end as dragEventEnd,
   move as dragEventMove,
@@ -24,6 +23,7 @@ import { isDefined, isObject } from '@js/core/utils/type';
 import type { GroupPanel } from '@js/ui/data_grid';
 import swatchContainer from '@ts/core/utils/swatch_container';
 import { WIDGET_CLASS } from '@ts/core/widget/widget';
+import eventsEngine from '@ts/events/core/events_engine';
 import { CLASSES as COLUMN_HEADERS_CLASSES } from '@ts/grids/grid_core/column_headers/const';
 import { getDraggingPanelBoundingRects } from '@ts/grids/grid_core/columns_resizing_reordering/utils';
 import type { EditorFactory } from '@ts/grids/grid_core/editor_factory/editor_factory';

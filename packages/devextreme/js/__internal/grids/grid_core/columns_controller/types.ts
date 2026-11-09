@@ -63,16 +63,16 @@ export type SavedColumnState = ColumnUserState & { initialIndex?: number };
 
 export type AddedColumn = string | (Column & { columns?: (Column | string)[] });
 
-export interface UserStateApplierOptions {
-  columns: Column[];
+export interface UserStateApplierOptions<TColumn extends Column = Column> {
+  columns: TColumn[];
   columnsUserState: SavedColumnState[];
   ignoreColumnOptionNames: string[];
   hasUserState: boolean;
-  createColumn: (columnOptions: AddedColumn) => Column;
+  createColumn: (columnOptions: AddedColumn) => TColumn;
 }
 
-export interface UserStateApplyResult {
-  columns: Column[];
+export interface UserStateApplyResult<TColumn extends Column = Column> {
+  columns: TColumn[];
   hasAddedBands: boolean;
 }
 

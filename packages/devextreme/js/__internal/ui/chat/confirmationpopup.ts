@@ -1,9 +1,9 @@
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import Guid from '@js/core/guid';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import messageLocalization from '@js/localization/message';
 import Popup, { type Properties as PopupProperties, type ToolbarItem } from '@js/ui/popup';
+import eventsEngine from '@ts/events/core/events_engine';
 import { BUTTON_CLASS } from '@ts/ui/button/button';
 import type InternalPopup from '@ts/ui/popup/popup';
 
@@ -81,7 +81,6 @@ class ConfirmationPopup {
           .bottomToolbar()
           ?.find(`.${BUTTON_CLASS}`)
           .first();
-        // @ts-expect-error
         eventsEngine.trigger($firstButton, 'focus');
       },
       wrapperAttr: { class: CHAT_CONFIRMATION_POPUP_WRAPPER_CLASS },

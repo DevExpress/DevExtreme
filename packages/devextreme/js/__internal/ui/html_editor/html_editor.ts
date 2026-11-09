@@ -2,7 +2,6 @@ import '@ts/ui/html_editor/converters/delta';
 
 // @ts-expect-error events.d.ts does not declare Event
 import { Event as dxEvent } from '@js/common/core/events';
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import scrollEvents from '@js/common/core/events/gesture/emitter.gesture.scroll';
 import pointerEvents from '@js/common/core/events/pointer';
 import { addNamespace, normalizeKeyName } from '@js/common/core/events/utils/index';
@@ -32,6 +31,7 @@ import type { Converter, HtmlEditorFormat, Properties } from '@js/ui/html_editor
 import type { Properties as PopupProperties } from '@js/ui/popup';
 import { getNextFocusableElement, getPreviousFocusableElement } from '@ts/core/utils/focus';
 import type { OptionChanged } from '@ts/core/widget/types';
+import eventsEngine from '@ts/events/core/events_engine';
 import Editor from '@ts/ui/editor/editor';
 import ConverterController, { type BaseConverter } from '@ts/ui/html_editor/converterController';
 import getWordMatcher from '@ts/ui/html_editor/matchers/wordLists';
@@ -436,7 +436,7 @@ class HtmlEditor extends Editor<Properties> {
       noop,
     );
 
-    eventsEngine.on(
+    eventsEngine.on<DxEvent<PointerEvent>>(
       $scrollContainer,
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- NAME is always set
       addNamespace(pointerEvents.move, this.NAME!),

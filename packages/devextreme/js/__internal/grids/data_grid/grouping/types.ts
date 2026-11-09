@@ -1,5 +1,6 @@
 import type { DeferredObj } from '@js/core/utils/deferred';
 import type { RowExpandingEvent } from '@js/ui/data_grid';
+import type { CustomLoadResult } from '@ts/grids/grid_core/data_source_adapter/custom_loader';
 import type { LoadOperation, RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
 import type { ExecuteActionArgs } from '@ts/grids/grid_core/modules/types';
 import type { RowKey } from '@ts/grids/grid_core/types';
@@ -8,7 +9,9 @@ export type ChangeRowExpandArgs = ExecuteActionArgs<RowExpandingEvent<unknown, R
   & { expanded: boolean };
 
 export interface GroupingDataControllerExtension {
-  changeRowExpand: (key: RowKey, isRowClick?: boolean) => DeferredObj<unknown>;
+  expandRow: (key: RowKey) => DeferredObj<unknown>;
+  // eslint-disable-next-line @typescript-eslint/method-signature-style -- overridden by methods
+  changeRowExpand(key: RowKey, isRowClick?: boolean): DeferredObj<unknown>;
   // eslint-disable-next-line @typescript-eslint/method-signature-style -- overridden by methods
   isRowExpanded(key: RowKey): boolean;
   // eslint-disable-next-line @typescript-eslint/method-signature-style -- overridden by methods
@@ -47,7 +50,24 @@ export interface GroupInfoData {
   path: unknown[];
   isExpanded: boolean;
   isPending?: boolean;
+  childrenTotalCount?: number;
+  skipChildrenTotalCount?: number;
 }
+
+export interface ExpandedGroupsInfo {
+  items: GroupItemData[];
+  paths: unknown[][];
+  count: number;
+  lastCount: number;
+  skip?: number;
+  take?: number;
+}
+
+export type GroupPagingOptions = Pick<LoadOperation, 'skip' | 'take' | 'skips' | 'takes'>;
+
+export type GroupPagingCallback = (groupInfo: GroupInfoData, totalOffset: number) => void;
+
+export type GroupItemsLoadResult = CustomLoadResult | DeferredObj<CustomLoadResult>;
 
 export interface GroupInfo {
   key: RowKey;

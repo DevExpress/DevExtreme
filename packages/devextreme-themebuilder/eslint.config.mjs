@@ -44,8 +44,6 @@ export default [
       '@stylistic': stylistic,
     },
     rules: {
-      // TODO Vinogradov: remove after eslint-config-devextreme rc2 will be released:
-      'function-paren-newline': 'off',
       'import/extensions': 'off',
       'import/no-relative-packages': 'off',
       'class-methods-use-this': 'warn',
@@ -54,7 +52,6 @@ export default [
       '@typescript-eslint/no-unsafe-return': 'warn',
       '@typescript-eslint/no-non-null-assertion': 'warn',
       '@typescript-eslint/member-ordering': 'warn',
-      '@typescript-eslint/ban-types': 'off',
       '@typescript-eslint/no-unnecessary-boolean-literal-compare': 'off',
       'require-await': 'warn',
     },

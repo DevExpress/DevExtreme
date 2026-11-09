@@ -6,8 +6,8 @@ import type { DxEvent } from '@js/events';
 import type { Item as ContextMenuItem, ItemClickEvent } from '@js/ui/context_menu';
 import type { Properties as DataGridProperties } from '@js/ui/data_grid';
 import type { Properties as LoadPanelProperties } from '@js/ui/load_panel';
-import type { dxScrollableOptions, ScrollEventInfo } from '@js/ui/scroll_view/ui.scrollable';
 import type dxScrollable from '@js/ui/scroll_view/ui.scrollable';
+import type { dxScrollableOptions, ScrollEventInfo } from '@js/ui/scroll_view/ui.scrollable';
 import type {
   Column, ColumnsChanges, ColumnTemplateSource, TemplateModel,
 } from '@ts/grids/grid_core/columns_controller/types';
@@ -77,7 +77,9 @@ export type ViewDataChange = DataChange
   & Partial<Pick<UpdateChange, 'columnIndices' | 'changeTypes'>>;
 
 /** @architectureLeak data_grid: group cells render this template, and the cell hint skips them */
-export type HintColumn = Column & { groupCellTemplate?: ColumnTemplateSource<ViewCellOptions> };
+export type WithGroupCellTemplate<T> = T & {
+  groupCellTemplate?: ColumnTemplateSource<ViewCellOptions>;
+};
 
 export interface ViewRowCell extends Cell {
   columnIndex?: number;
@@ -118,7 +120,7 @@ export interface WatchableOptions {
 }
 
 export interface ViewCellOptions extends Pick<ViewRow, 'rowType' | 'rowIndex' | 'key' | 'data' | 'values'> {
-  column: Column;
+  column: WithGroupCellTemplate<Column>;
   columnIndex: number;
   isAltRow?: boolean;
   columns?: Column[];
@@ -218,12 +220,24 @@ export type RowsViewOptions = InternalGridOptions & Pick<DataGridProperties, 'gr
 /** @architectureLeak data_grid/summary: core extenders adjust the group summary cells */
 export interface SummaryRowsViewExtension {
   // eslint-disable-next-line @typescript-eslint/method-signature-style -- overridden by methods
+  renderGroupSummaryCells($row: dxElementWrapper, options: RowRenderOptions): void;
+
+  // eslint-disable-next-line @typescript-eslint/method-signature-style -- overridden by methods
+  hasAlignByColumnSummaryItems(columnIndex: number, options: RowRenderOptions): boolean;
+
+  // eslint-disable-next-line @typescript-eslint/method-signature-style -- DataGrid narrows options
+  getAlignByColumnCellCount(groupCellColSpan: number, options: RowRenderOptions): number;
+
+  // eslint-disable-next-line @typescript-eslint/method-signature-style -- overridden by methods
   renderGroupSummaryCellsCore(
     $groupCell: dxElementWrapper,
     options: RowRenderOptions,
     groupCellColSpan: number,
     alignByColumnCellCount: number,
   ): void;
+
+  // eslint-disable-next-line @typescript-eslint/method-signature-style -- overridden by methods
+  getSummaryCellIndex(columnIndex: number, columns: Column[]): number;
 }
 
 // the grid passes loadPanel options to the LoadPanel widget, so its animation applies too
