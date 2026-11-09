@@ -60,7 +60,7 @@ function parseDBF(stream: ParserStream, errors: string[]): DataBaseFileParseResu
       errors,
     );
     timeEnd = new Date();
-  } catch(e) {
+  } catch (e) {
     errors.push('dbf: parsing error: ' + e.message + ' / ' + e.description);
   }
   // @ts-expect-error Date arithmetic; the timestamps stay unassigned when parsing fails
@@ -109,21 +109,21 @@ function parseFieldDescriptor(stream: ParserStream): DataBaseFileField {
 }
 
 var DBF_FIELD_PARSERS: Record<string, DataBaseFileFieldParser> = {
-  C: function(stream, length) {
+  C: function (stream, length) {
     var str = getAsciiString(stream, length);
 
     try {
       str = decodeURIComponent(escape(str)); // T522922
     // eslint-disable-next-line no-empty
-    } catch(e) { }
+    } catch (e) { }
 
     return str.trim();
   },
-  N: function(stream, length) {
+  N: function (stream, length) {
     var str = getAsciiString(stream, length);
     return parseFloat(str);
   },
-  D: function(stream, length) {
+  D: function (stream, length) {
     var str = getAsciiString(stream, length);
     // @ts-expect-error the Date constructor coerces the numeric substrings
     return new Date(str.substring(0, 4), str.substring(4, 6) - 1, str.substring(6, 8));

@@ -9,10 +9,10 @@ import type {
   UserStateApplyResult,
 } from './types';
 
-export class UserStateApplier {
-  constructor(private readonly options: UserStateApplierOptions) {}
+export class UserStateApplier<TColumn extends Column = Column> {
+  constructor(private readonly options: UserStateApplierOptions<TColumn>) {}
 
-  public apply(): UserStateApplyResult {
+  public apply(): UserStateApplyResult<TColumn> {
     const stateIndexes = this.matchColumnsWithState();
     const columns = this.applyStateToColumns(stateIndexes);
     const hasAddedBands = this.appendAddedColumns(columns, stateIndexes);
@@ -50,13 +50,13 @@ export class UserStateApplier {
     return columns.map((column) => this.findMatchIndex(columnsUserState, column, matchCountById));
   }
 
-  private applyStateToColumns(stateIndexes: number[]): Column[] {
+  private applyStateToColumns(stateIndexes: number[]): TColumn[] {
     const {
       columns, columnsUserState, hasUserState, ignoreColumnOptionNames,
     } = this.options;
     const allColumnsHaveState = stateIndexes.every((stateIndex) => stateIndex >= 0);
     const canApplyState = hasUserState || allColumnsHaveState;
-    const resultColumns: Column[] = [];
+    const resultColumns: TColumn[] = [];
 
     columns.forEach((column, index) => {
       const stateIndex = stateIndexes[index];
@@ -76,7 +76,7 @@ export class UserStateApplier {
     return resultColumns;
   }
 
-  private appendAddedColumns(resultColumns: Column[], stateIndexes: number[]): boolean {
+  private appendAddedColumns(resultColumns: TColumn[], stateIndexes: number[]): boolean {
     const {
       columnsUserState, ignoreColumnOptionNames, createColumn,
     } = this.options;

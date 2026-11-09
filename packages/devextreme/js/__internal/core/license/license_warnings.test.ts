@@ -12,10 +12,8 @@ interface CliTemplates {
   keyVerificationFailed: (type: string, keyVersion: string, requiredVersion: string) => string;
 }
 
-/* eslint-disable global-require, @typescript-eslint/no-var-requires */
 /* eslint-disable @typescript-eslint/no-require-imports */
 const { TEMPLATES: CLI_TEMPLATES } = require('../../../../license/messages') as { TEMPLATES: CliTemplates };
-/* eslint-enable global-require, @typescript-eslint/no-var-requires */
 /* eslint-enable @typescript-eslint/no-require-imports */
 
 describe('texts of the console and of the devextreme-license CLI', () => {

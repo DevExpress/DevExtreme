@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/method-signature-style */
 import positionUtils from '@js/common/core/animation/position';
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import { addNamespace, normalizeKeyName } from '@js/common/core/events/utils/index';
 import domAdapter from '@js/core/dom_adapter';
 import type { dxElementWrapper } from '@js/core/renderer';
@@ -15,6 +14,7 @@ import {
 } from '@js/core/utils/size';
 import type { DxEvent } from '@js/events';
 import EditorFactoryMixin from '@js/ui/shared/ui.editor_factory_mixin';
+import eventsEngine from '@ts/events/core/events_engine';
 import type { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/column_headers';
 import type {
   ColumnsResizerViewController,
@@ -137,10 +137,10 @@ export class EditorFactory extends ViewControllerWithMixin {
       let isHideBorder: boolean | undefined;
 
       if (
-        !$focus.hasClass(EDITING_CLASSES.cellFocusDisabled)
+        !$focus.hasClass(CLASSES.cellFocusDisabled)
         && !$focus.hasClass(VIEW_CLASSES.row)
       ) {
-        const $focusCell = $focus.closest(`${this._getFocusCellSelector()}, .${EDITING_CLASSES.cellFocusDisabled}`);
+        const $focusCell = $focus.closest(`${this._getFocusCellSelector()}, .${CLASSES.cellFocusDisabled}`);
 
         if ($focusCell.get(0) !== $focus.get(0)) {
           isHideBorder = this._needHideBorder($focusCell);
@@ -148,7 +148,7 @@ export class EditorFactory extends ViewControllerWithMixin {
         }
       }
 
-      if ($focus.length && !$focus.hasClass(EDITING_CLASSES.cellFocusDisabled)) {
+      if ($focus.length && !$focus.hasClass(CLASSES.cellFocusDisabled)) {
         this.focus($focus, isHideBorder);
         return;
       }
@@ -170,7 +170,7 @@ export class EditorFactory extends ViewControllerWithMixin {
 
   private _updateFocus(e: { event?: DxEvent }): void {
     const isFocusOverlay = e?.event
-      && $(e.event.target).hasClass(this.addWidgetPrefix(EDITING_CLASSES.focusOverlay));
+      && $(e.event.target).hasClass(this.addWidgetPrefix(CLASSES.focusOverlay));
 
     this._isFocusOverlay = !!this._isFocusOverlay || isFocusOverlay;
 
@@ -264,7 +264,7 @@ export class EditorFactory extends ViewControllerWithMixin {
       return;
     }
 
-    this._$focusOverlay ??= $('<div>').addClass(this.addWidgetPrefix(EDITING_CLASSES.focusOverlay));
+    this._$focusOverlay ??= $('<div>').addClass(this.addWidgetPrefix(CLASSES.focusOverlay));
 
     this.updateFocusOverlay($element, isHideBorder);
   }
@@ -342,7 +342,7 @@ export class EditorFactory extends ViewControllerWithMixin {
 
     if ($container) {
       // T179518
-      eventsEngine.on($container, addNamespace('keydown', MODULE_NAMESPACE), (e) => {
+      eventsEngine.on($container, addNamespace('keydown', MODULE_NAMESPACE), (e: DxEvent<KeyboardEvent>) => {
         if (normalizeKeyName(e) === 'tab') {
           this._updateFocusHandler(e);
         }

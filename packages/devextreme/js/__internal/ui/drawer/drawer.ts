@@ -1,6 +1,5 @@
 import { fx } from '@js/common/core/animation';
 import { name as CLICK_EVENT_NAME } from '@js/common/core/events/click';
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import { triggerResizeEvent } from '@js/common/core/events/visibility_change';
 import registerComponent from '@js/core/component_registrator';
 import { getPublicElement } from '@js/core/element';
@@ -19,6 +18,7 @@ import type {
 import type { PanelLocation, Properties } from '@js/ui/drawer';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
+import eventsEngine from '@ts/events/core/events_engine';
 import { animation } from '@ts/ui/drawer/drawer.animation';
 import OverlapStrategy from '@ts/ui/drawer/drawer.rendering.strategy.overlap';
 import PushStrategy from '@ts/ui/drawer/drawer.rendering.strategy.push';

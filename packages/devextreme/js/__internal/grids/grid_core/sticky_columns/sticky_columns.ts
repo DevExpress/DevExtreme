@@ -17,7 +17,7 @@ import type { HorizontalBounds } from '@ts/grids/grid_core/keyboard_navigation/t
 import type { MasterDetailRowsViewExtension } from '@ts/grids/grid_core/master_detail/types';
 import type { ValidatingEditorFactoryExtension } from '@ts/grids/grid_core/validating/types';
 import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
-import type { VirtualScrollingResizingControllerExtension } from '@ts/grids/grid_core/virtual_scrolling/types';
+import type { VirtualScrollingResizingController } from '@ts/grids/grid_core/virtual_scrolling/types';
 import type { ElementOffset } from '@ts/ui/scroll_view/types';
 
 import { HIDDEN_COLUMNS_WIDTH } from '../adaptivity/const';
@@ -883,7 +883,7 @@ const editorFactory = (
 };
 
 const resizing = (
-  Base: ModuleType<ResizingController & VirtualScrollingResizingControllerExtension>,
+  Base: ModuleType<VirtualScrollingResizingController>,
 ): ModuleType<ResizingController> => class ResizingStickyColumnsExtender extends Base {
   protected declare _columnHeadersView: StickyColumnHeadersView;
 

@@ -273,7 +273,7 @@ export function runTestAtPage(test, demoUrl) {
 
   if (settings.explicitTests) {
     // eslint-disable-next-line no-only-tests/no-only-tests
-    executor = shouldRunTestExplicitly(demoUrl) ? test.only : executor = test.skip;
+    executor = shouldRunTestExplicitly(demoUrl) ? test.only : test.skip;
   }
   return executor.page(demoUrl);
 }
