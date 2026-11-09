@@ -37,12 +37,12 @@ import { isSameItem } from '@ts/grids/grid_core/data_controller/utils/row_change
 import { generateRowValues } from '@ts/grids/grid_core/data_controller/utils/row_values';
 import type { DataSourceController } from '@ts/grids/grid_core/data_source/data_source_controller';
 import type { RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
-import type { FocusController } from '@ts/grids/grid_core/focus/m_focus';
+import type { FocusController } from '@ts/grids/grid_core/focus/focus';
 import type {
   KeyboardNavigationController,
 } from '@ts/grids/grid_core/keyboard_navigation/keyboard_navigation';
 import type { OptionChanged } from '@ts/grids/grid_core/types';
-import type { ValidatingController } from '@ts/grids/grid_core/validating/m_validating';
+import type { ValidatingController } from '@ts/grids/grid_core/validating/validating';
 import Scrollable from '@ts/ui/scroll_view/scrollable';
 import type { ElementOffset } from '@ts/ui/scroll_view/types';
 
