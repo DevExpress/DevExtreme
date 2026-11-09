@@ -419,7 +419,9 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
         this._setOption('suggestions', value);
     }
 
-    
+    /**
+     * [descr:dxChatOptions.toolCallOptions]
+     */
     @Input()
     get toolCallOptions(): ToolCallOptions {
         return this._getOption('toolCallOptions');

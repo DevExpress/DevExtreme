@@ -918,7 +918,7 @@ const DxToolCallConfig = {
     arguments: Object as PropType<Record<string, any>>,
     expanded: Boolean,
     name: String,
-    result: [Object, String] as PropType<object | string>,
+    result: [Object, String] as PropType<Record<string, any> | string>,
     status: String as PropType<ToolCallStatus>
   }
 };
