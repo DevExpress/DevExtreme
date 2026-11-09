@@ -68,15 +68,6 @@
   flex-direction: column;
 }
 
-::ng-deep .dx-chat-messagebubble:has(> .dx-chat-tool-call-view) {
-  min-width: 344px;
-}
-
-::ng-deep .dx-theme-fluent-typography .dx-chat-messagebubble:has(> .dx-chat-tool-call-view),
-::ng-deep .dx-theme-fluent-next-typography .dx-chat-messagebubble:has(> .dx-chat-tool-call-view) {
-  min-width: 320px;
-}
-
 ::ng-deep .chat-suggestion-cards {
   display: flex;
   flex-wrap: wrap;

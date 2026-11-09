@@ -49,7 +49,9 @@ $(() => {
     try {
       args = JSON.parse(call.function.arguments || '{}');
     } catch {
-      args = {};
+      return {
+        name, arguments: {}, status: 'error', result: 'Invalid tool arguments',
+      };
     }
 
     await wait(TOOL_DELAY);
