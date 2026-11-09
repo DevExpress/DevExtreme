@@ -61,5 +61,18 @@ export function getInstanceByElement<T = any>(
   return elementData<T>($element.get(0), name);
 }
 
+export function getComponentInstance<T = unknown>($element: dxElementWrapper): T | undefined {
+  const element = $element.get(0);
+
+  if (!element) {
+    return undefined;
+  }
+
+  const names = elementData<string[] | undefined>(element, COMPONENT_NAMES_DATA_KEY);
+  const componentName = names?.[0];
+
+  return componentName ? elementData<T>(element, componentName) : undefined;
+}
+
 export { getName as name };
 export default { name: getName };

@@ -28,7 +28,7 @@ import type { DataAdapterOptions } from '@ts/ui/hierarchical_collection/data_ada
 import type { InternalNode } from '@ts/ui/hierarchical_collection/data_converter';
 import HierarchicalCollectionWidget from '@ts/ui/hierarchical_collection/hierarchical_collection_widget';
 
-const DX_MENU_CLASS = 'dx-menu';
+export const DX_MENU_CLASS = 'dx-menu';
 const DX_MENU_NO_ICONS_CLASS = `${DX_MENU_CLASS}-no-icons`;
 const DX_MENU_BASE_CLASS = 'dx-menu-base';
 const ITEM_CLASS = `${DX_MENU_CLASS}-item`;
