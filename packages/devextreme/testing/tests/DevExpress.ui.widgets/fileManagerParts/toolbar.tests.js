@@ -444,6 +444,20 @@ QUnit.module('Toolbar', moduleConfig, () => {
         assert.equal($dropDownButton.attr('title'), 'Thumbnails View', 'Thumbnails View');
     });
 
+    test('itemView dropDownButton is named after the current view mode (T1337649)', function(assert) {
+        createFileManager(false);
+        this.clock.tick(400);
+
+        const getViewSwitcherLabel = () => this.wrapper.getToolbarDropDownButton().find(`.${Consts.BUTTON_CLASS}`).attr('aria-label');
+
+        assert.strictEqual(getViewSwitcherLabel(), 'Details View', 'details view');
+
+        this.wrapper.getInstance().option('itemView.mode', 'thumbnails');
+        this.clock.tick(400);
+
+        assert.strictEqual(getViewSwitcherLabel(), 'Thumbnails View', 'thumbnails view');
+    });
+
     test('Raise the ToolbarItemClick event on default toolbar', function(assert) {
         createFileManager(false);
         this.clock.tick(400);
