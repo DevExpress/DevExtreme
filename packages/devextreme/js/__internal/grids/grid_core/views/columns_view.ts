@@ -440,10 +440,8 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
       resultOptions.rowIndex = this.getRowIndex($row);
 
       if ($fieldItemContent.length) {
-        // a field item content always stores its form item
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        const formItemOptions = getData($fieldItemContent, EDIT_FORM_ITEM_DATA_KEY)!;
-        if (formItemOptions.column) {
+        const formItemOptions = getData($fieldItemContent, EDIT_FORM_ITEM_DATA_KEY);
+        if (formItemOptions?.column) {
           resultOptions.column = formItemOptions.column;
           resultOptions.columnIndex = this._columnsController
             .getVisibleIndex(resultOptions.column.index);

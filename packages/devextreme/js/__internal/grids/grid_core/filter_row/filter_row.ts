@@ -267,10 +267,9 @@ const columnHeadersView = (
         $cell.find(`.${this.addWidgetPrefix(CLASSES.filterRangeOverlay)}`),
         Overlay,
       );
-      if (overlayInstance) {
-        // the filter range overlay is rendered together with its content
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        const $editorRangeElements = overlayInstance.$content()!.find(`.${CLASSES.editorContainer}`);
+      const $overlayContent = overlayInstance?.$content();
+      if ($overlayContent) {
+        const $editorRangeElements = $overlayContent.find(`.${CLASSES.editorContainer}`);
 
         this._updateEditorValue(column, $editorRangeElements.first());
         this._updateEditorValue(column, $editorRangeElements.last());

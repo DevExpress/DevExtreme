@@ -1334,10 +1334,8 @@ export const validatingEditorFactoryExtender = (
     if (isFixedColumns && !isFormBasedEditMode(this._editingController.getEditMode())) {
       const nextRowOptions = getData($cell.closest(`.${VIEW_CLASSES.row}`).next(), ROW_OPTIONS_KEY);
 
-      if (nextRowOptions?.rowType === 'group') {
-        // a rendered group row always has rowIndex
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        const $nextFixedRowElement = $(this._rowsView.getRowElement(nextRowOptions.rowIndex!))
+      if (nextRowOptions?.rowType === 'group' && isDefined(nextRowOptions.rowIndex)) {
+        const $nextFixedRowElement = $(this._rowsView.getRowElement(nextRowOptions.rowIndex))
           .last();
         const $groupCellElement = $nextFixedRowElement.find(`.${VIEW_CLASSES.groupCell}`);
 
