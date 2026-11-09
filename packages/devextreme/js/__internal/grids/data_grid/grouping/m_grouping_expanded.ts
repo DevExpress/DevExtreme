@@ -10,13 +10,13 @@ import type { VirtualScrollingDataSourceAdapterExtension } from '@ts/grids/grid_
 
 import dataGridCore from '../core';
 import { createGroupFilter } from '../utils';
-import type { GroupingDataSourceAdapter } from './m_grouping';
 import { GroupingHelper as GroupingHelperCore } from './m_grouping_core';
 import type {
   DataItem,
   ForeachGroupsCallback,
   ForeachGroupsResult,
   GroupInfoData,
+  GroupingDataSourceAdapter,
   GroupingLoadOperation,
   GroupItemData,
   GroupItemsPosition,
