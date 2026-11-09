@@ -150,7 +150,7 @@ export class AppService {
     },
     {
       title: 'Error State',
-      description: 'Check the weather in London and in Atlantis: one of the tools fails.',
+      description: 'Check the weather in London and in Atlantis: one of the calls fails.',
       prompt: 'Check the current weather conditions in London, UK and in Atlantis, Atlantis.',
     },
   ];

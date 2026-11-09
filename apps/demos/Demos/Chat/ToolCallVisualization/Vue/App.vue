@@ -23,15 +23,15 @@
         :user="user"
         :speech-to-text-enabled="true"
         :tool-call-options="toolCallOptions"
-        empty-view-template="empty-view"
+        empty-view-template="emptyView"
         v-model:typing-users="typingUsers"
         v-model:alerts="alerts"
         @message-entered="onMessageEntered($event)"
       >
-        <template #empty-view>
+        <template #emptyView="{ data }">
           <div>
-            <div class="dx-chat-messagelist-empty-message">{{ dictionary.en['dxChat-emptyListMessage'] }}</div>
-            <div class="dx-chat-messagelist-empty-prompt">{{ dictionary.en['dxChat-emptyListPrompt'] }}</div>
+            <div class="dx-chat-messagelist-empty-message">{{ data.texts.message }}</div>
+            <div class="dx-chat-messagelist-empty-prompt">{{ data.texts.prompt }}</div>
             <div class="chat-suggestion-cards">
               <button
                 v-for="card in suggestionCards"
