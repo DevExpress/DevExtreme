@@ -10927,7 +10927,10 @@ declare module DevExpress.ui {
      * [descr:_ui_card_view_ContextMenuPreparingEvent]
      */
     export type ContextMenuPreparingEvent<TCardData = unknown> =
-      DevExpress.common.core.events.EventInfo<dxCardView> & {
+      DevExpress.common.core.events.NativeEventInfo<
+        dxCardView,
+        DevExpress.events.InteractionEvent
+      > & {
         /**
          * [descr:_ui_card_view_ContextMenuPreparingEvent.items]
          */

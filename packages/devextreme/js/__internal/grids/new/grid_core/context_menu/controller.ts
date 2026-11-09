@@ -27,7 +27,7 @@ export abstract class BaseContextMenuController<TTargetView = unknown, TContextI
 
     this.lastEvent = event;
 
-    const items = this.getItems(view, targetElement, contextInfo);
+    const items = this.getItems(view, targetElement, contextInfo, event);
 
     if (!items) {
       return;
@@ -44,6 +44,7 @@ export abstract class BaseContextMenuController<TTargetView = unknown, TContextI
   protected abstract getItems(
     view: TTargetView,
     targetElement: Element,
-    contextInfo?: TContextInfo
+    contextInfo?: TContextInfo,
+    event?: KeyboardEvent | MouseEvent,
   ): ContextMenuItem[] | undefined;
 }

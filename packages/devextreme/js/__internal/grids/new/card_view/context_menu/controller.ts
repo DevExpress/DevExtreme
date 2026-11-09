@@ -1,4 +1,5 @@
 import type { SingleMultipleOrNone } from '@js/common';
+import type { DxEvent, InteractionEvent } from '@js/events';
 import messageLocalization from '@js/localization/message';
 import type { Item as ContextMenuItem, ItemClickEvent as ContextMenuItemPressedEvent } from '@js/ui/context_menu';
 
@@ -50,6 +51,7 @@ export class ContextMenuController
     view: ContextMenuTarget,
     targetElement: Element,
     contextInfo: ContextInfo = {},
+    event?: KeyboardEvent | MouseEvent,
   ): ContextMenuItem[] | undefined {
     const items: ContextMenuItem[] = [];
 
@@ -58,7 +60,8 @@ export class ContextMenuController
     }
 
     // @ts-expect-error
-    const event: ContextMenuPreparingEvent<CardInfo> = {
+    const preparingEvent: ContextMenuPreparingEvent<CardInfo> = {
+      event: event as DxEvent<InteractionEvent> | undefined,
       items: items.length > 0 ? items : undefined,
       target: view,
       targetElement: targetElement as HTMLElement,
@@ -72,9 +75,9 @@ export class ContextMenuController
 
     const callback = this.options.action('onContextMenuPreparing').peek();
 
-    callback(event);
+    callback(preparingEvent);
 
-    return event.items;
+    return preparingEvent.items;
   }
 
   private getSortingItems(column: Column): CardViewContextMenuItem[] {

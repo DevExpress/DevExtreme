@@ -18,6 +18,7 @@ import {
     EventInfo,
     NativeEventInfo,
     PointerInteractionEvent,
+    InteractionEvent,
 } from '../events';
 import { dxToolbarItem, ToolbarItemLocation } from './toolbar';
 import { dxLoadPanelOptions } from './load_panel';
@@ -1241,9 +1242,9 @@ export type ContextMenuTarget = 'toolbar' | 'headerPanel' | 'content';
  * @docid _ui_card_view_ContextMenuPreparingEvent
  * @public
  * @type object
- * @inherits EventInfo
+ * @inherits NativeEventInfo
  */
-export type ContextMenuPreparingEvent<TCardData = unknown> = EventInfo<dxCardView> & {
+export type ContextMenuPreparingEvent<TCardData = unknown> = NativeEventInfo<dxCardView, InteractionEvent> & {
   /**
    * @docid _ui_card_view_ContextMenuPreparingEvent.items
    * @public

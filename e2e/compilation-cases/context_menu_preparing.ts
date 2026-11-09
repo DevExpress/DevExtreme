@@ -1,3 +1,4 @@
+import CardView from 'devextreme/ui/card_view';
 import ContextMenu from 'devextreme/ui/context_menu';
 import DataGrid from 'devextreme/ui/data_grid';
 import PivotGrid from 'devextreme/ui/pivot_grid';
@@ -14,6 +15,14 @@ new DataGrid(document.createElement('div'), {
 new TreeList(document.createElement('div'), {
   onContextMenuPreparing(e) {
     contextMenu.option('position', { of: e.event });
+  },
+});
+
+new CardView(document.createElement('div'), {
+  onContextMenuPreparing(e) {
+    contextMenu.option('position', {
+      of: e.event?.type === 'keydown' ? e.targetElement : e.event,
+    });
   },
 });
 
