@@ -27,7 +27,7 @@ import { ColumnHeadersView } from '__internal/grids/data_grid/module_not_extende
 import { columnsControllerModule } from '__internal/grids/grid_core/columns_controller/columns_controller';
 const ColumnsController = columnsControllerModule.controllers.columns;
 import { RowsView } from '__internal/grids/data_grid/module_not_extended/rows';
-import { GroupingHeaderPanelExtender } from '__internal/grids/data_grid/grouping/m_grouping';
+import { GroupingHeaderPanelExtender } from '__internal/grids/data_grid/grouping/grouping';
 import { HeaderPanel } from '__internal/grids/data_grid/module_not_extended/header_panel';
 import Action from '__internal/core/action';
 import { getHeight } from 'core/utils/size';
