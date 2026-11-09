@@ -1,5 +1,5 @@
-import type { Locator } from '@playwright/test';
-import type { Appointment } from 'devextreme/ui/scheduler';
+import type { Locator, Page } from '@playwright/test';
+import type { Appointment, Properties } from 'devextreme/ui/scheduler';
 import { expect, test } from '../../../fixtures';
 import { createWidget } from '../../../helpers/createWidget';
 import { insertStylesheetRulesToPage } from '../../../helpers/domUtils';
@@ -47,8 +47,29 @@ const getAppointmentFromStartDate = (startDate: Date, offset: number): Appointme
   };
 };
 
-const getTop = (element: Locator): Promise<number> => element.evaluate(
-  (node) => node.getBoundingClientRect().top,
+const REGULAR_HEIGHT = [25, 25, 25, 25, 25, 25, 25, 25];
+const SUMMER_HEIGHT: Record<number, number[]> = {
+  0: [25, 50, 50, 25, 25, 25, 25, 25],
+  [-360]: [25, 25, 25, 25, 25, 25, 25, 50],
+};
+
+const getExpectedHeight = (season: TestCase['season'], offset: number): number[] => (
+  season === 'summer' ? SUMMER_HEIGHT[offset] ?? REGULAR_HEIGHT : REGULAR_HEIGHT
+);
+
+interface Geometry {
+  top: number;
+  height: number;
+}
+
+const getGeometry = (element: Locator): Promise<Geometry> => element.evaluate((node) => {
+  const { top, height } = node.getBoundingClientRect();
+
+  return { top, height };
+});
+
+const getUpdatedCount = (page: Page): Promise<number> => page.evaluate(
+  () => (window as any).updatedCount,
 );
 
 const BERLIN_SUMMER_CASE: TestCase = {
@@ -150,33 +171,54 @@ test.describe('Scheduler render during DST', () => {
   }) => {
     getTimezoneTest(timezone)(`Should drag-n-drop appointment correctly during around DST (${timezone}, ${season}, ${offset})`, async ({ page }) => {
       await insertStylesheetRulesToPage(page, CUSTOM_CSS);
-      await createWidget(page, 'dxScheduler', {
-        timeZone: timezone,
-        dataSource: [getAppointmentFromStartDate(startDate, offset)],
-        currentView: 'week',
-        currentDate,
-        offset,
-        showCurrentTimeIndicator: false,
-        showAllDayPanel: false,
-        firstDayOfWeek: 4,
-        cellDuration: 60,
-        height: 800,
+      await createWidget(page, 'dxScheduler', (options: Properties) => {
+        (window as any).updatedCount = 0;
+
+        return {
+          ...options,
+          onAppointmentUpdated: () => {
+            (window as any).updatedCount += 1;
+          },
+        };
+      }, SCHEDULER_SELECTOR, {
+        arg: {
+          timeZone: timezone,
+          dataSource: [getAppointmentFromStartDate(startDate, offset)],
+          currentView: 'week',
+          currentDate,
+          offset,
+          showCurrentTimeIndicator: false,
+          showAllDayPanel: false,
+          firstDayOfWeek: 4,
+          cellDuration: 60,
+          height: 800,
+        },
       });
 
       const scheduler = new Scheduler(page, SCHEDULER_SELECTOR);
       const appointment = scheduler.getAppointment(APPOINTMENT_TEXT);
       const [[firstCellRowIdx, firstCellColIdx]] = cellIdxArray;
       const firstCell = scheduler.getDateTableCell(firstCellRowIdx, firstCellColIdx);
-      const firstCellTop = await getTop(firstCell);
+      const { top: firstCellTop } = await getGeometry(firstCell);
+      const expectedHeight = getExpectedHeight(season, offset);
 
       for (const [idx, [rowIdx, colIdx]] of cellIdxArray.entries()) {
         const cell = scheduler.getDateTableCell(rowIdx, colIdx);
+        const updatedCount = await getUpdatedCount(page);
 
         await dragToElement(page, appointment.element, cell, { offsetY: DRAG_Y_OFFSET_PX });
 
+        if (idx > 0) {
+          await expect.poll(() => getUpdatedCount(page)).toBeGreaterThan(updatedCount);
+        }
+
         await expect
-          .poll(async () => (await getTop(appointment.element)) - firstCellTop)
-          .toBe(expectedTopPosition[idx]);
+          .poll(async () => {
+            const { top, height } = await getGeometry(appointment.element);
+
+            return { top: top - firstCellTop, height };
+          })
+          .toEqual({ top: expectedTopPosition[idx], height: expectedHeight[idx] });
       }
     });
   });
