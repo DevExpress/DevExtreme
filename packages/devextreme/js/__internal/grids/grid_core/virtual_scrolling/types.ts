@@ -1,6 +1,7 @@
 import type { dxElementWrapper } from '@js/core/renderer';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import type DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/data_source_adapter';
+import type { ResizingController } from '@ts/grids/grid_core/grid_view/grid_view';
 import type { RowsView } from '@ts/grids/grid_core/views/rows_view';
 import type { ViewDataChange } from '@ts/grids/grid_core/views/types';
 import type {
@@ -20,6 +21,9 @@ export interface ChangedLoadParams {
 export interface VirtualScrollingResizingControllerExtension {
   hasResizeTimeout: () => boolean;
 }
+
+export type VirtualScrollingResizingController = ResizingController
+& VirtualScrollingResizingControllerExtension;
 
 export type ContentOffsetType = 'begin' | 'end';
 
@@ -72,7 +76,8 @@ export type VirtualScrollingDataSourceAdapter = DataSourceAdapter
 export type VirtualScrollingDataChange = ViewDataChange & { removeCount?: number };
 
 export interface VirtualScrollingRowsViewExtension {
-  _updateContentPosition: (isRender?: boolean) => void;
+  // eslint-disable-next-line @typescript-eslint/method-signature-style -- overridden by methods
+  _updateContentPosition(isRender?: boolean): void;
 }
 
 export type VirtualScrollingRowsView = RowsView & VirtualScrollingRowsViewExtension;

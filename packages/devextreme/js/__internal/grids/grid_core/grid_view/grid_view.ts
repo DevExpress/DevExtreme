@@ -67,7 +67,7 @@ export class ResizingController extends modules.ViewController {
 
   public _columnsController!: ColumnsController;
 
-  private _footerView!: FooterView;
+  protected _footerView!: FooterView;
 
   private _gridView!: GridView;
 
