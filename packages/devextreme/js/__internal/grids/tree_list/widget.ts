@@ -27,7 +27,7 @@ import './module_not_extended/search';
 import './keyboard_navigation';
 import './module_not_extended/headers_keyboard_navigation';
 import './module_not_extended/virtual_columns';
-import './m_focus';
+import './focus';
 import './module_not_extended/row_dragging';
 import './module_not_extended/toast';
 import './ai_assistant/ai_assistant';

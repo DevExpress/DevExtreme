@@ -54,7 +54,7 @@ import type {
 import { CLASSES as EDITOR_FACTORY_CLASSES } from '@ts/grids/grid_core/editor_factory/const';
 import type { EditorFactory } from '@ts/grids/grid_core/editor_factory/editor_factory';
 import { CLASSES as FILTER_ROW_CLASSES } from '@ts/grids/grid_core/filter_row/const';
-import type { FocusController } from '@ts/grids/grid_core/focus/m_focus';
+import type { FocusController } from '@ts/grids/grid_core/focus/focus';
 import type { ResizingController } from '@ts/grids/grid_core/grid_view/grid_view';
 import { CLASSES as MASTER_DETAIL_CLASSES } from '@ts/grids/grid_core/master_detail/const';
 import type { SearchPanelViewController } from '@ts/grids/grid_core/search/search';
