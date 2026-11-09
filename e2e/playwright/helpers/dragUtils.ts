@@ -40,7 +40,7 @@ const scrollIntoView = (
     point: number;
   }
 
-  const SCROLLABLE_OVERFLOW = /auto|scroll/;
+  const SCROLLABLE_OVERFLOW = /auto|scroll|hidden/;
   const root = document.documentElement;
 
   const hasScroll = (el: Element): boolean => {
