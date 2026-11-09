@@ -44,8 +44,8 @@ describe('Style utils', () => {
       expect(styleProp('transition')).toBe('webkitTransition');
     });
 
-    it('should check the vendor prefixes in the webkit, moz, o, ms order', () => {
-      const { styleProp } = loadStyleModule({ msTransition: '', mozTransition: '' });
+    it('should check the vendor prefixes in the webkit, moz, o order', () => {
+      const { styleProp } = loadStyleModule({ oTransition: '', mozTransition: '' });
 
       expect(styleProp('transition')).toBe('mozTransition');
     });

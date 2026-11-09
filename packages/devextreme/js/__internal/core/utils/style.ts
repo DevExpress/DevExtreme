@@ -4,13 +4,12 @@ import { camelize } from '@js/core/utils/inflector';
 import { isNumeric, isString } from '@js/core/utils/type';
 import { callOnce } from '@ts/core/utils/call_once';
 
-const jsPrefixes = ['', 'Webkit', 'Moz', 'O', 'Ms'];
+const jsPrefixes = ['', 'Webkit', 'Moz', 'O'];
 const cssPrefixes: Record<string, string> = {
   '': '',
   Webkit: '-webkit-',
   Moz: '-moz-',
   O: '-o-',
-  ms: '-ms-',
 };
 const getStyles = callOnce(() => domAdapter.createElement('dx').style);
 
