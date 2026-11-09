@@ -8,7 +8,7 @@ import type { ColumnKeyboardNavigationController } from '@ts/grids/grid_core/key
 import type { ExecuteActionArgs } from '@ts/grids/grid_core/modules/types';
 import type { RowKey } from '@ts/grids/grid_core/types';
 
-import type { GroupingHelper } from './m_grouping_core';
+import type { GroupingHelper } from './grouping_core';
 
 export interface GroupingDataSourceAdapterExtension {
   _grouping: GroupingHelper;

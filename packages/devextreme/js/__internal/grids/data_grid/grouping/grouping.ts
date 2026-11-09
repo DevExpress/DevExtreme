@@ -42,9 +42,9 @@ import {
   CONTEXT_MENU_UNGROUP_ALL_COLUMNS_ICON_NAME,
   CONTEXT_MENU_UNGROUP_COLUMN_ICON_NAME,
 } from './const';
-import { GroupingHelper as CollapsedGroupingHelper } from './m_grouping_collapsed';
-import type { GroupingHelper } from './m_grouping_core';
-import { GroupingHelper as ExpandedGroupingHelper } from './m_grouping_expanded';
+import { GroupingHelper as CollapsedGroupingHelper } from './grouping_collapsed';
+import type { GroupingHelper } from './grouping_core';
+import { GroupingHelper as ExpandedGroupingHelper } from './grouping_expanded';
 import type {
   ForeachGroupsResult,
   GroupInfoLevel,
