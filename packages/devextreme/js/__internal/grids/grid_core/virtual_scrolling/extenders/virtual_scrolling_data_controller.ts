@@ -361,34 +361,36 @@ export const virtualScrollingDataControllerExtender = (
       return;
     }
 
-    if (!this._visibleItems) {
+    const visibleItems = this._visibleItems;
+
+    if (!visibleItems) {
       return;
     }
 
     if (change.changeType === 'update') {
-      change.rowIndices.forEach((rowIndex, index) => {
-        if (!change.changeTypes || !change.items || !this._visibleItems) {
-          return;
-        }
+      const { changeTypes, items } = change;
 
-        const changeType = change.changeTypes[index];
-        const newItem = change.items[index];
-        if (changeType === 'update') {
-          this._visibleItems[rowIndex] = newItem;
-        } else if (changeType === 'insert') {
-          this._visibleItems.splice(rowIndex, 0, newItem);
-        } else if (changeType === 'remove') {
-          this._visibleItems.splice(rowIndex, 1);
-        }
-      });
+      if (changeTypes && items) {
+        change.rowIndices.forEach((rowIndex, index) => {
+          const changeType = changeTypes[index];
+          const newItem = items[index];
+          if (changeType === 'update') {
+            visibleItems[rowIndex] = newItem;
+          } else if (changeType === 'insert') {
+            visibleItems.splice(rowIndex, 0, newItem);
+          } else if (changeType === 'remove') {
+            visibleItems.splice(rowIndex, 1);
+          }
+        });
+      }
     } else {
-      this._visibleItems.forEach((item, index, visibleItems) => {
-        visibleItems[index] = this._items[index + delta] || visibleItems[index];
+      visibleItems.forEach((item, index) => {
+        visibleItems[index] = this._items[index + delta] || item;
       });
-      change.items = this._visibleItems;
+      change.items = visibleItems;
     }
 
-    updateItemIndices(this._visibleItems);
+    updateItemIndices(visibleItems);
   }
 
   private _updateLoadViewportParams(): void {

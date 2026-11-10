@@ -521,8 +521,8 @@ class VirtualScrollController<TItem = unknown> {
     this._dataLoader.loadIfNeed();
   }
 
-  public handleDataChanged(callBase: ChangedCallback<TItem>, e?: ChangedEvent): void {
-    this._dataLoader.handleDataChanged(callBase, e);
+  public handleDataChanged(changedCallback: ChangedCallback<TItem>, e?: ChangedEvent): void {
+    this._dataLoader.handleDataChanged(changedCallback, e);
   }
 
   public getDelayDeferred(): DeferredObj<unknown> | undefined {
