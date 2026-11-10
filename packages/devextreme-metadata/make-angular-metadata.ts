@@ -45,6 +45,7 @@ Ng.makeMetadata({
     ].map((pair) => replaceTypes(pair[1], ['*'], [types.uidRef(pair[0], true)])),
 
     replaceTypes('ui/map:dxMapOptions.markers.onClick', ['*'], ['object']),
+    replaceTypes('common/core/animation:PositionConfig.of', ['events/events.types:DxEvent'], []),
 
     ...replaceTypesMutations,
 
