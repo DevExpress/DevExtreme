@@ -1,4 +1,5 @@
 import type { dxElementWrapper } from '@js/core/renderer';
+import type { EngineEvent } from '@ts/events/core/events_engine';
 import eventsEngine from '@ts/events/core/events_engine';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import { isCellBasedEditMode } from '@ts/grids/grid_core/editing/editing_utils';
@@ -8,7 +9,9 @@ import type { ModuleType } from '@ts/grids/grid_core/types';
 import { CLASSES } from '../const';
 import { hasHiddenWidth } from '../utils';
 
-function focusCellHandler(e): void {
+type FocusCellEvent = EngineEvent & { data?: { $nextCell?: dxElementWrapper } };
+
+function focusCellHandler(e: FocusCellEvent): void {
   const $nextCell = e.data?.$nextCell;
 
   eventsEngine.off($nextCell, 'focus', focusCellHandler);
