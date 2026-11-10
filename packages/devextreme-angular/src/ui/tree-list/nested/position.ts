@@ -10,7 +10,6 @@ import {
 } from '@angular/core';
 import type { PositionAlignment, HorizontalAlignment, VerticalAlignment } from 'devextreme/common';
 import type { CollisionResolutionCombination, CollisionResolution } from 'devextreme/common/core/animation';
-import type { DxEvent } from 'devextreme/events/events.types';
 
 import {
     DxIntegrationModule,
@@ -67,10 +66,10 @@ export class DxoTreeListPositionComponent extends NestedOption implements OnDest
     }
 
     @Input()
-    get of(): any | DxEvent | string {
+    get of(): any | string {
         return this._getOption('of');
     }
-    set of(value: any | DxEvent | string) {
+    set of(value: any | string) {
         this._setOption('of', value);
     }
 

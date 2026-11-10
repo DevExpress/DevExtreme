@@ -11,7 +11,6 @@ import NestedOption from "./core/nested-option";
 import type { Position as CommonPosition, HorizontalAlignment, VerticalAlignment, Direction, PositionAlignment, ToolbarItemLocation, template, ToolbarItemComponent } from "devextreme/common";
 import type { PositionConfig, AnimationConfig, CollisionResolution, AnimationState, AnimationType, CollisionResolutionCombination } from "devextreme/common/core/animation";
 import type { ContentReadyEvent, DisposingEvent, HiddenEvent, HidingEvent, InitializedEvent, ShowingEvent, ShownEvent, TitleRenderedEvent } from "devextreme/ui/popover";
-import type { DxEvent } from "devextreme/events/events.types";
 import type { LocateInMenuMode, ShowTextMode } from "devextreme/ui/toolbar";
 import type { CollectionWidgetItem } from "devextreme/ui/collection/ui.collection_widget.base";
 import type { ToolbarLocation } from "devextreme/ui/popup";
@@ -328,7 +327,7 @@ type IPositionProps = React.PropsWithChildren<{
     x?: HorizontalAlignment;
     y?: VerticalAlignment;
   };
-  of?: any | DxEvent | string;
+  of?: any | string;
   offset?: Record<string, any> | string | {
     x?: number;
     y?: number;

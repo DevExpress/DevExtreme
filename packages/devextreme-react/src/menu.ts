@@ -13,7 +13,6 @@ import type { dxMenuItem, ContentReadyEvent, DisposingEvent, InitializedEvent, I
 import type { AnimationConfig, CollisionResolution, PositionConfig, AnimationState, AnimationType, CollisionResolutionCombination } from "devextreme/common/core/animation";
 import type { HorizontalAlignment, VerticalAlignment, Direction, template, PositionAlignment, SubmenuShowMode } from "devextreme/common";
 import type { CollectionWidgetItem } from "devextreme/ui/collection/ui.collection_widget.base";
-import type { DxEvent } from "devextreme/events/events.types";
 
 type ReplaceFieldTypes<TSource, TReplacement> = {
   [P in keyof TSource]: P extends keyof TReplacement ? TReplacement[P] : TSource[P];
@@ -356,7 +355,7 @@ type IPositionProps = React.PropsWithChildren<{
     x?: HorizontalAlignment;
     y?: VerticalAlignment;
   };
-  of?: any | DxEvent | string;
+  of?: any | string;
   offset?: Record<string, any> | string | {
     x?: number;
     y?: number;

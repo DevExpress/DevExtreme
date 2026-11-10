@@ -25,7 +25,7 @@ import type { DataSourceOptions } from "devextreme/data/data_source";
 import type { Store } from "devextreme/data/store";
 import type { AIIntegration } from "devextreme/common/ai-integration";
 import type { LoadingAnimationType } from "devextreme/ui/load_indicator";
-import type { event, DxEvent } from "devextreme/events/events.types";
+import type { event } from "devextreme/events/events.types";
 
 import type dxForm from "devextreme/ui/form";
 import type DataSource from "devextreme/data/data_source";
@@ -2094,7 +2094,7 @@ type IPositionProps = React.PropsWithChildren<{
     x?: HorizontalAlignment;
     y?: VerticalAlignment;
   };
-  of?: any | DxEvent | string;
+  of?: any | string;
   offset?: Record<string, any> | string | {
     x?: number;
     y?: number;

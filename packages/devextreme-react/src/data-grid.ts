@@ -25,7 +25,7 @@ import type { DataSourceOptions } from "devextreme/data/data_source";
 import type { Store } from "devextreme/data/store";
 import type { LocateInMenuMode, ShowTextMode } from "devextreme/ui/toolbar";
 import type { CollectionWidgetItem } from "devextreme/ui/collection/ui.collection_widget.base";
-import type { event, DxEvent } from "devextreme/events/events.types";
+import type { event } from "devextreme/events/events.types";
 import type { EventInfo } from "devextreme/common/core/events";
 import type { Component } from "devextreme/core/component";
 import type { LoadingAnimationType } from "devextreme/ui/load_indicator";
@@ -2954,7 +2954,7 @@ type IPositionProps = React.PropsWithChildren<{
     x?: HorizontalAlignment;
     y?: VerticalAlignment;
   };
-  of?: any | DxEvent | string;
+  of?: any | string;
   offset?: Record<string, any> | string | {
     x?: number;
     y?: number;

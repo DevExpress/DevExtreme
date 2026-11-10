@@ -12,7 +12,6 @@ import type { PositionAlignment, HorizontalAlignment, VerticalAlignment, Directi
 import type { PositionConfig, AnimationConfig, CollisionResolution, AnimationState, AnimationType, CollisionResolutionCombination } from "devextreme/common/core/animation";
 import type { ContentReadyEvent, DisposingEvent, HiddenEvent, HidingEvent, InitializedEvent, ShowingEvent, ShownEvent } from "devextreme/ui/load_panel";
 import type { LoadingAnimationType } from "devextreme/ui/load_indicator";
-import type { DxEvent } from "devextreme/events/events.types";
 
 type ReplaceFieldTypes<TSource, TReplacement> = {
   [P in keyof TSource]: P extends keyof TReplacement ? TReplacement[P] : TSource[P];
@@ -301,7 +300,7 @@ type IPositionProps = React.PropsWithChildren<{
     x?: HorizontalAlignment;
     y?: VerticalAlignment;
   };
-  of?: any | DxEvent | string;
+  of?: any | string;
   offset?: Record<string, any> | string | {
     x?: number;
     y?: number;
