@@ -1,5 +1,5 @@
 import type { SingleMultipleOrNone } from '@js/common';
-import type { DxEvent, InteractionEvent } from '@js/events';
+import { createEvent } from '@js/common/core/events/utils/index';
 import messageLocalization from '@js/localization/message';
 import type { Item as ContextMenuItem, ItemClickEvent as ContextMenuItemPressedEvent } from '@js/ui/context_menu';
 
@@ -61,7 +61,7 @@ export class ContextMenuController
 
     // @ts-expect-error component and element are added by the action
     const preparingEvent: ContextMenuPreparingEvent<CardInfo> = {
-      event: event as DxEvent<InteractionEvent>,
+      event: createEvent(event),
       items: items.length > 0 ? items : undefined,
       target: view,
       targetElement: event.target as HTMLElement,
