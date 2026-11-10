@@ -1,7 +1,8 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import {
+  Component, enableProdMode, inject, signal,
+} from '@angular/core';
 import { DxDataGridModule, DxPopupModule } from 'devextreme-angular';
-import type { AIIntegration } from 'devextreme-angular/common/ai-integration';
 import { Service, type Vehicle } from './app.service';
 import { AiService } from './ai/ai.service';
 import { Trademark } from './trademark/trademark.component';
@@ -26,26 +27,21 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  vehicles: Vehicle[];
+  readonly vehicles = inject(Service).getVehicles();
 
-  popupVisible = false;
+  readonly aiIntegration = inject(AiService).getAiIntegration();
 
-  currentVehicle: Vehicle | null = null;
+  readonly popupVisible = signal(false);
 
-  aiIntegration: AIIntegration;
-
-  constructor(service: Service, aiService: AiService) {
-    this.vehicles = service.getVehicles();
-    this.aiIntegration = aiService.getAiIntegration();
-  }
+  readonly currentVehicle = signal<Vehicle | null>(null);
 
   showInfo(vehicle: Vehicle) {
-    this.currentVehicle = vehicle;
-    this.popupVisible = true;
+    this.currentVehicle.set(vehicle);
+    this.popupVisible.set(true);
   }
 
   hideInfo() {
-    this.popupVisible = false;
+    this.popupVisible.set(false);
   }
 
   onAIColumnRequestCreating(e: { data: Partial<Vehicle>[] }) {
@@ -58,8 +54,4 @@ export class AppComponent {
   }
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

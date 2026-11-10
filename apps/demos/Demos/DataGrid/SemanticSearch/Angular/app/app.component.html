@@ -14,7 +14,7 @@
         <div [style]="{ display: 'flex', alignItems: 'center' }">
           <span [style]="{ marginRight: '8px' }">Similarity Factor:</span>
           <dx-number-box
-            [value]="similarityFactor"
+            [value]="similarityFactor()"
             [min]="0"
             [max]="1"
             format="0.00"

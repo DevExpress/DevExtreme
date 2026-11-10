@@ -1,9 +1,11 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, ViewChild, provideZoneChangeDetection } from '@angular/core';
-import { DxSelectBoxModule, DxSelectBoxTypes } from 'devextreme-angular/ui/select-box';
-import { DxCheckBoxModule, DxCheckBoxTypes } from 'devextreme-angular/ui/check-box';
-import { DxTabsModule, DxTabsComponent, DxTabsTypes } from 'devextreme-angular/ui/tabs';
-import { Tab, Service } from './app.service';
+import {
+  Component, computed, enableProdMode, inject, signal,
+} from '@angular/core';
+import { DxSelectBoxModule } from 'devextreme-angular/ui/select-box';
+import { DxCheckBoxModule, type DxCheckBoxTypes } from 'devextreme-angular/ui/check-box';
+import { DxTabsModule, type DxTabsTypes } from 'devextreme-angular/ui/tabs';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -21,72 +23,44 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  @ViewChild('withText') withText: DxTabsComponent;
+  private readonly service = inject(Service);
 
-  @ViewChild('withIconAndText') withIconAndText: DxTabsComponent;
+  readonly tabsWithText = this.service.getTabsWithText();
 
-  @ViewChild('withIcon') withIcon: DxTabsComponent;
+  readonly tabsWithIconAndText = this.service.getTabsWithIconAndText();
 
-  tabsWithText: Tab[];
+  readonly tabsWithIcon = this.service.getTabsWithIcon();
 
-  tabsWithIconAndText: Tab[];
+  readonly showNavButtons = signal(false);
 
-  tabsWithIcon: Tab[];
+  readonly scrollByContent = signal(false);
 
-  showNavButtons = false;
+  readonly rtlEnabled = signal(false);
 
-  scrollByContent = false;
+  readonly orientations: DxTabsTypes.Orientation[] = ['horizontal', 'vertical'];
 
-  rtlEnabled = false;
+  readonly stylingModes: DxTabsTypes.TabsStyle[] = ['primary', 'secondary'];
 
-  orientations: DxTabsTypes.Orientation[] = ['horizontal', 'vertical'];
+  readonly iconPositions: DxTabsTypes.TabsIconPosition[] = ['top', 'start', 'end', 'bottom'];
 
-  stylingModes: DxTabsTypes.TabsStyle[] = ['primary', 'secondary'];
+  readonly width = signal('auto');
 
-  iconPositions: DxTabsTypes.TabsIconPosition[] = ['top', 'start', 'end', 'bottom'];
+  readonly orientation = signal(this.orientations[0]);
 
-  width = 'auto';
+  readonly stylingMode = signal(this.stylingModes[1]);
 
-  orientation = this.orientations[0];
+  readonly iconPosition = signal(this.iconPositions[0]);
 
-  stylingMode = this.stylingModes[1];
-
-  iconPosition = this.iconPositions[0];
-
-  widgetWrapperClasses = {
+  readonly widgetWrapperClasses = computed(() => ({
     'widget-wrapper': true,
-    'widget-wrapper-horizontal': true,
-    'widget-wrapper-vertical': false,
-    'strict-width': false,
-  };
-
-  constructor(service: Service) {
-    this.tabsWithText = service.getTabsWithText();
-    this.tabsWithIconAndText = service.getTabsWithIconAndText();
-    this.tabsWithIcon = service.getTabsWithIcon();
-  }
-
-  onOrientationChanged(e: DxSelectBoxTypes.ValueChangedEvent) {
-    if (e.value === 'vertical') {
-      this.widgetWrapperClasses['widget-wrapper-vertical'] = true;
-      this.widgetWrapperClasses['widget-wrapper-horizontal'] = false;
-    } else {
-      this.widgetWrapperClasses['widget-wrapper-horizontal'] = true;
-      this.widgetWrapperClasses['widget-wrapper-vertical'] = false;
-    }
-  }
-
-  toggleStrictWidthClass() {
-    this.widgetWrapperClasses['strict-width'] = this.scrollByContent || this.showNavButtons;
-  }
+    'widget-wrapper-horizontal': this.orientation() !== 'vertical',
+    'widget-wrapper-vertical': this.orientation() === 'vertical',
+    'strict-width': this.scrollByContent() || this.showNavButtons(),
+  }));
 
   onFullWidthChanged(e: DxCheckBoxTypes.ValueChangedEvent) {
-    this.width = e.value ? '100%' : 'auto';
+    this.width.set(e.value ? '100%' : 'auto');
   }
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

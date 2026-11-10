@@ -9,8 +9,8 @@
       type="bar"
     >
       <dxo-chart-aggregation
-        [enabled]="useAggregation"
-        [method]="currentFunction"
+        [enabled]="useAggregation()"
+        [method]="currentFunction()"
       ></dxo-chart-aggregation>
     </dxo-chart-common-series-settings>
     <dxo-chart-series-template
@@ -34,7 +34,7 @@
         displayExpr="displayName"
         valueExpr="func"
         [(value)]="currentFunction"
-        [disabled]="!useAggregation"
+        [disabled]="!useAggregation()"
         [inputAttr]="{ 'aria-label': 'Method' }"
       >
       </dx-select-box>

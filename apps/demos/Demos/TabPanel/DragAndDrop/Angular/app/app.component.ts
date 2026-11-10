@@ -1,10 +1,12 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import {
+  Component, computed, enableProdMode, inject, signal,
+} from '@angular/core';
 import {
   DxButtonModule, DxSortableModule, DxTabPanelModule, DxListModule,
 } from 'devextreme-angular';
 import type { DxSortableTypes } from 'devextreme-angular/ui/sortable';
-import { Employee, Service, Task } from './app.service';
+import { type Employee, Service, type Task } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -25,52 +27,48 @@ if (!/localhost/.test(document.location.host)) {
 })
 
 export class AppComponent {
-  allEmployees: Employee[];
+  private readonly service = inject(Service);
 
-  employees: Employee[];
+  private readonly allEmployees: Employee[] = this.service.getEmployees();
 
-  selectedIndex: number;
+  readonly employees = signal<Employee[]>(this.service.getEmployees().slice(0, 3));
 
-  tasks: Task[];
+  readonly selectedIndex = signal(0);
 
-  tasksDataSourceStorage: { key: number, dataSourceInstance: Task[] }[] = [];
+  private readonly tasks: Task[] = this.service.getTasks();
 
-  constructor(private service: Service) {
-    this.allEmployees = service.getEmployees();
-    this.employees = service.getEmployees().slice(0, 3);
-    this.selectedIndex = 0;
-    this.tasks = service.getTasks();
-  }
+  private readonly tasksDataSourceStorage: { key: number, dataSourceInstance: Task[] }[] = [];
+
+  readonly showCloseButton = computed(() => this.employees().length > 1);
+
+  readonly disableButton = computed(() => this.employees().length === this.allEmployees.length);
 
   onTabDragStart(e: DxSortableTypes.DragStartEvent) {
     e.itemData = e.fromData[e.fromIndex];
   }
 
   onTabDrop(e: DxSortableTypes.ReorderEvent) {
-    e.fromData.splice(e.fromIndex, 1);
-    e.toData.splice(e.toIndex, 0, e.itemData);
+    const employees = [...this.employees()];
+    employees.splice(e.fromIndex, 1);
+    employees.splice(e.toIndex, 0, e.itemData);
+    this.employees.set(employees);
   }
 
   addButtonHandler() {
-    const newItem = this.allEmployees.filter((employee) => this.employees.indexOf(employee) === -1)[0];
+    const employees = this.employees();
+    const newItem = this.allEmployees.filter((employee) => employees.indexOf(employee) === -1)[0];
 
-    this.selectedIndex = this.employees.length;
-    this.employees.push(newItem);
+    this.selectedIndex.set(employees.length);
+    this.employees.set([...employees, newItem]);
   }
 
   closeButtonHandler(itemData: Employee) {
-    const index = this.employees.indexOf(itemData);
+    const employees = [...this.employees()];
+    const index = employees.indexOf(itemData);
 
-    this.employees.splice(index, 1);
-    if (index >= this.employees.length && index > 0) this.selectedIndex = index - 1;
-  }
-
-  showCloseButton() {
-    return this.employees.length > 1;
-  }
-
-  disableButton() {
-    return this.employees.length === this.allEmployees.length;
+    employees.splice(index, 1);
+    this.employees.set(employees);
+    if (index >= employees.length && index > 0) this.selectedIndex.set(index - 1);
   }
 
   getTasks(id: number) {
@@ -95,8 +93,4 @@ export class AppComponent {
   }
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

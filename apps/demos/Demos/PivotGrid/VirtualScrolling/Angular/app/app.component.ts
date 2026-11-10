@@ -1,7 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import { Component, enableProdMode, inject } from '@angular/core';
 import { DxPivotGridModule } from 'devextreme-angular';
-import { Options as DataSourceConfig } from 'devextreme/ui/pivot_grid/data_source';
+import type { Options as DataSourceConfig } from 'devextreme/ui/pivot_grid/data_source';
 import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -17,48 +17,40 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  pivotGridDataSource: DataSourceConfig;
-
-  constructor(service: Service) {
-    this.pivotGridDataSource = {
-      fields: [{
-        caption: 'Region',
-        width: 120,
-        dataField: 'region',
-        area: 'row',
-        expanded: true,
-      }, {
-        caption: 'City',
-        dataField: 'city',
-        width: 150,
-        area: 'row',
-      }, {
-        dataField: 'date',
-        dataType: 'date',
-        area: 'column',
-      }, {
-        groupName: 'date',
-        groupInterval: 'year',
-        expanded: true,
-      }, {
-        groupName: 'date',
-        groupInterval: 'quarter',
-        expanded: true,
-      }, {
-        caption: 'Total',
-        dataField: 'amount',
-        dataType: 'number',
-        summaryType: 'sum',
-        format: 'currency',
-        area: 'data',
-      }],
-      store: service.getSales(),
-    };
-  }
+  readonly pivotGridDataSource: DataSourceConfig = {
+    fields: [{
+      caption: 'Region',
+      width: 120,
+      dataField: 'region',
+      area: 'row',
+      expanded: true,
+    }, {
+      caption: 'City',
+      dataField: 'city',
+      width: 150,
+      area: 'row',
+    }, {
+      dataField: 'date',
+      dataType: 'date',
+      area: 'column',
+    }, {
+      groupName: 'date',
+      groupInterval: 'year',
+      expanded: true,
+    }, {
+      groupName: 'date',
+      groupInterval: 'quarter',
+      expanded: true,
+    }, {
+      caption: 'Total',
+      dataField: 'amount',
+      dataType: 'number',
+      summaryType: 'sum',
+      format: 'currency',
+      area: 'data',
+    }],
+    store: inject(Service).getSales(),
+  };
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

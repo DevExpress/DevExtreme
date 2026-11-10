@@ -2,8 +2,8 @@ import { equalByValue } from '@js/core/utils/common';
 import { Deferred, type DeferredObj } from '@js/core/utils/deferred';
 import { compileGetter } from '@ts/core/utils/data';
 import type { StoreLoadOptions } from '@ts/data/data_source/types';
-import type { GroupingHelper as CollapsedGroupingHelper } from '@ts/grids/data_grid/grouping/m_grouping_collapsed';
-import type { GroupingHelper } from '@ts/grids/data_grid/grouping/m_grouping_core';
+import type { GroupingHelper as CollapsedGroupingHelper } from '@ts/grids/data_grid/grouping/grouping_collapsed';
+import type { GroupingHelper } from '@ts/grids/data_grid/grouping/grouping_core';
 import type {
   GroupInfoData,
   GroupingDataControllerExtension,

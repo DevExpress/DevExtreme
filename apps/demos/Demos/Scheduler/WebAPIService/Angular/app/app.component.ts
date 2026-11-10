@@ -1,5 +1,5 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import { Component, enableProdMode } from '@angular/core';
 import { DxSchedulerModule } from 'devextreme-angular';
 import * as AspNetData from 'devextreme-aspnet-data-nojquery';
 import 'anti-forgery';
@@ -18,9 +18,9 @@ const url = 'https://js.devexpress.com/Demos/NetCore/api/SchedulerData';
   ],
 })
 export class AppComponent {
-  currentDate = new Date(2021, 3, 27);
+  readonly currentDate = new Date(2021, 3, 27);
 
-  appointmentsData: AspNetData.CustomStore = AspNetData.createStore({
+  readonly appointmentsData = AspNetData.createStore({
     key: 'AppointmentId',
     loadUrl: url,
     insertUrl: url,
@@ -32,8 +32,4 @@ export class AppComponent {
   });
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

@@ -1,8 +1,8 @@
 <div id="gauge-demo">
   <dx-linear-gauge
     id="gauge"
-    [value]="currentValue.primary"
-    [subvalues]="currentValue.secondary"
+    [value]="currentValue().primary"
+    [subvalues]="currentValue().secondary"
   >
     <dxo-linear-gauge-scale [startValue]="0" [endValue]="10" [tickInterval]="2">
       <dxo-linear-gauge-label

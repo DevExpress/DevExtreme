@@ -1,11 +1,13 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { enableProdMode, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewChild, provideZoneChangeDetection } from '@angular/core';
+import {
+  enableProdMode, ChangeDetectionStrategy, Component, inject, signal, viewChild,
+} from '@angular/core';
 import { HttpClient, provideHttpClient, withFetch } from '@angular/common/http';
 import { lastValueFrom } from 'rxjs';
 import { CustomStore } from 'devextreme-angular/common/data';
 import { DxDataGridModule } from 'devextreme-angular';
-import { DxDataGridTypes } from 'devextreme-angular/ui/data-grid';
-import { DxTreeViewModule, DxTreeViewComponent, DxTreeViewTypes } from 'devextreme-angular/ui/tree-view';
+import type { DxDataGridTypes } from 'devextreme-angular/ui/data-grid';
+import { DxTreeViewModule, DxTreeViewComponent, type DxTreeViewTypes } from 'devextreme-angular/ui/tree-view';
 import { DxDropDownBoxModule } from 'devextreme-angular/ui/drop-down-box';
 
 if (!/localhost/.test(document.location.host)) {
@@ -24,28 +26,27 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  @ViewChild(DxTreeViewComponent, { static: false }) treeView: DxTreeViewComponent;
+  private readonly treeView = viewChild(DxTreeViewComponent);
 
-  treeDataSource: CustomStore;
+  private readonly httpClient = inject(HttpClient);
 
-  gridDataSource: CustomStore;
+  readonly treeDataSource = this.makeAsyncDataSource('treeProducts.json');
 
-  isTreeBoxOpened = false;
+  readonly gridDataSource = this.makeAsyncDataSource('customers.json');
 
-  isGridBoxOpened = false;
+  readonly isTreeBoxOpened = signal(false);
 
-  gridBoxValue = [3];
+  readonly isGridBoxOpened = signal(false);
 
-  treeBoxValue: string | string[] = '1_1';
+  readonly gridBoxValue = signal([3]);
 
-  gridColumns = ['CompanyName', 'City', 'Phone'];
+  readonly treeBoxValue = signal<string | string[]>('1_1');
 
-  constructor(private httpClient: HttpClient, private ref: ChangeDetectorRef) {
-    this.treeDataSource = this.makeAsyncDataSource(this.httpClient, 'treeProducts.json');
-    this.gridDataSource = this.makeAsyncDataSource(this.httpClient, 'customers.json');
-  }
+  readonly gridColumns = ['CompanyName', 'City', 'Phone'];
 
-  makeAsyncDataSource(http: HttpClient, jsonFile: string) {
+  private makeAsyncDataSource(jsonFile: string) {
+    const http = this.httpClient;
+
     return new CustomStore({
       loadMode: 'raw',
       key: 'ID',
@@ -56,35 +57,36 @@ export class AppComponent {
   }
 
   syncTreeViewSelection() {
-    if (!this.treeView) return;
+    const treeView = this.treeView();
 
-    if (this.treeBoxValue) {
-      this.treeView.instance.selectItem(this.treeBoxValue);
+    if (!treeView) return;
+
+    const treeBoxValue = this.treeBoxValue();
+
+    if (treeBoxValue) {
+      treeView.instance.selectItem(treeBoxValue);
     } else {
-      this.treeView.instance.unselectAll();
+      treeView.instance.unselectAll();
     }
 
-    this.isTreeBoxOpened = false;
-    this.ref.detectChanges();
+    this.isTreeBoxOpened.set(false);
   }
 
   treeView_itemSelectionChanged(e: DxTreeViewTypes.ItemSelectionChangedEvent) {
     const selectedKeys = e.component.getSelectedNodeKeys();
-    this.treeBoxValue = selectedKeys.length > 0 ? selectedKeys[0] : null;
+    this.treeBoxValue.set(selectedKeys.length > 0 ? selectedKeys[0] : null);
   }
 
   dataGrid_selectionChanged(e: DxDataGridTypes.SelectionChangedEvent) {
-    this.gridBoxValue = e.selectedRowKeys;
-    this.isGridBoxOpened = false;
-    this.ref.detectChanges();
+    this.gridBoxValue.set(e.selectedRowKeys);
+    this.isGridBoxOpened.set(false);
   }
 
-  gridBox_displayExpr = ({ CompanyName, Phone }) => CompanyName && `${CompanyName} <${Phone}>`;
+  readonly gridBox_displayExpr = ({ CompanyName, Phone }) => CompanyName && `${CompanyName} <${Phone}>`;
 }
 
 bootstrapApplication(AppComponent, {
   providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
     provideHttpClient(withFetch()),
   ],
 });

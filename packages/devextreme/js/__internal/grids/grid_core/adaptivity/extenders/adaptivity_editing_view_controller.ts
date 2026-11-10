@@ -4,6 +4,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable prefer-rest-params */
 import { Deferred } from '@js/core/utils/deferred';
+import { getData } from '@ts/core/element_data';
 import type { EditingController } from '@ts/grids/grid_core/editing/editing';
 import { isFormBasedEditMode } from '@ts/grids/grid_core/editing/editing_utils';
 import type { CellBasedEditingController } from '@ts/grids/grid_core/editing/types';
@@ -11,7 +12,7 @@ import type { ModuleType } from '@ts/grids/grid_core/types';
 import gridCoreUtils from '@ts/grids/grid_core/utils';
 import { FIELD_ITEM_CONTENT_CLASS } from '@ts/ui/form/constants';
 
-import { EDIT_MODE } from '../../editing/const';
+import { EDIT_FORM_ITEM_DATA_KEY, EDIT_MODE } from '../../editing/const';
 import { ADAPTIVE_ROW_TYPE } from '../const';
 import type { AdaptivityDataController } from '../types';
 
@@ -34,7 +35,9 @@ export const adaptivityEditingViewControllerExtender = (
   protected _closeEditItem($targetElement) {
     const $itemContents = $targetElement.closest(`.${FIELD_ITEM_CONTENT_CLASS}`);
     const rowIndex = this._dataController.getRowIndexByKey(this._dataController.getAdaptiveExpandedKey()) + 1;
-    const formItem = $itemContents.length ? $itemContents.first().data('dx-form-item') : null;
+    const formItem = $itemContents.length
+      ? getData($itemContents.first(), EDIT_FORM_ITEM_DATA_KEY)
+      : null;
     const columnIndex = formItem?.column && this._columnsController.getVisibleIndex(formItem.column.index);
 
     if (!this.isEditCell(rowIndex, columnIndex)) {

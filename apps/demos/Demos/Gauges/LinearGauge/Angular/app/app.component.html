@@ -1,6 +1,6 @@
 <div class="long-title"><h3>Weather Indicators</h3></div>
 <div id="gauge-demo">
-  <dx-linear-gauge class="gauge-element" [value]="weatherData.temperature">
+  <dx-linear-gauge class="gauge-element" [value]="weatherData().temperature">
     <dxo-linear-gauge-title text="Temperature (°C)">
       <dxo-linear-gauge-font [size]="16"></dxo-linear-gauge-font>
     </dxo-linear-gauge-title>
@@ -25,7 +25,7 @@
     </dxo-linear-gauge-range-container>
   </dx-linear-gauge>
 
-  <dx-linear-gauge class="gauge-element" [value]="weatherData.humidity">
+  <dx-linear-gauge class="gauge-element" [value]="weatherData().humidity">
     <dxo-linear-gauge-value-indicator
       type="rhombus"
       color="#A4DDED"
@@ -46,7 +46,7 @@
     ></dxo-linear-gauge-range-container>
   </dx-linear-gauge>
 
-  <dx-linear-gauge class="gauge-element" [value]="weatherData.pressure">
+  <dx-linear-gauge class="gauge-element" [value]="weatherData().pressure">
     <dxo-linear-gauge-value-indicator
       type="circle"
       color="#E3A857"

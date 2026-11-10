@@ -1,9 +1,11 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, ViewChild, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import {
+  Component, enableProdMode, inject, signal,
+} from '@angular/core';
 import { DxRangeSelectorModule } from 'devextreme-angular';
 import { VisualRange } from 'devextreme-angular/common/charts';
-import { DxChartModule, DxChartComponent } from 'devextreme-angular/ui/chart';
-import { Service, StockPrice } from './app.service';
+import { DxChartModule } from 'devextreme-angular/ui/chart';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -20,19 +22,9 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  @ViewChild(DxChartComponent, { static: false }) chart: DxChartComponent;
+  readonly stockPrices = inject(Service).getStockPrices();
 
-  stockPrices: StockPrice[];
-
-  visualRange: VisualRange = {};
-
-  constructor(service: Service) {
-    this.stockPrices = service.getStockPrices();
-  }
+  readonly visualRange = signal<VisualRange>({});
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

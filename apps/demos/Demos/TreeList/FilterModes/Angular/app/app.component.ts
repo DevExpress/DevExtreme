@@ -1,8 +1,10 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import {
+  Component, enableProdMode, inject, signal,
+} from '@angular/core';
 import { DxSelectBoxModule } from 'devextreme-angular';
 import { DxTreeListModule, DxTreeListTypes } from 'devextreme-angular/ui/tree-list';
-import { Employee, Service } from './app.service';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -19,20 +21,13 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  employees: Employee[];
+  private readonly service = inject(Service);
 
-  filterModes: DxTreeListTypes.TreeListFilterMode[];
+  readonly employees = this.service.getEmployees();
 
-  filterModeValue: DxTreeListTypes.TreeListFilterMode = 'matchOnly';
+  readonly filterModes = this.service.getFilterModes();
 
-  constructor(service: Service) {
-    this.employees = service.getEmployees();
-    this.filterModes = service.getFilterModes();
-  }
+  readonly filterModeValue = signal<DxTreeListTypes.TreeListFilterMode>('matchOnly');
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

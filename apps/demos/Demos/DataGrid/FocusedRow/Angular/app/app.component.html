@@ -25,12 +25,12 @@
 
 <div class="task-info">
   <div class="info">
-    <div id="taskSubject">{{ taskSubject }}</div>
-    <p id="taskDetails">{{ taskDetails }}</p>
+    <div id="taskSubject">{{ focusedTask()?.Task_Subject }}</div>
+    <p id="taskDetails">{{ focusedTask()?.Task_Description }}</p>
   </div>
   <div class="progress">
-    <span id="taskStatus">{{ taskStatus }}</span>
-    <span id="taskProgress">{{ taskProgress }}</span>
+    <span id="taskStatus">{{ focusedTask()?.Task_Status }}</span>
+    <span id="taskProgress">{{ taskProgress() }}</span>
   </div>
 </div>
 

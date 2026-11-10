@@ -82,7 +82,15 @@ function createExecutionOrder(
   }
 
   const order: KarmaEnvironment[] = [];
-  const validEnvironments: KarmaEnvironment[] = ['client', 'server', 'hydration'];
+  const validEnvironments: KarmaEnvironment[] = [
+    'client',
+    'server',
+    'hydration',
+    'zone',
+    'zoneless',
+    'server-zoneless',
+    'hydration-zoneless',
+  ];
 
   for (const environment of validEnvironments) {
     if (environments.includes(environment)) {

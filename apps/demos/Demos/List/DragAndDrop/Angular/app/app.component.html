@@ -1,13 +1,13 @@
 <div id="list-demo">
   <div class="widget-container">
     <dx-list
-      [dataSource]="plannedTasks"
+      [dataSource]="plannedTasks()"
       keyExpr="id"
       [repaintChangesOnly]="true"
     >
       <dxo-list-item-dragging
         group="tasks"
-        [data]="plannedTasks"
+        [data]="plannedTasks()"
         [allowReordering]="true"
         [onDragStart]="onDragStart"
         [onAdd]="onAdd"
@@ -16,10 +16,14 @@
       >
       </dxo-list-item-dragging>
     </dx-list>
-    <dx-list [dataSource]="doingTasks" keyExpr="id" [repaintChangesOnly]="true">
+    <dx-list
+      [dataSource]="doingTasks()"
+      keyExpr="id"
+      [repaintChangesOnly]="true"
+    >
       <dxo-list-item-dragging
         group="tasks"
-        [data]="doingTasks"
+        [data]="doingTasks()"
         [allowReordering]="true"
         [onDragStart]="onDragStart"
         [onAdd]="onAdd"

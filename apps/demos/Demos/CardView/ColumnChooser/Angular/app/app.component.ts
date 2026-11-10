@@ -1,7 +1,9 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import {
+  Component, enableProdMode, inject, signal,
+} from '@angular/core';
 import { DxCardViewModule, DxSelectBoxModule, DxCheckBoxModule } from 'devextreme-angular';
-import { Employee, Service } from './app.service';
+import { type Employee, Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -19,21 +21,17 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  employees: Employee[];
+  readonly employees = inject(Service).getEmployees();
 
-  columnChooserMode = 'select';
+  readonly columnChooserMode = signal('select');
 
-  allowColumnReordering = false;
+  readonly allowColumnReordering = signal(false);
 
-  searchEnabled = true;
+  readonly searchEnabled = signal(true);
 
-  allowSelectAll = true;
+  readonly allowSelectAll = signal(true);
 
-  selectByClick = true;
-
-  constructor(service: Service) {
-    this.employees = service.getEmployees();
-  }
+  readonly selectByClick = signal(true);
 
   altExpr({ First_Name, Last_Name }: Employee): string {
     return `Photo of ${First_Name} ${Last_Name}`;
@@ -48,8 +46,4 @@ export class AppComponent {
   }
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

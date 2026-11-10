@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DxFormModule } from 'devextreme-angular';
 import { EmployeeService } from './employee.service';
@@ -15,14 +15,14 @@ import { Employee } from './employee.model';
 })
 export class InputsListInFormComponent {
   employee: Employee;
-  isHomeAddressVisible = true;
-  phoneOptions: DxTextBoxTypes.Properties[] = [];
+  isHomeAddressVisible = signal(true);
+  phoneOptions = signal<DxTextBoxTypes.Properties[]>([]);
 
   checkBoxOptions: DxCheckBoxTypes.Properties = {
     text: 'Show Address',
     value: true,
     onValueChanged: (e: DxCheckBoxTypes.ValueChangedEvent) => {
-      this.isHomeAddressVisible = e.component.option('value') as boolean;
+      this.isHomeAddressVisible.set(e.component.option('value') as boolean);
     },
   };
 
@@ -31,13 +31,13 @@ export class InputsListInFormComponent {
     text: 'Add phone',
     onClick: () => {
       this.employee.Phones.push('');
-      this.phoneOptions = this.getPhonesOptions(this.employee.Phones);
+      this.phoneOptions.set(this.getPhonesOptions(this.employee.Phones));
     },
   };
 
   constructor(service: EmployeeService) {
     this.employee = service.getEmployee();
-    this.phoneOptions = this.getPhonesOptions(this.employee.Phones);
+    this.phoneOptions.set(this.getPhonesOptions(this.employee.Phones));
   }
 
   getPhonesOptions = (phones: string[]) =>
@@ -56,7 +56,7 @@ export class InputsListInFormComponent {
             icon: 'trash',
             onClick: () => {
               this.employee.Phones.splice(index, 1);
-              this.phoneOptions = this.getPhonesOptions(this.employee.Phones);
+              this.phoneOptions.set(this.getPhonesOptions(this.employee.Phones));
             },
           },
         },

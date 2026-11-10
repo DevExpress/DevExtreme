@@ -1,12 +1,12 @@
 <dx-scheduler
   timeZone="America/Los_Angeles"
-  [crossScrollingEnabled]="crossScrollingEnabled"
+  [crossScrollingEnabled]="crossScrollingEnabled()"
   [dataSource]="appointmentsData"
   [views]="['day', 'month']"
   currentView="month"
-  [groups]="groups"
+  [groups]="groups()"
   recurrenceEditMode="series"
-  [currentDate]="currentDate"
+  [currentDate]="currentDate()"
   (onCellContextMenu)="onCellContextMenu($event)"
   (onAppointmentContextMenu)="onAppointmentContextMenu($event)"
   [startDayHour]="9"
@@ -21,7 +21,7 @@
 </dx-scheduler>
 
 <dx-context-menu
-  [items]="contextMenuItems"
+  [items]="contextMenuItems()"
   target=".dx-scheduler"
   (onItemClick)="onContextMenuItemClick($event)"
   (onHiding)="onContextMenuHiding()"

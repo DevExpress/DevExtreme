@@ -57,7 +57,6 @@ const SHARED_TSCONFIG_TEMPLATE = path.join(__dirname, 'tsconfig.demo-bundle-angu
 const GENERATED_TSCONFIG_DIR = path.join(__dirname, '.demo-bundle-angular-tsconfigs');
 // Under apps/demos so the shim's bare devextreme import resolves through node_modules.
 const GENERATED_SHIM_DIR = path.join(__dirname, '.demo-bundle-angular-shims');
-const ANGULAR_ZONE_SCRIPT = '../../../../node_modules/zone.js/bundles/zone.umd.js';
 // esbuild's code-splitting output (shared chunks across a batch) — wiped and regenerated each run.
 const CHUNKS_DIRNAME = '_chunks';
 
@@ -154,8 +153,7 @@ function buildHtml({ jsFiles, cssFiles, srcDir }) {
   const scripts = jsFiles
     .map((f) => {
       const src = f.startsWith('.') ? f : `./${f}`;
-      const type = f === ANGULAR_ZONE_SCRIPT ? '' : ' type="module"';
-      return `<script src="${src}"${type}></script>`;
+      return `<script src="${src}" type="module"></script>`;
     })
     .join('\n    ');
   return `<!DOCTYPE html>
@@ -540,7 +538,7 @@ function prepareDemo(demo) {
   };
 }
 
-const ANGULAR_IMPLICIT_PACKAGES = ['zone.js', 'reflect-metadata', 'devextreme-dist'];
+const ANGULAR_IMPLICIT_PACKAGES = ['reflect-metadata', 'devextreme-dist'];
 function writeDemoManifest(demo, destDir) {
   const { discoverDemoSpecifiers, resolvePackageVersions } = require('./vendor-bundle');
   const packages = resolvePackageVersions([
@@ -707,13 +705,9 @@ async function bundleDemo(demo, createCompilerPlugin, destDirOverride) {
   const localJsFiles = sortJsFiles(outputs.filter((o) => o.endsWith('.js')).map((o) => path.basename(o)));
   if (localJsFiles.length === 0) return { ok: false, reason: 'no JS output produced' };
 
-  const jsFiles = [
-    ANGULAR_ZONE_SCRIPT,
-    ...localJsFiles,
-  ];
   const cssFiles = outputs.filter((o) => o.endsWith('.css')).map((o) => path.basename(o));
 
-  fs.writeFileSync(path.join(destDir, 'index.html'), buildHtml({ jsFiles, cssFiles, srcDir: prepared.srcDir }));
+  fs.writeFileSync(path.join(destDir, 'index.html'), buildHtml({ jsFiles: localJsFiles, cssFiles, srcDir: prepared.srcDir }));
   if (IS_GENERATE_MANIFESTS) writeDemoManifest(prepared, destDir);
   return { ok: true };
 }
@@ -753,11 +747,7 @@ async function bundleDemoBatch(batch, createCompilerPlugin) {
       return { ok: false, reason: `no JS output produced for ${demo.widget}/${demo.name}` };
     }
 
-    const jsFiles = [
-      ANGULAR_ZONE_SCRIPT,
-      ...localJsFiles,
-    ];
-    fs.writeFileSync(path.join(destDir, 'index.html'), buildHtml({ jsFiles, cssFiles, srcDir: demo.srcDir }));
+    fs.writeFileSync(path.join(destDir, 'index.html'), buildHtml({ jsFiles: localJsFiles, cssFiles, srcDir: demo.srcDir }));
     if (IS_GENERATE_MANIFESTS) writeDemoManifest(demo, destDir);
   }
 
@@ -926,7 +916,6 @@ module.exports = {
   cleanupEntryShims,
   bundleDemo,
   buildHtml,
-  ANGULAR_ZONE_SCRIPT,
   angularSingleCopyPlugin,
   antiForgeryPlugin,
   globalizePlugin,

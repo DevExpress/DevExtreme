@@ -141,19 +141,19 @@
             </div>
           </div>
         </dx-tag-box>
-        <dx-popover [target]="target" [visible]="visible">
+        <dx-popover [target]="target()" [visible]="visible()">
           <div *dxTemplate="let data of 'content'">
             <p>
-              <b>Name: </b><span>{{ product.Name }}</span>
+              <b>Name: </b><span>{{ product().Name }}</span>
             </p>
             <p>
-              <b>Price: </b><span>{{ product.Price }}</span>
+              <b>Price: </b><span>{{ product().Price }}</span>
             </p>
             <p>
-              <b>In-stock: </b><span>{{ product.Current_Inventory }}</span>
+              <b>In-stock: </b><span>{{ product().Current_Inventory }}</span>
             </p>
             <p>
-              <b>Category: </b><span>{{ product.Category }}</span>
+              <b>Category: </b><span>{{ product().Category }}</span>
             </p>
           </div>
         </dx-popover>

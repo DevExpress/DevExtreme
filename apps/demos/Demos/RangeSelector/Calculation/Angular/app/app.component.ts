@@ -1,8 +1,8 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import { Component, enableProdMode, signal } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { DxSelectBoxModule } from 'devextreme-angular';
-import { DxRangeSelectorModule, DxRangeSelectorTypes } from 'devextreme-angular/ui/range-selector';
+import { DxRangeSelectorModule, type DxRangeSelectorTypes } from 'devextreme-angular/ui/range-selector';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -19,17 +19,17 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  pipe = new DatePipe('en-US');
+  private readonly pipe = new DatePipe('en-US');
 
-  dataSource = ['onHandleMove', 'onHandleRelease'];
+  readonly dataSource = ['onHandleMove', 'onHandleRelease'];
 
-  workingDaysCount = 260;
+  readonly workingDaysCount = signal(260);
 
-  startValue = new Date(2011, 0, 1);
+  readonly startValue = new Date(2011, 0, 1);
 
-  endValue = new Date(2011, 11, 31);
+  readonly endValue = new Date(2011, 11, 31);
 
-  onValueChanged = (e: DxRangeSelectorTypes.ValueChangedEvent) => {
+  readonly onValueChanged = (e: DxRangeSelectorTypes.ValueChangedEvent) => {
     const currentDate = new Date(e.value[0]);
     let workingDaysCount = 0;
 
@@ -39,16 +39,12 @@ export class AppComponent {
       }
       currentDate.setDate(currentDate.getDate() + 1);
     }
-    this.workingDaysCount = workingDaysCount;
+    this.workingDaysCount.set(workingDaysCount);
   };
 
-  customizeSliderMarker: DxRangeSelectorTypes.Properties['sliderMarker']['customizeText'] = ({ value }) => this.pipe.transform(value, 'dd EEEE');
+  readonly customizeSliderMarker: DxRangeSelectorTypes.Properties['sliderMarker']['customizeText'] = ({ value }) => this.pipe.transform(value, 'dd EEEE');
 
-  customizeLabel: DxRangeSelectorTypes.Properties['scale']['label']['customizeText'] = ({ value }) => this.pipe.transform(value, 'MMM');
+  readonly customizeLabel: DxRangeSelectorTypes.Properties['scale']['label']['customizeText'] = ({ value }) => this.pipe.transform(value, 'MMM');
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

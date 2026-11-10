@@ -1,7 +1,9 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, ViewChild, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import {
+  Component, enableProdMode, signal, viewChild,
+} from '@angular/core';
 import { DxSelectBoxModule, DxCheckBoxModule, DxButtonModule } from 'devextreme-angular';
-import { DxCalendarComponent, DxCalendarModule, DxCalendarTypes } from 'devextreme-angular/ui/calendar';
+import { DxCalendarComponent, DxCalendarModule, type DxCalendarTypes } from 'devextreme-angular/ui/calendar';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -20,55 +22,51 @@ if (!/localhost/.test(document.location.host)) {
 })
 
 export class AppComponent {
-  @ViewChild(DxCalendarComponent, { static: false }) calendar: DxCalendarComponent;
+  private readonly calendar = viewChild.required(DxCalendarComponent);
 
-  now = new Date();
+  private readonly now = new Date();
 
-  value = [new Date(), new Date(new Date().getTime() + 1000 * 60 * 60 * 24)];
+  readonly value = [new Date(), new Date(new Date().getTime() + 1000 * 60 * 60 * 24)];
 
-  selectionModes: DxCalendarTypes.CalendarSelectionMode[] = [
+  readonly selectionModes: DxCalendarTypes.CalendarSelectionMode[] = [
     'single', 'multiple', 'range',
   ];
 
-  selectionMode: DxCalendarTypes.CalendarSelectionMode = 'multiple';
+  readonly selectionMode = signal<DxCalendarTypes.CalendarSelectionMode>('multiple');
 
-  minDateValue: Date | null = null;
+  readonly minDateValue = signal<Date | null>(null);
 
-  maxDateValue: Date | null = null;
+  readonly maxDateValue = signal<Date | null>(null);
 
-  disabledDates: Function | null = null;
+  readonly disabledDates = signal<Function | null>(null);
 
-  isWeekend(date: Date) {
+  private isWeekend(date: Date) {
     const day = date.getDay();
 
     return day === 0 || day === 6;
   }
 
   setMinDate({ value }) {
-    this.minDateValue = value
+    this.minDateValue.set(value
       ? new Date(this.now.getTime() - 1000 * 60 * 60 * 24 * 3)
-      : null;
+      : null);
   }
 
   setMaxDate({ value }) {
-    this.maxDateValue = value
+    this.maxDateValue.set(value
       ? new Date(this.now.getTime() + 1000 * 60 * 60 * 24 * 3)
-      : null;
+      : null);
   }
 
   disableWeekend({ value }) {
-    this.disabledDates = value
+    this.disabledDates.set(value
       ? (data: { view: string, date: Date }) => data.view === 'month' && this.isWeekend(data.date)
-      : null;
+      : null);
   }
 
   clearValue() {
-    this.calendar.instance.clear();
+    this.calendar().instance.clear();
   }
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

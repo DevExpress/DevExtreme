@@ -1,7 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import { Component, enableProdMode, inject } from '@angular/core';
 import { DxChartModule, DxChartTypes } from 'devextreme-angular/ui/chart';
-import { Service, Temperature } from './app.service';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -19,24 +19,21 @@ const customizeText: DxChartTypes.ArgumentAxisLabel['customizeText'] = ({ valueT
   ],
 })
 export class AppComponent {
-  highAverageColor = '#ff9b52';
+  private readonly service = inject(Service);
 
-  lowAverageColor = '#6199e6';
+  private readonly averageTemperatureRange = this.service.getRangeOfAverageTemperature();
 
-  highAverage: number;
+  readonly highAverageColor = '#ff9b52';
 
-  lowAverage: number;
+  readonly lowAverageColor = '#6199e6';
 
-  temperaturesData: Temperature[];
+  readonly highAverage = this.averageTemperatureRange.highAverage;
 
-  constructor(service: Service) {
-    this.temperaturesData = service.getTemperaturesData();
-    const { highAverage, lowAverage } = service.getRangeOfAverageTemperature();
-    this.highAverage = highAverage;
-    this.lowAverage = lowAverage;
-  }
+  readonly lowAverage = this.averageTemperatureRange.lowAverage;
 
-  customizePoint: DxChartTypes.Properties['customizePoint'] = ({ value }) => {
+  readonly temperaturesData = this.service.getTemperaturesData();
+
+  readonly customizePoint: DxChartTypes.Properties['customizePoint'] = ({ value }) => {
     if (value > this.highAverage) {
       return { color: this.highAverageColor };
     } if (value < this.lowAverage) {
@@ -45,7 +42,7 @@ export class AppComponent {
     return null;
   };
 
-  customizeLabel: DxChartTypes.Properties['customizeLabel'] = ({ value }) => {
+  readonly customizeLabel: DxChartTypes.Properties['customizeLabel'] = ({ value }) => {
     if (value > this.highAverage) {
       return getLabelsSettings(this.highAverageColor);
     } if (value < this.lowAverage) {
@@ -54,7 +51,7 @@ export class AppComponent {
     return null;
   };
 
-  customizeText = customizeText;
+  readonly customizeText = customizeText;
 }
 
 function getLabelsSettings(backgroundColor: string) {
@@ -65,8 +62,4 @@ function getLabelsSettings(backgroundColor: string) {
   };
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

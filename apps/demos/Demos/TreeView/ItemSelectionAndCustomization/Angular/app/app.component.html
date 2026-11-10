@@ -5,11 +5,11 @@
     [items]="employees"
     [width]="340"
     [height]="320"
-    [showCheckBoxesMode]="checkboxVisibility"
-    [selectionMode]="selectionMode"
-    [disabledNodeSelectionMode]="disabledNodeSelectionMode"
-    [selectNodesRecursive]="recursiveSelection"
-    [selectByClick]="selectOnClick"
+    [showCheckBoxesMode]="checkboxVisibility()"
+    [selectionMode]="selectionMode()"
+    [disabledNodeSelectionMode]="disabledNodeSelectionMode()"
+    [selectNodesRecursive]="recursiveSelection()"
+    [selectByClick]="selectOnClick()"
     (onSelectionChanged)="treeViewSelectionChanged($event)"
     (onContentReady)="treeViewContentReady($event)"
   >
@@ -23,7 +23,7 @@
       id="selected-employees"
       [width]="400"
       [height]="200"
-      [items]="selectedEmployees"
+      [items]="selectedEmployees()"
       showScrollbar="always"
     >
       <div *dxTemplate="let item of 'item'">
@@ -43,7 +43,7 @@
           <dx-select-box
             [items]="checkboxVisibilityOptions"
             [inputAttr]="{ 'aria-label': 'Checkbox Visibility' }"
-            [value]="checkboxVisibility"
+            [value]="checkboxVisibility()"
             (onValueChanged)="checkboxVisibilityValueChanged($event)"
           ></dx-select-box>
         </div>
@@ -53,9 +53,9 @@
         <div class="editor-container">
           <dx-select-box
             [items]="selectionModes"
-            [value]="selectionMode"
+            [value]="selectionMode()"
             [inputAttr]="{ 'aria-label': 'Selection Mode' }"
-            [disabled]="isSelectionModeDisabled"
+            [disabled]="isSelectionModeDisabled()"
             (onValueChanged)="selectionModeValueChanged($event)"
           ></dx-select-box>
         </div>
@@ -65,7 +65,7 @@
         <div class="editor-container">
           <dx-select-box
             [items]="disabledNodeSelectionModes"
-            [value]="disabledNodeSelectionMode"
+            [value]="disabledNodeSelectionMode()"
             [inputAttr]="{ 'aria-label': 'Disabled Node Selection Mode' }"
             (onValueChanged)="disabledNodeSelectionModeValueChanged($event)"
           ></dx-select-box>
@@ -78,7 +78,7 @@
         <div class="editor-container">
           <dx-check-box
             text="Recursive Selection"
-            [disabled]="isRecursiveDisabled"
+            [disabled]="isRecursiveDisabled()"
             [(value)]="recursiveSelection"
           ></dx-check-box>
         </div>
