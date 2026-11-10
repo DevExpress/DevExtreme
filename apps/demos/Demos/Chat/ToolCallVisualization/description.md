@@ -3,7 +3,7 @@ AI assistants often call tools (functions) to retrieve data or execute actions b
 This demo uses [Azure OpenAI](https://azure.microsoft.com/en-us/products/ai-services/openai-service) and three local tools: current weather, current office time, and exchange rates. Click a card in the empty Chat to send a prompt that calls a single tool, multiple tools, or a tool that fails.
 <!--split-->
 
-## Tool Call Visualization
+The Chat displays tool calls at the top of the message bubble (above response text). Each call is a collapsible item that displays arguments and the result when expanded. If a message contains multiple tool calls, the Chat also displays the total call count.
 
 Populate a text message's [toolCalls](/Documentation/ApiReference/UI_Components/dxChat/Types/TextMessage/#toolCalls) array to display tool calls. Each [ToolCall](/Documentation/ApiReference/UI_Components/dxChat/Types/ToolCall/) object supports the following fields:
 
@@ -17,8 +17,6 @@ The tool output (a string or an object).
 The call status: `'success'` (default) or `'error'`. Failed calls display an error badge.
 - **expanded**    
 Specifies whether the call details are initially visible.
-
-The Chat displays tool calls at the top of the message bubble (above response text). Each call is a collapsible item that displays arguments and the result when expanded. If a message contains multiple tool calls, the Chat also displays the total call count.
 
 ## Tool Call Options
 
