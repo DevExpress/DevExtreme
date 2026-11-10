@@ -102,6 +102,9 @@ type ContextMenuAnchor = ContextMenuTarget | DxEvent;
 const isRendererTarget = (
   target: ContextMenuAnchor,
 ): target is dxElementWrapper => isRenderer(target);
+const isEventAnchor = (
+  anchor: ContextMenuAnchor,
+): anchor is DxEvent => typeof anchor === 'object' && 'preventDefault' in anchor;
 type ContextMenuNode = InternalNode & Item;
 
 type ShowContextMenuEvent = EventInfo<ContextMenu> & {
@@ -1229,10 +1232,10 @@ class ContextMenu<
 
   _getTarget(): ContextMenuTarget {
     const { target, position } = this.option();
+    const positionTarget = isEventAnchor(position?.of) ? undefined : position?.of;
 
-    // @ts-expect-error position.of is used as the target element, an event is not expected here
     // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-    return target || position?.of || $(domAdapter.getDocument());
+    return target || positionTarget || $(domAdapter.getDocument());
   }
 
   _getContextMenuPosition(): PositionConfig | undefined {
