@@ -58,13 +58,11 @@ import type {
   CellRenderOptions,
   FocusStateParams,
   GroupCellOptions,
-  GroupContinuationData,
   RowPreparedOptions,
   RowRenderOptions,
   RowsModuleOptions,
   RowsViewContentChange,
   RowsViewLoadPanelOptions,
-  RowsViewOptions,
   RowsViewScrollEvent,
   ScrollPosition,
   TableRenderOptions,
@@ -1064,11 +1062,11 @@ export class RowsView extends ColumnsView {
   }
 
   /**
-   * @extended: editing
+   * @extended: editing, grouping, summary
    */
   protected _getCellOptions(options: CellRenderOptions): ViewCellOptions {
     const { column, row, value } = options;
-    const { data, summaryCells }: ViewRow & { data?: GroupContinuationData } = row;
+    const { data, summaryCells } = row;
     const displayValue = gridCoreUtils.getDisplayValue(column, value, data, row.rowType);
 
     // The same object: _addWatchMethod's watch/update closures hold it
@@ -1088,26 +1086,7 @@ export class RowsView extends ColumnsView {
         summaryItems: summaryCells?.[options.columnIndex],
         resized: column.resizedCallbacks,
       } satisfies Partial<ViewCellOptions>,
-      this.getGroupContinuationMessages(column, data),
     );
-  }
-
-  private getGroupContinuationMessages(
-    column: Column,
-    data: GroupContinuationData | undefined,
-  ): Pick<ViewCellOptions, 'groupContinuesMessage' | 'groupContinuedMessage'> {
-    const { grouping, scrolling } = this.option() as RowsViewOptions;
-    const isGroupCell = isDefined(column.groupIndex) && !column.command;
-    if (!isGroupCell || isVirtualPaging(scrolling)) {
-      return {};
-    }
-
-    const texts = grouping?.texts;
-
-    return {
-      groupContinuesMessage: data?.isContinuationOnNextPage && texts?.groupContinuesMessage,
-      groupContinuedMessage: data?.isContinuation && texts?.groupContinuedMessage,
-    };
   }
 
   protected _toggleDraggableSourceColumnClass(
