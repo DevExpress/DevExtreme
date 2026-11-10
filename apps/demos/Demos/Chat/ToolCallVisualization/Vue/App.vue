@@ -22,12 +22,15 @@
         :show-day-headers="false"
         :user="user"
         :speech-to-text-enabled="true"
-        :tool-call-options="toolCallOptions"
         empty-view-template="emptyView"
         v-model:typing-users="typingUsers"
         v-model:alerts="alerts"
         @message-entered="onMessageEntered($event)"
       >
+        <DxToolCallOptions
+          :expand-all="expandAll"
+        />
+
         <template #emptyView="{ data }">
           <div>
             <div class="dx-chat-messagelist-empty-message">{{ data.texts.message }}</div>
@@ -66,7 +69,7 @@
 import {
   ref, computed, nextTick, onBeforeMount,
 } from 'vue';
-import DxChat, { type DxChatTypes } from 'devextreme-vue/chat';
+import DxChat, { DxToolCallOptions, type DxChatTypes } from 'devextreme-vue/chat';
 import DxCheckBox from 'devextreme-vue/check-box';
 import { type DxButtonTypes } from 'devextreme-vue/button';
 import DxToolbar, { DxItem } from 'devextreme-vue/toolbar';
@@ -97,8 +100,6 @@ const isDisabled = ref(false);
 const expandAll = ref(false);
 const messages: AIMessage[] = [{ role: 'system', content: SYSTEM_PROMPT }];
 let isProcessing = false;
-
-const toolCallOptions = computed(() => ({ expandAll: expandAll.value }));
 
 const clearButtonOptions = computed((): DxButtonTypes.Properties => ({
   icon: 'clearhistory',

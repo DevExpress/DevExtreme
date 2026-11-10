@@ -1,7 +1,7 @@
 import React, {
   useCallback, useMemo, useRef, useState,
 } from 'react';
-import Chat from 'devextreme-react/chat';
+import Chat, { ToolCallOptions } from 'devextreme-react/chat';
 import type { ChatTypes } from 'devextreme-react/chat';
 import Toolbar, { Item } from 'devextreme-react/toolbar';
 import type { ButtonTypes } from 'devextreme-react/button';
@@ -112,8 +112,6 @@ export default function App() {
     },
   }), [isProcessing, clearMessages]);
 
-  const toolCallOptions = useMemo(() => ({ expandAll: !!expandAll }), [expandAll]);
-
   const emptyViewRender = useCallback(({ texts }: { texts: { message: string; prompt: string } }) => (
     <div>
       <div className="dx-chat-messagelist-empty-message">{texts.message}</div>
@@ -156,10 +154,11 @@ export default function App() {
           onMessageEntered={onMessageEntered}
           alerts={alerts}
           typingUsers={typingUsers}
-          toolCallOptions={toolCallOptions}
           emptyViewRender={emptyViewRender}
           speechToTextEnabled={true}
-        />
+        >
+          <ToolCallOptions expandAll={!!expandAll} />
+        </Chat>
       </div>
 
       <div className="options">
