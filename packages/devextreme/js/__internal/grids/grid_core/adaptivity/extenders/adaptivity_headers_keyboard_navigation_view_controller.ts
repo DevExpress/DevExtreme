@@ -5,7 +5,7 @@ import type {
 } from '@ts/grids/grid_core/keyboard_navigation/headers_keyboard_navigation';
 import type { ModuleType } from '@ts/grids/grid_core/types';
 
-import { HIDDEN_COLUMNS_WIDTH } from '../const';
+import { hasHiddenWidth } from '../utils';
 
 export const adaptivityHeadersKeyboardNavigationViewControllerExtender = (
   Base: ModuleType<HeadersKeyboardNavigationController>,
@@ -24,7 +24,7 @@ export const adaptivityHeadersKeyboardNavigationViewControllerExtender = (
       ? visibleColumns.slice(visibleIndex + 1)
       : visibleColumns.slice(0, visibleIndex).reverse();
 
-    while (visibleColumns?.shift()?.visibleWidth === HIDDEN_COLUMNS_WIDTH) {
+    while (hasHiddenWidth(visibleColumns?.shift())) {
       indexCorrection += direction === 'next' ? 1 : -1;
     }
 
@@ -33,7 +33,7 @@ export const adaptivityHeadersKeyboardNavigationViewControllerExtender = (
 
   protected getFocusableColumns(rowIndex?: number, bandColumnId?: number): Column[] {
     return super.getFocusableColumns(rowIndex, bandColumnId)
-      .filter((col) => col.visibleWidth !== HIDDEN_COLUMNS_WIDTH);
+      .filter((col) => !hasHiddenWidth(col));
   }
 
   protected getDraggableColumns(
@@ -41,6 +41,6 @@ export const adaptivityHeadersKeyboardNavigationViewControllerExtender = (
     rowIndex: number,
   ): Column[] {
     return super.getDraggableColumns(column, rowIndex)
-      .filter((col) => col.visibleWidth !== HIDDEN_COLUMNS_WIDTH);
+      .filter((col) => !hasHiddenWidth(col));
   }
 };

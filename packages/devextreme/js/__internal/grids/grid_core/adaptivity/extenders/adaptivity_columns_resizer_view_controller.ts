@@ -5,7 +5,7 @@ import type {
 } from '@ts/grids/grid_core/columns_resizing_reordering/columns_resizing_reordering';
 import type { ColumnPointProps, ModuleType } from '@ts/grids/grid_core/types';
 
-import { HIDDEN_COLUMNS_WIDTH } from '../const';
+import { hasHiddenWidth } from '../utils';
 
 export const adaptivityColumnsResizerViewControllerExtender = (
   Base: ModuleType<ColumnsResizerViewController>,
@@ -17,11 +17,10 @@ export const adaptivityColumnsResizerViewControllerExtender = (
     cells?: dxElementWrapper,
   ): boolean {
     const result = super._pointCreated(point, columns, cells);
-    const currentColumn: Partial<Column> = columns[point.columnIndex] || {};
     const nextColumnIndex = this._getNextColumnIndex(point.columnIndex);
     const nextColumn: Partial<Column> = columns[nextColumnIndex] || {};
     const hasHiddenColumnsOnly = nextColumnIndex !== point.columnIndex + 1 && nextColumn.command;
-    const hasAdaptiveHiddenWidth = currentColumn.visibleWidth === HIDDEN_COLUMNS_WIDTH
+    const hasAdaptiveHiddenWidth = hasHiddenWidth(columns[point.columnIndex])
       || hasHiddenColumnsOnly;
 
     return result || !!hasAdaptiveHiddenWidth;
@@ -31,7 +30,7 @@ export const adaptivityColumnsResizerViewControllerExtender = (
     const visibleColumns = this._columnsController.getVisibleColumns();
     let index = super._getNextColumnIndex(currentColumnIndex);
 
-    while (visibleColumns[index]?.visibleWidth === HIDDEN_COLUMNS_WIDTH) {
+    while (hasHiddenWidth(visibleColumns[index])) {
       index += 1;
     }
 

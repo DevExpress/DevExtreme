@@ -18,10 +18,9 @@ import type {
 } from '@ts/grids/grid_core/views/types';
 import { FIELD_ITEM_CONTENT_CLASS } from '@ts/ui/form/constants';
 
-import {
-  ADAPTIVE_ROW_TYPE, CLASSES, EXPAND_ARIA_NAME, HIDDEN_COLUMNS_WIDTH,
-} from '../const';
+import { ADAPTIVE_ROW_TYPE, CLASSES, EXPAND_ARIA_NAME } from '../const';
 import type { AdaptiveDetailCellOptions, AdaptivityDataController } from '../types';
+import { hasHiddenWidth } from '../utils';
 
 function getDataCellElements($row: dxElementWrapper): dxElementWrapper {
   return $row.find('td:not(.dx-datagrid-hidden-column):not([class*=\'dx-command-\'])');
@@ -90,7 +89,7 @@ export const adaptivityRowsViewExtender = (
 
     if (
       options.row?.rowType !== ADAPTIVE_ROW_TYPE
-      && options.column.visibleWidth === HIDDEN_COLUMNS_WIDTH
+      && hasHiddenWidth(options.column)
     ) {
       $cell.addClass(this.addWidgetPrefix(CLASSES.hiddenColumn));
     }
