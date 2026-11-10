@@ -6,4 +6,11 @@ export interface KarmaMultiEnvExecutorSchema {
   timeout?: number;
 }
 
-export type KarmaEnvironment = 'client' | 'server' | 'hydration' | 'zone' | 'zoneless';
+export type KarmaEnvironment =
+  | 'client'
+  | 'server'
+  | 'hydration'
+  | 'zone'
+  | 'zoneless'
+  | 'server-zoneless'
+  | 'hydration-zoneless';

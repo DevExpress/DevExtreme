@@ -134,8 +134,8 @@ function addJsonpCallback(callbackName: string, deferred: DeferredResult, xhrSur
 
 function sendRequestByScript(url: string, deferred: DeferredResult, xhrSurrogate: XHRSurrogate) {
   evalCrossDomainScript(url).then(
-    () => deferred.resolve(null, SUCCESS, xhrSurrogate),
-    () => deferred.reject(xhrSurrogate, ERROR),
+    () => { deferred.resolve(null, SUCCESS, xhrSurrogate); },
+    () => { deferred.reject(xhrSurrogate, ERROR); },
   );
 }
 

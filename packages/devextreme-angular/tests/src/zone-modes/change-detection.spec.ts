@@ -1,6 +1,7 @@
 /* tslint:disable:component-selector */
 import {
   Component,
+  NgZone,
   ViewChild,
   signal,
 } from '@angular/core';
@@ -28,6 +29,7 @@ import {
   DxTemplateModule,
   DxDraggableModule,
   DxChartModule,
+  DxChartComponent,
 } from 'devextreme-angular';
 
 const isZoneless = typeof (window as any).Zone === 'undefined';
@@ -52,6 +54,8 @@ class TestHostComponent {
 
   @ViewChild(DxListComponent) list: DxListComponent;
 
+  @ViewChild(DxChartComponent) chart: DxChartComponent;
+
   text = signal('');
 
   plain = '';
@@ -67,6 +71,8 @@ class TestHostComponent {
   clicks = 0;
 
   dragMoves = 0;
+
+  hoverChanges = 0;
 
   renders = 0;
 
@@ -120,6 +126,35 @@ function mouse(target: EventTarget, type: string, x: number, y: number): void {
 }
 
 const wait = (ms: number) => new Promise((resolve) => { setTimeout(resolve, ms); });
+
+const hoverChartTemplate = `
+  <dx-chart [dataSource]="points" (onPointHoverChanged)="hoverChanges = hoverChanges + 1">
+    <dxo-animation [enabled]="false"></dxo-animation>
+    <dxi-series argumentField="arg" valueField="val"></dxi-series>
+  </dx-chart>
+  <span class="out">{{ hoverChanges }}{{ countRender() }}</span>
+`;
+
+function hoverChartPoints(fixture: ComponentFixture<TestHostComponent>, stepsBetweenPoints = 20): number {
+  const svg: SVGElement = fixture.nativeElement.querySelector('dx-chart svg');
+  const { left, top } = svg.getBoundingClientRect();
+  const points = fixture.componentInstance.chart.instance.getAllSeries()[0]
+    .getAllPoints() as unknown as { x: number; y: number }[];
+  let moves = 0;
+
+  for (let i = 1; i < points.length; i += 1) {
+    const from = points[i - 1];
+    const to = points[i];
+    for (let step = 0; step < stepsBetweenPoints; step += 1) {
+      const x = left + from.x + ((to.x - from.x) * step) / stepsBetweenPoints;
+      const y = top + from.y + ((to.y - from.y) * step) / stepsBetweenPoints;
+      mouse(document.elementFromPoint(x, y) ?? svg, 'mousemove', x, y);
+      moves += 1;
+    }
+  }
+
+  return moves;
+}
 
 describe(`Change detection [${mode}]: environment`, () => {
   it(isZoneless ? 'runs without zone.js' : 'runs with zone.js', () => {
@@ -273,6 +308,58 @@ describe(`Change detection [${mode}]: events registered outside the Angular zone
       expect(host.renders).toBeGreaterThan(rendersBefore);
     }
   });
+
+  it('hovering chart points runs change detection per hover change, not per mousemove', async () => {
+    const fixture = await render(hoverChartTemplate);
+    await wait(50);
+    await fixture.whenStable();
+    const host = fixture.componentInstance;
+    const rendersBefore = host.renders;
+
+    const moves = hoverChartPoints(fixture);
+    await wait(100);
+    await fixture.whenStable();
+
+    const renders = host.renders - rendersBefore;
+    const rendersPerPass = 2;
+
+    expect(host.hoverChanges).toBeGreaterThan(0);
+    expect(moves).toBeGreaterThan(host.hoverChanges * 5);
+    expect(outputText(fixture)).toBe(String(host.hoverChanges));
+    expect(renders).toBeLessThanOrEqual((host.hoverChanges + 1) * rendersPerPass);
+  });
+
+  if (!isZoneless) {
+    it('hovering chart points handles mousemove outside the Angular zone and enters it per hover change', async () => {
+      const fixture = await render(hoverChartTemplate);
+      await wait(50);
+      await fixture.whenStable();
+      const host = fixture.componentInstance;
+      const svg: SVGElement = fixture.nativeElement.querySelector('dx-chart svg');
+      let movesInAngularZone = 0;
+      const onMove = () => {
+        if (NgZone.isInAngularZone()) {
+          movesInAngularZone += 1;
+        }
+      };
+      eventsEngine.on(svg, 'dxpointermove', onMove);
+      const zoneRun = spyOn(NgZone.prototype, 'run').and.callThrough();
+
+      try {
+        hoverChartPoints(fixture);
+        await wait(100);
+        await fixture.whenStable();
+      } finally {
+        eventsEngine.off(svg, 'dxpointermove', onMove);
+      }
+
+      const zoneEntriesPerHoverChange = 2;
+
+      expect(host.hoverChanges).toBeGreaterThan(0);
+      expect(movesInAngularZone).toBe(0);
+      expect(zoneRun.calls.count()).toBeLessThanOrEqual((host.hoverChanges + 1) * zoneEntriesPerHoverChange);
+    });
+  }
 
   it('public option changed by the widget during mousemove does not run change detection', async () => {
     const fixture = await render(`

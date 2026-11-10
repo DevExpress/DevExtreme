@@ -1,7 +1,9 @@
 const { NgModule, provideZonelessChangeDetection } = require('@angular/core');
 
-const ZonelessTestingModule = NgModule({
+class ZonelessTestingModule {}
+
+NgModule({
   providers: [provideZonelessChangeDetection()],
-})(class ZonelessTestingModule {});
+})(ZonelessTestingModule);
 
 module.exports = { ZonelessTestingModule };

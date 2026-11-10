@@ -14,7 +14,7 @@
           itemType="group"
           caption="Home Address"
           name="HomeAddress"
-          [visible]="isHomeAddressVisible"
+          [visible]="isHomeAddressVisible()"
         >
           <dxi-item dataField="Address"></dxi-item>
           <dxi-item dataField="City"></dxi-item>
@@ -25,11 +25,11 @@
       <dxi-item
         itemType="group"
         name="phones"
-        *ngFor="let phone of phoneOptions; let i = index"
+        *ngFor="let phone of phoneOptions(); let i = index"
       >
         <dxi-item
           [dataField]="'Phones[' + i + ']'"
-          [editorOptions]="phoneOptions[i]"
+          [editorOptions]="phone"
         >
           <dxo-label [text]="'Phone ' + (i + 1)"></dxo-label>
         </dxi-item>
