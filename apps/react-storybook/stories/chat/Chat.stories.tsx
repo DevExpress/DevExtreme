@@ -1113,8 +1113,17 @@ export const Suggestions: Story = {
     },
 };
 
+type ToolCallExpanded = 'Default' | 'Expanded' | 'Collapsed';
+
 interface ToolCallsStoryArgs {
     expandAll: boolean;
+    showInMessageTemplate: boolean;
+    useMessageTemplate: boolean;
+    name?: string;
+    status: 'Default' | 'success' | 'error';
+    expanded: ToolCallExpanded;
+    arguments?: Record<string, unknown>;
+    result?: string;
 }
 
 const ALERT_TIMEOUT = 1000 * 60;
@@ -1128,6 +1137,38 @@ const getErrorMessage = (error: unknown): string => {
     return 'Unknown error';
 };
 
+const getFirstToolCallOverrides = ({
+    name, status, expanded, arguments: toolCallArguments, result,
+}: Pick<ToolCallsStoryArgs, 'name' | 'status' | 'expanded' | 'arguments' | 'result'>): Partial<ChatTypes.ToolCall> => ({
+    ...(name === undefined ? {} : { name }),
+    ...(status === 'Default' ? {} : { status }),
+    ...(expanded === 'Default' ? {} : { expanded: expanded === 'Expanded' }),
+    ...(toolCallArguments === undefined ? {} : { arguments: toolCallArguments }),
+    ...(result === undefined ? {} : { result }),
+});
+
+// The controls change the first tool call of the first message that has tool calls
+const applyFirstToolCallOverrides = (
+    messages: ToolCallsMessage[],
+    overrides: Partial<ChatTypes.ToolCall>,
+): ToolCallsMessage[] => {
+    let applied = false;
+
+    return messages.map((message) => {
+        const { toolCalls } = message as ChatTypes.TextMessage;
+
+        if (applied || !toolCalls?.length) {
+            return message;
+        }
+
+        applied = true;
+
+        const [firstToolCall, ...otherToolCalls] = toolCalls;
+
+        return { ...message, toolCalls: [{ ...firstToolCall, ...overrides }, ...otherToolCalls] } as ToolCallsMessage;
+    });
+};
+
 // The messages of the AI service (the first one is the system prompt) are kept apart from the Chat messages
 const createHistory = (): ModelMessage[] => [{ role: 'system', content: systemPrompt }];
 
@@ -1135,11 +1176,61 @@ export const ToolCallsVisualization: StoryObj<ToolCallsStoryArgs> = {
     name: 'Tool Calls Visualization',
     args: {
         expandAll: false,
+        showInMessageTemplate: false,
+        useMessageTemplate: false,
+        status: 'Default',
+        expanded: "Expanded",
+        name: "foobar",
+        arguments: {}
     },
     argTypes: {
         expandAll: { name: 'toolCallOptions.expandAll', control: 'boolean' },
+        showInMessageTemplate: {
+            name: 'toolCallOptions.showInMessageTemplate',
+            description: 'Takes effect only when messageTemplate is used (enable "messageTemplate" below)',
+            control: 'boolean',
+        },
+        useMessageTemplate: {
+            name: 'messageTemplate',
+            description: 'Renders messages with a custom template',
+            control: 'boolean',
+        },
+        name: {
+            name: 'toolCalls[0].name',
+            description: 'The controls below change the first tool call of the first message that has tool calls. Ask the assistant something first',
+            control: 'text',
+        },
+        status: {
+            name: 'toolCalls[0].status',
+            control: { type: 'inline-radio' },
+            options: ['Default', 'success', 'error'],
+        },
+        expanded: {
+            name: 'toolCalls[0].expanded',
+            description: 'Default: the state is defined by toolCallOptions.expandAll',
+            control: { type: 'inline-radio' },
+            options: ['Default', 'Expanded', 'Collapsed'],
+        },
+        arguments: { name: 'toolCalls[0].arguments', control: 'object' },
+        result: { name: 'toolCalls[0].result', control: 'text' },
     },
-    render: ({ expandAll }) => {
+    render: ({
+        expandAll,
+        showInMessageTemplate,
+        useMessageTemplate,
+        name,
+        status,
+        expanded,
+        arguments: toolCallArguments,
+        result,
+    }) => {
+        const overrides = getFirstToolCallOverrides({
+            name, status, expanded, arguments: toolCallArguments, result,
+        });
+        const overridesRef = useRef(overrides);
+
+        overridesRef.current = overrides;
+
         const storeRef = useRef<ToolCallsMessage[]>([]);
         const historyRef = useRef<ModelMessage[]>(createHistory());
         const [alerts, setAlerts] = useState<ChatTypes.Alert[]>([]);
@@ -1165,9 +1256,11 @@ export const ToolCallsVisualization: StoryObj<ToolCallsStoryArgs> = {
         const dataSource = useMemo(() => new DataSource({
             store: new CustomStore({
                 key: 'id',
-                load: () => Promise.resolve([...storeRef.current]),
+                load: () => Promise.resolve(applyFirstToolCallOverrides(storeRef.current, overridesRef.current)),
                 insert: (message: ToolCallsMessage) => {
-                    storeRef.current.push(message);
+                    if (!storeRef.current.some(({ id }) => id === message.id)) {
+                        storeRef.current.push(message);
+                    }
 
                     return Promise.resolve(message);
                 },
@@ -1176,8 +1269,24 @@ export const ToolCallsVisualization: StoryObj<ToolCallsStoryArgs> = {
         }), []);
 
         const pushMessage = useCallback((message: ToolCallsMessage) => {
-            dataSource.store().push([{ type: 'insert', data: message }]);
+            const messages = applyFirstToolCallOverrides([...storeRef.current, message], overridesRef.current);
+
+            storeRef.current.push(message);
+            dataSource.store().push([{ type: 'insert', data: messages[messages.length - 1] }]);
         }, [dataSource]);
+
+        const overridesKey = JSON.stringify(overrides);
+
+        useEffect(() => {
+            dataSource.reload();
+        }, [dataSource, overridesKey]);
+
+        const messageRender = useCallback(({ message }: { message: ChatTypes.Message }) => (
+            <div>
+                <b>Custom template: </b>
+                {(message as ChatTypes.TextMessage).text}
+            </div>
+        ), []);
 
         const showError = useCallback((message: string) => {
             setAlerts([{ message }]);
@@ -1287,14 +1396,15 @@ export const ToolCallsVisualization: StoryObj<ToolCallsStoryArgs> = {
                         height={710}
                         dataSource={dataSource}
                         reloadOnChange={false}
-                        showAvatar={false}
+                        showAvatar
                         showDayHeaders={false}
                         speechToTextEnabled
                         alerts={alerts}
                         typingUsers={typingUsers}
-                        toolCallOptions={{ expandAll }}
+                        toolCallOptions={{ expandAll, showInMessageTemplate }}
                         onMessageEntered={onMessageEntered}
                         emptyViewRender={renderEmptyView}
+                        {...(useMessageTemplate && { messageRender })}
                     />
                 </div>
             </div>
