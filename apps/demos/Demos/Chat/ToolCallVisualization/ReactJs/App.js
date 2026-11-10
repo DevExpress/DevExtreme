@@ -1,7 +1,7 @@
 import React, {
   useCallback, useMemo, useRef, useState,
 } from 'react';
-import Chat from 'devextreme-react/chat';
+import Chat, { ToolCallOptions } from 'devextreme-react/chat';
 import Toolbar, { Item } from 'devextreme-react/toolbar';
 import CheckBox from 'devextreme-react/check-box';
 import { loadMessages } from 'devextreme-react/common/core/localization';
@@ -93,7 +93,6 @@ export default function App() {
     }),
     [isProcessing, clearMessages],
   );
-  const toolCallOptions = useMemo(() => ({ expandAll: !!expandAll }), [expandAll]);
   const emptyViewRender = useCallback(
     ({ texts }) => (
       <div>
@@ -138,10 +137,11 @@ export default function App() {
           onMessageEntered={onMessageEntered}
           alerts={alerts}
           typingUsers={typingUsers}
-          toolCallOptions={toolCallOptions}
           emptyViewRender={emptyViewRender}
           speechToTextEnabled={true}
-        />
+        >
+          <ToolCallOptions expandAll={!!expandAll} />
+        </Chat>
       </div>
 
       <div className="options">
