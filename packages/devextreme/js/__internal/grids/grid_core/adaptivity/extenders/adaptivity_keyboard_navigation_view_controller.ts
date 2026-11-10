@@ -1,6 +1,4 @@
-/* eslint-disable @stylistic/max-len */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
+import type { dxElementWrapper } from '@js/core/renderer';
 import eventsEngine from '@ts/events/core/events_engine';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import { isCellBasedEditMode } from '@ts/grids/grid_core/editing/editing_utils';
@@ -18,9 +16,10 @@ function focusCellHandler(e): void {
 
 export const adaptivityKeyboardNavigationViewControllerExtender = (
   Base: ModuleType<KeyboardNavigationController>,
-): ModuleType<KeyboardNavigationController> => class AdaptivityKeyboardNavigationViewControllerExtender
-  extends Base {
-  public isCellValid($cell, isClick?) {
+): ModuleType<
+  KeyboardNavigationController
+> => class AdaptivityKeyboardNavigationViewControllerExtender extends Base {
+  public isCellValid($cell: dxElementWrapper, isClick?: boolean): boolean {
     return (
       super.isCellValid($cell, isClick)
         && !$cell.hasClass(this.addWidgetPrefix(CLASSES.hiddenColumn))
@@ -28,7 +27,10 @@ export const adaptivityKeyboardNavigationViewControllerExtender = (
     );
   }
 
-  protected _processNextCellInMasterDetail($nextCell, $cell) {
+  protected _processNextCellInMasterDetail(
+    $nextCell: dxElementWrapper | null,
+    $cell: dxElementWrapper,
+  ): void {
     super._processNextCellInMasterDetail($nextCell, $cell);
 
     const isCellOrBatchMode = isCellBasedEditMode(this._editingController.getEditMode());
@@ -51,7 +53,7 @@ export const adaptivityKeyboardNavigationViewControllerExtender = (
     return super.isFocusableColumn(column) && column.visibleWidth !== HIDDEN_COLUMNS_WIDTH;
   }
 
-  public isCellElement($cell) {
+  public isCellElement($cell: dxElementWrapper): boolean {
     return super.isCellElement($cell) || $cell.hasClass(CLASSES.adaptiveItemText);
   }
 };

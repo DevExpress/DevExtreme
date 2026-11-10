@@ -1,16 +1,17 @@
-/* eslint-disable @stylistic/max-len */
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import type { Direction } from '@ts/grids/grid_core/keyboard_navigation/const';
-import type { HeadersKeyboardNavigationController } from '@ts/grids/grid_core/keyboard_navigation/headers_keyboard_navigation';
+import type {
+  HeadersKeyboardNavigationController,
+} from '@ts/grids/grid_core/keyboard_navigation/headers_keyboard_navigation';
 import type { ModuleType } from '@ts/grids/grid_core/types';
 
 import { HIDDEN_COLUMNS_WIDTH } from '../const';
 
 export const adaptivityHeadersKeyboardNavigationViewControllerExtender = (
   Base: ModuleType<HeadersKeyboardNavigationController>,
-): ModuleType<HeadersKeyboardNavigationController> => class AdaptivityHeadersKeyboardNavigationViewControllerExtender
-  extends Base {
+): ModuleType<
+  HeadersKeyboardNavigationController
+> => class AdaptivityHeadersKeyboardNavigationViewControllerExtender extends Base {
   protected getColumnVisibleIndexCorrection(
     visibleIndex: number,
     rowIndex: number,
@@ -36,9 +37,9 @@ export const adaptivityHeadersKeyboardNavigationViewControllerExtender = (
   }
 
   protected getDraggableColumns(
-    column,
+    column: Column,
     rowIndex: number,
-  ): any[] {
+  ): Column[] {
     return super.getDraggableColumns(column, rowIndex)
       .filter((col) => col.visibleWidth !== HIDDEN_COLUMNS_WIDTH);
   }
