@@ -19,6 +19,7 @@ import type {
 import type {
   ChangedCallback,
   ItemSizes,
+  LoaderChangedCallback,
   VirtualItemsCount,
 } from '@ts/grids/grid_core/virtual_data_loader/types';
 import type Scrollable from '@ts/ui/scroll_view/scrollable';
@@ -518,8 +519,14 @@ class VirtualScrollController<TItem = unknown> {
     this._dataLoader.loadIfNeed();
   }
 
-  public handleDataChanged(changedCallback: ChangedCallback<TItem>, e?: ChangedEvent): void {
-    this._dataLoader.handleDataChanged(changedCallback, e);
+  public handleDataChanged(changeHandler: LoaderChangedCallback<TItem>): void;
+  public handleDataChanged(changeHandler: ChangedCallback<TItem>, e?: ChangedEvent): void;
+  public handleDataChanged(
+    changeHandler: ChangedCallback<TItem> | LoaderChangedCallback<TItem>,
+    e?: ChangedEvent,
+  ): void {
+    // @ts-expect-error only the ChangedCallback overload passes e, which the loader passes on
+    this._dataLoader.handleDataChanged(changeHandler, e);
   }
 
   public getDelayDeferred(): DeferredObj<unknown> | undefined {
