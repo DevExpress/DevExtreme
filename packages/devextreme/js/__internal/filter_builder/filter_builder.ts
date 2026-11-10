@@ -7,7 +7,7 @@ import Guid from '@js/core/guid';
 import $, { type dxElementWrapper } from '@js/core/renderer';
 import { when } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
-import { isDefined } from '@js/core/utils/type';
+import { isDefined, isEvent } from '@js/core/utils/type';
 import type { GroupOperation } from '@js/ui/filter_builder';
 import type { ShownEvent } from '@js/ui/popup';
 import Popup from '@js/ui/popup/ui.popup';
@@ -1012,10 +1012,9 @@ class FilterBuilder extends Widget<FilterBuilderProperties> implements EditorFac
 
   _dimensionChanged(): void {
     const position = this._popupWithTreeView?.option('position');
-    const positionOf = typeof position === 'object' ? position.of : undefined;
+    const positionOf = typeof position === 'object' && !isEvent(position.of) ? position.of : undefined;
 
     if (positionOf) {
-      // @ts-expect-error the popup is positioned at its field button, never at an event
       this._popupWithTreeView?.option('maxHeight', getElementMaxHeightByWindow($(positionOf)));
     }
   }

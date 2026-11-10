@@ -20,7 +20,7 @@ import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { getOuterHeight } from '@js/core/utils/size';
 import {
-  isDefined, isFunction, isObject, isPlainObject, isRenderer, isString,
+  isDefined, isEvent, isFunction, isObject, isPlainObject, isRenderer, isString,
 } from '@js/core/utils/type';
 import { getWindow, hasWindow } from '@js/core/utils/window';
 import type { DxEvent } from '@js/events';
@@ -102,9 +102,6 @@ type ContextMenuAnchor = ContextMenuTarget | DxEvent;
 const isRendererTarget = (
   target: ContextMenuAnchor,
 ): target is dxElementWrapper => isRenderer(target);
-const isEventAnchor = (
-  anchor: ContextMenuAnchor,
-): anchor is DxEvent => typeof anchor === 'object' && 'preventDefault' in anchor;
 type ContextMenuNode = InternalNode & Item;
 
 type ShowContextMenuEvent = EventInfo<ContextMenu> & {
@@ -1240,7 +1237,7 @@ class ContextMenu<
   private getShowEventTarget(): ContextMenuTarget {
     const target = this._getTarget();
 
-    return isEventAnchor(target) ? $(domAdapter.getDocument()) : target;
+    return isEvent(target) ? $(domAdapter.getDocument()) : target;
   }
 
   _getContextMenuPosition(): PositionConfig | undefined {
