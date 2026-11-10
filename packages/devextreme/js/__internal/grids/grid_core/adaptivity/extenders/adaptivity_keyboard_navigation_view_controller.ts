@@ -5,7 +5,8 @@ import { isCellBasedEditMode } from '@ts/grids/grid_core/editing/editing_utils';
 import type { KeyboardNavigationController } from '@ts/grids/grid_core/keyboard_navigation/keyboard_navigation';
 import type { ModuleType } from '@ts/grids/grid_core/types';
 
-import { CLASSES, HIDDEN_COLUMNS_WIDTH } from '../const';
+import { CLASSES } from '../const';
+import { hasHiddenWidth } from '../utils';
 
 function focusCellHandler(e): void {
   const $nextCell = e.data?.$nextCell;
@@ -50,7 +51,7 @@ export const adaptivityKeyboardNavigationViewControllerExtender = (
   }
 
   protected isFocusableColumn(column: Column): boolean {
-    return super.isFocusableColumn(column) && column.visibleWidth !== HIDDEN_COLUMNS_WIDTH;
+    return super.isFocusableColumn(column) && !hasHiddenWidth(column);
   }
 
   public isCellElement($cell: dxElementWrapper): boolean {
