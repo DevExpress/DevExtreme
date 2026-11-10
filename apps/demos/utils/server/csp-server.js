@@ -161,8 +161,6 @@ const CSP_DEMO_ALLOWLIST = {
   },
   'Chat/ToolCallVisualization': {
     'connect-src': DEMO_OPENAI_CONNECT_SRC,
-    // The assistant avatar is a data: SVG (all frameworks).
-    'img-src': ['data:'],
   },
   'Scheduler/CellTemplates': {
     'img-src': ['data:'],
