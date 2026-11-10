@@ -1,8 +1,9 @@
-export {
-  virtualScrollingDataControllerExtender,
-  type VirtualScrollingDataControllerExtension,
-} from './extenders/virtual_scrolling_data_controller';
-export type { VirtualScrollingDataSourceAdapter, VirtualScrollingRowsView } from './types';
+export { virtualScrollingDataControllerExtender } from './extenders/virtual_scrolling_data_controller';
+export type {
+  VirtualScrollingDataControllerExtension,
+  VirtualScrollingDataSourceAdapter,
+  VirtualScrollingRowsView,
+} from './types';
 export {
   dataSourceAdapterExtender,
   resizing,

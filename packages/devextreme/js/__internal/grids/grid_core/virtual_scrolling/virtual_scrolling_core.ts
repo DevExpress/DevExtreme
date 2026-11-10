@@ -38,7 +38,7 @@ import type {
   VirtualScrollDataOptions,
 } from './types';
 
-// @ts-expect-error scrollTop() is typed as a setter only
+// @ts-expect-error scrollTop can't be called through the Scrollable | dxElementWrapper union
 const getScrollTop = (scrollable: ExternalScrollable): number => scrollable.scrollTop();
 
 function subscribeToExternalScrollers(
@@ -140,10 +140,8 @@ function subscribeToExternalScrollers(
   };
 }
 
-class VirtualScrollController<
-  TDataOptions extends VirtualScrollDataOptions = VirtualScrollDataOptions,
-> {
-  private readonly _dataOptions: TDataOptions;
+class VirtualScrollController<TItem = unknown> {
+  private readonly _dataOptions: VirtualScrollDataOptions<TItem>;
 
   private readonly component: InternalGrid;
 
@@ -167,13 +165,17 @@ class VirtualScrollController<
 
   public positionChanged: Callback;
 
-  private readonly _dataLoader: VirtualDataLoader;
+  private readonly _dataLoader: VirtualDataLoader<TItem>;
 
   private _scrollTimeoutID?: ReturnType<typeof setTimeout>;
 
   private _windowScroll?: ExternalScrollers | null;
 
-  constructor(component: InternalGrid, dataOptions: TDataOptions, isVirtual = false) {
+  constructor(
+    component: InternalGrid,
+    dataOptions: VirtualScrollDataOptions<TItem>,
+    isVirtual = false,
+  ) {
     this._dataOptions = dataOptions;
     this.component = component;
     this._viewportSize = component.option(LEGACY_SCROLLING_MODE) === false ? 15 : 0;
@@ -519,7 +521,7 @@ class VirtualScrollController<
     this._dataLoader.loadIfNeed();
   }
 
-  public handleDataChanged(callBase: ChangedCallback, e?: ChangedEvent): void {
+  public handleDataChanged(callBase: ChangedCallback<TItem>, e?: ChangedEvent): void {
     this._dataLoader.handleDataChanged(callBase, e);
   }
 

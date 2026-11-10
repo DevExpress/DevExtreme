@@ -293,6 +293,21 @@ jobs:
         path: ${{ github.workspace }}/e2e/playwright/artifacts/test-results
         if-no-files-found: ignore
 
+    - name: Collect new etalons
+      if: ${{ failure() }}
+      run: |
+        mkdir -p "$RUNNER_TEMP/new-etalons"
+        git ls-files --others --exclude-standard -z -- 'e2e/playwright/tests/**/etalons/*.png' \
+          | xargs -0 -r cp --parents -t "$RUNNER_TEMP/new-etalons"
+
+    - name: Upload new etalons
+      if: ${{ failure() }}
+      uses: actions/upload-artifact@v7
+      with:
+        name: playwright-etalons-${{ env.JOB_NAME }}
+        path: ${{ runner.temp }}/new-etalons
+        if-no-files-found: ignore
+
   merge-artifacts:
     runs-on: ubuntu-latest
     timeout-minutes: 6
@@ -315,6 +330,7 @@ jobs:
           const artifactGroups = {
             blobs: /^playwright-blob-/,
             traces: /^playwright-traces-/,
+            etalons: /^playwright-etalons-/,
           };
 
           for (const [outputName, pattern] of Object.entries(artifactGroups)) {
@@ -376,4 +392,13 @@ jobs:
         name: playwright-traces
         pattern: playwright-traces-*
         separate-directories: true
+        delete-merged: true
+
+    - name: Merge new etalons
+      if: steps.mergeable-artifacts.outputs.etalons == 'true'
+      uses: actions/upload-artifact/merge@v7
+      continue-on-error: true
+      with:
+        name: playwright-etalons
+        pattern: playwright-etalons-*
         delete-merged: true

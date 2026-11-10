@@ -14,9 +14,8 @@ import type {
 } from '@ts/grids/grid_core/types';
 import { isVirtualPaging } from '@ts/grids/grid_core/utils';
 
-import type { GroupingDataSourceAdapter } from '../m_grouping';
 import type {
-  ChangeRowExpandArgs, GroupItem, ProcessGroupItemsOptions,
+  ChangeRowExpandArgs, GroupingDataSourceAdapter, GroupItem, ProcessGroupItemsOptions,
 } from '../types';
 import {
   getGroupColumnIndices, isGroupNode, isGroupRow, isSameContinuationState, isSameExpandedState,

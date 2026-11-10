@@ -1,3 +1,9 @@
+import type { DataKey } from '@ts/core/element_data';
+
+import type { RowPreparedOptions } from './types';
+
+export const ROW_OPTIONS_KEY: DataKey<RowPreparedOptions> = 'options';
+
 export const CLASSES = {
   rowsView: 'rowsview',
   noWrap: 'nowrap',

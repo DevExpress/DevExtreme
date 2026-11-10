@@ -1,9 +1,29 @@
 import type { DeferredObj } from '@js/core/utils/deferred';
 import type { RowExpandingEvent } from '@js/ui/data_grid';
+import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import type { CustomLoadResult } from '@ts/grids/grid_core/data_source_adapter/custom_loader';
+import type DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/data_source_adapter';
 import type { LoadOperation, RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
+import type { ColumnKeyboardNavigationController } from '@ts/grids/grid_core/keyboard_navigation/column_keyboard_navigation_core';
 import type { ExecuteActionArgs } from '@ts/grids/grid_core/modules/types';
 import type { RowKey } from '@ts/grids/grid_core/types';
+
+import type { GroupingHelper } from './grouping_core';
+
+export interface GroupingDataSourceAdapterExtension {
+  _grouping: GroupingHelper;
+  isRowExpanded: (key: RowKey) => boolean;
+  collapseAll: (groupIndex?: number) => boolean;
+  expandAll: (groupIndex?: number) => boolean;
+}
+
+export type GroupingDataSourceAdapter = DataSourceAdapter & GroupingDataSourceAdapterExtension;
+
+export type GroupingKeyboardNavigationController = ColumnKeyboardNavigationController & {
+  groupColumn?: (column: Column, rowIndex: number) => void;
+  ungroupColumn?: (column: Column, rowIndex: number) => void;
+  ungroupAllColumns?: () => void;
+};
 
 export type ChangeRowExpandArgs = ExecuteActionArgs<RowExpandingEvent<unknown, RowKey>>
   & { expanded: boolean };

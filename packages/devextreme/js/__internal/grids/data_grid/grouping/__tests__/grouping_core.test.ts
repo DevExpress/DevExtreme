@@ -1,8 +1,8 @@
 import { describe, expect, it } from '@jest/globals';
 import type { StoreLoadOptions } from '@ts/data/data_source/types';
 
-import type { GroupingDataSourceAdapter } from '../m_grouping';
-import { GroupingHelper } from '../m_grouping_expanded';
+import { GroupingHelper } from '../grouping_expanded';
+import type { GroupingDataSourceAdapter } from '../types';
 import { createDataSourceAdapterStub } from './grouping_expanded.mock';
 
 const refresh = (grouping: GroupingHelper, group: StoreLoadOptions['group']): void => {

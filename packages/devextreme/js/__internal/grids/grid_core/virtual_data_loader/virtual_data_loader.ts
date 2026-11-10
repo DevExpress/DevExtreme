@@ -15,34 +15,34 @@ import type {
 
 const LEGACY_SCROLLING_MODE = 'scrolling.legacyMode';
 
-const needTwoPagesLoading = (that: VirtualDataLoader): boolean => (
+const needTwoPagesLoading = <TItem>(that: VirtualDataLoader<TItem>): boolean => (
   Boolean(that.option('scrolling.loadTwoPagesOnStart'))
   || that._controller.isVirtual()
   || that._controller.getViewportItemIndex() > 0
 );
 
-const getBeginPageIndex = (that: VirtualDataLoader): number => (
+const getBeginPageIndex = <TItem>(that: VirtualDataLoader<TItem>): number => (
   that._cache.length ? that._cache[0].pageIndex : -1
 );
 
-const getEndPageIndex = (that: VirtualDataLoader): number => (
+const getEndPageIndex = <TItem>(that: VirtualDataLoader<TItem>): number => (
   that._cache.length ? that._cache[that._cache.length - 1].pageIndex : -1
 );
 
-const fireChanged = (
-  that: VirtualDataLoader,
-  changed: ChangedCallback,
-  args?: VirtualDataLoaderChange,
+const fireChanged = <TItem>(
+  that: VirtualDataLoader<TItem>,
+  changed: ChangedCallback<TItem>,
+  args?: VirtualDataLoaderChange<TItem>,
 ): void => {
   that._isChangedFiring = true;
   changed(args);
   that._isChangedFiring = false;
 };
 
-const processDelayChanged = (
-  that: VirtualDataLoader,
-  changed: ChangedCallback,
-  args?: VirtualDataLoaderChange,
+const processDelayChanged = <TItem>(
+  that: VirtualDataLoader<TItem>,
+  changed: ChangedCallback<TItem>,
+  args?: VirtualDataLoaderChange<TItem>,
 ): boolean | undefined => {
   if (that._isDelayChanged) {
     that._isDelayChanged = false;
@@ -52,7 +52,7 @@ const processDelayChanged = (
   return undefined;
 };
 
-const getViewportPageCount = (that: VirtualDataLoader): number => {
+const getViewportPageCount = <TItem>(that: VirtualDataLoader<TItem>): number => {
   const pageSize = that._dataOptions.pageSize();
   const preventPreload = that.option('scrolling.preventPreload');
 
@@ -89,7 +89,7 @@ const getViewportPageCount = (that: VirtualDataLoader): number => {
   return pageSize && realViewportSize > 0 ? Math.ceil(realViewportSize / pageSize) : 1;
 };
 
-const getPreloadPageCount = (that: VirtualDataLoader, previous?: boolean): number => {
+const getPreloadPageCount = <TItem>(that: VirtualDataLoader<TItem>, previous?: boolean): number => {
   const preloadEnabled = that.option('scrolling.preloadEnabled');
   let pageCount = getViewportPageCount(that);
   const isAppendMode = that._controller.isAppendMode();
@@ -111,7 +111,7 @@ const getPreloadPageCount = (that: VirtualDataLoader, previous?: boolean): numbe
   return pageCount;
 };
 
-const getPageIndexForLoad = (that: VirtualDataLoader): number => {
+const getPageIndexForLoad = <TItem>(that: VirtualDataLoader<TItem>): number => {
   let result = -1;
   const beginPageIndex = getBeginPageIndex(that);
   const dataOptions = that._dataOptions;
@@ -149,8 +149,8 @@ const getPageIndexForLoad = (that: VirtualDataLoader): number => {
   return result;
 };
 
-const loadCore = (
-  that: VirtualDataLoader,
+const loadCore = <TItem>(
+  that: VirtualDataLoader<TItem>,
   pageIndex: number,
 ): DeferredObj<unknown> | undefined => {
   const dataOptions = that._dataOptions;
@@ -168,16 +168,16 @@ const loadCore = (
   return undefined;
 };
 
-const processChanged = (
-  that: VirtualDataLoader,
-  changed: ChangedCallback,
+const processChanged = <TItem>(
+  that: VirtualDataLoader<TItem>,
+  changed: ChangedCallback<TItem>,
   changeType?: ProcessedChange['changeType'] | ChangedEvent,
   isDelayChanged?: boolean,
   removeCacheItem?: VirtualDataLoaderCacheItem,
 ): void => {
   const dataOptions = that._dataOptions;
   const items = dataOptions.items().slice();
-  let change: ProcessedChange | ChangedEvent | undefined = isObject(changeType)
+  let change: ProcessedChange<TItem> | ChangedEvent | undefined = isObject(changeType)
     ? changeType
     : undefined;
   const isPrepend = changeType === 'prepend';
@@ -223,8 +223,8 @@ const processChanged = (
   }
 };
 
-export class VirtualDataLoader {
-  public readonly _dataOptions: VirtualDataLoaderDataOptions;
+export class VirtualDataLoader<TItem = unknown> {
+  public readonly _dataOptions: VirtualDataLoaderDataOptions<TItem>;
 
   public readonly _controller: VirtualDataLoaderController;
 
@@ -244,7 +244,7 @@ export class VirtualDataLoader {
 
   constructor(
     controller: VirtualDataLoaderController,
-    dataOptions: VirtualDataLoaderDataOptions,
+    dataOptions: VirtualDataLoaderDataOptions<TItem>,
   ) {
     this._dataOptions = dataOptions;
     this._controller = controller;
@@ -382,7 +382,7 @@ export class VirtualDataLoader {
     }
   }
 
-  public handleDataChanged(callBase: ChangedCallback, e?: ChangedEvent): void {
+  public handleDataChanged(callBase: ChangedCallback<TItem>, e?: ChangedEvent): void {
     const dataOptions = this._dataOptions;
     let lastCacheLength = this._cache.length;
     const isVirtualMode = this._controller.isVirtualMode();
