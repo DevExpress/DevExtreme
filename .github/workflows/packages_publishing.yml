@@ -24,7 +24,6 @@ env:
   NX_SKIP_NX_CACHE: true
   FILTER: ${{ inputs.filter || '' }}
   SET_TIMESTAMP_VERSION:  ${{ inputs.tag == 'daily' }}
-  SBOM_PACKAGE_NAMES: devextreme,devextreme-angular,devextreme-react,devextreme-vue,devextreme-themebuilder
 
 jobs:
   build:
@@ -56,78 +55,8 @@ jobs:
       - name: Build npm packages
         run: pnpm run all:build:internal
 
-      # Builds the dx-make-sbom package argument list from known package names and the tgz files produced in artifacts/npm.
-      # Produces SBOM_PACKAGES for the SBOM build step.
-      - name: Prepare SBOM package inputs
-        run: |
-          package_version=$(node -p "require('./package.json').version")
-          IFS=',' read -ra package_names <<< "$SBOM_PACKAGE_NAMES"
-          sbom_packages=()
-
-          for package_name in "${package_names[@]}"; do
-            tgz_path="artifacts/npm/$package_name-$package_version.tgz"
-
-            if [ ! -f "$tgz_path" ]; then
-              echo "Expected package tarball not found: $tgz_path"
-              exit 1
-            fi
-
-            sbom_packages+=("$package_name(../../$tgz_path)")
-          done
-
-          sbom_packages_value=$(IFS=,; echo "${sbom_packages[*]}")
-          echo "SBOM_PACKAGES=$sbom_packages_value" >> "$GITHUB_ENV"
-          echo "$sbom_packages_value"
-
-      - name: Set GitHub Packages auth
-        run: pnpm set //npm.pkg.github.com/:_authToken='${NODE_AUTH_TOKEN}'
-
-      # Generates CycloneDX SBOM JSON files for the selected packages using the just-built tgz files.
-      # Produces packages/sbom/dist/*.cdx.json.
-      - name: Build SBOMs
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: pnpm nx make sbom --packages="$SBOM_PACKAGES"
-
-      # Collects concrete SBOM file paths for validation because the shared action expects explicit file names.
-      # Produces the sbomFiles.outputs.files multiline output.
-      - name: Collect SBOM files
-        id: sbomFiles
-        run: |
-          shopt -s nullglob
-          sbom_files=(packages/sbom/dist/*.cdx.json)
-
-          if [ ${#sbom_files[@]} -eq 0 ]; then
-            echo "No SBOM files found in packages/sbom/dist"
-            exit 1
-          fi
-
-          {
-            echo "files<<EOF"
-            printf '%s\n' "${sbom_files[@]}"
-            echo "EOF"
-          } >> "$GITHUB_OUTPUT"
-
-      # Validates every generated CycloneDX SBOM file with the shared validation action.
-      # Produces no artifact; fails the workflow if any SBOM is invalid.
-      - name: Validate SBOMs
-        uses: DevExpress/github-actions/validate-sbom@5034a6d5e0fd18fc2826ed20a5140f9c83b8994f
-        with:
-          input-format: json
-          input-files: ${{ steps.sbomFiles.outputs.files }}
-
       - name: Build artifacts package
         run: pnpm run make-artifacts-package
-
-      # Saves generated SBOM files for the publish job.
-      # Produces the sbom-packages workflow artifact.
-      - name: Upload SBOMs
-        uses: actions/upload-artifact@v7
-        with:
-          name: sbom-packages
-          path: packages/sbom/dist
-          if-no-files-found: error
-          retention-days: 1
 
       - name: Upload packages
         uses: actions/upload-artifact@v7
@@ -137,10 +66,11 @@ jobs:
           if-no-files-found: error
           retention-days: 1
 
+
       - name: Filter packages
         id: filter
         working-directory: artifacts/npm
-        run: ls *.tgz | grep -E -i "$FILTER" | sed -r 's/^(.*).tgz$/"\1"/g' | paste -sd "," - | sed -r 's/(.*)/packages=[\1]/' >> "$GITHUB_OUTPUT"
+        run: ls devextreme-internal-*.tgz devextreme-dist-internal-*.tgz devextreme-artifacts-*.tgz devextreme-monorepo-tools-*.tgz | grep -E -i "$FILTER" | sed -r 's/^(.*).tgz$/"\1"/g' | paste -sd "," - | sed -r 's/(.*)/packages=[\1]/' >> "$GITHUB_OUTPUT"
 
   publish:
     name: Publish package
@@ -159,14 +89,6 @@ jobs:
         with:
           name: npm-packages
           path: npm-packages
-
-      # Restores generated SBOM files from the build job.
-      # Produces the local sbom-packages directory for matrix publishing.
-      - name: Download SBOMs
-        uses: actions/download-artifact@v8
-        with:
-          name: sbom-packages
-          path: sbom-packages
 
       - name: Use Node.js
         uses: actions/setup-node@v7
@@ -193,43 +115,6 @@ jobs:
           pnpm pkg get version | tr -d '"' | sed -r 's/(.*)/version=\1/' >> "$GITHUB_OUTPUT";
           pnpm pkg get version | tr -d '"' | sed -r 's/([0-9]+\.[0-9]+).*/majorVersion=\1/' >> "$GITHUB_OUTPUT";
 
-      # Wraps the matching SBOM JSON file into a minimal @<owner>/<package>-sbom npm package when the matrix package has an SBOM.
-      # Produces sbomPackage outputs used by the publish step.
-      - name: Build SBOM package
-        id: sbomPackage
-        env:
-          PACKAGE_NAME: ${{ steps.scopedPackage.outputs.name }}
-          PACKAGE_VERSION: ${{ steps.scopedPackage.outputs.version }}
-        run: |
-          UNSCOPED_PACKAGE_NAME=$(echo "$PACKAGE_NAME" | sed -r 's#^@[^/]+/##');
-          SBOM_FILE="sbom-packages/$UNSCOPED_PACKAGE_NAME.cdx.json";
-
-          if [[ ",$SBOM_PACKAGE_NAMES," != *",$UNSCOPED_PACKAGE_NAME,"* ]]; then
-            echo "SBOM publishing is not configured for $UNSCOPED_PACKAGE_NAME"
-            echo "hasSbom=false" >> "$GITHUB_OUTPUT";
-            exit 0;
-          fi
-
-          if [ ! -f "$SBOM_FILE" ]; then
-            echo "No SBOM found for $UNSCOPED_PACKAGE_NAME"
-            echo "hasSbom=false" >> "$GITHUB_OUTPUT";
-            exit 0;
-          fi
-
-          OWNER=$(echo "${{ github.repository_owner }}" | tr '[:upper:]' '[:lower:]');
-          SBOM_PACKAGE_NAME="@$OWNER/$UNSCOPED_PACKAGE_NAME-sbom";
-          SBOM_PACKAGE_DIR="sbom-package/$SBOM_PACKAGE_NAME";
-
-          mkdir -p "$SBOM_PACKAGE_DIR";
-          cp "$SBOM_FILE" "$SBOM_PACKAGE_DIR/";
-          cd "$SBOM_PACKAGE_DIR";
-          node -e "const fs = require('fs'); const [name, version] = process.argv.slice(1); fs.writeFileSync('package.json', JSON.stringify({ name, version }, null, 2));" "$SBOM_PACKAGE_NAME" "$PACKAGE_VERSION";
-          echo "hasSbom=true" >> "$GITHUB_OUTPUT";
-          echo "packageDir=$PWD" >> "$GITHUB_OUTPUT";
-          pnpm pkg get name | tr -d '"' | sed -r 's/(.*)/name=\1/' >> "$GITHUB_OUTPUT";
-          pnpm pkg get version | tr -d '"' | sed -r 's/(.*)/version=\1/' >> "$GITHUB_OUTPUT";
-          pnpm pkg get version | tr -d '"' | sed -r 's/([0-9]+\.[0-9]+).*/majorVersion=\1/' >> "$GITHUB_OUTPUT";
-
       - name: Set GitHub Packages auth
         run: pnpm set //npm.pkg.github.com/:_authToken='${NODE_AUTH_TOKEN}'
 
@@ -243,20 +128,6 @@ jobs:
           PACKAGE_NAME: ${{ steps.scopedPackage.outputs.name }}
           PACKAGE_VERSION: ${{ steps.scopedPackage.outputs.version }}
           PACKAGE_VERSION_MAJOR: ${{ steps.scopedPackage.outputs.majorVersion }}
-        run: |
-          pnpm publish --no-git-checks --quiet --ignore-scripts --tag $PACKAGE_VERSION_MAJOR-${{ inputs.tag }} --registry https://npm.pkg.github.com;
-          pnpm dist-tag add $PACKAGE_NAME@$PACKAGE_VERSION latest --registry=https://npm.pkg.github.com;
-
-        # Publishes the generated @<owner>/<package>-sbom npm package to GitHub Packages.
-        # Produces @<owner>/<package>-sbom in the npm.pkg.github.com feed.
-      - name: Publish SBOM to GitHub Packages
-        if: ${{ steps.sbomPackage.outputs.hasSbom == 'true' }}
-        working-directory: ${{ steps.sbomPackage.outputs.packageDir }}
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          PACKAGE_NAME: ${{ steps.sbomPackage.outputs.name }}
-          PACKAGE_VERSION: ${{ steps.sbomPackage.outputs.version }}
-          PACKAGE_VERSION_MAJOR: ${{ steps.sbomPackage.outputs.majorVersion }}
         run: |
           pnpm publish --no-git-checks --quiet --ignore-scripts --tag $PACKAGE_VERSION_MAJOR-${{ inputs.tag }} --registry https://npm.pkg.github.com;
           pnpm dist-tag add $PACKAGE_NAME@$PACKAGE_VERSION latest --registry=https://npm.pkg.github.com;
