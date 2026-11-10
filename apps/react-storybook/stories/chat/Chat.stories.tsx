@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect, useMemo, useRef } from 'react';
-import { Chat, ChatTypes } from 'devextreme-react/chat'
+import { Chat, ChatTypes, ToolCallOptions } from 'devextreme-react/chat'
 import { Button, Toast } from 'devextreme-react';
 import type { Meta, StoryObj } from '@storybook/react-webpack5';
 import DataSource from 'devextreme/data/data_source';
@@ -1116,12 +1116,12 @@ export const Suggestions: Story = {
 type ToolCallExpanded = 'Default' | 'Expanded' | 'Collapsed';
 
 interface ToolCallsStoryArgs {
-    expandAll: boolean;
-    showInMessageTemplate: boolean;
-    useMessageTemplate: boolean;
+    expandAll?: boolean;
+    showInMessageTemplate?: boolean;
+    useMessageTemplate?: boolean;
     name?: string;
-    status: 'Default' | 'success' | 'error';
-    expanded: ToolCallExpanded;
+    status?: 'Default' | 'success' | 'error';
+    expanded?: ToolCallExpanded;
     arguments?: Record<string, unknown>;
     result?: string;
 }
@@ -1141,8 +1141,8 @@ const getFirstToolCallOverrides = ({
     name, status, expanded, arguments: toolCallArguments, result,
 }: Pick<ToolCallsStoryArgs, 'name' | 'status' | 'expanded' | 'arguments' | 'result'>): Partial<ChatTypes.ToolCall> => ({
     ...(name === undefined ? {} : { name }),
-    ...(status === 'Default' ? {} : { status }),
-    ...(expanded === 'Default' ? {} : { expanded: expanded === 'Expanded' }),
+    ...(status === undefined || status === 'Default' ? {} : { status }),
+    ...(expanded === undefined || expanded === 'Default' ? {} : { expanded: expanded === 'Expanded' }),
     ...(toolCallArguments === undefined ? {} : { arguments: toolCallArguments }),
     ...(result === undefined ? {} : { result }),
 });
@@ -1174,14 +1174,15 @@ const createHistory = (): ModelMessage[] => [{ role: 'system', content: systemPr
 
 export const ToolCallsVisualization: StoryObj<ToolCallsStoryArgs> = {
     name: 'Tool Calls Visualization',
+    parameters: {
+        controls: { expanded: true },
+    },
     args: {
         expandAll: false,
         showInMessageTemplate: false,
         useMessageTemplate: false,
         status: 'Default',
-        expanded: "Expanded",
-        name: "foobar",
-        arguments: {}
+        expanded: 'Default',
     },
     argTypes: {
         expandAll: { name: 'toolCallOptions.expandAll', control: 'boolean' },
@@ -1211,8 +1212,16 @@ export const ToolCallsVisualization: StoryObj<ToolCallsStoryArgs> = {
             control: { type: 'inline-radio' },
             options: ['Default', 'Expanded', 'Collapsed'],
         },
-        arguments: { name: 'toolCalls[0].arguments', control: 'object' },
-        result: { name: 'toolCalls[0].result', control: 'text' },
+        arguments: {
+            name: 'toolCalls[0].arguments',
+            description: 'Example: { "country": "UK", "city": "London" }. An empty object hides the field',
+            control: 'object',
+        },
+        result: {
+            name: 'toolCalls[0].result',
+            description: 'Example: 15\u00b0C (59\u00b0F). An empty string hides the field',
+            control: 'text',
+        },
     },
     render: ({
         expandAll,
@@ -1401,11 +1410,15 @@ export const ToolCallsVisualization: StoryObj<ToolCallsStoryArgs> = {
                         speechToTextEnabled
                         alerts={alerts}
                         typingUsers={typingUsers}
-                        toolCallOptions={{ expandAll, showInMessageTemplate }}
                         onMessageEntered={onMessageEntered}
                         emptyViewRender={renderEmptyView}
                         {...(useMessageTemplate && { messageRender })}
-                    />
+                    >
+                        <ToolCallOptions 
+                            expandAll={expandAll} 
+                            showInMessageTemplate={showInMessageTemplate} 
+                        />
+                    </Chat>
                 </div>
             </div>
         );
