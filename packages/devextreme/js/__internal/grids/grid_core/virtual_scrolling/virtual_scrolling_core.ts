@@ -25,11 +25,7 @@ import type Scrollable from '@ts/ui/scroll_view/scrollable';
 
 import gridCoreUtils from '../utils';
 import { VirtualDataLoader } from '../virtual_data_loader/virtual_data_loader';
-import {
-  LEGACY_SCROLLING_MODE,
-  SCROLLING_MODE_INFINITE,
-  SCROLLING_MODE_VIRTUAL,
-} from './const';
+import { LEGACY_SCROLLING_MODE } from './const';
 import type {
   ContentOffsetType,
   ExternalScrollable,
@@ -37,6 +33,7 @@ import type {
   ViewportParams,
   VirtualScrollDataOptions,
 } from './types';
+import { isInfiniteMode, isVirtualMode } from './utils/scrolling_mode';
 
 // @ts-expect-error scrollTop can't be called through the Scrollable | dxElementWrapper union
 const getScrollTop = (scrollable: ExternalScrollable): number => scrollable.scrollTop();
@@ -451,15 +448,15 @@ class VirtualScrollController<TItem = unknown> {
   }
 
   public isVirtualMode(): boolean {
-    return this.option('scrolling.mode') === SCROLLING_MODE_VIRTUAL || this.isVirtual();
+    return isVirtualMode(this.option('scrolling')) || this.isVirtual();
   }
 
   public isAppendMode(): boolean {
-    return this.option('scrolling.mode') === SCROLLING_MODE_INFINITE && !this.isVirtual();
+    return isInfiniteMode(this.option('scrolling')) && !this.isVirtual();
   }
 
   public getViewportParams(): ViewportParams {
-    const virtualMode = this.option('scrolling.mode') === SCROLLING_MODE_VIRTUAL;
+    const virtualMode = isVirtualMode(this.option('scrolling'));
     const totalItemsCount = this._dataOptions.totalItemsCount();
     const hasKnownLastPage = this._dataOptions.hasKnownLastPage();
     const topIndex = hasKnownLastPage && this._viewportItemIndex > totalItemsCount

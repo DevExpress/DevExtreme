@@ -30,7 +30,6 @@ import type {
   RawItemData,
 } from '../data_source_adapter/types';
 import type { StateStoringDataControllerExtension } from '../state_storing/extenders/state_storing_data_controller';
-import gridCoreUtils, { isInfiniteMode, isVirtualMode, isVirtualPaging } from '../utils';
 import type { RowsViewScrollEvent } from '../views/types';
 import {
   CLASSES,
@@ -48,6 +47,9 @@ import type {
   VirtualScrollingRowsView,
 } from './types';
 import { isItemCountableByDataSource } from './utils/items';
+import {
+  isInfiniteMode, isVirtualMode, isVirtualPaging, isVirtualRowRendering,
+} from './utils/scrolling_mode';
 import { subscribeToExternalScrollers, VirtualScrollController } from './virtual_scrolling_core';
 
 const updateLoading = (that: VirtualScrollingDataSourceAdapter): void => {
@@ -509,7 +511,7 @@ export const resizing = (
   }
 
   public resize(): DeferredObj<unknown> {
-    if (!isVirtualMode(this.option('scrolling')) && !gridCoreUtils.isVirtualRowRendering(this)) {
+    if (!isVirtualMode(this.option('scrolling')) && !isVirtualRowRendering(this.option('scrolling'))) {
       return super.resize();
     }
 
@@ -642,7 +644,7 @@ export const rowsView = (
       const viewportSize = this._dataController.viewportSize() || 20;
 
       if (
-        gridCoreUtils.isVirtualRowRendering(this)
+        isVirtualRowRendering(this.option('scrolling'))
         && itemCount > 0
         && this.option(LEGACY_SCROLLING_MODE) !== false
       ) {
@@ -823,7 +825,7 @@ export const rowsView = (
 
     this._dataController.viewportItemSize(rowHeight);
 
-    if (isVirtualMode(this.option('scrolling')) || gridCoreUtils.isVirtualRowRendering(this)) {
+    if (isVirtualMode(this.option('scrolling')) || isVirtualRowRendering(this.option('scrolling'))) {
       const isEmptyRows = this._dataController.isEmpty();
       if (isEmptyRows) {
         return;
@@ -902,9 +904,9 @@ export const rowsView = (
       }
 
       const scrolling = this.option('scrolling');
-      const isVirtualRowRendering = isVirtualMode(scrolling) || scrolling?.rowRenderingMode !== 'standard';
+      const rendersVirtualRows = isVirtualMode(scrolling) || scrolling?.rowRenderingMode !== 'standard';
 
-      if (isVirtualRowRendering && this.option(LEGACY_SCROLLING_MODE) === false) {
+      if (rendersVirtualRows && this.option(LEGACY_SCROLLING_MODE) === false) {
         this._updateContentItemSizes();
         this._updateViewportSize(null, this._scrollTop);
       }
@@ -916,7 +918,7 @@ export const rowsView = (
 
   protected _needUpdateRowHeight(itemsCount: number): boolean {
     return Boolean(super._needUpdateRowHeight(itemsCount)) || (itemsCount > 0
-      && (isInfiniteMode(this.option('scrolling')) && !gridCoreUtils.isVirtualRowRendering(this))
+      && (isInfiniteMode(this.option('scrolling')) && !isVirtualRowRendering(this.option('scrolling')))
     );
   }
 

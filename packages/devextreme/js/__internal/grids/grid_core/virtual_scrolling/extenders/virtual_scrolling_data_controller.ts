@@ -13,7 +13,6 @@ import type { RawItemData } from '@ts/grids/grid_core/data_source_adapter/types'
 import type { ModuleType, OptionChanged } from '@ts/grids/grid_core/types';
 import type { ItemSizes, VirtualItemsCount } from '@ts/grids/grid_core/virtual_data_loader/types';
 
-import gridCoreUtils, { isInfiniteMode, isVirtualMode, isVirtualPaging } from '../../utils';
 import {
   LEGACY_SCROLLING_MODE,
   LOAD_TIMEOUT,
@@ -35,6 +34,9 @@ import {
   isItemCountableByDataSource,
   updateItemIndices,
 } from '../utils/items';
+import {
+  isInfiniteMode, isVirtualMode, isVirtualPaging, isVirtualRowRendering,
+} from '../utils/scrolling_mode';
 import { VirtualScrollController } from '../virtual_scrolling_core';
 
 export const virtualScrollingDataControllerExtender = (
@@ -105,7 +107,7 @@ export const virtualScrollingDataControllerExtender = (
     const itemIndex = Number(rowsScrollController?.getItemIndexByPosition());
     const result = super.reload(reload, changesOnly);
     return result?.done(() => {
-      if (isVirtualMode(this.option('scrolling')) || gridCoreUtils.isVirtualRowRendering(this)) {
+      if (isVirtualMode(this.option('scrolling')) || isVirtualRowRendering(this.option('scrolling'))) {
         const rowIndexOffset = this.getRowIndexOffset();
         const rowIndex = Math.floor(itemIndex) - rowIndexOffset;
         const scrollable = this.component.getScrollable?.();
@@ -126,7 +128,7 @@ export const virtualScrollingDataControllerExtender = (
   }
 
   private initVirtualRows(): void {
-    const virtualRowsRendering = gridCoreUtils.isVirtualRowRendering(this);
+    const virtualRowsRendering = isVirtualRowRendering(this.option('scrolling'));
     const isLegacyScrolling = this.option(LEGACY_SCROLLING_MODE) !== false;
 
     this._allItems = null;
@@ -332,7 +334,7 @@ export const virtualScrollingDataControllerExtender = (
     const delta = this.getRowIndexDelta();
 
     super._updateItemsCore(change);
-    if (this.option(LEGACY_SCROLLING_MODE) === false && gridCoreUtils.isVirtualRowRendering(this)) {
+    if (this.option(LEGACY_SCROLLING_MODE) === false && isVirtualRowRendering(this.option('scrolling'))) {
       if (change.changeType === 'update'
         && change.rowIndices.length === 0
         && 'cancelEmptyChanges' in change
@@ -878,7 +880,7 @@ export const virtualScrollingDataControllerExtender = (
     const { checkLoadedParamsOnly, checkLoading, viewportIsNotFilled } = params ?? {};
     const virtualPaging = isVirtualPaging(this.option('scrolling'));
 
-    if (virtualPaging || gridCoreUtils.isVirtualRowRendering(this)) {
+    if (virtualPaging || isVirtualRowRendering(this.option('scrolling'))) {
       this._updateLoadViewportParams();
 
       const loadingItemsStarted = this._loadItems(checkLoading, !viewportIsNotFilled);
