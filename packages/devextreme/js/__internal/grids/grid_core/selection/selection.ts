@@ -1000,9 +1000,7 @@ export const selectionRowsViewExtender = <TBase extends ModuleType<RowsView>>(
   }
 
   private syncRowsSelection(): void {
-    const tableElement = this.getTableElement();
-
-    if (!tableElement || this.option(SELECTION_MODE) === 'none') {
+    if (this.option(SELECTION_MODE) === 'none') {
       return;
     }
 
@@ -1014,7 +1012,8 @@ export const selectionRowsViewExtender = <TBase extends ModuleType<RowsView>>(
       return isRowItem(items[rowIndex]) ? items[rowIndex] : items.find(isRowItem);
     };
 
-    const outdatedRows = this._getRowElements(tableElement).toArray()
+    const outdatedRows = this._getRowElements()
+      .toArray()
       .flatMap((rowElement, rowIndex) => {
         const rowOptions = getData(rowElement, ROW_OPTIONS_KEY);
         const item = rowOptions?.rowType === 'data'

@@ -157,6 +157,22 @@ describe('RowsView updates while new rows wait for async templates', () => {
     expect(getRowKeys($container, 'tr.dx-row-focused')).toEqual([2]);
   });
 
+  it('should not highlight the repainted row when the focused row key is reset', async () => {
+    const { instance, $container, renderPendingTemplates } = await createGrid({
+      focusedRowEnabled: true,
+      focusedRowKey: 2,
+    });
+
+    renderPendingTemplates();
+    instance.repaintRows([1]);
+    jest.runAllTimers();
+    instance.option('focusedRowKey', null);
+    jest.runAllTimers();
+    renderPendingTemplates();
+
+    expect(getRowKeys($container, 'tr.dx-row-focused')).toEqual([]);
+  });
+
   it('should highlight the selected row at its new position when the rows are sorted', async () => {
     const { instance, $container, renderPendingTemplates } = await createGrid({
       selection: { mode: 'multiple' },

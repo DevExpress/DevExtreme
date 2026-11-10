@@ -986,24 +986,26 @@ export const rowsView = (
   }
 
   private syncFocusedRow(): void {
+    if (!this.option('focusedRowEnabled')) {
+      return;
+    }
+
     const focusedRowKey = this.option('focusedRowKey');
+    const focusedRowIndex = isDefined(focusedRowKey)
+      ? this._dataController.getRowIndexByKey(focusedRowKey)
+      : -1;
+    const isHighlightOutdated = this._getRowElements()
+      .toArray()
+      .some((rowElement, rowIndex) => {
+        const isHighlighted = rowElement.classList.contains(CLASSES.rowFocused);
+        const isFocused = rowIndex === focusedRowIndex;
 
-    if (!this.option('focusedRowEnabled') || !isDefined(focusedRowKey)) {
-      return;
+        return isHighlighted !== isFocused;
+      });
+
+    if (isHighlightOutdated) {
+      this._focusController.updateFocusedRow({ focusedRowKey, preventScroll: true });
     }
-
-    const focusedRowIndex = this._dataController.getRowIndexByKey(focusedRowKey);
-    const rowElements = this._getRowElements(this.getTableElement()).toArray();
-    const focusedRowElements = rowElements
-      .filter((rowElement) => rowElement.classList.contains(CLASSES.rowFocused));
-    const isFocusedRowShown = focusedRowElements.length === 1
-      && focusedRowElements[0] === rowElements[focusedRowIndex];
-
-    if (focusedRowIndex < 0 || isFocusedRowShown) {
-      return;
-    }
-
-    this._focusController.updateFocusedRow({ focusedRowKey, preventScroll: true });
   }
 
   public updateFocusElementTabIndex(
