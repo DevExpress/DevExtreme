@@ -56,6 +56,11 @@ export class VirtualDataLoader<TItem = unknown> {
       || this._controller.getViewportItemIndex() > 0;
   }
 
+  private isLegacyVirtualPaging(): boolean {
+    return this.option(LEGACY_SCROLLING_MODE) !== false
+      && (this._controller.isVirtualMode() || this._controller.isAppendMode());
+  }
+
   private getBeginPageIndex(): number {
     return this._cache.length ? this._cache[0].pageIndex : -1;
   }
@@ -76,13 +81,13 @@ export class VirtualDataLoader<TItem = unknown> {
   private processDelayChanged(
     changedCallback: ChangedCallback<TItem>,
     args?: VirtualDataLoaderChange<TItem>,
-  ): boolean | undefined {
+  ): boolean {
     if (this._isDelayChanged) {
       this._isDelayChanged = false;
       this.fireChanged(changedCallback, args);
       return true;
     }
-    return undefined;
+    return false;
   }
 
   private getViewportPageCount(): number {
@@ -294,10 +299,7 @@ export class VirtualDataLoader<TItem = unknown> {
   public pageIndex(): number;
   public pageIndex(pageIndex: number): number | undefined;
   public pageIndex(pageIndex?: number): number | undefined {
-    const isVirtualMode = this._controller.isVirtualMode();
-    const isAppendMode = this._controller.isAppendMode();
-
-    if (this.option(LEGACY_SCROLLING_MODE) !== false && (isVirtualMode || isAppendMode)) {
+    if (this.isLegacyVirtualPaging()) {
       if (pageIndex !== undefined) {
         this._pageIndex = pageIndex;
       }
@@ -330,10 +332,8 @@ export class VirtualDataLoader<TItem = unknown> {
     const dataOptions = this._dataOptions;
     // eslint-disable-next-line @typescript-eslint/init-declarations -- assigned in branches
     let result: DeferredObj<unknown> | undefined;
-    const isVirtualMode = this._controller.isVirtualMode();
-    const isAppendMode = this._controller.isAppendMode();
 
-    if (this.option(LEGACY_SCROLLING_MODE) !== false && (isVirtualMode || isAppendMode)) {
+    if (this.isLegacyVirtualPaging()) {
       const pageIndexForLoad = this.getPageIndexForLoad();
 
       if (pageIndexForLoad >= 0) {
@@ -390,7 +390,7 @@ export class VirtualDataLoader<TItem = unknown> {
 
     if (e?.changes) {
       this.fireChanged(changedCallback, e);
-    } else if (this.option(LEGACY_SCROLLING_MODE) !== false && (isVirtualMode || isAppendMode)) {
+    } else if (this.isLegacyVirtualPaging()) {
       const beginPageIndex = this.getBeginPageIndex();
       if (beginPageIndex >= 0) {
         if (isVirtualMode && beginPageIndex + this._cache.length !== dataOptions.pageIndex()
