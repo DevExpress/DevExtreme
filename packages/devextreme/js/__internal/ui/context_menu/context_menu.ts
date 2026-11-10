@@ -426,7 +426,7 @@ class ContextMenu<
       this._overlay.$element().remove();
       this._overlay = null;
     }
-    this._detachShowContextMenuEvents(this._getTarget());
+    this._detachShowContextMenuEvents(this.getShowEventTarget());
     this._shownSubmenus = [];
     super._clean();
   }
@@ -473,7 +473,7 @@ class ContextMenu<
   }
 
   _renderContentImpl(): void {
-    this._detachShowContextMenuEvents(this._getTarget());
+    this._detachShowContextMenuEvents(this.getShowEventTarget());
     this._showContextMenuEventHandler = this._createShowContextMenuEventHandler();
     this._attachShowContextMenuEvents();
   }
@@ -580,7 +580,7 @@ class ContextMenu<
       return;
     }
 
-    const target = this._getTarget();
+    const target = this.getShowEventTarget();
     const isSelector = isString(target);
     const eventName = addNamespace(showEvent, this._eventNamespace);
 
@@ -1128,7 +1128,7 @@ class ContextMenu<
         break;
       case 'showEvent':
         if (previousValue) {
-          this._detachShowContextMenuEvents(this._getTarget(), previousValue);
+          this._detachShowContextMenuEvents(this.getShowEventTarget(), previousValue);
         }
         this._invalidate();
         break;
@@ -1230,12 +1230,17 @@ class ContextMenu<
     this.setAria('owns', undefined);
   }
 
-  _getTarget(): ContextMenuTarget {
+  _getTarget(): ContextMenuAnchor {
     const { target, position } = this.option();
-    const positionTarget = isEventAnchor(position?.of) ? undefined : position?.of;
 
     // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-    return target || positionTarget || $(domAdapter.getDocument());
+    return target || position?.of || $(domAdapter.getDocument());
+  }
+
+  private getShowEventTarget(): ContextMenuTarget {
+    const target = this._getTarget();
+
+    return isEventAnchor(target) ? $(domAdapter.getDocument()) : target;
   }
 
   _getContextMenuPosition(): PositionConfig | undefined {

@@ -4,15 +4,17 @@ import {
 import fx from '@js/common/core/animation/fx';
 import { createEvent } from '@js/common/core/events/utils/index';
 import $ from '@js/core/renderer';
+import type { Properties } from '@js/ui/context_menu';
 import ContextMenu from '@ts/ui/context_menu/context_menu';
 
 const instances: ContextMenu[] = [];
 
-const createContextMenu = (): ContextMenu => {
+const createContextMenu = (options: Properties = {}): ContextMenu => {
   const $element = $('<div>').appendTo(document.body);
 
   const contextMenu = new ContextMenu($element.get(0) as HTMLElement, {
     items: [{ text: 'A' }],
+    ...options,
   });
   instances.push(contextMenu);
 
@@ -49,6 +51,22 @@ describe('ContextMenu', () => {
       jest.runAllTimers();
 
       expect(contextMenu.option('visible')).toBe(true);
+    });
+
+    it('should be positioned at the event on show()', () => {
+      const event = createEvent(new MouseEvent('contextmenu'), {});
+      const anchors: unknown[] = [];
+      const contextMenu = createContextMenu({
+        showEvent: '',
+        onPositioning: (e) => { anchors.push(e.position.of); },
+      });
+      contextMenu.option('position', { of: event });
+
+      contextMenu.show().catch(() => {});
+      jest.runAllTimers();
+
+      expect(anchors).toHaveLength(1);
+      expect(anchors[0]).toBe(event);
     });
   });
 });
