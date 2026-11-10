@@ -30,6 +30,7 @@ import type {
   GridContextMenuItem,
   ViewRowEvent,
 } from '@ts/grids/grid_core/views/types';
+import { isInfiniteMode } from '@ts/grids/grid_core/virtual_scrolling';
 
 import type { ColumnHeadersView } from '../../grid_core/column_headers/column_headers';
 import type { HeaderPanel } from '../../grid_core/header_panel/header_panel';
@@ -533,8 +534,7 @@ export const GroupingRowsViewExtender = (
 
   protected _rowClick(e: ViewRowEvent): void {
     const expandMode: Grouping['expandMode'] = this.option('grouping.expandMode');
-    const scrollingMode = this.option('scrolling.mode');
-    const isGroupRowStateChanged = scrollingMode !== 'infinite'
+    const isGroupRowStateChanged = !isInfiniteMode(this.option('scrolling'))
       && expandMode === 'rowClick'
       && $(e.event.target).closest(`.${VIEW_CLASSES.groupRow}`).length;
     const isExpandButtonClicked = $(e.event.target).closest(`.${DATAGRID_EXPAND_CLASS}`).length;

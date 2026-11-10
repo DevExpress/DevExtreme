@@ -63,6 +63,7 @@ import type { ModuleType, RowKey } from '@ts/grids/grid_core/types';
 import gridCoreUtils from '@ts/grids/grid_core/utils';
 import { CLASSES as VIEW_CLASSES, ROW_OPTIONS_KEY } from '@ts/grids/grid_core/views/const';
 import type { RowsView } from '@ts/grids/grid_core/views/rows_view';
+import { isStandardMode } from '@ts/grids/grid_core/virtual_scrolling';
 import type { PositioningEvent } from '@ts/ui/overlay/overlay';
 import Popup from '@ts/ui/popup/popup';
 import type { ValidationResultInternal } from '@ts/ui/validation_engine';
@@ -1091,7 +1092,7 @@ export const validatingEditingExtender = (
   protected _handleDataChanged(args: DataChange): void {
     const validationState = this._validatingController._validationState;
 
-    if (this.option('scrolling.mode') === 'standard') {
+    if (isStandardMode(this.option('scrolling'))) {
       this.resetRowAndPageIndices();
     }
 

@@ -8,7 +8,7 @@ import type { StoreLoadOptions } from '@ts/data/data_source/types';
 import type { SummaryDataSourceAdapterExtension } from '@ts/grids/data_grid/summary/types';
 import type { LoadOperation, OperationTypes, RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
 import { combineFilters } from '@ts/grids/grid_core/filter/utils';
-import { isVirtualPaging } from '@ts/grids/grid_core/utils';
+import { isVirtualPaging } from '@ts/grids/grid_core/virtual_scrolling';
 
 import dataGridCore from '../core';
 import { createGroupFilter } from '../utils';

@@ -17,6 +17,7 @@ import type { DataSource } from '@ts/data/data_source/data_source';
 import type { ChangingEvent, StoreLoadOptions } from '@ts/data/data_source/types';
 import type { BeforePushEvent } from '@ts/data/types';
 import type { RowKey } from '@ts/grids/grid_core/types';
+import { isInfiniteMode, isVirtualMode } from '@ts/grids/grid_core/virtual_scrolling';
 
 import modules from '../modules/modules';
 import gridCoreUtils from '../utils';
@@ -367,7 +368,7 @@ export default class DataSourceAdapter extends modules.Controller {
     const dataSource = this._dataSource;
     const groupCount = gridCoreUtils.normalizeSortingInfo(this.group()).length;
     const isReshapeMode = this.option('editing.refreshMode') === 'reshape';
-    const isVirtualMode = this.option('scrolling.mode') === 'virtual';
+    const virtualMode = isVirtualMode(this.option('scrolling'));
 
     const filteredChanges = changes.filter(
       (change) => !dataSource.paginate() || change.type !== 'insert' || change.index !== undefined,
@@ -394,12 +395,9 @@ export default class DataSourceAdapter extends modules.Controller {
       skipCopying: !this._needToCopyDataObject(),
     });
 
-    const needUpdateTotalCountCorrection = this._currentTotalCount > 0 || (
-      (fromStore || !isReshapeMode)
-                  && isVirtualMode
-    );
+    const isAppliedWithoutReshape = fromStore || !isReshapeMode;
 
-    if (needUpdateTotalCountCorrection) {
+    if (this._currentTotalCount > 0 || (isAppliedWithoutReshape && virtualMode)) {
       this._totalCountCorrection += getItemCount() - oldItemCount;
     }
 
@@ -800,7 +798,7 @@ export default class DataSourceAdapter extends modules.Controller {
       }
       if (itemsCount === 0 && dataSource.pageIndex() >= this.pageCount()) {
         dataSource.pageIndex(this.pageCount() - 1);
-        if (this.option('scrolling.mode') !== 'infinite') {
+        if (!isInfiniteMode(this.option('scrolling'))) {
           dataSource.load();
           isLoading = true;
         }
