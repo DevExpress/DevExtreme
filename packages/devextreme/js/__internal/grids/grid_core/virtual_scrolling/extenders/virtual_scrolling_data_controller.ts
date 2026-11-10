@@ -249,10 +249,11 @@ export const virtualScrollingDataControllerExtender = (
             return;
           }
 
-          // @ts-expect-error the loader change becomes a data change here
-          const change: DataChange = loaderChange ?? {};
-          change.changeType = change.changeType ?? 'refresh';
-          change.items = change.items ?? that._visibleItems;
+          const change: DataChange = {
+            changeType: 'refresh',
+            items: that._visibleItems,
+            ...loaderChange,
+          };
 
           that._visibleItems.forEach((item, index) => {
             item.rowIndex = index;
