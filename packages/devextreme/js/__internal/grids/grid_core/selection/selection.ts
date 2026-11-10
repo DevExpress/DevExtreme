@@ -975,7 +975,7 @@ export const selectionRowsViewExtender = <TBase extends ModuleType<RowsView>>(
     }
   }
 
-  private isClickableElement($target: dxElementWrapper): boolean {
+  public isClickableElement($target: dxElementWrapper): boolean {
     const isCommandSelect = $target.closest(`.${COMMAND_SELECT_CLASS}`).length;
 
     return !!isCommandSelect;
