@@ -15,9 +15,9 @@ export interface VirtualDataLoaderCacheItem {
   itemsCount: number;
 }
 
-export interface ProcessedChange {
+export interface ProcessedChange<TItem = unknown> {
   changeType: 'append' | 'prepend';
-  items: unknown[];
+  items: TItem[];
   removeCount?: number;
 }
 
@@ -25,9 +25,11 @@ export interface DelayedChange {
   isDelayed: boolean;
 }
 
-export type VirtualDataLoaderChange = ProcessedChange | ChangedEvent | DelayedChange;
+export type VirtualDataLoaderChange<TItem = unknown> = ProcessedChange<TItem>
+| ChangedEvent
+| DelayedChange;
 
-export type ChangedCallback = (change?: VirtualDataLoaderChange) => void;
+export type ChangedCallback<TItem = unknown> = (change?: VirtualDataLoaderChange<TItem>) => void;
 
 export interface VirtualDataLoaderController {
   option: (name: string) => unknown;
@@ -44,7 +46,7 @@ export interface VirtualDataLoaderController {
   _setViewportPositionCore: (position: number) => void;
 }
 
-export interface VirtualDataLoaderDataOptions {
+export interface VirtualDataLoaderDataOptions<TItem = unknown> {
   pageSize: () => number;
   pageIndex: {
     (): number;
@@ -56,9 +58,9 @@ export interface VirtualDataLoaderDataOptions {
   isLoading: () => boolean;
   hasKnownLastPage: () => boolean;
   load: () => DeferredObj<unknown> | undefined;
-  items: (isBase?: boolean) => unknown[];
-  viewportItems: (items?: unknown[]) => unknown[];
+  items: (isBase?: boolean) => TItem[];
+  viewportItems: (items?: TItem[]) => TItem[];
   updateLoading: () => void;
   onChanged: (e: { changeType: 'pageIndex' }) => void;
-  correctCount?: (items: unknown[], count: number, fromEnd?: boolean) => number;
+  correctCount?: (items: TItem[], count: number, fromEnd?: boolean) => number;
 }
