@@ -1,3 +1,4 @@
+import { errors as dataErrors } from '@js/common/data/errors';
 import errors from '@js/core/errors';
 import { each } from '@js/core/utils/iterator';
 import { deepExtendArraySafe } from '@js/core/utils/object';
@@ -75,7 +76,7 @@ const assignPropValue = function assignPropValue(
   options: DataOptions,
 ): void {
   if (propName === 'this') {
-    throw new errors.Error('E4016');
+    throw new dataErrors.Error('E4016');
   }
 
   const propValue = obj[propName];

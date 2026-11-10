@@ -296,10 +296,10 @@ QUnit.module('setter', () => {
     test('attempt to assign scalar to self', function(assert) {
         assert.throws(() => {
             SETTER()('personName', 'Alex');
-        });
+        }, /E4016/);
         assert.throws(() => {
             SETTER('this')('personName', 'Alex');
-        });
+        }, /E4016/);
     });
 
     test('able to assign to self with merge', function(assert) {
