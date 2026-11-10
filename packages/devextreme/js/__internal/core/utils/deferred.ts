@@ -13,7 +13,7 @@ type DeferredHandlerName = 'done' | 'fail' | 'progress';
 interface DeferredConfig {
   method: DeferredMethod;
   handler: DeferredHandlerName;
-  state?: DeferredState;
+  state?: Exclude<DeferredState, 'pending'>;
 }
 
 type Handler = (this: unknown, ...args: unknown[]) => unknown;
@@ -183,7 +183,7 @@ const DeferredObj = function DeferredObj(this: DeferredInternal): void {
 
 deferredConfig.forEach((config) => {
   const methodName = config.method;
-  const { state } = config;
+  const { state: settledState } = config;
 
   DeferredObj.prototype[`${methodName}With`] = function triggerWith(
     this: DeferredInternal,
@@ -195,11 +195,11 @@ deferredConfig.forEach((config) => {
     if (this.state() === 'pending') {
       this[`${methodName}Args`] = args;
       this[`${methodName}Context`] = context;
-      if (state) {
-        this._state = state;
+      if (settledState) {
+        this._state = settledState;
       }
       callbacks.fire(context, args);
-      if (state !== 'pending') {
+      if (settledState) {
         this.resolveCallbacks.empty();
         this.rejectCallbacks.empty();
       }
