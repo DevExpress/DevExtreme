@@ -7,7 +7,7 @@
   [showRowLines]="true"
   [showBorders]="true"
   [allowColumnResizing]="true"
-  [columnResizingMode]="columnResizingMode"
+  [columnResizingMode]="columnResizingMode()"
   [columnMinWidth]="50"
   [expandedRowKeys]="[1, 3, 6]"
 >
@@ -32,9 +32,8 @@
       id="select-resizing"
       [items]="resizingModes"
       [inputAttr]="{ 'aria-label': 'Resizing Mode' }"
-      [value]="resizingModes[0]"
+      [(value)]="columnResizingMode"
       [width]="250"
-      (onValueChanged)="selectResizing($event)"
     >
     </dx-select-box>
   </div>

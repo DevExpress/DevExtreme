@@ -5,17 +5,17 @@
       #menu
       [dataSource]="products"
       displayExpr="name"
-      [showFirstSubmenuMode]="showFirstSubmenuModes"
+      [showFirstSubmenuMode]="showFirstSubmenuModes()"
       orientation="horizontal"
       [hideSubmenuOnMouseLeave]="false"
       (onItemClick)="itemClick($event)"
     >
     </dx-menu>
-    @if (currentProduct) {
+    @if (currentProduct(); as product) {
     <div id="product-details">
-      <img src="{{ currentProduct.icon }}" />
-      <div class="name">{{ currentProduct.name }}</div>
-      <div class="price">{{ "$" + currentProduct.price }}</div>
+      <img src="{{ product.icon }}" />
+      <div class="name">{{ product.name }}</div>
+      <div class="price">{{ "$" + product.price }}</div>
     </div>
     }
   </div>

@@ -26,8 +26,10 @@ import {
 } from 'devextreme-angular';
 
 import config from 'devextreme/core/config';
+import { isZoneless, itWithZone } from '../helpers/zone-mode';
 // TODO: Try to replace dxButton to Widget ('require' required)
 import dxButton from 'devextreme/ui/button';
+import { detectChanges } from '../helpers/change-detection';
 
 const DxTestWidget = dxButton;
 
@@ -177,7 +179,7 @@ describe('DevExtreme Angular widget', () => {
     fixture.detectChanges();
 
     fixture.componentInstance.visible = false;
-    fixture.detectChanges();
+    detectChanges(fixture);
 
     expect(testSpy).toHaveBeenCalledTimes(1);
   });
@@ -241,7 +243,7 @@ describe('DevExtreme Angular widget', () => {
     const instance = getWidget(fixture);
 
     testComponent.testOption = 'Changed 2';
-    fixture.detectChanges();
+    detectChanges(fixture);
     expect(instance.option('testOption')).toBe('Changed 2');
   });
 
@@ -276,7 +278,7 @@ describe('DevExtreme Angular widget', () => {
 
     const testSpy = spyOn(testComponent, 'testMethod');
     testComponent.testOption = 'Changed 2';
-    fixture.detectChanges();
+    detectChanges(fixture);
     expect(instance.option('testOption')).toBe('Changed 2');
     expect(testSpy).toHaveBeenCalledTimes(1);
   });
@@ -394,7 +396,7 @@ describe('DevExtreme Angular widget', () => {
     }
   });
 
-  it('ngZone onStable should not called recursively (T551347)', () => {
+  itWithZone('ngZone onStable should not called recursively (T551347)', () => {
     TestBed.configureTestingModule(
       {
         declarations: [TestContainerComponent, DxTestWidgetComponent],
@@ -418,7 +420,7 @@ describe('DevExtreme Angular widget', () => {
     fixture.autoDetectChanges(false);
   });
 
-  it('should not be failed when two-way binding in markup is used for ininitial option', () => {
+  it('should not be failed when two-way binding in markup is used for ininitial option', async () => {
     TestBed.configureTestingModule(
       {
         declarations: [TestContainerComponent, DxTestWidgetComponent],
@@ -435,8 +437,11 @@ describe('DevExtreme Angular widget', () => {
     });
 
     const fixture = TestBed.createComponent(TestContainerComponent);
+    await fixture.whenStable();
 
     expect(document.getElementById('test').innerText).toBe('test text');
-    fixture.autoDetectChanges(false);
+    if (!isZoneless) {
+      fixture.autoDetectChanges(false);
+    }
   });
 });

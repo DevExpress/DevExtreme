@@ -5,7 +5,7 @@
     [group]="draggingGroupName"
     (onDragStart)="onListDragStart($event)"
   >
-    @for (task of tasks; track task.text) {
+    @for (task of tasks(); track task.text) {
     <dx-draggable
       class="item dx-card"
       [clone]="true"
@@ -23,7 +23,7 @@
 <dx-scheduler
   timeZone="America/Los_Angeles"
   id="scheduler"
-  [dataSource]="appointments"
+  [dataSource]="appointments()"
   [currentDate]="currentDate"
   [startDayHour]="9"
   [height]="600"

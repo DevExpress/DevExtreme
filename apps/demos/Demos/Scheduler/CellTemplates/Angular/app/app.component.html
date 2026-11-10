@@ -1,7 +1,7 @@
 <dx-scheduler
   [dataSource]="dataSource"
   [views]="views"
-  [currentView]="currentView"
+  [currentView]="currentView()"
   [currentDate]="currentDate"
   [firstDayOfWeek]="0"
   [startDayHour]="9"
@@ -20,13 +20,13 @@
   <div
     *dxTemplate="let dataCell of 'dataCellTemplate'"
     [class.disable-date]="isDisableDate | apply : dataCell.startDate"
-    [class.dx-scheduler-date-table-cell-text]="currentView === 'month'"
+    [class.dx-scheduler-date-table-cell-text]="currentView() === 'month'"
     [class.dinner]="
       !(isDisableDate | apply : dataCell.startDate) &&
       (isDinner | apply : dataCell.startDate)
     "
   >
-    {{ currentView === "month" ? (dataCell.startDate | date) : "" }}
+    {{ currentView() === "month" ? (dataCell.startDate | date) : "" }}
   </div>
 
   <div

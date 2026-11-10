@@ -6,9 +6,9 @@
       [animationEnabled]="true"
       [swipeEnabled]="true"
       [dataSource]="dataSource"
-      [tabsPosition]="tabsPosition"
-      [stylingMode]="stylingMode"
-      [iconPosition]="iconPosition"
+      [tabsPosition]="tabsPosition()"
+      [stylingMode]="stylingMode()"
+      [iconPosition]="iconPosition()"
     >
       <div *dxTemplate="let tabPanelItem of 'item'">
         <div class="tabpanel-item">

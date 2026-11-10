@@ -6,9 +6,8 @@
       [showWeekNumbers]="false"
       [disabled]="false"
       [firstDayOfWeek]="0"
-      [zoomLevel]="zoomLevels[0]"
-      (zoomLevelChange)="onZoomLevelChange()"
-      [cellTemplate]="cellTemplate"
+      [(zoomLevel)]="zoomLevel"
+      [cellTemplate]="cellTemplate()"
       weekNumberRule="auto"
     >
       <span *dxTemplate="let cell of 'custom'" [class]="getCellCssClass(cell)">
@@ -22,7 +21,7 @@
       <span>Zoom level</span>
       <dx-select-box
         [dataSource]="zoomLevels"
-        [(value)]="calendar.zoomLevel"
+        [(value)]="zoomLevel"
         [inputAttr]="{ 'aria-label': 'Zoom Level' }"
       >
       </dx-select-box>

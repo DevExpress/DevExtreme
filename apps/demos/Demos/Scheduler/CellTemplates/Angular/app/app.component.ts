@@ -1,11 +1,13 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, Pipe, PipeTransform, provideZoneChangeDetection } from '@angular/core';
+import {
+  Component, enableProdMode, inject, Pipe, signal, type PipeTransform,
+} from '@angular/core';
 import { DatePipe } from '@angular/common';
-import { DxSchedulerComponent, DxSchedulerModule } from 'devextreme-angular';
+import { type DxSchedulerComponent, DxSchedulerModule } from 'devextreme-angular';
 import { DataSource } from 'devextreme-angular/common/data';
 import notify from 'devextreme/ui/notify';
-import { DxSchedulerTypes } from 'devextreme-angular/ui/scheduler';
-import { DxFormComponent } from 'devextreme-angular/ui/form';
+import type { DxSchedulerTypes } from 'devextreme-angular/ui/scheduler';
+import type { DxFormComponent } from 'devextreme-angular/ui/form';
 import { DataService } from './app.service';
 
 @Pipe({ name: 'apply' })
@@ -29,24 +31,28 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  dataSource: DataSource;
+  private readonly dataService = inject(DataService);
 
-  dinnerTime: { from: number, to: number };
+  readonly dataSource = new DataSource({
+    store: this.dataService.getData(),
+  });
 
-  holidays: Date[];
+  private readonly dinnerTime = this.dataService.getDinnerTime();
 
-  currentDate = new Date(2021, 3, 27);
+  private readonly holidays = this.dataService.getHolidays();
 
-  views = ['workWeek', 'month'];
+  readonly currentDate = new Date(2021, 3, 27);
 
-  currentView = this.views[0];
+  readonly views = ['workWeek', 'month'];
 
-  formatHour = (hours: number) => new Date(2021, 0, 1, hours).toLocaleTimeString('en-US', {
+  readonly currentView = signal(this.views[0]);
+
+  private readonly formatHour = (hours: number) => new Date(2021, 0, 1, hours).toLocaleTimeString('en-US', {
     hour: 'numeric',
     minute: '2-digit',
   });
 
-  disabledDatesDescription = () => {
+  private readonly disabledDatesDescription = () => {
     const disabledDates = this.holidays
       .filter((date) => !this.isWeekend(date))
       .map((date) => new Date(date).toLocaleDateString('en-US', {
@@ -65,35 +71,27 @@ export class AppComponent {
     return '';
   };
 
-  disabledTimeDescription = () => {
+  private readonly disabledTimeDescription = () => {
     const from = this.formatHour(this.dinnerTime.from);
     const to = this.formatHour(this.dinnerTime.to);
     return `The time range from ${from} to ${to} is disabled on all days`;
   };
 
-  ariaDescription = () => [this.disabledDatesDescription(), this.disabledTimeDescription()]
+  private readonly ariaDescription = () => [this.disabledDatesDescription(), this.disabledTimeDescription()]
     .filter(Boolean)
     .join('. ');
 
-  constructor(public dataService: DataService) {
-    this.dinnerTime = this.dataService.getDinnerTime();
-    this.holidays = this.dataService.getHolidays();
-    this.dataSource = new DataSource({
-      store: dataService.getData(),
-    });
-  }
-
-  onContentReady = (e: DxSchedulerTypes.ContentReadyEvent) => {
+  readonly onContentReady = (e: DxSchedulerTypes.ContentReadyEvent) => {
     this.setComponentAria(e.component?.$element());
   };
 
-  onOptionChanged = (e: DxSchedulerTypes.OptionChangedEvent) => {
+  readonly onOptionChanged = (e: DxSchedulerTypes.OptionChangedEvent) => {
     if (e.name === 'currentView') {
-      this.currentView = e.value;
+      this.currentView.set(e.value);
     }
   };
 
-  onAppointmentFormOpening = (e: DxSchedulerTypes.AppointmentFormOpeningEvent) => {
+  readonly onAppointmentFormOpening = (e: DxSchedulerTypes.AppointmentFormOpeningEvent) => {
     const startDate = e.appointmentData.startDate as Date;
     if (!this.isValidAppointmentDate(startDate)) {
       e.cancel = true;
@@ -102,7 +100,7 @@ export class AppComponent {
     this.applyDisableDatesToDateEditors(e.form);
   };
 
-  onAppointmentAdding = (e: DxSchedulerTypes.AppointmentAddingEvent) => {
+  readonly onAppointmentAdding = (e: DxSchedulerTypes.AppointmentAddingEvent) => {
     const isValidAppointment = this.isValidAppointment(e.component, e.appointmentData);
     if (!isValidAppointment) {
       e.cancel = true;
@@ -110,7 +108,7 @@ export class AppComponent {
     }
   };
 
-  onAppointmentUpdating = (e: DxSchedulerTypes.AppointmentUpdatingEvent) => {
+  readonly onAppointmentUpdating = (e: DxSchedulerTypes.AppointmentUpdatingEvent) => {
     const isValidAppointment = this.isValidAppointment(e.component, e.newData);
     if (!isValidAppointment) {
       e.cancel = true;
@@ -118,44 +116,44 @@ export class AppComponent {
     }
   };
 
-  notifyDisableDate = () => {
+  private readonly notifyDisableDate = () => {
     notify('Cannot create or move an appointment/event to disabled time/date regions.', 'warning', 1000);
   };
 
-  isHoliday = (date: Date) => {
+  private readonly isHoliday = (date: Date) => {
     const localeDate = date.toLocaleDateString();
     return this.holidays.filter((holiday) => holiday.toLocaleDateString() === localeDate).length > 0;
   };
 
-  isWeekend = (date: Date) => {
+  private readonly isWeekend = (date: Date) => {
     const day = date.getDay();
     return day === 0 || day === 6;
   };
 
-  isDinner = (date: Date) => {
+  readonly isDinner = (date: Date) => {
     const hours = date.getHours();
     return hours >= this.dinnerTime.from && hours < this.dinnerTime.to;
   };
 
-  isDisableDate = (date: Date) => this.isHoliday(date) || this.isWeekend(date);
+  readonly isDisableDate = (date: Date) => this.isHoliday(date) || this.isWeekend(date);
 
-  isDisabledDateCell = (date: Date) => (this.currentView === 'month' ? this.isWeekend(date) : this.isDisableDate(date));
+  readonly isDisabledDateCell = (date: Date) => (this.currentView() === 'month' ? this.isWeekend(date) : this.isDisableDate(date));
 
-  hasCoffeeCupIcon = (date: Date) => {
+  readonly hasCoffeeCupIcon = (date: Date) => {
     const hours = date.getHours();
     const minutes = date.getMinutes();
 
     return hours === this.dinnerTime.from && minutes === 0;
   };
 
-  isValidAppointment = (component: DxSchedulerComponent['instance'], appointmentData: DxSchedulerTypes.Appointment) => {
+  private readonly isValidAppointment = (component: DxSchedulerComponent['instance'], appointmentData: DxSchedulerTypes.Appointment) => {
     const startDate = new Date(appointmentData.startDate);
     const endDate = new Date(appointmentData.endDate);
     const cellDuration = component.option('cellDuration');
     return this.isValidAppointmentInterval(startDate, endDate, cellDuration);
   };
 
-  isValidAppointmentInterval = (startDate: Date, endDate: Date, cellDuration: number) => {
+  private readonly isValidAppointmentInterval = (startDate: Date, endDate: Date, cellDuration: number) => {
     const edgeEndDate = new Date(endDate.getTime() - 1);
 
     if (!this.isValidAppointmentDate(edgeEndDate)) {
@@ -175,9 +173,9 @@ export class AppComponent {
     return true;
   };
 
-  isValidAppointmentDate = (date: Date) => !this.isHoliday(date) && !this.isDinner(date) && !this.isWeekend(date);
+  private readonly isValidAppointmentDate = (date: Date) => !this.isHoliday(date) && !this.isDinner(date) && !this.isWeekend(date);
 
-  applyDisableDatesToDateEditors = (form: DxFormComponent['instance']) => {
+  private readonly applyDisableDatesToDateEditors = (form: DxFormComponent['instance']) => {
     const holidays = this.dataService.getHolidays();
     const startDateEditor = form.getEditor('startDate');
     startDateEditor.option('disabledDates', holidays);
@@ -186,7 +184,7 @@ export class AppComponent {
     endDateEditor.option('disabledDates', holidays);
   };
 
-  setComponentAria(element): void {
+  private setComponentAria(element): void {
     const prevAria = element?.attr('aria-label') || '';
     const description = this.ariaDescription();
     const nextAria = `${prevAria}${description ? ` ${description}` : ''}`;
@@ -194,8 +192,4 @@ export class AppComponent {
   }
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

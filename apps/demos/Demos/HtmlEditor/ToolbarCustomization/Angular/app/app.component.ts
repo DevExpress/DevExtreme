@@ -1,9 +1,9 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import {
-  ChangeDetectorRef, Component, enableProdMode, provideZoneChangeDetection,
+  Component, enableProdMode, inject, signal,
 } from '@angular/core';
 import { DxHtmlEditorModule, DxPopupModule } from 'devextreme-angular';
-import { DxButtonTypes } from 'devextreme-angular/ui/button';
+import type { DxButtonTypes } from 'devextreme-angular/ui/button';
 import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -22,26 +22,17 @@ if (!/localhost/.test(document.location.host)) {
 })
 
 export class AppComponent {
-  editorValue: string;
+  readonly editorValue = signal(inject(Service).getMarkup());
 
-  popupVisible: boolean;
+  readonly popupVisible = signal(false);
 
-  toolbarButtonOptions: DxButtonTypes.Properties = {
+  readonly toolbarButtonOptions: DxButtonTypes.Properties = {
     text: 'Show markup',
     stylingMode: 'text',
     onClick: () => {
-      this.popupVisible = true;
-      this.changeDetectorRef.detectChanges();
+      this.popupVisible.set(true);
     },
   };
-
-  constructor(service: Service, private changeDetectorRef: ChangeDetectorRef) {
-    this.editorValue = service.getMarkup();
-  }
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);
