@@ -974,6 +974,38 @@ export const rowsView = (
     }
   }
 
+  protected _renderCore(change?: DataChange): DeferredObj<unknown> {
+    const deferred = super._renderCore(change);
+    const isWaitingForTemplates = deferred.state() === 'pending';
+
+    return deferred.done(() => {
+      if (isWaitingForTemplates) {
+        this.syncFocusedRow();
+      }
+    });
+  }
+
+  private syncFocusedRow(): void {
+    const focusedRowKey = this.option('focusedRowKey');
+
+    if (!this.option('focusedRowEnabled') || !isDefined(focusedRowKey)) {
+      return;
+    }
+
+    const focusedRowIndex = this._dataController.getRowIndexByKey(focusedRowKey);
+    const rowElements = this._getRowElements(this.getTableElement()).toArray();
+    const focusedRowElements = rowElements
+      .filter((rowElement) => rowElement.classList.contains(CLASSES.rowFocused));
+    const isFocusedRowShown = focusedRowElements.length === 1
+      && focusedRowElements[0] === rowElements[focusedRowIndex];
+
+    if (focusedRowIndex < 0 || isFocusedRowShown) {
+      return;
+    }
+
+    this._focusController.updateFocusedRow({ focusedRowKey, preventScroll: true });
+  }
+
   public updateFocusElementTabIndex(
     $cellElements: dxElementWrapper,
     preventScroll?: boolean,

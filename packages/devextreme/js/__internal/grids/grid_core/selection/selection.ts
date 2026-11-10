@@ -19,6 +19,7 @@ import { isDefined } from '@js/core/utils/type';
 import type { StoreChange } from '@js/data/store';
 import type { DxEvent } from '@js/events';
 import errors from '@js/ui/widget/ui.errors';
+import { getData } from '@ts/core/element_data';
 import supportUtils from '@ts/core/utils/support';
 import type { StoreKey } from '@ts/data/abstract_store';
 import type { StoreLoadOptions } from '@ts/data/data_source/types';
@@ -35,7 +36,7 @@ import type { StateStoringController } from '@ts/grids/grid_core/state_storing/s
 import type {
   InternalGrid, ModuleType, OptionChanged, RowKey,
 } from '@ts/grids/grid_core/types';
-import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
+import { CLASSES as VIEW_CLASSES, ROW_OPTIONS_KEY } from '@ts/grids/grid_core/views/const';
 import type { RowsView } from '@ts/grids/grid_core/views/rows_view';
 import type { ViewRowEvent } from '@ts/grids/grid_core/views/types';
 import { isInfiniteMode, isVirtualPaging } from '@ts/grids/grid_core/virtual_scrolling';
@@ -891,14 +892,7 @@ export const selectionRowsViewExtender = <TBase extends ModuleType<RowsView>>(
             return;
           }
 
-          const { isSelected } = changeItem;
-          const needSelectionClass = Boolean(isSelected) && !isEditRow($row);
-
-          $row
-            .toggleClass(ROW_SELECTION_CLASS, needSelectionClass)
-            // @ts-expect-error dxCheckBox is added to the renderer at runtime
-            .find(`.${SELECT_CHECKBOX_CLASS}`).dxCheckBox('option', 'value', isSelected);
-          this.setAria('selected', String(isSelected), $row);
+          this.updateRowSelection($row, changeItem.isSelected);
         });
       });
 
@@ -906,6 +900,16 @@ export const selectionRowsViewExtender = <TBase extends ModuleType<RowsView>>(
     } else {
       super._update(change);
     }
+  }
+
+  private updateRowSelection($row: dxElementWrapper, isSelected?: boolean): void {
+    const needSelectionClass = Boolean(isSelected) && !isEditRow($row);
+
+    $row
+      .toggleClass(ROW_SELECTION_CLASS, needSelectionClass)
+      // @ts-expect-error dxCheckBox is added to the renderer at runtime
+      .find(`.${SELECT_CHECKBOX_CLASS}`).dxCheckBox('option', 'value', isSelected);
+    this.setAria('selected', String(isSelected), $row);
   }
 
   protected _createTable(columns?: Column[], isAppend?: boolean): dxElementWrapper {
@@ -984,8 +988,51 @@ export const selectionRowsViewExtender = <TBase extends ModuleType<RowsView>>(
 
   protected _renderCore(change?: DataChange): DeferredObj<unknown> {
     const deferred = super._renderCore(change);
-    this._updateCheckboxesClass();
-    return deferred;
+    const isWaitingForTemplates = deferred.state() === 'pending';
+
+    return deferred.done(() => {
+      this._updateCheckboxesClass();
+
+      if (isWaitingForTemplates) {
+        this.syncRowsSelection();
+      }
+    });
+  }
+
+  private syncRowsSelection(): void {
+    const tableElement = this.getTableElement();
+
+    if (!tableElement || this.option(SELECTION_MODE) === 'none') {
+      return;
+    }
+
+    const items = this._dataController.items();
+    const findDataItem = (key: RowKey, rowIndex: number): ProcessedItem | undefined => {
+      const isRowItem = (item?: ProcessedItem): boolean => item?.rowType === 'data'
+        && equalByValue(item.key, key);
+
+      return isRowItem(items[rowIndex]) ? items[rowIndex] : items.find(isRowItem);
+    };
+
+    const outdatedRows = this._getRowElements(tableElement).toArray()
+      .flatMap((rowElement, rowIndex) => {
+        const rowOptions = getData(rowElement, ROW_OPTIONS_KEY);
+        const item = rowOptions?.rowType === 'data'
+          ? findDataItem(rowOptions.key, rowIndex)
+          : undefined;
+        const isOutdated = item !== undefined
+          && rowElement.getAttribute('aria-selected') !== String(item.isSelected);
+
+        return isOutdated ? [{ rowIndex, isSelected: item.isSelected }] : [];
+      });
+
+    each(this.getTableElements(), (_, table) => {
+      const $rows = this._getRowElements($(table));
+
+      outdatedRows.forEach(({ rowIndex, isSelected }) => {
+        this.updateRowSelection($rows.eq(rowIndex), isSelected);
+      });
+    });
   }
 
   private _updateCheckboxesClass(): void {
