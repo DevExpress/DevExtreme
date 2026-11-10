@@ -2868,7 +2868,7 @@ const rowsView = <TBase extends ModuleType<RowsView>>(
     return $row;
   }
 
-  private _getColumnIndexByElement($element: dxElementWrapper): number {
+  private _getColumnIndexByElement($element: dxElementWrapper): number | undefined {
     let $cellElement = $element;
     let $tableElement = $cellElement.closest('table');
     const $tableElements = this.getTableElements();
@@ -2881,7 +2881,7 @@ const rowsView = <TBase extends ModuleType<RowsView>>(
     return this._getColumnIndexByElementCore($cellElement);
   }
 
-  public _getColumnIndexByElementCore($element: dxElementWrapper): number {
+  public _getColumnIndexByElementCore($element: dxElementWrapper): number | undefined {
     const $targetElement = $element.closest(
       `.${VIEW_CLASSES.row}> td:not(.${MASTER_DETAIL_CLASSES.detailCell})`,
     );
@@ -2894,7 +2894,9 @@ const rowsView = <TBase extends ModuleType<RowsView>>(
     const columnIndex = this._getColumnIndexByElement($targetElement);
     const row = this._dataController.items()[e.rowIndex];
     const allowUpdating = this._editingController.allowUpdating({ row }, eventName);
-    const column = this._columnsController.getVisibleColumns()[columnIndex];
+    const column = isDefined(columnIndex)
+      ? this._columnsController.getVisibleColumns()[columnIndex]
+      : undefined;
     const isEditedCell = this._editingController.isEditCell(e.rowIndex, columnIndex);
     const allowEditing = allowUpdating && column && (!!column.allowEditing || isEditedCell);
     const startEditAction = this.option('editing.startEditAction') ?? DEFAULT_START_EDIT_ACTION;
@@ -2909,7 +2911,7 @@ const rowsView = <TBase extends ModuleType<RowsView>>(
         domUtils.resetActiveElement();
       }
 
-      return isShowEditorAlways && allowEditing
+      return isShowEditorAlways && allowEditing && isDefined(columnIndex)
         && this._editingController.editCell(e.rowIndex, columnIndex);
     }
 
@@ -2923,7 +2925,7 @@ const rowsView = <TBase extends ModuleType<RowsView>>(
       this._editingController.closeEditCell(isError, withoutSaveEditData);
     }
 
-    if (allowEditing && eventName === startEditAction) {
+    if (allowEditing && eventName === startEditAction && isDefined(columnIndex)) {
       return this._editingController.editCell(e.rowIndex, columnIndex)
         || this._editingController.isEditRow(e.rowIndex);
     }
