@@ -14,7 +14,7 @@ import { writeFileText, readFileText } from '../../utils';
 const WORKSPACE_ROOT = findWorkspaceRoot();
 
 const INDEX_DEV_CONTENT = `export { setupStateManager, signal } from './dev/index';\n`;
-const INDEX_PROD_CONTENT = `export * from './prod/index';`;
+const INDEX_PROD_CONTENT = `export * from './prod/index.js';`;
 const DEV_FILE_CONTENT = `export const devOnly = () => {};\n`;
 const PROD_FILE_CONTENT = `export const prodOnly = () => {};\n`;
 const TOP_LEVEL_NON_INDEX_CONTENT = `export const topLevelNonIndex = () => {};\n`;
@@ -97,7 +97,7 @@ describe('StateManagerOptimizeExecutor E2E', () => {
     expect(await readFileText(indexPathFor('esm'))).toBe(INDEX_PROD_CONTENT);
 
     const cjsIndexContent = await readFileText(indexPathFor('cjs'));
-    expect(cjsIndexContent).toContain('require("./prod/index")');
+    expect(cjsIndexContent).toContain('require("./prod/index.js")');
   }, 30000);
 
   it('should optimize index.js when state_manager lives at flat root layout (no cjs/esm variant subdir)', async () => {
@@ -129,7 +129,7 @@ describe('StateManagerOptimizeExecutor E2E', () => {
     await runOptimize();
 
     expect(await readFileText(path.join(flatStateManagerDir, 'index.js'))).toBe(INDEX_PROD_CONTENT);
-    expect(await readFileText(indexPathFor('cjs'))).toContain('require("./prod/index")');
+    expect(await readFileText(indexPathFor('cjs'))).toContain('require("./prod/index.js")');
   }, 30000);
 
   it('should throw when no state_manager directories are found in any transpiledDir', async () => {

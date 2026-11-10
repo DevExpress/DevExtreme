@@ -8,7 +8,7 @@ import { removeDirectoryRespectingExclusions } from '../clean/clean.impl';
 import { toPosixPath } from '../../utils/path-resolver';
 import { StateManagerOptimizeExecutorSchema } from './schema';
 
-const ESM_REEXPORT = "export * from './prod/index';";
+const ESM_REEXPORT = "export * from './prod/index.js';";
 const STATE_MANAGER_INDEX_GLOB = '**/__internal/core/state_manager/index.js';
 const ERROR_BABEL_NO_CODE = 'Babel returned no code for CJS state_manager index.js';
 const ERROR_NO_STATE_MANAGER_FOUND =

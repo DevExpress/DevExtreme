@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/schema",
+  "version": 2,
+  "title": "Generate Exports Map Executor Schema",
+  "description": "Generates the package.json \"exports\" map of an assembled npm package from its per-directory package.json stubs and type declarations.",
+  "type": "object",
+  "properties": {
+    "packageDir": {
+      "type": "string",
+      "description": "Assembled npm package directory (root package.json plus per-directory stubs with main/module/typings)."
+    },
+    "ignore": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Directories (relative to packageDir) to skip when looking for stubs and type-only modules.",
+      "default": []
+    },
+    "extraExports": {
+      "type": "object",
+      "description": "Subpath entries appended to the generated map as-is, such as asset folders or wildcard patterns.",
+      "default": {}
+    }
+  },
+  "required": ["packageDir"]
+}

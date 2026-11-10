@@ -1,6 +1,16 @@
 import * as fs from 'fs';
 import * as path from 'path';
 
+const isFile = (filePath: string): boolean =>
+  fs.existsSync(filePath) && fs.statSync(filePath).isFile();
+
+// Specifiers may be fully specified ('./button.js') or extensionless ('./button', './grids')
+function resolveImportPath(target: string): string {
+  const candidates = [target, `${target}.js`, path.join(target, 'index.js')];
+
+  return candidates.find(isFile) ?? `${target}.js`;
+}
+
 export class SideEffectFinder {
   private checkedPaths: Map<string, Set<string>> = new Map();
   private recursiveHandlingPaths: Set<string> = new Set();
@@ -50,12 +60,8 @@ export class SideEffectFinder {
         const match = str.match(relativePathRegExp);
         if (!match) return;
 
-        let importPath = match[0].replace(/(^['"]|['"]$)/g, '');
-        importPath = path.join(path.dirname(modulePath), importPath) + '.js';
-
-        if (!fs.existsSync(importPath)) {
-          importPath = importPath.replace(/\.js$/, '/index.js');
-        }
+        const specifier = match[0].replace(/(^['"]|['"]$)/g, '');
+        const importPath = resolveImportPath(path.join(path.dirname(modulePath), specifier));
 
         if (isSideEffectImportRegExp.test(str)) {
           foundPaths.add(importPath);
