@@ -519,14 +519,14 @@ class VirtualScrollController<TItem = unknown> {
     this._dataLoader.loadIfNeed();
   }
 
-  public handleDataChanged(changeHandler: LoaderChangedCallback<TItem>): void;
-  public handleDataChanged(changeHandler: ChangedCallback<TItem>, e?: ChangedEvent): void;
+  public handleDataChanged(changedCallback: LoaderChangedCallback<TItem>): void;
+  public handleDataChanged(changedCallback: ChangedCallback<TItem>, e?: ChangedEvent): void;
   public handleDataChanged(
-    changeHandler: ChangedCallback<TItem> | LoaderChangedCallback<TItem>,
+    changedCallback: ChangedCallback<TItem> | LoaderChangedCallback<TItem>,
     e?: ChangedEvent,
   ): void {
     // @ts-expect-error only the ChangedCallback overload passes e, which the loader passes on
-    this._dataLoader.handleDataChanged(changeHandler, e);
+    this._dataLoader.handleDataChanged(changedCallback, e);
   }
 
   public getDelayDeferred(): DeferredObj<unknown> | undefined {
