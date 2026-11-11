@@ -1,6 +1,9 @@
 import type { dxElementWrapper } from '@js/core/renderer';
 import type { DeferredObj } from '@js/core/utils/deferred';
+import type { ProcessedItem } from '@ts/grids/grid_core/data_controller/types';
 import type DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/data_source_adapter';
+import type { RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
+import type { ResizingController } from '@ts/grids/grid_core/grid_view/grid_view';
 import type { RowsView } from '@ts/grids/grid_core/views/rows_view';
 import type { ViewDataChange } from '@ts/grids/grid_core/views/types';
 import type {
@@ -17,9 +20,22 @@ export interface ChangedLoadParams {
   loadPageCount: number;
 }
 
+export interface LoadPageParams extends ChangedLoadParams {
+  skipForCurrentPage: number;
+}
+
+export interface LoadViewportOptions {
+  checkLoadedParamsOnly?: boolean;
+  checkLoading?: boolean;
+  viewportIsNotFilled?: boolean;
+}
+
 export interface VirtualScrollingResizingControllerExtension {
   hasResizeTimeout: () => boolean;
 }
+
+export type VirtualScrollingResizingController = ResizingController
+& VirtualScrollingResizingControllerExtension;
 
 export type ContentOffsetType = 'begin' | 'end';
 
@@ -28,12 +44,15 @@ export interface ViewportParams {
   take: number;
 }
 
-export interface VirtualScrollDataOptions extends VirtualDataLoaderDataOptions {
+export interface VirtualScrollDataOptions<TItem = unknown>
+  extends VirtualDataLoaderDataOptions<TItem> {
   changingDuration: () => number;
   loadedOffset?: () => number;
-  loadedItemCount?: () => number;
+  loadedItemCount?: () => number | undefined;
   renderedItemsRange?: () => ViewportParams | undefined;
 }
+
+export type RowsScrollDataOptions = Required<VirtualScrollDataOptions<ProcessedItem>>;
 
 export type ExternalScrollable = Scrollable | dxElementWrapper;
 
@@ -43,7 +62,7 @@ export interface ExternalScrollers {
 }
 
 export interface VirtualScrollingDataSourceAdapterExtension {
-  _virtualScrollController: VirtualScrollController;
+  _virtualScrollController: VirtualScrollController<RawItemData>;
   _renderTime: number;
   _isLoading: boolean;
   loadPageCount: {
@@ -53,7 +72,6 @@ export interface VirtualScrollingDataSourceAdapterExtension {
   beginPageIndex: () => number;
   virtualItemsCount: () => VirtualItemsCount | undefined;
   getContentOffset: (type?: ContentOffsetType) => number;
-  getVirtualContentSize: () => number;
   setContentItemSizes: (sizes: number[]) => void;
   setViewportPosition: (position: number) => DeferredObj<unknown>;
   getViewportItemIndex: () => number;
@@ -71,8 +89,25 @@ export type VirtualScrollingDataSourceAdapter = DataSourceAdapter
 
 export type VirtualScrollingDataChange = ViewDataChange & { removeCount?: number };
 
+export interface VirtualScrollingDataControllerExtension {
+  virtualItemsCount: () => VirtualItemsCount | undefined;
+  // TODO public controller
+  _rowsScrollController?: VirtualScrollController<ProcessedItem> | null;
+  viewportSize: (size?: number) => number | undefined;
+  viewportHeight: (height: number, scrollTop?: number) => void;
+  viewportItemSize: (size?: number) => number | undefined;
+  setViewportPosition: (position: number) => void;
+  setContentItemSizes: (sizes: number[]) => void;
+  getItemSize: () => number | undefined;
+  getItemSizes: () => ItemSizes | undefined;
+  getContentOffset: (type?: ContentOffsetType) => number | undefined;
+  updateViewport: () => void;
+  loadIfNeed: () => void;
+}
+
 export interface VirtualScrollingRowsViewExtension {
-  _updateContentPosition: (isRender?: boolean) => void;
+  // eslint-disable-next-line @typescript-eslint/method-signature-style -- overridden by methods
+  _updateContentPosition(isRender?: boolean): void;
 }
 
 export type VirtualScrollingRowsView = RowsView & VirtualScrollingRowsViewExtension;

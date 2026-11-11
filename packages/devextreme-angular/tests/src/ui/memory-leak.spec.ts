@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { DxButtonModule, DxSliderModule } from 'devextreme-angular';
+import { detectChanges } from '../helpers/change-detection';
 
 @Component({
   standalone: false,
@@ -52,14 +53,14 @@ describe('Memory leak tests', () => {
 
     for (let i = 0; i < 100; i++) {
       component.isVisible = !component.isVisible;
-      fixture.detectChanges();
+      detectChanges(fixture);
     }
 
     const memoryBefore = await (performance as any).measureUserAgentSpecificMemory();
 
     for (let i = 0; i < 100; i++) {
       component.isVisible = !component.isVisible;
-      fixture.detectChanges();
+      detectChanges(fixture);
     }
 
     await forceGC();
@@ -84,14 +85,14 @@ describe('Memory leak tests', () => {
 
     for (let i = 0; i < 100; i++) {
       component.isVisible = !component.isVisible;
-      fixture.detectChanges();
+      detectChanges(fixture);
     }
 
     const memoryBefore = await (performance as any).measureUserAgentSpecificMemory();
 
     for (let i = 0; i < 100; i++) {
       component.isVisible = !component.isVisible;
-      fixture.detectChanges();
+      detectChanges(fixture);
     }
 
     await forceGC();

@@ -1149,6 +1149,50 @@ QUnit.module('placeholder and source', moduleConfig, () => {
         const $placeholderElement = $('.dx-sortable-placeholder');
         assert.notOk($placeholderElement.is(':visible'), 'placeholder is hidden');
     });
+
+    QUnit.test('Placeholder width should be reset after dropping inside an item clipped by the scroll container (itemOrientation is "horizontal")', function(assert) {
+        // arrange
+        const $scroll = $('<div>')
+            .css({ width: 300, overflowX: 'auto', overflowY: 'hidden', whiteSpace: 'nowrap' })
+            .appendTo('#qunit-fixture');
+        this.$element = $('<div>').css({ width: 480, height: 50 }).appendTo($scroll);
+        for(let i = 1; i <= 4; i++) {
+            $('<div>')
+                .css({ display: 'inline-block', width: 120, height: 50 })
+                .text(`item${i}`)
+                .appendTo(this.$element);
+        }
+
+        this.createSortable({
+            itemOrientation: 'horizontal',
+            dropFeedbackMode: 'indicate',
+            allowDropInsideItem: true,
+            autoScroll: false
+        });
+
+        const $items = this.$element.children();
+        const itemOffset = $items.eq(0).offset();
+        const clippedItemLeft = $items.eq(2).offset().left;
+        const pointer = pointerMock($items.eq(0)).start().down(itemOffset.left + 60, itemOffset.top + 25);
+
+        // act
+        pointer.move(clippedItemLeft + 40 - (itemOffset.left + 60), 0);
+
+        // assert
+        let $placeholder = $(PLACEHOLDER_SELECTOR);
+        assert.ok($placeholder.hasClass('dx-sortable-placeholder-inside'), 'placeholder is inside the clipped item');
+        assert.strictEqual($placeholder.get(0).style.width, '60px', 'placeholder width is the visible part of the clipped item');
+
+        // act
+        pointer.move(-35, 0);
+
+        // assert
+        $placeholder = $(PLACEHOLDER_SELECTOR);
+        assert.notOk($placeholder.hasClass('dx-sortable-placeholder-inside'), 'placeholder is before the clipped item');
+        assert.strictEqual($placeholder.get(0).style.width, '', 'placeholder width is reset');
+
+        pointer.up();
+    });
 });
 
 QUnit.module('Events', crossComponentModuleConfig, () => {

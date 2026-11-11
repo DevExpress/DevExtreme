@@ -23,6 +23,7 @@ import { Guid } from '@ts/core/guid';
 import messageLocalization from '@ts/core/localization/message';
 import { FunctionTemplate } from '@ts/core/templates/function_template';
 import { ensureDefined } from '@ts/core/utils/common';
+import { isEmpty } from '@ts/core/utils/string';
 import { isDefined, isObject, isPlainObject } from '@ts/core/utils/type';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { WidgetProperties } from '@ts/core/widget/widget';
@@ -603,9 +604,10 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
       haspopup: 'listbox',
     };
     const firstButtonAria: AriaAttributes = {};
+    const { text, hint } = this.option();
 
-    if (!this.option('text')) {
-      firstButtonAria.label = 'dropdownbutton';
+    if (!text) {
+      firstButtonAria.label = isEmpty(hint) ? 'dropdownbutton' : hint;
     }
 
     this._getButtons().each((index, $button) => {
@@ -896,6 +898,12 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
       case 'template':
         this._renderButtonGroup();
         break;
+      case 'hint': {
+        super._optionChanged(args);
+        const { opened } = this.option();
+        this._updateAriaAttributes(opened ?? false);
+        break;
+      }
       case '_cached_buttonGroupOptions':
       case '_cached_dropDownOptions':
         break;

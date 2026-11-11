@@ -7,6 +7,8 @@
 /* eslint-disable prefer-rest-params */
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
+import { getData } from '@ts/core/element_data';
+import { EDIT_FORM_ITEM_DATA_KEY } from '@ts/grids/grid_core/editing/const';
 import type { ModuleType } from '@ts/grids/grid_core/types';
 import type { RowsView } from '@ts/grids/grid_core/views/rows_view';
 import { FIELD_ITEM_CONTENT_CLASS } from '@ts/ui/form/constants';
@@ -64,7 +66,9 @@ export const adaptivityRowsViewExtender = (
   private _getColumnIndexByElementCore($element) {
     const $itemContent = $element.closest(`.${FIELD_ITEM_CONTENT_CLASS}`);
     if ($itemContent.length && $itemContent.closest(this.component.$element()).length) {
-      const formItem = $itemContent.length ? $itemContent.first().data('dx-form-item') : null;
+      const formItem = $itemContent.length
+        ? getData($itemContent.first(), EDIT_FORM_ITEM_DATA_KEY)
+        : null;
       return formItem?.column && this._columnsController.getVisibleIndex(formItem.column.index);
     }
     // @ts-expect-error
@@ -102,7 +106,10 @@ export const adaptivityRowsViewExtender = (
   public getContextMenuItems(options) {
     if (options.row?.rowType === 'detailAdaptive') {
       const view = this._columnHeadersView;
-      const formItem = $(options.targetElement).closest('.dx-field-item-label').next().data('dx-form-item');
+      const formItem = getData(
+        $(options.targetElement).closest('.dx-field-item-label').next(),
+        EDIT_FORM_ITEM_DATA_KEY,
+      );
       options.column = formItem ? formItem.column : options.column;
       return view.getContextMenuItems?.(options);
     }

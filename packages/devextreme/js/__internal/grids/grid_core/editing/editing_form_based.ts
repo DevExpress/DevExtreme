@@ -1,5 +1,4 @@
 /* eslint-disable max-classes-per-file */
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import { removeEvent } from '@js/common/core/events/remove';
 import devices from '@js/core/devices';
 import type { DxElement } from '@js/core/element';
@@ -17,7 +16,9 @@ import type { SimpleItemTemplateData } from '@js/ui/form';
 import Form from '@js/ui/form';
 import Popup from '@js/ui/popup/ui.popup';
 import Scrollable from '@js/ui/scroll_view/ui.scrollable';
+import { getData } from '@ts/core/element_data';
 import { WIDGET_CLASS } from '@ts/core/widget/widget';
+import eventsEngine from '@ts/events/core/events_engine';
 import type { Column, ColumnTemplateSource } from '@ts/grids/grid_core/columns_controller/types';
 import type { GeneratedItem, ProcessedItem } from '@ts/grids/grid_core/data_controller/types';
 import type { RowsView } from '@ts/grids/grid_core/views/rows_view';
@@ -31,6 +32,7 @@ import gridCoreUtils from '../utils';
 import {
   CLASSES,
   DATA_CHANGE_TYPE,
+  EDIT_FORM_ITEM_DATA_KEY,
   EDIT_MODE,
   EDITING_EDITROWKEY_OPTION_NAME,
   EDITING_FORM_OPTION_NAME,
@@ -212,7 +214,6 @@ const editingControllerExtender = (
           .find(FOCUSABLE_ELEMENT_SELECTOR)
           .not(`.${CLASSES.focusableElement}`)
           .first();
-        // @ts-expect-error eventsEngine.trigger is not fully typed
         eventsEngine.trigger($focusableElement, 'focus');
 
         if (repaintForm) {
@@ -329,7 +330,6 @@ const editingControllerExtender = (
     const $container = $(container);
     const row = detailCellOptions?.row;
 
-    // @ts-expect-error createColumn initializes calculateCellValue
     const value = item.column.calculateCellValue(row?.data);
     const displayValue = gridCoreUtils.getDisplayValue(item.column, value, row?.data, row?.rowType);
     const text = !item.column.command ? gridCoreUtils.formatValue(displayValue, item.column) : '';
@@ -634,7 +634,10 @@ const rowsView = (
     column: Column | undefined,
   ): number {
     return $cells?.toArray().findIndex((cellElement) => {
-      const item: EditFormItem | undefined = $(cellElement).find(`.${FIELD_ITEM_CONTENT_CLASS}`).data('dx-form-item');
+      const item = getData(
+        $(cellElement).find(`.${FIELD_ITEM_CONTENT_CLASS}`),
+        EDIT_FORM_ITEM_DATA_KEY,
+      );
 
       return Boolean(item?.column && column && item.column.index === column.index);
     }) ?? -1;

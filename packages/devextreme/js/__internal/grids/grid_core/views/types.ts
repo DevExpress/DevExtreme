@@ -4,10 +4,9 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import type { DxEvent } from '@js/events';
 import type { Item as ContextMenuItem, ItemClickEvent } from '@js/ui/context_menu';
-import type { Properties as DataGridProperties } from '@js/ui/data_grid';
 import type { Properties as LoadPanelProperties } from '@js/ui/load_panel';
-import type { dxScrollableOptions, ScrollEventInfo } from '@js/ui/scroll_view/ui.scrollable';
 import type dxScrollable from '@js/ui/scroll_view/ui.scrollable';
+import type { dxScrollableOptions, ScrollEventInfo } from '@js/ui/scroll_view/ui.scrollable';
 import type {
   Column, ColumnsChanges, ColumnTemplateSource, TemplateModel,
 } from '@ts/grids/grid_core/columns_controller/types';
@@ -77,7 +76,9 @@ export type ViewDataChange = DataChange
   & Partial<Pick<UpdateChange, 'columnIndices' | 'changeTypes'>>;
 
 /** @architectureLeak data_grid: group cells render this template, and the cell hint skips them */
-export type HintColumn = Column & { groupCellTemplate?: ColumnTemplateSource<ViewCellOptions> };
+export type WithGroupCellTemplate<T> = T & {
+  groupCellTemplate?: ColumnTemplateSource<ViewCellOptions>;
+};
 
 export interface ViewRowCell extends Cell {
   columnIndex?: number;
@@ -101,6 +102,8 @@ export interface ViewRow {
   isExpanded?: boolean;
   /** @architectureLeak editing: the cell hint skips rows that are being edited */
   isEditing?: boolean;
+  /** @architectureLeak editing, validating: validation skips the empty cells of a new row */
+  isNewRow?: boolean;
   /** @architectureLeak tree_list: core sets aria-expanded for rows of a tree node */
   node?: { hasChildren?: boolean };
   watch?: RowWatch;
@@ -118,7 +121,7 @@ export interface WatchableOptions {
 }
 
 export interface ViewCellOptions extends Pick<ViewRow, 'rowType' | 'rowIndex' | 'key' | 'data' | 'values'> {
-  column: Column;
+  column: WithGroupCellTemplate<Column>;
   columnIndex: number;
   isAltRow?: boolean;
   columns?: Column[];
@@ -130,7 +133,9 @@ export interface ViewCellOptions extends Pick<ViewRow, 'rowType' | 'rowIndex' | 
   /** @architectureLeak data_grid/summary: core renders summary items of group and footer cells */
   summaryItems?: SummaryTextItem[];
   resized?: Column['resizedCallbacks'];
+  /** @architectureLeak data_grid/grouping: core's default group template shows it */
   groupContinuesMessage?: string | false;
+  /** @architectureLeak data_grid/grouping: core's default group template shows it */
   groupContinuedMessage?: string | false;
   /** @architectureLeak editing: the cell hint skips cells that are being edited */
   isEditing?: boolean;
@@ -150,7 +155,7 @@ export interface CellEventOptions extends Partial<ViewCellOptions> {
 }
 
 export interface RowPreparedOptions extends ViewRow {
-  columns?: Column[];
+  columns: Column[];
   rowElement?: DxElement<Element>;
 }
 
@@ -206,17 +211,17 @@ export interface FocusStateParams {
   pageSizeChanged?: boolean;
 }
 
-/** @architectureLeak data_grid: a group split across pages marks its row data as continued */
-export interface GroupContinuationData {
-  isContinuation?: boolean;
-  isContinuationOnNextPage?: boolean;
-}
-
-/** @architectureLeak data_grid: group cells show the grouping continuation texts */
-export type RowsViewOptions = InternalGridOptions & Pick<DataGridProperties, 'grouping'>;
-
 /** @architectureLeak data_grid/summary: core extenders adjust the group summary cells */
 export interface SummaryRowsViewExtension {
+  // eslint-disable-next-line @typescript-eslint/method-signature-style -- overridden by methods
+  renderGroupSummaryCells($row: dxElementWrapper, options: RowRenderOptions): void;
+
+  // eslint-disable-next-line @typescript-eslint/method-signature-style -- overridden by methods
+  hasAlignByColumnSummaryItems(columnIndex: number, options: RowRenderOptions): boolean;
+
+  // eslint-disable-next-line @typescript-eslint/method-signature-style -- DataGrid narrows options
+  getAlignByColumnCellCount(groupCellColSpan: number, options: RowRenderOptions): number;
+
   // eslint-disable-next-line @typescript-eslint/method-signature-style -- overridden by methods
   renderGroupSummaryCellsCore(
     $groupCell: dxElementWrapper,
@@ -224,6 +229,9 @@ export interface SummaryRowsViewExtension {
     groupCellColSpan: number,
     alignByColumnCellCount: number,
   ): void;
+
+  // eslint-disable-next-line @typescript-eslint/method-signature-style -- overridden by methods
+  getSummaryCellIndex(columnIndex: number, columns: Column[]): number;
 }
 
 // the grid passes loadPanel options to the LoadPanel widget, so its animation applies too

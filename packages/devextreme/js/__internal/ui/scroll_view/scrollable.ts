@@ -1,5 +1,4 @@
 import type { ScrollDirection } from '@js/common';
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import scrollEvents from '@js/common/core/events/gesture/emitter.gesture.scroll';
 import { addNamespace } from '@js/common/core/events/utils';
 import registerComponent from '@js/core/component_registrator';
@@ -23,6 +22,7 @@ import supportUtils from '@ts/core/utils/support';
 import type { DOMComponentProperties } from '@ts/core/widget/dom_component';
 import DOMComponent from '@ts/core/widget/dom_component';
 import type { OptionChanged } from '@ts/core/widget/types';
+import eventsEngine from '@ts/events/core/events_engine';
 import {
   SCROLLABLE_CLASS,
   SCROLLABLE_CONTAINER_CLASS,
@@ -231,6 +231,7 @@ class Scrollable<
       this._$wrapper,
       addNamespace(scrollEvents.init, SCROLLABLE),
       initEventData,
+      // @ts-expect-error the handler is typed with the scroll action event, not the DOM event
       this._initHandler.bind(this),
     );
     eventsEngine.on(
@@ -260,6 +261,7 @@ class Scrollable<
     );
 
     eventsEngine.off(this._$container, `.${SCROLLABLE}`);
+    // @ts-expect-error the handler is typed with the scroll action event, not the DOM event
     eventsEngine.on(this._$container, addNamespace('scroll', SCROLLABLE), strategy.handleScroll.bind(strategy));
   }
 

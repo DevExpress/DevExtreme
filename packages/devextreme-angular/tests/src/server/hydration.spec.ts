@@ -12,6 +12,7 @@ import infernoRenderer from 'devextreme/core/inferno_renderer';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DevExtremeModule } from 'devextreme-angular';
 import { componentNames as componentNamesAll } from './component-names';
+import { provideChangeDetection } from '../helpers/zone-mode';
 
 const componentNames = componentNamesAll.filter((n) => ['toast', 'action-sheet'].includes(n));
 
@@ -31,7 +32,7 @@ class AppComponent {}
   declarations: [AppComponent],
   imports: [BrowserModule, DevExtremeModule],
   bootstrap: [AppComponent],
-  providers: [provideClientHydration()],
+  providers: [provideClientHydration(), provideChangeDetection()],
 })
 class AppBrowserModule {}
 
@@ -41,6 +42,7 @@ class AppBrowserModule {}
   bootstrap: [AppComponent],
   providers: [
     provideClientHydration(),
+    provideChangeDetection(),
     { provide: PLATFORM_ID, useValue: 'server' },
     importProvidersFrom(DxServerModule),
   ],

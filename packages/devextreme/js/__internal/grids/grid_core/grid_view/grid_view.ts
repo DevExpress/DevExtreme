@@ -67,7 +67,7 @@ export class ResizingController extends modules.ViewController {
 
   public _columnsController!: ColumnsController;
 
-  private _footerView!: FooterView;
+  protected _footerView!: FooterView;
 
   private _gridView!: GridView;
 
@@ -115,7 +115,6 @@ export class ResizingController extends modules.ViewController {
       const refreshSizesHandler = (change: DataChange): void => {
         let resizeDeferred: DeferredObj<unknown> = Deferred<null>().resolve(null);
         const changeType = change?.changeType;
-        // @ts-expect-error e.isDelayed is set for virtual scrolling with scrolling.legacyMode
         const isDelayed = change?.isDelayed;
         const needFireContentReady = changeType
           && changeType !== 'updateSelection'
@@ -146,7 +145,6 @@ export class ResizingController extends modules.ViewController {
 
   private _refreshSizes(e: ViewDataChange): DeferredObj<unknown> {
     const changeType = e?.changeType;
-    // @ts-expect-error e.isDelayed is set for virtual scrolling with scrolling.legacyMode
     const isDelayed = e?.isDelayed;
 
     if (!e || (changeType !== undefined && ['refresh', 'prepend', 'append'].includes(changeType))) {

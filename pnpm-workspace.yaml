@@ -21,12 +21,14 @@ minimumReleaseAgeExclude:
   - "devexpress-diagram"
   - "devexpress-gantt"
   - "@devexpress/utils"
+  - "eslint-config-devextreme@2.0.2"
+  - "devextreme-exceljs-fork@5.0.0"
 
 overrides:
   "js-yaml@<4.3.2": "^4.3.2"
   "rollup@<4.59.0": "^4.59.0"
   qs: ">=6.16.1"
-  "minimatch@>=9.0.0 < 9.0.7": 9.0.9
+  "minimatch@>=7.0.0 <11.0.1": file:./tools/minimatch-v7-v10-patch
   "micromatch@<4.0.8": ^4.0.8
   "esbuild@<0.28.1": ^0.28.1
   "tmp@<0.2.7": "^0.2.7"
@@ -80,12 +82,11 @@ catalog:
   inferno-server: ^8.2.3
   devexpress-diagram: 2.2.32
   devexpress-gantt: 4.1.72
-  devextreme-exceljs-fork: 4.4.13
+  devextreme-exceljs-fork: 5.0.0
   devextreme-quill: 1.8.0
-  "@eslint/js": 9.39.5
-  eslint: 9.39.5
-  eslint-config-airbnb-typescript: 18.0.0
-  eslint-config-devextreme: 1.1.13
+  "@eslint/js": 10.0.1
+  eslint: 10.14.0
+  eslint-config-devextreme: 2.0.2
   eslint-plugin-i18n: 2.4.0
   eslint-plugin-import: 2.32.0
   eslint-plugin-jsx-a11y: 6.10.2
@@ -100,12 +101,10 @@ catalog:
   testcafe: 3.7.5
   zod: 4.6.7
   "@playwright/test": 1.62.1
-  "@eslint-stylistic/metadata": ^2.13.0
-  "@eslint/eslintrc": 3.3.7
   "@stylistic/eslint-plugin": 5.10.0
   "@types/jquery": 4.0.1
-  "@typescript-eslint/eslint-plugin": 8.52.0
-  "@typescript-eslint/parser": 8.52.0
+  "@typescript-eslint/eslint-plugin": 8.58.2
+  "@typescript-eslint/parser": 8.58.2
 
 catalogs:
   angular:

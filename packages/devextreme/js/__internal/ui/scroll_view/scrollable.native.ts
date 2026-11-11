@@ -1,5 +1,4 @@
 import type { Orientation } from '@js/common';
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import { isDxMouseWheelEvent } from '@js/common/core/events/utils/index';
 import devices from '@js/core/devices';
 import type { dxElementWrapper } from '@js/core/renderer';
@@ -8,6 +7,7 @@ import { each } from '@js/core/utils/iterator';
 import { getHeight, getWidth } from '@js/core/utils/size';
 import type { ScrollEvent } from '@js/ui/scroll_view';
 import type { ActionConfig } from '@ts/core/widget/component';
+import eventsEngine from '@ts/events/core/events_engine';
 import type Scrollable from '@ts/ui/scroll_view/scrollable';
 import type { ScrollableProperties } from '@ts/ui/scroll_view/scrollable';
 import Scrollbar from '@ts/ui/scroll_view/scrollbar';

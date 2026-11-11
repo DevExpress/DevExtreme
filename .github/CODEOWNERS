@@ -152,6 +152,8 @@
 /packages/testcafe-models/scheduler/**                                @DevExpress/devextreme-scheduler
 /e2e/testcafe-devextreme/tests/scheduler/**                           @DevExpress/devextreme-scheduler
 /e2e/testcafe-devextreme/tests/accessibility/scheduler/**             @DevExpress/devextreme-scheduler
+/e2e/playwright/models/scheduler/**                                   @DevExpress/devextreme-scheduler
+/e2e/playwright/tests/scheduler/**                                    @DevExpress/devextreme-scheduler
 
 /packages/devextreme-scss/scss/widgets/*/scheduler/**        @DevExpress/devextreme-scheduler
 /packages/devextreme-scss/scss/widgets/*/recurrenceEditor/** @DevExpress/devextreme-scheduler

@@ -16,6 +16,7 @@ import {
 } from 'devextreme-angular';
 
 import DxDataGrid from 'devextreme/ui/data_grid';
+import { detectChanges } from '../helpers/change-detection';
 
 @Component({
   standalone: false,
@@ -142,7 +143,7 @@ describe('DxDataGrid', () => {
     const testComponent = fixture.componentInstance;
 
     testComponent.dataSourceWithUndefined[0].obj.field = true;
-    fixture.detectChanges();
+    detectChanges(fixture);
 
     const cells = fixture.nativeElement.querySelectorAll('.dx-data-row td');
     const firstCellContent = cells[0].innerText;
@@ -242,7 +243,7 @@ describe('DxDataGrid', () => {
     expect(instance?.option('columnChooser')?.enabled).toBe(true);
 
     testComponent.showComponent = false;
-    fixture.detectChanges();
+    detectChanges(fixture);
     expect(instance?.option('columnChooser')?.enabled).toBe(false);
     jasmine.clock().uninstall();
   });
@@ -271,7 +272,7 @@ describe('DxDataGrid', () => {
     jasmine.clock().tick(101);
     const testComponent = fixture.componentInstance;
     testComponent.showComponent = false;
-    fixture.detectChanges();
+    detectChanges(fixture);
     expect(testComponent.selectionCount).toBe(0);
     jasmine.clock().uninstall();
   });
@@ -395,7 +396,7 @@ describe('DxDataGrid', () => {
 
     const component = fixture.componentInstance;
     component.toggleData();
-    fixture.detectChanges();
+    detectChanges(fixture);
 
     jasmine.clock().tick(101);
     expect(fixture.nativeElement.querySelector('.templBClass')).toBeTruthy();

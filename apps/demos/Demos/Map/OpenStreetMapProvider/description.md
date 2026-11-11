@@ -1,4 +1,4 @@
-The DevExtreme [Map](/Documentation/Guide/UI_Components/Map/Overview/) supports the [OpenStreetMap](https://www.openstreetmap.org/) provider (OSM). This [provider](/Documentation/ApiReference/UI_Components/dxMap/Configuration/#provider) allows you to connect the Map to OSM-based tile, geocoding, and routing services. The provider supports core Map features such as markers, routes, and tooltips.
+DevExtreme [Map](/Documentation/Guide/UI_Components/Map/Overview/) supports the [OpenStreetMap](https://www.openstreetmap.org/) provider (OSM). This [provider](/Documentation/ApiReference/UI_Components/dxMap/Configuration/#provider) allows you to connect the Map to OSM-based tile, geocoding, and routing services. The provider supports core Map features including markers, routes, and tooltips.
 
 This demo uses [Stadia Maps](https://stadiamaps.com/) services to display map tiles and calculate a route between four markers.
 
@@ -6,8 +6,8 @@ This demo uses [Stadia Maps](https://stadiamaps.com/) services to display map ti
 
 [note]
 
-- Map tiles and routes in this demo are provided by [Stadia Maps](https://stadiamaps.com/) under Developer Express Inc.'s own subscription and are used for demonstration purposes only. The product does not include map tiles, map data, or tile and routing service licenses.
-- Our Stadia Maps subscription works only on our website. Configure your own mapping services when you copy this demo.
+- Map tiles and routes in this demo are provided by [Stadia Maps](https://stadiamaps.com/) under our own subscription and are used for demonstration purposes only. The product does not include map tiles, map data, or tile and routing service licenses.
+- Our Stadia Maps subscription ONLY works on our website. Configure your own mapping services when you copy this demo.
 
 [/note]
 

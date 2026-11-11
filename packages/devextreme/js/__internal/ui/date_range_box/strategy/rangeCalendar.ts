@@ -1,16 +1,16 @@
 import type { DateLike } from '@js/common';
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import { extend } from '@js/core/utils/extend';
 import { isFunction } from '@js/core/utils/type';
 import type { DxEvent } from '@js/events';
 import type { ValueChangedEvent } from '@js/ui/calendar';
+import eventsEngine from '@ts/events/core/events_engine';
 import type Calendar from '@ts/ui/calendar/calendar';
 import CalendarStrategy from '@ts/ui/date_box/date_box.strategy.calendar';
 import { getDeserializedDate, isSameDateArrays, isSameDates } from '@ts/ui/date_range_box/date_range.utils';
 import type DateRangeBox from '@ts/ui/date_range_box/date_range_box';
 import type MultiselectDateBox from '@ts/ui/date_range_box/multiselect_date_box';
-import type { PopupProperties } from '@ts/ui/popup/popup';
 import type Popup from '@ts/ui/popup/popup';
+import type { PopupProperties } from '@ts/ui/popup/popup';
 
 interface RangeValueChangedEvent extends Omit<ValueChangedEvent, 'value' | 'previousValue'> {
   value: (DateLike | undefined)[];
@@ -112,7 +112,6 @@ class RangeCalendarStrategy extends CalendarStrategy<
           : dateRangeBox.getStartDateBox()._getFirstPopupElement();
 
         if ($focusableElement) {
-          // @ts-expect-error the trigger method is not declared on EventsEngineType
           eventsEngine.trigger($focusableElement, 'focus');
           // @ts-expect-error the select method is not declared on dxElementWrapper
           $focusableElement.select();
@@ -246,7 +245,6 @@ class RangeCalendarStrategy extends CalendarStrategy<
       : this.getDateRangeBox().getStartDateBox();
 
     targetDateBox.focus();
-    // @ts-expect-error the trigger method should support HTMLElement
     eventsEngine.trigger(targetDateBox.field(), 'dxclick');
   }
 

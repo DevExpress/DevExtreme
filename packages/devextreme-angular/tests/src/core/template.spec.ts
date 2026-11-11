@@ -27,6 +27,8 @@ import {
 
 // TODO: Try to replace dxButton to Widget ('require' required)
 import DxButton from 'devextreme/ui/button';
+import { itWithZone } from '../helpers/zone-mode';
+import { detectChanges } from '../helpers/change-detection';
 
 const DxTestWidget = DxButton;
 DxTestWidget.defaultOptions({
@@ -267,7 +269,7 @@ describe('DevExtreme Angular widget\'s template', () => {
     expect(element.textContent).toBe('index: 5');
   });
 
-  it('should be created within Angular Zone', () => {
+  itWithZone('should be created within Angular Zone', () => {
     TestBed.overrideComponent(TestContainerComponent, {
       set: {
         template: `
@@ -325,7 +327,7 @@ describe('DevExtreme Angular widget\'s template', () => {
     expect(container.querySelector('.start')).not.toBeNull();
 
     testComponent.switchTemplateName();
-    fixture.detectChanges();
+    detectChanges(fixture);
     expect(template).not.toBeUndefined;
 
     templatesHash[template].render({ container });

@@ -2,28 +2,27 @@ import type { Page } from '@playwright/test';
 import type { WidgetName, WidgetOptions } from '../models/types';
 import { DEFAULT_SELECTOR } from './const';
 
-export interface CreateWidgetOptions {
-  disableFxAnimation: boolean;
+export interface CreateWidgetOptions<TArg = undefined> {
+  disableFxAnimation?: boolean;
+  arg?: TArg;
 }
 
-const DEFAULT_OPTIONS: CreateWidgetOptions = {
-  disableFxAnimation: true,
-};
+type WidgetConfig<TWidgetName> = TWidgetName extends keyof WidgetOptions
+  ? WidgetOptions[TWidgetName]
+  : object;
 
-export const createWidget = async <TWidgetName extends WidgetName>(
+export const createWidget = async <TWidgetName extends WidgetName, TArg = undefined>(
   page: Page,
   widgetName: TWidgetName,
-  widgetOptions: TWidgetName extends keyof WidgetOptions
-    ? WidgetOptions[TWidgetName]
-    | (() => WidgetOptions[TWidgetName] | Promise<WidgetOptions[TWidgetName]>)
-    : unknown,
+  widgetOptions: WidgetConfig<TWidgetName>
+    | ((arg: TArg) => WidgetConfig<TWidgetName> | Promise<WidgetConfig<TWidgetName>>),
   selector: string = DEFAULT_SELECTOR,
-  { disableFxAnimation } = DEFAULT_OPTIONS,
+  { disableFxAnimation = true, arg }: CreateWidgetOptions<TArg> = {},
 ): Promise<void> => {
   // Handlers cannot pass through the "page.evaluate" arguments, so a configuration with them
   // arrives as a factory that Playwright runs in the page.
   const options = typeof widgetOptions === 'function'
-    ? await page.evaluateHandle(widgetOptions as () => unknown)
+    ? await page.evaluateHandle(widgetOptions as (value: any) => unknown, arg)
     : widgetOptions;
 
   await page.evaluate(({
