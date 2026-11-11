@@ -6,7 +6,9 @@ import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import type { RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
 import type { EditingController } from '@ts/grids/grid_core/editing/editing';
 import type {
+  CellBasedEditingController,
   EditingChange, EditingColumn, EditorCellOptions,
+  FormBasedEditingControllerExtension,
 } from '@ts/grids/grid_core/editing/types';
 import type { EditorFactory } from '@ts/grids/grid_core/editor_factory/editor_factory';
 import type { RowKey } from '@ts/grids/grid_core/types';
@@ -85,6 +87,10 @@ export interface ValidatingEditingControllerExtension {
 }
 
 export type ValidatingEditingController = EditingController & ValidatingEditingControllerExtension;
+
+export type ValidatingCellBasedEditingController = CellBasedEditingController
+& FormBasedEditingControllerExtension
+& ValidatingEditingControllerExtension;
 
 export interface ValidatingEditorFactoryExtension {
   getOverlayBaseZIndex: () => number;
