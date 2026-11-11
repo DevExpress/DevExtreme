@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 /*
 This extender is to fix accessibilty issue: Scrollable should always have focusable element inside.
 When there are fixed columns on the left and grid has scroll, scrollable element does not have
@@ -12,17 +10,19 @@ And to make navigation via Tab key working properly some focus event handlers ar
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { isDefined, isEmptyObject } from '@js/core/utils/type';
+import type { DxEvent } from '@js/events';
 import type { ModuleType } from '@ts/grids/grid_core/types';
 import type { ViewDataChange } from '@ts/grids/grid_core/views/types';
 
 import type { KeyboardNavigationController } from './keyboard_navigation';
 import type { KeyDownEvent } from './types';
 
-// eslint-disable-next-line @stylistic/max-len
-export const keyboardNavigationScrollableA11yExtender = (Base: ModuleType<KeyboardNavigationController>): ModuleType<KeyboardNavigationController> => class ScrollableA11yExtender extends Base {
+export const keyboardNavigationScrollableA11yExtender = (
+  Base: ModuleType<KeyboardNavigationController>,
+): ModuleType<KeyboardNavigationController> => class ScrollableA11yExtender extends Base {
   private _$firstNotFixedCell: dxElementWrapper | undefined;
 
-  protected focusinHandler(event: any): void {
+  protected focusinHandler(event: DxEvent<FocusEvent>): void {
     const $target = $(event.target);
 
     this.translateFocusIfNeed(event, $target);
@@ -30,12 +30,12 @@ export const keyboardNavigationScrollableA11yExtender = (Base: ModuleType<Keyboa
     super.focusinHandler(event);
   }
 
-  protected focusOutHandler(e): void {
+  protected focusOutHandler(e: DxEvent<FocusEvent>): void {
     super.focusOutHandler(e);
     this.makeScrollableFocusableIfNeed();
   }
 
-  private translateFocusIfNeed(event: Event, $target: dxElementWrapper): void {
+  private translateFocusIfNeed(event: DxEvent<FocusEvent>, $target: dxElementWrapper): void {
     const needTranslateFocus = this.isScrollableNeedFocusable();
     const isFirstCellFixed = this._isFixedColumn(0);
 
