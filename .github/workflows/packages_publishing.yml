@@ -53,7 +53,7 @@ jobs:
         run: pnpm run all:set-timestamp-version
 
       - name: Build npm packages
-        run: pnpm run all:build:internal
+        run: pnpm nx all:build:internal-packages workflows
 
       - name: Upload packages
         uses: actions/upload-artifact@v7
@@ -63,11 +63,10 @@ jobs:
           if-no-files-found: error
           retention-days: 1
 
-
       - name: Filter packages
         id: filter
         working-directory: artifacts/npm
-        run: ls devextreme-internal-*.tgz devextreme-dist-internal-*.tgz | grep -E -i "$FILTER" | sed -r 's/^(.*).tgz$/"\1"/g' | paste -sd "," - | sed -r 's/(.*)/packages=[\1]/' >> "$GITHUB_OUTPUT"
+        run: ls *.tgz | grep -E -i "$FILTER" | sed -r 's/^(.*).tgz$/"\1"/g' | paste -sd "," - | sed -r 's/(.*)/packages=[\1]/' >> "$GITHUB_OUTPUT"
 
   publish:
     name: Publish package
