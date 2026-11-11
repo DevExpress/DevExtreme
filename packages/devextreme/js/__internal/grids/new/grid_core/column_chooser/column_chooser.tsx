@@ -1,11 +1,11 @@
 import type { ColumnChooserMode } from '@js/common/grids';
 import messageLocalization from '@js/localization/message';
+import type dxPopup from '@js/ui/popup';
 import type {
   Properties as PopupProperties, ShowingEvent,
 } from '@js/ui/popup';
-import type dxPopup from '@js/ui/popup';
-import type { Properties as TreeViewProperties } from '@js/ui/tree_view';
 import type dxTreeView from '@js/ui/tree_view';
+import type { Properties as TreeViewProperties } from '@js/ui/tree_view';
 import {
   Component, type RefObject,
 } from 'inferno';

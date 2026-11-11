@@ -21,7 +21,7 @@ async function fetchAntiForgeryToken() {
     return await response.json();
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-    throw new Error(errorMessage);
+    throw new Error(errorMessage, { cause: error });
   }
 }
 

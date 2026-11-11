@@ -6,14 +6,14 @@ import type {
   DataChange, GeneratedItem, ItemProcessingOptions, ProcessedItem, RefreshOptions,
 } from '@ts/grids/grid_core/data_controller/types';
 import type { ChangedEvent } from '@ts/grids/grid_core/data_source_adapter/types';
-import type { SelectionController } from '@ts/grids/grid_core/selection/m_selection';
+import type { SelectionController } from '@ts/grids/grid_core/selection/selection';
 import { getSelectColumnIndex, updateSelectCellValue } from '@ts/grids/grid_core/selection/utils';
 import type { ModuleType } from '@ts/grids/grid_core/types';
 import type { SelectionFilter } from '@ts/ui/selection/types';
 
-export const selectionDataControllerExtender = (
-  Base: ModuleType<DataController>,
-): ModuleType<DataController> => class SelectionDataControllerExtender extends Base {
+export const selectionDataControllerExtender = <TBase extends ModuleType<DataController>>(
+  Base: TBase,
+): TBase => class SelectionDataControllerExtender extends Base {
   private _selectionController!: SelectionController;
 
   public init(): void {

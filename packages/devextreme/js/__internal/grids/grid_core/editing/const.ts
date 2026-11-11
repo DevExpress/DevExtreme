@@ -1,6 +1,11 @@
 import type { DataChangeType, GridsEditMode, NewRowPosition } from '@js/common/grids';
+import type { DataKey } from '@ts/core/element_data';
+import { FIELD_ITEM_DATA_KEY } from '@ts/ui/form/constants';
 
-import type { EditActions } from './types';
+import type { EditActions, EditFormItem } from './types';
+
+// The form stores its SimpleItem under this key; the grid edit form passes EditFormItem items
+export const EDIT_FORM_ITEM_DATA_KEY: DataKey<EditFormItem> = FIELD_ITEM_DATA_KEY;
 
 export const CLASSES = {
   editRow: 'dx-edit-row',
@@ -10,7 +15,6 @@ export const CLASSES = {
 
   editorCell: 'dx-editor-cell',
   cellModified: 'dx-cell-modified',
-  cellFocusDisabled: 'dx-cell-focus-disabled',
   readonly: 'readonly',
 
   commandEdit: 'dx-command-edit',
@@ -27,7 +31,6 @@ export const CLASSES = {
   editPopupForm: 'edit-popup-form',
   formButtonsContainer: 'form-buttons-container',
 
-  focusOverlay: 'focus-overlay',
   focusableElement: 'dx-scrollable-container',
   dropDownEditorOverlay: 'dx-dropdowneditor-overlay',
 };

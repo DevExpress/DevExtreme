@@ -1,7 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import { Component, enableProdMode, inject } from '@angular/core';
 import { DxPieChartModule } from 'devextreme-angular';
-import { MedalistData, AnnotationInfo, Service } from './app.service';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -18,18 +18,11 @@ if (!/localhost/.test(document.location.host)) {
 })
 
 export class AppComponent {
-  champions: MedalistData[];
+  private readonly service = inject(Service);
 
-  annotations: AnnotationInfo[];
+  readonly champions = this.service.getChampionsData();
 
-  constructor(service: Service) {
-    this.champions = service.getChampionsData();
-    this.annotations = service.getAnnotationSources();
-  }
+  readonly annotations = this.service.getAnnotationSources();
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

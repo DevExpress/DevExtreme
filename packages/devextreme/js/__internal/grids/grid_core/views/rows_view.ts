@@ -1,7 +1,5 @@
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import { removeEvent } from '@js/common/core/events/remove';
 import messageLocalization from '@js/common/core/localization/message';
-import { data as elementData } from '@js/core/element_data';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import browser from '@js/core/utils/browser';
@@ -21,7 +19,9 @@ import type { RowPreparedEvent } from '@js/ui/data_grid';
 import type dxLoadPanel from '@js/ui/load_panel';
 import type { Properties as LoadPanelProperties } from '@js/ui/load_panel';
 import type { ActionEvent } from '@ts/core/action';
+import { getData } from '@ts/core/element_data';
 import { compileGetter } from '@ts/core/utils/data';
+import eventsEngine from '@ts/events/core/events_engine';
 import { CLASSES as COLUMN_FIXING_CLASSES } from '@ts/grids/grid_core/column_fixing/const';
 import type { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/column_headers';
 import type {
@@ -37,13 +37,12 @@ import { isSameItem } from '@ts/grids/grid_core/data_controller/utils/row_change
 import { generateRowValues } from '@ts/grids/grid_core/data_controller/utils/row_values';
 import type { DataSourceController } from '@ts/grids/grid_core/data_source/data_source_controller';
 import type { RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
-import type { FocusController } from '@ts/grids/grid_core/focus/m_focus';
-import type { ResizingController } from '@ts/grids/grid_core/grid_view/grid_view';
+import type { FocusController } from '@ts/grids/grid_core/focus/focus';
 import type {
   KeyboardNavigationController,
 } from '@ts/grids/grid_core/keyboard_navigation/keyboard_navigation';
 import type { OptionChanged } from '@ts/grids/grid_core/types';
-import type { ValidatingController } from '@ts/grids/grid_core/validating/m_validating';
+import type { ValidatingController } from '@ts/grids/grid_core/validating/validating';
 import Scrollable from '@ts/ui/scroll_view/scrollable';
 import type { ElementOffset } from '@ts/ui/scroll_view/types';
 
@@ -53,13 +52,12 @@ import type { EditingController } from '../editing/editing';
 import { CLASSES } from '../sticky_columns/const';
 import gridCoreUtils, { isVirtualPaging } from '../utils';
 import { ColumnsView } from './columns_view';
-import { CLASSES as VIEW_CLASSES } from './const';
+import { CLASSES as VIEW_CLASSES, ROW_OPTIONS_KEY } from './const';
 import type {
   CellRenderOptions,
   FocusStateParams,
   GroupCellOptions,
   GroupContinuationData,
-  HintColumn,
   RowPreparedOptions,
   RowRenderOptions,
   RowsModuleOptions,
@@ -132,8 +130,6 @@ export class RowsView extends ColumnsView {
 
   public _editingController!: EditingController;
 
-  private _resizingController!: ResizingController;
-
   protected _columnsResizerController!: ColumnsResizerViewController;
 
   protected _focusController!: FocusController;
@@ -172,7 +168,6 @@ export class RowsView extends ColumnsView {
     super.init();
 
     this._editingController = this.getController('editing');
-    this._resizingController = this.getController('resizing');
     this._columnsResizerController = this.getController('columnsResizer');
     this._focusController = this.getController('focus');
     this._keyboardNavigationController = this.getController('keyboardNavigation');
@@ -277,7 +272,7 @@ export class RowsView extends ColumnsView {
   protected _getCellTemplate(
     options: ViewCellOptions,
   ): ColumnTemplateSource<ViewCellOptions> | undefined {
-    const { column }: { column: HintColumn } = options;
+    const { column } = options;
 
     if (isGroupRow(options)) {
       // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing -- '' falls back
@@ -528,19 +523,21 @@ export class RowsView extends ColumnsView {
   private isRenderedLayoutCurrent(): boolean {
     const items = this._dataController.items();
     const rowElements = this._getRowElements().toArray() as HTMLElement[];
-    const renderedRows: (ProcessedItem & { columns: Column[] })[] = rowElements.map(
-      (rowElement) => elementData(rowElement, 'options'),
-    );
+    const renderedRows = rowElements.map((rowElement) => getData(rowElement, ROW_OPTIONS_KEY));
+    const [firstRenderedRow] = renderedRows;
 
     const isSameRows = renderedRows.length === items.length
       && renderedRows.every((renderedRow, index) => isSameItem(renderedRow, items[index], true)
         && isRowElementVisible(rowElements[index]) === (items[index].visible !== false));
 
-    if (!isSameRows || !renderedRows.length) {
+    if (!isSameRows || !firstRenderedRow) {
       return isSameRows;
     }
 
-    return isSameColumnLayout(renderedRows[0].columns, this._columnsController.getVisibleColumns());
+    return isSameColumnLayout(
+      firstRenderedRow.columns,
+      this._columnsController.getVisibleColumns(),
+    );
   }
 
   /**

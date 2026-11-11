@@ -37,14 +37,14 @@ import {
   LEGACY_SCROLLING_MODE,
   LOAD_TIMEOUT,
 } from './const';
-import type { VirtualScrollingDataControllerExtension } from './extenders/virtual_scrolling_data_controller';
 import type {
   ContentOffsetType,
   ExternalScrollers,
   VirtualScrollDataOptions,
   VirtualScrollingDataChange,
+  VirtualScrollingDataControllerExtension,
   VirtualScrollingDataSourceAdapter,
-  VirtualScrollingResizingControllerExtension,
+  VirtualScrollingResizingController,
   VirtualScrollingRowsView,
 } from './types';
 import { isItemCountableByDataSource } from './utils/items';
@@ -107,7 +107,7 @@ export const dataSourceAdapterExtender = (
 
   private _loadPageCount!: number;
 
-  public _virtualScrollController!: VirtualScrollController;
+  public _virtualScrollController!: VirtualScrollController<RawItemData>;
 
   public _renderTime = 0;
 
@@ -134,7 +134,7 @@ export const dataSourceAdapterExtender = (
     super.dispose(isSharedDataSource);
   }
 
-  private _getVirtualScrollDataOptions(): VirtualScrollDataOptions {
+  private _getVirtualScrollDataOptions(): VirtualScrollDataOptions<RawItemData> {
     return {
       pageSize: (): number => this.pageSize(),
       totalItemsCount: (): number => this.totalItemsCount(),
@@ -148,10 +148,10 @@ export const dataSourceAdapterExtender = (
         updateLoading(this);
       },
       itemsCount: (): number => this.itemsCount(true),
-      items: (): unknown[] => this._dataSource.items(),
-      viewportItems: (items?: unknown[]): unknown[] => {
+      // @ts-expect-error DataSource items are typed as unknown
+      items: (): RawItemData[] => this._dataSource.items(),
+      viewportItems: (items?: RawItemData[]): RawItemData[] => {
         if (items) {
-          // @ts-expect-error the loader passes back the items it got from items()
           this._items = items;
         }
         return this._items;
@@ -424,10 +424,6 @@ export const dataSourceAdapterExtender = (
     return this._virtualScrollController.getContentOffset(type);
   }
 
-  public getVirtualContentSize(): number {
-    return this._virtualScrollController.getVirtualContentSize();
-  }
-
   public setContentItemSizes(sizes: number[]): void {
     return this._virtualScrollController.setContentItemSizes(sizes);
   }
@@ -472,7 +468,7 @@ export const dataSourceAdapterExtender = (
 export const resizing = (
   Base: ModuleType<ResizingController>,
 ): ModuleType<
-  ResizingController & VirtualScrollingResizingControllerExtension
+  VirtualScrollingResizingController
 > => class VirtualScrollingResizingControllerExtender extends Base {
   private _resizeTimeout?: ReturnType<typeof setTimeout>;
 

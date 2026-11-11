@@ -1,8 +1,11 @@
 import { describe, expect, it } from '@jest/globals';
+import { noop } from '@js/core/utils/common';
 
+import { GroupingHelper } from '../grouping_expanded';
+import type { GroupInfoData, GroupingLoadOperation, GroupItemData } from '../types';
 import type { GroupConfig } from './grouping_expanded.helpers';
 import { GroupingTestHelper } from './grouping_expanded.helpers';
-import { createDataSourceAdapterStub, GroupingHelperMock } from './grouping_expanded.mock';
+import { createDataSourceAdapterStub } from './grouping_expanded.mock';
 
 // ---------------------------------------------------------------------------
 // Test data
@@ -247,7 +250,7 @@ describe('isPending logic', () => {
 
   describe('handleDataLoading: expandCorrection', () => {
     it('should widen the load window for collapsed groups after the expanding one', () => {
-      const grouping = new GroupingHelperMock(createDataSourceAdapterStub());
+      const grouping = new GroupingHelper(createDataSourceAdapterStub());
 
       // Group A was just expanded — isPending + isExpanded, count=100
       grouping.addGroupInfo({
@@ -258,11 +261,11 @@ describe('isPending logic', () => {
         offset: 100, count: 30, isExpanded: false, path: ['B'],
       });
 
-      const options: Record<string, unknown> = {
+      const options: GroupingLoadOperation = {
         storeLoadOptions: { skip: 0, take: 50 },
         loadOptions: { group: [{ selector: 'category' }] },
       };
-      grouping.testHandleDataLoading(options);
+      grouping.handleDataLoading(options);
 
       // expandCorrection = A.count (100) shifts boundary from 51 to 151,
       // so B (offset = A.count = 100) falls inside the load window
@@ -275,7 +278,7 @@ describe('isPending logic', () => {
     });
 
     it('should NOT widen the load window for previously expanded groups (not pending)', () => {
-      const grouping = new GroupingHelperMock(createDataSourceAdapterStub());
+      const grouping = new GroupingHelper(createDataSourceAdapterStub());
 
       // Group A is expanded but NOT pending (normal steady state)
       grouping.addGroupInfo({
@@ -286,11 +289,11 @@ describe('isPending logic', () => {
         offset: 100, count: 30, isExpanded: false, path: ['B'],
       });
 
-      const options: Record<string, unknown> = {
+      const options: GroupingLoadOperation = {
         storeLoadOptions: { skip: 0, take: 50 },
         loadOptions: { group: [{ selector: 'category' }] },
       };
-      grouping.testHandleDataLoading(options);
+      grouping.handleDataLoading(options);
 
       // Without expandCorrection boundary stays at 51;
       // B (offset = A.count = 100) is past it and therefore excluded
@@ -301,35 +304,181 @@ describe('isPending logic', () => {
 
   describe('handleDataLoading: isPending cleanup', () => {
     it('should delete isPending from an expanded group after processing', () => {
-      const grouping = new GroupingHelperMock(createDataSourceAdapterStub());
+      const grouping = new GroupingHelper(createDataSourceAdapterStub());
 
       grouping.addGroupInfo({
         offset: 0, count: 100, isExpanded: true, isPending: true, path: ['A'],
       });
 
-      const options: Record<string, unknown> = {
+      const options: GroupingLoadOperation = {
         storeLoadOptions: { skip: 0, take: 50 },
         loadOptions: { group: [{ selector: 'category' }] },
       };
-      grouping.testHandleDataLoading(options);
+      grouping.handleDataLoading(options);
 
       expect(grouping.findGroupInfo(['A'])?.isPending).toBeUndefined();
     });
 
     it('should delete isPending from a collapsed group after processing', () => {
-      const grouping = new GroupingHelperMock(createDataSourceAdapterStub());
+      const grouping = new GroupingHelper(createDataSourceAdapterStub());
 
       grouping.addGroupInfo({
         offset: 0, count: 10, isExpanded: false, isPending: true, path: ['A'],
       });
 
-      const options: Record<string, unknown> = {
+      const options: GroupingLoadOperation = {
         storeLoadOptions: { skip: 0, take: 50 },
         loadOptions: { group: [{ selector: 'category' }] },
       };
-      grouping.testHandleDataLoading(options);
+      grouping.handleDataLoading(options);
 
       expect(grouping.findGroupInfo(['A'])?.isPending).toBeUndefined();
     });
+  });
+});
+
+describe('handleDataLoaded: group items processing', () => {
+  const ROWS = [
+    { g: 'A', id: 'a1' },
+    { g: 'A', id: 'a2' },
+    { g: 'B', id: 'b1' },
+    { g: 'B', id: 'b2' },
+    { g: 'B', id: 'b3' },
+    { g: 'C', id: 'c1' },
+  ];
+
+  const COLLAPSED_A: GroupInfoData = {
+    offset: 0, count: 2, isExpanded: false, path: ['A'],
+  };
+  const COLLAPSED_B: GroupInfoData = {
+    offset: 2, count: 3, isExpanded: false, path: ['B'],
+  };
+
+  it.each([
+    {
+      name: 'hide the items of a collapsed group',
+      groupInfos: [COLLAPSED_B],
+      rows: ROWS,
+      take: 10,
+      skipFirstItem: false,
+      expected: [
+        { key: 'A', items: [ROWS[0], ROWS[1]] },
+        { key: 'B', items: null, collapsedItems: [ROWS[2], ROWS[3], ROWS[4]] },
+        { key: 'C', items: [ROWS[5]] },
+      ],
+    },
+    {
+      name: 'cut the items that do not fit into take',
+      groupInfos: [],
+      rows: ROWS,
+      take: 3,
+      skipFirstItem: false,
+      expected: [
+        { key: 'A', items: [ROWS[0], ROWS[1]] },
+        { key: 'B', items: [ROWS[2]], isContinuationOnNextPage: true },
+      ],
+    },
+    {
+      name: 'cut collapsed groups that do not fit into take',
+      groupInfos: [COLLAPSED_A, COLLAPSED_B],
+      rows: ROWS,
+      take: 1,
+      skipFirstItem: false,
+      expected: [
+        { key: 'A', items: null, collapsedItems: [ROWS[0], ROWS[1]] },
+      ],
+    },
+    {
+      name: 'mark the first group as a continuation when the first item is skipped',
+      groupInfos: [],
+      rows: ROWS,
+      take: 10,
+      skipFirstItem: true,
+      expected: [
+        { key: 'A', items: [ROWS[1]], isContinuation: true },
+        { key: 'B', items: [ROWS[2], ROWS[3], ROWS[4]] },
+        { key: 'C', items: [ROWS[5]] },
+      ],
+    },
+    {
+      name: 'remove the first group when its only item is skipped',
+      groupInfos: [],
+      rows: ROWS.slice(1),
+      take: 10,
+      skipFirstItem: true,
+      expected: [
+        { key: 'B', items: [ROWS[2], ROWS[3], ROWS[4]] },
+        { key: 'C', items: [ROWS[5]] },
+      ],
+    },
+    {
+      name: 'remove a collapsed first group when the first item is skipped',
+      groupInfos: [COLLAPSED_A],
+      rows: ROWS,
+      take: 10,
+      skipFirstItem: true,
+      expected: [
+        { key: 'B', items: [ROWS[2], ROWS[3], ROWS[4]] },
+        { key: 'C', items: [ROWS[5]] },
+      ],
+    },
+  ])('should $name', ({
+    groupInfos, rows, take, skipFirstItem, expected,
+  }) => {
+    const grouping = new GroupingHelper(createDataSourceAdapterStub());
+    groupInfos.forEach((groupInfo) => {
+      grouping.addGroupInfo({ ...groupInfo });
+    });
+    const options: GroupingLoadOperation = {
+      storeLoadOptions: {},
+      group: [{ selector: 'g' }],
+      data: rows,
+      skip: 0,
+      take,
+      skipFirstItem,
+    };
+
+    grouping.handleDataLoaded(options, noop);
+
+    expect(options.data).toEqual(expected);
+  });
+});
+
+describe('non-array items', () => {
+  it('should keep the offset when a group holds non-array items', () => {
+    const grouping = new GroupingHelper(createDataSourceAdapterStub());
+    const items = { key: 'B', items: null } as unknown as GroupItemData[];
+
+    expect(grouping.updateGroupOffsets([{ key: 'A', items }], 2, [], 0)).toBe(0);
+  });
+});
+
+describe('rows with an items field', () => {
+  it('should count rows of the last group level toward the page take', () => {
+    const grouping = new GroupingHelper(createDataSourceAdapterStub());
+    const rows = [
+      { g: 'A', id: 'a1', items: { id: 1 } },
+      { g: 'A', id: 'a2', items: { id: 2 } },
+    ];
+    const options: GroupingLoadOperation = {
+      storeLoadOptions: {},
+      group: [{ selector: 'g' }],
+      data: rows,
+      skip: 0,
+      take: 1,
+      skipFirstItem: false,
+    };
+
+    grouping.handleDataLoaded(options, noop);
+
+    expect(options.data).toEqual([{ key: 'A', items: [rows[0]], isContinuationOnNextPage: true }]);
+  });
+
+  it('should count rows of the last group level in group offsets', () => {
+    const grouping = new GroupingHelper(createDataSourceAdapterStub());
+    const rows = [{ key: 1, items: { id: 1 } }, { key: 2, items: { id: 2 } }];
+    const items = rows as unknown as GroupItemData[];
+
+    expect(grouping.updateGroupOffsets([{ key: 'A', items }], 1, [], 0)).toBe(2);
   });
 });

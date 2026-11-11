@@ -18,17 +18,7 @@
     "vite": "8.1.6",
     "webpack": "5.105.4",
     "webpack-cli": "4.10.0",
-    "devextreme": "workspace:*",
-    "eslint": "catalog:",
-    "@eslint/eslintrc": "catalog:",
-    "@eslint/js": "catalog:",
-    "@stylistic/eslint-plugin": "catalog:",
-    "@typescript-eslint/parser": "catalog:",
-    "eslint-config-devextreme": "catalog:",
-    "eslint-plugin-i18n": "catalog:",
-    "eslint-plugin-import": "catalog:",
-    "eslint-plugin-no-only-tests": "catalog:",
-    "eslint-plugin-spellcheck": "0.0.20"
+    "devextreme": "workspace:*"
   },
   "alias": {
     "globalize$": "./node_modules/globalize/dist/globalize.js",

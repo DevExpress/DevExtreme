@@ -1,4 +1,3 @@
-import { changeRulesToStylistic } from 'eslint-migration-utils';
 import javascriptConfig from 'eslint-config-devextreme/javascript';
 import typescriptConfig from 'eslint-config-devextreme/typescript';
 import jestConfig from 'eslint-config-devextreme/jest';
@@ -10,18 +9,10 @@ const restrictedSyntax = javascriptConfig
   .findLast(Boolean)
   .filter(({ selector }) => selector !== 'ForOfStatement');
 
-const toStylistic = (config, files) => {
-  const newConfig = { ...config, files };
-
-  if (config.rules) {
-    newConfig.rules = changeRulesToStylistic(config.rules);
-  }
-
-  return newConfig;
-};
+const withFiles = (config, files) => ({ ...config, files });
 
 const typescriptFor = (files, project) => [
-  ...typescriptConfig.map((config) => toStylistic(config, files)),
+  ...typescriptConfig.map((config) => withFiles(config, files)),
   {
     files,
     languageOptions: {

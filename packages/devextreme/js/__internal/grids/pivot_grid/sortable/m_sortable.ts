@@ -1,4 +1,3 @@
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import {
   drop as dragEventDrop,
   end as dragEventEnd,
@@ -20,6 +19,9 @@ import {
 import { isDefined } from '@js/core/utils/type';
 import swatchContainer from '@ts/core/utils/swatch_container';
 import DOMComponent from '@ts/core/widget/dom_component';
+import type { EngineEvent } from '@ts/events/core/events_engine';
+import eventsEngine from '@ts/events/core/events_engine';
+import type { DragOffset } from '@ts/events/drag';
 
 const { getSwatchContainer } = swatchContainer;
 
@@ -28,6 +30,8 @@ const SORTABLE_CLASS = 'dx-sortable-old';
 const SCROLL_STEP = 2;
 const START_SCROLL_OFFSET = 20;
 const SCROLL_TIMEOUT = 10;
+
+type DragMoveEvent = EngineEvent & { offset: DragOffset };
 
 function elementHasPoint(element, x, y) {
   const $item = $(element);
@@ -353,6 +357,7 @@ class Sortable extends DOMComponent<Sortable> {
       eventsEngine.on(
         $eventListener,
         addNamespace(dragEventStart, SORTABLE_NAMESPACE),
+        // @ts-expect-error the Sortable options are untyped
         itemSelector,
         (e) => {
           $sourceItem = $(e.currentTarget);
@@ -382,7 +387,8 @@ class Sortable extends DOMComponent<Sortable> {
           that._indicator = $('<div>').addClass('dx-position-indicator');
         },
       );
-      eventsEngine.on($eventListener, addNamespace(dragEventMove, SORTABLE_NAMESPACE), (e) => {
+      const dragMoveEventName = addNamespace(dragEventMove, SORTABLE_NAMESPACE);
+      eventsEngine.on($eventListener, dragMoveEventName, (e: DragMoveEvent) => {
         let $item;
         let $lastItem;
         let $prevItem;

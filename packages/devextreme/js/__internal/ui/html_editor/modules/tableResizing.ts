@@ -1,5 +1,4 @@
 import { move } from '@js/common/core/animation/translator';
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import { addNamespace } from '@js/common/core/events/utils/index';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
@@ -14,6 +13,7 @@ import type { DragMoveEvent } from '@js/ui/draggable';
 import Draggable from '@js/ui/draggable';
 import type { dxHtmlEditorTableResizing } from '@js/ui/html_editor';
 import type { DraggableProperties } from '@ts/draggable.types';
+import eventsEngine from '@ts/events/core/events_engine';
 
 import type { LineDirection } from '../types';
 import type { Delta, QuillInstance } from '../types/quill';
@@ -300,7 +300,7 @@ export default class TableResizingModule extends BaseModule {
       const $lastTable = this._tableResizeFrames[index]?.$table;
       const $tableLastWidth = this._tableResizeFrames[index].lastWidth;
       this._tableResizeFrames[index] = {
-        $frame: this._createTableResizeFrame(table),
+        $frame: this._createTableResizeFrame(),
         $table,
         index,
         lastWidth: $lastTable && table === $lastTable.get(0) ? $tableLastWidth : undefined,
@@ -362,8 +362,7 @@ export default class TableResizingModule extends BaseModule {
     });
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _createTableResizeFrame(table?: Element): dxElementWrapper {
+  _createTableResizeFrame(): dxElementWrapper {
     return $('<div>')
       .addClass(DX_COLUMN_RESIZE_FRAME_CLASS)
       .appendTo(this._quillContainer);
@@ -685,8 +684,9 @@ export default class TableResizingModule extends BaseModule {
     if (options.direction === 'vertical') {
       result.boundary = options.frame.$table;
       result.boundOffset = {
-        // @ts-expect-error boundOffset is typed {h, v} only; quadToObject also takes four sides
-        bottom: hasWindow() ? -getHeight(getWindow()) : -getOuterHeight(this._quillContainer),
+        bottom: hasWindow()
+          ? -getHeight(getWindow())
+          : -Number(getOuterHeight(this._quillContainer)),
         top: 0,
         left: 0,
         right: 0,
@@ -697,7 +697,6 @@ export default class TableResizingModule extends BaseModule {
       const $content = this.editorInstance._getContent();
       result.boundary = $content;
       result.boundOffset = {
-        // @ts-expect-error boundOffset is typed {h, v} only; quadToObject also takes four sides
         bottom: 0,
         top: 0,
         left: $content.css('paddingLeft'),
@@ -724,8 +723,7 @@ export default class TableResizingModule extends BaseModule {
       contentTemplate: null,
       allowMoveByClick: false,
       dragDirection: options.direction,
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      onDragMove: ({ component, event }): void => {
+      onDragMove: ({ event }): void => {
         this._dragMoveHandler(event, options);
       },
       onDragStart: (): void => {

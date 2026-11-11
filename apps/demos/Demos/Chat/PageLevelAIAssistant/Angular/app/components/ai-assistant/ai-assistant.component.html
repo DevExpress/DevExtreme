@@ -29,7 +29,7 @@
 
   <div class="ai-chat-content">
     <dx-chat
-      [disabled]="disabled"
+      [disabled]="disabled()"
       height="100%"
       [showAvatar]="false"
       width="auto"
@@ -50,9 +50,11 @@
         <div
           class="dx-chat-messagelist-empty-image dx-ai-chat__empty-image"
         ></div>
-        <div class="ai-chat-empty-message">{{ emptyViewMessage }}</div>
+        <div class="dx-chat-messagelist-empty-message ai-chat-empty-message">{{
+          emptyViewMessage
+        }}</div>
         <div
-          class="ai-chat-empty-prompt"
+          class="dx-chat-messagelist-empty-prompt ai-chat-empty-prompt"
           [innerHTML]="emptyViewPromptHtml"
         ></div>
       </ng-container>
@@ -63,6 +65,6 @@
 <dx-speed-dial-action
   icon="sparkle"
   label="AI Assistant"
-  [visible]="fabVisible"
+  [visible]="fabVisible()"
   (onClick)="toggle()"
 ></dx-speed-dial-action>

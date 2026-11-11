@@ -1,5 +1,4 @@
 /* eslint-disable max-classes-per-file */
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import { removeEvent } from '@js/common/core/events/remove';
 import { addNamespace } from '@js/common/core/events/utils';
 import messageLocalization from '@js/common/core/localization/message';
@@ -32,6 +31,7 @@ import { current, isFluent } from '@js/ui/themes';
 import { Deferred, fromPromise, when } from '@ts/core/utils/deferred';
 import domUtils from '@ts/core/utils/dom';
 import type Store from '@ts/data/abstract_store';
+import eventsEngine from '@ts/events/core/events_engine';
 import type { AdaptiveColumnsViewController } from '@ts/grids/grid_core/adaptivity/adaptivity';
 import { HIDDEN_COLUMNS_WIDTH } from '@ts/grids/grid_core/adaptivity/const';
 import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/columns_controller';
@@ -48,8 +48,9 @@ import type {
 import { generateRowValues } from '@ts/grids/grid_core/data_controller/utils/row_values';
 import type { DataSourceController } from '@ts/grids/grid_core/data_source/data_source_controller';
 import type { RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
+import { CLASSES as EDITOR_FACTORY_CLASSES } from '@ts/grids/grid_core/editor_factory/const';
 import type { EditorFactory } from '@ts/grids/grid_core/editor_factory/editor_factory';
-import type { FocusController } from '@ts/grids/grid_core/focus/m_focus';
+import type { FocusController } from '@ts/grids/grid_core/focus/focus';
 import type { HeaderPanel } from '@ts/grids/grid_core/header_panel/header_panel';
 import type { ToolbarItem } from '@ts/grids/grid_core/header_panel/types';
 import type { KeyboardNavigationController } from '@ts/grids/grid_core/keyboard_navigation/keyboard_navigation';
@@ -64,7 +65,7 @@ import type {
   RowKey,
 } from '@ts/grids/grid_core/types';
 import gridCoreUtils from '@ts/grids/grid_core/utils';
-import type { ValidatingController } from '@ts/grids/grid_core/validating/m_validating';
+import type { ValidatingController } from '@ts/grids/grid_core/validating/validating';
 import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
 import type { RowsView } from '@ts/grids/grid_core/views/rows_view';
 import type {
@@ -107,6 +108,7 @@ import {
 } from './editing_utils';
 import { editingDataControllerExtender } from './extenders/editing_data_controller';
 import type {
+  AddChangeOptions,
   AllowEditActionValue,
   CellBasedEditingController,
   EditActionOptions,
@@ -2449,7 +2451,7 @@ export class EditingController extends modules.ViewController {
    */
   protected _addChange(
     changeParams: EditingChangeParams,
-    options?: { row?: ProcessedItem; forceUpdateRow?: boolean },
+    options?: AddChangeOptions,
   ): EditingChange {
     const row = options?.row;
     const changes = [...this.getChanges()];
@@ -2718,7 +2720,7 @@ export class EditingController extends modules.ViewController {
   /**
    * @extended: validating, TreeList's editing
    */
-  protected _beforeSaveEditData(change?: EditingChange): boolean {
+  protected _beforeSaveEditData(change?: EditingChange): boolean | DeferredObj<boolean> {
     return !!change && !isDefined(change.key) && isDefined(change.type);
   }
 
@@ -2977,7 +2979,7 @@ const rowsView = <TBase extends ModuleType<RowsView>>(
 
       $cell
         .toggleClass(this.addWidgetPrefix(CLASSES.readonly), !isEditableCell)
-        .toggleClass(CLASSES.cellFocusDisabled, !isEditableCell);
+        .toggleClass(EDITOR_FACTORY_CLASSES.cellFocusDisabled, !isEditableCell);
 
       if (alignment) {
         $cell.find(EDITORS_INPUT_SELECTOR).first().css('textAlign', alignment);
@@ -3100,9 +3102,6 @@ const rowsView = <TBase extends ModuleType<RowsView>>(
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars -- used by overrides
   public editCellPrepared($cell: dxElementWrapper): void {}
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars -- used by overrides
-  protected _formItemPrepared(cellOptions: ViewCellOptions, $container: dxElementWrapper): void {}
 };
 
 const headerPanel = (

@@ -282,7 +282,7 @@ export type OptionChanged = OptionChangedFor<InternalGridOptions>;
 
 export interface Controllers {
   adaptiveColumns: import('./adaptivity/adaptivity').AdaptiveColumnsViewController;
-  applyFilter: import('./filter_row/m_filter_row').ApplyFilterViewController;
+  applyFilter: import('./filter_row/filter_row').ApplyFilterViewController;
   columnChooser: import('./column_chooser/column_chooser').ColumnChooserController;
   columns: import('./columns_controller/columns_controller').ColumnsController;
   columnsResizer: import('./columns_resizing_reordering/columns_resizing_reordering').ColumnsResizerViewController;
@@ -298,14 +298,14 @@ export interface Controllers {
   filter: import('./filter/filter_controller').FilterController;
   filterSync: import('./filter_sync/filter_sync').FilterSyncController;
   filterBuilder: import('./filter_builder/filter_builder').FilterBuilderController;
-  focus: import('./focus/m_focus').FocusController;
+  focus: import('./focus/focus').FocusController;
   headerFilter: import('./header_filter/header_filter').HeaderFilterController;
   keyboardNavigation: import('./keyboard_navigation/keyboard_navigation').KeyboardNavigationController;
   columnFocusDispatcher: import('./keyboard_navigation/column_focus_dispatcher').ColumnFocusDispatcher;
   headersKeyboardNavigation: import('./keyboard_navigation/headers_keyboard_navigation').HeadersKeyboardNavigationController;
   resizing: import('./grid_view/grid_view').ResizingController;
-  selection: import('./selection/m_selection').SelectionController;
-  validating: import('./validating/m_validating').ValidatingController;
+  selection: import('./selection/selection').SelectionController;
+  validating: import('./validating/validating').ValidatingController;
   searchPanel: import('./search/search').SearchPanelViewController;
   stateStoring: import('./state_storing/state_storing_controller_core').StateStoringController;
   synchronizeScrolling: import('./grid_view/grid_view').SynchronizeScrollingController;

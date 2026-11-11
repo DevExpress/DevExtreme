@@ -6,7 +6,23 @@ import type { DraggableBaseOptions, DragTemplateData, Properties } from '@js/ui/
 import type { EngineEvent } from '@ts/events/core/events_engine';
 import type { DragMoveData, DragStartData } from '@ts/events/drag';
 
-export type BoundOffset = number | string | { h?: number; v?: number };
+type BoundOffsetValue = number | string;
+
+interface BoundOffsetAxes {
+  h?: BoundOffsetValue;
+  v?: BoundOffsetValue;
+  x?: BoundOffsetValue;
+  y?: BoundOffsetValue;
+}
+
+interface BoundOffsetSides {
+  left?: BoundOffsetValue;
+  top?: BoundOffsetValue;
+  right?: BoundOffsetValue;
+  bottom?: BoundOffsetValue;
+}
+
+export type BoundOffset = number | string | BoundOffsetAxes | BoundOffsetSides;
 
 export type DragHandler = ((e: never) => void) | undefined;
 

@@ -2,15 +2,15 @@
   <dx-scroll-view
     #scrollView
     id="scrollview"
-    [scrollByContent]="scrollByContent"
-    [scrollByThumb]="scrollByThumb"
-    [showScrollbar]="scrollbarMode"
-    [bounceEnabled]="pullDown"
+    [scrollByContent]="scrollByContent()"
+    [scrollByThumb]="scrollByThumb()"
+    [showScrollbar]="scrollbarMode()"
+    [bounceEnabled]="pullDown()"
     reachBottomText="Updating..."
     (onPullDown)="updateTopContent($event)"
     (onReachBottom)="updateBottomContent($event)"
   >
-    <div id="scrollview-content" [innerHTML]="content"></div>
+    <div id="scrollview-content" [innerHTML]="content()"></div>
   </dx-scroll-view>
   <div class="options">
     <div class="caption">Options</div>
@@ -23,7 +23,7 @@
         valueExpr="value"
         displayExpr="text"
         [(value)]="scrollbarMode"
-        [disabled]="useNative"
+        [disabled]="useNative()"
       >
       </dx-select-box>
     </div>
@@ -55,7 +55,7 @@
       <dx-check-box
         text="Scroll by content"
         [(value)]="scrollByContent"
-        [disabled]="useNative"
+        [disabled]="useNative()"
       >
       </dx-check-box>
     </div>
@@ -63,7 +63,7 @@
       <dx-check-box
         text="Scroll by thumb"
         [(value)]="scrollByThumb"
-        [disabled]="useNative"
+        [disabled]="useNative()"
       >
       </dx-check-box>
     </div>

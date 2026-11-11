@@ -1,8 +1,10 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import {
+  Component, enableProdMode, inject, signal,
+} from '@angular/core';
 import { DxSelectBoxModule } from 'devextreme-angular';
-import { DxLinearGaugeModule, DxLinearGaugeTypes } from 'devextreme-angular/ui/linear-gauge';
-import { Service, PowerInfo } from './app.service';
+import { DxLinearGaugeModule, type DxLinearGaugeTypes } from 'devextreme-angular/ui/linear-gauge';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -19,16 +21,11 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  powerInfo: PowerInfo[];
+  readonly powerInfo = inject(Service).getPowerInfo();
 
-  currentValue: PowerInfo;
+  readonly currentValue = signal(this.powerInfo[0]);
 
-  constructor(service: Service) {
-    this.powerInfo = service.getPowerInfo();
-    this.currentValue = this.powerInfo[0];
-  }
-
-  customizeText: DxLinearGaugeTypes.ScaleLabel['customizeText'] = ({ valueText }) => `${valueText} kW`;
+  readonly customizeText: DxLinearGaugeTypes.ScaleLabel['customizeText'] = ({ valueText }) => `${valueText} kW`;
 
   customizeTooltip({ index, valueText }) {
     let result = `${valueText} kW`;
@@ -43,8 +40,4 @@ export class AppComponent {
   }
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

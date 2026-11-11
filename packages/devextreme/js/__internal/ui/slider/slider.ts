@@ -1,6 +1,5 @@
 import { name as clickName } from '@js/common/core/events/click';
 import { lock } from '@js/common/core/events/core/emitter.feedback';
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import Swipeable from '@js/common/core/events/gesture/swipeable';
 import pointerEvents from '@js/common/core/events/pointer';
 import {
@@ -25,6 +24,7 @@ import type { InkRipple } from '@ts/core/utils/ink_ripple';
 import { render } from '@ts/core/utils/ink_ripple';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { SupportedKeys } from '@ts/core/widget/widget';
+import eventsEngine from '@ts/events/core/events_engine';
 import type { SwipeEndEvent, SwipeStartEvent, SwipeUpdateEvent } from '@ts/events/swipe';
 
 import type { RangeStyles } from '../track_bar';
@@ -456,9 +456,7 @@ class Slider<
       const $handle = this._activeHandle();
 
       if ($handle) {
-        // @ts-expect-error trigger is not declared in the public events engine type
         eventsEngine.trigger($handle, 'focusin');
-        // @ts-expect-error trigger is not declared in the public events engine type
         eventsEngine.trigger($handle, 'focus');
       }
       startAction({ event: e });

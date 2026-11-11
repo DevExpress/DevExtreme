@@ -1,7 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import { Component, enableProdMode, inject } from '@angular/core';
 import { DxPolarChartModule } from 'devextreme-angular';
-import { Temperature, Service } from './app.service';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -17,21 +17,11 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  temperaturesData: Temperature[];
+  readonly temperaturesData = inject(Service).getTemperaturesData();
 
-  maxDay: Temperature;
+  readonly maxDay = this.temperaturesData.reduce((prev, current) => (prev.day >= current.day ? prev : current));
 
-  minNight: Temperature;
-
-  constructor(service: Service) {
-    this.temperaturesData = service.getTemperaturesData();
-    this.maxDay = this.temperaturesData.reduce((prev, current) => (prev.day >= current.day ? prev : current));
-    this.minNight = this.temperaturesData.reduce((prev, current) => (prev.night <= current.night ? prev : current));
-  }
+  readonly minNight = this.temperaturesData.reduce((prev, current) => (prev.night <= current.night ? prev : current));
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

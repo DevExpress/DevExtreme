@@ -29,7 +29,7 @@ export default class DependencyCollector {
 
     if (ast.comments?.length) {
       const styleComment = ast.comments
-          .find((comment: AstComment): boolean => comment.value.includes('STYLE'));
+        .find((comment: AstComment): boolean => comment.value.includes('STYLE'));
 
       if (styleComment) {
         return stylesRegex.exec(styleComment.value)[1].toLowerCase();
@@ -55,19 +55,19 @@ export default class DependencyCollector {
         && array1.every((value, index) => value === array2[index]);
   }
 
-  treeProcessor(node: ScriptsDependencyTree, cache: Map<string, any> = new Map() ): string[] {
+  treeProcessor(node: ScriptsDependencyTree, cache: Map<string, string[]> = new Map()): string[] {
     let result: string[] = [];
     const { widget, dependencies } = node;
 
-    Object.entries(dependencies).forEach(([path, nextNode]) => {
-      const cached = cache.get(path);
+    Object.entries(dependencies).forEach(([dependencyPath, nextNode]) => {
+      const cached = cache.get(dependencyPath);
 
       const procResult = cached || this.treeProcessor(nextNode, cache);
 
       result.push(...procResult);
 
-      if(!cached) {
-        cache.set(path, procResult)
+      if (!cached) {
+        cache.set(dependencyPath, procResult);
       }
     });
 
@@ -84,7 +84,10 @@ export default class DependencyCollector {
     return result;
   }
 
-  getFullDependencyTree(filePath: string, cache: Map<string, any> = new Map()): ScriptsDependencyTree {
+  getFullDependencyTree(
+    filePath: string,
+    cache: Map<string, string> = new Map(),
+  ): ScriptsDependencyTree {
     let cacheScriptItem = this.scriptsCache[filePath];
     const isTsxFile = REGEXP_IS_TSX_NOT_DTS.test(filePath);
     const filePathInProcess = filePathMap.get(filePath);
@@ -96,7 +99,7 @@ export default class DependencyCollector {
 
       const result = precinct.paperwork(filePath, {
         es6: { mixedImports: true },
-        ts: { skipTypeImports : true }
+        ts: { skipTypeImports: true },
       });
       const isBundleFile = filePath.includes('bundle-templates');
 
@@ -104,10 +107,10 @@ export default class DependencyCollector {
         const relativeDependency = isBundleFile
           ? dependency.replace(/^((?:\.\.\/)+)(?!bundles)/, '$1../js/')
           : dependency;
-        let absDepPath = relativeDependency
+        let absDepPath = relativeDependency;
 
         if (relativeDependency.startsWith('.')) {
-          absDepPath = path.resolve(path.dirname(filePath), relativeDependency)
+          absDepPath = path.resolve(path.dirname(filePath), relativeDependency);
         }
 
         const cachedRes = cache.get(absDepPath);
@@ -127,20 +130,20 @@ export default class DependencyCollector {
 
         return cabinetResult;
       })
-          // NOTE: Workaround for the filing-cabinet issue:
-          // https://github.com/dependents/node-filing-cabinet/issues/112
-          .map((path: string) => path.replace(REGEXP_IS_DTS, '.js'))
-          .filter((path: string): boolean => path !== null
-              && existsSync(path)
-              && !path.includes('node_modules')
-              && !path.includes('viz'));
+      // NOTE: Workaround for the filing-cabinet issue:
+      // https://github.com/dependents/node-filing-cabinet/issues/112
+        .map((scriptPath: string) => scriptPath.replace(REGEXP_IS_DTS, '.js'))
+        .filter((scriptPath: string): boolean => scriptPath !== null
+              && existsSync(scriptPath)
+              && !scriptPath.includes('node_modules')
+              && !scriptPath.includes('viz'));
 
       let widget = '';
 
       if (!isTsxFile) {
         widget = precinct.ast
-            ? DependencyCollector.getWidgetFromAst(precinct.ast)
-            : DependencyCollector.getWidgetFromSource(filePath)
+          ? DependencyCollector.getWidgetFromAst(precinct.ast)
+          : DependencyCollector.getWidgetFromSource(filePath);
       }
 
       cacheScriptItem = {
@@ -166,9 +169,9 @@ export default class DependencyCollector {
       const indexFileName = path.resolve(__dirname, `../../../devextreme-scss/scss/widgets/${theme}/_index.scss`);
       const indexContent = readFileSync(indexFileName, 'utf8');
       const indexPublicWidgetsList = new WidgetsHandler([], '', {})
-          .getIndexWidgetItems(indexContent)
-          .map((item: WidgetItem): string => item.widgetName.toLowerCase())
-          .sort();
+        .getIndexWidgetItems(indexContent)
+        .map((item: WidgetItem): string => item.widgetName.toLowerCase())
+        .sort();
 
       const dependenciesWidgets = Object.keys(this.flatStylesDependencyTree).sort();
 

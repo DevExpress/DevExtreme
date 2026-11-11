@@ -913,60 +913,6 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         assert.equal(dataSource.items()[1].name, 'Alex', 'first item became second');
     });
 
-    QUnit.test('Operation filter should generates correctly when sorting, remoteOperations, and the key column is not present', function(assert) {
-    // arrange
-        const data = [
-            { team: 'internal', name: 'Alex', age: 30 },
-            { team: 'internal', name: 'Dan', age: 25 },
-            { team: 'internal', name: 'Bob', age: 20 },
-            { team: 'public', name: 'Alice', age: 19 }];
-        const dataSource = createDataSource(data,
-            { key: 'name' },
-            { pageSize: 1, asyncLoadEnabled: false });
-
-        this.applyOptions({
-            keyExpr: 'name',
-            focusedRowEnabled: true,
-            remoteOperations: true,
-            dataSource: dataSource,
-            columns: ['team', 'age']
-        });
-
-        // act
-        this.dataController.resetDataSource();
-
-        const filter = this.dataController._generateOperationFilterByKey('Dan', data[1], false);
-
-        assert.equal(JSON.stringify(filter), '[[["name","<","Dan"],"or",["name","=",null]],"or",[["name","=","Dan"],"and",["name","<","Dan"]]]', 'Operation filter');
-    });
-
-    // T755462
-    QUnit.test('Check the filter generator for the boolean field', function(assert) {
-    // act, assert
-        let filter = this.dataController._generateBooleanFilter('isRoom', true, { desc: false });
-        assert.strictEqual(JSON.stringify(filter), '["isRoom","<>",true]', 'filter');
-
-        // act, assert
-        filter = this.dataController._generateBooleanFilter('isRoom', false, { desc: false });
-        assert.strictEqual(JSON.stringify(filter), '["isRoom","=",null]', 'filter');
-
-        // act, assert
-        filter = this.dataController._generateBooleanFilter('isRoom', true, { desc: true });
-        assert.strictEqual(JSON.stringify(filter), undefined, 'filter');
-
-        // act, assert
-        filter = this.dataController._generateBooleanFilter('isRoom', false, { desc: true });
-        assert.strictEqual(JSON.stringify(filter), '["isRoom","=",true]', 'filter');
-
-        // act, assert
-        filter = this.dataController._generateBooleanFilter('isRoom', null, { desc: true });
-        assert.strictEqual(JSON.stringify(filter), '["isRoom","<>",null]', 'filter');
-
-        // act, assert
-        filter = this.dataController._generateBooleanFilter('isRoom', null, { desc: false });
-        assert.strictEqual(JSON.stringify(filter), undefined, 'filter');
-    });
-
     QUnit.test('Get page index by simple key if remoteOperations is false', function(assert) {
     // arrange
         let count = 0;
@@ -3437,7 +3383,7 @@ QUnit.module('Virtual scrolling', { beforeEach: setupVirtualScrollingModule, aft
     });
 
     QUnit.test('virtual items at end', function(assert) {
-        this.dataController.setViewportItemIndex(985);
+        this.dataSourceController.getAdapter().setViewportItemIndex(985);
         const virtualItemsCount = this.dataController.virtualItemsCount();
         assert.ok(virtualItemsCount);
         assert.deepEqual(virtualItemsCount, {
@@ -3448,7 +3394,7 @@ QUnit.module('Virtual scrolling', { beforeEach: setupVirtualScrollingModule, aft
     });
 
     QUnit.test('virtual items after small scrolling at beginning', function(assert) {
-        this.dataController.setViewportItemIndex(1);
+        this.dataSourceController.getAdapter().setViewportItemIndex(1);
         const virtualItemsCount = this.dataController.virtualItemsCount();
         assert.ok(virtualItemsCount);
         assert.deepEqual(virtualItemsCount, {
@@ -3459,7 +3405,7 @@ QUnit.module('Virtual scrolling', { beforeEach: setupVirtualScrollingModule, aft
     });
 
     QUnit.test('virtual items before page center', function(assert) {
-        this.dataController.setViewportItemIndex(9);
+        this.dataSourceController.getAdapter().setViewportItemIndex(9);
         const virtualItemsCount = this.dataController.virtualItemsCount();
         assert.ok(virtualItemsCount);
         assert.deepEqual(virtualItemsCount, {
@@ -3471,7 +3417,7 @@ QUnit.module('Virtual scrolling', { beforeEach: setupVirtualScrollingModule, aft
     });
 
     QUnit.test('virtual items after page center', function(assert) {
-        this.dataController.setViewportItemIndex(11);
+        this.dataSourceController.getAdapter().setViewportItemIndex(11);
         const virtualItemsCount = this.dataController.virtualItemsCount();
         assert.ok(virtualItemsCount);
         assert.deepEqual(virtualItemsCount, {
@@ -3483,7 +3429,7 @@ QUnit.module('Virtual scrolling', { beforeEach: setupVirtualScrollingModule, aft
     });
 
     QUnit.test('virtual items before page end', function(assert) {
-        this.dataController.setViewportItemIndex(19);
+        this.dataSourceController.getAdapter().setViewportItemIndex(19);
         const virtualItemsCount = this.dataController.virtualItemsCount();
         assert.ok(virtualItemsCount);
         assert.deepEqual(virtualItemsCount, {
@@ -3495,7 +3441,7 @@ QUnit.module('Virtual scrolling', { beforeEach: setupVirtualScrollingModule, aft
     });
 
     QUnit.test('virtual items after page end', function(assert) {
-        this.dataController.setViewportItemIndex(21);
+        this.dataSourceController.getAdapter().setViewportItemIndex(21);
         const virtualItemsCount = this.dataController.virtualItemsCount();
         assert.ok(virtualItemsCount);
         assert.deepEqual(virtualItemsCount, {
@@ -3508,7 +3454,7 @@ QUnit.module('Virtual scrolling', { beforeEach: setupVirtualScrollingModule, aft
 
 
     QUnit.test('virtual items after change current page to next', function(assert) {
-        this.dataController.setViewportItemIndex(25);
+        this.dataSourceController.getAdapter().setViewportItemIndex(25);
         const virtualItemsCount = this.dataController.virtualItemsCount();
         assert.ok(virtualItemsCount);
         assert.deepEqual(virtualItemsCount, {
@@ -3520,10 +3466,10 @@ QUnit.module('Virtual scrolling', { beforeEach: setupVirtualScrollingModule, aft
     });
 
     QUnit.test('virtual items after change current page to previous', function(assert) {
-        this.dataController.setViewportItemIndex(25);
+        this.dataSourceController.getAdapter().setViewportItemIndex(25);
         assert.strictEqual(this.dataController.pageIndex(), 1);
 
-        this.dataController.setViewportItemIndex(5);
+        this.dataSourceController.getAdapter().setViewportItemIndex(5);
 
         assert.strictEqual(this.dataController.pageIndex(), 0);
 
@@ -3535,7 +3481,7 @@ QUnit.module('Virtual scrolling', { beforeEach: setupVirtualScrollingModule, aft
     });
 
     QUnit.test('virtual items after change current page to far', function(assert) {
-        this.dataController.setViewportItemIndex(400);
+        this.dataSourceController.getAdapter().setViewportItemIndex(400);
         const virtualItemsCount = this.dataController.virtualItemsCount();
         assert.deepEqual(virtualItemsCount, {
             begin: 400,
@@ -3550,7 +3496,7 @@ QUnit.module('Virtual scrolling', { beforeEach: setupVirtualScrollingModule, aft
         this.dataSourceController.store().insert({ id: 1001, value: 'value1001' });
         dataController.refresh();
 
-        dataController.setViewportItemIndex(999);
+        this.dataSourceController.getAdapter().setViewportItemIndex(999);
         assert.strictEqual(this.dataController.pageIndex(), 49);
 
         this.clock.tick(10);
@@ -3577,7 +3523,7 @@ QUnit.module('Virtual scrolling', { beforeEach: setupVirtualScrollingModule, aft
         dataController.viewportSize(3);
 
         // act
-        dataController.setViewportItemIndex(1002);
+        this.dataSourceController.getAdapter().setViewportItemIndex(1002);
 
         // assert
         assert.strictEqual(this.dataController.pageIndex(), 50);
@@ -3589,7 +3535,7 @@ QUnit.module('Virtual scrolling', { beforeEach: setupVirtualScrollingModule, aft
         const dataController = this.dataController;
         this.dataSourceController.store().remove(999);
         dataController.refresh();
-        dataController.setViewportItemIndex(998);
+        this.dataSourceController.getAdapter().setViewportItemIndex(998);
         assert.strictEqual(this.dataController.pageIndex(), 49);
 
         this.clock.tick(10);
@@ -3606,7 +3552,7 @@ QUnit.module('Virtual scrolling', { beforeEach: setupVirtualScrollingModule, aft
 
     QUnit.test('virtual items on setViewportItemIndex at end', function(assert) {
     // act
-        this.dataController.setViewportItemIndex(990);
+        this.dataSourceController.getAdapter().setViewportItemIndex(990);
 
         // assert
 
@@ -4296,14 +4242,14 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
         const changedArgs = [];
 
         this.dataController.viewportSize(2);
-        this.dataController.setViewportItemIndex(0.1);
+        this.dataSourceController.getAdapter().setViewportItemIndex(0.1);
 
         this.dataController.changed.add(function(e) {
             changedArgs.push(e);
         });
 
         // act
-        this.dataController.setViewportItemIndex(3);
+        this.dataSourceController.getAdapter().setViewportItemIndex(3);
 
         // assert
         assert.equal(changedArgs.length, 1);
@@ -4323,8 +4269,8 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
         });
 
         this.dataController.viewportSize(2);
-        this.dataController.setViewportItemIndex(0);
-        this.dataController.setViewportItemIndex(3);
+        this.dataSourceController.getAdapter().setViewportItemIndex(0);
+        this.dataSourceController.getAdapter().setViewportItemIndex(3);
 
         assert.equal(this.dataController.pageIndex(), 1);
 
@@ -4334,7 +4280,7 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
         });
 
         // act
-        this.dataController.setViewportItemIndex(0);
+        this.dataSourceController.getAdapter().setViewportItemIndex(0);
 
         // assert
         assert.equal(changedCallsCount, 1);
@@ -4357,7 +4303,7 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
             changedArgs.push(e);
         });
 
-        this.dataController.setViewportItemIndex(7);
+        this.dataSourceController.getAdapter().setViewportItemIndex(7);
         // act
         this.clock.next();
 
@@ -4441,7 +4387,7 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
 
 
         this.clock.tick(10);
-        dataController.setViewportItemIndex(7);
+        this.dataSourceController.getAdapter().setViewportItemIndex(7);
         this.clock.tick(10);
         dataController.changed.add(function(e) {
             changedArgs.push(e);
@@ -4484,14 +4430,14 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
         const dataController = this.dataController;
 
         dataController.viewportSize(2);
-        dataController.setViewportItemIndex(0.1);
+        this.dataSourceController.getAdapter().setViewportItemIndex(0.1);
 
         dataController.changed.add(function(e) {
             changedArgs.push(e);
         });
 
         // act
-        dataController.setViewportItemIndex(3);
+        this.dataSourceController.getAdapter().setViewportItemIndex(3);
 
         // assert
         assert.equal(changedArgs.length, 1);
@@ -4519,7 +4465,7 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
         });
 
         // act
-        dataController.setViewportItemIndex(4);
+        this.dataSourceController.getAdapter().setViewportItemIndex(4);
 
         // assert
         assert.equal(changedArgs.length, 4, 'load count');
@@ -4674,10 +4620,10 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
         });
 
         dataController.viewportSize(5);
-        dataController.setViewportItemIndex(0);
+        this.dataSourceController.getAdapter().setViewportItemIndex(0);
 
         // act
-        dataController.setViewportItemIndex(9);
+        this.dataSourceController.getAdapter().setViewportItemIndex(9);
 
         const items = [];
         $.each(TEN_NUMBERS, function(index, value) {
@@ -4735,7 +4681,7 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
 
 
         dataController.viewportSize(25);
-        dataController.setViewportItemIndex(0);
+        this.dataSourceController.getAdapter().setViewportItemIndex(0);
 
         // act
         dataController.load();
@@ -4760,9 +4706,9 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
         dataController.viewportSize(3);
 
         // act
-        dataController.setViewportItemIndex(0);
+        this.dataSourceController.getAdapter().setViewportItemIndex(0);
 
-        dataController.setViewportItemIndex(4);
+        this.dataSourceController.getAdapter().setViewportItemIndex(4);
 
         dataController.changeRowExpand([4]);
 
@@ -4798,7 +4744,7 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
         assert.ok(!isLoading, 'not loading');
 
         // act
-        dataController.setViewportItemIndex(0);
+        this.dataSourceController.getAdapter().setViewportItemIndex(0);
 
         dataController.changeRowExpand([0]);
 
@@ -4846,7 +4792,7 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
         });
 
         this.dataController.viewportSize(10);
-        this.dataController.setViewportItemIndex(0.1);
+        this.dataSourceController.getAdapter().setViewportItemIndex(0.1);
 
         let changedArgs;
 
@@ -4857,7 +4803,7 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
         this.columnOption('id', 'groupIndex', 0);
 
         // act
-        this.dataController.setViewportItemIndex(40);
+        this.dataSourceController.getAdapter().setViewportItemIndex(40);
 
         // assert
         const items = this.dataController.items();
@@ -4888,7 +4834,7 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
             pageSize
         });
         this.dataController.viewportSize(pageSize);
-        this.dataController.setViewportItemIndex(0);
+        this.dataSourceController.getAdapter().setViewportItemIndex(0);
 
         const items = this.dataController.items();
         assert.equal(items[pageSize - 1].rowType, 'group');
@@ -4918,7 +4864,7 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
             pageSize
         });
         this.dataController.viewportSize(pageSize);
-        this.dataController.setViewportItemIndex(0);
+        this.dataSourceController.getAdapter().setViewportItemIndex(0);
 
         const items = this.dataController.items();
         assert.equal(items[pageSize - 2].rowType, 'group');
@@ -5687,7 +5633,7 @@ QUnit.module('Infinite scrolling', {
 
     QUnit.test('setViewportItemIndex to begin current page not load next page', function(assert) {
     // act
-        this.dataController.setViewportItemIndex(1);
+        this.dataSourceController.getAdapter().setViewportItemIndex(1);
 
         // assert
         assert.strictEqual(this.dataController.pageIndex(), 0);
@@ -5697,7 +5643,7 @@ QUnit.module('Infinite scrolling', {
 
     QUnit.test('setViewportItemIndex to end current page load next page', function(assert) {
     // act
-        this.dataController.setViewportItemIndex(10);
+        this.dataSourceController.getAdapter().setViewportItemIndex(10);
 
         // assert
         assert.strictEqual(this.dataController.pageIndex(), 1);
@@ -5713,8 +5659,8 @@ QUnit.module('Infinite scrolling', {
         });
         // act
         this.options.loadingTimeout = 0;
-        this.dataController.setViewportItemIndex(10);
-        this.dataController.setViewportItemIndex(10);
+        this.dataSourceController.getAdapter().setViewportItemIndex(10);
+        this.dataSourceController.getAdapter().setViewportItemIndex(10);
 
         this.clock.tick(10);
 
@@ -5727,9 +5673,9 @@ QUnit.module('Infinite scrolling', {
 
 
     QUnit.test('second setViewportItemIndex to first page not load next page', function(assert) {
-        this.dataController.setViewportItemIndex(1);
+        this.dataSourceController.getAdapter().setViewportItemIndex(1);
         // act
-        this.dataController.setViewportItemIndex(19);
+        this.dataSourceController.getAdapter().setViewportItemIndex(19);
 
         // assert
         assert.strictEqual(this.dataController.pageIndex(), 1);
@@ -5739,9 +5685,9 @@ QUnit.module('Infinite scrolling', {
 
     QUnit.test('setViewportItemIndex to current page not load next page when hasKnownLastPage', function(assert) {
     // act
-        this.dataController.setViewportItemIndex(1);
-        this.dataController.setViewportItemIndex(21);
-        this.dataController.setViewportItemIndex(41);
+        this.dataSourceController.getAdapter().setViewportItemIndex(1);
+        this.dataSourceController.getAdapter().setViewportItemIndex(21);
+        this.dataSourceController.getAdapter().setViewportItemIndex(41);
 
         // assert
         assert.strictEqual(this.dataController.pageIndex(), 2);
@@ -5768,7 +5714,7 @@ QUnit.module('Infinite scrolling', {
         this.dataController.reload(true);
 
         // act
-        this.dataController.setViewportItemIndex(1);
+        this.dataSourceController.getAdapter().setViewportItemIndex(1);
         this.clock.tick(10);
 
         // assert
@@ -5854,7 +5800,7 @@ QUnit.module('Infinite scrolling', {
         this.dataController.pageSize(25);
 
         // act
-        this.dataController.setViewportItemIndex(40);
+        this.dataSourceController.getAdapter().setViewportItemIndex(40);
 
         // assert
         assert.deepEqual(this.dataController.items().length, 50);
@@ -5880,7 +5826,7 @@ QUnit.module('Infinite scrolling', {
         this.dataController.pageSize(50);
 
         // act
-        this.dataController.setViewportItemIndex(30);
+        this.dataSourceController.getAdapter().setViewportItemIndex(30);
 
         // assert
         assert.deepEqual(this.dataController.items().length, 50);

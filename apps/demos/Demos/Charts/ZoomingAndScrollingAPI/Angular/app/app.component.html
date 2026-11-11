@@ -6,7 +6,7 @@
     <dxo-chart-point [size]="7"></dxo-chart-point>
   </dxo-chart-common-series-settings>
   <dxo-chart-legend [visible]="false"></dxo-chart-legend>
-  <dxo-chart-argument-axis [visualRange]="visualRange">
+  <dxo-chart-argument-axis [visualRange]="visualRange()">
   </dxo-chart-argument-axis>
 </dx-chart>
 <dx-range-selector [dataSource]="zoomingData" [(value)]="visualRange">

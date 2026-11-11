@@ -27,7 +27,7 @@ export function addInfoHeader(
   const source = css.toString();
   const encoding = '@charset "UTF-8";';
   const charsetPrefix = /^@charset\s+"utf-8";\s*/i;
-  const match = source.match(charsetPrefix);
+  const match = charsetPrefix.exec(source);
 
   if (match) {
     const rest = source.slice(match[0].length).trimStart();
@@ -59,8 +59,11 @@ export async function autoPrefix(css: string): Promise<string> {
   })).css;
 }
 
-// eslint-disable-next-line @stylistic/max-len
-export function fixSwatchCss(css: string | Buffer, swatchClass: string, colorScheme: string): string {
+export function fixSwatchCss(
+  css: string | Buffer,
+  swatchClass: string,
+  colorScheme: string,
+): string {
   let result = css.toString();
 
   const escapedSelector = swatchClass.replace('.', '\\.');

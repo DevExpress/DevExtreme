@@ -28,6 +28,8 @@ window.$ = $;
         return;
     }
 
+    const templateEngineOptions = { noUnsafeEval: !QUnit.urlParams['nocsp'] };
+
     QUnit.module(
         'Client Validation',
         {
@@ -182,7 +184,7 @@ window.$ = $;
                     <div id="buttonWithInnerTemplate"><script nonce="wIkO6u">// DevExpress.aspnet.setTemplateEngine();</script>BUTTON_CONTENT</div>'
                 );
 
-                aspnet.setTemplateEngine();
+                aspnet.setTemplateEngine(templateEngineOptions);
             },
             afterEach: function() {
                 setTemplateEngine('default');
@@ -247,7 +249,7 @@ window.$ = $;
                 '<div id="button"></div>\
                 <script id="simpleTemplate" type="text/html" nonce="wIkO6u"></script>'
             );
-            aspnet.setTemplateEngine();
+            aspnet.setTemplateEngine(templateEngineOptions);
         },
         afterEach: function() {
             setTemplateEngine('default');
@@ -334,7 +336,7 @@ window.$ = $;
     });
 
     QUnit.test('Transcluded content (T691770, T693379)', function(assert) {
-        aspnet.setTemplateEngine();
+        aspnet.setTemplateEngine(templateEngineOptions);
         try {
             window.testCounters = {
                 innerEval: 0,
@@ -396,7 +398,7 @@ window.$ = $;
     });
 
     QUnit.test('T1146301 - NamedTemplate with expression inside Content RazorBlock', function(assert) {
-        aspnet.setTemplateEngine();
+        aspnet.setTemplateEngine(templateEngineOptions);
         try {
             $('#qunit-fixture').html(
                 '<div id="template-holder-widget"></div>' +
@@ -423,7 +425,7 @@ window.$ = $;
     });
 
     QUnit.test('T758209', function(assert) {
-        aspnet.setTemplateEngine();
+        aspnet.setTemplateEngine(templateEngineOptions);
 
         const errors = errorsAccessor();
         const spy = sinon.spy(errors, 'log');
@@ -494,7 +496,7 @@ window.$ = $;
     });
 
     QUnit.test('T810336', function(assert) {
-        aspnet.setTemplateEngine();
+        aspnet.setTemplateEngine(templateEngineOptions);
 
         window.__createButton = function(buttonID) {
             DevExpress.aspnet.createComponent('dxButton', { text: buttonID }, buttonID);
@@ -524,7 +526,7 @@ window.$ = $;
     });
 
     QUnit.test('T836885', function(assert) {
-        aspnet.setTemplateEngine();
+        aspnet.setTemplateEngine(templateEngineOptions);
 
         try {
             $('#qunit-fixture').html(
@@ -550,7 +552,7 @@ window.$ = $;
     });
 
     QUnit.test('T886572', function(assert) {
-        aspnet.setTemplateEngine();
+        aspnet.setTemplateEngine(templateEngineOptions);
         window.__createCheckBox = function(id) {
             DevExpress.aspnet.createComponent('dxCheckBox', { text: id }, id);
         };

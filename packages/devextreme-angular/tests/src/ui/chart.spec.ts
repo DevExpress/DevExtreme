@@ -13,6 +13,7 @@ import {
 } from 'devextreme-angular';
 
 import dxChart from 'devextreme/viz/chart';
+import { detectChanges } from '../helpers/change-detection';
 
 @Component({
   standalone: false,
@@ -97,7 +98,7 @@ describe('DxChart', () => {
       { valueField: 'value' },
     ];
 
-    fixture.detectChanges();
+    detectChanges(fixture);
 
     expect(spy.calls.count()).toBe(1);
   });
@@ -127,7 +128,7 @@ describe('DxChart', () => {
       valueField: 'value',
     });
 
-    fixture.detectChanges();
+    detectChanges(fixture);
 
     expect(spy.calls.count()).toBe(1);
   });
@@ -154,7 +155,7 @@ describe('DxChart', () => {
     expect(instance.option('argumentAxis.strips[0].label.text')).toBe('label1');
 
     fixture.componentInstance.strips[0].label = 'label2';
-    fixture.detectChanges();
+    detectChanges(fixture);
 
     expect(instance.option('argumentAxis.strips[0].label.text')).toBe('label2');
   });

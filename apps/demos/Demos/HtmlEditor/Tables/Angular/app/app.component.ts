@@ -1,5 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import {
+  Component, enableProdMode, inject, signal,
+} from '@angular/core';
 import { DxHtmlEditorModule, DxCheckBoxModule } from 'devextreme-angular';
 
 import { Service } from './app.service';
@@ -20,19 +22,11 @@ if (!/localhost/.test(document.location.host)) {
 })
 
 export class AppComponent {
-  valueContent: string;
+  readonly valueContent = inject(Service).getMarkup();
 
-  allowResizing = true;
+  readonly allowResizing = signal(true);
 
-  contextMenuEnabled = true;
-
-  constructor(service: Service) {
-    this.valueContent = service.getMarkup();
-  }
+  readonly contextMenuEnabled = signal(true);
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

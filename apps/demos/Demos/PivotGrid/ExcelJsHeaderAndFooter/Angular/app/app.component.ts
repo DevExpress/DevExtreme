@@ -1,13 +1,15 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import {
+  Component, enableProdMode, inject, signal,
+} from '@angular/core';
 import { DxCheckBoxModule } from 'devextreme-angular';
-import { Workbook, WorksheetViewFrozen } from 'devextreme-exceljs-fork';
+import { Workbook, type WorksheetViewFrozen } from 'devextreme-exceljs-fork';
 import { saveAs } from 'file-saver-es';
 // Our demo infrastructure requires us to use 'file-saver-es'. We recommend that you use the official 'file-saver' package in your applications.
 import { exportPivotGrid } from 'devextreme/excel_exporter';
-import { Options as DataSourceConfig } from 'devextreme/ui/pivot_grid/data_source';
+import type { Options as DataSourceConfig } from 'devextreme/ui/pivot_grid/data_source';
 import { DxPivotGridModule, DxPivotGridTypes } from 'devextreme-angular/ui/pivot-grid';
-import { Service, Sale } from './app.service';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -26,52 +28,46 @@ if (!/localhost/.test(document.location.host)) {
 })
 
 export class AppComponent {
-  sales: Sale[];
+  readonly dataSource: DataSourceConfig = {
+    fields: [{
+      caption: 'Region',
+      width: 120,
+      dataField: 'region',
+      area: 'row',
+      expanded: true,
+    }, {
+      caption: 'City',
+      dataField: 'city',
+      width: 150,
+      area: 'row',
+    }, {
+      dataField: 'date',
+      dataType: 'date',
+      area: 'column',
+      filterValues: [[2023], [2024], [2025]],
+      expanded: false,
+    }, {
+      caption: 'Sales',
+      dataField: 'amount',
+      dataType: 'number',
+      summaryType: 'sum',
+      format: 'currency',
+      area: 'data',
+    }, {
+      caption: 'Country',
+      dataField: 'country',
+      area: 'filter',
+    }],
+    store: inject(Service).getSales(),
+  };
 
-  dataSource: DataSourceConfig;
+  readonly exportDataFieldHeaders = signal(false);
 
-  exportDataFieldHeaders = false;
+  readonly exportRowFieldHeaders = signal(false);
 
-  exportRowFieldHeaders = false;
+  readonly exportColumnFieldHeaders = signal(false);
 
-  exportColumnFieldHeaders = false;
-
-  exportFilterFieldHeaders = false;
-
-  constructor(service: Service) {
-    this.dataSource = {
-      fields: [{
-        caption: 'Region',
-        width: 120,
-        dataField: 'region',
-        area: 'row',
-        expanded: true,
-      }, {
-        caption: 'City',
-        dataField: 'city',
-        width: 150,
-        area: 'row',
-      }, {
-        dataField: 'date',
-        dataType: 'date',
-        area: 'column',
-        filterValues: [[2023], [2024], [2025]],
-        expanded: false,
-      }, {
-        caption: 'Sales',
-        dataField: 'amount',
-        dataType: 'number',
-        summaryType: 'sum',
-        format: 'currency',
-        area: 'data',
-      }, {
-        caption: 'Country',
-        dataField: 'country',
-        area: 'filter',
-      }],
-      store: service.getSales(),
-    };
-  }
+  readonly exportFilterFieldHeaders = signal(false);
 
   onExporting(e: DxPivotGridTypes.ExportingEvent) {
     const workbook = new Workbook();
@@ -86,10 +82,10 @@ export class AppComponent {
       worksheet,
       topLeftCell: { row: 4, column: 1 },
       keepColumnWidths: false,
-      exportDataFieldHeaders: this.exportDataFieldHeaders,
-      exportRowFieldHeaders: this.exportRowFieldHeaders,
-      exportColumnFieldHeaders: this.exportColumnFieldHeaders,
-      exportFilterFieldHeaders: this.exportFilterFieldHeaders,
+      exportDataFieldHeaders: this.exportDataFieldHeaders(),
+      exportRowFieldHeaders: this.exportRowFieldHeaders(),
+      exportColumnFieldHeaders: this.exportColumnFieldHeaders(),
+      exportFilterFieldHeaders: this.exportFilterFieldHeaders(),
     }).then((cellRange) => {
       // Header
       const headerRow = worksheet.getRow(2);
@@ -117,8 +113,4 @@ export class AppComponent {
   }
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

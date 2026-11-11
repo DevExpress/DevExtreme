@@ -1,12 +1,15 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, ViewEncapsulation, provideZoneChangeDetection } from '@angular/core';
+import {
+  Component, enableProdMode, inject, signal, ViewEncapsulation,
+} from '@angular/core';
 import {
   DxResizableModule,
   DxDataGridModule,
   DxTagBoxModule,
   DxCheckBoxModule,
 } from 'devextreme-angular';
-import { Service, Order } from './app.service';
+import type { DxTagBoxTypes } from 'devextreme-angular/ui/tag-box';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -26,30 +29,22 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  handleValues: string[] = ['left', 'top', 'right', 'bottom'];
+  readonly handleValues: string[] = ['left', 'top', 'right', 'bottom'];
 
-  keepAspectRatio = true;
+  readonly keepAspectRatio = signal(true);
 
-  handles: string[] = ['left', 'top', 'right', 'bottom'];
+  readonly handles = signal<string[]>(['left', 'top', 'right', 'bottom']);
 
-  orders: Order[];
+  readonly orders = inject(Service).getOrders();
 
-  resizableClasses = '';
+  readonly resizableClasses = signal('');
 
-  constructor(service: Service) {
-    this.orders = service.getOrders();
-  }
-
-  handlesValueChange({ value }) {
-    this.resizableClasses = this.handleValues.reduce((acc, handle) => {
+  handlesValueChange({ value }: DxTagBoxTypes.ValueChangedEvent) {
+    this.resizableClasses.set(this.handleValues.reduce((acc, handle) => {
       const newClass = value.includes(handle) ? '' : ` no-${handle}-handle`;
       return acc + newClass;
-    }, 'dx-resizable');
+    }, 'dx-resizable'));
   }
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

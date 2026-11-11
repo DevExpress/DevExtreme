@@ -1,10 +1,10 @@
 import { name as clickEventName } from '@js/common/core/events/click';
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import { end, start } from '@js/common/core/events/hover';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import type { Properties as ButtonProperties } from '@js/ui/button';
 import Button from '@js/ui/button';
+import eventsEngine from '@ts/events/core/events_engine';
 import type TextEditorBase from '@ts/ui/text_box/text_editor.base';
 import TextEditorButton from '@ts/ui/text_box/texteditor_button_collection/button';
 

@@ -13,6 +13,7 @@ import {
 
 import readyCallbacks from 'devextreme/core/utils/ready_callbacks';
 import { on } from 'devextreme/events';
+import { itWithZone } from '../helpers/zone-mode';
 
 @Component({
   standalone: false,
@@ -23,7 +24,7 @@ class TestContainerComponent {
 }
 
 describe('global events', () => {
-  it('should be subscribed within Angular Zone', () => {
+  itWithZone('should be subscribed within Angular Zone', () => {
     let readyCallbacksCalls = 0;
     readyCallbacks.fire();
 
@@ -53,7 +54,7 @@ describe('global events', () => {
 });
 
 describe('events', () => {
-  it('should be fired within Angular Zone', () => {
+  itWithZone('should be fired within Angular Zone', () => {
     TestBed.configureTestingModule({
       declarations: [TestContainerComponent],
       imports: [DxDataGridModule],

@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/prefer-nullish-coalescing */
 import { name as clickEvent } from '@js/common/core/events/click';
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import { addNamespace, isCommandKeyPressed, normalizeKeyName } from '@js/common/core/events/utils';
 import messageLocalization from '@js/common/core/localization/message';
 import { normalizeLoadResult } from '@js/common/data/data_source/utils';
@@ -29,6 +28,7 @@ import type { ItemClickEvent, SelectionChangedEvent as ListSelectionChangedEvent
 import type { Properties } from '@js/ui/tag_box';
 import errors from '@js/ui/widget/ui.errors';
 import type { OptionChanged } from '@ts/core/widget/types';
+import eventsEngine from '@ts/events/core/events_engine';
 import type { KeyboardKeyDownEvent } from '@ts/events/core/keyboard_processor';
 import type { ItemCache } from '@ts/ui/drop_down_editor/drop_down_list';
 import type { ListBaseProperties } from '@ts/ui/list/list.base';
@@ -345,7 +345,6 @@ class TagBox<
     }
 
     const scrollPosition = this._getScrollPosition(direction);
-    // @ts-expect-error fix on renderer level
     this._$tagsContainer.scrollLeft(scrollPosition);
   }
 
@@ -384,8 +383,7 @@ class TagBox<
     const isScrollLeft = xor(direction === 'next', Boolean(rtlEnabled));
 
     let { left: scrollOffset = 0 } = this._$focusedTag?.position() || { };
-    // @ts-expect-error fix on renderer level
-    let scrollLeft = this._$tagsContainer.scrollLeft() as number;
+    let scrollLeft = this._$tagsContainer.scrollLeft<number>();
 
     if (isScrollLeft) {
       scrollOffset += Number(getOuterWidth(this._$focusedTag, true))
@@ -659,12 +657,10 @@ class TagBox<
       return undefined;
     }
 
-    const scrollLeft = this._$tagsContainer.scrollLeft();
+    const scrollLeft = this._$tagsContainer.scrollLeft<number>();
     const delta = e.delta * TAGBOX_MOUSE_WHEEL_DELTA_MULTIPLIER;
 
     if (!isCommandKeyPressed(e) && allowScroll(this._$tagsContainer, delta, true)) {
-      // @ts-expect-error scrollLeft with argument not typed in renderer.d.ts
-      // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
       this._$tagsContainer.scrollLeft(scrollLeft + delta);
       return false;
     }
@@ -676,7 +672,7 @@ class TagBox<
 
     const input = this._input();
     const namespace = addNamespace('keydown', this.NAME as string);
-    eventsEngine.on(input, namespace, (e: KeyboardEvent) => {
+    eventsEngine.on(input, namespace, (e: DxEvent<KeyboardEvent>) => {
       const keyName = normalizeKeyName(e) ?? '';
 
       if (!this._isControlKey(keyName) && this._isEditable()) {
@@ -698,7 +694,7 @@ class TagBox<
     const eventName = addNamespace('mousedown', 'dxTagBox');
 
     eventsEngine.off(this._inputWrapper(), eventName);
-    eventsEngine.on(this._inputWrapper(), eventName, (e: MouseEvent) => {
+    eventsEngine.on(this._inputWrapper(), eventName, (e: DxEvent<MouseEvent>) => {
       if (e.target !== this._input()[0] && this._isFocused()) {
         e.preventDefault();
       }

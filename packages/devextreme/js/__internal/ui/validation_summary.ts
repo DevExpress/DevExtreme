@@ -1,9 +1,9 @@
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import registerComponent from '@js/core/component_registrator';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import type { OptionChanged } from '@ts/core/widget/types';
 import { SCREEN_READER_ONLY_CLASS } from '@ts/core/widget/widget';
+import eventsEngine from '@ts/events/core/events_engine';
 import type { KoDxValidator } from '@ts/integration/knockout/validation';
 import type { PostprocessRenderItemInfo } from '@ts/ui/collection/collection_widget.base';
 import type { CollectionWidgetEditProperties } from '@ts/ui/collection/collection_widget.edit';

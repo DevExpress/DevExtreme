@@ -52,7 +52,7 @@ function map(values: Collection | null | undefined, callback: Callback): unknown
   return result;
 }
 
-function each<TValues extends ArrayLike<unknown> | dxElementWrapper | null | undefined>(
+function each<TValues extends (object & ArrayLike<unknown>) | dxElementWrapper | null | undefined>(
   values: TValues,
   callback: EachCallback<Item<NonNullable<TValues>>, Index<TValues>>,
 ): Each<TValues>;
@@ -83,7 +83,7 @@ function each(values: Collection | null | undefined, callback: Callback): unknow
 }
 
 function reverseEach<TItem>(
-  array: ArrayLike<TItem> | null | undefined,
+  array: (object & ArrayLike<TItem>) | null | undefined,
   callback: EachCallback<TItem, number>,
 ): void;
 function reverseEach(array: ArrayLike<unknown> | null | undefined, callback: Callback): void {

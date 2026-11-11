@@ -1,7 +1,6 @@
 import { fx } from '@js/common/core/animation';
 import { name as clickEventName } from '@js/common/core/events/click';
 import { name as contextMenuEventName } from '@js/common/core/events/contextmenu';
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import { name as dblclickEvent } from '@js/common/core/events/double_click';
 import holdEvent from '@js/common/core/events/hold';
 import pointerEvents from '@js/common/core/events/pointer';
@@ -42,6 +41,7 @@ import type {
 import supportUtils from '@ts/core/utils/support';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { SupportedKeys } from '@ts/core/widget/widget';
+import eventsEngine from '@ts/events/core/events_engine';
 import CheckBox from '@ts/ui/check_box/index';
 import type { ActionArgs, CollectionItemInfo, PostprocessRenderItemInfo } from '@ts/ui/collection/collection_widget.base';
 import type { CollectionWidgetEditProperties } from '@ts/ui/collection/collection_widget.edit';
@@ -1858,7 +1858,7 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
       },
     );
 
-    eventsEngine.on($itemContainer, pointerDownEventNamespace, nodeSelector, (e) => {
+    eventsEngine.on($itemContainer, pointerDownEventNamespace, nodeSelector, (e: DxEvent) => {
       this._itemPointerHandler(e);
     });
   }
@@ -1966,7 +1966,6 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
   focus(): void {
     const { items = [] } = this.option();
     if (this._selectAllEnabled() && items.length) {
-      // @ts-expect-error ts-error
       eventsEngine.trigger(this._$selectAllItem, 'focus');
       return;
     }

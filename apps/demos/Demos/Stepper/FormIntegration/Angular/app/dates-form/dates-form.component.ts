@@ -1,6 +1,8 @@
-import { Component, Input, SimpleChanges, ViewChild } from '@angular/core';
+import {
+  Component, effect, input, viewChild,
+} from '@angular/core';
 import { DxFormModule } from 'devextreme-angular';
-import { DxFormComponent, type DxFormTypes } from 'devextreme-angular/ui/form';
+import { type DxFormComponent, type DxFormTypes } from 'devextreme-angular/ui/form';
 import { type DxDateRangeBoxTypes } from 'devextreme-angular/ui/date-range-box';
 import 'devextreme/ui/date_range_box';
 import type { BookingFormData } from '../app.types';
@@ -13,27 +15,25 @@ import type { BookingFormData } from '../app.types';
   ],
 })
 export class DatesFormComponent {
-  @ViewChild('formComponent', { static: false }) form!: DxFormComponent;
+  private readonly form = viewChild<DxFormComponent>('formComponent');
 
-  @Input() formData: BookingFormData;
+  readonly formData = input.required<BookingFormData>();
 
-  @Input() validationGroup: string;
+  readonly validationGroup = input.required<string>();
 
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes.formData) {
-      const value = changes.formData.currentValue;
-
-      this.form?.instance?.reset(value);
-    }
+  constructor() {
+    effect(() => {
+      this.form()?.instance?.reset(this.formData());
+    });
   }
 
-  dateRangeBoxOptions: DxDateRangeBoxTypes.Properties = {
+  readonly dateRangeBoxOptions: DxDateRangeBoxTypes.Properties = {
     startDatePlaceholder: 'Check-in',
     endDatePlaceholder: 'Check-out',
     elementAttr: { id: 'datesPicker' },
   };
 
-  labelOptions: DxFormTypes.SimpleItem['label'] = {
+  readonly labelOptions: DxFormTypes.SimpleItem['label'] = {
     visible: false,
   };
 }

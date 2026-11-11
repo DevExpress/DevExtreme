@@ -1,5 +1,5 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import { Component, enableProdMode, inject } from '@angular/core';
 import { HttpClient, provideHttpClient, withFetch } from '@angular/common/http';
 import { lastValueFrom } from 'rxjs';
 import { DxSchedulerModule } from 'devextreme-angular';
@@ -18,15 +18,15 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  dataSource = new DataSource({
+  private readonly http = inject(HttpClient);
+
+  readonly dataSource = new DataSource({
     store: new CustomStore({
       load: () => this.getData({ showDeleted: false }),
     }),
   });
 
-  currentDate = new Date(2017, 4, 25);
-
-  constructor(private http: HttpClient) {}
+  readonly currentDate = new Date(2017, 4, 25);
 
   private getData(requestOptions: Record<string, unknown>) {
     const PUBLIC_KEY = 'AIzaSyBnNAISIUKe6xdhq1_rjor2rxoI3UlMY7k';
@@ -45,7 +45,6 @@ export class AppComponent {
 
 bootstrapApplication(AppComponent, {
   providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
     provideHttpClient(withFetch()),
   ],
 });

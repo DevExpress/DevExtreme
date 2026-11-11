@@ -4,7 +4,7 @@ import {
   stateStoringColumnsControllerExtender,
 } from './extenders/state_storing_columns_controller';
 import { stateStoringDataControllerExtender } from './extenders/state_storing_data_controller';
-import { rowsView, selection } from './m_state_storing';
+import { rowsView, selection } from './state_storing';
 import { GridStateStoringController } from './state_storing_controller';
 
 export const stateStoringModule = {

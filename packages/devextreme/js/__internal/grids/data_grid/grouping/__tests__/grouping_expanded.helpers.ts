@@ -1,4 +1,4 @@
-import { GroupingHelper, updateGroupOffsets } from '../m_grouping_expanded';
+import { GroupingHelper } from '../grouping_expanded';
 import type { DataItem, GroupInfoData, GroupItemData } from '../types';
 import { createDataSourceAdapterStub } from './grouping_expanded.mock';
 
@@ -90,7 +90,7 @@ export class GroupingTestHelper {
       count,
     };
 
-    updateGroupOffsets(this.grouping, this.items, [], 0, pendingGroupInfo);
+    this.grouping.updateGroupOffsets(this.items, 1, [], 0, pendingGroupInfo);
 
     if (groupInfo) {
       groupInfo.isExpanded = !groupInfo.isExpanded;

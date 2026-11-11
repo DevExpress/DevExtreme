@@ -1,6 +1,5 @@
 // eslint-disable-next-line @stylistic/max-len
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types,@typescript-eslint/no-unused-vars */
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import { name as dblClickName } from '@js/common/core/events/double_click';
 import { addNamespace } from '@js/common/core/events/utils/index';
 import devices from '@js/core/devices';
@@ -12,6 +11,7 @@ import { hasWindow } from '@js/core/utils/window';
 import CustomStore from '@js/data/custom_store';
 import type { WidgetProperties } from '@ts/core/widget/widget';
 import Widget from '@ts/core/widget/widget';
+import eventsEngine from '@ts/events/core/events_engine';
 
 const FILE_MANAGER_FILES_VIEW_CLASS = 'dx-filemanager-files-view';
 const FILE_MANAGER_ITEM_LIST_ITEM_OPEN_EVENT_NAMESPACE = 'dxFileManager_open';
@@ -333,7 +333,9 @@ class FileManagerItemListBase extends Widget<FileManagerItemListBaseOptions> {
     return '';
   }
 
-  _getItemSelector(): void {}
+  _getItemSelector(): string | undefined {
+    return undefined;
+  }
 
   _onItemDblClick(e): void {}
 
