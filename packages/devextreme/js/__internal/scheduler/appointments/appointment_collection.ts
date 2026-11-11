@@ -1234,7 +1234,6 @@ class SchedulerAppointments extends CollectionWidget<AppointmentCollectionProper
       this._removeDragSourceClassFromDraggedAppointment();
 
       if (isDeferred(dragEvent.cancel)) {
-        // @ts-expect-error isDeferred() is not declared as a type guard
         dragEvent.cancel.resolve(true);
       } else {
         dragEvent.cancel = true;

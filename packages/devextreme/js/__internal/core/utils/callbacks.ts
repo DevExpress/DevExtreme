@@ -8,7 +8,7 @@ export interface CallbackInterface<TArgs extends any[] = any[], TContext = any> 
 
   remove: (fn: CallbackType<TArgs, TContext>) => this;
 
-  has: (fn: CallbackType<TArgs, TContext>) => this;
+  has: (fn?: CallbackType<TArgs, TContext>) => boolean;
 
   empty: () => this;
 

@@ -3,6 +3,7 @@ type EventsEngineType = {
     off(element: any, eventName?: any, handler?: any): void;
     one(element: any, eventName: any, handler: any, options?: any): void;
     set(eventEngine: any): void;
+    trigger(element: unknown, event: unknown, extraParameters?: unknown): void;
     triggerHandler(element: any, opts: Record<string, unknown>): void;
 };
 
