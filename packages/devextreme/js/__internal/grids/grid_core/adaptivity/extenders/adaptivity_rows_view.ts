@@ -73,7 +73,7 @@ export const adaptivityRowsViewExtender = (
     }
   }
 
-  public _getColumnIndexByElementCore($element: dxElementWrapper): number | undefined {
+  public override getColumnIndexByElementCore($element: dxElementWrapper): number | undefined {
     const $itemContent = $element.closest(`.${FIELD_ITEM_CONTENT_CLASS}`);
     if ($itemContent.length && $itemContent.closest(this.component.$element()).length) {
       const formItem = $itemContent.length
@@ -81,7 +81,7 @@ export const adaptivityRowsViewExtender = (
         : null;
       return formItem?.column && this._columnsController.getVisibleIndex(formItem.column.index);
     }
-    return super._getColumnIndexByElementCore($element);
+    return super.getColumnIndexByElementCore($element);
   }
 
   public _cellPrepared($cell: dxElementWrapper, options: ViewCellOptions): void {
@@ -138,7 +138,7 @@ export const adaptivityRowsViewExtender = (
     return super.getContextMenuItems?.(options);
   }
 
-  public isClickableElement($target: dxElementWrapper): boolean {
+  public override isClickableElement($target: dxElementWrapper): boolean {
     const isClickable = super.isClickableElement?.($target) ?? false;
 
     return isClickable || !!$target.closest(`.${CLASSES.commandAdaptive}`).length;

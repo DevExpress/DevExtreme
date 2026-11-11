@@ -2877,10 +2877,10 @@ const rowsView = <TBase extends ModuleType<RowsView>>(
       $tableElement = $cellElement.closest('table');
     }
 
-    return this._getColumnIndexByElementCore($cellElement);
+    return this.getColumnIndexByElementCore($cellElement);
   }
 
-  public _getColumnIndexByElementCore($element: dxElementWrapper): number | undefined {
+  public getColumnIndexByElementCore($element: dxElementWrapper): number | undefined {
     const $targetElement = $element.closest(
       `.${VIEW_CLASSES.row}> td:not(.${MASTER_DETAIL_CLASSES.detailCell})`,
     );

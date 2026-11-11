@@ -248,7 +248,7 @@ export interface EditingRowsViewExtension {
   editCellPrepared($cell: dxElementWrapper): void;
 
   // eslint-disable-next-line @typescript-eslint/method-signature-style -- overridden by methods
-  _getColumnIndexByElementCore($element: dxElementWrapper): number | undefined;
+  getColumnIndexByElementCore($element: dxElementWrapper): number | undefined;
 }
 
 export interface EditingDataControllerExtension {
