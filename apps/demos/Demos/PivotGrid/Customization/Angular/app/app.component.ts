@@ -1,5 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import {
+  Component, enableProdMode, inject, signal,
+} from '@angular/core';
 import { DxPivotGridModule, DxCheckBoxModule } from 'devextreme-angular';
 import PivotGridDataSource from 'devextreme/ui/pivot_grid/data_source';
 import { Service } from './app.service';
@@ -20,56 +22,48 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  pivotGridDataSource: PivotGridDataSource;
+  readonly pivotGridDataSource = new PivotGridDataSource({
+    fields: [{
+      caption: 'Region',
+      dataField: 'region',
+      expanded: true,
+      area: 'row',
+    }, {
+      caption: 'Country',
+      dataField: 'country',
+      expanded: true,
+      area: 'row',
+    }, {
+      caption: 'City',
+      dataField: 'city',
+      area: 'row',
+    }, {
+      dataField: 'date',
+      dataType: 'date',
+      area: 'column',
+    }, {
+      caption: 'Sales',
+      dataField: 'amount',
+      dataType: 'number',
+      summaryType: 'sum',
+      format: 'currency',
+      area: 'data',
+    }, {
+      caption: 'Percent',
+      dataField: 'amount',
+      dataType: 'number',
+      summaryType: 'sum',
+      summaryDisplayMode: 'percentOfRowGrandTotal',
+      area: 'data',
+    }],
+    store: inject(Service).getSales(),
+  });
 
-  showTotalsPrior = false;
+  readonly showTotalsPrior = signal(false);
 
-  rowsDataFieldArea = false;
+  readonly rowsDataFieldArea = signal(false);
 
-  treeHeaderLayout = true;
-
-  constructor(service: Service) {
-    this.pivotGridDataSource = new PivotGridDataSource({
-      fields: [{
-        caption: 'Region',
-        dataField: 'region',
-        expanded: true,
-        area: 'row',
-      }, {
-        caption: 'Country',
-        dataField: 'country',
-        expanded: true,
-        area: 'row',
-      }, {
-        caption: 'City',
-        dataField: 'city',
-        area: 'row',
-      }, {
-        dataField: 'date',
-        dataType: 'date',
-        area: 'column',
-      }, {
-        caption: 'Sales',
-        dataField: 'amount',
-        dataType: 'number',
-        summaryType: 'sum',
-        format: 'currency',
-        area: 'data',
-      }, {
-        caption: 'Percent',
-        dataField: 'amount',
-        dataType: 'number',
-        summaryType: 'sum',
-        summaryDisplayMode: 'percentOfRowGrandTotal',
-        area: 'data',
-      }],
-      store: service.getSales(),
-    });
-  }
+  readonly treeHeaderLayout = signal(true);
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

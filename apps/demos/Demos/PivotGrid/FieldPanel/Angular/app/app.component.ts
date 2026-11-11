@@ -1,5 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import {
+  Component, enableProdMode, inject, signal,
+} from '@angular/core';
 import { DxCheckBoxModule } from 'devextreme-angular';
 import PivotGridDataSource from 'devextreme/ui/pivot_grid/data_source';
 import { DxPivotGridModule, DxPivotGridTypes } from 'devextreme-angular/ui/pivot-grid';
@@ -21,45 +23,41 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  pivotGridDataSource: PivotGridDataSource;
+  readonly pivotGridDataSource = new PivotGridDataSource({
+    fields: [{
+      caption: 'Region',
+      width: 120,
+      dataField: 'region',
+      area: 'row',
+    }, {
+      caption: 'City',
+      dataField: 'city',
+      width: 150,
+      area: 'row',
+      selector(data: Sale) {
+        return `${data.city} (${data.country})`;
+      },
+    }, {
+      dataField: 'date',
+      dataType: 'date',
+      area: 'column',
+    }, {
+      dataField: 'sales',
+      dataType: 'number',
+      summaryType: 'sum',
+      format: 'currency',
+      area: 'data',
+    }],
+    store: inject(Service).getSales(),
+  });
 
-  showDataFields = true;
+  readonly showDataFields = signal(true);
 
-  showRowFields = true;
+  readonly showRowFields = signal(true);
 
-  showColumnFields = true;
+  readonly showColumnFields = signal(true);
 
-  showFilterFields = true;
-
-  constructor(service: Service) {
-    this.pivotGridDataSource = new PivotGridDataSource({
-      fields: [{
-        caption: 'Region',
-        width: 120,
-        dataField: 'region',
-        area: 'row',
-      }, {
-        caption: 'City',
-        dataField: 'city',
-        width: 150,
-        area: 'row',
-        selector(data: Sale) {
-          return `${data.city} (${data.country})`;
-        },
-      }, {
-        dataField: 'date',
-        dataType: 'date',
-        area: 'column',
-      }, {
-        dataField: 'sales',
-        dataType: 'number',
-        summaryType: 'sum',
-        format: 'currency',
-        area: 'data',
-      }],
-      store: service.getSales(),
-    });
-  }
+  readonly showFilterFields = signal(true);
 
   contextMenuPreparing(e: DxPivotGridTypes.ContextMenuPreparingEvent) {
     const dataSource = e.component.getDataSource();
@@ -113,8 +111,4 @@ export class AppComponent {
   }
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

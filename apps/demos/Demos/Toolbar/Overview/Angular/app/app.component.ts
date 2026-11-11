@@ -1,12 +1,12 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import { Component, enableProdMode, inject } from '@angular/core';
 import { DxListModule, DxToolbarModule } from 'devextreme-angular';
 import 'devextreme/ui/select_box';
 import { DataSource } from 'devextreme-angular/common/data';
 import notify from 'devextreme/ui/notify';
 import type { DxButtonTypes } from 'devextreme-angular/ui/button';
 import type { DxSelectBoxTypes } from 'devextreme-angular/ui/select-box';
-import { ProductType, Service } from './app.service';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -23,82 +23,71 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  items: ProductType[];
+  private readonly service = inject(Service);
 
-  productTypes: ProductType[];
+  private readonly productTypes = this.service.getProductTypes();
 
-  productsStore: DataSource;
+  readonly productsStore = new DataSource(this.service.getProducts());
 
-  selectBoxOptions: DxSelectBoxTypes.Properties;
+  readonly selectBoxOptions: DxSelectBoxTypes.Properties = {
+    width: 140,
+    items: this.productTypes,
+    valueExpr: 'id',
+    displayExpr: 'text',
+    value: this.productTypes[0].id,
+    inputAttr: { 'aria-label': 'Categories' },
+    onValueChanged: ({ value }) => {
+      this.productsStore.filter(
+        (value > 1)
+          ? ['type', '=', value]
+          : null,
+      );
 
-  backButtonOptions: DxButtonTypes.Properties = {
+      this.productsStore.load();
+    },
+  };
+
+  readonly backButtonOptions: DxButtonTypes.Properties = {
     icon: 'back',
     onClick: () => {
       notify('Back button has been clicked!');
     },
   };
 
-  refreshButtonOptions: DxButtonTypes.Properties = {
+  readonly refreshButtonOptions: DxButtonTypes.Properties = {
     icon: 'refresh',
     onClick: () => {
       notify('Refresh button has been clicked!');
     },
   };
 
-  addButtonOptions: DxButtonTypes.Properties = {
+  readonly addButtonOptions: DxButtonTypes.Properties = {
     icon: 'plus',
     onClick: () => {
       notify('Add button has been clicked!');
     },
   };
 
-  saveButtonOptions: DxButtonTypes.Properties = {
+  readonly saveButtonOptions: DxButtonTypes.Properties = {
     text: 'Save',
     onClick: () => {
       notify('Save option has been clicked!');
     },
   };
 
-  printButtonOptions: DxButtonTypes.Properties = {
+  readonly printButtonOptions: DxButtonTypes.Properties = {
     text: 'Print',
     onClick: () => {
       notify('Print option has been clicked!');
     },
   };
 
-  settingsButtonOptions: DxButtonTypes.Properties = {
+  readonly settingsButtonOptions: DxButtonTypes.Properties = {
     text: 'Settings',
     onClick: () => {
       notify('Settings option has been clicked!');
     },
   };
-
-  constructor(service: Service) {
-    this.productTypes = service.getProductTypes();
-    this.productsStore = new DataSource(service.getProducts());
-
-    this.selectBoxOptions = {
-      width: 140,
-      items: this.productTypes,
-      valueExpr: 'id',
-      displayExpr: 'text',
-      value: this.productTypes[0].id,
-      inputAttr: { 'aria-label': 'Categories' },
-      onValueChanged: ({ value }) => {
-        this.productsStore.filter(
-          (value > 1)
-            ? ['type', '=', value]
-            : null,
-        );
-
-        this.productsStore.load();
-      },
-    };
-  }
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

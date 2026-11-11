@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, computed, input } from '@angular/core';
 import type { BookingFormData } from '../app.types';
 
 @Component({
@@ -7,15 +7,11 @@ import type { BookingFormData } from '../app.types';
   styleUrls: ['./confirmation.component.css'],
 })
 export class ConfirmationComponent {
-  @Input() formData: BookingFormData;
+  readonly formData = input.required<BookingFormData>();
 
-  @Input() isConfirmed: boolean;
+  readonly isConfirmed = input.required<boolean>();
 
-  getCheckInDate() {
-    return new Date(this.formData.dates[0]).toLocaleDateString();
-  }
+  readonly checkInDate = computed(() => new Date(this.formData().dates[0]).toLocaleDateString());
 
-  getCheckOutDate() {
-    return new Date(this.formData.dates[1]).toLocaleDateString();
-  }
+  readonly checkOutDate = computed(() => new Date(this.formData().dates[1]).toLocaleDateString());
 }

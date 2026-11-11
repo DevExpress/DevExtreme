@@ -43,6 +43,7 @@ import type {
 } from '@ts/grids/grid_core/keyboard_navigation/keyboard_navigation';
 import type { OptionChanged } from '@ts/grids/grid_core/types';
 import type { ValidatingController } from '@ts/grids/grid_core/validating/validating';
+import { isStandardMode, isVirtualPaging, isVirtualRowRendering } from '@ts/grids/grid_core/virtual_scrolling';
 import Scrollable from '@ts/ui/scroll_view/scrollable';
 import type { ElementOffset } from '@ts/ui/scroll_view/types';
 
@@ -50,20 +51,18 @@ import { CLASSES as REORDERING_CLASSES } from '../columns_resizing_reordering/co
 import { isLocalStore } from '../data_source_adapter/utils/store';
 import type { EditingController } from '../editing/editing';
 import { CLASSES } from '../sticky_columns/const';
-import gridCoreUtils, { isVirtualPaging } from '../utils';
+import gridCoreUtils from '../utils';
 import { ColumnsView } from './columns_view';
 import { CLASSES as VIEW_CLASSES, ROW_OPTIONS_KEY } from './const';
 import type {
   CellRenderOptions,
   FocusStateParams,
   GroupCellOptions,
-  GroupContinuationData,
   RowPreparedOptions,
   RowRenderOptions,
   RowsModuleOptions,
   RowsViewContentChange,
   RowsViewLoadPanelOptions,
-  RowsViewOptions,
   RowsViewScrollEvent,
   ScrollPosition,
   TableRenderOptions,
@@ -365,8 +364,8 @@ export class RowsView extends ColumnsView {
       return;
     }
 
-    const isStandardScrollingMode = this.option('scrolling.mode') === 'standard';
-    const isPagerMode = isStandardScrollingMode && !gridCoreUtils.isVirtualRowRendering(this);
+    const scrolling = this.option('scrolling');
+    const isPagerMode = isStandardMode(scrolling) && !isVirtualRowRendering(scrolling);
 
     const oneBasedRowIndex = Number(rowIndex) + 1;
     const rowIndexOffset = isPagerMode
@@ -1061,11 +1060,11 @@ export class RowsView extends ColumnsView {
   }
 
   /**
-   * @extended: editing
+   * @extended: editing, grouping, summary
    */
   protected _getCellOptions(options: CellRenderOptions): ViewCellOptions {
     const { column, row, value } = options;
-    const { data, summaryCells }: ViewRow & { data?: GroupContinuationData } = row;
+    const { data, summaryCells } = row;
     const displayValue = gridCoreUtils.getDisplayValue(column, value, data, row.rowType);
 
     // The same object: _addWatchMethod's watch/update closures hold it
@@ -1085,26 +1084,7 @@ export class RowsView extends ColumnsView {
         summaryItems: summaryCells?.[options.columnIndex],
         resized: column.resizedCallbacks,
       } satisfies Partial<ViewCellOptions>,
-      this.getGroupContinuationMessages(column, data),
     );
-  }
-
-  private getGroupContinuationMessages(
-    column: Column,
-    data: GroupContinuationData | undefined,
-  ): Pick<ViewCellOptions, 'groupContinuesMessage' | 'groupContinuedMessage'> {
-    const { grouping, scrolling } = this.option() as RowsViewOptions;
-    const isGroupCell = isDefined(column.groupIndex) && !column.command;
-    if (!isGroupCell || isVirtualPaging(scrolling)) {
-      return {};
-    }
-
-    const texts = grouping?.texts;
-
-    return {
-      groupContinuesMessage: data?.isContinuationOnNextPage && texts?.groupContinuesMessage,
-      groupContinuedMessage: data?.isContinuation && texts?.groupContinuedMessage,
-    };
   }
 
   protected _toggleDraggableSourceColumnClass(

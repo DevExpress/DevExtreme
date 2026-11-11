@@ -1,7 +1,9 @@
-import { Component, Input, AfterViewInit, ChangeDetectorRef } from '@angular/core';
+import {
+  Component, computed, inject, input,
+} from '@angular/core';
 import { DxDataGridModule } from 'devextreme-angular';
 import { DataSource, ArrayStore } from 'devextreme-angular/common/data';
-import { Service, Task } from '../app.service';
+import { Service } from '../app.service';
 
 @Component({
   selector: 'detail-grid',
@@ -9,28 +11,18 @@ import { Service, Task } from '../app.service';
   imports: [DxDataGridModule],
   providers: [Service],
 })
-export class DetailGridComponent implements AfterViewInit {
-  @Input() key: number;
+export class DetailGridComponent {
+  readonly key = input.required<number>();
 
-  tasksDataSource: DataSource;
+  private readonly tasks = inject(Service).getTasks();
 
-  tasks: Task[];
-
-  constructor(private service: Service, private changeDetectorRef: ChangeDetectorRef) {
-    this.tasks = service.getTasks();
-  }
-
-  ngAfterViewInit() {
-    this.tasksDataSource = new DataSource({
-      store: new ArrayStore({
-        data: this.tasks,
-        key: 'ID',
-      }),
-      filter: ['EmployeeID', '=', this.key],
-    });
-
-    this.changeDetectorRef.detectChanges();
-  }
+  readonly tasksDataSource = computed(() => new DataSource({
+    store: new ArrayStore({
+      data: this.tasks,
+      key: 'ID',
+    }),
+    filter: ['EmployeeID', '=', this.key()],
+  }));
 
   completedValue(rowData) {
     return rowData.Status === 'Completed';

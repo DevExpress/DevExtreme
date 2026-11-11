@@ -166,6 +166,8 @@ pnpm run convert-to-js split       # after React TypeScript changes
 pnpm run fix-lint
 ```
 
+Angular demos are zoneless and signal-based: follow `.github/instructions/demos-angular.instructions.md`.
+
 ## Code Style Conventions
 
 These rules apply to `packages/devextreme/js/**/*.d.ts` (see `.github/instructions/API_conventions.instructions.md`):

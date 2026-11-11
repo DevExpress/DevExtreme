@@ -1,9 +1,13 @@
-import { Component, Input, AfterViewInit, ChangeDetectorRef } from '@angular/core';
+import {
+  Component, computed, input, signal,
+} from '@angular/core';
 import { DataSource } from 'devextreme-angular/common/data';
 import * as AspNetData from 'devextreme-aspnet-data-nojquery';
 import { DxFormModule, DxDataGridModule, DxSelectBoxModule, DxTabPanelModule } from 'devextreme-angular';
 import { DxFormTypes } from 'devextreme-angular/ui/form';
 import { DxSelectBoxTypes } from 'devextreme-angular/ui/select-box';
+
+const url = 'https://js.devexpress.com/Demos/NetCore/api/DataGridAdvancedMasterDetailView';
 
 @Component({
   selector: 'detail-view',
@@ -16,54 +20,48 @@ import { DxSelectBoxTypes } from 'devextreme-angular/ui/select-box';
     DxTabPanelModule,
   ],
 })
-export class DetailViewComponent implements AfterViewInit {
-  @Input() key: number;
+export class DetailViewComponent {
+  readonly key = input.required<number>();
 
-  @Input() rowData: object;
+  readonly rowData = input.required<object>();
 
-  url: string;
+  readonly productIdBySupplier = signal<number | undefined>(undefined);
 
-  productIdBySupplier: number;
+  readonly productsData = computed(() => new DataSource({
+    store: AspNetData.createStore({
+      key: 'ProductID',
+      loadParams: { SupplierID: this.key() },
+      loadUrl: `${url}/GetProductsBySupplier`,
+      onLoaded: (items) => this.setDefaultProduct(items),
+    }),
+  }));
 
-  productsData: DataSource;
+  readonly orderHistoryData = computed(() => {
+    const productId = this.productIdBySupplier();
 
-  orderHistoryData: DataSource;
+    if (productId === undefined) {
+      return null;
+    }
 
-  constructor(private changeDetectorRef: ChangeDetectorRef) {
-    this.url = 'https://js.devexpress.com/Demos/NetCore/api/DataGridAdvancedMasterDetailView';
-  }
-
-  ngAfterViewInit() {
-    this.productsData = new DataSource({
+    return new DataSource({
       store: AspNetData.createStore({
-        key: 'ProductID',
-        loadParams: { SupplierID: this.key },
-        loadUrl: `${this.url}/GetProductsBySupplier`,
-        onLoaded: (items) => this.setDefaultProduct(items),
+        key: 'OrderID',
+        loadParams: { ProductID: productId },
+        loadUrl: `${url}/GetOrdersByProduct`,
       }),
     });
-
-    this.changeDetectorRef.detectChanges();
-  }
+  });
 
   setDefaultProduct(items) {
     const firstItem = items[0];
 
-    if (firstItem && this.productIdBySupplier === undefined) {
-      this.productIdBySupplier = firstItem.ProductID;
+    if (firstItem && this.productIdBySupplier() === undefined) {
+      this.productIdBySupplier.set(firstItem.ProductID);
     }
-    this.changeDetectorRef.detectChanges();
   }
 
   handleValueChange(e: DxSelectBoxTypes.ValueChangedEvent) {
-    this.productIdBySupplier = e.value;
-    this.orderHistoryData = new DataSource({
-      store: AspNetData.createStore({
-        key: 'OrderID',
-        loadParams: { ProductID: e.value },
-        loadUrl: `${this.url}/GetOrdersByProduct`,
-      }),
-    });
+    this.productIdBySupplier.set(e.value);
   }
 
   customizeItemTemplate(item: DxFormTypes.SimpleItem) {

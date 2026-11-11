@@ -4,7 +4,6 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import type { DxEvent } from '@js/events';
 import type { Item as ContextMenuItem, ItemClickEvent } from '@js/ui/context_menu';
-import type { Properties as DataGridProperties } from '@js/ui/data_grid';
 import type { Properties as LoadPanelProperties } from '@js/ui/load_panel';
 import type dxScrollable from '@js/ui/scroll_view/ui.scrollable';
 import type { dxScrollableOptions, ScrollEventInfo } from '@js/ui/scroll_view/ui.scrollable';
@@ -134,7 +133,9 @@ export interface ViewCellOptions extends Pick<ViewRow, 'rowType' | 'rowIndex' | 
   /** @architectureLeak data_grid/summary: core renders summary items of group and footer cells */
   summaryItems?: SummaryTextItem[];
   resized?: Column['resizedCallbacks'];
+  /** @architectureLeak data_grid/grouping: core's default group template shows it */
   groupContinuesMessage?: string | false;
+  /** @architectureLeak data_grid/grouping: core's default group template shows it */
   groupContinuedMessage?: string | false;
   /** @architectureLeak editing: the cell hint skips cells that are being edited */
   isEditing?: boolean;
@@ -209,15 +210,6 @@ export interface FocusStateParams {
   preventScroll?: boolean;
   pageSizeChanged?: boolean;
 }
-
-/** @architectureLeak data_grid: a group split across pages marks its row data as continued */
-export interface GroupContinuationData {
-  isContinuation?: boolean;
-  isContinuationOnNextPage?: boolean;
-}
-
-/** @architectureLeak data_grid: group cells show the grouping continuation texts */
-export type RowsViewOptions = InternalGridOptions & Pick<DataGridProperties, 'grouping'>;
 
 /** @architectureLeak data_grid/summary: core extenders adjust the group summary cells */
 export interface SummaryRowsViewExtension {

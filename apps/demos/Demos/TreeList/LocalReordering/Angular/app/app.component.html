@@ -1,7 +1,7 @@
 <div>
   <dx-tree-list
     id="employees"
-    [dataSource]="employees"
+    [dataSource]="employees()"
     [rootValue]="-1"
     keyExpr="ID"
     [showRowLines]="true"
@@ -13,9 +13,9 @@
     <dxo-tree-list-row-dragging
       [onDragChange]="onDragChange"
       [onReorder]="onReorder"
-      [allowDropInsideItem]="allowDropInsideItem"
-      [allowReordering]="allowReordering"
-      [showDragIcons]="showDragIcons"
+      [allowDropInsideItem]="allowDropInsideItem()"
+      [allowReordering]="allowReordering()"
+      [showDragIcons]="showDragIcons()"
     ></dxo-tree-list-row-dragging>
     <dxi-tree-list-column
       dataField="Title"

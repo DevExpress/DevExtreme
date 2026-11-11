@@ -1,5 +1,5 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, ChangeDetectionStrategy, provideZoneChangeDetection } from '@angular/core';
+import { Component, enableProdMode, ChangeDetectionStrategy } from '@angular/core';
 import { DxDataGridModule } from 'devextreme-angular';
 import * as AspNetData from 'devextreme-aspnet-data-nojquery';
 
@@ -23,8 +23,4 @@ export class AppComponent {
   });
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

@@ -17,9 +17,6 @@
               "base": "dist/sandbox"
             },
             "index": "src/index.html",
-            "polyfills": [
-              "src/polyfills.ts"
-            ],
             "tsConfig": "src/tsconfig.app.json",
             "styles": [
               "node_modules/devextreme/dist/css/dx.common.css",
@@ -78,7 +75,6 @@
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
             "main": "src/test.ts",
-            "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.spec.json",
             "karmaConfig": "karma.conf.js",
             "assets": [],

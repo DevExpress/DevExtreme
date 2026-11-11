@@ -18,6 +18,7 @@ import {
   DxListModule,
   DxListComponent,
 } from 'devextreme-angular';
+import { detectChanges } from '../helpers/change-detection';
 
 @Component({
   standalone: false,
@@ -79,7 +80,7 @@ describe('DxList', () => {
     const optionSpy = spyOn(instance, 'option').and.callThrough();
 
     testComponent.items.push(2);
-    fixture.detectChanges();
+    detectChanges(fixture);
 
     expect(optionSpy as jasmine.Spy).toHaveBeenCalledWith('items', [1, 2]);
     optionSpy.calls.reset();
@@ -104,10 +105,10 @@ describe('DxList', () => {
     const { instance } = testComponent.innerWidget;
 
     testComponent.emptyDataSource = { items: [] };
-    fixture.detectChanges();
+    detectChanges(fixture);
 
     testComponent.emptyDataSource.items.push({ id: 1 });
-    fixture.detectChanges();
+    detectChanges(fixture);
 
     expect(instance?.option('items')?.length).toBe(1);
   });
@@ -127,7 +128,7 @@ describe('DxList', () => {
     const optionSpy = spyOn(instance, 'option').and.callThrough();
 
     testComponent.items = testComponent.items;
-    fixture.detectChanges();
+    detectChanges(fixture);
 
     expect(instance.option).toHaveBeenCalledTimes(1);
     optionSpy.calls.reset();
@@ -146,7 +147,7 @@ describe('DxList', () => {
     const { instance } = testComponent.innerWidget;
 
     testComponent.defaultTemplateItems[0].disabled = true;
-    fixture.detectChanges();
+    detectChanges(fixture);
 
     const listItems = instance.element().querySelectorAll('.dx-list-item');
     const listItemHasDisabledClass = listItems[0].classList.contains('dx-state-disabled');
@@ -237,7 +238,7 @@ describe('DxList', () => {
         expect(instance.element().querySelectorAll('.dx-item.dx-state-disabled').length).toBe(0);
 
         testComponent.disabled = true;
-        fixture.detectChanges();
+        detectChanges(fixture);
 
         expect(instance.element().querySelectorAll('.dx-item.dx-state-disabled').length).toBe(1);
       });
@@ -271,7 +272,7 @@ describe('DxList', () => {
 
           testComponent.items.push(2);
 
-          fixture.detectChanges();
+          detectChanges(fixture);
 
           expect(instance?.option('items')?.length).toBe(2);
           expect(instance.element().querySelectorAll('.dx-item-content').length).toBe(2);
@@ -299,7 +300,7 @@ describe('DxList', () => {
 
           testComponent.items.pop();
           expect(testComponent.items.length).toBe(0);
-          fixture.detectChanges();
+          detectChanges(fixture);
 
           expect(instance?.option('items')?.length).toBe(0);
           expect(instance.element().querySelectorAll('.dx-item-content').length).toBe(0);
@@ -325,12 +326,12 @@ describe('DxList', () => {
           const testComponent = fixture.componentInstance;
 
           testComponent.items = [1, 2];
-          fixture.detectChanges();
+          detectChanges(fixture);
 
           const { instance } = testComponent.innerWidget;
 
           testComponent.items = [3, 4];
-          fixture.detectChanges();
+          detectChanges(fixture);
 
           expect(instance?.option('items')?.length).toBe(2);
           expect(instance.element().querySelectorAll('.dx-item-content').length).toBe(2);
@@ -374,7 +375,7 @@ describe('DxList', () => {
 
           testComponent.complexItems.push({ text: 'Item 2' });
 
-          fixture.detectChanges();
+          detectChanges(fixture);
 
           expect(instance.option).toHaveBeenCalled;
           expect(instance?.option('items')?.length).toBe(2);
@@ -386,7 +387,7 @@ describe('DxList', () => {
 
           testComponent.complexItems[0].text = 'Changed';
 
-          fixture.detectChanges();
+          detectChanges(fixture);
 
           expect(optionSpy).toHaveBeenCalledTimes(1);
           expect(optionSpy.calls.allArgs().length).toBe(1);
@@ -511,7 +512,7 @@ describe('DxList', () => {
     fixture.detectChanges();
 
     fixture.componentInstance.items = [];
-    fixture.detectChanges();
+    detectChanges(fixture);
 
     expect(destroyed).toBe(true);
   });
@@ -551,7 +552,7 @@ describe('DxList', () => {
     fixture.detectChanges();
 
     fixture.componentInstance.listVisible = false;
-    fixture.detectChanges();
+    detectChanges(fixture);
 
     expect(fixture.componentInstance.buttonDestroyed).toBe(true);
   });
@@ -589,7 +590,7 @@ describe('DxList', () => {
     fixture.detectChanges();
 
     fixture.componentInstance.listVisible = false;
-    fixture.detectChanges();
+    detectChanges(fixture);
 
     expect(fixture.componentInstance.buttonDestroyed).toBe(true);
   });

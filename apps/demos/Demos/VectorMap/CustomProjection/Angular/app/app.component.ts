@@ -1,8 +1,8 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import { Component, enableProdMode, inject } from '@angular/core';
 import { DxVectorMapModule } from 'devextreme-angular';
 import * as mapsData from 'devextreme-dist/js/vectormap-data/world.js';
-import { FeatureCollection, Service } from './app.service';
+import { Service } from './app.service';
 
 const RADIANS = Math.PI / 180;
 const WAGNER_6_P_LAT = Math.PI / Math.sqrt(3);
@@ -23,9 +23,9 @@ if (!/localhost/.test(document.location.host)) {
 })
 
 export class AppComponent {
-  worldMap = mapsData.world;
+  readonly worldMap = mapsData.world;
 
-  customProjection = {
+  readonly customProjection = {
     aspectRatio: 2,
 
     to(coordinates: number[]) {
@@ -49,15 +49,7 @@ export class AppComponent {
     },
   };
 
-  coordLinesData: FeatureCollection;
-
-  constructor(service: Service) {
-    this.coordLinesData = service.getCoordLinesData();
-  }
+  readonly coordLinesData = inject(Service).getCoordLinesData();
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

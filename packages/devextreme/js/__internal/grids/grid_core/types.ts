@@ -214,6 +214,10 @@ interface InternalSelection extends SelectionBase {
   maxFilterLengthInRequest?: number;
 }
 
+type InternalScrolling = (DataGridScrolling | TreeListScrolling) & {
+  legacyMode?: boolean;
+};
+
 export interface InternalGridOptions extends
   GridBaseOptions<InternalGrid, unknown, unknown>,
   TemporarlyOptionsTakenFromDataGrid,
@@ -230,7 +234,7 @@ export interface InternalGridOptions extends
 
   editing?: EditingOptions;
 
-  scrolling?: DataGridScrolling | TreeListScrolling;
+  scrolling?: InternalScrolling;
 
   filterValue?: FilterValue;
 

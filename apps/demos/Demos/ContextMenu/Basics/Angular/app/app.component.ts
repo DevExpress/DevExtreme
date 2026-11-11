@@ -1,5 +1,5 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import { Component, enableProdMode } from '@angular/core';
 import notify from 'devextreme/ui/notify';
 import { DxContextMenuModule, type DxContextMenuTypes } from 'devextreme-angular/ui/context-menu';
 
@@ -22,20 +22,16 @@ class ContextMenuItem {
   ],
 })
 export class AppComponent {
-  items: ContextMenuItem[];
-
-  constructor() {
-    this.items = [{
-      text: 'Share',
-      items: [
-        { text: 'Facebook' },
-        { text: 'Twitter' }],
-    },
-    { text: 'Download' },
-    { text: 'Comment' },
-    { text: 'Favorite' },
-    ];
-  }
+  readonly items: ContextMenuItem[] = [{
+    text: 'Share',
+    items: [
+      { text: 'Facebook' },
+      { text: 'Twitter' }],
+  },
+  { text: 'Download' },
+  { text: 'Comment' },
+  { text: 'Favorite' },
+  ];
 
   itemClick({ itemData }: DxContextMenuTypes.ItemClickEvent<ContextMenuItem>) {
     if (!itemData.items) {
@@ -44,8 +40,4 @@ export class AppComponent {
   }
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

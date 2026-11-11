@@ -62,12 +62,13 @@ import type { SearchPanelViewController } from '@ts/grids/grid_core/search/searc
 import { COMMAND_SELECT_CLASS } from '@ts/grids/grid_core/selection/const';
 import type { SelectionController } from '@ts/grids/grid_core/selection/selection';
 import type { Module, ModuleType, RowKey } from '@ts/grids/grid_core/types';
-import gridCoreUtils, { isVirtualPaging } from '@ts/grids/grid_core/utils';
+import gridCoreUtils from '@ts/grids/grid_core/utils';
 import { CLASSES as VIEW_CLASSES, ROW_OPTIONS_KEY } from '@ts/grids/grid_core/views/const';
 import type { RowsView } from '@ts/grids/grid_core/views/rows_view';
 import type {
   CellPosition, FocusStateParams, RowsViewScrollEvent, ViewRowEvent,
 } from '@ts/grids/grid_core/views/types';
+import { isVirtualPaging, isVirtualRowRendering } from '@ts/grids/grid_core/virtual_scrolling';
 import type Scrollable from '@ts/ui/scroll_view/scrollable';
 import type TextEditorBase from '@ts/ui/text_box/text_editor.base';
 import { memoize } from '@ts/utils/memoize';
@@ -2878,7 +2879,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
 
   private _isVirtualRowRender(): boolean {
     return (
-      this.isVirtualScrolling() || gridCoreUtils.isVirtualRowRendering(this)
+      this.isVirtualScrolling() || isVirtualRowRendering(this.option('scrolling'))
     );
   }
 

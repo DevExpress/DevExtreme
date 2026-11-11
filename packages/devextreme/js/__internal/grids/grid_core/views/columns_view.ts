@@ -51,6 +51,7 @@ import modules from '@ts/grids/grid_core/modules/modules';
 import type { SelectionController } from '@ts/grids/grid_core/selection/selection';
 import type { OptionChanged } from '@ts/grids/grid_core/types';
 import gridCoreUtils from '@ts/grids/grid_core/utils';
+import { isVirtualMode } from '@ts/grids/grid_core/virtual_scrolling';
 import { FIELD_ITEM_CONTENT_CLASS } from '@ts/ui/form/constants';
 
 import { CLASSES, ROW_OPTIONS_KEY } from './const';
@@ -1588,7 +1589,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
 
     if ($rows.length > 0 && cellPosition.rowIndex !== undefined && cellPosition.rowIndex >= 0) {
       if (
-        this.option('scrolling.mode') !== 'virtual'
+        !isVirtualMode(this.option('scrolling'))
         && this.option('scrolling.rowRenderingMode') !== 'virtual'
       ) {
         cellPosition.rowIndex = cellPosition.rowIndex < $rows.length

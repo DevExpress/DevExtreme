@@ -1,11 +1,12 @@
 import {
   Component,
   enableProdMode,
-  provideZoneChangeDetection,
+  inject,
+  signal,
 } from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
 import { DxTabsModule, DxSelectBoxModule, DxMultiViewModule } from 'devextreme-angular';
-import { Tab, Service } from './app.service';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -23,18 +24,9 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  employees: Tab[];
+  readonly employees = inject(Service).getEmployees();
 
-  selectedItem: Tab;
-
-  constructor(service: Service) {
-    this.employees = service.getEmployees();
-    this.selectedItem = this.employees[0];
-  }
+  readonly selectedItem = signal(this.employees[0]);
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

@@ -1,8 +1,10 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import {
+  Component, enableProdMode, inject, signal,
+} from '@angular/core';
 import { DxLinearGaugeModule, DxSelectBoxModule } from 'devextreme-angular';
 
-import { City, Service } from './app.service';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -21,18 +23,9 @@ if (!/localhost/.test(document.location.host)) {
 })
 
 export class AppComponent {
-  cities: City[];
+  readonly cities = inject(Service).getCities();
 
-  weatherData: City['data'];
-
-  constructor(service: Service) {
-    this.cities = service.getCities();
-    this.weatherData = this.cities[0].data;
-  }
+  readonly weatherData = signal(this.cities[0].data);
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

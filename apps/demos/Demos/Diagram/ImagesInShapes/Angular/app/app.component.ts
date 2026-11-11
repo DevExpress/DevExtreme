@@ -1,5 +1,5 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import { Component, enableProdMode, inject } from '@angular/core';
 import { provideHttpClient, withFetch } from '@angular/common/http';
 
 import { DxDiagramModule } from 'devextreme-angular';
@@ -21,25 +21,21 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  orgItemsDataSource: ArrayStore;
+  private readonly service = inject(Service);
 
-  orgLinksDataSource: ArrayStore;
+  readonly orgItemsDataSource = new ArrayStore({
+    key: 'ID',
+    data: this.service.getOrgItems(),
+  });
 
-  constructor(service: Service) {
-    this.orgItemsDataSource = new ArrayStore({
-      key: 'ID',
-      data: service.getOrgItems(),
-    });
-    this.orgLinksDataSource = new ArrayStore({
-      key: 'ID',
-      data: service.getOrgLinks(),
-    });
-  }
+  readonly orgLinksDataSource = new ArrayStore({
+    key: 'ID',
+    data: this.service.getOrgLinks(),
+  });
 }
 
 bootstrapApplication(AppComponent, {
   providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
     provideHttpClient(withFetch()),
   ],
 });
