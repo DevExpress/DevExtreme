@@ -908,7 +908,10 @@ export class SimulatedStrategy<
       return;
     }
     this._saveActive();
-    e.preventDefault?.();
+
+    if (e.cancelable ?? true) {
+      e.preventDefault?.();
+    }
 
     this._adjustDistance(e, e.delta);
     this._eventForUserAction = e;
