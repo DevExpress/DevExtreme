@@ -19,7 +19,7 @@ import type {
 } from '@ts/grids/grid_core/focus/types';
 import type { KeyboardNavigationController } from '@ts/grids/grid_core/keyboard_navigation/keyboard_navigation';
 import type { ModuleType, RowKey } from '@ts/grids/grid_core/types';
-import { isVirtualPaging } from '@ts/grids/grid_core/utils';
+import { isVirtualPaging } from '@ts/grids/grid_core/virtual_scrolling';
 
 import gridCore from '../core';
 import { createGroupFilter } from '../utils';

@@ -71,6 +71,7 @@ import type { RowsView } from '@ts/grids/grid_core/views/rows_view';
 import type {
   CellRenderOptions, ViewCellOptions, ViewDataChange, ViewRowEvent,
 } from '@ts/grids/grid_core/views/types';
+import { isVirtualMode } from '@ts/grids/grid_core/virtual_scrolling';
 
 import {
   ACTION_OPTION_NAMES,
@@ -278,9 +279,7 @@ export class EditingController extends modules.ViewController {
 
   private _getNewRowPosition(): NewRowPosition | undefined {
     const newRowPosition = this.option('editing.newRowPosition');
-    const scrollingMode = this.option('scrolling.mode');
-
-    if (scrollingMode === 'virtual') {
+    if (isVirtualMode(this.option('scrolling'))) {
       switch (newRowPosition) {
         case NEW_ROW_POSITION.pageTop:
           return NEW_ROW_POSITION.viewportTop;

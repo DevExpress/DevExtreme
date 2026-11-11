@@ -15,7 +15,7 @@ import type DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/data
 import type { DataFilter } from '@ts/grids/grid_core/filter/types';
 import type { WrappedLookupDataSource } from '@ts/grids/grid_core/types';
 
-import gridCoreUtils, { isInfiniteMode, isVirtualMode, isVirtualPaging } from '../utils';
+import gridCoreUtils from '../utils';
 
 interface CellRect {
   left: number;
@@ -504,59 +504,5 @@ describe('getWrappedLookupDataSource', () => {
       await expect(lookupDataSource.byKey(3)).resolves.toEqual({ id: 3, text: 'Three' });
       await expect(lookupDataSource.byKey(2)).resolves.toBeUndefined();
     });
-  });
-});
-
-describe('isVirtualMode', () => {
-  it('should be true for the virtual scrolling mode', () => {
-    expect(isVirtualMode({ mode: 'virtual' })).toBe(true);
-  });
-
-  it('should be false for the infinite scrolling mode', () => {
-    expect(isVirtualMode({ mode: 'infinite' })).toBe(false);
-  });
-
-  it('should be false for the standard scrolling mode', () => {
-    expect(isVirtualMode({ mode: 'standard' })).toBe(false);
-  });
-
-  it('should be false when there are no scrolling options', () => {
-    expect(isVirtualMode(undefined)).toBe(false);
-  });
-});
-
-describe('isInfiniteMode', () => {
-  it('should be true for the infinite scrolling mode', () => {
-    expect(isInfiniteMode({ mode: 'infinite' })).toBe(true);
-  });
-
-  it('should be false for the virtual scrolling mode', () => {
-    expect(isInfiniteMode({ mode: 'virtual' })).toBe(false);
-  });
-
-  it('should be false for the standard scrolling mode', () => {
-    expect(isInfiniteMode({ mode: 'standard' })).toBe(false);
-  });
-
-  it('should be false when there are no scrolling options', () => {
-    expect(isInfiniteMode(undefined)).toBe(false);
-  });
-});
-
-describe('isVirtualPaging', () => {
-  it('should be true for the virtual scrolling mode', () => {
-    expect(isVirtualPaging({ mode: 'virtual' })).toBe(true);
-  });
-
-  it('should be true for the infinite scrolling mode', () => {
-    expect(isVirtualPaging({ mode: 'infinite' })).toBe(true);
-  });
-
-  it('should be false for the standard scrolling mode', () => {
-    expect(isVirtualPaging({ mode: 'standard' })).toBe(false);
-  });
-
-  it('should be false when there are no scrolling options', () => {
-    expect(isVirtualPaging(undefined)).toBe(false);
   });
 });

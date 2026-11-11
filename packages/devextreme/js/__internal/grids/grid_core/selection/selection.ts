@@ -38,6 +38,7 @@ import type {
 import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
 import type { RowsView } from '@ts/grids/grid_core/views/rows_view';
 import type { ViewRowEvent } from '@ts/grids/grid_core/views/types';
+import { isInfiniteMode, isVirtualPaging } from '@ts/grids/grid_core/virtual_scrolling';
 import Selection from '@ts/ui/selection/selection';
 import type { SelectionChangeEvent, SelectionFilter, SelectionOptions } from '@ts/ui/selection/types';
 
@@ -46,7 +47,7 @@ import type { DataChange, ProcessedItem } from '../data_controller/types';
 import type { DataSourceController } from '../data_source/data_source_controller';
 import { isEditRow } from '../keyboard_navigation/utils';
 import modules from '../modules/modules';
-import gridCoreUtils, { isInfiniteMode, isVirtualPaging } from '../utils';
+import gridCoreUtils from '../utils';
 import {
   CHECKBOXES_HIDDEN_CLASS,
   COMMAND_SELECT_CLASS,
