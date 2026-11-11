@@ -6,7 +6,7 @@ import $ from 'jquery';
 import { setupDataGridModules, MockDataController, MockColumnsController } from '../../helpers/dataGridMocks.js';
 import { addShadowDomStyles } from 'core/utils/shadow_dom';
 
-import * as summaryModule from '__internal/grids/data_grid/summary/m_summary';
+import * as summaryModule from '__internal/grids/data_grid/summary/summary';
 import gridCoreUtils from '__internal/grids/grid_core/utils';
 import { noop } from 'core/utils/common';
 
