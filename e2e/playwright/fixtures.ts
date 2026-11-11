@@ -1,4 +1,4 @@
-import { test as base } from '@playwright/test';
+import { expect, test as base } from '@playwright/test';
 import { DEFAULT_BROWSER_SIZE, DEFAULT_THEME } from './helpers/const';
 import { changeTheme, openTestPage, resetPageState } from './helpers/testPageUtils';
 
@@ -16,6 +16,10 @@ export const test = base.extend<TestOptions>({
 
   page: async ({ page, theme, browserSize }, use) => {
     const [width, height] = browserSize;
+    // TestCafe failed a test on an uncaught error in the page; some tests assert nothing else.
+    const pageErrors: string[] = [];
+
+    page.on('pageerror', (error) => pageErrors.push(error.stack ?? error.message));
 
     await page.setViewportSize({ width, height });
     await openTestPage(page);
@@ -23,6 +27,8 @@ export const test = base.extend<TestOptions>({
     await resetPageState(page);
 
     await use(page);
+
+    expect(pageErrors, 'uncaught errors in the page').toEqual([]);
   },
 });
 
