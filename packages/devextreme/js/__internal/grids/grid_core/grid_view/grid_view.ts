@@ -22,7 +22,7 @@ import type { RowsView } from '@ts/grids/grid_core/views/rows_view';
 import type { ColumnWidth, ScrollPosition, ViewDataChange } from '@ts/grids/grid_core/views/types';
 import { isPercentWidth } from '@ts/grids/grid_core/views/utils';
 
-import type { FooterView } from '../../data_grid/summary/m_summary';
+import type { FooterView } from '../../data_grid/summary/summary';
 import type { AdaptiveColumnsViewController } from '../adaptivity/adaptivity';
 import type { ColumnHeadersView } from '../column_headers/column_headers';
 import type { ColumnsController } from '../columns_controller/columns_controller';
