@@ -40,7 +40,7 @@
         "devextreme-aspnet-data": "5.1.0",
         "devextreme-aspnet-data-nojquery": "5.1.0",
         "devextreme-cldr-data": "1.0.3",
-        "devextreme-exceljs-fork": "^4.4.13",
+        "devextreme-exceljs-fork": "^5.0.0",
         "devextreme-quill": "catalog:",
         "dx-systemjs-vue-browser": "1.1.2",
         "file-saver-es": "2.0.5",

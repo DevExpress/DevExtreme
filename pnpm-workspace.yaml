@@ -148,3 +148,4 @@ patchedDependencies:
 minimumReleaseAgeExclude:
   - "eslint-config-devextreme"
   - devextreme-internal-tools@20.5.0
+  - "devextreme-exceljs-fork@5.0.0"
