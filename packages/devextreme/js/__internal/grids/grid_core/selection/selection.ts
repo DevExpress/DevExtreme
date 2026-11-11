@@ -18,7 +18,6 @@ import { each } from '@js/core/utils/iterator';
 import { isDefined } from '@js/core/utils/type';
 import type { StoreChange } from '@js/data/store';
 import type { DxEvent } from '@js/events';
-import CheckBox from '@js/ui/check_box';
 import errors from '@js/ui/widget/ui.errors';
 import { getData } from '@ts/core/element_data';
 import supportUtils from '@ts/core/utils/support';
@@ -70,6 +69,7 @@ import type {
   SelectionModifierKeys,
   SelectionRowsView,
 } from './types';
+import { getSelectionCheckBox } from './utils';
 
 const processLongTap = (
   that: Pick<InternalGrid, 'getView' | 'getController' | 'option'>,
@@ -906,18 +906,15 @@ export const selectionRowsViewExtender = <TBase extends ModuleType<RowsView>>(
   private updateRowSelection($row: dxElementWrapper, isSelected?: boolean): void {
     const needSelectionClass = Boolean(isSelected) && !isEditRow($row);
 
-    $row
-      .toggleClass(ROW_SELECTION_CLASS, needSelectionClass)
-      // @ts-expect-error dxCheckBox is added to the renderer at runtime
-      .find(`.${SELECT_CHECKBOX_CLASS}`).dxCheckBox('option', 'value', isSelected);
+    $row.toggleClass(ROW_SELECTION_CLASS, needSelectionClass);
+    getSelectionCheckBox($row)?.option('value', isSelected);
     this.setAria('selected', String(isSelected), $row);
   }
 
   private isRowSelectionOutdated($row: dxElementWrapper, isSelected?: boolean): boolean {
-    const $checkBox = $row.find(`.${SELECT_CHECKBOX_CLASS}`);
+    const checkBox = getSelectionCheckBox($row);
     const isAriaOutdated = $row.attr('aria-selected') !== String(isSelected);
-    const isCheckBoxOutdated = $checkBox.length > 0
-      && CheckBox.getInstance($checkBox.get(0)).option('value') !== isSelected;
+    const isCheckBoxOutdated = checkBox !== undefined && checkBox.option('value') !== isSelected;
 
     return isAriaOutdated || isCheckBoxOutdated;
   }

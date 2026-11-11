@@ -94,6 +94,27 @@ describe('Selection while new rows wait for async templates', () => {
     expect(getRowKeys($container, 'tr.dx-selection')).toEqual([1]);
   });
 
+  it('should highlight the restored selected row whose checkbox is canceled in onEditorPreparing', async () => {
+    const { $container, renderPendingTemplates } = await createGrid({
+      selection: { mode: 'multiple' },
+      onEditorPreparing: (e) => {
+        if (e.parentType === 'dataRow' && e.row?.key === 1) {
+          e.cancel = true;
+        }
+      },
+      stateStoring: {
+        enabled: true,
+        type: 'custom',
+        customLoad: () => Promise.resolve(RESTORED_STATE),
+      },
+    });
+
+    await flushAsync();
+    renderPendingTemplates();
+
+    expect(getRowKeys($container, 'tr.dx-selection')).toEqual([1]);
+  });
+
   it('should highlight the rows selected with selectRows', async () => {
     const { instance, $container, renderPendingTemplates } = await createGrid({
       selection: { mode: 'multiple' },
