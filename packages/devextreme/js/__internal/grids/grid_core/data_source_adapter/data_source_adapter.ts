@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-dynamic-delete */
 import ArrayStore from '@js/common/data/array_store';
 import { applyBatch } from '@js/common/data/array_utils';
 import type { Callback } from '@js/core/utils/callbacks';
@@ -597,6 +596,7 @@ export default class DataSourceAdapter extends modules.Controller {
     each(options.storeLoadOptions, (optionName, optionValue) => {
       if (localLoadOptionNames[optionName]) {
         loadOptions[optionName] = optionValue;
+        // eslint-disable-next-line @typescript-eslint/no-dynamic-delete -- moved to loadOptions
         delete options.storeLoadOptions[optionName];
       }
     });
