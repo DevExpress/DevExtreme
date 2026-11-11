@@ -852,7 +852,9 @@ describe('columnOption', () => {
 
     const aiColumn = component.apiColumnOption('myColumn');
 
-    expect(aiColumn).toMatchObject({ type: 'ai', caption: 'AI Column', index: 3 });
+    expect(aiColumn.type).toBe('ai');
+    expect(aiColumn.caption).toBe('AI Column');
+    expect(aiColumn.index).toBe(3);
   });
 
   it('should apply cssClass to AI column', async () => {
@@ -1036,7 +1038,7 @@ describe('columnOption', () => {
 
     component.apiColumnOption('myColumn', 'encodeHtml', false);
     expect(component.getDataCell(0, 1).getText()).toBe('alert(\'XSS\')');
-    expect(component.apiColumnOption('myColumn')).toMatchObject({ encodeHtml: false });
+    expect(component.apiColumnOption('myColumn').encodeHtml).toBe(false);
   });
 
   it('should use calculateDisplayValue for AI column', async () => {
@@ -1176,7 +1178,7 @@ describe('columnOption', () => {
     });
 
     component.apiColumnOption('myColumn', 'type', 'ai');
-    expect(component.apiColumnOption('myColumn')).toMatchObject({ type: 'ai' });
+    expect(component.apiColumnOption('myColumn').type).toBe('ai');
   });
 
   describe('when prompt is reset', () => {
