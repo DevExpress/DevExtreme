@@ -233,7 +233,7 @@ const noNeedToCreateResizingPoint = (
   const { item, isLeftBoundary, isRightBoundary } = point;
   const $item = $(item);
   const offsetX = Math.round(point.x);
-  const rtlEnabled = that.option('rtlEnabled') as boolean;
+  const rtlEnabled = !!that.option('rtlEnabled');
   const isSplitPoint = isDefined(isLeftBoundary) || isDefined(isRightBoundary);
   const $cells = $(cells ?? '');
   const $container = $(that.getContent());
@@ -247,12 +247,12 @@ const noNeedToCreateResizingPoint = (
   if (isSplitPoint) {
     if (isLastLeftFixedCell($item, addWidgetPrefix)
       || isStickyCellPinnedToLeft($item, $container, addWidgetPrefix)) {
-      return isLeftBoundary as boolean;
+      return !!isLeftBoundary;
     }
 
     if (isFirstRightFixedCell($item, addWidgetPrefix)
       || isStickyCellPinnedToRight($item, $container, addWidgetPrefix)) {
-      return isRightBoundary as boolean;
+      return !!isRightBoundary;
     }
   }
 
