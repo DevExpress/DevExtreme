@@ -10,6 +10,6 @@ Use the options below the Chart to change aggregation settings:
 Clear this checkbox to display source data. All twelve monthly bars overlap and look like a single bar as tall as the highest monthly value. The tooltip displays the month for the bar under the mouse pointer, and this month changes as you move the pointer along the bar.
 
 - **Method**    
-Select the value that aggregated bars display: average, sum, or minimum. Gray bars in the background display the monthly maximum for comparison.
+Select the value that aggregated bars display: average, sum, or minimum. Gray bars in the background display the monthly maximum for comparison when average or minimum is selected.
 
 You can apply common aggregation settings to all series. Activate [aggregation](/Documentation/ApiReference/UI_Components/dxChart/Configuration/commonSeriesSettings/aggregation/).[enabled](/Documentation/ApiReference/UI_Components/dxChart/Configuration/commonSeriesSettings/aggregation/#enabled) in [commonSeriesSettings](/Documentation/ApiReference/UI_Components/dxChart/Configuration/commonSeriesSettings/) and specify an aggregation [method](/Documentation/ApiReference/UI_Components/dxChart/Configuration/commonSeriesSettings/aggregation/#method). Individual [series](/Documentation/ApiReference/UI_Components/dxChart/Configuration/series/aggregation/) settings override these common settings. In this demo, the gray series always use the *"max"* aggregation method.
