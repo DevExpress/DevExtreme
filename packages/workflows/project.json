@@ -187,6 +187,23 @@
         "description": "Full production release build. Use -c internal for the internal package pass."
       }
     },
+    "all:build:internal-packages": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "pnpm nx make-aspnet-metadata devextreme-metadata",
+          "pnpm nx inject-descriptions workflows",
+          "pnpm nx build devextreme-scss",
+          "pnpm nx build-dist devextreme -c internal",
+          "pnpm nx pack:devextreme-internal-to-artifacts workflows",
+          "pnpm nx pack:devextreme-dist-internal-to-artifacts workflows"
+        ],
+        "parallel": false
+      },
+      "metadata": {
+        "description": "Build and pack only the devextreme-internal and devextreme-dist-internal packages into root artifacts/npm."
+      }
+    },
     "make-artifacts-package": {
       "executor": "nx:run-commands",
       "cache": false,
