@@ -37,7 +37,6 @@
     "@angular/platform-browser-dynamic": "catalog:angular",
     "@angular/platform-server": "catalog:angular",
     "@stylistic/eslint-plugin": "catalog:",
-    "@types/jasmine": "6.0.0",
     "@types/node": "20.19.37",
     "@typescript-eslint/eslint-plugin": "catalog:",
     "@typescript-eslint/parser": "catalog:",

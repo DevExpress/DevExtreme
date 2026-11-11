@@ -73,8 +73,10 @@ export default defineConfig(async () => ({
     })),
     globals: true,
     maxWorkers: 3,
-    testTimeout: 60000,
-    hookTimeout: 60000,
+    restoreMocks: true,
+    fakeTimers: {
+      toFake: ['setTimeout', 'clearTimeout', 'setInterval', 'clearInterval'],
+    },
     reporters: ['default', 'junit'],
     outputFile: { junit: 'test-results.xml' },
     browser: {

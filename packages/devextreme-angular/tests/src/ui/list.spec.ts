@@ -77,13 +77,13 @@ describe('DxList', () => {
     const testComponent = fixture.componentInstance;
     const { instance } = testComponent.innerWidget;
 
-    const optionSpy = spyOn(instance, 'option').and.callThrough();
+    const optionSpy = vi.spyOn(instance, 'option');
 
     testComponent.items.push(2);
     detectChanges(fixture);
 
-    expect(optionSpy as jasmine.Spy).toHaveBeenCalledWith('items', [1, 2]);
-    optionSpy.calls.reset();
+    expect(optionSpy).toHaveBeenCalledWith('items', [1, 2]);
+    optionSpy.mockClear();
   });
 
   it('should react to collection change for empty dataSource', () => {
@@ -125,13 +125,13 @@ describe('DxList', () => {
     const testComponent = fixture.componentInstance;
     const { instance } = testComponent.innerWidget;
 
-    const optionSpy = spyOn(instance, 'option').and.callThrough();
+    const optionSpy = vi.spyOn(instance, 'option');
 
     testComponent.items = testComponent.items;
     detectChanges(fixture);
 
     expect(instance.option).toHaveBeenCalledTimes(1);
-    optionSpy.calls.reset();
+    optionSpy.mockClear();
   });
 
   it('should react to item option change', () => {
@@ -367,7 +367,7 @@ describe('DxList', () => {
           expect(instance.element().querySelectorAll('.dx-item-content').length).toBe(1);
           expect(instance.element().querySelectorAll('.dx-item-content')[0].textContent).toBe('Item 1');
 
-          const optionSpy = spyOn(instance, 'option').and.callThrough();
+          const optionSpy = vi.spyOn(instance, 'option');
 
           fixture.detectChanges();
 
@@ -383,20 +383,20 @@ describe('DxList', () => {
           expect(instance.element().querySelectorAll('.dx-item-content')[0].textContent).toBe('Item 1');
           expect(instance.element().querySelectorAll('.dx-item-content')[1].textContent).toBe('Item 2');
 
-          optionSpy.calls.reset();
+          optionSpy.mockClear();
 
           testComponent.complexItems[0].text = 'Changed';
 
           detectChanges(fixture);
 
           expect(optionSpy).toHaveBeenCalledTimes(1);
-          expect(optionSpy.calls.allArgs().length).toBe(1);
+          expect(optionSpy.mock.calls.length).toBe(1);
           expect(instance?.option('items')?.length).toBe(2);
           expect(instance.element().querySelectorAll('.dx-item-content').length).toBe(2);
           expect(instance.element().querySelectorAll('.dx-item-content')[0].textContent).toBe('Changed');
           expect(instance.element().querySelectorAll('.dx-item-content')[1].textContent).toBe('Item 2');
 
-          optionSpy.calls.reset();
+          optionSpy.mockClear();
         });
       });
 

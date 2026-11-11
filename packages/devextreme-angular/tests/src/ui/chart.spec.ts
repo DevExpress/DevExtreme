@@ -88,7 +88,7 @@ describe('DxChart', () => {
 
     const testComponent = fixture.componentInstance;
     const { chart } = testComponent;
-    const spy = spyOn<dxChart & { _applyChanges?: any }>(chart.instance, '_applyChanges');
+    const spy = vi.spyOn(chart.instance as dxChart & { _applyChanges: () => void }, '_applyChanges').mockImplementation(() => {});
 
     testComponent.dataSource = [{
       name: 1,
@@ -100,7 +100,7 @@ describe('DxChart', () => {
 
     detectChanges(fixture);
 
-    expect(spy.calls.count()).toBe(1);
+    expect(spy.mock.calls.length).toBe(1);
   });
 
   it('should not repainting twice in change detection cycle after detect changes in arrays', () => {
@@ -118,7 +118,7 @@ describe('DxChart', () => {
 
     const testComponent = fixture.componentInstance;
     const { chart } = testComponent;
-    const spy = spyOn<dxChart & { _applyChanges?: any }>(chart.instance, '_applyChanges');
+    const spy = vi.spyOn(chart.instance as dxChart & { _applyChanges: () => void }, '_applyChanges').mockImplementation(() => {});
 
     testComponent.dataSource.push({
       name: 1,
@@ -130,7 +130,7 @@ describe('DxChart', () => {
 
     detectChanges(fixture);
 
-    expect(spy.calls.count()).toBe(1);
+    expect(spy.mock.calls.length).toBe(1);
   });
 
   it('should change strip', () => {
@@ -172,8 +172,8 @@ describe('DxChart', () => {
       },
     });
 
-    jasmine.clock().uninstall();
-    jasmine.clock().install();
+    vi.useRealTimers();
+    vi.useFakeTimers();
     const fixture = TestBed.createComponent(TestContainerComponent);
     fixture.detectChanges();
 
@@ -183,6 +183,6 @@ describe('DxChart', () => {
     fixture.detectChanges();
     fixture.destroy();
     expect(testComponent.disposed);
-    jasmine.clock().uninstall();
+    vi.useRealTimers();
   });
 });

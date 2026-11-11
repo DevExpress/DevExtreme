@@ -39,7 +39,7 @@ describe('DxTagBox', () => {
 
   // spec
   it('value change should be fired once', () => {
-    const testSpy = spyOn(TestContainerComponent.prototype, 'testMethod');
+    const testSpy = vi.spyOn(TestContainerComponent.prototype, 'testMethod').mockImplementation(() => {});
     TestBed.overrideComponent(TestContainerComponent, {
       set: {
         template: `
@@ -61,7 +61,7 @@ describe('DxTagBox', () => {
   });
 
   it('value change should be fired once after remove tag', () => {
-    const testSpy = spyOn(TestContainerComponent.prototype, 'testMethod');
+    const testSpy = vi.spyOn(TestContainerComponent.prototype, 'testMethod').mockImplementation(() => {});
     TestBed.overrideComponent(TestContainerComponent, {
       set: {
         template: `

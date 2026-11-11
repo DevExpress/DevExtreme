@@ -1452,9 +1452,6 @@ importers:
       '@stylistic/eslint-plugin':
         specifier: 'catalog:'
         version: 5.10.0(eslint@10.14.0(jiti@2.6.1))
-      '@types/jasmine':
-        specifier: 6.0.0
-        version: 6.0.0
       '@types/node':
         specifier: 20.19.37
         version: 20.19.37
@@ -7673,9 +7670,6 @@ packages:
 
   '@types/jasmine@5.1.4':
     resolution: {integrity: sha512-px7OMFO/ncXxixDe1zR13V1iycqWae0MxTaw62RpFlksUi5QuNWgQJFkTQjIOvrmutJbI7Fp2Y2N1F6D2R4G6w==}
-
-  '@types/jasmine@6.0.0':
-    resolution: {integrity: sha512-18lgGsLmEh3VJk9eZ5wAjTISxdqzl6YOwu8UdMpolajN57QOCNbl+AbHUd+Yu9ItrsFdB+c8LSZSGNg8nHaguw==}
 
   '@types/jest@30.0.0':
     resolution: {integrity: sha512-XTYugzhuwqWjws0CVz8QpM36+T+Dz5mTEBKhNs/esGLnCIlGdRy+Dq78NRjd7ls7r8BC8ZRMOrKlkO1hU0JOwA==}
@@ -23806,8 +23800,6 @@ snapshots:
       '@types/istanbul-lib-report': 3.0.3
 
   '@types/jasmine@5.1.4': {}
-
-  '@types/jasmine@6.0.0': {}
 
   '@types/jest@30.0.0':
     dependencies:

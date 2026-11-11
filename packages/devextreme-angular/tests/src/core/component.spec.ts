@@ -168,7 +168,7 @@ describe('DevExtreme Angular widget', () => {
   });
 
   it('should be disposed', () => {
-    const testSpy = spyOn(TestContainerComponent.prototype, 'testMethod');
+    const testSpy = vi.spyOn(TestContainerComponent.prototype, 'testMethod').mockImplementation(() => {});
 
     TestBed.overrideComponent(TestContainerComponent, {
       set: {
@@ -212,7 +212,7 @@ describe('DevExtreme Angular widget', () => {
 
     const component = fixture.componentInstance;
     const instance = getWidget(fixture);
-    const testSpy = spyOn(component, 'testMethod');
+    const testSpy = vi.spyOn(component, 'testMethod').mockImplementation(() => {});
 
     instance.option('testOption', 'new value');
     fixture.detectChanges();
@@ -276,7 +276,7 @@ describe('DevExtreme Angular widget', () => {
     const testComponent = fixture.componentInstance;
     const instance = getWidget(fixture);
 
-    const testSpy = spyOn(testComponent, 'testMethod');
+    const testSpy = vi.spyOn(testComponent, 'testMethod').mockImplementation(() => {});
     testComponent.testOption = 'Changed 2';
     detectChanges(fixture);
     expect(instance.option('testOption')).toBe('Changed 2');
@@ -284,7 +284,7 @@ describe('DevExtreme Angular widget', () => {
   });
 
   it('should fire onInitialized event', () => {
-    const testSpy = spyOn(TestContainerComponent.prototype, 'testMethod');
+    const testSpy = vi.spyOn(TestContainerComponent.prototype, 'testMethod').mockImplementation(() => {});
     TestBed.overrideComponent(TestContainerComponent, {
       set: {
         template: '<dx-test-widget (onInitialized)="testMethod()"></dx-test-widget>',
@@ -297,7 +297,7 @@ describe('DevExtreme Angular widget', () => {
   });
 
   it('should fire onContentReady event', () => {
-    const testSpy = spyOn(TestContainerComponent.prototype, 'testMethod');
+    const testSpy = vi.spyOn(TestContainerComponent.prototype, 'testMethod').mockImplementation(() => {});
     TestBed.overrideComponent(TestContainerComponent, {
       set: {
         template: '<dx-test-widget (onContentReady)="testMethod()"></dx-test-widget>',
@@ -320,7 +320,7 @@ describe('DevExtreme Angular widget', () => {
     fixture.detectChanges();
 
     const instance = getWidget(fixture);
-    const spy = jasmine.createSpy('spy');
+    const spy = vi.fn();
 
     instance.on('optionChanged', spy);
     instance.off('optionChanged', spy);
@@ -342,7 +342,7 @@ describe('DevExtreme Angular widget', () => {
     fixture.detectChanges();
 
     const instance = getWidget(fixture);
-    const spy = jasmine.createSpy('spy');
+    const spy = vi.fn();
 
     instance.on('optionChanged', spy);
     instance.off('optionChanged');
