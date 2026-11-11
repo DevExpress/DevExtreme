@@ -215,8 +215,7 @@ const calculateScrollbarWidth = function calculateScrollbarWidth(): void {
     position: 'absolute',
     top: -9999,
   }).appendTo($('body'));
-  // @ts-expect-error get(0) is typed as Element
-  const result = $scrollDiv.get(0).offsetWidth - $scrollDiv.get(0).clientWidth;
+  const result = $scrollDiv.get<HTMLElement>(0).offsetWidth - $scrollDiv.get(0).clientWidth;
 
   $scrollDiv.remove();
 

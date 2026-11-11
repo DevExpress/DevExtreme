@@ -84,7 +84,7 @@ export abstract class GridCoreModel<TInstance = GridBase | CardView> {
   }
 
   public openHeaderFilter(columnIndex: number): HeaderFilterModel {
-    (this.getHeaderCellFilter(columnIndex).get(0) as HTMLElement).click();
+    (this.getHeaderCellFilter(columnIndex).get<HTMLElement>(0)).click();
 
     return new HeaderFilterModel();
   }

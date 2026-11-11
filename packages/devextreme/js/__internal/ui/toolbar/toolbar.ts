@@ -194,7 +194,7 @@ class Toolbar extends ToolbarBase<Properties> {
       return false;
     }
 
-    const target = getFirstFocusableElement(this.$element().get(0) as HTMLElement);
+    const target = getFirstFocusableElement(this.$element().get<HTMLElement>(0));
 
     target?.focus();
 

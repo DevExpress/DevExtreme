@@ -117,7 +117,7 @@ export class PopupModel {
       throw new Error(`Input element of editor with name "${editorName}" not found`);
     }
 
-    return $input.get(0) as HTMLInputElement;
+    return $input.get<HTMLInputElement>(0);
   };
 
   getInputValue = (editorName: string): string => {
