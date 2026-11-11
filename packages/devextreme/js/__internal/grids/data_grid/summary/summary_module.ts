@@ -7,7 +7,7 @@ import { summaryDataControllerExtender } from './extenders/summary_data_controll
 import {
   FooterView, summaryDataSourceAdapterExtender, summaryEditingControllerExtender,
   summaryRowsViewExtender,
-} from './m_summary';
+} from './summary';
 
 dataSourceAdapterProvider.extend(summaryDataSourceAdapterExtender);
 
