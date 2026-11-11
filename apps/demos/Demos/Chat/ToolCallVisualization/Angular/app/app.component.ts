@@ -1,16 +1,13 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import {
-  ChangeDetectorRef, Component, enableProdMode, provideZoneChangeDetection,
+  Component, Injector, afterNextRender, enableProdMode, inject, signal,
 } from '@angular/core';
-import { AsyncPipe } from '@angular/common';
 import {
   DxChatModule, DxButtonModule, DxCheckBoxModule, DxToolbarModule,
 } from 'devextreme-angular';
 import type { DxChatTypes } from 'devextreme-angular/ui/chat';
 import type { DxButtonTypes } from 'devextreme-angular/ui/button';
-import { Observable } from 'rxjs';
 import { loadMessages } from 'devextreme-angular/common/core/localization';
-import { DataSource } from 'devextreme-angular/common/data';
 import { AppService } from './app.service';
 import { AiService } from './ai/ai.service';
 
@@ -27,55 +24,46 @@ if (!/localhost/.test(document.location.host)) {
     DxButtonModule,
     DxCheckBoxModule,
     DxToolbarModule,
-    AsyncPipe,
   ],
 })
 export class AppComponent {
-  dataSource: DataSource;
+  private readonly appService = inject(AppService);
 
-  user: DxChatTypes.User;
+  private readonly injector = inject(Injector);
 
-  typingUsers$: Observable<DxChatTypes.User[]>;
+  readonly dataSource = this.appService.dataSource;
 
-  alerts$: Observable<DxChatTypes.Alert[]>;
+  readonly user = this.appService.user;
 
-  suggestionCards: AppService['suggestionCards'];
+  readonly typingUsers = this.appService.typingUsers;
 
-  expandAll = false;
+  readonly alerts = this.appService.alerts;
 
-  isDisabled = false;
+  readonly suggestionCards = this.appService.suggestionCards;
 
-  clearButtonOptions: DxButtonTypes.Properties;
+  readonly expandAll = signal(false);
 
-  constructor(
-    private readonly appService: AppService,
-    private readonly changeDetectorRef: ChangeDetectorRef,
-  ) {
+  readonly isDisabled = signal(false);
+
+  readonly clearButtonOptions = signal<DxButtonTypes.Properties>({
+    icon: 'clearhistory',
+    stylingMode: 'text',
+    hint: 'Clear chat',
+    onClick: () => this.appService.clearMessages(),
+  });
+
+  constructor() {
     loadMessages(this.appService.getDictionary());
-
-    this.dataSource = this.appService.dataSource;
-    this.user = this.appService.user;
-    this.alerts$ = this.appService.alerts$;
-    this.typingUsers$ = this.appService.typingUsers$;
-    this.suggestionCards = this.appService.suggestionCards;
-    this.clearButtonOptions = {
-      icon: 'clearhistory',
-      stylingMode: 'text',
-      hint: 'Clear chat',
-      onClick: () => this.appService.clearMessages(),
-    };
   }
 
   toggleDisabledState(disabled: boolean, event = undefined) {
-    this.isDisabled = disabled;
-    this.clearButtonOptions = { ...this.clearButtonOptions, disabled };
-
-    this.changeDetectorRef.detectChanges();
+    this.isDisabled.set(disabled);
+    this.clearButtonOptions.update((options) => ({ ...options, disabled }));
 
     if (disabled) {
       event?.target.blur();
     } else {
-      event?.target.focus();
+      afterNextRender(() => event?.target.focus(), { injector: this.injector });
     }
   }
 
@@ -84,7 +72,7 @@ export class AppComponent {
       return;
     }
 
-    if (!this.appService.alerts.length) {
+    if (!this.appService.alerts().length) {
       this.toggleDisabledState(true, e.event);
     }
 
@@ -112,7 +100,6 @@ export class AppComponent {
 
 bootstrapApplication(AppComponent, {
   providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
     AppService,
     AiService,
   ],

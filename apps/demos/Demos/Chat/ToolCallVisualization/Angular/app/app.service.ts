@@ -1,5 +1,4 @@
-import { Injectable } from '@angular/core';
-import { Observable, BehaviorSubject } from 'rxjs';
+import { Injectable, inject, signal } from '@angular/core';
 import { type DxChatTypes } from 'devextreme-angular/ui/chat';
 import { DataSource, CustomStore } from 'devextreme-angular/common/data';
 import type { OpenAI } from 'openai';
@@ -125,7 +124,7 @@ const toolImplementations: Record<string, (args: any) => string> = {
 })
 
 export class AppService {
-  aiService: AiService;
+  private readonly aiService = inject(AiService);
 
   user: DxChatTypes.User = {
     id: 'user',
@@ -159,30 +158,35 @@ export class AppService {
 
   messages: AIMessage[] = [{ role: 'system', content: SYSTEM_PROMPT }];
 
-  alerts: DxChatTypes.Alert[] = [];
+  customStore = new CustomStore({
+    key: 'id',
+    load: () => new Promise((resolve) => {
+      setTimeout(() => {
+        resolve([...this.store]);
+      }, 0);
+    }),
+    insert: (message) => new Promise((resolve) => {
+      setTimeout(() => {
+        this.store.push(message);
+        resolve(message);
+      });
+    }),
+  });
 
-  customStore: CustomStore;
-
-  dataSource: DataSource;
+  dataSource = new DataSource({
+    store: this.customStore,
+    paginate: false,
+  });
 
   isProcessing = false;
 
-  typingUsersSubject: BehaviorSubject<DxChatTypes.User[]> = new BehaviorSubject([]);
+  private readonly typingUsersState = signal<DxChatTypes.User[]>([]);
 
-  alertsSubject: BehaviorSubject<DxChatTypes.Alert[]> = new BehaviorSubject([]);
+  readonly typingUsers = this.typingUsersState.asReadonly();
 
-  constructor(aiService: AiService) {
-    this.aiService = aiService;
-    this.initDataSource();
-  }
+  private readonly alertsState = signal<DxChatTypes.Alert[]>([]);
 
-  get typingUsers$(): Observable<DxChatTypes.User[]> {
-    return this.typingUsersSubject.asObservable();
-  }
-
-  get alerts$(): Observable<DxChatTypes.Alert[]> {
-    return this.alertsSubject.asObservable();
-  }
+  readonly alerts = this.alertsState.asReadonly();
 
   getDictionary() {
     return {
@@ -192,28 +196,6 @@ export class AppService {
         'dxChat-textareaPlaceholder': 'Ask AI Assistant...',
       },
     };
-  }
-
-  initDataSource() {
-    this.customStore = new CustomStore({
-      key: 'id',
-      load: () => new Promise((resolve) => {
-        setTimeout(() => {
-          resolve([...this.store]);
-        }, 0);
-      }),
-      insert: (message) => new Promise((resolve) => {
-        setTimeout(() => {
-          this.store.push(message);
-          resolve(message);
-        });
-      }),
-    });
-
-    this.dataSource = new DataSource({
-      store: this.customStore,
-      paginate: false,
-    });
   }
 
   static wait(delay: number): Promise<void> {
@@ -294,16 +276,16 @@ export class AppService {
     const historyLength = this.messages.length;
 
     this.messages.push({ role: 'user', content: message.text ?? '' });
-    this.typingUsersSubject.next([this.assistant]);
+    this.typingUsersState.set([this.assistant]);
 
     try {
       const { text, toolCalls } = await this.getAIResponse(this.messages);
 
-      this.typingUsersSubject.next([]);
+      this.typingUsersState.set([]);
       this.messages.push({ role: 'assistant', content: text });
       this.renderAssistantMessage(text, toolCalls);
     } catch (err: unknown) {
-      this.typingUsersSubject.next([]);
+      this.typingUsersState.set([]);
       this.messages.length = historyLength;
       this.alertError(this.getErrorMessage(err));
     } finally {
@@ -343,8 +325,7 @@ export class AppService {
   }
 
   setAlerts(alerts: DxChatTypes.Alert[]) {
-    this.alerts = alerts;
-    this.alertsSubject.next(alerts);
+    this.alertsState.set(alerts);
   }
 
   async sendSuggestion(prompt: string) {
@@ -361,7 +342,7 @@ export class AppService {
 
     this.dataSource.store().push([{ type: 'insert', data: message }]);
 
-    if (!this.alerts.length) {
+    if (!this.alerts().length) {
       await this.processMessageSending(message);
     }
   }
@@ -373,7 +354,7 @@ export class AppService {
 
     this.dataSource.store().push([{ type: 'insert', data: { id: Date.now(), ...message } }]);
 
-    if (!this.alerts.length) {
+    if (!this.alerts().length) {
       await this.processMessageSending(message as DxChatTypes.TextMessage);
     }
   }
@@ -382,7 +363,7 @@ export class AppService {
     this.store.length = 0;
     this.messages.length = 1;
     this.setAlerts([]);
-    this.typingUsersSubject.next([]);
+    this.typingUsersState.set([]);
     this.dataSource.reload();
   }
 }

@@ -10,26 +10,26 @@
       <dxi-toolbar-item
         location="after"
         widget="dxButton"
-        [options]="clearButtonOptions"
+        [options]="clearButtonOptions()"
       >
       </dxi-toolbar-item>
     </dx-toolbar>
     <dx-chat
-      [disabled]="isDisabled"
+      [disabled]="isDisabled()"
       [dataSource]="dataSource"
       [reloadOnChange]="false"
       [showAvatar]="true"
       [showDayHeaders]="false"
       [user]="user"
       [height]="710"
-      [typingUsers]="typingUsers$ | async"
-      [alerts]="alerts$ | async"
+      [typingUsers]="typingUsers()"
+      [alerts]="alerts()"
       [speechToTextEnabled]="true"
       emptyViewTemplate="emptyViewTemplate"
       (onMessageEntered)="onMessageEntered($event)"
     >
       <dxo-chat-tool-call-options
-        [expandAll]="expandAll"
+        [expandAll]="expandAll()"
       ></dxo-chat-tool-call-options>
 
       <div *dxTemplate="let data of 'emptyViewTemplate'">
