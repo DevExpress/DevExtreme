@@ -71,7 +71,7 @@ catalog:
   inferno-server: ^8.2.3
   devexpress-diagram: 2.2.31
   devexpress-gantt: 4.1.71
-  devextreme-exceljs-fork: 4.4.13
+  devextreme-exceljs-fork: 5.0.0
   devextreme-quill: 1.7.10
   "@eslint/js": 10.0.1
   eslint: 10.14.0
@@ -140,3 +140,4 @@ patchedDependencies:
 minimumReleaseAgeExclude:
   - "eslint-config-devextreme"
   - devextreme-schematics
+  - "devextreme-exceljs-fork@5.0.0"
