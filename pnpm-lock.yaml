@@ -1879,9 +1879,6 @@ importers:
       js-beautify:
         specifier: 1.15.4
         version: 1.15.4
-      karma:
-        specifier: '>=6.0.0'
-        version: 6.4.4
       lodash:
         specifier: 4.18.1
         version: 4.18.1
