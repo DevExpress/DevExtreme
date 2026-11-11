@@ -1,10 +1,12 @@
 import type { DataType, HorizontalAlignment } from '@js/common';
+import type { Callback } from '@js/core/utils/callbacks';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import type { Format } from '@js/localization';
 import type { Column as DataGridColumn, Properties as DataGridProperties } from '@js/ui/data_grid';
 import type { Column, GroupColumn } from '@ts/grids/grid_core/columns_controller/types';
 import type { GeneratedItem } from '@ts/grids/grid_core/data_controller/types';
 import type { RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
+import type { EditingController } from '@ts/grids/grid_core/editing/editing';
 import type { OptionChanged, OptionChangedFor, SummaryTextItem } from '@ts/grids/grid_core/types';
 
 export type ExportOptionChanged = OptionChanged
@@ -89,6 +91,10 @@ export interface ExportCellData {
   cellSourceData: ExportCellSourceData;
   value: unknown;
 }
+
+export type ExportEditingController = EditingController & {
+  editingButtonsUpdated: Callback;
+};
 
 export interface ExportMenuItem {
   text: string;

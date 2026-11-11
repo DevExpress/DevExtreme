@@ -36,6 +36,7 @@ import type {
   ExportableColumn,
   ExportCellData,
   ExportColumn,
+  ExportEditingController,
   ExportGroupItem,
   ExportGroupSummaryItem,
   ExportItem,
@@ -274,6 +275,7 @@ export class DataProvider {
     const itemValues = item.values;
     result.cellSourceData.rowType = item.rowType;
     result.cellSourceData.column = columns[cellIndex] && columns[cellIndex].gridColumn;
+
     switch (item.rowType) {
       case 'groupFooter':
       case 'totalFooter':
@@ -287,7 +289,7 @@ export class DataProvider {
             result.cellSourceData.value = undefined;
           }
         }
-        break;
+        return result;
       case 'group': {
         result.cellSourceData.groupIndex = item.groupIndex;
         if (cellIndex < 1) {
@@ -297,12 +299,12 @@ export class DataProvider {
             item.summaryCells[0],
           );
           result.value = this._getGroupValue(item);
-          break;
+          return result;
         }
         const summaryItems = item.values[cellIndex];
         if (!Array.isArray(summaryItems)) {
           result.cellSourceData.value = undefined;
-          break;
+          return result;
         }
         result.cellSourceData.groupSummaryItems = this._convertFromGridGroupSummaryItems(
           summaryItems,
@@ -314,15 +316,14 @@ export class DataProvider {
             + dataGridCore.getSummaryText(summaryItems[i], this._options.summaryTexts);
         }
         result.value = summaryText;
-        break;
+        return result;
       }
       default: {
         const column = columns[cellIndex];
         if (column) {
           const value = itemValues[cellIndex];
-          // from 'ui.grid_core.rows.js: _getCellOptions'
+          // similar to 'grid_core/views/rows_view.ts: _getCellOptions'
           const displayValue = dataGridCore.getDisplayValue(column, value, item.data, item.rowType);
-          // similar to 'ui.grid_core.rows.js: _getCellOptions'
           const isFormatted = !isFinite(displayValue) || isDefined(column.customizeText);
           const isBooleanCustomizeText = isDefined(column.customizeText)
             && column.customizeText === this._exportController._columnsController.getCustomizeTextByDataType('boolean');
@@ -338,9 +339,9 @@ export class DataProvider {
           result.cellSourceData.value = value;
         }
         result.cellSourceData.data = item.data;
+        return result;
       }
     }
-    return result;
   }
 
   private isHeadersVisible(): boolean | undefined {
@@ -400,8 +401,7 @@ export class ExportController extends dataGridCore.ViewController {
   public init(): void {
     this.throwWarningIfNoOnExportingEvent();
     this._columnsController = this.getController('columns');
-    // @ts-expect-error the controller assumes the summary extension of DataController
-    this._dataController = this.getController('data');
+    this._dataController = this.getController('data') as DataController & SummaryDataControllerExtension;
     this.dataSourceController = this.getController('dataSource');
     this._selectionController = this.getController('selection');
     this._rowsView = this.getView('rowsView');
@@ -425,6 +425,51 @@ export class ExportController extends dataGridCore.ViewController {
     column.width = width;
   }
 
+  private _getColumnWidthsByColumnIndex(
+    columns: Column[],
+    initialColumnWidthsByColumnIndex: ColumnWidthsByColumnIndex | undefined,
+  ): ColumnWidthsByColumnIndex | undefined {
+    if (this._updateLockCount) {
+      return initialColumnWidthsByColumnIndex;
+    }
+
+    const columnWidths = this._getColumnWidths(this._headersView, this._rowsView);
+
+    if (!columnWidths?.length) {
+      return undefined;
+    }
+
+    const columnWidthsByColumnIndex: ColumnWidthsByColumnIndex = {};
+
+    for (let columnIndex = 0; columnIndex < columns.length; columnIndex += 1) {
+      const { index } = columns[columnIndex];
+
+      if (isDefined(index)) {
+        columnWidthsByColumnIndex[index] = columnWidths[columnIndex];
+      }
+    }
+
+    return columnWidthsByColumnIndex;
+  }
+
+  private _prepareExportColumn(
+    column: ExportColumn,
+    columnWidthsByColumnIndex: ColumnWidthsByColumnIndex | undefined,
+  ): void {
+    const currentColspan = this._calculateExportColspan(column);
+
+    if (isDefined(currentColspan)) {
+      column.exportColspan = currentColspan;
+    }
+
+    if (columnWidthsByColumnIndex) {
+      this._updateColumnWidth(
+        column,
+        isDefined(column.index) ? columnWidthsByColumnIndex[column.index] : undefined,
+      );
+    }
+  }
+
   public _getColumns(
     initialColumnWidthsByColumnIndex: ColumnWidthsByColumnIndex | undefined,
   ): ExportColumn[][] {
@@ -435,27 +480,9 @@ export class ExportController extends dataGridCore.ViewController {
     for (let i = 0; i <= rowCount; i += 1) {
       const currentHeaderRow: ExportColumn[] = [];
       const columns = columnsController.getVisibleColumns(i, true);
-      // eslint-disable-next-line @typescript-eslint/init-declarations -- assigned in the if below
-      let columnWidthsByColumnIndex: ColumnWidthsByColumnIndex | undefined;
-      if (i === rowCount) {
-        if (this._updateLockCount) {
-          columnWidthsByColumnIndex = initialColumnWidthsByColumnIndex;
-        } else {
-          const columnWidths = this._getColumnWidths(this._headersView, this._rowsView);
-          // eslint-disable-next-line max-depth -- nested in the per-row loop
-          if (columnWidths?.length) {
-            columnWidthsByColumnIndex = {};
-            // eslint-disable-next-line max-depth -- nested in the per-row loop
-            for (let columnIndex = 0; columnIndex < columns.length; columnIndex += 1) {
-              const { index } = columns[columnIndex];
-              // eslint-disable-next-line max-depth -- nested in the per-row loop
-              if (isDefined(index)) {
-                columnWidthsByColumnIndex[index] = columnWidths[columnIndex];
-              }
-            }
-          }
-        }
-      }
+      const columnWidthsByColumnIndex = i === rowCount
+        ? this._getColumnWidthsByColumnIndex(columns, initialColumnWidthsByColumnIndex)
+        : undefined;
 
       for (const sourceColumn of columns) {
         const column: ExportColumn = extend({}, sourceColumn, {
@@ -464,18 +491,7 @@ export class ExportController extends dataGridCore.ViewController {
         });
 
         if (this._needColumnExporting(column)) {
-          const currentColspan = this._calculateExportColspan(column);
-          // eslint-disable-next-line max-depth -- nested in the per-row loop
-          if (isDefined(currentColspan)) {
-            column.exportColspan = currentColspan;
-          }
-          // eslint-disable-next-line max-depth -- nested in the per-row loop
-          if (columnWidthsByColumnIndex) {
-            this._updateColumnWidth(
-              column,
-              isDefined(column.index) ? columnWidthsByColumnIndex[column.index] : undefined,
-            );
-          }
+          this._prepareExportColumn(column, columnWidthsByColumnIndex);
           currentHeaderRow.push(column);
         }
       }
@@ -566,30 +582,33 @@ export class ExportController extends dataGridCore.ViewController {
   }
 
   private _updateGroupValuesWithSummaryByColumn(sourceItems: ExportItem[]): void {
-    let summaryValues: ExportSummaryItem[][] = [];
-
     for (const item of sourceItems) {
       const { summaryCells } = item;
-      if (item.rowType === 'group' && summaryCells && summaryCells.length > 1) {
-        const groupColumnCount = item.values.length;
-        for (let j = 1; j < summaryCells.length; j += 1) {
-          // eslint-disable-next-line max-depth -- nested in the per-item loop
-          for (const summaryItem of summaryCells[j]) {
-            // eslint-disable-next-line max-depth -- nested in the per-item loop
-            if (summaryItem?.alignByColumn) {
-              // eslint-disable-next-line max-depth -- nested in the per-item loop
-              if (!Array.isArray(summaryValues[j - groupColumnCount])) {
-                summaryValues[j - groupColumnCount] = [];
-              }
-              summaryValues[j - groupColumnCount].push(summaryItem);
-            }
-          }
-        }
+      const isGroupSummary = item.rowType === 'group' && summaryCells;
 
-        if (summaryValues.length > 0) {
-          item.values.push(...summaryValues);
-          summaryValues = [];
+      if (!isGroupSummary) {
+        // eslint-disable-next-line no-continue
+        continue;
+      }
+
+      const summaryValues: ExportSummaryItem[][] = [];
+      const groupColumnCount = item.values.length;
+
+      for (let j = 1; j < summaryCells.length; j += 1) {
+        for (const summaryItem of summaryCells[j]) {
+          // eslint-disable-next-line max-depth -- nested in the per-item loop
+          if (!summaryItem?.alignByColumn) {
+            // eslint-disable-next-line no-continue
+            continue;
+          }
+
+          summaryValues[j - groupColumnCount] ??= [];
+          summaryValues[j - groupColumnCount].push(summaryItem);
         }
+      }
+
+      if (summaryValues.length > 0) {
+        item.values.push(...summaryValues);
       }
     }
   }
@@ -605,29 +624,24 @@ export class ExportController extends dataGridCore.ViewController {
 
       for (let j = 0; j < columns.length; j += 1) {
         const column = columns[j];
+        const isExported = this._needColumnExporting(column);
+
         isCommand ||= ['detailExpand', 'buttons'].includes(column.type ?? '');
 
-        if (this._needColumnExporting(column)) {
-          // eslint-disable-next-line max-depth -- nested in the per-item loop
-          if (item.values) {
-            // eslint-disable-next-line max-depth -- nested in the per-item loop
-            if (item.rowType === 'group' && !values.length) {
-              values.push(item.key[item.groupIndex]);
-            } else {
-              values.push(item.values[j]);
-            }
-          }
-          // eslint-disable-next-line max-depth -- nested in the per-item loop
-          if (item.summaryCells) {
-            // eslint-disable-next-line max-depth -- nested in the per-item loop
-            if (item.rowType === 'group' && !summaryCells.length) {
-              const index = j - groupColumns.length + item.groupIndex;
+        if (isExported && item.values) {
+          const value = item.rowType === 'group' && !values.length
+            ? item.key[item.groupIndex]
+            : item.values[j];
 
-              summaryCells.push(item.summaryCells[isCommand ? index : index + 1]);
-            } else {
-              summaryCells.push(item.summaryCells[j]);
-            }
-          }
+          values.push(value);
+        }
+
+        if (isExported && item.summaryCells) {
+          const index = item.rowType === 'group' && !summaryCells.length
+            ? j - groupColumns.length + item.groupIndex + (isCommand ? 0 : 1)
+            : j;
+
+          summaryCells.push(item.summaryCells[index]);
         }
       }
 
@@ -793,6 +807,8 @@ export class ExportController extends dataGridCore.ViewController {
 const editing = (
   Base: ModuleType<EditingController>,
 ): ModuleType<EditingController> => class ExportEditingControllerExtender extends Base {
+  public editingButtonsUpdated!: Callback;
+
   protected callbackNames(): string[] {
     const callbackList = super.callbackNames() ?? [];
     return [...callbackList, 'editingButtonsUpdated'];
@@ -801,7 +817,6 @@ const editing = (
   protected _updateEditButtons(): void {
     super._updateEditButtons();
 
-    // @ts-expect-error editingButtonsUpdated is added by callbackNames()
     this.editingButtonsUpdated.fire();
   }
 };
@@ -809,6 +824,8 @@ const editing = (
 const headerPanel = (
   Base: ModuleType<HeaderPanel>,
 ): ModuleType<HeaderPanel> => class ExportHeaderPanelExtender extends Base {
+  protected declare _editingController: ExportEditingController;
+
   private _exportController!: ExportController;
 
   protected _getToolbarItems(): ToolbarItem[] {
@@ -927,12 +944,13 @@ const headerPanel = (
   }
 
   public optionChanged(args: ExportOptionChanged): void {
-    // @ts-expect-error super.optionChanged() is typed without the export option
-    super.optionChanged(args);
     if (args.name === 'export') {
       args.handled = true;
       this._invalidate();
+      return;
     }
+
+    super.optionChanged(args);
   }
 
   private _needDisableExportButton(): boolean {
@@ -959,7 +977,6 @@ const headerPanel = (
 
     this._exportController = this.getController('export');
 
-    // @ts-expect-error editingButtonsUpdated is added by the export editing extender
     this._editingController.editingButtonsUpdated.add(() => {
       const disabled = this._needDisableExportButton();
 
