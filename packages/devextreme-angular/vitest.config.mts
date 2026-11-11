@@ -22,6 +22,32 @@ const resolveBuiltPackage = (): Plugin => ({
   },
 });
 
+const allSpecs = 'tests/src/**/*.spec.ts';
+const serverSpecs = 'tests/src/server/**/*.spec.ts';
+const hydrationSpec = 'tests/src/server/hydration.spec.ts';
+const serverOnlySpecs = ['tests/src/**/ssr-components.spec.ts', 'tests/src/**/hydration.spec.ts'];
+
+const environments: { name: string; setup: string; include: string[]; exclude?: string[] }[] = [
+  {
+    name: 'client',
+    setup: 'client',
+    include: [allSpecs],
+    exclude: ['tests/src/zone-modes/**', ...serverOnlySpecs],
+  },
+  {
+    name: 'server', setup: 'server', include: [serverSpecs], exclude: [hydrationSpec],
+  },
+  { name: 'hydration', setup: 'server', include: [hydrationSpec] },
+  { name: 'zone', setup: 'client', include: ['tests/src/zone-modes/**/*.spec.ts'] },
+  {
+    name: 'zoneless', setup: 'zoneless', include: [allSpecs], exclude: serverOnlySpecs,
+  },
+  {
+    name: 'server-zoneless', setup: 'server-zoneless', include: [serverSpecs], exclude: [hydrationSpec],
+  },
+  { name: 'hydration-zoneless', setup: 'server-zoneless', include: [hydrationSpec] },
+];
+
 export default defineConfig(async () => ({
   plugins: [resolveBuiltPackage()],
   resolve: {
@@ -36,16 +62,17 @@ export default defineConfig(async () => ({
     },
   },
   test: {
-    name: 'client',
+    projects: environments.map(({ name, setup, include, exclude }) => ({
+      extends: true,
+      test: {
+        name,
+        include,
+        exclude: exclude ?? [],
+        setupFiles: [`tests/vitest/setup.${setup}.ts`],
+      },
+    })),
     globals: true,
-    include: ['tests/src/**/*.spec.ts'],
-    exclude: [
-      'tests/src/zone-modes/**',
-      'tests/src/**/ssr-components.spec.ts',
-      'tests/src/**/hydration.spec.ts',
-    ],
-    setupFiles: ['tests/vitest/setup.client.ts'],
-    restoreMocks: true,
+    maxWorkers: 3,
     testTimeout: 60000,
     hookTimeout: 60000,
     reporters: ['default', 'junit'],

@@ -41,10 +41,25 @@ const decorateSpy = (spy: any, original?: AnyFn): any => {
 const globals = globalThis as any;
 const timersToFake = ['setTimeout', 'clearTimeout', 'setInterval', 'clearInterval'] as const;
 let testTimeout = 5000;
+let isTestRunning = false;
+const testScopedSpies: { mockRestore: () => void }[] = [];
+
+beforeEach(() => {
+  isTestRunning = true;
+});
+
+afterEach(() => {
+  isTestRunning = false;
+  testScopedSpies.splice(0).forEach((spy) => spy.mockRestore());
+});
 
 globals.spyOn = (target: any, method: string) => {
   const original = target[method];
   const spy = vi.spyOn(target, method).mockImplementation(() => undefined);
+
+  if (isTestRunning) {
+    testScopedSpies.push(spy);
+  }
 
   return decorateSpy(spy, original);
 };
