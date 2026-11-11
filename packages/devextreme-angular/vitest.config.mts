@@ -50,6 +50,12 @@ const environments: { name: string; setup: string; include: string[]; exclude?: 
 
 export default defineConfig(async () => ({
   plugins: [resolveBuiltPackage()],
+  oxc: {
+    decorator: {
+      legacy: true,
+      emitDecoratorMetadata: true,
+    },
+  },
   resolve: {
     alias: {
       stream: require.resolve('stream-browserify'),
