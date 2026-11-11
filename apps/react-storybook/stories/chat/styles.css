@@ -108,13 +108,3 @@
 .tool-calls-demo .chat-disabled .dx-chat-messagebox {
     opacity: 0.5;
 }
-
-/* Only for the story: the bubble with tool calls is as wide as in the design (320px of the block + the padding of the bubble) */
-.tool-calls-demo .dx-chat-messagebubble:has(> .dx-chat-tool-call-view) {
-    min-width: 344px;
-}
-
-.dx-theme-fluent-typography .tool-calls-demo .dx-chat-messagebubble:has(> .dx-chat-tool-call-view),
-.dx-theme-fluent-next-typography .tool-calls-demo .dx-chat-messagebubble:has(> .dx-chat-tool-call-view) {
-    min-width: 320px;
-}
