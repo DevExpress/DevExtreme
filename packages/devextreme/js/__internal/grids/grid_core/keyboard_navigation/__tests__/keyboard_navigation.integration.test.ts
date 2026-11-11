@@ -398,7 +398,7 @@ describe('Keyboard Navigation', () => {
     const SCROLL_TOP = 60;
 
     const getRowKeys = ($container: dxElementWrapper, selector: string): (number | undefined)[] => {
-      const container = $container.get(0) as HTMLElement;
+      const container = $container.get<HTMLElement>(0);
 
       return Array.from(container.querySelectorAll(`.dx-datagrid-rowsview ${selector}`), getRowKey);
     };
@@ -631,7 +631,7 @@ describe('Keyboard Navigation', () => {
       triggerKeyDown(instance, 'f', document.activeElement, { metaKey: true });
       jest.runAllTimers();
 
-      const searchInput = ($container.get(0) as HTMLElement).querySelector('.dx-datagrid-search-panel input');
+      const searchInput = $container.get<HTMLElement>(0).querySelector('.dx-datagrid-search-panel input');
       expect(document.activeElement).toBe(searchInput);
       expect(instance.getController('editing').isEditing()).toBe(false);
     });
@@ -1285,7 +1285,7 @@ describe('Keyboard Navigation', () => {
 
   describe('cell tabindex after render', () => {
     const getTabbableCells = ($container: dxElementWrapper): (string | null)[] => {
-      const container = $container.get(0) as HTMLElement;
+      const container = $container.get<HTMLElement>(0);
 
       return Array.from(
         container.querySelectorAll('.dx-datagrid-rowsview td[tabindex]'),

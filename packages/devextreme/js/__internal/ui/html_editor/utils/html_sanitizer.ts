@@ -21,9 +21,9 @@ export const sanitizeHtml = (quill: QuillStatic, value: Properties['value']): st
     // @ts-expect-error appendTo() is typed for elements; 'body' is a selector
     .appendTo('body');
 
-  const frame = $frame.get(0);
-  // @ts-expect-error get(0) is typed as Element; the frame is an iframe
+  const frame = $frame.get<HTMLIFrameElement>(0);
   const frameWindow = frame.contentWindow;
+  // @ts-expect-error contentWindow is null only for a detached iframe; this one is in the body
   const frameDocument = frameWindow.document;
   const frameDocumentBody = frameDocument.body;
 

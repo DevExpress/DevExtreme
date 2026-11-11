@@ -53,7 +53,7 @@ class NativeStrategy extends DateBoxStrategy {
     const dropDownButton = this.dateBox.getButton('dropDown');
     if (devices.real().android && dropDownButton) {
       dropDownButton.on('click', () => {
-        (this.dateBox._input().get(0) as HTMLInputElement).click();
+        this.dateBox._input().get<HTMLInputElement>(0).click();
       });
     }
   }

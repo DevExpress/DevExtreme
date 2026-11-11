@@ -336,8 +336,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     const isFullUpdate = !e || e.changeType === 'refresh';
     const isFocusedViewCorrect = this._focusedView?.name === this._rowsView.name;
     const isAppend = e && (e.changeType === 'append' || e.changeType === 'prepend');
-    // @ts-expect-error rendered view; get() is typed as Element
-    const root = $(domAdapter.getRootNode($rowsView.get?.(0)));
+    const root = $(domAdapter.getRootNode($rowsView.get?.<HTMLElement>(0)));
     const $focusedElement = root.find(':focus');
     const isFocusedElementCorrect = this._isFocusedElementCorrect($focusedElement, $rowsView, e);
 
@@ -1326,7 +1325,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
   }
 
   private focusFirstInteractiveElementInside($el: dxElementWrapper): void {
-    ($el.find(INTERACTIVE_ELEMENTS_SELECTOR).get(0) as HTMLElement).focus();
+    $el.find(INTERACTIVE_ELEMENTS_SELECTOR).get<HTMLElement>(0).focus();
   }
 
   private _processEnterKeyForDataCell(eventArgs: KeyboardKeyDownEvent, isEditing: boolean): void {

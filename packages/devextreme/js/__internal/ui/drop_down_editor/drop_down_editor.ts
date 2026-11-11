@@ -547,7 +547,7 @@ class DropDownEditor<
 
         // T1259996
         if (browser.mozilla) {
-          const inputElement = $input.get(0) as HTMLInputElement;
+          const inputElement = $input.get<HTMLInputElement>(0);
           inputElement.focus({ preventScroll: true });
         } else {
           eventsEngine.trigger($input, 'focus');

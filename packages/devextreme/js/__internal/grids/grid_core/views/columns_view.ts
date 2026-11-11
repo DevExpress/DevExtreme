@@ -648,7 +648,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
       }
 
       const { options } = templateParameters;
-      const doc = domAdapter.getRootNode($(options.container).get(0) as HTMLElement);
+      const doc = domAdapter.getRootNode($(options.container).get<HTMLElement>(0));
       const needWaitAsyncTemplates = this.needWaitAsyncTemplates();
 
       if (!isAsync || $(options.container).closest(doc).length || needWaitAsyncTemplates) {
@@ -1381,7 +1381,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
         const isDetailRow = $row.hasClass(MASTER_DETAIL_CLASSES.detailRow);
         const isErrorRow = $row.hasClass(ERROR_HANDLING_CLASSES.errorRow);
 
-        const isRowVisible = isRowElementVisible($row.get(0) as HTMLElement);
+        const isRowVisible = isRowElementVisible($row.get<HTMLElement>(0));
         const isRelevantRow = !isGroupRow && !isDetailRow && !isErrorRow;
 
         if (isRowVisible && isRelevantRow) {
@@ -1410,7 +1410,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
       : $row.find('td').eq(visibleCellIndex);
 
     for (let i = 0; i < $cell.length; i += 1) {
-      const cell = $cell.get(i) as HTMLElement;
+      const cell = $cell.get<HTMLElement>(i);
 
       Object.assign(cell.style, styleProps);
     }

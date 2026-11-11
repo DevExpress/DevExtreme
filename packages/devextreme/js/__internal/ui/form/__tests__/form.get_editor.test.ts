@@ -12,7 +12,7 @@ const forms: Form[] = [];
 
 const createForm = (): Form => {
   const $element = $('<div>').appendTo(document.body);
-  const form = new Form($element.get(0) as HTMLElement, {
+  const form = new Form($element.get<HTMLElement>(0), {
     formData: { name: 'John', isActive: true },
     items: [
       { dataField: 'name' },

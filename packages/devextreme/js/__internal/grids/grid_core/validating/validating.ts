@@ -1342,7 +1342,7 @@ export const validatingEditorFactoryExtender = (
 
         if (
           $groupCellElement.length
-          && ($groupCellElement.get(0) as HTMLElement).style.visibility !== 'hidden'
+          && $groupCellElement.get<HTMLElement>(0).style.visibility !== 'hidden'
         ) {
           $groupCellElement.css('visibility', 'hidden');
 

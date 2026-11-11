@@ -1082,7 +1082,7 @@ export class AppointmentForm {
   }
 
   private focusFirstFocusableInGroup($group: dxElementWrapper): void {
-    const focusTarget = $group.find(`.${CLASSES.fieldItemContent} [tabindex]`).first().get(0) as HTMLElement;
+    const focusTarget = $group.find(`.${CLASSES.fieldItemContent} [tabindex]`).first().get<HTMLElement>(0);
     focusTarget?.focus({ preventScroll: true });
   }
 }
