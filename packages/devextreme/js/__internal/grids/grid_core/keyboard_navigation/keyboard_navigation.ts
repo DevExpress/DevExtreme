@@ -756,9 +756,8 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
       keyName, key, ctrl, alt, originalEvent,
     } = eventArgs;
     const isViewSwitch = ctrl && (keyName === 'upArrow' || keyName === 'downArrow');
-    const isCommandShortcut = isCommandKeyPressed(originalEvent) && (keyName === 'A' || keyName === 'F');
     const isFastEditingKey = key?.length === 1
-      && !ctrl && !alt && !isCommandShortcut
+      && !alt && !isCommandKeyPressed(originalEvent)
       && this._isFastEditingAllowed();
 
     return !isViewSwitch && (FOCUSED_CELL_KEYS.includes(keyName) || isFastEditingKey);
@@ -1481,7 +1480,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     if (
       !this._isFastEditingAllowed()
       || originalEvent.altKey
-      || originalEvent.ctrlKey
+      || isCommandKeyPressed(originalEvent)
       || this._editingController.isEditing()
     ) {
       return false;
