@@ -1,12 +1,13 @@
-/* eslint-disable @typescript-eslint/no-unsafe-return */
 import { computed } from '@ts/core/state_manager/index';
 import { combineFilters } from '@ts/grids/grid_core/filter/utils';
 import type { Column } from '@ts/grids/new/grid_core/columns_controller/types';
 import { getColumnByIndexOrName } from '@ts/grids/new/grid_core/columns_controller/utils';
+import type { CompatibilityHeaderFilterController } from '@ts/grids/new/grid_core/filtering/header_filter/compatibility';
 import { HeaderFilterController } from '@ts/grids/new/grid_core/filtering/header_filter/controller';
 import type {
   HeaderFilterRootOptions,
 } from '@ts/grids/new/grid_core/filtering/header_filter/index';
+import type { LegacyCustomOperationConfig } from '@ts/grids/new/grid_core/filtering/legacy_filter_custom_operations';
 import { anyOf, noneOf } from '@ts/grids/new/grid_core/filtering/legacy_filter_custom_operations';
 import { SearchController } from '@ts/grids/new/grid_core/search/index';
 
@@ -63,7 +64,7 @@ export class FilterController {
   }));
 
   public readonly customOperations = computed(() => {
-    const config = {
+    const config: LegacyCustomOperationConfig = {
       columnOption: (columnName: string): Column | undefined => {
         const columns = this.columnsController.columns.peek();
 
@@ -74,7 +75,8 @@ export class FilterController {
         options for specific columns on its own
       */
       getHeaderFilterOptions: (): HeaderFilterRootOptions => this.options.oneWay('headerFilter').peek(),
-      getHeaderFilterController: (): unknown => this.headerFilterCompatibilityController,
+      getHeaderFilterController: () => this
+        .headerFilterCompatibilityController as CompatibilityHeaderFilterController,
     };
 
     const builtInCustomOperation: unknown[] = [
@@ -100,7 +102,7 @@ export class FilterController {
     },
   );
 
-  public headerFilterCompatibilityController: unknown = null;
+  public headerFilterCompatibilityController: CompatibilityHeaderFilterController | null = null;
 
   constructor(
     private readonly options: OptionsController,
