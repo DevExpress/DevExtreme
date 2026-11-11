@@ -55,9 +55,6 @@ jobs:
       - name: Build npm packages
         run: pnpm run all:build:internal
 
-      - name: Build artifacts package
-        run: pnpm run make-artifacts-package
-
       - name: Upload packages
         uses: actions/upload-artifact@v7
         with:
@@ -70,7 +67,7 @@ jobs:
       - name: Filter packages
         id: filter
         working-directory: artifacts/npm
-        run: ls devextreme-internal-*.tgz devextreme-dist-internal-*.tgz devextreme-artifacts-*.tgz devextreme-monorepo-tools-*.tgz | grep -E -i "$FILTER" | sed -r 's/^(.*).tgz$/"\1"/g' | paste -sd "," - | sed -r 's/(.*)/packages=[\1]/' >> "$GITHUB_OUTPUT"
+        run: ls devextreme-internal-*.tgz devextreme-dist-internal-*.tgz | grep -E -i "$FILTER" | sed -r 's/^(.*).tgz$/"\1"/g' | paste -sd "," - | sed -r 's/(.*)/packages=[\1]/' >> "$GITHUB_OUTPUT"
 
   publish:
     name: Publish package
