@@ -18,7 +18,7 @@ interface HeaderFilterState {
 }
 
 interface FilterPanelState {
-  filterPanel: ValueCondition[] | undefined;
+  filterPanel: ValueCondition | undefined;
 }
 
 interface FilterFullState extends HeaderFilterState, FilterPanelState {}
