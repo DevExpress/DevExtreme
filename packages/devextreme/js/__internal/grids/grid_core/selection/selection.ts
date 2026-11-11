@@ -18,6 +18,7 @@ import { each } from '@js/core/utils/iterator';
 import { isDefined } from '@js/core/utils/type';
 import type { StoreChange } from '@js/data/store';
 import type { DxEvent } from '@js/events';
+import CheckBox from '@js/ui/check_box';
 import errors from '@js/ui/widget/ui.errors';
 import { getData } from '@ts/core/element_data';
 import supportUtils from '@ts/core/utils/support';
@@ -912,6 +913,15 @@ export const selectionRowsViewExtender = <TBase extends ModuleType<RowsView>>(
     this.setAria('selected', String(isSelected), $row);
   }
 
+  private isRowSelectionOutdated($row: dxElementWrapper, isSelected?: boolean): boolean {
+    const $checkBox = $row.find(`.${SELECT_CHECKBOX_CLASS}`);
+    const isAriaOutdated = $row.attr('aria-selected') !== String(isSelected);
+    const isCheckBoxOutdated = $checkBox.length > 0
+      && CheckBox.getInstance($checkBox.get(0)).option('value') !== isSelected;
+
+    return isAriaOutdated || isCheckBoxOutdated;
+  }
+
   protected _createTable(columns?: Column[], isAppend?: boolean): dxElementWrapper {
     const selectionMode = this.option('selection.mode');
     const $table = super._createTable(columns, isAppend);
@@ -1020,7 +1030,7 @@ export const selectionRowsViewExtender = <TBase extends ModuleType<RowsView>>(
           ? findDataItem(rowOptions.key, rowIndex)
           : undefined;
         const isOutdated = item !== undefined
-          && rowElement.getAttribute('aria-selected') !== String(item.isSelected);
+          && this.isRowSelectionOutdated($(rowElement), item.isSelected);
 
         return isOutdated ? [{ rowIndex, isSelected: item.isSelected }] : [];
       });

@@ -5,6 +5,7 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import type { Properties as DataGridProperties } from '@js/ui/data_grid';
 import type { DataGridModel } from '@ts/grids/data_grid/__tests__/__mock__/model/data_grid';
 
+import { createPendingTemplate } from '../../__tests__/__mock__/helpers/pending_template';
 import type { DataGridInstance } from '../../__tests__/__mock__/helpers/utils';
 import {
   afterTest,
@@ -12,12 +13,7 @@ import {
   createDataGrid,
   flushAsync,
 } from '../../__tests__/__mock__/helpers/utils';
-
-interface TemplateArgs {
-  model: { value: unknown };
-  container: HTMLElement;
-  onRendered?: () => void;
-}
+import { COMMAND_SELECT_CLASS } from '../const';
 
 const ROWS = [{ id: 1 }, { id: 2 }, { id: 3 }];
 const RESTORED_STATE = { selectedRowKeys: [1] };
@@ -32,7 +28,9 @@ const getRowKeys = ($container: dxElementWrapper, selector: string): number[] =>
 
   return Array.from(
     container.querySelectorAll(`.dx-datagrid-rowsview ${selector}`),
-    (element) => Number(element.closest('tr')?.textContent),
+    (element) => Number(
+      element.closest('tr')?.querySelector(`td:not(.${COMMAND_SELECT_CLASS})`)?.textContent,
+    ),
   );
 };
 
@@ -42,29 +40,14 @@ const createGrid = async (options: DataGridProperties): Promise<{
   instance: DataGridInstance;
   renderPendingTemplates: () => void;
 }> => {
-  const pendingTemplates: (() => void)[] = [];
-  const renderPendingTemplates = (): void => {
-    while (pendingTemplates.length) {
-      pendingTemplates.shift()?.();
-      jest.runAllTimers();
-    }
-  };
+  const { template, renderPendingTemplates } = createPendingTemplate();
 
   const grid = await createDataGrid({
     dataSource: ROWS,
     columns: [{ dataField: 'id', cellTemplate: 'cellTemplate' }],
     templatesRenderAsynchronously: true,
     integrationOptions: {
-      templates: {
-        cellTemplate: {
-          render({ model, container, onRendered }: TemplateArgs): void {
-            pendingTemplates.push(() => {
-              container.append(String(model.value));
-              onRendered?.();
-            });
-          },
-        },
-      },
+      templates: { cellTemplate: template },
     },
     ...options,
   } as DataGridProperties);
@@ -72,7 +55,7 @@ const createGrid = async (options: DataGridProperties): Promise<{
   return { ...grid, renderPendingTemplates };
 };
 
-describe('RowsView updates while new rows wait for async templates', () => {
+describe('Selection while new rows wait for async templates', () => {
   beforeEach(beforeTest);
   afterEach(afterTest);
 
@@ -122,55 +105,6 @@ describe('RowsView updates while new rows wait for async templates', () => {
     await selecting;
 
     expect(getRowKeys($container, 'tr.dx-selection')).toEqual([2]);
-  });
-
-  it('should highlight the row focused with focusedRowKey', async () => {
-    const { instance, $container, renderPendingTemplates } = await createGrid({
-      focusedRowEnabled: true,
-    });
-
-    instance.option('focusedRowKey', 2);
-    jest.runAllTimers();
-    renderPendingTemplates();
-
-    expect(getRowKeys($container, 'tr.dx-row-focused')).toEqual([2]);
-  });
-
-  it('should highlight the focused row when a detail row is expanded above it', async () => {
-    const { instance, $container, renderPendingTemplates } = await createGrid({
-      focusedRowEnabled: true,
-      masterDetail: {
-        enabled: true,
-        template: (container: HTMLElement): void => {
-          container.append('detail');
-        },
-      },
-    });
-
-    instance.option('focusedRowKey', 2);
-    jest.runAllTimers();
-    const expanding = instance.expandRow(1);
-    jest.runAllTimers();
-    renderPendingTemplates();
-    await expanding;
-
-    expect(getRowKeys($container, 'tr.dx-row-focused')).toEqual([2]);
-  });
-
-  it('should not highlight the repainted row when the focused row key is reset', async () => {
-    const { instance, $container, renderPendingTemplates } = await createGrid({
-      focusedRowEnabled: true,
-      focusedRowKey: 2,
-    });
-
-    renderPendingTemplates();
-    instance.repaintRows([1]);
-    jest.runAllTimers();
-    instance.option('focusedRowKey', null);
-    jest.runAllTimers();
-    renderPendingTemplates();
-
-    expect(getRowKeys($container, 'tr.dx-row-focused')).toEqual([]);
   });
 
   it('should highlight the selected row at its new position when the rows are sorted', async () => {
@@ -229,6 +163,38 @@ describe('RowsView updates while new rows wait for async templates', () => {
 
     expect(getRowKeys($container, 'tr.dx-data-row')).toEqual([10, 1, 2, 3]);
     expect(getRowKeys($container, 'tr.dx-selection')).toEqual([2]);
+  });
+
+  it('should check the checkbox of the selected row updated after a row is inserted above it with repaintChangesOnly', async () => {
+    const { instance, $container, renderPendingTemplates } = await createGrid({
+      dataSource: {
+        store: {
+          type: 'array',
+          key: 'id',
+          data: ROWS.map((row) => ({ ...row, name: 'name' })),
+        },
+        pushAggregationTimeout: 0,
+      },
+      keyExpr: undefined,
+      columns: [{ dataField: 'id', cellTemplate: 'cellTemplate' }, 'name'],
+      repaintChangesOnly: true,
+      selection: { mode: 'multiple' },
+    });
+    const store = instance.getDataSource().store();
+
+    renderPendingTemplates();
+    store.push([{ type: 'insert', index: 0, data: { id: 10, name: 'name' } }]);
+    jest.runAllTimers();
+
+    const selecting = instance.selectRows([2], false);
+    jest.runAllTimers();
+    store.push([{ type: 'update', key: 2, data: { name: 'updated name' } }]);
+    jest.runAllTimers();
+    renderPendingTemplates();
+    await selecting;
+
+    expect(getRowKeys($container, 'tr.dx-selection')).toEqual([2]);
+    expect(getRowKeys($container, '.dx-checkbox-checked')).toEqual([2]);
   });
 
   it('should highlight the appended rows selected with selectAll in the legacy infinite scrolling', async () => {
