@@ -1,8 +1,16 @@
 import {
-  afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi,
+  afterAll, afterEach, beforeAll, beforeEach, describe, it, vi,
 } from 'vitest';
 
 type AnyFn = (...args: any[]) => any;
+
+const toError = (error: unknown): Error => {
+  if (error instanceof Error) {
+    return error;
+  }
+
+  return new Error(typeof error === 'string' ? error : JSON.stringify(error) ?? 'Failed');
+};
 
 const withDone = (fn?: AnyFn): AnyFn | undefined => {
   if (!fn || fn.length === 0) {
@@ -11,7 +19,7 @@ const withDone = (fn?: AnyFn): AnyFn | undefined => {
 
   return () => new Promise<void>((resolve, reject) => {
     const done: any = () => resolve();
-    done.fail = (error: unknown) => reject(error instanceof Error ? error : new Error(String(error)));
+    done.fail = (error: unknown) => reject(toError(error));
     fn(done);
   });
 };
@@ -81,7 +89,7 @@ globals.jasmine = {
 };
 
 globals.fail = (error?: unknown) => {
-  throw error instanceof Error ? error : new Error(String(error ?? 'Failed'));
+  throw toError(error);
 };
 
 const wrappedIt: any = (name: string, fn?: AnyFn, timeout?: number) => it(name, withDone(fn), timeout);
@@ -95,8 +103,3 @@ globals.beforeEach = (fn: AnyFn, timeout?: number) => beforeEach(withDone(fn), t
 globals.afterEach = (fn: AnyFn, timeout?: number) => afterEach(withDone(fn), timeout);
 globals.beforeAll = (fn: AnyFn, timeout?: number) => beforeAll(withDone(fn), timeout);
 globals.afterAll = (fn: AnyFn, timeout?: number) => afterAll(withDone(fn), timeout);
-
-expect.extend({
-  toBeTrue: (received: unknown) => ({ pass: received === true, message: () => `expected ${String(received)} to be true` }),
-  toBeFalse: (received: unknown) => ({ pass: received === false, message: () => `expected ${String(received)} to be false` }),
-});
