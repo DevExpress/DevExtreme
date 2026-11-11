@@ -73,7 +73,6 @@ export function paintedColor(value: string, element: Element | null | undefined)
     return fallbackOf(value);
   }
 
-  // @ts-expect-error createElementNS is on the strategy, not on the exported adapter type
   const probe = domAdapter.createElementNS(SVG_NAMESPACE, 'rect') as SVGElement;
   const paintedAs = (fill: string): string | undefined => {
     probe.style.setProperty('fill', fill);
