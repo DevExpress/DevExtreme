@@ -34,4 +34,4 @@ export declare function isRenderer(object: any): boolean;
 
 export declare function isPromise(object: any): object is Promise<any>;
 
-export declare function isDeferred(object: any): object is DeferredObj<any>;
+export declare function isDeferred(object: any): object is Pick<DeferredObj<any>, 'done' | 'fail'>;
