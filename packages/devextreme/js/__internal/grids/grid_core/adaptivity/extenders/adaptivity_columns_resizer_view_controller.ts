@@ -18,12 +18,10 @@ export const adaptivityColumnsResizerViewControllerExtender = (
   ): boolean {
     const result = super._pointCreated(point, columns, cells);
     const nextColumnIndex = this._getNextColumnIndex(point.columnIndex);
-    const nextColumn: Partial<Column> = columns[nextColumnIndex] || {};
-    const hasHiddenColumnsOnly = nextColumnIndex !== point.columnIndex + 1 && nextColumn.command;
-    const hasAdaptiveHiddenWidth = hasHiddenWidth(columns[point.columnIndex])
-      || hasHiddenColumnsOnly;
+    const nextColumn: Column | undefined = columns[nextColumnIndex];
+    const hasHiddenColumnsOnly = nextColumnIndex !== point.columnIndex + 1 && !!nextColumn?.command;
 
-    return result || !!hasAdaptiveHiddenWidth;
+    return result || hasHiddenWidth(columns[point.columnIndex]) || hasHiddenColumnsOnly;
   }
 
   protected _getNextColumnIndex(currentColumnIndex: number): number {

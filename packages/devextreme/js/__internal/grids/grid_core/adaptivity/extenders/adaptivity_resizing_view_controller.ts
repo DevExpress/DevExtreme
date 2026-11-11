@@ -32,8 +32,8 @@ export const adaptivityResizingViewControllerExtender = (
   }
 
   protected _needBestFit(): boolean {
-    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-    return super._needBestFit() || !!this.adaptiveColumnsController.getHidingColumnsQueue().length;
+    return !!super._needBestFit()
+      || !!this.adaptiveColumnsController.getHidingColumnsQueue().length;
   }
 
   protected _correctColumnWidths(resultWidths: ColumnWidth[], visibleColumns: Column[]): boolean {
