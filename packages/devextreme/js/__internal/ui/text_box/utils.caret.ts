@@ -51,7 +51,7 @@ const caret = (
   selection?: CaretRange,
   force = false,
 ): CaretRange | undefined => {
-  const inputElement = $(input).get(0) as HTMLInputElement;
+  const inputElement = $(input).get<HTMLInputElement>(0);
 
   if (!isDefined(selection)) {
     return getCaret(inputElement);

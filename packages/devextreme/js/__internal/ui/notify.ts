@@ -160,11 +160,9 @@ const setContainerStyles = (
   position: string | NotifyCoordinates,
 ): void => {
   const {
-    // @ts-expect-error 'offsetWidth' does not exist on type 'Element'
     offsetWidth: toastWidth,
-    // @ts-expect-error 'offsetHeight' does not exist on type 'Element'
     offsetHeight: toastHeight,
-  } = container.children().first().get(0);
+  } = container.children().first().get<HTMLElement>(0);
 
   const dimensions: Dimensions = {
     toastWidth,

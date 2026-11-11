@@ -15,7 +15,7 @@ const createResizable = (options: Partial<ResizableProperties> = {}): ResizableM
 
   resizables.push(instance);
 
-  return new ResizableModel($element.get(0) as HTMLElement);
+  return new ResizableModel($element.get<HTMLElement>(0));
 };
 
 describe('Resizable cancelOnEscape', () => {

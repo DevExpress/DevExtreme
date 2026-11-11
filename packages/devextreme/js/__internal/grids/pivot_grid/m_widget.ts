@@ -662,7 +662,7 @@ class PivotGrid extends Widget {
         fieldChooser.cancelChanges();
 
         if (that.$fieldChooserButton) {
-          (that.$fieldChooserButton.get(0) as HTMLElement).focus();
+          that.$fieldChooserButton.get<HTMLElement>(0).focus();
         }
       },
     };

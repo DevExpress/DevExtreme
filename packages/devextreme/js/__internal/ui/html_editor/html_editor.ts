@@ -381,7 +381,7 @@ class HtmlEditor extends Editor<Properties> {
       return;
     }
 
-    const editorNode = this.$element().get(0) as HTMLElement;
+    const editorNode = this.$element().get<HTMLElement>(0);
     const target = (
       isBackward
         ? getPreviousFocusableElement(editorNode)

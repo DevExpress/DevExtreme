@@ -896,8 +896,7 @@ class Draggable<
       const allObjects = domAdapter.elementsFromPoint(
         mousePosition.x,
         mousePosition.y,
-        // @ts-expect-error get is declared to return Element
-        this.$element().get(0),
+        this.$element().get<HTMLElement>(0),
       );
 
       this._verticalScrollHelper.updateScrollable(allObjects, mousePosition);
