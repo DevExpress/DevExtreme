@@ -1,10 +1,12 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, ViewChild, provideZoneChangeDetection } from '@angular/core';
+import {
+  Component, enableProdMode, inject, signal, viewChild,
+} from '@angular/core';
 import { DxTextBoxModule, DxSwitchModule } from 'devextreme-angular';
 import * as mapsData from 'devextreme-dist/js/vectormap-data/world.js';
-import { DxSelectBoxModule, DxSelectBoxTypes } from 'devextreme-angular/ui/select-box';
-import { DxVectorMapModule, DxVectorMapComponent, DxVectorMapTypes } from 'devextreme-angular/ui/vector-map';
-import { ViewportCoordinate, Service } from './app.service';
+import { DxSelectBoxModule, type DxSelectBoxTypes } from 'devextreme-angular/ui/select-box';
+import { DxVectorMapModule, DxVectorMapComponent, type DxVectorMapTypes } from 'devextreme-angular/ui/vector-map';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -25,36 +27,28 @@ if (!/localhost/.test(document.location.host)) {
 })
 
 export class AppComponent {
-  worldMap = mapsData.world;
+  readonly worldMap = mapsData.world;
 
-  zoomFactorValue = '1.00';
+  readonly zoomFactorValue = signal('1.00');
 
-  centerValue = '0.000, 46.036';
+  readonly centerValue = signal('0.000, 46.036');
 
-  viewportData: ViewportCoordinate[];
+  readonly viewportData = inject(Service).getCoordinates();
 
-  @ViewChild(DxVectorMapComponent, { static: false }) map: DxVectorMapComponent;
-
-  constructor(service: Service) {
-    this.viewportData = service.getCoordinates();
-  }
+  private readonly map = viewChild.required(DxVectorMapComponent);
 
   onValueChanged(e: DxSelectBoxTypes.ValueChangedEvent) {
-    this.map.instance.viewport(e.value);
+    this.map().instance.viewport(e.value);
   }
 
   zoomChanged(e: DxVectorMapTypes.ZoomFactorChangedEvent) {
-    this.zoomFactorValue = e.zoomFactor.toFixed(2);
+    this.zoomFactorValue.set(e.zoomFactor.toFixed(2));
   }
 
   centerChanged(e: DxVectorMapTypes.CenterChangedEvent) {
-    this.centerValue = `${e.center[0].toFixed(3)
-    }, ${e.center[1].toFixed(3)}`;
+    this.centerValue.set(`${e.center[0].toFixed(3)
+    }, ${e.center[1].toFixed(3)}`);
   }
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

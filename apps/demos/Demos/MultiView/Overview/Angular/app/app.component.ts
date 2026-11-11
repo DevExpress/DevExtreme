@@ -1,9 +1,11 @@
-import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import {
+  Component, enableProdMode, inject, signal,
+} from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
 
 import { DxMultiViewModule, DxCheckBoxModule } from 'devextreme-angular';
 
-import { Company, Service } from './app.service';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -21,24 +23,15 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  companies: Company[];
+  readonly companies = inject(Service).getCompanies();
 
-  itemCount: number;
+  readonly itemCount = this.companies.length;
 
-  selectedIndex = 0;
+  readonly selectedIndex = signal(0);
 
-  loop = false;
+  readonly loop = signal(false);
 
-  animationEnabled = true;
-
-  constructor(service: Service) {
-    this.companies = service.getCompanies();
-    this.itemCount = this.companies.length;
-  }
+  readonly animationEnabled = signal(true);
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

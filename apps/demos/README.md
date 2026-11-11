@@ -46,6 +46,8 @@ pnpm run fix-lint
 
 2. Use the built-in CLI to choose or enter the category, the demo name, and the technology for the new demo.
 
+For Angular demos, follow [Writing Angular demos](../../.github/instructions/demos-angular.instructions.md).
+
 ### TS React Infrastructure
 
 After you make any changes in React TypeScript sources, run the following command:

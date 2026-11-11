@@ -1,7 +1,9 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import {
+  Component, enableProdMode, inject, signal,
+} from '@angular/core';
 import { DxGanttModule, DxCheckBoxModule } from 'devextreme-angular';
-import { Service, Task, Dependency } from './app.service';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -19,27 +21,17 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  tasks: Task[];
+  private readonly service = inject(Service);
 
-  dependencies: Dependency[];
+  readonly tasks = this.service.getTasks();
 
-  autoUpdateParentTasks: boolean;
+  readonly dependencies = this.service.getDependencies();
 
-  validateDependencies: boolean;
+  readonly autoUpdateParentTasks = signal(true);
 
-  enablePredecessorGap: boolean;
+  readonly validateDependencies = signal(true);
 
-  constructor(service: Service) {
-    this.tasks = service.getTasks();
-    this.dependencies = service.getDependencies();
-    this.autoUpdateParentTasks = true;
-    this.validateDependencies = true;
-    this.enablePredecessorGap = true;
-  }
+  readonly enablePredecessorGap = signal(true);
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

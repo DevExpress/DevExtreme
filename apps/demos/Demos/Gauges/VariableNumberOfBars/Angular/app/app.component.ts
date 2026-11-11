@@ -1,12 +1,18 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import {
+  Component, enableProdMode, inject, signal,
+} from '@angular/core';
 import { DxBarGaugeModule, DxCheckBoxModule } from 'devextreme-angular';
 
-import { Product, Service } from './app.service';
+import { type Product, Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
 }
+
+const getActiveCounts = (products: Product[]) => products
+  .filter(({ active }) => active)
+  .map(({ count }) => count);
 
 @Component({
   selector: 'demo-app',
@@ -20,30 +26,13 @@ if (!/localhost/.test(document.location.host)) {
 })
 
 export class AppComponent {
-  products: Product[];
+  readonly products = inject(Service).getProducts();
 
-  values: Product[];
-
-  constructor(service: Service) {
-    this.products = service.getProducts();
-    this.productsToValues();
-  }
+  readonly values = signal(getActiveCounts(this.products));
 
   productsToValues() {
-    const values = [];
-
-    this.products.forEach((product) => {
-      if (product.active) {
-        values.push(product.count);
-      }
-    });
-
-    this.values = values;
+    this.values.set(getActiveCounts(this.products));
   }
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

@@ -6,8 +6,8 @@
     [showBorders]="true"
   >
     <dxo-data-grid-selection
-      [selectAllMode]="allMode"
-      [showCheckBoxesMode]="checkBoxesMode"
+      [selectAllMode]="allMode()"
+      [showCheckBoxesMode]="checkBoxesMode()"
       mode="multiple"
     ></dxo-data-grid-selection>
     <dxo-data-grid-paging [pageSize]="10"></dxo-data-grid-paging>
@@ -43,7 +43,7 @@
         [dataSource]="['allPages', 'page']"
         [inputAttr]="{ 'aria-label': 'Select All Mode' }"
         [(value)]="allMode"
-        [disabled]="checkBoxesMode === 'none'"
+        [disabled]="checkBoxesMode() === 'none'"
       ></dx-select-box>
     </div>
     <div class="option checkboxes-mode">

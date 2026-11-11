@@ -1,9 +1,11 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, ViewChild, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import {
+  Component, enableProdMode, inject, viewChild,
+} from '@angular/core';
 import { DxChartModule, DxChartComponent, DxButtonModule } from 'devextreme-angular';
 import { exportFromMarkup } from 'devextreme/viz/export';
 import { Canvg } from 'canvg';
-import { Service, OilProductionDataItem } from './app.service';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -20,13 +22,9 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  @ViewChild(DxChartComponent, { static: false }) chart: DxChartComponent;
+  private readonly chart = viewChild.required(DxChartComponent);
 
-  oilProductionData: OilProductionDataItem[];
-
-  constructor(service: Service) {
-    this.oilProductionData = service.getOilProductionData();
-  }
+  readonly oilProductionData = inject(Service).getOilProductionData();
 
   export() {
     exportFromMarkup(this.prepareMarkup(), {
@@ -78,15 +76,11 @@ export class AppComponent {
 
     const group = document.createElementNS('http://www.w3.org/2000/svg', 'g');
     group.setAttribute('transform', 'translate(305,12)');
-    group.innerHTML = this.chart.instance.svg();
+    group.innerHTML = this.chart().instance.svg();
     svg.appendChild(group);
 
     return svg;
   }
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

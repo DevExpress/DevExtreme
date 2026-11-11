@@ -60,8 +60,8 @@ const config = {
     } catch (ex) {
       try {
         return JSON.parse(normalizeToJSONString(normalizedString));
-      } catch (exNormalize) {
-        throw errors.Error('E3018', ex, normalizedString);
+      } catch {
+        throw ex;
       }
     }
   },

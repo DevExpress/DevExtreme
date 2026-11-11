@@ -1,5 +1,5 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import { Component, enableProdMode } from '@angular/core';
 import { DxTreeViewModule } from 'devextreme-angular';
 import * as AspNetData from 'devextreme-aspnet-data-nojquery';
 
@@ -13,14 +13,10 @@ if (!/localhost/.test(document.location.host)) {
   imports: [DxTreeViewModule],
 })
 export class AppComponent {
-  dataSource = AspNetData.createStore({
+  readonly dataSource = AspNetData.createStore({
     loadUrl: 'https://js.devexpress.com/Demos/NetCore/api/TreeViewPlainData',
     key: 'ID',
   });
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

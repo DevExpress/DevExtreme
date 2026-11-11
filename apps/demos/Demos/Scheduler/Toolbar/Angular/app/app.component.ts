@@ -1,5 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, ViewChild, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import {
+  Component, enableProdMode, inject, viewChild,
+} from '@angular/core';
 import { DxButtonModule, type DxButtonTypes } from 'devextreme-angular/ui/button';
 import { DxSchedulerModule, DxSchedulerComponent } from 'devextreme-angular/ui/scheduler';
 import { DxSelectBoxModule, type DxSelectBoxTypes } from 'devextreme-angular/ui/select-box';
@@ -22,15 +24,17 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  @ViewChild(DxSchedulerComponent, { static: true }) scheduler: DxSchedulerComponent;
+  private readonly scheduler = viewChild.required(DxSchedulerComponent);
 
-  dataSource = this.service.getAppointmentsDataSource();
+  private readonly service = inject(Service);
 
-  assignees = this.service.getAssignees();
+  readonly dataSource = this.service.getAppointmentsDataSource();
 
-  currentDate = this.service.getInitialCurrentDate();
+  readonly assignees = this.service.getAssignees();
 
-  newEventButtonOptions: DxButtonTypes.Properties = {
+  readonly currentDate = this.service.getInitialCurrentDate();
+
+  readonly newEventButtonOptions: DxButtonTypes.Properties = {
     icon: 'plus',
     text: 'New Appointment',
     stylingMode: 'outlined',
@@ -38,16 +42,14 @@ export class AppComponent {
     onClick: () => { this.onAppointmentAdd(); },
   };
 
-  constructor(private service: Service) {}
-
-  onAppointmentAdd() {
-    const selected = this.scheduler.instance.option('selectedCellData') ?? [];
+  private onAppointmentAdd() {
+    const selected = this.scheduler().instance.option('selectedCellData') ?? [];
 
     if (selected.length) {
       const firstSelected = selected[0];
       const lastSelected = selected.at(-1);
 
-      this.scheduler.instance.showAppointmentPopup({
+      this.scheduler().instance.showAppointmentPopup({
         ...firstSelected.groups,
         allDay: firstSelected.allDay,
         startDate: new Date(firstSelected.startDateUTC),
@@ -57,29 +59,25 @@ export class AppComponent {
       return;
     }
 
-    const currentDate = this.scheduler.instance.option('currentDate');
-    const cellDuration = this.scheduler.instance.option('cellDuration');
+    const currentDate = this.scheduler().instance.option('currentDate');
+    const cellDuration = this.scheduler().instance.option('cellDuration');
     const cellDurationMs = cellDuration * MS_IN_HOUR;
     const currentTime = new Date(currentDate as Date).getTime();
     const roundTime = Math.round(currentTime / cellDurationMs) * cellDurationMs;
 
-    this.scheduler.instance.showAppointmentPopup({
+    this.scheduler().instance.showAppointmentPopup({
       startDate: new Date(roundTime),
       endDate: new Date(roundTime + cellDurationMs),
     }, true);
   }
 
   onAssigneesChange(event: DxSelectBoxTypes.ValueChangedEvent) {
-    const dataSource = this.scheduler.instance.option('dataSource');
+    const dataSource = this.scheduler().instance.option('dataSource');
     const filter = event.value ? ['assigneeId', 'contains', event.value] : null;
 
     dataSource.filter(filter);
-    this.scheduler.instance.option('dataSource', dataSource);
+    this.scheduler().instance.option('dataSource', dataSource);
   }
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

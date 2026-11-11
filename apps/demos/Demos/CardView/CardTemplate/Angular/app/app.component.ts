@@ -1,11 +1,13 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import {
+  Component, enableProdMode, inject, signal,
+} from '@angular/core';
 import {
   DxCardViewModule,
   DxPopupModule,
 } from 'devextreme-angular';
 import { DxCardViewTypes } from 'devextreme-angular/ui/card-view';
-import { Service, Vehicle } from './app.service';
+import { Service, type Vehicle } from './app.service';
 import { VehicleCard } from './vehicle-card/vehicle-card.component';
 import { LicenseInfo } from './license-info/license-info.component';
 
@@ -25,23 +27,19 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  vehicles: Vehicle[];
+  readonly vehicles = inject(Service).getVehicles();
 
-  popupVisible = false;
+  readonly popupVisible = signal(false);
 
-  currentVehicle: Vehicle | null = null;
-
-  constructor(service: Service) {
-    this.vehicles = service.getVehicles();
-  }
+  readonly currentVehicle = signal<Vehicle | null>(null);
 
   showInfo(vehicle: Vehicle) {
-    this.currentVehicle = vehicle;
-    this.popupVisible = true;
+    this.currentVehicle.set(vehicle);
+    this.popupVisible.set(true);
   }
 
   hideInfo() {
-    this.popupVisible = false;
+    this.popupVisible.set(false);
   }
 
   getFormattedPrice(card: DxCardViewTypes.CardInfo): string {
@@ -50,8 +48,4 @@ export class AppComponent {
   }
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

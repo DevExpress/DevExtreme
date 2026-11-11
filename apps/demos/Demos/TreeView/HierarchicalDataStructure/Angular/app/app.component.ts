@@ -1,7 +1,9 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
-import { DxTreeViewModule, DxTreeViewTypes } from 'devextreme-angular/ui/tree-view';
-import { Product, Service } from './app.service';
+import {
+  Component, enableProdMode, inject, signal,
+} from '@angular/core';
+import { DxTreeViewModule, type DxTreeViewTypes } from 'devextreme-angular/ui/tree-view';
+import { type Product, Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -17,22 +19,13 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  products: Product[];
+  readonly products: Product[] = inject(Service).getProducts();
 
-  currentItem: Product;
-
-  constructor(service: Service) {
-    this.products = service.getProducts();
-    this.currentItem = this.products[0];
-  }
+  readonly currentItem = signal<Product>(this.products[0]);
 
   selectItem(e: DxTreeViewTypes.ItemClickEvent<Product>) {
-    this.currentItem = e.itemData;
+    this.currentItem.set(e.itemData);
   }
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

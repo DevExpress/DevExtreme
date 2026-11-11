@@ -184,7 +184,7 @@ describe('HeaderFilter', () => {
         });
 
       it('should throw an exception if there are no name or dataField', () => {
-        expect(() => utils.getColumnName({ } as Column)).toThrow();
+        expect(() => utils.getColumnName({ } as Column)).toThrow(/E1049/);
       });
     });
 

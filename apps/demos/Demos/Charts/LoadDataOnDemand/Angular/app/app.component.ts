@@ -1,5 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, ViewChild, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import {
+  Component, enableProdMode, inject, viewChild,
+} from '@angular/core';
 import { HttpClient, provideHttpClient, withFetch } from '@angular/common/http';
 import { lastValueFrom } from 'rxjs';
 import { DxChartComponent, DxChartModule } from 'devextreme-angular';
@@ -19,31 +21,31 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  @ViewChild(DxChartComponent, { static: false }) component: DxChartComponent;
+  private readonly component = viewChild.required(DxChartComponent);
 
-  private _visualRange: VisualRange = {
+  private readonly httpClient = inject(HttpClient);
+
+  private readonly _visualRange: VisualRange = {
     startValue: new Date(2025, 3, 1),
     length: {
       weeks: 2,
     },
   };
 
-  HALFDAY = 43200000;
+  readonly HALFDAY = 43200000;
 
   packetsLock = 0;
 
-  chartDataSource = new DataSource({
+  readonly chartDataSource = new DataSource({
     store: [],
     sort: 'date',
     paginate: false,
   });
 
-  bounds = {
+  readonly bounds = {
     startValue: new Date(2025, 0, 1),
     endValue: new Date(2025, 11, 31),
   };
-
-  constructor(private httpClient: HttpClient) {}
 
   get currentVisualRange(): VisualRange {
     return this._visualRange;
@@ -56,7 +58,7 @@ export class AppComponent {
   }
 
   onVisualRangeChanged() {
-    const items = this.component.instance.getDataSource().items();
+    const items = this.component().instance.getDataSource().items();
     const itemsFirstDate = items?.[0]?.date as number;
     const itemsLastDate = items?.[items.length - 1]?.date as number;
     const startDate = this._visualRange.startValue as number;
@@ -70,7 +72,7 @@ export class AppComponent {
   }
 
   uploadDataByVisualRange() {
-    const dataSource = this.component.instance.getDataSource();
+    const dataSource = this.component().instance.getDataSource();
     const ajaxArgs = {
       startVisible: this.getDateString(this._visualRange.startValue as Date),
       endVisible: this.getDateString(this._visualRange.endValue as Date),
@@ -78,7 +80,7 @@ export class AppComponent {
 
     if (!this.packetsLock) {
       this.packetsLock += 1;
-      this.component.instance.showLoadingIndicator();
+      this.component().instance.showLoadingIndicator();
 
       this.getDataFrame(ajaxArgs)
         .then((dataFrame: Record<string, number | Date>[]) => {
@@ -121,7 +123,6 @@ export class AppComponent {
 
 bootstrapApplication(AppComponent, {
   providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
     provideHttpClient(withFetch()),
   ],
 });

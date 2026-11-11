@@ -1,4 +1,4 @@
-require('./karma.common.test.shim');
+require('./karma.zone-polyfills.test.shim');
 
 const testing = require('@angular/core/testing');
 const server = require('@angular/platform-server/testing');
