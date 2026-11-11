@@ -4,7 +4,8 @@ import type { DeferredObj } from '@js/core/utils/deferred';
 import { when } from '@js/core/utils/deferred';
 import type { StoreLoadOptions } from '@ts/data/data_source/types';
 import type { LoadOperation, OperationTypes } from '@ts/grids/grid_core/data_source_adapter/types';
-import gridCoreUtils, { isVirtualPaging } from '@ts/grids/grid_core/utils';
+import gridCoreUtils from '@ts/grids/grid_core/utils';
+import { isVirtualPaging } from '@ts/grids/grid_core/virtual_scrolling';
 
 import gridCore from '../core';
 import type {

@@ -2,6 +2,7 @@ import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred, when } from '@js/core/utils/deferred';
 import { isObject, isString } from '@js/core/utils/type';
 import type { ChangedEvent } from '@ts/grids/grid_core/data_source_adapter/types';
+import { LEGACY_SCROLLING_MODE } from '@ts/grids/grid_core/virtual_scrolling/const';
 
 import type {
   ChangedCallback,
@@ -12,8 +13,6 @@ import type {
   VirtualDataLoaderDataOptions,
   VirtualItemsCount,
 } from './types';
-
-const LEGACY_SCROLLING_MODE = 'scrolling.legacyMode';
 
 export class VirtualDataLoader<TItem = unknown> {
   private readonly _dataOptions: VirtualDataLoaderDataOptions<TItem>;

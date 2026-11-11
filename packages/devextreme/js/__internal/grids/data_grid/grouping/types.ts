@@ -52,6 +52,8 @@ export type GroupItemData = {
   count?: number;
 };
 
+export type GroupContinuationData = Pick<GroupItemData, 'isContinuation' | 'isContinuationOnNextPage'>;
+
 // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
 export type GroupItem = {
   rowType: 'group';

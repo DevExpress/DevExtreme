@@ -24,8 +24,8 @@ import type {
   ModuleType,
   OptionChanged,
 } from '@ts/grids/grid_core/types';
-import gridCoreUtils from '@ts/grids/grid_core/utils';
 import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
+import { isVirtualRowRendering } from '@ts/grids/grid_core/virtual_scrolling';
 import { CLASSES as VIRTUAL_SCROLLING_CLASSES } from '@ts/grids/grid_core/virtual_scrolling/const';
 import Sortable from '@ts/sortable';
 import { SCROLLABLE_CONTAINER_CLASS } from '@ts/ui/scroll_view/consts';
@@ -219,7 +219,7 @@ const rowsView = (
 
     if (e?.changeType === 'update'
         && e.repaintChangesOnly
-        && gridCoreUtils.isVirtualRowRendering(this)) {
+        && isVirtualRowRendering(this.option('scrolling'))) {
       // eslint-disable-next-line @typescript-eslint/no-floating-promises -- fire-and-forget update
       deferUpdate(() => {
         this._updateSortable();

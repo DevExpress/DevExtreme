@@ -5,6 +5,13 @@ export type {
   VirtualScrollingRowsView,
 } from './types';
 export {
+  isInfiniteMode,
+  isStandardMode,
+  isVirtualMode,
+  isVirtualPaging,
+  isVirtualRowRendering,
+} from './utils/scrolling_mode';
+export {
   dataSourceAdapterExtender,
   resizing,
   rowsView,
