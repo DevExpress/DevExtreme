@@ -7,11 +7,13 @@ import type { RowKey } from '../types';
 import type { ColumnsView } from '../views/columns_view';
 import type { ViewCellOptions, ViewRow } from '../views/types';
 
-export interface AdaptivityDataController extends DataController {
+export interface AdaptivityDataControllerExtension {
   getAdaptiveExpandedKey: () => RowKey | undefined;
   setAdaptiveExpandedKey: (key: RowKey) => void;
   toggleExpandAdaptiveDetailRow: (key?: RowKey, alwaysExpanded?: boolean) => void;
 }
+
+export type AdaptivityDataController = DataController & AdaptivityDataControllerExtension;
 
 export type AdaptivityEditingController = CellBasedEditingController
   & FormBasedEditingControllerExtension;
