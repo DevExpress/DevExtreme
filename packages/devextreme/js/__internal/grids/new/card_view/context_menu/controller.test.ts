@@ -31,7 +31,7 @@ describe('ContextMenu', () => {
         onContextMenuPreparing,
       });
 
-      controller.getItems('content', document.createElement('div'));
+      controller.getItems('content', new MouseEvent('contextmenu'));
 
       expect(onContextMenuPreparing).toHaveBeenCalledTimes(1);
     });
