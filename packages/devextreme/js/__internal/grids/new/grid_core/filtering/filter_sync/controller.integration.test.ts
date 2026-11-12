@@ -176,7 +176,7 @@ describe.skip('FilterSync', () => {
                     },
                   },
                 ],
-                filterValue: changes.filterPanel as any,
+                filterValue: changes.filterPanel,
               });
 
               const headerFilterType = cardView.columnOption('value', 'filterType');

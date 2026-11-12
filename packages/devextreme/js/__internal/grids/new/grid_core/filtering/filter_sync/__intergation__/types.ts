@@ -1,24 +1,24 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import type { DataType } from '@js/common';
 import type { FilterType } from '@js/common/grids';
+import type { ValueCondition, ValueOperand } from '@ts/filter_builder/types';
 
 interface DataItem {
   id: number;
-  value: any;
+  value: unknown;
 }
 
 interface HeaderFilterDataItem {
   text: string;
-  value: any[];
+  value: unknown[];
 }
 
 interface HeaderFilterState {
   headerFilterType: FilterType | undefined;
-  headerFilter: any[] | undefined;
+  headerFilter: ValueOperand[] | undefined;
 }
 
 interface FilterPanelState {
-  filterPanel: any[] | undefined;
+  filterPanel: ValueCondition | undefined;
 }
 
 interface FilterFullState extends HeaderFilterState, FilterPanelState {}
