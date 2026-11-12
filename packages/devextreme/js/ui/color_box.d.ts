@@ -1,9 +1,4 @@
 import {
-    UserDefinedElement,
-    DxElement,
-} from '../core/element';
-
-import {
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
@@ -11,7 +6,6 @@ import {
 } from '../events';
 
 import {
-    template,
     ApplyValueMode,
 } from '../common';
 
@@ -192,14 +186,6 @@ export interface dxColorBoxOptions extends dxDropDownEditorOptions<dxColorBox> {
      * @public
      */
     editAlphaChannel?: boolean;
-    /**
-     * @docid
-     * @default null
-     * @type_function_return string|Element|jQuery
-     * @public
-     * @deprecated dxDropDownEditorOptions.fieldAddons
-     */
-    fieldTemplate?: template | ((value: string, fieldElement: DxElement) => string | UserDefinedElement) | null;
     /**
      * @docid
      * @default 1

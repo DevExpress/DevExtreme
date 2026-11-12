@@ -16,8 +16,6 @@ export default errorUtils(errors.ERROR_MESSAGES, {
 
   E1007: 'State storing cannot be provided due to the restrictions of the browser',
 
-  E1010: 'The template does not contain the TextBox widget',
-
   E1011: 'Items cannot be deleted from the List. Implement the "remove" function in the data store',
 
   E1012: 'Editing type \'{0}\' with the name \'{1}\' is unsupported',

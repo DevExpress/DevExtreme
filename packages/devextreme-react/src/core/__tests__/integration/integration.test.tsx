@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event'
 import * as React from 'react';
 
 import { useState, useEffect } from 'react';
-import SelectBox from '../../../select-box';
+import SelectBox, { FieldAddons } from '../../../select-box';
 import TextBox from '../../../text-box';
 import {
   Form,
@@ -105,8 +105,9 @@ describe('integration tests', () => {
           dataSource={items}
           displayExpr="Name"
           valueExpr="ID"
-          fieldRender={Field}
-        />
+        >
+          <FieldAddons beforeRender={Field} />
+        </SelectBox>
       );
     };
 

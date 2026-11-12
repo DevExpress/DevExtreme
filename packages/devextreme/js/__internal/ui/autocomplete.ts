@@ -19,7 +19,7 @@ const AUTOCOMPLETE_CLASS = 'dx-autocomplete';
 const AUTOCOMPLETE_POPUP_WRAPPER_CLASS = 'dx-autocomplete-popup-wrapper';
 
 export interface AutocompleteProperties extends Omit<
-  Properties, 'onItemClick' | 'onSelectionChanged' | 'dropDownOptions' | 'fieldTemplate'
+  Properties, 'onItemClick' | 'onSelectionChanged' | 'dropDownOptions'
 >, DropDownEditorInternalProperties {
 
 }
