@@ -1,4 +1,5 @@
 /* eslint-disable max-classes-per-file */
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { equalByValue } from '@js/core/utils/common';
 import { Deferred, type DeferredObj, when } from '@js/core/utils/deferred';
@@ -402,15 +403,31 @@ export class FocusController extends core.ViewController {
     }
   }
 
-  private _clearPreviousFocusedRow($tableElement, focusedRowIndex) {
+  public hasStaleFocusedRow(focusedRowIndex: number): boolean {
+    const rowsView = this.getView('rowsView');
+    const $tableElements: dxElementWrapper = rowsView.getTableElements();
+
+    return $tableElements.toArray().some((tableElement) => {
+      const $tableElement = $(tableElement);
+      const $focusedRow = rowsView._getRowElements($tableElement).eq(focusedRowIndex);
+
+      return this.findFocusedRows($tableElement).not($focusedRow).length > 0;
+    });
+  }
+
+  private findFocusedRows($tableElement): dxElementWrapper {
     const isNotMasterDetailFocusedRow = (_, focusedRow) => {
       const $focusedRowTable = $(focusedRow).closest(`.${this.addWidgetPrefix(TABLE_POSTFIX_CLASS)}`);
       return $tableElement.is($focusedRowTable);
     };
 
-    const $prevRowFocusedElement = $tableElement
+    return $tableElement
       .find(FOCUSED_ROW_SELECTOR)
       .filter(isNotMasterDetailFocusedRow);
+  }
+
+  private _clearPreviousFocusedRow($tableElement, focusedRowIndex) {
+    const $prevRowFocusedElement = this.findFocusedRows($tableElement);
 
     $prevRowFocusedElement
       .removeClass(ROW_FOCUSED_CLASS)
@@ -632,7 +649,11 @@ const focusDataControllerExtender = (
     const isFocusedRowVisible = focusedRowIndex >= 0;
     const isFocusedRowInChange = !!e.rowIndices?.includes(focusedRowIndex);
 
-    if (isFocusedRowVisible && isFocusedRowInChange) {
+    if (
+      isFocusedRowVisible
+      && isFocusedRowInChange
+      && this._focusController.hasStaleFocusedRow(focusedRowIndex)
+    ) {
       this._focusController.updateFocusedRow({ focusedRowKey, preventScroll: true });
     }
   }
