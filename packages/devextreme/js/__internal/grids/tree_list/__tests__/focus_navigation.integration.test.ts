@@ -89,3 +89,35 @@ describe('TreeList focus — navigating to the focused row', () => {
     expect(instance.option('focusedRowIndex')).toBe(1);
   });
 });
+
+describe('TreeList focus — partial update of the focused row', () => {
+  beforeEach(beforeTest);
+  afterEach(afterTest);
+
+  it('keeps DOM focus on the focused cell when the focused row is expanded with repaintChangesOnly (T1338023)', async () => {
+    const { instance } = await createTreeList({
+      dataSource: DATA,
+      columns: ['id', 'name'],
+      focusedRowEnabled: true,
+      focusedRowKey: 1,
+      repaintChangesOnly: true,
+      autoExpandAll: false,
+    });
+    await flushAsync();
+
+    const cell = instance.getCellElement(0, 'name') as HTMLElement;
+    instance.focus(cell);
+    await flushAsync();
+    cell.dispatchEvent(new KeyboardEvent('keydown', { key: 'Shift', bubbles: true }));
+
+    expect(document.activeElement).toBe(cell);
+
+    const expanding = instance.expandRow(1);
+    await flushAsync();
+    await expanding;
+
+    expect(visibleKeys(instance)).toEqual([1, 11, 2]);
+    expect(cell.hasAttribute('tabindex')).toBe(true);
+    expect(document.activeElement).toBe(cell);
+  });
+});
