@@ -479,6 +479,65 @@ export default function() {
                 done();
             }, 100);
         });
+
+        test('html value elements should not reach the document on init', function(assert) {
+            const addedTags = [];
+            const observer = new MutationObserver((records) => {
+                records.forEach(({ addedNodes }) => addedNodes.forEach((node) => addedTags.push(node.nodeName)));
+            });
+
+            observer.observe(document.body, { childList: true, subtree: true });
+
+            $('#htmlEditor').dxHtmlEditor({
+                value: '<p>text</p><meta http-equiv="refresh" content="86400"><base href="https://example.com/"><iframe srcdoc="<b>x</b>"></iframe>'
+            });
+
+            observer.takeRecords().forEach(({ addedNodes }) => addedNodes.forEach((node) => addedTags.push(node.nodeName)));
+            observer.disconnect();
+
+            assert.strictEqual(addedTags.indexOf('META'), -1, 'meta was not inserted into the document');
+            assert.strictEqual(addedTags.indexOf('BASE'), -1, 'base was not inserted into the document');
+            assert.strictEqual(addedTags.indexOf('IFRAME'), -1, 'the iframe with srcdoc was not inserted into the document');
+        });
+
+        test('html value set before the editor is created should not reach the document', function(assert) {
+            const addedTags = [];
+            const observer = new MutationObserver((records) => {
+                records.forEach(({ addedNodes }) => addedNodes.forEach((node) => addedTags.push(node.nodeName)));
+            });
+            let instance;
+
+            observer.observe(document.body, { childList: true, subtree: true });
+
+            $('#htmlEditor').dxHtmlEditor({
+                onInitialized: (e) => {
+                    instance = e.component;
+                },
+                customizeModules: () => {
+                    instance.option('value', '<p>text</p><meta http-equiv="refresh" content="86400">');
+                }
+            });
+
+            observer.takeRecords().forEach(({ addedNodes }) => addedNodes.forEach((node) => addedTags.push(node.nodeName)));
+            observer.disconnect();
+
+            assert.strictEqual(instance.option('value'), '<p>text</p><meta http-equiv="refresh" content="86400">', 'the value is kept');
+            assert.strictEqual($('#htmlEditor').find('.ql-editor').html(), '<p>text</p>', 'the value is rendered');
+            assert.strictEqual(addedTags.indexOf('META'), -1, 'meta was not inserted into the document');
+        });
+
+        test('script code should not be rendered as text', function(assert) {
+            const instance = $('#htmlEditor').dxHtmlEditor({
+                value: `<p>a</p>${this.htmlWithScript}`
+            }).dxHtmlEditor('instance');
+            const $content = $('#htmlEditor').find('.ql-editor');
+
+            assert.strictEqual($content.text(), 'a', 'initial value');
+
+            instance.option('value', `<p>b</p>${this.htmlWithScript}`);
+
+            assert.strictEqual($content.text(), 'b', 'value set at runtime');
+        });
     });
 
     testModule('Custom blots rendering', {

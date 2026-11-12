@@ -25,6 +25,7 @@ import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { isDefined, isFunction } from '@js/core/utils/type';
+import { hasWindow } from '@js/core/utils/window';
 import type { DxEvent } from '@js/events';
 import type { Properties as FormProperties } from '@js/ui/form';
 import type { Converter, HtmlEditorFormat, Properties } from '@js/ui/html_editor';
@@ -43,7 +44,7 @@ import { sanitizeHtml } from '@ts/ui/html_editor/utils/html_sanitizer';
 import { prepareScrollData } from '@ts/ui/text_box/utils.scroll';
 
 import type { BaseHtmlEditorModule } from './modules/base';
-import type { TableModule, UploaderModule } from './types/quill';
+import type { Delta, TableModule, UploaderModule } from './types/quill';
 import type { AIDialogResult, AIDialogShowPayload } from './ui/aiDialog';
 import AIDialog from './ui/aiDialog';
 
@@ -283,17 +284,21 @@ class HtmlEditor extends Editor<Properties> {
   }
 
   _updateContainerMarkup(): void {
-    const { value } = this.option();
-    const html = this._convertToHtml(value);
-
-    if (!html) {
+    if (hasWindow()) {
       return;
     }
 
-    const quill = getQuill();
-    const sanitizedHtml = sanitizeHtml(quill, html);
+    const { value } = this.option();
+    const html = this._convertToHtml(value);
 
-    this._$htmlContainer.html(sanitizedHtml);
+    if (html) {
+      this._$htmlContainer.html(sanitizeHtml(getQuill(), html));
+    }
+  }
+
+  _setInitialContent(html: string): void {
+    this._quillInstance.setContents(this._quillInstance.getInitialContent(html));
+    this._quillInstance.history.clear();
   }
 
   _render(): void {
@@ -400,7 +405,14 @@ class HtmlEditor extends Editor<Properties> {
     if (isFunction(customizeModules)) {
       customizeModules(modulesConfig);
     }
-    const { placeholder, readOnly, disabled } = this.option();
+    const {
+      placeholder, readOnly, disabled, value,
+    } = this.option();
+    const initialHtml = this._convertToHtml(value);
+
+    if (initialHtml) {
+      this._$htmlContainer.empty();
+    }
 
     this._quillInstance = this._getRegistrator().createEditor(this._$htmlContainer[0], {
       placeholder,
@@ -409,6 +421,9 @@ class HtmlEditor extends Editor<Properties> {
       theme: 'basic',
     });
 
+    if (initialHtml) {
+      this._setInitialContent(initialHtml);
+    }
     this._renderValidationState();
     this._deltaConverter.setQuillInstance(this._quillInstance);
     this._textChangeHandlerWithContext = this._textChangeHandler.bind(this);
@@ -515,6 +530,8 @@ class HtmlEditor extends Editor<Properties> {
   } {
     const quill = this._getRegistrator().getQuill();
     const wordListMatcher = getWordMatcher(quill);
+    const DeltaClass = quill.import('delta');
+    const ignoreMatcher = (): Delta => new DeltaClass();
 
     return {
       onPaste: (e) => this._saveValueChangeEvent(dxEvent(e)),
@@ -523,6 +540,7 @@ class HtmlEditor extends Editor<Properties> {
         ['p.MsoListParagraphCxSpFirst', wordListMatcher],
         ['p.MsoListParagraphCxSpMiddle', wordListMatcher],
         ['p.MsoListParagraphCxSpLast', wordListMatcher],
+        ['script', ignoreMatcher],
       ],
     };
   }
@@ -677,6 +695,8 @@ class HtmlEditor extends Editor<Properties> {
         this._updateHtmlContent(html);
         this._resumeValueChangeAction();
       }
+    } else if (hasWindow()) {
+      this._$htmlContainer.empty();
     } else {
       this._$htmlContainer.html(value);
     }
