@@ -134,14 +134,14 @@ class ToolCallView extends DOMComponent<ToolCallView, ToolCallViewProperties> {
     value: string,
     isError = false,
   ): void {
-    const labelId = `dx-${new Guid()}`;
+    const inputId = `dx-${new Guid()}`;
     const $field = $('<div>')
       .addClass(CHAT_TOOL_CALL_CLASSES.field)
       .addClass(fieldClass)
       .appendTo(container);
 
-    $('<div>')
-      .attr('id', labelId)
+    $('<label>')
+      .attr('for', inputId)
       .addClass(CHAT_TOOL_CALL_CLASSES.fieldLabel)
       .text(labelText)
       .appendTo($field);
@@ -153,7 +153,7 @@ class ToolCallView extends DOMComponent<ToolCallView, ToolCallViewProperties> {
       autoResizeEnabled: true,
       focusStateEnabled: false,
       hoverStateEnabled: false,
-      inputAttr: { 'aria-labelledby': labelId },
+      inputAttr: { id: inputId },
       elementAttr: isError ? { class: CHAT_TOOL_CALL_CLASSES.error } : {},
     });
   }

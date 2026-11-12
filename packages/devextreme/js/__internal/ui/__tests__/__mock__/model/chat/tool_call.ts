@@ -82,11 +82,9 @@ export class ToolCallModel {
   }
 
   public getFieldInputLabels(): string[] {
-    return this.getFieldInputs().map((input) => {
-      const labelId = input.getAttribute('aria-labelledby') ?? '';
-
-      return document.getElementById(labelId)?.textContent ?? '';
-    });
+    return this.getFieldInputs().map((input) => Array.from(input.labels ?? [])
+      .map((label) => label.textContent ?? '')
+      .join(' '));
   }
 
   public hasErrorResult(): boolean {
