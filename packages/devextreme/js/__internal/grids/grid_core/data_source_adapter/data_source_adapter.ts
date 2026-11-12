@@ -279,8 +279,8 @@ export default class DataSourceAdapter extends modules.Controller {
   /**
    * @extended: virtual_scrolling
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  protected resetPagesCache(isLiveUpdate?: boolean): void {
+  protected resetPagesCache(isLiveUpdate?: boolean): void;
+  protected resetPagesCache(): void {
     this._cachedData = createEmptyCachedData();
   }
 
@@ -841,14 +841,14 @@ export default class DataSourceAdapter extends modules.Controller {
   /**
    * @extended: virtual_scrolling, TreeLists's data_source_adapter
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  protected _changeRowExpandCore(path: RowKey): void {}
+  protected _changeRowExpandCore(path: RowKey): void;
+  protected _changeRowExpandCore(): void {}
 
   /**
    * @extended: TreeLists's data_source_adapter
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  public changeRowExpand(path: RowKey): DeferredObj<unknown> | undefined {
+  public changeRowExpand(path: RowKey): DeferredObj<unknown> | undefined;
+  public changeRowExpand(): DeferredObj<unknown> | undefined {
     return undefined;
   }
 
@@ -918,8 +918,8 @@ export default class DataSourceAdapter extends modules.Controller {
   /**
    * @extended: virtual_scrolling
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  public reload(full?: boolean, changesOnly?: boolean): DeferredObj<unknown> {
+  public reload(full?: boolean, changesOnly?: boolean): DeferredObj<unknown>;
+  public reload(full?: boolean): DeferredObj<unknown> {
     const result = full ? this._dataSource.reload() : this._dataSource.load();
     return result as unknown as DeferredObj<unknown>;
   }
@@ -940,6 +940,5 @@ export default class DataSourceAdapter extends modules.Controller {
    */
   public pageIndex(): number;
   public pageIndex(pageIndex: number): void;
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  public pageIndex(pageIndex?: number): number | void {}
+  public pageIndex(): number | void {}
 }
