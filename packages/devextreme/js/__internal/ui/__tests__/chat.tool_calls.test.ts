@@ -483,6 +483,16 @@ describe('Chat tool calls', () => {
       it('should take the direction of a string result from its text', () => {
         expect(openCall(WEATHER, RTL).getFieldDirections()).toEqual(['ltr', 'auto']);
       });
+
+      it('should show a JSON object passed as a string left to right', () => {
+        expect(openCall({ name: 'getWeather', result: '{"المدينة": "لندن"}' }, RTL)
+          .getFieldDirections()).toEqual(['ltr']);
+      });
+
+      it('should show a JSON array passed as a string left to right', () => {
+        expect(openCall({ name: 'getCities', result: '["لندن", "باريس"]' }, RTL)
+          .getFieldDirections()).toEqual(['ltr']);
+      });
     });
 
     it('should show nested arguments as indented JSON', () => {
