@@ -11,6 +11,7 @@ const START = Date.UTC(2026, 0, 1, 10, 0, 0);
 const USER = { id: 'user' };
 const ASSISTANT = { id: 'assistant', name: 'AI Assistant' };
 const LONG_RESULT = Array.from({ length: 30 }, (_, i) => `Line ${i + 1}: the forecast is stable`).join('\n');
+const MIXED_DIRECTION_RESULT = 'Cloudy, 15°C (59°F).\nמעונן, 15°C (59°F).';
 
 interface ChatCase {
   expandAll?: boolean;
@@ -94,7 +95,7 @@ test('Chat tool calls: disabled', async ({ page }) => {
 
 test('Chat tool calls: expanded in a right-to-left chat', async ({ page }) => {
   await createChat(page, {
-    expandAll: true, height: 900, rtlEnabled: true, weatherResult: 'Cloudy, 15°C (59°F).',
+    expandAll: true, height: 900, rtlEnabled: true, weatherResult: MIXED_DIRECTION_RESULT,
   });
 
   await testScreenshot(page, 'Chat tool calls expanded rtl.png', { element: '#container' });
