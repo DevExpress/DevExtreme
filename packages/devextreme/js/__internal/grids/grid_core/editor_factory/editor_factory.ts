@@ -317,8 +317,7 @@ export class EditorFactory extends ViewControllerWithMixin {
   /**
    * @extended: validating
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars -- overridable signature
-  public loseFocus(skipValidator?: boolean): void {
+  public loseFocus(): void {
     this._$focusedElement?.removeClass(KEYBOARD_NAVIGATION_CLASSES.focused);
     this._$focusedElement = null;
     this._$focusOverlay?.addClass(CLASSES.hidden);
