@@ -753,12 +753,10 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
 
   private isFocusedCellKey(eventArgs: KeyboardKeyDownEvent): boolean {
     const {
-      keyName, key, ctrl, alt, originalEvent,
+      keyName, key, ctrl, originalEvent,
     } = eventArgs;
     const isViewSwitch = ctrl && (keyName === 'upArrow' || keyName === 'downArrow');
-    const isFastEditingKey = key?.length === 1
-      && !alt && !isCommandKeyPressed(originalEvent)
-      && this._isFastEditingAllowed();
+    const isFastEditingKey = key?.length === 1 && this.canBeginFastEditing(originalEvent);
 
     return !isViewSwitch && (FOCUSED_CELL_KEYS.includes(keyName) || isFastEditingKey);
   }
@@ -1476,13 +1474,15 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     return false;
   }
 
+  private canBeginFastEditing(originalEvent: DxEvent<KeyboardEvent>): boolean {
+    return this._isFastEditingAllowed()
+      && !originalEvent.altKey
+      && !isCommandKeyPressed(originalEvent)
+      && !this._editingController.isEditing();
+  }
+
   private _beginFastEditing(originalEvent: DxEvent<KeyboardEvent>, isDeleting?: boolean): boolean {
-    if (
-      !this._isFastEditingAllowed()
-      || originalEvent.altKey
-      || isCommandKeyPressed(originalEvent)
-      || this._editingController.isEditing()
-    ) {
+    if (!this.canBeginFastEditing(originalEvent)) {
       return false;
     }
 
