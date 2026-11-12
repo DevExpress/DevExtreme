@@ -11,8 +11,9 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { isDefined, isEmptyObject } from '@js/core/utils/type';
 import type { DxEvent } from '@js/events';
-import type { ColumnFixingRowsView } from '@ts/grids/grid_core/column_fixing/types';
+import type { ColumnFixingColumnsViewExtension } from '@ts/grids/grid_core/column_fixing/types';
 import type { ModuleType } from '@ts/grids/grid_core/types';
+import type { RowsView } from '@ts/grids/grid_core/views/rows_view';
 import type { ViewDataChange } from '@ts/grids/grid_core/views/types';
 
 import type { KeyboardNavigationController } from './keyboard_navigation';
@@ -21,7 +22,7 @@ import type { KeyDownEvent } from './types';
 export const keyboardNavigationScrollableA11yExtender = (
   Base: ModuleType<KeyboardNavigationController>,
 ): ModuleType<KeyboardNavigationController> => class ScrollableA11yExtender extends Base {
-  protected declare _rowsView: ColumnFixingRowsView;
+  protected declare _rowsView: RowsView & Partial<ColumnFixingColumnsViewExtension>;
 
   private _$firstNotFixedCell: dxElementWrapper | undefined;
 
@@ -108,7 +109,7 @@ export const keyboardNavigationScrollableA11yExtender = (
 
   private isScrollableNeedFocusable(): boolean {
     const hasScrollable = !!this._rowsView.getScrollable();
-    const hasFixedTable = !!this._rowsView.getFixedTableElement()?.length;
+    const hasFixedTable = !!this._rowsView.getFixedTableElement?.()?.length;
     const isCellsRendered = !!this._rowsView.getCellElements(0)?.length;
 
     return hasScrollable && hasFixedTable && isCellsRendered;
