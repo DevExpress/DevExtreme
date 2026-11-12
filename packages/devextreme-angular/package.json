@@ -46,7 +46,7 @@
     "eslint-config-devextreme": "catalog:",
     "eslint-plugin-import": "catalog:",
     "ng-packagr": "catalog:angular",
-    "playwright": "1.62.1",
+    "playwright": "catalog:",
     "puppeteer": "25.13.0",
     "reflect-metadata": "0.1.13",
     "rxjs": "7.8.2",
