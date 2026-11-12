@@ -495,6 +495,10 @@ describe('Chat tool calls', () => {
       });
     });
 
+    it('should take the direction of a string result from its text in a left-to-right chat', () => {
+      expect(openCall(WEATHER).getFieldDirections()).toEqual(['ltr', 'auto']);
+    });
+
     it('should show nested arguments as indented JSON', () => {
       const call = openCall({
         name: 'search',
