@@ -649,14 +649,22 @@ jobs:
         echo "============================================================"
         echo " [QUARANTINED] Run of all quarantined tests (quarantine.json)"
         echo "============================================================"
+        quarantined_failed=0
+        meta_failed_names=""
         if [ "${{ needs.check-should-run.outputs.has-quarantined-tests }}" = "false" ]; then
           echo "No quarantined tests."
-          quarantined_failed=0
-          meta_failed_names=""
         else
-          run_tests --onlyQuarantined true
-          quarantined_failed=$last_failed
-          meta_failed_names=$(jq -r '.tests[]' "$result")
+          # Entries without "themes" rerun in DEFAULT_QUARANTINE_THEMES of runner.ts.
+          quarantine_themes=$( { [ -f quarantine.json ] && jq -r '.tests[].themes // empty | .[]' quarantine.json; printf '%s\n' fluent.blue.light fluent-next.blue.light; } | sort -u )
+          for theme in $quarantine_themes; do
+            echo " > theme: $theme"
+            run_tests --onlyQuarantined true --theme "$theme"
+            quarantined_failed=$((quarantined_failed + last_failed))
+            failed_names=$(jq -r --arg theme "$theme" '.tests[] | "\(.) (\($theme))"' "$result")
+            if [ -n "$failed_names" ]; then
+              meta_failed_names+="${meta_failed_names:+$'\n'}$failed_names"
+            fi
+          done
         fi
 
         echo ""
