@@ -1552,10 +1552,8 @@ export const validatingEditorFactoryExtender = (
     return `.dx-editor-cell .${invalidMessageClass}, .dx-cell-modified .${invalidMessageClass}`;
   }
 
-  public loseFocus(skipValidator?: boolean): void {
-    if (!skipValidator) {
-      this._validatingController.setValidator(null);
-    }
+  public loseFocus(): void {
+    this._validatingController.setValidator(null);
     super.loseFocus();
   }
 
