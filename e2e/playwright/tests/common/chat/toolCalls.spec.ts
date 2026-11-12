@@ -17,12 +17,13 @@ interface ChatCase {
   disabled?: boolean;
   height?: number;
   weatherResult?: string;
+  rtlEnabled?: boolean;
 }
 
 const createChat = async (
   page: Page,
   {
-    expandAll = false, disabled = false, height = 360, weatherResult = '15°C (59°F)',
+    expandAll = false, disabled = false, height = 360, weatherResult = '15°C (59°F)', rtlEnabled = false,
   }: ChatCase = {},
 ): Promise<void> => {
   await createWidget(page, 'dxChat', {
@@ -32,6 +33,7 @@ const createChat = async (
     showAvatar: false,
     showDayHeaders: false,
     disabled,
+    rtlEnabled,
     toolCallOptions: { expandAll },
     items: [
       {
@@ -88,4 +90,12 @@ test('Chat tool calls: disabled', async ({ page }) => {
   await createChat(page, { expandAll: true, disabled: true, height: 900 });
 
   await testScreenshot(page, 'Chat tool calls disabled.png', { element: '#container' });
+});
+
+test('Chat tool calls: expanded in a right-to-left chat', async ({ page }) => {
+  await createChat(page, {
+    expandAll: true, height: 900, rtlEnabled: true, weatherResult: 'Cloudy, 15°C (59°F).',
+  });
+
+  await testScreenshot(page, 'Chat tool calls expanded rtl.png', { element: '#container' });
 });
