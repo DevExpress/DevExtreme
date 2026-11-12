@@ -187,7 +187,7 @@
         "description": "Full production release build. Use -c internal for the internal package pass."
       }
     },
-    "all:build:internal-packages": {
+    "build:internal-packages": {
       "executor": "nx:run-commands",
       "options": {
         "commands": [

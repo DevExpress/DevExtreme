@@ -53,7 +53,7 @@ jobs:
         run: pnpm run all:set-timestamp-version
 
       - name: Build npm packages
-        run: pnpm nx all:build:internal-packages workflows
+        run: pnpm nx run workflows:build:internal-packages
 
       - name: Upload packages
         uses: actions/upload-artifact@v7
