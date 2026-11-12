@@ -75,7 +75,6 @@ const toolCallsMessage: Message = {
 const toolCallsOptions: Options<Properties> = {
   items: [[toolCallsMessage]],
   user: [userWithAvatar],
-  toolCallOptions: [{ expandAll: false }, { expandAll: true }],
 };
 
 const toolCallsCreated = async (
@@ -97,11 +96,20 @@ const toolCallsA11yCheckConfig = {
   },
 };
 
-const toolCallsConfiguration: Configuration<Properties> = {
+const collapsedToolCallsConfiguration: Configuration<Properties> = {
   component: 'dxChat',
-  a11yCheckConfig: toolCallsA11yCheckConfig,
-  options: toolCallsOptions,
+  a11yCheckConfig,
+  options: { ...toolCallsOptions, toolCallOptions: [{ expandAll: false }] },
   created: toolCallsCreated,
 };
 
-testAccessibility(toolCallsConfiguration);
+testAccessibility(collapsedToolCallsConfiguration);
+
+const expandedToolCallsConfiguration: Configuration<Properties> = {
+  component: 'dxChat',
+  a11yCheckConfig: toolCallsA11yCheckConfig,
+  options: { ...toolCallsOptions, toolCallOptions: [{ expandAll: true }] },
+  created: toolCallsCreated,
+};
+
+testAccessibility(expandedToolCallsConfiguration);
