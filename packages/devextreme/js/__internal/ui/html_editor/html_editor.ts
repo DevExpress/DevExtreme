@@ -662,7 +662,7 @@ class HtmlEditor extends Editor<Properties> {
     } else if (hasWindow()) {
       this._$htmlContainer.empty();
     } else {
-      this._$htmlContainer.html(value);
+      this._$htmlContainer.html(value ? sanitizeHtml(getQuill(), value) : value);
     }
   }
 
