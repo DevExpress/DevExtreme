@@ -12,7 +12,6 @@ import {
   DxChartModule, DxChartComponent, DxScrollViewModule,
 } from 'devextreme-angular';
 
-import dxChart from 'devextreme/viz/chart';
 import { detectChanges } from '../helpers/change-detection';
 
 @Component({
@@ -88,7 +87,8 @@ describe('DxChart', () => {
 
     const testComponent = fixture.componentInstance;
     const { chart } = testComponent;
-    const spy = vi.spyOn(chart.instance as dxChart & { _applyChanges: () => void }, '_applyChanges').mockImplementation(() => {});
+    const { instance }: { instance: any } = chart;
+    const spy = vi.spyOn(instance, '_applyChanges').mockImplementation(() => {});
 
     testComponent.dataSource = [{
       name: 1,
@@ -118,7 +118,8 @@ describe('DxChart', () => {
 
     const testComponent = fixture.componentInstance;
     const { chart } = testComponent;
-    const spy = vi.spyOn(chart.instance as dxChart & { _applyChanges: () => void }, '_applyChanges').mockImplementation(() => {});
+    const { instance }: { instance: any } = chart;
+    const spy = vi.spyOn(instance, '_applyChanges').mockImplementation(() => {});
 
     testComponent.dataSource.push({
       name: 1,

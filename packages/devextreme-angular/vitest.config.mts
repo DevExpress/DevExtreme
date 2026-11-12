@@ -78,7 +78,7 @@ export default defineConfig(async () => ({
       },
     })),
     globals: true,
-    maxWorkers: 3,
+    fileParallelism: false,
     restoreMocks: true,
     fakeTimers: {
       toFake: ['setTimeout', 'clearTimeout', 'setInterval', 'clearInterval'],
@@ -97,6 +97,7 @@ export default defineConfig(async () => ({
             '--js-flags=--expose-gc',
             '--no-sandbox',
             '--disable-gpu',
+            '--disable-dev-shm-usage',
             '--enable-precise-memory-info',
           ],
         },
