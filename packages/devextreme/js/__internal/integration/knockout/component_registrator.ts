@@ -238,9 +238,10 @@ if (ko) {
         createComponent();
 
         return {
-          controlsDescendantBindings: componentClass.subclassOf(Widget)
-            || componentClass.subclassOf(VizWidget)
-            || (componentClass.subclassOf(ComponentWrapper) && !(component instanceof ScrollView))
+          controlsDescendantBindings: componentClass.prototype instanceof Widget
+            || componentClass.prototype instanceof VizWidget
+            || (componentClass.prototype instanceof ComponentWrapper
+              && !(component instanceof ScrollView))
             || component instanceof Draggable,
         };
       },

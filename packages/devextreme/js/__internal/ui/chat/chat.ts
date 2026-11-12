@@ -853,8 +853,7 @@ class Chat extends Widget<Properties> {
   }
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-(Chat as any).include(DataHelperMixin);
+Chat.include(DataHelperMixin);
 
 registerComponent('dxChat', Chat);
 
