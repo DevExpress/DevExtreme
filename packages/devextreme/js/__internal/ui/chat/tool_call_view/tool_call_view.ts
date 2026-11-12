@@ -29,7 +29,17 @@ export const CHAT_TOOL_CALL_CLASSES = {
   error: 'dx-chat-tool-call-error',
 };
 
-const getValueDirection = (value: unknown): string => (typeof value === 'string' ? 'auto' : 'ltr');
+const isJsonText = (value: string): boolean => {
+  try {
+    return typeof JSON.parse(value) === 'object';
+  } catch {
+    return false;
+  }
+};
+
+const getValueDirection = (value: unknown): string => (
+  typeof value === 'string' && !isJsonText(value) ? 'auto' : 'ltr'
+);
 
 class ToolCallView extends DOMComponent<ToolCallView, ToolCallViewProperties> {
   _getDefaultOptions(): ToolCallViewProperties {
