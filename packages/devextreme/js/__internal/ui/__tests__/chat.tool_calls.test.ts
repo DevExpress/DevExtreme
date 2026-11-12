@@ -407,6 +407,23 @@ describe('Chat tool calls', () => {
         .toEqual(['Result']);
     });
 
+    it('should label the fields of every call in every message with their own labels', () => {
+      const chat = createChat({
+        toolCallOptions: { expandAll: true },
+        items: [
+          createMessage({ toolCalls: [WEATHER, TIME] }),
+          createMessage({ toolCalls: [FAILED] }),
+        ],
+      });
+
+      expect(chat.getMessageBubbles().map((bubble) => bubble.getToolCalls()
+        .map((call) => call.getFieldInputLabels())))
+        .toEqual([
+          [['Arguments', 'Result'], ['Arguments', 'Result']],
+          [['Arguments', 'Result']],
+        ]);
+    });
+
     [
       { result: 0, text: '0' },
       { result: false, text: 'false' },
