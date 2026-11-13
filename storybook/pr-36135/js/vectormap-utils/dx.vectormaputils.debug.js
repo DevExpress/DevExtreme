@@ -1,7 +1,7 @@
 /*!
 * DevExtreme (dx.vectormaputils.debug.js)
 * Version: 26.2.0
-* Build date: Wed Nov 11 2026
+* Build date: Fri Nov 13 2026
 *
 * Copyright (c) 2012 - 2026 Developer Express Inc. ALL RIGHTS RESERVED
 * Read about DevExtreme licensing here: https://js.devexpress.com/Licensing/
@@ -99,7 +99,7 @@ function parseCore(source, roundCoordinates, errors) {
             type: 'FeatureCollection',
             features: features,
         };
-        // eslint-disable-next-line dot-notation, @typescript-eslint/dot-notation
+        // eslint-disable-next-line @typescript-eslint/dot-notation
         result['bbox'] = shapeData.bBox;
     }
     else {

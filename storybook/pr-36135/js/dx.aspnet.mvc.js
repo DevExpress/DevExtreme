@@ -1,7 +1,7 @@
 /*!
 * DevExtreme (dx.aspnet.mvc.js)
 * Version: 26.2.0
-* Build date: Wed Nov 11 2026
+* Build date: Fri Nov 13 2026
 *
 * Copyright (c) 2012 - 2026 Developer Express Inc. ALL RIGHTS RESERVED
 * Read about DevExtreme licensing here: https://js.devexpress.com/Licensing/
@@ -37,10 +37,11 @@
         );
     }
 })(function($, setTemplateEngine, templateRendered, Guid, validationEngine, iteratorUtils, extractTemplateMarkup, encodeHtml, ajax) {
-    var templateCompiler = createTemplateCompiler();
     var pendingCreateComponentRoutines = [ ];
 
-    function createTemplateCompiler() {
+    function createTemplateCompiler(options) {
+        var noUnsafeEval = Boolean(options && options.noUnsafeEval);
+
         var ENCODE_QUALIFIER = '-',
             INTERPOLATE_QUALIFIER = '=';
 
@@ -74,6 +75,23 @@
             }
         }
 
+        function compileWithFunctionConstructor(code) {
+            // eslint-disable-next-line no-new-func
+            return new Function('obj', 'encodeHtml', code);
+        }
+
+        function compileWithGlobalEval(element, text, code) {
+            var src = element[0];
+            if(src.tagName === 'SCRIPT') {
+                var funcName = src.id.replaceAll('-', '');
+                var func = 'function ' + funcName + '(obj,encodeHtml){\n' + code + '\n}';
+                $.globalEval(func, src, window.document);
+                return funcName;
+            } else {
+                return text;
+            }
+        }
+
         return function(element) {
             var text = extractTemplateMarkup(element);
             var bag = ['var _ = [];', 'with(obj||{}) {'],
@@ -93,24 +111,15 @@
             bag.push('}', 'return _.join(\'\')');
             var code = bag.join('');
 
-            try {
-                // eslint-disable-next-line no-new-func
-                return new Function('obj', 'encodeHtml', code);
-            } catch(e) {
-                var src = element[0];
-                if(src.tagName === 'SCRIPT') {
-                    var funcName = src.id.replaceAll('-', '');
-                    var func = 'function ' + funcName + '(obj,encodeHtml){\n' + code + '\n}';
-                    $.globalEval(func, src, window.document);
-                    return funcName;
-                } else {
-                    return text;
-                }
-            }
+            return noUnsafeEval
+                ? compileWithGlobalEval(element, text, code)
+                : compileWithFunctionConstructor(code);
         };
     }
 
-    function createTemplateEngine() {
+    function createTemplateEngine(options) {
+        var templateCompiler = createTemplateCompiler(options);
+
         return {
             compile: function(element) {
                 return templateCompiler(element);
@@ -213,9 +222,9 @@
             }
         },
 
-        setTemplateEngine: function() {
+        setTemplateEngine: function(options) {
             if(setTemplateEngine) {
-                setTemplateEngine(createTemplateEngine());
+                setTemplateEngine(createTemplateEngine(options));
             }
         },
 
