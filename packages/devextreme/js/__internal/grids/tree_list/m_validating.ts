@@ -1,3 +1,4 @@
+import type { ValidatingCellBasedEditingController } from '@ts/grids/grid_core/validating/types';
 import { validatingModule } from '@ts/grids/grid_core/validating/validating_module';
 
 import type { CellBasedEditingController, FormBasedEditingControllerExtension } from '../grid_core/editing/types';
@@ -6,7 +7,8 @@ import treeListCore from './core';
 
 const editingControllerExtender = (
   Base: ModuleType<CellBasedEditingController & FormBasedEditingControllerExtension>,
-) => class TreeListEditingControllerExtender extends validatingModule.extenders.controllers.editing(Base) {
+): ModuleType<ValidatingCellBasedEditingController> => class TreeListEditingControllerExtender
+  extends validatingModule.extenders.controllers.editing(Base) {
   public override shouldMoveInvalidRowsToPage(): boolean {
     return false;
   }
