@@ -21,7 +21,7 @@ const LEGACY_INFINITE_SCROLLING_OPTIONS = {
 } as DataGridProperties;
 
 const getRowKeys = ($container: dxElementWrapper, selector: string): number[] => {
-  const container = $container.get(0) as HTMLElement;
+  const container = $container.get<HTMLElement>(0);
 
   return Array.from(
     container.querySelectorAll(`.dx-datagrid-rowsview ${selector}`),
