@@ -88,6 +88,7 @@ describe('TreeList focus — partial update of the focused row', () => {
       focusedRowKey: 1,
       repaintChangesOnly: true,
       autoExpandAll: false,
+      tabIndex: 3,
     });
     await flushAsync();
 
@@ -103,6 +104,6 @@ describe('TreeList focus — partial update of the focused row', () => {
     await expanding;
 
     expect(visibleKeys(instance)).toEqual([1, 11, 2]);
-    expect(row.hasAttribute('tabindex')).toBe(true);
+    expect(row.getAttribute('tabindex')).toBe('3');
   });
 });
