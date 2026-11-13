@@ -1,17 +1,13 @@
-/* eslint-disable consistent-return */
-/* eslint-disable @typescript-eslint/no-invalid-void-type */
-
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
 import type { FilterDescriptor } from '@js/data';
 import type DataSource from '@js/data/data_source';
 import { keysEqual } from '@ts/data/utils';
 
-import type { Constructor } from '../types';
-import type { GridCoreNewBase } from '../widget';
-import type { DataObject, Key } from './types';
+import type { GridCoreClass, Mixin } from '../types';
+import type { DataControllerPublicMethods, DataObject, Key } from './types';
 
-export function PublicMethods<T extends Constructor<GridCoreNewBase>>(GridCore: T) {
+export function PublicMethods<T extends GridCoreClass>(
+  GridCore: T,
+): Mixin<T, DataControllerPublicMethods> {
   return class GridCoreWithDataController extends GridCore {
     public getDataSource(): DataSource {
       return this.dataController.dataSource.peek();
@@ -37,7 +33,7 @@ export function PublicMethods<T extends Constructor<GridCoreNewBase>>(GridCore: 
       return this.dataController.getCombinedFilter();
     }
 
-    public keyOf(obj: DataObject) {
+    public keyOf(obj: DataObject): Key {
       return this.dataController.getDataKey(obj);
     }
 
@@ -47,11 +43,12 @@ export function PublicMethods<T extends Constructor<GridCoreNewBase>>(GridCore: 
 
     public pageSize(): number;
     public pageSize(value: number): void;
-    public pageSize(value?: number): number | void {
+    public pageSize(value?: number): number | undefined {
       if (value === undefined) {
         return this.dataController.pageSize.peek();
       }
       this.dataController.pageSize.value = value;
+      return undefined;
     }
 
     public pageIndex(): number;
