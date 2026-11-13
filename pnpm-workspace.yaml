@@ -2,6 +2,7 @@ packages:
   - 'apps/*'
   - 'e2e/*'
   - 'packages/*'
+  - '!packages/sbom'
 
 linkWorkspacePackages: true
 preferWorkspacePackages: true
