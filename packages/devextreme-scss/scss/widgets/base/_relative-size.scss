@@ -1,0 +1,11 @@
+@use "sass:math";
+
+$design-font-size: 14 !default;
+
+@function of($value, $size) {
+  @if $size != "compact" {
+    @return $value;
+  }
+
+  @return math.div(math.div($value, 1px), $design-font-size) * 1em;
+}
