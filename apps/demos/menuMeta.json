@@ -6577,7 +6577,7 @@
             "Title": "OpenStreetMap Provider",
             "Name": "OpenStreetMapProvider",
             "Widget": "Map",
-            "DemoType": "Web",
+            "DemoType": "Web"
           },
           {
             "Title": "Markers",
