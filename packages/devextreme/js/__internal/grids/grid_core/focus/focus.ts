@@ -136,7 +136,7 @@ export class FocusController extends core.ViewController {
     const hasFocusableCell = $focusedRows.children('[tabindex]').length > 0;
 
     if (!hasFocusableCell) {
-      $focusedRows.attr('tabindex', this.option('tabindex') || 0);
+      $focusedRows.attr('tabindex', this.option('tabIndex') ?? 0);
     }
   }
 
