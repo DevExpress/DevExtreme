@@ -171,6 +171,8 @@ export interface InternalGrid extends GridBaseType {
   _createAction: (actionSource: unknown, config?: ActionConfig) => ModuleItemAction;
 
   _createActionByOption: (optionName: string, config?: ActionConfig) => ModuleItemAction;
+
+  hasActionSubscription: (actionName: string) => boolean;
   isReady: () => boolean;
 
   getVisibleRows: () => ProcessedItem[];
@@ -214,6 +216,10 @@ interface InternalSelection extends SelectionBase {
   maxFilterLengthInRequest?: number;
 }
 
+type InternalScrolling = (DataGridScrolling | TreeListScrolling) & {
+  legacyMode?: boolean;
+};
+
 export interface InternalGridOptions extends
   GridBaseOptions<InternalGrid, unknown, unknown>,
   TemporarlyOptionsTakenFromDataGrid,
@@ -230,7 +236,7 @@ export interface InternalGridOptions extends
 
   editing?: EditingOptions;
 
-  scrolling?: DataGridScrolling | TreeListScrolling;
+  scrolling?: InternalScrolling;
 
   filterValue?: FilterValue;
 
@@ -292,7 +298,7 @@ export interface Controllers {
   editorFactory: import('./editor_factory/editor_factory').EditorFactory;
   errorHandling: import('./error_handling/error_handling_view_controller').ErrorHandlingViewController;
   // todo: export is dataGrid-only controller
-  export: import('../data_grid/export/m_export').ExportController;
+  export: import('../data_grid/export/export').ExportController;
   filter: import('./filter/filter_controller').FilterController;
   filterSync: import('./filter_sync/filter_sync').FilterSyncController;
   filterBuilder: import('./filter_builder/filter_builder').FilterBuilderController;
@@ -331,7 +337,7 @@ export interface Views {
   draggingHeaderView: import('./columns_resizing_reordering/columns_resizing_reordering').DraggingHeaderView;
   trackerView: import('./columns_resizing_reordering/columns_resizing_reordering').TrackerView;
   contextMenuView: import('./context_menu/context_menu').ContextMenuView;
-  footerView: import('../data_grid/summary/m_summary').FooterView;
+  footerView: import('../data_grid/summary/summary').FooterView;
   gridView: import('./grid_view/grid_view').GridView;
   filterBuilderView: import('./filter_builder/filter_builder').FilterBuilderView;
   filterPanelView: import('./filter_panel/filter_panel').FilterPanelView;

@@ -1,6 +1,27 @@
 import { describe, expect, it } from '@jest/globals';
 
-import { getAdaptiveDetailRowIndex, resolveAdaptiveDetailRowTarget } from '../utils';
+import { HIDDEN_COLUMNS_WIDTH } from '../const';
+import {
+  getAdaptiveDetailRowIndex,
+  hasHiddenWidth,
+  resolveAdaptiveDetailRowTarget,
+} from '../utils';
+
+describe('hasHiddenWidth', () => {
+  it('returns true for a column hidden by adaptivity', () => {
+    expect(hasHiddenWidth({ visibleWidth: HIDDEN_COLUMNS_WIDTH })).toBe(true);
+  });
+
+  it('returns false for a column with a width', () => {
+    expect(hasHiddenWidth({ visibleWidth: 100 })).toBe(false);
+    expect(hasHiddenWidth({ visibleWidth: 'auto' })).toBe(false);
+    expect(hasHiddenWidth({})).toBe(false);
+  });
+
+  it('returns false for a missing column', () => {
+    expect(hasHiddenWidth(undefined)).toBe(false);
+  });
+});
 
 describe('resolveAdaptiveDetailRowTarget', () => {
   it('expands the row when no adaptive detail row is expanded', () => {

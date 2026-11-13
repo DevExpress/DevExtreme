@@ -20,13 +20,13 @@
   id="photo-popup"
   maxHeight="600"
   [hideOnOutsideClick]="true"
-  [(title)]="imageItemToDisplay.name"
+  [title]="imageItemToDisplay().name"
   [(visible)]="popupVisible"
   [showCloseButton]="true"
 >
   <div *dxTemplate="let data of 'content'" class="photo-popup-content">
     <img
-      src="{{ imageItemToDisplay.dataItem.url }}"
+      src="{{ imageItemToDisplay().dataItem.url }}"
       class="photo-popup-image"
     />
   </div>

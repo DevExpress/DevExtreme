@@ -45,6 +45,8 @@ export interface SelectionRowsViewExtension {
   attachCheckBoxClickEvent: ($element: dxElementWrapper) => void;
   // eslint-disable-next-line @typescript-eslint/method-signature-style -- overridden by methods
   handleRowClickBySelection(e: ViewRowEvent): void;
+  // eslint-disable-next-line @typescript-eslint/method-signature-style -- overridden by methods
+  isClickableElement($target: dxElementWrapper): boolean;
 }
 
 export type SelectionRowsView = RowsView & SelectionRowsViewExtension;

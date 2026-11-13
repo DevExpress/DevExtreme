@@ -34,6 +34,7 @@ import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
 import type { RowsView } from '@ts/grids/grid_core/views/rows_view';
 import type { CellPosition, ViewDataChange, ViewRow } from '@ts/grids/grid_core/views/types';
 import type { VirtualScrollingDataControllerExtension } from '@ts/grids/grid_core/virtual_scrolling';
+import { isInfiniteMode, isVirtualRowRendering } from '@ts/grids/grid_core/virtual_scrolling';
 
 import { CLASSES } from './const';
 import { generateOperationFilterByKey } from './focus_utils';
@@ -212,7 +213,7 @@ export class FocusController extends core.ViewController {
   }
 
   public isAutoNavigateToFocusedRow(): boolean | undefined {
-    return this.option('scrolling.mode') !== 'infinite' && this.option('autoNavigateToFocusedRow');
+    return !isInfiniteMode(this.option('scrolling')) && this.option('autoNavigateToFocusedRow');
   }
 
   public _focusRowByIndex(index?: number, operationTypes?: OperationTypes | null): void {
@@ -383,7 +384,7 @@ export class FocusController extends core.ViewController {
 
   private _navigateTo(key: RowKey, deferred: DeferredObj<number>, needFocusRow: boolean): void {
     const visibleRowIndex = this.getDataController().getRowIndexByKey(key);
-    const isVirtualRowRenderingMode = gridCoreUtils.isVirtualRowRendering(this);
+    const isVirtualRowRenderingMode = isVirtualRowRendering(this.option('scrolling'));
     const isAutoNavigate = this.isAutoNavigateToFocusedRow();
 
     if (isAutoNavigate && isVirtualRowRenderingMode && visibleRowIndex < 0) {
@@ -970,6 +971,40 @@ export const rowsView = (
       }
     } else {
       super._update(change);
+    }
+  }
+
+  protected _renderCore(change?: DataChange): DeferredObj<unknown> {
+    const deferred = super._renderCore(change);
+    const isWaitingForTemplates = this.isWaitingForAsyncTemplates();
+
+    return deferred.done(() => {
+      if (isWaitingForTemplates) {
+        this.syncFocusedRow();
+      }
+    });
+  }
+
+  private syncFocusedRow(): void {
+    if (!this.option('focusedRowEnabled')) {
+      return;
+    }
+
+    const focusedRowKey = this.option('focusedRowKey');
+    const focusedRowIndex = isDefined(focusedRowKey)
+      ? this._dataController.getRowIndexByKey(focusedRowKey)
+      : -1;
+    const isHighlightOutdated = this._getRowElements()
+      .toArray()
+      .some((rowElement, rowIndex) => {
+        const isHighlighted = rowElement.classList.contains(CLASSES.rowFocused);
+        const isFocused = rowIndex === focusedRowIndex;
+
+        return isHighlighted !== isFocused;
+      });
+
+    if (isHighlightOutdated) {
+      this._focusController.updateFocusedRow({ focusedRowKey, preventScroll: true });
     }
   }
 

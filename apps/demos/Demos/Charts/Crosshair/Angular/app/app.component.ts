@@ -1,7 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import { Component, enableProdMode, inject } from '@angular/core';
 import { DxChartModule } from 'devextreme-angular';
-import { Service, CountryInfo, EnergyDescription } from './app.service';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -17,18 +17,11 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  countriesInfo: CountryInfo[];
+  private readonly service = inject(Service);
 
-  energySources: EnergyDescription[];
+  readonly countriesInfo = this.service.getCountriesInfo();
 
-  constructor(service: Service) {
-    this.countriesInfo = service.getCountriesInfo();
-    this.energySources = service.getEnergySources();
-  }
+  readonly energySources = this.service.getEnergySources();
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

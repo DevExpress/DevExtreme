@@ -25,6 +25,7 @@ import type { HeaderPanel } from '@ts/grids/grid_core/header_panel/header_panel'
 import type { ToolbarItem } from '@ts/grids/grid_core/header_panel/types';
 import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
 import type { RowsView } from '@ts/grids/grid_core/views/rows_view';
+import { isVirtualMode } from '@ts/grids/grid_core/virtual_scrolling';
 
 import type {
   InternalGrid, ModuleType, OptionChanged, RowKey,
@@ -584,7 +585,7 @@ const editingControllerExtender = (
     const { isPageChanged } = params ?? {};
     const editMode = this.getEditMode();
     const needResetIndexes = editMode === EDIT_MODE.batch
-      || (isPageChanged && this.option('scrolling.mode') !== 'virtual');
+      || (isPageChanged && !isVirtualMode(this.option('scrolling')));
 
     if (isCellBasedEditMode(editMode)) {
       if (needResetIndexes) {

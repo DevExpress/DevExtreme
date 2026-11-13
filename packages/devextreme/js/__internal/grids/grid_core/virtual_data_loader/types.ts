@@ -31,6 +31,11 @@ export type VirtualDataLoaderChange<TItem = unknown> = ProcessedChange<TItem>
 
 export type ChangedCallback<TItem = unknown> = (change?: VirtualDataLoaderChange<TItem>) => void;
 
+/** Gets only the loader's own changes: no adapter event is passed on */
+export type LoaderChangedCallback<TItem = unknown> = (
+  change?: ProcessedChange<TItem> | DelayedChange,
+) => void;
+
 export interface VirtualDataLoaderController {
   option: (name: string) => unknown;
   isVirtual: () => boolean;

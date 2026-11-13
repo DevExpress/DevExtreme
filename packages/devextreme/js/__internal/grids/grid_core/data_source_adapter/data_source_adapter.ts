@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-dynamic-delete */
 import ArrayStore from '@js/common/data/array_store';
 import { applyBatch } from '@js/common/data/array_utils';
 import type { Callback } from '@js/core/utils/callbacks';
@@ -17,6 +16,7 @@ import type { DataSource } from '@ts/data/data_source/data_source';
 import type { ChangingEvent, StoreLoadOptions } from '@ts/data/data_source/types';
 import type { BeforePushEvent } from '@ts/data/types';
 import type { RowKey } from '@ts/grids/grid_core/types';
+import { isInfiniteMode, isVirtualMode } from '@ts/grids/grid_core/virtual_scrolling';
 
 import modules from '../modules/modules';
 import gridCoreUtils from '../utils';
@@ -279,8 +279,8 @@ export default class DataSourceAdapter extends modules.Controller {
   /**
    * @extended: virtual_scrolling
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  protected resetPagesCache(isLiveUpdate?: boolean): void {
+  protected resetPagesCache(isLiveUpdate?: boolean): void;
+  protected resetPagesCache(): void {
     this._cachedData = createEmptyCachedData();
   }
 
@@ -367,7 +367,7 @@ export default class DataSourceAdapter extends modules.Controller {
     const dataSource = this._dataSource;
     const groupCount = gridCoreUtils.normalizeSortingInfo(this.group()).length;
     const isReshapeMode = this.option('editing.refreshMode') === 'reshape';
-    const isVirtualMode = this.option('scrolling.mode') === 'virtual';
+    const virtualMode = isVirtualMode(this.option('scrolling'));
 
     const filteredChanges = changes.filter(
       (change) => !dataSource.paginate() || change.type !== 'insert' || change.index !== undefined,
@@ -394,12 +394,9 @@ export default class DataSourceAdapter extends modules.Controller {
       skipCopying: !this._needToCopyDataObject(),
     });
 
-    const needUpdateTotalCountCorrection = this._currentTotalCount > 0 || (
-      (fromStore || !isReshapeMode)
-                  && isVirtualMode
-    );
+    const isAppliedWithoutReshape = fromStore || !isReshapeMode;
 
-    if (needUpdateTotalCountCorrection) {
+    if (this._currentTotalCount > 0 || (isAppliedWithoutReshape && virtualMode)) {
       this._totalCountCorrection += getItemCount() - oldItemCount;
     }
 
@@ -599,6 +596,7 @@ export default class DataSourceAdapter extends modules.Controller {
     each(options.storeLoadOptions, (optionName, optionValue) => {
       if (localLoadOptionNames[optionName]) {
         loadOptions[optionName] = optionValue;
+        // eslint-disable-next-line @typescript-eslint/no-dynamic-delete -- moved to loadOptions
         delete options.storeLoadOptions[optionName];
       }
     });
@@ -800,7 +798,7 @@ export default class DataSourceAdapter extends modules.Controller {
       }
       if (itemsCount === 0 && dataSource.pageIndex() >= this.pageCount()) {
         dataSource.pageIndex(this.pageCount() - 1);
-        if (this.option('scrolling.mode') !== 'infinite') {
+        if (!isInfiniteMode(this.option('scrolling'))) {
           dataSource.load();
           isLoading = true;
         }
@@ -843,14 +841,14 @@ export default class DataSourceAdapter extends modules.Controller {
   /**
    * @extended: virtual_scrolling, TreeLists's data_source_adapter
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  protected _changeRowExpandCore(path: RowKey): void {}
+  protected _changeRowExpandCore(path: RowKey): void;
+  protected _changeRowExpandCore(): void {}
 
   /**
    * @extended: TreeLists's data_source_adapter
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  public changeRowExpand(path: RowKey): DeferredObj<unknown> | undefined {
+  public changeRowExpand(path: RowKey): DeferredObj<unknown> | undefined;
+  public changeRowExpand(): DeferredObj<unknown> | undefined {
     return undefined;
   }
 
@@ -920,8 +918,8 @@ export default class DataSourceAdapter extends modules.Controller {
   /**
    * @extended: virtual_scrolling
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  public reload(full?: boolean, changesOnly?: boolean): DeferredObj<unknown> {
+  public reload(full?: boolean, changesOnly?: boolean): DeferredObj<unknown>;
+  public reload(full?: boolean): DeferredObj<unknown> {
     const result = full ? this._dataSource.reload() : this._dataSource.load();
     return result as unknown as DeferredObj<unknown>;
   }
@@ -942,6 +940,5 @@ export default class DataSourceAdapter extends modules.Controller {
    */
   public pageIndex(): number;
   public pageIndex(pageIndex: number): void;
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  public pageIndex(pageIndex?: number): number | void {}
+  public pageIndex(): number | void {}
 }

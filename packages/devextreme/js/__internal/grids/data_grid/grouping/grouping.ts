@@ -26,10 +26,13 @@ import type {
 import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
 import type {
   BoundingRect,
+  CellRenderOptions,
   ContextMenuItemsOptions,
   GridContextMenuItem,
+  ViewCellOptions,
   ViewRowEvent,
 } from '@ts/grids/grid_core/views/types';
+import { isInfiniteMode, isVirtualPaging } from '@ts/grids/grid_core/virtual_scrolling';
 
 import type { ColumnHeadersView } from '../../grid_core/column_headers/column_headers';
 import type { HeaderPanel } from '../../grid_core/header_panel/header_panel';
@@ -47,6 +50,7 @@ import type { GroupingHelper } from './grouping_core';
 import { GroupingHelper as ExpandedGroupingHelper } from './grouping_expanded';
 import type {
   ForeachGroupsResult,
+  GroupContinuationData,
   GroupInfoLevel,
   GroupingDataControllerExtension,
   GroupingDataSourceAdapter,
@@ -533,8 +537,7 @@ export const GroupingRowsViewExtender = (
 
   protected _rowClick(e: ViewRowEvent): void {
     const expandMode: Grouping['expandMode'] = this.option('grouping.expandMode');
-    const scrollingMode = this.option('scrolling.mode');
-    const isGroupRowStateChanged = scrollingMode !== 'infinite'
+    const isGroupRowStateChanged = !isInfiniteMode(this.option('scrolling'))
       && expandMode === 'rowClick'
       && $(e.event.target).closest(`.${VIEW_CLASSES.groupRow}`).length;
     const isExpandButtonClicked = $(e.event.target).closest(`.${DATAGRID_EXPAND_CLASS}`).length;
@@ -544,6 +547,16 @@ export const GroupingRowsViewExtender = (
     }
 
     super._rowClick(e);
+  }
+
+  protected _getCellOptions(options: CellRenderOptions): ViewCellOptions {
+    const { data }: { data?: GroupContinuationData } = options.row;
+
+    // The same object: _addWatchMethod's watch/update closures hold it
+    return Object.assign(
+      super._getCellOptions(options),
+      this.getGroupContinuationMessages(options.column, data),
+    );
   }
 
   private _changeGroupRowState(e: ViewRowEvent): void {
@@ -556,6 +569,23 @@ export const GroupingRowsViewExtender = (
       e.event.preventDefault();
       e.handled = true;
     }
+  }
+
+  private getGroupContinuationMessages(
+    column: Column,
+    data: GroupContinuationData | undefined,
+  ): Pick<ViewCellOptions, 'groupContinuesMessage' | 'groupContinuedMessage'> {
+    const isGroupCell = isDefined(column.groupIndex) && !column.command;
+    if (!isGroupCell || isVirtualPaging(this.option('scrolling'))) {
+      return {};
+    }
+
+    const texts: GroupingTexts = this.option('grouping.texts');
+
+    return {
+      groupContinuesMessage: data?.isContinuationOnNextPage && texts?.groupContinuesMessage,
+      groupContinuedMessage: data?.isContinuation && texts?.groupContinuedMessage,
+    };
   }
 };
 

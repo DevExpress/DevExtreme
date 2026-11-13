@@ -1,9 +1,9 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import {
   Component,
-  ViewChild,
   enableProdMode,
-  provideZoneChangeDetection,
+  inject,
+  viewChild,
 } from '@angular/core';
 import {
   DxCheckBoxModule,
@@ -13,13 +13,13 @@ import {
 } from 'devextreme-angular';
 import notify from 'devextreme/ui/notify';
 import Validator from 'devextreme/ui/validator';
-import { AsyncRule } from 'devextreme-angular/common';
-import { DxFormModule, DxFormComponent, DxFormTypes } from 'devextreme-angular/ui/form';
-import { DxTextBoxTypes } from 'devextreme-angular/ui/text-box';
-import { DxDateBoxTypes } from 'devextreme-angular/ui/date-box';
-import { DxDateRangeBoxTypes } from 'devextreme-angular/ui/date-range-box';
-import { DxButtonModule, DxButtonTypes } from 'devextreme-angular/ui/button';
-import { Customer, Service } from './app.service';
+import type { AsyncRule } from 'devextreme-angular/common';
+import { DxFormModule, DxFormComponent, type DxFormTypes } from 'devextreme-angular/ui/form';
+import type { DxTextBoxTypes } from 'devextreme-angular/ui/text-box';
+import type { DxDateBoxTypes } from 'devextreme-angular/ui/date-box';
+import type { DxDateRangeBoxTypes } from 'devextreme-angular/ui/date-range-box';
+import { DxButtonModule, type DxButtonTypes } from 'devextreme-angular/ui/button';
+import { Service } from './app.service';
 
 type EditorOptions = DxTextBoxTypes.Properties;
 
@@ -34,6 +34,11 @@ const sendRequest = function (value) {
       resolve(value !== invalidEmail);
     }, 1000);
   });
+};
+
+const getMaxDate = () => {
+  const date = new Date();
+  return new Date(date.setFullYear(date.getFullYear() - 21));
 };
 
 @Component({
@@ -51,27 +56,29 @@ const sendRequest = function (value) {
   ],
 })
 export class AppComponent {
-  @ViewChild(DxFormComponent, { static: false }) form: DxFormComponent;
+  private readonly service = inject(Service);
 
-  customer: Customer;
+  private readonly form = viewChild.required(DxFormComponent);
 
-  countries: string[];
+  readonly customer = this.service.getCustomer();
 
-  cities: string[];
+  readonly countries = this.service.getCountries();
 
-  maxDate: Date = new Date();
+  readonly cities = this.service.getCities();
 
-  cityPattern = '^[^0-9]+$';
+  readonly maxDate = getMaxDate();
 
-  namePattern = /^[^0-9]+$/;
+  readonly cityPattern = '^[^0-9]+$';
 
-  phonePattern = /^[02-9]\d{9}$/;
+  readonly namePattern = /^[^0-9]+$/;
 
-  passwordEditorOptions: EditorOptions = {
+  readonly phonePattern = /^[02-9]\d{9}$/;
+
+  readonly passwordEditorOptions: EditorOptions = {
     mode: 'password',
     valueChangeEvent: 'keyup',
     onValueChanged: () => {
-      const editor = this.form.instance.getEditor('ConfirmPassword');
+      const editor = this.form().instance.getEditor('ConfirmPassword');
       if (editor.option('value')) {
         const instance = Validator.getInstance(editor.element()) as Validator;
         instance.validate();
@@ -90,19 +97,19 @@ export class AppComponent {
     ],
   };
 
-  emailEditorOptions: EditorOptions = {
+  readonly emailEditorOptions: EditorOptions = {
     valueChangeEvent: 'keyup',
   };
 
-  nameEditorOptions: EditorOptions = {
+  readonly nameEditorOptions: EditorOptions = {
     valueChangeEvent: 'keyup',
   };
 
-  addressEditorOptions: EditorOptions = {
+  readonly addressEditorOptions: EditorOptions = {
     valueChangeEvent: 'keyup',
   };
 
-  phoneEditorOptions: EditorOptions = {
+  readonly phoneEditorOptions: EditorOptions = {
     mask: '(X00) 000-0000',
     maskRules: {
       X: /[02-9]/,
@@ -111,7 +118,7 @@ export class AppComponent {
     valueChangeEvent: 'keyup',
   };
 
-  confirmPasswordEditorOptions: EditorOptions = {
+  readonly confirmPasswordEditorOptions: EditorOptions = {
     mode: 'password',
     valueChangeEvent: 'keyup',
     buttons: [
@@ -127,57 +134,50 @@ export class AppComponent {
     ],
   };
 
-  colCountByScreen: DxFormTypes.GroupItem['colCountByScreen'] = {
+  readonly colCountByScreen: DxFormTypes.GroupItem['colCountByScreen'] = {
     xs: 2,
     sm: 2,
     md: 2,
     lg: 2,
   };
 
-  dateBoxOptions: DxDateBoxTypes.Properties = {
+  readonly dateBoxOptions: DxDateBoxTypes.Properties = {
     placeholder: 'Birth Date',
     acceptCustomValue: false,
     openOnFieldClick: true,
   };
 
-  dateRangeBoxOptions: DxDateRangeBoxTypes.Properties = {
+  readonly dateRangeBoxOptions: DxDateRangeBoxTypes.Properties = {
     startDatePlaceholder: 'Start Date',
     endDatePlaceholder: 'End Date',
     acceptCustomValue: false,
   };
 
-  registerButtonOptions: DxButtonTypes.Properties = {
+  readonly registerButtonOptions: DxButtonTypes.Properties = {
     text: 'Register',
     type: 'default',
     width: '120px',
     useSubmitBehavior: true,
   };
 
-  resetButtonOptions: DxButtonTypes.Properties = {
+  readonly resetButtonOptions: DxButtonTypes.Properties = {
     text: 'Reset',
     width: '120px',
     disabled: true,
     icon: 'refresh',
     onClick: () => {
-      this.form.instance.reset();
+      this.form().instance.reset();
     },
   };
 
-  constructor(service: Service) {
-    this.maxDate = new Date(this.maxDate.setFullYear(this.maxDate.getFullYear() - 21));
-    this.countries = service.getCountries();
-    this.cities = service.getCities();
-    this.customer = service.getCustomer();
-  }
-
-  passwordComparison = () => this.form.instance.option('formData').Password;
+  readonly passwordComparison = () => this.form().instance.option('formData').Password;
 
   checkComparison() {
     return true;
   }
 
-  changePasswordMode = (name: string) => {
-    const editor = this.form.instance.getEditor(name);
+  private readonly changePasswordMode = (name: string) => {
+    const editor = this.form().instance.getEditor(name);
     editor.option(
       'mode',
       editor.option('mode') === 'text' ? 'password' : 'text',
@@ -207,9 +207,9 @@ export class AppComponent {
     return startDate !== null && endDate !== null;
   }
 
-  asyncValidation: AsyncRule['validationCallback'] = ({ value }) => sendRequest(value);
+  readonly asyncValidation: AsyncRule['validationCallback'] = ({ value }) => sendRequest(value);
 
-  onFormSubmit = (e: SubmitEvent) => {
+  readonly onFormSubmit = (e: SubmitEvent) => {
     notify({
       message: 'You have submitted the form',
       position: {
@@ -221,16 +221,12 @@ export class AppComponent {
     e.preventDefault();
   };
 
-  onOptionChanged = (e: DxFormTypes.OptionChangedEvent) => {
+  readonly onOptionChanged = (e: DxFormTypes.OptionChangedEvent) => {
     if (e.name === 'isDirty') {
-      const resetButton = this.form.instance.getButton('Reset');
+      const resetButton = this.form().instance.getButton('Reset');
       resetButton.option('disabled', !e.value);
     }
   };
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

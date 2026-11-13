@@ -22,7 +22,7 @@ import type { RowsView } from '@ts/grids/grid_core/views/rows_view';
 import type { ColumnWidth, ScrollPosition, ViewDataChange } from '@ts/grids/grid_core/views/types';
 import { isPercentWidth } from '@ts/grids/grid_core/views/utils';
 
-import type { FooterView } from '../../data_grid/summary/m_summary';
+import type { FooterView } from '../../data_grid/summary/summary';
 import type { AdaptiveColumnsViewController } from '../adaptivity/adaptivity';
 import type { ColumnHeadersView } from '../column_headers/column_headers';
 import type { ColumnsController } from '../columns_controller/columns_controller';
@@ -115,7 +115,6 @@ export class ResizingController extends modules.ViewController {
       const refreshSizesHandler = (change: DataChange): void => {
         let resizeDeferred: DeferredObj<unknown> = Deferred<null>().resolve(null);
         const changeType = change?.changeType;
-        // @ts-expect-error e.isDelayed is set for virtual scrolling with scrolling.legacyMode
         const isDelayed = change?.isDelayed;
         const needFireContentReady = changeType
           && changeType !== 'updateSelection'
@@ -146,7 +145,6 @@ export class ResizingController extends modules.ViewController {
 
   private _refreshSizes(e: ViewDataChange): DeferredObj<unknown> {
     const changeType = e?.changeType;
-    // @ts-expect-error e.isDelayed is set for virtual scrolling with scrolling.legacyMode
     const isDelayed = e?.isDelayed;
 
     if (!e || (changeType !== undefined && ['refresh', 'prepend', 'append'].includes(changeType))) {

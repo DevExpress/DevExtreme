@@ -1,4 +1,5 @@
 import { Message, User, Properties } from 'devextreme/ui/chat.d';
+import { Selector } from 'testcafe';
 import url from '../../helpers/getPageUrl';
 import { testAccessibility, Configuration } from '../../helpers/accessibility/test';
 import { Options } from '../../helpers/generateOptionMatrix';
@@ -51,3 +52,64 @@ const configuration: Configuration = {
 };
 
 testAccessibility(configuration);
+
+const toolCallsMessage: Message = {
+  timestamp: new Date(),
+  text: 'Message text',
+  author: userWithoutAvatar,
+  toolCalls: [
+    {
+      name: 'getWeather',
+      arguments: { city: 'London' },
+      result: '15°C',
+    },
+    {
+      name: 'getExchangeRate',
+      arguments: { fromCurrency: 'USD', toCurrency: 'XYZ' },
+      result: 'Failed to execute the tool',
+      status: 'error',
+    },
+  ],
+};
+
+const toolCallsOptions: Options<Properties> = {
+  items: [[toolCallsMessage]],
+  user: [userWithAvatar],
+};
+
+const toolCallsCreated = async (
+  t: TestController,
+  optionConfiguration?: Properties,
+): Promise<void> => {
+  const expectedFieldCount = optionConfiguration?.toolCallOptions?.expandAll ? 4 : 0;
+
+  await t
+    .expect(Selector('.dx-chat-tool-call-view').exists)
+    .ok()
+    .expect(Selector('.dx-chat-tool-call-field').count)
+    .eql(expectedFieldCount);
+};
+
+const toolCallsA11yCheckConfig = {
+  rules: {
+    'nested-interactive': { enabled: false },
+  },
+};
+
+const collapsedToolCallsConfiguration: Configuration<Properties> = {
+  component: 'dxChat',
+  a11yCheckConfig,
+  options: { ...toolCallsOptions, toolCallOptions: [{ expandAll: false }] },
+  created: toolCallsCreated,
+};
+
+testAccessibility(collapsedToolCallsConfiguration);
+
+const expandedToolCallsConfiguration: Configuration<Properties> = {
+  component: 'dxChat',
+  a11yCheckConfig: toolCallsA11yCheckConfig,
+  options: { ...toolCallsOptions, toolCallOptions: [{ expandAll: true }] },
+  created: toolCallsCreated,
+};
+
+testAccessibility(expandedToolCallsConfiguration);

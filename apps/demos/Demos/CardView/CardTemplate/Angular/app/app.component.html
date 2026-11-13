@@ -49,7 +49,7 @@
 >
   <dxo-position at="center" my="center" collision="fit"></dxo-position>
   <div *dxTemplate="let _ of 'content'">
-    @if(currentVehicle) {
+    @if(currentVehicle(); as currentVehicle) {
     <license-info [vehicle]="currentVehicle"></license-info>
     }
   </div>

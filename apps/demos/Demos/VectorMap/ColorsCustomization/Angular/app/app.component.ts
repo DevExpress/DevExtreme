@@ -1,9 +1,9 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import { Component, enableProdMode, inject } from '@angular/core';
 import { DxVectorMapModule } from 'devextreme-angular';
 import * as mapsData from 'devextreme-dist/js/vectormap-data/world.js';
-import { DxVectorMapTypes } from 'devextreme-angular/ui/vector-map';
-import { Countries, Service } from './app.service';
+import type { DxVectorMapTypes } from 'devextreme-angular/ui/vector-map';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -20,16 +20,11 @@ if (!/localhost/.test(document.location.host)) {
 })
 
 export class AppComponent {
-  worldMap = mapsData.world;
+  readonly worldMap = mapsData.world;
 
-  countries: Countries;
+  private readonly countries = inject(Service).getCountries();
 
-  constructor(service: Service) {
-    this.countries = service.getCountries();
-    this.click = this.click.bind(this);
-  }
-
-  customizeTooltip = ({ attribute }) => {
+  readonly customizeTooltip = ({ attribute }) => {
     const name = attribute('name');
     const country = this.countries[name];
     if (country) {
@@ -41,7 +36,7 @@ export class AppComponent {
     return null;
   };
 
-  customizeLayers = (elements: { attribute: Function, applySettings: Function }[]) => {
+  readonly customizeLayers = (elements: { attribute: Function, applySettings: Function }[]) => {
     elements.forEach((element) => {
       const country = this.countries[element.attribute('name')];
       if (country) {
@@ -54,15 +49,11 @@ export class AppComponent {
     });
   };
 
-  click({ target }: DxVectorMapTypes.ClickEvent) {
+  readonly click = ({ target }: DxVectorMapTypes.ClickEvent) => {
     if (target && this.countries[target.attribute('name')]) {
       target.selected(!target.selected());
     }
-  }
+  };
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

@@ -8,7 +8,6 @@
           [items]="['single', 'multiple', 'none']"
           [(value)]="sortingMode"
           [inputAttr]="{ 'aria-label': 'Sorting Mode' }"
-          (onValueChanged)="onSortingValueChanged()"
         ></dx-select-box>
       </div>
     </div>
@@ -16,7 +15,7 @@
       <dx-check-box
         text="Show Sort Indexes"
         [(value)]="showSortIndexes"
-        [disabled]="showSortIndexDisabled"
+        [disabled]="showSortIndexDisabled()"
       ></dx-check-box>
     </div>
   </div>
@@ -55,8 +54,8 @@
 
       <dxo-gantt-editing [enabled]="true"></dxo-gantt-editing>
       <dxo-gantt-sorting
-        [mode]="sortingMode"
-        [showSortIndexes]="showSortIndexes"
+        [mode]="sortingMode()"
+        [showSortIndexes]="showSortIndexes()"
       ></dxo-gantt-sorting>
     </dx-gantt>
   </div>

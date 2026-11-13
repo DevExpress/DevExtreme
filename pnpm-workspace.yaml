@@ -22,6 +22,7 @@ minimumReleaseAgeExclude:
   - "devexpress-gantt"
   - "@devexpress/utils"
   - "eslint-config-devextreme@2.0.2"
+  - "devextreme-exceljs-fork@5.0.0"
 
 overrides:
   "js-yaml@<4.3.2": "^4.3.2"
@@ -81,7 +82,7 @@ catalog:
   inferno-server: ^8.2.3
   devexpress-diagram: 2.2.32
   devexpress-gantt: 4.1.72
-  devextreme-exceljs-fork: 4.4.13
+  devextreme-exceljs-fork: 5.0.0
   devextreme-quill: 1.8.0
   "@eslint/js": 10.0.1
   eslint: 10.14.0

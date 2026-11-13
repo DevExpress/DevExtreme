@@ -27,6 +27,7 @@ import {
     InitializedEventInfo,
     ChangedOptionInfo,
     InteractionEvent,
+    PointerInteractionEvent,
 } from '../events';
 
 import {
@@ -469,9 +470,9 @@ export type ContentReadyEvent<TRowData = any, TKey = any> = EventInfo<dxDataGrid
  * @docid _ui_data_grid_ContextMenuPreparingEvent
  * @public
  * @type object
- * @inherits EventInfo
+ * @inherits NativeEventInfo
  */
-export type ContextMenuPreparingEvent<TRowData = any, TKey = any> = EventInfo<dxDataGrid<TRowData, TKey>> & {
+export type ContextMenuPreparingEvent<TRowData = any, TKey = any> = NativeEventInfo<dxDataGrid<TRowData, TKey>, PointerInteractionEvent> & {
   /**
    * @docid _ui_data_grid_ContextMenuPreparingEvent.items
    * @type Array<Object>

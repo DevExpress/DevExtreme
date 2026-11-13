@@ -1,9 +1,9 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import { Component, enableProdMode, inject } from '@angular/core';
 import {
   DxCardViewModule,
 } from 'devextreme-angular';
-import { Task, Service } from './app.service';
+import { Service } from './app.service';
 import { CardHeader } from './card-header/card-header.component';
 import { PriorityComponent } from './priority/priority.component';
 import { EmployeeComponent } from './employee/employee.component';
@@ -26,16 +26,11 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  tasks: Task[];
-
-  constructor(service: Service) {
-    this.tasks = service.getTasks();
-  }
+  readonly tasks = inject(Service).getTasks();
 }
 
 bootstrapApplication(AppComponent, {
   providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
     Service,
   ],
 });

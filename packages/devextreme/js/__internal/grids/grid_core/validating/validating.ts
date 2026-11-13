@@ -63,6 +63,7 @@ import type { ModuleType, RowKey } from '@ts/grids/grid_core/types';
 import gridCoreUtils from '@ts/grids/grid_core/utils';
 import { CLASSES as VIEW_CLASSES, ROW_OPTIONS_KEY } from '@ts/grids/grid_core/views/const';
 import type { RowsView } from '@ts/grids/grid_core/views/rows_view';
+import { isStandardMode } from '@ts/grids/grid_core/virtual_scrolling';
 import type { PositioningEvent } from '@ts/ui/overlay/overlay';
 import Popup from '@ts/ui/popup/popup';
 import type { ValidationResultInternal } from '@ts/ui/validation_engine';
@@ -81,9 +82,9 @@ import type {
   CellValidationResultData,
   CellValidationResultValue,
   RowValidatingParams,
+  ValidatingCellBasedEditingController,
   ValidatingCellOptions,
   ValidatingEditingController,
-  ValidatingEditingControllerExtension,
   ValidatingEditorFactory,
   ValidatingEditorFactoryExtension,
   ValidationData,
@@ -761,11 +762,8 @@ export class ValidatingController extends modules.Controller {
 
 export const validatingEditingExtender = (
   Base: ModuleType<CellBasedEditingController & FormBasedEditingControllerExtension>,
-): ModuleType<
-  CellBasedEditingController
-  & FormBasedEditingControllerExtension
-  & ValidatingEditingControllerExtension
-> => class ValidateEditingControllerExtender extends Base {
+): ModuleType<ValidatingCellBasedEditingController> => class ValidateEditingControllerExtender
+  extends Base {
   protected _errorHandlingController!: ErrorHandlingViewController;
 
   public init(): void {
@@ -1091,7 +1089,7 @@ export const validatingEditingExtender = (
   protected _handleDataChanged(args: DataChange): void {
     const validationState = this._validatingController._validationState;
 
-    if (this.option('scrolling.mode') === 'standard') {
+    if (isStandardMode(this.option('scrolling'))) {
       this.resetRowAndPageIndices();
     }
 
@@ -1554,10 +1552,8 @@ export const validatingEditorFactoryExtender = (
     return `.dx-editor-cell .${invalidMessageClass}, .dx-cell-modified .${invalidMessageClass}`;
   }
 
-  public loseFocus(skipValidator?: boolean): void {
-    if (!skipValidator) {
-      this._validatingController.setValidator(null);
-    }
+  public loseFocus(): void {
+    this._validatingController.setValidator(null);
     super.loseFocus();
   }
 

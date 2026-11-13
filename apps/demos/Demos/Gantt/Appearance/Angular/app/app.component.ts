@@ -1,10 +1,10 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, ViewEncapsulation, provideZoneChangeDetection } from '@angular/core';
-import { DxCheckBoxModule, DxSelectBoxModule, DxDateBoxModule } from 'devextreme-angular';
-import { DxGanttModule, DxGanttTypes } from 'devextreme-angular/ui/gantt';
 import {
-  Service, Task, Dependency, Resource, ResourceAssignment,
-} from './app.service';
+  Component, enableProdMode, inject, signal, ViewEncapsulation,
+} from '@angular/core';
+import { DxCheckBoxModule, DxSelectBoxModule, DxDateBoxModule } from 'devextreme-angular';
+import { DxGanttModule, type DxGanttTypes } from 'devextreme-angular/ui/gantt';
+import { Service, type Task } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -25,34 +25,29 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  tasks: Task[];
+  private readonly service = inject(Service);
 
-  dependencies: Dependency[];
+  readonly tasks = this.service.getTasks();
 
-  resources: Resource[];
+  readonly dependencies = this.service.getDependencies();
 
-  resourceAssignments: ResourceAssignment[];
+  readonly resources = this.service.getResources();
 
-  scaleType: DxGanttTypes.Properties['scaleType'] = 'months';
+  readonly resourceAssignments = this.service.getResourceAssignments();
 
-  titlePosition: DxGanttTypes.Properties['taskTitlePosition'] = 'outside';
+  readonly scaleType = signal<DxGanttTypes.Properties['scaleType']>('months');
 
-  showResources = true;
+  readonly titlePosition = signal<DxGanttTypes.Properties['taskTitlePosition']>('outside');
 
-  showDependencies = true;
+  readonly showResources = signal(true);
 
-  showCustomTaskTooltip = true;
+  readonly showDependencies = signal(true);
 
-  startDateRange = new Date(2018, 11, 1);
+  readonly showCustomTaskTooltip = signal(true);
 
-  endDateRange = new Date(2019, 11, 1);
+  readonly startDateRange = signal(new Date(2018, 11, 1));
 
-  constructor(service: Service) {
-    this.tasks = service.getTasks();
-    this.dependencies = service.getDependencies();
-    this.resources = service.getResources();
-    this.resourceAssignments = service.getResourceAssignments();
-  }
+  readonly endDateRange = signal(new Date(2019, 11, 1));
 
   getTimeEstimate(task: Task) {
     return Math.abs((task.start as unknown as number) - (task.end as unknown as number)) / 36e5;
@@ -68,8 +63,4 @@ export class AppComponent {
   }
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

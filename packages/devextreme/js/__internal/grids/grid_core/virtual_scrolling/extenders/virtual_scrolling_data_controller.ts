@@ -13,7 +13,6 @@ import type { RawItemData } from '@ts/grids/grid_core/data_source_adapter/types'
 import type { ModuleType, OptionChanged } from '@ts/grids/grid_core/types';
 import type { ItemSizes, VirtualItemsCount } from '@ts/grids/grid_core/virtual_data_loader/types';
 
-import gridCoreUtils, { isInfiniteMode, isVirtualMode, isVirtualPaging } from '../../utils';
 import {
   LEGACY_SCROLLING_MODE,
   LOAD_TIMEOUT,
@@ -35,6 +34,9 @@ import {
   isItemCountableByDataSource,
   updateItemIndices,
 } from '../utils/items';
+import {
+  isInfiniteMode, isVirtualMode, isVirtualPaging, isVirtualRowRendering,
+} from '../utils/scrolling_mode';
 import { VirtualScrollController } from '../virtual_scrolling_core';
 
 export const virtualScrollingDataControllerExtender = (
@@ -105,7 +107,7 @@ export const virtualScrollingDataControllerExtender = (
     const itemIndex = Number(rowsScrollController?.getItemIndexByPosition());
     const result = super.reload(reload, changesOnly);
     return result?.done(() => {
-      if (isVirtualMode(this.option('scrolling')) || gridCoreUtils.isVirtualRowRendering(this)) {
+      if (isVirtualMode(this.option('scrolling')) || isVirtualRowRendering(this.option('scrolling'))) {
         const rowIndexOffset = this.getRowIndexOffset();
         const rowIndex = Math.floor(itemIndex) - rowIndexOffset;
         const scrollable = this.component.getScrollable?.();
@@ -126,7 +128,7 @@ export const virtualScrollingDataControllerExtender = (
   }
 
   private initVirtualRows(): void {
-    const virtualRowsRendering = gridCoreUtils.isVirtualRowRendering(this);
+    const virtualRowsRendering = isVirtualRowRendering(this.option('scrolling'));
     const isLegacyScrolling = this.option(LEGACY_SCROLLING_MODE) !== false;
 
     this._allItems = null;
@@ -247,10 +249,11 @@ export const virtualScrollingDataControllerExtender = (
             return;
           }
 
-          // @ts-expect-error the loader change becomes a data change here
-          const change: DataChange = loaderChange ?? {};
-          change.changeType = change.changeType ?? 'refresh';
-          change.items = change.items ?? that._visibleItems;
+          const change: DataChange = {
+            changeType: 'refresh',
+            items: that._visibleItems,
+            ...loaderChange,
+          };
 
           that._visibleItems.forEach((item, index) => {
             item.rowIndex = index;
@@ -332,7 +335,7 @@ export const virtualScrollingDataControllerExtender = (
     const delta = this.getRowIndexDelta();
 
     super._updateItemsCore(change);
-    if (this.option(LEGACY_SCROLLING_MODE) === false && gridCoreUtils.isVirtualRowRendering(this)) {
+    if (this.option(LEGACY_SCROLLING_MODE) === false && isVirtualRowRendering(this.option('scrolling'))) {
       if (change.changeType === 'update'
         && change.rowIndices.length === 0
         && 'cancelEmptyChanges' in change
@@ -361,34 +364,36 @@ export const virtualScrollingDataControllerExtender = (
       return;
     }
 
-    if (!this._visibleItems) {
+    const visibleItems = this._visibleItems;
+
+    if (!visibleItems) {
       return;
     }
 
     if (change.changeType === 'update') {
-      change.rowIndices.forEach((rowIndex, index) => {
-        if (!change.changeTypes || !change.items || !this._visibleItems) {
-          return;
-        }
+      const { changeTypes, items } = change;
 
-        const changeType = change.changeTypes[index];
-        const newItem = change.items[index];
-        if (changeType === 'update') {
-          this._visibleItems[rowIndex] = newItem;
-        } else if (changeType === 'insert') {
-          this._visibleItems.splice(rowIndex, 0, newItem);
-        } else if (changeType === 'remove') {
-          this._visibleItems.splice(rowIndex, 1);
-        }
-      });
+      if (changeTypes && items) {
+        change.rowIndices.forEach((rowIndex, index) => {
+          const changeType = changeTypes[index];
+          const newItem = items[index];
+          if (changeType === 'update') {
+            visibleItems[rowIndex] = newItem;
+          } else if (changeType === 'insert') {
+            visibleItems.splice(rowIndex, 0, newItem);
+          } else if (changeType === 'remove') {
+            visibleItems.splice(rowIndex, 1);
+          }
+        });
+      }
     } else {
-      this._visibleItems.forEach((item, index, visibleItems) => {
-        visibleItems[index] = this._items[index + delta] || visibleItems[index];
+      visibleItems.forEach((item, index) => {
+        visibleItems[index] = this._items[index + delta] || item;
       });
-      change.items = this._visibleItems;
+      change.items = visibleItems;
     }
 
-    updateItemIndices(this._visibleItems);
+    updateItemIndices(visibleItems);
   }
 
   private _updateLoadViewportParams(): void {
@@ -876,7 +881,7 @@ export const virtualScrollingDataControllerExtender = (
     const { checkLoadedParamsOnly, checkLoading, viewportIsNotFilled } = params ?? {};
     const virtualPaging = isVirtualPaging(this.option('scrolling'));
 
-    if (virtualPaging || gridCoreUtils.isVirtualRowRendering(this)) {
+    if (virtualPaging || isVirtualRowRendering(this.option('scrolling'))) {
       this._updateLoadViewportParams();
 
       const loadingItemsStarted = this._loadItems(checkLoading, !viewportIsNotFilled);

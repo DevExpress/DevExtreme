@@ -1,10 +1,10 @@
 import {
-  ChangeDetectorRef, Component, enableProdMode, provideZoneChangeDetection,
+  Component, enableProdMode, inject, signal,
 } from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
 import { DxListModule } from 'devextreme-angular';
 import type { DxSortableTypes } from 'devextreme-angular/ui/sortable';
-import { Task, Service } from './app.service';
+import { type Task, Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -21,37 +21,44 @@ type DxoItemDraggingProperties = DxSortableTypes.Properties;
   imports: [DxListModule],
 })
 export class AppComponent {
-  doingTasks: Task[];
+  private readonly service = inject(Service);
 
-  plannedTasks: Task[];
+  readonly doingTasks = signal<Task[]>(this.service.getDoingTasks());
 
-  constructor(service: Service, private changeDetectorRef: ChangeDetectorRef) {
-    this.doingTasks = service.getDoingTasks();
-    this.plannedTasks = service.getPlannedTasks();
-  }
+  readonly plannedTasks = signal<Task[]>(this.service.getPlannedTasks());
 
   onDragStart: DxoItemDraggingProperties['onDragStart'] = (e) => {
     e.itemData = e.fromData[e.fromIndex];
   };
 
   onAdd: DxoItemDraggingProperties['onAdd'] = (e) => {
-    e.toData.splice(e.toIndex, 0, e.itemData);
-    this.changeDetectorRef.markForCheck();
+    this.getTasks(e.toData).update((tasks) => {
+      const result = [...tasks];
+      result.splice(e.toIndex, 0, e.itemData);
+      return result;
+    });
   };
 
   onRemove: DxoItemDraggingProperties['onRemove'] = (e) => {
-    e.fromData.splice(e.fromIndex, 1);
-    this.changeDetectorRef.markForCheck();
+    this.getTasks(e.fromData).update((tasks) => {
+      const result = [...tasks];
+      result.splice(e.fromIndex, 1);
+      return result;
+    });
   };
 
   onReorder: DxoItemDraggingProperties['onReorder'] = (e) => {
-    this.onRemove(e as DxSortableTypes.RemoveEvent);
-    this.onAdd(e as DxSortableTypes.AddEvent);
+    this.getTasks(e.fromData).update((tasks) => {
+      const result = [...tasks];
+      result.splice(e.fromIndex, 1);
+      result.splice(e.toIndex, 0, e.itemData);
+      return result;
+    });
   };
+
+  private getTasks(data: Task[]) {
+    return data === this.plannedTasks() ? this.plannedTasks : this.doingTasks;
+  }
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

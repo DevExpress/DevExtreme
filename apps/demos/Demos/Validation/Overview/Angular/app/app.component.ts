@@ -1,5 +1,5 @@
 import {
-  ChangeDetectorRef, Component, enableProdMode, ViewChild, provideZoneChangeDetection,
+  Component, enableProdMode, inject, signal, viewChild,
 } from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
 import {
@@ -14,9 +14,9 @@ import {
   DxValidationSummaryModule,
 } from 'devextreme-angular';
 import notify from 'devextreme/ui/notify';
-import { DxButtonTypes } from 'devextreme-angular/ui/button';
-import { DxTextBoxTypes } from 'devextreme-angular/ui/text-box';
-import { ValidationCallbackData } from 'devextreme-angular/common';
+import type { DxButtonTypes } from 'devextreme-angular/ui/button';
+import type { DxTextBoxTypes } from 'devextreme-angular/ui/text-box';
+import type { ValidationCallbackData } from 'devextreme-angular/common';
 import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -30,6 +30,11 @@ const sendRequest = function (value: string) {
       resolve(value !== invalidEmail);
     }, 1000);
   });
+};
+
+const getMaxDate = () => {
+  const date = new Date();
+  return new Date(date.setFullYear(date.getFullYear() - 21));
 };
 
 @Component({
@@ -50,56 +55,49 @@ const sendRequest = function (value: string) {
 })
 
 export class AppComponent {
-  @ViewChild('targetValidator', { static: false }) validator: DxValidatorComponent;
+  private readonly validator = viewChild.required<DxValidatorComponent>('targetValidator');
 
   password = '';
 
   confirmPassword = '';
 
-  passwordMode: DxTextBoxTypes.TextBoxType = 'password';
+  readonly passwordMode = signal<DxTextBoxTypes.TextBoxType>('password');
 
-  confirmPasswordMode: DxTextBoxTypes.TextBoxType = 'password';
+  readonly confirmPasswordMode = signal<DxTextBoxTypes.TextBoxType>('password');
 
-  maxDate = new Date();
+  readonly maxDate = getMaxDate();
 
-  cityPattern = '^[^0-9]+$';
+  readonly cityPattern = '^[^0-9]+$';
 
-  namePattern = /^[^0-9]+$/;
+  readonly namePattern = /^[^0-9]+$/;
 
-  phonePattern = /^[02-9]\d{9}$/;
+  readonly phonePattern = /^[02-9]\d{9}$/;
 
-  countries: string[];
+  readonly countries = inject(Service).getCountries();
 
-  phoneRules: DxTextBoxTypes.Properties['maskRules'] = {
+  readonly phoneRules: DxTextBoxTypes.Properties['maskRules'] = {
     X: /[02-9]/,
   };
 
-  passwordButton: DxButtonTypes.Properties = {
+  readonly passwordButton: DxButtonTypes.Properties = {
     icon: 'eyeopen',
     stylingMode: 'text',
     onClick: () => {
-      this.passwordMode = this.passwordMode === 'text' ? 'password' : 'text';
-      this.changeDetectorRef.detectChanges();
+      this.passwordMode.update((mode) => (mode === 'text' ? 'password' : 'text'));
     },
   };
 
-  confirmPasswordButton: DxButtonTypes.Properties = {
+  readonly confirmPasswordButton: DxButtonTypes.Properties = {
     icon: 'eyeopen',
     stylingMode: 'text',
     onClick: () => {
-      this.confirmPasswordMode = this.confirmPasswordMode === 'text' ? 'password' : 'text';
-      this.changeDetectorRef.detectChanges();
+      this.confirmPasswordMode.update((mode) => (mode === 'text' ? 'password' : 'text'));
     },
   };
 
-  constructor(service: Service, private changeDetectorRef: ChangeDetectorRef) {
-    this.maxDate = new Date(this.maxDate.setFullYear(this.maxDate.getFullYear() - 21));
-    this.countries = service.getCountries();
-  }
+  readonly passwordComparison = () => this.password;
 
-  passwordComparison = () => this.password;
-
-  checkComparison = () => true;
+  readonly checkComparison = () => true;
 
   validateVacationDatesRange({ value: [startDate, endDate] }: ValidationCallbackData) {
     if (startDate === null || endDate === null) {
@@ -120,15 +118,15 @@ export class AppComponent {
     return startDate !== null && endDate !== null;
   }
 
-  asyncValidation = (params: ValidationCallbackData) => sendRequest(params.value);
+  readonly asyncValidation = (params: ValidationCallbackData) => sendRequest(params.value);
 
   onPasswordChanged() {
     if (this.confirmPassword) {
-      this.validator.instance.validate();
+      this.validator().instance.validate();
     }
   }
 
-  onFormSubmit = function (e: SubmitEvent) {
+  readonly onFormSubmit = function (e: SubmitEvent) {
     notify({
       message: 'You have submitted the form',
       position: {
@@ -141,8 +139,4 @@ export class AppComponent {
   };
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

@@ -1,11 +1,11 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import {
-  enableProdMode, ChangeDetectorRef, Component, provideZoneChangeDetection,
+  enableProdMode, Component, inject, signal,
 } from '@angular/core';
 import notify from 'devextreme/ui/notify';
 import { DxToolbarModule } from 'devextreme-angular';
-import { DxDropDownButtonModule, DxDropDownButtonComponent, DxDropDownButtonTypes } from 'devextreme-angular/ui/drop-down-button';
-import { ItemObject, Service } from './app.service';
+import { DxDropDownButtonModule, type DxDropDownButtonComponent, type DxDropDownButtonTypes } from 'devextreme-angular/ui/drop-down-button';
+import { Service } from './app.service';
 
 if (!document.location.host.includes('localhost')) {
   enableProdMode();
@@ -24,50 +24,40 @@ type Color = string;
   ],
 })
 export class AppComponent {
-  dropDownButton: DxDropDownButtonComponent['instance'];
+  private readonly service = inject(Service);
 
-  colors: Color[];
+  private dropDownButton: DxDropDownButtonComponent['instance'];
 
-  downloads: string[];
+  readonly colors: Color[] = this.service.getColors();
 
-  profileSettings: ItemObject[];
+  readonly downloads = this.service.getDownloads();
 
-  fontSizes: ItemObject[];
+  readonly profileSettings = this.service.getProfileSettings();
 
-  lineHeights: ItemObject[];
+  readonly fontSizes = this.service.getFontSizes();
 
-  alignments: ItemObject[];
+  readonly lineHeights = this.service.getLineHeights();
 
-  fontSize = 14;
+  readonly alignments = this.service.getAlignments();
 
-  color: string = null;
+  readonly fontSize = signal(14);
 
-  lineHeight = 1.35;
+  readonly color = signal<string | null>(null);
 
-  alignment = 'left';
+  readonly lineHeight = signal(1.35);
 
-  constructor(service: Service, private changeDetectorRef: ChangeDetectorRef) {
-    this.colors = service.getColors();
-    this.fontSizes = service.getFontSizes();
-    this.downloads = service.getDownloads();
-    this.profileSettings = service.getProfileSettings();
-    this.alignments = service.getAlignments();
-    this.lineHeights = service.getLineHeights();
-  }
+  readonly alignment = signal('left');
 
-  onAlignmentChanged = (e: DxDropDownButtonTypes.SelectionChangedEvent): void => {
-    this.alignment = e.item.value;
-    this.changeDetectorRef.detectChanges();
+  readonly onAlignmentChanged = (e: DxDropDownButtonTypes.SelectionChangedEvent): void => {
+    this.alignment.set(e.item.value);
   };
 
-  onFontSizeChanged = (e: DxDropDownButtonTypes.SelectionChangedEvent): void => {
-    this.fontSize = e.item.value;
-    this.changeDetectorRef.detectChanges();
+  readonly onFontSizeChanged = (e: DxDropDownButtonTypes.SelectionChangedEvent): void => {
+    this.fontSize.set(e.item.value);
   };
 
-  onLineHeightChanged = (e: DxDropDownButtonTypes.SelectionChangedEvent): void => {
-    this.lineHeight = e.item.value;
-    this.changeDetectorRef.detectChanges();
+  readonly onLineHeightChanged = (e: DxDropDownButtonTypes.SelectionChangedEvent): void => {
+    this.lineHeight.set(e.item.value);
   };
 
   onButtonClick(e: DxDropDownButtonTypes.ButtonClickEvent): void {
@@ -78,7 +68,7 @@ export class AppComponent {
     notify(e.itemData.name || e.itemData, 'success', 600);
   }
 
-  onColorPickerInit = (e: DxDropDownButtonTypes.InitializedEvent): void => {
+  readonly onColorPickerInit = (e: DxDropDownButtonTypes.InitializedEvent): void => {
     this.dropDownButton = e.component;
   };
 
@@ -87,13 +77,9 @@ export class AppComponent {
 
     iconElement.style.color = color;
 
-    this.color = color;
+    this.color.set(color);
     this.dropDownButton.close();
   }
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

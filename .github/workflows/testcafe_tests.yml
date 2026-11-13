@@ -262,11 +262,7 @@ jobs:
             { "componentFolder": "dataGrid", "name": "dataGrid (4/4)", "indices": "4/4", "cache": true, "concurrency": 5 },
 
             { "componentFolder": "editors", "name": "editors" },
-            { "componentFolder": "navigation", "name": "navigation", "concurrency": 6 },
-
-            { "componentFolder": "scheduler/common", "name": "scheduler / common (1/3)", "indices": "1/3", "concurrency": 6 },
-            { "componentFolder": "scheduler/common", "name": "scheduler / common (2/3)", "indices": "2/3", "concurrency": 6 },
-            { "componentFolder": "scheduler/common", "name": "scheduler / common (3/3)", "indices": "3/3", "concurrency": 6 }
+            { "componentFolder": "navigation", "name": "navigation", "concurrency": 6 }
           ]
           JSON
           )

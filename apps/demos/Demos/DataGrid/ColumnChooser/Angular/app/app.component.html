@@ -20,14 +20,14 @@
     ></dxo-data-grid-position>
 
     <dxo-data-grid-search
-      [enabled]="searchEnabled"
+      [enabled]="searchEnabled()"
       [editorOptions]="editorOptions"
     ></dxo-data-grid-search>
 
     <dxo-data-grid-selection
-      [allowSelectAll]="allowSelectAll"
-      [selectByClick]="selectByClick"
-      [recursive]="recursive"
+      [allowSelectAll]="allowSelectAll()"
+      [selectByClick]="selectByClick()"
+      [recursive]="recursive()"
     ></dxo-data-grid-selection>
   </dxo-data-grid-column-chooser>
 

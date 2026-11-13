@@ -1,11 +1,11 @@
 import {
-  ChangeDetectorRef, Component, enableProdMode, provideZoneChangeDetection,
+  Component, enableProdMode, inject, signal,
 } from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
 import { DxSchedulerModule, DxDraggableModule, DxScrollViewModule } from 'devextreme-angular';
-import { DxSchedulerTypes } from 'devextreme-angular/ui/scheduler';
-import { DxDraggableTypes } from 'devextreme-angular/ui/draggable';
-import { Appointment, Task, Service } from './app.service';
+import type { DxSchedulerTypes } from 'devextreme-angular/ui/scheduler';
+import type { DxDraggableTypes } from 'devextreme-angular/ui/draggable';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -23,35 +23,27 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  draggingGroupName = 'appointmentsGroup';
+  private readonly service = inject(Service);
 
-  tasks: Task[];
+  readonly draggingGroupName = 'appointmentsGroup';
 
-  appointments: Appointment[];
+  readonly tasks = signal(this.service.getTasks());
 
-  currentDate: Date = new Date(2021, 3, 26);
+  readonly appointments = signal(this.service.getAppointments());
 
-  constructor(service: Service, private changeDetectorRef: ChangeDetectorRef) {
-    this.tasks = service.getTasks();
-    this.appointments = service.getAppointments();
-  }
+  readonly currentDate = new Date(2021, 3, 26);
 
   onAppointmentRemove = (e: DxSchedulerTypes.AppointmentDraggingRemoveEvent) => {
-    const index = this.appointments.indexOf(e.itemData);
-
-    if (index >= 0) {
-      this.appointments.splice(index, 1);
-      this.tasks.push(e.itemData);
-      this.changeDetectorRef.markForCheck();
+    if (this.appointments().includes(e.itemData)) {
+      this.appointments.update((items) => items.filter((item) => item !== e.itemData));
+      this.tasks.update((items) => [...items, e.itemData]);
     }
   };
 
   onAppointmentAdd = (e: DxSchedulerTypes.AppointmentDraggingAddEvent) => {
-    const index = this.tasks.indexOf(e.fromData);
-
-    if (index >= 0) {
-      this.tasks.splice(index, 1);
-      this.appointments.push(e.itemData);
+    if (this.tasks().includes(e.fromData)) {
+      this.tasks.update((items) => items.filter((item) => item !== e.fromData));
+      this.appointments.update((items) => [...items, e.itemData]);
     }
   };
 
@@ -70,8 +62,4 @@ export class AppComponent {
   }
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

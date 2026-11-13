@@ -6,7 +6,7 @@ import { errors as dataErrors } from 'common/data/errors';
 import typeUtils from 'core/utils/type';
 import { DataSource } from 'common/data/data_source/data_source';
 import ArrayStore from 'common/data/array_store';
-import gridCoreUtils from '__internal/grids/grid_core/utils';
+import { isVirtualRowRendering } from '__internal/grids/grid_core/virtual_scrolling';
 import { setupDataGridModules, MockGridDataSource } from '../../helpers/dataGridMocks.js';
 
 import 'ui/data_grid';
@@ -4886,7 +4886,7 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
         this.dataController.init();
 
         // assert
-        assert.ok(gridCoreUtils.isVirtualRowRendering(this), 'rowRenderingMode is virtual');
+        assert.ok(isVirtualRowRendering(this.option('scrolling')), 'rowRenderingMode is virtual');
     });
 
     QUnit.test('New mode. Load params are synchronized after scrolling', function(assert) {
@@ -5989,7 +5989,7 @@ QUnit.module('Infinite scrolling (ScrollingDataSource)', {
         this.dataController.init();
 
         // assert
-        assert.ok(gridCoreUtils.isVirtualRowRendering(this), 'rowRenderingMode is virtual');
+        assert.ok(isVirtualRowRendering(this.option('scrolling')), 'rowRenderingMode is virtual');
     });
 
     QUnit.test('New mode. Load params are synchronized after scrolling', function(assert) {

@@ -2,6 +2,7 @@ import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred, when } from '@js/core/utils/deferred';
 import { isObject, isString } from '@js/core/utils/type';
 import type { ChangedEvent } from '@ts/grids/grid_core/data_source_adapter/types';
+import { LEGACY_SCROLLING_MODE } from '@ts/grids/grid_core/virtual_scrolling/const';
 
 import type {
   ChangedCallback,
@@ -13,234 +14,24 @@ import type {
   VirtualItemsCount,
 } from './types';
 
-const LEGACY_SCROLLING_MODE = 'scrolling.legacyMode';
-
-const needTwoPagesLoading = <TItem>(that: VirtualDataLoader<TItem>): boolean => (
-  Boolean(that.option('scrolling.loadTwoPagesOnStart'))
-  || that._controller.isVirtual()
-  || that._controller.getViewportItemIndex() > 0
-);
-
-const getBeginPageIndex = <TItem>(that: VirtualDataLoader<TItem>): number => (
-  that._cache.length ? that._cache[0].pageIndex : -1
-);
-
-const getEndPageIndex = <TItem>(that: VirtualDataLoader<TItem>): number => (
-  that._cache.length ? that._cache[that._cache.length - 1].pageIndex : -1
-);
-
-const fireChanged = <TItem>(
-  that: VirtualDataLoader<TItem>,
-  changed: ChangedCallback<TItem>,
-  args?: VirtualDataLoaderChange<TItem>,
-): void => {
-  that._isChangedFiring = true;
-  changed(args);
-  that._isChangedFiring = false;
-};
-
-const processDelayChanged = <TItem>(
-  that: VirtualDataLoader<TItem>,
-  changed: ChangedCallback<TItem>,
-  args?: VirtualDataLoaderChange<TItem>,
-): boolean | undefined => {
-  if (that._isDelayChanged) {
-    that._isDelayChanged = false;
-    fireChanged(that, changed, args);
-    return true;
-  }
-  return undefined;
-};
-
-const getViewportPageCount = <TItem>(that: VirtualDataLoader<TItem>): number => {
-  const pageSize = that._dataOptions.pageSize();
-  const preventPreload = that.option('scrolling.preventPreload');
-
-  if (preventPreload) {
-    return 0;
-  }
-
-  let realViewportSize = that._controller.viewportSize();
-
-  if (that._controller.isVirtualMode() && that.option('scrolling.removeInvisiblePages')) {
-    realViewportSize = 0;
-
-    const viewportSize = that._controller.viewportSize() * that._controller.viewportItemSize();
-
-    let offset = that._controller.getContentOffset();
-    const position = that._controller.getViewportPosition();
-
-    const virtualItemsCount = that._controller.virtualItemsCount();
-    const totalItemsCount = that._dataOptions.totalItemsCount();
-
-    // @ts-expect-error virtualItemsCount is defined in virtual mode
-    for (let itemIndex = virtualItemsCount.begin; itemIndex < totalItemsCount; itemIndex += 1) {
-      if (offset >= position + viewportSize) break;
-
-      const itemSize = that._controller.getItemSizes()[itemIndex]
-        || that._controller.viewportItemSize();
-      offset += itemSize;
-      if (offset >= position) {
-        realViewportSize += 1;
-      }
-    }
-  }
-
-  return pageSize && realViewportSize > 0 ? Math.ceil(realViewportSize / pageSize) : 1;
-};
-
-const getPreloadPageCount = <TItem>(that: VirtualDataLoader<TItem>, previous?: boolean): number => {
-  const preloadEnabled = that.option('scrolling.preloadEnabled');
-  let pageCount = getViewportPageCount(that);
-  const isAppendMode = that._controller.isAppendMode();
-
-  if (pageCount) {
-    if (previous) {
-      pageCount = preloadEnabled ? 1 : 0;
-    } else {
-      if (preloadEnabled) {
-        pageCount += 1;
-      }
-
-      if (isAppendMode || !needTwoPagesLoading(that)) {
-        pageCount -= 1;
-      }
-    }
-  }
-
-  return pageCount;
-};
-
-const getPageIndexForLoad = <TItem>(that: VirtualDataLoader<TItem>): number => {
-  let result = -1;
-  const beginPageIndex = getBeginPageIndex(that);
-  const dataOptions = that._dataOptions;
-
-  if (beginPageIndex < 0) {
-    result = that._pageIndex;
-  } else if (!that._cache[that._pageIndex - beginPageIndex]) {
-    result = that._pageIndex;
-  } else if (beginPageIndex >= 0 && that._controller.viewportSize() >= 0) {
-    if (beginPageIndex > 0) {
-      const needToLoadPageBeforeLast = getEndPageIndex(that) + 1 === dataOptions.pageCount()
-        && that._cache.length < getPreloadPageCount(that) + 1;
-      const needToLoadPrevPage = needToLoadPageBeforeLast
-        || (that._pageIndex === beginPageIndex && getPreloadPageCount(that, true));
-
-      if (needToLoadPrevPage) {
-        result = beginPageIndex - 1;
-      }
-    }
-
-    if (result < 0) {
-      const needToLoadNextPage = beginPageIndex + that._cache.length
-        <= that._pageIndex + getPreloadPageCount(that);
-
-      if (needToLoadNextPage) {
-        result = beginPageIndex + that._cache.length;
-      }
-    }
-  }
-
-  if (that._loadingPageIndexes[result]) {
-    result = -1;
-  }
-
-  return result;
-};
-
-const loadCore = <TItem>(
-  that: VirtualDataLoader<TItem>,
-  pageIndex: number,
-): DeferredObj<unknown> | undefined => {
-  const dataOptions = that._dataOptions;
-
-  if (pageIndex === that.pageIndex()
-    || (!dataOptions.isLoading() && pageIndex < dataOptions.pageCount())
-    || (!dataOptions.hasKnownLastPage() && pageIndex === dataOptions.pageCount())) {
-    dataOptions.pageIndex(pageIndex);
-
-    that._loadingPageIndexes[pageIndex] = true;
-    return when(dataOptions.load()).always(() => {
-      that._loadingPageIndexes[pageIndex] = false;
-    });
-  }
-  return undefined;
-};
-
-const processChanged = <TItem>(
-  that: VirtualDataLoader<TItem>,
-  changed: ChangedCallback<TItem>,
-  changeType?: ProcessedChange['changeType'] | ChangedEvent,
-  isDelayChanged?: boolean,
-  removeCacheItem?: VirtualDataLoaderCacheItem,
-): void => {
-  const dataOptions = that._dataOptions;
-  const items = dataOptions.items().slice();
-  let change: ProcessedChange<TItem> | ChangedEvent | undefined = isObject(changeType)
-    ? changeType
-    : undefined;
-  const isPrepend = changeType === 'prepend';
-  const viewportItems = dataOptions.viewportItems();
-
-  if (changeType && isString(changeType) && !that._isDelayChanged) {
-    change = {
-      changeType,
-      items,
-    };
-    if (removeCacheItem) {
-      change.removeCount = removeCacheItem.itemsCount;
-      if (change.removeCount && dataOptions.correctCount) {
-        change.removeCount = dataOptions.correctCount(viewportItems, change.removeCount, isPrepend);
-      }
-    }
-  }
-  let removeItemCount = removeCacheItem ? removeCacheItem.itemsLength : 0;
-
-  if (removeItemCount && dataOptions.correctCount) {
-    removeItemCount = dataOptions.correctCount(viewportItems, removeItemCount, isPrepend);
-  }
-
-  if (changeType === 'append') {
-    viewportItems.push(...items);
-    if (removeCacheItem) {
-      viewportItems.splice(0, removeItemCount);
-    }
-  } else if (isPrepend) {
-    viewportItems.unshift(...items);
-    if (removeCacheItem) {
-      viewportItems.splice(-removeItemCount);
-    }
-  } else {
-    that._dataOptions.viewportItems(items);
-  }
-  dataOptions.updateLoading();
-  that._lastPageIndex = that.pageIndex();
-  that._isDelayChanged = isDelayChanged;
-
-  if (!isDelayChanged) {
-    fireChanged(that, changed, change);
-  }
-};
-
 export class VirtualDataLoader<TItem = unknown> {
-  public readonly _dataOptions: VirtualDataLoaderDataOptions<TItem>;
+  private readonly _dataOptions: VirtualDataLoaderDataOptions<TItem>;
 
-  public readonly _controller: VirtualDataLoaderController;
+  private readonly _controller: VirtualDataLoaderController;
 
-  public _pageIndex: number;
+  private _pageIndex: number;
 
-  public _cache: VirtualDataLoaderCacheItem[];
+  private _cache: VirtualDataLoaderCacheItem[];
 
-  public _loadingPageIndexes: Record<number, boolean>;
+  private _loadingPageIndexes: Record<number, boolean>;
 
-  public _lastPageIndex: number;
+  private _lastPageIndex: number;
 
   private _delayDeferred?: DeferredObj<unknown>;
 
-  public _isChangedFiring?: boolean;
+  private _isChangedFiring?: boolean;
 
-  public _isDelayChanged?: boolean;
+  private _isDelayChanged?: boolean;
 
   constructor(
     controller: VirtualDataLoaderController,
@@ -254,8 +45,221 @@ export class VirtualDataLoader<TItem = unknown> {
     this._loadingPageIndexes = {};
   }
 
-  public option(name: string): unknown {
+  private option(name: string): unknown {
     return this._controller.option(name);
+  }
+
+  private needTwoPagesLoading(): boolean {
+    return Boolean(this.option('scrolling.loadTwoPagesOnStart'))
+      || this._controller.isVirtual()
+      || this._controller.getViewportItemIndex() > 0;
+  }
+
+  private isLegacyVirtualPaging(): boolean {
+    return this.option(LEGACY_SCROLLING_MODE) !== false
+      && (this._controller.isVirtualMode() || this._controller.isAppendMode());
+  }
+
+  private getBeginPageIndex(): number {
+    return this._cache.length ? this._cache[0].pageIndex : -1;
+  }
+
+  private getEndPageIndex(): number {
+    return this._cache.length ? this._cache[this._cache.length - 1].pageIndex : -1;
+  }
+
+  private fireChanged(
+    changedCallback: ChangedCallback<TItem>,
+    args?: VirtualDataLoaderChange<TItem>,
+  ): void {
+    this._isChangedFiring = true;
+    changedCallback(args);
+    this._isChangedFiring = false;
+  }
+
+  private processDelayChanged(
+    changedCallback: ChangedCallback<TItem>,
+    args?: VirtualDataLoaderChange<TItem>,
+  ): boolean {
+    if (this._isDelayChanged) {
+      this._isDelayChanged = false;
+      this.fireChanged(changedCallback, args);
+      return true;
+    }
+    return false;
+  }
+
+  private getViewportPageCount(): number {
+    const pageSize = this._dataOptions.pageSize();
+    const preventPreload = this.option('scrolling.preventPreload');
+
+    if (preventPreload) {
+      return 0;
+    }
+
+    let realViewportSize = this._controller.viewportSize();
+
+    if (this._controller.isVirtualMode() && this.option('scrolling.removeInvisiblePages')) {
+      realViewportSize = 0;
+
+      const viewportSize = this._controller.viewportSize() * this._controller.viewportItemSize();
+
+      let offset = this._controller.getContentOffset();
+      const position = this._controller.getViewportPosition();
+
+      const virtualItemsCount = this._controller.virtualItemsCount();
+      const totalItemsCount = this._dataOptions.totalItemsCount();
+
+      // @ts-expect-error virtualItemsCount is defined in virtual mode
+      for (let itemIndex = virtualItemsCount.begin; itemIndex < totalItemsCount; itemIndex += 1) {
+        if (offset >= position + viewportSize) break;
+
+        const itemSize = this._controller.getItemSizes()[itemIndex]
+          || this._controller.viewportItemSize();
+        offset += itemSize;
+        if (offset >= position) {
+          realViewportSize += 1;
+        }
+      }
+    }
+
+    return pageSize && realViewportSize > 0 ? Math.ceil(realViewportSize / pageSize) : 1;
+  }
+
+  private getPreloadPageCount(previous?: boolean): number {
+    const preloadEnabled = this.option('scrolling.preloadEnabled');
+    let pageCount = this.getViewportPageCount();
+    const isAppendMode = this._controller.isAppendMode();
+
+    if (pageCount) {
+      if (previous) {
+        pageCount = preloadEnabled ? 1 : 0;
+      } else {
+        if (preloadEnabled) {
+          pageCount += 1;
+        }
+
+        if (isAppendMode || !this.needTwoPagesLoading()) {
+          pageCount -= 1;
+        }
+      }
+    }
+
+    return pageCount;
+  }
+
+  private getPageIndexForLoad(): number {
+    let result = -1;
+    const beginPageIndex = this.getBeginPageIndex();
+    const dataOptions = this._dataOptions;
+
+    if (beginPageIndex < 0) {
+      result = this._pageIndex;
+    } else if (!this._cache[this._pageIndex - beginPageIndex]) {
+      result = this._pageIndex;
+    } else if (beginPageIndex >= 0 && this._controller.viewportSize() >= 0) {
+      if (beginPageIndex > 0) {
+        const needToLoadPageBeforeLast = this.getEndPageIndex() + 1 === dataOptions.pageCount()
+          && this._cache.length < this.getPreloadPageCount() + 1;
+        const needToLoadPrevPage = needToLoadPageBeforeLast
+          || (this._pageIndex === beginPageIndex && this.getPreloadPageCount(true));
+
+        if (needToLoadPrevPage) {
+          result = beginPageIndex - 1;
+        }
+      }
+
+      if (result < 0) {
+        const needToLoadNextPage = beginPageIndex + this._cache.length
+          <= this._pageIndex + this.getPreloadPageCount();
+
+        if (needToLoadNextPage) {
+          result = beginPageIndex + this._cache.length;
+        }
+      }
+    }
+
+    if (this._loadingPageIndexes[result]) {
+      result = -1;
+    }
+
+    return result;
+  }
+
+  private loadCore(
+    pageIndex: number,
+  ): DeferredObj<unknown> | undefined {
+    const dataOptions = this._dataOptions;
+
+    if (pageIndex === this.pageIndex()
+      || (!dataOptions.isLoading() && pageIndex < dataOptions.pageCount())
+      || (!dataOptions.hasKnownLastPage() && pageIndex === dataOptions.pageCount())) {
+      dataOptions.pageIndex(pageIndex);
+
+      this._loadingPageIndexes[pageIndex] = true;
+      return when(dataOptions.load()).always(() => {
+        this._loadingPageIndexes[pageIndex] = false;
+      });
+    }
+    return undefined;
+  }
+
+  private processChanged(
+    changedCallback: ChangedCallback<TItem>,
+    changeType?: ProcessedChange['changeType'] | ChangedEvent,
+    isDelayChanged?: boolean,
+    removeCacheItem?: VirtualDataLoaderCacheItem,
+  ): void {
+    const dataOptions = this._dataOptions;
+    const items = dataOptions.items().slice();
+    let change: ProcessedChange<TItem> | ChangedEvent | undefined = isObject(changeType)
+      ? changeType
+      : undefined;
+    const isPrepend = changeType === 'prepend';
+    const viewportItems = dataOptions.viewportItems();
+
+    if (changeType && isString(changeType) && !this._isDelayChanged) {
+      change = {
+        changeType,
+        items,
+      };
+      if (removeCacheItem) {
+        change.removeCount = removeCacheItem.itemsCount;
+        if (change.removeCount && dataOptions.correctCount) {
+          change.removeCount = dataOptions.correctCount(
+            viewportItems,
+            change.removeCount,
+            isPrepend,
+          );
+        }
+      }
+    }
+    let removeItemCount = removeCacheItem ? removeCacheItem.itemsLength : 0;
+
+    if (removeItemCount && dataOptions.correctCount) {
+      removeItemCount = dataOptions.correctCount(viewportItems, removeItemCount, isPrepend);
+    }
+
+    if (changeType === 'append') {
+      viewportItems.push(...items);
+      if (removeCacheItem) {
+        viewportItems.splice(0, removeItemCount);
+      }
+    } else if (isPrepend) {
+      viewportItems.unshift(...items);
+      if (removeCacheItem) {
+        viewportItems.splice(-removeItemCount);
+      }
+    } else {
+      this._dataOptions.viewportItems(items);
+    }
+    dataOptions.updateLoading();
+    this._lastPageIndex = this.pageIndex();
+    this._isDelayChanged = isDelayChanged;
+
+    if (!isDelayChanged) {
+      this.fireChanged(changedCallback, change);
+    }
   }
 
   public viewportItemIndexChanged(itemIndex: number): DeferredObj<unknown> | undefined {
@@ -294,10 +298,7 @@ export class VirtualDataLoader<TItem = unknown> {
   public pageIndex(): number;
   public pageIndex(pageIndex: number): number | undefined;
   public pageIndex(pageIndex?: number): number | undefined {
-    const isVirtualMode = this._controller.isVirtualMode();
-    const isAppendMode = this._controller.isAppendMode();
-
-    if (this.option(LEGACY_SCROLLING_MODE) !== false && (isVirtualMode || isAppendMode)) {
+    if (this.isLegacyVirtualPaging()) {
       if (pageIndex !== undefined) {
         this._pageIndex = pageIndex;
       }
@@ -309,7 +310,7 @@ export class VirtualDataLoader<TItem = unknown> {
   }
 
   public beginPageIndex(defaultPageIndex?: number): number {
-    let index = getBeginPageIndex(this);
+    let index = this.getBeginPageIndex();
     if (index < 0) {
       index = defaultPageIndex ?? this.pageIndex();
     }
@@ -317,7 +318,7 @@ export class VirtualDataLoader<TItem = unknown> {
   }
 
   public endPageIndex(): number {
-    const endPageIndex = getEndPageIndex(this);
+    const endPageIndex = this.getEndPageIndex();
 
     return endPageIndex > 0 ? endPageIndex : this._lastPageIndex;
   }
@@ -330,14 +331,12 @@ export class VirtualDataLoader<TItem = unknown> {
     const dataOptions = this._dataOptions;
     // eslint-disable-next-line @typescript-eslint/init-declarations -- assigned in branches
     let result: DeferredObj<unknown> | undefined;
-    const isVirtualMode = this._controller.isVirtualMode();
-    const isAppendMode = this._controller.isAppendMode();
 
-    if (this.option(LEGACY_SCROLLING_MODE) !== false && (isVirtualMode || isAppendMode)) {
-      const pageIndexForLoad = getPageIndexForLoad(this);
+    if (this.isLegacyVirtualPaging()) {
+      const pageIndexForLoad = this.getPageIndexForLoad();
 
       if (pageIndexForLoad >= 0) {
-        const loadResult = loadCore(this, pageIndexForLoad);
+        const loadResult = this.loadCore(pageIndexForLoad);
         if (loadResult) {
           const deferred = Deferred<unknown>();
           result = deferred;
@@ -382,16 +381,16 @@ export class VirtualDataLoader<TItem = unknown> {
     }
   }
 
-  public handleDataChanged(callBase: ChangedCallback<TItem>, e?: ChangedEvent): void {
+  public handleDataChanged(changedCallback: ChangedCallback<TItem>, e?: ChangedEvent): void {
     const dataOptions = this._dataOptions;
     let lastCacheLength = this._cache.length;
     const isVirtualMode = this._controller.isVirtualMode();
     const isAppendMode = this._controller.isAppendMode();
 
     if (e?.changes) {
-      fireChanged(this, callBase, e);
-    } else if (this.option(LEGACY_SCROLLING_MODE) !== false && (isVirtualMode || isAppendMode)) {
-      const beginPageIndex = getBeginPageIndex(this);
+      this.fireChanged(changedCallback, e);
+    } else if (this.isLegacyVirtualPaging()) {
+      const beginPageIndex = this.getBeginPageIndex();
       if (beginPageIndex >= 0) {
         if (isVirtualMode && beginPageIndex + this._cache.length !== dataOptions.pageIndex()
           && beginPageIndex - 1 !== dataOptions.pageIndex()) {
@@ -400,8 +399,8 @@ export class VirtualDataLoader<TItem = unknown> {
         }
         if (isAppendMode && dataOptions.pageIndex() === 0) {
           this._cache = [];
-        } else if (isAppendMode && dataOptions.pageIndex() < getEndPageIndex(this)) {
-          fireChanged(this, callBase, { changeType: 'append', items: [] });
+        } else if (isAppendMode && dataOptions.pageIndex() < this.getEndPageIndex()) {
+          this.fireChanged(changedCallback, { changeType: 'append', items: [] });
           return;
         }
       }
@@ -415,10 +414,10 @@ export class VirtualDataLoader<TItem = unknown> {
       const canRemoveInvisiblePages = Boolean(this.option('scrolling.removeInvisiblePages'))
         && isVirtualMode;
       if (!canRemoveInvisiblePages) {
-        processDelayChanged(this, callBase, { isDelayed: true });
+        this.processDelayChanged(changedCallback, { isDelayed: true });
       }
       const removeInvisiblePages = canRemoveInvisiblePages && this._cache.length > Math.max(
-        getPreloadPageCount(this) + (this.option('scrolling.preloadEnabled') ? 1 : 0),
+        this.getPreloadPageCount() + (this.option('scrolling.preloadEnabled') ? 1 : 0),
         2,
       );
 
@@ -438,21 +437,20 @@ export class VirtualDataLoader<TItem = unknown> {
         this._cache.push(cacheItem);
       }
 
-      const isDelayChanged = isVirtualMode && lastCacheLength === 0 && needTwoPagesLoading(this);
-      processChanged(
-        this,
-        callBase,
+      const isDelayChanged = isVirtualMode && lastCacheLength === 0 && this.needTwoPagesLoading();
+      this.processChanged(
+        changedCallback,
         this._cache.length > 1 ? changeType : undefined,
         isDelayChanged,
         removeCacheItem,
       );
       this._delayDeferred = this.load().done(() => {
-        if (processDelayChanged(this, callBase)) {
+        if (this.processDelayChanged(changedCallback)) {
           this.load(); // needed for infinite scrolling when height is not defined
         }
       });
     } else {
-      processChanged(this, callBase, e);
+      this.processChanged(changedCallback, e);
     }
   }
 
@@ -475,7 +473,7 @@ export class VirtualDataLoader<TItem = unknown> {
   }
 
   public virtualItemsCount(): VirtualItemsCount {
-    let pageIndex = getBeginPageIndex(this);
+    let pageIndex = this.getBeginPageIndex();
     if (pageIndex < 0) {
       pageIndex = this._dataOptions.pageIndex();
     }

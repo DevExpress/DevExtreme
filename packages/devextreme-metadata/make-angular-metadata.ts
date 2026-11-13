@@ -44,6 +44,7 @@ Ng.makeMetadata({
       ['ui/popup:dxPopupOptions', 'ui/card_view:Editing.popup'],
     ].map((pair) => replaceTypes(pair[1], ['*'], [types.uidRef(pair[0], true)])),
 
+    replaceTypes('common/core/animation:PositionConfig.of', ['events/events.types:DxEvent'], []),
     replaceTypes('ui/map:dxMapOptions.markers.onClick', ['*'], ['object']),
 
     ...replaceTypesMutations,
@@ -57,6 +58,7 @@ Ng.makeMetadata({
     removeMembers(/\/chat:MessageType/),
     removeMembers(/\/chat:MessageBase.type/),
     removeMembers(/\/chat:TextMessage.attachments/),
+    removeMembers(/\/chat:TextMessage.toolCalls/),
     removeMembers(
       /\/chat:dxChatOptions\.(fileUploaderOptions|inputFieldText|sendButtonOptions|speechToTextOptions|suggestions|onAttachmentDownloadClick)/,
     ),
