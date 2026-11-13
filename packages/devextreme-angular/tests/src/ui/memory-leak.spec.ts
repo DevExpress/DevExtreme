@@ -23,20 +23,12 @@ async function forceGC(times = 3): Promise<void> {
   });
 }
 
-describe('Memory leak tests', () => {
-  const originalTimeout = jasmine.DEFAULT_TIMEOUT_INTERVAL;
-
+describe('Memory leak tests', { timeout: 60000 }, () => {
   beforeAll(() => {
-    jasmine.DEFAULT_TIMEOUT_INTERVAL = 60000;
-
     TestBed.configureTestingModule({
       declarations: [TestContainerComponent],
       imports: [DxButtonModule, DxSliderModule],
     });
-  });
-
-  afterAll(() => {
-    jasmine.DEFAULT_TIMEOUT_INTERVAL = originalTimeout;
   });
 
   it('should not memory leak after change @if block with DxButton (T1324584)', async () => {

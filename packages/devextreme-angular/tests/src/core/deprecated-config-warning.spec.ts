@@ -1,4 +1,5 @@
 import { NestedOptionHost } from 'devextreme-angular';
+import type { MockInstance } from 'vitest';
 
 // The warning is reached through NestedOptionHost.setNestedOption(), so these
 // tests drive the real integration point rather than the internal helper.
@@ -21,10 +22,10 @@ function fakeNestedOption(ctorName: string): any {
 }
 
 describe('deprecated nested config warning', () => {
-  let warnSpy: jasmine.Spy;
+  let warnSpy: MockInstance;
 
   beforeEach(() => {
-    warnSpy = spyOn(console, 'warn');
+    warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
   });
 
   it('resolves the legacy mapping and warns exactly once when esbuild prefixes class names with "_"', () => {
@@ -37,7 +38,7 @@ describe('deprecated nested config warning', () => {
 
     expect(warnSpy).toHaveBeenCalledTimes(1);
 
-    const message = warnSpy.calls.mostRecent().args[0] as string;
+    const message = warnSpy.mock.lastCall[0] as string;
     expect(message).toContain('W3001');
     expect(message).toContain('legacy dxi-item');
     expect(message).toContain('dxi-accordion-item');

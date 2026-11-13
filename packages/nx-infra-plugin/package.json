@@ -33,7 +33,6 @@
     "babel-plugin-add-module-exports": ">=1.0.0",
     "babel-plugin-inferno": ">=6.0.0",
     "core-js-compat": ">=3.0.0",
-    "karma": ">=6.0.0",
     "ng-packagr": ">=19.0.0",
     "webpack": ">=5.0.0"
   },
@@ -60,9 +59,6 @@
       "optional": true
     },
     "core-js-compat": {
-      "optional": true
-    },
-    "karma": {
       "optional": true
     },
     "ng-packagr": {

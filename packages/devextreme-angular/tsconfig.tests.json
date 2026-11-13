@@ -12,6 +12,7 @@
   },
   "include": [
     "tests/src/**/*.spec.ts",
+    "tests/vitest/**/*.ts",
     "tests/src/**/component-names.ts"
   ]
 }

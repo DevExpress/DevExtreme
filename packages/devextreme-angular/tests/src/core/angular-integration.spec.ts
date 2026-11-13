@@ -16,13 +16,13 @@ class SingletonModule {
 
 describe('Integration module', () => {
   it('domAdapter should be injected once', () => {
-    const spy = spyOn(domAdapter, 'inject').and.callThrough();
+    const spy = vi.spyOn(domAdapter, 'inject');
 
     TestBed.configureTestingModule({
       imports: [SingletonModule],
     });
     TestBed.inject(SingletonModule);
 
-    expect(spy.calls.count()).toBe(1);
+    expect(spy.mock.calls.length).toBe(1);
   });
 });
