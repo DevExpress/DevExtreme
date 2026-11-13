@@ -10,7 +10,7 @@ import './editing/editing';
 import './module_not_extended/editing_row_based';
 import './module_not_extended/editing_form_based';
 import './module_not_extended/editing_cell_based';
-import './m_validating';
+import './validating';
 import './virtual_scrolling';
 import './module_not_extended/filter_row';
 import './module_not_extended/header_filter';
