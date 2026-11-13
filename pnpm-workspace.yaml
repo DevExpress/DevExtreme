@@ -112,6 +112,7 @@ catalogs:
     "@angular-devkit/build-angular": ~21.2.23
     "@angular-devkit/architect": ~0.2102.23
     "@angular-devkit/schematics": ~21.2.23
+    "@angular/build": ~21.2.23
     "@angular/cli": ~21.2.23
     "@angular/common": ~21.2.25
     "@angular/compiler": ~21.2.25
