@@ -1424,7 +1424,6 @@ export class RowsView extends ColumnsView {
     const $element = this.element();
 
     if (arguments.length === 0) {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-return -- getOuterHeight returns any
       return $element ? getOuterHeight($element, true) : 0;
     }
 
