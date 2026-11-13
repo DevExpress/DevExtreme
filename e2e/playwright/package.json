@@ -1,6 +1,6 @@
 {
   "name": "devextreme-playwright-tests",
-  "version": "26.2.2",
+  "version": "26.2.2-beta",
   "scripts": {
     "test": "node ./runner.mjs",
     "lint": "eslint",
