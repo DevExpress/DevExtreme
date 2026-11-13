@@ -2,12 +2,15 @@ import messageLocalization from '@js/common/core/localization/message';
 import { getPublicElement } from '@js/core/element';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
-import type { Attachment, AttachmentDownloadClickEvent, Message } from '@js/ui/chat';
+import type {
+  Attachment, AttachmentDownloadClickEvent, Message, ToolCall,
+} from '@js/ui/chat';
 import type { WidgetOptions } from '@js/ui/widget/ui.widget';
 import { ICON_CLASS } from '@ts/core/utils/icon';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
 import FileView from '@ts/ui/chat/file_view/file_view';
+import ToolCallView from '@ts/ui/chat/tool_call_view/tool_call_view';
 
 export const CHAT_MESSAGEBUBBLE_CLASS = 'dx-chat-messagebubble';
 export const CHAT_MESSAGEBUBBLE_DELETED_CLASS = 'dx-chat-messagebubble-deleted';
@@ -26,12 +29,17 @@ export interface Properties extends WidgetOptions<MessageBubble> {
   src?: string;
   alt?: string;
   attachments?: Attachment[];
+  toolCalls?: ToolCall[];
+  showToolCalls?: boolean;
+  expandAllToolCalls?: boolean;
   onAttachmentDownloadClick?: (e: AttachmentDownloadClickEvent) => void;
   template?: ((message: Message, container: Element) => void) | null;
 }
 
 class MessageBubble extends Widget<Properties> {
   _$content!: dxElementWrapper;
+
+  _$toolCalls?: dxElementWrapper;
 
   _$attachments?: dxElementWrapper;
 
@@ -42,6 +50,7 @@ class MessageBubble extends Widget<Properties> {
       isEdited: false,
       text: '',
       template: null,
+      showToolCalls: true,
     };
   }
 
@@ -52,11 +61,39 @@ class MessageBubble extends Widget<Properties> {
 
     super._initMarkup();
 
+    this._renderToolCallsElement();
     this._renderContentContainer();
     this._renderAttachmentsElement();
 
+    this._renderToolCalls();
     this._updateContent();
     this._renderAttachments();
+  }
+
+  _renderToolCallsElement(): void {
+    const {
+      toolCalls, isDeleted, showToolCalls, type,
+    } = this.option();
+
+    this._$toolCalls?.remove();
+    this._$toolCalls = undefined;
+
+    if (toolCalls?.length && !isDeleted && showToolCalls && type !== 'image') {
+      this._$toolCalls = $('<div>').prependTo(this.$element());
+    }
+  }
+
+  _renderToolCalls(): void {
+    const { toolCalls, expandAllToolCalls } = this.option();
+
+    if (!this._$toolCalls) {
+      return;
+    }
+
+    this._createComponent(this._$toolCalls, ToolCallView, {
+      toolCalls,
+      expandAll: expandAllToolCalls,
+    });
   }
 
   _renderContentContainer(): void {
@@ -168,16 +205,29 @@ class MessageBubble extends Widget<Properties> {
       case 'alt':
       case 'isDeleted':
         this._updateMessageData(name, value);
+
+        if (name === 'isDeleted') {
+          this._renderToolCallsElement();
+          this._renderToolCalls();
+        }
+
         this._updateContent();
         this._renderAttachmentsElement();
         this._renderAttachments();
         break;
       case 'type':
+        this._renderToolCallsElement();
+        this._renderToolCalls();
         this._updateContent();
         this._renderAttachmentsElement();
         this._renderAttachments();
         break;
       case 'template':
+        this._updateContent();
+        break;
+      case 'toolCalls':
+        this._renderToolCallsElement();
+        this._renderToolCalls();
         this._updateContent();
         break;
       case 'isEdited':
