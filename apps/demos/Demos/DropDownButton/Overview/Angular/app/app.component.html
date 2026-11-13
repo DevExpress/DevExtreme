@@ -61,7 +61,7 @@
           width: 125,
           stylingMode: 'text',
           useSelectMode: true,
-          onSelectionChanged: onAlignmentChanged
+          onSelectionChanged: onAlignmentChanged,
         }"
       >
       </dxi-toolbar-item>
@@ -75,7 +75,7 @@
           icon: 'square',
           stylingMode: 'text',
           dropDownOptions: { width: 'auto' },
-          dropDownContentTemplate: 'colorpicker'
+          dropDownContentTemplate: 'colorpicker',
         }"
       >
       </dxi-toolbar-item>
@@ -91,7 +91,7 @@
           items: fontSizes,
           selectedItemKey: 14,
           onSelectionChanged: onFontSizeChanged,
-          itemTemplate: 'fontItem'
+          itemTemplate: 'fontItem',
         }"
       >
       </dxi-toolbar-item>
@@ -107,7 +107,7 @@
           useSelectMode: true,
           items: lineHeights,
           selectedItemKey: 1.35,
-          onSelectionChanged: onLineHeightChanged
+          onSelectionChanged: onLineHeightChanged,
         }"
       >
       </dxi-toolbar-item>
@@ -122,11 +122,11 @@
       <div *dxTemplate="let data of 'colorpicker'">
         <div class="custom-color-picker">
           @for (iconColor of colors; track iconColor) {
-          <i
-            class="color dx-icon dx-icon-square"
-            [style.color]="iconColor"
-            (click)="onColorClick(iconColor)"
-          ></i>
+            <i
+              class="color dx-icon dx-icon-square"
+              [style.color]="iconColor"
+              (click)="onColorClick(iconColor)"
+            ></i>
           }
         </div>
       </div>

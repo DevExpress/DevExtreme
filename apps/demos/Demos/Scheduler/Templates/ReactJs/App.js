@@ -17,7 +17,7 @@ const currentDate = new Date(2025, 3, 27);
 const views = ['day', 'week', 'timelineDay'];
 const groups = ['theatreId'];
 const getMovieById = (id) =>
-  id ? query(moviesData).filter(['id', '=', id]).toArray()[0] ?? null : null;
+  id ? (query(moviesData).filter(['id', '=', id]).toArray()[0] ?? null) : null;
 const getEditorStylingMode = () => (themes.current().startsWith('generic') ? 'outlined' : 'filled');
 const priceDisplayExpr = (value) => `$${value}`;
 const colCountByScreen = { xs: 2 };

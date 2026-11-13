@@ -29,6 +29,8 @@ export default [
       'bundles',
       'coverage',
       'Demos/**/testcafe-test-code.js',
+      'Demos/**/bundle.js',
+      'Demos/**/_chunks',
       'shared/empty-file.ts',
       'Demos/**/Vue/**/*.html',
       'utils/templates/**/*.ts',

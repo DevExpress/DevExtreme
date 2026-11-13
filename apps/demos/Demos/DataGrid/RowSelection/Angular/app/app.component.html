@@ -28,12 +28,12 @@
   ></dxi-data-grid-column>
 </dx-data-grid>
 @if (selectedEmployee(); as selectedEmployee) {
-<div id="employeeInfo">
-  <img
-    class="employeePhoto"
-    [src]="selectedEmployee.Picture"
-    alt="Employee photo"
-  />
-  <p class="employeeNotes">{{ selectedEmployee.Notes }}</p>
-</div>
+  <div id="employeeInfo">
+    <img
+      class="employeePhoto"
+      [src]="selectedEmployee.Picture"
+      alt="Employee photo"
+    />
+    <p class="employeeNotes">{{ selectedEmployee.Notes }}</p>
+  </div>
 }

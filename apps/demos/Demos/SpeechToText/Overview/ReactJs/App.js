@@ -116,9 +116,7 @@ export default function App() {
         <span>Use voice recognition (speech to text)</span>
         <SpeechToText
           id="speech-to-text"
-          className={`${!animation ? 'animation-disabled' : ''} ${
-            displayMode === 'Custom' ? 'custom-button' : ''
-          }`}
+          className={`${!animation ? 'animation-disabled' : ''} ${displayMode === 'Custom' ? 'custom-button' : ''}`}
           startText={startText}
           stopText={stopText}
           stylingMode={stylingMode}

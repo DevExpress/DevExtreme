@@ -6,16 +6,16 @@
   [itemMargin]="10"
   [direction]="direction()"
 >
-  @for(home of homes; track home) {
-  <dxi-tile-view-item
-    [widthRatio]="home.widthRatio"
-    [heightRatio]="home.heightRatio"
-  >
-    <div
-      class="image"
-      [style.background-image]="'url(' + home.ImageSrc + ')'"
-    ></div>
-  </dxi-tile-view-item>
+  @for (home of homes; track home) {
+    <dxi-tile-view-item
+      [widthRatio]="home.widthRatio"
+      [heightRatio]="home.heightRatio"
+    >
+      <div
+        class="image"
+        [style.background-image]="'url(' + home.ImageSrc + ')'"
+      ></div>
+    </dxi-tile-view-item>
   }
 </dx-tile-view>
 <div class="options">

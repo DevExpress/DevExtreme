@@ -9,23 +9,24 @@
   ></dx-file-uploader>
   <div class="content">
     @if (value().length > 0) {
-    <div>
-      <h4>Selected Files</h4>
-    </div>
-    } @for (file of value(); track file.name) {
-    <div>
-      <div class="selected-item">
-        Name:
-        <span>{{ file.name }}</span
-        ><br />
-        Size: <span>{{ file.size }}</span
-        >bytes<br />
-        Type: <span>{{ file.type }}</span
-        ><br />
-        Last Modified Date:
-        <span>{{ file.lastModified | demodate }}</span>
+      <div>
+        <h4>Selected Files</h4>
       </div>
-    </div>
+    }
+    @for (file of value(); track file.name) {
+      <div>
+        <div class="selected-item">
+          Name:
+          <span>{{ file.name }}</span
+          ><br />
+          Size: <span>{{ file.size }}</span
+          >bytes<br />
+          Type: <span>{{ file.type }}</span
+          ><br />
+          Last Modified Date:
+          <span>{{ file.lastModified | demodate }}</span>
+        </div>
+      </div>
     }
   </div>
 </div>
@@ -37,7 +38,7 @@
       [dataSource]="[
         { name: 'All types', value: '*' },
         { name: 'Images', value: 'image/*' },
-        { name: 'Videos', value: 'video/*' }
+        { name: 'Videos', value: 'video/*' },
       ]"
       valueExpr="value"
       [inputAttr]="{ 'aria-label': 'File Type' }"

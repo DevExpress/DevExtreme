@@ -16,14 +16,14 @@
   <div class="options">
     <div class="caption">Visible Week Days</div>
     @for (day of dayLabels(); track day.index) {
-    <div class="option">
-      <dx-check-box
-        [text]="day.label"
-        [value]="day.visible"
-        (onValueChanged)="onDayToggled($event, day.index)"
-      >
-      </dx-check-box>
-    </div>
+      <div class="option">
+        <dx-check-box
+          [text]="day.label"
+          [value]="day.visible"
+          (onValueChanged)="onDayToggled($event, day.index)"
+        >
+        </dx-check-box>
+      </div>
     }
     <div class="validation-message">
       {{ validationMessage }}
