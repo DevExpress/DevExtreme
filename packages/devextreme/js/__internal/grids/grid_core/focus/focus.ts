@@ -120,8 +120,23 @@ export class FocusController extends core.ViewController {
     const isFocusedRowVisible = focusedRowIndex >= 0;
     const isFocusedRowInChange = !!e.rowIndices?.includes(focusedRowIndex);
 
-    if (isFocusedRowVisible && isFocusedRowInChange && this.hasStaleFocusedRow(focusedRowIndex)) {
+    if (!isFocusedRowVisible || !isFocusedRowInChange) {
+      return;
+    }
+
+    if (this.hasStaleFocusedRow(focusedRowIndex)) {
       this.updateFocusedRow({ focusedRowKey, preventScroll: true });
+    } else {
+      this.restoreFocusedRowTabIndex(focusedRowIndex);
+    }
+  }
+
+  private restoreFocusedRowTabIndex(focusedRowIndex: number): void {
+    const $focusedRows = $(this.getRowsView().getRowElement(focusedRowIndex));
+    const hasFocusableCell = $focusedRows.children('[tabindex]').length > 0;
+
+    if (!hasFocusableCell) {
+      $focusedRows.attr('tabindex', this.option('tabindex') || 0);
     }
   }
 
