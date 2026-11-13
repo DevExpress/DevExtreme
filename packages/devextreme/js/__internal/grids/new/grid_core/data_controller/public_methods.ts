@@ -1,8 +1,3 @@
-/* eslint-disable consistent-return */
-/* eslint-disable @typescript-eslint/no-invalid-void-type */
-
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
 import type { FilterDescriptor } from '@js/data';
 import type DataSource from '@js/data/data_source';
 import { keysEqual } from '@ts/data/utils';
@@ -11,6 +6,10 @@ import type { Constructor } from '../types';
 import type { GridCoreNewBase } from '../widget';
 import type { DataObject, Key } from './types';
 
+/* eslint-disable-next-line
+  @typescript-eslint/explicit-module-boundary-types,
+  @typescript-eslint/explicit-function-return-type
+  -- TS can't name the class type of a generic mixin */
 export function PublicMethods<T extends Constructor<GridCoreNewBase>>(GridCore: T) {
   return class GridCoreWithDataController extends GridCore {
     public getDataSource(): DataSource {
@@ -37,7 +36,7 @@ export function PublicMethods<T extends Constructor<GridCoreNewBase>>(GridCore: 
       return this.dataController.getCombinedFilter();
     }
 
-    public keyOf(obj: DataObject) {
+    public keyOf(obj: DataObject): Key {
       return this.dataController.getDataKey(obj);
     }
 
@@ -47,11 +46,12 @@ export function PublicMethods<T extends Constructor<GridCoreNewBase>>(GridCore: 
 
     public pageSize(): number;
     public pageSize(value: number): void;
-    public pageSize(value?: number): number | void {
+    public pageSize(value?: number): number | undefined {
       if (value === undefined) {
         return this.dataController.pageSize.peek();
       }
       this.dataController.pageSize.value = value;
+      return undefined;
     }
 
     public pageIndex(): number;

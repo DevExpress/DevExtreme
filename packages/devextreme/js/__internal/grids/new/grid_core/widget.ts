@@ -1,13 +1,13 @@
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable spellcheck/spell-checker */
 // eslint-disable-next-line max-classes-per-file
+import type { DefaultOptionsRule } from '@js/core/options/utils';
 import { extend } from '@js/core/utils/extend';
 import Widget from '@js/ui/widget/ui.widget';
 import { DIContext } from '@ts/core/di/index';
 import { infernoRenderer } from '@ts/core/inferno_renderer';
 import type { Signal } from '@ts/core/state_manager/index';
 import { signal } from '@ts/core/state_manager/index';
+import type { OptionChanged } from '@ts/core/widget/types';
 import { SearchView } from '@ts/grids/new/grid_core/search/view';
 import { rerender } from 'inferno';
 
@@ -98,7 +98,7 @@ export class GridCoreNewBase<
     di.register(this.diContext);
   }
 
-  protected _initWidgetMock() {
+  protected _initWidgetMock(): void {
     this.diContext.registerInstance(WidgetMock, new WidgetMock(
       this,
       this.diContext.get(DataControllerModule.CompatibilityDataController),
@@ -151,7 +151,7 @@ export class GridCoreNewBase<
     this._initLifeCycleController();
   }
 
-  protected _getDefaultOptions() {
+  protected _getDefaultOptions(): Options {
     return {
       // @ts-expect-error
       ...super._getDefaultOptions() as {},
@@ -159,7 +159,7 @@ export class GridCoreNewBase<
     };
   }
 
-  protected _defaultOptionsRules() {
+  protected _defaultOptionsRules(): DefaultOptionsRule<Options>[] {
     // @ts-expect-error
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return super._defaultOptionsRules().concat(defaultOptionsRules);
@@ -172,7 +172,7 @@ export class GridCoreNewBase<
   }
 
   // NOTE: this disables calling of _fireContentReadyAction on initial render
-  protected _renderContent() {
+  protected _renderContent(): void {
     // @ts-expect-error
     this._renderContentImpl();
   }
@@ -188,7 +188,7 @@ export class GridCoreNewBase<
     rerender();
   }
 
-  private _optionChanged(args) {
+  private _optionChanged(args: OptionChanged<Options>): void {
     [
       this.filterPanelView,
     ].forEach((c) => {

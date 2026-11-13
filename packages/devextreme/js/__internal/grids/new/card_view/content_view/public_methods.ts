@@ -1,6 +1,4 @@
 /* eslint-disable spellcheck/spell-checker */
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
 import type { DxElement } from '@js/core/element';
 import { getPublicElement } from '@js/core/element';
 import $ from '@js/core/renderer';
@@ -13,6 +11,10 @@ import { ItemsController } from '../../grid_core/items_controller/items_controll
 import type { CardViewBase } from '../widget';
 import * as cardModule from './content/card/card';
 
+/* eslint-disable-next-line
+  @typescript-eslint/explicit-module-boundary-types,
+  @typescript-eslint/explicit-function-return-type
+  -- TS can't name the class type of a generic mixin */
 export function PublicMethods<T extends Constructor<CardViewBase>>(GridCore: T) {
   return class CardViewWithContentView extends Base.PublicMethods(GridCore) {
     public getCardElement(cardIndex: number): DxElement {
