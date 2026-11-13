@@ -2,15 +2,13 @@
 import { isDefined } from '@ts/core/utils/type';
 
 import { ItemsController } from '../items_controller/items_controller';
-import type { Constructor } from '../types';
-import type { GridCoreNewBase } from '../widget';
+import type { GridCoreClass, Mixin } from '../types';
 import { EditingController } from './controller';
+import type { EditingPublicMethods } from './types';
 
-/* eslint-disable-next-line
-  @typescript-eslint/explicit-module-boundary-types,
-  @typescript-eslint/explicit-function-return-type
-  -- TS can't name the class type of a generic mixin */
-export function PublicMethods<T extends Constructor<GridCoreNewBase>>(GridCore: T) {
+export function PublicMethods<T extends GridCoreClass>(
+  GridCore: T,
+): Mixin<T, EditingPublicMethods> {
   return class GridCoreWithEditing extends GridCore {
     public addCard(): Promise<void> {
       const controller = this.diContext.get(EditingController);

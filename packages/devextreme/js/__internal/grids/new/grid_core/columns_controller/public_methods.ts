@@ -1,16 +1,13 @@
 import { isObject } from '@js/core/utils/type';
 
-import type { Constructor } from '../types';
-import type { GridCoreNewBase } from '../widget';
+import type { GridCoreClass, Mixin } from '../types';
 import type { ColumnProperties, ColumnSettings } from './options';
-import type { Column } from './types';
+import type { Column, ColumnsControllerPublicMethods } from './types';
 import { getColumnByIndexOrName } from './utils';
 
-/* eslint-disable-next-line
-  @typescript-eslint/explicit-module-boundary-types,
-  @typescript-eslint/explicit-function-return-type
-  -- TS can't name the class type of a generic mixin */
-export function PublicMethods<TBase extends Constructor<GridCoreNewBase>>(GridCore: TBase) {
+export function PublicMethods<TBase extends GridCoreClass>(
+  GridCore: TBase,
+): Mixin<TBase, ColumnsControllerPublicMethods> {
   return class GridCoreWithColumnsController extends GridCore {
     public getVisibleColumns(): Column[] {
       return this.columnsController.visibleColumns.peek();

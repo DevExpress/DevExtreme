@@ -1,12 +1,10 @@
-import type { Constructor } from '@ts/grids/new/grid_core/types';
+import type { GridCoreClass, Mixin } from '@ts/grids/new/grid_core/types';
 
-import type { GridCoreNewBase } from '../widget';
+import type { SortingPublicMethods } from './types';
 
-/* eslint-disable-next-line
-  @typescript-eslint/explicit-module-boundary-types,
-  @typescript-eslint/explicit-function-return-type
-  -- TS can't name the class type of a generic mixin */
-export function PublicMethods<T extends Constructor<GridCoreNewBase>>(GridCore: T) {
+export function PublicMethods<T extends GridCoreClass>(
+  GridCore: T,
+): Mixin<T, SortingPublicMethods> {
   return class GridCoreWithSortingController extends GridCore {
     public clearSorting(): void {
       this.sortingController.clearSorting();

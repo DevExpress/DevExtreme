@@ -1,11 +1,9 @@
-import type { Constructor } from '../types';
-import type { GridCoreNewBase } from '../widget';
+import type { GridCoreClass, Mixin } from '../types';
+import type { ColumnChooserPublicMethods } from './types';
 
-/* eslint-disable-next-line
-  @typescript-eslint/explicit-module-boundary-types,
-  @typescript-eslint/explicit-function-return-type
-  -- TS can't name the class type of a generic mixin */
-export function PublicMethods<TBase extends Constructor<GridCoreNewBase>>(GridCore: TBase) {
+export function PublicMethods<TBase extends GridCoreClass>(
+  GridCore: TBase,
+): Mixin<TBase, ColumnChooserPublicMethods> {
   return class GridCoreWithColumnChooser extends GridCore {
     public showColumnChooser(): void {
       this.columnChooserView.show();
