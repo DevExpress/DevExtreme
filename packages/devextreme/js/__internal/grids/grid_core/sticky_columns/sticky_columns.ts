@@ -163,11 +163,13 @@ const baseStickyColumns = <T extends ModuleType<ColumnsView>>(
     const $element = this.element();
     const hasStickyColumns = this.hasStickyColumns();
 
-    GridCoreStickyColumnsDom.toggleStickyColumnsClass(
-      $element,
-      hasStickyColumns,
-      this.addWidgetPrefix.bind(this),
-    );
+    if ($element) {
+      GridCoreStickyColumnsDom.toggleStickyColumnsClass(
+        $element,
+        hasStickyColumns,
+        this.addWidgetPrefix.bind(this),
+      );
+    }
 
     if (hasStickyColumns) {
       return deferred.done(() => {

@@ -82,9 +82,9 @@ import type {
   CellValidationResultData,
   CellValidationResultValue,
   RowValidatingParams,
+  ValidatingCellBasedEditingController,
   ValidatingCellOptions,
   ValidatingEditingController,
-  ValidatingEditingControllerExtension,
   ValidatingEditorFactory,
   ValidatingEditorFactoryExtension,
   ValidationData,
@@ -762,11 +762,8 @@ export class ValidatingController extends modules.Controller {
 
 export const validatingEditingExtender = (
   Base: ModuleType<CellBasedEditingController & FormBasedEditingControllerExtension>,
-): ModuleType<
-  CellBasedEditingController
-  & FormBasedEditingControllerExtension
-  & ValidatingEditingControllerExtension
-> => class ValidateEditingControllerExtender extends Base {
+): ModuleType<ValidatingCellBasedEditingController> => class ValidateEditingControllerExtender
+  extends Base {
   protected _errorHandlingController!: ErrorHandlingViewController;
 
   public init(): void {
@@ -1555,10 +1552,8 @@ export const validatingEditorFactoryExtender = (
     return `.dx-editor-cell .${invalidMessageClass}, .dx-cell-modified .${invalidMessageClass}`;
   }
 
-  public loseFocus(skipValidator?: boolean): void {
-    if (!skipValidator) {
-      this._validatingController.setValidator(null);
-    }
+  public loseFocus(): void {
+    this._validatingController.setValidator(null);
     super.loseFocus();
   }
 
