@@ -311,6 +311,7 @@
       },
       "configurations": {
         "qunit": {
+          "configKey": "esmQunit",
           "removeDebug": false
         }
       },
@@ -383,6 +384,7 @@
       },
       "configurations": {
         "qunit": {
+          "configKey": "esmQunit",
           "removeDebug": false
         }
       },
@@ -413,6 +415,7 @@
       },
       "configurations": {
         "qunit": {
+          "configKey": "esmQunit",
           "removeDebug": false
         }
       }
@@ -433,6 +436,7 @@
       },
       "configurations": {
         "qunit": {
+          "configKey": "esmQunit",
           "removeDebug": false
         }
       }

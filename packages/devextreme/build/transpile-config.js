@@ -17,6 +17,18 @@ const targets = {
     samsung: 13,
 };
 
+const esmQunit = Object.assign({}, common, {
+    // eslint-disable-next-line spellcheck/spell-checker
+    presets: [['@babel/preset-env', { targets, modules: false }]],
+    plugins: common.plugins.concat([
+        // Plain `@babel/runtime/helpers/*` paths resolve to the ESM or CJS helper through
+        // @babel/runtime's exports map, so tools that run esm/ as CommonJS (Jest) can load them
+        ['@babel/plugin-transform-runtime', {
+            version: '7.5.0' // https://github.com/babel/babel/issues/10261#issuecomment-514687857
+        }],
+    ])
+});
+
 module.exports = {
     cjs: Object.assign({}, common, {
         presets: [['@babel/preset-env', { targets }]],
@@ -33,15 +45,8 @@ module.exports = {
         ])
     }),
 
-    esm: Object.assign({}, common, {
-        // eslint-disable-next-line spellcheck/spell-checker
-        presets: [['@babel/preset-env', { targets, modules: false }]],
-        plugins: common.plugins.concat([
-            // Plain `@babel/runtime/helpers/*` paths resolve to the ESM or CJS helper through
-            // @babel/runtime's exports map, so tools that run esm/ as CommonJS (Jest) can load them
-            ['@babel/plugin-transform-runtime', {
-                version: '7.5.0' // https://github.com/babel/babel/issues/10261#issuecomment-514687857
-            }],
+    esm: Object.assign({}, esmQunit, {
+        plugins: esmQunit.plugins.concat([
             [addImportExtensions, {
                 // __internal is compiled by tsc into artifacts/dist_ts first
                 sourceRoots: [{
@@ -50,5 +55,10 @@ module.exports = {
                 }],
             }],
         ])
-    })
+    }),
+
+    // The QUnit runner's import map gives tests extensionless URLs (testing/runner/lib/importMap.ts).
+    // A test and the library have to import a module by the same URL to share one instance,
+    // so QUnit artifacts keep extensionless imports.
+    esmQunit,
 };
