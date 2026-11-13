@@ -297,7 +297,7 @@ export type ToolCall = {
  * @namespace DevExpress.ui.dxChat
  * @public
  */
-export type ToolCallOptions = {
+export type ToolCallProperties = {
     /**
      * @docid
      * @default false
@@ -616,7 +616,7 @@ export interface dxChatOptions extends WidgetOptions<dxChat> {
      * @docid
      * @public
      */
-    toolCallOptions?: ToolCallOptions;
+    toolCallOptions?: ToolCallProperties;
     /**
      * @docid
      * @default []
