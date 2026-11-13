@@ -51,6 +51,10 @@ describe('Keyboard Navigation', () => {
   const SELECTION_OPTIONS: DataGridProperties = {
     selection: { mode: 'multiple', showCheckBoxesMode: 'none' },
   };
+  const COMMAND_MODIFIERS = [
+    { modifierName: 'Ctrl', modifiers: { ctrlKey: true } },
+    { modifierName: 'Meta', modifiers: { metaKey: true } },
+  ];
 
   const getRowKey = (element: Element | null): number | undefined => {
     const row = element?.closest<HTMLTableRowElement>('tr.dx-data-row');
@@ -608,6 +612,30 @@ describe('Keyboard Navigation', () => {
 
       expect(instance.getController('editing').isEditing()).toBe(false);
     });
+
+    it.each(COMMAND_MODIFIERS)(
+      'should not prevent the default action of $modifierName+c pressed while the rows are rendering',
+      async ({ modifiers }) => {
+        const { instance, renderPendingTemplates } = await focusRowAndScrollDown(
+          false,
+          1,
+          EDITING_OPTIONS,
+        );
+
+        const { preventDefault, stopPropagation } = triggerKeyDown(
+          instance,
+          'c',
+          document.activeElement,
+          modifiers,
+        );
+        jest.runAllTimers();
+        renderPendingTemplates();
+
+        expect(preventDefault).toHaveBeenCalledTimes(0);
+        expect(stopPropagation).toHaveBeenCalledTimes(0);
+        expect(instance.getController('editing').isEditing()).toBe(false);
+      },
+    );
 
     it('should select all rows on Meta+A pressed while the rows are rendering', async () => {
       const { instance } = await focusRowAndScrollDown(false, 1, {
@@ -1423,6 +1451,54 @@ describe('Keyboard Navigation', () => {
       expect(document.activeElement).toBe(cell);
       expect(cell.classList.contains('dx-cell-focus-disabled')).toBe(false);
     });
+  });
+
+  describe('command shortcuts pressed with editOnKeyPress (T1337924)', () => {
+    const COMMAND_SHORTCUT_CASES = ['c', 'v', 'x', 'z'].flatMap(
+      (keyName) => COMMAND_MODIFIERS.map((modifier) => ({ keyName, ...modifier })),
+    );
+
+    const focusEditableCell = async (): Promise<DataGridInstance> => {
+      const { instance, component } = await createDataGrid({
+        dataSource: DATA_SOURCE.slice(0, 3),
+        keyExpr: 'id',
+        columns: ['id', 'name'],
+        editing: { mode: 'cell', allowUpdating: true },
+        keyboardNavigation: { editOnKeyPress: true },
+      });
+      triggerPointerDown(component.getDataCell(0, 1).getElement() as HTMLElement);
+      jest.runAllTimers();
+
+      return instance;
+    };
+
+    it('should start editing the focused cell on c pressed', async () => {
+      const instance = await focusEditableCell();
+
+      triggerKeyDown(instance, 'c');
+      jest.runAllTimers();
+
+      expect(instance.getController('editing').isEditing()).toBe(true);
+    });
+
+    it.each(COMMAND_SHORTCUT_CASES)(
+      'should not start editing on $modifierName+$keyName pressed',
+      async ({ keyName, modifiers }) => {
+        const instance = await focusEditableCell();
+
+        const { preventDefault, stopPropagation } = triggerKeyDown(
+          instance,
+          keyName,
+          undefined,
+          modifiers,
+        );
+        jest.runAllTimers();
+
+        expect(instance.getController('editing').isEditing()).toBe(false);
+        expect(preventDefault).toHaveBeenCalledTimes(0);
+        expect(stopPropagation).toHaveBeenCalledTimes(0);
+      },
+    );
   });
 
   describe('editor focus after editing starts in row mode', () => {
