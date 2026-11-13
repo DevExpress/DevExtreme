@@ -311,6 +311,7 @@
       },
       "configurations": {
         "qunit": {
+          "configKey": "esmQunit",
           "removeDebug": false
         }
       },
@@ -383,6 +384,7 @@
       },
       "configurations": {
         "qunit": {
+          "configKey": "esmQunit",
           "removeDebug": false
         }
       },
@@ -413,6 +415,7 @@
       },
       "configurations": {
         "qunit": {
+          "configKey": "esmQunit",
           "removeDebug": false
         }
       }
@@ -433,6 +436,7 @@
       },
       "configurations": {
         "qunit": {
+          "configKey": "esmQunit",
           "removeDebug": false
         }
       }
@@ -1288,6 +1292,35 @@
         "{projectRoot}/artifacts/npm/devextreme-internal/package.json"
       ]
     },
+    "build:npm:exports-map": {
+      "executor": "devextreme-nx-infra-plugin:generate-exports-map",
+      "cache": false,
+      "options": {
+        "packageDir": "./artifacts/npm/devextreme",
+        "ignore": ["__internal", "bin", "bundles", "cjs", "dist", "esm", "license", "scss"],
+        "extraExports": {
+          "./bundles/*": { "types": "./bundles/*.d.ts", "default": "./bundles/*.js" },
+          "./localization/messages/*.json": "./localization/messages/*.json",
+          "./dist/*": "./dist/*",
+          "./scss/*": "./scss/*",
+          "./esm/*.json": "./esm/*.json",
+          "./esm/*.js": "./esm/*.js",
+          "./esm/*": "./esm/*.js",
+          "./cjs/*.json": "./cjs/*.json",
+          "./cjs/*.js": "./cjs/*.js",
+          "./cjs/*": "./cjs/*.js",
+          "./*.d": { "types": "./*.d.ts" }
+        }
+      },
+      "configurations": {
+        "internal": {
+          "packageDir": "./artifacts/npm/devextreme-internal"
+        }
+      },
+      "metadata": {
+        "description": "Adds the \"exports\" map to the assembled package.json: one entry per module stub, type-only modules from declarations, plus extraExports."
+      }
+    },
     "compress:npm-sources": {
       "executor": "devextreme-nx-infra-plugin:compress",
       "options": {
@@ -1546,6 +1579,7 @@
           "pnpm nx run devextreme:build:npm:dist:package-json",
           "pnpm nx run devextreme:build:npm:assemble",
           "pnpm nx run devextreme:build:npm:root-package-json",
+          "pnpm nx run devextreme:build:npm:exports-map",
           "pnpm nx run devextreme:compress:npm-sources",
           "pnpm nx run devextreme:verify:public-modules",
           "pnpm nx run devextreme:build:npm:scss"
@@ -1587,6 +1621,7 @@
             "pnpm nx run devextreme:build:npm:dist:package-json",
             "pnpm nx run devextreme:build:npm:assemble",
             "pnpm nx run devextreme:build:npm:root-package-json",
+            "pnpm nx run devextreme:build:npm:exports-map",
             "pnpm nx run devextreme:compress:npm-sources -c production",
             "pnpm nx run devextreme:verify:public-modules",
             "pnpm nx run devextreme:build:npm:scss"
@@ -1599,6 +1634,7 @@
             "pnpm nx run devextreme:build:npm:dist:package-json -c internal",
             "pnpm nx run devextreme:build:npm:assemble -c internal",
             "pnpm nx run devextreme:build:npm:root-package-json -c internal",
+            "pnpm nx run devextreme:build:npm:exports-map -c internal",
             "pnpm nx run devextreme:compress:npm-sources -c internal",
             "pnpm nx run devextreme:verify:public-modules",
             "pnpm nx run devextreme:build:npm:scss -c internal"
@@ -1611,6 +1647,7 @@
             "pnpm nx run devextreme:build:npm:dist:package-json -c internal",
             "pnpm nx run devextreme:build:npm:assemble -c internal",
             "pnpm nx run devextreme:build:npm:root-package-json -c internal",
+            "pnpm nx run devextreme:build:npm:exports-map -c internal",
             "pnpm nx run devextreme:compress:npm-sources -c production-internal",
             "pnpm nx run devextreme:verify:public-modules",
             "pnpm nx run devextreme:build:npm:scss -c internal"
@@ -1623,6 +1660,7 @@
             "pnpm nx run devextreme:build:npm:dist:package-json",
             "pnpm nx run devextreme:build:npm:assemble -c test-internal",
             "pnpm nx run devextreme:build:npm:root-package-json",
+            "pnpm nx run devextreme:build:npm:exports-map",
             "pnpm nx run devextreme:compress:npm-sources",
             "pnpm nx run devextreme:verify:public-modules",
             "pnpm nx run devextreme:build:npm:scss"
@@ -1635,6 +1673,7 @@
             "pnpm nx run devextreme:build:npm:dist:package-json",
             "pnpm nx run devextreme:build:npm:assemble -c test-internal",
             "pnpm nx run devextreme:build:npm:root-package-json",
+            "pnpm nx run devextreme:build:npm:exports-map",
             "pnpm nx run devextreme:compress:npm-sources -c production",
             "pnpm nx run devextreme:verify:public-modules",
             "pnpm nx run devextreme:build:npm:scss"
