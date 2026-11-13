@@ -976,7 +976,7 @@ export const rowsView = (
 
   protected _renderCore(change?: DataChange): DeferredObj<unknown> {
     const deferred = super._renderCore(change);
-    const isWaitingForTemplates = deferred.state() === 'pending';
+    const isWaitingForTemplates = this.isWaitingForAsyncTemplates();
 
     return deferred.done(() => {
       if (isWaitingForTemplates) {

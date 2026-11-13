@@ -3,10 +3,8 @@ import {
 } from '@jest/globals';
 import type { dxElementWrapper } from '@js/core/renderer';
 import type { Properties as DataGridProperties } from '@js/ui/data_grid';
-import type { DataGridModel } from '@ts/grids/data_grid/__tests__/__mock__/model/data_grid';
 
-import { createPendingTemplate } from '../../__tests__/__mock__/helpers/pending_template';
-import type { DataGridInstance } from '../../__tests__/__mock__/helpers/utils';
+import { createGridWithPendingTemplates, ROWS } from '../../__tests__/__mock__/helpers/pending_template';
 import {
   afterTest,
   beforeTest,
@@ -15,7 +13,6 @@ import {
 } from '../../__tests__/__mock__/helpers/utils';
 import { COMMAND_SELECT_CLASS } from '../const';
 
-const ROWS = [{ id: 1 }, { id: 2 }, { id: 3 }];
 const RESTORED_STATE = { selectedRowKeys: [1] };
 
 // legacyMode isn't in the public type
@@ -34,33 +31,12 @@ const getRowKeys = ($container: dxElementWrapper, selector: string): number[] =>
   );
 };
 
-const createGrid = async (options: DataGridProperties): Promise<{
-  $container: dxElementWrapper;
-  component: DataGridModel;
-  instance: DataGridInstance;
-  renderPendingTemplates: () => void;
-}> => {
-  const { template, renderPendingTemplates } = createPendingTemplate();
-
-  const grid = await createDataGrid({
-    dataSource: ROWS,
-    columns: [{ dataField: 'id', cellTemplate: 'cellTemplate' }],
-    templatesRenderAsynchronously: true,
-    integrationOptions: {
-      templates: { cellTemplate: template },
-    },
-    ...options,
-  } as DataGridProperties);
-
-  return { ...grid, renderPendingTemplates };
-};
-
 describe('Selection while new rows wait for async templates', () => {
   beforeEach(beforeTest);
   afterEach(afterTest);
 
   it('should highlight the rows selected by the restored state', async () => {
-    const { $container, renderPendingTemplates } = await createGrid({
+    const { $container, renderPendingTemplates } = await createGridWithPendingTemplates({
       selection: { mode: 'multiple' },
       stateStoring: {
         enabled: true,
@@ -95,7 +71,7 @@ describe('Selection while new rows wait for async templates', () => {
   });
 
   it('should highlight the restored selected row whose checkbox is canceled in onEditorPreparing', async () => {
-    const { $container, renderPendingTemplates } = await createGrid({
+    const { $container, renderPendingTemplates } = await createGridWithPendingTemplates({
       selection: { mode: 'multiple' },
       onEditorPreparing: (e) => {
         if (e.parentType === 'dataRow' && e.row?.key === 1) {
@@ -116,7 +92,7 @@ describe('Selection while new rows wait for async templates', () => {
   });
 
   it('should highlight the rows selected with selectRows', async () => {
-    const { instance, $container, renderPendingTemplates } = await createGrid({
+    const { instance, $container, renderPendingTemplates } = await createGridWithPendingTemplates({
       selection: { mode: 'multiple' },
     });
 
@@ -129,7 +105,7 @@ describe('Selection while new rows wait for async templates', () => {
   });
 
   it('should highlight the selected row at its new position when the rows are sorted', async () => {
-    const { instance, $container, renderPendingTemplates } = await createGrid({
+    const { instance, $container, renderPendingTemplates } = await createGridWithPendingTemplates({
       selection: { mode: 'multiple' },
     });
 
@@ -145,7 +121,7 @@ describe('Selection while new rows wait for async templates', () => {
   });
 
   it('should not highlight the rows of the page opened after the selection', async () => {
-    const { instance, $container, renderPendingTemplates } = await createGrid({
+    const { instance, $container, renderPendingTemplates } = await createGridWithPendingTemplates({
       dataSource: [...ROWS, { id: 4 }],
       paging: { pageSize: 2 },
       selection: { mode: 'multiple' },
@@ -163,7 +139,7 @@ describe('Selection while new rows wait for async templates', () => {
   });
 
   it('should highlight only the selected row when a row is inserted with repaintChangesOnly', async () => {
-    const { instance, $container, renderPendingTemplates } = await createGrid({
+    const { instance, $container, renderPendingTemplates } = await createGridWithPendingTemplates({
       dataSource: {
         store: { type: 'array', key: 'id', data: ROWS.map((row) => ({ ...row })) },
         pushAggregationTimeout: 0,
@@ -187,7 +163,7 @@ describe('Selection while new rows wait for async templates', () => {
   });
 
   it('should check the checkbox of the selected row updated after a row is inserted above it with repaintChangesOnly', async () => {
-    const { instance, $container, renderPendingTemplates } = await createGrid({
+    const { instance, $container, renderPendingTemplates } = await createGridWithPendingTemplates({
       dataSource: {
         store: {
           type: 'array',
@@ -219,7 +195,7 @@ describe('Selection while new rows wait for async templates', () => {
   });
 
   it('should highlight the appended rows selected with selectAll in the legacy infinite scrolling', async () => {
-    const { instance, $container, renderPendingTemplates } = await createGrid({
+    const { instance, $container, renderPendingTemplates } = await createGridWithPendingTemplates({
       ...LEGACY_INFINITE_SCROLLING_OPTIONS,
       dataSource: [...ROWS, { id: 4 }],
       paging: { pageSize: 2 },
