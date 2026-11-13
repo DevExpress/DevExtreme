@@ -375,7 +375,7 @@ class Splitter extends CollectionWidgetLiveUpdate<Properties> {
   ): dxElementWrapper {
     const $itemFrame = super._renderItem(index, itemData, $container, $itemToReplace);
 
-    const itemElement = $itemFrame.get(0) as HTMLElement;
+    const itemElement = $itemFrame.get<HTMLElement>(0);
 
     setFlexProp(itemElement, FLEX_PROPERTY.flexShrink, DEFAULT_FLEX_SHRINK_PROP);
     setFlexProp(itemElement, FLEX_PROPERTY.flexBasis, DEFAULT_FLEX_BASIS_PROP);

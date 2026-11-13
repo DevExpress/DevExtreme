@@ -28,8 +28,8 @@ export const createCardView = (
     ...options,
   };
 
-  const instance = new CardView($container.get(0) as HTMLDivElement, cardViewOptions);
-  const component = new CardViewModel($container.get(0) as HTMLElement);
+  const instance = new CardView($container.get<HTMLDivElement>(0), cardViewOptions);
+  const component = new CardViewModel($container.get<HTMLElement>(0));
 
   jest.runAllTimers();
 

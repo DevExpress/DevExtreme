@@ -12,7 +12,7 @@ const instances: ContextMenu[] = [];
 const createContextMenu = (options: Properties = {}): ContextMenu => {
   const $element = $('<div>').appendTo(document.body);
 
-  const contextMenu = new ContextMenu($element.get(0) as HTMLElement, {
+  const contextMenu = new ContextMenu($element.get<HTMLElement>(0), {
     items: [{ text: 'A' }],
     ...options,
   });

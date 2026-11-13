@@ -7,7 +7,7 @@ import { createGridWithPendingTemplates } from '../../__tests__/__mock__/helpers
 import { afterTest, beforeTest } from '../../__tests__/__mock__/helpers/utils';
 
 const getRowKeys = ($container: dxElementWrapper, selector: string): number[] => {
-  const container = $container.get(0) as HTMLElement;
+  const container = $container.get<HTMLElement>(0);
 
   return Array.from(
     container.querySelectorAll(`.dx-datagrid-rowsview ${selector}`),

@@ -648,7 +648,7 @@ const columnHeadersView = (
 
     if (columnElements && $transparentColumnElement?.length) {
       const transparentColumnIndex = getTransparentColumnIndex(this.getFixedColumns());
-      const transparentCell = $transparentColumnElement.get(0) as HTMLTableCellElement;
+      const transparentCell = $transparentColumnElement.get<HTMLTableCellElement>(0);
       const elements = columnElements.toArray();
 
       elements.splice(transparentColumnIndex, transparentCell.colSpan, transparentCell);

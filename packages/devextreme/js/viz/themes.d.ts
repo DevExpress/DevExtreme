@@ -29,7 +29,7 @@ export function currentTheme(theme: string): void;
  * @static
  * @public
  */
-export function getTheme(theme: string): any;
+export function getTheme(theme?: string): any;
 
 /**
  * @docid viz.refreshTheme

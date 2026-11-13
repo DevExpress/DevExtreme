@@ -225,7 +225,6 @@ class AddUrlStrategy extends BaseStrategy {
   }
 
   getItemsConfig(): SimpleItem[] {
-    // @ts-expect-error isFluent's theme param is required in themes.d.ts; it defaults to current()
     const stylingMode = isFluent() ? 'text' : 'outlined';
 
     return [

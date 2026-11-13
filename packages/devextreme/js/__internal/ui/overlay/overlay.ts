@@ -654,7 +654,7 @@ class Overlay<
     }
 
     const { $container } = this._positionController;
-    const wrapper = this._$wrapper?.get(0) as HTMLElement | undefined;
+    const wrapper = this._$wrapper?.get<HTMLElement>(0);
 
     if (!$container || $container.get(0) === wrapper?.parentElement) {
       return;

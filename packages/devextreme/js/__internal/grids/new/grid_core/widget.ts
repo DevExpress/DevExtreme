@@ -181,7 +181,7 @@ export class GridCoreNewBase<
     // @ts-expect-error
     super._initMarkup();
     this.renderSubscription = this.diContext.get(MainView).render(
-      this.$element().get(0) as HTMLDivElement,
+      this.$element().get<HTMLDivElement>(0),
     );
     // NOTE: We flush all Inferno async render operations after initial render
     // Because after component creation markup should be ready
