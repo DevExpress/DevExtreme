@@ -46,11 +46,11 @@ const chats: Chat[] = [];
 const createChat = (options: Partial<Properties> = {}): ChatModel => {
   const $element = $('<div>').appendTo(document.body);
 
-  const instance = new Chat($element.get(0) as HTMLElement, { user: USER, ...options });
+  const instance = new Chat($element.get<HTMLElement>(0), { user: USER, ...options });
 
   chats.push(instance);
 
-  return new ChatModel($element.get(0) as HTMLElement);
+  return new ChatModel($element.get<HTMLElement>(0));
 };
 
 type StoreChanges = Parameters<ArrayStore['push']>[0];
