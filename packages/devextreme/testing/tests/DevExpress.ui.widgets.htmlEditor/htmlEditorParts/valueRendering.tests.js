@@ -456,6 +456,57 @@ export default function() {
             assert.strictEqual(sanitizedHtml, '<img src="undefined">', 'inline handlers are removed');
         });
 
+        test('sanitizeHtml should remove meta and base elements', function(assert) {
+            const sanitizedHtml = sanitizeHtml(Quill, '<p>text</p><meta http-equiv="refresh" content="0;url=https://example.com/"><base href="https://example.com/">');
+
+            assert.strictEqual(sanitizedHtml, '<p>text</p>', 'meta and base are removed');
+        });
+
+        test('sanitizeHtml should remove the srcdoc attribute', function(assert) {
+            const sanitizedHtml = sanitizeHtml(Quill, '<iframe srcdoc="<b>text</b>"></iframe>');
+
+            assert.strictEqual(sanitizedHtml, '<iframe></iframe>', 'srcdoc is removed');
+        });
+
+        test('sanitizeHtml should remove the URL attributes with a script scheme', function(assert) {
+            const sanitizedHtml = sanitizeHtml(Quill, [
+                '<a href="javascript:void(0)">a</a>',
+                '<a href=" JavaScript:void(0)">b</a>',
+                '<a href="java\tscript:void(0)">c</a>',
+                '<iframe src="vbscript:msgbox(1)"></iframe>',
+                '<object data="data:text/html,<b>x</b>"></object>',
+                '<form action="javascript:void(0)"><button formaction="javascript:void(0)">d</button></form>',
+            ].join(''));
+
+            assert.strictEqual(
+                sanitizedHtml,
+                '<a>a</a><a>b</a><a>c</a><iframe></iframe><object></object><form><button>d</button></form>',
+                'script URLs are removed and the content is kept'
+            );
+        });
+
+        test('sanitizeHtml should keep the safe URL attributes', function(assert) {
+            const html = '<a href="https://example.com/">a</a><img src="data:image/png;base64,AAAA"><iframe src="https://example.com/video"></iframe>';
+
+            assert.strictEqual(sanitizeHtml(Quill, html), html, 'safe URLs are kept');
+        });
+
+        test('sanitizeHtml should keep a data URL only as an image source', function(assert) {
+            const sanitizedHtml = sanitizeHtml(Quill, [
+                '<img src="data:image/svg+xml,%3Csvg%3E%3C/svg%3E">',
+                '<object data="data:image/svg+xml,%3Csvg onload=alert(1)%3E%3C/svg%3E"></object>',
+                '<embed src="data:image/svg+xml,%3Csvg onload=alert(1)%3E%3C/svg%3E">',
+                '<iframe src="data:application/xhtml+xml,%3Chtml%3E%3C/html%3E"></iframe>',
+                '<a href="data:text/plain,text">a</a>',
+            ].join(''));
+
+            assert.strictEqual(
+                sanitizedHtml,
+                '<img src="data:image/svg+xml,%3Csvg%3E%3C/svg%3E"><object></object><embed><iframe></iframe><a>a</a>',
+                'only the image data URL is kept'
+            );
+        });
+
         test('value change to html with embedded script should not execute the script', function(assert) {
             const done = assert.async();
 
@@ -478,6 +529,65 @@ export default function() {
                 assert.strictEqual(window._isInlineHandlerExecuted, false, 'inline handler was not executed');
                 done();
             }, 100);
+        });
+
+        test('html value elements should not reach the document on init', function(assert) {
+            const addedTags = [];
+            const observer = new MutationObserver((records) => {
+                records.forEach(({ addedNodes }) => addedNodes.forEach((node) => addedTags.push(node.nodeName)));
+            });
+
+            observer.observe(document.body, { childList: true, subtree: true });
+
+            $('#htmlEditor').dxHtmlEditor({
+                value: '<p>text</p><meta http-equiv="refresh" content="86400"><base href="https://example.com/"><iframe srcdoc="<b>x</b>"></iframe>'
+            });
+
+            observer.takeRecords().forEach(({ addedNodes }) => addedNodes.forEach((node) => addedTags.push(node.nodeName)));
+            observer.disconnect();
+
+            assert.strictEqual(addedTags.indexOf('META'), -1, 'meta was not inserted into the document');
+            assert.strictEqual(addedTags.indexOf('BASE'), -1, 'base was not inserted into the document');
+            assert.strictEqual(addedTags.indexOf('IFRAME'), -1, 'the iframe with srcdoc was not inserted into the document');
+        });
+
+        test('html value set before the editor is created should not reach the document', function(assert) {
+            const addedTags = [];
+            const observer = new MutationObserver((records) => {
+                records.forEach(({ addedNodes }) => addedNodes.forEach((node) => addedTags.push(node.nodeName)));
+            });
+            let instance;
+
+            observer.observe(document.body, { childList: true, subtree: true });
+
+            $('#htmlEditor').dxHtmlEditor({
+                onInitialized: (e) => {
+                    instance = e.component;
+                },
+                customizeModules: () => {
+                    instance.option('value', '<p>text</p><meta http-equiv="refresh" content="86400">');
+                }
+            });
+
+            observer.takeRecords().forEach(({ addedNodes }) => addedNodes.forEach((node) => addedTags.push(node.nodeName)));
+            observer.disconnect();
+
+            assert.strictEqual(instance.option('value'), '<p>text</p><meta http-equiv="refresh" content="86400">', 'the value is kept');
+            assert.strictEqual($('#htmlEditor').find('.ql-editor').html(), '<p>text</p>', 'the value is rendered');
+            assert.strictEqual(addedTags.indexOf('META'), -1, 'meta was not inserted into the document');
+        });
+
+        test('script code should not be rendered as text', function(assert) {
+            const instance = $('#htmlEditor').dxHtmlEditor({
+                value: `<p>a</p>${this.htmlWithScript}`
+            }).dxHtmlEditor('instance');
+            const $content = $('#htmlEditor').find('.ql-editor');
+
+            assert.strictEqual($content.text(), 'a', 'initial value');
+
+            instance.option('value', `<p>b</p>${this.htmlWithScript}`);
+
+            assert.strictEqual($content.text(), 'b', 'value set at runtime');
         });
     });
 
