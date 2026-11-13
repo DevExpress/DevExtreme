@@ -41,5 +41,5 @@
     "typecheck": "tsc -p tsconfig.json && tsc -p tests/tsconfig.json",
     "watch": "pnpm --workspace-root nx run devextreme-scss --target=watch"
   },
-  "version": "26.2.0"
+  "version": "26.2.2"
 }
