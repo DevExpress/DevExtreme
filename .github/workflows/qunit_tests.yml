@@ -8,7 +8,8 @@ on:
   pull_request:
     paths-ignore:
       - 'apps/**/*.md'
-  merge_group:
+  push:
+    branches: [26_2]
   workflow_dispatch:
 
 env:
@@ -127,7 +128,7 @@ jobs:
         retention-days: 1
 
     - name: Save nx cache
-      if: github.event_name != 'pull_request' && github.event_name != 'merge_group'
+      if: github.event_name != 'pull_request'
       uses: actions/cache/save@v5
       with:
         path: |
@@ -139,7 +140,7 @@ jobs:
 
   qunit-tests:
     needs: build
-    runs-on: ${{ github.event_name == 'merge_group' && 'devextreme-shr2-ondemand' || 'devextreme-shr2' }}
+    runs-on: devextreme-shr2
     name: Constel ${{ matrix.CONSTEL }}${{ matrix.TIMEZONE != '' && format('-{0}', matrix.TIMEZONE) || '' }}${{ matrix.CSP == 'false' && '-no-csp' || '' }}
     timeout-minutes: 11
     strategy:
