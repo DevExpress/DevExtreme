@@ -114,7 +114,7 @@ describe('DxTextBox value accessor', () => {
 
     const component = fixture.componentInstance;
     const { form } = component;
-    const testSpy = jasmine.createSpy('testSpy');
+    const testSpy = vi.fn();
 
     form.valueChanges.subscribe(testSpy);
 

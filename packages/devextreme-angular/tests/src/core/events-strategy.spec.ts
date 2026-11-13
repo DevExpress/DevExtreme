@@ -10,9 +10,9 @@ describe('Events strategy API', () => {
     };
     const eventsStrategy = new NgEventsStrategy({}, zoneMode);
     const handlers = [
-      jasmine.createSpy('first'),
-      jasmine.createSpy('second'),
-      jasmine.createSpy('third'),
+      vi.fn(),
+      vi.fn(),
+      vi.fn(),
     ];
 
     eventsStrategy.on({

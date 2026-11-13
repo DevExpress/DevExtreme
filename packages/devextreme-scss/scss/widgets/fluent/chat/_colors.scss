@@ -1,4 +1,5 @@
 @use "sass:color";
+@use "../../base/contrast";
 @use "../colors" as *;
 @use "../textEditor/colors" as *;
 @use "../button/colors" as *;
@@ -188,3 +189,31 @@ $chat-typingindicator-bubble-bg-color: $chat-bubble-background-color-secondary !
 $chat-messagelist-contextmenu-delete-button-color: $base-danger !default;
 $chat-messagelist-contextmenu-delete-button-focused-color: $base-danger !default;
 $chat-messagelist-contextmenu-delete-button-focused-bg: $base-hover-bg !default;
+
+$chat-tool-call-color: $base-text-color !default;
+$chat-tool-call-subtle-color: null !default;
+$chat-tool-call-border-color: $base-border-color !default;
+$chat-tool-call-error-color: null !default;
+$chat-tool-call-error-background-color-light: #fdf6f6 !default;
+$chat-tool-call-error-background-color-dark: #590815 !default;
+$chat-tool-call-error-background-color: null !default;
+
+@if $color == "blue" and $mode == "light" {
+  $chat-tool-call-subtle-color: $base-icon-color !default;
+  $chat-tool-call-error-color: $base-danger-hover !default;
+  $chat-tool-call-error-background-color: $chat-tool-call-error-background-color-light !default;
+} @else if $color == "blue" {
+  $chat-tool-call-subtle-color: $base-icon-color !default;
+  $chat-tool-call-error-color: $base-danger !default;
+  $chat-tool-call-error-background-color: $chat-tool-call-error-background-color-dark !default;
+} @else {
+  $chat-tool-call-subtle-color: contrast.readable(
+    $base-label-color,
+    $chat-bubble-background-color-secondary
+  ) !default;
+  $chat-tool-call-error-color: contrast.readable(
+    $base-danger,
+    color.mix($base-danger, $chat-bubble-background-color-secondary, 10%)
+  ) !default;
+  $chat-tool-call-error-background-color: color.change($base-danger, $alpha: 0.1) !default;
+}

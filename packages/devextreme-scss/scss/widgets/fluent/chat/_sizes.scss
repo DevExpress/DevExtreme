@@ -3,6 +3,7 @@
 @use "../typography/sizes" as *;
 @use "../popup/sizes" as *;
 @use "../button/colors" as *;
+@use "../../base/relative-size";
 
 $chat-border-radius: $base-border-radius * 3 !default;
 $chat-bubble-border-radius: null !default;
@@ -79,6 +80,33 @@ $chat-file-size-max-width: 4em !default;
 $chat-file-icon-font-size: null !default;
 $chat-file-view-items-gap: 8px !default;
 $chat-bubble-gap: 8px !default;
+
+$chat-tool-call-font-size: $fluent-base-font-size !default;
+$chat-tool-call-line-height: 1.4286 !default;
+$chat-tool-call-header-font-weight: 600 !default;
+$chat-tool-call-monospace-font-family: Consolas, "Courier New", monospace !default;
+$chat-tool-call-tag-font-size: $chat-information-font-size !default;
+$chat-tool-call-tag-line-height: 1.3333 !default; // 16px/12px
+$chat-tool-call-tag-padding: relative-size.of(2px, $size) relative-size.of(6px, $size) !default;
+$chat-tool-call-tag-border-radius: $base-border-radius !default;
+$chat-tool-call-padding: relative-size.of(6px, $size) !default;
+$chat-tool-call-gap: relative-size.of(4px, $size) !default;
+$chat-tool-call-items-gap: relative-size.of(2px, $size) !default;
+$chat-tool-call-icon-size: $fluent-base-icon-size !default;
+$chat-tool-call-body-padding-block-start: relative-size.of(2px, $size) !default;
+$chat-tool-call-body-padding-inline-end: relative-size.of(8px, $size) !default;
+$chat-tool-call-body-padding-block-end: relative-size.of(8px, $size) !default;
+$chat-tool-call-body-margin-inline-start: relative-size.of(15px, $size) !default;
+$chat-tool-call-body-padding-inline-start: relative-size.of(14px, $size) !default;
+$chat-tool-call-body-border-width: $fluent-base-border-width !default;
+$chat-tool-call-fields-gap: relative-size.of(8px, $size) !default;
+$chat-tool-call-label-padding-block-end: relative-size.of(2px, $size) !default;
+$chat-tool-call-field-padding: relative-size.of(6px, $size) relative-size.of(12px, $size) !default;
+$chat-tool-call-field-line-height: 1.4286 !default; // 20px/14px
+$chat-tool-call-field-max-height: 10em !default;
+$chat-tool-call-field-border-radius: 2 * $base-border-radius !default;
+$chat-tool-call-text-padding: relative-size.of(4px, $size) relative-size.of(6px, $size) relative-size.of(8px, $size) !default;
+$chat-tool-call-field-border-width: $fluent-base-border-width !default;
 
 @if $size == "default" {
   $chat-bubble-border-radius: $fluent-base-border-radius * 3 !default;

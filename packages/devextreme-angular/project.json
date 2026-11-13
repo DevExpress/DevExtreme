@@ -281,49 +281,18 @@
         "{projectRoot}/tests/src/server/component-names.ts"
       ]
     },
-    "clean:tests": {
-      "executor": "devextreme-nx-infra-plugin:clean",
-      "options": {
-        "targetDirectory": "./tests/dist"
-      }
-    },
-    "build:tests": {
+    "test:types": {
       "executor": "nx:run-commands",
       "options": {
-        "commands": [
-          "pnpm --workspace-root nx clean:tests devextreme-angular",
-          "pnpm --workspace-root nx generate-component-names-for-tests devextreme-angular",
-          "pnpm --workspace-root nx copy:dist-dx-angular-to-tests-dist devextreme-angular",
-          "tsc --project tsconfig.tests.json --outDir tests/dist"
-        ],
-        "cwd": "packages/devextreme-angular",
-        "parallel": false
+        "command": "pnpm exec tsc --project tsconfig.tests.json --noEmit",
+        "cwd": "packages/devextreme-angular"
       },
+      "dependsOn": [
+        "generate-component-names-for-tests"
+      ],
       "inputs": [
         "default",
-        "test",
-        "{projectRoot}/tests/src/server/component-names.ts"
-      ],
-      "outputs": [
-        "{projectRoot}/tests/dist/**/*",
-        "{projectRoot}/tests/dist/**/*.js.map"
-      ]
-    },
-    "copy:dist-dx-angular-to-tests-dist": {
-      "executor": "devextreme-nx-infra-plugin:copy-files",
-      "options": {
-        "files": [
-          {
-            "from": "./npm/dist",
-            "to": "./tests/dist/node_modules/devextreme-angular"
-          }
-        ]
-      },
-      "inputs": [
-        "{projectRoot}/npm/dist/**/*"
-      ],
-      "outputs": [
-        "{projectRoot}/tests/dist/node_modules/devextreme-angular"
+        "test"
       ]
     },
     "test": {
@@ -331,7 +300,7 @@
       "options": {
         "commands": [
           "pnpm --workspace-root nx build devextreme-angular -c testing",
-          "pnpm --workspace-root nx build:tests devextreme-angular",
+          "pnpm --workspace-root nx test:types devextreme-angular",
           "pnpm --workspace-root nx test:all devextreme-angular"
         ],
         "parallel": false,
@@ -344,204 +313,132 @@
       ]
     },
     "test:all": {
-      "executor": "devextreme-nx-infra-plugin:karma-multi-env",
+      "executor": "nx:run-commands",
       "options": {
-        "karmaConfig": "karma.conf.js",
-        "environments": [
-          "client",
-          "server",
-          "hydration",
-          "zone",
-          "zoneless",
-          "server-zoneless",
-          "hydration-zoneless"
-        ]
+        "command": "pnpm exec vitest run",
+        "cwd": "packages/devextreme-angular"
       },
       "dependsOn": [
-        "build:tests"
+        "generate-component-names-for-tests"
       ],
       "inputs": [
         "default",
-        "test",
-        "{projectRoot}/tests/dist/**/*"
+        "test"
       ]
     },
     "test:components-client": {
-      "executor": "devextreme-nx-infra-plugin:karma-multi-env",
+      "executor": "nx:run-commands",
       "options": {
-        "karmaConfig": "karma.conf.js",
-        "environments": [
-          "client"
-        ]
+        "command": "pnpm exec vitest run --project client",
+        "cwd": "packages/devextreme-angular"
       },
       "dependsOn": [
-        "build:tests"
+        "generate-component-names-for-tests"
       ],
       "inputs": [
         "default",
-        "test",
-        "{projectRoot}/tests/dist/**/*"
+        "test"
       ]
     },
     "test:components-client-debug": {
-      "executor": "devextreme-nx-infra-plugin:karma-multi-env",
+      "executor": "nx:run-commands",
       "options": {
-        "karmaConfig": "karma.conf.js",
-        "environments": [
-          "client"
-        ],
-        "debug": true
+        "command": "pnpm exec vitest --project client --browser.headless=false",
+        "cwd": "packages/devextreme-angular"
       },
       "dependsOn": [
-        "build:tests"
+        "generate-component-names-for-tests"
       ]
     },
     "test:components-server": {
-      "executor": "devextreme-nx-infra-plugin:karma-multi-env",
+      "executor": "nx:run-commands",
       "options": {
-        "karmaConfig": "karma.conf.js",
-        "environments": [
-          "server",
-          "hydration",
-          "server-zoneless",
-          "hydration-zoneless"
-        ]
+        "command": "pnpm exec vitest run --project server --project hydration --project server-zoneless --project hydration-zoneless",
+        "cwd": "packages/devextreme-angular"
       },
       "dependsOn": [
-        "build:tests"
+        "generate-component-names-for-tests"
       ],
       "inputs": [
         "default",
-        "test",
-        "{projectRoot}/tests/dist/**/*"
+        "test"
       ]
     },
     "test:components-server-debug": {
-      "executor": "devextreme-nx-infra-plugin:karma-multi-env",
+      "executor": "nx:run-commands",
       "options": {
-        "karmaConfig": "karma.conf.js",
-        "environments": [
-          "server"
-        ],
-        "debug": true
+        "command": "pnpm exec vitest --project server --browser.headless=false",
+        "cwd": "packages/devextreme-angular"
       },
       "dependsOn": [
-        "build:tests"
-      ],
-      "inputs": [
-        "default",
-        "test",
-        "{projectRoot}/tests/dist/**/*"
+        "generate-component-names-for-tests"
       ]
     },
     "test:components-server-zoneless-debug": {
-      "executor": "devextreme-nx-infra-plugin:karma-multi-env",
+      "executor": "nx:run-commands",
       "options": {
-        "karmaConfig": "karma.conf.js",
-        "environments": [
-          "server-zoneless"
-        ],
-        "debug": true
+        "command": "pnpm exec vitest --project server-zoneless --browser.headless=false",
+        "cwd": "packages/devextreme-angular"
       },
       "dependsOn": [
-        "build:tests"
+        "generate-component-names-for-tests"
       ]
     },
     "test:components-zone-modes": {
-      "executor": "devextreme-nx-infra-plugin:karma-multi-env",
+      "executor": "nx:run-commands",
       "options": {
-        "karmaConfig": "karma.conf.js",
-        "environments": [
-          "zone",
-          "zoneless"
-        ]
+        "command": "pnpm exec vitest run --project zone --project zoneless",
+        "cwd": "packages/devextreme-angular"
       },
       "dependsOn": [
-        "build:tests"
+        "generate-component-names-for-tests"
       ],
       "inputs": [
         "default",
-        "test",
-        "{projectRoot}/tests/dist/**/*"
+        "test"
       ]
     },
     "test:components-zone-debug": {
-      "executor": "devextreme-nx-infra-plugin:karma-multi-env",
+      "executor": "nx:run-commands",
       "options": {
-        "karmaConfig": "karma.conf.js",
-        "environments": [
-          "zone"
-        ],
-        "debug": true
+        "command": "pnpm exec vitest --project zone --browser.headless=false",
+        "cwd": "packages/devextreme-angular"
       },
       "dependsOn": [
-        "build:tests"
+        "generate-component-names-for-tests"
       ]
     },
     "test:components-zoneless-debug": {
-      "executor": "devextreme-nx-infra-plugin:karma-multi-env",
+      "executor": "nx:run-commands",
       "options": {
-        "karmaConfig": "karma.conf.js",
-        "environments": [
-          "zoneless"
-        ],
-        "debug": true
+        "command": "pnpm exec vitest --project zoneless --browser.headless=false",
+        "cwd": "packages/devextreme-angular"
       },
       "dependsOn": [
-        "build:tests"
+        "generate-component-names-for-tests"
       ]
     },
     "watch:test": {
-      "executor": "devextreme-nx-infra-plugin:karma-multi-env",
+      "executor": "nx:run-commands",
       "options": {
-        "karmaConfig": "karma.conf.js",
-        "watch": true,
-        "environments": [
-          "client"
-        ]
+        "command": "pnpm exec vitest --project client",
+        "cwd": "packages/devextreme-angular"
       },
       "dependsOn": [
-        "build:tests"
-      ],
-      "inputs": [
-        "default",
-        "test",
-        "{projectRoot}/tests/dist/**/*"
+        "generate-component-names-for-tests"
       ]
     },
     "run:tests": {
-      "executor": "devextreme-nx-infra-plugin:karma-multi-env",
+      "executor": "nx:run-commands",
       "options": {
-        "karmaConfig": "karma.conf.js",
-        "environments": [
-          "client",
-          "server",
-          "hydration",
-          "zone",
-          "zoneless",
-          "server-zoneless",
-          "hydration-zoneless"
-        ]
+        "command": "pnpm exec vitest run",
+        "cwd": "packages/devextreme-angular"
       },
       "dependsOn": [
-        "build:tests"
+        "generate-component-names-for-tests"
       ],
       "inputs": [
         "default",
-        "test",
-        "{projectRoot}/tests/dist/**/*"
-      ]
-    },
-    "watch:spec": {
-      "executor": "nx:run-commands",
-      "options": {
-        "commands": [
-          "tsc --project tsconfig.tests.json --outDir tests/dist --watch"
-        ],
-        "parallel": false,
-        "cwd": "packages/devextreme-angular"
-      },
-      "inputs": [
         "test"
       ]
     }
@@ -561,19 +458,7 @@
     ],
     "test": [
       "{projectRoot}/tests/**/*",
-      "{projectRoot}/karma.conf.js",
-      "{projectRoot}/karma.test.shim.js",
-      "{projectRoot}/karma.server.test.shim.js",
-      "{projectRoot}/karma.hydration.test.shim.js",
-      "{projectRoot}/karma.common.test.shim.js",
-      "{projectRoot}/karma.zone-polyfills.test.shim.js",
-      "{projectRoot}/karma.zone.test.shim.js",
-      "{projectRoot}/karma.zoneless.test.shim.js",
-      "{projectRoot}/karma.server-zoneless.test.shim.js",
-      "{projectRoot}/karma.hydration-zoneless.test.shim.js",
-      "{projectRoot}/karma.zone-testing.module.js",
-      "{projectRoot}/karma.zoneless-testing.module.js",
-      "{projectRoot}/webpack.test.js",
+      "{projectRoot}/vitest.config.mts",
       "{projectRoot}/tsconfig.tests.json",
       "{projectRoot}/src/**/*.spec.ts",
       "{projectRoot}/src/**/*.test.ts"
