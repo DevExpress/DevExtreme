@@ -7,5 +7,5 @@
     "devextreme": "workspace:*",
     "testcafe": "catalog:"
   },
-  "version": "26.2.0"
+  "version": "27.1.0"
 }
