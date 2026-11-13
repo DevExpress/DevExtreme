@@ -1,10 +1,10 @@
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
-import type { Constructor } from '@ts/grids/new/grid_core/types';
+import type { GridCoreClass, Mixin } from '@ts/grids/new/grid_core/types';
 
-import type { GridCoreNewBase } from '../widget';
+import type { FilterPublicMethods } from './types';
 
-export function PublicMethods<T extends Constructor<GridCoreNewBase>>(GridCore: T) {
+export function PublicMethods<T extends GridCoreClass>(
+  GridCore: T,
+): Mixin<T, FilterPublicMethods> {
   return class GridCoreWithFilterController extends GridCore {
     public clearFilter(): void {
       this.filterSyncController.clearFilters();

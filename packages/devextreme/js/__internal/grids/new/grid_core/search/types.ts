@@ -19,3 +19,7 @@ export interface SearchFieldProps {
   width?: string | number;
   onValueChanged?: (v: string) => void;
 }
+
+export interface SearchPublicMethods {
+  searchByText: (text: string) => void;
+}

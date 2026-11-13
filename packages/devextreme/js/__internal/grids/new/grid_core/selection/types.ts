@@ -1,9 +1,10 @@
 import type { SelectAllMode, SingleMultipleOrNone } from '@js/common';
 import type { EventInfo } from '@js/common/core/events';
 import type { SelectionColumnDisplayMode } from '@js/common/grids';
+import type { DeferredObj } from '@js/core/utils/deferred';
 import type dxCardView from '@js/ui/card_view';
 
-import type { Key } from '../data_controller/types';
+import type { DataObject, Key } from '../data_controller/types';
 
 export type SelectedCardKeys = Key[];
 
@@ -43,4 +44,17 @@ export interface SelectionOptions {
   allowSelectAll?: boolean;
 
   selectAllMode?: SelectAllMode;
+}
+
+export interface SelectionPublicMethods {
+  isCardSelected: (key: Key) => boolean;
+  getSelectedCardKeys: () => Key[];
+  getSelectedCardsData: () => DataObject[];
+  selectCards: (keys: Key[], preserve?: boolean) => DeferredObj<unknown> | undefined;
+  deselectCards: (keys: Key[]) => DeferredObj<unknown> | undefined;
+  selectCardsByIndexes: (indexes: number[]) => DeferredObj<unknown> | undefined;
+  deselectCardsByIndexes: (indexes: number[]) => DeferredObj<unknown> | undefined;
+  selectAll: () => DeferredObj<unknown> | undefined;
+  deselectAll: () => DeferredObj<unknown> | undefined;
+  clearSelection: () => void;
 }
