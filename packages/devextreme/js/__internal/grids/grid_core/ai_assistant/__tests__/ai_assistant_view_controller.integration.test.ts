@@ -431,7 +431,7 @@ describe('AIAssistantViewController', () => {
       expect(getMessageStatusClass($messagesBefore.eq(0))).toBe(MessageStatus.Failure);
 
       const regenerateButton = $messagesBefore.eq(0)
-        .find(`.${CLASSES.messageRegenerateButton}`).get(0) as HTMLElement;
+        .find(`.${CLASSES.messageRegenerateButton}`).get<HTMLElement>(0);
 
       expect(regenerateButton).toBeTruthy();
 
@@ -454,7 +454,7 @@ describe('AIAssistantViewController', () => {
       await flushAsync();
 
       const regenerateButton = findMessageElements().eq(0)
-        .find(`.${CLASSES.messageRegenerateButton}`).get(0) as HTMLElement;
+        .find(`.${CLASSES.messageRegenerateButton}`).get<HTMLElement>(0);
 
       regenerateButton.click();
       jest.runAllTimers();

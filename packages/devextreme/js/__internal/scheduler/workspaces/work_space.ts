@@ -1105,7 +1105,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   }
 
   private getScrollbarWidth(): number {
-    const containerElement = $(this.$dateTableScrollable.container()).get(0) as HTMLElement;
+    const containerElement = $(this.$dateTableScrollable.container()).get<HTMLElement>(0);
     const scrollbarWidth = containerElement.offsetWidth - containerElement.clientWidth;
     return scrollbarWidth;
   }
@@ -2422,7 +2422,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       host[componentName] = component;
     } else {
       const $element = component.$element();
-      const elementStyle = ($element.get(0) as HTMLElement).style;
+      const elementStyle = $element.get<HTMLElement>(0).style;
       const { height } = elementStyle;
       const { width } = elementStyle;
 

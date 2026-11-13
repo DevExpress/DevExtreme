@@ -46,7 +46,7 @@ export class AIChatModel {
   public getRegenerateButton(messageIndex: number): HTMLElement {
     return this.getMessage(messageIndex)
       .find(`.${CLASSES.messageRegenerateButton}`)
-      .get(0) as HTMLElement;
+      .get<HTMLElement>(0);
   }
 
   public getRegenerateButtonTitle(messageIndex: number): string {
@@ -58,6 +58,6 @@ export class AIChatModel {
   }
 
   public getPopupHeight(): string {
-    return (this.getPopupContentElement().get(0) as HTMLElement)?.style.height ?? '';
+    return this.getPopupContentElement().get<HTMLElement>(0)?.style.height ?? '';
   }
 }

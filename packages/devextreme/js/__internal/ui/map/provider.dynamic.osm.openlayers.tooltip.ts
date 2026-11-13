@@ -78,7 +78,7 @@ export class OpenLayersMarkerTooltip {
       elementAttr: { class: POPOVER_CLASS },
       wrapperAttr: { class: POPOVER_CLASS },
     }) as MarkerPopover;
-    this.element = $(this._popover.content()).parent().get(0) as HTMLElement;
+    this.element = $(this._popover.content()).parent().get<HTMLElement>(0);
     this._popover.on('showing', this._syncFocusState);
     this._popover.on('positioned', this._restoreContentSize);
     this._popover.on('positioned', this._syncFocusState);
