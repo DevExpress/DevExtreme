@@ -5,6 +5,7 @@ import holdEvent from '@js/common/core/events/hold';
 import { addNamespace, isCommandKeyPressed } from '@js/common/core/events/utils/index';
 import messageLocalization from '@js/common/core/localization/message';
 import { applyBatch } from '@js/common/data/array_utils';
+import { data as elementData } from '@js/core/element_data';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { equalByValue } from '@js/core/utils/common';
@@ -19,14 +20,14 @@ import type { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/m_col
 import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/m_columns_controller';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import type { ContextMenuController } from '@ts/grids/grid_core/context_menu/m_context_menu';
-import type { ModuleType } from '@ts/grids/grid_core/m_types';
+import type { ModuleType, RowKey } from '@ts/grids/grid_core/m_types';
 import type { StateStoringController } from '@ts/grids/grid_core/state_storing/state_storing_controller_core';
 import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
 import Selection from '@ts/ui/selection/selection';
 import type { SelectionChangeEvent, SelectionFilter, SelectionOptions } from '@ts/ui/selection/types';
 
 import type { DataController } from '../data_controller/data_controller';
-import type { DataChange } from '../data_controller/types';
+import type { DataChange, ProcessedItem } from '../data_controller/types';
 import { isEditRow } from '../keyboard_navigation/utils';
 import modules from '../m_modules';
 import gridCoreUtils from '../m_utils';
@@ -42,6 +43,7 @@ import {
   SELECTION_MODE,
   SHOW_CHECKBOXES_MODE,
 } from './const';
+import { getSelectionCheckBox } from './utils';
 
 const processLongTap = function (that, dxEvent) {
   // TODO getView
@@ -828,13 +830,7 @@ export const selectionRowsViewExtender = (
             return;
           }
 
-          const { isSelected } = changeItem;
-          const needSelectionClass = Boolean(isSelected) && !isEditRow($row);
-
-          $row
-            .toggleClass(ROW_SELECTION_CLASS, needSelectionClass)
-            .find(`.${SELECT_CHECKBOX_CLASS}`).dxCheckBox('option', 'value', isSelected);
-          that.setAria('selected', String(isSelected), $row);
+          that.updateRowSelection($row, changeItem.isSelected);
         });
       });
 
@@ -842,6 +838,22 @@ export const selectionRowsViewExtender = (
     } else {
       super._update(change);
     }
+  }
+
+  private updateRowSelection($row: dxElementWrapper, isSelected?: boolean): void {
+    const needSelectionClass = Boolean(isSelected) && !isEditRow($row);
+
+    $row.toggleClass(ROW_SELECTION_CLASS, needSelectionClass);
+    getSelectionCheckBox($row)?.option('value', isSelected);
+    this.setAria('selected', String(isSelected), $row);
+  }
+
+  private isRowSelectionOutdated($row: dxElementWrapper, isSelected?: boolean): boolean {
+    const checkBox = getSelectionCheckBox($row);
+    const isAriaOutdated = $row.attr('aria-selected') !== String(isSelected);
+    const isCheckBoxOutdated = checkBox !== undefined && checkBox.option('value') !== isSelected;
+
+    return isAriaOutdated || isCheckBoxOutdated;
   }
 
   protected _createTable() {
@@ -919,8 +931,50 @@ export const selectionRowsViewExtender = (
 
   protected _renderCore(change) {
     const deferred = super._renderCore(change);
-    this._updateCheckboxesClass();
-    return deferred;
+    const isWaitingForTemplates = this.isWaitingForAsyncTemplates();
+
+    return deferred.done(() => {
+      this._updateCheckboxesClass();
+
+      if (isWaitingForTemplates) {
+        this.syncRowsSelection();
+      }
+    });
+  }
+
+  private syncRowsSelection(): void {
+    if (this.option(SELECTION_MODE) === 'none') {
+      return;
+    }
+
+    const items = this._dataController.items();
+    const findDataItem = (key: RowKey, rowIndex: number): ProcessedItem | undefined => {
+      const isRowItem = (item?: ProcessedItem): boolean => item?.rowType === 'data'
+        && equalByValue(item.key, key);
+
+      return isRowItem(items[rowIndex]) ? items[rowIndex] : items.find(isRowItem);
+    };
+
+    const outdatedRows = this._getRowElements()
+      .toArray()
+      .flatMap((rowElement, rowIndex) => {
+        const rowOptions = elementData(rowElement, 'options');
+        const item = rowOptions?.rowType === 'data'
+          ? findDataItem(rowOptions.key, rowIndex)
+          : undefined;
+        const isOutdated = item !== undefined
+          && this.isRowSelectionOutdated($(rowElement), item.isSelected);
+
+        return isOutdated ? [{ rowIndex, isSelected: item.isSelected }] : [];
+      });
+
+    each(this.getTableElements(), (_, table) => {
+      const $rows = this._getRowElements($(table));
+
+      outdatedRows.forEach(({ rowIndex, isSelected }) => {
+        this.updateRowSelection($rows.eq(rowIndex), isSelected);
+      });
+    });
   }
 
   private _updateCheckboxesClass() {
