@@ -1,14 +1,12 @@
 import type { DeferredObj } from '@js/core/utils/deferred';
 
 import type { DataObject, Key } from '../data_controller/types';
-import type { Constructor } from '../types';
-import type { GridCoreNewBase } from '../widget';
+import type { GridCoreClass, Mixin } from '../types';
+import type { SelectionPublicMethods } from './types';
 
-/* eslint-disable-next-line
-  @typescript-eslint/explicit-module-boundary-types,
-  @typescript-eslint/explicit-function-return-type
-  -- TS can't name the class type of a generic mixin */
-export function PublicMethods<TBase extends Constructor<GridCoreNewBase>>(GridCore: TBase) {
+export function PublicMethods<TBase extends GridCoreClass>(
+  GridCore: TBase,
+): Mixin<TBase, SelectionPublicMethods> {
   return class GridCoreWithSelectionController extends GridCore {
     public isCardSelected(key: Key): boolean {
       return this.selectionController.isCardSelected(key);

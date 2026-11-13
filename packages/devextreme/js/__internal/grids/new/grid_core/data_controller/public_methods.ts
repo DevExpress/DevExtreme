@@ -2,15 +2,12 @@ import type { FilterDescriptor } from '@js/data';
 import type DataSource from '@js/data/data_source';
 import { keysEqual } from '@ts/data/utils';
 
-import type { Constructor } from '../types';
-import type { GridCoreNewBase } from '../widget';
-import type { DataObject, Key } from './types';
+import type { GridCoreClass, Mixin } from '../types';
+import type { DataControllerPublicMethods, DataObject, Key } from './types';
 
-/* eslint-disable-next-line
-  @typescript-eslint/explicit-module-boundary-types,
-  @typescript-eslint/explicit-function-return-type
-  -- TS can't name the class type of a generic mixin */
-export function PublicMethods<T extends Constructor<GridCoreNewBase>>(GridCore: T) {
+export function PublicMethods<T extends GridCoreClass>(
+  GridCore: T,
+): Mixin<T, DataControllerPublicMethods> {
   return class GridCoreWithDataController extends GridCore {
     public getDataSource(): DataSource {
       return this.dataController.dataSource.peek();
