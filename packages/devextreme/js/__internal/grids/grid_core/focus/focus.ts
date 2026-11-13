@@ -120,9 +120,35 @@ export class FocusController extends core.ViewController {
     const isFocusedRowVisible = focusedRowIndex >= 0;
     const isFocusedRowInChange = !!e.rowIndices?.includes(focusedRowIndex);
 
-    if (isFocusedRowVisible && isFocusedRowInChange) {
-      this.updateFocusedRow({ focusedRowKey, preventScroll: true });
+    if (!isFocusedRowVisible || !isFocusedRowInChange) {
+      return;
     }
+
+    if (this.hasStaleFocusedRow(focusedRowIndex)) {
+      this.updateFocusedRow({ focusedRowKey, preventScroll: true });
+    } else {
+      this.restoreFocusedRowTabIndex(focusedRowIndex);
+    }
+  }
+
+  private restoreFocusedRowTabIndex(focusedRowIndex: number): void {
+    const $focusedRows = $(this.getRowsView().getRowElement(focusedRowIndex));
+    const hasFocusableCell = $focusedRows.children('[tabindex]').length > 0;
+
+    if (!hasFocusableCell) {
+      $focusedRows.attr('tabindex', this.option('tabIndex') ?? 0);
+    }
+  }
+
+  private hasStaleFocusedRow(focusedRowIndex: number): boolean {
+    const rowsView = this.getRowsView();
+
+    return rowsView.getTableElements().toArray().some((tableElement) => {
+      const $tableElement = $(tableElement);
+      const $focusedRow = rowsView._getRowElements($tableElement).eq(focusedRowIndex);
+
+      return this.findFocusedRows($tableElement).not($focusedRow).length > 0;
+    });
   }
 
   private updateFocusedRowIfNeeded(e: DataChange, forceUpdate = false): void {
@@ -536,15 +562,19 @@ export class FocusController extends core.ViewController {
     }
   }
 
-  private _clearPreviousFocusedRow($tableElement: dxElementWrapper, focusedRowIndex: number): void {
+  private findFocusedRows($tableElement: dxElementWrapper): dxElementWrapper {
     const isNotMasterDetailFocusedRow = (_: number, focusedRow: Element): boolean => {
       const $focusedRowTable = $(focusedRow).closest(`.${this.addWidgetPrefix(VIEW_CLASSES.table)}`);
       return $tableElement.is($focusedRowTable);
     };
 
-    const $prevRowFocusedElement = $tableElement
+    return $tableElement
       .find(FOCUSED_ROW_SELECTOR)
       .filter(isNotMasterDetailFocusedRow);
+  }
+
+  private _clearPreviousFocusedRow($tableElement: dxElementWrapper, focusedRowIndex: number): void {
+    const $prevRowFocusedElement = this.findFocusedRows($tableElement);
 
     $prevRowFocusedElement
       .removeClass(CLASSES.rowFocused)
