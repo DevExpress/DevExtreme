@@ -643,7 +643,7 @@ class HtmlEditor extends Editor<Properties> {
         this._resumeValueChangeAction();
       }
     } else {
-      this._$htmlContainer.html(value);
+      this._$htmlContainer.html(value ? sanitizeHtml(getQuill(), value) : value);
     }
   }
 
