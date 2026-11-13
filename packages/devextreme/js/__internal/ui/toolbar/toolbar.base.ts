@@ -275,7 +275,7 @@ class ToolbarBase<
     const leftWidth = isRTL ? afterWidth : beforeWidth;
     const rightWidth = isRTL ? beforeWidth : afterWidth;
 
-    const centerEl = this._$centerSection.get(0) as HTMLElement;
+    const centerEl = this._$centerSection.get<HTMLElement>(0);
     const centerLeft = centerEl.offsetLeft;
     const centerRight = centerLeft + centerEl.offsetWidth;
 

@@ -85,7 +85,6 @@ class DataGrid extends GridCoreWidget<Properties> {
       },
       {
         device(): boolean {
-          // @ts-expect-error
           return isMaterialBased();
         },
         options: {

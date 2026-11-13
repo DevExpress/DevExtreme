@@ -487,8 +487,8 @@ const rowsView = (
         .find(`.${VIEW_CLASSES.groupCell}[aria-colindex='${columnIndex + 1}']`);
 
       for (let i = 0; i < $cells.length; i += 1) {
-        const cell = $cells.get(i) as HTMLElement;
-        const container = $(cell).find('.dx-datagrid-group-row-container').get(0) as HTMLElement;
+        const cell = $cells.get<HTMLElement>(i);
+        const container = $(cell).find('.dx-datagrid-group-row-container').get<HTMLElement>(0);
         Object.assign(cell.style, styleProps);
         Object.assign(container.style, styleProps);
       }

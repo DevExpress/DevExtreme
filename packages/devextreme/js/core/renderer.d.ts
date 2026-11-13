@@ -54,7 +54,7 @@ export interface dxElementWrapper {
 
   first(): this;
 
-  get(index: number): Element;
+  get<T extends Element = Element>(index: number): T;
 
   hasClass(className: string): boolean;
 

@@ -35,10 +35,10 @@ export const createTreeList = (
   };
 
   const instance = new TreeList(
-    $container.get(0) as HTMLDivElement,
+    $container.get<HTMLDivElement>(0),
     treeListOptions,
   ) as TreeListInstance;
-  const component = new TreeListModel($container.get(0) as HTMLElement);
+  const component = new TreeListModel($container.get<HTMLElement>(0));
 
   jest.runAllTimers();
 

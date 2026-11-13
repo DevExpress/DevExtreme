@@ -1204,7 +1204,7 @@ class Popup<
 
     (forceApplyBindings ?? noop)();
 
-    const overlayContent = this.$overlayContent().get(0) as HTMLElement;
+    const overlayContent = this.$overlayContent().get<HTMLElement>(0);
     const currentHeightStrategyClass = this._chooseHeightStrategy(overlayContent);
 
     this.$content()?.css(this._getHeightCssStyles(currentHeightStrategyClass, overlayContent));
@@ -1303,7 +1303,7 @@ class Popup<
   }
 
   _isAutoHeight(): boolean {
-    return (this.$overlayContent().get(0) as HTMLElement).style.height === 'auto';
+    return this.$overlayContent().get<HTMLElement>(0).style.height === 'auto';
   }
 
   _splitPopupHeight(): Record<string, number> {

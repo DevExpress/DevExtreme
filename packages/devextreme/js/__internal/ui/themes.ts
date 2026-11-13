@@ -318,7 +318,6 @@ export function current(options?) {
 
   if (currentThemeData) {
     $activeThemeLink.attr('href', knownThemes[currentThemeName].url);
-    // @ts-expect-error ts-error
     if (themeReadyCallback.has() || initDeferred.state() !== 'resolved' || options._forceTimeout) {
       waitForThemeLoad(currentThemeName);
     }
@@ -348,28 +347,25 @@ export function init(options): void {
   current(options);
 }
 
-function isTheme(themeRegExp: string, themeName: string): boolean {
-  if (!themeName) {
-    // eslint-disable-next-line no-param-reassign
-    themeName = currentThemeName || readThemeMarker();
-  }
+function isTheme(themeRegExp: string, themeName?: string): boolean {
+  const name: string | null = themeName || currentThemeName || readThemeMarker();
 
-  return new RegExp(themeRegExp).test(themeName);
+  return !!name && new RegExp(themeRegExp).test(name);
 }
 
-export function isMaterial(themeName: string): boolean {
+export function isMaterial(themeName?: string): boolean {
   return isTheme('material', themeName);
 }
 
-export function isFluent(themeName: string): boolean {
+export function isFluent(themeName?: string): boolean {
   return isTheme('fluent', themeName);
 }
 
-export function isMaterialBased(themeName: string): boolean {
+export function isMaterialBased(themeName?: string): boolean {
   return isMaterial(themeName) || isFluent(themeName);
 }
 
-export function isGeneric(themeName: string): boolean {
+export function isGeneric(themeName?: string): boolean {
   return isTheme('generic', themeName);
 }
 
@@ -377,7 +373,7 @@ export function isDark(themeName: string): boolean {
   return isTheme('dark', themeName);
 }
 
-export function isCompact(themeName: string): boolean {
+export function isCompact(themeName?: string): boolean {
   return isTheme('compact', themeName);
 }
 
