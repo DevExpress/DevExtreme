@@ -8,7 +8,8 @@ on:
   pull_request:
     paths-ignore:
       - 'apps/**/*.md'
-  merge_group:
+  push:
+    branches: [26_2]
   workflow_dispatch:
 
 env:
@@ -63,7 +64,7 @@ jobs:
     needs: check-should-run
     if: needs.check-should-run.outputs.should-run == 'true'
 
-    runs-on: ${{ github.event_name == 'merge_group' && 'devextreme-shr2-ondemand' || 'devextreme-shr2' }}
+    runs-on: devextreme-shr2
     timeout-minutes: 15
 
     steps:
@@ -217,7 +218,7 @@ jobs:
         retention-days: 1
 
     - name: Save nx cache
-      if: github.event_name != 'pull_request' && github.event_name != 'merge_group'
+      if: github.event_name != 'pull_request'
       uses: actions/cache/save@v5
       with:
         path: |
@@ -304,7 +305,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix: ${{ fromJson(needs.determine-testcafe-matrix.outputs.matrix) }}
-    runs-on: ${{ github.event_name == 'merge_group' && 'devextreme-shr2-ondemand' || 'devextreme-shr2' }}
+    runs-on: devextreme-shr2
     timeout-minutes: 12
 
     steps:
@@ -472,7 +473,7 @@ jobs:
       needs.check-should-run.outputs.should-run == 'true' &&
       needs.build.result == 'success' &&
       needs.check-quarantine.outputs.should-run != 'false'
-    runs-on: ${{ github.event_name == 'merge_group' && 'devextreme-shr2-ondemand' || 'devextreme-shr2' }}
+    runs-on: devextreme-shr2
     timeout-minutes: 8
 
     steps:
@@ -542,8 +543,8 @@ jobs:
         new_flakes_summary=./artifacts/new-flakes-summary.txt
         new_flakes=./artifacts/flaky-candidates.jsonl
         report_json=./artifacts/flaky-candidates.json
-        # base_ref is empty for push and merge_group, which carry the target elsewhere.
-        base_branch="${{ github.base_ref || github.event.merge_group.base_ref || github.ref_name }}"
+        # base_ref is empty for push, which carries the target in ref_name.
+        base_branch="${{ github.base_ref || github.ref_name }}"
         base_branch="${base_branch#refs/heads/}"
         mkdir -p ./artifacts
         : > "$new_flakes_summary"

@@ -9,8 +9,7 @@ on:
     paths-ignore:
       - 'apps/**/*.md'
   push:
-    branches: [24_2, 25_*]
-  merge_group:
+    branches: [24_2, 25_*, 26_*]
   workflow_dispatch:
 
 env:
@@ -117,7 +116,7 @@ jobs:
           retention-days: 1
 
       - name: Save nx cache
-        if: github.event_name != 'pull_request' && github.event_name != 'merge_group'
+        if: github.event_name != 'pull_request'
         uses: actions/cache/save@v5
         with:
           path: |

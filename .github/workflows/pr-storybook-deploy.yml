@@ -133,7 +133,7 @@ jobs:
           wait-for-pages-deployment: true
 
       - name: Save nx cache
-        if: github.event_name != 'pull_request' && github.event_name != 'merge_group'
+        if: github.event_name != 'pull_request'
         uses: actions/cache/save@v5
         with:
           path: |
