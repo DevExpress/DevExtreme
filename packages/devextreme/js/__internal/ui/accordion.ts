@@ -25,13 +25,13 @@ import type { CollectionItemInfo, CollectionItemKey, ItemRenderInfo } from '@ts/
 import type { CollectionWidgetLiveUpdateProperties } from '@ts/ui/collection/collection_widget.live_update';
 import CollectionWidgetLiveUpdate from '@ts/ui/collection/collection_widget.live_update';
 
-const ACCORDION_CLASS = 'dx-accordion';
+export const ACCORDION_CLASS = 'dx-accordion';
 const ACCORDION_WRAPPER_CLASS = 'dx-accordion-wrapper';
-const ACCORDION_ITEM_CLASS = 'dx-accordion-item';
-const ACCORDION_ITEM_OPENED_CLASS = 'dx-accordion-item-opened';
+export const ACCORDION_ITEM_CLASS = 'dx-accordion-item';
+export const ACCORDION_ITEM_OPENED_CLASS = 'dx-accordion-item-opened';
 const ACCORDION_ITEM_CLOSED_CLASS = 'dx-accordion-item-closed';
-const ACCORDION_ITEM_TITLE_CLASS = 'dx-accordion-item-title';
-const ACCORDION_ITEM_BODY_CLASS = 'dx-accordion-item-body';
+export const ACCORDION_ITEM_TITLE_CLASS = 'dx-accordion-item-title';
+export const ACCORDION_ITEM_BODY_CLASS = 'dx-accordion-item-body';
 const ACCORDION_ITEM_TITLE_CAPTION_CLASS = 'dx-accordion-item-title-caption';
 
 const ACCORDION_ITEM_DATA_KEY = 'dxAccordionItemData';
