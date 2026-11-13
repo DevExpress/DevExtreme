@@ -415,6 +415,15 @@ export class FocusController extends core.ViewController {
     });
   }
 
+  public restoreFocusedRowTabIndex(focusedRowIndex: number): void {
+    const $focusedRows = $(this.getView('rowsView').getRowElement(focusedRowIndex));
+    const hasFocusableCell = $focusedRows.children('[tabindex]').length > 0;
+
+    if (!hasFocusableCell) {
+      $focusedRows.attr('tabindex', this.option('tabindex') || 0);
+    }
+  }
+
   private findFocusedRows($tableElement): dxElementWrapper {
     const isNotMasterDetailFocusedRow = (_, focusedRow) => {
       const $focusedRowTable = $(focusedRow).closest(`.${this.addWidgetPrefix(TABLE_POSTFIX_CLASS)}`);
@@ -649,12 +658,14 @@ const focusDataControllerExtender = (
     const isFocusedRowVisible = focusedRowIndex >= 0;
     const isFocusedRowInChange = !!e.rowIndices?.includes(focusedRowIndex);
 
-    if (
-      isFocusedRowVisible
-      && isFocusedRowInChange
-      && this._focusController.hasStaleFocusedRow(focusedRowIndex)
-    ) {
+    if (!isFocusedRowVisible || !isFocusedRowInChange) {
+      return;
+    }
+
+    if (this._focusController.hasStaleFocusedRow(focusedRowIndex)) {
       this._focusController.updateFocusedRow({ focusedRowKey, preventScroll: true });
+    } else {
+      this._focusController.restoreFocusedRowTabIndex(focusedRowIndex);
     }
   }
 

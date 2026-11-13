@@ -79,4 +79,30 @@ describe('TreeList focus — partial update of the focused row', () => {
     expect(cell.hasAttribute('tabindex')).toBe(true);
     expect(document.activeElement).toBe(cell);
   });
+
+  it('keeps the focused row tab stop when the focused row is expanded with repaintChangesOnly (T1338023)', async () => {
+    const { instance } = createTreeList({
+      dataSource: DATA,
+      columns: ['id', 'name'],
+      focusedRowEnabled: true,
+      focusedRowKey: 1,
+      repaintChangesOnly: true,
+      autoExpandAll: false,
+    });
+    await flushAsync();
+
+    const row = $(instance.getRowElement(0)).get(0) as HTMLElement;
+    instance.focus(row);
+    await flushAsync();
+    row.dispatchEvent(new KeyboardEvent('keydown', { key: 'Shift', bubbles: true }));
+
+    expect(document.activeElement).toBe(row);
+
+    const expanding = instance.expandRow(1);
+    await flushAsync();
+    await expanding;
+
+    expect(visibleKeys(instance)).toEqual([1, 11, 2]);
+    expect(row.hasAttribute('tabindex')).toBe(true);
+  });
 });
