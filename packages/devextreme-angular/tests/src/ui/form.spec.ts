@@ -218,12 +218,12 @@ describe('DxForm', () => {
       const fixture = TestBed.createComponent(TestContainerComponent);
       fixture.detectChanges();
       const formInstance = getWidget(fixture);
-      const spy = spyOn(formInstance, 'resetOption');
+      const spy = vi.spyOn(formInstance, 'resetOption').mockImplementation(() => {});
 
       fixture.componentInstance.labelValues = [{ name: 'label1' }, { name: 'label2' }, { name: 'label3' }];
       detectChanges(fixture);
 
-      expect(spy.calls.count()).toBe(0);
+      expect(spy.mock.calls.length).toBe(0);
       expect(formInstance.option('items[0].items[0].label.text')).toBe('label1');
     });
 
@@ -244,12 +244,12 @@ describe('DxForm', () => {
       fixture.detectChanges();
 
       const formInstance = getWidget(fixture);
-      const spy = spyOn(formInstance, 'resetOption');
+      const spy = vi.spyOn(formInstance, 'resetOption').mockImplementation(() => {});
 
       fixture.componentInstance.labelValues = [{ name: 'label1' }, { name: 'label2' }, { name: 'label3' }];
       detectChanges(fixture);
 
-      expect(spy.calls.count()).toBe(0);
+      expect(spy.mock.calls.length).toBe(0);
       expect(formInstance.option('items[0].label.text')).toBe('label1');
     });
 
@@ -270,12 +270,12 @@ describe('DxForm', () => {
       fixture.detectChanges();
 
       const formInstance = getWidget(fixture);
-      const spy = spyOn(formInstance, 'resetOption');
+      const spy = vi.spyOn(formInstance, 'resetOption').mockImplementation(() => {});
 
       fixture.componentInstance.labelValuesSecond.splice(1, 1);
       detectChanges(fixture);
 
-      expect(spy.calls.count()).toBe(0);
+      expect(spy.mock.calls.length).toBe(0);
       expect(formInstance.option('items[1].label.text')).toBe('label3');
     });
 
@@ -299,13 +299,13 @@ describe('DxForm', () => {
       fixture.detectChanges();
 
       const formInstance = getWidget(fixture);
-      const spy = spyOn(formInstance, 'resetOption').and.callThrough();
+      const spy = vi.spyOn(formInstance, 'resetOption');
 
       fixture.componentInstance.labelValuesSecond.splice(1, 1);
       fixture.componentInstance.condition = false;
       detectChanges(fixture);
 
-      expect(spy.calls.count()).toBe(1);
+      expect(spy.mock.calls.length).toBe(1);
       expect(formInstance.option('items[1].label.text')).toBe('label3');
       expect(formInstance.option('items[2].label.text')).toBe(undefined);
     });
@@ -340,14 +340,14 @@ describe('DxForm', () => {
       fixture.detectChanges();
 
       const formInstance = getWidget(fixture);
-      const spy = spyOn(formInstance, 'resetOption').and.callThrough();
+      const spy = vi.spyOn(formInstance, 'resetOption');
 
       fixture.componentInstance.labelValues.splice(1, 1);
       fixture.componentInstance.labelValuesSecond.splice(1, 1);
       fixture.componentInstance.condition = false;
       detectChanges(fixture);
 
-      expect(spy.calls.count()).toBe(2);
+      expect(spy.mock.calls.length).toBe(2);
       expect(formInstance.option('items[0].items[1].label.text')).toBe(undefined);
       expect(formInstance.option('items[1].items[2].label.text')).toBe('label3');
       expect(formInstance.option('items[1].items[3].label.text')).toBe(undefined);

@@ -97,6 +97,7 @@ catalog:
   vue-eslint-parser: 10.4.1
   globals: 15.14.0
   jquery: 4.0.0
+  playwright: 1.62.1
   stylelint: 16.22.0
   testcafe: 3.7.5
   zod: 4.6.7

@@ -12,7 +12,6 @@ import ODataStore from 'devextreme/data/odata/store';
 import ajax from 'devextreme/core/utils/ajax';
 import { DxFileUploaderComponent, DxFileUploaderModule } from 'devextreme-angular';
 import { Observable } from 'rxjs';
-import createSpy = jasmine.createSpy;
 import RemoteFileSystemProvider from 'devextreme/file_management/remote_provider';
 import FileSystemItem from 'devextreme/file_management/file_system_item';
 
@@ -20,7 +19,7 @@ const interceptors: Record<string, () => void> = {};
 
 interceptors.interceptorFn = () => {};
 
-jasmine.DEFAULT_TIMEOUT_INTERVAL = 1000;
+vi.setConfig({ testTimeout: 1000 });
 
 @Injectable()
 export class TestInterceptor implements HttpInterceptor {
@@ -109,7 +108,7 @@ describe('Ajax request using DxHttpModule', () => {
     httpTestingControllerMock?.verify();
   });
 
-  it('request should be correctly timeouted', (done) => {
+  it('request should be correctly timeouted', () => new Promise<void>((done) => {
     const url = 'http://somefakedomain1221.com/json-url';
 
     ajax.sendRequest({
@@ -121,7 +120,7 @@ describe('Ajax request using DxHttpModule', () => {
     });
 
     httpTestingControllerMock.expectOne(url);
-  });
+  }));
 
   it('FormData without the upload option is sent as is', () => {
     const url = 'http://somefakedomain1221.com/form-data-url';
@@ -162,7 +161,7 @@ describe('Ajax request using DxHttpModule', () => {
     req.flush({});
   });
 
-  it('remote provider should upload a file', (done) => {
+  it('remote provider should upload a file', () => new Promise<void>((done) => {
     const url = 'http://somefakedomain1221.com/json-url';
 
     const remoteProvider = new RemoteFileSystemProvider({
@@ -195,11 +194,11 @@ describe('Ajax request using DxHttpModule', () => {
     const req = httpTestingControllerMock.expectOne(url);
 
     req.flush({ success: true });
-  });
+  }));
 
-  it('should be aborted with correct status', (done) => {
+  it('should be aborted with correct status', () => new Promise<void>((done) => {
     const url = '/heavy-url';
-    const failCallback = createSpy();
+    const failCallback = vi.fn();
 
     const request = ajax.sendRequest({
       url,
@@ -216,10 +215,10 @@ describe('Ajax request using DxHttpModule', () => {
 
     expect(failCallback).toHaveBeenCalledTimes(1);
     httpTestingControllerMock.expectOne(url);
-  });
+  }));
 
-  it('dataSource load() should be intercepted', (done) => {
-    const interceptorFnSpy = spyOn(interceptors, 'interceptorFn');
+  it('dataSource load() should be intercepted', () => new Promise<void>((done) => {
+    const interceptorFnSpy = vi.spyOn(interceptors, 'interceptorFn').mockImplementation(() => {});
     const url = 'https://js.devexpress.com/Demos/WidgetsGallery/odata/HierarchicalItems';
     const dataSource = new DataSource({
       store: new ODataStore({
@@ -239,10 +238,10 @@ describe('Ajax request using DxHttpModule', () => {
     req.flush([{ id: 0, text: 'TEST' }]);
 
     expect(dataSource.items()).toEqual([{ id: 0, text: 'TEST' }]);
-  });
+  }));
 
-  it('fileUploader have to upload file and interceptor is called', (done) => {
-    const interceptorFnSpy = spyOn(interceptors, 'interceptorFn');
+  it('fileUploader have to upload file and interceptor is called', () => new Promise<void>((done) => {
+    const interceptorFnSpy = vi.spyOn(interceptors, 'interceptorFn').mockImplementation(() => {});
 
     const callbacks = {
       onBeforeSend() {},
@@ -256,7 +255,7 @@ describe('Ajax request using DxHttpModule', () => {
 
     const { instance } = fixture.componentInstance.fileUploader;
 
-    Object.keys(callbacks).forEach((cb) => instance.option(cb, callbacks[cb] = createSpy()));
+    Object.keys(callbacks).forEach((cb) => instance.option(cb, callbacks[cb] = vi.fn()));
 
     instance.upload();
 
@@ -276,11 +275,11 @@ describe('Ajax request using DxHttpModule', () => {
       expect(resultText).toEqual('Uploaded');
       done();
     }, 500);
-  });
+  }));
 
   it('upload onprogress should report the actual total, not a running sum of loaded values', () => {
     const url = 'http://somefakedomain1221.com/upload-url';
-    const onprogress = createSpy();
+    const onprogress = vi.fn();
 
     ajax.sendRequest({
       url,
@@ -310,13 +309,13 @@ describe('Ajax request using DxHttpModule', () => {
     });
 
     expect(onprogress).toHaveBeenCalledTimes(3);
-    expect(onprogress.calls.allArgs().map(([e]) => e.total)).toEqual([1000000, 1000000, 1000000]);
-    expect(onprogress.calls.allArgs().map(([e]) => e.loaded)).toEqual([250000, 500000, 750000]);
+    expect(onprogress.mock.calls.map(([e]) => e.total)).toEqual([1000000, 1000000, 1000000]);
+    expect(onprogress.mock.calls.map(([e]) => e.loaded)).toEqual([250000, 500000, 750000]);
 
     req.flush([]);
   });
 
-  it('fileUploader should be aborted and callbacks are called correctly', (done) => {
+  it('fileUploader should be aborted and callbacks are called correctly', () => new Promise<void>((done) => {
     const callbacks = {
       onUploadAborted() {},
       onUploaded() {},
@@ -328,7 +327,7 @@ describe('Ajax request using DxHttpModule', () => {
 
     const { instance } = fixture.componentInstance.fileUploader;
 
-    Object.keys(callbacks).forEach((cb) => instance.option(cb, callbacks[cb] = createSpy()));
+    Object.keys(callbacks).forEach((cb) => instance.option(cb, callbacks[cb] = vi.fn()));
 
     instance.upload();
 
@@ -343,10 +342,10 @@ describe('Ajax request using DxHttpModule', () => {
       expect(callbacks.onUploaded).toHaveBeenCalledTimes(0);
       done();
     }, 0);
-  });
+  }));
 
-  it('JSONP cross domain request should be intercepted', (done) => {
-    const interceptorFnSpy = spyOn(interceptors, 'interceptorFn');
+  it('JSONP cross domain request should be intercepted', () => new Promise<void>((done) => {
+    const interceptorFnSpy = vi.spyOn(interceptors, 'interceptorFn').mockImplementation(() => {});
     const url = 'http://somefakedomain1221.com/json-url';
     const dataSource = new DataSource({
       store: new ODataStore({
@@ -372,15 +371,15 @@ describe('Ajax request using DxHttpModule', () => {
     expect(request.method).toBe('JSONP');
     expect(callbackName).toBe('JSONP_CALLBACK');
     expect(dataSource.items()).toEqual([{ id: 0, text: 'TEST' }]);
-  });
+  }));
 
-  it('script cross domain request (not interceptable) should create script element with src = url', (done) => {
+  it('script cross domain request (not interceptable) should create script element with src = url', () => new Promise<void>((done) => {
     const document = domAdapter.getDocument();
     const createElementOrig = document.createElement.bind(document);
 
     let scriptEl;
 
-    spyOn(document, 'createElement').and.callFake((...args) => {
+    vi.spyOn(document, 'createElement').mockImplementation((...args) => {
       const el = createElementOrig(...args);
       if (args[0] === 'script') {
         scriptEl = el;
@@ -398,11 +397,11 @@ describe('Ajax request using DxHttpModule', () => {
       expect(scriptEl?.src).toContain(url);
       done();
     });
-  });
+  }));
 
-  it('should request jsonp (same domain) create callback and call it, interceptor is called ', (done) => {
+  it('should request jsonp (same domain) create callback and call it, interceptor is called ', () => new Promise<void>((done) => {
     const url = '/same-domain';
-    const interceptorFnSpy = spyOn(interceptors, 'interceptorFn');
+    const interceptorFnSpy = vi.spyOn(interceptors, 'interceptorFn').mockImplementation(() => {});
 
     ajax.sendRequest({
       url,
@@ -420,14 +419,14 @@ describe('Ajax request using DxHttpModule', () => {
     expect(req.request.urlWithParams).toContain(`${url}?callback1=callbackName&`);
 
     req.flush('callbackName({ok: 1})');
-  });
+  }));
 
-  it('should request script (same domain) and evaluate it, interceptor is called', (done) => {
+  it('should request script (same domain) and evaluate it, interceptor is called', () => new Promise<void>((done) => {
     const url = '/same-domain/script';
-    const interceptorFnSpy = spyOn(interceptors, 'interceptorFn');
+    const interceptorFnSpy = vi.spyOn(interceptors, 'interceptorFn').mockImplementation(() => {});
     const document = domAdapter.getDocument();
     (document.defaultView as any).callback = () => {};
-    const callbackSpy = spyOn(document.defaultView as any, 'callback');
+    const callbackSpy = vi.spyOn(document.defaultView as any, 'callback').mockImplementation(() => {});
 
     ajax.sendRequest({
       url,
@@ -443,5 +442,5 @@ describe('Ajax request using DxHttpModule', () => {
     expect(req.request.urlWithParams).toContain(url);
 
     req.flush('callback()');
-  });
+  }));
 });
