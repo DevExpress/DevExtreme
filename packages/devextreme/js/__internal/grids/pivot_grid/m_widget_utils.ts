@@ -1,6 +1,7 @@
 import localizationDate from '@js/common/core/localization/date';
 import ArrayStore from '@js/common/data/array_store';
 import { DataSource } from '@js/common/data/data_source/data_source';
+import type { ScalarFilterValue } from '@js/common/grids';
 import domAdapter from '@js/core/dom_adapter';
 import coreAjaxUtils from '@js/core/utils/ajax';
 import type { DeferredObj } from '@js/core/utils/deferred';
@@ -21,6 +22,7 @@ import type {
   ExpandedLevelOptions,
   ForeachTree,
   PathItem,
+  PivotGridAxis,
   PivotGridField,
   PivotGridFilterField,
 } from './types';
@@ -229,7 +231,7 @@ function mergeArraysByMaxValue(values1: number[], values2: number[]): number[] {
 /**
  * @returns Maximum expanded level in the axis
  */
-function getExpandedLevel(options: ExpandedLevelOptions, axisName: 'rows' | 'columns'): number {
+function getExpandedLevel(options: ExpandedLevelOptions, axisName: PivotGridAxis): number {
   const fields = options[axisName];
   const expandedPaths = (axisName === 'columns' ? options.columnExpandedPaths : options.rowExpandedPaths) || [];
 
@@ -369,7 +371,7 @@ function setDefaultFieldValueFormatting(field: PivotGridField): void {
 
 function getFiltersByPath(
   fields: PivotGridField[],
-  path: unknown[] = [],
+  path: ScalarFilterValue[] = [],
 ): PivotGridFilterField[] {
   return path.map((value, i) => extend({}, fields[i], {
     groupIndex: null,
