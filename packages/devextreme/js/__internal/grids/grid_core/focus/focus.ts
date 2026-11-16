@@ -608,7 +608,7 @@ export class FocusController extends core.ViewController {
       return undefined;
     }
 
-    const tabIndex = this.option('tabindex') || 0;
+    const tabIndex = this.option('tabIndex') ?? 0;
     const rowsView = this.getView('rowsView');
     const $row = $(rowsView._getRowElements($tableElement).eq(focusedRowIndex));
 
