@@ -21,7 +21,6 @@ const popups: Popup[] = [];
 
 const createPopup = async (options: Partial<PopupProperties>): Promise<PopupModel> => {
   const $element = $('<div>').appendTo(document.body);
-  // @ts-expect-error DOMComponent constructor is not typed for direct instantiation
   const instance = new Popup($element, options);
   popups.push(instance);
 

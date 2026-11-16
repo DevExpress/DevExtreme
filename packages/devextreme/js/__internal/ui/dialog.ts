@@ -256,7 +256,6 @@ export const custom = (params: DialogParams): BaseDialog => {
     },
   };
 
-  // @ts-expect-error Incorrect constructor usage
   popupInstance = new Popup($element, options);
 
   popupInstance.$wrapper()

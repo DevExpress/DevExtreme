@@ -326,7 +326,6 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
       contentAlignment: 'center',
       showBackground: true,
     };
-    // @ts-expect-error no .d.ts for private component
     this._informer = new Informer($informer.get(0), options);
   }
 

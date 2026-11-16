@@ -36,9 +36,9 @@ QUnit.module('default', {
             }
         };
         this.TestComponent = class extends DOMComponent {
-            ctor(element, options) {
+            _beforeCreateOptions(element) {
                 this._traceLog = [];
-                super.ctor(element, options);
+                super._beforeCreateOptions(element);
             }
 
             _optionsByReference() {
@@ -695,11 +695,6 @@ QUnit.module('default', {
         let shownFired = 0;
 
         class TestComponent extends this.TestComponent {
-            ctor(element, options) {
-                this.NAME = 'TestComponent';
-                super.ctor(element, options);
-            }
-
             _visibilityChanged(visible) {
                 if(visible) {
                     shownFired++;
@@ -732,22 +727,12 @@ QUnit.module('default', {
         };
 
         class TestComponent1 extends this.TestComponent {
-            ctor(element, options) {
-                this.NAME = 'TestComponent1';
-                super.ctor(element, options);
-            }
-
             _visibilityChanged(visible) {
                 visibilityChanged(visible);
             }
         }
 
         class TestComponent2 extends this.TestComponent {
-            ctor(element, options) {
-                this.NAME = 'TestComponent2';
-                super.ctor(element, options);
-            }
-
             _visibilityChanged(visible) {
                 visibilityChanged(visible);
             }
@@ -773,11 +758,6 @@ QUnit.module('default', {
         };
 
         class TestComponent extends this.TestComponent {
-            ctor(element, options) {
-                this.NAME = 'TestComponent1';
-                super.ctor(element, options);
-            }
-
             _visibilityChanged(visible) {
                 visibilityChanged(visible);
             }
@@ -808,11 +788,6 @@ QUnit.module('default', {
         };
 
         class TestComponent extends this.TestComponent {
-            ctor(element, options) {
-                this.NAME = 'TestComponent1';
-                super.ctor(element, options);
-            }
-
             _visibilityChanged(visible) {
                 visibilityChanged(visible);
             }
@@ -843,11 +818,6 @@ QUnit.module('default', {
         };
 
         class TestComponent extends this.TestComponent {
-            ctor(element, options) {
-                this.NAME = 'TestComponent1';
-                super.ctor(element, options);
-            }
-
             _visibilityChanged(visible) {
                 visibilityChanged(visible);
             }
@@ -873,11 +843,6 @@ QUnit.module('default', {
         let dimensionChanged = 0;
 
         class TestComponent extends this.TestComponent {
-            ctor(element, options) {
-                this.NAME = 'TestComponent';
-                super.ctor(element, options);
-            }
-
             _dimensionChanged(visible) {
                 dimensionChanged++;
             }
@@ -897,11 +862,6 @@ QUnit.module('default', {
         let dimensionChanged = 0;
 
         class TestComponent extends this.TestComponent {
-            ctor(element, options) {
-                this.NAME = 'TestComponent';
-                super.ctor(element, options);
-            }
-
             _visibilityChanged() { }
 
             _dimensionChanged() {

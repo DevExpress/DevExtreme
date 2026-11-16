@@ -65,6 +65,19 @@ class DOMComponent<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   _templateManager!: any;
 
+  constructor(element: Element | dxElementWrapper, options?: unknown) {
+    super(options, element);
+
+    const validationAlreadyPerformed = peekValidationPerformed();
+    // @ts-expect-error
+    license.validateLicense(config().licenseKey);
+    if (!validationAlreadyPerformed && peekValidationPerformed()) {
+      config({ licenseKey: '' });
+    }
+
+    uiLayerInitialized.resolve();
+  }
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   static getInstance<T = any>(element: Element | dxElementWrapper): T {
     return getInstanceByElement<T>($(element), this);
@@ -87,24 +100,14 @@ class DOMComponent<
     };
   }
 
-  ctor(element: Element, options: TProperties): void {
+  _beforeCreateOptions(element: Element | dxElementWrapper): void {
     this._customClass = null;
 
     this._createElement(element);
     attachInstanceToElement(this._$element, this, this._dispose);
-
-    super.ctor(options);
-    const validationAlreadyPerformed = peekValidationPerformed();
-    // @ts-expect-error
-    license.validateLicense(config().licenseKey);
-    if (!validationAlreadyPerformed && peekValidationPerformed()) {
-      config({ licenseKey: '' });
-    }
-
-    uiLayerInitialized.resolve();
   }
 
-  _createElement(element: Element): void {
+  _createElement(element: Element | dxElementWrapper): void {
     this._$element = $(element);
   }
 

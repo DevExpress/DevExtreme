@@ -50,7 +50,6 @@ import eventsEngine from '@ts/events/core/events_engine';
 import type {
   CollectionItemInfo,
   CollectionItemKey,
-  Constructor,
   DataChange,
   InkRippleEvent,
   PostprocessRenderItemInfo,
@@ -90,7 +89,7 @@ const SELECT_ALL_ITEM_SELECTOR = '.dx-list-select-all';
 
 const LIST_FEEDBACK_SHOW_TIMEOUT = 70;
 
-type ScrollViewConstructor = Constructor<ScrollViewType>;
+type ScrollViewConstructor = typeof ScrollView;
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 let _scrollView: ScrollViewConstructor | null = null;
