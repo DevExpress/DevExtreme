@@ -23,9 +23,7 @@ export const test = base.extend<TestOptions>({
 
     page.on('pageerror', (error) => pageErrors.push(error.stack ?? error.message));
 
-    // The Material themes import Roboto from Google Fonts, and what it serves is out of our hands:
-    // some CI runs got a variable font instead of the static files, and text of weight 500 came out
-    // a few pixels different. Without the import, the theme uses the Roboto it bundles.
+    // Material themes fall back to their bundled Roboto instead of whatever Google Fonts serves.
     await page.context().route(GOOGLE_FONTS, (route) => route.fulfill({ contentType: 'text/css' }));
 
     await page.setViewportSize({ width, height });
