@@ -1,5 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, ViewChild, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import {
+  Component, enableProdMode, inject, viewChild,
+} from '@angular/core';
 import { HttpClient, provideHttpClient, withFetch } from '@angular/common/http';
 
 import { DxDiagramModule, DxDiagramComponent } from 'devextreme-angular';
@@ -19,11 +21,11 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  @ViewChild(DxDiagramComponent, { static: false }) diagram: DxDiagramComponent;
+  private readonly diagram = viewChild.required(DxDiagramComponent);
 
-  constructor(http: HttpClient) {
-    http.get('../../../../data/diagram-flow.json').subscribe({
-      next: (data) => { this.diagram.instance.import(JSON.stringify(data)); },
+  constructor() {
+    inject(HttpClient).get('../../../../data/diagram-flow.json').subscribe({
+      next: (data) => { this.diagram().instance.import(JSON.stringify(data)); },
       error: () => { throw new Error('Data Loading Error'); },
     });
   }
@@ -44,7 +46,6 @@ export class AppComponent {
 
 bootstrapApplication(AppComponent, {
   providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
     provideHttpClient(withFetch()),
   ],
 });

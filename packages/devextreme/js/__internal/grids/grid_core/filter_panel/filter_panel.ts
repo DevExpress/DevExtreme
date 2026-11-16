@@ -1,5 +1,4 @@
 /* eslint-disable max-classes-per-file */
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import messageLocalization from '@js/common/core/localization/message';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
@@ -10,6 +9,7 @@ import type { ValueChangedEvent as CheckBoxValueChangedEvent } from '@js/ui/chec
 import CheckBox from '@js/ui/check_box';
 import type { CustomOperation } from '@js/ui/filter_builder';
 import inflector from '@ts/core/utils/inflector';
+import eventsEngine from '@ts/events/core/events_engine';
 import type {
   Condition, ConditionValue, Criteria, FilterBuilderField, FilterCustomOperation,
 } from '@ts/filter_builder/types';

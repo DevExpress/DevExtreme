@@ -4,9 +4,11 @@ import {
 import type { ProcessedItem } from '@ts/grids/grid_core/data_controller/types';
 import type { RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
 
+import type { GroupItemData } from '../types';
 import {
   createOffsetFilter,
   getGroupColumnIndices,
+  getGroupCount,
   isGroupNode,
   isGroupRow,
   isSameContinuationState,
@@ -227,5 +229,13 @@ describe('createOffsetFilter', () => {
     );
 
     expect(filter).toEqual([['g', '>', 'A'], 'and', ['f', '=', 1]]);
+  });
+});
+
+describe('getGroupCount', () => {
+  it('should count no items when a group holds non-array items', () => {
+    const items = { key: 'B', items: null } as unknown as GroupItemData[];
+
+    expect(getGroupCount({ key: 'A', items }, 2)).toBe(0);
   });
 });

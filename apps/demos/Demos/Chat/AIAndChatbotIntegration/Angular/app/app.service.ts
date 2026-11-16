@@ -1,5 +1,4 @@
-import { Injectable } from '@angular/core';
-import { Observable, BehaviorSubject } from 'rxjs';
+import { Injectable, inject, signal } from '@angular/core';
 import { unified } from 'unified';
 import remarkParse from 'remark-parse';
 import remarkRehype from 'remark-rehype';
@@ -14,49 +13,52 @@ import { AiService, type AIMessage } from './ai/ai.service';
 })
 
 export class AppService {
-  aiService: AiService;
+  private readonly aiService = inject(AiService);
 
-  REGENERATION_TEXT = 'Regeneration...';
+  readonly REGENERATION_TEXT = 'Regeneration...';
 
-  ALERT_TIMEOUT = 1000 * 60;
+  private readonly ALERT_TIMEOUT = 1000 * 60;
 
-  user: DxChatTypes.User = {
+  readonly user: DxChatTypes.User = {
     id: 'user',
   };
 
-  assistant: DxChatTypes.User = {
+  private readonly assistant: DxChatTypes.User = {
     id: 'assistant',
     name: 'Virtual Assistant',
   };
 
-  store: any[] = [];
+  private store: any[] = [];
 
-  messages: AIMessage[] = [];
+  private messages: AIMessage[] = [];
 
-  alerts: DxChatTypes.Alert[] = [];
+  private readonly customStore = new CustomStore({
+    key: 'id',
+    load: () => new Promise((resolve) => {
+      setTimeout(() => {
+        resolve([...this.store]);
+      }, 0);
+    }),
+    insert: (message) => new Promise((resolve) => {
+      setTimeout(() => {
+        this.store.push(message);
+        resolve(message);
+      });
+    }),
+  });
 
-  customStore: CustomStore;
+  readonly dataSource = new DataSource({
+    store: this.customStore,
+    paginate: false,
+  });
 
-  dataSource: DataSource;
+  private readonly typingUsersState = signal<DxChatTypes.User[]>([]);
 
-  typingUsersSubject: BehaviorSubject<DxChatTypes.User[]> = new BehaviorSubject([]);
+  readonly typingUsers = this.typingUsersState.asReadonly();
 
-  alertsSubject: BehaviorSubject<DxChatTypes.Alert[]> = new BehaviorSubject([]);
+  private readonly alertsState = signal<DxChatTypes.Alert[]>([]);
 
-  constructor(aiService: AiService) {
-    this.aiService = aiService;
-    this.initDataSource();
-    this.typingUsersSubject.next([]);
-    this.alertsSubject.next([]);
-  }
-
-  get typingUsers$(): Observable<DxChatTypes.User[]> {
-    return this.typingUsersSubject.asObservable();
-  }
-
-  get alerts$(): Observable<DxChatTypes.Alert[]> {
-    return this.alertsSubject.asObservable();
-  }
+  readonly alerts = this.alertsState.asReadonly();
 
   getDictionary() {
     return {
@@ -68,35 +70,13 @@ export class AppService {
     };
   }
 
-  initDataSource() {
-    this.customStore = new CustomStore({
-      key: 'id',
-      load: () => new Promise((resolve) => {
-        setTimeout(() => {
-          resolve([...this.store]);
-        }, 0);
-      }),
-      insert: (message) => new Promise((resolve) => {
-        setTimeout(() => {
-          this.store.push(message);
-          resolve(message);
-        });
-      }),
-    });
-
-    this.dataSource = new DataSource({
-      store: this.customStore,
-      paginate: false,
-    });
-  }
-
-  getAIResponse(messages: AIMessage[]): Promise<string> {
+  private getAIResponse(messages: AIMessage[]): Promise<string> {
     return this.aiService.getAIResponse(messages) as Promise<string>;
   }
 
-  async processMessageSending(message: DxChatTypes.Message) {
+  private async processMessageSending(message: DxChatTypes.Message) {
     this.messages.push({ role: 'user', content: message.text });
-    this.typingUsersSubject.next([this.assistant]);
+    this.typingUsersState.set([this.assistant]);
 
     try {
       const aiResponse = await this.getAIResponse(this.messages);
@@ -105,17 +85,17 @@ export class AppService {
         setTimeout(resolve, 200);
       });
 
-      this.typingUsersSubject.next([]);
+      this.typingUsersState.set([]);
       this.messages.push({ role: 'assistant', content: aiResponse });
       this.renderAssistantMessage(aiResponse);
     } catch (err: unknown) {
-      this.typingUsersSubject.next([]);
+      this.typingUsersState.set([]);
       this.messages.pop();
       this.alertError(this.getErrorMessage(err));
     }
   }
 
-  getErrorMessage(err: unknown): string {
+  private getErrorMessage(err: unknown): string {
     if (err instanceof Error) return err.message;
     if (typeof err === 'string') return err;
     return 'Unknown error';
@@ -132,7 +112,7 @@ export class AppService {
     }]);
   }
 
-  renderAssistantMessage(text: string) {
+  private renderAssistantMessage(text: string) {
     const message = {
       id: Date.now(),
       timestamp: new Date(),
@@ -143,7 +123,7 @@ export class AppService {
     this.dataSource.store().push([{ type: 'insert', data: message }]);
   }
 
-  alertError(message: string) {
+  private alertError(message: string) {
     this.setAlerts([{
       message,
     }]);
@@ -153,9 +133,8 @@ export class AppService {
     }, this.ALERT_TIMEOUT);
   }
 
-  setAlerts(alerts: DxChatTypes.Alert[]) {
-    this.alerts = alerts;
-    this.alertsSubject.next(alerts);
+  private setAlerts(alerts: DxChatTypes.Alert[]) {
+    this.alertsState.set(alerts);
   }
 
   async regenerate() {
@@ -187,14 +166,14 @@ export class AppService {
     this.store = [];
     this.messages = [];
     this.setAlerts([]);
-    this.typingUsersSubject.next([]);
+    this.typingUsersState.set([]);
     this.dataSource.reload();
   }
 
   async onMessageEntered({ message, event }: DxChatTypes.MessageEnteredEvent) {
     this.dataSource.store().push([{ type: 'insert', data: { id: Date.now(), ...message } }]);
 
-    if (!this.alerts.length) {
+    if (!this.alerts().length) {
       await this.processMessageSending(message, event);
     }
   }

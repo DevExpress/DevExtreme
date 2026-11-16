@@ -1,4 +1,4 @@
-import type { GroupingDataSourceAdapter } from '../m_grouping';
+import type { GroupingDataSourceAdapter } from '../types';
 
 export const createDataSourceAdapterStub = (): GroupingDataSourceAdapter => ({
   option: (): undefined => undefined,

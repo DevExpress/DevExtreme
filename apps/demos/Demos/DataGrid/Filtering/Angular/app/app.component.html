@@ -5,11 +5,11 @@
   [showBorders]="true"
 >
   <dxo-data-grid-filter-row
-    [visible]="showFilterRow"
-    [applyFilter]="currentFilter"
+    [visible]="showFilterRow()"
+    [applyFilter]="currentFilter()"
   ></dxo-data-grid-filter-row>
   <dxo-data-grid-header-filter
-    [visible]="showHeaderFilter"
+    [visible]="showHeaderFilter()"
   ></dxo-data-grid-header-filter>
   <dxo-data-grid-search-panel
     [visible]="true"
@@ -75,7 +75,7 @@
       [(value)]="currentFilter"
       valueExpr="key"
       displayExpr="name"
-      [disabled]="!showFilterRow"
+      [disabled]="!showFilterRow()"
     ></dx-select-box>
   </div>
   <div class="option">

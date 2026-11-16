@@ -1,0 +1,19 @@
+{
+  "name": "minimatch-v7-v10-patch",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Patch for minimatch 7.x-10.x: restores makeRe() on top of minimatch 11",
+  "license": "MIT",
+  "main": "index.js",
+  "exports": {
+    ".": {
+      "import": "./index.mjs",
+      "require": "./index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "dependencies": {
+    "minimatch": "^11.0.4",
+    "picomatch": "^4.0.7"
+  }
+}

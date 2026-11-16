@@ -1,4 +1,4 @@
-@if (isConfirmed) {
+@if (isConfirmed()) {
 <div class="summary-item-header center">
   Your booking request was submitted.
 </div>
@@ -8,12 +8,11 @@
     <div class="summary-item-header">Dates</div>
     <div class="separator"></div>
     <div>
-      <span class="summary-item-label">Check-in Date: </span
-      >{{ getCheckInDate() }}
+      <span class="summary-item-label">Check-in Date: </span>{{ checkInDate() }}
     </div>
     <div>
       <span class="summary-item-label">Check-out Date: </span
-      >{{ getCheckOutDate() }}
+      >{{ checkOutDate() }}
     </div>
   </div>
 
@@ -22,15 +21,15 @@
     <div class="separator"></div>
     <div
       ><span class="summary-item-label">Adults: </span
-      >{{ formData.adultsCount }}</div
+      >{{ formData().adultsCount }}</div
     >
     <div
       ><span class="summary-item-label">Children: </span
-      >{{ formData.childrenCount }}</div
+      >{{ formData().childrenCount }}</div
     >
     <div
       ><span class="summary-item-label">Pets: </span
-      >{{ formData.petsCount }}</div
+      >{{ formData().petsCount }}</div
     >
   </div>
 
@@ -39,19 +38,19 @@
     <div class="separator"></div>
     <div
       ><span class="summary-item-label">Room Type: </span
-      >{{ formData.roomType }}</div
+      >{{ formData().roomType }}</div
     >
     <div
       ><span class="summary-item-label">Check-out Date: </span
-      >{{ formData.mealPlan }}</div
+      >{{ formData().mealPlan }}</div
     >
   </div>
 
-  @if (!!formData.additionalRequest) {
+  @if (!!formData().additionalRequest) {
   <div class="summary-item">
     <div class="summary-item-header">Additional Requests</div>
     <div class="separator"></div>
-    <div>{{ formData.additionalRequest }}</div>
+    <div>{{ formData().additionalRequest }}</div>
   </div>
   }
 </div>

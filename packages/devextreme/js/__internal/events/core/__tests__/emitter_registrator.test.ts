@@ -8,7 +8,7 @@ import {
   it,
   jest,
 } from '@jest/globals';
-import eventsEngine from '@js/common/core/events/core/events_engine';
+import eventsEngine from '@ts/events/core/events_engine';
 
 describe('EventManager gesture emitter lookup + Shadow DOM (T1329805)', () => {
   // eslint-disable-next-line @typescript-eslint/init-declarations

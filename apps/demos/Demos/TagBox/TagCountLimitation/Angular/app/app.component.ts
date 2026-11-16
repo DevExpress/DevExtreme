@@ -1,7 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import { Component, enableProdMode, inject } from '@angular/core';
 import { DxTagBoxModule, DxTagBoxTypes } from 'devextreme-angular/ui/tag-box';
-import { Product, Service } from './app.service';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -18,14 +18,9 @@ if (!/localhost/.test(document.location.host)) {
 })
 
 export class AppComponent {
-  products: Product[];
+  readonly products = inject(Service).getProducts();
 
-  slicedProducts: Product[];
-
-  constructor(service: Service) {
-    this.products = service.getProducts();
-    this.slicedProducts = this.products.slice(0, 5);
-  }
+  readonly slicedProducts = this.products.slice(0, 5);
 
   onMultiTagPreparing(args: DxTagBoxTypes.MultiTagPreparingEvent) {
     const selectedItemsLength = args.selectedItems.length;
@@ -39,8 +34,4 @@ export class AppComponent {
   }
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

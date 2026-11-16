@@ -1,7 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import { Component, enableProdMode, inject, signal } from '@angular/core';
 import { DxDataGridModule, DxButtonModule } from 'devextreme-angular';
-import { Service, Employee, State } from './app.service';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -18,28 +18,21 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  dataSource: Employee[];
+  private readonly service = inject(Service);
 
-  states: State[];
+  readonly dataSource = this.service.getEmployees();
 
-  events: string[] = [];
+  readonly states = this.service.getStates();
 
-  constructor(service: Service) {
-    this.dataSource = service.getEmployees();
-    this.states = service.getStates();
-  }
+  readonly events = signal<string[]>([]);
 
   logEvent(eventName) {
-    this.events.unshift(eventName);
+    this.events.update((events) => [eventName, ...events]);
   }
 
   clearEvents() {
-    this.events = [];
+    this.events.set([]);
   }
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

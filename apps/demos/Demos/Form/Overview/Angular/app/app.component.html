@@ -1,6 +1,6 @@
 <div id="form-demo">
   <div class="widget-container">
-    @if (labelMode === 'outside') {
+    @if (labelMode() === 'outside') {
     <div>Select company:</div>
     }
     <dx-select-box
@@ -9,19 +9,19 @@
       [inputAttr]="{ 'aria-label': 'Company' }"
       [(dataSource)]="companies"
       label="Select company"
-      [labelMode]="getCompanySelectorLabelMode()"
+      [labelMode]="companySelectorLabelMode()"
       [value]="companies[0]"
     ></dx-select-box>
     <dx-form
       id="form"
       [(formData)]="company.value"
-      [readOnly]="readOnly"
-      [labelMode]="labelMode"
-      [showColonAfterLabel]="showColon"
-      [labelLocation]="labelLocation"
-      [minColWidth]="minColWidth"
-      [colCount]="colCount"
-      [width]="width"
+      [readOnly]="readOnly()"
+      [labelMode]="labelMode()"
+      [showColonAfterLabel]="showColon()"
+      [labelLocation]="labelLocation()"
+      [minColWidth]="minColWidth()"
+      [colCount]="colCount()"
+      [width]="width()"
     ></dx-form>
   </div>
   <div class="options">

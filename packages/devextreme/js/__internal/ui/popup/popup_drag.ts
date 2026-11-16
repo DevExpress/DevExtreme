@@ -1,5 +1,4 @@
 import { locate, move } from '@js/common/core/animation/translator';
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import {
   end as dragEndEvent,
   move as dragMoveEvent,
@@ -14,6 +13,7 @@ import type {
   DxEvent,
   PointerInteractionEvent,
 } from '@js/events';
+import eventsEngine from '@ts/events/core/events_engine';
 import type { PopupPositionController } from '@ts/ui/popup/popup_position_controller';
 
 const KEYBOARD_DRAG_STEP = 5;
@@ -26,6 +26,18 @@ export interface PopupDragConfig<TPositionController> {
 }
 
 type MoveEvent = DxEvent<PointerInteractionEvent | KeyboardEvent>;
+
+type DragStartEvent = MoveEvent & {
+  targetElements: unknown[];
+  maxTopOffset: number;
+  maxBottomOffset: number;
+  maxLeftOffset: number;
+  maxRightOffset: number;
+};
+
+type DragUpdateEvent = MoveEvent & {
+  offset: { y: number; x: number };
+};
 
 interface ElementPosition {
   top: number;
@@ -95,15 +107,15 @@ export default class PopupDrag<TPositionController extends PopupPositionControll
   subscribe(): void {
     const eventNames = this._getEventNames();
 
-    eventsEngine.on(this._handle, eventNames.startEventName, (e) => {
+    eventsEngine.on(this._handle, eventNames.startEventName, (e: DragStartEvent) => {
       this._dragStartHandler(e);
     });
 
-    eventsEngine.on(this._handle, eventNames.updateEventName, (e) => {
+    eventsEngine.on(this._handle, eventNames.updateEventName, (e: DragUpdateEvent) => {
       this._dragUpdateHandler(e);
     });
 
-    eventsEngine.on(this._handle, eventNames.endEventName, (e) => {
+    eventsEngine.on(this._handle, eventNames.endEventName, (e: MoveEvent) => {
       this._dragEndHandler(e);
     });
   }
@@ -132,13 +144,7 @@ export default class PopupDrag<TPositionController extends PopupPositionControll
     };
   }
 
-  _dragStartHandler(e: MoveEvent & {
-    targetElements: unknown[];
-    maxTopOffset: number;
-    maxBottomOffset: number;
-    maxLeftOffset: number;
-    maxRightOffset: number;
-  }): void {
+  _dragStartHandler(e: DragStartEvent): void {
     const allowedOffsets = this._getAllowedOffsets();
 
     this._prevOffset = { x: 0, y: 0 };
@@ -150,9 +156,7 @@ export default class PopupDrag<TPositionController extends PopupPositionControll
     e.maxRightOffset = allowedOffsets.right;
   }
 
-  _dragUpdateHandler(e: MoveEvent & {
-    offset: { y: number; x: number }
-  }): void {
+  _dragUpdateHandler(e: DragUpdateEvent): void {
     const targetOffset = {
       top: e.offset.y - (this._prevOffset?.y ?? 0),
       left: e.offset.x - (this._prevOffset?.x ?? 0),

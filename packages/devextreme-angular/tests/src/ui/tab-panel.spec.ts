@@ -12,6 +12,7 @@ import {
   DxTabPanelModule,
   DxTabPanelComponent,
 } from 'devextreme-angular';
+import { detectChanges } from '../helpers/change-detection';
 
 @Component({
   standalone: false,
@@ -51,7 +52,7 @@ describe('DxTabPanel', () => {
 
     const index = component.tabPanelItems.length - 1;
     component.selectedIndex = index;
-    fixture.detectChanges();
+    detectChanges(fixture);
 
     const { instance } = component.tabPanel;
     expect(instance.option('items').length).toBe(4);

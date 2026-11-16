@@ -1,5 +1,4 @@
 import type { DefaultOptionsRule, Position } from '@js/common';
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import holdEvent from '@js/common/core/events/hold';
 import pointerEvents from '@js/common/core/events/pointer';
 import { addNamespace } from '@js/common/core/events/utils';
@@ -28,6 +27,7 @@ import { current as currentTheme, isFluent, isMaterial } from '@js/ui/themes';
 import { getImageAriaLabel, getImageContainer } from '@ts/core/utils/icon';
 import { render } from '@ts/core/utils/ink_ripple';
 import type { OptionChanged } from '@ts/core/widget/types';
+import eventsEngine from '@ts/events/core/events_engine';
 import type {
   CollectionItemInfo,
   InkRippleEvent,

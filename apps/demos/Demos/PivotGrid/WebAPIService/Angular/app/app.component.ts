@@ -1,6 +1,6 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
-import { Options as DataSourceConfig } from 'devextreme/ui/pivot_grid/data_source';
+import { Component, enableProdMode } from '@angular/core';
+import type { Options as DataSourceConfig } from 'devextreme/ui/pivot_grid/data_source';
 import { DxPivotGridModule } from 'devextreme-angular';
 import * as AspNetData from 'devextreme-aspnet-data-nojquery';
 
@@ -16,7 +16,7 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  dataSource: DataSourceConfig = {
+  readonly dataSource: DataSourceConfig = {
     remoteOperations: true,
     store: AspNetData.createStore({
       key: 'OrderID',
@@ -77,8 +77,4 @@ export class AppComponent {
   };
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

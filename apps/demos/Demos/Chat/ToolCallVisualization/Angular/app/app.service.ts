@@ -1,0 +1,369 @@
+import { Injectable, inject, signal } from '@angular/core';
+import { type DxChatTypes } from 'devextreme-angular/ui/chat';
+import { DataSource, CustomStore } from 'devextreme-angular/common/data';
+import type { OpenAI } from 'openai';
+import { AiService, type AIMessage } from './ai/ai.service';
+
+const ALERT_TIMEOUT = 1000 * 60;
+const MAX_TOOL_ROUNDS = 3;
+const TOOL_DELAY = 700;
+const TOOL_ERROR_TEXT = 'Failed to execute the tool';
+const SYSTEM_PROMPT = `
+You are a helpful assistant.
+Use the tools to answer questions about the weather, the current time in offices, and exchange rates.
+Always call a tool instead of guessing.
+Pass the country as a short name (such as UK or US), cities without the country, and currencies as ISO codes.
+When a question needs several tools, call all of them at once.
+If a tool fails, say so briefly.
+Keep answers short.
+`;
+
+interface SuggestionCard {
+  title: string;
+  description: string;
+  prompt: string;
+}
+
+const tools: OpenAI.ChatCompletionTool[] = [
+  {
+    type: 'function',
+    function: {
+      name: 'getWeather',
+      description: 'Get the current weather for a city',
+      parameters: {
+        type: 'object',
+        properties: {
+          country: { type: 'string', description: 'The short country name, such as UK or US' },
+          city: { type: 'string', description: 'The city name' },
+        },
+        required: ['country', 'city'],
+      },
+    },
+  },
+  {
+    type: 'function',
+    function: {
+      name: 'getCurrentTime',
+      description: 'Get the current local time in the offices of one or several cities',
+      parameters: {
+        type: 'object',
+        properties: {
+          locations: { type: 'array', items: { type: 'string' }, description: 'City names without the country, such as Barcelona' },
+        },
+        required: ['locations'],
+      },
+    },
+  },
+  {
+    type: 'function',
+    function: {
+      name: 'getExchangeRate',
+      description: 'Get the exchange rate between two currencies',
+      parameters: {
+        type: 'object',
+        properties: {
+          fromCurrency: { type: 'string', description: 'The ISO code of the source currency' },
+          toCurrency: { type: 'string', description: 'The ISO code of the target currency' },
+        },
+        required: ['fromCurrency', 'toCurrency'],
+      },
+    },
+  },
+];
+
+const weatherByCity: Record<string, string> = {
+  'london': '15°C (59°F)',
+  'barcelona': '21°C (70°F)',
+  'los angeles': '24°C (75°F)',
+  'new york': '12°C (54°F)',
+};
+
+const timeByCity: Record<string, string> = {
+  'london': '09:18 (UTC+00:00) Greenwich Mean Time',
+  'barcelona': '10:18 (UTC+01:00) Central European Time',
+  'los angeles': '01:18 (UTC−08:00) Pacific Time (US & Canada)',
+  'new york': '04:18 (UTC−05:00) Eastern Time (US & Canada)',
+};
+
+const dollarRates: Record<string, number> = {
+  USD: 1,
+  EUR: 0.92,
+  GBP: 0.79,
+  JPY: 149.5,
+};
+
+const toolImplementations: Record<string, (args: any) => string> = {
+  getWeather: ({ city }) => {
+    const weather = weatherByCity[String(city).toLowerCase()];
+
+    if (!weather) {
+      throw new Error(TOOL_ERROR_TEXT);
+    }
+
+    return weather;
+  },
+  getCurrentTime: ({ locations }) => (locations ?? [])
+    .map((location: string) => `${location}: ${timeByCity[String(location).toLowerCase()] ?? 'unknown time zone'}`)
+    .join('\n'),
+  getExchangeRate: ({ fromCurrency, toCurrency }) => {
+    const from = dollarRates[String(fromCurrency).toUpperCase()];
+    const to = dollarRates[String(toCurrency).toUpperCase()];
+
+    if (!from || !to) {
+      throw new Error(TOOL_ERROR_TEXT);
+    }
+
+    const rate = Math.round((to / from) * 10000) / 10000;
+
+    return `1 ${String(fromCurrency).toUpperCase()} = ${rate} ${String(toCurrency).toUpperCase()}`;
+  },
+};
+
+@Injectable({
+  providedIn: 'root',
+})
+
+export class AppService {
+  private readonly aiService = inject(AiService);
+
+  user: DxChatTypes.User = {
+    id: 'user',
+  };
+
+  assistant: DxChatTypes.User = {
+    id: 'assistant',
+    name: 'AI Assistant',
+    avatarUrl: '../../../../images/Chat/ai-assistant-avatar.svg',
+  };
+
+  suggestionCards: SuggestionCard[] = [
+    {
+      title: 'Single Tool',
+      description: 'Find out the current time in Barcelona and Los Angeles offices.',
+      prompt: 'Check the current time in Barcelona, Spain and Los Angeles, US.',
+    },
+    {
+      title: 'Multiple Tools',
+      description: 'Check the current weather and time in Barcelona. Look up USD-to-EUR exchange rate.',
+      prompt: 'Check the current weather conditions in Barcelona, Spain, the current time in Barcelona, Spain, and the exchange rate from USD to EUR.',
+    },
+    {
+      title: 'Error State',
+      description: 'Check the weather in London and Atlantis. The request for Atlantis fails.',
+      prompt: 'Check the current weather conditions in London, UK and in Atlantis, Atlantis.',
+    },
+  ];
+
+  store: DxChatTypes.Message[] = [];
+
+  messages: AIMessage[] = [{ role: 'system', content: SYSTEM_PROMPT }];
+
+  customStore = new CustomStore({
+    key: 'id',
+    load: () => new Promise((resolve) => {
+      setTimeout(() => {
+        resolve([...this.store]);
+      }, 0);
+    }),
+    insert: (message) => new Promise((resolve) => {
+      setTimeout(() => {
+        this.store.push(message);
+        resolve(message);
+      });
+    }),
+  });
+
+  dataSource = new DataSource({
+    store: this.customStore,
+    paginate: false,
+  });
+
+  isProcessing = false;
+
+  private readonly typingUsersState = signal<DxChatTypes.User[]>([]);
+
+  readonly typingUsers = this.typingUsersState.asReadonly();
+
+  private readonly alertsState = signal<DxChatTypes.Alert[]>([]);
+
+  readonly alerts = this.alertsState.asReadonly();
+
+  getDictionary() {
+    return {
+      en: {
+        'dxChat-emptyListMessage': 'Chat is Empty',
+        'dxChat-emptyListPrompt': 'Click a tile below to call a function.',
+        'dxChat-textareaPlaceholder': 'Ask AI Assistant...',
+      },
+    };
+  }
+
+  static wait(delay: number): Promise<void> {
+    return new Promise((resolve) => {
+      setTimeout(resolve, delay);
+    });
+  }
+
+  async runTool(call: { id: string; function: { name: string; arguments: string } }): Promise<DxChatTypes.ToolCall> {
+    const { name } = call.function;
+    let args: Record<string, unknown>;
+
+    try {
+      args = JSON.parse(call.function.arguments || '{}');
+    } catch {
+      return {
+        name, arguments: {}, status: 'error', result: 'Invalid tool arguments',
+      };
+    }
+
+    await AppService.wait(TOOL_DELAY);
+
+    try {
+      const implementation = toolImplementations[name];
+
+      if (!implementation) {
+        throw new Error(TOOL_ERROR_TEXT);
+      }
+
+      return {
+        name, arguments: args, status: 'success', result: implementation(args),
+      };
+    } catch (err: unknown) {
+      return {
+        name, arguments: args, status: 'error', result: this.getErrorMessage(err),
+      };
+    }
+  }
+
+  async getAIResponse(
+    messageList: AIMessage[],
+    toolCalls: DxChatTypes.ToolCall[] = [],
+    round = 0,
+  ): Promise<{ text: string; toolCalls: DxChatTypes.ToolCall[] }> {
+    const answer = await this.aiService.requestModel(messageList, tools);
+    const calls = (answer.tool_calls ?? []).filter(({ type }) => type === 'function') as any[];
+
+    if (!calls.length) {
+      return { text: answer.content ?? '', toolCalls };
+    }
+
+    if (round === MAX_TOOL_ROUNDS) {
+      throw new Error('The model requested too many tool calls. Try rephrasing your request.');
+    }
+
+    messageList.push({
+      role: 'assistant',
+      content: answer.content,
+      tool_calls: calls,
+    });
+
+    const results = await Promise.all(calls.map((call) => this.runTool(call)));
+
+    results.forEach((result, index) => {
+      messageList.push({
+        role: 'tool',
+        tool_call_id: calls[index].id,
+        content: result.status === 'error' ? `Error: ${result.result}` : result.result as string,
+      });
+    });
+
+    return this.getAIResponse(messageList, [...toolCalls, ...results], round + 1);
+  }
+
+  async processMessageSending(message: DxChatTypes.TextMessage) {
+    this.isProcessing = true;
+
+    const historyLength = this.messages.length;
+
+    this.messages.push({ role: 'user', content: message.text ?? '' });
+    this.typingUsersState.set([this.assistant]);
+
+    try {
+      const { text, toolCalls } = await this.getAIResponse(this.messages);
+
+      this.typingUsersState.set([]);
+      this.messages.push({ role: 'assistant', content: text });
+      this.renderAssistantMessage(text, toolCalls);
+    } catch (err: unknown) {
+      this.typingUsersState.set([]);
+      this.messages.length = historyLength;
+      this.alertError(this.getErrorMessage(err));
+    } finally {
+      this.isProcessing = false;
+    }
+  }
+
+  getErrorMessage(err: unknown): string {
+    if (err instanceof Error) return err.message;
+    if (typeof err === 'string') return err;
+    return 'Unknown error';
+  }
+
+  renderAssistantMessage(text: string, toolCalls: DxChatTypes.ToolCall[]) {
+    const message: DxChatTypes.TextMessage = {
+      id: Date.now(),
+      timestamp: new Date(),
+      author: this.assistant,
+      text,
+    };
+
+    if (toolCalls.length) {
+      message.toolCalls = toolCalls;
+    }
+
+    this.dataSource.store().push([{ type: 'insert', data: message }]);
+  }
+
+  alertError(message: string) {
+    this.setAlerts([{
+      message,
+    }]);
+
+    setTimeout(() => {
+      this.setAlerts([]);
+    }, ALERT_TIMEOUT);
+  }
+
+  setAlerts(alerts: DxChatTypes.Alert[]) {
+    this.alertsState.set(alerts);
+  }
+
+  async sendSuggestion(prompt: string) {
+    if (this.isProcessing) {
+      return;
+    }
+
+    const message: DxChatTypes.TextMessage = {
+      id: Date.now(),
+      timestamp: new Date(),
+      author: this.user,
+      text: prompt,
+    };
+
+    this.dataSource.store().push([{ type: 'insert', data: message }]);
+
+    if (!this.alerts().length) {
+      await this.processMessageSending(message);
+    }
+  }
+
+  async onMessageEntered({ message }: DxChatTypes.MessageEnteredEvent) {
+    if (this.isProcessing) {
+      return;
+    }
+
+    this.dataSource.store().push([{ type: 'insert', data: { id: Date.now(), ...message } }]);
+
+    if (!this.alerts().length) {
+      await this.processMessageSending(message as DxChatTypes.TextMessage);
+    }
+  }
+
+  clearMessages() {
+    this.store.length = 0;
+    this.messages.length = 1;
+    this.setAlerts([]);
+    this.typingUsersState.set([]);
+    this.dataSource.reload();
+  }
+}

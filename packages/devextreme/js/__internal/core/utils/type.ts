@@ -1,3 +1,5 @@
+import type { DeferredObj } from '@js/core/utils/deferred';
+
 type AnyFunction = (...args: unknown[]) => unknown;
 
 const types: Record<string, string | undefined> = {
@@ -98,7 +100,7 @@ const isPromise = function isPromise(object: unknown): object is PromiseLike<unk
   return !!object && isFunction((object as { then?: unknown }).then);
 };
 
-const isDeferred = function isDeferred(object: unknown): boolean {
+const isDeferred = function isDeferred(object: unknown): object is Pick<DeferredObj<unknown>, 'done' | 'fail'> {
   return !!object && isFunction((object as { done?: unknown }).done)
     && isFunction((object as { fail?: unknown }).fail);
 };

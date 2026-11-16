@@ -6117,14 +6117,13 @@ QUnit.module('Remote paging', {
             }
         }
 
+        const componentOptions = {
+            scrolling: { mode: 'virtual', loadTwoPagesOnStart: true }
+        };
+
         this.component = {
             option: function(name) {
-                if(name === 'scrolling.mode') {
-                    return 'virtual';
-                }
-                if(name === 'scrolling.loadTwoPagesOnStart') {
-                    return true;
-                }
+                return name.split('.').reduce((value, key) => value?.[key], componentOptions);
             }
         };
 

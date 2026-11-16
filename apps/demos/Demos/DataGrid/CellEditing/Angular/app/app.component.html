@@ -43,7 +43,7 @@
       <dxi-data-grid-item location="after">
         <dx-button
           (onClick)="deleteRecords()"
-          [disabled]="!selectedItemKeys.length"
+          [disabled]="!selectedItemKeys().length"
           icon="trash"
           text="Delete Selected Records"
           stylingMode="text"

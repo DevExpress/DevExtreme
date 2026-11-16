@@ -10,7 +10,7 @@
   [groups]="['priority']"
   [currentDate]="currentDate"
   [height]="580"
-  [snapToCellsMode]="snapToCellsMode"
+  [snapToCellsMode]="snapToCellsMode()"
 >
   <dxi-scheduler-resource
     fieldExpr="ownerId"
@@ -34,7 +34,7 @@
     <span>Snap to Grid:</span>
     <dx-select-box
       [items]="snapToCellsModeItems"
-      [value]="snapToCellsMode"
+      [value]="snapToCellsMode()"
       (onValueChanged)="onSnapToCellsModeChanged($event)"
     ></dx-select-box>
   </div>

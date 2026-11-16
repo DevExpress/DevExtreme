@@ -22,7 +22,7 @@ const mockCellRect = (
   $cell: dxElementWrapper,
   { left, width }: { left: number; width: number },
 ): dxElementWrapper => {
-  const element = $cell.get(0) as HTMLElement;
+  const element = $cell.get<HTMLElement>(0);
   const rect = {
     left, right: left + width, width, top: 0, bottom: 0, height: 0,
   } as DOMRect;

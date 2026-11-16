@@ -1,7 +1,6 @@
 /* eslint-disable max-classes-per-file */
 import type { SingleMultipleOrNone } from '@js/common';
 import { name as clickEventName } from '@js/common/core/events/click';
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import holdEvent from '@js/common/core/events/hold';
 import { addNamespace, isCommandKeyPressed } from '@js/common/core/events/utils/index';
 import messageLocalization from '@js/common/core/localization/message';
@@ -20,9 +19,11 @@ import { isDefined } from '@js/core/utils/type';
 import type { StoreChange } from '@js/data/store';
 import type { DxEvent } from '@js/events';
 import errors from '@js/ui/widget/ui.errors';
+import { getData } from '@ts/core/element_data';
 import supportUtils from '@ts/core/utils/support';
 import type { StoreKey } from '@ts/data/abstract_store';
 import type { StoreLoadOptions } from '@ts/data/data_source/types';
+import eventsEngine from '@ts/events/core/events_engine';
 import type { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/column_headers';
 import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/columns_controller';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
@@ -35,9 +36,10 @@ import type { StateStoringController } from '@ts/grids/grid_core/state_storing/s
 import type {
   InternalGrid, ModuleType, OptionChanged, RowKey,
 } from '@ts/grids/grid_core/types';
-import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
+import { CLASSES as VIEW_CLASSES, ROW_OPTIONS_KEY } from '@ts/grids/grid_core/views/const';
 import type { RowsView } from '@ts/grids/grid_core/views/rows_view';
 import type { ViewRowEvent } from '@ts/grids/grid_core/views/types';
+import { isInfiniteMode, isVirtualPaging } from '@ts/grids/grid_core/virtual_scrolling';
 import Selection from '@ts/ui/selection/selection';
 import type { SelectionChangeEvent, SelectionFilter, SelectionOptions } from '@ts/ui/selection/types';
 
@@ -46,7 +48,7 @@ import type { DataChange, ProcessedItem } from '../data_controller/types';
 import type { DataSourceController } from '../data_source/data_source_controller';
 import { isEditRow } from '../keyboard_navigation/utils';
 import modules from '../modules/modules';
-import gridCoreUtils, { isInfiniteMode, isVirtualPaging } from '../utils';
+import gridCoreUtils from '../utils';
 import {
   CHECKBOXES_HIDDEN_CLASS,
   COMMAND_SELECT_CLASS,
@@ -67,6 +69,7 @@ import type {
   SelectionModifierKeys,
   SelectionRowsView,
 } from './types';
+import { getSelectionCheckBox } from './utils';
 
 const processLongTap = (
   that: Pick<InternalGrid, 'getView' | 'getController' | 'option'>,
@@ -801,7 +804,6 @@ export const selectionColumnHeadersViewExtender = (
       }
 
       if (!$(event.target).closest(`.${SELECT_CHECKBOX_CLASS}`).length) {
-        // @ts-expect-error eventsEngine.trigger is not fully typed
         eventsEngine.trigger($(event.currentTarget).children(`.${SELECT_CHECKBOX_CLASS}`), clickEventName);
       }
       event.preventDefault();
@@ -843,7 +845,6 @@ export const selectionRowsViewExtender = <TBase extends ModuleType<RowsView>>(
       value: options.value,
       setValue(value, e) {
         if (e?.event?.type === 'keydown') {
-          // @ts-expect-error eventsEngine.trigger is not fully typed
           eventsEngine.trigger(e.element, clickEventName, e);
         }
       },
@@ -892,14 +893,7 @@ export const selectionRowsViewExtender = <TBase extends ModuleType<RowsView>>(
             return;
           }
 
-          const { isSelected } = changeItem;
-          const needSelectionClass = Boolean(isSelected) && !isEditRow($row);
-
-          $row
-            .toggleClass(ROW_SELECTION_CLASS, needSelectionClass)
-            // @ts-expect-error dxCheckBox is added to the renderer at runtime
-            .find(`.${SELECT_CHECKBOX_CLASS}`).dxCheckBox('option', 'value', isSelected);
-          this.setAria('selected', String(isSelected), $row);
+          this.updateRowSelection($row, changeItem.isSelected);
         });
       });
 
@@ -907,6 +901,22 @@ export const selectionRowsViewExtender = <TBase extends ModuleType<RowsView>>(
     } else {
       super._update(change);
     }
+  }
+
+  private updateRowSelection($row: dxElementWrapper, isSelected?: boolean): void {
+    const needSelectionClass = Boolean(isSelected) && !isEditRow($row);
+
+    $row.toggleClass(ROW_SELECTION_CLASS, needSelectionClass);
+    getSelectionCheckBox($row)?.option('value', isSelected);
+    this.setAria('selected', String(isSelected), $row);
+  }
+
+  private isRowSelectionOutdated($row: dxElementWrapper, isSelected?: boolean): boolean {
+    const checkBox = getSelectionCheckBox($row);
+    const isAriaOutdated = $row.attr('aria-selected') !== String(isSelected);
+    const isCheckBoxOutdated = checkBox !== undefined && checkBox.option('value') !== isSelected;
+
+    return isAriaOutdated || isCheckBoxOutdated;
   }
 
   protected _createTable(columns?: Column[], isAppend?: boolean): dxElementWrapper {
@@ -977,7 +987,7 @@ export const selectionRowsViewExtender = <TBase extends ModuleType<RowsView>>(
     }
   }
 
-  private isClickableElement($target: dxElementWrapper): boolean {
+  public isClickableElement($target: dxElementWrapper): boolean {
     const isCommandSelect = $target.closest(`.${COMMAND_SELECT_CLASS}`).length;
 
     return !!isCommandSelect;
@@ -985,8 +995,50 @@ export const selectionRowsViewExtender = <TBase extends ModuleType<RowsView>>(
 
   protected _renderCore(change?: DataChange): DeferredObj<unknown> {
     const deferred = super._renderCore(change);
-    this._updateCheckboxesClass();
-    return deferred;
+    const isWaitingForTemplates = this.isWaitingForAsyncTemplates();
+
+    return deferred.done(() => {
+      this._updateCheckboxesClass();
+
+      if (isWaitingForTemplates) {
+        this.syncRowsSelection();
+      }
+    });
+  }
+
+  private syncRowsSelection(): void {
+    if (this.option(SELECTION_MODE) === 'none') {
+      return;
+    }
+
+    const items = this._dataController.items();
+    const findDataItem = (key: RowKey, rowIndex: number): ProcessedItem | undefined => {
+      const isRowItem = (item?: ProcessedItem): boolean => item?.rowType === 'data'
+        && equalByValue(item.key, key);
+
+      return isRowItem(items[rowIndex]) ? items[rowIndex] : items.find(isRowItem);
+    };
+
+    const outdatedRows = this._getRowElements()
+      .toArray()
+      .flatMap((rowElement, rowIndex) => {
+        const rowOptions = getData(rowElement, ROW_OPTIONS_KEY);
+        const item = rowOptions?.rowType === 'data'
+          ? findDataItem(rowOptions.key, rowIndex)
+          : undefined;
+        const isOutdated = item !== undefined
+          && this.isRowSelectionOutdated($(rowElement), item.isSelected);
+
+        return isOutdated ? [{ rowIndex, isSelected: item.isSelected }] : [];
+      });
+
+    each(this.getTableElements(), (_, table) => {
+      const $rows = this._getRowElements($(table));
+
+      outdatedRows.forEach(({ rowIndex, isSelected }) => {
+        this.updateRowSelection($rows.eq(rowIndex), isSelected);
+      });
+    });
   }
 
   private _updateCheckboxesClass(): void {

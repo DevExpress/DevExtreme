@@ -1,10 +1,10 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import { HttpClient, provideHttpClient, withFetch } from '@angular/common/http';
-import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import { Component, enableProdMode, inject } from '@angular/core';
 import { DxCardViewModule } from 'devextreme-angular';
 import 'devextreme/ui/text_area';
 import { lastValueFrom } from 'rxjs';
-import { Employee, Service } from './app.service';
+import { type Employee, Service } from './app.service';
 import 'anti-forgery';
 
 if (!/localhost/.test(document.location.host)) {
@@ -20,20 +20,18 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  employees: Employee[];
+  private readonly httpClient = inject(HttpClient);
 
-  phonePattern = /^\(\d{3}\) \d{3}-\d{4}$/i;
+  readonly employees = inject(Service).getEmployees();
 
-  popupConfig = {
+  readonly phonePattern = /^\(\d{3}\) \d{3}-\d{4}$/i;
+
+  readonly popupConfig = {
     title: 'Employee Info',
     showTitle: true,
     width: 700,
     height: 525,
   };
-
-  constructor(private httpClient: HttpClient, service: Service) {
-    this.employees = service.getEmployees();
-  }
 
   altExpr({ fullName }: Employee) {
     return `Photo of ${fullName}`;
@@ -66,7 +64,6 @@ export class AppComponent {
 
 bootstrapApplication(AppComponent, {
   providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
     provideHttpClient(withFetch()),
   ],
 });

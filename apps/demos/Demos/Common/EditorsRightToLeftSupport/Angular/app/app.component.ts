@@ -1,5 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import {
+  Component, computed, enableProdMode, inject, signal,
+} from '@angular/core';
 import {
   DxSelectBoxModule,
   DxCheckBoxModule,
@@ -11,7 +13,7 @@ import {
   DxAutocompleteModule,
 } from 'devextreme-angular';
 
-import { Service, Country } from './app.service';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -35,33 +37,22 @@ if (!/localhost/.test(document.location.host)) {
 })
 
 export class AppComponent {
-  languages: string[] = [
+  readonly languages: string[] = [
     'Arabic: Right-to-Left direction',
     'English: Left-to-Right direction',
   ];
 
-  displayExpr = 'nameEn';
+  readonly rtlEnabled = signal(false);
 
-  rtlEnabled = false;
+  readonly displayExpr = computed(() => (this.rtlEnabled() ? 'nameAr' : 'nameEn'));
 
-  textValue = 'text';
+  readonly textValue = computed(() => (this.rtlEnabled() ? 'نص' : 'text'));
 
-  europeanUnion: Country[];
-
-  constructor(service: Service) {
-    this.europeanUnion = service.getCountries();
-  }
+  readonly europeanUnion = inject(Service).getCountries();
 
   onLanguageChanged(data) {
-    const isRTL = data.value === this.languages[0];
-    this.displayExpr = isRTL ? 'nameAr' : 'nameEn';
-    this.rtlEnabled = isRTL;
-    this.textValue = isRTL ? 'نص' : 'text';
+    this.rtlEnabled.set(data.value === this.languages[0]);
   }
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

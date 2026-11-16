@@ -1,9 +1,9 @@
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import { addNamespace } from '@js/common/core/events/utils/index';
 import browser from '@js/core/utils/browser';
 import { each } from '@js/core/utils/iterator';
 import { getWindow } from '@js/core/utils/window';
 import type { DxEvent } from '@js/events';
+import eventsEngine from '@ts/events/core/events_engine';
 import Quill from 'devextreme-quill';
 
 import type { QuillInstance } from '../types/quill';

@@ -555,45 +555,8 @@ const DxContextMenuItem = defineComponent(DxContextMenuItemConfig);
 (DxContextMenuItem as any).$_optionName = "items";
 (DxContextMenuItem as any).$_isCollectionItem = true;
 (DxContextMenuItem as any).$_expectedChildren = {
-  contextMenuItemItem: { isCollectionItem: true, optionName: "items" },
   item: { isCollectionItem: true, optionName: "items" }
 };
-
-const DxContextMenuItemItemConfig = {
-  emits: {
-    "update:isActive": null,
-    "update:hoveredElement": null,
-    "update:beginGroup": null,
-    "update:closeMenuOnClick": null,
-    "update:disabled": null,
-    "update:icon": null,
-    "update:items": null,
-    "update:selectable": null,
-    "update:selected": null,
-    "update:template": null,
-    "update:text": null,
-    "update:visible": null,
-  },
-  props: {
-    beginGroup: Boolean,
-    closeMenuOnClick: Boolean,
-    disabled: Boolean,
-    icon: String,
-    items: Array as PropType<Array<dxContextMenuItem>>,
-    selectable: Boolean,
-    selected: Boolean,
-    template: {},
-    text: String,
-    visible: Boolean
-  }
-};
-
-prepareConfigurationComponentConfig(DxContextMenuItemItemConfig);
-
-const DxContextMenuItemItem = defineComponent(DxContextMenuItemItemConfig);
-
-(DxContextMenuItemItem as any).$_optionName = "items";
-(DxContextMenuItemItem as any).$_isCollectionItem = true;
 
 const DxDependenciesConfig = {
   emits: {
@@ -861,7 +824,6 @@ const DxItem = defineComponent(DxItemConfig);
 (DxItem as any).$_optionName = "items";
 (DxItem as any).$_isCollectionItem = true;
 (DxItem as any).$_expectedChildren = {
-  contextMenuItemItem: { isCollectionItem: true, optionName: "items" },
   item: { isCollectionItem: true, optionName: "items" }
 };
 
@@ -1185,7 +1147,6 @@ export {
   DxColumnHeaderFilterSearch,
   DxContextMenu,
   DxContextMenuItem,
-  DxContextMenuItemItem,
   DxDependencies,
   DxEditing,
   DxFilterRow,

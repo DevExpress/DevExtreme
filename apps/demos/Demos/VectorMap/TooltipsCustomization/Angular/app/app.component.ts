@@ -1,9 +1,9 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import { Component, enableProdMode, inject } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 import { DxVectorMapModule, DxPieChartModule } from 'devextreme-angular';
 import * as mapsData from 'devextreme-dist/js/vectormap-data/world.js';
-import { GdpInfo, Service } from './app.service';
+import { type GdpInfo, Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -22,27 +22,22 @@ if (!/localhost/.test(document.location.host)) {
 })
 
 export class AppComponent {
-  worldMap = mapsData.world;
+  readonly worldMap = mapsData.world;
 
-  gdpData: Object;
+  readonly gdpData: Object = inject(Service).getCountriesGDP();
 
-  pipe = new DecimalPipe('en-US');
+  private readonly pipe = new DecimalPipe('en-US');
 
-  constructor(private service: Service) {
-    this.gdpData = service.getCountriesGDP();
-    this.customizeLayers = this.customizeLayers.bind(this);
-  }
-
-  customizeLayers(elements: Record<string, Function>[]) {
+  readonly customizeLayers = (elements: Record<string, Function>[]) => {
     elements.forEach((element) => {
       const countryGDPData = this.gdpData[element.attribute('name')];
       element.attribute('total', countryGDPData?.total || 0);
     });
-  }
+  };
 
-  customizeText = ({ start, end }: Record<string, number>) => `${this.pipe.transform(start, '1.0-0')} to ${this.pipe.transform(end, '1.0-0')}`;
+  readonly customizeText = ({ start, end }: Record<string, number>) => `${this.pipe.transform(start, '1.0-0')} to ${this.pipe.transform(end, '1.0-0')}`;
 
-  customizePieLabel = ({ argument, value }: { argument: string[], value: unknown }) => `${argument[0].toUpperCase() + argument.slice(1)}: $${value}M`;
+  readonly customizePieLabel = ({ argument, value }: { argument: string[], value: unknown }) => `${argument[0].toUpperCase() + argument.slice(1)}: $${value}M`;
 
   getPieData(name: string): GdpInfo[] {
     return this.gdpData[name] ? [
@@ -53,8 +48,4 @@ export class AppComponent {
   }
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

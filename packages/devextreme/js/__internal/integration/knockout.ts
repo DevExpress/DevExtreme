@@ -1,5 +1,5 @@
 /* eslint-disable import/first */
-import errors from '@ts/core/utils/error';
+import errors from '@ts/core/errors';
 import { compare as compareVersion } from '@ts/core/utils/version';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import ko from 'knockout';
@@ -7,7 +7,6 @@ import ko from 'knockout';
 // Check availability in global environment
 if (ko) {
   if (compareVersion(ko.version, [2, 3]) < 0) {
-    // @ts-expect-error
     throw errors.Error('E0013');
   }
 }

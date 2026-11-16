@@ -1,8 +1,8 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import { Component, enableProdMode, inject } from '@angular/core';
 import { DxSelectBoxModule } from 'devextreme-angular';
 import { DxChartModule, DxChartTypes } from 'devextreme-angular/ui/chart';
-import { Population, Service } from './app.service';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -20,17 +20,9 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  populationData: Population[];
+  readonly populationData = inject(Service).getPopulationData();
 
-  types: DxChartTypes.SeriesType[] = ['area', 'stackedarea', 'fullstackedarea'];
-
-  constructor(service: Service) {
-    this.populationData = service.getPopulationData();
-  }
+  readonly types: DxChartTypes.SeriesType[] = ['area', 'stackedarea', 'fullstackedarea'];
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

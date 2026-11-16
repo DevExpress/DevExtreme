@@ -1,7 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import { Component, enableProdMode, inject } from '@angular/core';
 import { DxCardViewModule, DxCardViewTypes } from 'devextreme-angular/ui/card-view';
-import { Order, Service } from './app.service';
+import { type Order, Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -30,7 +30,7 @@ export class AppComponent {
     };
   }
 
-  saleAmountHeaderFilterDataSource = [
+  readonly saleAmountHeaderFilterDataSource = [
     {
       text: 'Less than $3000',
       value: ['SaleAmount', '<', 3000],
@@ -69,15 +69,7 @@ export class AppComponent {
     return this.defaultCalculateFilterExpression(value, selectedFilterOperations, target);
   }
 
-  orders: Order[];
-
-  constructor(service: Service) {
-    this.orders = service.getOrders();
-  }
+  readonly orders = inject(Service).getOrders();
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

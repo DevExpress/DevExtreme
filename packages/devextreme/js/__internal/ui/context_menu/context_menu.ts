@@ -4,7 +4,6 @@ import { fx } from '@js/common/core/animation';
 import animationPosition from '@js/common/core/animation/position';
 import type { Cancelable, EventInfo } from '@js/common/core/events';
 import { name as contextMenuEventName } from '@js/common/core/events/contextmenu';
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import holdEvent from '@js/common/core/events/hold';
 import { addNamespace } from '@js/common/core/events/utils';
 import registerComponent from '@js/core/component_registrator';
@@ -21,7 +20,7 @@ import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { getOuterHeight } from '@js/core/utils/size';
 import {
-  isDefined, isFunction, isObject, isPlainObject, isRenderer, isString,
+  isDefined, isEvent, isFunction, isObject, isPlainObject, isRenderer, isString,
 } from '@js/core/utils/type';
 import { getWindow, hasWindow } from '@js/core/utils/window';
 import type { DxEvent } from '@js/events';
@@ -45,6 +44,7 @@ import type {
 import { current as currentTheme, isGeneric } from '@js/ui/themes';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { SupportedKeys } from '@ts/core/widget/widget';
+import eventsEngine from '@ts/events/core/events_engine';
 import type {
   ClickEvent, HoverEvent, ItemClickActionArguments, MenuBaseProperties,
 } from '@ts/ui/context_menu/menu_base';
@@ -97,9 +97,10 @@ const BORDER_WIDTH = 1;
 const window = getWindow();
 
 type ContextMenuTarget = string | dxElementWrapper | Element | Window | undefined;
+type ContextMenuAnchor = ContextMenuTarget | DxEvent;
 
 const isRendererTarget = (
-  target: ContextMenuTarget,
+  target: ContextMenuAnchor,
 ): target is dxElementWrapper => isRenderer(target);
 type ContextMenuNode = InternalNode & Item;
 
@@ -422,7 +423,7 @@ class ContextMenu<
       this._overlay.$element().remove();
       this._overlay = null;
     }
-    this._detachShowContextMenuEvents(this._getTarget());
+    this._detachShowContextMenuEvents(this.getShowEventTarget());
     this._shownSubmenus = [];
     super._clean();
   }
@@ -469,7 +470,7 @@ class ContextMenu<
   }
 
   _renderContentImpl(): void {
-    this._detachShowContextMenuEvents(this._getTarget());
+    this._detachShowContextMenuEvents(this.getShowEventTarget());
     this._showContextMenuEventHandler = this._createShowContextMenuEventHandler();
     this._attachShowContextMenuEvents();
   }
@@ -561,7 +562,6 @@ class ContextMenu<
         domAdapter.getDocument(),
         eventName,
         target,
-        // @ts-expect-error ts-error
         this._showContextMenuEventHandler,
       );
     } else {
@@ -573,11 +573,11 @@ class ContextMenu<
     const { showEvent: showEventOption, disabled } = this.option();
     const showEvent = this.getShowEvent(showEventOption);
 
-    if (!showEvent || disabled) {
+    if (!showEvent || disabled || !this._showContextMenuEventHandler) {
       return;
     }
 
-    const target = this._getTarget();
+    const target = this.getShowEventTarget();
     const isSelector = isString(target);
     const eventName = addNamespace(showEvent, this._eventNamespace);
 
@@ -813,7 +813,7 @@ class ContextMenu<
     return windowHeight;
   }
 
-  _getMaxHeight($anchor: ContextMenuTarget, considerAnchorHeight = true): number {
+  _getMaxHeight($anchor: ContextMenuAnchor, considerAnchorHeight = true): number {
     const windowHeight: number = getOuterHeight(window);
     const isAnchorRenderer = isRendererTarget($anchor);
     const document = domAdapter.getDocument();
@@ -1125,7 +1125,7 @@ class ContextMenu<
         break;
       case 'showEvent':
         if (previousValue) {
-          this._detachShowContextMenuEvents(this._getTarget(), previousValue);
+          this._detachShowContextMenuEvents(this.getShowEventTarget(), previousValue);
         }
         this._invalidate();
         break;
@@ -1227,11 +1227,17 @@ class ContextMenu<
     this.setAria('owns', undefined);
   }
 
-  _getTarget(): ContextMenuTarget {
+  _getTarget(): ContextMenuAnchor {
     const { target, position } = this.option();
 
     // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
     return target || position?.of || $(domAdapter.getDocument());
+  }
+
+  private getShowEventTarget(): ContextMenuTarget {
+    const target = this._getTarget();
+
+    return isEvent(target) ? $(domAdapter.getDocument()) : target;
   }
 
   _getContextMenuPosition(): PositionConfig | undefined {

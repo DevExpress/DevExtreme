@@ -1,7 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import { Component, enableProdMode, inject } from '@angular/core';
 import { DxTreeListModule, DxTreeListTypes } from 'devextreme-angular/ui/tree-list';
-import { Task, Employee, Service } from './app.service';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -17,23 +17,19 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  tasksData: Task[];
+  private readonly service = inject(Service);
 
-  statusesData: string[];
+  readonly tasksData = this.service.getTasksData();
 
-  employeesData: Employee[];
+  readonly employeesData = this.service.getEmployeesData();
 
-  constructor(service: Service) {
-    this.tasksData = service.getTasksData();
-    this.employeesData = service.getEmployeesData();
-    this.statusesData = [
-      'Not Started',
-      'Need Assistance',
-      'In Progress',
-      'Deferred',
-      'Completed',
-    ];
-  }
+  readonly statusesData = [
+    'Not Started',
+    'Need Assistance',
+    'In Progress',
+    'Deferred',
+    'Completed',
+  ];
 
   initNewRow(e: DxTreeListTypes.InitNewRowEvent) {
     e.data.Task_Status = 'Not Started';
@@ -42,8 +38,4 @@ export class AppComponent {
   }
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

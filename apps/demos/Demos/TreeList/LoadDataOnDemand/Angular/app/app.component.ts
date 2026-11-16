@@ -1,5 +1,5 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import { Component, enableProdMode, inject } from '@angular/core';
 import { HttpClient, HttpParams, provideHttpClient, withFetch } from '@angular/common/http';
 import { lastValueFrom } from 'rxjs';
 import { DxTreeListModule } from 'devextreme-angular';
@@ -18,30 +18,27 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  dataSource: DataSource;
+  private readonly http = inject(HttpClient);
 
-  constructor(http: HttpClient) {
-    this.dataSource = new DataSource({
-      load(loadOptions) {
-        let params = new HttpParams();
-        if (loadOptions.parentIds) {
-          loadOptions.parentIds.forEach((id) => {
-            params = params.append('parentIds', id);
-          });
-        }
-        return lastValueFrom(
-          http.get('https://js.devexpress.com/Demos/NetCore/api/treeListData', { params }),
-        );
-      },
-    });
-  }
+  readonly dataSource = new DataSource({
+    load: (loadOptions) => {
+      let params = new HttpParams();
+      if (loadOptions.parentIds) {
+        loadOptions.parentIds.forEach((id) => {
+          params = params.append('parentIds', id);
+        });
+      }
+      return lastValueFrom(
+        this.http.get('https://js.devexpress.com/Demos/NetCore/api/treeListData', { params }),
+      );
+    },
+  });
 
-  customizeSizeText = ({ value }) => (value === null ? '' : `${Math.ceil(value / 1024)} KB`);
+  readonly customizeSizeText = ({ value }) => (value === null ? '' : `${Math.ceil(value / 1024)} KB`);
 }
 
 bootstrapApplication(AppComponent, {
   providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
     provideHttpClient(withFetch()),
   ],
 });

@@ -1,9 +1,9 @@
-import EventsEngine from '@js/common/core/events/core/events_engine';
 import { addNamespace } from '@js/common/core/events/utils/index';
 import type { dxElementWrapper } from '@js/core/renderer';
 import browser from '@js/core/utils/browser';
 import { clipboardText as getClipboardText } from '@js/core/utils/dom';
 import type { DxEvent } from '@js/events';
+import EventsEngine from '@ts/events/core/events_engine';
 import type { TextEditorBaseProperties } from '@ts/ui/text_box/text_editor.base';
 import type TextEditorMask from '@ts/ui/text_box/text_editor.mask';
 import type { HandlingArgs } from '@ts/ui/text_box/text_editor.mask.rule';
@@ -75,7 +75,7 @@ export default class MaskStrategy {
     const $input = this._editorInput();
     const namespace = addNamespace(BLUR_EVENT, MASK_EVENT_NAMESPACE);
 
-    EventsEngine.on($input, namespace, (e) => {
+    EventsEngine.on($input, namespace, (e: DxEvent) => {
       this.editor._changeHandler(e);
     });
   }
@@ -254,11 +254,13 @@ export default class MaskStrategy {
     // @ts-expect-error dxElementWrapper.val() should return string
     const selectedText = inputVal.substring(caret?.start, caret?.end);
 
-    this.editor._maskKeyHandler(
-      event,
-      // @ts-expect-error with a text, clipboardText sets the data and returns nothing
-      () => getClipboardText(event, selectedText),
-    );
+    this.editor._maskKeyHandler(event, () => {
+      if (selectedText) {
+        getClipboardText(event, selectedText);
+      }
+
+      return undefined;
+    });
   }
 
   _dropHandler(): void {

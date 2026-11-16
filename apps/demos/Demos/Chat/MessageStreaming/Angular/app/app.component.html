@@ -10,7 +10,7 @@
       <dxi-toolbar-item
         location="after"
         widget="dxButton"
-        [options]="clearButtonOptions$ | async"
+        [options]="clearButtonOptions()"
       >
       </dxi-toolbar-item>
     </dx-toolbar>
@@ -21,9 +21,9 @@
       [showDayHeaders]="false"
       [user]="user"
       height="710"
-      [typingUsers]="typingUsers$ | async"
-      [alerts]="alerts$ | async"
-      [sendButtonOptions]="sendButtonOptions$ | async"
+      [typingUsers]="typingUsers()"
+      [alerts]="alerts()"
+      [sendButtonOptions]="sendButtonOptions()"
       [speechToTextEnabled]="true"
       (onMessageEntered)="onMessageEntered($event)"
       messageTemplate="messageTemplate"

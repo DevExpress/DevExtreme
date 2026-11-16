@@ -1,9 +1,9 @@
 <div class="container">
   <div
     class="employees"
-    [class]="pageSize === 4 ? 'employees--forth' : 'employees--six'"
+    [class]="pageSize() === 4 ? 'employees--forth' : 'employees--six'"
   >
-    @for (employee of pageEmployees; track employee.ID) {
+    @for (employee of pageEmployees(); track employee.ID) {
     <employee-card [employee]="employee"> </employee-card>
     }
   </div>
@@ -13,10 +13,8 @@
     [showNavigationButtons]="showNavigationButtons"
     [allowedPageSizes]="allowedPageSizes"
     [itemCount]="itemCount"
-    [pageIndex]="pageIndex"
-    [pageSize]="pageSize"
-    (pageIndexChange)="onPageIndexChange($event)"
-    (pageSizeChange)="onPageSizeChange($event)"
+    [(pageIndex)]="pageIndex"
+    [(pageSize)]="pageSize"
   >
   </dx-pagination>
 </div>

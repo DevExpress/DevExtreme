@@ -1,7 +1,8 @@
 import errors from '@js/core/errors';
+import type { DeferredObj } from '@js/core/utils/deferred';
 import { when } from '@js/core/utils/deferred';
 
-type Task = () => unknown;
+type Task = () => PromiseLike<unknown> | DeferredObj<unknown> | undefined;
 
 interface Queue {
   add: (task: Task, removeTaskCallback?: (task: Task) => void) => void;
@@ -27,14 +28,13 @@ function createQueue(discardPendingTasks?: boolean): Queue {
         continue;
       }
 
-      // @ts-expect-error the task result is not typed yet
-      if (result.then) {
-        // NOTE: immediate "then" on the next line can reset it back to false
-        when(result).always(exec);
-        return;
+      if (!result.then) {
+        throw errors.Error('E0015');
       }
 
-      throw errors.Error('E0015');
+      // NOTE: immediate "then" on the next line can reset it back to false
+      when(result).always(exec);
+      return;
     }
 
     _busy = false;

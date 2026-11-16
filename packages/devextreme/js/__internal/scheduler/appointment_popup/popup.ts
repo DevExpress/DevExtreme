@@ -1,4 +1,3 @@
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import pointerEvents from '@js/common/core/events/pointer';
 import { addNamespace } from '@js/common/core/events/utils/index';
 import { triggerResizeEvent } from '@js/common/core/events/visibility_change';
@@ -21,6 +20,7 @@ import Popup from '@js/ui/popup/ui.popup';
 import type { Properties as SchedulerProperties } from '@js/ui/scheduler';
 import { current, isFluent } from '@js/ui/themes';
 import errors from '@js/ui/widget/ui.errors';
+import eventsEngine from '@ts/events/core/events_engine';
 
 import { hide as hideLoading, show as showLoading } from '../loading';
 import type { TimeZoneCalculator } from '../r1/timezone_calculator/calculator';

@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, input } from '@angular/core';
 
 @Component({
   selector: 'category',
@@ -6,5 +6,5 @@ import { Component, Input } from '@angular/core';
   styleUrls: ['./category.component.css'],
 })
 export class Category {
-  @Input() category!: string;
+  readonly category = input.required<string>();
 }

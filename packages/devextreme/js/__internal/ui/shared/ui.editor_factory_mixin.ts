@@ -4,7 +4,6 @@ import '@js/ui/check_box';
 import '@js/ui/select_box';
 import '@js/ui/date_box';
 
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import { normalizeKeyName } from '@js/common/core/events/utils/index';
 import { normalizeDataSourceOptions } from '@js/common/data/data_source/utils';
 import devices from '@js/core/devices';
@@ -15,6 +14,7 @@ import { compileGetter } from '@js/core/utils/data';
 import { extend } from '@js/core/utils/extend';
 import { isDefined, isFunction, isObject } from '@js/core/utils/type';
 import variableWrapper from '@js/core/utils/variable_wrapper';
+import eventsEngine from '@ts/events/core/events_engine';
 
 const { isWrapped } = variableWrapper;
 
@@ -69,7 +69,6 @@ const getTextEditorConfig = (options) => {
     },
     onKeyDown(e): void {
       if (isEnterBug && normalizeKeyName(e.event) === 'enter') {
-        // @ts-expect-error ts-error
         eventsEngine.trigger($(e.component._input()), 'change');
       }
     },

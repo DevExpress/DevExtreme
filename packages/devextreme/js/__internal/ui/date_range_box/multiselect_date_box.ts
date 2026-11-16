@@ -1,9 +1,9 @@
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import { addNamespace } from '@js/common/core/events/utils/index';
 import $ from '@js/core/renderer';
 import { getWidth } from '@js/core/utils/size';
 import type { DxEvent, InteractionEvent } from '@js/events';
 import type { OptionChanged } from '@ts/core/widget/types';
+import eventsEngine from '@ts/events/core/events_engine';
 import DateBox from '@ts/ui/date_box/date_box';
 import type { DateBoxMaskProperties } from '@ts/ui/date_box/date_box.mask';
 import { getDeserializedDate, monthDifference } from '@ts/ui/date_range_box/date_range.utils';

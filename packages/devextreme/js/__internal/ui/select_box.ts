@@ -951,7 +951,7 @@ class SelectBox<
   }
 
   _valueSubstituted(): boolean {
-    const input = this._input().get(0) as HTMLInputElement;
+    const input = this._input().get<HTMLInputElement>(0);
     const currentSearchLength = this._searchValue().length;
     const isAllSelected = input.selectionStart === 0 && input.selectionEnd === currentSearchLength;
     const inputHasSelection = input.selectionStart !== input.selectionEnd;
@@ -989,7 +989,7 @@ class SelectBox<
       return;
     }
 
-    const inputElement = $input.get(0) as HTMLInputElement;
+    const inputElement = $input.get<HTMLInputElement>(0);
     // @ts-expect-error DataExpressionMixin must be typed
     const displayValue = this._displayGetter(item).toString();
     inputElement.value = displayValue;

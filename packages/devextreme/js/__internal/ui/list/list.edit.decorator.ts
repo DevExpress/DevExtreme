@@ -1,4 +1,3 @@
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import {
   end as swipeEventEnd,
   start as swipeEventStart,
@@ -9,6 +8,7 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { getWidth } from '@js/core/utils/size';
 import type { Cancelable, DxEvent } from '@js/events';
+import eventsEngine from '@ts/events/core/events_engine';
 import type { ListBaseProperties } from '@ts/ui/list/list.base';
 import type List from '@ts/ui/list/list.edit';
 

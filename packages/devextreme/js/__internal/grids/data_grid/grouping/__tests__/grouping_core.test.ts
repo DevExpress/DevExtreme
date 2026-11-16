@@ -1,7 +1,8 @@
 import { describe, expect, it } from '@jest/globals';
 import type { StoreLoadOptions } from '@ts/data/data_source/types';
 
-import { GroupingHelper } from '../m_grouping_expanded';
+import { GroupingHelper } from '../grouping_expanded';
+import type { GroupingDataSourceAdapter } from '../types';
 import { createDataSourceAdapterStub } from './grouping_expanded.mock';
 
 const refresh = (grouping: GroupingHelper, group: StoreLoadOptions['group']): void => {
@@ -31,5 +32,20 @@ describe('refresh', () => {
     refresh(grouping, [{ selector: 'g' }]);
 
     expect(grouping.findGroupInfo(['A'])).toBeUndefined();
+  });
+});
+
+describe('itemsCount', () => {
+  it('should count no items when a group holds non-array items', () => {
+    const dataSourceAdapter = {
+      option: (): undefined => undefined,
+      _dataSource: {
+        group: (): unknown[] => [{ selector: 'g' }, { selector: 'h' }],
+        items: (): unknown[] => [{ key: 'A', items: { key: 'B', items: null } }],
+      },
+    } as unknown as GroupingDataSourceAdapter;
+    const grouping = new GroupingHelper(dataSourceAdapter);
+
+    expect(grouping.itemsCount()).toBe(0);
   });
 });

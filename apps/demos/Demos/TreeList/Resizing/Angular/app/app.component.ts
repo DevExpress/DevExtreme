@@ -1,8 +1,10 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import {
+  Component, enableProdMode, inject, signal,
+} from '@angular/core';
 import { DxTreeListModule, DxTreeListTypes } from 'devextreme-angular/ui/tree-list';
-import { DxSelectBoxModule, DxSelectBoxTypes } from 'devextreme-angular/ui/select-box';
-import { Employee, Service } from './app.service';
+import { DxSelectBoxModule } from 'devextreme-angular/ui/select-box';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -19,23 +21,11 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  employees: Employee[];
+  readonly employees = inject(Service).getEmployees();
 
-  resizingModes: DxTreeListTypes.ColumnResizeMode[] = ['nextColumn', 'widget'];
+  readonly resizingModes: DxTreeListTypes.ColumnResizeMode[] = ['nextColumn', 'widget'];
 
-  columnResizingMode = this.resizingModes[0];
-
-  constructor(service: Service) {
-    this.employees = service.getEmployees();
-  }
-
-  selectResizing({ value }: DxSelectBoxTypes.ValueChangedEvent) {
-    this.columnResizingMode = value;
-  }
+  readonly columnResizingMode = signal(this.resizingModes[0]);
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

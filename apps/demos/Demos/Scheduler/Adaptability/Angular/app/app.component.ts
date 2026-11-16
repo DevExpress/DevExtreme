@@ -1,7 +1,9 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, ViewChild, provideZoneChangeDetection } from '@angular/core';
+import {
+  Component, enableProdMode, inject, signal, viewChild,
+} from '@angular/core';
 import { DxSpeedDialActionModule, DxSchedulerModule, DxSchedulerComponent } from 'devextreme-angular';
-import { Appointment, Resource, Service } from './app.service';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -18,28 +20,21 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  @ViewChild(DxSchedulerComponent, { static: false }) scheduler: DxSchedulerComponent;
+  private readonly scheduler = viewChild.required(DxSchedulerComponent);
 
-  appointments: Appointment[];
+  private readonly service = inject(Service);
 
-  currentDate: Date = new Date(2021, 2, 25);
+  readonly appointments = this.service.getAppointments();
 
-  cellDuration = 30;
+  readonly currentDate = signal(new Date(2021, 2, 25));
 
-  priorities: Resource[];
+  readonly cellDuration = 30;
 
-  constructor(service: Service) {
-    this.appointments = service.getAppointments();
-    this.priorities = service.getResources();
-  }
+  readonly priorities = this.service.getResources();
 
   showAppointmentPopup() {
-    this.scheduler.instance.showAppointmentPopup();
+    this.scheduler().instance.showAppointmentPopup();
   }
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

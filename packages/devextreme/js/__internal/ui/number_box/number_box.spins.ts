@@ -1,9 +1,9 @@
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import pointer from '@js/common/core/events/pointer';
 import { addNamespace } from '@js/common/core/events/utils/index';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import type { DxEvent, PointerInteractionEvent } from '@js/events/events.types';
+import eventsEngine from '@ts/events/core/events_engine';
 import TextEditorButton from '@ts/ui/text_box/texteditor_button_collection/button';
 
 import type NumberBoxBase from './number_box.base';

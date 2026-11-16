@@ -1,8 +1,9 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import { Component, enableProdMode, signal } from '@angular/core';
 import RemoteFileSystemProvider from 'devextreme/file_management/remote_provider';
 import { DxPopupModule } from 'devextreme-angular';
-import { DxFileManagerModule, DxFileManagerTypes } from 'devextreme-angular/ui/file-manager';
+import { DxFileManagerModule } from 'devextreme-angular/ui/file-manager';
+import type { DxFileManagerTypes } from 'devextreme-angular/ui/file-manager';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -19,26 +20,18 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  remoteProvider: RemoteFileSystemProvider;
+  readonly remoteProvider = new RemoteFileSystemProvider({
+    endpointUrl: 'https://js.devexpress.com/Demos/NetCore/api/file-manager-file-system-images',
+  });
 
-  imageItemToDisplay = {} as DxFileManagerTypes.SelectedFileOpenedEvent['file'];
+  readonly imageItemToDisplay = signal({} as DxFileManagerTypes.SelectedFileOpenedEvent['file']);
 
-  popupVisible = false;
-
-  constructor() {
-    this.remoteProvider = new RemoteFileSystemProvider({
-      endpointUrl: 'https://js.devexpress.com/Demos/NetCore/api/file-manager-file-system-images',
-    });
-  }
+  readonly popupVisible = signal(false);
 
   displayImagePopup(e: DxFileManagerTypes.SelectedFileOpenedEvent) {
-    this.imageItemToDisplay = e.file;
-    this.popupVisible = true;
+    this.imageItemToDisplay.set(e.file);
+    this.popupVisible.set(true);
   }
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

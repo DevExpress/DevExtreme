@@ -1,5 +1,4 @@
 import type { DefaultOptionsRule } from '@js/common';
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import pointerEvents from '@js/common/core/events/pointer';
 import { addNamespace } from '@js/common/core/events/utils/index';
 import registerComponent from '@js/core/component_registrator';
@@ -17,6 +16,7 @@ import errors from '@js/ui/widget/ui.errors';
 import { fromPromise } from '@ts/core/utils/deferred';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
+import eventsEngine from '@ts/events/core/events_engine';
 
 import type { LocationOption } from './provider.dynamic';
 import azure from './provider.dynamic.azure';

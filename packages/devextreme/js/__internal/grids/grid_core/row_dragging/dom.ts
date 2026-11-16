@@ -1,4 +1,5 @@
 import $ from '@js/core/renderer';
+import { CLASSES as EDITOR_FACTORY_CLASSES } from '@ts/grids/grid_core/editor_factory/const';
 import gridCoreUtils from '@ts/grids/grid_core/utils';
 
 import { CLASSES } from './const';
@@ -10,7 +11,7 @@ const createHandleTemplateFunc = (
   const $container = $(container);
 
   if (options.rowType === 'data') {
-    $container.addClass(CLASSES.cellFocusDisabled);
+    $container.addClass(EDITOR_FACTORY_CLASSES.cellFocusDisabled);
     return $('<span>').addClass(addWidgetPrefix(CLASSES.handleIcon));
   }
   gridCoreUtils.setEmptyText($container);

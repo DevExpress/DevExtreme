@@ -1,7 +1,9 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import {
+  Component, enableProdMode, inject, signal,
+} from '@angular/core';
 import { DxDataGridModule, DxSelectBoxModule, DxCheckBoxModule } from 'devextreme-angular';
-import { Employee, Service } from './app.service';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -20,33 +22,25 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  employees: Employee[];
+  readonly employees = inject(Service).getEmployees();
 
-  searchEnabled = true;
+  readonly searchEnabled = signal(true);
 
-  editorOptions = { placeholder: 'Search column' };
+  readonly editorOptions = { placeholder: 'Search column' };
 
-  allowSelectAll = true;
+  readonly allowSelectAll = signal(true);
 
-  selectByClick = true;
+  readonly selectByClick = signal(true);
 
-  recursive = true;
+  readonly recursive = signal(true);
 
-  columnChooserModes = [{
+  readonly columnChooserModes = [{
     key: 'dragAndDrop',
     name: 'Drag and drop',
   }, {
     key: 'select',
     name: 'Select',
   }];
-
-  constructor(service: Service) {
-    this.employees = service.getEmployees();
-  }
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

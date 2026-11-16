@@ -71,7 +71,7 @@
     *dxTemplate="let data of 'movie-info-form-template'"
     class="movie-info-container"
   >
-    @if (currentSelectedMovie; as movie) {
+    @if (currentSelectedMovie(); as movie) {
     <div class="movie-info">
       <div class="movie-preview-image">
         <img [src]="movie.image" alt="{{ movie.text }} poster" />

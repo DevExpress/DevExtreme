@@ -1,6 +1,5 @@
 import type { ValidationRule } from '@js/common';
 import { name as clickEventName } from '@js/common/core/events/click';
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import { getPublicElement } from '@js/core/element';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
@@ -9,11 +8,14 @@ import { format } from '@js/core/utils/string';
 import type { SimpleItem } from '@js/ui/form';
 import { current, isMaterialBased } from '@js/ui/themes';
 import errors from '@js/ui/widget/ui.errors';
+import { setData } from '@ts/core/element_data';
+import eventsEngine from '@ts/events/core/events_engine';
 import type Editor from '@ts/ui/editor/editor';
 import type { SimpleItemLabelTemplateData } from '@ts/ui/form/components/label';
 import { renderLabel } from '@ts/ui/form/components/label';
 import {
   FIELD_ITEM_CONTENT_CLASS,
+  FIELD_ITEM_DATA_KEY,
 } from '@ts/ui/form/constants';
 import type Form from '@ts/ui/form/form';
 import type LayoutManager from '@ts/ui/form/form.layout_manager';
@@ -138,7 +140,7 @@ export function renderFieldItem({
   //
 
   const $fieldEditorContainer = $('<div>');
-  $fieldEditorContainer.data('dx-form-item', item);
+  setData($fieldEditorContainer, FIELD_ITEM_DATA_KEY, item);
   const locationClassSuffix = { right: 'left', left: 'right', top: 'bottom' };
   $fieldEditorContainer
     .addClass(FIELD_ITEM_CONTENT_CLASS)
@@ -178,7 +180,6 @@ export function renderFieldItem({
 
     if (editorType === 'dxCheckBox' || editorType === 'dxSwitch') {
       eventsEngine.on($label, clickEventName, () => {
-        // @ts-expect-error ts-error
         eventsEngine.trigger($fieldEditorContainer.children(), clickEventName);
       });
     }

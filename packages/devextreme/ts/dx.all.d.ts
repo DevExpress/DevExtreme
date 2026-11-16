@@ -2833,7 +2833,11 @@ declare module DevExpress.common.core.animation {
     /**
      * [descr:PositionConfig.of]
      */
-    of?: string | DevExpress.core.UserDefinedElement | Window;
+    of?:
+      | string
+      | DevExpress.core.UserDefinedElement
+      | Window
+      | DevExpress.events.DxEvent;
     /**
      * [descr:PositionConfig.offset]
      */
@@ -7364,13 +7368,14 @@ declare module DevExpress.core {
 
     first(): this;
 
-    get(index: number): Element;
+    get<T extends Element = Element>(index: number): T;
 
     hasClass(className: string): boolean;
 
     hide(): this;
 
-    html(value?: string): this;
+    html<T = any>(): T;
+    html(value: string | number | undefined): this;
 
     index(element?: Element | dxElementWrapper): number;
 
@@ -7420,6 +7425,7 @@ declare module DevExpress.core {
 
     prev(): this;
 
+    prop<T = any>(propertyName: string): T;
     prop(propertyName: string, value: string | number | boolean): this;
 
     remove(element?: Element | dxElementWrapper): this;
@@ -7432,9 +7438,11 @@ declare module DevExpress.core {
 
     replaceWith(element: Element | dxElementWrapper): this;
 
-    scrollLeft(value?: string | undefined): this;
+    scrollLeft<T = any>(): T;
+    scrollLeft(value: string | number | undefined): this;
 
-    scrollTop(value?: string): this;
+    scrollTop<T = any>(): T;
+    scrollTop(value: string | number | undefined): this;
 
     show(): this;
 
@@ -10923,7 +10931,10 @@ declare module DevExpress.ui {
      * [descr:_ui_card_view_ContextMenuPreparingEvent]
      */
     export type ContextMenuPreparingEvent<TCardData = unknown> =
-      DevExpress.common.core.events.EventInfo<dxCardView> & {
+      DevExpress.common.core.events.NativeEventInfo<
+        dxCardView,
+        DevExpress.events.InteractionEvent
+      > & {
         /**
          * [descr:_ui_card_view_ContextMenuPreparingEvent.items]
          */
@@ -11930,6 +11941,10 @@ declare module DevExpress.ui {
       | 'selectedItems'
       | 'onSelectionChanged'
     >;
+    /**
+     * [descr:dxChatOptions.toolCallOptions]
+     */
+    toolCallOptions?: DevExpress.ui.dxChat.ToolCallOptions;
     /**
      * [descr:dxChatOptions.typingUsers]
      */
@@ -13062,7 +13077,10 @@ declare module DevExpress.ui {
     export type ContextMenuPreparingEvent<
       TRowData = any,
       TKey = any
-    > = DevExpress.common.core.events.EventInfo<dxDataGrid<TRowData, TKey>> & {
+    > = DevExpress.common.core.events.NativeEventInfo<
+      dxDataGrid<TRowData, TKey>,
+      DevExpress.events.PointerInteractionEvent
+    > & {
       /**
        * [descr:_ui_data_grid_ContextMenuPreparingEvent.items]
        */
@@ -24886,7 +24904,10 @@ declare module DevExpress.ui {
      * [descr:_ui_pivot_grid_ContextMenuPreparingEvent]
      */
     export type ContextMenuPreparingEvent =
-      DevExpress.common.core.events.EventInfo<dxPivotGrid> & {
+      DevExpress.common.core.events.NativeEventInfo<
+        dxPivotGrid,
+        DevExpress.events.InteractionEvent
+      > & {
         /**
          * [descr:_ui_pivot_grid_ContextMenuPreparingEvent.area]
          */
@@ -31714,7 +31735,10 @@ declare module DevExpress.ui {
     export type ContextMenuPreparingEvent<
       TRowData = any,
       TKey = any
-    > = DevExpress.common.core.events.EventInfo<dxTreeList<TRowData, TKey>> & {
+    > = DevExpress.common.core.events.NativeEventInfo<
+      dxTreeList<TRowData, TKey>,
+      DevExpress.events.PointerInteractionEvent
+    > & {
       /**
        * [descr:_ui_tree_list_ContextMenuPreparingEvent.items]
        */
@@ -35110,9 +35134,54 @@ declare module DevExpress.ui.dxChat {
      * [descr:TextMessage.isEdited]
      */
     isEdited?: boolean;
+    /**
+     * [descr:TextMessage.toolCalls]
+     */
+    toolCalls?: ToolCall[];
 
     [key: string]: any;
   };
+  /**
+   * [descr:ToolCall]
+   */
+  export type ToolCall = {
+    /**
+     * [descr:ToolCall.name]
+     */
+    name: string;
+    /**
+     * [descr:ToolCall.arguments]
+     */
+    arguments?: Record<string, any>;
+    /**
+     * [descr:ToolCall.result]
+     */
+    result?: string | object;
+    /**
+     * [descr:ToolCall.status]
+     */
+    status?: ToolCallStatus;
+    /**
+     * [descr:ToolCall.expanded]
+     */
+    expanded?: boolean;
+
+    [key: string]: any;
+  };
+  /**
+   * [descr:ToolCallOptions]
+   */
+  export type ToolCallOptions = {
+    /**
+     * [descr:ToolCallOptions.showInMessageTemplate]
+     */
+    showInMessageTemplate?: boolean;
+    /**
+     * [descr:ToolCallOptions.expandAll]
+     */
+    expandAll?: boolean;
+  };
+  export type ToolCallStatus = 'success' | 'error';
   /**
    * [descr:User]
    */
@@ -47610,7 +47679,7 @@ declare module DevExpress.viz {
   /**
    * [descr:viz.getTheme(theme)]
    */
-  export function getTheme(theme: string): any;
+  export function getTheme(theme?: string): any;
   /**
    * [descr:MapLayer]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.

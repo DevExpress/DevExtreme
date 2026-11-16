@@ -4,6 +4,7 @@ export const CLASSES = {
 };
 
 export const SCROLLING_MODE_INFINITE = 'infinite';
+export const SCROLLING_MODE_STANDARD = 'standard';
 export const SCROLLING_MODE_VIRTUAL = 'virtual';
 export const LOAD_TIMEOUT = 300;
 export const LEGACY_SCROLLING_MODE = 'scrolling.legacyMode';

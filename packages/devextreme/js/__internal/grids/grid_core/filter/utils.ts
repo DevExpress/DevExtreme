@@ -4,7 +4,7 @@ import { toComparable } from '@js/core/utils/data';
 import { isFunction } from '@js/core/utils/type';
 import type { Column, ColumnSelector } from '@ts/grids/grid_core/columns_controller/types';
 
-import type { DataFilter, FilterCombiner } from './types';
+import type { DataFilter, DataFilterSelector, FilterCombiner } from './types';
 
 export const isColumnExcluded = (
   column: Column,
@@ -40,8 +40,8 @@ export function combineFilters(
 }
 
 export function equalFilterParameters(
-  filter1: DataFilter | ScalarFilterValue,
-  filter2: DataFilter | ScalarFilterValue,
+  filter1: DataFilter | DataFilterSelector | ScalarFilterValue,
+  filter2: DataFilter | DataFilterSelector | ScalarFilterValue,
   langParams?: LangParams,
 ): boolean {
   if (Array.isArray(filter1) && Array.isArray(filter2)) {

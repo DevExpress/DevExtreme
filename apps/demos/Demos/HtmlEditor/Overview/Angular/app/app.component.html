@@ -1,5 +1,5 @@
 <dx-html-editor height="725px" [value]="valueContent">
-  <dxo-html-editor-toolbar [multiline]="isMultiline">
+  <dxo-html-editor-toolbar [multiline]="isMultiline()">
     <dxi-html-editor-item name="undo"></dxi-html-editor-item>
     <dxi-html-editor-item name="redo"></dxi-html-editor-item>
     <dxi-html-editor-item name="separator"></dxi-html-editor-item>
@@ -63,7 +63,7 @@
   </dxo-html-editor-toolbar>
   <dxo-html-editor-media-resizing [enabled]="true">
   </dxo-html-editor-media-resizing>
-  <dxo-html-editor-image-upload [tabs]="currentTab" fileUploadMode="base64">
+  <dxo-html-editor-image-upload [tabs]="currentTab()" fileUploadMode="base64">
   </dxo-html-editor-image-upload>
 </dx-html-editor>
 

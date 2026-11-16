@@ -29,18 +29,16 @@ export interface ScrollOffset {
 
 export type AllowedDirections = Record<Orientation, boolean>;
 
-export interface DxMouseEvent extends MouseEvent {
-  originalEvent: MouseEvent;
+export type DxMouseEvent = DxEvent<MouseEvent> & {
   delta: { x: number; y: number };
   isScrollingEvent: boolean;
   cancel: boolean;
   velocity: { x: number; y: number };
-}
+};
 
-export interface DxMouseWheelEvent extends MouseEvent {
-  originalEvent: MouseEvent;
+export type DxMouseWheelEvent = DxEvent<MouseEvent> & {
   delta: number;
-}
+};
 
 export interface DxKeyboardEvent extends KeyboardEvent {
   originalEvent: DxKeyboardEvent;

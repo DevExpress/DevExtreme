@@ -1,4 +1,3 @@
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import dateLocalization from '@js/common/core/localization/date';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
@@ -6,6 +5,7 @@ import type { DxEvent, InteractionEvent } from '@js/events';
 import type { Format } from '@js/localization';
 import type { ToolbarItem } from '@js/ui/popup';
 import { applyDataTypePreset } from '@ts/core/global_format_config';
+import eventsEngine from '@ts/events/core/events_engine';
 import type Calendar from '@ts/ui/calendar/calendar';
 import type DateBox from '@ts/ui/date_box/date_box.base';
 import type { DateBoxBaseProperties } from '@ts/ui/date_box/date_box.base';

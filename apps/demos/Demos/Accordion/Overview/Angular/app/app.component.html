@@ -1,10 +1,10 @@
 <div id="accordion">
   <dx-accordion
     [dataSource]="companies"
-    [collapsible]="collapsible"
-    [multiple]="multiple"
-    [animationDuration]="animationDuration"
-    [selectedItems]="selectedItems"
+    [collapsible]="collapsible()"
+    [multiple]="multiple()"
+    [animationDuration]="animationDuration()"
+    [selectedItems]="selectedItems()"
     (selectedItemsChange)="onSelectedItemsChange($event)"
     id="accordion-container"
   >
@@ -65,7 +65,7 @@
         [dataSource]="companies"
         displayExpr="CompanyName"
         [(value)]="selectedItems"
-        [disabled]="!multiple"
+        [disabled]="!multiple()"
         [inputAttr]="{ 'aria-label': 'Company' }"
       ></dx-tag-box>
     </div>

@@ -1,6 +1,5 @@
 import type { FloatingActionButtonDirection, GlobalConfig } from '@js/common';
 import { name as clickEventName } from '@js/common/core/events/click';
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import { addNamespace } from '@js/common/core/events/utils/index';
 import type { DeepPartial } from '@js/core';
 import type Guid from '@js/core/guid';
@@ -18,6 +17,7 @@ import type { InkRipple, InkRippleWaveConfig } from '@ts/core/utils/ink_ripple';
 import { render } from '@ts/core/utils/ink_ripple';
 import type { DefaultActionArgs } from '@ts/core/widget/component';
 import type { OptionChanged } from '@ts/core/widget/types';
+import eventsEngine from '@ts/events/core/events_engine';
 import type { OverlayProperties } from '@ts/ui/overlay/overlay';
 import Overlay from '@ts/ui/overlay/overlay';
 import type { SpeedDialActionProperties } from '@ts/ui/speed_dial_action/speed_dial_action';

@@ -62,7 +62,6 @@ export const defaultOptions = {
 export const defaultOptionsRules = [
   {
     device(): boolean {
-      // @ts-expect-error
       return isMaterialBased();
     },
     options: {

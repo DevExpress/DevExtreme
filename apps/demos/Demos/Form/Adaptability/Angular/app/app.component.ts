@@ -1,8 +1,10 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import {
+  Component, enableProdMode, inject, signal,
+} from '@angular/core';
 import { DxFormModule } from 'devextreme-angular';
-import { DxCheckBoxModule, DxCheckBoxTypes } from 'devextreme-angular/ui/check-box';
-import { Employee, Service } from './app.service';
+import { DxCheckBoxModule, type DxCheckBoxTypes } from 'devextreme-angular/ui/check-box';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -19,33 +21,25 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  employee: Employee;
+  readonly employee = inject(Service).getEmployee();
 
-  colCountByScreen = {
+  readonly colCountByScreen = signal({
     md: 4,
     sm: 2,
-  };
+  });
 
-  constructor(service: Service) {
-    this.employee = service.getEmployee();
-  }
-
-  screen = (width: number) => (width < 720 ? 'sm' : 'md');
+  readonly screen = (width: number) => (width < 720 ? 'sm' : 'md');
 
   valueChanged(e: DxCheckBoxTypes.ValueChangedEvent) {
     if (e.value) {
-      this.colCountByScreen = null;
+      this.colCountByScreen.set(null);
     } else {
-      this.colCountByScreen = {
+      this.colCountByScreen.set({
         md: 4,
         sm: 2,
-      };
+      });
     }
   }
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

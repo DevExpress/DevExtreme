@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, computed, input } from '@angular/core';
 
 @Component({
   selector: 'category',
@@ -6,11 +6,9 @@ import { Component, Input } from '@angular/core';
   styleUrls: ['./category.component.css'],
 })
 export class Category {
-  @Input() id!: number;
+  readonly id = input.required<number>();
 
-  @Input() name!: string;
+  readonly name = input.required<string>();
 
-  getBackgroundClass() {
-    return `category-${this.id}__bg-color`;
-  }
+  readonly wrapperClass = computed(() => `category__wrapper category-${this.id()}__bg-color`);
 }

@@ -27,10 +27,10 @@
     <div *dxTemplate="let data of 'content'">
       <dx-load-indicator
         class="button-indicator"
-        [visible]="loadIndicatorVisible"
+        [visible]="loadIndicatorVisible()"
       >
       </dx-load-indicator>
-      <span class="dx-button-text">{{ buttonText }}</span>
+      <span class="dx-button-text">{{ buttonText() }}</span>
     </div>
   </dx-button>
 </div>

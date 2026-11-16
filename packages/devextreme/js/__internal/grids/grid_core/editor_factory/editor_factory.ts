@@ -1,6 +1,4 @@
-/* eslint-disable @typescript-eslint/method-signature-style */
 import positionUtils from '@js/common/core/animation/position';
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import { addNamespace, normalizeKeyName } from '@js/common/core/events/utils/index';
 import domAdapter from '@js/core/dom_adapter';
 import type { dxElementWrapper } from '@js/core/renderer';
@@ -15,11 +13,12 @@ import {
 } from '@js/core/utils/size';
 import type { DxEvent } from '@js/events';
 import EditorFactoryMixin from '@js/ui/shared/ui.editor_factory_mixin';
+import eventsEngine from '@ts/events/core/events_engine';
 import type { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/column_headers';
 import type {
   ColumnsResizerViewController,
 } from '@ts/grids/grid_core/columns_resizing_reordering/columns_resizing_reordering';
-import type { ValidatingController } from '@ts/grids/grid_core/validating/m_validating';
+import type { ValidatingController } from '@ts/grids/grid_core/validating/validating';
 import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
 
 import type { ColumnsController } from '../columns_controller/columns_controller';
@@ -36,8 +35,9 @@ import type { RowsView } from '../views/rows_view';
 import { CLASSES, MODULE_NAMESPACE, UPDATE_FOCUS_EVENTS } from './const';
 
 interface EditorFactoryMixinType {
-  createEditor($container: dxElementWrapper, options: object): void;
+  createEditor: ($container: dxElementWrapper, options: object) => void;
 
+  // eslint-disable-next-line @typescript-eslint/method-signature-style -- overridden by methods
   _getRevertTooltipsSelector(): string;
 
 }
@@ -137,10 +137,10 @@ export class EditorFactory extends ViewControllerWithMixin {
       let isHideBorder: boolean | undefined;
 
       if (
-        !$focus.hasClass(EDITING_CLASSES.cellFocusDisabled)
+        !$focus.hasClass(CLASSES.cellFocusDisabled)
         && !$focus.hasClass(VIEW_CLASSES.row)
       ) {
-        const $focusCell = $focus.closest(`${this._getFocusCellSelector()}, .${EDITING_CLASSES.cellFocusDisabled}`);
+        const $focusCell = $focus.closest(`${this._getFocusCellSelector()}, .${CLASSES.cellFocusDisabled}`);
 
         if ($focusCell.get(0) !== $focus.get(0)) {
           isHideBorder = this._needHideBorder($focusCell);
@@ -148,7 +148,7 @@ export class EditorFactory extends ViewControllerWithMixin {
         }
       }
 
-      if ($focus.length && !$focus.hasClass(EDITING_CLASSES.cellFocusDisabled)) {
+      if ($focus.length && !$focus.hasClass(CLASSES.cellFocusDisabled)) {
         this.focus($focus, isHideBorder);
         return;
       }
@@ -170,7 +170,7 @@ export class EditorFactory extends ViewControllerWithMixin {
 
   private _updateFocus(e: { event?: DxEvent }): void {
     const isFocusOverlay = e?.event
-      && $(e.event.target).hasClass(this.addWidgetPrefix(EDITING_CLASSES.focusOverlay));
+      && $(e.event.target).hasClass(this.addWidgetPrefix(CLASSES.focusOverlay));
 
     this._isFocusOverlay = !!this._isFocusOverlay || isFocusOverlay;
 
@@ -264,7 +264,7 @@ export class EditorFactory extends ViewControllerWithMixin {
       return;
     }
 
-    this._$focusOverlay ??= $('<div>').addClass(this.addWidgetPrefix(EDITING_CLASSES.focusOverlay));
+    this._$focusOverlay ??= $('<div>').addClass(this.addWidgetPrefix(CLASSES.focusOverlay));
 
     this.updateFocusOverlay($element, isHideBorder);
   }
@@ -317,8 +317,7 @@ export class EditorFactory extends ViewControllerWithMixin {
   /**
    * @extended: validating
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars -- overridable signature
-  public loseFocus(skipValidator?: boolean): void {
+  public loseFocus(): void {
     this._$focusedElement?.removeClass(KEYBOARD_NAVIGATION_CLASSES.focused);
     this._$focusedElement = null;
     this._$focusOverlay?.addClass(CLASSES.hidden);
@@ -326,8 +325,7 @@ export class EditorFactory extends ViewControllerWithMixin {
 
   private _getContainerRoot(): Node {
     const $container = this.component?.$element();
-    // @ts-expect-error the grid element exists once the component is initialized
-    const root = domAdapter.getRootNode($container?.get(0));
+    const root = domAdapter.getRootNode($container?.get<HTMLElement>(0));
 
     // a grid created inside a plain document fragment (not a shadow root) listens on the document
     if (root.nodeType === Node.DOCUMENT_FRAGMENT_NODE && !('host' in root)) {
@@ -342,7 +340,7 @@ export class EditorFactory extends ViewControllerWithMixin {
 
     if ($container) {
       // T179518
-      eventsEngine.on($container, addNamespace('keydown', MODULE_NAMESPACE), (e) => {
+      eventsEngine.on($container, addNamespace('keydown', MODULE_NAMESPACE), (e: DxEvent<KeyboardEvent>) => {
         if (normalizeKeyName(e) === 'tab') {
           this._updateFocusHandler(e);
         }

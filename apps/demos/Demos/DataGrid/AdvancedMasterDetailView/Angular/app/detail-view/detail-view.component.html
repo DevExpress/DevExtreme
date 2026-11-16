@@ -7,8 +7,8 @@
       </dxi-form-item>
       <div *dxTemplate="let selectBoxItem of 'productSelectBox'">
         <dx-select-box
-          [value]="productIdBySupplier"
-          [dataSource]="productsData"
+          [value]="productIdBySupplier()"
+          [dataSource]="productsData()"
           [inputAttr]="{ 'aria-label': 'Product' }"
           [deferRendering]="false"
           valueExpr="ProductID"
@@ -22,7 +22,7 @@
         <dxo-form-label text="Order History"></dxo-form-label>
       </dxi-form-item>
       <div *dxTemplate="let order of 'orderHistory'">
-        <dx-data-grid [dataSource]="orderHistoryData" [showBorders]="true">
+        <dx-data-grid [dataSource]="orderHistoryData()" [showBorders]="true">
           <dxo-data-grid-paging [pageSize]="5"></dxo-data-grid-paging>
 
           <dxi-data-grid-column dataField="OrderID"></dxi-data-grid-column>
@@ -64,7 +64,7 @@
   ></dxi-tab-panel-item>
   <div *dxTemplate="let addressTabItem of 'addressTab'">
     <dx-form
-      [formData]="rowData"
+      [formData]="rowData()"
       [colCount]="2"
       [customizeItem]="customizeItemTemplate"
       class="address-form form-container"

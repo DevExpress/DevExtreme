@@ -12,11 +12,11 @@ import type { RefObject } from 'inferno';
  */
 export function wrapRef(ref: RefObject<HTMLElement>): dxElementWrapper {
   return {
-    // @ts-expect-error
     dxRenderer: true,
     get 0() {
       return ref.current!;
     },
+    // @ts-expect-error a mock can't implement the generic get<T>(); it returns the ref element
     get() {
       return ref.current!;
     },

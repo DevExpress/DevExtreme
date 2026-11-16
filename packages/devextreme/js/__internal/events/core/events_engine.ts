@@ -131,7 +131,8 @@ type ElementEventData = Record<string, EventTypeData>;
 
 export interface EventsEngineCore {
   on<TEvent extends EngineEvent = EngineEvent>(
-    target: EventsEngineTarget, handlers: EventHandlerMap<TEvent>): void;
+    target: EventsEngineTarget, handlers: EventHandlerMap<TEvent>,
+    selectorOrData?: EventSelectorOrData): void;
   on<TEvent extends EngineEvent = EngineEvent>(
     target: EventsEngineTarget, eventNames: EventNames<TEvent>,
     handler: EventHandler<TEvent>): void;

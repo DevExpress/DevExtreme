@@ -1,5 +1,5 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import { Component, enableProdMode, inject } from '@angular/core';
 import { HttpClient, HttpParams, provideHttpClient, withFetch } from '@angular/common/http';
 import { lastValueFrom } from 'rxjs';
 import { DxDataGridModule } from 'devextreme-angular';
@@ -7,6 +7,43 @@ import { CustomStore, type LoadOptions, type LoadResultObject } from 'devextreme
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
+}
+
+function createOrdersStore(httpClient: HttpClient) {
+  const isNotEmpty = (value: unknown) => (value !== undefined && value !== null && value !== '');
+
+  return new CustomStore({
+    key: 'OrderNumber',
+    async load(loadOptions: LoadOptions) {
+      const url = 'https://js.devexpress.com/Demos/WidgetsGalleryDataService/api/orders';
+
+      const paramNames: (keyof LoadOptions)[] = [
+        'skip', 'take', 'requireTotalCount', 'requireGroupCount',
+        'sort', 'filter', 'totalSummary', 'group', 'groupSummary',
+      ];
+
+      let params = new HttpParams();
+
+      paramNames
+        .filter((paramName) => isNotEmpty(loadOptions[paramName]))
+        .forEach((paramName) => {
+          params = params.set(paramName, JSON.stringify(loadOptions[paramName]));
+        });
+
+      try {
+        const result = await lastValueFrom(httpClient.get<LoadResultObject>(url, { params }));
+
+        return {
+          data: result.data,
+          totalCount: result.totalCount,
+          summary: result.summary,
+          groupCount: result.groupCount,
+        };
+      } catch {
+        throw new Error('Data Loading Error');
+      }
+    },
+  });
 }
 
 @Component({
@@ -17,49 +54,11 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  dataSource: CustomStore;
-
-  constructor(httpClient: HttpClient) {
-    const isNotEmpty = (value: unknown) => (value !== undefined && value !== null && value !== '');
-
-    this.dataSource = new CustomStore({
-      key: 'OrderNumber',
-      async load(loadOptions: LoadOptions) {
-        const url = 'https://js.devexpress.com/Demos/WidgetsGalleryDataService/api/orders';
-
-        const paramNames: (keyof LoadOptions)[] = [
-          'skip', 'take', 'requireTotalCount', 'requireGroupCount',
-          'sort', 'filter', 'totalSummary', 'group', 'groupSummary',
-        ];
-
-        let params = new HttpParams();
-
-        paramNames
-          .filter((paramName) => isNotEmpty(loadOptions[paramName]))
-          .forEach((paramName) => {
-            params = params.set(paramName, JSON.stringify(loadOptions[paramName]));
-          });
-
-        try {
-          const result = await lastValueFrom(httpClient.get<LoadResultObject>(url, { params }));
-
-          return {
-            data: result.data,
-            totalCount: result.totalCount,
-            summary: result.summary,
-            groupCount: result.groupCount,
-          };
-        } catch {
-          throw new Error('Data Loading Error');
-        }
-      },
-    });
-  }
+  readonly dataSource = createOrdersStore(inject(HttpClient));
 }
 
 bootstrapApplication(AppComponent, {
   providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
     provideHttpClient(withFetch()),
   ],
 });

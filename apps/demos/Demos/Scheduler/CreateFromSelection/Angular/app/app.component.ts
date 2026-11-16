@@ -1,7 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import { Component, enableProdMode, inject } from '@angular/core';
 import { DxSchedulerModule } from 'devextreme-angular';
-import { Appointment, Priority, Service } from './app.service';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -16,16 +16,13 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  appointmentsData: Appointment[];
+  private readonly service = inject(Service);
 
-  currentDate: Date = new Date(2021, 3, 21);
+  readonly appointmentsData = this.service.getAppointments();
 
-  prioritiesData: Priority[];
+  readonly currentDate = new Date(2021, 3, 21);
 
-  constructor(service: Service) {
-    this.appointmentsData = service.getAppointments();
-    this.prioritiesData = service.getPriorities();
-  }
+  readonly prioritiesData = this.service.getPriorities();
 
   onSelectionEnd(e) {
     const cells = e.selectedCellData;
@@ -45,8 +42,4 @@ export class AppComponent {
   }
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

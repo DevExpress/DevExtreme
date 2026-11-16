@@ -6,17 +6,17 @@ import type { DataChange } from '@ts/grids/grid_core/data_controller/types';
 import type { DataSourceController } from '@ts/grids/grid_core/data_source/data_source_controller';
 import type DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/data_source_adapter';
 import type { ModuleType, RowKey } from '@ts/grids/grid_core/types';
-import gridCoreUtils from '@ts/grids/grid_core/utils';
 import type { RowsView } from '@ts/grids/grid_core/views/rows_view';
 import {
   dataSourceAdapterExtender as virtualScrollingDataSourceAdapterExtender,
+  isVirtualRowRendering,
   rowsView as virtualScrollingRowsViewExtender,
   virtualScrollingDataControllerExtender,
   type VirtualScrollingDataControllerExtension,
   type VirtualScrollingDataSourceAdapter,
   virtualScrollingModule,
   type VirtualScrollingRowsView,
-} from '@ts/grids/grid_core/virtual_scrolling/index';
+} from '@ts/grids/grid_core/virtual_scrolling';
 
 import gridCore from './core';
 import dataSourceAdapterProvider from './data_source_adapter/data_source_adapter';
@@ -30,7 +30,7 @@ virtualScrollingModule.extenders.views.rowsView = (
   protected _handleDataChanged(e: DataChange): void {
     const { operationTypes } = e;
 
-    if (e.isDataChanged && gridCoreUtils.isVirtualRowRendering(this) && operationTypes) {
+    if (e.isDataChanged && isVirtualRowRendering(this.option('scrolling')) && operationTypes) {
       const { fullReload, pageIndex } = operationTypes;
 
       if (!fullReload && pageIndex) {

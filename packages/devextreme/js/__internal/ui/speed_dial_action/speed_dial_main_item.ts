@@ -1,6 +1,5 @@
 import type { HorizontalAlignment } from '@js/common';
 import type { PositionConfig } from '@js/common/core/animation';
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import config from '@js/core/config';
 import type Guid from '@js/core/guid';
 import type { DefaultOptionsRule } from '@js/core/options/utils';
@@ -19,6 +18,7 @@ import errors from '@js/ui/widget/ui.errors';
 import swatchContainer from '@ts/core/utils/swatch_container';
 import { themeLength } from '@ts/core/utils/theme_length';
 import type { OptionChanged } from '@ts/core/widget/types';
+import eventsEngine from '@ts/events/core/events_engine';
 
 import type SpeedDialAction from './speed_dial_action';
 import type { FloatingActionButtonPosition, SpeedDialItemProperties } from './speed_dial_item';

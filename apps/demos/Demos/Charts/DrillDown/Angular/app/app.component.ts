@@ -1,7 +1,9 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import {
+  Component, enableProdMode, inject, signal,
+} from '@angular/core';
 import { DxTreeMapModule } from 'devextreme-angular';
-import { CitiesPopulation, Service } from './app.service';
+import { Service } from './app.service';
 
 interface DrillInfo {
   text: string;
@@ -22,31 +24,28 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  citiesPopulations: CitiesPopulation[];
+  readonly citiesPopulations = inject(Service).getCitiesPopulations();
 
-  drillInfos: DrillInfo[] = [];
-
-  constructor(service: Service) {
-    this.citiesPopulations = service.getCitiesPopulations();
-  }
+  readonly drillInfos = signal<DrillInfo[]>([]);
 
   nodeClick(e) {
     e.node.drillDown();
   }
 
   drill(e) {
-    this.drillInfos = [];
+    const drillInfos: DrillInfo[] = [];
     for (let node = e.node.getParent(); node; node = node.getParent()) {
-      this.drillInfos.unshift({
+      drillInfos.unshift({
         text: node.label() || 'All Continents',
         node,
       });
     }
-    if (this.drillInfos.length) {
-      this.drillInfos.push({
+    if (drillInfos.length) {
+      drillInfos.push({
         text: e.node.label(),
       });
     }
+    this.drillInfos.set(drillInfos);
   }
 
   drillInfoClick(node) {
@@ -56,8 +55,4 @@ export class AppComponent {
   }
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

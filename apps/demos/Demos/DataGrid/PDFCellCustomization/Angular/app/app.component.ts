@@ -1,9 +1,9 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import { Component, enableProdMode, inject } from '@angular/core';
 import { jsPDF } from 'jspdf';
 import { exportDataGrid } from 'devextreme-angular/common/export/pdf';
 import { DxDataGridModule, DxDataGridTypes } from 'devextreme-angular/ui/data-grid';
-import { Service, Company } from './app.service';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -20,11 +20,7 @@ if (!/localhost/.test(document.location.host)) {
 })
 
 export class AppComponent {
-  companies: Company[];
-
-  constructor(service: Service) {
-    this.companies = service.getCompanies();
-  }
+  readonly companies = inject(Service).getCompanies();
 
   onExporting(e: DxDataGridTypes.ExportingEvent) {
     const doc = new jsPDF();
@@ -69,8 +65,4 @@ export class AppComponent {
   }
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

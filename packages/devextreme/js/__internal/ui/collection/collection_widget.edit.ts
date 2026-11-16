@@ -1,5 +1,4 @@
 import type { SingleMultipleAllOrNone, SingleMultipleOrNone } from '@js/common';
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import { DataSource } from '@js/common/data/data_source/data_source';
 import { normalizeLoadResult } from '@js/common/data/data_source/utils';
 import type { dxElementWrapper } from '@js/core/renderer';
@@ -20,6 +19,7 @@ import type { ItemLike, SelectionChangeInfo } from '@js/ui/collection/ui.collect
 import errors from '@js/ui/widget/ui.errors';
 import type { ActionConfig } from '@ts/core/widget/component';
 import type { OptionChanged } from '@ts/core/widget/types';
+import eventsEngine from '@ts/events/core/events_engine';
 import type {
   CollectionItemInfo,
   CollectionItemKey,
@@ -639,7 +639,6 @@ class CollectionWidget<
 
     if (indexExists(normalizedIndex)) {
       this._processSelectableItem($itemElement, false);
-      // @ts-expect-error arguments
       eventsEngine.triggerHandler($itemElement, 'stateChanged', false);
     }
   }
@@ -649,7 +648,6 @@ class CollectionWidget<
 
     if (indexExists(normalizedIndex)) {
       this._processSelectableItem($itemElement, true);
-      // @ts-expect-error arguments
       eventsEngine.triggerHandler($itemElement, 'stateChanged', true);
     }
   }

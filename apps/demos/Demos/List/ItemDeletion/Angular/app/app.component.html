@@ -3,8 +3,8 @@
     <dx-list
       [dataSource]="tasks"
       [height]="400"
-      [allowItemDeleting]="allowDeletion"
-      [itemDeleteMode]="itemDeleteMode"
+      [allowItemDeleting]="allowDeletion()"
+      [itemDeleteMode]="itemDeleteMode()"
     >
     </dx-list>
   </div>
@@ -17,7 +17,7 @@
     <div class="option">
       <span>Item delete mode</span>
       <dx-select-box
-        [disabled]="!allowDeletion"
+        [disabled]="!allowDeletion()"
         [items]="[
           'static',
           'toggle',

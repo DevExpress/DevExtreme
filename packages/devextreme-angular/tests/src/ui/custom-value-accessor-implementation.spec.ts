@@ -21,6 +21,7 @@ import DxTextBox from 'devextreme/ui/text_box';
 import {
   DxTextBoxModule,
 } from 'devextreme-angular';
+import { detectChanges } from '../helpers/change-detection';
 
 @Component({
   standalone: false,
@@ -88,7 +89,7 @@ describe('DxTextBox value accessor', () => {
     const instance = getWidget(fixture);
 
     fixture.componentInstance.value = 'text';
-    fixture.detectChanges();
+    detectChanges(fixture);
 
     expect(instance.option('value')).toBe('text');
   });
@@ -113,7 +114,7 @@ describe('DxTextBox value accessor', () => {
 
     const component = fixture.componentInstance;
     const { form } = component;
-    const testSpy = jasmine.createSpy('testSpy');
+    const testSpy = vi.fn();
 
     form.valueChanges.subscribe(testSpy);
 

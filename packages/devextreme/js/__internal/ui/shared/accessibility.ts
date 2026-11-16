@@ -1,10 +1,10 @@
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import { normalizeKeyName } from '@js/common/core/events/utils/index';
 import domAdapter from '@js/core/dom_adapter';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { noop } from '@js/core/utils/common';
 import { extend } from '@js/core/utils/extend';
+import eventsEngine from '@ts/events/core/events_engine';
 
 const FOCUS_STATE_CLASS = 'dx-state-focused';
 const FOCUS_DISABLED_CLASS = 'dx-cell-focus-disabled';
@@ -131,7 +131,6 @@ export function selectView(viewName: string, instance, event): void {
       );
       if ($focusViewElement?.length) {
         $focusViewElement.attr('tabindex', instance.option('tabindex') || 0);
-        // @ts-expect-error ts-error
         eventsEngine.trigger($focusViewElement, 'focus');
         $focusViewElement.removeClass(FOCUS_DISABLED_CLASS);
         break;
@@ -231,13 +230,9 @@ export function registerKeyboardAction(
   eventsEngine.on($element, 'focusin', selector, focusinHandler);
   eventsEngine.on($element, 'mouseup contextmenu', selector, mouseUpHandler);
   return (): void => {
-    // @ts-expect-error ts-error
     eventsEngine.off($element, 'keydown', selector, keyDownHandler);
-    // @ts-expect-error ts-error
     eventsEngine.off($element, 'mousedown', selector, mouseDownHandler);
-    // @ts-expect-error ts-error
     eventsEngine.off($element, 'focusin', selector, focusinHandler);
-    // @ts-expect-error ts-error
     eventsEngine.off($element, 'mouseup contextmenu', selector, mouseUpHandler);
   };
 }
@@ -255,7 +250,6 @@ export function restoreFocus(instance): void {
 
       focusedElementInfo = null;
 
-      // @ts-expect-error ts-error
       eventsEngine.trigger($targetElement, 'focus');
     }
   }

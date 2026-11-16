@@ -1,4 +1,3 @@
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import {
   addNamespace, getChar, isCommandKeyPressed, normalizeKeyName,
 } from '@js/common/core/events/utils/index';
@@ -23,6 +22,7 @@ import type { Format } from '@js/localization';
 import { getGlobalFormatByDataType } from '@ts/core/global_format_config';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { SupportedKeys } from '@ts/core/widget/widget';
+import eventsEngine from '@ts/events/core/events_engine';
 import type { DxMouseWheelEvent } from '@ts/ui/scroll_view/types';
 import TextEditor from '@ts/ui/text_box/text_editor';
 
@@ -276,7 +276,6 @@ class NumberBoxBase<
     const $input = this._input();
 
     if (!useLargeSpinButtons && domAdapter.getActiveElement() !== $input[0]) {
-      // @ts-expect-error ts-error
       eventsEngine.trigger($input, 'focus');
     }
   }

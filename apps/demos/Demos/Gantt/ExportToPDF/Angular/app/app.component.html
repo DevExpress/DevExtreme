@@ -76,7 +76,6 @@
           [displayExpr]="capitalize"
           [inputAttr]="{ 'aria-label': 'Date Range' }"
           [(value)]="dateRangeBoxValue"
-          (onValueChanged)="onDateRangeBoxSelectionChanged($event)"
         >
         </dx-select-box>
       </div>
@@ -88,10 +87,10 @@
       <div class="label">Start task (index):</div>
       <div class="value">
         <dx-number-box
-          [disabled]="customRangeDisabled"
+          [disabled]="customRangeDisabled()"
           [(value)]="startTaskIndex"
           [min]="0"
-          [max]="endTaskIndex"
+          [max]="endTaskIndex()"
           [showSpinButtons]="true"
           [inputAttr]="{ 'aria-label': 'Start Task Index' }"
         >
@@ -102,9 +101,9 @@
       <div class="label">End task (index):</div>
       <div class="value">
         <dx-number-box
-          [disabled]="customRangeDisabled"
+          [disabled]="customRangeDisabled()"
           [(value)]="endTaskIndex"
-          [min]="startTaskIndex"
+          [min]="startTaskIndex()"
           [max]="tasks.length - 1"
           [showSpinButtons]="true"
           [inputAttr]="{ 'aria-label': 'End Task Index' }"
@@ -116,9 +115,9 @@
       <div class="label">Start date:</div>
       <div class="value">
         <dx-date-box
-          [disabled]="customRangeDisabled"
+          [disabled]="customRangeDisabled()"
           [(value)]="startDate"
-          [max]="endDate"
+          [max]="endDate()"
           type="date"
           [inputAttr]="{ 'aria-label': 'Start Date' }"
         >
@@ -129,9 +128,9 @@
       <div class="label">End date:</div>
       <div class="value">
         <dx-date-box
-          [disabled]="customRangeDisabled"
+          [disabled]="customRangeDisabled()"
           [(value)]="endDate"
-          [min]="startDate"
+          [min]="startDate()"
           type="date"
           [inputAttr]="{ 'aria-label': 'End Date' }"
         >

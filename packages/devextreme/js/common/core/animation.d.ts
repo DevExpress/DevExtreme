@@ -1,5 +1,6 @@
 import { DxElement, UserDefinedElementsArray, UserDefinedElement } from '../../core/element';
 import { Device } from './environment';
+import { DxEvent } from '../../events/events.types';
 
 import {
   HorizontalAlignment,
@@ -256,7 +257,7 @@ export type PositionConfig = {
      * @docid
      * @public
      */
-    of?: string | UserDefinedElement | Window;
+    of?: string | UserDefinedElement | Window | DxEvent;
     /**
      * @docid
      * @public

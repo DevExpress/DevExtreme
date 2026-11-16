@@ -1,6 +1,5 @@
 import type { template } from '@js/common';
 import { name as clickEventName } from '@js/common/core/events/click';
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import { start as hoverStartEventName } from '@js/common/core/events/hover';
 import { addNamespace } from '@js/common/core/events/utils/index';
 import dateLocalization from '@js/common/core/localization/date';
@@ -20,6 +19,7 @@ import type { DefaultActionArgs } from '@ts/core/widget/component';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { WidgetProperties } from '@ts/core/widget/widget';
 import Widget from '@ts/core/widget/widget';
+import eventsEngine from '@ts/events/core/events_engine';
 
 const CALENDAR_OTHER_VIEW_CLASS = 'dx-calendar-other-view';
 const CALENDAR_CELL_CLASS = 'dx-calendar-cell';
@@ -435,14 +435,19 @@ class BaseView<
     this._createCellClickAction();
 
     eventsEngine.off(this._$table, CALENDAR_DXCLICK_EVENT_NAME);
-    eventsEngine.on(this._$table, CALENDAR_DXCLICK_EVENT_NAME, NOT_WEEK_CELL_SELECTOR, (e) => {
-      if (!$(e.currentTarget).hasClass(CALENDAR_EMPTY_CELL_CLASS)) {
-        this._cellClickAction({
-          event: e,
-          value: $(e.currentTarget).data<Date>(CALENDAR_DATE_VALUE_KEY),
-        });
-      }
-    });
+    eventsEngine.on(
+      this._$table,
+      CALENDAR_DXCLICK_EVENT_NAME,
+      NOT_WEEK_CELL_SELECTOR,
+      (e: DxEvent<MouseEvent | PointerEvent>) => {
+        if (!$(e.currentTarget).hasClass(CALENDAR_EMPTY_CELL_CLASS)) {
+          this._cellClickAction({
+            event: e,
+            value: $(e.currentTarget).data<Date>(CALENDAR_DATE_VALUE_KEY),
+          });
+        }
+      },
+    );
 
     const { selectionMode } = this.option();
 
@@ -454,7 +459,7 @@ class BaseView<
         this._$table,
         CALENDAR_DXHOVERSTART_EVENT_NAME,
         NOT_WEEK_CELL_SELECTOR,
-        (e) => {
+        (e: DxEvent<MouseEvent | PointerEvent>) => {
           if (!$(e.currentTarget).hasClass(CALENDAR_EMPTY_CELL_CLASS)) {
             this._cellHoverAction({
               event: e,
@@ -468,7 +473,7 @@ class BaseView<
     if (selectionMode !== SELECTION_MODE.single) {
       this._createWeekNumberCellClickAction();
 
-      eventsEngine.on(this._$table, CALENDAR_DXCLICK_EVENT_NAME, `.${CALENDAR_WEEK_NUMBER_CELL_CLASS}`, (e) => {
+      eventsEngine.on(this._$table, CALENDAR_DXCLICK_EVENT_NAME, `.${CALENDAR_WEEK_NUMBER_CELL_CLASS}`, (e: DxEvent<MouseEvent | PointerEvent>) => {
         const $row = $(e.currentTarget).closest('tr');
 
         const firstDateInRow = $row.find(`.${CALENDAR_CELL_CLASS}`).first().data<Date>(CALENDAR_DATE_VALUE_KEY);

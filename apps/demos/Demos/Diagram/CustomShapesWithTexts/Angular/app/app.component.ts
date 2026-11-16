@@ -1,9 +1,11 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, ViewChild, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import {
+  Component, enableProdMode, inject, viewChild,
+} from '@angular/core';
 import { HttpClient, provideHttpClient, withFetch } from '@angular/common/http';
 
 import { DxDiagramModule, DxDiagramComponent } from 'devextreme-angular';
-import { Service, Employee } from './app.service';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -20,15 +22,13 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  employees: Employee[];
+  readonly employees = inject(Service).getEmployees();
 
-  @ViewChild(DxDiagramComponent, { static: false }) diagram: DxDiagramComponent;
+  private readonly diagram = viewChild.required(DxDiagramComponent);
 
-  constructor(service: Service, http: HttpClient) {
-    this.employees = service.getEmployees();
-
-    http.get('../../../../data/diagram-employees.json').subscribe({
-      next: (data) => { this.diagram.instance.import(JSON.stringify(data)); },
+  constructor() {
+    inject(HttpClient).get('../../../../data/diagram-employees.json').subscribe({
+      next: (data) => { this.diagram().instance.import(JSON.stringify(data)); },
       error: () => { throw new Error('Data Loading Error'); },
     });
   }
@@ -36,7 +36,6 @@ export class AppComponent {
 
 bootstrapApplication(AppComponent, {
   providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
     provideHttpClient(withFetch()),
   ],
 });

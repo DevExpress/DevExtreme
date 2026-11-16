@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { DxButtonModule, DxSliderModule } from 'devextreme-angular';
+import { detectChanges } from '../helpers/change-detection';
 
 @Component({
   standalone: false,
@@ -22,20 +23,12 @@ async function forceGC(times = 3): Promise<void> {
   });
 }
 
-describe('Memory leak tests', () => {
-  const originalTimeout = jasmine.DEFAULT_TIMEOUT_INTERVAL;
-
+describe('Memory leak tests', { timeout: 60000 }, () => {
   beforeAll(() => {
-    jasmine.DEFAULT_TIMEOUT_INTERVAL = 60000;
-
     TestBed.configureTestingModule({
       declarations: [TestContainerComponent],
       imports: [DxButtonModule, DxSliderModule],
     });
-  });
-
-  afterAll(() => {
-    jasmine.DEFAULT_TIMEOUT_INTERVAL = originalTimeout;
   });
 
   it('should not memory leak after change @if block with DxButton (T1324584)', async () => {
@@ -52,14 +45,14 @@ describe('Memory leak tests', () => {
 
     for (let i = 0; i < 100; i++) {
       component.isVisible = !component.isVisible;
-      fixture.detectChanges();
+      detectChanges(fixture);
     }
 
     const memoryBefore = await (performance as any).measureUserAgentSpecificMemory();
 
     for (let i = 0; i < 100; i++) {
       component.isVisible = !component.isVisible;
-      fixture.detectChanges();
+      detectChanges(fixture);
     }
 
     await forceGC();
@@ -84,14 +77,14 @@ describe('Memory leak tests', () => {
 
     for (let i = 0; i < 100; i++) {
       component.isVisible = !component.isVisible;
-      fixture.detectChanges();
+      detectChanges(fixture);
     }
 
     const memoryBefore = await (performance as any).measureUserAgentSpecificMemory();
 
     for (let i = 0; i < 100; i++) {
       component.isVisible = !component.isVisible;
-      fixture.detectChanges();
+      detectChanges(fixture);
     }
 
     await forceGC();

@@ -46,7 +46,7 @@
   icon="trash"
   label="Delete row"
   [index]="2"
-  [visible]="selectedRowIndex !== -1"
+  [visible]="selectedRowIndex() !== -1"
   (onClick)="deleteRow()"
 >
 </dx-speed-dial-action>
@@ -54,7 +54,7 @@
   icon="edit"
   label="Edit row"
   [index]="3"
-  [visible]="selectedRowIndex !== -1"
+  [visible]="selectedRowIndex() !== -1"
   (onClick)="editRow()"
 >
 </dx-speed-dial-action>

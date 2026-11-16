@@ -3,10 +3,10 @@
   </dxi-chart-series>
   <dxi-chart-value-axis
     [visible]="true"
-    [autoBreaksEnabled]="autoBreaksEnabledValue"
-    [maxAutoBreakCount]="breaksCountValue"
+    [autoBreaksEnabled]="autoBreaksEnabledValue()"
+    [maxAutoBreakCount]="breaksCountValue()"
   >
-    <dxo-chart-break-style [line]="lineStyleValue"> </dxo-chart-break-style>
+    <dxo-chart-break-style [line]="lineStyleValue()"> </dxo-chart-break-style>
   </dxi-chart-value-axis>
   <dxo-chart-legend [visible]="false"> </dxo-chart-legend>
   <dxo-chart-tooltip [enabled]="true"> </dxo-chart-tooltip>

@@ -23,9 +23,9 @@
   <div class="widget-container">
     <dx-gantt taskListWidth="500" height="700" taskTitlePosition="none">
       <dxo-gantt-validation
-        [autoUpdateParentTasks]="autoUpdateParentTasks"
-        [validateDependencies]="validateDependencies"
-        [enablePredecessorGap]="enablePredecessorGap"
+        [autoUpdateParentTasks]="autoUpdateParentTasks()"
+        [validateDependencies]="validateDependencies()"
+        [enablePredecessorGap]="enablePredecessorGap()"
       ></dxo-gantt-validation>
 
       <dxo-gantt-tasks [dataSource]="tasks"></dxo-gantt-tasks>

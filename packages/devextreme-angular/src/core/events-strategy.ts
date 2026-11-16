@@ -1,5 +1,7 @@
-import { EventEmitter, NgZone } from '@angular/core';
+/* eslint-disable max-classes-per-file */
+import { EventEmitter } from '@angular/core';
 import { DxComponent } from './component';
+import type { ZoneMode } from './zone-mode';
 
 interface IEventSubscription {
   handler: any;
@@ -10,7 +12,10 @@ export class NgEventsStrategy {
 
   private events: { [key: string]: EventEmitter<any> } = {};
 
-  constructor(private readonly instance: any, private readonly zone: NgZone) { }
+  constructor(
+    private readonly instance: any,
+    private readonly zoneMode: ZoneMode,
+  ) { }
 
   hasEvent(name: string) {
     return this.getEmitter(name).observers.length !== 0;
@@ -18,13 +23,16 @@ export class NgEventsStrategy {
 
   fireEvent(name, args) {
     const emitter = this.getEmitter(name);
-    if (emitter.observers.length) {
-      const internalSubs = this.subscriptions[name] || [];
-      if (internalSubs.length === emitter.observers.length) {
-        emitter.next(args?.[0]);
-      } else {
-        this.zone.run(() => emitter.next(args?.[0]));
-      }
+    if (!emitter.observers.length) {
+      return;
+    }
+    const internalSubs = this.subscriptions[name] || [];
+    const hasAngularSubscribers = emitter.observers.length > internalSubs.length;
+
+    if (hasAngularSubscribers) {
+      this.zoneMode.emit(emitter, args?.[0]);
+    } else {
+      this.zoneMode.emitInternal(emitter, args?.[0], name !== 'optionChanged');
     }
   }
 
@@ -80,7 +88,10 @@ export class NgEventsStrategy {
 export class EmitterHelper {
   lockedValueChangeEvent = false;
 
-  constructor(private readonly zone: NgZone, private component: DxComponent) { }
+  constructor(
+    private readonly zoneMode: ZoneMode,
+    private component: DxComponent,
+  ) { }
 
   fireNgEvent(eventName: string, eventArgs: any) {
     if (this.lockedValueChangeEvent && eventName === 'valueChange') {
@@ -88,9 +99,7 @@ export class EmitterHelper {
     }
     const emitter = this.component[eventName];
     if (emitter?.observers.length) {
-      this.zone.run(() => {
-        emitter.next(eventArgs?.[0]);
-      });
+      this.zoneMode.emit(emitter, eventArgs?.[0]);
     }
   }
 

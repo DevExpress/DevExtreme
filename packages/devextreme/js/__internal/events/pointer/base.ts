@@ -1,10 +1,10 @@
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import { getEventTarget } from '@js/common/core/events/utils/event_target';
 import { addNamespace, eventSource, fireEvent } from '@js/common/core/events/utils/index';
 import domAdapter from '@js/core/dom_adapter';
 import browser from '@js/core/utils/browser';
 import type { EmitterEvent } from '@ts/events/core/emitter';
 import type { HandleObject } from '@ts/events/core/events_engine';
+import eventsEngine from '@ts/events/core/events_engine';
 
 const POINTER_EVENTS_NAMESPACE = 'dxPointerEvents';
 
@@ -94,7 +94,7 @@ class BaseStrategy {
       const target = this.noBubble ? element : domAdapter.getDocument();
       this._setSelector(handleObj);
 
-      eventsEngine.on(target, this._originalEvents, this._getSelector(), (e) => {
+      eventsEngine.on(target, this._originalEvents, this._getSelector(), (e: EmitterEvent) => {
         this._handler(e);
       });
     }

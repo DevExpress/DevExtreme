@@ -5,65 +5,57 @@ import { type DxButtonTypes } from 'devextreme-angular/ui/button';
   providedIn: 'root',
 })
 export class AppService {
-  displayModes: string[] = [];
+  private readonly displayModes: string[] = ['Icon Only', 'Text and Icon', 'Custom'];
 
-  stylingModes: { displayValue: string; value: DxButtonTypes.ButtonStyle }[] = [];
+  private readonly stylingModes: { displayValue: string; value: DxButtonTypes.ButtonStyle }[] = [
+    {
+      displayValue: 'Contained',
+      value: 'contained',
+    },
+    {
+      displayValue: 'Outlined',
+      value: 'outlined',
+    },
+    {
+      displayValue: 'Text',
+      value: 'text',
+    },
+  ];
 
-  types: { displayValue: string; value: DxButtonTypes.ButtonType }[] = [];
+  private readonly types: { displayValue: string; value: DxButtonTypes.ButtonType }[] = [
+    {
+      displayValue: 'Normal',
+      value: 'normal',
+    },
+    {
+      displayValue: 'Success',
+      value: 'success',
+    },
+    {
+      displayValue: 'Default',
+      value: 'default',
+    },
+    {
+      displayValue: 'Danger',
+      value: 'danger',
+    },
+  ];
 
-  languages: string[] = [];
+  private readonly languages: string[] = [
+    'Auto-detect',
+    'English',
+    'Spanish',
+    'French',
+    'German',
+  ];
 
-  langMap: { [key: string]: string } = {};
-
-  constructor() {
-    this.displayModes = ['Icon Only', 'Text and Icon', 'Custom'];
-    this.stylingModes = [
-      {
-        displayValue: 'Contained',
-        value: 'contained',
-      },
-      {
-        displayValue: 'Outlined',
-        value: 'outlined',
-      },
-      {
-        displayValue: 'Text',
-        value: 'text',
-      },
-    ];
-    this.types = [
-      {
-        displayValue: 'Normal',
-        value: 'normal',
-      },
-      {
-        displayValue: 'Success',
-        value: 'success',
-      },
-      {
-        displayValue: 'Default',
-        value: 'default',
-      },
-      {
-        displayValue: 'Danger',
-        value: 'danger',
-      },
-    ];
-    this.languages = [
-      'Auto-detect',
-      'English',
-      'Spanish',
-      'French',
-      'German',
-    ];
-    this.langMap = {
-      'Auto-detect': '',
-      'English': 'en-US',
-      'Spanish': 'es-ES',
-      'French': 'fr-FR',
-      'German': 'de-DE',
-    };
-  }
+  private readonly langMap: { [key: string]: string } = {
+    'Auto-detect': '',
+    'English': 'en-US',
+    'Spanish': 'es-ES',
+    'French': 'fr-FR',
+    'German': 'de-DE',
+  };
 
   getDisplayModes() {
     return this.displayModes;

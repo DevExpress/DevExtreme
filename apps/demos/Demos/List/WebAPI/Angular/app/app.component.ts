@@ -1,5 +1,5 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import { Component, enableProdMode } from '@angular/core';
 import { CurrencyPipe } from '@angular/common';
 import { DxListModule } from 'devextreme-angular';
 import { DataSource } from 'devextreme-angular/common/data';
@@ -18,7 +18,7 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  listData = new DataSource({
+  readonly listData = new DataSource({
     store: AspNetData.createStore({
       key: 'ProductID',
       loadUrl: 'https://js.devexpress.com/Demos/NetCore/api/ListData',
@@ -31,8 +31,4 @@ export class AppComponent {
   });
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

@@ -1,10 +1,10 @@
 <dx-stepper
-  [focusStateEnabled]="!isStepperReadonly"
-  [class.readonly]="isStepperReadonly"
+  [focusStateEnabled]="!isStepperReadonly()"
+  [class.readonly]="isStepperReadonly()"
   [(selectedIndex)]="selectedIndex"
   (onSelectionChanging)="onSelectionChanging($event)"
 >
-  @for (step of steps; track step) {
+  @for (step of steps(); track step) {
   <dxi-stepper-item
     [label]="step.label"
     [icon]="step.icon"
@@ -25,7 +25,7 @@
     <dxi-multi-view-item>
       <div *dxTemplate>
         <dates-form
-          [formData]="formData"
+          [formData]="formData()"
           [validationGroup]="validationGroups[0]"
         ></dates-form>
       </div>
@@ -33,7 +33,7 @@
     <dxi-multi-view-item>
       <div *dxTemplate>
         <guests-form
-          [formData]="formData"
+          [formData]="formData()"
           [validationGroup]="validationGroups[1]"
         ></guests-form>
       </div>
@@ -41,38 +41,38 @@
     <dxi-multi-view-item>
       <div *dxTemplate>
         <room-meal-plan-form
-          [formData]="formData"
+          [formData]="formData()"
           [validationGroup]="validationGroups[2]"
         ></room-meal-plan-form>
       </div>
     </dxi-multi-view-item>
     <dxi-multi-view-item>
       <div *dxTemplate>
-        <additional-form [formData]="formData"></additional-form>
+        <additional-form [formData]="formData()"></additional-form>
       </div>
     </dxi-multi-view-item>
     <dxi-multi-view-item>
       <div *dxTemplate>
         <confirmation
-          [formData]="confirmationData"
-          [isConfirmed]="isConfirmed"
+          [formData]="confirmationData()"
+          [isConfirmed]="isConfirmed()"
         ></confirmation>
       </div>
     </dxi-multi-view-item>
   </dx-multi-view>
   <div class="nav-panel">
     <div class="current-step">
-      @if (!isConfirmed) {
+      @if (!isConfirmed()) {
       <span>
-        Step <span class="selected-index">{{ selectedIndex + 1 }}</span> of
-        {{ steps.length }}
+        Step <span class="selected-index">{{ selectedIndex() + 1 }}</span> of
+        {{ steps().length }}
       </span>
       }
     </div>
     <div class="nav-buttons">
       <dx-button
         id="prevButton"
-        [visible]="selectedIndex !== 0 && !isConfirmed"
+        [visible]="selectedIndex() !== 0 && !isConfirmed()"
         text="Back"
         type="normal"
         (onClick)="onPrevButtonClick()"
@@ -81,7 +81,7 @@
       </dx-button>
       <dx-button
         id="nextButton"
-        [text]="getNextButtonText()"
+        [text]="nextButtonText()"
         type="default"
         (onClick)="onNextButtonClick()"
         [width]="100"

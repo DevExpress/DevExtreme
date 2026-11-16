@@ -3,16 +3,15 @@
     <dx-list
       [dataSource]="tasks"
       [height]="400"
-      [selectionMode]="selectionModeValue"
-      [selectAllMode]="selectAllModeValue"
+      [selectionMode]="selectionModeValue()"
+      [selectAllMode]="selectAllModeValue()"
       [showSelectionControls]="true"
-      [selectedItemKeys]="selectedItemKeys"
-      (selectedItemKeysChange)="onSelectedItemKeysChange($event)"
-      [selectByClick]="selectByClick"
+      [(selectedItemKeys)]="selectedItemKeys"
+      [selectByClick]="selectByClick()"
     ></dx-list>
     <div class="selected-data">
       <span class="caption">Selected IDs: </span>
-      <span>{{ selectedItemKeys.join(", ") }}</span>
+      <span>{{ selectedItemKeys().join(", ") }}</span>
     </div>
   </div>
   <div class="options">
@@ -29,7 +28,7 @@
     <div class="option">
       <span>Select All Mode</span>
       <dx-select-box
-        [disabled]="selectionModeValue !== 'all'"
+        [disabled]="selectionModeValue() !== 'all'"
         [items]="['page', 'allPages']"
         [inputAttr]="{ 'aria-label': 'Select All Mode' }"
         [(value)]="selectAllModeValue"

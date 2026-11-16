@@ -1,6 +1,5 @@
 import { move } from '@js/common/core/animation/translator';
 import { name as ClickEvent } from '@js/common/core/events/click';
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import { addNamespace, normalizeKeyName } from '@js/common/core/events/utils/index';
 import devices from '@js/core/devices';
 import type { dxElementWrapper } from '@js/core/renderer';
@@ -12,6 +11,7 @@ import {
 import type { DxEvent } from '@js/events';
 import type { dxHtmlEditorMediaResizing } from '@js/ui/html_editor';
 import Resizable from '@js/ui/resizable';
+import eventsEngine from '@ts/events/core/events_engine';
 import Quill from 'devextreme-quill';
 
 import type { QuillInstance } from '../types/quill';

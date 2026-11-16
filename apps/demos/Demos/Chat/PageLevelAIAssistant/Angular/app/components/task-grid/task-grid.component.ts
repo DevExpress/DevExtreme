@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, viewChild } from '@angular/core';
 import { DxDataGridModule, DxDataGridComponent } from 'devextreme-angular/ui/data-grid';
 import { tasks, type ColumnFilterExpression, type Task } from '../../data';
 
@@ -9,7 +9,7 @@ import { tasks, type ColumnFilterExpression, type Task } from '../../data';
   styleUrls: ['./task-grid.component.css'],
 })
 export class TaskGridComponent {
-  @ViewChild(DxDataGridComponent) private dxDataGrid!: DxDataGridComponent;
+  readonly gridComponent = viewChild.required(DxDataGridComponent);
 
   readonly tasks = tasks;
 
@@ -17,13 +17,9 @@ export class TaskGridComponent {
     elementAttr: { 'aria-label': 'Completed' },
   };
 
-  get gridComponent(): DxDataGridComponent {
-    return this.dxDataGrid;
-  }
+  readonly calculateCompletionCellValue = (rowData: Task): boolean => rowData.Completion === 100;
 
-  calculateCompletionCellValue = (rowData: Task): boolean => rowData.Completion === 100;
-
-  calculateCompletionFilterExpression = (
+  readonly calculateCompletionFilterExpression = (
     filterValue: unknown,
     selectedFilterOperation: string | null,
   ): ColumnFilterExpression => {

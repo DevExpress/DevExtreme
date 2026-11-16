@@ -147,7 +147,6 @@ export const DEFAULT_SCHEDULER_OPTIONS_RULES: SchedulerOptionsRule[] = [
   },
   {
     device(): boolean {
-      // @ts-expect-error
       return isMaterialBased();
     },
     options: {
@@ -168,7 +167,6 @@ export const DEFAULT_SCHEDULER_OPTIONS_RULES: SchedulerOptionsRule[] = [
   },
   {
     device(): boolean {
-      // @ts-expect-error
       return isMaterial();
     },
     options: {

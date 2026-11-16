@@ -1,6 +1,6 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import {
-  ChangeDetectorRef, Component, ViewChild, enableProdMode, provideZoneChangeDetection,
+  Component, enableProdMode, inject, signal, viewChild,
 } from '@angular/core';
 import { DecimalPipe, CurrencyPipe } from '@angular/common';
 import { HubConnectionBuilder, HttpTransportType } from '@aspnet/signalr';
@@ -21,17 +21,15 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  @ViewChild(DxChartComponent, { static: false }) component: DxChartComponent;
+  private readonly component = viewChild.required(DxChartComponent);
 
-  dataSource: CustomStore;
+  private readonly decimalPipe = inject(DecimalPipe);
 
-  connectionStarted = false;
+  private readonly currencyPipe = inject(CurrencyPipe);
 
-  constructor(
-    private decimalPipe: DecimalPipe,
-    private currencyPipe: CurrencyPipe,
-    private changeDetectorRef: ChangeDetectorRef,
-  ) {
+  readonly dataSource = signal<CustomStore | null>(null);
+
+  constructor() {
     const hubConnection = new HubConnectionBuilder()
       .withUrl('https://js.devexpress.com/Demos/NetCore/stockTickDataHub', {
         skipNegotiation: true,
@@ -50,9 +48,7 @@ export class AppComponent {
         hubConnection.on('updateStockPrice', (data: Record<string, unknown>) => {
           store.push([{ type: 'insert', key: data.date, data }]);
         });
-        this.dataSource = store;
-        this.connectionStarted = true;
-        this.changeDetectorRef.detectChanges();
+        this.dataSource.set(store);
       });
   }
 
@@ -70,9 +66,9 @@ export class AppComponent {
     return null;
   }
 
-  customizePoint: DxChartTypes.Properties['customizePoint'] = ({ seriesName, argument }) => {
+  readonly customizePoint: DxChartTypes.Properties['customizePoint'] = ({ seriesName, argument }) => {
     if (seriesName === 'Volume') {
-      const point = this.component.instance.getAllSeries()[0].getPointsByArg(argument)[0].data;
+      const point = this.component().instance.getAllSeries()[0].getPointsByArg(argument)[0].data;
       if (point.close >= point.open) {
         return { color: '#1db2f5' };
       }
@@ -80,19 +76,15 @@ export class AppComponent {
     return null;
   };
 
-  formatPrice = (points: { seriesName: string, [key: string]: string }[], field: string) => {
+  readonly formatPrice = (points: { seriesName: string, [key: string]: string }[], field: string) => {
     const pricePoint = points.find((point) => point.seriesName !== 'Volume');
     return this.currencyPipe.transform(pricePoint[field], 'USD', 'symbol', '1.0-0');
   };
 
-  formatVolume = (points: { seriesName: string, [key: string]: string }[]) => {
+  readonly formatVolume = (points: { seriesName: string, [key: string]: string }[]) => {
     const volPoint = points.find((point) => point.seriesName === 'Volume');
     return this.decimalPipe.transform(volPoint.value, '3.0-0');
   };
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

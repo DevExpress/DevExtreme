@@ -47,7 +47,7 @@
       [items]="months"
       [width]="150"
       [inputAttr]="{ 'aria-label': 'Month' }"
-      [value]="selectedMonth"
+      [value]="selectedMonth()"
       valueExpr="id"
       displayExpr="name"
       (onValueChanged)="onValueChanged($event)"

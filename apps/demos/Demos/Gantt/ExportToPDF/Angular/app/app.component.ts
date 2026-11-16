@@ -1,5 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, ViewChild, ChangeDetectorRef, provideZoneChangeDetection } from '@angular/core';
+import {
+  Component, computed, enableProdMode, inject, signal, viewChild,
+} from '@angular/core';
 import {
   DxGanttComponent,
   DxGanttModule,
@@ -10,11 +12,9 @@ import {
 import { exportGantt as exportGanttToPdf } from 'devextreme-angular/common/export/pdf';
 import { jsPDF } from 'jspdf';
 import { applyPlugin } from 'jspdf-autotable';
-import { DxSelectBoxModule, DxSelectBoxTypes } from 'devextreme-angular/ui/select-box';
-import { DxButtonTypes } from 'devextreme-angular/ui/button';
-import {
-  Service, Task, Dependency, Resource, ResourceAssignment,
-} from './app.service';
+import { DxSelectBoxModule } from 'devextreme-angular/ui/select-box';
+import type { DxButtonTypes } from 'devextreme-angular/ui/button';
+import { Service } from './app.service';
 
 applyPlugin(jsPDF);
 
@@ -40,70 +40,63 @@ type DateRange = Parameters<typeof exportGanttToPdf>[0]['dateRange'];
   ],
 })
 export class AppComponent {
-  @ViewChild(DxGanttComponent, { static: false }) gantt: DxGanttComponent;
+  private readonly gantt = viewChild.required(DxGanttComponent);
 
-  startDate: Date;
+  private readonly service = inject(Service);
 
-  endDate: Date;
+  readonly tasks = this.service.getTasks();
 
-  tasks: Task[];
+  readonly dependencies = this.service.getDependencies();
 
-  dependencies: Dependency[];
+  readonly resources = this.service.getResources();
 
-  resources: Resource[];
+  readonly resourceAssignments = this.service.getResourceAssignments();
 
-  resourceAssignments: ResourceAssignment[];
+  readonly startDate = signal(this.tasks[0].start);
 
-  startTaskIndex = 0;
+  readonly endDate = signal(this.tasks[0].end);
 
-  endTaskIndex = 3;
+  readonly startTaskIndex = signal(0);
 
-  customRangeDisabled = true;
+  readonly endTaskIndex = signal(3);
 
-  formats = ['A0', 'A1', 'A2', 'A3', 'A4', 'Auto'];
+  readonly formats = ['A0', 'A1', 'A2', 'A3', 'A4', 'Auto'];
 
-  exportModes = ['All', 'Chart', 'Tree List'];
+  readonly exportModes = ['All', 'Chart', 'Tree List'];
 
-  dateRanges = ['all', 'visible', 'custom'];
+  readonly dateRanges = ['all', 'visible', 'custom'];
 
-  formatBoxValue = this.formats[0];
+  readonly formatBoxValue = signal(this.formats[0]);
 
-  landscapeCheckBoxValue = true;
+  readonly landscapeCheckBoxValue = signal(true);
 
-  exportModeBoxValue = this.exportModes[0];
+  readonly exportModeBoxValue = signal(this.exportModes[0]);
 
-  dateRangeBoxValue = this.dateRanges[1];
+  readonly dateRangeBoxValue = signal(this.dateRanges[1]);
 
-  exportButtonOptions: DxButtonTypes.Properties = {
+  readonly customRangeDisabled = computed(() => this.dateRangeBoxValue() !== 'custom');
+
+  readonly exportButtonOptions: DxButtonTypes.Properties = {
     hint: 'Export to PDF',
     icon: 'exportpdf',
     stylingMode: 'text',
     onClick: () => this.exportButtonClick(),
   };
 
-  constructor(service: Service, private ref: ChangeDetectorRef) {
-    this.tasks = service.getTasks();
-    this.dependencies = service.getDependencies();
-    this.resources = service.getResources();
-    this.resourceAssignments = service.getResourceAssignments();
-    this.startDate = this.tasks[0].start;
-    this.endDate = this.tasks[0].end;
-  }
-
-  exportButtonClick() {
-    const gantt = this.gantt.instance;
-    const format = this.formatBoxValue.toLowerCase();
-    const isLandscape = this.landscapeCheckBoxValue;
+  private exportButtonClick() {
+    const gantt = this.gantt().instance;
+    const format = this.formatBoxValue().toLowerCase();
+    const isLandscape = this.landscapeCheckBoxValue();
     const exportMode = this.getExportMode();
-    const dataRangeMode = this.dateRangeBoxValue;
+    const dataRangeMode = this.dateRangeBoxValue();
     let dateRange: DateRange;
 
     if (dataRangeMode === 'custom') {
       dateRange = {
-        startIndex: this.startTaskIndex,
-        endIndex: this.endTaskIndex,
-        startDate: this.startDate,
-        endDate: this.endDate,
+        startIndex: this.startTaskIndex(),
+        endIndex: this.endTaskIndex(),
+        startDate: this.startDate(),
+        endDate: this.endDate(),
       };
     } else {
       dateRange = dataRangeMode as Exclude<DateRange, 'custom'>;
@@ -121,24 +114,15 @@ export class AppComponent {
     ).then((doc) => doc.save('gantt.pdf'));
   }
 
-  capitalize = ([firstLetter, ...restLetters]: string) => firstLetter.toUpperCase() + restLetters;
+  readonly capitalize = ([firstLetter, ...restLetters]: string) => firstLetter.toUpperCase() + restLetters;
 
-  getExportMode: () => ExportMode = () => {
+  private readonly getExportMode: () => ExportMode = () => {
     const modes: Record<string, ExportMode> = {
       'Tree List': 'treeList',
       Chart: 'chart',
     };
-    return modes[this.exportModeBoxValue] || 'all';
+    return modes[this.exportModeBoxValue()] || 'all';
   };
-
-  onDateRangeBoxSelectionChanged(e: DxSelectBoxTypes.ValueChangedEvent) {
-    this.customRangeDisabled = e.value !== 'custom';
-    this.ref.detectChanges();
-  }
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

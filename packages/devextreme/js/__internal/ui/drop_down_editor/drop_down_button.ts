@@ -1,4 +1,3 @@
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import messageLocalization from '@js/common/core/localization/message';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
@@ -6,6 +5,7 @@ import { extend } from '@js/core/utils/extend';
 import type { DxEvent } from '@js/events';
 import type { Properties as ButtonProperties } from '@js/ui/button';
 import Button from '@js/ui/button';
+import eventsEngine from '@ts/events/core/events_engine';
 
 import type Editor from '../editor/editor';
 import TextEditorButton from '../text_box/texteditor_button_collection/button';

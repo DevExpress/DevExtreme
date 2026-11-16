@@ -1,8 +1,8 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import { Component, enableProdMode, inject } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 import { DxPieChartModule } from 'devextreme-angular';
-import { Service, State } from './app.service';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -19,17 +19,9 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  populationData: State[];
+  readonly populationData = inject(Service).getPopulationData();
 
-  constructor(service: Service) {
-    this.populationData = service.getPopulationData();
-  }
-
-  getImagePath = ({ data: { name } }) => `../../../../images/flags/${name.replace(/\s/, '')}.svg`;
+  readonly getImagePath = ({ data: { name } }) => `../../../../images/flags/${name.replace(/\s/, '')}.svg`;
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

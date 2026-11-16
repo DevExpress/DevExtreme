@@ -1,11 +1,11 @@
 /* eslint-disable max-classes-per-file */
 import type { ScrollDirection, ScrollMode } from '@js/common';
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import { addNamespace } from '@js/common/core/events/utils/index';
 import domAdapter from '@js/core/dom_adapter';
 import { isDefined } from '@js/core/utils/type';
 import { getWindow } from '@js/core/utils/window';
 import type { ScrollOffset } from '@ts/core/utils/scroll';
+import eventsEngine from '@ts/events/core/events_engine';
 
 import type { CellPositionData, ViewCellData } from '../types';
 import type SchedulerWorkSpace from './work_space';

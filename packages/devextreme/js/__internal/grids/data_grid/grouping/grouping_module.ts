@@ -10,7 +10,7 @@ import {
   columnHeadersViewExtender,
   GroupingHeaderPanelExtender,
   GroupingRowsViewExtender,
-} from './m_grouping';
+} from './grouping';
 
 gridCore.registerModule('grouping', {
   defaultOptions(): Pick<Properties, 'grouping' | 'groupPanel'> {

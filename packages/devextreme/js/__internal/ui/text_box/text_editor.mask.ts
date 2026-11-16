@@ -1,4 +1,3 @@
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import { name as wheelEventName } from '@js/common/core/events/core/wheel';
 import {
   addNamespace, createEvent, isCommandKeyPressed, normalizeKeyName,
@@ -14,6 +13,7 @@ import type { DxEvent } from '@js/events';
 import { focused } from '@ts/core/utils/selectors';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { SupportedKeys } from '@ts/core/widget/widget';
+import eventsEngine from '@ts/events/core/events_engine';
 import type { ValueChangedEvent } from '@ts/ui/editor/editor';
 import type { DxMouseWheelEvent } from '@ts/ui/scroll_view/types';
 import type { TextEditorBaseProperties, TextEditorPropertiesConstraint } from '@ts/ui/text_box/text_editor.base';
@@ -252,7 +252,6 @@ class TextEditorMask<
 
     const changeEvent = createEvent(e, { type: 'change' });
 
-    // @ts-expect-error eventsEngine with trigger
     eventsEngine.trigger($input, changeEvent);
   }
 
@@ -498,7 +497,6 @@ class TextEditorMask<
 
     const raiseInputEvent = (): void => {
       if (previousText !== this._input().val()) {
-        // @ts-expect-error trigger
         eventsEngine.trigger(this._input(), 'input');
       }
     };

@@ -1,4 +1,3 @@
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import { removeEvent } from '@js/common/core/events/remove';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
@@ -6,6 +5,7 @@ import { isPrimitive } from '@js/core/utils/type';
 import type { WatchMethod } from '@ts/core/template_manager';
 import type { TemplateRenderOptions } from '@ts/core/templates/template_base';
 import { TemplateBase } from '@ts/core/templates/template_base';
+import eventsEngine from '@ts/events/core/events_engine';
 
 type WatchDispose = ReturnType<WatchMethod>;
 

@@ -1,6 +1,5 @@
 import type { Orientation } from '@js/common';
 import { move } from '@js/common/core/animation/translator';
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import pointerEvents from '@js/common/core/events/pointer';
 import { addNamespace } from '@js/common/core/events/utils/index';
 import domAdapter from '@js/core/dom_adapter';
@@ -14,6 +13,7 @@ import type { DxEvent } from '@js/events';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { WidgetProperties } from '@ts/core/widget/widget';
 import Widget from '@ts/core/widget/widget';
+import eventsEngine from '@ts/events/core/events_engine';
 import type { ScrollableShowScrollbar } from '@ts/ui/scroll_view/types';
 
 const SCROLLBAR = 'dxScrollbar';
@@ -125,7 +125,7 @@ class Scrollbar extends Widget<ScrollbarProperties> {
   }
 
   _attachPointerDownHandler(): void {
-    eventsEngine.on(
+    eventsEngine.on<DxEvent>(
       this._$thumb,
       addNamespace(pointerEvents.down, SCROLLBAR),
       this.feedbackOn.bind(this),
@@ -343,7 +343,6 @@ class Scrollbar extends Widget<ScrollbarProperties> {
 }
 
 readyCallback.add(() => {
-  // @ts-expect-error ts-error
   eventsEngine.subscribeGlobal(
     domAdapter.getDocument(),
     addNamespace(pointerEvents.up, SCROLLBAR),

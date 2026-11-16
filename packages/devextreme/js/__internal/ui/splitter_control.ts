@@ -1,4 +1,3 @@
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import pointerEvents from '@js/common/core/events/pointer';
 import { addNamespace } from '@js/common/core/events/utils/index';
 import domAdapter from '@js/core/dom_adapter';
@@ -9,6 +8,7 @@ import { getWindow } from '@js/core/utils/window';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { WidgetProperties } from '@ts/core/widget/widget';
 import Widget from '@ts/core/widget/widget';
+import eventsEngine from '@ts/events/core/events_engine';
 
 type Dimension = 'height' | 'width';
 
@@ -48,11 +48,11 @@ interface SplitterControlOptions extends WidgetProperties {
 }
 
 export default class SplitterControl extends Widget<SplitterControlOptions> {
-  SPLITTER_POINTER_DOWN_EVENT_NAME?: string;
+  SPLITTER_POINTER_DOWN_EVENT_NAME!: string;
 
-  SPLITTER_POINTER_MOVE_EVENT_NAME?: string;
+  SPLITTER_POINTER_MOVE_EVENT_NAME!: string;
 
-  SPLITTER_POINTER_UP_EVENT_NAME?: string;
+  SPLITTER_POINTER_UP_EVENT_NAME!: string;
 
   _$container!: dxElementWrapper;
 

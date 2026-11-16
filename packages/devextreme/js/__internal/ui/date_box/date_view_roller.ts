@@ -1,15 +1,16 @@
 import { fx } from '@js/common/core/animation';
 import { resetPosition } from '@js/common/core/animation/translator';
 import { name as clickEventName } from '@js/common/core/events/click';
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import { addNamespace } from '@js/common/core/events/utils/index';
 import registerComponent from '@js/core/component_registrator';
 import devices from '@js/core/devices';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { getHeight } from '@js/core/utils/size';
+import type { DxEvent } from '@js/events';
 import type { ScrollEventInfo } from '@js/ui/scroll_view/ui.scrollable';
 import type { OptionChanged } from '@ts/core/widget/types';
+import eventsEngine from '@ts/events/core/events_engine';
 import type { ScrollableProperties } from '@ts/ui/scroll_view/scrollable';
 import Scrollable from '@ts/ui/scroll_view/scrollable';
 import type { DxMouseEvent } from '@ts/ui/scroll_view/types';
@@ -181,11 +182,11 @@ class DateViewRoller extends Scrollable<DateViewRollerProperties> {
     return `.${DATEVIEW_ROLLER_ITEM_CLASS}`;
   }
 
-  _itemClickHandler(e: { currentTarget: dxElementWrapper }): void {
+  _itemClickHandler(e: DxEvent): void {
     this.option('selectedIndex', this._itemElementIndex(e.currentTarget));
   }
 
-  _itemElementIndex(itemElement: dxElementWrapper): number {
+  _itemElementIndex(itemElement: Element): number {
     return this._itemElements().index(itemElement);
   }
 

@@ -1,5 +1,5 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { ChangeDetectionStrategy, Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import { ChangeDetectionStrategy, Component, enableProdMode } from '@angular/core';
 import { NgTemplateOutlet } from '@angular/common';
 import { DxSplitterModule } from 'devextreme-angular';
 
@@ -22,9 +22,9 @@ interface PaneContentTemplate {
   ],
 })
 export class AppComponent {
-  dimensionOptions = new Set(['size', 'minSize', 'maxSize', 'collapsedSize']);
+  private readonly dimensionOptions = new Set(['size', 'minSize', 'maxSize', 'collapsedSize']);
 
-  paneContentTemplates: PaneContentTemplate[] = [
+  readonly paneContentTemplates: PaneContentTemplate[] = [
     { name: 'Left Pane' },
     { name: 'Central Pane' },
     { name: 'Right Pane' },
@@ -51,8 +51,4 @@ export class AppComponent {
   }
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

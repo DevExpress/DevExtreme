@@ -1,5 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, ViewChild, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import {
+  Component, enableProdMode, inject, viewChild,
+} from '@angular/core';
 import {
   DxButtonModule, DxTabPanelModule, DxDataGridModule, DxDataGridComponent,
 } from 'devextreme-angular';
@@ -27,36 +29,31 @@ if (!/localhost/.test(document.location.host)) {
 })
 
 export class AppComponent {
-  @ViewChild('priceDataGrid', { static: false }) priceDataGrid: DxDataGridComponent;
+  private readonly priceDataGrid = viewChild.required<DxDataGridComponent>('priceDataGrid');
 
-  @ViewChild('ratingDataGrid', { static: false }) ratingDataGrid: DxDataGridComponent;
+  private readonly ratingDataGrid = viewChild.required<DxDataGridComponent>('ratingDataGrid');
 
-  priceDataSource: DataSourceOptions;
+  private readonly service = inject(Service);
 
-  ratingDataSource: DataSourceOptions;
+  readonly priceDataSource: DataSourceOptions = {
+    store: new ArrayStore({
+      data: this.service.getProducts(),
+      key: 'Product_ID',
+    }),
+    select: ['Product_ID', 'Product_Name', 'Product_Sale_Price', 'Product_Retail_Price'],
+    filter: ['Product_ID', '<', 10],
+  };
 
-  constructor(service: Service) {
-    this.priceDataSource = {
-      store: new ArrayStore({
-        data: service.getProducts(),
-        key: 'Product_ID',
-      }),
-      select: ['Product_ID', 'Product_Name', 'Product_Sale_Price', 'Product_Retail_Price'],
-      filter: ['Product_ID', '<', 10],
-    };
-
-    this.ratingDataSource = {
-      store: new ArrayStore({
-        data: service.getProducts(),
-        key: 'Product_ID',
-      }),
-      select: ['Product_ID', 'Product_Name', 'Product_Consumer_Rating', 'Product_Category'],
-      filter: ['Product_ID', '<', 10],
-    };
-  }
+  readonly ratingDataSource: DataSourceOptions = {
+    store: new ArrayStore({
+      data: this.service.getProducts(),
+      key: 'Product_ID',
+    }),
+    select: ['Product_ID', 'Product_Name', 'Product_Consumer_Rating', 'Product_Category'],
+    filter: ['Product_ID', '<', 10],
+  };
 
   exportGrids() {
-    const context = this;
     const workbook = new Workbook();
     const priceSheet = workbook.addWorksheet('Price');
     const ratingSheet = workbook.addWorksheet('Rating');
@@ -79,14 +76,14 @@ export class AppComponent {
 
     exportDataGrid({
       worksheet: priceSheet,
-      component: context.priceDataGrid.instance,
+      component: this.priceDataGrid().instance,
       topLeftCell: { row: 4, column: 2 },
       customizeCell: ({ gridCell, excelCell }) => {
         setAlternatingRowsBackground(gridCell, excelCell);
       },
     }).then(() => exportDataGrid({
       worksheet: ratingSheet,
-      component: context.ratingDataGrid.instance,
+      component: this.ratingDataGrid().instance,
       topLeftCell: { row: 4, column: 2 },
       customizeCell: ({ gridCell, excelCell }) => {
         setAlternatingRowsBackground(gridCell, excelCell);
@@ -99,8 +96,4 @@ export class AppComponent {
   }
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

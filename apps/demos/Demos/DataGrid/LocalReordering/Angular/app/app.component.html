@@ -2,14 +2,14 @@
   <dx-data-grid
     id="gridContainer"
     [height]="440"
-    [dataSource]="tasks"
+    [dataSource]="tasks()"
     keyExpr="ID"
     [showBorders]="true"
   >
     <dxo-data-grid-row-dragging
       [allowReordering]="true"
       [onReorder]="onReorder"
-      [showDragIcons]="showDragIcons"
+      [showDragIcons]="showDragIcons()"
     ></dxo-data-grid-row-dragging>
     <dxo-data-grid-scrolling mode="virtual"></dxo-data-grid-scrolling>
     <dxo-data-grid-sorting mode="none"></dxo-data-grid-sorting>

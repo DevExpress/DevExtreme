@@ -1,8 +1,10 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, ViewChild, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import {
+  Component, enableProdMode, inject, viewChild, signal,
+} from '@angular/core';
 import { DxPieChartModule, DxPieChartComponent, DxPieChartTypes } from 'devextreme-angular/ui/pie-chart';
 import { DxSelectBoxModule, DxSelectBoxTypes } from 'devextreme-angular/ui/select-box';
-import { Service, Population } from './app.service';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -19,23 +21,19 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  @ViewChild(DxPieChartComponent, { static: false }) chart: DxPieChartComponent;
+  private readonly chart = viewChild.required(DxPieChartComponent);
 
-  populationData: Population[];
+  readonly populationData = inject(Service).getPopulationData();
 
-  selectedRegion = '';
-
-  constructor(service: Service) {
-    this.populationData = service.getPopulationData();
-  }
+  readonly selectedRegion = signal('');
 
   pointClick({ target: point }: DxPieChartTypes.PointClickEvent) {
     point.showTooltip();
-    this.selectedRegion = point.data.region;
+    this.selectedRegion.set(point.data.region);
   }
 
   valueChanged({ value }: DxSelectBoxTypes.ValueChangedEvent) {
-    this.chart.instance.getAllSeries()[0].getPointsByArg(value)[0].showTooltip();
+    this.chart().instance.getAllSeries()[0].getPointsByArg(value)[0].showTooltip();
   }
 
   customizeTooltip({ argumentText, valueText }: DxPieChartTypes.PointInfo) {
@@ -45,8 +43,4 @@ export class AppComponent {
   }
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

@@ -9,23 +9,30 @@ import type { SOURCE_ORDER } from './const';
 
 export type FilterCombiner = 'and' | 'or';
 
+/** A field name, or a getter (a calculated column's selector), which works only locally. */
+export type DataFilterSelector = string | ((data: RawItemData) => unknown);
+
 /**
  * The operator may be omitted — `=` is implied. Only data layer operations
  * are allowed here: column operations such as `between` or `anyof` belong to
  * `filterValue` and are expanded into these before they reach the store.
  */
-export type BinaryDataFilterExpression = [string, ScalarFilterValue]
-  | [string, SearchOperation, ScalarFilterValue];
+export type BinaryDataFilterExpression = [DataFilterSelector, ScalarFilterValue]
+  | [DataFilterSelector, SearchOperation, ScalarFilterValue];
+
+export type DataFilterPredicate = (data: RawItemData) => boolean;
 
 /**
  * A binary expression, a negation, or a group of expressions.
  * The combiner between neighbors may be omitted — `and` is implied.
+ * A group may also hold predicates, which work only locally.
  */
 export type DataFilterExpression = BinaryDataFilterExpression
   | ['!', DataFilterExpression]
-  | [DataFilterExpression, ...(FilterCombiner | DataFilterExpression)[]];
-
-export type DataFilterPredicate = (data: RawItemData) => boolean;
+  | [
+    DataFilterExpression | DataFilterPredicate,
+    ...(FilterCombiner | DataFilterExpression | DataFilterPredicate)[],
+  ];
 
 /**
  * The grid-internal "match nothing" filter. Not a data layer filter expression:

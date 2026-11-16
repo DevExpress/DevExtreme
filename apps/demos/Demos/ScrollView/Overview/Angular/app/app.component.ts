@@ -1,16 +1,16 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import {
-  ChangeDetectorRef,
   Component,
-  ViewChild,
-  AfterViewInit,
+  type AfterViewInit,
   enableProdMode,
-  provideZoneChangeDetection,
+  inject,
+  signal,
+  viewChild,
 } from '@angular/core';
 import { DxSelectBoxModule } from 'devextreme-angular';
-import { DxCheckBoxModule, DxCheckBoxTypes } from 'devextreme-angular/ui/check-box';
-import { DxScrollViewModule, DxScrollViewComponent, DxScrollViewTypes } from 'devextreme-angular/ui/scroll-view';
-import { ScrollbarMode } from 'devextreme-angular/common';
+import { DxCheckBoxModule, type DxCheckBoxTypes } from 'devextreme-angular/ui/check-box';
+import { DxScrollViewModule, DxScrollViewComponent, type DxScrollViewTypes } from 'devextreme-angular/ui/scroll-view';
+import type { ScrollbarMode } from 'devextreme-angular/common';
 import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -30,9 +30,9 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent implements AfterViewInit {
-  @ViewChild(DxScrollViewComponent, { static: false }) scrollView: DxScrollViewComponent;
+  private readonly scrollView = viewChild.required(DxScrollViewComponent);
 
-  showScrollbarModes: { text: string, value: ScrollbarMode }[] = [
+  readonly showScrollbarModes: { text: string, value: ScrollbarMode }[] = [
     {
       text: 'On Scroll',
       value: 'onScroll',
@@ -48,47 +48,41 @@ export class AppComponent implements AfterViewInit {
     },
   ];
 
-  content: string;
+  readonly content = signal(inject(Service).getContent());
 
-  updateContentTimer: unknown;
+  private updateContentTimer: unknown;
 
-  scrollByContent = true;
+  readonly scrollByContent = signal(true);
 
-  scrollByThumb = true;
+  readonly scrollByThumb = signal(true);
 
-  scrollbarMode: ScrollbarMode = this.showScrollbarModes[0].value;
+  readonly scrollbarMode = signal<ScrollbarMode>(this.showScrollbarModes[0].value);
 
-  pullDown = false;
+  readonly pullDown = signal(false);
 
-  useNative: boolean;
-
-  constructor(service: Service, private changeDetectorRef: ChangeDetectorRef) {
-    this.content = service.getContent();
-  }
+  readonly useNative = signal<boolean>(undefined);
 
   ngAfterViewInit() {
-    this.scrollView.instance.option('onReachBottom', this.updateBottomContent);
-    this.useNative = this.scrollView.instance.option('useNative');
-    this.changeDetectorRef.detectChanges();
+    this.scrollView().instance.option('onReachBottom', this.updateBottomContent);
+    this.useNative.set(this.scrollView().instance.option('useNative'));
   }
 
   useNativeChanged = (data: DxCheckBoxTypes.ValueChangedEvent) => {
-    this.scrollView.instance.option('useNative', data.value);
-    if (data.value && this.scrollbarMode === 'never') {
-      this.scrollbarMode = 'onScroll';
+    this.scrollView().instance.option('useNative', data.value);
+    if (data.value && this.scrollbarMode() === 'never') {
+      this.scrollbarMode.set('onScroll');
     }
   };
 
   valueChanged = (data: DxCheckBoxTypes.ValueChangedEvent) => {
-    this.scrollView.instance.option('onReachBottom', data.value ? this.updateBottomContent : null);
+    this.scrollView().instance.option('onReachBottom', data.value ? this.updateBottomContent : null);
   };
 
   updateContent = (args: DxScrollViewTypes.PullDownEvent | DxScrollViewTypes.ReachBottomEvent, eventName: string) => {
     const updateContentText = `<br /><div>Content has been updated on the ${eventName} event.</div><br />`;
     if (this.updateContentTimer) { clearTimeout(this.updateContentTimer as number); }
     this.updateContentTimer = setTimeout(() => {
-      this.content = (eventName === 'PullDown' ? updateContentText + this.content : this.content + updateContentText);
-      this.changeDetectorRef.detectChanges();
+      this.content.update((content) => (eventName === 'PullDown' ? updateContentText + content : content + updateContentText));
       args.component.release(false);
     }, 500);
   };
@@ -102,8 +96,4 @@ export class AppComponent implements AfterViewInit {
   };
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

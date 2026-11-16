@@ -1,8 +1,10 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, ViewChild, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import {
+  Component, enableProdMode, inject, signal, viewChild,
+} from '@angular/core';
 import { DxDataGridComponent, DxDataGridModule } from 'devextreme-angular';
 import { DxCheckBoxModule, DxCheckBoxTypes } from 'devextreme-angular/ui/check-box';
-import { Employee, Service } from './app.service';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -20,25 +22,17 @@ if (!/localhost/.test(document.location.host)) {
 })
 
 export class AppComponent {
-  @ViewChild(DxDataGridComponent, { static: false }) dataGrid: DxDataGridComponent;
+  private readonly dataGrid = viewChild.required(DxDataGridComponent);
 
-  employees: Employee[];
+  readonly employees = inject(Service).getEmployees();
 
-  positionDisableSorting = false;
-
-  constructor(service: Service) {
-    this.employees = service.getEmployees();
-  }
+  readonly positionDisableSorting = signal(false);
 
   onValueChange(e: DxCheckBoxTypes.ValueChangedEvent) {
     if (e.value) {
-      this.dataGrid.instance.columnOption(5, 'sortOrder', undefined);
+      this.dataGrid().instance.columnOption(5, 'sortOrder', undefined);
     }
   }
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

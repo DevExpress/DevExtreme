@@ -36,6 +36,11 @@ export type StartEditingEvent = KeyboardKeyDownEvent | DxEvent<KeyboardEvent>;
 export type KeyboardNavigationDataController = DataController
   & Partial<VirtualScrollingDataControllerExtension>;
 
+export interface KeyboardNavigationRowsViewExtension {
+  // eslint-disable-next-line @typescript-eslint/method-signature-style -- overridden by methods
+  updateFocusElementTabIndex(cellElements: dxElementWrapper, preventScroll?: boolean): void;
+}
+
 export type RenderCompletedChange = ViewDataChange & {
   virtualColumnsScrolling?: boolean;
   event?: DxEvent;

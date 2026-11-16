@@ -1,0 +1,67 @@
+@use "sass:color";
+@use "sass:math";
+
+$min-text-contrast: 4.5 !default;
+
+@function channel-luminance($value) {
+  $max-channel-value: 255;
+  $linear-threshold: 0.04045;
+  $linear-slope: 12.92;
+  $gamma-offset: 0.055;
+  $gamma: 2.4;
+
+  $normalized: math.div($value, $max-channel-value);
+
+  @if $normalized <= $linear-threshold {
+    @return math.div($normalized, $linear-slope);
+  }
+
+  @return math.pow(math.div($normalized + $gamma-offset, 1 + $gamma-offset), $gamma);
+}
+
+@function luminance($color) {
+  $red-weight: 0.2126;
+  $green-weight: 0.7152;
+  $blue-weight: 0.0722;
+
+  $red: channel-luminance(color.channel($color, "red", $space: rgb));
+  $green: channel-luminance(color.channel($color, "green", $space: rgb));
+  $blue: channel-luminance(color.channel($color, "blue", $space: rgb));
+
+  @return $red-weight * $red + $green-weight * $green + $blue-weight * $blue;
+}
+
+@function contrast-ratio($foreground, $background) {
+  $luminance-offset: 0.05;
+
+  $lighter: math.max(luminance($foreground), luminance($background));
+  $darker: math.min(luminance($foreground), luminance($background));
+
+  @return math.div($lighter + $luminance-offset, $darker + $luminance-offset);
+}
+
+@function flatten($color, $backdrop) {
+  $alpha: color.channel($color, "alpha");
+
+  @return color.mix(color.change($color, $alpha: 1), $backdrop, $alpha * 100%);
+}
+
+@function readable($color, $background, $minimum: $min-text-contrast) {
+  $steps: 20;
+  $step-size: 5%;
+  $pole: black;
+
+  @if contrast-ratio(white, $background) > contrast-ratio(black, $background) {
+    $pole: white;
+  }
+
+  @for $step from 0 through $steps {
+    $candidate: color.mix($pole, $color, $step * $step-size);
+
+    @if contrast-ratio($candidate, $background) >= $minimum {
+      @return $candidate;
+    }
+  }
+
+  @return $pole;
+}

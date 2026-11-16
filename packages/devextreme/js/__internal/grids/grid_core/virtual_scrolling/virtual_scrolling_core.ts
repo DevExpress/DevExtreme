@@ -1,5 +1,4 @@
 import positionUtils from '@js/common/core/animation/position';
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import browser from '@js/core/utils/browser';
@@ -10,6 +9,7 @@ import { Deferred } from '@js/core/utils/deferred';
 import { each } from '@js/core/utils/iterator';
 import { isDefined } from '@js/core/utils/type';
 import { getWindow } from '@js/core/utils/window';
+import eventsEngine from '@ts/events/core/events_engine';
 import type { ChangedEvent } from '@ts/grids/grid_core/data_source_adapter/types';
 import type {
   GridPropertyType,
@@ -19,17 +19,14 @@ import type {
 import type {
   ChangedCallback,
   ItemSizes,
+  LoaderChangedCallback,
   VirtualItemsCount,
 } from '@ts/grids/grid_core/virtual_data_loader/types';
 import type Scrollable from '@ts/ui/scroll_view/scrollable';
 
 import gridCoreUtils from '../utils';
 import { VirtualDataLoader } from '../virtual_data_loader/virtual_data_loader';
-import {
-  LEGACY_SCROLLING_MODE,
-  SCROLLING_MODE_INFINITE,
-  SCROLLING_MODE_VIRTUAL,
-} from './const';
+import { LEGACY_SCROLLING_MODE } from './const';
 import type {
   ContentOffsetType,
   ExternalScrollable,
@@ -37,8 +34,9 @@ import type {
   ViewportParams,
   VirtualScrollDataOptions,
 } from './types';
+import { isInfiniteMode, isVirtualMode } from './utils/scrolling_mode';
 
-// @ts-expect-error scrollTop() is typed as a setter only
+// @ts-expect-error scrollTop can't be called through the Scrollable | dxElementWrapper union
 const getScrollTop = (scrollable: ExternalScrollable): number => scrollable.scrollTop();
 
 function subscribeToExternalScrollers(
@@ -88,6 +86,7 @@ function subscribeToExternalScrollers(
     if (widget) {
       widget.on('scroll', handler);
     } else {
+      // @ts-expect-error without a widget, scrollable is the element
       eventsEngine.on(scrollable, 'scroll', handler);
     }
 
@@ -104,6 +103,7 @@ function subscribeToExternalScrollers(
       if (widget) {
         widget.off('scroll', handler);
       } else {
+        // @ts-expect-error without a widget, scrollable is the element
         eventsEngine.off(scrollable, 'scroll', handler);
       }
     });
@@ -138,10 +138,8 @@ function subscribeToExternalScrollers(
   };
 }
 
-class VirtualScrollController<
-  TDataOptions extends VirtualScrollDataOptions = VirtualScrollDataOptions,
-> {
-  private readonly _dataOptions: TDataOptions;
+class VirtualScrollController<TItem = unknown> {
+  private readonly _dataOptions: VirtualScrollDataOptions<TItem>;
 
   private readonly component: InternalGrid;
 
@@ -165,13 +163,17 @@ class VirtualScrollController<
 
   public positionChanged: Callback;
 
-  private readonly _dataLoader: VirtualDataLoader;
+  private readonly _dataLoader: VirtualDataLoader<TItem>;
 
   private _scrollTimeoutID?: ReturnType<typeof setTimeout>;
 
   private _windowScroll?: ExternalScrollers | null;
 
-  constructor(component: InternalGrid, dataOptions: TDataOptions, isVirtual = false) {
+  constructor(
+    component: InternalGrid,
+    dataOptions: VirtualScrollDataOptions<TItem>,
+    isVirtual = false,
+  ) {
     this._dataOptions = dataOptions;
     this.component = component;
     this._viewportSize = component.option(LEGACY_SCROLLING_MODE) === false ? 15 : 0;
@@ -447,15 +449,15 @@ class VirtualScrollController<
   }
 
   public isVirtualMode(): boolean {
-    return this.option('scrolling.mode') === SCROLLING_MODE_VIRTUAL || this.isVirtual();
+    return isVirtualMode(this.option('scrolling')) || this.isVirtual();
   }
 
   public isAppendMode(): boolean {
-    return this.option('scrolling.mode') === SCROLLING_MODE_INFINITE && !this.isVirtual();
+    return isInfiniteMode(this.option('scrolling')) && !this.isVirtual();
   }
 
   public getViewportParams(): ViewportParams {
-    const virtualMode = this.option('scrolling.mode') === SCROLLING_MODE_VIRTUAL;
+    const virtualMode = isVirtualMode(this.option('scrolling'));
     const totalItemsCount = this._dataOptions.totalItemsCount();
     const hasKnownLastPage = this._dataOptions.hasKnownLastPage();
     const topIndex = hasKnownLastPage && this._viewportItemIndex > totalItemsCount
@@ -517,8 +519,14 @@ class VirtualScrollController<
     this._dataLoader.loadIfNeed();
   }
 
-  public handleDataChanged(callBase: ChangedCallback, e?: ChangedEvent): void {
-    this._dataLoader.handleDataChanged(callBase, e);
+  public handleDataChanged(changedCallback: LoaderChangedCallback<TItem>): void;
+  public handleDataChanged(changedCallback: ChangedCallback<TItem>, e?: ChangedEvent): void;
+  public handleDataChanged(
+    changedCallback: ChangedCallback<TItem> | LoaderChangedCallback<TItem>,
+    e?: ChangedEvent,
+  ): void {
+    // @ts-expect-error only the ChangedCallback overload passes e, which the loader passes on
+    this._dataLoader.handleDataChanged(changedCallback, e);
   }
 
   public getDelayDeferred(): DeferredObj<unknown> | undefined {

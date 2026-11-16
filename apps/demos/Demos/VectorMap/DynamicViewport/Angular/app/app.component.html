@@ -31,7 +31,7 @@
       <div class="option">
         <span>Zoom factor</span>
         <dx-text-box
-          [value]="zoomFactorValue"
+          [value]="zoomFactorValue()"
           [readOnly]="true"
           [width]="210"
           [inputAttr]="{ 'aria-label': 'Zoom' }"
@@ -42,7 +42,7 @@
         <span>Center</span>
         <dx-text-box
           [inputAttr]="{ 'aria-label': 'Center' }"
-          [value]="centerValue"
+          [value]="centerValue()"
           [readOnly]="true"
           [width]="210"
         ></dx-text-box>

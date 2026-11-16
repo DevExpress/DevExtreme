@@ -1,6 +1,5 @@
 import type { Position } from '@js/common';
 import { locate, move } from '@js/common/core/animation/translator';
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import { end as dragEventEnd, move as dragEventMove, start as dragEventStart } from '@js/common/core/events/drag';
 import { addNamespace } from '@js/common/core/events/utils/index';
 import { triggerResizeEvent } from '@js/common/core/events/visibility_change';
@@ -22,6 +21,7 @@ import type {
 } from '@js/ui/resizable';
 import DOMComponent from '@ts/core/widget/dom_component';
 import type { OptionChanged } from '@ts/core/widget/types';
+import eventsEngine from '@ts/events/core/events_engine';
 
 const RESIZABLE = 'dxResizable';
 const RESIZABLE_CLASS = 'dx-resizable';

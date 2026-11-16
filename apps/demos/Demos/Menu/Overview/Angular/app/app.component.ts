@@ -1,5 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import {
+  Component, enableProdMode, inject, signal,
+} from '@angular/core';
 import { DxSelectBoxModule, DxCheckBoxModule } from 'devextreme-angular';
 import { DxMenuModule, type DxMenuTypes } from 'devextreme-angular/ui/menu';
 
@@ -24,9 +26,9 @@ const isProductItem = (item: Product | ProductItem): item is ProductItem =>
   ],
 })
 export class AppComponent {
-  products: Product[];
+  readonly products = inject(Service).getProducts();
 
-  showSubmenuModes = [{
+  readonly showSubmenuModes = [{
     name: 'onHover' as DxMenuTypes.SubmenuShowMode,
     delay: { show: 0, hide: 500 },
   }, {
@@ -34,25 +36,17 @@ export class AppComponent {
     delay: { show: 0, hide: 300 },
   }];
 
-  showFirstSubmenuModes = this.showSubmenuModes[1];
+  readonly showFirstSubmenuModes = signal(this.showSubmenuModes[1]);
 
-  currentProduct: ProductItem;
-
-  constructor(service: Service) {
-    this.products = service.getProducts();
-  }
+  readonly currentProduct = signal<ProductItem | undefined>(undefined);
 
   itemClick(data: DxMenuTypes.ItemClickEvent<Product>) {
     const item = data.itemData;
 
     if (isProductItem(item)) {
-      this.currentProduct = item;
+      this.currentProduct.set(item);
     }
   }
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

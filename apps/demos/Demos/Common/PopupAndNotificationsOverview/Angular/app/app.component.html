@@ -52,7 +52,7 @@
     [width]="660"
     [height]="540"
     [showTitle]="true"
-    [title]="currentHouse.Address"
+    [title]="currentHouse().Address"
     [dragEnabled]="false"
     [hideOnOutsideClick]="true"
     [(visible)]="popupVisible"
@@ -61,17 +61,17 @@
     <div *dxTemplate="let data of 'content'">
       <div class="popup-property-details">
         <div class="large-text">{{
-          currentHouse.Price | currency : "USD" : "symbol" : "1.0-0"
+          currentHouse().Price | currency : "USD" : "symbol" : "1.0-0"
         }}</div>
         <div class="opacity"
-          >{{ currentHouse.Address }}, {{ currentHouse.City }},
-          {{ currentHouse.State }}</div
+          >{{ currentHouse().Address }}, {{ currentHouse().City }},
+          {{ currentHouse().State }}</div
         >
         <dx-button
           class="favorites"
           icon="favorites"
           [text]="
-            currentHouse.Favorite ? REMOVE_FROM_FAVORITES : ADD_TO_FAVORITES
+            currentHouse().Favorite ? REMOVE_FROM_FAVORITES : ADD_TO_FAVORITES
           "
           [width]="260"
           [height]="44"
@@ -80,15 +80,15 @@
         </dx-button>
         <div class="images">
           <img
-            alt="{{ currentHouse.Address }}"
-            src="{{ currentHouse.Image }}"
+            alt="{{ currentHouse().Address }}"
+            src="{{ currentHouse().Image }}"
           />
           <img
-            alt="{{ currentHouse.Address }}"
-            src="{{ currentHouse.Image.replace('.jpg', 'b.jpg') }}"
+            alt="{{ currentHouse().Address }}"
+            src="{{ currentHouse().Image.replace('.jpg', 'b.jpg') }}"
           />
         </div>
-        <div>{{ currentHouse.Features }}</div>
+        <div>{{ currentHouse().Features }}</div>
       </div>
     </div>
   </dx-popup>

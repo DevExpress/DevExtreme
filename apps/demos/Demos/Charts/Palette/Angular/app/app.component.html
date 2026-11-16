@@ -1,9 +1,9 @@
 <div class="flex-container">
   <dx-pie-chart
     id="pie"
-    [palette]="palette"
+    [palette]="palette()"
     [dataSource]="data"
-    [paletteExtensionMode]="paletteExtensionMode"
+    [paletteExtensionMode]="paletteExtensionMode()"
   >
     <dxo-pie-chart-size [width]="500"></dxo-pie-chart-size>
     <dxo-pie-chart-legend [visible]="false"></dxo-pie-chart-legend>
@@ -11,7 +11,7 @@
   </dx-pie-chart>
 
   <div class="palette-container flex-block">
-    @for(color of baseColors; track color) {
+    @for(color of baseColors(); track color) {
     <div class="palette-item" [style.background-color]="color"></div>
     }
   </div>

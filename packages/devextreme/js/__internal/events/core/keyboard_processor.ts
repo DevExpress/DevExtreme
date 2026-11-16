@@ -1,8 +1,8 @@
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import { addNamespace, normalizeKeyName } from '@js/common/core/events/utils/index';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import type { DxEvent } from '@js/events';
+import eventsEngine from '@ts/events/core/events_engine';
 
 const COMPOSITION_START_EVENT = 'compositionstart';
 const COMPOSITION_END_EVENT = 'compositionend';

@@ -1,5 +1,5 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import { Component, enableProdMode, inject } from '@angular/core';
 import { DxPieChartModule } from 'devextreme-angular';
 import { DecimalPipe } from '@angular/common';
 import { Service } from './app.service';
@@ -19,16 +19,11 @@ if (!/localhost/.test(document.location.host)) {
 })
 
 export class AppComponent {
-  service: Service;
+  readonly service = inject(Service);
 
-  countries: Iterable<string>;
+  readonly countries = new Set(this.service.getData().map((item) => item.country));
 
-  pipe = new DecimalPipe('en-US');
-
-  constructor(service: Service) {
-    this.service = service;
-    this.countries = new Set(service.getData().map((item) => item.country));
-  }
+  readonly pipe = new DecimalPipe('en-US');
 
   customizeLabel(e) {
     return `${e.argumentText}\n${e.valueText}`;
@@ -44,8 +39,4 @@ export class AppComponent {
   }
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

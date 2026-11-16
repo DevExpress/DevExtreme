@@ -1,6 +1,6 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import {
-  ChangeDetectorRef, Component, enableProdMode, provideZoneChangeDetection,
+  Component, enableProdMode, inject, signal,
 } from '@angular/core';
 import { HttpClient, HttpParams, provideHttpClient, withFetch } from '@angular/common/http';
 import { lastValueFrom, Observable } from 'rxjs';
@@ -26,15 +26,30 @@ const URL = 'https://js.devexpress.com/Demos/NetCore/api/DataGridWebApi';
   ],
 })
 export class AppComponent {
-  dataSource: CustomStore;
+  private readonly http = inject(HttpClient);
 
-  requests: string[] = [];
+  readonly dataSource = new CustomStore({
+    key: 'OrderID',
+    load: () => this.sendRequest(`${URL}/Orders`),
+    insert: (values) => this.sendRequest(`${URL}/InsertOrder`, 'POST', {
+      values: JSON.stringify(values),
+    }),
+    update: (key, values) => this.sendRequest(`${URL}/UpdateOrder`, 'PUT', {
+      key,
+      values: JSON.stringify(values),
+    }),
+    remove: (key) => this.sendRequest(`${URL}/DeleteOrder`, 'DELETE', {
+      key,
+    }),
+  });
 
-  refreshModes = ['full', 'reshape', 'repaint'];
+  readonly requests = signal<string[]>([]);
 
-  refreshMode = 'reshape';
+  readonly refreshModes = ['full', 'reshape', 'repaint'];
 
-  customersData = {
+  readonly refreshMode = signal('reshape');
+
+  readonly customersData = {
     paginate: true,
     store: new CustomStore({
       key: 'Value',
@@ -43,28 +58,11 @@ export class AppComponent {
     }),
   };
 
-  shippersData = new CustomStore({
+  readonly shippersData = new CustomStore({
     key: 'Value',
     loadMode: 'raw',
     load: () => this.sendRequest(`${URL}/ShippersLookup`),
   });
-
-  constructor(private http: HttpClient, private changeDetectorRef: ChangeDetectorRef) {
-    this.dataSource = new CustomStore({
-      key: 'OrderID',
-      load: () => this.sendRequest(`${URL}/Orders`),
-      insert: (values) => this.sendRequest(`${URL}/InsertOrder`, 'POST', {
-        values: JSON.stringify(values),
-      }),
-      update: (key, values) => this.sendRequest(`${URL}/UpdateOrder`, 'PUT', {
-        key,
-        values: JSON.stringify(values),
-      }),
-      remove: (key) => this.sendRequest(`${URL}/DeleteOrder`, 'DELETE', {
-        key,
-      }),
-    });
-  }
 
   async sendRequest(url: string, method = 'GET', data = {}) {
     this.logRequest(method, url, data);
@@ -106,18 +104,18 @@ export class AppComponent {
 
     const time = formatDate(new Date(), 'HH:mm:ss');
 
-    this.requests.unshift([time, method, url.slice(URL.length), args].join(' '));
-    this.changeDetectorRef.detectChanges();
+    const request = [time, method, url.slice(URL.length), args].join(' ');
+
+    this.requests.update((requests) => [request, ...requests]);
   }
 
   clearRequests() {
-    this.requests = [];
+    this.requests.set([]);
   }
 }
 
 bootstrapApplication(AppComponent, {
   providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
     provideHttpClient(withFetch()),
   ],
 });

@@ -1,7 +1,7 @@
 import type { FilterType } from '@js/common/grids';
-import errors from '@js/core/errors';
 import { isDefined } from '@js/core/utils/type';
 import filterUtils from '@js/ui/shared/filtering';
+import errors from '@js/ui/widget/ui.errors';
 import type { DataFilterExpression } from '@ts/grids/grid_core/filter/types';
 import { combineFilters } from '@ts/grids/grid_core/filter/utils';
 import type { Column } from '@ts/grids/new/grid_core/columns_controller/types';

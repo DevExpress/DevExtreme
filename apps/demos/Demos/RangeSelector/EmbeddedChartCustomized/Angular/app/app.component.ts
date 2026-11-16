@@ -1,5 +1,5 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import { Component, enableProdMode } from '@angular/core';
 import { DxRangeSelectorModule } from 'devextreme-angular';
 
 if (!/localhost/.test(document.location.host)) {
@@ -38,8 +38,4 @@ export class AppComponent {
   customizeText = ({ valueText }) => `${valueText} s`;
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

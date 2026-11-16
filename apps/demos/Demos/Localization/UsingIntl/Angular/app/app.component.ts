@@ -1,12 +1,12 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import { Component, enableProdMode, inject } from '@angular/core';
 import { DxSelectBoxModule, DxDataGridModule } from 'devextreme-angular';
 
 import { locale, loadMessages, formatMessage } from 'devextreme-angular/common/core/localization';
 
 import deMessages from 'devextreme/localization/messages/de.json';
 import ruMessages from 'devextreme/localization/messages/ru.json';
-import { Locale, Payment, Service } from './app.service';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -25,24 +25,22 @@ if (!/localhost/.test(document.location.host)) {
 })
 
 export class AppComponent {
-  locale: string;
+  private readonly service = inject(Service);
 
-  locales: Locale[];
+  readonly locale = this.getLocale();
 
-  payments: Payment[];
+  readonly payments = this.service.getPayments();
 
-  formatMessage = formatMessage;
+  readonly locales = this.service.getLocales();
 
-  constructor(private service: Service) {
-    this.locale = this.getLocale();
-    this.payments = service.getPayments();
-    this.locales = service.getLocales();
+  readonly formatMessage = formatMessage;
 
+  constructor() {
     this.initMessages();
     locale(this.locale);
   }
 
-  initMessages() {
+  private initMessages() {
     loadMessages(deMessages);
     loadMessages(ruMessages);
     loadMessages(this.service.getDictionary());
@@ -53,18 +51,14 @@ export class AppComponent {
     parent.document.location.reload();
   }
 
-  getLocale() {
+  private getLocale() {
     const locale = sessionStorage.getItem('locale');
     return locale != null ? locale : 'en';
   }
 
-  setLocale(locale) {
+  private setLocale(locale) {
     sessionStorage.setItem('locale', locale);
   }
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

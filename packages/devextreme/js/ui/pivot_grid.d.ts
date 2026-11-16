@@ -8,6 +8,7 @@ import {
     EventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
+    InteractionEvent,
 } from '../events';
 
 import PivotGridDataSource, {
@@ -122,9 +123,9 @@ export type ContentReadyEvent = EventInfo<dxPivotGrid>;
  * @docid _ui_pivot_grid_ContextMenuPreparingEvent
  * @public
  * @type object
- * @inherits EventInfo
+ * @inherits NativeEventInfo
  */
-export type ContextMenuPreparingEvent = EventInfo<dxPivotGrid> & {
+export type ContextMenuPreparingEvent = NativeEventInfo<dxPivotGrid, InteractionEvent> & {
     /** @docid _ui_pivot_grid_ContextMenuPreparingEvent.area */
     readonly area?: string;
     /**

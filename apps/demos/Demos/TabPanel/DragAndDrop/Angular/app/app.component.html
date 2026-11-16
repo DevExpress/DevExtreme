@@ -9,21 +9,21 @@
 </div>
 <dx-sortable
   filter=".dx-tab"
-  [data]="employees"
+  [data]="employees()"
   itemOrientation="horizontal"
   dragDirection="horizontal"
   (onDragStart)="onTabDragStart($event)"
   (onReorder)="onTabDrop($event)"
 >
   <dx-tab-panel
-    [dataSource]="employees"
+    [dataSource]="employees()"
     [height]="410"
     itemTitleTemplate="title"
     itemTemplate="item"
     [deferRendering]="false"
     [showNavButtons]="true"
     [repaintChangesOnly]="true"
-    [selectedIndex]="selectedIndex"
+    [selectedIndex]="selectedIndex()"
   >
     <div *dxTemplate="let content of 'title'">
       <span>{{ content.FirstName }} {{ content.LastName }}</span>

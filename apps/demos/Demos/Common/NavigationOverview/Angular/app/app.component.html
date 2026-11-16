@@ -9,32 +9,32 @@
   </div>
   <div class="right-content">
     <div class="title-container">
-      <img alt="country flag" class="flag" [src]="countryData.flag" />
+      <img alt="country flag" class="flag" [src]="countryData().flag" />
       <div>
-        <div class="country-name">{{ countryData.fullName }}</div>
-        <div>{{ countryData.description }}</div>
+        <div class="country-name">{{ countryData().fullName }}</div>
+        <div>{{ countryData().description }}</div>
       </div>
     </div>
 
     <div class="stats">
       <div>
         <div class="sub-title">Area, km<sup>2</sup></div>
-        <div class="stat-value">{{ countryData.area }}</div>
+        <div class="stat-value">{{ countryData().area }}</div>
       </div>
       <div>
         <div class="sub-title">Population</div>
-        <div class="stat-value">{{ countryData.population }}</div>
+        <div class="stat-value">{{ countryData().population }}</div>
       </div>
       <div>
         <div class="sub-title">GDP, billion</div>
-        <div class="stat-value">{{ "$" + countryData.gdp }}</div>
+        <div class="stat-value">{{ "$" + countryData().gdp }}</div>
       </div>
     </div>
 
     <div class="sub-title">Largest cities</div>
     <dx-tab-panel
       id="tabpanel"
-      [(dataSource)]="citiesData"
+      [dataSource]="citiesData()"
       [animationEnabled]="true"
       [(selectedIndex)]="tabPanelIndex"
       itemTitleTemplate="title"

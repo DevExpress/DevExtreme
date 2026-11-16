@@ -1,6 +1,5 @@
 /* eslint-disable max-classes-per-file */
 import { cancelAnimationFrame, requestAnimationFrame } from '@js/common/core/animation/frame';
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import {
   addNamespace, eventData, eventDelta, isDxMouseWheelEvent, isMouseEvent,
 } from '@js/common/core/events/utils/index';
@@ -8,6 +7,7 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import devices from '@ts/core/devices';
 import type { EmitterConfigData, EmitterEvent, EventCoords } from '@ts/events/core/emitter';
 import registerEmitter from '@ts/events/core/emitter_registrator';
+import eventsEngine from '@ts/events/core/events_engine';
 import GestureEmitter from '@ts/events/gesture/emitter.gesture';
 
 const realDevice = devices.real();

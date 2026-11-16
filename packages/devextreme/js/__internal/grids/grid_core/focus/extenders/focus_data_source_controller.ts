@@ -3,9 +3,7 @@ import type { StoreChange } from '@js/data/store';
 import type { DataSourceController } from '@ts/grids/grid_core/data_source/data_source_controller';
 import type { ModuleType } from '@ts/grids/grid_core/types';
 
-export interface FocusDataSourceControllerExtension {
-  consumeDataPushed: () => boolean;
-}
+import type { FocusDataSourceControllerExtension } from '../types';
 
 export const focusDataSourceControllerExtender = (
   Base: ModuleType<DataSourceController>,

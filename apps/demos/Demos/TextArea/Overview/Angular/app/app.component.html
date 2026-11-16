@@ -19,7 +19,7 @@
 <div class="textarea-wrapper">
   <dx-text-area
     [(height)]="height"
-    [maxLength]="maxLength"
+    [maxLength]="maxLength()"
     [(value)]="value"
     [(autoResizeEnabled)]="autoResizeEnabled"
     [inputAttr]="{ 'aria-label': 'Notes' }"
@@ -47,7 +47,7 @@
     <dx-text-area
       [height]="90"
       [(value)]="valueForEditableTextArea"
-      [valueChangeEvent]="eventValue"
+      [valueChangeEvent]="eventValue()"
       [inputAttr]="{ 'aria-label': 'Notes' }"
     >
     </dx-text-area>

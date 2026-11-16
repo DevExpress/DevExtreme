@@ -1,5 +1,5 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import { Component, enableProdMode, inject } from '@angular/core';
 import { DataSource, ArrayStore } from 'devextreme-angular/common/data';
 import { DxSelectBoxModule } from 'devextreme-angular';
 import { Service } from './app.service';
@@ -18,37 +18,31 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  fromUngroupedData: DataSource;
+  private readonly service = inject(Service);
 
-  fromPregroupedData: DataSource;
+  readonly fromUngroupedData = new DataSource({
+    store: new ArrayStore({
+      data: this.service.getUngroupedData(),
+      key: 'ID',
+    }),
+    group: 'Category',
+  });
 
-  constructor(service: Service) {
-    this.fromUngroupedData = new DataSource({
-      store: new ArrayStore({
-        data: service.getUngroupedData(),
-        key: 'ID',
-      }),
-      group: 'Category',
-    });
+  readonly fromPregroupedData = new DataSource({
+    store: new ArrayStore({
+      data: this.service.getPregroupedData(),
+      key: 'ID',
+    }),
+    map(item) {
+      item.key = item.Category;
+      item.items = item.Products;
+      return item;
+    },
+  });
 
-    this.fromPregroupedData = new DataSource({
-      store: new ArrayStore({
-        data: service.getPregroupedData(),
-        key: 'ID',
-      }),
-      map(item) {
-        item.key = item.Category;
-        item.items = item.Products;
-        return item;
-      },
-    });
-
+  constructor() {
     this.fromPregroupedData.load();
   }
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

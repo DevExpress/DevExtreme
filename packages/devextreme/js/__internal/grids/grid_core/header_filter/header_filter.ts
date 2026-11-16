@@ -1,6 +1,5 @@
 /* eslint-disable max-classes-per-file */
 import { name as clickEventName } from '@js/common/core/events/click';
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import dateLocalization from '@js/common/core/localization/date';
 import messageLocalization from '@js/common/core/localization/message';
 import type { GroupItem } from '@js/common/data';
@@ -19,6 +18,7 @@ import filterUtils from '@js/ui/shared/filtering';
 import { compileGetter } from '@ts/core/utils/data';
 import type { DataSource } from '@ts/data/data_source/data_source';
 import type { StoreLoadOptions } from '@ts/data/data_source/types';
+import eventsEngine from '@ts/events/core/events_engine';
 import type { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/column_headers';
 import type { Column, ColumnsChanges, WithCellValueCalculator } from '@ts/grids/grid_core/columns_controller/types';
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';

@@ -21,8 +21,8 @@
   <span class="caption">Selected Items:</span>
   <span>
     {{
-      selectedItems && selectedItems.length
-        ? (selectedItems | stringifyItems : textExpression)
+      selectedItems().length
+        ? (selectedItems() | stringifyItems : textExpression)
         : "Nobody has been selected"
     }}
   </span>

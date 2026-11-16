@@ -1,5 +1,5 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import { Component, enableProdMode, inject } from '@angular/core';
 import { DxSelectBoxModule, DxDataGridModule } from 'devextreme-angular';
 
 import 'devextreme/common/core/localization/globalize/number';
@@ -17,7 +17,7 @@ import ruCldrData from 'devextreme-cldr-data/ru.json';
 import supplementalCldrData from 'devextreme-cldr-data/supplemental.json';
 
 import Globalize from 'globalize';
-import { Locale, Payment, Service } from './app.service';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -36,24 +36,22 @@ if (!/localhost/.test(document.location.host)) {
 })
 
 export class AppComponent {
-  locale: string;
+  private readonly service = inject(Service);
 
-  locales: Locale[];
+  readonly locale = this.getLocale();
 
-  payments: Payment[];
+  readonly payments = this.service.getPayments();
 
-  formatMessage = Globalize.formatMessage.bind(Globalize);
+  readonly locales = this.service.getLocales();
 
-  constructor(private service: Service) {
-    this.locale = this.getLocale();
-    this.payments = service.getPayments();
-    this.locales = service.getLocales();
+  readonly formatMessage = Globalize.formatMessage.bind(Globalize);
 
+  constructor() {
     this.initGlobalize();
     Globalize.locale(this.locale);
   }
 
-  initGlobalize() {
+  private initGlobalize() {
     Globalize.load(
       deCldrData,
       ruCldrData,
@@ -69,18 +67,14 @@ export class AppComponent {
     parent.document.location.reload();
   }
 
-  getLocale() {
+  private getLocale() {
     const locale = sessionStorage.getItem('locale');
     return locale != null ? locale : 'en';
   }
 
-  setLocale(locale) {
+  private setLocale(locale) {
     sessionStorage.setItem('locale', locale);
   }
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

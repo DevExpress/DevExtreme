@@ -11,7 +11,7 @@ import {
   focusEditorFactoryViewControllerExtender,
   keyboardNavigation,
   rowsView,
-} from './m_focus';
+} from './focus';
 
 type FocusDefaultProperties = 'focusedRowEnabled' | 'autoNavigateToFocusedRow' | 'focusedRowKey' | 'focusedRowIndex' | 'focusedColumnIndex';
 
