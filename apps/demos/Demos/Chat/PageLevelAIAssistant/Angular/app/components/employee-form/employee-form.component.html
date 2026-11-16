@@ -3,17 +3,18 @@
     [formData]="formData"
     [colCount]="3"
     labelLocation="top"
-    [aiIntegration]="aiIntegration"
+    [aiIntegration]="aiIntegration()"
     (onOptionChanged)="onOptionChanged($event)"
   >
+    @for (field of formFields; track field.dataField) {
     <dxi-form-simple-item
-      *ngFor="let field of formFields"
       [dataField]="field.dataField"
       [label]="field.label"
       [editorType]="field.editorType"
       [editorOptions]="field.editorOptions"
       [aiOptions]="field.aiOptions"
     ></dxi-form-simple-item>
+    }
     <dxi-form-button-item
       name="Save"
       [colSpan]="3"

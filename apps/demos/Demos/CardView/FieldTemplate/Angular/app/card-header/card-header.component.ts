@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, input } from '@angular/core';
 
 @Component({
   selector: 'card-header',
@@ -6,5 +6,5 @@ import { Component, Input } from '@angular/core';
   styleUrls: ['./card-header.component.css'],
 })
 export class CardHeader {
-  @Input() text: string;
+  readonly text = input.required<string>();
 }

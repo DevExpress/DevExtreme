@@ -1,7 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import { Component, enableProdMode, inject } from '@angular/core';
 import { DxBulletModule } from 'devextreme-angular';
-import { Week, Service } from './app.service';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -18,11 +18,7 @@ if (!/localhost/.test(document.location.host)) {
 })
 
 export class AppComponent {
-  weeksData: Week[];
-
-  constructor(service: Service) {
-    this.weeksData = service.getWeeksData();
-  }
+  readonly weeksData = inject(Service).getWeeksData();
 
   customizeTooltip(arg) {
     return {
@@ -31,8 +27,4 @@ export class AppComponent {
   }
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

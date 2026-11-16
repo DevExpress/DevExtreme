@@ -94,6 +94,7 @@
     "dx-chat-suggestions",
     "dx-chat-textarea",
     "dx-chat-textarea-toolbar",
+    "dx-chat-tool-call-view",
     "dx-chat-typingindicator-bubble",
     "dx-chat-typingindicator-circle",
     "dx-chat-typingindicator-content",

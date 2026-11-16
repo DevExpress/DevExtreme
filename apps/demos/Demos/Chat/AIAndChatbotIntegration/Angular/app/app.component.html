@@ -10,20 +10,20 @@
       <dxi-toolbar-item
         location="after"
         widget="dxButton"
-        [options]="clearButtonOptions"
+        [options]="clearButtonOptions()"
       >
       </dxi-toolbar-item>
     </dx-toolbar>
     <dx-chat
-      [class.chat-disabled]="isDisabled"
+      [class.chat-disabled]="isDisabled()"
       [dataSource]="dataSource"
       [reloadOnChange]="false"
       [showAvatar]="false"
       [showDayHeaders]="false"
       [user]="user"
       height="710"
-      [typingUsers]="typingUsers$ | async"
-      [alerts]="alerts$ | async"
+      [typingUsers]="typingUsers()"
+      [alerts]="alerts()"
       (onMessageEntered)="onMessageEntered($event)"
       messageTemplate="messageTemplate"
       [speechToTextEnabled]="true"
@@ -42,7 +42,7 @@
           </div>
           <div class="bubble-button-container">
             <dx-button
-              [icon]="copyButtonIcon"
+              [icon]="copyButtonIcon()"
               stylingMode="text"
               hint="Copy"
               (onClick)="onCopyButtonClick(data.message)"

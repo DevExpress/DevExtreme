@@ -1,12 +1,10 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import {
-  ChangeDetectorRef, Component, enableProdMode, provideZoneChangeDetection,
+  Component, enableProdMode, inject, signal,
 } from '@angular/core';
 import { DxGanttModule, DxPopupModule } from 'devextreme-angular';
-import { DxButtonTypes } from 'devextreme-angular/ui/button';
-import {
-  Service, Task, Dependency, Resource, ResourceAssignment,
-} from './app.service';
+import type { DxButtonTypes } from 'devextreme-angular/ui/button';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -24,36 +22,26 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  tasks: Task[];
+  private readonly service = inject(Service);
 
-  dependencies: Dependency[];
+  readonly tasks = this.service.getTasks();
 
-  resources: Resource[];
+  readonly dependencies = this.service.getDependencies();
 
-  resourceAssignments: ResourceAssignment[];
+  readonly resources = this.service.getResources();
 
-  popupVisible = false;
+  readonly resourceAssignments = this.service.getResourceAssignments();
 
-  customButtonOptions: DxButtonTypes.Properties = {
+  readonly popupVisible = signal(false);
+
+  readonly customButtonOptions: DxButtonTypes.Properties = {
     text: 'About',
     icon: 'info',
     stylingMode: 'text',
     onClick: () => {
-      this.popupVisible = true;
-      this.changeDetectorRef.detectChanges();
+      this.popupVisible.set(true);
     },
   };
-
-  constructor(service: Service, private changeDetectorRef: ChangeDetectorRef) {
-    this.tasks = service.getTasks();
-    this.dependencies = service.getDependencies();
-    this.resources = service.getResources();
-    this.resourceAssignments = service.getResourceAssignments();
-  }
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

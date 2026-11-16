@@ -17,7 +17,7 @@
   <h2>Selected Employees</h2>
   <dx-data-grid
     id="gridContainer"
-    [dataSource]="selectedEmployees"
+    [dataSource]="selectedEmployees()"
     [columns]="['FirstName', 'LastName', 'BirthYear', 'City', 'Title']"
     [showBorders]="true"
     [columnAutoWidth]="true"

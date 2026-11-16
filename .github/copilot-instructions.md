@@ -11,7 +11,7 @@ DevExtreme is an enterprise-ready suite of UI components for Angular, React, Vue
 - **Package Manager:** pnpm 11.9.0 (`packageManager` field in package.json)
 - **Node Version:** 24.16.0 (`.node-version`; `engines.node` is `^24.16.0`)
 - **Build System:** Nx + custom build scripts + custom Nx executors (via `devextreme-nx-infra-plugin`)
-- **Test Frameworks:** QUnit, Jest, TestCafe, Karma (Angular)
+- **Test Frameworks:** QUnit, Jest, TestCafe, Vitest (Angular)
 
 ## Critical Setup Requirements
 

@@ -1,7 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import { Component, enableProdMode, inject } from '@angular/core';
 import { DxChartModule, DxChartTypes } from 'devextreme-angular/ui/chart';
-import { Population, CorrelationDescription, Service } from './app.service';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -17,26 +17,23 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  title = 'Correlation between Total Population and\n Population with Age over 60';
+  private readonly service = inject(Service);
 
-  dataSource: Population[];
+  readonly title = 'Correlation between Total Population and\n Population with Age over 60';
 
-  correlationSource: CorrelationDescription[];
+  readonly dataSource = this.service.getPopulationData();
 
-  constructor(service: Service) {
-    this.dataSource = service.getPopulationData();
-    this.correlationSource = service.getCorrelationSource();
-  }
+  readonly correlationSource = this.service.getCorrelationSource();
 
-  customizeTooltip = ({
+  readonly customizeTooltip = ({
     point, argumentText, valueText, size,
   }: { point: Record<string, unknown>, argumentText: string, valueText: string, size: number }) => ({
     text: `${point.tag}<br/>Total Population: ${argumentText}M<br/>Population with Age over 60: ${valueText}M (${size}%)`,
   });
 
-  argumentCustomizeText: DxChartTypes.ArgumentAxisLabel['customizeText'] = ({ value }) => `${value}M`;
+  readonly argumentCustomizeText: DxChartTypes.ArgumentAxisLabel['customizeText'] = ({ value }) => `${value}M`;
 
-  valueCustomizeText: DxChartTypes.ValueAxisLabel['customizeText'] = ({ value }) => `${value}M`;
+  readonly valueCustomizeText: DxChartTypes.ValueAxisLabel['customizeText'] = ({ value }) => `${value}M`;
 
   onSeriesClick({ target: series }: DxChartTypes.SeriesClickEvent) {
     series.isVisible()
@@ -45,8 +42,4 @@ export class AppComponent {
   }
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

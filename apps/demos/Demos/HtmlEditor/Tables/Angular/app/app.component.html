@@ -1,9 +1,9 @@
 <dx-html-editor height="750px" [value]="valueContent">
   <dxo-html-editor-table-context-menu
-    [enabled]="contextMenuEnabled"
+    [enabled]="contextMenuEnabled()"
   ></dxo-html-editor-table-context-menu>
   <dxo-html-editor-table-resizing
-    [enabled]="allowResizing"
+    [enabled]="allowResizing()"
   ></dxo-html-editor-table-resizing>
   <dxo-html-editor-toolbar>
     <dxi-html-editor-item name="bold"></dxi-html-editor-item>

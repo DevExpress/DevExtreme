@@ -6,6 +6,7 @@ import type { ClickEvent as ButtonClickEvent } from '@js/ui/button';
 import Button from '@js/ui/button';
 import type { ContentReadyEvent, ItemClickEvent } from '@js/ui/list';
 import type { Appointment } from '@js/ui/scheduler';
+import { getData } from '@ts/core/element_data';
 import { FunctionTemplate } from '@ts/core/templates/function_template';
 
 import { APPOINTMENT_SETTINGS_KEY, LIST_ITEM_CLASS, LIST_ITEM_DATA_KEY } from './constants';
@@ -93,9 +94,7 @@ export class CompactAppointmentsHelper {
 
       const getItemData = (
         itemElement: Element | dxElementWrapper,
-      ): SafeAppointment | undefined => ($(itemElement)
-        .data<{ appointment?: SafeAppointment } | undefined>(LIST_ITEM_DATA_KEY))
-        ?.appointment;
+      ): SafeAppointment | undefined => getData(itemElement, LIST_ITEM_DATA_KEY)?.appointment;
       const getItemSettings = (
         _: dxElementWrapper,
         event: Record<string, unknown>,

@@ -8,11 +8,11 @@
   [dataSource]="pivotGridDataSource"
 >
   <dxo-pivot-grid-header-filter
-    [showRelevantValues]="showRelevantValues"
+    [showRelevantValues]="showRelevantValues()"
     [width]="300"
     [height]="400"
   >
-    <dxo-pivot-grid-search [enabled]="searchEnabled"></dxo-pivot-grid-search>
+    <dxo-pivot-grid-search [enabled]="searchEnabled()"></dxo-pivot-grid-search>
   </dxo-pivot-grid-header-filter>
 
   <dxo-pivot-grid-field-chooser

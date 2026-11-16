@@ -1,19 +1,24 @@
 import { errors as dataErrors } from '@js/common/data/errors';
 import storeHelper from '@js/common/data/store_helper';
 import { keysEqual, normalizeSortingInfo } from '@js/common/data/utils';
+import devices from '@js/core/devices';
 import { toComparable } from '@js/core/utils/data';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { isDefined, isString } from '@js/core/utils/type';
+import type { ItemClickEvent } from '@js/ui/context_menu';
+import type { GroupPanel } from '@js/ui/data_grid';
 import type { StoreLoadOptions } from '@ts/data/data_source/types';
 import type { SortingInfo, SortingSelector } from '@ts/data/utils';
+import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import type { ProcessedItem } from '@ts/grids/grid_core/data_controller/types';
 import type DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/data_source_adapter';
 import type { LoadOperation, RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
 import type { DataFilter } from '@ts/grids/grid_core/filter/types';
 import { combineFilters } from '@ts/grids/grid_core/filter/utils';
 import type { RowKey } from '@ts/grids/grid_core/types';
+import type { GridContextMenuItem } from '@ts/grids/grid_core/views/types';
 
 import dataGridCore from '../core';
 import type {
@@ -22,6 +27,7 @@ import type {
   GroupInfo,
   GroupInfoData,
   GroupInfoLevel,
+  GroupingKeyboardNavigationController,
   GroupItem,
   GroupItemData,
   GroupItemsPosition,
@@ -469,4 +475,43 @@ export function processDataItem(state: GroupItemsProcessingState): void {
   if (state.take < 0) {
     state.removeLastItemsCount += 1;
   }
+}
+
+export function onGroupingMenuItemClick(
+  keyboardNavigationController: GroupingKeyboardNavigationController | undefined,
+  column: Column,
+  rowIndex: number,
+  e: ItemClickEvent<GridContextMenuItem>,
+): void {
+  switch (e.itemData?.value) {
+    case 'group':
+      keyboardNavigationController?.groupColumn?.(column, rowIndex);
+      break;
+    case 'ungroup':
+      keyboardNavigationController?.ungroupColumn?.(column, rowIndex);
+      break;
+    case 'ungroupAll':
+      keyboardNavigationController?.ungroupAllColumns?.();
+      break;
+    default:
+      break;
+  }
+}
+
+export function isGroupPanelVisible(groupPanelOptions: GroupPanel | undefined): boolean {
+  const visible = groupPanelOptions?.visible;
+
+  return visible === 'auto'
+    ? devices.current().deviceType === 'desktop'
+    : !!visible;
+}
+
+export function allowDragging(
+  groupPanelOptions: GroupPanel | undefined,
+  column: Column | undefined,
+): boolean {
+  const isVisible = isGroupPanelVisible(groupPanelOptions);
+  const canDrag = groupPanelOptions?.allowColumnDragging && column?.allowGrouping;
+
+  return isVisible && !!canDrag;
 }

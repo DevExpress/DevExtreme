@@ -16,8 +16,7 @@
     "core-js": "^2.6.12",
     "devextreme": "workspace:*",
     "devextreme-angular": "workspace:*",
-    "tslib": "^2.6.1",
-    "zone.js": "catalog:angular"
+    "tslib": "^2.6.1"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "catalog:angular",

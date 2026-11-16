@@ -1,5 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import {
+  Component, enableProdMode, inject, signal,
+} from '@angular/core';
 import {
   DxSelectBoxModule,
   DxTextAreaModule,
@@ -11,7 +13,7 @@ import {
   DxTextBoxModule,
 } from 'devextreme-angular';
 import notify from 'devextreme/ui/notify';
-import { EditorStyle, LabelMode } from 'devextreme-angular/common';
+import type { EditorStyle, LabelMode } from 'devextreme-angular/common';
 import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -37,15 +39,15 @@ if (!/localhost/.test(document.location.host)) {
 })
 
 export class AppComponent {
-  stylingMode: EditorStyle = 'outlined';
+  readonly stylingMode = signal<EditorStyle>('outlined');
 
-  labelMode: LabelMode = 'static';
+  readonly labelMode = signal<LabelMode>('static');
 
-  birthDate = new Date(1981, 5, 3);
+  readonly birthDate = new Date(1981, 5, 3);
 
-  states: string[];
+  readonly states = inject(Service).getStates();
 
-  phoneRules = {
+  readonly phoneRules = {
     X: /[02-9]/,
   };
 
@@ -58,14 +60,6 @@ export class AppComponent {
       notify('The task was not saved. Please check if all fields are valid.', 'error');
     }
   }
-
-  constructor(service: Service) {
-    this.states = service.getStates();
-  }
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

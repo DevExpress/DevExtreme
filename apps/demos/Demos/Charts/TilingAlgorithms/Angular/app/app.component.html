@@ -2,7 +2,7 @@
   id="treemap"
   [dataSource]="getPopulationsByAge"
   title="Population by Age Groups"
-  [layoutAlgorithm]="algorithm === 'custom' ? customAlgorithm : algorithm"
+  [layoutAlgorithm]="layoutAlgorithm()"
 >
   <dxo-tree-map-colorizer
     type="discrete"

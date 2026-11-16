@@ -1,5 +1,5 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import { Component, enableProdMode } from '@angular/core';
 import {
   DxDataGridModule, DxFormModule, DxSelectBoxModule, DxTabPanelModule,
 } from 'devextreme-angular';
@@ -24,22 +24,14 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  url = 'https://js.devexpress.com/Demos/NetCore/api/DataGridAdvancedMasterDetailView';
+  private readonly url = 'https://js.devexpress.com/Demos/NetCore/api/DataGridAdvancedMasterDetailView';
 
-  suppliersData: DataSource;
-
-  constructor() {
-    this.suppliersData = new DataSource({
-      store: AspNetData.createStore({
-        key: 'SupplierID',
-        loadUrl: `${this.url}/GetSuppliers`,
-      }),
-    });
-  }
+  readonly suppliersData = new DataSource({
+    store: AspNetData.createStore({
+      key: 'SupplierID',
+      loadUrl: `${this.url}/GetSuppliers`,
+    }),
+  });
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

@@ -9,14 +9,16 @@ import gridCoreUtils from '@ts/grids/grid_core/utils';
 import { LEGACY_SCROLLING_MODE } from '../../virtual_scrolling/const';
 import type { AdaptiveColumnsViewController } from '../adaptivity';
 import { ADAPTIVE_ROW_TYPE, COLLAPSE_ARIA_NAME, EXPAND_ARIA_NAME } from '../const';
-import type { AdaptivityDataController } from '../types';
+import type { AdaptivityDataControllerExtension } from '../types';
 import { getAdaptiveDetailRowIndex, resolveAdaptiveDetailRowTarget } from '../utils';
 
 type AdaptivityDataControllerBase = DataController & MasterDetailDataControllerExtension;
 
 export const adaptivityDataControllerExtender = (
   Base: ModuleType<AdaptivityDataControllerBase>,
-): ModuleType<AdaptivityDataController> => class AdaptivityDataControllerExtender extends Base {
+): ModuleType<
+  DataController & AdaptivityDataControllerExtension
+> => class AdaptivityDataControllerExtender extends Base {
   private adaptiveExpandedKey?: RowKey;
 
   protected adaptiveColumnsController!: AdaptiveColumnsViewController;

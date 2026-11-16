@@ -1,5 +1,5 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import { Component, enableProdMode, inject } from '@angular/core';
 import { provideHttpClient, withFetch } from '@angular/common/http';
 
 import { DxDiagramModule } from 'devextreme-angular';
@@ -21,25 +21,21 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  flowNodesDataSource: ArrayStore;
+  private readonly service = inject(Service);
 
-  flowEdgesDataSource: ArrayStore;
+  readonly flowNodesDataSource = new ArrayStore({
+    key: 'id',
+    data: this.service.getFlowNodes(),
+  });
 
-  constructor(service: Service) {
-    this.flowNodesDataSource = new ArrayStore({
-      key: 'id',
-      data: service.getFlowNodes(),
-    });
-    this.flowEdgesDataSource = new ArrayStore({
-      key: 'id',
-      data: service.getFlowEdges(),
-    });
-  }
+  readonly flowEdgesDataSource = new ArrayStore({
+    key: 'id',
+    data: this.service.getFlowEdges(),
+  });
 }
 
 bootstrapApplication(AppComponent, {
   providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
     provideHttpClient(withFetch()),
   ],
 });

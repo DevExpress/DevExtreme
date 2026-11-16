@@ -1,6 +1,8 @@
-import { Component, Input, SimpleChanges, ViewChild } from '@angular/core';
+import {
+  Component, effect, input, viewChild,
+} from '@angular/core';
 import { DxFormModule } from 'devextreme-angular';
-import { DxFormComponent, type DxFormTypes } from 'devextreme-angular/ui/form';
+import { type DxFormComponent, type DxFormTypes } from 'devextreme-angular/ui/form';
 import { type DxSelectBoxTypes } from 'devextreme-angular/ui/select-box';
 import 'devextreme/ui/select_box';
 import type { BookingFormData } from '../app.types';
@@ -13,40 +15,38 @@ import type { BookingFormData } from '../app.types';
   ],
 })
 export class RoomMealPlanFormComponent {
-  @ViewChild('formComponent', { static: false }) form!: DxFormComponent;
+  private readonly form = viewChild<DxFormComponent>('formComponent');
 
-  @Input() formData: BookingFormData;
+  readonly formData = input.required<BookingFormData>();
 
-  @Input() validationGroup: string;
+  readonly validationGroup = input.required<string>();
 
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes.formData) {
-      const value = changes.formData.currentValue;
-
-      this.form?.instance?.reset(value);
-    }
+  constructor() {
+    effect(() => {
+      this.form()?.instance?.reset(this.formData());
+    });
   }
 
-  roomLabelOptions: DxFormTypes.SimpleItem['label'] = {
+  readonly roomLabelOptions: DxFormTypes.SimpleItem['label'] = {
     text: 'Room Type',
     location: 'top',
   };
 
-  mealLabelOptions: DxFormTypes.SimpleItem['label'] = {
+  readonly mealLabelOptions: DxFormTypes.SimpleItem['label'] = {
     text: 'Meal Plan',
     location: 'top',
   };
 
-  roomTypes = ['Single', 'Double', 'Suite'];
+  private readonly roomTypes = ['Single', 'Double', 'Suite'];
 
-  mealPlans = ['Bed & Breakfast', 'Half Board', 'Full Board', 'All-Inclusive'];
+  private readonly mealPlans = ['Bed & Breakfast', 'Half Board', 'Full Board', 'All-Inclusive'];
 
-  mealSelectBoxOptions: DxSelectBoxTypes.Properties = {
+  readonly mealSelectBoxOptions: DxSelectBoxTypes.Properties = {
     items: this.mealPlans,
     elementAttr: { id: 'mealPlan' },
   };
 
-  roomSelectBoxOptions: DxSelectBoxTypes.Properties = {
+  readonly roomSelectBoxOptions: DxSelectBoxTypes.Properties = {
     items: this.roomTypes,
     elementAttr: { id: 'roomType' },
   };

@@ -43,10 +43,10 @@ export const createDataGrid = async (
   };
 
   const instance = new DataGrid(
-    $container.get(0) as HTMLDivElement,
+    $container.get<HTMLDivElement>(0),
     dataGridOptions,
   ) as DataGridInstance;
-  const component = new DataGridModel($container.get(0) as HTMLElement);
+  const component = new DataGridModel($container.get<HTMLElement>(0));
 
   jest.runAllTimers();
 

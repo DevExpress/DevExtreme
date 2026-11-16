@@ -152,7 +152,9 @@ class SwipeDownNativeScrollViewStrategy<
     }
 
     if (this._state === STATE_PULLED) {
-      e.preventDefault();
+      if (e.cancelable ?? true) {
+        e.preventDefault();
+      }
       this._movePullDown();
     }
   }

@@ -28,7 +28,7 @@
       <div class="dx-field-value">
         <dx-text-box
           [inputAttr]="{ 'aria-label': 'Password' }"
-          [mode]="passwordMode"
+          [mode]="passwordMode()"
           [(value)]="password"
           (onValueChanged)="onPasswordChanged()"
         >
@@ -51,7 +51,7 @@
       <div class="dx-field-value">
         <dx-text-box
           [(value)]="confirmPassword"
-          [mode]="confirmPasswordMode"
+          [mode]="confirmPasswordMode()"
           [inputAttr]="{ 'aria-label': 'Password' }"
         >
           <dxi-text-box-button

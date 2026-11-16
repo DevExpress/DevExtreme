@@ -14,6 +14,8 @@ import {
   DxTagBoxModule,
   DxFormComponent,
 } from 'devextreme-angular';
+import { isZoneless } from '../helpers/zone-mode';
+import { detectChanges } from '../helpers/change-detection';
 
 @Component({
   standalone: false,
@@ -146,7 +148,7 @@ describe('DxForm', () => {
       expect(instance.element().querySelectorAll('.dx-textbox').length).toBe(1);
     });
 
-    it(`should update model after editor value was changed (with ${testName} nested items)`, () => {
+    it(`should update model after editor value was changed (with ${testName} nested items)`, async () => {
       TestBed.overrideComponent(TestContainerComponent, {
         set: {
           template: `
@@ -166,9 +168,12 @@ describe('DxForm', () => {
       const input = instance.element().querySelector('input');
       input.value = 'test value';
       input?.dispatchEvent(new Event('change'));
+      await fixture.whenStable();
 
       expect(document.getElementById('text').innerText.trim()).toBe('test value');
-      fixture.autoDetectChanges(false);
+      if (!isZoneless) {
+        fixture.autoDetectChanges(false);
+      }
     });
 
     it(`should work with custom validation and ngIf (with ${testName} nested items)`, () => {
@@ -213,12 +218,12 @@ describe('DxForm', () => {
       const fixture = TestBed.createComponent(TestContainerComponent);
       fixture.detectChanges();
       const formInstance = getWidget(fixture);
-      const spy = spyOn(formInstance, 'resetOption');
+      const spy = vi.spyOn(formInstance, 'resetOption').mockImplementation(() => {});
 
       fixture.componentInstance.labelValues = [{ name: 'label1' }, { name: 'label2' }, { name: 'label3' }];
-      fixture.detectChanges();
+      detectChanges(fixture);
 
-      expect(spy.calls.count()).toBe(0);
+      expect(spy.mock.calls.length).toBe(0);
       expect(formInstance.option('items[0].items[0].label.text')).toBe('label1');
     });
 
@@ -239,12 +244,12 @@ describe('DxForm', () => {
       fixture.detectChanges();
 
       const formInstance = getWidget(fixture);
-      const spy = spyOn(formInstance, 'resetOption');
+      const spy = vi.spyOn(formInstance, 'resetOption').mockImplementation(() => {});
 
       fixture.componentInstance.labelValues = [{ name: 'label1' }, { name: 'label2' }, { name: 'label3' }];
-      fixture.detectChanges();
+      detectChanges(fixture);
 
-      expect(spy.calls.count()).toBe(0);
+      expect(spy.mock.calls.length).toBe(0);
       expect(formInstance.option('items[0].label.text')).toBe('label1');
     });
 
@@ -265,12 +270,12 @@ describe('DxForm', () => {
       fixture.detectChanges();
 
       const formInstance = getWidget(fixture);
-      const spy = spyOn(formInstance, 'resetOption');
+      const spy = vi.spyOn(formInstance, 'resetOption').mockImplementation(() => {});
 
       fixture.componentInstance.labelValuesSecond.splice(1, 1);
-      fixture.detectChanges();
+      detectChanges(fixture);
 
-      expect(spy.calls.count()).toBe(0);
+      expect(spy.mock.calls.length).toBe(0);
       expect(formInstance.option('items[1].label.text')).toBe('label3');
     });
 
@@ -294,13 +299,13 @@ describe('DxForm', () => {
       fixture.detectChanges();
 
       const formInstance = getWidget(fixture);
-      const spy = spyOn(formInstance, 'resetOption').and.callThrough();
+      const spy = vi.spyOn(formInstance, 'resetOption');
 
       fixture.componentInstance.labelValuesSecond.splice(1, 1);
       fixture.componentInstance.condition = false;
-      fixture.detectChanges();
+      detectChanges(fixture);
 
-      expect(spy.calls.count()).toBe(1);
+      expect(spy.mock.calls.length).toBe(1);
       expect(formInstance.option('items[1].label.text')).toBe('label3');
       expect(formInstance.option('items[2].label.text')).toBe(undefined);
     });
@@ -335,14 +340,14 @@ describe('DxForm', () => {
       fixture.detectChanges();
 
       const formInstance = getWidget(fixture);
-      const spy = spyOn(formInstance, 'resetOption').and.callThrough();
+      const spy = vi.spyOn(formInstance, 'resetOption');
 
       fixture.componentInstance.labelValues.splice(1, 1);
       fixture.componentInstance.labelValuesSecond.splice(1, 1);
       fixture.componentInstance.condition = false;
-      fixture.detectChanges();
+      detectChanges(fixture);
 
-      expect(spy.calls.count()).toBe(2);
+      expect(spy.mock.calls.length).toBe(2);
       expect(formInstance.option('items[0].items[1].label.text')).toBe(undefined);
       expect(formInstance.option('items[1].items[2].label.text')).toBe('label3');
       expect(formInstance.option('items[1].items[3].label.text')).toBe(undefined);
@@ -392,7 +397,7 @@ describe('DxForm', () => {
     fixture.detectChanges();
 
     fixture.componentInstance.formData.date = new Date(2017, 0, 1);
-    fixture.detectChanges();
+    detectChanges(fixture);
 
     const formInstance = getWidget(fixture);
     const dateBoxInstance = formInstance.getEditor('date');

@@ -97,6 +97,7 @@ export interface DataChangeBase {
   cancel?: boolean;
   isLiveUpdate?: boolean;
   totalColumnIndices?: number[];
+  isDelayed?: boolean;
 }
 
 export interface UpdateChange extends DataChangeBase {

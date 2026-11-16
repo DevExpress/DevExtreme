@@ -1,7 +1,6 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
-import { DxHtmlEditorModule, type DxHtmlEditorTypes } from 'devextreme-angular/ui/html-editor';
-import type { AIIntegration } from 'devextreme-angular/common/ai-integration';
+import { Component, enableProdMode, inject } from '@angular/core';
+import { DxHtmlEditorModule } from 'devextreme-angular/ui/html-editor';
 import { Service } from './app.service';
 import { AiService } from './ai/ai.service';
 
@@ -20,21 +19,13 @@ if (!/localhost/.test(document.location.host)) {
 })
 
 export class AppComponent {
-  aiIntegration: AIIntegration;
+  private readonly service = inject(Service);
 
-  extractKeywordsPrompt: DxHtmlEditorTypes.AICustomCommand['prompt'];
+  readonly aiIntegration = inject(AiService).getAiIntegration();
 
-  valueContent: string;
+  readonly extractKeywordsPrompt = this.service.getPrompt();
 
-  constructor(service: Service, aiService: AiService) {
-    this.extractKeywordsPrompt = service.getPrompt();
-    this.valueContent = service.getMarkup();
-    this.aiIntegration = aiService.getAiIntegration();
-  }
+  readonly valueContent = this.service.getMarkup();
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

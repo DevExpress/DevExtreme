@@ -23,6 +23,7 @@ import {
 import { isDeferred, isDefined, isEmptyObject } from '@js/core/utils/type';
 import type { DxEvent } from '@js/events';
 import * as accessibility from '@js/ui/shared/accessibility';
+import { getData } from '@ts/core/element_data';
 import { isElementInDom } from '@ts/core/utils/dom';
 import { focused } from '@ts/core/utils/selectors';
 import eventsEngine from '@ts/events/core/events_engine';
@@ -54,19 +55,20 @@ import type {
 import { CLASSES as EDITOR_FACTORY_CLASSES } from '@ts/grids/grid_core/editor_factory/const';
 import type { EditorFactory } from '@ts/grids/grid_core/editor_factory/editor_factory';
 import { CLASSES as FILTER_ROW_CLASSES } from '@ts/grids/grid_core/filter_row/const';
-import type { FocusController } from '@ts/grids/grid_core/focus/m_focus';
+import type { FocusController } from '@ts/grids/grid_core/focus/focus';
 import type { ResizingController } from '@ts/grids/grid_core/grid_view/grid_view';
 import { CLASSES as MASTER_DETAIL_CLASSES } from '@ts/grids/grid_core/master_detail/const';
 import type { SearchPanelViewController } from '@ts/grids/grid_core/search/search';
 import { COMMAND_SELECT_CLASS } from '@ts/grids/grid_core/selection/const';
 import type { SelectionController } from '@ts/grids/grid_core/selection/selection';
 import type { Module, ModuleType, RowKey } from '@ts/grids/grid_core/types';
-import gridCoreUtils, { isVirtualPaging } from '@ts/grids/grid_core/utils';
-import { CLASSES as VIEW_CLASSES } from '@ts/grids/grid_core/views/const';
+import gridCoreUtils from '@ts/grids/grid_core/utils';
+import { CLASSES as VIEW_CLASSES, ROW_OPTIONS_KEY } from '@ts/grids/grid_core/views/const';
 import type { RowsView } from '@ts/grids/grid_core/views/rows_view';
 import type {
-  CellPosition, FocusStateParams, RowPreparedOptions, RowsViewScrollEvent, ViewRowEvent,
+  CellPosition, FocusStateParams, RowsViewScrollEvent, ViewRowEvent,
 } from '@ts/grids/grid_core/views/types';
+import { isVirtualPaging, isVirtualRowRendering } from '@ts/grids/grid_core/virtual_scrolling';
 import type Scrollable from '@ts/ui/scroll_view/scrollable';
 import type TextEditorBase from '@ts/ui/text_box/text_editor.base';
 import { memoize } from '@ts/utils/memoize';
@@ -334,8 +336,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     const isFullUpdate = !e || e.changeType === 'refresh';
     const isFocusedViewCorrect = this._focusedView?.name === this._rowsView.name;
     const isAppend = e && (e.changeType === 'append' || e.changeType === 'prepend');
-    // @ts-expect-error rendered view; get() is typed as Element
-    const root = $(domAdapter.getRootNode($rowsView.get?.(0)));
+    const root = $(domAdapter.getRootNode($rowsView.get?.<HTMLElement>(0)));
     const $focusedElement = root.find(':focus');
     const isFocusedElementCorrect = this._isFocusedElementCorrect($focusedElement, $rowsView, e);
 
@@ -751,13 +752,10 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
 
   private isFocusedCellKey(eventArgs: KeyboardKeyDownEvent): boolean {
     const {
-      keyName, key, ctrl, alt, originalEvent,
+      keyName, key, ctrl, originalEvent,
     } = eventArgs;
     const isViewSwitch = ctrl && (keyName === 'upArrow' || keyName === 'downArrow');
-    const isCommandShortcut = isCommandKeyPressed(originalEvent) && (keyName === 'A' || keyName === 'F');
-    const isFastEditingKey = key?.length === 1
-      && !ctrl && !alt && !isCommandShortcut
-      && this._isFastEditingAllowed();
+    const isFastEditingKey = key?.length === 1 && this.canBeginFastEditing(originalEvent);
 
     return !isViewSwitch && (FOCUSED_CELL_KEYS.includes(keyName) || isFastEditingKey);
   }
@@ -1324,7 +1322,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
   }
 
   private focusFirstInteractiveElementInside($el: dxElementWrapper): void {
-    ($el.find(INTERACTIVE_ELEMENTS_SELECTOR).get(0) as HTMLElement).focus();
+    $el.find(INTERACTIVE_ELEMENTS_SELECTOR).get<HTMLElement>(0).focus();
   }
 
   private _processEnterKeyForDataCell(eventArgs: KeyboardKeyDownEvent, isEditing: boolean): void {
@@ -1475,13 +1473,15 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     return false;
   }
 
+  private canBeginFastEditing(originalEvent: DxEvent<KeyboardEvent>): boolean {
+    return this._isFastEditingAllowed()
+      && !originalEvent.altKey
+      && !isCommandKeyPressed(originalEvent)
+      && !this._editingController.isEditing();
+  }
+
   private _beginFastEditing(originalEvent: DxEvent<KeyboardEvent>, isDeleting?: boolean): boolean {
-    if (
-      !this._isFastEditingAllowed()
-      || originalEvent.altKey
-      || originalEvent.ctrlKey
-      || this._editingController.isEditing()
-    ) {
+    if (!this.canBeginFastEditing(originalEvent)) {
       return false;
     }
 
@@ -2684,7 +2684,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
 
   protected _fireFocusedCellChanged($cell: dxElementWrapper): void {
     const columnIndex = this._rowsView.getCellIndex($cell);
-    const rowOptions: RowPreparedOptions | undefined = $cell.parent().data('options');
+    const rowOptions = getData($cell.parent(), ROW_OPTIONS_KEY);
     const focusedRowKey = rowOptions?.key;
 
     this._memoFireFocusedCellChanged(focusedRowKey, columnIndex);
@@ -2877,7 +2877,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
 
   private _isVirtualRowRender(): boolean {
     return (
-      this.isVirtualScrolling() || gridCoreUtils.isVirtualRowRendering(this)
+      this.isVirtualScrolling() || isVirtualRowRendering(this.option('scrolling'))
     );
   }
 

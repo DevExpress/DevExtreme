@@ -24,7 +24,7 @@ const createContextMenu = (): ContextMenu => {
   const $target = $('<div>').appendTo(document.body);
   const $element = $('<div>').appendTo(document.body);
 
-  const contextMenu = new ContextMenu($element.get(0) as HTMLElement, {
+  const contextMenu = new ContextMenu($element.get<HTMLElement>(0), {
     target: $target.get(0),
     showSubmenuMode: 'onClick',
     items: ITEMS,

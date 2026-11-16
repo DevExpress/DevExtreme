@@ -72,6 +72,7 @@ describe('Iterator utils', () => {
       expect(each(null, callback)).toBeUndefined();
       // @ts-expect-error a number is not a collection
       expect(each(0, callback)).toBeUndefined();
+      // @ts-expect-error a string is not a collection
       expect(each('', callback)).toBeUndefined();
       // @ts-expect-error a boolean is not a collection
       expect(each(false, callback)).toBeUndefined();

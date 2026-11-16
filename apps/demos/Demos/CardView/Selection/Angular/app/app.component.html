@@ -16,7 +16,7 @@
         [dataSource]="['always', 'none', 'onClick', 'onLongTap']"
         [inputAttr]="{ 'aria-label': 'Show Checkboxes Mode' }"
         [(value)]="showCheckBoxesMode"
-        [disabled]="selectionMode !== 'multiple'"
+        [disabled]="selectionMode() !== 'multiple'"
       ></dx-select-box>
     </div>
     <div class="option">
@@ -25,14 +25,14 @@
         [dataSource]="['allPages', 'page']"
         [inputAttr]="{ 'aria-label': 'Select All Mode' }"
         [(value)]="selectAllMode"
-        [disabled]="selectionMode !== 'multiple' || !allowSelectAll"
+        [disabled]="selectionMode() !== 'multiple' || !allowSelectAll()"
       ></dx-select-box>
     </div>
     <div class="option">
       <dx-check-box
         text="Allow Select All"
         [(value)]="allowSelectAll"
-        [disabled]="selectionMode !== 'multiple'"
+        [disabled]="selectionMode() !== 'multiple'"
       ></dx-check-box>
     </div>
   </div>
@@ -49,10 +49,10 @@
     [imageExpr]="imageExpr"
   ></dxo-card-view-card-cover>
   <dxo-card-view-selection
-    [mode]="selectionMode"
-    [showCheckBoxesMode]="showCheckBoxesMode"
-    [allowSelectAll]="allowSelectAll"
-    [selectAllMode]="selectAllMode"
+    [mode]="selectionMode()"
+    [showCheckBoxesMode]="showCheckBoxesMode()"
+    [allowSelectAll]="allowSelectAll()"
+    [selectAllMode]="selectAllMode()"
   ></dxo-card-view-selection>
   <dxi-card-view-column dataField="FullName"></dxi-card-view-column>
   <dxi-card-view-column dataField="Position"></dxi-card-view-column>

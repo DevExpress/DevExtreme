@@ -1,5 +1,6 @@
-import { Component, Input, ChangeDetectorRef, OnDestroy, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {
+  Component, OnDestroy, OnInit, inject, input, signal,
+} from '@angular/core';
 import { DxTextBoxModule, DxButtonGroupModule, DxButtonModule, DxTextAreaModule, DxLoadPanelModule } from 'devextreme-angular';
 import { type DxTextBoxTypes } from 'devextreme-angular/ui/text-box';
 import { type DxButtonGroupTypes } from 'devextreme-angular/ui/button-group';
@@ -9,12 +10,25 @@ import themes from 'devextreme/ui/themes';
 import { type Vehicle, type AbortRequest } from '../app.service';
 import { AiService, type AIMessage } from '../ai/ai.service';
 
+function getOutputAreaHeights() {
+  const isCompact = themes.current().endsWith('compact');
+  const isMaterial = themes.current().startsWith('material');
+  const isGeneric = themes.current().startsWith('generic');
+
+  if (isMaterial) {
+    return { min: isCompact ? 60 : 68, max: isCompact ? 200 : 244 };
+  }
+  if (isGeneric) {
+    return { min: isCompact ? 42 : 56, max: isCompact ? 154 : 178 };
+  }
+  return { min: isCompact ? 42 : 56, max: isCompact ? 154 : 196 };
+}
+
 @Component({
   selector: 'detail-view',
   templateUrl: './detail-view.component.html',
   styleUrls: ['./detail-view.component.css'],
   imports: [
-    CommonModule,
     DxTextBoxModule,
     DxButtonGroupModule,
     DxButtonModule,
@@ -23,60 +37,43 @@ import { AiService, type AIMessage } from '../ai/ai.service';
   ],
 })
 export class DetailViewComponent implements OnInit, OnDestroy {
-  @Input() rowData!: Vehicle;
+  private readonly aiService = inject(AiService);
 
-  @Input() registerAbortRequest?: (abortRequest: AbortRequest) => void;
+  readonly rowData = input.required<Vehicle>();
 
-  @Input() unregisterAbortRequest?: (abortRequest: AbortRequest) => void;
+  readonly registerAbortRequest = input<(abortRequest: AbortRequest) => void>();
 
-  promptValue: string = '';
+  readonly unregisterAbortRequest = input<(abortRequest: AbortRequest) => void>();
 
-  responseValue: string = '';
+  readonly promptValue = signal('');
 
-  submitButtonText: string = 'Submit';
+  readonly responseValue = signal('');
 
-  isLoading: boolean = false;
+  readonly submitButtonText = signal('Submit');
 
-  isError: boolean = false;
+  readonly isLoading = signal(false);
 
-  outputAreaMinHeight: number;
+  readonly isError = signal(false);
 
-  outputAreaMaxHeight: number;
+  readonly outputAreaHeights = getOutputAreaHeights();
 
-  abortController: AbortController | null = null;
-
-  readonly abortRequest = () => this.abortController?.abort();
-
-  suggestions = [
+  readonly suggestions = [
     { type: 'default', text: '✨ Summary', prompt: 'Display general information about this vehicle and its features.' },
     { type: 'default', text: '⚡ Ideal Buyer', prompt: 'Describe who this vehicle appeals to the most in a sentence.' },
     { type: 'default', text: '🏎️ Competitors', prompt: 'List 2-3 models that directly compete with this vehicle.' },
   ];
 
-  constructor(private readonly aiService: AiService, private readonly changeDetectorRef: ChangeDetectorRef) {
-    const isCompact = themes.current().endsWith('compact');
-    const isMaterial = themes.current().startsWith('material');
-    const isGeneric = themes.current().startsWith('generic');
+  private abortController: AbortController | null = null;
 
-    if (isMaterial) {
-      this.outputAreaMinHeight = isCompact ? 60 : 68;
-      this.outputAreaMaxHeight = isCompact ? 200 : 244;
-    } else if (isGeneric) {
-      this.outputAreaMinHeight = isCompact ? 42 : 56;
-      this.outputAreaMaxHeight = isCompact ? 154 : 178;
-    } else {
-      this.outputAreaMinHeight = isCompact ? 42 : 56;
-      this.outputAreaMaxHeight = isCompact ? 154 : 196;
-    }
-  }
+  readonly abortRequest = () => this.abortController?.abort();
 
   ngOnInit() {
-    this.registerAbortRequest?.(this.abortRequest);
+    this.registerAbortRequest()?.(this.abortRequest);
   }
 
   ngOnDestroy() {
     this.abortRequest();
-    this.unregisterAbortRequest?.(this.abortRequest);
+    this.unregisterAbortRequest()?.(this.abortRequest);
   }
 
   onSubmit({ event }: DxTextBoxTypes.EnterKeyEvent | DxButtonTypes.ClickEvent) {
@@ -84,37 +81,38 @@ export class DetailViewComponent implements OnInit, OnDestroy {
   }
 
   onSuggestionClick({ itemData: suggestion, event }: DxButtonGroupTypes.ItemClickEvent) {
-    this.promptValue = suggestion.prompt;
+    this.promptValue.set(suggestion.prompt);
     this.handleSubmit(event);
   }
 
   async handleSubmit(event?: EventObject) {
-    if (!this.promptValue) return;
+    const prompt = this.promptValue();
+
+    if (!prompt) return;
 
     const controller = new AbortController();
     this.abortController = controller;
-    this.isError = false;
-    this.isLoading = true;
+    this.isError.set(false);
+    this.isLoading.set(true);
     (event?.target as HTMLElement)?.blur();
 
     try {
       const messages: AIMessage[] = [
         { role: 'system', content: this.aiService.getSystemPrompt() },
-        { role: 'user', content: `User prompt: ${this.promptValue}\nRow data: ${JSON.stringify(this.rowData)}` },
+        { role: 'user', content: `User prompt: ${prompt}\nRow data: ${JSON.stringify(this.rowData())}` },
       ];
 
       const aiResponse = await this.aiService.getAIResponse(messages, controller.signal);
 
       if (aiResponse === '') throw new Error('AI response is empty');
-      this.responseValue = aiResponse;
+      this.responseValue.set(aiResponse);
     } catch {
-      this.responseValue = '';
-      this.isError = true;
+      this.responseValue.set('');
+      this.isError.set(true);
     } finally {
       this.abortController = null;
-      this.isLoading = false;
-      this.submitButtonText = 'Resubmit';
-      if (!controller.signal.aborted) this.changeDetectorRef.detectChanges();
+      this.isLoading.set(false);
+      this.submitButtonText.set('Resubmit');
       (event?.target as HTMLElement)?.focus();
     }
   }

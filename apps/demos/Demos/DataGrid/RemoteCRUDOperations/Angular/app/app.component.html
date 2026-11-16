@@ -7,7 +7,7 @@
   <dxo-data-grid-scrolling mode="virtual"></dxo-data-grid-scrolling>
   <dxo-data-grid-editing
     mode="cell"
-    [refreshMode]="refreshMode"
+    [refreshMode]="refreshMode()"
     [allowAdding]="true"
     [allowUpdating]="true"
     [allowDeleting]="true"
@@ -68,7 +68,7 @@
       </dx-button>
     </div>
     <ul>
-      @for(request of requests; track request) {
+      @for(request of requests(); track $index) {
       <li>{{ request }}</li>
       }
     </ul>

@@ -1,10 +1,9 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import {
-  Component, ViewChild, enableProdMode, provideZoneChangeDetection,
+  Component, enableProdMode, inject, viewChild,
 } from '@angular/core';
 import config from 'devextreme/core/config';
 import { loadMessages } from 'devextreme-angular/common/core/localization';
-import type { AIIntegration } from 'devextreme-angular/common/ai-integration';
 import type { DxChatTypes } from 'devextreme-angular/ui/chat';
 import { AiAssistantComponent } from './components/ai-assistant/ai-assistant.component';
 import { EmployeeFormComponent } from './components/employee-form/employee-form.component';
@@ -46,36 +45,28 @@ loadMessages({
   ],
 })
 export class AppComponent {
-  @ViewChild(EmployeeFormComponent) private employeeForm!: EmployeeFormComponent;
+  private readonly employeeForm = viewChild.required(EmployeeFormComponent);
 
-  @ViewChild(TaskGridComponent) private taskGrid!: TaskGridComponent;
+  private readonly taskGrid = viewChild.required(TaskGridComponent);
 
-  @ViewChild(AiAssistantComponent) private aiAssistant!: AiAssistantComponent;
+  private readonly aiAssistant = viewChild.required(AiAssistantComponent);
 
-  readonly aiIntegration: AIIntegration;
-
-  constructor(aiService: AiService) {
-    this.aiIntegration = aiService.getAiIntegration();
-  }
+  readonly aiIntegration = inject(AiService).getAiIntegration();
 
   async onMessageSubmitted(message: DxChatTypes.TextMessage): Promise<void> {
-    this.aiAssistant.setDisabled(true);
+    this.aiAssistant().setDisabled(true);
 
     try {
       await routeMessage(message.text ?? '', {
-        form: this.employeeForm.formComponent,
-        gridInstance: this.taskGrid.gridComponent,
+        form: this.employeeForm().formComponent(),
+        gridInstance: this.taskGrid().gridComponent(),
         aiIntegration: this.aiIntegration,
-        pushMessage: (message) => this.aiAssistant.pushMessage(message),
+        pushMessage: (message) => this.aiAssistant().pushMessage(message),
       });
     } finally {
-      this.aiAssistant.setDisabled(false);
+      this.aiAssistant().setDisabled(false);
     }
   }
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

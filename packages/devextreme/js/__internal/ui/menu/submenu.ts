@@ -11,6 +11,7 @@ import { extend } from '@js/core/utils/extend';
 import {
   getHeight, getWidth, setHeight, setWidth,
 } from '@js/core/utils/size';
+import { isEvent } from '@js/core/utils/type';
 import type { DxEvent } from '@js/events';
 import type { Item } from '@js/ui/menu';
 import type { ContextMenuProperties } from '@ts/ui/context_menu/context_menu';
@@ -174,7 +175,8 @@ class Submenu extends ContextMenu<SubmenuProperties> {
 
     const $submenu = this._itemContainer().children(`.${DX_SUBMENU_CLASS}`).eq(0);
 
-    const $rootItem = $(positionOption?.of).find('.dx-context-menu-container-border');
+    const rootItem = isEvent(positionOption?.of) ? undefined : positionOption?.of;
+    const $rootItem = $(rootItem).find('.dx-context-menu-container-border');
     const position: PositionConfig = {
       // @ts-expect-error ts-error
       of: $submenu,

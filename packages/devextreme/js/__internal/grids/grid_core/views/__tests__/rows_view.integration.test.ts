@@ -25,7 +25,7 @@ const FIRST_PAGE_ROW_KEYS = [0, 1, 2];
 const SECOND_PAGE_ROW_KEYS = [3, 4, 5];
 
 const getRowKeys = ($container: dxElementWrapper): number[] => {
-  const container = $container.get(0) as HTMLElement;
+  const container = $container.get<HTMLElement>(0);
   const rows = container.querySelectorAll<HTMLTableRowElement>('.dx-datagrid-rowsview tr.dx-data-row');
 
   return Array.from(rows, (row) => Number(row.cells[0].textContent));
@@ -126,7 +126,7 @@ describe('RowsView row changes', () => {
         });
       },
     });
-    const content = (grid.$container.get(0) as HTMLElement)
+    const content = grid.$container.get<HTMLElement>(0)
       .querySelector<HTMLElement>('.dx-datagrid-rowsview .dx-datagrid-content') as HTMLElement;
 
     content.style.height = `${CONTENT_HEIGHT}px`;

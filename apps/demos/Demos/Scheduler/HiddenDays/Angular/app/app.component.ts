@@ -1,7 +1,9 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
-import { DxSchedulerModule, DxSchedulerTypes } from 'devextreme-angular/ui/scheduler';
-import { DxCheckBoxModule, DxCheckBoxTypes } from 'devextreme-angular/ui/check-box';
+import {
+  Component, computed, enableProdMode, inject, signal,
+} from '@angular/core';
+import { DxSchedulerModule, type DxSchedulerTypes } from 'devextreme-angular/ui/scheduler';
+import { DxCheckBoxModule, type DxCheckBoxTypes } from 'devextreme-angular/ui/check-box';
 import { ArrayStore } from 'devextreme-angular/common/data';
 import { DataService } from './app.service';
 
@@ -26,13 +28,16 @@ interface DayLabel {
   ],
 })
 export class AppComponent {
-  dataSource: ArrayStore;
+  readonly dataSource = new ArrayStore({
+    key: 'id',
+    data: inject(DataService).getAppointments(),
+  });
 
-  currentDate = new Date(2021, 3, 26);
+  readonly currentDate = new Date(2021, 3, 26);
 
-  validationMessage = 'The hiddenWeekDays option cannot hide all days of the week. At least one day must remain visible.';
+  readonly validationMessage = 'The hiddenWeekDays option cannot hide all days of the week. At least one day must remain visible.';
 
-  dayLabels: DayLabel[] = [
+  readonly dayLabels = signal<DayLabel[]>([
     { index: 0, label: 'Sunday', visible: true },
     { index: 1, label: 'Monday', visible: true },
     { index: 2, label: 'Tuesday', visible: true },
@@ -40,35 +45,19 @@ export class AppComponent {
     { index: 4, label: 'Thursday', visible: true },
     { index: 5, label: 'Friday', visible: false },
     { index: 6, label: 'Saturday', visible: true },
-  ];
+  ]);
 
-  hiddenWeekDays: DxSchedulerTypes.DayOfWeek[] = [];
+  readonly hiddenWeekDays = computed(() => this.dayLabels()
+    .filter((d) => !d.visible)
+    .map((d) => d.index));
 
-  isInvalid = false;
-
-  constructor(dataService: DataService) {
-    this.dataSource = new ArrayStore({
-      key: 'id',
-      data: dataService.getAppointments(),
-    });
-    this.hiddenWeekDays = this.computeHiddenWeekDays();
-  }
+  readonly isInvalid = computed(() => this.dayLabels().every((d) => !d.visible));
 
   onDayToggled(e: DxCheckBoxTypes.ValueChangedEvent, dayIndex: number): void {
-    this.dayLabels[dayIndex].visible = e.value;
-    this.isInvalid = this.dayLabels.every((d) => !d.visible);
-    this.hiddenWeekDays = this.computeHiddenWeekDays();
-  }
-
-  private computeHiddenWeekDays(): DxSchedulerTypes.DayOfWeek[] {
-    return this.dayLabels
-      .filter((d) => !d.visible)
-      .map((d) => d.index);
+    this.dayLabels.update((labels) => labels.map((d) => (
+      d.index === dayIndex ? { ...d, visible: e.value } : d
+    )));
   }
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

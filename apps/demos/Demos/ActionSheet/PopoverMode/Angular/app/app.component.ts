@@ -1,8 +1,11 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import {
+  Component, enableProdMode, inject, signal,
+} from '@angular/core';
 import { DxActionSheetModule, DxListModule } from 'devextreme-angular';
+import type { DxListTypes } from 'devextreme-angular/ui/list';
 import notify from 'devextreme/ui/notify';
-import { Contact, Service } from './app.service';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -19,26 +22,22 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  contacts: Contact[];
+  readonly contacts = inject(Service).getContacts();
 
-  commands: { text: string }[] = [
+  readonly commands: { text: string }[] = [
     { text: 'Call' },
     { text: 'Send message' },
     { text: 'Edit' },
     { text: 'Delete' },
   ];
 
-  actionSheetVisible = false;
+  readonly actionSheetVisible = signal(false);
 
-  actionSheetTarget = '';
+  readonly actionSheetTarget = signal<DxListTypes.ItemClickEvent['itemElement'] | string>('');
 
-  constructor(service: Service) {
-    this.contacts = service.getContacts();
-  }
-
-  itemClick(e) {
-    this.actionSheetTarget = e.itemElement;
-    this.actionSheetVisible = true;
+  itemClick(e: DxListTypes.ItemClickEvent) {
+    this.actionSheetTarget.set(e.itemElement);
+    this.actionSheetVisible.set(true);
   }
 
   showNotify(text: string) {
@@ -46,8 +45,4 @@ export class AppComponent {
   }
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

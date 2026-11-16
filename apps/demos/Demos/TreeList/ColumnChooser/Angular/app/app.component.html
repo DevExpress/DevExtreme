@@ -20,14 +20,14 @@
     ></dxo-tree-list-position>
 
     <dxo-tree-list-search
-      [enabled]="searchEnabled"
+      [enabled]="searchEnabled()"
       [editorOptions]="editorOptions"
     ></dxo-tree-list-search>
 
     <dxo-tree-list-selection
-      [allowSelectAll]="allowSelectAll"
-      [selectByClick]="selectByClick"
-      [recursive]="recursive"
+      [allowSelectAll]="allowSelectAll()"
+      [selectByClick]="selectByClick()"
+      [recursive]="recursive()"
     ></dxo-tree-list-selection>
   </dxo-tree-list-column-chooser>
 

@@ -1,5 +1,5 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import { Component, enableProdMode, inject } from '@angular/core';
 import { DxSchedulerModule, DxSelectBoxModule, DxTemplateModule } from 'devextreme-angular';
 import { DxSchedulerTypes } from 'devextreme-angular/ui/scheduler';
 import { DxSelectBoxTypes } from 'devextreme-angular/ui/select-box';
@@ -7,7 +7,7 @@ import { DxFormTypes } from 'devextreme-angular/ui/form';
 import { DxPopupTypes } from 'devextreme-angular/ui/popup';
 import { DxTagBoxTypes } from 'devextreme-angular/ui/tag-box';
 import { custom as customDialog } from 'devextreme/ui/dialog';
-import { Appointment, Assignee, Service, assignees } from './app.service';
+import { type Appointment, Service, assignees } from './app.service';
 
 type dxScheduler = NonNullable<DxSchedulerTypes.InitializedEvent['component']>;
 type dxForm = NonNullable<DxFormTypes.InitializedEvent['component']>;
@@ -30,20 +30,20 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  appointmentsData: Appointment[];
+  readonly appointmentsData = inject(Service).getAppointments();
 
-  currentDate: Date = new Date(2026, 1, 10);
+  readonly currentDate = new Date(2026, 1, 10);
 
-  views: DxSchedulerTypes.ViewType[] = ['day', 'week', 'workWeek', 'month'];
+  readonly views: DxSchedulerTypes.ViewType[] = ['day', 'week', 'workWeek', 'month'];
 
-  assignees: Assignee[] = assignees;
+  readonly assignees = assignees;
 
-  overlappingRuleItems = [
+  readonly overlappingRuleItems = [
     { value: 'sameResource', text: 'Different Resources' },
     { value: 'allResources', text: 'Never' },
   ];
 
-  assigneeIdEditorOptions = {
+  readonly assigneeIdEditorOptions = {
     onValueChanged: (e: DxTagBoxTypes.ValueChangedEvent) => {
       if (e.value?.length > 1) {
         e.component.option('value', [e.value[e.value.length - 1]]);
@@ -52,14 +52,14 @@ export class AppComponent {
     tagTemplate: 'assigneeTagTemplate',
   };
 
-  popupOptions = {
+  readonly popupOptions = {
     onInitialized: (e: DxPopupTypes.InitializedEvent) => { this.popup = e.component; },
     onHidden: () => {
       this.setConflictError(false);
     },
   };
 
-  formElementAttr = { id: 'form', class: 'hide-informer' };
+  readonly formElementAttr = { id: 'form', class: 'hide-informer' };
 
   private popup?: dxPopup;
 
@@ -67,18 +67,14 @@ export class AppComponent {
 
   private overlappingRule = 'sameResource';
 
-  constructor(service: Service) {
-    this.appointmentsData = service.getAppointments();
-  }
-
   private showConflictError = false;
 
-  setConflictError(show: boolean): void {
+  private setConflictError(show: boolean): void {
     this.showConflictError = show;
     this.form?.option('elementAttr.class', show ? '' : 'hide-informer');
   }
 
-  onFormInitialized = (e: DxFormTypes.InitializedEvent): void => {
+  readonly onFormInitialized = (e: DxFormTypes.InitializedEvent): void => {
     this.form = e.component;
     this.form?.on('fieldDataChanged', (event: { dataField: string }) => {
       if (this.showConflictError && ['startDate', 'endDate', 'assigneeId', 'recurrenceRule'].includes(event.dataField)) {
@@ -88,7 +84,7 @@ export class AppComponent {
     });
   };
 
-  customizeItem = (item: DxFormTypes.SimpleItem): void => {
+  readonly customizeItem = (item: DxFormTypes.SimpleItem): void => {
     if (item.name === 'allDayEditor' || item.name === 'recurrenceEndEditor') {
       item.label.visible = true;
     } else if (item.name === 'subjectEditor') {
@@ -201,8 +197,4 @@ export class AppComponent {
   }
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

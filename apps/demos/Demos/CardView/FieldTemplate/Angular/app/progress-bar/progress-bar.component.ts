@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, input } from '@angular/core';
 import {
   DxProgressBarModule,
 } from 'devextreme-angular';
@@ -12,7 +12,7 @@ import {
   ],
 })
 export class ProgressComponent {
-  @Input() value: number;
+  readonly value = input.required<number>();
 
   getStatusFormat(_, value: number): string {
     return `${value}%`;

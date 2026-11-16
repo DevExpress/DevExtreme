@@ -15,8 +15,8 @@
     [dataSource]="pivotGridDataSource"
     [width]="400"
     [height]="400"
-    [layout]="layout"
-    [applyChangesMode]="applyChangesMode"
+    [layout]="layout()"
+    [applyChangesMode]="applyChangesMode()"
     [(state)]="state"
   >
     <dxo-pivot-grid-field-chooser-texts
@@ -28,7 +28,7 @@
     >
     </dxo-pivot-grid-field-chooser-texts>
   </dx-pivot-grid-field-chooser>
-  @if (applyChangesMode === 'onDemand') {
+  @if (applyChangesMode() === 'onDemand') {
   <div class="bottom-bar">
     <dx-button
       id="applyButton"

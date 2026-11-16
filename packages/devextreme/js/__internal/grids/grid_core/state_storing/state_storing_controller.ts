@@ -4,7 +4,7 @@ import { extend } from '@ts/core/utils/extend';
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
 import type { FilterSyncController } from '@ts/grids/grid_core/filter_sync/filter_sync';
 import type { InternalGridOptions } from '@ts/grids/grid_core/types';
-import { isVirtualPaging } from '@ts/grids/grid_core/utils';
+import { isVirtualPaging } from '@ts/grids/grid_core/virtual_scrolling';
 
 import type { StateStoringDataControllerExtension } from './extenders/state_storing_data_controller';
 import { StateStoringController } from './state_storing_controller_core';

@@ -27,7 +27,7 @@
     dataType="date"
   ></dxi-data-grid-column>
 </dx-data-grid>
-@if (selectedEmployee) {
+@if (selectedEmployee(); as selectedEmployee) {
 <div id="employeeInfo">
   <img
     class="employeePhoto"

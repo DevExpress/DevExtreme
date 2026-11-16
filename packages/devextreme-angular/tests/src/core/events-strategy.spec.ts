@@ -2,11 +2,17 @@ import { NgEventsStrategy } from 'devextreme-angular';
 
 describe('Events strategy API', () => {
   it('should allow to pass object with event handlers in the "on" method', () => {
-    const eventsStrategy = new NgEventsStrategy({}, null);
+    const zoneMode = {
+      emit: (emitter, value) => emitter.next(value),
+      emitInternal: (emitter, value) => emitter.next(value),
+      markForCheck: () => {},
+      markForOptionChange: () => {},
+    };
+    const eventsStrategy = new NgEventsStrategy({}, zoneMode);
     const handlers = [
-      jasmine.createSpy('first'),
-      jasmine.createSpy('second'),
-      jasmine.createSpy('third'),
+      vi.fn(),
+      vi.fn(),
+      vi.fn(),
     ];
 
     eventsStrategy.on({

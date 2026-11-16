@@ -10,12 +10,12 @@
             displayExpr="Name"
             valueExpr="ID"
             [inputAttr]="{ 'aria-label': 'Product' }"
-            [searchMode]="searchModeOption"
-            [searchExpr]="searchExprOption"
-            [searchTimeout]="searchTimeoutOption"
-            [minSearchLength]="minSearchLengthOption"
+            [searchMode]="searchModeOption()"
+            [searchExpr]="searchExprOption()"
+            [searchTimeout]="searchTimeoutOption()"
+            [minSearchLength]="minSearchLengthOption()"
             [searchEnabled]="true"
-            [showDataBeforeSearch]="showDataBeforeSearchOption"
+            [showDataBeforeSearch]="showDataBeforeSearchOption()"
           ></dx-select-box>
         </div>
       </div>
@@ -38,7 +38,7 @@
         </div>
       </div>
       <div class="dx-field current-product">
-        Current product: @if (selectedProduct) {
+        Current product: @if (selectedProduct(); as selectedProduct) {
         <span class="current-value">
           {{ selectedProduct.Name }} (ID: {{ selectedProduct.ID }})
         </span>

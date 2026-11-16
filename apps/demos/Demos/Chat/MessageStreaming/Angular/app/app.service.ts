@@ -1,5 +1,4 @@
-import { Injectable } from '@angular/core';
-import { Observable, BehaviorSubject } from 'rxjs';
+import { Injectable, inject, signal } from '@angular/core';
 import { unified } from 'unified';
 import remarkParse from 'remark-parse';
 import remarkRehype from 'remark-rehype';
@@ -87,11 +86,13 @@ function createDelayedRenderer({ delay = 20, onRender }: DelayedRendererOptions)
 
 @Injectable()
 export class AppService {
-  readonly ALERT_TIMEOUT = 1000 * 60;
+  private readonly aiService = inject(AiService);
+
+  private readonly ALERT_TIMEOUT = 1000 * 60;
 
   readonly user: DxChatTypes.User = { id: 'user' };
 
-  readonly assistant: DxChatTypes.User = { id: 'assistant', name: 'AI Assistant' };
+  private readonly assistant: DxChatTypes.User = { id: 'assistant', name: 'AI Assistant' };
 
   private store: DxChatTypes.Message[] = [];
 
@@ -99,51 +100,37 @@ export class AppService {
 
   private abortController: AbortController | null = null;
 
-  private typingUsersSubject = new BehaviorSubject<DxChatTypes.User[]>([]);
+  private readonly typingUsersState = signal<DxChatTypes.User[]>([]);
 
-  private alertsSubject = new BehaviorSubject<DxChatTypes.Alert[]>([]);
+  readonly typingUsers = this.typingUsersState.asReadonly();
 
-  private isStreamingSubject = new BehaviorSubject<boolean>(false);
+  private readonly alertsState = signal<DxChatTypes.Alert[]>([]);
 
-  readonly dataSource: DataSource;
+  readonly alerts = this.alertsState.asReadonly();
 
-  get alerts(): DxChatTypes.Alert[] {
-    return this.alertsSubject.getValue();
-  }
+  private readonly isStreamingState = signal(false);
 
-  get typingUsers$(): Observable<DxChatTypes.User[]> {
-    return this.typingUsersSubject.asObservable();
-  }
+  readonly isStreaming = this.isStreamingState.asReadonly();
 
-  get alerts$(): Observable<DxChatTypes.Alert[]> {
-    return this.alertsSubject.asObservable();
-  }
+  private readonly customStore = new CustomStore({
+    key: 'id',
+    load: () => new Promise((resolve) => {
+      setTimeout(() => {
+        resolve([...this.store]);
+      }, 0);
+    }),
+    insert: (message) => new Promise((resolve) => {
+      setTimeout(() => {
+        this.store.push(message);
+        resolve(message);
+      });
+    }),
+  });
 
-  get isStreaming$(): Observable<boolean> {
-    return this.isStreamingSubject.asObservable();
-  }
-
-  constructor(private readonly aiService: AiService) {
-    const customStore = new CustomStore({
-      key: 'id',
-      load: () => new Promise((resolve) => {
-        setTimeout(() => {
-          resolve([...this.store]);
-        }, 0);
-      }),
-      insert: (message) => new Promise((resolve) => {
-        setTimeout(() => {
-          this.store.push(message);
-          resolve(message);
-        });
-      }),
-    });
-
-    this.dataSource = new DataSource({
-      store: customStore,
-      paginate: false,
-    });
-  }
+  readonly dataSource = new DataSource({
+    store: this.customStore,
+    paginate: false,
+  });
 
   getDictionary() {
     return {
@@ -188,10 +175,10 @@ export class AppService {
   }
 
   private alertError(message: string): void {
-    this.alertsSubject.next([{ message }]);
+    this.alertsState.set([{ message }]);
 
     setTimeout(() => {
-      this.alertsSubject.next([]);
+      this.alertsState.set([]);
     }, this.ALERT_TIMEOUT);
   }
 
@@ -201,7 +188,7 @@ export class AppService {
     }
   }
 
-  async fetchAIResponse(message: DxChatTypes.Message): Promise<void> {
+  private async fetchAIResponse(message: DxChatTypes.Message): Promise<void> {
     const dataItemToMessage = (item: DxChatTypes.Message): AIMessage => ({
       role: item.author?.id as AIMessage['role'],
       content: item.text,
@@ -210,8 +197,8 @@ export class AppService {
     this.messages = [...this.dataSource.items().map(dataItemToMessage), dataItemToMessage(message)];
     this.abortController = new AbortController();
 
-    setTimeout(() => this.isStreamingSubject.next(true), 0);
-    this.typingUsersSubject.next([this.assistant]);
+    setTimeout(() => this.isStreamingState.set(true), 0);
+    this.typingUsersState.set([this.assistant]);
 
     let assistantId: number | undefined;
     let buffer = '';
@@ -220,7 +207,7 @@ export class AppService {
     const delayedRenderer = createDelayedRenderer({
       onRender: (chunk: string) => {
         if (!typingCleared) {
-          this.typingUsersSubject.next([]);
+          this.typingUsersState.set([]);
           typingCleared = true;
         }
 
@@ -248,10 +235,10 @@ export class AppService {
 
       await delayedRenderer.waitForIdle();
 
-      this.typingUsersSubject.next([]);
+      this.typingUsersState.set([]);
     } catch (e: unknown) {
       delayedRenderer.stop();
-      this.typingUsersSubject.next([]);
+      this.typingUsersState.set([]);
 
       if (!this.abortController?.signal.aborted) {
         if (assistantId !== undefined) {
@@ -261,22 +248,22 @@ export class AppService {
       }
     } finally {
       this.abortController = null;
-      this.isStreamingSubject.next(false);
+      this.isStreamingState.set(false);
     }
   }
 
   clearMessages(): void {
     this.store = [];
     this.messages = [];
-    this.alertsSubject.next([]);
-    this.typingUsersSubject.next([]);
+    this.alertsState.set([]);
+    this.typingUsersState.set([]);
     this.dataSource.reload();
   }
 
   onMessageEntered({ message }: DxChatTypes.MessageEnteredEvent): void {
     this.insertMessage({ id: Date.now(), ...message });
 
-    if (!this.alerts.length) {
+    if (!this.alerts().length) {
       this.fetchAIResponse(message);
     }
   }
@@ -291,7 +278,7 @@ export class AppService {
 
     this.insertMessage(message);
 
-    if (!this.alerts.length) {
+    if (!this.alerts().length) {
       this.fetchAIResponse(message);
     }
   }

@@ -1,5 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import {
+  Component, enableProdMode, inject, signal,
+} from '@angular/core';
 import { HttpClient, HttpParams, provideHttpClient, withFetch } from '@angular/common/http';
 import { lastValueFrom } from 'rxjs';
 import { DxAutocompleteModule } from 'devextreme-angular';
@@ -15,6 +17,30 @@ function isNotEmpty(value: unknown): boolean {
   return value !== undefined && value !== null && value !== '';
 }
 
+function createClientsStore(httpClient: HttpClient) {
+  return new CustomStore({
+    key: 'Value',
+    useDefaultSearch: true,
+    load(loadOptions) {
+      let params: HttpParams = new HttpParams();
+      [
+        'skip',
+        'take',
+        'filter',
+      ].forEach((option) => {
+        if (option in loadOptions && isNotEmpty(loadOptions[option])) {
+          params = params.set(option, JSON.stringify(loadOptions[option]));
+        }
+      });
+      return lastValueFrom(httpClient.get('https://js.devexpress.com/Demos/NetCore/api/DataGridWebApi/CustomersLookup', { params }))
+        .then(({ data }: { data: Record<string, unknown>[] }) => ({
+          data,
+        }))
+        .catch(() => { throw new Error('Data Loading Error'); });
+    },
+  });
+}
+
 @Component({
   selector: 'demo-app',
   providers: [Service],
@@ -26,59 +52,32 @@ function isNotEmpty(value: unknown): boolean {
 })
 
 export class AppComponent {
-  names: string[];
+  private readonly service = inject(Service);
 
-  surnames: string[];
+  readonly names = this.service.getNames();
 
-  positions: string[];
+  readonly surnames = this.service.getSurnames();
 
-  states: CustomStore;
+  readonly positions = this.service.getPositions();
 
-  clientsStore: CustomStore;
+  readonly states = AspNetData.createStore({
+    loadUrl: 'https://js.devexpress.com/Demos/NetCore/api/DataGridStatesLookup',
+    key: 'ID',
+  });
+
+  readonly clientsStore = createClientsStore(inject(HttpClient));
 
   firstName = '';
 
   lastName = '';
 
-  position: string;
+  readonly position = this.positions[0];
 
   state = '';
 
   currentClient = '';
 
-  fullInfo = '';
-
-  constructor(httpClient: HttpClient, service: Service) {
-    this.clientsStore = new CustomStore({
-      key: 'Value',
-      useDefaultSearch: true,
-      load(loadOptions) {
-        let params: HttpParams = new HttpParams();
-        [
-          'skip',
-          'take',
-          'filter',
-        ].forEach((option) => {
-          if (option in loadOptions && isNotEmpty(loadOptions[option])) {
-            params = params.set(option, JSON.stringify(loadOptions[option]));
-          }
-        });
-        return lastValueFrom(httpClient.get('https://js.devexpress.com/Demos/NetCore/api/DataGridWebApi/CustomersLookup', { params }))
-          .then(({ data }: { data: Record<string, unknown>[] }) => ({
-            data,
-          }))
-          .catch(() => { throw new Error('Data Loading Error'); });
-      },
-    });
-    this.states = AspNetData.createStore({
-      loadUrl: 'https://js.devexpress.com/Demos/NetCore/api/DataGridStatesLookup',
-      key: 'ID',
-    });
-    this.names = service.getNames();
-    this.surnames = service.getSurnames();
-    this.positions = service.getPositions();
-    this.position = this.positions[0];
-  }
+  readonly fullInfo = signal('');
 
   updateEmployeeInfo() {
     let result = '';
@@ -86,13 +85,12 @@ export class AppComponent {
     result += (result && this.position) ? (`, ${this.position}`) : this.position || '';
     result += (result && this.state) ? (`, ${this.state}`) : this.state || '';
     result += (result && this.currentClient) ? (`, ${this.currentClient}`) : this.currentClient || '';
-    this.fullInfo = result;
+    this.fullInfo.set(result);
   }
 }
 
 bootstrapApplication(AppComponent, {
   providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
     provideHttpClient(withFetch()),
   ],
 });

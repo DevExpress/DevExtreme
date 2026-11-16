@@ -7,7 +7,7 @@ import {
   validatingEditingExtender,
   validatingEditorFactoryExtender,
   validatingRowsViewExtender,
-} from './m_validating';
+} from './validating';
 
 interface ValidatingModuleOptions {
   editing: { texts: Pick<EditingTextsBase, 'validationCancelChanges'> };

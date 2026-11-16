@@ -1,8 +1,10 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import {
+  Component, enableProdMode, inject, signal,
+} from '@angular/core';
 import { DxSchedulerModule, DxRadioGroupModule } from 'devextreme-angular';
-import { DxRadioGroupTypes } from 'devextreme-angular/ui/radio-group';
-import { Appointment, Service } from './app.service';
+import type { DxRadioGroupTypes } from 'devextreme-angular/ui/radio-group';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -19,11 +21,11 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  appointmentsData: Appointment[];
+  readonly appointmentsData = inject(Service).getAppointments();
 
-  currentDate = new Date(2021, 2, 28);
+  readonly currentDate = new Date(2021, 2, 28);
 
-  views = [
+  readonly views = [
     {
       type: 'day',
       name: '4 Days',
@@ -32,21 +34,13 @@ export class AppComponent {
     'week',
   ];
 
-  allDayPanelMode = 'allDay';
+  readonly allDayPanelMode = signal('allDay');
 
-  allDayPanelModes = ['all', 'allDay', 'hidden'];
-
-  constructor(service: Service) {
-    this.appointmentsData = service.getAppointments();
-  }
+  readonly allDayPanelModes = ['all', 'allDay', 'hidden'];
 
   onChangeAllDayPanelMode(e: DxRadioGroupTypes.ValueChangedEvent) {
-    this.allDayPanelMode = e.value;
+    this.allDayPanelMode.set(e.value);
   }
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

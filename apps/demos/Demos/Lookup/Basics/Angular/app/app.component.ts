@@ -1,5 +1,5 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import { Component, enableProdMode, inject } from '@angular/core';
 import { DxLookupModule } from 'devextreme-angular';
 import { DataSource, ArrayStore } from 'devextreme-angular/common/data';
 
@@ -19,24 +19,17 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  employees: string[];
+  private readonly service = inject(Service);
 
-  dataSource: DataSource;
+  readonly dataSource = new DataSource({
+    store: new ArrayStore({
+      data: this.service.getTasks(),
+      key: 'Id',
+    }),
+    group: 'Assigned',
+  });
 
-  constructor(service: Service) {
-    this.dataSource = new DataSource({
-      store: new ArrayStore({
-        data: service.getTasks(),
-        key: 'Id',
-      }),
-      group: 'Assigned',
-    });
-    this.employees = service.getEmployees();
-  }
+  readonly employees = this.service.getEmployees();
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

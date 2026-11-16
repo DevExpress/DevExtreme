@@ -1,25 +1,24 @@
-import { CommonModule } from '@angular/common';
-import { Component, Input, ViewChild } from '@angular/core';
-import { DxFormModule, DxFormComponent, DxFormTypes } from 'devextreme-angular/ui/form';
+import { Component, input, viewChild } from '@angular/core';
+import { DxFormModule, DxFormComponent, type DxFormTypes } from 'devextreme-angular/ui/form';
 import { DxToastModule, DxToastComponent } from 'devextreme-angular/ui/toast';
 import type { AIIntegration } from 'devextreme-angular/common/ai-integration';
-import { DxButtonTypes } from 'devextreme-angular/ui/button';
+import type { DxButtonTypes } from 'devextreme-angular/ui/button';
 import { employee, formFieldsConfig, type Employee } from '../../data';
 
 @Component({
   selector: 'app-employee-form',
-  imports: [CommonModule, DxFormModule, DxToastModule],
+  imports: [DxFormModule, DxToastModule],
   templateUrl: './employee-form.component.html',
   styleUrls: ['./employee-form.component.css'],
 })
 export class EmployeeFormComponent {
-  @Input({ required: true }) aiIntegration!: AIIntegration;
+  readonly aiIntegration = input.required<AIIntegration>();
 
-  @ViewChild(DxFormComponent) private dxForm!: DxFormComponent;
+  readonly formComponent = viewChild.required(DxFormComponent);
 
-  @ViewChild(DxToastComponent) private dxToast!: DxToastComponent;
+  private readonly dxToast = viewChild.required(DxToastComponent);
 
-  formData: Employee = { ...employee };
+  readonly formData: Employee = { ...employee };
 
   readonly formFields = formFieldsConfig;
 
@@ -30,14 +29,10 @@ export class EmployeeFormComponent {
     useSubmitBehavior: true,
     width: '120px',
     onClick: () => {
-      this.dxForm.instance.reset(this.formData);
-      this.dxToast.instance.show();
+      this.formComponent().instance.reset(this.formData);
+      this.dxToast().instance.show();
     },
   };
-
-  get formComponent(): DxFormComponent {
-    return this.dxForm;
-  }
 
   onOptionChanged(e: DxFormTypes.OptionChangedEvent): void {
     if (e.name === 'isDirty') {

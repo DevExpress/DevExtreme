@@ -1216,7 +1216,7 @@ class Popup<
 
     (forceApplyBindings ?? noop)();
 
-    const overlayContent = this.$overlayContent().get(0) as HTMLElement;
+    const overlayContent = this.$overlayContent().get<HTMLElement>(0);
     const currentHeightStrategyClass = this._chooseHeightStrategy(overlayContent);
 
     this.$content()?.css(this._getHeightCssStyles(currentHeightStrategyClass, overlayContent));
@@ -1315,7 +1315,7 @@ class Popup<
   }
 
   _isAutoHeight(): boolean {
-    return (this.$overlayContent().get(0) as HTMLElement).style.height === 'auto';
+    return this.$overlayContent().get<HTMLElement>(0).style.height === 'auto';
   }
 
   _splitPopupHeight(): Record<string, number> {
@@ -1560,8 +1560,7 @@ class Popup<
 
     return $wrapper
       .find('[tabindex]')
-      // @ts-expect-error ts-error
-      .filter((_, item) => item.getAttribute('tabindex') >= 0);
+      .filter((_, item) => Number(item.getAttribute('tabindex')) >= 0);
   }
 }
 

@@ -30,7 +30,7 @@ const createTreeList = (
 ): Promise<InternalGrid> => new Promise((resolve) => {
   const $container = $('<div>').attr('id', CONTAINER_ID).appendTo(document.body);
 
-  const instance = new TreeList($container.get(0) as HTMLDivElement, {
+  const instance = new TreeList($container.get<HTMLDivElement>(0), {
     dataSource: items,
     keyExpr: 'id',
     parentIdExpr: 'parentId',

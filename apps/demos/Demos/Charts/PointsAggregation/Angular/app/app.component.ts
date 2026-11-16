@@ -1,9 +1,9 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { enableProdMode, Component, provideZoneChangeDetection } from '@angular/core';
-import { DxChartModule, DxCheckBoxModule, DxSelectBoxModule } from 'devextreme-angular';
 import {
-  Service, WeatherIndicators, AggregationInterval, AggregationFunction,
-} from './app.service';
+  enableProdMode, Component, inject, signal,
+} from '@angular/core';
+import { DxChartModule, DxCheckBoxModule, DxSelectBoxModule } from 'devextreme-angular';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -22,19 +22,15 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  weatherIndicators: WeatherIndicators[];
+  private readonly service = inject(Service);
 
-  intervals: AggregationInterval[];
+  readonly weatherIndicators = this.service.getWeatherIndicators();
 
-  functions: AggregationFunction[];
+  readonly intervals = this.service.getAggregationIntervals();
 
-  useAggregation = true;
+  readonly functions = this.service.getAggregationFunctions();
 
-  constructor(service: Service) {
-    this.weatherIndicators = service.getWeatherIndicators();
-    this.intervals = service.getAggregationIntervals();
-    this.functions = service.getAggregationFunctions();
-  }
+  readonly useAggregation = signal(true);
 
   customizeTooltip({
     point: { aggregationInfo },
@@ -94,8 +90,4 @@ export class AppComponent {
   }
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

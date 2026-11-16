@@ -1,9 +1,11 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, ViewChild, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import {
+  Component, enableProdMode, inject, viewChild,
+} from '@angular/core';
 import { DxDataGridComponent, DxDataGridModule, DxSelectBoxModule } from 'devextreme-angular';
 import { type DxSelectBoxTypes } from 'devextreme-angular/ui/select-box';
 
-import { Service, Task } from './app.service';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -21,28 +23,23 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  @ViewChild(DxDataGridComponent, { static: false }) dataGrid: DxDataGridComponent;
+  private readonly dataGrid = viewChild.required(DxDataGridComponent);
 
-  statuses: string[];
+  private readonly service = inject(Service);
 
-  tasks: Task[];
+  readonly statuses = this.service.getStatuses();
 
-  constructor(private service: Service) {
-    this.statuses = this.service.getStatuses();
-    this.tasks = this.service.getTasks();
-  }
+  readonly tasks = this.service.getTasks();
 
   selectStatus(e: DxSelectBoxTypes.ValueChangedEvent) {
+    const { instance } = this.dataGrid();
+
     if (e.value === 'All') {
-      this.dataGrid.instance.clearFilter();
+      instance.clearFilter();
     } else {
-      this.dataGrid.instance.filter(['Task_Status', '=', e.value]);
+      instance.filter(['Task_Status', '=', e.value]);
     }
   }
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

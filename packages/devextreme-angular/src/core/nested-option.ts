@@ -1,3 +1,4 @@
+/* eslint-disable max-classes-per-file */
 import {
   Component, QueryList, ElementRef, Renderer2, EventEmitter,
 } from '@angular/core';

@@ -79,11 +79,9 @@ describe('DxSelectBox', () => {
     const { instance } = selectBox;
 
     instance.option('value', 2);
-    // @ts-expect-error
     expect(instance.option('text')).toBe(1);
 
     instance.option('value', 2);
-    // @ts-expect-error
     expect(instance.option('text')).toBe(1);
   });
 });

@@ -1,7 +1,8 @@
 import {
   Component,
   enableProdMode,
-  provideZoneChangeDetection,
+  inject,
+  signal,
 } from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
 import { DxDataGridModule, type DxDataGridTypes } from 'devextreme-angular/ui/data-grid';
@@ -19,21 +20,13 @@ if (!/localhost/.test(document.location.host)) {
   imports: [DxDataGridModule],
 })
 export class AppComponent {
-  employees: Employee[];
+  readonly employees = inject(Service).getEmployees();
 
-  selectedEmployee: Employee | undefined;
-
-  constructor(service: Service) {
-    this.employees = service.getEmployees();
-  }
+  readonly selectedEmployee = signal<Employee | undefined>(undefined);
 
   onSelectionChanged({ selectedRowsData }: DxDataGridTypes.SelectionChangedEvent) {
-    this.selectedEmployee = selectedRowsData[0];
+    this.selectedEmployee.set(selectedRowsData[0]);
   }
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

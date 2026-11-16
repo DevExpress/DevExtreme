@@ -1,5 +1,5 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import { Component, enableProdMode, signal } from '@angular/core';
 import * as AspNetData from 'devextreme-aspnet-data-nojquery';
 import { DxNumberBoxModule } from 'devextreme-angular';
 import { DxTreeListModule, DxTreeListTypes } from 'devextreme-angular/ui/tree-list';
@@ -21,19 +21,19 @@ const url = 'https://js.devexpress.com/Demos/NetCore/api/TreeListTasks';
   ],
 })
 export class AppComponent {
-  taskSubject: string;
+  readonly taskSubject = signal('');
 
-  taskAssigned: string;
+  readonly taskAssigned = signal('');
 
-  startDate: string;
+  readonly startDate = signal('');
 
-  taskStatus: string;
+  readonly taskStatus = signal('');
 
-  taskProgress: string;
+  readonly taskProgress = signal('');
 
-  focusedRowKey = 45;
+  readonly focusedRowKey = signal(45);
 
-  dataSource = AspNetData.createStore({
+  readonly dataSource = AspNetData.createStore({
     key: 'Task_ID',
     loadUrl: `${url}/Tasks`,
     onBeforeSend(_, ajaxOptions) {
@@ -41,7 +41,7 @@ export class AppComponent {
     },
   });
 
-  taskEmployees = AspNetData.createStore({
+  readonly taskEmployees = AspNetData.createStore({
     key: 'ID',
     loadMode: 'raw',
     loadUrl: `${url}/TaskEmployees`,
@@ -58,18 +58,14 @@ export class AppComponent {
         assigned = Name;
       });
 
-      this.taskSubject = rowData.Task_Subject;
-      this.taskAssigned = assigned;
-      this.startDate = new Date(rowData.Task_Start_Date).toLocaleDateString();
+      this.taskSubject.set(rowData.Task_Subject);
+      this.taskAssigned.set(assigned);
+      this.startDate.set(new Date(rowData.Task_Start_Date).toLocaleDateString());
 
-      this.taskStatus = rowData.Task_Status;
-      this.taskProgress = rowData.Task_Completion ? `${rowData.Task_Completion}%` : '';
+      this.taskStatus.set(rowData.Task_Status);
+      this.taskProgress.set(rowData.Task_Completion ? `${rowData.Task_Completion}%` : '');
     }
   }
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

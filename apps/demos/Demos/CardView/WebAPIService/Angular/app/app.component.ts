@@ -1,5 +1,5 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import { Component, enableProdMode } from '@angular/core';
 import * as AspNetData from 'devextreme-aspnet-data-nojquery';
 import { DxCardViewModule } from 'devextreme-angular';
 import 'devextreme/ui/select_box';
@@ -19,7 +19,7 @@ const url = 'https://js.devexpress.com/Demos/NetCore/api/TreeListTasks';
   ],
 })
 export class AppComponent {
-  dataSource = AspNetData.createStore({
+  readonly dataSource = AspNetData.createStore({
     key: 'Task_ID',
     loadUrl: `${url}/Tasks`,
     insertUrl: `${url}/InsertTask`,
@@ -31,8 +31,4 @@ export class AppComponent {
   });
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

@@ -314,8 +314,7 @@ class Sortable extends DOMComponent<Sortable> {
     };
 
     const createGroups = function () {
-      // @ts-expect-error ts-error
-      const root: any = domAdapter.getRootNode(that.$element().get(0));
+      const root: any = domAdapter.getRootNode(that.$element().get<HTMLElement>(0));
 
       if (!groupSelector) {
         return element;

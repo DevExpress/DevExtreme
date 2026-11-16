@@ -30,24 +30,26 @@ import type {
   RawItemData,
 } from '../data_source_adapter/types';
 import type { StateStoringDataControllerExtension } from '../state_storing/extenders/state_storing_data_controller';
-import gridCoreUtils, { isInfiniteMode, isVirtualMode, isVirtualPaging } from '../utils';
 import type { RowsViewScrollEvent } from '../views/types';
 import {
   CLASSES,
   LEGACY_SCROLLING_MODE,
   LOAD_TIMEOUT,
 } from './const';
-import type { VirtualScrollingDataControllerExtension } from './extenders/virtual_scrolling_data_controller';
 import type {
   ContentOffsetType,
   ExternalScrollers,
   VirtualScrollDataOptions,
   VirtualScrollingDataChange,
+  VirtualScrollingDataControllerExtension,
   VirtualScrollingDataSourceAdapter,
-  VirtualScrollingResizingControllerExtension,
+  VirtualScrollingResizingController,
   VirtualScrollingRowsView,
 } from './types';
 import { isItemCountableByDataSource } from './utils/items';
+import {
+  isInfiniteMode, isVirtualMode, isVirtualPaging, isVirtualRowRendering,
+} from './utils/scrolling_mode';
 import { subscribeToExternalScrollers, VirtualScrollController } from './virtual_scrolling_core';
 
 const updateLoading = (that: VirtualScrollingDataSourceAdapter): void => {
@@ -107,7 +109,7 @@ export const dataSourceAdapterExtender = (
 
   private _loadPageCount!: number;
 
-  public _virtualScrollController!: VirtualScrollController;
+  public _virtualScrollController!: VirtualScrollController<RawItemData>;
 
   public _renderTime = 0;
 
@@ -134,7 +136,7 @@ export const dataSourceAdapterExtender = (
     super.dispose(isSharedDataSource);
   }
 
-  private _getVirtualScrollDataOptions(): VirtualScrollDataOptions {
+  private _getVirtualScrollDataOptions(): VirtualScrollDataOptions<RawItemData> {
     return {
       pageSize: (): number => this.pageSize(),
       totalItemsCount: (): number => this.totalItemsCount(),
@@ -148,10 +150,10 @@ export const dataSourceAdapterExtender = (
         updateLoading(this);
       },
       itemsCount: (): number => this.itemsCount(true),
-      items: (): unknown[] => this._dataSource.items(),
-      viewportItems: (items?: unknown[]): unknown[] => {
+      // @ts-expect-error DataSource items are typed as unknown
+      items: (): RawItemData[] => this._dataSource.items(),
+      viewportItems: (items?: RawItemData[]): RawItemData[] => {
         if (items) {
-          // @ts-expect-error the loader passes back the items it got from items()
           this._items = items;
         }
         return this._items;
@@ -424,10 +426,6 @@ export const dataSourceAdapterExtender = (
     return this._virtualScrollController.getContentOffset(type);
   }
 
-  public getVirtualContentSize(): number {
-    return this._virtualScrollController.getVirtualContentSize();
-  }
-
   public setContentItemSizes(sizes: number[]): void {
     return this._virtualScrollController.setContentItemSizes(sizes);
   }
@@ -472,7 +470,7 @@ export const dataSourceAdapterExtender = (
 export const resizing = (
   Base: ModuleType<ResizingController>,
 ): ModuleType<
-  ResizingController & VirtualScrollingResizingControllerExtension
+  VirtualScrollingResizingController
 > => class VirtualScrollingResizingControllerExtender extends Base {
   private _resizeTimeout?: ReturnType<typeof setTimeout>;
 
@@ -513,7 +511,7 @@ export const resizing = (
   }
 
   public resize(): DeferredObj<unknown> {
-    if (!isVirtualMode(this.option('scrolling')) && !gridCoreUtils.isVirtualRowRendering(this)) {
+    if (!isVirtualMode(this.option('scrolling')) && !isVirtualRowRendering(this.option('scrolling'))) {
       return super.resize();
     }
 
@@ -646,7 +644,7 @@ export const rowsView = (
       const viewportSize = this._dataController.viewportSize() || 20;
 
       if (
-        gridCoreUtils.isVirtualRowRendering(this)
+        isVirtualRowRendering(this.option('scrolling'))
         && itemCount > 0
         && this.option(LEGACY_SCROLLING_MODE) !== false
       ) {
@@ -827,7 +825,7 @@ export const rowsView = (
 
     this._dataController.viewportItemSize(rowHeight);
 
-    if (isVirtualMode(this.option('scrolling')) || gridCoreUtils.isVirtualRowRendering(this)) {
+    if (isVirtualMode(this.option('scrolling')) || isVirtualRowRendering(this.option('scrolling'))) {
       const isEmptyRows = this._dataController.isEmpty();
       if (isEmptyRows) {
         return;
@@ -906,9 +904,9 @@ export const rowsView = (
       }
 
       const scrolling = this.option('scrolling');
-      const isVirtualRowRendering = isVirtualMode(scrolling) || scrolling?.rowRenderingMode !== 'standard';
+      const rendersVirtualRows = isVirtualMode(scrolling) || scrolling?.rowRenderingMode !== 'standard';
 
-      if (isVirtualRowRendering && this.option(LEGACY_SCROLLING_MODE) === false) {
+      if (rendersVirtualRows && this.option(LEGACY_SCROLLING_MODE) === false) {
         this._updateContentItemSizes();
         this._updateViewportSize(null, this._scrollTop);
       }
@@ -920,7 +918,7 @@ export const rowsView = (
 
   protected _needUpdateRowHeight(itemsCount: number): boolean {
     return Boolean(super._needUpdateRowHeight(itemsCount)) || (itemsCount > 0
-      && (isInfiniteMode(this.option('scrolling')) && !gridCoreUtils.isVirtualRowRendering(this))
+      && (isInfiniteMode(this.option('scrolling')) && !isVirtualRowRendering(this.option('scrolling')))
     );
   }
 

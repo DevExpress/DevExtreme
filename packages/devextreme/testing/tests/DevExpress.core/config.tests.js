@@ -126,3 +126,9 @@ QUnit.test('DevExpress.config.optionsParser works correct', function(assert) {
         assert.deepEqual(optionsParser(optionsString), etalon);
     });
 });
+
+QUnit.test('DevExpress.config.optionsParser throws a SyntaxError for options that cannot be parsed', function(assert) {
+    const optionsParser = DevExpress.config().optionsParser;
+
+    assert.throws(() => optionsParser('dxTemplate: { name: '), SyntaxError);
+});

@@ -1,7 +1,9 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import {
+  Component, enableProdMode, inject, signal,
+} from '@angular/core';
 import { DxChartModule, DxCheckBoxModule, DxSelectBoxModule } from 'devextreme-angular';
-import { SolarSystemObject, Service } from './app.service';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -20,29 +22,19 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  data: SolarSystemObject[];
+  readonly data = inject(Service).getData();
 
-  lineStyles: string[] = ['waved', 'straight'];
+  readonly lineStyles = ['waved', 'straight'];
 
-  breaksCount: number[] = [1, 2, 3, 4];
+  readonly breaksCount = [1, 2, 3, 4];
 
-  lineStyleValue: string;
+  readonly lineStyleValue = signal(this.lineStyles[0]);
 
-  autoBreaksEnabledValue = true;
+  readonly autoBreaksEnabledValue = signal(true);
 
-  breaksCountValue: number;
+  readonly breaksCountValue = signal(this.breaksCount[2]);
 
-  title = 'Relative Masses of the Heaviest\n Solar System Objects';
-
-  constructor(service: Service) {
-    this.data = service.getData();
-    this.lineStyleValue = this.lineStyles[0];
-    this.breaksCountValue = this.breaksCount[2];
-  }
+  readonly title = 'Relative Masses of the Heaviest\n Solar System Objects';
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

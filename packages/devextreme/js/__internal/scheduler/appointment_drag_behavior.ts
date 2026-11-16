@@ -13,6 +13,7 @@ import type {
   AppointmentDraggingStartEvent,
   Properties as SchedulerProperties,
 } from '@js/ui/scheduler';
+import { getData } from '@ts/core/element_data';
 
 import { APPOINTMENT_SETTINGS_KEY, LIST_ITEM_DATA_KEY } from './constants';
 import type Scheduler from './scheduler';
@@ -39,11 +40,6 @@ interface DragStartData {
 interface AppointmentInfo {
   appointment: SafeAppointment;
   settings: AppointmentViewModelPlain;
-}
-
-interface ListItemData {
-  appointment?: SafeAppointment;
-  settings?: AppointmentViewModelPlain;
 }
 
 type DragStartArgs = AppointmentDraggingStartEvent & {
@@ -127,8 +123,7 @@ export default class AppointmentDragBehavior {
   }
 
   getItemData(appointmentElement: Element | dxElementWrapper): SafeAppointment | undefined {
-    const dataFromTooltip = $(appointmentElement)
-      .data<ListItemData | undefined>(LIST_ITEM_DATA_KEY);
+    const dataFromTooltip = getData(appointmentElement, LIST_ITEM_DATA_KEY);
     const itemDataFromTooltip = dataFromTooltip?.appointment;
     const itemDataFromGrid: SafeAppointment = this.appointments._getItemData(appointmentElement);
 
@@ -136,7 +131,7 @@ export default class AppointmentDragBehavior {
   }
 
   getItemSettings(appointment: Element | dxElementWrapper): AppointmentViewModelPlain | undefined {
-    const itemData = $(appointment).data<ListItemData | undefined>(LIST_ITEM_DATA_KEY);
+    const itemData = getData(appointment, LIST_ITEM_DATA_KEY);
     return itemData?.settings;
   }
 

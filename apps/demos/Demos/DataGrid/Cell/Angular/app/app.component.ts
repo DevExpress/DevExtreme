@@ -1,11 +1,13 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, Pipe, PipeTransform, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import {
+  Component, Pipe, PipeTransform, enableProdMode, inject,
+} from '@angular/core';
 import {
   DxDataGridModule,
   DxSparklineModule,
 } from 'devextreme-angular';
 import { CurrencyPipe, DecimalPipe } from '@angular/common';
-import { Service, WeekData } from './app.service';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -32,19 +34,11 @@ export class GridCellDataPipe implements PipeTransform {
   ],
 })
 export class AppComponent {
-  dataSource: WeekData[];
-
-  constructor(service: Service) {
-    this.dataSource = service.getWeekData();
-  }
+  readonly dataSource = inject(Service).getWeekData();
 
   abs(value: number) {
     return Math.abs(value);
   }
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, input } from '@angular/core';
 
 @Component({
   selector: 'status',
@@ -6,5 +6,5 @@ import { Component, Input } from '@angular/core';
   styleUrls: ['./status.component.css'],
 })
 export class Status {
-  @Input() status!: string;
+  readonly status = input.required<string>();
 }

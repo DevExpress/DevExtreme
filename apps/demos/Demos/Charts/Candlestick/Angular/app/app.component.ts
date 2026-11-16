@@ -1,8 +1,8 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import { Component, enableProdMode, inject } from '@angular/core';
 import { DxChartModule } from 'devextreme-angular';
 
-import { StockPrice, Service } from './app.service';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -18,11 +18,7 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  stockPrices: StockPrice[];
-
-  constructor(service: Service) {
-    this.stockPrices = service.getStockPrices();
-  }
+  readonly stockPrices = inject(Service).getStockPrices();
 
   customizeTooltip(arg) {
     return {
@@ -34,8 +30,4 @@ export class AppComponent {
   }
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

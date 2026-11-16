@@ -98,12 +98,10 @@ export const extractTemplateMarkup = (element: Element | dxElementWrapper): stri
     });
 
   if (templateTag && templateTag.length) {
-    // @ts-expect-error html() without a value returns the markup
-    const templateMarkup: string = templateTag.eq(0).html();
+    const templateMarkup = templateTag.eq(0).html<string>();
     return templateMarkup;
   }
-  // @ts-expect-error html() without a value returns the markup
-  const markup: string = $('<div>').append($element).html();
+  const markup = $('<div>').append($element).html<string>();
   return markup;
 };
 
@@ -120,8 +118,7 @@ export const normalizeTemplateElement = (element: unknown): dxElementWrapper => 
 
   if ($element.length === 1) {
     if ($element.is('script')) {
-      // @ts-expect-error html() without a value returns the markup
-      const markup: string = $element.html();
+      const markup = $element.html<string>();
       $element = normalizeTemplateElement(markup.trim());
     } else if ($element.is('table')) {
       $element = $element.children('tbody').contents();
@@ -213,9 +210,9 @@ export const replaceWith = (
 
 export const isElementInDom = ($element?: dxElementWrapper): boolean => {
   const element = $element?.get(0);
-  const shadowHost = (element?.getRootNode() as { host?: Element | string } | undefined)?.host;
+  const shadowHost = element && getRootNodeHost(element);
 
-  return !!$(shadowHost || element).closest(getWindow().document).length;
+  return !!$(shadowHost ?? element).closest(getWindow().document).length;
 };
 
 const ARIA_DESCRIBEDBY_ATTRIBUTE = 'aria-describedby';

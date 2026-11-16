@@ -1,8 +1,8 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import { Component, enableProdMode, inject } from '@angular/core';
 import { DxChartModule } from 'devextreme-angular';
 
-import { CountryInfo, Service } from './app.service';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -18,15 +18,7 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  countriesInfo: CountryInfo[];
-
-  constructor(service: Service) {
-    this.countriesInfo = service.getCountriesInfo();
-  }
+  readonly countriesInfo = inject(Service).getCountriesInfo();
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

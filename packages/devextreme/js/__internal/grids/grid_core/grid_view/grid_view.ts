@@ -22,7 +22,7 @@ import type { RowsView } from '@ts/grids/grid_core/views/rows_view';
 import type { ColumnWidth, ScrollPosition, ViewDataChange } from '@ts/grids/grid_core/views/types';
 import { isPercentWidth } from '@ts/grids/grid_core/views/utils';
 
-import type { FooterView } from '../../data_grid/summary/m_summary';
+import type { FooterView } from '../../data_grid/summary/summary';
 import type { AdaptiveColumnsViewController } from '../adaptivity/adaptivity';
 import type { ColumnHeadersView } from '../column_headers/column_headers';
 import type { ColumnsController } from '../columns_controller/columns_controller';
@@ -67,7 +67,7 @@ export class ResizingController extends modules.ViewController {
 
   public _columnsController!: ColumnsController;
 
-  private _footerView!: FooterView;
+  protected _footerView!: FooterView;
 
   private _gridView!: GridView;
 
@@ -115,7 +115,6 @@ export class ResizingController extends modules.ViewController {
       const refreshSizesHandler = (change: DataChange): void => {
         let resizeDeferred: DeferredObj<unknown> = Deferred<null>().resolve(null);
         const changeType = change?.changeType;
-        // @ts-expect-error e.isDelayed is set for virtual scrolling with scrolling.legacyMode
         const isDelayed = change?.isDelayed;
         const needFireContentReady = changeType
           && changeType !== 'updateSelection'
@@ -146,7 +145,6 @@ export class ResizingController extends modules.ViewController {
 
   private _refreshSizes(e: ViewDataChange): DeferredObj<unknown> {
     const changeType = e?.changeType;
-    // @ts-expect-error e.isDelayed is set for virtual scrolling with scrolling.legacyMode
     const isDelayed = e?.isDelayed;
 
     if (!e || (changeType !== undefined && ['refresh', 'prepend', 'append'].includes(changeType))) {
@@ -297,7 +295,7 @@ export class ResizingController extends modules.ViewController {
     this._toggleBestFitModeForView(this._footerView, VIEW_CLASSES.footerBody, isBestFit);
 
     if (this._needStretch()) {
-      ($rowsTable.get(0) as HTMLElement).style.width = isBestFit ? 'auto' : '';
+      $rowsTable.get<HTMLElement>(0).style.width = isBestFit ? 'auto' : '';
     }
   }
 
@@ -306,7 +304,7 @@ export class ResizingController extends modules.ViewController {
     const $contentElement: dxElementWrapper = this._rowsView._findContentElement();
 
     if (value === true) {
-      this._prevContentMinHeight = ($contentElement.get(0) as HTMLElement).style.minHeight;
+      this._prevContentMinHeight = $contentElement.get<HTMLElement>(0).style.minHeight;
     }
 
     if (isDefined(this._prevContentMinHeight)) {
@@ -803,7 +801,7 @@ export class ResizingController extends modules.ViewController {
     const groupElement = this._getGroupElement();
 
     const rootElementHeight = getHeight($rootElement.get(0));
-    const height = this.option('height') ?? ($rootElement.get(0) as HTMLElement).style.height;
+    const height = this.option('height') ?? $rootElement.get<HTMLElement>(0).style.height;
     const isHeightSpecified = !!height && height !== 'auto';
 
     // @ts-expect-error css value can be undefined

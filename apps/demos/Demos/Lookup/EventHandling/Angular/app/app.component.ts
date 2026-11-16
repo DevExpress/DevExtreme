@@ -1,8 +1,10 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import {
+  Component, enableProdMode, inject, signal,
+} from '@angular/core';
 import { DxSelectBoxModule } from 'devextreme-angular';
 import { DxLookupModule, DxLookupTypes } from 'devextreme-angular/ui/lookup';
-import { Service, Employee } from './app.service';
+import { Service, type Employee } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -19,27 +21,19 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  employees: Employee[];
+  readonly employees = inject(Service).getEmployees();
 
-  selectedEmployee: Employee;
+  readonly selectedEmployee = signal<Employee | undefined>(undefined);
 
-  applyValueMode: DxLookupTypes.ApplyValueMode = 'instantly';
+  readonly applyValueMode = signal<DxLookupTypes.ApplyValueMode>('instantly');
 
-  applyValueModes: DxLookupTypes.ApplyValueMode[] = ['instantly', 'useButtons'];
-
-  constructor(service: Service) {
-    this.employees = service.getEmployees();
-  }
+  readonly applyValueModes: DxLookupTypes.ApplyValueMode[] = ['instantly', 'useButtons'];
 
   valueChanged({ value }: DxLookupTypes.ValueChangedEvent) {
-    this.selectedEmployee = value;
+    this.selectedEmployee.set(value);
   }
 
-  getDisplayExpr = ({ FirstName, LastName }: Record<string, string> = {}) => (FirstName ? `${FirstName} ${LastName}` : undefined);
+  readonly getDisplayExpr = ({ FirstName, LastName }: Record<string, string> = {}) => (FirstName ? `${FirstName} ${LastName}` : undefined);
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

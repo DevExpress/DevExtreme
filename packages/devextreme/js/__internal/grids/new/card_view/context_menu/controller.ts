@@ -1,9 +1,11 @@
 import type { SingleMultipleOrNone } from '@js/common';
+import { createEvent } from '@js/common/core/events/utils/index';
 import messageLocalization from '@js/localization/message';
 import type { Item as ContextMenuItem, ItemClickEvent as ContextMenuItemPressedEvent } from '@js/ui/context_menu';
 
 import { ColumnsController } from '../../grid_core/columns_controller/index';
 import type { CardInfo, Column } from '../../grid_core/columns_controller/types';
+import type { ContextMenuShowEvent } from '../../grid_core/context_menu/controller';
 import { BaseContextMenuController } from '../../grid_core/context_menu/controller';
 import { SortingController } from '../../grid_core/sorting_controller/index';
 import { OptionsController } from '../options_controller';
@@ -38,7 +40,7 @@ export class ContextMenuController
   }
 
   public override show(
-    event: KeyboardEvent | MouseEvent,
+    event: ContextMenuShowEvent,
     view: ContextMenuTarget,
     contextInfo: ContextInfo = {},
     onMenuCloseCallback?: () => void,
@@ -48,7 +50,7 @@ export class ContextMenuController
 
   public override getItems(
     view: ContextMenuTarget,
-    targetElement: Element,
+    event: ContextMenuShowEvent,
     contextInfo: ContextInfo = {},
   ): ContextMenuItem[] | undefined {
     const items: ContextMenuItem[] = [];
@@ -57,11 +59,12 @@ export class ContextMenuController
       items.push(...this.getSortingItems(contextInfo.column));
     }
 
-    // @ts-expect-error
-    const event: ContextMenuPreparingEvent<CardInfo> = {
+    // @ts-expect-error component and element are added by the action
+    const preparingEvent: ContextMenuPreparingEvent<CardInfo> = {
+      event: createEvent(event),
       items: items.length > 0 ? items : undefined,
       target: view,
-      targetElement: targetElement as HTMLElement,
+      targetElement: event.target as HTMLElement,
       columnIndex: undefined,
       card: undefined,
       cardIndex: undefined,
@@ -72,9 +75,9 @@ export class ContextMenuController
 
     const callback = this.options.action('onContextMenuPreparing').peek();
 
-    callback(event);
+    callback(preparingEvent);
 
-    return event.items;
+    return preparingEvent.items;
   }
 
   private getSortingItems(column: Column): CardViewContextMenuItem[] {

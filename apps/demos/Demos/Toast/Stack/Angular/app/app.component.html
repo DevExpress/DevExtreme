@@ -11,49 +11,49 @@
     [items]="positions"
     [inputAttr]="{ 'aria-label': 'Position' }"
     [(value)]="predefinedPosition"
-    [visible]="isPredefined"
+    [visible]="isPredefined()"
   >
   </dx-select-box>
   <div class="section">
     <dx-number-box
-      [visible]="!isPredefined"
+      [visible]="!isPredefined()"
       placeholder="top"
-      [(value)]="coordinatePosition.top"
+      [(value)]="top"
       width="48%"
       valueChangeEvent="keyup"
-      [disabled]="!!coordinatePosition.bottom"
+      [disabled]="!!bottom()"
       [inputAttr]="{ 'aria-label': 'Position Top' }"
     >
     </dx-number-box>
     <dx-number-box
-      [visible]="!isPredefined"
+      [visible]="!isPredefined()"
       placeholder="bottom"
-      [(value)]="coordinatePosition.bottom"
+      [(value)]="bottom"
       width="48%"
       valueChangeEvent="keyup"
-      [disabled]="!!coordinatePosition.top"
+      [disabled]="!!top()"
       [inputAttr]="{ 'aria-label': 'Position Bottom' }"
     >
     </dx-number-box>
   </div>
   <div class="section">
     <dx-number-box
-      [visible]="!isPredefined"
+      [visible]="!isPredefined()"
       placeholder="left"
-      [(value)]="coordinatePosition.left"
+      [(value)]="left"
       width="48%"
       valueChangeEvent="keyup"
-      [disabled]="!!coordinatePosition.right"
+      [disabled]="!!right()"
       [inputAttr]="{ 'aria-label': 'Position Left' }"
     >
     </dx-number-box>
     <dx-number-box
-      [visible]="!isPredefined"
+      [visible]="!isPredefined()"
       placeholder="right"
-      [(value)]="coordinatePosition.right"
+      [(value)]="right"
       width="48%"
       valueChangeEvent="keyup"
-      [disabled]="!!coordinatePosition.left"
+      [disabled]="!!left()"
       [inputAttr]="{ 'aria-label': 'Position Right' }"
     >
     </dx-number-box>

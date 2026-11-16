@@ -83,8 +83,7 @@ function getAutoSizedElements(
 
   $lineElements.each((index, element) => {
     const $element = $(element);
-    // @ts-expect-error get(0) is typed Element (renderer.d.ts); the cells are HTMLElements
-    if ($element.get(0).style[isHorizontal ? 'width' : 'height'] === '') {
+    if ($element.get<HTMLElement>(0).style[isHorizontal ? 'width' : 'height'] === '') {
       result.push($element);
     }
   });

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 
 @Component({
   selector: 'trademark',
@@ -6,17 +6,17 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
   styleUrls: ['./trademark.component.css'],
 })
 export class Trademark {
-  @Input() id!: number;
+  readonly id = input.required<number>();
 
-  @Input() name!: string;
+  readonly name = input.required<string>();
 
-  @Input() trademarkName!: string;
+  readonly trademarkName = input.required<string>();
 
-  @Output() showInfo = new EventEmitter<void>();
+  readonly showInfo = output();
 
-  onKeyDown = (event: KeyboardEvent) => {
+  onKeyDown(event: KeyboardEvent) {
     if (event.key === 'Enter') {
       this.showInfo.emit();
     }
-  };
+  }
 }

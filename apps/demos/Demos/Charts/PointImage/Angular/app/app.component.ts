@@ -1,7 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import { Component, enableProdMode, inject } from '@angular/core';
 import { DxChartModule, DxChartTypes } from 'devextreme-angular/ui/chart';
-import { Service, IceHockeyStatistics } from './app.service';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -17,15 +17,11 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  title = 'Canadian Men’s National Ice Hockey Team\n at the World Championships';
+  readonly title = 'Canadian Men’s National Ice Hockey Team\n at the World Championships';
 
-  iceHockeyStatistics: IceHockeyStatistics[];
+  readonly iceHockeyStatistics = inject(Service).getIceHockeyStatistics();
 
-  constructor(service: Service) {
-    this.iceHockeyStatistics = service.getIceHockeyStatistics();
-  }
-
-  customizePoint: DxChartTypes.Properties['customizePoint'] = ({ value }) => {
+  readonly customizePoint: DxChartTypes.Properties['customizePoint'] = ({ value }) => {
     const color = {
       1: 'gold',
       2: 'silver',
@@ -38,15 +34,11 @@ export class AppComponent {
     return null;
   };
 
-  customizeText: DxChartTypes.ValueAxisLabel['customizeText'] = ({ valueText }) => ({
+  readonly customizeText: DxChartTypes.ValueAxisLabel['customizeText'] = ({ valueText }) => ({
     1: `${valueText}st place`,
     2: `${valueText}nd place`,
     3: `${valueText}rd place`,
   }[valueText] || `${valueText}th place`);
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

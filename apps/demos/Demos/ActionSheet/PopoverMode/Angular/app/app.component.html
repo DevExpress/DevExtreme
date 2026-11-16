@@ -12,6 +12,6 @@
   title="Choose action"
   [usePopover]="true"
   [(visible)]="actionSheetVisible"
-  [target]="actionSheetTarget"
+  [target]="actionSheetTarget()"
   (onItemClick)="showNotify($event.itemData.text)"
 ></dx-action-sheet>

@@ -17,9 +17,9 @@ class StoreChangedEvent {
 
 @Injectable()
 export class CollaborativeEditingService {
-  private storeChanged = new Subject<StoreChangedEvent[]>();
+  private readonly storeChanged = new Subject<StoreChangedEvent[]>();
 
-  private groupId: string = new Guid().toString();
+  private readonly groupId: string = new Guid().toString();
 
   private connection: Object;
 

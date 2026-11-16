@@ -1,5 +1,5 @@
 import {
-  ChangeDetectorRef, Component, enableProdMode, provideZoneChangeDetection,
+  Component, enableProdMode, inject, signal,
 } from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
 import { DxListModule, DxButtonModule, DxTagBoxModule } from 'devextreme-angular';
@@ -38,30 +38,25 @@ const TAB_SIZE = 4;
 })
 
 export class AppComponent {
-  filterText: string;
+  private readonly service = inject(Service);
 
-  dataSourceText: string;
+  readonly filterText = signal('');
 
-  fields: string[];
+  readonly dataSourceText = signal('');
 
-  filter: (string[] | string)[];
+  readonly fields: string[] = this.service.getFields();
 
-  categories: string[];
+  readonly filter = signal<(string[] | string)[]>(this.service.getFilter());
 
-  customOperations: typeof anyOfOperation[] = [anyOfOperation];
+  readonly categories = this.service.getCategories();
 
-  groupOperations = ['and', 'or'];
+  readonly customOperations: typeof anyOfOperation[] = [anyOfOperation];
 
-  constructor(service: Service, private changeDetectorRef: ChangeDetectorRef) {
-    this.fields = service.getFields();
-    this.filter = service.getFilter();
-    this.categories = service.getCategories();
-  }
+  readonly groupOperations = ['and', 'or'];
 
   updateTexts(e: DxFilterBuilderTypes.InitializedEvent) {
-    this.filterText = AppComponent.formatValue(e.component.option('value'));
-    this.dataSourceText = AppComponent.formatValue(e.component.getFilterExpression());
-    this.changeDetectorRef.detectChanges();
+    this.filterText.set(AppComponent.formatValue(e.component.option('value')));
+    this.dataSourceText.set(AppComponent.formatValue(e.component.getFilterExpression()));
   }
 
   private static formatValue(value: FilterBuilderValue, spaces = TAB_SIZE) {
@@ -81,8 +76,4 @@ export class AppComponent {
   private static getLineBreak = (spaces: number) => `\r\n${new Array(spaces + 1).join(' ')}`;
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

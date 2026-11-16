@@ -6,7 +6,7 @@
   [remoteOperations]="true"
   (onRowInserted)="onRowInserted($event)"
 >
-  <dxo-data-grid-scrolling [mode]="scrollingMode"></dxo-data-grid-scrolling>
+  <dxo-data-grid-scrolling [mode]="scrollingMode()"></dxo-data-grid-scrolling>
   <dxo-data-grid-editing
     mode="row"
     [allowAdding]="true"
@@ -14,8 +14,8 @@
     [allowUpdating]="true"
     [confirmDelete]="false"
     [useIcons]="true"
-    [newRowPosition]="newRowPosition"
-    [changes]="changes"
+    [newRowPosition]="newRowPosition()"
+    [changes]="changes()"
     [(editRowKey)]="editRowKey"
   ></dxo-data-grid-editing>
   <dxo-data-grid-pager [visible]="true"></dxo-data-grid-pager>

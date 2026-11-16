@@ -23,7 +23,7 @@
       name="Temperature range"
     >
       <dxo-chart-aggregation
-        [enabled]="useAggregation"
+        [enabled]="useAggregation()"
         method="custom"
         [calculate]="calculateRangeArea"
       >
@@ -38,7 +38,7 @@
       <dxo-chart-point [size]="7"></dxo-chart-point>
       <dxo-chart-aggregation
         #pointsAggregationSettings
-        [enabled]="useAggregation"
+        [enabled]="useAggregation()"
         method="avg"
       >
       </dxo-chart-aggregation>

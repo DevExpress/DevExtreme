@@ -71,7 +71,7 @@ function toggleUi(visible) {
 
 const moduleConfig = {
     beforeEach: function() {
-        mockComponent.option.withArgs('scrolling.mode').returns('virtual');
+        mockComponent.option.withArgs('scrolling').returns({ mode: 'virtual' });
 
         mockDataSource.pageSize.returns(DEFAULT_PAGE_SIZE);
         mockDataSource.items.returns([]);

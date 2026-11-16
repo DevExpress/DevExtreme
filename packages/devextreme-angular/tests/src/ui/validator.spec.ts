@@ -15,6 +15,7 @@ import {
   DxValidatorModule,
   DxValidatorComponent,
 } from 'devextreme-angular';
+import { detectChanges } from '../helpers/change-detection';
 
 @Component({
   standalone: false,
@@ -105,15 +106,15 @@ describe('DxValidator', () => {
       expect(instance.element().classList.contains('dx-invalid')).toBe(false);
 
       testComponent.text = '';
-      fixture.detectChanges();
+      detectChanges(fixture);
       expect(instance.element().classList.contains('dx-invalid')).toBe(true);
 
       testComponent.text = 'Some text';
-      fixture.detectChanges();
+      detectChanges(fixture);
       expect(instance.element().classList.contains('dx-invalid')).toBe(true);
 
       testComponent.text = 'some@ema.il';
-      fixture.detectChanges();
+      detectChanges(fixture);
       expect(instance.element().classList.contains('dx-invalid')).toBe(false);
     });
 
@@ -136,17 +137,17 @@ describe('DxValidator', () => {
       expect(testComponent.isValid).toBe(true);
 
       testComponent.text = '';
-      fixture.detectChanges();
+      detectChanges(fixture);
       testComponent.validator.instance.validate();
       expect(testComponent.isValid).toBe(false);
 
       testComponent.text = 'Some text';
-      fixture.detectChanges();
+      detectChanges(fixture);
       testComponent.validator.instance.validate();
       expect(testComponent.isValid).toBe(false);
 
       testComponent.text = 'some@email.yes';
-      fixture.detectChanges();
+      detectChanges(fixture);
       testComponent.validator.instance.validate();
       expect(testComponent.isValid).toBe(true);
     });

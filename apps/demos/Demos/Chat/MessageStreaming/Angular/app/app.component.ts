@@ -1,12 +1,11 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
-import { AsyncPipe } from '@angular/common';
+import {
+  Component, computed, enableProdMode, inject,
+} from '@angular/core';
 import { DxChatModule, DxToolbarModule } from 'devextreme-angular';
 import type { DxChatTypes } from 'devextreme-angular/ui/chat';
 import type { DxButtonTypes } from 'devextreme-angular/ui/button';
-import { Observable, map } from 'rxjs';
 import { loadMessages } from 'devextreme-angular/common/core/localization';
-import { DataSource } from 'devextreme-angular/common/data';
 import { AppService, suggestionCards } from './app.service';
 import { AiService } from './ai/ai.service';
 
@@ -21,53 +20,43 @@ if (!/localhost/.test(document.location.host)) {
   imports: [
     DxChatModule,
     DxToolbarModule,
-    AsyncPipe,
   ],
 })
 export class AppComponent {
-  dataSource: DataSource;
+  private readonly appService = inject(AppService);
 
-  user: DxChatTypes.User;
+  readonly dataSource = this.appService.dataSource;
 
-  typingUsers$: Observable<DxChatTypes.User[]>;
+  readonly user = this.appService.user;
 
-  alerts$: Observable<DxChatTypes.Alert[]>;
+  readonly typingUsers = this.appService.typingUsers;
 
-  sendButtonOptions$: Observable<DxChatTypes.SendButtonProperties>;
+  readonly alerts = this.appService.alerts;
 
-  clearButtonOptions$: Observable<DxButtonTypes.Properties>;
+  readonly sendButtonOptions = computed<DxChatTypes.SendButtonProperties>(() => (
+    this.appService.isStreaming() ? {
+      action: 'custom',
+      icon: 'stopfilled',
+      onClick: () => this.appService.stopStreaming(),
+    } : {
+      action: 'send',
+      icon: 'arrowright',
+      onClick: () => {},
+    }
+  ));
+
+  readonly clearButtonOptions = computed<DxButtonTypes.Properties>(() => ({
+    icon: 'clearhistory',
+    stylingMode: 'text',
+    hint: 'Clear chat',
+    disabled: this.appService.isStreaming(),
+    onClick: () => this.appService.clearMessages(),
+  }));
 
   readonly suggestionCards = suggestionCards;
 
-  constructor(private readonly appService: AppService) {
+  constructor() {
     loadMessages(this.appService.getDictionary());
-
-    this.dataSource = this.appService.dataSource;
-    this.user = this.appService.user;
-    this.alerts$ = this.appService.alerts$;
-    this.typingUsers$ = this.appService.typingUsers$;
-
-    this.sendButtonOptions$ = this.appService.isStreaming$.pipe(
-      map((isStreaming) => (isStreaming ? {
-        action: 'custom' as const,
-        icon: 'stopfilled',
-        onClick: () => this.appService.stopStreaming(),
-      } : {
-        action: 'send' as const,
-        icon: 'arrowright',
-        onClick: () => {},
-      })),
-    );
-
-    this.clearButtonOptions$ = this.appService.isStreaming$.pipe(
-      map((isStreaming) => ({
-        icon: 'clearhistory',
-        stylingMode: 'text' as const,
-        hint: 'Clear chat',
-        disabled: isStreaming,
-        onClick: () => this.appService.clearMessages(),
-      })),
-    );
   }
 
   convertToHtml(message: DxChatTypes.Message): string {
@@ -85,7 +74,6 @@ export class AppComponent {
 
 bootstrapApplication(AppComponent, {
   providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
     AppService,
     AiService,
   ],

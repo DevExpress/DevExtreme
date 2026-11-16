@@ -1,6 +1,6 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject, signal } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { BehaviorSubject, Observable, lastValueFrom } from 'rxjs';
+import { lastValueFrom } from 'rxjs';
 import applyChanges from 'devextreme/data/apply_changes';
 
 export class Order {
@@ -33,25 +33,23 @@ class Response<T> {
 
 @Injectable()
 export class Service {
-  private orders$ = new BehaviorSubject<Order[]>([]);
+  private readonly http = inject(HttpClient);
 
-  private url = 'https://js.devexpress.com/Demos/NetCore/api/DataGridWebApi';
+  private readonly url = 'https://js.devexpress.com/Demos/NetCore/api/DataGridWebApi';
 
-  constructor(private http: HttpClient) { }
+  private readonly ordersState = signal<Order[]>([]);
 
-  updateOrders(change: Change<Order>, data: Order) {
+  readonly orders = this.ordersState.asReadonly();
+
+  private updateOrders(change: Change<Order>, data: Order) {
     change.data = data;
-    const orders = applyChanges(this.orders$.getValue(), [change], { keyExpr: 'OrderID' });
-    this.orders$.next(orders);
+    this.ordersState.update((orders) => applyChanges(orders, [change], { keyExpr: 'OrderID' }));
   }
 
-  getOrders(): Observable<Order[]> {
-    lastValueFrom(this.http.get(`${this.url}/Orders?skip=700`, { withCredentials: true }))
-      .then((data: Response<Order>) => {
-        this.orders$.next(data.data);
-      });
+  async loadOrders(): Promise<void> {
+    const { data } = await lastValueFrom(this.http.get<Response<Order>>(`${this.url}/Orders?skip=700`, { withCredentials: true }));
 
-    return this.orders$.asObservable();
+    this.ordersState.set(data);
   }
 
   async insert(change: Change<Order>): Promise<Order> {

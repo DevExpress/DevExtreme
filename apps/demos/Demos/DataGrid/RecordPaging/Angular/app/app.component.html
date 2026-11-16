@@ -11,10 +11,10 @@
   <dxo-data-grid-pager
     [visible]="true"
     [allowedPageSizes]="allowedPageSizes"
-    [displayMode]="displayMode"
-    [showPageSizeSelector]="showPageSizeSelector"
-    [showInfo]="showInfo"
-    [showNavigationButtons]="showNavButtons"
+    [displayMode]="displayMode()"
+    [showPageSizeSelector]="showPageSizeSelector()"
+    [showInfo]="showInfo()"
+    [showNavigationButtons]="showNavButtons()"
   >
   </dxo-data-grid-pager>
 </dx-data-grid>
@@ -48,7 +48,7 @@
       <dx-check-box
         id="showNavButtons"
         text="Show Navigation Buttons"
-        [disabled]="isCompactMode"
+        [disabled]="isCompactMode()"
         [(value)]="showNavButtons"
       >
       </dx-check-box>

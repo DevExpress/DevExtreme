@@ -1,11 +1,10 @@
 <dx-tile-view
-  #tileView
   [height]="390"
   [baseItemHeight]="120"
   [baseItemWidth]="185"
   width="100%"
   [itemMargin]="10"
-  direction="horizontal"
+  [direction]="direction()"
 >
   @for(home of homes; track home) {
   <dxi-tile-view-item
@@ -26,7 +25,7 @@
     <dx-select-box
       [items]="['horizontal', 'vertical']"
       [inputAttr]="{ 'aria-label': 'Direction' }"
-      [(value)]="tileView.direction"
+      [(value)]="direction"
     >
     </dx-select-box>
   </div>

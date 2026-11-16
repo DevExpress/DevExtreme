@@ -39,6 +39,7 @@ import { on } from 'devextreme/events';
 
 // TODO: Try to replace dxButton to Widget ('require' required)
 import DxButton from 'devextreme/ui/button';
+import { detectChanges } from '../helpers/change-detection';
 
 const DxTestWidget = DxButton;
 DxTestWidget.defaultOptions({
@@ -308,7 +309,7 @@ describe('DevExtreme Angular widget', () => {
     const instance = getWidget(fixture);
 
     testComponent.testOption = 'text';
-    fixture.detectChanges();
+    detectChanges(fixture);
 
     expect(instance.option('testOption')).toEqual({ testNestedOption: 'text' });
   });
@@ -335,7 +336,7 @@ describe('DevExtreme Angular widget', () => {
     expect(instance.option('testCollectionOption')[0].testOption).toEqual({ testNestedOption: undefined });
 
     testComponent.testOption = 'text';
-    fixture.detectChanges();
+    detectChanges(fixture);
 
     expect(instance.option('testCollectionOption')[0].testOption).toEqual({ testNestedOption: 'text' });
   });
@@ -358,7 +359,7 @@ describe('DevExtreme Angular widget', () => {
 
     const testComponent = fixture.componentInstance;
     const instance = getWidget(fixture);
-    const testSpy = spyOn(testComponent, 'testMethod');
+    const testSpy = vi.spyOn(testComponent, 'testMethod').mockImplementation(() => {});
 
     instance.option('testOption.testNestedOption', 'new value');
     fixture.detectChanges();
@@ -383,7 +384,7 @@ describe('DevExtreme Angular widget', () => {
 
     const testComponent = fixture.componentInstance;
     const instance = getWidget(fixture);
-    const testSpy = spyOn(testComponent, 'testMethod');
+    const testSpy = vi.spyOn(testComponent, 'testMethod').mockImplementation(() => {});
 
     instance.option('testCollectionOption[0].testOption', 'new value');
     fixture.detectChanges();

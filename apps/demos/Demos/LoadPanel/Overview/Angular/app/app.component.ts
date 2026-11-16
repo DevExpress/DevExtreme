@@ -1,5 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, ChangeDetectorRef, provideZoneChangeDetection } from '@angular/core';
+import {
+  Component, enableProdMode, inject, signal,
+} from '@angular/core';
 import { DxButtonModule, DxLoadPanelModule, DxCheckBoxModule } from 'devextreme-angular';
 
 import { Employee, Service } from './app.service';
@@ -22,36 +24,26 @@ if (!/localhost/.test(document.location.host)) {
 })
 
 export class AppComponent {
-  employee: Employee;
+  private readonly employee = inject(Service).getEmployee();
 
-  employeeInfo = new Employee();
+  readonly employeeInfo = signal(new Employee());
 
-  loadingVisible = false;
-
-  constructor(private changeDetectorRef: ChangeDetectorRef, service: Service) {
-    this.employee = service.getEmployee();
-  }
+  readonly loadingVisible = signal(false);
 
   onShown() {
     setTimeout(() => {
-      this.loadingVisible = false;
-      this.changeDetectorRef.detectChanges();
+      this.loadingVisible.set(false);
     }, 3000);
   }
 
   onHidden() {
-    this.employeeInfo = this.employee;
-    this.changeDetectorRef.detectChanges();
+    this.employeeInfo.set(this.employee);
   }
 
   showLoadPanel() {
-    this.employeeInfo = new Employee();
-    this.loadingVisible = true;
+    this.employeeInfo.set(new Employee());
+    this.loadingVisible.set(true);
   }
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

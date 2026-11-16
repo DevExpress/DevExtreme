@@ -1,8 +1,8 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import { Component, enableProdMode, inject } from '@angular/core';
 import { DxPieChartModule } from 'devextreme-angular';
 import { registerGradient, registerPattern } from 'devextreme/common/charts';
-import { Data, Service } from './app.service';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -19,17 +19,13 @@ if (!/localhost/.test(document.location.host)) {
 })
 
 export class AppComponent {
-  data: Data[];
+  readonly data = inject(Service).getData();
 
-  imagePatternSize = 12;
+  readonly imagePatternSize = 12;
 
-  shapePatternSize = 6;
+  readonly shapePatternSize = 6;
 
-  constructor(service: Service) {
-    this.data = service.getData();
-  }
-
-  customizePoint = (point) => {
+  readonly customizePoint = (point) => {
     const color = point.series.getPointsByArg(point.argument)[0].getColor();
     let fillId;
     switch (point.argument) {
@@ -55,14 +51,14 @@ export class AppComponent {
     return { color: { fillId } };
   };
 
-  customizeText = (info) => info.argument;
+  readonly customizeText = (info) => info.argument;
 
-  private hexToRgb = (hex: string, opacity = 1) => {
+  private readonly hexToRgb = (hex: string, opacity = 1) => {
     const hexColorParts = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
     return `rgba(${parseInt(hexColorParts[1], 16)}, ${parseInt(hexColorParts[2], 16)}, ${parseInt(hexColorParts[3], 16)}, ${opacity})`;
   };
 
-  private getGradient = (type: string, color1: string, color2: string) => registerGradient(type, {
+  private readonly getGradient = (type: string, color1: string, color2: string) => registerGradient(type, {
     colors: [{
       offset: '20%',
       color: color1,
@@ -72,11 +68,11 @@ export class AppComponent {
     }],
   });
 
-  private getLinearGradient = (color: string) => this.getGradient('linear', color, this.hexToRgb(color, 0.5));
+  private readonly getLinearGradient = (color: string) => this.getGradient('linear', color, this.hexToRgb(color, 0.5));
 
-  private getRadialGradient = (color: string) => this.getGradient('radial', this.hexToRgb(color, 0.5), color);
+  private readonly getRadialGradient = (color: string) => this.getGradient('radial', this.hexToRgb(color, 0.5), color);
 
-  private getPatternImage = (color: string) => registerPattern({
+  private readonly getPatternImage = (color: string) => registerPattern({
     width: this.imagePatternSize,
     height: this.imagePatternSize,
     template: (container) => {
@@ -94,7 +90,7 @@ export class AppComponent {
     },
   });
 
-  private getStrokePattern = (color: string) => registerPattern({
+  private readonly getStrokePattern = (color: string) => registerPattern({
     width: this.shapePatternSize,
     height: this.shapePatternSize,
     template: (container) => {
@@ -115,7 +111,7 @@ export class AppComponent {
     },
   });
 
-  private getSquarePattern = (color: string) => registerPattern({
+  private readonly getSquarePattern = (color: string) => registerPattern({
     width: this.shapePatternSize,
     height: this.shapePatternSize,
     template: (container) => {
@@ -124,7 +120,7 @@ export class AppComponent {
     },
   });
 
-  private createRect = (size: number, fill: string, stroke: string, strokeWidth: number) => {
+  private readonly createRect = (size: number, fill: string, stroke: string, strokeWidth: number) => {
     const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
 
     rect.setAttribute('x', '0');
@@ -139,8 +135,4 @@ export class AppComponent {
   };
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

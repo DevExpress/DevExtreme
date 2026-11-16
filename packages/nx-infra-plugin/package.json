@@ -33,7 +33,6 @@
     "babel-plugin-add-module-exports": ">=1.0.0",
     "babel-plugin-inferno": ">=6.0.0",
     "core-js-compat": ">=3.0.0",
-    "karma": ">=6.0.0",
     "ng-packagr": ">=19.0.0",
     "webpack": ">=5.0.0"
   },
@@ -62,9 +61,6 @@
     "core-js-compat": {
       "optional": true
     },
-    "karma": {
-      "optional": true
-    },
     "ng-packagr": {
       "optional": true
     },
@@ -76,7 +72,7 @@
     "@types/babel__core": "7.20.5",
     "@types/fs-extra": "11.0.4",
     "@types/jest": "30.0.0",
-    "@types/lodash": "4.17.25",
+    "@types/lodash": "4.17.27",
     "@types/minimatch": "5.1.2",
     "@types/node": "18.19.130",
     "@types/normalize-path": "3.0.2",

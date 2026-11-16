@@ -1,7 +1,9 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, ViewChild, provideZoneChangeDetection } from '@angular/core';
+import {
+  Component, enableProdMode, inject, signal, viewChild,
+} from '@angular/core';
 import { DxCardViewComponent, DxCardViewModule, DxSelectBoxModule, DxCheckBoxModule } from 'devextreme-angular';
-import { Employee, Service } from './app.service';
+import { type Employee, Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -19,21 +21,17 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  @ViewChild(DxCardViewComponent, { static: true }) cardView: DxCardViewComponent;
+  private readonly cardView = viewChild.required(DxCardViewComponent);
 
-  employees: Employee[];
+  readonly employees = inject(Service).getEmployees();
 
-  selectionMode = 'multiple';
+  readonly selectionMode = signal('multiple');
 
-  allowSelectAll = true;
+  readonly allowSelectAll = signal(true);
 
-  showCheckBoxesMode = 'always';
+  readonly showCheckBoxesMode = signal('always');
 
-  selectAllMode = 'allPages';
-
-  constructor(service: Service) {
-    this.employees = service.getEmployees();
-  }
+  readonly selectAllMode = signal('allPages');
 
   altExpr({ FullName }: Employee): string {
     return `Photo of ${FullName}`;
@@ -44,12 +42,8 @@ export class AppComponent {
   }
 
   clearSelection() {
-    this.cardView.instance.clearSelection();
+    this.cardView().instance.clearSelection();
   }
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

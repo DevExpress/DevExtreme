@@ -1,7 +1,6 @@
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import type { GridBase } from '@js/common/grids';
 import type { DxPromise } from '@js/core/utils/deferred';
+import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import { PagerModel } from '@ts/pagination/__tests__/__mock__/model/pager';
 
 import { GridCoreModel } from './grid_core';
@@ -13,7 +12,10 @@ export abstract class DataGridBaseModel<
     return new PagerModel(this.root, `.${this.addWidgetPrefix('pager')}`);
   }
 
-  public apiColumnOption(id: string, name?: string, value?: any): any {
+  public apiColumnOption(id: string): Column;
+  public apiColumnOption(id: string, name: string): unknown;
+  public apiColumnOption(id: string, name: string, value: unknown): void;
+  public apiColumnOption(id: string, name?: string, value?: unknown): unknown {
     const instance = this.getInstance();
 
     switch (arguments.length) {

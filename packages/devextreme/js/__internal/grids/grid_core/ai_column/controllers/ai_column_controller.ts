@@ -3,6 +3,7 @@ import type { StoreChange } from '@js/data/store';
 import { isDefined } from '@ts/core/utils/type';
 import type Store from '@ts/data/abstract_store';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
+import { isVirtualRowRendering } from '@ts/grids/grid_core/virtual_scrolling';
 
 import type { ColumnsController } from '../../columns_controller/columns_controller';
 import type { DataController } from '../../data_controller/data_controller';
@@ -11,7 +12,6 @@ import type DataSourceAdapter from '../../data_source_adapter/data_source_adapte
 import type { ChangedEvent, RawItemData } from '../../data_source_adapter/types';
 import { Controller } from '../../modules/modules';
 import type { RowKey } from '../../types';
-import gridCoreUtils from '../../utils';
 import type { InternalRequestCallbacks } from '../types';
 import { getAICommandColumnDefaultOptions, isAIColumnAutoMode, isPromptOption } from '../utils';
 import { AIColumnIntegrationController } from './ai_column_integration_controller';
@@ -134,7 +134,7 @@ export class AIColumnController extends Controller {
   }
 
   private subscribeToDataControllerChanged(): void {
-    if (!this.getAIColumns().length || !gridCoreUtils.isVirtualRowRendering(this)) {
+    if (!this.getAIColumns().length || !isVirtualRowRendering(this.option('scrolling'))) {
       return;
     }
 

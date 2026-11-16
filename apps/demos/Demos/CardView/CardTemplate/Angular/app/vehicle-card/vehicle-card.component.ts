@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 import { DxButtonModule } from 'devextreme-angular';
 
 @Component({
@@ -10,19 +10,19 @@ import { DxButtonModule } from 'devextreme-angular';
   ],
 })
 export class VehicleCard {
-  @Input() id!: number;
+  readonly id = input.required<number>();
 
-  @Input() model!: string;
+  readonly model = input.required<string>();
 
-  @Input() price!: string;
+  readonly price = input.required<string>();
 
-  @Input() categoryName!: string;
+  readonly categoryName = input.required<string>();
 
-  @Input() modification!: string;
+  readonly modification = input.required<string>();
 
-  @Input() bodyStyleName!: string;
+  readonly bodyStyleName = input.required<string>();
 
-  @Input() horsepower!: string;
+  readonly horsepower = input.required<string>();
 
-  @Output() showInfo = new EventEmitter<void>();
+  readonly showInfo = output();
 }

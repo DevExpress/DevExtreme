@@ -1,7 +1,6 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import { Component, enableProdMode, inject } from '@angular/core';
 import { DxTreeListModule } from 'devextreme-angular';
-import type { AIIntegration } from 'devextreme-angular/common/ai-integration';
 import { Service, type IEmployee } from './app.service';
 import { AiService } from './ai/ai.service';
 import { Employee } from './employee/employee.component';
@@ -23,14 +22,9 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  employees: IEmployee[];
+  readonly employees = inject(Service).getEmployees();
 
-  aiIntegration: AIIntegration;
-
-  constructor(service: Service, aiService: AiService) {
-    this.employees = service.getEmployees();
-    this.aiIntegration = aiService.getAiIntegration();
-  }
+  readonly aiIntegration = inject(AiService).getAiIntegration();
 
   onAIColumnRequestCreating(e: { data: Partial<IEmployee>[] }) {
     e.data = e.data.map((item) => ({
@@ -42,8 +36,4 @@ export class AppComponent {
   }
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

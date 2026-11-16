@@ -1,8 +1,8 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import { Component, enableProdMode, inject } from '@angular/core';
 import { DxVectorMapModule } from 'devextreme-angular';
 import * as mapsData from 'devextreme-dist/js/vectormap-data/world.js';
-import { FeatureCollection, Service } from './app.service';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -19,27 +19,19 @@ if (!/localhost/.test(document.location.host)) {
 })
 
 export class AppComponent {
-  worldMap = mapsData.world;
+  private readonly service = inject(Service);
 
-  markers: FeatureCollection;
+  readonly worldMap = mapsData.world;
 
-  names: string[];
+  readonly markers = this.service.getMarkers();
 
-  constructor(service: Service) {
-    this.markers = service.getMarkers();
-    this.names = service.getNames();
-    this.customizeText = this.customizeText.bind(this);
-  }
+  private readonly names = this.service.getNames();
 
-  customizeText = ({ index }: { index: number }) => this.names[index];
+  readonly customizeText = ({ index }: { index: number }) => this.names[index];
 
-  customizeTooltip = ({ layer, attribute }: { layer: Record<string, string>, attribute: Function }) => ((layer.type === 'marker')
+  readonly customizeTooltip = ({ layer, attribute }: { layer: Record<string, string>, attribute: Function }) => ((layer.type === 'marker')
     ? { text: attribute('tooltip') }
     : undefined);
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

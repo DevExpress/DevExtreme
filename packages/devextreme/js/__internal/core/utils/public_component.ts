@@ -2,6 +2,7 @@ import { removeEvent } from '@js/common/core/events/remove';
 import { data as elementData } from '@js/core/element_data';
 import type { dxElementWrapper } from '@js/core/renderer';
 import { isDefined } from '@js/core/utils/type';
+import { getData } from '@ts/core/element_data';
 import eventsEngine from '@ts/events/core/events_engine';
 
 const COMPONENT_NAMES_DATA_KEY = 'dxComponents';
@@ -14,7 +15,9 @@ const ANONYMOUS_COMPONENT_DATA_KEY = 'dxPrivateComponent';
 const componentNames = new WeakMap<object, string>();
 let nextAnonymousComponent = 0;
 
-const getName = function getName(componentClass: object, newName?: string): string | undefined {
+function getName(componentClass: object): string;
+function getName(componentClass: object, newName: string): undefined;
+function getName(componentClass: object, newName?: string): string | undefined {
   if (isDefined(newName)) {
     componentNames.set(componentClass, newName);
     return undefined;
@@ -28,7 +31,7 @@ const getName = function getName(componentClass: object, newName?: string): stri
   }
 
   return componentNames.get(componentClass);
-};
+}
 
 export function attachInstanceToElement(
   $element: dxElementWrapper,
@@ -36,7 +39,7 @@ export function attachInstanceToElement(
   disposeFn?: () => void,
 ): void {
   const data = elementData<ComponentsData>($element.get(0));
-  const name = getName(componentInstance.constructor) as string;
+  const name = getName(componentInstance.constructor);
 
   data[name] = componentInstance;
 
@@ -59,6 +62,16 @@ export function getInstanceByElement<T = any>(
   const name = getName(componentClass);
 
   return elementData<T>($element.get(0), name);
+}
+
+// Infers the type from the class and returns undefined when there is no instance.
+// getInstanceByElement keeps its loose signature for the static getInstance() methods,
+// where the caller picks the type
+export function findInstanceByElement<T>(
+  target: Node | dxElementWrapper | null | undefined,
+  componentClass: abstract new (...args: never[]) => T,
+): T | undefined {
+  return getData<T>(target, getName(componentClass));
 }
 
 export function getComponentInstance<T = unknown>($element: dxElementWrapper): T | undefined {

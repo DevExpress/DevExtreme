@@ -1,3 +1,6 @@
+import type { SimpleItem } from '@js/ui/form';
+import type { DataKey } from '@ts/core/element_data';
+
 export const WIDGET_CLASS = 'dx-widget';
 export const FORM_CLASS = 'dx-form';
 export const FORM_GROUP_CLASS = 'dx-form-group';
@@ -10,6 +13,7 @@ export const FIELD_ITEM_LABEL_CONTENT_CLASS = 'dx-field-item-label-content';
 export const FORM_LAYOUT_MANAGER_CLASS = 'dx-layout-manager';
 export const FIELD_ITEM_LABEL_CLASS = 'dx-field-item-label';
 export const FIELD_ITEM_CONTENT_CLASS = 'dx-field-item-content';
+export const FIELD_ITEM_DATA_KEY: DataKey<SimpleItem> = 'dx-form-item';
 export const SINGLE_COLUMN_ITEM_CONTENT = 'dx-single-column-item-content';
 export const ROOT_SIMPLE_ITEM_CLASS = 'dx-root-simple-item';
 export const FORM_GROUP_CONTENT_CLASS = 'dx-form-group-content';

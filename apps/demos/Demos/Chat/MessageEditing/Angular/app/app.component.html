@@ -11,8 +11,8 @@
       (onMessageUpdated)="onMessageUpdated($event)"
     >
       <dxo-chat-editing
-        [allowUpdating]="allowUpdating"
-        [allowDeleting]="allowDeleting"
+        [allowUpdating]="allowUpdating()"
+        [allowDeleting]="allowDeleting()"
       ></dxo-chat-editing>
     </dx-chat>
   </div>
@@ -26,7 +26,7 @@
         [items]="editingStrategies"
         displayExpr="text"
         valueExpr="key"
-        [value]="selectedEditingStrategy"
+        [value]="selectedEditingStrategy()"
         [inputAttr]="allowEditingLabel"
         (onValueChanged)="onAllowUpdatingChange($event)"
       ></dx-select-box>
@@ -38,7 +38,7 @@
         [items]="editingStrategies"
         displayExpr="text"
         valueExpr="key"
-        [value]="selectedDeletingStrategy"
+        [value]="selectedDeletingStrategy()"
         [inputAttr]="allowDeletingLabel"
         (onValueChanged)="onAllowDeletingChange($event)"
       ></dx-select-box>

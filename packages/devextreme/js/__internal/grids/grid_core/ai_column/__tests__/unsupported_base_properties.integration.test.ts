@@ -56,7 +56,7 @@ describe('Unsupported properties', () => {
       expect(aiTestHeader).toHaveLength(1);
       expect(aiTestHeader.attr('aria-colindex')).toEqual('2');
       expect(aiTestHeader.attr('aria-sort')).toBeUndefined();
-      (aiTestHeader.get(0) as HTMLElement).click();
+      (aiTestHeader.get<HTMLElement>(0)).click();
       expect(aiTestHeader.attr('aria-sort')).toBeUndefined();
     });
     it('should have no sorting state in the header after a click (dynamic update)', async () => {
@@ -77,7 +77,7 @@ describe('Unsupported properties', () => {
       expect(aiTestHeader).toHaveLength(1);
       expect(aiTestHeader.attr('aria-colindex')).toEqual('2');
       expect(aiTestHeader.attr('aria-sort')).toBeUndefined();
-      (aiTestHeader.get(0) as HTMLElement).click();
+      (aiTestHeader.get<HTMLElement>(0)).click();
       expect(aiTestHeader.attr('aria-sort')).toBeUndefined();
     });
     it('should have no sorting state in the header with sortOrder and sortIndex options (first load)', async () => {

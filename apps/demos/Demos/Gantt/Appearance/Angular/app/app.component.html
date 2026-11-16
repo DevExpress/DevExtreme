@@ -79,21 +79,23 @@
     <dx-gantt
       taskListWidth="500"
       height="700"
-      [taskTitlePosition]="titlePosition"
-      [scaleType]="scaleType"
-      [showResources]="showResources"
-      [showDependencies]="showDependencies"
+      [taskTitlePosition]="titlePosition()"
+      [scaleType]="scaleType()"
+      [showResources]="showResources()"
+      [showDependencies]="showDependencies()"
       [taskTooltipContentTemplate]="
-        showCustomTaskTooltip ? 'taskTooltipContentTemplate' : undefined
+        showCustomTaskTooltip() ? 'taskTooltipContentTemplate' : undefined
       "
       [taskTimeTooltipContentTemplate]="
-        showCustomTaskTooltip ? 'taskTimeTooltipContentTemplate' : undefined
+        showCustomTaskTooltip() ? 'taskTimeTooltipContentTemplate' : undefined
       "
       [taskProgressTooltipContentTemplate]="
-        showCustomTaskTooltip ? 'taskProgressTooltipContentTemplate' : undefined
+        showCustomTaskTooltip()
+          ? 'taskProgressTooltipContentTemplate'
+          : undefined
       "
-      [startDateRange]="startDateRange"
-      [endDateRange]="endDateRange"
+      [startDateRange]="startDateRange()"
+      [endDateRange]="endDateRange()"
     >
       <dxo-gantt-tasks [dataSource]="tasks"></dxo-gantt-tasks>
       <dxo-gantt-dependencies

@@ -47,7 +47,6 @@ const createAdapter = async (
 const NON_PAGING_CASES: { method: string; args: unknown[] }[] = [
   { method: 'virtualItemsCount', args: [] },
   { method: 'getContentOffset', args: ['end'] },
-  { method: 'getVirtualContentSize', args: [] },
   { method: 'setContentItemSizes', args: [[20, 30]] },
   { method: 'setViewportPosition', args: [100] },
   { method: 'getViewportItemIndex', args: [] },

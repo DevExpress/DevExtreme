@@ -1,8 +1,8 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import { Component, enableProdMode, inject } from '@angular/core';
 import { DxSelectBoxModule } from 'devextreme-angular';
 import { DxPolarChartModule, DxPolarChartTypes } from 'devextreme-angular/ui/polar-chart';
-import { WindRose, WindDescription, Service } from './app.service';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -19,14 +19,11 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  windRoseData: WindRose[];
+  private readonly service = inject(Service);
 
-  windSources: WindDescription[];
+  readonly windRoseData = this.service.getWindRoseData();
 
-  constructor(service: Service) {
-    this.windRoseData = service.getWindRoseData();
-    this.windSources = service.getWindSources();
-  }
+  readonly windSources = this.service.getWindSources();
 
   onLegendClick({ target: series }: DxPolarChartTypes.LegendClickEvent) {
     series.isVisible()
@@ -35,8 +32,4 @@ export class AppComponent {
   }
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

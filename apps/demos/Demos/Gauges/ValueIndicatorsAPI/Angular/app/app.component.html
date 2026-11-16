@@ -2,8 +2,8 @@
   <div class="widget-container">
     <dx-circular-gauge
       id="gauge"
-      [value]="gaugeValue"
-      [subvalues]="gaugeSubvalues"
+      [value]="gaugeValue()"
+      [subvalues]="gaugeSubvalues()"
     >
       <dxo-circular-gauge-scale
         [startValue]="10"
@@ -37,7 +37,7 @@
     <div class="option">
       <span>Additional generator 1</span>
       <dx-number-box
-        [(value)]="additionalGenerator[0]"
+        [(value)]="additionalGenerator1"
         [min]="10"
         [max]="40"
         [width]="100"
@@ -49,7 +49,7 @@
     <div class="option">
       <span>Additional generator 2</span>
       <dx-number-box
-        [(value)]="additionalGenerator[1]"
+        [(value)]="additionalGenerator2"
         [min]="10"
         [max]="40"
         [width]="100"

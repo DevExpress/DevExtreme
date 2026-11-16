@@ -19,7 +19,7 @@ class ProbeTextEditor extends TextEditor {
 const editors: ProbeTextEditor[] = [];
 
 const createEditor = (options: Partial<TextEditorBaseProperties> = {}): ProbeTextEditor => {
-  const element = $('<div>').appendTo(document.body).get(0) as HTMLElement;
+  const element = $('<div>').appendTo(document.body).get<HTMLElement>(0);
   // @ts-expect-error DOMComponent constructor is not typed for direct instantiation
   const instance: ProbeTextEditor = new ProbeTextEditor(element, options);
 

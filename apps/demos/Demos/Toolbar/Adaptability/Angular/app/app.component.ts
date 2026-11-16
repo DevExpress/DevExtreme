@@ -1,5 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, inject, provideZoneChangeDetection } from '@angular/core';
+import {
+  Component, enableProdMode, inject, signal,
+} from '@angular/core';
 import {
   DxToolbarModule,
   DxSelectBoxModule,
@@ -12,15 +14,15 @@ import {
 import themes from 'devextreme/ui/themes';
 import notify from 'devextreme/ui/notify';
 import {
-  FontFamily,
-  FontSize,
-  FontStyle,
-  Heading,
-  LineHeight,
-  ListType,
+  type FontFamily,
+  type FontSize,
+  type FontStyle,
+  type Heading,
+  type LineHeight,
+  type ListType,
   Service,
-  TextAlign,
-  TextAlignExtended,
+  type TextAlign,
+  type TextAlignExtended,
 } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -44,34 +46,33 @@ if (!/localhost/.test(document.location.host)) {
 })
 
 export class AppComponent {
-  customService = inject(Service);
+  private readonly customService = inject(Service);
 
-  stylingMode = !themes.current().startsWith('generic') ? 'text' : undefined;
+  readonly stylingMode = !themes.current().startsWith('generic') ? 'text' : undefined;
 
-  fontSizes: FontSize[] = this.customService.getFontSizes();
+  readonly fontSizes: FontSize[] = this.customService.getFontSizes();
 
-  lineHeights: LineHeight[] = this.customService.getLineHeights();
+  readonly lineHeights: LineHeight[] = this.customService.getLineHeights();
 
-  lineHeight: number[] = [this.lineHeights[1].lineHeight];
+  readonly lineHeight: number[] = [this.lineHeights[1].lineHeight];
 
-  fontFamilies: FontFamily[] = this.customService.getFontFamilies();
+  readonly fontFamilies: FontFamily[] = this.customService.getFontFamilies();
 
-  headings: Heading[] = this.customService.getHeadings();
+  readonly headings: Heading[] = this.customService.getHeadings();
 
-  heading = this.headings[0]?.text;
+  readonly heading = this.headings[0]?.text;
 
-  fontStyles: FontStyle[] = this.customService.getFontStyles();
+  readonly fontStyles: FontStyle[] = this.customService.getFontStyles();
 
-  textAlignItems: TextAlign[] = this.customService.getTextAlign();
+  readonly textAlignItems: TextAlign[] = this.customService.getTextAlign();
 
-  textAlignItemsExtended: TextAlignExtended[] = this.customService.getTextAlignExtended();
+  readonly textAlignItemsExtended: TextAlignExtended[] = this.customService.getTextAlignExtended();
 
-  selectedTextAlign = [this.textAlignItems[0]?.alignment];
+  readonly selectedTextAlign = signal([this.textAlignItems[0]?.alignment]);
 
-  listTypes: ListType[] = this.customService.getListType();
+  readonly multiline = signal(true);
 
-  constructor() {
-  }
+  readonly listTypes: ListType[] = this.customService.getListType();
 
   onTextAlignChanged(e: { itemData: { hint: string } }): void {
     this.onButtonClick(e.itemData.hint);
@@ -94,8 +95,4 @@ export class AppComponent {
   }
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

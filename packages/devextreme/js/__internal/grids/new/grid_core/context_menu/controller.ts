@@ -2,10 +2,12 @@ import type dxContextMenu from '@js/ui/context_menu';
 import type { Item as ContextMenuItem, PositioningEvent } from '@js/ui/context_menu';
 import { createRef } from 'inferno';
 
+export type ContextMenuShowEvent = KeyboardEvent | MouseEvent;
+
 export abstract class BaseContextMenuController<TTargetView = unknown, TContextInfo = unknown> {
   public readonly contextMenuRef = createRef<dxContextMenu>();
 
-  private lastEvent?: KeyboardEvent | MouseEvent;
+  private lastEvent?: ContextMenuShowEvent;
 
   public onPositioning = (e: PositioningEvent): void => {
     // @ts-expect-error
@@ -13,7 +15,7 @@ export abstract class BaseContextMenuController<TTargetView = unknown, TContextI
   };
 
   public show(
-    event: KeyboardEvent | MouseEvent,
+    event: ContextMenuShowEvent,
     view: TTargetView,
     contextInfo?: TContextInfo,
     onMenuCloseCallback?: () => void,
@@ -27,7 +29,7 @@ export abstract class BaseContextMenuController<TTargetView = unknown, TContextI
 
     this.lastEvent = event;
 
-    const items = this.getItems(view, targetElement, contextInfo);
+    const items = this.getItems(view, event, contextInfo);
 
     if (!items) {
       return;
@@ -43,7 +45,7 @@ export abstract class BaseContextMenuController<TTargetView = unknown, TContextI
 
   protected abstract getItems(
     view: TTargetView,
-    targetElement: Element,
-    contextInfo?: TContextInfo
+    event: ContextMenuShowEvent,
+    contextInfo?: TContextInfo,
   ): ContextMenuItem[] | undefined;
 }

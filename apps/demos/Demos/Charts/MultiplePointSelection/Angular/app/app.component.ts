@@ -1,7 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import { Component, enableProdMode, inject } from '@angular/core';
 import { DxChartModule, DxChartTypes } from 'devextreme-angular/ui/chart';
-import { Service, MedalsInfo } from './app.service';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -17,11 +17,7 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  medalsInfo: MedalsInfo[];
-
-  constructor(service: Service) {
-    this.medalsInfo = service.getMedalsInfo();
-  }
+  readonly medalsInfo = inject(Service).getMedalsInfo();
 
   pointClick({ target: point }: DxChartTypes.PointClickEvent) {
     if (point.isSelected()) {
@@ -32,8 +28,4 @@ export class AppComponent {
   }
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

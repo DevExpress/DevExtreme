@@ -1,6 +1,6 @@
 <dx-data-grid
   id="gridContainer"
-  [dataSource]="employees"
+  [dataSource]="employees()"
   [showBorders]="true"
   keyExpr="ID"
   (onRowValidating)="onRowValidating($event)"

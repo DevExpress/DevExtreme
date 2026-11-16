@@ -1,8 +1,10 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import {
+  Component, enableProdMode, inject, signal,
+} from '@angular/core';
 import { DxRangeSelectorModule } from 'devextreme-angular';
 import { DxPolarChartModule, DxPolarChartTypes } from 'devextreme-angular/ui/polar-chart';
-import { DataFrame, Service } from './app.service';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -19,18 +21,9 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  dataSource: DataFrame[];
+  readonly dataSource = inject(Service).getDataSource();
 
-  visualRange: DxPolarChartTypes.ValueAxis['visualRange'] = {};
-
-  constructor(service: Service) {
-    this.visualRange = { startValue: 0, endValue: 8 };
-    this.dataSource = service.getDataSource();
-  }
+  readonly visualRange = signal<DxPolarChartTypes.ValueAxis['visualRange']>({ startValue: 0, endValue: 8 });
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);

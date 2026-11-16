@@ -10,8 +10,6 @@ import type { ColumnContextMenu, MixinBase, MoveColumnMenuItem } from './types';
 export const ColumnContextMenuMixin = <T extends MixinBase>(
   Base: T,
 ): T & ModuleType<ColumnContextMenu> => class extends Base {
-  protected isNeedToFocusColumn = false;
-
   public getMoveColumnContextMenuItems(options: ContextMenuItemsOptions): MoveColumnMenuItem[] {
     const { column, rowIndex } = options;
     const allowColumnReordering = this.isColumnReorderingEnabled?.(column);
@@ -23,7 +21,6 @@ export const ColumnContextMenuMixin = <T extends MixinBase>(
 
     const rtlEnabled = this.option('rtlEnabled');
     const onItemClick = (e: ItemClickEvent<MoveColumnMenuItem>): void => {
-      this.isNeedToFocusColumn = true;
       keyboardNavigationController.moveColumn(
         column,
         e.itemData?.value,

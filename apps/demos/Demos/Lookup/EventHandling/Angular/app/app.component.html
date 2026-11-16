@@ -3,7 +3,7 @@
     placeholder="Select employee"
     [items]="employees"
     [displayExpr]="getDisplayExpr"
-    [applyValueMode]="applyValueMode"
+    [applyValueMode]="applyValueMode()"
     [inputAttr]="{ 'aria-label': 'Lookup' }"
     (onValueChanged)="valueChanged($event)"
   >
@@ -12,7 +12,7 @@
     ></dxo-lookup-drop-down-options>
   </dx-lookup>
 </div>
-@if (selectedEmployee) {
+@if (selectedEmployee(); as selectedEmployee) {
 <div class="selected">
   <div class="frame">
     <img src="{{ selectedEmployee.Picture }}" alt="" />

@@ -17,7 +17,7 @@
           itemType="group"
           caption="Home Address"
           name="HomeAddress"
-          [visible]="isHomeAddressVisible"
+          [visible]="isHomeAddressVisible()"
         >
           <dxi-form-item dataField="Address"></dxi-form-item>
           <dxi-form-item dataField="City"></dxi-form-item>
@@ -25,11 +25,11 @@
       </dxi-form-item>
     </dxi-form-item>
     <dxi-form-item itemType="group" caption="Phones" name="phones-container">
-      @for (phone of phoneOptions; track $index) {
+      @for (phone of phoneOptions(); track $index) {
       <dxi-form-item itemType="group" name="phones">
         <dxi-form-item
           [dataField]="'Phones[' + $index + ']'"
-          [editorOptions]="phoneOptions[$index]"
+          [editorOptions]="phoneOptions()[$index]"
         >
           <dxo-form-label [text]="'Phone ' + ($index + 1)"> </dxo-form-label>
         </dxi-form-item>

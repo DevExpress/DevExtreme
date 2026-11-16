@@ -15,6 +15,7 @@ import { isDefined } from '@js/core/utils/type';
 import type { Properties as FormProperties, SimpleItemTemplateData } from '@js/ui/form';
 import Form from '@js/ui/form';
 import { isMaterial } from '@js/ui/themes';
+import { getData } from '@ts/core/element_data';
 import eventsEngine from '@ts/events/core/events_engine';
 import type { Column, WithCellValueCalculator } from '@ts/grids/grid_core/columns_controller/types';
 import { isCellBasedEditMode, isFormBasedEditMode } from '@ts/grids/grid_core/editing/editing_utils';
@@ -24,7 +25,7 @@ import { FIELD_ITEM_CONTENT_CLASS } from '@ts/ui/form/constants';
 import { AI_COLUMN_NAME } from '../ai_column/const';
 import type { ColumnsController } from '../columns_controller/columns_controller';
 import type { ProcessedItem } from '../data_controller/types';
-import { EDIT_MODE } from '../editing/const';
+import { EDIT_FORM_ITEM_DATA_KEY, EDIT_MODE } from '../editing/const';
 import type { KeyboardNavigationController } from '../keyboard_navigation/keyboard_navigation';
 import { CLASSES as MASTER_DETAIL_CLASSES } from '../master_detail/const';
 import modules from '../modules/modules';
@@ -731,13 +732,15 @@ export class AdaptiveColumnsViewController extends modules.ViewController {
     return this._$itemContents ?? undefined;
   }
 
-  public getItemContentByColumnIndex(visibleColumnIndex: number): dxElementWrapper | undefined {
+  public getItemContentByColumnIndex(
+    visibleColumnIndex: string | number,
+  ): dxElementWrapper | undefined {
     // @ts-expect-error the adaptive detail form is rendered here
     const $itemContents: dxElementWrapper = this._$itemContents;
 
     for (let i = 0; i < $itemContents.length; i += 1) {
       const $itemContent = $itemContents.eq(i);
-      const item = $itemContent.data<AdaptiveFormItem | undefined>('dx-form-item');
+      const item = getData($itemContent, EDIT_FORM_ITEM_DATA_KEY);
       if (
         item?.column
         && this._columnsController.getVisibleIndex(item.column.index) === visibleColumnIndex
@@ -767,7 +770,6 @@ export class AdaptiveColumnsViewController extends modules.ViewController {
       items: this._getFormItemsByHiddenColumns(this._hiddenColumns),
       formID: `dx-${new Guid()}`,
     };
-    // @ts-expect-error isMaterial() without a theme checks the current one
     const defaultFormOptions = isMaterial() ? { colCount: 2 } : {};
 
     this.executeAction('onAdaptiveDetailRowPreparing', { formOptions: userFormOptions });

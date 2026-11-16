@@ -15,7 +15,7 @@ import {
     DoCheck,
     SimpleChanges,
     ContentChildren,
-    QueryList
+    QueryList,
 } from '@angular/core';
 
 
@@ -770,6 +770,10 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
         return new DxForm(element, options);
     }
 
+    _createWidget(element: any) {
+        super._createWidget(element);
+        this.instance.on('fieldDataChanged', () => this._markForCheck());
+    }
 
     ngOnDestroy() {
         this._destroyWidget();

@@ -1,4 +1,4 @@
-import { TestBed, fakeAsync, tick } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import { Component, Input } from '@angular/core';
 import { DxPopupService, type DxPopupTypes } from 'devextreme-angular/ui/popup';
 import { DxButtonModule } from 'devextreme-angular/ui/button';
@@ -16,6 +16,8 @@ class PopupContentComponent {
   @Input() onClick = () => {};
 }
 
+const wait = (ms: number) => new Promise((resolve) => { setTimeout(resolve, ms); });
+
 describe('Using DxPopupService', () => {
   let popupService: DxPopupService;
 
@@ -23,7 +25,7 @@ describe('Using DxPopupService', () => {
     popupService = TestBed.inject(DxPopupService);
   });
 
-  it('DxPopupService opens DxPopup with component passed as argument', fakeAsync(() => {
+  it('DxPopupService opens DxPopup with component passed as argument', async () => {
     const TITLE_MIN_WIDTH = 150;
     const POPUP_CONTENT_MAX_HEIGHT = 240;
     const popupOptions: DxPopupTypes.Properties = {
@@ -66,7 +68,7 @@ describe('Using DxPopupService', () => {
     const popupTitleBarEl: HTMLElement = popupEl.querySelector('.dx-toolbar .dx-toolbar-before .dx-toolbar-label');
     const popupContentEl: HTMLElement = popupEl.querySelector('.dx-popup-content');
 
-    tick(500);
+    await wait(500);
 
     expect(isPopupHidden).toBeFalsy();
     expect(popupEl).toBeTruthy();
@@ -77,9 +79,9 @@ describe('Using DxPopupService', () => {
 
     popupContentButtonEl.click();
 
-    tick(500);
+    await wait(500);
 
     expect(isPopupHidden).toBeTruthy();
     expect(popupRef.contentRef.hostView.destroyed).toBeTruthy();
-  }));
+  }, 3000);
 });

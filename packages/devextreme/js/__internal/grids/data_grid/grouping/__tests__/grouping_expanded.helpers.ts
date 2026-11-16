@@ -1,4 +1,4 @@
-import { GroupingHelper } from '../m_grouping_expanded';
+import { GroupingHelper } from '../grouping_expanded';
 import type { DataItem, GroupInfoData, GroupItemData } from '../types';
 import { createDataSourceAdapterStub } from './grouping_expanded.mock';
 

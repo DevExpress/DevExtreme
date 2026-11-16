@@ -42,7 +42,6 @@ import type {
   ExpandCellTemplate,
   ExpandCellTemplateOptions,
   FormatOptions,
-  InternalGridOptions,
   LoadPanelPosition,
   LookupDataSource,
   RowKey,
@@ -70,27 +69,11 @@ const DATAGRID_GROUP_OPENED_CLASS = 'dx-datagrid-group-opened';
 const DATAGRID_GROUP_CLOSED_CLASS = 'dx-datagrid-group-closed';
 const DATAGRID_EXPAND_CLASS = 'dx-datagrid-expand';
 const NO_DATA_CLASS = 'nodata';
-const SCROLLING_MODE_INFINITE = 'infinite';
-const SCROLLING_MODE_VIRTUAL = 'virtual';
-const LEGACY_SCROLLING_MODE = 'scrolling.legacyMode';
-const ROW_RENDERING_MODE_OPTION = 'scrolling.rowRenderingMode';
 
 const DEFAULT_COLUMN_WIDTH = 50;
 
 export function isDateType(dataType: string | undefined): boolean {
   return dataType === 'date' || dataType === 'datetime';
-}
-
-export function isVirtualMode(scrolling: InternalGridOptions['scrolling']): boolean {
-  return scrolling?.mode === SCROLLING_MODE_VIRTUAL;
-}
-
-export function isInfiniteMode(scrolling: InternalGridOptions['scrolling']): boolean {
-  return scrolling?.mode === SCROLLING_MODE_INFINITE;
-}
-
-export function isVirtualPaging(scrolling: InternalGridOptions['scrolling']): boolean {
-  return isVirtualMode(scrolling) || isInfiniteMode(scrolling);
 }
 
 const getGlobalFormat = (dataType: string): Format | undefined => {
@@ -615,7 +598,7 @@ export default {
     const isSelectTextOnEditingStart = component.option('editing.selectTextOnEditStart');
 
     if (!isFocused && isSelectTextOnEditingStart && $element.is('.dx-texteditor-input') && !$element.is('[readonly]')) {
-      const element = $element.get(0) as HTMLInputElement | HTMLTextAreaElement;
+      const element = $element.get<HTMLInputElement | HTMLTextAreaElement>(0);
       const editor = getWidgetInstance($element.closest('.dx-texteditor'));
       const loadItemDeferred = editor && '_loadItemDeferred' in editor
         ? editor._loadItemDeferred
@@ -658,16 +641,6 @@ export default {
       return $grid.is(controller.component.$element());
     }
     return false;
-  },
-
-  isVirtualRowRendering(that: ModuleItem): boolean {
-    const rowRenderingMode = that.option(ROW_RENDERING_MODE_OPTION);
-
-    if (that.option(LEGACY_SCROLLING_MODE) === false && isVirtualPaging(that.option('scrolling'))) {
-      return true;
-    }
-
-    return rowRenderingMode === SCROLLING_MODE_VIRTUAL;
   },
 
   getPixelRatio(window: Window): number {

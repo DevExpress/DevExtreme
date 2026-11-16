@@ -204,6 +204,18 @@ describe('ContextMenu', () => {
       expect(event.items).toBeUndefined();
     });
 
+    it('onContextMenuPreparing event contains the triggering event', () => {
+      const cardView = setup({ columns: ['Column 1'] });
+      const event = openContextMenu(cardView, SELECTORS.headerItem);
+
+      expect(event.event).toMatchObject({
+        type: 'contextmenu',
+        target: rootQuerySelector(SELECTORS.headerItem),
+      });
+      expect(event.event?.originalEvent).toBeInstanceOf(MouseEvent);
+      expect(event.event?.isDefaultPrevented()).toBe(true);
+    });
+
     it('columns have customized context menu items sorting text', () => {
       const cardView = setup({
         columns: [{ dataField: 'column1' }],

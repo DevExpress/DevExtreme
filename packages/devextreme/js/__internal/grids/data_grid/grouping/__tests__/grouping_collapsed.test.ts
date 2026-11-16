@@ -1,7 +1,7 @@
 import { describe, expect, it } from '@jest/globals';
 import { noop } from '@js/core/utils/common';
 
-import { GroupingHelper } from '../m_grouping_collapsed';
+import { GroupingHelper } from '../grouping_collapsed';
 import type { GroupingLoadOperation } from '../types';
 import { createDataSourceAdapterStub } from './grouping_expanded.mock';
 

@@ -16,6 +16,7 @@ import {
 } from 'devextreme-angular';
 
 import DxDataGrid from 'devextreme/ui/data_grid';
+import { detectChanges } from '../helpers/change-detection';
 
 @Component({
   standalone: false,
@@ -80,7 +81,7 @@ describe('DxDataGrid', () => {
   });
 
   // spec
-  it('should not fall into infinite loop', (done) => {
+  it('should not fall into infinite loop', () => new Promise<void>((done) => {
     TestBed.overrideComponent(TestContainerComponent, {
       set: {
         template: '<dx-data-grid [columns]="columns" [dataSource]="dataSource"></dx-data-grid>',
@@ -94,7 +95,7 @@ describe('DxDataGrid', () => {
 
       done();
     }, 0);
-  });
+  }));
 
   it('should update columns', () => {
     TestBed.overrideComponent(TestContainerComponent, {
@@ -103,12 +104,12 @@ describe('DxDataGrid', () => {
       },
     });
 
-    jasmine.clock().uninstall();
-    jasmine.clock().install();
+    vi.useRealTimers();
+    vi.useFakeTimers();
 
     const fixture = TestBed.createComponent(TestContainerComponent);
     fixture.detectChanges();
-    jasmine.clock().tick(101);
+    vi.advanceTimersByTime(101);
 
     const component = fixture.componentInstance;
     expect(component.columns[0].visible).toBe(true);
@@ -131,18 +132,18 @@ describe('DxDataGrid', () => {
       },
     });
 
-    jasmine.clock().uninstall();
-    jasmine.clock().install();
+    vi.useRealTimers();
+    vi.useFakeTimers();
 
     const fixture = TestBed.createComponent(TestContainerComponent);
     fixture.detectChanges();
 
-    jasmine.clock().tick(101);
+    vi.advanceTimersByTime(101);
 
     const testComponent = fixture.componentInstance;
 
     testComponent.dataSourceWithUndefined[0].obj.field = true;
-    fixture.detectChanges();
+    detectChanges(fixture);
 
     const cells = fixture.nativeElement.querySelectorAll('.dx-data-row td');
     const firstCellContent = cells[0].innerText;
@@ -150,11 +151,11 @@ describe('DxDataGrid', () => {
     expect(cells.length).toEqual(1);
     expect(firstCellContent).toBe('true');
 
-    jasmine.clock().uninstall();
+    vi.useRealTimers();
   });
 
   it('should fire onToolbarPreparing event', () => {
-    const testSpy = spyOn(TestContainerComponent.prototype, 'testMethod');
+    const testSpy = vi.spyOn(TestContainerComponent.prototype, 'testMethod').mockImplementation(() => {});
     TestBed.overrideComponent(TestContainerComponent, {
       set: {
         template: '<dx-data-grid (onToolbarPreparing)="testMethod()"></dx-data-grid>',
@@ -184,7 +185,7 @@ describe('DxDataGrid', () => {
     const column = fixture.componentInstance.innerWidgets.first.columns[0];
 
     if (typeof column === 'string') {
-      fail();
+      expect.fail();
     } else {
       expect(column?.columns?.length).toBe(1);
       // eslint-disable-next-line
@@ -193,7 +194,7 @@ describe('DxDataGrid', () => {
   });
 
   it('should create rows only once when value of cells is an object', () => {
-    const testSpy = spyOn(TestContainerComponent.prototype, 'onRowPrepared');
+    const testSpy = vi.spyOn(TestContainerComponent.prototype, 'onRowPrepared').mockImplementation(() => {});
     TestBed.overrideComponent(TestContainerComponent, {
       set: {
         template: `<dx-data-grid [dataSource]="[{text: 'text'}]" (onRowPrepared)="onRowPrepared()">
@@ -204,19 +205,19 @@ describe('DxDataGrid', () => {
       },
     });
 
-    jasmine.clock().uninstall();
-    jasmine.clock().install();
+    vi.useRealTimers();
+    vi.useFakeTimers();
 
     const fixture = TestBed.createComponent(TestContainerComponent);
     fixture.detectChanges();
 
-    jasmine.clock().tick(101);
+    vi.advanceTimersByTime(101);
 
     fixture.componentInstance.innerWidgets.last.instance.editRow(0);
     fixture.detectChanges();
 
     expect(testSpy).toHaveBeenCalledTimes(2);
-    jasmine.clock().uninstall();
+    vi.useRealTimers();
   });
 
   it('should reset nested option', () => {
@@ -229,22 +230,22 @@ describe('DxDataGrid', () => {
       },
     });
 
-    jasmine.clock().uninstall();
-    jasmine.clock().install();
+    vi.useRealTimers();
+    vi.useFakeTimers();
 
     const fixture = TestBed.createComponent(TestContainerComponent);
 
     fixture.detectChanges();
 
-    jasmine.clock().tick(101);
+    vi.advanceTimersByTime(101);
     const testComponent = fixture.componentInstance;
     const { instance } = testComponent.innerWidgets.last;
     expect(instance?.option('columnChooser')?.enabled).toBe(true);
 
     testComponent.showComponent = false;
-    fixture.detectChanges();
+    detectChanges(fixture);
     expect(instance?.option('columnChooser')?.enabled).toBe(false);
-    jasmine.clock().uninstall();
+    vi.useRealTimers();
   });
 
   it('should not call onSelectionChanged when selection is resetting', () => {
@@ -261,19 +262,19 @@ describe('DxDataGrid', () => {
       },
     });
 
-    jasmine.clock().uninstall();
-    jasmine.clock().install();
+    vi.useRealTimers();
+    vi.useFakeTimers();
 
     const fixture = TestBed.createComponent(TestContainerComponent);
 
     fixture.detectChanges();
 
-    jasmine.clock().tick(101);
+    vi.advanceTimersByTime(101);
     const testComponent = fixture.componentInstance;
     testComponent.showComponent = false;
-    fixture.detectChanges();
+    detectChanges(fixture);
     expect(testComponent.selectionCount).toBe(0);
-    jasmine.clock().uninstall();
+    vi.useRealTimers();
   });
 
   it('should destroy devextreme components in template correctly', () => {
@@ -308,17 +309,17 @@ describe('DxDataGrid', () => {
       },
     });
 
-    jasmine.clock().uninstall();
-    jasmine.clock().install();
+    vi.useRealTimers();
+    vi.useFakeTimers();
 
     const fixture = TestBed.createComponent(TestGridComponent);
     fixture.detectChanges();
-    jasmine.clock().tick(101);
+    vi.advanceTimersByTime(101);
 
     fixture.destroy();
 
     expect(fixture.componentInstance.isDestroyed).toBe(true);
-    jasmine.clock().uninstall();
+    vi.useRealTimers();
   });
 
   // https://supportcenter.devexpress.com/internal/ticket/details/T1124163
@@ -387,25 +388,23 @@ describe('DxDataGrid', () => {
       },
     });
 
-    jasmine.clock().uninstall();
-    jasmine.clock().install();
+    vi.useRealTimers();
+    vi.useFakeTimers();
 
     const fixture = TestBed.createComponent(TestGridComponent);
     fixture.detectChanges();
 
     const component = fixture.componentInstance;
     component.toggleData();
-    fixture.detectChanges();
+    detectChanges(fixture);
 
-    jasmine.clock().tick(101);
+    vi.advanceTimersByTime(101);
     expect(fixture.nativeElement.querySelector('.templBClass')).toBeTruthy();
-    jasmine.clock().uninstall();
+    vi.useRealTimers();
   });
 });
 
-describe('Nested DxDataGrid', () => {
-  let originalTimeout;
-
+describe('Nested DxDataGrid', { timeout: 60000 }, () => {
   beforeEach(() => {
     TestBed.configureTestingModule(
       {
@@ -413,17 +412,10 @@ describe('Nested DxDataGrid', () => {
         imports: [DxDataGridModule],
       },
     );
-
-    originalTimeout = jasmine.DEFAULT_TIMEOUT_INTERVAL;
-    jasmine.DEFAULT_TIMEOUT_INTERVAL = 60000;
-  });
-
-  afterEach(() => {
-    jasmine.DEFAULT_TIMEOUT_INTERVAL = originalTimeout;
   });
 
   // NOTE: https://github.com/angular/angular/issues/18997
-  it('should not update parent DxDataGrid with 30 dxi-data-grid-column (T545977)', (done) => {
+  it('should not update parent DxDataGrid with 30 dxi-data-grid-column (T545977)', () => new Promise<void>((done) => {
     TestBed.overrideComponent(TestContainerComponent, {
       set: {
         template: `
@@ -494,9 +486,9 @@ describe('Nested DxDataGrid', () => {
         done();
       }, 1000);
     }, 1000);
-  });
+  }));
 
-  it('should render a template with data when zone is stable (T869744)', (done) => {
+  it('should render a template with data when zone is stable (T869744)', () => new Promise<void>((done) => {
     TestBed.overrideComponent(TestContainerComponent, {
       set: {
         template: `
@@ -523,9 +515,9 @@ describe('Nested DxDataGrid', () => {
       expect(element?.textContent).toBe('String');
       done();
     }, 1000);
-  });
+  }));
 
-  it('should render a template with dynamic content once (T1269950)', (done) => {
+  it('should render a template with dynamic content once (T1269950)', () => new Promise<void>((done) => {
     TestBed.overrideComponent(TestContainerComponent, {
       set: {
         template: `
@@ -560,24 +552,17 @@ describe('Nested DxDataGrid', () => {
         done();
       }, 1000);
     }, 1000);
-  });
+  }));
 });
 
-describe('DxDataGrid slow tests', () => {
-  const originalTimeout = jasmine.DEFAULT_TIMEOUT_INTERVAL;
-
+describe('DxDataGrid slow tests', { timeout: 60000 }, () => {
   beforeAll(() => {
-    jasmine.DEFAULT_TIMEOUT_INTERVAL = 60000;
-
     TestBed.configureTestingModule(
       {
         declarations: [TestContainerComponent],
         imports: [DxDataGridModule],
       },
     );
-  });
-  afterAll(() => {
-    jasmine.DEFAULT_TIMEOUT_INTERVAL = originalTimeout;
   });
 
   it('should not memory leak after click if dx-data-grid is on page (T1307313)', async () => {

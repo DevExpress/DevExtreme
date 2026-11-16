@@ -1,7 +1,7 @@
 <div id="gauge-demo">
   <div id="gauge-container">
     <div class="left-section">
-      <dx-circular-gauge [value]="speedValue / 2">
+      <dx-circular-gauge [value]="speedValue() / 2">
         <dxo-circular-gauge-size
           [width]="90"
           [height]="90"
@@ -17,7 +17,7 @@
         >
         </dxo-circular-gauge-scale>
       </dx-circular-gauge>
-      <dx-circular-gauge [value]="speedValue / 2">
+      <dx-circular-gauge [value]="speedValue() / 2">
         <dxo-circular-gauge-size
           [width]="90"
           [height]="90"
@@ -38,7 +38,7 @@
     <div class="center-section">
       <dx-circular-gauge
         id="speed-gauge"
-        [value]="speedValue"
+        [value]="speedValue()"
         centerTemplate="centerTemplate"
       >
         <dxo-circular-gauge-size [width]="260"></dxo-circular-gauge-size>
@@ -80,7 +80,7 @@
           </text>
         </svg>
       </dx-circular-gauge>
-      <dx-linear-gauge id="fuel-gauge" [value]="50 - speedValue * 0.24">
+      <dx-linear-gauge id="fuel-gauge" [value]="50 - speedValue() * 0.24">
         <dxo-linear-gauge-size
           [width]="90"
           [height]="20"
@@ -105,7 +105,7 @@
       </dx-linear-gauge>
     </div>
     <div class="right-section">
-      <dx-circular-gauge [value]="speedValue / 2">
+      <dx-circular-gauge [value]="speedValue() / 2">
         <dxo-circular-gauge-size
           [width]="90"
           [height]="90"
@@ -121,7 +121,7 @@
         >
         </dxo-circular-gauge-scale>
       </dx-circular-gauge>
-      <dx-circular-gauge [value]="speedValue / 2">
+      <dx-circular-gauge [value]="speedValue() / 2">
         <dxo-circular-gauge-size
           [width]="90"
           [height]="90"

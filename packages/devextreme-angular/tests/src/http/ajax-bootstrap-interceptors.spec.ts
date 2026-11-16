@@ -6,12 +6,13 @@ import {
   HttpInterceptorFn,
   HttpClient,
 } from '@angular/common/http';
-import { ApplicationRef, Component, provideZoneChangeDetection } from '@angular/core';
+import { ApplicationRef, Component } from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
 import { DxHttpModule } from 'devextreme-angular/http';
 import DataSource from 'devextreme/data/data_source';
 import ODataStore from 'devextreme/data/odata/store';
 import { throwError } from 'rxjs';
+import { provideChangeDetection } from '../helpers/zone-mode';
 
 const TEST_URL = '';
 const interceptors: Record<string, () => void> = {};
@@ -65,7 +66,7 @@ describe('Using DxHttpModule in application with interceptors provided in bootst
 
     const appRef = await bootstrapApplication(TestAppComponent, {
       providers: [
-        provideZoneChangeDetection(),
+        provideChangeDetection(),
         provideHttpClient(withInterceptors([testInterceptorFn])),
         { provide: HttpClientTestingModule },
       ],
@@ -82,8 +83,8 @@ describe('Using DxHttpModule in application with interceptors provided in bootst
     httpTestingControllerMock?.verify();
   });
 
-  it('should call interceptors while calling httpClient directly ', (done) => {
-    const interceptorFnSpy = spyOn(interceptors, 'interceptorFn');
+  it('should call interceptors while calling httpClient directly ', () => new Promise<void>((done) => {
+    const interceptorFnSpy = vi.spyOn(interceptors, 'interceptorFn').mockImplementation(() => {});
 
     component
       .fetchData()
@@ -91,10 +92,10 @@ describe('Using DxHttpModule in application with interceptors provided in bootst
         expect(interceptorFnSpy).toHaveBeenCalledTimes(1);
         done();
       }).finally(() => {});
-  });
+  }));
 
-  it('dataSource load() should be intercepted', (done) => {
-    const interceptorFnSpy = spyOn(interceptors, 'interceptorFn');
+  it('dataSource load() should be intercepted', () => new Promise<void>((done) => {
+    const interceptorFnSpy = vi.spyOn(interceptors, 'interceptorFn').mockImplementation(() => {});
 
     // eslint-disable-next-line no-void
     void component.loadDataSource()
@@ -102,5 +103,5 @@ describe('Using DxHttpModule in application with interceptors provided in bootst
         expect(interceptorFnSpy).toHaveBeenCalledTimes(1);
         done();
       });
-  });
+  }));
 });

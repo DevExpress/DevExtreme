@@ -1,7 +1,9 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, ViewChild, provideZoneChangeDetection } from '@angular/core';
+import {
+  Component, enableProdMode, inject, viewChild,
+} from '@angular/core';
 import { DxTreeListModule, DxTreeListComponent } from 'devextreme-angular';
-import { Employee, Service } from './app.service';
+import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -17,16 +19,12 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  @ViewChild(DxTreeListComponent, { static: false }) treeList: DxTreeListComponent;
+  private readonly treeList = viewChild.required(DxTreeListComponent);
 
-  employees: Employee[];
-
-  constructor(private service: Service) {
-    this.employees = service.getEmployees();
-  }
+  readonly employees = inject(Service).getEmployees();
 
   onStateResetClick() {
-    this.treeList.instance.state(null);
+    this.treeList().instance.state(null);
   }
 
   onRefreshClick() {
@@ -34,8 +32,4 @@ export class AppComponent {
   }
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-  ],
-});
+bootstrapApplication(AppComponent);
