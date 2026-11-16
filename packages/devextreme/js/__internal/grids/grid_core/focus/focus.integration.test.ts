@@ -206,7 +206,7 @@ describe('GridCore focus', () => {
       const $container = $('<div>')
         .attr('id', GRID_CONTAINER_ID)
         .appendTo(document.body);
-      const instance = new DataGrid($container.get(0) as HTMLDivElement, {
+      const instance = new DataGrid($container.get<HTMLDivElement>(0), {
         dataSource: store,
         remoteOperations: true,
         focusedRowEnabled: true,

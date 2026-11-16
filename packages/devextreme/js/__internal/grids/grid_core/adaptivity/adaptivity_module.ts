@@ -22,6 +22,7 @@ export const adaptivityModule: Module = {
   },
   extenders: {
     views: {
+      // @ts-expect-error the extender assumes the editing and selection extensions of RowsView
       rowsView: adaptivityRowsViewExtender,
     },
     controllers: {

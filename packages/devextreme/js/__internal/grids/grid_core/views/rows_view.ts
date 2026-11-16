@@ -475,7 +475,7 @@ export class RowsView extends ColumnsView {
 
     if (rtlEnabled) {
       const maxHorizontalScrollOffset = getMaxHorizontalScrollOffset(
-        this._scrollableContainer?.get(0) as HTMLElement | undefined,
+        this._scrollableContainer?.get<HTMLElement>(0),
       );
 
       this._scrollRight = maxHorizontalScrollOffset - left;
@@ -1294,7 +1294,7 @@ export class RowsView extends ColumnsView {
   }
 
   public getScrollbarWidth(isHorizontal?: boolean): number {
-    const scrollableContainer = this._scrollableContainer?.get(0) as HTMLElement | undefined;
+    const scrollableContainer = this._scrollableContainer?.get<HTMLElement>(0);
     let scrollbarWidth = 0;
 
     if (scrollableContainer) {
@@ -1373,7 +1373,7 @@ export class RowsView extends ColumnsView {
 
     if (rtlEnabled) {
       const maxHorizontalScrollOffset = getMaxHorizontalScrollOffset(
-        this._scrollableContainer?.get(0) as HTMLElement | undefined,
+        this._scrollableContainer?.get<HTMLElement>(0),
       );
       const scrollRight = maxHorizontalScrollOffset - scrollLeft;
 
@@ -1422,7 +1422,6 @@ export class RowsView extends ColumnsView {
     const $element = this.element();
 
     if (arguments.length === 0) {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-return -- getOuterHeight returns any
       return $element ? getOuterHeight($element, true) : 0;
     }
 

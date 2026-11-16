@@ -329,7 +329,7 @@ export class View extends ModuleItem {
 
     const marginTop = parseFloat($element.css('marginTop') ?? '') || 0;
     const marginBottom = parseFloat($element.css('marginBottom') ?? '') || 0;
-    const { offsetHeight } = $element.get(0) as HTMLElement;
+    const { offsetHeight } = $element.get<HTMLElement>(0);
 
     return offsetHeight + marginTop + marginBottom;
   }
@@ -398,8 +398,8 @@ export class View extends ModuleItem {
   }
 
   public focus(preventScroll?: boolean): void {
-    // @ts-expect-error rendered view; get() is typed as Element
-    this.element().get(0).focus({ preventScroll });
+    // @ts-expect-error element() is undefined only before the view is rendered
+    this.element().get<HTMLElement>(0).focus({ preventScroll });
   }
 }
 

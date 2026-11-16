@@ -1,14 +1,21 @@
 import type { Locator } from '@playwright/test';
-import AppointmentCollector from './collector';
+import AppointmentCollector, { CLASS } from './collector';
 
 export default class Collectors {
+  public readonly all: Locator;
+
   private readonly scheduler: Locator;
 
   constructor(scheduler: Locator) {
     this.scheduler = scheduler;
+    this.all = scheduler.locator(`.${CLASS.appointmentCollector}`);
   }
 
   public get(index: number): AppointmentCollector {
     return new AppointmentCollector(this.scheduler, index);
+  }
+
+  public find(title: string, index = 0): AppointmentCollector {
+    return new AppointmentCollector(this.scheduler, index, title);
   }
 }

@@ -336,8 +336,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     const isFullUpdate = !e || e.changeType === 'refresh';
     const isFocusedViewCorrect = this._focusedView?.name === this._rowsView.name;
     const isAppend = e && (e.changeType === 'append' || e.changeType === 'prepend');
-    // @ts-expect-error rendered view; get() is typed as Element
-    const root = $(domAdapter.getRootNode($rowsView.get?.(0)));
+    const root = $(domAdapter.getRootNode($rowsView.get?.<HTMLElement>(0)));
     const $focusedElement = root.find(':focus');
     const isFocusedElementCorrect = this._isFocusedElementCorrect($focusedElement, $rowsView, e);
 
@@ -753,13 +752,10 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
 
   private isFocusedCellKey(eventArgs: KeyboardKeyDownEvent): boolean {
     const {
-      keyName, key, ctrl, alt, originalEvent,
+      keyName, key, ctrl, originalEvent,
     } = eventArgs;
     const isViewSwitch = ctrl && (keyName === 'upArrow' || keyName === 'downArrow');
-    const isCommandShortcut = isCommandKeyPressed(originalEvent) && (keyName === 'A' || keyName === 'F');
-    const isFastEditingKey = key?.length === 1
-      && !ctrl && !alt && !isCommandShortcut
-      && this._isFastEditingAllowed();
+    const isFastEditingKey = key?.length === 1 && this.canBeginFastEditing(originalEvent);
 
     return !isViewSwitch && (FOCUSED_CELL_KEYS.includes(keyName) || isFastEditingKey);
   }
@@ -1326,7 +1322,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
   }
 
   private focusFirstInteractiveElementInside($el: dxElementWrapper): void {
-    ($el.find(INTERACTIVE_ELEMENTS_SELECTOR).get(0) as HTMLElement).focus();
+    $el.find(INTERACTIVE_ELEMENTS_SELECTOR).get<HTMLElement>(0).focus();
   }
 
   private _processEnterKeyForDataCell(eventArgs: KeyboardKeyDownEvent, isEditing: boolean): void {
@@ -1477,13 +1473,15 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     return false;
   }
 
+  private canBeginFastEditing(originalEvent: DxEvent<KeyboardEvent>): boolean {
+    return this._isFastEditingAllowed()
+      && !originalEvent.altKey
+      && !isCommandKeyPressed(originalEvent)
+      && !this._editingController.isEditing();
+  }
+
   private _beginFastEditing(originalEvent: DxEvent<KeyboardEvent>, isDeleting?: boolean): boolean {
-    if (
-      !this._isFastEditingAllowed()
-      || originalEvent.altKey
-      || originalEvent.ctrlKey
-      || this._editingController.isEditing()
-    ) {
+    if (!this.canBeginFastEditing(originalEvent)) {
       return false;
     }
 

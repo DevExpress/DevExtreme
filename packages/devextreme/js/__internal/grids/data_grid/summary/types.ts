@@ -3,7 +3,7 @@ import type {
   SummaryTotalItem as SummaryTotalItemOption, SummaryType,
 } from '@js/ui/data_grid';
 import type { SortingInfo } from '@ts/data/utils';
-import type { Column } from '@ts/grids/data_grid/types';
+import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import type DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/data_source_adapter';
 import type { RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
 import type { EditingController } from '@ts/grids/grid_core/editing/editing';
@@ -72,6 +72,7 @@ export interface EditingControllerRequired {
 
 export interface SummaryDataControllerExtension {
   footerItems: () => FooterItem[];
+  calculateSummaryCells: (args: CalculateSummaryCellsArgs) => SummaryCellItem[][];
 }
 
 export interface SummaryDataSourceAdapterExtension {

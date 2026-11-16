@@ -73,7 +73,7 @@ const dropDownBoxes: DropDownBox[] = [];
 const createDropDownBox = (options: Partial<Properties> = {}): DropDownEditorModel => {
   const $element = $('<div>').appendTo(document.body);
 
-  const instance = new DropDownBox($element.get(0) as HTMLElement, {
+  const instance = new DropDownBox($element.get<HTMLElement>(0), {
     dataSource: [{ id: 1, text: 'Item one' }],
     valueExpr: 'id',
     displayExpr: 'text',
@@ -84,7 +84,7 @@ const createDropDownBox = (options: Partial<Properties> = {}): DropDownEditorMod
 
   dropDownBoxes.push(instance);
 
-  return new DropDownEditorModel($element.get(0) as HTMLElement);
+  return new DropDownEditorModel($element.get<HTMLElement>(0));
 };
 
 describe('DropDownBox', () => {

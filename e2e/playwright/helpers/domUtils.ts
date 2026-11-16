@@ -1,4 +1,4 @@
-import type { Page } from '@playwright/test';
+import type { Locator, Page } from '@playwright/test';
 
 const STYLESHEET_RULES_ID = 'stylesheetRules';
 
@@ -121,3 +121,15 @@ export const removeStylesheetRulesFromPage = async (page: Page): Promise<void> =
   (stylesheetId) => { document.getElementById(stylesheetId)?.remove(); },
   STYLESHEET_RULES_ID,
 );
+
+export const getStyleAttribute = async (
+  locator: Locator,
+): Promise<string | null> => locator.getAttribute('style');
+
+export const hasHorizontalScroll = async (
+  locator: Locator,
+): Promise<boolean> => locator.evaluate((element) => element.scrollWidth > element.clientWidth);
+
+export const getDocumentScrollTop = async (
+  page: Page,
+): Promise<number> => page.evaluate(() => document.documentElement.scrollTop);

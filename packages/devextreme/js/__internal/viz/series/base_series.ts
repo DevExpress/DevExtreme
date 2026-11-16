@@ -1107,7 +1107,7 @@ export let Series = class Series {
   }
 
   _getMarkerGroupOptions(): ThemeValue {
-    return _extend(false, {}, this._getOptionsForPoint(), { hoverStyle: {}, selectionStyle: {} });
+    return _extend({}, this._getOptionsForPoint(), { hoverStyle: {}, selectionStyle: {} });
   }
 
   _getAggregationMethod(isValueAxisDiscrete: boolean): (aggregationInfo: ThemeValue, series: ThemeValue) => ThemeValue {

@@ -70,11 +70,11 @@ export default class themes {
 }
 
 export function current(): string;
-export function isMaterialBased(theme: string): boolean;
-export function isFluent(theme: string): boolean;
-export function isMaterial(theme: string): boolean;
-export function isGeneric(theme: string): boolean;
-export function isCompact(theme: string): boolean;
+export function isMaterialBased(theme?: string): boolean;
+export function isFluent(theme?: string): boolean;
+export function isMaterial(theme?: string): boolean;
+export function isGeneric(theme?: string): boolean;
+export function isCompact(theme?: string): boolean;
 
 export function mode(element: UserDefinedElement): 'light' | 'dark';
 export function refreshMode(): void;

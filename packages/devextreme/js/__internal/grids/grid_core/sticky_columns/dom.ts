@@ -1,23 +1,35 @@
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { getBoundingRect } from '@js/core/utils/position';
 import { isDefined } from '@js/core/utils/type';
+import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import type { ColumnPointProps } from '@ts/grids/grid_core/types';
 
 import type { ColumnHeadersView } from '../column_headers/column_headers';
 import { CLASSES, StickyPosition } from './const';
 import { isFixedEdge } from './utils';
 
-const addStickyColumnBorderLeftClass = ($cell, addWidgetPrefix): void => {
+type AddWidgetPrefix = (className: string) => string;
+
+const addStickyColumnBorderLeftClass = (
+  $cell: dxElementWrapper,
+  addWidgetPrefix: AddWidgetPrefix,
+): void => {
   $cell.addClass(addWidgetPrefix(CLASSES.stickyColumnBorderLeft));
 };
 
-const addStickyColumnBorderRightClass = ($cell, addWidgetPrefix): void => {
+const addStickyColumnBorderRightClass = (
+  $cell: dxElementWrapper,
+  addWidgetPrefix: AddWidgetPrefix,
+): void => {
   $cell.addClass(addWidgetPrefix(CLASSES.stickyColumnBorderRight));
 };
 
-const addStickyColumnClass = ($cell, fixedPosition, addWidgetPrefix): void => {
+const addStickyColumnClass = (
+  $cell: dxElementWrapper,
+  fixedPosition: StickyPosition,
+  addWidgetPrefix: AddWidgetPrefix,
+): void => {
   switch (fixedPosition) {
     case StickyPosition.Right:
       $cell.addClass(addWidgetPrefix(CLASSES.stickyColumnRight));
@@ -30,18 +42,26 @@ const addStickyColumnClass = ($cell, fixedPosition, addWidgetPrefix): void => {
   }
 };
 
-const toggleColumnNoBorderClass = ($cell, value, addWidgetPrefix): void => {
+const toggleColumnNoBorderClass = (
+  $cell: dxElementWrapper,
+  value: boolean,
+  addWidgetPrefix: AddWidgetPrefix,
+): void => {
   $cell.toggleClass(addWidgetPrefix(CLASSES.columnNoBorder), value);
 };
 
-const toggleStickyColumnsClass = ($element, hasStickyColumns, addWidgetPrefix): void => {
+const toggleStickyColumnsClass = (
+  $element: dxElementWrapper,
+  hasStickyColumns: boolean,
+  addWidgetPrefix: AddWidgetPrefix,
+): void => {
   $element.toggleClass(addWidgetPrefix(CLASSES.stickyColumns), hasStickyColumns);
 };
 
 const isStickyCellPinnedToLeft = (
   $cell: dxElementWrapper,
   $container: dxElementWrapper,
-  addWidgetPrefix,
+  addWidgetPrefix: AddWidgetPrefix,
 ): boolean => {
   const isStickyCell = $cell.hasClass(addWidgetPrefix(CLASSES.stickyColumn));
 
@@ -60,7 +80,7 @@ const isStickyCellPinnedToLeft = (
 const isStickyCellPinnedToRight = (
   $cell: dxElementWrapper,
   $container: dxElementWrapper,
-  addWidgetPrefix,
+  addWidgetPrefix: AddWidgetPrefix,
 ): boolean => {
   const isStickyCell = $cell.hasClass(addWidgetPrefix(CLASSES.stickyColumn));
 
@@ -79,57 +99,63 @@ const isStickyCellPinnedToRight = (
 const isStickyCellPinned = (
   $cell: dxElementWrapper,
   $container: dxElementWrapper,
-  addWidgetPrefix,
+  addWidgetPrefix: AddWidgetPrefix,
 ): boolean => isStickyCellPinnedToLeft($cell, $container, addWidgetPrefix)
   || isStickyCellPinnedToRight($cell, $container, addWidgetPrefix);
 
 const isFixedCellPinnedToRight = (
   $cell: dxElementWrapper,
   $container: dxElementWrapper,
-  addWidgetPrefix,
+  addWidgetPrefix: AddWidgetPrefix,
 ): boolean => $cell.hasClass(addWidgetPrefix(CLASSES.stickyColumnRight))
   || isStickyCellPinnedToRight($cell, $container, addWidgetPrefix);
 
 const isFixedCellPinnedToLeft = (
   $cell: dxElementWrapper,
   $container: dxElementWrapper,
-  addWidgetPrefix,
+  addWidgetPrefix: AddWidgetPrefix,
 ): boolean => $cell.hasClass(addWidgetPrefix(CLASSES.stickyColumnLeft))
   || isStickyCellPinnedToLeft($cell, $container, addWidgetPrefix);
 
 const isLastLeftFixedCell = (
   $cell: dxElementWrapper,
-  addWidgetPrefix,
+  addWidgetPrefix: AddWidgetPrefix,
 ): boolean => $cell.hasClass(addWidgetPrefix(CLASSES.stickyColumnLeft))
     && $cell.hasClass(addWidgetPrefix(CLASSES.stickyColumnBorderRight));
 
 const isFirstRightFixedCell = (
   $cell: dxElementWrapper,
-  addWidgetPrefix,
+  addWidgetPrefix: AddWidgetPrefix,
 ): boolean => $cell.hasClass(addWidgetPrefix(CLASSES.stickyColumnRight))
     && $cell.hasClass(addWidgetPrefix(CLASSES.stickyColumnBorderLeft));
 
 const isStickyCell = (
   $cell: dxElementWrapper,
-  addWidgetPrefix,
+  addWidgetPrefix: AddWidgetPrefix,
 ): boolean => $cell.hasClass(addWidgetPrefix(CLASSES.stickyColumn));
 
 const isFixedCell = (
   $cell: dxElementWrapper,
-  addWidgetPrefix,
+  addWidgetPrefix: AddWidgetPrefix,
 ): boolean => $cell.hasClass(addWidgetPrefix(CLASSES.stickyColumnLeft))
       || $cell.hasClass(addWidgetPrefix(CLASSES.stickyColumnRight))
       || $cell.hasClass(addWidgetPrefix(CLASSES.stickyColumn));
 
-const getLeftFixedCells = ($cells: dxElementWrapper, addWidgetPrefix): dxElementWrapper => $cells
+const getLeftFixedCells = (
+  $cells: dxElementWrapper,
+  addWidgetPrefix: AddWidgetPrefix,
+): dxElementWrapper => $cells
   .filter((_, cell: Element) => $(cell).hasClass(addWidgetPrefix(CLASSES.stickyColumnLeft)));
 
-const getRightFixedCells = ($cells: dxElementWrapper, addWidgetPrefix): dxElementWrapper => $cells
+const getRightFixedCells = (
+  $cells: dxElementWrapper,
+  addWidgetPrefix: AddWidgetPrefix,
+): dxElementWrapper => $cells
   .filter((_, cell: Element) => $(cell).hasClass(addWidgetPrefix(CLASSES.stickyColumnRight)));
 
 const getNonFixedAndStickyCells = (
   $cells: dxElementWrapper,
-  addWidgetPrefix,
+  addWidgetPrefix: AddWidgetPrefix,
 ): dxElementWrapper => $cells
   .filter((_, cell: Element) => $(cell).hasClass(addWidgetPrefix(CLASSES.stickyColumn))
       || !isFixedCell($(cell), addWidgetPrefix));
@@ -137,7 +163,7 @@ const getNonFixedAndStickyCells = (
 const getLastLeftFixedCell = (
   $cells: dxElementWrapper,
   $container: dxElementWrapper,
-  addWidgetPrefix,
+  addWidgetPrefix: AddWidgetPrefix,
 ): dxElementWrapper => {
   const rtlEnabled = $container.css('direction') === 'rtl';
   const processedCells = rtlEnabled ? $cells.toArray() : $cells.toArray().reverse();
@@ -151,7 +177,7 @@ const getLastLeftFixedCell = (
 const getFirstRightFixedCell = (
   $cells: dxElementWrapper,
   $container: dxElementWrapper,
-  addWidgetPrefix,
+  addWidgetPrefix: AddWidgetPrefix,
 ): dxElementWrapper => {
   const rtlEnabled = $container.css('direction') === 'rtl';
   const processedCells = rtlEnabled ? $cells.toArray().reverse() : $cells.toArray();
@@ -165,7 +191,7 @@ const getFirstRightFixedCell = (
 const getNonFixedAreaBoundingRect = (
   $cells: dxElementWrapper,
   $container: dxElementWrapper,
-  addWidgetPrefix,
+  addWidgetPrefix: AddWidgetPrefix,
 ): { left: number; right: number } => {
   const containerRect = getBoundingRect($container.get(0));
   const result = {
@@ -198,16 +224,16 @@ const noNeedToCreateResizingPoint = (
     cells,
   }: {
     point: ColumnPointProps;
-    column;
-    nextColumn;
+    column: Column | undefined;
+    nextColumn: Column | undefined;
     cells: dxElementWrapper | undefined;
   },
-  addWidgetPrefix,
+  addWidgetPrefix: AddWidgetPrefix,
 ): boolean => {
   const { item, isLeftBoundary, isRightBoundary } = point;
   const $item = $(item);
   const offsetX = Math.round(point.x);
-  const rtlEnabled = that.option('rtlEnabled') as boolean;
+  const rtlEnabled = !!that.option('rtlEnabled');
   const isSplitPoint = isDefined(isLeftBoundary) || isDefined(isRightBoundary);
   const $cells = $(cells ?? '');
   const $container = $(that.getContent());
@@ -221,12 +247,12 @@ const noNeedToCreateResizingPoint = (
   if (isSplitPoint) {
     if (isLastLeftFixedCell($item, addWidgetPrefix)
       || isStickyCellPinnedToLeft($item, $container, addWidgetPrefix)) {
-      return isLeftBoundary as boolean;
+      return !!isLeftBoundary;
     }
 
     if (isFirstRightFixedCell($item, addWidgetPrefix)
       || isStickyCellPinnedToRight($item, $container, addWidgetPrefix)) {
-      return isRightBoundary as boolean;
+      return !!isRightBoundary;
     }
   }
 
@@ -240,16 +266,12 @@ const noNeedToCreateResizingPoint = (
 };
 
 const noNeedToCreateReorderingPoint = (
-  point,
+  point: ColumnPointProps,
   $cells: dxElementWrapper,
   $container: dxElementWrapper,
-  addWidgetPrefix,
+  addWidgetPrefix: AddWidgetPrefix,
 ): boolean => {
-  const { item, isLeftBoundary, isRightBoundary }: {
-    item: HTMLElement;
-    isLeftBoundary: boolean | undefined;
-    isRightBoundary: boolean | undefined;
-  } = point;
+  const { item, isLeftBoundary, isRightBoundary } = point;
   const $item = $(item);
   const pointX = Math.round(point.x);
   const isSplitPoint = isDefined(isLeftBoundary) || isDefined(isRightBoundary);
@@ -266,13 +288,13 @@ const noNeedToCreateReorderingPoint = (
   return pointX < nonFixedAreaBoundingRect.left || pointX > nonFixedAreaBoundingRect.right;
 };
 
-const doesGroupCellEndInFirstColumn = ($groupCell): boolean => {
+const doesGroupCellEndInFirstColumn = ($groupCell: dxElementWrapper): boolean => {
   const $groupRow = $groupCell.parent();
   const commandColumns = $groupRow.children().filter(
     (i) => i < $groupCell.index(),
   );
 
-  const groupColSpanWithoutCommand = $groupCell.attr('colspan') - commandColumns.length;
+  const groupColSpanWithoutCommand = Number($groupCell.attr('colspan')) - commandColumns.length;
 
   return groupColSpanWithoutCommand === 1;
 };
@@ -280,7 +302,7 @@ const doesGroupCellEndInFirstColumn = ($groupCell): boolean => {
 const getScrollPadding = (
   $cells: dxElementWrapper,
   $container: dxElementWrapper,
-  addWidgetPrefix,
+  addWidgetPrefix: AddWidgetPrefix,
 ): {
   left: number;
   right: number;
@@ -298,7 +320,7 @@ const isOutsideVisibleArea = (
   $element: dxElementWrapper,
   $cells: dxElementWrapper,
   $container: dxElementWrapper,
-  addWidgetPrefix,
+  addWidgetPrefix: AddWidgetPrefix,
 ): boolean => {
   const elementRect = getBoundingRect($element.get(0));
   const elementRectLeft = Math.round(elementRect.left);

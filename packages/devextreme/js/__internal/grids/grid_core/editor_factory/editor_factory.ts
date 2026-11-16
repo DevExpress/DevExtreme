@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/method-signature-style */
 import positionUtils from '@js/common/core/animation/position';
 import { addNamespace, normalizeKeyName } from '@js/common/core/events/utils/index';
 import domAdapter from '@js/core/dom_adapter';
@@ -36,8 +35,9 @@ import type { RowsView } from '../views/rows_view';
 import { CLASSES, MODULE_NAMESPACE, UPDATE_FOCUS_EVENTS } from './const';
 
 interface EditorFactoryMixinType {
-  createEditor($container: dxElementWrapper, options: object): void;
+  createEditor: ($container: dxElementWrapper, options: object) => void;
 
+  // eslint-disable-next-line @typescript-eslint/method-signature-style -- overridden by methods
   _getRevertTooltipsSelector(): string;
 
 }
@@ -317,8 +317,7 @@ export class EditorFactory extends ViewControllerWithMixin {
   /**
    * @extended: validating
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars -- overridable signature
-  public loseFocus(skipValidator?: boolean): void {
+  public loseFocus(): void {
     this._$focusedElement?.removeClass(KEYBOARD_NAVIGATION_CLASSES.focused);
     this._$focusedElement = null;
     this._$focusOverlay?.addClass(CLASSES.hidden);
@@ -326,8 +325,7 @@ export class EditorFactory extends ViewControllerWithMixin {
 
   private _getContainerRoot(): Node {
     const $container = this.component?.$element();
-    // @ts-expect-error the grid element exists once the component is initialized
-    const root = domAdapter.getRootNode($container?.get(0));
+    const root = domAdapter.getRootNode($container?.get<HTMLElement>(0));
 
     // a grid created inside a plain document fragment (not a shadow root) listens on the document
     if (root.nodeType === Node.DOCUMENT_FRAGMENT_NODE && !('host' in root)) {

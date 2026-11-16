@@ -104,7 +104,7 @@ class SchedulerTableCreator {
         row.append(allDayElements[index].get(0));
       }
 
-      tableBody.appendChild(row.get(0) as HTMLElement);
+      tableBody.appendChild(row.get<HTMLElement>(0));
     }
   }
 

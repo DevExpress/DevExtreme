@@ -16,11 +16,11 @@ const createDropDownButton = (
 ): { instance: DropDownButton; model: DropDownButtonModel } => {
   const $element = $('<div>').appendTo(document.body);
 
-  const instance = new DropDownButton($element.get(0) as HTMLElement, options);
+  const instance = new DropDownButton($element.get<HTMLElement>(0), options);
 
   instances.push(instance);
 
-  return { instance, model: new DropDownButtonModel($element.get(0) as HTMLElement) };
+  return { instance, model: new DropDownButtonModel($element.get<HTMLElement>(0)) };
 };
 
 describe('DropDownButton', () => {

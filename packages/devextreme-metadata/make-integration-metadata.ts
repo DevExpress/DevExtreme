@@ -18,6 +18,7 @@ Imd.makeMetadata({
       [types.uidRef('common/charts:DashStyle'), 'undefined'],
     ),
 
+    replaceTypes('common/core/animation:PositionConfig.of', ['events/events.types:DxEvent'], []),
     replaceTypes('common/grids:AIAssistant.chat', ['*'], ['object']),
     replaceTypes('common/grids:ColumnAIOptions.popup', ['*'], ['object']),
     replaceTypes('ui/card_view:dxCardViewOptions.filterBuilderPopup', ['*'], ['object']),

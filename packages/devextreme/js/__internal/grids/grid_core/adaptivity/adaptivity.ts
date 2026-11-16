@@ -732,7 +732,9 @@ export class AdaptiveColumnsViewController extends modules.ViewController {
     return this._$itemContents ?? undefined;
   }
 
-  public getItemContentByColumnIndex(visibleColumnIndex: number): dxElementWrapper | undefined {
+  public getItemContentByColumnIndex(
+    visibleColumnIndex: string | number,
+  ): dxElementWrapper | undefined {
     // @ts-expect-error the adaptive detail form is rendered here
     const $itemContents: dxElementWrapper = this._$itemContents;
 
@@ -768,7 +770,6 @@ export class AdaptiveColumnsViewController extends modules.ViewController {
       items: this._getFormItemsByHiddenColumns(this._hiddenColumns),
       formID: `dx-${new Guid()}`,
     };
-    // @ts-expect-error isMaterial() without a theme checks the current one
     const defaultFormOptions = isMaterial() ? { colCount: 2 } : {};
 
     this.executeAction('onAdaptiveDetailRowPreparing', { formOptions: userFormOptions });

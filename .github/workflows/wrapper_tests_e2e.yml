@@ -15,6 +15,7 @@ on:
 
 env:
   NX_SKIP_NX_CACHE: ${{ contains(github.event.pull_request.labels.*.name, 'skip-cache') && 'true' || 'false' }}
+  NX_MAX_CACHE_SIZE: 512MB
 
 jobs:
   build-packages:

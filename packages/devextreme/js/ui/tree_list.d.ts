@@ -26,6 +26,7 @@ import {
     InitializedEventInfo,
     ChangedOptionInfo,
     InteractionEvent,
+    PointerInteractionEvent,
 } from '../events';
 
 import {
@@ -262,9 +263,9 @@ export type ContentReadyEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList
  * @docid _ui_tree_list_ContextMenuPreparingEvent
  * @public
  * @type object
- * @inherits EventInfo
+ * @inherits NativeEventInfo
  */
-export type ContextMenuPreparingEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>> & {
+export type ContextMenuPreparingEvent<TRowData = any, TKey = any> = NativeEventInfo<dxTreeList<TRowData, TKey>, PointerInteractionEvent> & {
     /**
      * @docid _ui_tree_list_ContextMenuPreparingEvent.items
      * @type Array<Object>

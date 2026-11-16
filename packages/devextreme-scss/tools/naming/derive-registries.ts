@@ -794,7 +794,11 @@ const OVERRIDES: Overrides = {
       'alert-list', 'prompt', 'textarea', 'toolbar', 'information', 'author-name', 'timestamp',
       'typing-indicator', 'circle', 'bubble', 'group',
       // .dx-chat-messagebubble-image is a real <img> box inside a bubble
-      'image'],
+      'image',
+      // the tool calls block (.dx-chat-tool-call-*): the view, its "N tools" header, the error tag,
+      // the opened body (its left border is the vertical line), the fields and their labels
+      'tool-call', 'tool-call-header', 'tool-call-tag', 'tool-call-body', 'tool-call-label',
+      'tool-call-field', 'tool-call-text'],
     /*
      * `alpha` alone was doing three jobs — the alpha row, the alpha cell and the alpha scale are
      * three different elements with three different sizes, so each gets its own segment and the

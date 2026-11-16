@@ -2408,7 +2408,7 @@ export class EditingController extends modules.ViewController {
       // NOTE: if the editForm is enabled then we need to search for focused element
       // in the document root, otherwise we need to search for element in the shadow dom
       const elementContainer = this._editForm?.element()
-        ?? this.component.$element().get(0) as HTMLElement;
+        ?? this.component.$element().get<HTMLElement>(0);
       const $focusedElement = $(domAdapter.getActiveElement(elementContainer));
       const columnIndex = this._rowsView.getCellIndex($focusedElement, row.rowIndex);
       let focusedElement = $focusedElement.get(0);
@@ -2423,7 +2423,7 @@ export class EditingController extends modules.ViewController {
           // eslint-disable-next-line no-restricted-globals
           setTimeout(() => {
             focusedElement = domAdapter.getActiveElement(
-              this.component.$element()?.get(0) as HTMLElement,
+              this.component.$element()?.get<HTMLElement>(0),
             );
             if (selectionRange.selectionStart >= 0) {
               gridCoreUtils.setSelectionRange(focusedElement, selectionRange);
@@ -2867,7 +2867,7 @@ const rowsView = <TBase extends ModuleType<RowsView>>(
     return $row;
   }
 
-  private _getColumnIndexByElement($element: dxElementWrapper): number {
+  private _getColumnIndexByElement($element: dxElementWrapper): number | undefined {
     let $cellElement = $element;
     let $tableElement = $cellElement.closest('table');
     const $tableElements = this.getTableElements();
@@ -2877,10 +2877,10 @@ const rowsView = <TBase extends ModuleType<RowsView>>(
       $tableElement = $cellElement.closest('table');
     }
 
-    return this._getColumnIndexByElementCore($cellElement);
+    return this.getColumnIndexByElementCore($cellElement);
   }
 
-  private _getColumnIndexByElementCore($element: dxElementWrapper): number {
+  public getColumnIndexByElementCore($element: dxElementWrapper): number | undefined {
     const $targetElement = $element.closest(
       `.${VIEW_CLASSES.row}> td:not(.${MASTER_DETAIL_CLASSES.detailCell})`,
     );
@@ -2893,7 +2893,9 @@ const rowsView = <TBase extends ModuleType<RowsView>>(
     const columnIndex = this._getColumnIndexByElement($targetElement);
     const row = this._dataController.items()[e.rowIndex];
     const allowUpdating = this._editingController.allowUpdating({ row }, eventName);
-    const column = this._columnsController.getVisibleColumns()[columnIndex];
+    const column = isDefined(columnIndex)
+      ? this._columnsController.getVisibleColumns()[columnIndex]
+      : undefined;
     const isEditedCell = this._editingController.isEditCell(e.rowIndex, columnIndex);
     const allowEditing = allowUpdating && column && (!!column.allowEditing || isEditedCell);
     const startEditAction = this.option('editing.startEditAction') ?? DEFAULT_START_EDIT_ACTION;
@@ -2908,7 +2910,7 @@ const rowsView = <TBase extends ModuleType<RowsView>>(
         domUtils.resetActiveElement();
       }
 
-      return isShowEditorAlways && allowEditing
+      return isShowEditorAlways && allowEditing && isDefined(columnIndex)
         && this._editingController.editCell(e.rowIndex, columnIndex);
     }
 
@@ -2922,7 +2924,7 @@ const rowsView = <TBase extends ModuleType<RowsView>>(
       this._editingController.closeEditCell(isError, withoutSaveEditData);
     }
 
-    if (allowEditing && eventName === startEditAction) {
+    if (allowEditing && eventName === startEditAction && isDefined(columnIndex)) {
       return this._editingController.editCell(e.rowIndex, columnIndex)
         || this._editingController.isEditRow(e.rowIndex);
     }

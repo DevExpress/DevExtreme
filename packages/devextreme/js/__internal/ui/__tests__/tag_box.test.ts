@@ -47,7 +47,7 @@ const tagBoxes: TagBox[] = [];
 const createTagBox = (options: Partial<Properties> = {}): TagBoxModel => {
   const $element = $('<div>').appendTo(document.body);
 
-  const instance = new TagBox($element.get(0) as HTMLElement, {
+  const instance = new TagBox($element.get<HTMLElement>(0), {
     dataSource: createDelayedStore(),
     valueExpr: 'ID',
     displayExpr: 'FullName',
@@ -58,7 +58,7 @@ const createTagBox = (options: Partial<Properties> = {}): TagBoxModel => {
 
   tagBoxes.push(instance);
 
-  return new TagBoxModel($element.get(0) as HTMLElement);
+  return new TagBoxModel($element.get<HTMLElement>(0));
 };
 
 const forms: Form[] = [];
@@ -66,7 +66,7 @@ const forms: Form[] = [];
 const createFormWithTagBox = (options: Partial<FormProperties> = {}): Form => {
   const $element = $('<div>').appendTo(document.body);
 
-  const form = new Form($element.get(0) as HTMLElement, {
+  const form = new Form($element.get<HTMLElement>(0), {
     items: [{
       dataField: 'employees',
       editorType: 'dxTagBox',

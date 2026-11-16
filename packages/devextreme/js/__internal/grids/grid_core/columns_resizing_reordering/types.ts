@@ -6,7 +6,7 @@ import type { ColumnChooserView } from '../column_chooser/column_chooser';
 import type { ColumnHeadersView } from '../column_headers/column_headers';
 import type { Column, ColumnIndex, DropLocationNames } from '../columns_controller/types';
 import type { HeaderPanel } from '../header_panel/header_panel';
-import type { ColumnPoint } from '../types';
+import type { ColumnPoint, ColumnPointProps } from '../types';
 import type { BoundingRect } from '../views/types';
 import type { DraggingHeaderView } from './columns_resizing_reordering';
 
@@ -84,7 +84,7 @@ export interface DraggingPointsOptions extends DragOptions {
 }
 
 export interface DraggingPointCreatedOptions {
-  point: ColumnPoint;
+  point: ColumnPointProps;
   columns: Column[];
   location?: string;
   sourceColumn?: Column;

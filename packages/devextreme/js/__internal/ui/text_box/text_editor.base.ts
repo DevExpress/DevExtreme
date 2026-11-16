@@ -535,8 +535,7 @@ class TextEditorBase<
 
   _isValueValid(): boolean {
     if (this._input().length) {
-      // @ts-expect-error Property 'validity' does not exist on type 'Element'
-      const { validity } = this._input().get(0);
+      const { validity } = this._input().get<HTMLInputElement>(0);
 
       if (validity) {
         return Boolean(validity.valid);

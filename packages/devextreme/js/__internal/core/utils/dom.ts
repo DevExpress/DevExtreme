@@ -210,9 +210,9 @@ export const replaceWith = (
 
 export const isElementInDom = ($element?: dxElementWrapper): boolean => {
   const element = $element?.get(0);
-  const shadowHost = (element?.getRootNode() as { host?: Element | string } | undefined)?.host;
+  const shadowHost = element && getRootNodeHost(element);
 
-  return !!$(shadowHost || element).closest(getWindow().document).length;
+  return !!$(shadowHost ?? element).closest(getWindow().document).length;
 };
 
 const ARIA_DESCRIBEDBY_ATTRIBUTE = 'aria-describedby';

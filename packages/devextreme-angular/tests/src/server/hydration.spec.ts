@@ -12,6 +12,7 @@ import infernoRenderer from 'devextreme/core/inferno_renderer';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DevExtremeModule } from 'devextreme-angular';
 import { componentNames as componentNamesAll } from './component-names';
+import type { MockInstance } from 'vitest';
 import { provideChangeDetection } from '../helpers/zone-mode';
 
 const componentNames = componentNamesAll.filter((n) => ['toast', 'action-sheet'].includes(n));
@@ -58,16 +59,16 @@ class TestHelpers {
     element.classList.add(...classNames);
   }
 
-  static hasConsoleMessage(spy: jasmine.Spy, messages: string[]): boolean {
-    return spy.calls.allArgs().some((args) => messages.some((msg) => args[0].toLowerCase().includes(msg.toLowerCase())));
+  static hasConsoleMessage(spy: MockInstance, messages: string[]): boolean {
+    return spy.mock.calls.some((args) => messages.some((msg) => args[0].toLowerCase().includes(msg.toLowerCase())));
   }
 }
 
 describe('Angular Components Hydration Test', () => {
   let consoleSpies: {
-    warn: jasmine.Spy;
-    error: jasmine.Spy;
-    log: jasmine.Spy;
+    warn: MockInstance;
+    error: MockInstance;
+    log: MockInstance;
   };
   const ssrState: {
     containerHtml: string;
@@ -77,15 +78,13 @@ describe('Angular Components Hydration Test', () => {
     ssrHTML: '',
   };
 
-  beforeAll(() => {
-    consoleSpies = {
-      warn: spyOn(console, 'warn').and.callThrough(),
-      error: spyOn(console, 'error').and.callThrough(),
-      log: spyOn(console, 'log').and.callThrough(),
-    };
-  });
-
   beforeEach(() => {
+    consoleSpies = {
+      warn: vi.spyOn(console, 'warn'),
+      error: vi.spyOn(console, 'error'),
+      log: vi.spyOn(console, 'log'),
+    };
+
     destroyPlatform();
   });
 

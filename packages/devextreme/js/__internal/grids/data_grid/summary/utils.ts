@@ -1,5 +1,5 @@
 import { isDefined } from '@js/core/utils/type';
-import type { Column } from '@ts/grids/data_grid/types';
+import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import type { ProcessedItem } from '@ts/grids/grid_core/data_controller/types';
 
 import { DATAGRID_GROUP_FOOTER_ROW_TYPE } from './const';
