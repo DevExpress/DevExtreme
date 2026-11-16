@@ -201,7 +201,8 @@ jobs:
       fail-fast: false
       matrix: ${{ fromJson(needs.determine-playwright-matrix.outputs.matrix) }}
     runs-on: devextreme-shr2
-    timeout-minutes: 10
+    # A failed test runs once more, so a run where many tests fail takes up to twice as long.
+    timeout-minutes: 15
 
     steps:
     - name: Get sources
@@ -277,8 +278,9 @@ jobs:
         path: ${{ github.workspace }}/e2e/playwright/artifacts/blob-report
         if-no-files-found: ignore
 
+    # Not only on failure: a test that passed on its retry still left the trace of the failed run.
     - name: Upload test traces and screenshot diffs
-      if: ${{ failure() }}
+      if: ${{ always() }}
       uses: actions/upload-artifact@v7
       with:
         name: playwright-traces-${{ env.JOB_NAME }}
@@ -286,19 +288,31 @@ jobs:
         if-no-files-found: ignore
 
     - name: Collect new etalons
-      if: ${{ failure() }}
+      if: ${{ always() }}
       run: |
         mkdir -p "$RUNNER_TEMP/new-etalons"
         git ls-files --others --exclude-standard -z -- 'e2e/playwright/tests/**/etalons/*.png' \
           | xargs -0 -r cp --parents -t "$RUNNER_TEMP/new-etalons"
 
     - name: Upload new etalons
-      if: ${{ failure() }}
+      if: ${{ always() }}
       uses: actions/upload-artifact@v7
       with:
         name: playwright-etalons-${{ env.JOB_NAME }}
         path: ${{ runner.temp }}/new-etalons
         if-no-files-found: ignore
+
+    # A test without an etalon writes one and fails, but its retry compares against that file and
+    # passes, so the written etalons have to fail the job on their own.
+    - name: Fail on new etalons
+      if: ${{ always() }}
+      run: |
+        new_etalons=$(git ls-files --others --exclude-standard -- 'e2e/playwright/tests/**/etalons/*.png')
+        if [ -n "$new_etalons" ]; then
+          echo "::error::The tests wrote etalons that are not in the repository. They are in the playwright-etalons artifact:"
+          echo "$new_etalons"
+          exit 1
+        fi
 
   merge-artifacts:
     runs-on: ubuntu-latest

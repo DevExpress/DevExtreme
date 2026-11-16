@@ -131,6 +131,11 @@ The trace holds every action with the DOM before and after it, the network and t
 failed screenshot comparison uploads its `-expected`, `-actual` and `-diff` images alongside, so a
 failure that only happens on CI can be diagnosed without reproducing it.
 
+On CI a failed test runs once more, in a new browser. A test that passes then does not fail the
+job: the log lists it under "flaky", and the traces artifact keeps its failed run. A test that
+wrote a missing etalon is the exception: its retry passes against that file, so the job fails on
+the new etalon instead.
+
 ## Writing a test
 
 ```ts
