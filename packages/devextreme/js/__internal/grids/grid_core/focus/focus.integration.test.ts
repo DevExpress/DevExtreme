@@ -361,6 +361,27 @@ describe('GridCore focus', () => {
     });
   });
 
+  describe('when focusedRowKey is changed with a custom tabIndex', () => {
+    it('should apply the tabIndex option to the new focused row (T1338023)', async () => {
+      const { instance } = await createDataGrid({
+        dataSource: [
+          { id: 1, name: 'Item 1' },
+          { id: 2, name: 'Item 2' },
+        ],
+        keyExpr: 'id',
+        focusedRowEnabled: true,
+        focusedRowKey: 1,
+        tabIndex: 3,
+        columns: ['id', 'name'],
+      });
+
+      instance.option('focusedRowKey', 2);
+      await flushAsync();
+
+      expect($(instance.getRowElement(1)).get(0).getAttribute('tabindex')).toBe('3');
+    });
+  });
+
   describe('when the focused row has an expanded master detail', () => {
     it('should not make the detail row a tab stop (T1338023)', async () => {
       const { instance } = await createDataGrid({
