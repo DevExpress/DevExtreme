@@ -1,6 +1,6 @@
-Multiple data points within a data set can be attributed to the same category. DevExtreme Chart can [aggregate](/Documentation/Guide/UI_Components/Chart/Data_Aggregation/) such points and display one value per category in each series.
+Multiple data points within a data set can be attributed to the same category. DevExtreme Chart can [aggregate](/Documentation/Guide/UI_Components/Chart/Data_Aggregation/) such points and display one value per category.
 
-This demo binds a DevExtreme Chart to monthly crude oil production data from six US states. The Chart creates a series for each year and draws twelve bars (one for each month) in the same position. When you activate aggregation, the component replaces these twelve bars with a single bar.
+This demo binds a DevExtreme Chart to monthly crude oil production data from six US states. The Chart creates a series for each year and displays twelve bars (one for each month) in the same position. When you enable aggregation, the component replaces these twelve bars with a single bar.
 
 <!--split-->
 
