@@ -134,6 +134,15 @@ export const setZoomLevel = async (page: Page, zoomLevel: number): Promise<void>
   zoomLevel,
 );
 
+// The scheduler renders a viewport in one long task, and nothing can be checked in the page until
+// it ends. With thousands of appointments on a loaded CI agent that task outlasts the default
+// expect timeout, so the check would fail before it ever runs.
+const RENDER_TIMEOUT = 20000;
+
+export const waitForAppointmentsRender = async (scheduler: Scheduler): Promise<void> => {
+  await expect(scheduler.appointments.first()).toBeAttached({ timeout: RENDER_TIMEOUT });
+};
+
 export const waitForViewportRender = async (scheduler: Scheduler): Promise<void> => {
   await expect.poll(() => scheduler.workspaceScrollable.evaluate((container) => {
     const {
@@ -142,5 +151,5 @@ export const waitForViewportRender = async (scheduler: Scheduler): Promise<void>
 
     return document.elementsFromPoint(left + width / 2, top + height / 2)
       .some((element) => element.classList.contains('dx-scheduler-date-table-cell'));
-  })).toBe(true);
+  }), { timeout: RENDER_TIMEOUT }).toBe(true);
 };
