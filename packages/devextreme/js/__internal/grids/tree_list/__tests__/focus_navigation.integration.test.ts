@@ -134,7 +134,7 @@ describe('TreeList focus — partial update of the focused row', () => {
     });
     await flushAsync();
 
-    const row = $(instance.getRowElement(0)).get(0) as HTMLElement;
+    const row = $(instance.getRowElement(0)).get(0);
     instance.focus(row);
     await flushAsync();
     row.dispatchEvent(new KeyboardEvent('keydown', { key: 'Shift', bubbles: true }));
