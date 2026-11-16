@@ -210,7 +210,6 @@ jobs:
       fail-fast: false
       matrix: ${{ fromJson(needs.determine-playwright-matrix.outputs.matrix) }}
     runs-on: devextreme-shr2
-    # A failed test runs once more, so a run where many tests fail takes up to twice as long.
     timeout-minutes: 15
 
     steps:
@@ -287,7 +286,6 @@ jobs:
         path: ${{ github.workspace }}/e2e/playwright/artifacts/blob-report
         if-no-files-found: ignore
 
-    # Not only on failure: a test that passed on its retry still left the trace of the failed run.
     - name: Upload test traces and screenshot diffs
       if: ${{ always() }}
       uses: actions/upload-artifact@v7
@@ -311,8 +309,7 @@ jobs:
         path: ${{ runner.temp }}/new-etalons
         if-no-files-found: ignore
 
-    # A test without an etalon writes one and fails, but its retry compares against that file and
-    # passes, so the written etalons have to fail the job on their own.
+    # A retry passes against the etalon its first attempt wrote, so new etalons fail the job here.
     - name: Fail on new etalons
       if: ${{ always() }}
       run: |

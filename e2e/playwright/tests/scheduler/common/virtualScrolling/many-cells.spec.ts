@@ -63,8 +63,6 @@ test.describe('Scheduler: Virtual scrolling (many cells)', () => {
       );
 
       const scheduler = new Scheduler(page, '#container');
-      // The appointments load after the widget is created and are rendered later, in a separate
-      // long task — the screenshot has to wait for it, not start next to it.
       await waitForAppointmentsRender(scheduler);
 
       await testScreenshot(page, buildScreenshotName(viewType, groupOrientation, 'start'), { element: scheduler.element });

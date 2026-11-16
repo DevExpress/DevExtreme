@@ -27,8 +27,6 @@ export default defineConfig<TestOptions>({
   outputDir: './artifacts/test-results',
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
-  // Now and then Chrome on the CI agents never paints a page it has just opened, and every wait in
-  // that test times out. A retry runs in a new worker, with a new browser.
   retries: process.env.CI ? 1 : 0,
   workers: process.env.CI ? 8 : 4,
   reporter: process.env.CI

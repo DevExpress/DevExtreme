@@ -134,9 +134,7 @@ export const setZoomLevel = async (page: Page, zoomLevel: number): Promise<void>
   zoomLevel,
 );
 
-// The scheduler renders a viewport in one long task, and nothing can be checked in the page until
-// it ends. With thousands of appointments on a loaded CI agent that task outlasts the default
-// expect timeout, so the check would fail before it ever runs.
+// Rendering thousands of appointments can block the page longer than the default expect timeout.
 const RENDER_TIMEOUT = 20000;
 
 export const waitForAppointmentsRender = async (scheduler: Scheduler): Promise<void> => {
