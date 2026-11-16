@@ -26,8 +26,6 @@ interface TemplateLike {
 
 export type CreateElement = (templateSource: unknown) => TemplateLike;
 
-type ElementFilter = (predicate: (index: number, element: Node) => boolean) => dxElementWrapper;
-
 interface TempTemplate {
   template: TemplateLike;
   source: unknown;
@@ -189,7 +187,7 @@ export class TemplateManager {
   _extractAnonymousTemplate($el: dxElementWrapper): AnonymousTemplateMeta {
     const $anonymousTemplate = $el.contents().detach();
 
-    const filterContents = $anonymousTemplate.filter as unknown as ElementFilter;
+    const filterContents = $anonymousTemplate.filter;
     const $notJunkTemplateContent = filterContents.call($anonymousTemplate, (_, element) => {
       const isTextNode = element.nodeType === TEXT_NODE;
       const isEmptyText = $(element).text().trim().length < 1;

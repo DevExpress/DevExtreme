@@ -624,6 +624,7 @@ class DateBoxMask<
   }
 
   _getActivePartValue(dateValue?: Date | null): number {
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
     const date = dateValue ?? this._maskValue as Date;
     const getter = this._getActivePartProp('getter');
     const isGetterFunction = isFunction(getter);

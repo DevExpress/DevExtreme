@@ -328,7 +328,7 @@ const numberLocalizationBase = {
     const globalNumberFormat = getGlobalFormatByDataType('number');
 
     if (!format && globalNumberFormat) {
-      format = globalNumberFormat as LocalizationFormat;
+      format = globalNumberFormat;
     }
 
     // @ts-expect-error

@@ -245,7 +245,7 @@ export default {
           return (presetOverride as DateFormatter)(date);
         }
         // eslint-disable-next-line no-param-reassign
-        format = presetOverride as LocalizationFormat;
+        format = presetOverride;
       }
     }
 
