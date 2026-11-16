@@ -1454,6 +1454,13 @@ export class DataController extends modules.Controller {
     return 0;
   }
 
+  /**
+   * @extended: virtual_scrolling
+   */
+  public isViewportPositionPending(): boolean {
+    return false;
+  }
+
   private changePaging(optionName: PagingOptionName, value?: number): PagingResult {
     const dataSourceAdapter = this.dataSourceController.getAdapter();
 

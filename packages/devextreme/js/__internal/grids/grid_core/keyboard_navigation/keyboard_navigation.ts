@@ -176,6 +176,8 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
 
   private focusRestoreScrollTop = 0;
 
+  private isPageNavigationPending = false;
+
   // #region Initialization
   public init(): void {
     this._dataController = this.getController('data');
@@ -332,6 +334,8 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     if (!$rowsView) {
       return;
     }
+
+    this.completePageNavigation();
 
     const isFullUpdate = !e || e.changeType === 'refresh';
     const isFocusedViewCorrect = this._focusedView?.name === this._rowsView.name;
@@ -745,7 +749,10 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
   }
 
   private isWaitingForRowsRendering(eventArgs: KeyboardKeyDownEvent): boolean {
-    return this._rowsView.isWaitingForRowsLayout()
+    const isWaitingForRows = this._rowsView.isWaitingForRowsLayout()
+      || (this.isPageNavigationPending && this._rowsView.isViewportRowsRenderPending());
+
+    return isWaitingForRows
       && !this._editingController?.isEditing()
       && !this.isInsideMasterDetail($(eventArgs.originalEvent.target));
   }
@@ -1716,6 +1723,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
         this.setRowFocusType();
       }
 
+      this.isPageNavigationPending = false;
       this._updateFocusedCellPosition($targetCell);
 
       if (this._allowRowUpdating() && isCellOrBatchEditMode && column?.allowEditing) {
@@ -2062,14 +2070,18 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     const { columnIndex } = this._focusedCellPosition;
     const rowIndexOffset = this._dataController.getRowIndexOffset();
 
-    let newRowIndex = isUpArrow
-      ? rowIndex
-      : this._rowsView.getTopVisibleItemIndex() + rowIndexOffset;
+    let newRowIndex = isUpArrow ? rowIndex : this.getTopVisibleRowIndex();
 
     if (!isUpArrow) {
       this._editorFactory.loseFocus();
       this.applyTabIndexToElement($rowsViewElement);
       eventsEngine.trigger($rowsViewElement, 'focus');
+
+      this.isPageNavigationPending = this._rowsView.isViewportRowsRenderPending();
+
+      if (this.isPageNavigationPending) {
+        return;
+      }
     } else {
       // @ts-expect-error getRow() is typed as possibly undefined
       const $rowElement: dxElementWrapper = this._rowsView.getRow(newRowIndex - rowIndexOffset);
@@ -2087,6 +2099,22 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     if (isUpArrow) {
       this.updateFocus(false);
     }
+  }
+
+  private getTopVisibleRowIndex(): number {
+    return this._rowsView.getTopVisibleItemIndex() + this._dataController.getRowIndexOffset();
+  }
+
+  private completePageNavigation(): void {
+    if (!this.isPageNavigationPending || this._rowsView.isViewportRowsRenderPending()) {
+      return;
+    }
+
+    this.isPageNavigationPending = false;
+    this.setFocusedCellPosition(
+      this.getTopVisibleRowIndex(),
+      this._focusedCellPosition.columnIndex,
+    );
   }
 
   // #endregion Focusing
@@ -2813,7 +2841,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
       const { rowIndex = -1, columnIndex = -1 } = cellPosition;
       const rowIndexOffset = this._dataController.getRowIndexOffset();
       const column = this._columnsController.getVisibleColumns(null, true)[columnIndex];
-      const columnIndexOffset = column && column.fixed
+      const columnIndexOffset = column?.fixed
         ? this._getFixedColumnIndexOffset(column)
         : this._columnsController.getColumnIndexOffset();
 
@@ -3265,7 +3293,7 @@ const editing = (
     const visibleColumnIndex = this._keyboardNavigationController.getVisibleColumnIndex();
     const column = this._columnsController.getVisibleColumns()[visibleColumnIndex];
 
-    if ((column && column.type) || this.getEditMode() === EDIT_MODE.form) {
+    if ((column?.type) || this.getEditMode() === EDIT_MODE.form) {
       this._keyboardNavigationController.resetFocusedCell();
     }
     super.editRow(rowIndex);
