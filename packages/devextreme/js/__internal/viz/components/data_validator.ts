@@ -1,4 +1,3 @@
-/* eslint-disable @stylistic/max-len */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/init-declarations */
@@ -126,10 +125,19 @@ function getType(unit, type) {
 }
 
 function correctAxisType(type, axisType, hasCategories, incidentOccurred) {
-  if (type === STRING && (axisType === CONTINUOUS || axisType === LOGARITHMIC || axisType === SEMIDISCRETE)) {
+  if (
+    type === STRING
+    && (axisType === CONTINUOUS || axisType === LOGARITHMIC || axisType === SEMIDISCRETE)
+  ) {
     incidentOccurred('E2002');
   }
-  return axisType === LOGARITHMIC ? LOGARITHMIC : hasCategories || axisType === DISCRETE || type === STRING ? DISCRETE : axisType === SEMIDISCRETE ? SEMIDISCRETE : CONTINUOUS;
+  return axisType === LOGARITHMIC
+    ? LOGARITHMIC
+    : hasCategories || axisType === DISCRETE || type === STRING
+      ? DISCRETE
+      : axisType === SEMIDISCRETE
+        ? SEMIDISCRETE
+        : CONTINUOUS;
 }
 
 // Do we really need this one if all it is only for logarithmic case?
@@ -141,7 +149,11 @@ function validUnit(unit, field, incidentOccurred) {
 
 function createParserUnit(type, axisType, incidentOccurred) {
   const parser = type ? _getParser(type) : eigen;
-  const filterInfinity = axisType !== DISCRETE ? function (x) { return isFinite(x) || x === undefined ? x : null; } : eigen;
+  const filterInfinity = axisType !== DISCRETE
+    ? function (x) {
+      return isFinite(x) || x === undefined ? x : null;
+    }
+    : eigen;
 
   return function (unit, field) {
     const parseUnit = filterInfinity(parser(unit));
@@ -154,7 +166,11 @@ function createParserUnit(type, axisType, incidentOccurred) {
 }
 
 function prepareParsers(groupsData, incidentOccurred) {
-  const argumentParser = createParserUnit(groupsData.argumentType, groupsData.argumentAxisType, incidentOccurred);
+  const argumentParser = createParserUnit(
+    groupsData.argumentType,
+    groupsData.argumentAxisType,
+    incidentOccurred,
+  );
   let sizeParser;
   let valueParser;
   const categoryParsers = [argumentParser];
@@ -251,7 +267,12 @@ function groupPieData(data, groupsData) {
 
   groupsData.groups.forEach((group) => {
     group.series.forEach((series) => {
-      groupMinSlices(data, series.getArgumentField(), series.getValueFields()[0], series.getOptions().smallValuesGrouping);
+      groupMinSlices(
+        data,
+        series.getArgumentField(),
+        series.getValueFields()[0],
+        series.getOptions().smallValuesGrouping,
+      );
     });
   });
 }
@@ -325,7 +346,9 @@ function getSortByCategories(categories) {
 function sortData(data, groupsData, options, uniqueArgumentFields) {
   const dataByArguments = {};
   const isDiscrete = groupsData.argumentAxisType === DISCRETE;
-  const userCategories = isDiscrete && groupsData.argumentOptions && groupsData.argumentOptions.categories;
+  const userCategories = isDiscrete
+    && groupsData.argumentOptions
+    && groupsData.argumentOptions.categories;
   let sortFunction = function (data) { return data; };
   const sortingMethodOption = options.sortingMethod;
   let reSortCategories;
@@ -337,7 +360,12 @@ function sortData(data, groupsData, options, uniqueArgumentFields) {
     groupsData.categories = getCategories(data, uniqueArgumentFields, userCategories);
   }
 
-  if (userCategories || (!_isFunction(sortingMethodOption) && groupsData.argumentType === STRING && !options._skipArgumentSorting)) {
+  if (
+    userCategories
+    || (!_isFunction(sortingMethodOption)
+      && groupsData.argumentType === STRING
+      && !options._skipArgumentSorting)
+  ) {
     // @ts-expect-error
     sortFunction = getSortByCategories(groupsData.categories);
   } else if (sortingMethodOption === true && groupsData.argumentType !== STRING) {
@@ -382,7 +410,10 @@ function getCategories(data, uniqueArgumentFields, userCategories) {
 
 function checkArgumentTypeOfGroup(series, cell, groupsData) {
   series.forEach((currentSeries) => {
-    groupsData.argumentType = getType(cell[currentSeries.getArgumentField()], groupsData.argumentType);
+    groupsData.argumentType = getType(
+      cell[currentSeries.getArgumentField()],
+      groupsData.argumentType,
+    );
   });
   return groupsData.argumentType;
 }
@@ -390,8 +421,9 @@ function checkArgumentTypeOfGroup(series, cell, groupsData) {
 function checkType(data, groupsData, checkTypeForAllData) {
   const groupsWithUndefinedValueType = [];
   const groupsWithUndefinedArgumentType = [];
-  // @ts-expect-error
-  const argumentTypeGroup = groupsData.argumentOptions && axisTypeParser(groupsData.argumentOptions.argumentType);
+  const argumentTypeGroup = groupsData.argumentOptions
+    // @ts-expect-error
+    && axisTypeParser(groupsData.argumentOptions.argumentType);
   let groupsIndexes;
 
   groupsData.groups.forEach((group) => {
@@ -438,12 +470,22 @@ function checkType(data, groupsData, checkTypeForAllData) {
 function checkAxisType(groupsData, incidentOccurred) {
   const argumentOptions = groupsData.argumentOptions || {};
   const userArgumentCategories = (argumentOptions && argumentOptions.categories) || [];
-  const argumentAxisType = correctAxisType(groupsData.argumentType, argumentOptions.type, !!userArgumentCategories.length, incidentOccurred);
+  const argumentAxisType = correctAxisType(
+    groupsData.argumentType,
+    argumentOptions.type,
+    !!userArgumentCategories.length,
+    incidentOccurred,
+  );
 
   groupsData.groups.forEach((group) => {
     const valueOptions = group.valueOptions || {};
     const valueCategories = valueOptions.categories || [];
-    const valueAxisType = correctAxisType(group.valueType, valueOptions.type, !!valueCategories.length, incidentOccurred);
+    const valueAxisType = correctAxisType(
+      group.valueType,
+      valueOptions.type,
+      !!valueCategories.length,
+      incidentOccurred,
+    );
 
     group.series.forEach((series) => {
       const optionsSeries = {};
@@ -522,7 +564,12 @@ export let validateData = function (data, groupsData, incidentOccurred, options)
   }
   groupPieData(data, groupsData);
 
-  const dataByArgumentFields = sortData(data, groupsData, options, getUniqueArgumentFields(groupsData));
+  const dataByArgumentFields = sortData(
+    data,
+    groupsData,
+    options,
+    getUniqueArgumentFields(groupsData),
+  );
 
   return dataByArgumentFields;
 };

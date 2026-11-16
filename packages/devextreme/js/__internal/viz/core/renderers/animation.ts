@@ -8,7 +8,6 @@
 /* eslint-disable @typescript-eslint/no-this-alias */
 /* eslint-disable no-multi-assign */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
-/* eslint-disable @stylistic/max-len */
 /* eslint-disable @typescript-eslint/init-declarations */
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable guard-for-in */
@@ -56,8 +55,12 @@ type AnimationTick = (this: Animation, now: number) => unknown;
 
 export const noop = function (): void { };
 export const easingFunctions: Record<string, EasingFunction> = {
-  easeOutCubic(pos, start, end) { return pos === 1 ? end : (1 - (1 - pos) ** 3) * (end - start) + +start; },
-  linear(pos, start, end) { return pos === 1 ? end : pos * (end - start) + +start; },
+  easeOutCubic(pos, start, end) {
+    return pos === 1 ? end : (1 - (1 - pos) ** 3) * (end - start) + +start;
+  },
+  linear(pos, start, end) {
+    return pos === 1 ? end : pos * (end - start) + +start;
+  },
 };
 
 export const animationSvgStep: AnimationSteps = {
@@ -125,7 +128,14 @@ function step(this: Animation, now: number): unknown {
 
   for (attrName in that.params) {
     const anim = animateStep[attrName] || animateStep.base;
-    anim(that.element, that.params[attrName], that._progress, that._easing, that._currentParams, attrName);
+    anim(
+      that.element,
+      that.params[attrName],
+      that._progress,
+      that._easing,
+      that._currentParams,
+      attrName,
+    );
   }
 
   that.options.step && that.options.step(that._easing(that._progress, 0, 1), that._progress);
@@ -176,7 +186,9 @@ export class Animation {
     this.element = element;
     this.params = params;
     this.options = options;
-    this.duration = options.partitionDuration ? options.duration * options.partitionDuration : options.duration;
+    this.duration = options.partitionDuration
+      ? options.duration * options.partitionDuration
+      : options.duration;
     this.delay = options.delay && options.duration * options.delay || 0;
     this._animateStep = options.animateStep || animationSvgStep;
     // @ts-expect-error an unknown or missing easing name falls back to easeOutCubic
@@ -253,7 +265,8 @@ export let AnimationController = class AnimationController {
 
   addAnimation(animation: Animation): void {
     this._animations[this._animationCount++] = animation;
-    // @ts-expect-error the handle is null when _loop() had no end callback, clearTimeout(null) is a no-op
+    // @ts-expect-error the handle is null when _loop() had no end callback, clearTimeout(null) is a
+    // no-op
     clearTimeout(this._endAnimationTimer);
     if (!this._timerId) {
       clearTimeout(this._startDelay);
@@ -283,10 +296,12 @@ export let AnimationController = class AnimationController {
   stop(): void {
     this._animations = {};
     this._animationCount = 0;
-    // @ts-expect-error the timer handle is null when no frame is requested, cancelAnimationFrame(null) is a no-op
+    // @ts-expect-error the timer handle is null when no frame is requested,
+    // cancelAnimationFrame(null) is a no-op
     cancelAnimationFrame(this._timerId);
     clearTimeout(this._startDelay);
-    // @ts-expect-error the handle is null when _loop() had no end callback, clearTimeout(null) is a no-op
+    // @ts-expect-error the handle is null when _loop() had no end callback, clearTimeout(null) is a
+    // no-op
     clearTimeout(this._endAnimationTimer);
     this._timerId = null;
   }

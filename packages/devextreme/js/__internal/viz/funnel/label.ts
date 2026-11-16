@@ -4,7 +4,6 @@
 /* eslint-disable @typescript-eslint/no-shadow */
 /* eslint-disable consistent-return */
 /* eslint-disable no-param-reassign */
-/* eslint-disable @stylistic/max-len */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
@@ -90,7 +89,9 @@ function getConnectorStrategy(options, inverted) {
   const verticalCorrection = inverted ? -PREVENT_EMPTY_PIXEL_OFFSET : 0;
 
   function getFigureCenter(figure) {
-    return isLeftPos ? [figure[0] + PREVENT_EMPTY_PIXEL_OFFSET, figure[1] + verticalCorrection] : [figure[2] - PREVENT_EMPTY_PIXEL_OFFSET, figure[3] + verticalCorrection];
+    return isLeftPos
+      ? [figure[0] + PREVENT_EMPTY_PIXEL_OFFSET, figure[1] + verticalCorrection]
+      : [figure[2] - PREVENT_EMPTY_PIXEL_OFFSET, figure[3] + verticalCorrection];
   }
 
   return {
@@ -103,7 +104,9 @@ function getConnectorStrategy(options, inverted) {
       const y = bBox.y;
       const x1 = x + bBox.width;
 
-      return [...Array(bBox.height + 1)].map((_, i) => [x, y + i]).concat([...Array(bBox.height + 1)].map((_, i) => [x1, y + i]));
+      return [...Array(bBox.height + 1)]
+        .map((_, i) => [x, y + i])
+        .concat([...Array(bBox.height + 1)].map((_, i) => [x1, y + i]));
     },
 
     isHorizontal() { return true; },
@@ -174,7 +177,9 @@ function removeEmptySpace(labels, requiredSpace, startPoint) {
     const prevLabel = labels[index + 1];
     if (requiredSpace > 0) {
       const bBox = label.getBoundingRect();
-      const point = prevLabel ? prevLabel.getBoundingRect().y + prevLabel.getBoundingRect().height : startPoint;
+      const point = prevLabel
+        ? prevLabel.getBoundingRect().y + prevLabel.getBoundingRect().height
+        : startPoint;
       const emptySpace = bBox.y - point;
       const shift = Math.min(emptySpace, requiredSpace);
 
@@ -291,8 +296,12 @@ export const plugin = {
         }
 
         const bBox = label.getBoundingRect();
-        // @ts-expect-error
-        const pos = correctLabelPosition(getCoords(coords, bBox, options, inverted), bBox, that._labelRect);
+        const pos = correctLabelPosition(
+          // @ts-expect-error
+          getCoords(coords, bBox, options, inverted),
+          bBox,
+          that._labelRect,
+        );
 
         label.setFigureToDrawConnector(coords);
         label.shift(pos.x, pos.y);
@@ -319,34 +328,43 @@ export const plugin = {
       } else if (resolveLabelOverlapping === 'shift') {
         const maxHeight = this._labelRect[3];
 
-        labels.filter((label) => label.isVisible()).reduce(([height, emptySpace], label, index, labels) => {
-          const bBox = label.getBoundingRect();
-          let y = bBox.y;
+        labels
+          .filter((label) => label.isVisible())
+          .reduce(
+            ([height, emptySpace], label, index, labels) => {
+              const bBox = label.getBoundingRect();
+              let y = bBox.y;
 
-          if (bBox.y < height) {
-            label.shift(bBox.x, height);
-            y = height;
-          }
+              if (bBox.y < height) {
+                label.shift(bBox.x, height);
+                y = height;
+              }
 
-          if (y - height > 0) {
-            emptySpace += y - height;
-          }
+              if (y - height > 0) {
+                emptySpace += y - height;
+              }
 
-          if (y + bBox.height > maxHeight) {
-            if (emptySpace && emptySpace > y + bBox.height - maxHeight) {
-              removeEmptySpace(labels.slice(0, index).reverse(), y + bBox.height - maxHeight, that._labelRect[1]);
-              emptySpace -= y + bBox.height - maxHeight;
-              label.shift(bBox.x, y - (y + bBox.height - maxHeight));
-              height = y - (y + bBox.height - maxHeight) + bBox.height;
-            } else {
-              label.hide();
-            }
-          } else {
-            height = y + bBox.height;
-          }
+              if (y + bBox.height > maxHeight) {
+                if (emptySpace && emptySpace > y + bBox.height - maxHeight) {
+                  removeEmptySpace(
+                    labels.slice(0, index).reverse(),
+                    y + bBox.height - maxHeight,
+                    that._labelRect[1],
+                  );
+                  emptySpace -= y + bBox.height - maxHeight;
+                  label.shift(bBox.x, y - (y + bBox.height - maxHeight));
+                  height = y - (y + bBox.height - maxHeight) + bBox.height;
+                } else {
+                  label.hide();
+                }
+              } else {
+                height = y + bBox.height;
+              }
 
-          return [height, emptySpace];
-        }, [this._labelRect[1], 0]);
+              return [height, emptySpace];
+            },
+            [this._labelRect[1], 0],
+          );
       }
     },
 
@@ -383,7 +401,9 @@ export const plugin = {
           strategy: connectorStrategy,
         });
 
-        label.setOptions(getLabelOptions(labelOptions, item.color, that._defaultLabelTextAlignment()));
+        label.setOptions(
+          getLabelOptions(labelOptions, item.color, that._defaultLabelTextAlignment()),
+        );
 
         label.setData({
           item,
@@ -408,7 +428,7 @@ export const plugin = {
       // @ts-expect-error
       that._labels.forEach((label, index) => {
         const rect = label.getBoundingRect();
-        if (x >= rect.x && x <= (rect.x + rect.width) && y >= rect.y && y <= (rect.y + rect.height)) {
+        if (x >= rect.x && x <= rect.x + rect.width && y >= rect.y && y <= rect.y + rect.height) {
           const pos = isOutsidePosition(that._getOption('label').position) ? 'outside' : 'inside';
           data = {
             id: index,

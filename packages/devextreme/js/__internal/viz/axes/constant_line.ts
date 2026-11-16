@@ -2,7 +2,6 @@
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 /* eslint-disable @typescript-eslint/init-declarations */
 /* eslint-disable @typescript-eslint/no-shadow */
-/* eslint-disable @stylistic/max-len */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
@@ -50,11 +49,15 @@ export default function createConstantLine(axis, options) {
 
       this.coord = axis._getConstantLinePos(parsedValue, canvas.start, canvas.end);
 
-      const rootGroup = options.displayBehindSeries ? axis._axisConstantLineGroups.under : axis._axisConstantLineGroups.above;
+      const rootGroup = options.displayBehindSeries
+        ? axis._axisConstantLineGroups.under
+        : axis._axisConstantLineGroups.above;
       let group = rootGroup[labelPosition];
 
       if (!group) {
-        const side = axis._isHorizontal ? labelOptions.verticalAlignment : labelOptions.horizontalAlignment;
+        const side = axis._isHorizontal
+          ? labelOptions.verticalAlignment
+          : labelOptions.horizontalAlignment;
         group = rootGroup[side];
       }
 
@@ -69,7 +72,9 @@ export default function createConstantLine(axis, options) {
       });
 
       this.line = path.append(rootGroup.inside);
-      this.label = labelOptions.visible ? axis._drawConstantLineLabels(parsedValue, labelOptions, this.coord, group) : null;
+      this.label = labelOptions.visible
+        ? axis._drawConstantLineLabels(parsedValue, labelOptions, this.coord, group)
+        : null;
 
       this.updatePosition();
 
@@ -95,13 +100,16 @@ export default function createConstantLine(axis, options) {
 
       this.coord = coord;
       if (animate && storedCoord) {
-        this.label && this.label.attr(axis._getConstantLineLabelsCoords(storedCoord, this.labelOptions));
+        this.label
+          && this.label.attr(axis._getConstantLineLabelsCoords(storedCoord, this.labelOptions));
         this.line && this.line.attr(axis._getConstantLineGraphicAttributes(storedCoord));
 
-        this.label && this.label.animate(axis._getConstantLineLabelsCoords(this.coord, this.labelOptions));
+        this.label
+          && this.label.animate(axis._getConstantLineLabelsCoords(this.coord, this.labelOptions));
         this.line && this.line.animate(axis._getConstantLineGraphicAttributes(this.coord));
       } else {
-        this.label && this.label.attr(axis._getConstantLineLabelsCoords(this.coord, this.labelOptions));
+        this.label
+          && this.label.attr(axis._getConstantLineLabelsCoords(this.coord, this.labelOptions));
         this.line && this.line.attr(axis._getConstantLineGraphicAttributes(this.coord));
         axis._rotateConstantLine(this.line, this.coord);
       }

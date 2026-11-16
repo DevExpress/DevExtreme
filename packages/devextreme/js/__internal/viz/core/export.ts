@@ -9,7 +9,6 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-multi-assign */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
-/* eslint-disable @stylistic/max-len */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-use-before-define */
@@ -247,7 +246,11 @@ function setPrint(imageSrc, options) {
   };
 }
 
-function getItemAttributes(options: ThemeValue, type: string, itemIndex: number): MenuItemAttributes {
+function getItemAttributes(
+  options: ThemeValue,
+  type: string,
+  itemIndex: number,
+): MenuItemAttributes {
   const x = BUTTON_SIZE - LIST_WIDTH;
   const y = BUTTON_SIZE + LIST_PADDING_TOP + LIST_STROKE_WIDTH + itemIndex * MENU_ITEM_HEIGHT;
 
@@ -270,8 +273,9 @@ function getItemAttributes(options: ThemeValue, type: string, itemIndex: number)
       'stroke-width': LIST_STROKE_WIDTH,
       cursor: 'pointer',
       sharp: 'v',
-      d: `M ${x} ${y + MENU_ITEM_HEIGHT - LIST_STROKE_WIDTH} `
-      + `L ${x + LIST_WIDTH} ${y + MENU_ITEM_HEIGHT - LIST_STROKE_WIDTH}`,
+      d:
+        `M ${x} ${y + MENU_ITEM_HEIGHT - LIST_STROKE_WIDTH} `
+        + `L ${x + LIST_WIDTH} ${y + MENU_ITEM_HEIGHT - LIST_STROKE_WIDTH}`,
     };
   }
 
@@ -364,7 +368,9 @@ export const exportFromMarkup = function (markup, options) {
   options.exportedAction = options.onExported;
   options.fileSavingAction = options.onFileSaving;
   options.margin = isDefined(options.margin) ? options.margin : MARGIN;
-  options.backgroundColor = isDefined(options.backgroundColor) ? options.backgroundColor : getBackgroundColorFromMarkup(markup) || getTheme().backgroundColor;
+  options.backgroundColor = isDefined(options.backgroundColor)
+    ? options.backgroundColor
+    : getBackgroundColorFromMarkup(markup) || getTheme().backgroundColor;
   _export(markup, options, getCreatorFunc(options.format));
 };
 
@@ -390,33 +396,40 @@ export let combineMarkups = function (widgets, options: CombineMarkupsOptions = 
   }
   const compactView = !options.gridLayout;
   const exportItems = widgets.reduce((r, row, rowIndex) => {
-    const rowInfo = row.reduce((r, item, colIndex) => {
-      const size = item.getSize();
-      const backgroundColor = item.option('backgroundColor') || getTheme(item.option('theme')).backgroundColor;
-      const node = $(item.element())
-        .find('svg')
-        .get(0)
-        .cloneNode(true);
+    const rowInfo = row.reduce(
+      (r, item, colIndex) => {
+        const size = item.getSize();
+        const backgroundColor = item.option('backgroundColor') || getTheme(item.option('theme')).backgroundColor;
+        const node = $(item.element()).find('svg').get(0).cloneNode(true);
 
-      backgroundColor && r.backgroundColors.indexOf(backgroundColor) === -1 && r.backgroundColors.push(backgroundColor);
+        backgroundColor
+          && r.backgroundColors.indexOf(backgroundColor) === -1
+          && r.backgroundColors.push(backgroundColor);
 
-      r.hOffset = r.width;
-      r.width += size.width;
-      r.height = Math.max(r.height, size.height);
-      r.itemWidth = Math.max(r.itemWidth, size.width);
-      r.items.push({
-        node,
-        width: size.width,
-        height: size.height,
-        c: colIndex,
-        r: rowIndex,
-        hOffset: r.hOffset,
-      });
+        r.hOffset = r.width;
+        r.width += size.width;
+        r.height = Math.max(r.height, size.height);
+        r.itemWidth = Math.max(r.itemWidth, size.width);
+        r.items.push({
+          node,
+          width: size.width,
+          height: size.height,
+          c: colIndex,
+          r: rowIndex,
+          hOffset: r.hOffset,
+        });
 
-      return r;
-    }, {
-      items: [], height: 0, itemWidth: 0, hOffset: 0, width: 0, backgroundColors: r.backgroundColors,
-    });
+        return r;
+      },
+      {
+        items: [],
+        height: 0,
+        itemWidth: 0,
+        hOffset: 0,
+        width: 0,
+        backgroundColors: r.backgroundColors,
+      },
+    );
 
     r.rowOffsets.push(r.totalHeight);
     r.rowHeights.push(rowInfo.height);
@@ -428,7 +441,14 @@ export let combineMarkups = function (widgets, options: CombineMarkupsOptions = 
 
     return r;
   }, {
-    items: [], rowOffsets: [], rowHeights: [], itemWidth: 0, totalHeight: 0, maxItemLen: 0, totalWidth: 0, backgroundColors: [],
+    items: [],
+    rowOffsets: [],
+    rowHeights: [],
+    itemWidth: 0,
+    totalHeight: 0,
+    maxItemLen: 0,
+    totalWidth: 0,
+    backgroundColors: [],
   });
 
   const backgroundColor = `${exportItems.backgroundColors.length === 1 ? exportItems.backgroundColors[0] : ''}`;
@@ -538,7 +558,12 @@ export let ExportMenu = class ExportMenu {
     this._buttonGroup = renderer.g().attr({ class: `${EXPORT_CSS_CLASS}-button` }).append(this._group);
     this._listGroup = renderer.g().attr({ class: `${EXPORT_CSS_CLASS}-list` }).append(this._group);
 
-    this._overlay = renderer.rect(-LIST_WIDTH + BUTTON_SIZE, BUTTON_SIZE + LIST_PADDING_TOP, LIST_WIDTH, 0);
+    this._overlay = renderer.rect(
+      -LIST_WIDTH + BUTTON_SIZE,
+      BUTTON_SIZE + LIST_PADDING_TOP,
+      LIST_WIDTH,
+      0,
+    );
     this._overlay.attr({
       'stroke-width': LIST_STROKE_WIDTH,
       cursor: 'pointer',
@@ -579,7 +604,10 @@ export let ExportMenu = class ExportMenu {
   }
 
   draw(width: number, height: number, canvas: { left: number }): this {
-    this._group.move(width - BUTTON_SIZE - SHADOW_OFFSET - SHADOW_BLUR + canvas.left, Math.floor(height / 2 - BUTTON_SIZE / 2));
+    this._group.move(
+      width - BUTTON_SIZE - SHADOW_OFFSET - SHADOW_BLUR + canvas.left,
+      Math.floor(height / 2 - BUTTON_SIZE / 2),
+    );
 
     const layoutOptions = this.getLayoutOptions();
     if (layoutOptions.width > width || layoutOptions.height > height) {
@@ -610,7 +638,9 @@ export let ExportMenu = class ExportMenu {
       options.formats = this.validFormats.supported.slice();
     }
 
-    options.printingEnabled = options.printingEnabled === undefined ? true : options.printingEnabled;
+    options.printingEnabled = options.printingEnabled === undefined
+      ? true
+      : options.printingEnabled;
 
     if (options.enabled && (options.formats.length || options.printingEnabled)) {
       this.show();
@@ -779,7 +809,12 @@ export let ExportMenu = class ExportMenu {
 };
 
 // BaseWidget.js
-function getExportOptions(widget: ThemeValue, exportOptions: ThemeValue, fileName?: string, format?: string): ExportOptions {
+function getExportOptions(
+  widget: ThemeValue,
+  exportOptions: ThemeValue,
+  fileName?: string,
+  format?: string,
+): ExportOptions {
   if (format || exportOptions.format) {
     format = validateFormat(format || exportOptions.format, widget._incidentOccurred);
   }
@@ -793,9 +828,13 @@ function getExportOptions(widget: ThemeValue, exportOptions: ThemeValue, fileNam
     height,
     margin: exportOptions.margin,
     svgToCanvas: exportOptions.svgToCanvas,
-    exportingAction: widget._createActionByOption('onExporting', { excludeValidators: ['disabled'] }),
+    exportingAction: widget._createActionByOption('onExporting', {
+      excludeValidators: ['disabled'],
+    }),
     exportedAction: widget._createActionByOption('onExported', { excludeValidators: ['disabled'] }),
-    fileSavingAction: widget._createActionByOption('onFileSaving', { excludeValidators: ['disabled'] }),
+    fileSavingAction: widget._createActionByOption('onFileSaving', {
+      excludeValidators: ['disabled'],
+    }),
   };
 }
 
@@ -893,7 +932,8 @@ export const plugin = {
       option: 'export',
     });
 
-    // TODO: Event options change processing either should be done by the eventTrigger or shouldn't be done at all
+    // TODO: Event options change processing either should be done by the eventTrigger or shouldn't
+    // be done at all
     proto._optionChangesMap.onExporting = 'EXPORT';
     proto._optionChangesMap.onExported = 'EXPORT';
     proto._optionChangesMap.onFileSaving = 'EXPORT';

@@ -10,7 +10,6 @@
 /* eslint-disable @typescript-eslint/no-shadow */
 /* eslint-disable consistent-return */
 /* eslint-disable no-multi-assign */
-/* eslint-disable @stylistic/max-len */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable prefer-destructuring */
@@ -97,7 +96,9 @@ const baseRangeSeries = {
       });
 
       if (!isFinite(result[val1Field]) || !isFinite(result[val2Field])) {
-        if (data.filter((i) => i[val1Field] === null && i[val2Field] === null).length === data.length) {
+        if (
+          data.filter((i) => i[val1Field] === null && i[val2Field] === null).length === data.length
+        ) {
           result[val1Field] = result[val2Field] = null;
         } else {
           return;
@@ -128,7 +129,10 @@ const baseRangeSeries = {
       if (isArgument) {
         tmpCoord = p.getCenterCoord()[coordName[1]] === coord ? p[oppositeCoordName] : undefined;
       } else {
-        const coords = [Math.min(p[coordName], p[minCoordName]), Math.max(p[coordName], p[minCoordName])];
+        const coords = [
+          Math.min(p[coordName], p[minCoordName]),
+          Math.max(p[coordName], p[minCoordName]),
+        ];
         tmpCoord = coord >= coords[0] && coord <= coords[1] ? p[oppositeCoordName] : undefined;
       }
 
@@ -170,7 +174,9 @@ chart.rangearea = _extend({}, areaSeries, {
     return {
       line: processedPoints,
       bottomLine: processedMinPointsCoords,
-      area: _map(processedPoints, (pt) => pt.getCoords()).concat(processedMinPointsCoords.slice().reverse()),
+      area: _map(processedPoints, (pt) => pt.getCoords()).concat(
+        processedMinPointsCoords.slice().reverse(),
+      ),
       singlePointSegment: processedPoints !== points,
     };
   },
@@ -214,7 +220,9 @@ chart.rangearea = _extend({}, areaSeries, {
     areaSeries._updateElement.apply(this, arguments);
 
     if (bottomBorderElement) {
-      animate ? bottomBorderElement.animate(bottomLineParams) : bottomBorderElement.attr(bottomLineParams);
+      animate
+        ? bottomBorderElement.animate(bottomLineParams)
+        : bottomBorderElement.attr(bottomLineParams);
     }
   },
 }, baseRangeSeries);

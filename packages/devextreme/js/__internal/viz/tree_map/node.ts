@@ -1,4 +1,3 @@
-/* eslint-disable @stylistic/max-len */
 /* eslint-disable @typescript-eslint/no-use-before-define */
 
 import { extend as _extend } from '@ts/core/utils/extend';
@@ -58,7 +57,10 @@ class Node {
   updateStyles(): void {
     const isNode = Number(this.isNode());
 
-    this.state = this._buildState(this.ctx.settings[isNode].state, !isNode && this.color && { fill: this.color });
+    this.state = this._buildState(
+      this.ctx.settings[isNode].state,
+      !isNode && this.color && { fill: this.color },
+    );
   }
 
   _buildState(state: ThemeValue, extra: ThemeValue): ThemeValue {
