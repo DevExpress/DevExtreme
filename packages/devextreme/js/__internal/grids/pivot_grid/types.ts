@@ -1,9 +1,13 @@
+import type { ScalarFilterValue } from '@js/common/grids';
 import type { DeferredObj } from '@js/core/utils/deferred';
+import type PivotGridDataSource from '@js/ui/pivot_grid/data_source';
 import type { Field } from '@js/ui/pivot_grid/data_source';
 
 export type PivotGridField = Field & {
   index?: number;
   _initProperties?: Record<string, unknown> | null;
+  levels?: PivotGridField[];
+  searchValue?: string;
 };
 
 export type PivotGridFilterField = Omit<
@@ -13,8 +17,11 @@ export type PivotGridFilterField = Omit<
   groupIndex: null;
   groupName: null;
   filterType: string;
-  filterValues: unknown[];
+  filterValues: ScalarFilterValue[];
 };
+
+/** A hierarchy field's filter value holds one header value per level. */
+export type PivotGridFilterValue = ScalarFilterValue | ScalarFilterValue[];
 
 export interface TreeItem<TItem> {
   children?: TItem[];
@@ -37,15 +44,28 @@ export interface PathItem {
   value?: unknown;
 }
 
+export type PivotGridAxis = 'rows' | 'columns';
+
 export interface ExpandedLevelOptions {
   rows: PivotGridField[];
   columns: PivotGridField[];
-  rowExpandedPaths?: unknown[][];
-  columnExpandedPaths?: unknown[][];
-  headerName?: string;
-  path?: unknown[];
-  oppositePath?: unknown[];
+  rowExpandedPaths?: ScalarFilterValue[][];
+  columnExpandedPaths?: ScalarFilterValue[][];
+  headerName?: PivotGridAxis;
+  path?: ScalarFilterValue[];
+  oppositePath?: ScalarFilterValue[];
 }
+
+export interface PivotGridLoadOptions extends ExpandedLevelOptions {
+  values?: PivotGridField[];
+  filters?: PivotGridField[];
+  rowSkip?: number;
+  rowTake?: number;
+  columnSkip?: number;
+  columnTake?: number;
+}
+
+export type DrillDownParams = Parameters<PivotGridDataSource['createDrillDownDataSource']>[0];
 
 export interface DiscoveredField {
   dataField: string;
