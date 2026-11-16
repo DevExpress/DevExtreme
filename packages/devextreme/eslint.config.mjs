@@ -366,11 +366,10 @@ export default [
             '@typescript-eslint/no-restricted-imports': ['error', {
                 patterns: [{
                     group: [
-                        '@js/ui/data_grid/*',
                         '@js/ui/pivot_grid/*',
                         '@js/ui/tree_list/*',
-                        '@js/ui/grid_core/*',
                     ],
+                    allowTypeImports: true,
                     message: 'Please use import from TS modules instead.',
                 }, {
                     group: ['@js/__internal/*'],
