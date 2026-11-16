@@ -260,7 +260,7 @@ export const getValueDataType = (
 
   return isUnknownDataType
     ? undefined
-    : dataType as DataType;
+    : dataType;
 };
 
 export const getColumnFormat = (

@@ -14,7 +14,6 @@ import type {
 } from '@js/common/ai-integration';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
-import type { Message } from '@js/ui/chat';
 import { AIIntegration } from '@ts/core/ai_integration/core/ai_integration';
 
 import {
@@ -239,7 +238,7 @@ describe('AIAssistantViewController', () => {
         author: { id: 'user', name: 'User' },
         text,
         timestamp: new Date().toISOString(),
-      } as Message).catch(() => {});
+      }).catch(() => {});
       jest.runAllTimers();
     };
 

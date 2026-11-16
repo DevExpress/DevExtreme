@@ -213,7 +213,7 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
       },
     };
 
-    return options as ChatTextAreaProperties;
+    return options;
   }
 
   _createMessageEnteredAction(): void {

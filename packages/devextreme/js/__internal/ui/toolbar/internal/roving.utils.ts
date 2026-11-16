@@ -157,7 +157,7 @@ export function getAvailableItems(
       && !!resolveFocusTarget($(item))?.length,
   );
 
-  return $(elements) as unknown as dxElementWrapper;
+  return $(elements);
 }
 
 export function focusItemFocusTarget($item: dxElementWrapper): void {

@@ -989,7 +989,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       recurrenceExceptionExpr: this.option('recurrenceExceptionExpr'),
       disabledExpr: this.option('disabledExpr'),
       visibleExpr: this.option('visibleExpr'),
-    } as IFieldExpr);
+    });
 
     super._init();
 
@@ -1207,9 +1207,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     optionName: K,
     actionConfig?: { excludeValidators?: string[] },
   ): (args: SchedulerActionMap[K]) => void {
-    return this._createActionByOption(optionName, actionConfig) as (
-      args: SchedulerActionMap[K],
-    ) => void;
+    return this._createActionByOption(optionName, actionConfig);
   }
 
   private initActions(): void {
@@ -1241,7 +1239,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
   private updateA11yStatus(): void {
     const dateRange = this._workSpace.getDateRange();
     const indicatorTime = this.option('showCurrentTimeIndicator')
-      ? getToday(this.option('indicatorTime') as Date, this.timeZoneCalculator)
+      ? getToday(this.option('indicatorTime'), this.timeZoneCalculator)
       : undefined;
     const label = getA11yStatusText(
       this.currentView,
@@ -1444,7 +1442,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       itemElement: $(e.itemElement),
       targetedAppointment: e.itemData?.targetedAppointment,
     };
-    const mappedFields = this.fire('mapAppointmentFields', eventConfig) as MappedAppointmentFields;
+    const mappedFields: MappedAppointmentFields = this.fire('mapAppointmentFields', eventConfig);
 
     return extend({}, mappedFields, {
       component: e.component,
@@ -1771,7 +1769,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       groups: this.resourceManager.groupResources(),
       onCellClick: this.createSchedulerAction('onCellClick'),
       onCellContextMenu: this.createSchedulerAction('onCellContextMenu'),
-      skippedDays: this.getViewOption('hiddenWeekDays') as number[],
+      skippedDays: this.getViewOption('hiddenWeekDays'),
       dataCellTemplate: mergedOptions.dataCellTemplate
         ? this._getTemplate(mergedOptions.dataCellTemplate) as unknown as TemplateBase
         : null,
@@ -1960,8 +1958,8 @@ class Scheduler extends SchedulerOptionsBaseWidget {
         onSave: (newAppointment) => {
           this.updateAppointment(rawAppointment, appointment.source).catch(noop);
           return this.saveAppointmentAndScroll(
-            () => this.addAppointment(newAppointment as SafeAppointment),
-            newAppointment as SafeAppointment,
+            () => this.addAppointment(newAppointment),
+            newAppointment,
           );
         },
         title: messageLocalization.format('dxScheduler-editPopupTitle'),
@@ -2178,7 +2176,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       cancel: false,
     };
 
-    const performFailAction = function performFailAction(this: Scheduler, err?: Error): void {
+    const failAction = function performFailAction(this: Scheduler, err?: Error): void {
       if (onUpdatePrevented) {
         onUpdatePrevented.call(this);
       }
@@ -2217,14 +2215,14 @@ class Scheduler extends SchedulerOptionsBaseWidget {
                 storeAppointment as SafeAppointment,
               );
             })
-            .fail(() => performFailAction());
+            .fail(() => failAction());
         } catch (err: unknown) {
-          performFailAction(err instanceof Error ? err : undefined);
+          failAction(err instanceof Error ? err : undefined);
           this.updatingAppointments.delete(target);
           deferred.resolve();
         }
       } else {
-        performFailAction();
+        failAction();
         this.updatingAppointments.delete(target);
         deferred.resolve();
       }
@@ -2270,7 +2268,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     appointment?: SafeAppointment,
   ): void {
     const args: AppointmentCompletedOptions = {
-      appointmentData: (appointment ?? storeAppointment) as SafeAppointment,
+      appointmentData: (appointment ?? storeAppointment),
     };
 
     if (storeAppointment instanceof Error) {
@@ -2373,7 +2371,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
   ): void {
     const newRawTargetedAppointment: SafeAppointment = rawTargetedAppointment
       ? { ...rawTargetedAppointment }
-      : {} as SafeAppointment;
+      : {};
     if (rawTargetedAppointment) {
       delete newRawTargetedAppointment.displayStartDate;
       delete newRawTargetedAppointment.displayEndDate;
@@ -2387,7 +2385,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
 
     const isCreateAppointment = createNewAppointment ?? isEmptyObject(rawAppointment);
 
-    let appointment: SafeAppointment = rawAppointment ?? {} as SafeAppointment;
+    let appointment: SafeAppointment = rawAppointment ?? {};
     if (isEmptyObject(appointment)) {
       appointment = this.createPopupAppointment();
     }
@@ -2397,8 +2395,8 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       if (this.editing.allowAdding) {
         this.appointmentPopup.show(appointment, {
           onSave: (appointmentData) => this.saveAppointmentAndScroll(
-            () => this.addAppointment(appointmentData as SafeAppointment),
-            appointmentData as SafeAppointment,
+            () => this.addAppointment(appointmentData),
+            appointmentData,
           ),
           title: messageLocalization.format('dxScheduler-newPopupTitle'),
           readOnly: false,
@@ -2419,8 +2417,8 @@ class Scheduler extends SchedulerOptionsBaseWidget {
 
         this.appointmentPopup.show(appointment, {
           onSave: (appointmentData) => this.saveAppointmentAndScroll(
-            () => this.updateAppointment(appointment, appointmentData as SafeAppointment),
-            appointmentData as SafeAppointment,
+            () => this.updateAppointment(appointment, appointmentData),
+            appointmentData,
           ),
           title: messageLocalization.format('dxScheduler-editPopupTitle'),
           readOnly,

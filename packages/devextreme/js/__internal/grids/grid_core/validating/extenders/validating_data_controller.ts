@@ -57,6 +57,7 @@ export const validatingDataControllerExtender = (
     newRow: ProcessedItem,
     columnIndex: number,
   ): boolean {
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
     const cell = oldRow.cells?.[columnIndex] as ValidatedCell | undefined;
 
     const oldValidationStatus = this._getValidationStatus({ status: cell?.validationStatus });

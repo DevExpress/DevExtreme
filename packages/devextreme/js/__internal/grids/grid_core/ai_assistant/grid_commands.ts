@@ -196,7 +196,7 @@ export class GridCommands {
 
       parsedActions.push({
         name: action.name,
-        args: parseResult.data as Record<string, unknown>,
+        args: parseResult.data,
       });
     }
 
