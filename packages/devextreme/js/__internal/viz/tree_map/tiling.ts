@@ -3,7 +3,6 @@
 /* eslint-disable no-plusplus */
 /* eslint-disable func-names */
 /* eslint-disable @typescript-eslint/naming-convention */
-/* eslint-disable @stylistic/max-len */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
@@ -38,7 +37,9 @@ export const getStaticSideIndex = function (rect) {
 };
 
 export function buildSidesData(rect, directions, _staticSideIndex) {
-  const staticSideIndex = _staticSideIndex !== undefined ? _staticSideIndex : getStaticSideIndex(rect);
+  const staticSideIndex = _staticSideIndex !== undefined
+    ? _staticSideIndex
+    : getStaticSideIndex(rect);
   const variedSideIndex = 1 - staticSideIndex;
   const staticSideDirection = directions[staticSideIndex];
   const variedSideDirection = directions[variedSideIndex];
@@ -70,7 +71,8 @@ export function calculateRectangles(nodes, head, totalRect, sidesData, rowData) 
   let delta;
 
   variedSidePart[sidesData.varied1] = totalRect[sidesData.varied1];
-  variedSidePart[sidesData.varied2] = totalRect[sidesData.varied1] + sidesData.variedDir * rowData.side;
+  variedSidePart[sidesData.varied2] = totalRect[sidesData.varied1]
+    + sidesData.variedDir * rowData.side;
   for (i = head, ii = head + rowData.count; i < ii; ++i) {
     rect = variedSidePart.slice();
     rect[static1] = position;

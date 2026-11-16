@@ -2,7 +2,6 @@
 /* eslint-disable @typescript-eslint/no-this-alias */
 /* eslint-disable func-names */
 /* eslint-disable @typescript-eslint/naming-convention */
-/* eslint-disable @stylistic/max-len */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable prefer-destructuring */
@@ -18,7 +17,13 @@ const _isNumeric = isNumeric;
 export default _extend({}, candlestickPoint, {
   _getPoints() {
     const that = this;
-    const createPoint = that._options.rotated ? function (x, y) { return [y, x]; } : function (x, y) { return [x, y]; };
+    const createPoint = that._options.rotated
+      ? function (x, y) {
+        return [y, x];
+      }
+      : function (x, y) {
+        return [x, y];
+      };
     const openYExist = _isNumeric(that.openY);
     const closeYExist = _isNumeric(that.closeY);
     const x = that.x;

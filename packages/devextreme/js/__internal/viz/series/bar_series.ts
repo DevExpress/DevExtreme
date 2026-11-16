@@ -7,7 +7,6 @@
 /* eslint-disable func-names */
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable @typescript-eslint/no-shadow */
-/* eslint-disable @stylistic/max-len */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable prefer-destructuring */
@@ -132,7 +131,8 @@ const baseBarSeriesMethods = {
   getValueRangeInitialValue: areaSeries.getValueRangeInitialValue,
 
   _patchMarginOptions(options) {
-    options.checkInterval = !this.useAggregation() || this.getArgumentAxis()?.aggregatedPointBetweenTicks();
+    options.checkInterval = !this.useAggregation()
+      || this.getArgumentAxis()?.aggregatedPointBetweenTicks();
     return options;
   },
 
@@ -180,11 +180,15 @@ chart.bar = _extend({}, chartSeries, baseBarSeriesMethods, {
     const translator = axis.getTranslator();
     const range = this.getViewport();
     const min = translator.translate(range.categories ? range.categories[0] : range.min);
-    const max = translator.translate(range.categories ? range.categories[range.categories.length - 1] : range.max);
+    const max = translator.translate(
+      range.categories ? range.categories[range.categories.length - 1] : range.max,
+    );
     const rotated = this.getOptions().rotated;
     const inverted = axis.getOptions().inverted;
 
-    return rotated && !inverted || !rotated && inverted ? coord >= min && coord <= max : coord >= max && coord <= min;
+    return (rotated && !inverted) || (!rotated && inverted)
+      ? coord >= min && coord <= max
+      : coord >= max && coord <= min;
   },
 
   getSeriesPairCoord(coord, isArgument) {
@@ -256,8 +260,16 @@ polar.bar = _extend({}, polarSeries, baseBarSeriesMethods, {
 
     for (let i = 0; i < points.length; i++) {
       const p = points[i];
-      const tmpPoint = _isDefined(p[paramName]) && _isDefined(params[paramName]) && p[paramName].valueOf() === params[paramName].valueOf()
-        ? convertPolarToXY(argAxis.getCenter(), startAngle, -argAxis.getTranslatedAngle(p.angle), p.radius) : undefined;
+      const tmpPoint = _isDefined(p[paramName])
+        && _isDefined(params[paramName])
+        && p[paramName].valueOf() === params[paramName].valueOf()
+        ? convertPolarToXY(
+          argAxis.getCenter(),
+          startAngle,
+          -argAxis.getTranslatedAngle(p.angle),
+          p.radius,
+        )
+        : undefined;
 
       if (_isDefined(tmpPoint)) {
         // @ts-expect-error

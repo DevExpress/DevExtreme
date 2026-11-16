@@ -25,7 +25,6 @@
 /* eslint-disable no-multi-assign */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable default-case */
-/* eslint-disable @stylistic/max-len */
 /* eslint-disable spellcheck/spell-checker */
 /* eslint-disable @typescript-eslint/init-declarations */
 /* eslint-disable no-restricted-syntax */
@@ -339,12 +338,41 @@ export function processHatchingAttrs(element: HatchingTarget, attrs: SvgAttribut
 // Build path segments
 //
 
-const buildArcPath = function (x: number, y: number, innerR: number, outerR: number, startAngleCos: number, startAngleSin: number, endAngleCos: number, endAngleSin: number, isCircle: boolean, longFlag: string): string {
+const buildArcPath = function (
+  x: number,
+  y: number,
+  innerR: number,
+  outerR: number,
+  startAngleCos: number,
+  startAngleSin: number,
+  endAngleCos: number,
+  endAngleSin: number,
+  isCircle: boolean,
+  longFlag: string,
+): string {
   return [
-    'M', (x + outerR * startAngleCos).toFixed(ARC_COORD_PREC), (y - outerR * startAngleSin).toFixed(ARC_COORD_PREC),
-    'A', outerR.toFixed(ARC_COORD_PREC), outerR.toFixed(ARC_COORD_PREC), 0, longFlag, 0, (x + outerR * endAngleCos).toFixed(ARC_COORD_PREC), (y - outerR * endAngleSin).toFixed(ARC_COORD_PREC),
-    isCircle ? 'M' : 'L', (x + innerR * endAngleCos).toFixed(5), (y - innerR * endAngleSin).toFixed(ARC_COORD_PREC),
-    'A', innerR.toFixed(ARC_COORD_PREC), innerR.toFixed(ARC_COORD_PREC), 0, longFlag, 1, (x + innerR * startAngleCos).toFixed(ARC_COORD_PREC), (y - innerR * startAngleSin).toFixed(ARC_COORD_PREC),
+    'M',
+    (x + outerR * startAngleCos).toFixed(ARC_COORD_PREC),
+    (y - outerR * startAngleSin).toFixed(ARC_COORD_PREC),
+    'A',
+    outerR.toFixed(ARC_COORD_PREC),
+    outerR.toFixed(ARC_COORD_PREC),
+    0,
+    longFlag,
+    0,
+    (x + outerR * endAngleCos).toFixed(ARC_COORD_PREC),
+    (y - outerR * endAngleSin).toFixed(ARC_COORD_PREC),
+    isCircle ? 'M' : 'L',
+    (x + innerR * endAngleCos).toFixed(5),
+    (y - innerR * endAngleSin).toFixed(ARC_COORD_PREC),
+    'A',
+    innerR.toFixed(ARC_COORD_PREC),
+    innerR.toFixed(ARC_COORD_PREC),
+    0,
+    longFlag,
+    1,
+    (x + innerR * startAngleCos).toFixed(ARC_COORD_PREC),
+    (y - innerR * startAngleSin).toFixed(ARC_COORD_PREC),
     'Z',
   ].join(' ');
 };
@@ -376,7 +404,15 @@ function buildCurveSegments(points: ThemeValue, close?: boolean): PathSegment[] 
   return buildSegments(points, buildSimpleCurveSegment, close);
 }
 
-function buildSegments(points: ThemeValue, buildSimpleSegment: (points: ThemeValue, close: boolean | undefined, list: PathSegment[]) => PathSegment[], close: boolean | undefined): PathSegment[] {
+function buildSegments(
+  points: ThemeValue,
+  buildSimpleSegment: (
+    points: ThemeValue,
+    close: boolean | undefined,
+    list: PathSegment[],
+  ) => PathSegment[],
+  close: boolean | undefined,
+): PathSegment[] {
   let i;
   let ii;
   const list: PathSegment[] = [];
@@ -390,7 +426,11 @@ function buildSegments(points: ThemeValue, buildSimpleSegment: (points: ThemeVal
   return list;
 }
 
-function buildSimpleLineSegment(points: ThemeValue, close: boolean | undefined, list: PathSegment[]): PathSegment[] {
+function buildSimpleLineSegment(
+  points: ThemeValue,
+  close: boolean | undefined,
+  list: PathSegment[],
+): PathSegment[] {
   let i = 0;
   const k0 = list.length;
   let k = k0;
@@ -414,7 +454,11 @@ function buildSimpleLineSegment(points: ThemeValue, close: boolean | undefined, 
   return list;
 }
 
-function buildSimpleCurveSegment(points: ThemeValue, close: boolean | undefined, list: PathSegment[]): PathSegment[] {
+function buildSimpleCurveSegment(
+  points: ThemeValue,
+  close: boolean | undefined,
+  list: PathSegment[],
+): PathSegment[] {
   let i;
   let k = list.length;
   const ii = (points || []).length;
@@ -471,7 +515,11 @@ function combinePathParam(segments: PathSegment[]): string {
   return d.join(' ');
 }
 
-function compensateSegments(oldSegments: PathSegment[], newSegments: PathSegment[], type: string): PathSegment[] | undefined {
+function compensateSegments(
+  oldSegments: PathSegment[],
+  newSegments: PathSegment[],
+  type: string,
+): PathSegment[] | undefined {
   const oldLength = oldSegments.length;
   const newLength = newSegments.length;
   let i;
@@ -553,7 +601,8 @@ function baseCss<T extends CssTarget>(that: T, styles?: SvgAttributes | null): T
       elemStyles[key] = value !== '' ? value : null;
     }
   }
-  // NOTE: Seems that [].concat is not faster when there are only few entries in the `styles` (and in most cases there are few of them)
+  // NOTE: Seems that [].concat is not faster when there are only few entries in the `styles` (and
+  // in most cases there are few of them)
   for (key in elemStyles) {
     // The alternative is to *delete* entries in the previous cycle, but it is *delete*!
     value = elemStyles[key];
@@ -661,7 +710,13 @@ function baseAttr(that: SvgElementInstance, attrs?: string | SvgAttributes | nul
   return that;
 }
 
-function orderHtmlTree(list: TextItem[], line: number, node: ThemeValue, parentStyle: SvgAttributes, parentClassName: string): number {
+function orderHtmlTree(
+  list: TextItem[],
+  line: number,
+  node: ThemeValue,
+  parentStyle: SvgAttributes,
+  parentClassName: string,
+): number {
   let style;
   let realStyle;
   let i;
@@ -670,12 +725,16 @@ function orderHtmlTree(list: TextItem[], line: number, node: ThemeValue, parentS
 
   if (node.wholeText !== undefined) {
     list.push({
-      value: node.wholeText, style: parentStyle, className: parentClassName /* EXPERIMENTAL */, line, height: parentStyle[KEY_FONT_SIZE] || 0,
+      value: node.wholeText,
+      style: parentStyle,
+      className: parentClassName /* EXPERIMENTAL */,
+      line,
+      height: parentStyle[KEY_FONT_SIZE] || 0,
     });
   } else if (node.tagName === 'BR') {
     ++line;
   } else if (domAdapter.isElementNode(node)) {
-    extend(style = {}, parentStyle);
+    extend((style = {}), parentStyle);
     switch (node.tagName) {
       case 'B':
       case 'STRONG':
@@ -736,7 +795,8 @@ function parseHTML(text: string): TextItem[] {
   const div = domAdapter.createElement('div');
   div.innerHTML = text.replace(/\r/g, '').replace(/\n/g, '<br/>').replace(/style=/g, 'data-style=');
   div.querySelectorAll('[data-style]').forEach((element) => {
-    // @ts-expect-error querySelectorAll types the matches as Element, which has no style; a string sets the inline style text
+    // @ts-expect-error querySelectorAll types the matches as Element, which has no style; a string
+    // sets the inline style text
     element.style = element.getAttribute('data-style');
     element.removeAttribute('data-style');
   });
@@ -799,8 +859,13 @@ function detachAndStoreTitleElements(element: Element): () => void {
   };
 }
 
-// @ts-expect-error returns the index only when the text crosses maxWidth, undefined otherwise
-function getIndexForEllipsis(text: TextItem, maxWidth: number, startBox: number, endBox: number): number | undefined {
+function getIndexForEllipsis(
+  text: TextItem,
+  maxWidth: number,
+  startBox: number,
+  endBox: number,
+  // @ts-expect-error returns the index only when the text crosses maxWidth, undefined otherwise
+): number | undefined {
   let k;
   let kk;
   if (startBox <= maxWidth && endBox > maxWidth) {
@@ -816,7 +881,11 @@ function getTextWidth(text: TextItem): number {
   return text.value.length ? text.tspan.getSubStringLength(0, text.value.length) : 0;
 }
 
-function prepareLines(element: SvgTextDomElement, texts: TextItem[] | null, maxWidth: number): TextLine[] {
+function prepareLines(
+  element: SvgTextDomElement,
+  texts: TextItem[] | null,
+  maxWidth: number,
+): TextLine[] {
   let lines: TextLine[] = [];
   let i;
   let ii;
@@ -859,7 +928,10 @@ function getSpaceBreakIndex(text: TextItem, maxWidth: number): number {
   }, initialIndices);
 
   let spaceIndex = 0;
-  while (spaceIndices[spaceIndex + 1] !== undefined && (text.startBox + text.tspan.getSubStringLength(0, spaceIndices[spaceIndex + 1]) < maxWidth)) {
+  while (
+    spaceIndices[spaceIndex + 1] !== undefined
+    && text.startBox + text.tspan.getSubStringLength(0, spaceIndices[spaceIndex + 1]) < maxWidth
+  ) {
     spaceIndex++;
   }
 
@@ -875,7 +947,10 @@ function getWordBreakIndex(text: TextItem, maxWidth: number): number | undefined
   }
 }
 
-function getEllipsisString(ellipsisMaxWidth: number, { hideOverflowEllipsis }: TextOverflowOptions): string {
+function getEllipsisString(
+  ellipsisMaxWidth: number,
+  { hideOverflowEllipsis }: TextOverflowOptions,
+): string {
   return hideOverflowEllipsis && ellipsisMaxWidth === 0 ? '' : ELLIPSIS;
 }
 
@@ -893,7 +968,13 @@ function setEllipsis(text: TextItem, ellipsisMaxWidth: number, options: TextOver
   }
 }
 
-function wordWrap(text: TextItem, maxWidth: number, ellipsisMaxWidth: number, options: TextOverflowOptions, lastStepBreakIndex?: number): TextLine[] {
+function wordWrap(
+  text: TextItem,
+  maxWidth: number,
+  ellipsisMaxWidth: number,
+  options: TextOverflowOptions,
+  lastStepBreakIndex?: number,
+): TextLine[] {
   const wholeText = text.value;
   let breakIndex;
   if (options.wordWrap !== 'none') {
@@ -961,39 +1042,45 @@ function calculateLineHeight(line: TextLine, lineHeight: number): number {
   return line.parts.reduce((height, text) => max(height, getItemLineHeight(text, lineHeight)), 0);
 }
 
-function setMaxHeight(lines: TextLine[], ellipsisMaxWidth: number, options: TextOverflowOptions, maxHeight: number, lineHeight: number): TextLine[] {
+function setMaxHeight(
+  lines: TextLine[],
+  ellipsisMaxWidth: number,
+  options: TextOverflowOptions,
+  maxHeight: number,
+  lineHeight: number,
+): TextLine[] {
   const { textOverflow } = options;
-  if (!isFinite(maxHeight)
-      || Number(maxHeight) === 0
-    || textOverflow === 'none'
-  ) {
+  if (!isFinite(maxHeight) || Number(maxHeight) === 0 || textOverflow === 'none') {
     return lines;
   }
-  const result = lines.reduce<[TextLine[], number]>(([lines, commonHeight], l, index, arr) => {
-    const height = calculateLineHeight(l, lineHeight);
-    commonHeight += height;
-    if (commonHeight < maxHeight) {
-      lines.push(l);
-    } else {
-      l.parts.forEach((item) => {
-        removeTextSpan(item);
-      });
-      if (textOverflow === 'ellipsis') {
-        const prevLine = arr[index - 1];
-        if (prevLine) {
-          const text = prevLine.parts[prevLine.parts.length - 1];
-          if (!text.hasEllipsis) {
-            if (ellipsisMaxWidth === 0 || text.endBox < ellipsisMaxWidth) {
-              setNewText(text, text.value.length, getEllipsisString(ellipsisMaxWidth, options));
-            } else {
-              setEllipsis(text, ellipsisMaxWidth, options);
+  const result = lines.reduce<[TextLine[], number]>(
+    ([lines, commonHeight], l, index, arr) => {
+      const height = calculateLineHeight(l, lineHeight);
+      commonHeight += height;
+      if (commonHeight < maxHeight) {
+        lines.push(l);
+      } else {
+        l.parts.forEach((item) => {
+          removeTextSpan(item);
+        });
+        if (textOverflow === 'ellipsis') {
+          const prevLine = arr[index - 1];
+          if (prevLine) {
+            const text = prevLine.parts[prevLine.parts.length - 1];
+            if (!text.hasEllipsis) {
+              if (ellipsisMaxWidth === 0 || text.endBox < ellipsisMaxWidth) {
+                setNewText(text, text.value.length, getEllipsisString(ellipsisMaxWidth, options));
+              } else {
+                setEllipsis(text, ellipsisMaxWidth, options);
+              }
             }
           }
         }
       }
-    }
-    return [lines, commonHeight];
-  }, [[], 0]);
+      return [lines, commonHeight];
+    },
+    [[], 0],
+  );
 
   if (textOverflow === 'hide' && result[1] > maxHeight) {
     result[0].forEach((l) => {
@@ -1007,7 +1094,13 @@ function setMaxHeight(lines: TextLine[], ellipsisMaxWidth: number, options: Text
   return result[0];
 }
 
-function applyOverflowRules(element: SvgTextDomElement, texts: TextItem[] | null, maxWidth: number, ellipsisMaxWidth: number, options: TextOverflowOptions): TextLine[] {
+function applyOverflowRules(
+  element: SvgTextDomElement,
+  texts: TextItem[] | null,
+  maxWidth: number,
+  ellipsisMaxWidth: number,
+  options: TextOverflowOptions,
+): TextLine[] {
   if (!texts) {
     const textValue = element.textContent;
     const text = { value: textValue, height: 0, line: 0 };
@@ -1017,40 +1110,47 @@ function applyOverflowRules(element: SvgTextDomElement, texts: TextItem[] | null
     texts = [text];
   }
 
-  return texts.reduce<[TextLine[], number, number, boolean, number?]>(([lines, startBox, endBox, stop, lineNumber], text) => {
-    const line = lines[lines.length - 1];
-    if (stop) {
-      return [lines, startBox, endBox, stop];
-    }
-    if (!line || text.line !== lineNumber) {
-      text.startBox = startBox = 0;
-      lines.push({ commonLength: text.value.length, parts: [text] });
-    } else {
-      text.startBox = startBox;
-      if (startBox > ellipsisMaxWidth && options.wordWrap === 'none' && options.textOverflow === 'ellipsis') {
-        removeTextSpan(text);
-        return [lines, startBox, endBox, stop, lineNumber];
+  return texts.reduce<[TextLine[], number, number, boolean, number?]>(
+    ([lines, startBox, endBox, stop, lineNumber], text) => {
+      const line = lines[lines.length - 1];
+      if (stop) {
+        return [lines, startBox, endBox, stop];
       }
-      line.parts.push(text);
-
-      line.commonLength += text.value.length;
-    }
-    text.endBox = endBox = startBox + getTextWidth(text);
-
-    startBox = endBox;
-
-    if (isDefined(maxWidth) && endBox > maxWidth) {
-      const wordWrapLines = wordWrap(text, maxWidth, ellipsisMaxWidth, options);
-      if (!wordWrapLines.length) {
-        lines = [];
-        stop = true;
+      if (!line || text.line !== lineNumber) {
+        text.startBox = startBox = 0;
+        lines.push({ commonLength: text.value.length, parts: [text] });
       } else {
-        lines = lines.concat(wordWrapLines.filter((l) => l.parts.length > 0));
-      }
-    }
+        text.startBox = startBox;
+        if (
+          startBox > ellipsisMaxWidth
+          && options.wordWrap === 'none'
+          && options.textOverflow === 'ellipsis'
+        ) {
+          removeTextSpan(text);
+          return [lines, startBox, endBox, stop, lineNumber];
+        }
+        line.parts.push(text);
 
-    return [lines, startBox, endBox, stop, text.line];
-  }, [[], 0, 0, false, 0])[0];
+        line.commonLength += text.value.length;
+      }
+      text.endBox = endBox = startBox + getTextWidth(text);
+
+      startBox = endBox;
+
+      if (isDefined(maxWidth) && endBox > maxWidth) {
+        const wordWrapLines = wordWrap(text, maxWidth, ellipsisMaxWidth, options);
+        if (!wordWrapLines.length) {
+          lines = [];
+          stop = true;
+        } else {
+          lines = lines.concat(wordWrapLines.filter((l) => l.parts.length > 0));
+        }
+      }
+
+      return [lines, startBox, endBox, stop, text.line];
+    },
+    [[], 0, 0, false, 0],
+  )[0];
 }
 
 function setNewText(text: TextItem, index: number, insertString = ELLIPSIS): void {
@@ -1067,7 +1167,11 @@ function removeTextSpan(text: TextItem): void {
   text.stroke && text.stroke.parentNode && text.stroke.parentNode.removeChild(text.stroke);
 }
 
-function createTextNodes(wrapper: TextSvgElementInstance, text: ThemeValue, isStroked: boolean): void {
+function createTextNodes(
+  wrapper: TextSvgElementInstance,
+  text: ThemeValue,
+  isStroked: boolean,
+): void {
   let items;
   let parsedHtml;
 
@@ -1089,7 +1193,8 @@ function createTextNodes(wrapper: TextSvgElementInstance, text: ThemeValue, isSt
     items = [{ value: text.trim(), height: 0 }];
   }
   if (items) {
-    if (items.length) { // T227388
+    if (items.length) {
+      // T227388
       wrapper._texts = items;
       if (isStroked) {
         createTspans(items, wrapper.element, KEY_STROKE);
@@ -1154,7 +1259,13 @@ function maxLengthFontSize(fontSize1: ThemeValue, fontSize2: ThemeValue): ThemeV
   const height1 = parsedHeight1 || DEFAULT_FONT_SIZE;
   const height2 = parsedHeight2 || DEFAULT_FONT_SIZE;
 
-  return height1 > height2 ? !isNaN(parsedHeight1) ? fontSize1 : height1 : !isNaN(parsedHeight2) ? fontSize2 : height2;
+  return height1 > height2
+    ? !isNaN(parsedHeight1)
+      ? fontSize1
+      : height1
+    : !isNaN(parsedHeight2)
+      ? fontSize2
+      : height2;
 }
 
 function strokeTextNodes(wrapper: TextSvgElementInstance): void {
@@ -1175,7 +1286,12 @@ function strokeTextNodes(wrapper: TextSvgElementInstance): void {
   }
 }
 
-function baseAnimate<T extends SvgElementInstance>(that: T, params: SvgAttributes, options?: ElementAnimationOptions, complete?: () => void): T {
+function baseAnimate<T extends SvgElementInstance>(
+  that: T,
+  params: SvgAttributes,
+  options?: ElementAnimationOptions,
+  complete?: () => void,
+): T {
   options = options || {};
   let key;
   let value;
@@ -1202,7 +1318,9 @@ function baseAnimate<T extends SvgElementInstance>(that: T, params: SvgAttribute
       value = params[key];
       if (/^(translate(X|Y)|rotate[XY]?|scale(X|Y))$/i.test(key)) {
         animationParams.transform = animationParams.transform || { from: {}, to: {} };
-        animationParams.transform.from[key] = key in settings ? Number(settings[key].toFixed(3)) : defaults[key]; // T338486
+        animationParams.transform.from[key] = key in settings
+          ? Number(settings[key].toFixed(3))
+          : defaults[key]; // T338486
         animationParams.transform.to[key] = value;
       } else if (key === 'arc' || key === 'segments') {
         animationParams[key] = value;
@@ -1214,7 +1332,11 @@ function baseAnimate<T extends SvgElementInstance>(that: T, params: SvgAttribute
         };
       }
     }
-    renderer.animateElement(that, animationParams, extend(extend({}, renderer._animation), options));
+    renderer.animateElement(
+      that,
+      animationParams,
+      extend(extend({}, renderer._animation), options),
+    );
   } else {
     options.step && options.step.call(that, 1, 1);
     options.complete && options.complete.call(that);
@@ -1225,8 +1347,13 @@ function baseAnimate<T extends SvgElementInstance>(that: T, params: SvgAttribute
 }
 
 function buildLink(target: SvgElementInstance | null, parameters: ThemeValue): ElementLink {
-  // @ts-expect-error `to` is set below for a real link (a virtual link has no container), `i` once linkItem() inserts the item
-  const obj: ElementLink = { is: false, name: parameters.name || parameters, after: parameters.after };
+  // @ts-expect-error `to` is set below for a real link (a virtual link has no container), `i` once
+  // linkItem() inserts the item
+  const obj: ElementLink = {
+    is: false,
+    name: parameters.name || parameters,
+    after: parameters.after,
+  };
   if (target) {
     obj.to = target;
   } else {
@@ -1341,7 +1468,8 @@ export let SvgElement = class SvgElement {
     return this;
   }
 
-  // NOTE: Though it is not actually required I think it would be better to explicitly declare usage of link mechanism
+  // NOTE: Though it is not actually required I think it would be better to explicitly declare usage
+  // of link mechanism
   enableLinks(): this {
     this._links = [];
     return this;
@@ -1387,7 +1515,8 @@ export let SvgElement = class SvgElement {
     return this;
   }
 
-  // It might be better to traverse list to start (not to end) as widget components more likely will be rendered in the same order as they were created
+  // It might be better to traverse list to start (not to end) as widget components more likely will
+  // be rendered in the same order as they were created
   linkAppend(): this {
     const link = this._link;
     const items = link.to._links;
@@ -1502,7 +1631,13 @@ export let SvgElement = class SvgElement {
     return this;
   }
 
-  rotate(angle: number, x?: number, y?: number, animate?: boolean, animOptions?: ElementAnimationOptions): this {
+  rotate(
+    angle: number,
+    x?: number,
+    y?: number,
+    animate?: boolean,
+    animOptions?: ElementAnimationOptions,
+  ): this {
     const obj: SvgAttributes = {
       rotate: angle || 0,
     };
@@ -1588,9 +1723,11 @@ export let SvgElement = class SvgElement {
   on(...args: ThemeValue[]): this;
   on(): this {
     const args = [this._getJQElement()];
-    // @ts-expect-error push.apply forwards `arguments`, which the typings do not accept as an argument array
+    // @ts-expect-error push.apply forwards `arguments`, which the typings do not accept as an
+    // argument array
     args.push.apply(args, arguments);
-    // @ts-expect-error apply() passes the collected array, the typings expect the (element, eventName, handler) tuple
+    // @ts-expect-error apply() passes the collected array, the typings expect the (element,
+    // eventName, handler) tuple
     eventsEngine.on.apply(eventsEngine, args);
     return this;
   }
@@ -1598,9 +1735,11 @@ export let SvgElement = class SvgElement {
   off(...args: ThemeValue[]): this;
   off(): this {
     const args = [this._getJQElement()];
-    // @ts-expect-error push.apply forwards `arguments`, which the typings do not accept as an argument array
+    // @ts-expect-error push.apply forwards `arguments`, which the typings do not accept as an
+    // argument array
     args.push.apply(args, arguments);
-    // @ts-expect-error apply() passes the collected array, the typings expect the (element, eventName?, handler?) tuple
+    // @ts-expect-error apply() passes the collected array, the typings expect the (element,
+    // eventName?, handler?) tuple
     eventsEngine.off.apply(eventsEngine, args);
     return this;
   }
@@ -1608,9 +1747,11 @@ export let SvgElement = class SvgElement {
   trigger(...args: ThemeValue[]): this;
   trigger(): this {
     const args = [this._getJQElement()];
-    // @ts-expect-error push.apply forwards `arguments`, which the typings do not accept as an argument array
+    // @ts-expect-error push.apply forwards `arguments`, which the typings do not accept as an
+    // argument array
     args.push.apply(args, arguments);
-    // @ts-expect-error apply() passes the collected array, the typings expect the (element, event, extraParameters?) tuple
+    // @ts-expect-error apply() passes the collected array, the typings expect the (element, event,
+    // extraParameters?) tuple
     eventsEngine.trigger.apply(eventsEngine, args);
     return this;
   }
@@ -1694,14 +1835,24 @@ export let ArcSvgElement = class ArcSvgElement extends SvgElement {
     if (isObjectArgument(attrs)) {
       attrs = extend({}, attrs);
       if ('x' in attrs || 'y' in attrs || 'innerRadius' in attrs || 'outerRadius' in attrs || 'startAngle' in attrs || 'endAngle' in attrs) {
-        settings.x = x = 'x' in attrs ? attrs.x : settings.x; delete attrs.x;
-        settings.y = y = 'y' in attrs ? attrs.y : settings.y; delete attrs.y;
-        settings.innerRadius = innerRadius = 'innerRadius' in attrs ? attrs.innerRadius : settings.innerRadius; delete attrs.innerRadius;
-        settings.outerRadius = outerRadius = 'outerRadius' in attrs ? attrs.outerRadius : settings.outerRadius; delete attrs.outerRadius;
-        settings.startAngle = startAngle = 'startAngle' in attrs ? attrs.startAngle : settings.startAngle; delete attrs.startAngle;
-        settings.endAngle = endAngle = 'endAngle' in attrs ? attrs.endAngle : settings.endAngle; delete attrs.endAngle;
-        // @ts-expect-error normalizeArcParams returns an untyped array of the buildArcPath arguments
-        attrs.d = buildArcPath.apply(null, normalizeArcParams(x, y, innerRadius, outerRadius, startAngle, endAngle));
+        settings.x = x = 'x' in attrs ? attrs.x : settings.x;
+        delete attrs.x;
+        settings.y = y = 'y' in attrs ? attrs.y : settings.y;
+        delete attrs.y;
+        settings.innerRadius = innerRadius = 'innerRadius' in attrs ? attrs.innerRadius : settings.innerRadius;
+        delete attrs.innerRadius;
+        settings.outerRadius = outerRadius = 'outerRadius' in attrs ? attrs.outerRadius : settings.outerRadius;
+        delete attrs.outerRadius;
+        settings.startAngle = startAngle = 'startAngle' in attrs ? attrs.startAngle : settings.startAngle;
+        delete attrs.startAngle;
+        settings.endAngle = endAngle = 'endAngle' in attrs ? attrs.endAngle : settings.endAngle;
+        delete attrs.endAngle;
+        attrs.d = buildArcPath.apply(
+          null,
+          // @ts-expect-error normalizeArcParams returns an untyped array of the buildArcPath
+          // arguments
+          normalizeArcParams(x, y, innerRadius, outerRadius, startAngle, endAngle),
+        );
       }
     }
     return baseAttr(this, attrs);
@@ -1770,9 +1921,15 @@ export let RectSvgElement = class RectSvgElement extends SvgElement {
         || attrs[KEY_STROKE_WIDTH] !== undefined) {
         attrs.x !== undefined ? x = this._originalX = attrs.x : x = this._originalX || 0;
         attrs.y !== undefined ? y = this._originalY = attrs.y : y = this._originalY || 0;
-        attrs.width !== undefined ? width = this._originalWidth = attrs.width : width = this._originalWidth || 0;
-        attrs.height !== undefined ? height = this._originalHeight = attrs.height : height = this._originalHeight || 0;
-        attrs[KEY_STROKE_WIDTH] !== undefined ? sw = this._originalSW = attrs[KEY_STROKE_WIDTH] : sw = this._originalSW;
+        attrs.width !== undefined
+          ? (width = this._originalWidth = attrs.width)
+          : (width = this._originalWidth || 0);
+        attrs.height !== undefined
+          ? (height = this._originalHeight = attrs.height)
+          : (height = this._originalHeight || 0);
+        attrs[KEY_STROKE_WIDTH] !== undefined
+          ? (sw = this._originalSW = attrs[KEY_STROKE_WIDTH])
+          : (sw = this._originalSW);
 
         maxSW = ~~((width < height ? width : height) / 2);
         newSW = (sw || 0) < maxSW ? sw || 0 : maxSW;
@@ -1781,7 +1938,8 @@ export let RectSvgElement = class RectSvgElement extends SvgElement {
         attrs.y = y + newSW / 2;
         attrs.width = width - newSW;
         attrs.height = height - newSW;
-        (((sw || 0) !== newSW) || !(newSW === 0 && sw === undefined)) && (attrs[KEY_STROKE_WIDTH] = newSW);
+        ((sw || 0) !== newSW || !(newSW === 0 && sw === undefined))
+          && (attrs[KEY_STROKE_WIDTH] = newSW);
       }
 
       if ('sharp' in attrs) {
@@ -1915,7 +2073,11 @@ export let TextSvgElement = class TextSvgElement extends SvgElement {
     return hasEllipsis;
   }
 
-  setMaxSize(maxWidth: number, maxHeight?: number, options: TextOverflowOptions = {}): MaxSizeResult {
+  setMaxSize(
+    maxWidth: number,
+    maxHeight?: number,
+    options: TextOverflowOptions = {},
+  ): MaxSizeResult {
     let lines: TextLine[] = [];
     let textChanged = false;
     let textIsEmpty = false;
@@ -1929,7 +2091,7 @@ export let TextSvgElement = class TextSvgElement extends SvgElement {
 
     const { width, height } = this._getElementBBox();
 
-    if ((width || height) && (width > maxWidth || maxHeight && height > maxHeight)) {
+    if ((width || height) && (width > maxWidth || (maxHeight && height > maxHeight))) {
       if (maxWidth - ellipsisWidth < 0) {
         ellipsisMaxWidth = 0;
       } else {
@@ -1937,15 +2099,26 @@ export let TextSvgElement = class TextSvgElement extends SvgElement {
       }
 
       lines = applyOverflowRules(this.element, this._texts, maxWidth, ellipsisMaxWidth, options);
-      // @ts-expect-error setMaxHeight() keeps every line for a non-finite maxHeight, undefined included
-      lines = setMaxHeight(lines, ellipsisMaxWidth, options, maxHeight, parseFloat(this._getLineHeight()));
-      this._texts = lines.reduce((texts: TextItem[], line) => texts.concat(line.parts), []).filter((t) => t.value !== '').map((t) => {
-        t.stroke && t.tspan.parentNode.appendChild(t.stroke);
-        return t;
-      }).map((t) => {
-        t.tspan.parentNode.appendChild(t.tspan);
-        return t;
-      });
+      lines = setMaxHeight(
+        lines,
+        ellipsisMaxWidth,
+        options,
+        // @ts-expect-error setMaxHeight() keeps every line for a non-finite maxHeight, undefined
+        // included
+        maxHeight,
+        parseFloat(this._getLineHeight()),
+      );
+      this._texts = lines
+        .reduce((texts: TextItem[], line) => texts.concat(line.parts), [])
+        .filter((t) => t.value !== '')
+        .map((t) => {
+          t.stroke && t.tspan.parentNode.appendChild(t.stroke);
+          return t;
+        })
+        .map((t) => {
+          t.tspan.parentNode.appendChild(t.tspan);
+          return t;
+        });
 
       !this._texts.length && (this._texts = null);
 
@@ -1971,7 +2144,9 @@ export let TextSvgElement = class TextSvgElement extends SvgElement {
   }
 
   _getLineHeight(): ThemeValue {
-    return !isNaN(parseFloat(this._styles[KEY_FONT_SIZE])) ? this._styles[KEY_FONT_SIZE] : DEFAULT_FONT_SIZE;
+    return !isNaN(parseFloat(this._styles[KEY_FONT_SIZE]))
+      ? this._styles[KEY_FONT_SIZE]
+      : DEFAULT_FONT_SIZE;
   }
 };
 
@@ -2142,7 +2317,11 @@ export let Renderer = class Renderer {
     return this;
   }
 
-  animateElement(element: SvgElementInstance, params: SvgAttributes, options: AnimationOptions): this {
+  animateElement(
+    element: SvgElementInstance,
+    params: SvgAttributes,
+    options: AnimationOptions,
+  ): this {
     this._animationController.animateElement(element, params, options);
     return this;
   }
@@ -2178,7 +2357,14 @@ export let Renderer = class Renderer {
     return this._createElement('g');
   }
 
-  image(x?: number, y?: number, w?: number, h?: number, href?: string, location?: string): SvgElementInstance {
+  image(
+    x?: number,
+    y?: number,
+    w?: number,
+    h?: number,
+    href?: string,
+    location?: string,
+  ): SvgElementInstance {
     const image = this._createElement('image', {
       x: x || 0,
       y: y || 0,
@@ -2199,10 +2385,22 @@ export let Renderer = class Renderer {
 
   // TODO check B232257
   // TODO animate end angle special case
-  arc(x?: number, y?: number, innerRadius?: number, outerRadius?: number, startAngle?: number, endAngle?: number): ArcSvgElementInstance {
+  arc(
+    x?: number,
+    y?: number,
+    innerRadius?: number,
+    outerRadius?: number,
+    startAngle?: number,
+    endAngle?: number,
+  ): ArcSvgElementInstance {
     const elem = new ArcSvgElement(this);
     return elem.attr({
-      x: x || 0, y: y || 0, innerRadius: innerRadius || 0, outerRadius: outerRadius || 0, startAngle: startAngle || 0, endAngle: endAngle || 0,
+      x: x || 0,
+      y: y || 0,
+      innerRadius: innerRadius || 0,
+      outerRadius: outerRadius || 0,
+      startAngle: startAngle || 0,
+      endAngle: endAngle || 0,
     });
   }
 
@@ -2211,7 +2409,11 @@ export let Renderer = class Renderer {
     return elem.attr({ text, x: x || 0, y: y || 0 });
   }
 
-  linearGradient(stops: GradientStop[], id = getNextDefsSvgId(), rotationAngle?: number): SvgElementInstance {
+  linearGradient(
+    stops: GradientStop[],
+    id = getNextDefsSvgId(),
+    rotationAngle?: number,
+  ): SvgElementInstance {
     const gradient = this._createElement('linearGradient', {
       id,
       gradientTransform: `rotate(${rotationAngle || 0})`,
@@ -2259,7 +2461,9 @@ export let Renderer = class Renderer {
     }).append(this._defs);
     pattern.id = id;
 
-    const rect = this.rect(0, 0, step, step).attr({ fill: color, opacity: hatching.opacity }).append(pattern);
+    const rect = this.rect(0, 0, step, step)
+      .attr({ fill: color, opacity: hatching.opacity })
+      .append(pattern);
     const path = new PathSvgElement(this).attr({ d, 'stroke-width': hatching.width || 1, stroke: color }).append(pattern);
 
     /// #DEBUG
@@ -2270,7 +2474,12 @@ export let Renderer = class Renderer {
     return pattern;
   }
 
-  customPattern(id: string, template: PatternTemplate, width: number, height: number): SvgElementInstance {
+  customPattern(
+    id: string,
+    template: PatternTemplate,
+    width: number,
+    height: number,
+  ): SvgElementInstance {
     const option = {
       id,
       width,
@@ -2302,7 +2511,10 @@ export let Renderer = class Renderer {
   }
 
   // appended automatically
-  clipShape(method: (...args: ThemeValue[]) => SvgElementInstance, methodArgs: ThemeValue): SvgElementInstance {
+  clipShape(
+    method: (...args: ThemeValue[]) => SvgElementInstance,
+    methodArgs: ThemeValue,
+  ): SvgElementInstance {
     const id = getNextDefsSvgId();
     let clipPath = this._createElement('clipPath', { id }).append(this._defs);
     const shape = method.apply(this, methodArgs).append(clipPath);
@@ -2333,7 +2545,17 @@ export let Renderer = class Renderer {
   }
 
   // appended automatically
-  shadowFilter(x?: number, y?: number, width?: number, height?: number, offsetX?: number, offsetY?: number, blur?: number, color?: string, opacity?: number): SvgElementInstance {
+  shadowFilter(
+    x?: number,
+    y?: number,
+    width?: number,
+    height?: number,
+    offsetX?: number,
+    offsetY?: number,
+    blur?: number,
+    color?: string,
+    opacity?: number,
+  ): SvgElementInstance {
     const id = getNextDefsSvgId();
     const filter = this._createElement('filter', {
       id, x: x || 0, y: y || 0, width: width || 0, height: height || 0,
@@ -2430,7 +2652,10 @@ export let Renderer = class Renderer {
   }
 
   initDefsElements(): void {
-    const storage = this._defsElementsStorage = this._defsElementsStorage || { byHash: {}, baseId: getNextDefsSvgId() };
+    const storage = (this._defsElementsStorage = this._defsElementsStorage || {
+      byHash: {},
+      baseId: getNextDefsSvgId(),
+    });
     const { byHash } = storage;
     let name;
 
@@ -2442,7 +2667,11 @@ export let Renderer = class Renderer {
     storage.nextId = 0;
   }
 
-  drawPattern({ color, hatching }: SvgAttributes, storageId: string, nextId: number): SvgElementInstance {
+  drawPattern(
+    { color, hatching }: SvgAttributes,
+    storageId: string,
+    nextId: number,
+  ): SvgElementInstance {
     return this.pattern(color, hatching, `${storageId}-hatching-${nextId++}`);
   }
 
@@ -2457,7 +2686,8 @@ export let Renderer = class Renderer {
     const method = type === 'pattern' ? this.drawPattern : this.drawFilter;
     let pattern;
 
-    // @ts-expect-error a missing ref reads refToHash.undefined (or .null), which never matches a hash
+    // @ts-expect-error a missing ref reads refToHash.undefined (or .null), which never matches a
+    // hash
     if (storage.refToHash[ref] !== hash) {
       if (ref) {
         this.releaseDefsElements(ref);
@@ -2471,7 +2701,8 @@ export let Renderer = class Renderer {
       ++storageItem.count;
       ref = storageItem.pattern.id;
     }
-    // @ts-expect-error ref is a stored id here: it already maps to the hash or has just been replaced
+    // @ts-expect-error ref is a stored id here: it already maps to the hash or has just been
+    // replaced
     return ref;
   }
 
