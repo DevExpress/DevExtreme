@@ -297,6 +297,7 @@
     },
     "test": {
       "executor": "nx:run-commands",
+      "dependsOn": [],
       "options": {
         "commands": [
           "pnpm --workspace-root nx build devextreme-angular -c testing",
