@@ -60,7 +60,7 @@
   "license": "MIT",
   "peerDependencies": {
     "devextreme": "workspace:*",
-    "vue": "^3.0.0"
+    "vue": "^3.5.0"
   },
   "devDependencies": {
     "@vue/compiler-sfc": "3.3.4",
