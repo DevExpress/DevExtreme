@@ -207,7 +207,7 @@ describe('format locale integration', () => {
         numberFormat: { default: { locale: 'en-US' } },
       });
 
-      const formatted = numberLocalization.format(1234.5, format as never);
+      const formatted = numberLocalization.format(1234.5, format);
 
       expect(formatted).toBe(text);
       expect([
@@ -227,7 +227,7 @@ describe('format locale integration', () => {
         config({ ...config(), numberFormat: { default: { locale: globalLocale } } });
       }
 
-      const formatted = numberLocalization.format(1234.5, format as never);
+      const formatted = numberLocalization.format(1234.5, format);
 
       expect(formatted).toBe('١٬٢٣٤٫٥');
       expect(numberLocalization.parse(formatted, format as never)).toBe(1234.5);
@@ -255,7 +255,7 @@ describe('format locale integration', () => {
         config({ ...config(), numberFormat: { default: { locale: globalLocale } } });
       }
 
-      const formatted = numberLocalization.format(-1234.5, format as never);
+      const formatted = numberLocalization.format(-1234.5, format);
 
       expect(numberLocalization.parse(formatted, format as never)).toBe(-1234.5);
     });
@@ -269,10 +269,10 @@ describe('format locale integration', () => {
 
       expect(numberLocalization.format(1234.5, {
         maximumFractionDigits: 1, useGrouping: true,
-      } as never)).toBe('1.234,5');
+      })).toBe('1.234,5');
       expect(numberLocalization.format(1234.5, {
         maximumFractionDigits: 1, useGrouping: true, locale: 'en-US',
-      } as never)).toBe('1,234.5');
+      })).toBe('1,234.5');
       expect(numberLocalization.format(1234.5)).toBe('1,234.50');
     });
 
@@ -555,7 +555,7 @@ describe('format locale integration', () => {
     ])('should parse text formatted with explicit format locale %j', (format) => {
       coreLocalization.locale('de');
 
-      const text = dateLocalization.format(date, format as never) as string;
+      const text = dateLocalization.format(date, format) as string;
       const parsed = dateLocalization.parse(text, format as never) as Date;
 
       expect(parsed.getFullYear()).toBe(2020);
@@ -637,7 +637,7 @@ describe('format locale integration', () => {
     ])('should parse text with non-Latin digits of the format locale %j', (format) => {
       coreLocalization.locale('en');
 
-      const text = dateLocalization.format(date, format as never) as string;
+      const text = dateLocalization.format(date, format) as string;
       const parsed = dateLocalization.parse(text, format as never) as Date;
 
       expect(text).not.toMatch(/[0-9]/);
@@ -650,7 +650,7 @@ describe('format locale integration', () => {
       const format = { type: 'shortTime', locale: 'ar-EG' };
       const time = new Date(2020, 0, 2, 14, 5);
 
-      const text = dateLocalization.format(time, format as never) as string;
+      const text = dateLocalization.format(time, format) as string;
       const parsed = dateLocalization.parse(text, format as never) as Date;
 
       expect(text).not.toMatch(/[0-9]/);
@@ -660,7 +660,7 @@ describe('format locale integration', () => {
     it('should format an LDML pattern with the digits of the format locale', () => {
       coreLocalization.locale('en');
 
-      expect(dateLocalization.format(date, { type: 'dd.MM.yyyy', locale: 'ar-EG' } as never))
+      expect(dateLocalization.format(date, { type: 'dd.MM.yyyy', locale: 'ar-EG' }))
         .toBe('٠٢.٠١.٢٠٢٠');
       expect(dateLocalization.format(date, 'dd.MM.yyyy')).toBe('02.01.2020');
     });
@@ -669,7 +669,7 @@ describe('format locale integration', () => {
       coreLocalization.locale('ar-EG');
       const format = { type: 'dd.MM.yyyy', locale: 'en' };
 
-      const text = dateLocalization.format(date, format as never) as string;
+      const text = dateLocalization.format(date, format) as string;
 
       expect(text).toBe('02.01.2020');
       expect(dateLocalization.parse(text, format as never)).toEqual(date);
@@ -682,7 +682,7 @@ describe('format locale integration', () => {
 
       expect(numberLocalization.parse('€1,234.50', {
         type: 'currency', currency: 'EUR', locale: 'en-US',
-      } as never)).toBe(1234.5);
+      })).toBe(1234.5);
     });
 
     it('should use global numberFormat locale for OpenXML currency format', () => {

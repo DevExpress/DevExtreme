@@ -94,13 +94,13 @@ const setup = ({
   };
 };
 
-const createOptions = (overrides: Partial<LoadOperation> = {}): LoadOperation => ({
+const createOptions = (overrides: Partial<LoadOperation> = {}): LoadOperation => (({
   operationId: 1,
   remoteOperations: { filtering: true },
   storeLoadOptions: { sort: 'id' },
   loadOptions: {},
   ...overrides,
-} as unknown as LoadOperation);
+}));
 
 interface Tracker {
   done: jest.Mock<(branchData: RawItemData[]) => void>;

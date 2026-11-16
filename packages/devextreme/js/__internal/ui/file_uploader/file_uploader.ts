@@ -1266,7 +1266,7 @@ class FileUploader extends Editor<FileUploaderProperties> {
       return;
     }
 
-    if (this._isFileLimitReached(files as unknown as File[])) {
+    if (this._isFileLimitReached(files)) {
       this._fileLimitReachedAction?.();
       return;
     }

@@ -29,7 +29,7 @@ const summaryRow = (
 const groupRow = (state?: SummaryRowState): ProcessedItem => summaryRow('group', state);
 
 const groupFooterRow = (state?: SummaryRowState): ProcessedItem => summaryRow(
-  DATAGRID_GROUP_FOOTER_ROW_TYPE as ProcessedItem['rowType'],
+  DATAGRID_GROUP_FOOTER_ROW_TYPE,
   state,
 );
 

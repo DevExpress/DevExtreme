@@ -45,7 +45,7 @@ const createAdapterStub = (marker: string): AdapterStub => ({
   _dataSource: { marker } as unknown as DataSource,
   store: jest.fn(() => ({ marker } as unknown as Store)),
   key: jest.fn(() => marker as StoreKey),
-  remoteOperations: jest.fn(() => ({ filtering: true } as RemoteOperationsOptions)),
+  remoteOperations: jest.fn(() => ({ filtering: true })),
   getDataIndexGetter: jest.fn(() => (): number => 0),
   hasKnownLastPage: jest.fn(() => false),
   totalItemsCount: jest.fn(() => 42),
@@ -98,7 +98,7 @@ const createProviderStub = (adapter: AdapterStub): ProviderStub => {
 
 const asProvider = (
   stub: ProviderStub,
-): DataSourceAdapterProvider => stub as unknown as DataSourceAdapterProvider;
+): DataSourceAdapterProvider => stub;
 
 const SOURCE = { marker: 'source' } as unknown as DataSource;
 

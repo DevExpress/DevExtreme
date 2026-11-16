@@ -257,7 +257,7 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
       indicatorTime: new Date(),
       indicatorUpdateInterval: 5 * toMs('minute'),
       shadeUntilCurrentTime: true,
-    }) as WorkspaceOptionsInternal;
+    });
   }
 
   protected getCurrentTimePanelCellIndices(): number[] {
