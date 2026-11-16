@@ -438,7 +438,7 @@ describe('filterValueCommand', () => {
           throw new Error('Error');
         }
         return original(...args);
-      }) as never);
+      }));
       const callbacks = createCallbacks();
 
       const result = await filterValueCommand.execute(instance, callbacks)({
@@ -621,7 +621,7 @@ describe('filterValueCommand', () => {
           throw new Error('Error');
         }
         return original(...args);
-      }) as never);
+      }));
       const callbacks = createCallbacks();
 
       await filterValueCommand.execute(instance, callbacks)({

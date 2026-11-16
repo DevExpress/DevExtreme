@@ -76,7 +76,7 @@ export class SchedulerHeader extends Widget<HeaderOptions> {
     return extend(super._getDefaultOptions(), {
       // TODO: passed via scheduler options as _useShortDateFormat
       _useShortDateFormat: !devices.real().generic || devices.isSimulator(),
-    }) as HeaderOptions;
+    });
   }
 
   private createEventMap(): void {
@@ -201,7 +201,7 @@ export class SchedulerHeader extends Widget<HeaderOptions> {
       }
     }
 
-    return extend(true, {}, item) as ToolbarItem;
+    return extend(true, {}, item);
   }
 
   private callEvent(event: string, arg: unknown): void {

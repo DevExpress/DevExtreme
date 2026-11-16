@@ -331,7 +331,7 @@ describe('summaryCommand', () => {
           throw new Error('Error');
         }
         return (realOption as (...a: unknown[]) => unknown)(...callArgs);
-      }) as never);
+      }));
       const callbacks = createCallbacks();
 
       const result = await summaryCommand.execute(instance, callbacks)({
@@ -504,7 +504,7 @@ describe('clearSummaryCommand', () => {
           throw new Error('Error');
         }
         return (realOption as (...a: unknown[]) => unknown)(...callArgs);
-      }) as never);
+      }));
       const callbacks = createCallbacks();
 
       const result = await clearSummaryCommand.execute(instance, callbacks)();
@@ -531,7 +531,7 @@ describe('clearSummaryCommand', () => {
           throw new Error('Error');
         }
         return (realOption as (...a: unknown[]) => unknown)(...callArgs);
-      }) as never);
+      }));
       const callbacks = createCallbacks();
 
       await clearSummaryCommand.execute(instance, callbacks)();

@@ -83,7 +83,7 @@ class SchedulerAgenda extends WorkSpace {
       agendaDuration: 7,
       rowHeight: 60,
       noDataText: '',
-    }) as WorkspaceOptionsInternal;
+    });
   }
 
   _optionChanged(args: OptionChanged<WorkspaceOptionsInternal>): void {

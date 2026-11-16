@@ -1005,7 +1005,7 @@ function syncConditionIntoGroup(
   }
 
   if (isNegation) {
-    return ['!', result.length === 1 ? result[0] as Criteria : result];
+    return ['!', result.length === 1 ? result[0] : result];
   }
 
   return result.length === 1 ? result[0] as Criteria : result;

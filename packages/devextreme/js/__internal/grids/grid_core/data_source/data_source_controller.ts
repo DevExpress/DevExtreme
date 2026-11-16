@@ -72,13 +72,13 @@ export class DataSourceController<
 
     if (dataSourceOptions instanceof DataSourceClass) {
       this.isShared = true;
-      return dataSourceOptions as unknown as DataSource;
+      return dataSourceOptions;
     }
 
     this.isShared = false;
     return new DataSourceClass(
       extend(true, {}, normalizeDataSourceOptions(dataSourceOptions, {})),
-    ) as unknown as DataSource;
+    );
   }
 
   public getDataSource(): DataSource | null {

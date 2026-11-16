@@ -188,7 +188,7 @@ class CalendarWithTimeStrategy extends CalendarStrategy {
 
   popupConfig(popupConfig: PopupProperties): PopupProperties {
     const calendarPopupConfig = super.popupConfig(popupConfig);
-    return extend(calendarPopupConfig, { width: 'auto' }) as PopupProperties;
+    return extend(calendarPopupConfig, { width: 'auto' });
   }
 
   _preventFocusOnPopup(e: DxEvent<MouseEvent>): void {

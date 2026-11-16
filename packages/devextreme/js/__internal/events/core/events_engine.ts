@@ -766,7 +766,7 @@ type EventInitializer = (
 ) => void;
 
 function normalizeEventArguments(initialize: EventInitializer): DxEventConstructor {
-  const EventConstructor = function EventConstructor(
+  const EventClass = function EventConstructor(
     this: EngineEvent,
     src?: EventSource,
     config?: EventPropertyBag,
@@ -777,7 +777,7 @@ function normalizeEventArguments(initialize: EventInitializer): DxEventConstruct
 
     const source: EventPropertyBag = isString(src)
       ? { type: src }
-      : (src ?? {}) as EventPropertyBag;
+      : (src ?? {});
 
     initialize.call(this, source, config ?? {});
 
@@ -812,9 +812,9 @@ function normalizeEventArguments(initialize: EventInitializer): DxEventConstruct
     },
   };
 
-  Object.assign(EventConstructor.prototype, eventPrototype);
+  Object.assign(EventClass.prototype, eventPrototype);
 
-  return EventConstructor;
+  return EventClass;
 }
 
 function initEvent(EventClass: DxEventConstructor | undefined): void {
