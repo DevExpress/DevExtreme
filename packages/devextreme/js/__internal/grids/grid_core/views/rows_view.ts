@@ -523,7 +523,7 @@ export class RowsView extends ColumnsView {
       return false;
     }
 
-    return this._dataController.isLoading()
+    return this.dataSourceController.isLoading()
       || this._dataController.isViewportPositionPending()
       || this.isWaitingForRowsLayout();
   }

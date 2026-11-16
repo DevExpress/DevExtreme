@@ -252,6 +252,34 @@ describe('PageUp and PageDown with virtual scrolling (T898324)', () => {
     expect(getFocusedRowIndex()).toBe(2 * ROWS_PER_PAGE);
   });
 
+  it('should focus the top visible row when PageDown is pressed during custom loading', async () => {
+    const instance = await createGrid();
+    focusFirstCell(instance);
+
+    instance.beginCustomLoading('');
+    pressKey(instance, 'pageDown');
+
+    expect(getFocusedRowIndex()).toBe(ROWS_PER_PAGE);
+  });
+
+  it('should focus the top visible row once its rows are loaded from a remote store during custom loading', async () => {
+    const instance = await createGrid({
+      keyExpr: undefined,
+      dataSource: createRemoteStore(),
+      remoteOperations: { paging: true },
+    });
+    focusFirstCell(instance);
+    pressKey(instance, 'pageDown');
+    instance.beginCustomLoading('');
+
+    pressKeyWithoutRendering(instance, 'pageDown');
+    const isDataLoadingOnFocusRestore = instance.getController('dataSource').isLoading();
+    jest.runAllTimers();
+
+    expect(isDataLoadingOnFocusRestore).toBe(true);
+    expect(getFocusedRowIndex()).toBe(2 * ROWS_PER_PAGE);
+  });
+
   it('should focus the top visible row once its rows have rendered async templates', async () => {
     const { instance, renderPendingTemplates } = await createGridWithAsyncTemplates();
     focusFirstCell(instance);
