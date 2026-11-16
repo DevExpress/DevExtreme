@@ -323,4 +323,41 @@ describe('GridCore focus', () => {
       expect(countFocusedRows()).toBe(1);
     });
   });
+
+  describe('when another row is updated via the store push API with repaintChangesOnly', () => {
+    it('should keep DOM focus on the focused cell (T1338023)', async () => {
+      const { instance } = await createDataGrid({
+        dataSource: {
+          store: {
+            type: 'array',
+            key: 'id',
+            data: [
+              { id: 1, name: 'Item 1' },
+              { id: 2, name: 'Item 2' },
+            ],
+          },
+          pushAggregationTimeout: 0,
+        },
+        focusedRowEnabled: true,
+        focusedRowKey: 1,
+        repaintChangesOnly: true,
+        columns: ['id', 'name'],
+      });
+
+      const cell = instance.getCellElement(0, 'name') as HTMLElement;
+      instance.focus(cell);
+      await flushAsync();
+      cell.dispatchEvent(new KeyboardEvent('keydown', { key: 'Shift', bubbles: true }));
+
+      expect(document.activeElement).toBe(cell);
+
+      instance.getDataSource().store().push([{ type: 'update', key: 2, data: { name: 'Item 2 updated' } }]);
+      await flushAsync();
+
+      expect($(instance.getCellElement(1, 'name')).text()).toBe('Item 2 updated');
+      expect(cell.hasAttribute('tabindex')).toBe(true);
+      expect($(instance.getRowElement(0)).get(0).hasAttribute('tabindex')).toBe(false);
+      expect(document.activeElement).toBe(cell);
+    });
+  });
 });
