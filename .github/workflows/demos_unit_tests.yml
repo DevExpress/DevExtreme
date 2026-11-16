@@ -13,6 +13,7 @@ on:
 
 env:
   RUN_TESTS: true
+  NX_MAX_CACHE_SIZE: 512MB
 
 jobs:
   check-should-run:
@@ -73,7 +74,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-${{ github.sha }}-
             ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-
-            ${{ runner.os }}-nx-v2-
 
           lookup-only: true
 
@@ -107,7 +107,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-${{ github.sha }}-
             ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-
-            ${{ runner.os }}-nx-v2-
 
       - name: Run unit tests
         working-directory: apps/demos
