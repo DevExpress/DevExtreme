@@ -56,7 +56,7 @@ function hasLicensePrefix(licenseKey: string, prefix: string): boolean {
   return licenseKey.trim().startsWith(prefix);
 }
 
-function displayTrialPanel(trialExpired: boolean, licenseId?: string): void {
+function displayTrialPanel(trialExpired: boolean): void {
   const buyNowLink = config().buyNowLink ?? BUY_NOW_LINK;
   const licensingDocLink = config().licensingDocLink ?? LICENSING_DOC_LINK;
   showTrialPanel(
@@ -68,7 +68,6 @@ function displayTrialPanel(trialExpired: boolean, licenseId?: string): void {
     {
       trialExpired,
       libraries: LIBRARIES,
-      licenseId,
     },
   );
 }
@@ -158,7 +157,7 @@ export function validateLicense(licenseKey: string, versionStr: string = fullVer
   });
 
   if (error) {
-    displayTrialPanel(warningType === 'trial-expired', licenseId);
+    displayTrialPanel(warningType === 'trial-expired');
   }
 
   if (error) {
@@ -173,7 +172,7 @@ export function validateLicense(licenseKey: string, versionStr: string = fullVer
         warningType,
         versionStr,
         versionInfo,
-        licenseId ? { licenseId, licenseKey: licenseKey.trim() } : undefined,
+        licenseId ? { licenseId } : undefined,
       );
     } else {
       errors.log(error);
