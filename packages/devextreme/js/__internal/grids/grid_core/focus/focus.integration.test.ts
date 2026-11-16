@@ -360,4 +360,29 @@ describe('GridCore focus', () => {
       expect(document.activeElement).toBe(cell);
     });
   });
+
+  describe('when the focused row has an expanded master detail', () => {
+    it('should not make the detail row a tab stop (T1338023)', async () => {
+      const { instance } = await createDataGrid({
+        dataSource: [
+          { id: 1, name: 'Item 1' },
+          { id: 2, name: 'Item 2' },
+        ],
+        keyExpr: 'id',
+        focusedRowEnabled: true,
+        focusedRowKey: 1,
+        columns: ['id', 'name'],
+        masterDetail: {
+          enabled: true,
+          template: (container) => { $(container).text('detail'); },
+        },
+      });
+
+      await instance.expandRow(1);
+      await flushAsync();
+
+      expect(instance.getVisibleRows()[1].rowType).toBe('detail');
+      expect($(instance.getRowElement(1)).get(0).hasAttribute('tabindex')).toBe(false);
+    });
+  });
 });
