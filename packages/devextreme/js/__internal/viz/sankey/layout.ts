@@ -1,9 +1,7 @@
-/* eslint-disable @stylistic/no-mixed-operators */
 /* eslint-disable @typescript-eslint/prefer-for-of */
 /* eslint-disable @typescript-eslint/init-declarations */
 /* eslint-disable no-plusplus */
 /* eslint-disable @typescript-eslint/naming-convention */
-/* eslint-disable @stylistic/max-len */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
@@ -121,11 +119,15 @@ export const layout = {
   _computeNodes(cascades, options) {
     const rects = [];
     const maxWeight = this._getMaxWeightThroughCascades(cascades);
-    const maxNodeNum = graphModule.routines.maxOfArray(cascades.map((nodesInCascade) => Object.keys(nodesInCascade).length));
+    const maxNodeNum = graphModule.routines.maxOfArray(
+      cascades.map((nodesInCascade) => Object.keys(nodesInCascade).length),
+    );
     let nodePadding = options.nodePadding;
     let heightAvailable = options.height - nodePadding * (maxNodeNum - 1);
 
-    if (heightAvailable < 0) { // when the available height is too small, e.g. sum of all paddings is more then available height
+    if (heightAvailable < 0) {
+      // when the available height is too small, e.g. sum of all paddings is more then available
+      // height
       nodePadding = 0;
       heightAvailable = options.height - nodePadding * (maxNodeNum - 1);
     }
@@ -138,12 +140,15 @@ export const layout = {
       const cascadeRects = [];
       let y = 0;
       const nodesInCascade = Object.keys(cascade).length;
-      const cascadeHeight = this._getWeightForCascade(cascades, cascadeIdx) / this._weightPerPixel + nodePadding * (nodesInCascade - 1);
+      const cascadeHeight = this._getWeightForCascade(cascades, cascadeIdx) / this._weightPerPixel
+        + nodePadding * (nodesInCascade - 1);
 
       let cascadeAlign;
 
       if (Array.isArray(options.nodeAlign)) {
-        cascadeAlign = cascadeIdx < options.nodeAlign.length ? options.nodeAlign[cascadeIdx] : _ALIGNMENT_DEFAULT;
+        cascadeAlign = cascadeIdx < options.nodeAlign.length
+          ? options.nodeAlign[cascadeIdx]
+          : _ALIGNMENT_DEFAULT;
       } else {
         cascadeAlign = options.nodeAlign;
       }
@@ -156,29 +161,35 @@ export const layout = {
       y = Math.round(y);
 
       Object.keys(cascade).forEach((nodeTitle) => {
-        cascade[nodeTitle].sort = this._sort && Object.prototype.hasOwnProperty.call(this._sort, nodeTitle) ? this._sort[nodeTitle] : 1;
+        cascade[nodeTitle].sort = this._sort
+          && Object.prototype.hasOwnProperty.call(this._sort, nodeTitle)
+          ? this._sort[nodeTitle]
+          : 1;
       });
 
-      Object.keys(cascade).sort((a, b) => cascade[a].sort - cascade[b].sort).forEach((nodeTitle) => {
-        const node = cascade[nodeTitle];
-        const height = Math.floor(heightAvailable * node.maxWeight / maxWeight);
-        const x = Math.round(cascadeIdx * options.width / (cascades.length - 1)) - (cascadeIdx === 0 ? 0 : options.nodeWidth);
-        const rect = {};
-        // @ts-expect-error
-        rect._name = nodeTitle;
-        // @ts-expect-error
-        rect.width = options.nodeWidth;
-        // @ts-expect-error
-        rect.height = height;
-        // @ts-expect-error
-        rect.x = x + options.x;
-        // @ts-expect-error
-        rect.y = y + options.y;
+      Object.keys(cascade)
+        .sort((a, b) => cascade[a].sort - cascade[b].sort)
+        .forEach((nodeTitle) => {
+          const node = cascade[nodeTitle];
+          const height = Math.floor((heightAvailable * node.maxWeight) / maxWeight);
+          const x = Math.round((cascadeIdx * options.width) / (cascades.length - 1))
+            - (cascadeIdx === 0 ? 0 : options.nodeWidth);
+          const rect = {};
+          // @ts-expect-error
+          rect._name = nodeTitle;
+          // @ts-expect-error
+          rect.width = options.nodeWidth;
+          // @ts-expect-error
+          rect.height = height;
+          // @ts-expect-error
+          rect.x = x + options.x;
+          // @ts-expect-error
+          rect.y = y + options.y;
 
-        y += height + nodePadding;
-        // @ts-expect-error
-        cascadeRects.push(rect);
-      });
+          y += height + nodePadding;
+          // @ts-expect-error
+          cascadeRects.push(rect);
+        });
       cascadeIdx++;
       // @ts-expect-error
       rects.push(cascadeRects);
@@ -222,7 +233,9 @@ export const layout = {
       rectsOfCascade.forEach((nodeRect) => {
         const nodeTitle = nodeRect._name;
         const rectFrom = this._findRectByName(rects, nodeTitle);
-        const linksFromNode = links.filter((link) => link[0] === nodeTitle); // all outgoing links from the node
+        const linksFromNode = links.filter(
+          (link) => link[0] === nodeTitle,
+        ); // all outgoing links from the node
 
         // all outgoing links should be sorted according to the order of their target nodes
         linksFromNode.forEach((link) => {
@@ -234,15 +247,28 @@ export const layout = {
           const yOffsetFrom = yOffsets[link[0]].out;
           const yOffsetTo = yOffsets[link[1]].in;
           // heights of left and right parts of the link must fit the nodes on it's left and right
-          const heightFrom = yOffsets[link[0]].out + height > rectFrom.height ? rectFrom.height - yOffsets[link[0]].out : height;
-          const heightTo = yOffsets[link[1]].in + height > rectTo.height ? rectTo.height - yOffsets[link[1]].in : height;
+          const heightFrom = yOffsets[link[0]].out + height > rectFrom.height
+            ? rectFrom.height - yOffsets[link[0]].out
+            : height;
+          const heightTo = yOffsets[link[1]].in + height > rectTo.height
+            ? rectTo.height - yOffsets[link[1]].in
+            : height;
           // @ts-expect-error
           paths.push({
             from: {
-              x: rectFrom.x, y: rectFrom.y + yOffsetFrom, width: rectFrom.width, height: heightFrom, node: rectFrom, weight: link[2],
+              x: rectFrom.x,
+              y: rectFrom.y + yOffsetFrom,
+              width: rectFrom.width,
+              height: heightFrom,
+              node: rectFrom,
+              weight: link[2],
             },
             to: {
-              x: rectTo.x, y: rectTo.y + yOffsetTo, width: rectTo.width, height: heightTo, node: rectTo,
+              x: rectTo.x,
+              y: rectTo.y + yOffsetTo,
+              width: rectTo.width,
+              height: heightTo,
+              node: rectTo,
             },
           });
           yOffsets[link[0]].out += height;
@@ -263,7 +289,9 @@ export const layout = {
           // @ts-expect-error
           width: link.to.x - (link.from.x + link.from.width),
           // @ts-expect-error
-          height: Math.max(link.from.x + link.from.height, link.to.y + link.to.height) - Math.min(link.from.y, link.to.y),
+          height: Math.max(link.from.x + link.from.height, link.to.y + link.to.height)
+            // @ts-expect-error
+            - Math.min(link.from.y, link.to.y),
         },
         // @ts-expect-error
         _weight: link.from.weight,

@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-this-alias */
-/* eslint-disable @stylistic/max-len */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
@@ -10,9 +9,13 @@ import { plugin as pluginTooltip } from '@ts/viz/core/tooltip';
 function getCoords(coords, figureCoords, renderer) {
   const offset = renderer.getRootOffset();
 
-  return coords || (
-    figureCoords && [(figureCoords[0] + figureCoords[2]) / 2 + offset.left, (figureCoords[1] + figureCoords[5]) / 2 + offset.top]
-  ) || [-1000, -1000];
+  return (
+    coords
+    || (figureCoords && [
+      (figureCoords[0] + figureCoords[2]) / 2 + offset.left,
+      (figureCoords[1] + figureCoords[5]) / 2 + offset.top,
+    ]) || [-1000, -1000]
+  );
 }
 
 export const plugin = {

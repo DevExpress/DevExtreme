@@ -1,7 +1,6 @@
 /* eslint-disable no-return-assign */
 /* eslint-disable @typescript-eslint/init-declarations */
 /* eslint-disable func-names */
-/* eslint-disable @stylistic/max-len */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
@@ -30,7 +29,9 @@ export function getColorizer(options, themeManager, root) {
   const type = _normalizeEnum(options.type || defaultColorizerName);
   const colorizer = colorizers[type]?.(options, themeManager, root);
 
-  return colorizer ? (options.colorizeGroups ? wrapGroupColorGetter : wrapLeafColorGetter)(colorizer) : _noop;
+  return colorizer
+    ? (options.colorizeGroups ? wrapGroupColorGetter : wrapLeafColorGetter)(colorizer)
+    : _noop;
 }
 
 export function addColorizer(name, colorizer) {

@@ -7,7 +7,6 @@
 /* eslint-disable no-nested-ternary */
 /* eslint-disable consistent-return */
 /* eslint-disable no-multi-assign */
-/* eslint-disable @stylistic/max-len */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
@@ -200,7 +199,9 @@ export default {
     const that = this;
     const axis = that.series.getValueAxis();
     if (that.hasValue()) {
-      that.value = that.properValue = axis.validateUnit(that.initialValue.valueOf() + correction.valueOf());
+      that.value = that.properValue = axis.validateUnit(
+        that.initialValue.valueOf() + correction.valueOf(),
+      );
       that.minValue = axis.validateUnit(correction);
     }
   },
@@ -238,8 +239,20 @@ export default {
     const width = options.width || DEFAULT_IMAGE_WIDTH;
     const height = options.height || DEFAULT_IMAGE_HEIGHT;
 
-    return renderer.image(-_round(width * 0.5), -_round(height * 0.5), width, height, options.url ? options.url.toString() : options.toString(), 'center')
-      .attr({ translateX: settings.translateX, translateY: settings.translateY, visibility: settings.visibility });
+    return renderer
+      .image(
+        -_round(width * 0.5),
+        -_round(height * 0.5),
+        width,
+        height,
+        options.url ? options.url.toString() : options.toString(),
+        'center',
+      )
+      .attr({
+        translateX: settings.translateX,
+        translateY: settings.translateY,
+        visibility: settings.visibility,
+      });
   },
 
   _createSymbolMarker(renderer, pointSettings) {
@@ -258,7 +271,9 @@ export default {
 
   _createMarker(renderer, group, image, settings) {
     const that = this;
-    const marker = that._checkImage(image) ? that._createImageMarker(renderer, settings, image) : that._createSymbolMarker(renderer, settings);
+    const marker = that._checkImage(image)
+      ? that._createImageMarker(renderer, settings, image)
+      : that._createSymbolMarker(renderer, settings);
     if (marker) {
       marker.data({ 'chart-data-point': that }).append(group);
     }
@@ -295,7 +310,9 @@ export default {
     let bBox;
 
     if (options.visible) {
-      bBox = that._checkImage(options.image) ? that._getImageBBox(x, y) : that._getSymbolBBox(x, y, options.styles.normal.r);
+      bBox = that._checkImage(options.image)
+        ? that._getImageBBox(x, y)
+        : that._getSymbolBBox(x, y, options.styles.normal.r);
     } else {
       bBox = {
         x, y, width: 0, height: 0,
@@ -317,7 +334,10 @@ export default {
     const that = this;
     const customVisibility = that._getCustomLabelVisibility();
     const label = that._label;
-    const isVisible = that._showForZeroValues() && that.hasValue() && customVisibility !== false && (that.series.getLabelVisibility() || customVisibility);
+    const isVisible = that._showForZeroValues()
+      && that.hasValue()
+      && customVisibility !== false
+      && (that.series.getLabelVisibility() || customVisibility);
 
     label.draw(!!isVisible);
   },
@@ -339,7 +359,8 @@ export default {
     const bBox = this._getGraphicBBox(pointPosition);
     const w2 = bBox.width / 2;
     const h2 = bBox.height / 2;
-    // This is to make label connector end at the center of point; "width" and "height" are required by the path building algorithm
+    // This is to make label connector end at the center of point; "width" and "height" are required
+    // by the path building algorithm
     // TODO: When path building algorithm is updated remove "width" and "height"
     return { x: bBox.x + w2, y: bBox.y + h2, r: this._options.visible ? Math.max(w2, h2) : 0 };
   },
@@ -349,8 +370,12 @@ export default {
   },
 
   _isPointInVisibleArea(visibleArea, graphicBBox) {
-    return (visibleArea.minX <= (graphicBBox.x + graphicBBox.width)) && (visibleArea.maxX >= graphicBBox.x)
-                && (visibleArea.minY <= graphicBBox.y + graphicBBox.height) && (visibleArea.maxY >= graphicBBox.y);
+    return (
+      visibleArea.minX <= graphicBBox.x + graphicBBox.width
+      && visibleArea.maxX >= graphicBBox.x
+      && visibleArea.minY <= graphicBBox.y + graphicBBox.height
+      && visibleArea.maxY >= graphicBBox.y
+    );
   },
 
   _checkLabelPosition(label, coord) {
@@ -466,7 +491,19 @@ export default {
     const translates = that._getTranslates(animationEnabled);
     const style = that._getStyle();
 
-    that.graphic = that._createMarker(renderer, group, options.image, _extend({ translateX: translates.x, translateY: translates.y, points: that._populatePointShape(options.symbol, style.r) }, style));
+    that.graphic = that._createMarker(
+      renderer,
+      group,
+      options.image,
+      _extend(
+        {
+          translateX: translates.x,
+          translateY: translates.y,
+          points: that._populatePointShape(options.symbol, style.r),
+        },
+        style,
+      ),
+    );
   },
 
   _getErrorBarSettings() {
@@ -492,8 +529,12 @@ export default {
     const displayMode = _normalizeEnum(errorBarOptions.displayMode);
     const isHighDisplayMode = displayMode === 'high';
     const isLowDisplayMode = displayMode === 'low';
-    const highErrorOnly = (isHighDisplayMode || !_isDefined(low)) && (_isDefined(high) && !isLowDisplayMode);
-    const lowErrorOnly = (isLowDisplayMode || !_isDefined(high)) && (_isDefined(low) && !isHighDisplayMode);
+    const highErrorOnly = (isHighDisplayMode || !_isDefined(low))
+      && _isDefined(high)
+      && !isLowDisplayMode;
+    const lowErrorOnly = (isLowDisplayMode || !_isDefined(high))
+      && _isDefined(low)
+      && !isHighDisplayMode;
 
     let edgeLength = errorBarOptions.edgeLength;
 
@@ -613,7 +654,9 @@ export default {
   _updateData(data) {
     const that = this;
     that.value = that.properValue = that.initialValue = that.originalValue = data.value;
-    that.minValue = that.initialMinValue = that.originalMinValue = _isDefined(data.minValue) ? data.minValue : CANVAS_POSITION_DEFAULT;
+    that.minValue = that.initialMinValue = that.originalMinValue = _isDefined(data.minValue)
+      ? data.minValue
+      : CANVAS_POSITION_DEFAULT;
   },
 
   _getImageSettings(image) {
@@ -661,9 +704,16 @@ export default {
     const visibility = !that.isVisible() ? { visibility: 'hidden' } : {};
 
     if (that._checkImage(image)) {
-      settings = _extend({}, { visibility: style.visibility }, visibility, that._getImageSettings(image));
+      settings = _extend(
+        {},
+        { visibility: style.visibility },
+        visibility,
+        that._getImageSettings(image),
+      );
     } else {
-      settings = _extend({}, style, visibility, { points: that._populatePointShape(options.symbol, style.r) });
+      settings = _extend({}, style, visibility, {
+        points: that._populatePointShape(options.symbol, style.r),
+      });
     }
 
     if (!animationEnabled) {
@@ -705,11 +755,19 @@ export default {
       {},
       labelFormatObject,
       {
-        argumentText: tooltip.formatValue(that.initialArgument, 'argument', that.series.argumentType),
+        argumentText: tooltip.formatValue(
+          that.initialArgument,
+          'argument',
+          that.series.argumentType,
+        ),
         valueText: tooltip.formatValue(that.initialValue, undefined, that.series.valueType),
       },
-      _isDefined(labelFormatObject.percent) ? { percentText: tooltip.formatValue(labelFormatObject.percent, 'percent') } : {},
-      _isDefined(labelFormatObject.total) ? { totalText: tooltip.formatValue(labelFormatObject.total) } : {},
+      _isDefined(labelFormatObject.percent)
+        ? { percentText: tooltip.formatValue(labelFormatObject.percent, 'percent') }
+        : {},
+      _isDefined(labelFormatObject.total)
+        ? { totalText: tooltip.formatValue(labelFormatObject.total) }
+        : {},
     );
   },
 
@@ -719,7 +777,12 @@ export default {
 
   coordsIn(x, y) {
     const trackerRadius = this._storeTrackerR();
-    return (x >= this.x - trackerRadius) && (x <= this.x + trackerRadius) && (y >= this.y - trackerRadius) && (y <= this.y + trackerRadius);
+    return (
+      x >= this.x - trackerRadius
+      && x <= this.x + trackerRadius
+      && y >= this.y - trackerRadius
+      && y <= this.y + trackerRadius
+    );
   },
 
   getMinValue(noErrorBar) {

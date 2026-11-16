@@ -6,7 +6,6 @@
 /* eslint-disable no-nested-ternary */
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-multi-assign */
-/* eslint-disable @stylistic/max-len */
 /* eslint-disable @typescript-eslint/no-use-before-define */
 /* eslint-disable prefer-destructuring */
 /* eslint-disable no-else-return */
@@ -44,7 +43,11 @@ interface SlidersControllerParams {
   trackersGroup: ThemeValue;
   translator: ThemeValue;
   axis: { getVisibleArea: () => number[] };
-  updateSelectedRange: (range: SelectedRange, lastSelectedRange: SelectedRange, e: ThemeValue) => void;
+  updateSelectedRange: (
+    range: SelectedRange,
+    lastSelectedRange: SelectedRange,
+    e: ThemeValue,
+  ) => void;
 }
 
 interface RangeBounds {
@@ -152,15 +155,26 @@ export let SlidersController = class SlidersController {
 
   constructor(params: SlidersControllerParams) {
     const sliderParams = {
-      renderer: params.renderer, root: params.root, trackersGroup: params.trackersGroup, translator: params.translator,
+      renderer: params.renderer,
+      root: params.root,
+      trackersGroup: params.trackersGroup,
+      translator: params.translator,
     };
     this._params = params;
-    this._areaTracker = params.renderer.path(null, 'area').attr({ class: 'area-tracker', fill: '#000000', opacity: 0.0001 }).append(params.trackersGroup);
-    this._selectedAreaTracker = params.renderer.path(null, 'area').attr({ class: 'selected-area-tracker', fill: '#000000', opacity: 0.0001 }).append(params.trackersGroup);
-    // Shutter is appended before sliders because later (when they will be foregrounded) it will be at any case located before them.
+    this._areaTracker = params.renderer
+      .path(null, 'area')
+      .attr({ class: 'area-tracker', fill: '#000000', opacity: 0.0001 })
+      .append(params.trackersGroup);
+    this._selectedAreaTracker = params.renderer
+      .path(null, 'area')
+      .attr({ class: 'selected-area-tracker', fill: '#000000', opacity: 0.0001 })
+      .append(params.trackersGroup);
+    // Shutter is appended before sliders because later (when they will be foregrounded) it will be
+    // at any case located before them.
     this._shutter = params.renderer.path(null, 'area').append(params.root);
     this._sliders = [new Slider(sliderParams, 0), new Slider(sliderParams, 1)];
-    // It seems that there is no special reasons to suppress first event - it was accidentally suppressed.
+    // It seems that there is no special reasons to suppress first event - it was accidentally
+    // suppressed.
     // Let it stay so for now.
     this._processSelectionChanged = dummyProcessSelectionChanged;
   }
@@ -186,22 +200,38 @@ export let SlidersController = class SlidersController {
     }
   }
 
-  update(verticalRange: number[], behavior: ThemeValue, isCompactMode: boolean, sliderHandleOptions: ThemeValue, sliderMarkerOptions: ThemeValue, shutterOptions: ThemeValue, rangeBounds: RangeBounds, fullTicks: ThemeValue[], selectedRangeColor: string): void {
+  update(
+    verticalRange: number[],
+    behavior: ThemeValue,
+    isCompactMode: boolean,
+    sliderHandleOptions: ThemeValue,
+    sliderMarkerOptions: ThemeValue,
+    shutterOptions: ThemeValue,
+    rangeBounds: RangeBounds,
+    fullTicks: ThemeValue[],
+    selectedRangeColor: string,
+  ): void {
     const screenRange = this._params.translator.getScreenRange();
 
     this._verticalRange = verticalRange;
     this._minRange = rangeBounds.minRange;
     this._maxRange = rangeBounds.maxRange;
-    // TODO: Investigate reasons of "renderer.animationEnabled" usage - it seems to be useless (if only for vml somehow)
+    // TODO: Investigate reasons of "renderer.animationEnabled" usage - it seems to be useless (if
+    // only for vml somehow)
     this._animationEnabled = behavior.animationEnabled && this._params.renderer.animationEnabled();
     this._allowSlidersSwap = behavior.allowSlidersSwap;
     this._sliders[0].update(verticalRange, sliderHandleOptions, sliderMarkerOptions);
     this._sliders[1].update(verticalRange, sliderHandleOptions, sliderMarkerOptions);
-    // This is required for placing sliders and shutter into initial position from which initial animation will be going.
+    // This is required for placing sliders and shutter into initial position from which initial
+    // animation will be going.
     this._sliders[0]._position = this._sliders[1]._position = screenRange[0];
 
-    this._values = !this._params.translator.isValueProlonged && behavior.snapToTicks ? fullTicks : null;
-    this._areaTracker.attr({ points: buildRectPoints(screenRange[0], verticalRange[0], screenRange[1], verticalRange[1]) });
+    this._values = !this._params.translator.isValueProlonged && behavior.snapToTicks
+      ? fullTicks
+      : null;
+    this._areaTracker.attr({
+      points: buildRectPoints(screenRange[0], verticalRange[0], screenRange[1], verticalRange[1]),
+    });
 
     // SlidersContainer
     this._isCompactMode = isCompactMode;
@@ -211,7 +241,8 @@ export let SlidersController = class SlidersController {
     this._isOnMoving = _normalizeEnum(behavior.valueChangeMode) === 'onhandlemove';
 
     this._updateSelectedRange();
-    // This is placing sliders and shutter into initial position. They all will be animated from that position when "setSelectedRange" is called.
+    // This is placing sliders and shutter into initial position. They all will be animated from
+    // that position when "setSelectedRange" is called.
     this._applyTotalPosition(false);
   }
 
@@ -276,9 +307,26 @@ export let SlidersController = class SlidersController {
       position2 -= this._sliders[1]._tracker._originalWidth / 2;
     }
 
-    this._selectedAreaTracker.attr({ points: buildRectPoints(position1, this._verticalRange[0], position2, this._verticalRange[1]) }).css({
-      cursor: Math.abs(this._params.translator.getScreenRange()[1] - this._params.translator.getScreenRange()[0] - position2 + position1) < 0.001 ? 'default' : 'pointer',
-    });
+    this._selectedAreaTracker
+      .attr({
+        points: buildRectPoints(
+          position1,
+          this._verticalRange[0],
+          position2,
+          this._verticalRange[1],
+        ),
+      })
+      .css({
+        cursor:
+          Math.abs(
+            this._params.translator.getScreenRange()[1]
+              - this._params.translator.getScreenRange()[0]
+              - position2
+              + position1,
+          ) < 0.001
+            ? 'default'
+            : 'pointer',
+      });
   }
 
   _applySelectedRangePosition(isAnimated: boolean): void {
@@ -288,12 +336,27 @@ export let SlidersController = class SlidersController {
     let screenRange;
     let points;
     if (this._isCompactMode) {
-      points = [pos1 + Math.ceil(this._shutterOffset), (verticalRange[0] + verticalRange[1]) / 2, pos2 - Math.floor(this._shutterOffset), (verticalRange[0] + verticalRange[1]) / 2];
+      points = [
+        pos1 + Math.ceil(this._shutterOffset),
+        (verticalRange[0] + verticalRange[1]) / 2,
+        pos2 - Math.floor(this._shutterOffset),
+        (verticalRange[0] + verticalRange[1]) / 2,
+      ];
     } else {
       screenRange = this._params.axis.getVisibleArea();
       points = [
-        buildRectPoints(screenRange[0], verticalRange[0], Math.max(pos1 - Math.floor(this._shutterOffset), screenRange[0]), verticalRange[1]),
-        buildRectPoints(screenRange[1], verticalRange[0], Math.min(pos2 + Math.ceil(this._shutterOffset), screenRange[1]), verticalRange[1]),
+        buildRectPoints(
+          screenRange[0],
+          verticalRange[0],
+          Math.max(pos1 - Math.floor(this._shutterOffset), screenRange[0]),
+          verticalRange[1],
+        ),
+        buildRectPoints(
+          screenRange[1],
+          verticalRange[0],
+          Math.min(pos2 + Math.ceil(this._shutterOffset), screenRange[1]),
+          verticalRange[1],
+        ),
       ];
     }
     if (isAnimated) {
@@ -317,23 +380,33 @@ export let SlidersController = class SlidersController {
       return a <= b;
     };
 
-    let { startValue, endValue } = adjustVisualRange({
-      dataType: businessRange.dataType,
-      axisType: businessRange.axisType,
-      base: businessRange.base,
-    }, {
-      startValue: translator.isValid(visualRange.startValue) ? translator.getCorrectValue(visualRange.startValue, +1) : undefined,
-      endValue: translator.isValid(visualRange.endValue) ? translator.getCorrectValue(visualRange.endValue, -1) : undefined,
-      length: visualRange.length,
-    }, {
-      min: businessRange.minVisible,
-      max: businessRange.maxVisible,
-      categories: businessRange.categories,
-    });
+    let { startValue, endValue } = adjustVisualRange(
+      {
+        dataType: businessRange.dataType,
+        axisType: businessRange.axisType,
+        base: businessRange.base,
+      },
+      {
+        startValue: translator.isValid(visualRange.startValue)
+          ? translator.getCorrectValue(visualRange.startValue, +1)
+          : undefined,
+        endValue: translator.isValid(visualRange.endValue)
+          ? translator.getCorrectValue(visualRange.endValue, -1)
+          : undefined,
+        length: visualRange.length,
+      },
+      {
+        min: businessRange.minVisible,
+        max: businessRange.maxVisible,
+        categories: businessRange.categories,
+      },
+    );
 
     startValue = isNumeric(startValue) ? adjust(startValue) : startValue;
     endValue = isNumeric(endValue) ? adjust(endValue) : endValue;
-    const values = compare(translator.to(startValue, -1), translator.to(endValue, +1)) ? [startValue, endValue] : [endValue, startValue];
+    const values = compare(translator.to(startValue, -1), translator.to(endValue, +1))
+      ? [startValue, endValue]
+      : [endValue, startValue];
     this._sliders[0].setDisplayValue(values[0]);
     this._sliders[1].setDisplayValue(values[1]);
     this._sliders[0]._position = translator.to(values[0], -1);
@@ -354,7 +427,11 @@ export let SlidersController = class SlidersController {
     return move;
 
     function move(position: number, e?: ThemeValue): void {
-      if (position !== currentPosition && (position > currentPosition === position > (sliders[0].getPosition() + sliders[1].getPosition()) / 2 - offset)) {
+      if (
+        position !== currentPosition
+        && position > currentPosition
+          === position > (sliders[0].getPosition() + sliders[1].getPosition()) / 2 - offset
+      ) {
         that._moveSelectedArea(position + offset, false, e);
       }
       currentPosition = position;
@@ -391,10 +468,16 @@ export let SlidersController = class SlidersController {
       startPosition = endPosition - interval;
     }
 
-    // Check for "minRange" and "maxRange" is not performed because it was not performed in the previous code, though I find it strange.
+    // Check for "minRange" and "maxRange" is not performed because it was not performed in the
+    // previous code, though I find it strange.
     const startValue = selectClosestValue(translator.from(startPosition, -1), this._values);
     sliders[0].setDisplayValue(startValue);
-    sliders[1].setDisplayValue(selectClosestValue(translator.from(translator.to(startValue, -1) + interval, +1), this._values));
+    sliders[1].setDisplayValue(
+      selectClosestValue(
+        translator.from(translator.to(startValue, -1) + interval, +1),
+        this._values,
+      ),
+    );
     sliders[0]._position = startPosition;
     sliders[1]._position = endPosition;
     this._applyTotalPosition(isAnimated);
@@ -403,7 +486,11 @@ export let SlidersController = class SlidersController {
     }
   }
 
-  placeSliderAndBeginMoving(firstPosition: number, secondPosition: number, e?: ThemeValue): MovingHandler {
+  placeSliderAndBeginMoving(
+    firstPosition: number,
+    secondPosition: number,
+    e?: ThemeValue,
+  ): MovingHandler {
     const translator = this._params.translator;
     const sliders = this._sliders;
     const index = firstPosition < secondPosition ? 0 : 1;
@@ -427,14 +514,21 @@ export let SlidersController = class SlidersController {
       }
     }
     if (this._minRange) {
-      thresholdPosition = translator.to(translator.add(selectClosestValue(values[index], this._values), this._minRange, -dir), -dir);
+      thresholdPosition = translator.to(
+        translator.add(selectClosestValue(values[index], this._values), this._minRange, -dir),
+        -dir,
+      );
       // Check - if "secondPosition" is closer to "firstPosition" than it is allowed by "minRange".
       if (compare(secondPosition, thresholdPosition)) {
         values[1 - index] = translator.add(values[index], this._minRange, -dir);
       }
-      thresholdPosition = translator.to(translator.add(translator.getRange()[1 - index], this._minRange, dir), -dir);
+      thresholdPosition = translator.to(
+        translator.add(translator.getRange()[1 - index], this._minRange, dir),
+        -dir,
+      );
       // Check - if "firstPosition" is closer to an end than it is allowed by "minRange".
-      // So there is definitely not enough space for both sliders - the first  (as the one which is farther from the end) has to be moved away by "minRange".
+      // So there is definitely not enough space for both sliders - the first (as the one which is
+      // farther from the end) has to be moved away by "minRange".
       if (antiCompare(firstPosition, thresholdPosition)) {
         values[1 - index] = translator.getRange()[1 - index];
         values[index] = translator.add(values[1 - index], this._minRange, dir);
@@ -473,7 +567,9 @@ export let SlidersController = class SlidersController {
     let compareMin = index > 0 ? isLess : isGreater;
     let compareMax = index > 0 ? isGreater : isLess;
     let moveOffset = sliders[index].getPosition() - initialPosition;
-    let swapOffset = compareMin(sliders[index].getPosition(), initialPosition) ? -moveOffset : moveOffset;
+    let swapOffset = compareMin(sliders[index].getPosition(), initialPosition)
+      ? -moveOffset
+      : moveOffset;
 
     move.complete = function (e: ThemeValue): void {
       sliders[index]._setValid(true);
@@ -491,9 +587,12 @@ export let SlidersController = class SlidersController {
       if (position !== currentPosition) {
         if (compareMin(position + swapOffset, staticPosition)) {
           isValid = that._allowSlidersSwap;
-          // TODO: Validate "_minRange" so that for discrete translator it is always null - that will allow to split "isValueProlonged" and "_minRange" checks
+          // TODO: Validate "_minRange" so that for discrete translator it is always null - that
+          // will allow to split "isValueProlonged" and "_minRange" checks
           if (isValid && !translator.isValueProlonged && that._minRange) {
-            isValid = translator.isValid(translator.add(sliders[1 - index].getValue(), that._minRange, -dir));
+            isValid = translator.isValid(
+              translator.add(sliders[1 - index].getValue(), that._minRange, -dir),
+            );
           }
           if (isValid) {
             that._changeMovingSlider(index);
@@ -512,18 +611,26 @@ export let SlidersController = class SlidersController {
           pos = Math.max(Math.min(position + moveOffset, maxPosition), minPosition);
           // TODO: Write it as single operation (isValid = ... && ... && ...) when code is stable.
           // Check - if moving slider is closer to static slider than a span of a single category.
-          isValid = translator.isValueProlonged ? !compareMin(pos, translator.to(value, dir)) : true;
+          isValid = translator.isValueProlonged
+            ? !compareMin(pos, translator.to(value, dir))
+            : true;
           let invalidStateValue;
           // Check - if moving slider is closer to static slider than it is allowed "minRange".
           if (isValid && that._minRange) {
-            isValid = !compareMin(pos, translator.to(translator.add(value, that._minRange, dir), dir));
+            isValid = !compareMin(
+              pos,
+              translator.to(translator.add(value, that._minRange, dir), dir),
+            );
             if (!isValid) {
               invalidStateValue = translator.add(value, that._minRange, dir);
             }
           }
           // Check - if moving slider is farther from static slider than it is allowed by "maxRange"
           if (isValid && that._maxRange) {
-            isValid = !compareMax(pos, translator.to(translator.add(value, that._maxRange, dir), dir));
+            isValid = !compareMax(
+              pos,
+              translator.to(translator.add(value, that._maxRange, dir), dir),
+            );
             if (!isValid) {
               invalidStateValue = translator.add(value, that._maxRange, dir);
             }
@@ -550,12 +657,15 @@ export let SlidersController = class SlidersController {
     const position = sliders[1 - index].getPosition();
     const dir = index > 0 ? +1 : -1;
     let newValue;
-    sliders[index].setDisplayValue(selectClosestValue(translator.from(position, dir), this._values));
+    sliders[index].setDisplayValue(
+      selectClosestValue(translator.from(position, dir), this._values),
+    );
     newValue = translator.from(position, -dir);
     if (translator.isValueProlonged) {
       newValue = translator.from(position, dir);
     } else if (this._minRange) {
-      // TODO: Consider adding "translator.isValid" check - that will allow to split "if-else" into two "if"
+      // TODO: Consider adding "translator.isValid" check - that will allow to split "if-else" into
+      // two "if"
       newValue = translator.add(newValue, this._minRange, -dir);
     }
     sliders[1 - index].setDisplayValue(selectClosestValue(newValue, this._values));

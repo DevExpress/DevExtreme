@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-return-assign */
-/* eslint-disable @stylistic/no-mixed-operators */
 /* eslint-disable @typescript-eslint/prefer-for-of */
 /* eslint-disable prefer-spread */
 /* eslint-disable @typescript-eslint/no-this-alias */
@@ -12,7 +11,6 @@
 /* eslint-disable @typescript-eslint/no-shadow */
 /* eslint-disable consistent-return */
 /* eslint-disable no-multi-assign */
-/* eslint-disable @stylistic/max-len */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
@@ -168,7 +166,10 @@ abstract class BaseTracker {
 
   updateSeries(series, resetDecorations) {
     const that = this;
-    const noHoveredSeries = !(series?.some((s) => s === that.hoveredSeries) || that._hoveredPoint && that._hoveredPoint.series);
+    const noHoveredSeries = !(
+      series?.some((s) => s === that.hoveredSeries)
+      || (that._hoveredPoint && that._hoveredPoint.series)
+    );
 
     if (that._storedSeries !== series) {
       that._storedSeries = series || [];
@@ -273,8 +274,14 @@ abstract class BaseTracker {
     const eventData = { target: point };
 
     if (point?.getOptions()) {
-      tooltipFormatObject = point.getTooltipFormatObject(that._tooltip, that._tooltip.isShared() && that._chart.getStackedPoints(point));
-      if (!isDefined(tooltipFormatObject.valueText) && !tooltipFormatObject.points || !point.isVisible()) {
+      tooltipFormatObject = point.getTooltipFormatObject(
+        that._tooltip,
+        that._tooltip.isShared() && that._chart.getStackedPoints(point),
+      );
+      if (
+        (!isDefined(tooltipFormatObject.valueText) && !tooltipFormatObject.points)
+        || !point.isVisible()
+      ) {
         return;
       }
 
@@ -327,7 +334,8 @@ abstract class BaseTracker {
   }
 
   _disableOutHandler() {
-    this._outHandler && eventsEngine.off(domAdapter.getDocument(), POINTER_ACTION, this._outHandler);
+    this._outHandler
+      && eventsEngine.off(domAdapter.getDocument(), POINTER_ACTION, this._outHandler);
     this._outHandler = null;
   }
 
@@ -337,7 +345,8 @@ abstract class BaseTracker {
 
   _pointerOut(force?) {
     this.clearHover(true);
-    (force || this._tooltip.isEnabled()) && this._hideTooltip(this.pointAtShownTooltip, false, true);
+    (force || this._tooltip.isEnabled())
+      && this._hideTooltip(this.pointAtShownTooltip, false, true);
   }
 
   _triggerLegendClick(eventArgs, elementClick) {
@@ -583,7 +592,8 @@ export class ChartTracker extends BaseTracker {
     const that = this;
     super.update(options);
     that._argumentAxis = options.argumentAxis || {};
-    that._axisHoverEnabled = that._argumentAxis && _normalizeEnum(that._argumentAxis.getOptions().hoverMode) === ALL_ARGUMENT_POINTS_MODE;
+    that._axisHoverEnabled = that._argumentAxis
+      && _normalizeEnum(that._argumentAxis.getOptions().hoverMode) === ALL_ARGUMENT_POINTS_MODE;
     that._rotated = options.rotated;
     that._crosshair = options.crosshair;
     that._stickyHovering = options.stickyHovering;
@@ -749,7 +759,10 @@ export class PieTracker extends BaseTracker {
     const that = this;
     const points = [];
 
-    that._storedSeries.forEach((s) => points.push.apply(points, s.getPointsByKeys(item.argument, item.argumentIndex)));
+    that._storedSeries.forEach((s) => points.push.apply(
+      points,
+      s.getPointsByKeys(item.argument, item.argumentIndex),
+    ));
     that._eventTrigger(LEGEND_CLICK, { target: item.argument, points, event: e });
   }
 
@@ -774,7 +787,9 @@ export class PieTracker extends BaseTracker {
   }
 
   _processArgumentHoveredPoint(argument, argumentIndex) {
-    const points = this._storedSeries.flatMap((series) => series.getPointsByKeys(argument, argumentIndex));
+    const points = this._storedSeries.flatMap(
+      (series) => series.getPointsByKeys(argument, argumentIndex),
+    );
 
     if (points.length === 1) {
       this._setHoveredPoint(points[0]);
