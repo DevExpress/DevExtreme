@@ -213,6 +213,28 @@ describe('PageUp and PageDown with virtual scrolling (T898324)', () => {
     expect(getFocusedRowIndex()).toBe(pressCount * ROWS_PER_PAGE);
   });
 
+  it('should focus the top visible row when the grid is repainted before the rows are rendered', async () => {
+    const instance = await createGridWithAsyncRendering();
+    const pressCount = 4;
+    let renderCount = 0;
+    focusFirstCell(instance);
+    instance.getView('rowsView').renderCompleted.add(() => {
+      renderCount += 1;
+    });
+
+    Array.from({ length: pressCount }).forEach(() => {
+      pressKeyWithoutRendering(instance, 'pageDown');
+    });
+    instance.repaint();
+    const isRowsRenderPendingAfterRepaint = instance.getView('rowsView').isViewportRowsRenderPending();
+    const renderCountBeforeTimeout = renderCount;
+    jest.runAllTimers();
+
+    expect(renderCountBeforeTimeout).toBeGreaterThan(0);
+    expect(isRowsRenderPendingAfterRepaint).toBe(true);
+    expect(getFocusedRowIndex()).toBe(pressCount * ROWS_PER_PAGE);
+  });
+
   it('should focus the top visible row once its rows are loaded from a remote store', async () => {
     const instance = await createGrid({
       keyExpr: undefined,
@@ -268,6 +290,28 @@ describe('PageUp and PageDown with virtual scrolling (T898324)', () => {
 
     expect(isRowsRenderPending).toBe(true);
     expect(getFocusedRowIndex()).toBe(1);
+  });
+
+  it('should not ignore downArrow pressed after PageDown while the data is reloading when scrolling is standard', async () => {
+    const instance = await createGrid({
+      keyExpr: undefined,
+      dataSource: createRemoteStore(),
+      remoteOperations: { paging: true },
+      paging: { enabled: false },
+      scrolling: { mode: 'standard' },
+    });
+    focusFirstCell(instance);
+
+    instance.refresh().catch(() => {});
+    pressKeyWithoutRendering(instance, 'pageDown');
+    const isLoadingOnFocusRestore = instance.getController('data').isLoading();
+    triggerKeyDown(instance, 'downArrow', document.activeElement);
+    const focusedRowIndexBeforeLoading = getFocusedRowIndex();
+    jest.runAllTimers();
+
+    expect(isLoadingOnFocusRestore).toBe(true);
+    expect(focusedRowIndexBeforeLoading).toBe(ROWS_PER_PAGE + 1);
+    expect(getFocusedRowIndex()).toBe(ROWS_PER_PAGE + 1);
   });
 
   it('should keep the row focused by downArrow after the next render once the page navigation is completed', async () => {

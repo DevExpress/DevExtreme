@@ -2058,47 +2058,33 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
   }
 
   private restoreFocusableElement(rowIndex?: number, $event?: Event): void {
-    // eslint-disable-next-line @typescript-eslint/init-declarations -- set in the up-arrow branch
-    let args: FocusedRowChangingArgs | undefined;
-    const isUpArrow = isDefined(rowIndex);
     const $rowsViewElement = this._rowsView.element();
 
     if (!$rowsViewElement) {
       return;
     }
 
-    const { columnIndex } = this._focusedCellPosition;
-    const rowIndexOffset = this._dataController.getRowIndexOffset();
-
-    let newRowIndex = isUpArrow ? rowIndex : this.getTopVisibleRowIndex();
-
-    if (!isUpArrow) {
+    if (!isDefined(rowIndex)) {
       this._editorFactory.loseFocus();
       this.applyTabIndexToElement($rowsViewElement);
       eventsEngine.trigger($rowsViewElement, 'focus');
 
-      this.isPageNavigationPending = this._rowsView.isViewportRowsRenderPending();
-
-      if (this.isPageNavigationPending) {
-        return;
-      }
-    } else {
-      // @ts-expect-error getRow() is typed as possibly undefined
-      const $rowElement: dxElementWrapper = this._rowsView.getRow(newRowIndex - rowIndexOffset);
-      args = this._fireFocusedRowChanging($event, $rowElement);
-
-      if (!args.cancel && args.rowIndexChanged) {
-        newRowIndex = args.newRowIndex;
-      }
+      this.isPageNavigationPending = true;
+      this.completePageNavigation();
+      return;
     }
 
-    if (!isUpArrow || !args?.cancel) {
-      this.setFocusedCellPosition(newRowIndex, columnIndex);
+    const { columnIndex } = this._focusedCellPosition;
+    const rowIndexOffset = this._dataController.getRowIndexOffset();
+    // @ts-expect-error getRow() is typed as possibly undefined
+    const $rowElement: dxElementWrapper = this._rowsView.getRow(rowIndex - rowIndexOffset);
+    const args = this._fireFocusedRowChanging($event, $rowElement);
+
+    if (!args.cancel) {
+      this.setFocusedCellPosition(args.rowIndexChanged ? args.newRowIndex : rowIndex, columnIndex);
     }
 
-    if (isUpArrow) {
-      this.updateFocus(false);
-    }
+    this.updateFocus(false);
   }
 
   private getTopVisibleRowIndex(): number {
