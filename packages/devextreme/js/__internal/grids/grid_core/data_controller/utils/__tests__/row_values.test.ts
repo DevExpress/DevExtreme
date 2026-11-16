@@ -52,7 +52,7 @@ describe('generateRowValues', () => {
         calls.push(args);
         return null;
       },
-    } as unknown as Partial<Column>);
+    });
 
     generateRowValues(DATA, [column, column]);
 

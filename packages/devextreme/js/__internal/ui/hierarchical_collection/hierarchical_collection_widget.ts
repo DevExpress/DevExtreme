@@ -89,7 +89,7 @@ class HierarchicalCollectionWidget<
   }
 
   _getDataAdapterOptions(): Partial<DataAdapterOptions> {
-    return {} as Partial<DataAdapterOptions>;
+    return {};
   }
 
   _getItemExtraPropNames(): string[] {
