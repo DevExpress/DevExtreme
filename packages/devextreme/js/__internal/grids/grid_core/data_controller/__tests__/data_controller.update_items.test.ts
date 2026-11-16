@@ -16,7 +16,7 @@ const createGrid = async (): Promise<DataController> => {
     columns: ['name'],
   });
 
-  return instance.getController('data') as unknown as DataController;
+  return instance.getController('data');
 };
 
 const refreshChange = (useProcessedItemsCache = false): DataChange => ({

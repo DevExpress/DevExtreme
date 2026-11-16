@@ -53,7 +53,7 @@ const App = () => {
         setDoingTasksState((prevTasks: Task[]): Task[] => updateTasks(prevTasks));
       }
     } else {
-      onRemove(e as RemoveEvent);
+      onRemove(e);
       onAdd(e as AddEvent);
     }
   }, [onAdd, onRemove]);

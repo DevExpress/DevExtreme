@@ -38,7 +38,7 @@ const createMessage = (message: Partial<Message> & Record<string, unknown> = {})
 
   return {
     id: nextId, author: ASSISTANT, text: 'Answer', timestamp: new Date(), ...message,
-  } as Message;
+  };
 };
 
 const chats: Chat[] = [];
