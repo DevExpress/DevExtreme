@@ -23,6 +23,7 @@ import type { DxEvent, EventInfo, InitializedEventInfo } from '@js/events';
 import type { ActionEvent } from '@ts/core/action';
 import type { DeprecatedOptionInfo } from '@ts/core/options/index';
 import type { IntegrationOptions } from '@ts/core/template_manager';
+import { inheritClass } from '@ts/core/widget/legacy_inherit';
 import type { OptionChanged } from '@ts/core/widget/types';
 
 const getEventName = (
@@ -203,6 +204,14 @@ export class Component<
     });
 
     return this;
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  static inherit<TClass extends new (...args: any[]) => object>(
+    this: TClass,
+    members?: Record<string, unknown>,
+  ): TClass {
+    return inheritClass(this, members);
   }
 
   _setDeprecatedOptions(): void {
