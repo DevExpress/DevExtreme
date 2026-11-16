@@ -8,7 +8,8 @@ on:
   pull_request:
     paths-ignore:
       - 'apps/**/*.md'
-  merge_group:
+  push:
+    branches: [26_2]
   workflow_dispatch:
 
 env:
@@ -28,7 +29,7 @@ jobs:
         run: echo "should-run=${{ env.RUN_TESTS }}" >> $GITHUB_OUTPUT
 
   build-devextreme:
-    runs-on: ${{ github.event_name == 'merge_group' && 'devextreme-shr2-ondemand' || 'devextreme-shr2' }}
+    runs-on: devextreme-shr2
     name: Build DevExtreme
     needs: [check-should-run]
     if: |
@@ -148,7 +149,7 @@ jobs:
           retention-days: 1
 
       - name: Save nx cache
-        if: github.event_name != 'pull_request' && github.event_name != 'merge_group'
+        if: github.event_name != 'pull_request'
         uses: actions/cache/save@v5
         with:
           path: |
@@ -159,7 +160,7 @@ jobs:
           key: ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-${{ github.sha }}
   build-demos:
     name: Build demos
-    runs-on: ${{ github.event_name == 'merge_group' && 'devextreme-shr2-ondemand' || 'devextreme-shr2' }}
+    runs-on: devextreme-shr2
     timeout-minutes: 10
     needs: [check-should-run, build-devextreme]
     if: |
@@ -415,7 +416,7 @@ jobs:
     env:
       ACCESSIBILITY_TESTCAFE_REPORT_PATH: "accessibility_testcafe_report"
 
-    runs-on: ${{ github.event_name == 'merge_group' && 'devextreme-shr2-ondemand' || 'devextreme-shr2' }}
+    runs-on: devextreme-shr2
     name: ${{ matrix.CONSTEL }}-${{ matrix.STRATEGY }}-${{ matrix.THEME }}
     timeout-minutes: 15
 
@@ -583,7 +584,7 @@ jobs:
         ]
         THEME: ['fluent.blue.light', 'fluent-next.blue.light']
 
-    runs-on: ${{ github.event_name == 'merge_group' && 'devextreme-shr2-ondemand' || 'devextreme-shr2' }}
+    runs-on: devextreme-shr2
     name: ${{ matrix.CONSTEL }}-screenshots-${{ matrix.THEME }}
     timeout-minutes: 18
 
@@ -788,7 +789,7 @@ jobs:
         include:
           - { SHARD_INDEX: 1, SHARD_TOTAL: 2 }
           - { SHARD_INDEX: 2, SHARD_TOTAL: 2 }
-    runs-on: ${{ github.event_name == 'merge_group' && 'devextreme-shr2-ondemand' || 'devextreme-shr2' }}
+    runs-on: devextreme-shr2
     timeout-minutes: 20
 
     steps:
@@ -872,7 +873,7 @@ jobs:
           - { FRAMEWORK: Angular, SHARD_INDEX: 1, SHARD_TOTAL: 3 }
           - { FRAMEWORK: Angular, SHARD_INDEX: 2, SHARD_TOTAL: 3 }
           - { FRAMEWORK: Angular, SHARD_INDEX: 3, SHARD_TOTAL: 3 }
-    runs-on: ${{ github.event_name == 'merge_group' && 'devextreme-shr2-ondemand' || 'devextreme-shr2' }}
+    runs-on: devextreme-shr2
     timeout-minutes: 16
 
     steps:

@@ -8,7 +8,8 @@ on:
   pull_request:
     paths-ignore:
       - 'apps/**/*.md'
-  merge_group:
+  push:
+    branches: [26_2]
 
 env:
   NX_SKIP_NX_CACHE: ${{ contains(github.event.pull_request.labels.*.name, 'skip-cache') && 'true' || 'false' }}
@@ -126,7 +127,7 @@ jobs:
       run: pnpm exec nx type-check
 
     - name: Save nx cache
-      if: github.event_name != 'pull_request' && github.event_name != 'merge_group'
+      if: github.event_name != 'pull_request'
       uses: actions/cache/save@v5
       with:
         path: |
@@ -225,7 +226,7 @@ jobs:
       run: pnpm exec nx lint-js
 
     - name: Save nx cache
-      if: github.event_name != 'pull_request' && github.event_name != 'merge_group'
+      if: github.event_name != 'pull_request'
       uses: actions/cache/save@v5
       with:
         path: |
@@ -318,7 +319,7 @@ jobs:
       run: pnpm exec nx lint-texts
 
     - name: Save nx cache
-      if: github.event_name != 'pull_request' && github.event_name != 'merge_group'
+      if: github.event_name != 'pull_request'
       uses: actions/cache/save@v5
       with:
         path: |
@@ -457,7 +458,7 @@ jobs:
       run: pnpm exec nx run-many -t lint -p devextreme-angular devextreme-react devextreme-vue
 
     - name: Save nx cache
-      if: github.event_name != 'pull_request' && github.event_name != 'merge_group'
+      if: github.event_name != 'pull_request'
       uses: actions/cache/save@v5
       with:
         path: |
