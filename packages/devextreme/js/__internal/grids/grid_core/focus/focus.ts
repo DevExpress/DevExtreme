@@ -141,14 +141,9 @@ export class FocusController extends core.ViewController {
   }
 
   private hasStaleFocusedRow(focusedRowIndex: number): boolean {
-    const rowsView = this.getRowsView();
-
-    return rowsView.getTableElements().toArray().some((tableElement) => {
-      const $tableElement = $(tableElement);
-      const $focusedRow = rowsView._getRowElements($tableElement).eq(focusedRowIndex);
-
-      return this.findFocusedRows($tableElement).not($focusedRow).length > 0;
-    });
+    return this.getRowsView().getTableElements().toArray().some(
+      (tableElement) => this.findStaleFocusedRows($(tableElement), focusedRowIndex).length > 0,
+    );
   }
 
   private updateFocusedRowIfNeeded(e: DataChange, forceUpdate = false): void {
@@ -573,8 +568,23 @@ export class FocusController extends core.ViewController {
       .filter(isNotMasterDetailFocusedRow);
   }
 
+  private findStaleFocusedRows(
+    $tableElement: dxElementWrapper,
+    focusedRowIndex: number,
+  ): dxElementWrapper {
+    const $focusedRows = this.findFocusedRows($tableElement);
+
+    if (focusedRowIndex < 0) {
+      return $focusedRows;
+    }
+
+    const $focusedRow = this.getRowsView()._getRowElements($tableElement).eq(focusedRowIndex);
+
+    return $focusedRows.not($focusedRow);
+  }
+
   private _clearPreviousFocusedRow($tableElement: dxElementWrapper, focusedRowIndex: number): void {
-    const $prevRowFocusedElement = this.findFocusedRows($tableElement);
+    const $prevRowFocusedElement = this.findStaleFocusedRows($tableElement, focusedRowIndex);
 
     $prevRowFocusedElement
       .removeClass(CLASSES.rowFocused)
@@ -602,7 +612,11 @@ export class FocusController extends core.ViewController {
     const rowsView = this.getView('rowsView');
     const $row = $(rowsView._getRowElements($tableElement).eq(focusedRowIndex));
 
-    $row.addClass(CLASSES.rowFocused).attr('tabindex', tabIndex);
+    $row.addClass(CLASSES.rowFocused);
+
+    if (!$row.children('[tabindex]').length) {
+      $row.attr('tabindex', tabIndex);
+    }
 
     return $row;
   }
