@@ -1,21 +1,17 @@
 import type { ColumnChooserMode } from '@js/common/grids';
 import type { DxElement } from '@js/core/element';
 import messageLocalization from '@js/localization/message';
-import type { Properties as ButtonProperties } from '@js/ui/button';
 import type dxPopup from '@js/ui/popup';
-import type { Properties as PopupProperties } from '@js/ui/popup';
 import type dxTreeView from '@js/ui/tree_view';
 import type { Properties as TreeViewProperties } from '@js/ui/tree_view';
 import type { ReadonlySignal } from '@ts/core/state_manager/index';
 import { computed, signal } from '@ts/core/state_manager/index';
 import { createRef } from 'inferno';
 
-import type { Props as ColumnSortableProps } from '../../card_view/header_panel/column_sortable';
 import { ColumnsController } from '../columns_controller/index';
 import { View } from '../core/view';
 import { OptionsController } from '../options_controller/options_controller';
 import { ToolbarController } from '../toolbar/controller';
-import type { DefaultToolbarItem } from '../toolbar/types';
 import { addWidgetPrefix } from '../utils/common';
 import type { ColumnChooserProps } from './column_chooser';
 import { CLASS, ColumnChooser } from './column_chooser';
@@ -84,12 +80,12 @@ export class ColumnChooserView extends View<ColumnChooserProps> {
             'aria-haspopup': 'dialog',
             class: addWidgetPrefix(CLASS.toolbarBtn),
           },
-        } as ButtonProperties,
+        },
         showText: 'inMenu',
         location: 'after',
         locateInMenu: 'auto',
         visible: true,
-      } as DefaultToolbarItem),
+      }),
       this.options.oneWay('columnChooser.enabled'),
     );
   }
@@ -124,11 +120,11 @@ export class ColumnChooserView extends View<ColumnChooserProps> {
         container: this.options.oneWay('columnChooser.container').value,
         position: this.options.oneWay('columnChooser.position').value,
 
-        onHidden: () => {
+        onHidden: (): void => {
           this.popupVisible.value = false;
           this.toolbarButtonElement?.focus();
         },
-      } as PopupProperties,
+      },
 
       treeViewConfig: {
         searchEditorOptions: this.options.oneWay('columnChooser.search.editorOptions').value,
@@ -146,7 +142,7 @@ export class ColumnChooserView extends View<ColumnChooserProps> {
         onDragStart: this.columnChooserController.onDragStart,
         onDragEnd: this.columnChooserController.onDragEnd,
         onPlaceholderPrepared: this.columnChooserController.onPlaceholderPrepared,
-      } as Partial<ColumnSortableProps>,
+      },
     }));
   }
 }

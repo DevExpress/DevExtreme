@@ -14,7 +14,6 @@ import { noop } from '@js/core/utils/common';
 import dateUtils from '@js/core/utils/date';
 import { extend } from '@js/core/utils/extend';
 import { isBoolean } from '@js/core/utils/type';
-import type { Properties as DateBoxProperties } from '@js/ui/date_box';
 import type {
   GroupItem, Item as FormItem, Properties as FormProperties, SimpleItem,
 } from '@js/ui/form';
@@ -29,7 +28,7 @@ import DropDownEditor from '@ts/ui/drop_down_editor/drop_down_editor';
 import type Popup from '@ts/ui/popup/popup';
 
 import type { TimeZoneCalculator } from '../r1/timezone_calculator/calculator';
-import type { CreateComponentFn, SafeAppointment } from '../types';
+import type { CreateComponentFn } from '../types';
 import type { AppointmentDataAccessor } from '../utils/data_accessor/appointment_data_accessor';
 import type { ResourceLoader } from '../utils/loader/resource_loader';
 import type { RawResourceData } from '../utils/loader/types';
@@ -358,7 +357,7 @@ export class AppointmentForm {
 
         onContentReady?.call(this, e);
       },
-    } as FormProperties;
+    };
 
     const formOptions = extend(true, defaultOptions, customFormOptions);
     return this.config.createComponent(element, dxForm, formOptions);
@@ -377,7 +376,7 @@ export class AppointmentForm {
         this.createResourcesGroup(),
         this.createDescriptionGroup(),
       ],
-    } as GroupItem;
+    };
   }
 
   private createSubjectGroup(): GroupItem {
@@ -406,7 +405,7 @@ export class AppointmentForm {
           editorType: 'dxTextBox',
         },
       ],
-    } as GroupItem;
+    };
   }
 
   private createDateRangeGroup(): GroupItem {
@@ -432,7 +431,7 @@ export class AppointmentForm {
           ],
         },
       ],
-    } as GroupItem;
+    };
   }
 
   private createAllDaySwitch(): SimpleItem {
@@ -473,7 +472,7 @@ export class AppointmentForm {
           }
         },
       } as SwitchProperties,
-    } as SimpleItem;
+    };
   }
 
   private createStartDateGroup(): GroupItem {
@@ -642,7 +641,7 @@ export class AppointmentForm {
                   onContentReady: (e): void => {
                     e.component.option('value', getEditorsDate());
                   },
-                } as DateBoxProperties,
+                },
               },
               dateItemOptions,
             ),
@@ -667,7 +666,7 @@ export class AppointmentForm {
                 onContentReady: (e): void => {
                   e.component.option('value', getEditorsDate());
                 },
-              } as DateBoxProperties,
+              },
             }, timeItemOptions)],
         },
         extend(true, {
@@ -681,11 +680,11 @@ export class AppointmentForm {
             placeholder: messageLocalization.format('dxScheduler-noTimezoneTitle'),
             searchEnabled: true,
             dataSource: createTimeZoneDataSource(),
-          } as SelectBoxProperties,
+          },
         }, timezoneItemOptions),
       ],
       ...groupItemOptions,
-    } as GroupItem;
+    };
   }
 
   private createRepeatGroup(): GroupItem {
@@ -737,7 +736,7 @@ export class AppointmentForm {
           } as SelectBoxProperties,
         },
       ],
-    } as GroupItem;
+    };
   }
 
   private createDescriptionGroup(): GroupItem {
@@ -769,7 +768,7 @@ export class AppointmentForm {
           } as TextAreaProperties,
         },
       ],
-    } as GroupItem;
+    };
   }
 
   private createResourcesGroup(): GroupItem {
@@ -794,7 +793,7 @@ export class AppointmentForm {
           displayExpr: dataAccessor.textExpr,
           valueExpr: dataAccessor.idExpr,
         },
-      } as SimpleItem;
+      };
     });
 
     const noCustomResourceIcons = resourcesLoaders.every((resource) => !resource.icon);
@@ -819,7 +818,7 @@ export class AppointmentForm {
             items: resourcesItems,
           },
         ],
-      } as GroupItem;
+      };
     }
 
     resourcesItems = resourcesItems.map((item, index) => {
@@ -839,7 +838,7 @@ export class AppointmentForm {
           },
           item,
         ],
-      } as GroupItem;
+      };
     });
 
     return {
@@ -851,7 +850,7 @@ export class AppointmentForm {
       },
       cssClass: CLASSES.resourcesGroup,
       items: resourcesItems,
-    } as GroupItem;
+    };
   }
 
   private applyFormItemDefaults(item: FormItem, showIcon: boolean): void {
@@ -987,7 +986,7 @@ export class AppointmentForm {
 
   private async updateSubjectIconColor(): Promise<void> {
     const groupValues = getRawAppointmentGroupValues(
-      this.formData as SafeAppointment,
+      this.formData,
       this.resourceManager.resources,
     );
     const groupIndex = getAppointmentGroupIndex(
@@ -995,7 +994,7 @@ export class AppointmentForm {
       this.resourceManager.groupsLeafs,
     )[0];
     const color = await this.resourceManager.getAppointmentColor({
-      itemData: this.formData as SafeAppointment,
+      itemData: this.formData,
       groupIndex,
     });
 

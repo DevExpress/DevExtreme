@@ -372,7 +372,7 @@ export const getSerializationFormat = (
   switch (dataType) {
     case 'date':
     case 'datetime':
-      return dateSerialization.getDateSerializationFormat(value) as string;
+      return dateSerialization.getDateSerializationFormat(value);
     case 'number':
       if (isString(value)) {
         return 'string';

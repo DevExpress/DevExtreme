@@ -66,7 +66,7 @@ export class KbnFocusTrapEnabled extends Component<KbnFocusTrapBaseProps> {
         <div
           ref={ref}
           onKeyDown={this.onKeyDown.bind(this)}
-          {...(restProps as KbnFocusTrapProps)}
+          {...(restProps)}
         >
           <div data-dx-focus-trap-content={true} onKeyDown={this.onContentKeyDown.bind(this)}>
             <div ref={this.firstFocusDecoyRef} data-dx-focus-decoy={true} tabIndex={0} />

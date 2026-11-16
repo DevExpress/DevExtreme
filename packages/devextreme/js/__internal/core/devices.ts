@@ -398,7 +398,7 @@ class Devices {
       generic: result.platform === 'generic',
     };
 
-    return extend(result, shortcuts) as ResolvedDevice;
+    return extend(result, shortcuts);
   }
 
   _fromUA(ua: string): ResolvedDevice {
