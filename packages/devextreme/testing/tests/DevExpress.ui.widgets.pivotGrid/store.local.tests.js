@@ -1319,7 +1319,7 @@ QUnit.module('Array Local Store', moduleConfig, () => {
             dataType: 'date'
         };
 
-        new LocalStore(dataSource).getFields(field).done(function() {
+        new LocalStore(dataSource).getFields([field]).done(function() {
             assert.deepEqual(field, {
                 dataField: 'OrderDate',
                 dataType: 'date'
