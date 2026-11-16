@@ -947,6 +947,40 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewFocusController e
     }
   }
 
+  protected _renderCore(change) {
+    const deferred = super._renderCore(change);
+    const isWaitingForTemplates = this.isWaitingForAsyncTemplates();
+
+    return deferred.done(() => {
+      if (isWaitingForTemplates) {
+        this.syncFocusedRow();
+      }
+    });
+  }
+
+  private syncFocusedRow(): void {
+    if (!this.option('focusedRowEnabled')) {
+      return;
+    }
+
+    const focusedRowKey = this.option('focusedRowKey');
+    const focusedRowIndex = isDefined(focusedRowKey)
+      ? this._dataController.getRowIndexByKey(focusedRowKey)
+      : -1;
+    const isHighlightOutdated = this._getRowElements()
+      .toArray()
+      .some((rowElement, rowIndex) => {
+        const isHighlighted = rowElement.classList.contains(ROW_FOCUSED_CLASS);
+        const isFocused = rowIndex === focusedRowIndex;
+
+        return isHighlighted !== isFocused;
+      });
+
+    if (isHighlightOutdated) {
+      this._focusController.updateFocusedRow({ focusedRowKey, preventScroll: true });
+    }
+  }
+
   private updateFocusElementTabIndex($cellElements, preventScroll) {
     if (this.option('focusedRowEnabled')) {
       this._setFocusedRowElementTabIndex(preventScroll);
