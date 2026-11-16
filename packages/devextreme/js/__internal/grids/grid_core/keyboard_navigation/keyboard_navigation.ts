@@ -351,7 +351,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     this.initKeyDownHandler();
     this._setRowsViewAttributes();
 
-    if (isFocusedViewCorrect && isFocusedElementCorrect) {
+    if (isFocusedViewCorrect && isFocusedElementCorrect && !this.isPageNavigationPending) {
       const needUpdateFocus = this._isNeedFocus
         ? !isAppend
         : this._isHiddenFocus && isFullUpdate && !e?.virtualColumnsScrolling;
@@ -1823,6 +1823,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     }
 
     if (!args.cancel) {
+      this.isPageNavigationPending = false;
       this.applyFocus($elementToFocus, !args.isHighlighted);
 
       if (this.getElementType($elementToFocus) !== 'row' || isEditRow($elementToFocus)) {

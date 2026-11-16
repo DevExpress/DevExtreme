@@ -235,6 +235,20 @@ describe('PageUp and PageDown with virtual scrolling (T898324)', () => {
     expect(getFocusedRowIndex()).toBe(pressCount * ROWS_PER_PAGE);
   });
 
+  it('should not focus the previous row when the grid is repainted before the rows are rendered', async () => {
+    const instance = await createGridWithAsyncRendering();
+    focusFirstCell(instance);
+
+    pressKeyWithoutRendering(instance, 'pageDown');
+    instance.repaint();
+    jest.advanceTimersByTime(0);
+    const focusedRowIndexAfterRepaint = getFocusedRowIndex();
+    jest.runAllTimers();
+
+    expect(focusedRowIndexAfterRepaint).toBeUndefined();
+    expect(getFocusedRowIndex()).toBe(ROWS_PER_PAGE);
+  });
+
   it('should focus the top visible row once its rows are loaded from a remote store', async () => {
     const instance = await createGrid({
       keyExpr: undefined,
@@ -366,5 +380,18 @@ describe('PageUp and PageDown with virtual scrolling (T898324)', () => {
     jest.runAllTimers();
 
     expect(instance.option('focusedRowIndex')).toBe(ROWS_PER_PAGE + clickedVisibleRowIndex);
+  });
+
+  it('should keep the cell focused by the focus method before the rows of the new position are rendered', async () => {
+    const instance = await createGridWithAsyncRendering();
+    const focusedVisibleRowIndex = 2;
+    focusFirstCell(instance);
+    pressKey(instance, 'pageDown');
+
+    pressKeyWithoutRendering(instance, 'pageUp');
+    instance.focus(instance.getCellElement(focusedVisibleRowIndex, 0) as HTMLElement);
+    jest.runAllTimers();
+
+    expect(instance.option('focusedRowIndex')).toBe(ROWS_PER_PAGE + focusedVisibleRowIndex);
   });
 });
