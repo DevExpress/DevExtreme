@@ -57,6 +57,7 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-${{ github.sha }}-
           ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-
+          ${{ runner.os }}-nx-v2-
 
         lookup-only: true
 
@@ -90,6 +91,7 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-${{ github.sha }}-
           ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-
+          ${{ runner.os }}-nx-v2-
 
     - name: Build
       working-directory: ./packages/devextreme
@@ -177,6 +179,7 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-${{ github.sha }}-
           ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-
+          ${{ runner.os }}-nx-v2-
 
         lookup-only: true
 
@@ -210,6 +213,7 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-${{ github.sha }}-
           ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-
+          ${{ runner.os }}-nx-v2-
 
     - name: Build
       working-directory: ./packages/devextreme
@@ -274,6 +278,7 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-${{ github.sha }}-
           ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-
+          ${{ runner.os }}-nx-v2-
 
         lookup-only: true
 
@@ -307,6 +312,7 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-${{ github.sha }}-
           ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-
+          ${{ runner.os }}-nx-v2-
 
     - name: Check texts
       working-directory: ./packages/devextreme
@@ -412,6 +418,7 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-${{ github.sha }}-
           ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-
+          ${{ runner.os }}-nx-v2-
 
         lookup-only: true
 
@@ -445,6 +452,7 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-${{ github.sha }}-
           ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-
+          ${{ runner.os }}-nx-v2-
 
     - name: Lint wrappers
       run: pnpm exec nx run-many -t lint -p devextreme-angular devextreme-react devextreme-vue
