@@ -77,6 +77,7 @@ describe('TreeList focus — partial update of the focused row', () => {
 
     expect(visibleKeys(instance)).toEqual([1, 11, 2]);
     expect(cell.hasAttribute('tabindex')).toBe(true);
+    expect($(instance.getRowElement(0)).get(0).hasAttribute('tabindex')).toBe(false);
     expect(document.activeElement).toBe(cell);
   });
 
@@ -105,6 +106,31 @@ describe('TreeList focus — partial update of the focused row', () => {
 
     expect(visibleKeys(instance)).toEqual([1, 11, 2]);
     expect(row.getAttribute('tabindex')).toBe('3');
+  });
+
+  it('never removes the tab stop from the focused row while it is expanded with repaintChangesOnly (T1338023)', async () => {
+    const { instance } = createTreeList({
+      dataSource: DATA,
+      columns: ['id', 'name'],
+      focusedRowEnabled: true,
+      focusedRowKey: 1,
+      repaintChangesOnly: true,
+      autoExpandAll: false,
+    });
+    await flushAsync();
+
+    const row = $(instance.getRowElement(0)).get(0);
+    instance.focus(row);
+    await flushAsync();
+    const removeAttribute = jest.spyOn(row, 'removeAttribute');
+
+    const expanding = instance.expandRow(1);
+    await flushAsync();
+    await expanding;
+
+    expect(visibleKeys(instance)).toEqual([1, 11, 2]);
+    expect(removeAttribute).not.toHaveBeenCalledWith('tabindex');
+    expect(document.activeElement).toBe(row);
   });
 
   it('keeps DOM focus on the focused cell when another row is updated via push (T1338023)', async () => {
