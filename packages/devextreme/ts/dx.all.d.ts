@@ -11944,7 +11944,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxChatOptions.toolCallOptions]
      */
-    toolCallOptions?: DevExpress.ui.dxChat.ToolCallOptions;
+    toolCallOptions?: DevExpress.ui.dxChat.ToolCallProperties;
     /**
      * [descr:dxChatOptions.typingUsers]
      */
@@ -35169,15 +35169,15 @@ declare module DevExpress.ui.dxChat {
     [key: string]: any;
   };
   /**
-   * [descr:ToolCallOptions]
+   * [descr:ToolCallProperties]
    */
-  export type ToolCallOptions = {
+  export type ToolCallProperties = {
     /**
-     * [descr:ToolCallOptions.showInMessageTemplate]
+     * [descr:ToolCallProperties.showInMessageTemplate]
      */
     showInMessageTemplate?: boolean;
     /**
-     * [descr:ToolCallOptions.expandAll]
+     * [descr:ToolCallProperties.expandAll]
      */
     expandAll?: boolean;
   };

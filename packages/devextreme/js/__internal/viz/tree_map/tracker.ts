@@ -4,7 +4,6 @@
 /* eslint-disable func-names */
 /* eslint-disable import/no-mutable-exports */
 /* eslint-disable @typescript-eslint/naming-convention */
-/* eslint-disable @stylistic/max-len */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 
@@ -47,7 +46,9 @@ expand(proto, '_initCore', function () {
       const proxy = getProxy(id);
       const interactWithGroup = _parseScalar(that._getOption('interactWithGroup', true));
 
-      return interactWithGroup && proxy.isLeaf() && proxy.getParent().isActive() ? proxy.getParent() : proxy;
+      return interactWithGroup && proxy.isLeaf() && proxy.getParent().isActive()
+        ? proxy.getParent()
+        : proxy;
     },
     getData(e) {
       const { target } = e;

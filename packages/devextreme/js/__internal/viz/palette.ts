@@ -7,7 +7,6 @@
 /* eslint-disable @typescript-eslint/no-shadow */
 /* eslint-disable consistent-return */
 /* eslint-disable no-param-reassign */
-/* eslint-disable @stylistic/max-len */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-use-before-define */
@@ -177,7 +176,8 @@ export function generateColors(palette, count, options = { keepLastColorInEnd: f
 
 export function getPalette(palette, parameters) {
   parameters = parameters || {};
-  palette = palette || (currentPaletteName === undefined ? parameters.themeDefault : currentPalette());
+  palette = palette
+    || (currentPaletteName === undefined ? parameters.themeDefault : currentPalette());
 
   let result;
   const type = parameters.type;
@@ -206,9 +206,13 @@ export function registerPalette(name, palette) {
     // @ts-expect-error
     item.simpleSet = Array.isArray(palette.simpleSet) ? palette.simpleSet.slice(0) : undefined;
     // @ts-expect-error
-    item.indicatingSet = Array.isArray(palette.indicatingSet) ? palette.indicatingSet.slice(0) : undefined;
+    item.indicatingSet = Array.isArray(palette.indicatingSet)
+      ? palette.indicatingSet.slice(0)
+      : undefined;
     // @ts-expect-error
-    item.gradientSet = Array.isArray(palette.gradientSet) ? palette.gradientSet.slice(0) : undefined;
+    item.gradientSet = Array.isArray(palette.gradientSet)
+      ? palette.gradientSet.slice(0)
+      : undefined;
     // @ts-expect-error
     item.accentColor = palette.accentColor;
   }

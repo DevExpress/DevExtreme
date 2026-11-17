@@ -15,7 +15,6 @@
 /* eslint-disable consistent-return */
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-multi-assign */
-/* eslint-disable @stylistic/max-len */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-use-before-define */
 /* eslint-disable prefer-destructuring */
@@ -211,10 +210,15 @@ function getTickGenerator(
     allowNegatives,
     linearThreshold,
 
-    axisDivisionFactor: adjustDivisionFactor(options.axisDivisionFactor || DEFAULT_AXIS_DIVISION_FACTOR),
-    minorAxisDivisionFactor: adjustDivisionFactor(options.minorAxisDivisionFactor || DEFAULT_MINOR_AXIS_DIVISION_FACTOR),
+    axisDivisionFactor: adjustDivisionFactor(
+      options.axisDivisionFactor || DEFAULT_AXIS_DIVISION_FACTOR,
+    ),
+    minorAxisDivisionFactor: adjustDivisionFactor(
+      options.minorAxisDivisionFactor || DEFAULT_MINOR_AXIS_DIVISION_FACTOR,
+    ),
     numberMultipliers: options.numberMultipliers,
-    calculateMinors: options.minorTick.visible || options.minorGrid.visible || options.calculateMinors,
+    calculateMinors:
+      options.minorTick.visible || options.minorGrid.visible || options.calculateMinors,
 
     allowDecimals: options.allowDecimals,
     endOnTick: options.endOnTick,
@@ -232,17 +236,14 @@ function getTickGenerator(
   });
 }
 
-function createMajorTick(axis: AxisInstance, renderer: ThemeValue, skippedCategory: ThemeValue): ThemeValue {
+function createMajorTick(
+  axis: AxisInstance,
+  renderer: ThemeValue,
+  skippedCategory: ThemeValue,
+): ThemeValue {
   const options = axis.getOptions();
 
-  return tick(
-    axis,
-    renderer,
-    options.tick,
-    options.grid,
-    skippedCategory,
-    false,
-  );
+  return tick(axis, renderer, options.tick, options.grid, skippedCategory, false);
 }
 
 function createMinorTick(axis: AxisInstance, renderer: ThemeValue): ThemeValue {
@@ -256,7 +257,11 @@ function createMinorTick(axis: AxisInstance, renderer: ThemeValue): ThemeValue {
   );
 }
 
-function createBoundaryTick(axis: AxisInstance, renderer: ThemeValue, isFirst: boolean): ThemeValue {
+function createBoundaryTick(
+  axis: AxisInstance,
+  renderer: ThemeValue,
+  isFirst: boolean,
+): ThemeValue {
   const options = axis.getOptions();
 
   return tick(
@@ -270,7 +275,12 @@ function createBoundaryTick(axis: AxisInstance, renderer: ThemeValue, isFirst: b
   );
 }
 
-function callAction(elements: ThemeValue[] | null | undefined, action: string, actionArgument1?: ThemeValue, actionArgument2?: ThemeValue): void {
+function callAction(
+  elements: ThemeValue[] | null | undefined,
+  action: string,
+  actionArgument1?: ThemeValue,
+  actionArgument2?: ThemeValue,
+): void {
   (elements || []).forEach((e) => e[action](actionArgument1, actionArgument2));
 }
 
@@ -364,11 +374,17 @@ function validateAxisOptions(options: ThemeValue): void {
 }
 
 function getOptimalAngle(boxes: ThemeValue[], labelOpt: ThemeValue): number {
-  const angle = _math.asin((boxes[0].height + labelOpt.minSpacing) / (boxes[1].x - boxes[0].x)) * 180 / _math.PI;
+  const angle = (_math.asin((boxes[0].height + labelOpt.minSpacing) / (boxes[1].x - boxes[0].x))
+      * 180)
+    / _math.PI;
   return angle < 45 ? -45 : -90;
 }
 
-function updateLabels(ticks: ThemeValue[], step: number, func?: (tick: ThemeValue, index: number) => void): void {
+function updateLabels(
+  ticks: ThemeValue[],
+  step: number,
+  func?: (tick: ThemeValue, index: number) => void,
+): void {
   ticks.forEach((tick, index) => {
     if (tick.getContentContainer()) {
       if (index % step !== 0) {
@@ -406,7 +422,14 @@ function configureGenerator(
   });
 
   return function (tickInterval, skipTickGeneration, min, max, breaks) {
-    return getTickGenerator(tickGeneratorOptions, _noop, skipTickGeneration, viewPort.isEmpty(), (v) => v, viewPort)(
+    return getTickGenerator(
+      tickGeneratorOptions,
+      _noop,
+      skipTickGeneration,
+      viewPort.isEmpty(),
+      (v) => v,
+      viewPort,
+    )(
       {
         min,
         max,
@@ -424,7 +447,10 @@ function configureGenerator(
   };
 }
 
-function getConstantLineSharpDirection(coord: number, axisCanvas: { start: number; end: number }): number {
+function getConstantLineSharpDirection(
+  coord: number,
+  axisCanvas: { start: number; end: number },
+): number {
   return Math.max(axisCanvas.start, axisCanvas.end) !== coord ? 1 : -1;
 }
 
@@ -578,7 +604,10 @@ export let Axis = class Axis {
 
   declare _checkAlignmentConstantLineLabels: (labelOptions: ThemeValue) => void;
 
-  declare _getConstantLineLabelsCoords: (value: number, labelOptions: ThemeValue) => { x: number; y: number };
+  declare _getConstantLineLabelsCoords: (
+    value: number,
+    labelOptions: ThemeValue,
+  ) => { x: number; y: number };
 
   declare _getAdjustedStripLabelCoords: (strip: ThemeValue) => LabelTranslation;
 
@@ -632,9 +661,18 @@ export let Axis = class Axis {
 
   declare setSpiderTicks: (ticks: ThemeValue[]) => void;
 
-  declare _checkBoundedLabelsOverlapping: (majorTicks: ThemeValue[], boxes: ThemeValue[], mode: string) => void;
+  declare _checkBoundedLabelsOverlapping: (
+    majorTicks: ThemeValue[],
+    boxes: ThemeValue[],
+    mode: string,
+  ) => void;
 
-  declare _checkShiftedLabels: (majorTicks: ThemeValue[], boxes: ThemeValue[], minSpacing: number, alignment: string) => void;
+  declare _checkShiftedLabels: (
+    majorTicks: ThemeValue[],
+    boxes: ThemeValue[],
+    minSpacing: number,
+    alignment: string,
+  ) => void;
 
   declare drawScaleBreaks: (customCanvas?: ThemeValue) => void;
 
@@ -642,7 +680,11 @@ export let Axis = class Axis {
 
   declare _rotateConstantLine: (line: ThemeValue, value: number) => void;
 
-  declare _getTickMarkPoints: (coords: ThemeValue, length: number, options?: ThemeValue) => number[];
+  declare _getTickMarkPoints: (
+    coords: ThemeValue,
+    length: number,
+    options?: ThemeValue,
+  ) => number[];
 
   declare _validateOverlappingMode: (mode: string, displayMode?: string) => string;
 
@@ -737,7 +779,11 @@ export let Axis = class Axis {
       const grid = that._getGridPoints(tick.coords);
 
       if (grid.points) {
-        return that._createPathElement(grid.points, gridStyle, that.getSharpDirectionByCoords(tick.coords));
+        return that._createPathElement(
+          grid.points,
+          gridStyle,
+          that.getSharpDirectionByCoords(tick.coords),
+        );
       }
       return null;
     };
@@ -761,8 +807,12 @@ export let Axis = class Axis {
       top: axisCanvas.top,
       bottom: axisCanvas.height - axisCanvas.bottom,
     };
-    const firstBorderLinePosition = borderOptions.visible && borderOptions[canvasStart] ? canvas[canvasStart] : undefined;
-    const lastBorderLinePosition = borderOptions.visible && borderOptions[canvasEnd] ? canvas[canvasEnd] : undefined;
+    const firstBorderLinePosition = borderOptions.visible && borderOptions[canvasStart]
+      ? canvas[canvasStart]
+      : undefined;
+    const lastBorderLinePosition = borderOptions.visible && borderOptions[canvasEnd]
+      ? canvas[canvasEnd]
+      : undefined;
     const minDelta = MAX_GRID_BORDER_ADHENSION + firstBorderLinePosition;
     const maxDelta = lastBorderLinePosition - MAX_GRID_BORDER_ADHENSION;
 
@@ -774,15 +824,27 @@ export let Axis = class Axis {
 
     return {
       points: isHorizontal
-        ? coords[tickPositionField] !== null ? [coords[tickPositionField], positionFrom, coords[tickPositionField], positionTo] : null
-        : coords[tickPositionField] !== null ? [positionFrom, coords[tickPositionField], positionTo, coords[tickPositionField]] : null,
+        ? coords[tickPositionField] !== null
+          ? [coords[tickPositionField], positionFrom, coords[tickPositionField], positionTo]
+          : null
+        : coords[tickPositionField] !== null
+          ? [positionFrom, coords[tickPositionField], positionTo, coords[tickPositionField]]
+          : null,
     };
   }
 
-  _getConstantLinePos(parsedValue: ThemeValue, canvasStart: number, canvasEnd: number): number | undefined {
+  _getConstantLinePos(
+    parsedValue: ThemeValue,
+    canvasStart: number,
+    canvasEnd: number,
+  ): number | undefined {
     const value = this._getTranslatedCoord(parsedValue);
 
-    if (!isDefined(value) || value < _min(canvasStart, canvasEnd) || value > _max(canvasStart, canvasEnd)) {
+    if (
+      !isDefined(value)
+      || value < _min(canvasStart, canvasEnd)
+      || value > _max(canvasStart, canvasEnd)
+    ) {
       return undefined;
     }
 
@@ -794,22 +856,39 @@ export let Axis = class Axis {
     const positionTo = this._orthogonalPositions.end;
 
     return {
-      points: this._isHorizontal ? [value, positionFrom, value, positionTo] : [positionFrom, value, positionTo, value],
+      points: this._isHorizontal
+        ? [value, positionFrom, value, positionTo]
+        : [positionFrom, value, positionTo, value],
     };
   }
 
   _createConstantLine(value: number, attr: ThemeValue): ThemeValue {
-    return this._createPathElement(this._getConstantLineGraphicAttributes(value).points, attr, getConstantLineSharpDirection(value, this._getCanvasStartEnd()));
+    return this._createPathElement(
+      this._getConstantLineGraphicAttributes(value).points,
+      attr,
+      getConstantLineSharpDirection(value, this._getCanvasStartEnd()),
+    );
   }
 
-  _drawConstantLineLabelText(text: string, x: number, y: number, { font, cssClass }: ThemeValue, group: ThemeValue): ThemeValue {
+  _drawConstantLineLabelText(
+    text: string,
+    x: number,
+    y: number,
+    { font, cssClass }: ThemeValue,
+    group: ThemeValue,
+  ): ThemeValue {
     return this._renderer.text(text, x, y)
       .css(patchFontOptions(extend({}, this._options.label.font, font)))
       .attr({ align: 'center', class: cssClass })
       .append(group);
   }
 
-  _drawConstantLineLabels(parsedValue: ThemeValue, lineLabelOptions: ThemeValue, value: number, group: ThemeValue): ThemeValue {
+  _drawConstantLineLabels(
+    parsedValue: ThemeValue,
+    lineLabelOptions: ThemeValue,
+    value: number,
+    group: ThemeValue,
+  ): ThemeValue {
     let text = lineLabelOptions.text;
     const options = this._options;
     const labelOptions = options.label;
@@ -822,7 +901,13 @@ export let Axis = class Axis {
     return this._drawConstantLineLabelText(text, coords.x, coords.y, lineLabelOptions, group);
   }
 
-  _getStripPos(startValue: ThemeValue, endValue: ThemeValue, canvasStart: number, canvasEnd: number, range: ThemeValue): StripPosition {
+  _getStripPos(
+    startValue: ThemeValue,
+    endValue: ThemeValue,
+    canvasStart: number,
+    canvasEnd: number,
+    range: ThemeValue,
+  ): StripPosition {
     const isContinuous = !!(range.minVisible || range.maxVisible);
     const categories = (range.categories || []).reduce((result, cat) => {
       result.push(cat.valueOf());
@@ -865,16 +950,24 @@ export let Axis = class Axis {
       end = canvasEnd;
     }
 
-    const stripPosition: StripPosition = start < end ? { from: start, to: end } : { from: end, to: start };
+    const stripPosition: StripPosition = start < end
+      ? { from: start, to: end }
+      : { from: end, to: start };
     const visibleArea = this.getVisibleArea();
 
-    if (stripPosition.from <= visibleArea[0] && stripPosition.to <= visibleArea[0] || stripPosition.from >= visibleArea[1] && stripPosition.to >= visibleArea[1]) {
+    if (
+      (stripPosition.from <= visibleArea[0] && stripPosition.to <= visibleArea[0])
+      || (stripPosition.from >= visibleArea[1] && stripPosition.to >= visibleArea[1])
+    ) {
       stripPosition.outOfCanvas = true;
     }
     return stripPosition;
   }
 
-  _getStripGraphicAttributes(fromPoint: number, toPoint: number): { x: number; y: number; width: number; height: number } {
+  _getStripGraphicAttributes(
+    fromPoint: number,
+    toPoint: number,
+  ): { x: number; y: number; width: number; height: number } {
     let x;
     let y;
     let width;
@@ -916,7 +1009,12 @@ export let Axis = class Axis {
   }
 
   _adjustLabelsCoord(offset: number, maxWidth: number, checkCanvas?: boolean): void {
-    const getContainerAttrs = (tick: ThemeValue): LabelTranslation => this._getLabelAdjustedCoord(tick, offset + (tick.labelOffset || 0), maxWidth, checkCanvas);
+    const getContainerAttrs = (tick: ThemeValue): LabelTranslation => this._getLabelAdjustedCoord(
+      tick,
+      offset + (tick.labelOffset || 0),
+      maxWidth,
+      checkCanvas,
+    );
     this._majorTicks.forEach((tick) => {
       if (tick.label) {
         tick.updateMultilineTextAlignment();
@@ -932,27 +1030,52 @@ export let Axis = class Axis {
     const positionsAreConsistent = options.position === options.label.position;
     const maxSize = this._majorTicks.reduce((size, tick) => {
       if (!tick.getContentContainer()) return size;
-      const bBox = tick.labelRotationAngle ? rotateBBox(tick.labelBBox, [tick.labelCoords.x, tick.labelCoords.y], -tick.labelRotationAngle) : tick.labelBBox;
+      const bBox = tick.labelRotationAngle
+        ? rotateBBox(
+          tick.labelBBox,
+          [tick.labelCoords.x, tick.labelCoords.y],
+          -tick.labelRotationAngle,
+        )
+        : tick.labelBBox;
       return {
         width: _max(size.width || 0, bBox.width),
         height: _max(size.height || 0, bBox.height),
         offset: _max(size.offset || 0, tick.labelOffset || 0),
       };
     }, {});
-    const additionalOffset = positionsAreConsistent ? this._isHorizontal ? maxSize.height : maxSize.width : 0;
+    const additionalOffset = positionsAreConsistent
+      ? this._isHorizontal
+        ? maxSize.height
+        : maxSize.width
+      : 0;
 
     this._adjustLabelsCoord(offset, maxSize.width);
 
-    return offset + additionalOffset + (additionalOffset && this._options.label.indentFromAxis) + (positionsAreConsistent ? maxSize.offset : 0);
+    return (
+      offset
+      + additionalOffset
+      + (additionalOffset && this._options.label.indentFromAxis)
+      + (positionsAreConsistent ? maxSize.offset : 0)
+    );
   }
 
-  _getLabelAdjustedCoord(tick: ThemeValue, offset: number, maxWidth: number, checkCanvas?: boolean): LabelTranslation;
+  _getLabelAdjustedCoord(
+    tick: ThemeValue,
+    offset: number,
+    maxWidth: number,
+    checkCanvas?: boolean,
+  ): LabelTranslation;
 
   _getLabelAdjustedCoord(tick: ThemeValue, offset: number, maxWidth: number): LabelTranslation {
     offset = offset || 0;
     const options = this._options;
     const templateBox = tick.templateContainer && tick.templateContainer.getBBox();
-    const box = templateBox || rotateBBox(tick.labelBBox, [tick.labelCoords.x, tick.labelCoords.y], -tick.labelRotationAngle || 0);
+    const box = templateBox
+      || rotateBBox(
+        tick.labelBBox,
+        [tick.labelCoords.x, tick.labelCoords.y],
+        -tick.labelRotationAngle || 0,
+      );
     const textAlign = tick.labelAlignment || options.label.alignment;
     const isDiscrete = this._options.type === 'discrete';
     const isFlatLabel = tick.labelRotationAngle % 90 === 0;
@@ -972,9 +1095,13 @@ export let Axis = class Axis {
       }
 
       if (textAlign === RIGHT) {
-        translateX = isDiscrete && isFlatLabel ? tick.coords.x - (box.x + box.width) : labelX - box.x - box.width;
+        translateX = isDiscrete && isFlatLabel
+          ? tick.coords.x - (box.x + box.width)
+          : labelX - box.x - box.width;
       } else if (textAlign === LEFT) {
-        translateX = isDiscrete && isFlatLabel ? labelX - box.x - (tick.coords.x - labelX) : labelX - box.x;
+        translateX = isDiscrete && isFlatLabel
+          ? labelX - box.x - (tick.coords.x - labelX)
+          : labelX - box.x;
       } else {
         translateX = labelX - box.x - box.width / 2;
       }
@@ -1078,7 +1205,14 @@ export let Axis = class Axis {
     this._axisStripLabelGroup && this._axisStripLabelGroup.clear();
   }
 
-  _getLabelFormatObject(value: ThemeValue, labelOptions: ThemeValue, range?: ThemeValue, point?: ThemeValue, tickInterval?: ThemeValue, ticks?: ThemeValue[]): LabelFormatObject {
+  _getLabelFormatObject(
+    value: ThemeValue,
+    labelOptions: ThemeValue,
+    range?: ThemeValue,
+    point?: ThemeValue,
+    tickInterval?: ThemeValue,
+    ticks?: ThemeValue[],
+  ): LabelFormatObject {
     range = range || this._getViewportRange();
 
     const formatObject: LabelFormatObject = {
@@ -1107,19 +1241,42 @@ export let Axis = class Axis {
     return formatObject;
   }
 
-  formatLabel(value: ThemeValue, labelOptions: ThemeValue, range?: ThemeValue, point?: ThemeValue, tickInterval?: ThemeValue, ticks?: ThemeValue[]): string {
-    const formatObject = this._getLabelFormatObject(value, labelOptions, range, point, tickInterval, ticks);
+  formatLabel(
+    value: ThemeValue,
+    labelOptions: ThemeValue,
+    range?: ThemeValue,
+    point?: ThemeValue,
+    tickInterval?: ThemeValue,
+    ticks?: ThemeValue[],
+  ): string {
+    const formatObject = this._getLabelFormatObject(
+      value,
+      labelOptions,
+      range,
+      point,
+      tickInterval,
+      ticks,
+    );
 
-    return isFunction(labelOptions.customizeText) ? labelOptions.customizeText.call(formatObject, formatObject) : formatObject.valueText;
+    return isFunction(labelOptions.customizeText)
+      ? labelOptions.customizeText.call(formatObject, formatObject)
+      : formatObject.valueText;
   }
 
   formatHint(value: ThemeValue, labelOptions: ThemeValue, range?: ThemeValue): string | undefined {
     const formatObject = this._getLabelFormatObject(value, labelOptions, range);
 
-    return isFunction(labelOptions.customizeHint) ? labelOptions.customizeHint.call(formatObject, formatObject) : undefined;
+    return isFunction(labelOptions.customizeHint)
+      ? labelOptions.customizeHint.call(formatObject, formatObject)
+      : undefined;
   }
 
-  formatRange(startValue: ThemeValue, endValue: ThemeValue, interval: ThemeValue, argumentFormat: ThemeValue): string {
+  formatRange(
+    startValue: ThemeValue,
+    endValue: ThemeValue,
+    interval: ThemeValue,
+    argumentFormat: ThemeValue,
+  ): string {
     return formatRange({
       startValue, endValue, tickInterval: interval, argumentFormat, axisOptions: this.getOptions(),
     });
@@ -1159,7 +1316,10 @@ export let Axis = class Axis {
     const cTop = canvas.top;
     const cRight = canvas.width - canvas.right;
     const cBottom = canvas.height - canvas.bottom;
-    const edgeMarginCorrection = _max(grid.visible && grid.width || 0, tick.visible && tick.width || 0);
+    const edgeMarginCorrection = _max(
+      (grid.visible && grid.width) || 0,
+      (tick.visible && tick.width) || 0,
+    );
     const constantLineAboveSeries = that._axisConstantLineGroups.above;
     const constantLineUnderSeries = that._axisConstantLineGroups.under;
     const boxes = [that._axisElementsGroup,
@@ -1196,10 +1356,18 @@ export let Axis = class Axis {
     }
 
     if (edgeMarginCorrection) {
-      if (that._isHorizontal && canvas.right < edgeMarginCorrection && margins.right < edgeMarginCorrection) {
+      if (
+        that._isHorizontal
+        && canvas.right < edgeMarginCorrection
+        && margins.right < edgeMarginCorrection
+      ) {
         margins.right = edgeMarginCorrection;
       }
-      if (!that._isHorizontal && canvas.bottom < edgeMarginCorrection && margins.bottom < edgeMarginCorrection) {
+      if (
+        !that._isHorizontal
+        && canvas.bottom < edgeMarginCorrection
+        && margins.bottom < edgeMarginCorrection
+      ) {
         margins.bottom = edgeMarginCorrection;
       }
     }
@@ -1245,14 +1413,18 @@ export let Axis = class Axis {
 
   // public
   dispose(): void {
-    [this._axisElementsGroup, this._axisStripGroup, this._axisGroup].forEach((g) => { g.dispose(); });
+    [this._axisElementsGroup, this._axisStripGroup, this._axisGroup].forEach((g) => {
+      g.dispose();
+    });
 
     this._strips = this._title = null;
 
-    this._axisStripGroup = this._axisConstantLineGroups = this._axisStripLabelGroup = this._axisBreaksGroup = null;
+    this._axisStripGroup = this._axisConstantLineGroups = null;
+    this._axisStripLabelGroup = this._axisBreaksGroup = null;
     this._axisLineGroup = this._axisElementsGroup = this._axisGridGroup = null;
     this._axisGroup = this._axisTitleGroup = null;
-    this._axesContainerGroup = this._stripsGroup = this._constantLinesGroup = this._labelsAxesGroup = null;
+    this._axesContainerGroup = this._stripsGroup = null;
+    this._constantLinesGroup = this._labelsAxesGroup = null;
 
     this._renderer = this._options = this._textOptions = this._textFontStyles = null;
     // @ts-expect-error the disposed axis drops its translator
@@ -1341,7 +1513,10 @@ export let Axis = class Axis {
       return _abs(value - prevValue);
     }
     const { allowNegatives, linearThreshold } = new Range(this.getTranslator().getBusinessRange());
-    return _abs(getLog(value, options.logarithmBase, allowNegatives, linearThreshold) - getLog(prevValue, options.logarithmBase, allowNegatives, linearThreshold));
+    return _abs(
+      getLog(value, options.logarithmBase, allowNegatives, linearThreshold)
+        - getLog(prevValue, options.logarithmBase, allowNegatives, linearThreshold),
+    );
   }
 
   getCanvasRange(): { startValue: ThemeValue; endValue: ThemeValue } {
@@ -1395,7 +1570,10 @@ export let Axis = class Axis {
   hideOuterElements(): void {
     const options = this._options;
 
-    if ((options.label.visible || this._outsideConstantLines.length) && !this._translator.getBusinessRange().isEmpty()) {
+    if (
+      (options.label.visible || this._outsideConstantLines.length)
+      && !this._translator.getBusinessRange().isEmpty()
+    ) {
       this._incidentOccurred('W2106', [this._isHorizontal ? 'horizontal' : 'vertical']);
       this._axisElementsGroup.clear();
       callAction(this._outsideConstantLines, 'removeLabel');
@@ -1406,7 +1584,8 @@ export let Axis = class Axis {
     const options = this._options;
     if (options.type === constants.logarithmic) {
       range.addRange({
-        allowNegatives: options.allowNegatives !== undefined ? options.allowNegatives : range.min <= 0,
+        allowNegatives:
+          options.allowNegatives !== undefined ? options.allowNegatives : range.min <= 0,
       });
       if (!isNaN(options.linearThreshold)) {
         range.linearThreshold = options.linearThreshold;
@@ -1428,8 +1607,10 @@ export let Axis = class Axis {
     let maxDefined = isDefined(visualRange.endValue);
 
     if (!isDiscrete) {
-      minDefined = minDefined && (!isDefined(wholeRange.endValue) || visualRange.startValue < wholeRange.endValue);
-      maxDefined = maxDefined && (!isDefined(wholeRange.startValue) || visualRange.endValue > wholeRange.startValue);
+      minDefined = minDefined
+        && (!isDefined(wholeRange.endValue) || visualRange.startValue < wholeRange.endValue);
+      maxDefined = maxDefined
+        && (!isDefined(wholeRange.startValue) || visualRange.endValue > wholeRange.startValue);
     }
 
     const minVisible = minDefined ? visualRange.startValue : result.minVisible;
@@ -1439,7 +1620,11 @@ export let Axis = class Axis {
       result.min = wholeRange.startValue ?? result.min;
       result.max = wholeRange.endValue ?? result.max;
     } else {
-      const categoriesInfo = getCategoriesInfo(categories, wholeRange.startValue, wholeRange.endValue);
+      const categoriesInfo = getCategoriesInfo(
+        categories,
+        wholeRange.startValue,
+        wholeRange.endValue,
+      );
 
       categories = categoriesInfo.categories;
       result.categories = categories;
@@ -1484,7 +1669,12 @@ export let Axis = class Axis {
       range.startValue = disabledNegatives && range.startValue <= 0 ? null : range.startValue;
       range.endValue = disabledNegatives && range.endValue <= 0 ? null : range.endValue;
     }
-    if (!isDiscrete && isDefined(range.startValue) && isDefined(range.endValue) && range.startValue > range.endValue) {
+    if (
+      !isDiscrete
+      && isDefined(range.startValue)
+      && isDefined(range.endValue)
+      && range.startValue > range.endValue
+    ) {
       const tmp = range.endValue;
       range.endValue = range.startValue;
       range.startValue = tmp;
@@ -1493,7 +1683,11 @@ export let Axis = class Axis {
     return range;
   }
 
-  _getVisualRangeUpdateMode(viewport: ThemeValue, newRange: ThemeValue, oppositeValue?: string): string {
+  _getVisualRangeUpdateMode(
+    viewport: ThemeValue,
+    newRange: ThemeValue,
+    oppositeValue?: string,
+  ): string {
     let value = this._options.visualRangeUpdateMode;
     const translator = this._translator;
     const range = this._seriesData;
@@ -1505,11 +1699,14 @@ export let Axis = class Axis {
 
     if (!this.isArgumentAxis) {
       const viewport = this.getViewport();
-      const isViewportNotDefined = !isDefined(viewport.startValue) && !isDefined(viewport.endValue) && !isDefined(viewport.length);
+      const isViewportNotDefined = !isDefined(viewport.startValue)
+        && !isDefined(viewport.endValue)
+        && !isDefined(viewport.length);
 
       if (isViewportNotDefined) {
         const visualRange = this.visualRange();
-        const isVisualRangeNotDefined = !isDefined(visualRange.startValue) && !isDefined(visualRange.endValue);
+        const isVisualRangeNotDefined = !isDefined(visualRange.startValue)
+          && !isDefined(visualRange.endValue);
 
         if (isVisualRangeNotDefined) {
           return RESET;
@@ -1523,12 +1720,16 @@ export let Axis = class Axis {
           const categories = range.categories;
           const newCategories = newRange.categories;
           const visualRange = this.visualRange();
-          if (categories
-                        && newCategories
-                        && categories.length
-                        && newCategories.map((c) => c.valueOf()).join(',').indexOf(categories.map((c) => c.valueOf()).join(',')) !== -1
-                        && (visualRange.startValue.valueOf() !== categories[0].valueOf()
-                            || visualRange.endValue.valueOf() !== categories[categories.length - 1].valueOf())
+          if (
+            categories
+            && newCategories
+            && categories.length
+            && newCategories
+              .map((c) => c.valueOf())
+              .join(',')
+              .indexOf(categories.map((c) => c.valueOf()).join(',')) !== -1
+            && (visualRange.startValue.valueOf() !== categories[0].valueOf()
+              || visualRange.endValue.valueOf() !== categories[categories.length - 1].valueOf())
           ) {
             value = KEEP;
           } else {
@@ -1565,14 +1766,22 @@ export let Axis = class Axis {
     return value;
   }
 
-  _handleBusinessRangeChanged(oppositeVisualRangeUpdateMode: string | undefined, axisReinitialized: boolean | undefined, newRange: ThemeValue): void {
+  _handleBusinessRangeChanged(
+    oppositeVisualRangeUpdateMode: string | undefined,
+    axisReinitialized: boolean | undefined,
+    newRange: ThemeValue,
+  ): void {
     const visualRange = this.visualRange();
 
     if (axisReinitialized || this._translator.getBusinessRange().isEmpty()) {
       return;
     }
 
-    const visualRangeUpdateMode = this._lastVisualRangeUpdateMode = this._getVisualRangeUpdateMode(visualRange, newRange, oppositeVisualRangeUpdateMode);
+    const visualRangeUpdateMode = (this._lastVisualRangeUpdateMode = this._getVisualRangeUpdateMode(
+      visualRange,
+      newRange,
+      oppositeVisualRangeUpdateMode,
+    ));
 
     if (visualRangeUpdateMode === KEEP) {
       this._setVisualRange([visualRange.startValue, visualRange.endValue]);
@@ -1588,9 +1797,15 @@ export let Axis = class Axis {
     const { type } = this._options;
     let length;
     if (type === constants.logarithmic) {
-      length = adjust(this.calculateInterval(currentBusinessRange.maxVisible, currentBusinessRange.minVisible));
+      length = adjust(
+        this.calculateInterval(currentBusinessRange.maxVisible, currentBusinessRange.minVisible),
+      );
     } else if (type === constants.discrete) {
-      const categoriesInfo = getCategoriesInfo(currentBusinessRange.categories, currentBusinessRange.minVisible, currentBusinessRange.maxVisible);
+      const categoriesInfo = getCategoriesInfo(
+        currentBusinessRange.categories,
+        currentBusinessRange.minVisible,
+        currentBusinessRange.maxVisible,
+      );
       length = categoriesInfo.categories.length;
     } else {
       length = currentBusinessRange.maxVisible - currentBusinessRange.minVisible;
@@ -1659,8 +1874,10 @@ export let Axis = class Axis {
 
     const interval = this._getTickIntervalValue();
 
-    return this._getBreaksForRange(businessRange.minVisible, businessRange.maxVisible)
-      .reduce((result, scaleBreak) => result - this._getHiddenDuration(scaleBreak, interval), length);
+    return this._getBreaksForRange(businessRange.minVisible, businessRange.maxVisible).reduce(
+      (result, scaleBreak) => result - this._getHiddenDuration(scaleBreak, interval),
+      length,
+    );
   }
 
   _addToValue(value: ThemeValue, diff: number): ThemeValue {
@@ -1691,7 +1908,10 @@ export let Axis = class Axis {
     const isReversed = range.startValue > range.endValue;
 
     if (isReversed) {
-      const reordered = this.adjustPannedRange({ startValue: range.endValue, endValue: range.startValue }, anchor);
+      const reordered = this.adjustPannedRange(
+        { startValue: range.endValue, endValue: range.startValue },
+        anchor,
+      );
 
       return { startValue: reordered.endValue, endValue: reordered.startValue };
     }
@@ -1750,11 +1970,16 @@ export let Axis = class Axis {
   getVisualRangeCenter(range?: ThemeValue, useMerge?: boolean): ThemeValue {
     const translator = this.getTranslator();
     const businessRange = translator.getBusinessRange();
-    const currentBusinessRange = useMerge ? extend(true, {}, businessRange, range || {}) : range || businessRange;
+    const currentBusinessRange = useMerge
+      ? extend(true, {}, businessRange, range || {})
+      : range || businessRange;
     const { type, logarithmBase } = this._options;
     let center;
 
-    if (!isDefined(currentBusinessRange.minVisible) || !isDefined(currentBusinessRange.maxVisible)) {
+    if (
+      !isDefined(currentBusinessRange.minVisible)
+      || !isDefined(currentBusinessRange.maxVisible)
+    ) {
       return;
     }
 
@@ -1762,19 +1987,38 @@ export let Axis = class Axis {
       const {
         allowNegatives, linearThreshold, minVisible, maxVisible,
       } = currentBusinessRange;
-      center = raiseTo(adjust(getLog(maxVisible, logarithmBase, allowNegatives, linearThreshold) + getLog(minVisible, logarithmBase, allowNegatives, linearThreshold)) / 2, logarithmBase, allowNegatives, linearThreshold);
+      center = raiseTo(
+        adjust(
+          getLog(maxVisible, logarithmBase, allowNegatives, linearThreshold)
+            + getLog(minVisible, logarithmBase, allowNegatives, linearThreshold),
+        ) / 2,
+        logarithmBase,
+        allowNegatives,
+        linearThreshold,
+      );
     } else if (type === constants.discrete) {
-      const categoriesInfo = getCategoriesInfo(currentBusinessRange.categories, currentBusinessRange.minVisible, currentBusinessRange.maxVisible);
+      const categoriesInfo = getCategoriesInfo(
+        currentBusinessRange.categories,
+        currentBusinessRange.minVisible,
+        currentBusinessRange.maxVisible,
+      );
       const index = Math.ceil(categoriesInfo.categories.length / 2) - 1;
       // @ts-expect-error a discrete range always has categories
       center = businessRange.categories.indexOf(categoriesInfo.categories[index]);
     } else {
-      center = translator.toValue((currentBusinessRange.maxVisible.valueOf() + currentBusinessRange.minVisible.valueOf()) / 2);
+      center = translator.toValue(
+        (currentBusinessRange.maxVisible.valueOf() + currentBusinessRange.minVisible.valueOf()) / 2,
+      );
     }
     return center;
   }
 
-  setBusinessRange(range: RangeData, axisReinitialized?: boolean, oppositeVisualRangeUpdateMode?: string, argCategories?: ThemeValue): void {
+  setBusinessRange(
+    range: RangeData,
+    axisReinitialized?: boolean,
+    oppositeVisualRangeUpdateMode?: string,
+    argCategories?: ThemeValue,
+  ): void {
     const options = this._options;
     const isDiscrete = options.type === constants.discrete;
 
@@ -1825,7 +2069,9 @@ export let Axis = class Axis {
     }
     this._seriesData.sortCategories(this.getCategoriesSorter(argCategories));
 
-    this._seriesData.userBreaks = this._seriesData.isEmpty() ? [] : this._getScaleBreaks(options, this._seriesData, this._series, this.isArgumentAxis);
+    this._seriesData.userBreaks = this._seriesData.isEmpty()
+      ? []
+      : this._getScaleBreaks(options, this._seriesData, this._series, this.isArgumentAxis);
 
     this._translator.updateBusinessRange(this._getViewportRange());
   }
@@ -1852,16 +2098,22 @@ export let Axis = class Axis {
   getLabelsPosition(): number {
     const options = this._options;
     const position = options.position;
-    const labelShift = options.label.indentFromAxis + (this._axisShift || 0) + this._constantLabelOffset;
+    const labelShift = options.label.indentFromAxis
+      + (this._axisShift || 0)
+      + this._constantLabelOffset;
     const axisPosition = this._axisPosition;
 
-    return position === TOP || position === LEFT ? axisPosition - labelShift : axisPosition + labelShift;
+    return position === TOP || position === LEFT
+      ? axisPosition - labelShift
+      : axisPosition + labelShift;
   }
 
   getFormattedValue(value: ThemeValue, options: ThemeValue, point?: ThemeValue): string | null {
     const labelOptions = this._options.label;
 
-    return isDefined(value) ? this.formatLabel(value, extend(true, {}, labelOptions, options), undefined, point) : null;
+    return isDefined(value)
+      ? this.formatLabel(value, extend(true, {}, labelOptions, options), undefined, point)
+      : null;
   }
 
   _getBoundaryTicks(majors: ThemeValue[], viewPort: ThemeValue): ThemeValue[] {
@@ -1926,12 +2178,16 @@ export let Axis = class Axis {
 
   estimateTickInterval(canvas: ThemeValue): boolean {
     this.updateCanvas(canvas);
-    return this._tickInterval !== this._getTicks(this._getViewportRange(), _noop, true).tickInterval;
+    return (
+      this._tickInterval !== this._getTicks(this._getViewportRange(), _noop, true).tickInterval
+    );
   }
 
   setTicks(ticks: ThemeValue): void {
     const majors = ticks.majorTicks || [];
-    this._majorTicks = majors.map(createMajorTick(this, this._renderer, this._getSkippedCategory(majors)));
+    this._majorTicks = majors.map(
+      createMajorTick(this, this._renderer, this._getSkippedCategory(majors)),
+    );
     this._minorTicks = (ticks.minorTicks || []).map(createMinorTick(this, this._renderer));
     this._isSynchronized = true;
   }
@@ -1940,12 +2196,23 @@ export let Axis = class Axis {
     return val;
   }
 
-  _getTicks(viewPort: ThemeValue, incidentOccurred?: IncidentOccurred, skipTickGeneration?: boolean): ThemeValue {
+  _getTicks(
+    viewPort: ThemeValue,
+    incidentOccurred?: IncidentOccurred,
+    skipTickGeneration?: boolean,
+  ): ThemeValue {
     const options = this._options;
     const customTicks = options.customTicks;
     const customMinorTicks = options.customMinorTicks;
 
-    return getTickGenerator(options, incidentOccurred || this._incidentOccurred, skipTickGeneration, this._translator.getBusinessRange().isEmpty(), this._adjustDivisionFactor.bind(this), viewPort)(
+    return getTickGenerator(
+      options,
+      incidentOccurred || this._incidentOccurred,
+      skipTickGeneration,
+      this._translator.getBusinessRange().isEmpty(),
+      this._adjustDivisionFactor.bind(this),
+      viewPort,
+    )(
       {
         min: viewPort.minVisible,
         max: viewPort.maxVisible,
@@ -1965,7 +2232,10 @@ export let Axis = class Axis {
     );
   }
 
-  _createTicksAndLabelFormat(range: RangeInstance, incidentOccurred?: IncidentOccurred): ThemeValue {
+  _createTicksAndLabelFormat(
+    range: RangeInstance,
+    incidentOccurred?: IncidentOccurred,
+  ): ThemeValue {
     const options = this._options;
     const ticks = this._getTicks(range, incidentOccurred, false);
 
@@ -1976,7 +2246,10 @@ export let Axis = class Axis {
     return ticks;
   }
 
-  getAggregationInfo(useAllAggregatedPoints: boolean, range: ThemeValue): { interval: ThemeValue; ticks: ThemeValue[] } {
+  getAggregationInfo(
+    useAllAggregatedPoints: boolean,
+    range: ThemeValue,
+  ): { interval: ThemeValue; ticks: ThemeValue[] } {
     const options = this._options;
 
     const businessRange = new Range(this.getTranslator().getBusinessRange()).addRange(range);
@@ -1989,10 +2262,29 @@ export let Axis = class Axis {
     const aggregationGroupWidth = this._getAggregationGroupWidth();
 
     const minInterval = !options.aggregationGroupWidth && !aggregationInterval && range.interval;
-    const generateTicks = configureGenerator(options, aggregationGroupWidth, businessRange, this._getScreenDelta(), minInterval);
+    const generateTicks = configureGenerator(
+      options,
+      aggregationGroupWidth,
+      businessRange,
+      this._getScreenDelta(),
+      minInterval,
+    );
 
-    const tickInterval = generateTicks(aggregationInterval, true, minVisible, maxVisible, this._seriesData?.breaks).tickInterval;
-    const ticks = this._generateTick(useAllAggregatedPoints, businessRange, minVisible, maxVisible, tickInterval, generateTicks);
+    const tickInterval = generateTicks(
+      aggregationInterval,
+      true,
+      minVisible,
+      maxVisible,
+      this._seriesData?.breaks,
+    ).tickInterval;
+    const ticks = this._generateTick(
+      useAllAggregatedPoints,
+      businessRange,
+      minVisible,
+      maxVisible,
+      tickInterval,
+      generateTicks,
+    );
 
     this._aggregationInterval = tickInterval;
 
@@ -2021,7 +2313,14 @@ export let Axis = class Axis {
     return aggregationGroupWidth;
   }
 
-  _generateTick(useAllAggregatedPoints: boolean, businessRange: RangeInstance, minVisible: ThemeValue, maxVisible: ThemeValue, tickInterval: ThemeValue, generateTicks: TicksGenerator): ThemeValue[] {
+  _generateTick(
+    useAllAggregatedPoints: boolean,
+    businessRange: RangeInstance,
+    minVisible: ThemeValue,
+    maxVisible: ThemeValue,
+    tickInterval: ThemeValue,
+    generateTicks: TicksGenerator,
+  ): ThemeValue[] {
     const min = useAllAggregatedPoints ? businessRange.min : minVisible;
     const max = useAllAggregatedPoints ? businessRange.max : maxVisible;
 
@@ -2082,10 +2381,18 @@ export let Axis = class Axis {
     this.updateCanvas(canvas);
 
     const range = this._getViewportRange();
-    // @ts-expect-error setBusinessRange() sets userBreaks before the ticks are created
-    this._initialBreaks = range.breaks = this._seriesData.breaks = this._filterBreaks(this._seriesData.userBreaks, range, options.breakStyle);
+    this._initialBreaks = range.breaks = this._seriesData.breaks = this._filterBreaks(
+      // @ts-expect-error setBusinessRange() sets userBreaks before the ticks are created
+      this._seriesData.userBreaks,
+      range,
+      options.breakStyle,
+    );
 
-    this._estimatedTickInterval = this._getTicks(this.adjustViewport(this._seriesData), _noop, true).tickInterval; // tickInterval calculation
+    this._estimatedTickInterval = this._getTicks(
+      this.adjustViewport(this._seriesData),
+      _noop,
+      true,
+    ).tickInterval; // tickInterval calculation
 
     const margins = this._calculateValueMargins();
 
@@ -2101,13 +2408,17 @@ export let Axis = class Axis {
     if (options.showCustomBoundaryTicks && boundaryTicks.length) {
       this._boundaryTicks = [boundaryTicks[0]].map(createBoundaryTick(this, renderer, true));
       if (boundaryTicks.length > 1) {
-        this._boundaryTicks = this._boundaryTicks.concat([boundaryTicks[1]].map(createBoundaryTick(this, renderer, false)));
+        this._boundaryTicks = this._boundaryTicks.concat(
+          [boundaryTicks[1]].map(createBoundaryTick(this, renderer, false)),
+        );
       }
     } else {
       this._boundaryTicks = [];
     }
 
-    const minors = (ticks.minorTicks || []).filter((minor) => !boundaryTicks.some((boundary) => valueOf(boundary) === valueOf(minor)));
+    const minors = (ticks.minorTicks || []).filter(
+      (minor) => !boundaryTicks.some((boundary) => valueOf(boundary) === valueOf(minor)),
+    );
 
     this._tickInterval = ticks.tickInterval;
     this._minorTickInterval = ticks.minorTickInterval;
@@ -2145,7 +2456,8 @@ export let Axis = class Axis {
     });
 
     this._ticksToRemove = Object.keys(majorTicksByValues)
-      .map((k) => majorTicksByValues[k]).concat(oldMinorTicks.slice(this._minorTicks.length, oldMinorTicks.length));
+      .map((k) => majorTicksByValues[k])
+      .concat(oldMinorTicks.slice(this._minorTicks.length, oldMinorTicks.length));
     this._ticksToRemove.forEach((t) => t.label?.removeTitle());
 
     if (ticks.breaks) {
@@ -2220,7 +2532,9 @@ export let Axis = class Axis {
     const viewPort = this.getViewport();
     const screenDelta = this._getScreenDelta();
     const isDiscrete = (options.type || '').indexOf(constants.discrete) !== -1;
-    const valueMarginsEnabled = options.valueMarginsEnabled && !isDiscrete && !this.customPositionIsBoundaryOrthogonalAxis();
+    const valueMarginsEnabled = options.valueMarginsEnabled
+      && !isDiscrete
+      && !this.customPositionIsBoundaryOrthogonalAxis();
 
     const translator = this._translator;
 
@@ -2243,7 +2557,9 @@ export let Axis = class Axis {
       rangeInterval = this._calculateRangeInterval(dataRange.interval);
       const pxInterval = translator.getInterval(rangeInterval);
       if (isFinite(pxInterval)) {
-        interval = Math.ceil(pxInterval / (2 * this._getConvertIntervalCoefficient(pxInterval, screenDelta)));
+        interval = Math.ceil(
+          pxInterval / (2 * this._getConvertIntervalCoefficient(pxInterval, screenDelta)),
+        );
       } else {
         rangeInterval = 0;
       }
@@ -2256,8 +2572,15 @@ export let Axis = class Axis {
 
     if (valueMarginsEnabled) {
       if (isDefined(minValueMargin)) {
-        minPercentPadding = isFinite(minValueMargin) ? minValueMargin : 0;
-      } else if (!this.isArgumentAxis && margins.checkInterval && valueOf(dataRange.minVisible) > 0 && valueOf(dataRange.minVisible) === valueOf(dataRange.min)) {
+        minPercentPadding = isFinite(minValueMargin)
+          ? minValueMargin
+          : 0;
+      } else if (
+        !this.isArgumentAxis
+        && margins.checkInterval
+        && valueOf(dataRange.minVisible) > 0
+        && valueOf(dataRange.minVisible) === valueOf(dataRange.min)
+      ) {
         minPadding = MIN_BAR_MARGIN;
       } else {
         minPadding = Math.max(marginSize, interval);
@@ -2265,8 +2588,15 @@ export let Axis = class Axis {
       }
 
       if (isDefined(maxValueMargin)) {
-        maxPercentPadding = isFinite(maxValueMargin) ? maxValueMargin : 0;
-      } else if (!this.isArgumentAxis && margins.checkInterval && valueOf(dataRange.maxVisible) < 0 && valueOf(dataRange.maxVisible) === valueOf(dataRange.max)) {
+        maxPercentPadding = isFinite(maxValueMargin)
+          ? maxValueMargin
+          : 0;
+      } else if (
+        !this.isArgumentAxis
+        && margins.checkInterval
+        && valueOf(dataRange.maxVisible) < 0
+        && valueOf(dataRange.maxVisible) === valueOf(dataRange.max)
+      ) {
         maxPadding = MIN_BAR_MARGIN;
       } else {
         maxPadding = Math.max(marginSize, interval);
@@ -2289,7 +2619,8 @@ export let Axis = class Axis {
     const canvasStartEnd = this._getCanvasStartEnd();
 
     const commonMargin = 1 + (minPercentPadding || 0) + (maxPercentPadding || 0);
-    const screenDeltaWithMargins = ((screenDelta - minPadding - maxPadding) / commonMargin) || screenDelta;
+    const screenDeltaWithMargins = (screenDelta - minPadding - maxPadding) / commonMargin
+      || screenDelta;
 
     if (minPercentPadding !== undefined || maxPercentPadding !== undefined) {
       if (minPercentPadding !== undefined) {
@@ -2331,16 +2662,24 @@ export let Axis = class Axis {
       }
     }
 
-    minPercentPadding = minPercentPadding === undefined ? minPadding / screenDeltaWithMargins : minPercentPadding;
-    maxPercentPadding = maxPercentPadding === undefined ? maxPadding / screenDeltaWithMargins : maxPercentPadding;
+    minPercentPadding = minPercentPadding === undefined
+      ? minPadding / screenDeltaWithMargins
+      : minPercentPadding;
+    maxPercentPadding = maxPercentPadding === undefined
+      ? maxPadding / screenDeltaWithMargins
+      : maxPercentPadding;
 
     if (!isDiscrete) {
       if (this._translator.isInverted()) {
-        minValue = minValue ?? translator.from(canvasStartEnd.start + screenDelta * minPercentPadding, -1);
-        maxValue = maxValue ?? translator.from(canvasStartEnd.end - screenDelta * maxPercentPadding, 1);
+        minValue = minValue
+          ?? translator.from(canvasStartEnd.start + screenDelta * minPercentPadding, -1);
+        maxValue = maxValue
+          ?? translator.from(canvasStartEnd.end - screenDelta * maxPercentPadding, 1);
       } else {
-        minValue = minValue ?? translator.from(canvasStartEnd.start - screenDelta * minPercentPadding, -1);
-        maxValue = maxValue ?? translator.from(canvasStartEnd.end + screenDelta * maxPercentPadding, 1);
+        minValue = minValue
+          ?? translator.from(canvasStartEnd.start - screenDelta * minPercentPadding, -1);
+        maxValue = maxValue
+          ?? translator.from(canvasStartEnd.end + screenDelta * maxPercentPadding, 1);
       }
     }
 
@@ -2395,7 +2734,10 @@ export let Axis = class Axis {
       const minExpectedPadding = _abs(canvasStartEnd.start - minPoint);
       const maxExpectedPadding = _abs(canvasStartEnd.end - maxPoint);
 
-      const coeff = this._getConvertIntervalCoefficient(minExpectedPadding + maxExpectedPadding, screenDelta);
+      const coeff = this._getConvertIntervalCoefficient(
+        minExpectedPadding + maxExpectedPadding,
+        screenDelta,
+      );
 
       start = minExpectedPadding / coeff;
       end = maxExpectedPadding / coeff;
@@ -2449,7 +2791,9 @@ export let Axis = class Axis {
   }
 
   _createConstantLines(): void {
-    const constantLines = (this._options.constantLines || []).map((o) => createConstantLine(this, o));
+    const constantLines = (this._options.constantLines || []).map(
+      (o) => createConstantLine(this, o),
+    );
 
     this._outsideConstantLines = constantLines.filter((l) => l.labelPosition === 'outside');
     this._insideConstantLines = constantLines.filter((l) => l.labelPosition === 'inside');
@@ -2527,7 +2871,9 @@ export let Axis = class Axis {
     this._adjustConstantLineLabels(this._insideConstantLines);
     this._adjustStripLabels();
 
-    let offset = this._constantLabelOffset = this._adjustConstantLineLabels(this._outsideConstantLines);
+    let offset = (this._constantLabelOffset = this._adjustConstantLineLabels(
+      this._outsideConstantLines,
+    ));
 
     if (!this._translator.getBusinessRange().isEmpty()) {
       this._setLabelsPlacement();
@@ -2565,12 +2911,17 @@ export let Axis = class Axis {
     }
 
     const displayMode = this._validateDisplayMode(options.label.displayMode);
-    const overlappingMode = this._validateOverlappingMode(options.label.overlappingBehavior, displayMode);
+    const overlappingMode = this._validateOverlappingMode(
+      options.label.overlappingBehavior,
+      displayMode,
+    );
     const wordWrapMode = options.label.wordWrap || 'none';
     const overflowMode = options.label.textOverflow || 'none';
 
     if ((wordWrapMode !== 'none' || overflowMode !== 'none') && displayMode !== ROTATE && overlappingMode !== ROTATE && overlappingMode !== 'auto') {
-      const usefulSpace = isDefined(options.placeholderSize) ? options.placeholderSize - options.label.indentFromAxis : undefined;
+      const usefulSpace = isDefined(options.placeholderSize)
+        ? options.placeholderSize - options.label.indentFromAxis
+        : undefined;
       if (this._isHorizontal) {
         textWidth = convertedTickInterval;
         textHeight = usefulSpace;
@@ -2640,7 +2991,9 @@ export let Axis = class Axis {
 
     callAction(this._majorTicks, 'updateLabelPosition', animationEnabled);
 
-    this._outsideConstantLines.concat(this._insideConstantLines || []).forEach((l) => l.updatePosition(animationEnabled));
+    this._outsideConstantLines
+      .concat(this._insideConstantLines || [])
+      .forEach((l) => l.updatePosition(animationEnabled));
 
     callAction(this._strips, 'updatePosition', animationEnabled);
 
@@ -2701,7 +3054,9 @@ export let Axis = class Axis {
 
   _validateOptions(options: ThemeValue): void {
     options.wholeRange = this._validateVisualRange(options.wholeRange);
-    options.visualRange = options._customVisualRange = this._validateVisualRange(options._customVisualRange);
+    options.visualRange = options._customVisualRange = this._validateVisualRange(
+      options._customVisualRange,
+    );
 
     this._setVisualRange(options._customVisualRange);
   }
@@ -2709,7 +3064,11 @@ export let Axis = class Axis {
   validate(): void {
     const options = this._options;
     const dataType = this.isArgumentAxis ? options.argumentType : options.valueType;
-    const parser = dataType ? getParser(dataType) : function (unit: ThemeValue): ThemeValue { return unit; };
+    const parser = dataType
+      ? getParser(dataType)
+      : function (unit: ThemeValue): ThemeValue {
+        return unit;
+      };
 
     this.parser = parser;
     options.dataType = dataType;
@@ -2757,7 +3116,13 @@ export let Axis = class Axis {
     };
   }
 
-  _getZoomEndEventArg(previousRange: ThemeValue, event: ThemeValue, actionType: string | undefined, zoomFactor: number, shift: number): ThemeValue {
+  _getZoomEndEventArg(
+    previousRange: ThemeValue,
+    event: ThemeValue,
+    actionType: string | undefined,
+    zoomFactor: number,
+    shift: number,
+  ): ThemeValue {
     const newRange = this.visualRange();
     return {
       axis: this,
@@ -2802,7 +3167,9 @@ export let Axis = class Axis {
   getTemplatesGroups(): ThemeValue[] {
     const ticks = this._majorTicks;
     if (ticks) {
-      return this._majorTicks.map((tick) => tick.templateContainer).filter((item) => isDefined(item));
+      return this._majorTicks
+        .map((tick) => tick.templateContainer)
+        .filter((item) => isDefined(item));
     } else {
       return [];
     }
@@ -2850,7 +3217,12 @@ export let Axis = class Axis {
     }
   }
 
-  handleZooming(visualRange: ThemeValue, preventEvents?: ThemeValue, domEvent?: ThemeValue, action?: string): ZoomResults {
+  handleZooming(
+    visualRange: ThemeValue,
+    preventEvents?: ThemeValue,
+    domEvent?: ThemeValue,
+    action?: string,
+  ): ZoomResults {
     preventEvents = preventEvents || {};
 
     if (isDefined(visualRange)) {
@@ -2895,7 +3267,11 @@ export let Axis = class Axis {
         categories: previousRange.categories,
       };
       const typeIsNotChanged = this.getOptions().type === this._storedZoomEndParams.type;
-      const shift = typeIsNotChanged ? adjust(this.getVisualRangeCenter() - this.getVisualRangeCenter(previousBusinessRange, false)) : NaN;
+      const shift = typeIsNotChanged
+        ? adjust(
+          this.getVisualRangeCenter() - this.getVisualRangeCenter(previousBusinessRange, false),
+        )
+        : NaN;
       const calcZoomFactor = (): number => {
         if (action === 'pan') {
           return 1;
@@ -2904,10 +3280,19 @@ export let Axis = class Axis {
         const currentLength = this.getVisualRangeLength() || 1;
         const ratio = this.getVisualRangeLength(previousBusinessRange) / currentLength;
 
-        return Math.round(multiplyInExponentialForm(ratio, ZOOM_FACTOR_PRECISION)) / ZOOM_FACTOR_MULTIPLIER;
+        return (
+          Math.round(multiplyInExponentialForm(ratio, ZOOM_FACTOR_PRECISION))
+          / ZOOM_FACTOR_MULTIPLIER
+        );
       };
       const zoomFactor = typeIsNotChanged ? calcZoomFactor() : NaN;
-      const zoomEndEvent = this._getZoomEndEventArg(previousRange, domEvent, action, zoomFactor, shift);
+      const zoomEndEvent = this._getZoomEndEventArg(
+        previousRange,
+        domEvent,
+        action,
+        zoomFactor,
+        shift,
+      );
 
       zoomEndEvent.cancel = this.checkZoomingLowerLimitOvercome(zoomFactor === 1 ? 'pan' : 'zoom', zoomFactor).stopInteraction;
       this._eventTrigger('zoomEnd', zoomEndEvent);
@@ -2925,7 +3310,11 @@ export let Axis = class Axis {
     this._visualRange(this, previousRange);
   }
 
-  checkZoomingLowerLimitOvercome(actionType: string, zoomFactor: number, range?: ThemeValue): { stopInteraction: boolean; correctedRange: ThemeValue } {
+  checkZoomingLowerLimitOvercome(
+    actionType: string,
+    zoomFactor: number,
+    range?: ThemeValue,
+  ): { stopInteraction: boolean; correctedRange: ThemeValue } {
     const options = this._options;
     const translator = this._translator;
     let minZoom = options.minVisualRangeLength;
@@ -2949,7 +3338,7 @@ export let Axis = class Axis {
 
     if (isDefined(minZoom) || options.type === 'discrete') {
       minZoom = translator.convert(minZoom);
-      if (visualRange && (minZoom < beforeVisualRangeLength) && (minZoom >= afterVisualRangeLength)) {
+      if (visualRange && minZoom < beforeVisualRangeLength && minZoom >= afterVisualRangeLength) {
         correctedRange = getVizRangeObject(translator.getRangeByMinZoomValue(minZoom, visualRange));
         isOvercoming = false;
       } else {
@@ -2976,7 +3365,9 @@ export let Axis = class Axis {
 
     if (this._options.type === 'discrete') {
       seriesData = this._translator.getBusinessRange();
-      extremeDataValue = isMax ? seriesData.categories[seriesData.categories.length - 1] : seriesData.categories[0];
+      extremeDataValue = isMax
+        ? seriesData.categories[seriesData.categories.length - 1]
+        : seriesData.categories[0];
     } else {
       seriesData = this.getZoomBounds(); // T702708
       extremeDataValue = isMax ? seriesData.endValue : seriesData.startValue;
@@ -2985,7 +3376,9 @@ export let Axis = class Axis {
     const translator = this.getTranslator();
     const extremePoint = translator.translate(extremeDataValue);
     const visualRange = this.visualRange();
-    const visualRangePoint = isMax ? translator.translate(visualRange.endValue) : translator.translate(visualRange.startValue);
+    const visualRangePoint = isMax
+      ? translator.translate(visualRange.endValue)
+      : translator.translate(visualRange.startValue);
 
     return _abs(visualRangePoint - extremePoint) < SCROLL_THRESHOLD;
   }
@@ -3004,7 +3397,10 @@ export let Axis = class Axis {
     }
   }
 
-  measureLabels(canvas: ThemeValue, withIndents?: boolean): { x: number; y: number; width: number; height: number } {
+  measureLabels(
+    canvas: ThemeValue,
+    withIndents?: boolean,
+  ): { x: number; y: number; width: number; height: number } {
     const options = this._options;
     const widthAxis = options.visible ? options.width : 0;
     let ticks;
@@ -3028,7 +3424,14 @@ export let Axis = class Axis {
     }
 
     const maxText = ticks.reduce((prevLabel, tick, index) => {
-      const label = this.formatLabel(tick, options.label, viewportRange, undefined, tickInterval, ticks);
+      const label = this.formatLabel(
+        tick,
+        options.label,
+        viewportRange,
+        undefined,
+        tickInterval,
+        ticks,
+      );
       if (prevLabel.length < label.length) {
         return label;
       } else {
@@ -3036,7 +3439,11 @@ export let Axis = class Axis {
       }
     }, this.formatLabel(ticks[0], options.label, viewportRange, undefined, tickInterval, ticks));
 
-    const text = this._renderer.text(maxText, 0, 0).css(this._textFontStyles).attr(this._textOptions).append(this._renderer.root);
+    const text = this._renderer
+      .text(maxText, 0, 0)
+      .css(this._textFontStyles)
+      .attr(this._textOptions)
+      .append(this._renderer.root);
     const box = text.getBBox();
 
     text.remove();
@@ -3051,7 +3458,10 @@ export let Axis = class Axis {
     }
     const labelOpt = this._options.label;
     const displayMode = this._validateDisplayMode(labelOpt.displayMode);
-    const overlappingMode = this._validateOverlappingMode(labelOpt.overlappingBehavior, displayMode);
+    const overlappingMode = this._validateOverlappingMode(
+      labelOpt.overlappingBehavior,
+      displayMode,
+    );
     const ignoreOverlapping = overlappingMode === 'none' || overlappingMode === 'ignore';
     const behavior = {
       rotationAngle: labelOpt.rotationAngle,
@@ -3079,7 +3489,12 @@ export let Axis = class Axis {
     }
   }
 
-  _applyLabelOverlapping(boxes: ThemeValue[], mode: string, step: number, behavior: ThemeValue): void {
+  _applyLabelOverlapping(
+    boxes: ThemeValue[],
+    mode: string,
+    step: number,
+    behavior: ThemeValue,
+  ): void {
     const labelOpt = this._options.label;
     const majorTicks = this._majorTicks;
 
@@ -3090,7 +3505,12 @@ export let Axis = class Axis {
       if (index === 0) {
         return false;
       }
-      return constants.areLabelsOverlap(box, array[index - 1], labelOpt.minSpacing, labelOpt.alignment);
+      return constants.areLabelsOverlap(
+        box,
+        array[index - 1],
+        labelOpt.minSpacing,
+        labelOpt.alignment,
+      );
     };
     if (step > 1 && boxes.some(checkLabels)) {
       this._applyLabelMode(mode, step, boxes, behavior);
@@ -3099,7 +3519,13 @@ export let Axis = class Axis {
     this._checkShiftedLabels(majorTicks, boxes, labelOpt.minSpacing, labelOpt.alignment);
   }
 
-  _applyLabelMode(mode: string, step: number, boxes: ThemeValue[], behavior: ThemeValue, notRecastStep?: boolean): void {
+  _applyLabelMode(
+    mode: string,
+    step: number,
+    boxes: ThemeValue[],
+    behavior: ThemeValue,
+    notRecastStep?: boolean,
+  ): void {
     const majorTicks = this._majorTicks;
     const labelOpt = this._options.label;
     const angle = behavior.rotationAngle;
@@ -3141,7 +3567,9 @@ export let Axis = class Axis {
         if (step === 2) {
           this._applyLabelMode('stagger', step, boxes, behavior);
         } else {
-          this._applyLabelMode(ROTATE, step, boxes, { rotationAngle: getOptimalAngle(boxes, labelOpt) });
+          this._applyLabelMode(ROTATE, step, boxes, {
+            rotationAngle: getOptimalAngle(boxes, labelOpt),
+          });
         }
         break;
       default:
@@ -3156,7 +3584,11 @@ export let Axis = class Axis {
 
   _updateTranslator(): void {
     const translator = this._translator;
-    translator.update(translator.getBusinessRange(), this._canvas || {}, this._getTranslatorOptions());
+    translator.update(
+      translator.getBusinessRange(),
+      this._canvas || {},
+      this._getTranslatorOptions(),
+    );
   }
 
   _getTranslatorOptions(): Translator2DOptions {
@@ -3180,7 +3612,9 @@ export let Axis = class Axis {
     const isHorizontal = this._isHorizontal;
     const canvas = this._canvas || {};
     const invert = this._translator.getBusinessRange().invert;
-    const coords = isHorizontal ? [canvas.left, canvas.width - canvas.right] : [canvas.height - canvas.bottom, canvas.top];
+    const coords = isHorizontal
+      ? [canvas.left, canvas.width - canvas.right]
+      : [canvas.height - canvas.bottom, canvas.top];
 
     invert && coords.reverse();
 
@@ -3199,7 +3633,12 @@ export let Axis = class Axis {
     return screenDelta - (breaksLength ? breaks[breaksLength - 1].cumulativeWidth : 0);
   }
 
-  _getScaleBreaks(axisOptions: ThemeValue, viewport: ThemeValue, series: ThemeValue[], isArgumentAxis?: boolean): ThemeValue[];
+  _getScaleBreaks(
+    axisOptions: ThemeValue,
+    viewport: ThemeValue,
+    series: ThemeValue[],
+    isArgumentAxis?: boolean,
+  ): ThemeValue[];
 
   _getScaleBreaks(): ThemeValue[] { return []; }
 

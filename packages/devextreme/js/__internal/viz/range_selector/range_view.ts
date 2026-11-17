@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/init-declarations */
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-multi-assign */
-/* eslint-disable @stylistic/max-len */
 /* eslint-disable prefer-destructuring */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 
@@ -26,7 +25,12 @@ interface RangeViewSeriesDataSource {
   isShowChart: () => boolean;
 }
 
-function drawSeriesView(root: ThemeValue, seriesDataSource: RangeViewSeriesDataSource, canvas: RangeViewCanvas, isAnimationEnabled: boolean): void {
+function drawSeriesView(
+  root: ThemeValue,
+  seriesDataSource: RangeViewSeriesDataSource,
+  canvas: RangeViewCanvas,
+  isAnimationEnabled: boolean,
+): void {
   const seriesList = seriesDataSource.getSeries();
   if (!seriesList.length) {
     return;
@@ -87,12 +91,16 @@ export let RangeView = class RangeView {
     if (!isCompactMode) {
       if (merge(backgroundOption.visible, backgroundTheme.visible)) {
         if (backgroundOption.color) {
-          renderer.rect(canvas.left, canvas.top, canvasWidth + 1, canvas.height).attr({
-            // Seems that "backgroundTheme.color" is never used and so can be removed both from here and from themes
-            // TODO: Check it (special attention to WidgetsGallery) and remove the option
-            fill: merge(backgroundOption.color, backgroundTheme.color),
-            class: 'dx-range-selector-background',
-          }).append(root);
+          renderer
+            .rect(canvas.left, canvas.top, canvasWidth + 1, canvas.height)
+            .attr({
+              // Seems that "backgroundTheme.color" is never used and so can be removed both from
+              // here and from themes
+              // TODO: Check it (special attention to WidgetsGallery) and remove the option
+              fill: merge(backgroundOption.color, backgroundTheme.color),
+              class: 'dx-range-selector-background',
+            })
+            .append(root);
         }
         if (backgroundOption.image && backgroundOption.image.url) {
           renderer.image(

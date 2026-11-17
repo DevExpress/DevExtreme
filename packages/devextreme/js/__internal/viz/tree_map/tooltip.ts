@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-this-alias */
 /* eslint-disable func-names */
 /* eslint-disable @typescript-eslint/no-shadow */
-/* eslint-disable @stylistic/max-len */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 
@@ -37,7 +36,12 @@ expand(proto, '_onTilingPerformed', function () {
 
 function getCoords(coords, rect, renderer) {
   const offset = renderer.getRootOffset();
-  return coords || (rect && [(rect[0] + rect[2]) / 2 + offset.left, (rect[1] + rect[3]) / 2 + offset.top]) || [-1000, -1000];
+  return (
+    coords
+    || (rect && [(rect[0] + rect[2]) / 2 + offset.left, (rect[1] + rect[3]) / 2 + offset.top]) || [
+      -1000, -1000,
+    ]
+  );
 }
 
 proto._showTooltip = function (index, coords) {

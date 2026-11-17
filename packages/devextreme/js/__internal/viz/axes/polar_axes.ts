@@ -10,7 +10,6 @@
 /* eslint-disable @typescript-eslint/no-shadow */
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-multi-assign */
-/* eslint-disable @stylistic/max-len */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
@@ -64,7 +63,9 @@ const circularAxes = {
     let { minVisible, maxVisible } = this._getViewportRange();
     if (ticks && ticks.length > 1) {
       minVisible = minVisible < ticks[0].value ? minVisible : ticks[0].value;
-      maxVisible = minVisible > ticks[ticks.length - 1].value ? maxVisible : ticks[ticks.length - 1].value;
+      maxVisible = minVisible > ticks[ticks.length - 1].value
+        ? maxVisible
+        : ticks[ticks.length - 1].value;
     }
 
     return {
@@ -77,7 +78,11 @@ const circularAxes = {
     const margins = this._calculateValueMargins(this._majorTicks);
 
     const br = this._translator.getBusinessRange();
-    br.addRange({ minVisible: margins.minValue, maxVisible: margins.maxValue, interval: this._calculateRangeInterval(br.interval) });
+    br.addRange({
+      minVisible: margins.minValue,
+      maxVisible: margins.maxValue,
+      interval: this._calculateRangeInterval(br.interval),
+    });
     this._translator.updateBusinessRange(br);
   },
 
@@ -104,7 +109,10 @@ const circularAxes = {
   },
 
   _updateRadius(canvas) {
-    const rad = _min(canvas.width - canvas.left - canvas.right, canvas.height - canvas.top - canvas.bottom) / 2;
+    const rad = _min(
+      canvas.width - canvas.left - canvas.right,
+      canvas.height - canvas.top - canvas.bottom,
+    ) / 2;
     this._radius = rad < 0 ? 0 : rad;
   },
 
@@ -165,7 +173,10 @@ const circularAxes = {
 
   getMargins() {
     const tickOptions = this._options.tick;
-    const tickOuterLength = _max(tickOptions.visible ? tickOptions.length / 2 + tickOptions.shift : 0, 0);
+    const tickOuterLength = _max(
+      tickOptions.visible ? tickOptions.length / 2 + tickOptions.shift : 0,
+      0,
+    );
     const radius = this.getRadius();
     const { x, y } = this._center;
     const labelBoxes = this._majorTicks.map((t) => t.label && t.label.getBBox()).filter((b) => b);
@@ -178,7 +189,9 @@ const circularAxes = {
     });
 
     const margins = calculateCanvasMargins(labelBoxes, canvas);
-    Object.keys(margins).forEach((k) => margins[k] = (margins[k] < tickOuterLength ? tickOuterLength : margins[k]));
+    Object.keys(margins).forEach(
+      (k) => (margins[k] = margins[k] < tickOuterLength ? tickOuterLength : margins[k]),
+    );
 
     return margins;
   },
@@ -227,7 +240,14 @@ const circularAxes = {
   },
 
   _createStrip(coords) {
-    return this._renderer.arc(coords.x, coords.y, coords.innerRadius, coords.outerRadius, coords.startAngle, coords.endAngle);
+    return this._renderer.arc(
+      coords.x,
+      coords.y,
+      coords.innerRadius,
+      coords.outerRadius,
+      coords.startAngle,
+      coords.endAngle,
+    );
   },
 
   _getStripLabelCoords(from, to) {
@@ -442,14 +462,26 @@ const circularAxes = {
     if (mode !== 'hide') {
       return;
     }
-    const lastVisibleLabelIndex = majorTicks.reduce((lastVisibleLabelIndex, tick, index) => (tick.label ? index : lastVisibleLabelIndex), null);
+    const lastVisibleLabelIndex = majorTicks.reduce(
+      (lastVisibleLabelIndex, tick, index) => (tick.label ? index : lastVisibleLabelIndex),
+      null,
+    );
 
     if (!lastVisibleLabelIndex) {
       return;
     }
 
-    if (constants.areLabelsOverlap(boxes[0], boxes[lastVisibleLabelIndex], labelOpt.minSpacing, constants.center)) {
-      labelOpt.hideFirstOrLast === 'first' ? majorTicks[0].removeLabel() : majorTicks[lastVisibleLabelIndex].removeLabel();
+    if (
+      constants.areLabelsOverlap(
+        boxes[0],
+        boxes[lastVisibleLabelIndex],
+        labelOpt.minSpacing,
+        constants.center,
+      )
+    ) {
+      labelOpt.hideFirstOrLast === 'first'
+        ? majorTicks[0].removeLabel()
+        : majorTicks[lastVisibleLabelIndex].removeLabel();
     }
   },
 
@@ -615,8 +647,14 @@ export const linear = {
     const cosSin = getCosAndSin(labelCoords.angle);
     const indentFromAxis = that._options.label.indentFromAxis || 0;
     const box = tick.labelBBox;
-    const x = labelCoords.x - abs(indentFromAxis * cosSin.sin) + abs(box.width / 2 * cosSin.cos) - box.width / 2;
-    const y = labelY + (labelY - box.y) - abs(box.height / 2 * cosSin.sin) + abs(indentFromAxis * cosSin.cos);
+    const x = labelCoords.x
+      - abs(indentFromAxis * cosSin.sin)
+      + abs((box.width / 2) * cosSin.cos)
+      - box.width / 2;
+    const y = labelY
+      + (labelY - box.y)
+      - abs((box.height / 2) * cosSin.sin)
+      + abs(indentFromAxis * cosSin.cos);
 
     return { x, y };
   },
@@ -649,7 +687,12 @@ export const linear = {
 
   _getTranslatedValue(value, offset) {
     const startAngle = this.getAngles()[0];
-    const xy = convertPolarToXY(this.getCenter(), startAngle, 0, this._translator.translate(value, offset));
+    const xy = convertPolarToXY(
+      this.getCenter(),
+      startAngle,
+      0,
+      this._translator.translate(value, offset),
+    );
     return { x: xy.x, y: xy.y, angle: startAngle - HALF_PI_ANGLE };
   },
 
@@ -732,7 +775,13 @@ export const linear = {
   _getStep(boxes) {
     const quarter = getPolarQuarter(this.getAngles()[0]);
     const spacing = this._options.label.minSpacing;
-    const func = quarter === 2 || quarter === 4 ? function (box) { return box.width + spacing; } : function (box) { return box.height; };
+    const func = quarter === 2 || quarter === 4
+      ? function (box) {
+        return box.width + spacing;
+      }
+      : function (box) {
+        return box.height;
+      };
     const maxLabelLength = boxes.reduce((prevValue, box) => _max(prevValue, func(box)), 0);
 
     return constants.getTicksCountInRange(this._majorTicks, quarter === 2 || quarter === 4 ? 'x' : 'y', maxLabelLength);

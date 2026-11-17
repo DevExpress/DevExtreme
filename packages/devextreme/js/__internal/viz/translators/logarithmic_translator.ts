@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/init-declarations */
-/* eslint-disable @stylistic/max-len */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
@@ -12,11 +11,25 @@ import {
 
 export default {
   fromValue(value) {
-    return value !== null ? getLog(value, this._canvasOptions.base, this._businessRange.allowNegatives, this._businessRange.linearThreshold) : value;
+    return value !== null
+      ? getLog(
+        value,
+        this._canvasOptions.base,
+        this._businessRange.allowNegatives,
+        this._businessRange.linearThreshold,
+      )
+      : value;
   },
 
   toValue(value) {
-    return value !== null ? raiseTo(value, this._canvasOptions.base, this._businessRange.allowNegatives, this._businessRange.linearThreshold) : value;
+    return value !== null
+      ? raiseTo(
+        value,
+        this._canvasOptions.base,
+        this._businessRange.allowNegatives,
+        this._businessRange.linearThreshold,
+      )
+      : value;
   },
 
   getMinBarSize(minBarSize) {
@@ -39,7 +52,10 @@ export default {
     let updateValue;
 
     if (isDefined(minShownValue) && prevValue > 0) {
-      minBarSize = baseMethod(this.fromValue(stackValue / prevValue), this.fromValue(minShownValue) - canvasOptions.rangeMinVisible);
+      minBarSize = baseMethod(
+        this.fromValue(stackValue / prevValue),
+        this.fromValue(minShownValue) - canvasOptions.rangeMinVisible,
+      );
       updateValue = canvasOptions.base ** (this.fromValue(prevValue) + minBarSize) - prevValue;
     } else {
       updateValue = baseMethod(initialValue, minShownValue);

@@ -14,7 +14,7 @@ import { getHeight } from '@js/core/utils/size';
 import { isDate, isDefined } from '@js/core/utils/type';
 import type { DxEvent } from '@js/events';
 import type {
-  AttachmentDownloadClickEvent, Message, TextMessage, ToolCallOptions, User,
+  AttachmentDownloadClickEvent, Message, TextMessage, ToolCallProperties, User,
 } from '@js/ui/chat';
 import type dxContextMenu from '@js/ui/context_menu';
 import type { Item as ContextMenuItem } from '@js/ui/context_menu';
@@ -96,7 +96,7 @@ export interface Properties extends WidgetOptions<MessageList> {
   currentUserId: number | string | undefined;
   showDayHeaders: boolean;
   messageTemplate?: MessageTemplate;
-  toolCallOptions?: ToolCallOptions;
+  toolCallOptions?: ToolCallProperties;
   emptyViewTemplate?: EmptyViewTemplate;
   dayHeaderFormat?: Format;
   messageTimestampFormat?: Format;

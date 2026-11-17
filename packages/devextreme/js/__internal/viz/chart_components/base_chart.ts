@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-unsafe-declaration-merging */
-/* eslint-disable @stylistic/max-len */
 /* eslint-disable @stylistic/no-mixed-operators */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
@@ -165,7 +164,9 @@ function resolveLabelOverlappingInOneDirection(
   points.forEach((p) => {
     if (!p) return;
 
-    hasStackedSeries = hasStackedSeries || p.series.isStackedSeries() || p.series.isFullStackedSeries();
+    hasStackedSeries = hasStackedSeries
+      || p.series.isStackedSeries()
+      || p.series.isFullStackedSeries();
     p.getLabels().forEach((l) => {
       if (l.isVisible()) {
         rollingStocks.push(new RollingStock(l, isRotated, shiftFunction));
@@ -201,8 +202,10 @@ function checkStacksOverlapping(firstRolling, secondRolling, inTwoSides?) {
   const firstRect = firstRolling.getBoundingRect();
   const secondRect = secondRolling.getBoundingRect();
   const oppositeOverlapping = inTwoSides
-    ? (firstRect.oppositeStart <= secondRect.oppositeStart && firstRect.oppositeEnd > secondRect.oppositeStart)
-            || (secondRect.oppositeStart <= firstRect.oppositeStart && secondRect.oppositeEnd > firstRect.oppositeStart)
+    ? (firstRect.oppositeStart <= secondRect.oppositeStart
+        && firstRect.oppositeEnd > secondRect.oppositeStart)
+      || (secondRect.oppositeStart <= firstRect.oppositeStart
+        && secondRect.oppositeEnd > firstRect.oppositeStart)
     : true;
 
   return firstRect.end > secondRect.start && oppositeOverlapping;
@@ -687,7 +690,8 @@ export class BaseChart extends BaseWidget {
 
   _preserveOriginalCanvas() {
     this.__originalCanvas = this._canvas;
-    this._canvas = extend({}, this._canvas); // NOTE: Instance of the original canvas must be preserved
+    // NOTE: Instance of the original canvas must be preserved
+    this._canvas = extend({}, this._canvas);
   }
 
   _renderElements(drawOptions) {
@@ -715,7 +719,9 @@ export class BaseChart extends BaseWidget {
     const layoutTargets = this._getLayoutTargets();
 
     this._layoutAxes((needSpace) => {
-      const axisDrawOptions = needSpace ? extend({}, drawOptions, { animate: false, recreateCanvas: true }) : drawOptions;
+      const axisDrawOptions = needSpace
+        ? extend({}, drawOptions, { animate: false, recreateCanvas: true })
+        : drawOptions;
       const canvas = this._renderAxes(axisDrawOptions, preparedOptions);
       this._shrinkAxes(needSpace, canvas);
     });
@@ -746,7 +752,11 @@ export class BaseChart extends BaseWidget {
       const argumentAxis = this._argumentAxes[0];
 
       this._scrollBar
-        .init(argBusinessRange, !argumentAxis.getOptions().valueMarginsEnabled, argumentAxis.getWholeRangeBreaks())
+        .init(
+          argBusinessRange,
+          !argumentAxis.getOptions().valueMarginsEnabled,
+          argumentAxis.getWholeRangeBreaks(),
+        )
         .setPosition(zoomMinArg, zoomMaxArg);
     }
 
@@ -772,8 +782,10 @@ export class BaseChart extends BaseWidget {
   }
 
   _calculateSeriesLayout(drawOptions, isRotated) {
-    drawOptions.hideLayoutLabels = this.layoutManager.needMoreSpaceForPanesCanvas(this._getLayoutTargets(), isRotated)
-            && !this._themeManager.getOptions('adaptiveLayout').keepLabels;
+    drawOptions.hideLayoutLabels = this.layoutManager.needMoreSpaceForPanesCanvas(
+      this._getLayoutTargets(),
+      isRotated,
+    ) && !this._themeManager.getOptions('adaptiveLayout').keepLabels;
 
     this._updateSeriesDimensions(drawOptions);
   }
@@ -784,8 +796,13 @@ export class BaseChart extends BaseWidget {
     return series.map((s) => {
       const valViewPortFilter = this._getValFilter(s);
 
-      return s.getPoints().filter((p) => p.getOptions().visible && argViewPortFilter(p.argument)
-                    && (valViewPortFilter(p.getMinValue(true)) || valViewPortFilter(p.getMaxValue(true)))).length;
+      return s
+        .getPoints()
+        .filter(
+          (p) => p.getOptions().visible
+            && argViewPortFilter(p.argument)
+            && (valViewPortFilter(p.getMinValue(true)) || valViewPortFilter(p.getMaxValue(true))),
+        ).length;
     });
   }
 
@@ -900,11 +917,16 @@ export class BaseChart extends BaseWidget {
   }
 
   _cleanGroups() {
-    this._stripsGroup.linkRemove().clear(); // TODO: Must be removed in the same place where appended (advanced chart)
-    this._gridGroup.linkRemove().clear(); // TODO: Must be removed in the same place where appended (advanced chart)
-    this._axesGroup.linkRemove().clear(); // TODO: Must be removed in the same place where appended (advanced chart)
-    this._constantLinesGroup.clear(); // TODO: Must be removed in the same place where appended (advanced chart)
-    this._stripLabelAxesGroup.linkRemove().clear(); // TODO: Must be removed in the same place where appended (advanced chart)
+    // TODO: Must be removed in the same place where appended (advanced chart)
+    this._stripsGroup.linkRemove().clear();
+    // TODO: Must be removed in the same place where appended (advanced chart)
+    this._gridGroup.linkRemove().clear();
+    // TODO: Must be removed in the same place where appended (advanced chart)
+    this._axesGroup.linkRemove().clear();
+    // TODO: Must be removed in the same place where appended (advanced chart)
+    this._constantLinesGroup.clear();
+    // TODO: Must be removed in the same place where appended (advanced chart)
+    this._stripLabelAxesGroup.linkRemove().clear();
     // that._seriesGroup.linkRemove().clear();
     this._labelsGroup.linkRemove().clear();
     this._crosshairCursorGroup.linkRemove().clear();
@@ -970,7 +992,11 @@ export class BaseChart extends BaseWidget {
   _processRefreshData(newRefreshAction) {
     const currentRefreshActionPosition = ACTIONS_BY_PRIORITY.indexOf(this._currentRefreshData);
     const newRefreshActionPosition = ACTIONS_BY_PRIORITY.indexOf(newRefreshAction);
-    if (!this._currentRefreshData || (currentRefreshActionPosition >= 0 && newRefreshActionPosition < currentRefreshActionPosition)) {
+    if (
+      !this._currentRefreshData
+      || (currentRefreshActionPosition >= 0
+        && newRefreshActionPosition < currentRefreshActionPosition)
+    ) {
       this._currentRefreshData = newRefreshAction;
       // this._invalidate();
     }
@@ -1215,7 +1241,12 @@ export class BaseChart extends BaseWidget {
     }
 
     this._groupSeries();
-    const parsedData = validateData(data, this._groupsData, this._incidentOccurred, dataValidatorOptions);
+    const parsedData = validateData(
+      data,
+      this._groupsData,
+      this._incidentOccurred,
+      dataValidatorOptions,
+    );
     themeManager.resetPalette();
 
     this.series.forEach((singleSeries) => {
@@ -1248,7 +1279,11 @@ export class BaseChart extends BaseWidget {
     const themeManager = this._themeManager;
     const seriesTemplate = themeManager.getOptions('seriesTemplate');
     const seriesOptions = seriesTemplate ? processSeriesTemplate(seriesTemplate, data || []) : this.option('series');
-    const allSeriesOptions = isArray(seriesOptions) ? seriesOptions : seriesOptions ? [seriesOptions] : [];
+    const allSeriesOptions = isArray(seriesOptions)
+      ? seriesOptions
+      : seriesOptions
+        ? [seriesOptions]
+        : [];
     const extraOptions = this._getExtraOptions();
     let particularSeriesOptions;
     let seriesTheme;
@@ -1315,7 +1350,10 @@ export class BaseChart extends BaseWidget {
       }
     });
 
-    !disposeSeriesFamilies && (disposeSeriesFamilies = seriesBasis.some((sb: any) => sb.series.name !== seriesThemes[sb.series.index].name));
+    !disposeSeriesFamilies
+      && (disposeSeriesFamilies = seriesBasis.some(
+        (sb: any) => sb.series.name !== seriesThemes[sb.series.index].name,
+      ));
 
     this.series = [];
     disposeSeriesFamilies && this._disposeSeriesFamilies();
@@ -1328,7 +1366,8 @@ export class BaseChart extends BaseWidget {
 
     seriesBasis.forEach((basis: any) => {
       const seriesTheme = basis.options;
-      const argumentAxis = this._argumentAxes?.filter((a) => a.pane === seriesTheme.pane)[0] ?? this.getArgumentAxis();
+      const argumentAxis = this._argumentAxes?.filter((a) => a.pane === seriesTheme.pane)[0]
+        ?? this.getArgumentAxis();
       const renderSettings = {
         commonSeriesModes: this._getSelectionModes(),
         argumentAxis,
@@ -1361,7 +1400,11 @@ export class BaseChart extends BaseWidget {
   getStackedPoints(point) {
     const stackName = point.series.getStackName();
     return this._getVisibleSeries().reduce((stackPoints, series) => {
-      if ((!_isDefined(series.getStackName()) || !_isDefined(stackName)) || stackName === series.getStackName()) {
+      if (
+        !_isDefined(series.getStackName())
+        || !_isDefined(stackName)
+        || stackName === series.getStackName()
+      ) {
         stackPoints = stackPoints.concat(series.getPointsByArg(point.argument));
       }
       return stackPoints;
@@ -1537,7 +1580,8 @@ BaseChart.addPlugin(dataSourcePlugin);
 BaseChart.addPlugin(tooltipPlugin);
 BaseChart.addPlugin(loadingIndicatorPlugin);
 
-// These are charts specifics on using title - they cannot be omitted because of charts custom layout.
+// These are charts specifics on using title - they cannot be omitted because of charts custom
+// layout.
 // eslint-disable-next-line
 const { _change_TITLE } = BaseChart.prototype;
 BaseChart.prototype._change_TITLE = function () {

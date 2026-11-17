@@ -10,7 +10,6 @@
 /* eslint-disable no-nested-ternary */
 /* eslint-disable @typescript-eslint/no-shadow */
 /* eslint-disable no-multi-assign */
-/* eslint-disable @stylistic/max-len */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-use-before-define */
 /* eslint-disable prefer-destructuring */
@@ -74,10 +73,21 @@ function validateBarGroupPadding(barGroupPadding: number): number {
 }
 
 function isStackExist(series: ThemeValue[], arg: ThemeValue): boolean {
-  return series.some((s) => !s.getOptions().ignoreEmptyPoints || s.getPointsByArg(arg, true).some((point) => point.hasValue()));
+  return series.some(
+    (s) => !s.getOptions().ignoreEmptyPoints
+      || s.getPointsByArg(arg, true).some((point) => point.hasValue()),
+  );
 }
 
-function correctStackCoordinates(series: ThemeValue[], currentStacks: string[], arg: ThemeValue, stack: string, parameters: BarParameters, barsArea: number, seriesStackIndexCallback: StackIndexCallback): void {
+function correctStackCoordinates(
+  series: ThemeValue[],
+  currentStacks: string[],
+  arg: ThemeValue,
+  stack: string,
+  parameters: BarParameters,
+  barsArea: number,
+  seriesStackIndexCallback: StackIndexCallback,
+): void {
   series.forEach((series) => {
     const stackIndex = seriesStackIndexCallback(currentStacks.indexOf(stack), currentStacks.length);
     const points = series.getPointsByArg(arg, true);
@@ -107,7 +117,11 @@ function getStackName(series: ThemeValue): ThemeValue {
   return series.getStackName() || series.getBarOverlapGroup();
 }
 
-function adjustBarSeriesDimensionsCore(series: ThemeValue[], options: ThemeValue, seriesStackIndexCallback: StackIndexCallback): void {
+function adjustBarSeriesDimensionsCore(
+  series: ThemeValue[],
+  options: ThemeValue,
+  seriesStackIndexCallback: StackIndexCallback,
+): void {
   const commonStacks: string[] = [];
   const allArguments: ThemeValue[] = [];
   const seriesInStacks = {};
@@ -121,13 +135,19 @@ function adjustBarSeriesDimensionsCore(series: ThemeValue[], options: ThemeValue
     let aggregationInterval = argumentAxis.getAggregationInterval();
 
     tickInterval = isDateArgAxis ? dateUtils.dateToMilliseconds(tickInterval) : tickInterval;
-    aggregationInterval = isDateArgAxis ? dateUtils.dateToMilliseconds(aggregationInterval) : aggregationInterval;
+    aggregationInterval = isDateArgAxis
+      ? dateUtils.dateToMilliseconds(aggregationInterval)
+      : aggregationInterval;
     interval = aggregationInterval < tickInterval ? aggregationInterval : tickInterval;
   }
 
   interval = argumentAxis?.getTranslator().getInterval(interval);
 
-  const barsArea = barGroupWidth ? interval > barGroupWidth ? barGroupWidth : interval : interval * (1 - validateBarGroupPadding(options.barGroupPadding));
+  const barsArea = barGroupWidth
+    ? interval > barGroupWidth
+      ? barGroupWidth
+      : interval
+    : interval * (1 - validateBarGroupPadding(options.barGroupPadding));
 
   series.forEach((s, i) => {
     const stackName = getStackName(s) || i.toString();
@@ -156,12 +176,25 @@ function adjustBarSeriesDimensionsCore(series: ThemeValue[], options: ThemeValue
 
     const parameters = calculateParams(barsArea, currentStacks.length);
     commonStacks.forEach((stack) => {
-      correctStackCoordinates(seriesInStacks[stack], currentStacks, arg, stack, parameters, barsArea, seriesStackIndexCallback);
+      correctStackCoordinates(
+        seriesInStacks[stack],
+        currentStacks,
+        arg,
+        stack,
+        parameters,
+        barsArea,
+        seriesStackIndexCallback,
+      );
     });
   });
 }
 
-function calculateParams(barsArea: number, count: number, percentWidth?: number, fixedBarWidth?: number): BarParameters {
+function calculateParams(
+  barsArea: number,
+  count: number,
+  percentWidth?: number,
+  fixedBarWidth?: number,
+): BarParameters {
   let spacing;
   let width;
 
@@ -169,21 +202,27 @@ function calculateParams(barsArea: number, count: number, percentWidth?: number,
     width = _min(fixedBarWidth, barsArea / count);
     spacing = count > 1 ? round((barsArea - round(width) * count) / (count - 1)) : 0;
   } else if (isDefined(percentWidth)) {
-    width = barsArea * percentWidth / count;
+    width = (barsArea * percentWidth) / count;
     spacing = count > 1 ? round((barsArea - barsArea * percentWidth) / (count - 1)) : 0;
   } else {
-    spacing = round(barsArea / count * 0.2);
+    spacing = round((barsArea / count) * 0.2);
     width = (barsArea - spacing * (count - 1)) / count;
   }
 
   return {
-    width: width > 1 ? round(width) : 1, spacing, middleIndex: count / 2, rawWidth: width,
+    width: width > 1 ? round(width) : 1,
+    spacing,
+    middleIndex: count / 2,
+    rawWidth: width,
   };
 }
 
 function getOffset(stackIndex: number, parameters: BarParameters): number {
   const width = parameters.rawWidth < 1 ? parameters.rawWidth : parameters.width;
-  return ((stackIndex - parameters.middleIndex) + 0.5) * width - (((parameters.middleIndex - stackIndex) - 0.5) * parameters.spacing);
+  return (
+    (stackIndex - parameters.middleIndex + 0.5) * width
+    - (parameters.middleIndex - stackIndex - 0.5) * parameters.spacing
+  );
 }
 
 function correctPointCoordinates(points: ThemeValue[], width: number, offset: number): void {
@@ -203,13 +242,21 @@ function getVisibleSeries(that: ThemeValue): ThemeValue[] {
   return that.series.filter((s) => s.isVisible());
 }
 
-function getAbsStackSumByArg(stackKeepers: StackKeepers, stackName: string, argument: ThemeValue): number {
+function getAbsStackSumByArg(
+  stackKeepers: StackKeepers,
+  stackName: string,
+  argument: ThemeValue,
+): number {
   const positiveStackValue = (stackKeepers.positive[stackName] || {})[argument] || 0;
   const negativeStackValue = -(stackKeepers.negative[stackName] || {})[argument] || 0;
   return positiveStackValue + negativeStackValue;
 }
 
-function getStackSumByArg(stackKeepers: StackKeepers, stackName: string, argument: ThemeValue): number {
+function getStackSumByArg(
+  stackKeepers: StackKeepers,
+  stackName: string,
+  argument: ThemeValue,
+): number {
   const positiveStackValue = (stackKeepers.positive[stackName] || {})[argument] || 0;
   const negativeStackValue = (stackKeepers.negative[stackName] || {})[argument] || 0;
   return positiveStackValue + negativeStackValue;
@@ -229,7 +276,11 @@ function isInverted(series: ThemeValue[]): boolean {
 
 function adjustBarSeriesDimensions(): void {
   const series = getVisibleSeries(this);
-  adjustBarSeriesDimensionsCore(series, this._options, getSeriesStackIndexCallback(isInverted(series)));
+  adjustBarSeriesDimensionsCore(
+    series,
+    this._options,
+    getSeriesStackIndexCallback(isInverted(series)),
+  );
 }
 
 function getFirstValueSign(series: ThemeValue): number {
@@ -265,7 +316,9 @@ function adjustStackedSeriesValues(): void {
     const stackName = getStackName(singleSeries);
     let hole = false;
 
-    const stack = getFirstValueSign(singleSeries) < 0 ? lastSeriesInNegativeStack : lastSeriesInPositiveStack;
+    const stack = getFirstValueSign(singleSeries) < 0
+      ? lastSeriesInNegativeStack
+      : lastSeriesInPositiveStack;
 
     singleSeries._prevSeries = stack[stackName];
     stack[stackName] = singleSeries;
@@ -299,12 +352,15 @@ function adjustStackedSeriesValues(): void {
         if (!hole && prevPoint && prevPoint.hasValue()) {
           argument = prevPoint.argument.valueOf();
           prevPoint._skipSetRightHole = true;
-          holesStack.right[argument] = (holesStack.right[argument] || 0) + (prevPoint.value.valueOf() - (isFinite(prevPoint.minValue) ? prevPoint.minValue.valueOf() : 0));
+          holesStack.right[argument] = (holesStack.right[argument] || 0)
+            + (prevPoint.value.valueOf()
+              - (isFinite(prevPoint.minValue) ? prevPoint.minValue.valueOf() : 0));
         }
         hole = true;
       } else if (hole) {
         hole = false;
-        holesStack.left[argument] = (holesStack.left[argument] || 0) + (point.value.valueOf() - (isFinite(point.minValue) ? point.minValue.valueOf() : 0));
+        holesStack.left[argument] = (holesStack.left[argument] || 0)
+          + (point.value.valueOf() - (isFinite(point.minValue) ? point.minValue.valueOf() : 0));
         point._skipSetLeftHole = true;
       }
     });
@@ -359,9 +415,15 @@ function updateStackedSeriesValues(): void {
         value = (value / getAbsStackSumByArg(stack, stackName, argument)) || 0;
       }
 
-      const updateValue = valueAxisTranslator.checkMinBarSize(value, minShownBusinessValue, point.value);
+      const updateValue = valueAxisTranslator.checkMinBarSize(
+        value,
+        minShownBusinessValue,
+        point.value,
+      );
       const valueType = getValueType(updateValue);
-      const currentStack = stackKeepers[valueType][stackName] = stackKeepers[valueType][stackName] || {};
+      const currentStack = (stackKeepers[valueType][
+        stackName
+      ] = stackKeepers[valueType][stackName] || {});
 
       if (currentStack[argument]) {
         point.minValue = currentStack[argument];
@@ -408,8 +470,12 @@ function updateRangeSeriesValues(): void {
         }
 
         if (point.value.valueOf() - point.minValue.valueOf() < minShownBusinessValue) {
-          point.value = valueAxisTranslator.toValue(point.value.valueOf() + minShownBusinessValue / 2);
-          point.minValue = valueAxisTranslator.toValue(point.minValue.valueOf() - minShownBusinessValue / 2);
+          point.value = valueAxisTranslator.toValue(
+            point.value.valueOf() + minShownBusinessValue / 2,
+          );
+          point.minValue = valueAxisTranslator.toValue(
+            point.minValue.valueOf() - minShownBusinessValue / 2,
+          );
         }
       });
     }
@@ -425,7 +491,10 @@ function updateBarSeriesValues(): void {
     if (minShownBusinessValue) {
       _each(singleSeries.getPoints(), (index, point) => {
         if (point.hasValue()) {
-          point.value = valueAxisTranslator.checkMinBarSize(point.initialValue, minShownBusinessValue);
+          point.value = valueAxisTranslator.checkMinBarSize(
+            point.initialValue,
+            minShownBusinessValue,
+          );
         }
       });
     }
@@ -434,7 +503,11 @@ function updateBarSeriesValues(): void {
 
 function adjustCandlestickSeriesDimensions(): void {
   const series = getVisibleSeries(this);
-  adjustBarSeriesDimensionsCore(series, { barGroupPadding: 0.3 }, getSeriesStackIndexCallback(isInverted(series)));
+  adjustBarSeriesDimensionsCore(
+    series,
+    { barGroupPadding: 0.3 },
+    getSeriesStackIndexCallback(isInverted(series)),
+  );
 }
 
 function adjustBubbleSeriesDimensions(): void {
@@ -571,7 +644,10 @@ export let SeriesFamily = class SeriesFamily {
 
   add(series: ThemeValue[]): void {
     const type = this.type;
-    this.series = _map(series, (singleSeries) => (singleSeries.type === type ? singleSeries : null));
+    this.series = _map(
+      series,
+      (singleSeries) => (singleSeries.type === type ? singleSeries : null),
+    );
   }
 };
 
