@@ -370,7 +370,6 @@ class SummaryCell {
   public slice(field: SummaryFieldId, value: unknown): SummaryCell | null {
     const config: SummaryCellPaths = {};
     const { area, index: fieldIndex } = getFieldPos(this._descriptions, field, this._fieldsCache);
-    const newPath: SummaryHeaderItem[] = [];
 
     if (area !== ROW && area !== COLUMN) {
       return null;
@@ -383,7 +382,6 @@ class SummaryCell {
       return null;
     }
 
-    newPath[path.length - 1] = path[path.length - 1];
     for (let i = level; i >= 0; i -= 1) {
       const parentItem: SummaryHeaderItem | undefined = path[i + 1];
       if (parentItem) {
