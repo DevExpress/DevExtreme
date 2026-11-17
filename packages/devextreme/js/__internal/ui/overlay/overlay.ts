@@ -36,7 +36,8 @@ import type {
   DxEvent,
   PointerInteractionEvent,
 } from '@js/events';
-import type { dxOverlayAnimation, Properties } from '@js/ui/overlay';
+import type dxOverlay from '@js/ui/overlay';
+import type { dxOverlayAnimation, dxOverlayOptions, Properties } from '@js/ui/overlay';
 import uiErrors from '@js/ui/widget/ui.errors';
 import documentSizeCallbacks from '@ts/core/utils/document_size_callbacks';
 import domUtils from '@ts/core/utils/dom';
@@ -115,9 +116,10 @@ export type InternalAnimationConfig = Omit<AnimationConfig, 'from' | 'to'> & {
 export type InternalPositionAlignment = NonNullable<PositionConfig['my']>
   | `${VerticalAlignment} ${HorizontalAlignment}`;
 
-export type InternalPositionConfig = Omit<PositionConfig, 'of' | 'offset' | 'my' | 'at'> & {
+export type InternalPositionConfig = Omit<PositionConfig, 'of' | 'offset' | 'boundaryOffset' | 'my' | 'at'> & {
   of?: PositionConfig['of'] | dxElementWrapper;
   offset?: PositionConfig['offset'] | { h?: number; v?: number };
+  boundaryOffset?: PositionConfig['boundaryOffset'] | { h?: number; v?: number };
   my?: InternalPositionAlignment;
   at?: InternalPositionAlignment;
 };
@@ -160,7 +162,9 @@ export interface OverlayInternalProperties {
   hideTopOverlayHandler?: (() => void) | null;
 }
 
-export interface OverlayProperties extends Omit<Properties, 'animation' | 'width' | 'height'>,
+export interface OverlayProperties<
+  TComponent = dxOverlay<Properties>,
+> extends Omit<dxOverlayOptions<TComponent>, 'animation' | 'width' | 'height'>,
   OverlayInternalProperties {
   width?: Properties['width'] | (() => number | string);
 
@@ -220,7 +224,8 @@ ready(() => {
 });
 
 class Overlay<
-  TProperties extends OverlayProperties = OverlayProperties,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  TProperties extends OverlayProperties<any> = OverlayProperties,
 > extends Widget<TProperties> {
   _$wrapper?: dxElementWrapper | null;
 
