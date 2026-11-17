@@ -57,6 +57,41 @@ test together with its etalon. The two sets must never cover the same case at on
 left behind gets updated by whoever touches the component next and starts asserting a render
 nobody checks.
 
+### Record etalons on a Mac
+
+The image is `linux/amd64`, the platform of the CI agent. On Apple Silicon it runs through Rosetta;
+under QEMU emulation Chrome is several times slower. [Colima](https://github.com/abiosoft/colima)
+gives the `docker` CLI a free runtime that uses Rosetta:
+
+```bash
+softwareupdate --install-rosetta --agree-to-license
+brew install colima docker docker-buildx
+colima start --vm-type vz --vz-rosetta --cpu 4 --memory 8
+docker run --rm --platform linux/amd64 ubuntu:24.04 uname -m   # prints x86_64
+```
+
+4 CPUs and 8 GB are enough for a component folder: `docker/run.sh` takes half the cores, so two
+workers. Give the VM more for a larger run (`colima stop`, then `colima start --cpu 8 --memory 12`).
+After a reboot, `colima start` brings it back with the same settings.
+
+The container uses the host's `node_modules` and DevExtreme build, so build first and rebuild after
+a source change. Then, from `e2e/playwright`, record and verify the etalons of the folder in both
+themes the CI jobs run:
+
+```bash
+pnpm exec nx build devextreme-scss              # from the repository root
+pnpm exec nx build devextreme -c testing
+
+docker/run.sh --update-snapshots tests/editors/selectBox/
+THEME=fluent-next.blue.light docker/run.sh --update-snapshots tests/editors/selectBox/
+
+docker/run.sh tests/editors/selectBox/
+THEME=fluent-next.blue.light docker/run.sh tests/editors/selectBox/
+```
+
+The first run builds the image and takes a few minutes. Look through the new files before
+committing them, as with etalons from CI.
+
 ### Etalons from CI
 
 Without a container, CI records the etalons. A test whose etalon does not exist fails, and
@@ -204,3 +239,7 @@ relied on it needs the target made reachable, not the check switched off.
 
 **Page errors.** A test fails on an uncaught error in the page, as it did in TestCafe. A test whose
 TestCafe version ended with `expect(true).ok()` checks exactly that and needs no assertion.
+
+**Old models.** A model in `packages/testcafe-models` that the ported tests used goes in the same
+PR, but only after a search proves nothing else uses it: grep all of `e2e/` and `packages/` for its
+import path, since other tests and other models import models too. A model still in use stays.
