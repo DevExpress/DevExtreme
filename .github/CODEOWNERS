@@ -11,6 +11,7 @@
 /packages/devextreme-scss/scss/widgets/**                               @DevExpress/devextreme-components
 /apps/demos/Demos/**                                                    @DevExpress/devextreme-components
 /e2e/testcafe-devextreme/tests/*/**                                     @DevExpress/devextreme-components
+/e2e/playwright/tests/editors/**                                        @DevExpress/devextreme-components
 /packages/devextreme/testing/tests/DevExpress.serverSide*/**            @DevExpress/devextreme-components
 
 ## ui
@@ -19,6 +20,7 @@
 /packages/devextreme/js/__internal/pagination/**                        @DevExpress/devextreme-components
 
 /packages/testcafe-models/**                                            @DevExpress/devextreme-components
+/e2e/playwright/models/**                                               @DevExpress/devextreme-components
 /packages/devextreme/testing/tests/DevExpress.ui/**                     @DevExpress/devextreme-components
 /packages/devextreme/testing/tests/DevExpress.ui.widgets*/**            @DevExpress/devextreme-components
 /packages/devextreme/testing/tests/DevExpress.knockout/**               @DevExpress/devextreme-components
