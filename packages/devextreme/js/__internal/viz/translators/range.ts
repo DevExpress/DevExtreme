@@ -3,7 +3,6 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable no-param-reassign */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
-/* eslint-disable @stylistic/max-len */
 
 import { extend } from '@ts/core/utils/extend';
 import { isDate, isDefined, isFunction } from '@ts/core/utils/type';
@@ -105,11 +104,29 @@ export let Range = class Range {
     const isDiscrete = that[axisTypeSelector] === 'discrete';
 
     const compareAndReplaceByField = function (field: string, compare: ValueComparer): void {
-      compareAndReplace(that[field], otherRange[field], (value) => { that[field] = value; }, compare);
+      compareAndReplace(
+        that[field],
+        otherRange[field],
+        (value) => {
+          that[field] = value;
+        },
+        compare,
+      );
     };
 
-    const controlValuesByVisibleBounds = function (valueField: string, visibleValueField: string, compare: ValueComparer): void {
-      compareAndReplace(that[valueField], that[visibleValueField], (value) => { _isDefined(that[valueField]) && (that[valueField] = value); }, compare);
+    const controlValuesByVisibleBounds = function (
+      valueField: string,
+      visibleValueField: string,
+      compare: ValueComparer,
+    ): void {
+      compareAndReplace(
+        that[valueField],
+        that[visibleValueField],
+        (value) => {
+          _isDefined(that[valueField]) && (that[valueField] = value);
+        },
+        compare,
+      );
     };
 
     const checkField = function (field: string): void {
@@ -161,7 +178,10 @@ export let Range = class Range {
   }
 
   isEmpty(): boolean {
-    return (!_isDefined(this[minSelector]) || !_isDefined(this[maxSelector])) && (!this.categories || this.categories.length === 0);
+    return (
+      (!_isDefined(this[minSelector]) || !_isDefined(this[maxSelector]))
+      && (!this.categories || this.categories.length === 0)
+    );
   }
 
   correctValueZeroLevel(): this {
@@ -188,7 +208,9 @@ export let Range = class Range {
 
     if (Array.isArray(sort)) {
       const sortValues = sort.map((item): ThemeValue => item.valueOf());
-      const filteredSeriesCategories = this.categories.filter((item) => !sortValues.includes(item.valueOf()));
+      const filteredSeriesCategories = this.categories.filter(
+        (item) => !sortValues.includes(item.valueOf()),
+      );
       this.categories = sort.concat(filteredSeriesCategories);
     } else {
       const notAFunction = !_isFunction(sort);

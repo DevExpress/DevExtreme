@@ -1,4 +1,3 @@
-/* eslint-disable @stylistic/max-len */
 /* eslint-disable @typescript-eslint/init-declarations */
 
 import { registerComponent } from '@ts/core/component_registrator';
@@ -49,7 +48,9 @@ class PolarChart extends AdvancedChart {
     const themeManager = this._themeManager;
     const axisUserOptions = this.option('argumentAxis');
     const argumentAxisOptions = themeManager.getOptions('argumentAxis', axisUserOptions) || {};
-    const startAngle = isFinite(argumentAxisOptions.startAngle) ? normalizeAngle(argumentAxisOptions.startAngle) : 0;
+    const startAngle = isFinite(argumentAxisOptions.startAngle)
+      ? normalizeAngle(argumentAxisOptions.startAngle)
+      : 0;
 
     return {
       type: this.option('useSpiderWeb') && isArgumentAxis ? 'discrete' : axisOptions.type,
@@ -156,7 +157,12 @@ class PolarChart extends AdvancedChart {
     }
   }
 
-  _createClipCircle(clipArray: ThemeValue, left: ThemeValue, top: ThemeValue, radius: number): void {
+  _createClipCircle(
+    clipArray: ThemeValue,
+    left: ThemeValue,
+    top: ThemeValue,
+    radius: number,
+  ): void {
     let clipCircle = clipArray[0];
 
     if (!clipCircle) {
@@ -169,14 +175,24 @@ class PolarChart extends AdvancedChart {
 
   _applyExtraSettings(series: ThemeValue): void {
     const wideClipRect = this._panesClipRects.wide[0];
-    series.setClippingParams(this._panesClipRects.base[0].id, wideClipRect && wideClipRect.id, false, false);
+    series.setClippingParams(
+      this._panesClipRects.base[0].id,
+      wideClipRect && wideClipRect.id,
+      false,
+      false,
+    );
   }
 
   getActualAngle(angle: number): ThemeValue {
     return this.getArgumentAxis().getOptions().inverted ? DOUBLE_PI_ANGLE - angle : angle;
   }
 
-  getXYFromPolar(angle: number, radius: number, argument: ThemeValue, value: ThemeValue): ThemeValue {
+  getXYFromPolar(
+    angle: number,
+    radius: number,
+    argument: ThemeValue,
+    value: ThemeValue,
+  ): ThemeValue {
     const layoutInfo = {
       angle: undefined,
       radius: undefined,
@@ -211,7 +227,10 @@ class PolarChart extends AdvancedChart {
 
     if (isDefined(argAngle) && isDefined(translatedRadius)) {
       const coords = convertPolarToXY(argAxis.getCenter(), startAngle, argAngle, translatedRadius);
-      extend(layoutInfo, coords, { angle: argAxis.getTranslatedAngle(argAngle), radius: translatedRadius });
+      extend(layoutInfo, coords, {
+        angle: argAxis.getTranslatedAngle(argAngle),
+        radius: translatedRadius,
+      });
     }
 
     return layoutInfo;

@@ -1,7 +1,6 @@
 /* eslint-disable no-bitwise */
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable no-nested-ternary */
-/* eslint-disable @stylistic/max-len */
 /* eslint-disable prefer-destructuring */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
@@ -37,7 +36,10 @@ interface NodeLayoutLink {
 
 interface NodeWidget {
   _renderer: { getRootOffset: () => { left: number; top: number } };
-  _tooltip?: { show: (target: ThemeValue, coords: { x: number; y: number }) => void; hide: () => void };
+  _tooltip?: {
+    show: (target: ThemeValue, coords: { x: number; y: number }) => void;
+    hide: () => void;
+  };
   _links: Link[];
   _getOption: (name: string, isScalar?: boolean) => ThemeValue;
   _suspend: () => void;
@@ -57,13 +59,25 @@ interface NodeParams {
   linksOut: NodeLayoutLink[];
 }
 
-function compileAttrs(color: string, itemOptions: ThemeValue, itemBaseOptions: ThemeValue): NodeAttrs {
+function compileAttrs(
+  color: string,
+  itemOptions: ThemeValue,
+  itemBaseOptions: ThemeValue,
+): NodeAttrs {
   const border = itemOptions.border;
   const baseBorder = itemBaseOptions.border;
   const borderVisible = isDefined(border.visible) ? border.visible : baseBorder.visible;
   const borderWidth = isDefined(border.width) ? border.width : baseBorder.width;
-  const borderOpacity = isDefined(border.opacity) ? border.opacity : isDefined(baseBorder.opacity) ? baseBorder.opacity : 1;
-  const opacity = isDefined(itemOptions.opacity) ? itemOptions.opacity : isDefined(itemBaseOptions.opacity) ? itemBaseOptions.opacity : 1;
+  const borderOpacity = isDefined(border.opacity)
+    ? border.opacity
+    : isDefined(baseBorder.opacity)
+      ? baseBorder.opacity
+      : 1;
+  const opacity = isDefined(itemOptions.opacity)
+    ? itemOptions.opacity
+    : isDefined(itemBaseOptions.opacity)
+      ? itemBaseOptions.opacity
+      : 1;
 
   return {
     fill: itemOptions.color || color,
@@ -75,16 +89,24 @@ function compileAttrs(color: string, itemOptions: ThemeValue, itemBaseOptions: T
   };
 }
 
-function compileLabelAttrs(labelOptions: ThemeValue, filter: ThemeValue, node: Node): { attr: Record<string, ThemeValue>; css: ThemeValue } {
+function compileLabelAttrs(
+  labelOptions: ThemeValue,
+  filter: ThemeValue,
+  node: Node,
+): { attr: Record<string, ThemeValue>; css: ThemeValue } {
   const _patchFontOptions = patchFontOptions;
 
   if (labelOptions.useNodeColors) {
     labelOptions.font.color = node.color;
   }
 
-  const borderVisible = isDefined(labelOptions.border.visible) ? labelOptions.border.visible : false;
+  const borderVisible = isDefined(labelOptions.border.visible)
+    ? labelOptions.border.visible
+    : false;
   const borderWidth = isDefined(labelOptions.border.width) ? labelOptions.border.width : 0;
-  const borderColor = isDefined(labelOptions.border.color) ? labelOptions.border.color : labelOptions.font.color;
+  const borderColor = isDefined(labelOptions.border.color)
+    ? labelOptions.border.color
+    : labelOptions.font.color;
   const borderOpacity = isDefined(labelOptions.border.opacity) ? labelOptions.border.opacity : 1;
   const attr: Record<string, ThemeValue> = {
     filter,
@@ -196,22 +218,36 @@ class Node {
   }
 
   showTooltip(coords?: number[]): void {
-    this.widget._getOption('hoverEnabled', true) && this.widget._tooltip && this.widget._tooltip.show({
-      type: 'node',
-      info: {
-        label: this.label,
-        title: this.label,
-        weightIn: this.linksIn.reduce((previousValue, currentValue) => previousValue + currentValue.weight, 0),
-        weightOut: this.linksOut.reduce((previousValue, currentValue) => previousValue + currentValue.weight, 0),
-      },
-    }, typeof coords !== 'undefined' ? { x: coords[0], y: coords[1] } : this.coords);
+    this.widget._getOption('hoverEnabled', true)
+      && this.widget._tooltip
+      && this.widget._tooltip.show(
+        {
+          type: 'node',
+          info: {
+            label: this.label,
+            title: this.label,
+            weightIn: this.linksIn.reduce(
+              (previousValue, currentValue) => previousValue + currentValue.weight,
+              0,
+            ),
+            weightOut: this.linksOut.reduce(
+              (previousValue, currentValue) => previousValue + currentValue.weight,
+              0,
+            ),
+          },
+        },
+        typeof coords !== 'undefined' ? { x: coords[0], y: coords[1] } : this.coords,
+      );
   }
 
   hideTooltip(): void {
     this.widget._tooltip && this.widget._tooltip.hide();
   }
 
-  getLabelAttributes(labelSettings: ThemeValue, filter: ThemeValue): { attr: Record<string, ThemeValue>; css: ThemeValue } {
+  getLabelAttributes(
+    labelSettings: ThemeValue,
+    filter: ThemeValue,
+  ): { attr: Record<string, ThemeValue>; css: ThemeValue } {
     return compileLabelAttrs(labelSettings, filter, this);
   }
 }

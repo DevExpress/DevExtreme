@@ -4,7 +4,6 @@
 /* eslint-disable no-nested-ternary */
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-multi-assign */
-/* eslint-disable @stylistic/max-len */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
@@ -81,7 +80,15 @@ function getCloudAngle({ width, height }, x, y, anchorX, anchorY) {
   return 0; // 0, 3, 4
 }
 
-function getCloudPoints({ width, height }, x, y, anchorX, anchorY, { arrowWidth, cornerRadius = 0 }, bounded) {
+function getCloudPoints(
+  { width, height },
+  x,
+  y,
+  anchorX,
+  anchorY,
+  { arrowWidth, cornerRadius = 0 },
+  bounded,
+) {
   const halfArrowWidth = arrowWidth / 2;
   const halfWidth = width / 2;
   const halfHeight = height / 2;
@@ -129,7 +136,11 @@ function getCloudPoints({ width, height }, x, y, anchorX, anchorY, { arrowWidth,
       getArc(cornerRadius, cos(angle), 1 - sin(angle)),
       'L',
       [anchorX, anchorY, arrowEndPointX, arrowEndPointY],
-      getAbsoluteArc(cornerRadius, rightTopCorner[0] + cornerRadius, rightTopCorner[1] + cornerRadius),
+      getAbsoluteArc(
+        cornerRadius,
+        rightTopCorner[0] + cornerRadius,
+        rightTopCorner[1] + cornerRadius,
+      ),
     );
 
     if (Math.abs(angle) > PI / 2) {
@@ -140,16 +151,54 @@ function getCloudPoints({ width, height }, x, y, anchorX, anchorY, { arrowWidth,
   } else if (anchorX > xr && anchorY >= yt && anchorY <= yb) { // 4
     let arrowArc;
 
-    if (arrowBaseTop >= rightTopCorner[1] + cornerRadius && arrowBaseBottom <= rightBottomCorner[1]) {
-      arrowArc = buildPath(getArc(cornerRadius, 1, 1), 'L', [xr, arrowBaseTop, anchorX, anchorY, xr, arrowBaseBottom], 'L', rightBottomCorner, getArc(cornerRadius, -1, 1));
-    } else if (arrowBaseTop < rightTopCorner[1] + cornerRadius && arrowBaseBottom >= rightTopCorner[1] + cornerRadius && arrowBaseBottom <= rightBottomCorner[1]) {
+    if (
+      arrowBaseTop >= rightTopCorner[1] + cornerRadius
+      && arrowBaseBottom <= rightBottomCorner[1]
+    ) {
+      arrowArc = buildPath(
+        getArc(cornerRadius, 1, 1),
+        'L',
+        [
+          xr,
+          arrowBaseTop,
+          anchorX,
+          anchorY,
+          xr,
+          arrowBaseBottom,
+        ],
+        'L',
+        rightBottomCorner,
+        getArc(cornerRadius, -1, 1),
+      );
+    } else if (
+      arrowBaseTop < rightTopCorner[1] + cornerRadius
+      && arrowBaseBottom >= rightTopCorner[1] + cornerRadius
+      && arrowBaseBottom <= rightBottomCorner[1]
+    ) {
       const arrowWidthRest = rightTopCorner[1] + cornerRadius - arrowBaseTop;
       const angle = arrowWidthRest / cornerRadius;
 
       const arrowBaseTopX = rightTopCorner[0] + cos(angle) * cornerRadius;
       const arrowBaseTopY = rightTopCorner[1] + (1 - sin(angle)) * cornerRadius;
-      arrowArc = buildPath(getArc(cornerRadius, cos(angle), 1 - sin(angle)), 'L', [arrowBaseTopX, arrowBaseTopY, anchorX, anchorY, xr, arrowBaseBottom], 'L', rightBottomCorner, getArc(cornerRadius, -1, 1));
-    } else if (arrowBaseTop < rightTopCorner[1] + cornerRadius && arrowBaseBottom < rightTopCorner[1] + cornerRadius) {
+      arrowArc = buildPath(
+        getArc(cornerRadius, cos(angle), 1 - sin(angle)),
+        'L',
+        [
+          arrowBaseTopX,
+          arrowBaseTopY,
+          anchorX,
+          anchorY,
+          xr,
+          arrowBaseBottom,
+        ],
+        'L',
+        rightBottomCorner,
+        getArc(cornerRadius, -1, 1),
+      );
+    } else if (
+      arrowBaseTop < rightTopCorner[1] + cornerRadius
+      && arrowBaseBottom < rightTopCorner[1] + cornerRadius
+    ) {
       const arrowWidthRest = rightTopCorner[1] + cornerRadius - arrowBaseTop;
       const arrowAngle = arrowWidthRest / cornerRadius;
       const angle = arrowAngle;
@@ -157,47 +206,114 @@ function getCloudPoints({ width, height }, x, y, anchorX, anchorY, { arrowWidth,
       const arrowBaseTopX = rightTopCorner[0] + cos(angle) * cornerRadius;
       const arrowBaseTopY = rightTopCorner[1] + (1 - sin(angle)) * cornerRadius;
 
-      const bottomAngle = Math.sin((rightTopCorner[1] + cornerRadius - arrowBaseBottom) / cornerRadius);
+      const bottomAngle = Math.sin(
+        (rightTopCorner[1]
+          + cornerRadius
+          - arrowBaseBottom)
+          / cornerRadius,
+      );
 
       const arrowBaseBottomX = rightTopCorner[0] + cornerRadius * cos(bottomAngle);
-      const arrowBaseBottomY = rightTopCorner[1] + cornerRadius * (1 - sin(bottomAngle));
+      const arrowBaseBottomY = rightTopCorner[1]
+        + cornerRadius * (1 - sin(bottomAngle));
 
       arrowArc = buildPath(
         getArc(cornerRadius, cos(angle), 1 - sin(angle)),
         'L',
-        [arrowBaseTopX, arrowBaseTopY, anchorX, anchorY, arrowBaseBottomX, arrowBaseBottomY],
-        getAbsoluteArc(cornerRadius, rightTopCorner[0] + cornerRadius, rightTopCorner[1] + cornerRadius),
+        [
+          arrowBaseTopX,
+          arrowBaseTopY,
+          anchorX,
+          anchorY,
+          arrowBaseBottomX,
+          arrowBaseBottomY,
+        ],
+        getAbsoluteArc(
+          cornerRadius,
+          rightTopCorner[0] + cornerRadius,
+          rightTopCorner[1] + cornerRadius,
+        ),
         'L',
         rightBottomCorner,
         getArc(cornerRadius, -1, 1),
       );
-    } else if (arrowBaseTop <= rightTopCorner[1] + cornerRadius && arrowBaseBottom >= rightBottomCorner[1]) {
-      const topAngle = asin((rightTopCorner[1] + cornerRadius - arrowBaseTop) / cornerRadius);
+    } else if (
+      arrowBaseTop <= rightTopCorner[1] + cornerRadius
+      && arrowBaseBottom >= rightBottomCorner[1]
+    ) {
+      const topAngle = asin(
+        (rightTopCorner[1] + cornerRadius - arrowBaseTop)
+          / cornerRadius,
+      );
       const arrowBaseTopX = rightTopCorner[0] + cornerRadius * cos(topAngle);
-      const arrowBaseTopY = rightTopCorner[1] + cornerRadius * (1 - sin(topAngle));
+      const arrowBaseTopY = rightTopCorner[1]
+        + cornerRadius * (1 - sin(topAngle));
 
-      const bottomAngle = asin((arrowBaseBottom - rightBottomCorner[1]) / cornerRadius);
-      const arrowBaseBottomX = rightBottomCorner[0] + cornerRadius * (cos(bottomAngle) - 1);
-      const arrowBaseBottomY = rightBottomCorner[1] + cornerRadius * sin(bottomAngle);
+      const bottomAngle = asin(
+        (arrowBaseBottom - rightBottomCorner[1])
+          / cornerRadius,
+      );
+      const arrowBaseBottomX = rightBottomCorner[0]
+        + cornerRadius * (cos(bottomAngle) - 1);
+      const arrowBaseBottomY = rightBottomCorner[1]
+        + cornerRadius * sin(bottomAngle);
 
       arrowArc = buildPath(
-        getArc(cornerRadius, cos(topAngle), 1 - sin(topAngle)),
+        getArc(
+          cornerRadius,
+          cos(topAngle),
+          1 - sin(topAngle),
+        ),
         'L',
-        [arrowBaseTopX, arrowBaseTopY, anchorX, anchorY, arrowBaseBottomX, arrowBaseBottomY],
-        getAbsoluteArc(cornerRadius, rightBottomCorner[0] - cornerRadius, rightBottomCorner[1] + cornerRadius),
+        [
+          arrowBaseTopX,
+          arrowBaseTopY,
+          anchorX,
+          anchorY,
+          arrowBaseBottomX,
+          arrowBaseBottomY,
+        ],
+        getAbsoluteArc(
+          cornerRadius,
+          rightBottomCorner[0] - cornerRadius,
+          rightBottomCorner[1] + cornerRadius,
+        ),
       );
-    } else if (arrowBaseTop > rightTopCorner[1] + cornerRadius && arrowBaseTop <= rightBottomCorner[1] && arrowBaseBottom > rightBottomCorner[1]) {
-      const bottomAngle = asin((arrowBaseBottom - rightBottomCorner[1]) / cornerRadius);
-      const arrowBaseBottomX = rightBottomCorner[0] + cornerRadius * (cos(bottomAngle) - 1);
-      const arrowBaseBottomY = rightBottomCorner[1] + cornerRadius * sin(bottomAngle);
+    } else if (
+      arrowBaseTop > rightTopCorner[1] + cornerRadius
+      && arrowBaseTop <= rightBottomCorner[1]
+      && arrowBaseBottom > rightBottomCorner[1]
+    ) {
+      const bottomAngle = asin(
+        (arrowBaseBottom - rightBottomCorner[1])
+          / cornerRadius,
+      );
+      const arrowBaseBottomX = rightBottomCorner[0]
+        + cornerRadius * (cos(bottomAngle) - 1);
+      const arrowBaseBottomY = rightBottomCorner[1]
+        + cornerRadius * sin(bottomAngle);
 
       arrowArc = buildPath(
         getArc(cornerRadius, 1, 1),
         'L',
-        [xr, arrowBaseTop, anchorX, anchorY, arrowBaseBottomX, arrowBaseBottomY],
-        getAbsoluteArc(cornerRadius, rightBottomCorner[0] - cornerRadius, rightBottomCorner[1] + cornerRadius),
+        [
+          xr,
+          arrowBaseTop,
+          anchorX,
+          anchorY,
+          arrowBaseBottomX,
+          arrowBaseBottomY,
+        ],
+        getAbsoluteArc(
+          cornerRadius,
+          rightBottomCorner[0] - cornerRadius,
+          rightBottomCorner[1] + cornerRadius,
+        ),
       );
-    } else if (arrowBaseTop > rightTopCorner[1] + cornerRadius && arrowBaseBottom > rightBottomCorner[1]) {
+    } else if (
+      arrowBaseTop > rightTopCorner[1] + cornerRadius
+      && arrowBaseBottom > rightBottomCorner[1]
+    ) {
       const bottomAngle = asin((arrowBaseBottom - rightBottomCorner[1]) / cornerRadius);
       const arrowBaseBottomX = rightBottomCorner[0] + cornerRadius * (cos(bottomAngle) - 1);
       const arrowBaseBottomY = rightBottomCorner[1] + cornerRadius * sin(bottomAngle);
@@ -213,7 +329,11 @@ function getCloudPoints({ width, height }, x, y, anchorX, anchorY, { arrowWidth,
         getArc(cornerRadius, cos(topAngle) - 1, sin(topAngle)),
         'L',
         [arrowBaseTopX, arrowBaseTopY, anchorX, anchorY, arrowBaseBottomX, arrowBaseBottomY],
-        getAbsoluteArc(cornerRadius, rightBottomCorner[0] - cornerRadius, rightBottomCorner[1] + cornerRadius),
+        getAbsoluteArc(
+          cornerRadius,
+          rightBottomCorner[0] - cornerRadius,
+          rightBottomCorner[1] + cornerRadius,
+        ),
       );
     }
 
@@ -261,7 +381,15 @@ export let Plaque = class {
 
   y;
 
-  constructor(options, widget, root, contentTemplate, bounded = true, measureContent = (_, g) => g.getBBox(), moveContentGroup = (_, g, x, y) => g.move(x, y)) {
+  constructor(
+    options,
+    widget,
+    root,
+    contentTemplate,
+    bounded = true,
+    measureContent = (_, g) => g.getBBox(),
+    moveContentGroup = (_, g, x, y) => g.move(x, y),
+  ) {
     this.widget = widget;
     this.options = options;
     this.root = root;
@@ -296,7 +424,10 @@ export let Plaque = class {
       return false;
     }
 
-    if (isDefined(anchorX) && (anchorX < bounds.xl || bounds.xr < anchorX || anchorY < bounds.yt || bounds.yb < anchorY)) {
+    if (
+      isDefined(anchorX)
+      && (anchorX < bounds.xl || bounds.xr < anchorX || anchorY < bounds.yt || bounds.yb < anchorY)
+    ) {
       return false;
     }
 
@@ -338,7 +469,10 @@ export let Plaque = class {
         } else if (bounds.width < size.width) {
           x = round(bounds.xl + bounds.width / 2);
         } else {
-          x = min(max(anchorX, Math.ceil(bounds.xl + size.width / 2 + lm)), Math.floor(bounds.xr - size.width / 2 - rm));
+          x = min(
+            max(anchorX, Math.ceil(bounds.xl + size.width / 2 + lm)),
+            Math.floor(bounds.xr - size.width / 2 - rm),
+          );
         }
       } else {
         x += offsetX || 0;
@@ -380,7 +514,11 @@ export let Plaque = class {
     };
 
     if (this.contentTemplate.render) {
-      this.contentTemplate.render({ model: options, container: this._contentGroup.element, onRendered: onRender });
+      this.contentTemplate.render({
+        model: options,
+        container: this._contentGroup.element,
+        onRendered: onRender,
+      });
     } else {
       this.contentTemplate({ group: this._contentGroup, onRender, ...restProps });
     }
@@ -424,9 +562,18 @@ export let Plaque = class {
     const rotationAngle = getCloudAngle(size, this.x, this.y, this.anchorX, this.anchorY);
     return {
       x: Math.floor(this.x - size.width / 2 - margins.lm),
-      y: Math.floor(this.y - size.height / 2 - margins.tm - (rotationAngle === 270 ? this.options.arrowLength : 0)),
+      y: Math.floor(
+        this.y
+          - size.height / 2
+          - margins.tm
+          - (rotationAngle === 270 ? this.options.arrowLength : 0),
+      ),
       width: size.width + margins.lm + margins.rm,
-      height: size.height + margins.tm + margins.bm + (rotationAngle === 90 || rotationAngle === 270 ? this.options.arrowLength : 0),
+      height:
+        size.height
+        + margins.tm
+        + margins.bm
+        + (rotationAngle === 90 || rotationAngle === 270 ? this.options.arrowLength : 0),
     };
   }
 
@@ -473,7 +620,12 @@ export let Plaque = class {
     })
       .rotate(rotationAngle, x, y);
 
-    this.moveContentGroup(this.widget, this._contentGroup, x - this._contentBBox.x - this._contentBBox.width / 2, y - this._contentBBox.y - this._contentBBox.height / 2);
+    this.moveContentGroup(
+      this.widget,
+      this._contentGroup,
+      x - this._contentBBox.x - this._contentBBox.width / 2,
+      y - this._contentBBox.y - this._contentBBox.height / 2,
+    );
   }
 
   hitTest(x, y) {

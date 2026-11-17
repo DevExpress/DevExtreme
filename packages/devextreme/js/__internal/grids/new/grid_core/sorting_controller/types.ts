@@ -7,3 +7,7 @@ export interface SortOptions {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   compare: (this: Column, value1: any, value2: any) => number | undefined;
 }
+
+export interface SortingPublicMethods {
+  clearSorting: () => void;
+}

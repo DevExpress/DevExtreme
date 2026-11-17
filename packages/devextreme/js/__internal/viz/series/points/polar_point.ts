@@ -3,7 +3,6 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-multi-assign */
-/* eslint-disable @stylistic/max-len */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable prefer-destructuring */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
@@ -80,7 +79,9 @@ export const polarSymbolPoint = _extend({}, symbolPoint, {
     const center = that.series.getValueAxis().getCenter();
     const coord = that._getCoords(that.argument, that.value);
     const translator = that._getValTranslator();
-    const maxRadius = translator.isInverted() ? translator.translate(CANVAS_POSITION_START) : translator.translate(CANVAS_POSITION_END);
+    const maxRadius = translator.isInverted()
+      ? translator.translate(CANVAS_POSITION_START)
+      : translator.translate(CANVAS_POSITION_END);
     const normalizedRadius = isDefined(coord.radius) && coord.radius >= 0 ? coord.radius : null;
 
     that.vx = normalizeAngle(coord.angle);
@@ -114,8 +115,10 @@ export const polarSymbolPoint = _extend({}, symbolPoint, {
       return;
     }
 
-    isDefined(that.lowError) && (that._lowErrorCoord = that.centerY - translator.translate(that.lowError));
-    isDefined(that.highError) && (that._highErrorCoord = that.centerY - translator.translate(that.highError));
+    isDefined(that.lowError)
+      && (that._lowErrorCoord = that.centerY - translator.translate(that.lowError));
+    isDefined(that.highError)
+      && (that._highErrorCoord = that.centerY - translator.translate(that.highError));
     that._errorBarPos = that.centerX;
 
     that._baseErrorBarPos = errorBars.type === 'stdDeviation' ? that._lowErrorCoord + (that._highErrorCoord - that._lowErrorCoord) / 2 : that.centerY - that.radius;
@@ -191,7 +194,9 @@ export const polarBarPoint = _extend({}, barPoint, {
     const that = this;
     const translator = that._getValTranslator();
     const businessRange = translator.getBusinessRange();
-    const maxRadius = translator.isInverted() ? translator.translate(CANVAS_POSITION_START) : translator.translate(CANVAS_POSITION_END);
+    const maxRadius = translator.isInverted()
+      ? translator.translate(CANVAS_POSITION_START)
+      : translator.translate(CANVAS_POSITION_END);
 
     that.radiusInner = translator.translate(that.minValue);
 
@@ -260,7 +265,12 @@ export const polarBarPoint = _extend({}, barPoint, {
     const x = that.centerX + that.defaultRadius * angleFunctions.cos;
     const y = that.centerY - that.defaultRadius * angleFunctions.sin;
 
-    if (x > visibleArea.minX && x < visibleArea.maxX && y > visibleArea.minY && y < visibleArea.maxY) {
+    if (
+      x > visibleArea.minX
+      && x < visibleArea.maxX
+      && y > visibleArea.minY
+      && y < visibleArea.maxY
+    ) {
       coord = that._moveLabelOnCanvas(coord, visibleArea, label.getBoundingRect());
     }
     return coord;
