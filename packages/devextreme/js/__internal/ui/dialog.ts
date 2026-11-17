@@ -227,7 +227,6 @@ export const custom = (params: DialogParams): BaseDialog => {
   const configuration: PopupProperties<Popup> = {
     animation,
     container: $element,
-    // @ts-expect-error dragAndResizeArea should be typed correctly in popup.d.ts
     dragAndResizeArea: window,
     dragEnabled: ensureDefined(dragEnabled, true),
     height: 'auto',
@@ -236,7 +235,6 @@ export const custom = (params: DialogParams): BaseDialog => {
     onHiding: (): void => { deferred.reject(); },
     onShowing,
     onShown,
-    // @ts-expect-error position should be typed correctly in popup.d.ts
     position: popupPosition,
     rtlEnabled: config().rtlEnabled,
     showCloseButton: showCloseButton ?? false,

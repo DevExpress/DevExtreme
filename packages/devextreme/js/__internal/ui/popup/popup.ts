@@ -179,13 +179,15 @@ const getHeightStrategyChangeOffset = (
 
 export interface PopupProperties<
   TComponent = dxPopup,
-> extends Omit<dxPopupOptions<TComponent>, 'animation' | 'container' | 'position'>,
+> extends Omit<dxPopupOptions<TComponent>, 'animation' | 'container' | 'position' | 'dragAndResizeArea'>,
   OverlayInternalProperties {
   animation?: dxPopupAnimation | null;
 
   container?: Properties['container'] | dxElementWrapper;
 
   position?: Properties['position'] | InternalPositionConfig;
+
+  dragAndResizeArea?: Properties['dragAndResizeArea'] | Window;
 
   autoResizeEnabled?: boolean;
 
