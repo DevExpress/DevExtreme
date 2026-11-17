@@ -2,14 +2,25 @@ import ArrayStore from '@js/common/data/array_store';
 import { CustomStore } from '@js/common/data/custom_store';
 import { DataSource } from '@js/common/data/data_source/data_source';
 import dataQuery from '@js/common/data/query';
-// eslint-disable-next-line import/extensions
 import { aggregators } from '@js/common/data/utils';
+import type { ScalarFilterValue } from '@js/common/grids';
 import { noop } from '@js/core/utils/common';
-import { compileGetter, toComparable } from '@js/core/utils/data';
 import dateSerialization from '@js/core/utils/date_serialization';
+import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred, when } from '@js/core/utils/deferred';
 import { each } from '@js/core/utils/iterator';
 import { isDefined, isNumeric, isString } from '@js/core/utils/type';
+import { compileGetter, toComparable } from '@ts/core/utils/data';
+import type { StoreKey } from '@ts/data/abstract_store';
+import type { LoadOperation, StoreLoadOptions } from '@ts/data/data_source/types';
+import type {
+  DiscoveredField,
+  DrillDownParams,
+  PivotGridAxis,
+  PivotGridField,
+  PivotGridFilterValue,
+  PivotGridLoadOptions,
+} from '@ts/grids/pivot_grid/types';
 
 import {
   discoverObjectFields,
@@ -18,10 +29,28 @@ import {
   setFieldProperty,
   storeDrillDownMixin,
 } from '../m_widget_utils';
+import type {
+  CustomSummaryOptions,
+  DataItemFilter,
+  DateIntervalSelector,
+  FieldSelector,
+  FieldSelectors,
+  LocalAggregator,
+  LocalExpandedPaths,
+  LocalField,
+  LocalFilterOptions,
+  LocalHeaderItem,
+  LocalHeaderItemsHash,
+  LocalHeaders,
+  LocalHierarchyOptions,
+  LocalLoadOptions,
+  LocalLoadResult,
+  LocalStoreOptions,
+} from './types';
 
 const PATH_DELIMETER = '/./';
 
-const DATE_INTERVAL_SELECTORS = {
+const DATE_INTERVAL_SELECTORS: Record<string, DateIntervalSelector> = {
   year(date) {
     return date && date.getFullYear();
   },
@@ -39,32 +68,39 @@ const DATE_INTERVAL_SELECTORS = {
   },
 };
 
-function getDataSelector(dataField) {
-  return dataField.indexOf('.') !== -1 ? compileGetter(dataField) : function (data) { return data[dataField]; };
+const AGGREGATORS: Partial<Record<string, LocalAggregator>> = aggregators;
+
+function getDataSelector(dataField: string): FieldSelector {
+  return dataField.includes('.')
+    ? compileGetter(dataField)
+    : function selectDataField(data: unknown): unknown {
+      // @ts-expect-error a data item is an object here
+      return data[dataField];
+    };
 }
 
-function getDateValue(dataSelector) {
-  return function (data) {
-    let value = dataSelector(data);
+function getDateValue(dataSelector: FieldSelector): FieldSelector {
+  return function selectDateValue(data: unknown): unknown {
+    const value = dataSelector(data);
     if (value && !(value instanceof Date)) {
-      value = dateSerialization.deserializeDate(value);
+      return dateSerialization.deserializeDate(value);
     }
     return value;
   };
 }
 
-function prepareFields(fields) {
+function prepareFields(fields: PivotGridField[] | undefined): void {
   each(fields || [], (_, field) => {
-    let fieldSelector;
-    let intervalSelector;
+    // eslint-disable-next-line @typescript-eslint/init-declarations -- assigned in the if/else
+    let fieldSelector: FieldSelector;
     const { dataField } = field;
-    let groupInterval;
     const { levels } = field;
-    let dataSelector;
+    // eslint-disable-next-line @typescript-eslint/init-declarations -- assigned in the if/else
+    let dataSelector: FieldSelector;
 
     if (!field.selector) {
       if (!dataField) {
-        dataSelector = function (data) { return data; };
+        dataSelector = function selectData(data: unknown): unknown { return data; };
       } else {
         dataSelector = getDataSelector(dataField);
       }
@@ -74,20 +110,24 @@ function prepareFields(fields) {
       }
 
       if (field.dataType === 'date') {
-        intervalSelector = DATE_INTERVAL_SELECTORS[field.groupInterval];
+        const intervalSelector: DateIntervalSelector | undefined = DATE_INTERVAL_SELECTORS[
+          String(field.groupInterval)
+        ];
         const valueSelector = getDateValue(dataSelector);
 
-        fieldSelector = function (data) {
-          const value = valueSelector(data);
+        fieldSelector = function selectDateInterval(data: unknown): unknown {
+          // @ts-expect-error a date field's value is a Date or empty
+          const value: Date | undefined = valueSelector(data);
           return intervalSelector ? intervalSelector(value) : value;
         };
       } else if (field.dataType === 'number') {
-        groupInterval = isNumeric(field.groupInterval)
+        const groupInterval = isNumeric(field.groupInterval)
           && field.groupInterval > 0
           && field.groupInterval;
 
-        fieldSelector = function (data) {
-          let value = dataSelector(data);
+        fieldSelector = function selectNumberGroup(data: unknown): unknown {
+          // @ts-expect-error a number field's value is a number or a numeric string
+          let value: number | string = dataSelector(data);
           if (isString(value)) {
             value = Number(value);
           }
@@ -104,8 +144,14 @@ function prepareFields(fields) {
   });
 }
 
-const addHierarchyItem = function (value, hierarchyItems, pathHash, childrenHash) {
-  let hierarchyItem = childrenHash[pathHash];
+const addHierarchyItem = function addHierarchyItem(
+  value: unknown,
+  hierarchyItems: LocalHeaderItem[],
+  pathHash: string,
+  childrenHash: LocalHeaderItemsHash,
+): LocalHeaderItem {
+  // @ts-expect-error the "length" key holds the item count
+  let hierarchyItem: LocalHeaderItem | undefined = childrenHash[pathHash];
 
   if (!hierarchyItem) {
     hierarchyItem = {
@@ -119,77 +165,92 @@ const addHierarchyItem = function (value, hierarchyItems, pathHash, childrenHash
   return hierarchyItem;
 };
 
-function fillHierarchyItemIndexesCore(indexes, options, children, expandIndex, pathHash?) {
+function fillHierarchyItemIndexesCore(
+  indexes: number[],
+  options: LocalHierarchyOptions,
+  children: LocalHeaderItem[],
+  expandIndex: number,
+  pathHash?: string,
+): void {
   const dimension = options.dimensions[expandIndex];
   const { expandedPathsHash } = options;
-  let dimensionValue;
-  let hierarchyItem;
 
   if (dimension) {
-    dimensionValue = dimension.selector(options.data);
-    pathHash = pathHash !== undefined ? pathHash + PATH_DELIMETER + dimensionValue : `${dimensionValue}`;
+    const dimensionValue = dimension.selector(options.data);
+    const itemPathHash = pathHash !== undefined
+      // eslint-disable-next-line @typescript-eslint/restrict-plus-operands -- any data value
+      ? pathHash + PATH_DELIMETER + dimensionValue
+      : `${dimensionValue}`;
 
-    hierarchyItem = addHierarchyItem(dimensionValue, children, pathHash, options.childrenHash);
+    const hierarchyItem = addHierarchyItem(
+      dimensionValue,
+      children,
+      itemPathHash,
+      options.childrenHash,
+    );
 
     indexes.push(hierarchyItem.index);
 
-    if (expandedPathsHash && expandedPathsHash[pathHash] || dimension.expanded) {
-      if (!hierarchyItem.children) {
-        hierarchyItem.children = [];
-      }
+    if ((expandedPathsHash && expandedPathsHash[itemPathHash]) || dimension.expanded) {
+      hierarchyItem.children ??= [];
       fillHierarchyItemIndexesCore(
         indexes,
         options,
         hierarchyItem.children,
         expandIndex + 1,
-        pathHash,
+        itemPathHash,
       );
     }
   }
 }
 
-function generateHierarchyItems(data, loadOptions, headers, headerName) {
+function generateHierarchyItems(
+  data: unknown,
+  loadOptions: LocalLoadOptions,
+  headers: LocalHeaders,
+  headerName: PivotGridAxis,
+): number[] {
   const result = [0];
+  // @ts-expect-error path is set together with headerName
   const expandIndex = loadOptions.headerName === headerName ? loadOptions.path.length : 0;
   const expandedPaths = headerName === 'rows' ? loadOptions.rowExpandedPaths : loadOptions.columnExpandedPaths;
-  const options = {
+  const options: LocalHierarchyOptions = {
     data,
     childrenHash: headers[`${headerName}Hash`],
     dimensions: loadOptions[headerName],
     expandedPathsHash: loadOptions.headerName !== headerName
-      && expandedPaths
-      && expandedPaths.hash,
+      && expandedPaths?.hash,
   };
 
   fillHierarchyItemIndexesCore(result, options, headers[headerName], expandIndex);
   return result;
 }
 
-function generateAggregationCells(data, cells, headers, options) {
-  const cellSet: any = [];
-  let x;
-  let y;
-  let rowIndex;
-  let columnIndex;
+function generateAggregationCells(
+  data: unknown,
+  cells: unknown[][][],
+  headers: LocalHeaders,
+  options: LocalLoadOptions,
+): unknown[][] {
+  const cellSet: unknown[][] = [];
 
   const rowIndexes = generateHierarchyItems(data, options, headers, 'rows');
   const columnIndexes = generateHierarchyItems(data, options, headers, 'columns');
 
-  for (y = 0; y < rowIndexes.length; y += 1) {
-    rowIndex = rowIndexes[y];
-    cells[rowIndex] = cells[rowIndex] || [];
-    for (x = 0; x < columnIndexes.length; x += 1) {
-      columnIndex = columnIndexes[x];
-      cellSet.push(cells[rowIndex][columnIndex] = cells[rowIndex][columnIndex] || []);
+  for (const rowIndex of rowIndexes) {
+    cells[rowIndex] = cells[rowIndex] ?? [];
+    for (const columnIndex of columnIndexes) {
+      cellSet.push(cells[rowIndex][columnIndex] = cells[rowIndex][columnIndex] ?? []);
     }
   }
 
   return cellSet;
 }
 
-function fillHashExpandedPath(expandedPaths) {
+function fillHashExpandedPath(expandedPaths: LocalExpandedPaths | undefined): void {
   if (expandedPaths) {
-    const hash = expandedPaths.hash = {};
+    const hash: Record<string, boolean> = {};
+    expandedPaths.hash = hash;
     expandedPaths.forEach((path) => {
       const pathValue = path.map((value) => `${value}`).join(PATH_DELIMETER);
       hash[pathValue] = true;
@@ -197,7 +258,7 @@ function fillHashExpandedPath(expandedPaths) {
   }
 }
 
-function prepareLoadOption(options) {
+function prepareLoadOption(options: PivotGridLoadOptions): asserts options is LocalLoadOptions {
   options.rows = options.rows || [];
   options.columns = options.columns || [];
   options.filters = options.filters || [];
@@ -211,38 +272,42 @@ function prepareLoadOption(options) {
   prepareFields(options.filters);
 }
 
-function getAggregator(field) {
+function getAggregator(field: LocalField): LocalAggregator {
   if (field.summaryType === 'custom') {
     field.calculateCustomSummary = field.calculateCustomSummary || noop;
 
     return {
-      seed() {
-        const options = {
+      seed(): CustomSummaryOptions {
+        const options: CustomSummaryOptions = {
           summaryProcess: 'start',
           totalValue: undefined,
         };
-        field.calculateCustomSummary(options);
+        field.calculateCustomSummary?.(options);
         return options;
       },
-      step(options, value) {
+      step(options: CustomSummaryOptions, value: unknown): CustomSummaryOptions {
         options.summaryProcess = 'calculate';
         options.value = value;
-        field.calculateCustomSummary(options);
+        field.calculateCustomSummary?.(options);
         return options;
       },
-      finalize(options) {
+      finalize(options: CustomSummaryOptions): unknown {
         options.summaryProcess = 'finalize';
         delete options.value;
-        field.calculateCustomSummary(options);
+        field.calculateCustomSummary?.(options);
         return options.totalValue;
       },
     };
   }
 
-  return aggregators[field.summaryType] || aggregators.count;
+  return AGGREGATORS[String(field.summaryType)] ?? aggregators.count;
 }
 
-function aggregationStep(measures, aggregationCells, data) {
+function aggregationStep(
+  measures: LocalField[],
+  aggregationCells: unknown[][],
+  data: unknown,
+): void {
   for (let aggregatorIndex = 0; aggregatorIndex < measures.length; aggregatorIndex += 1) {
     const cellField = measures[aggregatorIndex];
     const cellValue = cellField.selector(data);
@@ -250,8 +315,7 @@ function aggregationStep(measures, aggregationCells, data) {
     const aggregator = getAggregator(cellField);
     const isAggregatorSeedFunction = typeof aggregator.seed === 'function';
 
-    for (let cellSetIndex = 0; cellSetIndex < aggregationCells.length; cellSetIndex += 1) {
-      const cell = aggregationCells[cellSetIndex];
+    for (const cell of aggregationCells) {
       if (cell.length <= aggregatorIndex) {
         cell[aggregatorIndex] = isAggregatorSeedFunction ? aggregator.seed() : aggregator.seed;
       }
@@ -264,14 +328,14 @@ function aggregationStep(measures, aggregationCells, data) {
   }
 }
 
-function aggregationFinalize(measures, cells) {
+function aggregationFinalize(measures: LocalField[] | undefined, cells: unknown[][][]): void {
   each(measures, (aggregatorIndex, cellField) => {
     const aggregator = getAggregator(cellField);
     if (aggregator.finalize) {
       each(cells, (_, row) => {
-        each(row, (_, cell) => {
-          if (cell && cell[aggregatorIndex] !== undefined) {
-            cell[aggregatorIndex] = aggregator.finalize(cell[aggregatorIndex]);
+        each(row, (columnIndex, cell) => {
+          if (cell?.[aggregatorIndex] !== undefined) {
+            cell[aggregatorIndex] = aggregator.finalize?.(cell[aggregatorIndex]);
           }
         });
       });
@@ -279,16 +343,19 @@ function aggregationFinalize(measures, cells) {
   });
 }
 
-function areValuesEqual(filterValue, fieldValue) {
+function areValuesEqual(filterValue: PivotGridFilterValue, fieldValue: unknown): boolean {
   let valueOfFilter = filterValue && filterValue.valueOf();
   let valueOfField = fieldValue && fieldValue.valueOf();
 
   if (Array.isArray(filterValue)) {
-    fieldValue = fieldValue || [];
+    // @ts-expect-error a hierarchy field's value is an array
+    const fieldValues: unknown[] = fieldValue || [];
 
     for (let i = 0; i < filterValue.length; i += 1) {
-      valueOfFilter = filterValue[i] && filterValue[i].valueOf();
-      valueOfField = fieldValue[i] && fieldValue[i].valueOf();
+      const filterItem = filterValue[i];
+      const fieldItem = fieldValues[i];
+      valueOfFilter = filterItem && filterItem.valueOf();
+      valueOfField = fieldItem && fieldItem.valueOf();
 
       if (valueOfFilter !== valueOfField) {
         return false;
@@ -299,16 +366,16 @@ function areValuesEqual(filterValue, fieldValue) {
   return valueOfFilter === valueOfField;
 }
 
-function getGroupValue(levels, data) {
-  const value: any = [];
+function getGroupValue(levels: LocalField[], data: unknown): unknown[] {
+  const value: unknown[] = [];
   each(levels, (_, field) => {
     value.push(field.selector(data));
   });
   return value;
 }
 
-function createDimensionFilters(dimension) {
-  const filters: any = [];
+function createDimensionFilters(dimension: LocalField[]): DataItemFilter[] {
+  const filters: DataItemFilter[] = [];
   each(dimension, (_, field) => {
     const filterValues = field.filterValues || [];
     const { groupName } = field;
@@ -316,13 +383,13 @@ function createDimensionFilters(dimension) {
     if (groupName && isNumeric(field.groupIndex)) {
       return;
     }
-    const filter = function (dataItem) {
+    const filter = function filter(dataItem: unknown): boolean {
       const value = field.levels
         ? getGroupValue(field.levels, dataItem)
         : field.selector(dataItem);
       let result = false;
-      for (let i = 0; i < filterValues.length; i += 1) {
-        if (areValuesEqual(filterValues[i], value)) {
+      for (const filterValue of filterValues) {
+        if (areValuesEqual(filterValue, value)) {
           result = true;
           break;
         }
@@ -330,23 +397,26 @@ function createDimensionFilters(dimension) {
       return field.filterType === 'exclude' ? !result : result;
     };
 
-    filterValues.length && filters.push(filter);
+    if (filterValues.length) {
+      filters.push(filter);
+    }
   });
   return filters;
 }
 
-function createFilter(options) {
+function createFilter(options: LocalFilterOptions): DataItemFilter {
   const filters = createDimensionFilters(options.rows)
     .concat(createDimensionFilters(options.columns))
     .concat(createDimensionFilters(options.filters));
-  const expandedDimensions = options[options.headerName];
-  const { path } = options;
+  // @ts-expect-error an undefined headerName reads no dimension
+  const expandedDimensions: LocalField[] | undefined = options[options.headerName];
+  // @ts-expect-error path is set together with headerName
+  const { path }: { path: ScalarFilterValue[] } = options;
 
   if (expandedDimensions) {
     filters.push((dataItem) => {
-      let expandValue;
       for (let i = 0; i < path.length; i += 1) {
-        expandValue = expandedDimensions[i].selector(dataItem);
+        const expandValue = expandedDimensions[i].selector(dataItem);
         if (toComparable(expandValue, true) !== toComparable(path[i], true)) {
           return false;
         }
@@ -355,9 +425,9 @@ function createFilter(options) {
     });
   }
 
-  return function (dataItem) {
-    for (let i = 0; i < filters.length; i += 1) {
-      if (!filters[i](dataItem)) {
+  return function filterDataItem(dataItem: unknown): boolean {
+    for (const filter of filters) {
+      if (!filter(dataItem)) {
         return false;
       }
     }
@@ -365,30 +435,36 @@ function createFilter(options) {
   };
 }
 
-function loadCore(items, options, notifyProgress) {
-  const headers = {
+function loadCore(
+  items: unknown[],
+  options: LocalLoadOptions,
+  notifyProgress: (progress: number) => void,
+): DeferredObj<LocalLoadResult> {
+  const headers: LocalHeaders = {
     columns: [],
     rows: [],
     columnsHash: { length: 1 },
     rowsHash: { length: 1 },
   };
-  const values = [];
-  let aggregationCells;
-  let data;
-  // @ts-expect-error
-  const d = new Deferred();
+  const values: unknown[][][] = [];
+  // eslint-disable-next-line @typescript-eslint/init-declarations -- assigned in processData()
+  let aggregationCells: unknown[][];
+  // eslint-disable-next-line @typescript-eslint/init-declarations -- assigned in processData()
+  let data: unknown;
+  const d = Deferred<LocalLoadResult>();
   let i = 0;
 
   const filter = createFilter(options);
 
-  function processData() {
+  function processData(): void {
     const t = new Date();
     const startIndex = i;
 
     for (; i < items.length; i += 1) {
       if (i > startIndex && i % 10000 === 0) {
-        if ((new Date() as any) - (t as any) >= 300) {
+        if (Number(new Date()) - Number(t) >= 300) {
           notifyProgress(i / items.length);
+          // eslint-disable-next-line no-restricted-globals -- yields to the browser between chunks
           setTimeout(processData, 0);
 
           return;
@@ -397,7 +473,9 @@ function loadCore(items, options, notifyProgress) {
       data = items[i];
       if (filter(data)) {
         aggregationCells = generateAggregationCells(data, values, headers, options);
-        aggregationStep(options.values, aggregationCells, data);
+        if (options.values) {
+          aggregationStep(options.values, aggregationCells, data);
+        }
       }
     }
 
@@ -417,7 +495,26 @@ function loadCore(items, options, notifyProgress) {
   return d;
 }
 
-function filterDataSource(dataSource, fieldSelectors) {
+function processFilter(filter: unknown, fieldSelectors: FieldSelectors): unknown {
+  if (!Array.isArray(filter)) {
+    return filter;
+  }
+
+  const processedFilter = filter.slice(0);
+  if (
+    isString(processedFilter[0])
+    && (processedFilter[1] instanceof Date || processedFilter[2] instanceof Date)
+  ) {
+    processedFilter[0] = fieldSelectors[processedFilter[0]];
+  }
+
+  for (let i = 0; i < processedFilter.length; i += 1) {
+    processedFilter[i] = processFilter(processedFilter[i], fieldSelectors);
+  }
+  return processedFilter;
+}
+
+function filterDataSource(dataSource: DataSource, fieldSelectors: FieldSelectors): unknown[] {
   let filter = dataSource.filter();
 
   if (dataSource.store() instanceof CustomStore && filter) {
@@ -428,11 +525,16 @@ function filterDataSource(dataSource, fieldSelectors) {
   return dataSource.items();
 }
 
-function loadDataSource(dataSource, fieldSelectors, reload?) {
-  // @ts-expect-error
-  const d = new Deferred();
+function loadDataSource(
+  dataSource: DataSource,
+  fieldSelectors: FieldSelectors,
+  reload?: boolean,
+): DeferredObj<unknown[]> {
+  const d = Deferred<unknown[]>();
 
-  const customizeStoreLoadOptionsHandler = function (options) {
+  const customizeStoreLoadOptionsHandler = function customizeStoreLoadOptionsHandler(
+    options: LoadOperation,
+  ): void {
     if (dataSource.store() instanceof ArrayStore) {
       options.storeLoadOptions.filter = processFilter(
         options.storeLoadOptions.filter,
@@ -448,7 +550,10 @@ function loadDataSource(dataSource, fieldSelectors, reload?) {
     when(loadDeferred).done(() => {
       loadDataSource(dataSource, fieldSelectors).done(() => {
         d.resolve(filterDataSource(dataSource, fieldSelectors));
+      // eslint-disable-next-line @typescript-eslint/no-misused-promises -- ignores the result
       }).fail(d.reject);
+    // @ts-expect-error fail() gets the error, but is typed with the resolve value
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises -- ignores the result
     }).fail(d.reject);
   } else {
     d.resolve(filterDataSource(dataSource, fieldSelectors));
@@ -458,122 +563,126 @@ function loadDataSource(dataSource, fieldSelectors, reload?) {
   });
 }
 
-function fillSelectorsByFields(selectors, fields) {
+function fillSelectorsByFields(selectors: FieldSelectors, fields: PivotGridField[]): void {
   fields.forEach((field) => {
     if (field.dataField && field.dataType === 'date') {
       const valueSelector = getDateValue(getDataSelector(field.dataField));
-      selectors[field.dataField] = function (data) { return valueSelector(data); };
+      selectors[field.dataField] = function selectDateValue(data: unknown): unknown {
+        return valueSelector(data);
+      };
     }
   });
 }
 
-function getFieldSelectors(options) {
-  const selectors = {};
+function getFieldSelectors(
+  options: PivotGridField[] | LocalLoadOptions | undefined,
+): FieldSelectors {
+  const selectors: FieldSelectors = {};
 
   if (Array.isArray(options)) {
     fillSelectorsByFields(selectors, options);
   } else if (options) {
-    ['rows', 'columns', 'filters'].forEach((area) => {
-      options[area] && fillSelectorsByFields(selectors, options[area]);
+    (['rows', 'columns', 'filters'] as const).forEach((area) => {
+      if (options[area]) {
+        fillSelectorsByFields(selectors, options[area]);
+      }
     });
   }
   return selectors;
 }
 
-function processFilter(filter, fieldSelectors) {
-  if (!Array.isArray(filter)) {
-    return filter;
-  }
-
-  filter = filter.slice(0);
-  if (isString(filter[0]) && (filter[1] instanceof Date || filter[2] instanceof Date)) {
-    filter[0] = fieldSelectors[filter[0]];
-  }
-
-  for (let i = 0; i < filter.length; i += 1) {
-    filter[i] = processFilter(filter[i], fieldSelectors);
-  }
-  return filter;
-}
-
 class LocalStore {
-  _progressChanged: any;
+  public _progressChanged: (progress: number) => void;
 
-  _dataSource: any;
+  public _dataSource: DataSource;
 
-  constructor(options) {
+  constructor(options: LocalStoreOptions) {
     this._progressChanged = options.onProgressChanged || noop;
     this._dataSource = new DataSource(options);
     this._dataSource.paginate(false);
   }
 
-  getFields(fields) {
-    // @ts-expect-error
-    const d = new Deferred();
+  public getFields(fields?: PivotGridField[]): DeferredObj<DiscoveredField[]> {
+    const d = Deferred<DiscoveredField[]>();
 
     loadDataSource(this._dataSource, getFieldSelectors(fields)).done((data) => {
       d.resolve(discoverObjectFields(data, fields));
+    // @ts-expect-error fail() gets the error, but is typed with the resolve value
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises -- ignores the result
     }).fail(d.reject);
 
     return d;
   }
 
-  key() {
+  public key(): StoreKey | undefined {
     return this._dataSource.key();
   }
 
-  load(options) {
-    // @ts-expect-error
-    const d = new Deferred();
+  public load(options: PivotGridLoadOptions): DeferredObj<LocalLoadResult> {
+    const d = Deferred<LocalLoadResult>();
 
     prepareLoadOption(options);
 
     loadDataSource(this._dataSource, getFieldSelectors(options), options.reload).done((data) => {
+      // eslint-disable-next-line @typescript-eslint/no-misused-promises -- ignores the result
       when(loadCore(data, options, this._progressChanged)).done(d.resolve);
+    // @ts-expect-error fail() gets the error, but is typed with the resolve value
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises -- ignores the result
     }).fail(d.reject);
 
     return d;
   }
 
-  filter(...args: unknown[]) {
+  public filter(): StoreLoadOptions['filter'];
+  public filter(...filterExpr: NonNullable<StoreLoadOptions['filter']>[]): void;
+  public filter(...args: unknown[]): unknown {
     return this._dataSource.filter(...args);
   }
 
-  supportPaging() {
+  public supportPaging(): boolean {
     return false;
   }
 
-  getDrillDownItems(loadOptions, params) {
-    loadOptions = loadOptions || {};
-    params = params || {};
+  public getDrillDownItems(
+    descriptions: PivotGridLoadOptions | undefined,
+    drillDownParams: DrillDownParams | undefined,
+  ): unknown[] {
+    // @ts-expect-error descriptions are created on the first load
+    const loadOptions: PivotGridLoadOptions = descriptions || {};
+    const params: DrillDownParams = drillDownParams || {};
     prepareLoadOption(loadOptions);
 
-    const drillDownItems: any = [];
+    const drillDownItems: unknown[] = [];
     const items = this._dataSource.items();
-    let item;
+    // eslint-disable-next-line @typescript-eslint/init-declarations -- assigned in the if/else
+    let item: unknown;
     const { maxRowCount } = params;
     const { customColumns } = params;
     const filter = createFilter(loadOptions);
     const pathFilter = createFilter({
+      // @ts-expect-error getFiltersByPath() copies the prepared fields
       rows: getFiltersByPath(loadOptions.rows, params.rowPath),
+      // @ts-expect-error getFiltersByPath() copies the prepared fields
       columns: getFiltersByPath(loadOptions.columns, params.columnPath),
       filters: [],
     });
 
-    for (let i = 0; i < items.length; i += 1) {
-      if (pathFilter(items[i]) && filter(items[i])) {
+    for (const dataItem of items) {
+      if (pathFilter(dataItem) && filter(dataItem)) {
         if (customColumns) {
           item = {};
-          for (let j = 0; j < customColumns.length; j += 1) {
-            item[customColumns[j]] = items[i][customColumns[j]];
+          // eslint-disable-next-line max-depth -- copies the custom columns of each matching item
+          for (const column of customColumns) {
+            // @ts-expect-error a data item is an object here
+            item[column] = dataItem[column];
           }
         } else {
-          item = items[i];
+          item = dataItem;
         }
 
         drillDownItems.push(item);
       }
-      if (maxRowCount > 0 && drillDownItems.length === maxRowCount) {
+      if ((maxRowCount ?? 0) > 0 && drillDownItems.length === maxRowCount) {
         break;
       }
     }
