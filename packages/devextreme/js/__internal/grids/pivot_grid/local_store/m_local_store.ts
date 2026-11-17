@@ -3,12 +3,10 @@ import { CustomStore } from '@js/common/data/custom_store';
 import { DataSource } from '@js/common/data/data_source/data_source';
 import dataQuery from '@js/common/data/query';
 import { aggregators } from '@js/common/data/utils';
-import type { ScalarFilterValue } from '@js/common/grids';
 import { noop } from '@js/core/utils/common';
 import dateSerialization from '@js/core/utils/date_serialization';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred, when } from '@js/core/utils/deferred';
-import { each } from '@js/core/utils/iterator';
 import { isDefined, isNumeric, isString } from '@js/core/utils/type';
 import { compileGetter, toComparable } from '@ts/core/utils/data';
 import type { StoreKey } from '@ts/data/abstract_store';
@@ -48,7 +46,7 @@ import type {
   LocalStoreOptions,
 } from './types';
 
-const PATH_DELIMETER = '/./';
+const PATH_DELIMITER = '/./';
 
 const DATE_INTERVAL_SELECTORS: Record<string, DateIntervalSelector> = {
   year(date) {
@@ -90,20 +88,14 @@ function getDateValue(dataSelector: FieldSelector): FieldSelector {
 }
 
 function prepareFields(fields: PivotGridField[] | undefined): void {
-  each(fields || [], (_, field) => {
-    // eslint-disable-next-line @typescript-eslint/init-declarations -- assigned in the if/else
-    let fieldSelector: FieldSelector;
-    const { dataField } = field;
-    const { levels } = field;
-    // eslint-disable-next-line @typescript-eslint/init-declarations -- assigned in the if/else
-    let dataSelector: FieldSelector;
-
+  (fields || []).forEach((field) => {
     if (!field.selector) {
-      if (!dataField) {
-        dataSelector = function selectData(data: unknown): unknown { return data; };
-      } else {
-        dataSelector = getDataSelector(dataField);
-      }
+      const { dataField, levels } = field;
+      const dataSelector = dataField
+        ? getDataSelector(dataField)
+        : function selectData(data: unknown): unknown { return data; };
+      // eslint-disable-next-line @typescript-eslint/init-declarations -- assigned in the if/else
+      let fieldSelector: FieldSelector;
 
       if (levels) {
         prepareFields(levels);
@@ -151,17 +143,20 @@ const addHierarchyItem = function addHierarchyItem(
   childrenHash: LocalHeaderItemsHash,
 ): LocalHeaderItem {
   // @ts-expect-error the "length" key holds the item count
-  let hierarchyItem: LocalHeaderItem | undefined = childrenHash[pathHash];
+  const existingItem: LocalHeaderItem | undefined = childrenHash[pathHash];
 
-  if (!hierarchyItem) {
-    hierarchyItem = {
-      value,
-      // eslint-disable-next-line no-plusplus
-      index: childrenHash.length++,
-    };
-    childrenHash[pathHash] = hierarchyItem;
-    hierarchyItems.push(hierarchyItem);
+  if (existingItem) {
+    return existingItem;
   }
+
+  const hierarchyItem: LocalHeaderItem = {
+    value,
+    index: childrenHash.length,
+  };
+  childrenHash.length += 1;
+  childrenHash[pathHash] = hierarchyItem;
+  hierarchyItems.push(hierarchyItem);
+
   return hierarchyItem;
 };
 
@@ -178,8 +173,7 @@ function fillHierarchyItemIndexesCore(
   if (dimension) {
     const dimensionValue = dimension.selector(options.data);
     const itemPathHash = pathHash !== undefined
-      // eslint-disable-next-line @typescript-eslint/restrict-plus-operands -- any data value
-      ? pathHash + PATH_DELIMETER + dimensionValue
+      ? `${pathHash}${PATH_DELIMITER}${dimensionValue}`
       : `${dimensionValue}`;
 
     const hierarchyItem = addHierarchyItem(
@@ -211,18 +205,17 @@ function generateHierarchyItems(
   headerName: PivotGridAxis,
 ): number[] {
   const result = [0];
-  // @ts-expect-error path is set together with headerName
-  const expandIndex = loadOptions.headerName === headerName ? loadOptions.path.length : 0;
+  const expandIndex = loadOptions.headerName === headerName ? loadOptions.path?.length ?? 0 : 0;
   const expandedPaths = headerName === 'rows' ? loadOptions.rowExpandedPaths : loadOptions.columnExpandedPaths;
   const options: LocalHierarchyOptions = {
     data,
     childrenHash: headers[`${headerName}Hash`],
     dimensions: loadOptions[headerName],
-    expandedPathsHash: loadOptions.headerName !== headerName
-      && expandedPaths?.hash,
+    expandedPathsHash: loadOptions.headerName !== headerName && expandedPaths?.hash,
   };
 
   fillHierarchyItemIndexesCore(result, options, headers[headerName], expandIndex);
+
   return result;
 }
 
@@ -252,7 +245,7 @@ function fillHashExpandedPath(expandedPaths: LocalExpandedPaths | undefined): vo
     const hash: Record<string, boolean> = {};
     expandedPaths.hash = hash;
     expandedPaths.forEach((path) => {
-      const pathValue = path.map((value) => `${value}`).join(PATH_DELIMETER);
+      const pathValue = path.map((value) => `${value}`).join(PATH_DELIMITER);
       hash[pathValue] = true;
     });
   }
@@ -329,11 +322,11 @@ function aggregationStep(
 }
 
 function aggregationFinalize(measures: LocalField[] | undefined, cells: unknown[][][]): void {
-  each(measures, (aggregatorIndex, cellField) => {
+  measures?.forEach((cellField, aggregatorIndex) => {
     const aggregator = getAggregator(cellField);
     if (aggregator.finalize) {
-      each(cells, (_, row) => {
-        each(row, (columnIndex, cell) => {
+      cells.forEach((row) => {
+        row.forEach((cell) => {
           if (cell?.[aggregatorIndex] !== undefined) {
             cell[aggregatorIndex] = aggregator.finalize?.(cell[aggregatorIndex]);
           }
@@ -367,16 +360,12 @@ function areValuesEqual(filterValue: PivotGridFilterValue, fieldValue: unknown):
 }
 
 function getGroupValue(levels: LocalField[], data: unknown): unknown[] {
-  const value: unknown[] = [];
-  each(levels, (_, field) => {
-    value.push(field.selector(data));
-  });
-  return value;
+  return levels.map((field) => field.selector(data));
 }
 
 function createDimensionFilters(dimension: LocalField[]): DataItemFilter[] {
   const filters: DataItemFilter[] = [];
-  each(dimension, (_, field) => {
+  dimension.forEach((field) => {
     const filterValues = field.filterValues || [];
     const { groupName } = field;
 
@@ -387,13 +376,8 @@ function createDimensionFilters(dimension: LocalField[]): DataItemFilter[] {
       const value = field.levels
         ? getGroupValue(field.levels, dataItem)
         : field.selector(dataItem);
-      let result = false;
-      for (const filterValue of filterValues) {
-        if (areValuesEqual(filterValue, value)) {
-          result = true;
-          break;
-        }
-      }
+      const result = filterValues.some((filterValue) => areValuesEqual(filterValue, value));
+
       return field.filterType === 'exclude' ? !result : result;
     };
 
@@ -408,30 +392,18 @@ function createFilter(options: LocalFilterOptions): DataItemFilter {
   const filters = createDimensionFilters(options.rows)
     .concat(createDimensionFilters(options.columns))
     .concat(createDimensionFilters(options.filters));
-  // @ts-expect-error an undefined headerName reads no dimension
-  const expandedDimensions: LocalField[] | undefined = options[options.headerName];
-  // @ts-expect-error path is set together with headerName
-  const { path }: { path: ScalarFilterValue[] } = options;
+  const expandedDimensions = options.headerName ? options[options.headerName] : undefined;
+  const { path } = options;
 
-  if (expandedDimensions) {
-    filters.push((dataItem) => {
-      for (let i = 0; i < path.length; i += 1) {
-        const expandValue = expandedDimensions[i].selector(dataItem);
-        if (toComparable(expandValue, true) !== toComparable(path[i], true)) {
-          return false;
-        }
-      }
-      return true;
-    });
+  if (expandedDimensions && path) {
+    filters.push((dataItem) => path.every((pathValue, index) => {
+      const expandValue = expandedDimensions[index].selector(dataItem);
+      return toComparable(expandValue, true) === toComparable(pathValue, true);
+    }));
   }
 
   return function filterDataItem(dataItem: unknown): boolean {
-    for (const filter of filters) {
-      if (!filter(dataItem)) {
-        return false;
-      }
-    }
-    return true;
+    return filters.every((filter) => filter(dataItem));
   };
 }
 
@@ -447,10 +419,6 @@ function loadCore(
     rowsHash: { length: 1 },
   };
   const values: unknown[][][] = [];
-  // eslint-disable-next-line @typescript-eslint/init-declarations -- assigned in processData()
-  let aggregationCells: unknown[][];
-  // eslint-disable-next-line @typescript-eslint/init-declarations -- assigned in processData()
-  let data: unknown;
   const d = Deferred<LocalLoadResult>();
   let i = 0;
 
@@ -470,9 +438,9 @@ function loadCore(
           return;
         }
       }
-      data = items[i];
+      const data = items[i];
       if (filter(data)) {
-        aggregationCells = generateAggregationCells(data, values, headers, options);
+        const aggregationCells = generateAggregationCells(data, values, headers, options);
         if (options.values) {
           aggregationStep(options.values, aggregationCells, data);
         }
@@ -671,7 +639,7 @@ class LocalStore {
       if (pathFilter(dataItem) && filter(dataItem)) {
         if (customColumns) {
           item = {};
-          // eslint-disable-next-line max-depth -- copies the custom columns of each matching item
+
           for (const column of customColumns) {
             // @ts-expect-error a data item is an object here
             item[column] = dataItem[column];
