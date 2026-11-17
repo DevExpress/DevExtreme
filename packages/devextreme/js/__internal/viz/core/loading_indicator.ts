@@ -8,7 +8,6 @@
 /* eslint-disable no-multi-assign */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-use-before-define */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 
 import type { ThemeValue } from './base_theme_manager';
@@ -152,7 +151,7 @@ export let LoadingIndicator = class LoadingIndicator {
 
 export const plugin = {
   name: 'loading_indicator',
-  init() {
+  init(): void {
     const that = this;
 
     that._loadingIndicator = new LoadingIndicator({
@@ -161,7 +160,7 @@ export const plugin = {
       notify,
     });
     that._scheduleLoadingIndicatorHiding();
-    function notify(state) {
+    function notify(state): void {
       // This flag is used to suppress redundant `_optionChanged` notifications caused by the
       // mechanism that synchronizes the `loadingIndicator.show` option and the loading indicator
       // visibility
@@ -173,53 +172,53 @@ export const plugin = {
       }
     }
   },
-  dispose() {
+  dispose(): void {
     this._loadingIndicator.dispose();
     this._loadingIndicator = null;
   },
   members: {
-    _scheduleLoadingIndicatorHiding() {
+    _scheduleLoadingIndicatorHiding(): void {
       this._loadingIndicator.scheduleHiding();
     },
-    _fulfillLoadingIndicatorHiding() {
+    _fulfillLoadingIndicatorHiding(): void {
       this._loadingIndicator.fulfillHiding();
     },
-    showLoadingIndicator() {
+    showLoadingIndicator(): void {
       this._loadingIndicator.show();
     },
-    hideLoadingIndicator() {
+    hideLoadingIndicator(): void {
       this._loadingIndicator.hide();
     },
-    _onBeginUpdate() {
+    _onBeginUpdate(): void {
       if (!this._optionChangedLocker) {
         this._scheduleLoadingIndicatorHiding();
       }
     },
   },
   extenders: {
-    _dataSourceLoadingChangedHandler(isLoading) {
+    _dataSourceLoadingChangedHandler(isLoading): void {
       if (isLoading && (this._options.silent('loadingIndicator') || {}).enabled) {
         this._loadingIndicator.show();
       }
     },
 
-    _setContentSize() {
+    _setContentSize(): void {
       this._loadingIndicator.setSize(this._canvas);
     },
-    endUpdate() {
+    endUpdate(): void {
       if (this._initialized && this._dataIsReady()) {
         this._fulfillLoadingIndicatorHiding();
       }
     },
   },
-  customize(constructor) {
+  customize(constructor): void {
     const proto = constructor.prototype;
 
     // Of course this looks dirty - but cleaning it is another task. For now it has been just
     // extracted from BaseWidget with minimal changes.
     if (proto._dataSourceChangedHandler) {
       const { _dataSourceChangedHandler } = proto;
-      proto._dataSourceChangedHandler = function () {
+      proto._dataSourceChangedHandler = function (): void {
         this._scheduleLoadingIndicatorHiding();
         _dataSourceChangedHandler.apply(this, arguments);
       };
@@ -238,7 +237,7 @@ export const plugin = {
     });
     proto._eventsMap.onLoadingIndicatorReady = { name: 'loadingIndicatorReady' };
     const { _drawn } = proto;
-    proto._drawn = function () {
+    proto._drawn = function (): void {
       _drawn.apply(this, arguments);
       if (this._dataIsReady()) {
         this._fulfillLoadingIndicatorHiding();
@@ -249,7 +248,7 @@ export const plugin = {
 };
 
 /// #DEBUG
-exports.DEBUG_set_LoadingIndicator = function (value) {
+exports.DEBUG_set_LoadingIndicator = function (value): void {
   LoadingIndicator = value;
 };
 /// #ENDDEBUG

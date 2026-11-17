@@ -17,7 +17,7 @@ proto._eventsMap.onDrill = { name: 'drill' };
 expand(proto, '_extendProxyType', function (proto) {
   const that = this;
 
-  proto.drillDown = function () {
+  proto.drillDown = function (): void {
     that._drillToNode(this._id);
   };
 });
@@ -26,7 +26,7 @@ expand(proto, '_onNodesCreated', function () {
   this._drilldownIndex = -1;
 });
 
-proto._drillToNode = function (index) {
+proto._drillToNode = function (index): void {
   const that = this;
   let node;
 

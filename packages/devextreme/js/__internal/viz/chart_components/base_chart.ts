@@ -45,6 +45,8 @@ import { Series } from '@ts/viz/series/base_series';
 import BaseWidget from '../core/base_widget';
 import { RollingStock } from './rolling_stock';
 
+type ThemeManagerInstance = InstanceType<typeof ThemeManager>;
+
 type SortingMethodParams = (a: any, b: any) => number;
 
 const { isArray } = Array;
@@ -91,7 +93,7 @@ const FORCE_RENDER_REFRESH_ACTION_OPTIONS = [
 
 const FONT = 'font';
 
-function checkHeightRollingStock(rollingStocks, stubCanvas) {
+function checkHeightRollingStock(rollingStocks, stubCanvas): void {
   const canvasSize = stubCanvas.end - stubCanvas.start;
   let size = 0;
   rollingStocks.forEach((rollingStock) => {
@@ -125,7 +127,7 @@ function findAndKillSmallValue(rollingStocks) {
   return width;
 }
 
-function checkStackOverlap(rollingStocks) {
+function checkStackOverlap(rollingStocks): boolean {
   let i;
   let j;
   let iLength;
@@ -196,7 +198,7 @@ function resolveLabelOverlappingInOneDirection(
   return true;
 }
 
-function checkStacksOverlapping(firstRolling, secondRolling, inTwoSides?) {
+function checkStacksOverlapping(firstRolling, secondRolling, inTwoSides?): boolean | undefined {
   if (!firstRolling || !secondRolling) return;
   const firstRect = firstRolling.getBoundingRect();
   const secondRect = secondRolling.getBoundingRect();
@@ -271,7 +273,7 @@ function moveRollingStock(rollingStocks: (RollingStock | null)[], canvas): void 
   }
 }
 
-function getLegendFields(name) {
+function getLegendFields(name): { nameField: string; colorField: string; indexField: string } {
   return {
     nameField: `${name}Name`,
     colorField: `${name}Color`,
@@ -293,7 +295,7 @@ function getLegendSettings(legendDataField) {
   };
 }
 
-function checkOverlapping(firstRect, secondRect) {
+function checkOverlapping(firstRect, secondRect): boolean {
   return ((firstRect.x <= secondRect.x && secondRect.x <= firstRect.x + firstRect.width)
         || (firstRect.x >= secondRect.x && firstRect.x <= secondRect.x + secondRect.width))
         && ((firstRect.y <= secondRect.y && secondRect.y <= firstRect.y + firstRect.height)
@@ -397,7 +399,7 @@ export class BaseChart extends BaseWidget {
     return themeOptions;
   }
 
-  _createThemeManager() {
+  _createThemeManager(): ThemeManagerInstance {
     const chartOption = this.option();
     const themeManager = new ThemeManager(this._getThemeManagerOptions());
 
@@ -405,7 +407,7 @@ export class BaseChart extends BaseWidget {
     return themeManager;
   }
 
-  _initCore() {
+  _initCore(): void {
     this._canvasClipRect = this._renderer.clipRect();
 
     this._createHtmlStructure();
@@ -438,7 +440,7 @@ export class BaseChart extends BaseWidget {
     return this._themeManager.getOptions('adaptiveLayout');
   }
 
-  _reinit() {
+  _reinit(): void {
     _setCanvasValues(this._canvas);
     this._reinitAxes();
 
@@ -450,7 +452,7 @@ export class BaseChart extends BaseWidget {
     ]);
   }
 
-  _createHtmlStructure() {
+  _createHtmlStructure(): void {
     const renderer = this._renderer;
     const { root } = renderer;
     const createConstantLinesGroup = function () {
@@ -459,26 +461,26 @@ export class BaseChart extends BaseWidget {
     };
 
     this._constantLinesGroup = {
-      dispose() {
+      dispose(): void {
         this.under.dispose();
         this.above.dispose();
       },
-      linkOff() {
+      linkOff(): void {
         this.under.linkOff();
         this.above.linkOff();
       },
-      clear() {
+      clear(): void {
         this.under.linkRemove().clear();
         this.above.linkRemove().clear();
       },
-      linkAppend() {
+      linkAppend(): void {
         this.under.linkAppend();
         this.above.linkAppend();
       },
     };
     this._labelsAxesGroup = renderer.g().attr({ class: 'dxc-elements-axes-group' });
 
-    const appendLabelsAxesGroup = () => {
+    const appendLabelsAxesGroup = (): void => {
       this._labelsAxesGroup.linkOn(root, 'elements');
     };
 
@@ -503,7 +505,7 @@ export class BaseChart extends BaseWidget {
     this._scrollBarGroup = renderer.g().attr({ class: 'dxc-scroll-bar' }).linkOn(root, 'scroll-bar');
   }
 
-  _disposeObjectsInArray(propName: string, fieldNames?: string[]) {
+  _disposeObjectsInArray(propName: string, fieldNames?: string[]): void {
     (this[propName] || []).forEach((item) => {
       if (fieldNames && item) {
         fieldNames.forEach((field) => {
@@ -516,7 +518,7 @@ export class BaseChart extends BaseWidget {
     this[propName] = null;
   }
 
-  _disposeCore() {
+  _disposeCore(): void {
     const disposeObject = (propName: string): void => {
       // TODO: What is the purpose of the `if` check in a private function?
       if (this[propName]) {
@@ -579,7 +581,7 @@ export class BaseChart extends BaseWidget {
     return this._themeManager.getOptions('animation');
   }
 
-  _getDefaultSize() {
+  _getDefaultSize(): { width: number; height: number } {
     return { width: 400, height: 400 };
   }
 
@@ -589,7 +591,7 @@ export class BaseChart extends BaseWidget {
     return this._themeManager.getOptions(name);
   }
 
-  _applySize(rect) {
+  _applySize(rect): void {
     this._rect = rect.slice();
 
     if (!this._changes.has('FULL_RENDER')) {
@@ -605,11 +607,11 @@ export class BaseChart extends BaseWidget {
   //    }
   // }
 
-  _resize() {
+  _resize(): void {
     this._doRender(this.__renderOptions || { animate: false, isResize: true });
   }
 
-  _createTracker() {
+  _createTracker(): void {
     this._tracker = new trackerModule[this._trackerType]({
       seriesGroup: this._seriesGroup,
       renderer: this._renderer,
@@ -632,7 +634,7 @@ export class BaseChart extends BaseWidget {
     };
   }
 
-  _updateTracker(trackerCanvases) {
+  _updateTracker(trackerCanvases): void {
     this._tracker.update(this._getTrackerSettings());
     this._tracker.setCanvases({
       left: 0,
@@ -654,7 +656,7 @@ export class BaseChart extends BaseWidget {
     });
   }
 
-  _doRender(_options) {
+  _doRender(_options): void {
     if (this._canvas.width === 0 && this._canvas.height === 0) return;
 
     this._resetIsReady(); // T207606
@@ -687,13 +689,13 @@ export class BaseChart extends BaseWidget {
     this._lastRenderingTime = Number(new Date()) - Number(startTime);
   }
 
-  _preserveOriginalCanvas() {
+  _preserveOriginalCanvas(): void {
     this.__originalCanvas = this._canvas;
     // NOTE: Instance of the original canvas must be preserved
     this._canvas = extend({}, this._canvas);
   }
 
-  _renderElements(drawOptions) {
+  _renderElements(drawOptions): void {
     const preparedOptions = this._prepareToRender(drawOptions);
     const isRotated = this._isRotated();
     const isLegendInside = this._isLegendInside();
@@ -769,18 +771,18 @@ export class BaseChart extends BaseWidget {
     this._renderer.unlock();
   }
 
-  _appendSeriesGroups() {
+  _appendSeriesGroups(): void {
     this._seriesGroup.linkAppend();
     this._labelsGroup.linkAppend();
     this._appendAdditionalSeriesGroups();
   }
 
-  _renderSeries(drawOptions, isRotated, isLegendInside) {
+  _renderSeries(drawOptions, isRotated, isLegendInside): void {
     this._calculateSeriesLayout(drawOptions, isRotated);
     this._renderSeriesElements(drawOptions, isLegendInside);
   }
 
-  _calculateSeriesLayout(drawOptions, isRotated) {
+  _calculateSeriesLayout(drawOptions, isRotated): void {
     drawOptions.hideLayoutLabels = this.layoutManager.needMoreSpaceForPanesCanvas(
       this._getLayoutTargets(),
       isRotated,
@@ -805,7 +807,7 @@ export class BaseChart extends BaseWidget {
     });
   }
 
-  _renderSeriesElements(drawOptions, isLegendInside) {
+  _renderSeriesElements(drawOptions, isLegendInside): void {
     const { series } = this;
     const resolveLabelOverlapping = this._themeManager.getOptions('resolveLabelOverlapping');
     const pointsToAnimation = this._getPointsToAnimation(series);
@@ -837,7 +839,7 @@ export class BaseChart extends BaseWidget {
     this._seriesElementsDrawn = true;
   }
 
-  _changesApplied() {
+  _changesApplied(): void {
     if (this._seriesElementsDrawn) {
       this._seriesElementsDrawn = false;
       this._drawn();
@@ -845,13 +847,13 @@ export class BaseChart extends BaseWidget {
     }
   }
 
-  _locateLabels(resolveLabelOverlapping) {
+  _locateLabels(resolveLabelOverlapping): void {
     this._resolveLabelOverlapping(resolveLabelOverlapping);
   }
 
-  _renderExtraElements() {}
+  _renderExtraElements(): void {}
 
-  _clearCanvas() {
+  _clearCanvas(): void {
     // T207665, T336349, T503616
     this._canvas = this.__originalCanvas;
   }
@@ -878,7 +880,7 @@ export class BaseChart extends BaseWidget {
     return grep(this.getAllSeries(), (series) => series.isVisible());
   }
 
-  _resolveLabelOverlappingHide() {
+  _resolveLabelOverlappingHide(): void {
     const labels = [];
     let currentLabel;
     let nextLabel;
@@ -915,7 +917,7 @@ export class BaseChart extends BaseWidget {
     }
   }
 
-  _cleanGroups() {
+  _cleanGroups(): void {
     // TODO: Must be removed in the same place where appended (advanced chart)
     this._stripsGroup.linkRemove().clear();
     // TODO: Must be removed in the same place where appended (advanced chart)
@@ -932,11 +934,11 @@ export class BaseChart extends BaseWidget {
     this._scaleBreaksGroup.linkRemove().clear();
   }
 
-  _allowLegendInsidePosition() {
+  _allowLegendInsidePosition(): boolean {
     return false;
   }
 
-  _createLegend() {
+  _createLegend(): void {
     const legendSettings = getLegendSettings(this._legendDataField);
 
     this._legend = new Legend({
@@ -956,7 +958,7 @@ export class BaseChart extends BaseWidget {
     this._layout.add(this._legend);
   }
 
-  _updateLegend() {
+  _updateLegend(): void {
     const themeManager = this._themeManager;
     const legendOptions = themeManager.getOptions('legend');
     const legendData = this._getLegendData();
@@ -988,7 +990,7 @@ export class BaseChart extends BaseWidget {
     return options;
   }
 
-  _processRefreshData(newRefreshAction) {
+  _processRefreshData(newRefreshAction): void {
     const currentRefreshActionPosition = ACTIONS_BY_PRIORITY.indexOf(this._currentRefreshData);
     const newRefreshActionPosition = ACTIONS_BY_PRIORITY.indexOf(newRefreshAction);
     if (
@@ -1038,7 +1040,7 @@ export class BaseChart extends BaseWidget {
     };
   }
 
-  _disposeSeries(seriesIndex?) {
+  _disposeSeries(seriesIndex?): void {
     if (this.series) {
       if (_isDefined(seriesIndex)) {
         this.series[seriesIndex].dispose();
@@ -1053,13 +1055,13 @@ export class BaseChart extends BaseWidget {
     }
   }
 
-  _disposeSeriesFamilies() {
+  _disposeSeriesFamilies(): void {
     (this.seriesFamilies || []).forEach((family) => { family.dispose(); });
     Object.assign(this, { seriesFamilies: null });
     this._needHandleRenderComplete = true;
   }
 
-  _optionChanged(arg) {
+  _optionChanged(arg): void {
     this._themeManager.resetOptions(arg.name);
     super._optionChanged(arg);
   }
@@ -1069,58 +1071,58 @@ export class BaseChart extends BaseWidget {
     super._applyChanges();
   }
 
-  _change_ANIMATION() {
+  _change_ANIMATION(): void {
     this._renderer.updateAnimationOptions(this._getAnimationOptions());
   }
 
-  _change_DATA_SOURCE() {
+  _change_DATA_SOURCE(): void {
     this._needHandleRenderComplete = true;
     this._updateDataSource();
   }
 
-  _change_PALETTE() {
+  _change_PALETTE(): void {
     this._themeManager.updatePalette();
     this._refreshSeries('DATA_INIT');
   }
 
-  _change_REFRESH_SERIES_DATA_INIT() {
+  _change_REFRESH_SERIES_DATA_INIT(): void {
     this._refreshSeries('DATA_INIT');
   }
 
-  _change_DATA_INIT() {
+  _change_DATA_INIT(): void {
     if ((!this.series || this.needToPopulateSeries) && !this._changes.has('FORCE_DATA_INIT')) {
       this._dataInit();
     }
   }
 
-  _change_FORCE_DATA_INIT() {
+  _change_FORCE_DATA_INIT(): void {
     this._dataInit();
   }
 
-  _change_REFRESH_SERIES_FAMILIES() {
+  _change_REFRESH_SERIES_FAMILIES(): void {
     this._processSeriesFamilies();
     this._populateBusinessRange();
     this._processRefreshData(FORCE_RENDER_REFRESH_ACTION);
   }
 
-  _change_FORCE_RENDER() {
+  _change_FORCE_RENDER(): void {
     this._processRefreshData(FORCE_RENDER_REFRESH_ACTION);
   }
 
-  _change_AXES_AND_PANES() {
+  _change_AXES_AND_PANES(): void {
     this._refreshSeries('INIT');
   }
 
-  _change_ROTATED() {
+  _change_ROTATED(): void {
     this._createScrollBar();
     this._refreshSeries('INIT');
   }
 
-  _change_REFRESH_SERIES_REINIT() {
+  _change_REFRESH_SERIES_REINIT(): void {
     this._refreshSeries('INIT');
   }
 
-  _change_REFRESH_AXES() {
+  _change_REFRESH_AXES(): void {
     _setCanvasValues(this._canvas);
     this._reinitAxes();
 
@@ -1130,38 +1132,38 @@ export class BaseChart extends BaseWidget {
     ]);
   }
 
-  _change_SCROLL_BAR() {
+  _change_SCROLL_BAR(): void {
     this._createScrollBar();
     this._processRefreshData(FORCE_RENDER_REFRESH_ACTION);
   }
 
-  _change_REINIT() {
+  _change_REINIT(): void {
     this._processRefreshData(REINIT_REFRESH_ACTION);
   }
 
-  _change_FORCE_DRAWING() {
+  _change_FORCE_DRAWING(): void {
     this._resetComponentsAnimation();
   }
 
-  _change_FORCE_FIRST_DRAWING() {
+  _change_FORCE_FIRST_DRAWING(): void {
     this._resetComponentsAnimation(true);
   }
 
-  _resetComponentsAnimation(isFirstDrawing?) {
+  _resetComponentsAnimation(isFirstDrawing?): void {
     this.series.forEach((s) => { s.resetApplyingAnimation(isFirstDrawing); });
     this._resetAxesAnimation(isFirstDrawing);
   }
 
-  _refreshSeries(actionName) {
+  _refreshSeries(actionName): void {
     this.needToPopulateSeries = true;
     this._requestChange([actionName]);
   }
 
-  _change_CORRECT_AXIS() {
+  _change_CORRECT_AXIS(): void {
     this._correctAxes();
   }
 
-  _doRefresh() {
+  _doRefresh(): void {
     const methodName = this._currentRefreshData;
     if (methodName) {
       this._currentRefreshData = null;
@@ -1170,7 +1172,7 @@ export class BaseChart extends BaseWidget {
     }
   }
 
-  _updateCanvasClipRect(canvas) {
+  _updateCanvasClipRect(canvas): void {
     const width = Math.max(canvas.width - canvas.left - canvas.right, 0);
     const height = Math.max(canvas.height - canvas.top - canvas.bottom, 0);
 
@@ -1186,7 +1188,7 @@ export class BaseChart extends BaseWidget {
     return this._canvasClipRect.id;
   }
 
-  _dataSourceChangedHandler() {
+  _dataSourceChangedHandler(): void {
     if (this._changes.has('INIT')) {
       this._requestChange(['DATA_INIT']);
     } else {
@@ -1194,15 +1196,15 @@ export class BaseChart extends BaseWidget {
     }
   }
 
-  _dataInit() {
+  _dataInit(): void {
     this._dataSpecificInit(true);
   }
 
-  _processSingleSeries(singleSeries) {
+  _processSingleSeries(singleSeries): void {
     singleSeries.createPoints(false);
   }
 
-  _handleSeriesDataUpdated() {
+  _handleSeriesDataUpdated(): void {
     if (this._getVisibleSeries().some((s) => s.useAggregation())) {
       this._populateMarginOptions();
     }
@@ -1210,7 +1212,7 @@ export class BaseChart extends BaseWidget {
     this.series.forEach((s) => this._processSingleSeries(s), this);
   }
 
-  _dataSpecificInit(needRedraw) {
+  _dataSpecificInit(needRedraw): void {
     if (!this.series || this.needToPopulateSeries) {
       this.series = this._populateSeries();
     }
@@ -1225,11 +1227,11 @@ export class BaseChart extends BaseWidget {
     // needRedraw && that._forceRender();
   }
 
-  _forceRender() {
+  _forceRender(): void {
     this._doRender({ force: true });
   }
 
-  _repopulateSeries() {
+  _repopulateSeries(): void {
     const themeManager = this._themeManager;
     const data = this._dataSourceItems();
     const dataValidatorOptions = themeManager.getOptions('dataPrepareSettings');
@@ -1255,7 +1257,7 @@ export class BaseChart extends BaseWidget {
     this._handleSeriesDataUpdated();
   }
 
-  _renderCompleteHandler() {
+  _renderCompleteHandler(): void {
     let allSeriesInited = true;
     if (this._needHandleRenderComplete) {
       this.series.forEach((s) => {
@@ -1268,7 +1270,7 @@ export class BaseChart extends BaseWidget {
     }
   }
 
-  _dataIsReady() {
+  _dataIsReady(): boolean {
     // In order to support scenario when chart is created without "dataSource" and it is considered
     // as data is being loaded the check for state of "dataSource" option is added
     return _isDefined(this.option('dataSource')) && this._dataIsLoaded();
@@ -1287,7 +1289,7 @@ export class BaseChart extends BaseWidget {
     let particularSeriesOptions;
     let seriesTheme;
     const seriesThemes = [];
-    const seriesVisibilityChanged = (target) => {
+    const seriesVisibilityChanged = (target): void => {
       this._specialProcessSeries();
       this._populateBusinessRange(target && target.getValueAxis(), true);
       this._renderer.stopAllAnimations(true);
@@ -1328,7 +1330,7 @@ export class BaseChart extends BaseWidget {
     this.needToPopulateSeries = false;
 
     seriesThemes.forEach((theme) => {
-      const findSeries = (s) => s.name === theme.name
+      const findSeries = (s): boolean => s.name === theme.name
         && !seriesBasis.map((sb: any) => sb.series).includes(s);
 
       const curSeries = this.series?.find(findSeries);
@@ -1357,7 +1359,7 @@ export class BaseChart extends BaseWidget {
     this.series = [];
     disposeSeriesFamilies && this._disposeSeriesFamilies();
     this._themeManager.resetPalette();
-    const eventPipe = (data) => {
+    const eventPipe = (data): void => {
       this.series.forEach((currentSeries) => {
         currentSeries.notify(data);
       });
@@ -1412,11 +1414,11 @@ export class BaseChart extends BaseWidget {
 
   // API
 
-  hideTooltip() {
+  hideTooltip(): void {
     this._tracker._hideTooltip();
   }
 
-  clearHover() {
+  clearHover(): void {
     this._tracker.clearHover();
   }
 
@@ -1428,7 +1430,7 @@ export class BaseChart extends BaseWidget {
     return this;
   }
 
-  refresh() {
+  refresh(): void {
     this._disposeSeries();
     this._disposeSeriesFamilies();
     this._requestChange(['CONTAINER_SIZE', 'REFRESH_SERIES_REINIT']);
@@ -1439,7 +1441,7 @@ export class BaseChart extends BaseWidget {
     return [adaptiveLayout.width, adaptiveLayout.height];
   }
 
-  _change_REFRESH() {
+  _change_REFRESH(): void {
     if (!this._changes.has('INIT')) {
       this._doRefresh();
     } else {
@@ -1447,16 +1449,16 @@ export class BaseChart extends BaseWidget {
     }
   }
 
-  _change_FULL_RENDER() {
+  _change_FULL_RENDER(): void {
     this._forceRender();
     this._changes.remove('FULL_RENDER');
   }
 
-  _change_INIT() {
+  _change_INIT(): void {
     this._reinit();
   }
 
-  _stopCurrentHandling() {
+  _stopCurrentHandling(): void {
     if (this._disposed) {
       return;
     }
@@ -1583,7 +1585,7 @@ BaseChart.addPlugin(loadingIndicatorPlugin);
 // layout.
 // eslint-disable-next-line
 const { _change_TITLE } = BaseChart.prototype;
-BaseChart.prototype._change_TITLE = function () {
+BaseChart.prototype._change_TITLE = function (): void {
   _change_TITLE.call(this);
   this._change(['FORCE_RENDER']);
 };

@@ -26,7 +26,7 @@ const chartBarSeries = _chart.bar;
 
 const baseStackedSeries = {
   _calculateErrorBars: _noop,
-  _updateOptions(options) {
+  _updateOptions(options): void {
     this._stackName = `axis_${options.axis || 'default'}`;
   },
 };
