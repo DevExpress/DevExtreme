@@ -104,10 +104,8 @@ const messageLocalization = dependencyInjector({
     return undefined;
   },
 
-  format(key: string): string {
+  format(key: string, ...values: unknown[]): string {
     const formatter: MessageFormatter = this.getFormatter(key);
-    // eslint-disable-next-line prefer-rest-params
-    const values = Array.prototype.slice.call(arguments, 1);
 
     return formatter?.apply(this, values) || '';
   },
