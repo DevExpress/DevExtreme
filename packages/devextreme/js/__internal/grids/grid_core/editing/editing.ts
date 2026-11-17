@@ -1,6 +1,6 @@
 /* eslint-disable max-classes-per-file */
 import { removeEvent } from '@js/common/core/events/remove';
-import { addNamespace } from '@js/common/core/events/utils';
+import { addNamespace, normalizeKeyName } from '@js/common/core/events/utils';
 import messageLocalization from '@js/common/core/localization/message';
 import { createObjectWithChanges } from '@js/common/data/array_utils';
 import type { GridsEditMode, NewRowInfo, NewRowPosition } from '@js/common/grids';
@@ -2565,6 +2565,7 @@ export class EditingController extends modules.ViewController {
     const useLegacyColumnButtonTemplate = this.option('useLegacyColumnButtonTemplate');
     let $button = $('<a>')
       .attr('href', '#')
+      .attr('role', 'button')
       .addClass(CLASSES.link)
       .addClass(button.cssClass ?? '');
 
@@ -2608,12 +2609,39 @@ export class EditingController extends modules.ViewController {
       if (this._isButtonDisabled(button, options)) {
         $button.addClass('dx-state-disabled');
         this.setAria('disabled', 'true', $button);
+        eventsEngine.on($button, addNamespace('click', EDITING_NAMESPACE), (event): void => {
+          event.preventDefault();
+          event.stopPropagation();
+        });
       } else if (!button.template || button.onClick) {
         eventsEngine.on($button, addNamespace('click', EDITING_NAMESPACE), this.createAction((e): void => {
           button.onClick?.call(button, extend({}, e, { row: options.row, column: options.column }));
           e.event.preventDefault();
           e.event.stopPropagation();
         }));
+      }
+
+      if ($button.is('a')) {
+        let spacePressed = false;
+
+        eventsEngine.on($button, addNamespace('keydown keyup', EDITING_NAMESPACE), (event): void => {
+          if (normalizeKeyName(event) !== 'space') {
+            return;
+          }
+
+          event.preventDefault();
+          event.stopPropagation();
+
+          if (event.type === 'keydown') {
+            spacePressed = true;
+          } else if (spacePressed) {
+            spacePressed = false;
+            eventsEngine.trigger($button, 'click');
+          }
+        });
+        eventsEngine.on($button, addNamespace('blur', EDITING_NAMESPACE), (): void => {
+          spacePressed = false;
+        });
       }
 
       $container.append($button);
