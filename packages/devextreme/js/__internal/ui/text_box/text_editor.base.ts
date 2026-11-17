@@ -711,7 +711,6 @@ class TextEditorBase<
   }
 
   _attachPlaceholderEvents(): void {
-    // @ts-expect-error second argument
     const startEvent = addNamespace(pointerEvents.up, this.NAME);
 
     eventsEngine.on(this._$placeholder, startEvent, () => {
@@ -756,7 +755,6 @@ class TextEditorBase<
           excludeValidators: ['readOnly'],
         });
 
-        // @ts-expect-error eventsEngine typification
         eventsEngine.on($input, addNamespace(event.toLowerCase(), this.NAME), (e) => {
           if (this._disposed) {
             return;
@@ -772,7 +770,6 @@ class TextEditorBase<
     const $input = this._input();
 
     EVENTS_LIST.forEach((event: string) => {
-      // @ts-expect-error second argument && eventsEngine typification
       eventsEngine.off($input, addNamespace(event.toLowerCase(), this.NAME));
     });
 

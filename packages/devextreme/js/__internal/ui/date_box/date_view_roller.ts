@@ -106,7 +106,6 @@ class DateViewRoller extends Scrollable<DateViewRollerProperties> {
     if (!this.option('showOnClick')) {
       return;
     }
-    // @ts-expect-error ts-error
     const eventName = addNamespace(clickEventName, this.NAME);
     const clickAction = this._createActionByOption('onClick');
 
@@ -171,7 +170,6 @@ class DateViewRoller extends Scrollable<DateViewRollerProperties> {
 
   _renderItemsClick(): void {
     const itemSelector = this._getItemSelector();
-    // @ts-expect-error ts-error
     const eventName = addNamespace(clickEventName, this.NAME);
 
     eventsEngine.off(this.$element(), eventName, itemSelector);
