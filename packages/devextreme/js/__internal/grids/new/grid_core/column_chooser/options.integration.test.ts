@@ -3,9 +3,7 @@ import {
   afterEach, describe, expect, it,
 } from '@jest/globals';
 import type { PositionConfig } from '@js/common/core/animation';
-import type {
-  ColumnChooser, ColumnChooserMode, ColumnChooserSearchConfig, ColumnChooserSelectionConfig,
-} from '@js/common/grids';
+import type { ColumnChooserMode } from '@js/common/grids';
 import $ from '@js/core/renderer';
 import type dxPopup from '@js/ui/popup';
 import type dxTreeView from '@js/ui/tree_view';
@@ -15,13 +13,6 @@ import { rerender } from 'inferno';
 
 import { defaultOptions as columnChooserDefaultOptions } from './options';
 
-type ColumnChooserDefaults = Required<
-  Pick<ColumnChooser, 'enabled' | 'width' | 'height' | 'emptyPanelText' | 'title'>
-> & Pick<ColumnChooser, 'container'> & {
-  search: Required<Pick<ColumnChooserSearchConfig, 'enabled' | 'timeout'>>;
-  selection: Required<Pick<ColumnChooserSelectionConfig, 'allowSelectAll' | 'selectByClick'>>;
-};
-
 const SELECTORS = {
   cardView: '.dx-cardview',
   columnChooserBtn: '.dx-cardview-column-chooser-button',
@@ -29,7 +20,7 @@ const SELECTORS = {
   treeView: '.dx-treeview',
 };
 
-const defaultOptions = columnChooserDefaultOptions.columnChooser as ColumnChooserDefaults;
+const defaultOptions = columnChooserDefaultOptions.columnChooser;
 
 const rootQuerySelector = (selector: string) => document.body.querySelector(selector);
 
@@ -81,7 +72,7 @@ describe('Options', () => {
     it.each([
       { value: true, result: true },
       { value: false, result: false },
-      { value: undefined, result: defaultOptions.enabled },
+      { value: undefined, result: defaultOptions?.enabled },
     ])('enabled: %s', ({ value, result }) => {
       setup({ columnChooser: { enabled: value } });
 
@@ -91,9 +82,9 @@ describe('Options', () => {
     });
 
     it.each<{
-      value?: number; result: number | string;
+      value?: number; result?: number | string;
     }>([
-      { value: undefined, result: defaultOptions.width },
+      { value: undefined, result: defaultOptions?.width },
       { value: 100, result: 100 },
       { value: 1000, result: 1000 },
     ])('width: $value', ({ value, result }) => {
@@ -107,9 +98,9 @@ describe('Options', () => {
     });
 
     it.each<{
-      value?: number; result: number | string;
+      value?: number; result?: number | string;
     }>([
-      { value: undefined, result: defaultOptions.height },
+      { value: undefined, result: defaultOptions?.height },
       { value: 100, result: 100 },
       { value: 1000, result: 1000 },
     ])('height: $value', ({ value, result }) => {
@@ -125,7 +116,7 @@ describe('Options', () => {
     it.each<{
       value?: string; result: string | Element | undefined;
     }>([
-      { value: undefined, result: defaultOptions.container },
+      { value: undefined, result: defaultOptions?.container },
       { value: '#custom', result: '#custom' },
     ])('container: $value', ({ value, result }) => {
       setupOpened({
@@ -174,9 +165,9 @@ describe('Options', () => {
     });
 
     it.each<{
-      value?: string; result: string;
+      value?: string; result?: string;
     }>([
-      { value: undefined, result: defaultOptions.emptyPanelText },
+      { value: undefined, result: defaultOptions?.emptyPanelText },
       { value: 'custom value', result: 'custom value' },
     ])('emptyPanelText: $value', ({ value, result }) => {
       setupOpened({
@@ -189,9 +180,9 @@ describe('Options', () => {
     });
 
     it.each<{
-      value?: string; result: string;
+      value?: string; result?: string;
     }>([
-      { value: undefined, result: defaultOptions.title },
+      { value: undefined, result: defaultOptions?.title },
       { value: 'custom value', result: 'custom value' },
     ])('title: $value', ({ value, result }) => {
       setupOpened({
@@ -204,9 +195,9 @@ describe('Options', () => {
     });
 
     it.each<{
-      value?: boolean; result: boolean;
+      value?: boolean; result?: boolean;
     }>([
-      { value: undefined, result: defaultOptions.search.enabled },
+      { value: undefined, result: defaultOptions?.search?.enabled },
       { value: true, result: true },
       { value: false, result: false },
     ])('search.enabled: $value', ({ value, result }) => {
@@ -220,9 +211,9 @@ describe('Options', () => {
     });
 
     it.each<{
-      value?: number; result: number;
+      value?: number; result?: number;
     }>([
-      { value: undefined, result: defaultOptions.search.timeout },
+      { value: undefined, result: defaultOptions?.search?.timeout },
       { value: 100, result: 100 },
       { value: 1000, result: 1000 },
     ])('search.timeout: $value', ({ value, result }) => {
@@ -274,7 +265,7 @@ describe('Options', () => {
     it.each<{
       value?: boolean; result: 'selectAll' | 'normal';
     }>([
-      { value: undefined, result: defaultOptions.selection.allowSelectAll ? 'selectAll' : 'normal' },
+      { value: undefined, result: defaultOptions?.selection?.allowSelectAll ? 'selectAll' : 'normal' },
       { value: true, result: 'selectAll' },
       { value: false, result: 'normal' },
     ])('selection.allowSelectAll: $value', ({ value, result }) => {
@@ -288,9 +279,9 @@ describe('Options', () => {
     });
 
     it.each<{
-      value?: boolean; result: boolean;
+      value?: boolean; result?: boolean;
     }>([
-      { value: undefined, result: defaultOptions.selection.selectByClick },
+      { value: undefined, result: defaultOptions?.selection?.selectByClick },
       { value: true, result: true },
       { value: false, result: false },
     ])('selection.selectByClick: $value', ({ value, result }) => {
