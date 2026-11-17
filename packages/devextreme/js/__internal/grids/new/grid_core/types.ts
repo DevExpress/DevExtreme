@@ -1,10 +1,14 @@
 import type { template } from '@js/core/templates/template';
 import type { EventInfo } from '@js/events';
 
-import type { GridCoreNew } from './widget';
+import type { GridCoreNew, GridCoreNewBase } from './widget';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type Constructor<T, TDeps extends readonly any[] = any[]> = new(...deps: TDeps) => T;
+
+export type GridCoreClass = Constructor<GridCoreNewBase>;
+
+export type Mixin<TBase, TMethods> = TBase & Constructor<TMethods>;
 
 // TODO
 // eslint-disable-next-line @typescript-eslint/no-unused-vars

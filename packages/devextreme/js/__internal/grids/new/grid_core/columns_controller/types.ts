@@ -8,6 +8,7 @@ import type { ComponentType } from 'inferno';
 
 import type { DataObject, Key } from '../data_controller/types';
 import type { HighlightedTextItem } from '../search/types';
+import type { ColumnProperties, ColumnSettings } from './options';
 
 type InheritedColumnProps = | 'alignment'
   | 'dataType'
@@ -128,4 +129,24 @@ export interface ColumnsConfigurationFromData {
 export interface ColumnFromDataOptions {
   dataType?: DataType;
   format?: Format;
+}
+
+export interface ColumnsControllerPublicMethods {
+  getVisibleColumns: () => Column[];
+  addColumn: (column: ColumnProperties) => void;
+  getVisibleColumnIndex: (columnNameOrIndex: string | number) => number;
+  deleteColumn: (columnNameOrIndex: string | number) => void;
+  columnOption: {
+    (columnNameOrIndex: string | number): Column;
+    (columnNameOrIndex: string | number, options: ColumnSettings): void;
+    <T extends keyof ColumnSettings>(
+      columnNameOrIndex: string | number,
+      option: T,
+      value: ColumnSettings[T],
+    ): void;
+    <T extends keyof ColumnSettings>(
+      columnNameOrIndex: string | number,
+      option: T,
+    ): Column[T];
+  };
 }
