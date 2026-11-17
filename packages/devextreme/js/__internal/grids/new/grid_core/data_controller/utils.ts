@@ -161,5 +161,5 @@ export function updateItemsImmutable(
     data,
     changes,
     immutable: true,
-  }) as DataObject[];
+  });
 }

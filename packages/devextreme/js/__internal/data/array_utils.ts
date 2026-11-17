@@ -32,9 +32,9 @@ interface GroupItem {
   collapsedItems?: unknown[];
 }
 
-export interface ApplyBatchOptions {
+export interface ApplyBatchOptions<TItem = unknown> {
   keyInfo: KeyInfo;
-  data: unknown[];
+  data: TItem[];
   changes: StoreChange[];
   groupCount?: number;
   useInsertIndex?: boolean;
@@ -361,10 +361,10 @@ function remove(
   return undefined;
 }
 
-function applyBatch({
+function applyBatch<TItem>({
   keyInfo, data, changes, groupCount, useInsertIndex, immutable,
   disableCache, logError, skipCopying,
-}: ApplyBatchOptions): unknown[] {
+}: ApplyBatchOptions<TItem>): TItem[] {
   const resultItems = immutable === true ? [...data] : data;
 
   changes.forEach((item) => {
