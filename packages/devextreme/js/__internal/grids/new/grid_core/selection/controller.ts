@@ -1,3 +1,4 @@
+import type { Cancelable } from '@js/common/core/events';
 import type { DataSource, LoadResult } from '@js/common/data';
 import type { FilterDescriptor, LoadOptions, SelectDescriptor } from '@js/common/data.types';
 import type { DeferredObj, DxExtendedPromise } from '@js/core/utils/deferred';
@@ -10,6 +11,7 @@ import { DataController } from '@ts/grids/new/grid_core/data_controller/index';
 import { OptionsValidationController } from '@ts/grids/new/grid_core/options_validation/index';
 import { ShowCheckBoxesMode } from '@ts/grids/new/grid_core/selection/const';
 import Selection from '@ts/ui/selection/selection';
+import type { SelectionChangeEvent } from '@ts/ui/selection/types';
 
 import type { CardInfo } from '../columns_controller/types';
 import type { DataObject, Key } from '../data_controller/types';
@@ -212,7 +214,7 @@ export class SelectionController {
     };
   }
 
-  private getSelectionEventArgs(e): SelectionEventInfo {
+  private getSelectionEventArgs(e: SelectionChangeEvent<DataObject, Key>): SelectionEventInfo {
     return {
       currentSelectedCardKeys: [...e.addedItemKeys],
       currentDeselectedCardKeys: [...e.removedItemKeys],
@@ -223,8 +225,7 @@ export class SelectionController {
     };
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  private selectionChanging(e: any): void {
+  private selectionChanging(e: SelectionChangeEvent<DataObject, Key> & Cancelable): void {
     if (e.addedItemKeys.length || e.removedItemKeys.length) {
       const onSelectionChanging = this.onSelectionChanging.peek();
       const eventArgs = {
@@ -238,8 +239,7 @@ export class SelectionController {
     }
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  private selectionChanged(e: any): void {
+  private selectionChanged(e: SelectionChangeEvent<DataObject, Key>): void {
     if (e.addedItemKeys.length || e.removedItemKeys.length) {
       this.optionsValidationController.validateKeyExpr();
 

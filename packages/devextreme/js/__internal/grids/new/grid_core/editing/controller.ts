@@ -7,6 +7,7 @@ import { generateNewRowTempKey } from '@ts/grids/grid_core/editing/editing_utils
 import { OptionsValidationController } from '@ts/grids/new/grid_core/options_validation/index';
 
 import { ColumnsController } from '../columns_controller/columns_controller';
+import type { CardInfo } from '../columns_controller/types';
 import { DataController } from '../data_controller/data_controller';
 import type { DataObject, Key } from '../data_controller/types';
 import { ItemsController } from '../items_controller/items_controller';
@@ -121,19 +122,17 @@ export class EditingController {
     this.validateMethod = validateMethod;
   }
 
+  private getLoadedCard(key: Key): CardInfo {
+    return this.itemsController.getCardByKey(key) as CardInfo;
+  }
+
   public editCard(key: Key): void {
     this.optionsValidationController.validateKeyExpr();
-
-    const card = this.itemsController.getCardByKey(key);
-
-    if (!card) {
-      return;
-    }
 
     const eventArgs = {
       cancel: false,
       key,
-      data: card.data,
+      data: this.getLoadedCard(key).data,
     };
 
     this.onEditingStart.peek()(eventArgs);
@@ -284,9 +283,7 @@ export class EditingController {
       switch (change.type) {
         case 'update': {
           const updatingArgs = {
-            /* eslint-disable-next-line @typescript-eslint/no-non-null-assertion --
-               a change for an unloaded card must fail the save, not be dropped */
-            oldData: this.itemsController.getCardByKey(change.key)!.data,
+            oldData: this.getLoadedCard(change.key).data,
             newData: change.data,
             cancel: false,
             key: change.key,
@@ -310,12 +307,7 @@ export class EditingController {
           break;
         }
         case 'remove': {
-          /* eslint-disable-next-line @typescript-eslint/no-non-null-assertion --
-             a change for an unloaded card must fail the save, not be dropped */
-          const { data } = (this.itemsController.findItemByKey(
-            this.itemsController.items.peek(),
-            change.key,
-          )!);
+          const { data } = this.getLoadedCard(change.key);
 
           const removingArgs = {
             cancel: false,
