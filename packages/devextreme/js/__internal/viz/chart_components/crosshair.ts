@@ -3,7 +3,6 @@
 /* eslint-disable func-names */
 /* eslint-disable no-nested-ternary */
 /* eslint-disable no-multi-assign */
-/* eslint-disable @stylistic/max-len */
 /* eslint-disable prefer-destructuring */
 
 import { extend } from '@ts/core/utils/extend';
@@ -85,20 +84,36 @@ function getRectangleBBox(bBox: BBox): BBox {
   };
 }
 
-function getLabelCheckerPosition(x: number, y: number, isHorizontal: boolean, canvas: Canvas): LabelPositionChecker {
-  const params: [CoordName, SizeName, CoordName, SizeName, number, number] = isHorizontal ? ['x', 'width', 'y', 'height', y, 0] : ['y', 'height', 'x', 'width', x, 1];
+function getLabelCheckerPosition(
+  x: number,
+  y: number,
+  isHorizontal: boolean,
+  canvas: Canvas,
+): LabelPositionChecker {
+  const params: [CoordName, SizeName, CoordName, SizeName, number, number] = isHorizontal
+    ? ['x', 'width', 'y', 'height', y, 0]
+    : ['y', 'height', 'x', 'width', x, 1];
 
   return function (bBox, position, coord) {
     const labelCoord = { x: coord.x, y: coord.y };
     const rectangleBBox = getRectangleBBox(bBox);
     const delta = isHorizontal ? coord.y - bBox.y - bBox.height / 2 : coord.y - bBox.y;
 
-    labelCoord.y = isHorizontal || (!isHorizontal && position === BOTTOM) ? coord.y + delta : coord.y;
+    labelCoord.y = isHorizontal || (!isHorizontal && position === BOTTOM)
+      ? coord.y + delta
+      : coord.y;
 
     if (rectangleBBox[params[0]] < 0) {
       labelCoord[params[0]] -= rectangleBBox[params[0]];
-    } else if (rectangleBBox[params[0]] + rectangleBBox[params[1]] + delta * params[5] > canvas[params[1]]) {
-      labelCoord[params[0]] -= rectangleBBox[params[0]] + rectangleBBox[params[1]] + delta * params[5] - canvas[params[1]];
+    } else if (
+      rectangleBBox[params[0]] + rectangleBBox[params[1]] + delta * params[5]
+      > canvas[params[1]]
+    ) {
+      labelCoord[params[0]]
+        -= rectangleBBox[params[0]]
+        + rectangleBBox[params[1]]
+        + delta * params[5]
+        - canvas[params[1]];
     }
     if (params[4] - rectangleBBox[params[3]] / 2 < 0) {
       labelCoord[params[2]] -= params[4] - rectangleBBox[params[3]] / 2;
@@ -136,7 +151,12 @@ export let Crosshair = class Crosshair {
 
   declare _linesCanvas: Bounds;
 
-  constructor(renderer: ThemeValue, options: ThemeValue, params: CrosshairParams, group: ThemeValue) {
+  constructor(
+    renderer: ThemeValue,
+    options: ThemeValue,
+    params: CrosshairParams,
+    group: ThemeValue,
+  ) {
     this._renderer = renderer;
     this._crosshairGroup = group;
     this._options = {};
@@ -161,7 +181,10 @@ export let Crosshair = class Crosshair {
 
   dispose(): void {
     // @ts-expect-error dispose drops the references kept in non-nullable fields
-    this._renderer = this._crosshairGroup = this._options = this._axes = this._canvas = this._horizontalGroup = this._verticalGroup = this._horizontal = this._vertical = this._circle = this._panes = null;
+    this._renderer = this._crosshairGroup = this._options = this._axes = this._canvas = null;
+    this._horizontalGroup = this._verticalGroup = this._horizontal = this._vertical = null;
+    // @ts-expect-error dispose drops the references kept in non-nullable fields
+    this._circle = this._panes = null;
   }
 
   _prepareOptions(options: ThemeValue, direction: Direction): void {
@@ -203,23 +226,41 @@ export let Crosshair = class Crosshair {
     this._horizontal = {};
     this._vertical = {};
 
-    this._circle = renderer.circle(canvas.left, canvas.top, 0).attr(circleOptions).append(this._crosshairGroup);
+    this._circle = renderer
+      .circle(canvas.left, canvas.top, 0)
+      .attr(circleOptions)
+      .append(this._crosshairGroup);
     this._horizontalGroup = renderer.g().append(this._crosshairGroup);
     this._verticalGroup = renderer.g().append(this._crosshairGroup);
 
     if (verticalOptions.visible) {
       this._vertical.lines = this._createLines(verticalOptions.line, 'h', this._verticalGroup);
-      this._vertical.labels = this._createLabels(this._axes[0], verticalOptions, false, this._verticalGroup);
+      this._vertical.labels = this._createLabels(
+        this._axes[0],
+        verticalOptions,
+        false,
+        this._verticalGroup,
+      );
     }
     if (horizontalOptions.visible) {
       this._horizontal.lines = this._createLines(horizontalOptions.line, 'v', this._horizontalGroup);
-      this._horizontal.labels = this._createLabels(this._axes[1], horizontalOptions, true, this._horizontalGroup);
+      this._horizontal.labels = this._createLabels(
+        this._axes[1],
+        horizontalOptions,
+        true,
+        this._horizontalGroup,
+      );
     }
 
     this.hide();
   }
 
-  _createLabels(axes: ThemeValue[], options: CrosshairLineSettings, isHorizontal: boolean, group: ThemeValue): CrosshairLabel[] {
+  _createLabels(
+    axes: ThemeValue[],
+    options: CrosshairLineSettings,
+    isHorizontal: boolean,
+    group: ThemeValue,
+  ): CrosshairLabel[] {
     const canvas = this._canvas;
     const renderer = this._renderer;
     let x;
@@ -245,14 +286,26 @@ export let Crosshair = class Crosshair {
           x = canvas.left;
           y = currentLabelPos;
         }
-        const align = position === TOP || position === BOTTOM ? CENTER : position === RIGHT ? LEFT : RIGHT;
-        background = renderer.rect(0, 0, 0, 0).attr({ fill: labelOptions.backgroundColor || options.line.stroke }).append(group);
+        const align = position === TOP || position === BOTTOM
+          ? CENTER
+          : position === RIGHT
+            ? LEFT
+            : RIGHT;
+        background = renderer
+          .rect(0, 0, 0, 0)
+          .attr({ fill: labelOptions.backgroundColor || options.line.stroke })
+          .append(group);
         text = renderer.text('0', 0, 0).css(patchFontOptions(options.label.font)).attr({
           align,
           class: labelOptions.cssClass,
         }).append(group);
         labels.push({
-          text, background, axis, options: labelOptions, pos: { coord: currentLabelPos, side: position }, startXY: { x, y },
+          text,
+          background,
+          axis,
+          options: labelOptions,
+          pos: { coord: currentLabelPos, side: position },
+          startXY: { x, y },
         });
       });
     }
@@ -260,7 +313,13 @@ export let Crosshair = class Crosshair {
     return labels;
   }
 
-  _updateText(value: ThemeValue, axisName: ThemeValue, labels: CrosshairLabel[], point: ThemeValue, func: LabelPositionChecker): void {
+  _updateText(
+    value: ThemeValue,
+    axisName: ThemeValue,
+    labels: CrosshairLabel[],
+    point: ThemeValue,
+    func: LabelPositionChecker,
+  ): void {
     labels.forEach((label) => {
       const axis = label.axis;
       const coord = label.startXY;
@@ -300,7 +359,10 @@ export let Crosshair = class Crosshair {
     const coords = this._linesCanvas;
     const canvas = this._canvas;
 
-    coords[position] = coords[position] !== canvas[position] && mathAbs(coords[position] - canvas[position]) < mathAbs(labelCoord - canvas[position]) ? coords[position] : labelCoord;
+    coords[position] = coords[position] !== canvas[position]
+      && mathAbs(coords[position] - canvas[position]) < mathAbs(labelCoord - canvas[position])
+      ? coords[position]
+      : labelCoord;
   }
 
   _updateLines(lines: ThemeValue[], x: number, y: number, r: number, isHorizontal: boolean): void {
@@ -362,13 +424,25 @@ export let Crosshair = class Crosshair {
       });
 
       if (horizontal.lines) {
-        this._updateText(pointData.yValue, pointData.axis, horizontal.labels, point, getLabelCheckerPosition(x, y, true, canvas));
+        this._updateText(
+          pointData.yValue,
+          pointData.axis,
+          horizontal.labels,
+          point,
+          getLabelCheckerPosition(x, y, true, canvas),
+        );
         this._updateLines(horizontal.lines, x, y, rad, true);
         this._horizontalGroup.attr({ translateY: y - canvas.top });
       }
 
       if (vertical.lines) {
-        this._updateText(pointData.xValue, pointData.axis, vertical.labels, point, getLabelCheckerPosition(x, y, false, canvas));
+        this._updateText(
+          pointData.xValue,
+          pointData.axis,
+          vertical.labels,
+          point,
+          getLabelCheckerPosition(x, y, false, canvas),
+        );
         this._updateLines(vertical.lines, x, y, rad, false);
         this._verticalGroup.attr({ translateX: x - canvas.left });
       }

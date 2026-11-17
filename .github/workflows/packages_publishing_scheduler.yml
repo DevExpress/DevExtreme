@@ -11,7 +11,7 @@ jobs:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     strategy:
       matrix:
-        branch: ['24_2', '25_1', '25_2', '26_1', 'main']
+        branch: ['24_2', '25_1', '26_1']
 
     name: Run Packages Publishing workflow
     steps:

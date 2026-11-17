@@ -6,7 +6,6 @@
 /* eslint-disable import/no-mutable-exports */
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable no-multi-assign */
-/* eslint-disable @stylistic/max-len */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-use-before-define */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
@@ -63,7 +62,12 @@ export let LoadingIndicator = class LoadingIndicator {
     this._createStates(parameters.eventTrigger, this._group, renderer.root, parameters.notify);
   }
 
-  _createStates(eventTrigger: LoadingIndicatorEventTrigger, group: ThemeValue, root: ThemeValue, notify: LoadingIndicatorNotify): void {
+  _createStates(
+    eventTrigger: LoadingIndicatorEventTrigger,
+    group: ThemeValue,
+    root: ThemeValue,
+    notify: LoadingIndicatorNotify,
+  ): void {
     this._states = [{
       opacity: 0,
       start(): void {
@@ -97,7 +101,9 @@ export let LoadingIndicator = class LoadingIndicator {
 
   setOptions(options: ThemeValue): void {
     this._rect.attr({ fill: options.backgroundColor });
-    this._text.css(_patchFontOptions(options.font)).attr({ text: options.text, class: options.cssClass });
+    this._text
+      .css(_patchFontOptions(options.font))
+      .attr({ text: options.text, class: options.cssClass });
     this[options.show ? 'show' : 'hide']();
   }
 
@@ -151,10 +157,16 @@ export const plugin = {
   init() {
     const that = this;
 
-    that._loadingIndicator = new LoadingIndicator({ eventTrigger: that._eventTrigger, renderer: that._renderer, notify });
+    that._loadingIndicator = new LoadingIndicator({
+      eventTrigger: that._eventTrigger,
+      renderer: that._renderer,
+      notify,
+    });
     that._scheduleLoadingIndicatorHiding();
     function notify(state) {
-      // This flag is used to suppress redundant `_optionChanged` notifications caused by the mechanism that synchronizes the `loadingIndicator.show` option and the loading indicator visibility
+      // This flag is used to suppress redundant `_optionChanged` notifications caused by the
+      // mechanism that synchronizes the `loadingIndicator.show` option and the loading indicator
+      // visibility
       that._skipLoadingIndicatorOptions = true;
       that.option('loadingIndicator', { show: state });
       that._skipLoadingIndicatorOptions = false;
@@ -205,7 +217,8 @@ export const plugin = {
   customize(constructor) {
     const proto = constructor.prototype;
 
-    // Of course this looks dirty - but cleaning it is another task. For now it has been just extracted from BaseWidget with minimal changes.
+    // Of course this looks dirty - but cleaning it is another task. For now it has been just
+    // extracted from BaseWidget with minimal changes.
     if (proto._dataSourceChangedHandler) {
       const _dataSourceChangedHandler = proto._dataSourceChangedHandler;
       proto._dataSourceChangedHandler = function () {

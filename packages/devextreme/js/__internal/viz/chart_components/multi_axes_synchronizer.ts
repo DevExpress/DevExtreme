@@ -1,11 +1,9 @@
 /* eslint-disable no-cond-assign */
-/* eslint-disable @stylistic/no-mixed-operators */
 /* eslint-disable @typescript-eslint/prefer-for-of */
 /* eslint-disable @typescript-eslint/init-declarations */
 /* eslint-disable no-plusplus */
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable no-multi-assign */
-/* eslint-disable @stylistic/max-len */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
@@ -156,7 +154,10 @@ function populateAxesInfo(axes) {
 }
 
 function updateTickValues(axesInfo) {
-  const maxTicksCount = axesInfo.reduce((max, axisInfo) => _max(max, axisInfo.tickValues.length), 0);
+  const maxTicksCount = axesInfo.reduce(
+    (max, axisInfo) => _max(max, axisInfo.tickValues.length),
+    0,
+  );
 
   axesInfo.forEach((axisInfo) => {
     let ticksMultiplier;
@@ -172,7 +173,9 @@ function updateTickValues(axesInfo) {
     } else {
       if (tickValues.length > 1 && tickInterval) {
         ticksMultiplier = _floor((maxTicksCount + 1) / tickValues.length);
-        ticksCount = ticksMultiplier > 1 ? _floor((maxTicksCount + 1) / ticksMultiplier) : maxTicksCount;
+        ticksCount = ticksMultiplier > 1
+          ? _floor((maxTicksCount + 1) / ticksMultiplier)
+          : maxTicksCount;
         additionalStartTicksCount = _floor((ticksCount - tickValues.length) / 2);
 
         while (additionalStartTicksCount > 0 && (tickValues[0] !== 0)) {
@@ -215,7 +218,8 @@ function correctMinMaxValues(axesInfo) {
       }
 
       const axisBaseValueOffset = axisInfo.baseTickValue - axisInfo.minValue;
-      const scaledMainAxisBaseValueOffset = mainAxisBaseValueOffset * getAxisRange(axisInfo) / mainAxisRange;
+      const scaledMainAxisBaseValueOffset = (mainAxisBaseValueOffset * getAxisRange(axisInfo))
+        / mainAxisRange;
       const move = scaledMainAxisBaseValueOffset - axisBaseValueOffset;
 
       axisInfo.minValue -= move;
@@ -232,8 +236,12 @@ function calculatePaddings(axesInfo) {
 
   axesInfo.forEach((axisInfo) => {
     const inverted = axisInfo.inverted;
-    minPadding = axisInfo.minValue > axisInfo.oldMinValue ? (axisInfo.minValue - axisInfo.oldMinValue) / getAxisRange(axisInfo) : 0;
-    maxPadding = axisInfo.maxValue < axisInfo.oldMaxValue ? (axisInfo.oldMaxValue - axisInfo.maxValue) / getAxisRange(axisInfo) : 0;
+    minPadding = axisInfo.minValue > axisInfo.oldMinValue
+      ? (axisInfo.minValue - axisInfo.oldMinValue) / getAxisRange(axisInfo)
+      : 0;
+    maxPadding = axisInfo.maxValue < axisInfo.oldMaxValue
+      ? (axisInfo.oldMaxValue - axisInfo.maxValue) / getAxisRange(axisInfo)
+      : 0;
 
     startPadding = _max(startPadding, inverted ? maxPadding : minPadding);
     endPadding = _max(endPadding, inverted ? minPadding : maxPadding);
@@ -321,7 +329,10 @@ function correctAfterSynchronize(axesInfo) {
       // @ts-expect-error
       invalidAxisInfo.push(info);
     } else if (!isDefined(correctValue) && !isDefined(info.synchronizedValue)) {
-      correctValue = _abs((info.maxValue - info.minValue) / ((info.tickValues[_floor(info.tickValues.length / 2)] - info.minValue) || info.maxValue));
+      correctValue = _abs(
+        (info.maxValue - info.minValue)
+          / (info.tickValues[_floor(info.tickValues.length / 2)] - info.minValue || info.maxValue),
+      );
     }
   });
 
@@ -372,8 +383,12 @@ function updateMinorTicks(axesInfo) {
 }
 
 function allAxesValuesOnSameSideFromZero(axesInfo) {
-  const allPositive = axesInfo.every(({ oldMinValue, oldMaxValue }) => oldMinValue >= 0 && oldMaxValue >= 0);
-  const allNegative = axesInfo.every(({ oldMinValue, oldMaxValue }) => oldMinValue <= 0 && oldMaxValue <= 0);
+  const allPositive = axesInfo.every(
+    ({ oldMinValue, oldMaxValue }) => oldMinValue >= 0 && oldMaxValue >= 0,
+  );
+  const allNegative = axesInfo.every(
+    ({ oldMinValue, oldMaxValue }) => oldMinValue <= 0 && oldMaxValue <= 0,
+  );
 
   return allPositive || allNegative;
 }

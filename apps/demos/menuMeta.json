@@ -3769,6 +3769,7 @@
       {
         "Name": "Scheduler",
         "Equivalents": "dxScheduler, dx-scheduler",
+        "Badge": "Updated",
         "Groups": [
           {
             "Name": "Overview",
@@ -4019,6 +4020,7 @@
           {
             "Name": "Grouping",
             "Equivalents": "",
+            "Badge": "Updated",
             "Demos": [
               {
                 "Title": "Grouping by Resources",
@@ -4044,7 +4046,8 @@
                 "Title": "Multilevel Grouping",
                 "Name": "MultilevelGrouping",
                 "Widget": "Scheduler",
-                "DemoType": "Web"
+                "DemoType": "Web",
+                "Badge": "New"
               }
             ]
           },

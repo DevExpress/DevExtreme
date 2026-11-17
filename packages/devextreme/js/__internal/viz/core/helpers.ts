@@ -3,7 +3,6 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable prefer-spread */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
-/* eslint-disable @stylistic/max-len */
 /* eslint-disable @typescript-eslint/init-declarations */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
@@ -60,7 +59,10 @@ function combineLists(baseList, thisList) {
 }
 
 function buildTotalChanges(proto) {
-  proto._totalChangesOrder = proto._optionChangesOrder.concat(proto._layoutChangesOrder, proto._customChangesOrder);
+  proto._totalChangesOrder = proto._optionChangesOrder.concat(
+    proto._layoutChangesOrder,
+    proto._customChangesOrder,
+  );
 }
 
 function addChange(settings) {
@@ -182,10 +184,19 @@ export const replaceInherit = isServerSide
       proto._fontFields = combineLists(fontFields, proto._fontFields);
       proto._eventsMap = combineMaps(eventsMap, proto._eventsMap);
       proto._initialChanges = combineLists(initialChanges, proto._initialChanges);
-      proto._themeDependentChanges = combineLists(themeDependentChanges, proto._themeDependentChanges);
+      proto._themeDependentChanges = combineLists(
+        themeDependentChanges,
+        proto._themeDependentChanges,
+      );
       proto._optionChangesMap = combineMaps(optionChangesMap, proto._optionChangesMap);
-      proto._partialOptionChangesMap = combineMaps(partialOptionChangesMap, proto._partialOptionChangesMap);
-      proto._partialOptionChangesPath = combineMaps(partialOptionChangesPath, proto._partialOptionChangesPath);
+      proto._partialOptionChangesMap = combineMaps(
+        partialOptionChangesMap,
+        proto._partialOptionChangesMap,
+      );
+      proto._partialOptionChangesPath = combineMaps(
+        partialOptionChangesPath,
+        proto._partialOptionChangesPath,
+      );
       proto._optionChangesOrder = combineLists(optionChangesOrder, proto._optionChangesOrder);
       proto._layoutChangesOrder = combineLists(layoutChangesOrder, proto._layoutChangesOrder);
       proto._customChangesOrder = combineLists(customChangesOrder, proto._customChangesOrder);
@@ -249,13 +260,31 @@ export const setupWidgetPrototype = isServerSide
     proto._fontFields = combineLists(baseProto._fontFields, proto._fontFields);
     proto._eventsMap = combineMaps(baseProto._eventsMap, proto._eventsMap);
     proto._initialChanges = combineLists(baseProto._initialChanges, proto._initialChanges);
-    proto._themeDependentChanges = combineLists(baseProto._themeDependentChanges, proto._themeDependentChanges);
+    proto._themeDependentChanges = combineLists(
+      baseProto._themeDependentChanges,
+      proto._themeDependentChanges,
+    );
     proto._optionChangesMap = combineMaps(baseProto._optionChangesMap, proto._optionChangesMap);
-    proto._partialOptionChangesMap = combineMaps(baseProto._partialOptionChangesMap, proto._partialOptionChangesMap);
-    proto._partialOptionChangesPath = combineMaps(baseProto._partialOptionChangesPath, proto._partialOptionChangesPath);
-    proto._optionChangesOrder = combineLists(baseProto._optionChangesOrder, proto._optionChangesOrder);
-    proto._layoutChangesOrder = combineLists(baseProto._layoutChangesOrder, proto._layoutChangesOrder);
-    proto._customChangesOrder = combineLists(baseProto._customChangesOrder, proto._customChangesOrder);
+    proto._partialOptionChangesMap = combineMaps(
+      baseProto._partialOptionChangesMap,
+      proto._partialOptionChangesMap,
+    );
+    proto._partialOptionChangesPath = combineMaps(
+      baseProto._partialOptionChangesPath,
+      proto._partialOptionChangesPath,
+    );
+    proto._optionChangesOrder = combineLists(
+      baseProto._optionChangesOrder,
+      proto._optionChangesOrder,
+    );
+    proto._layoutChangesOrder = combineLists(
+      baseProto._layoutChangesOrder,
+      proto._layoutChangesOrder,
+    );
+    proto._customChangesOrder = combineLists(
+      baseProto._customChangesOrder,
+      proto._customChangesOrder,
+    );
     buildTotalChanges(proto);
     Widget.addPlugin = addPlugin;
   };

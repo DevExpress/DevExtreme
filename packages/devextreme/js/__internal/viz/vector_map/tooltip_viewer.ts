@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/init-declarations */
 /* eslint-disable func-names */
-/* eslint-disable @stylistic/max-len */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 
@@ -76,10 +75,20 @@ export let TooltipViewer = class TooltipViewer {
           const callback = (result: boolean): void => {
             result && arg.done(result);
           };
-          proxy && callback(tooltip.show(proxy, { x: arg.x, y: arg.y, offset: TOOLTIP_OFFSET }, { target: proxy }, undefined, callback));
+          proxy
+            && callback(
+              tooltip.show(
+                proxy,
+                { x: arg.x, y: arg.y, offset: TOOLTIP_OFFSET },
+                { target: proxy },
+                undefined,
+                callback,
+              ),
+            );
         }
       },
-      // There are no checks for `tooltip.isEnabled()` in the following two handlers because they are called only if the previous one has finished with `true`
+      // There are no checks for `tooltip.isEnabled()` in the following two handlers because they
+      // are called only if the previous one has finished with `true`
       'focus-move': function (arg) {
         tooltip.move(arg.x, arg.y, TOOLTIP_OFFSET);
       },

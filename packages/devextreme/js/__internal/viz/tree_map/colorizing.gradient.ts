@@ -4,7 +4,6 @@
 /* eslint-disable no-plusplus */
 /* eslint-disable func-names */
 /* eslint-disable @typescript-eslint/naming-convention */
-/* eslint-disable @stylistic/max-len */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-use-before-define */
@@ -47,7 +46,10 @@ function createGuessingColorizer(getColor, getValue) {
   return function (node) {
     const { parent } = node;
 
-    return getColor(node, ranges[parent._id] || (ranges[parent._id] = calculateRange(parent.nodes, getValue)));
+    return getColor(
+      node,
+      ranges[parent._id] || (ranges[parent._id] = calculateRange(parent.nodes, getValue)),
+    );
   };
 }
 
