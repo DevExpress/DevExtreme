@@ -24362,11 +24362,11 @@ snapshots:
       vite: 8.1.6(@types/node@26.1.1)(esbuild@0.28.2)(jiti@2.6.1)(less@4.9.1)(sass-embedded@1.105.1)(sass@1.105.1)(terser@5.51.2)(yaml@2.9.0)
       vue: 3.5.45(typescript@5.9.3)
 
-  '@vitest/browser-playwright@5.1.0(playwright@1.62.1)(vite@8.3.4(@types/node@20.19.37)(esbuild@0.28.1)(jiti@2.6.1)(less@4.9.1)(sass-embedded@1.104.1)(sass@1.104.1)(terser@5.51.2)(yaml@2.9.0))(vitest@5.1.0)':
+  '@vitest/browser-playwright@5.1.0(playwright@1.65.1)(vite@8.3.4(@types/node@20.19.37)(esbuild@0.28.1)(jiti@2.6.1)(less@4.9.1)(sass-embedded@1.104.1)(sass@1.104.1)(terser@5.51.2)(yaml@2.9.0))(vitest@5.1.0)':
     dependencies:
       '@vitest/browser': 5.1.0(vite@8.3.4(@types/node@20.19.37)(esbuild@0.28.1)(jiti@2.6.1)(less@4.9.1)(sass-embedded@1.104.1)(sass@1.104.1)(terser@5.51.2)(yaml@2.9.0))(vitest@5.1.0)
       '@vitest/mocker': 5.1.0(vite@8.3.4(@types/node@20.19.37)(esbuild@0.28.1)(jiti@2.6.1)(less@4.9.1)(sass-embedded@1.104.1)(sass@1.104.1)(terser@5.51.2)(yaml@2.9.0))
-      playwright: 1.62.1
+      playwright: 1.65.1
       tinyrainbow: 3.2.0
       vitest: 5.1.0(@types/node@20.19.37)(@vitest/browser-playwright@5.1.0)(@vitest/ui@5.1.0)(jsdom@26.1.0)(vite@8.3.4(@types/node@20.19.37)(esbuild@0.28.1)(jiti@2.6.1)(less@4.9.1)(sass-embedded@1.104.1)(sass@1.104.1)(terser@5.51.2)(yaml@2.9.0))
     transitivePeerDependencies:
@@ -35379,7 +35379,7 @@ snapshots:
       why-is-node-running: 3.2.1
     optionalDependencies:
       '@types/node': 20.19.37
-      '@vitest/browser-playwright': 5.1.0(playwright@1.62.1)(vite@8.3.4(@types/node@20.19.37)(esbuild@0.28.1)(jiti@2.6.1)(less@4.9.1)(sass-embedded@1.104.1)(sass@1.104.1)(terser@5.51.2)(yaml@2.9.0))(vitest@5.1.0)
+      '@vitest/browser-playwright': 5.1.0(playwright@1.65.1)(vite@8.3.4(@types/node@20.19.37)(esbuild@0.28.1)(jiti@2.6.1)(less@4.9.1)(sass-embedded@1.104.1)(sass@1.104.1)(terser@5.51.2)(yaml@2.9.0))(vitest@5.1.0)
       '@vitest/ui': 5.1.0(vitest@5.1.0)
       jsdom: 26.1.0
     transitivePeerDependencies:
