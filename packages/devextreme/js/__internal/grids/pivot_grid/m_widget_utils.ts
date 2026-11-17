@@ -18,6 +18,7 @@ import type { StoreLoadOptions } from '@ts/data/abstract_store';
 import { CLASSES } from './const';
 import type {
   DiscoveredField,
+  DrillDownParams,
   DrillDownStore,
   ExpandedLevelOptions,
   ForeachTree,
@@ -25,6 +26,7 @@ import type {
   PivotGridAxis,
   PivotGridField,
   PivotGridFilterField,
+  PivotGridLoadOptions,
 } from './types';
 
 const setFieldProperty = function setFieldProperty(
@@ -384,12 +386,10 @@ function getFiltersByPath(
 const storeDrillDownMixin = {
   createDrillDownDataSource(
     this: DrillDownStore,
-    descriptions: unknown,
-    params: unknown,
+    descriptions: PivotGridLoadOptions | undefined,
+    params: DrillDownParams | undefined,
   ): DataSource {
     const items = this.getDrillDownItems(descriptions, params);
-    // eslint-disable-next-line @typescript-eslint/init-declarations -- never assigned
-    let arrayStore: ArrayStore | undefined;
 
     function createCustomStoreMethod(
       methodName: 'load' | 'totalCount',
@@ -397,20 +397,14 @@ const storeDrillDownMixin = {
       options: StoreLoadOptions,
     ) => DeferredObj<unknown> {
       return function customStoreMethod(options) {
-        // eslint-disable-next-line @typescript-eslint/init-declarations -- assigned in the if/else
-        let d: DeferredObj<unknown>;
+        const d = Deferred<unknown>();
 
-        if (arrayStore) {
-          d = arrayStore[methodName](options);
-        } else {
-          d = Deferred<unknown>();
-          when(items).done((data) => {
-            const dataStore = new ArrayStore(data);
-            // eslint-disable-next-line @typescript-eslint/no-misused-promises -- ignores the result
-            dataStore[methodName](options).done(d.resolve).fail(d.reject);
-            // eslint-disable-next-line @typescript-eslint/no-misused-promises -- ignores the result
-          }).fail(d.reject);
-        }
+        when(items).done((data) => {
+          const arrayStore = new ArrayStore(data);
+          // eslint-disable-next-line @typescript-eslint/no-misused-promises -- ignores the result
+          arrayStore[methodName](options).done(d.resolve).fail(d.reject);
+          // eslint-disable-next-line @typescript-eslint/no-misused-promises -- ignores the result
+        }).fail(d.reject);
 
         return d;
       };
