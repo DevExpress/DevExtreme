@@ -426,10 +426,10 @@ function getExpandedIndex(options: ExpandedLevelOptions, axis: PivotGridAxis): n
 function getFiltersForExpandedDimension(options: ExpandedLevelOptions): PivotGridFilterField[] {
   const oppositeAxis = options.headerName === 'rows' ? 'columns' : 'rows';
 
-  // @ts-expect-error path is set together with headerName
-  const fields: PivotGridField[] = options[options.headerName];
+  const fields = options.headerName ? options[options.headerName] : undefined;
   const oppositeFields = options[oppositeAxis];
 
+  // @ts-expect-error path is set together with headerName
   const filters = getFiltersByPath(fields, options.path);
   const oppositeFieldsFilters = getFiltersByPath(oppositeFields, options.oppositePath || []);
 

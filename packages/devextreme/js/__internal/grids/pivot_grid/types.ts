@@ -78,8 +78,8 @@ export interface DiscoveredField {
 
 export interface DrillDownStore {
   getDrillDownItems: (
-    descriptions: unknown,
-    params: unknown,
+    descriptions: PivotGridLoadOptions | undefined,
+    params: DrillDownParams | undefined,
   ) => unknown[] | DeferredObj<unknown[]>;
   key: () => string | string[] | undefined;
 }
