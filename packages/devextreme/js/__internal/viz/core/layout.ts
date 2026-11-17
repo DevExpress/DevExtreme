@@ -3,7 +3,6 @@
 /* eslint-disable func-names */
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable no-multi-assign */
-/* eslint-disable @stylistic/max-len */
 /* eslint-disable @typescript-eslint/no-use-before-define */
 /* eslint-disable prefer-destructuring */
 
@@ -143,9 +142,16 @@ function processRectBackward(item: LayoutItem, rect: number[], alignmentRect: nu
   const primarySide = item.side;
   const secondarySide = getConjugateSide(primarySide);
   const itemRect: number[] = [];
-  const secondary = getSlice(item.secondary, alignmentRect[secondarySide], alignmentRect[2 + secondarySide], item.size[secondarySide]);
+  const secondary = getSlice(
+    item.secondary,
+    alignmentRect[secondarySide],
+    alignmentRect[2 + secondarySide],
+    item.size[secondarySide],
+  );
   itemRect[primarySide] = _round(itemRect[2 + primarySide] = rect[item.primary + primarySide] + (item.position === 'inside' ? getShrink(item.primary, item.size[primarySide]) : 0));
-  itemRect[item.primary + primarySide] = _round(rect[item.primary + primarySide] - getShrink(item.primary, item.size[primarySide]));
+  itemRect[item.primary + primarySide] = _round(
+    rect[item.primary + primarySide] - getShrink(item.primary, item.size[primarySide]),
+  );
 
   if (item.position !== 'inside') {
     rect[item.primary + primarySide] = itemRect[item.primary + primarySide];
@@ -156,7 +162,14 @@ function processRectBackward(item: LayoutItem, rect: number[], alignmentRect: nu
   return itemRect;
 }
 
-function processBackward(item: LayoutItem, rect: number[], alignmentRect: number[], fitRect: number[], size: number[], targetRect: number[]): void {
+function processBackward(
+  item: LayoutItem,
+  rect: number[],
+  alignmentRect: number[],
+  fitRect: number[],
+  size: number[],
+  targetRect: number[],
+): void {
   const itemRect = processRectBackward(item, rect, alignmentRect);
   const itemFitRect = processRectBackward(item, fitRect, fitRect);
 
@@ -190,8 +203,10 @@ class Layout {
   }
 
   // Note on possible improvement.
-  // "createTargets" part depends on options of a target while the following cycle depends on container size - those areas do not intersect.
-  // When any of options are changed targets have to be recreated and cycle has to be executed. But when container size is changed there is no
+  // "createTargets" part depends on options of a target while the following cycle depends on
+  // container size - those areas do not intersect.
+  // When any of options are changed targets have to be recreated and cycle has to be executed. But
+  // when container size is changed there is no
   // need to recreate targets - only cycle has to be executed.
   forward(targetRect: number[], minSize: number[]): number[] {
     const rect = targetRect.slice();
@@ -260,11 +275,17 @@ function processWeakItems(collection: LayoutItem[]): LayoutItem[] {
   let headerItem;
 
   if (weakItem) {
-    headerItem = collection.filter((item) => weakItem.primary === item.primary && item.side === weakItem.side && item !== weakItem)[0];
+    headerItem = collection.filter(
+      (item) => weakItem.primary === item.primary
+        && item.side === weakItem.side
+        && item !== weakItem,
+    )[0];
   }
 
   if (weakItem && headerItem) {
-    return [makeHeader(headerItem, weakItem)].concat(collection.filter((item) => !(item === headerItem || item === weakItem)));
+    return [makeHeader(headerItem, weakItem)].concat(
+      collection.filter((item) => !(item === headerItem || item === weakItem)),
+    );
   }
 
   return collection;
@@ -295,7 +316,8 @@ function makeHeader(header: LayoutItem, weakElement: LayoutItem): LayoutItem {
         const weakSize = weakElement.element.measure(targetSize.slice());
         targetSize[primary] -= weakSize[primary];
         const headerSize = header.element.measure(targetSize.slice());
-        result[side] = weakSize[side] = headerSize[side] = Math.max(headerSize[side], weakSize[side]);
+        headerSize[side] = Math.max(headerSize[side], weakSize[side]);
+        result[side] = weakSize[side] = headerSize[side];
 
         weakElement.size = weakSize;
         header.size = headerSize;
@@ -313,7 +335,10 @@ function makeHeader(header: LayoutItem, weakElement: LayoutItem): LayoutItem {
         fitRect[2 + weakElement.primary] = weakRect[weakElement.primary];
         const headerFitReact = processBackwardHeaderRect(header, fitRect);
 
-        if (fitRect[2 + weakElement.primary] < rect[2 + weakElement.primary] && header.size[header.primary] > rect[2 + header.primary] - rect[header.primary]) {
+        if (
+          fitRect[2 + weakElement.primary] < rect[2 + weakElement.primary]
+          && header.size[header.primary] > rect[2 + header.primary] - rect[header.primary]
+        ) {
           rect[2 + weakElement.primary] = fitRect[2 + weakElement.primary];
         }
 

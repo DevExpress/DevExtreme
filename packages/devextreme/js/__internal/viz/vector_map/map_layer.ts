@@ -14,7 +14,6 @@
 /* eslint-disable consistent-return */
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-multi-assign */
-/* eslint-disable @stylistic/max-len */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-use-before-define */
@@ -225,7 +224,8 @@ function isGeoJsonObject(obj) {
   return _isArray(obj.features);
 }
 
-// The problem is that when remote source returns an object (not an array) the data.DataSource internally wraps it into array (of one element)
+// The problem is that when remote source returns an object (not an array) the data.DataSource
+// internally wraps it into array (of one element)
 // So specific `if` clause is required to recognize GeoJson object in the returned `items`
 function unwrapFromDataSource(source) {
   let sourceType;
@@ -243,9 +243,11 @@ function unwrapFromDataSource(source) {
   return new sourceType(source);
 }
 
-// The first problem is that when our DataSource is updated with an object (not an array) it considers such object a bunch of options.
+// The first problem is that when our DataSource is updated with an object (not an array) it
+// considers such object a bunch of options.
 // So single object has to be wrapped into array in order to be passed to the data.DataSource as is.
-// The second problem is that when our DataSource is updated with `null` or `undefined` it does nothing - callback is not triggered (it is because of charts).
+// The second problem is that when our DataSource is updated with `null` or `undefined` it does
+// nothing - callback is not triggered (it is because of charts).
 // So `null` or `undefined` is changed to empty array.
 function wrapToDataSource(option) {
   return option ? isGeoJsonObject(option) ? [option] : option : [];
@@ -335,7 +337,9 @@ let selectStrategy = function (options, data) {
       _extend(strategy, strategiesByGeometry[type](sample));
     }
     if (strategiesByElementType[type]) {
-      elementType = strategiesByElementType[type][elementType] ? elementType : strategiesByElementType[type]._default;
+      elementType = strategiesByElementType[type][elementType]
+        ? elementType
+        : strategiesByElementType[type]._default;
       _extend(strategy, strategiesByElementType[type][elementType]);
       strategy.elementType = elementType;
       strategy.fullType += `:${elementType}`;
@@ -745,13 +749,25 @@ strategiesByElementType[TYPE_MARKER] = {
       const opacity = pick(style.opacity, null);
       styles.image = [
         {
-          x: -size / 2, y: -size / 2, width: size, height: size, opacity,
+          x: -size / 2,
+          y: -size / 2,
+          width: size,
+          height: size,
+          opacity,
         },
         {
-          x: -hoveredSize / 2, y: -hoveredSize / 2, width: hoveredSize, height: hoveredSize, opacity: pick(style.hoveredOpacity, opacity),
+          x: -hoveredSize / 2,
+          y: -hoveredSize / 2,
+          width: hoveredSize,
+          height: hoveredSize,
+          opacity: pick(style.hoveredOpacity, opacity),
         },
         {
-          x: -selectedSize / 2, y: -selectedSize / 2, width: selectedSize, height: selectedSize, opacity: pick(style.selectedOpacity, opacity),
+          x: -selectedSize / 2,
+          y: -selectedSize / 2,
+          width: selectedSize,
+          height: selectedSize,
+          opacity: pick(style.selectedOpacity, opacity),
         },
       ];
     },
@@ -889,7 +905,8 @@ function raiseChanged(context, handle, state, name) {
   context.params.eventTrigger(name, { target: handle.proxy, state });
 }
 
-// This is required because `$.extend` cannot be used - because of the `options.data` which is commonly a very large array
+// This is required because `$.extend` cannot be used - because of the `options.data` which is
+// commonly a very large array
 // TODO: Try to use our simple `extend` instead of `$.extend`
 function combineSettings(common, partial) {
   const obj = _extend({}, common, partial);
@@ -929,7 +946,11 @@ let performGrouping = function (context, partition, settingField, dataField, val
       partition,
       values,
     };
-    context.params.dataExchanger.set(context.name, settingField, { partition, values, defaultColor: context.settings.color });
+    context.params.dataExchanger.set(context.name, settingField, {
+      partition,
+      values,
+      defaultColor: context.settings.color,
+    });
   }
 };
 
@@ -944,7 +965,10 @@ function dropGrouping(context) {
 
 groupByColor = function (context) {
   performGrouping(context, context.settings.colorGroups, 'color', context.settings.colorGroupingField, (count) => {
-    const _palette = context.params.themeManager.createDiscretePalette(context.settings.palette, count);
+    const _palette = context.params.themeManager.createDiscretePalette(
+      context.settings.palette,
+      count,
+    );
     let i;
     const list: string[] = [];
     for (i = 0; i < count; ++i) {
@@ -1060,7 +1084,8 @@ let MapLayer = class MapLayer {
     };
     this._container = container;
     this._options = {};
-    // Though the `_handles` field is set in the `_createHandles` it is required here because projection events are fired before data is set
+    // Though the `_handles` field is set in the `_createHandles` it is required here because
+    // projection events are fired before data is set
     this._handles = [];
     // The `_data` field may be accessed in the `setOptions` when data is not set
     this._data = new EmptySource();
@@ -1153,8 +1178,11 @@ let MapLayer = class MapLayer {
       this._refreshDataSource();
     } else if (this._data.count() > 0) {
       this._params.notifyDirty();
-      this._update((options.type !== undefined && options.type !== this._context.str.type)
-                || (options.elementType !== undefined && options.elementType !== this._context.str.elementType));
+      this._update(
+        (options.type !== undefined && options.type !== this._context.str.type)
+          || (options.elementType !== undefined
+            && options.elementType !== this._context.str.elementType),
+      );
     }
     this._transformCore();
   }
@@ -1165,7 +1193,8 @@ let MapLayer = class MapLayer {
       context.str.reset(context);
       context.root.clear();
       context.labelRoot && context.labelRoot.clear();
-      this._params.tracker.reset(); // T173037; TODO: There is no need to reset the entire tracker - only its memory about items
+      // T173037; TODO: There is no need to reset the entire tracker - only its memory about items
+      this._params.tracker.reset();
       this._destroyHandles();
       context.str = selectStrategy(this._options, this._data);
       context.str.setup(context);
@@ -1222,7 +1251,15 @@ let MapLayer = class MapLayer {
 
       const initValue = coordsToBoundsSearch[0];
 
-      return coordsToBoundsSearch.reduce((min, c) => [_min(min[0], c[0]), _min(min[1], c[1]), _max(min[2], c[0]), _max(min[3], c[1])], [initValue[0], initValue[1], initValue[0], initValue[1]]);
+      return coordsToBoundsSearch.reduce(
+        (min, c) => [
+          _min(min[0], c[0]),
+          _min(min[1], c[1]),
+          _max(min[2], c[0]),
+          _max(min[3], c[1]),
+        ],
+        [initValue[0], initValue[1], initValue[0], initValue[1]],
+      );
     })).map(getMaxBound));
   }
 
@@ -1236,10 +1273,10 @@ let MapLayer = class MapLayer {
   }
 
   _createHandles(): void {
-    const handles: MapLayerElementInstance[] = this._handles = [];
+    const handles: MapLayerElementInstance[] = (this._handles = []);
     const data = this._data;
     let i;
-    const ii = handles.length = data.count();
+    const ii = (handles.length = data.count());
     const context = this._context;
     const geometry = data.geometry;
     const attributes = data.attributes;
@@ -1249,8 +1286,10 @@ let MapLayer = class MapLayer {
       dataItem = data.item(i);
       handles[i] = new MapLayerElement(context, i, geometry(dataItem), attributes(dataItem));
     }
-    // Customization must be performed before anything else happens to element (that is the idea of customization)
-    _isFunction(this._options.customize) && customizeHandles(this.getProxies(), this._options.customize, this._params.widget);
+    // Customization must be performed before anything else happens to element (that is the idea of
+    // customization)
+    _isFunction(this._options.customize)
+      && customizeHandles(this.getProxies(), this._options.customize, this._params.widget);
 
     for (i = 0; i < ii; ++i) {
       handle = handles[i];
@@ -1400,8 +1439,17 @@ let MapLayerElement = class MapLayerElement {
 
   declare _styles: ThemeValue;
 
-  constructor(context: LayerContext, index: number, geometry: { coordinates: ThemeValue }, attributes: ThemeValue) {
-    const proxy: ElementProxy = this.proxy = createProxy(this, geometry.coordinates, _extend({}, attributes));
+  constructor(
+    context: LayerContext,
+    index: number,
+    geometry: { coordinates: ThemeValue },
+    attributes: ThemeValue,
+  ) {
+    const proxy: ElementProxy = (this.proxy = createProxy(
+      this,
+      geometry.coordinates,
+      _extend({}, attributes),
+    ));
     this._ctx = context;
     this._index = index;
     this._fig = this._label = null;
@@ -1410,7 +1458,8 @@ let MapLayerElement = class MapLayerElement {
     this._settings = { label: {} };
     proxy.index = index;
     proxy.layer = context.layer;
-    // TODO: Replace "name" field with one referencing layer index and use layer index (instead of name) as layer id
+    // TODO: Replace "name" field with one referencing layer index and use layer index (instead of
+    // name) as layer id
     // as it is more suitable, simple and consistent
     this._data = { name: context.name, index };
   }
@@ -1435,7 +1484,7 @@ let MapLayerElement = class MapLayerElement {
 
   draw(): void {
     const context = this._ctx;
-    context.str.draw(context, this._fig = {}, this._data);
+    context.str.draw(context, (this._fig = {}), this._data);
     this._fig.root.append(context.root);
   }
 
@@ -1478,13 +1527,18 @@ let MapLayerElement = class MapLayerElement {
       }
       label.value = _String(this.proxy.text || this.proxy.attribute(labelSettings.dataField) || '');
       if (label.value) {
-        // The data should be set when the element is created but it requires changes in the Renderer
-        label.text.attr({ text: label.value, x: 0, y: 0 }).css(_patchFontOptions(labelSettings.font)).attr({
-          align: 'center',
-          stroke: labelSettings.stroke,
-          'stroke-width': labelSettings['stroke-width'],
-          'stroke-opacity': labelSettings['stroke-opacity'],
-        }).data(context.dataKey, this._data)
+        // The data should be set when the element is created but it requires changes in the
+        // Renderer
+        label.text
+          .attr({ text: label.value, x: 0, y: 0 })
+          .css(_patchFontOptions(labelSettings.font))
+          .attr({
+            align: 'center',
+            stroke: labelSettings.stroke,
+            'stroke-width': labelSettings['stroke-width'],
+            'stroke-opacity': labelSettings['stroke-opacity'],
+          })
+          .data(context.dataKey, this._data)
           .append(label.root);
         label.settings = settings;
       }
@@ -1515,7 +1569,8 @@ let MapLayerElement = class MapLayerElement {
 
   update(settings: ThemeValue): void {
     this._settings = combineSettings(this._settings, settings);
-    // This check is required because the method can be called during the customization stage when DOM content neither is created nor should be changed
+    // This check is required because the method can be called during the customization stage when
+    // DOM content neither is created nor should be changed
     if (this._fig) {
       this.refresh();
       if (this._label && this._label.value) {
@@ -1560,7 +1615,8 @@ let MapLayerElement = class MapLayerElement {
         tmp.setSelected(false);
       }
       selection.state[selection.single || this._index] = state ? this : null;
-      // This check is required because the method can be called during the customization stage when DOM content neither is created nor should be changed
+      // This check is required because the method can be called during the customization stage when
+      // DOM content neither is created nor should be changed
       if (this._fig) {
         this._setState();
         this._setForeground();
@@ -1612,13 +1668,11 @@ function calculatePolygonCentroid(coordinates) {
     minY = _min(minY, v2[1]);
     maxY = _max(maxY, v2[1]);
   }
-  // from centroid coords we need subtract the center of bbox coords to get a good geometrical center (T312029)
+  // from centroid coords we need subtract the center of bbox coords to get a good geometrical
+  // center (T312029)
   return {
     area: _abs(area) / 2,
-    center: [
-      2 * cx / 3 / area - (minX + maxX) / 2,
-      2 * cy / 3 / area - (minY + maxY) / 2,
-    ],
+    center: [(2 * cx) / 3 / area - (minX + maxX) / 2, (2 * cy) / 3 / area - (minY + maxY) / 2],
   };
 }
 
@@ -1661,7 +1715,8 @@ function calculateLineStringData(coordinates) {
 }
 
 // TODO: Optimize!
-// There are redundant iterations in the following cycle - interior holes of a polygon should not be taken into account
+// There are redundant iterations in the following cycle - interior holes of a polygon should not be
+// taken into account
 // So there is only centroid to be calculated for each "Polygon"
 function projectAreaLabel(coordinates) {
   let i;
@@ -1678,7 +1733,9 @@ function projectAreaLabel(coordinates) {
     }
   }
   // TODO: Move "_sqrt" to the "calculatePolygonCentroid"
-  return resultCentroid ? [resultCentroid.center, [_sqrt(resultCentroid.area), _sqrt(resultCentroid.area)]] : [[], []];
+  return resultCentroid
+    ? [resultCentroid.center, [_sqrt(resultCentroid.area), _sqrt(resultCentroid.area)]]
+    : [[], []];
 }
 
 function projectLineLabel(coordinates) {
@@ -1738,8 +1795,10 @@ export let MapLayerCollection = class MapLayerCollection {
     this._clip.dispose();
     this._layers.forEach((l) => l.dispose());
     this._offTracker();
-    // @ts-expect-error dispose releases the parameters, the subscription, the layers and the elements
-    this._params = this._offTracker = this._layers = this._layerByName = this._clip = this._background = this._container = null;
+    // @ts-expect-error dispose releases the parameters, the subscription, the layers and the
+    // elements
+    this._params = this._offTracker = this._layers = this._layerByName = null;
+    this._clip = this._background = this._container = null;
   }
 
   _subscribeToTracker(tracker: LayerTracker, renderer: ThemeValue, eventTrigger: MapLayerParams['eventTrigger']): void {
@@ -1805,7 +1864,10 @@ export let MapLayerCollection = class MapLayerCollection {
     const rect = this._rect;
     const bw = this._borderWidth;
     this._clip.attr({
-      x: rect[0] + bw, y: rect[1] + bw, width: _max(rect[2] - bw * 2, 0), height: _max(rect[3] - bw * 2, 0),
+      x: rect[0] + bw,
+      y: rect[1] + bw,
+      width: _max(rect[2] - bw * 2, 0),
+      height: _max(rect[3] - bw * 2, 0),
     });
   }
 

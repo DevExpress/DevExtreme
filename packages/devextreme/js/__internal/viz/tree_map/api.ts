@@ -6,7 +6,6 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-multi-assign */
-/* eslint-disable @stylistic/max-len */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-use-before-define */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
@@ -136,7 +135,8 @@ proto._createProxyType = function () {
 
   that._extendProxyType(Proxy.prototype);
 
-  // TODO: Find a way to make the following methods exist one per module rather then one per instance
+  // TODO: Find a way to make the following methods exist one per module rather then one per
+  // instance
   that._handlers.beginBuildNodes = function () {
     nodes = that._nodes;
     new Proxy(that._root);
@@ -191,7 +191,8 @@ nodeProto.updateStyles = function () {
 
   _updateStyles.call(that);
   if (that._custom) {
-    that._partialState = (!that.ctx.forceReset && that._partialState) || that.ctx.calculateState(that._custom);
+    that._partialState = (!that.ctx.forceReset && that._partialState)
+      || that.ctx.calculateState(that._custom);
     _extend(true, that.state, that._partialState);
   }
 };
@@ -203,7 +204,8 @@ nodeProto.updateLabelStyle = function () {
 
   _updateLabelStyle.call(that);
   if (custom?.label) {
-    that._partialLabelState = (!that.ctx.forceReset && that._partialLabelState) || calculatePartialLabelState(that, custom.label);
+    that._partialLabelState = (!that.ctx.forceReset && that._partialLabelState)
+      || calculatePartialLabelState(that, custom.label);
     that.labelState = _extend(true, {}, that.labelState, that._partialLabelState);
   }
 };

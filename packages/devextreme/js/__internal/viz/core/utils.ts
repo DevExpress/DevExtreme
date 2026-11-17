@@ -10,7 +10,6 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-multi-assign */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
-/* eslint-disable @stylistic/max-len */
 /* eslint-disable @typescript-eslint/init-declarations */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
@@ -161,7 +160,8 @@ export const getPower = function (value) {
 
 type IsAny<T> = 0 extends 1 & T ? true : false;
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- an untyped array gives untyped items
+// an untyped array gives untyped items
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 type Item<TArray> = IsAny<TArray> extends true ? any
   : TArray extends ArrayLike<infer TItem> ? TItem : never;
 
@@ -236,7 +236,8 @@ export function normalizeBBox(bBox) {
   return result;
 }
 
-// Angle is expected to be from right-handed cartesian (not svg) space - positive is counterclockwise
+// Angle is expected to be from right-handed cartesian (not svg) space - positive is
+// counterclockwise
 export function rotateBBox(bBox, center, angle) {
   const cos = _Number(_cos(angle * PI_DIV_180).toFixed(3));
   const sin = _Number(_sin(angle * PI_DIV_180).toFixed(3));
@@ -316,7 +317,10 @@ export function convertPolarToXY(centerCoords, startAngle, angle, radius) {
   angle = isDefined(angle) ? angle + startAngle - shiftAngle : 0;
   const cosSin = getCosAndSin(angle);
 
-  return { x: _round(centerCoords.x + normalizedRadius * cosSin.cos), y: _round(centerCoords.y + normalizedRadius * cosSin.sin) };
+  return {
+    x: _round(centerCoords.x + normalizedRadius * cosSin.cos),
+    y: _round(centerCoords.y + normalizedRadius * cosSin.sin),
+  };
 }
 
 export const convertXYToPolar = function (centerCoords, x, y) {
@@ -327,7 +331,9 @@ export const convertXYToPolar = function (centerCoords, x, y) {
 };
 
 export const processSeriesTemplate = function (seriesTemplate, items) {
-  const customizeSeries = isFunction(seriesTemplate.customizeSeries) ? seriesTemplate.customizeSeries : noop;
+  const customizeSeries = isFunction(seriesTemplate.customizeSeries)
+    ? seriesTemplate.customizeSeries
+    : noop;
   const { nameField } = seriesTemplate;
   const generatedSeries = {};
   const seriesOrder: PropertyKey[] = [];
@@ -342,7 +348,10 @@ export const processSeriesTemplate = function (seriesTemplate, items) {
     if (nameField in data) {
       series = generatedSeries[data[nameField]];
       if (!series) {
-        series = generatedSeries[data[nameField]] = { name: data[nameField], nameFieldValue: data[nameField] };
+        series = generatedSeries[data[nameField]] = {
+          name: data[nameField],
+          nameFieldValue: data[nameField],
+        };
         seriesOrder.push(series.name);
       }
     }
@@ -419,12 +428,20 @@ export function normalizePanesHeight(panes) {
   const emptyHeightCount = emptyHeightPanes.length;
 
   if (weightSum < 1 && emptyHeightCount) {
-    emptyHeightPanes.forEach((pane) => pane.height = (1 - weightSum) / emptyHeightCount);
-  } else if (weightSum > 1 || weightSum < 1 && !emptyHeightCount || weightSum === 1 && emptyHeightCount) {
+    emptyHeightPanes.forEach(
+      (pane) => (pane.height = (1 - weightSum) / emptyHeightCount),
+    );
+  } else if (
+    weightSum > 1
+    || (weightSum < 1 && !emptyHeightCount)
+    || (weightSum === 1 && emptyHeightCount)
+  ) {
     if (emptyHeightCount) {
       const weightForEmpty = weightSum / weightHeightCount;
       const emptyWeightSum = emptyHeightCount * weightForEmpty;
-      relativeHeightPanes.filter((pane) => pane.height).forEach((pane) => pane.height *= (weightSum - emptyWeightSum) / weightSum);
+      relativeHeightPanes
+        .filter((pane) => pane.height)
+        .forEach((pane) => (pane.height *= (weightSum - emptyWeightSum) / weightSum));
       emptyHeightPanes.forEach((pane) => pane.height = weightForEmpty);
     }
     relativeHeightPanes.forEach((pane) => pane.height *= 1 / weightSum);
@@ -435,14 +452,21 @@ export function normalizePanesHeight(panes) {
 export let updatePanesCanvases = function (panes, canvas, rotated) {
   let distributedSpace = 0;
   const padding = PANE_PADDING;
-  const paneSpace = rotated ? canvas.width - canvas.left - canvas.right : canvas.height - canvas.top - canvas.bottom;
-  const totalCustomSpace = panes.reduce((prev, cur) => prev + (!isRelativeHeightPane(cur) ? cur.height : 0), 0);
+  const paneSpace = rotated
+    ? canvas.width - canvas.left - canvas.right
+    : canvas.height - canvas.top - canvas.bottom;
+  const totalCustomSpace = panes.reduce(
+    (prev, cur) => prev + (!isRelativeHeightPane(cur) ? cur.height : 0),
+    0,
+  );
   const usefulSpace = paneSpace - padding * (panes.length - 1) - totalCustomSpace;
   const startName = rotated ? 'left' : 'top';
   const endName = rotated ? 'right' : 'bottom';
 
   panes.forEach((pane) => {
-    const calcLength = !isRelativeHeightPane(pane) ? pane.height : _round(pane.height * usefulSpace);
+    const calcLength = !isRelativeHeightPane(pane)
+      ? pane.height
+      : _round(pane.height * usefulSpace);
     pane.canvas = pane.canvas || {};
     extend(pane.canvas, canvas);
     pane.canvas[startName] = canvas[startName] + distributedSpace;
@@ -463,7 +487,8 @@ export const unique = function (array) {
 };
 
 export const getVerticallyShiftedAngularCoords = function (bBox, dy, center) {
-  // TODO: Use center instead of left top corner - that is more correct and allows to get rid of "isPositive"
+  // TODO: Use center instead of left top corner - that is more correct and allows to get rid of
+  // "isPositive"
   //   horizontalOffset1 = bBox.x + bBox.width / 2 - center.x
   //   horizontalOffset2 = bBox.y + bBox.height / 2 - center.y
   //   verticalOffset2 = newCoord.y + bBox.height / 2 - center.y
@@ -471,7 +496,13 @@ export const getVerticallyShiftedAngularCoords = function (bBox, dy, center) {
   const horizontalOffset1 = (isPositive ? bBox.x : bBox.x + bBox.width) - center.x;
   const verticalOffset1 = bBox.y - center.y;
   const verticalOffset2 = verticalOffset1 + dy;
-  const horizontalOffset2 = _round(sqrt(horizontalOffset1 * horizontalOffset1 + verticalOffset1 * verticalOffset1 - verticalOffset2 * verticalOffset2));
+  const horizontalOffset2 = _round(
+    sqrt(
+      horizontalOffset1 * horizontalOffset1
+        + verticalOffset1 * verticalOffset1
+        - verticalOffset2 * verticalOffset2,
+    ),
+  );
   const dx = (isPositive ? +horizontalOffset2 : -horizontalOffset2) || horizontalOffset1;
   return { x: center.x + (isPositive ? dx : dx - bBox.width), y: bBox.y + dy };
 };
@@ -641,7 +672,10 @@ export function getLogExt(value, base, allowNegatives = false, linearThreshold?)
   if (transformValue < 0) {
     return 0;
   }
-  return adjust(sign(value) * transformValue, Number((base ** (linearThreshold - 1)).toFixed(abs(linearThreshold))));
+  return adjust(
+    sign(value) * transformValue,
+    Number((base ** (linearThreshold - 1)).toFixed(abs(linearThreshold))),
+  );
 }
 
 export function raiseToExt(value, base, allowNegatives = false, linearThreshold?) {
@@ -659,7 +693,10 @@ export function raiseToExt(value, base, allowNegatives = false, linearThreshold?
     return 0;
   }
 
-  return adjust(sign(value) * transformValue, Number((base ** linearThreshold).toFixed(abs(linearThreshold))));
+  return adjust(
+    sign(value) * transformValue,
+    Number((base ** linearThreshold).toFixed(abs(linearThreshold))),
+  );
 }
 
 export function rangesAreEqual(range, rangeFromOptions) {

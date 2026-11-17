@@ -1,5 +1,4 @@
 /* eslint-disable no-nested-ternary */
-/* eslint-disable @stylistic/max-len */
 /* eslint-disable prefer-destructuring */
 
 import supportUtils from '@ts/core/utils/support';
@@ -22,7 +21,11 @@ interface SliderParams {
 type SliderEventHandler = (e: ThemeValue) => void;
 
 function getSliderTrackerWidth(sliderHandleWidth: number): number {
-  return supportUtils.touchEvents || supportUtils.pointerEvents ? TOUCH_SPLITTER_WIDTH : SPLITTER_WIDTH < sliderHandleWidth ? sliderHandleWidth : SPLITTER_WIDTH;
+  return supportUtils.touchEvents || supportUtils.pointerEvents
+    ? TOUCH_SPLITTER_WIDTH
+    : SPLITTER_WIDTH < sliderHandleWidth
+      ? sliderHandleWidth
+      : SPLITTER_WIDTH;
 }
 
 class Slider {
@@ -95,8 +98,15 @@ class Slider {
     this._marker.setText(text);
   }
 
-  update(verticalRange: number[], sliderHandleOptions: ThemeValue, sliderMarkerOptions: ThemeValue): void {
-    this._formatOptions = { format: sliderMarkerOptions.format, customizeText: sliderMarkerOptions.customizeText };
+  update(
+    verticalRange: number[],
+    sliderHandleOptions: ThemeValue,
+    sliderMarkerOptions: ThemeValue,
+  ): void {
+    this._formatOptions = {
+      format: sliderMarkerOptions.format,
+      customizeText: sliderMarkerOptions.customizeText,
+    };
     this._marker.applyOptions(sliderMarkerOptions, this._translator.getScreenRange());
     this._colors = [sliderMarkerOptions.invalidRangeColor, sliderHandleOptions.color];
     this._sliderGroup.attr({ translateY: verticalRange[0] });

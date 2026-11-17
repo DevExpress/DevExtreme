@@ -7,7 +7,6 @@
 /* eslint-disable @typescript-eslint/no-shadow */
 /* eslint-disable consistent-return */
 /* eslint-disable no-multi-assign */
-/* eslint-disable @stylistic/max-len */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable prefer-destructuring */
@@ -29,7 +28,13 @@ export default _extend({}, barPoint, {
   _getContinuousPoints(openCoord, closeCoord) {
     const that = this;
     const x = that.x;
-    const createPoint = that._options.rotated ? function (x, y) { return [y, x]; } : function (x, y) { return [x, y]; };
+    const createPoint = that._options.rotated
+      ? function (x, y) {
+        return [y, x];
+      }
+      : function (x, y) {
+        return [x, y];
+      };
     const width = that.width;
     const highCoord = that.highY;
     const max = _abs(highCoord - openCoord) < _abs(highCoord - closeCoord) ? openCoord : closeCoord;
@@ -78,7 +83,13 @@ export default _extend({}, barPoint, {
   _getCrockPoints(y) {
     const that = this;
     const x = that.x;
-    const createPoint = that._options.rotated ? function (x, y) { return [y, x]; } : function (x, y) { return [x, y]; };
+    const createPoint = that._options.rotated
+      ? function (x, y) {
+        return [y, x];
+      }
+      : function (x, y) {
+        return [x, y];
+      };
     // @ts-expect-error
     return [].concat(createPoint(x, that.highY))
     // @ts-expect-error
@@ -112,7 +123,9 @@ export default _extend({}, barPoint, {
 
   getColor() {
     const that = this;
-    return that._isReduction ? that._options.reduction.color : that._styles.normal.stroke || that.series.getColor();
+    return that._isReduction
+      ? that._options.reduction.color
+      : that._styles.normal.stroke || that.series.getColor();
   },
 
   _drawMarkerInGroup(group, attributes, renderer) {
@@ -182,8 +195,12 @@ export default _extend({}, barPoint, {
     let height;
 
     if (highY === lowY) {
-      highY = rotated ? highY + DEFAULT_FINANCIAL_TRACKER_MARGIN : highY - DEFAULT_FINANCIAL_TRACKER_MARGIN;
-      lowY = rotated ? lowY - DEFAULT_FINANCIAL_TRACKER_MARGIN : lowY + DEFAULT_FINANCIAL_TRACKER_MARGIN;
+      highY = rotated
+        ? highY + DEFAULT_FINANCIAL_TRACKER_MARGIN
+        : highY - DEFAULT_FINANCIAL_TRACKER_MARGIN;
+      lowY = rotated
+        ? lowY - DEFAULT_FINANCIAL_TRACKER_MARGIN
+        : lowY + DEFAULT_FINANCIAL_TRACKER_MARGIN;
     }
 
     if (rotated) {
