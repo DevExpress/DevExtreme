@@ -143,8 +143,8 @@ export class EditingController {
     }
   }
 
-  public async validate(): Promise<boolean> {
-    return this.validateMethod?.() ?? true;
+  public validate(): Promise<boolean> {
+    return this.validateMethod?.() ?? Promise.resolve(true);
   }
 
   public async addCard(): Promise<void> {
