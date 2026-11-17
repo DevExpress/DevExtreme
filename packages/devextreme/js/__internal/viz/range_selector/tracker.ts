@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/init-declarations */
 /* eslint-disable no-multi-assign */
-/* eslint-disable @stylistic/max-len */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-use-before-define */
 /* eslint-disable prefer-destructuring */
@@ -34,7 +33,11 @@ interface TrackerSlider {
 
 interface TrackerController {
   getTrackerTargets: () => { area: ThemeValue; selectedArea: ThemeValue; sliders: TrackerSlider[] };
-  placeSliderAndBeginMoving: (firstPosition: number, secondPosition: number, e: ThemeValue) => MovingHandler;
+  placeSliderAndBeginMoving: (
+    firstPosition: number,
+    secondPosition: number,
+    e: ThemeValue,
+  ) => MovingHandler;
   moveSelectedArea: (screenPosition: number, e: ThemeValue) => void;
   beginSelectedAreaMoving: (initialPosition: number) => MovingHandler;
   beginSliderMoving: (initialIndex: number, initialPosition: number) => MovingHandler;
@@ -105,7 +108,12 @@ function getEventPageX(event: ThemeValue): number {
   return result;
 }
 
-function initializeAreaEvents(controller: TrackerController, area: ThemeValue, state: TrackerState, getRootOffsetLeft: () => number): DocumentEvents {
+function initializeAreaEvents(
+  controller: TrackerController,
+  area: ThemeValue,
+  state: TrackerState,
+  getRootOffsetLeft: () => number,
+): DocumentEvents {
   let isTouchEvent;
   let isActive = false;
   let initialPosition;
@@ -124,8 +132,15 @@ function initializeAreaEvents(controller: TrackerController, area: ThemeValue, s
         offset = getRootOffsetLeft();
         if (movingHandler) {
           movingHandler(position - offset, e);
-        } else if (state.manualRangeSelectionEnabled && Math.abs(initialPosition - position) >= MIN_MANUAL_SELECTING_WIDTH) {
-          movingHandler = controller.placeSliderAndBeginMoving(initialPosition - offset, position - offset, e);
+        } else if (
+          state.manualRangeSelectionEnabled
+          && Math.abs(initialPosition - position) >= MIN_MANUAL_SELECTING_WIDTH
+        ) {
+          movingHandler = controller.placeSliderAndBeginMoving(
+            initialPosition - offset,
+            position - offset,
+            e,
+          );
         }
       }
     },
@@ -133,7 +148,11 @@ function initializeAreaEvents(controller: TrackerController, area: ThemeValue, s
       let position;
       if (isActive) {
         position = getEventPageX(e);
-        if (!movingHandler && state.moveSelectedRangeByClick && Math.abs(initialPosition - position) < MIN_MANUAL_SELECTING_WIDTH) {
+        if (
+          !movingHandler
+          && state.moveSelectedRangeByClick
+          && Math.abs(initialPosition - position) < MIN_MANUAL_SELECTING_WIDTH
+        ) {
           controller.moveSelectedArea(position - getRootOffsetLeft(), e);
         }
         cancel(e);
@@ -161,7 +180,12 @@ function initializeAreaEvents(controller: TrackerController, area: ThemeValue, s
   return docEvents;
 }
 
-function initializeSelectedAreaEvents(controller: TrackerController, area: ThemeValue, state: TrackerState, getRootOffsetLeft: () => number): DocumentEvents {
+function initializeSelectedAreaEvents(
+  controller: TrackerController,
+  area: ThemeValue,
+  state: TrackerState,
+  getRootOffsetLeft: () => number,
+): DocumentEvents {
   let isTouchEvent;
   let isActive = false;
   let movingHandler: MovingHandler | null = null;
@@ -201,7 +225,12 @@ function initializeSelectedAreaEvents(controller: TrackerController, area: Theme
   return docEvents;
 }
 
-function initializeSliderEvents(controller: TrackerController, sliders: TrackerSlider[], state: TrackerState, getRootOffsetLeft: () => number): DocumentEvents {
+function initializeSliderEvents(
+  controller: TrackerController,
+  sliders: TrackerSlider[],
+  state: TrackerState,
+  getRootOffsetLeft: () => number,
+): DocumentEvents {
   let isTouchEvent;
   let isActive = false;
   let movingHandler: MovingHandler | null = null;
@@ -264,7 +293,12 @@ export let Tracker = class Tracker {
       params.renderer.root.css({ msTouchAction: 'pinch-zoom' });
     }
     this._docEvents = [
-      initializeSelectedAreaEvents(params.controller, targets.selectedArea, state, getRootOffsetLeft),
+      initializeSelectedAreaEvents(
+        params.controller,
+        targets.selectedArea,
+        state,
+        getRootOffsetLeft,
+      ),
       initializeAreaEvents(params.controller, targets.area, state, getRootOffsetLeft),
       initializeSliderEvents(params.controller, targets.sliders, state, getRootOffsetLeft),
     ];

@@ -6,7 +6,6 @@
 /* eslint-disable func-names */
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable no-param-reassign */
-/* eslint-disable @stylistic/max-len */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-use-before-define */
@@ -61,7 +60,9 @@ export function currentTheme(themeName, colorScheme) {
   }
 
   const scheme = normalizeEnum(colorScheme);
-  currentThemeName = (themeName?.platform ? findThemeNameByPlatform(normalizeEnum(themeName.platform), themeName.version, scheme) : findThemeNameByName(normalizeEnum(themeName), scheme)) || currentThemeName;
+  currentThemeName = (themeName?.platform
+    ? findThemeNameByPlatform(normalizeEnum(themeName.platform), themeName.version, scheme)
+    : findThemeNameByName(normalizeEnum(themeName), scheme)) || currentThemeName;
   // For chaining only
   return this;
 }
@@ -115,30 +116,42 @@ function mergeObject(target, field, source, sourceValue?) {
 
 // TODO: Font initialization should be done here
 function patchTheme(theme) {
-  theme = _extend(true, {
-    loadingIndicator: { font: {} },
-    export: { font: {} },
-    legend: { font: {}, border: {} },
-    title: { font: {} },
-    tooltip: { font: {} },
-    'chart:common': {},
-    'chart:common:axis': {
-      grid: {}, minorGrid: {}, tick: {}, minorTick: {}, title: { font: {} }, label: { font: {} },
+  theme = _extend(
+    true,
+    {
+      loadingIndicator: { font: {} },
+      export: { font: {} },
+      legend: { font: {}, border: {} },
+      title: { font: {} },
+      tooltip: { font: {} },
+      'chart:common': {},
+      'chart:common:axis': {
+        grid: {},
+        minorGrid: {},
+        tick: {},
+        minorTick: {},
+        title: { font: {} },
+        label: { font: {} },
+      },
+      'chart:common:annotation': { font: {}, border: {} },
+      chart: { commonSeriesSettings: { candlestick: {} } },
+      pie: {},
+      polar: {},
+      gauge: { scale: { tick: {}, minorTick: {}, label: { font: {} } } },
+      barGauge: {},
+      funnel: {},
+      sankey: {},
+      map: { background: {} },
+      treeMap: {
+        tile: { selectionStyle: { border: {} } },
+        group: { border: {}, selectionStyle: { border: {} }, label: { font: {} } },
+      },
+      rangeSelector: { scale: { tick: {}, minorTick: {}, label: { font: {} } }, chart: {} },
+      sparkline: {},
+      bullet: {},
     },
-    'chart:common:annotation': { font: {}, border: {} },
-    chart: { commonSeriesSettings: { candlestick: {} } },
-    pie: {},
-    polar: {},
-    gauge: { scale: { tick: {}, minorTick: {}, label: { font: {} } } },
-    barGauge: {},
-    funnel: {},
-    sankey: {},
-    map: { background: {} },
-    treeMap: { tile: { selectionStyle: { border: {} } }, group: { border: {}, selectionStyle: { border: {} }, label: { font: {} } } },
-    rangeSelector: { scale: { tick: {}, minorTick: {}, label: { font: {} } }, chart: {} },
-    sparkline: {},
-    bullet: {},
-  }, theme);
+    theme,
+  );
 
   mergeScalar(theme.loadingIndicator, 'backgroundColor', theme);
   mergeScalar(theme.chart.commonSeriesSettings.candlestick, 'innerColor', null, theme.backgroundColor);
@@ -190,7 +203,12 @@ function patchAxes(theme) {
   [commonAxisSettings.grid, commonAxisSettings.minorGrid].forEach((obj) => {
     mergeScalar(obj, colorFieldName, null, theme.gridColor);
   });
-  [commonAxisSettings, commonAxisSettings.tick, commonAxisSettings.minorTick, commonAxisSettings.label.font].forEach((obj) => {
+  [
+    commonAxisSettings,
+    commonAxisSettings.tick,
+    commonAxisSettings.minorTick,
+    commonAxisSettings.label.font,
+  ].forEach((obj) => {
     mergeScalar(obj, colorFieldName, null, theme.axisColor);
   });
   mergeScalar(commonAxisSettings.title.font, colorFieldName, null, theme.secondaryTitleColor);

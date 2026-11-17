@@ -9,7 +9,6 @@
 /* eslint-disable @typescript-eslint/no-shadow */
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-multi-assign */
-/* eslint-disable @stylistic/max-len */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-use-before-define */
@@ -173,7 +172,12 @@ function getDateTimeFormat(tick, { showTransition, ticks, tickInterval }) {
         prevDateIndex = indexOfTick === 0 ? ticks.length - 1 : indexOfTick - 1;
         nextDateIndex = indexOfTick === 0 ? 1 : -1;
       }
-      const datesDifferences = getDatesDifferences(ticks[prevDateIndex], tick, ticks[nextDateIndex], typeFormat);
+      const datesDifferences = getDatesDifferences(
+        ticks[prevDateIndex],
+        tick,
+        ticks[nextDateIndex],
+        typeFormat,
+      );
       typeFormat = formatHelper.getDateFormatByDifferences(datesDifferences, typeFormat);
     }
   }
@@ -183,7 +187,10 @@ function getDateTimeFormat(tick, { showTransition, ticks, tickInterval }) {
 function getFormatExponential(tick, tickInterval) {
   const stringTick = abs(tick).toString();
   if (isExponential(tick)) {
-    return Math.max(abs(getExponent(tick) - getExponent(tickInterval)), abs(getPrecision(tick) - getPrecision(tickInterval)));
+    return Math.max(
+      abs(getExponent(tick) - getExponent(tickInterval)),
+      abs(getPrecision(tick) - getPrecision(tickInterval)),
+    );
   }
   return abs(getNoZeroIndex(stringTick.split('.')[1]) - getExponent(tickInterval) + 1);
 }
@@ -250,7 +257,10 @@ function formatDateRange(startValue, endValue, tickInterval) {
   const values = [];
 
   if (tickInterval in diff) {
-    const rangeFormat = getHighAndSelfDiffFormat(getDatesDifferences(startValue, endValue), tickInterval);
+    const rangeFormat = getHighAndSelfDiffFormat(
+      getDatesDifferences(startValue, endValue),
+      tickInterval,
+    );
     const value = _format(startValue, rangeFormat);
 
     if (value) {
@@ -342,7 +352,11 @@ export function smartFormatter(tick, options) {
 }
 
 export function formatRange({
-  startValue, endValue, tickInterval, argumentFormat, axisOptions: { dataType, type, logarithmBase },
+  startValue,
+  endValue,
+  tickInterval,
+  argumentFormat,
+  axisOptions: { dataType, type, logarithmBase },
 }) {
   if (type === 'discrete') {
     return '';

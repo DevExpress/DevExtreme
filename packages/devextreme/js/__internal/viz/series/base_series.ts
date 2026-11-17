@@ -10,7 +10,6 @@
 /* eslint-disable @typescript-eslint/no-shadow */
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-multi-assign */
-/* eslint-disable @stylistic/max-len */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable prefer-destructuring */
 /* eslint-disable no-else-return */
@@ -132,7 +131,13 @@ _extend(
   financialSeries,
   stackedSeries.chart,
 );
-_extend(seriesNS.mixins.polar, lineSeries.polar, areaSeries.polar, barSeries.polar, stackedSeries.polar);
+_extend(
+  seriesNS.mixins.polar,
+  lineSeries.polar,
+  areaSeries.polar,
+  barSeries.polar,
+  stackedSeries.polar,
+);
 
 function includePointsMode(mode: ThemeValue): boolean {
   mode = _normalizeEnum(mode);
@@ -345,11 +350,18 @@ export let Series = class Series {
 
   declare autoHidePointMarkers?: boolean;
 
-  declare _aggregators: Record<string, (aggregationInfo: ThemeValue, series: ThemeValue) => ThemeValue>;
+  declare _aggregators: Record<
+    string,
+    (aggregationInfo: ThemeValue, series: ThemeValue) => ThemeValue
+  >;
 
   declare _defaultAggregator: string;
 
-  declare _parseStyle: (options: ThemeValue, defaultColor: string, defaultBorderColor?: string) => ThemeValue;
+  declare _parseStyle: (
+    options: ThemeValue,
+    defaultColor: string,
+    defaultBorderColor?: string,
+  ) => ThemeValue;
 
   declare _getCreatingPointOptions: (data: ThemeValue, dataIndex?: number) => ThemeValue;
 
@@ -363,13 +375,22 @@ export let Series = class Series {
 
   declare _calculateErrorBars: (data: ThemeValue[]) => void;
 
-  declare _checkData: (data: ThemeValue, skippedFields?: ThemeValue, fieldsToCheck?: ThemeValue) => boolean;
+  declare _checkData: (
+    data: ThemeValue,
+    skippedFields?: ThemeValue,
+    fieldsToCheck?: ThemeValue,
+  ) => boolean;
 
   declare _removeElement: (element: ThemeValue) => void;
 
   declare _drawPoint: (options: DrawPointOptions) => void;
 
-  declare _drawSegment: (points: SeriesPoint[], animationEnabled: boolean, segmentCount: number, lastSegment: boolean) => void;
+  declare _drawSegment: (
+    points: SeriesPoint[],
+    animationEnabled: boolean,
+    segmentCount: number,
+    lastSegment: boolean,
+  ) => void;
 
   declare _animate: (firstDrawing?: boolean) => void;
 
@@ -389,7 +410,11 @@ export let Series = class Series {
 
   declare _getOptionsForPoint: () => ThemeValue;
 
-  declare _createPointStyles: (pointOptions: ThemeValue, data?: ThemeValue, point?: SeriesPoint) => ThemeValue;
+  declare _createPointStyles: (
+    pointOptions: ThemeValue,
+    data?: ThemeValue,
+    point?: SeriesPoint,
+  ) => ThemeValue;
 
   declare _patchMarginOptions: (options: ThemeValue) => ThemeValue;
 
@@ -459,7 +484,12 @@ export let Series = class Series {
     };
   }
 
-  setClippingParams(baseId: ThemeValue, wideId: ThemeValue, forceClipping: boolean, clipLabels = true): void {
+  setClippingParams(
+    baseId: ThemeValue,
+    wideId: ThemeValue,
+    forceClipping: boolean,
+    clipLabels = true,
+  ): void {
     this._paneClipRectID = baseId;
     this._widePaneClipRectID = wideId;
     this._forceClipping = forceClipping;
@@ -583,7 +613,9 @@ export let Series = class Series {
 
     this._createGroups();
 
-    this._processEmptyValue = newOptions.ignoreEmptyPoints ? (x): ThemeValue => (x === null ? undefined : x) : (x): ThemeValue => x;
+    this._processEmptyValue = newOptions.ignoreEmptyPoints
+      ? (x): ThemeValue => (x === null ? undefined : x)
+      : (x): ThemeValue => x;
   }
 
   _defineDrawingState(): void {
@@ -620,7 +652,11 @@ export let Series = class Series {
     return this._options;
   }
 
-  _getOldPoint(data: ThemeValue, oldPointsByArgument: Record<string, SeriesPoint[]>, index: number): SeriesPoint | undefined {
+  _getOldPoint(
+    data: ThemeValue,
+    oldPointsByArgument: Record<string, SeriesPoint[]>,
+    index: number,
+  ): SeriesPoint | undefined {
     const arg = data.argument && data.argument.valueOf();
     const point = (oldPointsByArgument[arg] || [])[0];
 
@@ -670,7 +706,9 @@ export let Series = class Series {
       const aggregateByCategory = this.argumentAxisType === DISCRETE;
 
       const argumentRange = aggregateByCategory ? {} : this.getArgumentRange();
-      const aggregationInfo = aggregateByCategory ? {} : this.getArgumentAxis().getAggregationInfo(this._useAllAggregatedPoints, argumentRange);
+      const aggregationInfo = aggregateByCategory
+        ? {}
+        : this.getArgumentAxis().getAggregationInfo(this._useAllAggregatedPoints, argumentRange);
 
       data = this._resample(aggregationInfo, data);
     }
@@ -690,7 +728,9 @@ export let Series = class Series {
   }
 
   _normalizeUsingAllAggregatedPoints(useAllAggregatedPoints?: boolean): void {
-    this._useAllAggregatedPoints = this.useAggregation() && (this.argumentAxisType === DISCRETE || ((this._data || []).length > 1 && !!useAllAggregatedPoints));
+    this._useAllAggregatedPoints = this.useAggregation()
+      && (this.argumentAxisType === DISCRETE
+        || ((this._data || []).length > 1 && !!useAllAggregatedPoints));
   }
 
   _createPoints(): void {
@@ -718,7 +758,9 @@ export let Series = class Series {
         this._incidentOccurred('W2002', [this.name, field]);
       }
     }
-    Object.keys(oldPointsByArgument).forEach((key) => this._disposePoints(oldPointsByArgument[key]));
+    Object.keys(oldPointsByArgument).forEach(
+      (key) => this._disposePoints(oldPointsByArgument[key]),
+    );
 
     this._points = points;
   }
@@ -803,7 +845,11 @@ export let Series = class Series {
     });
   }
 
-  draw(animationEnabled: boolean, hideLayoutLabels?: boolean, legendCallback?: LegendCallback): void {
+  draw(
+    animationEnabled: boolean,
+    hideLayoutLabels?: boolean,
+    legendCallback?: LegendCallback,
+  ): void {
     const firstDrawing = this._firstDrawing;
 
     this._legendCallback = legendCallback || this._legendCallback;
@@ -916,7 +962,11 @@ export let Series = class Series {
     this._resetNearestPoint();
     this._changeStyle(this.lastSelectionMode);
 
-    if (this.lastSelectionMode !== NONE_MODE && this.isHovered() && includePointsMode(this.lastHoverMode)) {
+    if (
+      this.lastSelectionMode !== NONE_MODE
+      && this.isHovered()
+      && includePointsMode(this.lastHoverMode)
+    ) {
       this._resetPointsView(HOVER);
     }
   }
@@ -926,7 +976,11 @@ export let Series = class Series {
 
     this._changeStyle(this.lastSelectionMode, SELECTION);
 
-    if (this.lastSelectionMode !== NONE_MODE && this.isHovered() && includePointsMode(this.lastHoverMode)) {
+    if (
+      this.lastSelectionMode !== NONE_MODE
+      && this.isHovered()
+      && includePointsMode(this.lastHoverMode)
+    ) {
       this._setPointsView(HOVER);
     }
   }
@@ -982,9 +1036,14 @@ export let Series = class Series {
 
   updateHover(x: number, y: number): void {
     const currentNearestPoint = this._nearestPoint;
-    const point = this.isHovered() && this.lastHoverMode === NEAREST_POINT && this.getNeighborPoint(x, y);
+    const point = this.isHovered()
+      && this.lastHoverMode === NEAREST_POINT
+      && this.getNeighborPoint(x, y);
 
-    if (point !== currentNearestPoint && !(this.isSelected() && this.lastSelectionMode !== NONE_MODE)) {
+    if (
+      point !== currentNearestPoint
+      && !(this.isSelected() && this.lastSelectionMode !== NONE_MODE)
+    ) {
       this._resetNearestPoint();
       if (point) {
         point.setView(HOVER);
@@ -998,7 +1057,9 @@ export let Series = class Series {
   }
 
   areLabelsVisible(): boolean {
-    return !_isDefined(this._options.maxLabelCount) || (this._points.length <= this._options.maxLabelCount);
+    return (
+      !_isDefined(this._options.maxLabelCount) || this._points.length <= this._options.maxLabelCount
+    );
   }
 
   getLabelVisibility(): boolean {
@@ -1021,7 +1082,9 @@ export let Series = class Series {
       customizeObject.series = this;
       customLabelOptions = customizeLabel.call(customizeObject, customizeObject);
       useLabelCustomOptions = customLabelOptions && !_isEmptyObject(customLabelOptions);
-      customLabelOptions = useLabelCustomOptions ? _extend(true, {}, options.label, customLabelOptions) : null;
+      customLabelOptions = useLabelCustomOptions
+        ? _extend(true, {}, options.label, customLabelOptions)
+        : null;
     }
 
     if (customizePoint && customizePoint.call) {
@@ -1032,7 +1095,12 @@ export let Series = class Series {
     }
 
     if (useLabelCustomOptions || usePointCustomOptions) {
-      pointOptions = this._parsePointOptions(this._preparePointOptions(customOptions), customLabelOptions || options.label, pointData, point);
+      pointOptions = this._parsePointOptions(
+        this._preparePointOptions(customOptions),
+        customLabelOptions || options.label,
+        pointData,
+        point,
+      );
       pointOptions.styles.useLabelCustomOptions = useLabelCustomOptions;
       pointOptions.styles.usePointCustomOptions = usePointCustomOptions;
 
@@ -1074,7 +1142,12 @@ export let Series = class Series {
     }
   }
 
-  _parsePointOptions(pointOptions: ThemeValue, labelOptions: ThemeValue, data?: ThemeValue, point?: SeriesPoint): ThemeValue {
+  _parsePointOptions(
+    pointOptions: ThemeValue,
+    labelOptions: ThemeValue,
+    data?: ThemeValue,
+    point?: SeriesPoint,
+  ): ThemeValue {
     const options = this._options;
     const styles = this._createPointStyles(pointOptions, data, point);
     const parsedOptions = _extend({}, pointOptions, {
@@ -1103,7 +1176,9 @@ export let Series = class Series {
     return _extend({}, this._getOptionsForPoint(), { hoverStyle: {}, selectionStyle: {} });
   }
 
-  _getAggregationMethod(isValueAxisDiscrete: boolean): (aggregationInfo: ThemeValue, series: ThemeValue) => ThemeValue {
+  _getAggregationMethod(
+    isValueAxisDiscrete: boolean,
+  ): (aggregationInfo: ThemeValue, series: ThemeValue) => ThemeValue {
     const options = this.getOptions().aggregation;
     const method = _normalizeEnum(options.method);
     const customAggregator = method === 'custom' && options.calculate;
@@ -1213,7 +1288,11 @@ export let Series = class Series {
           aggregationInterval: interval,
           data: dataInInterval.map(getData),
         };
-        addAggregatedData(aggregatedData, aggregationMethod(aggregationInfo, this), aggregationInfo);
+        addAggregatedData(
+          aggregatedData,
+          aggregationMethod(aggregationInfo, this),
+          aggregationInfo,
+        );
       }
     }
 
@@ -1280,7 +1359,11 @@ export let Series = class Series {
 
     this.fullState |= HOVER_STATE;
 
-    this._changeStyle(this.lastHoverMode, undefined, this.isSelected() && this.lastSelectionMode !== NONE_MODE);
+    this._changeStyle(
+      this.lastHoverMode,
+      undefined,
+      this.isSelected() && this.lastSelectionMode !== NONE_MODE,
+    );
 
     eventTrigger(SERIES_HOVER_CHANGED, { target: this });
   }
@@ -1295,7 +1378,11 @@ export let Series = class Series {
     this._resetNearestPoint();
     this.fullState &= ~HOVER_STATE;
 
-    this._changeStyle(this.lastHoverMode, HOVER, this.isSelected() && this.lastSelectionMode !== NONE_MODE);
+    this._changeStyle(
+      this.lastHoverMode,
+      HOVER,
+      this.isSelected() && this.lastSelectionMode !== NONE_MODE,
+    );
 
     eventTrigger(SERIES_HOVER_CHANGED, { target: this });
   }
@@ -1434,9 +1521,10 @@ export let Series = class Series {
 
   _clearPointHoverHandler(target: ThemeValue, mode: string, notifyLegend?: boolean): void {
     if (mode === ALL_ARGUMENT_POINTS) {
-      (target.series !== this) && this.getPointsByKeys(target.argument, target.argumentIndex).forEach((currentPoint) => {
-        currentPoint.resetView(HOVER);
-      });
+      target.series !== this
+        && this.getPointsByKeys(target.argument, target.argumentIndex).forEach((currentPoint) => {
+          currentPoint.resetView(HOVER);
+        });
       notifyLegend && this._legendCallback(target);
     } else if (mode === ALL_SERIES_POINTS && target.series === this) {
       this._resetPointsView(HOVER, target);
@@ -1466,7 +1554,12 @@ export let Series = class Series {
     this._deleteTrackers();
 
     // @ts-expect-error dispose() drops the references
-    this._group = this._extGroups = this._markersGroup = this._elementsGroup = this._bordersGroup = this._labelsGroup = this._errorBarGroup = this._graphics = this._rangeData = this._renderer = this._styles = this._options = this._pointOptions = this._drawnPoints = this.pointsByArgument = this._segments = this._prevSeries = null;
+    this._group = this._extGroups = this._markersGroup = this._elementsGroup = null;
+    this._bordersGroup = this._labelsGroup = this._errorBarGroup = this._graphics = null;
+    // @ts-expect-error dispose() drops the references
+    this._rangeData = this._renderer = this._styles = this._options = this._pointOptions = null;
+    // @ts-expect-error dispose() drops the references
+    this._drawnPoints = this.pointsByArgument = this._segments = this._prevSeries = null;
   }
 
   getMarginOptions(): ThemeValue {
@@ -1552,7 +1645,8 @@ Object.assign(Series.prototype, {
 
   usePointsToDefineAutoHiding: _noop,
 
-  // TODO. Problem related to 'point' option for bar-like series. Revisit this code once options parsing is changed
+  // TODO. Problem related to 'point' option for bar-like series. Revisit this code once options
+  // parsing is changed
   // see T243839, T231939
   _updatePointsVisibility: _noop,
 

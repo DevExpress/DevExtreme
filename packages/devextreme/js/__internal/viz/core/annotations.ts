@@ -6,7 +6,6 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable @typescript-eslint/no-shadow */
 /* eslint-disable no-multi-assign */
-/* eslint-disable @stylistic/max-len */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
@@ -87,7 +86,9 @@ function coreAnnotation(options, contentTemplate) {
         const callback = (result) => {
           result && (tooltip.annotation = that);
         };
-        callback(tooltip.show(options, { x, y }, { target: options }, options.customizeTooltip, callback));
+        callback(
+          tooltip.show(options, { x, y }, { target: options }, options.customizeTooltip, callback),
+        );
       } else if (!tooltip.isCursorOnTooltip(x, y)) {
         tooltip.move(x, y);
       }
@@ -135,7 +136,13 @@ function getImageObject(image) {
   return typeof image === 'string' ? { url: image } : image;
 }
 
-export let createAnnotations = function (widget, items, commonAnnotationSettings = {}, customizeAnnotation, pullOptions) {
+export let createAnnotations = function (
+  widget,
+  items,
+  commonAnnotationSettings = {},
+  customizeAnnotation,
+  pullOptions,
+) {
   // @ts-expect-error
   const commonImageOptions = getImageObject(commonAnnotationSettings.image);
   return items.reduce((arr, item) => {
@@ -143,7 +150,7 @@ export let createAnnotations = function (widget, items, commonAnnotationSettings
     const customizedItem = isFunction(customizeAnnotation) ? customizeAnnotation(item) : {};
     if (customizedItem) {
       // @ts-expect-error customizeAnnotation returns the options of an annotation
-      customizedItem.image = getImageObject(customizedItem.image);// T881143
+      customizedItem.image = getImageObject(customizedItem.image); // T881143
     }
 
     const options = extend(
@@ -156,7 +163,12 @@ export let createAnnotations = function (widget, items, commonAnnotationSettings
       customizedItem,
     );
     const templateFunction = getTemplateFunction(options, widget);
-    const annotation = templateFunction && extend(true, pullOptions(options), coreAnnotation(options, widget._getTemplate(templateFunction)));
+    const annotation = templateFunction
+      && extend(
+        true,
+        pullOptions(options),
+        coreAnnotation(options, widget._getTemplate(templateFunction)),
+      );
     annotation && arr.push(annotation);
     return arr;
   }, []);
@@ -220,7 +232,9 @@ const chartPlugin = {
         if (!isDefined(axis) && !isDefined(series)) {
           coords[valCoordName] = argAxis.getAxisPosition();
         } else if (isDefined(axis) && !isDefined(series)) {
-          coords[valCoordName] = this._argumentAxes.filter((a) => a.pane === axis.pane)[0].getAxisPosition();
+          coords[valCoordName] = this._argumentAxes
+            .filter((a) => a.pane === axis.pane)[0]
+            .getAxisPosition();
         } else if (series?.checkSeriesViewportCoord(argAxis, coords[argCoordName])) {
           coords[valCoordName] = series.getSeriesPairCoord(coords[argCoordName], true);
         }
@@ -249,7 +263,10 @@ const chartPlugin = {
         y: touch.pageY || originalEvent.pageY || event.pageY,
       };
 
-      const annotation = this._annotations.items.filter((a) => a.hitTest(coords.x - rootOffset.left, coords.y - rootOffset.top))[0];
+      const annotation = this._annotations.items.filter((a) => a.hitTest(
+        coords.x - rootOffset.left,
+        coords.y - rootOffset.top,
+      ))[0];
 
       if (!annotation || !annotation.options.tooltipEnabled) {
         this._annotations.hideTooltip();
@@ -323,8 +340,10 @@ const polarChartPlugin = {
         // @ts-expect-error
         if (isDefined(coords.angle) && !isDefined(value) && !isDefined(radius)) {
           if (!isDefined(argument)) {
-            // @ts-expect-error
-            argument = argAxis.getTranslator().from(isFinite(angle) ? this.getActualAngle(angle) : coords.angle);
+            argument = argAxis
+              .getTranslator()
+              // @ts-expect-error
+              .from(isFinite(angle) ? this.getActualAngle(angle) : coords.angle);
           }
           // @ts-expect-error
           pointCoords = series.getSeriesPairCoord({ argument, angle: -coords.angle }, true);

@@ -4,7 +4,6 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-multi-assign */
-/* eslint-disable @stylistic/max-len */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable prefer-destructuring */
 /* eslint-disable no-else-return */
@@ -34,7 +33,9 @@ export default _extend({}, symbolPoint, {
       that._visible = true;
     }
 
-    that.minValue = that.initialMinValue = that.originalMinValue = _isDefined(data.minValue) ? data.minValue : 0;
+    that.minValue = that.initialMinValue = that.originalMinValue = _isDefined(data.minValue)
+      ? data.minValue
+      : 0;
   },
 
   animate(complete, duration, delay) {
@@ -90,7 +91,11 @@ export default _extend({}, symbolPoint, {
     if (that._isLabelDrawingWithoutPoints) {
       return that._checkLabelPosition(coord, bBox, visibleArea);
     } else {
-      return that._getLabelExtraCoord(coord, that._checkVerticalLabelPosition(coord, bBox, visibleArea), bBox);
+      return that._getLabelExtraCoord(
+        coord,
+        that._checkVerticalLabelPosition(coord, bBox, visibleArea),
+        bBox,
+      );
     }
   },
 
@@ -264,7 +269,9 @@ export default _extend({}, symbolPoint, {
     const rad = that.radiusOuter;
     const seriesStyle = that._options.styles.normal;
     const strokeWidthBy2 = seriesStyle['stroke-width'] / 2;
-    const borderWidth = that.series.getOptions().containerBackgroundColor === seriesStyle.stroke ? _round(strokeWidthBy2) : _round(-strokeWidthBy2);
+    const borderWidth = that.series.getOptions().containerBackgroundColor === seriesStyle.stroke
+      ? _round(strokeWidthBy2)
+      : _round(-strokeWidthBy2);
     const angleFunctions = _getCosAndSin(_round(that.middleAngle));
 
     return {
@@ -287,7 +294,8 @@ export default _extend({}, symbolPoint, {
         fromAngle = toAngle = that.shiftedAngle;
       }
     }
-    that.graphic = renderer.arc(that.centerX, that.centerY, radiusInner, radiusOuter, toAngle, fromAngle)
+    that.graphic = renderer
+      .arc(that.centerX, that.centerY, radiusInner, radiusOuter, toAngle, fromAngle)
       .attr({ 'stroke-linejoin': 'round' })
       .smartAttr(that._getStyle())
       .data({ 'chart-data-point': that })
@@ -413,7 +421,9 @@ export default _extend({}, symbolPoint, {
     if (fromAngle === toAngle && _abs(that.toAngle - that.fromAngle) > 1E-4) {
       return true;
     } else {
-      return fromAngle >= toAngle ? angle <= fromAngle && angle >= toAngle : !(angle >= fromAngle && angle <= toAngle);
+      return fromAngle >= toAngle
+        ? angle <= fromAngle && angle >= toAngle
+        : !(angle >= fromAngle && angle <= toAngle);
     }
   },
 });
