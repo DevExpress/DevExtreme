@@ -66,7 +66,7 @@ import gridCoreUtils from '@ts/grids/grid_core/utils';
 import { CLASSES as VIEW_CLASSES, ROW_OPTIONS_KEY } from '@ts/grids/grid_core/views/const';
 import type { RowsView } from '@ts/grids/grid_core/views/rows_view';
 import type {
-  CellPosition, FocusStateParams, RowsViewScrollEvent, ViewRowEvent,
+  CellPosition, FocusStateParams, RowsViewScrollEvent, ViewRow, ViewRowEvent,
 } from '@ts/grids/grid_core/views/types';
 import { isVirtualPaging, isVirtualRowRendering } from '@ts/grids/grid_core/virtual_scrolling';
 import type Scrollable from '@ts/ui/scroll_view/scrollable';
@@ -3077,6 +3077,20 @@ const rowsView = (
         this._keyboardNavigationController.pointerEventHandler(eventArgs);
       }
     }
+  }
+
+  protected _updateCells(
+    $rowElement: dxElementWrapper,
+    $newRowElement: dxElementWrapper,
+    columnIndices: number[],
+    options?: ViewRow,
+  ): void {
+    const focusStateClasses = [CLASSES.focused, EDITOR_FACTORY_CLASSES.cellFocusDisabled]
+      .filter((className) => $rowElement.hasClass(className));
+
+    super._updateCells($rowElement, $newRowElement, columnIndices, options);
+
+    focusStateClasses.forEach((className) => $rowElement.addClass(className));
   }
 
   public renderFocusState(params: FocusStateParams): void {
