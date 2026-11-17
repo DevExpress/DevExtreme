@@ -12,7 +12,6 @@ import Validator from '@ts/ui/validator';
 import { createRef } from 'inferno';
 
 import { ColumnsController } from '../../columns_controller/columns_controller';
-import type { Column } from '../../columns_controller/types';
 import { View } from '../../core/view';
 import { ItemsController } from '../../items_controller/items_controller';
 import { KeyboardNavigationController } from '../../keyboard_navigation/index';
@@ -20,6 +19,7 @@ import { OptionsController } from '../../options_controller/options_controller';
 import { ToolbarController } from '../../toolbar/controller';
 import { EditingController } from '../controller';
 import type { EditingTexts } from '../options';
+import type { ColumnFormItem } from '../types';
 import { PendingPromises } from '../utils';
 import type { Props } from './component';
 import { EditPopup } from './component';
@@ -32,8 +32,6 @@ const EDITOR_TYPES_BY_DATA_TYPE: Record<DataType, dxForm.FormItemComponent> = {
   date: 'dxDateBox',
   datetime: 'dxDateBox',
 };
-
-type ColumnFormItem = dxForm.SimpleItem & { column?: Column };
 
 export class EditPopupView extends View<Props> {
   private readonly promises = new PendingPromises();
