@@ -61,7 +61,7 @@ describe('getMinimalAppointments', () => {
         disabled: false,
       };
       const result = getMinimalAppointments(
-        data as any,
+        data,
         {
           dataAccessors: mockAppointmentDataAccessor,
           timeZoneCalculator: createTimeZoneCalculator(''),
@@ -111,7 +111,7 @@ describe('getMinimalAppointments', () => {
     }];
 
     const result = getMinimalAppointments(
-      data as any,
+      data,
       {
         dataAccessors: mockAppointmentDataAccessor,
         timeZoneCalculator: createTimeZoneCalculator(''),
@@ -135,7 +135,7 @@ describe('getMinimalAppointments', () => {
     }];
 
     const result = getMinimalAppointments(
-      data as any,
+      data,
       {
         dataAccessors: new AppointmentDataAccessor(mockUppercaseFieldExpressions, true),
         timeZoneCalculator: createTimeZoneCalculator(''),

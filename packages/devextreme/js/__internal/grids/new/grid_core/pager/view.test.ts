@@ -38,7 +38,7 @@ const isPaginationVisible = (rootElement: HTMLDivElement): boolean => {
 
 const getPagination = (rootElement: HTMLDivElement): dxPagination => {
   const element = rootElement.querySelector('.dx-pagination');
-  const component = ($(element as any) as any).dxPagination('instance') as dxPagination;
+  const component = ($(element) as any).dxPagination('instance') as dxPagination;
 
   return component;
 };

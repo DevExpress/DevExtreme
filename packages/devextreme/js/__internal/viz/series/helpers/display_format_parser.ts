@@ -1,5 +1,4 @@
 /* eslint-disable no-param-reassign */
-/* eslint-disable @stylistic/max-len */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
@@ -39,7 +38,9 @@ export function processDisplayFormat(displayFormat, pointInfo) {
     if (startBracketIndex >= 0 && endBracketIndex > 0) {
       const placeHolder = actualText.substring(startBracketIndex + 1, endBracketIndex);
       const value = getValueByPlaceHolder(placeHolder, pointInfo);
-      actualText = actualText.substr(0, startBracketIndex) + value + actualText.substr(endBracketIndex + 1);
+      actualText = actualText.substr(0, startBracketIndex)
+        + value
+        + actualText.substr(endBracketIndex + 1);
     } else {
       continueProcess = false;
     }

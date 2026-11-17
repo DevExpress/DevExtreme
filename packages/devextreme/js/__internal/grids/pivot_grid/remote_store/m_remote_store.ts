@@ -1,11 +1,25 @@
 import { DataSource } from '@js/common/data/data_source/data_source';
 import { normalizeLoadResult } from '@js/common/data/data_source/utils';
+import type { ScalarFilterValue } from '@js/common/grids';
 import dateSerialization from '@js/core/utils/date_serialization';
+import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred, when } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
-import { isDefined, isString } from '@js/core/utils/type';
+import { isDefined, isFunction, isString } from '@js/core/utils/type';
 import { capitalize } from '@ts/core/utils/capitalize';
+import type Store from '@ts/data/abstract_store';
+import type { StoreKey } from '@ts/data/abstract_store';
+import type { StoreLoadOptions } from '@ts/data/data_source/types';
+import type {
+  DiscoveredField,
+  DrillDownParams,
+  ExpandedLevelOptions,
+  PivotGridAxis,
+  PivotGridField,
+  PivotGridFilterField,
+  PivotGridLoadOptions,
+} from '@ts/grids/pivot_grid/types';
 
 import pivotGridUtils, {
   getExpandedLevel,
@@ -13,23 +27,34 @@ import pivotGridUtils, {
   setDefaultFieldValueFormatting,
 } from '../m_widget_utils';
 import { forEachGroup } from './m_remote_store_utils';
+import type {
+  DataFilter,
+  FilterExpression,
+  GroupingOption,
+  RemoteFilterField,
+  RemoteGroup,
+  RemoteGroupedResult,
+  RemoteHeaderItem,
+  RemoteLoadExtra,
+  RemoteLoadOptions,
+  RemoteLoadResult,
+  RemoteParseState,
+  RemoteRequestOptions,
+} from './types';
 
-function createGroupingOptions(fields, useSortOrder) {
-  const groupingOptions: any = [];
-
-  each(fields, (index: number, field) => {
-    groupingOptions.push({
-      selector: field.dataField,
-      groupInterval: field.groupInterval,
-      desc: useSortOrder && field.sortOrder === 'desc',
-      isExpanded: index < fields.length - 1,
-    });
-  });
-
-  return groupingOptions;
+function createGroupingOptions(
+  fields: PivotGridField[],
+  useSortOrder: number | undefined,
+): GroupingOption[] {
+  return fields.map((field, index) => ({
+    selector: field.dataField,
+    groupInterval: field.groupInterval,
+    desc: useSortOrder && field.sortOrder === 'desc',
+    isExpanded: index < fields.length - 1,
+  }));
 }
 
-function getFieldFilterSelector(field) {
+function getFieldFilterSelector(field: RemoteFilterField): string | undefined {
   let selector = field.dataField;
   let { groupInterval } = field;
 
@@ -44,27 +69,32 @@ function getFieldFilterSelector(field) {
 }
 
 function getIntervalFilterExpression(
-  selector,
-  numericInterval,
-  numericValue,
-  isExcludedFilterType,
-) {
+  selector: string | undefined,
+  numericInterval: number,
+  numericValue: number,
+  isExcludedFilterType: boolean,
+): FilterExpression {
   const startFilterValue = [selector, isExcludedFilterType ? '<' : '>=', numericValue];
   const endFilterValue = [selector, isExcludedFilterType ? '>=' : '<', numericValue + numericInterval];
 
   return [startFilterValue, isExcludedFilterType ? 'or' : 'and', endFilterValue];
 }
 
-function getFilterExpressionForFilterValue(field, filterValue, filterType?) {
+function getFilterExpressionForFilterValue(
+  field: RemoteFilterField,
+  filterValue: ScalarFilterValue,
+  filterType?: string,
+): FilterExpression {
   const selector = getFieldFilterSelector(field);
-  const isExcludedFilterType = (filterType || field.filterType) === 'exclude';
-  let expression = [selector, isExcludedFilterType ? '<>' : '=', filterValue];
+  const isExcludedFilterType = (filterType ?? field.filterType) === 'exclude';
+  let expression: FilterExpression = [selector, isExcludedFilterType ? '<>' : '=', filterValue];
 
   if (isDefined(field.groupInterval)) {
     if (typeof field.groupInterval === 'string' && field.groupInterval.toLowerCase() === 'quarter') {
       expression = getIntervalFilterExpression(
         selector,
         3,
+        // @ts-expect-error a quarter value is a number
         (filterValue - 1) * 3 + 1,
         isExcludedFilterType,
       );
@@ -72,6 +102,7 @@ function getFilterExpressionForFilterValue(field, filterValue, filterType?) {
       expression = getIntervalFilterExpression(
         selector,
         field.groupInterval,
+        // @ts-expect-error a numeric interval value is a number
         filterValue,
         isExcludedFilterType,
       );
@@ -81,21 +112,20 @@ function getFilterExpressionForFilterValue(field, filterValue, filterType?) {
   return expression;
 }
 
-function createFieldFilterExpressions(field, operation?) {
-  const fieldFilterExpressions: any = [];
+function createFieldFilterExpressions(
+  field: RemoteFilterField,
+  operation?: string,
+): FilterExpression {
+  const fieldFilterExpressions: FilterExpression = [];
 
   if (field.searchValue) {
     return [field.dataField, 'contains', field.searchValue];
   }
 
-  if (field.filterType === 'exclude') {
-    operation = operation || 'and';
-  } else {
-    operation = operation || 'or';
-  }
+  const currentOperation = operation ?? (field.filterType === 'exclude' ? 'and' : 'or');
 
   each(field.filterValues, (index, filterValue) => {
-    let currentExpression: any = [];
+    let currentExpression: FilterExpression = [];
 
     if (Array.isArray(filterValue)) {
       const parseLevelsRecursive = field.levels?.length;
@@ -118,7 +148,7 @@ function createFieldFilterExpressions(field, operation?) {
     }
 
     if (fieldFilterExpressions.length) {
-      fieldFilterExpressions.push(operation);
+      fieldFilterExpressions.push(currentOperation);
     }
 
     fieldFilterExpressions.push(currentExpression);
@@ -127,14 +157,14 @@ function createFieldFilterExpressions(field, operation?) {
   return fieldFilterExpressions;
 }
 
-function createFilterExpressions(fields) {
-  let filterExpressions: any = [];
+function createFilterExpressions(fields: RemoteFilterField[] | undefined): FilterExpression {
+  let filterExpressions: FilterExpression = [];
 
-  each(fields, ((_, field) => {
+  fields?.forEach((field) => {
     const fieldExpressions = createFieldFilterExpressions(field);
 
     if (!fieldExpressions.length) {
-      return [];
+      return;
     }
 
     if (filterExpressions.length) {
@@ -142,11 +172,9 @@ function createFilterExpressions(fields) {
     }
 
     filterExpressions.push(fieldExpressions);
+  });
 
-    return undefined;
-  }) as any);
-
-  if (filterExpressions.length === 1) {
+  if (filterExpressions.length === 1 && Array.isArray(filterExpressions[0])) {
     // eslint-disable-next-line prefer-destructuring
     filterExpressions = filterExpressions[0];
   }
@@ -154,25 +182,33 @@ function createFilterExpressions(fields) {
   return filterExpressions;
 }
 
-function mergeFilters(filters, op = 'and'): any {
-  const notEmpty = (filter): boolean => !!filter?.length;
+function mergeFilters(filters: (FilterExpression | undefined)[], op?: string): FilterExpression;
+function mergeFilters(filters: (DataFilter | undefined)[], op?: string): DataFilter;
+function mergeFilters(filters: (DataFilter | undefined)[], op = 'and'): DataFilter {
+  const notEmpty = (filter: DataFilter | undefined): filter is DataFilter => !!filter?.length;
 
-  const result: any = [];
+  const result: (DataFilter | string)[] = [];
 
-  each(filters, (_, filter) => {
+  filters.forEach((filter) => {
     if (notEmpty(filter)) result.push(filter, op);
   });
 
   result.pop();
 
   // remove redundant nesting
-  if (result.length === 1) return result[0];
+  if (result.length === 1 && (Array.isArray(result[0]) || isFunction(result[0]))) {
+    return result[0];
+  }
 
   return result;
 }
 
-function createLoadOptions(options, externalFilterExpr, hasRows) {
-  const loadOptions: any = {
+function createLoadOptions(
+  options: RemoteRequestOptions,
+  externalFilterExpr: DataFilter | undefined,
+  hasRows: number,
+): RemoteLoadOptions {
+  const loadOptions: RemoteLoadOptions = {
     groupSummary: [],
     totalSummary: [],
   };
@@ -199,7 +235,7 @@ function createLoadOptions(options, externalFilterExpr, hasRows) {
     loadOptions.requireGroupCount = true;
   }
 
-  let filterExpressions = createFilterExpressions(options.filters);
+  let filterExpressions: DataFilter = createFilterExpressions(options.filters);
 
   filterExpressions = externalFilterExpr
     ? mergeFilters([filterExpressions, options.filterExpression, externalFilterExpr])
@@ -209,20 +245,28 @@ function createLoadOptions(options, externalFilterExpr, hasRows) {
     loadOptions.filter = filterExpressions;
   }
 
-  each(options.values, (_, value) => {
+  options.values?.forEach((value) => {
     const summaryOption = {
       selector: value.dataField,
       summaryType: value.summaryType || 'count',
     };
 
     loadOptions.groupSummary.push(summaryOption);
-    options.includeTotalSummary && loadOptions.totalSummary.push(summaryOption);
+    if (options.includeTotalSummary) {
+      loadOptions.totalSummary.push(summaryOption);
+    }
   });
 
   return loadOptions;
 }
 
-function setValue(valuesArray, value, rowIndex, columnIndex, dataIndex) {
+function setValue(
+  valuesArray: unknown[][][],
+  value: unknown,
+  rowIndex: number,
+  columnIndex: number,
+  dataIndex: number,
+): void {
   valuesArray[rowIndex] = valuesArray[rowIndex] || [];
   valuesArray[rowIndex][columnIndex] = valuesArray[rowIndex][columnIndex] || [];
   if (!isDefined(valuesArray[rowIndex][columnIndex][dataIndex])) {
@@ -230,23 +274,29 @@ function setValue(valuesArray, value, rowIndex, columnIndex, dataIndex) {
   }
 }
 
-function parseValue(value, field) {
-  if (field && field.dataType === 'number' && isString(value)) {
+function parseValue(value: unknown, field: PivotGridField | undefined): unknown {
+  if (field?.dataType === 'number' && isString(value)) {
     return Number(value);
   }
 
-  if (field && field.dataType === 'date' && !field.groupInterval && !(value instanceof Date)) {
+  if (field?.dataType === 'date' && !field.groupInterval && !(value instanceof Date)) {
     return dateSerialization.deserializeDate(value);
   }
 
   return value;
 }
 
-function parseResult(data, total, descriptions, result) {
-  const rowPath: any = [];
-  let columnPath: any = [];
+function parseResult(
+  data: (RemoteGroup | undefined)[],
+  total: RemoteLoadExtra | undefined,
+  descriptions: RemoteRequestOptions,
+  result: RemoteParseState,
+): RemoteParseState {
+  const rowPath: string[] = [];
+  let columnPath: string[] = [];
   const { rowHash } = result;
   const { columnHash } = result;
+  let groups = data;
 
   if (total?.summary) {
     each(total.summary, (index, summary) => {
@@ -260,19 +310,25 @@ function parseResult(data, total, descriptions, result) {
     });
   }
 
-  if (total && total.groupCount >= 0) {
+  if (total?.groupCount !== undefined && total.groupCount >= 0) {
     const skip = descriptions.rows.length ? descriptions.rowSkip : descriptions.columnSkip;
-    data = [...Array(skip)].concat(data);
-    data.length = total.groupCount;
+    groups = [...Array(skip)].concat(data);
+    groups.length = total.groupCount;
   }
 
-  function getItem(dataItem, dimensionName, path, level, field) {
+  function getItem(
+    dataItem: RemoteGroup,
+    dimensionName: 'row' | 'column',
+    path: string[],
+    level: number,
+    field: PivotGridField | undefined,
+  ): RemoteHeaderItem {
     const dimensionHash = result[`${dimensionName}Hash`];
-    let parentItem;
-    let parentItemChildren;
-    let item;
+    // eslint-disable-next-line @typescript-eslint/init-declarations -- assigned in the if/else
+    let parentItemChildren: RemoteHeaderItem[];
+    // eslint-disable-next-line @typescript-eslint/init-declarations -- assigned in the if/else
+    let item: RemoteHeaderItem;
     const pathValue = path.slice(0, level + 1).join('/');
-    let parentPathValue;
 
     if (dimensionHash[pathValue] !== undefined) {
       item = dimensionHash[pathValue];
@@ -284,11 +340,12 @@ function parseResult(data, total, descriptions, result) {
         displayText: dataItem.displayText,
       };
 
-      parentPathValue = path.slice(0, level).join('/');
+      const parentPathValue = path.slice(0, level).join('/');
 
       if (level > 0 && dimensionHash[parentPathValue] !== undefined) {
-        parentItem = dimensionHash[parentPathValue];
-        parentItemChildren = parentItem.children = parentItem.children || [];
+        const parentItem = dimensionHash[parentPathValue];
+        parentItem.children ??= [];
+        parentItemChildren = parentItem.children;
       } else {
         parentItemChildren = result[`${dimensionName}s`];
       }
@@ -300,11 +357,13 @@ function parseResult(data, total, descriptions, result) {
     return item;
   }
 
-  forEachGroup(data, (item, level) => {
+  forEachGroup(groups, (item, level) => {
     const rowLevel = level >= descriptions.rows.length ? descriptions.rows.length : level;
     const columnLevel = level >= descriptions.rows.length ? level - descriptions.rows.length : 0;
-    let columnItem;
-    let rowItem;
+    // eslint-disable-next-line @typescript-eslint/init-declarations -- assigned in the if/else
+    let columnItem: RemoteHeaderItem | undefined;
+    // eslint-disable-next-line @typescript-eslint/init-declarations -- assigned in the if/else
+    let rowItem: RemoteHeaderItem | undefined;
 
     if (level >= descriptions.rows.length && columnLevel >= descriptions.columns.length) {
       return;
@@ -330,8 +389,8 @@ function parseResult(data, total, descriptions, result) {
       result.rows.push({});
     }
 
-    const currentRowIndex = rowItem?.index || result.grandTotalRowIndex;
-    const currentColumnIndex = columnItem?.index || result.grandTotalColumnIndex;
+    const currentRowIndex = rowItem?.index ?? result.grandTotalRowIndex;
+    const currentColumnIndex = columnItem?.index ?? result.grandTotalColumnIndex;
 
     each(item?.summary || [], (i, summary) => {
       setValue(result.values, summary, currentRowIndex, currentColumnIndex, i);
@@ -341,8 +400,8 @@ function parseResult(data, total, descriptions, result) {
   return result;
 }
 
-function getFiltersForDimension(fields) {
-  return fields?.filter((f) => f.filterValues?.length || f.searchValue) || [];
+function getFiltersForDimension(fields: PivotGridField[] | undefined): PivotGridField[] {
+  return fields?.filter((f) => f.filterValues?.length || f.searchValue) ?? [];
 }
 
 /**
@@ -350,23 +409,27 @@ function getFiltersForDimension(fields) {
  *
  * Otherwise, returns 0
  */
-function getExpandedIndex(options, axis) {
+function getExpandedIndex(options: ExpandedLevelOptions, axis: PivotGridAxis): number {
   if (options.headerName) {
     if (axis === options.headerName) {
+      // @ts-expect-error path is set together with headerName
       return options.path.length;
-    } if (options.oppositePath) {
+    }
+
+    if (options.oppositePath) {
       return options.oppositePath.length;
     }
   }
   return 0;
 }
 
-function getFiltersForExpandedDimension(options) {
+function getFiltersForExpandedDimension(options: ExpandedLevelOptions): PivotGridFilterField[] {
   const oppositeAxis = options.headerName === 'rows' ? 'columns' : 'rows';
 
-  const fields = options[options.headerName];
+  const fields = options.headerName ? options[options.headerName] : undefined;
   const oppositeFields = options[oppositeAxis];
 
+  // @ts-expect-error path is set together with headerName
   const filters = getFiltersByPath(fields, options.path);
   const oppositeFieldsFilters = getFiltersByPath(oppositeFields, options.oppositePath || []);
 
@@ -376,7 +439,7 @@ function getFiltersForExpandedDimension(options) {
 /**
  * @returns index of the first field with field.expanded != true
  */
-function getFirstCollapsedIndex(fields): number {
+function getFirstCollapsedIndex(fields: PivotGridField[]): number {
   for (let index = 0; index < fields.length; index += 1) {
     if (!fields[index].expanded) return index;
   }
@@ -384,12 +447,16 @@ function getFirstCollapsedIndex(fields): number {
   return 0;
 }
 
-function getExpandedPathsFilterExprByLevel(options, axis, level) {
+function getExpandedPathsFilterExprByLevel(
+  options: ExpandedLevelOptions,
+  axis: PivotGridAxis,
+  level: number,
+): FilterExpression {
   if (options.headerName === axis) {
     return [];
   }
 
-  const isPathInLevel = (fields, path: any[]): boolean => {
+  const isPathInLevel = (fields: PivotGridField[], path: ScalarFilterValue[]): boolean => {
     if (path.length > level) return false;
 
     let expandedLevel = path.length;
@@ -412,15 +479,15 @@ function getExpandedPathsFilterExprByLevel(options, axis, level) {
   const fields = options[axis].slice(startFieldIndex, level);
   const paths = (axis === 'rows' ? options.rowExpandedPaths : options.columnExpandedPaths) || [];
 
-  let result: any = [];
+  const result: FilterExpression[] = [];
 
-  each(paths, (_, path) => {
-    path = path.slice(startFieldIndex);
+  paths.forEach((expandedPath) => {
+    const path = expandedPath.slice(startFieldIndex);
 
     // only prepare filters for paths that are in the specified level
     if (!isPathInLevel(fields, path)) return;
 
-    const filters: any = [];
+    const filters: FilterExpression[] = [];
 
     for (let i = 0; i < path.length; i += 1) {
       const field = fields[i];
@@ -437,42 +504,44 @@ function getExpandedPathsFilterExprByLevel(options, axis, level) {
     result.push(pathFilterExpression);
   });
 
-  result = mergeFilters(result, 'or');
-
-  return result;
+  return mergeFilters(result, 'or');
 }
 
-function getGrandTotalRequest(options, dimensionName, commonFilters) {
+function getGrandTotalRequest(
+  options: RemoteRequestOptions,
+  dimensionName: PivotGridAxis,
+  commonFilters: RemoteFilterField[],
+): RemoteRequestOptions[] {
   const expandedIndex = getExpandedIndex(options, dimensionName);
   const expandedLevel = getExpandedLevel(options, dimensionName);
   const expandedPaths = (dimensionName === 'columns' ? options.columnExpandedPaths : options.rowExpandedPaths) || [];
   const oppositeDimensionName = dimensionName === 'columns' ? 'rows' : 'columns';
   const fields = options[dimensionName];
-  const result: any = [];
+  const result: RemoteRequestOptions[] = [];
 
   if (expandedPaths.length) {
     for (let i = expandedIndex; i <= expandedLevel; i += 1) {
       const slicedFields = fields.slice(expandedIndex, i + 1);
       const filterExpr = getExpandedPathsFilterExprByLevel(options, dimensionName, i);
 
-      const grandTotalOptions = {
+      const grandTotalOptions: Partial<RemoteRequestOptions> = {
         filters: commonFilters,
         filterExpression: filterExpr,
         [dimensionName]: slicedFields,
         [oppositeDimensionName]: [],
       };
 
-      result.push(extend({}, options, grandTotalOptions));
+      result.push({ ...options, ...grandTotalOptions });
     }
   } else {
     const slicedFields = fields.slice(expandedIndex, expandedLevel + 1);
-    const grandTotalOptions = {
+    const grandTotalOptions: Partial<RemoteRequestOptions> = {
       filters: commonFilters,
       [dimensionName]: slicedFields,
       [oppositeDimensionName]: [],
     };
 
-    result.push(extend({}, options, grandTotalOptions));
+    result.push({ ...options, ...grandTotalOptions });
   }
 
   result[0].includeTotalSummary = true;
@@ -480,13 +549,13 @@ function getGrandTotalRequest(options, dimensionName, commonFilters) {
   return result;
 }
 
-function createRequestsOptions(options) {
+function createRequestsOptions(options: RemoteRequestOptions): RemoteRequestOptions[] {
   const rowExpandedIndex = getExpandedIndex(options, 'rows');
   const rowExpandedLevel = getExpandedLevel(options, 'rows');
   const columnExpandedIndex = getExpandedIndex(options, 'columns');
   const columnExpandedLevel = getExpandedLevel(options, 'columns');
 
-  const requestsOptions: any = [];
+  const requestsOptions: RemoteRequestOptions[] = [];
 
   const commonFilters = (options.filters || []).concat(
     getFiltersForDimension(options.rows),
@@ -512,12 +581,13 @@ function createRequestsOptions(options) {
 
         const filterExpression = mergeFilters([rowsFilterExpr, columnsFilterExpr]);
 
-        const requestOptions = extend({}, options, {
+        const requestOptions = {
+          ...options,
           columns,
           rows,
           filters: commonFilters,
           filterExpression,
-        });
+        };
 
         requestsOptions.push(requestOptions);
       }
@@ -531,8 +601,8 @@ function createRequestsOptions(options) {
   return requestsOptions;
 }
 
-function prepareFields(fields) {
-  each(fields || [], (_, field) => {
+function prepareFields(fields: PivotGridField[] = []): void {
+  fields.forEach((field) => {
     const { levels } = field;
 
     if (levels) {
@@ -544,18 +614,17 @@ function prepareFields(fields) {
 }
 
 class RemoteStore {
-  _dataSource: any;
+  public _dataSource: DataSource;
 
-  _store: any;
+  public _store: Store;
 
-  constructor(options) {
+  constructor(options: unknown) {
     this._dataSource = new DataSource(options);
     this._store = this._dataSource.store();
   }
 
-  getFields(fields) {
-    // @ts-expect-error
-    const d = new Deferred();
+  public getFields(fields?: PivotGridField[]): DeferredObj<DiscoveredField[]> {
+    const d = Deferred<DiscoveredField[]>();
 
     this._store.load({
       skip: 0,
@@ -563,20 +632,20 @@ class RemoteStore {
     }).done((data) => {
       const normalizedArguments = normalizeLoadResult(data);
       d.resolve(pivotGridUtils.discoverObjectFields(normalizedArguments.data, fields));
+    // @ts-expect-error fail() gets the error, but is typed with the resolve value
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises -- ignores the result
     }).fail(d.reject);
 
     return d;
   }
 
-  key() {
+  public key(): StoreKey | undefined {
     return this._store.key();
   }
 
-  load(options) {
-    const that: any = this;
-    // @ts-expect-error
-    const d = new Deferred();
-    const result = {
+  public load(options: PivotGridLoadOptions): DeferredObj<RemoteLoadResult> {
+    const d = Deferred<RemoteLoadResult>();
+    const result: RemoteParseState = {
       rows: [],
       columns: [],
       values: [],
@@ -589,24 +658,27 @@ class RemoteStore {
       columnIndex: 1,
     };
     const requestsOptions = createRequestsOptions(options);
-    const deferreds: any = [];
 
     prepareFields(options.rows);
     prepareFields(options.columns);
     prepareFields(options.filters);
 
-    each(requestsOptions, (_, requestOptions) => {
-      const loadOptions = createLoadOptions(requestOptions, that.filter(), options.rows.length);
-      const loadDeferred = that._store.load(loadOptions);
-
-      deferreds.push(loadDeferred);
+    const deferreds = requestsOptions.map((requestOptions) => {
+      const loadOptions = createLoadOptions(requestOptions, this.filter(), options.rows.length);
+      // @ts-expect-error group and summary items are looser than the data layer's descriptors
+      return this._store.load(loadOptions);
     });
 
-    when.apply(null, deferreds).done(function () {
-      const args = deferreds.length > 1 ? arguments : [arguments];
+    when(...deferreds).done((...loadResults: unknown[]) => {
+      // @ts-expect-error when() passes the resolve arguments of each load as a list
+      const args: unknown[][] = deferreds.length > 1 ? loadResults : [loadResults];
 
-      each(args, (index, argument) => {
-        const normalizedArguments = normalizeLoadResult(argument[0], argument[1]);
+      args.forEach((argument, index) => {
+        // @ts-expect-error a grouped load returns groups, their summary and count
+        const normalizedArguments: RemoteGroupedResult = normalizeLoadResult(
+          argument[0],
+          argument[1],
+        );
         parseResult(
           normalizedArguments.data,
           normalizedArguments.extra,
@@ -622,25 +694,34 @@ class RemoteStore {
         grandTotalRowIndex: result.grandTotalRowIndex,
         grandTotalColumnIndex: result.grandTotalColumnIndex,
       });
+    // @ts-expect-error fail() gets the error, but is typed with the resolve value
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises -- ignores the result
     }).fail(d.reject);
 
     return d;
   }
 
-  filter(...args: any[]) {
-    return this._dataSource.filter.apply(this._dataSource, args);
+  public filter(): StoreLoadOptions['filter'];
+  public filter(...filterExpr: NonNullable<StoreLoadOptions['filter']>[]): void;
+  public filter(...args: unknown[]): unknown {
+    return this._dataSource.filter(...args);
   }
 
-  supportPaging() {
+  public supportPaging(): boolean {
     return false;
   }
 
-  createDrillDownDataSource(loadOptions, params): any {
-    loadOptions = loadOptions || {};
-    params = params || {};
+  public createDrillDownDataSource(
+    descriptions: PivotGridLoadOptions | undefined,
+    drillDownParams: DrillDownParams | undefined,
+  ): DataSource {
+    // @ts-expect-error descriptions are created on the first load
+    const loadOptions: PivotGridLoadOptions = descriptions || {};
+    const params: DrillDownParams = drillDownParams || {};
 
     const store = this._store;
-    const filters = getFiltersByPath(loadOptions.rows, params.rowPath)
+    const pathFilters: RemoteFilterField[] = getFiltersByPath(loadOptions.rows, params.rowPath);
+    const filters = pathFilters
       .concat(getFiltersByPath(loadOptions.columns, params.columnPath))
       .concat(getFiltersForDimension(loadOptions.rows))
       .concat(loadOptions.filters || [])
@@ -649,10 +730,10 @@ class RemoteStore {
     const filterExp = createFilterExpressions(filters);
 
     return new DataSource({
-      load(loadOptions) {
-        const filter = mergeFilters([filterExp, loadOptions.filter]);
+      load(storeLoadOptions: StoreLoadOptions): DeferredObj<unknown[]> {
+        const filter: DataFilter = mergeFilters([filterExp, storeLoadOptions.filter]);
 
-        const extendedLoadOptions = extend({}, loadOptions, {
+        const extendedLoadOptions = extend({}, storeLoadOptions, {
           filter: filter.length === 0 ? undefined : filter,
           select: params.customColumns,
         });

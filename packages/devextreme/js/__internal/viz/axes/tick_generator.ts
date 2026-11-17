@@ -10,7 +10,6 @@
 /* eslint-disable @typescript-eslint/no-shadow */
 /* eslint-disable no-param-reassign */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
-/* eslint-disable @stylistic/max-len */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-use-before-define */
@@ -70,7 +69,8 @@ function dummyGenerator(options) {
     const interval = screenDelta / count;
 
     return {
-      ticks: interval > 0 ? Array.apply(null, new Array(count + 1)).map((_, i) => interval * i) : [],
+      ticks:
+        interval > 0 ? Array.apply(null, new Array(count + 1)).map((_, i) => interval * i) : [],
       tickInterval: interval,
     };
   };
@@ -88,12 +88,24 @@ function discreteGenerator(options) {
 }
 
 const getValue = (value) => value;
-const getLogValue = (base, allowNegatives, linearThreshold) => (value) => getLog(value, base, allowNegatives, linearThreshold);
-const raiseTo = (base, allowNegatives, linearThreshold) => (value) => raiseToExt(value, base, allowNegatives, linearThreshold);
+const getLogValue = (base, allowNegatives, linearThreshold) => (value) => getLog(
+  value,
+  base,
+  allowNegatives,
+  linearThreshold,
+);
+const raiseTo = (base, allowNegatives, linearThreshold) => (value) => raiseToExt(
+  value,
+  base,
+  allowNegatives,
+  linearThreshold,
+);
 const mathRaiseTo = (base) => (value) => mathRaise(value, base);
 const logAbsValue = (base) => (value) => (value === 0 ? 0 : mathLog(mathAbs(value), base));
 
-const correctValueByInterval = (post, round, getValue) => (value, interval) => adjust(post(round(adjust(getValue(value) / interval)) * interval));
+const correctValueByInterval = (post, round, getValue) => (value, interval) => adjust(
+  post(round(adjust(getValue(value) / interval)) * interval),
+);
 
 function correctMinValueByEndOnTick(floorFunc, ceilFunc, resolveEndOnTick, endOnTick) {
   if (isDefined(endOnTick)) {
@@ -102,7 +114,12 @@ function correctMinValueByEndOnTick(floorFunc, ceilFunc, resolveEndOnTick, endOn
   return function (value, interval, businessViewInfo, forceEndOnTick) {
     const floorTickValue = floorFunc(value, interval);
 
-    if (value - floorTickValue === 0 || !isDefined(businessViewInfo) || resolveEndOnTick(value, floorTickValue, interval, businessViewInfo) || forceEndOnTick) {
+    if (
+      value - floorTickValue === 0
+      || !isDefined(businessViewInfo)
+      || resolveEndOnTick(value, floorTickValue, interval, businessViewInfo)
+      || forceEndOnTick
+    ) {
       return floorTickValue;
     }
     return ceilFunc(value, interval);
@@ -114,20 +131,36 @@ function resolveEndOnTick(curValue, tickValue, interval, businessViewInfo) {
   const intervalCount = math.max(mathCeil(businessViewInfo.businessDelta / interval), 2);
   const businessRatio = businessViewInfo.screenDelta / (intervalCount * interval);
   const potentialTickScreenDiff = math.round(businessRatio * prevTickDataDiff);
-  const delimiterFactor = getLog(businessRatio * interval / businessViewInfo.axisDivisionFactor, 2) + 1;
+  const delimiterFactor = getLog(
+    (businessRatio * interval) / businessViewInfo.axisDivisionFactor,
+    2,
+  ) + 1;
   const delimiterMultiplier = (businessViewInfo.isSpacedMargin ? 2 : 1) * delimiterFactor;
   const screenDelimiter = math.round(VISIBILITY_DELIMITER * delimiterMultiplier);
-  return businessViewInfo.businessDelta > businessViewInfo.interval && potentialTickScreenDiff >= screenDelimiter;
+  return (
+    businessViewInfo.businessDelta > businessViewInfo.interval
+    && potentialTickScreenDiff >= screenDelimiter
+  );
 }
 
 function resolveEndOnTickLog(base) {
   return function (curValue, tickValue, interval, businessViewInfo) {
-    return resolveEndOnTick(getLog(curValue, base), getLog(tickValue, base), interval, businessViewInfo);
+    return resolveEndOnTick(
+      getLog(curValue, base),
+      getLog(tickValue, base),
+      interval,
+      businessViewInfo,
+    );
   };
 }
 
 function resolveEndOnTickDate(curValue, tickValue, interval, businessViewInfo) {
-  return resolveEndOnTick(curValue.valueOf(), tickValue.valueOf(), dateToMilliseconds(interval), businessViewInfo);
+  return resolveEndOnTick(
+    curValue.valueOf(),
+    tickValue.valueOf(),
+    dateToMilliseconds(interval),
+    businessViewInfo,
+  );
 }
 
 function getBusinessDelta(data, breaks) {
@@ -172,7 +205,12 @@ function calculateTickInterval(
   _,
   minTickInterval,
 ) {
-  const interval = getIntervalByFactor(businessDelta, screenDelta, axisDivisionFactor, addTickCount);
+  const interval = getIntervalByFactor(
+    businessDelta,
+    screenDelta,
+    axisDivisionFactor,
+    addTickCount,
+  );
   let result = 1;
   const onlyIntegers = allowDecimals === false;
 
@@ -271,7 +309,9 @@ function getAdjustIntervalLog(skipCalculationLimits) {
     if (!skipCalculationLimits && factor < 1) {
       factor = 1;
     }
-    return multipliers.concat(multipliers[0] * 10).reduce((r, m) => (r < interval ? m * factor : r), 0);
+    return multipliers
+      .concat(multipliers[0] * 10)
+      .reduce((r, m) => (r < interval ? m * factor : r), 0);
   };
 }
 
@@ -315,9 +355,17 @@ function calculateTickIntervalDateTime(
   minTickInterval?,
 ) {
   if (!forceTickInterval || !tickInterval) {
-    const result = adjustIntervalDateTime(getIntervalByFactor(businessDelta, screenDelta, axisDivisionFactor), multipliers, null, gapSize);
+    const result = adjustIntervalDateTime(
+      getIntervalByFactor(businessDelta, screenDelta, axisDivisionFactor),
+      multipliers,
+      null,
+      gapSize,
+    );
 
-    if (!tickInterval || (!forceTickInterval && dateToMilliseconds(tickInterval) <= dateToMilliseconds(result))) {
+    if (
+      !tickInterval
+      || (!forceTickInterval && dateToMilliseconds(tickInterval) <= dateToMilliseconds(result))
+    ) {
       tickInterval = result;
     }
   }
@@ -354,12 +402,26 @@ function adjustIntervalDateTime(interval, multipliers?, _?, gapSize?) {
   return result;
 }
 
-function calculateMinorTickIntervalDateTime(businessDelta, screenDelta, tickInterval, axisDivisionFactor) {
-  return calculateTickIntervalDateTime(businessDelta, screenDelta, tickInterval, true, axisDivisionFactor, DATETIME_MINOR_MULTIPLIERS);
+function calculateMinorTickIntervalDateTime(
+  businessDelta,
+  screenDelta,
+  tickInterval,
+  axisDivisionFactor,
+) {
+  return calculateTickIntervalDateTime(
+    businessDelta,
+    screenDelta,
+    tickInterval,
+    true,
+    axisDivisionFactor,
+    DATETIME_MINOR_MULTIPLIERS,
+  );
 }
 
 function getTickIntervalByCustomTicks(getValue, postProcess) {
-  return (ticks) => (ticks ? postProcess(mathAbs(adjust(getValue(ticks[1]) - getValue(ticks[0])))) || undefined : undefined);
+  return (ticks) => (ticks
+    ? postProcess(mathAbs(adjust(getValue(ticks[1]) - getValue(ticks[0])))) || undefined
+    : undefined);
 }
 
 function addInterval(value, interval, isNegative) {
@@ -395,7 +457,17 @@ function addIntervalWithBreaks(addInterval, breaks, correctValue) {
 }
 
 function calculateTicks(addInterval, correctMinValue, adjustInterval, resolveEndOnTick) {
-  return function (data, tickInterval, endOnTick, gaps, breaks, businessDelta, screenDelta, axisDivisionFactor, generateExtraTick) {
+  return function (
+    data,
+    tickInterval,
+    endOnTick,
+    gaps,
+    breaks,
+    businessDelta,
+    screenDelta,
+    axisDivisionFactor,
+    generateExtraTick,
+  ) {
     const correctTickValue = correctTickValueOnGapSize(addInterval, gaps);
     const { min } = data;
     const { max } = data;
@@ -423,13 +495,17 @@ function calculateTicks(addInterval, correctMinValue, adjustInterval, resolveEnd
     cur = correctTickValue(cur);
 
     let prev;
-    while (cur < max && cur !== prev || generateExtraTick && cur <= max) {
+    while ((cur < max && cur !== prev) || (generateExtraTick && cur <= max)) {
       // @ts-expect-error
       ticks.push(cur);
       prev = cur;
       cur = correctTickValue(addInterval(cur, tickInterval));
     }
-    if (endOnTick || (cur - max === 0) || (!isDefined(endOnTick) && resolveEndOnTick(max, cur, tickInterval, businessViewInfo))) {
+    if (
+      endOnTick
+      || cur - max === 0
+      || (!isDefined(endOnTick) && resolveEndOnTick(max, cur, tickInterval, businessViewInfo))
+    ) {
       // @ts-expect-error
       ticks.push(cur);
     }
@@ -437,7 +513,13 @@ function calculateTicks(addInterval, correctMinValue, adjustInterval, resolveEnd
   };
 }
 
-function calculateMinorTicks(updateTickInterval, addInterval, correctMinValue, correctTickValue, ceil) {
+function calculateMinorTicks(
+  updateTickInterval,
+  addInterval,
+  correctMinValue,
+  correctTickValue,
+  ceil,
+) {
   return function (min, max, majorTicks, minorTickInterval, tickInterval, breaks, maxCount) {
     const factor = tickInterval / minorTickInterval;
     const lastMajor = majorTicks[majorTicks.length - 1];
@@ -550,7 +632,18 @@ function correctTickValueOnGapSize(addInterval, breaks) {
   };
 }
 
-function generator(options, getBusinessDelta, calculateTickInterval, calculateMinorTickInterval, getMajorTickIntervalByCustomTicks, getMinorTickIntervalByCustomTicks, convertTickInterval, calculateTicks, calculateMinorTicks, processScaleBreaks) {
+function generator(
+  options,
+  getBusinessDelta,
+  calculateTickInterval,
+  calculateMinorTickInterval,
+  getMajorTickIntervalByCustomTicks,
+  getMinorTickIntervalByCustomTicks,
+  convertTickInterval,
+  calculateTicks,
+  calculateMinorTicks,
+  processScaleBreaks,
+) {
   function processCustomTicks(customTicks) {
     return {
       tickInterval: getMajorTickIntervalByCustomTicks(customTicks.majors),
@@ -561,14 +654,23 @@ function generator(options, getBusinessDelta, calculateTickInterval, calculateMi
   }
 
   function correctUserTickInterval(tickInterval, businessDelta, limit) {
-    if (tickInterval && (businessDelta / convertTickInterval(tickInterval)) >= limit + 1) {
+    if (tickInterval && businessDelta / convertTickInterval(tickInterval) >= limit + 1) {
       options.incidentOccurred('W2003');
       tickInterval = undefined;
     }
     return tickInterval;
   }
 
-  function generateMajorTicks(ticks, data, businessDelta, screenDelta, tickInterval, forceTickInterval, customTicks, breaks) {
+  function generateMajorTicks(
+    ticks,
+    data,
+    businessDelta,
+    screenDelta,
+    tickInterval,
+    forceTickInterval,
+    customTicks,
+    breaks,
+  ) {
     if (customTicks.majors) {
       ticks.breaks = breaks;
       return ticks;
@@ -577,7 +679,9 @@ function generator(options, getBusinessDelta, calculateTickInterval, calculateMi
     const gaps = breaks.filter((b) => b.gapSize);
     let majorTicks;
 
-    tickInterval = options.skipCalculationLimits ? tickInterval : correctUserTickInterval(tickInterval, businessDelta, screenDelta);
+    tickInterval = options.skipCalculationLimits
+      ? tickInterval
+      : correctUserTickInterval(tickInterval, businessDelta, screenDelta);
     tickInterval = calculateTickInterval(
       businessDelta,
       screenDelta,
@@ -593,7 +697,17 @@ function generator(options, getBusinessDelta, calculateTickInterval, calculateMi
     );
 
     if (!options.skipTickGeneration) {
-      majorTicks = calculateTicks(data, tickInterval, options.endOnTick, gaps, breaks, businessDelta, screenDelta, options.axisDivisionFactor, options.generateExtraTick);
+      majorTicks = calculateTicks(
+        data,
+        tickInterval,
+        options.endOnTick,
+        gaps,
+        breaks,
+        businessDelta,
+        screenDelta,
+        options.axisDivisionFactor,
+        options.generateExtraTick,
+      );
 
       breaks = processScaleBreaks(breaks, majorTicks, tickInterval);
 
@@ -606,7 +720,15 @@ function generator(options, getBusinessDelta, calculateTickInterval, calculateMi
     return ticks;
   }
 
-  function generateMinorTicks(ticks, data, businessDelta, screenDelta, minorTickInterval, minorTickCount, customTicks) {
+  function generateMinorTicks(
+    ticks,
+    data,
+    businessDelta,
+    screenDelta,
+    minorTickInterval,
+    minorTickCount,
+    customTicks,
+  ) {
     if (!options.calculateMinors) {
       return ticks;
     }
@@ -615,25 +737,59 @@ function generator(options, getBusinessDelta, calculateTickInterval, calculateMi
     }
 
     const minorBusinessDelta = convertTickInterval(ticks.tickInterval);
-    const minorScreenDelta = screenDelta * minorBusinessDelta / businessDelta;
+    const minorScreenDelta = (screenDelta * minorBusinessDelta) / businessDelta;
     const { breaks } = ticks;
 
     if (!minorTickInterval && minorTickCount) {
-      minorTickInterval = getMinorTickIntervalByCustomTicks([minorBusinessDelta / (minorTickCount + 1), minorBusinessDelta / (minorTickCount + 1) * 2]);
+      minorTickInterval = getMinorTickIntervalByCustomTicks([
+        minorBusinessDelta / (minorTickCount + 1),
+        (minorBusinessDelta / (minorTickCount + 1)) * 2,
+      ]);
     } else {
       minorTickCount = undefined;
     }
 
-    minorTickInterval = correctUserTickInterval(minorTickInterval, minorBusinessDelta, minorScreenDelta);
+    minorTickInterval = correctUserTickInterval(
+      minorTickInterval,
+      minorBusinessDelta,
+      minorScreenDelta,
+    );
 
-    minorTickInterval = calculateMinorTickInterval(minorBusinessDelta, minorScreenDelta, minorTickInterval, options.minorAxisDivisionFactor);
-    ticks.minorTicks = filterTicks(ticks.minorTicks.concat(calculateMinorTicks(data.min, data.max, ticks.ticks, minorTickInterval, ticks.tickInterval, breaks, minorTickCount)), breaks);
+    minorTickInterval = calculateMinorTickInterval(
+      minorBusinessDelta,
+      minorScreenDelta,
+      minorTickInterval,
+      options.minorAxisDivisionFactor,
+    );
+    ticks.minorTicks = filterTicks(
+      ticks.minorTicks.concat(
+        calculateMinorTicks(
+          data.min,
+          data.max,
+          ticks.ticks,
+          minorTickInterval,
+          ticks.tickInterval,
+          breaks,
+          minorTickCount,
+        ),
+      ),
+      breaks,
+    );
     ticks.minorTickInterval = minorTickInterval;
 
     return ticks;
   }
 
-  return function (data, screenDelta, tickInterval, forceTickInterval, customTicks, minorTickInterval, minorTickCount, breaks) {
+  return function (
+    data,
+    screenDelta,
+    tickInterval,
+    forceTickInterval,
+    customTicks,
+    minorTickInterval,
+    minorTickCount,
+    breaks,
+  ) {
     customTicks = customTicks || {};
 
     const businessDelta = getBusinessDelta(data, breaks);
@@ -643,9 +799,26 @@ function generator(options, getBusinessDelta, calculateTickInterval, calculateMi
       if (businessDelta === 0 && !customTicks.majors) {
         result.ticks = [data.min];
       } else {
-        result = generateMajorTicks(result, data, businessDelta, screenDelta, tickInterval, forceTickInterval, customTicks, breaks || []);
+        result = generateMajorTicks(
+          result,
+          data,
+          businessDelta,
+          screenDelta,
+          tickInterval,
+          forceTickInterval,
+          customTicks,
+          breaks || [],
+        );
         if (!options.skipTickGeneration && businessDelta > 0) {
-          result = generateMinorTicks(result, data, businessDelta, screenDelta, minorTickInterval, minorTickCount, customTicks);
+          result = generateMinorTicks(
+            result,
+            data,
+            businessDelta,
+            screenDelta,
+            minorTickInterval,
+            minorTickCount,
+            customTicks,
+          );
         }
       }
     }
@@ -673,12 +846,28 @@ function getScaleBreaksProcessor(convertTickInterval, getValue, addCorrection) {
 
     return breaks.reduce((result, b) => {
       let breakTicks = ticks.filter((tick) => tick <= b.from);
-      // @ts-expect-error
-      const from = addCorrection(getBaseTick(b.from, [].concat(breakTicks[breakTicks.length - 1], ticks[breakTicks.length]), interval, getValue), correction);
+      const from = addCorrection(
+        getBaseTick(
+          b.from,
+          // @ts-expect-error
+          [].concat(breakTicks[breakTicks.length - 1], ticks[breakTicks.length]),
+          interval,
+          getValue,
+        ),
+        correction,
+      );
 
       breakTicks = ticks.filter((tick) => tick >= b.to);
-      // @ts-expect-error
-      const to = addCorrection(getBaseTick(b.to, [].concat(breakTicks[0], ticks[ticks.length - breakTicks.length - 1]), interval, getValue), -correction);
+      const to = addCorrection(
+        getBaseTick(
+          b.to,
+          // @ts-expect-error
+          [].concat(breakTicks[0], ticks[ticks.length - breakTicks.length - 1]),
+          interval,
+          getValue,
+        ),
+        -correction,
+      );
 
       if (getValue(to) - getValue(from) < interval && !b.gapSize) {
         return result;
@@ -708,13 +897,19 @@ function numericGenerator(options) {
     calculateTickIntervalByCustomTicks,
     calculateTickIntervalByCustomTicks,
     getValue,
-    calculateTicks(addInterval, correctMinValueByEndOnTick(floor, ceil, resolveEndOnTick, options.endOnTick), adjustInterval, resolveEndOnTick),
+    calculateTicks(
+      addInterval,
+      correctMinValueByEndOnTick(floor, ceil, resolveEndOnTick, options.endOnTick),
+      adjustInterval,
+      resolveEndOnTick,
+    ),
     calculateMinorTicks(getValue, addInterval, floor, addInterval, getValue),
     getScaleBreaksProcessor(getValue, getValue, (value, correction) => value + correction),
   );
 }
 
-const correctValueByIntervalLog = (post, getRound, getValue) => (value, interval) => sign(value) * adjust(post(getRound(value)(adjust(getValue(value) / interval)) * interval));
+const correctValueByIntervalLog = (post, getRound, getValue) => (value, interval) => sign(value)
+  * adjust(post(getRound(value)(adjust(getValue(value) / interval)) * interval));
 
 function logarithmicGenerator(options) {
   const base = options.logBase;
@@ -739,8 +934,19 @@ function logarithmicGenerator(options) {
     getTickIntervalByCustomTicks(log, getValue),
     getTickIntervalByCustomTicks(getValue, getValue),
     getValue,
-    calculateTicks(addIntervalLog(log, raise), correctMinValueByEndOnTick(floor, ceil, resolveEndOnTickLog(base), options.endOnTick), getAdjustIntervalLog(options.skipCalculationLimits), resolveEndOnTickLog(base)),
-    calculateMinorTicks((_, tick, prevTick, factor) => Math.max(Math.abs(tick), Math.abs(prevTick)) / factor, addInterval, floor, ceilNumber, ceil),
+    calculateTicks(
+      addIntervalLog(log, raise),
+      correctMinValueByEndOnTick(floor, ceil, resolveEndOnTickLog(base), options.endOnTick),
+      getAdjustIntervalLog(options.skipCalculationLimits),
+      resolveEndOnTickLog(base),
+    ),
+    calculateMinorTicks(
+      (_, tick, prevTick, factor) => Math.max(Math.abs(tick), Math.abs(prevTick)) / factor,
+      addInterval,
+      floor,
+      ceilNumber,
+      ceil,
+    ),
     getScaleBreaksProcessor(getValue, log, (value, correction) => raise(log(value) + correction)),
   );
 }
@@ -748,15 +954,25 @@ function logarithmicGenerator(options) {
 function dateGenerator(options) {
   function floor(value, interval) {
     const floorNumber = correctValueByInterval(getValue, mathFloor, getValue);
-    let intervalObject = isString(interval) ? dateUtils.getDateIntervalByString(interval.toLowerCase()) : interval;
+    let intervalObject = isString(interval)
+      ? dateUtils.getDateIntervalByString(interval.toLowerCase())
+      : interval;
     const divider = dateToMilliseconds(interval);
 
     if (intervalObject.days % 7 === 0 || interval.quarters) {
       intervalObject = adjustIntervalDateTime(divider);
     }
 
-    const correctDateWithUnitBeginning = (v) => dateUtils.correctDateWithUnitBeginning(v, intervalObject, null, options.firstDayOfWeek);
-    const floorAtStartDate = (v) => new Date(mathFloor((v.getTime() - v.getTimezoneOffset() * MINUTE) / divider) * divider + v.getTimezoneOffset() * MINUTE);
+    const correctDateWithUnitBeginning = (v) => dateUtils.correctDateWithUnitBeginning(
+      v,
+      intervalObject,
+      null,
+      options.firstDayOfWeek,
+    );
+    const floorAtStartDate = (v) => new Date(
+      mathFloor((v.getTime() - v.getTimezoneOffset() * MINUTE) / divider) * divider
+          + v.getTimezoneOffset() * MINUTE,
+    );
 
     value = correctDateWithUnitBeginning(value);
 
@@ -790,7 +1006,10 @@ function dateGenerator(options) {
     return newValue;
   }
 
-  const calculateTickIntervalByCustomTicks = getTickIntervalByCustomTicks(getValue, dateUtils.convertMillisecondsToDateUnits);
+  const calculateTickIntervalByCustomTicks = getTickIntervalByCustomTicks(
+    getValue,
+    dateUtils.convertMillisecondsToDateUnits,
+  );
 
   return generator(
     options,
@@ -800,9 +1019,18 @@ function dateGenerator(options) {
     calculateTickIntervalByCustomTicks,
     calculateTickIntervalByCustomTicks,
     dateToMilliseconds,
-    calculateTicks(addIntervalDate, correctMinValueByEndOnTick(floor, ceil, resolveEndOnTickDate, options.endOnTick), adjustIntervalDateTime, resolveEndOnTickDate),
+    calculateTicks(
+      addIntervalDate,
+      correctMinValueByEndOnTick(floor, ceil, resolveEndOnTickDate, options.endOnTick),
+      adjustIntervalDateTime,
+      resolveEndOnTickDate,
+    ),
     calculateMinorTicks(getValue, addIntervalDate, floor, addIntervalDate, getValue),
-    getScaleBreaksProcessor(dateToMilliseconds, getValue, (value, correction) => new Date(value.getTime() + correction)),
+    getScaleBreaksProcessor(
+      dateToMilliseconds,
+      getValue,
+      (value, correction) => new Date(value.getTime() + correction),
+    ),
   );
 }
 

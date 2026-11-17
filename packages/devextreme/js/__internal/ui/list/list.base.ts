@@ -849,7 +849,6 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item> {
 
   _attachGroupCollapseEvent(): void {
     const { collapsibleGroups } = this.option();
-    // @ts-expect-error ts-error
     const eventNameClick = addNamespace(clickEventName, this.NAME);
     const headerSelector = `.${LIST_GROUP_HEADER_CLASS}`;
 
@@ -1107,7 +1106,6 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item> {
   }
 
   _updateSwipeEventSubscription($itemElement: dxElementWrapper = this._itemElements()): void {
-    // @ts-expect-error ts-error
     const endEventName = addNamespace(swipeEventEnd, this.NAME);
     eventsEngine.off($itemElement, endEventName);
 

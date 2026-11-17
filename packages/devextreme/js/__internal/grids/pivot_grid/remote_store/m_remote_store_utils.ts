@@ -1,11 +1,15 @@
-const forEachGroup = function (data, callback, level?) {
-  data = data || [];
-  level = level || 0;
+import type { RemoteGroup } from './types';
 
-  for (let i = 0; i < data.length; i += 1) {
-    const group = data[i];
+const forEachGroup = function forEachGroup(
+  data: (RemoteGroup | undefined)[] | undefined,
+  callback: (group: RemoteGroup | undefined, level: number) => void,
+  level = 0,
+): void {
+  const groups = data ?? [];
+
+  for (const group of groups) {
     callback(group, level);
-    if (group && group.items && group.items.length) {
+    if (group?.items?.length) {
       forEachGroup(group.items, callback, level + 1);
     }
   }

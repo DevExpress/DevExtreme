@@ -1,4 +1,3 @@
-/* eslint-disable @stylistic/no-mixed-operators */
 /* eslint-disable @typescript-eslint/no-shadow */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
@@ -23,8 +22,10 @@ export default {
   },
 
   normalizeValues(items) {
-    // eslint-disable-next-line @stylistic/max-len
-    const max = items.reduce((max, item) => Math.max(item.value, max), items[0] && items[0].value || 0);
+    const max = items.reduce(
+      (max, item) => Math.max(item.value, max),
+      (items[0] && items[0].value) || 0,
+    );
 
     return items.map((item) => item.value / max);
   },

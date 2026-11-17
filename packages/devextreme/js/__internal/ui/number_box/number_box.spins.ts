@@ -30,7 +30,7 @@ export default class SpinButtons extends TextEditorButton<NumberBoxBase, dxEleme
       return;
     }
 
-    const eventName = addNamespace(pointer.down, editor.NAME ?? '');
+    const eventName = addNamespace(pointer.down, editor.NAME);
     const $spinContainerChildren = $spinContainer.children();
 
     const pointerDownAction = editor._createAction(

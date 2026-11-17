@@ -1542,7 +1542,7 @@ class Diagram extends Widget<Properties> {
 
   _getCustomShapes(): Properties['customShapes'] {
     const { customShapes } = this.option();
-    return (customShapes ?? []) as Properties['customShapes'];
+    return (customShapes ?? []);
   }
 
   _getToolboxGroups(): ToolboxGroups {
@@ -2621,7 +2621,7 @@ class Diagram extends Widget<Properties> {
         dataItem: undefined,
       },
       createMethod(nativeItem),
-    ) as Item;
+    );
   }
 
   _nativeShapeToDiagramShape(nativeShape): dxDiagramShape {

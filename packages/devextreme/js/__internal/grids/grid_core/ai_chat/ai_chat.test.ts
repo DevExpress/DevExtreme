@@ -882,7 +882,7 @@ describe('AIChat', () => {
           on: jest.fn(),
           off: jest.fn(),
         };
-        mockChatInstance.getDataSource.mockReturnValue(newDataSource as any);
+        mockChatInstance.getDataSource.mockReturnValue(newDataSource);
 
         aiChat.updateOptions({
           container: $container,
@@ -909,7 +909,7 @@ describe('AIChat', () => {
           on: jest.fn(),
           off: jest.fn(),
         };
-        mockChatInstance.getDataSource.mockReturnValue(newDataSource as any);
+        mockChatInstance.getDataSource.mockReturnValue(newDataSource);
 
         aiChat.updateOptions({
           container: $container,
@@ -932,7 +932,7 @@ describe('AIChat', () => {
           on: jest.fn(),
           off: jest.fn(),
         };
-        mockChatInstance.getDataSource.mockReturnValue(newDataSource as any);
+        mockChatInstance.getDataSource.mockReturnValue(newDataSource);
 
         mockClearChatButtonInstance.option.mockClear();
         aiChat.updateOptions({
@@ -956,7 +956,7 @@ describe('AIChat', () => {
           on: jest.fn(),
           off: jest.fn(),
         };
-        mockChatInstance.getDataSource.mockReturnValue(newDataSource as any);
+        mockChatInstance.getDataSource.mockReturnValue(newDataSource);
 
         mockClearChatButtonInstance.option.mockClear();
         aiChat.updateOptions({

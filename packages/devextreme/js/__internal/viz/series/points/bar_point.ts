@@ -4,7 +4,6 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-multi-assign */
-/* eslint-disable @stylistic/max-len */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable prefer-destructuring */
@@ -136,10 +135,18 @@ export default _extend({}, symbolPoint, {
     const labelBBox = label.getBoundingRect();
 
     if (this._options.resolveLabelsOverlapping) {
-      if (((coord.y <= graphicBBox.y && coord.y + labelBBox.height >= graphicBBox.y + graphicBBox.height)
-                || (coord.x <= graphicBBox.x && coord.x + labelBBox.width >= graphicBBox.x + graphicBBox.width))
-                && !(coord.y > graphicBBox.y + graphicBBox.height || coord.y + labelBBox.height < graphicBBox.y
-                || coord.x > graphicBBox.x + graphicBBox.width || coord.x + labelBBox.width < graphicBBox.x)) {
+      if (
+        ((coord.y <= graphicBBox.y
+          && coord.y + labelBBox.height >= graphicBBox.y + graphicBBox.height)
+          || (coord.x <= graphicBBox.x
+            && coord.x + labelBBox.width >= graphicBBox.x + graphicBBox.width))
+        && !(
+          coord.y > graphicBBox.y + graphicBBox.height
+          || coord.y + labelBBox.height < graphicBBox.y
+          || coord.x > graphicBBox.x + graphicBBox.width
+          || coord.x + labelBBox.width < graphicBBox.x
+        )
+      ) {
         label.draw(false);
         return true;
       }
@@ -347,10 +354,14 @@ export default _extend({}, symbolPoint, {
       const argAxisPosition = argAxis.getAxisPosition();
       if (axisOptions.visible) {
         if (!rotated) {
-          height -= that.minY === that.defaultY && that.minY === argAxisPosition - argAxis.getAxisShift() ? edgeOffset : 0;
+          height
+            -= that.minY === that.defaultY && that.minY === argAxisPosition - argAxis.getAxisShift()
+              ? edgeOffset
+              : 0;
           height < 0 && (height = 0);
         } else {
-          const isStartFromAxis = that.minX === that.defaultX && that.minX === argAxisPosition - argAxis.getAxisShift();
+          const isStartFromAxis = that.minX === that.defaultX
+            && that.minX === argAxisPosition - argAxis.getAxisShift();
           x += isStartFromAxis ? edgeOffset : 0;
           width -= isStartFromAxis ? edgeOffset : 0;
           width < 0 && (width = 0);
@@ -365,6 +376,6 @@ export default _extend({}, symbolPoint, {
 
   coordsIn(x, y) {
     const that = this;
-    return (x >= that.x) && (x <= that.x + that.width) && (y >= that.y) && (y <= that.y + that.height);
+    return x >= that.x && x <= that.x + that.width && y >= that.y && y <= that.y + that.height;
   },
 });

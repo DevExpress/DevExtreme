@@ -244,6 +244,7 @@ export default [
       '@typescript-eslint/no-extraneous-class': 0,
       '@typescript-eslint/no-floating-promises': 0,
       '@typescript-eslint/only-throw-error': 'warn',
+      '@typescript-eslint/no-unnecessary-type-assertion': ['error', { typesToIgnore: ['string'] }],
     },
   },
 

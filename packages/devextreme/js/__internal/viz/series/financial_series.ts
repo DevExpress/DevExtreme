@@ -8,7 +8,6 @@
 /* eslint-disable @typescript-eslint/no-shadow */
 /* eslint-disable consistent-return */
 /* eslint-disable no-multi-assign */
-/* eslint-disable @stylistic/max-len */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable prefer-destructuring */
@@ -73,10 +72,20 @@ export const stock = _extend({}, scatterSeries, {
 
     if (!creatingPointOptions) {
       defaultPointOptions = this._getPointOptions();
-      that._predefinedPointOptions = creatingPointOptions = _extend(true, { styles: {} }, defaultPointOptions);
-      creatingPointOptions.styles.normal = creatingPointOptions.styles.positive.normal = creatingPointOptions.styles.reduction.normal = creatingPointOptions.styles.reductionPositive.normal = {
-        'stroke-width': defaultPointOptions.styles && defaultPointOptions.styles.normal && defaultPointOptions.styles.normal['stroke-width'],
+      that._predefinedPointOptions = creatingPointOptions = _extend(
+        true,
+        { styles: {} },
+        defaultPointOptions,
+      );
+      const normalStyle = {
+        'stroke-width': defaultPointOptions.styles
+          && defaultPointOptions.styles.normal
+          && defaultPointOptions.styles.normal['stroke-width'],
       };
+      creatingPointOptions.styles.normal = normalStyle;
+      creatingPointOptions.styles.positive.normal = normalStyle;
+      creatingPointOptions.styles.reduction.normal = normalStyle;
+      creatingPointOptions.styles.reductionPositive.normal = normalStyle;
     }
 
     return creatingPointOptions;
@@ -173,7 +182,11 @@ export const stock = _extend({}, scatterSeries, {
     const that = this;
     const reductionColor = options.reduction.color;
     return {
-      normal: that._parsePointStyle({ color: reductionColor, width: options.width, hatching: options.hatching }, reductionColor, reductionColor),
+      normal: that._parsePointStyle(
+        { color: reductionColor, width: options.width, hatching: options.hatching },
+        reductionColor,
+        reductionColor,
+      ),
       hover: that._parsePointStyle(options.hoverStyle, reductionColor, reductionColor),
       selection: that._parsePointStyle(options.selectionStyle, reductionColor, reductionColor),
     };
@@ -188,8 +201,10 @@ export const stock = _extend({}, scatterSeries, {
     const reductionStyle = that._getReductionStyle(pointOptions);
     const reductionPositiveStyle = _extend(true, {}, reductionStyle);
 
-    positiveStyle.normal.fill = positiveStyle.hover.fill = positiveStyle.selection.fill = innerColor;
-    reductionPositiveStyle.normal.fill = reductionPositiveStyle.hover.fill = reductionPositiveStyle.selection.fill = innerColor;
+    positiveStyle.normal.fill = positiveStyle.hover.fill = innerColor;
+    positiveStyle.selection.fill = innerColor;
+    reductionPositiveStyle.normal.fill = reductionPositiveStyle.hover.fill = innerColor;
+    reductionPositiveStyle.selection.fill = innerColor;
 
     styles.positive = positiveStyle;
     styles.reduction = reductionStyle;

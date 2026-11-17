@@ -9,7 +9,7 @@ fixture.disablePageReloads`Toolbar_keyboard_navigation_nonAPG`
 
 const itemHasFocus = (item: Selector): Selector => item.filter(
   (node) => node === document.activeElement
-    || node.contains(document.activeElement as Node | null),
+    || node.contains(document.activeElement),
 );
 
 const setupThreeButtonsFixture = async (): Promise<void> => {

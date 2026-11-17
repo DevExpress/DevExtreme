@@ -5,7 +5,6 @@
 /* eslint-disable no-plusplus */
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable no-multi-assign */
-/* eslint-disable @stylistic/max-len */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable prefer-destructuring */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
@@ -200,9 +199,19 @@ export let Point = class Point {
 
   declare _hasGraphic: () => boolean;
 
-  declare _drawMarker: (renderer: ThemeValue, group: ThemeValue, animationEnabled?: boolean, firstDrawing?: boolean) => void;
+  declare _drawMarker: (
+    renderer: ThemeValue,
+    group: ThemeValue,
+    animationEnabled?: boolean,
+    firstDrawing?: boolean,
+  ) => void;
 
-  declare _updateMarker: (animationEnabled: boolean | undefined, style: ThemeValue, group?: ThemeValue, legendCallback?: ThemeValue) => void;
+  declare _updateMarker: (
+    animationEnabled: boolean | undefined,
+    style: ThemeValue,
+    group?: ThemeValue,
+    legendCallback?: ThemeValue,
+  ) => void;
 
   declare _drawLabel: () => void;
 
@@ -252,7 +261,12 @@ export let Point = class Point {
 
   declare resetValue: () => void;
 
-  declare setPercentValue: (absTotal: number, total: number, leftHoleTotal?: number, rightHoleTotal?: number) => void;
+  declare setPercentValue: (
+    absTotal: number,
+    total: number,
+    leftHoleTotal?: number,
+    rightHoleTotal?: number,
+  ) => void;
 
   declare correctCoordinates: (correctOptions: ThemeValue) => void;
 
@@ -343,7 +357,12 @@ export let Point = class Point {
     this.graphic = null;
   }
 
-  draw(renderer: ThemeValue, groups: ThemeValue, animationEnabled?: boolean, firstDrawing?: boolean): this {
+  draw(
+    renderer: ThemeValue,
+    groups: ThemeValue,
+    animationEnabled?: boolean,
+    firstDrawing?: boolean,
+  ): this {
     if (this._needDeletingOnDraw || (this.series.autoHidePointMarkers && !this.isSelected())) {
       this.deleteMarker();
       this._needDeletingOnDraw = false;
@@ -354,7 +373,9 @@ export let Point = class Point {
     }
 
     if (!this._hasGraphic()) {
-      this.getMarkerVisibility() && !this.series.autoHidePointMarkers && this._drawMarker(renderer, groups.markers, animationEnabled, firstDrawing);
+      this.getMarkerVisibility()
+        && !this.series.autoHidePointMarkers
+        && this._drawMarker(renderer, groups.markers, animationEnabled, firstDrawing);
     } else {
       this._updateMarker(animationEnabled, this._getStyle(), groups.markers);
     }
@@ -394,7 +415,12 @@ export let Point = class Point {
   applyView(legendCallback?: ThemeValue): void {
     const style = this._getViewStyle();
     this._currentStyle = style;
-    if (!this.graphic && this.getMarkerVisibility() && this.series.autoHidePointMarkers && (style === SELECTION || style === HOVER)) {
+    if (
+      !this.graphic
+      && this.getMarkerVisibility()
+      && this.series.autoHidePointMarkers
+      && (style === SELECTION || style === HOVER)
+    ) {
       this._drawMarker(this.series.getRenderer(), this.series.getMarkersGroup());
     }
     if (this.graphic) {
@@ -484,7 +510,8 @@ export let Point = class Point {
       }
       this._setType(mixins[newPointTypeMixin]);
     } else {
-      this._needDeletingOnDraw = this._needDeletingOnDraw || this._checkSymbol(oldOptions, newOptions);
+      this._needDeletingOnDraw = this._needDeletingOnDraw
+        || this._checkSymbol(oldOptions, newOptions);
       this._needClearingOnDraw = this._checkCustomize(oldOptions, newOptions);
     }
 
@@ -541,7 +568,11 @@ export let Point = class Point {
     return this._options;
   }
 
-  animate(complete: (() => void) | undefined, settings: ThemeValue, partitionDuration?: number): void {
+  animate(
+    complete: (() => void) | undefined,
+    settings: ThemeValue,
+    partitionDuration?: number,
+  ): void {
     if (!this.graphic) {
       complete && complete();
       return;
@@ -562,7 +593,9 @@ export let Point = class Point {
   }
 
   getDefaultCoords(): Coords {
-    return !this._options.rotated ? { x: this.x, y: this.defaultY } : { x: this.defaultX, y: this.y };
+    return !this._options.rotated
+      ? { x: this.x, y: this.defaultY }
+      : { x: this.defaultX, y: this.y };
   }
 
   setDefaultCoords(): void {
@@ -594,7 +627,12 @@ export let Point = class Point {
   }
 
   hasValue(): boolean {
-    return this.value !== null && this.minValue !== null && this.isArgumentCorrect() && this.isValueCorrect();
+    return (
+      this.value !== null
+      && this.minValue !== null
+      && this.isArgumentCorrect()
+      && this.isValueCorrect()
+    );
   }
 
   dispose(): void {

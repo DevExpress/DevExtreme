@@ -10,7 +10,6 @@ import type { RealSize } from './generate_view_model/steps/add_geometry/types';
 import { getAgendaAppointmentInfo, getAppointmentInfo } from './get_appointment_info';
 import { prepareAppointments } from './preparation/prepare_appointments';
 import type {
-  AppointmentCollectorViewModel,
   AppointmentEntity,
   AppointmentItemViewModel,
   AppointmentViewModelPlain,
@@ -131,7 +130,7 @@ class AppointmentLayoutManager {
           height: item.height,
           isCompact: item.isCompact,
           items: item.items.map(toCollectedItem),
-        } as AppointmentCollectorViewModel;
+        };
       }
 
       return toItem(item);

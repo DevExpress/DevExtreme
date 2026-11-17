@@ -18,7 +18,6 @@ if (Quill) {
     constructor(quill: QuillInstance, options: BaseModuleOptions) {
       super(quill, options);
 
-      // @ts-expect-error NAME is typed as optional; the Component constructor always sets it
       const widgetName: string = this.editorInstance.NAME;
 
       eventsEngine.on(this.quill.root, addNamespace('drop', widgetName), this._dropHandler.bind(this));

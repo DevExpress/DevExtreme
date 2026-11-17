@@ -261,7 +261,7 @@ export default function App() {
         <ConnectionPoint x={0.1} y={0.5} />
       </CustomShape>
       <Toolbox>
-        <Group category={'hardware' as any} title="Hardware" />
+        <Group category="hardware" title="Hardware" />
       </Toolbox>
     </Diagram>
   );

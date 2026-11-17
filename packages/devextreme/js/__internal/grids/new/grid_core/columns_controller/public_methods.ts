@@ -1,17 +1,13 @@
-/* eslint-disable consistent-return */
-
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
-
 import { isObject } from '@js/core/utils/type';
 
-import type { Constructor } from '../types';
-import type { GridCoreNewBase } from '../widget';
+import type { GridCoreClass, Mixin } from '../types';
 import type { ColumnProperties, ColumnSettings } from './options';
-import type { Column } from './types';
+import type { Column, ColumnsControllerPublicMethods } from './types';
 import { getColumnByIndexOrName } from './utils';
 
-export function PublicMethods<TBase extends Constructor<GridCoreNewBase>>(GridCore: TBase) {
+export function PublicMethods<TBase extends GridCoreClass>(
+  GridCore: TBase,
+): Mixin<TBase, ColumnsControllerPublicMethods> {
   return class GridCoreWithColumnsController extends GridCore {
     public getVisibleColumns(): Column[] {
       return this.columnsController.visibleColumns.peek();
@@ -71,15 +67,14 @@ export function PublicMethods<TBase extends Constructor<GridCoreNewBase>>(GridCo
       columnNameOrIndex: string | number,
       option?: T | ColumnSettings,
       value?: ColumnSettings[T],
-    // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
-    ): Column | Column[T] | void {
+    ): Column | Column[T] | undefined {
       const column = getColumnByIndexOrName(
         this.columnsController.columns.peek(),
         columnNameOrIndex,
       );
 
       if (!column) {
-        return;
+        return undefined;
       }
 
       if (arguments.length === 1) {
@@ -96,7 +91,6 @@ export function PublicMethods<TBase extends Constructor<GridCoreNewBase>>(GridCo
             );
           });
         } else {
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-return
           return column[option as T];
         }
       }
@@ -104,6 +98,8 @@ export function PublicMethods<TBase extends Constructor<GridCoreNewBase>>(GridCo
       if (arguments.length === 3) {
         this.columnsController.columnOption(column, option as keyof Column, value);
       }
+
+      return undefined;
     }
   };
 }
