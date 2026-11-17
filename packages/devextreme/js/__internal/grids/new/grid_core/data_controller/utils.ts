@@ -153,7 +153,7 @@ export function getStoreLoadOptions(
 
 export function updateItemsImmutable(
   data: DataObject[],
-  changes: StoreChange[],
+  changes: StoreChange<DataObject>[],
   keyInfo: KeyInfo,
 ): DataObject[] {
   return applyBatch({
