@@ -4,7 +4,6 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-multi-assign */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable prefer-destructuring */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 
 import { extend } from '@ts/core/utils/extend';
@@ -38,8 +37,7 @@ export const polarSymbolPoint = _extend({}, symbolPoint, {
   _getElementCoords: piePoint._getElementCoords,
 
   _moveLabelOnCanvas(coord, visibleArea, labelBBox) {
-    let x = coord.x;
-    let y = coord.y;
+    let { x, y } = coord;
     if (visibleArea.minX > x) {
       x = visibleArea.minX;
     }
@@ -108,7 +106,7 @@ export const polarSymbolPoint = _extend({}, symbolPoint, {
 
   _translateErrorBars() {
     const that = this;
-    const errorBars = that._options.errorBars;
+    const { errorBars } = that._options;
     const translator = that._getValTranslator();
 
     if (!errorBars) {
@@ -241,12 +239,10 @@ export const polarBarPoint = _extend({}, barPoint, {
     const that = this;
     const styles = that._getStyle();
     const coords = that.getMarkerCoords();
-    let innerRadius = coords.innerRadius;
-    let outerRadius = coords.outerRadius;
+    let { innerRadius, outerRadius } = coords;
 
     const start = that._getCoords(that.argument, CANVAS_POSITION_DEFAULT);
-    let x = coords.x;
-    let y = coords.y;
+    let { x, y } = coords;
 
     if (animationEnabled) {
       innerRadius = 0;

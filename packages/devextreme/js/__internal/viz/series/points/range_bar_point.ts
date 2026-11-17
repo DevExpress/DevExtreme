@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-this-alias */
 /* eslint-disable @typescript-eslint/init-declarations */
 /* eslint-disable @typescript-eslint/naming-convention */
-/* eslint-disable prefer-destructuring */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 
 import { noop } from '@ts/core/utils/common';
@@ -17,7 +16,7 @@ export default _extend({}, barPoint, {
   _getFormatObject: rangeSymbolPointMethods._getFormatObject,
 
   clearVisibility() {
-    const graphic = this.graphic;
+    const { graphic } = this;
 
     if (graphic && graphic.attr('visibility')) {
       graphic.attr({ visibility: null });
@@ -25,7 +24,7 @@ export default _extend({}, barPoint, {
   },
 
   setInvisibility() {
-    const graphic = this.graphic;
+    const { graphic } = this;
 
     if (graphic && graphic.attr('visibility') !== 'hidden') {
       graphic.attr({ visibility: 'hidden' });

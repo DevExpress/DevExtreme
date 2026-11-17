@@ -9,7 +9,6 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-multi-assign */
 /* eslint-disable @typescript-eslint/no-use-before-define */
-/* eslint-disable prefer-destructuring */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 /* eslint-disable max-classes-per-file */
@@ -440,7 +439,7 @@ export let Tracker = class Tracker {
     // Now to avoid not so necessary complication of renderer text-span issue is handled on the side
     // of the tracker.
     function getData(event: ThemeValue): ThemeValue {
-      const target = event.target;
+      const { target } = event;
       return (target.tagName === 'tspan' ? target.parentNode : target)[DATA_KEY];
     }
   }
@@ -596,8 +595,7 @@ function getDistance(x1: number, y1: number, x2: number, y2: number): number {
 }
 
 function isTouchEvent(event: ThemeValue): boolean {
-  const type: string = event.originalEvent.type;
-  const pointerType = event.originalEvent.pointerType;
+  const { type, pointerType }: { type: string; pointerType: ThemeValue } = event.originalEvent;
   return type.startsWith('touch') || (type.startsWith('MSPointer') && pointerType !== 4) || (type.startsWith('pointer') && pointerType !== 'mouse');
 }
 
@@ -635,7 +633,7 @@ function setupEvents(): void {
 }
 
 function getEventCoords(event: ThemeValue): Coords {
-  const originalEvent = event.originalEvent;
+  const { originalEvent } = event;
   const touch = (originalEvent.touches && originalEvent.touches[0]) || {};
   return {
     x: touch.pageX || originalEvent.pageX || event.pageX,
@@ -648,7 +646,7 @@ function getPointerId(event: { originalEvent: { pointerId?: number } }): number 
 }
 
 function getMultitouchEventCoords(event: ThemeValue, pointerId: number): Coords | null {
-  let originalEvent = event.originalEvent;
+  let { originalEvent } = event;
   if (originalEvent.pointerId !== undefined) {
     originalEvent = originalEvent.pointerId === pointerId ? originalEvent : null;
   } else {
