@@ -240,8 +240,7 @@ function getExpandedLevel(options: ExpandedLevelOptions, axisName: PivotGridAxis
   let expandedLevel = 0;
 
   if (options.headerName === axisName) {
-    // @ts-expect-error path is set together with headerName
-    expandedLevel = options.path.length;
+    expandedLevel = options.path?.length ?? 0;
   } else if (options.headerName && options.headerName !== axisName && options.oppositePath) {
     expandedLevel = options.oppositePath.length;
   } else {
