@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable spellcheck/spell-checker */
 import { applyChanges } from '@js/common/data';
 import { isDefined } from '@js/core/utils/type';
@@ -67,7 +66,7 @@ export class EditingController {
       return null;
     }
 
-    const oldItem = this.itemsController.findItemByKey(items, editCardKey)!;
+    const oldItem = this.itemsController.findItemByKey(items, editCardKey);
 
     if (!oldItem) {
       return null;
@@ -125,10 +124,16 @@ export class EditingController {
   public editCard(key: Key): void {
     this.optionsValidationController.validateKeyExpr();
 
+    const card = this.itemsController.getCardByKey(key);
+
+    if (!card) {
+      return;
+    }
+
     const eventArgs = {
       cancel: false,
       key,
-      data: this.itemsController.getCardByKey(key)!.data,
+      data: card.data,
     };
 
     this.onEditingStart.peek()(eventArgs);
@@ -279,6 +284,8 @@ export class EditingController {
       switch (change.type) {
         case 'update': {
           const updatingArgs = {
+            /* eslint-disable-next-line @typescript-eslint/no-non-null-assertion --
+               a change for an unloaded card must fail the save, not be dropped */
             oldData: this.itemsController.getCardByKey(change.key)!.data,
             newData: change.data,
             cancel: false,
@@ -303,6 +310,8 @@ export class EditingController {
           break;
         }
         case 'remove': {
+          /* eslint-disable-next-line @typescript-eslint/no-non-null-assertion --
+             a change for an unloaded card must fail the save, not be dropped */
           const { data } = (this.itemsController.findItemByKey(
             this.itemsController.items.peek(),
             change.key,

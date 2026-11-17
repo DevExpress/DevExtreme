@@ -44,6 +44,8 @@ export interface SelectionOptions {
   allowSelectAll?: boolean;
 
   selectAllMode?: SelectAllMode;
+
+  maxFilterLengthInRequest?: number;
 }
 
 export interface SelectionPublicMethods {

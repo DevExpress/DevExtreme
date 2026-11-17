@@ -1,7 +1,6 @@
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
-
-import type { DeferredObj } from '@js/core/utils/deferred';
+import type { DataSource, LoadResult } from '@js/common/data';
+import type { FilterDescriptor, LoadOptions, SelectDescriptor } from '@js/common/data.types';
+import type { DeferredObj, DxExtendedPromise } from '@js/core/utils/deferred';
 import messageLocalization from '@js/localization/message';
 import type { ReadonlySignal } from '@ts/core/state_manager/index';
 import {
@@ -177,7 +176,10 @@ export class SelectionController {
     });
   }
 
-  private getSelectionConfig(dataSource, selectionOption): object {
+  private getSelectionConfig(
+    dataSource: DataSource<unknown, unknown>,
+    selectionOption: SelectionOptions,
+  ): object {
     const selectedCardKeys = this.selectedCardKeys.peek();
     const { dataController } = this;
 
@@ -186,22 +188,22 @@ export class SelectionController {
       mode: selectionOption.mode,
       maxFilterLengthInRequest: selectionOption.maxFilterLengthInRequest,
       ignoreDisabledItems: true,
-      key() {
+      key(): string | string[] {
         return dataSource.key();
       },
-      keyOf(item) {
+      keyOf(item: unknown): unknown {
         return dataSource.store().keyOf(item);
       },
-      dataFields() {
+      dataFields(): SelectDescriptor<unknown> {
         return dataSource.select();
       },
-      load(options) {
+      load(options: LoadOptions<unknown>): DxExtendedPromise<LoadResult<unknown>> {
         return dataSource.store().load(options);
       },
-      plainItems() {
+      plainItems(): unknown[] {
         return dataSource.items();
       },
-      filter() {
+      filter(): FilterDescriptor {
         return dataController.getCombinedFilter();
       },
       totalCount: () => dataSource.totalCount(),
@@ -265,7 +267,7 @@ export class SelectionController {
 
   private updateSelectionToolbarButtons(
     selectedCardKeys: SelectedCardKeys,
-  ) {
+  ): void {
     const isSelectAll = this.isSelectAll();
     const isOnePageSelectAll = this.isOnePageSelectAll();
 

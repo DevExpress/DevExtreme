@@ -11,6 +11,7 @@ import CardView from '@ts/grids/new/card_view/widget';
 import { rerender } from 'inferno';
 
 import type { ContextMenuPreparingEvent } from '.';
+import type { CardViewContextMenuItem } from './controller';
 
 const setup = (options: CardViewOptions = {}): CardView => {
   const container = document.createElement('div');
@@ -246,7 +247,7 @@ describe('ContextMenu', () => {
       expect(event.items).toHaveLength(3);
 
       event.items?.forEach((item) => {
-        expect(item.disabled).toBe(sortOrder === item.value);
+        expect(item.disabled).toBe(sortOrder === (item as CardViewContextMenuItem).value);
       });
     });
 
