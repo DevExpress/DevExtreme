@@ -221,14 +221,14 @@ class Popover<
   }
 
   _attachEscapeKeyHandler(): void {
-    const eventName = addNamespace('keydown', this.NAME as string);
+    const eventName = addNamespace('keydown', this.NAME);
 
     eventsEngine.off(domAdapter.getDocument(), eventName, this._documentEscapeKeyHandler);
     eventsEngine.on(domAdapter.getDocument(), eventName, this._documentEscapeKeyHandler);
   }
 
   _detachEscapeKeyHandler(): void {
-    const eventName = addNamespace('keydown', this.NAME as string);
+    const eventName = addNamespace('keydown', this.NAME);
 
     eventsEngine.off(domAdapter.getDocument(), eventName, this._documentEscapeKeyHandler);
   }
@@ -285,7 +285,7 @@ class Popover<
       return;
     }
 
-    const namespace = `${this.NAME as string}Hoverable`;
+    const namespace = `${this.NAME}Hoverable`;
 
     const activeHideEvents = hideEventName
       .split(/\s+/)
@@ -324,7 +324,7 @@ class Popover<
       return;
     }
 
-    const namespace = `${this.NAME as string}Hoverable`;
+    const namespace = `${this.NAME}Hoverable`;
 
     const allEventNames = [
       ...Object.keys(HOVER_EVENT_PAIRS),
@@ -380,8 +380,7 @@ class Popover<
 
     this[EVENT_HANDLER_NAME] = this._createEventHandler(name);
 
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const eventName = addNamespace(event, this.NAME!);
+    const eventName = addNamespace(event, this.NAME);
 
     const isSelector = isString(target);
 
@@ -404,8 +403,7 @@ class Popover<
       return;
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    eventName = addNamespace(eventName, this.NAME!);
+    eventName = addNamespace(eventName, this.NAME);
 
     const EVENT_HANDLER_NAME = this._getEventHandlerName(name);
     const isSelector = isString(target);

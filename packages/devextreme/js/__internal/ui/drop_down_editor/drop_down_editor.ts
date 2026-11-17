@@ -653,7 +653,6 @@ class DropDownEditor<
 
   _renderOpenHandler(): void {
     const $inputWrapper = this._inputWrapper();
-    // @ts-expect-error NAME property is missing
     const eventName = addNamespace(clickEventName, this.NAME);
     const { openOnFieldClick } = this.option();
 
@@ -669,7 +668,6 @@ class DropDownEditor<
   _attachFocusOutHandler(): void {
     if (isIOs) {
       this._detachFocusOutEvents();
-      // @ts-expect-error NAME property is missing
       eventsEngine.on(this._inputWrapper(), addNamespace('focusout', this.NAME), (event: DxEvent<FocusEvent>) => {
         const newTarget = event.relatedTarget;
         const { opened } = this.option();
@@ -695,7 +693,6 @@ class DropDownEditor<
     if (!isIOs) {
       return;
     }
-    // @ts-expect-error NAME property is missing
     eventsEngine.off(this._inputWrapper(), addNamespace('focusout', this.NAME));
   }
 
@@ -830,7 +827,6 @@ class DropDownEditor<
   }
 
   _attachPopupKeyHandler(): void {
-    // @ts-expect-error ts-error NAME property is missing
     eventsEngine.on(this._popup?.$overlayContent(), addNamespace('keydown', this.NAME), (e: DxEvent<KeyboardEvent>) => this._popupKeyHandler(e));
   }
 

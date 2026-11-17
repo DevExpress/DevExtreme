@@ -1015,7 +1015,6 @@ class Overlay<
 
   _toggleTabTerminator(enabled: boolean): void {
     const { tabFocusLoopEnabled } = this.option();
-    // @ts-expect-error NAME has string | undefined type
     const eventName = addNamespace('keydown', this.NAME);
 
     if (tabFocusLoopEnabled || enabled) {
@@ -1026,7 +1025,6 @@ class Overlay<
   }
 
   _destroyTabTerminator(): void {
-    // @ts-expect-error NAME has string | undefined type
     const eventName = addNamespace('keydown', this.NAME);
     eventsEngine.off(domAdapter.getDocument(), eventName, this._proxiedTabTerminatorHandler);
   }
@@ -1125,7 +1123,6 @@ class Overlay<
   }
 
   _toggleHideOnParentsScrollSubscription(needSubscribe?: boolean): void {
-    // @ts-expect-error NAME has string | undefined type
     const scrollEvent = addNamespace('scroll', this.NAME);
     const info = this._parentsScrollSubscriptionInfo ?? {};
 
@@ -1336,7 +1333,6 @@ class Overlay<
   }
 
   _toggleWrapperScrollEventsSubscription(enabled?: boolean): void {
-    // @ts-expect-error NAME has string | undefined type
     const eventName = addNamespace(dragEventMove, this.NAME);
 
     eventsEngine.off(this._$wrapper, eventName);

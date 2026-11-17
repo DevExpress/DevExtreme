@@ -283,7 +283,6 @@ if (Quill) {
     }
 
     _getContainerMouseDownEvent(): string {
-      // @ts-expect-error NAME is typed optional (component.ts); the constructor always sets it
       return addNamespace('mousedown', this.editorInstance.NAME);
     }
 

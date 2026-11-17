@@ -410,16 +410,14 @@ class HtmlEditor extends Editor<Properties> {
 
     eventsEngine.on(
       $scrollContainer,
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- NAME is always set
-      addNamespace(scrollEvents.init, this.NAME!),
+      addNamespace(scrollEvents.init, this.NAME),
       initScrollData,
       noop,
     );
 
     eventsEngine.on<DxEvent<PointerEvent>>(
       $scrollContainer,
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- NAME is always set
-      addNamespace(pointerEvents.move, this.NAME!),
+      addNamespace(pointerEvents.move, this.NAME),
       this._pointerMoveHandler.bind(this),
     );
   }
