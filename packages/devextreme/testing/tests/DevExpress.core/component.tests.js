@@ -363,11 +363,6 @@ QUnit.module('default', {}, () => {
 
     QUnit.test('complex options', function(assert) {
         class Component1 extends Component {
-            ctor(options) {
-                this.NAME = 'component1';
-                super.ctor(options);
-            }
-
             _getDefaultOptions() {
                 return $.extend(
                     super._getDefaultOptions(), {
@@ -408,10 +403,6 @@ QUnit.module('default', {}, () => {
         let triggered;
 
         class TempComponent extends Component {
-            ctor(options) {
-                this.NAME = 'temp';
-                super.ctor(options);
-            }
         }
 
         const instance = new TempComponent({
