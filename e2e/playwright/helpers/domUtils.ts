@@ -133,3 +133,46 @@ export const hasHorizontalScroll = async (
 export const getDocumentScrollTop = async (
   page: Page,
 ): Promise<number> => page.evaluate(() => document.documentElement.scrollTop);
+
+// A button a test clicks to take the focus away from a widget. It is transparent, so it never
+// shows in a screenshot. TestCafe kept it under the page content and still delivered the click to
+// it; a real click lands on whatever is on top, so here the button is on top and takes one pixel
+// of the page margin, where nothing else is.
+export const addFocusableElementBefore = async (
+  page: Page,
+  targetSelector: string,
+  elementId = 'focusable-start',
+): Promise<string> => page.evaluate(
+  ({ selector, id }) => {
+    document.getElementById(id)?.remove();
+
+    const target = document.querySelector(selector);
+    const button = document.createElement('button');
+
+    button.id = id;
+    button.textContent = 'Start';
+    Object.assign(button.style, {
+      position: 'fixed',
+      top: '0',
+      left: '0',
+      width: '1px',
+      height: '1px',
+      padding: '0',
+      border: '0',
+      overflow: 'hidden',
+      opacity: '0',
+    });
+    target?.parentElement?.insertBefore(button, target);
+
+    return button.id;
+  },
+  { selector: targetSelector, id: elementId },
+);
+
+// Resolves once the browser has rendered a frame: style, layout and the observers that run with
+// them (ResizeObserver, IntersectionObserver) have seen every change made before the call.
+export const waitForNextFrame = async (page: Page): Promise<void> => page.evaluate(
+  () => new Promise<void>((resolve) => {
+    requestAnimationFrame(() => requestAnimationFrame(() => resolve()));
+  }),
+);
