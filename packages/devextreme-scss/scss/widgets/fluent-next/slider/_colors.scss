@@ -8,11 +8,11 @@ $slider-accent-bg-hovered: ds.$color-bg-primary-hovered !default;
 $slider-accent-border-focused: ds.$color-border-primary-shared-active !default;
 $slider-accent-bg-focused: ds.$color-content-primary-shared-active !default;
 
-$slider-invalid-bg: ds.$color-border-danger !default;
-$slider-invalid-bg-hovered: ds.$color-border-danger !default;
+$slider-invalid-bg: ds.$color-bg-danger !default;
+$slider-invalid-bg-hovered: ds.$color-bg-danger-hovered !default;
 
-$slider-invalid-border-focused: ds.$color-border-danger !default;
-$slider-invalid-bg-focused: ds.$color-content-danger !default;
+$slider-invalid-border-focused: ds.$color-border-danger-shared-active !default;
+$slider-invalid-bg-focused: ds.$color-bg-danger-shared-active !default;
 
 $slider-border-disabled: ds.$color-border-disabled !default;
 $slider-bg-disabled: ds.$color-content-disabled !default;
@@ -22,4 +22,4 @@ $slider-tooltip-content: ds.$color-content !default;
 
 $slider-border: ds.$color-border !default;
 $slider-element-bg: ds.$color-bg !default;
-$slider-handle-invalid-bg: ds.$color-border-danger !default;
+$slider-handle-invalid-bg: ds.$color-bg-danger !default;
