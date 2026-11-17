@@ -151,7 +151,7 @@ class HierarchicalCollectionWidget<
     const $imageContainer = getImageContainer(itemData.icon);
     // @ts-expect-error ts-error
     if ($imageContainer.is('img')) {
-      const componentName = this.NAME?.startsWith('dxPrivateComponent')
+      const componentName = this.NAME.startsWith('dxPrivateComponent')
         ? ''
         : `${this.NAME} `;
       // @ts-expect-error ts-error

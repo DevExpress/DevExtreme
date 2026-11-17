@@ -1114,7 +1114,6 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
 
   _detachHoldEvent(itemsContainer: dxElementWrapper): void {
     const itemSelector = this._itemSelector();
-    // @ts-expect-error ts-error
     const eventName = addNamespace(holdEvent.name, this.NAME);
 
     eventsEngine.off(itemsContainer, eventName, itemSelector);
@@ -1122,7 +1121,6 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
 
   _detachContextMenuEvent(itemsContainer: dxElementWrapper): void {
     const itemSelector = this._itemSelector();
-    // @ts-expect-error ts-error
     const eventName = addNamespace(contextMenuEventName, this.NAME);
 
     eventsEngine.off(itemsContainer, eventName, itemSelector);
@@ -1285,7 +1283,6 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
     $icon: dxElementWrapper,
     node: TreeViewNode,
   ): void {
-    // @ts-expect-error ts-error
     const eventName = addNamespace(clickEventName, this.NAME);
 
     eventsEngine.off($icon, eventName);
@@ -1882,9 +1879,7 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
   } {
     const itemSelector = `.${this._itemClass()}`;
     const nodeSelector = `.${NODE_CLASS}, .${SELECT_ALL_ITEM_CLASS}`;
-    // @ts-expect-error ts-error
     const clickEventNamespace = addNamespace(clickEventName, this.NAME);
-    // @ts-expect-error ts-error
     const pointerDownEventNamespace = addNamespace(pointerEvents.down, this.NAME);
 
     return {

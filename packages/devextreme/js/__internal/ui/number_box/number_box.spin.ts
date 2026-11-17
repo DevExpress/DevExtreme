@@ -67,7 +67,6 @@ class SpinButton extends Widget<SpinButtonProperties> {
 
   _render(): void {
     super._render();
-    // @ts-expect-error ts-error
     const eventName = addNamespace(pointerEvents.down, this.NAME);
     const $element = this.$element();
 

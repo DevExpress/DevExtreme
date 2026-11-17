@@ -17,9 +17,6 @@ export interface MultiselectDateBoxProperties extends DateBoxMaskProperties {
 }
 
 class MultiselectDateBox extends DateBox<MultiselectDateBoxProperties> {
-  // Temporary solution. Move to component level
-  public NAME!: string;
-
   private _skipIsValidOptionChange?: boolean;
 
   _strategy!: RangeCalendarStrategy;
