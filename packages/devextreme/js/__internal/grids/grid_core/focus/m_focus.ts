@@ -464,7 +464,7 @@ export class FocusController extends core.ViewController {
     if (changedItem && (changedItem.rowType === 'data' || changedItem.rowType === 'group')) {
       const { focusedRowIndex } = options;
       const { $tableElement } = options;
-      const tabIndex = this.option('tabindex') || 0;
+      const tabIndex = this.option('tabIndex') ?? 0;
       const rowsView = this.getView('rowsView');
 
       $row = $(rowsView._getRowElements($tableElement).eq(focusedRowIndex));
