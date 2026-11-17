@@ -71,7 +71,7 @@
     "jest-environment-jsdom": "30.4.1",
     "ts-jest": "29.4.12",
     "typescript": "catalog:tools",
-    "typescript-min": "npm:typescript@4.9.5",
+    "typescript-min": "npm:typescript@5.4.5",
     "vue": "3.5.45",
     "@vue/shared": "3.5.45",
     "vue-router": "4.6.4",
