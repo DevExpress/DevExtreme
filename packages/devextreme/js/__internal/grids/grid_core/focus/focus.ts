@@ -120,30 +120,9 @@ export class FocusController extends core.ViewController {
     const isFocusedRowVisible = focusedRowIndex >= 0;
     const isFocusedRowInChange = !!e.rowIndices?.includes(focusedRowIndex);
 
-    if (!isFocusedRowVisible || !isFocusedRowInChange) {
-      return;
-    }
-
-    if (this.hasStaleFocusedRow(focusedRowIndex)) {
+    if (isFocusedRowVisible && isFocusedRowInChange) {
       this.updateFocusedRow({ focusedRowKey, preventScroll: true });
-    } else {
-      this.restoreFocusedRowTabIndex(focusedRowIndex);
     }
-  }
-
-  private restoreFocusedRowTabIndex(focusedRowIndex: number): void {
-    const $focusedRows = $(this.getRowsView().getRowElement(focusedRowIndex));
-    const hasFocusableCell = $focusedRows.children('[tabindex]').length > 0;
-
-    if (!hasFocusableCell) {
-      $focusedRows.attr('tabindex', this.option('tabIndex') ?? 0);
-    }
-  }
-
-  private hasStaleFocusedRow(focusedRowIndex: number): boolean {
-    return this.getRowsView().getTableElements().toArray().some(
-      (tableElement) => this.findStaleFocusedRows($(tableElement), focusedRowIndex).length > 0,
-    );
   }
 
   private updateFocusedRowIfNeeded(e: DataChange, forceUpdate = false): void {
@@ -557,22 +536,18 @@ export class FocusController extends core.ViewController {
     }
   }
 
-  private findFocusedRows($tableElement: dxElementWrapper): dxElementWrapper {
+  private findStaleFocusedRows(
+    $tableElement: dxElementWrapper,
+    focusedRowIndex: number,
+  ): dxElementWrapper {
     const isNotMasterDetailFocusedRow = (_: number, focusedRow: Element): boolean => {
       const $focusedRowTable = $(focusedRow).closest(`.${this.addWidgetPrefix(VIEW_CLASSES.table)}`);
       return $tableElement.is($focusedRowTable);
     };
 
-    return $tableElement
+    const $focusedRows = $tableElement
       .find(FOCUSED_ROW_SELECTOR)
       .filter(isNotMasterDetailFocusedRow);
-  }
-
-  private findStaleFocusedRows(
-    $tableElement: dxElementWrapper,
-    focusedRowIndex: number,
-  ): dxElementWrapper {
-    const $focusedRows = this.findFocusedRows($tableElement);
 
     if (focusedRowIndex < 0) {
       return $focusedRows;
