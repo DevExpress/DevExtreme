@@ -101,7 +101,7 @@ catalog:
   stylelint: 16.22.0
   testcafe: 3.7.5
   zod: 4.6.7
-  "@playwright/test": 1.62.1
+  "@playwright/test": 1.65.1
   "@stylistic/eslint-plugin": 5.10.0
   "@types/jquery": 4.0.1
   "@typescript-eslint/eslint-plugin": 8.72.1
