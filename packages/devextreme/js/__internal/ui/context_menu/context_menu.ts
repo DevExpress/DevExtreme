@@ -147,9 +147,6 @@ export interface ContextMenuProperties<TItem extends Item = Item> extends
 class ContextMenu<
   TProperties extends ContextMenuProperties = ContextMenuProperties,
 > extends MenuBase<TProperties> {
-  // Temporary solution. Move to component level
-  public NAME!: string;
-
   _shownSubmenus?: dxElementWrapper[];
 
   _overlay!: Overlay | null;

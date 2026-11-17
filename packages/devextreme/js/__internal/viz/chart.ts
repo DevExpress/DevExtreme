@@ -1,4 +1,3 @@
-/* eslint-disable @stylistic/max-len */
 /* eslint-disable @stylistic/no-mixed-operators */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable @typescript-eslint/init-declarations */
@@ -378,7 +377,8 @@ function checkUsedSpace(sizeShortage, side, axes, getMarginFunc) {
 }
 
 function axisAnimationEnabled(drawOptions, pointsToAnimation) {
-  const pointsCount = pointsToAnimation.reduce((sum, count) => sum + count, 0) / pointsToAnimation.length;
+  const pointsCount = pointsToAnimation.reduce((sum, count) => sum + count, 0)
+    / pointsToAnimation.length;
 
   return drawOptions.animate && pointsCount <= drawOptions.animationPointsLimit;
 }
@@ -623,7 +623,9 @@ class Chart extends AdvancedChart {
   _resetAxesAnimation(isFirstDrawing: boolean, isHorizontal: boolean): void {
     let axes;
     if (_isDefined(isHorizontal)) {
-      axes = Number(isHorizontal) ^ Number(this._isRotated()) ? this._argumentAxes : this._valueAxes;
+      axes = Number(isHorizontal) ^ Number(this._isRotated())
+        ? this._argumentAxes
+        : this._valueAxes;
     } else {
       axes = this._getAllAxes();
     }
@@ -666,8 +668,14 @@ class Chart extends AdvancedChart {
     );
 
     return {
-      x: crosshairEnabled && crosshairOptions.horizontalLine.visible && horizontalLabel.visible ? margins.x : 0,
-      y: crosshairEnabled && crosshairOptions.verticalLine.visible && verticalLabel.visible ? margins.y : 0,
+      x:
+        crosshairEnabled && crosshairOptions.horizontalLine.visible && horizontalLabel.visible
+          ? margins.x
+          : 0,
+      y:
+        crosshairEnabled && crosshairOptions.verticalLine.visible && verticalLabel.visible
+          ? margins.y
+          : 0,
     };
   }
 
@@ -744,7 +752,9 @@ class Chart extends AdvancedChart {
     this._valueAxes.forEach((axis) => {
       const { optionPath } = axis.getOptions();
       if (optionPath) {
-        const axesWithSamePath = this._valueAxes.filter((a) => a.getOptions().optionPath === optionPath);
+        const axesWithSamePath = this._valueAxes.filter(
+          (a) => a.getOptions().optionPath === optionPath,
+        );
         if (axesWithSamePath.length > 1) {
           if (axesWithSamePath.some((a) => a === defaultAxis)) {
             axesWithSamePath.forEach((a) => {
@@ -838,7 +848,10 @@ class Chart extends AdvancedChart {
       axis.updateCanvas(this._canvas, true);
     });
     series.forEach((series) => {
-      if (series.useAggregation() && (isCanvasChanged || zoomChanged || !series._useAllAggregatedPoints)) {
+      if (
+        series.useAggregation()
+        && (isCanvasChanged || zoomChanged || !series._useAllAggregatedPoints)
+      ) {
         series.createPoints();
       }
     });
@@ -866,7 +879,9 @@ class Chart extends AdvancedChart {
       : Math.abs(max - min);
     let precision = getPrecision(viewportDistance);
     precision = precision > 1 ? 10 ** (precision - 2) : 1;
-    const zoomChanged = Math.round((this._zoomLength - viewportDistance) * precision) / precision !== 0;
+    const zoomChanged = Math.round((this._zoomLength - viewportDistance) * precision)
+        / precision
+      !== 0;
     this._zoomLength = viewportDistance;
 
     return zoomChanged;
@@ -938,7 +953,11 @@ class Chart extends AdvancedChart {
     const paneIndex = this._getPaneIndex(series.pane);
     const panesClipRects = this._panesClipRects;
     const wideClipRect = panesClipRects.wide[paneIndex];
-    series.setClippingParams(panesClipRects.base[paneIndex].id, wideClipRect?.id, this._getPaneBorderVisibility(paneIndex));
+    series.setClippingParams(
+      panesClipRects.base[paneIndex].id,
+      wideClipRect?.id,
+      this._getPaneBorderVisibility(paneIndex),
+    );
   }
 
   _updatePanesCanvases(drawOptions: ThemeValue): void {
@@ -982,7 +1001,8 @@ class Chart extends AdvancedChart {
   _applyAutoHidePointMarkers(filteredSeries: ThemeValue): void {
     let overlappingPoints = [];
 
-    const overlappedPointsCalculator = (pointsCount, currentPoint) => pointsCount + isPointOverlapped(currentPoint, overlappingPoints, true);
+    const overlappedPointsCalculator = (pointsCount, currentPoint) => pointsCount
+      + isPointOverlapped(currentPoint, overlappingPoints, true);
 
     for (let i = filteredSeries.length - 1; i >= 0; i -= 1) {
       const currentSeries = filteredSeries[i];
@@ -1031,7 +1051,8 @@ class Chart extends AdvancedChart {
         const argVisualRange = argAxis.visualRange();
         const argAxisIsDiscrete = argAxis.getOptions().type === DISCRETE;
         const sortingCallback = argAxisIsDiscrete
-          ? (p1, p2) => argVisualRange.categories.indexOf(p1.argument) - argVisualRange.categories.indexOf(p2.argument)
+          ? (p1, p2) => argVisualRange.categories.indexOf(p1.argument)
+              - argVisualRange.categories.indexOf(p2.argument)
           : (p1, p2) => p1.argument - p2.argument;
         let points = [];
 
@@ -1086,8 +1107,18 @@ class Chart extends AdvancedChart {
     const needCustomAdjustAxes = this._axesBoundaryPositioning();
 
     if (!drawOptions.adjustAxes && !needCustomAdjustAxes) {
-      drawAxesWithTicks(verticalAxes, !rotated && synchronizeMultiAxes, panesCanvases, panesBorderOptions);
-      drawAxesWithTicks(horizontalAxes, rotated && synchronizeMultiAxes, panesCanvases, panesBorderOptions);
+      drawAxesWithTicks(
+        verticalAxes,
+        !rotated && synchronizeMultiAxes,
+        panesCanvases,
+        panesBorderOptions,
+      );
+      drawAxesWithTicks(
+        horizontalAxes,
+        rotated && synchronizeMultiAxes,
+        panesCanvases,
+        panesBorderOptions,
+      );
       performActionOnAxes(allAxes, 'prepareAnimation');
       this._renderScaleBreaks();
       horizontalAxes.forEach((a) => a.resolveOverlappingForCustomPositioning(verticalAxes));
@@ -1162,14 +1193,24 @@ class Chart extends AdvancedChart {
           this.panes.forEach(({ name }) => { vAxesMargins.panes[name].left += offset; });
         }
 
-        panesCanvases = shrinkCanvases(rotated, panesCanvases, paneSizes, vAxesMargins, hAxesMargins);
+        panesCanvases = shrinkCanvases(
+          rotated,
+          panesCanvases,
+          paneSizes,
+          vAxesMargins,
+          hAxesMargins,
+        );
 
         performActionOnAxes(allElements, 'updateSize', panesCanvases, false, false);
         oldTitlesWidth = calculateTitlesWidth(verticalAxes);
       }
     });
 
-    if (verticalAxes.some((v) => v.customPositionIsAvailable() && v.getCustomPosition() !== v._axisPosition)) {
+    if (
+      verticalAxes.some(
+        (v) => v.customPositionIsAvailable() && v.getCustomPosition() !== v._axisPosition,
+      )
+    ) {
       axesIsAnimated && this._resetAxesAnimation(verticalAxesFirstDrawing, false);
       performActionOnAxes(verticalAxes, 'updateSize', panesCanvases, axesIsAnimated);
     }
@@ -1438,14 +1479,30 @@ class Chart extends AdvancedChart {
       }
       const bc = pane.borderCoords;
 
-      const segmentRectParams = prepareSegmentRectPoints(bc.left, bc.top, bc.width, bc.height, borderOptions);
-      this._renderer.path(segmentRectParams.points, segmentRectParams.pathType).attr(attr).append(this._panesBorderGroup);
+      const segmentRectParams = prepareSegmentRectPoints(
+        bc.left,
+        bc.top,
+        bc.width,
+        bc.height,
+        borderOptions,
+      );
+      this._renderer
+        .path(segmentRectParams.points, segmentRectParams.pathType)
+        .attr(attr)
+        .append(this._panesBorderGroup);
     });
 
     this._panesBorderGroup.linkAppend();
   }
 
-  _createClipRect(clipArray: ThemeValue, index: number, left: ThemeValue, top: ThemeValue, width: ThemeValue, height: ThemeValue): void {
+  _createClipRect(
+    clipArray: ThemeValue,
+    index: number,
+    left: ThemeValue,
+    top: ThemeValue,
+    width: ThemeValue,
+    height: ThemeValue,
+  ): void {
     let clipRect = clipArray[index];
 
     if (!clipRect) {
@@ -1474,7 +1531,10 @@ class Chart extends AdvancedChart {
       this._createClipRect(panesClipRects.base, i, left, top, width, height);
 
       _each(this.series, (_, series) => {
-        if (series.pane === pane.name && (series.isFinancialSeries() || series.areErrorBarsVisible())) {
+        if (
+          series.pane === pane.name
+          && (series.isFinancialSeries() || series.areErrorBarsVisible())
+        ) {
           needWideClipRect = true;
         }
       });
@@ -1623,7 +1683,9 @@ class Chart extends AdvancedChart {
 
     return {
       minVisible: isDiscrete ? range.minVisible || categories[0] : range.minVisible,
-      maxVisible: isDiscrete ? range.maxVisible || categories[categories.length - 1] : range.maxVisible,
+      maxVisible: isDiscrete
+        ? range.maxVisible || categories[categories.length - 1]
+        : range.maxVisible,
     };
   }
 
@@ -1636,7 +1698,9 @@ class Chart extends AdvancedChart {
       if (axis !== this.getArgumentAxis()) {
         return true;
       }
-      this._argumentAxes.filter((a) => a !== axis).forEach((a) => a.visualRange(range, { start: true, end: true }));
+      this._argumentAxes
+        .filter((a) => a !== axis)
+        .forEach((a) => a.visualRange(range, { start: true, end: true }));
     }
     return false;
   }

@@ -1,7 +1,6 @@
 /* eslint-disable func-names */
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-multi-assign */
-/* eslint-disable @stylistic/max-len */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
@@ -19,7 +18,15 @@ function getPathStyle(options) {
   };
 }
 
-function createTick(axis, renderer, tickOptions, gridOptions, skippedCategory?, skipLabels?, offset?) {
+function createTick(
+  axis,
+  renderer,
+  tickOptions,
+  gridOptions,
+  skippedCategory?,
+  skipLabels?,
+  offset?,
+) {
   const tickOffset = offset || axis._tickOffset;
   const lineGroup = axis._axisLineGroup;
   const elementsGroup = axis._axisElementsGroup;
@@ -68,7 +75,9 @@ function createTick(axis, renderer, tickOptions, gridOptions, skippedCategory?, 
             labelCoords: this._storedLabelsCoords,
           };
           this._storedCoords = this.coords;
-          this._storedLabelsCoords = this.templateContainer ? this._getTemplateCoords() : this.labelCoords;
+          this._storedLabelsCoords = this.templateContainer
+            ? this._getTemplateCoords()
+            : this.labelCoords;
         });
       },
       resetCoordinates() {
@@ -91,7 +100,9 @@ function createTick(axis, renderer, tickOptions, gridOptions, skippedCategory?, 
           axis.sharp(this.mark, axis.getSharpDirectionByCoords(this.coords));
           this.updateTickPosition(options);
         } else {
-          this.mark = axis._createPathElement([], tickStyle, axis.getSharpDirectionByCoords(this.coords)).append(lineGroup);
+          this.mark = axis
+            ._createPathElement([], tickStyle, axis.getSharpDirectionByCoords(this.coords))
+            .append(lineGroup);
           this.updateTickPosition(options);
         }
       },
@@ -133,8 +144,10 @@ function createTick(axis, renderer, tickOptions, gridOptions, skippedCategory?, 
           this.mark,
           // @ts-expect-error
           { points: axis._getTickMarkPoints(tick.coords, tickOptions.length, options) },
-          // @ts-expect-error
-          this._storedCoords && { points: axis._getTickMarkPoints(tick._storedCoords, tickOptions.length, options) },
+          this._storedCoords && {
+            // @ts-expect-error
+            points: axis._getTickMarkPoints(tick._storedCoords, tickOptions.length, options),
+          },
           animate,
           false,
         );
@@ -219,10 +232,16 @@ function createTick(axis, renderer, tickOptions, gridOptions, skippedCategory?, 
           this._fadeOutLabel();
         }
         if (this.grid) {
-          this.grid.append(axis._axisGridGroup).attr(startSettings).animate(endSettings, animationSettings);
+          this.grid
+            .append(axis._axisGridGroup)
+            .attr(startSettings)
+            .animate(endSettings, animationSettings);
         }
         if (this.mark) {
-          this.mark.append(axis._axisLineGroup).attr(startSettings).animate(endSettings, animationSettings);
+          this.mark
+            .append(axis._axisLineGroup)
+            .attr(startSettings)
+            .animate(endSettings, animationSettings);
         }
       },
 
@@ -250,8 +269,11 @@ function createTick(axis, renderer, tickOptions, gridOptions, skippedCategory?, 
       },
 
       _getTemplateCoords() {
-        // @ts-expect-error
-        return axis._getLabelAdjustedCoord(this, (axis._constantLabelOffset || 0) + (tick.labelOffset || 0));
+        return axis._getLabelAdjustedCoord(
+          this,
+          // @ts-expect-error
+          (axis._constantLabelOffset || 0) + (tick.labelOffset || 0),
+        );
       },
 
       updateLabelPosition(animate) {
@@ -296,7 +318,9 @@ function createTick(axis, renderer, tickOptions, gridOptions, skippedCategory?, 
         if (labelOptions.template || !this.label) {
           return;
         }
-        this.label.attr({ textsAlignment: this.labelAlignment || axis.getOptions().label.alignment });
+        this.label.attr({
+          textsAlignment: this.labelAlignment || axis.getOptions().label.alignment,
+        });
       },
 
       drawGrid(drawLine) {

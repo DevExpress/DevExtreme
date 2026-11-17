@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-this-alias */
 /* eslint-disable @typescript-eslint/init-declarations */
 /* eslint-disable no-param-reassign */
-/* eslint-disable @stylistic/max-len */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
@@ -23,7 +22,12 @@ export default {
       } else {
         value = new Date(value.getTime());
       }
-      value = dateUtils.correctDateWithUnitBeginning(value, interval, null, this._options.firstDayOfWeek);
+      value = dateUtils.correctDateWithUnitBeginning(
+        value,
+        interval,
+        null,
+        this._options.firstDayOfWeek,
+      );
     } else {
       value = adjust(floor(adjust(value / interval)) * interval, interval);
     }
@@ -48,7 +52,11 @@ export default {
   },
 
   getInterval() {
-    return Math.round(this._canvasOptions.ratioOfCanvasRange * (this._businessRange.interval || Math.abs(this._canvasOptions.rangeMax - this._canvasOptions.rangeMin)));
+    return Math.round(
+      this._canvasOptions.ratioOfCanvasRange
+        * (this._businessRange.interval
+          || Math.abs(this._canvasOptions.rangeMax - this._canvasOptions.rangeMin)),
+    );
   },
 
   zoom() { },
@@ -87,7 +95,10 @@ export default {
       rangeMax = that._intervalize(rangeMax, interval);
     }
 
-    if (value.valueOf() < rangeMin || value.valueOf() >= dateUtils.addInterval(rangeMax, interval)) {
+    if (
+      value.valueOf() < rangeMin
+      || value.valueOf() >= dateUtils.addInterval(rangeMax, interval)
+    ) {
       return false;
     }
 
@@ -124,7 +135,9 @@ export default {
       offset = dateUtils.addInterval(rMax, this._options.interval) - rMin;
     }
 
-    const projectedValue = this._calculateProjection(offset * this._canvasOptions.ratioOfCanvasRange);
+    const projectedValue = this._calculateProjection(
+      offset * this._canvasOptions.ratioOfCanvasRange,
+    );
 
     return this._conversionValue(projectedValue, skipRound);
   },
@@ -142,8 +155,13 @@ export default {
       interval = dateUtils.dateToMilliseconds(origInterval);
     }
 
-    value = that._calculateUnProjection((position - that._canvasOptions.startPoint) / that._canvasOptions.ratioOfCanvasRange);
-    value = that._intervalize(dateUtils.addInterval(value, interval / 2, direction > 0), origInterval);
+    value = that._calculateUnProjection(
+      (position - that._canvasOptions.startPoint) / that._canvasOptions.ratioOfCanvasRange,
+    );
+    value = that._intervalize(
+      dateUtils.addInterval(value, interval / 2, direction > 0),
+      origInterval,
+    );
 
     if (value < rMin) {
       value = rMin;

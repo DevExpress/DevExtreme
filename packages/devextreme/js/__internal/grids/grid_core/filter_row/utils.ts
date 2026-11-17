@@ -48,7 +48,7 @@ export const hasMultiselectEditor = ($editorContainer: dxElementWrapper): boolea
   const editor = getEditorInstance($editorContainer);
 
   if (editor) {
-    return MULTISELECT_EDITOR_NAMES.includes(editor.NAME ?? '');
+    return MULTISELECT_EDITOR_NAMES.includes(editor.NAME);
   }
 
   return !$editorContainer.find(`.${CLASSES.filterRangeContent}`).length;

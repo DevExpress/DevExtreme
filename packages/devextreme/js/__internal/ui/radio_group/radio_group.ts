@@ -295,7 +295,6 @@ class RadioGroup extends Editor<RadioGroupProperties> {
     return this._radios?._itemElements();
   }
 }
-// @ts-expect-error Widget base class should define a typed static include() method
 RadioGroup.include(DataExpressionMixin);
 
 registerComponent('dxRadioGroup', RadioGroup);

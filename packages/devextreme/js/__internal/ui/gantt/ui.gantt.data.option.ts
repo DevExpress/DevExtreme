@@ -1,14 +1,15 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import { DataHelperMixin } from '__internal/data/m_data_helper';
-import { Component } from '@js/core/component';
+import type { ComponentProperties } from '@ts/core/widget/component';
+import { Component } from '@ts/core/widget/component';
 import type { OptionChanged } from '@ts/core/widget/types';
 
-interface DataOptionProperties {
+interface DataOptionProperties extends ComponentProperties<DataOption> {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   dataSource?: any;
 }
 
-class DataOption extends Component<DataOptionProperties> {
+class DataOption extends Component<DataOption, DataOptionProperties> {
   _optionName: string;
 
   _getLoadPanel: () => { show: () => void; hide: () => void } | null;
@@ -150,7 +151,6 @@ class DataOption extends Component<DataOptionProperties> {
   }
 }
 
-// @ts-expect-error ts-error
 DataOption.include(DataHelperMixin);
 
 export default DataOption;

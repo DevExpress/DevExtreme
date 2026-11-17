@@ -2,7 +2,6 @@
 /* eslint-disable @typescript-eslint/init-declarations */
 /* eslint-disable func-names */
 /* eslint-disable consistent-return */
-/* eslint-disable @stylistic/max-len */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
@@ -52,9 +51,15 @@ export function setTooltipCustomOptions(sankey) {
         }
         const formatter = (value) => tooltip.formatValue(value);
         if (args.type === 'node') {
-          return generateCustomCallback(options.customizeNodeTooltip, defaultCustomizeNodeTooltip(formatter))(args.info);
+          return generateCustomCallback(
+            options.customizeNodeTooltip,
+            defaultCustomizeNodeTooltip(formatter),
+          )(args.info);
         } else if (args.type === 'link') {
-          return generateCustomCallback(options.customizeLinkTooltip, defaultCustomizeLinkTooltip(formatter))(args.info);
+          return generateCustomCallback(
+            options.customizeLinkTooltip,
+            defaultCustomizeLinkTooltip(formatter),
+          )(args.info);
         }
 
         return {};

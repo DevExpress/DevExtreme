@@ -125,9 +125,6 @@ interface MenuProperties extends
 }
 
 class Menu extends MenuBase<MenuProperties> {
-  // Temporary solution. Move to component level
-  public NAME!: string;
-
   _submenus!: Submenu[];
 
   _visibleSubmenu?: Submenu | null;
