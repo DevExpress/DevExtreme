@@ -9,11 +9,11 @@ import { dateSerialization } from '@ts/core/utils/date_serialization';
 import { isDefined } from '@ts/core/utils/type';
 
 const parsers = {
-  string(val) {
+  string(val): string {
     return isDefined(val) ? `${val}` : val;
   },
 
-  numeric(val) {
+  numeric(val): number {
     if (!isDefined(val)) {
       return val;
     }
