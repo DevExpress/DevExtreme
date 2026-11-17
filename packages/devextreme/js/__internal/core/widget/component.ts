@@ -101,7 +101,7 @@ export class Component<
 
   _optionsByReference!: Partial<TProperties>;
 
-  NAME?: string;
+  NAME!: string;
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   _eventsStrategy: any;
