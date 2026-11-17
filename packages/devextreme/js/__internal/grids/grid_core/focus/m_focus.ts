@@ -403,36 +403,15 @@ export class FocusController extends core.ViewController {
     }
   }
 
-  public hasStaleFocusedRow(focusedRowIndex: number): boolean {
-    const $tableElements: dxElementWrapper = this.getView('rowsView').getTableElements();
-
-    return $tableElements.toArray().some(
-      (tableElement) => this.findStaleFocusedRows($(tableElement), focusedRowIndex).length > 0,
-    );
-  }
-
-  public restoreFocusedRowTabIndex(focusedRowIndex: number): void {
-    const $focusedRows = $(this.getView('rowsView').getRowElement(focusedRowIndex));
-    const hasFocusableCell = $focusedRows.children('[tabindex]').length > 0;
-
-    if (!hasFocusableCell) {
-      $focusedRows.attr('tabindex', this.option('tabIndex') ?? 0);
-    }
-  }
-
-  private findFocusedRows($tableElement): dxElementWrapper {
+  private findStaleFocusedRows($tableElement, focusedRowIndex: number): dxElementWrapper {
     const isNotMasterDetailFocusedRow = (_, focusedRow) => {
       const $focusedRowTable = $(focusedRow).closest(`.${this.addWidgetPrefix(TABLE_POSTFIX_CLASS)}`);
       return $tableElement.is($focusedRowTable);
     };
 
-    return $tableElement
+    const $focusedRows = $tableElement
       .find(FOCUSED_ROW_SELECTOR)
       .filter(isNotMasterDetailFocusedRow);
-  }
-
-  private findStaleFocusedRows($tableElement, focusedRowIndex: number): dxElementWrapper {
-    const $focusedRows = this.findFocusedRows($tableElement);
 
     if (focusedRowIndex < 0) {
       return $focusedRows;
@@ -670,14 +649,8 @@ const focusDataControllerExtender = (
     const isFocusedRowVisible = focusedRowIndex >= 0;
     const isFocusedRowInChange = !!e.rowIndices?.includes(focusedRowIndex);
 
-    if (!isFocusedRowVisible || !isFocusedRowInChange) {
-      return;
-    }
-
-    if (this._focusController.hasStaleFocusedRow(focusedRowIndex)) {
+    if (isFocusedRowVisible && isFocusedRowInChange) {
       this._focusController.updateFocusedRow({ focusedRowKey, preventScroll: true });
-    } else {
-      this._focusController.restoreFocusedRowTabIndex(focusedRowIndex);
     }
   }
 
