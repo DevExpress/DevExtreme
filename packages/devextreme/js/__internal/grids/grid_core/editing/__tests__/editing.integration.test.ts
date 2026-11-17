@@ -86,15 +86,17 @@ describe('DataGrid editing', () => {
       expect(buttons[1].getAttribute('role')).toBe('button');
     });
 
-    it('should trigger click event on Space key once on keyup', async () => {
+    it('should trigger click event and onKeyDown on Space key', async () => {
       // arrange
       const onClick = jest.fn();
+      const onKeyDown = jest.fn();
       await createDataGrid({
         dataSource: [{ id: 1 }],
         columns: ['id', {
           type: 'buttons',
           buttons: [{ text: 'custom', onClick }],
         }],
+        onKeyDown,
       });
 
       // act
@@ -111,6 +113,7 @@ describe('DataGrid editing', () => {
 
       // assert
       expect(onClick).not.toHaveBeenCalled();
+      expect(onKeyDown).toHaveBeenCalledTimes(2);
 
       // act
       dispatchSpace(button, 'keyup');

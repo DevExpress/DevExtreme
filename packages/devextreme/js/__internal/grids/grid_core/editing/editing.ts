@@ -2630,7 +2630,6 @@ export class EditingController extends modules.ViewController {
           }
 
           event.preventDefault();
-          event.stopPropagation();
 
           if (event.type === 'keydown') {
             spacePressed = true;
