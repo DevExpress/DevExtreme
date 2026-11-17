@@ -632,7 +632,7 @@ class TagBox<
   }
 
   _renderSingleLineScroll(): void {
-    const mouseWheelEvent = addNamespace('dxmousewheel', this.NAME as string);
+    const mouseWheelEvent = addNamespace('dxmousewheel', this.NAME);
     const $element = this.$element();
     const { multiline } = this.option();
 
@@ -671,7 +671,7 @@ class TagBox<
     super._renderEvents();
 
     const input = this._input();
-    const namespace = addNamespace('keydown', this.NAME as string);
+    const namespace = addNamespace('keydown', this.NAME);
     eventsEngine.on(input, namespace, (e: DxEvent<KeyboardEvent>) => {
       const keyName = normalizeKeyName(e) ?? '';
 

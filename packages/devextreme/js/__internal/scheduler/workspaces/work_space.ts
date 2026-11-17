@@ -1289,7 +1289,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
 
     const cellSelector = `.${DATE_TABLE_CELL_CLASS},.${ALL_DAY_TABLE_CELL_CLASS}`;
     const $element = this.$element();
-    const eventName = addNamespace(contextMenuEventName, this.NAME as string);
+    const eventName = addNamespace(contextMenuEventName, this.NAME);
 
     eventsEngine.off($element, eventName, cellSelector);
     eventsEngine.on($element, eventName, cellSelector, this.contextMenuHandler.bind(this));

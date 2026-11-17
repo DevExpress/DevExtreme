@@ -203,7 +203,6 @@ abstract class Provider {
   }
 
   _addEventNamespace(name: string): string {
-    // @ts-expect-error ts-error
     return addNamespace(name, this._mapWidget.NAME);
   }
 
