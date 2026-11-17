@@ -10,7 +10,6 @@
 /* eslint-disable no-multi-assign */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-/* eslint-disable prefer-destructuring */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 
 import { noop as _noop } from '@ts/core/utils/common';
@@ -194,7 +193,7 @@ export const stock = _extend({}, scatterSeries, {
 
   _createPointStyles(pointOptions) {
     const that = this;
-    const innerColor = that._options.innerColor;
+    const { innerColor } = that._options;
     const styles = that._getDefaultStyle(pointOptions);
 
     const positiveStyle = _extend(true, {}, styles);
@@ -267,7 +266,7 @@ export const stock = _extend({}, scatterSeries, {
 
   _patchMarginOptions(options) {
     const pointOptions = this._getCreatingPointOptions();
-    const styles = pointOptions.styles;
+    const { styles } = pointOptions;
     const border = [styles.normal, styles.hover, styles.selection]
       .reduce((max, style) => Math.max(max, style['stroke-width']), 0);
 

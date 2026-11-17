@@ -7,7 +7,6 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-multi-assign */
 /* eslint-disable @typescript-eslint/no-use-before-define */
-/* eslint-disable prefer-destructuring */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
@@ -197,8 +196,7 @@ class SliderMarker {
       rectSize = rectSize || that._getRectSize(size);
       that._group.attr({ translateY: -(rectSize.height + POINTER_SIZE) });
       const pointsData = that._getAreaPointsInfo(size);
-      const points = pointsData.points;
-      const offset = pointsData.offset;
+      const { points, offset } = pointsData;
       that._area.attr({ points });
       that._border.attr({
         x: that._isLeftPointer ? points[0] - 1 : points[2],

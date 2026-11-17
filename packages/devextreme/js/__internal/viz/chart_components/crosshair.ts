@@ -3,7 +3,6 @@
 /* eslint-disable func-names */
 /* eslint-disable no-nested-ternary */
 /* eslint-disable no-multi-assign */
-/* eslint-disable prefer-destructuring */
 
 import { extend } from '@ts/core/utils/extend';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
@@ -164,7 +163,7 @@ export let Crosshair = class Crosshair {
   }
 
   update(options: ThemeValue, params: CrosshairParams): void {
-    const canvas = params.canvas;
+    const { canvas } = params;
     this._canvas = {
       top: canvas.top,
       bottom: canvas.height - canvas.bottom,
@@ -273,7 +272,7 @@ export let Crosshair = class Crosshair {
 
     if (labelOptions.visible) {
       axes.forEach((axis) => {
-        const position = axis.getOptions().position;
+        const { position } = axis.getOptions();
         if (axis.getTranslator().getBusinessRange().isEmpty()) {
           return;
         }
@@ -321,7 +320,7 @@ export let Crosshair = class Crosshair {
     func: LabelPositionChecker,
   ): void {
     labels.forEach((label) => {
-      const axis = label.axis;
+      const { axis } = label;
       const coord = label.startXY;
       const textElement = label.text;
       const backgroundElement = label.background;
@@ -406,7 +405,7 @@ export let Crosshair = class Crosshair {
   }
 
   show(data: { point: ThemeValue; x: number; y: number }): void {
-    const point = data.point;
+    const { point } = data;
     const pointData = point.getCrosshairData(data.x, data.y);
     const r = point.getPointRadius();
     const horizontal = this._horizontal;

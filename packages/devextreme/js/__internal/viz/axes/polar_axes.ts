@@ -13,7 +13,6 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-/* eslint-disable prefer-destructuring */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 
@@ -149,9 +148,9 @@ const circularAxes = {
 
   _validateOptions(options) {
     const that = this;
-    let originValue = options.originValue;
+    let { originValue } = options;
     const wholeRange = options.wholeRange = {};
-    const period = options.period;
+    const { period } = options;
 
     if (isDefined(originValue)) {
       originValue = that.validateUnit(originValue);
@@ -321,12 +320,11 @@ const circularAxes = {
 
   _getLabelAdjustedCoord(tick, _offset, _maxWidth, checkCanvas) {
     const that = this;
-    const labelCoords = tick.labelCoords;
+    const { labelCoords } = tick;
     const labelY = labelCoords.y;
     const labelAngle = labelCoords.angle;
     const cosSin = getCosAndSin(labelAngle);
-    const cos = cosSin.cos;
-    const sin = cosSin.sin;
+    const { cos, sin } = cosSin;
     const box = tick.labelBBox;
     const halfWidth = box.width / 2;
     const halfHeight = box.height / 2;
@@ -642,7 +640,7 @@ export const linear = {
 
   _getLabelAdjustedCoord(tick) {
     const that = this;
-    const labelCoords = tick.labelCoords;
+    const { labelCoords } = tick;
     const labelY = labelCoords.y;
     const cosSin = getCosAndSin(labelCoords.angle);
     const indentFromAxis = that._options.label.indentFromAxis || 0;
@@ -701,7 +699,7 @@ export const linear = {
   },
 
   _getCanvasStartEnd() {
-    const invert = this.getTranslator().getBusinessRange().invert;
+    const { invert } = this.getTranslator().getBusinessRange();
     const coords = [0, this.getRadius()];
 
     invert && coords.reverse();

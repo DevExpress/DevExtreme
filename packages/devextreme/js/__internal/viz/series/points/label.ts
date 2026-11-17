@@ -5,7 +5,6 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-multi-assign */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable prefer-destructuring */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 
@@ -173,14 +172,15 @@ const barPointStrategy = {
   },
 
   adjustPoints(points): number[] {
-    const lineIsVertical = _abs(points[1] - points[3]) <= 1;
-    const lineIsHorizontal = _abs(points[0] - points[2]) <= 1;
+    const [x1, y1, x2, y2] = points;
+    const lineIsVertical = _abs(y1 - y2) <= 1;
+    const lineIsHorizontal = _abs(x1 - x2) <= 1;
 
     if (lineIsHorizontal) {
-      points[0] = points[2];
+      points[0] = x2;
     }
     if (lineIsVertical) {
-      points[1] = points[3];
+      points[1] = y2;
     }
     return points;
   },
@@ -319,7 +319,7 @@ function checkConnector(connector: ThemeValue): boolean {
 }
 
 function formatText(data: ThemeValue, options: ThemeValue): string {
-  const format = options.format;
+  const { format } = options;
 
   data.valueText = _format(data.value, format);
   data.argumentText = _format(data.argument, options.argumentFormat);
@@ -590,7 +590,7 @@ export let Label = class Label {
     let rowCountChanged = false;
     if (this._text) {
       const result = this._text.setMaxSize(maxWidth - padding, undefined, this._options);
-      let rowCount = result.rowCount;
+      let { rowCount } = result;
       if (rowCount === 0) {
         rowCount = 1;
       }

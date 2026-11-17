@@ -4,7 +4,6 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable no-multi-assign */
 /* eslint-disable @typescript-eslint/no-use-before-define */
-/* eslint-disable prefer-destructuring */
 
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 
@@ -124,7 +123,7 @@ function getShrink(alignment: number, size: number): number {
 }
 
 function processForward(item: LayoutItem, rect: number[], minSize: number[]): boolean {
-  const side = item.side;
+  const { side } = item;
   const size = item.element.measure([rect[2] - rect[0], rect[3] - rect[1]]);
   const minSide = minSize[side];
   const isValid = size[side] < rect[2 + side] - rect[side] - minSide;
@@ -275,11 +274,11 @@ function processWeakItems(collection: LayoutItem[]): LayoutItem[] {
   let headerItem;
 
   if (weakItem) {
-    headerItem = collection.filter(
+    [headerItem] = collection.filter(
       (item) => weakItem.primary === item.primary
         && item.side === weakItem.side
         && item !== weakItem,
-    )[0];
+    );
   }
 
   if (weakItem && headerItem) {
@@ -301,9 +300,7 @@ function processBackwardHeaderRect(element: LayoutItem, rect: number[]): number[
 }
 
 function makeHeader(header: LayoutItem, weakElement: LayoutItem): LayoutItem {
-  const side = header.side;
-  const primary = header.primary;
-  const secondary = header.secondary;
+  const { side, primary, secondary } = header;
 
   return {
     side,

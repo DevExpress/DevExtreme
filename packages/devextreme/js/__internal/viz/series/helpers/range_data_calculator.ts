@@ -7,7 +7,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-use-before-define */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-/* eslint-disable prefer-destructuring */
 /* eslint-disable no-else-return */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
@@ -133,7 +132,7 @@ function getViewportReducer(series) {
   if (argumentAxis && argumentAxis.getMarginOptions().checkInterval) {
     const range = series.getArgumentAxis().getTranslator().getBusinessRange();
     const add = getAddFunction(range, false);
-    const interval = range.interval;
+    const { interval } = range;
 
     if (isFinite(interval) && isDefined(viewport.startValue) && isDefined(viewport.endValue)) {
       viewport.startValue = add(viewport.startValue, interval, -1);
@@ -144,7 +143,7 @@ function getViewportReducer(series) {
   const viewportFilter = getViewPortFilter(viewport);
 
   return function (range, point, index, points) {
-    const argument = point.argument;
+    const { argument } = point;
 
     if (!point.hasValue()) {
       return range;
@@ -261,7 +260,7 @@ export default {
     const viewportReducer = getViewportReducer(series);
     const range = points.reduce(
       (range, point, index, points) => {
-        const argument = point.argument;
+        const { argument } = point;
         if (!point.isArgumentCorrect()) {
           return range;
         }
