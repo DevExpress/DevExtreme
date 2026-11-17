@@ -87,9 +87,6 @@ let renderFileUploaderInput = (): dxElementWrapper => $('<input>').attr('type', 
 const isFormDataSupported = (): boolean => !!window.FormData;
 
 class FileUploader extends Editor<FileUploaderProperties> {
-  // Temporary solution. Move to component level
-  public NAME!: string;
-
   _activeDropZone?: Element | null;
 
   _selectButton!: Button;
