@@ -134,6 +134,13 @@ export const setZoomLevel = async (page: Page, zoomLevel: number): Promise<void>
   zoomLevel,
 );
 
+// Rendering thousands of appointments can block the page longer than the default expect timeout.
+const RENDER_TIMEOUT = 20000;
+
+export const waitForAppointmentsRender = async (scheduler: Scheduler): Promise<void> => {
+  await expect(scheduler.appointments.first()).toBeAttached({ timeout: RENDER_TIMEOUT });
+};
+
 export const waitForViewportRender = async (scheduler: Scheduler): Promise<void> => {
   await expect.poll(() => scheduler.workspaceScrollable.evaluate((container) => {
     const {
@@ -142,5 +149,5 @@ export const waitForViewportRender = async (scheduler: Scheduler): Promise<void>
 
     return document.elementsFromPoint(left + width / 2, top + height / 2)
       .some((element) => element.classList.contains('dx-scheduler-date-table-cell'));
-  })).toBe(true);
+  }), { timeout: RENDER_TIMEOUT }).toBe(true);
 };
