@@ -16,7 +16,7 @@ const proto = TreeMapBase.prototype;
 expand(proto, '_extendProxyType', function (proto) {
   const that = this;
 
-  proto.showTooltip = function (coords) {
+  proto.showTooltip = function (coords): void {
     that._showTooltip(this._id, coords);
   };
 });
@@ -44,7 +44,7 @@ function getCoords(coords, rect, renderer) {
   );
 }
 
-proto._showTooltip = function (index, coords) {
+proto._showTooltip = function (index, coords): void {
   const that = this;
   const tooltip = that._tooltip;
   const node = that._nodes[index];
@@ -52,7 +52,7 @@ proto._showTooltip = function (index, coords) {
     that._moveTooltip(node, coords);
     return;
   }
-  const callback = (result) => {
+  const callback = (result): void => {
     if (result === undefined) {
       return;
     }
@@ -69,13 +69,13 @@ proto._showTooltip = function (index, coords) {
   }, { x: xy[0], y: xy[1], offset: 0 }, { node: node.proxy }, undefined, callback));
 };
 
-proto._moveTooltip = function (node, coords) {
+proto._moveTooltip = function (node, coords): void {
   const xy = getCoords(coords, node.rect, this._renderer);
 
   this._tooltip.move(xy[0], xy[1], 0);
 };
 
-proto.hideTooltip = function () {
+proto.hideTooltip = function (): void {
   if (this._tooltipIndex >= 0) {
     this._tooltipIndex = -1;
     this._tooltip.hide();

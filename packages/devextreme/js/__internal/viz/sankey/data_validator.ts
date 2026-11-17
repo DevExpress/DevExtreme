@@ -5,7 +5,7 @@
 import graphModule from './graph';
 
 const validator = {
-  validate(data, incidentOccurred) {
+  validate(data, incidentOccurred): null {
     let result = null;
     if (this._hasCycle(data)) {
       // @ts-expect-error

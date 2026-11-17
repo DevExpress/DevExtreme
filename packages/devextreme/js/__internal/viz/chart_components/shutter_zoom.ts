@@ -2,7 +2,6 @@
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable func-names */
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 
@@ -17,7 +16,7 @@ const DRAG_START_EVENT_NAME = dragEventStart + SHUTTER_EVENTS_NS;
 const DRAG_UPDATE_EVENT_NAME = dragEventMove + SHUTTER_EVENTS_NS;
 const DRAG_END_EVENT_NAME = dragEventEnd + SHUTTER_EVENTS_NS;
 
-function getPointerCoord(rootOffset, canvas, rotated, e) {
+function getPointerCoord(rootOffset, canvas, rotated, e): number {
   let coord = Math.floor(rotated ? e.pageY - rootOffset.top : e.pageX - rootOffset.left);
   const min = rotated ? canvas.y1 : canvas.x1;
   const max = rotated ? canvas.y2 : canvas.x2;
@@ -30,7 +29,7 @@ function getPointerCoord(rootOffset, canvas, rotated, e) {
   return coord;
 }
 
-function checkCoords(rootOffset, canvas, e) {
+function checkCoords(rootOffset, canvas, e): boolean {
   const x = e.pageX - rootOffset.left;
   const y = e.pageY - rootOffset.top;
   return x >= canvas.x1 && x <= canvas.x2
@@ -38,7 +37,7 @@ function checkCoords(rootOffset, canvas, e) {
 }
 
 function dragStartHandler(ctx) {
-  return function (e) {
+  return function (e): void {
     const offset = ctx.getRootOffset();
     const canvas = ctx.getCanvas();
 
@@ -63,7 +62,7 @@ function dragStartHandler(ctx) {
 }
 
 function dragHandler(ctx) {
-  return function (e) {
+  return function (e): void {
     const curCoord = getPointerCoord(ctx.rootOffset, ctx.canvas, ctx.rotated, e);
     const attr = {};
     ctx.curCoord = curCoord;
@@ -75,7 +74,7 @@ function dragHandler(ctx) {
 }
 
 function dragEndHandler(ctx) {
-  return function (e) {
+  return function (e): void {
     ctx.triggerEnd();
     ctx.rect.remove();
   };
@@ -90,14 +89,14 @@ function shutterZoom(options) {
     rect,
     root: renderer.root,
     rotated,
-    triggerStart() { chart._eventTrigger('zoomStart'); },
-    triggerEnd() {
+    triggerStart(): void { chart._eventTrigger('zoomStart'); },
+    triggerEnd(): void {
       const tr = chart._argumentAxes[0].getTranslator();
       const rangeStart = Math.min(this.startCoord, this.curCoord);
       const rangeEnd = Math.max(this.startCoord, this.curCoord);
       chart._eventTrigger('zoomEnd', { rangeStart: tr.from(rangeStart), rangeEnd: tr.from(rangeEnd) });
     },
-    dispose() {
+    dispose(): void {
       renderer.root.off(SHUTTER_EVENTS_NS);
       rect.dispose();
     },
@@ -132,7 +131,7 @@ function shutterZoom(options) {
 export default {
   name: 'shutter_zoom',
 
-  init() {
+  init(): void {
     const options = this.option('shutterZoom') || {};
 
     if (!options.enabled) {
@@ -147,7 +146,7 @@ export default {
     });
   },
 
-  dispose() {
+  dispose(): void {
     this._shutterZoom && this._shutterZoom.dispose();
   },
 };

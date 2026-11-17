@@ -53,7 +53,7 @@ function canvasToRect(canvas) {
   };
 }
 
-function checkCoords(rect, coords) {
+function checkCoords(rect, coords): boolean {
   const { x } = coords;
   const { y } = coords;
   return x >= rect.x && x <= (rect.width + rect.x)
@@ -104,10 +104,13 @@ function axisZoom(axis, onlyAxisToNotify, getRange, getParameters, actionField, 
   return { stopInteraction, result };
 }
 
-function zoomAxes(e, axes, getRange, zoom, params, onlyAxisToNotify?) {
+function zoomAxes(e, axes, getRange, zoom, params, onlyAxisToNotify?): boolean {
   axes = sortAxes(axes, onlyAxisToNotify);
   let zoomStarted = false;
-  const getParameters = (silent) => ({ start: !!silent, end: !!silent });
+  const getParameters = (silent): { start: boolean; end: boolean } => ({
+    start: !!silent,
+    end: !!silent,
+  });
   getFilteredAxes(axes).some((axis) => {
     const translator = axis.getTranslator();
     const scale = translator.getMinScale(zoom);
@@ -124,7 +127,7 @@ function zoomAxes(e, axes, getRange, zoom, params, onlyAxisToNotify?) {
   return zoomStarted;
 }
 
-function cancelEvent(e) {
+function cancelEvent(e): void {
   if (e.originalEvent) {
     cancelEvent(e.originalEvent);
   }
@@ -135,7 +138,7 @@ function cancelEvent(e) {
 
 export default {
   name: 'zoom_and_pan',
-  init() {
+  init(): void {
     const chart = this;
     const renderer = this._renderer;
     let lastWheelTimer: number | undefined;
@@ -154,7 +157,7 @@ export default {
       return axes;
     }
 
-    function startAxesViewportChanging(zoomAndPan, actionField, e) {
+    function startAxesViewportChanging(zoomAndPan, actionField, e): void {
       const axes = getAxesCopy(zoomAndPan, actionField);
 
       getFilteredAxes(axes).some(
@@ -163,7 +166,7 @@ export default {
     }
 
     function axesViewportChanging(zoomAndPan, actionField, e, offsetCalc, centerCalc) {
-      function zoomAxes(axes, criteria, coordField, e, actionData) {
+      function zoomAxes(axes, criteria, coordField, e, actionData): { zoomed: boolean } {
         let zoom = { zoomed: false };
         criteria && getFilteredAxes(axes).forEach((axis) => {
           const options = axis.getOptions();
@@ -220,7 +223,7 @@ export default {
         return zoom;
       }
 
-      function storeOffset(e, actionData, zoom, coordField) {
+      function storeOffset(e, actionData, zoom, coordField): void {
         if (zoom.zoomed) {
           actionData.offset[coordField] = (e.offset
             ? e.offset[coordField]
@@ -228,7 +231,7 @@ export default {
         }
       }
 
-      function storeCenter(center, actionData, zoom, coordField) {
+      function storeCenter(center, actionData, zoom, coordField): void {
         if (zoom.zoomed) {
           actionData.center[coordField] = center[coordField] + zoom.deltaTranslate;
         }
@@ -261,8 +264,8 @@ export default {
         || argZoom.enabled || valZoom.enabled;
     }
 
-    function finishAxesViewportChanging(zoomAndPan, actionField, e, offsetCalc) {
-      function zoomAxes(axes, coordField, actionData, onlyAxisToNotify) {
+    function finishAxesViewportChanging(zoomAndPan, actionField, e, offsetCalc): void {
+      function zoomAxes(axes, coordField, actionData, onlyAxisToNotify): boolean {
         let zoomStarted = false;
         const scale = e.scale || 1;
         const getRange = (axis) => {
@@ -310,7 +313,7 @@ export default {
       zoomStarted && chart._requestChange(['VISUAL_RANGE']);
     }
 
-    function panArgumentAxisToThumb(e, scrollRange) {
+    function panArgumentAxisToThumb(e, scrollRange): void {
       const axes = getFilteredAxes(chart._argumentAxes);
       const getRange = (axis) => {
         const range = getVizRangeObject([scrollRange.startValue, scrollRange.endValue]);
@@ -350,7 +353,7 @@ export default {
       };
     }
 
-    function getPointerCoord(rect, e) {
+    function getPointerCoord(rect, e): { x: number; y: number } {
       const rootOffset = renderer.getRootOffset();
       return {
         x: _min(_max(e.pageX - rootOffset.left, rect.x), rect.width + rect.x),
@@ -358,7 +361,7 @@ export default {
       };
     }
 
-    function calcCenterForPinch(e) {
+    function calcCenterForPinch(e): { x: number; y: number } {
       const rootOffset = renderer.getRootOffset();
       const x1 = e.pointers[0].pageX;
       const x2 = e.pointers[1].pageX;
@@ -370,7 +373,7 @@ export default {
       };
     }
 
-    function calcCenterForDrag(e) {
+    function calcCenterForDrag(e): { x: number; y: number } {
       const rootOffset = renderer.getRootOffset();
       return {
         x: e.pageX - rootOffset.left,
@@ -378,11 +381,11 @@ export default {
       };
     }
 
-    function calcOffsetForDrag(e, actionData, coordField) {
+    function calcOffsetForDrag(e, actionData, coordField): number {
       return e.offset[coordField] - actionData.offset[coordField];
     }
 
-    function setLastWheelTimer() {
+    function setLastWheelTimer(): void {
       clearTimeout(lastWheelTimer);
       // eslint-disable-next-line no-restricted-globals
       lastWheelTimer = setTimeout(() => {
@@ -402,7 +405,7 @@ export default {
     }
 
     const zoomAndPan = {
-      dragStartHandler(e) {
+      dragStartHandler(e): void {
         // @ts-expect-error
         const { options } = zoomAndPan;
         const isTouch = e.pointerType === 'touch';
@@ -450,7 +453,7 @@ export default {
           startAxesViewportChanging(zoomAndPan, 'pan', e);
         }
       },
-      dragHandler(e) {
+      dragHandler(e): void {
         const rotated = chart.option('rotated');
         // @ts-expect-error
         const { options } = zoomAndPan;
@@ -504,7 +507,7 @@ export default {
           preventDefaults(e);
         }
       },
-      dragEndHandler(e) {
+      dragEndHandler(e): void {
         const rotated = chart.option('rotated');
         // @ts-expect-error
         const { options } = zoomAndPan;
@@ -555,7 +558,7 @@ export default {
         // @ts-expect-error
         zoomAndPan.actionData = null;
       },
-      pinchStartHandler(e) {
+      pinchStartHandler(e): void {
         const actionData = prepareActionData(calcCenterForPinch(e), 'zoom');
         if (actionData.cancel) {
           cancelEvent(e);
@@ -565,7 +568,7 @@ export default {
         zoomAndPan.actionData = actionData;
         startAxesViewportChanging(zoomAndPan, 'zoom', e);
       },
-      pinchHandler(e) {
+      pinchHandler(e): void {
         // @ts-expect-error
         if (!zoomAndPan.actionData) {
           return;
@@ -581,7 +584,7 @@ export default {
         );
         preventDefaults(e);
       },
-      pinchEndHandler(e) {
+      pinchEndHandler(e): void {
         // @ts-expect-error
         if (!zoomAndPan.actionData) {
           return;
@@ -597,7 +600,7 @@ export default {
         // @ts-expect-error
         zoomAndPan.actionData = null;
       },
-      mouseWheelHandler(e) {
+      mouseWheelHandler(e): void {
         // @ts-expect-error
         const { options } = zoomAndPan;
         const rotated = chart.option('rotated');
@@ -676,7 +679,7 @@ export default {
           setLastWheelTimer();
         }
       },
-      cleanup() {
+      cleanup(): void {
         renderer.root.off(EVENTS_NS);
         // @ts-expect-error
         zoomAndPan.actionData?.rect?.dispose();
@@ -684,7 +687,7 @@ export default {
         zoomAndPan.actionData = null;
         renderer.root.css({ 'touch-action': '' });
       },
-      setup(options) {
+      setup(options): void {
         zoomAndPan.cleanup();
         if (!options.argumentAxis.pan) {
           renderer.root.on(SCROLL_BAR_START_EVENT_NAME, cancelEvent);
@@ -754,14 +757,14 @@ export default {
     this._zoomAndPan = zoomAndPan;
   },
   members: {
-    _setupZoomAndPan() {
+    _setupZoomAndPan(): void {
       this._zoomAndPan.setup(this._themeManager.getOptions('zoomAndPan'));
     },
   },
-  dispose() {
+  dispose(): void {
     this._zoomAndPan.cleanup();
   },
-  customize(constructor) {
+  customize(constructor): void {
     constructor.addChange({
       code: 'ZOOM_AND_PAN',
       handler() {
