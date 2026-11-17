@@ -145,8 +145,7 @@ if (Quill) {
 
         return buttonItemConfig;
       } if (item.items) {
-        item.items = this._prepareMenuItems(item.items);
-        return item;
+        return { ...item, items: this._prepareMenuItems(item.items) };
       }
       return item;
     }
