@@ -65,6 +65,20 @@ export type OptionAction<THandler> = Record<never, never> extends OptionActionEv
   ? (event?: OptionActionEventArgs<THandler>) => void
   : (event: OptionActionEventArgs<THandler>) => void;
 
+interface ComponentMixin {
+  [member: string]: unknown;
+  ctor?: () => void;
+  postCtor?: () => void;
+}
+
+interface MixinTarget {
+  prototype: object;
+  _includedCtors: (() => void)[];
+  _includedPostCtors: (() => void)[];
+}
+
+const SKIPPED_MIXIN_MEMBERS = ['ctor', 'postCtor', 'default'];
+
 export interface ComponentProperties<TComponent> extends ComponentOptions<
   EventInfo<TComponent>,
   InitializedEventInfo<TComponent>,
@@ -95,6 +109,10 @@ export class Component<
   TProperties extends ComponentProperties<TComponent> = ComponentProperties<TComponent>,
   // @ts-expect-error dxClass inheritance issue
 > extends (Class.inherit({}) as new() => {}) implements PublicComponent<TProperties> {
+  static _includedCtors: (() => void)[];
+
+  static _includedPostCtors: (() => void)[];
+
   _deprecatedOptions!: Record<string, DeprecatedOptionInfo>;
 
   _options!: Options<TProperties>;
@@ -127,6 +145,42 @@ export class Component<
   _initializing?: boolean;
 
   _cancelOptionChange?: string | boolean;
+
+  static include<TClass extends MixinTarget>(this: TClass, ...mixins: object[]): TClass {
+    const hasOwnProperty = Object.prototype.hasOwnProperty.bind(this);
+
+    if (!hasOwnProperty('_includedCtors') && !hasOwnProperty('_includedPostCtors')) {
+      this._includedCtors = this._includedCtors.slice(0);
+      this._includedPostCtors = this._includedPostCtors.slice(0);
+    }
+
+    const prototype = this.prototype as Record<string, unknown>;
+
+    mixins.forEach((mixin) => {
+      const members = mixin as ComponentMixin;
+
+      if (members.ctor) {
+        this._includedCtors.push(members.ctor);
+      }
+      if (members.postCtor) {
+        this._includedPostCtors.push(members.postCtor);
+      }
+
+      // eslint-disable-next-line no-restricted-syntax
+      for (const name in members) {
+        if (!SKIPPED_MIXIN_MEMBERS.includes(name)) {
+          /// #DEBUG
+          if (name in prototype) {
+            throw errors.Error('E0002', name);
+          }
+          /// #ENDDEBUG
+          prototype[name] = members[name];
+        }
+      }
+    });
+
+    return this;
+  }
 
   _setDeprecatedOptions(): void {
     this._deprecatedOptions = {};
