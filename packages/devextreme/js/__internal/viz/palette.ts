@@ -11,7 +11,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-use-before-define */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-/* eslint-disable prefer-destructuring */
 /* eslint-disable no-else-return */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 
@@ -180,7 +179,7 @@ export function getPalette(palette, parameters) {
     || (currentPaletteName === undefined ? parameters.themeDefault : currentPalette());
 
   let result;
-  const type = parameters.type;
+  const { type } = parameters;
   if (Array.isArray(palette)) {
     return palette.slice(0);
   } else {

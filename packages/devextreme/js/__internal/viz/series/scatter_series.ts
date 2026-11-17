@@ -20,7 +20,6 @@
 /* eslint-disable no-multi-assign */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-/* eslint-disable prefer-destructuring */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 
@@ -427,7 +426,7 @@ const baseScatterMethods = {
   },
 
   _drawPoint(options) {
-    const point = options.point;
+    const { point } = options;
 
     if (point.isInVisibleArea()) {
       point.clearVisibility();
@@ -661,7 +660,7 @@ const baseScatterMethods = {
 
   _patchMarginOptions(options) {
     const pointOptions = this._getCreatingPointOptions();
-    const styles = pointOptions.styles;
+    const { styles } = pointOptions;
     const maxSize = [styles.normal, styles.hover, styles.selection]
       .reduce((max, style) => _max(max, style.r * 2 + style['stroke-width']), 0);
 
@@ -682,7 +681,7 @@ chart = _extend({}, baseScatterMethods, {
     let trackers;
     let trackersGroup;
     const segments = that._segments || [];
-    const rotated = that._options.rotated;
+    const { rotated } = that._options;
 
     if (!that.isVisible()) {
       return;
@@ -750,7 +749,7 @@ chart = _extend({}, baseScatterMethods, {
 
   _getNearestPointsByCoord(coord, isArgument) {
     const that = this;
-    const rotated = that.getOptions().rotated;
+    const { rotated } = that.getOptions();
     const isOpposite = !isArgument && !rotated || isArgument && rotated;
     const coordName = isOpposite ? 'vy' : 'vx';
     const allPoints = that.getPoints();
@@ -808,7 +807,7 @@ chart = _extend({}, baseScatterMethods, {
 
   _applyVisibleArea() {
     const that = this;
-    const rotated = that._options.rotated;
+    const { rotated } = that._options;
     const visibleX = (rotated ? that.getValueAxis() : that.getArgumentAxis()).getVisibleArea();
     const visibleY = (rotated ? that.getArgumentAxis() : that.getValueAxis()).getVisibleArea();
 

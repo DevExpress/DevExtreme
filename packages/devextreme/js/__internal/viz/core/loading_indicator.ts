@@ -9,7 +9,6 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-use-before-define */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-/* eslint-disable prefer-destructuring */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 
 import type { ThemeValue } from './base_theme_manager';
@@ -55,7 +54,7 @@ export let LoadingIndicator = class LoadingIndicator {
   declare _noHiding: boolean;
 
   constructor(parameters: LoadingIndicatorParams) {
-    const renderer = parameters.renderer;
+    const { renderer } = parameters;
     this._group = renderer.g().attr({ class: 'dx-loading-indicator' }).linkOn(renderer.root, { name: 'loading-indicator', after: 'peripheral' });
     this._rect = renderer.rect().attr({ opacity: 0 }).append(this._group);
     this._text = renderer.text().attr({ align: 'center' }).append(this._group);
@@ -93,8 +92,7 @@ export let LoadingIndicator = class LoadingIndicator {
   }
 
   setSize(size: { width: number; height: number }): void {
-    const width = size.width;
-    const height = size.height;
+    const { width, height } = size;
     this._rect.attr({ width, height });
     this._text.attr({ x: width / 2, y: height / 2 });
   }
@@ -220,7 +218,7 @@ export const plugin = {
     // Of course this looks dirty - but cleaning it is another task. For now it has been just
     // extracted from BaseWidget with minimal changes.
     if (proto._dataSourceChangedHandler) {
-      const _dataSourceChangedHandler = proto._dataSourceChangedHandler;
+      const { _dataSourceChangedHandler } = proto;
       proto._dataSourceChangedHandler = function () {
         this._scheduleLoadingIndicatorHiding();
         _dataSourceChangedHandler.apply(this, arguments);
@@ -239,7 +237,7 @@ export const plugin = {
       isOptionChange: true,
     });
     proto._eventsMap.onLoadingIndicatorReady = { name: 'loadingIndicatorReady' };
-    const _drawn = proto._drawn;
+    const { _drawn } = proto;
     proto._drawn = function () {
       _drawn.apply(this, arguments);
       if (this._dataIsReady()) {

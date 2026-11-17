@@ -14,7 +14,6 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-/* eslint-disable prefer-destructuring */
 /* eslint-disable no-else-return */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
@@ -60,7 +59,7 @@ const EXLUDE_POINTS_MODE = 'excludepoints';
 const LEGEND_HOVER_MODES = [INCLUDE_POINTS_MODE, EXLUDE_POINTS_MODE, NONE_MODE];
 
 function getData(event, dataKey, tryCheckParent?) {
-  const target = event.target;
+  const { target } = event;
   if (target.tagName === 'tspan') {
     return target.parentNode[dataKey];
   }
@@ -579,7 +578,7 @@ export class ChartTracker extends BaseTracker {
   _pointClick(point, event) {
     const that = this;
     const eventTrigger = that._eventTrigger;
-    const series = point.series;
+    const { series } = point;
     const eventArgs = { target: point, event };
 
     eventTrigger(POINT_CLICK, eventArgs, () => {

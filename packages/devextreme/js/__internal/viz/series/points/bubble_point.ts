@@ -5,7 +5,6 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-multi-assign */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable prefer-destructuring */
 
 import { extend } from '@ts/core/utils/extend';
 import symbolPoint from '@ts/viz/series/points/symbol_point';
@@ -30,13 +29,13 @@ export default _extend({}, symbolPoint, {
 
   getTooltipParams(location) {
     const that = this;
-    const graphic = that.graphic;
+    const { graphic } = that;
 
     if (!graphic) {
       return;
     }
 
-    const height = graphic.getBBox().height;
+    const { height } = graphic.getBBox();
     return {
       x: that.x,
       y: that.y,

@@ -18,7 +18,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-use-before-define */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-/* eslint-disable prefer-destructuring */
 /* eslint-disable no-else-return */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
@@ -33,8 +32,7 @@ import { generateDateBreaks } from '@ts/viz/axes/datetime_breaks';
 import { getCosAndSin, getLog, patchFontOptions } from '@ts/viz/core/utils';
 import { Range } from '@ts/viz/translators/range';
 
-const getNextDateUnit = dateUtils.getNextDateUnit;
-const correctDateWithUnitBeginning = dateUtils.correctDateWithUnitBeginning;
+const { getNextDateUnit, correctDateWithUnitBeginning } = dateUtils;
 const _math = Math;
 const _max = _math.max;
 const TOP = constants.top;
@@ -352,7 +350,7 @@ export default {
 
     _getTickMarkPoints(coords, length, tickOptions) {
       const isHorizontal = this._isHorizontal;
-      const tickOrientation = this._options.tickOrientation;
+      const { tickOrientation } = this._options;
       const labelPosition = this._options.label.position;
       let tickStartCoord;
 
@@ -374,7 +372,7 @@ export default {
     },
 
     getTickStartPositionShift(length) {
-      const width = this._options.width;
+      const { width } = this._options;
       const position = this.getResolvedBoundaryPosition();
       return length % 2 === 1
         ? (width % 2 === 0 && (position === LEFT || position === TOP))
@@ -464,7 +462,7 @@ export default {
     _drawDateMarker(date, options, range) {
       const that = this;
       const markerOptions = that._options.marker;
-      const invert = that._translator.getBusinessRange().invert;
+      const { invert } = that._translator.getBusinessRange();
       const textIndent = markerOptions.width + markerOptions.textLeftIndent;
       let pathElement;
 
@@ -578,7 +576,7 @@ export default {
       const that = this;
       const markerOptions = this._options.marker;
       const textIndent = markerOptions.width + markerOptions.textLeftIndent;
-      const invert = this._translator.getBusinessRange().invert;
+      const { invert } = this._translator.getBusinessRange();
       const canvas = that._getCanvasStartEnd();
       const dateMarkers = this._dateMarkers;
 
@@ -609,7 +607,7 @@ export default {
 
       this._dateMarkers.forEach((marker) => {
         if (marker.label) {
-          const labelBBox = marker.labelBBox;
+          const { labelBBox } = marker;
           const dy = marker.y + markerOptions.textTopIndent - labelBBox.y;
 
           marker.label.attr({
@@ -643,7 +641,7 @@ export default {
 
     _initializeMarkersTrackers(offset) {
       const that = this;
-      const separatorHeight = that._options.marker.separatorHeight;
+      const { separatorHeight } = that._options.marker;
       const renderer = that._renderer;
       const businessRange = this._translator.getBusinessRange();
       const canvas = that._getCanvasStartEnd();
@@ -657,7 +655,7 @@ export default {
                           x: canvas.end,
                           date: businessRange.max,
                         };
-          const x = marker.x;
+          const { x } = marker;
           const y = marker.y + offset;
           const markerTracker = renderer.path([
             x, y,
@@ -715,13 +713,12 @@ export default {
       constantLines.forEach((item) => {
         const isHorizontal = that._isHorizontal;
         const linesOptions = item.options;
-        const paddingTopBottom = linesOptions.paddingTopBottom;
-        const paddingLeftRight = linesOptions.paddingLeftRight;
+        const { paddingTopBottom, paddingLeftRight } = linesOptions;
         const labelOptions = linesOptions.label;
         const labelVerticalAlignment = labelOptions.verticalAlignment;
         const labelHorizontalAlignment = labelOptions.horizontalAlignment;
         const labelIsInside = labelOptions.position === 'inside';
-        const label = item.label;
+        const { label } = item;
         const box = item.labelBBox;
         let translateX;
         let translateY;
@@ -811,8 +808,8 @@ export default {
     },
 
     _estimateLabelHeight(bBox, labelOptions) {
-      let height = bBox.height;
-      const drawingType = labelOptions.drawingType;
+      let { height } = bBox;
+      const { drawingType } = labelOptions;
 
       if (this._validateDisplayMode(drawingType) === 'stagger' || this._validateOverlappingMode(labelOptions.overlappingBehavior, drawingType) === 'stagger') {
         height = height * 2 + labelOptions.staggeringSpacing;
@@ -834,8 +831,7 @@ export default {
       const that = this;
       const range = that._getViewportRange();
       const ticksData = this._createTicksAndLabelFormat(range);
-      const ticks = ticksData.ticks;
-      const tickInterval = ticksData.tickInterval;
+      const { ticks, tickInterval } = ticksData;
       const options = this._options;
       const constantLineOptions = that._outsideConstantLines
         .filter((l) => l.labelOptions.visible)
@@ -889,7 +885,7 @@ export default {
     },
 
     _checkAlignmentConstantLineLabels(labelOptions) {
-      const position = labelOptions.position;
+      const { position } = labelOptions;
       let verticalAlignment = (labelOptions.verticalAlignment || '').toLowerCase();
       let horizontalAlignment = (labelOptions.horizontalAlignment || '').toLowerCase();
 
@@ -936,14 +932,12 @@ export default {
 
     _getAdjustedStripLabelCoords(strip) {
       const stripOptions = strip.options;
-      const paddingTopBottom = stripOptions.paddingTopBottom;
-      const paddingLeftRight = stripOptions.paddingLeftRight;
-      const horizontalAlignment = stripOptions.label.horizontalAlignment;
-      const verticalAlignment = stripOptions.label.verticalAlignment;
+      const { paddingTopBottom, paddingLeftRight } = stripOptions;
+      const { horizontalAlignment, verticalAlignment } = stripOptions.label;
       const box = strip.labelBBox;
       const labelHeight = box.height;
       const labelWidth = box.width;
-      const labelCoords = strip.labelCoords;
+      const { labelCoords } = strip;
       let y = labelCoords.y - box.y;
       let x = labelCoords.x - box.x;
 
@@ -974,14 +968,13 @@ export default {
 
       const that = this;
       const options = that._options;
-      const position = options.position;
-      const margin = options.title.margin;
+      const { position } = options;
+      const { margin } = options.title;
       const title = that._title;
       const boxTitle = title.bBox;
-      const x = boxTitle.x;
-      const y = boxTitle.y;
-      const width = boxTitle.width;
-      const height = boxTitle.height;
+      const {
+        x, y, width, height,
+      } = boxTitle;
       const axisPosition = that._axisPosition;
       const loCoord = axisPosition - margin - offset;
       const hiCoord = axisPosition + margin + offset;
@@ -1033,8 +1026,7 @@ export default {
 
     coordsIn(x, y) {
       const canvas = this.getCanvas();
-      const isHorizontal = this._options.isHorizontal;
-      const position = this._options.position;
+      const { isHorizontal, position } = this._options;
       const coord = isHorizontal ? y : x;
 
       if (isHorizontal && (x < canvas.left || x > (canvas.width - canvas.right))
@@ -1105,8 +1097,7 @@ export default {
       const that = this;
       const orthogonalPositions = that._orthogonalPositions;
       const isHorizontal = that._isHorizontal;
-      const horizontalAlignment = stripLabelOptions.horizontalAlignment;
-      const verticalAlignment = stripLabelOptions.verticalAlignment;
+      const { horizontalAlignment, verticalAlignment } = stripLabelOptions;
       let x;
       let y;
 
@@ -1168,13 +1159,11 @@ export default {
     },
 
     _filterBreaks(breaks, viewport, breakStyle) {
-      const minVisible = viewport.minVisible;
-      const maxVisible = viewport.maxVisible;
+      const { minVisible, maxVisible } = viewport;
       const breakSize = breakStyle ? breakStyle.width : 0;
 
       return breaks.reduce((result, currentBreak) => {
-        let from = currentBreak.from;
-        let to = currentBreak.to;
+        let { from, to } = currentBreak;
         const lastResult = result[result.length - 1];
         let newBreak;
 
@@ -1182,7 +1171,7 @@ export default {
           return result;
         }
         if (from > to) {
-          to = [from, from = to][0];
+          [from, to] = [to, from];
         }
         if (result.length && from < lastResult.to) {
           if (to > lastResult.to) {
@@ -1306,8 +1295,7 @@ export default {
     drawScaleBreaks(customCanvas) {
       const that = this;
       const options = that._options;
-      const breakStyle = options.breakStyle;
-      const position = options.position;
+      const { breakStyle, position } = options;
       let positionFrom;
       let positionTo;
       const breaks = that._translator.getBusinessRange().breaks || [];
@@ -1380,7 +1368,7 @@ export default {
     shift(margins) {
       const that = this;
       const options = that._options;
-      const isHorizontal = options.isHorizontal;
+      const { isHorizontal } = options;
       const axesSpacing = that.getMultipleAxesSpacing();
       const constantLinesGroups = that._axisConstantLineGroups;
 
@@ -1410,7 +1398,7 @@ export default {
       const that = this;
       const orthogonalAxis = that.getOrthogonalAxis();
       const resolvedPosition = position ?? that.getResolvedPositionOption();
-      const offset = that.getOptions().offset;
+      const { offset } = that.getOptions();
       const orthogonalTranslator = orthogonalAxis.getTranslator();
       const orthogonalAxisType = orthogonalAxis.getOptions().type;
       let validPosition = orthogonalAxis.validateUnit(resolvedPosition);
@@ -1534,7 +1522,7 @@ export default {
         .forEach((orthogonalAxis) => {
           for (let i = 0; i < that._majorTicks.length; i++) {
             const tick = that._majorTicks[i];
-            const label = tick.label;
+            const { label } = tick;
             if (label) {
               if (
                 // @ts-expect-error
@@ -1606,7 +1594,7 @@ export default {
 
     _shiftThroughAxisOverlappedTick(tick) {
       const that = this;
-      const label = tick.label;
+      const { label } = tick;
 
       if (!label) {
         return;

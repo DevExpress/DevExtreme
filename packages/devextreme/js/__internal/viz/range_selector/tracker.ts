@@ -2,7 +2,6 @@
 /* eslint-disable no-multi-assign */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-use-before-define */
-/* eslint-disable prefer-destructuring */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 
 import { domAdapter } from '@ts/core/dom_adapter';
@@ -54,8 +53,7 @@ interface TrackerParams {
 
 function isLeftButtonPressed(event: ThemeValue): boolean {
   const e = event || window.event;
-  const originalEvent = e.originalEvent;
-  const touches = e.touches;
+  const { originalEvent, touches } = e;
   const pointerType = originalEvent ? originalEvent.pointerType : false;
   const eventTouches = originalEvent ? originalEvent.touches : false;
   const isMSPointerLeftClick = originalEvent && pointerType !== undefined && (pointerType === (originalEvent.MSPOINTER_TYPE_TOUCH || 'touch') || (pointerType === (originalEvent.MSPOINTER_TYPE_MOUSE || 'mouse') && originalEvent.buttons === 1));
@@ -65,8 +63,7 @@ function isLeftButtonPressed(event: ThemeValue): boolean {
 }
 
 function isMultiTouches(event: ThemeValue): boolean | null {
-  const originalEvent = event.originalEvent;
-  const touches = event.touches;
+  const { originalEvent, touches } = event;
   const eventTouches = originalEvent && originalEvent.touches;
 
   return (touches && touches.length > 1) || (eventTouches && eventTouches.length > 1) || null;
@@ -91,7 +88,7 @@ function isTouchEventArgs(e: ThemeValue): boolean {
 }
 
 function getEventPageX(event: ThemeValue): number {
-  const originalEvent = event.originalEvent;
+  const { originalEvent } = event;
   let result = 0;
   if (event.pageX) {
     result = event.pageX;
