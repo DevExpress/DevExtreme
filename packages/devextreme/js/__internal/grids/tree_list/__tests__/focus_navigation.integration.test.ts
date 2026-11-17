@@ -106,4 +106,38 @@ describe('TreeList focus — partial update of the focused row', () => {
     expect(visibleKeys(instance)).toEqual([1, 11, 2]);
     expect(row.getAttribute('tabindex')).toBe('3');
   });
+
+  it('keeps DOM focus on the focused cell when another row is updated via push (T1338023)', async () => {
+    const { instance } = createTreeList({
+      dataSource: {
+        store: {
+          type: 'array',
+          key: 'id',
+          data: DATA.map((item) => ({ ...item })),
+        },
+        pushAggregationTimeout: 0,
+      },
+      columns: ['id', 'name'],
+      focusedRowEnabled: true,
+      focusedRowKey: 1,
+      repaintChangesOnly: true,
+      autoExpandAll: false,
+    });
+    await flushAsync();
+
+    const cell = instance.getCellElement(0, 'name') as HTMLElement;
+    instance.focus(cell);
+    await flushAsync();
+    cell.dispatchEvent(new KeyboardEvent('keydown', { key: 'Shift', bubbles: true }));
+
+    expect(document.activeElement).toBe(cell);
+
+    instance.getDataSource().store().push([{ type: 'update', key: 2, data: { name: 'root B updated' } }]);
+    await flushAsync();
+
+    expect($(instance.getCellElement(1, 'name')).text()).toBe('root B updated');
+    expect(cell.hasAttribute('tabindex')).toBe(true);
+    expect($(instance.getRowElement(0)).get(0).hasAttribute('tabindex')).toBe(false);
+    expect(document.activeElement).toBe(cell);
+  });
 });

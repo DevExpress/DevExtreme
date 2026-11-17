@@ -404,15 +404,11 @@ export class FocusController extends core.ViewController {
   }
 
   public hasStaleFocusedRow(focusedRowIndex: number): boolean {
-    const rowsView = this.getView('rowsView');
-    const $tableElements: dxElementWrapper = rowsView.getTableElements();
+    const $tableElements: dxElementWrapper = this.getView('rowsView').getTableElements();
 
-    return $tableElements.toArray().some((tableElement) => {
-      const $tableElement = $(tableElement);
-      const $focusedRow = rowsView._getRowElements($tableElement).eq(focusedRowIndex);
-
-      return this.findFocusedRows($tableElement).not($focusedRow).length > 0;
-    });
+    return $tableElements.toArray().some(
+      (tableElement) => this.findStaleFocusedRows($(tableElement), focusedRowIndex).length > 0,
+    );
   }
 
   public restoreFocusedRowTabIndex(focusedRowIndex: number): void {
@@ -435,8 +431,20 @@ export class FocusController extends core.ViewController {
       .filter(isNotMasterDetailFocusedRow);
   }
 
+  private findStaleFocusedRows($tableElement, focusedRowIndex: number): dxElementWrapper {
+    const $focusedRows = this.findFocusedRows($tableElement);
+
+    if (focusedRowIndex < 0) {
+      return $focusedRows;
+    }
+
+    const $focusedRow = this.getView('rowsView')._getRowElements($tableElement).eq(focusedRowIndex);
+
+    return $focusedRows.not($focusedRow);
+  }
+
   private _clearPreviousFocusedRow($tableElement, focusedRowIndex) {
-    const $prevRowFocusedElement = this.findFocusedRows($tableElement);
+    const $prevRowFocusedElement = this.findStaleFocusedRows($tableElement, focusedRowIndex);
 
     $prevRowFocusedElement
       .removeClass(ROW_FOCUSED_CLASS)
@@ -460,7 +468,11 @@ export class FocusController extends core.ViewController {
       const rowsView = this.getView('rowsView');
 
       $row = $(rowsView._getRowElements($tableElement).eq(focusedRowIndex));
-      $row.addClass(ROW_FOCUSED_CLASS).attr('tabindex', tabIndex);
+      $row.addClass(ROW_FOCUSED_CLASS);
+
+      if (!$row.children('[tabindex]').length) {
+        $row.attr('tabindex', tabIndex);
+      }
     }
 
     return $row;
