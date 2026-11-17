@@ -967,9 +967,10 @@ export const rowsView = (
       if (this._focusController.isRowFocused(row.key)) {
         $row.addClass(CLASSES.rowFocused);
 
-        const isFocusableRow = row.rowType === 'data' || row.rowType === 'group';
+        const isRowTabStop = row.rowType === 'group'
+          || (row.rowType === 'data' && !this._keyboardNavigationController.isCellFocusType());
 
-        if (isFocusableRow && !this._keyboardNavigationController.isCellFocusType()) {
+        if (isRowTabStop) {
           $row.attr('tabindex', this.option('tabIndex') ?? 0);
         }
       }

@@ -361,6 +361,49 @@ describe('GridCore focus', () => {
     });
   });
 
+  describe('when a focused group row is updated via the store push API with repaintChangesOnly', () => {
+    it('should keep DOM focus on the group row in cell focus mode (T1338023)', async () => {
+      const { instance } = await createDataGrid({
+        dataSource: {
+          store: {
+            type: 'array',
+            key: 'id',
+            data: [
+              { id: 1, group: 'A', value: 1 },
+              { id: 2, group: 'A', value: 2 },
+              { id: 3, group: 'B', value: 3 },
+            ],
+          },
+          reshapeOnPush: true,
+          pushAggregationTimeout: 0,
+        },
+        columns: ['id', { dataField: 'group', groupIndex: 0 }, 'value'],
+        summary: { groupItems: [{ column: 'value', summaryType: 'sum' }] },
+        focusedRowEnabled: true,
+        repaintChangesOnly: true,
+      });
+
+      const cell = instance.getCellElement(1, 'id') as HTMLElement;
+      instance.focus(cell);
+      await flushAsync();
+      cell.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowUp', bubbles: true }));
+      await flushAsync();
+      const groupRow = $(instance.getRowElement(0)).get(0);
+      groupRow.dispatchEvent(new KeyboardEvent('keydown', { key: 'Shift', bubbles: true }));
+
+      expect(instance.option('focusedRowKey')).toEqual(['A']);
+      expect(document.activeElement).toBe(groupRow);
+
+      const removeAttribute = jest.spyOn(groupRow, 'removeAttribute');
+      instance.getDataSource().store().push([{ type: 'update', key: 1, data: { value: 100 } }]);
+      await flushAsync();
+
+      expect($(instance.getRowElement(0)).text()).toContain('102');
+      expect(removeAttribute).not.toHaveBeenCalledWith('tabindex');
+      expect(document.activeElement).toBe(groupRow);
+    });
+  });
+
   describe('when focusedRowKey is changed with a custom tabIndex', () => {
     it('should apply the tabIndex option to the new focused row (T1338023)', async () => {
       const { instance } = await createDataGrid({
