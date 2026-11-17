@@ -408,11 +408,14 @@ test.meta({ themes: [Themes.materialBlue, Themes.genericLight] })('SVG icon set'
     .ok(compareResults.errorMessages());
 }).before(async () => {
   const iconSetName = isFluent() ? 'fluent' : getThemeName();
-  const icons = Object.keys(iconSet).map((iconName) => ({
-    id: `dx-${new Guid()}`,
-    iconName,
-    src: `../../../packages/devextreme-scss/images/icons/${iconSetName}/${iconName}.svg`,
-  }));
+  const glyphs = Object.values(iconSet);
+  const icons = Object.entries(iconSet)
+    .filter(([, glyph], index) => glyphs.indexOf(glyph) === index)
+    .map(([iconName]) => ({
+      id: `dx-${new Guid()}`,
+      iconName,
+      src: `../../../packages/devextreme-scss/images/icons/${iconSetName}/${iconName}.svg`,
+    }));
 
   // eslint-disable-next-line @typescript-eslint/no-shadow
   await ClientFunction((icons, appendElementTo) => {
