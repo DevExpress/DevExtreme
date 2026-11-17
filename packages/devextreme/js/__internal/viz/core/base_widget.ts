@@ -99,8 +99,10 @@ const getEmptyComponent = function (): ThemeValue {
   class EmptyComponent extends DOMComponent<any, any> {
     _getDefaultSize!: () => RawCanvas;
 
-    constructor(element: Element, options: ThemeValue) {
-      super(element, options);
+    _initTemplates(): void {}
+
+    ctor(element: Element, options: ThemeValue): void {
+      super.ctor(element, options);
       const sizedElement = domAdapter.createElement('div');
 
       const width = options && isNumeric(options.width) ? `${options.width}px` : '100%';
@@ -112,8 +114,6 @@ const getEmptyComponent = function (): ThemeValue {
       domAdapter.setClass(sizedElement, SIZED_ELEMENT_CLASS, false);
       domAdapter.insertElement(element, sizedElement);
     }
-
-    _initTemplates(): void {}
   }
 
   const originalInherit = (EmptyComponent as ThemeValue).inherit;

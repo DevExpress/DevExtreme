@@ -1094,6 +1094,11 @@ moduleWithoutCsp(
 
         QUnit.test('regressions: nested component should be disposed', function(assert) {
             class TestComponent extends DOMComponent {
+                ctor(element, options) {
+                    this.NAME = 'TestComponent';
+                    super.ctor(element, options);
+                }
+
                 _dispose() {
                     this.__disposed__ = true;
                 }

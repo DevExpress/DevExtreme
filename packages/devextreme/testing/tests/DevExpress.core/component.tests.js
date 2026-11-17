@@ -7,9 +7,9 @@ import devices from '__internal/core/devices';
 import config from 'core/config';
 
 class TestComponent extends Component {
-    _beforeCreateOptions(extra) {
+    ctor(options) {
         this._resetTraceLog();
-        super._beforeCreateOptions(extra);
+        super.ctor(options);
     }
 
     _setOptionsByReference() {
@@ -363,6 +363,11 @@ QUnit.module('default', {}, () => {
 
     QUnit.test('complex options', function(assert) {
         class Component1 extends Component {
+            ctor(options) {
+                this.NAME = 'component1';
+                super.ctor(options);
+            }
+
             _getDefaultOptions() {
                 return $.extend(
                     super._getDefaultOptions(), {
@@ -403,6 +408,10 @@ QUnit.module('default', {}, () => {
         let triggered;
 
         class TempComponent extends Component {
+            ctor(options) {
+                this.NAME = 'temp';
+                super.ctor(options);
+            }
         }
 
         const instance = new TempComponent({

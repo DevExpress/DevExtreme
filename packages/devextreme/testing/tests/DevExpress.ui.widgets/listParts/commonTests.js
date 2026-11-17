@@ -57,10 +57,11 @@ const getListKeyboard = ($list) => {
 };
 
 class ScrollViewMock extends DOMComponent {
-    _beforeCreateOptions(element) {
+    ctor(element, options) {
+        this.NAME = 'dxScrollView';
         this._contentHeight = 400;
 
-        super._beforeCreateOptions(element);
+        super.ctor(element, options);
     }
 
     _init() {

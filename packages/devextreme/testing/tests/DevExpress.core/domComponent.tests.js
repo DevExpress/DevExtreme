@@ -36,9 +36,9 @@ QUnit.module('default', {
             }
         };
         this.TestComponent = class extends DOMComponent {
-            _beforeCreateOptions(element) {
+            ctor(element, options) {
                 this._traceLog = [];
-                super._beforeCreateOptions(element);
+                super.ctor(element, options);
             }
 
             _optionsByReference() {
@@ -695,6 +695,11 @@ QUnit.module('default', {
         let shownFired = 0;
 
         class TestComponent extends this.TestComponent {
+            ctor(element, options) {
+                this.NAME = 'TestComponent';
+                super.ctor(element, options);
+            }
+
             _visibilityChanged(visible) {
                 if(visible) {
                     shownFired++;
@@ -727,12 +732,22 @@ QUnit.module('default', {
         };
 
         class TestComponent1 extends this.TestComponent {
+            ctor(element, options) {
+                this.NAME = 'TestComponent1';
+                super.ctor(element, options);
+            }
+
             _visibilityChanged(visible) {
                 visibilityChanged(visible);
             }
         }
 
         class TestComponent2 extends this.TestComponent {
+            ctor(element, options) {
+                this.NAME = 'TestComponent2';
+                super.ctor(element, options);
+            }
+
             _visibilityChanged(visible) {
                 visibilityChanged(visible);
             }
@@ -758,6 +773,11 @@ QUnit.module('default', {
         };
 
         class TestComponent extends this.TestComponent {
+            ctor(element, options) {
+                this.NAME = 'TestComponent1';
+                super.ctor(element, options);
+            }
+
             _visibilityChanged(visible) {
                 visibilityChanged(visible);
             }
@@ -788,6 +808,11 @@ QUnit.module('default', {
         };
 
         class TestComponent extends this.TestComponent {
+            ctor(element, options) {
+                this.NAME = 'TestComponent1';
+                super.ctor(element, options);
+            }
+
             _visibilityChanged(visible) {
                 visibilityChanged(visible);
             }
@@ -818,6 +843,11 @@ QUnit.module('default', {
         };
 
         class TestComponent extends this.TestComponent {
+            ctor(element, options) {
+                this.NAME = 'TestComponent1';
+                super.ctor(element, options);
+            }
+
             _visibilityChanged(visible) {
                 visibilityChanged(visible);
             }
@@ -843,6 +873,11 @@ QUnit.module('default', {
         let dimensionChanged = 0;
 
         class TestComponent extends this.TestComponent {
+            ctor(element, options) {
+                this.NAME = 'TestComponent';
+                super.ctor(element, options);
+            }
+
             _dimensionChanged(visible) {
                 dimensionChanged++;
             }
@@ -862,6 +897,11 @@ QUnit.module('default', {
         let dimensionChanged = 0;
 
         class TestComponent extends this.TestComponent {
+            ctor(element, options) {
+                this.NAME = 'TestComponent';
+                super.ctor(element, options);
+            }
+
             _visibilityChanged() { }
 
             _dimensionChanged() {
@@ -1344,6 +1384,46 @@ QUnit.module('construction order', {
         });
 
         assert.deepEqual(log, ['onInitialized', '_render', 'postCtor']);
+
+        instance.dispose();
+    });
+
+    QUnit.test('a ctor member passed to inherit() wraps the base initialization', function(assert) {
+        const log = [];
+
+        const Base = DOMComponent.inherit({
+            ctor(element, options) {
+                log.push('base ctor before');
+                this.callBase(element, options);
+                log.push('base ctor after: width ' + this.option('width'));
+            },
+            _init() {
+                log.push('_init');
+                this.callBase();
+            },
+            _useTemplates() {
+                return false;
+            }
+        });
+        const Derived = Base.inherit({
+            ctor(element, options) {
+                log.push('derived ctor before');
+                this.callBase(element, Object.assign({}, options, { width: 200 }));
+                log.push('derived ctor after');
+            }
+        });
+
+        const instance = new Derived($('#component'), { width: 100 });
+        log.push('constructed');
+
+        assert.deepEqual(log, [
+            'derived ctor before',
+            'base ctor before',
+            '_init',
+            'base ctor after: width 200',
+            'derived ctor after',
+            'constructed'
+        ]);
 
         instance.dispose();
     });

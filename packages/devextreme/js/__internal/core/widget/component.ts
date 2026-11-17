@@ -146,27 +146,12 @@ export class Component<
   _cancelOptionChange?: string | boolean;
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  constructor(options: any = {}, extra?: unknown) {
+  constructor(...args: any[]) {
     // eslint-disable-next-line @typescript-eslint/naming-convention
     const { _includedCtors, _includedPostCtors } = this.constructor as unknown as MixinTarget;
 
     _includedCtors.forEach((ctor) => { ctor.call(this); });
-    this._beforeCreateOptions(extra);
-
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    const { _optionChangedCallbacks, _disposingCallbacks } = options;
-
-    this.NAME = publicComponentName(this.constructor);
-
-    this._eventsStrategy = EventsStrategy.create(this, options.eventsStrategy);
-
-    this._updateLockCount = 0;
-
-    this._optionChangedCallbacks = _optionChangedCallbacks || Callbacks();
-    this._disposingCallbacks = _disposingCallbacks || Callbacks();
-    this.postponedOperations = new PostponedOperations();
-    this._createOptions(options);
-
+    this.ctor(...args as [unknown?, unknown?]);
     _includedPostCtors.forEach((postCtor) => { postCtor.call(this); });
   }
 
@@ -256,8 +241,22 @@ export class Component<
     return this._optionsByReference;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _beforeCreateOptions(extra?: unknown): void {}
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-vars
+  ctor(options: any = {}, extra?: unknown): void {
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    const { _optionChangedCallbacks, _disposingCallbacks } = options;
+
+    this.NAME = publicComponentName(this.constructor);
+
+    this._eventsStrategy = EventsStrategy.create(this, options.eventsStrategy);
+
+    this._updateLockCount = 0;
+
+    this._optionChangedCallbacks = _optionChangedCallbacks || Callbacks();
+    this._disposingCallbacks = _disposingCallbacks || Callbacks();
+    this.postponedOperations = new PostponedOperations();
+    this._createOptions(options);
+  }
 
   _createOptions(options: TProperties): void {
     this.beginUpdate();
