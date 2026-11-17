@@ -94,7 +94,7 @@ class RadioButton extends Editor {
   }
 
   _renderClick(): void {
-    const eventName = addNamespace(clickEventName, this.NAME ?? '');
+    const eventName = addNamespace(clickEventName, this.NAME);
 
     this._clickAction = this._createAction((args: { event: ValueChangedEvent }): void => {
       this._clickHandler(args.event);

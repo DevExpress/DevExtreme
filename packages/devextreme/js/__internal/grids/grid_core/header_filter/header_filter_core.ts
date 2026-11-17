@@ -65,7 +65,7 @@ function getSelectAllCheckBox(
 
 function getListSelectAllValueChangedHandler(
   selectAllCheckBox: dxCheckBox,
-  listComponent: dxList,
+  listComponent: List,
 ): CheckBoxValueChangedHandler {
   const originalHandler = selectAllCheckBox.option('onValueChanged') as CheckBoxValueChangedHandler;
 
@@ -100,7 +100,7 @@ function getListSelectAllValueChangedHandler(
 // It's temporary solution, in future we should implement this functionality in list
 // or change our HeaderFilter UX behavior
 function decorateListSelectAllValueChanged(
-  listComponent: dxList,
+  listComponent: List,
 ): void {
   const selectAllCheckBox = getSelectAllCheckBox(listComponent);
   if (!selectAllCheckBox) {
@@ -112,7 +112,7 @@ function decorateListSelectAllValueChanged(
 }
 
 function updateListSelectAllState(
-  listComponent: dxList,
+  listComponent: List,
   filterValues: HeaderFilterValues | null | undefined,
 ): void {
   if (listComponent.option('searchValue')) {
