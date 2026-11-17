@@ -24,7 +24,12 @@ const NORMAL_STATE = states.normalMark;
 const HOVER_STATE = states.hoverMark;
 const SELECTED_STATE = states.selectedMark;
 const MAX_RESOLVE_ITERATION_COUNT = 5;
-const LEGEND_ACTIONS = [states.resetItem, states.applyHover, states.applySelected, states.applySelected];
+const LEGEND_ACTIONS = [
+  states.resetItem,
+  states.applyHover,
+  states.applySelected,
+  states.applySelected,
+];
 
 function shiftInColumnFunction(box, length) {
   return { x: box.x, y: box.y - length };
@@ -286,7 +291,11 @@ class PieChart extends BaseChart {
     });
 
     if (drawnLabels) {
-      layout = this.layoutManager.applyPieChartSeriesLayout(canvas, series, drawOptions.hideLayoutLabels);
+      layout = this.layoutManager.applyPieChartSeriesLayout(
+        canvas,
+        series,
+        drawOptions.hideLayoutLabels,
+      );
     }
 
     series.forEach((singleSeries) => {
@@ -330,7 +339,8 @@ class PieChart extends BaseChart {
         ? this._getLayoutSeriesForEqualPies(visibleSeries, sizeGroupLayout)
         : this._getLayoutSeries(visibleSeries, drawOptions);
 
-      delta = (layout.radiusOuter - layout.radiusInner - seriesSpacing * (lengthVisibleSeries - 1)) / lengthVisibleSeries;
+      delta = (layout.radiusOuter - layout.radiusInner - seriesSpacing * (lengthVisibleSeries - 1))
+        / lengthVisibleSeries;
       innerRad = layout.radiusInner;
 
       this._setGeometry(layout);
@@ -379,7 +389,11 @@ class PieChart extends BaseChart {
           points.push.apply(points, seriesPoints);
         });
 
-        if (target && target.argument === data.argument && target.argumentIndex === data.argumentIndex) {
+        if (
+          target
+          && target.argument === data.argument
+          && target.argumentIndex === data.argumentIndex
+        ) {
           points.push(target as never);
         }
 
@@ -395,7 +409,10 @@ class PieChart extends BaseChart {
     do {
       wordWrapApplied = this._adjustSeriesLabels(resolveLabelOverlapping === 'shift');
       labelsWereOverlapped = this._resolveLabelOverlapping(resolveLabelOverlapping);
-    } while ((labelsWereOverlapped || wordWrapApplied) && ++iterationCount < MAX_RESOLVE_ITERATION_COUNT);
+    } while (
+      (labelsWereOverlapped || wordWrapApplied)
+      && ++iterationCount < MAX_RESOLVE_ITERATION_COUNT
+    );
   }
 
   _adjustSeriesLabels(moveLabelsFromCenter) {
@@ -409,7 +426,11 @@ class PieChart extends BaseChart {
       return r;
     }, { inside: [], columns: [], outside: [] });
     let labelsOverlapped = false;
-    const shiftFunction = (box, length) => _getVerticallyShiftedAngularCoords(box, -length, this._center);
+    const shiftFunction = (box, length) => _getVerticallyShiftedAngularCoords(
+      box,
+      -length,
+      this._center,
+    );
 
     if (seriesByPosition.inside.length > 0) {
       const pointsToResolve = seriesByPosition.inside.reduce((r, singleSeries) => {

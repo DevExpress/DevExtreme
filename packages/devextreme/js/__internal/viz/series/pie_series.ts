@@ -9,7 +9,6 @@
 /* eslint-disable consistent-return */
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-multi-assign */
-/* eslint-disable @stylistic/max-len */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable prefer-destructuring */
@@ -65,7 +64,9 @@ export const pie = _extend({}, barSeries, {
   _getOldPoint(data, oldPointsByArgument, index) {
     const point = (this._points || [])[index];
     if (point) {
-      oldPointsByArgument[point.argument.valueOf()] = oldPointsByArgument[point.argument.valueOf()].filter((p) => p !== point);
+      oldPointsByArgument[point.argument.valueOf()] = oldPointsByArgument[
+        point.argument.valueOf()
+      ].filter((p) => p !== point);
     }
     return point;
   },
@@ -120,7 +121,9 @@ export const pie = _extend({}, barSeries, {
   },
 
   _checkData(data, skippedFields) {
-    const base = barSeries._checkData.call(this, data, skippedFields, { value: this.getValueFields()[0] });
+    const base = barSeries._checkData.call(this, data, skippedFields, {
+      value: this.getValueFields()[0],
+    });
     return this._options.paintNullPoints ? base : base && data.value !== null;
   },
   // @ts-expect-error
@@ -186,7 +189,9 @@ export const pie = _extend({}, barSeries, {
       }
     });
 
-    return totalMinSegmentSize < 360 ? minSegmentSize * totalNotMinValues / (360 - totalMinSegmentSize) : 0;
+    return totalMinSegmentSize < 360
+      ? (minSegmentSize * totalNotMinValues) / (360 - totalMinSegmentSize)
+      : 0;
   },
 
   _applyArrangeCorrection(points, minShownValue, total) {
@@ -250,7 +255,10 @@ export const pie = _extend({}, barSeries, {
     points.forEach((p) => {
       p.normalInitialValue = p.initialValue / (maxValue !== 0 ? maxValue : 1);
     });
-    const total = points.reduce((total, point) => total + (point.isVisible() ? point.normalInitialValue : 0), 0);
+    const total = points.reduce(
+      (total, point) => total + (point.isVisible() ? point.normalInitialValue : 0),
+      0,
+    );
     if (minSegmentSize) {
       minShownValue = this._getArrangeMinShownValue(points, total);
     }
@@ -306,7 +314,11 @@ export const pie = _extend({}, barSeries, {
 
     if (firstDrawing) {
       animatePoint = function (p, i) {
-        p.animate(i === pointsCount - 1 ? completeFunc : undefined, ANIMATION_DURATION, (1 - ANIMATION_DURATION) * i / (pointsCount - 1));
+        p.animate(
+          i === pointsCount - 1 ? completeFunc : undefined,
+          ANIMATION_DURATION,
+          ((1 - ANIMATION_DURATION) * i) / (pointsCount - 1),
+        );
       };
     } else {
       animatePoint = function (p, i) {
