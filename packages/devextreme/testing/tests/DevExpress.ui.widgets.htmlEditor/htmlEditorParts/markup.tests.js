@@ -64,6 +64,24 @@ export default function() {
             assert.equal(!!instance._quillRegistrator, isQuillRendered, 'Quill registrator isn\'t initialized at SSR');
         });
 
+        test('vulnerable markup should not be rendered into the container', function(assert) {
+            // NOTE: no URL and a one-day delay, so a regression is caught without navigating away
+            const vulnerableMarkup = '<meta http-equiv="refresh" content="86400"><a href="javascript:void(0)">link</a><script>window._isScriptExecuted = true;</script>';
+            const instance = $('#htmlEditor').dxHtmlEditor({
+                value: `<p>Initial</p>${vulnerableMarkup}`
+            }).dxHtmlEditor('instance');
+            const $container = instance.$element().find(`.${QUILL_CONTAINER_CLASS}`);
+            const assertSafe = (message) => {
+                assert.strictEqual($container.find('meta, script, [href^="javascript"]').length, 0, message);
+            };
+
+            assertSafe('initial value');
+
+            instance.option('value', `<p>New value</p>${vulnerableMarkup}`);
+
+            assertSafe('value set at runtime');
+        });
+
         test('styling mode', function(assert) {
             const $element = $('#htmlEditor').dxHtmlEditor({
                 value: 'Test',

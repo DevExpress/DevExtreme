@@ -1,5 +1,4 @@
 /* eslint-disable no-nested-ternary */
-/* eslint-disable @stylistic/max-len */
 /* eslint-disable prefer-destructuring */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
@@ -31,7 +30,10 @@ interface LinkConnection {
 
 interface LinkWidget {
   _renderer: { getRootOffset: () => { left: number; top: number }; root?: { element?: Element } };
-  _tooltip?: { show: (target: ThemeValue, coords: { x: number; y: number }) => void; hide: () => void };
+  _tooltip?: {
+    show: (target: ThemeValue, coords: { x: number; y: number }) => void;
+    hide: () => void;
+  };
   _getOption: (name: string, isScalar?: boolean) => ThemeValue;
   _suspend: () => void;
   _resume: () => void;
@@ -49,18 +51,38 @@ interface LinkParams {
   gradient: ThemeValue;
 }
 
-function compileAttrs(color: string, itemOptions: ThemeValue, itemBaseOptions: ThemeValue, gradient?: ThemeValue): LinkAttrs {
+function compileAttrs(
+  color: string,
+  itemOptions: ThemeValue,
+  itemBaseOptions: ThemeValue,
+  gradient?: ThemeValue,
+): LinkAttrs {
   const border = itemOptions.border;
   const baseBorder = itemBaseOptions.border;
   const borderVisible = isDefined(border.visible) ? border.visible : baseBorder.visible;
   const borderWidth = isDefined(border.width) ? border.width : baseBorder.width;
-  const borderOpacity = isDefined(border.opacity) ? border.opacity : isDefined(baseBorder.opacity) ? baseBorder.opacity : 1;
-  const opacity = isDefined(itemOptions.opacity) ? itemOptions.opacity : isDefined(itemBaseOptions.opacity) ? itemBaseOptions.opacity : 1;
+  const borderOpacity = isDefined(border.opacity)
+    ? border.opacity
+    : isDefined(baseBorder.opacity)
+      ? baseBorder.opacity
+      : 1;
+  const opacity = isDefined(itemOptions.opacity)
+    ? itemOptions.opacity
+    : isDefined(itemBaseOptions.opacity)
+      ? itemBaseOptions.opacity
+      : 1;
   let fill = itemOptions.color || color;
 
-  if (itemBaseOptions.colorMode === COLOR_MODE_TARGET || itemBaseOptions.colorMode === COLOR_MODE_SOURCE) {
+  if (
+    itemBaseOptions.colorMode === COLOR_MODE_TARGET
+    || itemBaseOptions.colorMode === COLOR_MODE_SOURCE
+  ) {
     fill = color;
-  } else if (itemBaseOptions.colorMode === COLOR_MODE_GRADIENT && gradient && isDefined(gradient.id)) {
+  } else if (
+    itemBaseOptions.colorMode === COLOR_MODE_GRADIENT
+    && gradient
+    && isDefined(gradient.id)
+  ) {
     fill = gradient.id;
   }
 
@@ -113,7 +135,12 @@ class Link {
 
     this.states = {
       normal: compileAttrs(this.fill, this.options, this.options, params.gradient),
-      adjacentNodeHover: compileAttrs(this.fill, { opacity: 0, border: {} }, this.options, params.gradient),
+      adjacentNodeHover: compileAttrs(
+        this.fill,
+        { opacity: 0, border: {} },
+        this.options,
+        params.gradient,
+      ),
       hover: compileAttrs(this.fill, { opacity: 0, border: {} }, this.options, params.gradient),
     };
 

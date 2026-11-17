@@ -2,7 +2,6 @@
 /* eslint-disable no-plusplus */
 /* eslint-disable func-names */
 /* eslint-disable @typescript-eslint/naming-convention */
-/* eslint-disable @stylistic/max-len */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
@@ -18,7 +17,9 @@ const routines = {
     if (callback) {
       callback_function = callback;
     }
-    for (let i = 0; i < arr.length; i++) { if (callback_function(arr[i]) > m) m = callback_function(arr[i]); }
+    for (let i = 0; i < arr.length; i++) {
+      if (callback_function(arr[i]) > m) m = callback_function(arr[i]);
+    }
     return m;
   },
 };
@@ -121,7 +122,10 @@ const struct = {
     // method expects sorted vertices array to be in this._sortedList
     const sortedVertices = this._sortedList;
     sortedVertices.forEach((vertex) => {
-      const averts = getReverseAdjacentVertices(links, vertex.name); // neigbours who INCOME to the vertex
+      const averts = getReverseAdjacentVertices(
+        links,
+        vertex.name,
+      ); // neigbours who INCOME to the vertex
       if (averts.length === 0) {
         vertex.lp = 0; // 'lp' means 'Longest Path'
       } else {
