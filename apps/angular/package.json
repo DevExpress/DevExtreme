@@ -19,12 +19,14 @@
     "tslib": "^2.6.1"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "catalog:angular",
+    "@angular/build": "catalog:angular",
     "@angular/cli": "catalog:angular",
-    "@types/jasmine": "5.1.4",
     "@types/node": "20.11.17",
+    "@vitest/browser-playwright": "4.1.12",
     "cross-env": "7.0.3",
-    "typescript": "catalog:angular"
+    "playwright": "catalog:",
+    "typescript": "catalog:angular",
+    "vitest": "4.1.12"
   },
   "scripts": {
     "ng": "ng",
