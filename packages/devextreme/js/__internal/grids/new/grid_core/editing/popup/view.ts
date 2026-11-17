@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 /* eslint-disable spellcheck/spell-checker */
 import type { DataType } from '@js/common';
 import $ from '@js/core/renderer';
@@ -34,6 +32,8 @@ const EDITOR_TYPES_BY_DATA_TYPE: Record<DataType, dxForm.FormItemComponent> = {
   date: 'dxDateBox',
   datetime: 'dxDateBox',
 };
+
+type ColumnFormItem = dxForm.SimpleItem & { column?: Column };
 
 export class EditPopupView extends View<Props> {
   private readonly promises = new PendingPromises();
@@ -169,10 +169,10 @@ export class EditPopupView extends View<Props> {
       return;
     }
 
-    const simpleFormItem = item as dxForm.SimpleItem;
+    const simpleFormItem = item as ColumnFormItem;
     const itemId = simpleFormItem.name ?? simpleFormItem.dataField;
 
-    const column: Column = (simpleFormItem as any).column
+    const column = simpleFormItem.column
         ?? columns.find((c) => c.name === itemId)
         ?? columns.find((c) => c.dataField === itemId);
 
@@ -180,7 +180,7 @@ export class EditPopupView extends View<Props> {
       return;
     }
 
-    (simpleFormItem as any).column = column;
+    simpleFormItem.column = column;
 
     if (itemId && !customEditorItems.includes(itemId)) {
       simpleFormItem.editorType = EDITOR_TYPES_BY_DATA_TYPE[column.dataType];

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-floating-promises */
 /* eslint-disable @typescript-eslint/no-invalid-void-type */
 import {
   describe, expect, it, jest,
@@ -9,7 +8,7 @@ import type { Column } from '../columns_controller/types';
 import { defaultSetFieldValue, PendingPromises } from './utils';
 
 describe('defaultSetFieldValue', () => {
-  it('should set value to dataField', () => {
+  it('should set value to dataField', async () => {
     const newData = {};
     const value = 'some_value';
 
@@ -17,18 +16,18 @@ describe('defaultSetFieldValue', () => {
       dataField: 'some_field',
     } as Column;
 
-    defaultSetFieldValue.call(column, newData, value, {});
+    await defaultSetFieldValue.call(column, newData, value, {});
 
     expect(newData).toEqual({ some_field: 'some_value' });
   });
   describe('when column does not have dataField', () => {
-    it('should not set change data', () => {
+    it('should not set change data', async () => {
       const newData = {};
       const value = 'some_value';
 
       const column = {} as Column;
 
-      defaultSetFieldValue.call(column, newData, value, {});
+      await defaultSetFieldValue.call(column, newData, value, {});
 
       expect(newData).toEqual({});
     });
@@ -44,17 +43,19 @@ describe('PendingPromises', () => {
     const p2 = createPromise<void>();
     const p3 = createPromise<void>();
 
-    promises.add(p1.promise);
-    promises.add(p2.promise);
-    promises.add(p3.promise);
+    promises.add(p1.promise).catch(() => {});
+    promises.add(p2.promise).catch(() => {});
+    promises.add(p3.promise).catch(() => {});
 
     const overallPromise = promises.waitForAll();
 
     let flag = false;
 
-    overallPromise.then(() => {
-      flag = true;
-    });
+    overallPromise
+      .then(() => {
+        flag = true;
+      })
+      .catch(() => {});
 
     p1.resolve();
     await jest.runAllTimersAsync();
