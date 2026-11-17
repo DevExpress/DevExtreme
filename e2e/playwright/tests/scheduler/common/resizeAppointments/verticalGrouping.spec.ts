@@ -53,10 +53,12 @@ test.describe('Resize appointments in the Scheduler with vertical groupping', ()
     const secondAppointment = scheduler.getAppointment('second');
 
     await dragToOffset(page, firstAppointment.resizableHandle.bottom, 0, 100);
-    await expect(firstAppointment.date).toHaveText('9:30 AM - 11:00 AM');
+    await expect(firstAppointment.element).toHaveCSS('height', '140.594px');
+    await expect(firstAppointment.date).toHaveText('9:30 AM - 11:21 AM');
 
     await dragToOffset(page, secondAppointment.resizableHandle.bottom, 0, 100);
-    await expect(secondAppointment.date).toHaveText('9:30 AM - 11:00 AM');
+    await expect(secondAppointment.element).toHaveCSS('height', '165.922px');
+    await expect(secondAppointment.date).toHaveText('9:30 AM - 11:41 AM');
   });
 
   test('Should correctly calculate group resizing area after scroll (T1041672)', async ({ page }) => {
@@ -103,6 +105,7 @@ test.describe('Resize appointments in the Scheduler with vertical groupping', ()
     const appointment = scheduler.getAppointment('app');
 
     await dragToOffset(page, appointment.resizableHandle.bottom, 0, 100);
-    await expect(appointment.date).toHaveText('9:30 AM - 11:00 AM');
+    await expect(appointment.element).toHaveCSS('height', '165.922px');
+    await expect(appointment.date).toHaveText('9:30 AM - 11:41 AM');
   });
 });

@@ -96,9 +96,6 @@ test.describe('Hotkeys for appointments update and navigation', () => {
     await createScheduler(page, {
       views: ['day', 'week'],
       currentView: 'day',
-      toolbar: {
-        allowKeyboardNavigation: false,
-      },
     });
 
     const { toolbar } = new Scheduler(page, '#container');
@@ -150,7 +147,6 @@ test.describe('Hotkeys for appointments update and navigation', () => {
             name: 'dateNavigator',
           },
         ],
-        allowKeyboardNavigation: false,
       },
     });
 

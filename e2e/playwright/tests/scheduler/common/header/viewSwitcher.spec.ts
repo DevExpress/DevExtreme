@@ -71,7 +71,6 @@ test.describe('Scheduler header - View switcher', () => {
           },
           'viewSwitcher',
         ],
-        allowKeyboardNavigation: false,
       },
     });
 
