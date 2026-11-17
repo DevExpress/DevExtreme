@@ -936,9 +936,10 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewFocusController e
       if (this._focusController.isRowFocused(row.key)) {
         $row.addClass(ROW_FOCUSED_CLASS);
 
-        const isFocusableRow = row.rowType === 'data' || row.rowType === 'group';
+        const isRowTabStop = row.rowType === 'group'
+          || (row.rowType === 'data' && !this._keyboardNavigationController.isCellFocusType());
 
-        if (isFocusableRow && !this._keyboardNavigationController.isCellFocusType()) {
+        if (isRowTabStop) {
           $row.attr('tabindex', this.option('tabIndex') ?? 0);
         }
       }
