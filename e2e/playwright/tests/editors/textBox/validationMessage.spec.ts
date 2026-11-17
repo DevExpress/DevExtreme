@@ -31,7 +31,6 @@ test.describe('ValidationMessage', () => {
     await page.keyboard.press('Enter');
     await page.locator('#focusable-start').click();
 
-    // The hidden container must be rendered for a frame, or the page never sees it hidden.
     await setAttribute(page, '#container', 'hidden', 'true');
     await waitForNextFrame(page);
     await removeAttribute(page, '#container', 'hidden');

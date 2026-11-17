@@ -36,7 +36,6 @@ test.describe('CheckBox', () => {
       await appendElementTo(page, '#container', 'div', 'indeterminate');
       await createWidget(page, 'dxCheckBox', { value: undefined, text: 'indeterminate' }, '#indeterminate');
 
-      // rtl
       await appendElementTo(page, '#container', 'div', 'checkedRTL');
       await createWidget(page, 'dxCheckBox', { value: true, text: 'checked', rtlEnabled: true }, '#checkedRTL');
 

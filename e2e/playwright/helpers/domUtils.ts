@@ -134,10 +134,6 @@ export const getDocumentScrollTop = async (
   page: Page,
 ): Promise<number> => page.evaluate(() => document.documentElement.scrollTop);
 
-// A button a test clicks to take the focus away from a widget. It is transparent, so it never
-// shows in a screenshot. TestCafe kept it under the page content and still delivered the click to
-// it; a real click lands on whatever is on top, so here the button is on top and takes one pixel
-// of the page margin, where nothing else is.
 export const addFocusableElementBefore = async (
   page: Page,
   targetSelector: string,
@@ -169,8 +165,6 @@ export const addFocusableElementBefore = async (
   { selector: targetSelector, id: elementId },
 );
 
-// Resolves once the browser has rendered a frame: style, layout and the observers that run with
-// them (ResizeObserver, IntersectionObserver) have seen every change made before the call.
 export const waitForNextFrame = async (page: Page): Promise<void> => page.evaluate(
   () => new Promise<void>((resolve) => {
     requestAnimationFrame(() => requestAnimationFrame(() => resolve()));

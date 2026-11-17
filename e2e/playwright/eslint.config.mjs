@@ -68,9 +68,6 @@ export default [
     },
   },
   {
-    // A fixed wait, a raised timeout, a forced action or a retry wrapper makes a test pass without
-    // saying why a step was not ready. The shared code and the folders migrated under this rule
-    // wait for the state the next step needs instead.
     files: ['helpers/**/*.ts', 'models/**/*.ts', 'tests/editors/**/*.ts'],
     rules: {
       'no-restricted-syntax': ['error', {

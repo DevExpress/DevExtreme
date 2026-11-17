@@ -14,7 +14,6 @@ export default class RadioGroup extends Widget {
   constructor(page: Page, selector: Locator | string) {
     super(page, selector);
 
-    // Direct children only: an item template may hold a radio group of its own.
     this.items = this.element.locator(`:scope > .${CLASS.collection} > .${CLASS.item}`);
   }
 

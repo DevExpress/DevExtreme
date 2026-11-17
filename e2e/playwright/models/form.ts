@@ -6,7 +6,6 @@ export default class Form extends Widget {
   public getName(): WidgetName { return 'dxForm'; }
 
   public async validate(): Promise<void> {
-    // The validation result holds the validators, which cannot leave the page.
     await this.element.evaluate((element) => {
       ($(element) as any).dxForm('instance').validate();
     });
