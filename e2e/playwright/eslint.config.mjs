@@ -67,4 +67,28 @@ export default [
       '@stylistic/no-extra-parens': 'off',
     },
   },
+  {
+    // A fixed wait, a raised timeout, a forced action or a retry wrapper makes a test pass without
+    // saying why a step was not ready. The shared code and the folders migrated under this rule
+    // wait for the state the next step needs instead.
+    files: ['helpers/**/*.ts', 'models/**/*.ts', 'tests/editors/**/*.ts'],
+    rules: {
+      'no-restricted-syntax': ['error', {
+        selector: "CallExpression[callee.property.name='waitForTimeout']",
+        message: 'Wait for the state the next step needs, not for time.',
+      }, {
+        selector: "Property[key.name='force'][value.value=true]",
+        message: 'A forced action skips the checks a user action would pass. Make the target reachable.',
+      }, {
+        selector: "CallExpression[callee.property.name='toPass']",
+        message: 'Use a retrying assertion on the value itself (expect(locator), expect.poll).',
+      }, {
+        selector: "CallExpression[callee.object.name='test'][callee.property.name=/^(setTimeout|slow)$/]",
+        message: 'Do not raise the test timeout. Find what the test is waiting for.',
+      }, {
+        selector: "Property[key.name='timeout']",
+        message: 'Do not raise a timeout. If this is a widget option, disable the rule on this line and say so.',
+      }],
+    },
+  },
 ];
