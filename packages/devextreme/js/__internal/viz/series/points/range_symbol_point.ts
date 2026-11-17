@@ -1,10 +1,8 @@
-/* eslint-disable @stylistic/no-mixed-operators */
 /* eslint-disable no-bitwise */
 /* eslint-disable @typescript-eslint/no-this-alias */
 /* eslint-disable @typescript-eslint/init-declarations */
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable no-multi-assign */
-/* eslint-disable @stylistic/max-len */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable prefer-destructuring */
 /* eslint-disable no-else-return */
@@ -143,7 +141,9 @@ export default _extend({}, symbolPoint, {
     const coord = this._getPositionFromLocation(location);
 
     if (options.visible) {
-      bBox = image ? this._getImageBBox(coord.x, coord.y) : this._getSymbolBBox(coord.x, coord.y, options.styles.normal.r);
+      bBox = image
+        ? this._getImageBBox(coord.x, coord.y)
+        : this._getSymbolBBox(coord.x, coord.y, options.styles.normal.r);
     } else {
       bBox = {
         x: coord.x, y: coord.y, width: 0, height: 0,
@@ -178,7 +178,9 @@ export default _extend({}, symbolPoint, {
     const visibleArea = this.series.getValueAxis().getVisibleArea();
     const minBound = visibleArea[0];
     const maxBound = visibleArea[1];
-    let delta = _round((topCoords[coordSelector] + topCoords[valueSelector] - bottomCoords[coordSelector]) / 2);
+    let delta = _round(
+      (topCoords[coordSelector] + topCoords[valueSelector] - bottomCoords[coordSelector]) / 2,
+    );
     let coord1 = topCoords[coordSelector] - delta;
     let coord2 = bottomCoords[coordSelector] + delta;
 
@@ -245,7 +247,11 @@ export default _extend({}, symbolPoint, {
     topLabel.pointPosition = notInverted ? 'top' : 'bottom';
     bottomLabel.pointPosition = notInverted ? 'bottom' : 'top';
 
-    if ((that.series.getLabelVisibility() || customVisibility) && that.hasValue() && customVisibility !== false) {
+    if (
+      (that.series.getLabelVisibility() || customVisibility)
+      && that.hasValue()
+      && customVisibility !== false
+    ) {
       that.visibleTopMarker !== false && labels.push(topLabel);
       that.visibleBottomMarker !== false && labels.push(bottomLabel);
 
@@ -293,7 +299,8 @@ export default _extend({}, symbolPoint, {
     const oldImages = that._getImage(oldOptions.image);
     const newImages = that._getImage(newOptions.image);
     const topImageChanged = that._checkImage(oldImages.top) !== that._checkImage(newImages.top);
-    const bottomImageChanged = that._checkImage(oldImages.bottom) !== that._checkImage(newImages.bottom);
+    const bottomImageChanged = that._checkImage(oldImages.bottom)
+      !== that._checkImage(newImages.bottom);
 
     return symbolChanged || topImageChanged || bottomImageChanged;
   },
@@ -377,7 +384,8 @@ export default _extend({}, symbolPoint, {
     const visibleValArea = that.series.getValueAxis().getVisibleArea();
 
     const notVisibleByArg = (visibleArgArea[1] < argument) || (visibleArgArea[0] > argument);
-    const notVisibleByVal = ((visibleValArea[0] > minValue) && (visibleValArea[0] > maxValue)) || ((visibleValArea[1] < minValue) && (visibleValArea[1] < maxValue));
+    const notVisibleByVal = (visibleValArea[0] > minValue && visibleValArea[0] > maxValue)
+      || (visibleValArea[1] < minValue && visibleValArea[1] < maxValue);
 
     if (notVisibleByArg || notVisibleByVal) {
       visibleTopMarker = visibleBottomMarker = visibleRangeArea = false;
@@ -529,9 +537,9 @@ export default _extend({}, symbolPoint, {
     const yCond = (y >= this.y - trackerRadius) && (y <= this.y + trackerRadius);
 
     if (this._options.rotated) {
-      return yCond && (xCond || (x >= this.minX - trackerRadius) && (x <= this.minX + trackerRadius));
+      return yCond && (xCond || (x >= this.minX - trackerRadius && x <= this.minX + trackerRadius));
     } else {
-      return xCond && (yCond || (y >= this.minY - trackerRadius) && (y <= this.minY + trackerRadius));
+      return xCond && (yCond || (y >= this.minY - trackerRadius && y <= this.minY + trackerRadius));
     }
   },
 

@@ -6,7 +6,6 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-multi-assign */
-/* eslint-disable @stylistic/max-len */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-use-before-define */
 /* eslint-disable prefer-destructuring */
@@ -39,7 +38,13 @@ function hasText(text: ThemeValue): boolean {
   return !!(text && String(text).length > 0);
 }
 
-function processTitleLength(elem: ThemeValue, text: ThemeValue, width: number, options: ThemeValue, placeholderSize: ThemeValue): void {
+function processTitleLength(
+  elem: ThemeValue,
+  text: ThemeValue,
+  width: number,
+  options: ThemeValue,
+  placeholderSize: ThemeValue,
+): void {
   if (elem.attr({ text }).setMaxSize(width, placeholderSize, options).textChanged) {
     elem.setTitle(text);
   }
@@ -133,7 +138,9 @@ export let Title = class Title extends LayoutElement {
     this._subtitleElement.attr({ align, class: options.subtitle.cssClass });
 
     group.linkAppend();
-    hasText(options.subtitle.text) ? this._subtitleElement.append(group) : this._subtitleElement.remove();
+    hasText(options.subtitle.text)
+      ? this._subtitleElement.append(group)
+      : this._subtitleElement.remove();
   }
 
   _updateTexts(): void {
@@ -155,7 +162,9 @@ export let Title = class Title extends LayoutElement {
     titleElement.attr({ y });
 
     if (hasText(subtitleOptions.text)) {
-      subtitleElement.attr({ text: subtitleOptions.text, y: 0 }).css(_patchFontOptions(subtitleOptions.font));
+      subtitleElement
+        .attr({ text: subtitleOptions.text, y: 0 })
+        .css(_patchFontOptions(subtitleOptions.font));
     }
   }
 
@@ -237,7 +246,13 @@ export let Title = class Title extends LayoutElement {
       if (_Number(placeholderSize) > 0) {
         placeholderSize -= this._titleElement.getBBox().height;
       }
-      processTitleLength(this._subtitleElement, options.subtitle.text, maxWidth, options.subtitle, placeholderSize);
+      processTitleLength(
+        this._subtitleElement,
+        options.subtitle.text,
+        maxWidth,
+        options.subtitle,
+        placeholderSize,
+      );
       this._shiftSubtitle();
     }
 
@@ -344,7 +359,9 @@ Title.prototype.DEBUG_getOptions = function (): ThemeValue { return this._option
 
 function processTitleOptions(options: ThemeValue): ThemeValue {
   const newOptions = _isString(options) ? { text: options } : options || {};
-  newOptions.subtitle = _isString(newOptions.subtitle) ? { text: newOptions.subtitle } : newOptions.subtitle || {};
+  newOptions.subtitle = _isString(newOptions.subtitle)
+    ? { text: newOptions.subtitle }
+    : newOptions.subtitle || {};
   return newOptions;
 }
 

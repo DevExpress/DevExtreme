@@ -18,7 +18,6 @@
 /* eslint-disable consistent-return */
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-multi-assign */
-/* eslint-disable @stylistic/max-len */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable prefer-destructuring */
@@ -70,12 +69,15 @@ function sum(array) {
 
 function isErrorBarTypeCorrect(type) {
   // TODO why UNDEFINED is here
-  // return inArray(type, [FIXED, PERCENT, VARIANCE, STANDARD_DEVIATION, STANDARD_ERROR, UNDEFINED]) !== -1;
+  // return inArray(type, [FIXED, PERCENT, VARIANCE, STANDARD_DEVIATION, STANDARD_ERROR, UNDEFINED])
+  // !== -1;
   return [FIXED, PERCENT, VARIANCE, STANDARD_DEVIATION, STANDARD_ERROR].includes(type);
 }
 
 function variance(array, expectedValue) {
-  return sum(_map(array, (value) => (value - expectedValue) * (value - expectedValue))) / array.length;
+  return (
+    sum(_map(array, (value) => (value - expectedValue) * (value - expectedValue))) / array.length
+  );
 }
 
 function calculateAvgErrorBars(result, data, series) {
@@ -250,8 +252,11 @@ const baseScatterMethods = {
         // @ts-expect-error
         cat[pointCoord] = p;
       } else {
-        // @ts-expect-error
-        Array.isArray(cat[pointCoord]) ? cat[pointCoord].push(p) : cat[pointCoord] = [cat[pointCoord], p];
+        Array.isArray(cat[pointCoord])
+          // @ts-expect-error
+          ? cat[pointCoord].push(p)
+          // @ts-expect-error
+          : (cat[pointCoord] = [cat[pointCoord], p]);
       }
     });
 
@@ -291,7 +296,11 @@ const baseScatterMethods = {
     let normalStyle;
     if (!creatingPointOptions) {
       defaultPointOptions = that._getPointOptions();
-      that._predefinedPointOptions = creatingPointOptions = _extend(true, { styles: {} }, defaultPointOptions);
+      that._predefinedPointOptions = creatingPointOptions = _extend(
+        true,
+        { styles: {} },
+        defaultPointOptions,
+      );
       normalStyle = defaultPointOptions.styles && defaultPointOptions.styles.normal || {};
 
       creatingPointOptions.styles = creatingPointOptions.styles || {};
@@ -335,8 +344,18 @@ const baseScatterMethods = {
     return {
       labelColor: mainPointColor,
       normal: normalStyle,
-      hover: that._parsePointStyle(pointOptions.hoverStyle, containerColor, mainPointColor, pointOptions.size),
-      selection: that._parsePointStyle(pointOptions.selectionStyle, containerColor, mainPointColor, pointOptions.size),
+      hover: that._parsePointStyle(
+        pointOptions.hoverStyle,
+        containerColor,
+        mainPointColor,
+        pointOptions.size,
+      ),
+      selection: that._parsePointStyle(
+        pointOptions.selectionStyle,
+        containerColor,
+        mainPointColor,
+        pointOptions.size,
+      ),
     };
   },
 
@@ -400,7 +419,11 @@ const baseScatterMethods = {
   },
 
   _errorBarsEnabled() {
-    return this.valueAxisType !== DISCRETE && this.valueAxisType !== LOGARITHMIC && this.valueType !== DATETIME;
+    return (
+      this.valueAxisType !== DISCRETE
+      && this.valueAxisType !== LOGARITHMIC
+      && this.valueType !== DATETIME
+    );
   },
 
   _drawPoint(options) {
@@ -420,7 +443,11 @@ const baseScatterMethods = {
     const animationSettings = { duration: that._defaultDuration };
 
     that._labelsGroup && that._labelsGroup.animate({ opacity: 1 }, animationSettings);
-    that._errorBarGroup && that._errorBarGroup.animate({ opacity: that._options.valueErrorBar.opacity || 1 }, animationSettings);
+    that._errorBarGroup
+      && that._errorBarGroup.animate(
+        { opacity: that._options.valueErrorBar.opacity || 1 },
+        animationSettings,
+      );
   },
 
   _animate() {
@@ -428,7 +455,14 @@ const baseScatterMethods = {
     const lastPointIndex = that._drawnPoints.length - 1;
 
     _each(that._drawnPoints || [], (i, p) => {
-      p.animate(i === lastPointIndex ? () => { that._animateComplete(); } : undefined, { translateX: p.x, translateY: p.y });
+      p.animate(
+        i === lastPointIndex
+          ? () => {
+            that._animateComplete();
+          }
+          : undefined,
+        { translateX: p.x, translateY: p.y },
+      );
     });
   },
 
@@ -465,10 +499,17 @@ const baseScatterMethods = {
         return result;
       }, [0, 0, 0]);
 
-      return calculateAvgErrorBars({
-        [valueField]: aggregationResult[2] === data.length ? null : aggregationResult[0] / aggregationResult[1],
-        [series.getArgumentField()]: series._getIntervalCenter(intervalStart, intervalEnd),
-      }, data, series);
+      return calculateAvgErrorBars(
+        {
+          [valueField]:
+            aggregationResult[2] === data.length
+              ? null
+              : aggregationResult[0] / aggregationResult[1],
+          [series.getArgumentField()]: series._getIntervalCenter(intervalStart, intervalEnd),
+        },
+        data,
+        series,
+      );
     },
 
     sum({ intervalStart, intervalEnd, data }, series) {
@@ -586,12 +627,15 @@ const baseScatterMethods = {
         };
         break;
       default:
-        valueArray = _map(data, (item) => (_isDefined(item.data[valueField]) ? item.data[valueField] : null));
+        valueArray = _map(data, (item) => (_isDefined(item.data[valueField])
+          ? item.data[valueField]
+          : null));
         valueArrayLength = valueArray.length;
         floatErrorValue = floatErrorValue || 1;
         switch (errorBarType) {
           case VARIANCE:
-            floatErrorValue = variance(valueArray, sum(valueArray) / valueArrayLength) * floatErrorValue;
+            floatErrorValue = variance(valueArray, sum(valueArray) / valueArrayLength)
+              * floatErrorValue;
             processDataItem = addSubError;
             break;
           case STANDARD_DEVIATION:
@@ -603,7 +647,10 @@ const baseScatterMethods = {
             };
             break;
           case STANDARD_ERROR:
-            floatErrorValue = _sqrt(variance(valueArray, sum(valueArray) / valueArrayLength) / valueArrayLength) * floatErrorValue;
+            floatErrorValue = _sqrt(
+              variance(valueArray, sum(valueArray) / valueArrayLength)
+                  / valueArrayLength,
+            ) * floatErrorValue;
             processDataItem = addSubError;
             break;
         }
@@ -824,7 +871,11 @@ polar = _extend({}, baseScatterMethods, {
 
     for (let i = 0; i < points.length; i++) {
       const p = points[i];
-      const tmpPoint = _isDefined(p[paramName]) && _isDefined(params[paramName]) && p[paramName].valueOf() === params[paramName].valueOf() ? { x: p.x, y: p.y } : undefined;
+      const tmpPoint = _isDefined(p[paramName])
+        && _isDefined(params[paramName])
+        && p[paramName].valueOf() === params[paramName].valueOf()
+        ? { x: p.x, y: p.y }
+        : undefined;
 
       if (_isDefined(tmpPoint)) {
         // @ts-expect-error
