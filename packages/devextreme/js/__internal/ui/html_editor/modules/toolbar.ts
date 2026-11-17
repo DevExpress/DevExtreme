@@ -144,8 +144,7 @@ if (Quill) {
       return isHeaderValue ? `${localize('heading')} ${value}` : localize('normalText');
     }
 
-    // @ts-expect-error localize() takes a string; acceptedValues may hold numbers and booleans
-    return localize(value) || value;
+    return localize(String(value)) || value;
   };
   ToolbarModule = class extends BaseModule {
     declare options: ToolbarModuleOptions;
