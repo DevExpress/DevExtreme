@@ -1,4 +1,3 @@
-/* eslint-disable prefer-destructuring */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @stylistic/no-mixed-operators */
 /* eslint-disable prefer-spread */
@@ -27,8 +26,7 @@ import {
   raiseToExt,
 } from '@ts/viz/core/utils';
 
-const { convertDateUnitToMilliseconds } = dateUtils;
-const { dateToMilliseconds } = dateUtils;
+const { convertDateUnitToMilliseconds, dateToMilliseconds } = dateUtils;
 const math = Math;
 const mathAbs = math.abs;
 const mathFloor = math.floor;
@@ -469,8 +467,7 @@ function calculateTicks(addInterval, correctMinValue, adjustInterval, resolveEnd
     generateExtraTick,
   ) {
     const correctTickValue = correctTickValueOnGapSize(addInterval, gaps);
-    const { min } = data;
-    const { max } = data;
+    const { min, max } = data;
     const businessViewInfo = {
       screenDelta,
       businessDelta,
@@ -595,8 +592,8 @@ function filterTicks(ticks, breaks) {
   if (breaks.length) {
     const result = breaks.reduce((result, b) => {
       const tmpTicks = [];
-      let i;
-      for (i = result[1]; i < ticks.length; i++) {
+      let i = result[1];
+      for (; i < ticks.length; i++) {
         const tickValue = ticks[i];
 
         if (tickValue < b.from) {

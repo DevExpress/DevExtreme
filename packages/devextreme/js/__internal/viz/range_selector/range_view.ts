@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/init-declarations */
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-multi-assign */
-/* eslint-disable prefer-destructuring */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
@@ -78,8 +77,7 @@ export let RangeView = class RangeView {
     isAnimationEnabled: boolean,
     seriesDataSource?: RangeViewSeriesDataSource,
   ): void {
-    const renderer = this._params.renderer;
-    const root = this._params.root;
+    const { renderer, root } = this._params;
     const canvasWidth = canvas.width - canvas.left;
     let seriesGroup;
 

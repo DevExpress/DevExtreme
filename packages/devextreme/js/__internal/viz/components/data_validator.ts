@@ -16,7 +16,6 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-plusplus */
 /* eslint-disable no-restricted-syntax */
-/* eslint-disable prefer-destructuring */
 
 import { extend } from '@ts/core/utils/extend';
 import {
@@ -207,12 +206,9 @@ function getParsedCell(cell, parsers) {
   let i;
   const ii = parsers.length;
   const obj = extend({}, cell);
-  let field;
-  let value;
   for (i = 0; i < ii; ++i) {
-    field = parsers[i][0];
-    value = cell[field];
-    obj[field] = parsers[i][1](value, field);
+    const [field, parseField] = parsers[i];
+    obj[field] = parseField(cell[field], field);
   }
   return obj;
 }
@@ -245,7 +241,7 @@ function findIndexByThreshold(data, valueField, threshold) {
 function groupMinSlices(originalData, argumentField, valueField, smallValuesGrouping) {
   smallValuesGrouping = smallValuesGrouping || {};
 
-  const mode = smallValuesGrouping.mode;
+  const { mode } = smallValuesGrouping;
   const others = {};
 
   if (!mode || mode === 'none') { return; }

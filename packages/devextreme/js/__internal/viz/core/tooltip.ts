@@ -10,7 +10,6 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-/* eslint-disable prefer-destructuring */
 /* eslint-disable no-else-return */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
@@ -33,7 +32,7 @@ import { Renderer } from './renderers/renderer';
 import type { BBox, Canvas } from './types';
 import { normalizeEnum, patchFontOptions } from './utils';
 
-const format = formatHelper.format;
+const { format } = formatHelper;
 
 const mathCeil = Math.ceil;
 const mathMax = Math.max;
@@ -156,7 +155,7 @@ export let Tooltip = class Tooltip {
       pathModified: params.pathModified,
       container: this._wrapper[0],
     }));
-    const root = renderer.root;
+    const { root } = renderer;
     root.attr({ 'pointer-events': 'none' });
 
     // svg text

@@ -9,7 +9,6 @@
 /* eslint-disable @typescript-eslint/no-shadow */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-/* eslint-disable prefer-destructuring */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 
 import { extend } from '@ts/core/utils/extend';
@@ -147,7 +146,7 @@ const baseBarSeriesMethods = {
 // @ts-expect-error
 chart.bar = _extend({}, chartSeries, baseBarSeriesMethods, {
   _getAffineCoordOptions() {
-    const rotated = this._options.rotated;
+    const { rotated } = this._options;
     const direction = rotated ? 'X' : 'Y';
     const settings = {
       scaleX: rotated ? 0.001 : 1,
@@ -183,8 +182,8 @@ chart.bar = _extend({}, chartSeries, baseBarSeriesMethods, {
     const max = translator.translate(
       range.categories ? range.categories[range.categories.length - 1] : range.max,
     );
-    const rotated = this.getOptions().rotated;
-    const inverted = axis.getOptions().inverted;
+    const { rotated } = this.getOptions();
+    const { inverted } = axis.getOptions();
 
     return (rotated && !inverted) || (!rotated && inverted)
       ? coord >= min && coord <= max

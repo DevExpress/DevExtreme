@@ -6,7 +6,6 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-/* eslint-disable prefer-destructuring */
 
 import { isFunction as _isFunction } from '@ts/core/utils/type';
 import { normalizeEnum as _normalizeEnum } from '@ts/viz/core/utils';
@@ -61,12 +60,11 @@ export function calculateRectangles(nodes, head, totalRect, sidesData, rowData) 
   let i;
   let ii;
   const variedSidePart = [0, 0, 0, 0];
-  const static1 = sidesData.static1;
-  const static2 = sidesData.static2;
+  const { static1, static2 } = sidesData;
   let position = totalRect[static1];
   const dir = sidesData.staticDir;
   let side = sidesData.staticSide;
-  let sum = rowData.sum;
+  let { sum } = rowData;
   let rect;
   let delta;
 

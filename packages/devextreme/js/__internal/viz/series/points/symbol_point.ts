@@ -10,7 +10,6 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-/* eslint-disable prefer-destructuring */
 /* eslint-disable no-else-return */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
@@ -108,7 +107,7 @@ export default {
 
   clearVisibility() {
     const that = this;
-    const graphic = that.graphic;
+    const { graphic } = that;
     if (graphic && graphic.attr('visibility')) {
       graphic.attr({ visibility: null });
     }
@@ -120,7 +119,7 @@ export default {
 
   setInvisibility() {
     const that = this;
-    const graphic = that.graphic;
+    const { graphic } = that;
     if (graphic && graphic.attr('visibility') !== 'hidden') {
       graphic.attr({ visibility: 'hidden' });
     }
@@ -129,7 +128,7 @@ export default {
   },
 
   clearMarker() {
-    const graphic = this.graphic;
+    const { graphic } = this;
     graphic && graphic.attr(this._emptySettings);
   },
 
@@ -257,7 +256,7 @@ export default {
 
   _createSymbolMarker(renderer, pointSettings) {
     let marker;
-    const symbol = this._options.symbol;
+    const { symbol } = this._options;
 
     if (symbol === 'circle') {
       delete pointSettings.points;
@@ -290,7 +289,7 @@ export default {
   },
 
   _getImageBBox(x, y) {
-    const image = this._options.image;
+    const { image } = this._options;
     const width = image.width || DEFAULT_IMAGE_WIDTH;
     const height = image.height || DEFAULT_IMAGE_HEIGHT;
 
@@ -305,8 +304,7 @@ export default {
   _getGraphicBBox() {
     const that = this;
     const options = that._options;
-    const x = that.x;
-    const y = that.y;
+    const { x, y } = that;
     let bBox;
 
     if (options.visible) {
@@ -456,8 +454,7 @@ export default {
     const offset = LABEL_OFFSET;
     const centerY = graphicBBox.height / 2 - labelBBox.height / 2;
     const centerX = graphicBBox.width / 2 - labelBBox.width / 2;
-    let x = graphicBBox.x;
-    let y = graphicBBox.y;
+    let { x, y } = graphicBBox;
 
     switch (position) {
       case 'left':
@@ -536,7 +533,7 @@ export default {
       && _isDefined(low)
       && !isHighDisplayMode;
 
-    let edgeLength = errorBarOptions.edgeLength;
+    let { edgeLength } = errorBarOptions;
 
     if (edgeLength <= 1 && edgeLength > 0) {
       edgeLength = this._getErrorBarBaseEdgeLength() * errorBarOptions.edgeLength;
@@ -570,7 +567,7 @@ export default {
 
   getTooltipParams() {
     const that = this;
-    const graphic = that.graphic;
+    const { graphic } = that;
     return {
       x: that.x,
       y: that.y,
@@ -603,8 +600,8 @@ export default {
 
   _storeTrackerR() {
     const that = this;
-    let navigator = window.navigator;
-    const r = that._options.styles.normal.r;
+    let { navigator } = window;
+    const { r } = that._options.styles.normal;
     /// #DEBUG
     navigator = that.__debug_navigator || navigator;
     that.__debug_browserNavigator = navigator;
@@ -617,8 +614,7 @@ export default {
   _translateErrorBars() {
     const that = this;
     const options = that._options;
-    const rotated = options.rotated;
-    const errorBars = options.errorBars;
+    const { rotated, errorBars } = options;
     const translator = that._getValTranslator();
 
     if (!errorBars) {
@@ -671,7 +667,7 @@ export default {
     const that = this;
     const r = that._options.rotated;
     const value = that.properValue;
-    const argument = that.argument;
+    const { argument } = that;
     return {
       x: that.vx,
       y: that.vy,
@@ -684,9 +680,9 @@ export default {
   getPointRadius() {
     const style = this._getStyle();
     const options = this._options;
-    const r = style.r;
+    const { r } = style;
     let extraSpace;
-    const symbol = options.symbol;
+    const { symbol } = options;
     const isSquare = symbol === 'square';
     const isTriangle = symbol === 'triangle' || symbol === 'triangleDown' || symbol === 'triangleUp';
     if (options.visible && !options.image && r) {
@@ -700,7 +696,7 @@ export default {
     const that = this;
     const options = that._options;
     let settings;
-    const image = options.image;
+    const { image } = options;
     const visibility = !that.isVisible() ? { visibility: 'hidden' } : {};
 
     if (that._checkImage(image)) {
@@ -739,7 +735,7 @@ export default {
   },
 
   _getLabelPosition() {
-    const rotated = this._options.rotated;
+    const { rotated } = this._options;
     if (this.initialValue > 0) {
       return rotated ? 'right' : 'top';
     } else {
@@ -784,7 +780,7 @@ export default {
   getMinValue(noErrorBar) {
     const errorBarOptions = this._options.errorBars;
     if (errorBarOptions && !noErrorBar) {
-      const displayMode = errorBarOptions.displayMode;
+      const { displayMode } = errorBarOptions;
       const lowValue = displayMode !== 'high' && _isDefined(this.lowError) ? this.lowError : this.value;
       const highValue = displayMode !== 'low' && _isDefined(this.highError) ? this.highError : this.value;
 
@@ -797,7 +793,7 @@ export default {
   getMaxValue(noErrorBar) {
     const errorBarOptions = this._options.errorBars;
     if (errorBarOptions && !noErrorBar) {
-      const displayMode = errorBarOptions.displayMode;
+      const { displayMode } = errorBarOptions;
       const lowValue = displayMode !== 'high' && _isDefined(this.lowError) ? this.lowError : this.value;
       const highValue = displayMode !== 'low' && _isDefined(this.highError) ? this.highError : this.value;
 

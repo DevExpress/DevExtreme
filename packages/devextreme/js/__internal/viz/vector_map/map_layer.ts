@@ -18,7 +18,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-use-before-define */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-/* eslint-disable prefer-destructuring */
 /* eslint-disable no-else-return */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
@@ -233,8 +232,7 @@ function unwrapFromDataSource(source) {
     if (isGeoJsonObject(source)) {
       sourceType = GeoJsonSource;
     } else if (source.length === 1 && source[0] && isGeoJsonObject(source[0])) {
-      sourceType = GeoJsonSource;
-      source = source[0];
+      return new GeoJsonSource(source[0]);
     } else if (_isArray(source)) {
       sourceType = ArraySource;
     }
@@ -286,7 +284,7 @@ function pick(a, b) {
 
 function guessTypeByData(sample) {
   let type = TYPE_TO_TYPE_MAP[sample.type];
-  const coordinates = sample.coordinates;
+  const { coordinates } = sample;
   if (!type) {
     if (typeof coordinates[0] === 'number') {
       type = TYPE_MARKER;
@@ -622,8 +620,8 @@ strategiesByElementType[TYPE_MARKER] = {
       const values: number[] = [];
       let i;
       const ii = values.length = handles.length;
-      const settings = context.settings;
-      const dataField = settings.dataField;
+      const { settings } = context;
+      const { dataField } = settings;
       const minSize = settings.minSize > 0 ? _Number(settings.minSize) : 0;
       const maxSize = settings.maxSize > minSize ? _Number(settings.maxSize) : minSize;
 
@@ -644,7 +642,7 @@ strategiesByElementType[TYPE_MARKER] = {
     },
 
     updateGrouping(context) {
-      const dataField = context.settings.dataField;
+      const { dataField } = context.settings;
       strategiesByType[TYPE_MARKER].updateGrouping(context);
       groupBySize(context, (proxy) => getDataValue(proxy, dataField));
     },
@@ -660,9 +658,8 @@ strategiesByElementType[TYPE_MARKER] = {
       const values = getDataValue(proxy, ctx.settings.dataField) || [];
       const colors = settings._colors;
       let sum = 0;
-      const pie = figure.pie;
-      const renderer = ctx.renderer;
-      const dataKey = ctx.dataKey;
+      const { pie } = figure;
+      const { renderer, dataKey } = ctx;
       const r = (settings.size > 0 ? _Number(settings.size) : 0) / 2;
       let start = 90;
       let end = start;
@@ -707,7 +704,7 @@ strategiesByElementType[TYPE_MARKER] = {
     arrange(context, handles) {
       let i;
       const ii = handles.length;
-      const dataField = context.settings.dataField;
+      const { dataField } = context.settings;
       let values;
       let count = 0;
       let palette;
@@ -825,13 +822,12 @@ function transformList(projection, coordinates) {
   const output: number[] = [];
   let i;
   const ii = coordinates.length;
-  let item;
   let k = 0;
   output.length = 2 * ii;
   for (i = 0; i < ii; ++i) {
-    item = projection.transform(coordinates[i]);
-    output[k++] = item[0];
-    output[k++] = item[1];
+    const [x, y] = projection.transform(coordinates[i]);
+    output[k++] = x;
+    output[k++] = y;
   }
   return output;
 }
@@ -916,7 +912,7 @@ function combineSettings(common, partial) {
 }
 
 function processCommonSettings(context, options) {
-  const themeManager = context.params.themeManager;
+  const { themeManager } = context.params;
   const strategy = context.str;
   const settings = combineSettings(_extend({ label: {}, color: strategy.getDefaultColor(context, options.palette) }, themeManager.theme(`layer:${strategy.fullType}`)), options);
   let colors;
@@ -955,8 +951,8 @@ let performGrouping = function (context, partition, settingField, dataField, val
 };
 
 function dropGrouping(context) {
-  const name = context.name;
-  const dataExchanger = context.params.dataExchanger;
+  const { name } = context;
+  const { dataExchanger } = context.params;
   _each(context.grouping, (field) => {
     dataExchanger.set(name, field, null);
   });
@@ -979,7 +975,7 @@ groupByColor = function (context) {
 };
 
 groupBySize = function (context, valueCallback) {
-  const settings = context.settings;
+  const { settings } = context;
   performGrouping(context, settings.sizeGroups, 'size', valueCallback || settings.sizeGroupingField, (count) => {
     const minSize = settings.minSize > 0 ? _Number(settings.minSize) : 0;
     const maxSize = settings.maxSize >= minSize ? _Number(settings.maxSize) : 0;
@@ -1278,8 +1274,7 @@ let MapLayer = class MapLayer {
     let i;
     const ii = (handles.length = data.count());
     const context = this._context;
-    const geometry = data.geometry;
-    const attributes = data.attributes;
+    const { geometry, attributes } = data;
     let handle;
     let dataItem;
     for (i = 0; i < ii; ++i) {
@@ -1370,7 +1365,7 @@ let MapLayer = class MapLayer {
   }
 
   clearSelection(): void {
-    const selection = this._context.selection;
+    const { selection } = this._context;
     if (selection) {
       _each(selection.state, (_, handle) => {
         handle && handle.setSelected(false);
@@ -1585,7 +1580,7 @@ let MapLayerElement = class MapLayerElement {
   }
 
   _setForeground(): void {
-    const root = this._fig.root;
+    const { root } = this._fig;
 
     this._state ? root.toForeground() : root.toBackground();
   }
@@ -1605,7 +1600,7 @@ let MapLayerElement = class MapLayerElement {
   setSelected(state: boolean, _noEvent?: boolean): void {
     const currentState = hasFlag(this._state, STATE_SELECTED);
     const newState = !!state;
-    const selection = this._ctx.selection;
+    const { selection } = this._ctx;
     let tmp;
     if (selection && currentState !== newState) {
       this._state = setFlag(this._state, STATE_SELECTED, newState);
@@ -1643,7 +1638,7 @@ let MapLayerElement = class MapLayerElement {
 // http://en.wikipedia.org/wiki/Centroid
 function calculatePolygonCentroid(coordinates) {
   let i;
-  const length = coordinates.length;
+  const { length } = coordinates;
   let v1;
   let v2 = coordinates[length - 1];
   let cross;
@@ -1747,8 +1742,9 @@ function projectLineLabel(coordinates) {
 
   for (i = 0; i < ii; ++i) {
     data = calculateLineStringData(coordinates[i]);
-    if (data[2] > maxLength) {
-      maxLength = data[2];
+    const length = data[2];
+    if (length > maxLength) {
+      maxLength = length;
       resultData = data;
     }
   }
@@ -1778,7 +1774,7 @@ export let MapLayerCollection = class MapLayerCollection {
   declare _borderWidth: number;
 
   constructor(params: MapLayerParams) {
-    const renderer = params.renderer;
+    const { renderer } = params;
     this._params = params;
     this._layers = [];
     // TODO: Use Set instance instead of plain object

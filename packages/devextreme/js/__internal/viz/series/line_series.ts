@@ -12,7 +12,6 @@
 /* eslint-disable no-multi-assign */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-/* eslint-disable prefer-destructuring */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 
@@ -181,7 +180,7 @@ const lineMethods = {
 
   _drawSegment(points, animationEnabled, segmentCount, lastSegment) {
     const that = this;
-    const rotated = that._options.rotated;
+    const { rotated } = that._options;
     const segment = that._prepareSegment(points, rotated, lastSegment);
 
     that._segments.push(segment);
@@ -232,8 +231,8 @@ const lineMethods = {
     const max = axis
       .getTranslator()
       .translate(range.categories ? range.categories[range.categories.length - 1] : range.max);
-    const rotated = this.getOptions().rotated;
-    const inverted = axis.getOptions().inverted;
+    const { rotated } = this.getOptions();
+    const { inverted } = axis.getOptions();
 
     return axis.isArgumentAxis && (!rotated && !inverted || rotated && inverted)
             || !axis.isArgumentAxis && (rotated && !inverted || !rotated && inverted)
@@ -308,7 +307,7 @@ chart.stepline = extend({}, lineSeries, {
 
   getSeriesPairCoord(coord, isArgument) {
     let oppositeCoord;
-    const rotated = this._options.rotated;
+    const { rotated } = this._options;
     const isOpposite = !isArgument && !rotated || isArgument && rotated;
     const coordName = !isOpposite ? 'vx' : 'vy';
     const oppositeCoordName = !isOpposite ? 'vy' : 'vx';
@@ -619,7 +618,7 @@ polar.line = extend({}, polarScatterSeries, lineMethods, {
     const neighborPoints = that.getNeighborPoints(coordParam, paramName);
 
     if (neighborPoints.length === 1) {
-      coords = neighborPoints[0];
+      [coords] = neighborPoints;
     } else if (neighborPoints.length > 1) {
       const prevPoint = neighborPoints[0];
       const point = neighborPoints[1];

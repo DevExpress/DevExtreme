@@ -6,7 +6,6 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable no-multi-assign */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable prefer-destructuring */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 
@@ -385,7 +384,7 @@ export let Point = class Point {
 
   _getViewStyle(): string {
     let state = NORMAL_STATE;
-    let fullState = this.fullState;
+    let { fullState } = this;
     const styles = [NORMAL, HOVER, SELECTION, SELECTION];
 
     if (this._viewCounters.hover) {
@@ -492,7 +491,7 @@ export let Point = class Point {
     }
 
     const oldOptions = this._options;
-    const widgetType = newOptions.widgetType;
+    const { widgetType } = newOptions;
     const oldType = oldOptions && oldOptions.type;
     const newType = newOptions.type;
     const newPointTypeMixin = pointTypes[widgetType][newType];
@@ -660,7 +659,7 @@ export let Point = class Point {
       });
     }
 
-    const aggregationInfo = this.aggregationInfo;
+    const { aggregationInfo } = this;
     if (aggregationInfo) {
       const axis = this.series.getArgumentAxis();
       const rangeText = axis.formatRange(

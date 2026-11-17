@@ -7,7 +7,6 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable no-multi-assign */
 /* eslint-disable max-classes-per-file */
-/* eslint-disable prefer-destructuring */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 
 import { extend } from '@ts/core/utils/extend';
@@ -150,7 +149,7 @@ let Legend = class Legend extends _BaseLegend {
   setOptions(options: ThemeValue): this {
     this.update(this._data, options, this._params.themeManager.theme('legend').title);
     this._unbindData();
-    const source = options.source;
+    const { source } = options;
     this._bindData(source ? { category: source.layer, name: source.grouping } : unknownSource);
     this.updateLayout();
     return this;

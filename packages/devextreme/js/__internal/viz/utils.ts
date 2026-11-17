@@ -9,7 +9,6 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-/* eslint-disable prefer-destructuring */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 
 import { each as _each } from '@ts/core/utils/iterator';
@@ -75,7 +74,9 @@ export let prepareSegmentRectPoints = function (left, top, width, height, border
   // @ts-expect-error
   segments.length && points.push(segments);
 
-  points.length === 1 && (points = points[0]);
+  if (points.length === 1) {
+    [points] = points;
+  }
 
   return { points, pathType: visiblyOpt === 15 ? 'area' : 'line' };
 };
@@ -110,7 +111,7 @@ exports._test_prepareSegmentRectPoints = function () {
   // @ts-expect-error
   const original = prepareSegmentRectPoints.original || prepareSegmentRectPoints;
   if (arguments[0]) {
-    prepareSegmentRectPoints = arguments[0];
+    [prepareSegmentRectPoints] = arguments;
   }
   // @ts-expect-error
   prepareSegmentRectPoints.original = original;
