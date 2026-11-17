@@ -175,6 +175,37 @@ describe('TreeList focus — partial update of the focused row', () => {
     expect(document.activeElement).toBe(row);
   });
 
+  it('moves the tab stop from the first row to the focused row when its hidden focused row is expanded (T1338023)', async () => {
+    const { instance } = await createTreeList({
+      dataSource: [
+        { id: 1, parentId: 0, name: 'root A' },
+        { id: 2, parentId: 0, name: 'root B' },
+        { id: 21, parentId: 2, name: 'child B1' },
+        { id: 3, parentId: 0, name: 'root C' },
+      ],
+      columns: ['id', 'name'],
+      focusedRowEnabled: true,
+      focusedRowKey: 21,
+      autoNavigateToFocusedRow: false,
+      repaintChangesOnly: true,
+      autoExpandAll: false,
+    });
+    await flushAsync();
+
+    instance.repaint();
+    await flushAsync();
+
+    expect($(instance.getRowElement(0)).get(0).hasAttribute('tabindex')).toBe(true);
+
+    const expanding = instance.expandRow(2);
+    await flushAsync();
+    await expanding;
+
+    expect(visibleKeys(instance)).toEqual([1, 2, 21, 3]);
+    expect($(instance.getRowElement(0)).get(0).hasAttribute('tabindex')).toBe(false);
+    expect($(instance.getRowElement(2)).get(0).hasAttribute('tabindex')).toBe(true);
+  });
+
   it('keeps DOM focus on the focused cell when another row is updated via push (T1338023)', async () => {
     const { instance } = await createTreeList({
       dataSource: {
