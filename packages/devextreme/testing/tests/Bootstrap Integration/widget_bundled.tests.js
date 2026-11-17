@@ -55,7 +55,7 @@ const ui = DevExpress.ui;
 $.each(ui, function(componentName, componentConstructor) {
     if($.fn[componentName] &&
         ui[componentName] &&
-        ui[componentName].subclassOf &&
+        typeof ui[componentName] === 'function' &&
         componentName !== 'dxDateViewRoller'
     ) {
         QUnit.test(componentName, function(assert) {

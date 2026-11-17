@@ -108,7 +108,6 @@ class DialogInfoBase {
   getContentTemplate() {
     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     return (content) => {
-      // @ts-expect-error ts-error
       this._form = new Form(content, {
         formData: this._getFormData(),
         items: this._getFormItems(),
