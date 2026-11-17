@@ -3008,6 +3008,17 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewKeyboardExtender 
     }
   }
 
+  protected _updateCells($rowElement, $newRowElement, columnIndices, options?): void {
+    const focusStateClasses = [FOCUSED_CLASS, CELL_FOCUS_DISABLED_CLASS]
+      .filter((className) => $rowElement.hasClass(className));
+
+    super._updateCells($rowElement, $newRowElement, columnIndices, options);
+
+    focusStateClasses.forEach((className) => {
+      $rowElement.addClass(className);
+    });
+  }
+
   public renderFocusState(params) {
     super.renderFocusState(params);
 

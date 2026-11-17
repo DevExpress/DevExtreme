@@ -361,6 +361,7 @@ describe('GridCore focus', () => {
 
       expect(instance.option('focusedRowKey')).toEqual(['A']);
       expect(document.activeElement).toBe(groupRow);
+      expect(groupRow.classList.contains('dx-focused')).toBe(true);
 
       const removeAttribute = jest.spyOn(groupRow, 'removeAttribute');
       instance.getDataSource().store().push([{ type: 'update', key: 1, data: { value: 100 } }]);
@@ -368,6 +369,7 @@ describe('GridCore focus', () => {
 
       expect($(instance.getRowElement(0)).text()).toContain('102');
       expect(removeAttribute).not.toHaveBeenCalledWith('tabindex');
+      expect(groupRow.classList.contains('dx-focused')).toBe(true);
       expect(document.activeElement).toBe(groupRow);
     });
   });
