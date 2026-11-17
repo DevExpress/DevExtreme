@@ -35,7 +35,7 @@ interface GroupItem {
 export interface ApplyBatchOptions<TItem = unknown> {
   keyInfo: KeyInfo;
   data: TItem[];
-  changes: StoreChange[];
+  changes: StoreChange<TItem>[];
   groupCount?: number;
   useInsertIndex?: boolean;
   immutable?: boolean;
