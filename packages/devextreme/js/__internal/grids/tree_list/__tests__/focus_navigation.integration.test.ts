@@ -2,6 +2,7 @@ import {
   afterEach, beforeEach, describe, expect, it, jest,
 } from '@jest/globals';
 import $ from '@js/core/renderer';
+import eventsEngine from '@ts/events/core/events_engine';
 
 import { flushAsync } from '../../grid_core/__tests__/__mock__/helpers/utils';
 import {
@@ -18,6 +19,12 @@ const DATA = [
   { id: 2, parentId: 0, name: 'root B' },
   { id: 21, parentId: 2, name: 'child B1' },
 ];
+
+const click = (element: Element): void => {
+  eventsEngine.trigger(element, 'dxpointerdown');
+  eventsEngine.trigger(element, 'dxpointerup');
+  eventsEngine.trigger(element, 'dxclick');
+};
 
 const visibleKeys = (
   instance: Awaited<ReturnType<typeof createTreeList>>['instance'],
@@ -238,5 +245,31 @@ describe('TreeList focus — partial update of the focused row', () => {
     expect(cell.hasAttribute('tabindex')).toBe(true);
     expect($(instance.getRowElement(0)).get(0).hasAttribute('tabindex')).toBe(false);
     expect(document.activeElement).toBe(cell);
+  });
+
+  it('keeps the pointer focus state of the focused row when it is expanded with repaintChangesOnly (T1338023)', async () => {
+    const { instance } = await createTreeList({
+      dataSource: DATA,
+      columns: ['id', 'name'],
+      focusedRowEnabled: true,
+      repaintChangesOnly: true,
+      autoExpandAll: false,
+    });
+    await flushAsync();
+
+    const row = $(instance.getRowElement(0)).get(0);
+    click(instance.getCellElement(0, 'name') as HTMLElement);
+    await flushAsync();
+
+    expect(instance.option('focusedRowKey')).toBe(1);
+    expect(row.classList.contains('dx-cell-focus-disabled')).toBe(true);
+
+    const expanding = instance.expandRow(1);
+    await flushAsync();
+    await expanding;
+
+    expect(visibleKeys(instance)).toEqual([1, 11, 2]);
+    expect(row.classList.contains('dx-cell-focus-disabled')).toBe(true);
+    expect(row.classList.contains('dx-focused')).toBe(false);
   });
 });
