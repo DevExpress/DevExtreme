@@ -31,8 +31,7 @@ test.describe('ValidationMessage', () => {
     await page.keyboard.press('Enter');
     await page.locator('#focusable-start').click();
 
-    // The editor learns that it was hidden from a ResizeObserver, which runs with a rendered
-    // frame. Without the frame both changes land in one and the editor never sees them.
+    // The hidden container must be rendered for a frame, or the page never sees it hidden.
     await setAttribute(page, '#container', 'hidden', 'true');
     await waitForNextFrame(page);
     await removeAttribute(page, '#container', 'hidden');
