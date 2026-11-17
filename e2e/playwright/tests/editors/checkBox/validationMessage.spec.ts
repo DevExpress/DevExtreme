@@ -10,8 +10,6 @@ const validatorOptions = {
   }],
 };
 
-// The first two tests assert nothing themselves: the page fixture fails a test on an uncaught
-// error in the page, and that is what they check.
 test.describe('CheckBox_ValidationMessage', () => {
   test('ValidationMessage integrated in editor should not raise any errors when it is placed inside of form and has name "style" (T941581)', async ({ page }) => {
     await createWidget(page, 'dxCheckBox', {

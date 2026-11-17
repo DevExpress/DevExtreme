@@ -15,7 +15,6 @@ export default class RadioButton {
 
   constructor(item: Locator) {
     this.item = item;
-    // The item's own icon: its content may hold nested radio buttons.
     this.element = item.locator(`:scope > .${CLASS.valueContainer} > .${CLASS.icon}`);
   }
 
