@@ -117,9 +117,10 @@ export type InternalAnimationConfig = Omit<AnimationConfig, 'from' | 'to'> & {
 export type InternalPositionAlignment = NonNullable<PositionConfig['my']>
   | `${VerticalAlignment} ${HorizontalAlignment}`;
 
-export type InternalPositionConfig = Omit<PositionConfig, 'of' | 'offset' | 'my' | 'at'> & {
+export type InternalPositionConfig = Omit<PositionConfig, 'of' | 'offset' | 'boundaryOffset' | 'my' | 'at'> & {
   of?: PositionConfig['of'] | dxElementWrapper;
   offset?: PositionConfig['offset'] | { h?: number; v?: number };
+  boundaryOffset?: PositionConfig['boundaryOffset'] | { h?: number; v?: number };
   my?: InternalPositionAlignment;
   at?: InternalPositionAlignment;
 };
