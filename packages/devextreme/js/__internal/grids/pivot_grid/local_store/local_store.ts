@@ -26,7 +26,7 @@ import {
   setDefaultFieldValueFormatting,
   setFieldProperty,
   storeDrillDownMixin,
-} from '../m_widget_utils';
+} from '../widget_utils';
 import type {
   CustomSummaryOptions,
   DataItemFilter,
@@ -185,7 +185,7 @@ function fillHierarchyItemIndexesCore(
 
     indexes.push(hierarchyItem.index);
 
-    if ((expandedPathsHash && expandedPathsHash[itemPathHash]) || dimension.expanded) {
+    if (expandedPathsHash?.[itemPathHash] || dimension.expanded) {
       hierarchyItem.children ??= [];
       fillHierarchyItemIndexesCore(
         indexes,
@@ -211,7 +211,7 @@ function generateHierarchyItems(
     data,
     childrenHash: headers[`${headerName}Hash`],
     dimensions: loadOptions[headerName],
-    expandedPathsHash: loadOptions.headerName !== headerName && expandedPaths?.hash,
+    expandedPathsHash: loadOptions.headerName !== headerName ? expandedPaths?.hash : undefined,
   };
 
   fillHierarchyItemIndexesCore(result, options, headers[headerName], expandIndex);
@@ -534,10 +534,7 @@ function loadDataSource(
 function fillSelectorsByFields(selectors: FieldSelectors, fields: PivotGridField[]): void {
   fields.forEach((field) => {
     if (field.dataField && field.dataType === 'date') {
-      const valueSelector = getDateValue(getDataSelector(field.dataField));
-      selectors[field.dataField] = function selectDateValue(data: unknown): unknown {
-        return valueSelector(data);
-      };
+      selectors[field.dataField] = getDateValue(getDataSelector(field.dataField));
     }
   });
 }
@@ -640,6 +637,7 @@ class LocalStore {
         if (customColumns) {
           item = {};
 
+          // eslint-disable-next-line max-depth -- copies the custom columns of a matching data item
           for (const column of customColumns) {
             // @ts-expect-error a data item is an object here
             item[column] = dataItem[column];
