@@ -1416,6 +1416,7 @@
       "task-edit-wrapper",
       "edit-progress",
       "parent-task",
+      "parent-task-progress",
       "collapsable-row",
       "splitter-bar",
       "toolbar",

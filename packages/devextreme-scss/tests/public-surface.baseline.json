@@ -1079,6 +1079,7 @@
       "--dx-gantt-milestone-size",
       "--dx-gantt-parent-task-bg",
       "--dx-gantt-parent-task-content",
+      "--dx-gantt-parent-task-progress-bg",
       "--dx-gantt-selection-bg",
       "--dx-gantt-si-padding-inline-end",
       "--dx-gantt-si-padding-inline-start",

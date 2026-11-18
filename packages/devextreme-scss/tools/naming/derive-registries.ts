@@ -835,7 +835,7 @@ const OVERRIDES: Overrides = {
       'items-container', 'milestone', 'notch', 'selection', 'successor',
       'task', 'task-res', 'task-title', 'task-progress', 'task-wrapper', 'task-edit-wrapper',
       'edit-progress',
-      'parent-task', 'collapsable-row', 'splitter-bar', 'toolbar', 'toolbar-wrapper',
+      'parent-task', 'parent-task-progress', 'collapsable-row', 'splitter-bar', 'toolbar', 'toolbar-wrapper',
       'toolbar-separator', 'title', 'view', 'row', 'si', 'hb', 'vb', 'tm', 'ti'],
     'html-editor': ['toolbar', 'table', 'variable', 'mention', 'resize', 'resize-frame', 'cover',
       'uploader', 'file-uploader', 'input-wrapper', 'wrapper', 'ai-dialog', 'content', 'icon', 'item',
