@@ -55,10 +55,23 @@ crop and render differently, so a TestCafe image is not a valid reference for th
 It is still the check of the port. Recording writes whatever the test reached, and a verify run
 compares against that same file, so neither notices a test that shot the wrong state. Before
 deleting the TestCafe etalon, compare the new one with it: the same picture, within the per-pixel
-threshold.
-The one expected difference is a scrollbar: this suite shows it, TestCafe cut it off, so a viewport
-shot of a page that overflows comes out up to 15 px larger, with the scrollbar in the extra strip.
-Anything else means the test reached a different state; find out why rather than accept the image.
+threshold. Three differences are expected:
+
+- A scrollbar. This suite shows it, TestCafe cut it off, so a viewport shot of a page that
+  overflows comes out up to 15 px larger, with the scrollbar in the extra strip.
+- Anything under a TestCafe mask (`<name>_mask.png` next to the etalon, black where ignored).
+- Single antialiased pixels on the edges of shapes that sit on fractional coordinates. The TestCafe
+  comparer ignored antialiasing (looks-same, `ignoreAntialiasing`, tolerance 5), so its etalon
+  could drift there unnoticed; this suite compares them strictly.
+
+Anything else, a block of pixels or a moved edge, means the test reached a different state; find
+out why rather than accept the image.
+
+**Masks.** `testScreenshot` takes no mask, and the usual reason for one is gone:
+`toHaveScreenshot` stops CSS animations (an infinite one at its first frame) and hides the caret.
+Port a masked test without its mask, then run it strictly in the container a few times in a row
+(`--repeat-each 10`). If it is stable, delete the mask with the TestCafe etalon. If it is not, make
+the state deterministic (stop the animation, fix the data or the clock) rather than hide it.
 
 Migrating a test means, in one PR: port the test, record its etalon here, and delete the TestCafe
 test together with its etalon. The two sets must never cover the same case at once — a stale pair
@@ -198,6 +211,13 @@ viewport is 1200×800 and the widgets of the previous test are disposed.
 
 Port a test one to one: the same steps, the same checks, the same screenshot names. A title changes
 only when it repeats in the file, which Playwright rejects: add the loop parameters to it.
+
+**`runInTheme`.** In TestCafe it was a filter, not a setting: the test ran only in the job whose
+theme matched — usually one of the whole-suite theme jobs — and the folder jobs skipped it.
+`test.use({ theme })` instead runs the test in that theme in the job that takes its folder. That
+is the port: the result does not depend on the job, and a screenshot keeps one etalon named after
+the pinned theme. Do not add a theme tag on top of it: the
+test would run once more in the tagged job.
 
 **Typing.** `fill` sets the value at once and sends no key events, so masked, numeric and date
 editors do not react to it. Type with `pressSequentially`, and press keys under their Playwright

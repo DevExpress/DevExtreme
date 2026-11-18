@@ -22,11 +22,15 @@ export default abstract class DropDownList extends TextBox {
     this.dropDownButton = this.element.locator(`.${CLASS.dropDownButton}`);
   }
 
-  // The input names the popup content in "aria-owns" once the popup is rendered; the content
-  // itself sits in an overlay wrapper elsewhere in the body.
+  // The element that names the popup content in "aria-owns" once the popup is rendered; the
+  // content itself sits in an overlay wrapper elsewhere in the body.
+  public getPopupOwner(): Locator {
+    return this.input;
+  }
+
   public isOpened(): Promise<boolean> {
-    return this.input.evaluate((input, { attr, invisible }) => {
-      const popupId = input.getAttribute(attr);
+    return this.getPopupOwner().evaluate((owner, { attr, invisible }) => {
+      const popupId = owner.getAttribute(attr);
       const popup = popupId ? document.getElementById(popupId) : null;
 
       return !!popup && !popup.parentElement?.classList.contains(invisible);
@@ -34,9 +38,11 @@ export default abstract class DropDownList extends TextBox {
   }
 
   public async getPopup(): Promise<Locator> {
-    await expect(this.input).toHaveAttribute(ATTR.popupId, /./);
+    const owner = this.getPopupOwner();
 
-    const popupId = await this.input.getAttribute(ATTR.popupId);
+    await expect(owner).toHaveAttribute(ATTR.popupId, /./);
+
+    const popupId = await owner.getAttribute(ATTR.popupId);
 
     return this.page.locator(`#${popupId}`);
   }
