@@ -121,3 +121,40 @@ export const removeStylesheetRulesFromPage = async (page: Page): Promise<void> =
   (stylesheetId) => { document.getElementById(stylesheetId)?.remove(); },
   STYLESHEET_RULES_ID,
 );
+
+export const addFocusableElementBefore = async (
+  page: Page,
+  targetSelector: string,
+  elementId = 'focusable-start',
+): Promise<string> => page.evaluate(
+  ({ selector, id }) => {
+    document.getElementById(id)?.remove();
+
+    const target = document.querySelector(selector);
+    const button = document.createElement('button');
+
+    button.id = id;
+    button.textContent = 'Start';
+    Object.assign(button.style, {
+      position: 'fixed',
+      top: '0',
+      left: '0',
+      width: '1px',
+      height: '1px',
+      padding: '0',
+      border: '0',
+      overflow: 'hidden',
+      opacity: '0',
+    });
+    target?.parentElement?.insertBefore(button, target);
+
+    return button.id;
+  },
+  { selector: targetSelector, id: elementId },
+);
+
+export const waitForNextFrame = async (page: Page): Promise<void> => page.evaluate(
+  () => new Promise<void>((resolve) => {
+    requestAnimationFrame(() => requestAnimationFrame(() => resolve()));
+  }),
+);
