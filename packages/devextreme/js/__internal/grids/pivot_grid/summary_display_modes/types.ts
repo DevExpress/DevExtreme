@@ -1,7 +1,7 @@
 import type { PivotGridArea } from '@js/ui/pivot_grid/data_source';
 import type { PivotGridField } from '@ts/grids/pivot_grid/types';
 
-import type { Cell as SummaryCell } from './m_summary_display_modes';
+import type { Cell as SummaryCell } from './summary_display_modes';
 
 export interface SummaryHeaderItem {
   index: number;

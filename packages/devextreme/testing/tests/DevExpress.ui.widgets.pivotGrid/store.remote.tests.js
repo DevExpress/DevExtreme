@@ -1,8 +1,8 @@
 import $ from 'jquery';
-import { RemoteStore } from '__internal/grids/pivot_grid/remote_store/m_remote_store';
-import { forEachGroup } from '__internal/grids/pivot_grid/remote_store/m_remote_store_utils';
+import { RemoteStore } from '__internal/grids/pivot_grid/remote_store/remote_store';
+import { forEachGroup } from '__internal/grids/pivot_grid/remote_store/remote_store_utils';
 import { sort } from '__internal/grids/pivot_grid/data_source/m_data_source_utils';
-import pivotGridUtils from '__internal/grids/pivot_grid/m_widget_utils';
+import pivotGridUtils from '__internal/grids/pivot_grid/widget_utils';
 import ArrayStore from 'common/data/array_store';
 import DataSource from 'common/data/data_source';
 
