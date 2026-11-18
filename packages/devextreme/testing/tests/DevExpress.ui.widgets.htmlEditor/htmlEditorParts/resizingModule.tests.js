@@ -191,7 +191,7 @@ module('Resizing module', moduleConfig, () => {
         this.attachSpies(resizingInstance);
         this.$image.trigger(clickEvent);
 
-        assert.notOk(resizingInstance._$target, 'There is no active target');
+        assert.notOk(resizingInstance._target, 'There is no active target');
         assert.ok(this.updateFrameSpy.notCalled, 'Frame isn\'t updated');
         assert.ok(this.showFrameSpy.notCalled, 'Frame isn\'t shown');
     });
@@ -208,7 +208,7 @@ module('Resizing module', moduleConfig, () => {
             .get(0)
             .getBoundingClientRect();
 
-        assert.ok(resizingInstance._$target, 'There is active target');
+        assert.ok(resizingInstance._target, 'There is active target');
         assert.ok(this.updateFrameSpy.calledOnce, 'Frame has been updated');
         assert.ok(this.showFrameSpy.calledOnce, 'Frame has been shown');
         assert.ok($resizeFrame.is(':visible'), 'Frame element is visible');
@@ -270,7 +270,7 @@ module('Resizing module', moduleConfig, () => {
         this.attachSpies(resizingInstance);
         this.$div.trigger(clickEvent);
 
-        assert.notOk(resizingInstance._$target, 'There is no active target');
+        assert.notOk(resizingInstance._target, 'There is no active target');
         assert.ok(this.updateFrameSpy.notCalled, 'Frame hasn\'t been updated');
         assert.ok(this.showFrameSpy.notCalled, 'Frame hasn\'t been shown');
         assert.notOk($resizeFrame.is(':visible'), 'Frame element isn\'t visible');
@@ -309,7 +309,7 @@ module('Resizing module', moduleConfig, () => {
 
         this.$image.trigger(clickEvent);
 
-        assert.notOk(resizingInstance._$target, 'There is no active target');
+        assert.notOk(resizingInstance._target, 'There is no active target');
         assert.ok(this.updateFrameSpy.notCalled, 'Frame hasn\'t been updated');
         assert.ok(this.showFrameSpy.notCalled, 'Frame hasn\'t been shown');
         assert.notOk($resizeFrame.is(':visible'), 'Frame element isn\'t visible');
@@ -327,7 +327,7 @@ module('Resizing module', moduleConfig, () => {
 
         this.$element.trigger(clickEvent);
 
-        assert.notOk(resizingInstance._$target, 'There is no active target');
+        assert.notOk(resizingInstance._target, 'There is no active target');
         assert.ok(this.hideFrameSpy.calledOnce, 'Frame has been hidden');
         assert.notOk($resizeFrame.is(':visible'), 'Frame element isn\'t visible');
     });
@@ -344,7 +344,7 @@ module('Resizing module', moduleConfig, () => {
 
         this.$element.trigger('keydown');
 
-        assert.notOk(resizingInstance._$target, 'There is no active target');
+        assert.notOk(resizingInstance._target, 'There is no active target');
         assert.ok(this.hideFrameSpy.calledOnce, 'Frame has been hidden');
         assert.notOk($resizeFrame.is(':visible'), 'Frame element isn\'t visible');
     });
@@ -406,7 +406,7 @@ module('Resizing module', moduleConfig, () => {
 
         this.$element.trigger('scroll');
 
-        assert.ok(resizingInstance._$target, 'There is an active target');
+        assert.ok(resizingInstance._target, 'There is an active target');
         assert.ok($resizeFrame.is(':visible'), 'Frame element is visible');
         assert.ok(this.updateFrameSpy.calledTwice, 'Frame has been updated two times');
         assert.ok(this.hideFrameSpy.notCalled, 'Frame hasn\'t been hidden');
