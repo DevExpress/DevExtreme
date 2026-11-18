@@ -52,6 +52,14 @@ docker/run.sh --update-snapshots    # rewrite the etalons of the tests that ran
 The etalons here are recorded anew, not copied from `e2e/testcafe-devextreme`: the two runners
 crop and render differently, so a TestCafe image is not a valid reference for this suite.
 
+It is still the check of the port. Recording writes whatever the test reached, and a verify run
+compares against that same file, so neither notices a test that shot the wrong state. Before
+deleting the TestCafe etalon, compare the new one with it: the same picture, within the per-pixel
+threshold.
+The one expected difference is a scrollbar: this suite shows it, TestCafe cut it off, so a viewport
+shot of a page that overflows comes out up to 15 px larger, with the scrollbar in the extra strip.
+Anything else means the test reached a different state; find out why rather than accept the image.
+
 Migrating a test means, in one PR: port the test, record its etalon here, and delete the TestCafe
 test together with its etalon. The two sets must never cover the same case at once — a stale pair
 left behind gets updated by whoever touches the component next and starts asserting a render
@@ -236,6 +244,12 @@ the observer runs.
 **Clicks.** A click is a real one: it lands on the topmost element at that point and fails when
 that is not the target. TestCafe delivered a click to a covered element anyway, so a test that
 relied on it needs the target made reachable, not the check switched off.
+
+**Scrolling before a click.** TestCafe scrolled the whole target into view before a click;
+Playwright scrolls only as far as the click point. When the target is wider or taller than the
+window, the focus then scrolls the page after the click, and a drop-down closes on that scroll —
+sometimes before the next step, sometimes after it. Scroll the target into view first, as TestCafe
+did: `element.scrollIntoView({ block: 'nearest', inline: 'nearest' })` in `locator.evaluate`.
 
 **Page errors.** A test fails on an uncaught error in the page, as it did in TestCafe. A test whose
 TestCafe version ended with `expect(true).ok()` checks exactly that and needs no assertion.
