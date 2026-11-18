@@ -60,7 +60,11 @@ test.describe('DateBox', () => {
       },
     }, '#container');
 
-    await testScreenshot(page, 'DateBox with datetime and root element as container.png', { element: '#container' });
+    await testScreenshot(
+      page,
+      'DateBox with datetime and root element as container.png',
+      { element: '#container', withOverflow: true },
+    );
   });
 
   test('DateBox with datetime and opened AM/PM select (T1312677, T1327616)', {
@@ -84,7 +88,7 @@ test.describe('DateBox', () => {
     await testScreenshot(
       page,
       'DateBox with datetime and opened AMPM select.png',
-      { element: '#container' },
+      { element: '#container', withOverflow: true },
     );
   });
 });
