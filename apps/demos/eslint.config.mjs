@@ -448,6 +448,13 @@ export default [
   })),
 
   {
+    files: ['playwright.config.ts'],
+    rules: {
+      'import/no-extraneous-dependencies': ['error', { devDependencies: true }],
+    },
+  },
+
+  {
     files: ['testing/**/*.{js,ts}'],
     languageOptions: {
       globals: {

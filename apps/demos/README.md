@@ -63,6 +63,59 @@ pnpm run convert-to-js "JSDemos/Demos/Diagram/**/React"
 ```
 
 The "Check generated JS demos" GitHub Action ensures that the React JavaScript and TypeScript sources remain in sync.
+## Screenshot Tests
+
+Every demo page is compared with an etalon in `testing/etalons`. jQuery demos run on [Playwright](https://playwright.dev/) (`testing/common.spec.ts`); React, Vue and Angular demos, the manual widget tests (`testing/widgets`) and the accessibility checks still run on TestCafe.
+
+### Run locally
+
+Build DevExtreme first (`pnpm run demos:prepare` from the monorepo root). The tests use the system Google Chrome and start their own web server.
+
+```
+cd apps/demos
+pnpm run test-playwright --ignore-snapshots                # every jQuery demo, fluent.blue.light
+pnpm run test-playwright --ignore-snapshots --grep DataGrid-   # demos of one component
+THEME=material.blue.light pnpm run test-playwright --ignore-snapshots
+CONSTEL="jquery(1/3)" CONCURRENCY=4 pnpm run test-playwright --ignore-snapshots   # one CI shard
+```
+
+Everything after the script name goes to `playwright test`, so `--headed`, `--ui` and `--repeat-each` work too.
+
+A test fails on a console error or warning outside `testing/known-warnings.js` and on an uncaught error in the page.
+
+### Etalons
+
+The etalons are Linux renders made by CI, where the comparison is strict: no pixel may differ. Text is drawn differently on macOS and Windows, so a run on your machine compares loosely and proves little: pass `--ignore-snapshots` and never commit an etalon written there.
+
+To add or update an etalon, delete the file and push. The job fails on the missing etalon and uploads what it rendered:
+
+```
+gh run download <run-id> -n playwright-etalons -D ci-etalons
+cp -R ci-etalons/. ../..                 # from apps/demos: the paths start at the repository root
+```
+
+Look at the image before you commit it. One etalon serves all frameworks of a demo.
+
+### Files next to a demo
+
+| File | Purpose |
+|---|---|
+| `client-script.js` | runs in the page before the demo, for example to fix the current date with `MockDate` |
+| `test-code.js` | runs in the page after it loads; a returned promise is awaited |
+| `test-styles.css` | styles added for the test only |
+| `playwright-test-code.js` | steps that need real input, as a function of the Playwright `page` |
+| `visualtestrc.json` | `ignore` switches the demo off on CI, for all frameworks or for one |
+
+### Read a failed CI run
+
+```
+gh run download <run-id> -n playwright-report -D ci-report
+gh run download <run-id> -n playwright-traces -D ci-traces
+pnpm exec playwright show-report ci-report
+```
+
+A failed comparison uploads its `-expected`, `-actual` and `-diff` images with the trace. On CI a failed test runs once more; a test that passes then is listed under "flaky" and does not fail the job.
+
 ## See Also
 
 - [Technical demos online](https://js.devexpress.com/Demos/)
