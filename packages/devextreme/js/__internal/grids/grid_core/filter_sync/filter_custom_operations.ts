@@ -22,7 +22,7 @@ import type {
   HeaderFilterTextItem,
 } from './types';
 
-function baseOperation(grid: InternalGrid): HeaderFilterOperation {
+const baseOperation = (grid: InternalGrid): HeaderFilterOperation => {
   const calculateFilterExpression = function calculateFilterExpression(
     filterValue: ValueOperand[],
     field: FilterBuilderField,
@@ -59,14 +59,15 @@ function baseOperation(grid: InternalGrid): HeaderFilterOperation {
     return result;
   };
 
-  const getFullText = function getFullText(itemText: string, parentText: string | null): string {
-    return parentText ? `${parentText}/${itemText}` : itemText;
+  const getFullText = (itemText: string, parentText: string | null): string => {
+    const result = parentText ? `${parentText}/${itemText}` : itemText;
+    return result;
   };
 
-  const getSelectedItemsTexts = function getSelectedItemsTexts(
+  const getSelectedItemsTexts = (
     items: HeaderFilterTextItem[],
     parentText: string | null,
-  ): string[] {
+  ): string[] => {
     let result: string[] = [];
     items.forEach((item) => {
       if (item.items) {
@@ -85,10 +86,10 @@ function baseOperation(grid: InternalGrid): HeaderFilterOperation {
 
   const headerFilterController = grid?.getController('headerFilter');
   // Override in the private API WA [T1232532]
-  const customizeText = function customizeText(
+  const customizeText = (
     fieldInfo: HeaderFilterFieldInfo,
     options?: HeaderFilterCustomizeTextOptions,
-  ): DeferredObj<string> | string {
+  ): DeferredObj<string> | string => {
     const textOptions = options ?? {};
     const { value } = fieldInfo;
     let column = grid.columnOption(fieldInfo.field.dataField);
@@ -184,7 +185,7 @@ function baseOperation(grid: InternalGrid): HeaderFilterOperation {
     },
     customizeText,
   };
-}
+};
 
 export function anyOf(grid: InternalGrid): FilterCustomOperation {
   // @ts-expect-error customizeText takes a grid column field, not FieldInfo.field
