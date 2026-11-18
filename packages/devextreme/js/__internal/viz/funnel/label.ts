@@ -11,7 +11,8 @@
 
 import { noop } from '@ts/core/utils/common';
 import { extend } from '@ts/core/utils/extend';
-import type { Coords } from '@ts/viz/core/types';
+import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
+import type { BBox, Coords } from '@ts/viz/core/types';
 import { normalizeEnum } from '@ts/viz/core/utils';
 import { Label } from '@ts/viz/series/points/label';
 
@@ -258,17 +259,20 @@ export const plugin = {
     _change_TILING(): void {
       const that = this;
       const options = that._getOption('label');
-      let getCoords = getInsideLabelPosition;
+      let getCoords: (
+        coords: Coords,
+        bBox: BBox,
+        options: ThemeValue,
+        inverted?: boolean,
+      ) => Coords = getInsideLabelPosition;
       const inverted = that._getOption('inverted', true);
       let textAlignment;
 
       if (isOutsidePosition(options.position)) {
         if (normalizeEnum(options.position) === OUTSIDE_POSITION) {
-          // @ts-expect-error
           getCoords = options.horizontalAlignment === 'left' ? getOutsideLeftLabelPosition : getOutsideRightLabelPosition;
         } else {
           textAlignment = this._defaultLabelTextAlignment();
-          // @ts-expect-error
           getCoords = options.horizontalAlignment === 'left' ? getColumnLabelLeftPosition(this._labelRect, this._rect, textAlignment) : getColumnLabelRightPosition(this._labelRect, this._rect, textAlignment);
         }
       }
@@ -298,7 +302,6 @@ export const plugin = {
 
         const bBox = label.getBoundingRect();
         const pos = correctLabelPosition(
-          // @ts-expect-error
           getCoords(coords, bBox, options, inverted),
           bBox,
           that._labelRect,

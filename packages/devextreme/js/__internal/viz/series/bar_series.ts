@@ -14,6 +14,7 @@
 import { extend } from '@ts/core/utils/extend';
 import { each } from '@ts/core/utils/iterator';
 import { isDefined as _isDefined } from '@ts/core/utils/type';
+import type { Coords } from '@ts/viz/core/types';
 import { convertPolarToXY, extractColor } from '@ts/viz/core/utils';
 
 import { chart as areaChart } from './area_series';
@@ -251,7 +252,7 @@ polar.bar = _extend({}, polarSeries, baseBarSeriesMethods, {
   },
 
   getSeriesPairCoord(params, isArgument) {
-    let coords = null;
+    let coords: Coords | null = null;
     const paramName = isArgument ? 'argument' : 'radius';
     const points = this.getVisiblePoints();
     const argAxis = this.getArgumentAxis();
@@ -271,7 +272,6 @@ polar.bar = _extend({}, polarSeries, baseBarSeriesMethods, {
         : undefined;
 
       if (_isDefined(tmpPoint)) {
-        // @ts-expect-error
         coords = tmpPoint;
         break;
       }
