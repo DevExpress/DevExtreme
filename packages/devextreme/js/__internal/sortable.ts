@@ -19,10 +19,13 @@ import type { EngineEvent } from '@ts/events/core/events_engine';
 import eventsEngine from '@ts/events/core/events_engine';
 
 import { isDefined } from '../core/utils/type';
-import type { DragEvent, DragEventArgs, DragTemplateArgs } from './draggable.types';
 import type {
-  AnimateConfig, ItemPoint, OptionChangedToIndexArgs, PlaceholderPreparedArgs,
-  SortableDragStartArgs, SortableEventArgs, SortableProperties, SourceScrollableInfo,
+  DragAction, DragEvent, DragEventArgs, DragTemplateArgs,
+} from './draggable.types';
+import type {
+  AnimateConfig, AnyItemPoint, ItemPoint, OptionChangedToIndexArgs, PlaceholderPreparedArgs,
+  SortableActionArgs, SortableDragStartArgs, SortableEventArgs, SortableProperties,
+  SourceScrollableInfo,
 } from './sortable.types';
 
 const window = getWindow();
@@ -75,7 +78,7 @@ function getScrollableBoundary($scrollable: dxElementWrapper): Quad | undefined 
   };
 }
 
-class Sortable extends Draggable<SortableProperties> {
+class Sortable extends Draggable<SortableProperties, SortableActionArgs> {
   _$placeholderElement?: dxElementWrapper | null;
 
   _$scrollable?: dxElementWrapper;
@@ -87,6 +90,16 @@ class Sortable extends Draggable<SortableProperties> {
   _sourceScrollHandler!: (e: EngineEvent) => void;
 
   _modifiedItemMargin?: string;
+
+  _onAddAction?: DragAction<SortableActionArgs['onAdd']>;
+
+  _onDragChangeAction?: DragAction<SortableActionArgs['onDragChange']>;
+
+  _onPlaceholderPreparedAction?: DragAction<SortableActionArgs['onPlaceholderPrepared']>;
+
+  _onRemoveAction?: DragAction<SortableActionArgs['onRemove']>;
+
+  _onReorderAction?: DragAction<SortableActionArgs['onReorder']>;
 
   _init(): void {
     super._init();
@@ -227,7 +240,7 @@ class Sortable extends Draggable<SortableProperties> {
       // @ts-expect-error itemPoints are set by _updateItemPoints
       const lastItemPoint = itemPoints[itemPoints.length - 1];
 
-      if (lastItemPoint) {
+      if (lastItemPoint?.top !== undefined) {
         const $element = this.$element();
         const elementOffset = $element.offset();
 
@@ -365,18 +378,21 @@ class Sortable extends Draggable<SortableProperties> {
     const rtlEnabled = this.option('rtlEnabled');
 
     // eslint-disable-next-line @typescript-eslint/init-declarations
-    let itemPoint: ItemPoint | undefined;
+    let itemPoint: AnyItemPoint | undefined;
     for (let i = itemPoints.length - 1; i >= 0; i -= 1) {
-      const centerPosition = itemPoints[i + 1]
-        && (itemPoints[i][axisName] + itemPoints[i + 1][axisName]) / 2;
+      const point = itemPoints[i];
+      const nextPoint = itemPoints[i + 1];
+      const centerPosition = point.top !== undefined && nextPoint?.top !== undefined
+        ? (point[axisName] + nextPoint[axisName]) / 2
+        : undefined;
 
       if (
-        (!isVertical && rtlEnabled
+        centerPosition === undefined
+        || (!isVertical && rtlEnabled
           ? cursorPosition > centerPosition
           : centerPosition > cursorPosition)
-        || centerPosition === undefined
       ) {
-        itemPoint = itemPoints[i];
+        itemPoint = point;
       } else {
         break;
       }
@@ -449,7 +465,7 @@ class Sortable extends Draggable<SortableProperties> {
     );
   }
 
-  _getItemPoints(): ItemPoint[] {
+  _getItemPoints(): AnyItemPoint[] {
     let result: ItemPoint[] = [];
     /* eslint-disable @typescript-eslint/init-declarations */
     let offset: Coordinates | undefined;
@@ -510,12 +526,11 @@ class Sortable extends Draggable<SortableProperties> {
         }
       }
     } else {
-      // @ts-expect-error the empty list point has no position and size
-      result.push({
+      return [{
         dropInsideItem: false,
         index: 0,
         isValid: true,
-      });
+      }];
     }
 
     return result;
@@ -533,6 +548,7 @@ class Sortable extends Draggable<SortableProperties> {
       const isVertical = this._isVerticalOrientation();
       const positionPropName = isVertical ? 'top' : 'left';
       itemPoints.forEach((itemPoint) => {
+        // @ts-expect-error the point of an empty list has no position
         itemPoint[positionPropName] -= scrollBy;
       });
     }
@@ -574,7 +590,7 @@ class Sortable extends Draggable<SortableProperties> {
     );
   }
 
-  _updatePlaceholderPosition(e: DragEvent, itemPoint: ItemPoint): void {
+  _updatePlaceholderPosition(e: DragEvent, itemPoint: AnyItemPoint): void {
     const sourceDraggable = this._getSourceDraggable();
     const toIndex = this._normalizeToIndex(itemPoint.index, itemPoint.dropInsideItem);
 
@@ -934,14 +950,14 @@ class Sortable extends Draggable<SortableProperties> {
     items: Element[],
     elementSize: number,
     fromIndex: number | null,
-    toIndex: number | null,
+    toIndex: number | null | undefined,
   ): number[] {
     const positions: number[] = [];
 
     for (let i = 0; i < items.length; i += 1) {
       let position = 0;
 
-      if (toIndex === null || fromIndex === null) {
+      if (toIndex === null || toIndex === undefined || fromIndex === null) {
         positions.push(position);
         // eslint-disable-next-line no-continue
         continue;
@@ -1001,7 +1017,6 @@ class Sortable extends Draggable<SortableProperties> {
     const positionPropName = isVerticalOrientation ? 'top' : 'left';
     const elementSize = this._getDraggableElementSize(isVerticalOrientation);
     const items = this._getItems();
-    // @ts-expect-error prevToIndex is undefined when update() is called
     const prevPositions = this._getPositions(items, elementSize, fromIndex, prevToIndex);
     const positions = this._getPositions(items, elementSize, fromIndex, toIndex);
     const animationConfig = this.option('animation');
