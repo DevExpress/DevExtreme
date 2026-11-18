@@ -1078,6 +1078,7 @@
       "--dx-gantt-header-item-height",
       "--dx-gantt-milestone-size",
       "--dx-gantt-parent-task-bg",
+      "--dx-gantt-parent-task-content",
       "--dx-gantt-selection-bg",
       "--dx-gantt-si-padding-inline-end",
       "--dx-gantt-si-padding-inline-start",
