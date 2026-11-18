@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-declaration-merging */
 // PLUGINS_SECTION
 import { registerComponent as componentRegistrator } from '@ts/core/component_registrator';
 import { isDefined } from '@ts/core/utils/type';
@@ -183,9 +182,13 @@ function createBarCustomizeFunction(
   };
 }
 
-interface Sparkline extends DataSourcePluginMembers {}
-
 class Sparkline extends BaseSparkline {
+  declare _dataIsLoaded: DataSourcePluginMembers['_dataIsLoaded'];
+
+  declare _dataSourceItems: DataSourcePluginMembers['_dataSourceItems'];
+
+  declare _updateDataSource: DataSourcePluginMembers['_updateDataSource'];
+
   _series;
 
   _seriesGroup;

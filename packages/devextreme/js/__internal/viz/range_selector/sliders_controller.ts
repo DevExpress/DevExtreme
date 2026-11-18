@@ -21,8 +21,8 @@ const { animationSettings } = utils;
 const { emptySliderMarkerText } = consts;
 
 interface SelectedRange {
-  startValue: ThemeValue;
-  endValue: ThemeValue;
+  startValue: number | string | Date;
+  endValue: number | string | Date;
 }
 
 interface VisualRangeInput {
