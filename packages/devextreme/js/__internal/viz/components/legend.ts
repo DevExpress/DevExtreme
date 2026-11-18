@@ -33,7 +33,7 @@ import type { AlignedLayoutRect, LayoutAlignment } from '@ts/viz/core/layout_ele
 import { LayoutElement, WrapperLayoutElement } from '@ts/viz/core/layout_element';
 import { getFuncIri, processHatchingAttrs } from '@ts/viz/core/renderers/renderer';
 import { Title } from '@ts/viz/core/title';
-import type { BBox, Bounds } from '@ts/viz/core/types';
+import type { BBox, Bounds, Size } from '@ts/viz/core/types';
 import { enumParser, normalizeEnum, patchFontOptions } from '@ts/viz/core/utils';
 
 const _Number = Number;
@@ -121,7 +121,7 @@ interface LegendItem extends CreatedLegendItem {
   markerBBox: BBox;
   markerSize: number;
   labelBBox: BBox;
-  bBox: { width: number; height: number };
+  bBox: Size;
 }
 
 interface LegendLineItem {
@@ -242,7 +242,7 @@ function getSizeItem(
   options: ThemeValue,
   markerBBox: BBox,
   labelBBox: BBox,
-): { width: number; height: number } {
+): Size {
   const defaultXMargin = 7;
   const defaultTopMargin = 4;
   let width;
@@ -581,7 +581,7 @@ export let Legend = class Legend extends LayoutElement {
 
   declare _items: LegendItem[];
 
-  declare _size: { width: number; height: number };
+  declare _size: Size;
 
   declare _x1: number;
 

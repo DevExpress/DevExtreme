@@ -13,6 +13,7 @@ import { each } from '@ts/core/utils/iterator';
 import type { LegendDataItem } from '@ts/viz/components/legend';
 import { Legend as _BaseLegend } from '@ts/viz/components/legend';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
+import type { Size } from '@ts/viz/core/types';
 
 const _extend = extend;
 const _each = each;
@@ -113,7 +114,7 @@ let Legend = class Legend extends _BaseLegend {
   }
 
   // This method is called only by the layout
-  resize(size: { width: number; height: number } | null): void {
+  resize(size: Size | null): void {
     this._params.notifyDirty();
     if (size === null) {
       this.erase();
