@@ -112,8 +112,8 @@ const baseRangeSeries = {
     return [this._options.rangeValue1Field || 'val1', this._options.rangeValue2Field || 'val2'];
   },
 
-  getSeriesPairCoord(coord, isArgument): null {
-    let oppositeCoord = null;
+  getSeriesPairCoord(coord, isArgument): number | null {
+    let oppositeCoord: number | null = null;
     const { rotated } = this._options;
     const isOpposite = !isArgument && !rotated || isArgument && rotated;
     const coordName = isOpposite ? 'vy' : 'vx';
