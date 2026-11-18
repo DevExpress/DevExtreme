@@ -1,98 +1,121 @@
-import { extend } from '@js/core/utils/extend';
 import { isDefined, isFunction, isObject } from '@js/core/utils/type';
+import type { PivotGridSummaryDisplayMode } from '@js/ui/pivot_grid/data_source';
+import pivotGridUtils, { findField, foreachTree } from '@ts/grids/pivot_grid/m_widget_utils';
+import type { PivotGridDescriptions, PivotGridField } from '@ts/grids/pivot_grid/types';
 
-import pivotGridUtils, { findField, foreachTree } from '../m_widget_utils';
+import type {
+  SummaryCellData,
+  SummaryCellPaths,
+  SummaryData,
+  SummaryDataCell,
+  SummaryExpression,
+  SummaryFieldId,
+  SummaryFieldPosition,
+  SummaryFieldsCache,
+  SummaryHeaderItem,
+} from './types';
 
 const COLUMN = 'column';
 const ROW = 'row';
-const NULL = null;
 
-const calculatePercentValue = function (value, totalValue) {
-  let result: any = value / totalValue;
+const calculatePercentValue = function calculatePercentValue(
+  value: unknown,
+  totalValue: unknown,
+): number | null {
+  const result = Number(value) / Number(totalValue);
   if (!isDefined(value) || isNaN(result)) {
-    result = NULL;
+    return null;
   }
   return result;
 };
 
-const percentOfGrandTotal = function (e, dimension?) {
+const percentOfGrandTotal = function percentOfGrandTotal(
+  e: SummaryCell,
+  dimension?: string,
+): number | null {
   return calculatePercentValue(e.value(), e.grandTotal(dimension).value());
 };
 
-const percentOfParent = function (e, dimension) {
+const percentOfParent = function percentOfParent(
+  e: SummaryCell,
+  dimension: string,
+): number | null {
   const parent = e.parent(dimension);
   const parentValue = parent ? parent.value() : e.value();
 
   return calculatePercentValue(e.value(), parentValue);
 };
 
-const createAbsoluteVariationExp = function (allowCrossGroup) {
-  return function (e) {
+const createAbsoluteVariationExp = function createAbsoluteVariationExp(
+  allowCrossGroup: boolean | undefined,
+): (e: SummaryCell) => number | null {
+  return function absoluteVariation(e: SummaryCell): number | null {
     const prevCell = e.prev(COLUMN, allowCrossGroup);
-    const prevValue = prevCell && prevCell.value();
+    const prevValue = prevCell?.value();
 
     if (isDefined(prevValue) && isDefined(e.value())) {
-      return e.value() - prevValue;
+      return Number(e.value()) - Number(prevValue);
     }
 
-    return NULL;
+    return null;
   };
 };
 
-const createPercentVariationExp = function (allowCrossGroup) {
+const createPercentVariationExp = function createPercentVariationExp(
+  allowCrossGroup: boolean | undefined,
+): (e: SummaryCell) => number | null {
   const absoluteExp = createAbsoluteVariationExp(allowCrossGroup);
-  return function (e) {
+  return function percentVariation(e: SummaryCell): number | null {
     const absVar = absoluteExp(e);
     const prevCell = e.prev(COLUMN, allowCrossGroup);
-    const prevValue = prevCell && prevCell.value();
+    const prevValue = prevCell?.value();
 
-    return absVar !== NULL && prevValue ? absVar / prevValue : NULL;
+    return absVar !== null && prevValue ? absVar / Number(prevValue) : null;
   };
 };
 
-const summaryDictionary = {
-  percentOfColumnTotal(e) {
+const summaryDictionary: Partial<Record<PivotGridSummaryDisplayMode, SummaryExpression>> = {
+  percentOfColumnTotal(e: SummaryCell): number | null {
     return percentOfParent(e, ROW);
   },
 
-  percentOfRowTotal(e) {
+  percentOfRowTotal(e: SummaryCell): number | null {
     return percentOfParent(e, COLUMN);
   },
 
-  percentOfColumnGrandTotal(e) {
+  percentOfColumnGrandTotal(e: SummaryCell): number | null {
     return percentOfGrandTotal(e, ROW);
   },
 
-  percentOfRowGrandTotal(e) {
+  percentOfRowGrandTotal(e: SummaryCell): number | null {
     return percentOfGrandTotal(e, COLUMN);
   },
 
-  percentOfGrandTotal(e) {
+  percentOfGrandTotal(e: SummaryCell): number | null {
     return percentOfGrandTotal(e);
   },
 };
-const getPrevCellCrossGroup = function (cell, direction) {
-  if (!cell || !cell.parent(direction)) {
+const getPrevCellCrossGroup = function getPrevCellCrossGroup(
+  cell: SummaryCell | null | undefined,
+  direction: string,
+): SummaryCell | null | undefined {
+  if (!cell?.parent(direction)) {
     return undefined;
   }
 
-  let prevCell = cell.prev(direction);
+  const prevCell = cell.prev(direction);
 
-  if (!prevCell) {
-    prevCell = getPrevCellCrossGroup(cell.parent(direction), direction);
-  }
-
-  return prevCell;
+  return prevCell ?? getPrevCellCrossGroup(cell.parent(direction), direction);
 };
 
-const createRunningTotalExpr = (field) => {
+const createRunningTotalExpr = (field: PivotGridField): SummaryExpression | undefined => {
   if (!field.runningTotal) {
     return undefined;
   }
 
   const direction = field.runningTotal === COLUMN ? ROW : COLUMN;
 
-  return (e) => {
+  return (e: SummaryCell): unknown => {
     const prevCell = field.allowCrossGroupCalculation
       ? getPrevCellCrossGroup(e, direction)
       : e.prev(direction, false);
@@ -103,6 +126,8 @@ const createRunningTotalExpr = (field) => {
 
     switch (true) {
       case isDefined(calculatedValue) && isDefined(originalValue) && isDefined(prevCalculatedValue):
+        // @ts-expect-error summary values are unknown, + also joins strings
+        // eslint-disable-next-line @typescript-eslint/restrict-plus-operands -- values are unknown
         return prevCalculatedValue + calculatedValue;
       case isDefined(prevCalculatedValue):
         return prevCalculatedValue;
@@ -112,142 +137,160 @@ const createRunningTotalExpr = (field) => {
   };
 };
 
-function createCache() {
+function createCache(): SummaryFieldsCache {
   return {
     fields: {},
     positions: {},
   };
 }
 
-function getFieldPos(descriptions, field, cache) {
-  let fieldParams = {
+function getFieldPos(
+  descriptions: PivotGridDescriptions,
+  field: SummaryFieldId,
+  cache: SummaryFieldsCache,
+): SummaryFieldPosition {
+  let fieldParams: SummaryFieldPosition = {
     index: -1,
   };
+  let fieldObject = isObject(field) ? field : undefined;
 
   if (!isObject(field)) {
     if (cache.fields[field]) {
-      field = cache[field];
+      // @ts-expect-error found fields are stored on the cache itself, not in cache.fields
+      fieldObject = cache[field];
     } else {
       const allFields = descriptions.columns.concat(descriptions.rows).concat(descriptions.values);
       const fieldIndex = findField(allFields, field);
-      field = cache[field] = allFields[fieldIndex];
+      fieldObject = allFields[fieldIndex];
+      cache[field] = fieldObject;
     }
   }
 
-  if (field) {
-    const area = field.area || 'data';
-    fieldParams = cache.positions[field.index] = cache.positions[field.index] || {
+  if (fieldObject) {
+    const area = fieldObject.area ?? 'data';
+    const positionKey = String(fieldObject.index);
+    const descriptionName: keyof PivotGridDescriptions = area === 'data' ? 'values' : `${area}s`;
+    fieldParams = cache.positions[positionKey] || {
       area,
-      index: descriptions[area === 'data' ? 'values' : `${area}s`].indexOf(field),
+      index: descriptions[descriptionName].indexOf(fieldObject),
     };
+    cache.positions[positionKey] = fieldParams;
   }
 
   return fieldParams;
 }
 
-function getPathFieldName(dimension) {
+function getPathFieldName(dimension?: string): '_rowPath' | '_columnPath' {
   return dimension === ROW ? '_rowPath' : '_columnPath';
 }
 
-const SummaryCell = function (columnPath, rowPath, data, descriptions, fieldIndex, fieldsCache?) {
-  // - @ts-expect-error
-  this._columnPath = columnPath;
-  // - @ts-expect-error
-  this._rowPath = rowPath;
-  // - @ts-expect-error
-  this._fieldIndex = fieldIndex;
-  // - @ts-expect-error
-  this._fieldsCache = fieldsCache || createCache();
-  // - @ts-expect-error
-  this._data = data;
-  // - @ts-expect-error
-  this._descriptions = descriptions;
+class SummaryCell {
+  private readonly _columnPath: SummaryHeaderItem[];
 
-  const cell = data.values
-    && data.values[rowPath[0].index]
-    && data.values[rowPath[0].index][columnPath[0].index];
+  private readonly _rowPath: SummaryHeaderItem[];
 
-  if (cell) {
-    cell.originalCell = cell.originalCell || cell.slice();
-    cell.postProcessedFlags = cell.postProcessedFlags || [];
-    // - @ts-expect-error
-    this._cell = cell;
+  private readonly _fieldIndex: number;
+
+  private readonly _fieldsCache: SummaryFieldsCache;
+
+  private readonly _data: SummaryCellData;
+
+  private readonly _descriptions: PivotGridDescriptions;
+
+  private readonly _cell?: SummaryDataCell;
+
+  constructor(
+    columnPath: SummaryHeaderItem[],
+    rowPath: SummaryHeaderItem[],
+    data: SummaryCellData,
+    descriptions: PivotGridDescriptions,
+    fieldIndex: number,
+    fieldsCache?: SummaryFieldsCache,
+  ) {
+    this._columnPath = columnPath;
+    this._rowPath = rowPath;
+    this._fieldIndex = fieldIndex;
+    this._fieldsCache = fieldsCache ?? createCache();
+    this._data = data;
+    this._descriptions = descriptions;
+
+    const cell = data.values?.[rowPath[0].index]?.[columnPath[0].index];
+
+    if (cell) {
+      cell.originalCell ??= cell.slice();
+      cell.postProcessedFlags ??= [];
+      this._cell = cell;
+    }
   }
-};
-SummaryCell.prototype = extend(SummaryCell.prototype, {
 
-  _getPath(dimension) {
+  private _getPath(dimension?: string): SummaryHeaderItem[] {
     return this[getPathFieldName(dimension)];
-  },
+  }
 
-  _getDimension(dimension) {
-    dimension = dimension === ROW ? 'rows' : 'columns';
-    return this._descriptions[dimension];
-  },
+  private _getDimension(dimension: string): PivotGridField[] {
+    const dimensionName = dimension === ROW ? 'rows' : 'columns';
+    return this._descriptions[dimensionName];
+  }
 
-  _createCell(config) {
-    const that = this;
+  private _createCell(config: SummaryCellPaths): SummaryCell {
     return new SummaryCell(
-      config._columnPath || that._columnPath,
-      config._rowPath || that._rowPath,
-      that._data,
-      that._descriptions,
-      that._fieldIndex,
+      config._columnPath ?? this._columnPath,
+      config._rowPath ?? this._rowPath,
+      this._data,
+      this._descriptions,
+      this._fieldIndex,
     );
-  },
+  }
 
-  parent(direction) {
+  public parent(direction: string): SummaryCell | null {
     const path = this._getPath(direction).slice();
-    const config = {};
+    const config: SummaryCellPaths = {};
     path.shift();
 
     if (path.length) {
       config[getPathFieldName(direction)] = path;
       return this._createCell(config);
     }
-    return NULL;
-  },
+    return null;
+  }
 
-  children(direction) {
+  public children(direction: string): SummaryCell[] {
     const path = this._getPath(direction).slice();
     const item = path[0];
-    const result = [];
-    const cellConfig = {};
+    const result: SummaryCell[] = [];
+    const cellConfig: SummaryCellPaths = {};
 
     if (item.children) {
-      for (let i = 0; i < item.children.length; i += 1) {
-        cellConfig[getPathFieldName(direction)] = [item.children[i]].concat(path.slice());
-        // @ts-expect-error
+      for (const child of item.children) {
+        cellConfig[getPathFieldName(direction)] = [child].concat(path.slice());
         result.push(this._createCell(cellConfig));
       }
     }
 
     return result;
-  },
+  }
 
-  grandTotal(direction) {
-    const config: any = {};
-    const rowPath = this._rowPath;
-    const columnPath = this._columnPath;
-    const dimensionPath = this._getPath(direction);
-    const pathFieldName = getPathFieldName(direction);
+  public grandTotal(direction?: string): SummaryCell {
+    const config: SummaryCellPaths = {};
 
     if (!direction) {
-      config._rowPath = [rowPath[rowPath.length - 1]];
-      config._columnPath = [columnPath[columnPath.length - 1]];
+      config._rowPath = this._rowPath.slice(-1);
+      config._columnPath = this._columnPath.slice(-1);
     } else {
-      config[pathFieldName] = [dimensionPath[dimensionPath.length - 1]];
+      const pathFieldName = getPathFieldName(direction);
+      config[pathFieldName] = this._getPath(direction).slice(-1);
     }
     return this._createCell(config);
-  },
+  }
 
-  next(direction, allowCrossGroup) {
+  public next(direction: string, allowCrossGroup?: boolean): SummaryCell | null {
     const currentPath = this._getPath(direction);
     const item = currentPath[0];
     let parent = this.parent(direction);
-    let siblings;
+    // eslint-disable-next-line @typescript-eslint/init-declarations -- assigned in both branches
+    let siblings: SummaryCell[];
 
-    if (parent) {
+    if (parent && currentPath[1].children) {
       const index = currentPath[1].children.indexOf(item);
       siblings = parent.children(direction);
 
@@ -263,19 +306,20 @@ SummaryCell.prototype = extend(SummaryCell.prototype, {
         siblings = parent ? parent.children(direction) : [];
       } while (parent && !siblings.length);
 
-      return siblings[0] || NULL;
+      return siblings[0] || null;
     }
 
-    return NULL;
-  },
+    return null;
+  }
 
-  prev(direction, allowCrossGroup) {
+  public prev(direction: string, allowCrossGroup?: boolean): SummaryCell | null {
     const currentPath = this._getPath(direction);
     const item = currentPath[0];
     let parent = this.parent(direction);
-    let siblings;
+    // eslint-disable-next-line @typescript-eslint/init-declarations -- assigned in both branches
+    let siblings: SummaryCell[];
 
-    if (parent) {
+    if (parent && currentPath[1].children) {
       const index = currentPath[1].children.indexOf(item);
       siblings = parent.children(direction);
 
@@ -291,17 +335,17 @@ SummaryCell.prototype = extend(SummaryCell.prototype, {
         siblings = parent ? parent.children(direction) : [];
       } while (parent && !siblings.length);
 
-      return siblings[siblings.length - 1] || NULL;
+      return siblings[siblings.length - 1] || null;
     }
 
-    return NULL;
-  },
+    return null;
+  }
 
-  cell() {
+  public cell(): SummaryDataCell | undefined {
     return this._cell;
-  },
+  }
 
-  field(area) {
+  public field(area: string): PivotGridField | null {
     if (area === 'data') {
       return this._descriptions.values[this._fieldIndex];
     }
@@ -309,127 +353,127 @@ SummaryCell.prototype = extend(SummaryCell.prototype, {
     const descriptions = this._getDimension(area);
     const field = descriptions[path.length - 2];
 
-    return field || NULL;
-  },
+    return field || null;
+  }
 
-  child(direction, fieldValue) {
-    let childLevelField;
+  public child(direction: string, fieldValue: unknown): SummaryCell | null {
     const children = this.children(direction);
-    for (let i = 0; i < children.length; i += 1) {
-      childLevelField = childLevelField || children[i].field(direction);
-      if (children[i].value(childLevelField) === fieldValue) {
-        return children[i];
+    const childLevelField = children[0]?.field(direction);
+    for (const child of children) {
+      if (child.value(childLevelField) === fieldValue) {
+        return child;
       }
     }
-    return NULL;
-  },
+    return null;
+  }
 
-  slice(field, value) {
-    const that = this;
-    const config = {};
-    const fieldPos: any = getFieldPos(this._descriptions, field, this._fieldsCache);
-    const { area } = fieldPos;
-    const fieldIndex = fieldPos.index;
-    let sliceCell = NULL;
-    const newPath: any = [];
+  public slice(field: SummaryFieldId, value: unknown): SummaryCell | null {
+    const config: SummaryCellPaths = {};
+    const { area, index: fieldIndex } = getFieldPos(this._descriptions, field, this._fieldsCache);
 
-    if (area === ROW || area === COLUMN) {
-      const path = this._getPath(area).slice();
-      const level: any = fieldIndex !== -1 && (path.length - 2 - fieldIndex);
+    if (area !== ROW && area !== COLUMN) {
+      return null;
+    }
 
-      if (path[level]) {
-        newPath[path.length - 1] = path[path.length - 1];
-        for (let i = level; i >= 0; i -= 1) {
-          if (path[i + 1]) {
-            const childItems = path[i + 1].children || [];
-            const currentValue = i === level ? value : path[i].value;
-            path[i] = undefined;
+    const path = this._getPath(area).slice();
+    const level = fieldIndex !== -1 && (path.length - 2 - fieldIndex);
 
-            for (let childIndex = 0; childIndex < childItems.length; childIndex += 1) {
-              if (childItems[childIndex].value === currentValue) {
-                path[i] = childItems[childIndex];
-                break;
-              }
-            }
-          }
-          if (path[i] === undefined) {
-            return sliceCell;
-          }
+    if (level === false || !path[level]) {
+      return null;
+    }
+
+    for (let i = level; i >= 0; i -= 1) {
+      const parentItem: SummaryHeaderItem | undefined = path[i + 1];
+      if (parentItem) {
+        const childItems = parentItem.children ?? [];
+        const currentValue = i === level ? value : path[i].value;
+        const childItem = childItems.find((item) => item.value === currentValue);
+
+        if (!childItem) {
+          return null;
         }
-
-        config[getPathFieldName(area)] = path;
-        sliceCell = that._createCell(config);
+        path[i] = childItem;
+      }
+      if (path[i] === undefined) {
+        return null;
       }
     }
 
-    return sliceCell;
-  },
+    config[getPathFieldName(area)] = path;
+    return this._createCell(config);
+  }
 
-  value(arg1, arg2) {
+  public value(arg1?: boolean | SummaryFieldId | null, arg2?: boolean): unknown {
     const cell = this._cell;
     let fieldIndex = this._fieldIndex;
     const fistArgIsBoolean = arg1 === true || arg1 === false;
-    const field = !fistArgIsBoolean ? arg1 : NULL;
-    const needCalculatedValue = fistArgIsBoolean && arg1 || arg2;
+    const field = !fistArgIsBoolean ? arg1 : null;
+    const needCalculatedValue = (fistArgIsBoolean && arg1) || arg2;
 
     if (isDefined(field)) {
-      const fieldPos: any = getFieldPos(this._descriptions, field, this._fieldsCache);
+      const fieldPos = getFieldPos(this._descriptions, field, this._fieldsCache);
       fieldIndex = fieldPos.index;
 
       if (fieldPos.area !== 'data') {
         const path = this._getPath(fieldPos.area);
-        const level: any = fieldIndex !== -1 && (path.length - 2 - fieldIndex);
+        const level = fieldIndex !== -1 && (path.length - 2 - fieldIndex);
 
-        return path[level] && path[level].value;
+        return level === false ? undefined : path[level]?.value;
       }
     }
 
-    if (cell && cell.originalCell) {
+    if (cell?.originalCell) {
       return needCalculatedValue ? cell[fieldIndex] : cell.originalCell[fieldIndex];
     }
 
-    return NULL;
-  },
+    return null;
+  }
 
-  isPostProcessed(field) {
+  public isPostProcessed(field?: SummaryFieldId | null): boolean {
     let fieldIndex = this._fieldIndex;
     if (isDefined(field)) {
-      const fieldPos: any = getFieldPos(this._descriptions, field, this._fieldsCache);
+      const fieldPos = getFieldPos(this._descriptions, field, this._fieldsCache);
       fieldIndex = fieldPos.index;
 
       if (fieldPos.area !== 'data') {
         return false;
       }
     }
-    return !!(this._cell && this._cell.postProcessedFlags[fieldIndex]);
-  },
-});
+    return !!this._cell?.postProcessedFlags?.[fieldIndex];
+  }
+}
 
-function getExpression(field) {
-  const { summaryDisplayMode } = field;
-  const crossGroupCalculation = field.allowCrossGroupCalculation;
-  let expression: any = NULL;
+function getExpression(field: PivotGridField): SummaryExpression | null | undefined {
+  const { summaryDisplayMode, allowCrossGroupCalculation } = field;
+  let expression: SummaryExpression | null | undefined = null;
 
   if (isFunction(field.calculateSummaryValue)) {
+    // @ts-expect-error SummaryCell returns null where dxPivotGridSummaryCell says it does not
     expression = field.calculateSummaryValue;
   } else if (summaryDisplayMode) {
     if (summaryDisplayMode === 'absoluteVariation') {
-      expression = createAbsoluteVariationExp(crossGroupCalculation);
+      expression = createAbsoluteVariationExp(allowCrossGroupCalculation);
     } else if (summaryDisplayMode === 'percentVariation') {
-      expression = createPercentVariationExp(crossGroupCalculation);
+      expression = createPercentVariationExp(allowCrossGroupCalculation);
     } else {
       expression = summaryDictionary[summaryDisplayMode];
     }
 
-    if (expression && !field.format && summaryDisplayMode.indexOf('percent') !== -1) {
+    if (expression && !field.format && summaryDisplayMode.includes('percent')) {
       pivotGridUtils.setFieldProperty(field, 'format', 'percent');
     }
   }
   return expression;
 }
 
-function processDataCell(data, rowIndex, columnIndex, isRunningTotalCalculation) {
-  const values = data.values[rowIndex][columnIndex] = data.values[rowIndex][columnIndex] || [];
+function processDataCell(
+  data: SummaryData,
+  rowIndex: number,
+  columnIndex: number,
+  isRunningTotalCalculation: boolean,
+): void {
+  data.values[rowIndex][columnIndex] = data.values[rowIndex][columnIndex] || [];
+  const values = data.values[rowIndex][columnIndex];
   const { originalCell } = values;
 
   if (!originalCell) {
@@ -443,38 +487,46 @@ function processDataCell(data, rowIndex, columnIndex, isRunningTotalCalculation)
   data.values[rowIndex][columnIndex].allowResetting = isRunningTotalCalculation;
 }
 
-function applyDisplaySummaryMode(descriptions, data) {
-  const expressions: any = [];
-  const columnElements: any = [{ index: data.grandTotalColumnIndex, children: data.columns }];
-  const rowElements: any = [{ index: data.grandTotalRowIndex, children: data.rows }];
+function applyDisplaySummaryMode(descriptions: PivotGridDescriptions, data: SummaryData): void {
+  const expressions: (SummaryExpression | null | undefined)[] = [];
+  const columnElements: SummaryHeaderItem[] = [
+    { index: data.grandTotalColumnIndex, children: data.columns },
+  ];
+  const rowElements: SummaryHeaderItem[] = [
+    { index: data.grandTotalRowIndex, children: data.rows },
+  ];
   const valueFields = descriptions.values;
   const fieldsCache = createCache();
 
   data.values = data.values || [];
 
-  foreachTree(columnElements, (columnPath) => {
+  foreachTree(columnElements, (columnPath: SummaryHeaderItem[]) => {
     columnPath[0].isEmpty = [];
   }, false);
 
-  foreachTree(rowElements, (rowPath) => {
+  foreachTree(rowElements, (rowPath: SummaryHeaderItem[]) => {
     const rowItem = rowPath[0];
 
     rowItem.isEmpty = [];
 
     data.values[rowItem.index] = data.values[rowItem.index] || [];
 
-    foreachTree(columnElements, (columnPath) => {
+    foreachTree(columnElements, (columnPath: SummaryHeaderItem[]) => {
       const columnItem = columnPath[0];
-      let isEmptyCell;
 
       processDataCell(data, rowItem.index, columnItem.index, false);
 
+      if (!rowItem.isEmpty || !columnItem.isEmpty) {
+        return;
+      }
+
       for (let i = 0; i < valueFields.length; i += 1) {
         const field = valueFields[i];
-        const expression = expressions[i] = expressions[i] === undefined
-          ? getExpression(field)
-          : expressions[i];
-        isEmptyCell = false;
+        if (expressions[i] === undefined) {
+          expressions[i] = getExpression(field);
+        }
+        const expression = expressions[i];
+        let isEmptyCell = false;
         if (expression) {
           const expressionArg = new SummaryCell(
             columnPath,
@@ -485,18 +537,18 @@ function applyDisplaySummaryMode(descriptions, data) {
             fieldsCache,
           );
           const cell = expressionArg.cell();
-          const value = cell[i] = expression(expressionArg);
-          cell.postProcessedFlags[i] = true;
-          isEmptyCell = value === null || value === undefined;
+          if (cell?.postProcessedFlags) {
+            const value = expression(expressionArg);
+            cell[i] = value;
+            cell.postProcessedFlags[i] = true;
+            isEmptyCell = value === null || value === undefined;
+          }
         }
-        if (columnItem.isEmpty[i] === undefined) {
-          columnItem.isEmpty[i] = true;
-        }
-        if (rowItem.isEmpty[i] === undefined) {
-          rowItem.isEmpty[i] = true;
-        }
+        columnItem.isEmpty[i] ??= true;
+        rowItem.isEmpty[i] ??= true;
         if (!isEmptyCell) {
-          rowItem.isEmpty[i] = columnItem.isEmpty[i] = false;
+          columnItem.isEmpty[i] = false;
+          rowItem.isEmpty[i] = false;
         }
       }
     }, false);
@@ -506,29 +558,32 @@ function applyDisplaySummaryMode(descriptions, data) {
   data.isEmptyGrandTotalColumn = columnElements[0].isEmpty;
 }
 
-function applyRunningTotal(descriptions, data) {
-  const expressions: any = [];
-  const columnElements = [{ index: data.grandTotalColumnIndex, children: data.columns }];
-  const rowElements = [{ index: data.grandTotalRowIndex, children: data.rows }];
+function applyRunningTotal(descriptions: PivotGridDescriptions, data: SummaryData): void {
+  const expressions: (SummaryExpression | undefined)[] = [];
+  const columnElements: SummaryHeaderItem[] = [
+    { index: data.grandTotalColumnIndex, children: data.columns },
+  ];
+  const rowElements: SummaryHeaderItem[] = [
+    { index: data.grandTotalRowIndex, children: data.rows },
+  ];
   const valueFields = descriptions.values;
   const fieldsCache = createCache();
 
   data.values = data.values || [];
 
-  foreachTree(rowElements, (rowPath) => {
+  foreachTree(rowElements, (rowPath: SummaryHeaderItem[]) => {
     const rowItem = rowPath[0];
     data.values[rowItem.index] = data.values[rowItem.index] || [];
 
-    foreachTree(columnElements, (columnPath) => {
+    foreachTree(columnElements, (columnPath: SummaryHeaderItem[]) => {
       const columnItem = columnPath[0];
 
       processDataCell(data, rowItem.index, columnItem.index, true);
 
       for (let i = 0; i < valueFields.length; i += 1) {
         const field = valueFields[i];
-        const expression = expressions[i] = expressions[i] === undefined
-          ? createRunningTotalExpr(field)
-          : expressions[i];
+        expressions[i] ??= createRunningTotalExpr(field);
+        const expression = expressions[i];
 
         if (expression) {
           const expressionArg = new SummaryCell(
@@ -540,18 +595,25 @@ function applyRunningTotal(descriptions, data) {
             fieldsCache,
           );
           const cell = expressionArg.cell();
-          cell[i] = expression(expressionArg);
-          cell.postProcessedFlags[i] = true;
+          if (cell?.postProcessedFlags) {
+            cell[i] = expression(expressionArg);
+            cell.postProcessedFlags[i] = true;
+          }
         }
       }
     }, false);
   }, false);
 }
 
-function createMockSummaryCell(descriptions, fields, indices) {
+function createMockSummaryCell(
+  descriptions: PivotGridDescriptions,
+  fields: PivotGridField[],
+  indices: Record<number, boolean>,
+): SummaryCell {
   const summaryCell = new SummaryCell([], [], {}, descriptions, 0);
-  summaryCell.value = function (fieldId) {
+  summaryCell.value = function value(fieldId?: boolean | SummaryFieldId | null): void {
     if (isDefined(fieldId)) {
+      // @ts-expect-error findField() finds nothing for a field object or a boolean
       const index = findField(fields, fieldId);
       const field = fields[index];
       if (!indices[index] && field && !isDefined(field.area)) {
@@ -560,10 +622,10 @@ function createMockSummaryCell(descriptions, fields, indices) {
       }
     }
   };
-  summaryCell.grandTotal = function () {
+  summaryCell.grandTotal = function grandTotal(this: SummaryCell): SummaryCell {
     return this;
   };
-  summaryCell.children = function () {
+  summaryCell.children = function children(): SummaryCell[] {
     return [];
   };
 
