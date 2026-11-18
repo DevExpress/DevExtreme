@@ -323,4 +323,132 @@ describe('GridCore focus', () => {
       expect(countFocusedRows()).toBe(1);
     });
   });
+
+  describe('when another row is updated via the store push API with repaintChangesOnly', () => {
+    it('should keep DOM focus on the focused cell (T1338023)', async () => {
+      const { instance } = await createDataGrid({
+        dataSource: {
+          store: {
+            type: 'array',
+            key: 'id',
+            data: [
+              { id: 1, name: 'Item 1' },
+              { id: 2, name: 'Item 2' },
+            ],
+          },
+          pushAggregationTimeout: 0,
+        },
+        focusedRowEnabled: true,
+        focusedRowKey: 1,
+        repaintChangesOnly: true,
+        columns: ['id', 'name'],
+      });
+
+      const cell = instance.getCellElement(0, 'name') as HTMLElement;
+      instance.focus(cell);
+      await flushAsync();
+      cell.dispatchEvent(new KeyboardEvent('keydown', { key: 'Shift', bubbles: true }));
+
+      expect(document.activeElement).toBe(cell);
+
+      instance.getDataSource().store().push([{ type: 'update', key: 2, data: { name: 'Item 2 updated' } }]);
+      await flushAsync();
+
+      expect($(instance.getCellElement(1, 'name')).text()).toBe('Item 2 updated');
+      expect(cell.hasAttribute('tabindex')).toBe(true);
+      expect($(instance.getRowElement(0)).get(0).hasAttribute('tabindex')).toBe(false);
+      expect(document.activeElement).toBe(cell);
+    });
+  });
+
+  describe('when a focused group row is updated via the store push API with repaintChangesOnly', () => {
+    it('should keep DOM focus on the group row in cell focus mode (T1338023)', async () => {
+      const { instance } = await createDataGrid({
+        dataSource: {
+          store: {
+            type: 'array',
+            key: 'id',
+            data: [
+              { id: 1, group: 'A', value: 1 },
+              { id: 2, group: 'A', value: 2 },
+              { id: 3, group: 'B', value: 3 },
+            ],
+          },
+          reshapeOnPush: true,
+          pushAggregationTimeout: 0,
+        },
+        columns: ['id', { dataField: 'group', groupIndex: 0 }, 'value'],
+        summary: { groupItems: [{ column: 'value', summaryType: 'sum' }] },
+        focusedRowEnabled: true,
+        repaintChangesOnly: true,
+      });
+
+      const cell = instance.getCellElement(1, 'id') as HTMLElement;
+      instance.focus(cell);
+      await flushAsync();
+      cell.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowUp', bubbles: true }));
+      await flushAsync();
+      const groupRow = $(instance.getRowElement(0)).get(0);
+      groupRow.dispatchEvent(new KeyboardEvent('keydown', { key: 'Shift', bubbles: true }));
+
+      expect(instance.option('focusedRowKey')).toEqual(['A']);
+      expect(document.activeElement).toBe(groupRow);
+      expect(groupRow.classList.contains('dx-focused')).toBe(true);
+
+      const removeAttribute = jest.spyOn(groupRow, 'removeAttribute');
+      instance.getDataSource().store().push([{ type: 'update', key: 1, data: { value: 100 } }]);
+      await flushAsync();
+
+      expect($(instance.getRowElement(0)).text()).toContain('102');
+      expect(removeAttribute).not.toHaveBeenCalledWith('tabindex');
+      expect(groupRow.classList.contains('dx-focused')).toBe(true);
+      expect(document.activeElement).toBe(groupRow);
+    });
+  });
+
+  describe('when focusedRowKey is changed with a custom tabIndex', () => {
+    it('should apply the tabIndex option to the new focused row (T1338023)', async () => {
+      const { instance } = await createDataGrid({
+        dataSource: [
+          { id: 1, name: 'Item 1' },
+          { id: 2, name: 'Item 2' },
+        ],
+        keyExpr: 'id',
+        focusedRowEnabled: true,
+        focusedRowKey: 1,
+        tabIndex: 3,
+        columns: ['id', 'name'],
+      });
+
+      instance.option('focusedRowKey', 2);
+      await flushAsync();
+
+      expect($(instance.getRowElement(1)).get(0).getAttribute('tabindex')).toBe('3');
+    });
+  });
+
+  describe('when the focused row has an expanded master detail', () => {
+    it('should not make the detail row a tab stop (T1338023)', async () => {
+      const { instance } = await createDataGrid({
+        dataSource: [
+          { id: 1, name: 'Item 1' },
+          { id: 2, name: 'Item 2' },
+        ],
+        keyExpr: 'id',
+        focusedRowEnabled: true,
+        focusedRowKey: 1,
+        columns: ['id', 'name'],
+        masterDetail: {
+          enabled: true,
+          template: (container) => { $(container).text('detail'); },
+        },
+      });
+
+      await instance.expandRow(1);
+      await flushAsync();
+
+      expect(instance.getVisibleRows()[1].rowType).toBe('detail');
+      expect($(instance.getRowElement(1)).get(0).hasAttribute('tabindex')).toBe(false);
+    });
+  });
 });
