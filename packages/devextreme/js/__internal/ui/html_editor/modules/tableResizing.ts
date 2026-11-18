@@ -169,7 +169,11 @@ export default class TableResizingModule extends BaseModule {
   }
 
   _attachEvents(): void {
-    this._detachEvents();
+    if (this._quillTextChangeHandler) {
+      this.quill.off('text-change', this._quillTextChangeHandler);
+    }
+
+    eventsEngine.off(this.editorInstance._getContent(), SCROLL_EVENT);
     eventsEngine.on(
       this.editorInstance._getContent(),
       SCROLL_EVENT,

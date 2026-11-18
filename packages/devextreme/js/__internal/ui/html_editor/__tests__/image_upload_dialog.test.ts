@@ -47,6 +47,10 @@ const DIALOG_CONFIGS: DialogConfig[] = UPLOAD_MODES.flatMap((mode) => TAB_SETS.m
   fileTabIndex: tabSet.fileTabIndex,
 })));
 
+const EMPTY_RECT: DOMRect = {
+  x: 0, y: 0, width: 0, height: 0, top: 0, right: 0, bottom: 0, left: 0, toJSON: () => ({}),
+};
+
 const editors: HtmlEditor[] = [];
 
 const getAddButton = (): Button => Button.getInstance(
@@ -103,7 +107,7 @@ describe('HtmlEditor image dialog, the file tab', () => {
     jest.useFakeTimers();
     fx.off = true;
     // jsdom has no layout for a Range, and Quill reads it when the selection is set
-    Range.prototype.getBoundingClientRect = (): DOMRect => new DOMRect();
+    Range.prototype.getBoundingClientRect = (): DOMRect => EMPTY_RECT;
   });
 
   afterEach(() => {
