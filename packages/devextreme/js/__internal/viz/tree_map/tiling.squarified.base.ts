@@ -5,7 +5,6 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-/* eslint-disable prefer-destructuring */
 
 import { buildSidesData, calculateRectangles, getStaticSideIndex } from '@ts/viz/tree_map/tiling';
 
@@ -70,7 +69,7 @@ function doStep(nodes, head, context) {
 }
 
 export default function (data, accumulate, isFixedStaticSide) {
-  const items = data.items;
+  const { items } = data;
   const ii = items.length;
   let i;
   const context = {

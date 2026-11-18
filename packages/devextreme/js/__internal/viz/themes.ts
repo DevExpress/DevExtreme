@@ -10,7 +10,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-use-before-define */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-/* eslint-disable prefer-destructuring */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 
@@ -75,9 +74,9 @@ function getThemeInfo(themeName, splitter) {
 
 function registerThemeName(themeName, targetThemeName) {
   const themeInfo = getThemeInfo(themeName, '.') || { name: themeName };
-  const name = themeInfo.name;
+  const { name } = themeInfo;
   // @ts-expect-error
-  const scheme = themeInfo.scheme;
+  const { scheme } = themeInfo;
   if (scheme) {
     const fullThemeKey = `${name}.${scheme}`;
 
@@ -220,7 +219,7 @@ function patchAxes(theme) {
 }
 
 function patchMapLayers(theme) {
-  const map = theme.map;
+  const { map } = theme;
   ['area', 'line', 'marker'].forEach((section) => {
     mergeObject(map, `layer:${section}`, null, map.layer);
   });

@@ -8,7 +8,6 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-/* eslint-disable prefer-destructuring */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 
 import { isDefined } from '@ts/core/utils/type';
@@ -49,7 +48,7 @@ export const plugin = {
       widget: that,
       root: that._renderer.root,
       getData(e, tooltipData) {
-        const target = e.target;
+        const { target } = e;
         const data = target[dataKey];
         if (isDefined(data)) {
           return data;

@@ -1,12 +1,11 @@
 /* eslint-disable no-nested-ternary */
-/* eslint-disable prefer-destructuring */
 
 import supportUtils from '@ts/core/utils/support';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 import { formatValue, isFirefoxOnAndroid, utils } from '@ts/viz/range_selector/common';
 import SliderMarker from '@ts/viz/range_selector/slider_marker';
 
-const animationSettings = utils.animationSettings;
+const { animationSettings } = utils;
 
 const SPLITTER_WIDTH = 8;
 const TOUCH_SPLITTER_WIDTH = 20;

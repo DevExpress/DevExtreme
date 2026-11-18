@@ -5,7 +5,6 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-multi-assign */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable prefer-destructuring */
 /* eslint-disable no-else-return */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
@@ -113,8 +112,7 @@ export default _extend({}, symbolPoint, {
   }) {
     const that = this;
     const angleFunctions = _getCosAndSin(that.middleAngle);
-    const radiusInner = that.radiusInner;
-    const radiusOuter = that.radiusOuter;
+    const { radiusInner, radiusOuter } = that;
     const columnsPosition = position === 'columns';
     let rad;
     let x;
@@ -157,9 +155,9 @@ export default _extend({}, symbolPoint, {
     const rightBorderX = visibleArea.maxX - labelWidth;
     const leftBorderX = visibleArea.minX;
     const angleOfPoint = _normalizeAngle(that.middleAngle);
-    const centerX = that.centerX;
-    const connectorOffset = options.connectorOffset;
-    let x = coord.x;
+    const { centerX } = that;
+    const { connectorOffset } = options;
+    let { x } = coord;
 
     if (options.position === 'columns') {
       if (angleOfPoint <= 90 || angleOfPoint >= 270) {
@@ -200,8 +198,8 @@ export default _extend({}, symbolPoint, {
   },
 
   _checkVerticalLabelPosition(coord, box, visibleArea) {
-    const x = coord.x;
-    let y = coord.y;
+    const { x } = coord;
+    let { y } = coord;
 
     if (coord.y + box.height > visibleArea.maxY) {
       y = visibleArea.maxY - box.height;
@@ -218,8 +216,8 @@ export default _extend({}, symbolPoint, {
   },
 
   _checkHorizontalLabelPosition(coord, box, visibleArea) {
-    let x = coord.x;
-    const y = coord.y;
+    let { x } = coord;
+    const { y } = coord;
     if (coord.x + box.width > visibleArea.maxX) {
       x = visibleArea.maxX - box.width;
     } else if (coord.x < visibleArea.minX) {
@@ -233,8 +231,8 @@ export default _extend({}, symbolPoint, {
     const label = that._label;
     const box = label.getBoundingRect();
     const visibleArea = that._getVisibleArea();
-    const position = label.getLayoutOptions().position;
-    let width = box.width;
+    const { position } = label.getLayoutOptions();
+    let { width } = box;
     let rowCountChanged = false;
 
     if (position === 'columns' && that.series.index > 0) {
@@ -284,10 +282,9 @@ export default _extend({}, symbolPoint, {
 
   _drawMarker(renderer, group, animationEnabled, firstDrawing) {
     const that = this;
-    let radiusOuter = that.radiusOuter;
-    let radiusInner = that.radiusInner;
-    let fromAngle = that.fromAngle;
-    let toAngle = that.toAngle;
+    let {
+      radiusOuter, radiusInner, fromAngle, toAngle,
+    } = that;
 
     if (animationEnabled) {
       radiusInner = radiusOuter = 0;
@@ -307,8 +304,7 @@ export default _extend({}, symbolPoint, {
   getTooltipParams() {
     const that = this;
     const angleFunctions = _getCosAndSin(that.middleAngle);
-    const radiusInner = that.radiusInner;
-    const radiusOuter = that.radiusOuter;
+    const { radiusInner, radiusOuter } = that;
     return {
       x: that.centerX + (radiusInner + (radiusOuter - radiusInner) / 2) * angleFunctions.cos,
       y: that.centerY - (radiusInner + (radiusOuter - radiusInner) / 2) * angleFunctions.sin,
@@ -319,8 +315,7 @@ export default _extend({}, symbolPoint, {
   _translate() {
     const that = this;
     const angle = that.shiftedAngle || 0;
-    const value = that.value;
-    const minValue = that.minValue;
+    const { value, minValue } = that;
     const translator = that._getValTranslator();
 
     that.fromAngle = translator.translate(minValue) + angle;
@@ -388,7 +383,7 @@ export default _extend({}, symbolPoint, {
 
   _getFormatObject(tooltip) {
     const formatObject = symbolPoint._getFormatObject.call(this, tooltip);
-    const percent = this.percent;
+    const { percent } = this;
 
     formatObject.percent = percent;
     formatObject.percentText = tooltip.formatValue(percent, 'percent');

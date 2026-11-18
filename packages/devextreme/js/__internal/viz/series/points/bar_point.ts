@@ -6,7 +6,6 @@
 /* eslint-disable no-multi-assign */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-/* eslint-disable prefer-destructuring */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 
 import { extend } from '@ts/core/utils/extend';
@@ -27,8 +26,8 @@ const TOP = 'top';
 const BOTTOM = 'bottom';
 
 function getLabelOrientation(point) {
-  const initialValue = point.initialValue;
-  const invert = point._getValTranslator().getBusinessRange().invert;
+  const { initialValue } = point;
+  const { invert } = point._getValTranslator().getBusinessRange();
   const isDiscreteValue = point.series.valueAxisType === 'discrete';
   const isFullStacked = point.series.isFullStackedSeries();
   const notAxisInverted = (!isDiscreteValue && ((initialValue >= 0 && !invert)
@@ -163,7 +162,7 @@ export default _extend({}, symbolPoint, {
     const that = this;
     const style = that._getStyle();
     const r = that._options.cornerRadius;
-    const rotated = that._options.rotated;
+    const { rotated } = that._options;
     let {
       x, y, width, height,
     } = that.getMarkerCoords();
@@ -187,10 +186,9 @@ export default _extend({}, symbolPoint, {
 
   _getSettingsForTracker() {
     const that = this;
-    let y = that.y;
-    let height = that.height;
-    let x = that.x;
-    let width = that.width;
+    let {
+      y, height, x, width,
+    } = that;
 
     if (that._options.rotated) {
       if (width === 1) {
@@ -211,7 +209,7 @@ export default _extend({}, symbolPoint, {
   },
 
   getGraphicSettings() {
-    const graphic = this.graphic;
+    const { graphic } = this;
     return {
       x: graphic.attr('x'),
       y: graphic.attr('y'),
@@ -292,7 +290,7 @@ export default _extend({}, symbolPoint, {
   // TODO check & rework
   _translate() {
     const that = this;
-    const rotated = that._options.rotated;
+    const { rotated } = that._options;
     const valAxis = rotated ? 'x' : 'y';
     const argAxis = rotated ? 'y' : 'x';
     const valIntervalName = rotated ? 'width' : 'height';
@@ -324,13 +322,14 @@ export default _extend({}, symbolPoint, {
     that._translateErrorBars(argVisibleArea);
 
     if (that.inVisibleArea && that[argAxis] !== null) {
-      if (that[argAxis] < argVisibleArea[0]) {
-        that[argIntervalName] = that[argIntervalName] - (argVisibleArea[0] - that[argAxis]);
-        that[argAxis] = argVisibleArea[0];
+      const [minArg, maxArg] = argVisibleArea;
+      if (that[argAxis] < minArg) {
+        that[argIntervalName] = that[argIntervalName] - (minArg - that[argAxis]);
+        that[argAxis] = minArg;
       }
 
-      if (that[argAxis] + that[argIntervalName] > argVisibleArea[1]) {
-        that[argIntervalName] = argVisibleArea[1] - that[argAxis];
+      if (that[argAxis] + that[argIntervalName] > maxArg) {
+        that[argIntervalName] = maxArg - that[argAxis];
       }
     }
   },
@@ -341,12 +340,11 @@ export default _extend({}, symbolPoint, {
 
   getMarkerCoords() {
     const that = this;
-    let x = that.x;
-    const y = that.y;
-    let width = that.width;
-    let height = that.height;
+    let { x } = that;
+    const { y } = that;
+    let { width, height } = that;
     const argAxis = that.series.getArgumentAxis();
-    const rotated = that._options.rotated;
+    const { rotated } = that._options;
 
     if (argAxis.getAxisPosition) {
       const axisOptions = argAxis.getOptions();

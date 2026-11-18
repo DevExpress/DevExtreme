@@ -12,7 +12,6 @@
 /* eslint-disable no-multi-assign */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-/* eslint-disable prefer-destructuring */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 
@@ -150,7 +149,7 @@ chart.rangebar = _extend({}, barSeries, baseRangeSeries);
 // @ts-expect-error
 chart.rangearea = _extend({}, areaSeries, {
   _drawPoint(options) {
-    const point = options.point;
+    const { point } = options;
 
     if (point.isInVisibleArea()) {
       point.clearVisibility();

@@ -12,7 +12,6 @@
 /* eslint-disable no-multi-assign */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-use-before-define */
-/* eslint-disable prefer-destructuring */
 /* eslint-disable no-else-return */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
@@ -92,9 +91,9 @@ function correctStackCoordinates(
     const stackIndex = seriesStackIndexCallback(currentStacks.indexOf(stack), currentStacks.length);
     const points = series.getPointsByArg(arg, true);
     const barPadding = validateBarPadding(series.getOptions().barPadding);
-    const barWidth = series.getOptions().barWidth;
+    const { barWidth } = series.getOptions();
     let offset = getOffset(stackIndex, parameters);
-    let width = parameters.width;
+    let { width } = parameters;
     let extraParameters;
 
     if (stackIndex === -1) {
@@ -125,7 +124,7 @@ function adjustBarSeriesDimensionsCore(
   const commonStacks: string[] = [];
   const allArguments: ThemeValue[] = [];
   const seriesInStacks = {};
-  const barGroupWidth = options.barGroupWidth;
+  const { barGroupWidth } = options;
   const argumentAxis = series[0]?.getArgumentAxis();
   let interval;
 
@@ -299,7 +298,7 @@ function getFirstValueSign(series: ThemeValue): number {
 
 function adjustStackedSeriesValues(): void {
   const that = this;
-  const negativesAsZeroes = that._options.negativesAsZeroes;
+  const { negativesAsZeroes } = that._options;
   const series = getVisibleSeries(that);
   const stackKeepers = {
     positive: {},
@@ -366,7 +365,7 @@ function adjustStackedSeriesValues(): void {
     });
   });
   series.forEach((singleSeries) => {
-    const holes = singleSeries.holes;
+    const { holes } = singleSeries;
     singleSeries.getPoints().forEach((point) => {
       const argument = point.argument.valueOf();
       point.resetHoles();
@@ -399,7 +398,7 @@ function updateStackedSeriesValues(): void {
     negative: {},
   };
   _each(series, (_, singleSeries) => {
-    const minBarSize = singleSeries.getOptions().minBarSize;
+    const { minBarSize } = singleSeries.getOptions();
     const valueAxisTranslator = singleSeries.getValueAxis().getTranslator();
     const minShownBusinessValue = minBarSize && valueAxisTranslator.getMinBarSize(minBarSize);
     const stackName = singleSeries.getStackName();
@@ -460,7 +459,7 @@ function updateRangeSeriesValues(): void {
   const that = this;
   const series = getVisibleSeries(that);
   _each(series, (_, singleSeries) => {
-    const minBarSize = singleSeries.getOptions().minBarSize;
+    const { minBarSize } = singleSeries.getOptions();
     const valueAxisTranslator = singleSeries.getValueAxis().getTranslator();
     const minShownBusinessValue = minBarSize && valueAxisTranslator.getMinBarSize(minBarSize);
     if (minShownBusinessValue) {
@@ -484,7 +483,7 @@ function updateRangeSeriesValues(): void {
 
 function updateBarSeriesValues(): void {
   _each(this.series, (_, singleSeries) => {
-    const minBarSize = singleSeries.getOptions().minBarSize;
+    const { minBarSize } = singleSeries.getOptions();
     const valueAxisTranslator = singleSeries.getValueAxis().getTranslator();
     const minShownBusinessValue = minBarSize && valueAxisTranslator.getMinBarSize(minBarSize);
 
@@ -643,7 +642,7 @@ export let SeriesFamily = class SeriesFamily {
   }
 
   add(series: ThemeValue[]): void {
-    const type = this.type;
+    const { type } = this;
     this.series = _map(
       series,
       (singleSeries) => (singleSeries.type === type ? singleSeries : null),

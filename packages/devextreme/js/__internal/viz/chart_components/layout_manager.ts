@@ -8,7 +8,6 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-multi-assign */
 /* eslint-disable @typescript-eslint/no-use-before-define */
-/* eslint-disable prefer-destructuring */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 
 import { isNumeric as _isNumber } from '@ts/core/utils/type';
@@ -144,8 +143,7 @@ function correctLabelRadius(
   let curRadius;
   let i;
   let runningWidth = 0;
-  const sizes = labelSizes.sizes;
-  const rSizes = labelSizes.rSizes;
+  const { sizes, rSizes } = labelSizes;
 
   for (i = 0; i < series.length; i++) {
     if (sizes[i] === 0) {
@@ -256,7 +254,7 @@ let LayoutManager = class LayoutManager {
     const paneSpaceWidth = canvas.width - canvas.left - canvas.right;
     const paneCenterX = paneSpaceWidth / 2 + canvas.left;
     const paneCenterY = paneSpaceHeight / 2 + canvas.top;
-    const piePercentage = this._options.piePercentage;
+    const { piePercentage } = this._options;
     let availableRadius;
     let minR;
 
@@ -289,7 +287,7 @@ let LayoutManager = class LayoutManager {
     series: ThemeValue[],
     layout: { x: number; y: number; radius: number },
   ): PieLayout {
-    const radius = layout.radius;
+    const { radius } = layout;
 
     return {
       centerX: floor(layout.x),
@@ -322,9 +320,7 @@ let LayoutManager = class LayoutManager {
     fixedSizeCallback?: (pane: ThemeValue) => PaneFixedSize,
   ): { width: number; height: number } | false {
     const options = this._options;
-    const width = options.width;
-    const height = options.height;
-    const piePercentage = options.piePercentage;
+    const { width, height, piePercentage } = options;
     const percentageIsValid = _isNumber(piePercentage);
     let needHorizontalSpace = 0;
     let needVerticalSpace = 0;
@@ -381,8 +377,7 @@ let LayoutManager = class LayoutManager {
       return;
     }
 
-    const position = layoutOptions.position;
-    const cutSide = layoutOptions.cutSide;
+    const { position, cutSide } = layoutOptions;
     const my = {
       horizontal: position.horizontal,
       vertical: position.vertical,

@@ -5,7 +5,6 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-/* eslint-disable prefer-destructuring */
 /* eslint-disable no-else-return */
 
 import validatorModule from '@ts/viz/sankey/data_validator';
@@ -122,7 +121,7 @@ export const layout = {
     const maxNodeNum = graphModule.routines.maxOfArray(
       cascades.map((nodesInCascade) => Object.keys(nodesInCascade).length),
     );
-    let nodePadding = options.nodePadding;
+    let { nodePadding } = options;
     let heightAvailable = options.height - nodePadding * (maxNodeNum - 1);
 
     if (heightAvailable < 0) {
