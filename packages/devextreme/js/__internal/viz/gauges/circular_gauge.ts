@@ -260,8 +260,7 @@ class CircularGauge extends dxGauge {
     return this._area.radius;
   }
 
-  _getTicksOrientation(scaleOptions: ThemeValue): string {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+  _getTicksOrientation(scaleOptions: { orientation: string }): string {
     return scaleOptions.orientation;
   }
 
