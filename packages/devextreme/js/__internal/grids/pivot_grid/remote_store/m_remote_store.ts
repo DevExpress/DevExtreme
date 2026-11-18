@@ -412,8 +412,7 @@ function getFiltersForDimension(fields: PivotGridField[] | undefined): PivotGrid
 function getExpandedIndex(options: ExpandedLevelOptions, axis: PivotGridAxis): number {
   if (options.headerName) {
     if (axis === options.headerName) {
-      // @ts-expect-error path is set together with headerName
-      return options.path.length;
+      return options.path?.length ?? 0;
     }
 
     if (options.oppositePath) {
