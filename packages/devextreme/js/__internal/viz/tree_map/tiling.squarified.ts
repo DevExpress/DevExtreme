@@ -1,17 +1,16 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
 
 import { addAlgorithm } from '@ts/viz/tree_map/tiling';
 import _squarify from '@ts/viz/tree_map/tiling.squarified.base';
 
 const _max = Math.max;
 
-function accumulate(total, current) {
+function accumulate(total, current): number {
   return _max(total, current);
 }
 
-function squarified(data) {
+function squarified(data): void {
   return _squarify(data, accumulate, false);
 }
 

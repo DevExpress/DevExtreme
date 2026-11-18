@@ -40,8 +40,8 @@ const createTreeList = async (
     .attr('id', TREELIST_CONTAINER_ID)
     .appendTo(document.body);
 
-  const instance = new TreeList($container.get(0) as HTMLDivElement, options);
-  const component = new TreeListModel($container.get(0) as HTMLElement);
+  const instance = new TreeList($container.get<HTMLDivElement>(0), options);
+  const component = new TreeListModel($container.get<HTMLElement>(0));
 
   jest.runAllTimers();
 

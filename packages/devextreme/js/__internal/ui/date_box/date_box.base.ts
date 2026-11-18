@@ -363,7 +363,7 @@ class DateBox<
       return;
     }
 
-    const inputElement = this._input().get(0) as HTMLElement;
+    const inputElement = this._input().get<HTMLElement>(0);
     const { rtlEnabled } = this.option();
     const clearButtonWidth = this._getClearButtonWidth();
     const longestElementDimensions = this._getLongestElementDimensions();
@@ -394,7 +394,7 @@ class DateBox<
 
   _getClearButtonWidth(): number {
     let clearButtonWidth = 0;
-    const input = this._input().get(0) as HTMLInputElement;
+    const input = this._input().get<HTMLInputElement>(0);
 
     if (this._isClearButtonVisible() && input.value === '') {
       const clearButtonElement = this.$element().find(`.${DX_CLEAR_BUTTON_CLASS}`).get(0);

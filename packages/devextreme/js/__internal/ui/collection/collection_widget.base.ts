@@ -960,11 +960,8 @@ class CollectionWidget<
     const itemSelector = this._itemSelector();
     const pointerDownEvent = pointerEvents.down;
     const pointerUpEvent = pointerEvents.up;
-    // @ts-expect-error ts-error
     const clickEventNamespace = addNamespace(clickEventName, this.NAME);
-    // @ts-expect-error ts-error
     const pointerDownEventNamespace = addNamespace(pointerDownEvent, this.NAME);
-    // @ts-expect-error ts-error
     const pointerUpEventNamespace = addNamespace(pointerUpEvent, this.NAME);
 
     const pointerDownAction = new Action((args) => {
@@ -1095,7 +1092,6 @@ class CollectionWidget<
   _attachHoldEvent(): void {
     const $itemContainer = this._itemContainer();
     const itemSelector = this._itemSelector();
-    // @ts-expect-error ts-error
     const eventName = addNamespace(holdEvent.name, this.NAME);
 
     eventsEngine.off($itemContainer, eventName, itemSelector);
@@ -1129,7 +1125,6 @@ class CollectionWidget<
   _attachContextMenuEvent(): void {
     const $itemContainer = this._itemContainer();
     const itemSelector = this._itemSelector();
-    // @ts-expect-error ts-error
     const eventName = addNamespace(contextMenuEventName, this.NAME);
 
     eventsEngine.off($itemContainer, eventName, itemSelector);
@@ -1569,7 +1564,6 @@ class CollectionWidget<
 // @ts-expect-error ts-error
 CollectionWidget.ItemClass = CollectionWidgetItem;
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-(CollectionWidget as any).include(DataHelperMixin);
+CollectionWidget.include(DataHelperMixin);
 
 export default CollectionWidget;

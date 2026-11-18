@@ -223,8 +223,7 @@ export class Editor extends InfernoWrapperComponent<EditorProps> {
       <Widget
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         ref={this.widgetRef as any}
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        rootElementRef={this.rootElementRef as any}
+        rootElementRef={this.rootElementRef}
         aria={this.aria}
         classes={this.cssClasses}
         activeStateEnabled={this.props.activeStateEnabled}

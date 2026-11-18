@@ -5,7 +5,6 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable @typescript-eslint/no-shadow */
 /* eslint-disable consistent-return */
-/* eslint-disable @stylistic/max-len */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
@@ -61,7 +60,10 @@ chart.bubble = _extend({}, scatterSeries, {
 
   _checkData(data, skippedFields) {
     // @ts-expect-error
-    return scatterSeries._checkData.call(this, data, skippedFields, { value: this.getValueFields()[0], size: this.getSizeField() });
+    return scatterSeries._checkData.call(this, data, skippedFields, {
+      value: this.getValueFields()[0],
+      size: this.getSizeField(),
+    });
   },
 
   _getPointDataSelector(data, options) {
@@ -111,12 +113,16 @@ chart.bubble = _extend({}, scatterSeries, {
     const that = this;
     const lastPointIndex = that._drawnPoints.length - 1;
     const labelsGroup = that._labelsGroup;
-    const labelAnimFunc = function () {
+    const labelAnimFunc = function (): void {
       labelsGroup && labelsGroup.animate({ opacity: 1 }, { duration: that._defaultDuration });
     };
 
     _each(that._drawnPoints || [], (i, p) => {
-      p.animate(i === lastPointIndex ? labelAnimFunc : undefined, { r: p.bubbleSize, translateX: p.x, translateY: p.y });
+      p.animate(i === lastPointIndex ? labelAnimFunc : undefined, {
+        r: p.bubbleSize,
+        translateX: p.x,
+        translateY: p.y,
+      });
     });
   },
 

@@ -6,9 +6,7 @@
 /* eslint-disable import/no-mutable-exports */
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable no-multi-assign */
-/* eslint-disable @stylistic/max-len */
 /* eslint-disable max-classes-per-file */
-/* eslint-disable prefer-destructuring */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 
 import { paintedColor } from '@ts/core/utils/css_variables';
@@ -142,14 +140,19 @@ let Legend = class Legend extends _BaseLegend {
   }
 
   _bindData(arg: LegendDataSource): void {
-    this._params.dataExchanger.bind(this._dataCategory = arg.category, this._dataName = arg.name, this._onDataChanged);
+    this._params.dataExchanger.bind(
+      (this._dataCategory = arg.category),
+      (this._dataName = arg.name),
+      this._onDataChanged,
+    );
   }
 
-  // The `_root` should be appended or removed here but there is no way to check if core.Legend is actually enabled or not
+  // The `_root` should be appended or removed here but there is no way to check if core.Legend is
+  // actually enabled or not
   setOptions(options: ThemeValue): this {
     this.update(this._data, options, this._params.themeManager.theme('legend').title);
     this._unbindData();
-    const source = options.source;
+    const { source } = options;
     this._bindData(source ? { category: source.layer, name: source.grouping } : unknownSource);
     this.updateLayout();
     return this;

@@ -80,7 +80,6 @@ class TreeList extends GridCoreWidget<dxTreeListOptions> {
     return super._defaultOptionsRules().concat([
       {
         device(): boolean {
-          // @ts-expect-error
           return isMaterialBased();
         },
         options: {

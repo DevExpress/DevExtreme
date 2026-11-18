@@ -348,8 +348,8 @@ class BaseWidget extends DOMComponent<any, any> {
     return {
       items: [],
       groups: [],
-      launchRequest: () => {},
-      doneRequest: () => {},
+      launchRequest: (): void => {},
+      doneRequest: (): void => {},
     };
   }
 
@@ -511,7 +511,7 @@ class BaseWidget extends DOMComponent<any, any> {
     }
 
     this._proxiedTargetParentsScrollHandler = this._proxiedTargetParentsScrollHandler
-            || function () { this._stopCurrentHandling(); }.bind(this);
+            || function (): void { this._stopCurrentHandling(); }.bind(this);
 
     eventsEngine.off($('').add(this._$prevRootParents), scrollEvents, this._proxiedTargetParentsScrollHandler);
 

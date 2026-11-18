@@ -135,6 +135,11 @@ The trace holds every action with the DOM before and after it, the network and t
 failed screenshot comparison uploads its `-expected`, `-actual` and `-diff` images alongside, so a
 failure that only happens on CI can be diagnosed without reproducing it.
 
+On CI a failed test runs once more, in a new browser. A test that passes then does not fail the
+job: the log lists it under "flaky", and the traces artifact keeps its failed run. A test that
+wrote a missing etalon is the exception: its retry passes against that file, so the job fails on
+the new etalon instead.
+
 ## Writing a test
 
 ```ts
@@ -164,3 +169,38 @@ viewport is 1200×800 and the widgets of the previous test are disposed.
 | `RequestMock`                   | `mockApi` on top of `page.route`              |
 | `mockdate`                      | `mockDate` on top of `page.clock`             |
 | machine timezone on the agent   | `TIMEZONE` → the browser context              |
+| `t.typeText`                    | `locator.pressSequentially`                   |
+| `t.pressKey('ctrl+a')`          | `page.keyboard.press('Control+a')`            |
+| `t.expect(selector.value)`      | `expect(locator).toHaveValue`                 |
+| `t.expect(widget.option('x'))`  | `expect.poll(() => widget.option('x'))`       |
+| `.before(...)` of a test        | the first lines of the test                   |
+| `meta({ browserSize })`         | `test.use({ browserSize })`                   |
+| `meta({ runInTheme })`          | `test.use({ theme })`                         |
+| `meta({ themes })`              | `{ tag: ['@generic.light'] }`                 |
+
+## Porting a TestCafe test
+
+Port a test one to one: the same steps, the same checks, the same screenshot names. A title changes
+only when it repeats in the file, which Playwright rejects: add the loop parameters to it.
+
+**Typing.** `fill` sets the value at once and sends no key events, so masked, numeric and date
+editors do not react to it. Type with `pressSequentially`, and press keys under their Playwright
+names: `Enter`, `Escape`, `ArrowLeft`, `Control+a`.
+
+**Checks.** TestCafe retried `t.expect(selector.value)`; here only `expect(locator)` and
+`expect.poll` retry. `expect(await locator.inputValue()).toBe(x)` reads the value once and fails
+whenever the page is a moment late.
+
+**Waiting.** A step waits for the state it needs, never for time. `helpers/`, `models/` and the
+test folders migrated under this rule (see `eslint.config.mjs`) may not use `waitForTimeout`,
+`setTimeout`, `force: true`, `toPass`, a `timeout` option or a call that raises a timeout
+(`test.setTimeout`, `page.setDefaultTimeout`). When a widget reacts to a change
+through an observer and leaves nothing to assert on, `waitForNextFrame` waits for the frame in which
+the observer runs.
+
+**Clicks.** A click is a real one: it lands on the topmost element at that point and fails when
+that is not the target. TestCafe delivered a click to a covered element anyway, so a test that
+relied on it needs the target made reachable, not the check switched off.
+
+**Page errors.** A test fails on an uncaught error in the page, as it did in TestCafe. A test whose
+TestCafe version ended with `expect(true).ok()` checks exactly that and needs no assertion.

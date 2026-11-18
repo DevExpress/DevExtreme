@@ -774,7 +774,7 @@ describe('trial expired', () => {
   });
 
   describe('license id', () => {
-    it('passes the license id to the overlay and adds the license id and the key to the error', () => {
+    it('does not pass the license id to the overlay; the error has the license id and a fixed public key text instead of the key', () => {
       jest.spyOn(productKeyValidator, 'parseDevExpressProductKey').mockReturnValue({
         kind: TokenKind.corrupted,
         error: 'trial-expired',
@@ -784,8 +784,9 @@ describe('trial expired', () => {
       validateLicense(`${LCP_LICENSE} `, '26.2.0');
 
       expect(trialPanelSpy.mock.calls[0][3]).toBe(SUBSCRIPTION_NAMES);
-      expect(trialPanelSpy.mock.calls[0][5]).toEqual({ trialExpired: true, libraries: 'DevExtreme', licenseId: LICENSE_ID });
-      expect(loggerErrorSpy).toHaveBeenCalledWith(expect.stringMatching(new RegExp(`DevExtreme Complete\\. License ID: ${LICENSE_ID}\\. License Source: Public Key \\(${LCP_LICENSE}\\)\\.\\n\\nFor additional information`)));
+      expect(trialPanelSpy.mock.calls[0][5]).toEqual({ trialExpired: true, libraries: 'DevExtreme' });
+      expect(loggerErrorSpy).toHaveBeenCalledWith(expect.stringMatching(new RegExp(`DevExtreme Complete\\. License ID: ${LICENSE_ID}\\. License Source: Public Key \\(LCPv1\\.\\.\\.\\)\\.\\n\\nFor additional information`)));
+      expect(loggerErrorSpy.mock.calls[0].join(' ')).not.toContain(LCP_LICENSE);
     });
 
     it('does not pass the license source to the panel', () => {
@@ -803,16 +804,16 @@ describe('trial expired', () => {
     it.each([
       ['a trial that is not expired', { kind: TokenKind.corrupted, error: 'product-kind', licenseId: LICENSE_ID }],
       ['an incompatible version', { kind: TokenKind.verified, payload: { licenseId: LICENSE_ID, maxVersionAllowed: 251 } }],
-    ] as const)('passes the license id to the banner (%s)', (_, token) => {
-      jest.spyOn(productKeyValidator, 'parseDevExpressProductKey').mockReturnValue(token as never);
+    ] as const)('does not pass the license id to the banner (%s)', (_, token) => {
+      jest.spyOn(productKeyValidator, 'parseDevExpressProductKey').mockReturnValue(token);
 
       validateLicense(LCP_LICENSE, '26.2.0');
 
-      expect(trialPanelSpy.mock.calls[0][5]).toEqual({ trialExpired: false, libraries: 'DevExtreme', licenseId: LICENSE_ID });
+      expect(trialPanelSpy.mock.calls[0][5]).toEqual({ trialExpired: false, libraries: 'DevExtreme' });
       expect(trialPanelSpy.mock.calls[0][3]).toBe(SUBSCRIPTION_NAMES);
     });
 
-    it('adds the license id and the key to the warning about a license without DevExtreme', () => {
+    it('adds the license id and a fixed public key text to the warning about a license without DevExtreme', () => {
       jest.spyOn(productKeyValidator, 'parseDevExpressProductKey').mockReturnValue({
         kind: TokenKind.corrupted,
         error: 'product-kind',
@@ -822,10 +823,10 @@ describe('trial expired', () => {
       validateLicense(LCP_LICENSE, '26.2.0');
 
       expect(consoleWarnSpy).toHaveBeenCalledTimes(1);
-      expect(consoleWarnSpy).toHaveBeenCalledWith(expect.stringMatching(new RegExp(`^W0019 - For evaluation purposes only \\(v26\\.2\\.0\\)\\. .*DevExtreme Complete\\. License ID: ${LICENSE_ID}\\. License Source: Public Key \\(${LCP_LICENSE}\\)\\.$`)));
+      expect(consoleWarnSpy).toHaveBeenCalledWith(expect.stringMatching(new RegExp(`^W0019 - For evaluation purposes only \\(v26\\.2\\.0\\)\\. .*DevExtreme Complete\\. License ID: ${LICENSE_ID}\\. License Source: Public Key \\(LCPv1\\.\\.\\.\\)\\.$`)));
     });
 
-    it('adds the license id and the key only to the incompatible version warning', () => {
+    it('adds the license id and a fixed public key text only to the incompatible version warning', () => {
       jest.spyOn(productKeyValidator, 'parseDevExpressProductKey').mockReturnValue({
         kind: TokenKind.verified,
         payload: { licenseId: LICENSE_ID, maxVersionAllowed: 251 },
@@ -835,7 +836,7 @@ describe('trial expired', () => {
 
       expect(consoleWarnSpy).toHaveBeenCalledTimes(2);
       expect(consoleWarnSpy.mock.calls[0][0]).not.toContain('License ID');
-      expect(consoleWarnSpy.mock.calls[1][0]).toBe(`W0020 - Incompatible DevExpress license key version (v25.1). Use and Redistribution prohibited. Download and register an updated DevExpress license key (v26.2+). Clear npm/IDE/NuGet cache and rebuild your project (https://devexpress.com/DX1002). License ID: ${LICENSE_ID}. License Source: Public Key (${LCP_LICENSE}).`);
+      expect(consoleWarnSpy.mock.calls[1][0]).toBe(`W0020 - Incompatible DevExpress license key version (v25.1). Use and Redistribution prohibited. Download and register an updated DevExpress license key (v26.2+). Clear npm/IDE/NuGet cache and rebuild your project (https://devexpress.com/DX1002). License ID: ${LICENSE_ID}. License Source: Public Key (LCPv1...).`);
     });
 
     it.each(['', 'str@nge in.put'])('does not add a license id without a license (%j)', (key) => {

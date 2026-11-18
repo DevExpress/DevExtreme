@@ -9,10 +9,7 @@
 /* eslint-disable consistent-return */
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-multi-assign */
-/* eslint-disable @stylistic/max-len */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
-/* eslint-disable prefer-destructuring */
 /* eslint-disable no-else-return */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
@@ -54,7 +51,7 @@ export const pie = _extend({}, barSeries, {
   _createErrorBarGroup: _noop,
 
   _drawPoint(options) {
-    const point = options.point;
+    const { point } = options;
     const legendCallback = this._legendCallback;
     // @ts-expect-error
     chartScatterSeries._drawPoint.call(this, options);
@@ -65,7 +62,9 @@ export const pie = _extend({}, barSeries, {
   _getOldPoint(data, oldPointsByArgument, index) {
     const point = (this._points || [])[index];
     if (point) {
-      oldPointsByArgument[point.argument.valueOf()] = oldPointsByArgument[point.argument.valueOf()].filter((p) => p !== point);
+      oldPointsByArgument[point.argument.valueOf()] = oldPointsByArgument[
+        point.argument.valueOf()
+      ].filter((p) => p !== point);
     }
     return point;
   },
@@ -120,7 +119,9 @@ export const pie = _extend({}, barSeries, {
   },
 
   _checkData(data, skippedFields) {
-    const base = barSeries._checkData.call(this, data, skippedFields, { value: this.getValueFields()[0] });
+    const base = barSeries._checkData.call(this, data, skippedFields, {
+      value: this.getValueFields()[0],
+    });
     return this._options.paintNullPoints ? base : base && data.value !== null;
   },
   // @ts-expect-error
@@ -170,7 +171,7 @@ export const pie = _extend({}, barSeries, {
   },
 
   _getArrangeMinShownValue(points, total) {
-    const minSegmentSize = this._options.minSegmentSize;
+    const { minSegmentSize } = this._options;
     let totalMinSegmentSize = 0;
     let totalNotMinValues = 0;
 
@@ -186,14 +187,16 @@ export const pie = _extend({}, barSeries, {
       }
     });
 
-    return totalMinSegmentSize < 360 ? minSegmentSize * totalNotMinValues / (360 - totalMinSegmentSize) : 0;
+    return totalMinSegmentSize < 360
+      ? (minSegmentSize * totalNotMinValues) / (360 - totalMinSegmentSize)
+      : 0;
   },
 
   _applyArrangeCorrection(points, minShownValue, total) {
     const options = this._options;
     const isClockWise = options.segmentsDirection !== 'anticlockwise';
     const shiftedAngle = _isFinite(options.startAngle) ? normalizeAngle(options.startAngle) : 0;
-    const minSegmentSize = options.minSegmentSize;
+    const { minSegmentSize } = options;
     let percent;
     let correction = 0;
     let zeroTotalCorrection = 0;
@@ -227,7 +230,7 @@ export const pie = _extend({}, barSeries, {
   arrangePoints() {
     const that = this;
     const originalPoints = that._points || [];
-    const minSegmentSize = that._options.minSegmentSize;
+    const { minSegmentSize } = that._options;
     let minShownValue;
     let isAllPointsNegative = true;
     let i = 0;
@@ -250,7 +253,10 @@ export const pie = _extend({}, barSeries, {
     points.forEach((p) => {
       p.normalInitialValue = p.initialValue / (maxValue !== 0 ? maxValue : 1);
     });
-    const total = points.reduce((total, point) => total + (point.isVisible() ? point.normalInitialValue : 0), 0);
+    const total = points.reduce(
+      (total, point) => total + (point.isVisible() ? point.normalInitialValue : 0),
+      0,
+    );
     if (minSegmentSize) {
       minShownValue = this._getArrangeMinShownValue(points, total);
     }
@@ -299,17 +305,21 @@ export const pie = _extend({}, barSeries, {
     const that = this;
     const points = that._points;
     const pointsCount = points && points.length;
-    const completeFunc = function () {
+    const completeFunc = function (): void {
       that._animateComplete();
     };
     let animatePoint;
 
     if (firstDrawing) {
-      animatePoint = function (p, i) {
-        p.animate(i === pointsCount - 1 ? completeFunc : undefined, ANIMATION_DURATION, (1 - ANIMATION_DURATION) * i / (pointsCount - 1));
+      animatePoint = function (p, i): void {
+        p.animate(
+          i === pointsCount - 1 ? completeFunc : undefined,
+          ANIMATION_DURATION,
+          ((1 - ANIMATION_DURATION) * i) / (pointsCount - 1),
+        );
       };
     } else {
-      animatePoint = function (p, i) {
+      animatePoint = function (p, i): void {
         p.animate(i === pointsCount - 1 ? completeFunc : undefined);
       };
     }

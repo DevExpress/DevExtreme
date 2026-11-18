@@ -245,9 +245,11 @@ describe('ContextMenu', () => {
 
       expect(event.items).toHaveLength(3);
 
-      event.items?.forEach((item) => {
-        expect(item.disabled).toBe(sortOrder === item.value);
-      });
+      expect(event.items).toMatchObject([
+        { value: 'asc', disabled: sortOrder === 'asc' },
+        { value: 'desc', disabled: sortOrder === 'desc' },
+        { value: undefined, disabled: sortOrder === undefined },
+      ]);
     });
 
     it('items set in onContextMenuPreparing are displayed', () => {

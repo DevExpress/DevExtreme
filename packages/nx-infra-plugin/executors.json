@@ -50,11 +50,6 @@
       "schema": "./src/executors/build-angular-library/schema.json",
       "description": "Build Angular libraries using ng-packagr"
     },
-    "karma-multi-env": {
-      "implementation": "./src/executors/karma-multi-env/executor",
-      "schema": "./src/executors/karma-multi-env/schema.json",
-      "description": "Run Karma tests sequentially across multiple Angular environments (client, server, hydration)"
-    },
     "localization": {
       "implementation": "./src/executors/localization/executor",
       "schema": "./src/executors/localization/schema.json",

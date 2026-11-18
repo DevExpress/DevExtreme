@@ -1,10 +1,10 @@
 /* eslint-disable spellcheck/spell-checker */
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import {
   afterEach, describe, expect, it, jest,
 } from '@jest/globals';
 import $ from '@js/core/renderer';
 import dxCalendar from '@js/ui/calendar';
+import type Editor from '@js/ui/editor/editor';
 import CardView from '@ts/grids/new/card_view/widget';
 import type { Options as GridCoreOptions } from '@ts/grids/new/grid_core/options';
 import { rerender } from 'inferno';
@@ -72,6 +72,16 @@ const setup = (config: Options) => {
     return form;
   };
 
+  const getEditor = (dataField: string): Editor => {
+    const editor = getForm().getEditor(dataField);
+
+    if (!editor) {
+      throw new Error(`editor for ${dataField} is not rendered`);
+    }
+
+    return editor;
+  };
+
   return {
     optionsController,
     editingController,
@@ -80,6 +90,7 @@ const setup = (config: Options) => {
     toolbarController,
     context,
     getForm,
+    getEditor,
     mockConfirmController,
   };
 };
@@ -88,7 +99,7 @@ describe('ColumnProperties', () => {
   describe('allowEditing', () => {
     describe('when it is false', () => {
       it('should make editor disabled', () => {
-        const { getForm } = setup({
+        const { getEditor } = setup({
           dataSource: [{ field1: 1 }],
           keyExpr: 'field1',
           editing: {
@@ -97,13 +108,13 @@ describe('ColumnProperties', () => {
           columns: [{ dataField: 'field1', allowEditing: false }],
         });
 
-        expect(getForm().getEditor('field1')!.option('disabled')).toBe(true);
+        expect(getEditor('field1').option('disabled')).toBe(true);
       });
     });
   });
   describe('editorOptions', () => {
     it('should be passed to form item editorOptions', () => {
-      const { getForm } = setup({
+      const { getEditor } = setup({
         dataSource: [{ field1: 1 }],
         keyExpr: 'field1',
         editing: {
@@ -112,7 +123,7 @@ describe('ColumnProperties', () => {
         columns: [{ dataField: 'field1', editorOptions: { someEditOption: 'someEditOptionValue' } }],
       });
 
-      expect(getForm().getEditor('field1')!.option('someEditOption')).toBe('someEditOptionValue');
+      expect(getEditor('field1').option('someEditOption')).toBe('someEditOptionValue');
     });
   });
   describe('setFieldValue', () => {
@@ -121,7 +132,7 @@ describe('ColumnProperties', () => {
         newData.mycustomfield = value;
       });
 
-      const { editPopupView, editingController, getForm } = setup({
+      const { editPopupView, editingController, getEditor } = setup({
         columns: [{
           dataField: 'field1',
           setFieldValue,
@@ -136,7 +147,7 @@ describe('ColumnProperties', () => {
         },
       });
 
-      getForm().getEditor('field1')!.option('value', 'qwe');
+      getEditor('field1').option('value', 'qwe');
 
       // @ts-expect-error private field
       await editPopupView.promises.waitForAll();
@@ -148,7 +159,7 @@ describe('ColumnProperties', () => {
 
   describe('formItem', () => {
     it('should be passed to form item', () => {
-      const { getForm } = setup({
+      const { getEditor } = setup({
         dataSource: [{ field1: 1 }],
         keyExpr: 'field1',
         editing: {
@@ -157,7 +168,7 @@ describe('ColumnProperties', () => {
         columns: [{ dataField: 'field1', formItem: { editorType: 'dxCalendar' } }],
       });
 
-      expect(getForm().getEditor('field1')!).toBeInstanceOf(dxCalendar);
+      expect(getEditor('field1')).toBeInstanceOf(dxCalendar);
     });
   });
 
@@ -186,7 +197,7 @@ describe('Options', () => {
     });
     describe('editCardKey', () => {
       it('should open popup with given item', () => {
-        const { getForm } = setup({
+        const { getEditor } = setup({
           columns: [{
             dataField: 'field1',
           }, 'id'],
@@ -200,8 +211,8 @@ describe('Options', () => {
           },
         });
 
-        expect(getForm().getEditor('field1')!.option('value')).toBe('value1');
-        expect(getForm().getEditor('id')!.option('value')).toBe(1);
+        expect(getEditor('field1').option('value')).toBe('value1');
+        expect(getEditor('id').option('value')).toBe(1);
       });
     });
 

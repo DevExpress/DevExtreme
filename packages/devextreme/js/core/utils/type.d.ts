@@ -1,3 +1,5 @@
+import type { DeferredObj } from './deferred';
+
 export declare function isBoolean(object: any): object is boolean;
 
 export declare function isDate(object: any): object is Date;
@@ -32,4 +34,4 @@ export declare function isRenderer(object: any): boolean;
 
 export declare function isPromise(object: any): object is Promise<any>;
 
-export declare function isDeferred(object: any): boolean;
+export declare function isDeferred(object: any): object is Pick<DeferredObj<any>, 'done' | 'fail'>;

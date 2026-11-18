@@ -1,6 +1,5 @@
 import { BaseInfernoComponent } from '@ts/core/r1/runtime/inferno/index';
 import { PublicTemplate } from '@ts/scheduler/r1/components/templates/index';
-import type { ResourceCellTemplateProps } from '@ts/scheduler/r1/components/types';
 
 import { combineClasses } from '../../../../core/r1/utils/render_utils';
 import { getResourceCellTemplateData } from '../../utils/group_panel_tree';
@@ -70,7 +69,7 @@ export class GroupPanelHorizontalCell extends BaseInfernoComponent<GroupPanelHor
                     id, text, color, data, resourceIndex, isLeaf, path,
                   }),
                   index,
-                } as ResourceCellTemplateProps}
+                }}
                 />
               : (
                 <div>

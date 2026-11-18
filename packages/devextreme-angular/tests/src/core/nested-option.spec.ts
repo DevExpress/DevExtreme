@@ -359,7 +359,7 @@ describe('DevExtreme Angular widget', () => {
 
     const testComponent = fixture.componentInstance;
     const instance = getWidget(fixture);
-    const testSpy = spyOn(testComponent, 'testMethod');
+    const testSpy = vi.spyOn(testComponent, 'testMethod').mockImplementation(() => {});
 
     instance.option('testOption.testNestedOption', 'new value');
     fixture.detectChanges();
@@ -384,7 +384,7 @@ describe('DevExtreme Angular widget', () => {
 
     const testComponent = fixture.componentInstance;
     const instance = getWidget(fixture);
-    const testSpy = spyOn(testComponent, 'testMethod');
+    const testSpy = vi.spyOn(testComponent, 'testMethod').mockImplementation(() => {});
 
     instance.option('testCollectionOption[0].testOption', 'new value');
     fixture.detectChanges();

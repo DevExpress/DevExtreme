@@ -8,14 +8,15 @@ const BUY_LINK = 'https://devexpress.com/BUY';
 
 export interface LicenseDetails {
   licenseId: string;
-  licenseKey: string;
 }
+
+const PUBLIC_KEY_SOURCE = 'Public Key (LCPv1...)';
 
 const getContinueUseText = (docCode: string): string => `Please register a valid license (https://devexpress.com/${docCode}) or purchase a new license (${BUY_LINK}) to continue use of the following DevExpress product libraries: ${LIBRARIES} - Included in Subscriptions: ${SUBSCRIPTIONS}.`;
 
 export const TEMPLATES = Object.freeze({
   licenseDetails: (details?: LicenseDetails): string => (details
-    ? ` License ID: ${details.licenseId}. License Source: Public Key (${details.licenseKey}).`
+    ? ` License ID: ${details.licenseId}. License Source: ${PUBLIC_KEY_SOURCE}.`
     : ''),
 
   purchaseLicense: (version: string): string => `For evaluation purposes only (v${version}). Redistribution prohibited. ${getContinueUseText('DX1000')}`,

@@ -66,7 +66,7 @@ import gridCoreUtils from '@ts/grids/grid_core/utils';
 import { CLASSES as VIEW_CLASSES, ROW_OPTIONS_KEY } from '@ts/grids/grid_core/views/const';
 import type { RowsView } from '@ts/grids/grid_core/views/rows_view';
 import type {
-  CellPosition, FocusStateParams, RowsViewScrollEvent, ViewRowEvent,
+  CellPosition, FocusStateParams, RowsViewScrollEvent, ViewRow, ViewRowEvent,
 } from '@ts/grids/grid_core/views/types';
 import { isVirtualPaging, isVirtualRowRendering } from '@ts/grids/grid_core/virtual_scrolling';
 import type Scrollable from '@ts/ui/scroll_view/scrollable';
@@ -178,7 +178,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
 
   // #region Initialization
   public init(): void {
-    this._dataController = this.getController('data') as KeyboardNavigationDataController;
+    this._dataController = this.getController('data');
     this.dataSourceController = this.getController('dataSource');
     this._selectionController = this.getController('selection');
     this._editingController = this.getController('editing') as CellBasedEditingController;
@@ -336,8 +336,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     const isFullUpdate = !e || e.changeType === 'refresh';
     const isFocusedViewCorrect = this._focusedView?.name === this._rowsView.name;
     const isAppend = e && (e.changeType === 'append' || e.changeType === 'prepend');
-    // @ts-expect-error rendered view; get() is typed as Element
-    const root = $(domAdapter.getRootNode($rowsView.get?.(0)));
+    const root = $(domAdapter.getRootNode($rowsView.get?.<HTMLElement>(0)));
     const $focusedElement = root.find(':focus');
     const isFocusedElementCorrect = this._isFocusedElementCorrect($focusedElement, $rowsView, e);
 
@@ -520,7 +519,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
   ): void {
     const isEditing = this._editingController.isEditing();
     const direction: NavigationDirection = event.shift ? 'previous' : 'next';
-    const eventTarget = event.originalEvent.target as Element;
+    const eventTarget = event.originalEvent.target;
     const { hasEditingOptions, isLastValidCell } = options;
     let originalHandlerRequired = options.isOriginalHandlerRequired;
 
@@ -1323,7 +1322,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
   }
 
   private focusFirstInteractiveElementInside($el: dxElementWrapper): void {
-    ($el.find(INTERACTIVE_ELEMENTS_SELECTOR).get(0) as HTMLElement).focus();
+    $el.find(INTERACTIVE_ELEMENTS_SELECTOR).get<HTMLElement>(0).focus();
   }
 
   private _processEnterKeyForDataCell(eventArgs: KeyboardKeyDownEvent, isEditing: boolean): void {
@@ -3078,6 +3077,20 @@ const rowsView = (
         this._keyboardNavigationController.pointerEventHandler(eventArgs);
       }
     }
+  }
+
+  protected _updateCells(
+    $rowElement: dxElementWrapper,
+    $newRowElement: dxElementWrapper,
+    columnIndices: number[],
+    options?: ViewRow,
+  ): void {
+    const focusStateClasses = [CLASSES.focused, EDITOR_FACTORY_CLASSES.cellFocusDisabled]
+      .filter((className) => $rowElement.hasClass(className));
+
+    super._updateCells($rowElement, $newRowElement, columnIndices, options);
+
+    focusStateClasses.forEach((className) => $rowElement.addClass(className));
   }
 
   public renderFocusState(params: FocusStateParams): void {

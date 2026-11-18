@@ -76,7 +76,7 @@ const createCells = (rects: CellRect[], direction = 'ltr'): dxElementWrapper => 
   rects.forEach(({
     left, top, width, height,
   }) => {
-    const cell = $('<div>').css('direction', direction).appendTo($container).get(0) as HTMLElement;
+    const cell = $('<div>').css('direction', direction).appendTo($container).get<HTMLElement>(0);
     const rect = {
       left,
       top,
@@ -125,7 +125,7 @@ const createLookupColumn = (overrides: Record<string, unknown> = {}): Column => 
   defaultCalculateCellValue: calculateCellValue,
   lookup: { dataSource: LOOKUP_ITEMS, valueExpr: 'id', displayExpr: 'text' },
   ...overrides,
-}) as unknown as Column;
+});
 
 const createDataSourceAdapter = (
   groupItems: { key: unknown }[],

@@ -1,13 +1,11 @@
 /* eslint-disable no-nested-ternary */
-/* eslint-disable @stylistic/max-len */
-/* eslint-disable prefer-destructuring */
 
 import supportUtils from '@ts/core/utils/support';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 import { formatValue, isFirefoxOnAndroid, utils } from '@ts/viz/range_selector/common';
 import SliderMarker from '@ts/viz/range_selector/slider_marker';
 
-const animationSettings = utils.animationSettings;
+const { animationSettings } = utils;
 
 const SPLITTER_WIDTH = 8;
 const TOUCH_SPLITTER_WIDTH = 20;
@@ -22,7 +20,11 @@ interface SliderParams {
 type SliderEventHandler = (e: ThemeValue) => void;
 
 function getSliderTrackerWidth(sliderHandleWidth: number): number {
-  return supportUtils.touchEvents || supportUtils.pointerEvents ? TOUCH_SPLITTER_WIDTH : SPLITTER_WIDTH < sliderHandleWidth ? sliderHandleWidth : SPLITTER_WIDTH;
+  return supportUtils.touchEvents || supportUtils.pointerEvents
+    ? TOUCH_SPLITTER_WIDTH
+    : SPLITTER_WIDTH < sliderHandleWidth
+      ? sliderHandleWidth
+      : SPLITTER_WIDTH;
 }
 
 class Slider {
@@ -95,8 +97,15 @@ class Slider {
     this._marker.setText(text);
   }
 
-  update(verticalRange: number[], sliderHandleOptions: ThemeValue, sliderMarkerOptions: ThemeValue): void {
-    this._formatOptions = { format: sliderMarkerOptions.format, customizeText: sliderMarkerOptions.customizeText };
+  update(
+    verticalRange: number[],
+    sliderHandleOptions: ThemeValue,
+    sliderMarkerOptions: ThemeValue,
+  ): void {
+    this._formatOptions = {
+      format: sliderMarkerOptions.format,
+      customizeText: sliderMarkerOptions.customizeText,
+    };
     this._marker.applyOptions(sliderMarkerOptions, this._translator.getScreenRange());
     this._colors = [sliderMarkerOptions.invalidRangeColor, sliderHandleOptions.color];
     this._sliderGroup.attr({ translateY: verticalRange[0] });

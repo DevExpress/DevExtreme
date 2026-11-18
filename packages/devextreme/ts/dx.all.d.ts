@@ -7368,7 +7368,7 @@ declare module DevExpress.core {
 
     first(): this;
 
-    get(index: number): Element;
+    get<T extends Element = Element>(index: number): T;
 
     hasClass(className: string): boolean;
 
@@ -11944,7 +11944,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxChatOptions.toolCallOptions]
      */
-    toolCallOptions?: DevExpress.ui.dxChat.ToolCallOptions;
+    toolCallOptions?: DevExpress.ui.dxChat.ToolCallProperties;
     /**
      * [descr:dxChatOptions.typingUsers]
      */
@@ -35169,15 +35169,15 @@ declare module DevExpress.ui.dxChat {
     [key: string]: any;
   };
   /**
-   * [descr:ToolCallOptions]
+   * [descr:ToolCallProperties]
    */
-  export type ToolCallOptions = {
+  export type ToolCallProperties = {
     /**
-     * [descr:ToolCallOptions.showInMessageTemplate]
+     * [descr:ToolCallProperties.showInMessageTemplate]
      */
     showInMessageTemplate?: boolean;
     /**
-     * [descr:ToolCallOptions.expandAll]
+     * [descr:ToolCallProperties.expandAll]
      */
     expandAll?: boolean;
   };
@@ -47679,7 +47679,7 @@ declare module DevExpress.viz {
   /**
    * [descr:viz.getTheme(theme)]
    */
-  export function getTheme(theme: string): any;
+  export function getTheme(theme?: string): any;
   /**
    * [descr:MapLayer]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.

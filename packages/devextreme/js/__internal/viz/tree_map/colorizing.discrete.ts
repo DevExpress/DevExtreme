@@ -18,7 +18,7 @@ function discreteColorizer(options, themeManager, root) {
   return (options.colorizeGroups ? discreteGroupColorizer : discreteLeafColorizer)(palette, root);
 }
 
-function getLeafsCount(root) {
+function getLeafsCount(root): number {
   const allNodes = root.nodes.slice();
   let i;
   const ii = allNodes.length;
@@ -45,7 +45,7 @@ function discreteLeafColorizer(palette) {
   };
 }
 
-function getNodesCount(root) {
+function getNodesCount(root): number {
   const allNodes = root.nodes.slice();
   let i;
   const ii = allNodes.length;

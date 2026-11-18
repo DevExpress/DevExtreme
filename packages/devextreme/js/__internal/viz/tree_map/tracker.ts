@@ -4,7 +4,6 @@
 /* eslint-disable func-names */
 /* eslint-disable import/no-mutable-exports */
 /* eslint-disable @typescript-eslint/naming-convention */
-/* eslint-disable @stylistic/max-len */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 
@@ -25,7 +24,7 @@ let _TESTS_dataKey;
 /// #ENDDEBUG
 proto._eventsMap.onClick = { name: 'click' };
 
-const getDataKey = function () {
+const getDataKey = function (): string {
   const dataKey = DATA_KEY_BASE + dataKeyModifier++;
   return dataKey;
 };
@@ -47,17 +46,19 @@ expand(proto, '_initCore', function () {
       const proxy = getProxy(id);
       const interactWithGroup = _parseScalar(that._getOption('interactWithGroup', true));
 
-      return interactWithGroup && proxy.isLeaf() && proxy.getParent().isActive() ? proxy.getParent() : proxy;
+      return interactWithGroup && proxy.isLeaf() && proxy.getParent().isActive()
+        ? proxy.getParent()
+        : proxy;
     },
     getData(e) {
       const { target } = e;
       return (target.tagName === 'tspan' ? target.parentNode : target)[dataKey];
     },
-    click(e) {
+    click(e): void {
       that._eventTrigger('click', e);
     },
   });
-  that._handlers.setTrackerData = function (node, element) {
+  that._handlers.setTrackerData = function (node, element): void {
     element.data(dataKey, node._id);
   };
 });

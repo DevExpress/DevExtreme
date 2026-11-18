@@ -761,7 +761,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   }
 
   _focusInHandler(e: DxEvent): void {
-    const $target = $(e.target as Element | null);
+    const $target = $(e.target);
     const $focusTarget = this._focusTarget();
     // T1312256: On macOS, e.target can be a child element of the workspace root
     const isTargetInsideWorkspace = $target.is($focusTarget)
@@ -1105,7 +1105,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   }
 
   private getScrollbarWidth(): number {
-    const containerElement = $(this.$dateTableScrollable.container()).get(0) as HTMLElement;
+    const containerElement = $(this.$dateTableScrollable.container()).get<HTMLElement>(0);
     const scrollbarWidth = containerElement.offsetWidth - containerElement.clientWidth;
     return scrollbarWidth;
   }
@@ -1183,7 +1183,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       SCHEDULER_CELL_DXCLICK_EVENT_NAME,
       cellSelector,
       (e: DxEvent<MouseEvent | PointerEvent>) => {
-        const $cell = $(e.target as Element | null);
+        const $cell = $(e.target);
         this.cellClickAction?.(
           {
             event: e,
@@ -1218,9 +1218,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     optionName: K,
     config?: ActionConfig,
   ): (args: WorkspaceOptionActionMap[K]) => void {
-    return this._createActionByOption(optionName, config) as (
-      args: WorkspaceOptionActionMap[K],
-    ) => void;
+    return this._createActionByOption(optionName, config);
   }
 
   private createCellClickAction(): void {
@@ -1246,7 +1244,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   }
 
   private pointerDownHandler(e: { target: EventTarget | null; which?: number }): void {
-    const $target = $(e.target as Element | null);
+    const $target = $(e.target);
 
     if (!$target.hasClass(DATE_TABLE_CELL_CLASS) && !$target.hasClass(ALL_DAY_TABLE_CELL_CLASS)) {
       this.isCellClick = false;
@@ -1291,14 +1289,14 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
 
     const cellSelector = `.${DATE_TABLE_CELL_CLASS},.${ALL_DAY_TABLE_CELL_CLASS}`;
     const $element = this.$element();
-    const eventName = addNamespace(contextMenuEventName, this.NAME as string);
+    const eventName = addNamespace(contextMenuEventName, this.NAME);
 
     eventsEngine.off($element, eventName, cellSelector);
     eventsEngine.on($element, eventName, cellSelector, this.contextMenuHandler.bind(this));
   }
 
   private contextMenuHandler(e: DxEvent): void {
-    const $cell = $(e.target as Element | null);
+    const $cell = $(e.target);
     this.contextMenuAction?.(
       {
         event: e as CellContextMenuEvent['event'],
@@ -1469,7 +1467,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   }
 
   protected getFormat(): string | ((date: Date) => string) {
-    return abstract() as string;
+    return abstract();
   }
 
   getWorkArea(): dxElementWrapper {
@@ -2422,7 +2420,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       host[componentName] = component;
     } else {
       const $element = component.$element();
-      const elementStyle = ($element.get(0) as HTMLElement).style;
+      const elementStyle = $element.get<HTMLElement>(0).style;
       const { height } = elementStyle;
       const { width } = elementStyle;
 
@@ -3496,7 +3494,7 @@ const createDragBehaviorConfig = (
     }
 
     const canceled = e.cancel;
-    const $itemElement = $(e.itemElement as Element | null);
+    const $itemElement = $(e.itemElement);
     // @ts-expect-error
     const appointments = (e.component)._appointments as AppointmentsList;
 
@@ -3575,7 +3573,7 @@ const createDragBehaviorConfig = (
     });
 
     if (droppableCell) {
-      if (!getDroppableCell().is(droppableCell as unknown as dxElementWrapper)) {
+      if (!getDroppableCell().is(droppableCell)) {
         removeDroppableCellClass();
       }
 
@@ -3604,7 +3602,7 @@ const createDragBehaviorConfig = (
     }
 
     removeDroppableCellClass();
-    $(e.itemElement as Element).removeClass(APPOINTMENT_DRAG_SOURCE_CLASS);
+    $(e.itemElement).removeClass(APPOINTMENT_DRAG_SOURCE_CLASS);
   };
 
   const cursorOffset = options.isSetCursorOffset

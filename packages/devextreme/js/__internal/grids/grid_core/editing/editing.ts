@@ -2408,7 +2408,7 @@ export class EditingController extends modules.ViewController {
       // NOTE: if the editForm is enabled then we need to search for focused element
       // in the document root, otherwise we need to search for element in the shadow dom
       const elementContainer = this._editForm?.element()
-        ?? this.component.$element().get(0) as HTMLElement;
+        ?? this.component.$element().get<HTMLElement>(0);
       const $focusedElement = $(domAdapter.getActiveElement(elementContainer));
       const columnIndex = this._rowsView.getCellIndex($focusedElement, row.rowIndex);
       let focusedElement = $focusedElement.get(0);
@@ -2423,7 +2423,7 @@ export class EditingController extends modules.ViewController {
           // eslint-disable-next-line no-restricted-globals
           setTimeout(() => {
             focusedElement = domAdapter.getActiveElement(
-              this.component.$element()?.get(0) as HTMLElement,
+              this.component.$element()?.get<HTMLElement>(0),
             );
             if (selectionRange.selectionStart >= 0) {
               gridCoreUtils.setSelectionRange(focusedElement, selectionRange);

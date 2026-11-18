@@ -2,7 +2,7 @@ import $ from 'jquery';
 import { DataController } from '__internal/grids/pivot_grid/data_controller/m_data_controller';
 import virtualScrolling from '__internal/grids/grid_core/virtual_scrolling/virtual_scrolling_core';
 import stateStoring from '__internal/grids/grid_core/state_storing/state_storing_controller_core';
-import pivotGridUtils from '__internal/grids/pivot_grid/m_widget_utils';
+import pivotGridUtils from '__internal/grids/pivot_grid/widget_utils';
 import { PivotGridDataSource } from '__internal/grids/pivot_grid/data_source/m_data_source';
 
 import executeAsyncMock from '../../helpers/executeAsyncMock.js';
