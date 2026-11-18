@@ -9,6 +9,7 @@ import {
 import { addNamespace } from '@js/common/core/events/utils/index';
 import registerComponent from '@js/core/component_registrator';
 import domAdapter from '@js/core/dom_adapter';
+import type { Coordinates, dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
@@ -19,9 +20,19 @@ import {
 import { isDefined } from '@js/core/utils/type';
 import swatchContainer from '@ts/core/utils/swatch_container';
 import DOMComponent from '@ts/core/widget/dom_component';
+import type { OptionChanged } from '@ts/core/widget/types';
 import type { EngineEvent } from '@ts/events/core/events_engine';
 import eventsEngine from '@ts/events/core/events_engine';
 import type { DragOffset } from '@ts/events/drag';
+import type Scrollable from '@ts/ui/scroll_view/scrollable';
+
+import type {
+  OldSortableChangedArgs,
+  OldSortableDraggingArgs,
+  OldSortableItemOffset,
+  OldSortableProperties,
+  OldSortableScrollWrapper,
+} from './types';
 
 const { getSwatchContainer } = swatchContainer;
 
@@ -31,11 +42,32 @@ const SCROLL_STEP = 2;
 const START_SCROLL_OFFSET = 20;
 const SCROLL_TIMEOUT = 10;
 
-type DragMoveEvent = EngineEvent & { offset: DragOffset };
+type DragMoveEvent = EngineEvent & { offset: DragOffset; pageX: number; pageY: number };
 
-function elementHasPoint(element, x, y) {
+const getElementOffset = ($element: dxElementWrapper): Coordinates => {
+  const result = $element.offset();
+  return result as Coordinates;
+};
+
+const getElementSizes = (
+  $element: dxElementWrapper,
+): { width: number; height: number } => {
+  const width = getWidth($element);
+  const height = getHeight($element);
+  return { width, height } as { width: number; height: number };
+};
+
+const getElementOuterSizes = (
+  $element: dxElementWrapper,
+): { width: number; height: number } => {
+  const width = getOuterWidth($element, true);
+  const height = getOuterHeight($element, true);
+  return { width, height } as { width: number; height: number };
+};
+
+function elementHasPoint(element: Element, x: number, y: number): boolean | undefined {
   const $item = $(element);
-  const offset = $item.offset()!;
+  const offset = getElementOffset($item);
 
   if (x >= offset.left && x <= offset.left + Number(getOuterWidth($item, true))) {
     if (y >= offset.top && y <= offset.top + Number(getOuterHeight($item, true))) {
@@ -46,14 +78,18 @@ function elementHasPoint(element, x, y) {
   return undefined;
 }
 
-function checkHorizontalPosition(position, itemOffset, rtl) {
+function checkHorizontalPosition(
+  position: number,
+  itemOffset: OldSortableItemOffset,
+  rtl: boolean | undefined,
+): boolean {
   if (isDefined(itemOffset.posHorizontal)) {
     return rtl ? position > itemOffset.posHorizontal : position < itemOffset.posHorizontal;
   }
   return true;
 }
 
-function getIndex($items, $item) {
+function getIndex($items: dxElementWrapper, $item: dxElementWrapper): number {
   let index = -1;
   const itemElement = $item.get(0);
 
@@ -75,10 +111,13 @@ function getIndex($items, $item) {
   return index === $items.length ? -1 : index;
 }
 
-function getTargetGroup(e, $groups) {
-  let result;
+function getTargetGroup(
+  e: DragMoveEvent,
+  $groups: dxElementWrapper,
+): dxElementWrapper | null {
+  let result: dxElementWrapper | null = null;
 
-  each($groups, function () {
+  each($groups, function findTargetGroup() {
     if (elementHasPoint(this, e.pageX, e.pageY)) {
       result = $(this);
     }
@@ -86,9 +125,13 @@ function getTargetGroup(e, $groups) {
   return result;
 }
 
-function getItemsOffset($elements, isVertical, $itemsContainer) {
-  const result: any = [];
-  let $item: any = [];
+function getItemsOffset(
+  $elements: dxElementWrapper,
+  isVertical: boolean,
+  $itemsContainer: dxElementWrapper,
+): OldSortableItemOffset[] {
+  const result: OldSortableItemOffset[] = [];
+  let $item: dxElementWrapper | never[] = [];
 
   for (let i = 0; i < $elements.length; i += $item.length) {
     $item = $elements.eq(i);
@@ -97,18 +140,24 @@ function getItemsOffset($elements, isVertical, $itemsContainer) {
       $item = $itemsContainer.find(`[item-group='${$item.attr('item-group')}']`);
     }
     if ($item.is(':visible')) {
+      const lastItemOffset = getElementOffset($item.last());
+      const {
+        width: lastItemWidth, height: lastItemHeight,
+      } = getElementOuterSizes($item.last());
+      const itemOffset = getElementOffset($item);
+
       const offset = {
         item: $item,
         index: result.length,
         posVertical: isVertical
           ? (
-            $item.last().offset().top + $item.offset().top + getOuterHeight($item.last(), true)
+            lastItemOffset.top + itemOffset.top + lastItemHeight
           ) / 2
-          : getOuterHeight($item.last(), true) + $item.last().offset().top,
+          : lastItemHeight + lastItemOffset.top,
         posHorizontal: isVertical
           ? undefined
           : (
-            getOuterWidth($item.last(), true) + $item.last().offset().left + $item.offset().left
+            lastItemWidth + lastItemOffset.left + itemOffset.left
           ) / 2,
       };
 
@@ -119,32 +168,34 @@ function getItemsOffset($elements, isVertical, $itemsContainer) {
   return result;
 }
 
-function getScrollWrapper(scrollable) {
+function getScrollWrapper(scrollable: Scrollable): OldSortableScrollWrapper {
+  // eslint-disable-next-line @typescript-eslint/init-declarations -- unset until the first move()
   let timeout: ReturnType<typeof setTimeout> | undefined;
   let scrollTop = scrollable.scrollTop();
   const $element = scrollable.$element();
-  const { top } = $element.offset();
-  const height = getHeight($element);
+  const { top } = getElementOffset($element);
+  const { height } = getElementSizes($element);
   let delta = 0;
 
-  function onScroll(e) {
+  function onScroll(e: { scrollOffset: { top: number } }): void {
     scrollTop = e.scrollOffset.top;
   }
 
   scrollable.on('scroll', onScroll);
 
-  function move() {
-    stop();
-    scrollable.scrollTo(scrollTop += delta);
-
-    timeout = setTimeout(move, SCROLL_TIMEOUT);
-  }
-
-  function stop() {
+  function stop(): void {
     clearTimeout(timeout);
   }
 
-  function moveIfNeed(event) {
+  function move(): void {
+    stop();
+    scrollable.scrollTo(scrollTop += delta);
+
+    // eslint-disable-next-line no-restricted-globals -- repeats the auto-scroll step
+    timeout = setTimeout(move, SCROLL_TIMEOUT);
+  }
+
+  function moveIfNeed(event: { pageY: number }): void {
     if (event.pageY <= top + START_SCROLL_OFFSET) {
       delta = -SCROLL_STEP;
     } else if (event.pageY >= top + height - START_SCROLL_OFFSET) {
@@ -159,22 +210,22 @@ function getScrollWrapper(scrollable) {
 
   return {
     moveIfNeed,
-    element() {
+    element(): dxElementWrapper {
       return $element;
     },
-    dispose() {
+    dispose(): void {
       stop();
       scrollable.off('scroll', onScroll);
     },
   };
 }
 
-class Sortable extends DOMComponent<Sortable> {
-  _indicator: any;
+class OldSortable extends DOMComponent<OldSortable, OldSortableProperties> {
+  _indicator?: dxElementWrapper;
 
-  _$draggable: any;
+  _$draggable?: dxElementWrapper | null;
 
-  _getDefaultOptions() {
+  _getDefaultOptions(): OldSortableProperties {
     return extend(super._getDefaultOptions(), {
       onChanged: null,
       onDragging: null,
@@ -192,28 +243,35 @@ class Sortable extends DOMComponent<Sortable> {
     });
   }
 
-  _renderItem($sourceItem, target) {
+  _renderItem($sourceItem: dxElementWrapper, target: string): dxElementWrapper {
     const itemRender = this.option('itemRender');
-    let $item;
+    // eslint-disable-next-line @typescript-eslint/init-declarations -- set in the if/else below
+    let $item: dxElementWrapper;
 
     if (itemRender) {
-      // @ts-expect-error ts-error
       $item = itemRender($sourceItem, target);
     } else {
       $item = $sourceItem.clone();
-      $item.css({
-        width: getWidth($sourceItem),
-        height: getHeight($sourceItem),
-      });
+      $item.css(getElementSizes($sourceItem));
     }
     return $item;
   }
 
-  _renderIndicator($item, isVertical, $targetGroup, isLast) {
-    const height = getOuterHeight($item, true);
-    const width = getOuterWidth($item, true);
-    const top = $item.offset().top - $targetGroup.offset().top;
-    const left = $item.offset().left - $targetGroup.offset().left;
+  _renderIndicator(
+    $item: dxElementWrapper,
+    isVertical: boolean,
+    $targetGroup: dxElementWrapper,
+    isLast: boolean,
+  ): void {
+    if (!this._indicator) {
+      return;
+    }
+
+    const itemOffset = getElementOffset($item);
+    const targetGroupOffset = getElementOffset($targetGroup);
+    const top = itemOffset.top - targetGroupOffset.top;
+    const left = itemOffset.left - targetGroupOffset.left;
+    const { height, width } = getElementOuterSizes($item);
 
     this._indicator
       .css({
@@ -235,18 +293,25 @@ class Sortable extends DOMComponent<Sortable> {
     }
   }
 
-  _renderDraggable($sourceItem) {
-    this._$draggable && this._$draggable.remove();
+  _renderDraggable($sourceItem: dxElementWrapper): void {
+    const $container = getSwatchContainer($sourceItem);
+
+    if (!$container) {
+      return;
+    }
+
+    this._$draggable?.remove();
 
     this._$draggable = this._renderItem($sourceItem, 'drag')
-      .addClass(this.option('dragClass')).appendTo(getSwatchContainer($sourceItem))
+      .addClass(this.option('dragClass'))
       .css({
         zIndex: 1000000,
         position: 'absolute',
-      });
+      })
+      .appendTo($container);
   }
 
-  _detachEventHandlers() {
+  _detachEventHandlers(): void {
     const dragEventsString = [dragEventMove, dragEventStart, dragEventEnd, dragEventEnter, dragEventLeave, dragEventDrop].join(' ');
     eventsEngine.off(
       this._getEventListener(),
@@ -255,9 +320,13 @@ class Sortable extends DOMComponent<Sortable> {
     );
   }
 
-  _getItemOffset(isVertical, itemsOffset, e) {
+  _getItemOffset(
+    isVertical: boolean,
+    itemsOffset: OldSortableItemOffset[],
+    e: DragMoveEvent,
+  ): OldSortableItemOffset | undefined {
     for (let i = 0; i < itemsOffset.length; i += 1) {
-      let shouldInsert;
+      let shouldInsert = false;
       const sameLine = e.pageY < itemsOffset[i].posVertical;
 
       if (isVertical) {
@@ -278,61 +347,65 @@ class Sortable extends DOMComponent<Sortable> {
     return undefined;
   }
 
-  _getEventListener() {
+  _getEventListener(): dxElementWrapper {
     const groupSelector = this.option('groupSelector');
     const element = this.$element();
 
-    // @ts-expect-error ts-error
     return groupSelector ? element.find(groupSelector) : element;
   }
 
-  _attachEventHandlers() {
-    const that = this;
-    const itemSelector = that.option('itemSelector');
-    const itemContainerSelector = that.option('itemContainerSelector');
-    const groupSelector = that.option('groupSelector');
-    const sourceClass = that.option('sourceClass');
-    const targetClass = that.option('targetClass');
-    const onDragging = that.option('onDragging');
-    const groupFilter = that.option('groupFilter');
-    let $sourceItem;
-    let sourceIndex;
-    let $targetItem;
-    let $targetGroup;
-    let startPositions;
-    let sourceGroup;
-    const element = that.$element();
-    let $groups;
-    let scrollWrapper: any = null;
+  _attachEventHandlers(): void {
+    const itemSelector = this.option('itemSelector');
+    const itemContainerSelector = this.option('itemContainerSelector');
+    const groupSelector = this.option('groupSelector');
+    const sourceClass = this.option('sourceClass');
+    const targetClass = this.option('targetClass');
+    const onDragging = this.option('onDragging');
+    const groupFilter = this.option('groupFilter');
+    let $sourceItem: dxElementWrapper | null = null;
+    // eslint-disable-next-line @typescript-eslint/init-declarations -- set in the drag handlers
+    let sourceIndex: number;
+    let $targetItem: dxElementWrapper | null = null;
+    let $targetGroup: dxElementWrapper | null = null;
+    // eslint-disable-next-line @typescript-eslint/init-declarations -- set in the drag handlers
+    let startPositions: Coordinates[];
+    // eslint-disable-next-line @typescript-eslint/init-declarations -- set in the drag handlers
+    let sourceGroup: string | undefined;
+    const element = this.$element();
+    // eslint-disable-next-line @typescript-eslint/init-declarations -- set in the drag handlers
+    let $groups: dxElementWrapper;
+    let scrollWrapper: OldSortableScrollWrapper | null = null;
     let targetIndex = -1;
 
-    const setStartPositions = function () {
+    const setStartPositions = (): void => {
       startPositions = [];
       each($sourceItem, (_, item) => {
-        startPositions.push($(item).offset());
+        startPositions.push(getElementOffset($(item)));
       });
     };
 
-    const createGroups = function () {
-      const root: any = domAdapter.getRootNode(that.$element().get<HTMLElement>(0));
+    const createGroups = (): dxElementWrapper => {
+      const root = domAdapter.getRootNode(this.$element().get<HTMLElement>(0));
 
       if (!groupSelector) {
         return element;
       }
       return groupFilter
-        // @ts-expect-error ts-error
         ? $(root).find(groupSelector).filter(groupFilter)
-        // @ts-expect-error ts-error
         : element.find(groupSelector);
     };
 
-    const disposeScrollWrapper = function () {
+    const disposeScrollWrapper = (): void => {
       scrollWrapper?.dispose();
       scrollWrapper = null;
     };
 
-    const invokeOnDraggingEvent = function () {
-      const draggingArgs: any = {
+    const invokeOnDraggingEvent = (): void => {
+      if (!$sourceItem || !$targetItem || !$targetGroup) {
+        return;
+      }
+
+      const draggingArgs: OldSortableDraggingArgs = {
         sourceGroup,
         sourceIndex,
         sourceElement: $sourceItem,
@@ -340,27 +413,27 @@ class Sortable extends DOMComponent<Sortable> {
         targetIndex: $targetGroup.find(itemSelector).index($targetItem),
       };
 
-      // @ts-expect-error ts-error
-      onDragging && onDragging(draggingArgs);
+      if (onDragging) {
+        onDragging(draggingArgs);
+      }
 
       if (draggingArgs.cancel) {
-        $targetGroup = undefined;
+        $targetGroup = null;
       }
     };
 
-    that._detachEventHandlers();
+    this._detachEventHandlers();
 
-    if (that.option('allowDragging')) {
-      const $eventListener = that._getEventListener();
+    if (this.option('allowDragging')) {
+      const $eventListener = this._getEventListener();
 
       eventsEngine.on(
         $eventListener,
         addNamespace(dragEventStart, SORTABLE_NAMESPACE),
-        // @ts-expect-error the Sortable options are untyped
         itemSelector,
         (e) => {
           $sourceItem = $(e.currentTarget);
-          const $sourceGroup = $sourceItem.closest(groupSelector);
+          const $sourceGroup = groupSelector ? $sourceItem.closest(groupSelector) : $();
           sourceGroup = $sourceGroup.attr('group');
 
           sourceIndex = getIndex(
@@ -375,42 +448,40 @@ class Sortable extends DOMComponent<Sortable> {
             $sourceItem = $sourceGroup.find(`[item-group='${$sourceItem.attr('item-group')}']`);
           }
 
-          that._renderDraggable($sourceItem);
+          this._renderDraggable($sourceItem);
 
-          $targetItem = that._renderItem($sourceItem, 'target').addClass(targetClass);
+          $targetItem = this._renderItem($sourceItem, 'target').addClass(targetClass);
 
           $sourceItem.addClass(sourceClass);
 
           setStartPositions();
           $groups = createGroups();
-          that._indicator = $('<div>').addClass('dx-position-indicator');
+          this._indicator = $('<div>').addClass('dx-position-indicator');
         },
       );
       const dragMoveEventName = addNamespace(dragEventMove, SORTABLE_NAMESPACE);
       eventsEngine.on($eventListener, dragMoveEventName, (e: DragMoveEvent) => {
-        let $item;
-        let $lastItem;
-        let $prevItem;
-
-        if (!$sourceItem) {
+        if (!$sourceItem || !$targetItem) {
           return;
         }
 
         targetIndex = -1;
 
-        that._indicator.detach();
+        this._indicator?.detach();
 
-        each(that._$draggable, (index, draggableElement) => {
-          ($(draggableElement) as any).css({
+        each(this._$draggable, (index, draggableElement) => {
+          $(draggableElement).css({
             top: startPositions[index].top + e.offset.y,
             left: startPositions[index].left + e.offset.x,
           });
         });
 
-        $targetGroup && $targetGroup.removeClass(targetClass);
+        $targetGroup?.removeClass(targetClass);
 
         $targetGroup = getTargetGroup(e, $groups);
-        $targetGroup && invokeOnDraggingEvent();
+        if ($targetGroup) {
+          invokeOnDraggingEvent();
+        }
 
         if ($targetGroup
           && scrollWrapper
@@ -418,7 +489,7 @@ class Sortable extends DOMComponent<Sortable> {
           disposeScrollWrapper();
         }
 
-        scrollWrapper && scrollWrapper.moveIfNeed(e);
+        scrollWrapper?.moveIfNeed(e);
 
         if (!$targetGroup) {
           $targetItem.detach();
@@ -426,27 +497,29 @@ class Sortable extends DOMComponent<Sortable> {
         }
 
         if (!scrollWrapper && $targetGroup.attr('allow-scrolling')) {
-          scrollWrapper = getScrollWrapper($targetGroup.dxScrollable('instance'));
+          // @ts-expect-error dxScrollable is not defined in dxElementWrapper
+          const scrollInstance = $targetGroup.dxScrollable('instance');
+          scrollWrapper = getScrollWrapper(scrollInstance);
         }
 
         $targetGroup.addClass(targetClass);
         const $itemContainer = $targetGroup.find(itemContainerSelector);
         const $items = $itemContainer.find(itemSelector);
 
-        const targetSortable = $targetGroup.closest(`.${SORTABLE_CLASS}`).data('dxSortableOld');
+        const targetSortable: OldSortable = $targetGroup.closest(`.${SORTABLE_CLASS}`).data('dxSortableOld');
         const useIndicator = targetSortable.option('useIndicator');
 
-        const isVertical = (targetSortable || that).option('direction') === 'vertical';
+        const isVertical = (targetSortable || this).option('direction') === 'vertical';
         const itemsOffset = getItemsOffset($items, isVertical, $itemContainer);
 
-        const itemOffset = that._getItemOffset(isVertical, itemsOffset, e);
+        const itemOffset = this._getItemOffset(isVertical, itemsOffset, e);
 
         if (itemOffset) {
-          $item = itemOffset.item;
+          const $item = itemOffset.item;
 
-          $prevItem = itemsOffset[itemOffset.index - 1] && itemsOffset[itemOffset.index - 1].item;
+          const $prevItem = itemsOffset[itemOffset.index - 1]?.item;
 
-          if ($item.hasClass(sourceClass) || ($prevItem && $prevItem.hasClass(sourceClass) && $prevItem.is(':visible'))) {
+          if ($item.hasClass(sourceClass) || ($prevItem?.hasClass(sourceClass) && $prevItem.is(':visible'))) {
             $targetItem.detach();
             return;
           }
@@ -463,15 +536,15 @@ class Sortable extends DOMComponent<Sortable> {
           const isNextIndex = targetIndex === (sourceIndex + 1);
 
           if (isAnotherGroup) {
-            that._renderIndicator($item, isVertical, $targetGroup, that.option('rtlEnabled') && !isVertical);
+            this._renderIndicator($item, isVertical, $targetGroup, !!this.option('rtlEnabled') && !isVertical);
             return;
           }
 
           if (!isSameIndex && !isNextIndex) {
-            that._renderIndicator($item, isVertical, $targetGroup, that.option('rtlEnabled') && !isVertical);
+            this._renderIndicator($item, isVertical, $targetGroup, !!this.option('rtlEnabled') && !isVertical);
           }
         } else {
-          $lastItem = $items.last();
+          const $lastItem = $items.last();
           if ($lastItem.is(':visible') && $lastItem.hasClass(sourceClass)) {
             return;
           }
@@ -480,7 +553,9 @@ class Sortable extends DOMComponent<Sortable> {
           }
 
           if (useIndicator) {
-            $items.length && that._renderIndicator($lastItem, isVertical, $targetGroup, !that.option('rtlEnabled') || isVertical);
+            if ($items.length) {
+              this._renderIndicator($lastItem, isVertical, $targetGroup, !this.option('rtlEnabled') || isVertical);
+            }
           } else {
             $targetItem.appendTo($itemContainer);
           }
@@ -489,12 +564,12 @@ class Sortable extends DOMComponent<Sortable> {
       eventsEngine.on($eventListener, addNamespace(dragEventEnd, SORTABLE_NAMESPACE), () => {
         disposeScrollWrapper();
 
-        if (!$sourceItem) {
+        if (!$sourceItem || !$targetItem) {
           return;
         }
 
-        const onChanged = that.option('onChanged');
-        const changedArgs: any = {
+        const onChanged = this.option('onChanged');
+        const changedArgs: OldSortableChangedArgs = {
           sourceIndex,
           sourceElement: $sourceItem,
           sourceGroup,
@@ -508,47 +583,51 @@ class Sortable extends DOMComponent<Sortable> {
           $targetGroup.removeClass(targetClass);
           changedArgs.targetGroup = $targetGroup.attr('group');
           if (sourceGroup !== changedArgs.targetGroup || targetIndex > -1) {
-            // @ts-expect-error ts-error
-            onChanged && onChanged(changedArgs);
-            changedArgs.removeSourceElement && $sourceItem.remove();
+            if (onChanged) {
+              onChanged(changedArgs);
+            }
+            if (changedArgs.removeSourceElement) {
+              $sourceItem.remove();
+            }
           }
         }
 
-        that._indicator.detach();
-        changedArgs.removeSourceClass && $sourceItem.removeClass(sourceClass);
+        this._indicator?.detach();
+        if (changedArgs.removeSourceClass) {
+          $sourceItem.removeClass(sourceClass);
+        }
         $sourceItem = null;
 
-        that._$draggable.remove();
-        that._$draggable = null;
+        this._$draggable?.remove();
+        this._$draggable = null;
 
-        changedArgs.removeTargetElement && $targetItem.remove();
+        if (changedArgs.removeTargetElement) {
+          $targetItem.remove();
+        }
         $targetItem.removeClass(targetClass);
         $targetItem = null;
       });
     }
   }
 
-  _init() {
+  _init(): void {
     super._init();
     this._attachEventHandlers();
   }
 
-  _render() {
+  _render(): void {
     super._render();
     this.$element().addClass(SORTABLE_CLASS);
   }
 
-  _dispose() {
-    const that = this;
-
+  _dispose(): void {
     super._dispose();
 
-    that._$draggable && that._$draggable.detach();
-    that._indicator && that._indicator.detach();
+    this._$draggable?.detach();
+    this._indicator?.detach();
   }
 
-  _optionChanged(args) {
-    const that = this;
+  _optionChanged(args: OptionChanged<OldSortableProperties>): void {
     switch (args.name) {
       case 'onDragging':
       case 'onChanged':
@@ -562,7 +641,7 @@ class Sortable extends DOMComponent<Sortable> {
       case 'allowDragging':
       case 'groupFilter':
       case 'useIndicator':
-        that._attachEventHandlers();
+        this._attachEventHandlers();
         break;
       case 'direction':
         break;
@@ -571,18 +650,18 @@ class Sortable extends DOMComponent<Sortable> {
     }
   }
 
-  _useTemplates() {
+  _useTemplates(): boolean {
     return false;
   }
 }
 
 /// #DEBUG
 // @ts-expect-error ts-error
-Sortable.prototype.__SCROLL_STEP = SCROLL_STEP;
+OldSortable.prototype.__SCROLL_STEP = SCROLL_STEP;
 /// #ENDDEBUG
 
 // TODO remove dxSortableOld component
-registerComponent('dxSortableOld', Sortable);
+registerComponent('dxSortableOld', OldSortable);
 
-export default { Sortable };
-export { Sortable };
+export default { OldSortable };
+export { OldSortable };
