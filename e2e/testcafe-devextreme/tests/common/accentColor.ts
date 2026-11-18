@@ -9,7 +9,7 @@ import { isFluentNext, testScreenshot } from '../../helpers/themeUtils';
 
 const STEPS = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150, 160, 170, 180];
 
-const DESIGNED_PALETTE_TOLERANCE = 4;
+const DESIGNED_PALETTE_TOLERANCE = 1.5;
 const HUE_TOLERANCE = 0.01;
 
 const NORMALIZED_ACCENT_LIGHTNESS: Record<string, number> = {
