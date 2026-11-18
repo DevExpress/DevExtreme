@@ -1600,8 +1600,8 @@ importers:
   packages/devextreme-scss:
     devDependencies:
       '@devexpress/design-tokens-internal':
-        specifier: 262.26.0
-        version: 262.26.0
+        specifier: 262.54.0
+        version: 262.54.0
       '@stylistic/eslint-plugin':
         specifier: 'catalog:'
         version: 5.10.0(eslint@10.14.0(jiti@2.6.1))
@@ -4270,8 +4270,8 @@ packages:
     resolution: {integrity: sha512-qr3VQYc0KopduFkEY6SxaOIi1Xhm0jIWQfrxxMVboI/p2rjF/Mj/iqaiUxQQP6F3ujpW/7l0mzhf17uwcFZhBA==}
     deprecated: The @devexpress/callsite-record package is deprecated and will no longer receive updates.
 
-  '@devexpress/design-tokens-internal@262.26.0':
-    resolution: {integrity: sha512-01quVuRR+y1QzxCsW5u5DICs07T3kzdtXukqJIRxjxTtknrpUIca7gpnrxJz4nPLR2V95nYrsWWIOCJV8Yy6Yw==}
+  '@devexpress/design-tokens-internal@262.54.0':
+    resolution: {integrity: sha512-PeUnyNwLmQfzRY6aR38Fd8ubVFcXZpMX5moNFCytMwoRfAGO7/fzlyC8cZnELapVqi1Pi3xk/PhJtfTTXZsfvg==}
 
   '@devexpress/utils@2.1.4':
     resolution: {integrity: sha512-8s3iGkrQOMAkVnZWGFpoiJt4H7sIVxowxpMGQhiHgdbWg90LXXNj5GlIxO6wnZST17pVbXV0VpZA0lKv8Du+Bg==}
@@ -20087,7 +20087,7 @@ snapshots:
       lodash: 4.18.1
       pinkie-promise: 2.0.1
 
-  '@devexpress/design-tokens-internal@262.26.0': {}
+  '@devexpress/design-tokens-internal@262.54.0': {}
 
   '@devexpress/utils@2.1.4':
     dependencies:
