@@ -1,6 +1,5 @@
 import type { Locator } from '@playwright/test';
-import { expect } from '@playwright/test';
-import { classMatcher } from '../internal/classMatcher';
+import { expectClass } from '../internal/classMatcher';
 
 const CLASS = {
   valueContainer: 'dx-radio-value-container',
@@ -18,9 +17,7 @@ export default class RadioButton {
     this.element = item.locator(`:scope > .${CLASS.valueContainer} > .${CLASS.icon}`);
   }
 
-  public async expectChecked(present = true): Promise<void> {
-    const assertion = expect(this.item);
-
-    await (present ? assertion : assertion.not).toHaveClass(classMatcher(CLASS.checked));
+  public expectChecked(present = true): Promise<void> {
+    return expectClass(this.item, CLASS.checked, present);
   }
 }

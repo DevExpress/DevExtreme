@@ -78,8 +78,8 @@ test.describe('SelectBox placeholder', () => {
     const list = await selectBox.getList();
 
     await expect(list.items).toHaveCount(12);
-    await expect(list.getItem(0)).toHaveText('item 1');
-    await expect(list.getItem(11)).toHaveText('item 12');
+    await expect(list.getItem(0).element).toHaveText('item 1');
+    await expect(list.getItem(11).element).toHaveText('item 12');
 
     await list.scrollTo(50);
     await expect.poll(() => isDataSourceLoading(page)).toBe(false);
@@ -97,7 +97,7 @@ test.describe('SelectBox placeholder', () => {
     await selectBox.option('opened', true);
 
     await expect(list.items).toHaveCount(12);
-    await expect(list.getItem(0)).toHaveText('item 2');
-    await expect(list.getItem(11)).toHaveText('item 24');
+    await expect(list.getItem(0).element).toHaveText('item 2');
+    await expect(list.getItem(11).element).toHaveText('item 24');
   });
 });
