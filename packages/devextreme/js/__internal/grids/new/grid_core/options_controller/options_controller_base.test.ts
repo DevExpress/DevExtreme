@@ -1,16 +1,20 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import {
   beforeEach,
   describe, expect, it, jest,
 } from '@jest/globals';
+import type { Component } from '@js/core/component';
 
 import { createComponentMock } from './component.mock';
 import { OptionsController } from './options_controller_base';
 
-const setup = <TOptions extends Record<string, any>>(
+const setup = <TOptions extends object>(
   options: TOptions,
   defaultOptions: TOptions,
-) => {
+): {
+  component: Component<TOptions>;
+  optionsController: OptionsController<TOptions>;
+  onOptionChangedMock: jest.Mock;
+} => {
   const onOptionChangedMock = jest.fn();
 
   const component = createComponentMock(options, defaultOptions);
@@ -90,6 +94,7 @@ describe('oneWay', () => {
   const mixedComplexOptions: MixedOptions = {
     value: { valueA: 'A', valueB: 'B' },
   };
+  const mixedComplexValue = mixedComplexOptions.value as { valueA?: string; valueB?: string };
 
   describe('initial values', () => {
     describe('plain options', () => {
@@ -133,7 +138,7 @@ describe('oneWay', () => {
 
         const value = optionsController.oneWay('nested.value');
 
-        expect(value.peek()).toBe(nestedPlainOptions.nested!.value);
+        expect(value.peek()).toBe(nestedPlainOptions.nested?.value);
       });
 
       it('should have initial default value if parent config option is undefined', () => {
@@ -277,7 +282,7 @@ describe('oneWay', () => {
       });
 
       it('should have initial value same as passed in config if default not specified', () => {
-        const optionalOptions = { optionalValue: function optionalFnValue() {} };
+        const optionalOptions = { optionalValue: function optionalFnValue(): void {} };
         const { optionsController } = setup<FunctionOptions>(
           optionalOptions,
           defaultFunctionOptions,
@@ -306,7 +311,7 @@ describe('oneWay', () => {
 
         const value = optionsController.oneWay('value.valueA');
 
-        expect(value.peek()).toStrictEqual((mixedComplexOptions.value as any).valueA);
+        expect(value.peek()).toStrictEqual(mixedComplexValue.valueA);
       });
 
       it('should have initial value undefined if parent is plain value', () => {
@@ -322,7 +327,7 @@ describe('oneWay', () => {
 
         const value = optionsController.oneWay('value.valueA');
 
-        expect(value.peek()).toBe((mixedComplexOptions.value as any).valueA);
+        expect(value.peek()).toBe(mixedComplexValue.valueA);
       });
     });
 
@@ -600,7 +605,7 @@ describe('oneWay', () => {
         const value = optionsController.oneWay('value.valueA');
         component.option('value.valueA', undefined);
 
-        expect(value.peek()).toBe((mixedComplexOptions.value as any)?.valueA);
+        expect(value.peek()).toBe(mixedComplexValue.valueA);
       });
 
       it('should update to undefined if parent option update to plain one', () => {
@@ -624,7 +629,7 @@ describe('oneWay', () => {
         const value = optionsController.oneWay('value.valueA');
         component.option('value', undefined);
 
-        expect(value.peek()).toBe((mixedComplexOptions.value as any)?.valueA);
+        expect(value.peek()).toBe(mixedComplexValue.valueA);
       });
 
       it('should update to undefined if default value is plain', () => {
