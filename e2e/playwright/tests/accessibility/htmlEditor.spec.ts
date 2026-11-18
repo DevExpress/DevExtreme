@@ -1,21 +1,13 @@
 import type { Page } from '@playwright/test';
 import type { Properties } from 'devextreme/ui/html_editor';
 import HtmlEditor from '../../models/htmlEditor';
-import { changeTheme, resetPageState } from '../../helpers/testPageUtils';
 import {
   test, defaultSelector, testAccessibility, type Configuration,
 } from '../../helpers/accessibility/test';
-import { applyViewportEnvironment } from '../../helpers/accessibility/utils';
 import type { Options } from '../../helpers/generateOptionMatrix';
 
 // NOTE: HtmlEditor needs Quill, which only the extended container page references
-test.beforeEach(async ({ page, theme }) => {
-  await page.goto('/e2e/playwright/tests/container-extended.html');
-  await page.waitForFunction(() => !!(window as any).DevExpress);
-  await changeTheme(page, theme);
-  await resetPageState(page);
-  await applyViewportEnvironment(page);
-});
+test.use({ containerUrl: '/e2e/playwright/tests/container-extended.html' });
 
 const MENU_ITEM_CLASS = 'dx-menu-item';
 const SUBMENU_CLASS = 'dx-submenu';

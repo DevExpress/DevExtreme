@@ -3,6 +3,7 @@ import AxeBuilder from '@axe-core/playwright';
 import { expect } from '@playwright/test';
 import type { Page } from '@playwright/test';
 import type { Result, RunOptions } from 'axe-core';
+import { removeStylesheetRulesFromPage } from '../domUtils';
 import { getCurrentTheme } from '../testPageUtils';
 import { getThemeName } from '../themeUtils';
 
@@ -13,6 +14,41 @@ export interface A11yCheckOptions extends RunOptions {
 export type A11yContext = string | { include: string[][] };
 
 const COLOR_CONTRAST_RULE = 'color-contrast';
+
+const INITIAL_BODY_KEY = '__a11yInitialBody';
+
+export async function openContainerPage(page: Page, url: string): Promise<void> {
+  await page.goto(url);
+  await page.waitForFunction(() => !!(window as any).DevExpress);
+  await page.evaluate((key) => {
+    (window as any)[key] = document.body.innerHTML;
+  }, INITIAL_BODY_KEY);
+}
+
+// What TestCafe's clearTestPage did between the tests of a fixture that kept its page.
+export async function clearContainerPage(page: Page): Promise<void> {
+  await page.evaluate((key) => {
+    const widgetSelector = '.dx-widget';
+
+    $(widgetSelector)
+      .filter((_, element) => $(element).parents(widgetSelector).length === 0)
+      .each((_, element) => {
+        const $element = $(element) as any;
+
+        $element.data().dxComponents?.forEach((name: string) => {
+          if ($element.hasClass('dx-widget')) {
+            $element[name]?.('dispose');
+          }
+        });
+        $element.empty();
+      });
+
+    document.body.innerHTML = (window as any)[key];
+    document.body.className = 'dx-surface';
+  }, INITIAL_BODY_KEY);
+
+  await removeStylesheetRulesFromPage(page);
+}
 
 // The TestCafe runner checked accessibility on a "dx-viewport" body, not the "dx-surface" one the
 // other tests use: it is where overlays render and what the theme styles as the page background.
@@ -71,7 +107,11 @@ export const a11yCheck = async (
     ? { ...options, runOnly: COLOR_CONTRAST_RULE }
     : options;
 
-  const builder = new AxeBuilder({ page }).options({ rules: {}, ...effectiveOptions });
+  // Legacy mode runs axe.run() in the page, as TestCafe did. The default mode opens a blank page
+  // for every check to merge per-frame results, which the suite pays for thousands of times.
+  const builder = new AxeBuilder({ page })
+    .setLegacyMode()
+    .options({ rules: {}, ...effectiveOptions });
 
   if (typeof selector === 'string') {
     builder.include(selector);

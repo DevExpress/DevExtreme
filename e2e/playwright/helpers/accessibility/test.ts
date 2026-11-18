@@ -1,22 +1,72 @@
 import type { Page } from '@playwright/test';
-import { test as base } from '../../fixtures';
+import { expect, GOOGLE_FONTS, test as base } from '../../fixtures';
 import type { WidgetName } from '../../models/types';
-import { DEFAULT_SELECTOR } from '../const';
+import { DEFAULT_SELECTOR, TEST_PAGE_URL } from '../const';
 import { createWidget } from '../createWidget';
 import { generateOptionMatrix, type Options } from '../generateOptionMatrix';
+import { changeTheme, resetPageState } from '../testPageUtils';
 import { getThemeName } from '../themeUtils';
 import {
-  a11yCheck, applyViewportEnvironment, type A11yCheckOptions, type A11yContext,
+  a11yCheck,
+  applyViewportEnvironment,
+  clearContainerPage,
+  openContainerPage,
+  type A11yCheckOptions,
+  type A11yContext,
 } from './utils';
 
-export const test = base.extend<{ a11yEnvironment: undefined }>({
-  a11yEnvironment: [async ({ page }, use) => {
+interface A11yOptions {
+  containerUrl: string;
+}
+
+interface A11yWorkerFixtures {
+  sharedPage: Page;
+}
+
+// One page per worker, cleared between tests, the way the TestCafe fixtures kept their page:
+// loading dx.all.js again for each of the ~2400 tests made a run too long for its CI job.
+export const test = base.extend<A11yOptions, A11yWorkerFixtures>({
+  containerUrl: [TEST_PAGE_URL, { option: true }],
+
+  sharedPage: [async ({ browser }, use, workerInfo) => {
+    const { baseURL, timezoneId } = workerInfo.project.use;
+    const context = await browser.newContext({ baseURL, timezoneId });
+
+    await context.route(GOOGLE_FONTS, (route) => route.fulfill({ contentType: 'text/css' }));
+    await use(await context.newPage());
+    await context.close();
+  }, { scope: 'worker' }],
+
+  page: async ({
+    sharedPage: page, theme, browserSize, containerUrl,
+  }, use) => {
+    const [width, height] = browserSize;
+    const pageErrors: string[] = [];
+    const onPageError = (error: Error): void => { pageErrors.push(error.stack ?? error.message); };
+
+    page.on('pageerror', onPageError);
+
+    await page.setViewportSize({ width, height });
+
+    if (page.url() === 'about:blank' || new URL(page.url()).pathname !== containerUrl) {
+      await openContainerPage(page, containerUrl);
+    } else {
+      await clearContainerPage(page);
+    }
+
+    await changeTheme(page, theme);
     await applyViewportEnvironment(page);
-    await use(undefined);
-  }, { auto: true }],
+    await resetPageState(page);
+    await page.mouse.up();
+
+    await use(page);
+
+    page.off('pageerror', onPageError);
+    expect(pageErrors, 'uncaught errors in the page').toEqual([]);
+  },
 });
 
-export { expect } from '../../fixtures';
+export { expect };
 
 export interface Configuration<TComponentOptions = unknown> {
   component: WidgetName;
