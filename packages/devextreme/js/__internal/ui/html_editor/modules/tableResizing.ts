@@ -96,8 +96,6 @@ export default class TableResizingModule extends BaseModule {
 
   _quillContainer: dxElementWrapper;
 
-  _tableData: unknown[];
-
   enabled: boolean;
 
   _tableResizeFrames: TableResizeFrame[];
@@ -126,8 +124,6 @@ export default class TableResizingModule extends BaseModule {
 
   _nextColumnOffsetLimit?: number;
 
-  _attachResizerTimeout?: ReturnType<typeof setTimeout>;
-
   _startTableWidth?: number;
 
   _startLineSeparatorPosition!: number;
@@ -139,7 +135,6 @@ export default class TableResizingModule extends BaseModule {
     this._minColumnWidth = this._minSizeLimit('minColumnWidth', options.minColumnWidth);
     this._minRowHeight = this._minSizeLimit('minRowHeight', options.minRowHeight);
     this._quillContainer = this.editorInstance._getQuillContainer();
-    this._tableData = [];
 
     if (this.enabled) {
       this._applyResizing();
@@ -357,8 +352,8 @@ export default class TableResizingModule extends BaseModule {
   }
 
   _detachSeparatorEvents($lineSeparators: dxElementWrapper): void {
-    $lineSeparators.each((i, $lineSeparator) => {
-      eventsEngine.off($lineSeparator, POINTERDOWN_EVENT);
+    $lineSeparators.each((i, lineSeparator) => {
+      eventsEngine.off(lineSeparator, POINTERDOWN_EVENT);
     });
   }
 
@@ -870,7 +865,5 @@ export default class TableResizingModule extends BaseModule {
     this._resizeHandlerWithContext = undefined;
     this._isDragging = undefined;
     this._startTableWidth = undefined;
-
-    clearTimeout(this._attachResizerTimeout);
   }
 }
