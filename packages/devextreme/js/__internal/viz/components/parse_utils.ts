@@ -18,9 +18,8 @@ const parsers = {
       return val;
     }
 
-    let parsedVal = Number(val);
+    let parsedVal: number | undefined = Number(val);
     if (isNaN(parsedVal)) {
-      // @ts-expect-error
       parsedVal = undefined;
     }
     return parsedVal;

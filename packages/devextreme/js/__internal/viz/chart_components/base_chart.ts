@@ -40,6 +40,7 @@ import { plugin as loadingIndicatorPlugin } from '@ts/viz/core/loading_indicator
 import { plugin as titlePlugin } from '@ts/viz/core/title';
 import type { TooltipPluginMembers } from '@ts/viz/core/tooltip';
 import { plugin as tooltipPlugin } from '@ts/viz/core/tooltip';
+import type { Size } from '@ts/viz/core/types';
 import { map as _map, processSeriesTemplate, setCanvasValues as _setCanvasValues } from '@ts/viz/core/utils';
 import { Series } from '@ts/viz/series/base_series';
 
@@ -582,7 +583,7 @@ export class BaseChart extends BaseWidget {
     return this._themeManager.getOptions('animation');
   }
 
-  _getDefaultSize(): { width: number; height: number } {
+  _getDefaultSize(): Size {
     return { width: 400, height: 400 };
   }
 
