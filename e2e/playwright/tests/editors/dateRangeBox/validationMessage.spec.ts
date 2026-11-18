@@ -65,7 +65,11 @@ test.describe('DateRangeBox validation message position', () => {
       await new Form(page, `#${id}`).validate();
     }
 
-    await testScreenshot(page, 'The validation message overlay position for DateRangeBox before opening.png', { element: '#container' });
+    await testScreenshot(
+      page,
+      'The validation message overlay position for DateRangeBox before opening.png',
+      { element: '#container', withOverflow: true },
+    );
 
     for (const id of ids) {
       const form = new Form(page, `#${id}`);
@@ -77,6 +81,10 @@ test.describe('DateRangeBox validation message position', () => {
       await dateRangeBox.dropDownButton.click();
     }
 
-    await testScreenshot(page, 'The validation message overlay position for DateRangeBox after opening.png', { element: '#container' });
+    await testScreenshot(
+      page,
+      'The validation message overlay position for DateRangeBox after opening.png',
+      { element: '#container', withOverflow: true },
+    );
   });
 });
