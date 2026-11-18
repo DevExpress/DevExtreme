@@ -323,15 +323,7 @@ function getAdjustIntervalLog(skipCalculationLimits) {
   };
 }
 
-function getDataTimeMultipliers(gapSize): {
-  millisecond: number[];
-  second: number[];
-  minute: number[];
-  hour: number[];
-  day: number[];
-  week: number[];
-  month: number[];
-} {
+function getDataTimeMultipliers(gapSize): typeof DATETIME_MULTIPLIERS {
   if (gapSize && gapSize > 2) {
     return DATETIME_MULTIPLIERS_WITH_BIG_WEEKEND;
   }

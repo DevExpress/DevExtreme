@@ -25,6 +25,7 @@ import { adjust, sign } from '@ts/core/utils/math';
 import {
   isDefined, isExponential, isFunction, isNumeric, isString,
 } from '@ts/core/utils/type';
+import type { Coords } from '@ts/viz/core/types';
 
 const {
   PI,
@@ -310,7 +311,7 @@ export function convertPolarToXY(
   startAngle,
   angle,
   radius,
-): { x: number; y: number } {
+): Coords {
   const shiftAngle = 90;
   const normalizedRadius = radius > 0 ? radius : 0;
 
