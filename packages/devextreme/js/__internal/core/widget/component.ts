@@ -1,5 +1,4 @@
 import Action from '@js/core/action';
-import Class from '@js/core/class';
 import type {
   Component as PublicComponent,
   ComponentOptions,
@@ -24,6 +23,7 @@ import type { DxEvent, EventInfo, InitializedEventInfo } from '@js/events';
 import type { ActionEvent } from '@ts/core/action';
 import type { DeprecatedOptionInfo } from '@ts/core/options/index';
 import type { IntegrationOptions } from '@ts/core/template_manager';
+import { inheritClass } from '@ts/core/widget/legacy_inherit';
 import type { OptionChanged } from '@ts/core/widget/types';
 
 const getEventName = (
@@ -65,6 +65,20 @@ export type OptionAction<THandler> = Record<never, never> extends OptionActionEv
   ? (event?: OptionActionEventArgs<THandler>) => void
   : (event: OptionActionEventArgs<THandler>) => void;
 
+interface ComponentMixin {
+  [member: string]: unknown;
+  ctor?: () => void;
+  postCtor?: () => void;
+}
+
+interface MixinTarget {
+  prototype: object;
+  _includedCtors: (() => void)[];
+  _includedPostCtors: (() => void)[];
+}
+
+const SKIPPED_MIXIN_MEMBERS = ['ctor', 'postCtor', 'default'];
+
 export interface ComponentProperties<TComponent> extends ComponentOptions<
   EventInfo<TComponent>,
   InitializedEventInfo<TComponent>,
@@ -93,15 +107,18 @@ export interface ComponentProperties<TComponent> extends ComponentOptions<
 export class Component<
   TComponent extends Component<TComponent, TProperties>,
   TProperties extends ComponentProperties<TComponent> = ComponentProperties<TComponent>,
-  // @ts-expect-error dxClass inheritance issue
-> extends (Class.inherit({}) as new() => {}) implements PublicComponent<TProperties> {
+> implements PublicComponent<TProperties> {
+  static _includedCtors: (() => void)[] = [];
+
+  static _includedPostCtors: (() => void)[] = [];
+
   _deprecatedOptions!: Record<string, DeprecatedOptionInfo>;
 
   _options!: Options<TProperties>;
 
   _optionsByReference!: Partial<TProperties>;
 
-  NAME?: string;
+  NAME!: string;
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   _eventsStrategy: any;
@@ -127,6 +144,60 @@ export class Component<
   _initializing?: boolean;
 
   _cancelOptionChange?: string | boolean;
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  constructor(...args: any[]) {
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    const { _includedCtors, _includedPostCtors } = this.constructor as unknown as MixinTarget;
+
+    _includedCtors.forEach((ctor) => { ctor.call(this); });
+    this.ctor(...args as [unknown?, unknown?]);
+    _includedPostCtors.forEach((postCtor) => { postCtor.call(this); });
+  }
+
+  static include<TClass extends MixinTarget>(this: TClass, ...mixins: object[]): TClass {
+    const hasOwnProperty = Object.prototype.hasOwnProperty.bind(this);
+
+    if (!hasOwnProperty('_includedCtors') && !hasOwnProperty('_includedPostCtors')) {
+      this._includedCtors = this._includedCtors.slice(0);
+      this._includedPostCtors = this._includedPostCtors.slice(0);
+    }
+
+    const prototype = this.prototype as Record<string, unknown>;
+
+    mixins.forEach((mixin) => {
+      const members = mixin as ComponentMixin;
+
+      if (members.ctor) {
+        this._includedCtors.push(members.ctor);
+      }
+      if (members.postCtor) {
+        this._includedPostCtors.push(members.postCtor);
+      }
+
+      // eslint-disable-next-line no-restricted-syntax
+      for (const name in members) {
+        if (!SKIPPED_MIXIN_MEMBERS.includes(name)) {
+          /// #DEBUG
+          if (name in prototype) {
+            throw errors.Error('E0002', name);
+          }
+          /// #ENDDEBUG
+          prototype[name] = members[name];
+        }
+      }
+    });
+
+    return this;
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  static inherit<TClass extends new (...args: any[]) => object>(
+    this: TClass,
+    members?: Record<string, unknown>,
+  ): TClass {
+    return inheritClass(this, members);
+  }
 
   _setDeprecatedOptions(): void {
     this._deprecatedOptions = {};

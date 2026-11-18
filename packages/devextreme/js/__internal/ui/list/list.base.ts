@@ -50,7 +50,6 @@ import eventsEngine from '@ts/events/core/events_engine';
 import type {
   CollectionItemInfo,
   CollectionItemKey,
-  Constructor,
   DataChange,
   InkRippleEvent,
   PostprocessRenderItemInfo,
@@ -90,7 +89,7 @@ const SELECT_ALL_ITEM_SELECTOR = '.dx-list-select-all';
 
 const LIST_FEEDBACK_SHOW_TIMEOUT = 70;
 
-type ScrollViewConstructor = Constructor<ScrollViewType>;
+type ScrollViewConstructor = typeof ScrollView;
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 let _scrollView: ScrollViewConstructor | null = null;
@@ -850,7 +849,6 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item> {
 
   _attachGroupCollapseEvent(): void {
     const { collapsibleGroups } = this.option();
-    // @ts-expect-error ts-error
     const eventNameClick = addNamespace(clickEventName, this.NAME);
     const headerSelector = `.${LIST_GROUP_HEADER_CLASS}`;
 
@@ -1108,7 +1106,6 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item> {
   }
 
   _updateSwipeEventSubscription($itemElement: dxElementWrapper = this._itemElements()): void {
-    // @ts-expect-error ts-error
     const endEventName = addNamespace(swipeEventEnd, this.NAME);
     eventsEngine.off($itemElement, endEventName);
 

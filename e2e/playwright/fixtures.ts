@@ -2,6 +2,8 @@ import { expect, test as base } from '@playwright/test';
 import { DEFAULT_BROWSER_SIZE, DEFAULT_THEME } from './helpers/const';
 import { changeTheme, openTestPage, resetPageState } from './helpers/testPageUtils';
 
+const GOOGLE_FONTS = /^https:\/\/fonts\.googleapis\.com\//;
+
 export interface TestOptions {
   theme: string;
   browserSize: [number, number];
@@ -20,6 +22,9 @@ export const test = base.extend<TestOptions>({
     const pageErrors: string[] = [];
 
     page.on('pageerror', (error) => pageErrors.push(error.stack ?? error.message));
+
+    // Material themes fall back to their bundled Roboto instead of whatever Google Fonts serves.
+    await page.context().route(GOOGLE_FONTS, (route) => route.fulfill({ contentType: 'text/css' }));
 
     await page.setViewportSize({ width, height });
     await openTestPage(page);

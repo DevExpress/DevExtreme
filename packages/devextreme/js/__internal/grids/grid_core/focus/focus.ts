@@ -536,15 +536,30 @@ export class FocusController extends core.ViewController {
     }
   }
 
-  private _clearPreviousFocusedRow($tableElement: dxElementWrapper, focusedRowIndex: number): void {
+  private findStaleFocusedRows(
+    $tableElement: dxElementWrapper,
+    focusedRowIndex: number,
+  ): dxElementWrapper {
     const isNotMasterDetailFocusedRow = (_: number, focusedRow: Element): boolean => {
       const $focusedRowTable = $(focusedRow).closest(`.${this.addWidgetPrefix(VIEW_CLASSES.table)}`);
       return $tableElement.is($focusedRowTable);
     };
 
-    const $prevRowFocusedElement = $tableElement
+    const $focusedRows = $tableElement
       .find(FOCUSED_ROW_SELECTOR)
       .filter(isNotMasterDetailFocusedRow);
+
+    if (focusedRowIndex < 0) {
+      return $focusedRows;
+    }
+
+    const $focusedRow = this.getRowsView()._getRowElements($tableElement).eq(focusedRowIndex);
+
+    return $focusedRows.not($focusedRow);
+  }
+
+  private _clearPreviousFocusedRow($tableElement: dxElementWrapper, focusedRowIndex: number): void {
+    const $prevRowFocusedElement = this.findStaleFocusedRows($tableElement, focusedRowIndex);
 
     $prevRowFocusedElement
       .removeClass(CLASSES.rowFocused)
@@ -568,11 +583,15 @@ export class FocusController extends core.ViewController {
       return undefined;
     }
 
-    const tabIndex = this.option('tabindex') || 0;
+    const tabIndex = this.option('tabIndex') ?? 0;
     const rowsView = this.getView('rowsView');
     const $row = $(rowsView._getRowElements($tableElement).eq(focusedRowIndex));
 
-    $row.addClass(CLASSES.rowFocused).attr('tabindex', tabIndex);
+    $row.addClass(CLASSES.rowFocused);
+
+    if (!$row.children('[tabindex]').length) {
+      $row.attr('tabindex', tabIndex);
+    }
 
     return $row;
   }
@@ -947,6 +966,13 @@ export const rowsView = (
     if (this.option('focusedRowEnabled') && row) {
       if (this._focusController.isRowFocused(row.key)) {
         $row.addClass(CLASSES.rowFocused);
+
+        const isRowTabStop = row.rowType === 'group'
+          || (row.rowType === 'data' && !this._keyboardNavigationController.isCellFocusType());
+
+        if (isRowTabStop) {
+          $row.attr('tabindex', this.option('tabIndex') ?? 0);
+        }
       }
     }
 

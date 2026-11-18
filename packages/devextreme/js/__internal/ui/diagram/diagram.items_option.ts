@@ -54,7 +54,6 @@ interface ItemsOptionBase {
 // eslint-disable-next-line @typescript-eslint/no-unsafe-declaration-merging
 class ItemsOptionBase extends Component<ItemsOptionBase, ItemsOptionProperties> {}
 
-// @ts-expect-error include is a Class.inherit static that the Component typing does not declare
 ItemsOptionBase.include(DataHelperMixin);
 
 class ItemsOption extends ItemsOptionBase {

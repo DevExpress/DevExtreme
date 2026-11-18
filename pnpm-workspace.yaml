@@ -97,6 +97,7 @@ catalog:
   vue-eslint-parser: 10.4.1
   globals: 15.14.0
   jquery: 4.0.0
+  playwright: 1.62.1
   stylelint: 16.22.0
   testcafe: 3.7.5
   zod: 4.6.7
@@ -111,6 +112,7 @@ catalogs:
     "@angular-devkit/build-angular": ~21.2.23
     "@angular-devkit/architect": ~0.2102.23
     "@angular-devkit/schematics": ~21.2.23
+    "@angular/build": ~21.2.23
     "@angular/cli": ~21.2.23
     "@angular/common": ~21.2.25
     "@angular/compiler": ~21.2.25
