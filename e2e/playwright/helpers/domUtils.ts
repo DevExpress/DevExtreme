@@ -165,6 +165,26 @@ export const addFocusableElementBefore = async (
   { selector: targetSelector, id: elementId },
 );
 
+export const addFocusableElementAfter = async (
+  page: Page,
+  targetSelector: string,
+  elementId = 'focusable-end',
+): Promise<string> => page.evaluate(
+  ({ selector, id }) => {
+    document.getElementById(id)?.remove();
+
+    const target = document.querySelector(selector);
+    const button = document.createElement('button');
+
+    button.id = id;
+    button.textContent = 'End';
+    target?.parentElement?.insertBefore(button, target.nextElementSibling);
+
+    return button.id;
+  },
+  { selector: targetSelector, id: elementId },
+);
+
 export const waitForNextFrame = async (page: Page): Promise<void> => page.evaluate(
   () => new Promise<void>((resolve) => {
     requestAnimationFrame(() => requestAnimationFrame(() => resolve()));
