@@ -110,6 +110,7 @@
       {
         "Name": "Chat",
         "Equivalents": "dxChat, dx-chat, chat",
+        "Badge": "Updated",
         "Groups": [
           {
             "Name": "AI and Chatbot Integration",
@@ -4417,6 +4418,7 @@
         "Name": "Chat",
         "Breadcrumb": true,
         "Equivalents": "dxChat, dx-chat, chat",
+        "Badge": "Updated",
         "Groups": [
           {
             "Name": "Overview",

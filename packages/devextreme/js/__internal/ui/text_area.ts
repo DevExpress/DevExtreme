@@ -90,17 +90,14 @@ class TextArea<
     const $input = this._input();
     const initScrollData = prepareScrollData($input, true);
 
-    // @ts-expect-error addNamespace
     eventsEngine.on($input, addNamespace(scrollEvents.init, this.NAME), initScrollData, noop);
     eventsEngine.on<DxEvent<MouseEvent | PointerEvent>>(
       $input,
-      // @ts-expect-error addNamespace
       addNamespace(pointerEvents.down, this.NAME),
       this._pointerDownHandler.bind(this),
     );
     eventsEngine.on<DxEvent<MouseEvent | PointerEvent>>(
       $input,
-      // @ts-expect-error addNamespace
       addNamespace(pointerEvents.move, this.NAME),
       this._pointerMoveHandler.bind(this),
     );
@@ -150,7 +147,6 @@ class TextArea<
 
   _renderEvents(): void {
     if (this.option('autoResizeEnabled')) {
-      // @ts-expect-error addNamespace
       eventsEngine.on(this._input(), addNamespace('input paste', this.NAME), this._updateInputHeight.bind(this));
     }
 
@@ -158,7 +154,6 @@ class TextArea<
   }
 
   _refreshEvents(): void {
-    // @ts-expect-error addNamespace
     eventsEngine.off(this._input(), addNamespace('input paste', this.NAME));
     super._refreshEvents();
   }

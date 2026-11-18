@@ -31,7 +31,7 @@ class EditDecoratorContext extends EditDecorator {
   }
 
   _renderOverlay($element: dxElementWrapper): Overlay {
-    return this._list._createComponent($element, Overlay, {
+    return this._list._createComponent<Overlay>($element, Overlay, {
       shading: false,
       deferRendering: true,
       hideOnParentScroll: true,

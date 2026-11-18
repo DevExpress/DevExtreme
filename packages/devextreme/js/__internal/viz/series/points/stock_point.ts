@@ -4,7 +4,6 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-/* eslint-disable prefer-destructuring */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 
 import { extend } from '@ts/core/utils/extend';
@@ -26,8 +25,7 @@ export default _extend({}, candlestickPoint, {
       };
     const openYExist = _isNumeric(that.openY);
     const closeYExist = _isNumeric(that.closeY);
-    const x = that.x;
-    const width = that.width;
+    const { x, width } = that;
     // @ts-expect-error
     let points = [].concat(createPoint(x, that.highY));
     // @ts-expect-error

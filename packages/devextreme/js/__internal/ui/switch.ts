@@ -241,7 +241,7 @@ class Switch extends Editor<Properties> {
   }
 
   _renderClick(): void {
-    const eventName = addNamespace(clickEventName, this.NAME ?? '');
+    const eventName = addNamespace(clickEventName, this.NAME);
     const $element = this.$element();
     this._clickAction = this._createAction(this._clickHandler.bind(this));
 

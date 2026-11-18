@@ -439,8 +439,8 @@ class Slider<
   }
 
   _renderStartHandler(): void {
-    const pointerDownEventName = addNamespace(pointerEvents.down, this.NAME ?? '');
-    const clickEventName = addNamespace(clickName, this.NAME ?? '');
+    const pointerDownEventName = addNamespace(pointerEvents.down, this.NAME);
+    const clickEventName = addNamespace(clickName, this.NAME);
     const startAction = this._createAction(this._startHandler.bind(this));
     const $element = this.$element();
 
