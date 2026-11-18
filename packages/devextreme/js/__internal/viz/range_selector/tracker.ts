@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/init-declarations */
-/* eslint-disable no-multi-assign */
 /* eslint-disable @typescript-eslint/no-use-before-define */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 
@@ -300,7 +299,8 @@ export let Tracker = class Tracker {
   declare _docEvents: DocumentEvents[];
 
   constructor(params: TrackerParams) {
-    const state = this._state = {};
+    this._state = {};
+    const state = this._state;
     const targets = params.controller.getTrackerTargets();
     if (msPointerEnabled) {
       params.renderer.root.css({ msTouchAction: 'pinch-zoom' });
