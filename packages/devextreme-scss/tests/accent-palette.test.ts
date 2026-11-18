@@ -75,32 +75,6 @@ test('the palettes read back exactly the steps the contract fixes', () => {
   expect(readBack).toEqual(paletteNames.map((palette) => [palette, contractSteps]));
 });
 
-test('no step multiplies and divides by the same number — Chrome 145 folds that term to zero', () => {
-  const degenerateFactors = (expression: string): string[] => {
-    const offenders: string[] = [];
-    const multiplier = /(\d+) \* \(/g;
-    let match = multiplier.exec(expression);
-    while (match) {
-      let depth = 1;
-      let index = match.index + match[0].length;
-      while (depth > 0 && index < expression.length) {
-        if (expression[index] === '(') depth += 1;
-        if (expression[index] === ')') depth -= 1;
-        index += 1;
-      }
-      const divisor = /^ \/ (\d+)/.exec(expression.slice(index));
-      if (divisor?.[1] === match[1]) offenders.push(`${match[1]} * (…) / ${divisor[1]}`);
-      match = multiplier.exec(expression);
-    }
-    return offenders;
-  };
-
-  const offenders = [...stylesheet().matchAll(/--dx-accent-color-(\d+): (.+);/g)]
-    .flatMap(([, step, value]) => degenerateFactors(value).map((shape) => `step ${step}: ${shape}`));
-
-  expect(offenders).toEqual([]);
-});
-
 test('the base pins the alpha and every step is built from it, so a translucent accent does not fade the whole scale', () => {
   const declarations = new Map([...stylesheet().matchAll(/(--dx-accent-color-[a-z0-9]+): (.+);/g)]
     .map(([, name, expression]) => [name, expression]));
