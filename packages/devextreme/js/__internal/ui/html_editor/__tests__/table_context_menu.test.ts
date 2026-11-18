@@ -30,6 +30,10 @@ interface Repaint {
 const TABLE_MARKUP = '<table><tbody><tr><td>cell</td></tr></tbody></table>';
 const COMMAND_TEXT = 'Insert Row Above';
 
+const EMPTY_RECT: DOMRect = {
+  x: 0, y: 0, width: 0, height: 0, top: 0, right: 0, bottom: 0, left: 0, toJSON: () => ({}),
+};
+
 const editors: HtmlEditor[] = [];
 
 const createEditor = (options: Properties): HtmlEditor => {
@@ -237,7 +241,7 @@ describe('HtmlEditor table context menu with custom items', () => {
     jest.useFakeTimers();
     fx.off = true;
     // jsdom has no layout for a Range, and Quill reads it when the selection is set
-    Range.prototype.getBoundingClientRect = (): DOMRect => new DOMRect();
+    Range.prototype.getBoundingClientRect = (): DOMRect => EMPTY_RECT;
   });
 
   afterEach(() => {
