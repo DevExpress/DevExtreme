@@ -4,7 +4,6 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-/* eslint-disable prefer-destructuring */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 
@@ -40,7 +39,7 @@ function createTick(
 
   function getLabelFontStyle(tick) {
     let fontStyle = axis._textFontStyles;
-    const customizeColor = labelOptions.customizeColor;
+    const { customizeColor } = labelOptions;
 
     if (customizeColor && customizeColor.call) {
       fontStyle = extend({}, axis._textFontStyles, { fill: customizeColor.call(tick, tick) });
@@ -277,7 +276,7 @@ function createTick(
       },
 
       updateLabelPosition(animate) {
-        const templateContainer = this.templateContainer;
+        const { templateContainer } = this;
         if (!this.getContentContainer()) {
           return;
         }

@@ -11,7 +11,6 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-multi-assign */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable prefer-destructuring */
 /* eslint-disable no-else-return */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
@@ -83,7 +82,7 @@ interface DrawPointOptions {
 }
 
 const seriesNS: Record<string, ThemeValue> = {};
-const states = consts.states;
+const { states } = consts;
 
 const DISCRETE = 'discrete';
 const SELECTED_STATE = states.selectedMark;
@@ -464,7 +463,7 @@ export let Series = class Series {
   }
 
   _createStyles(options: ThemeValue): void {
-    const mainSeriesColor = options.mainSeriesColor;
+    const { mainSeriesColor } = options;
     const colorId = this._getColorId(options);
     const hoverStyle = options.hoverStyle || {};
     const selectionStyle = options.selectionStyle || {};
@@ -518,7 +517,7 @@ export let Series = class Series {
 
   _createPoint(data: ThemeValue, index: number, oldPoint?: SeriesPoint): SeriesPoint {
     data.index = index;
-    const pointsByArgument = this.pointsByArgument;
+    const { pointsByArgument } = this;
     const options = this._getCreatingPointOptions(data);
     const arg = data.argument.valueOf();
     let point = oldPoint;
@@ -566,7 +565,7 @@ export let Series = class Series {
   }
 
   updateOptions(newOptions: ThemeValue, settings?: SeriesSettings): void {
-    const widgetType = newOptions.widgetType;
+    const { widgetType } = newOptions;
     const oldType = this.type;
     const newType = newOptions.type;
 
@@ -671,7 +670,7 @@ export let Series = class Series {
 
   updateData(data: ThemeValue): void {
     const options = this._options;
-    const nameField = options.nameField;
+    const { nameField } = options;
 
     data = data || [];
 
@@ -719,7 +718,7 @@ export let Series = class Series {
   }
 
   useAggregation(): boolean {
-    const aggregation = this.getOptions().aggregation;
+    const { aggregation } = this.getOptions();
 
     return aggregation && aggregation.enabled;
   }
@@ -1070,12 +1069,12 @@ export let Series = class Series {
 
   customizePoint(point: SeriesPoint, pointData: ThemeValue): void {
     const options = this._options;
-    const customizePoint = options.customizePoint;
+    const { customizePoint } = options;
     let customizeObject;
     let pointOptions;
     let customLabelOptions;
     let customOptions;
-    const customizeLabel = options.customizeLabel;
+    const { customizeLabel } = options;
     let useLabelCustomOptions;
     let usePointCustomOptions;
 
@@ -1229,7 +1228,7 @@ export let Series = class Series {
     const aggregationMethod = this._getAggregationMethod(isValueAxisDiscrete);
 
     if (aggregateByCategory) {
-      const categories = this.getArgumentAxis().getTranslator().getBusinessRange().categories;
+      const { categories } = this.getArgumentAxis().getTranslator().getBusinessRange();
       const groups = categories.reduce((g, category) => {
         g[category.valueOf()] = [];
         return g;
@@ -1466,9 +1465,9 @@ export let Series = class Series {
   }
 
   notify(data: ThemeValue): void {
-    const action = data.action;
+    const { action } = data;
     const seriesModes = this._seriesModes;
-    const target = data.target;
+    const { target } = data;
     const targetOptions = target.getOptions();
     const pointHoverMode = _normalizeEnum(targetOptions.hoverMode);
     const selectionModeOfPoint = _normalizeEnum(targetOptions.selectionMode);
@@ -1668,7 +1667,7 @@ Object.assign(Series.prototype, {
   _getColorId: _noop,
 });
 
-export const mixins = seriesNS.mixins;
+export const { mixins } = seriesNS;
 
 /// #DEBUG
 /* eslint-disable-next-line @typescript-eslint/naming-convention

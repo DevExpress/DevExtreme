@@ -7,20 +7,15 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-/* eslint-disable prefer-destructuring */
 /* eslint-disable no-else-return */
 
 import { extend } from '@ts/core/utils/extend';
 import { isDefined } from '@ts/core/utils/type';
 
 const math = Math;
-const round = math.round;
-const max = math.max;
-const min = math.min;
-const sin = math.sin;
-const cos = math.cos;
-const asin = math.asin;
-const PI = math.PI;
+const {
+  round, max, min, sin, cos, asin, PI,
+} = math;
 
 const buildPath = (...points) => points.join('');
 
@@ -402,7 +397,7 @@ export let Plaque = class {
   draw({
     x: anchorX, y: anchorY, canvas = {}, offsetX, offsetY, offset = 0, ...restProps
   }) {
-    const options = this.options;
+    const { options } = this;
     let { x, y } = options;
 
     const bounds = {
@@ -527,7 +522,7 @@ export let Plaque = class {
 
   _draw() {
     const renderer = this.widget._renderer;
-    const options = this.options;
+    const { options } = this;
 
     const shadowSettings = extend({
       x: '-50%', y: '-50%', width: '200%', height: '200%',

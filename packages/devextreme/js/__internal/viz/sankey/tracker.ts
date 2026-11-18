@@ -7,7 +7,6 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-/* eslint-disable prefer-destructuring */
 /* eslint-disable no-else-return */
 
 import { Tracker } from '@ts/viz/components/tracker';
@@ -40,7 +39,7 @@ export const plugin = {
       widget: that,
       root: that._renderer.root,
       getData(e) {
-        const target = e.target;
+        const { target } = e;
         return target[dataKey];
       },
       getNode(index) {
