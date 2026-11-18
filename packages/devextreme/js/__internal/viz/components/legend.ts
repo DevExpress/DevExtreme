@@ -16,7 +16,6 @@
 /* eslint-disable no-multi-assign */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-use-before-define */
-/* eslint-disable prefer-destructuring */
 /* eslint-disable no-else-return */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
@@ -223,7 +222,7 @@ function getAttributes(item: ThemeValue, state: ThemeValue, size?: number): Them
 }
 
 function parseMargins(options: ThemeValue): void {
-  let margin = options.margin;
+  let { margin } = options;
   if (margin >= 0) {
     margin = _Number(options.margin);
     margin = {
@@ -1071,7 +1070,7 @@ export let Legend = class Legend extends LayoutElement {
 
   _getItemsLayoutOptions(): ItemsLayoutOptions {
     const options = this._options;
-    const orientation = options.orientation;
+    const { orientation } = options;
     const layoutOptions = {
       itemsAlignment: options.itemsAlignment,
       orientation: options.orientation,
@@ -1132,7 +1131,7 @@ export let Legend = class Legend extends LayoutElement {
 
   _adjustBackgroundSettings(locationOptions: ThemeValue): void {
     if (!this._background) return;
-    const border = locationOptions.border;
+    const { border } = locationOptions;
     const legendBox = this._calculateTotalBox();
     const backgroundSettings: Record<string, ThemeValue> = {
       x: _round(legendBox.x - locationOptions.paddingLeftRight),

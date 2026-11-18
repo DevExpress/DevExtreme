@@ -17,7 +17,6 @@
 /* eslint-disable no-multi-assign */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-use-before-define */
-/* eslint-disable prefer-destructuring */
 /* eslint-disable no-else-return */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
@@ -153,7 +152,7 @@ interface ZoomResults {
 
 type AxisInstance = InstanceType<typeof Axis>;
 
-const convertTicksToValues = constants.convertTicksToValues;
+const { convertTicksToValues } = constants;
 const _math = Math;
 const _abs = _math.abs;
 const _max = _math.max;
@@ -328,7 +327,7 @@ function removeInvalidTick(ticks: ThemeValue[], i: number): boolean {
 
 function validateAxisOptions(options: ThemeValue): void {
   const labelOptions = options.label;
-  let position = options.position;
+  let { position } = options;
   const defaultPosition = options.isHorizontal ? BOTTOM : LEFT;
   const secondaryPosition = options.isHorizontal ? TOP : RIGHT;
 
@@ -794,7 +793,7 @@ export let Axis = class Axis {
     const positionFrom = orthogonalPositions.start;
     const positionTo = orthogonalPositions.end;
 
-    const borderOptions = this.borderOptions;
+    const { borderOptions } = this;
 
     const canvasStart = isHorizontal ? LEFT : TOP;
     const canvasEnd = isHorizontal ? RIGHT : BOTTOM;
@@ -887,7 +886,7 @@ export let Axis = class Axis {
     value: number,
     group: ThemeValue,
   ): ThemeValue {
-    let text = lineLabelOptions.text;
+    let { text } = lineLabelOptions;
     const options = this._options;
     const labelOptions = options.label;
 
@@ -1077,10 +1076,10 @@ export let Axis = class Axis {
     const textAlign = tick.labelAlignment || options.label.alignment;
     const isDiscrete = this._options.type === 'discrete';
     const isFlatLabel = tick.labelRotationAngle % 90 === 0;
-    const indentFromAxis = options.label.indentFromAxis;
+    const { indentFromAxis } = options.label;
     const labelPosition = options.label.position;
     const axisPosition = this._axisPosition;
-    const labelCoords = tick.labelCoords;
+    const { labelCoords } = tick;
     const labelX = labelCoords.x;
     let translateX;
     let translateY;
@@ -1282,7 +1281,7 @@ export let Axis = class Axis {
 
   _setTickOffset(): void {
     const options = this._options;
-    const discreteAxisDivisionMode = options.discreteAxisDivisionMode;
+    const { discreteAxisDivisionMode } = options;
     this._tickOffset = +(discreteAxisDivisionMode !== 'crossLabels' || !discreteAxisDivisionMode);
   }
 
@@ -1715,7 +1714,7 @@ export let Axis = class Axis {
     if (this.isArgumentAxis) {
       if (![SHIFT, KEEP, RESET].includes(value)) {
         if (range.axisType === constants.discrete) {
-          const categories = range.categories;
+          const { categories } = range;
           const newCategories = newRange.categories;
           const visualRange = this.visualRange();
           if (
@@ -2050,7 +2049,7 @@ export let Axis = class Axis {
           max: visualRange.endValue,
         });
       }
-      const synchronizedValue = options.synchronizedValue;
+      const { synchronizedValue } = options;
       if (isDefined(synchronizedValue)) {
         this._seriesData.addRange({
           min: synchronizedValue,
@@ -2095,7 +2094,7 @@ export let Axis = class Axis {
 
   getLabelsPosition(): number {
     const options = this._options;
-    const position = options.position;
+    const { position } = options;
     const labelShift = options.label.indentFromAxis
       + (this._axisShift || 0)
       + this._constantLabelOffset;
@@ -2115,7 +2114,7 @@ export let Axis = class Axis {
   }
 
   _getBoundaryTicks(majors: ThemeValue[], viewPort: ThemeValue): ThemeValue[] {
-    const length = majors.length;
+    const { length } = majors;
     const options = this._options;
     const customBounds = options.customBoundTicks;
     const min = viewPort.minVisible;
@@ -2196,8 +2195,7 @@ export let Axis = class Axis {
     skipTickGeneration?: boolean,
   ): ThemeValue {
     const options = this._options;
-    const customTicks = options.customTicks;
-    const customMinorTicks = options.customMinorTicks;
+    const { customTicks, customMinorTicks } = options;
 
     return getTickGenerator(
       options,
@@ -2252,7 +2250,7 @@ export let Axis = class Axis {
     const minVisible = visualRange?.startValue ?? businessRange.minVisible;
     const maxVisible = visualRange?.endValue ?? businessRange.maxVisible;
 
-    const aggregationInterval = options.aggregationInterval;
+    const { aggregationInterval } = options;
     const aggregationGroupWidth = this._getAggregationGroupWidth();
 
     const minInterval = !options.aggregationGroupWidth && !aggregationInterval && range.interval;
@@ -2264,13 +2262,13 @@ export let Axis = class Axis {
       minInterval,
     );
 
-    const tickInterval = generateTicks(
+    const { tickInterval } = generateTicks(
       aggregationInterval,
       true,
       minVisible,
       maxVisible,
       this._seriesData?.breaks,
-    ).tickInterval;
+    );
     const ticks = this._generateTick(
       useAllAggregatedPoints,
       businessRange,
@@ -2532,8 +2530,7 @@ export let Axis = class Axis {
 
     const translator = this._translator;
 
-    const minValueMargin = options.minValueMargin;
-    const maxValueMargin = options.maxValueMargin;
+    const { minValueMargin, maxValueMargin } = options;
 
     let minPadding = 0;
     let maxPadding = 0;
@@ -2633,7 +2630,7 @@ export let Axis = class Axis {
             && !options.skipViewportExtending
             && !viewPort.action
             && options.endOnTick !== false) {
-      const length = ticks.length;
+      const { length } = ticks;
       const firstTickPosition = translator.translate(ticks[0].value);
       const lastTickPosition = translator.translate(ticks[length - 1].value);
 
@@ -3198,7 +3195,7 @@ export let Axis = class Axis {
         endValue,
       };
     } else if (_isArray(args[0])) {
-      visualRange = args[0];
+      [visualRange] = args;
     } else if (isPlainObject(args[0])) {
       visualRange = extend({}, args[0]);
     } else {
@@ -3254,7 +3251,7 @@ export let Axis = class Axis {
     if (isDefined(this._storedZoomEndParams) && !this._storedZoomEndParams.prevent) {
       const previousRange = this._storedZoomEndParams.startRange;
       const domEvent = this._storedZoomEndParams.event;
-      const action = this._storedZoomEndParams.action;
+      const { action } = this._storedZoomEndParams;
       const previousBusinessRange = {
         minVisible: previousRange.startValue,
         maxVisible: previousRange.endValue,
@@ -3340,7 +3337,7 @@ export let Axis = class Axis {
         isOvercoming &= minZoom > afterVisualRangeLength;
       }
     } else {
-      const canvasLength = this._translator.canvasLength;
+      const { canvasLength } = this._translator;
       const fullRange = {
         minVisible: businessRange.min,
         maxVisible: businessRange.max,
@@ -3605,7 +3602,7 @@ export let Axis = class Axis {
   _getCanvasStartEnd(): { start: number; end: number } {
     const isHorizontal = this._isHorizontal;
     const canvas = this._canvas || {};
-    const invert = this._translator.getBusinessRange().invert;
+    const { invert } = this._translator.getBusinessRange();
     const coords = isHorizontal
       ? [canvas.left, canvas.width - canvas.right]
       : [canvas.height - canvas.bottom, canvas.top];
@@ -3650,7 +3647,7 @@ export let Axis = class Axis {
     if (this.isArgumentAxis) {
       sort = argCategories;
     } else {
-      const categoriesSortingMethod = this._options.categoriesSortingMethod;
+      const { categoriesSortingMethod } = this._options;
       sort = categoriesSortingMethod ?? this._options.categories;
     }
 

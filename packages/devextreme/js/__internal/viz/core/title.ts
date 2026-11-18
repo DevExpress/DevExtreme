@@ -8,7 +8,6 @@
 /* eslint-disable no-multi-assign */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-use-before-define */
-/* eslint-disable prefer-destructuring */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 
 import { extend } from '@ts/core/utils/extend';
@@ -120,7 +119,7 @@ export let Title = class Title extends LayoutElement {
   }
 
   _updateStructure(): void {
-    const renderer = this._params.renderer;
+    const { renderer } = this._params;
     const group = this._group;
     const options = this._options;
     const align = options.horizontalAlignment;
@@ -171,7 +170,7 @@ export let Title = class Title extends LayoutElement {
   _shiftSubtitle(): void {
     const titleBox = this._titleElement.getBBox();
     const element = this._subtitleElement;
-    const offset = this._options.subtitle.offset;
+    const { offset } = this._options.subtitle;
 
     element.move(0, titleBox.y + titleBox.height - element.getBBox().y - offset);
   }
@@ -236,10 +235,10 @@ export let Title = class Title extends LayoutElement {
 
   _correctTitleLength(width: number): void {
     const options = this._options;
-    const margin = options.margin;
+    const { margin } = options;
     const maxWidth = width - margin.left - margin.right;
 
-    let placeholderSize = options.placeholderSize;
+    let { placeholderSize } = options;
 
     processTitleLength(this._titleElement, options.text, maxWidth, options, placeholderSize);
     if (this._subtitleElement) {
@@ -277,7 +276,7 @@ export let Title = class Title extends LayoutElement {
 
   _updateBoundingRect(): void {
     const options = this._options;
-    const margin = options.margin;
+    const { margin } = options;
     const boundingRect = this._boundingRect;
     const box = this._hasText ? this._group.getBBox() : {
       width: 0, height: 0, x: 0, y: 0, isEmpty: true,

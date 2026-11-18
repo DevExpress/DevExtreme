@@ -9,7 +9,6 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-/* eslint-disable prefer-destructuring */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 
@@ -26,7 +25,7 @@ import { Plaque } from './plaque';
 import { Tooltip } from './tooltip';
 import { patchFontOptions } from './utils';
 
-const getDocument = domAdapter.getDocument;
+const { getDocument } = domAdapter;
 
 const EVENT_NS = 'annotations';
 const DOT_EVENT_NS = `.${EVENT_NS}`;
@@ -80,7 +79,7 @@ function coreAnnotation(options, contentTemplate) {
     },
     showTooltip(tooltip, { x, y }) {
       const that = this;
-      const options = that.options;
+      const { options } = that;
       if (tooltip.annotation !== that) {
         tooltip.setTemplate(options.tooltipTemplate);
         const callback = (result) => {
@@ -205,7 +204,7 @@ const chartPlugin = {
       let pane = axis?.pane;
 
       if (annotation.series) {
-        series = this.series.filter((s) => s.name === annotation.series)[0];
+        [series] = this.series.filter((s) => s.name === annotation.series);
         axis = series?.getValueAxis();
         isDefined(axis) && (pane = axis.pane);
       }
@@ -325,13 +324,12 @@ const polarChartPlugin = {
       const argAxis = this.getArgumentAxis();
       let argument = argAxis.validateUnit(annotation.argument);
       const value = this.getValueAxis().validateUnit(annotation.value);
-      const radius = annotation.radius;
-      const angle = annotation.angle;
+      const { radius, angle } = annotation;
       let pointCoords;
       let series;
 
       if (annotation.series) {
-        series = this.series.filter((s) => s.name === annotation.series)[0];
+        [series] = this.series.filter((s) => s.name === annotation.series);
       }
 
       extend(true, coords, this.getXYFromPolar(angle, radius, argument, value));
@@ -400,9 +398,7 @@ const vectorMapPlugin = {
       if (annotation.coordinates) {
         const data = this._projection.toScreenPoint(annotation.coordinates);
         // @ts-expect-error
-        coords.x = data[0];
-        // @ts-expect-error
-        coords.y = data[1];
+        [coords.x, coords.y] = data;
       }
 
       return coords;
@@ -450,7 +446,6 @@ const pieChartPlugin = {
   dispose() {},
   members: {
     _getAnnotationCoords(annotation) {
-      let series;
       const coords = {
         offsetX: annotation.offsetX,
         offsetY: annotation.offsetY,
@@ -458,11 +453,9 @@ const pieChartPlugin = {
       };
 
       if (annotation.argument) {
-        if (annotation.series) {
-          series = this.getSeriesByName(annotation.series);
-        } else {
-          series = this.series[0];
-        }
+        const series = annotation.series
+          ? this.getSeriesByName(annotation.series)
+          : this.series[0];
         const argument = series.getPointsByArg(annotation.argument)[0];
         const { x, y } = argument.getAnnotationCoords(annotation.location);
         // @ts-expect-error

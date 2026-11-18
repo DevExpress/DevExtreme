@@ -7,7 +7,6 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-/* eslint-disable prefer-destructuring */
 /* eslint-disable no-else-return */
 
 import { noop } from '@ts/core/utils/common';
@@ -101,7 +100,7 @@ function getConnectorStrategy(options, inverted) {
     getFigureCenter,
     prepareLabelPoints(bBox) {
       const x = bBox.x + connectorIndent;
-      const y = bBox.y;
+      const { y } = bBox;
       const x1 = x + bBox.width;
 
       return [...Array(bBox.height + 1)]
@@ -157,17 +156,18 @@ function getLabelOptions(labelOptions, defaultColor, defaultTextAlignment) {
 }
 
 function correctLabelPosition(pos, bBox, rect) {
-  if (pos.x < rect[0]) {
-    pos.x = rect[0];
+  const [left, top, right, bottom] = rect;
+  if (pos.x < left) {
+    pos.x = left;
   }
-  if (pos.x + bBox.width > rect[2]) {
-    pos.x = rect[2] - bBox.width;
+  if (pos.x + bBox.width > right) {
+    pos.x = right - bBox.width;
   }
-  if (pos.y < rect[1]) {
-    pos.y = rect[1];
+  if (pos.y < top) {
+    pos.y = top;
   }
-  if (pos.y + bBox.height > rect[3]) {
-    pos.y = rect[3] - bBox.height;
+  if (pos.y + bBox.height > bottom) {
+    pos.y = bottom - bBox.height;
   }
   return pos;
 }
@@ -333,7 +333,7 @@ export const plugin = {
           .reduce(
             ([height, emptySpace], label, index, labels) => {
               const bBox = label.getBoundingRect();
-              let y = bBox.y;
+              let { y } = bBox;
 
               if (bBox.y < height) {
                 label.shift(bBox.x, height);

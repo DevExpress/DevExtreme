@@ -12,7 +12,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-use-before-define */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-/* eslint-disable prefer-destructuring */
 /* eslint-disable no-else-return */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 
@@ -150,7 +149,7 @@ export function getPalette(palette, parameters) {
     || (currentPaletteName === undefined ? parameters.themeDefault : currentPalette());
 
   let result;
-  const type = parameters.type;
+  const { type } = parameters;
   if (Array.isArray(palette)) {
     return palette.slice(0);
   } else {
@@ -258,7 +257,7 @@ function getAlternateColorsStrategy(palette, parameters) {
 
 function getExtrapolateColorsStrategy(palette, parameters) {
   function convertColor(color, cycleIndex, cycleCount) {
-    const hsl = new Color(color).hsl;
+    const { hsl } = new Color(color);
     let l = hsl.l / 100;
     const diapason = cycleCount - 1 / cycleCount;
     let minL = l - diapason * 0.5;

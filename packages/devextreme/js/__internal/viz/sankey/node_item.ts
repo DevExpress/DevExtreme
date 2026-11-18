@@ -1,7 +1,6 @@
 /* eslint-disable no-bitwise */
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable no-nested-ternary */
-/* eslint-disable prefer-destructuring */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 
@@ -64,7 +63,7 @@ function compileAttrs(
   itemOptions: ThemeValue,
   itemBaseOptions: ThemeValue,
 ): NodeAttrs {
-  const border = itemOptions.border;
+  const { border } = itemOptions;
   const baseBorder = itemBaseOptions.border;
   const borderVisible = isDefined(border.visible) ? border.visible : baseBorder.visible;
   const borderWidth = isDefined(border.width) ? border.width : baseBorder.width;

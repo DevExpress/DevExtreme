@@ -7,7 +7,6 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-/* eslint-disable prefer-destructuring */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 
 import { debug } from '@ts/core/utils/console';
@@ -25,7 +24,7 @@ function getValueAxesPerPanes(valueAxes) {
   const result = {};
 
   valueAxes.forEach((axis) => {
-    const pane = axis.pane;
+    const { pane } = axis;
     if (!result[pane]) {
       result[pane] = [];
     }
@@ -74,7 +73,7 @@ function convertAxisInfo(axisInfo, converter) {
     return;
   }
   const base = axisInfo.logarithmicBase;
-  const tickValues = axisInfo.tickValues;
+  const { tickValues } = axisInfo;
 
   axisInfo.minValue = converter.transform(axisInfo.minValue, base);
   axisInfo.oldMinValue = converter.transform(axisInfo.oldMinValue, base);
@@ -102,8 +101,8 @@ function populateAxesInfo(axes) {
 
     let axisInfo;
     let tickInterval = axis._tickInterval;
-    const synchronizedValue = options.synchronizedValue;
-    const action = axis.getViewport().action;
+    const { synchronizedValue } = options;
+    const { action } = axis.getViewport();
 
     if (majorTicks && majorTicks.length > 0
             && isNumeric(majorTicks[0])
@@ -163,9 +162,7 @@ function updateTickValues(axesInfo) {
     let ticksMultiplier;
     let ticksCount;
     let additionalStartTicksCount = 0;
-    const synchronizedValue = axisInfo.synchronizedValue;
-    const tickValues = axisInfo.tickValues;
-    const tickInterval = axisInfo.tickInterval;
+    const { synchronizedValue, tickValues, tickInterval } = axisInfo;
 
     if (isDefined(synchronizedValue)) {
       axisInfo.baseTickValue = axisInfo.invertedBaseTickValue = synchronizedValue;
@@ -187,7 +184,7 @@ function updateTickValues(axesInfo) {
         }
         axisInfo.tickInterval = tickInterval / ticksMultiplier;
       }
-      axisInfo.baseTickValue = tickValues[0];
+      [axisInfo.baseTickValue] = tickValues;
       axisInfo.invertedBaseTickValue = tickValues[tickValues.length - 1];
     }
   });
@@ -235,7 +232,7 @@ function calculatePaddings(axesInfo) {
   let endPadding = 0;
 
   axesInfo.forEach((axisInfo) => {
-    const inverted = axisInfo.inverted;
+    const { inverted } = axisInfo;
     minPadding = axisInfo.minValue > axisInfo.oldMinValue
       ? (axisInfo.minValue - axisInfo.oldMinValue) / getAxisRange(axisInfo)
       : 0;
@@ -255,7 +252,7 @@ function calculatePaddings(axesInfo) {
 function correctMinMaxValuesByPaddings(axesInfo, paddings) {
   axesInfo.forEach((info) => {
     const range = getAxisRange(info);
-    const inverted = info.inverted;
+    const { inverted } = info;
 
     info.minValue = adjust(info.minValue - paddings[inverted ? 'end' : 'start'] * range);
     info.maxValue = adjust(info.maxValue + paddings[inverted ? 'start' : 'end'] * range);
@@ -270,10 +267,9 @@ function updateTickValuesIfSynchronizedValueUsed(axesInfo) {
   });
 
   axesInfo.forEach((info) => {
-    const tickInterval = info.tickInterval;
-    const tickValues = info.tickValues;
-    const maxValue = info.maxValue;
-    const minValue = info.minValue;
+    const {
+      tickInterval, tickValues, maxValue, minValue,
+    } = info;
     let tick;
 
     if (hasSynchronizedValue && tickInterval) {
@@ -296,7 +292,7 @@ function updateTickValuesIfSynchronizedValueUsed(axesInfo) {
 
 function applyMinMaxValues(axesInfo) {
   axesInfo.forEach((info) => {
-    const axis = info.axis;
+    const { axis } = info;
     const range = axis.getTranslator().getBusinessRange();
 
     if (range.min === range.minVisible) {
