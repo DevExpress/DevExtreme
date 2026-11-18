@@ -4,7 +4,7 @@ import { each } from '@ts/core/utils/iterator';
 import { clone } from '@ts/core/utils/object';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 import { setupWidgetPrototype } from '@ts/viz/core/helpers';
-import type { Bounds } from '@ts/viz/core/types';
+import type { Bounds, Size } from '@ts/viz/core/types';
 import { normalizeEnum } from '@ts/viz/core/utils';
 import { BaseGauge } from '@ts/viz/gauges/base_gauge';
 import type { ScaleMeasure, TicksCoefficients } from '@ts/viz/gauges/common';
@@ -266,7 +266,7 @@ class LinearGauge extends dxGauge {
     return s;
   }
 
-  _getDefaultSize(): { width: number; height: number } {
+  _getDefaultSize(): Size {
     const geometry = this.option('geometry') || {};
     if (geometry.orientation === 'vertical') {
       return { width: 100, height: 300 };

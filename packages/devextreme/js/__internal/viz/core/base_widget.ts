@@ -37,7 +37,7 @@ import warnings from '@ts/viz/core/errors_warnings';
 import { changes, isDisabledOnServer, replaceInherit } from '@ts/viz/core/helpers';
 import _Layout from '@ts/viz/core/layout';
 import { Renderer } from '@ts/viz/core/renderers/renderer';
-import type { Canvas } from '@ts/viz/core/types';
+import type { Canvas, Size } from '@ts/viz/core/types';
 import { parseScalar as _parseScalar } from '@ts/viz/core/utils';
 import { areCanvasesDifferent, floorCanvasDimensions } from '@ts/viz/utils';
 
@@ -776,7 +776,7 @@ class BaseWidget extends DOMComponent<any, any> {
     return this._renderer.svg();
   }
 
-  getSize(): { width: number; height: number } {
+  getSize(): Size {
     const canvas = this._canvas || {};
     return { width: canvas.width, height: canvas.height };
   }
