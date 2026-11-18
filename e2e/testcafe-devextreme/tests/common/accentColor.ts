@@ -12,6 +12,16 @@ const STEPS = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150,
 const DESIGNED_PALETTE_TOLERANCE = 4;
 const HUE_TOLERANCE = 0.01;
 
+const NORMALIZED_ACCENT_LIGHTNESS: Record<string, number> = {
+  '#000080': 0.45,
+  '#ffff00': 0.6,
+  'oklch(0.3 0.016 200)': 0.465,
+  'oklch(0.7 0.016 40)': 0.585,
+  black: 0.525,
+  white: 0.525,
+  '#808080': 0.525,
+};
+
 interface Oklch {
   l: number;
   c: number;
@@ -267,6 +277,23 @@ fixture`Custom accent color`
     lighteningSteps: [],
     stepsOffHue: [],
   });
+});
+
+(isFluentNext() ? test : test.skip)('an accent too dark, too light, short of chroma or achromatic is normalized, keeping its chroma and hue', async (t) => {
+  const normalized: Record<string, Oklch> = {};
+  const expected: Record<string, Oklch> = {};
+
+  for (const [accent, lightness] of Object.entries(NORMALIZED_ACCENT_LIGHTNESS)) {
+    const { measured, source } = await measurePalette(accent, [100]);
+    const accentItself = stepOf(measured, 100);
+
+    normalized[accent] = {
+      l: rounded(accentItself.l), c: rounded(accentItself.c), h: rounded(accentItself.h),
+    };
+    expected[accent] = { l: lightness, c: rounded(source!.c), h: rounded(source!.h) };
+  }
+
+  await t.expect(normalized).eql(expected);
 });
 
 (isFluentNext() ? test : test.skip)('the derived palette is drawn as designed', async (t) => {
