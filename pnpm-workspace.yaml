@@ -55,6 +55,7 @@ overrides:
   zod@>=4.0.0 <4.6.6: ^4.6.6
 catalog:
   axe-core: 4.13.0
+  "@axe-core/playwright": 4.13.0
   inferno: ^8.2.3
   inferno-create-element: ^8.2.3
   inferno-server: ^8.2.3
