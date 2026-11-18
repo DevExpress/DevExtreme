@@ -20,7 +20,15 @@ import {
   start as dragEventStart,
 } from '@ts/events/drag';
 import { exportNames as transformEvents } from '@ts/events/transform';
+import type { Coords } from '@ts/viz/core/types';
 import { getVizRangeObject, normalizeEnum } from '@ts/viz/core/utils';
+import type { ZoomResult } from '@ts/viz/translators/translator2d';
+
+interface ViewportZoom extends Partial<ZoomResult> {
+  zoomed: boolean;
+  deltaTranslate?: number;
+  enabled?: boolean;
+}
 
 const EVENTS_NS = '.zoomAndPanNS';
 
@@ -166,8 +174,8 @@ export default {
     }
 
     function axesViewportChanging(zoomAndPan, actionField, e, offsetCalc, centerCalc) {
-      function zoomAxes(axes, criteria, coordField, e, actionData): { zoomed: boolean } {
-        let zoom = { zoomed: false };
+      function zoomAxes(axes, criteria, coordField, e, actionData): ViewportZoom {
+        let zoom: ViewportZoom = { zoomed: false };
         criteria && getFilteredAxes(axes).forEach((axis) => {
           const options = axis.getOptions();
           const viewport = axis.visualRange();
@@ -178,7 +186,6 @@ export default {
             zoom,
             axis.getTranslator().zoom(translate, scale, axis.getZoomBounds()),
           );
-          // @ts-expect-error
           let pannedRange = getVizRangeObject([zoom.min, zoom.max]);
           if (actionField === 'pan' && scale === 1) {
             pannedRange = axis.adjustPannedRange(pannedRange);
@@ -201,8 +208,9 @@ export default {
             );
             if (!stopInteraction) {
               zoom.zoomed = true;
-              // @ts-expect-error
-              zoom.deltaTranslate = translate - zoom.translate;
+              // extend() above has copied the translator's zoom result into zoom
+              // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+              zoom.deltaTranslate = translate - zoom.translate!;
             }
           } else if (e.pointerType === 'touch' && options.type === 'discrete') {
             const isMinPosition = axis.isExtremePosition(false);
@@ -216,7 +224,6 @@ export default {
                 || (isMaxPosition
                   && ((translate > 0 && !options.inverted) || (translate < 0 && options.inverted)))
               );
-            // @ts-expect-error
             zoom.enabled = zoomInEnabled || zoomOutEnabled || panningEnabled;
           }
         });
@@ -240,8 +247,8 @@ export default {
       const rotated = chart.option('rotated');
       const { actionData } = zoomAndPan;
       const { options } = zoomAndPan;
-      let argZoom = {};
-      let valZoom = {};
+      let argZoom: Partial<ViewportZoom> = {};
+      let valZoom: Partial<ViewportZoom> = {};
 
       if (!actionData.fallback) {
         argZoom = zoomAxes(chart._argumentAxes, options.argumentAxis[actionField], rotated ? 'y' : 'x', e, actionData);
@@ -254,13 +261,10 @@ export default {
       const center = centerCalc(e);
       storeCenter(center, actionData, argZoom, rotated ? 'y' : 'x');
       storeCenter(center, actionData, valZoom, rotated ? 'x' : 'y');
-      // @ts-expect-error
       if (!argZoom.zoomed && !valZoom.zoomed) {
         actionData.center = center;
       }
-      // @ts-expect-error
       return argZoom.zoomed || valZoom.zoomed || actionData.fallback
-        // @ts-expect-error
         || argZoom.enabled || valZoom.enabled;
     }
 
@@ -353,7 +357,7 @@ export default {
       };
     }
 
-    function getPointerCoord(rect, e): { x: number; y: number } {
+    function getPointerCoord(rect, e): Coords {
       const rootOffset = renderer.getRootOffset();
       return {
         x: _min(_max(e.pageX - rootOffset.left, rect.x), rect.width + rect.x),
@@ -361,7 +365,7 @@ export default {
       };
     }
 
-    function calcCenterForPinch(e): { x: number; y: number } {
+    function calcCenterForPinch(e): Coords {
       const rootOffset = renderer.getRootOffset();
       const x1 = e.pointers[0].pageX;
       const x2 = e.pointers[1].pageX;
@@ -373,7 +377,7 @@ export default {
       };
     }
 
-    function calcCenterForDrag(e): { x: number; y: number } {
+    function calcCenterForDrag(e): Coords {
       const rootOffset = renderer.getRootOffset();
       return {
         x: e.pageX - rootOffset.left,

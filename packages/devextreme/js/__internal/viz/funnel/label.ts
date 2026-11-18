@@ -11,6 +11,7 @@
 
 import { noop } from '@ts/core/utils/common';
 import { extend } from '@ts/core/utils/extend';
+import type { Coords } from '@ts/viz/core/types';
 import { normalizeEnum } from '@ts/viz/core/utils';
 import { Label } from '@ts/viz/series/points/label';
 
@@ -54,7 +55,7 @@ function getOutsideLeftLabelPosition(coords, bBox, options, inverted) {
   };
 }
 
-function getInsideLabelPosition(coords, bBox, options): { x: number; y: number } {
+function getInsideLabelPosition(coords, bBox, options): Coords {
   const width = coords[2] - coords[0];
   const height = coords[7] - coords[1];
 

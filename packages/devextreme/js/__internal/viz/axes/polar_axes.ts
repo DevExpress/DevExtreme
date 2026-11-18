@@ -23,6 +23,7 @@ import constants from '@ts/viz/axes/axes_constants';
 import { calculateCanvasMargins, measureLabels } from '@ts/viz/axes/axes_utils';
 import { tick } from '@ts/viz/axes/tick';
 import xyAxes from '@ts/viz/axes/xy_axes';
+import type { Coords } from '@ts/viz/core/types';
 import {
   convertPolarToXY, convertXYToPolar,
   getCosAndSin, getDistance,
@@ -280,7 +281,7 @@ const circularAxes = {
     line.rotate(value + this.getAngles()[0], x, y);
   },
 
-  _getConstantLineLabelsCoords(value): { x: number; y: number } {
+  _getConstantLineLabelsCoords(value): Coords {
     const that = this;
     const cosSin = getCosAndSin(-value - that.getAngles()[0]);
     const halfRad = that.getRadius() / 2;
@@ -638,7 +639,7 @@ export const linear = {
     ];
   },
 
-  _getLabelAdjustedCoord(tick): { x: number; y: number } {
+  _getLabelAdjustedCoord(tick): Coords {
     const that = this;
     const { labelCoords } = tick;
     const labelY = labelCoords.y;

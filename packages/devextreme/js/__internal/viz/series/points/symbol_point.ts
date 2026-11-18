@@ -19,6 +19,7 @@ import { extend } from '@ts/core/utils/extend';
 import { each } from '@ts/core/utils/iterator';
 import { isDefined as _isDefined } from '@ts/core/utils/type';
 import { getWindow, hasProperty } from '@ts/core/utils/window';
+import type { BBox } from '@ts/viz/core/types';
 import { normalizeEnum as _normalizeEnum } from '@ts/viz/core/utils';
 import { Label } from '@ts/viz/series/points/label';
 
@@ -279,7 +280,7 @@ export default {
     return marker;
   },
 
-  _getSymbolBBox(x, y, r): { x: number; y: number; width: number; height: number } {
+  _getSymbolBBox(x, y, r): BBox {
     return {
       x: x - r,
       y: y - r,
