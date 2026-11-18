@@ -591,16 +591,16 @@ class PivotGridDataSource {
     });
   }
 
-  getFields(that) {
+  getFields() {
     // @ts-expect-error
     const result = new Deferred();
-    const store = that._store;
-    const storeFields = store && store.getFields(that._fields);
+    const store = this._store;
+    const storeFields = store && store.getFields(this._fields);
     let mergedFields;
 
     when(storeFields).done((storeFields) => {
-      that._storeFields = storeFields;
-      mergedFields = this.mergeFields(that._fields, storeFields, that._retrieveFields);
+      this._storeFields = storeFields;
+      mergedFields = this.mergeFields(this._fields, storeFields, this._retrieveFields);
       result.resolve(mergedFields);
     }).fail(result.reject);
 
@@ -784,7 +784,7 @@ class PivotGridDataSource {
     const loadTask = () => {
       that._delayedLoadTask = undefined;
       if (!that._descriptions) {
-        when(this.getFields(that)).done((fields) => {
+        when(this.getFields()).done((fields) => {
           that._fieldsPrepared(fields);
           that._loadCore(options, d);
         }).fail(d.reject).fail(that._loadErrorHandler);
