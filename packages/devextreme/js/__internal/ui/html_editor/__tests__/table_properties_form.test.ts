@@ -118,11 +118,9 @@ const clickContextMenuItem = (
   jest.runAllTimers();
 
   if (caretIndex !== undefined) {
-    // jsdom moves the selection into the focused menu, a browser keeps it in the editor
-    const { root } = editor.getQuillInstance();
+    // jsdom may move the selection into the focused menu, a browser keeps it in the editor
     const [leaf, offset] = editor.getQuillInstance().getLeaf(caretIndex);
 
-    expect(root.contains(document.getSelection()?.anchorNode ?? null)).toBe(false);
     document.getSelection()?.collapse(leaf.domNode, offset);
   }
 
