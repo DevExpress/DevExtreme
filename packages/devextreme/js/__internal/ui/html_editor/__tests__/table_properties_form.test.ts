@@ -58,6 +58,10 @@ const STATE_IN_CELL: EditorState = {
   caretIndex: CARET_IN_CELL,
 };
 
+const EMPTY_RECT: DOMRect = {
+  x: 0, y: 0, width: 0, height: 0, top: 0, right: 0, bottom: 0, left: 0, toJSON: () => ({}),
+};
+
 const editors: HtmlEditor[] = [];
 
 const createEditor = ({ options, caretIndex }: EditorState): HtmlEditor => {
@@ -150,7 +154,7 @@ describe('HtmlEditor cell and table properties forms', () => {
     jest.useFakeTimers();
     fx.off = true;
     // jsdom has no layout for a Range, and Quill reads it when the selection is set
-    Range.prototype.getBoundingClientRect = (): DOMRect => new DOMRect();
+    Range.prototype.getBoundingClientRect = (): DOMRect => EMPTY_RECT;
   });
 
   afterEach(() => {
