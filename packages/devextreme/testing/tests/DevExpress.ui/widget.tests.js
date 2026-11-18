@@ -97,7 +97,6 @@ QUnit.module('render', {}, () => {
 
         class TestWidget extends Widget {
             ctor(element, options) {
-                this.NAME = 'TestWidget1';
                 this._visibilityChanged = visibilityChanged;
 
                 super.ctor(element, options);
@@ -436,12 +435,6 @@ QUnit.module('API', {
 }, () => {
     QUnit.test('\'repaint\' method refreshes widget by default', function(assert) {
         class NewWidget extends Widget {
-            ctor(element, options) {
-                this.NAME = 'Widget';
-
-                super.ctor(element, options);
-            }
-
             _render() {
                 this.$element().append('<div></div>');
             }
@@ -787,11 +780,6 @@ QUnit.module('widget sizing render', {}, () => {
 
 QUnit.module('templates support', {}, () => {
     class TestContainer extends Widget {
-        ctor(element, options) {
-            this.NAME = 'TestContainer';
-            super.ctor(element, options);
-        }
-
         _renderContentImpl() {
             if(this.option('integrationOptions.templates').template) {
                 this.option('integrationOptions.templates').template.render({ container: this.$element() });
@@ -1181,12 +1169,6 @@ QUnit.module('templates caching', {
         };
 
         class TestContainer extends Widget {
-            ctor(element, options) {
-                this.NAME = 'TestContainer';
-
-                super.ctor(element, options);
-            }
-
             _renderContentImpl() {
                 this._getTemplateByOption('template')
                     .render({ container: this.$element() });
@@ -1223,12 +1205,6 @@ QUnit.module('templates caching', {
 QUnit.module('platform specific templates', {
     beforeEach: function() {
         class TestContainerWidget extends Widget {
-            ctor(element, options) {
-                this.NAME = 'TestContainerWidget';
-                super.ctor(element, options);
-
-            }
-
             _renderContentImpl() {
                 if(this.option('integrationOptions.templates')['item']) {
                     this.option('integrationOptions.templates')['item'].render({ container: this.$element() });
@@ -1275,12 +1251,6 @@ QUnit.module('platform specific templates', {
 QUnit.module('template support regressions', {
     beforeEach: function() {
         class TestContainer extends Widget {
-            ctor(element, options) {
-                this.NAME = 'TestContainer';
-                super.ctor(element, options);
-
-            }
-
             _renderContentImpl() {
                 if(this.option('integrationOptions.templates').template) {
                     this.option('integrationOptions.templates').template.render({ container: this.$element() });
@@ -1289,11 +1259,6 @@ QUnit.module('template support regressions', {
         }
 
         class TestWidget extends Widget {
-            ctor(element, options) {
-                this.NAME = 'TestWidget';
-                super.ctor(element, options);
-            }
-
             _render() {
                 super._render();
                 this.$element().text('test');
@@ -1378,11 +1343,9 @@ QUnit.module('keyboard navigation', {}, () => {
 
         class TestWidget extends Widget {
             ctor(element, options) {
-                this.NAME = 'TestWidget';
                 this._supportedKeys = supportedKeysHandler;
 
                 super.ctor(element, options);
-
             }
         };
 
@@ -1547,12 +1510,6 @@ QUnit.module('dataHelperMixin', {}, () => {
     QUnit.test('dataSource disposing should remove only widget handlers preserving existing handlers (T213769)', function(assert) {
         const $container = $('#widget');
         class TestWidget extends Widget {
-            ctor(element, options) {
-                this.NAME = 'TestWidget';
-                super.ctor(element, options);
-
-            }
-
             _getDefaultOptions() {
                 return $.extend(
                     super._getDefaultOptions(),
@@ -1671,11 +1628,6 @@ QUnit.module('aria accessibility', {}, () => {
 
 QUnit.module('inner options cache', {}, () => {
     class TestWidget extends Widget {
-        ctor(element, options) {
-            this.NAME = 'TestWidget';
-            super.ctor(element, options);
-        }
-
         _init() {
             super._init();
             this._options.cache('innerComponentOptions', this.option('innerComponentOptions'));
