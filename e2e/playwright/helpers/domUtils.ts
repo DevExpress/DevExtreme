@@ -14,17 +14,6 @@ export const setAttribute = async (
   { elementSelector: selector, name: attribute, attributeValue: value },
 );
 
-export const removeAttribute = async (
-  page: Page,
-  selector: string,
-  attribute: string,
-): Promise<void> => page.evaluate(
-  ({ elementSelector, name }) => {
-    document.querySelector(elementSelector)?.removeAttribute(name);
-  },
-  { elementSelector: selector, name: attribute },
-);
-
 export const appendAttributeValue = async (
   page: Page,
   selector: string,
@@ -151,10 +140,4 @@ export const addFocusableElementBefore = async (
     return button.id;
   },
   { selector: targetSelector, id: elementId },
-);
-
-export const waitForNextFrame = async (page: Page): Promise<void> => page.evaluate(
-  () => new Promise<void>((resolve) => {
-    requestAnimationFrame(() => requestAnimationFrame(() => resolve()));
-  }),
 );
