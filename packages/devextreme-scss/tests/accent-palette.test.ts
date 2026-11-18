@@ -38,8 +38,7 @@ test('the stylesheet declares exactly what the contract names', () => {
   const declared = [...stylesheet().matchAll(/(--dx-accent[a-z0-9-]*):/g)].map((match) => match[1]);
 
   expect(declared).toEqual([
-    contract.source.name,
-    ...contract.settings.map(({ name }) => name),
+    contract.base.name,
     ...contractSteps.map(stepName),
   ]);
   expect(stylesheet()).toContain(`var(${contract.input.name})`);
@@ -102,12 +101,15 @@ test('no step multiplies and divides by the same number — Chrome 145 folds tha
   expect(offenders).toEqual([]);
 });
 
-test('every step pins the alpha, so a translucent accent does not fade the whole scale', () => {
-  const offenders = [...stylesheet().matchAll(/--dx-accent-color-(\d+): (.+);/g)]
-    .filter(([, , expression]) => !expression.endsWith('h / 1)'))
-    .map(([, step]) => `step ${step} inherits the alpha of the accent`);
+test('the base pins the alpha and every step is built from it, so a translucent accent does not fade the whole scale', () => {
+  const declarations = new Map([...stylesheet().matchAll(/(--dx-accent-color-[a-z0-9]+): (.+);/g)]
+    .map(([, name, expression]) => [name, expression]));
 
-  expect(offenders).toEqual([]);
+  expect(declarations.get(contract.base.name))
+    .toMatch(new RegExp(`^oklch\\(from var\\(${contract.input.name}\\) .+ h / 1\\)$`));
+  expect(contractSteps.filter((step) => declarations.get(stepName(step))
+    ?.startsWith(`oklch(from var(${contract.base.name}) `)))
+    .toEqual(contractSteps);
 });
 
 test('the built bundles carry both halves of the accent', () => {

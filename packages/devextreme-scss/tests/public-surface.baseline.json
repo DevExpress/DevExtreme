@@ -52,7 +52,6 @@
       "fluent-next"
     ],
     "names": [
-      "--dx-accent-chroma-min",
       "--dx-accent-color-10",
       "--dx-accent-color-100",
       "--dx-accent-color-110",
@@ -71,9 +70,7 @@
       "--dx-accent-color-70",
       "--dx-accent-color-80",
       "--dx-accent-color-90",
-      "--dx-accent-color-source",
-      "--dx-accent-lightness-max",
-      "--dx-accent-lightness-min",
+      "--dx-accent-color-base",
       "--dx-accordion-bg",
       "--dx-accordion-body-padding",
       "--dx-accordion-content",
