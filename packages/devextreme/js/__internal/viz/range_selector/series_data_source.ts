@@ -1,8 +1,5 @@
 /* eslint-disable @typescript-eslint/init-declarations */
-/* eslint-disable no-plusplus */
 /* eslint-disable func-names */
-/* eslint-disable no-nested-ternary */
-/* eslint-disable no-multi-assign */
 
 import { extend } from '@ts/core/utils/extend';
 import { each } from '@ts/core/utils/iterator';
@@ -98,7 +95,8 @@ export let SeriesDataSource = class SeriesDataSource {
   declare argCategories?: ThemeValue[];
 
   constructor(options: SeriesDataSourceOptions) {
-    const themeManager = this._themeManager = createThemeManager(options.chart);
+    this._themeManager = createThemeManager(options.chart);
+    const themeManager = this._themeManager;
 
     themeManager.setTheme(options.chart.theme);
     const topIndent = themeManager.getOptions('topIndent');
@@ -141,13 +139,11 @@ export let SeriesDataSource = class SeriesDataSource {
       this._hideChart = true;
     }
 
-    allSeriesOptions = Array.isArray(allSeriesOptions)
-      ? allSeriesOptions
-      : allSeriesOptions
-        ? [allSeriesOptions]
-        : [];
+    if (!Array.isArray(allSeriesOptions)) {
+      allSeriesOptions = allSeriesOptions ? [allSeriesOptions] : [];
+    }
 
-    for (i = 0; i < allSeriesOptions.length; i++) {
+    for (i = 0; i < allSeriesOptions.length; i += 1) {
       particularSeriesOptions = extend(true, {}, allSeriesOptions[i]);
 
       particularSeriesOptions.rotated = false;
@@ -187,7 +183,7 @@ export let SeriesDataSource = class SeriesDataSource {
       };
       parsedData = validateData(data, groupsData, options.incidentOccurred, chartThemeManager.getOptions('dataPrepareSettings'));
       this.argCategories = groupsData.categories;
-      for (i = 0; i < series.length; i++) {
+      for (i = 0; i < series.length; i += 1) {
         series[i].updateData(parsedData[series[i].getArgumentField()]);
       }
     }
