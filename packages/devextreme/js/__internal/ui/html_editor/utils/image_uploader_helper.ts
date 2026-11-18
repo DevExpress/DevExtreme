@@ -150,13 +150,8 @@ class AddUrlStrategy extends BaseStrategy {
 
   heightEditor!: TextBox;
 
-  constructor(
-    module: BaseHtmlEditorModule,
-    config: dxHtmlEditorImageUpload,
-    onFileSelected?: () => void,
-  ) {
-    // @ts-expect-error BaseStrategy takes no onFileSelected (see Findings)
-    super(module, config, onFileSelected);
+  constructor(module: BaseHtmlEditorModule, config: dxHtmlEditorImageUpload) {
+    super(module, config);
 
     this.shouldKeepAspectRatio = true;
   }
@@ -288,9 +283,8 @@ class UpdateUrlStrategy extends AddUrlStrategy {
     module: BaseHtmlEditorModule,
     config: dxHtmlEditorImageUpload,
     formData: Record<string, unknown>,
-    onFileSelected?: () => void,
   ) {
-    super(module, config, onFileSelected);
+    super(module, config);
     this.formData = formData;
     this.modifyFormData();
   }
@@ -323,15 +317,9 @@ class UpdateUrlStrategy extends AddUrlStrategy {
   }
 
   embedFormatIndex(): number {
-    const selection = this.selection ?? this.quill.getSelection();
+    const { index, length } = this.selection;
 
-    if (selection) {
-      if (selection.length) {
-        return selection.index;
-      }
-      return selection.index - 1;
-    }
-    return this.quill.getLength();
+    return length ? index : index - 1;
   }
 }
 
@@ -349,8 +337,7 @@ class FileStrategy extends BaseStrategy {
     config: dxHtmlEditorImageUpload,
     onFileSelected: () => void,
   ) {
-    // @ts-expect-error BaseStrategy takes no onFileSelected (see Findings)
-    super(module, config, onFileSelected);
+    super(module, config);
     this.useBase64 = !isDefined(this.config.fileUploadMode) || this.config.fileUploadMode === 'base64';
 
     this.isValidInternal = false;
@@ -359,12 +346,13 @@ class FileStrategy extends BaseStrategy {
   }
 
   upload(): boolean {
+    if (!this.data) {
+      return false;
+    }
+
     if (this.useBase64) {
-      // @ts-expect-error data is set once a file is selected, which enables the add button
       this.base64Upload(this.data);
-    // @ts-expect-error data and its value are set once a file is selected (see above)
-    } else if (this.data.value.length) {
-      // @ts-expect-error see above
+    } else if (this.data.value?.length) {
       this.data.component.upload();
     }
 
@@ -498,7 +486,7 @@ class BaseTab {
     return this.isUpdating
       // @ts-expect-error formData is undefined only for FileTab, which overrides createStrategy
       ? new UpdateUrlStrategy(this.module, this.config, this.formData)
-      : new AddUrlStrategy(this.module, this.config, this.onFileSelected);
+      : new AddUrlStrategy(this.module, this.config);
   }
 
   isDisableButton(): boolean {
