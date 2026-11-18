@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import ajax from 'core/utils/ajax';
-import pivotGridUtils from '__internal/grids/pivot_grid/m_widget_utils';
+import pivotGridUtils from '__internal/grids/pivot_grid/widget_utils';
 import { XmlaStore } from '__internal/grids/pivot_grid/xmla_store/m_xmla_store';
 import { errors } from 'common/data/errors';
 import localization from 'localization';

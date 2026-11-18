@@ -1,4 +1,7 @@
+import type { CustomStoreOptions } from '@js/common/data';
 import type { ScalarFilterValue } from '@js/common/grids';
+import type { DataSourceLike } from '@js/data/data_source';
+import type { NormalizedDataSourceOptions } from '@ts/data/data_source/types';
 import type {
   PivotGridField,
   PivotGridLoadOptions,
@@ -66,7 +69,7 @@ export interface LocalHierarchyOptions {
   data: unknown;
   childrenHash: LocalHeaderItemsHash;
   dimensions: LocalField[];
-  expandedPathsHash: Record<string, boolean> | false | undefined;
+  expandedPathsHash: Record<string, boolean> | undefined;
 }
 
 export interface CustomSummaryOptions {
@@ -92,6 +95,16 @@ export interface LocalLoadResult {
   grandTotalColumnIndex: number;
 }
 
-export interface LocalStoreOptions {
+/** PivotGridDataSource passes normalized options, with its own handlers set to null. */
+type PivotGridStoreSourceOptions = {
+  [TKey in keyof NormalizedDataSourceOptions]: TKey extends 'onChanged' | 'onLoadingChanged'
+    ? NormalizedDataSourceOptions[TKey] | null
+    : NormalizedDataSourceOptions[TKey];
+};
+
+/** The constructor passes the options on to DataSource. */
+export type LocalStoreOptions = (
+  DataSourceLike<unknown> | CustomStoreOptions | PivotGridStoreSourceOptions
+) & {
   onProgressChanged?: (progress: number) => void;
-}
+};
