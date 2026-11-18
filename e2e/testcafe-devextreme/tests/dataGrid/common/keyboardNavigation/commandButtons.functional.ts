@@ -95,3 +95,75 @@ test('should not scroll to the top of the page on Enter key if disabled', async 
   // assert
   await t.expect(getScrollY()).eql(200);
 }).before(async () => createDataGrid());
+
+test('should focus the command cell if Space key is used to save/cancel editing', async (t) => {
+  // arrange
+  const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+  const textCell = dataGrid.getDataCell(0, 0);
+  const commandButtonCell = dataGrid.getDataCell(0, 1);
+  const editButton = commandButtonCell.getLinkEdit();
+
+  // act
+  await t
+    .click(textCell.element)
+    .pressKey('tab');
+
+  // assert
+  await t.expect(editButton.focused).ok();
+
+  // act
+  await t.pressKey('space');
+
+  // assert
+  await t
+    .expect(textCell.isEditCell).ok()
+    .expect(textCell.isFocused).ok();
+
+  // act
+  await t.pressKey('tab');
+
+  // assert
+  const saveButton = commandButtonCell.getLinkSave();
+  await t.expect(saveButton.focused).ok();
+
+  // act
+  await t.pressKey('space');
+
+  // assert
+  await t.expect(textCell.isEditCell).notOk();
+  await t.expect(commandButtonCell.isFocused).ok();
+
+  // act
+  await t.pressKey('tab');
+
+  // assert
+  await t.expect(editButton.focused).ok();
+
+  // act
+  await t.pressKey('space');
+
+  // assert
+  await t
+    .expect(textCell.isEditCell).ok()
+    .expect(textCell.isFocused).ok();
+
+  // act
+  await t.pressKey('tab tab');
+
+  // assert
+  const cancelButton = commandButtonCell.getLinkCancel();
+  await t.expect(cancelButton.focused).ok();
+
+  // act
+  await t.pressKey('space');
+
+  // assert
+  await t.expect(textCell.isEditCell).notOk();
+  await t.expect(commandButtonCell.isFocused).ok();
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: [{ id: 1, text: 'item' }],
+  columns: ['text'],
+  editing: {
+    allowUpdating: true,
+  },
+}));

@@ -2606,7 +2606,9 @@ export class EditingController extends modules.ViewController {
         $button.attr('title', button.hint);
       }
 
-      if (this._isButtonDisabled(button, options)) {
+      const isDisabled = this._isButtonDisabled(button, options);
+
+      if (isDisabled) {
         $button.addClass('dx-state-disabled');
         this.setAria('disabled', 'true', $button);
         eventsEngine.on($button, addNamespace('click', EDITING_NAMESPACE), (event): void => {
@@ -2631,13 +2633,19 @@ export class EditingController extends modules.ViewController {
 
           event.preventDefault();
 
+          if (isDisabled) {
+            return;
+          }
+
           if (event.type === 'keydown') {
             spacePressed = true;
           } else if (spacePressed) {
             spacePressed = false;
+            this._keyboardNavigationController.prepareCommandCellFocus(event.target);
             eventsEngine.trigger($button, 'click');
           }
         });
+
         eventsEngine.on($button, addNamespace('blur', EDITING_NAMESPACE), (): void => {
           spacePressed = false;
         });
