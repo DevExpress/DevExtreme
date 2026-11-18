@@ -112,7 +112,7 @@ module('Table context menu integration', {
             const startPosition = this.instance._getQuillContainer().get(0).getBoundingClientRect();
             const contextMenuPosition = this.instance.getModule('tableContextMenu')._contextMenu.option('position');
 
-            assert.strictEqual(contextMenuPosition.collision, 'fit fit', 'collision is correct');
+            assert.strictEqual(contextMenuPosition.collision, 'fit', 'collision is correct');
             assert.strictEqual(contextMenuPosition.offset.x, clickCoordinates.clientX - startPosition.left, 'horizontal offset is correct');
             assert.strictEqual(contextMenuPosition.offset.y, clickCoordinates.clientY - startPosition.top, 'vertical offset is correct');
         });
