@@ -34,11 +34,11 @@ export function getColorizer(options, themeManager, root) {
     : _noop;
 }
 
-export function addColorizer(name, colorizer) {
+export function addColorizer(name, colorizer): void {
   colorizers[name] = colorizer;
 }
 
-export function setDefaultColorizer(name) {
+export function setDefaultColorizer(name): void {
   defaultColorizerName = name;
 }
 
@@ -47,7 +47,7 @@ function getValueAsColorCode(node) {
 }
 
 function createColorCode(colorCodeField) {
-  return function (node) {
+  return function (node): number {
     return Number(node.data[colorCodeField]);
   };
 }

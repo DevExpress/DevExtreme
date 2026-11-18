@@ -108,7 +108,7 @@ interface FuncIriNode extends ChildNode {
   readonly childNodes: NodeListOf<FuncIriNode>;
 }
 
-interface SvgDomElement extends SVGElement {
+export interface SvgDomElement extends SVGElement {
   _fixFuncIri?: FuncIriCallback;
   cloneNode: (deep?: boolean) => SvgDomElement;
   getBBox?: () => DOMRect;

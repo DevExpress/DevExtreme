@@ -22,8 +22,8 @@ import type { InternalGrid } from '@ts/grids/grid_core/types';
 
 import type { RovingTabIndexComponent } from '../keyboard_navigation/roving_tab_index';
 import { RovingTabIndex } from '../keyboard_navigation/roving_tab_index';
-import { createPath, foreachTree } from '../m_widget_utils';
 import SortableModule from '../sortable/m_sortable';
+import { createPath, foreachTree } from '../widget_utils';
 import { getFieldItemA11yLabel } from './a11y';
 import { ATTRIBUTES, CLASSES, FIELD_DATA_KEY } from './const';
 import { dragAndDropItemRender } from './dom';

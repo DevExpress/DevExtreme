@@ -67,7 +67,7 @@ function estimateBubbleSize(
   return Math.min(width, height) * maxSize;
 }
 
-function setAxisVisualRangeByOption(arg, axis, isDirectOption, index?) {
+function setAxisVisualRangeByOption(arg, axis, isDirectOption, index?): void {
   let options;
   let visualRange;
 
@@ -559,8 +559,8 @@ export class AdvancedChart extends BaseChart {
   getValueAxis(name?: string): ThemeValue {
     return (this._valueAxes || []).find(
       _isDefined(name)
-        ? (a) => a.name === name
-        : (a) => a.pane === this.defaultPane,
+        ? (a): boolean => a.name === name
+        : (a): boolean => a.pane === this.defaultPane,
     );
   }
 

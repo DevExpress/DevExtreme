@@ -4,7 +4,6 @@
 /* eslint-disable func-names */
 /* eslint-disable import/no-mutable-exports */
 /* eslint-disable @typescript-eslint/naming-convention */
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable no-else-return */
@@ -23,13 +22,13 @@ let _TESTS_dataKey;
 proto._eventsMap.onNodeClick = { name: 'nodeClick' };
 proto._eventsMap.onLinkClick = { name: 'linkClick' };
 
-const getDataKey = function () {
+const getDataKey = function (): string {
   return DATA_KEY_BASE + dataKeyModifier++;
 };
 
 export const plugin = {
   name: 'tracker',
-  init() {
+  init(): void {
     const that = this;
     const dataKey = getDataKey();
     /// #DEBUG
@@ -49,7 +48,7 @@ export const plugin = {
           return that._links[index - that._nodes.length];
         }
       },
-      click(e) {
+      click(e): void {
         const eventName = this.getData(e.event) < that._nodes.length ? 'nodeClick' : 'linkClick';
         that._eventTrigger(eventName, {
           target: e.node,
@@ -60,11 +59,11 @@ export const plugin = {
 
     this._dataKey = dataKey;
   },
-  dispose() {
+  dispose(): void {
     this._tracker.dispose();
   },
   extenders: {
-    _change_LINKS_DRAW() {
+    _change_LINKS_DRAW(): void {
       const dataKey = this._dataKey;
       this._nodes.concat(this._links).forEach((item, index) => {
         item.element.data(dataKey, index);

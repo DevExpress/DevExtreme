@@ -94,7 +94,7 @@ interface BreaksCheckingMethods {
   getBreaksSize: (br: TranslatorBreak, lastBreak: TranslatorBreak) => number;
 }
 
-interface ZoomResult {
+export interface ZoomResult {
   min: ThemeValue;
   max: ThemeValue;
   translate: number;
