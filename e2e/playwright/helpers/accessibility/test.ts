@@ -59,21 +59,24 @@ const serializeFunctions = (value: unknown): unknown => {
 const restoreFunctions = (serialized: unknown): any => {
   const key = '__a11yFunction';
 
+  // eslint-disable-next-line @typescript-eslint/no-implied-eval
+  const build = (code: string): unknown => new Function(`return (${code});`)();
+
   const restore = (value: unknown): unknown => {
     if (Array.isArray(value)) {
       return value.map(restore);
     }
 
-    if (value && typeof value === 'object' && !(value instanceof Date)) {
+    if (value && typeof value === 'object' && Object.getPrototypeOf(value) === Object.prototype) {
       const source = (value as Record<string, unknown>)[key];
 
       if (typeof source === 'string') {
-        const expression = /^(async\s+)?(function\b|\(|[\w$]+\s*=>)/.test(source)
-          ? source
-          : `function ${source}`;
-
-        // eslint-disable-next-line @typescript-eslint/no-implied-eval
-        return new Function(`return (${expression});`)();
+        try {
+          return build(source);
+        } catch {
+          // Method shorthand ("name() {}") is not an expression on its own.
+          return build(source.replace(/^(async\s+)?/, '$1function '));
+        }
       }
 
       return Object.fromEntries(
