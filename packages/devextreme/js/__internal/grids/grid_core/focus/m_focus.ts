@@ -1,4 +1,5 @@
 /* eslint-disable max-classes-per-file */
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { equalByValue } from '@js/core/utils/common';
 import { Deferred, type DeferredObj, when } from '@js/core/utils/deferred';
@@ -402,15 +403,27 @@ export class FocusController extends core.ViewController {
     }
   }
 
-  private _clearPreviousFocusedRow($tableElement, focusedRowIndex) {
+  private findStaleFocusedRows($tableElement, focusedRowIndex: number): dxElementWrapper {
     const isNotMasterDetailFocusedRow = (_, focusedRow) => {
       const $focusedRowTable = $(focusedRow).closest(`.${this.addWidgetPrefix(TABLE_POSTFIX_CLASS)}`);
       return $tableElement.is($focusedRowTable);
     };
 
-    const $prevRowFocusedElement = $tableElement
+    const $focusedRows = $tableElement
       .find(FOCUSED_ROW_SELECTOR)
       .filter(isNotMasterDetailFocusedRow);
+
+    if (focusedRowIndex < 0) {
+      return $focusedRows;
+    }
+
+    const $focusedRow = this.getView('rowsView')._getRowElements($tableElement).eq(focusedRowIndex);
+
+    return $focusedRows.not($focusedRow);
+  }
+
+  private _clearPreviousFocusedRow($tableElement, focusedRowIndex) {
+    const $prevRowFocusedElement = this.findStaleFocusedRows($tableElement, focusedRowIndex);
 
     $prevRowFocusedElement
       .removeClass(ROW_FOCUSED_CLASS)
@@ -430,11 +443,15 @@ export class FocusController extends core.ViewController {
     if (changedItem && (changedItem.rowType === 'data' || changedItem.rowType === 'group')) {
       const { focusedRowIndex } = options;
       const { $tableElement } = options;
-      const tabIndex = this.option('tabindex') || 0;
+      const tabIndex = this.option('tabIndex') ?? 0;
       const rowsView = this.getView('rowsView');
 
       $row = $(rowsView._getRowElements($tableElement).eq(focusedRowIndex));
-      $row.addClass(ROW_FOCUSED_CLASS).attr('tabindex', tabIndex);
+      $row.addClass(ROW_FOCUSED_CLASS);
+
+      if (!$row.children('[tabindex]').length) {
+        $row.attr('tabindex', tabIndex);
+      }
     }
 
     return $row;
@@ -918,6 +935,13 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewFocusController e
     if (this.option('focusedRowEnabled') && row) {
       if (this._focusController.isRowFocused(row.key)) {
         $row.addClass(ROW_FOCUSED_CLASS);
+
+        const isRowTabStop = row.rowType === 'group'
+          || (row.rowType === 'data' && !this._keyboardNavigationController.isCellFocusType());
+
+        if (isRowTabStop) {
+          $row.attr('tabindex', this.option('tabIndex') ?? 0);
+        }
       }
     }
 
