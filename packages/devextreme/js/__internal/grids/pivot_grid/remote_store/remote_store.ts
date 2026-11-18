@@ -25,8 +25,8 @@ import pivotGridUtils, {
   getExpandedLevel,
   getFiltersByPath,
   setDefaultFieldValueFormatting,
-} from '../m_widget_utils';
-import { forEachGroup } from './m_remote_store_utils';
+} from '../widget_utils';
+import { forEachGroup } from './remote_store_utils';
 import type {
   DataFilter,
   FilterExpression,
