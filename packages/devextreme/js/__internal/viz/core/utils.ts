@@ -574,6 +574,16 @@ export function normalizeArcParams(x, y, innerRadius, outerRadius, startAngle, e
   ];
 }
 
+interface VisualRangeObject<T> {
+  startValue: T;
+  endValue: T;
+}
+
+export function convertVisualRangeObject<T>(visualRange: VisualRangeObject<T>): T[];
+export function convertVisualRangeObject<T>(
+  visualRange: VisualRangeObject<T>,
+  convertToVisualRange: boolean,
+): T[] | VisualRangeObject<T>;
 export function convertVisualRangeObject(visualRange, convertToVisualRange?) {
   if (convertToVisualRange) {
     return visualRange;
