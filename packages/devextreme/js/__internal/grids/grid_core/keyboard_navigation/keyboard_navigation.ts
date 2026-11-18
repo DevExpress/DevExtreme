@@ -1723,7 +1723,6 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
         this.setRowFocusType();
       }
 
-      this.isPageNavigationPending = false;
       this._updateFocusedCellPosition($targetCell);
 
       if (this._allowRowUpdating() && isCellOrBatchEditMode && column?.allowEditing) {
@@ -1823,7 +1822,6 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     }
 
     if (!args.cancel) {
-      this.isPageNavigationPending = false;
       this.applyFocus($elementToFocus, !args.isHighlighted);
 
       if (this.getElementType($elementToFocus) !== 'row' || isEditRow($elementToFocus)) {
@@ -2086,6 +2084,13 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     }
 
     this.updateFocus(false);
+  }
+
+  public setFocusedRowIndex(rowIndex: number | undefined): void {
+    if (rowIndex !== this._focusedCellPosition?.rowIndex) {
+      this.isPageNavigationPending = false;
+    }
+    super.setFocusedRowIndex(rowIndex);
   }
 
   private getTopVisibleRowIndex(): number {

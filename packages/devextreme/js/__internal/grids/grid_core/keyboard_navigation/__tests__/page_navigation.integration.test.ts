@@ -394,4 +394,111 @@ describe('PageUp and PageDown with virtual scrolling (T898324)', () => {
 
     expect(instance.option('focusedRowIndex')).toBe(ROWS_PER_PAGE + focusedVisibleRowIndex);
   });
+
+  it.each([
+    { optionName: 'focusedRowKey', value: null, expectedFocusedRowIndex: -1 },
+    { optionName: 'focusedRowKey', value: 3 * ROWS_PER_PAGE, expectedFocusedRowIndex: 3 * ROWS_PER_PAGE },
+    { optionName: 'focusedRowIndex', value: 7, expectedFocusedRowIndex: 7 },
+  ])('should keep $optionName set to $value before the rows of the new position are rendered', async ({ optionName, value, expectedFocusedRowIndex }) => {
+    const instance = await createGrid({
+      focusedRowEnabled: true,
+      scrolling: { mode: 'virtual', renderAsync: true },
+    });
+    focusFirstCell(instance);
+
+    pressKeyWithoutRendering(instance, 'pageDown');
+    instance.option(optionName, value);
+    jest.runAllTimers();
+
+    expect(instance.option('focusedRowIndex')).toBe(expectedFocusedRowIndex);
+  });
+
+  it('should keep the focused row reset by onFocusedRowChanging on a click before the rows of the new position are rendered', async () => {
+    let isFocusedRowResetOnChanging = false;
+    const instance = await createGrid({
+      focusedRowEnabled: true,
+      scrolling: { mode: 'virtual', renderAsync: true },
+      onFocusedRowChanging: (e) => {
+        if (isFocusedRowResetOnChanging) {
+          e.newRowIndex = -1;
+        }
+      },
+    });
+    focusFirstCell(instance);
+
+    pressKeyWithoutRendering(instance, 'pageDown');
+    isFocusedRowResetOnChanging = true;
+    clickRow(instance, 2);
+    jest.runAllTimers();
+
+    expect(instance.option('focusedRowIndex')).toBe(-1);
+  });
+
+  it('should focus the top visible row once its rows are loaded from a remote store while all rows are being selected', async () => {
+    const instance = await createGrid({
+      keyExpr: undefined,
+      dataSource: createRemoteStore(),
+      remoteOperations: { paging: true },
+      selection: { mode: 'multiple', selectAllMode: 'allPages' },
+    });
+    focusFirstCell(instance);
+    pressKey(instance, 'pageDown');
+
+    instance.selectAll().catch(() => {});
+    pressKey(instance, 'pageDown');
+
+    expect(getFocusedRowIndex()).toBe(2 * ROWS_PER_PAGE);
+  });
+
+  it('should focus the top visible row when a click is canceled while its rows are loaded from a remote store', async () => {
+    const instance = await createGrid({
+      keyExpr: undefined,
+      dataSource: createRemoteStore(),
+      remoteOperations: { paging: true },
+    });
+    focusFirstCell(instance);
+    pressKey(instance, 'pageDown');
+
+    pressKeyWithoutRendering(instance, 'pageDown');
+    clickRow(instance, 2);
+    jest.runAllTimers();
+
+    expect(getFocusedRowIndex()).toBe(2 * ROWS_PER_PAGE);
+  });
+
+  it('should focus the top visible row when onFocusedCellChanging cancels a click before the rows of the new position are rendered', async () => {
+    let isClickCanceled = false;
+    const instance = await createGrid({
+      scrolling: { mode: 'virtual', renderAsync: true },
+      onFocusedCellChanging: (e) => {
+        e.cancel = isClickCanceled;
+      },
+    });
+    focusFirstCell(instance);
+
+    pressKeyWithoutRendering(instance, 'pageDown');
+    isClickCanceled = true;
+    clickRow(instance, 2);
+    jest.runAllTimers();
+
+    expect(getFocusedRowIndex()).toBe(ROWS_PER_PAGE);
+  });
+
+  it.each(['refresh', 'push'])('should focus the top visible row when the focused row is restored after %s before the rows of the new position are rendered', async (operation) => {
+    const instance = await createGrid({
+      focusedRowEnabled: true,
+      scrolling: { mode: 'virtual', renderAsync: true },
+    });
+    focusFirstCell(instance);
+
+    pressKeyWithoutRendering(instance, 'pageDown');
+    if (operation === 'refresh') {
+      instance.refresh().catch(() => {});
+    } else {
+      instance.getDataSource().store().push([{ type: 'update', key: 2, data: { name: 'Updated' } }]);
+    }
+    jest.runAllTimers();
+
+    expect(instance.option('focusedRowIndex')).toBe(ROWS_PER_PAGE);
+  });
 });

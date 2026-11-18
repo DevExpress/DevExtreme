@@ -515,17 +515,11 @@ export class RowsView extends ColumnsView {
     return this._findContentElement();
   }
 
+  /**
+   * @extended: virtual_scrolling
+   */
   public isViewportRowsRenderPending(): boolean {
-    const scrolling = this.option('scrolling');
-    const isVirtualRender = isVirtualPaging(scrolling) || isVirtualRowRendering(scrolling);
-
-    if (!isVirtualRender) {
-      return false;
-    }
-
-    return this.dataSourceController.isLoading()
-      || this._dataController.isViewportPositionPending()
-      || this.isWaitingForRowsLayout();
+    return false;
   }
 
   public isWaitingForRowsLayout(): boolean {
