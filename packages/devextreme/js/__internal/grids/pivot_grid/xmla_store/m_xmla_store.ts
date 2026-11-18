@@ -15,7 +15,7 @@ import pivotGridUtils, {
   foreachTree,
   getExpandedLevel,
   storeDrillDownMixin,
-} from '../m_widget_utils';
+} from '../widget_utils';
 
 // Utility functions
 function union(elements: any[]): string {

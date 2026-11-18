@@ -1,7 +1,5 @@
 /* eslint-disable @stylistic/no-mixed-operators */
 /* eslint-disable @typescript-eslint/naming-convention */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
-/* eslint-disable prefer-destructuring */
 
 import { projection } from '@ts/viz/vector_map/projection.main';
 
@@ -14,7 +12,7 @@ const _atan = Math.atan;
 const _exp = Math.exp;
 const _log = Math.log;
 
-const PI = Math.PI;
+const { PI } = Math;
 const PI_DIV_4 = PI / 4;
 const GEO_LON_BOUND = 180;
 const GEO_LAT_BOUND = 90;
@@ -23,7 +21,7 @@ const RADIANS = PI / 180;
 const MERCATOR_LAT_BOUND = (2 * _atan(_exp(PI)) - PI / 2) / RADIANS;
 const MILLER_LAT_BOUND = (2.5 * _atan(_exp(0.8 * PI)) - 0.625 * PI) / RADIANS;
 
-function clamp(value, threshold) {
+function clamp(value, threshold): number {
   return _max(_min(value, +threshold), -threshold);
 }
 

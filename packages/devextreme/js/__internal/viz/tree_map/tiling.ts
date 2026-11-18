@@ -6,7 +6,6 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-/* eslint-disable prefer-destructuring */
 
 import { isFunction as _isFunction } from '@ts/core/utils/type';
 import { normalizeEnum as _normalizeEnum } from '@ts/viz/core/utils';
@@ -20,11 +19,11 @@ export function getAlgorithm(value) {
   return algorithms[_normalizeEnum(value)] || (_isFunction(value) && value) || defaultAlgorithm;
 }
 
-export function addAlgorithm(name, callback) {
+export function addAlgorithm(name, callback): void {
   algorithms[name] = callback;
 }
 
-export function setDefaultAlgorithm(name) {
+export function setDefaultAlgorithm(name): void {
   defaultAlgorithm = algorithms[name];
 }
 
@@ -32,7 +31,7 @@ const directionToIndexOffsets = {};
 directionToIndexOffsets[-1] = [2, 0];
 directionToIndexOffsets[+1] = [0, 2];
 
-export const getStaticSideIndex = function (rect) {
+export const getStaticSideIndex = function (rect): 0 | 1 {
   return (rect[2] - rect[0]) < (rect[3] - rect[1]) ? 0 : 1;
 };
 
@@ -57,16 +56,15 @@ export function buildSidesData(rect, directions, _staticSideIndex) {
   };
 }
 
-export function calculateRectangles(nodes, head, totalRect, sidesData, rowData) {
+export function calculateRectangles(nodes, head, totalRect, sidesData, rowData): void {
   let i;
   let ii;
   const variedSidePart = [0, 0, 0, 0];
-  const static1 = sidesData.static1;
-  const static2 = sidesData.static2;
+  const { static1, static2 } = sidesData;
   let position = totalRect[static1];
   const dir = sidesData.staticDir;
   let side = sidesData.staticSide;
-  let sum = rowData.sum;
+  let { sum } = rowData;
   let rect;
   let delta;
 

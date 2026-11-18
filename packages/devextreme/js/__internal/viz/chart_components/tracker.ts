@@ -14,7 +14,6 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-/* eslint-disable prefer-destructuring */
 /* eslint-disable no-else-return */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
@@ -60,7 +59,7 @@ const EXLUDE_POINTS_MODE = 'excludepoints';
 const LEGEND_HOVER_MODES = [INCLUDE_POINTS_MODE, EXLUDE_POINTS_MODE, NONE_MODE];
 
 function getData(event, dataKey, tryCheckParent?) {
-  const target = event.target;
+  const { target } = event;
   if (target.tagName === 'tspan') {
     return target.parentNode[dataKey];
   }
@@ -160,11 +159,11 @@ abstract class BaseTracker {
 
   abstract _getArgumentHoverMode(): string;
 
-  update(options) {
+  update(options): void {
     this._chart = options.chart;
   }
 
-  updateSeries(series, resetDecorations) {
+  updateSeries(series, resetDecorations): void {
     const that = this;
     const noHoveredSeries = !(
       series?.some((s) => s === that.hoveredSeries)
@@ -189,12 +188,12 @@ abstract class BaseTracker {
     }
   }
 
-  setCanvases(mainCanvas, paneCanvases) {
+  setCanvases(mainCanvas, paneCanvases): void {
     this._mainCanvas = mainCanvas;
     this._canvases = paneCanvases;
   }
 
-  repairTooltip() {
+  repairTooltip(): void {
     const point = this.pointAtShownTooltip;
     if (!point || !point.series || !point.isVisible()) {
       this._hideTooltip(point, true);
@@ -203,7 +202,7 @@ abstract class BaseTracker {
     }
   }
 
-  _setHoveredPoint(point) {
+  _setHoveredPoint(point): void {
     if (point === this._hoveredPoint) {
       return;
     }
@@ -212,7 +211,7 @@ abstract class BaseTracker {
     this._hoveredPoint = point;
   }
 
-  _releaseHoveredPoint(isPointerOut?) {
+  _releaseHoveredPoint(isPointerOut?): void {
     if (this._hoveredPoint && this._hoveredPoint.getOptions()) {
       this._hoveredPoint.clearHover();
       this._hoveredPoint = null;
@@ -222,21 +221,21 @@ abstract class BaseTracker {
     }
   }
 
-  _setHoveredSeries(series, mode) {
+  _setHoveredSeries(series, mode): void {
     this._releaseHoveredSeries();
     this._releaseHoveredPoint();
     series.hover(mode);
     this.hoveredSeries = series;
   }
 
-  _releaseHoveredSeries() { // hoveredPoint only for T273289
+  _releaseHoveredSeries(): void { // hoveredPoint only for T273289
     if (this.hoveredSeries) {
       this.hoveredSeries.clearHover();
       this.hoveredSeries = null;
     }
   }
 
-  clearSelection() {
+  clearSelection(): void {
     this._storedSeries.forEach((series) => {
       if (series) {
         series.clearSelection();
@@ -245,19 +244,19 @@ abstract class BaseTracker {
     });
   }
 
-  _clean() {
+  _clean(): void {
     const that = this;
     that.hoveredPoint = that.hoveredSeries = that._hoveredArgumentPoints = null;
     that._hideTooltip(that.pointAtShownTooltip);
   }
 
-  clearHover(isPointerOut?) {
+  clearHover(isPointerOut?): void {
     this._resetHoveredArgument();
     this._releaseHoveredSeries();
     this._releaseHoveredPoint(isPointerOut);
   }
 
-  _hideTooltip(point, silent?, isPointerOut?) {
+  _hideTooltip(point, silent?, isPointerOut?): void {
     const that = this;
     if (!that._tooltip || (point && that.pointAtShownTooltip !== point)) {
       return;
@@ -268,7 +267,7 @@ abstract class BaseTracker {
     that._tooltip.hide(!!isPointerOut);
   }
 
-  _showTooltip(point) {
+  _showTooltip(point): void {
     const that = this;
     let tooltipFormatObject;
     const eventData = { target: point };
@@ -289,14 +288,14 @@ abstract class BaseTracker {
       const rootOffset = that._renderer.getRootOffset();
       coords.x += rootOffset.left;
       coords.y += rootOffset.top;
-      const callback = (result) => {
+      const callback = (result): void => {
         result && (that.pointAtShownTooltip = point);
       };
       callback(that._tooltip.show(tooltipFormatObject, coords, eventData, undefined, callback));
     }
   }
 
-  _showPointTooltip(event, point) {
+  _showPointTooltip(event, point): void {
     const that = event.data.tracker;
     const pointWithTooltip = that.pointAtShownTooltip;
 
@@ -306,16 +305,16 @@ abstract class BaseTracker {
     that._showTooltip(point);
   }
 
-  _hidePointTooltip(event, point) {
+  _hidePointTooltip(event, point): void {
     event.data.tracker._hideTooltip(point, false, true);
   }
 
-  _enableOutHandler() {
+  _enableOutHandler(): void {
     if (this._outHandler) {
       return;
     }
     const that = this;
-    const handler = function (e) {
+    const handler = function (e): void {
       const rootOffset = that._renderer.getRootOffset();
       const x = _floor(e.pageX - rootOffset.left);
       const y = _floor(e.pageY - rootOffset.top);
@@ -333,23 +332,23 @@ abstract class BaseTracker {
     return this._tooltip.isEnabled() && this._tooltip.isCursorOnTooltip(e.pageX, e.pageY);
   }
 
-  _disableOutHandler() {
+  _disableOutHandler(): void {
     this._outHandler
       && eventsEngine.off(domAdapter.getDocument(), POINTER_ACTION, this._outHandler);
     this._outHandler = null;
   }
 
-  stopCurrentHandling() {
+  stopCurrentHandling(): void {
     this._pointerOut(true);
   }
 
-  _pointerOut(force?) {
+  _pointerOut(force?): void {
     this.clearHover(true);
     (force || this._tooltip.isEnabled())
       && this._hideTooltip(this.pointAtShownTooltip, false, true);
   }
 
-  _triggerLegendClick(eventArgs, elementClick) {
+  _triggerLegendClick(eventArgs, elementClick): void {
     const eventTrigger = this._eventTrigger;
 
     eventTrigger(LEGEND_CLICK, eventArgs, () => {
@@ -358,7 +357,7 @@ abstract class BaseTracker {
     });
   }
 
-  _hoverLegendItem(x, y) {
+  _hoverLegendItem(x, y): void {
     const that = this;
     const item = that._legend.getItemByCoord(x, y);
     let series;
@@ -375,11 +374,11 @@ abstract class BaseTracker {
     }
   }
 
-  _processArgumentHoveredPoint(argument, argumentIndex) {
+  _processArgumentHoveredPoint(argument, argumentIndex): void {
     this._releaseHoveredPoint();
   }
 
-  _hoverArgument(argument, argumentIndex?) {
+  _hoverArgument(argument, argumentIndex?): void {
     const that = this;
     const hoverMode = that._getArgumentHoverMode();
 
@@ -403,7 +402,7 @@ abstract class BaseTracker {
     }
   }
 
-  _resetHoveredArgument() {
+  _resetHoveredArgument(): void {
     const that = this;
     let hoverMode;
 
@@ -425,13 +424,13 @@ abstract class BaseTracker {
     }
   }
 
-  _notifySeries(data) {
+  _notifySeries(data): void {
     this._storedSeries.forEach((series) => {
       series.notify(data);
     });
   }
 
-  _pointerHandler(e) {
+  _pointerHandler(e): void {
     const that = e.data.tracker;
     const rootOffset = that._renderer.getRootOffset();
     const x = _floor(e.pageX - rootOffset.left);
@@ -507,17 +506,17 @@ abstract class BaseTracker {
     that._pointerComplete(point, x, y);
   }
 
-  _pointerOnPoint(point, x, y, e?) {
+  _pointerOnPoint(point, x, y, e?): void {
     this._resetHoveredArgument();
     this._setHoveredPoint(point);
     this._pointerComplete(point, x, y);
   }
 
-  _pointerComplete(point?, x?, y?) {
+  _pointerComplete(point?, x?, y?): void {
     this.pointAtShownTooltip !== point && this._tooltip.isEnabled() && this._showTooltip(point);
   }
 
-  _clickHandler(e) {
+  _clickHandler(e): void {
     const that = e.data.tracker;
 
     if (that._isHolding) {
@@ -551,7 +550,7 @@ abstract class BaseTracker {
     }
   }
 
-  dispose() {
+  dispose(): void {
     const that = this;
     that._disableOutHandler();
     that._renderer.root.off(DOT_EVENT_NS);
@@ -576,10 +575,10 @@ export class ChartTracker extends BaseTracker {
 
   _timeoutKeeper;
 
-  _pointClick(point, event) {
+  _pointClick(point, event): void {
     const that = this;
     const eventTrigger = that._eventTrigger;
-    const series = point.series;
+    const { series } = point;
     const eventArgs = { target: point, event };
 
     eventTrigger(POINT_CLICK, eventArgs, () => {
@@ -588,7 +587,7 @@ export class ChartTracker extends BaseTracker {
     });
   }
 
-  update(options) {
+  update(options): void {
     const that = this;
     super.update(options);
     that._argumentAxis = options.argumentAxis || {};
@@ -615,17 +614,17 @@ export class ChartTracker extends BaseTracker {
     return !canvas && this._stuckSeries && point?.series !== this._stuckSeries;
   }
 
-  _hideCrosshair() {
+  _hideCrosshair(): void {
     this._crosshair?.hide();
   }
 
-  _moveCrosshair(point, x, y) {
+  _moveCrosshair(point, x, y): void {
     if (this._crosshair && point?.isVisible()) {
       this._crosshair.show({ point, x, y });
     }
   }
 
-  _clean() {
+  _clean(): void {
     const that = this;
     super._clean();
     that._resetTimer();
@@ -656,7 +655,7 @@ export class ChartTracker extends BaseTracker {
     return point?.series;
   }
 
-  _setTimeout(callback, keeper) {
+  _setTimeout(callback, keeper): void {
     const that = this;
     if (that._timeoutKeeper !== keeper) {
       that._resetTimer();
@@ -668,19 +667,19 @@ export class ChartTracker extends BaseTracker {
     }
   }
 
-  _resetTimer() {
+  _resetTimer(): void {
     clearTimeout(this._hoverTimeout);
     this._timeoutKeeper = this._hoverTimeout = null;
   }
 
-  _stopEvent(e) {
+  _stopEvent(e): void {
     if (!isDefined(e.cancelable) || e.cancelable) {
       e.preventDefault();
       e.stopPropagation(); // T249548
     }
   }
 
-  _setStuckSeries(e, series, x, y) {
+  _setStuckSeries(e, series, x, y): boolean {
     if (e.pointerType !== 'mouse') {
       this._stuckSeries = null;
     } else {
@@ -689,7 +688,7 @@ export class ChartTracker extends BaseTracker {
     return !!this._stuckSeries;
   }
 
-  _pointerOut(force?) {
+  _pointerOut(force?): void {
     const that = this;
     that._stuckSeries = null;
     that._hideCrosshair();
@@ -698,7 +697,7 @@ export class ChartTracker extends BaseTracker {
   }
   // @ts-expect-error
 
-  _hoverArgumentAxis(x, y, e) {
+  _hoverArgumentAxis(x, y, e): true | undefined {
     const that = this;
     that._resetHoveredArgument();
     if (that._axisHoverEnabled && that._argumentAxis.coordsIn(x, y)) {
@@ -707,7 +706,7 @@ export class ChartTracker extends BaseTracker {
     }
   }
 
-  _pointerComplete(point?, x?, y?) {
+  _pointerComplete(point?, x?, y?): void {
     const that = this;
     that.hoveredSeries && that.hoveredSeries.updateHover(x, y);
     that._resetTimer();
@@ -715,18 +714,18 @@ export class ChartTracker extends BaseTracker {
     super._pointerComplete(point);
   }
 
-  _legendClick(item, e) {
+  _legendClick(item, e): void {
     const series = this._storedSeries[item.id];
     this._triggerLegendClick({ target: series, event: e }, SERIES_CLICK);
   }
 
-  _hoverLegendItem(x, y) {
+  _hoverLegendItem(x, y): void {
     this._stuckSeries = null;
     this._hideCrosshair();
     super._hoverLegendItem(x, y);
   }
 
-  _pointerOnPoint(point, x, y, e) {
+  _pointerOnPoint(point, x, y, e): void {
     this._setStuckSeries(e, point.series, x, y);
     this._releaseHoveredSeries();
     super._pointerOnPoint(point, x, y, e);
@@ -736,7 +735,7 @@ export class ChartTracker extends BaseTracker {
     return correctHoverMode(this._argumentAxis);
   }
 
-  dispose() {
+  dispose(): void {
     this._resetTimer();
     super.dispose();
   }
@@ -751,11 +750,11 @@ Object.assign(ChartTracker.prototype, {
 });
 
 export class PieTracker extends BaseTracker {
-  _isPointerOut(_, point) {
+  _isPointerOut(_, point): boolean {
     return !point;
   }
 
-  _legendClick(item, e) {
+  _legendClick(item, e): void {
     const that = this;
     const points = [];
 
@@ -766,11 +765,11 @@ export class PieTracker extends BaseTracker {
     that._eventTrigger(LEGEND_CLICK, { target: item.argument, points, event: e });
   }
 
-  _pointClick(point, e) {
+  _pointClick(point, e): void {
     this._eventTrigger(POINT_CLICK, { target: point, event: e });
   }
 
-  _hoverLegendItem(x, y) {
+  _hoverLegendItem(x, y): void {
     const that = this;
     const item = that._legend.getItemByCoord(x, y);
 
@@ -786,7 +785,7 @@ export class PieTracker extends BaseTracker {
     return correctHoverMode(this._legend);
   }
 
-  _processArgumentHoveredPoint(argument, argumentIndex) {
+  _processArgumentHoveredPoint(argument, argumentIndex): void {
     const points = this._storedSeries.flatMap(
       (series) => series.getPointsByKeys(argument, argumentIndex),
     );

@@ -10,8 +10,6 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-multi-assign */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
-/* eslint-disable prefer-destructuring */
 /* eslint-disable no-else-return */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
@@ -53,7 +51,7 @@ export const pie = _extend({}, barSeries, {
   _createErrorBarGroup: _noop,
 
   _drawPoint(options) {
-    const point = options.point;
+    const { point } = options;
     const legendCallback = this._legendCallback;
     // @ts-expect-error
     chartScatterSeries._drawPoint.call(this, options);
@@ -173,7 +171,7 @@ export const pie = _extend({}, barSeries, {
   },
 
   _getArrangeMinShownValue(points, total) {
-    const minSegmentSize = this._options.minSegmentSize;
+    const { minSegmentSize } = this._options;
     let totalMinSegmentSize = 0;
     let totalNotMinValues = 0;
 
@@ -198,7 +196,7 @@ export const pie = _extend({}, barSeries, {
     const options = this._options;
     const isClockWise = options.segmentsDirection !== 'anticlockwise';
     const shiftedAngle = _isFinite(options.startAngle) ? normalizeAngle(options.startAngle) : 0;
-    const minSegmentSize = options.minSegmentSize;
+    const { minSegmentSize } = options;
     let percent;
     let correction = 0;
     let zeroTotalCorrection = 0;
@@ -232,7 +230,7 @@ export const pie = _extend({}, barSeries, {
   arrangePoints() {
     const that = this;
     const originalPoints = that._points || [];
-    const minSegmentSize = that._options.minSegmentSize;
+    const { minSegmentSize } = that._options;
     let minShownValue;
     let isAllPointsNegative = true;
     let i = 0;
@@ -307,13 +305,13 @@ export const pie = _extend({}, barSeries, {
     const that = this;
     const points = that._points;
     const pointsCount = points && points.length;
-    const completeFunc = function () {
+    const completeFunc = function (): void {
       that._animateComplete();
     };
     let animatePoint;
 
     if (firstDrawing) {
-      animatePoint = function (p, i) {
+      animatePoint = function (p, i): void {
         p.animate(
           i === pointsCount - 1 ? completeFunc : undefined,
           ANIMATION_DURATION,
@@ -321,7 +319,7 @@ export const pie = _extend({}, barSeries, {
         );
       };
     } else {
-      animatePoint = function (p, i) {
+      animatePoint = function (p, i): void {
         p.animate(i === pointsCount - 1 ? completeFunc : undefined);
       };
     }

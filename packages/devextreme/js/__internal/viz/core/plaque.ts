@@ -7,28 +7,23 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-/* eslint-disable prefer-destructuring */
 /* eslint-disable no-else-return */
 
 import { extend } from '@ts/core/utils/extend';
 import { isDefined } from '@ts/core/utils/type';
 
 const math = Math;
-const round = math.round;
-const max = math.max;
-const min = math.min;
-const sin = math.sin;
-const cos = math.cos;
-const asin = math.asin;
-const PI = math.PI;
+const {
+  round, max, min, sin, cos, asin, PI,
+} = math;
 
-const buildPath = (...points) => points.join('');
+const buildPath = (...points): string => points.join('');
 
-function getArc(cornerRadius, xDirection, yDirection) {
+function getArc(cornerRadius, xDirection, yDirection): string {
   return `a ${cornerRadius} ${cornerRadius} 0 0 1 ${xDirection * cornerRadius} ${yDirection * cornerRadius}`;
 }
 
-function getAbsoluteArc(cornerRadius, x, y) {
+function getAbsoluteArc(cornerRadius, x, y): string {
   return `A ${cornerRadius} ${cornerRadius} 0 0 1 ${x} ${y}`;
 }
 
@@ -47,7 +42,7 @@ function rotateSize(options, angle) {
   return options;
 }
 
-function getCloudAngle({ width, height }, x, y, anchorX, anchorY) {
+function getCloudAngle({ width, height }, x, y, anchorX, anchorY): 0 | 90 | 180 | 270 {
   const halfWidth = width / 2;
   const halfHeight = height / 2;
 
@@ -88,7 +83,7 @@ function getCloudPoints(
   anchorY,
   { arrowWidth, cornerRadius = 0 },
   bounded,
-) {
+): string {
   const halfArrowWidth = arrowWidth / 2;
   const halfWidth = width / 2;
   const halfHeight = height / 2;
@@ -401,8 +396,8 @@ export let Plaque = class {
 
   draw({
     x: anchorX, y: anchorY, canvas = {}, offsetX, offsetY, offset = 0, ...restProps
-  }) {
-    const options = this.options;
+  }): boolean {
+    const { options } = this;
     let { x, y } = options;
 
     const bounds = {
@@ -442,7 +437,7 @@ export let Plaque = class {
     const contentWidth = options.width > 0 ? options.width : null;
     const contentHeight = options.height > 0 ? options.height : null;
 
-    const onRender = () => {
+    const onRender = (): void => {
       const bBox = this._contentBBox = this.measureContent(this.widget, this._contentGroup);
 
       const size = this._size = {
@@ -525,9 +520,9 @@ export let Plaque = class {
     return true;
   }
 
-  _draw() {
+  _draw(): void {
     const renderer = this.widget._renderer;
-    const options = this.options;
+    const { options } = this;
 
     const shadowSettings = extend({
       x: '-50%', y: '-50%', width: '200%', height: '200%',
@@ -577,7 +572,7 @@ export let Plaque = class {
     };
   }
 
-  clear() {
+  clear(): this {
     if (this._root) {
       this._root.remove();
       this._shadow.remove();
@@ -586,19 +581,19 @@ export let Plaque = class {
     return this;
   }
 
-  customizeCloud(attr) {
+  customizeCloud(attr): void {
     if (this._cloud) {
       this._cloud.attr(attr);
     }
   }
 
-  moveRoot(x, y) {
+  moveRoot(x, y): void {
     if (this._root) {
       this._root.move(x, y);
     }
   }
 
-  move(x, y) {
+  move(x, y): void {
     x = round(x);
     y = round(y);
     this.x = x;
@@ -628,7 +623,7 @@ export let Plaque = class {
     );
   }
 
-  hitTest(x, y) {
+  hitTest(x, y): boolean {
     const { width, height } = this._size || {};
     return Math.abs(x - this.x) <= width / 2 && Math.abs(y - this.y) <= height / 2;
   }

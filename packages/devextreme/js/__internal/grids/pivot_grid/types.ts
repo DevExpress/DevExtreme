@@ -65,6 +65,13 @@ export interface PivotGridLoadOptions extends ExpandedLevelOptions {
   columnTake?: number;
 }
 
+export interface PivotGridDescriptions {
+  rows: PivotGridField[];
+  columns: PivotGridField[];
+  values: PivotGridField[];
+  filters: PivotGridField[];
+}
+
 export type DrillDownParams = Parameters<PivotGridDataSource['createDrillDownDataSource']>[0];
 
 export interface DiscoveredField {

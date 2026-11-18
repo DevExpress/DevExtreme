@@ -12,7 +12,6 @@
 /* eslint-disable no-multi-assign */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-/* eslint-disable prefer-destructuring */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 
@@ -113,8 +112,8 @@ const baseRangeSeries = {
     return [this._options.rangeValue1Field || 'val1', this._options.rangeValue2Field || 'val2'];
   },
 
-  getSeriesPairCoord(coord, isArgument) {
-    let oppositeCoord = null;
+  getSeriesPairCoord(coord, isArgument): number | null {
+    let oppositeCoord: number | null = null;
     const { rotated } = this._options;
     const isOpposite = !isArgument && !rotated || isArgument && rotated;
     const coordName = isOpposite ? 'vy' : 'vx';
@@ -150,7 +149,7 @@ chart.rangebar = _extend({}, barSeries, baseRangeSeries);
 // @ts-expect-error
 chart.rangearea = _extend({}, areaSeries, {
   _drawPoint(options) {
-    const point = options.point;
+    const { point } = options;
 
     if (point.isInVisibleArea()) {
       point.clearVisibility();

@@ -8,8 +8,6 @@
 /* eslint-disable no-multi-assign */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
-/* eslint-disable prefer-destructuring */
 /* eslint-disable no-else-return */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
@@ -40,7 +38,7 @@ import { Renderer } from './renderers/renderer';
 import type { BBox, Canvas } from './types';
 import { normalizeEnum, patchFontOptions } from './utils';
 
-const format = formatHelper.format;
+const { format } = formatHelper;
 
 const mathCeil = Math.ceil;
 const mathMax = Math.max;
@@ -187,7 +185,7 @@ export let Tooltip = class Tooltip {
       pathModified: params.pathModified,
       container: this._wrapper[0],
     }));
-    const root = renderer.root;
+    const { root } = renderer;
     root.attr({ 'pointer-events': 'none' });
 
     // svg text
@@ -255,8 +253,8 @@ export let Tooltip = class Tooltip {
     }
 
     const drawTooltip = ({
-      group, onRender, eventData, isMoving, templateCallback = () => {},
-    }: TooltipDrawParams) => {
+      group, onRender, eventData, isMoving, templateCallback = (): void => {},
+    }: TooltipDrawParams): true | undefined => {
       const state = this._state;
       if (!isMoving) {
         const template = this._template;
@@ -588,15 +586,15 @@ export interface TooltipPluginMembers {
 
 export const plugin = {
   name: 'tooltip',
-  init() {
+  init(): void {
     this._initTooltip();
   },
-  dispose() {
+  dispose(): void {
     this._disposeTooltip();
   },
   members: {
     // The method exists only to be overridden in sparklines.
-    _initTooltip() {
+    _initTooltip(): void {
       this._tooltip = new Tooltip({
         cssClass: `${this._rootClassPrefix}-tooltip`,
         eventTrigger: this._eventTrigger,
@@ -606,25 +604,25 @@ export const plugin = {
       });
     },
     // The method exists only to be overridden in sparklines.
-    _disposeTooltip() {
+    _disposeTooltip(): void {
       this._tooltip.dispose();
       this._tooltip = null;
     },
     // The method exists only to be overridden in sparklines.
-    _setTooltipRendererOptions() {
+    _setTooltipRendererOptions(): void {
       this._tooltip.setRendererOptions(this._getRendererOptions());
     },
     // The method exists only to be overridden in sparklines and gauges.
-    _setTooltipOptions() {
+    _setTooltipOptions(): void {
       this._tooltip.update(this._getOption('tooltip'));
     },
   },
   extenders: {
-    _stopCurrentHandling() {
+    _stopCurrentHandling(): void {
       this._tooltip && this._tooltip.hide();
     },
   },
-  customize(constructor) {
+  customize(constructor): void {
     const proto = constructor.prototype;
 
     proto._eventsMap.onTooltipShown = { name: 'tooltipShown' };
@@ -651,7 +649,7 @@ export const plugin = {
 };
 
 /// #DEBUG
-exports.DEBUG_set_tooltip = function (value) {
+exports.DEBUG_set_tooltip = function (value): void {
   Tooltip = value;
 };
 /// #ENDDEBUG

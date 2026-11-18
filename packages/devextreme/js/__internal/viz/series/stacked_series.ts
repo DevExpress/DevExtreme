@@ -7,7 +7,6 @@
 /* eslint-disable no-multi-assign */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-/* eslint-disable prefer-destructuring */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 
@@ -27,7 +26,7 @@ const chartBarSeries = _chart.bar;
 
 const baseStackedSeries = {
   _calculateErrorBars: _noop,
-  _updateOptions(options) {
+  _updateOptions(options): void {
     this._stackName = `axis_${options.axis || 'default'}`;
   },
 };
@@ -166,10 +165,12 @@ chart.stackedsplinearea = _extend({}, areaSeries.splinearea, baseStackedSeries, 
           prevSeriesPoints = pointByArg[argument]
             || getPointsByArgFromPrevSeries(that._prevSeries, argument);
           if (prevSeriesPoints) {
+            const firstPrevSeriesPoint = prevSeriesPoints[0];
+            const thirdPrevSeriesPoint = prevSeriesPoints[2];
             backwardPoints[i - 1]
-              && prevSeriesPoints[0]
-              && (backwardPoints[i - 1] = prevSeriesPoints[0]);
-            backwardPoints[i + 1] && (backwardPoints[i + 1] = prevSeriesPoints[2] || p);
+              && firstPrevSeriesPoint
+              && (backwardPoints[i - 1] = firstPrevSeriesPoint);
+            backwardPoints[i + 1] && (backwardPoints[i + 1] = thirdPrevSeriesPoint || p);
           }
         }
       });

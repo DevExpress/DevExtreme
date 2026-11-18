@@ -12,7 +12,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-use-before-define */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-/* eslint-disable prefer-destructuring */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 /* eslint-disable max-classes-per-file */
 
@@ -181,8 +180,7 @@ export let Projection = class Projection {
 
   _setupScreen(): void {
     const canvas = this._canvas;
-    const width = canvas.width;
-    const height = canvas.height;
+    const { width, height } = canvas;
     const engine = this._engine;
     const aspectRatio = engine.ar();
     this._x0 = canvas.left + width / 2;
@@ -407,7 +405,7 @@ export let Projection = class Projection {
   }
 
   getViewport(): number[] {
-    const unproject = this._engine.unproject;
+    const { unproject } = this._engine;
     const lt = unproject(this._fromTransformed([-1, -1]));
     const lb = unproject(this._fromTransformed([-1, +1]));
     const rt = unproject(this._fromTransformed([+1, -1]));
@@ -617,7 +615,7 @@ function findMinMax(p1: number[], p2: number[]): { min: number[]; max: number[] 
   };
 }
 
-export const projection = function (parameters) {
+export const projection = function (parameters): EngineInstance | null {
   return parameters && parameters.to ? new Engine(parameters) : null;
 };
 
@@ -640,7 +638,7 @@ function createProjectUnprojectMethods(project, unproject, p1, p2, delta) {
   const y0 = (p1[1] + p2[1]) / 2 - delta / 2;
   const k = 2 / delta;
   return {
-    to(coordinates) {
+    to(coordinates): number[] {
       const [p0, p1] = project(coordinates);
       return [-1 + (p0 - x0) * k, -1 + (p1 - y0) * k];
     },

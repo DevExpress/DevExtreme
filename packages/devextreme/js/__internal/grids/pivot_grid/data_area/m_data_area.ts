@@ -4,7 +4,7 @@ import { setTabIndex } from '@js/ui/shared/accessibility';
 import supportUtils from '@ts/core/utils/support';
 
 import { AreaItem } from '../area_item/m_area_item';
-import { calculateScrollbarWidth } from '../m_widget_utils';
+import { calculateScrollbarWidth } from '../widget_utils';
 
 const PIVOTGRID_AREA_CLASS = 'dx-pivotgrid-area';
 const PIVOTGRID_AREA_DATA_CLASS = 'dx-pivotgrid-area-data';

@@ -7,7 +7,6 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-multi-assign */
 /* eslint-disable @typescript-eslint/no-use-before-define */
-/* eslint-disable prefer-destructuring */
 /* eslint-disable no-else-return */
 
 import { noop } from '@ts/core/utils/common';
@@ -18,8 +17,8 @@ import { adjustVisualRange, normalizeEnum as _normalizeEnum, rangesAreEqual } fr
 import { consts, isFirefoxOnAndroid, utils } from '@ts/viz/range_selector/common';
 import Slider from '@ts/viz/range_selector/slider';
 
-const animationSettings = utils.animationSettings;
-const emptySliderMarkerText = consts.emptySliderMarkerText;
+const { animationSettings } = utils;
+const { emptySliderMarkerText } = consts;
 
 interface SelectedRange {
   startValue: ThemeValue;
@@ -211,7 +210,7 @@ export let SlidersController = class SlidersController {
     fullTicks: ThemeValue[],
     selectedRangeColor: string,
   ): void {
-    const screenRange = this._params.translator.getScreenRange();
+    const [startScreenPosition, endScreenPosition] = this._params.translator.getScreenRange();
 
     this._verticalRange = verticalRange;
     this._minRange = rangeBounds.minRange;
@@ -224,13 +223,18 @@ export let SlidersController = class SlidersController {
     this._sliders[1].update(verticalRange, sliderHandleOptions, sliderMarkerOptions);
     // This is required for placing sliders and shutter into initial position from which initial
     // animation will be going.
-    this._sliders[0]._position = this._sliders[1]._position = screenRange[0];
+    this._sliders[0]._position = this._sliders[1]._position = startScreenPosition;
 
     this._values = !this._params.translator.isValueProlonged && behavior.snapToTicks
       ? fullTicks
       : null;
     this._areaTracker.attr({
-      points: buildRectPoints(screenRange[0], verticalRange[0], screenRange[1], verticalRange[1]),
+      points: buildRectPoints(
+        startScreenPosition,
+        verticalRange[0],
+        endScreenPosition,
+        verticalRange[1],
+      ),
     });
 
     // SlidersContainer
@@ -270,8 +274,7 @@ export let SlidersController = class SlidersController {
       sliders[0]._setText(emptySliderMarkerText);
       sliders[1]._setText(emptySliderMarkerText);
       sliders[0]._value = sliders[1]._value = undefined;
-      sliders[0]._position = this._params.translator.getScreenRange()[0];
-      sliders[1]._position = this._params.translator.getScreenRange()[1];
+      [sliders[0]._position, sliders[1]._position] = this._params.translator.getScreenRange();
       this._applyTotalPosition(false);
       suppressSetSelectedRange(this);
     } else {
@@ -299,6 +302,7 @@ export let SlidersController = class SlidersController {
   }
 
   _applyAreaTrackersPosition(): void {
+    const [startScreenPosition, endScreenPosition] = this._params.translator.getScreenRange();
     let position1 = this._sliders[0].getPosition();
     let position2 = this._sliders[1].getPosition();
 
@@ -319,8 +323,8 @@ export let SlidersController = class SlidersController {
       .css({
         cursor:
           Math.abs(
-            this._params.translator.getScreenRange()[1]
-              - this._params.translator.getScreenRange()[0]
+            endScreenPosition
+              - startScreenPosition
               - position2
               + position1,
           ) < 0.001
@@ -372,7 +376,7 @@ export let SlidersController = class SlidersController {
 
   setSelectedRange(visualRange?: VisualRangeInput | null, e?: ThemeValue): void {
     visualRange = visualRange || {};
-    const translator = this._params.translator;
+    const { translator } = this._params;
     const businessRange = translator.getBusinessRange();
     const compare = businessRange.axisType === 'discrete' ? function (a: ThemeValue, b: ThemeValue): boolean {
       return a < b;
@@ -439,7 +443,7 @@ export let SlidersController = class SlidersController {
   }
 
   _dockSelectedArea(e?: ThemeValue): void {
-    const translator = this._params.translator;
+    const { translator } = this._params;
     const sliders = this._sliders;
 
     sliders[0]._position = translator.to(sliders[0].getValue(), -1);
@@ -454,17 +458,18 @@ export let SlidersController = class SlidersController {
   }
 
   _moveSelectedArea(screenPosition: number, isAnimated: boolean, e?: ThemeValue): void {
-    const translator = this._params.translator;
+    const { translator } = this._params;
     const sliders = this._sliders;
     const interval = sliders[1].getPosition() - sliders[0].getPosition();
     let startPosition = screenPosition - interval / 2;
     let endPosition = screenPosition + interval / 2;
-    if (startPosition < translator.getScreenRange()[0]) {
-      startPosition = translator.getScreenRange()[0];
+    const [minScreenPosition, maxScreenPosition] = translator.getScreenRange();
+    if (startPosition < minScreenPosition) {
+      startPosition = minScreenPosition;
       endPosition = startPosition + interval;
     }
-    if (endPosition > translator.getScreenRange()[1]) {
-      endPosition = translator.getScreenRange()[1];
+    if (endPosition > maxScreenPosition) {
+      endPosition = maxScreenPosition;
       startPosition = endPosition - interval;
     }
 
@@ -491,7 +496,7 @@ export let SlidersController = class SlidersController {
     secondPosition: number,
     e?: ThemeValue,
   ): MovingHandler {
-    const translator = this._params.translator;
+    const { translator } = this._params;
     const sliders = this._sliders;
     const index = firstPosition < secondPosition ? 0 : 1;
     const dir = index > 0 ? +1 : -1;
@@ -540,8 +545,7 @@ export let SlidersController = class SlidersController {
     positions[index] = translator.to(values[index], dir);
     sliders[0].setDisplayValue(values[0]);
     sliders[1].setDisplayValue(values[1]);
-    sliders[0]._position = positions[0];
-    sliders[1]._position = positions[1];
+    [sliders[0]._position, sliders[1]._position] = positions;
     this._applyTotalPosition(true);
     if (this._isOnMoving) {
       this._processSelectionChanged(e);
@@ -556,10 +560,9 @@ export let SlidersController = class SlidersController {
 
   beginSliderMoving(initialIndex: number, initialPosition: number): MovingHandler {
     const that = this;
-    const translator = that._params.translator;
+    const { translator } = that._params;
     const sliders = that._sliders;
-    const minPosition = translator.getScreenRange()[0];
-    const maxPosition = translator.getScreenRange()[1];
+    const [minPosition, maxPosition] = translator.getScreenRange();
     let index = initialIndex;
     const staticPosition = sliders[1 - index].getPosition();
     let currentPosition = initialPosition;
@@ -652,7 +655,7 @@ export let SlidersController = class SlidersController {
   }
 
   _changeMovingSlider(index: number): void {
-    const translator = this._params.translator;
+    const { translator } = this._params;
     const sliders = this._sliders;
     const position = sliders[1 - index].getPosition();
     const dir = index > 0 ? +1 : -1;

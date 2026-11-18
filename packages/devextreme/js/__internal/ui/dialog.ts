@@ -116,8 +116,8 @@ export const custom = (params: DialogParams): BaseDialog => {
     .html(messageMarkup)
     .attr('id', messageId);
 
-  const onContentReady: PopupProperties['onContentReady'] = (e) => {
-    const component = e.component as Popup;
+  const onContentReady: PopupProperties<Popup>['onContentReady'] = (e) => {
+    const { component } = e;
 
     component.$content()
       ?.addClass(DX_DIALOG_CONTENT_CLASSNAME)
@@ -128,8 +128,8 @@ export const custom = (params: DialogParams): BaseDialog => {
     }
   };
 
-  const onShowing: PopupProperties['onShowing'] = (e) => {
-    const component = e.component as Popup;
+  const onShowing: PopupProperties<Popup>['onShowing'] = (e) => {
+    const { component } = e;
     const bottomToolbar = component.bottomToolbar();
 
     bottomToolbar
@@ -140,8 +140,8 @@ export const custom = (params: DialogParams): BaseDialog => {
     domUtils.resetActiveElement();
   };
 
-  const onShown: PopupProperties['onShown'] = (e) => {
-    const component = e.component as Popup;
+  const onShown: PopupProperties<Popup>['onShown'] = (e) => {
+    const { component } = e;
     const bottomToolbar = component.bottomToolbar();
 
     const $firstButton = bottomToolbar
@@ -224,10 +224,9 @@ export const custom = (params: DialogParams): BaseDialog => {
     boundaryOffset: { ...DEFAULT_BOUNDARY_OFFSET },
   };
 
-  const configuration: PopupProperties = {
+  const configuration: PopupProperties<Popup> = {
     animation,
     container: $element,
-    // @ts-expect-error dragAndResizeArea should be typed correctly in popup.d.ts
     dragAndResizeArea: window,
     dragEnabled: ensureDefined(dragEnabled, true),
     height: 'auto',
@@ -236,7 +235,6 @@ export const custom = (params: DialogParams): BaseDialog => {
     onHiding: (): void => { deferred.reject(); },
     onShowing,
     onShown,
-    // @ts-expect-error position should be typed correctly in popup.d.ts
     position: popupPosition,
     rtlEnabled: config().rtlEnabled,
     showCloseButton: showCloseButton ?? false,

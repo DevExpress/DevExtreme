@@ -1,6 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-
 import { Component } from '@js/core/component';
 import { getPathParts } from '@js/core/utils/data';
 import type { ChangedOptionInfo } from '@js/events';
@@ -20,9 +17,9 @@ import type {
   TemplateProperty,
 } from './types';
 
-function getOr<T>(cache: Record<string, T>, key: string, orElse: () => T): T {
+function getOr<T>(cache: Record<string, unknown>, key: string, orElse: () => T): T {
   if (cache[key]) {
-    return cache[key];
+    return cache[key] as T;
   }
 
   const value = orElse();
@@ -32,10 +29,13 @@ function getOr<T>(cache: Record<string, T>, key: string, orElse: () => T): T {
 }
 
 export class OptionsController<
-  TProps extends Record<string, any>,
+  TProps extends object,
   TDefaultProps extends TProps = TProps,
 > {
-  private readonly cache = {
+  private readonly cache: Record<
+    'oneWay' | 'oneWayWithChanges' | 'twoWay' | 'action' | 'template',
+    Record<string, unknown>
+  > = {
     oneWay: {},
     oneWayWithChanges: {},
     twoWay: {},
@@ -115,7 +115,7 @@ export class OptionsController<
         () => getTreeNodeByPath(
           this.internalOptions.value.options,
           pathArray,
-        ),
+        ) as PropertyWithDefaults<TProps, TDefaultProps, TProp>,
       );
     });
   }
@@ -131,7 +131,10 @@ export class OptionsController<
           const { options, changes } = this.internalOptions.value;
 
           return {
-            value: getTreeNodeByPath(options, pathArray),
+            value: getTreeNodeByPath(
+              options,
+              pathArray,
+            ) as PropertyWithDefaults<TProps, TDefaultProps, TProp>,
             changes,
           };
         },
@@ -142,21 +145,24 @@ export class OptionsController<
   public twoWay<TProp extends string>(
     name: TProp,
   ): Signal<PropertyWithDefaults<TProps, TDefaultProps, TProp>> {
-    return getOr(this.cache.twoWay, name, () => {
+    type TValue = PropertyWithDefaults<TProps, TDefaultProps, TProp>;
+
+    return getOr(this.cache.twoWay, name, (): Signal<TValue> => {
       // eslint-disable-next-line @typescript-eslint/no-this-alias
       const that = this;
-      const obs = signal(this.component.option(name));
+      const obs = signal(this.component.option(name) as TValue);
       effect(() => {
-        obs.value = this.oneWay(name).value as any;
+        obs.value = this.oneWay(name).value;
       });
       return {
-        get value(): any {
+        get value(): TValue {
           return obs.value;
         },
-        set value(value: any) {
+        set value(value: TValue) {
           const isInitialized = that.initialized.peek();
           const callbackName = `on${name}Change`;
-          const callback = that.component.option(callbackName) as any;
+          const callback = that.component.option(callbackName) as
+            ((value: TValue) => void) | undefined;
           const isControlled = that.isControlledMode && that.component.option(name) !== undefined;
 
           if (isControlled) {
@@ -164,6 +170,7 @@ export class OptionsController<
             return;
           }
 
+          // @ts-expect-error Component.option() doesn't resolve nested option paths
           that.component.option(name, value);
 
           // 🚨🚨🚨 Hotfix for filterSync
@@ -177,21 +184,12 @@ export class OptionsController<
 
           callback?.(value);
         },
-        peek(): any {
+        peek(): TValue {
           return obs.peek();
         },
-        subscribe(...params: any): any {
-        // @ts-expect-error
-          return obs.subscribe(...params);
-        },
-        toJSON(...params: any[]): any {
-        // @ts-expect-error
-          return obs.toJSON(...params);
-        },
-        valueOf(...params: any[]): any {
-        // @ts-expect-error
-          return obs.valueOf(...params);
-        },
+        subscribe: obs.subscribe.bind(obs),
+        toJSON: obs.toJSON.bind(obs),
+        valueOf: obs.valueOf.bind(obs),
         brand: obs.brand,
       };
     });
@@ -199,7 +197,7 @@ export class OptionsController<
 
   public normalizeTemplate<T>(template: Template<T>): ComponentType<T> {
     // @ts-expect-error
-    return TemplateWrapper(this.component._getTemplate(template)) as any;
+    return TemplateWrapper(this.component._getTemplate(template)) as ComponentType<T>;
   }
 
   public template<TProp extends string>(
@@ -208,8 +206,10 @@ export class OptionsController<
     return getOr(this.cache.template, name, () => {
       const templateOption = this.oneWay(name);
       return computed(
-        // @ts-expect-error
-        () => templateOption.value && this.normalizeTemplate(templateOption.value) as any,
+        () => (
+          templateOption.value
+          && this.normalizeTemplate(templateOption.value as Template<unknown>)
+        ) as TemplateProperty<TProps, TProp>,
       );
     });
   }
@@ -223,7 +223,7 @@ export class OptionsController<
         () => {
           track(actionOption.value);
           // @ts-expect-error
-          return this.component._createActionByOption(name) as any;
+          return this.component._createActionByOption(name) as ActionProperty<TProps, TProp>;
         },
       );
     });

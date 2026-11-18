@@ -9,7 +9,6 @@
 /* eslint-disable @typescript-eslint/no-shadow */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-/* eslint-disable prefer-destructuring */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 
 import { extend } from '@ts/core/utils/extend';
@@ -54,11 +53,11 @@ const baseBarSeriesMethods = {
     return base;
   },
 
-  _applyMarkerClipRect(settings) {
+  _applyMarkerClipRect(settings): void {
     settings['clip-path'] = null;
   },
 
-  _setGroupsSettings(animationEnabled, firstDrawing) {
+  _setGroupsSettings(animationEnabled, firstDrawing): void {
     const that = this;
     let settings = {};
     // @ts-expect-error
@@ -73,7 +72,7 @@ const baseBarSeriesMethods = {
     that._markersGroup.attr(settings);
   },
 
-  _drawPoint(options) {
+  _drawPoint(options): void {
     options.hasAnimation = options.hasAnimation && !options.firstDrawing;
     options.firstDrawing = false;
     // @ts-expect-error
@@ -103,7 +102,7 @@ const baseBarSeriesMethods = {
     };
   },
 
-  _updatePointsVisibility() {
+  _updatePointsVisibility(): void {
     const visibility = this._options.visible;
     each(this._points, (_, point) => {
       point._options.visible = visibility;
@@ -114,12 +113,12 @@ const baseBarSeriesMethods = {
     return this._options;
   },
 
-  _animate(firstDrawing) {
+  _animate(firstDrawing): void {
     const that = this;
-    const complete = function () {
+    const complete = function (): void {
       that._animateComplete();
     };
-    const animateFunc = function (drawnPoints, complete) {
+    const animateFunc = function (drawnPoints, complete): void {
       const lastPointIndex = drawnPoints.length - 1;
       _each(drawnPoints || [], (i, point) => {
         point.animate(i === lastPointIndex ? complete : undefined, point.getMarkerCoords());
@@ -138,16 +137,16 @@ const baseBarSeriesMethods = {
 
   _defaultAggregator: 'sum',
 
-  _defineDrawingState() {},
+  _defineDrawingState(): void {},
 
-  usePointsToDefineAutoHiding() {
+  usePointsToDefineAutoHiding(): boolean {
     return false;
   },
 };
 // @ts-expect-error
 chart.bar = _extend({}, chartSeries, baseBarSeriesMethods, {
   _getAffineCoordOptions() {
-    const rotated = this._options.rotated;
+    const { rotated } = this._options;
     const direction = rotated ? 'X' : 'Y';
     const settings = {
       scaleX: rotated ? 0.001 : 1,
@@ -183,8 +182,8 @@ chart.bar = _extend({}, chartSeries, baseBarSeriesMethods, {
     const max = translator.translate(
       range.categories ? range.categories[range.categories.length - 1] : range.max,
     );
-    const rotated = this.getOptions().rotated;
-    const inverted = axis.getOptions().inverted;
+    const { rotated } = this.getOptions();
+    const { inverted } = axis.getOptions();
 
     return (rotated && !inverted) || (!rotated && inverted)
       ? coord >= min && coord <= max

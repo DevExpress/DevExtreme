@@ -16,7 +16,6 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-plusplus */
 /* eslint-disable no-restricted-syntax */
-/* eslint-disable prefer-destructuring */
 
 import { extend } from '@ts/core/utils/extend';
 import {
@@ -43,7 +42,7 @@ const axisTypeParser = enumParser([STRING, NUMERIC, DATETIME]);
 
 const _isArray = Array.isArray;
 
-function groupingValues(data, others, valueField, index) {
+function groupingValues(data, others, valueField, index): void {
   if (index >= 0) {
     data.slice(index).forEach((cell) => {
       if (_isDefined(cell[valueField])) {
@@ -54,7 +53,7 @@ function groupingValues(data, others, valueField, index) {
   }
 }
 
-function processGroups(groups) {
+function processGroups(groups): void {
   groups.forEach((group) => {
     group.valueType = group.valueAxisType = null;
     group.series.forEach((series) => {
@@ -65,7 +64,13 @@ function processGroups(groups) {
 }
 
 function sortValues(data, asc, selector) {
-  const func = asc ? function (a, b) { return a - b; } : function (a, b) { return b - a; };
+  const func = asc
+    ? function (a, b): number {
+      return a - b;
+    }
+    : function (a, b): number {
+      return b - a;
+    };
   data.sort((a, b) => {
     const valA = selector(a);
     const valB = selector(b);
@@ -76,7 +81,7 @@ function sortValues(data, asc, selector) {
   return data;
 }
 
-function resetArgumentAxes(axes) {
+function resetArgumentAxes(axes): void {
   axes && axes.forEach((axis) => {
     axis.resetTypes(ARGUMENT_TYPE);
   });
@@ -93,7 +98,7 @@ function parseCategories(categories, parser) {
   return newArray;
 }
 
-function parseAxisCategories(groupsData, parsers) {
+function parseAxisCategories(groupsData, parsers): void {
   const argumentCategories = groupsData.argumentOptions && groupsData.argumentOptions.categories;
 
   groupsData.groups.forEach((valueGroup, i) => {
@@ -124,7 +129,7 @@ function getType(unit, type) {
   return result;
 }
 
-function correctAxisType(type, axisType, hasCategories, incidentOccurred) {
+function correctAxisType(type, axisType, hasCategories, incidentOccurred): 'logarithmic' | 'discrete' | 'semidiscrete' | 'continuous' {
   if (
     type === STRING
     && (axisType === CONTINUOUS || axisType === LOGARITHMIC || axisType === SEMIDISCRETE)
@@ -141,7 +146,7 @@ function correctAxisType(type, axisType, hasCategories, incidentOccurred) {
 }
 
 // Do we really need this one if all it is only for logarithmic case?
-function validUnit(unit, field, incidentOccurred) {
+function validUnit(unit, field, incidentOccurred): void {
   if (unit) {
     incidentOccurred(!_isNumber(unit) && !_isDate(unit) && !_isString(unit) ? 'E2003' : 'E2004', [field]);
   }
@@ -207,12 +212,9 @@ function getParsedCell(cell, parsers) {
   let i;
   const ii = parsers.length;
   const obj = extend({}, cell);
-  let field;
-  let value;
   for (i = 0; i < ii; ++i) {
-    field = parsers[i][0];
-    value = cell[field];
-    obj[field] = parsers[i][1](value, field);
+    const [field, parseField] = parsers[i];
+    obj[field] = parseField(cell[field], field);
   }
   return obj;
 }
@@ -242,10 +244,10 @@ function findIndexByThreshold(data, valueField, threshold) {
   return i;
 }
 
-function groupMinSlices(originalData, argumentField, valueField, smallValuesGrouping) {
+function groupMinSlices(originalData, argumentField, valueField, smallValuesGrouping): void {
   smallValuesGrouping = smallValuesGrouping || {};
 
-  const mode = smallValuesGrouping.mode;
+  const { mode } = smallValuesGrouping;
   const others = {};
 
   if (!mode || mode === 'none') { return; }
@@ -259,7 +261,7 @@ function groupMinSlices(originalData, argumentField, valueField, smallValuesGrou
   others[valueField] && originalData.push(others);
 }
 
-function groupPieData(data, groupsData) {
+function groupPieData(data, groupsData): void {
   const firstSeries = groupsData.groups[0] && groupsData.groups[0].series[0];
   const isPie = firstSeries && (firstSeries.type === 'pie' || firstSeries.type === 'doughnut' || firstSeries.type === 'donut');
 
@@ -277,7 +279,7 @@ function groupPieData(data, groupsData) {
   });
 }
 
-function addUniqueItemToCollection(item, collection, itemsHash) {
+function addUniqueItemToCollection(item, collection, itemsHash): void {
   if (!itemsHash[item]) {
     collection.push(item);
     itemsHash[item] = true;
@@ -297,7 +299,7 @@ function getUniqueArgumentFields(groupsData) {
   return uniqueArgumentFields;
 }
 
-function sort(a, b) {
+function sort(a, b): number {
   const result = a - b;
 
   if (isNaN(result)) {
@@ -418,7 +420,7 @@ function checkArgumentTypeOfGroup(series, cell, groupsData) {
   return groupsData.argumentType;
 }
 
-function checkType(data, groupsData, checkTypeForAllData) {
+function checkType(data, groupsData, checkTypeForAllData): void {
   const groupsWithUndefinedValueType = [];
   const groupsWithUndefinedArgumentType = [];
   const argumentTypeGroup = groupsData.argumentOptions
@@ -467,7 +469,7 @@ function checkType(data, groupsData, checkTypeForAllData) {
   }
 }
 
-function checkAxisType(groupsData, incidentOccurred) {
+function checkAxisType(groupsData, incidentOccurred): void {
   const argumentOptions = groupsData.argumentOptions || {};
   const userArgumentCategories = (argumentOptions && argumentOptions.categories) || [];
   const argumentAxisType = correctAxisType(

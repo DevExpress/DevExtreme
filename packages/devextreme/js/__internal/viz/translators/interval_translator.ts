@@ -51,7 +51,7 @@ export default {
     return that.to(bp, direction, skipRound, interval);
   },
 
-  getInterval() {
+  getInterval(): number {
     return Math.round(
       this._canvasOptions.ratioOfCanvasRange
         * (this._businessRange.interval
@@ -59,13 +59,13 @@ export default {
     );
   },
 
-  zoom() { },
+  zoom(): void { },
 
-  getMinScale() { },
+  getMinScale(): void { },
 
-  getScale() { },
+  getScale(): void { },
 
-  _parse(value) {
+  _parse(value): number | Date {
     return this._businessRange.dataType === 'datetime' ? new Date(value) : Number(value);
   },
 
@@ -77,7 +77,7 @@ export default {
     return this._parse(value);
   },
 
-  isValid(value, interval) {
+  isValid(value, interval): boolean {
     const that = this;
     const co = that._canvasOptions;
     let { rangeMin } = co;
@@ -172,7 +172,7 @@ export default {
     return value;
   },
 
-  _add() {
+  _add(): number {
     return NaN;
   },
 

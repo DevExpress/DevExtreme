@@ -16,7 +16,7 @@ function getValue(value) { return value; }
 const MIN_VALID_SCALE_OFFSET = 0.05;
 
 export default {
-  translate(category, directionOffset) {
+  translate(category, directionOffset): number | null {
     const that = this;
     const canvasOptions = that._canvasOptions;
     const categoryIndex = that._categoriesToPoints[category?.valueOf()];
@@ -42,7 +42,7 @@ export default {
     return this._canvasOptions.interval;
   },
 
-  getEventScale(zoomEvent) {
+  getEventScale(zoomEvent): number {
     const scale = zoomEvent.deltaScale || 1;
     return 1 - (1 - scale) / (0.75 + this.visibleCategories.length / this._categories.length);
   },
@@ -115,7 +115,7 @@ export default {
     };
   },
 
-  getMinScale(zoom) {
+  getMinScale(zoom): number {
     const that = this;
     const canvasOptions = that._canvasOptions;
     let categoriesLength = (that.visibleCategories || that._categories).length;
@@ -125,7 +125,7 @@ export default {
     return canvasOptions.canvasLength / ((Math.max(categoriesLength, 1) * canvasOptions.interval));
   },
 
-  getScale(min, max) {
+  getScale(min, max): number {
     const that = this;
     const canvasOptions = that._canvasOptions;
     const visibleArea = that.getCanvasVisibleArea();
@@ -144,13 +144,13 @@ export default {
 
   // dxRangeSelector
 
-  isValid(value) {
+  isValid(value): boolean {
     return isDefined(value) ? this._categoriesToPoints[value.valueOf()] >= 0 : false;
   },
 
   getCorrectValue: getValue,
 
-  to(value, direction) {
+  to(value, direction): number {
     const canvasOptions = this._canvasOptions;
     const categoryIndex = this._categoriesToPoints[value?.valueOf()];
     const startPointIndex = canvasOptions.startPointIndex || 0;
@@ -190,7 +190,7 @@ export default {
     return categories[result];
   },
 
-  _add() {
+  _add(): number {
     return NaN;
   },
 

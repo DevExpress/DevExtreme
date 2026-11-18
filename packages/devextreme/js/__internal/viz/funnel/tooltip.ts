@@ -24,11 +24,11 @@ export const plugin = {
   dispose: noop,
 
   extenders: {
-    _buildNodes() {
+    _buildNodes(): void {
       this.hideTooltip();
     },
 
-    _change_TILING() {
+    _change_TILING(): void {
       if (this._tooltipIndex >= 0) {
         this._moveTooltip(this._items[this._tooltipIndex]);
       }
@@ -36,19 +36,19 @@ export const plugin = {
   },
 
   members: {
-    hideTooltip() {
+    hideTooltip(): void {
       if (this._tooltipIndex >= 0) {
         this._tooltipIndex = -1;
         this._tooltip.hide();
       }
     },
 
-    _moveTooltip(item, coords) {
+    _moveTooltip(item, coords): void {
       const xy = getCoords(coords, item.coords, this._renderer);
       this._tooltip.move(xy[0], xy[1], 0);
     },
 
-    _showTooltip(index, coords) {
+    _showTooltip(index, coords): void {
       const that = this;
       const tooltip = that._tooltip;
       const item = that._items[index];
@@ -58,7 +58,7 @@ export const plugin = {
         return;
       }
 
-      const callback = (result) => {
+      const callback = (result): void => {
         if (result === undefined) {
           return;
         }
@@ -77,7 +77,7 @@ export const plugin = {
       }, { x: xy[0], y: xy[1], offset: 0 }, { item }, undefined, callback));
     },
   },
-  customize(constructor) {
+  customize(constructor): void {
     constructor.addPlugin(pluginTooltip);
   },
 };

@@ -15,7 +15,7 @@ export const createTracker = (renderer, root) => renderer
 
 export const createVisibilityGroup = (renderer, root, className = '') => renderer.g().attr({ class: className }).append(root);
 
-export const toggleDisplay = (blocks, isVisible) => {
+export const toggleDisplay = (blocks, isVisible): void => {
   const cssDisplayBlock = { display: 'block' };
   const cssDisplayNone = { display: 'none' };
   const style = isVisible ? cssDisplayBlock : cssDisplayNone;
