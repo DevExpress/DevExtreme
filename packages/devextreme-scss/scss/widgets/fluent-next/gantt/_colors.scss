@@ -6,6 +6,7 @@ $gantt-content-disabled: ds.$color-content-disabled !default;
 
 $gantt-task-bg: ds.$color-bg-primary-shared !default;
 $gantt-parent-task-bg: ds.$color-bg-success !default;
+$gantt-parent-task-content: ds.$color-content-on-success !default;
 $gantt-task-res-content: ds.$color-content-inverted !default;
 $gantt-task-res-bg: ds.$color-bg-inverted !default;
 $gantt-task-progress-bg: rgb(from #{ds.$color-bg-inverted} r g b / 0.2) !default;
