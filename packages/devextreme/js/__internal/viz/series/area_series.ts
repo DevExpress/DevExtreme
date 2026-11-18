@@ -59,7 +59,7 @@ const baseAreaMethods = {
     return defaultSegment;
   },
 
-  _updateElement(element, segment, animate, complete) {
+  _updateElement(element, segment, animate, complete): void {
     const lineParams = { points: segment.line };
     const areaParams = { points: segment.area };
     const borderElement = element.line;
@@ -72,7 +72,7 @@ const baseAreaMethods = {
     }
   },
 
-  _removeElement(element) {
+  _removeElement(element): void {
     element.line && element.line.remove();
     element.area.remove();
   },
@@ -84,7 +84,7 @@ const baseAreaMethods = {
     };
   },
 
-  _applyStyle(style) {
+  _applyStyle(style): void {
     const that = this;
 
     that._elementsGroup && that._elementsGroup.smartAttr(style.elements);

@@ -35,7 +35,7 @@ function getValueAxesPerPanes(valueAxes) {
 }
 
 const linearConverter = (br) => ({
-  transform(v, b) {
+  transform(v, b): number {
     return adjust(getLogExt(v, b, br.allowNegatives, br.linearThreshold));
   },
   getTicks(interval, tickValues, base) {
@@ -53,7 +53,7 @@ const linearConverter = (br) => ({
 });
 
 const logConverter = (br) => ({
-  transform(v, b) {
+  transform(v, b): number {
     return adjust(raiseToExt(v, b, br.allowNegatives, br.linearThreshold));
   },
   getTicks(interval, tickValues, base) {
@@ -68,7 +68,7 @@ const logConverter = (br) => ({
   },
 });
 
-function convertAxisInfo(axisInfo, converter) {
+function convertAxisInfo(axisInfo, converter): void {
   if (!axisInfo.isLogarithmic) {
     return;
   }
@@ -152,7 +152,7 @@ function populateAxesInfo(axes) {
   }, []);
 }
 
-function updateTickValues(axesInfo) {
+function updateTickValues(axesInfo): void {
   const maxTicksCount = axesInfo.reduce(
     (max, axisInfo) => _max(max, axisInfo.tickValues.length),
     0,
@@ -190,11 +190,11 @@ function updateTickValues(axesInfo) {
   });
 }
 
-function getAxisRange(axisInfo) {
+function getAxisRange(axisInfo): number {
   return (axisInfo.maxValue - axisInfo.minValue) || 1; // T153054
 }
 
-function correctMinMaxValues(axesInfo) {
+function correctMinMaxValues(axesInfo): void {
   const mainAxisInfo = axesInfo[0];
   const mainAxisRange = getAxisRange(mainAxisInfo);
 
@@ -225,7 +225,7 @@ function correctMinMaxValues(axesInfo) {
   });
 }
 
-function calculatePaddings(axesInfo) {
+function calculatePaddings(axesInfo): { start: number; end: number } {
   let minPadding;
   let maxPadding;
   let startPadding = 0;
@@ -249,7 +249,7 @@ function calculatePaddings(axesInfo) {
   };
 }
 
-function correctMinMaxValuesByPaddings(axesInfo, paddings) {
+function correctMinMaxValuesByPaddings(axesInfo, paddings): void {
   axesInfo.forEach((info) => {
     const range = getAxisRange(info);
     const { inverted } = info;
@@ -259,7 +259,7 @@ function correctMinMaxValuesByPaddings(axesInfo, paddings) {
   });
 }
 
-function updateTickValuesIfSynchronizedValueUsed(axesInfo) {
+function updateTickValuesIfSynchronizedValueUsed(axesInfo): void {
   let hasSynchronizedValue = false;
 
   axesInfo.forEach((info) => {
@@ -290,7 +290,7 @@ function updateTickValuesIfSynchronizedValueUsed(axesInfo) {
   });
 }
 
-function applyMinMaxValues(axesInfo) {
+function applyMinMaxValues(axesInfo): void {
   axesInfo.forEach((info) => {
     const { axis } = info;
     const range = axis.getTranslator().getBusinessRange();
@@ -316,7 +316,7 @@ function applyMinMaxValues(axesInfo) {
   });
 }
 
-function correctAfterSynchronize(axesInfo) {
+function correctAfterSynchronize(axesInfo): void {
   const invalidAxisInfo = [];
   let correctValue;
 
@@ -354,7 +354,7 @@ function correctAfterSynchronize(axesInfo) {
   });
 }
 
-function updateMinorTicks(axesInfo) {
+function updateMinorTicks(axesInfo): void {
   axesInfo.forEach((axisInfo) => {
     if (!axisInfo.minorTickInterval) {
       return;
@@ -413,7 +413,7 @@ function correctPaddings(axesInfo, paddings) {
 }
 
 const multiAxesSynchronizer = {
-  synchronize(valueAxes) {
+  synchronize(valueAxes): void {
     each(getValueAxesPerPanes(valueAxes), (_, axes) => {
       if (axes.length <= 1) {
         return;

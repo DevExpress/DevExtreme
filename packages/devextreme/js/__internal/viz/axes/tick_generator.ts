@@ -61,7 +61,12 @@ const VISIBILITY_DELIMITER = 3;
 const MINUTE = 60 * 1000;
 
 function dummyGenerator(options) {
-  return function (data, screenDelta, tickInterval, forceTickInterval) {
+  return function (
+    data,
+    screenDelta,
+    tickInterval,
+    forceTickInterval,
+  ): { ticks: number[]; tickInterval: number } {
     let count = mathFloor(screenDelta / options.axisDivisionFactor);
     count = count < 1 ? 1 : count;
     const interval = screenDelta / count;
@@ -86,22 +91,22 @@ function discreteGenerator(options) {
 }
 
 const getValue = (value) => value;
-const getLogValue = (base, allowNegatives, linearThreshold) => (value) => getLog(
+const getLogValue = (base, allowNegatives, linearThreshold) => (value): number => getLog(
   value,
   base,
   allowNegatives,
   linearThreshold,
 );
-const raiseTo = (base, allowNegatives, linearThreshold) => (value) => raiseToExt(
+const raiseTo = (base, allowNegatives, linearThreshold) => (value): number => raiseToExt(
   value,
   base,
   allowNegatives,
   linearThreshold,
 );
-const mathRaiseTo = (base) => (value) => mathRaise(value, base);
-const logAbsValue = (base) => (value) => (value === 0 ? 0 : mathLog(mathAbs(value), base));
+const mathRaiseTo = (base) => (value): number => mathRaise(value, base);
+const logAbsValue = (base) => (value): number => (value === 0 ? 0 : mathLog(mathAbs(value), base));
 
-const correctValueByInterval = (post, round, getValue) => (value, interval) => adjust(
+const correctValueByInterval = (post, round, getValue) => (value, interval): number => adjust(
   post(round(adjust(getValue(value) / interval)) * interval),
 );
 
@@ -124,7 +129,7 @@ function correctMinValueByEndOnTick(floorFunc, ceilFunc, resolveEndOnTick, endOn
   };
 }
 
-function resolveEndOnTick(curValue, tickValue, interval, businessViewInfo) {
+function resolveEndOnTick(curValue, tickValue, interval, businessViewInfo): boolean {
   const prevTickDataDiff = interval - mathAbs(tickValue - curValue);
   const intervalCount = math.max(mathCeil(businessViewInfo.businessDelta / interval), 2);
   const businessRatio = businessViewInfo.screenDelta / (intervalCount * interval);
@@ -142,7 +147,7 @@ function resolveEndOnTick(curValue, tickValue, interval, businessViewInfo) {
 }
 
 function resolveEndOnTickLog(base) {
-  return function (curValue, tickValue, interval, businessViewInfo) {
+  return function (curValue, tickValue, interval, businessViewInfo): boolean {
     return resolveEndOnTick(
       getLog(curValue, base),
       getLog(tickValue, base),
@@ -152,7 +157,7 @@ function resolveEndOnTickLog(base) {
   };
 }
 
-function resolveEndOnTickDate(curValue, tickValue, interval, businessViewInfo) {
+function resolveEndOnTickDate(curValue, tickValue, interval, businessViewInfo): boolean {
   return resolveEndOnTick(
     curValue.valueOf(),
     tickValue.valueOf(),
@@ -161,7 +166,7 @@ function resolveEndOnTickDate(curValue, tickValue, interval, businessViewInfo) {
   );
 }
 
-function getBusinessDelta(data, breaks) {
+function getBusinessDelta(data, breaks): number {
   let spacing = 0;
   if (breaks) {
     spacing = breaks.reduce((prev, item) => prev + (item.to - item.from), 0);
@@ -171,7 +176,7 @@ function getBusinessDelta(data, breaks) {
 
 function getBusinessDeltaLog(base, allowNegatives, linearThreshold) {
   const getLog = getLogValue(base, allowNegatives, linearThreshold);
-  return function (data, breaks) {
+  return function (data, breaks): number {
     let spacing = 0;
     if (breaks) {
       spacing = breaks.reduce((prev, item) => prev + mathAbs(getLog(item.to / item.from)), 0);
@@ -180,14 +185,19 @@ function getBusinessDeltaLog(base, allowNegatives, linearThreshold) {
   };
 }
 
-function getIntervalByFactor(businessDelta, screenDelta, axisDivisionFactor, addTickCount?) {
+function getIntervalByFactor(
+  businessDelta,
+  screenDelta,
+  axisDivisionFactor,
+  addTickCount?,
+): number {
   let count = (screenDelta / axisDivisionFactor) - (addTickCount || 0);
   count = count < 1 ? 1 : count;
 
   return businessDelta / count;
 }
 
-function getMultiplierFactor(interval, factorDelta?) {
+function getMultiplierFactor(interval, factorDelta?): number {
   return 10 ** (mathFloor(getLog(interval, 10)) + (factorDelta || 0));
 }
 
@@ -232,7 +242,7 @@ function calculateTickInterval(
   return tickInterval;
 }
 
-function adjustInterval(interval, multipliers, onlyIntegers) {
+function adjustInterval(interval, multipliers, onlyIntegers): number {
   const factor = getMultiplierFactor(interval, -1);
   let result = 1;
 
@@ -313,7 +323,7 @@ function getAdjustIntervalLog(skipCalculationLimits) {
   };
 }
 
-function getDataTimeMultipliers(gapSize) {
+function getDataTimeMultipliers(gapSize): typeof DATETIME_MULTIPLIERS {
   if (gapSize && gapSize > 2) {
     return DATETIME_MULTIPLIERS_WITH_BIG_WEEKEND;
   }
@@ -422,7 +432,9 @@ function getTickIntervalByCustomTicks(getValue, postProcess) {
     : undefined);
 }
 
-function addInterval(value, interval, isNegative) {
+function addInterval(value: Date, interval, isNegative): Date;
+function addInterval(value: number, interval, isNegative): number;
+function addInterval(value, interval, isNegative): Date | number {
   return dateUtils.addInterval(value, interval, isNegative);
 }
 
@@ -430,7 +442,7 @@ function addIntervalLog(log, raise) {
   return (value, interval, isNegative) => raise(addInterval(log(value), interval, isNegative));
 }
 
-function addIntervalDate(value, interval, isNegative?) {
+function addIntervalDate(value, interval, isNegative?): Date {
   return addInterval(value, interval, isNegative);
 }
 
@@ -905,7 +917,10 @@ function numericGenerator(options) {
   );
 }
 
-const correctValueByIntervalLog = (post, getRound, getValue) => (value, interval) => sign(value)
+const correctValueByIntervalLog = (post, getRound, getValue) => (
+  value,
+  interval,
+): number => sign(value)
   * adjust(post(getRound(value)(adjust(getValue(value) / interval)) * interval));
 
 function logarithmicGenerator(options) {
@@ -916,8 +931,8 @@ function logarithmicGenerator(options) {
   const absLog = logAbsValue(base);
   const absRaise = mathRaiseTo(base);
 
-  const absFloor = (value) => (value < 0 ? mathCeil : mathFloor);
-  const absCeil = (value) => (value < 0 ? mathFloor : mathCeil);
+  const absFloor = (value): (x: number) => number => (value < 0 ? mathCeil : mathFloor);
+  const absCeil = (value): (x: number) => number => (value < 0 ? mathFloor : mathCeil);
 
   const floor = correctValueByIntervalLog(absRaise, absFloor, absLog);
   const ceil = correctValueByIntervalLog(absRaise, absCeil, absLog);
@@ -960,13 +975,13 @@ function dateGenerator(options) {
       intervalObject = adjustIntervalDateTime(divider);
     }
 
-    const correctDateWithUnitBeginning = (v) => dateUtils.correctDateWithUnitBeginning(
+    const correctDateWithUnitBeginning = (v): Date => dateUtils.correctDateWithUnitBeginning(
       v,
       intervalObject,
       null,
       options.firstDayOfWeek,
     );
-    const floorAtStartDate = (v) => new Date(
+    const floorAtStartDate = (v): Date => new Date(
       mathFloor((v.getTime() - v.getTimezoneOffset() * MINUTE) / divider) * divider
           + v.getTimezoneOffset() * MINUTE,
     );

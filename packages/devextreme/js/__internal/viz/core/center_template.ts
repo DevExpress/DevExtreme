@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
 
 import { noop } from '@ts/core/utils/common';
 import { patchFontOptions } from '@ts/viz/core/utils';
@@ -7,11 +6,11 @@ import { patchFontOptions } from '@ts/viz/core/utils';
 const pieChartPlugin = {
   name: 'center_template_pie_chart',
   init: noop,
-  dispose() {
+  dispose(): void {
     this._centerTemplateGroup.linkOff().dispose();
   },
   extenders: {
-    _createHtmlStructure() {
+    _createHtmlStructure(): void {
       const patchedFontOptions = patchFontOptions(this._themeManager._font);
       this._centerTemplateGroup = this._renderer.g()
         .attr({ class: 'dxc-hole-template' })
@@ -19,12 +18,12 @@ const pieChartPlugin = {
         .css(patchedFontOptions)
         .linkAppend();
     },
-    _renderExtraElements() {
+    _renderExtraElements(): void {
       this._requestChange(['CENTER_TEMPLATE']);
     },
   },
   members: {
-    _renderCenterTemplate() {
+    _renderCenterTemplate(): void {
       const template = this.option('centerTemplate');
       const centerTemplateGroup = this._centerTemplateGroup.clear();
 
@@ -49,7 +48,7 @@ const pieChartPlugin = {
       });
     },
   },
-  customize(constructor) {
+  customize(constructor): void {
     constructor.addChange({
       code: 'CENTER_TEMPLATE',
       handler() {
@@ -65,21 +64,21 @@ const gaugePlugin = {
   init: noop,
   dispose: pieChartPlugin.dispose,
   extenders: {
-    _initCore() {
+    _initCore(): void {
       this._createCenterTemplateGroup();
     },
-    _renderContent() {
+    _renderContent(): void {
       const patchedFontOptions = patchFontOptions(this._themeManager._font);
       this._centerTemplateGroup.css(patchedFontOptions);
       this._requestChange(['CENTER_TEMPLATE']);
     },
-    _updateExtraElements() {
+    _updateExtraElements(): void {
       this._requestChange(['CENTER_TEMPLATE']);
     },
   },
   members: {
     _renderCenterTemplate: pieChartPlugin.members._renderCenterTemplate,
-    _createCenterTemplateGroup() {
+    _createCenterTemplateGroup(): void {
       this._centerTemplateGroup = this._renderer.g()
         .attr({ class: 'dxg-hole-template' })
         .linkOn(this._renderer.root, 'center-template')

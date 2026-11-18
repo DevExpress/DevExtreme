@@ -24,7 +24,7 @@ let _TESTS_dataKey;
 /// #ENDDEBUG
 proto._eventsMap.onClick = { name: 'click' };
 
-const getDataKey = function () {
+const getDataKey = function (): string {
   const dataKey = DATA_KEY_BASE + dataKeyModifier++;
   return dataKey;
 };
@@ -54,11 +54,11 @@ expand(proto, '_initCore', function () {
       const { target } = e;
       return (target.tagName === 'tspan' ? target.parentNode : target)[dataKey];
     },
-    click(e) {
+    click(e): void {
       that._eventTrigger('click', e);
     },
   });
-  that._handlers.setTrackerData = function (node, element) {
+  that._handlers.setTrackerData = function (node, element): void {
     element.data(dataKey, node._id);
   };
 });
