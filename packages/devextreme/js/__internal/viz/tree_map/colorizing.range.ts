@@ -8,7 +8,7 @@
 
 import { addColorizer, createColorCodeGetter as _createColorCodeGetter } from '@ts/viz/tree_map/colorizing';
 
-function getPaletteIndex(value, items) {
+function getPaletteIndex(value, items): number {
   let start = 0;
   let end = items.length - 1;
   let index = -1;

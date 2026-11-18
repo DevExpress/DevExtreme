@@ -71,7 +71,7 @@ function getThemeInfo(themeName, splitter) {
   return k > 0 ? { name: themeName.substring(0, k), scheme: themeName.substring(k + 1) } : null;
 }
 
-function registerThemeName(themeName, targetThemeName) {
+function registerThemeName(themeName, targetThemeName): void {
   const themeInfo = getThemeInfo(themeName, '.') || { name: themeName };
   const { name } = themeInfo;
   // @ts-expect-error
@@ -86,7 +86,7 @@ function registerThemeName(themeName, targetThemeName) {
   }
 }
 
-export function registerTheme(theme, baseThemeName) {
+export function registerTheme(theme, baseThemeName): void {
   const themeName = normalizeEnum(theme && theme.name);
   if (themeName) {
     theme.isDefault && (defaultTheme = themeName);
@@ -95,18 +95,18 @@ export function registerTheme(theme, baseThemeName) {
   }
 }
 
-export function registerThemeSchemeAlias(from, to) {
+export function registerThemeSchemeAlias(from, to): void {
   themesSchemeMapping[from] = to;
 }
 
-function mergeScalar(target, field, source, sourceValue?) {
+function mergeScalar(target, field, source, sourceValue?): void {
   const _value = source?.[field] ?? sourceValue;
   if (_value !== undefined && target[field] === undefined) {
     target[field] = _value;
   }
 }
 
-function mergeObject(target, field, source, sourceValue?) {
+function mergeObject(target, field, source, sourceValue?): void {
   const _value = source?.[field] ?? sourceValue;
   if (_value !== undefined) {
     target[field] = _extend(true, {}, _value, target[field]);
@@ -196,7 +196,7 @@ function patchTheme(theme) {
   return theme;
 }
 
-function patchAxes(theme) {
+function patchAxes(theme): void {
   const commonAxisSettings = theme['chart:common:axis'];
   const colorFieldName = 'color';
   [commonAxisSettings.grid, commonAxisSettings.minorGrid].forEach((obj) => {
@@ -217,7 +217,7 @@ function patchAxes(theme) {
   mergeScalar(theme.rangeSelector.scale.label.font, colorFieldName, null, theme.axisColor);
 }
 
-function patchMapLayers(theme) {
+function patchMapLayers(theme): void {
   const { map } = theme;
   ['area', 'line', 'marker'].forEach((section) => {
     mergeObject(map, `layer:${section}`, null, map.layer);
@@ -227,13 +227,13 @@ function patchMapLayers(theme) {
   });
 }
 
-export function addCacheItem(target) {
+export function addCacheItem(target): void {
   const cacheUid = ++nextCacheUid;
   target._cache = cacheUid;
   widgetsCache[cacheUid] = target;
 }
 
-export function removeCacheItem(target) {
+export function removeCacheItem(target): void {
   delete widgetsCache[target._cache];
 }
 
@@ -273,7 +273,7 @@ export {
   widgetsCache,
 };
 
-exports.resetCurrentTheme = function () {
+exports.resetCurrentTheme = function (): void {
   currentThemeName = null;
 };
 /// #ENDDEBUG

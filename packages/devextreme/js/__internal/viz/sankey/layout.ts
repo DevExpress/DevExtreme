@@ -30,7 +30,7 @@ export const layout = {
     }
   },
 
-  _getInWeightForNode(nodeTitle, links) {
+  _getInWeightForNode(nodeTitle, links): number {
     let w = 0;
     links.forEach((link) => {
       if (link[1] === nodeTitle) {
@@ -40,7 +40,7 @@ export const layout = {
     return w;
   },
 
-  _getOutWeightForNode(nodeTitle, links) {
+  _getOutWeightForNode(nodeTitle, links): number {
     let w = 0;
     links.forEach((link) => {
       if (link[0] === nodeTitle) {
@@ -92,7 +92,7 @@ export const layout = {
     return cascades;
   },
 
-  _getWeightForCascade(cascades, cascadeIdx) {
+  _getWeightForCascade(cascades, cascadeIdx): number {
     let wMax = 0;
     const cascade = cascades[cascadeIdx];
     Object.keys(cascade).forEach((nodeTitle) => {
@@ -101,7 +101,7 @@ export const layout = {
     return wMax;
   },
 
-  _getMaxWeightThroughCascades(cascades) {
+  _getMaxWeightThroughCascades(cascades): number {
     const max = [];
     cascades.forEach((cascade) => {
       let mW = 0;
@@ -206,7 +206,7 @@ export const layout = {
     return null;
   },
 
-  _findIndexByName(rects, nodeTitle) {
+  _findIndexByName(rects, nodeTitle): number | null {
     let index = 0;
     for (let c = 0; c < rects.length; c++) {
       for (let r = 0; r < rects[c].length; r++) {
@@ -307,7 +307,7 @@ export const layout = {
     return result;
   },
 
-  _fitNodeHeight(nodeName, nodeRects, paths) {
+  _fitNodeHeight(nodeName, nodeRects, paths): void {
     const targetRect = this._findRectByName(nodeRects, nodeName);
     let heightOfLinksSummaryIn = 0;
     let heightOfLinksSummaryOut = 0;
@@ -323,7 +323,7 @@ export const layout = {
     targetRect.height = Math.max(heightOfLinksSummaryIn, heightOfLinksSummaryOut);
   },
 
-  _fitAllNodesHeight(nodeRects, paths) {
+  _fitAllNodesHeight(nodeRects, paths): void {
     for (let c = 0; c < nodeRects.length; c++) {
       for (let r = 0; r < nodeRects[c].length; r++) {
         this._fitNodeHeight(nodeRects[c][r]._name, nodeRects, paths);
@@ -331,7 +331,7 @@ export const layout = {
     }
   },
 
-  _spline(rectLeft, rectRight) {
+  _spline(rectLeft, rectRight): string {
     const p_UpLeft = { x: rectLeft.x + rectLeft.width, y: rectLeft.y };
     const p_DownLeft = { x: rectLeft.x + rectLeft.width, y: rectLeft.y + rectLeft.height };
     const p_UpRight = { x: rectRight.x, y: rectRight.y };
@@ -372,7 +372,7 @@ export const layout = {
     return result;
   },
 
-  overlap(box1, box2) {
+  overlap(box1, box2): boolean {
     return !(box2.x > box1.x + box1.width || box2.x + box2.width < box1.x
             || box2.y >= box1.y + box1.height || box2.y + box2.height <= box1.y);
   },

@@ -164,7 +164,7 @@ export function getPalette(palette, parameters) {
   return type ? result[type].slice(0) : result;
 }
 
-export function registerPalette(name, palette) {
+export function registerPalette(name, palette): void {
   const item = {};
   let paletteName;
 
@@ -203,7 +203,7 @@ export let getAccentColor = function (palette, themeDefault) {
   return palette.accentColor || palette[0];
 };
 
-function RingBuf(buf) {
+function RingBuf(buf): void {
   let ind = 0;
   this.next = function () {
     const res = buf[ind++];
@@ -212,7 +212,7 @@ function RingBuf(buf) {
     }
     return res;
   };
-  this.reset = function () {
+  this.reset = function (): void {
     ind = 0;
   };
 }
@@ -222,7 +222,7 @@ function getAlternateColorsStrategy(palette, parameters) {
   const paletteSteps = new RingBuf([0, stepHighlight, -stepHighlight]);
   let currentPalette = [];
 
-  function reset() {
+  function reset(): void {
     const step = paletteSteps.next();
     currentPalette = step ? getAlteredPalette(palette, step) : palette.slice(0);
   }
@@ -248,7 +248,7 @@ function getAlternateColorsStrategy(palette, parameters) {
       return colors;
     },
 
-    reset() {
+    reset(): void {
       paletteSteps.reset();
       reset();
     },
@@ -304,7 +304,7 @@ function getExtrapolateColorsStrategy(palette, parameters) {
       return colors;
     },
 
-    reset() {
+    reset(): void {
 
     },
   };
@@ -428,7 +428,7 @@ function getColorMixer(palette, parameters) {
       }
     },
 
-    reset() {
+    reset(): void {
 
     },
   };
@@ -437,7 +437,7 @@ function getColorMixer(palette, parameters) {
 // eslint-disable-next-line import/no-mutable-exports -- description seam for tests
 export let createPalette = function (palette, parameters, themeDefaultPalette?) {
   const paletteObj = {
-    dispose() {
+    dispose(): void {
       this._extensionStrategy = null;
     },
 
@@ -487,7 +487,7 @@ function getAlteredPalette(originalPalette, step) {
   return palette;
 }
 
-function getNewColor(currentColor, step) {
+function getNewColor(currentColor, step): string {
   let newColor = new Color(currentColor).alter(step);
   const lightness = getLightness(newColor);
   if (lightness > 200 || lightness < 55) {
@@ -496,7 +496,7 @@ function getNewColor(currentColor, step) {
   return newColor.toHex();
 }
 
-function getLightness(color) {
+function getLightness(color): number {
   return color.r * 0.3 + color.g * 0.59 + color.b * 0.11;
 }
 
@@ -518,7 +518,7 @@ function createDiscreteColors(source, count) {
   const gradient = [];
   let i;
 
-  function addColor(pos) {
+  function addColor(pos): void {
     const k = sourceCount * pos;
     const kl = Math.floor(k);
     const kr = Math.ceil(k);
@@ -547,7 +547,7 @@ export function getGradientPalette(source, themeDefaultPalette) {
   const color2 = new Color(palette[1]);
 
   return {
-    getColor(ratio) {
+    getColor(ratio): string | null {
       return ratio >= 0 && ratio <= 1 ? color1.blend(color2, ratio).toHex() : null;
     },
   };

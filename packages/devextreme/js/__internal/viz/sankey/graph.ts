@@ -11,7 +11,7 @@ const GRAY = 'gray';
 const BLACK = 'black';
 
 const routines = {
-  maxOfArray(arr, callback?) {
+  maxOfArray(arr, callback?): number {
     let m = 0;
     let callback_function = (v) => v;
     if (callback) {
@@ -98,7 +98,7 @@ const struct = {
     return this._hasCycle;
   },
 
-  _depthFirstSearch(links, vertices, vertex) {
+  _depthFirstSearch(links, vertices, vertex): void {
     vertices[vertex].color = GRAY;
     const averts = getAdjacentVertices(links, vertex);
     for (let a = 0; a < averts.length; a++) {

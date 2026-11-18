@@ -27,7 +27,7 @@ export default {
     return mode === 'ignore' || mode === 'none' ? mode : 'hide';
   },
 
-  getTicksCountInRange(ticks, valueKey, range) {
+  getTicksCountInRange(ticks, valueKey, range): number {
     let i = 1;
 
     if (ticks.length > 1) {
@@ -40,7 +40,7 @@ export default {
     return i;
   },
 
-  areLabelsOverlap(bBox1, bBox2, spacing, alignment) {
+  areLabelsOverlap(bBox1, bBox2, spacing, alignment): boolean {
     const horizontalInverted = bBox1.x > bBox2.x;
     const verticalInverted = bBox1.y > bBox2.y;
     let x1 = bBox1.x;

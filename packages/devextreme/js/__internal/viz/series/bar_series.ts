@@ -53,11 +53,11 @@ const baseBarSeriesMethods = {
     return base;
   },
 
-  _applyMarkerClipRect(settings) {
+  _applyMarkerClipRect(settings): void {
     settings['clip-path'] = null;
   },
 
-  _setGroupsSettings(animationEnabled, firstDrawing) {
+  _setGroupsSettings(animationEnabled, firstDrawing): void {
     const that = this;
     let settings = {};
     // @ts-expect-error
@@ -72,7 +72,7 @@ const baseBarSeriesMethods = {
     that._markersGroup.attr(settings);
   },
 
-  _drawPoint(options) {
+  _drawPoint(options): void {
     options.hasAnimation = options.hasAnimation && !options.firstDrawing;
     options.firstDrawing = false;
     // @ts-expect-error
@@ -102,7 +102,7 @@ const baseBarSeriesMethods = {
     };
   },
 
-  _updatePointsVisibility() {
+  _updatePointsVisibility(): void {
     const visibility = this._options.visible;
     each(this._points, (_, point) => {
       point._options.visible = visibility;
@@ -113,12 +113,12 @@ const baseBarSeriesMethods = {
     return this._options;
   },
 
-  _animate(firstDrawing) {
+  _animate(firstDrawing): void {
     const that = this;
-    const complete = function () {
+    const complete = function (): void {
       that._animateComplete();
     };
-    const animateFunc = function (drawnPoints, complete) {
+    const animateFunc = function (drawnPoints, complete): void {
       const lastPointIndex = drawnPoints.length - 1;
       _each(drawnPoints || [], (i, point) => {
         point.animate(i === lastPointIndex ? complete : undefined, point.getMarkerCoords());
@@ -137,9 +137,9 @@ const baseBarSeriesMethods = {
 
   _defaultAggregator: 'sum',
 
-  _defineDrawingState() {},
+  _defineDrawingState(): void {},
 
-  usePointsToDefineAutoHiding() {
+  usePointsToDefineAutoHiding(): boolean {
     return false;
   },
 };

@@ -42,7 +42,7 @@ export default function createStrip(axis, options) {
         .append(axis._axisStripLabelGroup);
     },
 
-    draw() {
+    draw(): void {
       if (axis._translator.getBusinessRange().isEmpty()) {
         return;
       }
@@ -74,10 +74,10 @@ export default function createStrip(axis, options) {
       return this.label;
     },
 
-    removeLabel() {
+    removeLabel(): void {
     },
 
-    updatePosition(animate) {
+    updatePosition(animate): void {
       const stripPos = this._getCoord();
 
       if (animate && storedCoord) {
@@ -100,12 +100,12 @@ export default function createStrip(axis, options) {
       }
     },
 
-    saveCoords() {
+    saveCoords(): void {
       lastStoredCoordinates = storedCoord;
       storedCoord = this._getCoord();
     },
 
-    resetCoordinates() {
+    resetCoordinates(): void {
       storedCoord = lastStoredCoordinates;
     },
   };

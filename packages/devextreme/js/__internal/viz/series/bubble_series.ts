@@ -113,7 +113,7 @@ chart.bubble = _extend({}, scatterSeries, {
     const that = this;
     const lastPointIndex = that._drawnPoints.length - 1;
     const labelsGroup = that._labelsGroup;
-    const labelAnimFunc = function () {
+    const labelAnimFunc = function (): void {
       labelsGroup && labelsGroup.animate({ opacity: 1 }, { duration: that._defaultDuration });
     };
 
