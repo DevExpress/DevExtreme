@@ -1,15 +1,17 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 import type { EventInfo } from '@js/common/core/events';
 import type { DxElement } from '@js/core/element';
+import type dxCardView from '@js/ui/card_view';
+import type { Item as ContextMenuItem } from '@js/ui/context_menu';
 
 import type { CardInfo, Column } from '../../grid_core/columns_controller/types';
 
 export type ContextMenuTarget = 'toolbar' | 'headerPanel' | 'content';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export type ContextMenuPreparingEvent<TCardData = unknown, TKey = unknown> = EventInfo<any> & {
-  items?: any[];
+export type ContextMenuPreparingEvent<TCardData = unknown, TKey = unknown> = EventInfo<
+  dxCardView
+> & {
+  items?: ContextMenuItem[];
 
   readonly target: ContextMenuTarget;
 

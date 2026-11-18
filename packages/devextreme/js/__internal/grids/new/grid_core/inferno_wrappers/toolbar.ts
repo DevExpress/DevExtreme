@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import '@js/ui/button';
 import '@js/ui/check_box';
 
@@ -15,19 +14,22 @@ export class Toolbar extends InfernoWrapper<ToolbarProps, dxToolbar> {
   }
 
   protected updateComponentOptions(prevProps: ToolbarProps, props: ToolbarProps): void {
+    const { items: currentItems } = props;
+    const { items: prevItems } = prevProps;
+
     if (
-      Array.isArray(props.items)
-      && Array.isArray(prevProps.items)
-      && props.items.length === prevProps.items.length
+      Array.isArray(currentItems)
+      && Array.isArray(prevItems)
+      && currentItems.length === prevItems.length
     ) {
-      props.items?.forEach((item, index) => {
-        if (props.items![index] !== prevProps.items![index]) {
-          const prevItem = prevProps.items![index];
+      currentItems.forEach((item, index) => {
+        if (item !== prevItems[index]) {
+          const prevItem = prevItems[index];
 
           Object.keys(item).forEach((key) => {
             if (item[key] !== prevItem[key]) {
               if (key !== 'options') {
-                this.component?.option(`items[${index}].${key}`, props.items![index][key]);
+                this.component?.option(`items[${index}].${key}`, item[key]);
               } else {
                 const prevOptions = prevItem[key];
                 const currentOptions = item[key];
@@ -36,7 +38,7 @@ export class Toolbar extends InfernoWrapper<ToolbarProps, dxToolbar> {
                     || currentOptions?.[option] !== prevOptions[option];
                   const isExcludedOption = excludedStateOptions.includes(option);
                   if (isOptionChanged && !isExcludedOption) {
-                    this.component?.option(`items[${index}].${key}.${option}`, props.items![index][key][option]);
+                    this.component?.option(`items[${index}].${key}.${option}`, currentOptions[option]);
                   }
                 });
               }
