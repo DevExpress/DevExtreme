@@ -257,9 +257,7 @@ whenever the page is a moment late.
 **Waiting.** A step waits for the state it needs, never for time. `helpers/`, `models/` and the
 test folders migrated under this rule (see `eslint.config.mjs`) may not use `waitForTimeout`,
 `setTimeout`, `force: true`, `toPass`, a `timeout` option or a call that raises a timeout
-(`test.setTimeout`, `page.setDefaultTimeout`). When a widget reacts to a change
-through an observer and leaves nothing to assert on, `waitForNextFrame` waits for the frame in which
-the observer runs.
+(`test.setTimeout`, `page.setDefaultTimeout`).
 
 **Clicks.** A click is a real one: it lands on the topmost element at that point and fails when
 that is not the target. TestCafe delivered a click to a covered element anyway, so a test that
