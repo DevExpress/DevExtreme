@@ -85,11 +85,11 @@ export default function createConstantLine(axis, options) {
       return this.label;
     },
 
-    removeLabel() {
+    removeLabel(): void {
       this.label && this.label.remove();
     },
 
-    updatePosition(animate) {
+    updatePosition(animate): void {
       const canvas = axis._getCanvasStartEnd();
 
       const coord = axis._getConstantLinePos(this.getParsedValue(), canvas.start, canvas.end);
@@ -115,12 +115,12 @@ export default function createConstantLine(axis, options) {
       }
     },
 
-    saveCoords() {
+    saveCoords(): void {
       lastStoredCoordinates = storedCoord;
       storedCoord = this.coord;
     },
 
-    resetCoordinates() {
+    resetCoordinates(): void {
       storedCoord = lastStoredCoordinates;
     },
   };

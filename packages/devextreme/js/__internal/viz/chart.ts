@@ -71,7 +71,7 @@ function getFirstAxisNameForPane(axes, paneName, defaultPane) {
   return result;
 }
 
-function changeVisibilityAxisGrids(axis, gridVisibility, minorGridVisibility) {
+function changeVisibilityAxisGrids(axis, gridVisibility, minorGridVisibility): void {
   const gridOpt = axis.getOptions().grid;
   const minorGridOpt = axis.getOptions().minorGrid;
 
@@ -79,7 +79,7 @@ function changeVisibilityAxisGrids(axis, gridVisibility, minorGridVisibility) {
   minorGridOpt && (minorGridOpt.visible = minorGridVisibility);
 }
 
-function hideGridsOnNonFirstValueAxisForPane(axesForPane) {
+function hideGridsOnNonFirstValueAxisForPane(axesForPane): void {
   let axisShown = false;
   const hiddenStubAxis = [];
   const minorGridVisibility = axesForPane.some((axis) => {
@@ -149,12 +149,12 @@ function findAxis(paneName, axisName, axes) {
   }
 }
 
-function compareAxes(a, b) {
+function compareAxes(a, b): number {
   return a.priority - b.priority;
 }
 
 // checks if pane with provided name exists in this panes array
-function doesPaneExist(panes, paneName) {
+function doesPaneExist(panes, paneName): boolean {
   let found = false;
   _each(panes, (_, pane) => {
     if (pane.name === paneName) {
@@ -173,11 +173,11 @@ function accumulate(field, src1, src2, auxSpacing) {
   return val1 + val2 + (val1 && val2 ? auxSpacing : 0);
 }
 
-function pickMax(field, src1, src2) {
+function pickMax(field, src1, src2): number {
   return pickMaxValue(src1[field], src2[field]);
 }
 
-function pickMaxValue(val1, val2) {
+function pickMaxValue(val1, val2): number {
   return Math.max(val1 || 0, val2 || 0);
 }
 
@@ -236,7 +236,13 @@ function getVerticalAxesMargins(axes) {
   }, { panes: {} });
 }
 
-function performActionOnAxes(axes, action, actionArgument1?, actionArgument2?, actionArgument3?) {
+function performActionOnAxes(
+  axes,
+  action,
+  actionArgument1?,
+  actionArgument2?,
+  actionArgument3?,
+): void {
   axes.forEach((axis) => {
     axis[action](
       actionArgument1?.[axis.pane],
@@ -252,13 +258,13 @@ function shrinkCanvases(isRotated, canvases, sizes, verticalMargins, horizontalM
     return m[side];
   }
 
-  function getMaxMargin(side, margins1, margins2, pane) {
+  function getMaxMargin(side, margins1, margins2, pane): number {
     return pickMaxValue(getMargin(side, margins1, pane), getMargin(side, margins2, pane));
   }
 
-  const getOriginalField = (field) => `original${field[0].toUpperCase()}${field.slice(1)}`;
+  const getOriginalField = (field): string => `original${field[0].toUpperCase()}${field.slice(1)}`;
 
-  function shrink(canvases, paneNames, sizeField, startMargin, endMargin, oppositeMargins) {
+  function shrink(canvases, paneNames, sizeField, startMargin, endMargin, oppositeMargins): void {
     paneNames = paneNames.sort((p1, p2) => canvases[p2][startMargin] - canvases[p1][startMargin]);
     paneNames.forEach((pane) => {
       const canvas = canvases[pane];
@@ -320,7 +326,7 @@ function shrinkCanvases(isRotated, canvases, sizes, verticalMargins, horizontalM
   return canvases;
 }
 
-function drawAxesWithTicks(axes, condition, canvases, panesBorderOptions) {
+function drawAxesWithTicks(axes, condition, canvases, panesBorderOptions): void {
   if (condition) {
     performActionOnAxes(axes, 'createTicks', canvases);
     multiAxesSynchronizer.synchronize(axes);
@@ -330,7 +336,7 @@ function drawAxesWithTicks(axes, condition, canvases, panesBorderOptions) {
 
 function shiftAxis(side1, side2) {
   const shifts = {};
-  return function (axis) {
+  return function (axis): void {
     if (!axis.customPositionIsAvailable() || axis.customPositionEqualsToPredefined()) {
       const shift = shifts[axis.pane] = shifts[axis.pane] || {
         top: 0, left: 0, bottom: 0, right: 0,
@@ -350,7 +356,7 @@ function shiftAxis(side1, side2) {
   };
 }
 
-function getCommonSize(side, margins) {
+function getCommonSize(side, margins): number {
   let size = 0;
   let paneMargins;
 
@@ -362,7 +368,7 @@ function getCommonSize(side, margins) {
   return size;
 }
 
-function checkUsedSpace(sizeShortage, side, axes, getMarginFunc) {
+function checkUsedSpace(sizeShortage, side, axes, getMarginFunc): void {
   let size = 0;
   if (sizeShortage[side] > 0) {
     size = getCommonSize(side, getMarginFunc(axes, getAxisMargins));
@@ -433,7 +439,7 @@ function collectMarkersInfoBySeries(allSeries, filteredSeries, argAxis) {
   return { series, overloadedSeries };
 }
 
-const isOverlay = (currentPoint, overlayPoint, pointRadius) => {
+const isOverlay = (currentPoint, overlayPoint, pointRadius): boolean => {
   const pointHitsLeftBorder = overlayPoint.x - pointRadius <= currentPoint.x;
   const pointHitsRightBorder = overlayPoint.x + pointRadius >= currentPoint.x;
   const pointHitsTopBorder = overlayPoint.y - pointRadius <= currentPoint.y;
@@ -444,7 +450,7 @@ const isOverlay = (currentPoint, overlayPoint, pointRadius) => {
   return isPointOverlappedHorizontally && isPointOverlappedVertically;
 };
 
-const isPointOverlapped = (currentPoint, points, skipSamePointsComparing?) => {
+const isPointOverlapped = (currentPoint, points, skipSamePointsComparing?): boolean => {
   const radiusPoint = currentPoint.getOptions().size / 2;
 
   for (let i = 0; i < points.length; i += 1) {
@@ -464,7 +470,7 @@ const isPointOverlapped = (currentPoint, points, skipSamePointsComparing?) => {
   return false;
 };
 
-function fastHidingPointMarkersByArea(canvas, markersInfo, series) {
+function fastHidingPointMarkersByArea(canvas, markersInfo, series): void {
   const area = canvas.width * canvas.height;
   const seriesPoints = markersInfo.series;
 
@@ -483,7 +489,7 @@ function fastHidingPointMarkersByArea(canvas, markersInfo, series) {
   }
 }
 
-function updateMarkersInfo(points, overloadedSeries) {
+function updateMarkersInfo(points, overloadedSeries): void {
   let isContinuousSeries = false;
   for (let i = 0; i < points.length - 1; i += 1) {
     const curPoint = points[i];
@@ -609,7 +615,7 @@ class Chart extends AdvancedChart {
 
     if (_isDefined(valueAxis) && valueAxis !== argumentAxis.getOrthogonalAxis()) {
       argumentAxis.getOrthogonalAxis = () => valueAxis;
-      argumentAxis.customPositionIsBoundaryOrthogonalAxis = () => this._valueAxes
+      argumentAxis.customPositionIsBoundaryOrthogonalAxis = (): boolean => this._valueAxes
         .some((v) => v.customPositionIsBoundary());
     } else if (_isDefined(argumentAxis.getOrthogonalAxis()) && !_isDefined(valueAxis)) {
       argumentAxis.getOrthogonalAxis = noop;
@@ -1051,9 +1057,9 @@ class Chart extends AdvancedChart {
         const argVisualRange = argAxis.visualRange();
         const argAxisIsDiscrete = argAxis.getOptions().type === DISCRETE;
         const sortingCallback = argAxisIsDiscrete
-          ? (p1, p2) => argVisualRange.categories.indexOf(p1.argument)
+          ? (p1, p2): number => argVisualRange.categories.indexOf(p1.argument)
               - argVisualRange.categories.indexOf(p2.argument)
-          : (p1, p2) => p1.argument - p2.argument;
+          : (p1, p2): number => p1.argument - p2.argument;
         let points = [];
 
         markersInfo.series.forEach((s) => { points = points.concat((s as any).points); });
@@ -1592,7 +1598,7 @@ class Chart extends AdvancedChart {
       ? (box, length) => ({ x: box.x - length, y: box.y })
       : (box, length) => ({ x: box.x, y: box.y - length });
 
-    const processor = (a, b) => {
+    const processor = (a, b): number => {
       const coordPosition = isRotated ? 1 : 0;
       const figureCenter1 = a.labels[0].getFigureCenter()[coordPosition];
       const figureCenter12 = b.labels[0].getFigureCenter()[coordPosition];

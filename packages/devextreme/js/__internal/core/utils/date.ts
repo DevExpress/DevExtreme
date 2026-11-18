@@ -14,7 +14,7 @@ type DateView = 'month' | 'year' | 'decade' | 'century';
 
 type DateUnitSource = TimeIntervalConfig | Partial<Record<TimeInterval, unknown>>;
 
-interface DatesDifferences {
+export interface DatesDifferences {
   year: boolean;
   month: boolean;
   day: boolean;

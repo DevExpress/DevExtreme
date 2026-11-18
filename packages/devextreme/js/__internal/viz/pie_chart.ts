@@ -10,11 +10,14 @@ import { plugins as annotationsPlugins } from '@ts/viz/core/annotations';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 import { setupWidgetPrototype } from '@ts/viz/core/helpers';
 import { plugins as centerTemplatePlugins } from '@ts/viz/core/center_template';
+import type { Canvas } from '@ts/viz/core/types';
 import { getVerticallyShiftedAngularCoords as _getVerticallyShiftedAngularCoords, normalizeAngle } from '@ts/viz/core/utils';
 import { Range } from '@ts/viz/translators/range';
 import { Translator1D } from '@ts/viz/translators/translator1d';
 
 import { BaseChart, overlapping } from './chart_components/base_chart';
+
+type Translator1DInstance = InstanceType<typeof Translator1D>;
 
 const { states } = consts;
 const seriesSpacing = consts.pieSeriesSpacing;
@@ -43,7 +46,7 @@ function dividePoints(series, points?) {
   }, points || { left: [], right: [] });
 }
 
-function resolveOverlappedLabels(points, shiftCallback, inverseDirection, canvas) {
+function resolveOverlappedLabels(points, shiftCallback, inverseDirection, canvas): boolean {
   let overlapped = false;
   if (inverseDirection) {
     points.left.reverse();
@@ -66,7 +69,7 @@ function resolveOverlappedLabels(points, shiftCallback, inverseDirection, canvas
   ) || overlapped;
 }
 
-function getLegendItemAction(points) {
+function getLegendItemAction(points): string {
   let state = NORMAL_STATE;
 
   points.forEach((point) => {
@@ -100,7 +103,7 @@ function correctPercentValue(value) {
 }
 
 const pieSizeEqualizer = (function () {
-  function equalize(group, allPies) {
+  function equalize(group, allPies): void {
     const pies = allPies.filter((p) => p._isVisible() && p.getSizeGroup() === group);
     const minRadius = Math.min.apply(null, pies.map((p) => p.getSizeGroupLayout().radius));
     const minPie = pies.filter((p) => p.getSizeGroupLayout().radius === minRadius);
@@ -123,7 +126,7 @@ const pieSizeEqualizer = (function () {
   let timers = {};
 
   return {
-    queue(pie) {
+    queue(pie): void {
       const group = pie.getSizeGroup();
       pies = addToList(pies, pie);
 
@@ -132,7 +135,7 @@ const pieSizeEqualizer = (function () {
         equalize(group, pies);
       });
     },
-    remove(pie) {
+    remove(pie): void {
       pies = removeFromList(pies, pie);
 
       if (!pies.length) {
@@ -158,12 +161,12 @@ class PieChart extends BaseChart {
     });
   }
 
-  _disposeCore() {
+  _disposeCore(): void {
     pieSizeEqualizer.remove(this);
     super._disposeCore();
   }
 
-  _groupSeries() {
+  _groupSeries(): void {
     const { series } = this;
 
     this._groupsData = {
@@ -175,7 +178,7 @@ class PieChart extends BaseChart {
     };
   }
 
-  getArgumentAxis() {
+  getArgumentAxis(): null {
     return null;
   }
 
@@ -184,16 +187,16 @@ class PieChart extends BaseChart {
       .setCodomain(360, 0);
 
     return {
-      getTranslator() {
+      getTranslator(): Translator1DInstance {
         return translator;
       },
-      setBusinessRange(range) {
+      setBusinessRange(range): void {
         translator.setDomain(range.min, range.max);
       },
     };
   }
 
-  _populateBusinessRange() {
+  _populateBusinessRange(): void {
     this.series.map((series) => {
       const range = new Range();
       range.addRange(series.getRangeData().val);
@@ -202,22 +205,22 @@ class PieChart extends BaseChart {
     });
   }
 
-  _specialProcessSeries() {
+  _specialProcessSeries(): void {
     _each(this.series, (_, singleSeries) => {
       singleSeries.arrangePoints();
     });
   }
 
-  _checkPaneName() {
+  _checkPaneName(): boolean {
     return true;
   }
 
-  _processSingleSeries(singleSeries) {
+  _processSingleSeries(singleSeries): void {
     super._processSingleSeries(singleSeries);
     singleSeries.arrangePoints();
   }
 
-  _handleSeriesDataUpdated() {
+  _handleSeriesDataUpdated(): void {
     let maxPointCount = 0;
     this.series.forEach((s) => {
       maxPointCount = Math.max(s.getPointsCount(), maxPointCount);
@@ -275,7 +278,7 @@ class PieChart extends BaseChart {
     return items;
   }
 
-  _getLayoutTargets() {
+  _getLayoutTargets(): { canvas: Canvas }[] {
     return [{ canvas: this._canvas }];
   }
 
@@ -326,7 +329,7 @@ class PieChart extends BaseChart {
     return layout;
   }
 
-  _updateSeriesDimensions(drawOptions) {
+  _updateSeriesDimensions(drawOptions): void {
     const visibleSeries = this._getVisibleSeries();
     const lengthVisibleSeries = visibleSeries.length;
     let innerRad;
@@ -355,7 +358,7 @@ class PieChart extends BaseChart {
     }
   }
 
-  _renderSeries(drawOptions, isRotated, isLegendInside) {
+  _renderSeries(drawOptions, isRotated, isLegendInside): void {
     this._calculateSeriesLayout(drawOptions, isRotated);
 
     if (!drawOptions.sizeGroupLayout && this.getSizeGroup()) {
@@ -371,7 +374,7 @@ class PieChart extends BaseChart {
     return this._center;
   }
 
-  getInnerRadius() {
+  getInnerRadius(): number {
     return this._innerRadius;
   }
 
@@ -379,7 +382,7 @@ class PieChart extends BaseChart {
     const legend = this._legend;
     const items = this._getLegendTargets().map((i) => i.legendData);
 
-    return (target) => {
+    return (target): void => {
       items.forEach((data) => {
         const points = [];
         const callback = legend.getActionCallback({ index: data.id });
@@ -402,7 +405,7 @@ class PieChart extends BaseChart {
     };
   }
 
-  _locateLabels(resolveLabelOverlapping) {
+  _locateLabels(resolveLabelOverlapping): void {
     let iterationCount = 0;
     let labelsWereOverlapped;
     let wordWrapApplied;
@@ -419,7 +422,7 @@ class PieChart extends BaseChart {
     return this.series.reduce((r, s) => s.adjustLabels(moveLabelsFromCenter) || r, false);
   }
 
-  _resolveLabelOverlappingShift() {
+  _resolveLabelOverlappingShift(): boolean {
     const inverseDirection = this.option('segmentsDirection') === 'anticlockwise';
     const seriesByPosition = this.series.reduce((r, s) => {
       (r[s.getOptions().label.position] || r.outside).push(s);
@@ -472,7 +475,7 @@ class PieChart extends BaseChart {
     return labelsOverlapped;
   }
 
-  _setGeometry({ centerX: x, centerY: y, radiusInner }) {
+  _setGeometry({ centerX: x, centerY: y, radiusInner }): void {
     this._center = { x, y };
     this._innerRadius = radiusInner;
   }
