@@ -5,7 +5,6 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-multi-assign */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 
 import { extend } from '@ts/core/utils/extend';
@@ -25,7 +24,7 @@ const LEFT = 'left';
 const TOP = 'top';
 const BOTTOM = 'bottom';
 
-function getLabelOrientation(point) {
+function getLabelOrientation(point): 'top' | 'bottom' {
   const { initialValue } = point;
   const { invert } = point._getValTranslator().getBusinessRange();
   const isDiscreteValue = point.series.valueAxisType === 'discrete';
@@ -99,7 +98,7 @@ export default _extend({}, symbolPoint, {
   },
 
   _getLabelPosition() {
-    let position = getLabelOrientation(this);
+    let position: string = getLabelOrientation(this);
     if (this._options.rotated) {
       position = position === TOP ? RIGHT : LEFT;
     }

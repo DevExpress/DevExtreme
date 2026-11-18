@@ -32,7 +32,7 @@ export default {
       : value;
   },
 
-  getMinBarSize(minBarSize) {
+  getMinBarSize(minBarSize): number {
     const visibleArea = this.getCanvasVisibleArea();
     const minValue = this.from(visibleArea.min + minBarSize);
     const canvasOptions = this._canvasOptions;

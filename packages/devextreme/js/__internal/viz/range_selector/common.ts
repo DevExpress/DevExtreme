@@ -1,6 +1,5 @@
 /* eslint-disable func-names */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
 
 import devices from '@ts/core/devices';
 import { browser } from '@ts/core/utils/browser';
@@ -32,7 +31,7 @@ export const formatValue = function (
   valueType?,
   type?,
   logarithmBase?,
-) {
+): string {
   const formatObject = {
     value,
     valueText: _format(value, {
@@ -51,4 +50,5 @@ export const formatValue = function (
   );
 };
 
-export const isFirefoxOnAndroid = () => browser.mozilla && devices.real().android;
+export const isFirefoxOnAndroid = (): boolean | undefined => browser.mozilla
+  && devices.real().android;

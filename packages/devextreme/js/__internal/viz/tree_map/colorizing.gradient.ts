@@ -20,11 +20,11 @@ function createSimpleColorizer(getColor, range) {
   };
 }
 
-function getRangeData(range) {
+function getRangeData(range): number[] {
   return [Number(range[0]) || 0, (range[1] - range[0]) || 1];
 }
 
-function calculateRange(nodes, getValue) {
+function calculateRange(nodes, getValue): number[] {
   let i;
   const ii = nodes.length;
   const codes = [];

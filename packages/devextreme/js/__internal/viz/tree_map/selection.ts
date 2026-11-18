@@ -44,7 +44,7 @@ expand(proto, '_onNodesCreated', function () {
 expand(proto, '_extendProxyType', function (proto) {
   const that = this;
 
-  proto.select = function (state) {
+  proto.select = function (state): void {
     that._selectNode(this._id, !!state);
   };
   proto.isSelected = function () {
@@ -84,7 +84,7 @@ expand(proto, '_applyTilesAppearance', function () {
 
 const tileToFront = [leafToFront, groupToFront];
 
-function bringSelectedTilesToForeground(nodes, selectionList) {
+function bringSelectedTilesToForeground(nodes, selectionList): void {
   let i;
   const ii = selectionList.length;
   let node;
@@ -95,23 +95,23 @@ function bringSelectedTilesToForeground(nodes, selectionList) {
   }
 }
 
-function leafToFront(content) {
+function leafToFront(content): void {
   content.toForeground();
 }
 
-function groupToFront(content) {
+function groupToFront(content): void {
   content.outer.toForeground();
   content.inner.toForeground();
 }
 
-proto._applySelectionState = function (index, state) {
+proto._applySelectionState = function (index, state): void {
   const node = this._nodes[index];
 
   node.setState(STATE_CODE, state);
   this._eventTrigger('selectionChanged', { node: node.proxy });
 };
 
-proto._selectNode = function (index, state) {
+proto._selectNode = function (index, state): void {
   const that = this;
   let selectionList;
   let k;
@@ -138,7 +138,7 @@ proto._selectNode = function (index, state) {
   }
 };
 
-proto.clearSelection = function () {
+proto.clearSelection = function (): void {
   const that = this;
   const selectionList = that._selectionList;
   let i;

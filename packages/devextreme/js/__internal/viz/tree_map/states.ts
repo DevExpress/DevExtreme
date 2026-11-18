@@ -46,7 +46,7 @@ nodeProto._getState = function () {
   return this.state[this.statesMap[this.code]];
 };
 
-nodeProto.setState = function (code, state) {
+nodeProto.setState = function (code, state): void {
   if (state) {
     this.code |= code;
   } else {
@@ -55,7 +55,7 @@ nodeProto.setState = function (code, state) {
   this.ctx.change(['TILES']);
 };
 
-function buildAdditionalStates(states, base, source, list) {
+function buildAdditionalStates(states, base, source, list): void {
   let i;
   const ii = list.length;
 

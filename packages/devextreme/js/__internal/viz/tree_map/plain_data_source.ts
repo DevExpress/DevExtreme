@@ -51,7 +51,7 @@ proto._processDataSourceItems = function (items) {
   return { items: rootNodes, isPlain: true };
 };
 
-function treeFiller(context, items) {
+function treeFiller(context, items): void {
   let currentItem;
   let i;
   const { struct } = context;
