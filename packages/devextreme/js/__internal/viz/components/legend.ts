@@ -14,10 +14,8 @@
 /* eslint-disable consistent-return */
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-multi-assign */
-/* eslint-disable @stylistic/max-len */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-use-before-define */
-/* eslint-disable prefer-destructuring */
 /* eslint-disable no-else-return */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
@@ -170,7 +168,11 @@ interface LegendBoundingRect extends AlignedLayoutRect {
 }
 
 interface LegendTemplate {
-  render: (args: { model: LegendDataItem; container: ThemeValue; onRendered: () => unknown }) => void;
+  render: (args: {
+    model: LegendDataItem;
+    container: ThemeValue;
+    onRendered: () => unknown;
+  }) => void;
 }
 
 interface LegendWidget {
@@ -228,7 +230,11 @@ function painter(element: Element | null | undefined): (fill: string) => string 
 
 function paintFills(items: ThemeValue[], paint: (fill: string) => string): () => void {
   const handed = items
-    .flatMap((item) => statesOf(item).map((state) => ({ state, name: state.fill, painted: paint(state.fill) })))
+    .flatMap((item) => statesOf(item).map((state) => ({
+      state,
+      name: state.fill,
+      painted: paint(state.fill),
+    })))
     .filter(({ name, painted }) => painted !== name);
 
   handed.forEach(({ state, painted }) => {
@@ -245,8 +251,14 @@ function paintFills(items: ThemeValue[], paint: (fill: string) => string): () =>
 }
 
 function paintedItem(item: ThemeValue, paint: (fill: string) => string): ThemeValue {
-  const withPaintedFill = (holder: ThemeValue): ThemeValue => (holder ? { ...holder, fill: paint(holder.fill) } : holder);
-  const states = Object.fromEntries(Object.entries(item.states).map(([name, state]) => [name, withPaintedFill(state)]));
+  const withPaintedFill = (
+    holder: ThemeValue,
+  ): ThemeValue => (holder
+    ? { ...holder, fill: paint(holder.fill) }
+    : holder);
+  const states = Object.fromEntries(
+    Object.entries(item.states).map(([name, state]) => [name, withPaintedFill(state)]),
+  );
 
   return { ...item, marker: withPaintedFill(item.marker), states };
 }
@@ -264,7 +276,7 @@ function getAttributes(item: ThemeValue, state: ThemeValue, size?: number): Them
 }
 
 function parseMargins(options: ThemeValue): void {
-  let margin = options.margin;
+  let { margin } = options;
   if (margin >= 0) {
     margin = _Number(options.margin);
     margin = {
@@ -281,7 +293,11 @@ function parseMargins(options: ThemeValue): void {
   options.margin = margin;
 }
 
-function getSizeItem(options: ThemeValue, markerBBox: BBox, labelBBox: BBox): { width: number; height: number } {
+function getSizeItem(
+  options: ThemeValue,
+  markerBBox: BBox,
+  labelBBox: BBox,
+): { width: number; height: number } {
   const defaultXMargin = 7;
   const defaultTopMargin = 4;
   let width;
@@ -313,14 +329,23 @@ function calculateBBoxLabelAndMarker(markerBBox: BBox, labelBBox: BBox): Bounds 
   return bBox;
 }
 
-function applyMarkerState(id: number, idToIndexMap: Record<number, number>, items: LegendItem[], stateName: keyof LegendItemStates): void {
+function applyMarkerState(
+  id: number,
+  idToIndexMap: Record<number, number>,
+  items: LegendItem[],
+  stateName: keyof LegendItemStates,
+): void {
   const item = idToIndexMap && items[idToIndexMap[id]];
   if (item) {
     item.renderMarker(item.states[stateName]);
   }
 }
 
-function parseOptions(options: ThemeValue, textField: string, allowInsidePosition?: boolean): ThemeValue {
+function parseOptions(
+  options: ThemeValue,
+  textField: string,
+  allowInsidePosition?: boolean,
+): ThemeValue {
   if (!options) return null;
 
   /// #DEBUG
@@ -337,13 +362,26 @@ function parseOptions(options: ThemeValue, textField: string, allowInsidePositio
 
   parseMargins(options);
   options.horizontalAlignment = parseHorizontalAlignment(options.horizontalAlignment, RIGHT);
-  options.verticalAlignment = parseVerticalAlignment(options.verticalAlignment, options.horizontalAlignment === CENTER ? BOTTOM : TOP);
-  options.orientation = parseOrientation(options.orientation, options.horizontalAlignment === CENTER ? HORIZONTAL : VERTICAL);
-  options.itemTextPosition = parseItemTextPosition(options.itemTextPosition, options.orientation === HORIZONTAL ? BOTTOM : RIGHT);
+  options.verticalAlignment = parseVerticalAlignment(
+    options.verticalAlignment,
+    options.horizontalAlignment === CENTER ? BOTTOM : TOP,
+  );
+  options.orientation = parseOrientation(
+    options.orientation,
+    options.horizontalAlignment === CENTER ? HORIZONTAL : VERTICAL,
+  );
+  options.itemTextPosition = parseItemTextPosition(
+    options.itemTextPosition,
+    options.orientation === HORIZONTAL ? BOTTOM : RIGHT,
+  );
   options.position = allowInsidePosition ? parsePosition(options.position, OUTSIDE) : OUTSIDE;
   options.itemsAlignment = parseItemsAlignment(options.itemsAlignment, null);
   options.hoverMode = _normalizeEnum(options.hoverMode);
-  options.customizeText = _isFunction(options.customizeText) ? options.customizeText : function (): ThemeValue { return this[textField]; };
+  options.customizeText = _isFunction(options.customizeText)
+    ? options.customizeText
+    : function (): ThemeValue {
+      return this[textField];
+    };
   options.customizeHint = _isFunction(options.customizeHint) ? options.customizeHint : noop;
   options._incidentOccurred = options._incidentOccurred || noop;
   return options;
@@ -364,8 +402,13 @@ function isCircle(type: ThemeValue): boolean {
 function inRect(rect: Bounds, x: number, y: number): boolean {
   return x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom;
 }
-// @ts-expect-error returns true only when the lines do not fit, undefined otherwise
-function checkLinesSize(lines: LegendLine[], layoutOptions: ItemsLayoutOptions, countItems: number, margins: Bounds): boolean | undefined {
+function checkLinesSize(
+  lines: LegendLine[],
+  layoutOptions: ItemsLayoutOptions,
+  countItems: number,
+  margins: Bounds,
+  // @ts-expect-error returns true only when the lines do not fit, undefined otherwise
+): boolean | undefined {
   const position = { x: 0, y: 0 };
   let maxMeasureLength = 0;
   let maxAltMeasureLength = 0;
@@ -383,13 +426,16 @@ function checkLinesSize(lines: LegendLine[], layoutOptions: ItemsLayoutOptions, 
 
     line.forEach((item, index) => {
       const offset = item.offset || layoutOptions.spacing;
-      position[layoutOptions.direction] += item[layoutOptions.measure] + (index !== lineLength - 1 ? offset : 0);
+      position[layoutOptions.direction]
+        += item[layoutOptions.measure] + (index !== lineLength - 1 ? offset : 0);
       maxMeasureLength = _max(maxMeasureLength, position[layoutOptions.direction]);
     });
 
     position[layoutOptions.direction] = 0;
-    position[layoutOptions.altDirection] += firstItem[layoutOptions.altMeasure]
-        // @ts-expect-error without altOffset the sum is NaN and falls back to altSpacing (maxAltMeasureLength is not used)
+    position[layoutOptions.altDirection]
+      += firstItem[layoutOptions.altMeasure]
+        // @ts-expect-error without altOffset the sum is NaN and falls back to altSpacing
+        // (maxAltMeasureLength is not used)
         + firstItem.altOffset || layoutOptions.altSpacing;
     maxAltMeasureLength = _max(maxAltMeasureLength, position[layoutOptions.altDirection]);
   });
@@ -413,10 +459,17 @@ function getLineLength(line: LegendLine, layoutOptions: ItemsLayoutOptions): num
 }
 
 function getMaxLineLength(lines: LegendLine[], layoutOptions: ItemsLayoutOptions): number {
-  return lines.reduce((maxLineLength, line) => _max(maxLineLength, getLineLength(line, layoutOptions)), 0);
+  return lines.reduce(
+    (maxLineLength, line) => _max(maxLineLength, getLineLength(line, layoutOptions)),
+    0,
+  );
 }
 
-function getInitPositionForDirection(line: LegendLine, layoutOptions: ItemsLayoutOptions, maxLineLength: number): number {
+function getInitPositionForDirection(
+  line: LegendLine,
+  layoutOptions: ItemsLayoutOptions,
+  maxLineLength: number,
+): number {
   const lineLength = getLineLength(line, layoutOptions);
   let initPosition: number;
 
@@ -459,7 +512,11 @@ function getPos(layoutOptions: ItemsLayoutOptions): LayoutAlignment {
   }
 }
 
-function getLines(lines: LegendLine[], layoutOptions: ItemsLayoutOptions, itemIndex: number): TableLine {
+function getLines(
+  lines: LegendLine[],
+  layoutOptions: ItemsLayoutOptions,
+  itemIndex: number,
+): TableLine {
   const tableLine = {} as TableLine;
 
   if (itemIndex % layoutOptions.countItem === 0) {
@@ -608,8 +665,16 @@ export let Legend = class Legend extends LayoutElement {
     return this._options;
   }
 
-  update(data: LegendDataItem[] = [], options: ThemeValue, themeManagerTitleOptions: ThemeValue = {}): this {
-    options = this._options = parseOptions(options, this._textField, this._allowInsidePosition) || {};
+  update(
+    data: LegendDataItem[] = [],
+    options: ThemeValue,
+    themeManagerTitleOptions: ThemeValue = {},
+  ): this {
+    options = this._options = parseOptions(
+      options,
+      this._textField,
+      this._allowInsidePosition,
+    ) || {};
     const initMarkerSize = options.markerSize;
     this._updated = true;
     this._data = data.map((dataItem) => {
@@ -628,7 +693,8 @@ export let Legend = class Legend extends LayoutElement {
           return dataItem.states.normal.opacity;
         },
         set(value) {
-          dataItem.states.normal.opacity = dataItem.states.hover.opacity = dataItem.states.selection.opacity = value;
+          dataItem.states.normal.opacity = dataItem.states.hover.opacity = value;
+          dataItem.states.selection.opacity = value;
         },
       });
       Object.defineProperty(dataItem.marker, 'fill', {
@@ -706,7 +772,10 @@ export let Legend = class Legend extends LayoutElement {
     }
 
     // TODO review pass or process states in legend
-    this._markersGroup = this._renderer.g().attr({ class: this._itemGroupClass }).append(this._insideLegendGroup);
+    this._markersGroup = this._renderer
+      .g()
+      .attr({ class: this._itemGroupClass })
+      .append(this._insideLegendGroup);
     this._createItems(items);
 
     this._updateElementsPosition(width, height);
@@ -753,20 +822,25 @@ export let Legend = class Legend extends LayoutElement {
 
     that._markersId = {};
 
-    const templateFunction = !options.markerTemplate ? (dataItem: LegendDataItem, group: ThemeValue): void => {
-      const attrs = dataItem.marker;
-      createMarker(renderer, attrs.size)
-        .attr({
-          fill: attrs.fill,
-          opacity: attrs.opacity,
-          filter: attrs.filter,
-        })
-        .append({ element: group });
-    } : options.markerTemplate;
+    const templateFunction = !options.markerTemplate
+      ? (dataItem: LegendDataItem, group: ThemeValue): void => {
+        const attrs = dataItem.marker;
+        createMarker(renderer, attrs.size)
+          .attr({
+            fill: attrs.fill,
+            opacity: attrs.opacity,
+            filter: attrs.filter,
+          })
+          .append({ element: group });
+      }
+      : options.markerTemplate;
 
     const template = that._widget._getTemplate(templateFunction);
     const modelOf = options.markerTemplate
-      ? (dataItem: LegendDataItem): ThemeValue => paintedItem(dataItem, painter(renderer.root.element))
+      ? (dataItem: LegendDataItem): ThemeValue => paintedItem(
+        dataItem,
+        painter(renderer.root.element),
+      )
       : (dataItem: LegendDataItem): ThemeValue => dataItem;
 
     const markersGroup = that._markersGroup;
@@ -801,7 +875,11 @@ export let Legend = class Legend extends LayoutElement {
         marker: markerGroup,
         renderer,
         group: itemGroup,
-        tracker: { id: dataItem.id, argument: dataItem.argument, argumentIndex: dataItem.argumentIndex },
+        tracker: {
+          id: dataItem.id,
+          argument: dataItem.argument,
+          argumentIndex: dataItem.argumentIndex,
+        },
         states,
         itemTextPosition: options.itemTextPosition,
         markerOffset: 0,
@@ -897,7 +975,9 @@ export let Legend = class Legend extends LayoutElement {
     const options = this._options;
     const align = getAlign(options.itemTextPosition);
     const text = options.customizeText.call(labelFormatObject, labelFormatObject);
-    const fontStyle = _isDefined(data.textOpacity) ? { color: options.font.color, opacity: data.textOpacity } : {};
+    const fontStyle = _isDefined(data.textOpacity)
+      ? { color: options.font.color, opacity: data.textOpacity }
+      : {};
 
     return this._renderer.text(text, 0, 0)
       .css(patchFontOptions(fontStyle))
@@ -936,7 +1016,10 @@ export let Legend = class Legend extends LayoutElement {
       this._createLines(lines, layoutOptions);
       this._alignLines(lines, layoutOptions);
       iteration++;
-    } while (checkLinesSize(lines, layoutOptions, countItems, options.margin) && iteration < countItems);
+    } while (
+      checkLinesSize(lines, layoutOptions, countItems, options.margin)
+      && iteration < countItems
+    );
 
     this._applyItemPosition(lines, layoutOptions);
   }
@@ -961,7 +1044,10 @@ export let Legend = class Legend extends LayoutElement {
           vertical: CENTER,
         },
         bBox: {
-          width: item.markerBBox.width, height: item.markerBBox.height, x: item.markerBBox.x, y: item.markerBBox.y,
+          width: item.markerBBox.width,
+          height: item.markerBBox.height,
+          x: item.markerBBox.x,
+          y: item.markerBBox.y,
         },
         itemIndex: i,
       };
@@ -1010,7 +1096,11 @@ export let Legend = class Legend extends LayoutElement {
     lines.forEach((line) => {
       const firstItem = line[0];
       const altOffset = firstItem.altOffset || layoutOptions.altSpacing;
-      position[layoutOptions.direction] = getInitPositionForDirection(line, layoutOptions, maxLineLength);
+      position[layoutOptions.direction] = getInitPositionForDirection(
+        line,
+        layoutOptions,
+        maxLineLength,
+      );
 
       line.forEach((item) => {
         const offset = item.offset || layoutOptions.spacing;
@@ -1036,7 +1126,10 @@ export let Legend = class Legend extends LayoutElement {
     });
 
     this._items.forEach((item) => {
-      const itemBBox = calculateBBoxLabelAndMarker(item.bBoxes[0].getLayoutOptions(), item.bBoxes[1].getLayoutOptions());
+      const itemBBox = calculateBBoxLabelAndMarker(
+        item.bBoxes[0].getLayoutOptions(),
+        item.bBoxes[1].getLayoutOptions(),
+      );
       const horizontal = this._options.columnItemSpacing / 2;
       const vertical = this._options.rowItemSpacing / 2;
       item.tracker.left = itemBBox.left - horizontal;
@@ -1048,7 +1141,7 @@ export let Legend = class Legend extends LayoutElement {
 
   _getItemsLayoutOptions(): ItemsLayoutOptions {
     const options = this._options;
-    const orientation = options.orientation;
+    const { orientation } = options;
     const layoutOptions = {
       itemsAlignment: options.itemsAlignment,
       orientation: options.orientation,
@@ -1101,14 +1194,15 @@ export let Legend = class Legend extends LayoutElement {
       layoutOptions.inverseLabelPosition = true;
     }
     layoutOptions.itemTextPosition = options.itemTextPosition;
-    layoutOptions.altCountItem = layoutOptions.altCountItem || _ceil(this._items.length / layoutOptions.countItem);
+    layoutOptions.altCountItem = layoutOptions.altCountItem
+      || _ceil(this._items.length / layoutOptions.countItem);
 
     return layoutOptions;
   }
 
   _adjustBackgroundSettings(locationOptions: ThemeValue): void {
     if (!this._background) return;
-    const border = locationOptions.border;
+    const { border } = locationOptions;
     const legendBox = this._calculateTotalBox();
     const backgroundSettings: Record<string, ThemeValue> = {
       x: _round(legendBox.x - locationOptions.paddingLeftRight),
@@ -1205,7 +1299,10 @@ export let Legend = class Legend extends LayoutElement {
     let box = {} as BBox;
 
     if (this._insideLegendGroup) {
-      this._insideLegendGroup.attr({ translateX: x - this._boundingRect.x, translateY: y - this._boundingRect.y });
+      this._insideLegendGroup.attr({
+        translateX: x - this._boundingRect.x,
+        translateY: y - this._boundingRect.y,
+      });
     }
 
     this._title && this._shiftTitle(this._boundingRect.widthWithoutMargins);
@@ -1226,7 +1323,9 @@ export let Legend = class Legend extends LayoutElement {
       return;
     }
 
-    const width = boxWidth === undefined ? titleBox.width : boxWidth - (this._background ? 2 * this._options.paddingLeftRight : 0);
+    const width = boxWidth === undefined
+      ? titleBox.width
+      : boxWidth - (this._background ? 2 * this._options.paddingLeftRight : 0);
     const titleOptions = title.getOptions();
     let titleY = titleBox.y + titleOptions.margin.top;
     let titleX = 0;
@@ -1295,7 +1394,9 @@ export let Legend = class Legend extends LayoutElement {
   dispose(): this {
     this._title && this._title.dispose();
     // @ts-expect-error dispose() drops the references
-    this._legendGroup = this._insideLegendGroup = this._title = this._renderer = this._options = this._data = this._items = null;
+    this._legendGroup = this._insideLegendGroup = this._title = this._renderer = null;
+    // @ts-expect-error dispose() drops the references
+    this._options = this._data = this._items = null;
 
     return this;
   }

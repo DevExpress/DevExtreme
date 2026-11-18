@@ -1,7 +1,6 @@
 /* eslint-disable radix */
 /* eslint-disable max-classes-per-file */
 /* eslint-disable @typescript-eslint/naming-convention */
-/* eslint-disable @stylistic/max-len */
 
 import { noop } from '@ts/core/utils/common';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
@@ -67,8 +66,14 @@ class LayoutElement {
     const { at } = options;
     const { my } = options;
     const offset = options.offset || defaultOffset;
-    const shiftX = -alignFactors[my.horizontal] * myBBox.width + ofBBox.x + alignFactors[at.horizontal] * ofBBox.width + parseInt(offset.horizontal);
-    const shiftY = -alignFactors[my.vertical] * myBBox.height + ofBBox.y + alignFactors[at.vertical] * ofBBox.height + parseInt(offset.vertical);
+    const shiftX = -alignFactors[my.horizontal] * myBBox.width
+      + ofBBox.x
+      + alignFactors[at.horizontal] * ofBBox.width
+      + parseInt(offset.horizontal);
+    const shiftY = -alignFactors[my.vertical] * myBBox.height
+      + ofBBox.y
+      + alignFactors[at.vertical] * ofBBox.height
+      + parseInt(offset.vertical);
 
     this.shift(_round(shiftX), _round(shiftY));
   }
@@ -85,7 +90,8 @@ class WrapperLayoutElement extends LayoutElement {
 
   constructor(renderElement: LayoutRenderElement | null, bBox?: BBox) {
     super();
-    // @ts-expect-error `null` comes only together with a cached bBox: such a wrapper is a static layout target that is never shifted
+    // @ts-expect-error `null` comes only together with a cached bBox: such a wrapper is a static
+    // layout target that is never shifted
     this._renderElement = renderElement;
     this._cacheBBox = bBox;
   }

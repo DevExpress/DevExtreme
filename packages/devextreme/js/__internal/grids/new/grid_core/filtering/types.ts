@@ -5,3 +5,7 @@ export interface AppliedFilters {
 }
 
 export type FilterValue = unknown[];
+
+export interface FilterPublicMethods {
+  clearFilter: () => void;
+}

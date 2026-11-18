@@ -6,9 +6,7 @@
 /* eslint-disable @typescript-eslint/no-shadow */
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-multi-assign */
-/* eslint-disable @stylistic/max-len */
 /* eslint-disable @typescript-eslint/no-use-before-define */
-/* eslint-disable prefer-destructuring */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
@@ -91,7 +89,8 @@ class SliderMarker {
     }
     return {
       width: textSize.width,
-      // @ts-expect-error null while the label has no finite height; the size arithmetic treats it as 0
+      // @ts-expect-error null while the label has no finite height; the size arithmetic treats it
+      // as 0
       height: this._textHeight,
       y: textSize.y,
     };
@@ -150,15 +149,24 @@ class SliderMarker {
 
     return {
       offset: rectLeftBorder,
-      isCut: (!isLeft || pointerCenterPoint !== pointerLeftPoint) && (isLeft || pointerCenterPoint !== pointerRightPoint),
+      isCut:
+        (!isLeft || pointerCenterPoint !== pointerLeftPoint)
+        && (isLeft || pointerCenterPoint !== pointerRightPoint),
       points: [
-        rectLeftBorder, 0,
-        rectRightBorder, 0,
-        rectRightBorder, rectHeight,
-        pointerRightPoint, rectHeight,
-        pointerCenterPoint, rectHeight + POINTER_SIZE,
-        pointerLeftPoint, rectHeight,
-        rectLeftBorder, rectHeight,
+        rectLeftBorder,
+        0,
+        rectRightBorder,
+        0,
+        rectRightBorder,
+        rectHeight,
+        pointerRightPoint,
+        rectHeight,
+        pointerCenterPoint,
+        rectHeight + POINTER_SIZE,
+        pointerLeftPoint,
+        rectHeight,
+        rectLeftBorder,
+        rectHeight,
       ],
     };
   }
@@ -175,7 +183,10 @@ class SliderMarker {
     const rectSize = that._getRectSize(currentTextSize);
 
     textSize = that._textSize || currentTextSize;
-    textSize = that._textSize = currentTextSize.width > textSize.width || currentTextSize.height > textSize.height ? currentTextSize : textSize;
+    textSize = that._textSize = currentTextSize.width > textSize.width
+      || currentTextSize.height > textSize.height
+      ? currentTextSize
+      : textSize;
     that._timeout = setTimeout(() => {
       updateSliderMarker(currentTextSize, rectSize);
       that._textSize = currentTextSize;
@@ -185,19 +196,28 @@ class SliderMarker {
       rectSize = rectSize || that._getRectSize(size);
       that._group.attr({ translateY: -(rectSize.height + POINTER_SIZE) });
       const pointsData = that._getAreaPointsInfo(size);
-      const points = pointsData.points;
-      const offset = pointsData.offset;
+      const { points, offset } = pointsData;
       that._area.attr({ points });
-      that._border.attr({ x: that._isLeftPointer ? points[0] - 1 : points[2], height: pointsData.isCut ? rectSize.height : rectSize.height + POINTER_SIZE });
+      that._border.attr({
+        x: that._isLeftPointer ? points[0] - 1 : points[2],
+        height: pointsData.isCut ? rectSize.height : rectSize.height + POINTER_SIZE,
+      });
 
-      const trackerAttrs: { translateX?: number; x?: number; width: number; height: number } = { translateX: offset, width: rectSize.width, height: rectSize.height + POINTER_SIZE };
+      const trackerAttrs: { translateX?: number; x?: number; width: number; height: number } = {
+        translateX: offset,
+        width: rectSize.width,
+        height: rectSize.height + POINTER_SIZE,
+      };
       if (isFirefoxOnAndroid()) {
         trackerAttrs.x = offset;
         trackerAttrs.translateX = undefined;
       }
       that._tracker.attr(trackerAttrs);
 
-      that._label.attr({ translateX: that._paddingLeftRight + offset, translateY: rectSize.height / 2 - (size.y + size.height / 2) });
+      that._label.attr({
+        translateX: that._paddingLeftRight + offset,
+        translateY: rectSize.height / 2 - (size.y + size.height / 2),
+      });
     }
 
     updateSliderMarker(textSize);

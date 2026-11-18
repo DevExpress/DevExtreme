@@ -268,7 +268,7 @@ describe('locale-only displayFormat follows the editor type', () => {
     expect(input.value).not.toMatch(/[0-9]/);
 
     const pastedDate = new Date(2024, 6, 20);
-    const pastedText = dateLocalization.format(pastedDate, displayFormat as never) as string;
+    const pastedText = dateLocalization.format(pastedDate, displayFormat) as string;
 
     input.setSelectionRange(0, input.value.length);
     editor._maskPasteHandler({

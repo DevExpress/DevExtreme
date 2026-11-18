@@ -153,7 +153,6 @@ class TextEditorMask<
     }
 
     const input = this._input();
-    // @ts-expect-error addNamespace with second argument
     const eventName = addNamespace(wheelEventName, this.NAME);
 
     const mouseWheelAction = this._createAction((e: { event: DxMouseWheelEvent }) => {
@@ -193,7 +192,6 @@ class TextEditorMask<
       return;
     }
 
-    // @ts-expect-error addNamespace with second argument
     const eventName = addNamespace(DROP_EVENT_NAME, this.NAME);
     const input = this._input();
 

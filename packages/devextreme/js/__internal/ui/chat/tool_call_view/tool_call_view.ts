@@ -29,6 +29,18 @@ export const CHAT_TOOL_CALL_CLASSES = {
   error: 'dx-chat-tool-call-error',
 };
 
+const isJsonText = (value: string): boolean => {
+  try {
+    return typeof JSON.parse(value) === 'object';
+  } catch {
+    return false;
+  }
+};
+
+const getValueDirection = (value: unknown): string => (
+  typeof value === 'string' && !isJsonText(value) ? 'auto' : 'ltr'
+);
+
 class ToolCallView extends DOMComponent<ToolCallView, ToolCallViewProperties> {
   _getDefaultOptions(): ToolCallViewProperties {
     return {
@@ -113,6 +125,7 @@ class ToolCallView extends DOMComponent<ToolCallView, ToolCallViewProperties> {
         CHAT_TOOL_CALL_CLASSES.arguments,
         messageLocalization.format('dxChat-toolCallArgumentsLabel'),
         stringifyValue(call.arguments),
+        getValueDirection(call.arguments),
       );
     }
 
@@ -122,6 +135,7 @@ class ToolCallView extends DOMComponent<ToolCallView, ToolCallViewProperties> {
         CHAT_TOOL_CALL_CLASSES.result,
         messageLocalization.format('dxChat-toolCallResultLabel'),
         stringifyValue(call.result),
+        getValueDirection(call.result),
         call.status === 'error',
       );
     }
@@ -132,6 +146,7 @@ class ToolCallView extends DOMComponent<ToolCallView, ToolCallViewProperties> {
     fieldClass: string,
     labelText: string,
     value: string,
+    direction: string,
     isError = false,
   ): void {
     const inputId = `dx-${new Guid()}`;
@@ -153,7 +168,7 @@ class ToolCallView extends DOMComponent<ToolCallView, ToolCallViewProperties> {
       autoResizeEnabled: true,
       focusStateEnabled: false,
       hoverStateEnabled: false,
-      inputAttr: { id: inputId },
+      inputAttr: { id: inputId, dir: direction },
       elementAttr: isError ? { class: CHAT_TOOL_CALL_CLASSES.error } : {},
     });
   }

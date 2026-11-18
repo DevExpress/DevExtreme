@@ -1439,7 +1439,7 @@ test('The data should display correctly after changing the dataSource and focuse
   await dataGrid.option({
     focusedRowIndex: -1,
     dataSource: [...new Array(100)].map((_, index) => ({ id: index, text: `item ${index}` })),
-  } as any);
+  });
 
   // assert
   await t

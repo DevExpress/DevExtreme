@@ -241,7 +241,7 @@ export default function App() {
         </Nodes>
         <ContextToolbox shapeIconsPerRow={1} width={100} />
         <Toolbox showSearch={false} shapeIconsPerRow={1}>
-          <Group category={'employee' as any} title="Employee" expanded={true} />
+          <Group category="employee" title="Employee" expanded={true} />
         </Toolbox>
         <PropertiesPanel>
           <Tab>

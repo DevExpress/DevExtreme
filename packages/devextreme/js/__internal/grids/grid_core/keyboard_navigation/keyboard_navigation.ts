@@ -66,7 +66,7 @@ import gridCoreUtils from '@ts/grids/grid_core/utils';
 import { CLASSES as VIEW_CLASSES, ROW_OPTIONS_KEY } from '@ts/grids/grid_core/views/const';
 import type { RowsView } from '@ts/grids/grid_core/views/rows_view';
 import type {
-  CellPosition, FocusStateParams, RowsViewScrollEvent, ViewRowEvent,
+  CellPosition, FocusStateParams, RowsViewScrollEvent, ViewRow, ViewRowEvent,
 } from '@ts/grids/grid_core/views/types';
 import { isVirtualPaging, isVirtualRowRendering } from '@ts/grids/grid_core/virtual_scrolling';
 import type Scrollable from '@ts/ui/scroll_view/scrollable';
@@ -178,7 +178,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
 
   // #region Initialization
   public init(): void {
-    this._dataController = this.getController('data') as KeyboardNavigationDataController;
+    this._dataController = this.getController('data');
     this.dataSourceController = this.getController('dataSource');
     this._selectionController = this.getController('selection');
     this._editingController = this.getController('editing') as CellBasedEditingController;
@@ -519,7 +519,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
   ): void {
     const isEditing = this._editingController.isEditing();
     const direction: NavigationDirection = event.shift ? 'previous' : 'next';
-    const eventTarget = event.originalEvent.target as Element;
+    const eventTarget = event.originalEvent.target;
     const { hasEditingOptions, isLastValidCell } = options;
     let originalHandlerRequired = options.isOriginalHandlerRequired;
 
@@ -3077,6 +3077,20 @@ const rowsView = (
         this._keyboardNavigationController.pointerEventHandler(eventArgs);
       }
     }
+  }
+
+  protected _updateCells(
+    $rowElement: dxElementWrapper,
+    $newRowElement: dxElementWrapper,
+    columnIndices: number[],
+    options?: ViewRow,
+  ): void {
+    const focusStateClasses = [CLASSES.focused, EDITOR_FACTORY_CLASSES.cellFocusDisabled]
+      .filter((className) => $rowElement.hasClass(className));
+
+    super._updateCells($rowElement, $newRowElement, columnIndices, options);
+
+    focusStateClasses.forEach((className) => $rowElement.addClass(className));
   }
 
   public renderFocusState(params: FocusStateParams): void {

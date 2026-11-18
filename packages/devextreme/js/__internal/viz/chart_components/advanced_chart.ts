@@ -1,4 +1,3 @@
-/* eslint-disable @stylistic/max-len */
 /* eslint-disable @stylistic/no-mixed-operators */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable @typescript-eslint/init-declarations */
@@ -68,7 +67,7 @@ function estimateBubbleSize(
   return Math.min(width, height) * maxSize;
 }
 
-function setAxisVisualRangeByOption(arg, axis, isDirectOption, index?) {
+function setAxisVisualRangeByOption(arg, axis, isDirectOption, index?): void {
   let options;
   let visualRange;
 
@@ -286,13 +285,20 @@ export class AdvancedChart extends BaseChart {
     this._redesignAxes(valueAxesPopulatedOptions, false);
   }
 
-  _redesignAxes(options: ThemeValue, isArgumentAxes: boolean, paneWithNonVirtualAxis?: ThemeValue): void {
+  _redesignAxes(
+    options: ThemeValue,
+    isArgumentAxes: boolean,
+    paneWithNonVirtualAxis?: ThemeValue,
+  ): void {
     const axesBasis = [];
     let axes = isArgumentAxes ? this._argumentAxes : this._valueAxes;
 
     options.forEach((opt) => {
-      const curAxes = axes?.filter((a) => a.name === opt.name
-                && (!_isDefined(opt.pane) && this.panes.some((p) => p.name === a.pane) || a.pane === opt.pane));
+      const curAxes = axes?.filter(
+        (a) => a.name === opt.name
+          && ((!_isDefined(opt.pane) && this.panes.some((p) => p.name === a.pane))
+            || a.pane === opt.pane),
+      );
       if (curAxes?.length) {
         curAxes.forEach((axis) => {
           const axisTypes = getAxisTypes(this._groupsData, axis, isArgumentAxes);// T891599
@@ -553,8 +559,8 @@ export class AdvancedChart extends BaseChart {
   getValueAxis(name?: string): ThemeValue {
     return (this._valueAxes || []).find(
       _isDefined(name)
-        ? (a) => a.name === name
-        : (a) => a.pane === this.defaultPane,
+        ? (a): boolean => a.name === name
+        : (a): boolean => a.pane === this.defaultPane,
     );
   }
 
@@ -599,7 +605,13 @@ export class AdvancedChart extends BaseChart {
     });
   }
 
-  _populateAxesOptions(typeSelector: string, userOptions: ThemeValue, axisOptions: ThemeValue, rotated?: boolean, virtual?: boolean): ThemeValue {
+  _populateAxesOptions(
+    typeSelector: string,
+    userOptions: ThemeValue,
+    axisOptions: ThemeValue,
+    rotated?: boolean,
+    virtual?: boolean,
+  ): ThemeValue {
     const preparedUserOptions = this._prepareStripsAndConstantLines(
       typeSelector,
       userOptions,
@@ -681,7 +693,11 @@ export class AdvancedChart extends BaseChart {
     });
   }
 
-  _prepareStripsAndConstantLines(typeSelector: string, userOptions: ThemeValue, rotated?: boolean): ThemeValue {
+  _prepareStripsAndConstantLines(
+    typeSelector: string,
+    userOptions: ThemeValue,
+    rotated?: boolean,
+  ): ThemeValue {
     userOptions = this._themeManager.getOptions(typeSelector, userOptions, rotated);
     if (userOptions.strips) {
       userOptions.strips.forEach((line, i) => {

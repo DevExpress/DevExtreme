@@ -2,7 +2,6 @@
 /* eslint-disable @typescript-eslint/init-declarations */
 /* eslint-disable func-names */
 /* eslint-disable consistent-return */
-/* eslint-disable @stylistic/max-len */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
@@ -13,10 +12,10 @@
 import { extend as _extend } from '@ts/core/utils/extend';
 import { isFunction } from '@ts/core/utils/type';
 
-const defaultCustomizeLinkTooltip = (formatter) => function (info) {
+const defaultCustomizeLinkTooltip = (formatter) => function (info): { html: string } {
   return { html: `<strong>${info.source} > ${info.target}</strong><br/>Weight: ${formatter(info.weight)}` };
 };
-const defaultCustomizeNodeTooltip = (formatter) => function (info) {
+const defaultCustomizeNodeTooltip = (formatter) => function (info): { html: string } {
   return { html: `<strong>${info.label}</strong><br/>Incoming weight: ${formatter(info.weightIn)}<br/>Outgoing weight: ${formatter(info.weightOut)}` };
 };
 const generateCustomCallback = function (customCallback, defaultCallback) {
@@ -31,8 +30,8 @@ const generateCustomCallback = function (customCallback, defaultCallback) {
   };
 };
 
-export function setTooltipCustomOptions(sankey) {
-  sankey.prototype._setTooltipOptions = function () {
+export function setTooltipCustomOptions(sankey): void {
+  sankey.prototype._setTooltipOptions = function (): void {
     const tooltip = this._tooltip;
     const options = tooltip && this._getOption('tooltip');
 
@@ -52,9 +51,15 @@ export function setTooltipCustomOptions(sankey) {
         }
         const formatter = (value) => tooltip.formatValue(value);
         if (args.type === 'node') {
-          return generateCustomCallback(options.customizeNodeTooltip, defaultCustomizeNodeTooltip(formatter))(args.info);
+          return generateCustomCallback(
+            options.customizeNodeTooltip,
+            defaultCustomizeNodeTooltip(formatter),
+          )(args.info);
         } else if (args.type === 'link') {
-          return generateCustomCallback(options.customizeLinkTooltip, defaultCustomizeLinkTooltip(formatter))(args.info);
+          return generateCustomCallback(
+            options.customizeLinkTooltip,
+            defaultCustomizeLinkTooltip(formatter),
+          )(args.info);
         }
 
         return {};
@@ -71,7 +76,7 @@ export function setTooltipCustomOptions(sankey) {
       enabled: options.enabled,
     }));
   };
-  sankey.prototype.hideTooltip = function () {
+  sankey.prototype.hideTooltip = function (): void {
     this._tooltip && this._tooltip.hide();
   };
 }

@@ -9,18 +9,17 @@ import { dateSerialization } from '@ts/core/utils/date_serialization';
 import { isDefined } from '@ts/core/utils/type';
 
 const parsers = {
-  string(val) {
+  string(val): string | null | undefined {
     return isDefined(val) ? `${val}` : val;
   },
 
-  numeric(val) {
+  numeric(val): number | null | undefined {
     if (!isDefined(val)) {
       return val;
     }
 
-    let parsedVal = Number(val);
+    let parsedVal: number | undefined = Number(val);
     if (isNaN(parsedVal)) {
-      // @ts-expect-error
       parsedVal = undefined;
     }
     return parsedVal;

@@ -26,8 +26,7 @@ export class InfoText extends BaseInfernoComponent<InfoTextPropsType> {
 
   public refs: any = null;
 
-  // eslint-disable-next-line @stylistic/max-len
-  public rootElementRef?: RefObject<HTMLDivElement> = infernoCreateRef() as RefObject<HTMLDivElement>;
+  public rootElementRef?: RefObject<HTMLDivElement> = infernoCreateRef();
 
   getInfoText(): string {
     return this.props.infoText ?? getLocalizationMessage(this.context, 'dxPagination-infoText');

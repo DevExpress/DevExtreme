@@ -10,7 +10,6 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-multi-assign */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
-/* eslint-disable @stylistic/max-len */
 /* eslint-disable @typescript-eslint/init-declarations */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
@@ -26,6 +25,7 @@ import { adjust, sign } from '@ts/core/utils/math';
 import {
   isDefined, isExponential, isFunction, isNumeric, isString,
 } from '@ts/core/utils/type';
+import type { Coords } from '@ts/viz/core/types';
 
 const {
   PI,
@@ -55,43 +55,43 @@ let numDefsSvgElements = 1;
 
 export const PANE_PADDING = 10;
 
-export const getLog = function (value, base) {
+export const getLog = function (value, base): number {
   if (!value) {
     return _NaN;
   }
   return log(value) / log(base);
 };
 
-export const getAdjustedLog10 = function (value) {
+export const getAdjustedLog10 = function (value): number {
   return adjust(getLog(value, 10));
 };
 
-export const raiseTo = function (power, base) {
+export const raiseTo = function (power, base): number {
   return base ** power;
 };
 
 //  Translates angle to [0, 360)
 //  Expects number, no validation
-export const normalizeAngle = function (angle) {
+export const normalizeAngle = function (angle): number {
   return ((angle % 360) + 360) % 360;
 };
 
 //  Maps angle in trigonometric space to angle in 'renderer' space
 //  Expects numbers, no validation
-export const convertAngleToRendererSpace = function (angle) {
+export const convertAngleToRendererSpace = function (angle): number {
   return 90 - angle;
 };
 
 //  Maps angle in degrees to angle in radians
 //  Expects number, no validation
-export const degreesToRadians = function (value) {
+export const degreesToRadians = function (value): number {
   return PI * value / 180;
 };
 
 //  Calculates sin and cos for <angle> in degrees
 //  Expects number, no validation
 // eslint-disable-next-line import/no-mutable-exports -- description seam for tests
-export let getCosAndSin = function (angle) {
+export let getCosAndSin = function (angle): { cos: number; sin: number } {
   const angleInRadians = degreesToRadians(angle);
   return { cos: _cos(angleInRadians), sin: _sin(angleInRadians) };
 };
@@ -102,7 +102,7 @@ const DECIMAL_ORDER_THRESHOLD = 1E-14;
 //    ____________________
 //   /       2          2
 // \/ (y2-y1)  + (x2-x1)
-export const getDistance = function (x1, y1, x2, y2) {
+export const getDistance = function (x1, y1, x2, y2): number {
   const diffX = x2 - x1;
   const diffY = y2 - y1;
   return sqrt(diffY * diffY + diffX * diffX);
@@ -142,7 +142,7 @@ export const getAppropriateFormat = function (start, end, count) {
   return null;
 };
 // @ts-expect-error
-export const roundValue = function (value, precision) {
+export const roundValue = function (value, precision): number | undefined {
   if (precision > 20) {
     precision = 20;
   }
@@ -160,7 +160,8 @@ export const getPower = function (value) {
 
 type IsAny<T> = 0 extends 1 & T ? true : false;
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- an untyped array gives untyped items
+// an untyped array gives untyped items
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 type Item<TArray> = IsAny<TArray> extends true ? any
   : TArray extends ArrayLike<infer TItem> ? TItem : never;
 
@@ -201,7 +202,7 @@ function decreaseFields(object, keys, eachDecrease, decrease) {
   return dec;
 }
 
-export function normalizeEnum(value) {
+export function normalizeEnum(value): string {
   return String(value).toLowerCase();
 }
 
@@ -235,7 +236,8 @@ export function normalizeBBox(bBox) {
   return result;
 }
 
-// Angle is expected to be from right-handed cartesian (not svg) space - positive is counterclockwise
+// Angle is expected to be from right-handed cartesian (not svg) space - positive is
+// counterclockwise
 export function rotateBBox(bBox, center, angle) {
   const cos = _Number(_cos(angle * PI_DIV_180).toFixed(3));
   const sin = _Number(_sin(angle * PI_DIV_180).toFixed(3));
@@ -304,17 +306,25 @@ export let patchFontOptions = function (options) {
   return fontOptions;
 };
 
-export function convertPolarToXY(centerCoords, startAngle, angle, radius) {
+export function convertPolarToXY(
+  centerCoords,
+  startAngle,
+  angle,
+  radius,
+): Coords {
   const shiftAngle = 90;
   const normalizedRadius = radius > 0 ? radius : 0;
 
   angle = isDefined(angle) ? angle + startAngle - shiftAngle : 0;
   const cosSin = getCosAndSin(angle);
 
-  return { x: _round(centerCoords.x + normalizedRadius * cosSin.cos), y: _round(centerCoords.y + normalizedRadius * cosSin.sin) };
+  return {
+    x: _round(centerCoords.x + normalizedRadius * cosSin.cos),
+    y: _round(centerCoords.y + normalizedRadius * cosSin.sin),
+  };
 }
 
-export const convertXYToPolar = function (centerCoords, x, y) {
+export const convertXYToPolar = function (centerCoords, x, y): { phi: number; r: number } {
   const radius = getDistance(centerCoords.x, centerCoords.y, x, y);
   const angle = atan2(y - centerCoords.y, x - centerCoords.x);
 
@@ -322,7 +332,9 @@ export const convertXYToPolar = function (centerCoords, x, y) {
 };
 
 export const processSeriesTemplate = function (seriesTemplate, items) {
-  const customizeSeries = isFunction(seriesTemplate.customizeSeries) ? seriesTemplate.customizeSeries : noop;
+  const customizeSeries = isFunction(seriesTemplate.customizeSeries)
+    ? seriesTemplate.customizeSeries
+    : noop;
   const { nameField } = seriesTemplate;
   const generatedSeries = {};
   const seriesOrder: PropertyKey[] = [];
@@ -337,7 +349,10 @@ export const processSeriesTemplate = function (seriesTemplate, items) {
     if (nameField in data) {
       series = generatedSeries[data[nameField]];
       if (!series) {
-        series = generatedSeries[data[nameField]] = { name: data[nameField], nameFieldValue: data[nameField] };
+        series = generatedSeries[data[nameField]] = {
+          name: data[nameField],
+          nameFieldValue: data[nameField],
+        };
         seriesOrder.push(series.name);
       }
     }
@@ -380,9 +395,9 @@ export const getCategoriesInfo = function (categories, startValue, endValue) {
   };
 };
 
-export function isRelativeHeightPane(pane) { return !(pane.unit % 2); }
+export function isRelativeHeightPane(pane): boolean { return !(pane.unit % 2); }
 
-export function normalizePanesHeight(panes) {
+export function normalizePanesHeight(panes): void {
   panes.forEach((pane) => {
     const { height } = pane;
     let unit = 0;
@@ -414,12 +429,20 @@ export function normalizePanesHeight(panes) {
   const emptyHeightCount = emptyHeightPanes.length;
 
   if (weightSum < 1 && emptyHeightCount) {
-    emptyHeightPanes.forEach((pane) => pane.height = (1 - weightSum) / emptyHeightCount);
-  } else if (weightSum > 1 || weightSum < 1 && !emptyHeightCount || weightSum === 1 && emptyHeightCount) {
+    emptyHeightPanes.forEach(
+      (pane) => (pane.height = (1 - weightSum) / emptyHeightCount),
+    );
+  } else if (
+    weightSum > 1
+    || (weightSum < 1 && !emptyHeightCount)
+    || (weightSum === 1 && emptyHeightCount)
+  ) {
     if (emptyHeightCount) {
       const weightForEmpty = weightSum / weightHeightCount;
       const emptyWeightSum = emptyHeightCount * weightForEmpty;
-      relativeHeightPanes.filter((pane) => pane.height).forEach((pane) => pane.height *= (weightSum - emptyWeightSum) / weightSum);
+      relativeHeightPanes
+        .filter((pane) => pane.height)
+        .forEach((pane) => (pane.height *= (weightSum - emptyWeightSum) / weightSum));
       emptyHeightPanes.forEach((pane) => pane.height = weightForEmpty);
     }
     relativeHeightPanes.forEach((pane) => pane.height *= 1 / weightSum);
@@ -427,17 +450,24 @@ export function normalizePanesHeight(panes) {
 }
 
 // eslint-disable-next-line import/no-mutable-exports -- description seam for tests
-export let updatePanesCanvases = function (panes, canvas, rotated) {
+export let updatePanesCanvases = function (panes, canvas, rotated): void {
   let distributedSpace = 0;
   const padding = PANE_PADDING;
-  const paneSpace = rotated ? canvas.width - canvas.left - canvas.right : canvas.height - canvas.top - canvas.bottom;
-  const totalCustomSpace = panes.reduce((prev, cur) => prev + (!isRelativeHeightPane(cur) ? cur.height : 0), 0);
+  const paneSpace = rotated
+    ? canvas.width - canvas.left - canvas.right
+    : canvas.height - canvas.top - canvas.bottom;
+  const totalCustomSpace = panes.reduce(
+    (prev, cur) => prev + (!isRelativeHeightPane(cur) ? cur.height : 0),
+    0,
+  );
   const usefulSpace = paneSpace - padding * (panes.length - 1) - totalCustomSpace;
   const startName = rotated ? 'left' : 'top';
   const endName = rotated ? 'right' : 'bottom';
 
   panes.forEach((pane) => {
-    const calcLength = !isRelativeHeightPane(pane) ? pane.height : _round(pane.height * usefulSpace);
+    const calcLength = !isRelativeHeightPane(pane)
+      ? pane.height
+      : _round(pane.height * usefulSpace);
     pane.canvas = pane.canvas || {};
     extend(pane.canvas, canvas);
     pane.canvas[startName] = canvas[startName] + distributedSpace;
@@ -458,7 +488,8 @@ export const unique = function (array) {
 };
 
 export const getVerticallyShiftedAngularCoords = function (bBox, dy, center) {
-  // TODO: Use center instead of left top corner - that is more correct and allows to get rid of "isPositive"
+  // TODO: Use center instead of left top corner - that is more correct and allows to get rid of
+  // "isPositive"
   //   horizontalOffset1 = bBox.x + bBox.width / 2 - center.x
   //   horizontalOffset2 = bBox.y + bBox.height / 2 - center.y
   //   verticalOffset2 = newCoord.y + bBox.height / 2 - center.y
@@ -466,7 +497,13 @@ export const getVerticallyShiftedAngularCoords = function (bBox, dy, center) {
   const horizontalOffset1 = (isPositive ? bBox.x : bBox.x + bBox.width) - center.x;
   const verticalOffset1 = bBox.y - center.y;
   const verticalOffset2 = verticalOffset1 + dy;
-  const horizontalOffset2 = _round(sqrt(horizontalOffset1 * horizontalOffset1 + verticalOffset1 * verticalOffset1 - verticalOffset2 * verticalOffset2));
+  const horizontalOffset2 = _round(
+    sqrt(
+      horizontalOffset1 * horizontalOffset1
+        + verticalOffset1 * verticalOffset1
+        - verticalOffset2 * verticalOffset2,
+    ),
+  );
   const dx = (isPositive ? +horizontalOffset2 : -horizontalOffset2) || horizontalOffset1;
   return { x: center.x + (isPositive ? dx : dx - bBox.width), y: bBox.y + dy };
 };
@@ -542,13 +579,13 @@ export function convertVisualRangeObject(visualRange, convertToVisualRange?) {
 export function getAddFunction(range, correctZeroLevel) {
   // T170398
   if (range.dataType === 'datetime') {
-    return function (rangeValue, marginValue, sign = 1) {
+    return function (rangeValue, marginValue, sign = 1): Date {
       return new Date(rangeValue.getTime() + sign * marginValue);
     };
   }
 
   if (range.axisType === 'logarithmic') {
-    return function (rangeValue, marginValue, sign = 1) {
+    return function (rangeValue, marginValue, sign = 1): number {
       const log = getLogExt(rangeValue, range.base) + sign * marginValue;
       return raiseToExt(log, range.base);
     };
@@ -625,7 +662,7 @@ export function adjustVisualRange(options, visualRange, wholeRange, dataRange?) 
   };
 }
 
-export function getLogExt(value, base, allowNegatives = false, linearThreshold?) {
+export function getLogExt(value, base, allowNegatives = false, linearThreshold?): number {
   if (!allowNegatives) {
     return getLog(value, base);
   }
@@ -636,10 +673,13 @@ export function getLogExt(value, base, allowNegatives = false, linearThreshold?)
   if (transformValue < 0) {
     return 0;
   }
-  return adjust(sign(value) * transformValue, Number((base ** (linearThreshold - 1)).toFixed(abs(linearThreshold))));
+  return adjust(
+    sign(value) * transformValue,
+    Number((base ** (linearThreshold - 1)).toFixed(abs(linearThreshold))),
+  );
 }
 
-export function raiseToExt(value, base, allowNegatives = false, linearThreshold?) {
+export function raiseToExt(value, base, allowNegatives = false, linearThreshold?): number {
   if (!allowNegatives) {
     return raiseTo(value, base);
   }
@@ -654,7 +694,10 @@ export function raiseToExt(value, base, allowNegatives = false, linearThreshold?
     return 0;
   }
 
-  return adjust(sign(value) * transformValue, Number((base ** linearThreshold).toFixed(abs(linearThreshold))));
+  return adjust(
+    sign(value) * transformValue,
+    Number((base ** linearThreshold).toFixed(abs(linearThreshold))),
+  );
 }
 
 export function rangesAreEqual(range, rangeFromOptions) {
@@ -673,12 +716,12 @@ export function valueOf(value) {
   return value && value.valueOf();
 }
 
-export function pointInCanvas(canvas, x, y) {
+export function pointInCanvas(canvas, x, y): boolean {
   return x >= canvas.left && x <= canvas.right && y >= canvas.top && y <= canvas.bottom;
 }
 
 // eslint-disable-next-line import/no-mutable-exports -- description seam for tests
-export let getNextDefsSvgId = () => `DevExpress_${numDefsSvgElements++}`;
+export let getNextDefsSvgId = (): string => `DevExpress_${numDefsSvgElements++}`;
 
 export function extractColor(color, isBase?) {
   if (isString(color) || !color) {

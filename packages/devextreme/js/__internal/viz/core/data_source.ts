@@ -17,15 +17,15 @@ export interface DataSourcePluginMembers {
 const { postCtor } = DataHelperMixin;
 let name;
 const members = {
-  _dataSourceLoadErrorHandler() {
+  _dataSourceLoadErrorHandler(): void {
     this._dataSourceChangedHandler();
   },
 
-  _dataSourceOptions() {
+  _dataSourceOptions(): { paginate: boolean } {
     return { paginate: false };
   },
 
-  _updateDataSource() {
+  _updateDataSource(): void {
     this._refreshDataSource();
     if (!this.option('dataSource')) {
       this._dataSourceChangedHandler();
@@ -51,7 +51,7 @@ for (name in DataHelperMixin) {
 
 export const plugin = {
   name: 'data_source',
-  init() {
+  init(): void {
     postCtor.call(this);
   },
   dispose: noop,
