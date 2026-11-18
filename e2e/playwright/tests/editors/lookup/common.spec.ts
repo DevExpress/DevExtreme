@@ -26,27 +26,27 @@ const getRect = (locator: Locator): Promise<{ top: number; bottom: number }> => 
 );
 
 test.describe('Lookup', () => {
-  test('Popup should not be closed if lookup is placed at the page bottom (T1018037)', async ({ page }) => {
-    await createWidget(page, 'dxLookup', {
-      items: [1, 2, 3],
-      usePopover: false,
-    });
-
-    const lookup = new Lookup(page, '#container');
-
-    await lookup.element.evaluate((element) => {
-      const $element = $(element);
-
-      $element.css({ top: window.innerHeight - ($element.height() ?? 0) });
-    });
-
-    await lookup.open();
-
-    await expect.poll(() => lookup.isOpened()).toBe(true);
-  });
-
   test.describe(() => {
     test.use({ theme: 'material.blue.light' });
+
+    test('Popup should not be closed if lookup is placed at the page bottom (T1018037)', async ({ page }) => {
+      await createWidget(page, 'dxLookup', {
+        items: [1, 2, 3],
+        usePopover: false,
+      });
+
+      const lookup = new Lookup(page, '#container');
+
+      await lookup.element.evaluate((element) => {
+        const $element = $(element);
+
+        $element.css({ top: window.innerHeight - ($element.height() ?? 0) });
+      });
+
+      await lookup.open();
+
+      await expect.poll(() => lookup.isOpened()).toBe(true);
+    });
 
     test('Popup should be flipped if lookup is placed at the page bottom', async ({ page }) => {
       await page.evaluate(() => {
