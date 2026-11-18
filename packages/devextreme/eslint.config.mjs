@@ -366,11 +366,10 @@ export default [
             '@typescript-eslint/no-restricted-imports': ['error', {
                 patterns: [{
                     group: [
-                        '@js/ui/data_grid/*',
                         '@js/ui/pivot_grid/*',
                         '@js/ui/tree_list/*',
-                        '@js/ui/grid_core/*',
                     ],
+                    allowTypeImports: true,
                     message: 'Please use import from TS modules instead.',
                 }, {
                     group: ['@js/__internal/*'],
@@ -389,6 +388,9 @@ export default [
             'class-methods-use-this': 'off',
             '@typescript-eslint/ban-ts-comment': 'off',
             '@typescript-eslint/prefer-ts-expect-error': 'off',
+            '@typescript-eslint/no-unnecessary-type-assertion': ['error', {
+                typesToIgnore: ['(...args: unknown[]) => void', '(...a: unknown[]) => void'],
+            }],
         },
     },
     // Rules for a new TS files

@@ -5,10 +5,8 @@
 /* eslint-disable @typescript-eslint/no-shadow */
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-multi-assign */
-/* eslint-disable @stylistic/max-len */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-/* eslint-disable prefer-destructuring */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 
@@ -28,7 +26,7 @@ const chartBarSeries = _chart.bar;
 
 const baseStackedSeries = {
   _calculateErrorBars: _noop,
-  _updateOptions(options) {
+  _updateOptions(options): void {
     this._stackName = `axis_${options.axis || 'default'}`;
   },
 };
@@ -73,7 +71,8 @@ function clonePoint(point, value, minValue, position) {
 function preparePointsForStackedAreaSegment(points) {
   let i = 0;
   let p;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- the points of a series are not typed
+  // the points of a series are not typed
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const result: any[][] = [];
   let array;
   const len = points.length;
@@ -96,7 +95,11 @@ function preparePointsForStackedAreaSegment(points) {
 // @ts-expect-error
 chart.stackedarea = _extend({}, chartAreaSeries, baseStackedSeries, {
   _prepareSegment(points, rotated) {
-    return chartAreaSeries._prepareSegment.call(this, preparePointsForStackedAreaSegment(points), rotated);
+    return chartAreaSeries._prepareSegment.call(
+      this,
+      preparePointsForStackedAreaSegment(points),
+      rotated,
+    );
   },
   _appendInGroup() {
     this._group.append(this._extGroups.seriesGroup).toBackground();
@@ -128,14 +131,17 @@ chart.stackedsplinearea = _extend({}, areaSeries.splinearea, baseStackedSeries, 
         point.argument = p.argument;
         return point;
       });
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- the points of a series are not typed
+      // the points of a series are not typed
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       let prevSeriesForwardPoints: any[] = [];
       const pointByArg = {};
       let i = 0;
       const len = that._prevSeries._segments.length;
 
       while (i < len) {
-        prevSeriesForwardPoints = prevSeriesForwardPoints.concat(that._prevSeries._segments[i].line);
+        prevSeriesForwardPoints = prevSeriesForwardPoints.concat(
+          that._prevSeries._segments[i].line,
+        );
         i++;
       }
 
@@ -156,10 +162,15 @@ chart.stackedsplinearea = _extend({}, areaSeries.splinearea, baseStackedSeries, 
         const argument = p.argument.valueOf();
         let prevSeriesPoints;
         if (i % 3 === 0) {
-          prevSeriesPoints = pointByArg[argument] || getPointsByArgFromPrevSeries(that._prevSeries, argument);
+          prevSeriesPoints = pointByArg[argument]
+            || getPointsByArgFromPrevSeries(that._prevSeries, argument);
           if (prevSeriesPoints) {
-            backwardPoints[i - 1] && prevSeriesPoints[0] && (backwardPoints[i - 1] = prevSeriesPoints[0]);
-            backwardPoints[i + 1] && (backwardPoints[i + 1] = prevSeriesPoints[2] || p);
+            const firstPrevSeriesPoint = prevSeriesPoints[0];
+            const thirdPrevSeriesPoint = prevSeriesPoints[2];
+            backwardPoints[i - 1]
+              && firstPrevSeriesPoint
+              && (backwardPoints[i - 1] = firstPrevSeriesPoint);
+            backwardPoints[i + 1] && (backwardPoints[i + 1] = thirdPrevSeriesPoint || p);
           }
         }
       });

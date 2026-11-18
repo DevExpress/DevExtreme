@@ -598,7 +598,7 @@ export default {
     const isSelectTextOnEditingStart = component.option('editing.selectTextOnEditStart');
 
     if (!isFocused && isSelectTextOnEditingStart && $element.is('.dx-texteditor-input') && !$element.is('[readonly]')) {
-      const element = $element.get(0) as HTMLInputElement | HTMLTextAreaElement;
+      const element = $element.get<HTMLInputElement | HTMLTextAreaElement>(0);
       const editor = getWidgetInstance($element.closest('.dx-texteditor'));
       const loadItemDeferred = editor && '_loadItemDeferred' in editor
         ? editor._loadItemDeferred

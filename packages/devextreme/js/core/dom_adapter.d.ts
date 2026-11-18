@@ -25,6 +25,7 @@ export interface DomAdapter {
   removeAttribute: (element, name) => void;
   isElementNode: (element: any) => boolean;
   createElement: (tagName: string, context?: Document) => HTMLElement;
+  createElementNS: (ns: string, tagName: string, context?: Document) => Element;
   createDocumentFragment: () => DocumentFragment;
   createTextNode: (text: any, context?: any) => any;
   setClass: (element: HTMLElement, className: string, isAdd: boolean) => void;

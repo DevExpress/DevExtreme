@@ -39,7 +39,7 @@ import { getRealElementWidth } from '__internal/grids/pivot_grid/area_item/m_are
 import DataAreaModule from '__internal/grids/pivot_grid/data_area/m_data_area';
 import DataControllerModule from '__internal/grids/pivot_grid/data_controller/m_data_controller';
 import HeadersAreaModule from '__internal/grids/pivot_grid/headers_area/m_headers_area';
-import pivotGridUtils, { getScrollbarWidth } from '__internal/grids/pivot_grid/m_widget_utils';
+import pivotGridUtils, { getScrollbarWidth } from '__internal/grids/pivot_grid/widget_utils';
 
 import pointerMock from '../../helpers/pointerMock.js';
 

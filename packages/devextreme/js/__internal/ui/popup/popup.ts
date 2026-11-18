@@ -33,8 +33,9 @@ import {
 import { isDefined, isObject } from '@js/core/utils/type';
 import type { Properties as ButtonProperties } from '@js/ui/button';
 import Button from '@js/ui/button';
+import type dxPopup from '@js/ui/popup';
 import type {
-  dxPopupAnimation, Properties, ToolbarItem, ToolbarLocation,
+  dxPopupAnimation, dxPopupOptions, Properties, ToolbarItem, ToolbarLocation,
 } from '@js/ui/popup';
 import type { ResizeEndEvent, ResizeEvent, ResizeStartEvent } from '@js/ui/resizable';
 import Resizable from '@js/ui/resizable';
@@ -175,13 +176,17 @@ const getHeightStrategyChangeOffset = (
   popupVerticalPaddings: number,
 ): number => (currentHeightStrategyClass === HEIGHT_STRATEGIES.flex ? -popupVerticalPaddings : 0);
 
-export interface PopupProperties extends Omit<Properties, 'animation' | 'container' | 'position'>,
+export interface PopupProperties<
+  TComponent = dxPopup,
+> extends Omit<dxPopupOptions<TComponent>, 'animation' | 'container' | 'position' | 'dragAndResizeArea'>,
   OverlayInternalProperties {
   animation?: dxPopupAnimation | null;
 
   container?: Properties['container'] | dxElementWrapper;
 
   position?: Properties['position'] | InternalPositionConfig;
+
+  dragAndResizeArea?: Properties['dragAndResizeArea'] | Window;
 
   autoResizeEnabled?: boolean;
 
@@ -203,7 +208,8 @@ export interface PopupProperties extends Omit<Properties, 'animation' | 'contain
 }
 
 class Popup<
-  TProperties extends PopupProperties = PopupProperties,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  TProperties extends PopupProperties<any> = PopupProperties,
 > extends Overlay<TProperties> {
   _actions?: PopupActions;
 
@@ -1216,7 +1222,7 @@ class Popup<
 
     (forceApplyBindings ?? noop)();
 
-    const overlayContent = this.$overlayContent().get(0) as HTMLElement;
+    const overlayContent = this.$overlayContent().get<HTMLElement>(0);
     const currentHeightStrategyClass = this._chooseHeightStrategy(overlayContent);
 
     this.$content()?.css(this._getHeightCssStyles(currentHeightStrategyClass, overlayContent));
@@ -1315,7 +1321,7 @@ class Popup<
   }
 
   _isAutoHeight(): boolean {
-    return (this.$overlayContent().get(0) as HTMLElement).style.height === 'auto';
+    return this.$overlayContent().get<HTMLElement>(0).style.height === 'auto';
   }
 
   _splitPopupHeight(): Record<string, number> {

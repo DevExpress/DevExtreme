@@ -77,9 +77,6 @@ export interface DateRangeBoxProperties extends Omit<Properties, 'value'> {
 }
 
 class DateRangeBox extends Editor<DateRangeBoxProperties> {
-  // Temporary solution. Move to component level
-  public NAME!: string;
-
   private _openAction!: (e?: Record<string, unknown>) => void;
 
   private _closeAction!: (e?: Record<string, unknown>) => void;

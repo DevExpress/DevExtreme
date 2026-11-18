@@ -7,7 +7,7 @@ import {
   foreachDataLevel,
   foreachTree,
   getCompareFunction,
-} from '../m_widget_utils';
+} from '../widget_utils';
 
 function sort(loadOptions, dataSource, getAscOrder) {
   sortDimension(dataSource, loadOptions, 'rows', getAscOrder);

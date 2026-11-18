@@ -11,7 +11,7 @@ const forms: Form[] = [];
 
 const createForm = (options: Properties): InternalForm => {
   const $element = $('<div>').appendTo(document.body);
-  const form = new Form($element.get(0) as HTMLElement, options);
+  const form = new Form($element.get<HTMLElement>(0), options);
   forms.push(form);
 
   return form as unknown as InternalForm;

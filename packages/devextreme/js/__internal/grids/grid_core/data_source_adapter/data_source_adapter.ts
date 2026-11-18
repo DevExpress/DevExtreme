@@ -203,6 +203,7 @@ export default class DataSourceAdapter extends modules.Controller {
   public paginate(): boolean | undefined;
   public paginate(value: boolean): void;
   public paginate(value?: boolean): boolean | undefined {
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
     return (this._dataSource.paginate as (...a: unknown[]) => boolean | undefined)(value);
   }
 
@@ -912,7 +913,7 @@ export default class DataSourceAdapter extends modules.Controller {
    * @extended: virtual_scrolling
    */
   public load(): DeferredObj<unknown> {
-    return this._dataSource.load() as unknown as DeferredObj<unknown>;
+    return this._dataSource.load();
   }
 
   /**
@@ -921,7 +922,7 @@ export default class DataSourceAdapter extends modules.Controller {
   public reload(full?: boolean, changesOnly?: boolean): DeferredObj<unknown>;
   public reload(full?: boolean): DeferredObj<unknown> {
     const result = full ? this._dataSource.reload() : this._dataSource.load();
-    return result as unknown as DeferredObj<unknown>;
+    return result;
   }
 
   public getCachedStoreData(): RawItemData[] | undefined {

@@ -103,6 +103,6 @@ export class SliderTooltipPositionController<
       return configuration;
     }
 
-    return position as PopoverPosition;
+    return position;
   }
 }

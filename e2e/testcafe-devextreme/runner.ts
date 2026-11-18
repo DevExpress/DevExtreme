@@ -73,25 +73,28 @@ interface ParsedArgs {
 }
 
 const QUARANTINE_FILE = path.join(__dirname, 'quarantine.json');
+// Themes of every component folder job; keep in sync with the quarantine job in testcafe_tests.yml.
+const DEFAULT_QUARANTINE_THEMES = ['fluent.blue.light', 'fluent-next.blue.light'];
 
 interface QuarantineEntry {
   test: string;
   file?: string;
+  themes?: string[];
 }
 
-// test name -> fixture files ('' = match any file, for entries without "file")
-function readQuarantinedTests(): Map<string, string[]> {
+// test name -> its quarantine.json entries
+function readQuarantinedTests(): Map<string, QuarantineEntry[]> {
   if (!fs.existsSync(QUARANTINE_FILE)) {
-    return new Map<string, string[]>();
+    return new Map<string, QuarantineEntry[]>();
   }
 
   const { tests } = JSON.parse(fs.readFileSync(QUARANTINE_FILE, 'utf8'));
-  const result = new Map<string, string[]>();
+  const result = new Map<string, QuarantineEntry[]>();
 
-  (tests as QuarantineEntry[]).forEach(({ test, file }) => {
-    const files = result.get(test) ?? [];
-    files.push(file ?? '');
-    result.set(test, files);
+  (tests as QuarantineEntry[]).forEach((entry) => {
+    const entries = result.get(entry.test) ?? [];
+    entries.push(entry);
+    result.set(entry.test, entries);
   });
 
   return result;
@@ -215,16 +218,27 @@ async function main() {
     );
 
     const quarantinedTests = readQuarantinedTests();
-    const isQuarantined = (testNameArg: string, fixturePath: string, testMeta?: any): boolean => {
-      if (testMeta?.unstable) {
-        return true;
+    // Without "themes", an entry is skipped in every regular job and rerun in the default themes.
+    const isQuarantinedInTheme = (themes?: string[]): boolean => {
+      const theme = process.env.theme ?? '';
+
+      if (onlyQuarantined) {
+        return (themes ?? DEFAULT_QUARANTINE_THEMES).includes(theme);
       }
 
-      const files = quarantinedTests.get(testNameArg);
+      return !themes || themes.includes(theme);
+    };
+    const isQuarantined = (testNameArg: string, fixturePath: string, testMeta?: any): boolean => {
+      if (testMeta?.unstable) {
+        return isQuarantinedInTheme();
+      }
 
-      return !!files?.some(
-        (fixtureFile) => !fixtureFile || fixturePath.replace(/\\/g, '/').endsWith(fixtureFile),
-      );
+      const entries = quarantinedTests.get(testNameArg);
+
+      return !!entries?.some((entry) => (
+        (!entry.file || fixturePath.replace(/\\/g, '/').endsWith(entry.file))
+        && isQuarantinedInTheme(entry.themes)
+      ));
     };
 
     if (fs.existsSync('./screenshots')) {
@@ -315,7 +329,7 @@ async function main() {
         return true;
       });
 
-      if (!componentFolderArg && args.theme) {
+      if (!componentFolderArg && args.theme && !onlyQuarantined) {
         filters.push((
           _testName: string,
           _fixtureName: string,

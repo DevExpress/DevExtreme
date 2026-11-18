@@ -6,12 +6,10 @@
 /* eslint-disable func-names */
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable no-param-reassign */
-/* eslint-disable @stylistic/max-len */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-use-before-define */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-/* eslint-disable prefer-destructuring */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 
@@ -62,7 +60,9 @@ export function currentTheme(themeName, colorScheme) {
   }
 
   const scheme = normalizeEnum(colorScheme);
-  currentThemeName = (themeName?.platform ? findThemeNameByPlatform(normalizeEnum(themeName.platform), themeName.version, scheme) : findThemeNameByName(normalizeEnum(themeName), scheme)) || currentThemeName;
+  currentThemeName = (themeName?.platform
+    ? findThemeNameByPlatform(normalizeEnum(themeName.platform), themeName.version, scheme)
+    : findThemeNameByName(normalizeEnum(themeName), scheme)) || currentThemeName;
   // For chaining only
   return this;
 }
@@ -72,11 +72,11 @@ function getThemeInfo(themeName, splitter) {
   return k > 0 ? { name: themeName.substring(0, k), scheme: themeName.substring(k + 1) } : null;
 }
 
-function registerThemeName(themeName, targetThemeName) {
+function registerThemeName(themeName, targetThemeName): void {
   const themeInfo = getThemeInfo(themeName, '.') || { name: themeName };
-  const name = themeInfo.name;
+  const { name } = themeInfo;
   // @ts-expect-error
-  const scheme = themeInfo.scheme;
+  const { scheme } = themeInfo;
   if (scheme) {
     const fullThemeKey = `${name}.${scheme}`;
 
@@ -87,7 +87,7 @@ function registerThemeName(themeName, targetThemeName) {
   }
 }
 
-export function registerTheme(theme, baseThemeName) {
+export function registerTheme(theme, baseThemeName): void {
   const themeName = normalizeEnum(theme && theme.name);
   if (themeName) {
     theme.isDefault && (defaultTheme = themeName);
@@ -96,18 +96,18 @@ export function registerTheme(theme, baseThemeName) {
   }
 }
 
-export function registerThemeSchemeAlias(from, to) {
+export function registerThemeSchemeAlias(from, to): void {
   themesSchemeMapping[from] = to;
 }
 
-function mergeScalar(target, field, source, sourceValue?) {
+function mergeScalar(target, field, source, sourceValue?): void {
   const _value = source?.[field] ?? sourceValue;
   if (_value !== undefined && target[field] === undefined) {
     target[field] = _value;
   }
 }
 
-function mergeObject(target, field, source, sourceValue?) {
+function mergeObject(target, field, source, sourceValue?): void {
   const _value = source?.[field] ?? sourceValue;
   if (_value !== undefined) {
     target[field] = _extend(true, {}, _value, target[field]);
@@ -116,30 +116,42 @@ function mergeObject(target, field, source, sourceValue?) {
 
 // TODO: Font initialization should be done here
 function patchTheme(theme) {
-  theme = _extend(true, {
-    loadingIndicator: { font: {} },
-    export: { font: {} },
-    legend: { font: {}, border: {} },
-    title: { font: {} },
-    tooltip: { font: {} },
-    'chart:common': {},
-    'chart:common:axis': {
-      grid: {}, minorGrid: {}, tick: {}, minorTick: {}, title: { font: {} }, label: { font: {} },
+  theme = _extend(
+    true,
+    {
+      loadingIndicator: { font: {} },
+      export: { font: {} },
+      legend: { font: {}, border: {} },
+      title: { font: {} },
+      tooltip: { font: {} },
+      'chart:common': {},
+      'chart:common:axis': {
+        grid: {},
+        minorGrid: {},
+        tick: {},
+        minorTick: {},
+        title: { font: {} },
+        label: { font: {} },
+      },
+      'chart:common:annotation': { font: {}, border: {} },
+      chart: { commonSeriesSettings: { candlestick: {} } },
+      pie: {},
+      polar: {},
+      gauge: { scale: { tick: {}, minorTick: {}, label: { font: {} } } },
+      barGauge: {},
+      funnel: {},
+      sankey: {},
+      map: { background: {} },
+      treeMap: {
+        tile: { selectionStyle: { border: {} } },
+        group: { border: {}, selectionStyle: { border: {} }, label: { font: {} } },
+      },
+      rangeSelector: { scale: { tick: {}, minorTick: {}, label: { font: {} } }, chart: {} },
+      sparkline: {},
+      bullet: {},
     },
-    'chart:common:annotation': { font: {}, border: {} },
-    chart: { commonSeriesSettings: { candlestick: {} } },
-    pie: {},
-    polar: {},
-    gauge: { scale: { tick: {}, minorTick: {}, label: { font: {} } } },
-    barGauge: {},
-    funnel: {},
-    sankey: {},
-    map: { background: {} },
-    treeMap: { tile: { selectionStyle: { border: {} } }, group: { border: {}, selectionStyle: { border: {} }, label: { font: {} } } },
-    rangeSelector: { scale: { tick: {}, minorTick: {}, label: { font: {} } }, chart: {} },
-    sparkline: {},
-    bullet: {},
-  }, theme);
+    theme,
+  );
 
   mergeScalar(theme.loadingIndicator, 'backgroundColor', theme);
   mergeScalar(theme.chart.commonSeriesSettings.candlestick, 'innerColor', null, theme.backgroundColor);
@@ -185,13 +197,18 @@ function patchTheme(theme) {
   return theme;
 }
 
-function patchAxes(theme) {
+function patchAxes(theme): void {
   const commonAxisSettings = theme['chart:common:axis'];
   const colorFieldName = 'color';
   [commonAxisSettings.grid, commonAxisSettings.minorGrid].forEach((obj) => {
     mergeScalar(obj, colorFieldName, null, theme.gridColor);
   });
-  [commonAxisSettings, commonAxisSettings.tick, commonAxisSettings.minorTick, commonAxisSettings.label.font].forEach((obj) => {
+  [
+    commonAxisSettings,
+    commonAxisSettings.tick,
+    commonAxisSettings.minorTick,
+    commonAxisSettings.label.font,
+  ].forEach((obj) => {
     mergeScalar(obj, colorFieldName, null, theme.axisColor);
   });
   mergeScalar(commonAxisSettings.title.font, colorFieldName, null, theme.secondaryTitleColor);
@@ -201,8 +218,8 @@ function patchAxes(theme) {
   mergeScalar(theme.rangeSelector.scale.label.font, colorFieldName, null, theme.axisColor);
 }
 
-function patchMapLayers(theme) {
-  const map = theme.map;
+function patchMapLayers(theme): void {
+  const { map } = theme;
   ['area', 'line', 'marker'].forEach((section) => {
     mergeObject(map, `layer:${section}`, null, map.layer);
   });
@@ -211,13 +228,13 @@ function patchMapLayers(theme) {
   });
 }
 
-export function addCacheItem(target) {
+export function addCacheItem(target): void {
   const cacheUid = ++nextCacheUid;
   target._cache = cacheUid;
   widgetsCache[cacheUid] = target;
 }
 
-export function removeCacheItem(target) {
+export function removeCacheItem(target): void {
   delete widgetsCache[target._cache];
 }
 
@@ -258,7 +275,7 @@ export {
   widgetsCache,
 };
 
-exports.resetCurrentTheme = function () {
+exports.resetCurrentTheme = function (): void {
   currentThemeName = null;
 };
 /// #ENDDEBUG

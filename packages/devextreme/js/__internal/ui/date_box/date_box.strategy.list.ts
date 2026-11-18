@@ -296,6 +296,7 @@ class ListStrategy extends DateBoxStrategy {
       const { dateSerializationFormat } = this.dateBox.option();
 
       if (dateSerializationFormat) {
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
         date = dateSerialization.deserializeDate(date) as Date;
       } else {
         date = new Date(date);

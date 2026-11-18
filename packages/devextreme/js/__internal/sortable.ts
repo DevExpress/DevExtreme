@@ -252,7 +252,7 @@ class Sortable extends Draggable<SortableProperties> {
           const $lastItem = $(this._getPrevVisibleItem(items));
 
           this._$modifiedItem = $lastItem;
-          this._modifiedItemMargin = ($lastItem.get(0) as HTMLElement).style.marginBottom;
+          this._modifiedItemMargin = $lastItem.get<HTMLElement>(0).style.marginBottom;
 
           $lastItem.css('marginBottom', sourceElementSize - freeSize);
 

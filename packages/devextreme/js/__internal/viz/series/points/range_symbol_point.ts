@@ -1,12 +1,9 @@
-/* eslint-disable @stylistic/no-mixed-operators */
 /* eslint-disable no-bitwise */
 /* eslint-disable @typescript-eslint/no-this-alias */
 /* eslint-disable @typescript-eslint/init-declarations */
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable no-multi-assign */
-/* eslint-disable @stylistic/max-len */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable prefer-destructuring */
 /* eslint-disable no-else-return */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
@@ -40,7 +37,7 @@ export default _extend({}, symbolPoint, {
   },
 
   hideMarker(type) {
-    const graphic = this.graphic;
+    const { graphic } = this;
     const marker = graphic && graphic[`${type}Marker`];
     const label = this[`_${type}Label`];
 
@@ -58,7 +55,7 @@ export default _extend({}, symbolPoint, {
 
   clearVisibility() {
     const that = this;
-    const graphic = that.graphic;
+    const { graphic } = that;
     const topMarker = graphic && graphic.topMarker;
     const bottomMarker = graphic && graphic.bottomMarker;
 
@@ -72,7 +69,7 @@ export default _extend({}, symbolPoint, {
 
   clearMarker() {
     const that = this;
-    const graphic = that.graphic;
+    const { graphic } = that;
     const topMarker = graphic && graphic.topMarker;
     const bottomMarker = graphic && graphic.bottomMarker;
     const emptySettings = that._emptySettings;
@@ -143,7 +140,9 @@ export default _extend({}, symbolPoint, {
     const coord = this._getPositionFromLocation(location);
 
     if (options.visible) {
-      bBox = image ? this._getImageBBox(coord.x, coord.y) : this._getSymbolBBox(coord.x, coord.y, options.styles.normal.r);
+      bBox = image
+        ? this._getImageBBox(coord.x, coord.y)
+        : this._getSymbolBBox(coord.x, coord.y, options.styles.normal.r);
     } else {
       bBox = {
         x: coord.x, y: coord.y, width: 0, height: 0,
@@ -172,13 +171,15 @@ export default _extend({}, symbolPoint, {
   },
 
   _getOverlayCorrections(topCoords, bottomCoords) {
-    const rotated = this._options.rotated;
+    const { rotated } = this._options;
     const coordSelector = !rotated ? 'y' : 'x';
     const valueSelector = !rotated ? 'height' : 'width';
     const visibleArea = this.series.getValueAxis().getVisibleArea();
     const minBound = visibleArea[0];
     const maxBound = visibleArea[1];
-    let delta = _round((topCoords[coordSelector] + topCoords[valueSelector] - bottomCoords[coordSelector]) / 2);
+    let delta = _round(
+      (topCoords[coordSelector] + topCoords[valueSelector] - bottomCoords[coordSelector]) / 2,
+    );
     let coord1 = topCoords[coordSelector] - delta;
     let coord2 = bottomCoords[coordSelector] + delta;
 
@@ -245,7 +246,11 @@ export default _extend({}, symbolPoint, {
     topLabel.pointPosition = notInverted ? 'top' : 'bottom';
     bottomLabel.pointPosition = notInverted ? 'bottom' : 'top';
 
-    if ((that.series.getLabelVisibility() || customVisibility) && that.hasValue() && customVisibility !== false) {
+    if (
+      (that.series.getLabelVisibility() || customVisibility)
+      && that.hasValue()
+      && customVisibility !== false
+    ) {
       that.visibleTopMarker !== false && labels.push(topLabel);
       that.visibleBottomMarker !== false && labels.push(bottomLabel);
 
@@ -293,7 +298,8 @@ export default _extend({}, symbolPoint, {
     const oldImages = that._getImage(oldOptions.image);
     const newImages = that._getImage(newOptions.image);
     const topImageChanged = that._checkImage(oldImages.top) !== that._checkImage(newImages.top);
-    const bottomImageChanged = that._checkImage(oldImages.bottom) !== that._checkImage(newImages.bottom);
+    const bottomImageChanged = that._checkImage(oldImages.bottom)
+      !== that._checkImage(newImages.bottom);
 
     return symbolChanged || topImageChanged || bottomImageChanged;
   },
@@ -325,7 +331,7 @@ export default _extend({}, symbolPoint, {
 
   _drawOneMarker(renderer, markerType, imageSettings, settings) {
     const that = this;
-    const graphic = that.graphic;
+    const { graphic } = that;
     if (graphic[markerType]) {
       that._updateOneMarker(markerType, settings);
     } else {
@@ -352,7 +358,7 @@ export default _extend({}, symbolPoint, {
 
   _getSettingsForTracker(radius) {
     const that = this;
-    const rotated = that._options.rotated;
+    const { rotated } = that._options;
 
     return {
       translateX: rotated ? _min(that.x, that.minX) - radius : that.x - radius,
@@ -364,7 +370,7 @@ export default _extend({}, symbolPoint, {
 
   isInVisibleArea() {
     const that = this;
-    const rotated = that._options.rotated;
+    const { rotated } = that._options;
     const argument = !rotated ? that.x : that.y;
     const maxValue = !rotated ? _max(that.minY, that.y) : _max(that.minX, that.x);
     const minValue = !rotated ? _min(that.minY, that.y) : _min(that.minX, that.x);
@@ -377,7 +383,8 @@ export default _extend({}, symbolPoint, {
     const visibleValArea = that.series.getValueAxis().getVisibleArea();
 
     const notVisibleByArg = (visibleArgArea[1] < argument) || (visibleArgArea[0] > argument);
-    const notVisibleByVal = ((visibleValArea[0] > minValue) && (visibleValArea[0] > maxValue)) || ((visibleValArea[1] < minValue) && (visibleValArea[1] < maxValue));
+    const notVisibleByVal = (visibleValArea[0] > minValue && visibleValArea[0] > maxValue)
+      || (visibleValArea[1] < minValue && visibleValArea[1] < maxValue);
 
     if (notVisibleByArg || notVisibleByVal) {
       visibleTopMarker = visibleBottomMarker = visibleRangeArea = false;
@@ -400,7 +407,7 @@ export default _extend({}, symbolPoint, {
     const that = this;
     let x;
     let y;
-    const rotated = that._options.rotated;
+    const { rotated } = that._options;
     const minValue = !rotated ? _min(that.y, that.minY) : _min(that.x, that.minX);
     const side = !rotated ? 'height' : 'width';
     const visibleArea = that._getVisibleArea();
@@ -421,7 +428,7 @@ export default _extend({}, symbolPoint, {
 
   _translate() {
     const that = this;
-    const rotated = that._options.rotated;
+    const { rotated } = that._options;
     symbolPoint._translate.call(that);
 
     that.height = rotated ? 0 : _abs(that.minY - that.y);
@@ -450,14 +457,10 @@ export default _extend({}, symbolPoint, {
 
   getCrosshairData(x, y) {
     const that = this;
-    const rotated = that._options.rotated;
-    const minX = that.minX;
-    const minY = that.minY;
-    const vx = that.vx;
-    const vy = that.vy;
-    const value = that.value;
-    const minValue = that.minValue;
-    const argument = that.argument;
+    const { rotated } = that._options;
+    const {
+      minX, minY, vx, vy, value, minValue, argument,
+    } = that;
     const coords = {
       axis: that.series.axis,
       x: vx,
@@ -491,9 +494,7 @@ export default _extend({}, symbolPoint, {
 
   _getFormatObject(tooltip) {
     const that = this;
-    const initialMinValue = that.initialMinValue;
-    const initialValue = that.initialValue;
-    const initialArgument = that.initialArgument;
+    const { initialMinValue, initialValue, initialArgument } = that;
     const minValue = tooltip.formatValue(initialMinValue, undefined, that.series.valueType);
     const value = tooltip.formatValue(initialValue, undefined, that.series.valueType);
 
@@ -529,9 +530,9 @@ export default _extend({}, symbolPoint, {
     const yCond = (y >= this.y - trackerRadius) && (y <= this.y + trackerRadius);
 
     if (this._options.rotated) {
-      return yCond && (xCond || (x >= this.minX - trackerRadius) && (x <= this.minX + trackerRadius));
+      return yCond && (xCond || (x >= this.minX - trackerRadius && x <= this.minX + trackerRadius));
     } else {
-      return xCond && (yCond || (y >= this.minY - trackerRadius) && (y <= this.minY + trackerRadius));
+      return xCond && (yCond || (y >= this.minY - trackerRadius && y <= this.minY + trackerRadius));
     }
   },
 

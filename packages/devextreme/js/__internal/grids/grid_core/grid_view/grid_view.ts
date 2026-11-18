@@ -295,7 +295,7 @@ export class ResizingController extends modules.ViewController {
     this._toggleBestFitModeForView(this._footerView, VIEW_CLASSES.footerBody, isBestFit);
 
     if (this._needStretch()) {
-      ($rowsTable.get(0) as HTMLElement).style.width = isBestFit ? 'auto' : '';
+      $rowsTable.get<HTMLElement>(0).style.width = isBestFit ? 'auto' : '';
     }
   }
 
@@ -304,7 +304,7 @@ export class ResizingController extends modules.ViewController {
     const $contentElement: dxElementWrapper = this._rowsView._findContentElement();
 
     if (value === true) {
-      this._prevContentMinHeight = ($contentElement.get(0) as HTMLElement).style.minHeight;
+      this._prevContentMinHeight = $contentElement.get<HTMLElement>(0).style.minHeight;
     }
 
     if (isDefined(this._prevContentMinHeight)) {
@@ -801,7 +801,7 @@ export class ResizingController extends modules.ViewController {
     const groupElement = this._getGroupElement();
 
     const rootElementHeight = getHeight($rootElement.get(0));
-    const height = this.option('height') ?? ($rootElement.get(0) as HTMLElement).style.height;
+    const height = this.option('height') ?? $rootElement.get<HTMLElement>(0).style.height;
     const isHeightSpecified = !!height && height !== 'auto';
 
     // @ts-expect-error css value can be undefined

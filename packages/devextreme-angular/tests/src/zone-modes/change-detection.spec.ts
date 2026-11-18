@@ -343,7 +343,7 @@ describe(`Change detection [${mode}]: events registered outside the Angular zone
         }
       };
       eventsEngine.on(svg, 'dxpointermove', onMove);
-      const zoneRun = spyOn(NgZone.prototype, 'run').and.callThrough();
+      const zoneRun = vi.spyOn(NgZone.prototype, 'run');
 
       try {
         hoverChartPoints(fixture);
@@ -357,7 +357,7 @@ describe(`Change detection [${mode}]: events registered outside the Angular zone
 
       expect(host.hoverChanges).toBeGreaterThan(0);
       expect(movesInAngularZone).toBe(0);
-      expect(zoneRun.calls.count()).toBeLessThanOrEqual((host.hoverChanges + 1) * zoneEntriesPerHoverChange);
+      expect(zoneRun.mock.calls.length).toBeLessThanOrEqual((host.hoverChanges + 1) * zoneEntriesPerHoverChange);
     });
   }
 
@@ -521,7 +521,7 @@ if (isZoneless) {
       await fixture.whenStable();
       const host = fixture.componentInstance;
       const scrollable = host.grid.instance.getScrollable();
-      const scrolled = jasmine.createSpy('scrolled');
+      const scrolled = vi.fn();
       scrollable.on('scroll', scrolled);
       const rendersBefore = host.renders;
 

@@ -395,7 +395,7 @@ class DropDownList<
 
     return items.flatMap((item) => {
       const groupedItem = item as GroupItem<Item>;
-      return (grouped && groupedItem.items) ? groupedItem.items as Item[] : [item as Item];
+      return (grouped && groupedItem.items) ? groupedItem.items : [item];
     });
   }
 
@@ -1116,7 +1116,6 @@ class DropDownList<
   }
 }
 
-// @ts-expect-error refactor DataExpressionMixin
 DropDownList.include(DataExpressionMixin);
 
 registerComponent('dxDropDownList', DropDownList);

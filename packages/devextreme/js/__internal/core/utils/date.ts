@@ -14,7 +14,7 @@ type DateView = 'month' | 'year' | 'decade' | 'century';
 
 type DateUnitSource = TimeIntervalConfig | Partial<Record<TimeInterval, unknown>>;
 
-interface DatesDifferences {
+export interface DatesDifferences {
   year: boolean;
   month: boolean;
   day: boolean;
@@ -785,8 +785,7 @@ function getWeekNumber(date: Date, firstDayOfWeek: number, rule: WeekNumberRule)
 }
 
 const normalizeDateByWeek = function normalizeDateByWeek(date: Date, currentDate: Date): Date {
-  // eslint-disable-next-line @typescript-eslint/no-use-before-define -- dateUtils is set below
-  const differenceInDays = dateUtils.getDatesInterval(date, currentDate, 'day');
+  const differenceInDays = getDatesInterval(date, currentDate, 'day');
   let resultDate = new Date(date);
 
   if (differenceInDays >= 6) {

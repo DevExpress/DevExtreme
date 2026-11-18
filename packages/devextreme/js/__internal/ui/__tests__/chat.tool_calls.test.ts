@@ -38,7 +38,7 @@ const createMessage = (message: Partial<Message> & Record<string, unknown> = {})
 
   return {
     id: nextId, author: ASSISTANT, text: 'Answer', timestamp: new Date(), ...message,
-  } as Message;
+  };
 };
 
 const chats: Chat[] = [];
@@ -46,11 +46,11 @@ const chats: Chat[] = [];
 const createChat = (options: Partial<Properties> = {}): ChatModel => {
   const $element = $('<div>').appendTo(document.body);
 
-  const instance = new Chat($element.get(0) as HTMLElement, { user: USER, ...options });
+  const instance = new Chat($element.get<HTMLElement>(0), { user: USER, ...options });
 
   chats.push(instance);
 
-  return new ChatModel($element.get(0) as HTMLElement);
+  return new ChatModel($element.get<HTMLElement>(0));
 };
 
 type StoreChanges = Parameters<ArrayStore['push']>[0];
@@ -331,8 +331,8 @@ describe('Chat tool calls', () => {
   });
 
   describe('call body fields', () => {
-    const openCall = (toolCall: ToolCall): ToolCallModel => {
-      const chat = createChat({ items: [createMessage({ toolCalls: [toolCall] })] });
+    const openCall = (toolCall: ToolCall, options: Partial<Properties> = {}): ToolCallModel => {
+      const chat = createChat({ items: [createMessage({ toolCalls: [toolCall] })], ...options });
       const [call] = getBubble(chat).getToolCalls();
 
       call.toggle();
@@ -462,6 +462,41 @@ describe('Chat tool calls', () => {
       const call = openCall({ name: 'ping', arguments: {}, result: '' });
 
       expect(call.getFieldLabels()).toEqual([]);
+    });
+
+    describe('text direction in a right-to-left chat', () => {
+      const RTL = { rtlEnabled: true };
+
+      it('should show the JSON of the arguments and of an object result left to right', () => {
+        const call = openCall({
+          name: 'getWeather', arguments: { city: 'London' }, result: { temperature: 15 },
+        }, RTL);
+
+        expect(call.getFieldDirections()).toEqual(['ltr', 'ltr']);
+      });
+
+      it('should show a number result left to right', () => {
+        expect(openCall({ name: 'getValue', result: 42 as unknown as ToolCall['result'] }, RTL)
+          .getFieldDirections()).toEqual(['ltr']);
+      });
+
+      it('should take the direction of a string result from its text', () => {
+        expect(openCall(WEATHER, RTL).getFieldDirections()).toEqual(['ltr', 'auto']);
+      });
+
+      it('should show a JSON object passed as a string left to right', () => {
+        expect(openCall({ name: 'getWeather', result: '{"المدينة": "لندن"}' }, RTL)
+          .getFieldDirections()).toEqual(['ltr']);
+      });
+
+      it('should show a JSON array passed as a string left to right', () => {
+        expect(openCall({ name: 'getCities', result: '["لندن", "باريس"]' }, RTL)
+          .getFieldDirections()).toEqual(['ltr']);
+      });
+    });
+
+    it('should take the direction of a string result from its text in a left-to-right chat', () => {
+      expect(openCall(WEATHER).getFieldDirections()).toEqual(['ltr', 'auto']);
     });
 
     it('should show nested arguments as indented JSON', () => {

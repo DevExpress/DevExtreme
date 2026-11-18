@@ -72,6 +72,7 @@ describe('splitByGroupIndex', () => {
   describe('hierarchical resource', () => {
     // Leaf group order: 11 → 0, 12 → 1, 21 → 2, solo → 3
     const asItem = (roomId: unknown): MinimalAppointmentEntity => ({
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
       itemData: { roomId } as unknown as MinimalAppointmentEntity['itemData'],
     } as MinimalAppointmentEntity);
 

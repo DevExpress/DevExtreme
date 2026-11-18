@@ -1,7 +1,5 @@
 /* eslint-disable func-names */
-/* eslint-disable @stylistic/max-len */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
 
 import devices from '@ts/core/devices';
 import { browser } from '@ts/core/utils/browser';
@@ -26,7 +24,14 @@ export const consts = {
   pointerSize: POINTER_SIZE,
 };
 
-export const formatValue = function (value, formatOptions, tickIntervalsInfo?, valueType?, type?, logarithmBase?) {
+export const formatValue = function (
+  value,
+  formatOptions,
+  tickIntervalsInfo?,
+  valueType?,
+  type?,
+  logarithmBase?,
+): string {
   const formatObject = {
     value,
     valueText: _format(value, {
@@ -38,7 +43,12 @@ export const formatValue = function (value, formatOptions, tickIntervalsInfo?, v
       logarithmBase,
     }),
   };
-  return String(isFunction(formatOptions.customizeText) ? formatOptions.customizeText.call(formatObject, formatObject) : formatObject.valueText);
+  return String(
+    isFunction(formatOptions.customizeText)
+      ? formatOptions.customizeText.call(formatObject, formatObject)
+      : formatObject.valueText,
+  );
 };
 
-export const isFirefoxOnAndroid = () => browser.mozilla && devices.real().android;
+export const isFirefoxOnAndroid = (): boolean | undefined => browser.mozilla
+  && devices.real().android;

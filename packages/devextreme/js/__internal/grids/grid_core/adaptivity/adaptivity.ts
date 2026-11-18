@@ -770,7 +770,6 @@ export class AdaptiveColumnsViewController extends modules.ViewController {
       items: this._getFormItemsByHiddenColumns(this._hiddenColumns),
       formID: `dx-${new Guid()}`,
     };
-    // @ts-expect-error isMaterial() without a theme checks the current one
     const defaultFormOptions = isMaterial() ? { colCount: 2 } : {};
 
     this.executeAction('onAdaptiveDetailRowPreparing', { formOptions: userFormOptions });

@@ -256,10 +256,13 @@ function applyFormat(
   module.quill.format(...formatArgs);
 }
 
-function getTargetTableNode(module: FormatHandlersModule, partName: 'cell' | 'table'): HTMLElement {
-  const currentSelectionParts = module.quill.getModule('table').getTable();
-  // @ts-expect-error getTable returns null outside a table; the callers run inside one
-  return partName === 'table' ? currentSelectionParts[0].domNode : currentSelectionParts[2].domNode;
+function getTargetTableNode(
+  module: FormatHandlersModule,
+  partName: 'cell' | 'table',
+): HTMLElement | undefined {
+  const [tableBlot, , cellBlot] = module.quill.getModule('table').getTable();
+
+  return (partName === 'table' ? tableBlot : cellBlot)?.domNode;
 }
 
 function getLinkRange(module: FormatHandlersModule, range: RangeStatic): RangeStatic | null {
@@ -1124,11 +1127,19 @@ function prepareShowFormProperties(
   type: 'cell' | 'table',
 ): FormatHandlers['cellProperties'] {
   return ($element?: dxElementWrapper | FormatHandlerArgs): void => {
-    // @ts-expect-error a toolbar click passes its event here, which has no length (see Findings)
-    const $target: dxElementWrapper = $element?.length
+    const $target = $element && 'length' in $element && $element.length
       ? $element
       : $(getTargetTableNode(module, type));
-    const [tableBlot, rowBlot] = module.quill.getModule('table').getTable() ?? [];
+
+    if (!$target.length) {
+      return;
+    }
+
+    const [tableBlot, rowBlot] = module.quill.getModule('table').getTable();
+
+    if (type === 'cell' && !rowBlot) {
+      return;
+    }
 
     const formats = module.quill.getFormat(module.editorInstance.getSelection(true));
 

@@ -43,7 +43,7 @@ export const triggerCustomContextMenu = ClientFunction((selector) => {
   Object.defineProperty(event, 'pageX', { value: xPosition });
   Object.defineProperty(event, 'pageY', { value: yPosition });
 
-  element.dispatchEvent(event as any);
+  element.dispatchEvent(event);
 });
 
 test('Context menu should be shown at center of the header item if shown with the keyboard', async (t) => {

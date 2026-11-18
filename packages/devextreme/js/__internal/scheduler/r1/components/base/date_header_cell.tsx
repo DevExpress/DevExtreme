@@ -79,7 +79,7 @@ export class DateHeaderCell extends BaseInfernoComponent<DateHeaderCellProps> {
                   groupIndex,
                 },
                 index,
-              } as DateTimeCellTemplateProps}
+              }}
             />}
           {!isTimeCellTemplate
             && <PublicTemplate
@@ -92,7 +92,7 @@ export class DateHeaderCell extends BaseInfernoComponent<DateHeaderCellProps> {
                   groupIndex,
                 },
                 index,
-              } as DateTimeCellTemplateProps}
+              }}
             />}
         </>
     )

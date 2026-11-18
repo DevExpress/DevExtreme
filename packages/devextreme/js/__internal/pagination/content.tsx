@@ -48,15 +48,13 @@ export class PaginationContent extends InfernoComponent<PaginationContentProps> 
 
   public refs: any = null;
 
-  // eslint-disable-next-line @stylistic/max-len
-  public widgetElementRef?: RefObject<HTMLDivElement> = infernoCreateRef() as RefObject<HTMLDivElement>;
+  public widgetElementRef?: RefObject<HTMLDivElement> = infernoCreateRef();
 
-  // eslint-disable-next-line @stylistic/max-len
-  public widgetRootElementRef?: RefObject<HTMLDivElement> = infernoCreateRef() as RefObject<HTMLDivElement>;
+  public widgetRootElementRef?: RefObject<HTMLDivElement> = infernoCreateRef();
 
-  public pagesRef?: RefObject<HTMLDivElement> = infernoCreateRef() as RefObject<HTMLDivElement>;
+  public pagesRef?: RefObject<HTMLDivElement> = infernoCreateRef();
 
-  public infoTextRef?: RefObject<HTMLDivElement> = infernoCreateRef() as RefObject<HTMLDivElement>;
+  public infoTextRef?: RefObject<HTMLDivElement> = infernoCreateRef();
 
   public __getterCache: any = {
     keyboardAction: undefined,

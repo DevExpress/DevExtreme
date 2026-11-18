@@ -118,7 +118,7 @@ const hasDirtyTrackedValue = (componentClass: EditorClass): boolean => {
 
 const createEditor = (name: string, options: Record<string, unknown>): EditorInstance => {
   const $container = $('<div>').appendTo(document.body);
-  const element = $('<div>').appendTo($container).get(0) as HTMLElement;
+  const element = $('<div>').appendTo($container).get<HTMLElement>(0);
   const instance = new registeredComponents[name](element, options);
 
   editors.push(instance);

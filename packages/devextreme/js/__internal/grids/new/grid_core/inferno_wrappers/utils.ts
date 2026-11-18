@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import type { dxElementWrapper } from '@js/core/renderer';
 import type { RefObject } from 'inferno';
 
@@ -12,13 +10,13 @@ import type { RefObject } from 'inferno';
  */
 export function wrapRef(ref: RefObject<HTMLElement>): dxElementWrapper {
   return {
-    // @ts-expect-error
     dxRenderer: true,
-    get 0() {
-      return ref.current!;
+    get 0(): HTMLElement | null {
+      return ref.current;
     },
-    get() {
-      return ref.current!;
+    // @ts-expect-error a mock can't implement the generic get<T>(); it returns the ref element
+    get(): HTMLElement | null {
+      return ref.current;
     },
     length: 1,
   };

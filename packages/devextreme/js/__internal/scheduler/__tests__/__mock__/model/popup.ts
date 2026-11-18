@@ -117,12 +117,12 @@ export class PopupModel {
       throw new Error(`Input element of editor with name "${editorName}" not found`);
     }
 
-    return $input.get(0) as HTMLInputElement;
+    return $input.get<HTMLInputElement>(0);
   };
 
   getInputValue = (editorName: string): string => {
     const input = this.getInput(editorName);
-    return input.value as unknown as string;
+    return input.value;
   };
 
   setInputValue = (editorName: string, value: string | number | Date | boolean | null): void => {
