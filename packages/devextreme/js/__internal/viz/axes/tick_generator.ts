@@ -440,7 +440,9 @@ function getTickIntervalByCustomTicks(getValue, postProcess) {
     : undefined);
 }
 
-function addInterval(value, interval, isNegative): Date {
+function addInterval(value: Date, interval, isNegative): Date;
+function addInterval(value: number, interval, isNegative): number;
+function addInterval(value, interval, isNegative): Date | number {
   return dateUtils.addInterval(value, interval, isNegative);
 }
 
