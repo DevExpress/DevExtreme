@@ -531,7 +531,6 @@ class PivotGridDataSource {
     let result: any = [];
     const fieldsDictionary: any = {};
     const removedFields = {};
-    const mergedGroups = [];
     const dataTypes = getFieldsDataType(fields);
 
     if (storeFields) {
@@ -550,7 +549,7 @@ class PivotGridDataSource {
           }
           mergedField = extend({}, storeField, field, { _initProperties: null });
         } else {
-          fieldsDictionary[fieldKey] = mergedField = field;
+          mergedField = field;
         }
         if (!mergedField.dataType && dataTypes[field.dataField]) {
           mergedField.dataType = dataTypes[field.dataField];
@@ -570,8 +569,6 @@ class PivotGridDataSource {
     } else {
       result = fields;
     }
-
-    result.push.apply(result, mergedGroups);
 
     this.assignGroupIndexes(result);
 
