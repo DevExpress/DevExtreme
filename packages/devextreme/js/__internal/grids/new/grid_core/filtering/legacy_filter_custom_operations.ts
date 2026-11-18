@@ -37,7 +37,10 @@ export interface LegacyCustomOperationConfig {
 
 interface CustomizeTextFieldInfo {
   value?: FieldValue;
-  field: Partial<Pick<Column, 'dataField' | 'calculateDisplayValue'>>;
+  field: {
+    dataField: Column['name'];
+    calculateDisplayValue?: Column['calculateDisplayValue'];
+  };
 }
 
 interface HeaderFilterOperation {
@@ -140,7 +143,6 @@ const baseOperation = (config: LegacyCustomOperationConfig): HeaderFilterOperati
     const textOptions = options ?? {};
     const headerFilterController = getHeaderFilterController();
     const { value } = fieldInfo;
-    // @ts-expect-error TODO: the filter builder passes a field with a dataField
     const column = config.columnOption(fieldInfo.field.dataField);
     const headerFilter = column?.headerFilter;
     // TODO: lookup is not supported in CardView yet
@@ -206,7 +208,7 @@ const baseOperation = (config: LegacyCustomOperationConfig): HeaderFilterOperati
       const originalColumn = config.columnOption(conditionInfo.field.dataField);
       const column = extend(true, {}, originalColumn) as Column;
 
-      renderValueText(div, conditionInfo.text?.split('|'));
+      renderValueText(div, conditionInfo.text && conditionInfo.text.split('|'));
 
       const setValue = function setValue(value: ConditionValue): void {
         conditionInfo.setValue(value);
