@@ -9,7 +9,7 @@
   },
   "base": {
     "name": "--dx-accent-color-base",
-    "purpose": "the accent normalized once: lightness clamped to 0.45-0.6 and pulled towards 0.525 as chroma falls under 0.02, so white, black and grays get exactly 0.525; alpha forced to 1. Every step is built from it, and step 100 is this normalized accent rather than the colour the application wrote"
+    "purpose": "the accent normalized once: lightness clamped to 0.45-0.6 and pulled towards 0.525 as chroma falls under 0.02, so white, black and grays come out at about 0.525; alpha forced to 1. Every step is built from it, and step 100 is this normalized accent rather than the colour the application wrote"
   },
   "steps": {
     "prefix": "--dx-accent-color-",
