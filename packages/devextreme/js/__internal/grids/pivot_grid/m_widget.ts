@@ -42,7 +42,7 @@ import { FAKE_TABLE_CLASS, HORIZONTAL_HEADERS_AREA_CLASS, VERTICAL_HEADERS_AREA_
 import { RovingTabIndex } from './keyboard_navigation/roving_tab_index';
 import type { CellNavigationDirection } from './keyboard_navigation/table_cell_navigation';
 import { getAdjacentCell } from './keyboard_navigation/table_cell_navigation';
-import { findField, mergeArraysByMaxValue, setFieldProperty } from './m_widget_utils';
+import { findField, mergeArraysByMaxValue, setFieldProperty } from './widget_utils';
 
 type FieldChooserOptions = NonNullable<PivotGridProperties['fieldChooser']>;
 type FieldPanelOptions = NonNullable<PivotGridProperties['fieldPanel']>;

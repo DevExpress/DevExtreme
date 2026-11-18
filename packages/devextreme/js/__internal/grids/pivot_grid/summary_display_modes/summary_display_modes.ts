@@ -1,7 +1,7 @@
 import { isDefined, isFunction, isObject } from '@js/core/utils/type';
 import type { PivotGridSummaryDisplayMode } from '@js/ui/pivot_grid/data_source';
-import pivotGridUtils, { findField, foreachTree } from '@ts/grids/pivot_grid/m_widget_utils';
 import type { PivotGridDescriptions, PivotGridField } from '@ts/grids/pivot_grid/types';
+import pivotGridUtils, { findField, foreachTree } from '@ts/grids/pivot_grid/widget_utils';
 
 import type {
   SummaryCellData,

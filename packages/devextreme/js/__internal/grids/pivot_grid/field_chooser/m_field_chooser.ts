@@ -12,7 +12,7 @@ import ContextMenu from '@js/ui/context_menu';
 import TreeView from '@js/ui/tree_view';
 import { getData, setData } from '@ts/core/element_data';
 
-import { foreachDataLevel, getCompareFunction } from '../m_widget_utils';
+import { foreachDataLevel, getCompareFunction } from '../widget_utils';
 import {
   ATTRIBUTES, CLASSES, FIELD_DATA_KEY, ICONS,
 } from './const';
