@@ -12,7 +12,9 @@ import Store from '@js/data/abstract_store';
 import commonUtils from '@ts/core/utils/common';
 import inflector from '@ts/core/utils/inflector';
 
-import { LocalStore } from '../local_store/m_local_store';
+import { LocalStore } from '../local_store/local_store';
+import { RemoteStore } from '../remote_store/remote_store';
+import summaryUtils from '../summary_display_modes/summary_display_modes';
 import {
   createPath,
   findField,
@@ -21,9 +23,7 @@ import {
   formatValue,
   getFieldsDataType,
   setFieldProperty,
-} from '../m_widget_utils';
-import { RemoteStore } from '../remote_store/m_remote_store';
-import summaryUtils from '../summary_display_modes/m_summary_display_modes';
+} from '../widget_utils';
 import xmlaStore from '../xmla_store/m_xmla_store';
 import { sort } from './m_data_source_utils';
 

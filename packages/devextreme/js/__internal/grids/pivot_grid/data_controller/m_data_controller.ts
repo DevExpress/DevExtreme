@@ -12,7 +12,7 @@ import VirtualScrollControllerModule from '@ts/grids/grid_core/virtual_scrolling
 import { PivotGridDataSource } from '../data_source/m_data_source';
 import {
   createPath, findField, foreachTree, foreachTreeAsync, formatValue,
-} from '../m_widget_utils';
+} from '../widget_utils';
 import type { PivotGridColumnInfo } from './types';
 
 const math = Math;
