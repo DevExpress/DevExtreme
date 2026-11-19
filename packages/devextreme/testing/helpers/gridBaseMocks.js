@@ -49,6 +49,12 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
                     loadOptions: function() {
                         return {};
                     },
+                    isLoading: function() {
+                        return false;
+                    },
+                    isCustomLoading: function() {
+                        return false;
+                    },
                     store: function() {
                         return new ArrayStore(options.items);
                     },
@@ -163,6 +169,10 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
             },
 
             setViewportPosition: function() {},
+
+            isViewportPositionPending: function() {
+                return false;
+            },
 
             getVirtualContentSize: function() { return 0; },
 

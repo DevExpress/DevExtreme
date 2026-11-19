@@ -523,6 +523,22 @@ export const rowsView = (Base: ModuleType<RowsView>) => class VirtualScrollingRo
     super.dispose();
   }
 
+  public isViewportRowsRenderPending(): boolean {
+    const isVirtualRender = isVirtualPaging(this) || gridCoreUtils.isVirtualRowRendering(this);
+
+    if (!isVirtualRender) {
+      return false;
+    }
+
+    const dataSource = this._dataController.dataSource();
+    const isViewportDataLoading = !!dataSource?.isLoading() && !dataSource.isCustomLoading();
+
+    return isViewportDataLoading
+      // @ts-expect-error isViewportPositionPending() comes from the virtual scrolling data controller extender
+      || this._dataController.isViewportPositionPending()
+      || this.isWaitingForRowsLayout();
+  }
+
   private _scrollToCurrentPageOnResize() {
     if (this._dataController.pageIndex() > 0) {
       const resizeHandler = () => {

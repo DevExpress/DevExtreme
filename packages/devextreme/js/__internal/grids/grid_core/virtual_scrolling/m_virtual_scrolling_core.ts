@@ -155,6 +155,11 @@ class VirtualScrollController {
     this._dataLoader = new VirtualDataLoader(this, this._dataOptions);
   }
 
+  private clearScrollTimeout(): void {
+    clearTimeout(this._scrollTimeoutID);
+    this._scrollTimeoutID = undefined;
+  }
+
   private getItemSizes() {
     return this._itemSizes;
   }
@@ -216,9 +221,11 @@ class VirtualScrollController {
     const result = new Deferred();
     const scrollingTimeout = this.getScrollingTimeout();
 
-    clearTimeout(this._scrollTimeoutID);
+    this.clearScrollTimeout();
+
     if (scrollingTimeout > 0) {
       this._scrollTimeoutID = setTimeout(() => {
+        this._scrollTimeoutID = undefined;
         this._setViewportPositionCore(position);
         result.resolve();
       }, scrollingTimeout);
@@ -227,6 +234,10 @@ class VirtualScrollController {
       result.resolve();
     }
     return result.promise();
+  }
+
+  public isViewportPositionPending(): boolean {
+    return isDefined(this._scrollTimeoutID);
   }
 
   private getViewportPosition() {
@@ -396,7 +407,7 @@ class VirtualScrollController {
   }
 
   public dispose() {
-    clearTimeout(this._scrollTimeoutID);
+    this.clearScrollTimeout();
     this._windowScroll && this._windowScroll.dispose();
     this._windowScroll = null;
   }

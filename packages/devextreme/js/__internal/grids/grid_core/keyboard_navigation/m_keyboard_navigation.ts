@@ -153,6 +153,8 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
 
   private focusRestoreScrollTop = 0;
 
+  private isPageNavigationPending = false;
+
   // #region Initialization
   public init() {
     this._dataController = this.getController('data');
@@ -317,6 +319,9 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
 
   protected renderCompleted(e: any): void {
     const $rowsView = this._rowsView.element();
+
+    this.completePageNavigation();
+
     const isFullUpdate = !e || e.changeType === 'refresh';
     const isFocusedViewCorrect = this._focusedView && this._focusedView.name === this._rowsView.name;
     let needUpdateFocus = false;
@@ -333,7 +338,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     this.initKeyDownHandler();
     this._setRowsViewAttributes();
 
-    if (isFocusedViewCorrect && isFocusedElementCorrect) {
+    if (isFocusedViewCorrect && isFocusedElementCorrect && !this.isPageNavigationPending) {
       needUpdateFocus = this._isNeedFocus
         ? !isAppend
         : this._isHiddenFocus && isFullUpdate && !e?.virtualColumnsScrolling;
@@ -716,7 +721,10 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
   }
 
   private isWaitingForRowsRendering(eventArgs: KeyboardKeyDownEvent): boolean {
-    return this._rowsView.isWaitingForRowsLayout()
+    const isWaitingForRows = this._rowsView.isWaitingForRowsLayout()
+      || (this.isPageNavigationPending && this._rowsView.isViewportRowsRenderPending());
+
+    return isWaitingForRows
       && !this._editingController?.isEditing()
       && !this.isInsideMasterDetail($(eventArgs.originalEvent.target));
   }
@@ -2000,37 +2008,53 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
   }
 
   private restoreFocusableElement(rowIndex, $event) {
-    const that = this;
-    let args;
-    let $rowElement;
-    const isUpArrow = isDefined(rowIndex);
     const $rowsViewElement = this._rowsView.element();
-    const { columnIndex } = that._focusedCellPosition;
-    const rowIndexOffset = that._dataController.getRowIndexOffset();
 
-    rowIndex = isUpArrow
-      ? rowIndex
-      : this._rowsView.getTopVisibleItemIndex() + rowIndexOffset;
-
-    if (!isUpArrow) {
-      that._editorFactory.loseFocus();
-      that._applyTabIndexToElement($rowsViewElement);
+    if (!isDefined(rowIndex)) {
+      this._editorFactory.loseFocus();
+      this._applyTabIndexToElement($rowsViewElement);
       // @ts-expect-error
       eventsEngine.trigger($rowsViewElement, 'focus');
-    } else {
-      $rowElement = this._rowsView.getRow(rowIndex - rowIndexOffset);
-      args = that._fireFocusedRowChanging($event, $rowElement);
 
-      if (!args.cancel && args.rowIndexChanged) {
-        rowIndex = args.newRowIndex;
-      }
+      this.isPageNavigationPending = true;
+      this.completePageNavigation();
+      return;
     }
 
-    if (!isUpArrow || !args.cancel) {
-      that.setFocusedCellPosition(rowIndex, columnIndex);
+    const { columnIndex } = this._focusedCellPosition;
+    const rowIndexOffset = this._dataController.getRowIndexOffset();
+    // @ts-expect-error getRow() is typed as possibly undefined
+    const $rowElement: dxElementWrapper = this._rowsView.getRow(rowIndex - rowIndexOffset);
+    const args = this._fireFocusedRowChanging($event, $rowElement);
+
+    if (!args.cancel) {
+      this.setFocusedCellPosition(args.rowIndexChanged ? args.newRowIndex : rowIndex, columnIndex);
     }
 
-    isUpArrow && that._updateFocus(false);
+    this._updateFocus(false);
+  }
+
+  public setFocusedRowIndex(rowIndex: number | undefined): void {
+    if (rowIndex !== this._focusedCellPosition?.rowIndex) {
+      this.isPageNavigationPending = false;
+    }
+    super.setFocusedRowIndex(rowIndex);
+  }
+
+  private getTopVisibleRowIndex(): number {
+    return this._rowsView.getTopVisibleItemIndex() + this._dataController.getRowIndexOffset();
+  }
+
+  private completePageNavigation(): void {
+    if (!this.isPageNavigationPending || this._rowsView.isViewportRowsRenderPending()) {
+      return;
+    }
+
+    this.isPageNavigationPending = false;
+    this.setFocusedCellPosition(
+      this.getTopVisibleRowIndex(),
+      this._focusedCellPosition.columnIndex,
+    );
   }
 
   // #endregion Focusing

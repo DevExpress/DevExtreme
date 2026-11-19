@@ -593,6 +593,10 @@ export const virtualScrollingDataControllerExtender = (
     }
   }
 
+  public isViewportPositionPending(): boolean {
+    return !!this._rowsScrollController?.isViewportPositionPending();
+  }
+
   private setContentItemSizes(sizes) {
     const rowsScrollController = this._rowsScrollController;
     const dataSource = this._dataSource;
