@@ -5,7 +5,7 @@ import { clone } from '@ts/core/utils/object';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 import { plugins as centerTemplatePlugins } from '@ts/viz/core/center_template';
 import { setupWidgetPrototype } from '@ts/viz/core/helpers';
-import type { Bounds } from '@ts/viz/core/types';
+import type { Bounds, Size } from '@ts/viz/core/types';
 import { getCosAndSin, normalizeAngle } from '@ts/viz/core/utils';
 import { BaseGauge } from '@ts/viz/gauges/base_gauge';
 import * as circularIndicators from '@ts/viz/gauges/circular_indicators';
@@ -260,8 +260,7 @@ class CircularGauge extends dxGauge {
     return this._area.radius;
   }
 
-  _getTicksOrientation(scaleOptions: ThemeValue): string {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+  _getTicksOrientation(scaleOptions: { orientation: string }): string {
     return scaleOptions.orientation;
   }
 
@@ -377,7 +376,7 @@ class CircularGauge extends dxGauge {
     return (-this._translator.getCodomainRange() * r * PI) / 180;
   }
 
-  _getDefaultSize(): { width: number; height: number } {
+  _getDefaultSize(): Size {
     return { width: 300, height: 300 };
   }
 }

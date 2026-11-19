@@ -1,7 +1,6 @@
 /* eslint-disable max-depth */
 /* eslint-disable @typescript-eslint/no-this-alias */
 /* eslint-disable @typescript-eslint/init-declarations */
-/* eslint-disable no-plusplus */
 /* eslint-disable func-names */
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable consistent-return */
@@ -280,11 +279,12 @@ export let LayoutControl = class LayoutControl {
   }
 
   suspend(): void {
-    ++this._suspended;
+    this._suspended += 1;
   }
 
   resume(): void {
-    if (--this._suspended === 0) {
+    this._suspended -= 1;
+    if (this._suspended === 0) {
       this._update();
     }
   }

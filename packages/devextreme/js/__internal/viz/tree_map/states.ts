@@ -1,6 +1,5 @@
 /* eslint-disable no-bitwise */
 /* eslint-disable @typescript-eslint/init-declarations */
-/* eslint-disable no-plusplus */
 /* eslint-disable func-names */
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
@@ -59,7 +58,7 @@ function buildAdditionalStates(states, base, source, list): void {
   let i;
   const ii = list.length;
 
-  for (i = 0; i < ii; ++i) {
+  for (i = 0; i < ii; i += 1) {
     states[list[i]] = _extend({}, base, source[list[i]]);
   }
 }

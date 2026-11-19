@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-this-alias */
 /* eslint-disable @typescript-eslint/init-declarations */
-/* eslint-disable no-plusplus */
 /* eslint-disable func-names */
 /* eslint-disable import/no-mutable-exports */
 /* eslint-disable @typescript-eslint/naming-convention */
@@ -23,7 +22,9 @@ proto._eventsMap.onNodeClick = { name: 'nodeClick' };
 proto._eventsMap.onLinkClick = { name: 'linkClick' };
 
 const getDataKey = function (): string {
-  return DATA_KEY_BASE + dataKeyModifier++;
+  const dataKey = DATA_KEY_BASE + dataKeyModifier;
+  dataKeyModifier += 1;
+  return dataKey;
 };
 
 export const plugin = {

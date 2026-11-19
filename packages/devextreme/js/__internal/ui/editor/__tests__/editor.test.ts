@@ -66,7 +66,6 @@ const disposables: { dispose: () => void }[] = [];
 
 const createEditor = (options: Partial<EditorProperties> = {}): Editor => {
   const element = $('<div>').appendTo(document.body).get<HTMLElement>(0);
-  // @ts-expect-error DOMComponent constructor is not typed for direct instantiation
   const instance: Editor = new Editor(element, options);
 
   disposables.push(instance);
@@ -89,7 +88,6 @@ describe('Editor initialization', () => {
     } as Partial<EditorProperties>);
 
     expect(() => {
-      // @ts-expect-error DOMComponent constructor is not typed for direct instantiation
       const validator: Validator = new Validator(instance.$element().get(0), {});
 
       disposables.push(validator);
