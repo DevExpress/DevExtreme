@@ -4,17 +4,50 @@
 /* eslint-disable @typescript-eslint/no-shadow */
 /* eslint-disable consistent-return */
 /* eslint-disable no-param-reassign */
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable no-else-return */
 
 import { noop } from '@ts/core/utils/common';
 import { extend } from '@ts/core/utils/extend';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
-import type { BBox, Coords } from '@ts/viz/core/types';
+import type { Coords } from '@ts/viz/core/types';
 import { normalizeEnum } from '@ts/viz/core/utils';
+import type Funnel from '@ts/viz/funnel/funnel';
+import type { LabelRect, LabelStrategy } from '@ts/viz/series/points/label';
 import { Label } from '@ts/viz/series/points/label';
+
+type FunnelLabel = InstanceType<typeof Label>;
+
+type LabelsHost = Funnel & {
+  _labelsGroup: ThemeValue;
+  _labels: FunnelLabel[];
+  _labelRect: number[];
+  _resolveLabelOverlapping: () => void;
+  _defaultLabelTextAlignment: () => 'left' | 'right';
+  _correctLabelWidth: (label: FunnelLabel, item: number[], options: ThemeValue) => void;
+  _createLabels: () => void;
+};
+
+type LabelPositionGetter = (
+  coords: number[],
+  bBox: LabelRect,
+  options: ThemeValue,
+  inverted: boolean,
+) => Coords;
+
+interface FunnelLabelOptions {
+  format: ThemeValue;
+  textAlignment: string;
+  customizeText: ThemeValue;
+  attributes: { font: ThemeValue };
+  visible: boolean;
+  showForZeroValues: boolean;
+  horizontalOffset: number;
+  verticalOffset: number;
+  background: ThemeValue;
+  connector: ThemeValue;
+  wordWrap: string;
+  textOverflow: string;
+}
 
 const OUTSIDE_POSITION = 'outside';
 const INSIDE_POSITION = 'inside';
@@ -23,7 +56,7 @@ const COLUMNS_LABEL_INDENT = 20;
 const CONNECTOR_INDENT = 4;
 const PREVENT_EMPTY_PIXEL_OFFSET = 1;
 
-function getLabelIndent(pos): 0 | 5 | 20 {
+function getLabelIndent(pos: string): 0 | 5 | 20 {
   pos = normalizeEnum(pos);
   if (pos === OUTSIDE_POSITION) {
     return OUTSIDE_LABEL_INDENT;
@@ -33,30 +66,40 @@ function getLabelIndent(pos): 0 | 5 | 20 {
   return COLUMNS_LABEL_INDENT;
 }
 
-function isOutsidePosition(pos): boolean {
+function isOutsidePosition(pos: string): boolean {
   pos = normalizeEnum(pos);
   return pos === OUTSIDE_POSITION || pos !== INSIDE_POSITION;
 }
 
-function correctYForInverted(y, bBox, inverted) {
+function correctYForInverted(y: number, bBox: LabelRect, inverted: boolean): number {
   return inverted ? y - bBox.height : y;
 }
 
-function getOutsideRightLabelPosition(coords, bBox, options, inverted) {
+function getOutsideRightLabelPosition(
+  coords: number[],
+  bBox: LabelRect,
+  options: ThemeValue,
+  inverted: boolean,
+): Coords {
   return {
     x: coords[2] + options.horizontalOffset + OUTSIDE_LABEL_INDENT,
     y: correctYForInverted(coords[3] + options.verticalOffset, bBox, inverted),
   };
 }
 
-function getOutsideLeftLabelPosition(coords, bBox, options, inverted) {
+function getOutsideLeftLabelPosition(
+  coords: number[],
+  bBox: LabelRect,
+  options: ThemeValue,
+  inverted: boolean,
+): Coords {
   return {
     x: coords[0] - bBox.width - options.horizontalOffset - OUTSIDE_LABEL_INDENT,
     y: correctYForInverted(coords[1] + options.verticalOffset, bBox, inverted),
   };
 }
 
-function getInsideLabelPosition(coords, bBox, options): Coords {
+function getInsideLabelPosition(coords: number[], bBox: LabelRect, options: ThemeValue): Coords {
   const width = coords[2] - coords[0];
   const height = coords[7] - coords[1];
 
@@ -66,7 +109,11 @@ function getInsideLabelPosition(coords, bBox, options): Coords {
   };
 }
 
-function getColumnLabelRightPosition(labelRect, rect, textAlignment) {
+function getColumnLabelRightPosition(
+  labelRect: number[],
+  rect: number[],
+  textAlignment: string,
+): LabelPositionGetter {
   return function (coords, bBox, options, inverted) {
     return {
       x: textAlignment === 'left' ? rect[2] + options.horizontalOffset + COLUMNS_LABEL_INDENT : labelRect[2] - bBox.width,
@@ -75,7 +122,11 @@ function getColumnLabelRightPosition(labelRect, rect, textAlignment) {
   };
 }
 
-function getColumnLabelLeftPosition(labelRect, rect, textAlignment) {
+function getColumnLabelLeftPosition(
+  labelRect: number[],
+  rect: number[],
+  textAlignment: string,
+): LabelPositionGetter {
   return function (coords, bBox, options, inverted) {
     return {
       x: textAlignment === 'left' ? labelRect[0] : rect[0] - bBox.width - options.horizontalOffset - COLUMNS_LABEL_INDENT,
@@ -84,12 +135,12 @@ function getColumnLabelLeftPosition(labelRect, rect, textAlignment) {
   };
 }
 
-function getConnectorStrategy(options, inverted) {
+function getConnectorStrategy(options: ThemeValue, inverted: boolean): LabelStrategy {
   const isLeftPos = options.horizontalAlignment === 'left';
   const connectorIndent = isLeftPos ? CONNECTOR_INDENT : -CONNECTOR_INDENT;
   const verticalCorrection = inverted ? -PREVENT_EMPTY_PIXEL_OFFSET : 0;
 
-  function getFigureCenter(figure) {
+  function getFigureCenter(figure: number[]): number[] {
     return isLeftPos
       ? [figure[0] + PREVENT_EMPTY_PIXEL_OFFSET, figure[1] + verticalCorrection]
       : [figure[2] - PREVENT_EMPTY_PIXEL_OFFSET, figure[3] + verticalCorrection];
@@ -100,7 +151,7 @@ function getConnectorStrategy(options, inverted) {
       return !isOutsidePosition(options.position);
     },
     getFigureCenter,
-    prepareLabelPoints(bBox) {
+    prepareLabelPoints(bBox: LabelRect): number[][] {
       const x = bBox.x + connectorIndent;
       const { y } = bBox;
       const x1 = x + bBox.width;
@@ -112,17 +163,21 @@ function getConnectorStrategy(options, inverted) {
 
     isHorizontal(): boolean { return true; },
 
-    findFigurePoint(figure) {
+    findFigurePoint(figure: number[]): number[] {
       return getFigureCenter(figure);
     },
 
-    adjustPoints(points) {
+    adjustPoints(points: number[]): number[] {
       return points.map(Math.round);
     },
   };
 }
 
-function getLabelOptions(labelOptions, defaultColor, defaultTextAlignment) {
+function getLabelOptions(
+  labelOptions: ThemeValue,
+  defaultColor: string,
+  defaultTextAlignment: string,
+): FunnelLabelOptions {
   const opt = labelOptions || {};
   const labelFont = extend({}, opt.font) || {};
   const labelBorder = opt.border || {};
@@ -157,7 +212,7 @@ function getLabelOptions(labelOptions, defaultColor, defaultTextAlignment) {
   };
 }
 
-function correctLabelPosition(pos, bBox, rect) {
+function correctLabelPosition(pos: Coords, bBox: LabelRect, rect: number[]): Coords {
   const [left, top, right, bottom] = rect;
   if (pos.x < left) {
     pos.x = left;
@@ -174,7 +229,11 @@ function correctLabelPosition(pos, bBox, rect) {
   return pos;
 }
 
-function removeEmptySpace(labels, requiredSpace, startPoint): void {
+function removeEmptySpace(
+  labels: FunnelLabel[],
+  requiredSpace: number,
+  startPoint: number,
+): void {
   labels.reduce((requiredSpace, label, index, labels) => {
     const prevLabel = labels[index + 1];
     if (requiredSpace > 0) {
@@ -200,14 +259,14 @@ export const plugin = {
   init: noop,
   dispose: noop,
   extenders: {
-    _initCore(): void {
+    _initCore(this: LabelsHost): void {
       this._labelsGroup = this._renderer.g().attr({
         class: `${this._rootClassPrefix}-labels`,
       }).append(this._renderer.root);
       this._labels = [];
     },
 
-    _applySize(): void {
+    _applySize(this: LabelsHost): void {
       const options = this._getOption('label');
       const adaptiveLayout = this._getOption('adaptiveLayout');
       const rect = this._rect;
@@ -252,19 +311,14 @@ export const plugin = {
       }
     },
 
-    _buildNodes(): void {
+    _buildNodes(this: LabelsHost): void {
       this._createLabels();
     },
 
-    _change_TILING(): void {
+    _change_TILING(this: LabelsHost): void {
       const that = this;
       const options = that._getOption('label');
-      let getCoords: (
-        coords: Coords,
-        bBox: BBox,
-        options: ThemeValue,
-        inverted?: boolean,
-      ) => Coords = getInsideLabelPosition;
+      let getCoords: LabelPositionGetter = getInsideLabelPosition;
       const inverted = that._getOption('inverted', true);
       let textAlignment;
 
@@ -315,7 +369,7 @@ export const plugin = {
     },
   },
   members: {
-    _resolveLabelOverlapping(): void {
+    _resolveLabelOverlapping(this: LabelsHost): void {
       const that = this;
       const resolveLabelOverlapping = normalizeEnum(that._getOption('resolveLabelOverlapping', true));
       const labels = this._getOption('inverted', true) ? that._labels.slice().reverse() : that._labels;
@@ -372,11 +426,16 @@ export const plugin = {
       }
     },
 
-    _defaultLabelTextAlignment(): 'left' | 'right' {
+    _defaultLabelTextAlignment(this: LabelsHost): 'left' | 'right' {
       return this._getOption('rtlEnabled', true) ? 'right' : 'left';
     },
 
-    _correctLabelWidth(label, item, options): void {
+    _correctLabelWidth(
+      this: LabelsHost,
+      label: FunnelLabel,
+      item: number[],
+      options: ThemeValue,
+    ): void {
       const isLeftPos = options.horizontalAlignment === 'left';
       const minX = isLeftPos ? this._labelRect[0] : item[2];
       const maxX = isLeftPos ? item[0] : this._labelRect[2];
@@ -387,7 +446,7 @@ export const plugin = {
       }
     },
 
-    _createLabels(): void {
+    _createLabels(this: LabelsHost): void {
       const that = this;
       const labelOptions = that._getOption('label');
       const connectorStrategy = getConnectorStrategy(labelOptions, that._getOption('inverted', true));
@@ -425,10 +484,10 @@ export const plugin = {
       }
     },
   },
-  customize(constructor): void {
+  customize(constructor: typeof Funnel): void {
     constructor.prototype._proxyData.push(function (x, y) {
-      const that = this;
-      let data;
+      const that = this as LabelsHost;
+      let data: { id: number; type: string } | undefined;
       // @ts-expect-error
       that._labels.forEach((label, index) => {
         const rect = label.getBoundingRect();

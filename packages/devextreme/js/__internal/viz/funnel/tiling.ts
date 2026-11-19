@@ -1,18 +1,24 @@
 /* eslint-disable @typescript-eslint/init-declarations */
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
 
 import { normalizeEnum as _normalizeEnum } from '../core/utils';
 
-const algorithms = {};
-let defaultAlgorithm;
+export interface TilingItem {
+  value: number;
+}
 
-export function getAlgorithm(name) {
+export interface TilingAlgorithm {
+  getFigures: (data: number[], neckWidth: number, neckHeight: number) => number[][];
+  normalizeValues: (items: TilingItem[]) => number[];
+}
+
+const algorithms: Record<string, TilingAlgorithm> = {};
+let defaultAlgorithm: TilingAlgorithm;
+
+export function getAlgorithm(name: string): TilingAlgorithm {
   return algorithms[_normalizeEnum(name)] || defaultAlgorithm;
 }
 
-export function addAlgorithm(name, callback, setDefault?): void {
+export function addAlgorithm(name: string, callback: TilingAlgorithm, setDefault?: boolean): void {
   algorithms[name] = callback;
 
   if (setDefault) {
