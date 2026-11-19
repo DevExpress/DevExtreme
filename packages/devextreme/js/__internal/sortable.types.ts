@@ -127,5 +127,5 @@ export interface SortableProperties extends DraggableBaseProperties<SortableActi
 
   moveItemOnDrop: boolean;
 
-  onPlaceholderPrepared?: DragActionHandler<SortableActionArgs['onPlaceholderPrepared']>;
+  onPlaceholderPrepared?: DragActionHandler<PlaceholderPreparedArgs>;
 }

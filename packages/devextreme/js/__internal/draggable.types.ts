@@ -65,13 +65,7 @@ export interface DraggableBaseProperties<
   onDrop?: DragActionHandler<TActionArgs['onDrop']>;
 }
 
-export interface DraggableProperties extends DraggableBaseProperties {
-  onDragEnd?: Properties['onDragEnd'];
-
-  onDragMove?: Properties['onDragMove'];
-
-  onDragStart?: Properties['onDragStart'];
-}
+export type DraggableProperties = DraggableBaseProperties & Pick<Properties, 'onDragEnd' | 'onDragMove' | 'onDragStart'>;
 
 export interface MousePosition {
   x: number;
