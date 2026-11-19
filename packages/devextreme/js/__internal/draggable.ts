@@ -43,7 +43,7 @@ import eventsEngine from '@ts/events/core/events_engine';
 import type Scrollable from '@ts/ui/scroll_view/scrollable';
 
 import type {
-  CursorOffset, CursorOffsetCallback, DragAction, DragEvent, DragEventArgs,
+  CursorOffset, CursorOffsetCallback, DragAction, DragElementShownArgs, DragEvent, DragEventArgs,
   DraggableActionArgs, DraggableBaseProperties, DraggableProperties, DragStartArgs,
   DragTemplateArgs, ElementOffsetOptions, MousePosition, ScrollHelperOwner,
 } from './draggable.types';
@@ -319,21 +319,21 @@ class Draggable<
 
   _startPosition?: Coordinates;
 
-  _onDragCancelAction?: DragAction<DraggableActionArgs['onDragCancel']>;
+  _onDragCancelAction?: DragAction<DragEventArgs>;
 
-  _onDragEndAction?: DragAction<DraggableActionArgs['onDragEnd']>;
+  _onDragEndAction?: DragAction<DragEventArgs>;
 
-  _onDragEnterAction?: DragAction<DraggableActionArgs['onDragEnter']>;
+  _onDragEnterAction?: DragAction<DragEventArgs>;
 
-  _onDragLeaveAction?: DragAction<DraggableActionArgs['onDragLeave']>;
+  _onDragLeaveAction?: DragAction<DragEventArgs>;
 
-  _onDragMoveAction?: DragAction<DraggableActionArgs['onDragMove']>;
+  _onDragMoveAction?: DragAction<DragEventArgs>;
 
-  _onDragStartAction?: DragAction<DraggableActionArgs['onDragStart']>;
+  _onDragStartAction?: DragAction<DragStartArgs>;
 
-  _onDraggableElementShownAction?: DragAction<DraggableActionArgs['onDraggableElementShown']>;
+  _onDraggableElementShownAction?: DragAction<DragElementShownArgs>;
 
-  _onDropAction?: DragAction<DraggableActionArgs['onDrop']>;
+  _onDropAction?: DragAction<DragEventArgs>;
 
   reset(): void {}
 
@@ -1167,18 +1167,32 @@ class Draggable<
   }
 
   _optionChanged(args: OptionChanged<TProperties>): void {
-    const { name }: { name: string } = args;
+    const { name } = args;
 
     switch (name) {
       case 'onDragStart':
+        this._onDragStartAction = this._createActionByOption(name);
+        break;
       case 'onDragMove':
+        this._onDragMoveAction = this._createActionByOption(name);
+        break;
       case 'onDragEnd':
+        this._onDragEndAction = this._createActionByOption(name);
+        break;
       case 'onDrop':
+        this._onDropAction = this._createActionByOption(name);
+        break;
       case 'onDragEnter':
+        this._onDragEnterAction = this._createActionByOption(name);
+        break;
       case 'onDragLeave':
+        this._onDragLeaveAction = this._createActionByOption(name);
+        break;
       case 'onDragCancel':
+        this._onDragCancelAction = this._createActionByOption(name);
+        break;
       case 'onDraggableElementShown':
-        this[`_${name}Action`] = this._createActionByOption(name);
+        this._onDraggableElementShownAction = this._createActionByOption(name);
         break;
       case 'dragTemplate':
       case 'contentTemplate':

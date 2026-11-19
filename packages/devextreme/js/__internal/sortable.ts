@@ -91,15 +91,15 @@ class Sortable extends Draggable<SortableProperties, SortableActionArgs> {
 
   _modifiedItemMargin?: string;
 
-  _onAddAction?: DragAction<SortableActionArgs['onAdd']>;
+  _onAddAction?: DragAction<SortableEventArgs>;
 
-  _onDragChangeAction?: DragAction<SortableActionArgs['onDragChange']>;
+  _onDragChangeAction?: DragAction<SortableEventArgs>;
 
-  _onPlaceholderPreparedAction?: DragAction<SortableActionArgs['onPlaceholderPrepared']>;
+  _onPlaceholderPreparedAction?: DragAction<PlaceholderPreparedArgs>;
 
-  _onRemoveAction?: DragAction<SortableActionArgs['onRemove']>;
+  _onRemoveAction?: DragAction<SortableEventArgs>;
 
-  _onReorderAction?: DragAction<SortableActionArgs['onReorder']>;
+  _onReorderAction?: DragAction<SortableEventArgs>;
 
   _init(): void {
     super._init();
@@ -466,11 +466,6 @@ class Sortable extends Draggable<SortableProperties, SortableActionArgs> {
   }
 
   _getItemPoints(): AnyItemPoint[] {
-    let result: ItemPoint[] = [];
-    /* eslint-disable @typescript-eslint/init-declarations */
-    let offset: Coordinates | undefined;
-    let itemWidth: number | undefined;
-    /* eslint-enable @typescript-eslint/init-declarations */
     const { rtlEnabled } = this.option();
     const isVertical = this._isVerticalOrientation();
     const itemElements = this._getItems();
@@ -479,53 +474,7 @@ class Sortable extends Draggable<SortableProperties, SortableActionArgs> {
     const $draggableItem = this._getDraggableElement();
     const draggableVisibleIndex = visibleItemElements.indexOf($draggableItem.get(0));
 
-    if (visibleItemCount) {
-      let $item = $(visibleItemElements[0]);
-
-      for (let i = 0; i <= visibleItemCount; i += 1) {
-        const needCorrectLeftPosition = !isVertical
-          && Boolean(rtlEnabled) !== (i === visibleItemCount);
-        const needCorrectTopPosition = isVertical && i === visibleItemCount;
-
-        if (i < visibleItemCount) {
-          $item = $(visibleItemElements[i]);
-          offset = $item.offset();
-          itemWidth = getOuterWidth($item);
-        }
-
-        if (!offset || itemWidth === undefined) {
-          break;
-        }
-
-        result.push({
-          dropInsideItem: false,
-          left: offset.left + (needCorrectLeftPosition ? itemWidth : 0),
-          top: offset.top + (needCorrectTopPosition ? result[i - 1].height : 0),
-          index: i === visibleItemCount ? itemElements.length : itemElements.indexOf($item.get(0)),
-          $item,
-          width: getOuterWidth($item.get(0)),
-          height: getOuterHeight($item.get(0)),
-          isValid: this._isValidPoint(i, draggableVisibleIndex),
-        });
-      }
-
-      if (this.option('allowDropInsideItem')) {
-        const points = result;
-        result = [];
-        for (let i = 0; i < points.length; i += 1) {
-          result.push(points[i]);
-          // eslint-disable-next-line max-depth
-          if (points[i + 1]) {
-            result.push(extend({}, points[i], {
-              dropInsideItem: true,
-              top: Math.floor((points[i].top + points[i + 1].top) / 2),
-              left: Math.floor((points[i].left + points[i + 1].left) / 2),
-              isValid: this._isValidPoint(i, draggableVisibleIndex, true),
-            }));
-          }
-        }
-      }
-    } else {
+    if (!visibleItemCount) {
       return [{
         dropInsideItem: false,
         index: 0,
@@ -533,7 +482,48 @@ class Sortable extends Draggable<SortableProperties, SortableActionArgs> {
       }];
     }
 
-    return result;
+    const createPoint = (visibleIndex: number): ItemPoint => {
+      const isEndPoint = visibleIndex === visibleItemCount;
+      const itemElement = visibleItemElements[isEndPoint ? visibleIndex - 1 : visibleIndex];
+      const $item = $(itemElement);
+      const offset = $item.offset();
+      const width = getOuterWidth(itemElement);
+      const height = getOuterHeight(itemElement);
+      const needCorrectLeftPosition = !isVertical && Boolean(rtlEnabled) !== isEndPoint;
+      const needCorrectTopPosition = isVertical && isEndPoint;
+
+      return {
+        dropInsideItem: false,
+        left: (offset?.left ?? 0) + (needCorrectLeftPosition ? width : 0),
+        top: (offset?.top ?? 0) + (needCorrectTopPosition ? height : 0),
+        index: isEndPoint ? itemElements.length : itemElements.indexOf(itemElement),
+        $item,
+        width,
+        height,
+        isValid: this._isValidPoint(visibleIndex, draggableVisibleIndex),
+      };
+    };
+    const points = Array.from({ length: visibleItemCount + 1 }, (_, i) => createPoint(i));
+
+    if (!this.option('allowDropInsideItem')) {
+      return points;
+    }
+
+    return points.flatMap((point, i) => {
+      const nextPoint = points[i + 1];
+
+      if (!nextPoint) {
+        return [point];
+      }
+
+      return [point, {
+        ...point,
+        dropInsideItem: true,
+        top: Math.floor((point.top + nextPoint.top) / 2),
+        left: Math.floor((point.left + nextPoint.left) / 2),
+        isValid: this._isValidPoint(i, draggableVisibleIndex, true),
+      }];
+    });
   }
 
   _updateItemPoints(forceUpdate?: boolean): void {
