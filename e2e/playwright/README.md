@@ -283,3 +283,9 @@ TestCafe version ended with `expect(true).ok()` checks exactly that and needs no
 **Old models.** A model in `packages/testcafe-models` that the ported tests used goes in the same
 PR, but only after a search proves nothing else uses it: grep all of `e2e/` and `packages/` for its
 import path, since other tests and other models import models too. A model still in use stays.
+
+**Shared files.** The same goes for anything else in the TestCafe folder of the ported tests — a
+data file, a helper: other tests import them by a relative path
+(`accessibility/treeView.ts` takes `../navigation/treeView/data`). Grep `e2e/testcafe-devextreme`
+for the file's path before deleting it or moving it here; a file still in use stays, and the port
+takes a copy.
