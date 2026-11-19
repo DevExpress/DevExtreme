@@ -308,14 +308,10 @@ test.describe('Viz named colors', () => {
           startValue: 0, endValue: 100, tickInterval: 25, minRange: 30,
         },
         value: [20, 70],
-        animation: { enabled: false },
+        behavior: { animationEnabled: false },
       }, `#${mode}`);
 
-      const startSlider = page.locator('#container .slider-tracker').first();
-
-      // The sliders slide into place after the widget renders; hover waits until they stop.
-      await startSlider.hover();
-      await startDragToOffset(page, startSlider, 130, 0);
+      await startDragToOffset(page, page.locator('#container .slider-tracker').first(), 130, 0);
 
       await shoot(page, `Viz range selector invalid ${mode}`);
     });

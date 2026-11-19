@@ -79,9 +79,23 @@ const measurePalette = (
   const asOklch = (color: string): Oklch | null => {
     probe.style.backgroundColor = `oklch(from ${color} l c h)`;
     const resolved = getComputedStyle(probe).backgroundColor;
-    const parts = /^oklch\(([-\d.]+) ([-\d.]+) ([-\d.]+)/.exec(resolved);
+    const parts = /^oklch\(([-\d.]+) ([-\d.]+) ([-\d.]+|none)/.exec(resolved);
 
-    return parts ? { l: +parts[1], c: +parts[2], h: +parts[3] } : null;
+    if (!parts) {
+      return null;
+    }
+
+    if (parts[3] !== 'none') {
+      return { l: +parts[1], c: +parts[2], h: +parts[3] };
+    }
+
+    // Chrome 157 reports the hue of a near-grey as "none"; the a and b axes still carry it.
+    probe.style.backgroundColor = `oklab(from ${color} l a b)`;
+    const [, , a, b] = (/^oklab\(([-\d.]+) ([-\d.e]+) ([-\d.e]+)/.exec(getComputedStyle(probe).backgroundColor) ?? [])
+      .map(Number);
+    const hue = (Math.atan2(b, a) * 180) / Math.PI;
+
+    return { l: +parts[1], c: +parts[2], h: hue < 0 ? hue + 360 : hue };
   };
 
   const read = (step: number): MeasuredStep => {
