@@ -6,7 +6,6 @@
 /* eslint-disable prefer-spread */
 /* eslint-disable @typescript-eslint/no-this-alias */
 /* eslint-disable @typescript-eslint/init-declarations */
-/* eslint-disable no-plusplus */
 /* eslint-disable func-names */
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable no-nested-ternary */
@@ -629,14 +628,14 @@ strategiesByElementType[TYPE_MARKER] = {
         return;
       }
 
-      for (i = 0; i < ii; ++i) {
+      for (i = 0; i < ii; i += 1) {
         values[i] = _max(getDataValue(handles[i].proxy, dataField) || 0, 0);
       }
       const minValue = _min.apply(null, values);
       const maxValue = _max.apply(null, values);
       const deltaValue = (maxValue - minValue) || 1;
       const deltaSize = maxSize - minSize;
-      for (i = 0; i < ii; ++i) {
+      for (i = 0; i < ii; i += 1) {
         handles[i]._settings.size = minSize + deltaSize * (values[i] - minValue) / deltaValue;
       }
     },
@@ -708,7 +707,7 @@ strategiesByElementType[TYPE_MARKER] = {
       let values;
       let count = 0;
       let palette;
-      for (i = 0; i < ii; ++i) {
+      for (i = 0; i < ii; i += 1) {
         values = getDataValue(handles[i].proxy, dataField);
         if (values && values.length > count) {
           count = values.length;
@@ -783,7 +782,7 @@ function projectPointList(projection, coordinates): number[][] {
   const output: number[][] = [];
   let i;
   const ii = output.length = coordinates.length;
-  for (i = 0; i < ii; ++i) {
+  for (i = 0; i < ii; i += 1) {
     output[i] = projection.project(coordinates[i]);
   }
   return output;
@@ -797,7 +796,7 @@ function projectPolygon(projection, coordinates): number[][][] {
   const output: number[][][] = [];
   let i;
   const ii = output.length = coordinates.length;
-  for (i = 0; i < ii; ++i) {
+  for (i = 0; i < ii; i += 1) {
     output[i] = projectPointList(projection, coordinates[i]);
   }
   return output;
@@ -807,7 +806,7 @@ function projectMultiPolygon(projection, coordinates) {
   const output: number[][][][] = [];
   let i;
   const ii = output.length = coordinates.length;
-  for (i = 0; i < ii; ++i) {
+  for (i = 0; i < ii; i += 1) {
     output[i] = projectPolygon(projection, coordinates[i]);
   }
   return _concat.apply([], output);
@@ -824,10 +823,11 @@ function transformList(projection, coordinates): number[] {
   const ii = coordinates.length;
   let k = 0;
   output.length = 2 * ii;
-  for (i = 0; i < ii; ++i) {
+  for (i = 0; i < ii; i += 1) {
     const [x, y] = projection.transform(coordinates[i]);
-    output[k++] = x;
-    output[k++] = y;
+    output[k] = x;
+    output[k + 1] = y;
+    k += 2;
   }
   return output;
 }
@@ -836,7 +836,7 @@ function transformPointList(content, projection, coordinates): void {
   const output: number[][] = [];
   let i;
   const ii = output.length = coordinates.length;
-  for (i = 0; i < ii; ++i) {
+  for (i = 0; i < ii; i += 1) {
     output[i] = transformList(projection, coordinates[i]);
   }
   content.root.attr({ points: output });
@@ -920,7 +920,7 @@ function processCommonSettings(context, options) {
   let palette;
   if (settings.paletteSize > 0) {
     palette = themeManager.createDiscretePalette(settings.palette, settings.paletteSize);
-    for (i = 0, colors = []; i < settings.paletteSize; ++i) {
+    for (i = 0, colors = []; i < settings.paletteSize; i += 1) {
       colors.push(palette.getColor(i));
     }
     settings._colors = colors;
@@ -967,7 +967,7 @@ groupByColor = function (context): void {
     );
     let i;
     const list: string[] = [];
-    for (i = 0; i < count; ++i) {
+    for (i = 0; i < count; i += 1) {
       list.push(_palette.getColor(i));
     }
     return list;
@@ -982,7 +982,7 @@ groupBySize = function (context, valueCallback): void {
     let i = 0;
     const sizes: number[] = [];
     if (count > 1) {
-      for (i = 0; i < count; ++i) {
+      for (i = 0; i < count; i += 1) {
         sizes.push((minSize * (count - i - 1) + maxSize * i) / (count - 1));
       }
     } else if (count === 1) {
@@ -1277,7 +1277,7 @@ let MapLayer = class MapLayer {
     const { geometry, attributes } = data;
     let handle;
     let dataItem;
-    for (i = 0; i < ii; ++i) {
+    for (i = 0; i < ii; i += 1) {
       dataItem = data.item(i);
       handles[i] = new MapLayerElement(context, i, geometry(dataItem), attributes(dataItem));
     }
@@ -1286,7 +1286,7 @@ let MapLayer = class MapLayer {
     _isFunction(this._options.customize)
       && customizeHandles(this.getProxies(), this._options.customize, this._params.widget);
 
-    for (i = 0; i < ii; ++i) {
+    for (i = 0; i < ii; i += 1) {
       handle = handles[i];
       handle.project();
       handle.draw();
@@ -1303,14 +1303,14 @@ let MapLayer = class MapLayer {
     const handles = this._handles;
     let i;
     const ii = handles.length;
-    for (i = 0; i < ii; ++i) {
+    for (i = 0; i < ii; i += 1) {
       handles[i].refresh();
     }
     if (this._context.settings.label.enabled) {
-      for (i = 0; i < ii; ++i) {
+      for (i = 0; i < ii; i += 1) {
         handles[i].measureLabel();
       }
-      for (i = 0; i < ii; ++i) {
+      for (i = 0; i < ii; i += 1) {
         handles[i].adjustLabel();
       }
     }
@@ -1326,7 +1326,7 @@ let MapLayer = class MapLayer {
     const handles = this._handles;
     let i;
     const ii = handles.length;
-    for (i = 0; i < ii; ++i) {
+    for (i = 0; i < ii; i += 1) {
       handles[i].project();
     }
   }
@@ -1336,7 +1336,7 @@ let MapLayer = class MapLayer {
     let i;
     const ii = handles.length;
     this._transformCore();
-    for (i = 0; i < ii; ++i) {
+    for (i = 0; i < ii; i += 1) {
       handles[i].transform();
     }
   }
@@ -1650,7 +1650,7 @@ function calculatePolygonCentroid(coordinates): { area: number; center: number[]
   let minY = Infinity;
   let maxY = -Infinity;
 
-  for (i = 0; i < length; ++i) {
+  for (i = 0; i < length; i += 1) {
     v1 = v2;
     v2 = coordinates[i];
     cross = v1[0] * v2[1] - v2[0] * v1[1];
@@ -1683,7 +1683,7 @@ function calculateLineStringData(coordinates): (number | number[])[] {
   let min1 = v2[1];
   let max1 = v2[1];
 
-  for (i = 1; i < ii; ++i) {
+  for (i = 1; i < ii; i += 1) {
     v1 = v2;
     v2 = coordinates[i];
     totalLength += _sqrt((v1[0] - v2[0]) * (v1[0] - v2[0]) + (v1[1] - v2[1]) * (v1[1] - v2[1]));
@@ -1720,7 +1720,7 @@ function projectAreaLabel(coordinates) {
   let resultCentroid;
   let maxArea = 0;
 
-  for (i = 0; i < ii; ++i) {
+  for (i = 0; i < ii; i += 1) {
     centroid = calculatePolygonCentroid(coordinates[i]);
     if (centroid.area > maxArea) {
       maxArea = centroid.area;
@@ -1740,7 +1740,7 @@ function projectLineLabel(coordinates) {
   let data;
   let resultData;
 
-  for (i = 0; i < ii; ++i) {
+  for (i = 0; i < ii; i += 1) {
     data = calculateLineStringData(coordinates[i]);
     const length = data[2];
     if (length > maxLength) {
@@ -1842,7 +1842,7 @@ export let MapLayerCollection = class MapLayerCollection {
       this._layers.forEach((l) => l.dispose());
       const layerByName = this._layerByName = {};
       this._layers = layers = [];
-      for (let i = 0, ii = optionList.length; i < ii; ++i) {
+      for (let i = 0, ii = optionList.length; i < ii; i += 1) {
         const name = getName(optionList, i) || `map-layer-${i}`;
         const layer = layers[i] = new MapLayer(this._params, this._container, name, i);
         layerByName[name] = layer;

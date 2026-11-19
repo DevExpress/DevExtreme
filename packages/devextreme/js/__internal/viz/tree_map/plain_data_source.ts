@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/init-declarations */
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable guard-for-in */
-/* eslint-disable no-plusplus */
 /* eslint-disable func-names */
 /* eslint-disable no-multi-assign */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
@@ -29,7 +28,7 @@ proto._processDataSourceItems = function (items) {
     return { items, isPlain: false };
   }
 
-  for (i = 0; i < items.length; i++) {
+  for (i = 0; i < items.length; i += 1) {
     currentItem = items[i];
     parentId = currentItem[parentField];
     if (parentId) {
@@ -57,7 +56,7 @@ function treeFiller(context, items): void {
   const { struct } = context;
   let id;
 
-  for (i = 0; i < items.length; i++) {
+  for (i = 0; i < items.length; i += 1) {
     currentItem = items[i];
     id = currentItem[context.idField];
     if (struct[id]) {
