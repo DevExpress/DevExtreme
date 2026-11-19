@@ -1299,6 +1299,7 @@
         "packageDir": "./artifacts/npm/devextreme",
         "ignore": ["__internal", "bin", "bundles", "cjs", "dist", "esm", "license", "scss"],
         "declarationImports": true,
+        "directoryIndexes": ["esm", "cjs"],
         "extraExports": {
           "./bundles/*.d.ts": "./bundles/*.d.ts",
           "./bundles/*.js": "./bundles/*.js",

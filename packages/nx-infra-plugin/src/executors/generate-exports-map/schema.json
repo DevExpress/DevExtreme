@@ -20,6 +20,18 @@
       "description": "Adds entries for type imports with a '.d' suffix, such as 'pkg/ui/button.d': a './<folder>/*.d' pattern per top-level folder and an explicit entry per root declaration. No root './*.d' pattern, which makes Node warn (DEP0155) on 'pkg/' requests.",
       "default": false
     },
+    "directoryIndexes": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Deep-import folders (relative to packageDir), such as esm and cjs, whose subfolders with index.js get an explicit './<folder>' -> './<folder>/index.js' entry, because a './esm/*' -> './esm/*.js' pattern cannot reach a folder module. A folder with a sibling '<folder>.js' file gets no entry: the file keeps precedence.",
+      "default": []
+    },
+    "directoryIndexTypesFrom": {
+      "type": "object",
+      "additionalProperties": { "type": "string" },
+      "description": "Declaration folder for a directoryIndexes folder that ships no declarations, such as { \"esm\": \"cjs\" }: the entry for esm/<folder> gets types from cjs/<folder>/index.d.ts. By default a folder entry gets types from its own index.d.ts, when there is one.",
+      "default": {}
+    },
     "extraExports": {
       "type": "object",
       "description": "Subpath entries appended to the generated map as-is, such as asset folders or wildcard patterns.",

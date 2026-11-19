@@ -123,6 +123,58 @@ describe('GenerateExportsMapExecutor E2E', () => {
     expect(keys.filter((key) => key.endsWith('.d'))).toEqual([]);
   });
 
+  it('should map folder modules in directoryIndexes folders to their index.js', async () => {
+    await write('esm/ui/list/index.js');
+    await write('cjs/ui/list/index.js');
+    await write('cjs/grids/utils.js');
+    await write('cjs/grids/utils/index.js');
+    await write('esm/ui/menu.js');
+
+    const result = await run({
+      directoryIndexes: ['esm', 'cjs'],
+      extraExports: { './esm/*': './esm/*.js', './cjs/*': './cjs/*.js' },
+    });
+    expect(result.success).toBe(true);
+
+    const exportsMap = await readExports();
+    expect(exportsMap['./esm/ui/list']).toBe('./esm/ui/list/index.js');
+    expect(exportsMap['./cjs/ui/list']).toBe('./cjs/ui/list/index.js');
+    // The sibling file wins over the folder, so the folder stays on the './cjs/*' pattern
+    expect(exportsMap['./cjs/grids/utils']).toBeUndefined();
+    expect(exportsMap['./esm/ui/menu']).toBeUndefined();
+  });
+
+  it('should add types to folder entries from the folder or from directoryIndexTypesFrom', async () => {
+    await write('esm/common/index.js');
+    await write('cjs/common/index.js');
+    await write('cjs/common/index.d.ts');
+
+    const result = await run({
+      directoryIndexes: ['esm', 'cjs'],
+      directoryIndexTypesFrom: { esm: 'cjs' },
+    });
+    expect(result.success).toBe(true);
+
+    const exportsMap = await readExports();
+    expect(exportsMap['./esm/common']).toEqual({
+      types: './cjs/common/index.d.ts',
+      default: './esm/common/index.js',
+    });
+    expect(exportsMap['./cjs/common']).toEqual({
+      types: './cjs/common/index.d.ts',
+      default: './cjs/common/index.js',
+    });
+  });
+
+  it('should not map folder modules by default', async () => {
+    await write('esm/ui/list/index.js');
+
+    const result = await run();
+    expect(result.success).toBe(true);
+
+    expect((await readExports())['./esm/ui/list']).toBeUndefined();
+  });
+
   describe('package with a root module', () => {
     beforeEach(async () => {
       await writeJsonFile('package.json', {

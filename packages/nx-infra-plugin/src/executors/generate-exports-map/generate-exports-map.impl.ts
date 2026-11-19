@@ -17,6 +17,9 @@ interface ModuleStub {
 
 const PACKAGE_JSON = 'package.json';
 const DTS_EXTENSION = '.d.ts';
+const JS_EXTENSION = '.js';
+const INDEX_FILE = 'index.js';
+const INDEX_DTS_FILE = 'index.d.ts';
 
 const ERROR_DUPLICATE_SUBPATH = (subpath: string) =>
   `extraExports redefines a generated subpath: ${subpath}`;
@@ -109,6 +112,33 @@ export function createDeclarationImportEntries(dtsFiles: string[]): ExportsMap {
   return entries;
 }
 
+export async function createDirectoryIndexEntries(
+  packageDir: string,
+  folders: string[],
+  typesFrom: Record<string, string> = {},
+): Promise<ExportsMap> {
+  const entries: ExportsMap = {};
+
+  for (const folder of folders) {
+    const indexFiles = await glob(`${folder}/**/${INDEX_FILE}`, { cwd: packageDir, posix: true });
+    const typesFolder = typesFrom[folder] ?? folder;
+
+    for (const indexFile of indexFiles.sort()) {
+      const folderPath = indexFile.slice(0, -`/${INDEX_FILE}`.length);
+      if (fs.existsSync(path.join(packageDir, `${folderPath}${JS_EXTENSION}`))) {
+        continue;
+      }
+
+      const types = `${typesFolder}${folderPath.slice(folder.length)}/${INDEX_DTS_FILE}`;
+      entries[`./${folderPath}`] = fs.existsSync(path.join(packageDir, types))
+        ? { types: `./${types}`, default: `./${indexFile}` }
+        : `./${indexFile}`;
+    }
+  }
+
+  return entries;
+}
+
 function collectTargets(target: ExportsTarget): string[] {
   return typeof target === 'string' ? [target] : Object.values(target);
 }
@@ -127,6 +157,8 @@ interface ResolvedGenerateExportsMap {
   packageDir: string;
   ignore: string[];
   declarationImports: boolean;
+  directoryIndexes: string[];
+  directoryIndexTypesFrom: Record<string, string>;
   extraExports: ExportsMap;
 }
 
@@ -136,9 +168,18 @@ export default createExecutor<GenerateExportsMapExecutorSchema, ResolvedGenerate
     packageDir: path.resolve(projectRoot, options.packageDir),
     ignore: options.ignore ?? [],
     declarationImports: options.declarationImports ?? false,
+    directoryIndexes: options.directoryIndexes ?? [],
+    directoryIndexTypesFrom: options.directoryIndexTypesFrom ?? {},
     extraExports: options.extraExports ?? {},
   }),
-  run: async ({ packageDir, ignore, declarationImports, extraExports }) => {
+  run: async ({
+    packageDir,
+    ignore,
+    declarationImports,
+    directoryIndexes,
+    directoryIndexTypesFrom,
+    extraExports,
+  }) => {
     const rootPackageJsonPath = path.join(packageDir, PACKAGE_JSON);
     const pkg = await readJson<Record<string, unknown>>(rootPackageJsonPath);
     const globIgnore = ['node_modules/**', ...ignore.map((dir) => `${dir}/**`)];
@@ -188,6 +229,13 @@ export default createExecutor<GenerateExportsMapExecutorSchema, ResolvedGenerate
       Object.assign(exportsMap, createDeclarationImportEntries(dtsFiles));
     }
 
+    const directoryIndexEntries = await createDirectoryIndexEntries(
+      packageDir,
+      directoryIndexes,
+      directoryIndexTypesFrom,
+    );
+    Object.assign(exportsMap, directoryIndexEntries);
+
     for (const [subpath, target] of Object.entries(extraExports)) {
       if (subpath in exportsMap) {
         throw new Error(ERROR_DUPLICATE_SUBPATH(subpath));
@@ -205,6 +253,7 @@ export default createExecutor<GenerateExportsMapExecutorSchema, ResolvedGenerate
 
     logger.verbose(
       `Generated exports in ${rootPackageJsonPath}: ${stubCount} modules, ${typeOnlyCount} type-only modules, `
+        + `${Object.keys(directoryIndexEntries).length} folder indexes, `
         + `${Object.keys(extraExports).length} extra entries`,
     );
   },
