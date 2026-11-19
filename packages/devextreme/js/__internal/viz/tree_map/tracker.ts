@@ -28,7 +28,7 @@ const getDataKey = function (): string {
   return dataKey;
 };
 
-expand(proto, '_initCore', function () {
+expand(proto, '_initCore', function (this: TreeMapBase) {
   const that = this;
   const dataKey = getDataKey();
   /// #DEBUG
@@ -62,7 +62,7 @@ expand(proto, '_initCore', function () {
   };
 });
 
-expand(proto, '_disposeCore', function () {
+expand(proto, '_disposeCore', function (this: TreeMapBase) {
   this._tracker.dispose();
 });
 

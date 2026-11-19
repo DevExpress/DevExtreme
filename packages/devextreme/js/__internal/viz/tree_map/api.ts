@@ -21,7 +21,7 @@ const nodeProto = Node.prototype;
 proto._eventsMap.onNodesInitialized = { name: 'nodesInitialized' };
 proto._eventsMap.onNodesRendering = { name: 'nodesRendering' };
 
-proto._createProxyType = function (): void {
+proto._createProxyType = function (this: TreeMapBase): void {
   const that = this;
   let nodes: Node[];
 
@@ -179,13 +179,13 @@ function updateValue(node, value): void {
 proto._extendProxyType = noop;
 
 const { _resetNodes } = proto;
-proto._resetNodes = function (): void {
+proto._resetNodes = function (this: TreeMapBase): void {
   _resetNodes.call(this);
   this._eventTrigger('nodesRendering', { node: this._topNode.proxy });
 };
 
 const _updateStyles = nodeProto.updateStyles;
-nodeProto.updateStyles = function (): void {
+nodeProto.updateStyles = function (this: Node): void {
   const that = this;
 
   _updateStyles.call(that);
@@ -197,7 +197,7 @@ nodeProto.updateStyles = function (): void {
 };
 
 const _updateLabelStyle = nodeProto.updateLabelStyle;
-nodeProto.updateLabelStyle = function (): void {
+nodeProto.updateLabelStyle = function (this: Node): void {
   const that = this;
   const custom = that._custom;
 
