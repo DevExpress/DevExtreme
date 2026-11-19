@@ -11,11 +11,6 @@ import Guid from '@js/core/guid';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { BindableTemplate } from '@js/core/templates/bindable_template';
-import {
-  // @ts-expect-error ts-error
-  deferRenderer,
-  ensureDefined,
-} from '@js/core/utils/common';
 import { compileGetter } from '@js/core/utils/data';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import { when } from '@js/core/utils/deferred';
@@ -35,6 +30,10 @@ import type {
   ItemLike,
 } from '@js/ui/collection/ui.collection_widget.base';
 import { getPublicElement } from '@ts/core/element';
+import {
+  deferRenderer,
+  ensureDefined,
+} from '@ts/core/utils/common';
 import { focusable } from '@ts/core/utils/selectors';
 import type { ActionConfig } from '@ts/core/widget/component';
 import type { OptionChanged } from '@ts/core/widget/types';
@@ -711,7 +710,6 @@ class CollectionWidget<
   ): void {
     const itemData = this._getItemData($item);
     const index = $item.data(this._itemIndexKey());
-    // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
     this._renderItem(this._renderedItemsCount + index, itemData, null, $item);
   }
 

@@ -1816,11 +1816,9 @@ class Form extends Widget<FormProperties> {
 
     if (scrollable) {
       scrollable.update().done(() => {
-        // @ts-expect-error ts-error
         deferred.resolveWith(this);
       });
     } else {
-      // @ts-expect-error ts-error
       deferred.resolveWith(this);
     }
 

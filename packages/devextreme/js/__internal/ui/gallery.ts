@@ -526,12 +526,10 @@ class Gallery extends CollectionWidget<GalleryProperties, Item, CollectionItemKe
         left: targetPosition * this._elementWidth(),
         top: 0,
       });
-      // @ts-expect-error ts-error
       positionReady = Deferred().resolveWith(this);
     }
 
     positionReady.done(() => {
-      // @ts-expect-error ts-error
       this._deferredAnimate?.resolveWith(this);
       if (hideItems) {
         this._renderItemVisibility();
@@ -577,7 +575,6 @@ class Gallery extends CollectionWidget<GalleryProperties, Item, CollectionItemKe
               top: 0,
             });
           }
-          // @ts-expect-error ts-error
           animationComplete.resolveWith(that);
         },
         ...extraConfig,

@@ -12,11 +12,11 @@ export class DeferredObj<T> {
     fail(failCallback?: Callback<T>): DeferredObj<T>;
     progress(progressCallback?: Callback<T>): DeferredObj<T>;
     notify(...args: T[]): DeferredObj<T>;
-    notifyWith(context: DeferredObj<T>, args?: T[]): DeferredObj<T>;
+    notifyWith(context: unknown, args?: T[]): DeferredObj<T>;
     reject(...args: T[]): DeferredObj<T>;
-    rejectWith(context: DeferredObj<T>, args?: T[]): DeferredObj<T>;
+    rejectWith(context: unknown, args?: T[]): DeferredObj<T>;
     resolve(...args: T[]): DeferredObj<T>;
-    resolveWith(context: DeferredObj<T>, args?: T[]): DeferredObj<T>;
+    resolveWith(context: unknown, args?: T[]): DeferredObj<T>;
     promise(target?: T): Promise<T>;
 }
 
