@@ -11,6 +11,11 @@ const CLASS = {
   doneButton: 'dx-popup-done',
   cancelButton: 'dx-popup-cancel',
   overflowButton: 'dx-dropdownmenu-button',
+  todayButton: 'dx-button-today',
+  navigatorNextView: 'dx-calendar-navigator-next-view',
+  navigatorPrevView: 'dx-calendar-navigator-previous-view',
+  navigatorCaption: 'dx-calendar-caption-button',
+  viewsWrapper: 'dx-calendar-views-wrapper',
 };
 
 export default class Popup extends Overlay {
@@ -25,6 +30,10 @@ export default class Popup extends Overlay {
 
   public getBottomToolbar(): Locator {
     return this.getWrapper().locator(`.${CLASS.bottomToolbar}`);
+  }
+
+  public getViewsWrapper(): Locator {
+    return this.page.locator(`.${CLASS.viewsWrapper}`);
   }
 
   public getButton(index = 0): Button {
@@ -48,5 +57,21 @@ export default class Popup extends Overlay {
       this.page,
       this.getWrapper().locator(`.${CLASS.button}.${CLASS.cancelButton}`),
     );
+  }
+
+  public getTodayButton(): Button {
+    return new Button(this.page, this.getWrapper().locator(`.${CLASS.todayButton}`));
+  }
+
+  public getNavigatorPrevButton(): Button {
+    return new Button(this.page, this.getWrapper().locator(`.${CLASS.navigatorPrevView}`));
+  }
+
+  public getNavigatorNextButton(): Button {
+    return new Button(this.page, this.getWrapper().locator(`.${CLASS.navigatorNextView}`));
+  }
+
+  public getNavigatorCaption(): Button {
+    return new Button(this.page, this.getWrapper().locator(`.${CLASS.navigatorCaption}`));
   }
 }
