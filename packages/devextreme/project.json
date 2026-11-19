@@ -1300,6 +1300,8 @@
         "ignore": ["__internal", "bin", "bundles", "cjs", "dist", "esm", "license", "scss"],
         "declarationImports": true,
         "extraExports": {
+          "./bundles/*.d.ts": "./bundles/*.d.ts",
+          "./bundles/*.js": "./bundles/*.js",
           "./bundles/*": { "types": "./bundles/*.d.ts", "default": "./bundles/*.js" },
           "./localization/messages/*.json": "./localization/messages/*.json",
           "./dist/*": "./dist/*",
