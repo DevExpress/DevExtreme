@@ -72,7 +72,7 @@ test.describe('HtmlEditor: AIDialog', () => {
     await page.setViewportSize({ width: 400, height: 600 });
 
     await htmlEditor.aiDialog.getMenuButton().element.click();
-    await testScreenshot(page, 'htmleditor-ai-dialog-initial-state-resize-window.png', { element: '#container' });
+    await testScreenshot(page, 'htmleditor-ai-dialog-initial-state-resize-window.png');
   });
 
   test('generating state', async ({ page }) => {
