@@ -77,13 +77,15 @@ export const scrollIntoViewWithin = (
     const { overflowX, overflowY } = getWindow().getComputedStyle(parent);
     const elementRect = element.getBoundingClientRect();
     const parentRect = parent.getBoundingClientRect();
+    const viewTop = parentRect.top + parent.clientTop;
+    const viewLeft = parentRect.left + parent.clientLeft;
 
     if (isScrollableOverflow(overflowY)) {
       parent.scrollTop += getScrollDelta(
         elementRect.top,
         elementRect.bottom,
-        parentRect.top,
-        parentRect.bottom,
+        viewTop,
+        viewTop + parent.clientHeight,
       );
     }
 
@@ -91,8 +93,8 @@ export const scrollIntoViewWithin = (
       parent.scrollLeft += getScrollDelta(
         elementRect.left,
         elementRect.right,
-        parentRect.left,
-        parentRect.right,
+        viewLeft,
+        viewLeft + parent.clientWidth,
       );
     }
   }

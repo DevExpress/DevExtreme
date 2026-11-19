@@ -1008,6 +1008,25 @@ QUnit.module('keyboard navigation', moduleConfig, () => {
         assert.ok(Math.round(inputRect.left) >= Math.round(scrollerRect.left) && Math.round(inputRect.right) <= Math.round(scrollerRect.right), 'input is in the visible part of the scroller');
     });
 
+    QUnit.testInActiveWindow('first content element should not stay under the border of a scroller inside the popup after popup opening', function(assert) {
+        const $input = $('<input>', { type: 'text' }).css('display', 'block');
+        const $scroller = $('<div>').css({ height: 100, overflowY: 'auto', borderBottom: '20px solid' });
+
+        const instance = new DropDownBox(this.$element, {
+            contentTemplate(component, content) {
+                $scroller.append($('<div>').height(300), $input).appendTo(content);
+            }
+        });
+
+        instance.open();
+
+        const inputRect = $input.get(0).getBoundingClientRect();
+        const elementAtInputBottom = document.elementFromPoint(inputRect.left + inputRect.width / 2, inputRect.bottom - 1);
+
+        assert.strictEqual(document.activeElement, $input.get(0), 'input is focused');
+        assert.strictEqual(elementAtInputBottom, $input.get(0), 'input bottom edge is visible');
+    });
+
 });
 
 QUnit.module('validation', moduleConfig, () => {
