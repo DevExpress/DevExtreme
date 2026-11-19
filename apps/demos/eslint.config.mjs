@@ -35,7 +35,7 @@ export default [
       'utils/templates/**/*.tsx',
       '**/.DS_Store',
 
-      '**/*.{png,json,mjs,css,html,md}',
+      '**/*.{png,json,mjs,css,html,md,sh}',
     ],
   },
 
