@@ -755,7 +755,7 @@ test.describe('Theme modes', () => {
 
     const { stops, stopColorAttribute, failure } = await gradientStopsExportedToTheCanvas(page);
 
-    expect(stopColorAttribute, 'the widget writes the name into the attribute, so the exporter is the one that has to resolve it').toBe('var(--dx-viz-blue, #0078d4)');
+    expect(stopColorAttribute, 'the widget writes the name into the attribute, so the exporter is the one that has to resolve it').toBe('var(--dx-viz-blue, #0c69b7)');
     expect(failure, 'the export reaches onFileSaving instead of failing in addColorStop').toBe('');
     expect(stops.filter((stop) => stop.includes('var(')), 'no stop reaches the canvas as a reference').toEqual([]);
     expect(stops[0], 'the first stop carries what the page declared, neither the name nor the literal beside it').toBe(DECLARED_BLUE);
