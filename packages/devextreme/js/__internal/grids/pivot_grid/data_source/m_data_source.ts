@@ -1,6 +1,7 @@
+import type { DataSource } from '@js/common/data/data_source/data_source';
 import { normalizeDataSourceOptions } from '@js/common/data/data_source/utils';
+import type { ScalarFilterValue } from '@js/common/grids';
 import { EventsStrategy } from '@js/core/events_strategy';
-import { normalizeIndexes } from '@js/core/utils/array';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred, when } from '@js/core/utils/deferred';
 import {
@@ -9,16 +10,21 @@ import {
 } from '@js/core/utils/type';
 import Store from '@js/data/abstract_store';
 import type { PivotGridArea } from '@js/ui/pivot_grid/data_source';
+import type { EventHandler } from '@ts/core/events_strategy';
+import { normalizeIndexes } from '@ts/core/utils/array';
 import type { AsyncTask } from '@ts/core/utils/common';
 import commonUtils from '@ts/core/utils/common';
 import { extend } from '@ts/core/utils/extend';
 import inflector from '@ts/core/utils/inflector';
 import { each } from '@ts/core/utils/iterator';
+import type { StoreLoadOptions } from '@ts/data/data_source/types';
 import type {
+  DrillDownParams,
   PivotGridAxis,
   PivotGridDescriptions,
   PivotGridField,
   PivotGridLoadOptions,
+  PivotGridLoadResult,
   PivotGridStore,
 } from '@ts/grids/pivot_grid/types';
 
@@ -38,10 +44,15 @@ import xmlaStore from '../xmla_store/m_xmla_store';
 import { sort } from './m_data_source_utils';
 import type {
   DataSourceData,
+  DataSourceEventName,
+  DataSourceHeaderArea,
   DataSourceHeaderItem,
   DataSourceHeaderItems,
   DataSourceHeaderItemsByPath,
+  DataSourceLoadOptions,
   DataSourceOptions,
+  DataSourceState,
+  DataSourceStoreLoadOptions,
   DataSourceStoreOption,
 } from './types';
 
@@ -50,7 +61,7 @@ const DESCRIPTION_NAME_BY_AREA = {
   column: 'columns',
   data: 'values',
   filter: 'filters',
-};
+} as const;
 const STATE_PROPERTIES = [
   'area',
   'areaIndex',
@@ -170,14 +181,14 @@ class PivotGridDataSource {
 
     this._isFieldsModified = false;
 
-    [
+    ([
       'changed',
       'loadError',
       'loadingChanged',
       'progressChanged',
       'fieldsPrepared',
       'expandValueChanging',
-    ].forEach((eventName) => {
+    ] as const).forEach((eventName) => {
       const optionName = `on${eventName[0].toUpperCase()}${eventName.slice(1)}`;
       if (Object.prototype.hasOwnProperty.call(options, optionName)) {
         this.on(eventName, options[optionName]);
@@ -431,8 +442,8 @@ class PivotGridDataSource {
     loadOptions: PivotGridLoadOptions | undefined,
     dimensionName: PivotGridAxis,
     prevLoadOptions: PivotGridLoadOptions | undefined,
-  ): unknown[][] {
-    const result: unknown[][] = [];
+  ): ScalarFilterValue[][] {
+    const result: ScalarFilterValue[][] = [];
     const fields = loadOptions?.[dimensionName] ?? [];
     const prevFields = prevLoadOptions?.[dimensionName] ?? [];
 
@@ -443,6 +454,7 @@ class PivotGridDataSource {
       if (item.children && fields[path.length - 1] && !fields[path.length - 1].expanded) {
         if (path.length < fields.length
           && (!prevLoadOptions || this.equalFields(fields, prevFields, path.length))) {
+          // @ts-expect-error a header item value is a filter value
           result.push(path.slice());
         }
       }
@@ -558,7 +570,7 @@ class PivotGridDataSource {
         || Number(field1.groupIndex) - Number(field2.groupIndex));
   }
 
-  public isAreaField(field: PivotGridField, area: PivotGridArea): boolean {
+  public isAreaField(field: PivotGridField, area: PivotGridArea | undefined): boolean {
     const canAddFieldInArea = area === 'data' || field.visible !== false;
     return field.area === area && !isDefined(field.groupIndex) && canAddFieldInArea;
   }
@@ -691,100 +703,104 @@ class PivotGridDataSource {
     return d;
   }
 
-  getData() {
+  public getData(): DataSourceData {
     return this._data;
   }
 
-  getAreaFields(area, collectGroups?) {
-    let areaFields: any[] = [];
-    let descriptions;
-
+  public getAreaFields(
+    area: PivotGridArea | undefined,
+    collectGroups?: boolean,
+  ): PivotGridField[] {
     if (collectGroups || area === 'data') {
+      const areaFields: PivotGridField[] = [];
+
       this._fields.forEach((field) => {
         if (this.isAreaField(field, area)) {
           areaFields.push(field);
         }
       });
       this.sortFieldsByAreaIndex(areaFields);
-    } else {
-      descriptions = this._descriptions || {};
-      areaFields = descriptions[DESCRIPTION_NAME_BY_AREA[area]] || [];
+
+      return areaFields;
     }
 
-    return areaFields;
+    const descriptionName = area ? DESCRIPTION_NAME_BY_AREA[area] : undefined;
+
+    return (descriptionName && this._descriptions?.[descriptionName]) ?? [];
   }
 
-  getSummaryFields() {
+  public getSummaryFields(): PivotGridField[] {
     return this.getAreaFields('data').filter((field) => isDefined(field.summaryType));
   }
 
-  fields(fields) {
-    const that: any = this;
+  public fields(fields?: PivotGridField[]): PivotGridField[] {
     if (fields) {
-      that._fields = this.mergeFields(fields, that._storeFields, that._retrieveFields);
-      that._fieldsPrepared(that._fields);
+      this._fields = this.mergeFields(fields, this._storeFields, this._retrieveFields);
+      this._fieldsPrepared(this._fields);
     }
 
-    return that._fields;
+    return this._fields;
   }
 
-  field(id, options?) {
-    const that: any = this;
-    const fields = that._fields;
-    const field = fields && fields[isNumeric(id) ? id : findField(fields, id)];
-    let levels;
+  public field(
+    id: number | string,
+    options?: Partial<PivotGridField>,
+  ): PivotGridField | undefined {
+    const fields = this._fields;
+    const field: PivotGridField | undefined = fields[isNumeric(id) ? id : findField(fields, id)];
 
     if (field && options) {
       each(options, (optionName, optionValue) => {
-        const isInitialization = !STATE_PROPERTIES.includes(optionName as string);
+        const isInitialization = !STATE_PROPERTIES.includes(optionName);
 
         setFieldProperty(field, optionName, optionValue, isInitialization);
 
         if (optionName === 'sortOrder') {
-          levels = field.levels || [];
-          for (let i = 0; i < levels.length; i += 1) {
-            levels[i][optionName] = optionValue;
+          const levels = field.levels ?? [];
+          for (const level of levels) {
+            level.sortOrder = options.sortOrder;
           }
         }
       });
       this.updateCalculatedFieldProperties(field, CALCULATED_PROPERTIES);
 
-      that._descriptions = that._createDescriptions(field);
-      that._isFieldsModified = true;
-      that._eventsStrategy.fireEvent('fieldChanged', [field]);
+      this._descriptions = this._createDescriptions(field);
+      this._isFieldsModified = true;
+      this._eventsStrategy.fireEvent('fieldChanged', [field]);
     }
     return field;
   }
 
-  getFieldValues(index, applyFilters, options) {
-    const that: any = this;
-    const field = this._fields && this._fields[index];
+  public getFieldValues(
+    index: number,
+    applyFilters: boolean,
+    options: { searchValue?: string; skip?: number; take?: number } | undefined,
+  ): DeferredObj<DataSourceHeaderItem[]> {
+    const field: PivotGridField | undefined = this._fields[index];
     const store = this._store;
-    const loadFields: any = [];
-    const loadOptions: any = {
+    const loadFields: PivotGridField[] = [];
+    const loadOptions: PivotGridLoadOptions = {
       columns: loadFields,
       rows: [],
       values: this.getAreaFields('data'),
       filters: applyFilters
         ? this._fields.filter((f) => f !== field
             && f.area
-            && f.filterValues
-            && f.filterValues.length)
+            && f.filterValues?.length)
         : [],
       skipValues: true,
     };
-    let searchValue;
-    // @ts-expect-error
-    const d = new Deferred();
+    const searchValue = options?.searchValue;
+    const d = Deferred<DataSourceHeaderItem[]>();
 
     if (options) {
-      searchValue = options.searchValue;
       loadOptions.columnSkip = options.skip;
       loadOptions.columnTake = options.take;
     }
 
     if (field && store) {
-      (field.levels || [field]).forEach((level) => {
+      (field.levels ?? [field]).forEach((level) => {
+        // @ts-expect-error the loaded field resets filterValues and sortBySummaryField to null
         loadFields.push(extend({}, level, {
           expanded: true, filterValues: null, sortOrder: 'asc', sortBySummaryField: null, searchValue,
         }));
@@ -799,9 +815,11 @@ class PivotGridDataSource {
         }
         this.formatHeaders(loadOptions, data);
         if (!loadOptions.columnTake) {
-          that._sort(loadOptions, data);
+          this._sort(loadOptions, data);
         }
         d.resolve(data.columns);
+      // @ts-expect-error fail() gets the error, but is typed with the resolve value
+      // eslint-disable-next-line @typescript-eslint/no-misused-promises -- ignores the result
       }).fail(d.reject);
     } else {
       d.reject();
@@ -809,45 +827,45 @@ class PivotGridDataSource {
     return d;
   }
 
-  reload() {
+  public reload(): DeferredObj<DataSourceData> {
     return this.load({ reload: true });
   }
 
-  filter() {
-    const store = this._store;
-
-    // @ts-expect-error the pivot store isn't checked here, the arguments are passed as is
-    return store.filter.apply(store, arguments);
+  public filter(): StoreLoadOptions['filter'];
+  public filter(...filterExpr: NonNullable<StoreLoadOptions['filter']>[]): void;
+  public filter(...args: NonNullable<StoreLoadOptions['filter']>[]): unknown {
+    // @ts-expect-error the pivot store isn't checked here
+    return this._store.filter(...args);
   }
 
-  load(options?) {
-    const that: any = this;
-    // @ts-expect-error
-    const d = new Deferred();
-    options = options || {};
+  public load(options?: DataSourceLoadOptions): DeferredObj<DataSourceData> {
+    const d = Deferred<DataSourceData>();
+    const loadOptions = options ?? {};
 
-    that.beginLoading();
+    this.beginLoading();
 
     d.fail((e) => {
-      that._eventsStrategy.fireEvent('loadError', [e]);
+      this._eventsStrategy.fireEvent('loadError', [e]);
     }).always(() => {
-      that.endLoading();
+      this.endLoading();
     });
 
-    const loadTask = () => {
-      that._delayedLoadTask = undefined;
-      if (!that._descriptions) {
+    const loadTask = (): void => {
+      this._delayedLoadTask = undefined;
+      if (!this._descriptions) {
         when(this.getFields()).done((fields) => {
-          that._fieldsPrepared(fields);
-          that._loadCore(options, d);
+          this._fieldsPrepared(fields);
+          this._loadCore(loadOptions, d);
+        // @ts-expect-error fail() gets the error, but is typed with the resolve value
+        // eslint-disable-next-line @typescript-eslint/no-misused-promises -- ignores the result
         }).fail(d.reject);
       } else {
-        that._loadCore(options, d);
+        this._loadCore(loadOptions, d);
       }
     };
 
-    if (that.store()) {
-      that._delayedLoadTask = commonUtils.executeAsync(loadTask);
+    if (this.store()) {
+      this._delayedLoadTask = commonUtils.executeAsync(loadTask);
     } else {
       loadTask();
     }
@@ -855,7 +873,7 @@ class PivotGridDataSource {
     return d;
   }
 
-  createDrillDownDataSource(params) {
+  public createDrillDownDataSource(params: DrillDownParams): DataSource {
     // @ts-expect-error the pivot store isn't checked here
     return this._store.createDrillDownDataSource(
       this._descriptions,
@@ -863,38 +881,38 @@ class PivotGridDataSource {
     );
   }
 
-  _createDescriptions(currentField?) {
-    const that: any = this;
-    const fields = that.fields();
-    const descriptions: any = {
+  public _createDescriptions(currentField?: PivotGridField): PivotGridDescriptions {
+    const fields = this.fields();
+    const descriptions: PivotGridDescriptions = {
       rows: [],
       columns: [],
       values: [],
       filters: [],
     };
 
-    ['row', 'column', 'data', 'filter'].forEach((areaName) => {
+    (['row', 'column', 'data', 'filter'] as const).forEach((areaName) => {
       normalizeIndexes(this.getAreaFields(areaName, true), 'areaIndex', currentField);
     });
 
-    (fields || []).forEach((field) => {
-      const descriptionName = DESCRIPTION_NAME_BY_AREA[field.area];
-      const dimension = descriptions[descriptionName];
+    fields.forEach((field) => {
+      const dimension = field.area ? descriptions[DESCRIPTION_NAME_BY_AREA[field.area]] : undefined;
       const { groupName } = field;
 
       if (groupName && !isNumeric(field.groupIndex)) {
         field.levels = this.getFieldsByGroup(fields, field);
       }
 
-      if (!dimension || groupName && isNumeric(field.groupIndex) || (field.visible === false && (field.area !== 'data' && field.area !== 'filter'))) {
+      if (!dimension
+        || (groupName && isNumeric(field.groupIndex))
+        || (field.visible === false && (field.area !== 'data' && field.area !== 'filter'))) {
         return;
       }
 
       if (field.levels
           && dimension !== descriptions.filters
           && dimension !== descriptions.values) {
-        dimension.push.apply(dimension, field.levels);
-        if (field.filterValues && field.filterValues.length) {
+        dimension.push(...field.levels);
+        if (field.filterValues?.length) {
           descriptions.filters.push(field);
         }
       } else {
@@ -902,15 +920,16 @@ class PivotGridDataSource {
       }
     });
 
-    each(descriptions, (_, fields) => {
-      this.sortFieldsByAreaIndex(fields);
+    Object.values(descriptions).forEach((dimensionFields) => {
+      this.sortFieldsByAreaIndex(dimensionFields);
     });
 
-    const indices = {};
+    const indices: Record<number, boolean> = {};
     for (const field of descriptions.values) {
       const expression = field.calculateSummaryValue;
       if (isFunction(expression)) {
         const summaryCell = summaryUtils.createMockSummaryCell(descriptions, fields, indices);
+        // @ts-expect-error SummaryCell returns null where dxPivotGridSummaryCell says it does not
         expression(summaryCell);
       }
     }
@@ -918,9 +937,8 @@ class PivotGridDataSource {
     return descriptions;
   }
 
-  _fieldsPrepared(fields) {
-    const that: any = this;
-    that._fields = fields;
+  public _fieldsPrepared(fields: PivotGridField[]): void {
+    this._fields = fields;
     fields.forEach((field, index) => {
       field.index = index;
       this.updateCalculatedFieldProperties(field, ALL_CALCULATED_PROPERTIES);
@@ -928,7 +946,7 @@ class PivotGridDataSource {
 
     const currentFieldState = this.getFieldsState(fields, ['caption']);
 
-    that._eventsStrategy.fireEvent('fieldsPrepared', [fields]);
+    this._eventsStrategy.fireEvent('fieldsPrepared', [fields]);
 
     for (let i = 0; i < fields.length; i += 1) {
       if (fields[i].caption !== currentFieldState[i].caption) {
@@ -936,55 +954,62 @@ class PivotGridDataSource {
       }
     }
 
-    that._descriptions = that._createDescriptions();
+    this._descriptions = this._createDescriptions();
   }
 
-  isLoading() {
+  public isLoading(): boolean {
     return this._loadingCount > 0;
   }
 
-  state(state, skipLoading) {
-    const that: any = this;
-
-    if (arguments.length) {
-      state = extend({
+  public state(): DataSourceState;
+  public state(state: Partial<DataSourceState> | null | undefined, skipLoading?: boolean): void;
+  public state(
+    ...args: [] | [Partial<DataSourceState> | null | undefined, boolean?]
+  ): DataSourceState | undefined {
+    if (args.length) {
+      const [state, skipLoading] = args;
+      const fullState = extend({
         rowExpandedPaths: [],
         columnExpandedPaths: [],
       }, state);
 
-      if (!that._descriptions) {
-        that.beginLoading();
+      if (!this._descriptions) {
+        this.beginLoading();
         when(this.getFields()).done((fields) => {
-          that._fields = this.setFieldsState(state.fields, fields);
-          that._fieldsPrepared(fields);
-          !skipLoading && that.load(state);
+          this._fields = this.setFieldsState(fullState.fields, fields);
+          this._fieldsPrepared(fields);
+          if (!skipLoading) {
+            this.load(fullState);
+          }
         }).always(() => {
-          that.endLoading();
+          this.endLoading();
         });
       } else {
-        that._fields = this.setFieldsState(state.fields, that._fields);
-        that._descriptions = that._createDescriptions();
-        !skipLoading && that.load(state);
+        this._fields = this.setFieldsState(fullState.fields, this._fields);
+        this._descriptions = this._createDescriptions();
+        if (!skipLoading) {
+          this.load(fullState);
+        }
       }
 
       return undefined;
     }
     return {
-      fields: this.getFieldsState(that._fields, STATE_PROPERTIES),
-      columnExpandedPaths: this.getExpandedPaths(that._data, that._descriptions, 'columns', that._lastLoadOptions),
-      rowExpandedPaths: this.getExpandedPaths(that._data, that._descriptions, 'rows', that._lastLoadOptions),
+      fields: this.getFieldsState(this._fields, STATE_PROPERTIES),
+      columnExpandedPaths: this.getExpandedPaths(this._data, this._descriptions, 'columns', this._lastLoadOptions),
+      rowExpandedPaths: this.getExpandedPaths(this._data, this._descriptions, 'rows', this._lastLoadOptions),
     };
   }
 
-  beginLoading() {
+  public beginLoading(): void {
     this._changeLoadingCount(1);
   }
 
-  endLoading() {
+  public endLoading(): void {
     this._changeLoadingCount(-1);
   }
 
-  _changeLoadingCount(increment) {
+  public _changeLoadingCount(increment: number): void {
     const oldLoading = this.isLoading();
 
     this._loadingCount += increment;
@@ -995,30 +1020,37 @@ class PivotGridDataSource {
     }
   }
 
-  _hasPagingValues(options, area, oppositeIndex) {
-    const takeField = `${area}Take`;
-    const skipField = `${area}Skip`;
+  public _hasPagingValues(
+    options: DataSourceStoreLoadOptions,
+    area: DataSourceHeaderArea,
+    oppositeIndex: number,
+  ): boolean {
+    const takeField = `${area}Take` as const;
+    const skipField = `${area}Skip` as const;
     const { values } = this._data;
-    let items = this._data[`${area}s`];
+    let items: DataSourceHeaderItems | undefined = area === 'row' ? this._data.rows : this._data.columns;
     const oppositeArea = area === 'row' ? 'column' : 'row';
-    const indices: any = [];
+    const indices: (number | undefined)[] = [];
 
     if (options.path && options.area === area) {
       const headerItem = this.findHeaderItem(items, options.path);
-      items = headerItem && headerItem.children;
+      items = headerItem?.children;
       if (!items) {
         return false;
       }
     }
     if (options.oppositePath && options.area === oppositeArea) {
       const headerItem = this.findHeaderItem(items, options.oppositePath);
-      items = headerItem && headerItem.children;
+      items = headerItem?.children;
       if (!items) {
         return false;
       }
     }
 
-    for (let i = options[skipField]; i < options[skipField] + options[takeField]; i += 1) {
+    const skip = Number(options[skipField]);
+    const take = Number(options[takeField]);
+
+    for (let i = skip; i < skip + take; i += 1) {
       if (items[i]) {
         indices.push(items[i].index);
       }
@@ -1036,138 +1068,154 @@ class PivotGridDataSource {
     });
   }
 
-  _processPagingCacheByArea(options, pageSize, area) {
-    const takeField = `${area}Take`;
-    const skipField = `${area}Skip`;
-    let items = this._data[`${area}s`];
+  public _processPagingCacheByArea(
+    options: DataSourceStoreLoadOptions,
+    pageSize: number,
+    area: DataSourceHeaderArea,
+  ): void {
+    const takeField = `${area}Take` as const;
+    const skipField = `${area}Skip` as const;
+    let items: DataSourceHeaderItems = area === 'row' ? this._data.rows : this._data.columns;
     const oppositeArea = area === 'row' ? 'column' : 'row';
-    let item;
+    // eslint-disable-next-line @typescript-eslint/init-declarations -- assigned in the loop
+    let item: DataSourceHeaderItem | undefined;
+
+    if (!options[takeField]) {
+      return;
+    }
+
+    if (options.path && options.area === area) {
+      const headerItem = this.findHeaderItem(items, options.path);
+      items = headerItem?.children ?? [];
+    }
+    if (options.oppositePath && options.area === oppositeArea) {
+      const headerItem = this.findHeaderItem(items, options.oppositePath);
+      items = headerItem?.children ?? [];
+    }
+
+    do {
+      item = items[Number(options[skipField])];
+      if (item?.index !== undefined) {
+        if (this._hasPagingValues(options, oppositeArea, item.index)) {
+          options[skipField] = Number(options[skipField]) + 1;
+          options[takeField] = Number(options[takeField]) - 1;
+        } else {
+          break;
+        }
+      }
+    } while (item?.index !== undefined && options[takeField]);
 
     if (options[takeField]) {
-      if (options.path && options.area === area) {
-        const headerItem = this.findHeaderItem(items, options.path);
-        items = headerItem && headerItem.children || [];
-      }
-      if (options.oppositePath && options.area === oppositeArea) {
-        const headerItem = this.findHeaderItem(items, options.oppositePath);
-        items = headerItem && headerItem.children || [];
-      }
+      const start = Math.floor(Number(options[skipField]) / pageSize) * pageSize;
+      const end = Math.ceil((Number(options[skipField]) + options[takeField]) / pageSize)
+        * pageSize;
 
-      do {
-        item = items[options[skipField]];
-        if (item && item.index !== undefined) {
-          if (this._hasPagingValues(options, oppositeArea, item.index)) {
-            // eslint-disable-next-line no-plusplus
-            options[skipField]++;
-            // eslint-disable-next-line no-plusplus
-            options[takeField]--;
-          } else {
-            break;
-          }
-        }
-      } while (item && item.index !== undefined && options[takeField]);
-
-      if (options[takeField]) {
-        const start = Math.floor(options[skipField] / pageSize) * pageSize;
-        const end = Math.ceil((options[skipField] + options[takeField]) / pageSize) * pageSize;
-
-        options[skipField] = start;
-        options[takeField] = end - start;
-      }
+      options[skipField] = start;
+      options[takeField] = end - start;
     }
   }
 
-  _processPagingCache(storeLoadOptions) {
+  public _processPagingCache(storeLoadOptions: DataSourceStoreLoadOptions[]): void {
     const pageSize = this._pageSize;
 
     if (pageSize < 0) return;
 
-    for (let i = 0; i < storeLoadOptions.length; i += 1) {
-      this._processPagingCacheByArea(storeLoadOptions[i], pageSize, 'row');
-      this._processPagingCacheByArea(storeLoadOptions[i], pageSize, 'column');
+    for (const options of storeLoadOptions) {
+      this._processPagingCacheByArea(options, pageSize, 'row');
+      this._processPagingCacheByArea(options, pageSize, 'column');
     }
   }
 
-  _loadCore(options, deferred) {
-    const that: any = this;
+  public _loadCore(options: DataSourceLoadOptions, deferred: DeferredObj<DataSourceData>): void {
     const store = this._store;
     const descriptions = this._descriptions;
-    const reload = options.reload || (this.paginate() && that._isFieldsModified);
+    const reload = !!options.reload || (this.paginate() && this._isFieldsModified);
     const paginate = this.paginate();
-    const headerName = DESCRIPTION_NAME_BY_AREA[options.area];
+    const headerName = options.area ? DESCRIPTION_NAME_BY_AREA[options.area] : undefined;
 
-    options = options || {};
-
-    if (store) {
-      extend(options, descriptions);
-      options.columnExpandedPaths = options.columnExpandedPaths
-          || this.getExpandedPaths(this._data, options, 'columns', that._lastLoadOptions);
-      options.rowExpandedPaths = options.rowExpandedPaths
-          || this.getExpandedPaths(this._data, options, 'rows', that._lastLoadOptions);
-
-      if (paginate) {
-        options.pageSize = this._pageSize;
-      }
-
-      if (headerName) {
-        options.headerName = headerName;
-      }
-
-      that.beginLoading();
-      deferred.always(() => {
-        that.endLoading();
-      });
-
-      let storeLoadOptions = [options];
-
-      that._eventsStrategy.fireEvent('customizeStoreLoadOptions', [storeLoadOptions, reload]);
-
-      if (!reload) {
-        that._processPagingCache(storeLoadOptions);
-      }
-
-      storeLoadOptions = storeLoadOptions
-        .filter((options) => !(options.rows.length && options.rowTake === 0)
-            && !(options.columns.length && options.columnTake === 0));
-
-      if (!storeLoadOptions.length) {
-        that._update(deferred);
-        return;
-      }
-
-      const results = storeLoadOptions.map((options) => store.load(options));
-      when.apply(null, results).done(function () {
-        const results = arguments;
-        for (let i = 0; i < results.length; i += 1) {
-          const options = storeLoadOptions[i];
-          const data = results[i];
-          const isLast = i === results.length - 1;
-
-          if (options.path) {
-            that.applyPartialDataSource(
-              options.area,
-              options.path,
-              data,
-              isLast
-                ? deferred
-                : false,
-              options.oppositePath,
-            );
-          } else if (paginate && !reload && isDataExists(that._data)) {
-            that.mergePartialDataSource(data, isLast ? deferred : false);
-          } else {
-            extend(that._data, data);
-            that._lastLoadOptions = options;
-            that._update(isLast ? deferred : false);
-          }
-        }
-      }).fail(deferred.reject);
-    } else {
-      that._update(deferred);
+    if (!store) {
+      this._update(deferred);
+      return;
     }
+
+    const loadOptions: DataSourceStoreLoadOptions = extend(options, descriptions);
+    loadOptions.columnExpandedPaths ??= this.getExpandedPaths(
+      this._data,
+      loadOptions,
+      'columns',
+      this._lastLoadOptions,
+    );
+    loadOptions.rowExpandedPaths ??= this.getExpandedPaths(
+      this._data,
+      loadOptions,
+      'rows',
+      this._lastLoadOptions,
+    );
+
+    if (paginate) {
+      loadOptions.pageSize = this._pageSize;
+    }
+
+    if (headerName) {
+      loadOptions.headerName = headerName;
+    }
+
+    this.beginLoading();
+    deferred.always(() => {
+      this.endLoading();
+    });
+
+    let storeLoadOptions = [loadOptions];
+
+    this._eventsStrategy.fireEvent('customizeStoreLoadOptions', [storeLoadOptions, reload]);
+
+    if (!reload) {
+      this._processPagingCache(storeLoadOptions);
+    }
+
+    storeLoadOptions = storeLoadOptions
+      .filter((storeOptions) => !(storeOptions.rows.length && storeOptions.rowTake === 0)
+          && !(storeOptions.columns.length && storeOptions.columnTake === 0));
+
+    if (!storeLoadOptions.length) {
+      this._update(deferred);
+      return;
+    }
+
+    const results = storeLoadOptions.map((storeOptions) => store.load(storeOptions));
+    when(...results).done((...loadResults: PivotGridLoadResult[]) => {
+      for (let i = 0; i < loadResults.length; i += 1) {
+        const storeOptions = storeLoadOptions[i];
+        const data = loadResults[i];
+        const isLast = i === loadResults.length - 1;
+
+        if (storeOptions.path) {
+          this.applyPartialDataSource(
+            storeOptions.area,
+            storeOptions.path,
+            data,
+            isLast
+              ? deferred
+              : false,
+            storeOptions.oppositePath,
+          );
+        } else if (paginate && !reload && isDataExists(this._data)) {
+          this.mergePartialDataSource(data, isLast ? deferred : false);
+        } else {
+          extend(this._data, data);
+          this._lastLoadOptions = storeOptions;
+          this._update(isLast ? deferred : false);
+        }
+      }
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises -- ignores the result
+    }).fail(deferred.reject);
   }
 
-  _sort(descriptions, data, getAscOrder?: boolean) {
+  public _sort(
+    descriptions: PivotGridLoadOptions | undefined,
+    data: DataSourceData,
+    getAscOrder?: boolean,
+  ): void {
     const store = this._store;
 
     if (store && !this._paginate) {
@@ -1175,27 +1223,28 @@ class PivotGridDataSource {
     }
   }
 
-  sortLocal(): void {
+  public sortLocal(): void {
     this._sort(this._descriptions, this._data);
     this._eventsStrategy.fireEvent('changed', undefined);
   }
 
-  paginate() {
+  public paginate(): boolean | undefined {
     return this._paginate
-        && this._store
-        && this._store.supportPaging();
+        && this._store?.supportPaging();
   }
 
-  isEmpty() {
+  public isEmpty(): boolean {
     const dataFields = this.getAreaFields('data').filter((f) => f.visible !== false);
     const data = this.getData();
     return !dataFields.length || !data.values.length;
   }
 
-  _update(deferred?) {
-    const that: any = this;
-    const descriptions = that._descriptions;
-    const loadedData = that._data;
+  public _update(
+    deferred?: DeferredObj<DataSourceData> | false,
+  ): DeferredObj<DataSourceData> | false | undefined {
+    // @ts-expect-error descriptions are created on the first load
+    const descriptions: PivotGridDescriptions = this._descriptions;
+    const loadedData = this._data;
     const dataFields = descriptions.values;
     const expressionsUsed = areExpressionsUsed(dataFields);
 
@@ -1205,44 +1254,51 @@ class PivotGridDataSource {
       this.updateCache(loadedData.columns),
     ).done(() => {
       if (expressionsUsed) {
-        that._sort(descriptions, loadedData, expressionsUsed);
-        !that.isEmpty() && summaryUtils.applyDisplaySummaryMode(descriptions, loadedData);
+        this._sort(descriptions, loadedData, expressionsUsed);
+        if (!this.isEmpty()) {
+          // @ts-expect-error the loaded data has optional indexes, the summary data requires them
+          summaryUtils.applyDisplaySummaryMode(descriptions, loadedData);
+        }
       }
 
-      that._sort(descriptions, loadedData);
+      this._sort(descriptions, loadedData);
 
-      !that.isEmpty()
-          && isRunningTotalUsed(dataFields)
-          && summaryUtils.applyRunningTotal(descriptions, loadedData);
+      if (!this.isEmpty() && isRunningTotalUsed(dataFields)) {
+        // @ts-expect-error the loaded data has optional indexes, the summary data requires them
+        summaryUtils.applyRunningTotal(descriptions, loadedData);
+      }
 
-      that._data = loadedData;
-      deferred !== false && when(deferred).done(() => {
-        that._isFieldsModified = false;
-        that._eventsStrategy.fireEvent('changed');
-        if (isDefined(that._data.grandTotalRowIndex)) {
-          loadedData.grandTotalRowIndex = that._data.grandTotalRowIndex;
-        }
-        if (isDefined(that._data.grandTotalColumnIndex)) {
-          loadedData.grandTotalColumnIndex = that._data.grandTotalColumnIndex;
-        }
-      });
-      deferred && deferred.resolve(that._data);
+      this._data = loadedData;
+      if (deferred !== false) {
+        when(deferred).done(() => {
+          this._isFieldsModified = false;
+          this._eventsStrategy.fireEvent('changed');
+          if (isDefined(this._data.grandTotalRowIndex)) {
+            loadedData.grandTotalRowIndex = this._data.grandTotalRowIndex;
+          }
+          if (isDefined(this._data.grandTotalColumnIndex)) {
+            loadedData.grandTotalColumnIndex = this._data.grandTotalColumnIndex;
+          }
+        });
+      }
+      if (deferred) {
+        deferred.resolve(this._data);
+      }
     });
     return deferred;
   }
 
-  store() {
+  public store(): PivotGridStore | undefined {
     return this._store;
   }
 
-  collapseHeaderItem(area, path) {
-    const that: any = this;
-    const headerItems = area === 'column' ? that._data.columns : that._data.rows;
+  public collapseHeaderItem(area: DataSourceHeaderArea, path: ScalarFilterValue[]): boolean {
+    const headerItems = area === 'column' ? this._data.columns : this._data.rows;
     const headerItem = this.findHeaderItem(headerItems, path);
-    const field = that.getAreaFields(area)[path.length - 1];
+    const field: PivotGridField | undefined = this.getAreaFields(area)[path.length - 1];
 
-    if (headerItem && headerItem.children) {
-      that._eventsStrategy.fireEvent('expandValueChanging', [{
+    if (headerItem?.children) {
+      this._eventsStrategy.fireEvent('expandValueChanging', [{
         area,
         path,
         expanded: false,
@@ -1252,22 +1308,22 @@ class PivotGridDataSource {
       }
       headerItem.collapsedChildren = headerItem.children;
       delete headerItem.children;
-      that._update();
-      if (that.paginate()) {
-        that.load();
+      this._update();
+      if (this.paginate()) {
+        this.load();
       }
       return true;
     }
     return false;
   }
 
-  collapseAll(id) {
+  public collapseAll(id: number | string): void {
     let dataChanged = false;
-    const field = this.field(id) || {};
+    const field = this.field(id) ?? {};
     let areaOffsets = [this.getAreaFields(field.area).indexOf(field)];
 
     field.expanded = false;
-    if (field && field.levels) {
+    if (field.levels) {
       areaOffsets = [];
       field.levels.forEach((f) => {
         areaOffsets.push(this.getAreaFields(field.area).indexOf(f));
@@ -1275,25 +1331,31 @@ class PivotGridDataSource {
       });
     }
 
-    foreachTree(this._data[`${field.area}s`], (items) => {
+    const headerItems = field.area === 'row' || field.area === 'column'
+      ? this._data[`${field.area}s` as const]
+      : undefined;
+
+    foreachTree(headerItems, (items) => {
       const item = items[0];
       const path = createPath(items);
 
-      if (item && item.children && areaOffsets.includes(path.length - 1)) {
+      if (item?.children && areaOffsets.includes(path.length - 1)) {
         item.collapsedChildren = item.children;
         delete item.children;
         dataChanged = true;
       }
     }, true);
 
-    dataChanged && this._update();
+    if (dataChanged) {
+      this._update();
+    }
   }
 
-  expandAll(id) {
+  public expandAll(id: number | string): void {
     const field = this.field(id);
-    if (field && field.area) {
+    if (field?.area) {
       field.expanded = true;
-      if (field && field.levels) {
+      if (field.levels) {
         field.levels.forEach((f) => {
           f.expanded = true;
         });
@@ -1302,9 +1364,8 @@ class PivotGridDataSource {
     }
   }
 
-  expandHeaderItem(area, path) {
-    const that: any = this;
-    const headerItems = area === 'column' ? that._data.columns : that._data.rows;
+  public expandHeaderItem(area: DataSourceHeaderArea, path: ScalarFilterValue[]): boolean {
+    const headerItems = area === 'column' ? this._data.columns : this._data.rows;
     const headerItem = this.findHeaderItem(headerItems, path);
 
     if (headerItem && !headerItem.children) {
@@ -1315,143 +1376,160 @@ class PivotGridDataSource {
         expanded: true,
         needExpandData: !hasCache,
       };
-      that._eventsStrategy.fireEvent('expandValueChanging', [options]);
+      this._eventsStrategy.fireEvent('expandValueChanging', [options]);
       if (hasCache) {
         headerItem.children = headerItem.collapsedChildren;
         delete headerItem.collapsedChildren;
-        that._update();
+        this._update();
       } else if (this.store()) {
-        that.load(options);
+        this.load(options);
       }
       return hasCache;
     }
     return false;
   }
 
-  mergePartialDataSource(dataSource, deferred) {
-    const that: any = this;
-    const loadedData = that._data;
-    let newRowItemIndexesToCurrent;
-    let newColumnItemIndexesToCurrent;
+  public mergePartialDataSource(
+    dataSource: PivotGridLoadResult,
+    deferred: DeferredObj<DataSourceData> | false,
+  ): void {
+    const loadedData = this._data;
 
-    if (dataSource && dataSource.values) {
-      dataSource.rows = dataSource.rows || [];
-      dataSource.columns = dataSource.columns || [];
+    if (!dataSource?.values) {
+      return;
+    }
 
-      newRowItemIndexesToCurrent = this.updateHeaderItems(
-        loadedData.rows,
-        dataSource.rows,
-        loadedData.grandTotalColumnIndex,
-      );
-      newColumnItemIndexesToCurrent = this.updateHeaderItems(
-        loadedData.columns,
+    dataSource.rows ??= [];
+    dataSource.columns ??= [];
+
+    const newRowItemIndexesToCurrent = this.updateHeaderItems(
+      loadedData.rows,
+      dataSource.rows,
+      loadedData.grandTotalColumnIndex,
+    );
+    const newColumnItemIndexesToCurrent = this.updateHeaderItems(
+      loadedData.columns,
+      dataSource.columns,
+      loadedData.grandTotalColumnIndex,
+    );
+
+    when(newRowItemIndexesToCurrent, newColumnItemIndexesToCurrent)
+      .done((rowItemIndexesToCurrent, columnItemIndexesToCurrent) => {
+        if (rowItemIndexesToCurrent.length || columnItemIndexesToCurrent.length) {
+          this.updateDataSourceCells(
+            loadedData,
+            dataSource.values,
+            rowItemIndexesToCurrent,
+            columnItemIndexesToCurrent,
+          );
+        }
+        this._update(deferred);
+      });
+  }
+
+  public applyPartialDataSource(
+    area: DataSourceHeaderArea | undefined,
+    path: ScalarFilterValue[],
+    dataSource: PivotGridLoadResult,
+    deferred: DeferredObj<DataSourceData> | false,
+    oppositePath: ScalarFilterValue[] | undefined,
+  ): void {
+    const loadedData = this._data;
+    const headerItems = area === 'column' ? loadedData.columns : loadedData.rows;
+    const oppositeHeaderItems = area === 'column' ? loadedData.rows : loadedData.columns;
+
+    if (!dataSource?.values) {
+      return;
+    }
+
+    dataSource.rows ??= [];
+    dataSource.columns ??= [];
+    const headerItem = this.findHeaderItem(headerItems, path);
+    const oppositeHeaderItem = oppositePath
+      && this.findHeaderItem(oppositeHeaderItems, oppositePath);
+
+    if (!headerItem) {
+      return;
+    }
+
+    // eslint-disable-next-line @typescript-eslint/init-declarations -- assigned in the if/else
+    let newRowItemIndexesToCurrent: DeferredObj<number[]>;
+    // eslint-disable-next-line @typescript-eslint/init-declarations -- assigned in the if/else
+    let newColumnItemIndexesToCurrent: DeferredObj<number[]>;
+
+    if (area === 'column') {
+      newColumnItemIndexesToCurrent = this.updateHeaderItemChildren(
+        headerItems,
+        headerItem,
         dataSource.columns,
         loadedData.grandTotalColumnIndex,
       );
-
-      when(newRowItemIndexesToCurrent, newColumnItemIndexesToCurrent)
-        .done((newRowItemIndexesToCurrent, newColumnItemIndexesToCurrent) => {
-          if (newRowItemIndexesToCurrent.length || newColumnItemIndexesToCurrent.length) {
-            this.updateDataSourceCells(
-              loadedData,
-              dataSource.values,
-              newRowItemIndexesToCurrent,
-              newColumnItemIndexesToCurrent,
-            );
-          }
-          that._update(deferred);
-        });
-    }
-  }
-
-  applyPartialDataSource(area, path, dataSource, deferred, oppositePath) {
-    const that: any = this;
-    const loadedData = that._data;
-    const headerItems = area === 'column' ? loadedData.columns : loadedData.rows;
-    let headerItem;
-    const oppositeHeaderItems = area === 'column' ? loadedData.rows : loadedData.columns;
-    let oppositeHeaderItem;
-    let newRowItemIndexesToCurrent;
-    let newColumnItemIndexesToCurrent;
-
-    if (dataSource && dataSource.values) {
-      dataSource.rows = dataSource.rows || [];
-      dataSource.columns = dataSource.columns || [];
-      headerItem = this.findHeaderItem(headerItems, path);
-      oppositeHeaderItem = oppositePath && this.findHeaderItem(oppositeHeaderItems, oppositePath);
-      if (headerItem) {
-        if (area === 'column') {
-          newColumnItemIndexesToCurrent = this.updateHeaderItemChildren(
-            headerItems,
-            headerItem,
-            dataSource.columns,
-            loadedData.grandTotalColumnIndex,
-          );
-          if (oppositeHeaderItem) {
-            newRowItemIndexesToCurrent = this.updateHeaderItemChildren(
-              oppositeHeaderItems,
-              oppositeHeaderItem,
-              dataSource.rows,
-              loadedData.grandTotalRowIndex,
-            );
-          } else {
-            newRowItemIndexesToCurrent = this.updateHeaderItems(
-              loadedData.rows,
-              dataSource.rows,
-              loadedData.grandTotalRowIndex,
-            );
-          }
-        } else {
-          newRowItemIndexesToCurrent = this.updateHeaderItemChildren(
-            headerItems,
-            headerItem,
-            dataSource.rows,
-            loadedData.grandTotalRowIndex,
-          );
-          if (oppositeHeaderItem) {
-            newColumnItemIndexesToCurrent = this.updateHeaderItemChildren(
-              oppositeHeaderItems,
-              oppositeHeaderItem,
-              dataSource.columns,
-              loadedData.grandTotalColumnIndex,
-            );
-          } else {
-            newColumnItemIndexesToCurrent = this.updateHeaderItems(
-              loadedData.columns,
-              dataSource.columns,
-              loadedData.grandTotalColumnIndex,
-            );
-          }
-        }
-        when(newRowItemIndexesToCurrent, newColumnItemIndexesToCurrent)
-          .done((newRowItemIndexesToCurrent, newColumnItemIndexesToCurrent) => {
-            if (area === 'row' && newRowItemIndexesToCurrent.length || area === 'column' && newColumnItemIndexesToCurrent.length) {
-              this.updateDataSourceCells(
-                loadedData,
-                dataSource.values,
-                newRowItemIndexesToCurrent,
-                newColumnItemIndexesToCurrent,
-              );
-            }
-            that._update(deferred);
-          });
+      if (oppositeHeaderItem) {
+        newRowItemIndexesToCurrent = this.updateHeaderItemChildren(
+          oppositeHeaderItems,
+          oppositeHeaderItem,
+          dataSource.rows,
+          loadedData.grandTotalRowIndex,
+        );
+      } else {
+        newRowItemIndexesToCurrent = this.updateHeaderItems(
+          loadedData.rows,
+          dataSource.rows,
+          loadedData.grandTotalRowIndex,
+        );
+      }
+    } else {
+      newRowItemIndexesToCurrent = this.updateHeaderItemChildren(
+        headerItems,
+        headerItem,
+        dataSource.rows,
+        loadedData.grandTotalRowIndex,
+      );
+      if (oppositeHeaderItem) {
+        newColumnItemIndexesToCurrent = this.updateHeaderItemChildren(
+          oppositeHeaderItems,
+          oppositeHeaderItem,
+          dataSource.columns,
+          loadedData.grandTotalColumnIndex,
+        );
+      } else {
+        newColumnItemIndexesToCurrent = this.updateHeaderItems(
+          loadedData.columns,
+          dataSource.columns,
+          loadedData.grandTotalColumnIndex,
+        );
       }
     }
+    when(newRowItemIndexesToCurrent, newColumnItemIndexesToCurrent)
+      .done((rowItemIndexesToCurrent, columnItemIndexesToCurrent) => {
+        if ((area === 'row' && rowItemIndexesToCurrent.length)
+          || (area === 'column' && columnItemIndexesToCurrent.length)) {
+          this.updateDataSourceCells(
+            loadedData,
+            dataSource.values,
+            rowItemIndexesToCurrent,
+            columnItemIndexesToCurrent,
+          );
+        }
+        this._update(deferred);
+      });
   }
 
-  on(eventName, eventHandler) {
+  public on(
+    eventName: DataSourceEventName | Partial<Record<DataSourceEventName, EventHandler>>,
+    eventHandler?: EventHandler,
+  ): this {
     this._eventsStrategy.on(eventName, eventHandler);
     return this;
   }
 
-  off(eventName, eventHandler) {
+  public off(eventName: DataSourceEventName, eventHandler?: EventHandler): this {
     this._eventsStrategy.off(eventName, eventHandler);
     return this;
   }
 
-  dispose() {
-    const that: any = this;
-    const delayedLoadTask = that._delayedLoadTask;
+  public dispose(): void {
+    const delayedLoadTask = this._delayedLoadTask;
 
     this._eventsStrategy.dispose();
     if (delayedLoadTask) {
@@ -1460,7 +1538,7 @@ class PivotGridDataSource {
     this._isDisposed = true;
   }
 
-  isDisposed() {
+  public isDisposed(): boolean {
     return !!this._isDisposed;
   }
 }
