@@ -941,7 +941,7 @@ QUnit.module('keyboard navigation', moduleConfig, () => {
 
         instance.open();
 
-        assert.ok(inputFocusedHandler.callCount, 1, 'input get focused');
+        assert.strictEqual(inputFocusedHandler.callCount, 1, 'input get focused');
     });
 
     QUnit.testInActiveWindow('first content element should be focused after popup opening without scrolling the page', function(assert) {
