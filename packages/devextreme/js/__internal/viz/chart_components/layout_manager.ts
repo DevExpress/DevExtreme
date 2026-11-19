@@ -1,7 +1,6 @@
 /* eslint-disable @stylistic/no-mixed-operators */
 /* eslint-disable no-continue */
 /* eslint-disable @typescript-eslint/init-declarations */
-/* eslint-disable no-plusplus */
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable no-nested-ternary */
 /* eslint-disable consistent-return */
@@ -14,7 +13,7 @@ import { isNumeric as _isNumber } from '@ts/core/utils/type';
 import consts from '@ts/viz/components/consts';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 import { WrapperLayoutElement } from '@ts/viz/core/layout_element';
-import type { Canvas } from '@ts/viz/core/types';
+import type { Canvas, Size } from '@ts/viz/core/types';
 
 const { floor, sqrt } = Math;
 const _min = Math.min;
@@ -117,7 +116,7 @@ function getSizeLabels(series: ThemeValue[]): LabelSizes {
 
     let rWidth = maxWidth;
     if (maxWidth) {
-      res.outerLabelsCount++;
+      res.outerLabelsCount += 1;
       if (res.outerLabelsCount > 1) {
         maxWidth += consts.pieLabelSpacing;
       }
@@ -145,7 +144,7 @@ function correctLabelRadius(
   let runningWidth = 0;
   const { sizes, rSizes } = labelSizes;
 
-  for (i = 0; i < series.length; i++) {
+  for (i = 0; i < series.length; i += 1) {
     if (sizes[i] === 0) {
       curRadius && (curRadius += rSizes[i - 1]);
       continue;
@@ -318,7 +317,7 @@ let LayoutManager = class LayoutManager {
     panes: ThemeValue[],
     rotated: boolean,
     fixedSizeCallback?: (pane: ThemeValue) => PaneFixedSize,
-  ): { width: number; height: number } | false {
+  ): Size | false {
     const options = this._options;
     const { width, height, piePercentage } = options;
     const percentageIsValid = _isNumber(piePercentage);

@@ -2,7 +2,6 @@
 /* eslint-disable prefer-rest-params */
 /* eslint-disable @typescript-eslint/no-this-alias */
 /* eslint-disable @typescript-eslint/init-declarations */
-/* eslint-disable no-plusplus */
 /* eslint-disable func-names */
 /* eslint-disable import/no-mutable-exports */
 /* eslint-disable @typescript-eslint/naming-convention */
@@ -603,7 +602,7 @@ function selectItem(flags: boolean[], items: string[]): string {
   let i = 0;
   const ii = flags.length;
   let item;
-  for (; i < ii; ++i) {
+  for (; i < ii; i += 1) {
     if (flags[i]) {
       item = items[i];
       break;

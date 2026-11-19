@@ -17,6 +17,7 @@
 /* eslint-disable max-classes-per-file */
 
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
+import type { Size } from '@ts/viz/core/types';
 import { enumParser, parseScalar as _parseScalar } from '@ts/viz/core/utils';
 import { createTracker, createVisibilityGroup, toggleDisplay } from '@ts/viz/vector_map/control_bar/utils';
 
@@ -407,7 +408,7 @@ export let ControlBar = class ControlBar {
   }
 
   // BEGIN: Implementation of LayoutTarget interface
-  resize(size: { width: number; height: number } | null): void {
+  resize(size: Size | null): void {
     if (this._isActive) {
       this._root.attr({ visibility: size !== null ? null : 'hidden' });
     }

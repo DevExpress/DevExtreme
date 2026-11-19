@@ -551,7 +551,6 @@ class Form extends Widget<FormProperties> {
 
   _renderScrollable(): void {
     const useNativeScrolling = this.option('useNativeScrolling');
-    // @ts-expect-error ts-error
     this._scrollable = new Scrollable(this.$element(), {
       useNative: !!useNativeScrolling,
       useSimulatedScrollbar: !useNativeScrolling,

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-declaration-merging */
 /* eslint-disable max-classes-per-file */
 
 import type { VisualRange } from '@js/common/charts';
@@ -30,7 +29,7 @@ import { plugin as exportPlugin } from '@ts/viz/core/export';
 import { setupWidgetPrototype } from '@ts/viz/core/helpers';
 import { plugin as LoadingIndicatorPlugin } from '@ts/viz/core/loading_indicator';
 import { plugin as titlePlugin } from '@ts/viz/core/title';
-import type { Bounds } from '@ts/viz/core/types';
+import type { Bounds, Size } from '@ts/viz/core/types';
 import {
   convertVisualRangeObject,
   getCategoriesInfo,
@@ -971,17 +970,20 @@ Object.getOwnPropertyNames(Axis.prototype).forEach((field: string) => {
     AxisWrapper.prototype[field] = function callAxisMethod(
       this: { _axis: ThemeValue },
       ...args: unknown[]
-    ): ThemeValue {
-      const axis: ThemeValue = this._axis;
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+    ): unknown {
+      const axis: Record<string, (...methodArgs: unknown[]) => unknown> = this._axis;
       return axis[field](...args);
     };
   }
 });
 
-interface RangeSelector extends DataSourcePluginMembers {}
-
 class RangeSelector extends BaseWidget {
+  declare _dataIsLoaded: DataSourcePluginMembers['_dataIsLoaded'];
+
+  declare _dataSourceItems: DataSourcePluginMembers['_dataSourceItems'];
+
+  declare _updateDataSource: DataSourcePluginMembers['_updateDataSource'];
+
   _clipRect;
 
   _axis!: ThemeValue;
@@ -1010,7 +1012,7 @@ class RangeSelector extends BaseWidget {
     return this._dataIsLoaded();
   }
 
-  _getDefaultSize(): { width: number; height: number } {
+  _getDefaultSize(): Size {
     return {
       width: 400, height: 160,
     };
@@ -1513,7 +1515,6 @@ class RangeSelector extends BaseWidget {
   }
 
   getValue(): (number | string | Date)[] {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return convertVisualRangeObject(this._slidersController.getSelectedRange());
   }
 

@@ -1,6 +1,5 @@
 /* eslint-disable @stylistic/no-mixed-operators */
 /* eslint-disable @typescript-eslint/init-declarations */
-/* eslint-disable no-plusplus */
 /* eslint-disable func-names */
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
@@ -71,7 +70,7 @@ export function calculateRectangles(nodes, head, totalRect, sidesData, rowData):
   variedSidePart[sidesData.varied1] = totalRect[sidesData.varied1];
   variedSidePart[sidesData.varied2] = totalRect[sidesData.varied1]
     + sidesData.variedDir * rowData.side;
-  for (i = head, ii = head + rowData.count; i < ii; ++i) {
+  for (i = head, ii = head + rowData.count; i < ii; i += 1) {
     rect = variedSidePart.slice();
     rect[static1] = position;
     delta = _round(side * nodes[i].value / sum) || 0;

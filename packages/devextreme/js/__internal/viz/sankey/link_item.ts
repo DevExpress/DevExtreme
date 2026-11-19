@@ -5,7 +5,7 @@
 import { paintedColor } from '@ts/core/utils/css_variables';
 import { isDefined } from '@ts/core/utils/type';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
-import type { BBox } from '@ts/viz/core/types';
+import type { BBox, Coords } from '@ts/viz/core/types';
 import { COLOR_MODE_GRADIENT, COLOR_MODE_SOURCE, COLOR_MODE_TARGET } from '@ts/viz/sankey/constants';
 
 const states = ['normal', 'adjacentNodeHover', 'hover'];
@@ -30,7 +30,7 @@ interface LinkConnection {
 interface LinkWidget {
   _renderer: { getRootOffset: () => { left: number; top: number }; root?: { element?: Element } };
   _tooltip?: {
-    show: (target: ThemeValue, coords: { x: number; y: number }) => void;
+    show: (target: ThemeValue, coords: Coords) => void;
     hide: () => void;
   };
   _getOption: (name: string, isScalar?: boolean) => ThemeValue;
@@ -110,7 +110,7 @@ class Link {
 
   declare boundingRect: BBox;
 
-  declare coords: { x: number; y: number };
+  declare coords: Coords;
 
   declare states: LinkStates;
 

@@ -1,7 +1,6 @@
 /* eslint-disable prefer-spread */
 /* eslint-disable @typescript-eslint/no-this-alias */
 /* eslint-disable @typescript-eslint/init-declarations */
-/* eslint-disable no-plusplus */
 /* eslint-disable @typescript-eslint/no-shadow */
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-multi-assign */
@@ -87,7 +86,7 @@ function preparePointsForStackedAreaSegment(points) {
       array.push(clonePoint(p, p.rightHole, p.minRightHole, 'right'));
     }
     result.push(array);
-    i++;
+    i += 1;
   }
 
   return result.flat();
@@ -142,7 +141,7 @@ chart.stackedsplinearea = _extend({}, areaSeries.splinearea, baseStackedSeries, 
         prevSeriesForwardPoints = prevSeriesForwardPoints.concat(
           that._prevSeries._segments[i].line,
         );
-        i++;
+        i += 1;
       }
 
       each(prevSeriesForwardPoints, (_, p) => {
