@@ -1,7 +1,6 @@
 /* eslint-disable max-depth */
 /* eslint-disable @typescript-eslint/no-this-alias */
 /* eslint-disable @typescript-eslint/init-declarations */
-/* eslint-disable no-plusplus */
 /* eslint-disable func-names */
 /* eslint-disable no-nested-ternary */
 /* eslint-disable @typescript-eslint/no-shadow */
@@ -89,7 +88,7 @@ function bringSelectedTilesToForeground(nodes, selectionList): void {
   const ii = selectionList.length;
   let node;
 
-  for (i = 0; i < ii; ++i) {
+  for (i = 0; i < ii; i += 1) {
     node = nodes[selectionList[i]];
     tileToFront[Number(node.isNode())](node.tile);
   }
@@ -146,7 +145,7 @@ proto.clearSelection = function (): void {
 
   if (that._selectionMode !== MODE_NONE) {
     that._context.suspend();
-    for (i = 0; i < ii; ++i) {
+    for (i = 0; i < ii; i += 1) {
       that._applySelectionState(selectionList[i], false);
     }
     selectionList.length = 0;

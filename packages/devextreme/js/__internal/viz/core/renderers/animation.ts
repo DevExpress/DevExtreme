@@ -11,7 +11,6 @@
 /* eslint-disable @typescript-eslint/init-declarations */
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable guard-for-in */
-/* eslint-disable no-plusplus */
 
 import { cancelAnimationFrame, requestAnimationFrame } from '@ts/common/core/animation/frame';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
@@ -73,11 +72,11 @@ export const animationSvgStep: AnimationSteps = {
     let j;
     const segments: ThemeValue[][] = [];
 
-    for (i = 0; i < from.length; i++) {
+    for (i = 0; i < from.length; i += 1) {
       curSeg = from[i];
       seg = [curSeg[0]];
       if (curSeg.length > 1) {
-        for (j = 1; j < curSeg.length; j++) {
+        for (j = 1; j < curSeg.length; j += 1) {
           seg.push(easing(progress, curSeg[j], to[i][j]));
         }
       }
@@ -246,7 +245,7 @@ export let AnimationController = class AnimationController {
       if (!animations[an].tick(now)) {
         delete animations[an];
       }
-      activeAnimation++;
+      activeAnimation += 1;
     }
     if (activeAnimation === 0) {
       this.stop();
@@ -264,7 +263,8 @@ export let AnimationController = class AnimationController {
   }
 
   addAnimation(animation: Animation): void {
-    this._animations[this._animationCount++] = animation;
+    this._animations[this._animationCount] = animation;
+    this._animationCount += 1;
     // @ts-expect-error the handle is null when _loop() had no end callback, clearTimeout(null) is a
     // no-op
     clearTimeout(this._endAnimationTimer);

@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-this-alias */
 /* eslint-disable @typescript-eslint/init-declarations */
-/* eslint-disable no-plusplus */
 /* eslint-disable func-names */
 /* eslint-disable import/no-mutable-exports */
 /* eslint-disable @typescript-eslint/naming-convention */
@@ -25,7 +24,8 @@ let _TESTS_dataKey;
 proto._eventsMap.onClick = { name: 'click' };
 
 const getDataKey = function (): string {
-  const dataKey = DATA_KEY_BASE + dataKeyModifier++;
+  const dataKey = DATA_KEY_BASE + dataKeyModifier;
+  dataKeyModifier += 1;
   return dataKey;
 };
 
