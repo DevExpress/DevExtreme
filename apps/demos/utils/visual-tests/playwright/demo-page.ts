@@ -1,6 +1,6 @@
 import { readFileSync } from 'fs';
 import { join } from 'path';
-import type { Page } from '@playwright/test';
+import type { Page, Request } from '@playwright/test';
 import { applyTheme } from '../matrix-test-core';
 
 interface ConsoleMessage {
@@ -86,8 +86,48 @@ export async function prepareDemoPage(
   });
 }
 
-export async function openDemo(page: Page, url: string): Promise<void> {
-  await page.goto(url, { waitUntil: 'networkidle' });
+const nextFrame = (page: Page): Promise<void> => page.evaluate(() => new Promise<void>((resolve) => {
+  requestAnimationFrame(() => requestAnimationFrame(() => resolve()));
+}));
+
+// The "networkidle" load state cannot do this job: it is reported once per navigation, and a long
+// script keeps the network quiet enough for it to come before the page has finished loading.
+export function trackRequests(page: Page): () => Promise<void> {
+  const pending = new Set<Request>();
+  let onIdle: (() => void) | null = null;
+
+  const release = (request: Request): void => {
+    pending.delete(request);
+
+    if (pending.size === 0) {
+      onIdle?.();
+    }
+  };
+
+  page.on('request', (request) => pending.add(request));
+  page.on('requestfinished', release);
+  page.on('requestfailed', release);
+
+  return async (): Promise<void> => {
+    do {
+      if (pending.size > 0) {
+        await new Promise<void>((resolve) => { onIdle = resolve; });
+        onIdle = null;
+      }
+
+      // A request the page sends in reply to a response is in the set by the next frame.
+      await nextFrame(page);
+    } while (pending.size > 0);
+  };
+}
+
+export async function openDemo(
+  page: Page,
+  url: string,
+  waitForRequests: () => Promise<void>,
+): Promise<void> {
+  await page.goto(url);
+  await waitForRequests();
 
   await page.evaluate(() => {
     if (document.activeElement && document.activeElement !== document.body) {

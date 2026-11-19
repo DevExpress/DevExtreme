@@ -21,6 +21,7 @@ import {
   openDemo,
   prepareDemoPage,
   runTestCode,
+  trackRequests,
 } from '../utils/visual-tests/playwright/demo-page';
 import { knownWarnings } from './known-warnings';
 import { skippedTests } from './skipped-tests';
@@ -71,9 +72,11 @@ MIGRATED_FRAMEWORKS.forEach((approach) => {
 
         page.on('pageerror', (error) => pageErrors.push(error.stack ?? error.message));
 
+        const waitForRequests = trackRequests(page);
+
         await mockApi(page);
         await prepareDemoPage(page, pageURL, THEME, clientScript);
-        await openDemo(page, pageURL);
+        await openDemo(page, pageURL, waitForRequests);
 
         if (testStyles) {
           await page.addStyleTag({ content: testStyles });
@@ -89,6 +92,8 @@ MIGRATED_FRAMEWORKS.forEach((approach) => {
 
           await steps(page);
         }
+
+        await waitForRequests();
 
         const consoleMessages = (await getConsoleMessages(page))
           .filter((message) => !knownWarnings.some((warning) => message.startsWith(warning)));

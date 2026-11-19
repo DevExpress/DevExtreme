@@ -4,12 +4,14 @@ import {
   BASE_URL, SERVER_PORT, THEME, VIEWPORT,
 } from './utils/visual-tests/playwright/const';
 
-// The CI agent and the container draw the same pixels and are judged strictly. A run on the host
-// is lenient: another OS rasterises text differently, so its comparison proves nothing anyway.
+// The CI agent and the container draw the same pixels and are judged exactly. The same comparison
+// decides when a page has stopped changing, so a tolerance there lets the last frames of an
+// animation pass for the final picture. A run on the host is lenient: another OS rasterises text
+// differently, so its comparison proves nothing anyway.
 const rendersLikeCI = !!process.env.CI || !!process.env.DX_CONTAINER;
 
 const screenshotBudget = rendersLikeCI
-  ? { maxDiffPixels: 0, threshold: 0.1 }
+  ? { maxDiffPixels: 0, threshold: 0 }
   : { maxDiffPixelRatio: 0.05, threshold: 0.2 };
 
 // The flags pin the rendering pipeline so screenshots stay comparable between runs.
