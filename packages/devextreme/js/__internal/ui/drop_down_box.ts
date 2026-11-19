@@ -326,8 +326,8 @@ class DropDownBox<
 
   _popupShownHandler(): void {
     super._popupShownHandler();
-    const $firstElement = this._getTabbableElements().first();
-    eventsEngine.trigger($firstElement, 'focus');
+    const firstElement = this._getTabbableElements().first().get<HTMLElement>(0);
+    firstElement?.focus({ preventScroll: true });
   }
 
   _setCollectionWidgetOption(): void {}

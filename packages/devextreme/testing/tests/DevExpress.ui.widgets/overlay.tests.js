@@ -3381,6 +3381,36 @@ testModule('keyboard navigation', {
 
         assert.strictEqual(this.overlay.option('visible'), true, 'overlay doesn\'t handle keyboard propagated events');
     });
+
+    test('overlay content should get focus on show without scrolling the page', function(assert) {
+        const $pageTail = $('<div>').height(window.innerHeight * 3).appendTo('body');
+        const $target = $('<div>')
+            .css({ position: 'absolute', top: window.innerHeight - 10, left: 0, width: 10, height: 10 })
+            .appendTo('body');
+        const overlay = new Overlay($('<div>').appendTo('body'), {
+            focusStateEnabled: true,
+            container: 'body',
+            width: 100,
+            height: 100,
+            position: { my: 'top left', at: 'bottom left', of: $target, collision: 'none' }
+        });
+        const $overlayContent = $(overlay.$content());
+
+        try {
+            const pageScrollTop = window.scrollY;
+
+            overlay.show();
+
+            const contentBottomInPage = $overlayContent.get(0).getBoundingClientRect().bottom + window.scrollY;
+            assert.ok(contentBottomInPage > pageScrollTop + window.innerHeight, 'overlay content is below the visible part of the page');
+            assert.ok($overlayContent.is(getActiveElement()), 'overlay content is focused');
+            assert.strictEqual(window.scrollY, pageScrollTop, 'page is not scrolled');
+        } finally {
+            overlay.dispose();
+            $target.remove();
+            $pageTail.remove();
+        }
+    });
 });
 
 testModule('focus policy', {

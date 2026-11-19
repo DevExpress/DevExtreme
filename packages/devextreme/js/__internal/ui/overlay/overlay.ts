@@ -724,7 +724,7 @@ class Overlay<
       const { focusStateEnabled } = this.option();
 
       if (focusStateEnabled) {
-        eventsEngine.trigger(this._focusTarget(), 'focus');
+        this._focusTarget()?.get<HTMLElement>(0)?.focus({ preventScroll: true });
       }
 
       completeShowAnimation.call(this, element, config);

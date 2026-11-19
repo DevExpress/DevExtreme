@@ -944,6 +944,30 @@ QUnit.module('keyboard navigation', moduleConfig, () => {
         assert.ok(inputFocusedHandler.callCount, 1, 'input get focused');
     });
 
+    QUnit.testInActiveWindow('first content element should be focused after popup opening without scrolling the page', function(assert) {
+        const $pageTail = $('<div>').height(window.innerHeight * 3).appendTo('body');
+        const $input = $('<input>', { type: 'text' }).css('marginTop', window.innerHeight);
+
+        try {
+            const instance = new DropDownBox(this.$element, {
+                dropDownOptions: { maxHeight: window.innerHeight * 2 },
+                contentTemplate(component, content) {
+                    $(content).append($input);
+                }
+            });
+            const pageScrollTop = window.scrollY;
+
+            instance.open();
+
+            const inputBottomInPage = $input.get(0).getBoundingClientRect().bottom + window.scrollY;
+            assert.ok(inputBottomInPage > pageScrollTop + window.innerHeight, 'input is below the visible part of the page');
+            assert.strictEqual(document.activeElement, $input.get(0), 'input is focused');
+            assert.strictEqual(window.scrollY, pageScrollTop, 'page is not scrolled');
+        } finally {
+            $pageTail.remove();
+        }
+    });
+
 });
 
 QUnit.module('validation', moduleConfig, () => {
