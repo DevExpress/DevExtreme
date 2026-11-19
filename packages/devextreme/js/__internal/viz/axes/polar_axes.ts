@@ -4,7 +4,6 @@
 /* eslint-disable @typescript-eslint/no-this-alias */
 /* eslint-disable default-case */
 /* eslint-disable @typescript-eslint/init-declarations */
-/* eslint-disable no-plusplus */
 /* eslint-disable func-names */
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable @typescript-eslint/no-shadow */
@@ -23,6 +22,7 @@ import constants from '@ts/viz/axes/axes_constants';
 import { calculateCanvasMargins, measureLabels } from '@ts/viz/axes/axes_utils';
 import { tick } from '@ts/viz/axes/tick';
 import xyAxes from '@ts/viz/axes/xy_axes';
+import type { Coords } from '@ts/viz/core/types';
 import {
   convertPolarToXY, convertXYToPolar,
   getCosAndSin, getDistance,
@@ -73,7 +73,7 @@ const circularAxes = {
     };
   },
 
-  applyMargins() {
+  applyMargins(): void {
     const margins = this._calculateValueMargins(this._majorTicks);
 
     const br = this._translator.getBusinessRange();
@@ -107,7 +107,7 @@ const circularAxes = {
     return [options.startAngle, options.endAngle];
   },
 
-  _updateRadius(canvas) {
+  _updateRadius(canvas): void {
     const rad = _min(
       canvas.width - canvas.left - canvas.right,
       canvas.height - canvas.top - canvas.bottom,
@@ -115,7 +115,7 @@ const circularAxes = {
     this._radius = rad < 0 ? 0 : rad;
   },
 
-  _updateCenter(canvas) {
+  _updateCenter(canvas): void {
     this._center = {
       x: canvas.left + (canvas.width - canvas.right - canvas.left) / 2,
       y: canvas.top + (canvas.height - canvas.top - canvas.bottom) / 2,
@@ -133,7 +133,7 @@ const circularAxes = {
     return this._renderer.circle();
   },
 
-  _updateAxisElementPosition() {
+  _updateAxisElementPosition(): void {
     const center = this.getCenter();
     this._axisElement.attr({ cx: center.x, cy: center.y, r: this.getRadius() });
   },
@@ -146,7 +146,7 @@ const circularAxes = {
     return this._options.firstPointOnStartAngle;
   },
 
-  _validateOptions(options) {
+  _validateOptions(options): void {
     const that = this;
     let { originValue } = options;
     const wholeRange = options.wholeRange = {};
@@ -195,7 +195,7 @@ const circularAxes = {
     return margins;
   },
 
-  _updateLabelsPosition() {
+  _updateLabelsPosition(): void {
     const that = this;
 
     measureLabels(that._majorTicks);
@@ -212,11 +212,11 @@ const circularAxes = {
     return this._options.firstPointOnStartAngle || (this._options.type !== constants.discrete);
   },
 
-  _getTranslatedCoord(value, offset) {
+  _getTranslatedCoord(value, offset): number {
     return this._translator.translate(value, offset) - HALF_PI_ANGLE;
   },
 
-  _getCanvasStartEnd() {
+  _getCanvasStartEnd(): { start: number; end: number } {
     return {
       start: 0 - HALF_PI_ANGLE,
       end: 360 - HALF_PI_ANGLE,
@@ -249,7 +249,7 @@ const circularAxes = {
     );
   },
 
-  _getStripLabelCoords(from, to) {
+  _getStripLabelCoords(from, to): { x: number; y: number; align: string } {
     const that = this;
     const coords = that._getStripGraphicAttributes(from, to);
     const angle = coords.startAngle + (coords.endAngle - coords.startAngle) / 2;
@@ -275,12 +275,12 @@ const circularAxes = {
     return this._createPathElement(this._getConstantLineGraphicAttributes(value).points, attr);
   },
 
-  _rotateConstantLine(line, value) {
+  _rotateConstantLine(line, value): void {
     const { x, y } = this.getCenter();
     line.rotate(value + this.getAngles()[0], x, y);
   },
 
-  _getConstantLineLabelsCoords(value) {
+  _getConstantLineLabelsCoords(value): Coords {
     const that = this;
     const cosSin = getCosAndSin(-value - that.getAngles()[0]);
     const halfRad = that.getRadius() / 2;
@@ -293,11 +293,11 @@ const circularAxes = {
 
   _checkAlignmentConstantLineLabels: _noop,
 
-  _adjustDivisionFactor(val) {
+  _adjustDivisionFactor(val): number {
     return val * 180 / (this.getRadius() * PI);
   },
 
-  _getScreenDelta() {
+  _getScreenDelta(): number {
     const angles = this.getAngles();
     return abs(angles[0] - angles[1]);
   },
@@ -410,7 +410,7 @@ const circularAxes = {
     return { x: coords.x, y: coords.y, angle: this.getTranslatedAngle(angle) };
   },
 
-  _getAdjustedStripLabelCoords(strip) {
+  _getAdjustedStripLabelCoords(strip): { translateY: number } {
     const box = strip.labelBBox;
 
     return {
@@ -418,11 +418,11 @@ const circularAxes = {
     };
   },
 
-  coordsIn(x, y) {
+  coordsIn(x, y): boolean {
     return convertXYToPolar(this.getCenter(), x, y).r > this.getRadius();
   },
 
-  _rotateTick(element, coords) {
+  _rotateTick(element, coords): void {
     const center = this.getCenter();
     element.rotate(coords.angle, center.x, center.y);
   },
@@ -431,11 +431,11 @@ const circularAxes = {
     return constants.validateOverlappingMode(mode);
   },
 
-  _validateDisplayMode() {
+  _validateDisplayMode(): string {
     return 'standard';
   },
 
-  _getStep(boxes) {
+  _getStep(boxes): number {
     const that = this;
     const radius = that.getRadius() + (that._options.label.indentFromAxis || 0);
     const maxLabelBox = boxes.reduce((prevValue, box) => {
@@ -454,7 +454,7 @@ const circularAxes = {
     return constants.getTicksCountInRange(that._majorTicks, 'angle', _max(angle1, angle2));
   },
 
-  _checkBoundedLabelsOverlapping(majorTicks, boxes, mode) {
+  _checkBoundedLabelsOverlapping(majorTicks, boxes, mode): void {
     const labelOpt = this._options.label;
     mode = mode || this._validateOverlappingMode(labelOpt.overlappingBehavior);
     if (mode !== 'hide') {
@@ -483,12 +483,12 @@ const circularAxes = {
     }
   },
 
-  shift(margins) {
+  shift(margins): void {
     this._axisGroup.attr({ translateX: margins.right, translateY: margins.bottom });
     this._axisElementsGroup.attr({ translateX: margins.right, translateY: margins.bottom });
   },
 
-  getTranslatedAngle(angle) {
+  getTranslatedAngle(angle): number {
     const startAngle = this.getAngles()[0];
     return angle + startAngle - HALF_PI_ANGLE;
   },
@@ -557,7 +557,7 @@ export const circularSpider = extend({}, circularAxes, {
         nextTick = (spiderTicks[i + 1] || spiderTicks[0]).coords;
         lastTick = { x: (tick.x + nextTick.x) / 2, y: (tick.y + nextTick.y) / 2 };
       }
-      i++;
+      i += 1;
     }
     // @ts-expect-error
     points.push(lastTick.x, lastTick.y);
@@ -583,7 +583,7 @@ export const circularSpider = extend({}, circularAxes, {
 });
 
 export const linear = {
-  _resetMargins() {
+  _resetMargins(): void {
     this._reinitTranslator(this._getViewportRange());
   },
   _getStick: xyAxesLinear._getStick,
@@ -617,7 +617,7 @@ export const linear = {
 
   _createAxisElement: xyAxesLinear._createAxisElement,
 
-  _updateAxisElementPosition() {
+  _updateAxisElementPosition(): void {
     const centerCoord = this.getCenter();
 
     this._axisElement.attr({
@@ -638,7 +638,7 @@ export const linear = {
     ];
   },
 
-  _getLabelAdjustedCoord(tick) {
+  _getLabelAdjustedCoord(tick): Coords {
     const that = this;
     const { labelCoords } = tick;
     const labelY = labelCoords.y;
@@ -683,7 +683,7 @@ export const linear = {
     };
   },
 
-  _getTranslatedValue(value, offset) {
+  _getTranslatedValue(value, offset): { x: number; y: number; angle: number } {
     const startAngle = this.getAngles()[0];
     const xy = convertPolarToXY(
       this.getCenter(),
@@ -762,7 +762,7 @@ export const linear = {
 
   _checkAlignmentConstantLineLabels: _noop,
 
-  _rotateTick(element, coords, isGridLine) {
+  _rotateTick(element, coords, isGridLine): void {
     !isGridLine && element.rotate(coords.angle + HALF_PI_ANGLE, coords.x, coords.y);
   },
 
@@ -770,7 +770,7 @@ export const linear = {
 
   _validateDisplayMode: circularAxes._validateDisplayMode,
 
-  _getStep(boxes) {
+  _getStep(boxes): number {
     const quarter = getPolarQuarter(this.getAngles()[0]);
     const spacing = this._options.label.minSpacing;
     const func = quarter === 2 || quarter === 4

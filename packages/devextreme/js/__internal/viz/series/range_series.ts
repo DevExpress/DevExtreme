@@ -5,7 +5,6 @@
 /* eslint-disable @typescript-eslint/prefer-for-of */
 /* eslint-disable @typescript-eslint/no-this-alias */
 /* eslint-disable @typescript-eslint/init-declarations */
-/* eslint-disable no-plusplus */
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable @typescript-eslint/no-shadow */
 /* eslint-disable consistent-return */
@@ -112,8 +111,8 @@ const baseRangeSeries = {
     return [this._options.rangeValue1Field || 'val1', this._options.rangeValue2Field || 'val2'];
   },
 
-  getSeriesPairCoord(coord, isArgument) {
-    let oppositeCoord = null;
+  getSeriesPairCoord(coord, isArgument): number | null {
+    let oppositeCoord: number | null = null;
     const { rotated } = this._options;
     const isOpposite = !isArgument && !rotated || isArgument && rotated;
     const coordName = isOpposite ? 'vy' : 'vx';
@@ -121,7 +120,7 @@ const baseRangeSeries = {
     const oppositeCoordName = isOpposite ? 'vx' : 'vy';
     const points = this.getPoints();
 
-    for (let i = 0; i < points.length; i++) {
+    for (let i = 0; i < points.length; i += 1) {
       const p = points[i];
       let tmpCoord;
 

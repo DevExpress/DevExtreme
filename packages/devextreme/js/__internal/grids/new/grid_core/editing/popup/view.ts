@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 /* eslint-disable spellcheck/spell-checker */
 import type { DataType } from '@js/common';
 import $ from '@js/core/renderer';
@@ -14,7 +12,6 @@ import Validator from '@ts/ui/validator';
 import { createRef } from 'inferno';
 
 import { ColumnsController } from '../../columns_controller/columns_controller';
-import type { Column } from '../../columns_controller/types';
 import { View } from '../../core/view';
 import { ItemsController } from '../../items_controller/items_controller';
 import { KeyboardNavigationController } from '../../keyboard_navigation/index';
@@ -22,6 +19,7 @@ import { OptionsController } from '../../options_controller/options_controller';
 import { ToolbarController } from '../../toolbar/controller';
 import { EditingController } from '../controller';
 import type { EditingTexts } from '../options';
+import type { ColumnFormItem } from '../types';
 import { PendingPromises } from '../utils';
 import type { Props } from './component';
 import { EditPopup } from './component';
@@ -169,10 +167,10 @@ export class EditPopupView extends View<Props> {
       return;
     }
 
-    const simpleFormItem = item as dxForm.SimpleItem;
+    const simpleFormItem = item as ColumnFormItem;
     const itemId = simpleFormItem.name ?? simpleFormItem.dataField;
 
-    const column: Column = (simpleFormItem as any).column
+    const column = simpleFormItem.column
         ?? columns.find((c) => c.name === itemId)
         ?? columns.find((c) => c.dataField === itemId);
 
@@ -180,7 +178,7 @@ export class EditPopupView extends View<Props> {
       return;
     }
 
-    (simpleFormItem as any).column = column;
+    simpleFormItem.column = column;
 
     if (itemId && !customEditorItems.includes(itemId)) {
       simpleFormItem.editorType = EDITOR_TYPES_BY_DATA_TYPE[column.dataType];

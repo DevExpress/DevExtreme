@@ -1,4 +1,3 @@
-/* eslint-disable no-plusplus */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
@@ -27,11 +26,11 @@ export default {
     return mode === 'ignore' || mode === 'none' ? mode : 'hide';
   },
 
-  getTicksCountInRange(ticks, valueKey, range) {
+  getTicksCountInRange(ticks, valueKey, range): number {
     let i = 1;
 
     if (ticks.length > 1) {
-      for (; i < ticks.length; i++) {
+      for (; i < ticks.length; i += 1) {
         if (Math.abs(ticks[i].coords[valueKey] - ticks[0].coords[valueKey]) >= range) {
           break;
         }
@@ -40,7 +39,7 @@ export default {
     return i;
   },
 
-  areLabelsOverlap(bBox1, bBox2, spacing, alignment) {
+  areLabelsOverlap(bBox1, bBox2, spacing, alignment): boolean {
     const horizontalInverted = bBox1.x > bBox2.x;
     const verticalInverted = bBox1.y > bBox2.y;
     let x1 = bBox1.x;

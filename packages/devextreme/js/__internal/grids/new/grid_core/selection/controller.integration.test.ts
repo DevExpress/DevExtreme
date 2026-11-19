@@ -1,4 +1,4 @@
-/* eslint-disable spellcheck/spell-checker, @stylistic/max-len */
+/* eslint-disable spellcheck/spell-checker */
 import {
   afterEach, beforeEach, describe, expect, it, jest,
 } from '@jest/globals';
@@ -28,11 +28,15 @@ const setup = (options: GridCoreOptions = {}): CardView => {
 
 const getCardElements = (): NodeListOf<Element> => document.querySelectorAll(SELECTORS.card);
 
-const getCardCheckboxes = (): NodeListOf<Element> => document.querySelectorAll(SELECTORS.cardCheckbox);
+const getCardCheckboxes = (): NodeListOf<Element> => document.querySelectorAll(
+  SELECTORS.cardCheckbox,
+);
 
 const getSelectAllButton = (): Element | null => document.querySelector(SELECTORS.selectAllButton);
 
-const getClearSelectionButton = (): Element | null => document.querySelector(SELECTORS.clearSelectionButton);
+const getClearSelectionButton = (): Element | null => document.querySelector(
+  SELECTORS.clearSelectionButton,
+);
 
 const checkError = (): void => expect(throwError).toHaveBeenCalledWith('E1042', 'CardView');
 

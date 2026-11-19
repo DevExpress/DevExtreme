@@ -9,7 +9,6 @@
 /* eslint-disable max-classes-per-file */
 /* eslint-disable max-depth */
 /* eslint-disable no-nested-ternary */
-/* eslint-disable no-plusplus */
 /* eslint-disable prefer-spread */
 
 import graphicObject from '@ts/common/charts';
@@ -304,7 +303,8 @@ class BaseWidget extends DOMComponent<any, any> {
   }
 
   _resumeChanges(): void {
-    if (--this._changesLocker === 0 && this._changes.count() > 0 && !this._applyingChanges) {
+    this._changesLocker -= 1;
+    if (this._changesLocker === 0 && this._changes.count() > 0 && !this._applyingChanges) {
       this._renderer.lock();
       this._applyingChanges = true;
       this._applyChanges();
@@ -348,8 +348,8 @@ class BaseWidget extends DOMComponent<any, any> {
     return {
       items: [],
       groups: [],
-      launchRequest: () => {},
-      doneRequest: () => {},
+      launchRequest: (): void => {},
+      doneRequest: (): void => {},
     };
   }
 
@@ -511,7 +511,7 @@ class BaseWidget extends DOMComponent<any, any> {
     }
 
     this._proxiedTargetParentsScrollHandler = this._proxiedTargetParentsScrollHandler
-            || function () { this._stopCurrentHandling(); }.bind(this);
+            || function (): void { this._stopCurrentHandling(); }.bind(this);
 
     eventsEngine.off($('').add(this._$prevRootParents), scrollEvents, this._proxiedTargetParentsScrollHandler);
 

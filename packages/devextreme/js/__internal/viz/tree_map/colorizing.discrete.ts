@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/init-declarations */
-/* eslint-disable no-plusplus */
 /* eslint-disable func-names */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
@@ -18,14 +17,14 @@ function discreteColorizer(options, themeManager, root) {
   return (options.colorizeGroups ? discreteGroupColorizer : discreteLeafColorizer)(palette, root);
 }
 
-function getLeafsCount(root) {
+function getLeafsCount(root): number {
   const allNodes = root.nodes.slice();
   let i;
   const ii = allNodes.length;
   let count = 0;
   let node;
 
-  for (i = 0; i < ii; ++i) {
+  for (i = 0; i < ii; i += 1) {
     node = allNodes[i];
     if (node.isNode()) {
       count = Math.max(count, getLeafsCount(node));
@@ -45,14 +44,14 @@ function discreteLeafColorizer(palette) {
   };
 }
 
-function getNodesCount(root) {
+function getNodesCount(root): number {
   const allNodes = root.nodes.slice();
   let i;
   const ii = allNodes.length;
   let count = 0;
   let node;
 
-  for (i = 0; i < ii; ++i) {
+  for (i = 0; i < ii; i += 1) {
     node = allNodes[i];
     if (node.isNode()) {
       count += getNodesCount(node) + 1;
@@ -69,7 +68,7 @@ function prepareDiscreteGroupColors(palette, root) {
   let ii = allNodes.length;
   let node;
 
-  for (i = 0; i < ii; ++i) {
+  for (i = 0; i < ii; i += 1) {
     node = allNodes[i];
     if (node.isNode()) {
       allNodes = allNodes.concat(node.nodes);

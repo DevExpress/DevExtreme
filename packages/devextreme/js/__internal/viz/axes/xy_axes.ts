@@ -6,7 +6,6 @@
 /* eslint-disable prefer-spread */
 /* eslint-disable @typescript-eslint/no-this-alias */
 /* eslint-disable @typescript-eslint/init-declarations */
-/* eslint-disable no-plusplus */
 /* eslint-disable func-names */
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable no-nested-ternary */
@@ -22,6 +21,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 
+import type { TimeInterval } from '@js/common/charts';
 import formatHelper from '@ts/core/format_helper';
 import { noop } from '@ts/core/utils/common';
 import { dateUtils } from '@ts/core/utils/date';
@@ -55,7 +55,7 @@ const TICKS_CORRECTIONS = {
   center: -0.5,
 };
 
-function prepareDatesDifferences(datesDifferences, tickInterval) {
+function prepareDatesDifferences(datesDifferences, tickInterval): void {
   let dateUnitInterval;
   let i;
 
@@ -66,11 +66,11 @@ function prepareDatesDifferences(datesDifferences, tickInterval) {
     tickInterval = 'month';
   }
   if (datesDifferences[tickInterval]) {
-    for (i = 0; i < dateUtils.dateUnitIntervals.length; i++) {
+    for (i = 0; i < dateUtils.dateUnitIntervals.length; i += 1) {
       dateUnitInterval = dateUtils.dateUnitIntervals[i];
       if (datesDifferences[dateUnitInterval]) {
         datesDifferences[dateUnitInterval] = false;
-        datesDifferences.count--;
+        datesDifferences.count -= 1;
       }
       if (dateUnitInterval === tickInterval) {
         break;
@@ -97,7 +97,7 @@ function getMarkerDates(min, max, markerInterval) {
   return dates;
 }
 
-function getStripHorizontalAlignmentPosition(alignment) {
+function getStripHorizontalAlignmentPosition(alignment): string {
   let position = 'start';
   if (alignment === 'center') {
     position = 'center';
@@ -108,7 +108,7 @@ function getStripHorizontalAlignmentPosition(alignment) {
   return position;
 }
 
-function getStripVerticalAlignmentPosition(alignment) {
+function getStripVerticalAlignmentPosition(alignment): string {
   let position = 'start';
   if (alignment === 'center') {
     position = 'center';
@@ -119,7 +119,7 @@ function getStripVerticalAlignmentPosition(alignment) {
   return position;
 }
 
-function getMarkerInterval(tickInterval) {
+function getMarkerInterval(tickInterval): 0 | TimeInterval {
   let markerInterval = getNextDateUnit(tickInterval);
   if (markerInterval === 'quarter') {
     markerInterval = getNextDateUnit(markerInterval);
@@ -165,11 +165,11 @@ function getConstantLineLabelMarginForVerticalAlignment(constantLines, alignment
   );
 }
 
-function getLeftMargin(bBox) {
+function getLeftMargin(bBox): number {
   return _math.abs(bBox.x) || 0;
 }
 
-function getRightMargin(bBox) {
+function getRightMargin(bBox): number {
   return _math.abs(bBox.width - _math.abs(bBox.x)) || 0;
 }
 
@@ -182,7 +182,7 @@ function generateRangesOnPoints(points, edgePoints, getRange) {
   let prevValue;
   let curRange;
 
-  for (i = 1, length = points.length; i < length; i++) {
+  for (i = 1, length = points.length; i < length; i += 1) {
     curValue = points[i];
     prevValue = points[i - 1];
     curRange = getRange(curValue, prevValue);
@@ -217,8 +217,8 @@ function generateAutoBreaks(
 ) {
   const breaks = [];
   const getRange = type === 'logarithmic'
-    ? (min, max) => getLog(max / min, logarithmBase)
-    : (min, max) => max - min;
+    ? (min, max): number => getLog(max / min, logarithmBase)
+    : (min, max): number => max - min;
 
   let visibleRange = getRange(minVisible, maxVisible);
   const points = series.reduce(
@@ -249,7 +249,7 @@ function generateAutoBreaks(
     ? _math.min(maxAutoBreakCount, ranges.length)
     : ranges.length;
 
-  for (let i = 0; i < _maxAutoBreakCount; i++) {
+  for (let i = 0; i < _maxAutoBreakCount; i += 1) {
     // @ts-expect-error
     if (ranges[i].length >= minDiff) {
       // @ts-expect-error
@@ -275,7 +275,7 @@ function generateAutoBreaks(
 
 export default {
   linear: {
-    _getStep(boxes, rotationAngle) {
+    _getStep(boxes, rotationAngle): number {
       const spacing = this._options.label.minSpacing;
       const func = this._isHorizontal
         ? function (box) { return box.width + spacing; }
@@ -311,7 +311,7 @@ export default {
       return this._markerTrackers;
     },
 
-    _getSharpParam(opposite) {
+    _getSharpParam(opposite): 'h' | 'v' {
       return this._isHorizontal ^ opposite ? 'h' : 'v';
     },
 
@@ -319,7 +319,7 @@ export default {
       return this._renderer.path([], 'line');
     },
 
-    _updateAxisElementPosition() {
+    _updateAxisElementPosition(): void {
       const axisCoord = this._axisPosition;
       const canvas = this._getCanvasStartEnd();
 
@@ -334,7 +334,7 @@ export default {
       return this._translator.translate(value, offset);
     },
 
-    _initAxisPositions() {
+    _initAxisPositions(): void {
       const that = this;
 
       if (that.customPositionIsAvailable()) {
@@ -371,7 +371,7 @@ export default {
       ];
     },
 
-    getTickStartPositionShift(length) {
+    getTickStartPositionShift(length): number {
       const { width } = this._options;
       const position = this.getResolvedBoundaryPosition();
       return length % 2 === 1
@@ -437,11 +437,11 @@ export default {
       return text;
     },
 
-    _updateTitleCoords() {
+    _updateTitleCoords(): void {
       this._title && this._title.element.attr(this._getTitleCoords());
     },
 
-    _drawTitle() {
+    _drawTitle(): void {
       const title = this._drawTitleText(this._axisTitleGroup);
       if (title) {
         this._title = {
@@ -450,7 +450,7 @@ export default {
       }
     },
 
-    _measureTitle() {
+    _measureTitle(): void {
       if (this._title) {
         if (this._title.bBox && !this._title.originalSize) {
           this._title.originalSize = this._title.bBox;
@@ -493,15 +493,15 @@ export default {
         getEnd() {
           return this.x + (invert ? -1 : 1) * (textIndent + this.labelBBox.width);
         },
-        setTitle() {
+        setTitle(): void {
           this.title = text;
         },
-        hideLabel() {
+        hideLabel(): void {
           this.label.dispose();
           this.label = null;
           this.title = text;
         },
-        hide() {
+        hide(): void {
           if (pathElement) {
             pathElement.dispose();
             pathElement = null;
@@ -630,7 +630,7 @@ export default {
       return offset + markerOptions.topIndent + markerOptions.separatorHeight;
     },
 
-    _checkMarkersPosition(invert, dateMarker, prevDateMarker) {
+    _checkMarkersPosition(invert, dateMarker, prevDateMarker): boolean {
       if (prevDateMarker === undefined) {
         return true;
       }
@@ -639,7 +639,7 @@ export default {
         : dateMarker.x > prevDateMarker.getEnd();
     },
 
-    _initializeMarkersTrackers(offset) {
+    _initializeMarkersTrackers(offset): void {
       const that = this;
       const { separatorHeight } = that._options.marker;
       const renderer = that._renderer;
@@ -698,7 +698,7 @@ export default {
       return markerLabelOptions;
     },
 
-    _adjustConstantLineLabels(constantLines) {
+    _adjustConstantLineLabels(constantLines): number {
       const that = this;
       const axisPosition = that._options.position;
       const canvas = that.getCanvas();
@@ -884,7 +884,7 @@ export default {
       return margins;
     },
 
-    _checkAlignmentConstantLineLabels(labelOptions) {
+    _checkAlignmentConstantLineLabels(labelOptions): void {
       const { position } = labelOptions;
       let verticalAlignment = (labelOptions.verticalAlignment || '').toLowerCase();
       let horizontalAlignment = (labelOptions.horizontalAlignment || '').toLowerCase();
@@ -930,7 +930,7 @@ export default {
       return { x, y };
     },
 
-    _getAdjustedStripLabelCoords(strip) {
+    _getAdjustedStripLabelCoords(strip): { translateX: number; translateY: number } {
       const stripOptions = strip.options;
       const { paddingTopBottom, paddingLeftRight } = stripOptions;
       const { horizontalAlignment, verticalAlignment } = stripOptions.label;
@@ -960,7 +960,7 @@ export default {
       return { translateX: x, translateY: y };
     },
 
-    _adjustTitle(offset) {
+    _adjustTitle(offset): void {
       offset = offset || 0;
       if (!this._title) {
         return;
@@ -998,7 +998,7 @@ export default {
       title.element.attr(params);
     },
 
-    _checkTitleOverflow(titleElement) {
+    _checkTitleOverflow(titleElement): void {
       if (!this._title && !titleElement) {
         return;
       }
@@ -1024,7 +1024,7 @@ export default {
       }
     },
 
-    coordsIn(x, y) {
+    coordsIn(x, y): boolean {
       const canvas = this.getCanvas();
       const { isHorizontal, position } = this._options;
       const coord = isHorizontal ? y : x;
@@ -1047,7 +1047,7 @@ export default {
       max: true,
     },
 
-    adjust() {
+    adjust(): void {
       const that = this;
       const seriesData = that._seriesData;
       const viewport = that._series.filter((s) => s.isVisible()).reduce((range, s) => {
@@ -1089,7 +1089,7 @@ export default {
       return this._axisPosition;
     },
 
-    _getStick() {
+    _getStick(): boolean {
       return !this._options.valueMarginsEnabled;
     },
 
@@ -1138,7 +1138,7 @@ export default {
       };
     },
 
-    areCoordsOutsideAxis(coords) {
+    areCoordsOutsideAxis(coords): boolean {
       const coord = this._isHorizontal ? coords.x : coords.y;
 
       const visibleArea = this.getVisibleArea();
@@ -1226,7 +1226,7 @@ export default {
       return sortingBreaks(breaks);
     },
 
-    _drawBreak(translatedEnd, positionFrom, positionTo, width, options, group) {
+    _drawBreak(translatedEnd, positionFrom, positionTo, width, options, group): void {
       const that = this;
       const breakStart = translatedEnd - (!that._translator.isInverted() ? width + 1 : 0);
       const attr = {
@@ -1284,7 +1284,7 @@ export default {
       return group;
     },
 
-    _disposeBreaksGroup() {
+    _disposeBreaksGroup(): void {
       (this._breaksElements || []).forEach((clipRect) => {
         clipRect.dispose();
       });
@@ -1292,7 +1292,7 @@ export default {
       this._breaksElements = null;
     },
 
-    drawScaleBreaks(customCanvas) {
+    drawScaleBreaks(customCanvas): void {
       const that = this;
       const options = that._options;
       const { breakStyle, position } = options;
@@ -1365,7 +1365,7 @@ export default {
 
     _getSpiderCategoryOption: noop,
 
-    shift(margins) {
+    shift(margins): void {
       const that = this;
       const options = that._options;
       const { isHorizontal } = options;
@@ -1464,7 +1464,7 @@ export default {
       return options.customPosition ?? options.position;
     },
 
-    customPositionIsAvailable() {
+    customPositionIsAvailable(): boolean {
       const options = this.getOptions();
       return (
         isDefined(this.getOrthogonalAxis())
@@ -1493,7 +1493,7 @@ export default {
       return this.positionIsBoundary(this._customBoundaryPosition);
     },
 
-    positionIsBoundary(position) {
+    positionIsBoundary(position): boolean {
       return [TOP, LEFT, BOTTOM, RIGHT].includes(position);
     },
 
@@ -1501,7 +1501,7 @@ export default {
       return this._orthogonalPositions?.[position === TOP || position === LEFT ? 'start' : 'end'];
     },
 
-    resolveOverlappingForCustomPositioning(oppositeAxes) {
+    resolveOverlappingForCustomPositioning(oppositeAxes): void {
       const that = this;
 
       if (
@@ -1520,7 +1520,7 @@ export default {
       oppositeAxes
         .filter((orthogonalAxis) => orthogonalAxis.pane === that.pane)
         .forEach((orthogonalAxis) => {
-          for (let i = 0; i < that._majorTicks.length; i++) {
+          for (let i = 0; i < that._majorTicks.length; i += 1) {
             const tick = that._majorTicks[i];
             const { label } = tick;
             if (label) {
@@ -1534,7 +1534,7 @@ export default {
                 that._shiftThroughOrthogonalAxisOverlappedTick(label, orthogonalAxis);
               }
 
-              for (let j = 0; j < orthogonalAxis._majorTicks.length; j++) {
+              for (let j = 0; j < orthogonalAxis._majorTicks.length; j += 1) {
                 const oppositeTick = orthogonalAxis._majorTicks[j];
                 const oppositeLabel = oppositeTick.label;
                 if (oppositeLabel && that._detectElementsOverlapping(label, oppositeLabel)) {
@@ -1558,7 +1558,7 @@ export default {
         });
     },
 
-    _shiftThroughOrthogonalAxisOverlappedTick(label, orthogonalAxis) {
+    _shiftThroughOrthogonalAxisOverlappedTick(label, orthogonalAxis): void {
       const that = this;
       const labelBBox = label.getBBox();
       const orthogonalAxisPosition = orthogonalAxis.getAxisPosition();
@@ -1592,7 +1592,7 @@ export default {
       }
     },
 
-    _shiftThroughAxisOverlappedTick(tick) {
+    _shiftThroughAxisOverlappedTick(tick): void {
       const that = this;
       const { label } = tick;
 
@@ -1626,7 +1626,7 @@ export default {
       }
     },
 
-    _detectElementsOverlapping(element1, element2) {
+    _detectElementsOverlapping(element1, element2): boolean {
       if (!element1 || !element2) {
         return false;
       }
@@ -1657,7 +1657,7 @@ function getLineDrawer(
   const elementType = isWaved ? 'bezier' : 'line';
   const group = renderer.g().append(root);
 
-  return function (offset, attr) {
+  return function (offset, attr): void {
     renderer
       .path(
         rotatePoints(getPoints(positionFrom, breakStart, positionTo, offset, isWaved)),

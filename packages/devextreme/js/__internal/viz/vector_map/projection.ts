@@ -1,6 +1,5 @@
 /* eslint-disable @stylistic/no-mixed-operators */
 /* eslint-disable @typescript-eslint/naming-convention */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
 
 import { projection } from '@ts/viz/vector_map/projection.main';
 
@@ -22,7 +21,7 @@ const RADIANS = PI / 180;
 const MERCATOR_LAT_BOUND = (2 * _atan(_exp(PI)) - PI / 2) / RADIANS;
 const MILLER_LAT_BOUND = (2.5 * _atan(_exp(0.8 * PI)) - 0.625 * PI) / RADIANS;
 
-function clamp(value, threshold) {
+function clamp(value, threshold): number {
   return _max(_min(value, +threshold), -threshold);
 }
 

@@ -1,6 +1,5 @@
 /* eslint-disable prefer-spread */
 /* eslint-disable @typescript-eslint/init-declarations */
-/* eslint-disable no-plusplus */
 /* eslint-disable func-names */
 /* eslint-disable @typescript-eslint/no-shadow */
 /* eslint-disable no-param-reassign */
@@ -12,15 +11,15 @@ import { dateUtils } from '@ts/core/utils/date';
 
 const days = [0, 1, 2, 3, 4, 5, 6];
 
-function getWeekendDays(workdays) {
+function getWeekendDays(workdays): number[] {
   return days.filter((day) => !workdays.some((workDay) => workDay === day));
 }
 
-function getNextDayIndex(dayIndex) {
+function getNextDayIndex(dayIndex): number {
   return (dayIndex + 1) % 7;
 }
 
-function dayBetweenWeekend(weekend, day) {
+function dayBetweenWeekend(weekend, day): boolean {
   let { start } = weekend;
   const { end } = weekend;
 
@@ -34,12 +33,12 @@ function dayBetweenWeekend(weekend, day) {
   return false;
 }
 
-function getDaysDistance(day, end) {
+function getDaysDistance(day, end): number {
   let length = 0;
 
   while (day !== end) {
     day = getNextDayIndex(day);
-    length++;
+    length += 1;
   }
 
   return length;
@@ -70,7 +69,7 @@ function separateBreak(scaleBreak, day) {
   return result;
 }
 
-function getWeekEndDayIndices(workDays) {
+function getWeekEndDayIndices(workDays): number[] {
   const indices = getWeekendDays(workDays);
 
   if (indices.length < 7) {
@@ -139,7 +138,7 @@ function generateDateBreaksForWeekend(min, max, weekendDayIndices) {
 function excludeWorkDaysFromWeekEndBreaks(breaks, exactWorkDays) {
   const result = breaks.slice();
   let i;
-  const processWorkDay = function (workday) {
+  const processWorkDay = function (workday): void {
     workday = dateUtils.trimTime(new Date(workday));
     if (result[i].from <= workday && result[i].to > workday) {
       const separatedBreak = separateBreak(result[i], workday);
@@ -153,7 +152,7 @@ function excludeWorkDaysFromWeekEndBreaks(breaks, exactWorkDays) {
     }
   };
 
-  for (i = 0; i < result.length; i++) {
+  for (i = 0; i < result.length; i += 1) {
     exactWorkDays.forEach(processWorkDay);
   }
 
@@ -162,7 +161,7 @@ function excludeWorkDaysFromWeekEndBreaks(breaks, exactWorkDays) {
 
 function generateBreaksForHolidays(min, max, holidays, weekendDayIndices) {
   let day;
-  const dayInWeekend = function (dayIndex) {
+  const dayInWeekend = function (dayIndex): boolean {
     return dayIndex === day;
   };
   const adjustedMin = dateUtils.trimTime(min);

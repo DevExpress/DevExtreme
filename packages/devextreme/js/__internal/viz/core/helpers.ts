@@ -7,7 +7,6 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-/* eslint-disable no-plusplus */
 
 import { noop } from '@ts/core/utils/common';
 import { extend as _extend } from '@ts/core/utils/extend';
@@ -28,7 +27,7 @@ class Flags {
     const ii = codes.length;
     const flags = this._flags;
 
-    for (i = 0; i < ii; ++i) {
+    for (i = 0; i < ii; i += 1) {
       flags[codes[i]] = 1;
     }
   }
@@ -58,14 +57,14 @@ function combineLists(baseList, thisList) {
   return baseList !== thisList ? baseList.concat(thisList) : baseList.slice();
 }
 
-function buildTotalChanges(proto) {
+function buildTotalChanges(proto): void {
   proto._totalChangesOrder = proto._optionChangesOrder.concat(
     proto._layoutChangesOrder,
     proto._customChangesOrder,
   );
 }
 
-function addChange(settings) {
+function addChange(settings): void {
   const proto = this.prototype;
   const { code } = settings;
 
@@ -85,20 +84,20 @@ function createChainExecutor() {
     let i;
     const ii = executeChain._chain.length;
     let result;
-    for (i = 0; i < ii; ++i) {
+    for (i = 0; i < ii; i += 1) {
       result = executeChain._chain[i].apply(this, arguments);
     }
 
     return result;
   };
   executeChain._chain = [];
-  executeChain.add = function (item) { executeChain._chain.push(item); };
-  executeChain.copy = function (executor) { executeChain._chain = executor._chain.slice(); };
+  executeChain.add = function (item): void { executeChain._chain.push(item); };
+  executeChain.copy = function (executor): void { executeChain._chain = executor._chain.slice(); };
 
   return executeChain;
 }
 
-export function expand(target, name, expander) {
+export function expand(target, name, expander): void {
   let current = target[name];
   if (!current) {
     current = expander;
@@ -116,7 +115,7 @@ export function expand(target, name, expander) {
   target[name] = current;
 }
 
-function addPlugin(plugin) {
+function addPlugin(plugin): void {
   const proto = this.prototype;
   proto._plugins.push(plugin);
   plugin.fontFields && proto._fontFields.push.apply(proto._fontFields, plugin.fontFields);
@@ -136,7 +135,7 @@ function addPlugin(plugin) {
 }
 
 export const replaceInherit = isServerSide
-  ? function (widget) {
+  ? function (widget): void {
     const _inherit = widget.inherit;
     widget.inherit = function () {
       const result = _inherit.apply(this, arguments);
@@ -162,7 +161,7 @@ export const replaceInherit = isServerSide
     widget.addChange = noop;
     widget.addPlugin = noop;
   }
-  : function (widget) {
+  : function (widget): void {
     const _inherit = widget.inherit;
     widget.inherit = function () {
       let proto = this.prototype;
@@ -233,7 +232,7 @@ const INHERITED_LISTS = [
 ];
 
 export const setupWidgetPrototype = isServerSide
-  ? function (Widget, members?) {
+  ? function (Widget, members?): void {
     const proto = Widget.prototype;
     if (members) {
       Object.assign(proto, members);
@@ -250,7 +249,7 @@ export const setupWidgetPrototype = isServerSide
     });
     Widget.addPlugin = noop;
   }
-  : function (Widget, members?) {
+  : function (Widget, members?): void {
     const proto = Widget.prototype;
     const baseProto = Object.getPrototypeOf(proto);
     if (members) {

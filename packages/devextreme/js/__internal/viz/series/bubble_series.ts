@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-this-alias */
-/* eslint-disable no-plusplus */
 /* eslint-disable func-names */
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable @typescript-eslint/no-shadow */
@@ -89,7 +88,7 @@ chart.bubble = _extend({}, scatterSeries, {
       const aggregate = data.reduce((result, item) => {
         result[0] += item[valueField];
         result[1] += item[sizeField];
-        result[2]++;
+        result[2] += 1;
         return result;
       }, [0, 0, 0]);
 
@@ -113,7 +112,7 @@ chart.bubble = _extend({}, scatterSeries, {
     const that = this;
     const lastPointIndex = that._drawnPoints.length - 1;
     const labelsGroup = that._labelsGroup;
-    const labelAnimFunc = function () {
+    const labelAnimFunc = function (): void {
       labelsGroup && labelsGroup.animate({ opacity: 1 }, { duration: that._defaultDuration });
     };
 

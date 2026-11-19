@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-this-alias */
 /* eslint-disable @typescript-eslint/init-declarations */
-/* eslint-disable no-plusplus */
 /* eslint-disable func-names */
 /* eslint-disable import/no-mutable-exports */
 /* eslint-disable @typescript-eslint/naming-convention */
@@ -24,8 +23,9 @@ let _TESTS_dataKey;
 /// #ENDDEBUG
 proto._eventsMap.onClick = { name: 'click' };
 
-const getDataKey = function () {
-  const dataKey = DATA_KEY_BASE + dataKeyModifier++;
+const getDataKey = function (): string {
+  const dataKey = DATA_KEY_BASE + dataKeyModifier;
+  dataKeyModifier += 1;
   return dataKey;
 };
 
@@ -54,11 +54,11 @@ expand(proto, '_initCore', function () {
       const { target } = e;
       return (target.tagName === 'tspan' ? target.parentNode : target)[dataKey];
     },
-    click(e) {
+    click(e): void {
       that._eventTrigger('click', e);
     },
   });
-  that._handlers.setTrackerData = function (node, element) {
+  that._handlers.setTrackerData = function (node, element): void {
     element.data(dataKey, node._id);
   };
 });

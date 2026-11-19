@@ -2,7 +2,6 @@
 /* eslint-disable @stylistic/no-mixed-operators */
 /* eslint-disable @typescript-eslint/no-this-alias */
 /* eslint-disable @typescript-eslint/init-declarations */
-/* eslint-disable no-plusplus */
 /* eslint-disable func-names */
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable @typescript-eslint/no-shadow */
@@ -10,7 +9,6 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-multi-assign */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable no-else-return */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
@@ -239,7 +237,7 @@ export const pie = _extend({}, barSeries, {
 
     while (i < len && isAllPointsNegative) {
       isAllPointsNegative = originalPoints[i].value <= 0;
-      i++;
+      i += 1;
     }
 
     const points = that._points = _map(originalPoints, (point) => {
@@ -306,13 +304,13 @@ export const pie = _extend({}, barSeries, {
     const that = this;
     const points = that._points;
     const pointsCount = points && points.length;
-    const completeFunc = function () {
+    const completeFunc = function (): void {
       that._animateComplete();
     };
     let animatePoint;
 
     if (firstDrawing) {
-      animatePoint = function (p, i) {
+      animatePoint = function (p, i): void {
         p.animate(
           i === pointsCount - 1 ? completeFunc : undefined,
           ANIMATION_DURATION,
@@ -320,7 +318,7 @@ export const pie = _extend({}, barSeries, {
         );
       };
     } else {
-      animatePoint = function (p, i) {
+      animatePoint = function (p, i): void {
         p.animate(i === pointsCount - 1 ? completeFunc : undefined);
       };
     }

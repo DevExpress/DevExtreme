@@ -1,10 +1,8 @@
 /* eslint-disable @typescript-eslint/no-this-alias */
 /* eslint-disable @typescript-eslint/init-declarations */
-/* eslint-disable no-plusplus */
 /* eslint-disable func-names */
 /* eslint-disable @typescript-eslint/no-shadow */
 /* eslint-disable @typescript-eslint/no-use-before-define */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
 
 import '@ts/viz/tree_map/api';
 import '@ts/viz/tree_map/states';
@@ -46,10 +44,10 @@ nodeProto.additionalStates.push(1);
 expand(proto, '_extendProxyType', function (proto) {
   const that = this;
 
-  proto.setHover = function () {
+  proto.setHover = function (): void {
     that._hoverNode(this._id);
   };
-  proto.isHovered = function () {
+  proto.isHovered = function (): boolean {
     return that._hoverIndex === this._id;
   };
 });
@@ -66,23 +64,23 @@ expand(proto, '_changeGroupSettings', function () {
   }
 });
 
-proto._applyHoverState = function (index, state) {
+proto._applyHoverState = function (index, state): void {
   setNodeStateRecursive(this._nodes[index], STATE_CODE, state);
   this._eventTrigger('hoverChanged', { node: this._nodes[index].proxy });
 };
 
-function setNodeStateRecursive(node, code, state) {
+function setNodeStateRecursive(node, code, state): void {
   const nodes = node.isNode() && node.nodes;
   let i;
   const ii = nodes?.length;
 
   node.setState(code, state);
-  for (i = 0; i < ii; ++i) {
+  for (i = 0; i < ii; i += 1) {
     setNodeStateRecursive(nodes[i], code, state);
   }
 }
 
-proto._hoverNode = function (index) {
+proto._hoverNode = function (index): void {
   const that = this;
   const currentIndex = that._hoverIndex;
 
@@ -104,6 +102,6 @@ proto._hoverNode = function (index) {
   }
 };
 
-proto.clearHover = function () {
+proto.clearHover = function (): void {
   this._hoverNode(-1);
 };

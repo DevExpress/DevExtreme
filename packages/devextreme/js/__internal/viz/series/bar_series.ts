@@ -3,7 +3,6 @@
 /* eslint-disable @typescript-eslint/prefer-for-of */
 /* eslint-disable @typescript-eslint/no-this-alias */
 /* eslint-disable @typescript-eslint/init-declarations */
-/* eslint-disable no-plusplus */
 /* eslint-disable func-names */
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable @typescript-eslint/no-shadow */
@@ -53,11 +52,11 @@ const baseBarSeriesMethods = {
     return base;
   },
 
-  _applyMarkerClipRect(settings) {
+  _applyMarkerClipRect(settings): void {
     settings['clip-path'] = null;
   },
 
-  _setGroupsSettings(animationEnabled, firstDrawing) {
+  _setGroupsSettings(animationEnabled, firstDrawing): void {
     const that = this;
     let settings = {};
     // @ts-expect-error
@@ -72,7 +71,7 @@ const baseBarSeriesMethods = {
     that._markersGroup.attr(settings);
   },
 
-  _drawPoint(options) {
+  _drawPoint(options): void {
     options.hasAnimation = options.hasAnimation && !options.firstDrawing;
     options.firstDrawing = false;
     // @ts-expect-error
@@ -102,7 +101,7 @@ const baseBarSeriesMethods = {
     };
   },
 
-  _updatePointsVisibility() {
+  _updatePointsVisibility(): void {
     const visibility = this._options.visible;
     each(this._points, (_, point) => {
       point._options.visible = visibility;
@@ -113,12 +112,12 @@ const baseBarSeriesMethods = {
     return this._options;
   },
 
-  _animate(firstDrawing) {
+  _animate(firstDrawing): void {
     const that = this;
-    const complete = function () {
+    const complete = function (): void {
       that._animateComplete();
     };
-    const animateFunc = function (drawnPoints, complete) {
+    const animateFunc = function (drawnPoints, complete): void {
       const lastPointIndex = drawnPoints.length - 1;
       _each(drawnPoints || [], (i, point) => {
         point.animate(i === lastPointIndex ? complete : undefined, point.getMarkerCoords());
@@ -137,9 +136,9 @@ const baseBarSeriesMethods = {
 
   _defaultAggregator: 'sum',
 
-  _defineDrawingState() {},
+  _defineDrawingState(): void {},
 
-  usePointsToDefineAutoHiding() {
+  usePointsToDefineAutoHiding(): boolean {
     return false;
   },
 };
@@ -198,7 +197,7 @@ chart.bar = _extend({}, chartSeries, baseBarSeriesMethods, {
     const oppositeCoordName = isOpposite ? 'vx' : 'vy';
     const points = this.getPoints();
 
-    for (let i = 0; i < points.length; i++) {
+    for (let i = 0; i < points.length; i += 1) {
       const p = points[i];
       let tmpCoord;
 
@@ -257,7 +256,7 @@ polar.bar = _extend({}, polarSeries, baseBarSeriesMethods, {
     const argAxis = this.getArgumentAxis();
     const startAngle = argAxis.getAngles()[0];
 
-    for (let i = 0; i < points.length; i++) {
+    for (let i = 0; i < points.length; i += 1) {
       const p = points[i];
       const tmpPoint = _isDefined(p[paramName])
         && _isDefined(params[paramName])

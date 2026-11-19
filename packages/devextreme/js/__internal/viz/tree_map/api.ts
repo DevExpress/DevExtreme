@@ -1,7 +1,6 @@
 /* eslint-disable no-new */
 /* eslint-disable @typescript-eslint/no-this-alias */
 /* eslint-disable @typescript-eslint/init-declarations */
-/* eslint-disable no-plusplus */
 /* eslint-disable func-names */
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable no-param-reassign */
@@ -22,7 +21,7 @@ const nodeProto = Node.prototype;
 proto._eventsMap.onNodesInitialized = { name: 'nodesInitialized' };
 proto._eventsMap.onNodesRendering = { name: 'nodesRendering' };
 
-proto._createProxyType = function () {
+proto._createProxyType = function (): void {
   const that = this;
   let nodes;
 
@@ -63,7 +62,7 @@ proto._createProxyType = function () {
       const ii = _nodes?.length;
       const list: Proxy[] = [];
 
-      for (i = 0; i < ii; ++i) {
+      for (i = 0; i < ii; i += 1) {
         list.push(_nodes[i].proxy);
       }
       return list;
@@ -137,19 +136,19 @@ proto._createProxyType = function () {
 
   // TODO: Find a way to make the following methods exist one per module rather then one per
   // instance
-  that._handlers.beginBuildNodes = function () {
+  that._handlers.beginBuildNodes = function (): void {
     nodes = that._nodes;
     new Proxy(that._root);
   };
-  that._handlers.buildNode = function (node) {
+  that._handlers.buildNode = function (node): void {
     new Proxy(node);
   };
-  that._handlers.endBuildNodes = function () {
+  that._handlers.endBuildNodes = function (): void {
     that._eventTrigger('nodesInitialized', { root: that._root.proxy });
   };
 };
 
-function change(node, codes) {
+function change(node, codes): void {
   const { ctx } = node;
 
   ctx.suspend();
@@ -157,18 +156,18 @@ function change(node, codes) {
   ctx.resume();
 }
 
-function collectNodes(node, list) {
+function collectNodes(node, list): void {
   const { nodes } = node;
   let i;
   const ii = nodes?.length;
 
-  for (i = 0; i < ii; ++i) {
+  for (i = 0; i < ii; i += 1) {
     list.push(nodes[i].proxy);
     collectNodes(nodes[i], list);
   }
 }
 
-function updateValue(node, value) {
+function updateValue(node, value): void {
   const delta = value - node.value;
 
   while (node) {
@@ -180,13 +179,13 @@ function updateValue(node, value) {
 proto._extendProxyType = noop;
 
 const { _resetNodes } = proto;
-proto._resetNodes = function () {
+proto._resetNodes = function (): void {
   _resetNodes.call(this);
   this._eventTrigger('nodesRendering', { node: this._topNode.proxy });
 };
 
 const _updateStyles = nodeProto.updateStyles;
-nodeProto.updateStyles = function () {
+nodeProto.updateStyles = function (): void {
   const that = this;
 
   _updateStyles.call(that);
@@ -198,7 +197,7 @@ nodeProto.updateStyles = function () {
 };
 
 const _updateLabelStyle = nodeProto.updateLabelStyle;
-nodeProto.updateLabelStyle = function () {
+nodeProto.updateLabelStyle = function (): void {
   const that = this;
   const custom = that._custom;
 

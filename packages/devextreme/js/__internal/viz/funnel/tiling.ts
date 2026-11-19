@@ -12,7 +12,7 @@ export function getAlgorithm(name) {
   return algorithms[_normalizeEnum(name)] || defaultAlgorithm;
 }
 
-export function addAlgorithm(name, callback, setDefault?) {
+export function addAlgorithm(name, callback, setDefault?): void {
   algorithms[name] = callback;
 
   if (setDefault) {

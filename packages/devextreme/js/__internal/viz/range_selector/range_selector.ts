@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-declaration-merging */
 /* eslint-disable max-classes-per-file */
 
 import type { VisualRange } from '@js/common/charts';
@@ -965,17 +964,20 @@ Object.getOwnPropertyNames(Axis.prototype).forEach((field: string) => {
     AxisWrapper.prototype[field] = function callAxisMethod(
       this: { _axis: ThemeValue },
       ...args: unknown[]
-    ): ThemeValue {
-      const axis: ThemeValue = this._axis;
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+    ): unknown {
+      const axis: Record<string, (...methodArgs: unknown[]) => unknown> = this._axis;
       return axis[field](...args);
     };
   }
 });
 
-interface RangeSelector extends DataSourcePluginMembers {}
-
 class RangeSelector extends BaseWidget {
+  declare _dataIsLoaded: DataSourcePluginMembers['_dataIsLoaded'];
+
+  declare _dataSourceItems: DataSourcePluginMembers['_dataSourceItems'];
+
+  declare _updateDataSource: DataSourcePluginMembers['_updateDataSource'];
+
   _clipRect;
 
   _axis!: ThemeValue;
@@ -1491,7 +1493,6 @@ class RangeSelector extends BaseWidget {
   }
 
   getValue(): (number | string | Date)[] {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return convertVisualRangeObject(this._slidersController.getSelectedRange());
   }
 

@@ -4,7 +4,6 @@
 /* eslint-disable max-depth */
 /* eslint-disable @typescript-eslint/no-this-alias */
 /* eslint-disable @typescript-eslint/init-declarations */
-/* eslint-disable no-plusplus */
 /* eslint-disable func-names */
 /* eslint-disable no-nested-ternary */
 /* eslint-disable @typescript-eslint/no-shadow */
@@ -54,7 +53,7 @@ function getTangentPoint(point, prevPoint, centerPoint, tan, nextStepAngle) {
   return clonePoint(prevPoint, x, y, correctAngle);
 }
 
-function obtainCubicBezierTCoef(p, p0, p1, p2, p3) {
+function obtainCubicBezierTCoef(p, p0, p1, p2, p3): number[] {
   const d = p0 - p;
   const c = 3 * p1 - 3 * p0;
   const b = 3 * p2 - 6 * p1 + 3 * p0;
@@ -64,18 +63,18 @@ function obtainCubicBezierTCoef(p, p0, p1, p2, p3) {
 }
 
 const lineMethods = {
-  autoHidePointMarkersEnabled() {
+  autoHidePointMarkersEnabled(): boolean {
     return true;
   },
 
-  _applyGroupSettings(style, settings, group) {
+  _applyGroupSettings(style, settings, group): void {
     const that = this;
     settings = extend(settings, style);
     that._applyElementsClipRect(settings);
     group.attr(settings);
   },
 
-  _setGroupsSettings(animationEnabled) {
+  _setGroupsSettings(animationEnabled): void {
     const that = this;
     const style = that._styles.normal;
 
@@ -86,7 +85,7 @@ const lineMethods = {
     animationEnabled && that._markersGroup && that._markersGroup.attr({ opacity: 0.001 });
   },
 
-  _createGroups() {
+  _createGroups(): void {
     const that = this;
     that._createGroup('_elementsGroup', that, that._group);
     that._areBordersVisible() && that._createGroup('_bordersGroup', that, that._group);
@@ -94,7 +93,7 @@ const lineMethods = {
     chartScatterSeries._createGroups.call(that);
   },
 
-  _areBordersVisible() {
+  _areBordersVisible(): boolean {
     return false;
   },
 
@@ -120,7 +119,7 @@ const lineMethods = {
     return { elements: this._parseLineOptions(options, defaultColor) };
   },
 
-  _applyStyle(style) {
+  _applyStyle(style): void {
     const that = this;
     that._elementsGroup && that._elementsGroup.attr(style.elements);
     each(that._graphics || [], (_, graphic) => {
@@ -132,18 +131,18 @@ const lineMethods = {
     return { line: this._createMainElement(segment.line, { 'stroke-width': this._styles.normal.elements['stroke-width'] }).append(group) };
   },
 
-  _removeElement(element) {
+  _removeElement(element): void {
     element.line.remove();
   },
 
-  _updateElement(element, segment, animate, animationComplete) {
+  _updateElement(element, segment, animate, animationComplete): void {
     const params = { points: segment.line };
     const lineElement = element.line;
 
     animate ? lineElement.animate(params, {}, animationComplete) : lineElement.attr(params);
   },
 
-  _animateComplete() {
+  _animateComplete(): void {
     const that = this;
     // @ts-expect-error
     chartScatterSeries._animateComplete.call(that);
@@ -151,13 +150,13 @@ const lineMethods = {
       && that._markersGroup.animate({ opacity: 1 }, { duration: that._defaultDuration });
   },
 
-  _animate() {
+  _animate(): void {
     const that = this;
     const lastIndex = that._graphics.length - 1;
     each(that._graphics || [], (i, elem) => {
       let complete;
       if (i === lastIndex) {
-        complete = function () {
+        complete = function (): void {
           that._animateComplete();
         };
       }
@@ -165,7 +164,7 @@ const lineMethods = {
     });
   },
 
-  _drawPoint(options) {
+  _drawPoint(options): void {
     // @ts-expect-error
     chartScatterSeries._drawPoint.call(this, { point: options.point, groups: options.groups });
   },
@@ -178,7 +177,7 @@ const lineMethods = {
     return rotated ? points.sort((p1, p2) => p2.y - p1.y) : points.sort((p1, p2) => p1.x - p2.x);
   },
 
-  _drawSegment(points, animationEnabled, segmentCount, lastSegment) {
+  _drawSegment(points, animationEnabled, segmentCount, lastSegment): void {
     const that = this;
     const { rotated } = that._options;
     const segment = that._prepareSegment(points, rotated, lastSegment);
@@ -215,13 +214,13 @@ const lineMethods = {
     );
   },
 
-  _updateTrackerElement(segment, element) {
+  _updateTrackerElement(segment, element): void {
     const settings = this._getTrackerSettings(segment);
     settings.points = this._getMainPointsFromSegment(segment);
     element.attr(settings);
   },
 
-  checkSeriesViewportCoord(axis, coord) {
+  checkSeriesViewportCoord(axis, coord): boolean {
     // @ts-expect-error
     if (!chartScatterSeries.checkSeriesViewportCoord.call(this)) {
       return false;
@@ -253,7 +252,7 @@ const lineSeries = chart.line = extend({}, chartScatterSeries, lineMethods, {
     const needValueCoord = (isArgument && !that._options.rotated)
       || (!isArgument && that._options.rotated);
 
-    for (let i = 0; i < nearestPoints.length; i++) {
+    for (let i = 0; i < nearestPoints.length; i += 1) {
       const p = nearestPoints[i];
       const k = (p[1].vy - p[0].vy) / (p[1].vx - p[0].vx);
       const b = p[0].vy - p[0].vx * k;
@@ -313,7 +312,7 @@ chart.stepline = extend({}, lineSeries, {
     const oppositeCoordName = !isOpposite ? 'vy' : 'vx';
     const nearestPoints = this._getNearestPointsByCoord(coord, isArgument);
 
-    for (let i = 0; i < nearestPoints.length; i++) {
+    for (let i = 0; i < nearestPoints.length; i += 1) {
       const p = nearestPoints[i];
       let tmpCoord;
 
@@ -470,7 +469,7 @@ chart.spline = extend({}, lineSeries, {
     const visibleArea = axis.getVisibleArea();
     const nearestPoints = this._getNearestPointsByCoord(coord, isArgument);
 
-    for (let i = 0; i < nearestPoints.length; i++) {
+    for (let i = 0; i < nearestPoints.length; i += 1) {
       const p = nearestPoints[i];
       if (p.length === 1) {
         visibleArea[0] <= p[0][oppositeCoordName]
@@ -531,7 +530,7 @@ polar.line = extend({}, polarScatterSeries, lineMethods, {
     lastSegment && this._closeSegment(points);
 
     if (this.argumentAxisType !== DISCRETE && this.valueAxisType !== DISCRETE) {
-      for (i = 1; i < points.length; i++) {
+      for (i = 1; i < points.length; i += 1) {
         preparedPoints = preparedPoints.concat(
           this._getTangentPoints(points[i], points[i - 1], centerPoint, i === points.length - 1),
         );
@@ -585,13 +584,13 @@ polar.line = extend({}, polarScatterSeries, lineMethods, {
       tangentPoints = [prevPoint, point];
     } else if (betweenAngle > 0) {
       const angle = isLastSegment ? betweenAngle : betweenAngle - 1;
-      for (i = angle; i >= 0; i--) {
+      for (i = angle; i >= 0; i -= 1) {
         // @ts-expect-error
         tangentPoints.push(getTangentPoint(point, prevPoint, centerPoint, tan, i));
       }
     } else {
       const angle = isLastSegment ? betweenAngle : betweenAngle + 1;
-      for (i = 0; i >= angle; i--) {
+      for (i = 0; i >= angle; i -= 1) {
         // @ts-expect-error
         tangentPoints.push(getTangentPoint(point, prevPoint, centerPoint, tan, betweenAngle - i));
       }
@@ -605,8 +604,8 @@ polar.line = extend({}, polarScatterSeries, lineMethods, {
     const paramName = isArgument ? 'angle' : 'radius';
     const coordParam = params[paramName];
     const centerPoint = argAxis.getCenter();
-    const getLengthByCoords = (p1, p2) => sqrt((p1.x - p2.x) ** 2 + (p1.y - p2.y) ** 2);
-    const isInsideInterval = (prevPoint, point, { x, y }) => (
+    const getLengthByCoords = (p1, p2): number => sqrt((p1.x - p2.x) ** 2 + (p1.y - p2.y) ** 2);
+    const isInsideInterval = (prevPoint, point, { x, y }): boolean => (
       getLengthByCoords({ x, y }, centerPoint) <= argAxis.getRadius()
       && min(prevPoint.x, point.x) <= x
       && max(prevPoint.x, point.x) >= x
@@ -694,7 +693,7 @@ polar.line = extend({}, polarScatterSeries, lineMethods, {
       }
     }
 
-    for (let i = 1; i < points.length; i++) {
+    for (let i = 1; i < points.length; i += 1) {
       if (points[i - 1][paramName] === param) {
         // @ts-expect-error
         neighborPoints.push(points[i - 1]);

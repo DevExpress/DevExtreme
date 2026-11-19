@@ -10,7 +10,6 @@
 /* eslint-disable @typescript-eslint/init-declarations */
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable guard-for-in */
-/* eslint-disable no-plusplus */
 /* eslint-disable func-names */
 /* eslint-disable import/no-mutable-exports */
 /* eslint-disable @typescript-eslint/naming-convention */
@@ -58,7 +57,7 @@ const DATETIME = 'datetime';
 let chart = {};
 let polar = {};
 
-function sum(array) {
+function sum(array): number {
   let result = 0;
   _each(array, (_, value) => {
     result += value;
@@ -66,14 +65,14 @@ function sum(array) {
   return result;
 }
 
-function isErrorBarTypeCorrect(type) {
+function isErrorBarTypeCorrect(type): boolean {
   // TODO why UNDEFINED is here
   // return inArray(type, [FIXED, PERCENT, VARIANCE, STANDARD_DEVIATION, STANDARD_ERROR, UNDEFINED])
   // !== -1;
   return [FIXED, PERCENT, VARIANCE, STANDARD_DEVIATION, STANDARD_ERROR].includes(type);
 }
 
-function variance(array, expectedValue) {
+function variance(array, expectedValue): number {
   return (
     sum(_map(array, (value) => (value - expectedValue) * (value - expectedValue))) / array.length
   );
@@ -89,11 +88,11 @@ function calculateAvgErrorBars(result, data, series) {
     const fusionData = data.reduce((result, item) => {
       if (_isDefined(item[lowValueField])) {
         result[0] += item[valueField] - item[lowValueField];
-        result[1]++;
+        result[1] += 1;
       }
       if (_isDefined(item[highValueField])) {
         result[2] += item[highValueField] - item[valueField];
-        result[3]++;
+        result[3] += 1;
       }
 
       return result;
@@ -150,7 +149,7 @@ function getMinMaxAggregator(compare) {
   };
 }
 
-function checkFields(data, fieldsToCheck, skippedFields) {
+function checkFields(data, fieldsToCheck, skippedFields): boolean {
   let allFieldsIsValid = true;
 
   for (const field in fieldsToCheck) {
@@ -181,7 +180,7 @@ const baseScatterMethods = {
 
   _drawSegment: _noop,
 
-  _appendInGroup() {
+  _appendInGroup(): void {
     this._group.append(this._extGroups.seriesGroup);
   },
 
@@ -194,21 +193,21 @@ const baseScatterMethods = {
 
   _getColorId: _noop,
 
-  _applyElementsClipRect(settings) {
+  _applyElementsClipRect(settings): void {
     settings['clip-path'] = this._paneClipRectID;
   },
 
-  _applyMarkerClipRect(settings) {
+  _applyMarkerClipRect(settings): void {
     settings['clip-path'] = this._forceClipping ? this._paneClipRectID : null;
   },
 
-  _createGroup(groupName, parent, target, settings) {
+  _createGroup(groupName, parent, target, settings): void {
     const group = parent[groupName] = parent[groupName] || this._renderer.g();
     target && group.append(target);
     settings && group.attr(settings);
   },
 
-  _applyClearingSettings(settings) {
+  _applyClearingSettings(settings): void {
     settings.opacity = null;
     settings.scale = null;
     if (this._options.rotated) {
@@ -218,13 +217,13 @@ const baseScatterMethods = {
     }
   },
 
-  _createGroups() {
+  _createGroups(): void {
     const that = this;
     that._createGroup('_markersGroup', that, that._group);
     that._createGroup('_labelsGroup', that);
   },
 
-  _setMarkerGroupSettings() {
+  _setMarkerGroupSettings(): void {
     const that = this;
     const settings = that._createPointStyles(that._getMarkerGroupOptions()).normal;
     settings.class = 'dxc-markers';
@@ -262,7 +261,7 @@ const baseScatterMethods = {
     return cat;
   },
 
-  _createErrorBarGroup(animationEnabled) {
+  _createErrorBarGroup(animationEnabled): void {
     const that = this;
     const errorBarOptions = that._options.valueErrorBar;
     let settings;
@@ -281,7 +280,7 @@ const baseScatterMethods = {
     }
   },
 
-  _setGroupsSettings(animationEnabled) {
+  _setGroupsSettings(animationEnabled): void {
     const that = this;
     that._setMarkerGroupSettings();
     that._setLabelGroupSettings(animationEnabled);
@@ -358,7 +357,7 @@ const baseScatterMethods = {
     };
   },
 
-  _checkData(data, skippedFields, fieldsToCheck) {
+  _checkData(data, skippedFields, fieldsToCheck): boolean {
     fieldsToCheck = fieldsToCheck || { value: this.getValueFields()[0] };
     fieldsToCheck.argument = this.getArgumentField();
     return checkFields(data, fieldsToCheck, skippedFields || {}) && data.value === data.value;
@@ -377,7 +376,7 @@ const baseScatterMethods = {
     return undefined;
   },
 
-  getValueRangeInitialValue() {
+  getValueRangeInitialValue(): undefined {
     return undefined;
   },
 
@@ -417,7 +416,7 @@ const baseScatterMethods = {
     };
   },
 
-  _errorBarsEnabled() {
+  _errorBarsEnabled(): boolean {
     return (
       this.valueAxisType !== DISCRETE
       && this.valueAxisType !== LOGARITHMIC
@@ -425,7 +424,7 @@ const baseScatterMethods = {
     );
   },
 
-  _drawPoint(options) {
+  _drawPoint(options): void {
     const { point } = options;
 
     if (point.isInVisibleArea()) {
@@ -437,7 +436,7 @@ const baseScatterMethods = {
     }
   },
 
-  _animateComplete() {
+  _animateComplete(): void {
     const that = this;
     const animationSettings = { duration: that._defaultDuration };
 
@@ -449,14 +448,14 @@ const baseScatterMethods = {
       );
   },
 
-  _animate() {
+  _animate(): void {
     const that = this;
     const lastPointIndex = that._drawnPoints.length - 1;
 
     _each(that._drawnPoints || [], (i, p) => {
       p.animate(
         i === lastPointIndex
-          ? () => {
+          ? (): void => {
             that._animateComplete();
           }
           : undefined,
@@ -490,9 +489,9 @@ const baseScatterMethods = {
         const value = item[valueField];
         if (_isDefined(value)) {
           result[0] += value;
-          result[1]++;
+          result[1] += 1;
         } else if (value === null) {
-          result[2]++;
+          result[2] += 1;
         }
 
         return result;
@@ -523,9 +522,9 @@ const baseScatterMethods = {
           result[0] += value;
         }
         if (value === null) {
-          result[1]++;
+          result[1] += 1;
         } else if (value === undefined) {
-          result[2]++;
+          result[2] += 1;
         }
         return result;
       }, [0, 0, 0]);
@@ -559,7 +558,7 @@ const baseScatterMethods = {
     max: getMinMaxAggregator((a, b) => a > b),
   },
 
-  _endUpdateData() {
+  _endUpdateData(): void {
     delete this._predefinedPointOptions;
   },
 
@@ -583,7 +582,7 @@ const baseScatterMethods = {
     return valueFields;
   },
 
-  _calculateErrorBars(data) {
+  _calculateErrorBars(data): void {
     if (!this.areErrorBarsVisible()) {
       return;
     }
@@ -601,7 +600,7 @@ const baseScatterMethods = {
     let valueArrayLength;
     let meanValue;
     let processDataItem;
-    const addSubError = function (_i, item) {
+    const addSubError = function (_i, item): void {
       value = item.value;
       item.lowError = value - floatErrorValue;
       item.highError = value + floatErrorValue;
@@ -612,7 +611,7 @@ const baseScatterMethods = {
         processDataItem = addSubError;
         break;
       case PERCENT:
-        processDataItem = function (_, item) {
+        processDataItem = function (_, item): void {
           value = item.value;
           const error = value * floatErrorValue / 100;
           item.lowError = value - error;
@@ -620,7 +619,7 @@ const baseScatterMethods = {
         };
         break;
       case UNDEFINED: // TODO: rework this
-        processDataItem = function (_, item) {
+        processDataItem = function (_, item): void {
           item.lowError = item.data[lowValueField];
           item.highError = item.data[highValueField];
         };
@@ -640,7 +639,7 @@ const baseScatterMethods = {
           case STANDARD_DEVIATION:
             meanValue = sum(valueArray) / valueArrayLength;
             floatErrorValue = _sqrt(variance(valueArray, meanValue)) * floatErrorValue;
-            processDataItem = function (_, item) {
+            processDataItem = function (_, item): void {
               item.lowError = meanValue - floatErrorValue;
               item.highError = meanValue + floatErrorValue;
             };
@@ -670,7 +669,7 @@ const baseScatterMethods = {
     return options;
   },
 
-  usePointsToDefineAutoHiding() {
+  usePointsToDefineAutoHiding(): boolean {
     return !!this._getOptionsForPoint().visible;
   },
 };
@@ -726,7 +725,7 @@ chart = _extend({}, baseScatterMethods, {
     const oppositeCoordName = !isOpposite ? 'vy' : 'vx';
     const points = this.getVisiblePoints();
 
-    for (let i = 0; i < points.length; i++) {
+    for (let i = 0; i < points.length; i += 1) {
       const p = points[i];
       const tmpCoord = p[coordName] === coord ? p[oppositeCoordName] : undefined;
 
@@ -786,8 +785,8 @@ chart = _extend({}, baseScatterMethods, {
       point = cat[pCoord];
       do {
         point = cat[nCoord] || cat[pCoord];
-        pCoord--;
-        nCoord++;
+        pCoord -= 1;
+        nCoord += 1;
       } while ((pCoord >= 0 || nCoord < cat.length) && !point);
 
       if (Array.isArray(point)) {
@@ -868,7 +867,7 @@ polar = _extend({}, baseScatterMethods, {
     const paramName = isArgument ? 'argument' : 'radius';
     const points = this.getVisiblePoints();
 
-    for (let i = 0; i < points.length; i++) {
+    for (let i = 0; i < points.length; i += 1) {
       const p = points[i];
       const tmpPoint = _isDefined(p[paramName])
         && _isDefined(params[paramName])
