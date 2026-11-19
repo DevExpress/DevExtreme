@@ -1062,12 +1062,13 @@ QUnit.module('keyboard navigation', moduleConfig, () => {
             const inputRect = $input.get(0).getBoundingClientRect();
             const elementAtInputCorner = document.elementFromPoint(inputRect.right - 1, inputRect.bottom - 1);
 
-            assert.strictEqual(document.activeElement, $input.get(0), 'input is focused');
             assert.strictEqual(elementAtInputCorner, $input.get(0), 'input bottom right corner is visible');
             done();
         }, { once: true });
 
         instance.open();
+
+        assert.strictEqual(document.activeElement, $input.get(0), 'input is focused');
     });
 
     QUnit.testInActiveWindow('first content element should be scrolled into view inside nested smoothly scrolling scrollers in the popup after popup opening', function(assert) {
@@ -1100,13 +1101,14 @@ QUnit.module('keyboard navigation', moduleConfig, () => {
                 const inputRect = $input.get(0).getBoundingClientRect();
                 const elementAtInputCorner = document.elementFromPoint(inputRect.right - 1, inputRect.bottom - 1);
 
-                assert.strictEqual(document.activeElement, $input.get(0), 'input is focused');
                 assert.strictEqual(elementAtInputCorner, $input.get(0), 'input bottom right corner is visible');
                 done();
             }, { once: true });
         });
 
         instance.open();
+
+        assert.strictEqual(document.activeElement, $input.get(0), 'input is focused');
     });
 
 });
