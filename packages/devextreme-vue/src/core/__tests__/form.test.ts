@@ -1,5 +1,5 @@
 import { mount } from '@vue/test-utils';
-import { defineComponent, nextTick } from 'vue';
+import { ComponentPublicInstance, defineComponent, nextTick } from 'vue';
 
 import { DxForm, DxItem } from '../../form';
 
@@ -52,7 +52,7 @@ describe('form', () => {
     });
 
     await nextTick(() => {
-      expect(wrapper.getComponent('#form').vm.$el
+      expect(wrapper.getComponent<ComponentPublicInstance>('#form').vm.$el
         .getElementsByClassName('dx-field-item-label-text')).toHaveLength(2);
     });
   });
