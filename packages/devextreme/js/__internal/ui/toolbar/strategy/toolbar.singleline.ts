@@ -62,7 +62,6 @@ export class SingleLineStrategy {
 
     this._menu = this._toolbar._createComponent($menu, DropDownMenu, {
       disabled,
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       itemTemplate: () => menuItemTemplate,
       onItemClick: (e) => { itemClickAction(e); },
       container: menuContainer,

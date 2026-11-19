@@ -770,7 +770,7 @@ class Lookup extends DropDownList<LookupProperties> {
       maxHeight: dropDownOptions.maxHeight,
       showTitle: dropDownOptions.showTitle,
       title: dropDownOptions.title,
-      titleTemplate: this._getTemplateByOption('dropDownOptions.titleTemplate'),
+      titleTemplate: this._getTemplateByOption('dropDownOptions.titleTemplate') as unknown as PopupProperties['titleTemplate'],
       // @ts-expect-error fix on PopoverProperties level
       onTitleRendered: dropDownOptions.onTitleRendered,
       fullScreen: dropDownOptions.fullScreen,
@@ -1051,7 +1051,7 @@ class Lookup extends DropDownList<LookupProperties> {
       ...{
         tabIndex: searchEnabled ? -1 : 0,
         grouped,
-        groupTemplate: this._getTemplateByOption('groupTemplate'),
+        groupTemplate: this._getTemplateByOption('groupTemplate') as unknown as ListBaseProperties['groupTemplate'],
         pullRefreshEnabled,
         useNativeScrolling,
         pullingDownText,
