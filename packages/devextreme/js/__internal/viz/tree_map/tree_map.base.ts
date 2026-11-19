@@ -3,14 +3,17 @@ import '@ts/viz/tree_map/tiling.squarified';
 // By design discrete colorizing is used by default.
 import '@ts/viz/tree_map/colorizing.discrete';
 
+import type dxTreeMap from '@js/viz/tree_map';
 import { registerComponent as componentRegistrator } from '@ts/core/component_registrator';
 import { noop } from '@ts/core/utils/common';
+import type { Tracker } from '@ts/viz/components/tracker';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 // PLUGINS_SECTION
 import BaseWidget from '@ts/viz/core/base_widget';
 import type { DataSourcePluginMembers } from '@ts/viz/core/data_source';
 import { plugin } from '@ts/viz/core/data_source';
 import { setupWidgetPrototype } from '@ts/viz/core/helpers';
+import type { TooltipPluginMembers } from '@ts/viz/core/tooltip';
 import type { Size } from '@ts/viz/core/types';
 import { patchFontOptions } from '@ts/viz/core/utils';
 import { getColorizer, setDefaultColorizer } from '@ts/viz/tree_map/colorizing';
@@ -18,7 +21,6 @@ import { buildRectAppearance, buildTextAppearance } from '@ts/viz/tree_map/commo
 import Node from '@ts/viz/tree_map/node';
 import { getAlgorithm as getTilingAlgorithm, setDefaultAlgorithm } from '@ts/viz/tree_map/tiling';
 
-/* eslint-disable @typescript-eslint/no-unsafe-declaration-merging */
 /* eslint-disable spellcheck/spell-checker */
 const directions: Record<string, number[]> = {
   lefttoprightbottom: [+1, +1],
@@ -31,6 +33,11 @@ setDefaultAlgorithm('squarified');
 setDefaultColorizer('discrete');
 
 const emptyRect = [0, 0, 0, 0];
+
+export interface ProcessedDataItems {
+  items: ThemeValue[];
+  isPlain: boolean;
+}
 
 interface TraverseParams {
   itemsField: string;
@@ -259,28 +266,6 @@ function processLabelsLayout(context: ThemeValue, node: ThemeValue): void {
   }
 }
 
-interface TreeMapBase extends DataSourcePluginMembers {
-  _applyHoverState: (node: ThemeValue, state: boolean) => void;
-  _applySelectionState: (node: ThemeValue, state: boolean) => void;
-  _createProxyType: () => void;
-  _drillToNode: (index: number) => void;
-  _extendProxyType: (members: ThemeValue) => void;
-  _hoverNode: (node: ThemeValue, state: boolean) => void;
-  _moveTooltip: (node: ThemeValue, coords?: number[]) => void;
-  _onNodesCreated: () => void;
-  _onTilingPerformed: () => void;
-  _selectNode: (node: ThemeValue, state: boolean, isSingle?: boolean) => void;
-  _showTooltip: (index: number, coords?: number[]) => void;
-  clearHover: () => void;
-  clearSelection: () => void;
-  drillUp: () => void;
-  getCurrentNode: () => ThemeValue;
-  getRootNode: () => ThemeValue;
-  hideTooltip: () => void;
-  resetDrillDown: () => void;
-  resetNodes: () => void;
-}
-
 class TreeMapBase extends BaseWidget {
   _handlers!: ThemeValue;
 
@@ -313,6 +298,68 @@ class TreeMapBase extends BaseWidget {
   _isDataExpected?: boolean;
 
   _isSyncData?: boolean;
+
+  declare _drilldownIndex: number;
+
+  declare _groupHoverEnabled: boolean;
+
+  declare _hoverEnabled: boolean;
+
+  declare _hoverIndex: number;
+
+  declare _selectionList: number[];
+
+  declare _selectionMode: number;
+
+  declare _tooltip: TooltipPluginMembers['_tooltip'];
+
+  declare _tooltipIndex: number;
+
+  declare _tracker: Tracker;
+
+  declare _dataIsLoaded: DataSourcePluginMembers['_dataIsLoaded'];
+
+  declare _dataSourceItems: DataSourcePluginMembers['_dataSourceItems'];
+
+  declare _updateDataSource: DataSourcePluginMembers['_updateDataSource'];
+
+  declare _applyHoverState: (index: number, state: boolean) => void;
+
+  declare _applySelectionState: (index: number, state: boolean) => void;
+
+  declare _createProxyType: () => void;
+
+  declare _drillToNode: (index: number) => void;
+
+  declare _extendProxyType: (proxyProto: ThemeValue) => void;
+
+  declare _hoverNode: (index: number) => void;
+
+  declare _moveTooltip: (node: Node, coords?: number[]) => void;
+
+  declare _onNodesCreated: () => void;
+
+  declare _onTilingPerformed: () => void;
+
+  declare _selectNode: (index: number, state: boolean) => void;
+
+  declare _showTooltip: (index: number, coords?: number[]) => void;
+
+  declare clearHover: () => void;
+
+  declare clearSelection: dxTreeMap['clearSelection'];
+
+  declare drillUp: dxTreeMap['drillUp'];
+
+  declare getCurrentNode: dxTreeMap['getCurrentNode'];
+
+  declare getRootNode: dxTreeMap['getRootNode'];
+
+  declare hideTooltip: dxTreeMap['hideTooltip'];
+
+  declare resetDrillDown: dxTreeMap['resetDrillDown'];
+
+  declare resetNodes: () => this;
 
   _getDefaultSize(): Size {
     return { width: 400, height: 400 };
@@ -464,7 +511,7 @@ class TreeMapBase extends BaseWidget {
     this._change(['NODES_RESET']);
   }
 
-  _processDataSourceItems(items: ThemeValue[]): ThemeValue {
+  _processDataSourceItems(items: ThemeValue[]): ProcessedDataItems {
     return { items, isPlain: false };
   }
 
