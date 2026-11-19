@@ -271,7 +271,6 @@ class NotificationManager extends NotificationManagerBase {
       const $progressPanelElement = $('<div>').appendTo(container);
       const ProgressPanelClass = this._getProgressPanelComponent();
       this._progressPanel = new ProgressPanelClass(
-        // @ts-expect-error ts-error
         $progressPanelElement,
         extend({}, options, {
           onOperationClosed: ({ info }) => this._onProgressPanelOperationClosed(info),
