@@ -57,6 +57,29 @@ export function createStubEntry(
   };
 }
 
+// The root entry comes from the root package.json fields: { types } alone for a package
+// without a root module, such as devextreme, or a full entry for main/module, such as devextreme-react.
+export function createRootEntry(
+  rootPackageJsonPath: string,
+  pkg: Record<string, unknown>,
+  packageDir: string,
+): ExportsTarget | null {
+  const field = (name: string) =>
+    typeof pkg[name] === 'string' ? (pkg[name] as string) : undefined;
+  const stub: ModuleStub = {
+    main: field('main'),
+    module: field('module'),
+    typings: field('types'),
+  };
+  const entry = createStubEntry(rootPackageJsonPath, stub, packageDir);
+
+  if (entry || !stub.typings) {
+    return entry;
+  }
+
+  return { types: toSubpath(packageDir, path.resolve(packageDir, stub.typings)) };
+}
+
 // './ui/button_types.d.ts' -> './ui/button_types', './data/index.d.ts' -> './data'
 export function toTypeOnlySubpath(dtsSubpath: string): string {
   const withoutExtension = dtsSubpath.slice(0, -DTS_EXTENSION.length);
@@ -122,8 +145,9 @@ export default createExecutor<GenerateExportsMapExecutorSchema, ResolvedGenerate
 
     const exportsMap: ExportsMap = {};
 
-    if (typeof pkg['types'] === 'string') {
-      exportsMap['.'] = { types: toSubpath(packageDir, path.resolve(packageDir, pkg['types'])) };
+    const rootEntry = createRootEntry(rootPackageJsonPath, pkg, packageDir);
+    if (rootEntry) {
+      exportsMap['.'] = rootEntry;
     }
     exportsMap['./package.json'] = './package.json';
 

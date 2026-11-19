@@ -123,6 +123,40 @@ describe('GenerateExportsMapExecutor E2E', () => {
     expect(keys.filter((key) => key.endsWith('.d'))).toEqual([]);
   });
 
+  describe('package with a root module', () => {
+    beforeEach(async () => {
+      await writeJsonFile('package.json', {
+        name: 'test-lib',
+        version: '1.0.0',
+        main: './cjs/index.js',
+        module: './esm/index.js',
+        types: './cjs/index.d.ts',
+      });
+      await write('cjs/index.js');
+      await write('cjs/index.d.ts');
+      await write('esm/index.js');
+      await writeJsonFile('ui/button/package.json', {
+        main: '../../cjs/ui/button.js',
+        module: '../../esm/ui/button.js',
+        typings: '../../cjs/ui/button.d.ts',
+      });
+      await write('cjs/ui/button.d.ts');
+    });
+
+    it('should export the root module from main, module and types', async () => {
+      const result = await run();
+      expect(result.success).toBe(true);
+
+      expect((await readExports())['.']).toEqual({
+        types: './cjs/index.d.ts',
+        module: './esm/index.js',
+        import: './esm/index.js',
+        require: './cjs/index.js',
+        default: './esm/index.js',
+      });
+    });
+  });
+
   it('should fail when an entry points to a missing file', async () => {
     const errorSpy = jest.spyOn(logger, 'error').mockImplementation(() => undefined);
     await writeJsonFile('ui/menu/package.json', {

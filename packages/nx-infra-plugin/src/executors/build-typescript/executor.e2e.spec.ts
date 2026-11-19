@@ -151,6 +151,68 @@ describe('BuildTypescriptExecutor E2E', () => {
     }, 10000);
   });
 
+  describe('fullySpecifiedImports', () => {
+    const esmOptions: BuildTypescriptExecutorSchema = {
+      module: 'esm',
+      srcPattern: './src/**/*.{ts,tsx}',
+      excludePatterns: ['./src/**/__tests__/**/*'],
+      tsconfig: './tsconfig.esm.json',
+      outDir: './npm/esm',
+    };
+
+    beforeEach(async () => {
+      const srcDir = path.join(projectDir, 'src');
+      await writeFileText(
+        path.join(srcDir, 'helpers.ts'),
+        `export const one = 1;\nexport type Id = number;\n`,
+      );
+      await writeFileText(
+        path.join(srcDir, 'entry.ts'),
+        [
+          `import { add } from './utils';`,
+          `import { one } from './helpers';`,
+          `import type { Id } from './helpers';`,
+          `export * from './helpers';`,
+          `export { add };`,
+          `export const id: Id = add(one, 1);`,
+          `export const lazy = () => import('./helpers');`,
+          '',
+        ].join('\n'),
+      );
+    });
+
+    it('should add extensions to relative imports in the ESM output', async () => {
+      const result = await executor({ ...esmOptions, fullySpecifiedImports: true }, context);
+      expect(result.success).toBe(true);
+
+      const content = await readFileText(path.join(projectDir, 'npm', 'esm', 'entry.js'));
+      expect(content).toContain(`from './utils/index.js'`);
+      expect(content).toContain(`import { one } from './helpers.js'`);
+      expect(content).toContain(`export * from './helpers.js'`);
+      expect(content).toContain(`import('./helpers.js')`);
+      expect(content).not.toMatch(/'\.\/helpers'/);
+    }, 10000);
+
+    it('should keep relative imports as written by default', async () => {
+      const result = await executor(esmOptions, context);
+      expect(result.success).toBe(true);
+
+      const content = await readFileText(path.join(projectDir, 'npm', 'esm', 'entry.js'));
+      expect(content).toContain(`from './utils'`);
+      expect(content).toContain(`from './helpers'`);
+    }, 10000);
+
+    it('should fail on a relative import that does not resolve', async () => {
+      await writeFileText(
+        path.join(projectDir, 'src', 'broken.ts'),
+        `// @ts-ignore\nimport { missing } from './missing';\nexport const value = missing;\n`,
+      );
+
+      const result = await executor({ ...esmOptions, fullySpecifiedImports: true }, context);
+      expect(result.success).toBe(false);
+    }, 10000);
+  });
+
   describe('Error handling', () => {
     it('should fail when tsconfig is missing', async () => {
       fs.unlinkSync(path.join(projectDir, 'tsconfig.esm.json'));

@@ -116,6 +116,27 @@ describe('PrepareSubmodulesExecutor E2E', () => {
       expect(customPkg.module).toBe('../esm/custom.js');
     });
 
+    it('should treat fully specified imports in the ESM index file as the same modules', async () => {
+      const npmDir = path.join(tempDir, 'packages', 'test-package', 'npm');
+
+      await writeFileText(
+        path.join(npmDir, 'esm', 'index.js'),
+        `export { Button } from "./button.js";\nexport { Grid } from "./data/grid.js";`,
+      );
+
+      const result = await executor({ distDirectory: './npm' }, context);
+
+      expect(result.success).toBe(true);
+      expect(fs.existsSync(path.join(npmDir, 'button.js'))).toBe(false);
+
+      const buttonPkg = JSON.parse(await readFileText(path.join(npmDir, 'button', 'package.json')));
+      expect(buttonPkg.module).toBe('../esm/button.js');
+      expect(buttonPkg.typings).toBe('../cjs/button.d.ts');
+
+      const gridPkg = JSON.parse(await readFileText(path.join(npmDir, 'grid', 'package.json')));
+      expect(gridPkg.main).toBe('../cjs/data/grid.js');
+    });
+
     it('should generate package.json files for explicit submoduleFolders entries', async () => {
       const npmDir = path.join(tempDir, 'packages', 'test-package', 'npm');
 
