@@ -6,12 +6,14 @@ import '@ts/viz/tree_map/colorizing.discrete';
 import type dxTreeMap from '@js/viz/tree_map';
 import { registerComponent as componentRegistrator } from '@ts/core/component_registrator';
 import { noop } from '@ts/core/utils/common';
+import type { Tracker } from '@ts/viz/components/tracker';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 // PLUGINS_SECTION
 import BaseWidget from '@ts/viz/core/base_widget';
 import type { DataSourcePluginMembers } from '@ts/viz/core/data_source';
 import { plugin } from '@ts/viz/core/data_source';
 import { setupWidgetPrototype } from '@ts/viz/core/helpers';
+import type { TooltipPluginMembers } from '@ts/viz/core/tooltip';
 import type { Size } from '@ts/viz/core/types';
 import { patchFontOptions } from '@ts/viz/core/utils';
 import { getColorizer, setDefaultColorizer } from '@ts/viz/tree_map/colorizing';
@@ -296,6 +298,24 @@ class TreeMapBase extends BaseWidget {
   _isDataExpected?: boolean;
 
   _isSyncData?: boolean;
+
+  declare _drilldownIndex: number;
+
+  declare _groupHoverEnabled: boolean;
+
+  declare _hoverEnabled: boolean;
+
+  declare _hoverIndex: number;
+
+  declare _selectionList: number[];
+
+  declare _selectionMode: number;
+
+  declare _tooltip: TooltipPluginMembers['_tooltip'];
+
+  declare _tooltipIndex: number;
+
+  declare _tracker: Tracker;
 
   declare _dataIsLoaded: DataSourcePluginMembers['_dataIsLoaded'];
 

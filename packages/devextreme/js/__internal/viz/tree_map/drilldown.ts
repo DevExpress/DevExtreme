@@ -7,25 +7,26 @@ import '@ts/viz/tree_map/api';
 
 import type { dxTreeMapNode } from '@js/viz/tree_map';
 import { expand } from '@ts/viz/core/helpers';
+import type Node from '@ts/viz/tree_map/node';
 import TreeMapBase from '@ts/viz/tree_map/tree_map.base';
 
 const proto = TreeMapBase.prototype;
 
 proto._eventsMap.onDrill = { name: 'drill' };
 
-expand(proto, '_extendProxyType', function (proto) {
+expand(proto, '_extendProxyType', function (this: TreeMapBase, proto) {
   const that = this;
 
-  proto.drillDown = function (): void {
+  proto.drillDown = function (this: Pick<Node, '_id'>): void {
     that._drillToNode(this._id);
   };
 });
 
-expand(proto, '_onNodesCreated', function () {
+expand(proto, '_onNodesCreated', function (this: TreeMapBase) {
   this._drilldownIndex = -1;
 });
 
-proto._drillToNode = function (index): void {
+proto._drillToNode = function (this: TreeMapBase, index): void {
   const that = this;
   let node;
 

@@ -31,7 +31,7 @@ const generateCustomCallback = function (customCallback, defaultCallback) {
 };
 
 export function setTooltipCustomOptions(sankey: typeof Sankey): void {
-  sankey.prototype._setTooltipOptions = function (): void {
+  sankey.prototype._setTooltipOptions = function (this: Sankey): void {
     const tooltip: InstanceType<typeof Tooltip> | null = this._tooltip;
     const options = tooltip && this._getOption('tooltip');
 
@@ -76,7 +76,7 @@ export function setTooltipCustomOptions(sankey: typeof Sankey): void {
       enabled: options.enabled,
     }));
   };
-  sankey.prototype.hideTooltip = function (): void {
+  sankey.prototype.hideTooltip = function (this: Sankey): void {
     this._tooltip && this._tooltip.hide();
   };
 }
