@@ -76,8 +76,11 @@ threshold. Five differences are expected:
   last editor) made its image taller; Playwright takes the box alone and rounds a fractional size
   up, so an image can come out a row taller or several rows shorter. The common area is identical.
 - A whole colour shifted by a few units (an editor border 205 → 203). The tolerance
-  above let a later theme change through without a new TestCafe etalon; every other pixel of that
-  colour shifts the same way, and only the text antialiasing around it changes besides.
+  above let a later theme change or a Chrome update through without a new TestCafe etalon (`git log`
+  of the etalon shows how old it is: a toolbar popup last shot several Chrome versions back has its
+  shadow and text a few units darker, and its icon glyphs lack the colored subpixel antialiasing
+  the current Chrome draws, up to 67 units off at their edges); every other pixel of that colour
+  shifts the same way, and only the text antialiasing around it changes besides.
 
 Anything else, a block of pixels or a moved edge, means the test reached a different state; find
 out why rather than accept the image.
