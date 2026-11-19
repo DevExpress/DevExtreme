@@ -42,6 +42,25 @@ export const getElementMaxHeightByWindow = (
   return actualOffset * WINDOW_HEIGHT_PERCENT;
 };
 
+const isScrollableOverflow = (overflow: string): boolean => overflow !== 'visible' && overflow !== 'clip';
+
+const getScrollDelta = (
+  start: number,
+  end: number,
+  viewStart: number,
+  viewEnd: number,
+): number => {
+  if (start < viewStart) {
+    return start - viewStart;
+  }
+
+  if (end > viewEnd) {
+    return Math.min(end - viewEnd, start - viewStart);
+  }
+
+  return 0;
+};
+
 export const scrollIntoViewWithin = (
   element: HTMLElement | undefined,
   container: HTMLElement | undefined,
@@ -55,20 +74,26 @@ export const scrollIntoViewWithin = (
     parent && container.contains(parent);
     parent = parent.parentElement
   ) {
-    const { overflowY } = getWindow().getComputedStyle(parent);
+    const { overflowX, overflowY } = getWindow().getComputedStyle(parent);
+    const elementRect = element.getBoundingClientRect();
+    const parentRect = parent.getBoundingClientRect();
 
-    if (overflowY !== 'visible' && overflowY !== 'clip') {
-      const elementRect = element.getBoundingClientRect();
-      const parentRect = parent.getBoundingClientRect();
+    if (isScrollableOverflow(overflowY)) {
+      parent.scrollTop += getScrollDelta(
+        elementRect.top,
+        elementRect.bottom,
+        parentRect.top,
+        parentRect.bottom,
+      );
+    }
 
-      if (elementRect.top < parentRect.top) {
-        parent.scrollTop -= parentRect.top - elementRect.top;
-      } else if (elementRect.bottom > parentRect.bottom) {
-        parent.scrollTop += Math.min(
-          elementRect.bottom - parentRect.bottom,
-          elementRect.top - parentRect.top,
-        );
-      }
+    if (isScrollableOverflow(overflowX)) {
+      parent.scrollLeft += getScrollDelta(
+        elementRect.left,
+        elementRect.right,
+        parentRect.left,
+        parentRect.right,
+      );
     }
   }
 };

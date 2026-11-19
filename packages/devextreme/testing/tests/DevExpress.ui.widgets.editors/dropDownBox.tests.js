@@ -988,6 +988,26 @@ QUnit.module('keyboard navigation', moduleConfig, () => {
         assert.ok(Math.round(inputRect.top) >= Math.round(overlayContentRect.top) && Math.round(inputRect.bottom) <= Math.round(overlayContentRect.bottom), 'input is in the visible part of the popup');
     });
 
+    QUnit.testInActiveWindow('first content element should be scrolled into view horizontally inside the popup after popup opening', function(assert) {
+        const $input = $('<input>', { type: 'text' }).css('width', 50);
+        const $scroller = $('<div>').css({ overflowX: 'auto', whiteSpace: 'nowrap' });
+
+        const instance = new DropDownBox(this.$element, {
+            dropDownOptions: { width: 200 },
+            contentTemplate(component, content) {
+                $scroller.append($('<span>').css({ display: 'inline-block', width: 400 }), $input).appendTo(content);
+            }
+        });
+
+        instance.open();
+
+        const inputRect = $input.get(0).getBoundingClientRect();
+        const scrollerRect = $scroller.get(0).getBoundingClientRect();
+
+        assert.strictEqual(document.activeElement, $input.get(0), 'input is focused');
+        assert.ok(Math.round(inputRect.left) >= Math.round(scrollerRect.left) && Math.round(inputRect.right) <= Math.round(scrollerRect.right), 'input is in the visible part of the scroller');
+    });
+
 });
 
 QUnit.module('validation', moduleConfig, () => {
