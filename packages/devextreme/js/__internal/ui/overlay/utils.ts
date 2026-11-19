@@ -61,6 +61,12 @@ const getScrollDelta = (
   return 0;
 };
 
+const getContainingElement = (element: HTMLElement): HTMLElement | null => (
+  getWindow().getComputedStyle(element).position === 'absolute'
+    ? element.offsetParent
+    : element.parentElement
+) as HTMLElement | null;
+
 export const scrollIntoViewWithin = (
   element: HTMLElement | undefined,
   container: HTMLElement | undefined,
@@ -69,46 +75,47 @@ export const scrollIntoViewWithin = (
     return;
   }
 
-  const elementRect = element.getBoundingClientRect();
-  let shiftTop = 0;
-  let shiftLeft = 0;
+  let pendingTop = 0;
+  let pendingLeft = 0;
 
   for (
-    let parent = element.parentElement;
+    let parent = getContainingElement(element);
     parent && container.contains(parent);
-    parent = parent.parentElement
+    parent = getContainingElement(parent)
   ) {
     const { overflowX, overflowY } = getWindow().getComputedStyle(parent);
+    const elementRect = element.getBoundingClientRect();
     const parentRect = parent.getBoundingClientRect();
     const scaleX = parent.offsetWidth ? parentRect.width / parent.offsetWidth : 1;
     const scaleY = parent.offsetHeight ? parentRect.height / parent.offsetHeight : 1;
     const viewTop = parentRect.top + parent.clientTop * scaleY;
     const viewLeft = parentRect.left + parent.clientLeft * scaleX;
 
-    const top = isScrollableOverflow(overflowY)
+    const top = isScrollableOverflow(overflowY) && parent.scrollHeight > parent.clientHeight
       ? getScrollDelta(
-        elementRect.top - shiftTop,
-        elementRect.bottom - shiftTop,
+        elementRect.top - pendingTop,
+        elementRect.bottom - pendingTop,
         viewTop,
         viewTop + parent.clientHeight * scaleY,
-      )
+      ) / scaleY
       : 0;
-    const left = isScrollableOverflow(overflowX)
+    const left = isScrollableOverflow(overflowX) && parent.scrollWidth > parent.clientWidth
       ? getScrollDelta(
-        elementRect.left - shiftLeft,
-        elementRect.right - shiftLeft,
+        elementRect.left - pendingLeft,
+        elementRect.right - pendingLeft,
         viewLeft,
         viewLeft + parent.clientWidth * scaleX,
-      )
+      ) / scaleX
       : 0;
 
     if (top || left) {
-      parent.scrollTo({
-        top: parent.scrollTop + top / scaleY,
-        left: parent.scrollLeft + left / scaleX,
-      });
-      shiftTop += top;
-      shiftLeft += left;
+      const targetTop = parent.scrollTop + top;
+      const targetLeft = parent.scrollLeft + left;
+
+      parent.scrollTo({ top: targetTop, left: targetLeft });
+
+      pendingTop += (targetTop - parent.scrollTop) * scaleY;
+      pendingLeft += (targetLeft - parent.scrollLeft) * scaleX;
     }
   }
 };

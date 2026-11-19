@@ -1111,6 +1111,100 @@ QUnit.module('keyboard navigation', moduleConfig, () => {
         assert.strictEqual(document.activeElement, $input.get(0), 'input is focused');
     });
 
+    QUnit.testInActiveWindow('first content element should be scrolled into view inside nested scrollers in the popup after popup opening', function(assert) {
+        const $input = $('<input>', { type: 'text' }).css({ display: 'inline-block', width: 50 });
+        const $innerScroller = $('<div>').css({ display: 'inline-block', width: 100, height: 100, overflow: 'auto', whiteSpace: 'nowrap' });
+        const $outerScroller = $('<div>').css({ width: 150, height: 150, overflow: 'auto', whiteSpace: 'nowrap' });
+
+        const instance = new DropDownBox(this.$element, {
+            contentTemplate(component, content) {
+                $innerScroller.append($('<div>').height(300), $('<span>').css({ display: 'inline-block', width: 400 }), $input);
+                $outerScroller.append(
+                    $('<div>').height(300),
+                    $('<span>').css({ display: 'inline-block', width: 300 }),
+                    $innerScroller,
+                    $('<div>').css({ width: 900, height: 600 })
+                ).appendTo(content);
+            }
+        });
+
+        instance.open();
+
+        const inputRect = $input.get(0).getBoundingClientRect();
+        const elementAtInputCorner = document.elementFromPoint(inputRect.right - 1, inputRect.bottom - 1);
+
+        assert.strictEqual(document.activeElement, $input.get(0), 'input is focused');
+        assert.strictEqual(elementAtInputCorner, $input.get(0), 'input bottom right corner is visible');
+    });
+
+    QUnit.testInActiveWindow('first content element should be scrolled into view when its clipping ancestor has no scroll range in the popup after popup opening', function(assert) {
+        const $input = $('<input>', { type: 'text' }).css({ position: 'absolute', top: 400, left: 400, width: 50 });
+        const $clippingAncestor = $('<div>').css({ height: 50, overflow: 'hidden' });
+        const $scroller = $('<div>').css({ position: 'relative', width: 150, height: 150, overflow: 'auto' });
+
+        const instance = new DropDownBox(this.$element, {
+            contentTemplate(component, content) {
+                $clippingAncestor.append($input);
+                $scroller.append($clippingAncestor, $('<div>').css({ width: 900, height: 600 })).appendTo(content);
+            }
+        });
+
+        instance.open();
+
+        const inputRect = $input.get(0).getBoundingClientRect();
+        const elementAtInputCorner = document.elementFromPoint(inputRect.right - 1, inputRect.bottom - 1);
+
+        assert.strictEqual(document.activeElement, $input.get(0), 'input is focused');
+        assert.strictEqual(elementAtInputCorner, $input.get(0), 'input bottom right corner is visible');
+    });
+
+    QUnit.testInActiveWindow('first content element should be scrolled into view inside an inline ancestor with hidden overflow in the popup after popup opening', function(assert) {
+        const $textArea = $('<textarea>').css({ width: 50, height: 100 });
+        const $scroller = $('<div>').css({ width: 150, height: 150, overflow: 'auto', whiteSpace: 'nowrap' });
+
+        const instance = new DropDownBox(this.$element, {
+            contentTemplate(component, content) {
+                $scroller.append(
+                    $('<div>').height(300),
+                    $('<span>').css({ display: 'inline-block', width: 300 }),
+                    $('<label>').css('overflow', 'hidden').append('Comment', $textArea),
+                    $('<div>').css({ width: 900, height: 600 })
+                ).appendTo(content);
+            }
+        });
+
+        instance.open();
+
+        const textAreaRect = $textArea.get(0).getBoundingClientRect();
+        const elementAtTopLeftCorner = document.elementFromPoint(textAreaRect.left + 1, textAreaRect.top + 1);
+        const elementAtBottomRightCorner = document.elementFromPoint(textAreaRect.right - 1, textAreaRect.bottom - 1);
+
+        assert.strictEqual(document.activeElement, $textArea.get(0), 'text area is focused');
+        assert.strictEqual(elementAtTopLeftCorner, $textArea.get(0), 'text area top left corner is visible');
+        assert.strictEqual(elementAtBottomRightCorner, $textArea.get(0), 'text area bottom right corner is visible');
+    });
+
+    QUnit.testInActiveWindow('first content element should be scrolled into view when it is positioned relative to an outer scroller in the popup after popup opening', function(assert) {
+        const $input = $('<input>', { type: 'text' }).css({ position: 'absolute', top: 400, left: 10, width: 50 });
+        const $innerScroller = $('<div>').css({ height: 100, overflow: 'auto' });
+        const $outerScroller = $('<div>').css({ position: 'relative', width: 150, height: 150, overflow: 'auto' });
+
+        const instance = new DropDownBox(this.$element, {
+            contentTemplate(component, content) {
+                $innerScroller.append($('<div>').height(200), $input);
+                $outerScroller.append($innerScroller, $('<div>').height(600)).appendTo(content);
+            }
+        });
+
+        instance.open();
+
+        const inputRect = $input.get(0).getBoundingClientRect();
+        const elementAtInputCorner = document.elementFromPoint(inputRect.right - 1, inputRect.bottom - 1);
+
+        assert.strictEqual(document.activeElement, $input.get(0), 'input is focused');
+        assert.strictEqual(elementAtInputCorner, $input.get(0), 'input bottom right corner is visible');
+    });
+
 });
 
 QUnit.module('validation', moduleConfig, () => {
