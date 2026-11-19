@@ -17,11 +17,10 @@ import type Funnel from '@ts/viz/funnel/funnel';
 import type { LabelRect, LabelStrategy } from '@ts/viz/series/points/label';
 import { Label } from '@ts/viz/series/points/label';
 
-type FunnelLabel = InstanceType<typeof Label>;
+export type FunnelLabel = InstanceType<typeof Label>;
 
 type LabelsHost = Funnel & {
   _labelsGroup: ThemeValue;
-  _labels: FunnelLabel[];
   _labelRect: number[];
   _resolveLabelOverlapping: () => void;
   _defaultLabelTextAlignment: () => 'left' | 'right';
@@ -488,7 +487,7 @@ export const plugin = {
   },
   customize(constructor: typeof Funnel): void {
     constructor.prototype._proxyData.push(function (x, y) {
-      const that = this as LabelsHost;
+      const that = this;
       let data: { id: number; type: string } | undefined;
       // @ts-expect-error
       that._labels.forEach((label, index) => {
@@ -508,7 +507,7 @@ export const plugin = {
     ['label', 'resolveLabelOverlapping'].forEach((optionName) => {
       constructor.addChange({
         code: optionName.toUpperCase(),
-        handler() {
+        handler(this: LabelsHost) {
           this._createLabels();
           this._requestChange(['LAYOUT']);
         },

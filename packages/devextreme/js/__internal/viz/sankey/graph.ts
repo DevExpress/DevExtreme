@@ -12,6 +12,8 @@ export interface GraphVertex {
   outgoing: string[];
 }
 
+export type RankedVertex = GraphVertex & { lp: number };
+
 type VertexColors = Record<string, { color: string }>;
 
 interface GraphStruct {
@@ -19,7 +21,7 @@ interface GraphStruct {
   _sortedList: GraphVertex[];
   hasCycle: (links: SankeyDataItem[]) => boolean;
   _depthFirstSearch: (links: SankeyDataItem[], vertices: VertexColors, vertex: string) => void;
-  computeLongestPaths: (links: SankeyDataItem[]) => GraphVertex[];
+  computeLongestPaths: (links: SankeyDataItem[]) => RankedVertex[];
 }
 
 const WHITE = 'white';
@@ -128,7 +130,7 @@ const struct: GraphStruct = {
     vertices[vertex].color = BLACK;
   },
 
-  computeLongestPaths(this: GraphStruct, links: SankeyDataItem[]): GraphVertex[] {
+  computeLongestPaths(this: GraphStruct, links: SankeyDataItem[]): RankedVertex[] {
     // calculates longets paths for all vertices
     // method expects sorted vertices array to be in this._sortedList
     const sortedVertices = this._sortedList;
@@ -148,7 +150,7 @@ const struct: GraphStruct = {
         vertex.lp = routines.maxOfArray(maxLP) + 1;
       }
     });
-    return this._sortedList;
+    return this._sortedList as RankedVertex[];
   },
 };
 

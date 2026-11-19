@@ -9,26 +9,27 @@ import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 import { expand } from '@ts/viz/core/helpers';
 // PLUGINS_SECTION\
 import { plugin as tooltipPlugin } from '@ts/viz/core/tooltip';
+import type Node from '@ts/viz/tree_map/node';
 import TreeMapBase from '@ts/viz/tree_map/tree_map.base';
 
 const proto = TreeMapBase.prototype;
 
-expand(proto, '_extendProxyType', function (proto) {
+expand(proto, '_extendProxyType', function (this: TreeMapBase, proto) {
   const that = this;
 
-  proto.showTooltip = function (coords): void {
+  proto.showTooltip = function (this: Pick<Node, '_id'>, coords): void {
     that._showTooltip(this._id, coords);
   };
 });
 
-expand(proto, '_onNodesCreated', function () {
+expand(proto, '_onNodesCreated', function (this: TreeMapBase) {
   if (this._tooltipIndex >= 0) {
     this._tooltip.hide();
   }
   this._tooltipIndex = -1;
 });
 
-expand(proto, '_onTilingPerformed', function () {
+expand(proto, '_onTilingPerformed', function (this: TreeMapBase) {
   if (this._tooltipIndex >= 0) {
     this._moveTooltip(this._nodes[this._tooltipIndex]);
   }
@@ -48,7 +49,7 @@ function getCoords(
   );
 }
 
-proto._showTooltip = function (index, coords): void {
+proto._showTooltip = function (this: TreeMapBase, index, coords): void {
   const that = this;
   const tooltip = that._tooltip;
   const node = that._nodes[index];
@@ -73,13 +74,13 @@ proto._showTooltip = function (index, coords): void {
   }, { x: xy[0], y: xy[1], offset: 0 }, { node: node.proxy }, undefined, callback));
 };
 
-proto._moveTooltip = function (node, coords): void {
+proto._moveTooltip = function (this: TreeMapBase, node, coords): void {
   const xy = getCoords(coords, node.rect, this._renderer);
 
   this._tooltip.move(xy[0], xy[1], 0);
 };
 
-proto.hideTooltip = function (): void {
+proto.hideTooltip = function (this: TreeMapBase): void {
   if (this._tooltipIndex >= 0) {
     this._tooltipIndex = -1;
     this._tooltip.hide();

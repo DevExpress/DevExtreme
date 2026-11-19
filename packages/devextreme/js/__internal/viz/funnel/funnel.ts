@@ -7,6 +7,7 @@ import type { DataSourcePluginMembers } from '@ts/viz/core/data_source';
 import { plugin } from '@ts/viz/core/data_source';
 import { setupWidgetPrototype } from '@ts/viz/core/helpers';
 import type { Size } from '@ts/viz/core/types';
+import type { FunnelLabel } from '@ts/viz/funnel/label';
 
 import Item from './item';
 import { addAlgorithm, getAlgorithm } from './tiling';
@@ -61,6 +62,8 @@ class Funnel extends BaseWidget {
   declare _showTooltip: (id: number, coords?: number[]) => void;
 
   declare hideTooltip: () => void;
+
+  declare _labels: FunnelLabel[];
 
   _getDefaultSize(): Size {
     return { width: 400, height: 400 };

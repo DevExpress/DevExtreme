@@ -32,7 +32,7 @@ interface TrackerClickEvent {
   event: ThemeValue;
 }
 
-interface TrackerParameters {
+export interface TrackerParameters {
   widget: TrackerWidget;
   root: ThemeValue;
   getData: (e: ThemeValue, tooltipData?: boolean) => ThemeValue;

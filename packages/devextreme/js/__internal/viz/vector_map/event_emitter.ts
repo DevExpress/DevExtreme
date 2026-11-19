@@ -4,11 +4,19 @@
 /* eslint-disable no-multi-assign */
 /* eslint-disable @typescript-eslint/no-use-before-define */
 
+import type { CallbackInterface } from '@ts/core/utils/callbacks';
 import { Callbacks } from '@ts/core/utils/callbacks';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 
+type EventCallbacks = Record<string, CallbackInterface>;
+
+interface EventEmitterHost {
+  _eventNames: string[];
+  _events: EventCallbacks | null;
+}
+
 const eventEmitterMethods = {
-  _initEvents(): void {
+  _initEvents(this: EventEmitterHost): void {
     const names = this._eventNames;
     let i;
     const ii = names.length;
@@ -18,8 +26,8 @@ const eventEmitterMethods = {
     }
   },
 
-  _disposeEvents(): void {
-    const events = this._events;
+  _disposeEvents(this: EventEmitterHost): void {
+    const events = this._events as EventCallbacks;
     let name;
     for (name in events) {
       events[name].empty();
@@ -27,8 +35,8 @@ const eventEmitterMethods = {
     this._events = null;
   },
 
-  on(handlers: Record<string, (arg: ThemeValue) => void>): () => void {
-    const events = this._events;
+  on(this: EventEmitterHost, handlers: Record<string, (arg: ThemeValue) => void>): () => void {
+    const events = this._events as EventCallbacks;
     let name;
     for (name in handlers) {
       events[name].add(handlers[name]);
@@ -41,10 +49,12 @@ const eventEmitterMethods = {
     }
   },
 
-  _fire(name: string, arg?: ThemeValue): void {
-    this._events[name].fire(arg);
+  _fire(this: EventEmitterHost, name: string, arg?: ThemeValue): void {
+    (this._events as EventCallbacks)[name].fire(arg);
   },
 };
+
+export type EventEmitterMethods = typeof eventEmitterMethods;
 
 export function makeEventEmitter(target: { prototype: ThemeValue }): void {
   const proto = target.prototype;

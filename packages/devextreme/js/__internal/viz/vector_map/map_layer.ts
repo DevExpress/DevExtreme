@@ -315,6 +315,12 @@ type LayerStrategy = typeof emptyStrategy & {
   elementType?: string;
 };
 
+type MarkerStrategy = LayerStrategy & {
+  _draw: (context: LayerContext, figure: ThemeValue, data: ThemeValue) => void;
+  _getStyles: (styles: ThemeValue, settings: ThemeValue) => void;
+  _setState: (figure: ThemeValue, styles: ThemeValue, state: ThemeValue) => void;
+};
+
 const strategiesByType = {};
 const strategiesByGeometry = {};
 const strategiesByElementType = {};
@@ -456,7 +462,7 @@ strategiesByType[TYPE_MARKER] = {
 
   transform: transformPoint,
 
-  draw(context, figure, data): void {
+  draw(this: MarkerStrategy, context, figure, data): void {
     figure.root = context.renderer.g();
     this._draw(context, figure, data);
   },
@@ -469,7 +475,7 @@ strategiesByType[TYPE_MARKER] = {
     return [_round((label.size[0] + _max(settings.size || 0, 0)) / 2) + 2, 0];
   },
 
-  getStyles(settings): { root: { class: string }[] } {
+  getStyles(this: MarkerStrategy, settings): { root: { class: string }[] } {
     const styles = {
       root: [
         { class: 'dxm-marker' },
@@ -481,7 +487,7 @@ strategiesByType[TYPE_MARKER] = {
     return styles;
   },
 
-  setState(figure, styles, state): void {
+  setState(this: MarkerStrategy, figure, styles, state): void {
     applyElementState(figure, styles, state, 'root');
     this._setState(figure, styles, state);
   },
@@ -1422,7 +1428,7 @@ function createProxy(
 
     selected(state?: boolean, _noEvent?: boolean): ThemeValue {
       if (arguments.length > 0) {
-        handle.setSelected(state as boolean, _noEvent);
+        handle.setSelected(state, _noEvent);
         return proxy;
       } else {
         return handle.isSelected();
@@ -1625,7 +1631,7 @@ let MapLayerElement = class MapLayerElement {
     return this;
   }
 
-  setSelected(state: boolean, _noEvent?: boolean): void {
+  setSelected(state: boolean | undefined, _noEvent?: boolean): void {
     const currentState = hasFlag(this._state, STATE_SELECTED);
     const newState = !!state;
     const { selection } = this._ctx;

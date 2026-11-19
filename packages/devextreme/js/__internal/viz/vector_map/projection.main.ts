@@ -13,6 +13,7 @@
 
 import { extend } from '@ts/core/utils/extend';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
+import type { EventEmitterMethods } from '@ts/viz/vector_map/event_emitter';
 import { makeEventEmitter } from '@ts/viz/vector_map/event_emitter';
 
 const _Number = Number;
@@ -134,13 +135,13 @@ export let Projection = class Projection {
 
   declare _moveCenter: number[] | null;
 
-  declare _initEvents: () => void;
+  declare _initEvents: OmitThisParameter<EventEmitterMethods['_initEvents']>;
 
-  declare _disposeEvents: () => void;
+  declare _disposeEvents: OmitThisParameter<EventEmitterMethods['_disposeEvents']>;
 
-  declare _fire: (name: string, arg?: ThemeValue) => void;
+  declare _fire: OmitThisParameter<EventEmitterMethods['_fire']>;
 
-  declare on: (handlers: Record<string, () => void>) => () => void;
+  declare on: OmitThisParameter<EventEmitterMethods['on']>;
 
   constructor(parameters: ProjectionParams) {
     this._initEvents();

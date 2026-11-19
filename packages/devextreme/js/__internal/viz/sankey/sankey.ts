@@ -108,6 +108,8 @@ class Sankey extends BaseWidget {
 
   declare _setTooltipOptions: TooltipPluginMembers['_setTooltipOptions'];
 
+  declare _tooltip: TooltipPluginMembers['_tooltip'];
+
   declare hideTooltip: () => void;
 
   _getDefaultSize(): Size {

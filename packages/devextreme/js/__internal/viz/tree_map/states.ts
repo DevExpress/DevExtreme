@@ -44,7 +44,7 @@ nodeProto._getState = function (this: Node): ThemeValue {
   return this.state[this.statesMap[this.code]];
 };
 
-nodeProto.setState = function (code, state): void {
+nodeProto.setState = function (this: Node, code, state): void {
   if (state) {
     this.code |= code;
   } else {

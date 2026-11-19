@@ -6,7 +6,7 @@
 import type { Properties as SankeyProperties } from '@js/viz/sankey';
 import type { BBox } from '@ts/viz/core/types';
 import validatorModule from '@ts/viz/sankey/data_validator';
-import type { GraphVertex } from '@ts/viz/sankey/graph';
+import type { RankedVertex } from '@ts/viz/sankey/graph';
 import graphModule from '@ts/viz/sankey/graph';
 import type { NodeRect } from '@ts/viz/sankey/node_item';
 import type { SankeyDataItem } from '@ts/viz/sankey/sankey';
@@ -30,7 +30,7 @@ interface LinkPath {
   to: LinkEnd;
 }
 
-type SortableLink = SankeyDataItem & { sort: number };
+type SortableLink = Omit<SankeyDataItem, 'sort'> & { sort: number };
 
 interface LayoutLink {
   d: string;
@@ -60,15 +60,44 @@ interface LayoutResult {
   error?: string;
 }
 
+interface SankeyLayout {
+  _weightPerPixel: number | null;
+  _sort?: Record<string, number>;
+  _getCascadeIdx: (nodeTitle: string, cascadesConfig: RankedVertex[]) => number;
+  _getInWeightForNode: (nodeTitle: string, links: SankeyDataItem[]) => number;
+  _getOutWeightForNode: (nodeTitle: string, links: SankeyDataItem[]) => number;
+  _computeCascades: (links: SankeyDataItem[]) => Cascade[];
+  _getWeightForCascade: (cascades: Cascade[], cascadeIdx: number) => number;
+  _getMaxWeightThroughCascades: (cascades: Cascade[]) => number;
+  _computeNodes: (cascades: Cascade[], options: NodesOptions) => NodeRect[][];
+  _findRectByName: (rects: NodeRect[][], name: string) => NodeRect | null;
+  _findIndexByName: (rects: NodeRect[][], nodeTitle: string) => number | null;
+  _computeLinks: (
+    links: SankeyDataItem[],
+    rects: NodeRect[][],
+    cascades: Cascade[],
+  ) => LayoutLink[];
+  _fitNodeHeight: (nodeName: string, nodeRects: NodeRect[][], paths: LinkPath[]) => void;
+  _fitAllNodesHeight: (nodeRects: NodeRect[][], paths: LinkPath[]) => void;
+  _spline: (rectLeft: BBox, rectRight: BBox) => string;
+  computeLayout: (
+    linksData: SankeyDataItem[],
+    sortData: Record<string, number> | undefined,
+    options: LayoutOptions,
+    incidentOccurred: (errorCode: string) => void,
+  ) => LayoutResult;
+  overlap: (box1: BBox, box2: BBox) => boolean;
+}
+
 const _SPLINE_TENSION = 0.3;
 const _ALIGNMENT_CENTER = 'center';
 const _ALIGNMENT_BOTTOM = 'bottom';
 const _ALIGNMENT_DEFAULT = _ALIGNMENT_CENTER;
 
-export const layout = {
+export const layout: SankeyLayout = {
   _weightPerPixel: null,
 
-  _getCascadeIdx(nodeTitle: string, cascadesConfig: GraphVertex[]): number | null {
+  _getCascadeIdx(nodeTitle: string, cascadesConfig: RankedVertex[]): number {
     const nodeInfo = cascadesConfig.filter((c) => c.name === nodeTitle)[0];
 
     if (nodeInfo.outgoing.length > 0) {
@@ -100,7 +129,7 @@ export const layout = {
     return w;
   },
 
-  _computeCascades(links: SankeyDataItem[]): Cascade[] {
+  _computeCascades(this: SankeyLayout, links: SankeyDataItem[]): Cascade[] {
     const cascadesConfig = graphModule.struct.computeLongestPaths(links);
     const maxCascade = graphModule.routines.maxOfArray(cascadesConfig.map((c) => c.lp));
 
@@ -158,7 +187,7 @@ export const layout = {
     return graphModule.routines.maxOfArray(max);
   },
 
-  _computeNodes(cascades: Cascade[], options: NodesOptions): NodeRect[][] {
+  _computeNodes(this: SankeyLayout, cascades: Cascade[], options: NodesOptions): NodeRect[][] {
     const rects: NodeRect[][] = [];
     const maxWeight = this._getMaxWeightThroughCascades(cascades);
     const maxNodeNum = graphModule.routines.maxOfArray(
@@ -182,7 +211,8 @@ export const layout = {
       const cascadeRects: NodeRect[] = [];
       let y = 0;
       const nodesInCascade = Object.keys(cascade).length;
-      const cascadeHeight = this._getWeightForCascade(cascades, cascadeIdx) / this._weightPerPixel
+      const cascadeHeight = this._getWeightForCascade(cascades, cascadeIdx)
+        / (this._weightPerPixel as number)
         + nodePadding * (nodesInCascade - 1);
 
       let cascadeAlign;
@@ -216,12 +246,13 @@ export const layout = {
           const height = Math.floor((heightAvailable * node.maxWeight) / maxWeight);
           const x = Math.round((cascadeIdx * options.width) / (cascades.length - 1))
             - (cascadeIdx === 0 ? 0 : options.nodeWidth);
-          const rect = {} as NodeRect;
-          rect._name = nodeTitle;
-          rect.width = options.nodeWidth;
-          rect.height = height;
-          rect.x = x + options.x;
-          rect.y = y + options.y;
+          const rect: NodeRect = {
+            _name: nodeTitle,
+            width: options.nodeWidth,
+            height,
+            x: x + options.x,
+            y: y + options.y,
+          };
 
           y += height + nodePadding;
           cascadeRects.push(rect);
@@ -253,7 +284,12 @@ export const layout = {
     return null;
   },
 
-  _computeLinks(links: SankeyDataItem[], rects: NodeRect[][], cascades: Cascade[]): LayoutLink[] {
+  _computeLinks(
+    this: SankeyLayout,
+    links: SankeyDataItem[],
+    rects: NodeRect[][],
+    cascades: Cascade[],
+  ): LayoutLink[] {
     const yOffsets: Record<string, { in: number; out: number }> = {};
     const paths: LinkPath[] = [];
     const result: LayoutLink[] = [];
@@ -267,18 +303,18 @@ export const layout = {
     rects.forEach((rectsOfCascade) => {
       rectsOfCascade.forEach((nodeRect) => {
         const nodeTitle = nodeRect._name;
-        const rectFrom = this._findRectByName(rects, nodeTitle);
+        const rectFrom = this._findRectByName(rects, nodeTitle) as NodeRect;
         const linksFromNode = links.filter(
           (link) => link[0] === nodeTitle,
-        ) as SortableLink[]; // all outgoing links from the node
+        ) as unknown as SortableLink[]; // all outgoing links from the node
 
         // all outgoing links should be sorted according to the order of their target nodes
         linksFromNode.forEach((link) => {
-          link.sort = this._findIndexByName(rects, link[1]);
+          link.sort = this._findIndexByName(rects, link[1]) as number;
         });
         linksFromNode.sort((a, b) => a.sort - b.sort).forEach((link) => {
-          const rectTo = this._findRectByName(rects, link[1]);
-          const height = Math.round(link[2] / this._weightPerPixel);
+          const rectTo = this._findRectByName(rects, link[1]) as NodeRect;
+          const height = Math.round(link[2] / (this._weightPerPixel as number));
           const yOffsetFrom = yOffsets[link[0]].out;
           const yOffsetTo = yOffsets[link[1]].in;
           // heights of left and right parts of the link must fit the nodes on it's left and right
@@ -332,8 +368,13 @@ export const layout = {
     return result;
   },
 
-  _fitNodeHeight(nodeName: string, nodeRects: NodeRect[][], paths: LinkPath[]): void {
-    const targetRect = this._findRectByName(nodeRects, nodeName);
+  _fitNodeHeight(
+    this: SankeyLayout,
+    nodeName: string,
+    nodeRects: NodeRect[][],
+    paths: LinkPath[],
+  ): void {
+    const targetRect = this._findRectByName(nodeRects, nodeName) as NodeRect;
     let heightOfLinksSummaryIn = 0;
     let heightOfLinksSummaryOut = 0;
 
@@ -348,7 +389,7 @@ export const layout = {
     targetRect.height = Math.max(heightOfLinksSummaryIn, heightOfLinksSummaryOut);
   },
 
-  _fitAllNodesHeight(nodeRects: NodeRect[][], paths: LinkPath[]): void {
+  _fitAllNodesHeight(this: SankeyLayout, nodeRects: NodeRect[][], paths: LinkPath[]): void {
     for (let c = 0; c < nodeRects.length; c += 1) {
       for (let r = 0; r < nodeRects[c].length; r += 1) {
         this._fitNodeHeight(nodeRects[c][r]._name, nodeRects, paths);
@@ -368,6 +409,7 @@ export const layout = {
   },
 
   computeLayout(
+    this: SankeyLayout,
     linksData: SankeyDataItem[],
     sortData: Record<string, number> | undefined,
     options: LayoutOptions,

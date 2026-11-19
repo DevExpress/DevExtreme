@@ -16,8 +16,6 @@ import { buildRectAppearance } from '@ts/viz/tree_map/common';
 import Node from '@ts/viz/tree_map/node';
 import TreeMapBase from '@ts/viz/tree_map/tree_map.base';
 
-type SelectionHost = TreeMapBase & { _selectionList: number[] };
-
 const proto = TreeMapBase.prototype;
 const nodeProto = Node.prototype;
 
@@ -36,17 +34,17 @@ expand(proto._handlers, 'calculateAdditionalStates', (states, options) => {
 nodeProto.statesMap[2] = nodeProto.statesMap[3] = STATE_CODE;
 nodeProto.additionalStates.push(2);
 
-expand(proto, '_onNodesCreated', function () {
+expand(proto, '_onNodesCreated', function (this: TreeMapBase) {
   this._selectionList.length = 0;
 });
 
-expand(proto, '_extendProxyType', function (this: SelectionHost, proto) {
+expand(proto, '_extendProxyType', function (this: TreeMapBase, proto) {
   const that = this;
 
-  proto.select = function (state): void {
+  proto.select = function (this: Pick<Node, '_id'>, state): void {
     that._selectNode(this._id, !!state);
   };
-  proto.isSelected = function (): boolean {
+  proto.isSelected = function (this: Pick<Node, '_id'>): boolean {
     return that._selectionList.includes(this._id);
   };
   that._selectionList = [];
@@ -54,7 +52,7 @@ expand(proto, '_extendProxyType', function (this: SelectionHost, proto) {
 
 TreeMapBase.addChange({
   code: 'SELECTION_MODE',
-  handler() {
+  handler(this: TreeMapBase) {
     const that = this;
     const option = _normalizeEnum(that._getOption('selectionMode', true));
     const selectionList = that._selectionList;
@@ -75,7 +73,7 @@ TreeMapBase.addChange({
   option: 'selectionMode',
 });
 
-expand(proto, '_applyTilesAppearance', function () {
+expand(proto, '_applyTilesAppearance', function (this: TreeMapBase) {
   if (this._selectionList.length) {
     bringSelectedTilesToForeground(this._nodes, this._selectionList);
   }
@@ -103,14 +101,14 @@ function groupToFront(content): void {
   content.inner.toForeground();
 }
 
-proto._applySelectionState = function (index, state): void {
+proto._applySelectionState = function (this: TreeMapBase, index, state): void {
   const node = this._nodes[index];
 
   node.setState(STATE_CODE, state);
   this._eventTrigger('selectionChanged', { node: node.proxy });
 };
 
-proto._selectNode = function (index, state): void {
+proto._selectNode = function (this: TreeMapBase, index, state): void {
   const that = this;
   let selectionList;
   let k;
@@ -137,7 +135,7 @@ proto._selectNode = function (index, state): void {
   }
 };
 
-proto.clearSelection = function (): void {
+proto.clearSelection = function (this: TreeMapBase): void {
   const that = this;
   const selectionList = that._selectionList;
   let i;

@@ -5,6 +5,7 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable no-else-return */
 
+import type { TrackerParameters } from '@ts/viz/components/tracker';
 import { Tracker } from '@ts/viz/components/tracker';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 
@@ -53,7 +54,7 @@ export const plugin = {
           return that._links[index - that._nodes.length];
         }
       },
-      click(e): void {
+      click(this: TrackerParameters, e): void {
         const eventName = this.getData(e.event) < that._nodes.length ? 'nodeClick' : 'linkClick';
         that._eventTrigger(eventName, {
           target: e.node,
