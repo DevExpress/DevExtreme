@@ -26,7 +26,9 @@ const offsetWithin = (size: number, offset: number | undefined): number => {
 };
 
 // Mirrors TestCafe's ScrollAutomation, which leaves up to 50px between the element and the edge.
-const scrollIntoView = (
+// TestCafe ran it before every click and drag; a test that relied on where it left the page calls
+// it before the click.
+export const scrollIntoView = (
   element: Locator,
   offsetX?: number,
   offsetY?: number,
