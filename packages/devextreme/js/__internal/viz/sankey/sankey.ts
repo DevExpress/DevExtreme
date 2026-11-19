@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-declaration-merging */
 // PLUGINS_SECTION
 import { registerComponent as componentRegistrator } from '@ts/core/component_registrator';
 import { noop } from '@ts/core/utils/common';
@@ -8,15 +7,16 @@ import BaseWidget from '@ts/viz/core/base_widget';
 import type { DataSourcePluginMembers } from '@ts/viz/core/data_source';
 import { plugin as pluginDataSource } from '@ts/viz/core/data_source';
 import { setupWidgetPrototype } from '@ts/viz/core/helpers';
+import type { TooltipPluginMembers } from '@ts/viz/core/tooltip';
 import type { Size } from '@ts/viz/core/types';
 import { COLOR_MODE_GRADIENT, COLOR_MODE_SOURCE, COLOR_MODE_TARGET } from '@ts/viz/sankey/constants';
 import { layout as defaultLayoutBuilder } from '@ts/viz/sankey/layout';
 import Link from '@ts/viz/sankey/link_item';
 import Node from '@ts/viz/sankey/node_item';
 
-type SankeyDataItem = [string, string, number];
+export type SankeyDataItem = [string, string, number];
 
-interface ConnectedLink {
+export interface ConnectedLink {
   index: number;
   weight: number;
   node: string;
@@ -77,8 +77,6 @@ function getConnectedLinks(
   return result;
 }
 
-interface Sankey extends DataSourcePluginMembers {}
-
 class Sankey extends BaseWidget {
   _groupLinks;
 
@@ -101,6 +99,18 @@ class Sankey extends BaseWidget {
   _shadowFilter: ThemeValue;
 
   _proxyData!: HitTestCallback[];
+
+  declare _dataIsLoaded: DataSourcePluginMembers['_dataIsLoaded'];
+
+  declare _dataSourceItems: DataSourcePluginMembers['_dataSourceItems'];
+
+  declare _updateDataSource: DataSourcePluginMembers['_updateDataSource'];
+
+  declare _setTooltipOptions: TooltipPluginMembers['_setTooltipOptions'];
+
+  declare _tooltip: TooltipPluginMembers['_tooltip'];
+
+  declare hideTooltip: () => void;
 
   _getDefaultSize(): Size {
     return { width: 400, height: 400 };

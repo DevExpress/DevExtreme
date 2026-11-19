@@ -5,22 +5,26 @@
 /* eslint-disable no-multi-assign */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable @typescript-eslint/no-use-before-define */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
 
+import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
+import type { ProcessedDataItems } from '@ts/viz/tree_map/tree_map.base';
 import TreeMapBase from '@ts/viz/tree_map/tree_map.base';
 
 const proto = TreeMapBase.prototype;
 
 proto._optionChangesMap.idField = proto._optionChangesMap.parentField = 'NODES_CREATE';
 
-proto._processDataSourceItems = function (items) {
+proto._processDataSourceItems = function (
+  this: TreeMapBase,
+  items: ThemeValue[],
+): ProcessedDataItems {
   let i;
   const struct = {};
   let currentItem;
   const idField = this._getOption('idField', true);
   const parentField = this._getOption('parentField', true);
   let parentId;
-  const rootNodes = [];
+  const rootNodes: ThemeValue[] = [];
   let tmpItems;
   let item;
 
@@ -43,7 +47,6 @@ proto._processDataSourceItems = function (items) {
   treeFiller({ struct, idField }, rootNodes);
 
   for (item in struct) {
-    // @ts-expect-error
     struct[item] && rootNodes.push(struct[item]);
   }
 

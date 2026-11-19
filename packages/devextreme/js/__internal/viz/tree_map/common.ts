@@ -1,9 +1,14 @@
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-
+import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
+import type { SvgAttributes } from '@ts/viz/core/renderers/renderer';
 import { patchFontOptions as _patchFontOptions } from '@ts/viz/core/utils';
 
-export function buildRectAppearance(option) {
+export interface TextAppearance {
+  attr: SvgAttributes;
+  css: ReturnType<typeof _patchFontOptions>;
+  visible?: boolean;
+}
+
+export function buildRectAppearance(option: ThemeValue): SvgAttributes {
   const border = option.border || {};
   return {
     fill: option.color,
@@ -15,7 +20,7 @@ export function buildRectAppearance(option) {
   };
 }
 
-export function buildTextAppearance(options, filter) {
+export function buildTextAppearance(options: ThemeValue, filter?: string): TextAppearance {
   return {
     attr: { filter },
     css: _patchFontOptions(options.font),
