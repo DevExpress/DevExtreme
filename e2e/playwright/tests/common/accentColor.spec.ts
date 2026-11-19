@@ -17,10 +17,17 @@ interface Oklch {
   h: number;
 }
 
+interface Oklab {
+  l: number;
+  a: number;
+  b: number;
+}
+
 interface MeasuredStep {
   step: number;
   resolved: string;
   oklch: Oklch | null;
+  oklab: Oklab | null;
 }
 
 interface MeasuredPalette {
@@ -79,30 +86,26 @@ const measurePalette = (
   const asOklch = (color: string): Oklch | null => {
     probe.style.backgroundColor = `oklch(from ${color} l c h)`;
     const resolved = getComputedStyle(probe).backgroundColor;
-    const parts = /^oklch\(([-\d.]+) ([-\d.]+) ([-\d.]+|none)/.exec(resolved);
+    const parts = /^oklch\(([-\d.]+) ([-\d.]+) ([-\d.]+)/.exec(resolved);
 
-    if (!parts) {
-      return null;
-    }
+    return parts ? { l: +parts[1], c: +parts[2], h: +parts[3] } : null;
+  };
 
-    if (parts[3] !== 'none') {
-      return { l: +parts[1], c: +parts[2], h: +parts[3] };
-    }
-
-    // Chrome 157 reports the hue of a near-grey as "none"; the a and b axes still carry it.
+  const asOklab = (color: string): Oklab | null => {
     probe.style.backgroundColor = `oklab(from ${color} l a b)`;
-    const [, , a, b] = (/^oklab\(([-\d.]+) ([-\d.e]+) ([-\d.e]+)/.exec(getComputedStyle(probe).backgroundColor) ?? [])
-      .map(Number);
-    const hue = (Math.atan2(b, a) * 180) / Math.PI;
+    const resolved = getComputedStyle(probe).backgroundColor;
+    const parts = /^oklab\(([-\d.e]+) ([-\d.e]+) ([-\d.e]+)/.exec(resolved);
 
-    return { l: +parts[1], c: +parts[2], h: hue < 0 ? hue + 360 : hue };
+    return parts ? { l: +parts[1], a: +parts[2], b: +parts[3] } : null;
   };
 
   const read = (step: number): MeasuredStep => {
     probe.style.backgroundColor = `var(--dxds-primary-${step})`;
     const resolved = getComputedStyle(probe).backgroundColor;
 
-    return { step, resolved, oklch: asOklch(resolved) };
+    return {
+      step, resolved, oklch: asOklch(resolved), oklab: asOklab(resolved),
+    };
   };
 
   const setting = (name: string): number => +getComputedStyle(root).getPropertyValue(name).trim();
@@ -170,13 +173,8 @@ const drawPaletteStrip = (page: Page, accent: string, steps: number[]): Promise<
     }
   }, { accentColor: accent, paletteSteps: steps, stripId: PALETTE_STRIP });
 
-const oklchDistance = (first: Oklch, second: Oklch): number => {
-  const radians = Math.PI / 180;
-  const firstA = first.c * Math.cos(first.h * radians);
-  const firstB = first.c * Math.sin(first.h * radians);
-  const secondA = second.c * Math.cos(second.h * radians);
-  const secondB = second.c * Math.sin(second.h * radians);
-  const squared = (first.l - second.l) ** 2 + (firstA - secondA) ** 2 + (firstB - secondB) ** 2;
+const oklabDistance = (first: Oklab, second: Oklab): number => {
+  const squared = (first.l - second.l) ** 2 + (first.a - second.a) ** 2 + (first.b - second.b) ** 2;
 
   return Math.sqrt(squared) * 100;
 };
@@ -280,6 +278,8 @@ const RANGE_ACCENTS = [
 const rounded = (value: number): number => Math.round(value * 1000) / 1000;
 const stepOf = (measured: MeasuredStep[], step: number): Oklch => measured
   .find((entry) => entry.step === step)!.oklch!;
+const labOf = (measured: MeasuredStep[], step: number): Oklab => measured
+  .find((entry) => entry.step === step)!.oklab!;
 
 test.describe('Custom accent color', () => {
   test.skip(({ theme }) => getThemeName(theme) !== 'fluent-next', 'fluent-next only');
@@ -302,7 +302,7 @@ test.describe('Custom accent color', () => {
     expect(derived.measured
       .map((entry) => ({
         step: entry.step,
-        distance: rounded(oklchDistance(stepOf(designedSteps, entry.step), entry.oklch!)),
+        distance: rounded(oklabDistance(labOf(designedSteps, entry.step), entry.oklab!)),
       }))
       .filter(({ distance }) => distance > DESIGNED_PALETTE_TOLERANCE)).toEqual([]);
   });
