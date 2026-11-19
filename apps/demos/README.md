@@ -83,9 +83,11 @@ Everything after the script name goes to `playwright test`, so `--headed`, `--ui
 
 A test fails on a console error or warning outside `testing/known-warnings.js` and on an uncaught error in the page.
 
+Charts, gauges and range selectors are drawn without their start-up animation: the tests switch it off through the default options of these widgets, so a demo that turns the animation on itself still animates.
+
 ### Etalons
 
-The etalons are Linux renders made by CI, where the comparison is strict: no pixel may drift beyond a small colour threshold. Text is drawn differently on macOS and Windows, so a run on your machine compares loosely and proves little: pass `--ignore-snapshots` and never commit an etalon written there.
+The etalons are Linux renders made by CI, where the comparison is exact: no pixel may differ. Text is drawn differently on macOS and Windows, so a run on your machine compares loosely and proves little: pass `--ignore-snapshots` and never commit an etalon written there.
 
 To add or update an etalon, delete the file and push. The job fails on the missing etalon and uploads what it rendered:
 

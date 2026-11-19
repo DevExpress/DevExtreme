@@ -8,8 +8,13 @@ interface ConsoleMessage {
   text: string;
 }
 
+interface WidgetClass {
+  defaultOptions: (rule: { options: Record<string, unknown> }) => void;
+}
+
 declare global {
   interface Window {
+    DevExpress?: { viz?: Record<string, WidgetClass | undefined> };
     demoConsoleMessages: ConsoleMessage[];
     demoAnimationsFinished: () => Promise<void>;
   }
@@ -62,6 +67,22 @@ const collectConsoleMessages = (): void => {
   });
 };
 
+// Charts, gauges and range selectors animate their first render in script. The edges of a shape
+// drawn that way come out a few colour levels apart from run to run, so the tests switch the
+// animation off: the widget is drawn once, in its final state. The listener is added before jQuery
+// loads, so it runs ahead of the demo code.
+const disableVizAnimation = (): void => {
+  document.addEventListener('DOMContentLoaded', () => {
+    const viz = window.DevExpress?.viz;
+
+    ['dxChart', 'dxPieChart', 'dxPolarChart', 'dxCircularGauge', 'dxLinearGauge', 'dxBarGauge'].forEach((name) => {
+      viz?.[name]?.defaultOptions({ options: { animation: { enabled: false } } });
+    });
+
+    viz?.dxRangeSelector?.defaultOptions({ options: { behavior: { animationEnabled: false } } });
+  });
+};
+
 // A script animation asks for a frame for as long as it runs, so two frames in a row with no
 // request pending mean that nothing is animating.
 const trackAnimationFrames = (): void => {
@@ -110,6 +131,7 @@ const getInitScript = (clientScript: string | null): string => [
   `(${addTestStyles.toString()})(${JSON.stringify(TEST_STYLES)});`,
   `(${collectConsoleMessages.toString()})();`,
   `(${trackAnimationFrames.toString()})();`,
+  `(${disableVizAnimation.toString()})();`,
   clientScript ?? '',
 ].join('\n');
 
