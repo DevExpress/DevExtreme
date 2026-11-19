@@ -73,9 +73,9 @@ const measurePalette = ClientFunction((accent: string | null, steps: number[]) =
   const asOklch = (color: string): Oklch | null => {
     probe.style.backgroundColor = `oklch(from ${color} l c h)`;
     const resolved = getComputedStyle(probe).backgroundColor;
-    const parts = /^oklch\(([-\d.]+) ([-\d.]+) ([-\d.]+)/.exec(resolved);
+    const parts = /^oklch\(([-\d.]+) ([-\d.]+) ([-\d.]+|none)/.exec(resolved);
 
-    return parts ? { l: +parts[1], c: +parts[2], h: +parts[3] } : null;
+    return parts ? { l: +parts[1], c: +parts[2], h: parts[3] === 'none' ? 0 : +parts[3] } : null;
   };
 
   const read = (step: number): MeasuredStep => {
