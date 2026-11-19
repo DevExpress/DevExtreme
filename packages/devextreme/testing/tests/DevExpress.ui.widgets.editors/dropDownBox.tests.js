@@ -1027,6 +1027,26 @@ QUnit.module('keyboard navigation', moduleConfig, () => {
         assert.strictEqual(elementAtInputBottom, $input.get(0), 'input bottom edge is visible');
     });
 
+    QUnit.testInActiveWindow('first content element should be scrolled into view inside a scaled scroller in the popup after popup opening', function(assert) {
+        const $input = $('<input>', { type: 'text' }).css({ display: 'inline-block', width: 50 });
+        const $scroller = $('<div>').css({ width: 100, height: 100, overflow: 'auto', whiteSpace: 'nowrap' });
+
+        const instance = new DropDownBox(this.$element, {
+            contentTemplate(component, content) {
+                $scroller.append($('<div>').height(300), $('<span>').css({ display: 'inline-block', width: 400 }), $input);
+                $('<div>').css({ transform: 'scale(0.5)', transformOrigin: '0 0' }).append($scroller).appendTo(content);
+            }
+        });
+
+        instance.open();
+
+        const inputRect = $input.get(0).getBoundingClientRect();
+        const elementAtInputCorner = document.elementFromPoint(inputRect.right - 1, inputRect.bottom - 1);
+
+        assert.strictEqual(document.activeElement, $input.get(0), 'input is focused');
+        assert.strictEqual(elementAtInputCorner, $input.get(0), 'input bottom right corner is visible');
+    });
+
 });
 
 QUnit.module('validation', moduleConfig, () => {
