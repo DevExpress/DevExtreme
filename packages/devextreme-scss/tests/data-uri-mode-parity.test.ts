@@ -3,7 +3,18 @@ import { join } from 'path';
 
 const artifactsCss = join(__dirname, '..', '..', 'devextreme', 'artifacts', 'css');
 
-const MODE_DEPENDENT: { rule: string; property: string; reason: string }[] = [];
+const MODE_DEPENDENT: { rule: string; property: string; reason: string }[] = [
+  {
+    rule: '.dx-filemanager-i.dx-filemanager-i-done,.dx-filemanager-i.dx-icon.dx-filemanager-i-done',
+    property: 'background-image',
+    reason: 'the icon is painted with ds.$color-bg-success, which the token package gives a different value in the dark mode',
+  },
+  {
+    rule: '.dx-filemanager-i.dx-filemanager-i-danger,.dx-filemanager-i.dx-icon.dx-filemanager-i-danger',
+    property: 'background-image',
+    reason: 'the icon is painted with ds.$color-bg-danger, which the token package gives a different value in the dark mode',
+  },
+];
 
 interface Decl {
   rule: string;

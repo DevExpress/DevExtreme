@@ -11,7 +11,7 @@ if (getThemeName() === 'fluent-next') {
 
   const COUNT = 50;
   const ROUNDING_APART = 2;
-  const LITERALS = ['#0078d4', '#c83d3d', '#008f04', '#eaa300', '#e43ba6', '#865cbf'];
+  const LITERALS = ['#0c69b7', '#c83d3d', '#008f04', '#eaa300', '#e43ba6', '#865cbf'];
 
   const distancesOver = ClientFunction((
     extensionMode: string,
