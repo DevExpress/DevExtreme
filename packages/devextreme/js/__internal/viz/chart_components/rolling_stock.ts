@@ -1,8 +1,8 @@
-import type { BBox } from '@ts/viz/core/types';
+import type { BBox, Coords } from '@ts/viz/core/types';
 
 interface RollingStockLabel {
   getBoundingRect: () => BBox;
-  hideInsideLabel: (coords: { x: number; y: number }) => boolean;
+  hideInsideLabel: (coords: Coords) => boolean;
   getData: () => { value: number | string | Date };
   shift: (x: number, y: number) => void;
 }
@@ -21,7 +21,7 @@ export class RollingStock {
   private readonly shiftFunction: (
     bBox: BBox,
     shiftLength: number,
-  ) => { x: number; y: number };
+  ) => Coords;
 
   private readonly initialPosition: number;
 
@@ -30,7 +30,7 @@ export class RollingStock {
   constructor(
     label: RollingStockLabel,
     isRotated: boolean,
-    shiftFunction: (bBox: BBox, shiftLength: number) => { x: number; y: number },
+    shiftFunction: (bBox: BBox, shiftLength: number) => Coords,
   ) {
     const bBox = label.getBoundingRect();
     const { x } = bBox;

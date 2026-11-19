@@ -30,7 +30,7 @@ import { plugin as exportPlugin } from '@ts/viz/core/export';
 import { setupWidgetPrototype } from '@ts/viz/core/helpers';
 import { plugin as LoadingIndicatorPlugin } from '@ts/viz/core/loading_indicator';
 import { plugin as titlePlugin } from '@ts/viz/core/title';
-import type { Bounds } from '@ts/viz/core/types';
+import type { Bounds, Size } from '@ts/viz/core/types';
 import {
   convertVisualRangeObject,
   getCategoriesInfo,
@@ -1010,7 +1010,7 @@ class RangeSelector extends BaseWidget {
     return this._dataIsLoaded();
   }
 
-  _getDefaultSize(): { width: number; height: number } {
+  _getDefaultSize(): Size {
     return {
       width: 400, height: 160,
     };

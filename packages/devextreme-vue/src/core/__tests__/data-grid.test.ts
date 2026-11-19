@@ -1,5 +1,5 @@
 import { mount } from '@vue/test-utils';
-import { defineComponent, nextTick } from 'vue';
+import { ComponentPublicInstance, defineComponent, nextTick } from 'vue';
 
 import { DxColumn, DxDataGrid } from '../../data-grid';
 
@@ -49,7 +49,7 @@ describe('data grid', () => {
     });
 
     const wrapper = mount(vm);
-    const instance = (wrapper.getComponent('#grid').vm as any).$_instance;
+    const instance = (wrapper.getComponent<ComponentPublicInstance>('#grid').vm as any).$_instance;
     instance.option('columns[0].visible', false);
 
     await nextTick(() => {
