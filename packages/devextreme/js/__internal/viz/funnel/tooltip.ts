@@ -1,13 +1,24 @@
 /* eslint-disable @typescript-eslint/no-this-alias */
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
 
 import { noop } from '@ts/core/utils/common';
+import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
+import type { TooltipPluginMembers } from '@ts/viz/core/tooltip';
 import { plugin as pluginTooltip } from '@ts/viz/core/tooltip';
+import type Funnel from '@ts/viz/funnel/funnel';
+import type Item from '@ts/viz/funnel/item';
 
-function getCoords(coords, figureCoords, renderer) {
-  const offset = renderer.getRootOffset();
+type TooltipHost = Funnel & {
+  _tooltip: TooltipPluginMembers['_tooltip'];
+  _tooltipIndex: number;
+  _moveTooltip: (item: Item, coords?: number[]) => void;
+};
+
+function getCoords(
+  coords: number[] | undefined,
+  figureCoords: number[],
+  renderer: ThemeValue,
+): number[] {
+  const offset: { left: number; top: number } = renderer.getRootOffset();
 
   return (
     coords
@@ -24,11 +35,11 @@ export const plugin = {
   dispose: noop,
 
   extenders: {
-    _buildNodes(): void {
+    _buildNodes(this: TooltipHost): void {
       this.hideTooltip();
     },
 
-    _change_TILING(): void {
+    _change_TILING(this: TooltipHost): void {
       if (this._tooltipIndex >= 0) {
         this._moveTooltip(this._items[this._tooltipIndex]);
       }
@@ -36,19 +47,19 @@ export const plugin = {
   },
 
   members: {
-    hideTooltip(): void {
+    hideTooltip(this: TooltipHost): void {
       if (this._tooltipIndex >= 0) {
         this._tooltipIndex = -1;
         this._tooltip.hide();
       }
     },
 
-    _moveTooltip(item, coords): void {
+    _moveTooltip(this: TooltipHost, item: Item, coords?: number[]): void {
       const xy = getCoords(coords, item.coords, this._renderer);
       this._tooltip.move(xy[0], xy[1], 0);
     },
 
-    _showTooltip(index, coords): void {
+    _showTooltip(this: TooltipHost, index: number, coords?: number[]): void {
       const that = this;
       const tooltip = that._tooltip;
       const item = that._items[index];
@@ -77,7 +88,7 @@ export const plugin = {
       }, { x: xy[0], y: xy[1], offset: 0 }, { item }, undefined, callback));
     },
   },
-  customize(constructor): void {
+  customize(constructor: typeof Funnel): void {
     constructor.addPlugin(pluginTooltip);
   },
 };
