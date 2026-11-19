@@ -110,13 +110,14 @@ a source change. Then, from `e2e/playwright`, record and verify the etalons of t
 pnpm exec nx build devextreme-scss              # from the repository root
 pnpm exec nx build devextreme -c testing
 
-docker/run.sh --update-snapshots tests/editors/selectBox/
+docker/run.sh tests/editors/selectBox/ --update-snapshots
 
 docker/run.sh tests/editors/selectBox/
 ```
 
-The first run builds the image and takes a few minutes. Look through the new files before
-committing them, as with etalons from CI.
+Put the path before `--update-snapshots`: the flag takes an optional mode, and a path right after
+it is read as one (`argument 'tests/…' is invalid`). The first run builds the image and takes a few
+minutes. Look through the new files before committing them, as with etalons from CI.
 
 ### Etalons from CI
 
@@ -259,6 +260,15 @@ whenever the page is a moment late.
 test folders migrated under this rule (see `eslint.config.mjs`) may not use `waitForTimeout`,
 `setTimeout`, `force: true`, `toPass`, a `timeout` option or a call that raises a timeout
 (`test.setTimeout`, `page.setDefaultTimeout`).
+
+**Animations.** `show()` of an overlay returns a promise that resolves when the show animation ends,
+and both runners wait for it, so `await popup.show()` needs nothing after it. A widget created
+visible with animations on returns nothing to wait for: count its `onShown` calls on `window` and
+wait for the count with `page.waitForFunction`.
+
+**Images.** `toHaveScreenshot` compares the first picture that stays the same over two shots, and an
+image that is still loading can stay the same. Before such a shot, wait until every `img` in it is
+`complete`.
 
 **Clicks.** A click is a real one: it lands on the topmost element at that point and fails when
 that is not the target. TestCafe delivered a click to a covered element anyway, so a test that
