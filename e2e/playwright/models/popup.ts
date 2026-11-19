@@ -15,7 +15,6 @@ const CLASS = {
 export default class Popup extends Overlay {
   public static className = '.dx-popup-wrapper';
 
-  // eslint-disable-next-line class-methods-use-this
   public getName(): WidgetName { return 'dxPopup'; }
 
   public getToolbar(): Locator {

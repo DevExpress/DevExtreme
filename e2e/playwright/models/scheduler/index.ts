@@ -104,7 +104,6 @@ export default class Scheduler extends Widget {
     this.appointmentTooltip = new AppointmentTooltip(page, this.element);
   }
 
-  // eslint-disable-next-line class-methods-use-this
   public getName(): WidgetName { return 'dxScheduler'; }
 
   public getDateTableCell(rowIndex = 0, cellIndex = 0): Locator {

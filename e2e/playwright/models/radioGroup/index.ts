@@ -17,7 +17,6 @@ export default class RadioGroup extends Widget {
     this.items = this.element.locator(`:scope > .${CLASS.collection} > .${CLASS.item}`);
   }
 
-  // eslint-disable-next-line class-methods-use-this
   public getName(): WidgetName { return 'dxRadioGroup'; }
 
   public getItem(index = 0): RadioGroupItem {

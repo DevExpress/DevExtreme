@@ -27,7 +27,6 @@ export default class FilterBuilder extends Widget {
     return page.locator(`.${CLASS.popupContent} .${CLASS.treeView}`);
   }
 
-  // eslint-disable-next-line class-methods-use-this
   public getName(): WidgetName { return 'dxFilterBuilder'; }
 
   public getRootElement(): Locator {

@@ -19,7 +19,6 @@ export default class TextBox extends Widget {
     this.input = this.element.locator(`.${CLASS.input}`);
   }
 
-  // eslint-disable-next-line class-methods-use-this
   public getName(): WidgetName { return 'dxTextBox'; }
 
   public getButton(index = 0): Button {

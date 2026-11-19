@@ -19,7 +19,6 @@ export default class Overlay extends Widget {
     this.wrapper = this.element.locator(`.${CLASS.wrapper}`);
   }
 
-  // eslint-disable-next-line class-methods-use-this
   public getName(): WidgetName { return 'dxOverlay'; }
 
   // The last wrapper on the page rather than the one under the widget element: when several

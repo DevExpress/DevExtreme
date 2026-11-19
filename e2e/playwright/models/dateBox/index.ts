@@ -19,6 +19,5 @@ export default class DateBox extends Widget {
     this.dropDownEditorButton = this.element.locator(`.${CLASS.dropDownEditorButton}`);
   }
 
-  // eslint-disable-next-line class-methods-use-this
   public getName(): WidgetName { return 'dxDateBox'; }
 }

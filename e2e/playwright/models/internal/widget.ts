@@ -1,7 +1,7 @@
 import type { Locator, Page } from '@playwright/test';
 import type { WidgetName } from '../types';
-import { hasClass } from './hasClass';
 import { expectClass } from './classMatcher';
+import { hasClass } from './hasClass';
 
 const CLASS = {
   focused: 'dx-state-focused',

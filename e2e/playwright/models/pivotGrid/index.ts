@@ -20,7 +20,6 @@ const CLASS = {
 };
 
 export default class PivotGrid extends Widget {
-  // eslint-disable-next-line class-methods-use-this
   public getName(): WidgetName { return 'dxPivotGrid'; }
 
   public addWidgetPrefix(className: string): string {

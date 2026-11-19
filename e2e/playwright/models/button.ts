@@ -19,6 +19,5 @@ export default class Button extends Widget {
     return this.expectClass(CLASS.selected, present);
   }
 
-  // eslint-disable-next-line class-methods-use-this
   public getName(): WidgetName { return 'dxButton'; }
 }

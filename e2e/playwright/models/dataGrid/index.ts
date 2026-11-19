@@ -33,8 +33,9 @@ const E2E_ATTRIBUTES = {
 };
 
 export default class DataGrid extends GridCore {
-  // eslint-disable-next-line class-methods-use-this
-  public getName(): WidgetName { return 'dxDataGrid'; }
+  name: WidgetName = 'dxDataGrid';
+
+  compatibilityName: WidgetName = 'dxDataGrid';
 
   public getHeaders(): Headers {
     return new Headers(this.element.locator(`.${this.addWidgetPrefix(CLASS.headers)}`), this.getName());

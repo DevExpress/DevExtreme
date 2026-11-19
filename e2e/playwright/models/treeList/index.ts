@@ -7,8 +7,9 @@ const CLASS = {
 };
 
 export default class TreeList extends DataGrid {
-  // eslint-disable-next-line class-methods-use-this
-  public getName(): WidgetName { return 'dxTreeList'; }
+  name: WidgetName = 'dxTreeList';
+
+  compatibilityName: WidgetName = 'dxTreeList';
 
   public getContainer(): Locator {
     return this.element.locator(`.${CLASS.treeList}`);

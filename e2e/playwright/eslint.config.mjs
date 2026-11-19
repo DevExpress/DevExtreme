@@ -52,6 +52,7 @@ export default [
         ignoreRestSiblings: true,
         caughtErrors: 'none',
       }],
+      'class-methods-use-this': 'warn',
       'no-only-tests/no-only-tests': 'error',
       'no-await-in-loop': 'off',
       'no-restricted-globals': 'off',

@@ -19,7 +19,6 @@ export default class Menu extends Widget {
     this.items = page.locator(itemClass).filter({ visible: true });
   }
 
-  // eslint-disable-next-line class-methods-use-this
   public getName(): WidgetName { return 'dxMenu'; }
 
   public getItem(index: number): Locator {

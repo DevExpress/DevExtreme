@@ -15,11 +15,9 @@ export const CLASS = {
 };
 
 export default class CardView extends GridCore {
-  // eslint-disable-next-line class-methods-use-this
-  public getName(): WidgetName { return 'dxCardView'; }
+  name: WidgetName = 'dxCardView';
 
-  // eslint-disable-next-line class-methods-use-this
-  public getCompatibilityName(): WidgetName { return 'dxDataGrid'; }
+  compatibilityName: WidgetName = 'dxDataGrid';
 
   public getCards(): Locator {
     return this.element.locator(`.${this.addWidgetPrefix(CLASS.card)}`);

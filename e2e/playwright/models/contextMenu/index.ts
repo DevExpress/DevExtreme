@@ -19,7 +19,6 @@ export default class ContextMenu extends Widget {
     this.items = this.contextMenu.locator(`.${CLASS.item}`);
   }
 
-  // eslint-disable-next-line class-methods-use-this
   public getName(): WidgetName { return 'dxContextMenu'; }
 
   public getItemByIndex(index: number): Locator {

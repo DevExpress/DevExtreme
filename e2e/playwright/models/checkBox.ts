@@ -18,6 +18,5 @@ export default class CheckBox extends Widget {
     return this.expectClass(CLASS.indeterminate, present);
   }
 
-  // eslint-disable-next-line class-methods-use-this
   public getName(): WidgetName { return 'dxCheckBox'; }
 }
