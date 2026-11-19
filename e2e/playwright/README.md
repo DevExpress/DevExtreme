@@ -33,6 +33,14 @@ as a regular expression. The static server for the test page starts on its own.
 comparer did. Etalons live in `etalons/` next to the test and carry the theme in the file name —
 `PivotGrid markup (fluent.blue.light).png` — the same convention the TestCafe run uses.
 
+An element shot takes the box of the element. The TestCafe one took its scroll size, so what
+overflowed the element — a popup rendered into it, a validation message beside it — was in the
+picture. Pass `withOverflow: true` when the test is about that content:
+
+```ts
+await testScreenshot(page, 'DateBox popup.png', { element: '#container', withOverflow: true });
+```
+
 The pixel budget follows the renderer: the agent and the container draw the same pixels and are
 both judged strictly (`maxDiffPixels` 0, `threshold` 0.1), the UI mode included: no pixel may drift
 beyond the per-pixel threshold, which is what the TestCafe comparer enforced. A run on the host is
