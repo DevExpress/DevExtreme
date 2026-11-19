@@ -8,9 +8,8 @@ Our modern JavaScript/TypeScript component suite includes data grids, pivot tabl
 
 ## Resources
 
-- [Components](https://js.devexpress.com/Documentation/Guide/) - a complete list of available DevExtreme UI libraries
+- [Components](https://js.devexpress.com/Documentation/Guide/) - a complete list of available DevExtreme UI components
 - [Demos](https://js.devexpress.com/Demos/WidgetsGallery/) - interactive examples with source code
-- [Documentation](https://js.devexpress.com/Documentation/Guide/) - guides and APIs
 - [Responsive UI Templates](https://js.devexpress.com/Templates/UITemplates/) - a set of pre-built app modules for use in your next great DevExtreme-powered project
 
 ## License
@@ -21,6 +20,10 @@ DevExtreme requires a paid license for commercial use. For additional informatio
 - [Licensing](https://js.devexpress.com/Documentation/Guide/Common/Licensing/)
 
 Explore DevExtreme at your own pace with our Free [30-Day Trial version](https://js.devexpress.com/Documentation/Guide/Common/Licensing/#Evaluation_Trial).
+
+## Release Notes
+
+For our latest release notes, refer to the [What's New](https://www.devexpress.com/subscriptions/whats-new/#devextreme) section of DevExpress.com
 
 ## Get Started
 
