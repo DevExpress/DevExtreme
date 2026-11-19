@@ -82,22 +82,25 @@ export const scrollIntoViewWithin = (
     const viewTop = parentRect.top + parent.clientTop * scaleY;
     const viewLeft = parentRect.left + parent.clientLeft * scaleX;
 
-    if (isScrollableOverflow(overflowY)) {
-      parent.scrollTop += getScrollDelta(
+    const top = isScrollableOverflow(overflowY)
+      ? getScrollDelta(
         elementRect.top,
         elementRect.bottom,
         viewTop,
         viewTop + parent.clientHeight * scaleY,
-      ) / scaleY;
-    }
-
-    if (isScrollableOverflow(overflowX)) {
-      parent.scrollLeft += getScrollDelta(
+      ) / scaleY
+      : 0;
+    const left = isScrollableOverflow(overflowX)
+      ? getScrollDelta(
         elementRect.left,
         elementRect.right,
         viewLeft,
         viewLeft + parent.clientWidth * scaleX,
-      ) / scaleX;
+      ) / scaleX
+      : 0;
+
+    if (top || left) {
+      parent.scrollTo({ top: parent.scrollTop + top, left: parent.scrollLeft + left });
     }
   }
 };
