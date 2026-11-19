@@ -1,19 +1,14 @@
 import type { Locator } from '@playwright/test';
+import GridModule from '../gridCore/module';
 
 export const CLASS = {
-  header: 'dx-cardview-card-header',
+  header: 'card-header',
   toolbarItem: 'dx-toolbar-item',
 };
 
-export default class Card {
-  public readonly element: Locator;
-
-  constructor(element: Locator) {
-    this.element = element;
-  }
-
+export default class Card extends GridModule {
   public getHeader(): Locator {
-    return this.element.locator(`.${CLASS.header}`);
+    return this.element.locator(`.${this.addWidgetPrefix(CLASS.header)}`);
   }
 
   public getToolbarItem(index: number): Locator {

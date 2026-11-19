@@ -47,6 +47,8 @@ export interface ScrollPosition {
 }
 
 export default class Scheduler extends Widget {
+  name: WidgetName = 'dxScheduler';
+
   public readonly workSpace: Locator;
 
   public readonly appointments: Locator;
@@ -103,8 +105,6 @@ export default class Scheduler extends Widget {
     this.appointmentPopup = new AppointmentPopup(page);
     this.appointmentTooltip = new AppointmentTooltip(page, this.element);
   }
-
-  public getName(): WidgetName { return 'dxScheduler'; }
 
   public getDateTableCell(rowIndex = 0, cellIndex = 0): Locator {
     return this.dateTableRows.nth(rowIndex).locator(`.${CLASS.dateTableCell}`).nth(cellIndex);

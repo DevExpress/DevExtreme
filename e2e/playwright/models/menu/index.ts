@@ -9,6 +9,8 @@ const CLASS = {
 };
 
 export default class Menu extends Widget {
+  name: WidgetName = 'dxMenu';
+
   public readonly items: Locator;
 
   constructor(page: Page, adaptivityEnabled = false) {
@@ -18,8 +20,6 @@ export default class Menu extends Widget {
 
     this.items = page.locator(itemClass).filter({ visible: true });
   }
-
-  public getName(): WidgetName { return 'dxMenu'; }
 
   public getItem(index: number): Locator {
     return this.items.nth(index);

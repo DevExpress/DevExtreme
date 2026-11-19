@@ -8,7 +8,7 @@ const CLASS = {
 };
 
 export default class HtmlEditor extends Widget {
-  public getName(): WidgetName { return 'dxHtmlEditor'; }
+  name: WidgetName = 'dxHtmlEditor';
 
   public get content(): Locator {
     return this.element.locator(CLASS.CONTENT);

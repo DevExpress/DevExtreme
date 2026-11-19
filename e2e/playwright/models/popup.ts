@@ -13,9 +13,9 @@ const CLASS = {
 };
 
 export default class Popup extends Overlay {
-  public static className = '.dx-popup-wrapper';
+  name: WidgetName = 'dxPopup';
 
-  public getName(): WidgetName { return 'dxPopup'; }
+  public static className = '.dx-popup-wrapper';
 
   public getToolbar(): Locator {
     return this.getWrapper().locator(`.${CLASS.topToolbar}`);

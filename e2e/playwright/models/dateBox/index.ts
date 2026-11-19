@@ -8,6 +8,8 @@ const CLASS = {
 };
 
 export default class DateBox extends Widget {
+  name: WidgetName = 'dxDateBox';
+
   public readonly input: Locator;
 
   public readonly dropDownEditorButton: Locator;
@@ -18,6 +20,4 @@ export default class DateBox extends Widget {
     this.input = this.element.locator(`.${CLASS.input}`);
     this.dropDownEditorButton = this.element.locator(`.${CLASS.dropDownEditorButton}`);
   }
-
-  public getName(): WidgetName { return 'dxDateBox'; }
 }

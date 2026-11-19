@@ -8,6 +8,8 @@ const CLASS = {
 };
 
 export default class ContextMenu extends Widget {
+  name: WidgetName = 'dxContextMenu';
+
   public readonly items: Locator;
 
   public readonly contextMenu: Locator;
@@ -18,8 +20,6 @@ export default class ContextMenu extends Widget {
     this.contextMenu = page.locator(`.${CLASS.contextMenu}`);
     this.items = this.contextMenu.locator(`.${CLASS.item}`);
   }
-
-  public getName(): WidgetName { return 'dxContextMenu'; }
 
   public getItemByIndex(index: number): Locator {
     return this.items.nth(index);

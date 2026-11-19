@@ -12,7 +12,7 @@ const CLASS = {
 };
 
 export default class TreeView extends Widget {
-  public getName(): WidgetName { return 'dxTreeView'; }
+  name: WidgetName = 'dxTreeView';
 
   public getNodes(): Locator {
     return this.element.locator(`.${CLASS.node}`);

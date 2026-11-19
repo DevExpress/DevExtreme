@@ -1,7 +1,8 @@
 import type { Locator } from '@playwright/test';
 import { expect } from '@playwright/test';
+import type { WidgetName } from '../../types';
 import FocusableElement from '../../internal/focusable';
-import Widget from '../../internal/widget';
+import GridModule from '../module';
 
 const CLASS = {
   filterPanelIcon: 'dx-icon-filter',
@@ -10,16 +11,13 @@ const CLASS = {
   filterBuilder: 'dx-filterbuilder',
 };
 
-export default class FilterPanel extends FocusableElement {
+export default class FilterPanel extends GridModule {
   public readonly body: Locator;
 
-  public readonly widgetName: string;
-
-  constructor(element: Locator, widgetName: string) {
-    super(element);
+  constructor(element: Locator, widgetName: WidgetName) {
+    super(element, widgetName);
 
     this.body = element.page().locator('body');
-    this.widgetName = widgetName;
   }
 
   public async expectOpened(present = true): Promise<void> {
@@ -34,7 +32,7 @@ export default class FilterPanel extends FocusableElement {
 
   public getFilterText(): FocusableElement {
     return new FocusableElement(
-      this.element.locator(`.${Widget.addClassPrefix(this.widgetName, CLASS.filterPanelText)}`),
+      this.element.locator(`.${this.addWidgetPrefix(CLASS.filterPanelText)}`),
     );
   }
 }

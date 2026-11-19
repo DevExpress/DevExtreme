@@ -11,6 +11,8 @@ const CLASS = {
 };
 
 export default class TextBox extends Widget {
+  name: WidgetName = 'dxTextBox';
+
   public readonly input: Locator;
 
   constructor(page: Page, selector: Locator | string) {
@@ -18,8 +20,6 @@ export default class TextBox extends Widget {
 
     this.input = this.element.locator(`.${CLASS.input}`);
   }
-
-  public getName(): WidgetName { return 'dxTextBox'; }
 
   public getButton(index = 0): Button {
     return new Button(

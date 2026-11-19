@@ -20,7 +20,7 @@ const CLASS = {
 };
 
 export default class PivotGrid extends Widget {
-  public getName(): WidgetName { return 'dxPivotGrid'; }
+  name: WidgetName = 'dxPivotGrid';
 
   public addWidgetPrefix(className: string): string {
     return Widget.addClassPrefix(this.getName(), className);

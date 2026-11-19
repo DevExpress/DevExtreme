@@ -1,5 +1,5 @@
 import type { Locator } from '@playwright/test';
-import Widget from '../internal/widget';
+import GridModule from '../gridCore/module';
 import HeaderItem from './headerItem';
 
 const CLASS = {
@@ -7,18 +7,9 @@ const CLASS = {
   link: 'link',
 };
 
-export default class HeaderPanel {
-  public readonly element: Locator;
-
-  public readonly widgetName: string;
-
-  constructor(element: Locator, widgetName: string) {
-    this.element = element;
-    this.widgetName = widgetName;
-  }
-
+export default class HeaderPanel extends GridModule {
   public getHeaderItem(idx = 0): HeaderItem {
-    const itemSelector = `.${Widget.addClassPrefix(this.widgetName, CLASS.headerItem)}`;
+    const itemSelector = `.${this.addWidgetPrefix(CLASS.headerItem)}`;
 
     return new HeaderItem(this.element.locator(itemSelector).nth(idx));
   }

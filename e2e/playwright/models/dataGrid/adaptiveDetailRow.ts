@@ -1,9 +1,3 @@
-import type { Locator } from '@playwright/test';
+import FocusableElement from '../internal/focusable';
 
-export default class AdaptiveDetailRow {
-  public readonly element: Locator;
-
-  constructor(element: Locator) {
-    this.element = element;
-  }
-}
+export default class AdaptiveDetailRow extends FocusableElement {}

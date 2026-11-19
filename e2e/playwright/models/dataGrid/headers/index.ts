@@ -1,6 +1,4 @@
-import type { Locator } from '@playwright/test';
-import FocusableElement from '../../internal/focusable';
-import Widget from '../../internal/widget';
+import GridModule from '../../gridCore/module';
 import FilterRow from '../filter/row';
 import HeaderRow from './row';
 
@@ -11,17 +9,10 @@ const CLASS = {
   contentFixed: 'content-fixed',
 };
 
-export default class Headers extends FocusableElement {
-  public readonly widgetName: string;
-
-  constructor(element: Locator, widgetName: string) {
-    super(element);
-    this.widgetName = widgetName;
-  }
-
+export default class Headers extends GridModule {
   public getHeaderRow(index: number, isFixed = false): HeaderRow {
-    const content = Widget.addClassPrefix(this.widgetName, CLASS.content);
-    const contentFixed = Widget.addClassPrefix(this.widgetName, CLASS.contentFixed);
+    const content = this.addWidgetPrefix(CLASS.content);
+    const contentFixed = this.addWidgetPrefix(CLASS.contentFixed);
     const headersContainerSelector = isFixed
       ? `.${contentFixed}`
       : `.${content}:not(.${contentFixed})`;
@@ -34,7 +25,7 @@ export default class Headers extends FocusableElement {
 
   public getFilterRow(): FilterRow {
     return new FilterRow(
-      this.element.locator(`.${Widget.addClassPrefix(this.widgetName, CLASS.filterRow)}`),
+      this.element.locator(`.${this.addWidgetPrefix(CLASS.filterRow)}`),
     );
   }
 }

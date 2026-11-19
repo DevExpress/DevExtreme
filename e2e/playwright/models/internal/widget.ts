@@ -19,6 +19,8 @@ export default abstract class Widget {
 
   public readonly element: Locator;
 
+  abstract name: WidgetName;
+
   constructor(page: Page, selector: Locator | string) {
     this.page = page;
     this.element = typeof selector === 'string' ? page.locator(selector) : selector;
@@ -87,5 +89,7 @@ export default abstract class Widget {
     );
   }
 
-  abstract getName(): WidgetName;
+  public getName(): WidgetName {
+    return this.name;
+  }
 }

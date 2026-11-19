@@ -23,11 +23,11 @@ const ITEM_CLASS = {
 };
 
 export default class FilterBuilder extends Widget {
+  name: WidgetName = 'dxFilterBuilder';
+
   public static getPopupTreeView(page: Page): Locator {
     return page.locator(`.${CLASS.popupContent} .${CLASS.treeView}`);
   }
-
-  public getName(): WidgetName { return 'dxFilterBuilder'; }
 
   public getRootElement(): Locator {
     return this.element.locator(`.${CLASS.root}`);

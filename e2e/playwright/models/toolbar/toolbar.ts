@@ -9,7 +9,7 @@ const CLASS = {
 };
 
 export default class Toolbar extends Widget {
-  public getName(): WidgetName { return 'dxToolbar'; }
+  name: WidgetName = 'dxToolbar';
 
   public getOverflowMenu(): DropDownMenu {
     return new DropDownMenu(this.page, this.element.locator(`.${CLASS.overflowMenu}`));

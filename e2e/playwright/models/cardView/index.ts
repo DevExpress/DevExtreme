@@ -24,7 +24,7 @@ export default class CardView extends GridCore {
   }
 
   public getCard(nth = 0): Card {
-    return new Card(this.getCards().nth(nth));
+    return new Card(this.getCards().nth(nth), this.getName());
   }
 
   public getHeaders(): HeadersElement {

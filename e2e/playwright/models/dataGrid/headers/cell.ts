@@ -1,11 +1,10 @@
 import type { Locator } from '@playwright/test';
 import { expect } from '@playwright/test';
+import FocusableElement from '../../internal/focusable';
 
-export default class HeaderCell {
-  public readonly element: Locator;
-
+export default class HeaderCell extends FocusableElement {
   constructor(headerRow: Locator, index: number) {
-    this.element = headerRow.locator(`td[aria-colindex='${index + 1}']`);
+    super(headerRow.locator(`td[aria-colindex='${index + 1}']`));
   }
 
   public async expectFocused(present = true): Promise<void> {

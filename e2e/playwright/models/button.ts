@@ -9,6 +9,8 @@ export const CLASS = {
 };
 
 export default class Button extends Widget {
+  name: WidgetName = 'dxButton';
+
   public static className = 'dx-button';
 
   public get text(): Locator {
@@ -18,6 +20,4 @@ export default class Button extends Widget {
   public expectSelected(present = true): Promise<void> {
     return this.expectClass(CLASS.selected, present);
   }
-
-  public getName(): WidgetName { return 'dxButton'; }
 }

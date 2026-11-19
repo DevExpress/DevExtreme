@@ -8,6 +8,8 @@ export const CLASS = {
 };
 
 export default class CheckBox extends Widget {
+  name: WidgetName = 'dxCheckBox';
+
   public static className = 'dx-checkbox';
 
   public expectChecked(present = true): Promise<void> {
@@ -17,6 +19,4 @@ export default class CheckBox extends Widget {
   public expectIndeterminate(present = true): Promise<void> {
     return this.expectClass(CLASS.indeterminate, present);
   }
-
-  public getName(): WidgetName { return 'dxCheckBox'; }
 }

@@ -7,6 +7,8 @@ const CLASS = {
 };
 
 export default class TagBox extends SelectBox {
+  name: WidgetName = 'dxTagBox';
+
   public readonly tags: Locator;
 
   constructor(page: Page, selector: Locator | string) {
@@ -14,7 +16,4 @@ export default class TagBox extends SelectBox {
 
     this.tags = this.element.locator(`.${CLASS.tag}`);
   }
-
-  // eslint-disable-next-line class-methods-use-this
-  public getName(): WidgetName { return 'dxTagBox'; }
 }

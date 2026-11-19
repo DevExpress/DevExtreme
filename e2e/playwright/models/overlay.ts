@@ -8,6 +8,8 @@ const CLASS = {
 };
 
 export default class Overlay extends Widget {
+  name: WidgetName = 'dxOverlay';
+
   public readonly content: Locator;
 
   public readonly wrapper: Locator;
@@ -18,8 +20,6 @@ export default class Overlay extends Widget {
     this.content = this.element.locator(`.${CLASS.content}`);
     this.wrapper = this.element.locator(`.${CLASS.wrapper}`);
   }
-
-  public getName(): WidgetName { return 'dxOverlay'; }
 
   // The last wrapper on the page rather than the one under the widget element: when several
   // popups are open the topmost one is the interesting one.

@@ -15,8 +15,6 @@ export const CLASS = {
 export default abstract class GridCore extends Widget {
   public readonly body: Locator;
 
-  abstract name: WidgetName;
-
   abstract compatibilityName: WidgetName | undefined;
 
   constructor(page: Page, selector: Locator | string) {
@@ -42,8 +40,6 @@ export default abstract class GridCore extends Widget {
   public getColumnChooserButton(): Locator {
     return this.element.locator(`.${this.addWidgetPrefix(CLASS.columnChooserButton)}`);
   }
-
-  public getName(): WidgetName { return this.name; }
 
   public getCompatibilityName(): WidgetName {
     return this.compatibilityName ?? this.name;
