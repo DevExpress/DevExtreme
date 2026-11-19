@@ -1,14 +1,7 @@
 /* eslint-disable spellcheck/spell-checker */
-/* eslint-disable no-restricted-syntax */
-import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { ClientFunction } from 'testcafe';
-import Guid from 'devextreme/core/guid';
-import { getThemeName, testScreenshot } from '../../helpers/themeUtils';
-import url from '../../helpers/getPageUrl';
-import {
-  appendElementTo,
-} from '../../helpers/domUtils';
-import { Themes } from '../../helpers/themes';
+import { expect, test } from '../../fixtures';
+import { testScreenshot } from '../../helpers/screenshots';
+import { getThemeName } from '../../helpers/themeUtils';
 
 const ICON_CLASS = 'dx-icon';
 const iconSet = {
@@ -343,98 +336,90 @@ const iconSet = {
   clearhistory: '\f242',
 };
 
-fixture.disablePageReloads`Icons`
-  .page(url(__dirname, '../container.html'));
+const THEMED = { tag: ['@material.blue.light', '@generic.light'] };
 
-test.meta({ themes: [Themes.materialBlue, Themes.genericLight] })('Icon set', async (t) => {
-  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+test.describe('Icons', () => {
+  test('Icon set', THEMED, async ({ page }) => {
+    const icons = Object.entries(iconSet).map(([iconName, glyph], index) => ({
+      id: `dx-icon-${index}`,
+      iconName,
+      glyph,
+    }));
 
-  await testScreenshot(t, takeScreenshot, 'Icon set.png');
+    await page.evaluate(({ items, iconClass }) => {
+      const container = document.querySelector('#container');
+      if (!container) return;
 
-  await t
-    .expect(compareResults.isValid())
-    .ok(compareResults.errorMessages());
-}).before(async () => {
-  const icons = Object.entries(iconSet).map(([iconName, glyph]) => ({
-    id: `dx-${new Guid()}`,
-    iconName,
-    glyph,
-  }));
+      const fragment = document.createDocumentFragment();
 
-  // eslint-disable-next-line @typescript-eslint/no-shadow
-  await ClientFunction((icons, ICON_CLASS) => {
-    const container = document.querySelector('#container');
-    if (!container) return;
+      items.forEach(({ id, iconName, glyph }) => {
+        const element = document.createElement('div');
+        element.id = id;
+        Object.assign(element.style, {
+          display: 'inline-flex',
+          padding: '3px',
+          border: '1px solid black',
+          alignItems: 'center',
+          flexDirection: 'column',
+          fontSize: '10px',
+        });
 
-    const fragment = document.createDocumentFragment();
+        const iconDiv = document.createElement('div');
+        iconDiv.classList.add(iconClass, `${iconClass}-${iconName}`);
 
-    for (const { id, iconName, glyph } of icons) {
-      const element = document.createElement('div');
-      element.id = id;
-      Object.assign(element.style, {
-        display: 'inline-flex',
-        padding: '3px',
-        border: '1px solid black',
-        alignItems: 'center',
-        flexDirection: 'column',
-        fontSize: '10px',
+        const nameDiv = document.createElement('div');
+        nameDiv.textContent = iconName;
+
+        const glyphDiv = document.createElement('div');
+        glyphDiv.textContent = glyph.replace('\f', '\\f');
+
+        element.append(iconDiv, nameDiv, glyphDiv);
+        fragment.append(element);
       });
 
-      const iconDiv = document.createElement('div');
-      iconDiv.classList.add(ICON_CLASS, `${ICON_CLASS}-${iconName}`);
+      container.append(fragment);
+    }, { items: icons, iconClass: ICON_CLASS });
 
-      const nameDiv = document.createElement('div');
-      nameDiv.textContent = iconName;
+    await testScreenshot(page, 'Icon set.png');
+  });
 
-      const glyphDiv = document.createElement('div');
-      glyphDiv.textContent = glyph.replace('\f', '\\f');
+  test('SVG icon set', THEMED, async ({ page, theme }) => {
+    const themeName = getThemeName(theme);
+    const icons = Object.keys(iconSet).map((iconName, index) => ({
+      id: `dx-icon-${index}`,
+      iconName,
+      src: `../../../packages/devextreme-scss/images/icons/${themeName}/${iconName}.svg`,
+    }));
 
-      element.append(iconDiv, nameDiv, glyphDiv);
-      fragment.append(element);
-    }
+    await page.evaluate((items) => {
+      const container = document.querySelector('#container');
 
-    container.append(fragment);
-  }, { dependencies: { iconSet, ICON_CLASS } })(icons, ICON_CLASS);
-});
+      items.forEach(({ id, iconName, src }) => {
+        const element = document.createElement('div');
+        element.id = id;
+        Object.assign(element.style, {
+          display: 'inline-flex',
+          padding: '3px',
+          border: '1px solid black',
+          alignItems: 'center',
+          flexDirection: 'column',
+          fontSize: '10px',
+        });
 
-test.meta({ themes: [Themes.materialBlue, Themes.genericLight] })('SVG icon set', async (t) => {
-  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-
-  await testScreenshot(t, takeScreenshot, 'SVG icon set.png');
-
-  await t
-    .expect(compareResults.isValid())
-    .ok(compareResults.errorMessages());
-}).before(async () => {
-  const themeName = getThemeName();
-  const icons = Object.keys(iconSet).map((iconName) => ({
-    id: `dx-${new Guid()}`,
-    iconName,
-    src: `../../../packages/devextreme-scss/images/icons/${themeName}/${iconName}.svg`,
-  }));
-
-  // eslint-disable-next-line @typescript-eslint/no-shadow
-  await ClientFunction((icons, appendElementTo) => {
-    for (const { id, iconName, src } of icons) {
-      appendElementTo('#container', 'div', id, {
-        display: 'inline-flex',
-        padding: '3px',
-        border: '1px solid black',
-        alignItems: 'center',
-        flexDirection: 'column',
-        fontSize: '10px',
-      });
-
-      const el = document.getElementById(id);
-      if (el) {
         const img = document.createElement('img');
         img.src = src;
 
         const nameDiv = document.createElement('div');
         nameDiv.textContent = iconName;
 
-        el.append(img, nameDiv);
-      }
-    }
-  }, { dependencies: { appendElementTo } })(icons, appendElementTo);
+        element.append(img, nameDiv);
+        container?.appendChild(element);
+      });
+    }, icons);
+
+    await expect.poll(() => page.evaluate(() => Array.from(document.images)
+      .every((image) => image.complete && image.naturalWidth > 0))).toBe(true);
+
+    await testScreenshot(page, 'SVG icon set.png');
+  });
 });

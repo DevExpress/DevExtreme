@@ -1,17 +1,11 @@
-import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import Guid from 'devextreme/core/guid';
-import { Selector } from 'testcafe';
-import { testScreenshot } from '../../../helpers/themeUtils';
-import url from '../../../helpers/getPageUrl';
+import type { Page } from '@playwright/test';
+import { test } from '../../../fixtures';
 import { createWidget } from '../../../helpers/createWidget';
 import { appendElementTo, insertStylesheetRulesToPage } from '../../../helpers/domUtils';
-import { Themes } from '../../../helpers/themes';
+import { testScreenshot } from '../../../helpers/screenshots';
 
 const TOOLBAR_ITEM_BUTTON = '.dx-button';
 const HIDDEN_SCROLLBAR_THUMB_STYLE = '.dx-gantt .dx-scrollable-scroll { visibility: hidden !important; }';
-
-fixture`Gantt`
-  .page(url(__dirname, '../../container-extended.html'));
 
 const data = {
   tasks: [{
@@ -119,46 +113,32 @@ const data = {
   }],
 };
 
-test.meta({ themes: [Themes.materialBlue] })('Gantt - show resources button should not have focus state (T1264485)', async (t) => {
-  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-
-  await t
-    .click(Selector(TOOLBAR_ITEM_BUTTON));
-  await testScreenshot(t, takeScreenshot, 'Gantt show resourced.png', { element: '#container' });
-  await t
-    .expect(compareResults.isValid())
-    .ok(compareResults.errorMessages());
-}).before(async () => {
-  await insertStylesheetRulesToPage(HIDDEN_SCROLLBAR_THUMB_STYLE);
-  const id = `${new Guid()}`;
-  await appendElementTo('#container', 'div', id, {});
-  await createWidget('dxGantt', {
+const createGantt = async (page: Page, toolbarItem: 'showResources' | 'showDependencies'): Promise<void> => {
+  await insertStylesheetRulesToPage(page, HIDDEN_SCROLLBAR_THUMB_STYLE);
+  await appendElementTo(page, '#container', 'div', 'gantt');
+  await createWidget(page, 'dxGantt', {
     tasks: { dataSource: data.tasks },
-    toolbar: { items: ['showResources'] },
+    toolbar: { items: [toolbarItem] },
     dependencies: { dataSource: data.dependencies },
     resources: { dataSource: data.resources },
     resourceAssignments: { dataSource: data.resourceAssignments },
-  }, `#${id}`);
-});
+  }, '#gantt');
+};
 
-test('Gantt - show dependencies button should not have focus state (T1264485)', async (t) => {
-  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+test.describe('Gantt', () => {
+  test('Gantt - show resources button should not have focus state (T1264485)', { tag: ['@material.blue.light'] }, async ({ page }) => {
+    await createGantt(page, 'showResources');
 
-  await t
-    .click(Selector(TOOLBAR_ITEM_BUTTON));
-  await testScreenshot(t, takeScreenshot, 'Gantt show dependencies.png', { element: '#container' });
-  await t
-    .expect(compareResults.isValid())
-    .ok(compareResults.errorMessages());
-}).before(async () => {
-  await insertStylesheetRulesToPage(HIDDEN_SCROLLBAR_THUMB_STYLE);
-  const id = `${new Guid()}`;
-  await appendElementTo('#container', 'div', id, {});
-  await createWidget('dxGantt', {
-    tasks: { dataSource: data.tasks },
-    toolbar: { items: ['showDependencies'] },
-    dependencies: { dataSource: data.dependencies },
-    resources: { dataSource: data.resources },
-    resourceAssignments: { dataSource: data.resourceAssignments },
-  }, `#${id}`);
+    await page.locator(TOOLBAR_ITEM_BUTTON).first().click();
+
+    await testScreenshot(page, 'Gantt show resourced.png', { element: '#container' });
+  });
+
+  test('Gantt - show dependencies button should not have focus state (T1264485)', async ({ page }) => {
+    await createGantt(page, 'showDependencies');
+
+    await page.locator(TOOLBAR_ITEM_BUTTON).first().click();
+
+    await testScreenshot(page, 'Gantt show dependencies.png', { element: '#container' });
+  });
 });
