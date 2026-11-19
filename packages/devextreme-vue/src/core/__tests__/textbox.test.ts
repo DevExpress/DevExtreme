@@ -1,5 +1,5 @@
 import { mount } from '@vue/test-utils';
-import { defineComponent, nextTick } from 'vue';
+import { ComponentPublicInstance, defineComponent, nextTick } from 'vue';
 
 import { IConfigurable } from '../configuration-component';
 
@@ -28,9 +28,9 @@ describe('two-way binding', () => {
       },
     });
     const wrapper = mount(vm);
-    const component = wrapper.getComponent('#component2').vm as any as IConfigurable;
+    const component = wrapper.getComponent<ComponentPublicInstance>('#component2').vm as any as IConfigurable;
     component.$_config.updateValue = jest.fn();
-    wrapper.getComponent('#component1').vm.$emit('update:modelValue', 'newValue');
+    wrapper.getComponent<ComponentPublicInstance>('#component1').vm.$emit('update:modelValue', 'newValue');
     await nextTick(() => {
       expect(component.$_config.updateValue).toHaveBeenCalled();
     });
@@ -51,7 +51,7 @@ describe('two-way binding', () => {
       },
     });
     const wrapper = mount(vm);
-    const component = wrapper.getComponent('#component2').vm as any as IConfigurable;
+    const component = wrapper.getComponent<ComponentPublicInstance>('#component2').vm as any as IConfigurable;
     component.$_config.updateValue = jest.fn();
     await wrapper.setProps({ testValue: 'test' });
     await nextTick(() => {
@@ -76,7 +76,7 @@ describe('two-way binding', () => {
       },
     });
     const wrapper = mount(vm);
-    const component = wrapper.getComponent('#component');
+    const component = wrapper.getComponent<ComponentPublicInstance>('#component');
     await wrapper.setProps({ customClass: 'custom2' });
     await nextTick(() => {
       expect(component.element.classList.toString()).toBe('custom2 dx-show-invalid-badge dx-textbox dx-texteditor dx-editor-outlined dx-texteditor-empty dx-widget');
@@ -94,13 +94,13 @@ describe('two-way binding', () => {
       },
       props: {
         customClass: {
-          type: String,
+          type: Boolean,
           default: true,
         },
       },
     });
     const wrapper = mount(vm);
-    const component = wrapper.getComponent('#component');
+    const component = wrapper.getComponent<ComponentPublicInstance>('#component');
     await wrapper.setProps({ customClass: false });
     await nextTick(() => {
       expect(component.element.classList.toString()).toBe('dx-show-invalid-badge dx-textbox dx-texteditor dx-editor-outlined dx-texteditor-empty dx-widget');

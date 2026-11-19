@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/init-declarations */
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable guard-for-in */
-/* eslint-disable no-plusplus */
 /* eslint-disable no-multi-assign */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-use-before-define */
@@ -14,7 +13,7 @@ const eventEmitterMethods = {
     let i;
     const ii = names.length;
     const events = this._events = {};
-    for (i = 0; i < ii; ++i) {
+    for (i = 0; i < ii; i += 1) {
       events[names[i]] = Callbacks();
     }
   },

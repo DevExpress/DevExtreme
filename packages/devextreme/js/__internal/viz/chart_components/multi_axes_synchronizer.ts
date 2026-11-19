@@ -1,7 +1,6 @@
 /* eslint-disable no-cond-assign */
 /* eslint-disable @typescript-eslint/prefer-for-of */
 /* eslint-disable @typescript-eslint/init-declarations */
-/* eslint-disable no-plusplus */
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable no-multi-assign */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
@@ -177,7 +176,7 @@ function updateTickValues(axesInfo): void {
 
         while (additionalStartTicksCount > 0 && (tickValues[0] !== 0)) {
           tickValues.unshift(adjust(tickValues[0] - tickInterval));
-          additionalStartTicksCount--;
+          additionalStartTicksCount -= 1;
         }
         while (tickValues.length < ticksCount) {
           tickValues.push(adjust(tickValues[tickValues.length - 1] + tickInterval));
@@ -365,9 +364,9 @@ function updateMinorTicks(axesInfo): void {
     const interval = axisInfo.minorTickInterval;
     const tickCount = axisInfo.tickInterval / interval - 1;
 
-    for (let i = 1; i < axisInfo.tickValues.length; i++) {
+    for (let i = 1; i < axisInfo.tickValues.length; i += 1) {
       let tick = axisInfo.tickValues[i - 1];
-      for (let j = 0; j < tickCount; j++) {
+      for (let j = 0; j < tickCount; j += 1) {
         tick += interval;
         // @ts-expect-error
         ticks.push(tick);

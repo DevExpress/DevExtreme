@@ -4,7 +4,6 @@
 /* eslint-disable @typescript-eslint/no-this-alias */
 /* eslint-disable default-case */
 /* eslint-disable @typescript-eslint/init-declarations */
-/* eslint-disable no-plusplus */
 /* eslint-disable func-names */
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable @typescript-eslint/no-shadow */
@@ -558,7 +557,7 @@ export const circularSpider = extend({}, circularAxes, {
         nextTick = (spiderTicks[i + 1] || spiderTicks[0]).coords;
         lastTick = { x: (tick.x + nextTick.x) / 2, y: (tick.y + nextTick.y) / 2 };
       }
-      i++;
+      i += 1;
     }
     // @ts-expect-error
     points.push(lastTick.x, lastTick.y);
