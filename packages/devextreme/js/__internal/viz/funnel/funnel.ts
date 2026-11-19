@@ -18,7 +18,7 @@ const NODES_CREATE_CHANGE = 'NODES_CREATE';
 addAlgorithm('dynamicslope', dynamicSlope, true);
 addAlgorithm('dynamicheight', dynamicHeight);
 
-interface FunnelDataItem {
+export interface FunnelDataItem {
   value: number;
   color: ThemeValue;
   argument: ThemeValue;

@@ -60,7 +60,7 @@ interface BreakPosition {
   break?: ThemeValue;
 }
 
-interface CanvasOptions {
+export interface CanvasOptions {
   base?: number;
   rangeMin: ThemeValue;
   rangeMax: ThemeValue;

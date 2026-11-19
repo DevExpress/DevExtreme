@@ -1,8 +1,8 @@
-import type { GraphLink } from './graph';
 import graphModule from './graph';
+import type { SankeyDataItem } from './sankey';
 
 const validator = {
-  validate(data: GraphLink[], incidentOccurred: (errorCode: string) => void): string | null {
+  validate(data: SankeyDataItem[], incidentOccurred: (errorCode: string) => void): string | null {
     let result: string | null = null;
     if (this._hasCycle(data)) {
       result = 'E2006';
@@ -10,7 +10,7 @@ const validator = {
     }
     return result;
   },
-  _hasCycle(data: GraphLink[]): boolean {
+  _hasCycle(data: SankeyDataItem[]): boolean {
     return graphModule.struct.hasCycle(data);
   },
 };
