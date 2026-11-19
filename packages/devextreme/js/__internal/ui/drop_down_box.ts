@@ -19,7 +19,7 @@ import type { OptionChanged } from '@ts/core/widget/types';
 import eventsEngine from '@ts/events/core/events_engine';
 import DropDownEditor, { type DropDownEditorInternalProperties } from '@ts/ui/drop_down_editor/drop_down_editor';
 import type { PositioningEvent } from '@ts/ui/overlay/overlay';
-import { getElementMaxHeightByWindow } from '@ts/ui/overlay/utils';
+import { getElementMaxHeightByWindow, scrollIntoViewWithin } from '@ts/ui/overlay/utils';
 import type { PopupProperties as InternalPopupProperties } from '@ts/ui/popup/popup';
 
 const { getActiveElement } = domAdapter;
@@ -328,6 +328,7 @@ class DropDownBox<
     super._popupShownHandler();
     const firstElement = this._getTabbableElements().first().get<HTMLElement>(0);
     firstElement?.focus({ preventScroll: true });
+    scrollIntoViewWithin(firstElement, this._popup?.$overlayContent()?.get<HTMLElement>(0));
   }
 
   _setCollectionWidgetOption(): void {}

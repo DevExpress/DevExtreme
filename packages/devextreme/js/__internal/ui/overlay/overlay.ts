@@ -57,6 +57,7 @@ import {
   OVERLAY_POSITION_ALIASES,
   OverlayPositionController,
 } from '@ts/ui/overlay/overlay_position_controller';
+import { scrollIntoViewWithin } from '@ts/ui/overlay/utils';
 import * as zIndexPool from '@ts/ui/overlay/z_index';
 import { themeModeChangedCallback } from '@ts/ui/themes_callback';
 
@@ -724,7 +725,10 @@ class Overlay<
       const { focusStateEnabled } = this.option();
 
       if (focusStateEnabled) {
-        this._focusTarget()?.get<HTMLElement>(0)?.focus({ preventScroll: true });
+        const focusTarget = this._focusTarget()?.get<HTMLElement>(0);
+
+        focusTarget?.focus({ preventScroll: true });
+        scrollIntoViewWithin(focusTarget, this._$content?.get<HTMLElement>(0));
       }
 
       completeShowAnimation.call(this, element, config);

@@ -968,6 +968,25 @@ QUnit.module('keyboard navigation', moduleConfig, () => {
         }
     });
 
+    QUnit.testInActiveWindow('first content element should be scrolled into view inside the popup after popup opening', function(assert) {
+        const $input = $('<input>', { type: 'text' });
+
+        const instance = new DropDownBox(this.$element, {
+            dropDownOptions: { height: 200 },
+            contentTemplate(component, content) {
+                $(content).append($('<div>').height(400), $input);
+            }
+        });
+
+        instance.open();
+
+        const inputRect = $input.get(0).getBoundingClientRect();
+        const overlayContentRect = $(instance.content()).parent(`.${OVERLAY_CONTENT_CLASS}`).get(0).getBoundingClientRect();
+
+        assert.strictEqual(document.activeElement, $input.get(0), 'input is focused');
+        assert.ok(Math.round(inputRect.top) >= Math.round(overlayContentRect.top) && Math.round(inputRect.bottom) <= Math.round(overlayContentRect.bottom), 'input is in the visible part of the popup');
+    });
+
 });
 
 QUnit.module('validation', moduleConfig, () => {

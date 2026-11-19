@@ -3255,6 +3255,28 @@ QUnit.module('accessibility', {
             assert.strictEqual(document.activeElement, $input1.get(0), 'first tabbable element is focused');
         });
 
+        QUnit.test('Popover in dialog mode should scroll the first tabbable element into view inside content on show', function(assert) {
+            const instance = new Popover(this.$element, {
+                target: this.$target,
+                height: 200,
+                contentTemplate: function() {
+                    return $('<div>').append($('<div>').height(400), $('<input>', { id: 'input1' }));
+                },
+                toolbarItems: [{ text: 'OK' }],
+                visible: false,
+            });
+
+            instance.show();
+            this.clock.tick(500);
+
+            const input = $('#input1').get(0);
+            const inputRect = input.getBoundingClientRect();
+            const contentRect = instance.$content().get(0).getBoundingClientRect();
+
+            assert.strictEqual(document.activeElement, input, 'first tabbable element is focused');
+            assert.ok(Math.round(inputRect.top) >= Math.round(contentRect.top) && Math.round(inputRect.bottom) <= Math.round(contentRect.bottom), 'first tabbable element is in the visible part of the content');
+        });
+
         QUnit.test('Popover in dialog mode should restore focus to target on dispose when visible', function(assert) {
             this.$target.attr('tabindex', 0).focus();
 

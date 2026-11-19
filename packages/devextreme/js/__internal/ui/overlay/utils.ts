@@ -41,3 +41,34 @@ export const getElementMaxHeightByWindow = (
 
   return actualOffset * WINDOW_HEIGHT_PERCENT;
 };
+
+export const scrollIntoViewWithin = (
+  element: HTMLElement | undefined,
+  container: HTMLElement | undefined,
+): void => {
+  if (!element || !container) {
+    return;
+  }
+
+  for (
+    let parent = element.parentElement;
+    parent && container.contains(parent);
+    parent = parent.parentElement
+  ) {
+    const { overflowY } = getWindow().getComputedStyle(parent);
+
+    if (overflowY !== 'visible' && overflowY !== 'clip') {
+      const elementRect = element.getBoundingClientRect();
+      const parentRect = parent.getBoundingClientRect();
+
+      if (elementRect.top < parentRect.top) {
+        parent.scrollTop -= parentRect.top - elementRect.top;
+      } else if (elementRect.bottom > parentRect.bottom) {
+        parent.scrollTop += Math.min(
+          elementRect.bottom - parentRect.bottom,
+          elementRect.top - parentRect.top,
+        );
+      }
+    }
+  }
+};
