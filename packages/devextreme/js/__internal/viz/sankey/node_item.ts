@@ -4,11 +4,13 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 
+import type { Coordinates } from '@js/core/renderer';
 import { isDefined } from '@ts/core/utils/type';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
-import type { Coords } from '@ts/viz/core/types';
+import type { BBox, Coords } from '@ts/viz/core/types';
 import { patchFontOptions } from '@ts/viz/core/utils';
 import type Link from '@ts/viz/sankey/link_item';
+import type { ConnectedLink } from '@ts/viz/sankey/sankey';
 
 const states = ['normal', 'hover'];
 
@@ -21,21 +23,12 @@ interface NodeAttrs {
   hatching: ThemeValue;
 }
 
-interface NodeRect {
-  x: number;
-  y: number;
-  width: number;
-  height: number;
+export interface NodeRect extends BBox {
   _name: string;
 }
 
-interface NodeLayoutLink {
-  index: number;
-  weight: number;
-}
-
 interface NodeWidget {
-  _renderer: { getRootOffset: () => { left: number; top: number } };
+  _renderer: { getRootOffset: () => Coordinates };
   _tooltip?: {
     show: (target: ThemeValue, coords: Coords) => void;
     hide: () => void;
@@ -55,8 +48,8 @@ interface NodeParams {
   color: string;
   rect: NodeRect;
   options: ThemeValue;
-  linksIn: NodeLayoutLink[];
-  linksOut: NodeLayoutLink[];
+  linksIn: ConnectedLink[];
+  linksOut: ConnectedLink[];
 }
 
 function compileAttrs(
@@ -141,9 +134,9 @@ class Node {
 
   declare id: number;
 
-  declare linksIn: NodeLayoutLink[];
+  declare linksIn: ConnectedLink[];
 
-  declare linksOut: NodeLayoutLink[];
+  declare linksOut: ConnectedLink[];
 
   declare states: Record<'normal' | 'hover', NodeAttrs>;
 

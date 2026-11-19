@@ -21,9 +21,9 @@ import {
 } from '@ts/viz/core/utils';
 import { processDisplayFormat } from '@ts/viz/series/helpers/display_format_parser';
 
-type LabelRect = BBox | Record<string, never>;
+export type LabelRect = BBox | Record<string, never>;
 
-interface LabelStrategy {
+export interface LabelStrategy {
   isLabelInside: (bBox: LabelRect, figure: ThemeValue, isOutside: boolean) => boolean;
   prepareLabelPoints: (
     bBox: LabelRect,

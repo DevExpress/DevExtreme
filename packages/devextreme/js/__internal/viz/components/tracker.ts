@@ -3,6 +3,7 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 
+import type { Coordinates } from '@js/core/renderer';
 import { domAdapter } from '@ts/core/dom_adapter';
 import { name as clickEventName } from '@ts/events/click';
 import eventsEngine from '@ts/events/core/events_engine';
@@ -19,7 +20,7 @@ interface TrackerNode {
 }
 
 interface TrackerWidget {
-  _renderer: { getRootOffset: () => { left: number; top: number } };
+  _renderer: { getRootOffset: () => Coordinates };
   _getOption: (name: string) => ThemeValue;
   clearHover: () => void;
   hideTooltip: () => void;
@@ -31,7 +32,7 @@ interface TrackerClickEvent {
   event: ThemeValue;
 }
 
-interface TrackerParameters {
+export interface TrackerParameters {
   widget: TrackerWidget;
   root: ThemeValue;
   getData: (e: ThemeValue, tooltipData?: boolean) => ThemeValue;

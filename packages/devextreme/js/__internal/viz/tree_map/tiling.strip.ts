@@ -1,13 +1,12 @@
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-
+import type { TilingData } from '@ts/viz/tree_map/tiling';
 import { addAlgorithm } from '@ts/viz/tree_map/tiling';
 import _squarify from '@ts/viz/tree_map/tiling.squarified.base';
 
-function accumulate(total, current, count): number {
+function accumulate(total: number, current: number, count: number): number {
   return ((count - 1) * total + current) / count;
 }
 
-function strip(data): void {
+function strip(data: TilingData): void {
   return _squarify(data, accumulate, true);
 }
 
