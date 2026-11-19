@@ -20,6 +20,7 @@ import { addNamespace } from '@ts/events/utils/index';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 import type { Coords } from '@ts/viz/core/types';
 import { parseScalar } from '@ts/viz/core/utils';
+import type { EventEmitterMethods } from '@ts/viz/vector_map/event_emitter';
 import { makeEventEmitter } from '@ts/viz/vector_map/event_emitter';
 
 const navigator = getNavigator();
@@ -116,13 +117,13 @@ export let Tracker = class Tracker {
 
   declare _eventNames: string[];
 
-  declare _initEvents: () => void;
+  declare _initEvents: OmitThisParameter<EventEmitterMethods['_initEvents']>;
 
-  declare _disposeEvents: () => void;
+  declare _disposeEvents: OmitThisParameter<EventEmitterMethods['_disposeEvents']>;
 
-  declare _fire: (name: string, arg?: ThemeValue) => void;
+  declare _fire: OmitThisParameter<EventEmitterMethods['_fire']>;
 
-  declare on: (handlers: Record<string, (arg: ThemeValue) => void>) => () => void;
+  declare on: OmitThisParameter<EventEmitterMethods['on']>;
 
   constructor(parameters: TrackerParams) {
     this._root = parameters.root;

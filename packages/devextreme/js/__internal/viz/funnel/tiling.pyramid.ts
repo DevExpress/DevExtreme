@@ -1,16 +1,15 @@
 /* eslint-disable @stylistic/no-mixed-operators */
 /* eslint-disable @typescript-eslint/no-shadow */
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable no-else-return */
+
+import type { FunnelDataItem } from './funnel';
 
 const CENTER = 0.5;
 const LEFTCORNER = 0;
 const RIGHTCORNER = 1;
 
 export default {
-  getFigures(data, neckWidth, neckHeight) {
+  getFigures(data: number[], neckWidth: number, neckHeight: number): number[][] {
     let height = 0;
     let y = 0;
     let x = 0;
@@ -52,7 +51,7 @@ export default {
     });
   },
 
-  normalizeValues(items) {
+  normalizeValues(items: FunnelDataItem[]): number[] {
     const sum = items.reduce((sum, item) => sum + item.value, 0);
 
     return items.map((item) => item.value / sum);
