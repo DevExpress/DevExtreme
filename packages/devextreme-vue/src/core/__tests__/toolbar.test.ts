@@ -1,5 +1,5 @@
 import { mount } from '@vue/test-utils';
-import { defineComponent } from 'vue';
+import { defineComponent, nextTick } from 'vue';
 
 import DxButton from '../../button';
 import DxToolbar, { DxItem } from '../../toolbar';
@@ -10,7 +10,7 @@ beforeEach(() => {
 });
 
 describe('template rendering', () => {
-  it('should render a default template only for a configuration component where it is declared', () => {
+  it('should render a default template only for a configuration component where it is declared', async () => {
     const vm = defineComponent({
       template:
                 `<dx-toolbar id="component">
@@ -28,6 +28,7 @@ describe('template rendering', () => {
       },
     });
     const wrapper = mount(vm);
+    await nextTick();
     expect(wrapper.vm.$el.getElementsByClassName('dx-button')).toHaveLength(1);
   });
 });

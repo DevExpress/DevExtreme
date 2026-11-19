@@ -7,6 +7,7 @@ import BaseWidget from '@ts/viz/core/base_widget';
 import type { DataSourcePluginMembers } from '@ts/viz/core/data_source';
 import { plugin } from '@ts/viz/core/data_source';
 import { setupWidgetPrototype } from '@ts/viz/core/helpers';
+import type { Size } from '@ts/viz/core/types';
 
 import Item from './item';
 import { addAlgorithm, getAlgorithm } from './tiling';
@@ -56,7 +57,7 @@ class Funnel extends BaseWidget {
 
   _proxyData!: HitTestCallback[];
 
-  _getDefaultSize(): { width: number; height: number } {
+  _getDefaultSize(): Size {
     return { width: 400, height: 400 };
   }
 
@@ -264,7 +265,7 @@ class Funnel extends BaseWidget {
   }
 
   _getMinSize(): number[] {
-    const adaptiveLayout: { width: number; height: number } = this._getOption('adaptiveLayout');
+    const adaptiveLayout: Size = this._getOption('adaptiveLayout');
 
     return [adaptiveLayout.width, adaptiveLayout.height];
   }

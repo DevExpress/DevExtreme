@@ -43,14 +43,12 @@ class FileManagerDialogManager {
 
     const $chooseFolderDialog = $('<div>').appendTo(this._$element);
     this._chooseDirectoryDialog = new FileManagerFolderChooserDialog(
-      // @ts-expect-error ts-error
       $chooseFolderDialog,
       extend(baseDialogOptions, this._options.chooseDirectoryDialog),
     );
 
     const $renameDialog = $('<div>').appendTo(this._$element);
     this._renameItemDialog = new FileManagerNameEditorDialog(
-      // @ts-expect-error ts-error
       $renameDialog,
       extend(baseDialogOptions, {
         title: messageLocalization.format(
@@ -64,7 +62,6 @@ class FileManagerDialogManager {
 
     const $createDialog = $('<div>').appendTo(this._$element);
     this._createItemDialog = new FileManagerNameEditorDialog(
-      // @ts-expect-error ts-error
       $createDialog,
       extend(baseDialogOptions, {
         title: messageLocalization.format(
@@ -78,7 +75,6 @@ class FileManagerDialogManager {
 
     const $deleteItemDialog = $('<div>').appendTo(this._$element);
     this._deleteItemDialog = new FileManagerDeleteItemDialog(
-      // @ts-expect-error ts-error
       $deleteItemDialog,
       baseDialogOptions,
     );

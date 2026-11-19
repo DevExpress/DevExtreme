@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/prefer-for-of */
 /* eslint-disable @typescript-eslint/init-declarations */
-/* eslint-disable no-plusplus */
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
@@ -57,7 +56,7 @@ export const layout = {
     const cascades = [];
 
     // init cascades
-    for (let i = 0; i < maxCascade + 1; i++) {
+    for (let i = 0; i < maxCascade + 1; i += 1) {
       // @ts-expect-error
       cascades.push({});
     }
@@ -189,7 +188,7 @@ export const layout = {
           // @ts-expect-error
           cascadeRects.push(rect);
         });
-      cascadeIdx++;
+      cascadeIdx += 1;
       // @ts-expect-error
       rects.push(cascadeRects);
     });
@@ -198,8 +197,8 @@ export const layout = {
   },
 
   _findRectByName(rects, name) {
-    for (let c = 0; c < rects.length; c++) {
-      for (let r = 0; r < rects[c].length; r++) {
+    for (let c = 0; c < rects.length; c += 1) {
+      for (let r = 0; r < rects[c].length; r += 1) {
         if (name === rects[c][r]._name) return rects[c][r];
       }
     }
@@ -208,10 +207,10 @@ export const layout = {
 
   _findIndexByName(rects, nodeTitle): number | null {
     let index = 0;
-    for (let c = 0; c < rects.length; c++) {
-      for (let r = 0; r < rects[c].length; r++) {
+    for (let c = 0; c < rects.length; c += 1) {
+      for (let r = 0; r < rects[c].length; r += 1) {
         if (nodeTitle === rects[c][r]._name) return index;
-        index++;
+        index += 1;
       }
     }
     return null;
@@ -324,8 +323,8 @@ export const layout = {
   },
 
   _fitAllNodesHeight(nodeRects, paths): void {
-    for (let c = 0; c < nodeRects.length; c++) {
-      for (let r = 0; r < nodeRects[c].length; r++) {
+    for (let c = 0; c < nodeRects.length; c += 1) {
+      for (let r = 0; r < nodeRects[c].length; r += 1) {
         this._fitNodeHeight(nodeRects[c][r]._name, nodeRects, paths);
       }
     }

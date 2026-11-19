@@ -590,6 +590,22 @@ export const rowsView = (
     this._scrollToCurrentPageOnResize();
   }
 
+  public isViewportRowsRenderPending(): boolean {
+    const scrolling = this.option('scrolling');
+    const isVirtualRender = isVirtualPaging(scrolling) || isVirtualRowRendering(scrolling);
+
+    if (!isVirtualRender) {
+      return false;
+    }
+
+    const isViewportDataLoading = this.dataSourceController.isLoading()
+      && !this.dataSourceController.getAdapter()?.customLoader.isLoading();
+
+    return isViewportDataLoading
+      || this._dataController.isViewportPositionPending()
+      || this.isWaitingForRowsLayout();
+  }
+
   private _scrollToCurrentPageOnResize(): void {
     if (this._dataController.pageIndex() > 0) {
       const resizeHandler = (): void => {
