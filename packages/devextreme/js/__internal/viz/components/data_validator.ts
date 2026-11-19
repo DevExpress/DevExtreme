@@ -14,7 +14,6 @@
 /* eslint-disable no-multi-assign */
 /* eslint-disable no-nested-ternary */
 /* eslint-disable no-param-reassign */
-/* eslint-disable no-plusplus */
 /* eslint-disable no-restricted-syntax */
 
 import { extend } from '@ts/core/utils/extend';
@@ -212,7 +211,7 @@ function getParsedCell(cell, parsers) {
   let i;
   const ii = parsers.length;
   const obj = extend({}, cell);
-  for (i = 0; i < ii; ++i) {
+  for (i = 0; i < ii; i += 1) {
     const [field, parseField] = parsers[i];
     obj[field] = parseField(cell[field], field);
   }
@@ -224,7 +223,7 @@ function parse(data, parsers) {
   let i;
   const ii = data.length;
   parsedData.length = ii;
-  for (i = 0; i < ii; ++i) {
+  for (i = 0; i < ii; i += 1) {
     // @ts-expect-error
     parsedData[i] = getParsedCell(data[i], parsers);
   }
@@ -235,7 +234,7 @@ function findIndexByThreshold(data, valueField, threshold) {
   let i;
   const ii = data.length;
   let value;
-  for (i = 0; i < ii; ++i) {
+  for (i = 0; i < ii; i += 1) {
     value = data[i][valueField];
     if (_isDefined(value) && threshold > value) {
       break;
@@ -533,11 +532,12 @@ function verifyData(source, incidentOccurred) {
   let k;
   let item;
   if (sourceIsDefined && !hasError) {
-    for (i = 0, ii = source.length, k = 0; i < ii; ++i) {
+    for (i = 0, ii = source.length, k = 0; i < ii; i += 1) {
       item = source[i];
       if (_isObject(item)) {
         // @ts-expect-error
-        data[k++] = item;
+        data[k] = item;
+        k += 1;
       } else if (item) { // TODO: And what about `null`, `undefined` and `0`?
         hasError = true;
       }

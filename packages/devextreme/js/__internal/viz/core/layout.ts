@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/init-declarations */
-/* eslint-disable no-plusplus */
 /* eslint-disable func-names */
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable no-multi-assign */
@@ -214,7 +213,7 @@ class Layout {
     const ii = targets.length;
     const cache: LayoutItem[] = [];
 
-    for (i = 0; i < ii; ++i) {
+    for (i = 0; i < ii; i += 1) {
       if (processForward(targets[i], rect, minSize)) {
         cache.push(targets[i]);
       } else {
@@ -235,7 +234,7 @@ class Layout {
 
     const ii = targets.length;
 
-    for (i = 0; i < ii; ++i) {
+    for (i = 0; i < ii; i += 1) {
       target = targets[i];
       if (target.side !== targetSide) {
         backwardRect = targetRect.slice();
@@ -254,7 +253,7 @@ function createTargets(targets: LayoutTarget[]): LayoutItem[] {
   let collection: LayoutItem[] = [];
   let layout;
 
-  for (i = 0; i < ii; ++i) {
+  for (i = 0; i < ii; i += 1) {
     layout = targets[i].layoutOptions();
     if (layout) {
       layout = normalizeLayoutOptions(layout);

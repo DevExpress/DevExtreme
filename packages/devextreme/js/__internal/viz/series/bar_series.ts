@@ -3,7 +3,6 @@
 /* eslint-disable @typescript-eslint/prefer-for-of */
 /* eslint-disable @typescript-eslint/no-this-alias */
 /* eslint-disable @typescript-eslint/init-declarations */
-/* eslint-disable no-plusplus */
 /* eslint-disable func-names */
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable @typescript-eslint/no-shadow */
@@ -198,7 +197,7 @@ chart.bar = _extend({}, chartSeries, baseBarSeriesMethods, {
     const oppositeCoordName = isOpposite ? 'vx' : 'vy';
     const points = this.getPoints();
 
-    for (let i = 0; i < points.length; i++) {
+    for (let i = 0; i < points.length; i += 1) {
       const p = points[i];
       let tmpCoord;
 
@@ -257,7 +256,7 @@ polar.bar = _extend({}, polarSeries, baseBarSeriesMethods, {
     const argAxis = this.getArgumentAxis();
     const startAngle = argAxis.getAngles()[0];
 
-    for (let i = 0; i < points.length; i++) {
+    for (let i = 0; i < points.length; i += 1) {
       const p = points[i];
       const tmpPoint = _isDefined(p[paramName])
         && _isDefined(params[paramName])

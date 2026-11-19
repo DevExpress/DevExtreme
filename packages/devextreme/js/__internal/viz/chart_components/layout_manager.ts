@@ -1,7 +1,6 @@
 /* eslint-disable @stylistic/no-mixed-operators */
 /* eslint-disable no-continue */
 /* eslint-disable @typescript-eslint/init-declarations */
-/* eslint-disable no-plusplus */
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable no-nested-ternary */
 /* eslint-disable consistent-return */
@@ -117,7 +116,7 @@ function getSizeLabels(series: ThemeValue[]): LabelSizes {
 
     let rWidth = maxWidth;
     if (maxWidth) {
-      res.outerLabelsCount++;
+      res.outerLabelsCount += 1;
       if (res.outerLabelsCount > 1) {
         maxWidth += consts.pieLabelSpacing;
       }
@@ -145,7 +144,7 @@ function correctLabelRadius(
   let runningWidth = 0;
   const { sizes, rSizes } = labelSizes;
 
-  for (i = 0; i < series.length; i++) {
+  for (i = 0; i < series.length; i += 1) {
     if (sizes[i] === 0) {
       curRadius && (curRadius += rSizes[i - 1]);
       continue;

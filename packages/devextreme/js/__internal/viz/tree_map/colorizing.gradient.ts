@@ -1,7 +1,6 @@
 /* eslint-disable no-return-assign */
 /* eslint-disable prefer-spread */
 /* eslint-disable @typescript-eslint/init-declarations */
-/* eslint-disable no-plusplus */
 /* eslint-disable func-names */
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
@@ -30,7 +29,7 @@ function calculateRange(nodes, getValue): number[] {
   const codes = [];
   let code;
 
-  for (i = 0; i < ii; ++i) {
+  for (i = 0; i < ii; i += 1) {
     code = getValue(nodes[i]);
     if (isFinite(code)) {
       // @ts-expect-error
