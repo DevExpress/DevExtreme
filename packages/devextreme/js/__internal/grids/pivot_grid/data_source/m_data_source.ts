@@ -95,7 +95,7 @@ function createCaption(field: PivotGridField): string {
 function resetFieldState(field: PivotGridField, properties: string[]): void {
   const initialProperties = field._initProperties ?? {};
 
-  each(properties, (_, prop) => {
+  properties.forEach((prop) => {
     if (Object.prototype.hasOwnProperty.call(initialProperties, prop)) {
       field[prop] = initialProperties[prop];
     }
@@ -169,22 +169,19 @@ class PivotGridDataSource {
 
     this._isFieldsModified = false;
 
-    each(
-      [
-        'changed',
-        'loadError',
-        'loadingChanged',
-        'progressChanged',
-        'fieldsPrepared',
-        'expandValueChanging',
-      ],
-      (_, eventName) => {
-        const optionName = `on${eventName[0].toUpperCase()}${eventName.slice(1)}`;
-        if (Object.prototype.hasOwnProperty.call(options, optionName)) {
-          this.on(eventName, options[optionName]);
-        }
-      },
-    );
+    [
+      'changed',
+      'loadError',
+      'loadingChanged',
+      'progressChanged',
+      'fieldsPrepared',
+      'expandValueChanging',
+    ].forEach((eventName) => {
+      const optionName = `on${eventName[0].toUpperCase()}${eventName.slice(1)}`;
+      if (Object.prototype.hasOwnProperty.call(options, optionName)) {
+        this.on(eventName, options[optionName]);
+      }
+    });
 
     this._retrieveFields = options.retrieveFields ?? true;
 
@@ -456,7 +453,7 @@ class PivotGridDataSource {
     properties: string[],
   ): PivotGridField {
     if (srcField) {
-      each(properties, (_, name) => {
+      properties.forEach((name) => {
         if (skipInitPropertySave) {
           field[name] = srcField[name];
         } else {
@@ -476,16 +473,10 @@ class PivotGridDataSource {
   }
 
   public getFieldsState(fields: PivotGridField[], properties: string[]): PivotGridField[] {
-    const result: PivotGridField[] = [];
-
-    each(fields, (_, field) => {
-      result.push(this.setFieldProperties({
-        dataField: field.dataField,
-        name: field.name,
-      }, field, true, properties));
-    });
-
-    return result;
+    return fields.map((field) => this.setFieldProperties({
+      dataField: field.dataField,
+      name: field.name,
+    }, field, true, properties));
   }
 
   public getFieldStateId(field: PivotGridField): string {
@@ -496,15 +487,7 @@ class PivotGridDataSource {
   }
 
   public getFieldsById(fields: PivotGridField[] | undefined, id: string): PivotGridField[] {
-    const result: PivotGridField[] = [];
-
-    each(fields ?? [], (_, field) => {
-      if (this.getFieldStateId(field) === id) {
-        result.push(field);
-      }
-    });
-
-    return result;
+    return (fields ?? []).filter((field) => this.getFieldStateId(field) === id);
   }
 
   public setFieldsStateCore(
@@ -513,7 +496,7 @@ class PivotGridDataSource {
   ): PivotGridField[] {
     const fieldsState = stateFields ?? [];
 
-    each(fields, (index, field) => {
+    fields.forEach((field, index) => {
       this.setFieldProperties(field, fieldsState[index], false, STATE_PROPERTIES);
       this.updateCalculatedFieldProperties(field, CALCULATED_PROPERTIES);
     });
@@ -527,14 +510,14 @@ class PivotGridDataSource {
     const fieldsState = stateFields ?? [];
     const fieldsById: Record<string, PivotGridField[]> = {};
 
-    each(fields, (_, field) => {
+    fields.forEach((field) => {
       const id = this.getFieldStateId(field);
       if (!fieldsById[id]) {
         fieldsById[id] = this.getFieldsById(fields, this.getFieldStateId(field));
       }
     });
 
-    each(fieldsById, (id, fieldsWithId) => {
+    Object.entries(fieldsById).forEach(([id, fieldsWithId]) => {
       this.setFieldsStateCore(this.getFieldsById(fieldsState, id), fieldsWithId);
     });
 
@@ -600,11 +583,11 @@ class PivotGridDataSource {
     const removedFields: Record<string, PivotGridField | undefined> = {};
     const dataTypes = getFieldsDataType(fields);
 
-    each(storeFields, (_, field) => {
+    storeFields.forEach((field) => {
       fieldsDictionary[this.getFieldId(field, retrieveFieldsOptionValue)] = field;
     });
 
-    each(fields, (_, field) => {
+    fields.forEach((field) => {
       const fieldKey = this.getFieldId(field, retrieveFieldsOptionValue);
       const storeField = fieldsDictionary[fieldKey] || removedFields[fieldKey];
 
@@ -626,7 +609,7 @@ class PivotGridDataSource {
     });
 
     if (retrieveFieldsOptionValue) {
-      each(fieldsDictionary, (_, field) => {
+      Object.values(fieldsDictionary).forEach((field) => {
         result.push(field);
       });
     }
