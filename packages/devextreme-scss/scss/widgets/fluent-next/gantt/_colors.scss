@@ -4,13 +4,12 @@ $gantt-collapsable-row-bg: ds.$color-bg-low !default;
 
 $gantt-content-disabled: ds.$color-content-disabled !default;
 
-$gantt-task-bg: ds.$color-bg-primary-shared !default;
+$gantt-task-bg: ds.$color-bg-primary !default;
 $gantt-parent-task-bg: ds.$color-bg-success !default;
-$gantt-parent-task-content: ds.$color-content-on-success !default;
-$gantt-parent-task-progress-bg: ds.$color-bg-alpha-selected !default;
+$gantt-task-content: ds.$color-content-on-primary !default;
 $gantt-task-res-content: ds.$color-content-inverted !default;
 $gantt-task-res-bg: ds.$color-bg-inverted !default;
-$gantt-task-progress-bg: rgb(from #{ds.$color-bg-inverted} r g b / 0.2) !default;
+$gantt-task-progress-bg: rgb(from #{ds.$color-bg-static-dark} r g b / 0.2) !default;
 
 $gantt-bg: ds.$color-bg !default;
 $gantt-border: ds.$color-border !default;

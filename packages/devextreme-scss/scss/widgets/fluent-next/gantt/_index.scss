@@ -107,12 +107,8 @@
         border-bottom-right-radius: 0;
         border-bottom-left-radius: 0;
 
-        .dx-gantt-titleIn {
-          color: var(--dx-gantt-parent-task-content);
-        }
-
         &:not(.dx-gantt-noPrg) .dx-gantt-tPrg {
-          background-color: var(--dx-gantt-parent-task-progress-bg);
+          background-color: var(--dx-gantt-task-progress-bg);
         }
 
         &:not(.dx-gantt-smallTask)::before,
@@ -134,8 +130,8 @@
         }
 
         &:not(.dx-gantt-noPrg) .dx-gantt-tPrg::before {
-          border-left-color: var(--dx-gantt-parent-task-progress-bg);
-          border-top-color: var(--dx-gantt-parent-task-progress-bg);
+          border-left-color: var(--dx-gantt-task-progress-bg);
+          border-top-color: var(--dx-gantt-task-progress-bg);
         }
 
         &::after,
@@ -146,8 +142,8 @@
         }
 
         &.dx-gantt-cmpl::after {
-          border-right-color: var(--dx-gantt-parent-task-progress-bg);
-          border-top-color: var(--dx-gantt-parent-task-progress-bg);
+          border-right-color: var(--dx-gantt-task-progress-bg);
+          border-top-color: var(--dx-gantt-task-progress-bg);
         }
 
         &.dx-gantt-cmpl .dx-gantt-tPrg::after {
@@ -162,7 +158,7 @@
     }
 
     .dx-gantt-titleIn {
-      color: var(--dx-gantt-task-res-content);
+      color: var(--dx-gantt-task-content);
       padding: 0 var(--dx-gantt-task-title-padding-inline-start);
     }
   }
