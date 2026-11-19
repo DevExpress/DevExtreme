@@ -9,7 +9,6 @@ import { when } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { isDefined, isEvent } from '@js/core/utils/type';
 import type { GroupOperation } from '@js/ui/filter_builder';
-import type { ShownEvent } from '@js/ui/popup';
 import Popup from '@js/ui/popup/ui.popup';
 import EditorFactoryMixin from '@js/ui/shared/ui.editor_factory_mixin';
 import TreeView from '@js/ui/tree_view';
@@ -35,10 +34,9 @@ import type {
   GroupMenuItem,
   KeyEvent,
   MenuOptions,
+  MenuPopupOptions,
+  MenuTreeViewOptions,
   OperationMenuItem,
-  PopupMenuOptions,
-  PopupOptions,
-  ResolvedMenuOptions,
   ValueEditorOptions,
 } from './types';
 import {
@@ -480,28 +478,31 @@ class FilterBuilder extends Widget<FilterBuilderProperties> implements EditorFac
     const $guid = new Guid();
     $button.attr('aria-controls', `${$guid}`);
 
-    const menu: ResolvedMenuOptions<TItem> = {
-      ...options.menu,
-      id: $guid,
+    const { cssClass, ...menuOptions } = options.menu;
+
+    const treeViewOptions: MenuTreeViewOptions<TItem> = {
+      ...menuOptions,
       focusStateEnabled: true,
       selectionMode: 'single',
       onItemClick: menuOnItemClickWrapper(options.menu.onItemClick),
-      onHiding() {
-        $button.removeClass(ACTIVE_CLASS).attr('aria-expanded', 'false');
-      },
+      rtlEnabled,
+    };
+
+    const popupOptions: MenuPopupOptions = {
+      id: $guid,
+      cssClass: `${FILTER_BUILDER_OVERLAY_CLASS} ${cssClass}`,
+      rtlEnabled,
       position: {
         my: `${position} top`, at: `${position} bottom`, offset: '0 1', of: $button, collision: 'flip',
       },
       animation: null,
+      onHiding() {
+        $button.removeClass(ACTIVE_CLASS).attr('aria-expanded', 'false');
+      },
       onHidden() {
         removeMenu();
       },
-      cssClass: `${FILTER_BUILDER_OVERLAY_CLASS} ${options.menu.cssClass}`,
-      rtlEnabled,
-    };
-
-    const popup: PopupOptions = {
-      onShown: (info: ShownEvent): void => {
+      onShown: (info, treeView): void => {
         const treeViewContentElement = $(info.component.content());
         const treeViewElement = treeViewContentElement.find('.dx-treeview');
 
@@ -516,12 +517,9 @@ class FilterBuilder extends Widget<FilterBuilderProperties> implements EditorFac
                             || (e.type === 'keyup' && (keyName === ESCAPE_KEY || keyName === ENTER_KEY))) {
             // eslint-disable-next-line @typescript-eslint/no-floating-promises
             info.component.hide();
-            eventsEngine.trigger(menu.position.of, 'focus');
+            eventsEngine.trigger($button, 'focus');
           }
         });
-
-        // @ts-expect-error dxElementWrapper doesn't contain widget creation methods types
-        const treeView = treeViewElement.dxTreeView('instance');
 
         treeView.focus();
         treeView.option('focusedElement', null);
@@ -530,7 +528,7 @@ class FilterBuilder extends Widget<FilterBuilderProperties> implements EditorFac
 
     this._subscribeOnClickAndEnterKey($button, () => {
       removeMenu();
-      this._createPopupWithTreeView({ menu, popup }, this.$element());
+      this._createPopupWithTreeView(treeViewOptions, popupOptions, this.$element());
       $button.addClass(ACTIVE_CLASS).attr('aria-expanded', 'true');
     });
     return $button;
@@ -1020,46 +1018,52 @@ class FilterBuilder extends Widget<FilterBuilderProperties> implements EditorFac
   }
 
   _createPopupWithTreeView<TItem>(
-    options: PopupMenuOptions<TItem>,
+    treeViewOptions: MenuTreeViewOptions<TItem>,
+    popupOptions: MenuPopupOptions,
     $container: dxElementWrapper,
   ): void {
     // eslint-disable-next-line @typescript-eslint/no-this-alias
     const that = this;
-    const { onHidden } = options.menu;
+    const { onHidden, onShown } = popupOptions;
+    const menu: { treeView?: TreeView } = {};
     const $popup = $('<div>')
-      .addClass(options.menu.cssClass)
+      .addClass(popupOptions.cssClass)
       .appendTo($container);
 
     this._popupWithTreeView = this._createComponent($popup, Popup, {
-      onHiding: options.menu.onHiding,
+      onHiding: popupOptions.onHiding,
       onHidden: (...args) => {
         onHidden?.(...args);
         this._popupWithTreeView = undefined;
       },
-      rtlEnabled: options.menu.rtlEnabled,
-      position: options.menu.position,
-      animation: options.menu.animation,
+      rtlEnabled: popupOptions.rtlEnabled,
+      position: popupOptions.position,
+      animation: popupOptions.animation,
       contentTemplate(contentElement) {
         const $menuContainer = $('<div>').appendTo(contentElement);
-        that._createComponent($menuContainer, TreeView, options.menu);
+        menu.treeView = that._createComponent($menuContainer, TreeView, treeViewOptions);
 
-        $menuContainer.attr('id', `${options.menu.id}`);
+        $menuContainer.attr('id', `${popupOptions.id}`);
         // T852701
         this.repaint();
       },
-      maxHeight: getElementMaxHeightByWindow(options.menu.position.of),
+      maxHeight: getElementMaxHeightByWindow(popupOptions.position.of),
       visible: true,
       focusStateEnabled: false,
       preventScrollEvents: false,
       hideOnParentScroll: this.option('closePopupOnTargetScroll'),
       _hideOnParentScrollTarget: $popup,
       hideOnOutsideClick: true,
-      onShown: options.popup.onShown,
+      onShown: (e) => {
+        if (menu.treeView) {
+          onShown(e, menu.treeView);
+        }
+      },
       shading: false,
       width: 'auto',
       height: 'auto',
       showTitle: false,
-      _wrapperClassExternal: options.menu.cssClass,
+      _wrapperClassExternal: popupOptions.cssClass,
       _ignorePreventScrollEventsDeprecation: true,
     });
   }
