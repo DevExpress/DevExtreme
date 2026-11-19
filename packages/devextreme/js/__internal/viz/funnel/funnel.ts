@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-declaration-merging */
 // PLUGINS_SECTION
 import { registerComponent as componentRegistrator } from '@ts/core/component_registrator';
 import { noop } from '@ts/core/utils/common';
@@ -8,6 +7,7 @@ import type { DataSourcePluginMembers } from '@ts/viz/core/data_source';
 import { plugin } from '@ts/viz/core/data_source';
 import { setupWidgetPrototype } from '@ts/viz/core/helpers';
 import type { Size } from '@ts/viz/core/types';
+import type { FunnelLabel } from '@ts/viz/funnel/label';
 
 import Item from './item';
 import { addAlgorithm, getAlgorithm } from './tiling';
@@ -19,7 +19,7 @@ const NODES_CREATE_CHANGE = 'NODES_CREATE';
 addAlgorithm('dynamicslope', dynamicSlope, true);
 addAlgorithm('dynamicheight', dynamicHeight);
 
-interface FunnelDataItem {
+export interface FunnelDataItem {
   value: number;
   color: ThemeValue;
   argument: ThemeValue;
@@ -44,10 +44,6 @@ function getLegendItemState(itemState: ThemeValue): LegendItemState {
   };
 }
 
-interface Funnel extends DataSourcePluginMembers {
-  _showTooltip: (id: number, coords?: number[]) => void;
-}
-
 class Funnel extends BaseWidget {
   _group;
 
@@ -56,6 +52,18 @@ class Funnel extends BaseWidget {
   _rect!: number[];
 
   _proxyData!: HitTestCallback[];
+
+  declare _dataIsLoaded: DataSourcePluginMembers['_dataIsLoaded'];
+
+  declare _dataSourceItems: DataSourcePluginMembers['_dataSourceItems'];
+
+  declare _updateDataSource: DataSourcePluginMembers['_updateDataSource'];
+
+  declare _showTooltip: (id: number, coords?: number[]) => void;
+
+  declare hideTooltip: () => void;
+
+  declare _labels: FunnelLabel[];
 
   _getDefaultSize(): Size {
     return { width: 400, height: 400 };
