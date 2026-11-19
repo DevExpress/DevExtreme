@@ -1,5 +1,5 @@
 import { mount } from '@vue/test-utils';
-import { defineComponent } from 'vue';
+import { defineComponent, nextTick } from 'vue';
 
 import DxSelectBox from '../../select-box';
 import DxTextBox from '../../text-box';
@@ -10,7 +10,7 @@ beforeEach(() => {
 });
 
 describe('template rendering', () => {
-  it('field addons template rendered', () => {
+  it('field addons template rendered', async () => {
     const vm = defineComponent({
       template:
                 `<dx-select-box :data-source="dataSource" :field-addons="{ beforeTemplate: 'field' }" id="component">
@@ -29,6 +29,7 @@ describe('template rendering', () => {
       },
     });
     const wrapper = mount(vm);
+    await nextTick();
     expect(wrapper.findAll('.dx-dropdowneditor-field-before-template-wrapper .dx-textbox')).toHaveLength(1);
   });
 });
