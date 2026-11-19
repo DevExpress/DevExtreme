@@ -530,6 +530,18 @@ jobs:
         CI_ENV: true # The `ignore` field in the visualtestrc.json should be disabled when running test locally
       run: pnpm exec nx test-testcafe
 
+    - name: TEMP describe the agent
+      if: ${{ !cancelled() && matrix.STRATEGY == 'screenshots' }}
+      run: |
+        echo "== os"; head -4 /etc/os-release; nproc; free -g | head -2
+        echo "== time zone"; date +%Z; cat /etc/timezone 2>/dev/null || true; echo "TZ=${TZ:-unset} LANG=${LANG:-unset} LC_ALL=${LC_ALL:-unset}"
+        echo "== chrome"; google-chrome-stable --version; which google-chrome-stable; ls -la /opt/google/chrome/chrome
+        echo "== font families"; fc-list : family | sort -u
+        echo "== font files"; fc-list : file | sort
+        echo "== font packages"; dpkg -l | grep -iE 'fonts-|ttf-|fontconfig' | awk '{print $2, $3}'
+        echo "== matches"; for f in sans-serif serif monospace Arial Helvetica 'Segoe UI' Roboto Inter 'Courier New' emoji; do echo "$f -> $(fc-match "$f")"; done
+        echo "== arabic"; fc-match ':lang=ar'; echo "== symbols"; fc-list ':charset=2713' family | sort -u | head; fc-list ':charset=27F3' family | sort -u | head
+
     - name: Set Playwright artifact name
       if: ${{ !cancelled() && matrix.STRATEGY == 'screenshots' }}
       run: echo "PLAYWRIGHT_JOB_NAME=$(echo "${{ matrix.CONSTEL }}-${{ matrix.THEME }}" | tr '/' '-')" >> $GITHUB_ENV
@@ -549,7 +561,7 @@ jobs:
         # The default blob name is built from the test paths only, so jobs that differ by theme or
         # shard alone would write the same zip and overwrite each other once merged.
         PLAYWRIGHT_BLOB_OUTPUT_NAME: report-${{ env.PLAYWRIGHT_JOB_NAME }}.zip
-      run: pnpm run test-playwright
+      run: pnpm run test-playwright --update-snapshots=all
 
     - name: Show accessibility warnings
       if: matrix.STRATEGY == 'accessibility'
@@ -582,7 +594,7 @@ jobs:
       if: always() && matrix.STRATEGY == 'screenshots'
       run: |
         mkdir -p "$RUNNER_TEMP/new-etalons"
-        git ls-files --others --exclude-standard -z -- 'apps/demos/testing/etalons/*.png' \
+        git ls-files --others --modified --exclude-standard -z -- 'apps/demos/testing/etalons/*.png' \
           | xargs -0 -r cp --parents -t "$RUNNER_TEMP/new-etalons"
 
     - name: Upload new etalons
@@ -597,7 +609,7 @@ jobs:
     - name: Fail on new etalons
       if: always() && matrix.STRATEGY == 'screenshots'
       run: |
-        new_etalons=$(git ls-files --others --exclude-standard -- 'apps/demos/testing/etalons/*.png')
+        new_etalons=$(git ls-files --others --modified --exclude-standard -- 'apps/demos/testing/etalons/*.png')
         if [ -n "$new_etalons" ]; then
           echo "::error::The tests wrote etalons that are not in the repository. They are in the playwright-etalons artifact:"
           echo "$new_etalons"
