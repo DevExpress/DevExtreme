@@ -6,6 +6,7 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../../base/icon_fonts" as *;
+@use "../../base/gridBase/mixins" as *;
 @use "../../base/checkBox/mixins" as *;
 @use "../../base/button/mixins" as *;
 @use "../textEditor" as *;
@@ -175,10 +176,15 @@ $generic-grid-base-cell-input-height: math.round($generic-base-line-height * $ge
     }
 
     .dx-#{$widget-name}-content .dx-#{$widget-name}-table .dx-row {
-      .dx-command-edit {
-        .dx-link:not(.dx-link-icon) {
-          margin: 0 $generic-command-edit-text-margin;
-          min-width: 20px;
+      @if $size == "compact" {
+        .dx-command-edit-with-icons,
+        .dx-command-edit:not(.dx-command-edit-with-icons):has(> .dx-link:not(.dx-link-icon)) {
+          vertical-align: middle;
+
+          &:has(> .dx-link:focus) {
+            overflow: clip;
+            overflow-clip-margin: 2px;
+          }
         }
       }
 
@@ -189,10 +195,37 @@ $generic-grid-base-cell-input-height: math.round($generic-base-line-height * $ge
           margin: 0 $generic-command-edit-icon-margin;
         }
 
-        .dx-link:not(.dx-link-icon) {
-          width: auto;
+        .dx-link.dx-link-icon {
+          @include dx-icon-target-sizing(
+            $generic-command-edit-icon-size,
+            $generic-command-edit-icon-margin,
+            $generic-command-edit-icon-target-size
+          );
+
+          &:has(+ .dx-link.dx-link-icon) {
+            margin-inline-end: 0;
+          }
+
+          & + .dx-link.dx-link-icon {
+            margin-inline-start: 0;
+          }
         }
       }
+
+      .dx-command-edit {
+        .dx-link:not(.dx-link-icon) {
+          @include dx-command-text-target-sizing(
+            $generic-command-edit-icon-target-size,
+            $generic-button-horizontal-padding + $generic-button-border-weight,
+            $generic-command-edit-text-margin
+          );
+        }
+      }
+    }
+
+    .dx-#{$widget-name}-rowsview.dx-state-focused .dx-data-row > td.dx-command-edit > a.dx-link.dx-link-icon:focus,
+    .dx-#{$widget-name}-rowsview.dx-state-focused .dx-data-row > td.dx-command-edit > a.dx-link:not(.dx-link-icon):focus {
+      outline-offset: -2px;
     }
 
     .dx-command-drag {
