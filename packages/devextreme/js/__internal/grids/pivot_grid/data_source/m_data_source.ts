@@ -136,6 +136,10 @@ function isDataExists(data: DataSourceData): number {
   return data.rows.length || data.columns.length || data.values.length;
 }
 
+function isPivotGridStore(store: DataSourceStoreOption): store is PivotGridStore {
+  return isFunction(store.load) && isFunction(store.getFields);
+}
+
 class PivotGridDataSource {
   public _eventsStrategy: EventsStrategy;
 
@@ -415,8 +419,7 @@ class PivotGridDataSource {
       || Array.isArray(storeOptions)) {
       return this.createLocalOrRemoteStore(options, notifyProgress);
     }
-    if (isFunction(storeOptions.load) && isFunction(storeOptions.getFields)) {
-      // @ts-expect-error a custom pivot store is checked only for load() and getFields()
+    if (isPivotGridStore(storeOptions)) {
       return storeOptions;
     }
 
