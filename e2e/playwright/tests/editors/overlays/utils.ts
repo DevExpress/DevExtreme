@@ -20,18 +20,19 @@ export const getRect = (locator: Locator): Promise<Rect> => locator.evaluate((el
   };
 });
 
-const getCenterOffset = async (
-  outer: Locator,
-  inner: Locator,
-): Promise<{ vertical: number; horizontal: number }> => {
-  const outerRect = await getRect(outer);
-  const innerRect = await getRect(inner);
-  const centerOf = (rect: Rect): { x: number; y: number } => ({
-    x: (rect.left + rect.right) / 2,
-    y: (rect.top + rect.bottom) / 2,
-  });
-  const outerCenter = centerOf(outerRect);
-  const innerCenter = centerOf(innerRect);
+interface CenterOffset {
+  vertical: number;
+  horizontal: number;
+}
+
+const centerOf = (rect: Rect): { x: number; y: number } => ({
+  x: (rect.left + rect.right) / 2,
+  y: (rect.top + rect.bottom) / 2,
+});
+
+const getCenterOffset = async (outer: Locator, inner: Locator): Promise<CenterOffset> => {
+  const outerCenter = centerOf(await getRect(outer));
+  const innerCenter = centerOf(await getRect(inner));
 
   return {
     vertical: Math.abs(outerCenter.y - innerCenter.y),
@@ -39,9 +40,29 @@ const getCenterOffset = async (
   };
 };
 
-export const expectCentered = async (outer: Locator, inner: Locator): Promise<void> => {
-  await expect.poll(async () => (await getCenterOffset(outer, inner)).vertical)
-    .toBeLessThanOrEqual(0.5);
-  await expect.poll(async () => (await getCenterOffset(outer, inner)).horizontal)
-    .toBeLessThanOrEqual(0.5);
+const getWindowCenterOffset = async (locator: Locator): Promise<CenterOffset> => {
+  const center = centerOf(await getRect(locator));
+  const { innerWidth, innerHeight } = await locator.page().evaluate(
+    () => ({ innerWidth: window.innerWidth, innerHeight: window.innerHeight }),
+  );
+
+  return {
+    vertical: Math.abs(innerHeight / 2 - center.y),
+    horizontal: Math.abs(innerWidth / 2 - center.x),
+  };
 };
+
+const expectCenterOffsetWithinHalfPixel = async (
+  getOffset: () => Promise<CenterOffset>,
+): Promise<void> => {
+  await expect.poll(async () => (await getOffset()).vertical).toBeLessThanOrEqual(0.5);
+  await expect.poll(async () => (await getOffset()).horizontal).toBeLessThanOrEqual(0.5);
+};
+
+export const expectCentered = (outer: Locator, inner: Locator): Promise<void> => (
+  expectCenterOffsetWithinHalfPixel(() => getCenterOffset(outer, inner))
+);
+
+export const expectCenteredInWindow = (locator: Locator): Promise<void> => (
+  expectCenterOffsetWithinHalfPixel(() => getWindowCenterOffset(locator))
+);
