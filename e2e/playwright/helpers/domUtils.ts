@@ -14,17 +14,6 @@ export const setAttribute = async (
   { elementSelector: selector, name: attribute, attributeValue: value },
 );
 
-export const removeAttribute = async (
-  page: Page,
-  selector: string,
-  attribute: string,
-): Promise<void> => page.evaluate(
-  ({ elementSelector, name }) => {
-    document.querySelector(elementSelector)?.removeAttribute(name);
-  },
-  { elementSelector: selector, name: attribute },
-);
-
 export const appendAttributeValue = async (
   page: Page,
   selector: string,
@@ -133,3 +122,34 @@ export const hasHorizontalScroll = async (
 export const getDocumentScrollTop = async (
   page: Page,
 ): Promise<number> => page.evaluate(() => document.documentElement.scrollTop);
+
+export const addFocusableElementBefore = async (
+  page: Page,
+  targetSelector: string,
+  elementId = 'focusable-start',
+): Promise<string> => page.evaluate(
+  ({ selector, id }) => {
+    document.getElementById(id)?.remove();
+
+    const target = document.querySelector(selector);
+    const button = document.createElement('button');
+
+    button.id = id;
+    button.textContent = 'Start';
+    Object.assign(button.style, {
+      position: 'fixed',
+      top: '0',
+      left: '0',
+      width: '1px',
+      height: '1px',
+      padding: '0',
+      border: '0',
+      overflow: 'hidden',
+      opacity: '0',
+    });
+    target?.parentElement?.insertBefore(button, target);
+
+    return button.id;
+  },
+  { selector: targetSelector, id: elementId },
+);

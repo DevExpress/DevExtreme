@@ -3,7 +3,7 @@ import 'common/data/odata/store';
 
 import $ from 'jquery';
 import { noop } from 'core/utils/common';
-import { LocalStore } from '__internal/grids/pivot_grid/local_store/m_local_store';
+import { LocalStore } from '__internal/grids/pivot_grid/local_store/local_store';
 import { sort } from '__internal/grids/pivot_grid/data_source/m_data_source_utils';
 import pivotGridUtils from '__internal/grids/grid_core/utils';
 import config from 'core/config';
@@ -1319,7 +1319,7 @@ QUnit.module('Array Local Store', moduleConfig, () => {
             dataType: 'date'
         };
 
-        new LocalStore(dataSource).getFields(field).done(function() {
+        new LocalStore(dataSource).getFields([field]).done(function() {
             assert.deepEqual(field, {
                 dataField: 'OrderDate',
                 dataType: 'date'

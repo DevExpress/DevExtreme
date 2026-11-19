@@ -1,8 +1,6 @@
 /* eslint-disable @typescript-eslint/prefer-for-of */
-/* eslint-disable no-plusplus */
 /* eslint-disable func-names */
 /* eslint-disable @typescript-eslint/naming-convention */
-/* eslint-disable @stylistic/max-len */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
@@ -12,13 +10,15 @@ const GRAY = 'gray';
 const BLACK = 'black';
 
 const routines = {
-  maxOfArray(arr, callback?) {
+  maxOfArray(arr, callback?): number {
     let m = 0;
     let callback_function = (v) => v;
     if (callback) {
       callback_function = callback;
     }
-    for (let i = 0; i < arr.length; i++) { if (callback_function(arr[i]) > m) m = callback_function(arr[i]); }
+    for (let i = 0; i < arr.length; i += 1) {
+      if (callback_function(arr[i]) > m) m = callback_function(arr[i]);
+    }
     return m;
   },
 };
@@ -97,10 +97,10 @@ const struct = {
     return this._hasCycle;
   },
 
-  _depthFirstSearch(links, vertices, vertex) {
+  _depthFirstSearch(links, vertices, vertex): void {
     vertices[vertex].color = GRAY;
     const averts = getAdjacentVertices(links, vertex);
-    for (let a = 0; a < averts.length; a++) {
+    for (let a = 0; a < averts.length; a += 1) {
       if (vertices[averts[a]].color === WHITE) {
         this._depthFirstSearch(links, vertices, averts[a]);
       } else if (vertices[averts[a]].color === GRAY) {
@@ -121,7 +121,10 @@ const struct = {
     // method expects sorted vertices array to be in this._sortedList
     const sortedVertices = this._sortedList;
     sortedVertices.forEach((vertex) => {
-      const averts = getReverseAdjacentVertices(links, vertex.name); // neigbours who INCOME to the vertex
+      const averts = getReverseAdjacentVertices(
+        links,
+        vertex.name,
+      ); // neigbours who INCOME to the vertex
       if (averts.length === 0) {
         vertex.lp = 0; // 'lp' means 'Longest Path'
       } else {

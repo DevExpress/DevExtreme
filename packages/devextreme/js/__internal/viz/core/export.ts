@@ -9,12 +9,12 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-multi-assign */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
-/* eslint-disable @stylistic/max-len */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-use-before-define */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 
+import type { DeferredObj } from '@js/core/utils/deferred';
 import {
   export as _export, image as imageExporter, pdf as pdfExporter, svg as svgExporter,
 } from '@js/exporter';
@@ -31,6 +31,7 @@ import { getWindow } from '@ts/core/utils/window';
 import { end as hoverEventEnd, start as hoverEventStart } from '@ts/events/hover';
 import pointerEvents from '@ts/events/pointer';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
+import type { SvgDomElement, SvgElement } from '@ts/viz/core/renderers/renderer';
 import { Renderer } from '@ts/viz/core/renderers/renderer';
 import { patchFontOptions } from '@ts/viz/core/utils';
 import { getTheme } from '@ts/viz/themes';
@@ -129,7 +130,15 @@ interface ExportOptions {
   __test?: ThemeValue;
 }
 
-function getRendererWrapper(width, height, backgroundColor) {
+type SvgElementInstance = InstanceType<typeof SvgElement>;
+
+interface RendererWrapper {
+  createGroup: () => SvgElementInstance;
+  getRootContent: () => SvgDomElement;
+  dispose: () => void;
+}
+
+function getRendererWrapper(width, height, backgroundColor): RendererWrapper {
   const rendererContainer = $('<div>').get(0);
 
   const renderer = new Renderer({
@@ -140,13 +149,13 @@ function getRendererWrapper(width, height, backgroundColor) {
   renderer.root.element.setAttribute('data-backgroundcolor', backgroundColor);
 
   return {
-    createGroup() {
+    createGroup(): SvgElementInstance {
       return renderer.g();
     },
-    getRootContent() {
+    getRootContent(): SvgDomElement {
       return renderer.root.element.cloneNode(true);
     },
-    dispose() {
+    dispose(): void {
       renderer.dispose();
       rendererContainer.remove();
     },
@@ -182,7 +191,7 @@ function getCreatorFunc(format) {
   return imageExporter.getData;
 }
 
-function print(imageSrc, options) {
+function print(imageSrc, options): void {
   const { document } = getWindow();
   const iFrame = document.createElement('iframe');
   iFrame.onload = setPrint(imageSrc, options);
@@ -194,7 +203,7 @@ function print(imageSrc, options) {
   document.body.appendChild(iFrame);
 }
 
-function calculatePrintPageWidth(iFrameBody) {
+function calculatePrintPageWidth(iFrameBody): number {
   iFrameBody.style.width = A4WidthCm;
 
   const width = getWidth(iFrameBody);
@@ -205,7 +214,7 @@ function calculatePrintPageWidth(iFrameBody) {
 }
 
 function setPrint(imageSrc, options) {
-  return function () {
+  return function (): void {
     let window = this.contentWindow;
     const img = window.document.createElement('img');
     window.document.body.appendChild(img);
@@ -225,7 +234,7 @@ function setPrint(imageSrc, options) {
       window.document.body.style['transform-origin'] = '0 0';
     }
 
-    const removeFrame = () => {
+    const removeFrame = (): void => {
       /// #DEBUG
       options.__test?.checkAssertions();
       /// #ENDDEBUG
@@ -249,7 +258,11 @@ function setPrint(imageSrc, options) {
   };
 }
 
-function getItemAttributes(options: ThemeValue, type: string, itemIndex: number): MenuItemAttributes {
+function getItemAttributes(
+  options: ThemeValue,
+  type: string,
+  itemIndex: number,
+): MenuItemAttributes {
   const x = BUTTON_SIZE - LIST_WIDTH;
   const y = BUTTON_SIZE + LIST_PADDING_TOP + LIST_STROKE_WIDTH + itemIndex * MENU_ITEM_HEIGHT;
 
@@ -272,8 +285,9 @@ function getItemAttributes(options: ThemeValue, type: string, itemIndex: number)
       'stroke-width': LIST_STROKE_WIDTH,
       cursor: 'pointer',
       sharp: 'v',
-      d: `M ${x} ${y + MENU_ITEM_HEIGHT - LIST_STROKE_WIDTH} `
-      + `L ${x + LIST_WIDTH} ${y + MENU_ITEM_HEIGHT - LIST_STROKE_WIDTH}`,
+      d:
+        `M ${x} ${y + MENU_ITEM_HEIGHT - LIST_STROKE_WIDTH} `
+        + `L ${x + LIST_WIDTH} ${y + MENU_ITEM_HEIGHT - LIST_STROKE_WIDTH}`,
     };
   }
 
@@ -322,7 +336,7 @@ function createMenuItem(renderer: ThemeValue, options: ThemeValue, settings: The
     g: menuItem,
     rect,
     resetState: () => rect.attr({ fill: null }),
-    fixPosition: () => {
+    fixPosition: (): void => {
       const textBBox = text.getBBox();
       text.move(attr.text.x - textBBox.x - (options.rtl ? textBBox.width : 0));
     },
@@ -352,7 +366,7 @@ function createMenuItems(renderer: ThemeValue, options: ThemeValue): MenuItem[] 
   return items;
 }
 
-function getBackgroundColorFromMarkup(markup) {
+function getBackgroundColorFromMarkup(markup): string | undefined {
   if (!isString(markup)) {
     return $(markup).attr('data-backgroundcolor');
   }
@@ -360,7 +374,7 @@ function getBackgroundColorFromMarkup(markup) {
   return GET_COLOR_REGEX.exec(markup)?.[1];
 }
 
-export const exportFromMarkup = function (markup, options) {
+export const exportFromMarkup = function (markup, options): void {
   options.format = validateFormat(options.format) || DEFAULT_EXPORT_FORMAT;
   options.fileName = options.fileName || 'file';
 
@@ -368,13 +382,18 @@ export const exportFromMarkup = function (markup, options) {
   options.exportedAction = options.onExported;
   options.fileSavingAction = options.onFileSaving;
   options.margin = isDefined(options.margin) ? options.margin : MARGIN;
-  options.backgroundColor = resolvedInScope(isDefined(options.backgroundColor) ? options.backgroundColor : getBackgroundColorFromMarkup(markup) || getTheme().backgroundColor, domAdapter.getDocumentElement());
+  options.backgroundColor = resolvedInScope(
+    isDefined(options.backgroundColor)
+      ? options.backgroundColor
+      : getBackgroundColorFromMarkup(markup) || getTheme().backgroundColor,
+    domAdapter.getDocumentElement(),
+  );
   _export(markup, options, getCreatorFunc(options.format));
 };
 
-export const getMarkup = (widgets) => combineMarkups(widgets).root.outerHTML;
+export const getMarkup = (widgets): string => combineMarkups(widgets).root.outerHTML;
 
-export const exportWidgets = function (widgets, options) {
+export const exportWidgets = function (widgets, options): void {
   options = options || {};
   const markupInfo = combineMarkups(widgets, {
     gridLayout: options.gridLayout,
@@ -394,37 +413,47 @@ export let combineMarkups = function (widgets, options: CombineMarkupsOptions = 
   }
   const compactView = !options.gridLayout;
   const exportItems = widgets.reduce((r, row, rowIndex) => {
-    const rowInfo = row.reduce((r, item, colIndex) => {
-      const size = item.getSize();
-      const container = $(item.element());
-      const backgroundColor = resolvedInScope(
-        item.option('backgroundColor') || getTheme(item.option('theme')).backgroundColor,
-        container.get(0),
-      );
-      const source = container.find('svg').get(0);
-      const node = source.cloneNode(true) as Element;
+    const rowInfo = row.reduce(
+      (r, item, colIndex) => {
+        const size = item.getSize();
+        const container = $(item.element());
+        const backgroundColor = resolvedInScope(
+          item.option('backgroundColor') || getTheme(item.option('theme')).backgroundColor,
+          container.get(0),
+        );
+        const source = container.find('svg').get(0);
+        const node = source.cloneNode(true) as Element;
 
-      copyResolvedStyles(source, node);
+        copyResolvedStyles(source, node);
 
-      backgroundColor && r.backgroundColors.indexOf(backgroundColor) === -1 && r.backgroundColors.push(backgroundColor);
+        backgroundColor
+          && r.backgroundColors.indexOf(backgroundColor) === -1
+          && r.backgroundColors.push(backgroundColor);
 
-      r.hOffset = r.width;
-      r.width += size.width;
-      r.height = Math.max(r.height, size.height);
-      r.itemWidth = Math.max(r.itemWidth, size.width);
-      r.items.push({
-        node,
-        width: size.width,
-        height: size.height,
-        c: colIndex,
-        r: rowIndex,
-        hOffset: r.hOffset,
-      });
+        r.hOffset = r.width;
+        r.width += size.width;
+        r.height = Math.max(r.height, size.height);
+        r.itemWidth = Math.max(r.itemWidth, size.width);
+        r.items.push({
+          node,
+          width: size.width,
+          height: size.height,
+          c: colIndex,
+          r: rowIndex,
+          hOffset: r.hOffset,
+        });
 
-      return r;
-    }, {
-      items: [], height: 0, itemWidth: 0, hOffset: 0, width: 0, backgroundColors: r.backgroundColors,
-    });
+        return r;
+      },
+      {
+        items: [],
+        height: 0,
+        itemWidth: 0,
+        hOffset: 0,
+        width: 0,
+        backgroundColors: r.backgroundColors,
+      },
+    );
 
     r.rowOffsets.push(r.totalHeight);
     r.rowHeights.push(rowInfo.height);
@@ -436,7 +465,14 @@ export let combineMarkups = function (widgets, options: CombineMarkupsOptions = 
 
     return r;
   }, {
-    items: [], rowOffsets: [], rowHeights: [], itemWidth: 0, totalHeight: 0, maxItemLen: 0, totalWidth: 0, backgroundColors: [],
+    items: [],
+    rowOffsets: [],
+    rowHeights: [],
+    itemWidth: 0,
+    totalHeight: 0,
+    maxItemLen: 0,
+    totalWidth: 0,
+    backgroundColors: [],
   });
 
   const backgroundColor = `${exportItems.backgroundColors.length === 1 ? exportItems.backgroundColors[0] : ''}`;
@@ -460,7 +496,12 @@ export let combineMarkups = function (widgets, options: CombineMarkupsOptions = 
   };
 };
 
-function wrapItemsToElement(width, height, backgroundColor, { exportItems, options, compactView }) {
+function wrapItemsToElement(
+  width,
+  height,
+  backgroundColor,
+  { exportItems, options, compactView },
+): SvgDomElement {
   const rendererWrapper = getRendererWrapper(width, height, backgroundColor);
   const getVOffset = (item) => {
     const align = options.verticalAlignment;
@@ -546,7 +587,12 @@ export let ExportMenu = class ExportMenu {
     this._buttonGroup = renderer.g().attr({ class: `${EXPORT_CSS_CLASS}-button` }).append(this._group);
     this._listGroup = renderer.g().attr({ class: `${EXPORT_CSS_CLASS}-list` }).append(this._group);
 
-    this._overlay = renderer.rect(-LIST_WIDTH + BUTTON_SIZE, BUTTON_SIZE + LIST_PADDING_TOP, LIST_WIDTH, 0);
+    this._overlay = renderer.rect(
+      -LIST_WIDTH + BUTTON_SIZE,
+      BUTTON_SIZE + LIST_PADDING_TOP,
+      LIST_WIDTH,
+      0,
+    );
     this._overlay.attr({
       'stroke-width': LIST_STROKE_WIDTH,
       cursor: 'pointer',
@@ -587,7 +633,10 @@ export let ExportMenu = class ExportMenu {
   }
 
   draw(width: number, height: number, canvas: { left: number }): this {
-    this._group.move(width - BUTTON_SIZE - SHADOW_OFFSET - SHADOW_BLUR + canvas.left, Math.floor(height / 2 - BUTTON_SIZE / 2));
+    this._group.move(
+      width - BUTTON_SIZE - SHADOW_OFFSET - SHADOW_BLUR + canvas.left,
+      Math.floor(height / 2 - BUTTON_SIZE / 2),
+    );
 
     const layoutOptions = this.getLayoutOptions();
     if (layoutOptions.width > width || layoutOptions.height > height) {
@@ -618,7 +667,9 @@ export let ExportMenu = class ExportMenu {
       options.formats = this.validFormats.supported.slice();
     }
 
-    options.printingEnabled = options.printingEnabled === undefined ? true : options.printingEnabled;
+    options.printingEnabled = options.printingEnabled === undefined
+      ? true
+      : options.printingEnabled;
 
     if (options.enabled && (options.formats.length || options.printingEnabled)) {
       this.show();
@@ -787,7 +838,12 @@ export let ExportMenu = class ExportMenu {
 };
 
 // BaseWidget.js
-function getExportOptions(widget: ThemeValue, exportOptions: ThemeValue, fileName?: string, format?: string): ExportOptions {
+function getExportOptions(
+  widget: ThemeValue,
+  exportOptions: ThemeValue,
+  fileName?: string,
+  format?: string,
+): ExportOptions {
   if (format || exportOptions.format) {
     format = validateFormat(format || exportOptions.format, widget._incidentOccurred);
   }
@@ -801,15 +857,19 @@ function getExportOptions(widget: ThemeValue, exportOptions: ThemeValue, fileNam
     height,
     margin: exportOptions.margin,
     svgToCanvas: exportOptions.svgToCanvas,
-    exportingAction: widget._createActionByOption('onExporting', { excludeValidators: ['disabled'] }),
+    exportingAction: widget._createActionByOption('onExporting', {
+      excludeValidators: ['disabled'],
+    }),
     exportedAction: widget._createActionByOption('onExported', { excludeValidators: ['disabled'] }),
-    fileSavingAction: widget._createActionByOption('onFileSaving', { excludeValidators: ['disabled'] }),
+    fileSavingAction: widget._createActionByOption('onFileSaving', {
+      excludeValidators: ['disabled'],
+    }),
   };
 }
 
 export const plugin = {
   name: 'export',
-  init() {
+  init(): void {
     this._exportMenu = new ExportMenu({
       renderer: this._renderer,
       incidentOccurred: this._incidentOccurred,
@@ -818,7 +878,7 @@ export const plugin = {
     });
     this._layout.add(this._exportMenu);
   },
-  dispose() {
+  dispose(): void {
     this._exportMenu.dispose();
   },
 
@@ -837,7 +897,7 @@ export const plugin = {
       return pointerEventsValue;
     },
 
-    exportTo(fileName, format) {
+    exportTo(fileName, format): DeferredObj<unknown> {
       const menu = this._exportMenu;
       const options = getExportOptions(this, this._getOption('export') || {}, fileName, format);
 
@@ -855,7 +915,7 @@ export const plugin = {
       menu?.show();
       return promise;
     },
-    print() {
+    print(): DeferredObj<unknown> {
       const menu = this._exportMenu;
       const options = getExportOptions(this, this._getOption('export') || {});
 
@@ -868,7 +928,7 @@ export const plugin = {
       options.margin = 0;
       options.format = 'PNG';
       options.useBase64 = true;
-      options.fileSavingAction = (eventArgs) => {
+      options.fileSavingAction = (eventArgs): void => {
         print(`data:image/png;base64,${eventArgs.data}`, { width: options.width, __test: options.__test });
         eventArgs.cancel = true;
       };
@@ -887,7 +947,7 @@ export const plugin = {
       return promise;
     },
   },
-  customize(constructor) {
+  customize(constructor): void {
     const proto = constructor.prototype;
 
     constructor.addChange({
@@ -901,7 +961,8 @@ export const plugin = {
       option: 'export',
     });
 
-    // TODO: Event options change processing either should be done by the eventTrigger or shouldn't be done at all
+    // TODO: Event options change processing either should be done by the eventTrigger or shouldn't
+    // be done at all
     proto._optionChangesMap.onExporting = 'EXPORT';
     proto._optionChangesMap.onExported = 'EXPORT';
     proto._optionChangesMap.onFileSaving = 'EXPORT';
@@ -910,11 +971,11 @@ export const plugin = {
 };
 
 /// #DEBUG
-exports.DEBUG_set_combineMarkups = function (value) {
+exports.DEBUG_set_combineMarkups = function (value): void {
   combineMarkups = value;
 };
 
-exports.DEBUG_set_ExportMenu = function (value) {
+exports.DEBUG_set_ExportMenu = function (value): void {
   ExportMenu = value;
 };
 /// #ENDDEBUG

@@ -1,9 +1,7 @@
 /* eslint-disable @stylistic/no-mixed-operators */
-/* eslint-disable @typescript-eslint/init-declarations */
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-multi-assign */
-/* eslint-disable prefer-destructuring */
 
 import { noop } from '@ts/core/utils/common';
 import { extend } from '@ts/core/utils/extend';
@@ -13,7 +11,7 @@ import eventsEngine from '@ts/events/core/events_engine';
 import { end as dragEventEnd, move as dragEventMove, start as dragEventStart } from '@ts/events/drag';
 import { fireEvent } from '@ts/events/utils/index';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
-import type { Bounds, Canvas } from '@ts/viz/core/types';
+import type { Bounds, Canvas, Coords } from '@ts/viz/core/types';
 
 import { Translator2D } from '../translators/translator2d';
 
@@ -31,7 +29,7 @@ interface ScrollBarLayoutOptions {
 }
 
 interface ScrollBarPointerEvent extends EngineEvent {
-  offset: { x: number; y: number };
+  offset: Coords;
 }
 
 interface ScrollBarRange {
@@ -43,7 +41,7 @@ interface ScrollBarDragEvent {
   type: string;
   originalEvent: ScrollBarPointerEvent;
   target: ThemeValue;
-  offset: { x: number; y: number };
+  offset: Coords;
   scrollRange: ScrollBarRange | undefined;
 }
 
@@ -190,7 +188,7 @@ export let ScrollBar = class ScrollBar {
   }
 
   update(options: ThemeValue): this {
-    let position = options.position;
+    let { position } = options;
     const isVertical = options.rotated;
     const defaultPosition = isVertical ? 'right' : 'top';
     const secondaryPosition = isVertical ? 'left' : 'bottom';
@@ -240,14 +238,11 @@ export let ScrollBar = class ScrollBar {
   }
 
   setPane(panes: { name: string }[]): this {
-    const position = this._layoutOptions.position;
-    let pane;
+    const { position } = this._layoutOptions;
+    const pane = position === 'left' || position === 'top'
+      ? panes[0]
+      : panes[panes.length - 1];
 
-    if (position === 'left' || position === 'top') {
-      pane = panes[0];
-    } else {
-      pane = panes[panes.length - 1];
-    }
     this.pane = pane.name;
 
     return this;
@@ -258,8 +253,7 @@ export let ScrollBar = class ScrollBar {
 
     const options = this._layoutOptions;
     const pos = options.position;
-    const offset = options.offset;
-    const width = options.width;
+    const { offset, width } = options;
 
     this._scroll.attr({
       translateX: _getXCoord(canvas, pos, offset, width),
@@ -325,8 +319,7 @@ export let ScrollBar = class ScrollBar {
   _applyPosition(x1: number, x2: number): void {
     const visibleArea = this._translator.getCanvasVisibleArea();
 
-    const min = visibleArea.min;
-    const max = visibleArea.max;
+    const { min, max } = visibleArea;
 
     if (max <= min) {
       return;

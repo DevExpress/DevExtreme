@@ -12,7 +12,7 @@ import {
 
 type StyleModule = typeof import('@ts/core/utils/style');
 
-const createRealElement = document.createElement.bind(document) as (tagName: string) => HTMLElement;
+const createRealElement: (tagName: string) => HTMLElement = document.createElement.bind(document);
 
 const loadStyleModule = (supportedProps: Record<string, string>): StyleModule => {
   jest.resetModules();

@@ -59,7 +59,7 @@ export class GroupPanelVerticalNode extends BaseInfernoComponent<GroupPanelVerti
                 templateProps={{
                   data: getResourceCellTemplateData({ ...node, isLeaf }),
                   index,
-                } as ResourceCellTemplateProps}
+                }}
                 />
               : (
                 <div className="dx-scheduler-group-header-content">

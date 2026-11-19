@@ -1,10 +1,8 @@
 /* eslint-disable no-return-assign */
 /* eslint-disable prefer-spread */
 /* eslint-disable @typescript-eslint/init-declarations */
-/* eslint-disable no-plusplus */
 /* eslint-disable func-names */
 /* eslint-disable @typescript-eslint/naming-convention */
-/* eslint-disable @stylistic/max-len */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-use-before-define */
@@ -21,17 +19,17 @@ function createSimpleColorizer(getColor, range) {
   };
 }
 
-function getRangeData(range) {
+function getRangeData(range): number[] {
   return [Number(range[0]) || 0, (range[1] - range[0]) || 1];
 }
 
-function calculateRange(nodes, getValue) {
+function calculateRange(nodes, getValue): number[] {
   let i;
   const ii = nodes.length;
   const codes = [];
   let code;
 
-  for (i = 0; i < ii; ++i) {
+  for (i = 0; i < ii; i += 1) {
     code = getValue(nodes[i]);
     if (isFinite(code)) {
       // @ts-expect-error
@@ -47,7 +45,10 @@ function createGuessingColorizer(getColor, getValue) {
   return function (node) {
     const { parent } = node;
 
-    return getColor(node, ranges[parent._id] || (ranges[parent._id] = calculateRange(parent.nodes, getValue)));
+    return getColor(
+      node,
+      ranges[parent._id] || (ranges[parent._id] = calculateRange(parent.nodes, getValue)),
+    );
   };
 }
 

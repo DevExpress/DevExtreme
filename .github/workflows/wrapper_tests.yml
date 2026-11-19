@@ -12,7 +12,7 @@ concurrency:
 
 env:
   NX_SKIP_NX_CACHE: ${{ contains(github.event.pull_request.labels.*.name, 'skip-cache') && 'true' || 'false' }}
-  NX_MAX_CACHE_SIZE: 512MB
+  NX_MAX_CACHE_SIZE: 1GB
 
 jobs:
   build:
@@ -179,8 +179,9 @@ jobs:
       - name: Download Browser
         if: matrix.framework == 'angular'
         run: |
-          PUPPETEER_CMD="browsers install chrome@155.0.8059.39"
-          pnpm --filter devextreme-angular exec puppeteer $PUPPETEER_CMD
+          PUPPETEER_CHROME_VERSION="157.0.8103.78"
+          pnpm --filter devextreme-angular exec puppeteer browsers install "chrome@$PUPPETEER_CHROME_VERSION"
+          echo "PUPPETEER_CHROME_VERSION=$PUPPETEER_CHROME_VERSION" >> "$GITHUB_ENV"
 
       - name: Test ${{ matrix.framework }}
         env:

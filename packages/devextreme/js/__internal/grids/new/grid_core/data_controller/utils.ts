@@ -1,11 +1,10 @@
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ArrayStore, CustomStore } from '@js/common/data';
 import type { Store } from '@js/data';
 import type { DataSourceLike } from '@js/data/data_source';
 import DataSource from '@js/data/data_source';
 import { normalizeDataSourceOptions } from '@js/data/data_source/utils';
+import type { StoreChange } from '@js/data/store';
+import type { KeyInfo } from '@ts/data/array_utils';
 import { applyBatch } from '@ts/data/array_utils';
 
 import type {
@@ -154,10 +153,9 @@ export function getStoreLoadOptions(
 
 export function updateItemsImmutable(
   data: DataObject[],
-  changes: any[],
-  keyInfo: any,
+  changes: StoreChange<DataObject>[],
+  keyInfo: KeyInfo,
 ): DataObject[] {
-  // @ts-expect-error
   return applyBatch({
     keyInfo,
     data,

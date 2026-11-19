@@ -2,15 +2,12 @@
 /* eslint-disable prefer-rest-params */
 /* eslint-disable @typescript-eslint/no-this-alias */
 /* eslint-disable @typescript-eslint/init-declarations */
-/* eslint-disable no-plusplus */
 /* eslint-disable func-names */
 /* eslint-disable import/no-mutable-exports */
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-multi-assign */
-/* eslint-disable @stylistic/max-len */
 /* eslint-disable @typescript-eslint/no-use-before-define */
-/* eslint-disable prefer-destructuring */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 /* eslint-disable max-classes-per-file */
@@ -190,7 +187,11 @@ export let Tracker = class Tracker {
 
     const coords = getEventCoords(event);
     const threshold = isTouchEvent(event) ? DRAG_COORD_THRESHOLD_TOUCH : DRAG_COORD_THRESHOLD_MOUSE;
-    if (state.active || _abs(coords.x - state.x) > threshold || _abs(coords.y - state.y) > threshold) {
+    if (
+      state.active
+      || _abs(coords.x - state.x) > threshold
+      || _abs(coords.y - state.y) > threshold
+    ) {
       state.x = coords.x;
       state.y = coords.y;
       state.active = true;
@@ -294,7 +295,11 @@ export let Tracker = class Tracker {
     if (state.ready) {
       startDistance = getDistance(state.x1_0, state.y1_0, state.x2_0, state.y2_0);
       currentDistance = getDistance(state.x1, state.y1, state.x2, state.y2);
-      this._fire(EVENT_ZOOM, { ratio: currentDistance / startDistance, x: (state.x1_0 + state.x2_0) / 2, y: (state.y1_0 + state.y2_0) / 2 });
+      this._fire(EVENT_ZOOM, {
+        ratio: currentDistance / startDistance,
+        x: (state.x1_0 + state.x2_0) / 2,
+        y: (state.y1_0 + state.y2_0) / 2,
+      });
     }
     this._zoomState = null;
   }
@@ -313,7 +318,11 @@ export let Tracker = class Tracker {
       return;
     }
 
-    if (isTouchEvent(event) !== isTouch || this._hoverTarget === event.target || (this._hoverState && this._hoverState.data === data)) {
+    if (
+      isTouchEvent(event) !== isTouch
+      || this._hoverTarget === event.target
+      || (this._hoverState && this._hoverState.data === data)
+    ) {
       return;
     }
 
@@ -367,7 +376,9 @@ export let Tracker = class Tracker {
       const isTouch = isTouchEvent(event);
       const data = getData(event);
 
-      if (isTouch && !that._isTouchEnabled) { return; }
+      if (isTouch && !that._isTouchEnabled) {
+        return;
+      }
       if (data) {
         event.preventDefault();
       }
@@ -383,7 +394,9 @@ export let Tracker = class Tracker {
       const isTouch = isTouchEvent(event);
       const data = getData(event);
 
-      if (isTouch && !that._isTouchEnabled) { return; }
+      if (isTouch && !that._isTouchEnabled) {
+        return;
+      }
 
       that._moveDrag(event, data);
       that._moveZoom(event);
@@ -395,7 +408,9 @@ export let Tracker = class Tracker {
       const isTouch = isTouchEvent(event);
       const data = getData(event);
 
-      if (isTouch && !that._isTouchEnabled) { return; }
+      if (isTouch && !that._isTouchEnabled) {
+        return;
+      }
 
       that._endClick(event, data);
       that._endDrag();
@@ -405,7 +420,9 @@ export let Tracker = class Tracker {
     that._rootHandlers[EVENTS.wheel] = function (event): void {
       that._cancelFocus();
 
-      if (!that._isWheelEnabled) { return; }
+      if (!that._isWheelEnabled) {
+        return;
+      }
 
       const data = getData(event);
       if (data) {
@@ -416,10 +433,12 @@ export let Tracker = class Tracker {
     };
     that._wheelLock = { dir: 0 };
 
-    // Actually it is responsibility of the text element wrapper to handle "data" to its span elements (if there are any).
-    // Now to avoid not so necessary complication of renderer text-span issue is handled on the side of the tracker.
+    // Actually it is responsibility of the text element wrapper to handle "data" to its span
+    // elements (if there are any).
+    // Now to avoid not so necessary complication of renderer text-span issue is handled on the side
+    // of the tracker.
     function getData(event: ThemeValue): ThemeValue {
-      const target = event.target;
+      const { target } = event;
       return (target.tagName === 'tspan' ? target.parentNode : target)[DATA_KEY];
     }
   }
@@ -500,7 +519,9 @@ let Focus = class Focus {
 
     that.dispose = function (): void {
       // @ts-expect-error dispose releases the methods, the callback and the state
-      that.turnOn = that.turnOff = that.cancel = that.dispose = that = fire = _activeData = _data = null;
+      that.turnOn = that.turnOff = that.cancel = that.dispose = null;
+      // @ts-expect-error dispose releases the methods, the callback and the state
+      that = fire = _activeData = _data = null;
     };
     that.turnOn = function (data, coords): void {
       if (data === _data && _disabled) { return; }
@@ -573,8 +594,7 @@ function getDistance(x1: number, y1: number, x2: number, y2: number): number {
 }
 
 function isTouchEvent(event: ThemeValue): boolean {
-  const type: string = event.originalEvent.type;
-  const pointerType = event.originalEvent.pointerType;
+  const { type, pointerType }: { type: string; pointerType: ThemeValue } = event.originalEvent;
   return type.startsWith('touch') || (type.startsWith('MSPointer') && pointerType !== 4) || (type.startsWith('pointer') && pointerType !== 'mouse');
 }
 
@@ -582,7 +602,7 @@ function selectItem(flags: boolean[], items: string[]): string {
   let i = 0;
   const ii = flags.length;
   let item;
-  for (; i < ii; ++i) {
+  for (; i < ii; i += 1) {
     if (flags[i]) {
       item = items[i];
       break;
@@ -612,9 +632,12 @@ function setupEvents(): void {
 }
 
 function getEventCoords(event: ThemeValue): Coords {
-  const originalEvent = event.originalEvent;
+  const { originalEvent } = event;
   const touch = (originalEvent.touches && originalEvent.touches[0]) || {};
-  return { x: touch.pageX || originalEvent.pageX || event.pageX, y: touch.pageY || originalEvent.pageY || event.pageY };
+  return {
+    x: touch.pageX || originalEvent.pageX || event.pageX,
+    y: touch.pageY || originalEvent.pageY || event.pageY,
+  };
 }
 
 function getPointerId(event: { originalEvent: { pointerId?: number } }): number | undefined {
@@ -622,13 +645,15 @@ function getPointerId(event: { originalEvent: { pointerId?: number } }): number 
 }
 
 function getMultitouchEventCoords(event: ThemeValue, pointerId: number): Coords | null {
-  let originalEvent = event.originalEvent;
+  let { originalEvent } = event;
   if (originalEvent.pointerId !== undefined) {
     originalEvent = originalEvent.pointerId === pointerId ? originalEvent : null;
   } else {
     originalEvent = originalEvent.touches[pointerId];
   }
-  return originalEvent ? { x: originalEvent.pageX || event.pageX, y: originalEvent.pageY || event.pageY } : null;
+  return originalEvent
+    ? { x: originalEvent.pageX || event.pageX, y: originalEvent.pageY || event.pageY }
+    : null;
 }
 
 function adjustWheelDelta(delta: number, lock: ThemeValue): number {

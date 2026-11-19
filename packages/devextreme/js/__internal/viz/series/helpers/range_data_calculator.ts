@@ -3,12 +3,10 @@
 /* eslint-disable @typescript-eslint/init-declarations */
 /* eslint-disable func-names */
 /* eslint-disable @typescript-eslint/no-shadow */
-/* eslint-disable @stylistic/max-len */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-use-before-define */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-/* eslint-disable prefer-destructuring */
 /* eslint-disable no-else-return */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
@@ -22,7 +20,7 @@ const {
   abs, floor, ceil, min,
 } = Math;
 
-function continuousRangeCalculator(range, minValue, maxValue) {
+function continuousRangeCalculator(range, minValue, maxValue): void {
   range.min = range.min < minValue ? range.min : minValue;
   range.max = range.max > maxValue ? range.max : maxValue;
 }
@@ -33,7 +31,7 @@ function createGetLogFunction(axisType, axis) {
   }
   const base = axis.getOptions().logarithmBase;
 
-  return (value) => {
+  return (value): number => {
     const log = getLog(abs(value), base);
     const round = log < 0 ? floor : ceil;
     return round(log);
@@ -43,14 +41,14 @@ function createGetLogFunction(axisType, axis) {
 function getRangeCalculator(axisType, axis?, getLog?) {
   let rangeCalculator = continuousRangeCalculator;
   if (axisType === DISCRETE) {
-    rangeCalculator = function (range, minValue, maxValue) {
+    rangeCalculator = function (range, minValue, maxValue): void {
       if (minValue !== maxValue) {
         range.categories.push(maxValue);
       }
       range.categories.push(minValue);
     };
   } else if (axis) {
-    rangeCalculator = function (range, value) {
+    rangeCalculator = function (range, value): void {
       const interval = axis.calculateInterval(value, range.prevValue);
       const minInterval = range.interval;
 
@@ -61,7 +59,7 @@ function getRangeCalculator(axisType, axis?, getLog?) {
   }
 
   if (getLog) {
-    return (range, minValue, maxValue) => {
+    return (range, minValue, maxValue): void => {
       const minArgs = [];
       rangeCalculator(range, minValue, maxValue);
       // @ts-expect-error
@@ -69,7 +67,9 @@ function getRangeCalculator(axisType, axis?, getLog?) {
       // @ts-expect-error
       maxValue !== 0 && minArgs.push(getLog(maxValue));
       const linearThreshold = min.apply(null, minArgs);
-      range.linearThreshold = range.linearThreshold < linearThreshold ? range.linearThreshold : linearThreshold;
+      range.linearThreshold = range.linearThreshold < linearThreshold
+        ? range.linearThreshold
+        : linearThreshold;
     };
   }
   return rangeCalculator;
@@ -114,12 +114,12 @@ function getValueForArgument(point, extraPoint, x, range) {
   }
 }
 
-function calculateRangeBetweenPoints(rangeCalculator, range, point, prevPoint, bound) {
+function calculateRangeBetweenPoints(rangeCalculator, range, point, prevPoint, bound): void {
   const value = getValueForArgument(point, prevPoint, bound, range);
   rangeCalculator(range, value, value);
 }
 
-function isLineSeries(series) {
+function isLineSeries(series): boolean {
   return series.type.toLowerCase().indexOf('line') >= 0 || series.type.toLowerCase().indexOf('area') >= 0;
 }
 
@@ -132,7 +132,7 @@ function getViewportReducer(series) {
   if (argumentAxis && argumentAxis.getMarginOptions().checkInterval) {
     const range = series.getArgumentAxis().getTranslator().getBusinessRange();
     const add = getAddFunction(range, false);
-    const interval = range.interval;
+    const { interval } = range;
 
     if (isFinite(interval) && isDefined(viewport.startValue) && isDefined(viewport.endValue)) {
       viewport.startValue = add(viewport.startValue, interval, -1);
@@ -143,7 +143,7 @@ function getViewportReducer(series) {
   const viewportFilter = getViewPortFilter(viewport);
 
   return function (range, point, index, points) {
-    const argument = point.argument;
+    const { argument } = point;
 
     if (!point.hasValue()) {
       return range;
@@ -152,15 +152,41 @@ function getViewportReducer(series) {
     if (viewportFilter(argument)) {
       if (!range.startCalc) {
         range.startCalc = true;
-        calculatePointBetweenPoints(rangeCalculator, range, point, points[index - 1], viewport.startValue);
+        calculatePointBetweenPoints(
+          rangeCalculator,
+          range,
+          point,
+          points[index - 1],
+          viewport.startValue,
+        );
       }
-      rangeCalculator(range, point.getMinValue(), point.getMaxValue());
-    } else if (!viewport.categories && isDefined(viewport.startValue) && argument > viewport.startValue) {
+      rangeCalculator(
+        range,
+        point.getMinValue(),
+        point.getMaxValue(),
+      );
+    } else if (
+      !viewport.categories
+      && isDefined(viewport.startValue)
+      && argument > viewport.startValue
+    ) {
       if (!range.startCalc) {
-        calculatePointBetweenPoints(rangeCalculator, range, point, points[index - 1], viewport.startValue);
+        calculatePointBetweenPoints(
+          rangeCalculator,
+          range,
+          point,
+          points[index - 1],
+          viewport.startValue,
+        );
       }
       range.endCalc = true;
-      calculatePointBetweenPoints(rangeCalculator, range, point, points[index - 1], viewport.endValue);
+      calculatePointBetweenPoints(
+        rangeCalculator,
+        range,
+        point,
+        points[index - 1],
+        viewport.endValue,
+      );
     }
 
     return range;
@@ -176,15 +202,15 @@ function getViewPortFilter(viewport) {
     return (argument) => isDefined(argument) && dictionary[argument.valueOf()];
   }
   if (!isDefined(viewport.startValue) && !isDefined(viewport.endValue)) {
-    return () => true;
+    return (): boolean => true;
   }
   if (!isDefined(viewport.endValue)) {
-    return (argument) => argument >= viewport.startValue;
+    return (argument): boolean => argument >= viewport.startValue;
   }
   if (!isDefined(viewport.startValue)) {
-    return (argument) => argument <= viewport.endValue;
+    return (argument): boolean => argument <= viewport.endValue;
   }
-  return (argument) => argument >= viewport.startValue && argument <= viewport.endValue;
+  return (argument): boolean => argument >= viewport.startValue && argument <= viewport.endValue;
 }
 
 export default {
@@ -202,7 +228,9 @@ export default {
         let interval;
         if (data.length > 1) {
           const i1 = series.getArgumentAxis().calculateInterval(data[0].argument, data[1].argument);
-          const i2 = series.getArgumentAxis().calculateInterval(data[data.length - 1].argument, data[data.length - 2].argument);
+          const i2 = series
+            .getArgumentAxis()
+            .calculateInterval(data[data.length - 1].argument, data[data.length - 2].argument);
           interval = min(i1, i2);
         }
         range = {
@@ -219,26 +247,51 @@ export default {
     const points = series.getPoints();
     const useAggregation = series.useAggregation();
     const argumentAxis = series.getArgumentAxis();
-    const argumentCalculator = getRangeCalculator(series.argumentAxisType, points.length > 1 && argumentAxis, createGetLogFunction(series.argumentAxisType, argumentAxis));
-    const valueRangeCalculator = getRangeCalculator(series.valueAxisType, null, createGetLogFunction(series.valueAxisType, series.getValueAxis()));
+    const argumentCalculator = getRangeCalculator(
+      series.argumentAxisType,
+      points.length > 1 && argumentAxis,
+      createGetLogFunction(series.argumentAxisType, argumentAxis),
+    );
+    const valueRangeCalculator = getRangeCalculator(
+      series.valueAxisType,
+      null,
+      createGetLogFunction(series.valueAxisType, series.getValueAxis()),
+    );
     const viewportReducer = getViewportReducer(series);
-    const range = points.reduce((range, point, index, points) => {
-      const argument = point.argument;
-      if (!point.isArgumentCorrect()) {
-        return range;
-      }
+    const range = points.reduce(
+      (range, point, index, points) => {
+        const { argument } = point;
+        if (!point.isArgumentCorrect()) {
+          return range;
+        }
 
-      argumentCalculator(range.arg, argument, argument);
-      if (point.hasValue()) {
-        valueRangeCalculator(range.val, point.getMinValue(), point.getMaxValue());
-        viewportReducer(range.viewport, point, index, points);
-      }
-      return range;
-    }, {
-      arg: getInitialRange(series.argumentAxisType, series.argumentType, argumentAxis?.aggregatedPointBetweenTicks() ? undefined : series.getArgumentRangeInitialValue()),
-      val: getInitialRange(series.valueAxisType, series.valueType, points.length ? series.getValueRangeInitialValue() : undefined),
-      viewport: getInitialRange(series.valueAxisType, series.valueType, points.length ? series.getValueRangeInitialValue() : undefined),
-    });
+        argumentCalculator(range.arg, argument, argument);
+        if (point.hasValue()) {
+          valueRangeCalculator(range.val, point.getMinValue(), point.getMaxValue());
+          viewportReducer(range.viewport, point, index, points);
+        }
+        return range;
+      },
+      {
+        arg: getInitialRange(
+          series.argumentAxisType,
+          series.argumentType,
+          argumentAxis?.aggregatedPointBetweenTicks()
+            ? undefined
+            : series.getArgumentRangeInitialValue(),
+        ),
+        val: getInitialRange(
+          series.valueAxisType,
+          series.valueType,
+          points.length ? series.getValueRangeInitialValue() : undefined,
+        ),
+        viewport: getInitialRange(
+          series.valueAxisType,
+          series.valueType,
+          points.length ? series.getValueRangeInitialValue() : undefined,
+        ),
+      },
+    );
 
     if (useAggregation) {
       const argumentRange = this.getArgumentRange(series);
@@ -249,7 +302,10 @@ export default {
         if (isDefined(viewport.startValue) || isDefined(viewport.length)) {
           argumentCalculator(range.arg, argumentRange.min, argumentRange.min);
         }
-        if (isDefined(viewport.endValue) || isDefined(viewport.length) && isDefined(viewport.startValue)) {
+        if (
+          isDefined(viewport.endValue)
+          || (isDefined(viewport.length) && isDefined(viewport.startValue))
+        ) {
           argumentCalculator(range.arg, argumentRange.max, argumentRange.max);
         }
       }
@@ -265,7 +321,11 @@ export default {
     const points = series.getPoints();
     let range = {};
     const reducer = getViewportReducer(series);
-    range = getInitialRange(series.valueAxisType, series.valueType, points.length ? series.getValueRangeInitialValue() : undefined);
+    range = getInitialRange(
+      series.valueAxisType,
+      series.valueType,
+      points.length ? series.getValueRangeInitialValue() : undefined,
+    );
     points.some((point, index) => {
       reducer(range, point, index, points);
       // @ts-expect-error
@@ -280,7 +340,7 @@ export default {
     const valueViewPort = series.getValueAxis().visualRange() || {};
     const valueViewPortFilter = getViewPortFilter(valueViewPort);
     const points = series.getPoints();
-    const addValue = function (values, point, isEdge?) {
+    const addValue = function (values, point, isEdge?): void {
       const minValue = point.getMinValue();
       const maxValue = point.getMaxValue();
       const isMinValueInViewPort = valueViewPortFilter(minValue);
@@ -300,7 +360,7 @@ export default {
         }
       }
     };
-    const addEdgePoints = isLineSeries(series) ? function (result, points, index) {
+    const addEdgePoints = isLineSeries(series) ? function (result, points, index): void {
       const point = points[index];
       const prevPoint = points[index - 1];
       const nextPoint = points[index + 1];

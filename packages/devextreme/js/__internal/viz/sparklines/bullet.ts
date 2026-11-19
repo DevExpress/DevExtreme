@@ -1,6 +1,7 @@
 import { registerComponent as componentRegistrator } from '@ts/core/component_registrator';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 import { setupWidgetPrototype } from '@ts/viz/core/helpers';
+import type { Coords } from '@ts/viz/core/types';
 import BaseSparkline from '@ts/viz/sparklines/base_sparkline';
 
 const TARGET_MIN_Y = 0.02;
@@ -223,7 +224,7 @@ class Bullet extends BaseSparkline {
     this._barValuePath.attr(this._getBarValueParams()).append(this._renderer.root);
   }
 
-  _getTooltipCoords(): { x: number; y: number } {
+  _getTooltipCoords(): Coords {
     const canvas = this._canvas;
     const rootOffset = this._renderer.getRootOffset();
     const bBox = this._barValuePath.getBBox();

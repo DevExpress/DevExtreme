@@ -3,19 +3,17 @@
 /* eslint-disable @typescript-eslint/prefer-for-of */
 /* eslint-disable @typescript-eslint/no-this-alias */
 /* eslint-disable @typescript-eslint/init-declarations */
-/* eslint-disable no-plusplus */
 /* eslint-disable func-names */
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable @typescript-eslint/no-shadow */
-/* eslint-disable @stylistic/max-len */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-/* eslint-disable prefer-destructuring */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 
 import { extend } from '@ts/core/utils/extend';
 import { each } from '@ts/core/utils/iterator';
 import { isDefined as _isDefined } from '@ts/core/utils/type';
+import type { Coords } from '@ts/viz/core/types';
 import { convertPolarToXY, extractColor } from '@ts/viz/core/utils';
 
 import { chart as areaChart } from './area_series';
@@ -55,11 +53,11 @@ const baseBarSeriesMethods = {
     return base;
   },
 
-  _applyMarkerClipRect(settings) {
+  _applyMarkerClipRect(settings): void {
     settings['clip-path'] = null;
   },
 
-  _setGroupsSettings(animationEnabled, firstDrawing) {
+  _setGroupsSettings(animationEnabled, firstDrawing): void {
     const that = this;
     let settings = {};
     // @ts-expect-error
@@ -74,7 +72,7 @@ const baseBarSeriesMethods = {
     that._markersGroup.attr(settings);
   },
 
-  _drawPoint(options) {
+  _drawPoint(options): void {
     options.hasAnimation = options.hasAnimation && !options.firstDrawing;
     options.firstDrawing = false;
     // @ts-expect-error
@@ -104,7 +102,7 @@ const baseBarSeriesMethods = {
     };
   },
 
-  _updatePointsVisibility() {
+  _updatePointsVisibility(): void {
     const visibility = this._options.visible;
     each(this._points, (_, point) => {
       point._options.visible = visibility;
@@ -115,12 +113,12 @@ const baseBarSeriesMethods = {
     return this._options;
   },
 
-  _animate(firstDrawing) {
+  _animate(firstDrawing): void {
     const that = this;
-    const complete = function () {
+    const complete = function (): void {
       that._animateComplete();
     };
-    const animateFunc = function (drawnPoints, complete) {
+    const animateFunc = function (drawnPoints, complete): void {
       const lastPointIndex = drawnPoints.length - 1;
       _each(drawnPoints || [], (i, point) => {
         point.animate(i === lastPointIndex ? complete : undefined, point.getMarkerCoords());
@@ -132,22 +130,23 @@ const baseBarSeriesMethods = {
   getValueRangeInitialValue: areaSeries.getValueRangeInitialValue,
 
   _patchMarginOptions(options) {
-    options.checkInterval = !this.useAggregation() || this.getArgumentAxis()?.aggregatedPointBetweenTicks();
+    options.checkInterval = !this.useAggregation()
+      || this.getArgumentAxis()?.aggregatedPointBetweenTicks();
     return options;
   },
 
   _defaultAggregator: 'sum',
 
-  _defineDrawingState() {},
+  _defineDrawingState(): void {},
 
-  usePointsToDefineAutoHiding() {
+  usePointsToDefineAutoHiding(): boolean {
     return false;
   },
 };
 // @ts-expect-error
 chart.bar = _extend({}, chartSeries, baseBarSeriesMethods, {
   _getAffineCoordOptions() {
-    const rotated = this._options.rotated;
+    const { rotated } = this._options;
     const direction = rotated ? 'X' : 'Y';
     const settings = {
       scaleX: rotated ? 0.001 : 1,
@@ -180,11 +179,15 @@ chart.bar = _extend({}, chartSeries, baseBarSeriesMethods, {
     const translator = axis.getTranslator();
     const range = this.getViewport();
     const min = translator.translate(range.categories ? range.categories[0] : range.min);
-    const max = translator.translate(range.categories ? range.categories[range.categories.length - 1] : range.max);
-    const rotated = this.getOptions().rotated;
-    const inverted = axis.getOptions().inverted;
+    const max = translator.translate(
+      range.categories ? range.categories[range.categories.length - 1] : range.max,
+    );
+    const { rotated } = this.getOptions();
+    const { inverted } = axis.getOptions();
 
-    return rotated && !inverted || !rotated && inverted ? coord >= min && coord <= max : coord >= max && coord <= min;
+    return (rotated && !inverted) || (!rotated && inverted)
+      ? coord >= min && coord <= max
+      : coord >= max && coord <= min;
   },
 
   getSeriesPairCoord(coord, isArgument) {
@@ -195,7 +198,7 @@ chart.bar = _extend({}, chartSeries, baseBarSeriesMethods, {
     const oppositeCoordName = isOpposite ? 'vx' : 'vy';
     const points = this.getPoints();
 
-    for (let i = 0; i < points.length; i++) {
+    for (let i = 0; i < points.length; i += 1) {
       const p = points[i];
       let tmpCoord;
 
@@ -248,19 +251,26 @@ polar.bar = _extend({}, polarSeries, baseBarSeriesMethods, {
   },
 
   getSeriesPairCoord(params, isArgument) {
-    let coords = null;
+    let coords: Coords | null = null;
     const paramName = isArgument ? 'argument' : 'radius';
     const points = this.getVisiblePoints();
     const argAxis = this.getArgumentAxis();
     const startAngle = argAxis.getAngles()[0];
 
-    for (let i = 0; i < points.length; i++) {
+    for (let i = 0; i < points.length; i += 1) {
       const p = points[i];
-      const tmpPoint = _isDefined(p[paramName]) && _isDefined(params[paramName]) && p[paramName].valueOf() === params[paramName].valueOf()
-        ? convertPolarToXY(argAxis.getCenter(), startAngle, -argAxis.getTranslatedAngle(p.angle), p.radius) : undefined;
+      const tmpPoint = _isDefined(p[paramName])
+        && _isDefined(params[paramName])
+        && p[paramName].valueOf() === params[paramName].valueOf()
+        ? convertPolarToXY(
+          argAxis.getCenter(),
+          startAngle,
+          -argAxis.getTranslatedAngle(p.angle),
+          p.radius,
+        )
+        : undefined;
 
       if (_isDefined(tmpPoint)) {
-        // @ts-expect-error
         coords = tmpPoint;
         break;
       }

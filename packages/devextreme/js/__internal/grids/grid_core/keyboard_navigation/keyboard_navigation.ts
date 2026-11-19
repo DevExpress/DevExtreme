@@ -66,7 +66,7 @@ import gridCoreUtils from '@ts/grids/grid_core/utils';
 import { CLASSES as VIEW_CLASSES, ROW_OPTIONS_KEY } from '@ts/grids/grid_core/views/const';
 import type { RowsView } from '@ts/grids/grid_core/views/rows_view';
 import type {
-  CellPosition, FocusStateParams, RowsViewScrollEvent, ViewRowEvent,
+  CellPosition, FocusStateParams, RowsViewScrollEvent, ViewRow, ViewRowEvent,
 } from '@ts/grids/grid_core/views/types';
 import { isVirtualPaging, isVirtualRowRendering } from '@ts/grids/grid_core/virtual_scrolling';
 import type Scrollable from '@ts/ui/scroll_view/scrollable';
@@ -176,9 +176,11 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
 
   private focusRestoreScrollTop = 0;
 
+  private isPageNavigationPending = false;
+
   // #region Initialization
   public init(): void {
-    this._dataController = this.getController('data') as KeyboardNavigationDataController;
+    this._dataController = this.getController('data');
     this.dataSourceController = this.getController('dataSource');
     this._selectionController = this.getController('selection');
     this._editingController = this.getController('editing') as CellBasedEditingController;
@@ -333,6 +335,8 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
       return;
     }
 
+    this.completePageNavigation();
+
     const isFullUpdate = !e || e.changeType === 'refresh';
     const isFocusedViewCorrect = this._focusedView?.name === this._rowsView.name;
     const isAppend = e && (e.changeType === 'append' || e.changeType === 'prepend');
@@ -347,7 +351,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     this.initKeyDownHandler();
     this._setRowsViewAttributes();
 
-    if (isFocusedViewCorrect && isFocusedElementCorrect) {
+    if (isFocusedViewCorrect && isFocusedElementCorrect && !this.isPageNavigationPending) {
       const needUpdateFocus = this._isNeedFocus
         ? !isAppend
         : this._isHiddenFocus && isFullUpdate && !e?.virtualColumnsScrolling;
@@ -519,7 +523,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
   ): void {
     const isEditing = this._editingController.isEditing();
     const direction: NavigationDirection = event.shift ? 'previous' : 'next';
-    const eventTarget = event.originalEvent.target as Element;
+    const eventTarget = event.originalEvent.target;
     const { hasEditingOptions, isLastValidCell } = options;
     let originalHandlerRequired = options.isOriginalHandlerRequired;
 
@@ -745,7 +749,10 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
   }
 
   private isWaitingForRowsRendering(eventArgs: KeyboardKeyDownEvent): boolean {
-    return this._rowsView.isWaitingForRowsLayout()
+    const isWaitingForRows = this._rowsView.isWaitingForRowsLayout()
+      || (this.isPageNavigationPending && this._rowsView.isViewportRowsRenderPending());
+
+    return isWaitingForRows
       && !this._editingController?.isEditing()
       && !this.isInsideMasterDetail($(eventArgs.originalEvent.target));
   }
@@ -2050,43 +2057,56 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
   }
 
   private restoreFocusableElement(rowIndex?: number, $event?: Event): void {
-    // eslint-disable-next-line @typescript-eslint/init-declarations -- set in the up-arrow branch
-    let args: FocusedRowChangingArgs | undefined;
-    const isUpArrow = isDefined(rowIndex);
     const $rowsViewElement = this._rowsView.element();
 
     if (!$rowsViewElement) {
       return;
     }
 
-    const { columnIndex } = this._focusedCellPosition;
-    const rowIndexOffset = this._dataController.getRowIndexOffset();
-
-    let newRowIndex = isUpArrow
-      ? rowIndex
-      : this._rowsView.getTopVisibleItemIndex() + rowIndexOffset;
-
-    if (!isUpArrow) {
+    if (!isDefined(rowIndex)) {
       this._editorFactory.loseFocus();
       this.applyTabIndexToElement($rowsViewElement);
       eventsEngine.trigger($rowsViewElement, 'focus');
-    } else {
-      // @ts-expect-error getRow() is typed as possibly undefined
-      const $rowElement: dxElementWrapper = this._rowsView.getRow(newRowIndex - rowIndexOffset);
-      args = this._fireFocusedRowChanging($event, $rowElement);
 
-      if (!args.cancel && args.rowIndexChanged) {
-        newRowIndex = args.newRowIndex;
-      }
+      this.isPageNavigationPending = true;
+      this.completePageNavigation();
+      return;
     }
 
-    if (!isUpArrow || !args?.cancel) {
-      this.setFocusedCellPosition(newRowIndex, columnIndex);
+    const { columnIndex } = this._focusedCellPosition;
+    const rowIndexOffset = this._dataController.getRowIndexOffset();
+    // @ts-expect-error getRow() is typed as possibly undefined
+    const $rowElement: dxElementWrapper = this._rowsView.getRow(rowIndex - rowIndexOffset);
+    const args = this._fireFocusedRowChanging($event, $rowElement);
+
+    if (!args.cancel) {
+      this.setFocusedCellPosition(args.rowIndexChanged ? args.newRowIndex : rowIndex, columnIndex);
     }
 
-    if (isUpArrow) {
-      this.updateFocus(false);
+    this.updateFocus(false);
+  }
+
+  public setFocusedRowIndex(rowIndex: number | undefined): void {
+    if (rowIndex !== this._focusedCellPosition?.rowIndex) {
+      this.isPageNavigationPending = false;
     }
+    super.setFocusedRowIndex(rowIndex);
+  }
+
+  private getTopVisibleRowIndex(): number {
+    return this._rowsView.getTopVisibleItemIndex() + this._dataController.getRowIndexOffset();
+  }
+
+  private completePageNavigation(): void {
+    if (!this.isPageNavigationPending || this._rowsView.isViewportRowsRenderPending()) {
+      return;
+    }
+
+    this.isPageNavigationPending = false;
+    this.setFocusedCellPosition(
+      this.getTopVisibleRowIndex(),
+      this._focusedCellPosition.columnIndex,
+    );
   }
 
   // #endregion Focusing
@@ -2813,7 +2833,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
       const { rowIndex = -1, columnIndex = -1 } = cellPosition;
       const rowIndexOffset = this._dataController.getRowIndexOffset();
       const column = this._columnsController.getVisibleColumns(null, true)[columnIndex];
-      const columnIndexOffset = column && column.fixed
+      const columnIndexOffset = column?.fixed
         ? this._getFixedColumnIndexOffset(column)
         : this._columnsController.getColumnIndexOffset();
 
@@ -3079,6 +3099,20 @@ const rowsView = (
     }
   }
 
+  protected _updateCells(
+    $rowElement: dxElementWrapper,
+    $newRowElement: dxElementWrapper,
+    columnIndices: number[],
+    options?: ViewRow,
+  ): void {
+    const focusStateClasses = [CLASSES.focused, EDITOR_FACTORY_CLASSES.cellFocusDisabled]
+      .filter((className) => $rowElement.hasClass(className));
+
+    super._updateCells($rowElement, $newRowElement, columnIndices, options);
+
+    focusStateClasses.forEach((className) => $rowElement.addClass(className));
+  }
+
   public renderFocusState(params: FocusStateParams): void {
     super.renderFocusState(params);
 
@@ -3265,7 +3299,7 @@ const editing = (
     const visibleColumnIndex = this._keyboardNavigationController.getVisibleColumnIndex();
     const column = this._columnsController.getVisibleColumns()[visibleColumnIndex];
 
-    if ((column && column.type) || this.getEditMode() === EDIT_MODE.form) {
+    if ((column?.type) || this.getEditMode() === EDIT_MODE.form) {
       this._keyboardNavigationController.resetFocusedCell();
     }
     super.editRow(rowIndex);

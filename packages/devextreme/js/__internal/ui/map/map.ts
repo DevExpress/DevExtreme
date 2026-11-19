@@ -191,7 +191,6 @@ class Map extends Widget<MapProperties> {
   }
 
   _grabEvents(): void {
-    // @ts-expect-error ts-error
     const eventName = addNamespace(pointerEvents.down, this.NAME);
 
     eventsEngine.on(this.$element(), eventName, this._cancelEvent.bind(this));

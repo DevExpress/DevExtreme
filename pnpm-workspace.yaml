@@ -17,7 +17,7 @@ minimumReleaseAge: 1440 # ⚠️ Do NOT modify this.
 
 minimumReleaseAgeExclude:
   - "devextreme-internal-tools@22.1.0"
-  - "@devexpress/design-tokens-internal@262.26.0"
+  - "@devexpress/design-tokens-internal@262.54.0"
   - "devexpress-diagram"
   - "devexpress-gantt"
   - "@devexpress/utils"
@@ -75,15 +75,15 @@ catalog:
   vue-eslint-parser: 10.4.1
   globals: 15.14.0
   jquery: 4.0.0
-  playwright: 1.62.1
+  playwright: 1.65.1
   stylelint: 16.22.0
   testcafe: 3.7.5
   zod: 4.6.7
-  "@playwright/test": 1.62.1
+  "@playwright/test": 1.65.1
   "@stylistic/eslint-plugin": 5.10.0
   "@types/jquery": 4.0.1
-  "@typescript-eslint/eslint-plugin": 8.58.2
-  "@typescript-eslint/parser": 8.58.2
+  "@typescript-eslint/eslint-plugin": 8.72.1
+  "@typescript-eslint/parser": 8.72.1
 
 catalogs:
   angular:

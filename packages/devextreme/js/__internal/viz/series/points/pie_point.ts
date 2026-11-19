@@ -4,9 +4,7 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-multi-assign */
-/* eslint-disable @stylistic/max-len */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable prefer-destructuring */
 /* eslint-disable no-else-return */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
@@ -35,7 +33,9 @@ export default _extend({}, symbolPoint, {
       that._visible = true;
     }
 
-    that.minValue = that.initialMinValue = that.originalMinValue = _isDefined(data.minValue) ? data.minValue : 0;
+    that.minValue = that.initialMinValue = that.originalMinValue = _isDefined(data.minValue)
+      ? data.minValue
+      : 0;
   },
 
   animate(complete, duration, delay) {
@@ -91,7 +91,11 @@ export default _extend({}, symbolPoint, {
     if (that._isLabelDrawingWithoutPoints) {
       return that._checkLabelPosition(coord, bBox, visibleArea);
     } else {
-      return that._getLabelExtraCoord(coord, that._checkVerticalLabelPosition(coord, bBox, visibleArea), bBox);
+      return that._getLabelExtraCoord(
+        coord,
+        that._checkVerticalLabelPosition(coord, bBox, visibleArea),
+        bBox,
+      );
     }
   },
 
@@ -108,8 +112,7 @@ export default _extend({}, symbolPoint, {
   }) {
     const that = this;
     const angleFunctions = _getCosAndSin(that.middleAngle);
-    const radiusInner = that.radiusInner;
-    const radiusOuter = that.radiusOuter;
+    const { radiusInner, radiusOuter } = that;
     const columnsPosition = position === 'columns';
     let rad;
     let x;
@@ -152,9 +155,9 @@ export default _extend({}, symbolPoint, {
     const rightBorderX = visibleArea.maxX - labelWidth;
     const leftBorderX = visibleArea.minX;
     const angleOfPoint = _normalizeAngle(that.middleAngle);
-    const centerX = that.centerX;
-    const connectorOffset = options.connectorOffset;
-    let x = coord.x;
+    const { centerX } = that;
+    const { connectorOffset } = options;
+    let { x } = coord;
 
     if (options.position === 'columns') {
       if (angleOfPoint <= 90 || angleOfPoint >= 270) {
@@ -195,8 +198,8 @@ export default _extend({}, symbolPoint, {
   },
 
   _checkVerticalLabelPosition(coord, box, visibleArea) {
-    const x = coord.x;
-    let y = coord.y;
+    const { x } = coord;
+    let { y } = coord;
 
     if (coord.y + box.height > visibleArea.maxY) {
       y = visibleArea.maxY - box.height;
@@ -213,8 +216,8 @@ export default _extend({}, symbolPoint, {
   },
 
   _checkHorizontalLabelPosition(coord, box, visibleArea) {
-    let x = coord.x;
-    const y = coord.y;
+    let { x } = coord;
+    const { y } = coord;
     if (coord.x + box.width > visibleArea.maxX) {
       x = visibleArea.maxX - box.width;
     } else if (coord.x < visibleArea.minX) {
@@ -228,8 +231,8 @@ export default _extend({}, symbolPoint, {
     const label = that._label;
     const box = label.getBoundingRect();
     const visibleArea = that._getVisibleArea();
-    const position = label.getLayoutOptions().position;
-    let width = box.width;
+    const { position } = label.getLayoutOptions();
+    let { width } = box;
     let rowCountChanged = false;
 
     if (position === 'columns' && that.series.index > 0) {
@@ -265,7 +268,9 @@ export default _extend({}, symbolPoint, {
     const rad = that.radiusOuter;
     const seriesStyle = that._options.styles.normal;
     const strokeWidthBy2 = seriesStyle['stroke-width'] / 2;
-    const borderWidth = that.series.getOptions().containerBackgroundColor === seriesStyle.stroke ? _round(strokeWidthBy2) : _round(-strokeWidthBy2);
+    const borderWidth = that.series.getOptions().containerBackgroundColor === seriesStyle.stroke
+      ? _round(strokeWidthBy2)
+      : _round(-strokeWidthBy2);
     const angleFunctions = _getCosAndSin(_round(that.middleAngle));
 
     return {
@@ -277,10 +282,9 @@ export default _extend({}, symbolPoint, {
 
   _drawMarker(renderer, group, animationEnabled, firstDrawing) {
     const that = this;
-    let radiusOuter = that.radiusOuter;
-    let radiusInner = that.radiusInner;
-    let fromAngle = that.fromAngle;
-    let toAngle = that.toAngle;
+    let {
+      radiusOuter, radiusInner, fromAngle, toAngle,
+    } = that;
 
     if (animationEnabled) {
       radiusInner = radiusOuter = 0;
@@ -288,7 +292,8 @@ export default _extend({}, symbolPoint, {
         fromAngle = toAngle = that.shiftedAngle;
       }
     }
-    that.graphic = renderer.arc(that.centerX, that.centerY, radiusInner, radiusOuter, toAngle, fromAngle)
+    that.graphic = renderer
+      .arc(that.centerX, that.centerY, radiusInner, radiusOuter, toAngle, fromAngle)
       .attr({ 'stroke-linejoin': 'round' })
       .smartAttr(that._getStyle())
       .data({ 'chart-data-point': that })
@@ -299,8 +304,7 @@ export default _extend({}, symbolPoint, {
   getTooltipParams() {
     const that = this;
     const angleFunctions = _getCosAndSin(that.middleAngle);
-    const radiusInner = that.radiusInner;
-    const radiusOuter = that.radiusOuter;
+    const { radiusInner, radiusOuter } = that;
     return {
       x: that.centerX + (radiusInner + (radiusOuter - radiusInner) / 2) * angleFunctions.cos,
       y: that.centerY - (radiusInner + (radiusOuter - radiusInner) / 2) * angleFunctions.sin,
@@ -311,8 +315,7 @@ export default _extend({}, symbolPoint, {
   _translate() {
     const that = this;
     const angle = that.shiftedAngle || 0;
-    const value = that.value;
-    const minValue = that.minValue;
+    const { value, minValue } = that;
     const translator = that._getValTranslator();
 
     that.fromAngle = translator.translate(minValue) + angle;
@@ -380,7 +383,7 @@ export default _extend({}, symbolPoint, {
 
   _getFormatObject(tooltip) {
     const formatObject = symbolPoint._getFormatObject.call(this, tooltip);
-    const percent = this.percent;
+    const { percent } = this;
 
     formatObject.percent = percent;
     formatObject.percentText = tooltip.formatValue(percent, 'percent');
@@ -414,7 +417,9 @@ export default _extend({}, symbolPoint, {
     if (fromAngle === toAngle && _abs(that.toAngle - that.fromAngle) > 1E-4) {
       return true;
     } else {
-      return fromAngle >= toAngle ? angle <= fromAngle && angle >= toAngle : !(angle >= fromAngle && angle <= toAngle);
+      return fromAngle >= toAngle
+        ? angle <= fromAngle && angle >= toAngle
+        : !(angle >= fromAngle && angle <= toAngle);
     }
   },
 });

@@ -3,7 +3,6 @@
 /* eslint-disable no-nested-ternary */
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-multi-assign */
-/* eslint-disable @stylistic/max-len */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable no-else-return */
@@ -60,7 +59,7 @@ const baseAreaMethods = {
     return defaultSegment;
   },
 
-  _updateElement(element, segment, animate, complete) {
+  _updateElement(element, segment, animate, complete): void {
     const lineParams = { points: segment.line };
     const areaParams = { points: segment.area };
     const borderElement = element.line;
@@ -73,7 +72,7 @@ const baseAreaMethods = {
     }
   },
 
-  _removeElement(element) {
+  _removeElement(element): void {
     element.line && element.line.remove();
     element.area.remove();
   },
@@ -85,7 +84,7 @@ const baseAreaMethods = {
     };
   },
 
-  _applyStyle(style) {
+  _applyStyle(style): void {
     const that = this;
 
     that._elementsGroup && that._elementsGroup.smartAttr(style.elements);
@@ -116,7 +115,11 @@ const baseAreaMethods = {
 
   _areBordersVisible() {
     const options = this._options;
-    return options.border.visible || options.hoverStyle.border.visible || options.selectionStyle.border.visible;
+    return (
+      options.border.visible
+      || options.hoverStyle.border.visible
+      || options.selectionStyle.border.visible
+    );
   },
 
   _createMainElement(points, settings) {
@@ -133,7 +136,9 @@ const baseAreaMethods = {
 };
 
 function createAreaPoints(points) {
-  return _map(points, (pt) => pt.getCoords()).concat(_map(points.slice().reverse(), (pt) => pt.getCoords(true)));
+  return _map(points, (pt) => pt.getCoords()).concat(
+    _map(points.slice().reverse(), (pt) => pt.getCoords(true)),
+  );
 }
 // @ts-expect-error
 const areaSeries = chart.area = _extend({}, chartLineSeries, baseAreaMethods, {
@@ -150,9 +155,19 @@ const areaSeries = chart.area = _extend({}, chartLineSeries, baseAreaMethods, {
       if (axisOptions.visible) {
         areaPoints.forEach((p, i) => {
           if (p) {
-            const index = points.length === 1 ? 0 : i < points.length ? i : areaPoints.length - 1 - i;
-            rotated && p.x === points[index].defaultX && p.x === argAxisPosition - argAxis.getAxisShift() && (p.x += edgeOffset);
-            !rotated && p.y === points[index].defaultY && p.y === argAxisPosition - argAxis.getAxisShift() && (p.y += edgeOffset);
+            const index = points.length === 1
+              ? 0
+              : i < points.length
+                ? i
+                : areaPoints.length - 1 - i;
+            rotated
+              && p.x === points[index].defaultX
+              && p.x === argAxisPosition - argAxis.getAxisShift()
+              && (p.x += edgeOffset);
+            !rotated
+              && p.y === points[index].defaultY
+              && p.y === argAxisPosition - argAxis.getAxisShift()
+              && (p.y += edgeOffset);
           }
         });
       }
@@ -193,7 +208,11 @@ chart.steparea = _extend({}, areaSeries, {
     // @ts-expect-error
     const stepLineSeries = lineSeriesChart.stepline;
     points = areaSeries._processSinglePointsAreaSegment(points, rotated);
-    return areaSeries._prepareSegment.call(this, stepLineSeries._calculateStepLinePoints.call(this, points), rotated);
+    return areaSeries._prepareSegment.call(
+      this,
+      stepLineSeries._calculateStepLinePoints.call(this, points),
+      rotated,
+    );
   },
   // @ts-expect-error
   getSeriesPairCoord: lineSeriesChart.stepline.getSeriesPairCoord,
@@ -203,7 +222,12 @@ chart.splinearea = _extend({}, areaSeries, {
   _areaPointsToSplineAreaPoints(areaPoints) {
     const previousMiddlePoint = areaPoints[areaPoints.length / 2 - 1];
     const middlePoint = areaPoints[areaPoints.length / 2];
-    areaPoints.splice(areaPoints.length / 2, 0, { x: previousMiddlePoint.x, y: previousMiddlePoint.y }, { x: middlePoint.x, y: middlePoint.y });
+    areaPoints.splice(
+      areaPoints.length / 2,
+      0,
+      { x: previousMiddlePoint.x, y: previousMiddlePoint.y },
+      { x: middlePoint.x, y: middlePoint.y },
+    );
     /// #DEBUG
     if (previousMiddlePoint.defaultCoords) {
       areaPoints[areaPoints.length / 2].defaultCoords = true;
@@ -216,7 +240,10 @@ chart.splinearea = _extend({}, areaSeries, {
 
   _prepareSegment(points, rotated) {
     const processedPoints = areaSeries._processSinglePointsAreaSegment(points, rotated);
-    const areaSegment = areaSeries._prepareSegment.call(this, calculateBezierPoints(processedPoints, rotated));
+    const areaSegment = areaSeries._prepareSegment.call(
+      this,
+      calculateBezierPoints(processedPoints, rotated),
+    );
 
     this._areaPointsToSplineAreaPoints(areaSegment.area);
     areaSegment.singlePointSegment = processedPoints !== points;

@@ -95,7 +95,6 @@ class CollectionWidget<
 
   constructor(element: Element, options?: Record<string, unknown>) {
     CollectionWidget._initUserOptions = options ?? {};
-    // @ts-expect-error
     super(element, options);
   }
 

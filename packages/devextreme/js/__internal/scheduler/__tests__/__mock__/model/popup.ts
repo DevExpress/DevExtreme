@@ -122,7 +122,7 @@ export class PopupModel {
 
   getInputValue = (editorName: string): string => {
     const input = this.getInput(editorName);
-    return input.value as unknown as string;
+    return input.value;
   };
 
   setInputValue = (editorName: string, value: string | number | Date | boolean | null): void => {

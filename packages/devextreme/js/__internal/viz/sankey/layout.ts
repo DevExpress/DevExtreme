@@ -1,13 +1,9 @@
-/* eslint-disable @stylistic/no-mixed-operators */
 /* eslint-disable @typescript-eslint/prefer-for-of */
 /* eslint-disable @typescript-eslint/init-declarations */
-/* eslint-disable no-plusplus */
 /* eslint-disable @typescript-eslint/naming-convention */
-/* eslint-disable @stylistic/max-len */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-/* eslint-disable prefer-destructuring */
 /* eslint-disable no-else-return */
 
 import validatorModule from '@ts/viz/sankey/data_validator';
@@ -33,7 +29,7 @@ export const layout = {
     }
   },
 
-  _getInWeightForNode(nodeTitle, links) {
+  _getInWeightForNode(nodeTitle, links): number {
     let w = 0;
     links.forEach((link) => {
       if (link[1] === nodeTitle) {
@@ -43,7 +39,7 @@ export const layout = {
     return w;
   },
 
-  _getOutWeightForNode(nodeTitle, links) {
+  _getOutWeightForNode(nodeTitle, links): number {
     let w = 0;
     links.forEach((link) => {
       if (link[0] === nodeTitle) {
@@ -60,7 +56,7 @@ export const layout = {
     const cascades = [];
 
     // init cascades
-    for (let i = 0; i < maxCascade + 1; i++) {
+    for (let i = 0; i < maxCascade + 1; i += 1) {
       // @ts-expect-error
       cascades.push({});
     }
@@ -95,7 +91,7 @@ export const layout = {
     return cascades;
   },
 
-  _getWeightForCascade(cascades, cascadeIdx) {
+  _getWeightForCascade(cascades, cascadeIdx): number {
     let wMax = 0;
     const cascade = cascades[cascadeIdx];
     Object.keys(cascade).forEach((nodeTitle) => {
@@ -104,7 +100,7 @@ export const layout = {
     return wMax;
   },
 
-  _getMaxWeightThroughCascades(cascades) {
+  _getMaxWeightThroughCascades(cascades): number {
     const max = [];
     cascades.forEach((cascade) => {
       let mW = 0;
@@ -121,11 +117,15 @@ export const layout = {
   _computeNodes(cascades, options) {
     const rects = [];
     const maxWeight = this._getMaxWeightThroughCascades(cascades);
-    const maxNodeNum = graphModule.routines.maxOfArray(cascades.map((nodesInCascade) => Object.keys(nodesInCascade).length));
-    let nodePadding = options.nodePadding;
+    const maxNodeNum = graphModule.routines.maxOfArray(
+      cascades.map((nodesInCascade) => Object.keys(nodesInCascade).length),
+    );
+    let { nodePadding } = options;
     let heightAvailable = options.height - nodePadding * (maxNodeNum - 1);
 
-    if (heightAvailable < 0) { // when the available height is too small, e.g. sum of all paddings is more then available height
+    if (heightAvailable < 0) {
+      // when the available height is too small, e.g. sum of all paddings is more then available
+      // height
       nodePadding = 0;
       heightAvailable = options.height - nodePadding * (maxNodeNum - 1);
     }
@@ -138,12 +138,15 @@ export const layout = {
       const cascadeRects = [];
       let y = 0;
       const nodesInCascade = Object.keys(cascade).length;
-      const cascadeHeight = this._getWeightForCascade(cascades, cascadeIdx) / this._weightPerPixel + nodePadding * (nodesInCascade - 1);
+      const cascadeHeight = this._getWeightForCascade(cascades, cascadeIdx) / this._weightPerPixel
+        + nodePadding * (nodesInCascade - 1);
 
       let cascadeAlign;
 
       if (Array.isArray(options.nodeAlign)) {
-        cascadeAlign = cascadeIdx < options.nodeAlign.length ? options.nodeAlign[cascadeIdx] : _ALIGNMENT_DEFAULT;
+        cascadeAlign = cascadeIdx < options.nodeAlign.length
+          ? options.nodeAlign[cascadeIdx]
+          : _ALIGNMENT_DEFAULT;
       } else {
         cascadeAlign = options.nodeAlign;
       }
@@ -156,30 +159,36 @@ export const layout = {
       y = Math.round(y);
 
       Object.keys(cascade).forEach((nodeTitle) => {
-        cascade[nodeTitle].sort = this._sort && Object.prototype.hasOwnProperty.call(this._sort, nodeTitle) ? this._sort[nodeTitle] : 1;
+        cascade[nodeTitle].sort = this._sort
+          && Object.prototype.hasOwnProperty.call(this._sort, nodeTitle)
+          ? this._sort[nodeTitle]
+          : 1;
       });
 
-      Object.keys(cascade).sort((a, b) => cascade[a].sort - cascade[b].sort).forEach((nodeTitle) => {
-        const node = cascade[nodeTitle];
-        const height = Math.floor(heightAvailable * node.maxWeight / maxWeight);
-        const x = Math.round(cascadeIdx * options.width / (cascades.length - 1)) - (cascadeIdx === 0 ? 0 : options.nodeWidth);
-        const rect = {};
-        // @ts-expect-error
-        rect._name = nodeTitle;
-        // @ts-expect-error
-        rect.width = options.nodeWidth;
-        // @ts-expect-error
-        rect.height = height;
-        // @ts-expect-error
-        rect.x = x + options.x;
-        // @ts-expect-error
-        rect.y = y + options.y;
+      Object.keys(cascade)
+        .sort((a, b) => cascade[a].sort - cascade[b].sort)
+        .forEach((nodeTitle) => {
+          const node = cascade[nodeTitle];
+          const height = Math.floor((heightAvailable * node.maxWeight) / maxWeight);
+          const x = Math.round((cascadeIdx * options.width) / (cascades.length - 1))
+            - (cascadeIdx === 0 ? 0 : options.nodeWidth);
+          const rect = {};
+          // @ts-expect-error
+          rect._name = nodeTitle;
+          // @ts-expect-error
+          rect.width = options.nodeWidth;
+          // @ts-expect-error
+          rect.height = height;
+          // @ts-expect-error
+          rect.x = x + options.x;
+          // @ts-expect-error
+          rect.y = y + options.y;
 
-        y += height + nodePadding;
-        // @ts-expect-error
-        cascadeRects.push(rect);
-      });
-      cascadeIdx++;
+          y += height + nodePadding;
+          // @ts-expect-error
+          cascadeRects.push(rect);
+        });
+      cascadeIdx += 1;
       // @ts-expect-error
       rects.push(cascadeRects);
     });
@@ -188,20 +197,20 @@ export const layout = {
   },
 
   _findRectByName(rects, name) {
-    for (let c = 0; c < rects.length; c++) {
-      for (let r = 0; r < rects[c].length; r++) {
+    for (let c = 0; c < rects.length; c += 1) {
+      for (let r = 0; r < rects[c].length; r += 1) {
         if (name === rects[c][r]._name) return rects[c][r];
       }
     }
     return null;
   },
 
-  _findIndexByName(rects, nodeTitle) {
+  _findIndexByName(rects, nodeTitle): number | null {
     let index = 0;
-    for (let c = 0; c < rects.length; c++) {
-      for (let r = 0; r < rects[c].length; r++) {
+    for (let c = 0; c < rects.length; c += 1) {
+      for (let r = 0; r < rects[c].length; r += 1) {
         if (nodeTitle === rects[c][r]._name) return index;
-        index++;
+        index += 1;
       }
     }
     return null;
@@ -222,7 +231,9 @@ export const layout = {
       rectsOfCascade.forEach((nodeRect) => {
         const nodeTitle = nodeRect._name;
         const rectFrom = this._findRectByName(rects, nodeTitle);
-        const linksFromNode = links.filter((link) => link[0] === nodeTitle); // all outgoing links from the node
+        const linksFromNode = links.filter(
+          (link) => link[0] === nodeTitle,
+        ); // all outgoing links from the node
 
         // all outgoing links should be sorted according to the order of their target nodes
         linksFromNode.forEach((link) => {
@@ -234,15 +245,28 @@ export const layout = {
           const yOffsetFrom = yOffsets[link[0]].out;
           const yOffsetTo = yOffsets[link[1]].in;
           // heights of left and right parts of the link must fit the nodes on it's left and right
-          const heightFrom = yOffsets[link[0]].out + height > rectFrom.height ? rectFrom.height - yOffsets[link[0]].out : height;
-          const heightTo = yOffsets[link[1]].in + height > rectTo.height ? rectTo.height - yOffsets[link[1]].in : height;
+          const heightFrom = yOffsets[link[0]].out + height > rectFrom.height
+            ? rectFrom.height - yOffsets[link[0]].out
+            : height;
+          const heightTo = yOffsets[link[1]].in + height > rectTo.height
+            ? rectTo.height - yOffsets[link[1]].in
+            : height;
           // @ts-expect-error
           paths.push({
             from: {
-              x: rectFrom.x, y: rectFrom.y + yOffsetFrom, width: rectFrom.width, height: heightFrom, node: rectFrom, weight: link[2],
+              x: rectFrom.x,
+              y: rectFrom.y + yOffsetFrom,
+              width: rectFrom.width,
+              height: heightFrom,
+              node: rectFrom,
+              weight: link[2],
             },
             to: {
-              x: rectTo.x, y: rectTo.y + yOffsetTo, width: rectTo.width, height: heightTo, node: rectTo,
+              x: rectTo.x,
+              y: rectTo.y + yOffsetTo,
+              width: rectTo.width,
+              height: heightTo,
+              node: rectTo,
             },
           });
           yOffsets[link[0]].out += height;
@@ -263,7 +287,9 @@ export const layout = {
           // @ts-expect-error
           width: link.to.x - (link.from.x + link.from.width),
           // @ts-expect-error
-          height: Math.max(link.from.x + link.from.height, link.to.y + link.to.height) - Math.min(link.from.y, link.to.y),
+          height: Math.max(link.from.x + link.from.height, link.to.y + link.to.height)
+            // @ts-expect-error
+            - Math.min(link.from.y, link.to.y),
         },
         // @ts-expect-error
         _weight: link.from.weight,
@@ -280,7 +306,7 @@ export const layout = {
     return result;
   },
 
-  _fitNodeHeight(nodeName, nodeRects, paths) {
+  _fitNodeHeight(nodeName, nodeRects, paths): void {
     const targetRect = this._findRectByName(nodeRects, nodeName);
     let heightOfLinksSummaryIn = 0;
     let heightOfLinksSummaryOut = 0;
@@ -296,15 +322,15 @@ export const layout = {
     targetRect.height = Math.max(heightOfLinksSummaryIn, heightOfLinksSummaryOut);
   },
 
-  _fitAllNodesHeight(nodeRects, paths) {
-    for (let c = 0; c < nodeRects.length; c++) {
-      for (let r = 0; r < nodeRects[c].length; r++) {
+  _fitAllNodesHeight(nodeRects, paths): void {
+    for (let c = 0; c < nodeRects.length; c += 1) {
+      for (let r = 0; r < nodeRects[c].length; r += 1) {
         this._fitNodeHeight(nodeRects[c][r]._name, nodeRects, paths);
       }
     }
   },
 
-  _spline(rectLeft, rectRight) {
+  _spline(rectLeft, rectRight): string {
     const p_UpLeft = { x: rectLeft.x + rectLeft.width, y: rectLeft.y };
     const p_DownLeft = { x: rectLeft.x + rectLeft.width, y: rectLeft.y + rectLeft.height };
     const p_UpRight = { x: rectRight.x, y: rectRight.y };
@@ -345,7 +371,7 @@ export const layout = {
     return result;
   },
 
-  overlap(box1, box2) {
+  overlap(box1, box2): boolean {
     return !(box2.x > box1.x + box1.width || box2.x + box2.width < box1.x
             || box2.y >= box1.y + box1.height || box2.y + box2.height <= box1.y);
   },

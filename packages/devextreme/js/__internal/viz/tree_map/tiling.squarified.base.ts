@@ -1,26 +1,26 @@
-/* eslint-disable @stylistic/no-mixed-operators */
 /* eslint-disable @typescript-eslint/init-declarations */
-/* eslint-disable no-plusplus */
 /* eslint-disable func-names */
 /* eslint-disable @typescript-eslint/naming-convention */
-/* eslint-disable @stylistic/max-len */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-/* eslint-disable prefer-destructuring */
 
 import { buildSidesData, calculateRectangles, getStaticSideIndex } from '@ts/viz/tree_map/tiling';
 
 const _max = Math.max;
 const _round = Math.round;
 
-function compare(a, b) { return b.value - a.value; }
+function compare(a, b): number { return b.value - a.value; }
 
-function getAspectRatio(value) {
+function getAspectRatio(value): number {
   return _max(value, 1 / value);
 }
 
-function findAppropriateCollection(nodes, head, context) {
+function findAppropriateCollection(
+  nodes,
+  head,
+  context,
+): { sum: number; count: number; side: number } {
   let bestAspectRatio = Infinity;
   let nextAspectRatio;
   let sum = 0;
@@ -35,13 +35,17 @@ function findAppropriateCollection(nodes, head, context) {
     nextSum = sum + nodes[i].value;
     totalAspectRatio = context.staticSide / coeff / nextSum;
     nextAspectRatio = 0;
-    for (j = head; j <= i; ++j) {
-      nextAspectRatio = context.accumulate(nextAspectRatio, getAspectRatio(totalAspectRatio * nodes[j].value / nextSum), j - head + 1);
+    for (j = head; j <= i; j += 1) {
+      nextAspectRatio = context.accumulate(
+        nextAspectRatio,
+        getAspectRatio((totalAspectRatio * nodes[j].value) / nextSum),
+        j - head + 1,
+      );
     }
     if (nextAspectRatio < bestAspectRatio) {
       bestAspectRatio = nextAspectRatio;
       sum = nextSum;
-      ++i;
+      i += 1;
     } else {
       break;
     }
@@ -49,7 +53,7 @@ function findAppropriateCollection(nodes, head, context) {
   return { sum, count: i - head, side: _round(coeff * sum) };
 }
 
-function getArea(rect) {
+function getArea(rect): number {
   return (rect[2] - rect[0]) * (rect[3] - rect[1]);
 }
 
@@ -67,8 +71,8 @@ function doStep(nodes, head, context) {
   return head + rowData.count;
 }
 
-export default function (data, accumulate, isFixedStaticSide) {
-  const items = data.items;
+export default function (data, accumulate, isFixedStaticSide): void {
+  const { items } = data;
   const ii = items.length;
   let i;
   const context = {

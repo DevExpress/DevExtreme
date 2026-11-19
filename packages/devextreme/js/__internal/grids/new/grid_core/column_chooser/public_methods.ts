@@ -1,10 +1,9 @@
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
+import type { GridCoreClass, Mixin } from '../types';
+import type { ColumnChooserPublicMethods } from './types';
 
-import type { Constructor } from '../types';
-import type { GridCoreNewBase } from '../widget';
-
-export function PublicMethods<TBase extends Constructor<GridCoreNewBase>>(GridCore: TBase) {
+export function PublicMethods<TBase extends GridCoreClass>(
+  GridCore: TBase,
+): Mixin<TBase, ColumnChooserPublicMethods> {
   return class GridCoreWithColumnChooser extends GridCore {
     public showColumnChooser(): void {
       this.columnChooserView.show();

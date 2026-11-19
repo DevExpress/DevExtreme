@@ -1,14 +1,11 @@
 /* eslint-disable @typescript-eslint/no-this-alias */
 /* eslint-disable @typescript-eslint/init-declarations */
-/* eslint-disable no-plusplus */
 /* eslint-disable func-names */
 /* eslint-disable import/no-mutable-exports */
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable consistent-return */
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-/* eslint-disable prefer-destructuring */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 
 import { isDefined } from '@ts/core/utils/type';
@@ -25,13 +22,15 @@ let _TESTS_dataKey;
 proto._eventsMap.onItemClick = { name: 'itemClick' };
 proto._eventsMap.onLegendClick = { name: 'legendClick' };
 
-const getDataKey = function () {
-  return DATA_KEY_BASE + dataKeyModifier++;
+const getDataKey = function (): string {
+  const dataKey = DATA_KEY_BASE + dataKeyModifier;
+  dataKeyModifier += 1;
+  return dataKey;
 };
 
 export const plugin = {
   name: 'tracker',
-  init() {
+  init(): void {
     const that = this;
     const dataKey = getDataKey();
     /// #DEBUG
@@ -49,7 +48,7 @@ export const plugin = {
       widget: that,
       root: that._renderer.root,
       getData(e, tooltipData) {
-        const target = e.target;
+        const { target } = e;
         const data = target[dataKey];
         if (isDefined(data)) {
           return data;
@@ -65,7 +64,7 @@ export const plugin = {
       getNode(index) {
         return that._items[index];
       },
-      click(e) {
+      click(e): void {
         const proxyData = getProxyData(e.event);
         const dataType = proxyData && proxyData.type;
         const event = dataType === 'legend' ? 'legendClick' : 'itemClick';
@@ -79,11 +78,11 @@ export const plugin = {
 
     this._dataKey = dataKey;
   },
-  dispose() {
+  dispose(): void {
     this._tracker.dispose();
   },
   extenders: {
-    _change_TILING() {
+    _change_TILING(): void {
       const dataKey = this._dataKey;
       this._items.forEach((item, index) => {
         item.element.data(dataKey, index);

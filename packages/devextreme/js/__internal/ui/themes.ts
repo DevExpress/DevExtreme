@@ -253,7 +253,7 @@ function getCssClasses(themeName?: string): string[] {
 
     if (themeNameParts.length > 1) {
       // eslint-disable-next-line @typescript-eslint/no-use-before-define
-      result.push(`dx-color-scheme-${themeNameParts[1]}${isMaterialBased(themeName as string) ? `-${themeNameParts[2]}` : ''}`);
+      result.push(`dx-color-scheme-${themeNameParts[1]}${isMaterialBased(themeName) ? `-${themeNameParts[2]}` : ''}`);
     }
   }
 

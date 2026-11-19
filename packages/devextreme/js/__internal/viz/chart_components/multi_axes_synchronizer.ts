@@ -1,15 +1,11 @@
 /* eslint-disable no-cond-assign */
-/* eslint-disable @stylistic/no-mixed-operators */
 /* eslint-disable @typescript-eslint/prefer-for-of */
 /* eslint-disable @typescript-eslint/init-declarations */
-/* eslint-disable no-plusplus */
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable no-multi-assign */
-/* eslint-disable @stylistic/max-len */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-/* eslint-disable prefer-destructuring */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 
 import { debug } from '@ts/core/utils/console';
@@ -27,7 +23,7 @@ function getValueAxesPerPanes(valueAxes) {
   const result = {};
 
   valueAxes.forEach((axis) => {
-    const pane = axis.pane;
+    const { pane } = axis;
     if (!result[pane]) {
       result[pane] = [];
     }
@@ -38,7 +34,7 @@ function getValueAxesPerPanes(valueAxes) {
 }
 
 const linearConverter = (br) => ({
-  transform(v, b) {
+  transform(v, b): number {
     return adjust(getLogExt(v, b, br.allowNegatives, br.linearThreshold));
   },
   getTicks(interval, tickValues, base) {
@@ -56,7 +52,7 @@ const linearConverter = (br) => ({
 });
 
 const logConverter = (br) => ({
-  transform(v, b) {
+  transform(v, b): number {
     return adjust(raiseToExt(v, b, br.allowNegatives, br.linearThreshold));
   },
   getTicks(interval, tickValues, base) {
@@ -71,12 +67,12 @@ const logConverter = (br) => ({
   },
 });
 
-function convertAxisInfo(axisInfo, converter) {
+function convertAxisInfo(axisInfo, converter): void {
   if (!axisInfo.isLogarithmic) {
     return;
   }
   const base = axisInfo.logarithmicBase;
-  const tickValues = axisInfo.tickValues;
+  const { tickValues } = axisInfo;
 
   axisInfo.minValue = converter.transform(axisInfo.minValue, base);
   axisInfo.oldMinValue = converter.transform(axisInfo.oldMinValue, base);
@@ -104,8 +100,8 @@ function populateAxesInfo(axes) {
 
     let axisInfo;
     let tickInterval = axis._tickInterval;
-    const synchronizedValue = options.synchronizedValue;
-    const action = axis.getViewport().action;
+    const { synchronizedValue } = options;
+    const { action } = axis.getViewport();
 
     if (majorTicks && majorTicks.length > 0
             && isNumeric(majorTicks[0])
@@ -155,16 +151,17 @@ function populateAxesInfo(axes) {
   }, []);
 }
 
-function updateTickValues(axesInfo) {
-  const maxTicksCount = axesInfo.reduce((max, axisInfo) => _max(max, axisInfo.tickValues.length), 0);
+function updateTickValues(axesInfo): void {
+  const maxTicksCount = axesInfo.reduce(
+    (max, axisInfo) => _max(max, axisInfo.tickValues.length),
+    0,
+  );
 
   axesInfo.forEach((axisInfo) => {
     let ticksMultiplier;
     let ticksCount;
     let additionalStartTicksCount = 0;
-    const synchronizedValue = axisInfo.synchronizedValue;
-    const tickValues = axisInfo.tickValues;
-    const tickInterval = axisInfo.tickInterval;
+    const { synchronizedValue, tickValues, tickInterval } = axisInfo;
 
     if (isDefined(synchronizedValue)) {
       axisInfo.baseTickValue = axisInfo.invertedBaseTickValue = synchronizedValue;
@@ -172,29 +169,31 @@ function updateTickValues(axesInfo) {
     } else {
       if (tickValues.length > 1 && tickInterval) {
         ticksMultiplier = _floor((maxTicksCount + 1) / tickValues.length);
-        ticksCount = ticksMultiplier > 1 ? _floor((maxTicksCount + 1) / ticksMultiplier) : maxTicksCount;
+        ticksCount = ticksMultiplier > 1
+          ? _floor((maxTicksCount + 1) / ticksMultiplier)
+          : maxTicksCount;
         additionalStartTicksCount = _floor((ticksCount - tickValues.length) / 2);
 
         while (additionalStartTicksCount > 0 && (tickValues[0] !== 0)) {
           tickValues.unshift(adjust(tickValues[0] - tickInterval));
-          additionalStartTicksCount--;
+          additionalStartTicksCount -= 1;
         }
         while (tickValues.length < ticksCount) {
           tickValues.push(adjust(tickValues[tickValues.length - 1] + tickInterval));
         }
         axisInfo.tickInterval = tickInterval / ticksMultiplier;
       }
-      axisInfo.baseTickValue = tickValues[0];
+      [axisInfo.baseTickValue] = tickValues;
       axisInfo.invertedBaseTickValue = tickValues[tickValues.length - 1];
     }
   });
 }
 
-function getAxisRange(axisInfo) {
+function getAxisRange(axisInfo): number {
   return (axisInfo.maxValue - axisInfo.minValue) || 1; // T153054
 }
 
-function correctMinMaxValues(axesInfo) {
+function correctMinMaxValues(axesInfo): void {
   const mainAxisInfo = axesInfo[0];
   const mainAxisRange = getAxisRange(mainAxisInfo);
 
@@ -215,7 +214,8 @@ function correctMinMaxValues(axesInfo) {
       }
 
       const axisBaseValueOffset = axisInfo.baseTickValue - axisInfo.minValue;
-      const scaledMainAxisBaseValueOffset = mainAxisBaseValueOffset * getAxisRange(axisInfo) / mainAxisRange;
+      const scaledMainAxisBaseValueOffset = (mainAxisBaseValueOffset * getAxisRange(axisInfo))
+        / mainAxisRange;
       const move = scaledMainAxisBaseValueOffset - axisBaseValueOffset;
 
       axisInfo.minValue -= move;
@@ -224,16 +224,20 @@ function correctMinMaxValues(axesInfo) {
   });
 }
 
-function calculatePaddings(axesInfo) {
+function calculatePaddings(axesInfo): { start: number; end: number } {
   let minPadding;
   let maxPadding;
   let startPadding = 0;
   let endPadding = 0;
 
   axesInfo.forEach((axisInfo) => {
-    const inverted = axisInfo.inverted;
-    minPadding = axisInfo.minValue > axisInfo.oldMinValue ? (axisInfo.minValue - axisInfo.oldMinValue) / getAxisRange(axisInfo) : 0;
-    maxPadding = axisInfo.maxValue < axisInfo.oldMaxValue ? (axisInfo.oldMaxValue - axisInfo.maxValue) / getAxisRange(axisInfo) : 0;
+    const { inverted } = axisInfo;
+    minPadding = axisInfo.minValue > axisInfo.oldMinValue
+      ? (axisInfo.minValue - axisInfo.oldMinValue) / getAxisRange(axisInfo)
+      : 0;
+    maxPadding = axisInfo.maxValue < axisInfo.oldMaxValue
+      ? (axisInfo.oldMaxValue - axisInfo.maxValue) / getAxisRange(axisInfo)
+      : 0;
 
     startPadding = _max(startPadding, inverted ? maxPadding : minPadding);
     endPadding = _max(endPadding, inverted ? minPadding : maxPadding);
@@ -244,17 +248,17 @@ function calculatePaddings(axesInfo) {
   };
 }
 
-function correctMinMaxValuesByPaddings(axesInfo, paddings) {
+function correctMinMaxValuesByPaddings(axesInfo, paddings): void {
   axesInfo.forEach((info) => {
     const range = getAxisRange(info);
-    const inverted = info.inverted;
+    const { inverted } = info;
 
     info.minValue = adjust(info.minValue - paddings[inverted ? 'end' : 'start'] * range);
     info.maxValue = adjust(info.maxValue + paddings[inverted ? 'start' : 'end'] * range);
   });
 }
 
-function updateTickValuesIfSynchronizedValueUsed(axesInfo) {
+function updateTickValuesIfSynchronizedValueUsed(axesInfo): void {
   let hasSynchronizedValue = false;
 
   axesInfo.forEach((info) => {
@@ -262,10 +266,9 @@ function updateTickValuesIfSynchronizedValueUsed(axesInfo) {
   });
 
   axesInfo.forEach((info) => {
-    const tickInterval = info.tickInterval;
-    const tickValues = info.tickValues;
-    const maxValue = info.maxValue;
-    const minValue = info.minValue;
+    const {
+      tickInterval, tickValues, maxValue, minValue,
+    } = info;
     let tick;
 
     if (hasSynchronizedValue && tickInterval) {
@@ -286,9 +289,9 @@ function updateTickValuesIfSynchronizedValueUsed(axesInfo) {
   });
 }
 
-function applyMinMaxValues(axesInfo) {
+function applyMinMaxValues(axesInfo): void {
   axesInfo.forEach((info) => {
-    const axis = info.axis;
+    const { axis } = info;
     const range = axis.getTranslator().getBusinessRange();
 
     if (range.min === range.minVisible) {
@@ -312,7 +315,7 @@ function applyMinMaxValues(axesInfo) {
   });
 }
 
-function correctAfterSynchronize(axesInfo) {
+function correctAfterSynchronize(axesInfo): void {
   const invalidAxisInfo = [];
   let correctValue;
 
@@ -321,7 +324,10 @@ function correctAfterSynchronize(axesInfo) {
       // @ts-expect-error
       invalidAxisInfo.push(info);
     } else if (!isDefined(correctValue) && !isDefined(info.synchronizedValue)) {
-      correctValue = _abs((info.maxValue - info.minValue) / ((info.tickValues[_floor(info.tickValues.length / 2)] - info.minValue) || info.maxValue));
+      correctValue = _abs(
+        (info.maxValue - info.minValue)
+          / (info.tickValues[_floor(info.tickValues.length / 2)] - info.minValue || info.maxValue),
+      );
     }
   });
 
@@ -347,7 +353,7 @@ function correctAfterSynchronize(axesInfo) {
   });
 }
 
-function updateMinorTicks(axesInfo) {
+function updateMinorTicks(axesInfo): void {
   axesInfo.forEach((axisInfo) => {
     if (!axisInfo.minorTickInterval) {
       return;
@@ -358,9 +364,9 @@ function updateMinorTicks(axesInfo) {
     const interval = axisInfo.minorTickInterval;
     const tickCount = axisInfo.tickInterval / interval - 1;
 
-    for (let i = 1; i < axisInfo.tickValues.length; i++) {
+    for (let i = 1; i < axisInfo.tickValues.length; i += 1) {
       let tick = axisInfo.tickValues[i - 1];
-      for (let j = 0; j < tickCount; j++) {
+      for (let j = 0; j < tickCount; j += 1) {
         tick += interval;
         // @ts-expect-error
         ticks.push(tick);
@@ -372,8 +378,12 @@ function updateMinorTicks(axesInfo) {
 }
 
 function allAxesValuesOnSameSideFromZero(axesInfo) {
-  const allPositive = axesInfo.every(({ oldMinValue, oldMaxValue }) => oldMinValue >= 0 && oldMaxValue >= 0);
-  const allNegative = axesInfo.every(({ oldMinValue, oldMaxValue }) => oldMinValue <= 0 && oldMaxValue <= 0);
+  const allPositive = axesInfo.every(
+    ({ oldMinValue, oldMaxValue }) => oldMinValue >= 0 && oldMaxValue >= 0,
+  );
+  const allNegative = axesInfo.every(
+    ({ oldMinValue, oldMaxValue }) => oldMinValue <= 0 && oldMaxValue <= 0,
+  );
 
   return allPositive || allNegative;
 }
@@ -402,7 +412,7 @@ function correctPaddings(axesInfo, paddings) {
 }
 
 const multiAxesSynchronizer = {
-  synchronize(valueAxes) {
+  synchronize(valueAxes): void {
     each(getValueAxesPerPanes(valueAxes), (_, axes) => {
       if (axes.length <= 1) {
         return;

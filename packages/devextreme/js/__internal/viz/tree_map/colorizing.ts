@@ -1,7 +1,6 @@
 /* eslint-disable no-return-assign */
 /* eslint-disable @typescript-eslint/init-declarations */
 /* eslint-disable func-names */
-/* eslint-disable @stylistic/max-len */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
@@ -30,14 +29,16 @@ export function getColorizer(options, themeManager, root) {
   const type = _normalizeEnum(options.type || defaultColorizerName);
   const colorizer = colorizers[type]?.(options, themeManager, root);
 
-  return colorizer ? (options.colorizeGroups ? wrapGroupColorGetter : wrapLeafColorGetter)(colorizer) : _noop;
+  return colorizer
+    ? (options.colorizeGroups ? wrapGroupColorGetter : wrapLeafColorGetter)(colorizer)
+    : _noop;
 }
 
-export function addColorizer(name, colorizer) {
+export function addColorizer(name, colorizer): void {
   colorizers[name] = colorizer;
 }
 
-export function setDefaultColorizer(name) {
+export function setDefaultColorizer(name): void {
   defaultColorizerName = name;
 }
 
@@ -46,7 +47,7 @@ function getValueAsColorCode(node) {
 }
 
 function createColorCode(colorCodeField) {
-  return function (node) {
+  return function (node): number {
     return Number(node.data[colorCodeField]);
   };
 }
