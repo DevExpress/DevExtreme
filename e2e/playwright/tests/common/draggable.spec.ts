@@ -14,9 +14,8 @@ const centerOf = async (element: Locator): Promise<{ x: number; y: number }> => 
   return { x: box.x + box.width / 2, y: box.y + box.height / 2 };
 };
 
-// TestCafe dragged slowly here, so the pointer spent long enough at the edge of the ScrollView for
-// its auto-scroll to move the content. The drag takes the same straight line, stops at the edge
-// until the content has scrolled, then goes on to the end point.
+// The ScrollView auto-scrolls only while the pointer stays at its edge, so the drag stops there
+// until the content has scrolled, then goes on along the same line to the end point.
 const dragThroughTheEdge = async (
   page: Page,
   element: Locator,
