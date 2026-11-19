@@ -722,12 +722,12 @@ class Overlay<
         return;
       }
 
-      const { focusStateEnabled } = this.option();
+      const { focusStateEnabled, hideOnParentScroll } = this.option();
 
       if (focusStateEnabled) {
         const focusTarget = this._focusTarget()?.get<HTMLElement>(0);
 
-        focusTarget?.focus({ preventScroll: true });
+        focusTarget?.focus({ preventScroll: Boolean(hideOnParentScroll) });
         scrollIntoViewWithin(focusTarget, this._$content?.get<HTMLElement>(0));
       }
 
