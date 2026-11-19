@@ -9,6 +9,7 @@ Our modern JavaScript/TypeScript component suite includes data grids, pivot tabl
 ## Resources
 
 - [Components](https://js.devexpress.com/Documentation/Guide/) - a complete list of available DevExtreme UI components
+- [Documentation](https://js.devexpress.com/Documentation/Guide/) - guides and APIs
 - [Demos](https://js.devexpress.com/Demos/WidgetsGallery/) - interactive examples with source code
 - [Responsive UI Templates](https://js.devexpress.com/Templates/UITemplates/) - a set of pre-built app modules for use in your next great DevExtreme-powered project
 
