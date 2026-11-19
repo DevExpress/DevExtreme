@@ -10,7 +10,7 @@ interface Segment {
 }
 
 export interface RangeInfo extends Segment {
-  color?: ThemeValue;
+  color?: string;
   className?: string;
   classIndex?: number;
   startWidth?: number;
@@ -222,8 +222,8 @@ abstract class BaseRangeContainer extends BaseElement {
   abstract _createRange(range: RangeInfo, layout: ThemeValue): ThemeValue;
 
   // S170193
-  getColorForValue(value: number): ThemeValue {
-    let color: ThemeValue = null;
+  getColorForValue(value: number): string | null | undefined {
+    let color: string | null | undefined = null;
     each(this._ranges, (_, range: RangeInfo) => {
       const inRange = (range.start <= value && value <= range.end)
         || (range.start >= value && value >= range.end);

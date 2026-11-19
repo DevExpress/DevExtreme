@@ -13,7 +13,7 @@ import { plugin as LoadingIndicatorPlugin } from '@ts/viz/core/loading_indicator
 import { plugin as TitlePlugin } from '@ts/viz/core/title';
 import type { TooltipPluginMembers } from '@ts/viz/core/tooltip';
 import { plugin as TooltipPlugin } from '@ts/viz/core/tooltip';
-import type { Canvas } from '@ts/viz/core/types';
+import type { Canvas, Size } from '@ts/viz/core/types';
 import { parseScalar } from '@ts/viz/core/utils';
 import { ControlBar } from '@ts/viz/vector_map/control_bar/control_bar';
 import { DataExchanger } from '@ts/viz/vector_map/data_exchanger';
@@ -69,7 +69,7 @@ class VectorMap extends BaseWidget {
 
   _notifyReady!: () => void;
 
-  _getDefaultSize(): { width: number; height: number } {
+  _getDefaultSize(): Size {
     return { width: DEFAULT_WIDTH, height: DEFAULT_HEIGHT };
   }
 

@@ -4,7 +4,6 @@
 /* eslint-disable no-bitwise */
 /* eslint-disable radix */
 /* eslint-disable @typescript-eslint/init-declarations */
-/* eslint-disable no-plusplus */
 /* eslint-disable func-names */
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable no-nested-ternary */
@@ -158,7 +157,7 @@ function prepareBreaks(breaks: ThemeValue[], range: RangeInstance): TranslatorBr
   const { length } = breaks;
   let sum = 0;
 
-  for (i = 0; i < length; i++) {
+  for (i = 0; i < length; i += 1) {
     br = breaks[i];
     transformFrom = transform(br.from);
     transformTo = transform(br.to);
@@ -352,7 +351,7 @@ let _Translator2d = class _Translator2d {
     if (breaks === undefined) {
       return;
     }
-    for (i = 0, length = breaks.length; i < length; i++) {
+    for (i = 0, length = breaks.length; i < length; i += 1) {
       b = breaks[i];
       end = this.translate(b.to);
       b.end = end;
@@ -381,7 +380,7 @@ let _Translator2d = class _Translator2d {
       return { length: lastBreak.length, breaksSize: lastBreak.cumulativeWidth, inBreak: false };
     }
 
-    for (i = 0, length = breaks.length; i < length; i++) {
+    for (i = 0, length = breaks.length; i < length; i += 1) {
       br = breaks[i];
       prevBreak = breaks[i - 1];
       if (methods.isInBreak(pos, br, start, end)) {

@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-this-alias */
 /* eslint-disable @typescript-eslint/init-declarations */
-/* eslint-disable no-plusplus */
 /* eslint-disable func-names */
 /* eslint-disable @typescript-eslint/no-shadow */
 /* eslint-disable @typescript-eslint/no-use-before-define */
@@ -76,7 +75,7 @@ function setNodeStateRecursive(node, code, state): void {
   const ii = nodes?.length;
 
   node.setState(code, state);
-  for (i = 0; i < ii; ++i) {
+  for (i = 0; i < ii; i += 1) {
     setNodeStateRecursive(nodes[i], code, state);
   }
 }

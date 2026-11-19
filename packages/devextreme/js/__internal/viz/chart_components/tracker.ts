@@ -4,7 +4,6 @@
 /* eslint-disable prefer-spread */
 /* eslint-disable @typescript-eslint/no-this-alias */
 /* eslint-disable @typescript-eslint/init-declarations */
-/* eslint-disable no-plusplus */
 /* eslint-disable no-restricted-globals */
 /* eslint-disable func-names */
 /* eslint-disable @typescript-eslint/naming-convention */
@@ -601,7 +600,7 @@ export class ChartTracker extends BaseTracker {
   _getCanvas(x, y) {
     const that = this;
     const canvases = that._canvases || [];
-    for (let i = 0; i < canvases.length; i++) {
+    for (let i = 0; i < canvases.length; i += 1) {
       const c = canvases[i];
       if (inCanvas(c, x, y)) {
         return c;
