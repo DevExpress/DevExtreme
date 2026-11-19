@@ -219,6 +219,10 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
 
             setViewportPosition: function() {},
 
+            isViewportPositionPending: function() {
+                return false;
+            },
+
             getVirtualContentSize: function() { return 0; },
 
             getContentOffset: function(type) { return options.virtualItemsCount ? options.virtualItemsCount[type || 'begin'] * 20 : 0; },
