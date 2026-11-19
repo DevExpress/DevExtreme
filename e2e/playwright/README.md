@@ -259,6 +259,15 @@ test folders migrated under this rule (see `eslint.config.mjs`) may not use `wai
 `setTimeout`, `force: true`, `toPass`, a `timeout` option or a call that raises a timeout
 (`test.setTimeout`, `page.setDefaultTimeout`).
 
+**Animations.** `show()` of an overlay returns a promise that resolves when the show animation ends,
+and both runners wait for it, so `await popup.show()` needs nothing after it. A widget created
+visible with animations on returns nothing to wait for: count its `onShown` calls on `window` and
+wait for the count with `page.waitForFunction`.
+
+**Images.** `toHaveScreenshot` compares the first picture that stays the same over two shots, and an
+image that is still loading can stay the same. Before such a shot, wait until every `img` in it is
+`complete`.
+
 **Clicks.** A click is a real one: it lands on the topmost element at that point and fails when
 that is not the target. TestCafe delivered a click to a covered element anyway, so a test that
 relied on it needs the target made reachable, not the check switched off.
