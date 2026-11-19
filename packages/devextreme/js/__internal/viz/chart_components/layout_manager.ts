@@ -14,7 +14,7 @@ import { isNumeric as _isNumber } from '@ts/core/utils/type';
 import consts from '@ts/viz/components/consts';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 import { WrapperLayoutElement } from '@ts/viz/core/layout_element';
-import type { Canvas } from '@ts/viz/core/types';
+import type { Canvas, Size } from '@ts/viz/core/types';
 
 const { floor, sqrt } = Math;
 const _min = Math.min;
@@ -318,7 +318,7 @@ let LayoutManager = class LayoutManager {
     panes: ThemeValue[],
     rotated: boolean,
     fixedSizeCallback?: (pane: ThemeValue) => PaneFixedSize,
-  ): { width: number; height: number } | false {
+  ): Size | false {
     const options = this._options;
     const { width, height, piePercentage } = options;
     const percentageIsValid = _isNumber(piePercentage);
