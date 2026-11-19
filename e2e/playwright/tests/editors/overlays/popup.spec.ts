@@ -1,5 +1,6 @@
 import type { Locator, Page } from '@playwright/test';
 import { expect, test } from '../../../fixtures';
+import { waitForOverlayAnimations } from '../../../helpers/animation';
 import { createWidget } from '../../../helpers/createWidget';
 import {
   appendElementTo, getRect, setStyleAttribute,
@@ -14,12 +15,6 @@ const getCenter = async (locator: Locator): Promise<{ vertical: number; horizont
   return { vertical: (bottom + top) / 2, horizontal: (left + right) / 2 };
 };
 
-// The popups pop in (scale 0.55 → 1); wait until fx finishes.
-const waitForShowAnimations = (page: Page): Promise<void> => expect.poll(
-  () => page.evaluate(() => Array.from(document.querySelectorAll('.dx-overlay-content'))
-    .some((content) => (window as any).DevExpress.fx.isAnimating(content))),
-).toBe(false);
-
 const createPopupInAnimatedContainer = async (page: Page): Promise<void> => {
   await appendElementTo(page, '#container', 'div', 'content');
   await setStyleAttribute(page, '#content', 'width: 100%; height: 100%;');
@@ -30,7 +25,7 @@ const createPopupInAnimatedContainer = async (page: Page): Promise<void> => {
   }, undefined, { disableFxAnimation: false });
 
   await appendElementTo(page, '#container', 'div', 'innerContainer');
-  await waitForShowAnimations(page);
+  await waitForOverlayAnimations(page);
 
   await createWidget(page, 'dxPopup', {
     position: { of: '#content' },
@@ -40,7 +35,7 @@ const createPopupInAnimatedContainer = async (page: Page): Promise<void> => {
     height: 100,
   }, '#innerContainer', { disableFxAnimation: false });
 
-  await waitForShowAnimations(page);
+  await waitForOverlayAnimations(page);
 };
 
 const expectWithin = async (
