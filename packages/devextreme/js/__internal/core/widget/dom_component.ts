@@ -586,9 +586,10 @@ class DOMComponent<
   }
 
   _getTemplate(templateSource: unknown): FunctionTemplate {
-    const { integrationOptions, templatesRenderAsynchronously: isAsyncTemplate } = this.option();
+    const { integrationOptions } = this.option();
     const templates = integrationOptions?.templates as Record<string, unknown>;
     const skipTemplates = integrationOptions?.skipTemplates;
+    const isAsyncTemplate = Boolean(this.option('templatesRenderAsynchronously'));
 
     return this._templateManager.getTemplate(
       templateSource,
