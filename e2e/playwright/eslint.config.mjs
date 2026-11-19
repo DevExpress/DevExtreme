@@ -68,7 +68,7 @@ export default [
     },
   },
   {
-    files: ['helpers/**/*.ts', 'models/**/*.ts', 'tests/editors/**/*.ts'],
+    files: ['helpers/**/*.ts', 'models/**/*.ts', 'tests/editors/**/*.ts', 'tests/navigation/form/**/*.ts'],
     rules: {
       'no-restricted-syntax': ['error', {
         selector: "CallExpression[callee.property.name='waitForTimeout'], CallExpression[callee.name='setTimeout'], CallExpression[callee.object.name=/^(window|globalThis)$/][callee.property.name='setTimeout']",
