@@ -947,12 +947,13 @@ QUnit.module('keyboard navigation', moduleConfig, () => {
     QUnit.testInActiveWindow('first content element should be focused after popup opening without scrolling the page', function(assert) {
         const $pageTail = $('<div>').height(window.innerHeight * 3).appendTo('body');
         const $input = $('<input>', { type: 'text' }).css('marginTop', window.innerHeight);
+        const $nextInput = $('<input>', { type: 'text' });
 
         try {
             const instance = new DropDownBox(this.$element, {
                 dropDownOptions: { maxHeight: window.innerHeight * 2 },
                 contentTemplate(component, content) {
-                    $(content).append($input);
+                    $('<div>').append($input, $nextInput).appendTo(content);
                 }
             });
             const pageScrollTop = window.scrollY;
