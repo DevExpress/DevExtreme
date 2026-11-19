@@ -1,4 +1,4 @@
-import { test } from '../../../fixtures';
+import { expect, test } from '../../../fixtures';
 import { testScreenshot } from '../../../helpers/screenshots';
 
 test.describe('Dialog', () => {
@@ -21,6 +21,8 @@ test.describe('Dialog', () => {
           dialogFunction(args);
         }
       }, { type: dialogType, args: dialogArgs });
+
+      await expect(page.locator('.dx-dialog-button').first()).toBeFocused();
 
       await testScreenshot(page, `Dialog appearance (${dialogType}).png`);
     });
