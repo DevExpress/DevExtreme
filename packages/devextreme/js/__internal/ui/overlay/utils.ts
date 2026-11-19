@@ -2,7 +2,7 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { getInnerHeight, getOuterHeight } from '@js/core/utils/size';
 import { isNumeric } from '@js/core/utils/type';
-import { getWindow } from '@ts/core/utils/window';
+import { getWindow, hasWindow } from '@ts/core/utils/window';
 
 const WINDOW_HEIGHT_PERCENT = 0.9;
 
@@ -65,7 +65,7 @@ export const scrollIntoViewWithin = (
   element: HTMLElement | undefined,
   container: HTMLElement | undefined,
 ): void => {
-  if (!element || !container) {
+  if (!element || !container || !hasWindow()) {
     return;
   }
 
