@@ -4,7 +4,6 @@
 /* eslint-disable radix */
 /* eslint-disable @typescript-eslint/init-declarations */
 /* eslint-disable no-restricted-syntax */
-/* eslint-disable no-plusplus */
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable @typescript-eslint/no-shadow */
 /* eslint-disable no-param-reassign */
@@ -43,7 +42,7 @@ const INTERVALS_MAP = {
 };
 
 function patchFirstTickDiff(differences, tickFormatIndex): void {
-  for (let i = tickFormatIndex; i < dateUnitIntervals.length - 1; i++) {
+  for (let i = tickFormatIndex; i < dateUnitIntervals.length - 1; i += 1) {
     const dateUnitInterval = dateUnitIntervals[i];
     if (i === tickFormatIndex) {
       setDateUnitInterval(differences, tickFormatIndex + (differences.millisecond ? 2 : 1));
@@ -57,11 +56,11 @@ function patchFirstTickDiff(differences, tickFormatIndex): void {
 
 function patchTickDiff(differences, tickFormatIndex): boolean {
   let patched = false;
-  for (let i = dateUnitIntervals.length - 1; i >= tickFormatIndex; i--) {
+  for (let i = dateUnitIntervals.length - 1; i >= tickFormatIndex; i -= 1) {
     const dateUnitInterval = dateUnitIntervals[i];
     if (differences[dateUnitInterval]) {
       if (i - tickFormatIndex > 1) {
-        for (let j = 0; j <= tickFormatIndex; j++) {
+        for (let j = 0; j <= tickFormatIndex; j += 1) {
           resetDateUnitInterval(differences, j);
           patched = true;
         }
@@ -98,7 +97,7 @@ function resetDateUnitInterval(differences, intervalIndex): void {
 
   if (differences[dateUnitInterval]) {
     differences[dateUnitInterval] = false;
-    differences.count--;
+    differences.count -= 1;
   }
 }
 
@@ -107,7 +106,7 @@ function setDateUnitInterval(differences, intervalIndex): void {
 
   if (differences[dateUnitInterval] === false) {
     differences[dateUnitInterval] = true;
-    differences.count++;
+    differences.count += 1;
   }
 }
 
@@ -122,7 +121,7 @@ function getTransitionTickIndex(ticks, value): number {
   let nearestTickIndex = 0;
 
   minDiff = abs(value - ticks[0]);
-  for (i = 1; i < ticks.length; i++) {
+  for (i = 1; i < ticks.length; i += 1) {
     curDiff = abs(value - ticks[i]);
     if (curDiff < minDiff) {
       minDiff = curDiff;

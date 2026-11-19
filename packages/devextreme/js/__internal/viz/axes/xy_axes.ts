@@ -6,7 +6,6 @@
 /* eslint-disable prefer-spread */
 /* eslint-disable @typescript-eslint/no-this-alias */
 /* eslint-disable @typescript-eslint/init-declarations */
-/* eslint-disable no-plusplus */
 /* eslint-disable func-names */
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable no-nested-ternary */
@@ -67,11 +66,11 @@ function prepareDatesDifferences(datesDifferences, tickInterval): void {
     tickInterval = 'month';
   }
   if (datesDifferences[tickInterval]) {
-    for (i = 0; i < dateUtils.dateUnitIntervals.length; i++) {
+    for (i = 0; i < dateUtils.dateUnitIntervals.length; i += 1) {
       dateUnitInterval = dateUtils.dateUnitIntervals[i];
       if (datesDifferences[dateUnitInterval]) {
         datesDifferences[dateUnitInterval] = false;
-        datesDifferences.count--;
+        datesDifferences.count -= 1;
       }
       if (dateUnitInterval === tickInterval) {
         break;
@@ -183,7 +182,7 @@ function generateRangesOnPoints(points, edgePoints, getRange) {
   let prevValue;
   let curRange;
 
-  for (i = 1, length = points.length; i < length; i++) {
+  for (i = 1, length = points.length; i < length; i += 1) {
     curValue = points[i];
     prevValue = points[i - 1];
     curRange = getRange(curValue, prevValue);
@@ -244,7 +243,7 @@ function generateAutoBreaks(
     ? _math.min(maxAutoBreakCount, ranges.length)
     : ranges.length;
 
-  for (let i = 0; i < _maxAutoBreakCount; i++) {
+  for (let i = 0; i < _maxAutoBreakCount; i += 1) {
     if (ranges[i].length >= minDiff) {
       if (visibleRange <= ranges[i].length) {
         break;
@@ -1512,7 +1511,7 @@ export default {
       oppositeAxes
         .filter((orthogonalAxis) => orthogonalAxis.pane === that.pane)
         .forEach((orthogonalAxis) => {
-          for (let i = 0; i < that._majorTicks.length; i++) {
+          for (let i = 0; i < that._majorTicks.length; i += 1) {
             const tick = that._majorTicks[i];
             const { label } = tick;
             if (label) {
@@ -1526,7 +1525,7 @@ export default {
                 that._shiftThroughOrthogonalAxisOverlappedTick(label, orthogonalAxis);
               }
 
-              for (let j = 0; j < orthogonalAxis._majorTicks.length; j++) {
+              for (let j = 0; j < orthogonalAxis._majorTicks.length; j += 1) {
                 const oppositeTick = orthogonalAxis._majorTicks[j];
                 const oppositeLabel = oppositeTick.label;
                 if (oppositeLabel && that._detectElementsOverlapping(label, oppositeLabel)) {

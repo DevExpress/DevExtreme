@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/prefer-for-of */
-/* eslint-disable no-plusplus */
 /* eslint-disable func-names */
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
@@ -17,7 +16,7 @@ const routines = {
     if (callback) {
       callback_function = callback;
     }
-    for (let i = 0; i < arr.length; i++) {
+    for (let i = 0; i < arr.length; i += 1) {
       if (callback_function(arr[i]) > m) m = callback_function(arr[i]);
     }
     return m;
@@ -101,7 +100,7 @@ const struct = {
   _depthFirstSearch(links, vertices, vertex): void {
     vertices[vertex].color = GRAY;
     const averts = getAdjacentVertices(links, vertex);
-    for (let a = 0; a < averts.length; a++) {
+    for (let a = 0; a < averts.length; a += 1) {
       if (vertices[averts[a]].color === WHITE) {
         this._depthFirstSearch(links, vertices, averts[a]);
       } else if (vertices[averts[a]].color === GRAY) {

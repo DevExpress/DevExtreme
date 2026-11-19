@@ -15,7 +15,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-use-before-define */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-/* eslint-disable no-plusplus */
 
 import { noop } from '@ts/core/utils/common';
 import { dateUtils } from '@ts/core/utils/date';
@@ -182,7 +181,7 @@ export function map<TResult>(
     if (value !== null) {
       result.push(value);
     }
-    i++;
+    i += 1;
   }
   return result;
 }
@@ -279,7 +278,7 @@ export const enumParser = function (values) {
   const stored = {};
   let i;
   let ii;
-  for (i = 0, ii = values.length; i < ii; ++i) {
+  for (i = 0, ii = values.length; i < ii; i += 1) {
     stored[normalizeEnum(values[i])] = 1;
   }
   return function (value, defaultValue) {
@@ -344,7 +343,7 @@ export const processSeriesTemplate = function (seriesTemplate, items) {
   let data;
 
   items = items || [];
-  for (length = items.length; i < length; i++) {
+  for (length = items.length; i < length; i += 1) {
     data = items[i];
     if (nameField in data) {
       series = generatedSeries[data[nameField]];
@@ -569,6 +568,16 @@ export function normalizeArcParams(x, y, innerRadius, outerRadius, startAngle, e
   ];
 }
 
+interface VisualRangeObject<T> {
+  startValue: T;
+  endValue: T;
+}
+
+export function convertVisualRangeObject<T>(visualRange: VisualRangeObject<T>): T[];
+export function convertVisualRangeObject<T>(
+  visualRange: VisualRangeObject<T>,
+  convertToVisualRange: boolean,
+): T[] | VisualRangeObject<T>;
 export function convertVisualRangeObject(visualRange, convertToVisualRange?) {
   if (convertToVisualRange) {
     return visualRange;
@@ -633,7 +642,7 @@ export function adjustVisualRange(options, visualRange, wholeRange, dataRange?) 
   } else if (isDefined(rangeLength)) {
     rangeLength = parseInt(rangeLength);
     if (!isNaN(rangeLength) && isFinite(rangeLength)) {
-      rangeLength--;
+      rangeLength -= 1;
       if (!maxDefined && !minDefined) {
         max = categories[categories.length - 1];
         min = categories[categories.length - 1 - rangeLength];
@@ -721,7 +730,11 @@ export function pointInCanvas(canvas, x, y): boolean {
 }
 
 // eslint-disable-next-line import/no-mutable-exports -- description seam for tests
-export let getNextDefsSvgId = (): string => `DevExpress_${numDefsSvgElements++}`;
+export let getNextDefsSvgId = (): string => {
+  const id = `DevExpress_${numDefsSvgElements}`;
+  numDefsSvgElements += 1;
+  return id;
+};
 
 export function extractColor(color, isBase?) {
   if (isString(color) || !color) {
