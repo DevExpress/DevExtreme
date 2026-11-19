@@ -3403,7 +3403,7 @@ testModule('keyboard navigation', {
 
             const contentBottomInPage = $overlayContent.get(0).getBoundingClientRect().bottom + window.scrollY;
             assert.ok(contentBottomInPage > pageScrollTop + window.innerHeight, 'overlay content is below the visible part of the page');
-            assert.ok($overlayContent.is(getActiveElement()), 'overlay content is focused');
+            assert.strictEqual(document.activeElement, $overlayContent.get(0), 'overlay content is focused');
             assert.strictEqual(window.scrollY, pageScrollTop, 'page is not scrolled');
         } finally {
             overlay.dispose();
