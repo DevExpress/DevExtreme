@@ -103,15 +103,16 @@ themes the CI jobs run:
 pnpm exec nx build devextreme-scss              # from the repository root
 pnpm exec nx build devextreme -c testing
 
-docker/run.sh --update-snapshots tests/editors/selectBox/
-THEME=fluent-next.blue.light docker/run.sh --update-snapshots tests/editors/selectBox/
+docker/run.sh tests/editors/selectBox/ --update-snapshots
+THEME=fluent-next.blue.light docker/run.sh tests/editors/selectBox/ --update-snapshots
 
 docker/run.sh tests/editors/selectBox/
 THEME=fluent-next.blue.light docker/run.sh tests/editors/selectBox/
 ```
 
-The first run builds the image and takes a few minutes. Look through the new files before
-committing them, as with etalons from CI.
+Put the path before `--update-snapshots`: the flag takes an optional mode, and a path right after
+it is read as one (`argument 'tests/…' is invalid`). The first run builds the image and takes a few
+minutes. Look through the new files before committing them, as with etalons from CI.
 
 ### Etalons from CI
 
