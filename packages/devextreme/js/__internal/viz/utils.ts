@@ -81,7 +81,7 @@ export let prepareSegmentRectPoints = function (left, top, width, height, border
   return { points, pathType: visiblyOpt === 15 ? 'area' : 'line' };
 };
 
-const areCanvasesDifferent = function (canvas1, canvas2) {
+const areCanvasesDifferent = function (canvas1, canvas2): boolean {
   const sizeChangingThreshold = 1;
 
   const sizeLessThreshold = ['width', 'height']
@@ -116,7 +116,7 @@ exports._test_prepareSegmentRectPoints = function () {
   // @ts-expect-error
   prepareSegmentRectPoints.original = original;
   // @ts-expect-error
-  prepareSegmentRectPoints.restore = function () { prepareSegmentRectPoints = original; };
+  prepareSegmentRectPoints.restore = function (): void { prepareSegmentRectPoints = original; };
   return prepareSegmentRectPoints;
 };
 /// #ENDDEBUG

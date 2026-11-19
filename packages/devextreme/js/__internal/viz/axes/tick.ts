@@ -48,7 +48,7 @@ function createTick(
     return fontStyle;
   }
 
-  function createLabelHint(tick, range) {
+  function createLabelHint(tick, range): void {
     const labelHint = axis.formatHint(tick.value, labelOptions, range);
     if (isDefined(labelHint) && labelHint !== '') {
       tick.getContentContainer().setTitle(labelHint);
@@ -59,15 +59,15 @@ function createTick(
     const tick = {
       value,
 
-      updateValue(newValue) {
+      updateValue(newValue): void {
         this.value = value = newValue;
       },
 
-      initCoords() {
+      initCoords(): void {
         this.coords = axis._getTranslatedValue(value, tickOffset);
         this.labelCoords = axis._getTranslatedValue(value);
       },
-      saveCoords() {
+      saveCoords(): void {
         when(this._templateDef).done(() => {
           this._lastStoredCoordinates = {
             coords: this._storedCoords,
@@ -79,13 +79,13 @@ function createTick(
             : this.labelCoords;
         });
       },
-      resetCoordinates() {
+      resetCoordinates(): void {
         if (this._lastStoredCoordinates) {
           this._storedCoords = this._lastStoredCoordinates.coords;
           this._storedLabelsCoords = this._lastStoredCoordinates.labelCoords;
         }
       },
-      drawMark(options) {
+      drawMark(options): void {
         if (!tickOptions.visible || skippedCategory === value) {
           return;
         }
@@ -106,11 +106,11 @@ function createTick(
         }
       },
 
-      setSkippedCategory(category) {
+      setSkippedCategory(category): void {
         skippedCategory = category;
       },
 
-      _updateLine(lineElement, settings, storedSettings, animate, isGridLine) {
+      _updateLine(lineElement, settings, storedSettings, animate, isGridLine): void {
         if (!lineElement) {
           return;
         }
@@ -138,7 +138,7 @@ function createTick(
         this.coords.angle && axis._rotateTick(lineElement, this.coords, isGridLine);
       },
 
-      updateTickPosition(options, animate) {
+      updateTickPosition(options, animate): void {
         this._updateLine(
           this.mark,
           // @ts-expect-error
@@ -151,7 +151,7 @@ function createTick(
           false,
         );
       },
-      drawLabel(range, template) {
+      drawLabel(range, template): void {
         if (this.templateContainer && axis.isRendered()) {
           this.updateLabelPosition();
           return;
@@ -220,7 +220,7 @@ function createTick(
         return this.templateContainer || this.label;
       },
 
-      fadeOutElements() {
+      fadeOutElements(): void {
         const startSettings = { opacity: 1 };
         const endSettings = { opacity: 0 };
         const animationSettings = {
@@ -244,7 +244,7 @@ function createTick(
         }
       },
 
-      _fadeInLabel() {
+      _fadeInLabel(): void {
         const group = axis._renderer.g().attr({
           opacity: 0,
         }).append(axis._axisElementsGroup)
@@ -256,7 +256,7 @@ function createTick(
         this.getContentContainer().append(group);
       },
 
-      _fadeOutLabel() {
+      _fadeOutLabel(): void {
         const group = axis._renderer.g().attr({
           opacity: 1,
         }).animate({ opacity: 0 }, {
@@ -275,7 +275,7 @@ function createTick(
         );
       },
 
-      updateLabelPosition(animate) {
+      updateLabelPosition(animate): void {
         const { templateContainer } = this;
         if (!this.getContentContainer()) {
           return;
@@ -313,7 +313,7 @@ function createTick(
         }
       },
 
-      updateMultilineTextAlignment() {
+      updateMultilineTextAlignment(): void {
         if (labelOptions.template || !this.label) {
           return;
         }
@@ -322,7 +322,7 @@ function createTick(
         });
       },
 
-      drawGrid(drawLine) {
+      drawGrid(drawLine): void {
         if (gridOptions.visible && skippedCategory !== this.value) {
           if (this.grid) {
             this.grid.append(axis._axisGridGroup);
@@ -335,7 +335,7 @@ function createTick(
         }
       },
 
-      updateGridPosition(animate) {
+      updateGridPosition(animate): void {
         this._updateLine(
           this.grid,
           // @ts-expect-error
@@ -346,7 +346,7 @@ function createTick(
         );
       },
 
-      removeLabel() {
+      removeLabel(): void {
         const contentContainer = this.getContentContainer();
         contentContainer && contentContainer.remove();
         this._templateDef && this._templateDef.reject();

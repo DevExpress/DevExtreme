@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 // TODO: Can we get rid of this dependency of the PivotGrid here?
-import { calculateScrollbarWidth } from '__internal/grids/pivot_grid/m_widget_utils';
+import { calculateScrollbarWidth } from '__internal/grids/pivot_grid/widget_utils';
 import $ from '@js/core/renderer';
 import { getHeight, getWidth } from '@js/core/utils/size';
 import type { OptionChanged } from '@ts/core/widget/types';

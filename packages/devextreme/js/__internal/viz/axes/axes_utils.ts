@@ -30,7 +30,7 @@ export const calculateCanvasMargins = function (bBoxes, canvas) {
     });
 };
 
-export const measureLabels = function (items) {
+export const measureLabels = function (items): void {
   items.forEach((item) => {
     const label = item.getContentContainer();
     item.labelBBox = label ? label.getBBox() : {

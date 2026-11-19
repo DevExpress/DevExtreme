@@ -38,7 +38,6 @@ const editors: HtmlEditor[] = [];
 
 const createEditor = (options: Properties): HtmlEditor => {
   const $element = $('<div>').appendTo(document.body);
-  // @ts-expect-error direct instantiation is not typed
   const editor: HtmlEditor = new HtmlEditor($element, { value: TABLE_MARKUP, ...options });
 
   editors.push(editor);

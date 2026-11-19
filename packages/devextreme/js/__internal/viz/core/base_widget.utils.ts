@@ -32,14 +32,14 @@ export function createEventTrigger(eventsMap, callbackGetter) {
     }
   });
   let changes;
-  triggerEvent.change = function (name) {
+  triggerEvent.change = function (name): boolean {
     const eventInfo = eventsMap[name];
     if (eventInfo) {
       (changes = changes || {})[name] = eventInfo;
     }
     return !!eventInfo;
   };
-  triggerEvent.applyChanges = function () {
+  triggerEvent.applyChanges = function (): void {
     if (changes) {
       each(changes, (name, eventInfo) => {
         createEvent(eventInfo.newName || name);
@@ -47,27 +47,27 @@ export function createEventTrigger(eventsMap, callbackGetter) {
       changes = null;
     }
   };
-  triggerEvent.dispose = function () {
+  triggerEvent.dispose = function (): void {
     // @ts-expect-error
     eventsMap = callbackGetter = triggers = null;
   };
 
   return triggerEvent;
 
-  function createEvent(name) {
+  function createEvent(name): void {
     const eventInfo = eventsMap[name];
 
     triggers[eventInfo.name] = callbackGetter(name, eventInfo.actionSettings);
   }
 
-  function triggerEvent(name, arg, complete) {
+  function triggerEvent(name, arg, complete): void {
     triggers[name](arg);
     complete?.();
   }
 }
 
 export let createIncidentOccurred = function (widgetName, eventTrigger) {
-  return function incidentOccurred(id, args) {
+  return function incidentOccurred(id, args): void {
     eventTrigger('incidentOccurred', {
       target: {
         id,
@@ -83,7 +83,7 @@ export let createIncidentOccurred = function (widgetName, eventTrigger) {
 };
 
 function getResizeManager(resizeCallback) {
-  return (observe, unsubscribe) => {
+  return (observe, unsubscribe): () => void => {
     const { handler, dispose } = createDeferredHandler(resizeCallback, unsubscribe);
 
     observe(handler);
@@ -91,17 +91,20 @@ function getResizeManager(resizeCallback) {
   };
 }
 
-function createDeferredHandler(callback, unsubscribe) {
+function createDeferredHandler(
+  callback,
+  unsubscribe,
+): { handler: () => void; dispose: () => void } {
   let timeout;
 
-  const handler = function () {
+  const handler = function (): void {
     clearTimeout(timeout);
     timeout = setTimeout(callback, 100);
   };
 
   return {
     handler,
-    dispose() {
+    dispose(): void {
       clearTimeout(timeout);
       unsubscribe(handler);
     },
@@ -131,11 +134,11 @@ export { createEventTrigger as DEBUG_createEventTrigger };
 
 export const DEBUG_createIncidentOccurred = createIncidentOccurred;
 
-exports.DEBUG_stub_createIncidentOccurred = function (stub) {
+exports.DEBUG_stub_createIncidentOccurred = function (stub): void {
   createIncidentOccurred = stub;
 };
 
-exports.DEBUG_restore_createIncidentOccurred = function () {
+exports.DEBUG_restore_createIncidentOccurred = function (): void {
   createIncidentOccurred = DEBUG_createIncidentOccurred;
 };
 

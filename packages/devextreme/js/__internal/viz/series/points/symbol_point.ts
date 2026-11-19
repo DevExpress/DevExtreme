@@ -19,6 +19,7 @@ import { extend } from '@ts/core/utils/extend';
 import { each } from '@ts/core/utils/iterator';
 import { isDefined as _isDefined } from '@ts/core/utils/type';
 import { getWindow, hasProperty } from '@ts/core/utils/window';
+import type { BBox } from '@ts/viz/core/types';
 import { normalizeEnum as _normalizeEnum } from '@ts/viz/core/utils';
 import { Label } from '@ts/viz/series/points/label';
 
@@ -45,7 +46,7 @@ function getSquareMarkerCoords(radius) {
   ];
 }
 
-function getPolygonMarkerCoords(radius) {
+function getPolygonMarkerCoords(radius): number[] {
   const r = _ceil(radius); // T100386
   return [
     -r, 0,
@@ -56,7 +57,7 @@ function getPolygonMarkerCoords(radius) {
   ];
 }
 
-function getCrossMarkerCoords(radius) {
+function getCrossMarkerCoords(radius): number[] {
   const r = _ceil(radius); // T100386
   const floorHalfRadius = _floor(r / 2);
   const ceilHalfRadius = _ceil(r / 2);
@@ -96,7 +97,7 @@ function getTriangleUpMarkerCoords(radius) {
 }
 
 export default {
-  deleteLabel() {
+  deleteLabel(): void {
     this._label.dispose();
     this._label = null;
   },
@@ -105,7 +106,7 @@ export default {
     return this.graphic;
   },
 
-  clearVisibility() {
+  clearVisibility(): void {
     const that = this;
     const { graphic } = that;
     if (graphic && graphic.attr('visibility')) {
@@ -117,7 +118,7 @@ export default {
     return this.inVisibleArea && this.series.isVisible();
   },
 
-  setInvisibility() {
+  setInvisibility(): void {
     const that = this;
     const { graphic } = that;
     if (graphic && graphic.attr('visibility') !== 'hidden') {
@@ -127,12 +128,12 @@ export default {
     that._label.draw(false);
   },
 
-  clearMarker() {
+  clearMarker(): void {
     const { graphic } = this;
     graphic && graphic.attr(this._emptySettings);
   },
 
-  _createLabel() {
+  _createLabel(): void {
     this._label = new Label({
       renderer: this.series._renderer,
       labelsGroup: this.series._labelsGroup,
@@ -140,7 +141,7 @@ export default {
     });
   },
 
-  _calculateVisibility(x, y) {
+  _calculateVisibility(x, y): void {
     const {
       minX, maxX, minY, maxY,
     } = this._getVisibleArea();
@@ -148,24 +149,24 @@ export default {
     this.inVisibleArea = minX <= x && maxX >= x && minY <= y && maxY >= y;
   },
 
-  _updateLabelData() {
+  _updateLabelData(): void {
     this._label.setData(this._getLabelFormatObject());
   },
 
-  _updateLabelOptions() {
+  _updateLabelOptions(): void {
     !this._label && this._createLabel();
     this._label.setOptions(this._options.label);
   },
 
-  _checkImage(image) {
+  _checkImage(image): boolean {
     return _isDefined(image) && (typeof image === 'string' || _isDefined(image.url));
   },
 
-  _fillStyle() {
+  _fillStyle(): void {
     this._styles = this._options.styles;
   },
 
-  _checkSymbol(oldOptions, newOptions) {
+  _checkSymbol(oldOptions, newOptions): boolean {
     const oldSymbol = oldOptions.symbol;
     const newSymbol = newOptions.symbol;
     const symbolChanged = (oldSymbol === 'circle' && newSymbol !== 'circle') || (oldSymbol !== 'circle' && newSymbol === 'circle');
@@ -190,11 +191,11 @@ export default {
     }
   },
 
-  hasCoords() {
+  hasCoords(): boolean {
     return this.x !== null && this.y !== null;
   },
 
-  correctValue(correction) {
+  correctValue(correction): void {
     const that = this;
     const axis = that.series.getValueAxis();
     if (that.hasValue()) {
@@ -205,12 +206,12 @@ export default {
     }
   },
 
-  resetCorrection() {
+  resetCorrection(): void {
     this.value = this.properValue = this.initialValue;
     this.minValue = CANVAS_POSITION_DEFAULT;
   },
 
-  resetValue() {
+  resetValue(): void {
     const that = this;
     if (that.hasValue()) {
       that.value = that.properValue = that.initialValue = 0;
@@ -279,7 +280,7 @@ export default {
     return marker;
   },
 
-  _getSymbolBBox(x, y, r) {
+  _getSymbolBBox(x, y, r): BBox {
     return {
       x: x - r,
       y: y - r,
@@ -328,7 +329,7 @@ export default {
     return this._checkLabelPosition(label, coord);
   },
 
-  _drawLabel() {
+  _drawLabel(): void {
     const that = this;
     const customVisibility = that._getCustomLabelVisibility();
     const label = that._label;
@@ -340,7 +341,7 @@ export default {
     label.draw(!!isVisible);
   },
 
-  correctLabelPosition(label) {
+  correctLabelPosition(label): void {
     const that = this;
     const coord = that._getShiftLabelCoords(label);
     if (!that.hideInsideLabel(label, coord)) {
@@ -349,7 +350,7 @@ export default {
     }
   },
 
-  _showForZeroValues() {
+  _showForZeroValues(): boolean {
     return true;
   },
 
@@ -367,7 +368,7 @@ export default {
     return { x: this.x, y: this.y };
   },
 
-  _isPointInVisibleArea(visibleArea, graphicBBox) {
+  _isPointInVisibleArea(visibleArea, graphicBBox): boolean {
     return (
       visibleArea.minX <= graphicBBox.x + graphicBBox.width
       && visibleArea.maxX >= graphicBBox.x
@@ -482,7 +483,7 @@ export default {
     return { x, y };
   },
 
-  _drawMarker(renderer, group, animationEnabled) {
+  _drawMarker(renderer, group, animationEnabled): void {
     const that = this;
     const options = that._options;
     const translates = that._getTranslates(animationEnabled);
@@ -503,15 +504,15 @@ export default {
     );
   },
 
-  _getErrorBarSettings() {
+  _getErrorBarSettings(): { visibility: string } {
     return { visibility: 'visible' };
   },
 
-  _getErrorBarBaseEdgeLength() {
+  _getErrorBarBaseEdgeLength(): number {
     return this.getPointRadius() * 2;
   },
 
-  _drawErrorBar(renderer, group) {
+  _drawErrorBar(renderer, group): void {
     if (!this._options.errorBars) {
       return;
     }
@@ -575,7 +576,7 @@ export default {
     };
   },
 
-  setPercentValue(absTotal, total, leftHoleTotal, rightHoleTotal) {
+  setPercentValue(absTotal, total, leftHoleTotal, rightHoleTotal): void {
     const that = this;
     const valuePercent = (that.value / absTotal) || 0;
     const minValuePercent = (that.minValue / absTotal) || 0;
@@ -611,7 +612,7 @@ export default {
     return that._options.trackerR;
   },
 
-  _translateErrorBars() {
+  _translateErrorBars(): void {
     const that = this;
     const options = that._options;
     const { rotated, errorBars } = options;
@@ -627,7 +628,7 @@ export default {
     that._baseErrorBarPos = errorBars.type === 'stdDeviation' ? that._lowErrorCoord + (that._highErrorCoord - that._lowErrorCoord) / 2 : rotated ? that.vx : that.vy;
   },
 
-  _translate() {
+  _translate(): void {
     const that = this;
     const valTranslator = that._getValTranslator();
     const argTranslator = that._getArgTranslator();
@@ -647,7 +648,7 @@ export default {
     that._calculateVisibility(that.x, that.y);
   },
 
-  _updateData(data) {
+  _updateData(data): void {
     const that = this;
     that.value = that.properValue = that.initialValue = that.originalValue = data.value;
     that.minValue = that.initialMinValue = that.originalMinValue = _isDefined(data.minValue)
@@ -692,7 +693,7 @@ export default {
     return 0;
   },
 
-  _updateMarker(animationEnabled, style) {
+  _updateMarker(animationEnabled, style): void {
     const that = this;
     const options = that._options;
     let settings;
@@ -734,7 +735,7 @@ export default {
     };
   },
 
-  _getLabelPosition() {
+  _getLabelPosition(): 'left' | 'right' | 'top' | 'bottom' {
     const { rotated } = this._options;
     if (this.initialValue > 0) {
       return rotated ? 'right' : 'top';
@@ -771,7 +772,7 @@ export default {
     return this._options.visible;
   },
 
-  coordsIn(x, y) {
+  coordsIn(x, y): boolean {
     const trackerRadius = this._storeTrackerR();
     return (
       x >= this.x - trackerRadius
