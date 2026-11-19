@@ -65,6 +65,27 @@ export function toTypeOnlySubpath(dtsSubpath: string): string {
     : withoutExtension;
 }
 
+// Entries for type imports with a '.d' suffix ('pkg/ui/button.d'): a './ui/*.d' pattern per folder
+// and an explicit entry per root file ('./common.d'). A root './*.d' pattern would also do, but
+// Node warns (DEP0155) on every 'pkg/' request when a pattern key starts with './*', and bundlers
+// make such requests for prefix shares, such as 'devextreme/' in Module Federation.
+export function createDeclarationImportEntries(dtsFiles: string[]): ExportsMap {
+  const entries: ExportsMap = {};
+
+  for (const dtsFile of dtsFiles) {
+    const separatorIndex = dtsFile.indexOf('/');
+    if (separatorIndex === -1) {
+      const withoutTs = dtsFile.slice(0, -'.ts'.length);
+      entries[`./${withoutTs}`] = { types: `./${dtsFile}` };
+    } else {
+      const folder = dtsFile.slice(0, separatorIndex);
+      entries[`./${folder}/*.d`] = { types: `./${folder}/*.d.ts` };
+    }
+  }
+
+  return entries;
+}
+
 function collectTargets(target: ExportsTarget): string[] {
   return typeof target === 'string' ? [target] : Object.values(target);
 }
@@ -82,6 +103,7 @@ function findMissingTargets(packageDir: string, exportsMap: ExportsMap): string[
 interface ResolvedGenerateExportsMap {
   packageDir: string;
   ignore: string[];
+  declarationImports: boolean;
   extraExports: ExportsMap;
 }
 
@@ -90,9 +112,10 @@ export default createExecutor<GenerateExportsMapExecutorSchema, ResolvedGenerate
   resolve: (options, { projectRoot }) => ({
     packageDir: path.resolve(projectRoot, options.packageDir),
     ignore: options.ignore ?? [],
+    declarationImports: options.declarationImports ?? false,
     extraExports: options.extraExports ?? {},
   }),
-  run: async ({ packageDir, ignore, extraExports }) => {
+  run: async ({ packageDir, ignore, declarationImports, extraExports }) => {
     const rootPackageJsonPath = path.join(packageDir, PACKAGE_JSON);
     const pkg = await readJson<Record<string, unknown>>(rootPackageJsonPath);
     const globIgnore = ['node_modules/**', ...ignore.map((dir) => `${dir}/**`)];
@@ -135,6 +158,10 @@ export default createExecutor<GenerateExportsMapExecutorSchema, ResolvedGenerate
         exportsMap[subpath] = { types };
         typeOnlyCount += 1;
       }
+    }
+
+    if (declarationImports) {
+      Object.assign(exportsMap, createDeclarationImportEntries(dtsFiles));
     }
 
     for (const [subpath, target] of Object.entries(extraExports)) {

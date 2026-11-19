@@ -86,13 +86,41 @@ describe('GenerateExportsMapExecutor E2E', () => {
     const result = await run({
       extraExports: {
         './dist/*': './dist/*',
-        './*.d': { types: './*.d.ts' },
+        './scss/*': './scss/*',
       },
     });
     expect(result.success).toBe(true);
 
     const keys = Object.keys(await readExports());
-    expect(keys.slice(-2)).toEqual(['./dist/*', './*.d']);
+    expect(keys.slice(-2)).toEqual(['./dist/*', './scss/*']);
+  });
+
+  it('should add .d type imports per folder and per root declaration when declarationImports is set', async () => {
+    await write('common.d.ts');
+    await write('ui/button_types.d.ts');
+    await write('viz/core/utils.d.ts');
+    await write('esm/ui/ignored.d.ts');
+
+    const result = await run({ declarationImports: true });
+    expect(result.success).toBe(true);
+
+    const exportsMap = await readExports();
+    expect(exportsMap['./common.d']).toEqual({ types: './common.d.ts' });
+    expect(exportsMap['./ui/*.d']).toEqual({ types: './ui/*.d.ts' });
+    expect(exportsMap['./viz/*.d']).toEqual({ types: './viz/*.d.ts' });
+    expect(exportsMap['./esm/*.d']).toBeUndefined();
+    // A './*' pattern makes Node warn (DEP0155) on every 'test-lib/' request
+    expect(Object.keys(exportsMap).filter((key) => key.startsWith('./*'))).toEqual([]);
+  });
+
+  it('should not add .d type imports by default', async () => {
+    await write('common.d.ts');
+
+    const result = await run();
+    expect(result.success).toBe(true);
+
+    const keys = Object.keys(await readExports());
+    expect(keys.filter((key) => key.endsWith('.d'))).toEqual([]);
   });
 
   it('should fail when an entry points to a missing file', async () => {

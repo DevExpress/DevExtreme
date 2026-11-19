@@ -1298,6 +1298,7 @@
       "options": {
         "packageDir": "./artifacts/npm/devextreme",
         "ignore": ["__internal", "bin", "bundles", "cjs", "dist", "esm", "license", "scss"],
+        "declarationImports": true,
         "extraExports": {
           "./bundles/*": { "types": "./bundles/*.d.ts", "default": "./bundles/*.js" },
           "./localization/messages/*.json": "./localization/messages/*.json",
@@ -1308,8 +1309,7 @@
           "./esm/*": "./esm/*.js",
           "./cjs/*.json": "./cjs/*.json",
           "./cjs/*.js": "./cjs/*.js",
-          "./cjs/*": "./cjs/*.js",
-          "./*.d": { "types": "./*.d.ts" }
+          "./cjs/*": "./cjs/*.js"
         }
       },
       "configurations": {

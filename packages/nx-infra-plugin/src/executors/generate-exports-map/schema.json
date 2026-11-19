@@ -15,6 +15,11 @@
       "description": "Directories (relative to packageDir) to skip when looking for stubs and type-only modules.",
       "default": []
     },
+    "declarationImports": {
+      "type": "boolean",
+      "description": "Adds entries for type imports with a '.d' suffix, such as 'pkg/ui/button.d': a './<folder>/*.d' pattern per top-level folder and an explicit entry per root declaration. No root './*.d' pattern, which makes Node warn (DEP0155) on 'pkg/' requests.",
+      "default": false
+    },
     "extraExports": {
       "type": "object",
       "description": "Subpath entries appended to the generated map as-is, such as asset folders or wildcard patterns.",
