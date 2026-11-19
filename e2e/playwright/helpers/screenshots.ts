@@ -5,6 +5,9 @@ import { changeTheme, getCurrentTheme } from './testPageUtils';
 
 export interface ScreenshotOptions {
   element?: Locator | string | null;
+  // Shoots the scroll size of the element instead of its box, the way the TestCafe element shot
+  // did: what overflows the element, such as a popup rendered into it, stays in the picture.
+  withOverflow?: boolean;
   theme?: string;
   shouldTestInCompact?: boolean;
   compactCallBack?: () => Promise<unknown>;
@@ -48,6 +51,7 @@ const viewportClip = async (page: Page): Promise<{
 const clippedToViewport = async (
   page: Page,
   locator: Locator,
+  withOverflow: boolean,
 ): Promise<{ x: number; y: number; width: number; height: number } | null> => {
   const box = await locator.boundingBox();
 
@@ -56,17 +60,27 @@ const clippedToViewport = async (
   }
 
   const viewport = await viewportClip(page);
+  const scrollSize = withOverflow
+    ? await locator.evaluate((element) => ({
+      width: element.clientLeft + element.scrollWidth,
+      height: element.clientTop + element.scrollHeight,
+    }))
+    : { width: 0, height: 0 };
+  const fitsViewport = Math.max(box.width, scrollSize.width) <= viewport.width
+    && Math.max(box.height, scrollSize.height) <= viewport.height;
 
-  if (box.width <= viewport.width && box.height <= viewport.height) {
+  if (fitsViewport && !withOverflow) {
     return null;
   }
 
-  // The clip has to stay inside the viewport: a full-page capture widens the viewport to the whole
-  // document, the scrollbar goes away, and a widget that fills its container re-lays out to the
-  // wider space — the shot would show a layout the page never had.
-  await locator.evaluate((element) => {
-    element.scrollIntoView({ block: 'start', inline: 'start' });
-  });
+  if (!fitsViewport) {
+    // The clip has to stay inside the viewport: a full-page capture widens the viewport to the
+    // whole document, the scrollbar goes away, and a widget that fills its container re-lays out
+    // to the wider space — the shot would show a layout the page never had.
+    await locator.evaluate((element) => {
+      element.scrollIntoView({ block: 'start', inline: 'start' });
+    });
+  }
 
   const scrolled = await locator.boundingBox() ?? box;
   const x = Math.max(scrolled.x, 0);
@@ -75,8 +89,8 @@ const clippedToViewport = async (
   return {
     x,
     y,
-    width: Math.min(scrolled.width, viewport.width - x),
-    height: Math.min(scrolled.height, viewport.height - y),
+    width: Math.min(Math.max(scrolled.width, scrollSize.width), viewport.width - x),
+    height: Math.min(Math.max(scrolled.height, scrollSize.height), viewport.height - y),
   };
 };
 
@@ -84,13 +98,14 @@ const expectScreenshot = async (
   page: Page,
   locator: Locator | null,
   name: string,
+  withOverflow: boolean,
 ): Promise<void> => {
   if (!locator) {
     await expect(page).toHaveScreenshot([name]);
     return;
   }
 
-  const clip = await clippedToViewport(page, locator);
+  const clip = await clippedToViewport(page, locator, withOverflow);
 
   if (clip) {
     await expect(page).toHaveScreenshot([name], { clip });
@@ -107,6 +122,7 @@ export async function testScreenshot(
 ): Promise<void> {
   const {
     element,
+    withOverflow = false,
     theme,
     shouldTestInCompact = false,
     compactCallBack,
@@ -123,7 +139,12 @@ export async function testScreenshot(
   // No element means the whole viewport, the way the TestCafe comparer read a missing element.
   const target = resolveLocator(page, element);
 
-  await expectScreenshot(page, target, getScreenshotName(screenshotName, theme ?? activeTheme));
+  await expectScreenshot(
+    page,
+    target,
+    getScreenshotName(screenshotName, theme ?? activeTheme),
+    withOverflow,
+  );
 
   if (shouldTestInCompact) {
     // The theme of a "- compact" job already ends with the suffix; appending it twice would ask
@@ -133,7 +154,12 @@ export async function testScreenshot(
     await changeTheme(page, compactTheme);
     await compactCallBack?.();
 
-    await expectScreenshot(page, target, getScreenshotName(screenshotName, compactTheme));
+    await expectScreenshot(
+      page,
+      target,
+      getScreenshotName(screenshotName, compactTheme),
+      withOverflow,
+    );
   }
 
   if (theme || shouldTestInCompact) {
