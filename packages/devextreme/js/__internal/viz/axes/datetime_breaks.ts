@@ -1,6 +1,5 @@
 /* eslint-disable prefer-spread */
 /* eslint-disable @typescript-eslint/init-declarations */
-/* eslint-disable no-plusplus */
 /* eslint-disable func-names */
 /* eslint-disable @typescript-eslint/no-shadow */
 /* eslint-disable no-param-reassign */
@@ -39,7 +38,7 @@ function getDaysDistance(day, end): number {
 
   while (day !== end) {
     day = getNextDayIndex(day);
-    length++;
+    length += 1;
   }
 
   return length;
@@ -153,7 +152,7 @@ function excludeWorkDaysFromWeekEndBreaks(breaks, exactWorkDays) {
     }
   };
 
-  for (i = 0; i < result.length; i++) {
+  for (i = 0; i < result.length; i += 1) {
     exactWorkDays.forEach(processWorkDay);
   }
 
