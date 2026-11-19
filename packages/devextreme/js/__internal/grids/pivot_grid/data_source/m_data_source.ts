@@ -9,6 +9,7 @@ import {
 } from '@js/core/utils/type';
 import Store from '@js/data/abstract_store';
 import type { PivotGridArea } from '@js/ui/pivot_grid/data_source';
+import type { AsyncTask } from '@ts/core/utils/common';
 import commonUtils from '@ts/core/utils/common';
 import { extend } from '@ts/core/utils/extend';
 import inflector from '@ts/core/utils/inflector';
@@ -36,12 +37,12 @@ import {
 import xmlaStore from '../xmla_store/m_xmla_store';
 import { sort } from './m_data_source_utils';
 import type {
+  DataSourceData,
+  DataSourceHeaderItem,
+  DataSourceHeaderItems,
+  DataSourceHeaderItemsByPath,
   DataSourceOptions,
-  HeaderItem,
-  HeaderItems,
-  LoadedData,
-  ProgressHandler,
-  StoreOption,
+  DataSourceStoreOption,
 } from './types';
 
 const DESCRIPTION_NAME_BY_AREA = {
@@ -120,7 +121,7 @@ function isRunningTotalUsed(dataFields: PivotGridField[]): boolean {
   return dataFields.some((field) => !!field.runningTotal);
 }
 
-function isDataExists(data: LoadedData): number {
+function isDataExists(data: DataSourceData): number {
   return data.rows.length || data.columns.length || data.values.length;
 }
 
@@ -133,7 +134,7 @@ class PivotGridDataSource {
 
   public _pageSize: number;
 
-  public _data: LoadedData;
+  public _data: DataSourceData;
 
   public _loadingCount: number;
 
@@ -149,7 +150,7 @@ class PivotGridDataSource {
 
   public _storeFields?: PivotGridField[];
 
-  public _delayedLoadTask?: ReturnType<typeof commonUtils.executeAsync>;
+  public _delayedLoadTask?: AsyncTask;
 
   public _isDisposed?: boolean;
 
@@ -203,7 +204,10 @@ class PivotGridDataSource {
     updateCalculatedFieldProperties(field, calculatedProperties);
   }
 
-  public findHeaderItem(headerItems: HeaderItems, path: unknown[]): HeaderItem | null | undefined {
+  public findHeaderItem(
+    headerItems: DataSourceHeaderItems,
+    path: unknown[],
+  ): DataSourceHeaderItem | null | undefined {
     if (headerItems._cacheByPath) {
       return headerItems._cacheByPath[path.join('.')] ?? null;
     }
@@ -212,7 +216,7 @@ class PivotGridDataSource {
   }
 
   public getHeaderItemsLastIndex(
-    headerItems: HeaderItem[] | undefined,
+    headerItems: DataSourceHeaderItem[] | undefined,
     grandTotalIndex?: number,
   ): number {
     let lastIndex = -1;
@@ -240,9 +244,9 @@ class PivotGridDataSource {
   }
 
   public updateHeaderItemChildren(
-    headerItems: HeaderItem[],
-    headerItem: HeaderItem,
-    children: HeaderItem[],
+    headerItems: DataSourceHeaderItem[],
+    headerItem: DataSourceHeaderItem,
+    children: DataSourceHeaderItem[],
     grandTotalIndex: number | undefined,
   ): DeferredObj<number[]> {
     const applyingHeaderItemsCount = this.getHeaderItemsLastIndex(children) + 1;
@@ -284,8 +288,8 @@ class PivotGridDataSource {
   }
 
   public updateHeaderItems(
-    headerItems: HeaderItems,
-    newHeaderItems: HeaderItem[],
+    headerItems: DataSourceHeaderItems,
+    newHeaderItems: DataSourceHeaderItem[],
     grandTotalIndex: number | undefined,
   ): DeferredObj<number[]> {
     const d = Deferred<number[]>();
@@ -327,8 +331,8 @@ class PivotGridDataSource {
   }
 
   public updateDataSourceCells(
-    dataSource: LoadedData,
-    newDataSourceCells: unknown[][][] | undefined,
+    dataSource: DataSourceData,
+    newDataSourceCells: DataSourceData['values'] | undefined,
     newRowItemIndexesToCurrent: number[],
     newColumnItemIndexesToCurrent: number[],
   ): void {
@@ -359,7 +363,7 @@ class PivotGridDataSource {
 
   public createLocalOrRemoteStore(
     dataSourceOptions: DataSourceOptions,
-    notifyProgress: ProgressHandler,
+    notifyProgress: (progress: number) => void,
   ): PivotGridStore {
     const StoreConstructor = dataSourceOptions.remoteOperations
       || dataSourceOptions.paginate ? RemoteStore : LocalStore;
@@ -378,7 +382,7 @@ class PivotGridDataSource {
 
   public createStore(
     dataSourceOptions: DataSourceOptions,
-    notifyProgress: ProgressHandler,
+    notifyProgress: (progress: number) => void,
   ): PivotGridStore | undefined {
     if (isPlainObject(dataSourceOptions) && dataSourceOptions.load) {
       return this.createLocalOrRemoteStore(dataSourceOptions, notifyProgress);
@@ -389,7 +393,7 @@ class PivotGridDataSource {
       ? { store: dataSourceOptions }
       : dataSourceOptions;
     // @ts-expect-error the store option is set here and can be any store config
-    const storeOptions: StoreOption = options.store;
+    const storeOptions: DataSourceStoreOption = options.store;
 
     if (storeOptions.type === 'xmla') {
       // @ts-expect-error createDrillDownDataSource comes from storeDrillDownMixin
@@ -423,7 +427,7 @@ class PivotGridDataSource {
   }
 
   public getExpandedPaths(
-    dataSource: LoadedData,
+    dataSource: DataSourceData,
     loadOptions: PivotGridLoadOptions | undefined,
     dimensionName: PivotGridAxis,
     prevLoadOptions: PivotGridLoadOptions | undefined,
@@ -537,9 +541,9 @@ class PivotGridDataSource {
         area: groupingField.area,
         expanded: field.expanded ?? groupingField.expanded,
         dataField: field.dataField || groupingField.dataField,
-        dataType: field.dataType ?? groupingField.dataType,
-        sortBy: field.sortBy ?? groupingField.sortBy,
-        sortOrder: field.sortOrder ?? groupingField.sortOrder,
+        dataType: field.dataType || groupingField.dataType,
+        sortBy: field.sortBy || groupingField.sortBy,
+        sortOrder: field.sortOrder || groupingField.sortOrder,
         sortBySummaryField: field.sortBySummaryField || groupingField.sortBySummaryField,
         sortBySummaryPath: field.sortBySummaryPath ?? groupingField.sortBySummaryPath,
         visible: field.visible || groupingField.visible,
@@ -598,8 +602,8 @@ class PivotGridDataSource {
         ? extend({}, storeField, field, { _initProperties: null })
         : field;
 
-      if (!mergedField.dataType && dataTypes[`${field.dataField}`]) {
-        mergedField.dataType = dataTypes[`${field.dataField}`];
+      if (!mergedField.dataType && dataTypes[String(field.dataField)]) {
+        mergedField.dataType = dataTypes[String(field.dataField)];
       }
       // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
       delete fieldsDictionary[fieldKey];
@@ -649,7 +653,7 @@ class PivotGridDataSource {
   }
 
   public formatHeaderItems(
-    data: LoadedData,
+    data: DataSourceData,
     loadOptions: PivotGridLoadOptions,
     headerName: PivotGridAxis,
   ): DeferredObj<unknown> | undefined {
@@ -661,21 +665,24 @@ class PivotGridDataSource {
     });
   }
 
-  public formatHeaders(loadOptions: PivotGridLoadOptions, data: LoadedData): DeferredObj<unknown> {
+  public formatHeaders(
+    loadOptions: PivotGridLoadOptions,
+    data: DataSourceData,
+  ): DeferredObj<unknown> {
     return when(
       this.formatHeaderItems(data, loadOptions, 'columns'),
       this.formatHeaderItems(data, loadOptions, 'rows'),
     );
   }
 
-  public updateCache(headerItems: HeaderItems): DeferredObj<unknown> {
+  public updateCache(headerItems: DataSourceHeaderItems): DeferredObj<unknown> {
     const d = Deferred<unknown>();
-    const cacheByPath: Record<string, HeaderItem> = {};
+    const cacheByPath: DataSourceHeaderItemsByPath = {};
 
     when(foreachTreeAsync(headerItems, (items) => {
       const path = createPath(items).join('.');
-      // eslint-disable-next-line prefer-destructuring
-      cacheByPath[path] = items[0];
+      const [item] = items;
+      cacheByPath[path] = item;
     // eslint-disable-next-line @typescript-eslint/no-misused-promises -- ignores the result
     })).done(d.resolve);
 
