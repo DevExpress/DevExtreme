@@ -89,7 +89,7 @@ const NONE = 'none';
 const DEFAULT_FONT_SIZE = 12;
 const ELLIPSIS = '...';
 
-type SvgAttributes = Record<string, ThemeValue>;
+export type SvgAttributes = Record<string, ThemeValue>;
 
 type PathSegment = (number | string)[];
 
@@ -1764,7 +1764,7 @@ export let SvgElement = class SvgElement {
   }
 };
 
-type SvgElementInstance = InstanceType<typeof SvgElement>;
+export type SvgElementInstance = InstanceType<typeof SvgElement>;
 
 function removeFuncIriCallback(callback?: FuncIriCallback): void {
   fixFuncIriCallbacks.remove(callback);
@@ -2731,7 +2731,7 @@ export let Renderer = class Renderer {
   }
 };
 
-type RendererInstance = InstanceType<typeof Renderer>;
+export type RendererInstance = InstanceType<typeof Renderer>;
 
 function getHatchingHash({ color, hatching }: SvgAttributes): string {
   return `@${color}::${hatching.step}:${hatching.width}:${hatching.opacity}:${hatching.direction}`;

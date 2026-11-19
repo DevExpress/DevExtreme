@@ -5,9 +5,7 @@
 /* eslint-disable no-nested-ternary */
 /* eslint-disable @typescript-eslint/no-shadow */
 /* eslint-disable no-multi-assign */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-use-before-define */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
 
 import '@ts/viz/tree_map/api';
 import '@ts/viz/tree_map/states';
@@ -17,6 +15,8 @@ import { normalizeEnum as _normalizeEnum } from '@ts/viz/core/utils';
 import { buildRectAppearance } from '@ts/viz/tree_map/common';
 import Node from '@ts/viz/tree_map/node';
 import TreeMapBase from '@ts/viz/tree_map/tree_map.base';
+
+type SelectionHost = TreeMapBase & { _selectionList: number[] };
 
 const proto = TreeMapBase.prototype;
 const nodeProto = Node.prototype;
@@ -40,13 +40,13 @@ expand(proto, '_onNodesCreated', function () {
   this._selectionList.length = 0;
 });
 
-expand(proto, '_extendProxyType', function (proto) {
+expand(proto, '_extendProxyType', function (this: SelectionHost, proto) {
   const that = this;
 
   proto.select = function (state): void {
     that._selectNode(this._id, !!state);
   };
-  proto.isSelected = function () {
+  proto.isSelected = function (): boolean {
     return that._selectionList.includes(this._id);
   };
   that._selectionList = [];
