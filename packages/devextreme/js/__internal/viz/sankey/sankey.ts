@@ -8,6 +8,7 @@ import BaseWidget from '@ts/viz/core/base_widget';
 import type { DataSourcePluginMembers } from '@ts/viz/core/data_source';
 import { plugin as pluginDataSource } from '@ts/viz/core/data_source';
 import { setupWidgetPrototype } from '@ts/viz/core/helpers';
+import type { Size } from '@ts/viz/core/types';
 import { COLOR_MODE_GRADIENT, COLOR_MODE_SOURCE, COLOR_MODE_TARGET } from '@ts/viz/sankey/constants';
 import { layout as defaultLayoutBuilder } from '@ts/viz/sankey/layout';
 import Link from '@ts/viz/sankey/link_item';
@@ -101,7 +102,7 @@ class Sankey extends BaseWidget {
 
   _proxyData!: HitTestCallback[];
 
-  _getDefaultSize(): { width: number; height: number } {
+  _getDefaultSize(): Size {
     return { width: 400, height: 400 };
   }
 
@@ -417,7 +418,7 @@ class Sankey extends BaseWidget {
   }
 
   _getMinSize(): number[] {
-    const adaptiveLayout: { width: number; height: number } = this._getOption('adaptiveLayout');
+    const adaptiveLayout: Size = this._getOption('adaptiveLayout');
     return [adaptiveLayout.width, adaptiveLayout.height];
   }
 

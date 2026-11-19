@@ -40,7 +40,7 @@ import { tickGenerator } from '@ts/viz/axes/tick_generator';
 import xyMethods from '@ts/viz/axes/xy_axes';
 import { getParser } from '@ts/viz/components/parse_utils';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
-import type { Bounds } from '@ts/viz/core/types';
+import type { BBox, Bounds, Coords } from '@ts/viz/core/types';
 
 import {
   adjustVisualRange,
@@ -603,7 +603,7 @@ export let Axis = class Axis {
   declare _getConstantLineLabelsCoords: (
     value: number,
     labelOptions: ThemeValue,
-  ) => { x: number; y: number };
+  ) => Coords;
 
   declare _getAdjustedStripLabelCoords: (strip: ThemeValue) => LabelTranslation;
 
@@ -963,7 +963,7 @@ export let Axis = class Axis {
   _getStripGraphicAttributes(
     fromPoint: number,
     toPoint: number,
-  ): { x: number; y: number; width: number; height: number } {
+  ): BBox {
     let x;
     let y;
     let width;
@@ -3390,7 +3390,7 @@ export let Axis = class Axis {
   measureLabels(
     canvas: ThemeValue,
     withIndents?: boolean,
-  ): { x: number; y: number; width: number; height: number } {
+  ): BBox {
     const options = this._options;
     const widthAxis = options.visible ? options.width : 0;
     let ticks;

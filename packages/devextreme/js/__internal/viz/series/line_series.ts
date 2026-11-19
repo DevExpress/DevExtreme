@@ -18,6 +18,7 @@ import { extend } from '@ts/core/utils/extend';
 import { each } from '@ts/core/utils/iterator';
 import { solveCubicEquation, trunc } from '@ts/core/utils/math';
 import { clone } from '@ts/core/utils/object';
+import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 import {
   extractColor,
   getCosAndSin,
@@ -459,7 +460,7 @@ chart.spline = extend({}, lineSeries, {
 
   getSeriesPairCoord(coord, isArgument) {
     const that = this;
-    let oppositeCoord = null;
+    let oppositeCoord: number | null = null;
     const isOpposite = !isArgument && !this._options.rotated || isArgument && this._options.rotated;
     const coordName = !isOpposite ? 'vx' : 'vy';
     const bezierCoordName = !isOpposite ? 'x' : 'y';
@@ -491,7 +492,6 @@ chart.spline = extend({}, lineSeries, {
               + 3 * (1 - t) * t * t * p[2][bezierOppositeCoordName]
               + t * t * t * p[3][oppositeCoordName];
             if (visibleArea[0] <= tmpCoord && visibleArea[1] >= tmpCoord) {
-              // @ts-expect-error
               oppositeCoord = tmpCoord;
             }
           }
@@ -574,24 +574,21 @@ polar.line = extend({}, polarScatterSeries, lineMethods, {
   },
 
   _getTangentPoints(point, prevPoint, centerPoint, isLastSegment) {
-    let tangentPoints = [];
+    let tangentPoints: ThemeValue[] = [];
     const betweenAngle = Math.round(prevPoint.angle - point.angle);
     const tan = (prevPoint.radius - point.radius) / betweenAngle;
     let i;
 
     if (betweenAngle === 0) {
-      // @ts-expect-error
       tangentPoints = [prevPoint, point];
     } else if (betweenAngle > 0) {
       const angle = isLastSegment ? betweenAngle : betweenAngle - 1;
       for (i = angle; i >= 0; i -= 1) {
-        // @ts-expect-error
         tangentPoints.push(getTangentPoint(point, prevPoint, centerPoint, tan, i));
       }
     } else {
       const angle = isLastSegment ? betweenAngle : betweenAngle + 1;
       for (i = 0; i >= angle; i -= 1) {
-        // @ts-expect-error
         tangentPoints.push(getTangentPoint(point, prevPoint, centerPoint, tan, betweenAngle - i));
       }
     }

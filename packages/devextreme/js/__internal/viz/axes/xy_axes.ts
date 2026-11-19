@@ -176,8 +176,8 @@ function getRightMargin(bBox): number {
 function generateRangesOnPoints(points, edgePoints, getRange) {
   let i;
   let length;
-  let maxRange = null;
-  const ranges = [];
+  let maxRange: { start: number; end: number; length: number } | null = null;
+  const ranges: { start: number; end: number; length: number }[] = [];
   let curValue;
   let prevValue;
   let curRange;
@@ -188,17 +188,13 @@ function generateRangesOnPoints(points, edgePoints, getRange) {
     curRange = getRange(curValue, prevValue);
 
     if (edgePoints.indexOf(curValue) >= 0) {
-      // @ts-expect-error
       if (!maxRange || curRange > maxRange.length) {
-        // @ts-expect-error
         maxRange = { start: curValue, end: prevValue, length: curRange };
       }
     } else {
-      // @ts-expect-error
       if (maxRange && curRange < maxRange.length) {
         ranges.push(maxRange);
       } else {
-        // @ts-expect-error
         ranges.push({ start: curValue, end: prevValue, length: curRange });
       }
       maxRange = null;
@@ -238,11 +234,9 @@ function generateAutoBreaks(
 
   const ranges = generateRangesOnPoints(sortedAllPoints, edgePoints, getRange)
     .filter(({ length }) => !!length)
-    // @ts-expect-error
     .sort((a, b) => b.length - a.length);
   const epsilon = _math.min.apply(
     null,
-    // @ts-expect-error
     ranges.map((r) => r.length),
   ) / 1000;
   const _maxAutoBreakCount = isDefined(maxAutoBreakCount)
@@ -250,13 +244,10 @@ function generateAutoBreaks(
     : ranges.length;
 
   for (let i = 0; i < _maxAutoBreakCount; i += 1) {
-    // @ts-expect-error
     if (ranges[i].length >= minDiff) {
-      // @ts-expect-error
       if (visibleRange <= ranges[i].length) {
         break;
       }
-      // @ts-expect-error
       visibleRange -= ranges[i].length;
       if (visibleRange > epsilon || visibleRange < -epsilon) {
         // @ts-expect-error

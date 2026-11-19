@@ -26,6 +26,7 @@ import { noop as _noop } from '@ts/core/utils/common';
 import { extend as _extend } from '@ts/core/utils/extend';
 import { each as _each } from '@ts/core/utils/iterator';
 import { isDefined as _isDefined, isString as _isString } from '@ts/core/utils/type';
+import type { Coords } from '@ts/viz/core/types';
 import {
   convertXYToPolar, extractColor, map as _map, normalizeEnum as _normalizeEnum,
 } from '@ts/viz/core/utils';
@@ -863,7 +864,7 @@ polar = _extend({}, baseScatterMethods, {
   },
 
   getSeriesPairCoord(params, isArgument) {
-    let coords = null;
+    let coords: Coords | null = null;
     const paramName = isArgument ? 'argument' : 'radius';
     const points = this.getVisiblePoints();
 
@@ -876,7 +877,6 @@ polar = _extend({}, baseScatterMethods, {
         : undefined;
 
       if (_isDefined(tmpPoint)) {
-        // @ts-expect-error
         coords = tmpPoint;
         break;
       }

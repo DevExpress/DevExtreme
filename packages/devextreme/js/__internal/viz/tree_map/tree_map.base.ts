@@ -11,6 +11,7 @@ import BaseWidget from '@ts/viz/core/base_widget';
 import type { DataSourcePluginMembers } from '@ts/viz/core/data_source';
 import { plugin } from '@ts/viz/core/data_source';
 import { setupWidgetPrototype } from '@ts/viz/core/helpers';
+import type { Size } from '@ts/viz/core/types';
 import { patchFontOptions } from '@ts/viz/core/utils';
 import { getColorizer, setDefaultColorizer } from '@ts/viz/tree_map/colorizing';
 import { buildRectAppearance, buildTextAppearance } from '@ts/viz/tree_map/common';
@@ -313,7 +314,7 @@ class TreeMapBase extends BaseWidget {
 
   _isSyncData?: boolean;
 
-  _getDefaultSize(): { width: number; height: number } {
+  _getDefaultSize(): Size {
     return { width: 400, height: 400 };
   }
 
