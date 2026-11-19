@@ -5,10 +5,10 @@ import {
   getLogExt as getLog,
   raiseToExt as raiseTo,
 } from '@ts/viz/core/utils';
-import type { Translator2DInstance } from '@ts/viz/translators/translator2d';
+import type { CanvasOptions, Translator2DInstance } from '@ts/viz/translators/translator2d';
 
 type LogarithmicTranslator = Translator2DInstance & {
-  _canvasOptions: { base: number };
+  _canvasOptions: Required<Pick<CanvasOptions, 'base'>>;
 };
 
 export default {

@@ -6,10 +6,10 @@
 import { adjust } from '@ts/core/utils/math';
 import { isDefined } from '@ts/core/utils/type';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
-import type { Translator2DInstance, ZoomResult } from '@ts/viz/translators/translator2d';
+import type { CanvasOptions, Translator2DInstance, ZoomResult } from '@ts/viz/translators/translator2d';
 
 type CategoryTranslator = Translator2DInstance & {
-  _canvasOptions: { interval: number };
+  _canvasOptions: Required<Pick<CanvasOptions, 'interval'>>;
 };
 
 const { round } = Math;

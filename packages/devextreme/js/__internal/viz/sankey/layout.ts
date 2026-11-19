@@ -3,11 +3,13 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable no-else-return */
 
-import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
+import type { Properties as SankeyProperties } from '@js/viz/sankey';
 import type { BBox } from '@ts/viz/core/types';
 import validatorModule from '@ts/viz/sankey/data_validator';
-import type { GraphLink, GraphVertex } from '@ts/viz/sankey/graph';
+import type { GraphVertex } from '@ts/viz/sankey/graph';
 import graphModule from '@ts/viz/sankey/graph';
+import type { NodeRect } from '@ts/viz/sankey/node_item';
+import type { SankeyDataItem } from '@ts/viz/sankey/sankey';
 
 interface CascadeNode {
   nodeTitle: string;
@@ -19,10 +21,6 @@ interface CascadeNode {
 
 type Cascade = Record<string, CascadeNode>;
 
-interface NodeRect extends BBox {
-  _name: string;
-}
-
 interface LinkEnd extends BBox {
   node: NodeRect;
 }
@@ -32,7 +30,7 @@ interface LinkPath {
   to: LinkEnd;
 }
 
-type SortableLink = GraphLink & { sort: number };
+type SortableLink = SankeyDataItem & { sort: number };
 
 interface LayoutLink {
   d: string;
@@ -45,14 +43,14 @@ interface LayoutLink {
 interface NodesOptions extends BBox {
   nodePadding: number;
   nodeWidth: number;
-  nodeAlign: ThemeValue;
+  nodeAlign: SankeyProperties['alignment'];
 }
 
 interface LayoutOptions {
   availableRect: BBox;
   nodePadding: number;
   nodeWidth: number;
-  nodeAlign: ThemeValue;
+  nodeAlign: SankeyProperties['alignment'];
 }
 
 interface LayoutResult {
@@ -82,7 +80,7 @@ export const layout = {
     }
   },
 
-  _getInWeightForNode(nodeTitle: string, links: GraphLink[]): number {
+  _getInWeightForNode(nodeTitle: string, links: SankeyDataItem[]): number {
     let w = 0;
     links.forEach((link) => {
       if (link[1] === nodeTitle) {
@@ -92,7 +90,7 @@ export const layout = {
     return w;
   },
 
-  _getOutWeightForNode(nodeTitle: string, links: GraphLink[]): number {
+  _getOutWeightForNode(nodeTitle: string, links: SankeyDataItem[]): number {
     let w = 0;
     links.forEach((link) => {
       if (link[0] === nodeTitle) {
@@ -102,7 +100,7 @@ export const layout = {
     return w;
   },
 
-  _computeCascades(links: GraphLink[]): Cascade[] {
+  _computeCascades(links: SankeyDataItem[]): Cascade[] {
     const cascadesConfig = graphModule.struct.computeLongestPaths(links);
     const maxCascade = graphModule.routines.maxOfArray(cascadesConfig.map((c) => c.lp));
 
@@ -255,7 +253,7 @@ export const layout = {
     return null;
   },
 
-  _computeLinks(links: GraphLink[], rects: NodeRect[][], cascades: Cascade[]): LayoutLink[] {
+  _computeLinks(links: SankeyDataItem[], rects: NodeRect[][], cascades: Cascade[]): LayoutLink[] {
     const yOffsets: Record<string, { in: number; out: number }> = {};
     const paths: LinkPath[] = [];
     const result: LayoutLink[] = [];
@@ -370,7 +368,7 @@ export const layout = {
   },
 
   computeLayout(
-    linksData: GraphLink[],
+    linksData: SankeyDataItem[],
     sortData: Record<string, number> | undefined,
     options: LayoutOptions,
     incidentOccurred: (errorCode: string) => void,

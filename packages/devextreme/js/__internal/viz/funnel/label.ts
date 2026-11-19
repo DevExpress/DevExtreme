@@ -6,6 +6,8 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-else-return */
 
+import type { HorizontalAlignment } from '@js/common';
+import type { TextOverflow, WordWrap } from '@js/common/charts';
 import { noop } from '@ts/core/utils/common';
 import { extend } from '@ts/core/utils/extend';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
@@ -36,7 +38,7 @@ type LabelPositionGetter = (
 
 interface FunnelLabelOptions {
   format: ThemeValue;
-  textAlignment: string;
+  textAlignment: HorizontalAlignment;
   customizeText: ThemeValue;
   attributes: { font: ThemeValue };
   visible: boolean;
@@ -45,8 +47,8 @@ interface FunnelLabelOptions {
   verticalOffset: number;
   background: ThemeValue;
   connector: ThemeValue;
-  wordWrap: string;
-  textOverflow: string;
+  wordWrap: WordWrap;
+  textOverflow: TextOverflow;
 }
 
 const OUTSIDE_POSITION = 'outside';
@@ -112,7 +114,7 @@ function getInsideLabelPosition(coords: number[], bBox: LabelRect, options: Them
 function getColumnLabelRightPosition(
   labelRect: number[],
   rect: number[],
-  textAlignment: string,
+  textAlignment: HorizontalAlignment,
 ): LabelPositionGetter {
   return function (coords, bBox, options, inverted) {
     return {
@@ -125,7 +127,7 @@ function getColumnLabelRightPosition(
 function getColumnLabelLeftPosition(
   labelRect: number[],
   rect: number[],
-  textAlignment: string,
+  textAlignment: HorizontalAlignment,
 ): LabelPositionGetter {
   return function (coords, bBox, options, inverted) {
     return {
@@ -176,7 +178,7 @@ function getConnectorStrategy(options: ThemeValue, inverted: boolean): LabelStra
 function getLabelOptions(
   labelOptions: ThemeValue,
   defaultColor: string,
-  defaultTextAlignment: string,
+  defaultTextAlignment: HorizontalAlignment,
 ): FunnelLabelOptions {
   const opt = labelOptions || {};
   const labelFont = extend({}, opt.font) || {};

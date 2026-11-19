@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-shadow */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 
-import type { TilingItem } from './tiling';
+import type { FunnelDataItem } from './funnel';
 
 const CENTER = 0.5;
 
@@ -20,7 +20,7 @@ export default {
     });
   },
 
-  normalizeValues(items: TilingItem[]): number[] {
+  normalizeValues(items: FunnelDataItem[]): number[] {
     const max = items.reduce(
       (max, item) => Math.max(item.value, max),
       (items[0] && items[0].value) || 0,

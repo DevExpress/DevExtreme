@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-this-alias */
 
+import type { Coordinates } from '@js/core/renderer';
 import { noop } from '@ts/core/utils/common';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 import type { TooltipPluginMembers } from '@ts/viz/core/tooltip';
@@ -18,7 +19,7 @@ function getCoords(
   figureCoords: number[],
   renderer: ThemeValue,
 ): number[] {
-  const offset: { left: number; top: number } = renderer.getRootOffset();
+  const offset: Coordinates = renderer.getRootOffset();
 
   return (
     coords

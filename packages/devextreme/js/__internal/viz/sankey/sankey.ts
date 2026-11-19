@@ -14,9 +14,9 @@ import { layout as defaultLayoutBuilder } from '@ts/viz/sankey/layout';
 import Link from '@ts/viz/sankey/link_item';
 import Node from '@ts/viz/sankey/node_item';
 
-type SankeyDataItem = [string, string, number];
+export type SankeyDataItem = [string, string, number];
 
-interface ConnectedLink {
+export interface ConnectedLink {
   index: number;
   weight: number;
   node: string;
