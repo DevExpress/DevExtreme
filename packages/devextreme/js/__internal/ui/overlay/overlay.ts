@@ -1714,7 +1714,6 @@ class Overlay<
     const result = Deferred<boolean>();
 
     if (isShowing === visible) {
-      // @ts-expect-error this
       return result.resolveWith(this, [isShowing]).promise();
     }
 
@@ -1728,7 +1727,6 @@ class Overlay<
       .done(() => {
         delete this._animateDeferred;
 
-        // @ts-expect-error this
         result.resolveWith(this, [this._isVisible()]);
       })
       .fail(() => {

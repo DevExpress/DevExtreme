@@ -24,7 +24,6 @@ class SearchBoxController {
 
   _valueChangeDeferred!: DeferredObj<unknown>;
 
-  // eslint-disable-next-line no-restricted-globals
   _valueChangeTimeout!: ReturnType<typeof setTimeout>;
 
   _onSearchBoxValueChanged?: (value: string) => void;

@@ -6,17 +6,16 @@ import $ from '@js/core/renderer';
 import { noop } from '@js/core/utils/common';
 import { compileGetter } from '@js/core/utils/data';
 import type { DeferredObj } from '@js/core/utils/deferred';
-import {
-  Deferred,
-  // @ts-expect-error ts-error
-  fromPromise,
-  when,
-} from '@js/core/utils/deferred';
 import { each } from '@js/core/utils/iterator';
 import { isDefined, isObject } from '@js/core/utils/type';
 import type { DxEvent } from '@js/events';
 import type { ItemLike, SelectionChangeInfo } from '@js/ui/collection/ui.collection_widget.base';
 import errors from '@js/ui/widget/ui.errors';
+import {
+  Deferred,
+  fromPromise,
+  when,
+} from '@ts/core/utils/deferred';
 import type { ActionConfig } from '@ts/core/widget/component';
 import type { OptionChanged } from '@ts/core/widget/types';
 import eventsEngine from '@ts/events/core/events_engine';
@@ -929,20 +928,16 @@ class CollectionWidget<
           this._afterItemElementDeleted($item, deletedActionArgs);
           // @ts-expect-error Promise DefferedObj
           this._tryRefreshLastPage().done(() => {
-            // @ts-expect-error ts-error
             deferred.resolveWith(this);
           });
         }).fail(() => {
           $item.removeClass(itemResponseWaitClass);
-          // @ts-expect-error ts-error
           deferred.rejectWith(this);
         });
       }).fail(() => {
-        // @ts-expect-error ts-error
         deferred.rejectWith(this);
       });
     } else {
-      // @ts-expect-error ts-error
       deferred.rejectWith(this);
     }
 
@@ -968,10 +963,8 @@ class CollectionWidget<
       && indexExists(destinationIndex)
       && movingIndex !== destinationIndex;
     if (canMoveItems) {
-      // @ts-expect-error ts-error
       deferred.resolveWith(this);
     } else {
-      // @ts-expect-error ts-error
       deferred.rejectWith(this);
     }
     // @ts-expect-error ts-error

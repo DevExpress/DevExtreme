@@ -254,7 +254,6 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item> {
   _getItemLocation($item: dxElementWrapper, direction: Direction): number {
     if (direction === 'prev') {
       // @ts-expect-error ts-error
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       return $item.position().top
         - getHeight(this.$element().get(0))
         + Number(getOuterHeight($item));
@@ -695,7 +694,6 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item> {
   }
 
   _shouldRenderNextButton(): boolean {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return this._nextButtonMode() && this._dataController.isLoaded();
   }
 
@@ -1483,7 +1481,6 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item> {
     const $group = this._getItemsContainer().find(`.${LIST_GROUP_CLASS}`).eq(groupIndex);
     // @ts-expect-error ts-error
     this._collapseGroupHandler($group, false).done(() => {
-      // @ts-expect-error ts-error
       deferred.resolveWith(this);
     });
 
@@ -1495,7 +1492,6 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item> {
     const $group = this._getItemsContainer().find(`.${LIST_GROUP_CLASS}`).eq(groupIndex);
     // @ts-expect-error ts-error
     this._collapseGroupHandler($group, true).done(() => {
-      // @ts-expect-error ts-error
       deferred.resolveWith(this);
     });
 
@@ -1510,11 +1506,9 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item> {
         if (!this._scrollViewIsFull()) {
           this._updateLoadingState(true);
         }
-        // @ts-expect-error ts-error
         deferred.resolveWith(this);
       });
     } else {
-      // @ts-expect-error ts-error
       deferred.resolveWith(this);
     }
 
