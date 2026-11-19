@@ -18,10 +18,17 @@ interface Oklch {
   h: number;
 }
 
+interface Oklab {
+  l: number;
+  a: number;
+  b: number;
+}
+
 interface MeasuredStep {
   step: number;
   resolved: string;
   oklch: Oklch | null;
+  oklab: Oklab | null;
 }
 
 interface PaintedAccent {
@@ -68,11 +75,21 @@ const measurePalette = ClientFunction((accent: string | null, steps: number[]) =
     return parts ? { l: +parts[1], c: +parts[2], h: +parts[3] } : null;
   };
 
+  const asOklab = (color: string): Oklab | null => {
+    probe.style.backgroundColor = `oklab(from ${color} l a b)`;
+    const resolved = getComputedStyle(probe).backgroundColor;
+    const parts = /^oklab\(([-\d.e]+) ([-\d.e]+) ([-\d.e]+)/.exec(resolved);
+
+    return parts ? { l: +parts[1], a: +parts[2], b: +parts[3] } : null;
+  };
+
   const read = (step: number): MeasuredStep => {
     probe.style.backgroundColor = `var(--dxds-primary-${step})`;
     const resolved = getComputedStyle(probe).backgroundColor;
 
-    return { step, resolved, oklch: asOklch(resolved) };
+    return {
+      step, resolved, oklch: asOklch(resolved), oklab: asOklab(resolved),
+    };
   };
 
   const setting = (name: string): number => +getComputedStyle(root).getPropertyValue(name).trim();
@@ -133,13 +150,8 @@ const drawPaletteStrip = ClientFunction((accent: string, steps: number[]) => {
     caption.style.whiteSpace = 'pre';
   });
 }, { dependencies: { PALETTE_STRIP, asHex } });
-const oklchDistance = (first: Oklch, second: Oklch): number => {
-  const radians = Math.PI / 180;
-  const firstA = first.c * Math.cos(first.h * radians);
-  const firstB = first.c * Math.sin(first.h * radians);
-  const secondA = second.c * Math.cos(second.h * radians);
-  const secondB = second.c * Math.sin(second.h * radians);
-  const squared = (first.l - second.l) ** 2 + (firstA - secondA) ** 2 + (firstB - secondB) ** 2;
+const oklabDistance = (first: Oklab, second: Oklab): number => {
+  const squared = (first.l - second.l) ** 2 + (first.a - second.a) ** 2 + (first.b - second.b) ** 2;
 
   return Math.sqrt(squared) * 100;
 };
@@ -230,6 +242,8 @@ const RANGE_ACCENTS = [
 const rounded = (value: number): number => Math.round(value * 1000) / 1000;
 const stepOf = (measured: MeasuredStep[], step: number): Oklch => measured
   .find((entry) => entry.step === step)!.oklch!;
+const labOf = (measured: MeasuredStep[], step: number): Oklab => measured
+  .find((entry) => entry.step === step)!.oklab!;
 
 fixture`Custom accent color`
   .page(url(__dirname, '../container.html'))
@@ -251,7 +265,7 @@ fixture`Custom accent color`
     .expect(derived.measured
       .map((entry) => ({
         step: entry.step,
-        distance: rounded(oklchDistance(stepOf(designedSteps, entry.step), entry.oklch!)),
+        distance: rounded(oklabDistance(labOf(designedSteps, entry.step), entry.oklab!)),
       }))
       .filter(({ distance }) => distance > DESIGNED_PALETTE_TOLERANCE))
     .eql([]);
