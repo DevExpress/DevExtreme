@@ -700,7 +700,7 @@ class PivotGridDataSource {
     let descriptions;
 
     if (collectGroups || area === 'data') {
-      each(this._fields, (_, field) => {
+      this._fields.forEach((field) => {
         if (this.isAreaField(field, area)) {
           areaFields.push(field);
         }
@@ -784,8 +784,8 @@ class PivotGridDataSource {
     }
 
     if (field && store) {
-      each(field.levels || [field], function () {
-        loadFields.push(extend({}, this, {
+      (field.levels || [field]).forEach((level) => {
+        loadFields.push(extend({}, level, {
           expanded: true, filterValues: null, sortOrder: 'asc', sortBySummaryField: null, searchValue,
         }));
       });
@@ -873,11 +873,11 @@ class PivotGridDataSource {
       filters: [],
     };
 
-    each(['row', 'column', 'data', 'filter'], (_, areaName) => {
+    ['row', 'column', 'data', 'filter'].forEach((areaName) => {
       normalizeIndexes(this.getAreaFields(areaName, true), 'areaIndex', currentField);
     });
 
-    each(fields || [], (_, field) => {
+    (fields || []).forEach((field) => {
       const descriptionName = DESCRIPTION_NAME_BY_AREA[field.area];
       const dimension = descriptions[descriptionName];
       const { groupName } = field;
@@ -907,13 +907,13 @@ class PivotGridDataSource {
     });
 
     const indices = {};
-    each(descriptions.values, (_, field) => {
+    for (const field of descriptions.values) {
       const expression = field.calculateSummaryValue;
       if (isFunction(expression)) {
         const summaryCell = summaryUtils.createMockSummaryCell(descriptions, fields, indices);
         expression(summaryCell);
       }
-    });
+    }
 
     return descriptions;
   }
@@ -921,7 +921,7 @@ class PivotGridDataSource {
   _fieldsPrepared(fields) {
     const that: any = this;
     that._fields = fields;
-    each(fields, (index, field) => {
+    fields.forEach((field, index) => {
       field.index = index;
       this.updateCalculatedFieldProperties(field, ALL_CALCULATED_PROPERTIES);
     });
