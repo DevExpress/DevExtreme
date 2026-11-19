@@ -10,7 +10,6 @@ const resizables: Resizable[] = [];
 
 const createResizable = (options: Partial<ResizableProperties> = {}): ResizableModel => {
   const $element = $('<div>').appendTo(document.body);
-  // @ts-expect-error DOMComponent constructor is not typed for direct instantiation
   const instance = new Resizable($element, options);
 
   resizables.push(instance);

@@ -8,7 +8,7 @@ import 'bundles/modules/parts/widgets-web';
 GoogleProvider.remapConstant('http://fakeUrl');
 
 $.each(DevExpress.ui, function(componentName) {
-    if($.fn[componentName] && memoryLeaksHelper.componentCanBeTriviallyInstantiated(componentName) && DevExpress.ui[componentName].subclassOf(DropDownEditor)) {
+    if($.fn[componentName] && memoryLeaksHelper.componentCanBeTriviallyInstantiated(componentName) && DevExpress.ui[componentName].prototype instanceof DropDownEditor) {
         QUnit.test(componentName + ' should not leak memory by creating redundant event subscriptions after showing and hiding the drop down multiple times consecutively', function(assert) {
             const testNode = memoryLeaksHelper.createTestNode();
             const component = $(testNode)[componentName]()[componentName]('instance');
