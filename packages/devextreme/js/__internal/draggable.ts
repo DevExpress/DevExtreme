@@ -43,9 +43,9 @@ import eventsEngine from '@ts/events/core/events_engine';
 import type Scrollable from '@ts/ui/scroll_view/scrollable';
 
 import type {
-  ActionFn, CursorOffset, CursorOffsetCallback, DragEvent, DragEventArgs,
-  DraggableBaseProperties, DraggableProperties, DragStartArgs, DragTemplateArgs,
-  ElementOffsetOptions, MousePosition, ScrollHelperOwner,
+  CursorOffset, CursorOffsetCallback, DragAction, DragElementShownArgs, DragEvent, DragEventArgs,
+  DraggableActionArgs, DraggableBaseProperties, DraggableProperties, DragStartArgs,
+  DragTemplateArgs, ElementOffsetOptions, MousePosition, ScrollHelperOwner,
 } from './draggable.types';
 import Animator from './ui/scroll_view/animator';
 
@@ -64,7 +64,7 @@ const KEYDOWN_EVENT_NAME = addNamespace(KEYDOWN_EVENT, DRAGGABLE);
 const CLONE_CLASS = 'clone';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-type AnyDraggable = Draggable<any>;
+type AnyDraggable = Draggable<any, any>;
 
 let activeTargetDraggable: AnyDraggable | null = null;
 let activeSourceDraggable: AnyDraggable | null = null;
@@ -294,8 +294,9 @@ class ScrollAnimator extends Animator {
 }
 
 class Draggable<
-  TProperties extends DraggableBaseProperties = DraggableProperties,
-> extends DOMComponent<Draggable<TProperties>, TProperties> {
+  TProperties extends DraggableBaseProperties<TActionArgs> = DraggableProperties,
+  TActionArgs extends DraggableActionArgs = DraggableActionArgs,
+> extends DOMComponent<Draggable<TProperties, TActionArgs>, TProperties> {
   _$sourceElement?: dxElementWrapper | null;
 
   _initScrollTop!: number;
@@ -317,6 +318,22 @@ class Draggable<
   _initialLocate?: Coordinates;
 
   _startPosition?: Coordinates;
+
+  _onDragCancelAction?: DragAction<DragEventArgs>;
+
+  _onDragEndAction?: DragAction<DragEventArgs>;
+
+  _onDragEnterAction?: DragAction<DragEventArgs>;
+
+  _onDragLeaveAction?: DragAction<DragEventArgs>;
+
+  _onDragMoveAction?: DragAction<DragEventArgs>;
+
+  _onDragStartAction?: DragAction<DragStartArgs>;
+
+  _onDraggableElementShownAction?: DragAction<DragElementShownArgs>;
+
+  _onDropAction?: DragAction<DragEventArgs>;
 
   reset(): void {}
 
@@ -1108,8 +1125,15 @@ class Draggable<
     this._attachEventHandlers();
   }
 
-  _getAction(name: string): ActionFn {
-    const action: ActionFn | undefined = this[`_${name}Action`];
+  // The base passes the arguments it builds itself; the second overload is for a subclass action
+  _getAction<TName extends keyof DraggableActionArgs>(
+    name: TName,
+  ): DragAction<DraggableActionArgs[TName]>;
+  _getAction<TName extends keyof TActionArgs & string>(
+    name: TName,
+  ): DragAction<TActionArgs[TName]>;
+  _getAction(name: string): DragAction<unknown> {
+    const action: DragAction<unknown> | undefined = this[`_${name}Action`];
 
     return action || this._createActionByOption(name);
   }
@@ -1147,15 +1171,28 @@ class Draggable<
 
     switch (name) {
       case 'onDragStart':
+        this._onDragStartAction = this._createActionByOption(name);
+        break;
       case 'onDragMove':
+        this._onDragMoveAction = this._createActionByOption(name);
+        break;
       case 'onDragEnd':
+        this._onDragEndAction = this._createActionByOption(name);
+        break;
       case 'onDrop':
+        this._onDropAction = this._createActionByOption(name);
+        break;
       case 'onDragEnter':
+        this._onDragEnterAction = this._createActionByOption(name);
+        break;
       case 'onDragLeave':
+        this._onDragLeaveAction = this._createActionByOption(name);
+        break;
       case 'onDragCancel':
+        this._onDragCancelAction = this._createActionByOption(name);
+        break;
       case 'onDraggableElementShown':
-        // @ts-expect-error the action properties are not declared
-        this[`_${name}Action`] = this._createActionByOption(name);
+        this._onDraggableElementShownAction = this._createActionByOption(name);
         break;
       case 'dragTemplate':
       case 'contentTemplate':
