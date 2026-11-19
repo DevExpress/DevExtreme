@@ -3,8 +3,7 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
-
-export type GraphLink = [string, string, number];
+import type { SankeyDataItem } from '@ts/viz/sankey/sankey';
 
 export interface GraphVertex {
   name: string;
@@ -18,9 +17,9 @@ type VertexColors = Record<string, { color: string }>;
 interface GraphStruct {
   _hasCycle: boolean;
   _sortedList: GraphVertex[];
-  hasCycle: (links: GraphLink[]) => boolean;
-  _depthFirstSearch: (links: GraphLink[], vertices: VertexColors, vertex: string) => void;
-  computeLongestPaths: (links: GraphLink[]) => GraphVertex[];
+  hasCycle: (links: SankeyDataItem[]) => boolean;
+  _depthFirstSearch: (links: SankeyDataItem[], vertices: VertexColors, vertex: string) => void;
+  computeLongestPaths: (links: SankeyDataItem[]) => GraphVertex[];
 }
 
 const WHITE = 'white';
@@ -41,7 +40,7 @@ const routines = {
   },
 };
 
-const getVertices = function (links: GraphLink[]): string[] {
+const getVertices = function (links: SankeyDataItem[]): string[] {
   const vert: string[] = [];
 
   links.forEach((link) => {
@@ -56,7 +55,7 @@ const getVertices = function (links: GraphLink[]): string[] {
   return vert;
 };
 
-const getAdjacentVertices = function (links: GraphLink[], vertex: string): string[] {
+const getAdjacentVertices = function (links: SankeyDataItem[], vertex: string): string[] {
   const avert: string[] = [];
 
   links.forEach((link) => {
@@ -68,7 +67,7 @@ const getAdjacentVertices = function (links: GraphLink[], vertex: string): strin
   return avert;
 };
 
-const getReverseAdjacentVertices = function (links: GraphLink[], vertex: string): string[] {
+const getReverseAdjacentVertices = function (links: SankeyDataItem[], vertex: string): string[] {
   const avert: string[] = [];
 
   links.forEach((link) => {
@@ -84,7 +83,7 @@ const struct: GraphStruct = {
   _hasCycle: false,
   _sortedList: [],
 
-  hasCycle(this: GraphStruct, links: GraphLink[]): boolean {
+  hasCycle(this: GraphStruct, links: SankeyDataItem[]): boolean {
     // detects if the graph has cycle
     // sorts the vertices (modifies the _sortedList variable)
     this._hasCycle = false;
@@ -107,7 +106,7 @@ const struct: GraphStruct = {
 
   _depthFirstSearch(
     this: GraphStruct,
-    links: GraphLink[],
+    links: SankeyDataItem[],
     vertices: VertexColors,
     vertex: string,
   ): void {
@@ -129,7 +128,7 @@ const struct: GraphStruct = {
     vertices[vertex].color = BLACK;
   },
 
-  computeLongestPaths(this: GraphStruct, links: GraphLink[]): GraphVertex[] {
+  computeLongestPaths(this: GraphStruct, links: SankeyDataItem[]): GraphVertex[] {
     // calculates longets paths for all vertices
     // method expects sorted vertices array to be in this._sortedList
     const sortedVertices = this._sortedList;

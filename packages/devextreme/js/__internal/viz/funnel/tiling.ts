@@ -1,14 +1,11 @@
 /* eslint-disable @typescript-eslint/init-declarations */
 
 import { normalizeEnum as _normalizeEnum } from '../core/utils';
-
-export interface TilingItem {
-  value: number;
-}
+import type { FunnelDataItem } from './funnel';
 
 export interface TilingAlgorithm {
   getFigures: (data: number[], neckWidth: number, neckHeight: number) => number[][];
-  normalizeValues: (items: TilingItem[]) => number[];
+  normalizeValues: (items: FunnelDataItem[]) => number[];
 }
 
 const algorithms: Record<string, TilingAlgorithm> = {};

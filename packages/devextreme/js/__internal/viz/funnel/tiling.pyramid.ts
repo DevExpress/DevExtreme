@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-shadow */
 /* eslint-disable no-else-return */
 
-import type { TilingItem } from './tiling';
+import type { FunnelDataItem } from './funnel';
 
 const CENTER = 0.5;
 const LEFTCORNER = 0;
@@ -51,7 +51,7 @@ export default {
     });
   },
 
-  normalizeValues(items: TilingItem[]): number[] {
+  normalizeValues(items: FunnelDataItem[]): number[] {
     const sum = items.reduce((sum, item) => sum + item.value, 0);
 
     return items.map((item) => item.value / sum);
