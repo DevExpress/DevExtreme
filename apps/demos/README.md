@@ -89,9 +89,19 @@ The time zone is UTC for the page and for the mock data, whatever the machine is
 
 ### Etalons
 
-The etalons are Linux renders made by CI, where the comparison is exact: no pixel may differ. Text is drawn differently on macOS and Windows, so a run on your machine compares loosely and proves little: pass `--ignore-snapshots` and never commit an etalon written there.
+The etalons are Linux renders, and on CI the comparison is exact: no pixel may differ. Text is drawn differently on macOS and Windows, so a run on your machine compares loosely and proves little: pass `--ignore-snapshots` and never commit an etalon written there.
 
-To add or update an etalon, delete the file and push. The job fails on the missing etalon and uploads what it rendered:
+A container draws what the CI agent draws: it has the same Ubuntu, Chrome and fonts. It is the image of the component tests; see "Record etalons on a Mac" in `e2e/playwright/README.md` for the Docker setup. The container uses your `node_modules` and DevExtreme build:
+
+```
+utils/visual-tests/playwright/docker/run.sh --grep DataGrid-                       # compare as CI does
+THEME=material.blue.light utils/visual-tests/playwright/docker/run.sh --grep DataGrid-
+utils/visual-tests/playwright/docker/run.sh --update-snapshots --grep DataGrid-    # record etalons
+```
+
+On macOS the repository is mounted case-insensitively: a file that a demo requests in the wrong case loads in the container and is missing on CI.
+
+Without a container CI records the etalon: delete the file and push. The job fails on the missing etalon and uploads what it rendered:
 
 ```
 gh run download <run-id> -n playwright-etalons -D ci-etalons
