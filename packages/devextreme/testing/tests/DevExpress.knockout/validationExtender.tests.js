@@ -182,8 +182,8 @@ QUnit.test('dxValidator binding handler should be evaluated after editor binding
     assert.expect(1);
 
     registerComponent('dxTestEditor', { }, class extends Editor {
-        ctor(...args) {
-            super.ctor(...args);
+        constructor(...args) {
+            super(...args);
             assert.ok(!this.$element().data('dxValidator'));
         }
     });

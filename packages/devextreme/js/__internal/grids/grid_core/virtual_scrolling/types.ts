@@ -97,6 +97,7 @@ export interface VirtualScrollingDataControllerExtension {
   viewportHeight: (height: number, scrollTop?: number) => void;
   viewportItemSize: (size?: number) => number | undefined;
   setViewportPosition: (position: number) => void;
+  isViewportPositionPending: () => boolean;
   setContentItemSizes: (sizes: number[]) => void;
   getItemSize: () => number | undefined;
   getItemSizes: () => ItemSizes | undefined;

@@ -3,7 +3,6 @@
 /* eslint-disable @typescript-eslint/prefer-for-of */
 /* eslint-disable @typescript-eslint/no-this-alias */
 /* eslint-disable @typescript-eslint/init-declarations */
-/* eslint-disable no-plusplus */
 /* eslint-disable func-names */
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable @typescript-eslint/no-shadow */
@@ -14,6 +13,7 @@
 import { extend } from '@ts/core/utils/extend';
 import { each } from '@ts/core/utils/iterator';
 import { isDefined as _isDefined } from '@ts/core/utils/type';
+import type { Coords } from '@ts/viz/core/types';
 import { convertPolarToXY, extractColor } from '@ts/viz/core/utils';
 
 import { chart as areaChart } from './area_series';
@@ -198,7 +198,7 @@ chart.bar = _extend({}, chartSeries, baseBarSeriesMethods, {
     const oppositeCoordName = isOpposite ? 'vx' : 'vy';
     const points = this.getPoints();
 
-    for (let i = 0; i < points.length; i++) {
+    for (let i = 0; i < points.length; i += 1) {
       const p = points[i];
       let tmpCoord;
 
@@ -251,13 +251,13 @@ polar.bar = _extend({}, polarSeries, baseBarSeriesMethods, {
   },
 
   getSeriesPairCoord(params, isArgument) {
-    let coords = null;
+    let coords: Coords | null = null;
     const paramName = isArgument ? 'argument' : 'radius';
     const points = this.getVisiblePoints();
     const argAxis = this.getArgumentAxis();
     const startAngle = argAxis.getAngles()[0];
 
-    for (let i = 0; i < points.length; i++) {
+    for (let i = 0; i < points.length; i += 1) {
       const p = points[i];
       const tmpPoint = _isDefined(p[paramName])
         && _isDefined(params[paramName])
@@ -271,7 +271,6 @@ polar.bar = _extend({}, polarSeries, baseBarSeriesMethods, {
         : undefined;
 
       if (_isDefined(tmpPoint)) {
-        // @ts-expect-error
         coords = tmpPoint;
         break;
       }

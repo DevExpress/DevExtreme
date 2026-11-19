@@ -10,7 +10,7 @@ import { plugin as pluginLegend } from '@ts/viz/components/legend';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 import { plugins as centerTemplatePlugins } from '@ts/viz/core/center_template';
 import { setupWidgetPrototype } from '@ts/viz/core/helpers';
-import type { Coords } from '@ts/viz/core/types';
+import type { Coords, Size } from '@ts/viz/core/types';
 import {
   convertAngleToRendererSpace,
   getCosAndSin,
@@ -464,7 +464,7 @@ class BarGauge extends BaseGauge {
     this._baseValue = isFinite(baseValue) ? baseValue : domainMin;
   }
 
-  _getDefaultSize(): { width: number; height: number } {
+  _getDefaultSize(): Size {
     return { width: 300, height: 300 };
   }
 

@@ -17,7 +17,6 @@ const tooltips: TooltipModel[] = [];
 
 const createTooltip = async (options: Partial<TooltipProperties>): Promise<TooltipModel> => {
   const $element = $('<div>').appendTo(document.body);
-  // @ts-expect-error DOMComponent constructor is not typed for direct instantiation
   const instance = new Tooltip($element, options);
 
   await instance.show();

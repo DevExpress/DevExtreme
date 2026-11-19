@@ -1,5 +1,4 @@
 import Action from '@js/core/action';
-import Class from '@js/core/class';
 import type {
   Component as PublicComponent,
   ComponentOptions,
@@ -24,6 +23,7 @@ import type { DxEvent, EventInfo, InitializedEventInfo } from '@js/events';
 import type { ActionEvent } from '@ts/core/action';
 import type { DeprecatedOptionInfo } from '@ts/core/options/index';
 import type { IntegrationOptions } from '@ts/core/template_manager';
+import { inheritClass } from '@ts/core/widget/legacy_inherit';
 import type { OptionChanged } from '@ts/core/widget/types';
 
 const getEventName = (
@@ -107,11 +107,10 @@ export interface ComponentProperties<TComponent> extends ComponentOptions<
 export class Component<
   TComponent extends Component<TComponent, TProperties>,
   TProperties extends ComponentProperties<TComponent> = ComponentProperties<TComponent>,
-  // @ts-expect-error dxClass inheritance issue
-> extends (Class.inherit({}) as new() => {}) implements PublicComponent<TProperties> {
-  static _includedCtors: (() => void)[];
+> implements PublicComponent<TProperties> {
+  static _includedCtors: (() => void)[] = [];
 
-  static _includedPostCtors: (() => void)[];
+  static _includedPostCtors: (() => void)[] = [];
 
   _deprecatedOptions!: Record<string, DeprecatedOptionInfo>;
 
@@ -145,6 +144,16 @@ export class Component<
   _initializing?: boolean;
 
   _cancelOptionChange?: string | boolean;
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  constructor(...args: any[]) {
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    const { _includedCtors, _includedPostCtors } = this.constructor as unknown as MixinTarget;
+
+    _includedCtors.forEach((ctor) => { ctor.call(this); });
+    this.ctor(...args as [unknown?, unknown?]);
+    _includedPostCtors.forEach((postCtor) => { postCtor.call(this); });
+  }
 
   static include<TClass extends MixinTarget>(this: TClass, ...mixins: object[]): TClass {
     const hasOwnProperty = Object.prototype.hasOwnProperty.bind(this);
@@ -180,6 +189,14 @@ export class Component<
     });
 
     return this;
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  static inherit<TClass extends new (...args: any[]) => object>(
+    this: TClass,
+    members?: Record<string, unknown>,
+  ): TClass {
+    return inheritClass(this, members);
   }
 
   _setDeprecatedOptions(): void {

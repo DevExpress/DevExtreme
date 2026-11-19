@@ -4,7 +4,6 @@
 /* eslint-disable max-depth */
 /* eslint-disable @typescript-eslint/no-this-alias */
 /* eslint-disable @typescript-eslint/init-declarations */
-/* eslint-disable no-plusplus */
 /* eslint-disable func-names */
 /* eslint-disable no-nested-ternary */
 /* eslint-disable @typescript-eslint/no-shadow */
@@ -19,6 +18,7 @@ import { extend } from '@ts/core/utils/extend';
 import { each } from '@ts/core/utils/iterator';
 import { solveCubicEquation, trunc } from '@ts/core/utils/math';
 import { clone } from '@ts/core/utils/object';
+import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 import {
   extractColor,
   getCosAndSin,
@@ -253,7 +253,7 @@ const lineSeries = chart.line = extend({}, chartScatterSeries, lineMethods, {
     const needValueCoord = (isArgument && !that._options.rotated)
       || (!isArgument && that._options.rotated);
 
-    for (let i = 0; i < nearestPoints.length; i++) {
+    for (let i = 0; i < nearestPoints.length; i += 1) {
       const p = nearestPoints[i];
       const k = (p[1].vy - p[0].vy) / (p[1].vx - p[0].vx);
       const b = p[0].vy - p[0].vx * k;
@@ -313,7 +313,7 @@ chart.stepline = extend({}, lineSeries, {
     const oppositeCoordName = !isOpposite ? 'vy' : 'vx';
     const nearestPoints = this._getNearestPointsByCoord(coord, isArgument);
 
-    for (let i = 0; i < nearestPoints.length; i++) {
+    for (let i = 0; i < nearestPoints.length; i += 1) {
       const p = nearestPoints[i];
       let tmpCoord;
 
@@ -460,7 +460,7 @@ chart.spline = extend({}, lineSeries, {
 
   getSeriesPairCoord(coord, isArgument) {
     const that = this;
-    let oppositeCoord = null;
+    let oppositeCoord: number | null = null;
     const isOpposite = !isArgument && !this._options.rotated || isArgument && this._options.rotated;
     const coordName = !isOpposite ? 'vx' : 'vy';
     const bezierCoordName = !isOpposite ? 'x' : 'y';
@@ -470,7 +470,7 @@ chart.spline = extend({}, lineSeries, {
     const visibleArea = axis.getVisibleArea();
     const nearestPoints = this._getNearestPointsByCoord(coord, isArgument);
 
-    for (let i = 0; i < nearestPoints.length; i++) {
+    for (let i = 0; i < nearestPoints.length; i += 1) {
       const p = nearestPoints[i];
       if (p.length === 1) {
         visibleArea[0] <= p[0][oppositeCoordName]
@@ -492,7 +492,6 @@ chart.spline = extend({}, lineSeries, {
               + 3 * (1 - t) * t * t * p[2][bezierOppositeCoordName]
               + t * t * t * p[3][oppositeCoordName];
             if (visibleArea[0] <= tmpCoord && visibleArea[1] >= tmpCoord) {
-              // @ts-expect-error
               oppositeCoord = tmpCoord;
             }
           }
@@ -531,7 +530,7 @@ polar.line = extend({}, polarScatterSeries, lineMethods, {
     lastSegment && this._closeSegment(points);
 
     if (this.argumentAxisType !== DISCRETE && this.valueAxisType !== DISCRETE) {
-      for (i = 1; i < points.length; i++) {
+      for (i = 1; i < points.length; i += 1) {
         preparedPoints = preparedPoints.concat(
           this._getTangentPoints(points[i], points[i - 1], centerPoint, i === points.length - 1),
         );
@@ -575,24 +574,21 @@ polar.line = extend({}, polarScatterSeries, lineMethods, {
   },
 
   _getTangentPoints(point, prevPoint, centerPoint, isLastSegment) {
-    let tangentPoints = [];
+    let tangentPoints: ThemeValue[] = [];
     const betweenAngle = Math.round(prevPoint.angle - point.angle);
     const tan = (prevPoint.radius - point.radius) / betweenAngle;
     let i;
 
     if (betweenAngle === 0) {
-      // @ts-expect-error
       tangentPoints = [prevPoint, point];
     } else if (betweenAngle > 0) {
       const angle = isLastSegment ? betweenAngle : betweenAngle - 1;
-      for (i = angle; i >= 0; i--) {
-        // @ts-expect-error
+      for (i = angle; i >= 0; i -= 1) {
         tangentPoints.push(getTangentPoint(point, prevPoint, centerPoint, tan, i));
       }
     } else {
       const angle = isLastSegment ? betweenAngle : betweenAngle + 1;
-      for (i = 0; i >= angle; i--) {
-        // @ts-expect-error
+      for (i = 0; i >= angle; i -= 1) {
         tangentPoints.push(getTangentPoint(point, prevPoint, centerPoint, tan, betweenAngle - i));
       }
     }
@@ -694,7 +690,7 @@ polar.line = extend({}, polarScatterSeries, lineMethods, {
       }
     }
 
-    for (let i = 1; i < points.length; i++) {
+    for (let i = 1; i < points.length; i += 1) {
       if (points[i - 1][paramName] === param) {
         // @ts-expect-error
         neighborPoints.push(points[i - 1]);

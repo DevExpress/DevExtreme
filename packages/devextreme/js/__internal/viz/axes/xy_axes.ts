@@ -6,7 +6,6 @@
 /* eslint-disable prefer-spread */
 /* eslint-disable @typescript-eslint/no-this-alias */
 /* eslint-disable @typescript-eslint/init-declarations */
-/* eslint-disable no-plusplus */
 /* eslint-disable func-names */
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable no-nested-ternary */
@@ -67,11 +66,11 @@ function prepareDatesDifferences(datesDifferences, tickInterval): void {
     tickInterval = 'month';
   }
   if (datesDifferences[tickInterval]) {
-    for (i = 0; i < dateUtils.dateUnitIntervals.length; i++) {
+    for (i = 0; i < dateUtils.dateUnitIntervals.length; i += 1) {
       dateUnitInterval = dateUtils.dateUnitIntervals[i];
       if (datesDifferences[dateUnitInterval]) {
         datesDifferences[dateUnitInterval] = false;
-        datesDifferences.count--;
+        datesDifferences.count -= 1;
       }
       if (dateUnitInterval === tickInterval) {
         break;
@@ -177,29 +176,25 @@ function getRightMargin(bBox): number {
 function generateRangesOnPoints(points, edgePoints, getRange) {
   let i;
   let length;
-  let maxRange = null;
-  const ranges = [];
+  let maxRange: { start: number; end: number; length: number } | null = null;
+  const ranges: { start: number; end: number; length: number }[] = [];
   let curValue;
   let prevValue;
   let curRange;
 
-  for (i = 1, length = points.length; i < length; i++) {
+  for (i = 1, length = points.length; i < length; i += 1) {
     curValue = points[i];
     prevValue = points[i - 1];
     curRange = getRange(curValue, prevValue);
 
     if (edgePoints.indexOf(curValue) >= 0) {
-      // @ts-expect-error
       if (!maxRange || curRange > maxRange.length) {
-        // @ts-expect-error
         maxRange = { start: curValue, end: prevValue, length: curRange };
       }
     } else {
-      // @ts-expect-error
       if (maxRange && curRange < maxRange.length) {
         ranges.push(maxRange);
       } else {
-        // @ts-expect-error
         ranges.push({ start: curValue, end: prevValue, length: curRange });
       }
       maxRange = null;
@@ -239,25 +234,20 @@ function generateAutoBreaks(
 
   const ranges = generateRangesOnPoints(sortedAllPoints, edgePoints, getRange)
     .filter(({ length }) => !!length)
-    // @ts-expect-error
     .sort((a, b) => b.length - a.length);
   const epsilon = _math.min.apply(
     null,
-    // @ts-expect-error
     ranges.map((r) => r.length),
   ) / 1000;
   const _maxAutoBreakCount = isDefined(maxAutoBreakCount)
     ? _math.min(maxAutoBreakCount, ranges.length)
     : ranges.length;
 
-  for (let i = 0; i < _maxAutoBreakCount; i++) {
-    // @ts-expect-error
+  for (let i = 0; i < _maxAutoBreakCount; i += 1) {
     if (ranges[i].length >= minDiff) {
-      // @ts-expect-error
       if (visibleRange <= ranges[i].length) {
         break;
       }
-      // @ts-expect-error
       visibleRange -= ranges[i].length;
       if (visibleRange > epsilon || visibleRange < -epsilon) {
         // @ts-expect-error
@@ -1521,7 +1511,7 @@ export default {
       oppositeAxes
         .filter((orthogonalAxis) => orthogonalAxis.pane === that.pane)
         .forEach((orthogonalAxis) => {
-          for (let i = 0; i < that._majorTicks.length; i++) {
+          for (let i = 0; i < that._majorTicks.length; i += 1) {
             const tick = that._majorTicks[i];
             const { label } = tick;
             if (label) {
@@ -1535,7 +1525,7 @@ export default {
                 that._shiftThroughOrthogonalAxisOverlappedTick(label, orthogonalAxis);
               }
 
-              for (let j = 0; j < orthogonalAxis._majorTicks.length; j++) {
+              for (let j = 0; j < orthogonalAxis._majorTicks.length; j += 1) {
                 const oppositeTick = orthogonalAxis._majorTicks[j];
                 const oppositeLabel = oppositeTick.label;
                 if (oppositeLabel && that._detectElementsOverlapping(label, oppositeLabel)) {

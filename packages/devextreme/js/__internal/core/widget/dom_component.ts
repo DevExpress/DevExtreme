@@ -65,6 +65,11 @@ class DOMComponent<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   _templateManager!: any;
 
+  // eslint-disable-next-line @typescript-eslint/no-useless-constructor
+  constructor(element: Element | dxElementWrapper, options?: unknown) {
+    super(element, options);
+  }
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   static getInstance<T = any>(element: Element | dxElementWrapper): T {
     return getInstanceByElement<T>($(element), this);
@@ -87,7 +92,7 @@ class DOMComponent<
     };
   }
 
-  ctor(element: Element, options: TProperties): void {
+  ctor(element: Element | dxElementWrapper, options: TProperties): void {
     this._customClass = null;
 
     this._createElement(element);
@@ -104,7 +109,7 @@ class DOMComponent<
     uiLayerInitialized.resolve();
   }
 
-  _createElement(element: Element): void {
+  _createElement(element: Element | dxElementWrapper): void {
     this._$element = $(element);
   }
 

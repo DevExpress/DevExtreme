@@ -1,7 +1,6 @@
 /* eslint-disable import/no-import-module-exports */
 /* eslint-disable @typescript-eslint/no-this-alias */
 /* eslint-disable @typescript-eslint/init-declarations */
-/* eslint-disable no-plusplus */
 /* eslint-disable func-names */
 /* eslint-disable import/no-mutable-exports */
 /* eslint-disable @typescript-eslint/naming-convention */
@@ -15,6 +14,7 @@ import { each } from '@ts/core/utils/iterator';
 import type { LegendDataItem } from '@ts/viz/components/legend';
 import { Legend as _BaseLegend } from '@ts/viz/components/legend';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
+import type { Size } from '@ts/viz/core/types';
 
 const _extend = extend;
 const _each = each;
@@ -54,7 +54,7 @@ function buildData(partition: number[], values: ThemeValue[], field: string): Le
   const ii = values.length;
   const list = [];
   let item;
-  for (i = 0; i < ii; ++i) {
+  for (i = 0; i < ii; i += 1) {
     // @ts-expect-error the item gets its value, states and visibility right below
     list[i] = item = {
       start: partition[i],
@@ -117,7 +117,7 @@ let Legend = class Legend extends _BaseLegend {
   }
 
   // This method is called only by the layout
-  resize(size: { width: number; height: number } | null): void {
+  resize(size: Size | null): void {
     this._params.notifyDirty();
     if (size === null) {
       this.erase();
@@ -190,15 +190,15 @@ export let LegendsControl = class LegendsControl {
     const params = this._params;
     const theme = params.themeManager.theme('legend');
 
-    for (i = items.length; i < ii; ++i) {
+    for (i = items.length; i < ii; i += 1) {
       items[i] = new Legend(params);
     }
-    for (i = items.length - 1; i >= ii; --i) {
+    for (i = items.length - 1; i >= ii; i -= 1) {
       items[i].dispose();
       items.splice(i, 1);
     }
     params.layoutControl.suspend();
-    for (i = 0; i < ii; ++i) {
+    for (i = 0; i < ii; i += 1) {
       items[i].setOptions(_extend(true, {}, theme, optionList[i]));
     }
     params.layoutControl.resume();

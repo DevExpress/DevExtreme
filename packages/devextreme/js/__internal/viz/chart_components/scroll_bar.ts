@@ -11,7 +11,7 @@ import eventsEngine from '@ts/events/core/events_engine';
 import { end as dragEventEnd, move as dragEventMove, start as dragEventStart } from '@ts/events/drag';
 import { fireEvent } from '@ts/events/utils/index';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
-import type { Bounds, Canvas } from '@ts/viz/core/types';
+import type { Bounds, Canvas, Coords } from '@ts/viz/core/types';
 
 import { Translator2D } from '../translators/translator2d';
 
@@ -29,7 +29,7 @@ interface ScrollBarLayoutOptions {
 }
 
 interface ScrollBarPointerEvent extends EngineEvent {
-  offset: { x: number; y: number };
+  offset: Coords;
 }
 
 interface ScrollBarRange {
@@ -41,7 +41,7 @@ interface ScrollBarDragEvent {
   type: string;
   originalEvent: ScrollBarPointerEvent;
   target: ThemeValue;
-  offset: { x: number; y: number };
+  offset: Coords;
   scrollRange: ScrollBarRange | undefined;
 }
 
