@@ -46,7 +46,6 @@ export interface AccordionProperties extends Properties<Item, CollectionItemKey>
 class Accordion extends CollectionWidgetLiveUpdate<AccordionProperties, Item, CollectionItemKey> {
   _deferredAnimate?: DeferredObj<unknown>;
 
-  // eslint-disable-next-line no-restricted-globals
   _animationTimer?: ReturnType<typeof setTimeout>;
 
   _$container!: dxElementWrapper;
@@ -311,7 +310,6 @@ class Accordion extends CollectionWidgetLiveUpdate<AccordionProperties, Item, Co
     ))
       .done(() => {
         if (deferredAnimate) {
-          // @ts-expect-error ts-error
           deferredAnimate.resolveWith(that);
         }
       });

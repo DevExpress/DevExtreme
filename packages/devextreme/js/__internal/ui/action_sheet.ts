@@ -342,7 +342,6 @@ class ActionSheet extends CollectionWidget<Properties> {
     // @ts-expect-error ts-error
     this._popup.toggle(showing).done(() => {
       this.option('visible', showing);
-      // @ts-expect-error ts-error
       d.resolveWith(this);
     });
 

@@ -16,13 +16,13 @@ import type {
   EditorOptions,
   ValueChangedInfo,
 } from '@js/ui/editor/editor';
-import ValidationEngine from '@js/ui/validation_engine';
-import ValidationMessage from '@js/ui/validation_message';
 import domUtils from '@ts/core/utils/dom';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { WidgetProperties } from '@ts/core/widget/widget';
 import Widget from '@ts/core/widget/widget';
 import EventsEngine from '@ts/events/core/events_engine';
+import ValidationEngine from '@ts/ui/validation_engine';
+import ValidationMessage from '@ts/ui/validation_message';
 
 const INVALID_MESSAGE_AUTO = 'dx-invalid-message-auto';
 const READONLY_STATE_CLASS = 'dx-state-readonly';
@@ -107,7 +107,6 @@ class Editor<
 
   _initOptions(options: TProperties): void {
     super._initOptions(options);
-    // @ts-expect-error ts-error
     this.option(ValidationEngine.initValidationOptions(options));
   }
 
@@ -222,7 +221,6 @@ class Editor<
     // NOTE: The click should be processed before the validation message is shown because
     // it can change the editor's value
     if (this._canValueBeChangedByClick() && isValidationMessageShownOnFocus) {
-      // @ts-expect-error ts-error
       // NOTE: Prevent the validation message from showing
       const $validationMessageWrapper = this._validationMessage?.$wrapper();
       $validationMessageWrapper?.removeClass(INVALID_MESSAGE_AUTO);
@@ -232,7 +230,6 @@ class Editor<
       // NOTE: Show the validation message after a click changes the value
       // eslint-disable-next-line no-restricted-globals
       this.showValidationMessageTimeout = setTimeout(
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
         () => $validationMessageWrapper?.addClass(INVALID_MESSAGE_AUTO),
         150,
       );
@@ -334,7 +331,6 @@ class Editor<
 
       this._toggleAriaDescribedBy(validationMessageContentId);
 
-      // @ts-expect-error ts-error
       this._validationMessage = new ValidationMessage(this._$validationMessage, extend({
         validationErrors,
         rtlEnabled,
@@ -456,7 +452,6 @@ class Editor<
         break;
       case 'width':
         super._optionChanged(args);
-        // @ts-expect-error ts-error
         this._validationMessage?.updateMaxWidth();
         break;
       case 'name':
