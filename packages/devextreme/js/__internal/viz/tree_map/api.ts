@@ -5,13 +5,13 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-multi-assign */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-use-before-define */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
 
+import type { dxTreeMapNode } from '@js/viz/tree_map';
 import { noop } from '@ts/core/utils/common';
 import { extend as _extend } from '@ts/core/utils/extend';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
+import type { TextAppearance } from '@ts/viz/tree_map/common';
 import Node from '@ts/viz/tree_map/node';
 import TreeMapBase from '@ts/viz/tree_map/tree_map.base';
 
@@ -23,7 +23,7 @@ proto._eventsMap.onNodesRendering = { name: 'nodesRendering' };
 
 proto._createProxyType = function (): void {
   const that = this;
-  let nodes;
+  let nodes: Node[];
 
   class Proxy {
     declare _id: number;
@@ -43,12 +43,12 @@ proto._createProxyType = function (): void {
     }
 
     getParent(): Proxy | null {
-      return nodes[this._id].parent.proxy || null;
+      return (nodes[this._id].parent.proxy as Proxy | undefined) || null;
     }
 
     getChild(index: number): Proxy | null {
       const _nodes = nodes[this._id].nodes;
-      return _nodes ? _nodes[index].proxy : null;
+      return _nodes ? _nodes[index].proxy as Proxy : null;
     }
 
     getChildrenCount(): number {
@@ -57,7 +57,7 @@ proto._createProxyType = function (): void {
     }
 
     getAllChildren(): Proxy[] {
-      const _nodes = nodes[this._id].nodes;
+      const _nodes: ThemeValue = nodes[this._id].nodes;
       let i;
       const ii = _nodes?.length;
       const list: Proxy[] = [];
@@ -85,7 +85,7 @@ proto._createProxyType = function (): void {
 
     value(arg?: number): number | Proxy {
       const node = nodes[this._id];
-      let result;
+      let result: number | Proxy;
 
       if (arg !== undefined) {
         updateValue(node, arg > 0 ? Number(arg) : 0);
@@ -97,9 +97,9 @@ proto._createProxyType = function (): void {
       return result;
     }
 
-    label(arg?: string): string | Proxy {
+    label(arg?: string): string | Proxy | null {
       const node = nodes[this._id];
-      let result;
+      let result: string | Proxy | null;
 
       if (arg !== undefined) {
         node.customLabel = arg ? String(arg) : null;
@@ -209,19 +209,19 @@ nodeProto.updateLabelStyle = function (): void {
   }
 };
 
-function calculatePartialLabelState(node, settings) {
-  const state = node.ctx.calculateLabelState(settings);
+function calculatePartialLabelState(node: Node, settings: ThemeValue): TextAppearance {
+  const state: TextAppearance = node.ctx.calculateLabelState(settings);
   if ('visible' in settings) {
     state.visible = !!settings.visible;
   }
   return state;
 }
 
-proto.getRootNode = function () {
-  return this._root.proxy;
+proto.getRootNode = function (this: TreeMapBase): dxTreeMapNode {
+  return this._root.proxy as dxTreeMapNode;
 };
 
-proto.resetNodes = function () {
+proto.resetNodes = function (this: TreeMapBase): TreeMapBase {
   const context = this._context;
 
   context.suspend();

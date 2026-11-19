@@ -2,10 +2,10 @@
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable guard-for-in */
 /* eslint-disable no-multi-assign */
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-use-before-define */
 
 import { Callbacks } from '@ts/core/utils/callbacks';
+import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 
 const eventEmitterMethods = {
   _initEvents(): void {
@@ -27,7 +27,7 @@ const eventEmitterMethods = {
     this._events = null;
   },
 
-  on(handlers): () => void {
+  on(handlers: Record<string, (arg: ThemeValue) => void>): () => void {
     const events = this._events;
     let name;
     for (name in handlers) {
@@ -41,12 +41,12 @@ const eventEmitterMethods = {
     }
   },
 
-  _fire(name, arg): void {
+  _fire(name: string, arg?: ThemeValue): void {
     this._events[name].fire(arg);
   },
 };
 
-export function makeEventEmitter(target): void {
+export function makeEventEmitter(target: { prototype: ThemeValue }): void {
   const proto = target.prototype;
   let name;
   for (name in eventEmitterMethods) {

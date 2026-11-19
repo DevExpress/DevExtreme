@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-this-alias */
 /* eslint-disable func-names */
 /* eslint-disable @typescript-eslint/no-shadow */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
 
 import '@ts/viz/tree_map/api';
 
+import type { Coordinates } from '@js/core/renderer';
+import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 import { expand } from '@ts/viz/core/helpers';
 // PLUGINS_SECTION\
 import { plugin as tooltipPlugin } from '@ts/viz/core/tooltip';
@@ -34,8 +34,12 @@ expand(proto, '_onTilingPerformed', function () {
   }
 });
 
-function getCoords(coords, rect, renderer) {
-  const offset = renderer.getRootOffset();
+function getCoords(
+  coords: number[] | undefined,
+  rect: number[] | undefined,
+  renderer: ThemeValue,
+): number[] {
+  const offset: Coordinates = renderer.getRootOffset();
   return (
     coords
     || (rect && [(rect[0] + rect[2]) / 2 + offset.left, (rect[1] + rect[3]) / 2 + offset.top]) || [

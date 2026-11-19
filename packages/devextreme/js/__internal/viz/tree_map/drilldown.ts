@@ -2,11 +2,10 @@
 /* eslint-disable @typescript-eslint/no-shadow */
 /* eslint-disable @typescript-eslint/no-this-alias */
 /* eslint-disable @typescript-eslint/init-declarations */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
 
 import '@ts/viz/tree_map/api';
 
+import type { dxTreeMapNode } from '@js/viz/tree_map';
 import { expand } from '@ts/viz/core/helpers';
 import TreeMapBase from '@ts/viz/tree_map/tree_map.base';
 
@@ -43,16 +42,16 @@ proto._drillToNode = function (index): void {
   }
 };
 
-proto.resetDrillDown = function () {
+proto.resetDrillDown = function (this: TreeMapBase): TreeMapBase {
   this._drillToNode(-1);
   return this;
 };
 
-proto.drillUp = function () {
+proto.drillUp = function (this: TreeMapBase): TreeMapBase {
   this._drillToNode(this._topNode.parent._id || -1);
   return this;
 };
 
-proto.getCurrentNode = function () {
-  return this._topNode.proxy;
+proto.getCurrentNode = function (this: TreeMapBase): dxTreeMapNode {
+  return this._topNode.proxy as dxTreeMapNode;
 };
