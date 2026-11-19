@@ -442,13 +442,13 @@ export let createPalette = function (palette, parameters, themeDefaultPalette?) 
       this._extensionStrategy = null;
     },
 
-    getNextColor(count) {
+    getNextColor(count?) {
       const colorIndex = this._currentColor;
       this._currentColor += 1;
       return this._extensionStrategy.getColor(colorIndex, count);
     },
 
-    generateColors(count, parameters?) {
+    generateColors(count?, parameters?) {
       return this._extensionStrategy.generateColors(count, (parameters || {}).repeat);
     },
 
