@@ -76,16 +76,14 @@ export const appendElementTo = async (
 
 export const addCaptionTo = async (
   page: Page,
-  parentSelector: string,
+  elementSelector: string,
   caption: string,
+  where: InsertPosition = 'beforebegin',
 ): Promise<void> => page.evaluate(
-  ({ parent, text }) => {
-    const element = document.createElement('div');
-
-    element.textContent = text;
-    document.querySelector(parent)?.appendChild(element);
+  ({ selector, text, position }) => {
+    document.querySelector(selector)?.insertAdjacentText(position, text);
   },
-  { parent: parentSelector, text: caption },
+  { selector: elementSelector, text: caption, position: where },
 );
 
 export const insertStylesheetRulesToPage = async (

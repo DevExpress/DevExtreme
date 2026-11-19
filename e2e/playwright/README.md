@@ -55,7 +55,7 @@ crop and render differently, so a TestCafe image is not a valid reference for th
 It is still the check of the port. Recording writes whatever the test reached, and a verify run
 compares against that same file, so neither notices a test that shot the wrong state. Before
 deleting the TestCafe etalon, compare the new one with it: the same picture, within the per-pixel
-threshold. Three differences are expected:
+threshold. Five differences are expected:
 
 - A scrollbar. This suite shows it, TestCafe cut it off, so a viewport shot of a page that
   overflows comes out up to 15 px larger, with the scrollbar in the extra strip.
@@ -63,6 +63,13 @@ threshold. Three differences are expected:
 - Single antialiased pixels on the edges of shapes that sit on fractional coordinates. The TestCafe
   comparer ignored antialiasing (looks-same, `ignoreAntialiasing`, tolerance 5), so its etalon
   could drift there unnoticed; this suite compares them strictly.
+- The crop of an element shot. TestCafe took `getBoundingClientRect` widened to the element's
+  `scrollWidth`/`scrollHeight`, so a hidden descendant that sticks out (an invalid message under the
+  last editor) made its image taller; Playwright takes the box alone and rounds a fractional size
+  up, so an image can come out a row taller or several rows shorter. The common area is identical.
+- A whole colour shifted by a few units (an editor border 205 → 203 in fluent-next). The tolerance
+  above let a later theme change through without a new TestCafe etalon; every other pixel of that
+  colour shifts the same way, and only the text antialiasing around it changes besides.
 
 Anything else, a block of pixels or a moved edge, means the test reached a different state; find
 out why rather than accept the image.
