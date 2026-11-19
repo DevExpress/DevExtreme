@@ -1,5 +1,4 @@
 /* eslint-disable max-classes-per-file */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-use-before-define */
 
 import { noop } from '@ts/core/utils/common';
@@ -10,6 +9,8 @@ import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 import { setupWidgetPrototype } from '@ts/viz/core/helpers';
 import { map, normalizeEnum } from '@ts/viz/core/utils';
 import { BaseGauge, compareArrays } from '@ts/viz/gauges/base_gauge';
+import type { BaseIndicator } from '@ts/viz/gauges/base_indicators';
+import type BaseRangeContainer from '@ts/viz/gauges/base_range_container';
 
 const SHIFT_ANGLE = 90;
 
@@ -38,6 +39,12 @@ export interface TicksCoefficients {
   outer: number;
 }
 
+type GaugeElement = BaseRangeContainer | BaseIndicator | ValueIndicatorsSet;
+
+type HardModeGauge = Gauge & { _valueIndicators: BaseIndicator[] | null };
+
+type HardModeIndicator = BaseIndicator & { index: number };
+
 function processValue(value: ThemeValue, fallbackValue: ThemeValue): ThemeValue {
   if (value === null) {
     return value;
@@ -45,7 +52,9 @@ function processValue(value: ThemeValue, fallbackValue: ThemeValue): ThemeValue 
   return isFinite(value) ? Number(value) : fallbackValue;
 }
 
-function parseArrayOfNumbers(arg: ThemeValue): ThemeValue[] | null {
+function parseArrayOfNumbers(
+  arg: unknown[] | number | string | null | undefined,
+): unknown[] | null {
   if (Array.isArray(arg)) {
     return arg;
   }
@@ -64,7 +73,7 @@ abstract class Gauge extends BaseGauge {
 
   __subvalues!: ThemeValue[] | null;
 
-  _rangeContainer;
+  _rangeContainer!: BaseRangeContainer;
 
   _subvalueIndicatorContainer;
 
@@ -74,9 +83,9 @@ abstract class Gauge extends BaseGauge {
 
   _scale;
 
-  _valueIndicator;
+  _valueIndicator?: BaseIndicator | null;
 
-  _subvalueIndicatorsSet;
+  _subvalueIndicatorsSet?: ValueIndicatorsSet | null;
 
   _baseValue!: number;
 
@@ -132,6 +141,7 @@ abstract class Gauge extends BaseGauge {
     this._disposeValueIndicators();
     this._subvalueIndicatorContainer.linkOff();
 
+    // @ts-expect-error dispose() drops the reference
     this._rangeContainer = null;
     this._labelsAxesGroup = null;
     this._scaleGroup = null;
@@ -202,7 +212,7 @@ abstract class Gauge extends BaseGauge {
     this._renderScale(scaleOptions);
     this._subvalueIndicatorContainer.linkAppend();
 
-    const elements: ThemeValue[] = map(
+    const elements: GaugeElement[] = map(
       [this._rangeContainer].concat(this._prepareValueIndicators()),
       (element) => (element && element.enabled ? element : null),
     );
@@ -234,11 +244,11 @@ abstract class Gauge extends BaseGauge {
     scaleOptions.numberMultipliers = DEFAULT_NUMBER_MULTIPLIERS;
     scaleOptions.tickOrientation = this._getTicksOrientation(scaleOptions);
     if (scaleOptions.label.useRangeColors) {
-      const getColorForValue = (value: number): ThemeValue => this._rangeContainer
+      const getColorForValue = (value: number): string | null | undefined => this._rangeContainer
         .getColorForValue(value);
       scaleOptions.label.customizeColor = function customizeColor(
         this: { value: number },
-      ): ThemeValue {
+      ): string | null | undefined {
         return getColorForValue(this.value);
       };
     }
@@ -444,9 +454,27 @@ abstract class Gauge extends BaseGauge {
     className?: string,
     trackerType?: string,
     trackerIndex?: number,
+    strict?: false,
+  ): BaseIndicator;
+
+  _createIndicator(
+    type: string,
+    owner: ThemeValue,
+    className: string,
+    trackerType: string,
+    trackerIndex: number,
+    strict: boolean,
+  ): BaseIndicator | null;
+
+  _createIndicator(
+    type: string,
+    owner: ThemeValue,
+    className?: string,
+    trackerType?: string,
+    trackerIndex?: number,
     strict?: boolean,
-  ): ThemeValue {
-    const indicator = this._factory.createIndicator({
+  ): BaseIndicator | null {
+    const indicator: BaseIndicator | null = this._factory.createIndicator({
       renderer: this._renderer,
       translator: this._translator,
       owner,
@@ -550,12 +578,12 @@ function selectHardMode(that: ThemeValue): void {
 }
 
 function updateActiveElementsHardMode(this: ThemeValue): void {
-  this._valueIndicators.forEach((valueIndicator) => {
+  this._valueIndicators.forEach((valueIndicator: HardModeIndicator) => {
     valueIndicator.value(this._indicatorValues[valueIndicator.index], this._noAnimation);
   });
 }
 
-function prepareValueIndicatorsHardMode(this: ThemeValue): ThemeValue[] {
+function prepareValueIndicatorsHardMode(this: HardModeGauge): ThemeValue[] {
   const valueIndicators = this._valueIndicators || [];
   const userOptions = this.option('valueIndicators');
   const optionList: ThemeValue[] = [];
@@ -568,7 +596,7 @@ function prepareValueIndicatorsHardMode(this: ThemeValue): ThemeValue[] {
   }
   const newValueIndicators: ThemeValue[] = [];
   optionList.forEach((userSettings, index) => {
-    let valueIndicator = valueIndicators[index];
+    let valueIndicator: BaseIndicator | null = valueIndicators[index];
     if (!userSettings) {
       if (valueIndicator) {
         valueIndicator.dispose();
@@ -594,12 +622,12 @@ function prepareValueIndicatorsHardMode(this: ThemeValue): ThemeValue[] {
 }
 
 function disposeValueIndicatorsHardMode(this: ThemeValue): void {
-  this._valueIndicators.forEach((valueIndicator) => valueIndicator.dispose());
+  this._valueIndicators.forEach((valueIndicator: BaseIndicator) => valueIndicator.dispose());
   this._valueIndicators = null;
 }
 
 function cleanValueIndicatorsHardMode(this: ThemeValue): void {
-  this._valueIndicators.forEach((valueIndicator) => valueIndicator.clean());
+  this._valueIndicators.forEach((valueIndicator: BaseIndicator) => valueIndicator.clean());
 }
 
 function indicatorValueHardMode(this: ThemeValue, index: number, value?: ThemeValue): ThemeValue {
@@ -626,18 +654,18 @@ function accessPointerValue(
 }
 
 interface ValueIndicatorsSetParameters {
-  createIndicator: (type: string, index?: number) => ThemeValue;
+  createIndicator: (type: string, index?: number) => BaseIndicator;
   createPalette: (palette: ThemeValue) => ThemeValue;
 }
 
 class ValueIndicatorsSet {
   _parameters: ValueIndicatorsSetParameters;
 
-  _indicators: ThemeValue[];
+  _indicators: BaseIndicator[];
 
   _options: ThemeValue;
 
-  _sample: ThemeValue;
+  _sample!: BaseIndicator;
 
   _palette: ThemeValue;
 
@@ -647,7 +675,7 @@ class ValueIndicatorsSet {
 
   type?: string;
 
-  enabled?: boolean;
+  enabled?: boolean | null;
 
   constructor(parameters: ValueIndicatorsSetParameters) {
     this._parameters = parameters;
@@ -669,6 +697,7 @@ class ValueIndicatorsSet {
     this._indicators.forEach((indicator) => indicator.clean());
     this._palette = null;
     this._options = null;
+    // @ts-expect-error clean() drops the reference
     this._sample = null;
     return this;
   }

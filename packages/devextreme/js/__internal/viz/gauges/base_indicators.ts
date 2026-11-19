@@ -115,6 +115,8 @@ export abstract class BaseIndicator extends BaseElement {
 
   visible?: boolean;
 
+  declare index?: number;
+
   _init(): void {
     this._rootElement = this._createRoot()
       .linkOn(this._owner, { name: 'value-indicator', after: 'core' });
@@ -251,6 +253,8 @@ export abstract class BaseIndicator extends BaseElement {
   abstract _clear(): void;
 
   abstract _move(): void;
+
+  abstract measure(layout: unknown): IndicatorMeasure;
 }
 
 // The following is from baseMarker.js

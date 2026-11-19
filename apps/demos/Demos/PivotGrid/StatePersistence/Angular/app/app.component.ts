@@ -92,6 +92,10 @@ export class AppComponent {
     }
   }
 
+  onRefreshClick() {
+    window.location.reload();
+  }
+
   onResetButtonClick() {
     this.pivotGridDataSource.state({});
   }

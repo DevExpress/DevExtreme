@@ -1,5 +1,4 @@
 /* eslint-disable func-names */
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 
 import devices from '@ts/core/devices';
 import { browser } from '@ts/core/utils/browser';
@@ -24,13 +23,22 @@ export const consts = {
   pointerSize: POINTER_SIZE,
 };
 
+interface FormatObject {
+  value: unknown;
+  valueText: string;
+}
+
+interface ValueFormatOptions {
+  customizeText?: (this: FormatObject, formatObject: FormatObject) => unknown;
+}
+
 export const formatValue = function (
-  value,
-  formatOptions,
-  tickIntervalsInfo?,
-  valueType?,
-  type?,
-  logarithmBase?,
+  value: unknown,
+  formatOptions: ValueFormatOptions,
+  tickIntervalsInfo?: { ticks: unknown[]; tickInterval?: unknown },
+  valueType?: string,
+  type?: string,
+  logarithmBase?: number,
 ): string {
   const formatObject = {
     value,

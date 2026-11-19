@@ -3,7 +3,7 @@ import { mount } from '@vue/test-utils';
 import * as events from 'devextreme/events';
 import config from 'devextreme/core/config';
 import {
-  App, defineComponent, nextTick, ref, createVNode, Fragment
+  App, ComponentOptions, ComponentPublicInstance, defineComponent, nextTick, ref, createVNode, Fragment
 } from 'vue';
 import { createRouter, createWebHistory } from 'vue-router';
 
@@ -37,7 +37,7 @@ function createConfigurationComponent(config) {
   return defineComponent(config);
 }
 
-function createExtensionComponent(config) {
+function createExtensionComponent(config: ComponentOptions) {
   prepareExtensionComponentConfig(config);
 
   return defineComponent(config);
@@ -323,7 +323,7 @@ describe('component rendering', () => {
       });
 
       const wrapper = mount(vm);
-      const component = wrapper.getComponent('#component');
+      const component = wrapper.getComponent<ComponentPublicInstance>('#component');
 
       expect(WidgetClass.mock.calls[0][0]).toBe(component.vm.$el);
 
@@ -347,7 +347,7 @@ describe('component rendering', () => {
       });
 
       const wrapper = mount(vm);
-      const component = wrapper.getComponent('#component');
+      const component = wrapper.getComponent<ComponentPublicInstance>('#component');
 
       expect(WidgetClass.mock.calls[0][0]).toBe(component.vm.$el);
 
@@ -484,7 +484,7 @@ describe('component rendering', () => {
 
       const wrapper = mount(vm);
 
-      const config = (wrapper.getComponent('#component').vm as any as IConfigurable).$_config;
+      const config = (wrapper.getComponent<ComponentPublicInstance>('#component').vm as any as IConfigurable).$_config;
       expect(config.nested).toHaveLength(1);
       expect(config.nested[0].name).toBe('nestedOption');
       expect(config.nested[0].options).toEqual(['prop1', 'prop2', 'sampleProp']);
@@ -510,7 +510,7 @@ describe('component rendering', () => {
 
       const wrapper = mount(vm);
 
-      const config = (wrapper.getComponent('#component').vm as any as IConfigurable).$_config;
+      const config = (wrapper.getComponent<ComponentPublicInstance>('#component').vm as any as IConfigurable).$_config;
       expect(config.nested).toHaveLength(1);
       expect(config.nested[0].name).toBe('nestedOption');
       expect(config.nested[0].options).toEqual(['prop1', 'prop2', 'sampleProp']);
@@ -539,7 +539,7 @@ describe('component rendering', () => {
 
       const wrapper = mount(vm);
 
-      const config = (wrapper.getComponent('#component').vm as any as IConfigurable).$_config;
+      const config = (wrapper.getComponent<ComponentPublicInstance>('#component').vm as any as IConfigurable).$_config;
       expect(config.nested).toHaveLength(3);
 
       expect(config.nested[0].name).toBe('nestedOption');
@@ -584,7 +584,7 @@ describe('component rendering', () => {
 
       const wrapper = mount(vm);
 
-      const config = (wrapper.getComponent('#component').vm as any as IConfigurable).$_config;
+      const config = (wrapper.getComponent<ComponentPublicInstance>('#component').vm as any as IConfigurable).$_config;
       expect(config.nested).toHaveLength(3);
 
       expect(config.nested[0].name).toBe('nestedOption');
@@ -629,7 +629,7 @@ describe('component rendering', () => {
 
       const wrapper = mount(vm);
 
-      const component = wrapper.getComponent('#component').vm;
+      const component = wrapper.getComponent<ComponentPublicInstance>('#component').vm;
       expect(component.$.subTree.children).toHaveLength(3);
     });
 
@@ -661,7 +661,7 @@ describe('component rendering', () => {
 
       const wrapper = mount(vm);
 
-      const component = wrapper.getComponent('#component').vm;
+      const component = wrapper.getComponent<ComponentPublicInstance>('#component').vm;
       expect(component.$.subTree.children).toHaveLength(3);
     });
 
@@ -686,7 +686,7 @@ describe('component rendering', () => {
 
       const wrapper = mount(vm);
 
-      const config = (wrapper.getComponent('#component').vm as any as IConfigurable).$_config;
+      const config = (wrapper.getComponent<ComponentPublicInstance>('#component').vm as any as IConfigurable).$_config;
       const initialValues = config.getNestedOptionValues();
       expect(initialValues).toHaveProperty('nestedOption');
       expect(initialValues!.nestedOption).toHaveProperty('predefinedProp');
@@ -713,7 +713,7 @@ describe('component rendering', () => {
 
       const wrapper = mount(vm);
 
-      const config = (wrapper.getComponent('#component').vm as any as IConfigurable).$_config;
+      const config = (wrapper.getComponent<ComponentPublicInstance>('#component').vm as any as IConfigurable).$_config;
       expect(config.nested).toHaveLength(1);
 
       const nestedConfig = config.nested[0];
@@ -746,7 +746,7 @@ describe('component rendering', () => {
 
       const wrapper = mount(vm);
 
-      const config = (wrapper.getComponent('#component').vm as any as IConfigurable).$_config;
+      const config = (wrapper.getComponent<ComponentPublicInstance>('#component').vm as any as IConfigurable).$_config;
       expect(config.nested).toHaveLength(1);
 
       const nestedConfig = config.nested[0];
@@ -782,7 +782,7 @@ describe('component rendering', () => {
 
       const wrapper = mount(vm);
 
-      const config = (wrapper.getComponent('#component').vm as any as IConfigurable).$_config;
+      const config = (wrapper.getComponent<ComponentPublicInstance>('#component').vm as any as IConfigurable).$_config;
       expect(config.nested).toHaveLength(1);
 
       const nestedConfig = config.nested[0];
@@ -842,7 +842,7 @@ describe('component rendering', () => {
 
         const wrapper = mount(vm);
 
-        const widgetConfig = (wrapper.getComponent('#component').vm as any as IConfigurable).$_config;
+        const widgetConfig = (wrapper.getComponent<ComponentPublicInstance>('#component').vm as any as IConfigurable).$_config;
         expect(widgetConfig.nested[0].expectedChildren).toBe(expected);
       });
     });
@@ -865,7 +865,7 @@ describe('component rendering', () => {
       });
 
       const wrapper = mount(vm);
-      const component = wrapper.getComponent('#component');
+      const component = wrapper.getComponent<ComponentPublicInstance>('#component');
 
       expect(WidgetClass.mock.calls[0][0]).toBe(component.vm.$el);
 
@@ -1236,7 +1236,7 @@ describe('component rendering', () => {
         renderTemplate(
           'tmpl',
           {},
-          wrapper.getComponent('#component').vm.$el.querySelector('.template-container'),
+          wrapper.getComponent<ComponentPublicInstance>('#component').vm.$el.querySelector('.template-container'),
         );
 
         expect(mountedInDom).toBeTruthy();
@@ -1549,7 +1549,7 @@ describe('component rendering', () => {
       events.triggerHandler(container.children[0], 'dxremove');
       renderItemTemplate({ text: 'with data' }, container);
 
-      const subscriptions = (wrapper.getComponent('#component').vm as any).eventBus._list;
+      const subscriptions = (wrapper.getComponent<ComponentPublicInstance>('#component').vm as any).eventBus._list;
       expect(subscriptions.length).toBe(1);
 
       done();
@@ -1913,7 +1913,7 @@ describe('component rendering', () => {
 
       const wrapper = mount(vm);
 
-      const expectedElement = wrapper.getComponent('#component').vm.$el;
+      const expectedElement = wrapper.getComponent<ComponentPublicInstance>('#component').vm.$el;
       const actualElement = ExtensionWidgetClass.mock.calls[0][0];
 
       expect(ExtensionWidgetClass).toHaveBeenCalledTimes(1);
@@ -1976,8 +1976,8 @@ describe('component rendering', () => {
       });
 
       const wrapper = mount(vm);
-      const component1 = wrapper.getComponent('#component1');
-      const component2 = wrapper.getComponent('#component2');
+      const component1 = wrapper.getComponent<ComponentPublicInstance>('#component1');
+      const component2 = wrapper.getComponent<ComponentPublicInstance>('#component2');
 
       expect((component1.vm as any).$_config._initialValues.prop[0]).toEqual({ type: 'required' });
       expect((component2.vm as any).$_config._initialValues.prop[0]).toEqual({ type: 'email' });
