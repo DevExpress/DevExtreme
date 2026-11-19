@@ -16,7 +16,7 @@ declare global {
   interface Window {
     DevExpress?: { viz?: Record<string, WidgetClass | undefined> };
     demoConsoleMessages: ConsoleMessage[];
-    demoAnimationsFinished: () => Promise<void>;
+    demoSettled: () => Promise<void>;
   }
 }
 
@@ -83,9 +83,10 @@ const disableVizAnimation = (): void => {
   });
 };
 
-// A script animation asks for a frame for as long as it runs, so two frames in a row with no
-// request pending mean that nothing is animating.
-const trackAnimationFrames = (): void => {
+// A script animation asks for a frame for as long as it runs, and a grid keeps its load panel on
+// screen for a while after the data has come. Two frames in a row with neither mean that the page
+// has settled.
+const trackPageSettling = (): void => {
   const pending = new Set<number>();
   const request = window.requestAnimationFrame.bind(window);
   const cancel = window.cancelAnimationFrame.bind(window);
@@ -106,11 +107,15 @@ const trackAnimationFrames = (): void => {
     cancel(id);
   };
 
-  window.demoAnimationsFinished = (): Promise<void> => new Promise((resolve) => {
+  const isLoadPanelVisible = (): boolean => Array
+    .from(document.querySelectorAll('.dx-loadpanel-content'))
+    .some((panel) => panel.checkVisibility({ checkOpacity: true, checkVisibilityCSS: true }));
+
+  window.demoSettled = (): Promise<void> => new Promise((resolve) => {
     let idleFrames = 0;
 
     const check = (): void => {
-      idleFrames = pending.size === 0 ? idleFrames + 1 : 0;
+      idleFrames = pending.size === 0 && !isLoadPanelVisible() ? idleFrames + 1 : 0;
 
       if (idleFrames === 2) {
         resolve();
@@ -130,7 +135,7 @@ const getInitScript = (clientScript: string | null): string => [
   `(function () { ${TEST_UTILS_SOURCE} })();`,
   `(${addTestStyles.toString()})(${JSON.stringify(TEST_STYLES)});`,
   `(${collectConsoleMessages.toString()})();`,
-  `(${trackAnimationFrames.toString()})();`,
+  `(${trackPageSettling.toString()})();`,
   `(${disableVizAnimation.toString()})();`,
   clientScript ?? '',
 ].join('\n');
@@ -176,7 +181,7 @@ export function trackPageActivity(page: Page): () => Promise<void> {
       }
 
       // A request the page sends in reply to a response is in the set by the time this resolves.
-      await page.evaluate(() => window.demoAnimationsFinished());
+      await page.evaluate(() => window.demoSettled());
     } while (pending.size > 0);
   };
 }
@@ -188,16 +193,6 @@ export async function openDemo(
 ): Promise<void> {
   await page.goto(url);
   await waitForIdle();
-
-  await page.evaluate(() => {
-    if (document.activeElement && document.activeElement !== document.body) {
-      (document.activeElement as HTMLElement).blur();
-    }
-
-    window.getSelection()?.removeAllRanges();
-  });
-
-  await page.mouse.move(1, 1);
 
   // A screenshot taken before <link rel="stylesheet"> resolves gets unstyled, default-browser layout.
   await page.waitForFunction(() => Array

@@ -4,6 +4,12 @@ import {
   BASE_URL, SERVER_PORT, THEME, VIEWPORT,
 } from './utils/visual-tests/playwright/const';
 
+// Dates are shown and mock data is built in the time zone of the machine, so it is pinned to the
+// zone of the CI agent, for the page (timezoneId) and for the mocks.
+const TIMEZONE = 'UTC';
+
+process.env.TZ = TIMEZONE;
+
 // The CI agent and the container draw the same pixels and are judged exactly. A run on the host is
 // lenient: another OS rasterises text differently, so its comparison proves nothing anyway.
 const rendersLikeCI = !!process.env.CI || !!process.env.DX_CONTAINER;
@@ -54,6 +60,7 @@ export default defineConfig({
   },
   use: {
     baseURL: BASE_URL,
+    timezoneId: TIMEZONE,
     channel: 'chrome',
     headless: true,
     viewport: VIEWPORT,

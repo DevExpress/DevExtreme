@@ -83,7 +83,9 @@ Everything after the script name goes to `playwright test`, so `--headed`, `--ui
 
 A test fails on a console error or warning outside `testing/known-warnings.js` and on an uncaught error in the page.
 
-Charts, gauges and range selectors are drawn without their start-up animation: the tests switch it off through the default options of these widgets, so a demo that turns the animation on itself still animates.
+The page is shot when it has settled: no request is pending, no script animation is running and no load panel is on screen. Charts, gauges and range selectors are drawn without their start-up animation: the tests switch it off through the default options of these widgets, so a demo that turns the animation on itself still animates.
+
+The time zone is UTC for the page and for the mock data, whatever the machine is set to.
 
 ### Etalons
 
