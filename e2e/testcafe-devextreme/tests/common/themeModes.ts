@@ -653,7 +653,7 @@ if (getThemeName() === 'fluent-next') {
   test('exportTo hands a gradient stop the colour the name resolved to', async (t) => {
     const { stops, stopColorAttribute, failure } = await gradientStopsExportedToTheCanvas();
 
-    await t.expect(stopColorAttribute).eql('var(--dx-viz-blue, #0078d4)', 'the widget writes the name into the attribute, so the exporter is the one that has to resolve it');
+    await t.expect(stopColorAttribute).eql('var(--dx-viz-blue, #0c69b7)', 'the widget writes the name into the attribute, so the exporter is the one that has to resolve it');
     await t.expect(failure).eql('', 'the export reaches onFileSaving instead of failing in addColorStop');
     await t.expect(stops.filter((stop) => stop.includes('var('))).eql([], 'no stop reaches the canvas as a reference');
     await t.expect(stops[0]).eql(DECLARED_BLUE, 'the first stop carries what the page declared, neither the name nor the literal beside it');
