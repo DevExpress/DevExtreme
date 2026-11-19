@@ -1,16 +1,18 @@
 /* eslint-disable @typescript-eslint/init-declarations */
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
 
 import { isDefined } from '@ts/core/utils/type';
 import {
   getLogExt as getLog,
   raiseToExt as raiseTo,
 } from '@ts/viz/core/utils';
+import type { CanvasOptions, Translator2DInstance } from '@ts/viz/translators/translator2d';
+
+type LogarithmicTranslator = Translator2DInstance & {
+  _canvasOptions: Required<Pick<CanvasOptions, 'base'>>;
+};
 
 export default {
-  fromValue(value) {
+  fromValue(this: LogarithmicTranslator, value: number | null): number | null {
     return value !== null
       ? getLog(
         value,
@@ -21,7 +23,7 @@ export default {
       : value;
   },
 
-  toValue(value) {
+  toValue(this: LogarithmicTranslator, value: number | null): number | null {
     return value !== null
       ? raiseTo(
         value,
@@ -32,7 +34,7 @@ export default {
       : value;
   },
 
-  getMinBarSize(minBarSize): number {
+  getMinBarSize(this: LogarithmicTranslator, minBarSize: number): number {
     const visibleArea = this.getCanvasVisibleArea();
     const minValue = this.from(visibleArea.min + minBarSize);
     const canvasOptions = this._canvasOptions;
@@ -44,16 +46,21 @@ export default {
     return canvasOptions.base ** value;
   },
 
-  checkMinBarSize(initialValue, minShownValue, stackValue) {
+  checkMinBarSize(
+    this: LogarithmicTranslator,
+    initialValue: number,
+    minShownValue: number,
+    stackValue?: number,
+  ): number {
     const canvasOptions = this._canvasOptions;
     const prevValue = stackValue ? stackValue - initialValue : 0;
     const baseMethod = this.constructor.prototype.checkMinBarSize;
-    let minBarSize;
-    let updateValue;
+    let minBarSize: number;
+    let updateValue: number;
 
     if (isDefined(minShownValue) && prevValue > 0) {
       minBarSize = baseMethod(
-        this.fromValue(stackValue / prevValue),
+        this.fromValue((stackValue as number) / prevValue),
         this.fromValue(minShownValue) - canvasOptions.rangeMinVisible,
       );
       updateValue = canvasOptions.base ** (this.fromValue(prevValue) + minBarSize) - prevValue;
