@@ -840,7 +840,7 @@ class PivotGridDataSource {
         when(this.getFields()).done((fields) => {
           that._fieldsPrepared(fields);
           that._loadCore(options, d);
-        }).fail(d.reject).fail(that._loadErrorHandler);
+        }).fail(d.reject);
       } else {
         that._loadCore(options, d);
       }
