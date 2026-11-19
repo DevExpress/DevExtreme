@@ -10,6 +10,8 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 
+import type { Size } from '@ts/viz/core/types';
+
 import type { ThemeValue } from './base_theme_manager';
 import { patchFontOptions as _patchFontOptions } from './utils';
 
@@ -90,7 +92,7 @@ export let LoadingIndicator = class LoadingIndicator {
     this._state = STATE_HIDDEN;
   }
 
-  setSize(size: { width: number; height: number }): void {
+  setSize(size: Size): void {
     const { width, height } = size;
     this._rect.attr({ width, height });
     this._text.attr({ x: width / 2, y: height / 2 });

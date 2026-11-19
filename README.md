@@ -1,45 +1,35 @@
 # DevExtreme
 
-DevExtreme is an enterprise-ready suite of powerful, engaging UI components for popular front-end frameworks: Angular, React, Vue, and jQuery.
+DevExtreme is our award-winning, enterprise-ready UI component suite for today’s most popular front-end frameworks: Angular, React, Vue, and jQuery.
 
 ![DevExtreme components](https://js.devexpress.com/Content/Images/Main/modern/AdaptivityDesktop.png)
 
-DevExtreme components are responsive and accessible. They work well across different devices, screen sizes, and input methods. Whether your target audience uses phones, PCs or screen readers - DevExpress components are up to the task.
+Our modern JavaScript/TypeScript component suite includes data grids, pivot tables, interactive charts, data editors, navigation, and multi-purpose UI components. DevExtreme component libraries are responsive and support accessibility standards. They address a broad range of use case scenarios and are optimized to work as expected across different devices, screen sizes, and input methods.
 
-Our range of powerful, modern JavaScript components includes data grids, interactive charts, data editors and widgets. View the [Demo Gallery](https://js.devexpress.com/Demos/WidgetsGallery/) to see our components in action.
+## Resources
 
-- Official website: [js.devexpress.com](https://js.devexpress.com)
-- Pricing: [js.devexpress.com/buy](https://js.devexpress.com/Buy)
-- Licensing: [js.devexpress.com/licensing](https://js.devexpress.com/Licensing)
-- Support: [www.devexpress.com/support](https://www.devexpress.com/support)
+- [Components](https://js.devexpress.com/Documentation/Guide/) - a complete list of available DevExtreme UI libraries
+- [Demos](https://js.devexpress.com/Demos/WidgetsGallery/) - interactive examples with source code
+- [Documentation](https://js.devexpress.com/Documentation/Guide/) - guides and APIs
+- [Responsive UI Templates](https://js.devexpress.com/Templates/UITemplates/) - a set of pre-built app modules for use in your next great DevExtreme-powered project
 
-## Getting Started
+## License
 
-The DevExtreme website includes "Getting Started" guides for every aspect of DevExtreme:
+DevExtreme requires a paid license for commercial use. For additional information on pricing and licensing terms, please visit the following:
 
-- Angular
-    - [Create a DevExtreme Angular Application](https://js.devexpress.com/Angular/Documentation/Guide/Angular_Components/Getting_Started/Create_a_DevExtreme_Application/)
-    - [Add DevExtreme to an Angular Application](https://js.devexpress.com/Angular/Documentation/Guide/Angular_Components/Getting_Started/Add_DevExtreme_to_an_Angular_CLI_Application/)
+- [Pricing](https://js.devexpress.com/Buy)
+- [Licensing](https://js.devexpress.com/Documentation/Guide/Common/Licensing/)
 
-- React
-    - [Create a DevExtreme React Application](https://js.devexpress.com/React/Documentation/Guide/React_Components/Create_a_DevExtreme_Application/)
-    - [Add DevExtreme to a React Application](https://js.devexpress.com/React/Documentation/Guide/React_Components/Add_DevExtreme_to_a_React_Application/)
+Explore DevExtreme at your own pace with our Free [30-Day Trial version](https://js.devexpress.com/Documentation/Guide/Common/Licensing/#Evaluation_Trial).
 
-- Vue
-    - [Create a DevExtreme Vue Application](https://js.devexpress.com/Vue/Documentation/Guide/Vue_Components/Create_a_DevExtreme_Application/)
-    - [Add DevExtreme to a Vue Application](https://js.devexpress.com/Vue/Documentation/Guide/Vue_Components/Add_DevExtreme_to_a_Vue_Application/)
+## Get Started
 
-- jQuery
-    - [Add DevExtreme to a jQuery Application](https://js.devexpress.com/jQuery/Documentation/Guide/jQuery_Components/Add_DevExtreme_to_a_jQuery_Application/)
+Follow the guides below to add DevExtreme components to your app:
 
-## Learn
+[Angular](https://js.devexpress.com/Angular/Documentation/Guide/Angular_Components/Getting_Started/Add_DevExtreme_to_an_Angular_CLI_Application/) | [React](https://js.devexpress.com/React/Documentation/Guide/React_Components/Add_DevExtreme_to_a_React_Application/) | [Vue](https://js.devexpress.com/Vue/Documentation/Guide/Vue_Components/Add_DevExtreme_to_a_Vue_Application/) | [jQuery](https://js.devexpress.com/jQuery/Documentation/Guide/jQuery_Components/Add_DevExtreme_to_a_jQuery_Application/)
 
-- [Demo Gallery](https://js.devexpress.com/Demos/WidgetsGallery)
-- [Responsive UI Templates](https://js.devexpress.com/Templates/UITemplates)
-- [Documentation](https://js.devexpress.com/Documentation)
-- [Examples on GitHub](https://github.com/DevExpress-Examples)
-- [YouTube videos](https://www.youtube.com/playlist?list=PL8h4jt35t1wjGvgflbHEH_e3b23AA30-z)
+Using AI agents to build a DevExtreme app? Check out our [AI-assisted development tools](https://js.devexpress.com/Documentation/Guide/AI-assisted_Development/Overview/) (MCP Server and AI Agent Skills).
 
-## Contributing
+## Support and Feedback
 
-The DevExtreme team welcomes outside contributions of bug reports and feature requests. Read our [contribution guidelines](CONTRIBUTING.md) for more information.
+To report a bug, request a feature, or ask a question, submit a ticket via the [DevExpress Support Center](https://www.devexpress.com/Support/Center) (available to customers with an active DevExtreme license).

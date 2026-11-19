@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/init-declarations */
-/* eslint-disable no-plusplus */
 /* eslint-disable func-names */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
@@ -25,7 +24,7 @@ function getLeafsCount(root): number {
   let count = 0;
   let node;
 
-  for (i = 0; i < ii; ++i) {
+  for (i = 0; i < ii; i += 1) {
     node = allNodes[i];
     if (node.isNode()) {
       count = Math.max(count, getLeafsCount(node));
@@ -52,7 +51,7 @@ function getNodesCount(root): number {
   let count = 0;
   let node;
 
-  for (i = 0; i < ii; ++i) {
+  for (i = 0; i < ii; i += 1) {
     node = allNodes[i];
     if (node.isNode()) {
       count += getNodesCount(node) + 1;
@@ -69,7 +68,7 @@ function prepareDiscreteGroupColors(palette, root) {
   let ii = allNodes.length;
   let node;
 
-  for (i = 0; i < ii; ++i) {
+  for (i = 0; i < ii; i += 1) {
     node = allNodes[i];
     if (node.isNode()) {
       allNodes = allNodes.concat(node.nodes);

@@ -1,7 +1,6 @@
 /* eslint-disable no-new */
 /* eslint-disable @typescript-eslint/no-this-alias */
 /* eslint-disable @typescript-eslint/init-declarations */
-/* eslint-disable no-plusplus */
 /* eslint-disable func-names */
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable no-param-reassign */
@@ -63,7 +62,7 @@ proto._createProxyType = function (): void {
       const ii = _nodes?.length;
       const list: Proxy[] = [];
 
-      for (i = 0; i < ii; ++i) {
+      for (i = 0; i < ii; i += 1) {
         list.push(_nodes[i].proxy);
       }
       return list;
@@ -162,7 +161,7 @@ function collectNodes(node, list): void {
   let i;
   const ii = nodes?.length;
 
-  for (i = 0; i < ii; ++i) {
+  for (i = 0; i < ii; i += 1) {
     list.push(nodes[i].proxy);
     collectNodes(nodes[i], list);
   }
