@@ -2,7 +2,6 @@
 /* eslint-disable @stylistic/no-mixed-operators */
 /* eslint-disable @typescript-eslint/no-this-alias */
 /* eslint-disable @typescript-eslint/init-declarations */
-/* eslint-disable no-plusplus */
 /* eslint-disable func-names */
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable @typescript-eslint/no-shadow */
@@ -238,7 +237,7 @@ export const pie = _extend({}, barSeries, {
 
     while (i < len && isAllPointsNegative) {
       isAllPointsNegative = originalPoints[i].value <= 0;
-      i++;
+      i += 1;
     }
 
     const points = that._points = _map(originalPoints, (point) => {

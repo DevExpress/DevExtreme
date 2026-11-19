@@ -6,7 +6,6 @@
 /* eslint-disable @typescript-eslint/no-this-alias */
 /* eslint-disable default-case */
 /* eslint-disable @typescript-eslint/init-declarations */
-/* eslint-disable no-plusplus */
 /* eslint-disable func-names */
 /* eslint-disable import/no-mutable-exports */
 /* eslint-disable @typescript-eslint/naming-convention */
@@ -34,7 +33,7 @@ import type { AlignedLayoutRect, LayoutAlignment } from '@ts/viz/core/layout_ele
 import { LayoutElement, WrapperLayoutElement } from '@ts/viz/core/layout_element';
 import { getFuncIri, processHatchingAttrs } from '@ts/viz/core/renderers/renderer';
 import { Title } from '@ts/viz/core/title';
-import type { BBox, Bounds } from '@ts/viz/core/types';
+import type { BBox, Bounds, Size } from '@ts/viz/core/types';
 import { enumParser, normalizeEnum, patchFontOptions } from '@ts/viz/core/utils';
 
 const _Number = Number;
@@ -122,7 +121,7 @@ interface LegendItem extends CreatedLegendItem {
   markerBBox: BBox;
   markerSize: number;
   labelBBox: BBox;
-  bBox: { width: number; height: number };
+  bBox: Size;
 }
 
 interface LegendLineItem {
@@ -243,7 +242,7 @@ function getSizeItem(
   options: ThemeValue,
   markerBBox: BBox,
   labelBBox: BBox,
-): { width: number; height: number } {
+): Size {
   const defaultXMargin = 7;
   const defaultTopMargin = 4;
   let width;
@@ -393,7 +392,7 @@ function checkLinesSize(
 }
 
 function decreaseItemCount(layoutOptions: ItemsLayoutOptions, countItems: number): number {
-  layoutOptions.altCountItem++;
+  layoutOptions.altCountItem += 1;
   return _ceil(countItems / layoutOptions.altCountItem);
 }
 
@@ -503,9 +502,9 @@ function transpose<T>(array: T[][]): (T | undefined)[][] {
   let j;
   const transposeArray: (T | undefined)[][] = [];
 
-  for (i = 0; i < height; i++) {
+  for (i = 0; i < height; i += 1) {
     transposeArray[i] = [];
-    for (j = 0; j < width; j++) {
+    for (j = 0; j < width; j += 1) {
       transposeArray[i][j] = array[j][i];
     }
   }
@@ -582,7 +581,7 @@ export let Legend = class Legend extends LayoutElement {
 
   declare _items: LegendItem[];
 
-  declare _size: { width: number; height: number };
+  declare _size: Size;
 
   declare _x1: number;
 
@@ -944,7 +943,7 @@ export let Legend = class Legend extends LayoutElement {
       lines = [];
       this._createLines(lines, layoutOptions);
       this._alignLines(lines, layoutOptions);
-      iteration++;
+      iteration += 1;
     } while (
       checkLinesSize(lines, layoutOptions, countItems, options.margin)
       && iteration < countItems
@@ -1006,7 +1005,9 @@ export let Legend = class Legend extends LayoutElement {
     if (layoutOptions.itemsAlignment) {
       if (layoutOptions.markerOffset) {
         for (i = 0; i < lines.length;) {
-          transpose([lines[i++], lines[i++]]).forEach(processLine);
+          const pair = [lines[i], lines[i + 1]];
+          i += 2;
+          transpose(pair).forEach(processLine);
         }
       }
     } else {
@@ -1312,7 +1313,7 @@ export let Legend = class Legend extends LayoutElement {
     x -= legendGroup.attr('translateX');
     y -= legendGroup.attr('translateY');
 
-    for (let i = 0; i < items.length; i++) {
+    for (let i = 0; i < items.length; i += 1) {
       if (inRect(items[i].tracker, x, y)) {
         return items[i].tracker;
       }

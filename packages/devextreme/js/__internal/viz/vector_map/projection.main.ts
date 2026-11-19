@@ -2,7 +2,6 @@
 /* eslint-disable no-bitwise */
 /* eslint-disable @typescript-eslint/no-this-alias */
 /* eslint-disable @typescript-eslint/init-declarations */
-/* eslint-disable no-plusplus */
 /* eslint-disable func-names */
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable @typescript-eslint/no-shadow */
@@ -323,7 +322,7 @@ export let Projection = class Projection {
     const step = this._maxZoom ** (1 / k);
     let zoom = this._minZoom;
     this._scale = [zoom];
-    for (let i = 1; i <= k; ++i) {
+    for (let i = 1; i <= k; i += 1) {
       this._scale.push(zoom *= step);
     }
   }

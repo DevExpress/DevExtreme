@@ -201,7 +201,7 @@ jobs:
       fail-fast: false
       matrix: ${{ fromJson(needs.determine-playwright-matrix.outputs.matrix) }}
     runs-on: devextreme-shr2
-    timeout-minutes: 10
+    timeout-minutes: 15
 
     steps:
     - name: Get sources
@@ -220,7 +220,7 @@ jobs:
     - name: Setup Chrome
       uses: ./.github/actions/setup-chrome
       with:
-        chrome-version: '155.0.8059.39'
+        chrome-version: '157.0.8103.78'
 
     - name: Use Node.js
       uses: actions/setup-node@v7
@@ -278,12 +278,38 @@ jobs:
         if-no-files-found: ignore
 
     - name: Upload test traces and screenshot diffs
-      if: ${{ failure() }}
+      if: ${{ always() }}
       uses: actions/upload-artifact@v7
       with:
         name: playwright-traces-${{ env.JOB_NAME }}
         path: ${{ github.workspace }}/e2e/playwright/artifacts/test-results
         if-no-files-found: ignore
+
+    - name: Collect new etalons
+      if: ${{ always() }}
+      run: |
+        mkdir -p "$RUNNER_TEMP/new-etalons"
+        git ls-files --others --exclude-standard -z -- 'e2e/playwright/tests/**/etalons/*.png' \
+          | xargs -0 -r cp --parents -t "$RUNNER_TEMP/new-etalons"
+
+    - name: Upload new etalons
+      if: ${{ always() }}
+      uses: actions/upload-artifact@v7
+      with:
+        name: playwright-etalons-${{ env.JOB_NAME }}
+        path: ${{ runner.temp }}/new-etalons
+        if-no-files-found: ignore
+
+    # A retry passes against the etalon its first attempt wrote, so new etalons fail the job here.
+    - name: Fail on new etalons
+      if: ${{ always() }}
+      run: |
+        new_etalons=$(git ls-files --others --exclude-standard -- 'e2e/playwright/tests/**/etalons/*.png')
+        if [ -n "$new_etalons" ]; then
+          echo "::error::The tests wrote etalons that are not in the repository. They are in the playwright-etalons artifact:"
+          echo "$new_etalons"
+          exit 1
+        fi
 
   merge-artifacts:
     runs-on: ubuntu-latest
@@ -307,6 +333,7 @@ jobs:
           const artifactGroups = {
             blobs: /^playwright-blob-/,
             traces: /^playwright-traces-/,
+            etalons: /^playwright-etalons-/,
           };
 
           for (const [outputName, pattern] of Object.entries(artifactGroups)) {
@@ -368,4 +395,13 @@ jobs:
         name: playwright-traces
         pattern: playwright-traces-*
         separate-directories: true
+        delete-merged: true
+
+    - name: Merge new etalons
+      if: steps.mergeable-artifacts.outputs.etalons == 'true'
+      uses: actions/upload-artifact/merge@v7
+      continue-on-error: true
+      with:
+        name: playwright-etalons
+        pattern: playwright-etalons-*
         delete-merged: true

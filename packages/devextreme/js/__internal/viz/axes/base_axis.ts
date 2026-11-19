@@ -7,7 +7,6 @@
 /* eslint-disable @typescript-eslint/no-this-alias */
 /* eslint-disable default-case */
 /* eslint-disable @typescript-eslint/init-declarations */
-/* eslint-disable no-plusplus */
 /* eslint-disable func-names */
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable no-nested-ternary */
@@ -41,7 +40,7 @@ import { tickGenerator } from '@ts/viz/axes/tick_generator';
 import xyMethods from '@ts/viz/axes/xy_axes';
 import { getParser } from '@ts/viz/components/parse_utils';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
-import type { Bounds } from '@ts/viz/core/types';
+import type { BBox, Bounds, Coords } from '@ts/viz/core/types';
 
 import {
   adjustVisualRange,
@@ -303,14 +302,14 @@ function updateGridsPosition(ticks: ThemeValue[], animate?: boolean): void {
 
 function cleanUpInvalidTicks(ticks: ThemeValue[]): void {
   let i = ticks.length - 1;
-  for (i; i >= 0; i--) {
+  for (i; i >= 0; i -= 1) {
     if (!removeInvalidTick(ticks, i)) {
       break;
     }
   }
-  for (i = 0; i < ticks.length; i++) {
+  for (i = 0; i < ticks.length; i += 1) {
     if (removeInvalidTick(ticks, i)) {
-      i--;
+      i -= 1;
     } else {
       break;
     }
@@ -604,7 +603,7 @@ export let Axis = class Axis {
   declare _getConstantLineLabelsCoords: (
     value: number,
     labelOptions: ThemeValue,
-  ) => { x: number; y: number };
+  ) => Coords;
 
   declare _getAdjustedStripLabelCoords: (strip: ThemeValue) => LabelTranslation;
 
@@ -964,7 +963,7 @@ export let Axis = class Axis {
   _getStripGraphicAttributes(
     fromPoint: number,
     toPoint: number,
-  ): { x: number; y: number; width: number; height: number } {
+  ): BBox {
     let x;
     let y;
     let width;
@@ -3391,7 +3390,7 @@ export let Axis = class Axis {
   measureLabels(
     canvas: ThemeValue,
     withIndents?: boolean,
-  ): { x: number; y: number; width: number; height: number } {
+  ): BBox {
     const options = this._options;
     const widthAxis = options.visible ? options.width : 0;
     let ticks;

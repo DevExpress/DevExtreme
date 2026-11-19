@@ -1,4 +1,4 @@
-import type { Page } from '@playwright/test';
+import type { Locator, Page } from '@playwright/test';
 
 const STYLESHEET_RULES_ID = 'stylesheetRules';
 
@@ -12,17 +12,6 @@ export const setAttribute = async (
     document.querySelector(elementSelector)?.setAttribute(name, attributeValue);
   },
   { elementSelector: selector, name: attribute, attributeValue: value },
-);
-
-export const removeAttribute = async (
-  page: Page,
-  selector: string,
-  attribute: string,
-): Promise<void> => page.evaluate(
-  ({ elementSelector, name }) => {
-    document.querySelector(elementSelector)?.removeAttribute(name);
-  },
-  { elementSelector: selector, name: attribute },
 );
 
 export const appendAttributeValue = async (
@@ -122,6 +111,18 @@ export const removeStylesheetRulesFromPage = async (page: Page): Promise<void> =
   STYLESHEET_RULES_ID,
 );
 
+export const getStyleAttribute = async (
+  locator: Locator,
+): Promise<string | null> => locator.getAttribute('style');
+
+export const hasHorizontalScroll = async (
+  locator: Locator,
+): Promise<boolean> => locator.evaluate((element) => element.scrollWidth > element.clientWidth);
+
+export const getDocumentScrollTop = async (
+  page: Page,
+): Promise<number> => page.evaluate(() => document.documentElement.scrollTop);
+
 export const addFocusableElementBefore = async (
   page: Page,
   targetSelector: string,
@@ -151,10 +152,4 @@ export const addFocusableElementBefore = async (
     return button.id;
   },
   { selector: targetSelector, id: elementId },
-);
-
-export const waitForNextFrame = async (page: Page): Promise<void> => page.evaluate(
-  () => new Promise<void>((resolve) => {
-    requestAnimationFrame(() => requestAnimationFrame(() => resolve()));
-  }),
 );

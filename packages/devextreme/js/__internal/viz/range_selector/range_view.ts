@@ -1,6 +1,4 @@
 /* eslint-disable @typescript-eslint/init-declarations */
-/* eslint-disable no-param-reassign */
-/* eslint-disable no-multi-assign */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
@@ -48,7 +46,8 @@ function drawSeriesView(
   valueAxis.setBusinessRange(valueRange);
 
   seriesList.forEach((series) => {
-    series._extGroups.seriesGroup = series._extGroups.labelsGroup = root;
+    series._extGroups.labelsGroup = root;
+    series._extGroups.seriesGroup = root;
     series.draw(isAnimationEnabled);
   });
 }
@@ -81,33 +80,33 @@ export let RangeView = class RangeView {
     const canvasWidth = canvas.width - canvas.left;
     let seriesGroup;
 
-    backgroundOption = backgroundOption || {};
+    const background = backgroundOption || {};
     root.clear();
     this._clipRect.attr({
       x: canvas.left, y: canvas.top, width: canvasWidth, height: canvas.height,
     });
     if (!isCompactMode) {
-      if (merge(backgroundOption.visible, backgroundTheme.visible)) {
-        if (backgroundOption.color) {
+      if (merge(background.visible, backgroundTheme.visible)) {
+        if (background.color) {
           renderer
             .rect(canvas.left, canvas.top, canvasWidth + 1, canvas.height)
             .attr({
               // Seems that "backgroundTheme.color" is never used and so can be removed both from
               // here and from themes
               // TODO: Check it (special attention to WidgetsGallery) and remove the option
-              fill: merge(backgroundOption.color, backgroundTheme.color),
+              fill: merge(background.color, backgroundTheme.color),
               class: 'dx-range-selector-background',
             })
             .append(root);
         }
-        if (backgroundOption.image && backgroundOption.image.url) {
+        if (background.image && background.image.url) {
           renderer.image(
             canvas.left,
             canvas.top,
             canvasWidth + 1,
             canvas.height,
-            backgroundOption.image.url,
-            merge(backgroundOption.image.location, backgroundTheme.image.location),
+            background.image.url,
+            merge(background.image.location, backgroundTheme.image.location),
           ).append(root);
         }
       }

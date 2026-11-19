@@ -6,6 +6,7 @@
 
 import { isDefined } from '@ts/core/utils/type';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
+import type { Coords } from '@ts/viz/core/types';
 import { patchFontOptions } from '@ts/viz/core/utils';
 import type Link from '@ts/viz/sankey/link_item';
 
@@ -36,7 +37,7 @@ interface NodeLayoutLink {
 interface NodeWidget {
   _renderer: { getRootOffset: () => { left: number; top: number } };
   _tooltip?: {
-    show: (target: ThemeValue, coords: { x: number; y: number }) => void;
+    show: (target: ThemeValue, coords: Coords) => void;
     hide: () => void;
   };
   _links: Link[];
@@ -136,7 +137,7 @@ class Node {
 
   declare label: string;
 
-  declare coords: { x: number; y: number };
+  declare coords: Coords;
 
   declare id: number;
 

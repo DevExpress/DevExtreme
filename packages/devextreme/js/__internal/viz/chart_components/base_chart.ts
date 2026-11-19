@@ -15,7 +15,6 @@
 /* eslint-disable no-multi-assign */
 /* eslint-disable no-nested-ternary */
 /* eslint-disable no-param-reassign */
-/* eslint-disable no-plusplus */
 /* eslint-disable prefer-spread */
 
 import trackerModule from '@js/viz/chart_components/tracker';
@@ -135,8 +134,8 @@ function checkStackOverlap(rollingStocks): boolean {
   let jLength;
   let overlap = false;
 
-  for (i = 0, iLength = rollingStocks.length - 1; i < iLength; i++) {
-    for (j = i + 1, jLength = rollingStocks.length; j < jLength; j++) {
+  for (i = 0, iLength = rollingStocks.length - 1; i < iLength; i += 1) {
+    for (j = i + 1, jLength = rollingStocks.length; j < jLength; j += 1) {
       if (i !== j && checkStacksOverlapping(rollingStocks[i], rollingStocks[j], true)) {
         overlap = true;
         break;
@@ -892,15 +891,15 @@ export class BaseChart extends BaseWidget {
     let points;
     const series = this._getVisibleSeries();
 
-    for (i = 0; i < series.length; i++) {
+    for (i = 0; i < series.length; i += 1) {
       points = series[i].getVisiblePoints();
 
-      for (j = 0; j < points.length; j++) {
+      for (j = 0; j < points.length; j += 1) {
         labels.push.apply(labels, points[j].getLabels());
       }
     }
 
-    for (i = 0; i < labels.length; i++) {
+    for (i = 0; i < labels.length; i += 1) {
       currentLabel = labels[i];
       if (!currentLabel.isVisible()) {
         continue;
@@ -908,7 +907,7 @@ export class BaseChart extends BaseWidget {
 
       currentLabelRect = currentLabel.getBoundingRect();
 
-      for (j = i + 1; j < labels.length; j++) {
+      for (j = i + 1; j < labels.length; j += 1) {
         nextLabel = labels[j];
         nextLabelRect = nextLabel.getBoundingRect();
         if (checkOverlapping(currentLabelRect, nextLabelRect)) {
@@ -1298,7 +1297,7 @@ export class BaseChart extends BaseWidget {
       this._requestChange(['FULL_RENDER']);
     };
 
-    for (let i = 0; i < allSeriesOptions.length; i++) {
+    for (let i = 0; i < allSeriesOptions.length; i += 1) {
       particularSeriesOptions = extend(true, {}, allSeriesOptions[i], extraOptions);
 
       if (!_isDefined(particularSeriesOptions.name) || particularSeriesOptions.name === '') {

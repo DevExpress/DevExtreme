@@ -4,7 +4,6 @@
 /* eslint-disable @typescript-eslint/init-declarations */
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable guard-for-in */
-/* eslint-disable no-plusplus */
 /* eslint-disable func-names */
 /* eslint-disable @typescript-eslint/no-shadow */
 /* eslint-disable no-param-reassign */
@@ -553,7 +552,7 @@ function calculateMinorTicks(
     while (cur < firstMajor && (!tickBalance || tickBalance > 0)) {
       // @ts-expect-error
       cur >= min && ticks.push(cur);
-      tickBalance--;
+      tickBalance -= 1;
       cur = addInterval(cur, minorTickInterval);
     }
 
@@ -569,7 +568,7 @@ function calculateMinorTicks(
       let cur = correctTickValue(r.prevTick, minorTickInterval);
       while (cur < tick && (!tickBalance || tickBalance > 0)) {
         cur !== r.prevTick && r.minors.push(cur);
-        tickBalance--;
+        tickBalance -= 1;
         cur = addInterval(cur, minorTickInterval);
       }
 
@@ -605,7 +604,7 @@ function filterTicks(ticks, breaks) {
     const result = breaks.reduce((result, b) => {
       const tmpTicks = [];
       let i = result[1];
-      for (; i < ticks.length; i++) {
+      for (; i < ticks.length; i += 1) {
         const tickValue = ticks[i];
 
         if (tickValue < b.from) {

@@ -48,6 +48,10 @@ $(() => {
     }],
   }).dxDataGrid('instance');
 
+  $('#refresh-link').on('click', () => {
+    window.location.reload();
+  });
+
   $('#state-reset-link').on('click', () => {
     dataGrid.state(null);
   });

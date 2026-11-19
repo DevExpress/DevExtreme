@@ -1,5 +1,3 @@
-/* eslint-disable no-nested-ternary */
-
 import supportUtils from '@ts/core/utils/support';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 import { formatValue, isFirefoxOnAndroid, utils } from '@ts/viz/range_selector/common';
@@ -20,11 +18,10 @@ interface SliderParams {
 type SliderEventHandler = (e: ThemeValue) => void;
 
 function getSliderTrackerWidth(sliderHandleWidth: number): number {
-  return supportUtils.touchEvents || supportUtils.pointerEvents
-    ? TOUCH_SPLITTER_WIDTH
-    : SPLITTER_WIDTH < sliderHandleWidth
-      ? sliderHandleWidth
-      : SPLITTER_WIDTH;
+  if (supportUtils.touchEvents || supportUtils.pointerEvents) {
+    return TOUCH_SPLITTER_WIDTH;
+  }
+  return SPLITTER_WIDTH < sliderHandleWidth ? sliderHandleWidth : SPLITTER_WIDTH;
 }
 
 class Slider {

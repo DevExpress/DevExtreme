@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/init-declarations */
-/* eslint-disable no-plusplus */
 /* eslint-disable func-names */
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
@@ -36,7 +35,7 @@ function findAppropriateCollection(
     nextSum = sum + nodes[i].value;
     totalAspectRatio = context.staticSide / coeff / nextSum;
     nextAspectRatio = 0;
-    for (j = head; j <= i; ++j) {
+    for (j = head; j <= i; j += 1) {
       nextAspectRatio = context.accumulate(
         nextAspectRatio,
         getAspectRatio((totalAspectRatio * nodes[j].value) / nextSum),
@@ -46,7 +45,7 @@ function findAppropriateCollection(
     if (nextAspectRatio < bestAspectRatio) {
       bestAspectRatio = nextAspectRatio;
       sum = nextSum;
-      ++i;
+      i += 1;
     } else {
       break;
     }

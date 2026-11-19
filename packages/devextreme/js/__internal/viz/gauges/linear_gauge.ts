@@ -4,7 +4,7 @@ import { each } from '@ts/core/utils/iterator';
 import { clone } from '@ts/core/utils/object';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 import { setupWidgetPrototype } from '@ts/viz/core/helpers';
-import type { Bounds } from '@ts/viz/core/types';
+import type { Bounds, Size } from '@ts/viz/core/types';
 import { normalizeEnum } from '@ts/viz/core/utils';
 import { BaseGauge } from '@ts/viz/gauges/base_gauge';
 import type { ScaleMeasure, TicksCoefficients } from '@ts/viz/gauges/common';
@@ -71,8 +71,13 @@ class LinearGauge extends dxGauge {
 
   _area!: LinearArea;
 
-  _getTicksOrientation(scaleOptions: ThemeValue): string {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+  declare _rangeContainer: LinearRangeContainer;
+
+  _getTicksOrientation(scaleOptions: {
+    isHorizontal: boolean;
+    verticalOrientation: string;
+    horizontalOrientation: string;
+  }): string {
     return scaleOptions.isHorizontal
       ? scaleOptions.verticalOrientation
       : scaleOptions.horizontalOrientation;
@@ -86,8 +91,7 @@ class LinearGauge extends dxGauge {
   }
 
   _getInvertedState(): boolean {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    return !this._area.vertical && this.option('rtlEnabled');
+    return !this._area.vertical && (this.option('rtlEnabled') as boolean);
   }
 
   _prepareScaleSettings(): ThemeValue {
@@ -266,7 +270,7 @@ class LinearGauge extends dxGauge {
     return s;
   }
 
-  _getDefaultSize(): { width: number; height: number } {
+  _getDefaultSize(): Size {
     const geometry = this.option('geometry') || {};
     if (geometry.orientation === 'vertical') {
       return { width: 100, height: 300 };

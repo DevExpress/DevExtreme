@@ -1,7 +1,6 @@
 /* eslint-disable import/no-import-module-exports */
 /* eslint-disable @typescript-eslint/no-dynamic-delete */
 /* eslint-disable @typescript-eslint/init-declarations */
-/* eslint-disable no-plusplus */
 /* eslint-disable @typescript-eslint/prefer-nullish-coalescing */
 /* eslint-disable func-names */
 /* eslint-disable @typescript-eslint/naming-convention */
@@ -228,7 +227,8 @@ function patchMapLayers(theme): void {
 }
 
 export function addCacheItem(target): void {
-  const cacheUid = ++nextCacheUid;
+  nextCacheUid += 1;
+  const cacheUid = nextCacheUid;
   target._cache = cacheUid;
   widgetsCache[cacheUid] = target;
 }
