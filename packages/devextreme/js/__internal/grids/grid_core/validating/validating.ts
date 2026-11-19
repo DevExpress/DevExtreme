@@ -1319,7 +1319,6 @@ export const validatingEditorFactoryExtender = (
       onPositioned: this.overlayPositionedHandler.bind(this),
     };
 
-    // @ts-expect-error Overlay from ui.overlay.js is typed without constructor arguments
     this._revertTooltip = new Overlay($tooltipElement, tooltipOptions);
   }
 
@@ -1417,7 +1416,6 @@ export const validatingEditorFactoryExtender = (
 
     this._hideFixedGroupCell($cell, overlayOptions);
 
-    // @ts-expect-error Overlay from ui.overlay.js is typed without constructor arguments
     // eslint-disable-next-line no-new -- the overlay renders itself
     new Overlay($overlayElement, overlayOptions);
   }

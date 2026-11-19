@@ -7,7 +7,6 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-/* eslint-disable no-plusplus */
 
 import { noop } from '@ts/core/utils/common';
 import { extend as _extend } from '@ts/core/utils/extend';
@@ -28,7 +27,7 @@ class Flags {
     const ii = codes.length;
     const flags = this._flags;
 
-    for (i = 0; i < ii; ++i) {
+    for (i = 0; i < ii; i += 1) {
       flags[codes[i]] = 1;
     }
   }
@@ -85,7 +84,7 @@ function createChainExecutor() {
     let i;
     const ii = executeChain._chain.length;
     let result;
-    for (i = 0; i < ii; ++i) {
+    for (i = 0; i < ii; i += 1) {
       result = executeChain._chain[i].apply(this, arguments);
     }
 

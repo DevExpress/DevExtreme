@@ -51,6 +51,10 @@ $(() => {
     },
   }).dxPivotGrid('instance');
 
+  $('#refresh-link').on('click', () => {
+    window.location.reload();
+  });
+
   $('#reset').dxButton({
     text: "Reset the PivotGrid's State",
     onClick() {

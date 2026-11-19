@@ -298,7 +298,7 @@ export default {
       const rotated = chart.option('rotated');
       const { actionData } = zoomAndPan;
       const { options } = zoomAndPan;
-      let zoomStarted = true;
+      let zoomStarted: boolean | number = true;
 
       if (actionData.fallback) {
         // @ts-expect-error
@@ -311,7 +311,6 @@ export default {
         getFilteredAxes(axes).forEach((axis) => {
           axis.handleZooming(null, { start: true }, e, actionField);
         });
-        // @ts-expect-error
         zoomStarted = axes.length;
       }
       zoomStarted && chart._requestChange(['VISUAL_RANGE']);

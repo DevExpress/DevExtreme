@@ -189,6 +189,11 @@ class VirtualScrollController<TItem = unknown> {
     this._dataLoader = new VirtualDataLoader(this, this._dataOptions);
   }
 
+  private clearScrollTimeout(): void {
+    clearTimeout(this._scrollTimeoutID);
+    this._scrollTimeoutID = undefined;
+  }
+
   public getItemSizes(): ItemSizes {
     return this._itemSizes;
   }
@@ -250,10 +255,12 @@ class VirtualScrollController<TItem = unknown> {
     const result = Deferred<unknown>();
     const scrollingTimeout = this.getScrollingTimeout();
 
-    clearTimeout(this._scrollTimeoutID);
+    this.clearScrollTimeout();
+
     if (scrollingTimeout > 0) {
       // eslint-disable-next-line no-restricted-globals -- delays rendering by scrolling.timeout
       this._scrollTimeoutID = setTimeout(() => {
+        this._scrollTimeoutID = undefined;
         this._setViewportPositionCore(position);
         result.resolve();
       }, scrollingTimeout);
@@ -263,6 +270,10 @@ class VirtualScrollController<TItem = unknown> {
     }
     // @ts-expect-error promise() is typed as Promise but returns a Deferred-like value at runtime
     return result.promise();
+  }
+
+  public isViewportPositionPending(): boolean {
+    return isDefined(this._scrollTimeoutID);
   }
 
   public getViewportPosition(): number {
@@ -439,7 +450,7 @@ class VirtualScrollController<TItem = unknown> {
   }
 
   public dispose(): void {
-    clearTimeout(this._scrollTimeoutID);
+    this.clearScrollTimeout();
     this._windowScroll?.dispose();
     this._windowScroll = null;
   }

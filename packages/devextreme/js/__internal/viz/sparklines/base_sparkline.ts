@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-declaration-merging */
 import { domAdapter } from '@ts/core/dom_adapter';
 import { renderer as $ } from '@ts/core/renderer';
 import { noop } from '@ts/core/utils/common';
@@ -133,9 +132,17 @@ function createAxis(isHorizontal?: boolean): SparklineAxis {
   };
 }
 
-interface BaseSparkline extends TooltipPluginMembers {}
-
 abstract class BaseSparkline extends BaseWidget {
+  declare _tooltip: TooltipPluginMembers['_tooltip'];
+
+  declare _disposeTooltip: TooltipPluginMembers['_disposeTooltip'];
+
+  declare _initTooltip: TooltipPluginMembers['_initTooltip'];
+
+  declare _setTooltipOptions: TooltipPluginMembers['_setTooltipOptions'];
+
+  declare _setTooltipRendererOptions: TooltipPluginMembers['_setTooltipRendererOptions'];
+
   _tooltipTracker;
 
   _argumentAxis!: SparklineAxis;
