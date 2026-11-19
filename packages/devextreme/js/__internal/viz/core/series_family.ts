@@ -4,7 +4,6 @@
 /* eslint-disable default-case */
 /* eslint-disable @typescript-eslint/init-declarations */
 /* eslint-disable no-restricted-syntax */
-/* eslint-disable no-plusplus */
 /* eslint-disable func-names */
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable no-nested-ternary */
@@ -285,7 +284,7 @@ function adjustBarSeriesDimensions(): void {
 function getFirstValueSign(series: ThemeValue): number {
   const points = series.getPoints();
   let value;
-  for (let i = 0; i < points.length; i++) {
+  for (let i = 0; i < points.length; i += 1) {
     const point = points[i];
     value = point.initialValue && point.initialValue.valueOf();
     if (abs(value) > 0) {

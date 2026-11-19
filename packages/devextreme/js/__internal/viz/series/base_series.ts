@@ -5,7 +5,6 @@
 /* eslint-disable @typescript-eslint/init-declarations */
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable guard-for-in */
-/* eslint-disable no-plusplus */
 /* eslint-disable func-names */
 /* eslint-disable @typescript-eslint/no-shadow */
 /* eslint-disable no-param-reassign */
@@ -689,7 +688,7 @@ export let Series = class Series {
           data.push(pointDataItem);
         }
       } else {
-        itemsWithoutArgument++;
+        itemsWithoutArgument += 1;
       }
       return data;
     }, []);
@@ -1278,7 +1277,7 @@ export let Series = class Series {
     } else {
       let dataIndex = 0;
 
-      for (let i = 1; i < ticks.length; i++) {
+      for (let i = 1; i < ticks.length; i += 1) {
         const intervalEnd = ticks[i];
         const intervalStart = ticks[i - 1];
         const dataInInterval: ThemeValue[] = [];
@@ -1286,7 +1285,7 @@ export let Series = class Series {
           if (data[dataIndex].argument >= intervalStart) {
             dataInInterval.push(data[dataIndex]);
           }
-          dataIndex++;
+          dataIndex += 1;
         }
         const aggregationInfo = {
           intervalStart,

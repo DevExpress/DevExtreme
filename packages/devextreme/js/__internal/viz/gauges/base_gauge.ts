@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-declaration-merging */
 import formatHelper from '@ts/core/format_helper';
 import { noop } from '@ts/core/utils/common';
 import { paintedColor } from '@ts/core/utils/css_variables';
@@ -32,18 +31,31 @@ export interface GaugeFormatOptions {
   customizeText?: (this: ThemeValue, formatObject: ThemeValue) => ThemeValue;
 }
 
-export interface BaseGauge extends TooltipPluginMembers {
-  _change_TITLE: () => void;
-  _factory: ThemeValue;
-  _title: ThemeValue;
-  _updateExtraElements: () => void;
-
-  _DEBUG_change_title?: () => void;
-  _DEBUG_rootRect?: number[];
-  _debug_rendered?: () => void;
-}
-
 export abstract class BaseGauge extends BaseWidget {
+  declare _tooltip: TooltipPluginMembers['_tooltip'];
+
+  declare _disposeTooltip: TooltipPluginMembers['_disposeTooltip'];
+
+  declare _initTooltip: TooltipPluginMembers['_initTooltip'];
+
+  declare _setTooltipOptions: TooltipPluginMembers['_setTooltipOptions'];
+
+  declare _setTooltipRendererOptions: TooltipPluginMembers['_setTooltipRendererOptions'];
+
+  declare _change_TITLE: () => void;
+
+  declare _factory: ThemeValue;
+
+  declare _title: ThemeValue;
+
+  declare _updateExtraElements: () => void;
+
+  declare _DEBUG_change_title?: () => void;
+
+  declare _DEBUG_rootRect?: number[];
+
+  declare _debug_rendered?: () => void;
+
   _valueChangingLocker!: number;
 
   _translator;

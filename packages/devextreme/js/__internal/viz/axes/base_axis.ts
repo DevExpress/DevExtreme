@@ -7,7 +7,6 @@
 /* eslint-disable @typescript-eslint/no-this-alias */
 /* eslint-disable default-case */
 /* eslint-disable @typescript-eslint/init-declarations */
-/* eslint-disable no-plusplus */
 /* eslint-disable func-names */
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable no-nested-ternary */
@@ -305,14 +304,14 @@ function updateGridsPosition(ticks: ThemeValue[], animate?: boolean): void {
 
 function cleanUpInvalidTicks(ticks: ThemeValue[]): void {
   let i = ticks.length - 1;
-  for (i; i >= 0; i--) {
+  for (i; i >= 0; i -= 1) {
     if (!removeInvalidTick(ticks, i)) {
       break;
     }
   }
-  for (i = 0; i < ticks.length; i++) {
+  for (i = 0; i < ticks.length; i += 1) {
     if (removeInvalidTick(ticks, i)) {
-      i--;
+      i -= 1;
     } else {
       break;
     }

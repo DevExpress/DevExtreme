@@ -71,8 +71,13 @@ class LinearGauge extends dxGauge {
 
   _area!: LinearArea;
 
-  _getTicksOrientation(scaleOptions: ThemeValue): string {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+  declare _rangeContainer: LinearRangeContainer;
+
+  _getTicksOrientation(scaleOptions: {
+    isHorizontal: boolean;
+    verticalOrientation: string;
+    horizontalOrientation: string;
+  }): string {
     return scaleOptions.isHorizontal
       ? scaleOptions.verticalOrientation
       : scaleOptions.horizontalOrientation;
@@ -86,8 +91,7 @@ class LinearGauge extends dxGauge {
   }
 
   _getInvertedState(): boolean {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    return !this._area.vertical && this.option('rtlEnabled');
+    return !this._area.vertical && (this.option('rtlEnabled') as boolean);
   }
 
   _prepareScaleSettings(): ThemeValue {
