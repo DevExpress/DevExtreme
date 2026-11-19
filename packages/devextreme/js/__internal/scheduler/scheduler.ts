@@ -7,7 +7,6 @@ import type { DataSource } from '@js/common/data';
 import registerComponent from '@js/core/component_registrator';
 import config from '@js/core/config';
 import { getPublicElement } from '@js/core/element';
-import type { PostponedOperations } from '@js/core/postponed_operations';
 import type { Coordinates, dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { BindableTemplate } from '@js/core/templates/bindable_template';
@@ -57,7 +56,6 @@ import type {
   SelectionEndEvent,
 } from '@js/ui/scheduler';
 import errors from '@js/ui/widget/ui.errors';
-import type { Options } from '@ts/core/options/index';
 import { addOffsets, isValidDate } from '@ts/core/utils/date';
 import { tabbable } from '@ts/core/utils/selectors';
 import type { OptionChanged } from '@ts/core/widget/types';
@@ -95,7 +93,6 @@ import type { AppointmentTooltipExtraOptions, AppointmentTooltipOptions } from '
 import type {
   AppointmentTooltipContextMenuEventArgs,
   AppointmentTooltipItem,
-  CreateComponentFn,
   DOMMetaData,
   GroupBoundsOffset,
   MappedAppointmentFields,
@@ -366,12 +363,6 @@ class Scheduler extends SchedulerOptionsBaseWidget {
   // and initialization in constructor will erase the data
   private timeZoneCalculatorInstance: TimeZoneCalculator | null = null;
 
-  declare postponedOperations: PostponedOperations;
-
-  declare _disposed?: boolean;
-
-  declare _options: Options;
-
   private a11yStatus!: dxElementWrapper;
 
   // TODO: used externally in m_appointment_drag_behavior.ts,
@@ -388,9 +379,8 @@ class Scheduler extends SchedulerOptionsBaseWidget {
 
   declare _dataSource: DataSource | undefined;
 
-  // TODO: used externally in workspaces/work_space.ts
   // eslint-disable-next-line @typescript-eslint/naming-convention -- inherited Widget API
-  declare _createComponent: CreateComponentFn;
+  declare _getTemplate: (template: unknown) => FunctionTemplate;
 
   // TODO: used externally in m_subscribes.ts,
   // view_model/preparation/prepare_appointments.ts,
@@ -679,7 +669,6 @@ class Scheduler extends SchedulerOptionsBaseWidget {
         this.updateOption('header', name, value);
         this.updateOption('workSpace', name, value);
         this._appointments.option(name, value);
-        // @ts-expect-error
         super._optionChanged(args);
         break;
       case 'width':
@@ -689,12 +678,10 @@ class Scheduler extends SchedulerOptionsBaseWidget {
           this.updateOption('workSpace', 'width', value);
         }
         this.updateOption('workSpace', 'schedulerWidth', value);
-        // @ts-expect-error
         super._optionChanged(args);
         this._dimensionChanged(null, true);
         break;
       case 'height':
-        // @ts-expect-error
         super._optionChanged(args);
         this._dimensionChanged(null, true);
         this.updateOption('workSpace', 'schedulerHeight', value);
@@ -786,7 +773,6 @@ class Scheduler extends SchedulerOptionsBaseWidget {
         }
         break;
       default:
-        // @ts-expect-error
         super._optionChanged(args);
     }
   }
@@ -891,9 +877,9 @@ class Scheduler extends SchedulerOptionsBaseWidget {
   }
 
   _fireContentReadyAction(result?: DeferredObj<void>): void {
-    // @ts-expect-error
     const contentReadyBase = super._fireContentReadyAction.bind(this);
     const fireContentReady = (): void => {
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       contentReadyBase();
       result?.resolve();
     };
@@ -907,11 +893,10 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     }
   }
 
-  _dimensionChanged(value: unknown, isForce = false): void {
+  _dimensionChanged(value?: unknown, isForce = false): void {
     const isFixedHeight = typeof this.option('height') === 'number';
     const isFixedWidth = typeof this.option('width') === 'number';
 
-    // @ts-expect-error
     if (!this._isVisible()) {
       return;
     }
@@ -944,7 +929,6 @@ class Scheduler extends SchedulerOptionsBaseWidget {
 
   _clean(): void {
     this.cleanPopup();
-    // @ts-expect-error
     super._clean();
   }
 
@@ -1051,7 +1035,6 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       appointmentTooltip: new EmptyTemplate(),
       dropDownAppointment: new EmptyTemplate(),
     });
-    // @ts-expect-error
     super._initTemplates();
   }
 
@@ -1100,7 +1083,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
   }
 
   _renderContent(): void {
-    // @ts-expect-error
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     this._renderContentImpl();
   }
 
@@ -1132,7 +1115,6 @@ class Scheduler extends SchedulerOptionsBaseWidget {
 
     workspace?.option('allDayExpanded', this.isAllDayExpanded());
 
-    // @ts-expect-error
     const viewModel: AppointmentViewModelPlain[] = this._isVisible()
       ? this._layoutManager.generateViewModel()
       : [];
@@ -1198,7 +1180,6 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     // NOTE: Stop all scheduled macro tasks
     macroTaskArray.dispose();
 
-    // @ts-expect-error
     super._dispose();
   }
 
@@ -1248,7 +1229,6 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       indicatorTime,
     );
 
-    // @ts-expect-error
     this.setAria({ label });
     this.a11yStatus.text(label);
   }
@@ -1256,7 +1236,6 @@ class Scheduler extends SchedulerOptionsBaseWidget {
   private renderA11yStatus(): void {
     this.a11yStatus = createA11yStatusContainer();
     this.a11yStatus.prependTo(this.$element());
-    // @ts-expect-error
     this.setAria({ role: 'application' });
   }
 
@@ -1530,7 +1509,6 @@ class Scheduler extends SchedulerOptionsBaseWidget {
   _render(): void {
     this.getWorkSpace()?.updateHeaderEmptyCellWidth();
 
-    // @ts-expect-error
     super._render();
   }
 
@@ -2713,10 +2691,8 @@ class Scheduler extends SchedulerOptionsBaseWidget {
   }
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-(Scheduler as any).include(DataHelperMixin);
+Scheduler.include(DataHelperMixin);
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-registerComponent('dxScheduler', Scheduler as any);
+registerComponent('dxScheduler', Scheduler);
 
 export default Scheduler;
