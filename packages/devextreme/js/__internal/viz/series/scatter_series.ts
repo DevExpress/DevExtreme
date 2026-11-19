@@ -10,7 +10,6 @@
 /* eslint-disable @typescript-eslint/init-declarations */
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable guard-for-in */
-/* eslint-disable no-plusplus */
 /* eslint-disable func-names */
 /* eslint-disable import/no-mutable-exports */
 /* eslint-disable @typescript-eslint/naming-convention */
@@ -89,11 +88,11 @@ function calculateAvgErrorBars(result, data, series) {
     const fusionData = data.reduce((result, item) => {
       if (_isDefined(item[lowValueField])) {
         result[0] += item[valueField] - item[lowValueField];
-        result[1]++;
+        result[1] += 1;
       }
       if (_isDefined(item[highValueField])) {
         result[2] += item[highValueField] - item[valueField];
-        result[3]++;
+        result[3] += 1;
       }
 
       return result;
@@ -490,9 +489,9 @@ const baseScatterMethods = {
         const value = item[valueField];
         if (_isDefined(value)) {
           result[0] += value;
-          result[1]++;
+          result[1] += 1;
         } else if (value === null) {
-          result[2]++;
+          result[2] += 1;
         }
 
         return result;
@@ -523,9 +522,9 @@ const baseScatterMethods = {
           result[0] += value;
         }
         if (value === null) {
-          result[1]++;
+          result[1] += 1;
         } else if (value === undefined) {
-          result[2]++;
+          result[2] += 1;
         }
         return result;
       }, [0, 0, 0]);
@@ -726,7 +725,7 @@ chart = _extend({}, baseScatterMethods, {
     const oppositeCoordName = !isOpposite ? 'vy' : 'vx';
     const points = this.getVisiblePoints();
 
-    for (let i = 0; i < points.length; i++) {
+    for (let i = 0; i < points.length; i += 1) {
       const p = points[i];
       const tmpCoord = p[coordName] === coord ? p[oppositeCoordName] : undefined;
 
@@ -786,8 +785,8 @@ chart = _extend({}, baseScatterMethods, {
       point = cat[pCoord];
       do {
         point = cat[nCoord] || cat[pCoord];
-        pCoord--;
-        nCoord++;
+        pCoord -= 1;
+        nCoord += 1;
       } while ((pCoord >= 0 || nCoord < cat.length) && !point);
 
       if (Array.isArray(point)) {
@@ -868,7 +867,7 @@ polar = _extend({}, baseScatterMethods, {
     const paramName = isArgument ? 'argument' : 'radius';
     const points = this.getVisiblePoints();
 
-    for (let i = 0; i < points.length; i++) {
+    for (let i = 0; i < points.length; i += 1) {
       const p = points[i];
       const tmpPoint = _isDefined(p[paramName])
         && _isDefined(params[paramName])
