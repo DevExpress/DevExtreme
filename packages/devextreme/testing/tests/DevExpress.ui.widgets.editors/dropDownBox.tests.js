@@ -1070,6 +1070,45 @@ QUnit.module('keyboard navigation', moduleConfig, () => {
         instance.open();
     });
 
+    QUnit.testInActiveWindow('first content element should be scrolled into view inside nested smoothly scrolling scrollers in the popup after popup opening', function(assert) {
+        const done = assert.async();
+        const $input = $('<input>', { type: 'text' }).css({ display: 'inline-block', width: 50 });
+        const $innerScroller = $('<div>').css({ display: 'inline-block', width: 100, height: 100, overflow: 'auto', whiteSpace: 'nowrap', scrollBehavior: 'smooth' });
+        const $outerScroller = $('<div>').css({ width: 150, height: 150, overflow: 'auto', whiteSpace: 'nowrap', scrollBehavior: 'smooth' });
+        let pendingScrollEndCount = 2;
+
+        const instance = new DropDownBox(this.$element, {
+            contentTemplate(component, content) {
+                $innerScroller.append($('<div>').height(300), $('<span>').css({ display: 'inline-block', width: 400 }), $input);
+                $outerScroller.append(
+                    $('<div>').height(300),
+                    $('<span>').css({ display: 'inline-block', width: 300 }),
+                    $innerScroller,
+                    $('<div>').css({ width: 900, height: 600 })
+                ).appendTo(content);
+            }
+        });
+
+        [$innerScroller, $outerScroller].forEach(($scroller) => {
+            $scroller.get(0).addEventListener('scrollend', () => {
+                pendingScrollEndCount -= 1;
+
+                if(pendingScrollEndCount) {
+                    return;
+                }
+
+                const inputRect = $input.get(0).getBoundingClientRect();
+                const elementAtInputCorner = document.elementFromPoint(inputRect.right - 1, inputRect.bottom - 1);
+
+                assert.strictEqual(document.activeElement, $input.get(0), 'input is focused');
+                assert.strictEqual(elementAtInputCorner, $input.get(0), 'input bottom right corner is visible');
+                done();
+            }, { once: true });
+        });
+
+        instance.open();
+    });
+
 });
 
 QUnit.module('validation', moduleConfig, () => {
