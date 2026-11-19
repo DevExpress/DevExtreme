@@ -108,7 +108,22 @@ docker/run.sh tests/editors/selectBox/
 ```
 
 The first run builds the image and takes a few minutes. Look through the new files before
-committing them: a new etalon is only as right as the render it captured.
+committing them, as with etalons from CI.
+
+### Etalons from CI
+
+Without a container, CI records the etalons. A test whose etalon does not exist fails, and
+Playwright writes what it rendered in the etalon's place; the workflow collects those files at
+their repository paths into the `playwright-etalons` artifact:
+
+```bash
+gh run download <run-id> -n playwright-etalons -D ci-etalons
+cp -R ci-etalons/. ../..                 # from e2e/playwright: the paths start at the repository root
+```
+
+Look through them before committing — a new etalon is only as right as the render it captured. On
+the host, run such tests with `--ignore-snapshots`: a host run writes missing etalons too, and a
+macOS or Windows render must not end up among them.
 
 ## Themes
 
@@ -168,6 +183,11 @@ pnpm exec playwright show-trace ci-traces/<test-name>/trace.zip --port 0
 The trace holds every action with the DOM before and after it, the network and the console, and a
 failed screenshot comparison uploads its `-expected`, `-actual` and `-diff` images alongside, so a
 failure that only happens on CI can be diagnosed without reproducing it.
+
+On CI a failed test runs once more, in a new browser. A test that passes then does not fail the
+job: the log lists it under "flaky", and the traces artifact keeps its failed run. A test that
+wrote a missing etalon is the exception: its retry passes against that file, so the job fails on
+the new etalon instead.
 
 ## Writing a test
 
