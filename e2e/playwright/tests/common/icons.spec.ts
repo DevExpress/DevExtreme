@@ -1,5 +1,5 @@
 /* eslint-disable spellcheck/spell-checker */
-import { expect, test } from '../../fixtures';
+import { test } from '../../fixtures';
 import { testScreenshot } from '../../helpers/screenshots';
 import { getThemeName, isFluent } from '../../helpers/themeUtils';
 
@@ -421,8 +421,8 @@ test.describe('Icons', () => {
       });
     }, icons);
 
-    await expect.poll(() => page.evaluate(() => Array.from(document.images)
-      .every((image) => image.complete && image.naturalWidth > 0))).toBe(true);
+    await page.evaluate(() => Promise.all(Array.from(document.images)
+      .map((image) => image.decode())));
 
     await testScreenshot(page, 'SVG icon set.png');
   });
