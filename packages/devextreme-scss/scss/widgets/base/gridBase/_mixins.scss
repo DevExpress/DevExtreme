@@ -1,0 +1,10 @@
+@mixin dx-command-text-target-sizing($height, $padding-inline, $margin-inline, $min-width: 20px) {
+  $padding-block: max(0px, calc(($height - 1lh) / 2));
+
+  width: auto;
+  height: auto;
+  min-width: $min-width;
+  text-align: center;
+  padding: $padding-block $padding-inline;
+  margin: calc(-1 * $padding-block) $margin-inline;
+}
