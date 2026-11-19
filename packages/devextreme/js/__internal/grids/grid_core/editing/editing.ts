@@ -2580,9 +2580,8 @@ export class EditingController extends modules.ViewController {
         const iconType = iconUtils.getImageSourceType(icon);
 
         if (iconType === 'image' || iconType === 'svg') {
-          const $icon = iconUtils.getImageContainer(icon);
-          $icon?.addClass(button.cssClass ?? '').attr('aria-hidden', 'true').appendTo($button);
-          $icon?.filter('img').attr('alt', '');
+          // @ts-expect-error an image/svg has a container; addClass() is typed without undefined
+          $button = iconUtils.getImageContainer(icon).addClass(button.cssClass);
         } else {
           // @ts-expect-error attr() is typed without undefined
           $button.addClass(`dx-icon${iconType === 'dxIcon' ? '-' : ' '}${icon}`).attr('title', button.text);
