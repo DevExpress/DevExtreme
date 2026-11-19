@@ -3,7 +3,7 @@ import { expect, test } from '../../../fixtures';
 import { createWidget } from '../../../helpers/createWidget';
 import { appendElementTo, setStyleAttribute } from '../../../helpers/domUtils';
 import Popup from '../../../models/popup';
-import { expectCentered, getRect } from './utils';
+import { expectCentered, expectCenteredInWindow, getRect } from './utils';
 
 const waitForShownPopups = (page: Page, count: number): Promise<unknown> => page.waitForFunction(
   (expected) => (window as any).shownPopups === expected,
@@ -77,21 +77,27 @@ test.describe('Popup', () => {
   });
 
   test('Popup should be centered regarding the window after position.boundary is set to window', async ({ page }) => {
-    await createWidget(page, 'dxPopup', () => ({
+    await createWidget(page, 'dxPopup', {
       width: 300,
       height: 200,
       visible: true,
       animation: undefined,
       position: {
         boundary: '#otherContainer',
+        collision: 'fit',
       },
-      onShown: (e) => {
-        e.component.option('position.boundary', window);
-      },
-    }), undefined, { disableFxAnimation: false });
+    }, undefined, { disableFxAnimation: false });
 
     const popup = new Popup(page, '#container');
+    const content = popup.getContent();
+    const boundaryRect = await getRect(page.locator('#otherContainer'));
 
-    await expectCentered(popup.getWrapper(), popup.getContent());
+    await expect.poll(async () => (await getRect(content)).top).toBe(boundaryRect.top);
+
+    await popup.element.evaluate((element) => {
+      ($(element) as any).dxPopup('instance').option('position.boundary', window);
+    });
+
+    await expectCenteredInWindow(content);
   });
 });

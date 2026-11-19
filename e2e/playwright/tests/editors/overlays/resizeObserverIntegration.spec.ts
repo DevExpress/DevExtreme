@@ -112,7 +112,17 @@ test.describe('Popup', () => {
       });
     });
 
-    await popup.show();
+    const shownCallCountAtResize = await popup.element.evaluate((element) => {
+      ($(element) as any).dxPopup('instance').show();
+      $('#content').css({ width: '300px', height: '300px' });
+
+      return (window as any).shownCallCount;
+    });
+
+    expect(shownCallCountAtResize).toBe(0);
+
+    await page.waitForFunction(() => (window as any).shownCallCount > 0
+      && !(window as any).DevExpress.fx.isAnimating(document.querySelector('.dx-overlay-content')));
 
     await expect.poll(() => page.evaluate(() => (window as any).shownCallCount)).toBe(1);
     await expect.poll(() => page.evaluate(() => (window as any).showingCallCount)).toBe(1);
