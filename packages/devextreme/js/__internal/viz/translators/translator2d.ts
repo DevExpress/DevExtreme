@@ -543,11 +543,9 @@ let _Translator2d = class _Translator2d {
   _calculateUnProjection(distance: number): number {
     const canvasOptions = this._canvasOptions;
     this._businessRange.dataType === 'datetime' && (distance = Math.round(distance));
-    // valueOf() of a number or a Date
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return canvasOptions.invert
       ? canvasOptions.rangeMaxVisible.valueOf() - distance
-      : canvasOptions.rangeMinVisible.valueOf() + distance;
+      : (canvasOptions.rangeMinVisible.valueOf() as number) + distance;
   }
 
   getMinBarSize(minBarSize: number): number {

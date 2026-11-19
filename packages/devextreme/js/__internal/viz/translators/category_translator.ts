@@ -2,21 +2,28 @@
 /* eslint-disable radix */
 /* eslint-disable @typescript-eslint/init-declarations */
 /* eslint-disable no-param-reassign */
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
 
 import { adjust } from '@ts/core/utils/math';
 import { isDefined } from '@ts/core/utils/type';
+import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
+import type { Translator2DInstance, ZoomResult } from '@ts/viz/translators/translator2d';
+
+type CategoryTranslator = Translator2DInstance & {
+  _canvasOptions: { interval: number };
+};
 
 const { round } = Math;
 
-function getValue(value) { return value; }
+function getValue<T>(value: T): T { return value; }
 
 const MIN_VALID_SCALE_OFFSET = 0.05;
 
 export default {
-  translate(category, directionOffset): number | null {
+  translate(
+    this: CategoryTranslator,
+    category: ThemeValue,
+    directionOffset?: number,
+  ): number | null {
     const that = this;
     const canvasOptions = that._canvasOptions;
     const categoryIndex = that._categoriesToPoints[category?.valueOf()];
@@ -38,16 +45,16 @@ export default {
     return round(that._calculateProjection(canvasOptions.interval * stickDelta));
   },
 
-  getInterval() {
+  getInterval(this: CategoryTranslator): number {
     return this._canvasOptions.interval;
   },
 
-  getEventScale(zoomEvent): number {
+  getEventScale(this: CategoryTranslator, zoomEvent: { deltaScale?: number }): number {
     const scale = zoomEvent.deltaScale || 1;
     return 1 - (1 - scale) / (0.75 + this.visibleCategories.length / this._categories.length);
   },
 
-  zoom(translate, scale) {
+  zoom(this: CategoryTranslator, translate: number, scale: number): ZoomResult {
     const that = this;
     const scaleOffset = Math.abs(Math.abs(scale) - 1);
     const isZoomIn = scale > 1;
@@ -64,17 +71,18 @@ export default {
     const translateCategories = translate / interval;
     const visibleCount = (that.visibleCategories || []).length;
     let startCategoryIndex = parseInt(
+      // @ts-expect-error parseInt truncates a number here
       (canvasOptions.startPointIndex || 0) + translateCategories + 0.5,
     );
     const categoriesLength = parseInt(
-      // @ts-expect-error
+      // @ts-expect-error parseInt truncates a number here
       adjust(canvasOptions.canvasLength / interval) + (stick ? 1 : 0),
     ) || 1;
     let endCategoryIndex;
 
     if (invert) {
       startCategoryIndex = parseInt(
-        // @ts-expect-error
+        // @ts-expect-error parseInt truncates a number here
         (canvasOptions.startPointIndex || 0) + visibleCount - translateCategories + 0.5,
       ) - categoriesLength;
     }
@@ -93,7 +101,7 @@ export default {
       }
     }
     const newVisibleCategories = categories.slice(
-      // @ts-expect-error
+      // @ts-expect-error parseInt truncates a number here
       parseInt(startCategoryIndex),
       parseInt(endCategoryIndex),
     );
@@ -115,17 +123,17 @@ export default {
     };
   },
 
-  getMinScale(zoom): number {
+  getMinScale(this: CategoryTranslator, zoom: boolean): number {
     const that = this;
     const canvasOptions = that._canvasOptions;
     let categoriesLength = (that.visibleCategories || that._categories).length;
-    // @ts-expect-error
+    // @ts-expect-error parseInt truncates a number here
     categoriesLength += (parseInt(categoriesLength * 0.1) || 1) * (zoom ? -2 : 2);
 
     return canvasOptions.canvasLength / ((Math.max(categoriesLength, 1) * canvasOptions.interval));
   },
 
-  getScale(min, max): number {
+  getScale(this: CategoryTranslator, min?: ThemeValue, max?: ThemeValue): number {
     const that = this;
     const canvasOptions = that._canvasOptions;
     const visibleArea = that.getCanvasVisibleArea();
@@ -144,13 +152,13 @@ export default {
 
   // dxRangeSelector
 
-  isValid(value): boolean {
+  isValid(this: CategoryTranslator, value: ThemeValue): boolean {
     return isDefined(value) ? this._categoriesToPoints[value.valueOf()] >= 0 : false;
   },
 
   getCorrectValue: getValue,
 
-  to(value, direction): number {
+  to(this: CategoryTranslator, value: ThemeValue, direction: number): number {
     const canvasOptions = this._canvasOptions;
     const categoryIndex = this._categoriesToPoints[value?.valueOf()];
     const startPointIndex = canvasOptions.startPointIndex || 0;
@@ -161,7 +169,7 @@ export default {
     return round(this._calculateProjection(canvasOptions.interval * stickDelta));
   },
 
-  from(position, direction = 0) {
+  from(this: CategoryTranslator, position: number, direction = 0): ThemeValue {
     const canvasOptions = this._canvasOptions;
     const { startPoint } = canvasOptions;
     const categories = this.visibleCategories || this._categories;
@@ -198,7 +206,11 @@ export default {
 
   isValueProlonged: true,
 
-  getRangeByMinZoomValue(minZoom, visualRange) {
+  getRangeByMinZoomValue(
+    this: CategoryTranslator,
+    minZoom: number,
+    visualRange: ThemeValue,
+  ): [ThemeValue, ThemeValue] {
     const categories = this._categories;
     const minVisibleIndex = categories.indexOf(visualRange.minVisible);
     const maxVisibleIndex = categories.indexOf(visualRange.maxVisible);

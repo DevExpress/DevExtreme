@@ -1,11 +1,8 @@
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
-
+import type { GraphLink } from './graph';
 import graphModule from './graph';
 
 const validator = {
-  validate(data, incidentOccurred): string | null {
+  validate(data: GraphLink[], incidentOccurred: (errorCode: string) => void): string | null {
     let result: string | null = null;
     if (this._hasCycle(data)) {
       result = 'E2006';
@@ -13,7 +10,7 @@ const validator = {
     }
     return result;
   },
-  _hasCycle(data) {
+  _hasCycle(data: GraphLink[]): boolean {
     return graphModule.struct.hasCycle(data);
   },
 };
