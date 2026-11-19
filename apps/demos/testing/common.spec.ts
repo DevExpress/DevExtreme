@@ -72,10 +72,6 @@ MIGRATED_FRAMEWORKS.forEach((approach) => {
 
         page.on('pageerror', (error) => pageErrors.push(error.stack ?? error.message));
 
-        page.on('response', (response) => {
-          if (response.status() >= 400) { console.log(`[TEMP-HTTP] ${testName} ${response.status()} ${response.url()}`); }
-        });
-
         const waitForIdle = trackPageActivity(page);
 
         await mockApi(page);
