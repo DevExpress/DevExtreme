@@ -549,7 +549,7 @@ jobs:
         # The default blob name is built from the test paths only, so jobs that differ by theme or
         # shard alone would write the same zip and overwrite each other once merged.
         PLAYWRIGHT_BLOB_OUTPUT_NAME: report-${{ env.PLAYWRIGHT_JOB_NAME }}.zip
-      run: pnpm run test-playwright
+      run: pnpm run test-playwright --update-snapshots=all
 
     - name: Show accessibility warnings
       if: matrix.STRATEGY == 'accessibility'
@@ -582,7 +582,7 @@ jobs:
       if: always() && matrix.STRATEGY == 'screenshots'
       run: |
         mkdir -p "$RUNNER_TEMP/new-etalons"
-        git ls-files --others --exclude-standard -z -- 'apps/demos/testing/etalons/*.png' \
+        git ls-files --others --modified --exclude-standard -z -- 'apps/demos/testing/etalons/*.png' \
           | xargs -0 -r cp --parents -t "$RUNNER_TEMP/new-etalons"
 
     - name: Upload new etalons
@@ -597,7 +597,7 @@ jobs:
     - name: Fail on new etalons
       if: always() && matrix.STRATEGY == 'screenshots'
       run: |
-        new_etalons=$(git ls-files --others --exclude-standard -- 'apps/demos/testing/etalons/*.png')
+        new_etalons=$(git ls-files --others --modified --exclude-standard -- 'apps/demos/testing/etalons/*.png')
         if [ -n "$new_etalons" ]; then
           echo "::error::The tests wrote etalons that are not in the repository. They are in the playwright-etalons artifact:"
           echo "$new_etalons"
