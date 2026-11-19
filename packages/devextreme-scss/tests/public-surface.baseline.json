@@ -1084,6 +1084,7 @@
       "--dx-gantt-splitter-bar-width",
       "--dx-gantt-successor-bg",
       "--dx-gantt-task-bg",
+      "--dx-gantt-task-content",
       "--dx-gantt-task-edit-frame-border",
       "--dx-gantt-task-edit-progress-border",
       "--dx-gantt-task-edit-progress-height",
