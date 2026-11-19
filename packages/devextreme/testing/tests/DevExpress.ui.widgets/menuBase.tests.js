@@ -49,11 +49,6 @@ const DX_MENU_ITEM_TEXT_URL_CLASS = `${DX_MENU_ITEM_TEXT_CLASS}-with-url`;
 const DX_ICON_WITH_URL_CLASS = `${DX_ICON_CLASS}-with-url`;
 
 class TestComponent extends MenuBase {
-    ctor(element, options) {
-        this.NAME = 'TestComponent';
-        super.ctor(element, options);
-    }
-
     _itemDataKey() {
         return '123';
     }

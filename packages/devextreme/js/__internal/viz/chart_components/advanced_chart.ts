@@ -19,6 +19,7 @@ import { Axis } from '@ts/viz/axes/base_axis';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 import { setupWidgetPrototype } from '@ts/viz/core/helpers';
 import { SeriesFamily } from '@ts/viz/core/series_family';
+import type { Size } from '@ts/viz/core/types';
 import {
   convertVisualRangeObject, map as _map,
   mergeMarginOptions, rangesAreEqual, setCanvasValues, unique,
@@ -56,7 +57,7 @@ function processBubbleMargin(marginOptions, bubbleSize) {
 }
 
 function estimateBubbleSize(
-  size: { width: number; height: number },
+  size: Size,
   panesCount: number,
   maxSize: number,
   rotated: boolean,
