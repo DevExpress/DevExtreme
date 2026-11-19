@@ -11,6 +11,7 @@ import { ThemeManager as ChartThemeManager } from '@ts/viz/components/chart_them
 import { validateData } from '@ts/viz/components/data_validator';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 import { SeriesFamily } from '@ts/viz/core/series_family';
+import type { Size } from '@ts/viz/core/types';
 import { mergeMarginOptions, processSeriesTemplate } from '@ts/viz/core/utils';
 import { Series } from '@ts/viz/series/base_series';
 import { Range } from '@ts/viz/translators/range';
@@ -287,7 +288,7 @@ export let SeriesDataSource = class SeriesDataSource {
     return { arg: argRange, val: valRange };
   }
 
-  getMarginOptions(canvas: { width: number; height: number }): ThemeValue {
+  getMarginOptions(canvas: Size): ThemeValue {
     const bubbleSize = Math.min(canvas.width, canvas.height) * this._themeManager.getOptions('maxBubbleSize');
 
     return this._series.reduce((marginOptions, series) => {

@@ -351,7 +351,10 @@ function sortData(data, groupsData, options, uniqueArgumentFields) {
   const userCategories = isDiscrete
     && groupsData.argumentOptions
     && groupsData.argumentOptions.categories;
-  let sortFunction = function (data) { return data; };
+  let sortFunction: (
+    data: unknown[],
+    argumentField?: string,
+  ) => unknown[] = function (data) { return data; };
   const sortingMethodOption = options.sortingMethod;
   let reSortCategories;
 
@@ -368,16 +371,13 @@ function sortData(data, groupsData, options, uniqueArgumentFields) {
       && groupsData.argumentType === STRING
       && !options._skipArgumentSorting)
   ) {
-    // @ts-expect-error
     sortFunction = getSortByCategories(groupsData.categories);
   } else if (sortingMethodOption === true && groupsData.argumentType !== STRING) {
-    // @ts-expect-error
     sortFunction = sortByArgument;
     reSortCategories = isDiscrete;
   }
 
   uniqueArgumentFields.forEach((field) => {
-    // @ts-expect-error
     dataByArguments[field] = sortFunction(data, field);
   });
 
