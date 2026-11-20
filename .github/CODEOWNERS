@@ -12,6 +12,10 @@
 /apps/demos/Demos/**                                                    @DevExpress/devextreme-components
 /e2e/testcafe-devextreme/tests/*/**                                     @DevExpress/devextreme-components
 /e2e/playwright/tests/editors/**                                        @DevExpress/devextreme-components
+/e2e/playwright/tests/common/*                                          @DevExpress/devextreme-components
+/e2e/playwright/tests/common/etalons/**                                 @DevExpress/devextreme-components
+/e2e/playwright/tests/common/gantt/**                                   @DevExpress/devextreme-components
+/e2e/playwright/tests/common/pagination/**                              @DevExpress/devextreme-components
 /packages/devextreme/testing/tests/DevExpress.serverSide*/**            @DevExpress/devextreme-components
 
 ## ui
@@ -60,7 +64,7 @@
 /packages/devextreme/testing/tests/*/dataGrid.*                      @DevExpress/devextreme-grids
 /packages/testcafe-models/dataGrid/**                                @DevExpress/devextreme-grids
 /e2e/testcafe-devextreme/tests/dataGrid/**                           @DevExpress/devextreme-grids
-/e2e/testcafe-devextreme/tests/accessibility/dataGrid/**             @DevExpress/devextreme-grids
+/e2e/playwright/tests/accessibility/dataGrid/**                      @DevExpress/devextreme-grids
 
 /apps/demos/Demos/DataGrid/**           @DevExpress/devextreme-grids
 /apps/demos/testing/widgets/datagrid/** @DevExpress/devextreme-grids
@@ -79,7 +83,7 @@
 /packages/devextreme/testing/tests/*/treeList.*                      @DevExpress/devextreme-grids
 /packages/testcafe-models/treeList/**                                @DevExpress/devextreme-grids
 /e2e/testcafe-devextreme/tests/common/treeList/**                    @DevExpress/devextreme-grids
-/e2e/testcafe-devextreme/tests/accessibility/treeList/**             @DevExpress/devextreme-grids
+/e2e/playwright/tests/accessibility/treeList/**             @DevExpress/devextreme-grids
 
 /apps/demos/Demos/TreeList/**           @DevExpress/devextreme-grids
 
@@ -95,7 +99,7 @@
 /packages/devextreme/testing/tests/*/filterBuilder.*                           @DevExpress/devextreme-grids
 /packages/devextreme/testing/tests/DevExpress.ui.widgets/filterBuilderParts/** @DevExpress/devextreme-grids
 /e2e/testcafe-devextreme/tests/common/filterBuilder/** @DevExpress/devextreme-grids
-/e2e/testcafe-devextreme/tests/accessibility/filterBuilder.ts @DevExpress/devextreme-grids
+/e2e/playwright/tests/accessibility/filterBuilder.spec.ts @DevExpress/devextreme-grids
 /packages/testcafe-models/filterBuilder/**      @DevExpress/devextreme-grids
 
 /apps/demos/Demos/FilterBuilder/** @DevExpress/devextreme-grids
@@ -125,6 +129,7 @@
 
 /packages/devextreme/testing/tests/*/draggable.*                            @DevExpress/devextreme-grids
 /e2e/testcafe-devextreme/tests/common/draggable.ts                          @DevExpress/devextreme-grids
+/e2e/playwright/tests/common/draggable.spec.ts                              @DevExpress/devextreme-grids
 
 ## card_view
 /packages/devextreme/js/ui/card_view.d.ts                   @DevExpress/devextreme-grids
@@ -138,7 +143,7 @@
 /apps/demos/Demos/CardView/**                               @DevExpress/devextreme-grids
 /packages/testcafe-models/cardView/**                       @DevExpress/devextreme-grids
 /e2e/testcafe-devextreme/tests/cardView/**                  @DevExpress/devextreme-grids
-/e2e/testcafe-devextreme/tests/accessibility/cardView/**    @DevExpress/devextreme-grids
+/e2e/playwright/tests/accessibility/cardView/**    @DevExpress/devextreme-grids
 
 # Scheduler
 
@@ -152,7 +157,7 @@
 /packages/devextreme/testing/tests/DevExpress.ui.widgets.scheduler/** @DevExpress/devextreme-scheduler
 /packages/devextreme/testing/tests/*/scheduler.*                      @DevExpress/devextreme-scheduler
 /packages/testcafe-models/scheduler/**                                @DevExpress/devextreme-scheduler
-/e2e/testcafe-devextreme/tests/accessibility/scheduler/**             @DevExpress/devextreme-scheduler
+/e2e/playwright/tests/accessibility/scheduler/**             @DevExpress/devextreme-scheduler
 /e2e/playwright/models/scheduler/**                                   @DevExpress/devextreme-scheduler
 /e2e/playwright/tests/scheduler/**                                    @DevExpress/devextreme-scheduler
 
@@ -175,7 +180,7 @@
 /packages/devextreme/testing/tests/*/pivotGrid.*                      @DevExpress/devextreme-scheduler
 /packages/testcafe-models/pivotGrid/**                                @DevExpress/devextreme-scheduler
 /e2e/testcafe-devextreme/tests/common/pivotGrid/**                    @DevExpress/devextreme-scheduler
-/e2e/testcafe-devextreme/tests/accessibility/pivotGrid.ts             @DevExpress/devextreme-scheduler
+/e2e/playwright/tests/accessibility/pivotGrid.spec.ts             @DevExpress/devextreme-scheduler
 /e2e/playwright/models/pivotGrid/**                                   @DevExpress/devextreme-scheduler
 /e2e/playwright/tests/common/pivotGrid/**                             @DevExpress/devextreme-scheduler
 

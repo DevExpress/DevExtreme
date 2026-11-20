@@ -1024,7 +1024,6 @@ class FilterBuilder extends Widget<FilterBuilderProperties> implements EditorFac
   ): void {
     // eslint-disable-next-line @typescript-eslint/no-this-alias
     const that = this;
-    const { onHidden, onShown } = popupOptions;
     const menu: { treeView?: TreeView } = {};
     const $popup = $('<div>')
       .addClass(popupOptions.cssClass)
@@ -1033,7 +1032,7 @@ class FilterBuilder extends Widget<FilterBuilderProperties> implements EditorFac
     this._popupWithTreeView = this._createComponent($popup, Popup, {
       onHiding: popupOptions.onHiding,
       onHidden: (...args) => {
-        onHidden?.(...args);
+        popupOptions.onHidden?.(...args);
         this._popupWithTreeView = undefined;
       },
       rtlEnabled: popupOptions.rtlEnabled,
@@ -1056,7 +1055,7 @@ class FilterBuilder extends Widget<FilterBuilderProperties> implements EditorFac
       hideOnOutsideClick: true,
       onShown: (e) => {
         if (menu.treeView) {
-          onShown(e, menu.treeView);
+          popupOptions.onShown(e, menu.treeView);
         }
       },
       shading: false,

@@ -1,8 +1,9 @@
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
+import type { RendererInstance, SvgElementInstance } from '@ts/viz/core/renderers/renderer';
 
-export const createTracker = (renderer, root) => renderer
+export const createTracker = (
+  renderer: RendererInstance,
+  root: SvgElementInstance,
+): SvgElementInstance => renderer
   .g()
   .attr({
     stroke: 'none',
@@ -13,9 +14,13 @@ export const createTracker = (renderer, root) => renderer
   .css({ cursor: 'pointer' })
   .append(root);
 
-export const createVisibilityGroup = (renderer, root, className = '') => renderer.g().attr({ class: className }).append(root);
+export const createVisibilityGroup = (
+  renderer: RendererInstance,
+  root: SvgElementInstance,
+  className = '',
+): SvgElementInstance => renderer.g().attr({ class: className }).append(root);
 
-export const toggleDisplay = (blocks, isVisible): void => {
+export const toggleDisplay = (blocks: SvgElementInstance[], isVisible: boolean): void => {
   const cssDisplayBlock = { display: 'block' };
   const cssDisplayNone = { display: 'none' };
   const style = isVisible ? cssDisplayBlock : cssDisplayNone;

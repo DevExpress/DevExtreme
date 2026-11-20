@@ -28,6 +28,7 @@ import type { DxEvent } from '@js/events';
 import type { Properties as FormProperties } from '@js/ui/form';
 import type { Converter, HtmlEditorFormat, Properties } from '@js/ui/html_editor';
 import type { Properties as PopupProperties } from '@js/ui/popup';
+import type { TemplateBase } from '@ts/core/templates/template_base';
 import { getNextFocusableElement, getPreviousFocusableElement } from '@ts/core/utils/focus';
 import type { OptionChanged } from '@ts/core/widget/types';
 import { Event as dxEvent } from '@ts/events/core/events';
@@ -221,7 +222,7 @@ class HtmlEditor extends Editor<Properties> {
 
     this._renderStylingMode();
 
-    const template = this._getTemplate(ANONYMOUS_TEMPLATE_NAME);
+    const template = this._getTemplate(ANONYMOUS_TEMPLATE_NAME) as unknown as TemplateBase;
     const transclude = true;
 
     this._$templateResult = template?.render({

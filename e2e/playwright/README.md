@@ -33,6 +33,14 @@ as a regular expression. The static server for the test page starts on its own.
 comparer did. Etalons live in `etalons/` next to the test and carry the theme in the file name —
 `PivotGrid markup (fluent.blue.light).png` — the same convention the TestCafe run uses.
 
+An element shot takes the box of the element. The TestCafe one took its scroll size, so what
+overflowed the element — a popup rendered into it, a validation message beside it — was in the
+picture. Pass `withOverflow: true` when the test is about that content:
+
+```ts
+await testScreenshot(page, 'DateBox popup.png', { element: '#container', withOverflow: true });
+```
+
 The pixel budget follows the renderer: the agent and the container draw the same pixels and are
 both judged strictly (`maxDiffPixels` 0, `threshold` 0.1), the UI mode included: no pixel may drift
 beyond the per-pixel threshold, which is what the TestCafe comparer enforced. A run on the host is
@@ -55,7 +63,7 @@ crop and render differently, so a TestCafe image is not a valid reference for th
 It is still the check of the port. Recording writes whatever the test reached, and a verify run
 compares against that same file, so neither notices a test that shot the wrong state. Before
 deleting the TestCafe etalon, compare the new one with it: the same picture, within the per-pixel
-threshold. Three differences are expected:
+threshold. Five differences are expected:
 
 - A scrollbar. This suite shows it, TestCafe cut it off, so a viewport shot of a page that
   overflows comes out up to 15 px larger, with the scrollbar in the extra strip.
@@ -63,6 +71,13 @@ threshold. Three differences are expected:
 - Single antialiased pixels on the edges of shapes that sit on fractional coordinates. The TestCafe
   comparer ignored antialiasing (looks-same, `ignoreAntialiasing`, tolerance 5), so its etalon
   could drift there unnoticed; this suite compares them strictly.
+- The crop of an element shot. TestCafe took `getBoundingClientRect` widened to the element's
+  `scrollWidth`/`scrollHeight`, so a hidden descendant that sticks out (an invalid message under the
+  last editor) made its image taller; Playwright takes the box alone and rounds a fractional size
+  up, so an image can come out a row taller or several rows shorter. The common area is identical.
+- A whole colour shifted by a few units (an editor border 205 → 203 in fluent-next). The tolerance
+  above let a later theme change through without a new TestCafe etalon; every other pixel of that
+  colour shifts the same way, and only the text antialiasing around it changes besides.
 
 Anything else, a block of pixels or a moved edge, means the test reached a different state; find
 out why rather than accept the image.
@@ -103,15 +118,16 @@ themes the CI jobs run:
 pnpm exec nx build devextreme-scss              # from the repository root
 pnpm exec nx build devextreme -c testing
 
-docker/run.sh --update-snapshots tests/editors/selectBox/
-THEME=fluent-next.blue.light docker/run.sh --update-snapshots tests/editors/selectBox/
+docker/run.sh tests/editors/selectBox/ --update-snapshots
+THEME=fluent-next.blue.light docker/run.sh tests/editors/selectBox/ --update-snapshots
 
 docker/run.sh tests/editors/selectBox/
 THEME=fluent-next.blue.light docker/run.sh tests/editors/selectBox/
 ```
 
-The first run builds the image and takes a few minutes. Look through the new files before
-committing them, as with etalons from CI.
+Put the path before `--update-snapshots`: the flag takes an optional mode, and a path right after
+it is read as one (`argument 'tests/…' is invalid`). The first run builds the image and takes a few
+minutes. Look through the new files before committing them, as with etalons from CI.
 
 ### Etalons from CI
 
@@ -259,6 +275,15 @@ test folders migrated under this rule (see `eslint.config.mjs`) may not use `wai
 `setTimeout`, `force: true`, `toPass`, a `timeout` option or a call that raises a timeout
 (`test.setTimeout`, `page.setDefaultTimeout`).
 
+**Animations.** `show()` of an overlay returns a promise that resolves when the show animation ends,
+and both runners wait for it, so `await popup.show()` needs nothing after it. A widget created
+visible with animations on returns nothing to wait for: count its `onShown` calls on `window` and
+wait for the count with `page.waitForFunction`.
+
+**Images.** `toHaveScreenshot` compares the first picture that stays the same over two shots, and an
+image that is still loading can stay the same. Before such a shot, wait until every `img` in it is
+`complete`.
+
 **Clicks.** A click is a real one: it lands on the topmost element at that point and fails when
 that is not the target. TestCafe delivered a click to a covered element anyway, so a test that
 relied on it needs the target made reachable, not the check switched off.
@@ -275,3 +300,9 @@ TestCafe version ended with `expect(true).ok()` checks exactly that and needs no
 **Old models.** A model in `packages/testcafe-models` that the ported tests used goes in the same
 PR, but only after a search proves nothing else uses it: grep all of `e2e/` and `packages/` for its
 import path, since other tests and other models import models too. A model still in use stays.
+
+**Shared files.** The same goes for anything else in the TestCafe folder of the ported tests — a
+data file, a helper: other tests import them by a relative path
+(`accessibility/treeView.ts` takes `../navigation/treeView/data`). Grep `e2e/testcafe-devextreme`
+for the file's path before deleting it or moving it here; a file still in use stays, and the port
+takes a copy.

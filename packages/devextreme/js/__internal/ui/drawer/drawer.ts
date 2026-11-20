@@ -16,6 +16,7 @@ import type {
   PointerInteractionEvent,
 } from '@js/events';
 import type { PanelLocation, Properties } from '@js/ui/drawer';
+import type { TemplateBase } from '@ts/core/templates/template_base';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
 import eventsEngine from '@ts/events/core/events_engine';
@@ -304,7 +305,7 @@ class Drawer extends Widget<DrawerProperties> {
 
   _renderViewContent(): void {
     const contentTemplateOption = this.option('contentTemplate');
-    const contentTemplate = this._getTemplate(contentTemplateOption);
+    const contentTemplate = this._getTemplate(contentTemplateOption) as unknown as TemplateBase;
 
     if (contentTemplate) {
       const $viewTemplate = contentTemplate.render({

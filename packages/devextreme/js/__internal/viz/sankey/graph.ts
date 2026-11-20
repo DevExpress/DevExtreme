@@ -1,18 +1,37 @@
 /* eslint-disable @typescript-eslint/prefer-for-of */
 /* eslint-disable func-names */
 /* eslint-disable @typescript-eslint/naming-convention */
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
+
+import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
+import type { SankeyDataItem } from '@ts/viz/sankey/sankey';
+
+export interface GraphVertex {
+  name: string;
+  lp: number | null;
+  incoming: string[];
+  outgoing: string[];
+}
+
+export type RankedVertex = GraphVertex & { lp: number };
+
+type VertexColors = Record<string, { color: string }>;
+
+interface GraphStruct {
+  _hasCycle: boolean;
+  _sortedList: GraphVertex[];
+  hasCycle: (links: SankeyDataItem[]) => boolean;
+  _depthFirstSearch: (links: SankeyDataItem[], vertices: VertexColors, vertex: string) => void;
+  computeLongestPaths: (links: SankeyDataItem[]) => RankedVertex[];
+}
 
 const WHITE = 'white';
 const GRAY = 'gray';
 const BLACK = 'black';
 
 const routines = {
-  maxOfArray(arr, callback?): number {
+  maxOfArray(arr: ThemeValue[], callback?: (value: ThemeValue) => number): number {
     let m = 0;
-    let callback_function = (v) => v;
+    let callback_function = (v: ThemeValue): ThemeValue => v;
     if (callback) {
       callback_function = callback;
     }
@@ -23,18 +42,14 @@ const routines = {
   },
 };
 
-const getVertices = function (links) {
-  const vert = [];
+const getVertices = function (links: SankeyDataItem[]): string[] {
+  const vert: string[] = [];
 
   links.forEach((link) => {
-    // @ts-expect-error
     if (!vert.includes(link[0])) {
-      // @ts-expect-error
       vert.push(link[0]);
     }
-    // @ts-expect-error
     if (!vert.includes(link[1])) {
-      // @ts-expect-error
       vert.push(link[1]);
     }
   });
@@ -42,13 +57,11 @@ const getVertices = function (links) {
   return vert;
 };
 
-const getAdjacentVertices = function (links, vertex) {
-  const avert = [];
+const getAdjacentVertices = function (links: SankeyDataItem[], vertex: string): string[] {
+  const avert: string[] = [];
 
   links.forEach((link) => {
-    // @ts-expect-error
     if (link[0] === vertex && !avert.includes(link[1])) {
-      // @ts-expect-error
       avert.push(link[1]);
     }
   });
@@ -56,13 +69,11 @@ const getAdjacentVertices = function (links, vertex) {
   return avert;
 };
 
-const getReverseAdjacentVertices = function (links, vertex) {
-  const avert = [];
+const getReverseAdjacentVertices = function (links: SankeyDataItem[], vertex: string): string[] {
+  const avert: string[] = [];
 
   links.forEach((link) => {
-    // @ts-expect-error
     if (link[1] === vertex && !avert.includes(link[0])) {
-      // @ts-expect-error
       avert.push(link[0]);
     }
   });
@@ -70,25 +81,23 @@ const getReverseAdjacentVertices = function (links, vertex) {
   return avert;
 };
 
-const struct = {
+const struct: GraphStruct = {
   _hasCycle: false,
   _sortedList: [],
 
-  hasCycle(links) {
+  hasCycle(this: GraphStruct, links: SankeyDataItem[]): boolean {
     // detects if the graph has cycle
     // sorts the vertices (modifies the _sortedList variable)
     this._hasCycle = false;
     this._sortedList = [];
-    const vertices = {};
+    const vertices: VertexColors = {};
     const allVertices = getVertices(links);
     allVertices.forEach((vertex) => {
-      // @ts-expect-error
       vertices[vertex] = {
         color: WHITE,
       };
     });
     allVertices.forEach((vertex) => {
-      // @ts-expect-error
       if (vertices[vertex].color === WHITE) {
         this._depthFirstSearch(links, vertices, vertex);
       }
@@ -97,7 +106,12 @@ const struct = {
     return this._hasCycle;
   },
 
-  _depthFirstSearch(links, vertices, vertex): void {
+  _depthFirstSearch(
+    this: GraphStruct,
+    links: SankeyDataItem[],
+    vertices: VertexColors,
+    vertex: string,
+  ): void {
     vertices[vertex].color = GRAY;
     const averts = getAdjacentVertices(links, vertex);
     for (let a = 0; a < averts.length; a += 1) {
@@ -116,7 +130,7 @@ const struct = {
     vertices[vertex].color = BLACK;
   },
 
-  computeLongestPaths(links) {
+  computeLongestPaths(this: GraphStruct, links: SankeyDataItem[]): RankedVertex[] {
     // calculates longets paths for all vertices
     // method expects sorted vertices array to be in this._sortedList
     const sortedVertices = this._sortedList;
@@ -128,16 +142,15 @@ const struct = {
       if (averts.length === 0) {
         vertex.lp = 0; // 'lp' means 'Longest Path'
       } else {
-        const maxLP = [];
+        const maxLP: (number | null)[] = [];
         // get max through avertex.lp and add 1 to it
         averts.forEach((adjacentVertex) => {
-          // @ts-expect-error
           maxLP.push(sortedVertices.filter((sv) => sv.name === adjacentVertex)[0].lp);
         });
         vertex.lp = routines.maxOfArray(maxLP) + 1;
       }
     });
-    return this._sortedList;
+    return this._sortedList as RankedVertex[];
   },
 };
 
