@@ -2,7 +2,7 @@ import type { Page } from '@playwright/test';
 import type { Item as ButtonGroupItem } from 'devextreme/ui/button_group';
 import { expect, test } from '../../../fixtures';
 import { createWidget } from '../../../helpers/createWidget';
-import { addClass, appendElementTo, removeClass } from '../../../helpers/domUtils';
+import { appendElementTo, removeClassAttribute, setClassAttribute } from '../../../helpers/domUtils';
 import { testScreenshot } from '../../../helpers/screenshots';
 import { expectClass } from '../../../models/internal/classMatcher';
 import Toolbar from '../../../models/toolbar';
@@ -33,14 +33,14 @@ const testMenuStates = async (page: Page, baseName: string): Promise<void> => {
 
   for (const state of stateClasses) {
     for (const item of listItems) {
-      await addClass(item, state);
+      await setClassAttribute(page, item, state);
     }
 
     const stateName = state.replace('dx-state-', '');
     await testScreenshot(page, `${baseName} ${stateName}.png`, { element: targetContainer });
 
     for (const item of listItems) {
-      await removeClass(item, state);
+      await removeClassAttribute(page, item, state);
     }
   }
 };

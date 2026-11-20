@@ -1,7 +1,7 @@
 import type { Page } from '@playwright/test';
 import { expect, test } from '../../../fixtures';
 import { createWidget } from '../../../helpers/createWidget';
-import { appendStyle } from '../../../helpers/domUtils';
+import { setStyleAttribute } from '../../../helpers/domUtils';
 import { getThemeName } from '../../../helpers/themeUtils';
 import Scheduler from '../../../models/scheduler';
 
@@ -39,7 +39,7 @@ test.describe('Re-render on resize', () => {
       const scheduler = new Scheduler(page, SCHEDULER_SELECTOR);
       const { element } = scheduler.getAppointment('test');
 
-      await appendStyle(element, 'background-color: red;');
+      await setStyleAttribute(page, element, 'background-color: red;');
       await expect(element).toHaveAttribute('style', /transform: translate\(0px, 0px\); width: \d+\.\d+px; height: \d+px; background-color: red;/);
     });
   });
@@ -53,7 +53,7 @@ test.describe('Re-render on resize', () => {
       const scheduler = new Scheduler(page, SCHEDULER_SELECTOR);
       const { element } = scheduler.getAppointment('test');
 
-      await appendStyle(element, 'background-color: red;');
+      await setStyleAttribute(page, element, 'background-color: red;');
 
       await expect(element).toHaveAttribute('style', 'transform: translate(0px, 30px); width: 200px; height: 70px; background-color: red;');
     });
@@ -68,7 +68,7 @@ test.describe('Re-render on resize', () => {
       const scheduler = new Scheduler(page, SCHEDULER_SELECTOR);
       const { element } = scheduler.getAppointment('test');
 
-      await appendStyle(element, 'background-color: red;');
+      await setStyleAttribute(page, element, 'background-color: red;');
 
       await expect(element).toHaveAttribute('style', 'transform: translate(0px, 30px); width: 200px; height: 70px; background-color: red;');
     });
@@ -83,7 +83,7 @@ test.describe('Re-render on resize', () => {
       const scheduler = new Scheduler(page, SCHEDULER_SELECTOR);
       const { element } = scheduler.getAppointment('test');
 
-      await appendStyle(element, 'background-color: red;');
+      await setStyleAttribute(page, element, 'background-color: red;');
 
       const height = getThemeName(theme) === 'fluent-next' ? '61.2539px' : '61.7539px';
 

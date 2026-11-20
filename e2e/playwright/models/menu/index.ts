@@ -34,7 +34,8 @@ export default class Menu extends Widget {
   }
 
   public getSubMenu(rootItem: Locator): ContextMenu {
-    // A shown submenu nests one more element with the class; the first one is the widget.
+    // A hidden submenu takes its overlay content (which has the same class) back into the element;
+    // the first match is the widget.
     return new ContextMenu(this.page, rootItem.locator(`.${CLASS.contextMenu}`).first());
   }
 }

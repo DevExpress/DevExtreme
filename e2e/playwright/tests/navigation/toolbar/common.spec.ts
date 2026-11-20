@@ -2,7 +2,7 @@ import type { ToolbarItemComponent } from 'devextreme/common';
 import type { Item, LocateInMenuMode } from 'devextreme/ui/toolbar';
 import { test } from '../../../fixtures';
 import { createWidget } from '../../../helpers/createWidget';
-import { appendElementTo, appendStyle, setAttribute } from '../../../helpers/domUtils';
+import { appendElementTo, setAttribute, setStyleAttribute } from '../../../helpers/domUtils';
 import { testScreenshot } from '../../../helpers/screenshots';
 import Toolbar from '../../../models/toolbar';
 
@@ -15,34 +15,32 @@ test.describe('Toolbar_common', () => {
         await appendElementTo(page, '#container', 'div', 'toolbar');
         await setAttribute(page, '#container', 'style', 'width: 1184px;');
 
-        await createWidget(page, 'dxToolbar', ({ widgets, mode, rtl }) => {
-          const toolbarItems: Item[] = widgets.map((widgetName) => ({
-            location: 'before',
-            locateInMenu: mode,
-            widget: widgetName,
-            options: {
-              value: new Date(2021, 9, 17),
-              stylingMode: 'contained',
-              text: `${widgetName}`,
-              icon: 'refresh',
-              items: [{ text: `${widgetName}`, icon: 'export' }],
-              iconPosition: widgetName === 'dxTabs' ? 'start' : undefined,
-              width: mode === 'never' ? 115 : undefined,
-            },
-          }));
+        const toolbarItems: Item[] = supportedWidgets.map((widgetName) => ({
+          location: 'before',
+          locateInMenu,
+          widget: widgetName,
+          options: {
+            value: new Date(2021, 9, 17),
+            stylingMode: 'contained',
+            text: `${widgetName}`,
+            icon: 'refresh',
+            items: [{ text: `${widgetName}`, icon: 'export' }],
+            iconPosition: widgetName === 'dxTabs' ? 'start' : undefined,
+            width: locateInMenu === 'never' ? 115 : undefined,
+          },
+        }));
 
-          toolbarItems.push({
-            location: 'before',
-            locateInMenu: mode,
-            text: 'Some text',
-          });
+        toolbarItems.push({
+          location: 'before',
+          locateInMenu,
+          text: 'Some text',
+        });
 
-          return {
-            items: toolbarItems,
-            rtlEnabled: rtl,
-            width: mode === 'auto' ? 50 : '100%',
-          };
-        }, '#toolbar', { arg: { widgets: supportedWidgets, mode: locateInMenu, rtl: rtlEnabled } });
+        await createWidget(page, 'dxToolbar', {
+          items: toolbarItems,
+          rtlEnabled,
+          width: locateInMenu === 'auto' ? 50 : '100%',
+        }, '#toolbar');
 
         const toolbar = new Toolbar(page, '#toolbar');
         let targetContainer = page.locator('#container');
@@ -55,7 +53,7 @@ test.describe('Toolbar_common', () => {
           targetContainer = overflowMenu.getPopup().getContent().first();
         }
 
-        await appendStyle(targetContainer, 'background-color: gold;');
+        await setStyleAttribute(page, targetContainer, 'background-color: gold;');
 
         await testScreenshot(page, `Toolbar widgets render${rtlEnabled ? ' rtl=true' : ''},items[]locateInMenu=${locateInMenu}.png`, {
           element: targetContainer,
@@ -69,30 +67,28 @@ test.describe('Toolbar_common', () => {
       await setAttribute(page, '#container', 'style', 'box-sizing: border-box; width: 400px; height: 400px; padding: 8px;');
       await appendElementTo(page, '#container', 'div', 'toolbar');
 
-      await createWidget(page, 'dxToolbar', ({ widgets, rtl }) => {
-        const toolbarItems: Item[] = widgets.map((widgetName) => ({
-          location: 'before',
-          widget: widgetName,
-          options: {
-            value: new Date(2021, 9, 17),
-            stylingMode: 'contained',
-            text: 1,
-            items: [{ text: 1 }, { text: 2 }],
-            showClearButton: true,
-          },
-        }));
+      const toolbarItems: Item[] = supportedWidgets.map((widgetName) => ({
+        location: 'before',
+        widget: widgetName,
+        options: {
+          value: new Date(2021, 9, 17),
+          stylingMode: 'contained',
+          text: 1,
+          items: [{ text: 1 }, { text: 2 }],
+          showClearButton: true,
+        },
+      }));
 
-        toolbarItems.push({
-          location: 'after',
-          text: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry',
-        });
+      toolbarItems.push({
+        location: 'after',
+        text: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry',
+      });
 
-        return {
-          multiline: true,
-          items: toolbarItems,
-          rtlEnabled: rtl,
-        };
-      }, '#toolbar', { arg: { widgets: supportedWidgets, rtl: rtlEnabled } });
+      await createWidget(page, 'dxToolbar', {
+        multiline: true,
+        items: toolbarItems,
+        rtlEnabled,
+      }, '#toolbar');
 
       await testScreenshot(page, `Toolbar nested widgets render in multiline rtl=${rtlEnabled}.png`, {
         element: '#toolbar',
