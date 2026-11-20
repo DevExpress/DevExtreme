@@ -48,8 +48,7 @@ test('no other place in the runtime reads a --dx-* name', () => {
     ...written.variables.map(({ name }) => name),
     ...painted.variables.map(({ name }) => name),
     accent.input.name,
-    accent.source.name,
-    ...accent.settings.map(({ name }) => name),
+    accent.base.name,
     ...accent.steps.values.map((step) => `${accent.steps.prefix}${step}`),
   ]);
   const unlisted = walk(runtimeRoot, ['.ts', '.tsx'])
