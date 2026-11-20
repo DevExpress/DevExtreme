@@ -1305,6 +1305,7 @@
           "./bundles/*.js": "./bundles/*.js",
           "./bundles/*": { "types": "./bundles/*.d.ts", "default": "./bundles/*.js" },
           "./localization/messages/*.json": "./localization/messages/*.json",
+          "./localization/messages/*": "./localization/messages/*.json",
           "./dist/*": "./dist/*",
           "./scss/*": "./scss/*",
           "./esm/*.json": "./esm/*.json",
