@@ -1,9 +1,17 @@
-/* eslint-disable class-methods-use-this */
+import type { ScrollDirection } from '@js/common';
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { setTabIndex } from '@js/ui/shared/accessibility';
+import type { ScrollOffset } from '@ts/core/utils/scroll';
 import supportUtils from '@ts/core/utils/support';
 
 import { AreaItem } from '../area_item/m_area_item';
+import type {
+  AreaItemStyleOptions,
+  AreaItemVirtualContentParams,
+  AreaName,
+} from '../area_item/types';
+import type { PivotGridCell } from '../types';
 import { calculateScrollbarWidth } from '../widget_utils';
 
 const PIVOTGRID_AREA_CLASS = 'dx-pivotgrid-area';
@@ -13,32 +21,32 @@ const PIVOTGRID_GRAND_TOTAL_CLASS = 'dx-grandtotal';
 const PIVOTGRID_ROW_TOTAL_CLASS = 'dx-row-total';
 
 class DataArea extends AreaItem {
-  _getAreaName() {
+  protected _getAreaName(): AreaName {
     return 'data';
   }
 
-  render(rootElement, data) {
+  public render(rootElement: dxElementWrapper, data: PivotGridCell[][]): void {
     super.render(rootElement, data);
 
     this._makeFirstCellFocusable();
   }
 
-  _makeFirstCellFocusable() {
-    const firstCell = this.tableElement().get(0)?.querySelector('td');
+  protected _makeFirstCellFocusable(): void {
+    const firstCell = this.tableElement()?.get(0)?.querySelector('td');
 
     if (firstCell) {
       setTabIndex(this.component, $(firstCell));
     }
   }
 
-  _createGroupElement() {
+  protected _createGroupElement(): dxElementWrapper {
     return $('<div>')
       .addClass(PIVOTGRID_AREA_CLASS)
       .addClass(PIVOTGRID_AREA_DATA_CLASS)
       .css('borderTopWidth', 0);
   }
 
-  _applyCustomStyles(options) {
+  protected _applyCustomStyles(options: AreaItemStyleOptions): void {
     const { cell } = options;
     const { classArray } = options;
 
@@ -60,14 +68,15 @@ class DataArea extends AreaItem {
     super._applyCustomStyles(options);
   }
 
-  _moveFakeTable(scrollPos) {
+  protected _moveFakeTable(scrollPos: ScrollOffset): void {
     this._moveFakeTableHorizontally(scrollPos.left);
     this._moveFakeTableTop(scrollPos.top);
     super._moveFakeTable();
   }
 
-  renderScrollable() {
-    this._groupElement.dxScrollable({
+  public renderScrollable(): void {
+    // @ts-expect-error dxScrollable is added to the renderer at runtime
+    this._groupElement?.dxScrollable({
       useNative: this.getUseNativeValue(),
       useSimulatedScrollbar: false,
       rtlEnabled: this.component.option('rtlEnabled'),
@@ -77,26 +86,33 @@ class DataArea extends AreaItem {
     });
   }
 
-  getUseNativeValue() {
-    const { useNative } = this.component.option('scrolling');
+  public getUseNativeValue(): boolean {
+    const useNative = this.component.option('scrolling')?.useNative;
 
     return useNative === 'auto'
       ? !!supportUtils.nativeScrolling
       : !!useNative;
   }
 
-  getScrollbarWidth() {
+  public getScrollbarWidth(): number {
     return this.getUseNativeValue() ? calculateScrollbarWidth() : 0;
   }
 
-  updateScrollableOptions({ direction, rtlEnabled }) {
+  public updateScrollableOptions({ direction, rtlEnabled }: {
+    direction: ScrollDirection;
+    rtlEnabled: boolean | undefined;
+  }): void {
     const scrollable = this._getScrollable();
+
+    if (!scrollable) {
+      return;
+    }
 
     scrollable.option('useNative', this.getUseNativeValue());
     scrollable.option({ direction, rtlEnabled });
   }
 
-  getScrollableDirection(horizontal, vertical) {
+  public getScrollableDirection(horizontal: boolean, vertical: boolean): ScrollDirection {
     if (horizontal && !vertical) {
       return 'horizontal';
     } if (!horizontal && vertical) {
@@ -106,17 +122,17 @@ class DataArea extends AreaItem {
     return 'both';
   }
 
-  reset() {
+  public reset(): void {
     super.reset();
     if (this._virtualContent) {
       this._virtualContent.parent().css('height', 'auto');
     }
   }
 
-  setVirtualContentParams(params) {
+  public setVirtualContentParams(params: AreaItemVirtualContentParams): void {
     super.setVirtualContentParams(params);
 
-    this._virtualContent.parent().css('height', params.height);
+    this._virtualContent?.parent().css('height', params.height);
 
     this._setTableCss({
       top: params.top,
