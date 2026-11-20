@@ -40,6 +40,16 @@ export interface AreaItemStyleOptions {
   cssArray: string[];
 }
 
+export interface AreaItemCellContext {
+  cellIndex: number;
+  cellsCount: number;
+  rowIndex: number;
+  rowsCount: number;
+  rtlEnabled: boolean | undefined;
+  encodeHtml: boolean | undefined;
+  isCellNavigationEnabled: boolean;
+}
+
 export interface AreaItemCellAriaIndexOptions {
   areaName: AreaName;
   rowIndex: number;
