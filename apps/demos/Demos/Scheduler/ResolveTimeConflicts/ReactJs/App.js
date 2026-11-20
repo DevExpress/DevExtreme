@@ -134,21 +134,19 @@ const App = () => {
     }),
     [setConflictError],
   );
-  const onFormInitialized = useCallback(
+  const onFormInitialized = useCallback((e) => {
+    if (!e.component) return;
+    formRef.current = e.component;
+  }, []);
+  const onFormFieldDataChanged = useCallback(
     (e) => {
-      if (!e.component) return;
-      formRef.current = e.component;
-      e.component.on('fieldDataChanged', (fieldEvent) => {
-        if (
-          showConflictErrorRef.current &&
-          ['startDate', 'endDate', 'assigneeId', 'recurrenceRule'].includes(
-            fieldEvent.dataField ?? '',
-          )
-        ) {
-          setConflictError(false);
-          formRef.current?.validate();
-        }
-      });
+      if (
+        showConflictErrorRef.current &&
+        ['startDate', 'endDate', 'assigneeId', 'recurrenceRule'].includes(e.dataField ?? '')
+      ) {
+        setConflictError(false);
+        formRef.current?.validate();
+      }
     },
     [setConflictError],
   );
@@ -200,6 +198,7 @@ const App = () => {
           <Form
             labelMode="hidden"
             onInitialized={onFormInitialized}
+            onFieldDataChanged={onFormFieldDataChanged}
             customizeItem={customizeItem}
             elementAttr={{ class: 'hide-informer', id: 'form' }}
           >
