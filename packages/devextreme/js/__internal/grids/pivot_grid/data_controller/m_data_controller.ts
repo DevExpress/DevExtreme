@@ -1,19 +1,47 @@
+import type { dxElementWrapper } from '@js/core/renderer';
+import type { Callback } from '@js/core/utils/callbacks';
 import Callbacks from '@js/core/utils/callbacks';
 import { deferUpdate } from '@js/core/utils/common';
+import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred, when } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { each, map } from '@js/core/utils/iterator';
 import { format } from '@js/core/utils/string';
 import { isDefined, isString } from '@js/core/utils/type';
+import type { PivotGridDataFieldArea } from '@js/ui/pivot_grid';
+import type { StateStoringController } from '@ts/grids/grid_core/state_storing/state_storing_controller_core';
 import stateStoring from '@ts/grids/grid_core/state_storing/state_storing_controller_core';
+import type { InternalGrid } from '@ts/grids/grid_core/types';
 import { createColumnsInfo, foreachColumnInfo } from '@ts/grids/grid_core/virtual_columns/virtual_columns_core';
+import type { VirtualScrollDataOptions } from '@ts/grids/grid_core/virtual_scrolling/types';
+import type { VirtualScrollController } from '@ts/grids/grid_core/virtual_scrolling/virtual_scrolling_core';
 import VirtualScrollControllerModule from '@ts/grids/grid_core/virtual_scrolling/virtual_scrolling_core';
-
-import { PivotGridDataSource } from '../data_source/m_data_source';
+import { PivotGridDataSource } from '@ts/grids/pivot_grid/data_source/m_data_source';
+import type { DataSourceData, DataSourceHeaderItem } from '@ts/grids/pivot_grid/data_source/types';
+import type { PivotGrid } from '@ts/grids/pivot_grid/m_widget';
+import type { PivotGridField } from '@ts/grids/pivot_grid/types';
 import {
   createPath, findField, foreachTree, foreachTreeAsync, formatValue,
-} from '../widget_utils';
-import type { PivotGridColumnInfo } from './types';
+} from '@ts/grids/pivot_grid/widget_utils';
+
+import type {
+  AddInfoItemOptions,
+  DataControllerOptions,
+  HeaderArea,
+  HeaderInfoOptions,
+  IndexedHeaderItem,
+  PagingLoadOptions,
+  PivotGridCellInfo,
+  PivotGridColumnInfo,
+  PivotGridTexts,
+  RowInfoCallback,
+  ScrollDataAdapter,
+  ScrollPosition,
+  SortBySummaryPath,
+  ViewHeaderItem,
+  VirtualContentParams,
+  VirtualContentSize,
+} from './types';
 
 const math = Math;
 const GRAND_TOTAL_TYPE = 'GT';
@@ -22,68 +50,96 @@ const DATA_TYPE = 'D';
 const NOT_AVAILABLE = '#N/A';
 const CHANGING_DURATION_IF_PAGINATE = 300;
 
-const proxyMethod = function (type, methodName, defaultResult?) {
+const proxyMethod = function proxyMethod(
+  type: typeof DataController,
+  methodName: string,
+  defaultResult?: unknown,
+): void {
   const target = type.prototype;
   if (!target[methodName]) {
-    target[methodName] = function () {
+    target[methodName] = function (this: DataController, ...args: unknown[]): unknown {
       const dataSource = this._dataSource;
-      return dataSource ? dataSource[methodName].apply(dataSource, arguments) : defaultResult;
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return -- forwards by method name
+      return dataSource ? dataSource[methodName](...args) : defaultResult;
     };
   }
 };
 
 class DataController {
-  _options: any;
+  public _options: DataControllerOptions;
 
-  _dataSource: any;
+  public _dataSource: PivotGridDataSource;
 
-  _rowsScrollController: any;
+  public _rowsScrollController?: VirtualScrollController;
 
-  _columnsScrollController: any;
+  public _columnsScrollController?: VirtualScrollController;
 
-  _stateStoringController: any;
+  public _stateStoringController: StateStoringController;
 
-  _columnsInfo: any;
+  public _columnsInfo: PivotGridColumnInfo[][];
 
-  _rowsInfo: any;
+  public _rowsInfo: PivotGridColumnInfo[][];
 
-  _cellsInfo: any;
+  public _cellsInfo: PivotGridCellInfo[][];
 
-  expandValueChanging: any;
+  public _isSharedDataSource!: boolean;
 
-  loadingChanged: any;
+  public _lockChanged?: boolean;
 
-  progressChanged: any;
+  public _changedHandler!: () => void;
 
-  scrollChanged: any;
+  public _expandValueChangingHandler!: (e: unknown) => void;
 
-  changed: any;
+  public _loadingChangedHandler!: (isLoading: boolean) => void;
 
-  _rowPageIndex: any;
+  public _progressChangedHandler!: (progress: number) => void;
 
-  _rowPageSize: any;
+  public _fieldsPreparedHandler!: (fields: PivotGridField[]) => void;
 
-  _columnPageIndex: any;
+  public _customizeStoreLoadOptionsHandler!: (
+    storeLoadOptions: PagingLoadOptions[],
+    reload?: boolean,
+  ) => void;
 
-  _columnPageSize: any;
+  public dataSourceChanged: Callback<[]>;
 
-  _changingDuration: any;
+  public expandValueChanging: Callback<[unknown]>;
 
-  constructor(options) {
-    const that: any = this;
-    const virtualScrollControllerChanged = that._fireChanged.bind(that);
+  public loadingChanged: Callback<[boolean]>;
 
-    options = that._options = options || {};
+  public progressChanged: Callback<[number]>;
 
-    that.dataSourceChanged = Callbacks();
-    that._dataSource = that._createDataSource(options);
+  public scrollChanged: Callback<[ScrollPosition]>;
 
-    if (options.component && options.component.option('scrolling.mode') === 'virtual') {
-      that._rowsScrollController = this.createScrollController(that, options.component, {
+  public changed: Callback<[]>;
+
+  public _rowPageIndex?: number;
+
+  public _rowPageSize?: number;
+
+  public _columnPageIndex?: number;
+
+  public _columnPageSize?: number;
+
+  public _changingDuration?: number;
+
+  constructor(dataControllerOptions?: DataControllerOptions) {
+    // eslint-disable-next-line @typescript-eslint/no-this-alias -- the methods use their own this
+    const that = this;
+    const virtualScrollControllerChanged = this._fireChanged.bind(this);
+    const options = dataControllerOptions || {};
+
+    this._options = options;
+
+    this.dataSourceChanged = Callbacks();
+    this._dataSource = this._createDataSource(options);
+
+    if (options.component?.option('scrolling.mode') === 'virtual') {
+      this._rowsScrollController = this.createScrollController(this, options.component, {
         totalItemsCount() {
           return that.totalRowCount();
         },
-        pageIndex(index) {
+        pageIndex(index?: number) {
           return that.rowPageIndex(index);
         },
         pageSize() {
@@ -91,24 +147,28 @@ class DataController {
         },
 
         load() {
-          if (that._rowsScrollController.pageIndex() >= this.pageCount()) {
-            that._rowsScrollController.pageIndex(this.pageCount() - 1);
-          }
-          return that._rowsScrollController.handleDataChanged(function () {
-            if (that._dataSource.paginate()) {
-              that._dataSource.load();
-            } else {
-              virtualScrollControllerChanged.apply(this, arguments);
+          if (that._rowsScrollController) {
+            if (that._rowsScrollController.pageIndex() >= this.pageCount()) {
+              that._rowsScrollController.pageIndex(this.pageCount() - 1);
             }
-          });
+            that._rowsScrollController.handleDataChanged(() => {
+              if (that._dataSource.paginate()) {
+                that._dataSource.load();
+              } else {
+                virtualScrollControllerChanged();
+              }
+            });
+          }
+
+          return undefined;
         },
       });
 
-      that._columnsScrollController = this.createScrollController(that, options.component, {
+      this._columnsScrollController = this.createScrollController(this, options.component, {
         totalItemsCount() {
           return that.totalColumnCount();
         },
-        pageIndex(index) {
+        pageIndex(index?: number) {
           return that.columnPageIndex(index);
         },
         pageSize() {
@@ -116,43 +176,54 @@ class DataController {
         },
 
         load() {
-          if (that._columnsScrollController.pageIndex() >= this.pageCount()) {
-            that._columnsScrollController.pageIndex(this.pageCount() - 1);
+          if (that._columnsScrollController) {
+            if (that._columnsScrollController.pageIndex() >= this.pageCount()) {
+              that._columnsScrollController.pageIndex(this.pageCount() - 1);
+            }
+
+            that._columnsScrollController.handleDataChanged(() => {
+              if (that._dataSource.paginate()) {
+                that._dataSource.load();
+              } else {
+                virtualScrollControllerChanged();
+              }
+            });
           }
 
-          return that._columnsScrollController.handleDataChanged(function () {
-            if (that._dataSource.paginate()) {
-              that._dataSource.load();
-            } else {
-              virtualScrollControllerChanged.apply(this, arguments);
-            }
-          });
+          return undefined;
         },
 
       });
     }
 
-    that._stateStoringController = new stateStoring.StateStoringController(options.component).init();
+    this._stateStoringController = new stateStoring.StateStoringController(
+      options.component as unknown as InternalGrid,
+    ).init();
 
-    that._columnsInfo = [];
-    that._rowsInfo = [];
-    that._cellsInfo = [];
+    this._columnsInfo = [];
+    this._rowsInfo = [];
+    this._cellsInfo = [];
 
-    that.expandValueChanging = Callbacks();
-    that.loadingChanged = Callbacks();
-    that.progressChanged = Callbacks();
-    that.scrollChanged = Callbacks();
+    this.expandValueChanging = Callbacks();
+    this.loadingChanged = Callbacks();
+    this.progressChanged = Callbacks();
+    this.scrollChanged = Callbacks();
 
-    that.load();
-    that._update();
-    that.changed = Callbacks();
+    this.load();
+    this._update();
+    this.changed = Callbacks();
   }
 
-  createHeaderInfo = (headerItems, headerDescriptions, cellDescriptions, isHorizontal, options) => {
-    const info = [];
+  public createHeaderInfo = (
+    headerItems: DataSourceHeaderItem[],
+    headerDescriptions: PivotGridField[],
+    cellDescriptions: PivotGridField[],
+    isHorizontal: boolean,
+    options: HeaderInfoOptions,
+  ): DeferredObj<PivotGridColumnInfo[][]> => {
+    const info: PivotGridColumnInfo[][] = [];
     const depthSize = this._getHeaderItemsDepth(headerItems) || 1;
-    // @ts-expect-error createHeaderInfo returns a Deferred
-    const d = new Deferred();
+    const d = Deferred<PivotGridColumnInfo[][]>();
 
     this._getViewHeaderItems(headerItems, headerDescriptions, cellDescriptions, depthSize, options)
       .done((viewHeaderItems) => {
@@ -164,7 +235,7 @@ class DataController {
     return d;
   };
 
-  _getHeaderItemsDepth = (headerItems) => {
+  public _getHeaderItemsDepth = (headerItems: DataSourceHeaderItem[]): number => {
     let depth = 0;
 
     foreachTree(headerItems, (items) => {
@@ -174,8 +245,13 @@ class DataController {
     return depth;
   };
 
-  _createInfoItem = (headerItem, breadth, isHorizontal, isTree) => {
-    const infoItem: any = {
+  public _createInfoItem = (
+    headerItem: ViewHeaderItem,
+    breadth: number,
+    isHorizontal: boolean,
+    isTree: boolean,
+  ): PivotGridColumnInfo => {
+    const infoItem: PivotGridColumnInfo = {
       type: headerItem.type,
       text: headerItem.text,
     };
@@ -209,7 +285,7 @@ class DataController {
       infoItem[isHorizontal ? 'rowspan' : 'colspan'] = headerItem.depthSize;
     }
 
-    if (headerItem.index >= 0) {
+    if (Number(headerItem.index) >= 0) {
       infoItem.dataSourceIndex = headerItem.index;
     }
 
@@ -225,17 +301,23 @@ class DataController {
     return infoItem;
   };
 
-  _addInfoItem = (info, options) => {
+  public _addInfoItem = (info: PivotGridColumnInfo[][], options: AddInfoItemOptions): number => {
     const breadth = (options.lastIndex - options.index) || 1;
-    const addInfoItemCore = function (info, infoItem, itemIndex, depthIndex, isHorizontal) {
+    const addInfoItemCore = function addInfoItemCore(
+      headerInfo: PivotGridColumnInfo[][],
+      infoItem: PivotGridColumnInfo,
+      itemIndex: number,
+      depthIndex: number,
+      isHorizontal: boolean,
+    ): void {
       const index = isHorizontal ? depthIndex : itemIndex;
-      while (!info[index]) {
-        info.push([]);
+      while (!headerInfo[index]) {
+        headerInfo.push([]);
       }
       if (isHorizontal) {
-        info[index].push(infoItem);
+        headerInfo[index].push(infoItem);
       } else {
-        info[index].unshift(infoItem);
+        headerInfo[index].unshift(infoItem);
       }
     };
 
@@ -252,16 +334,23 @@ class DataController {
     return options.lastIndex;
   };
 
-  _isItemSorted = (items, sortBySummaryPath) => {
-    let path;
+  public _isItemSorted = (
+    items: ViewHeaderItem[],
+    sortBySummaryPath: SortBySummaryPath,
+  ): boolean => {
+    // eslint-disable-next-line @typescript-eslint/init-declarations -- assigned in the if-else
+    let path: unknown[];
     const item = items[0];
     const stringValuesUsed = isString(sortBySummaryPath[0]);
-    const headerItem = item.dataIndex >= 0 ? items[1] : item;
+    const headerItem = Number(item.dataIndex) >= 0 ? items[1] : item;
 
-    if ((stringValuesUsed && sortBySummaryPath[0].indexOf('&[') !== -1 && headerItem.key) || !headerItem.key) {
+    if (
+      (stringValuesUsed && String(sortBySummaryPath[0]).includes('&[') && headerItem.key)
+      || !headerItem.key
+    ) {
       path = createPath(items);
     } else {
-      path = map(items, (it) => (it.dataIndex >= 0 ? it.value : it.text)).reverse();
+      path = map(items, (it) => (Number(it.dataIndex) >= 0 ? it.value : it.text)).reverse();
     }
 
     if (item.type === GRAND_TOTAL_TYPE) {
@@ -271,23 +360,22 @@ class DataController {
     return path.join('/') === sortBySummaryPath.join('/');
   };
 
-  _getViewHeaderItems = (
-    headerItems,
-    headerDescriptions,
-    cellDescriptions,
-    depthSize,
-    options,
-  ) => {
+  public _getViewHeaderItems = (
+    headerItems: DataSourceHeaderItem[],
+    headerDescriptions: PivotGridField[],
+    cellDescriptions: PivotGridField[],
+    depthSize: number,
+    options: HeaderInfoOptions,
+  ): DeferredObj<ViewHeaderItem[]> => {
     const cellDescriptionsCount = cellDescriptions.length;
     const viewHeaderItems = this._createViewHeaderItems(headerItems, headerDescriptions);
     const { dataFields } = options;
-    // @ts-expect-error Deferred interop with when()
-    const d = new Deferred();
+    const d = Deferred<ViewHeaderItem[]>();
 
-    when(viewHeaderItems).done((items) => {
+    when(viewHeaderItems).done((createdViewItems) => {
       options.notifyProgress(0.5);
 
-      const viewItems = items;
+      const viewItems = createdViewItems;
 
       if (options.showGrandTotals) {
         viewItems[!options.showTotalsPrior ? 'push' : 'unshift']({
@@ -297,51 +385,56 @@ class DataController {
       }
 
       const hideTotals = options.showTotals === false
-        || dataFields.length > 0
-        && (dataFields.length === options.hiddenTotals.length);
+        || (dataFields.length > 0
+          && (dataFields.length === options.hiddenTotals.length));
       const hideData = dataFields.length > 0 && options.hiddenValues.length === dataFields.length;
+      let viewDepthSize = depthSize;
 
       if (hideData && hideTotals) {
-        depthSize = 1;
+        viewDepthSize = 1;
       }
 
       if (!hideTotals || options.layout === 'tree') {
         this._addAdditionalTotalHeaderItems(viewItems, headerDescriptions, options.showTotalsPrior, options.layout === 'tree');
       }
 
-      when(foreachTreeAsync(viewItems, (items) => {
+      when(foreachTreeAsync(viewItems, (items: ViewHeaderItem[]) => {
         const item = items[0];
 
         if (!item.children || item.children.length === 0) {
-          item.depthSize = depthSize - items.length + 1;
+          item.depthSize = viewDepthSize - items.length + 1;
         }
       })).done(() => {
         if (cellDescriptionsCount > 1) {
           this._addMetricHeaderItems(viewItems, cellDescriptions, options);
         }
 
-        !options.showEmpty && this._removeHiddenItems(viewItems);
+        if (!options.showEmpty) {
+          this._removeHiddenItems(viewItems);
+        }
 
         options.notifyProgress(0.75);
 
-        when(foreachTreeAsync(viewItems, (items) => {
+        when(foreachTreeAsync(viewItems, (items: ViewHeaderItem[]) => {
           const item = items[0];
           const { isMetric } = item;
-          const field = headerDescriptions[items.length - 1] || {};
+          const field: PivotGridField = headerDescriptions[items.length - 1] ?? {};
 
           if (item.type === DATA_TYPE && !isMetric) {
             item.width = field.width;
           }
 
           if (hideData && item.type === DATA_TYPE) {
-            const parentChildren = (items[1] ? items[1].children : viewItems) || [];
+            const parentChildren = (items[1] ? items[1].children : viewItems) ?? [];
 
             parentChildren.splice(parentChildren.indexOf(item), 1);
             return;
           }
 
           if (isMetric) {
-            item.wordWrapEnabled = cellDescriptions[item.dataIndex].wordWrapEnabled;
+            if (isDefined(item.dataIndex)) {
+              item.wordWrapEnabled = cellDescriptions[item.dataIndex].wordWrapEnabled;
+            }
           } else {
             item.wordWrapEnabled = field.wordWrapEnabled;
           }
@@ -349,12 +442,14 @@ class DataController {
           item.isLast = !item.children?.length;
           if (item.isLast) {
             each(options.sortBySummaryPaths, (_, sortBySummaryPath) => {
+              let sortPath = sortBySummaryPath;
+
               if (!isDefined(item.dataIndex)) {
-                sortBySummaryPath = sortBySummaryPath.slice(0);
-                sortBySummaryPath.pop();
+                sortPath = sortBySummaryPath.slice(0);
+                sortPath.pop();
               }
 
-              if (this._isItemSorted(items, sortBySummaryPath)) {
+              if (this._isItemSorted(items, sortPath)) {
                 item.sorted = true;
                 return false;
               }
@@ -376,9 +471,15 @@ class DataController {
     return d;
   };
 
-  _createHeaderItem = (childrenStack, depth, index) => {
-    const parent = childrenStack[depth] = childrenStack[depth] || [];
-    const node: any = parent[index] = {};
+  public _createHeaderItem = (
+    childrenStack: (ViewHeaderItem[] | undefined)[],
+    depth: number,
+    index: number,
+  ): ViewHeaderItem => {
+    const parent = childrenStack[depth] ?? [];
+    childrenStack[depth] = parent;
+    const node: ViewHeaderItem = {};
+    parent[index] = node;
 
     if (childrenStack[depth + 1]) {
       node.children = childrenStack[depth + 1];
@@ -392,18 +493,18 @@ class DataController {
     return node;
   };
 
-  _createViewHeaderItems = (headerItems, headerDescriptions) => {
-    const headerDescriptionsCount = headerDescriptions?.length || 0;
-    const childrenStack = [];
-    // @ts-expect-error Deferred interop with when()
-    const d = new Deferred();
-    let headerItem;
+  public _createViewHeaderItems = (
+    headerItems: DataSourceHeaderItem[],
+    headerDescriptions: PivotGridField[],
+  ): DeferredObj<ViewHeaderItem[]> => {
+    const headerDescriptionsCount = headerDescriptions?.length ?? 0;
+    const childrenStack: (ViewHeaderItem[] | undefined)[] = [];
+    const d = Deferred<ViewHeaderItem[]>();
 
-    when(foreachTreeAsync(headerItems, (items, index) => {
+    when(foreachTreeAsync(headerItems, (items: DataSourceHeaderItem[], index) => {
       const item = items[0];
       const path = createPath(items);
-
-      headerItem = this._createHeaderItem(childrenStack, path.length, index);
+      const headerItem = this._createHeaderItem(childrenStack, path.length, index);
 
       headerItem.type = DATA_TYPE;
       headerItem.value = item.value;
@@ -415,24 +516,27 @@ class DataController {
       headerItem.isEmpty = item.isEmpty;
 
       if (path.length < headerDescriptionsCount
-        && (!item.children || item.children.length !== 0)) {
+        && item.children?.length !== 0) {
         headerItem.expanded = !!item.children;
       }
     })).done(() => {
-      d.resolve(this._createHeaderItem(childrenStack, 0, 0).children || []);
+      d.resolve(this._createHeaderItem(childrenStack, 0, 0).children ?? []);
     });
 
     return d;
   };
 
-  _addMetricHeaderItems = (headerItems, cellDescriptions, options) => {
-    foreachTree(headerItems, (items) => {
+  public _addMetricHeaderItems = (
+    headerItems: ViewHeaderItem[],
+    cellDescriptions: PivotGridField[],
+    options: HeaderInfoOptions,
+  ): void => {
+    foreachTree(headerItems, (items: ViewHeaderItem[]) => {
       const item = items[0];
-      let i;
 
       if (!item.children || item.children.length === 0) {
         item.children = [];
-        for (i = 0; i < cellDescriptions.length; i += 1) {
+        for (let i = 0; i < cellDescriptions.length; i += 1) {
           const isGrandTotal = item.type === GRAND_TOTAL_TYPE;
           const isTotal = item.type === TOTAL_TYPE;
           const isValue = item.type === DATA_TYPE;
@@ -441,78 +545,78 @@ class DataController {
             || (isTotal && options.hiddenTotals.includes(i))
             || (isValue && options.hiddenValues.includes(i));
 
-          if (columnIsHidden) {
-            continue;
+          if (!columnIsHidden) {
+            item.children.push({
+              caption: cellDescriptions[i].caption,
+              path: item.path,
+              type: item.type,
+              value: i,
+              index: item.index,
+              dataIndex: i,
+              isMetric: true,
+              isEmpty: item.isEmpty?.[i],
+            });
           }
-
-          item.children.push({
-            caption: cellDescriptions[i].caption,
-            path: item.path,
-            type: item.type,
-            value: i,
-            index: item.index,
-            dataIndex: i,
-            isMetric: true,
-            isEmpty: item.isEmpty?.[i],
-          });
         }
       }
     });
   };
 
-  _addAdditionalTotalHeaderItems = (
-    headerItems,
-    headerDescriptions,
-    showTotalsPrior,
-    isTree,
-  ) => {
-    showTotalsPrior = showTotalsPrior || isTree;
+  public _addAdditionalTotalHeaderItems = (
+    headerItems: ViewHeaderItem[],
+    headerDescriptions: PivotGridField[],
+    showTotalsPrior: boolean,
+    isTree: boolean,
+  ): void => {
+    const totalsPrior = showTotalsPrior || isTree;
 
-    foreachTree(headerItems, (items, index) => {
+    foreachTree(headerItems, (items: ViewHeaderItem[], index) => {
       const item = items[0];
-      const parentChildren = (items[1] ? items[1].children : headerItems) || [];
+      const parentChildren = (items[1] ? items[1].children : headerItems) ?? [];
       const dataField = headerDescriptions[items.length - 1];
 
       if (item.type === DATA_TYPE
         && item.expanded
         && (dataField.showTotals !== false || isTree)) {
-        index !== -1 && parentChildren.splice(
-          showTotalsPrior
-            ? index
-            : index + 1,
-          0,
-          extend({}, item, {
-            children: null,
-            type: TOTAL_TYPE,
-            expanded: showTotalsPrior ? true : null,
-            isAdditionalTotal: true,
-          }),
-        );
+        if (index !== -1) {
+          parentChildren.splice(
+            totalsPrior
+              ? index
+              : index + 1,
+            0,
+            extend({}, item, {
+              children: null,
+              type: TOTAL_TYPE,
+              expanded: totalsPrior ? true : null,
+              isAdditionalTotal: true,
+            }),
+          );
+        }
 
-        if (showTotalsPrior) {
+        if (totalsPrior) {
           item.expanded = null;
         }
       }
     });
   };
 
-  _removeEmptyParent = (items, index) => {
+  public _removeEmptyParent = (items: ViewHeaderItem[], index: number): void => {
     const parent = items[index + 1];
 
-    if (!items[index].children.length && parent?.children) {
+    if (items[index].children?.length === 0 && parent?.children) {
       parent.children.splice(parent.children.indexOf(items[index]), 1);
       this._removeEmptyParent(items, index + 1);
     }
   };
 
-  _removeHiddenItems = (headerItems) => {
-    foreachTree([{ children: headerItems }], (items, index) => {
+  public _removeHiddenItems = (headerItems: ViewHeaderItem[]): void => {
+    foreachTree([{ children: headerItems }], (items: ViewHeaderItem[], index) => {
       const item = items[0];
-      const parentChildren = (items[1] ? items[1].children : headerItems) || [];
+      const parentChildren = (items[1] ? items[1].children : headerItems) ?? [];
       let { isEmpty } = item;
 
-      if (isEmpty?.length) {
-        isEmpty = item.isEmpty.filter((v) => v).length === isEmpty.length;
+      if (Array.isArray(isEmpty) && isEmpty.length) {
+        isEmpty = isEmpty.filter((v) => v).length === isEmpty.length;
       }
 
       if (item && !item.children && isEmpty) {
@@ -522,19 +626,23 @@ class DataController {
     });
   };
 
-  _fillHeaderInfo = (info, viewHeaderItems, depthSize, isHorizontal, isTree) => {
+  public _fillHeaderInfo = (
+    info: PivotGridColumnInfo[][],
+    viewHeaderItems: ViewHeaderItem[],
+    depthSize: number,
+    isHorizontal: boolean,
+    isTree: boolean,
+  ): void => {
     let lastIndex = 0;
-    let index;
-    let depth;
     const indexesByDepth = [0];
 
-    foreachTree(viewHeaderItems, (items) => {
+    foreachTree(viewHeaderItems, (items: ViewHeaderItem[]) => {
       const headerItem = items[0];
-      depth = headerItem.isMetric ? depthSize : items.length - 1;
+      const depth = headerItem.isMetric ? depthSize : items.length - 1;
       while (indexesByDepth.length - 1 < depth) {
         indexesByDepth.push(indexesByDepth[indexesByDepth.length - 1]);
       }
-      index = indexesByDepth[depth] || 0;
+      const index = indexesByDepth[depth] || 0;
       lastIndex = this._addInfoItem(info, {
         headerItem,
         index,
@@ -548,7 +656,11 @@ class DataController {
     });
   };
 
-  getHeaderItemText(item, description, options) {
+  public getHeaderItemText(
+    item: ViewHeaderItem,
+    description: PivotGridField,
+    options: HeaderInfoOptions,
+  ): string | undefined {
     let { text } = item;
 
     if (isDefined(item.displayText)) {
@@ -560,31 +672,38 @@ class DataController {
     }
 
     if (item.isAdditionalTotal) {
-      text = format(options.texts.total || '', text);
+      text = format(options.texts.total ?? '', text);
     }
 
     return text;
   }
 
-  formatCellValue(value, dataField, errorText) {
+  public formatCellValue(
+    value: unknown,
+    dataField: PivotGridField,
+    errorText: string | undefined,
+  ): string | undefined {
     return value === NOT_AVAILABLE ? errorText : formatValue(value, dataField);
   }
 
-  createSortPaths(headerFields, dataFields) {
-    const sortBySummaryPaths: any = [];
+  public createSortPaths(
+    headerFields: PivotGridField[],
+    dataFields: PivotGridField[],
+  ): SortBySummaryPath[] {
+    const sortBySummaryPaths: SortBySummaryPath[] = [];
 
     each(headerFields, (_, headerField) => {
       const fieldIndex = findField(dataFields, headerField.sortBySummaryField);
       if (fieldIndex >= 0) {
-        sortBySummaryPaths.push((headerField.sortBySummaryPath || []).concat([fieldIndex]));
+        sortBySummaryPaths.push((headerField.sortBySummaryPath ?? []).concat([fieldIndex]));
       }
     });
     return sortBySummaryPaths;
   }
 
-  foreachRowInfo(rowsInfo, callback) {
+  public foreachRowInfo(rowsInfo: PivotGridColumnInfo[][], callback: RowInfoCallback): void {
     let columnOffset = 0;
-    const columnOffsetResetIndexes: any = [];
+    const columnOffsetResetIndexes: number[] = [];
 
     for (let i = 0; i < rowsInfo.length; i += 1) {
       for (let j = 0; j < rowsInfo[i].length; j += 1) {
@@ -610,74 +729,87 @@ class DataController {
     }
   }
 
-  createCellsInfo(rowsInfo, columnsInfo, data, dataFields, dataFieldArea, errorText) {
-    const info: any = [];
+  public createCellsInfo(
+    rowsInfo: PivotGridColumnInfo[][],
+    columnsInfo: PivotGridColumnInfo[][],
+    data: DataSourceData,
+    dataFields: PivotGridField[],
+    dataFieldArea: PivotGridDataFieldArea | undefined,
+    errorText: string | undefined,
+  ): PivotGridCellInfo[][] {
+    const info: PivotGridCellInfo[][] = [];
     const dataFieldAreaInRows = dataFieldArea === 'row';
     const dataSourceCells = data.values;
 
-    dataSourceCells.length && this.foreachRowInfo(rowsInfo, (rowInfo, rowIndex) => {
-      const row: any = info[rowIndex] = [];
-      const dataRow = dataSourceCells[
-        rowInfo.dataSourceIndex >= 0
+    if (dataSourceCells.length) {
+      this.foreachRowInfo(rowsInfo, (rowInfo, rowIndex) => {
+        const row: PivotGridCellInfo[] = [];
+        info[rowIndex] = row;
+        const dataRowIndex = Number(rowInfo.dataSourceIndex) >= 0
           ? rowInfo.dataSourceIndex
-          : data.grandTotalRowIndex
-      ] || [];
+          : data.grandTotalRowIndex;
+        const dataRow = (isDefined(dataRowIndex) && dataSourceCells[dataRowIndex]) || [];
 
-      rowInfo.isLast && foreachColumnInfo(columnsInfo, (
-        columnInfo: PivotGridColumnInfo,
-        columnIndex: number,
-      ) => {
-        const dataIndex = (dataFieldAreaInRows ? rowInfo.dataIndex : columnInfo.dataIndex) || 0;
-        const dataField = dataFields[dataIndex];
+        if (rowInfo.isLast) {
+          foreachColumnInfo(columnsInfo, (
+            columnInfo: PivotGridColumnInfo,
+            columnIndex: number,
+          ) => {
+            const dataIndex = (dataFieldAreaInRows ? rowInfo.dataIndex : columnInfo.dataIndex) || 0;
+            const dataField = dataFields[dataIndex];
 
-        if (columnInfo.isLast && dataField && dataField.visible !== false) {
-          let cell = dataRow[
-            Number(columnInfo.dataSourceIndex) >= 0
-              ? columnInfo.dataSourceIndex
-              : data.grandTotalColumnIndex
-          ];
+            if (columnInfo.isLast && dataField && dataField.visible !== false) {
+              const cellIndex = Number(columnInfo.dataSourceIndex) >= 0
+                ? columnInfo.dataSourceIndex
+                : data.grandTotalColumnIndex;
+              let cell = isDefined(cellIndex) ? dataRow[cellIndex] : undefined;
 
-          if (!Array.isArray(cell)) {
-            cell = [cell];
-          }
+              if (!Array.isArray(cell)) {
+                cell = [cell];
+              }
 
-          const cellValue = cell[dataIndex];
+              const cellValue = cell[dataIndex];
 
-          row[columnIndex] = {
-            text: this.formatCellValue(cellValue, dataField, errorText),
-            value: cellValue,
-            format: dataField.format,
-            dataType: dataField.dataType,
+              row[columnIndex] = {
+                text: this.formatCellValue(cellValue, dataField, errorText),
+                value: cellValue,
+                format: dataField.format,
+                dataType: dataField.dataType,
 
-            columnType: columnInfo.type,
+                columnType: columnInfo.type,
 
-            rowType: rowInfo.type,
-            rowPath: rowInfo.path || [],
-            columnPath: columnInfo.path || [],
-            dataIndex,
-          };
+                rowType: rowInfo.type,
+                rowPath: rowInfo.path ?? [],
+                columnPath: columnInfo.path ?? [],
+                dataIndex,
+              };
 
-          if (dataField.width) {
-            row[columnIndex].width = dataField.width;
-          }
+              if (dataField.width) {
+                row[columnIndex].width = dataField.width;
+              }
+            }
+          });
         }
       });
-    });
+    }
 
     return info;
   }
 
-  getHeaderIndexedItems(headerItems, options) {
+  public getHeaderIndexedItems(
+    headerItems: DataSourceHeaderItem[],
+    options: Pick<HeaderInfoOptions, 'showTotals'>,
+  ): IndexedHeaderItem[] {
     let visibleIndex = 0;
-    const indexedItems: any = [];
+    const indexedItems: IndexedHeaderItem[] = [];
 
-    foreachTree(headerItems, (items) => {
+    foreachTree(headerItems, (items: DataSourceHeaderItem[]) => {
       const headerItem = items[0];
       const path = createPath(items);
 
       if (headerItem.children && options.showTotals === false) return;
 
-      const indexedItem = extend(true, {}, headerItem, {
+      const indexedItem: IndexedHeaderItem = extend(true, {}, headerItem, {
         visibleIndex: visibleIndex += 1,
         path,
       });
@@ -691,18 +823,22 @@ class DataController {
     return indexedItems;
   }
 
-  createScrollController(dataController, component, dataAdapter) {
-    return new VirtualScrollControllerModule.VirtualScrollController(component, extend({
+  public createScrollController(
+    dataController: DataController,
+    component: PivotGrid,
+    dataAdapter: ScrollDataAdapter,
+  ): VirtualScrollController {
+    const dataOptions = extend({
       hasKnownLastPage() {
         return true;
       },
-      pageCount() {
+      pageCount(this: VirtualScrollDataOptions) {
         return math.ceil(this.totalItemsCount() / this.pageSize());
       },
       updateLoading() {
 
       },
-      itemsCount() {
+      itemsCount(this: VirtualScrollDataOptions) {
         if (this.pageIndex() < this.pageCount() - 1) {
           return this.pageSize();
         }
@@ -728,11 +864,16 @@ class DataController {
         }
         return dataController._changingDuration || 0;
       },
-    }, dataAdapter));
+    }, dataAdapter);
+
+    return new VirtualScrollControllerModule.VirtualScrollController<unknown>(
+      component as unknown as InternalGrid,
+      dataOptions,
+    );
   }
 
-  getHiddenTotals(dataFields) {
-    const result: any = [];
+  public getHiddenTotals(dataFields: PivotGridField[]): number[] {
+    const result: number[] = [];
     each(dataFields, (index, field) => {
       if (field.showTotals === false) {
         result.push(index);
@@ -741,13 +882,13 @@ class DataController {
     return result;
   }
 
-  getHiddenValues(dataFields) {
-    const result: any = [];
+  public getHiddenValues(dataFields: PivotGridField[]): number[] {
+    const result: number[] = [];
 
     dataFields.forEach((field, index) => {
       if (
-        field.showValues === undefined
-        && field.showTotals === false
+        (field.showValues === undefined
+        && field.showTotals === false)
         || field.showValues === false
       ) {
         result.push(index);
@@ -757,8 +898,11 @@ class DataController {
     return result;
   }
 
-  getHiddenGrandTotalsTotals(dataFields, columnFields) {
-    let result: any = [];
+  public getHiddenGrandTotalsTotals(
+    dataFields: PivotGridField[],
+    columnFields: PivotGridField[],
+  ): number[] {
+    let result: number[] = [];
     each(dataFields, (index, field) => {
       if (field.showGrandTotals === false) {
         result.push(index);
@@ -772,15 +916,23 @@ class DataController {
     return result;
   }
 
-  _fireChanged() {
-    const that: any = this;
+  public _fireChanged(): void {
     const startChanging = new Date();
 
-    that.changed && !that._lockChanged && that.changed.fire();
-    that._changingDuration = (new Date() as any) - (startChanging as any);
+    if (this.changed && !this._lockChanged) {
+      this.changed.fire();
+    }
+    this._changingDuration = new Date().getTime() - startChanging.getTime();
   }
 
-  _correctSkipsTakes(rowIndex, rowSkip, rowSpan, levels, skips, takes) {
+  public _correctSkipsTakes(
+    rowIndex: number,
+    rowSkip: number,
+    rowSpan: number | undefined,
+    levels: number[],
+    skips: number[],
+    takes: number[],
+  ): void {
     const endIndex = rowSpan ? rowIndex + rowSpan - 1 : rowIndex;
     skips[levels.length] = skips[levels.length] || 0;
     takes[levels.length] = takes[levels.length] || 0;
@@ -791,38 +943,44 @@ class DataController {
     }
   }
 
-  _calculatePagingForRowExpandedPaths(options, skips, takes, rowExpandedSkips, rowExpandedTakes) {
+  public _calculatePagingForRowExpandedPaths(
+    options: PagingLoadOptions,
+    skips: number[],
+    takes: number[],
+    rowExpandedSkips: number[],
+    rowExpandedTakes: (number | undefined)[],
+  ): void {
     const rows = this._rowsInfo;
-    const rowCount = Math.min(options.rowSkip + options.rowTake, rows.length);
+    const rowCount = Math.min(Number(options.rowSkip) + Number(options.rowTake), rows.length);
     const { rowExpandedPaths } = options;
-    let levels: any = [];
-    const expandedPathIndexes = {};
-    let i;
-    let j;
-    let path;
+    let levels: number[] = [];
+    const expandedPathIndexes: Record<string, number> = {};
+    // eslint-disable-next-line @typescript-eslint/init-declarations -- keeps the last cell path
+    let path: unknown[] | undefined;
 
-    rowExpandedPaths.forEach((path, index) => {
-      expandedPathIndexes[path] = index;
+    rowExpandedPaths?.forEach((expandedPath, index) => {
+      expandedPathIndexes[String(expandedPath)] = index;
     });
 
-    for (i = 0; i < rowCount; i += 1) {
-      takes.length = skips.length = levels.length + 1;
-      for (j = 0; j < rows[i].length; j += 1) {
-        const cell = rows[i][j];
-
+    for (let i = 0; i < rowCount; i += 1) {
+      skips.length = levels.length + 1;
+      takes.length = skips.length;
+      for (const cell of rows[i]) {
         if (cell.type === 'D') {
-          this._correctSkipsTakes(i, options.rowSkip, cell.rowspan, levels, skips, takes);
+          this._correctSkipsTakes(i, Number(options.rowSkip), cell.rowspan, levels, skips, takes);
 
-          path = cell.path || path;
+          path = cell.path ?? path;
           const expandIndex = path && path.length > 1
-            ? expandedPathIndexes[path.slice(0, -1)]
+            ? expandedPathIndexes[String(path.slice(0, -1))]
             : -1;
 
+          // eslint-disable-next-line max-depth -- nested in the row and cell loops
           if (expandIndex >= 0) {
             rowExpandedSkips[expandIndex] = skips[levels.length] || 0;
             rowExpandedTakes[expandIndex] = takes[levels.length] || 0;
           }
 
+          // eslint-disable-next-line max-depth -- nested in the row and cell loops
           if (cell.rowspan) {
             levels.push(cell.rowspan);
           }
@@ -832,9 +990,15 @@ class DataController {
     }
   }
 
-  _calculatePagingForColumnExpandedPaths(options, skips, takes, expandedSkips, expandedTakes) {
-    const skipByPath = {};
-    const takeByPath = {};
+  public _calculatePagingForColumnExpandedPaths(
+    options: PagingLoadOptions,
+    skips: number[],
+    takes: number[],
+    expandedSkips: number[],
+    expandedTakes: (number | undefined)[],
+  ): void {
+    const skipByPath: Record<string, number> = {};
+    const takeByPath: Record<string, number> = {};
 
     foreachColumnInfo(this._columnsInfo, (columnInfo: PivotGridColumnInfo, columnIndex: number) => {
       if (columnInfo.type === 'D' && columnInfo.path && columnInfo.dataIndex === undefined) {
@@ -844,9 +1008,9 @@ class DataController {
         skipByPath[path] = skipByPath[path] || 0;
         takeByPath[path] = takeByPath[path] || 0;
 
-        if (columnIndex + colspan <= options.columnSkip) {
+        if (columnIndex + colspan <= Number(options.columnSkip)) {
           skipByPath[path] += 1;
-        } else if (columnIndex < options.columnSkip + options.columnTake) {
+        } else if (columnIndex < Number(options.columnSkip) + Number(options.columnTake)) {
           takeByPath[path] += 1;
         }
       }
@@ -855,9 +1019,9 @@ class DataController {
     skips[0] = skipByPath[''];
     takes[0] = takeByPath[''];
 
-    options.columnExpandedPaths.forEach((path, index) => {
-      const skip = skipByPath[path];
-      const take = takeByPath[path];
+    options.columnExpandedPaths?.forEach((path, index) => {
+      const skip = skipByPath[String(path)];
+      const take = takeByPath[String(path)];
 
       if (skip !== undefined) {
         expandedSkips[index] = skip;
@@ -868,12 +1032,22 @@ class DataController {
     });
   }
 
-  _processPagingForExpandedPaths(options, area, storeLoadOptions, reload) {
+  public _processPagingForExpandedPaths(
+    options: PagingLoadOptions,
+    area: HeaderArea,
+    storeLoadOptions: PagingLoadOptions[],
+    reload?: boolean,
+  ): void {
     const expandedPaths = options[`${area}ExpandedPaths`];
+
+    if (!expandedPaths) {
+      return;
+    }
+
     const expandedSkips = expandedPaths.map(() => 0);
     const expandedTakes = expandedPaths.map(() => (reload ? options.pageSize : 0));
-    const skips = [];
-    const takes = [];
+    const skips: number[] = [];
+    const takes: number[] = [];
 
     if (!reload) {
       if (area === 'row') {
@@ -905,38 +1079,43 @@ class DataController {
     );
   }
 
-  _savePagingForExpandedPaths(
-    options,
-    area,
-    storeLoadOptions,
-    skip,
-    take,
-    expandedSkips,
-    expandedTakes,
-  ) {
+  public _savePagingForExpandedPaths(
+    options: PagingLoadOptions,
+    area: HeaderArea,
+    storeLoadOptions: PagingLoadOptions[],
+    skip: number | undefined,
+    take: number | undefined,
+    expandedSkips: number[],
+    expandedTakes: (number | undefined)[],
+  ): void {
     const expandedPaths = options[`${area}ExpandedPaths`];
 
     options[`${area}ExpandedPaths`] = [];
-    options[`${area}Skip`] = skip !== undefined ? skip : options[`${area}Skip`];
-    options[`${area}Take`] = take !== undefined ? take : options[`${area}Take`];
+    options[`${area}Skip`] = skip ?? options[`${area}Skip`];
+    options[`${area}Take`] = take ?? options[`${area}Take`];
 
-    for (let i = 0; i < expandedPaths.length; i += 1) {
-      if (expandedTakes[i]) {
-        const isOppositeArea = options.area && options.area !== area;
+    if (expandedPaths) {
+      for (let i = 0; i < expandedPaths.length; i += 1) {
+        if (expandedTakes[i]) {
+          const isOppositeArea = options.area && options.area !== area;
 
-        storeLoadOptions.push(extend({
-          area,
-          headerName: `${area}s`,
-        }, options, {
-          [`${area}Skip`]: expandedSkips[i],
-          [`${area}Take`]: expandedTakes[i],
-          [isOppositeArea ? 'oppositePath' : 'path']: expandedPaths[i],
-        }));
+          storeLoadOptions.push(extend({
+            area,
+            headerName: `${area}s`,
+          }, options, {
+            [`${area}Skip`]: expandedSkips[i],
+            [`${area}Take`]: expandedTakes[i],
+            [isOppositeArea ? 'oppositePath' : 'path']: expandedPaths[i],
+          }));
+        }
       }
     }
   }
 
-  _handleCustomizeStoreLoadOptions(storeLoadOptions, reload) {
+  public _handleCustomizeStoreLoadOptions(
+    storeLoadOptions: PagingLoadOptions[],
+    reload?: boolean,
+  ): void {
     const options = storeLoadOptions[0];
     const rowsScrollController = this._rowsScrollController;
 
@@ -960,43 +1139,44 @@ class DataController {
 
     if (this._dataSource.paginate() && columnsScrollController) {
       const columnPageSize = columnsScrollController.pageSize();
-      storeLoadOptions.forEach((options) => {
-        if (options.headerName === 'columns') {
-          options.columnSkip = 0;
-          options.columnTake = columnPageSize;
-          options.columnExpandedPaths = [];
+      storeLoadOptions.forEach((loadOptions) => {
+        if (loadOptions.headerName === 'columns') {
+          loadOptions.columnSkip = 0;
+          loadOptions.columnTake = columnPageSize;
+          loadOptions.columnExpandedPaths = [];
         } else {
-          options.columnSkip = columnsScrollController.beginPageIndex() * columnPageSize;
-          options.columnTake = (
+          loadOptions.columnSkip = columnsScrollController.beginPageIndex() * columnPageSize;
+          loadOptions.columnTake = (
             columnsScrollController.endPageIndex() - columnsScrollController.beginPageIndex() + 1
           ) * columnPageSize;
-          this._processPagingForExpandedPaths(options, 'column', storeLoadOptions, reload);
+          this._processPagingForExpandedPaths(loadOptions, 'column', storeLoadOptions, reload);
         }
       });
     }
   }
 
-  load() {
-    const that: any = this;
+  public load(): void {
     const stateStoringController = this._stateStoringController;
 
     if (stateStoringController.isEnabled() && !stateStoringController.isLoaded()) {
       stateStoringController.load().always((state) => {
         if (state) {
-          that._dataSource.state(state);
+          // @ts-expect-error PivotGridDataSource.state() isn't typed yet
+          this._dataSource.state(state);
         } else {
-          that._dataSource.load();
+          this._dataSource.load();
         }
       });
     } else {
-      that._dataSource.load();
+      this._dataSource.load();
     }
   }
 
-  calculateVirtualContentParams(contentParams) {
-    const that: any = this;
-    const rowsScrollController = that._rowsScrollController;
-    const columnsScrollController = that._columnsScrollController;
+  public calculateVirtualContentParams(
+    contentParams: VirtualContentParams,
+  ): VirtualContentSize | undefined {
+    const rowsScrollController = this._rowsScrollController;
+    const columnsScrollController = this._columnsScrollController;
 
     if (rowsScrollController && columnsScrollController) {
       rowsScrollController.viewportItemSize(contentParams.virtualRowHeight);
@@ -1011,12 +1191,13 @@ class DataController {
       );
       columnsScrollController.setContentItemSizes(contentParams.itemWidths);
 
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises -- fire-and-forget
       deferUpdate(() => {
         columnsScrollController.loadIfNeed();
         rowsScrollController.loadIfNeed();
       });
 
-      that.scrollChanged.fire({
+      this.scrollChanged.fire({
         left: columnsScrollController.getViewportPosition(),
         top: rowsScrollController.getViewportPosition(),
       });
@@ -1032,98 +1213,96 @@ class DataController {
     return undefined;
   }
 
-  setViewportPosition(left, top) {
-    this._rowsScrollController.setViewportPosition(top || 0);
-    this._columnsScrollController.setViewportPosition(left || 0);
+  public setViewportPosition(left: number | undefined, top: number | undefined): void {
+    this._rowsScrollController?.setViewportPosition(top || 0);
+    this._columnsScrollController?.setViewportPosition(left || 0);
   }
 
-  subscribeToWindowScrollEvents($element) {
+  public subscribeToWindowScrollEvents($element: dxElementWrapper): void {
     this._rowsScrollController?.subscribeToWindowScrollEvents($element);
   }
 
-  updateWindowScrollPosition(position) {
+  public updateWindowScrollPosition(position: number): void {
     this._rowsScrollController?.scrollTo(position);
   }
 
-  updateViewOptions(options) {
+  public updateViewOptions(options: DataControllerOptions): void {
     extend(this._options, options);
     this._update();
   }
 
-  _handleExpandValueChanging(e) {
+  public _handleExpandValueChanging(e: unknown): void {
     this.expandValueChanging.fire(e);
   }
 
-  _handleLoadingChanged(isLoading) {
+  public _handleLoadingChanged(isLoading: boolean): void {
     this.loadingChanged.fire(isLoading);
   }
 
-  _handleProgressChanged(progress) {
+  public _handleProgressChanged(progress: number): void {
     this.progressChanged.fire(progress);
   }
 
-  _handleFieldsPrepared(e) {
+  public _handleFieldsPrepared(e: PivotGridField[]): void {
     this._options.onFieldsPrepared?.(e);
   }
 
-  _createDataSource(options) {
-    const that: any = this;
+  public _createDataSource(options: DataControllerOptions): PivotGridDataSource {
     const dataSourceOptions = options.dataSource;
-    let dataSource;
+    const isSharedDataSource = dataSourceOptions instanceof PivotGridDataSource;
 
-    that._isSharedDataSource = dataSourceOptions instanceof PivotGridDataSource;
+    this._isSharedDataSource = isSharedDataSource;
 
-    if (that._isSharedDataSource) {
-      dataSource = dataSourceOptions;
-    } else {
-      dataSource = new PivotGridDataSource(dataSourceOptions);
-    }
+    const dataSource = isSharedDataSource
+      ? dataSourceOptions
+      : new PivotGridDataSource(dataSourceOptions);
 
-    that._expandValueChangingHandler = that._handleExpandValueChanging.bind(that);
-    that._loadingChangedHandler = that._handleLoadingChanged.bind(that);
-    that._fieldsPreparedHandler = that._handleFieldsPrepared.bind(that);
-    that._customizeStoreLoadOptionsHandler = that._handleCustomizeStoreLoadOptions.bind(that);
-    that._changedHandler = function () {
-      that._update();
-      that.dataSourceChanged.fire();
+    this._expandValueChangingHandler = this._handleExpandValueChanging.bind(this);
+    this._loadingChangedHandler = this._handleLoadingChanged.bind(this);
+    this._fieldsPreparedHandler = this._handleFieldsPrepared.bind(this);
+    this._customizeStoreLoadOptionsHandler = this._handleCustomizeStoreLoadOptions.bind(this);
+    this._changedHandler = (): void => {
+      this._update();
+      this.dataSourceChanged.fire();
     };
-    that._progressChangedHandler = function (progress) {
-      that._handleProgressChanged(progress * 0.8);
+    this._progressChangedHandler = (progress: number): void => {
+      this._handleProgressChanged(progress * 0.8);
     };
 
-    dataSource.on('changed', that._changedHandler);
-    dataSource.on('expandValueChanging', that._expandValueChangingHandler);
-    dataSource.on('loadingChanged', that._loadingChangedHandler);
-    dataSource.on('progressChanged', that._progressChangedHandler);
-    dataSource.on('fieldsPrepared', that._fieldsPreparedHandler);
-    dataSource.on('customizeStoreLoadOptions', that._customizeStoreLoadOptionsHandler);
+    dataSource.on('changed', this._changedHandler);
+    dataSource.on('expandValueChanging', this._expandValueChangingHandler);
+    dataSource.on('loadingChanged', this._loadingChangedHandler);
+    dataSource.on('progressChanged', this._progressChangedHandler);
+    dataSource.on('fieldsPrepared', this._fieldsPreparedHandler);
+    dataSource.on('customizeStoreLoadOptions', this._customizeStoreLoadOptionsHandler);
 
     return dataSource;
   }
 
-  getDataSource() {
+  public getDataSource(): PivotGridDataSource {
     return this._dataSource;
   }
 
-  isLoading() {
+  public isLoading(): boolean {
     return this._dataSource.isLoading();
   }
 
-  beginLoading() {
+  public beginLoading(): void {
     this._dataSource.beginLoading();
   }
 
-  endLoading() {
+  public endLoading(): void {
     this._dataSource.endLoading();
   }
 
-  _update() {
-    const that: any = this;
-    const dataSource = that._dataSource;
-    const options = that._options;
-    const columnFields = dataSource.getAreaFields('column');
-    const rowFields = dataSource.getAreaFields('row');
-    const dataFields = dataSource.getAreaFields('data');
+  public _update(): void {
+    // eslint-disable-next-line @typescript-eslint/no-this-alias -- the methods use their own this
+    const that = this;
+    const dataSource = this._dataSource;
+    const options = this._options;
+    const columnFields: PivotGridField[] = dataSource.getAreaFields('column');
+    const rowFields: PivotGridField[] = dataSource.getAreaFields('row');
+    const dataFields: PivotGridField[] = dataSource.getAreaFields('data');
     const dataFieldsForRows = options.dataFieldArea === 'row' ? dataFields : [];
     const dataFieldsForColumns = options.dataFieldArea !== 'row' ? dataFields : [];
     const data = dataSource.getData();
@@ -1134,8 +1313,8 @@ class DataController {
       ? hiddenGrandTotals.length !== dataFields.length
       : true;
 
-    const commonOptions: any = {
-      texts: options.texts || {},
+    const commonOptions = {
+      texts: options.texts ?? {},
       hiddenTotals,
       hiddenValues,
       hiddenGrandTotals,
@@ -1143,7 +1322,8 @@ class DataController {
       dataFields,
       progress: 0,
     };
-    const rowOptions: any = extend({}, commonOptions, {
+    // @ts-expect-error notifyProgress is assigned below
+    const rowOptions: HeaderInfoOptions = extend({}, commonOptions, {
       isEmptyGrandTotal: data.isEmptyGrandTotalRow,
       showTotals: options.showRowTotals,
       showTotalsPrior: options.showTotalsPrior === 'rows' || options.showTotalsPrior === 'both',
@@ -1153,7 +1333,8 @@ class DataController {
       layout: options.rowHeaderLayout,
       fields: rowFields,
     });
-    const columnOptions: any = extend({}, commonOptions, {
+    // @ts-expect-error notifyProgress is assigned below
+    const columnOptions: HeaderInfoOptions = extend({}, commonOptions, {
       isEmptyGrandTotal: data.isEmptyGrandTotalColumn,
       showTotals: options.showColumnTotals,
       showTotalsPrior: options.showTotalsPrior === 'columns' || options.showTotalsPrior === 'both',
@@ -1163,7 +1344,10 @@ class DataController {
       fields: columnFields,
     });
 
-    const notifyProgress = function (progress) {
+    const notifyProgress = function notifyProgress(
+      this: HeaderInfoOptions,
+      progress: number,
+    ): void {
       this.progress = progress;
       that._handleProgressChanged(0.8 + 0.1 * rowOptions.progress + 0.1 * columnOptions.progress);
     };
@@ -1186,46 +1370,48 @@ class DataController {
     ).always(() => {
       dataSource._changeLoadingCount(-1);
     }).done((columnsInfo, rowsInfo) => {
-      that._columnsInfo = columnsInfo;
-      that._rowsInfo = rowsInfo;
+      this._columnsInfo = columnsInfo;
+      this._rowsInfo = rowsInfo;
 
-      if (that._rowsScrollController
-        && that._columnsScrollController
-        && that.changed
-        && !that._dataSource.paginate()) {
-        that._rowsScrollController.reset(true);
-        that._columnsScrollController.reset(true);
+      if (this._rowsScrollController
+        && this._columnsScrollController
+        && this.changed
+        && !this._dataSource.paginate()) {
+        this._rowsScrollController.reset(true);
+        this._columnsScrollController.reset(true);
 
-        that._lockChanged = true;
-        that._rowsScrollController.load();
-        that._columnsScrollController.load();
-        that._lockChanged = false;
+        this._lockChanged = true;
+        this._rowsScrollController.load();
+        this._columnsScrollController.load();
+        this._lockChanged = false;
       }
     }).done(() => {
-      that._fireChanged();
-      if (that._stateStoringController.isEnabled() && !that._dataSource.isLoading()) {
-        that._stateStoringController.state(that._dataSource.state());
-        that._stateStoringController.save();
+      this._fireChanged();
+      if (this._stateStoringController.isEnabled() && !this._dataSource.isLoading()) {
+        // @ts-expect-error state() is protected, PivotGridDataSource.state() isn't typed yet
+        this._stateStoringController.state(this._dataSource.state());
+        // @ts-expect-error save() is protected
+        this._stateStoringController.save();
       }
     });
   }
 
-  getRowsInfo(getAllData) {
-    const that: any = this;
-    const rowsInfo = that._rowsInfo;
-    const scrollController = that._rowsScrollController;
-    let rowspan;
+  public getRowsInfo(getAllData?: boolean): PivotGridColumnInfo[][] {
+    const rowsInfo = this._rowsInfo;
+    const scrollController = this._rowsScrollController;
     const isOnePredefinedRow = rowsInfo.length === 1 && (
+      // @ts-expect-error rowsInfo[0] is a row of cells, its type is always undefined
       !rowsInfo[0].type
+      // @ts-expect-error rowsInfo[0] is a row of cells, its type is always undefined
       || rowsInfo[0].type === GRAND_TOTAL_TYPE
     );
 
     if (scrollController && !getAllData && !isOnePredefinedRow) {
-      const startIndex = scrollController.beginPageIndex() * that.rowPageSize();
-      const endIndex = scrollController.endPageIndex() * that.rowPageSize() + that.rowPageSize();
-      const summaryFields = that._dataSource.getSummaryFields();
+      const startIndex = scrollController.beginPageIndex() * this.rowPageSize();
+      const endIndex = scrollController.endPageIndex() * this.rowPageSize() + this.rowPageSize();
+      const summaryFields: PivotGridField[] = this._dataSource.getSummaryFields();
       const isRowDataFieldArea = this._options.dataFieldArea === 'row';
-      const newRowsInfo: any = [];
+      const newRowsInfo: PivotGridColumnInfo[][] = [];
       let maxDepth = 1;
 
       this.foreachRowInfo(rowsInfo, (rowInfo, visibleIndex, rowIndex, _, columnIndex) => {
@@ -1235,11 +1421,11 @@ class DataController {
 
         if (isVisible) {
           newRowsInfo[index] = newRowsInfo[index] || [];
-          rowspan = rowIndex < startIndex
-            ? (rowInfo.rowspan - (startIndex - rowIndex)) || 1
+          let rowspan = rowIndex < startIndex
+            ? (Number(rowInfo.rowspan) - (startIndex - rowIndex)) || 1
             : rowInfo.rowspan;
 
-          if (startIndex + index + rowspan > endIndex) {
+          if (startIndex + index + Number(rowspan) > endIndex) {
             rowspan = (endIndex - (index + startIndex)) || 1;
           }
 
@@ -1281,15 +1467,14 @@ class DataController {
     return rowsInfo;
   }
 
-  getColumnsInfo(getAllData) {
-    const that: any = this;
-    let info = that._columnsInfo;
-    const scrollController = that._columnsScrollController;
+  public getColumnsInfo(getAllData?: boolean): PivotGridColumnInfo[][] {
+    let info = this._columnsInfo;
+    const scrollController = this._columnsScrollController;
 
     if (scrollController && !getAllData) {
-      const startIndex = scrollController.beginPageIndex() * that.columnPageSize();
-      const endIndex = scrollController.endPageIndex() * that.columnPageSize()
-        + that.columnPageSize();
+      const startIndex = scrollController.beginPageIndex() * this.columnPageSize();
+      const endIndex = scrollController.endPageIndex() * this.columnPageSize()
+        + this.columnPageSize();
 
       info = createColumnsInfo(info, startIndex, endIndex);
     }
@@ -1297,66 +1482,66 @@ class DataController {
     return info;
   }
 
-  totalRowCount() {
+  public totalRowCount(): number {
     return this._rowsInfo.length;
   }
 
-  rowPageIndex(index) {
+  public rowPageIndex(index?: number): number {
     if (index !== undefined) {
       this._rowPageIndex = index;
     }
     return this._rowPageIndex || 0;
   }
 
-  totalColumnCount() {
+  public totalColumnCount(): number {
     let count = 0;
     if (this._columnsInfo?.length) {
-      for (let i = 0; i < this._columnsInfo[0].length; i += 1) {
-        count += this._columnsInfo[0][i].colspan || 1;
+      for (const columnInfo of this._columnsInfo[0]) {
+        count += columnInfo.colspan || 1;
       }
     }
 
     return count;
   }
 
-  rowPageSize(size) {
+  public rowPageSize(size?: number): number {
     if (size !== undefined) {
       this._rowPageSize = size;
     }
     return this._rowPageSize || 20;
   }
 
-  columnPageSize(size) {
+  public columnPageSize(size?: number): number {
     if (size !== undefined) {
       this._columnPageSize = size;
     }
     return this._columnPageSize || 20;
   }
 
-  columnPageIndex(index) {
+  public columnPageIndex(index?: number): number {
     if (index !== undefined) {
       this._columnPageIndex = index;
     }
     return this._columnPageIndex || 0;
   }
 
-  getColumnIndexOffset() {
+  public getColumnIndexOffset(): number {
     return this._columnsScrollController
       ? this._columnsScrollController.beginPageIndex() * this._columnsScrollController.pageSize()
       : 0;
   }
 
-  getRowIndexOffset() {
+  public getRowIndexOffset(): number {
     return this._rowsScrollController
       ? this._rowsScrollController.beginPageIndex() * this._rowsScrollController.pageSize()
       : 0;
   }
 
-  getCellsInfo(getAllData) {
+  public getCellsInfo(getAllData?: boolean): PivotGridCellInfo[][] {
     const rowsInfo = this.getRowsInfo(getAllData);
     const columnsInfo = this.getColumnsInfo(getAllData);
     const data = this._dataSource.getData();
-    const texts = this._options.texts || {};
+    const texts: PivotGridTexts = this._options.texts ?? {};
 
     return this.createCellsInfo(
       rowsInfo,
@@ -1368,30 +1553,29 @@ class DataController {
     );
   }
 
-  dispose() {
-    const that: any = this;
-    if (that._isSharedDataSource) {
-      that._dataSource.off('changed', that._changedHandler);
-      that._dataSource.off('expandValueChanging', that._expandValueChangingHandler);
-      that._dataSource.off('loadingChanged', that._loadingChangedHandler);
-      that._dataSource.off('progressChanged', that._progressChangedHandler);
-      that._dataSource.off('fieldsPrepared', that._fieldsPreparedHandler);
-      that._dataSource.off('customizeStoreLoadOptions', that._customizeStoreLoadOptionsHandler);
+  public dispose(): void {
+    if (this._isSharedDataSource) {
+      this._dataSource.off('changed', this._changedHandler);
+      this._dataSource.off('expandValueChanging', this._expandValueChangingHandler);
+      this._dataSource.off('loadingChanged', this._loadingChangedHandler);
+      this._dataSource.off('progressChanged', this._progressChangedHandler);
+      this._dataSource.off('fieldsPrepared', this._fieldsPreparedHandler);
+      this._dataSource.off('customizeStoreLoadOptions', this._customizeStoreLoadOptionsHandler);
     } else {
-      that._dataSource.dispose();
+      this._dataSource.dispose();
     }
 
-    that._columnsScrollController?.dispose();
-    that._rowsScrollController?.dispose();
+    this._columnsScrollController?.dispose();
+    this._rowsScrollController?.dispose();
 
-    that._stateStoringController.dispose();
+    this._stateStoringController.dispose();
 
-    that.expandValueChanging.empty();
-    that.changed.empty();
-    that.loadingChanged.empty();
-    that.progressChanged.empty();
-    that.scrollChanged.empty();
-    that.dataSourceChanged.empty();
+    this.expandValueChanging.empty();
+    this.changed.empty();
+    this.loadingChanged.empty();
+    this.progressChanged.empty();
+    this.scrollChanged.empty();
+    this.dataSourceChanged.empty();
   }
 }
 
