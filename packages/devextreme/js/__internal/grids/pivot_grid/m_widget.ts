@@ -32,7 +32,7 @@ import gridCoreUtils from '@ts/grids/grid_core/utils';
 import { ChartIntegrationMixin } from './chart_integration/m_chart_integration';
 import DataAreaImport from './data_area/m_data_area';
 import DataControllerImport from './data_controller/m_data_controller';
-import { ExportController } from './export/m_export';
+import { ExportMixin } from './export/m_export';
 import { FIELD_DATA_KEY } from './field_chooser/const';
 import { FieldChooser } from './field_chooser/m_field_chooser';
 import { FieldChooserBase } from './field_chooser/m_field_chooser_base';
@@ -1900,7 +1900,7 @@ class PivotGrid extends Widget {
   }
 }
 
-Object.assign(PivotGrid.prototype, ExportController);
+Object.assign(PivotGrid.prototype, ExportMixin);
 Object.assign(PivotGrid.prototype, ChartIntegrationMixin);
 
 registerComponent('dxPivotGrid', PivotGrid);
