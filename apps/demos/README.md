@@ -91,15 +91,30 @@ The time zone is UTC for the page and for the mock data, whatever the machine is
 
 The etalons are Linux renders, and on CI the comparison is exact: no pixel may differ. Text is drawn differently on macOS and Windows, so a run on your machine compares loosely and proves little: pass `--ignore-snapshots` and never commit an etalon written there.
 
-A container draws what the CI agent draws: it has the same Ubuntu, Chrome and fonts. It is the image of the component tests; see "Record etalons on a Mac" in `e2e/playwright/README.md` for the Docker setup. The container uses your `node_modules` and DevExtreme build:
+### Record etalons on a Mac
+
+A container draws what the CI agent draws: it has the same Ubuntu, Chrome and fonts. It is the image of the component tests, so the Docker setup is the one in "Record etalons on a Mac" of `e2e/playwright/README.md`.
+
+The container uses your `node_modules` and DevExtreme build, so build first and rebuild after a source change. Then record the etalons of a demo in the three themes the CI jobs run, and verify them:
 
 ```
-utils/visual-tests/playwright/docker/run.sh --grep DataGrid-                       # compare as CI does
-THEME=material.blue.light utils/visual-tests/playwright/docker/run.sh --grep DataGrid-
-utils/visual-tests/playwright/docker/run.sh --update-snapshots --grep DataGrid-    # record etalons
+pnpm run demos:prepare                   # from the repository root
+
+cd apps/demos
+for theme in fluent.blue.light material.blue.light fluent-next.blue.light; do
+  THEME=$theme utils/visual-tests/playwright/docker/run.sh --update-snapshots --grep DataGrid-Overview
+done
+
+for theme in fluent.blue.light material.blue.light fluent-next.blue.light; do
+  THEME=$theme utils/visual-tests/playwright/docker/run.sh --grep DataGrid-Overview
+done
 ```
 
-On macOS the repository is mounted case-insensitively: a file that a demo requests in the wrong case loads in the container and is missing on CI.
+`--grep` takes test names, `<Product>-<Demo>`; without it every jQuery demo runs, about five minutes per theme. The first run builds the image and takes a few minutes more. The second loop compares as CI does: exactly.
+
+The repository is mounted case-insensitively on macOS: a file that a demo requests in the wrong case loads in the container and is missing on CI.
+
+### Etalons from CI
 
 Without a container CI records the etalon: delete the file and push. The job fails on the missing etalon and uploads what it rendered:
 
