@@ -18,6 +18,7 @@ import { FAKE_TABLE_CLASS } from '../keyboard_navigation/const';
 import type { PivotGridCell } from '../types';
 import type {
   AreaItemCellAriaIndexOptions,
+  AreaItemCellContext,
   AreaItemCellPreparedArgs,
   AreaItemComponent,
   AreaItemOption,
@@ -226,6 +227,77 @@ abstract class AreaItem {
     }
   }
 
+  private renderCellContent(
+    td: HTMLElement,
+    span: HTMLElement,
+    cell: PivotGridCell,
+    context: AreaItemCellContext,
+  ): string {
+    const { encodeHtml, isCellNavigationEnabled } = context;
+
+    if (cell.rowspan) {
+      td.setAttribute('rowspan', String(cell.rowspan));
+    }
+    if (cell.colspan) {
+      td.setAttribute('colspan', String(cell.colspan));
+    }
+
+    if (isCellNavigationEnabled && !cell.isWhiteSpace) {
+      td.setAttribute('tabindex', '-1');
+    }
+
+    const styleOptions: AreaItemStyleOptions = {
+      cellElement: undefined,
+      cell,
+      cellsCount: context.cellsCount,
+      cellIndex: context.cellIndex,
+      rowElement: undefined,
+      rowIndex: context.rowIndex,
+      rowsCount: context.rowsCount,
+      rtlEnabled: context.rtlEnabled,
+      classArray: [],
+      cssArray: [],
+    };
+
+    this._applyCustomStyles(styleOptions);
+
+    if (styleOptions.cssArray.length) {
+      setStyle(td, styleOptions.cssArray.join(';'));
+    }
+
+    if (styleOptions.classArray.length) {
+      td.setAttribute('class', styleOptions.classArray.join(' '));
+    }
+
+    if (isDefined(cell.expanded)) {
+      const div = domAdapter.createElement('div');
+      div.classList.add('dx-expand-icon-container');
+      const expandSpan = domAdapter.createElement('span');
+      expandSpan.classList.add(PIVOTGRID_EXPAND_CLASS);
+      div.appendChild(expandSpan);
+      td.appendChild(div);
+      const ariaLabel = String(cell.text ?? cell.value ?? '');
+      div.setAttribute('role', 'button');
+      div.setAttribute('aria-label', encodeHtml ? ariaLabel : $('<div>').html(ariaLabel).text());
+      div.setAttribute('aria-expanded', String(cell.expanded));
+      div.setAttribute('tabindex', isCellNavigationEnabled ? '-1' : '0');
+
+      // With cell navigation the cell itself is the focus target, so it
+      // must expose the expanded state to assistive technologies.
+      if (isCellNavigationEnabled) {
+        td.setAttribute('aria-expanded', String(cell.expanded));
+      }
+    }
+
+    const cellText = this._getCellText(cell, encodeHtml);
+
+    if (isDefined(cell.wordWrapEnabled)) {
+      span.style.whiteSpace = cell.wordWrapEnabled ? 'normal' : 'nowrap';
+    }
+
+    return cellText;
+  }
+
   protected _renderTableContent(tableElement: dxElementWrapper, data: PivotGridCell[][]): void {
     const rowsCount = data.length;
     const rtlEnabled = this.option('rtlEnabled');
@@ -266,65 +338,15 @@ abstract class AreaItem {
         const span = domAdapter.createElement('span');
 
         if (cell) {
-          if (cell.rowspan) {
-            td.setAttribute('rowspan', String(cell.rowspan));
-          }
-          if (cell.colspan) {
-            td.setAttribute('colspan', String(cell.colspan));
-          }
-
-          if (isCellNavigationEnabled && !cell.isWhiteSpace) {
-            td.setAttribute('tabindex', '-1');
-          }
-
-          const styleOptions: AreaItemStyleOptions = {
-            cellElement: undefined,
-            cell,
-            cellsCount: row.length,
+          cellText = this.renderCellContent(td, span, cell, {
             cellIndex: j,
-            rowElement: undefined,
+            cellsCount: row.length,
             rowIndex: i,
             rowsCount,
             rtlEnabled,
-            classArray: [],
-            cssArray: [],
-          };
-
-          this._applyCustomStyles(styleOptions);
-
-          if (styleOptions.cssArray.length) {
-            setStyle(td, styleOptions.cssArray.join(';'));
-          }
-
-          if (styleOptions.classArray.length) {
-            td.setAttribute('class', styleOptions.classArray.join(' '));
-          }
-
-          if (isDefined(cell.expanded)) {
-            const div = domAdapter.createElement('div');
-            div.classList.add('dx-expand-icon-container');
-            const expandSpan = domAdapter.createElement('span');
-            expandSpan.classList.add(PIVOTGRID_EXPAND_CLASS);
-            div.appendChild(expandSpan);
-            td.appendChild(div);
-            const ariaLabel = String(cell.text ?? cell.value ?? '');
-            div.setAttribute('role', 'button');
-            div.setAttribute('aria-label', encodeHtml ? ariaLabel : $('<div>').html(ariaLabel).text());
-            div.setAttribute('aria-expanded', String(cell.expanded));
-            div.setAttribute('tabindex', isCellNavigationEnabled ? '-1' : '0');
-
-            // With cell navigation the cell itself is the focus target, so it
-            // must expose the expanded state to assistive technologies.
-            if (isCellNavigationEnabled) {
-              td.setAttribute('aria-expanded', String(cell.expanded));
-            }
-          }
-
-          cellText = this._getCellText(cell, encodeHtml);
-
-          if (isDefined(cell.wordWrapEnabled)) {
-            span.style.whiteSpace = cell.wordWrapEnabled ? 'normal' : 'nowrap';
-          }
+            encodeHtml,
+            isCellNavigationEnabled,
+          });
         }
 
         span.innerHTML = cellText;

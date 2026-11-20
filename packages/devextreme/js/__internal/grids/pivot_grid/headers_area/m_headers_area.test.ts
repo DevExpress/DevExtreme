@@ -11,13 +11,14 @@ import $ from '@js/core/renderer';
 
 import type { AreaItemComponent } from '../area_item/types';
 import { FAKE_TABLE_CLASS } from '../keyboard_navigation/const';
+import type { PivotGridCell } from '../types';
 import { HorizontalHeadersArea, VerticalHeadersArea } from './m_headers_area';
 
 const TABLE_OFFSET = 1000;
 const CELL_SIZES = [100, 120, 300];
 const POSITION_PAST_TABLE = TABLE_OFFSET + 520;
 
-const createComponent = (): AreaItemComponent => ({
+const createComponent = (options: Record<string, unknown> = {}): AreaItemComponent => ({
   option: (optionName?: string): unknown => {
     if (optionName === undefined) {
       return {};
@@ -27,6 +28,7 @@ const createComponent = (): AreaItemComponent => ({
       rtlEnabled: false,
       encodeHtml: false,
       'scrolling.mode': 'virtual',
+      ...options,
     }[optionName];
   },
   _eventsStrategy: { hasEvent: () => false },
@@ -45,6 +47,69 @@ describe('Headers areas', () => {
 
   afterEach(() => {
     container.remove();
+  });
+
+  describe('HorizontalHeadersArea render cells', () => {
+    const renderArea = (
+      data: PivotGridCell[][],
+      options: Record<string, unknown> = {},
+    ): HorizontalHeadersArea => {
+      const area = new HorizontalHeadersArea(createComponent(options));
+
+      area.render($(container), data);
+
+      return area;
+    };
+
+    const getCell = (): HTMLTableCellElement | null => container.querySelector('td');
+
+    const getCellText = (): HTMLElement | null | undefined => getCell()?.querySelector(':scope > span');
+
+    it('should set the row and column spans of a cell', () => {
+      renderArea([[{ text: 'A', rowspan: 2, colspan: 3 }]]);
+
+      expect(getCell()?.getAttribute('rowspan')).toBe('2');
+      expect(getCell()?.getAttribute('colspan')).toBe('3');
+    });
+
+    it('should make a cell focusable but not a white space cell', () => {
+      renderArea([[{ text: 'A' }, { isWhiteSpace: true }]]);
+
+      const cells = Array.from(container.querySelectorAll('td'));
+
+      expect(cells.map((cell) => cell.getAttribute('tabindex'))).toEqual(['-1', null]);
+    });
+
+    it('should apply the width and the classes of a cell', () => {
+      renderArea([[{ text: 'A', width: 50, type: 'T' }]]);
+
+      expect(getCell()?.style.minWidth).toBe('50px');
+      expect(getCell()?.classList).toContain('dx-total');
+    });
+
+    it('should render an expand icon for an expandable cell', () => {
+      renderArea([[{ text: 'A', expanded: false }]]);
+
+      const icon = getCell()?.querySelector('.dx-expand-icon-container');
+
+      expect(icon?.getAttribute('role')).toBe('button');
+      expect(icon?.getAttribute('aria-label')).toBe('A');
+      expect(icon?.getAttribute('aria-expanded')).toBe('false');
+      expect(icon?.getAttribute('tabindex')).toBe('-1');
+      expect(getCell()?.getAttribute('aria-expanded')).toBe('false');
+    });
+
+    it('should set the white space of a cell with word wrap', () => {
+      renderArea([[{ text: 'A', wordWrapEnabled: false }]]);
+
+      expect(getCellText()?.style.whiteSpace).toBe('nowrap');
+    });
+
+    it('should encode the cell text when encodeHtml is true', () => {
+      renderArea([[{ text: '<b>A</b>' }]], { encodeHtml: true });
+
+      expect(getCellText()?.innerHTML).toBe('&lt;b&gt;A&lt;/b&gt;');
+    });
   });
 
   describe('HorizontalHeadersArea scrollTo with virtual scrolling', () => {
