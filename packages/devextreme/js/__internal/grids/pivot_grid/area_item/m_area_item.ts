@@ -147,10 +147,6 @@ abstract class AreaItem {
     return false;
   }
 
-  _getCloseMainElementMarkup() {
-    return '</tbody>';
-  }
-
   _getColumnIndexOffset() {
     return this.component._dataController?.getColumnIndexOffset() || 0;
   }
