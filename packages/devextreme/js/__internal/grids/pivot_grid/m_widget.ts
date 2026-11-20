@@ -359,6 +359,7 @@ class PivotGrid extends Widget {
     that._dataController && that._dataController.dispose();
 
     that._dataController = new DataControllerImport
+      // @ts-expect-error the widget's options aren't typed yet
       .DataController(that._getDataControllerOptions());
 
     if (hasWindow()) {
