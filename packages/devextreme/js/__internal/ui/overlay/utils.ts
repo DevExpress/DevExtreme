@@ -61,8 +61,10 @@ const getScrollDelta = (
   return 0;
 };
 
+const OUT_OF_FLOW_POSITIONS = ['absolute', 'fixed'];
+
 const getContainingElement = (element: HTMLElement): HTMLElement | null => (
-  getWindow().getComputedStyle(element).position === 'absolute'
+  OUT_OF_FLOW_POSITIONS.includes(getWindow().getComputedStyle(element).position)
     ? element.offsetParent
     : element.parentElement
 ) as HTMLElement | null;
