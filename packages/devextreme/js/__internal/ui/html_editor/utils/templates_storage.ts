@@ -1,21 +1,21 @@
+import type { FunctionTemplate } from '@js/core/templates/function_template';
 import { isDefined, isEmptyObject } from '@js/core/utils/type';
-import type { TemplateBase } from '@ts/core/templates/template_base';
 
 import type { MentionTemplateKey, MentionTemplateLookupKey } from '../types';
 
 export default class TemplatesStorage {
-  _storage: Record<string, Record<string, TemplateBase>>;
+  _storage: Record<string, Record<string, FunctionTemplate>>;
 
   constructor() {
     this._storage = {};
   }
 
-  set({ editorKey, marker }: MentionTemplateKey, value: TemplateBase): void {
+  set({ editorKey, marker }: MentionTemplateKey, value: FunctionTemplate): void {
     this._storage[editorKey] ??= {};
     this._storage[editorKey][marker] = value;
   }
 
-  get({ editorKey, marker }: MentionTemplateLookupKey): TemplateBase | undefined {
+  get({ editorKey, marker }: MentionTemplateLookupKey): FunctionTemplate | undefined {
     const isQuillFormatCall = !isDefined(editorKey);
 
     // NOTE: If anonymous templates are used, mentions are parsed from the markup.

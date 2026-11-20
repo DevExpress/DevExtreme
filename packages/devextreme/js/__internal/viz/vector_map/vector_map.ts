@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-declaration-merging */
 import '@ts/viz/vector_map/projection';
 
 import { registerComponent as componentRegistrator } from '@ts/core/component_registrator';
@@ -21,6 +20,7 @@ import { GestureHandler } from '@ts/viz/vector_map/gesture_handler';
 import { LayoutControl } from '@ts/viz/vector_map/layout';
 import { LegendsControl } from '@ts/viz/vector_map/legend';
 import { getMaxBound, MapLayerCollection } from '@ts/viz/vector_map/map_layer';
+import type { ProjectionInstance } from '@ts/viz/vector_map/projection.main';
 import { Projection } from '@ts/viz/vector_map/projection.main';
 import { TooltipViewer } from '@ts/viz/vector_map/tooltip_viewer';
 import { Tracker } from '@ts/viz/vector_map/tracker';
@@ -38,12 +38,10 @@ function mergeBounds(sumBounds: number[], dataBounds: number[] | undefined): num
   ] : sumBounds;
 }
 
-interface VectorMap extends AnnotationsPluginMembers, TooltipPluginMembers {}
-
 class VectorMap extends BaseWidget {
   _root;
 
-  _projection;
+  _projection!: ProjectionInstance;
 
   _tracker;
 
@@ -68,6 +66,14 @@ class VectorMap extends BaseWidget {
   _notifyDirty!: () => void;
 
   _notifyReady!: () => void;
+
+  declare _createHtmlStructure: AnnotationsPluginMembers['_createHtmlStructure'];
+
+  declare _prepareExtraElements: AnnotationsPluginMembers['_prepareExtraElements'];
+
+  declare _renderExtraElements: AnnotationsPluginMembers['_renderExtraElements'];
+
+  declare _tooltip: TooltipPluginMembers['_tooltip'];
 
   _getDefaultSize(): Size {
     return { width: DEFAULT_WIDTH, height: DEFAULT_HEIGHT };
@@ -474,12 +480,10 @@ class VectorMap extends BaseWidget {
   }
 
   convertToGeo(x: number, y: number): number[] {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return this._projection.fromScreenPoint([x, y]);
   }
 
   convertToXY(longitude: number, latitude: number): number[] {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return this._projection.toScreenPoint([longitude, latitude]);
   }
 }

@@ -687,7 +687,7 @@ class Form extends Widget<FormProperties> {
     item: PreparedItem,
   ): void {
     if (item.template) {
-      item.template = this._getTemplate(item.template);
+      item.template = this._getTemplate(item.template) as unknown as PreparedItem['template'];
     }
   }
 
