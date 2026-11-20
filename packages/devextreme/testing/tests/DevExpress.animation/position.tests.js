@@ -1147,32 +1147,34 @@ const testCollision = (name, fixtureName, params, expectedHorzDist, expectedVert
 
     QUnit.module('fractional window height');
 
-    QUnit.test('fit should keep the element inside a window whose client height is rounded up', function(assert) {
-        const done = assert.async();
+    ['fit', 'flip', 'flipfit'].forEach((collision) => {
+        QUnit.test(`${collision} should keep the element inside a window whose client height is rounded up`, function(assert) {
+            const done = assert.async();
 
-        createWindowWithOwnModule('common/core/animation/position', (frameWindow, { default: frameWindowPositionUtils }) => {
-            const frameDocument = frameWindow.document;
-            const visibleArea = frameDocument.createElement('div');
-            const page = frameDocument.createElement('div');
-            const what = frameDocument.createElement('div');
+            createWindowWithOwnModule('common/core/animation/position', (frameWindow, { default: frameWindowPositionUtils }) => {
+                const frameDocument = frameWindow.document;
+                const visibleArea = frameDocument.createElement('div');
+                const page = frameDocument.createElement('div');
+                const what = frameDocument.createElement('div');
 
-            Object.assign(visibleArea.style, { position: 'fixed', top: 0, bottom: 0 });
-            page.style.height = `${PAGE_HEIGHT}px`;
-            Object.assign(what.style, { position: 'absolute', top: 0, width: '100px', height: '100px' });
-            frameDocument.body.append(visibleArea, page, what);
+                Object.assign(visibleArea.style, { position: 'fixed', top: 0, bottom: 0 });
+                page.style.height = `${PAGE_HEIGHT}px`;
+                Object.assign(what.style, { position: 'absolute', top: 0, width: '100px', height: '100px' });
+                frameDocument.body.append(visibleArea, page, what);
 
-            const visibleHeight = visibleArea.getBoundingClientRect().height;
+                const visibleHeight = visibleArea.getBoundingClientRect().height;
 
-            assert.ok(frameDocument.documentElement.clientHeight > visibleHeight, `client height ${frameDocument.documentElement.clientHeight} is larger than the visible ${visibleHeight}`);
+                assert.ok(frameDocument.documentElement.clientHeight > visibleHeight, `client height ${frameDocument.documentElement.clientHeight} is larger than the visible ${visibleHeight}`);
 
-            frameWindowPositionUtils.setup(what, { my: 'bottom', at: 'bottom', of: frameWindow, collision: 'fit' });
+                frameWindowPositionUtils.setup(what, { my: 'bottom', at: 'bottom', of: frameWindow, collision });
 
-            assert.roughEqual(what.getBoundingClientRect().bottom, visibleHeight, 1, 'element is at the bottom of the window');
+                assert.roughEqual(what.getBoundingClientRect().bottom, visibleHeight, 1, 'element is at the bottom of the window');
 
-            what.scrollIntoView({ block: 'nearest' });
+                what.scrollIntoView({ block: 'nearest' });
 
-            assert.strictEqual(frameWindow.scrollY, 0, 'element is visible without scrolling the window');
-            done();
+                assert.strictEqual(frameWindow.scrollY, 0, 'element is visible without scrolling the window');
+                done();
+            });
         });
     });
 })();

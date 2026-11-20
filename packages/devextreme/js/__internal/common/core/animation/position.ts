@@ -374,7 +374,7 @@ const calculatePosition = function calculatePosition(
         const isIos = device.platform === 'ios';
 
         h.atSize = getWidth(of);
-        v.atSize = isIos ? of[0].innerHeight : getHeight(of);
+        v.atSize = isIos ? of[0].innerHeight : Math.floor(getViewportHeight(getHeight(of)));
       }
     } else if (of[0].nodeType === 9) {
       h.atLocation = 0;
