@@ -13,6 +13,21 @@ import {
   GRID_CONTAINER_ID,
 } from '../../__tests__/__mock__/helpers/utils';
 
+const dispatchSpace = (
+  element: HTMLElement,
+  type: 'keydown' | 'keyup',
+  repeat = false,
+): void => {
+  const event = new KeyboardEvent(type, {
+    key: ' ',
+    keyCode: 32,
+    bubbles: true,
+    cancelable: true,
+    repeat,
+  });
+  element.dispatchEvent(event);
+};
+
 describe('DataGrid editing', () => {
   let dataSource: Record<string, string | number>[] = [];
 
@@ -51,7 +66,65 @@ describe('DataGrid editing', () => {
     }];
   });
   afterEach(afterTest);
+      
+  describe('Command buttons', () => {
+    it('should have role="button"', async () => {
+      // arrange
+      await createDataGrid({
+        dataSource: [{ id: 1 }],
+        editing: { allowUpdating: true },
+        columns: ['id', {
+          type: 'buttons',
+          buttons: ['edit', { text: 'custom' }],
+        }],
+      });
 
+      const buttons = document.querySelectorAll(`#${GRID_CONTAINER_ID} .dx-command-edit .dx-link`);
+
+      // assert
+      expect(buttons).toHaveLength(2);
+      expect(buttons[0].getAttribute('role')).toBe('button');
+      expect(buttons[1].getAttribute('role')).toBe('button');
+    });
+
+    it('should trigger click event and onKeyDown on Space key', async () => {
+      // arrange
+      const onClick = jest.fn();
+      const onKeyDown = jest.fn();
+      await createDataGrid({
+        dataSource: [{ id: 1 }],
+        columns: ['id', {
+          type: 'buttons',
+          buttons: [{ text: 'custom', onClick }],
+        }],
+        onKeyDown,
+      });
+
+      // act
+      const button = document.querySelector(`#${GRID_CONTAINER_ID} .dx-command-edit .dx-link`) as HTMLElement;
+      button.focus();
+
+      // assert
+      expect(document.activeElement).toBe(button);
+
+      // act
+      dispatchSpace(button, 'keydown');
+      dispatchSpace(button, 'keydown', true);
+      await flushAsync();
+
+      // assert
+      expect(onClick).not.toHaveBeenCalled();
+      expect(onKeyDown).toHaveBeenCalledTimes(2);
+
+      // act
+      dispatchSpace(button, 'keyup');
+      await flushAsync();
+
+      // assert
+      expect(onClick).toHaveBeenCalledTimes(1);
+    });
+  });
+  
   describe('Command icon buttons', () => {
     it('should have aria-label based on hint, text, built-in localized label, and icon name', async () => {
       // arrange
