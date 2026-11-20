@@ -1,28 +1,27 @@
 import type { Locator, Page } from '@playwright/test';
 import type { WidgetName } from '../types';
 import Widget from '../internal/widget';
+import Overlay from '../overlay';
 
 const CLASS = {
   contextMenu: 'dx-context-menu',
   item: 'dx-menu-item',
+  overlay: 'dx-overlay',
 };
 
 export default class ContextMenu extends Widget {
   name: WidgetName = 'dxContextMenu';
 
+  // The menu renders its items into an overlay outside its element.
   public readonly items: Locator;
 
-  public readonly contextMenu: Locator;
+  public readonly overlay: Overlay;
 
   constructor(page: Page, selector: Locator | string) {
     super(page, selector);
 
-    this.contextMenu = page.locator(`.${CLASS.contextMenu}`);
-    this.items = this.contextMenu.locator(`.${CLASS.item}`);
-  }
-
-  public getItemByIndex(index: number): Locator {
-    return this.items.nth(index);
+    this.items = page.locator(`.${CLASS.contextMenu} .${CLASS.item}`);
+    this.overlay = new Overlay(page, this.element.locator(`.${CLASS.overlay}`));
   }
 
   public async show(): Promise<void> {

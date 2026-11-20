@@ -9,7 +9,7 @@ async function createCardViewWithPager(page: Page, config: any = {}): Promise<vo
   return createWidget(page, 'dxCardView', {
     dataSource,
 
-    // TODO: resolve the situation when colums are not set in config
+    // TODO: resolve the situation when columns are not set in config
     // There is the 'Maximum call stack size exceeded' error in this case
     columns: [
       'text',
