@@ -14,8 +14,7 @@ const serializeDate = (date: Date): string => [
 ].join('/');
 
 export default class CalendarView extends Widget {
-  // eslint-disable-next-line class-methods-use-this
-  public getName(): WidgetName { return 'dxCalendarView'; }
+  name: WidgetName = 'dxCalendarView';
 
   public getCellByDate(date: Date): Locator {
     return this.element.locator(`td[data-value='${serializeDate(date)}']`);

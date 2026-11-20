@@ -21,8 +21,7 @@ const CLASS = {
 };
 
 export default class Calendar extends Widget {
-  // eslint-disable-next-line class-methods-use-this
-  public getName(): WidgetName { return 'dxCalendar'; }
+  name: WidgetName = 'dxCalendar';
 
   public getSelectedRangeCells(): Locator {
     return this.element.locator(`.${CLASS.cellInRange}`);

@@ -14,6 +14,8 @@ const CLASS = {
 };
 
 export default class List extends Widget {
+  name: WidgetName = 'dxList';
+
   public readonly items: Locator;
 
   public readonly visibleItems: Locator;
@@ -30,9 +32,6 @@ export default class List extends Widget {
     this.selectAll = new ListItem(this.element.locator(`.${CLASS.selectAll}`));
     this.searchInput = this.element.locator(`.${CLASS.search} input`);
   }
-
-  // eslint-disable-next-line class-methods-use-this
-  public getName(): WidgetName { return 'dxList'; }
 
   public getItem(index = 0): ListItem {
     return new ListItem(this.items.nth(index));
