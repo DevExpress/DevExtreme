@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     Component,
     NgModule,
@@ -8,10 +6,6 @@ import {
     SkipSelf,
     Input
 } from '@angular/core';
-
-
-
-
 import type { DashStyle, Font } from 'devextreme/common/charts';
 
 import {
@@ -97,7 +91,6 @@ export class DxiPolarChartConstantLineComponent extends CollectionNestedOption {
         return 'constantLines';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -110,7 +103,6 @@ export class DxiPolarChartConstantLineComponent extends CollectionNestedOption {
     ngOnDestroy() {
         this._deleteRemovedOptions(this._fullOptionPath());
     }
-
 }
 
 @NgModule({

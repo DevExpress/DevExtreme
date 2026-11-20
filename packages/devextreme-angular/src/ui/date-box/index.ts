@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     TransferState,
     Component,
@@ -9,7 +7,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -84,10 +81,9 @@ import { DxoDateBoxShowModule } from 'devextreme-angular/ui/date-box/nested';
 import { DxoDateBoxToModule } from 'devextreme-angular/ui/date-box/nested';
 import { DxiDateBoxToolbarItemModule } from 'devextreme-angular/ui/date-box/nested';
 import { 
-           PROPERTY_TOKEN_buttons,
-           PROPERTY_TOKEN_toolbarItems,
-     } from 'devextreme-angular/core/tokens';
-
+    PROPERTY_TOKEN_buttons,
+    PROPERTY_TOKEN_toolbarItems,
+} from 'devextreme-angular/core/tokens';
 
 
 const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
@@ -97,7 +93,6 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
 };
 /**
  * [descr:dxDateBox]
-
  */
 @Component({
     selector: 'dx-date-box',
@@ -128,7 +123,6 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
 
     /**
      * [descr:dxDropDownEditorOptions.acceptCustomValue]
-    
      */
     @Input()
     get acceptCustomValue(): boolean {
@@ -138,10 +132,8 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
         this._setOption('acceptCustomValue', value);
     }
 
-
     /**
      * [descr:WidgetOptions.accessKey]
-    
      */
     @Input()
     get accessKey(): string | undefined {
@@ -151,10 +143,8 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
         this._setOption('accessKey', value);
     }
 
-
     /**
      * [descr:dxDropDownEditorOptions.activeStateEnabled]
-    
      */
     @Input()
     get activeStateEnabled(): boolean {
@@ -164,10 +154,8 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
         this._setOption('activeStateEnabled', value);
     }
 
-
     /**
      * [descr:dxDateBoxOptions.adaptivityEnabled]
-    
      */
     @Input()
     get adaptivityEnabled(): boolean {
@@ -177,10 +165,8 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
         this._setOption('adaptivityEnabled', value);
     }
 
-
     /**
      * [descr:DateBoxBaseOptions.applyButtonText]
-    
      */
     @Input()
     get applyButtonText(): string {
@@ -190,10 +176,8 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
         this._setOption('applyButtonText', value);
     }
 
-
     /**
      * [descr:dxDropDownEditorOptions.applyValueMode]
-    
      */
     @Input()
     get applyValueMode(): ApplyValueMode {
@@ -203,10 +187,8 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
         this._setOption('applyValueMode', value);
     }
 
-
     /**
      * [descr:dxDropDownEditorOptions.buttons]
-    
      */
     @Input()
     get buttons(): Array<DropDownPredefinedButton | TextEditorButton> | undefined {
@@ -216,10 +198,8 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
         this._setOption('buttons', value);
     }
 
-
     /**
      * [descr:DateBoxBaseOptions.calendarOptions]
-    
      */
     @Input()
     get calendarOptions(): dxCalendarOptions {
@@ -229,10 +209,8 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
         this._setOption('calendarOptions', value);
     }
 
-
     /**
      * [descr:DateBoxBaseOptions.cancelButtonText]
-    
      */
     @Input()
     get cancelButtonText(): string {
@@ -242,10 +220,8 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
         this._setOption('cancelButtonText', value);
     }
 
-
     /**
      * [descr:dxDateBoxOptions.dateOutOfRangeMessage]
-    
      */
     @Input()
     get dateOutOfRangeMessage(): string {
@@ -255,10 +231,8 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
         this._setOption('dateOutOfRangeMessage', value);
     }
 
-
     /**
      * [descr:DateBoxBaseOptions.dateSerializationFormat]
-    
      */
     @Input()
     get dateSerializationFormat(): string | undefined {
@@ -268,10 +242,8 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
         this._setOption('dateSerializationFormat', value);
     }
 
-
     /**
      * [descr:dxDropDownEditorOptions.deferRendering]
-    
      */
     @Input()
     get deferRendering(): boolean {
@@ -281,10 +253,8 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
         this._setOption('deferRendering', value);
     }
 
-
     /**
      * [descr:WidgetOptions.disabled]
-    
      */
     @Input()
     get disabled(): boolean {
@@ -294,10 +264,8 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
         this._setOption('disabled', value);
     }
 
-
     /**
      * [descr:dxDateBoxOptions.disabledDates]
-    
      */
     @Input()
     get disabledDates(): Array<Date> | ((data: { component: dxDateBox, date: Date, view: string }) => boolean) | null {
@@ -307,10 +275,8 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
         this._setOption('disabledDates', value);
     }
 
-
     /**
      * [descr:DateBoxBaseOptions.displayFormat]
-    
      */
     @Input()
     get displayFormat(): Format | null {
@@ -320,10 +286,8 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
         this._setOption('displayFormat', value);
     }
 
-
     /**
      * [descr:dxDropDownEditorOptions.dropDownButtonTemplate]
-    
      */
     @Input()
     get dropDownButtonTemplate(): any {
@@ -333,10 +297,8 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
         this._setOption('dropDownButtonTemplate', value);
     }
 
-
     /**
      * [descr:DateBoxBaseOptions.dropDownOptions]
-    
      */
     @Input()
     get dropDownOptions(): dxPopupOptions<any> {
@@ -346,10 +308,8 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
         this._setOption('dropDownOptions', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.elementAttr]
-    
      */
     @Input()
     get elementAttr(): Record<string, any> {
@@ -359,10 +319,8 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
         this._setOption('elementAttr', value);
     }
 
-
     /**
      * [descr:dxTextEditorOptions.focusStateEnabled]
-    
      */
     @Input()
     get focusStateEnabled(): boolean {
@@ -372,10 +330,8 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
         this._setOption('focusStateEnabled', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.height]
-    
      */
     @Input()
     get height(): number | string | undefined {
@@ -385,10 +341,8 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
         this._setOption('height', value);
     }
 
-
     /**
      * [descr:WidgetOptions.hint]
-    
      */
     @Input()
     get hint(): string | undefined {
@@ -398,10 +352,8 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
         this._setOption('hint', value);
     }
 
-
     /**
      * [descr:dxTextEditorOptions.hoverStateEnabled]
-    
      */
     @Input()
     get hoverStateEnabled(): boolean {
@@ -411,10 +363,8 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
         this._setOption('hoverStateEnabled', value);
     }
 
-
     /**
      * [descr:dxDateBoxOptions.inputAttr]
-    
      */
     @Input()
     get inputAttr(): any {
@@ -424,10 +374,8 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
         this._setOption('inputAttr', value);
     }
 
-
     /**
      * [descr:dxDateBoxOptions.interval]
-    
      */
     @Input()
     get interval(): number {
@@ -437,10 +385,8 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
         this._setOption('interval', value);
     }
 
-
     /**
      * [descr:dxDateBoxOptions.invalidDateMessage]
-    
      */
     @Input()
     get invalidDateMessage(): string {
@@ -450,10 +396,8 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
         this._setOption('invalidDateMessage', value);
     }
 
-
     /**
      * [descr:EditorOptions.isDirty]
-    
      */
     @Input()
     get isDirty(): boolean {
@@ -463,10 +407,8 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
         this._setOption('isDirty', value);
     }
 
-
     /**
      * [descr:EditorOptions.isValid]
-    
      */
     @Input()
     get isValid(): boolean {
@@ -476,10 +418,8 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
         this._setOption('isValid', value);
     }
 
-
     /**
      * [descr:dxDateBoxOptions.label]
-    
      */
     @Input()
     get label(): string {
@@ -489,10 +429,8 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
         this._setOption('label', value);
     }
 
-
     /**
      * [descr:dxTextEditorOptions.labelMode]
-    
      */
     @Input()
     get labelMode(): LabelMode {
@@ -502,10 +440,8 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
         this._setOption('labelMode', value);
     }
 
-
     /**
      * [descr:DateBoxBaseOptions.max]
-    
      */
     @Input()
     get max(): Date | null | number | string | undefined {
@@ -515,10 +451,8 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
         this._setOption('max', value);
     }
 
-
     /**
      * [descr:dxDateBoxOptions.maxLength]
-    
      */
     @Input()
     get maxLength(): null | number | string {
@@ -528,10 +462,8 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
         this._setOption('maxLength', value);
     }
 
-
     /**
      * [descr:DateBoxBaseOptions.min]
-    
      */
     @Input()
     get min(): Date | null | number | string | undefined {
@@ -541,10 +473,8 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
         this._setOption('min', value);
     }
 
-
     /**
      * [descr:dxDateBoxOptions.name]
-    
      */
     @Input()
     get name(): string {
@@ -554,10 +484,8 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
         this._setOption('name', value);
     }
 
-
     /**
      * [descr:dxDropDownEditorOptions.opened]
-    
      */
     @Input()
     get opened(): boolean {
@@ -567,10 +495,8 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
         this._setOption('opened', value);
     }
 
-
     /**
      * [descr:dxDropDownEditorOptions.openOnFieldClick]
-    
      */
     @Input()
     get openOnFieldClick(): boolean {
@@ -580,10 +506,8 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
         this._setOption('openOnFieldClick', value);
     }
 
-
     /**
      * [descr:dxDateBoxOptions.pickerType]
-    
      */
     @Input()
     get pickerType(): DatePickerType {
@@ -593,10 +517,8 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
         this._setOption('pickerType', value);
     }
 
-
     /**
      * [descr:dxDateBoxOptions.placeholder]
-    
      */
     @Input()
     get placeholder(): string {
@@ -606,10 +528,8 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
         this._setOption('placeholder', value);
     }
 
-
     /**
      * [descr:EditorOptions.readOnly]
-    
      */
     @Input()
     get readOnly(): boolean {
@@ -619,10 +539,8 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
         this._setOption('readOnly', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
-    
      */
     @Input()
     get rtlEnabled(): boolean {
@@ -632,10 +550,8 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
         this._setOption('rtlEnabled', value);
     }
 
-
     /**
      * [descr:dxDateBoxOptions.showAnalogClock]
-    
      */
     @Input()
     get showAnalogClock(): boolean {
@@ -645,10 +561,8 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
         this._setOption('showAnalogClock', value);
     }
 
-
     /**
      * [descr:dxTextEditorOptions.showClearButton]
-    
      */
     @Input()
     get showClearButton(): boolean {
@@ -658,10 +572,8 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
         this._setOption('showClearButton', value);
     }
 
-
     /**
      * [descr:dxDropDownEditorOptions.showDropDownButton]
-    
      */
     @Input()
     get showDropDownButton(): boolean {
@@ -671,10 +583,8 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
         this._setOption('showDropDownButton', value);
     }
 
-
     /**
      * [descr:dxTextEditorOptions.spellcheck]
-    
      */
     @Input()
     get spellcheck(): boolean {
@@ -684,10 +594,8 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
         this._setOption('spellcheck', value);
     }
 
-
     /**
      * [descr:dxTextEditorOptions.stylingMode]
-    
      */
     @Input()
     get stylingMode(): EditorStyle {
@@ -697,10 +605,8 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
         this._setOption('stylingMode', value);
     }
 
-
     /**
      * [descr:WidgetOptions.tabIndex]
-    
      */
     @Input()
     get tabIndex(): number {
@@ -710,10 +616,8 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
         this._setOption('tabIndex', value);
     }
 
-
     /**
      * [descr:dxDateBoxOptions.text]
-    
      */
     @Input()
     get text(): string {
@@ -723,10 +627,8 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
         this._setOption('text', value);
     }
 
-
     /**
      * [descr:DateBoxBaseOptions.todayButtonText]
-    
      */
     @Input()
     get todayButtonText(): string {
@@ -736,10 +638,8 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
         this._setOption('todayButtonText', value);
     }
 
-
     /**
      * [descr:dxDateBoxOptions.type]
-    
      */
     @Input()
     get type(): DateType {
@@ -749,10 +649,8 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
         this._setOption('type', value);
     }
 
-
     /**
      * [descr:DateBoxBaseOptions.useMaskBehavior]
-    
      */
     @Input()
     get useMaskBehavior(): boolean {
@@ -762,10 +660,8 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
         this._setOption('useMaskBehavior', value);
     }
 
-
     /**
      * [descr:EditorOptions.validationError]
-    
      */
     @Input()
     get validationError(): any | null {
@@ -775,10 +671,8 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
         this._setOption('validationError', value);
     }
 
-
     /**
      * [descr:EditorOptions.validationErrors]
-    
      */
     @Input()
     get validationErrors(): Array<any> | null {
@@ -788,10 +682,8 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
         this._setOption('validationErrors', value);
     }
 
-
     /**
      * [descr:EditorOptions.validationMessageMode]
-    
      */
     @Input()
     get validationMessageMode(): ValidationMessageMode {
@@ -801,10 +693,8 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
         this._setOption('validationMessageMode', value);
     }
 
-
     /**
      * [descr:dxDropDownEditorOptions.validationMessagePosition]
-    
      */
     @Input()
     get validationMessagePosition(): Mode | Position {
@@ -814,10 +704,8 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
         this._setOption('validationMessagePosition', value);
     }
 
-
     /**
      * [descr:EditorOptions.validationStatus]
-    
      */
     @Input()
     get validationStatus(): ValidationStatus {
@@ -827,10 +715,8 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
         this._setOption('validationStatus', value);
     }
 
-
     /**
      * [descr:dxDateBoxOptions.value]
-    
      */
     @Input()
     get value(): Date | null | number | string {
@@ -840,10 +726,8 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
         this._setOption('value', value);
     }
 
-
     /**
      * [descr:dxTextEditorOptions.valueChangeEvent]
-    
      */
     @Input()
     get valueChangeEvent(): string {
@@ -853,10 +737,8 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
         this._setOption('valueChangeEvent', value);
     }
 
-
     /**
      * [descr:WidgetOptions.visible]
-    
      */
     @Input()
     get visible(): boolean {
@@ -866,10 +748,8 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
         this._setOption('visible', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.width]
-    
      */
     @Input()
     get width(): number | string | undefined {
@@ -880,559 +760,386 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
     }
 
     /**
-    
      * [descr:dxDateBoxOptions.onChange]
-    
-    
      */
     @Output() onChange: EventEmitter<ChangeEvent>;
 
     /**
-    
      * [descr:dxDateBoxOptions.onClosed]
-    
-    
      */
     @Output() onClosed: EventEmitter<ClosedEvent>;
 
     /**
-    
      * [descr:dxDateBoxOptions.onContentReady]
-    
-    
      */
     @Output() onContentReady: EventEmitter<ContentReadyEvent>;
 
     /**
-    
      * [descr:dxDateBoxOptions.onCopy]
-    
-    
      */
     @Output() onCopy: EventEmitter<CopyEvent>;
 
     /**
-    
      * [descr:dxDateBoxOptions.onCut]
-    
-    
      */
     @Output() onCut: EventEmitter<CutEvent>;
 
     /**
-    
      * [descr:dxDateBoxOptions.onDisposing]
-    
-    
      */
     @Output() onDisposing: EventEmitter<DisposingEvent>;
 
     /**
-    
      * [descr:dxDateBoxOptions.onEnterKey]
-    
-    
      */
     @Output() onEnterKey: EventEmitter<EnterKeyEvent>;
 
     /**
-    
      * [descr:dxDateBoxOptions.onFocusIn]
-    
-    
      */
     @Output() onFocusIn: EventEmitter<FocusInEvent>;
 
     /**
-    
      * [descr:dxDateBoxOptions.onFocusOut]
-    
-    
      */
     @Output() onFocusOut: EventEmitter<FocusOutEvent>;
 
     /**
-    
      * [descr:dxDateBoxOptions.onInitialized]
-    
-    
      */
     @Output() onInitialized: EventEmitter<InitializedEvent>;
 
     /**
-    
      * [descr:dxDateBoxOptions.onInput]
-    
-    
      */
     @Output() onInput: EventEmitter<InputEvent>;
 
     /**
-    
      * [descr:dxDateBoxOptions.onKeyDown]
-    
-    
      */
     @Output() onKeyDown: EventEmitter<KeyDownEvent>;
 
     /**
-    
      * [descr:dxDateBoxOptions.onKeyUp]
-    
-    
      */
     @Output() onKeyUp: EventEmitter<KeyUpEvent>;
 
     /**
-    
      * [descr:dxDateBoxOptions.onOpened]
-    
-    
      */
     @Output() onOpened: EventEmitter<OpenedEvent>;
 
     /**
-    
      * [descr:dxDateBoxOptions.onOptionChanged]
-    
-    
      */
     @Output() onOptionChanged: EventEmitter<OptionChangedEvent>;
 
     /**
-    
      * [descr:dxDateBoxOptions.onPaste]
-    
-    
      */
     @Output() onPaste: EventEmitter<PasteEvent>;
 
     /**
-    
      * [descr:dxDateBoxOptions.onValueChanged]
-    
-    
      */
     @Output() onValueChanged: EventEmitter<ValueChangedEvent>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() acceptCustomValueChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() accessKeyChange: EventEmitter<string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() activeStateEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() adaptivityEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() applyButtonTextChange: EventEmitter<string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() applyValueModeChange: EventEmitter<ApplyValueMode>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() buttonsChange: EventEmitter<Array<DropDownPredefinedButton | TextEditorButton> | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() calendarOptionsChange: EventEmitter<dxCalendarOptions>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() cancelButtonTextChange: EventEmitter<string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() dateOutOfRangeMessageChange: EventEmitter<string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() dateSerializationFormatChange: EventEmitter<string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() deferRenderingChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() disabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() disabledDatesChange: EventEmitter<Array<Date> | ((data: { component: dxDateBox, date: Date, view: string }) => boolean) | null>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() displayFormatChange: EventEmitter<Format | null>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() dropDownButtonTemplateChange: EventEmitter<any>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() dropDownOptionsChange: EventEmitter<dxPopupOptions<any>>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() elementAttrChange: EventEmitter<Record<string, any>>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() focusStateEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() heightChange: EventEmitter<number | string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() hintChange: EventEmitter<string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() hoverStateEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() inputAttrChange: EventEmitter<any>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() intervalChange: EventEmitter<number>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() invalidDateMessageChange: EventEmitter<string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() isDirtyChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() isValidChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() labelChange: EventEmitter<string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() labelModeChange: EventEmitter<LabelMode>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() maxChange: EventEmitter<Date | null | number | string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() maxLengthChange: EventEmitter<null | number | string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() minChange: EventEmitter<Date | null | number | string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() nameChange: EventEmitter<string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() openedChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() openOnFieldClickChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() pickerTypeChange: EventEmitter<DatePickerType>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() placeholderChange: EventEmitter<string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() readOnlyChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() rtlEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() showAnalogClockChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() showClearButtonChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() showDropDownButtonChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() spellcheckChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() stylingModeChange: EventEmitter<EditorStyle>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() tabIndexChange: EventEmitter<number>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() textChange: EventEmitter<string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() todayButtonTextChange: EventEmitter<string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() typeChange: EventEmitter<DateType>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() useMaskBehaviorChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() validationErrorChange: EventEmitter<any | null>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() validationErrorsChange: EventEmitter<Array<any> | null>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() validationMessageModeChange: EventEmitter<ValidationMessageMode>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() validationMessagePositionChange: EventEmitter<Mode | Position>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() validationStatusChange: EventEmitter<ValidationStatus>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() valueChange: EventEmitter<Date | null | number | string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() valueChangeEventChange: EventEmitter<string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() visibleChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() widthChange: EventEmitter<number | string | undefined>;
 
     /**
-    
      * [descr:undefined]
-    
-    
      */
     @Output() onBlur: EventEmitter<any>;
-
-
     @HostListener('valueChange', ['$event']) change(_) { }
     @HostListener('onBlur', ['$event']) touched = (_) => {};
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,

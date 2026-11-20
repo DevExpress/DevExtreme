@@ -1,7 +1,5 @@
 /* tslint:disable:max-line-length */
-
 /* tslint:disable:use-input-property-decorator */
-
 import {
     Component,
     OnInit,
@@ -14,10 +12,6 @@ import {
     ContentChildren,
     QueryList
 } from '@angular/core';
-
-
-
-
 
 import {
     DxIntegrationModule,
@@ -96,7 +90,6 @@ export class DxoFormComponent extends DxoFormOptions implements OnDestroy, OnIni
         return 'form';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -116,7 +109,6 @@ export class DxoFormComponent extends DxoFormOptions implements OnDestroy, OnIni
     ngOnDestroy() {
         this._addRemovedOption(this._getOptionPath());
     }
-
 
 }
 

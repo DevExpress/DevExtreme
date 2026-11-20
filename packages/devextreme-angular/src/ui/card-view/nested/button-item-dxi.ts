@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     Component,
     NgModule,
@@ -8,10 +6,6 @@ import {
     SkipSelf,
     Input
 } from '@angular/core';
-
-
-
-
 import type { dxButtonOptions } from 'devextreme/ui/button';
 import type { HorizontalAlignment, VerticalAlignment } from 'devextreme/common';
 import type { FormItemType, FormPredefinedButtonItem } from 'devextreme/ui/form';
@@ -115,7 +109,6 @@ export class DxiCardViewButtonItemComponent extends CollectionNestedOption {
         return 'items';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -130,7 +123,6 @@ export class DxiCardViewButtonItemComponent extends CollectionNestedOption {
     ngOnDestroy() {
         this._deleteRemovedOptions(this._fullOptionPath());
     }
-
 }
 
 @NgModule({

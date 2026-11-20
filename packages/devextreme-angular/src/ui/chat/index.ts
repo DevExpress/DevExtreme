@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     TransferState,
     Component,
@@ -9,7 +7,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -31,7 +28,6 @@ import type { dxSpeechToTextOptions } from 'devextreme/ui/speech_to_text';
 import type { dxButtonGroupOptions } from 'devextreme/ui/button_group';
 
 import DxChat from 'devextreme/ui/chat';
-
 
 import {
     DxComponent,
@@ -71,16 +67,15 @@ import { DxiChatSuggestionsItemModule } from 'devextreme-angular/ui/chat/nested'
 import { DxiChatTypingUserModule } from 'devextreme-angular/ui/chat/nested';
 import { DxoChatUserModule } from 'devextreme-angular/ui/chat/nested';
 import { 
-           PROPERTY_TOKEN_alerts,
-           PROPERTY_TOKEN_attachments,
-           PROPERTY_TOKEN_items,
-           PROPERTY_TOKEN_typingUsers,
-     } from 'devextreme-angular/core/tokens';
+    PROPERTY_TOKEN_alerts,
+    PROPERTY_TOKEN_attachments,
+    PROPERTY_TOKEN_items,
+    PROPERTY_TOKEN_typingUsers,
+} from 'devextreme-angular/core/tokens';
 
 
 /**
  * [descr:dxChat]
-
  */
 @Component({
     selector: 'dx-chat',
@@ -120,7 +115,6 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
 
     /**
      * [descr:WidgetOptions.accessKey]
-    
      */
     @Input()
     get accessKey(): string | undefined {
@@ -130,10 +124,8 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
         this._setOption('accessKey', value);
     }
 
-
     /**
      * [descr:dxChatOptions.activeStateEnabled]
-    
      */
     @Input()
     get activeStateEnabled(): boolean {
@@ -143,10 +135,8 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
         this._setOption('activeStateEnabled', value);
     }
 
-
     /**
      * [descr:dxChatOptions.alerts]
-    
      */
     @Input()
     get alerts(): Array<Alert> {
@@ -156,10 +146,8 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
         this._setOption('alerts', value);
     }
 
-
     /**
      * [descr:dxChatOptions.dataSource]
-    
      */
     @Input()
     get dataSource(): Array<Message> | DataSource | DataSourceOptions | null | Store | string {
@@ -169,10 +157,8 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
         this._setOption('dataSource', value);
     }
 
-
     /**
      * [descr:dxChatOptions.dayHeaderFormat]
-    
      */
     @Input()
     get dayHeaderFormat(): Format {
@@ -182,10 +168,8 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
         this._setOption('dayHeaderFormat', value);
     }
 
-
     /**
      * [descr:WidgetOptions.disabled]
-    
      */
     @Input()
     get disabled(): boolean {
@@ -195,10 +179,8 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
         this._setOption('disabled', value);
     }
 
-
     /**
      * [descr:dxChatOptions.editing]
-    
      */
     @Input()
     get editing(): { allowDeleting?: boolean | ((options: { component: dxChat, message: Message }) => boolean), allowUpdating?: boolean | ((options: { component: dxChat, message: Message }) => boolean) } {
@@ -208,10 +190,8 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
         this._setOption('editing', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.elementAttr]
-    
      */
     @Input()
     get elementAttr(): Record<string, any> {
@@ -221,10 +201,8 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
         this._setOption('elementAttr', value);
     }
 
-
     /**
      * [descr:dxChatOptions.emptyViewTemplate]
-    
      */
     @Input()
     get emptyViewTemplate(): any {
@@ -233,7 +211,6 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
     set emptyViewTemplate(value: any) {
         this._setOption('emptyViewTemplate', value);
     }
-
 
     
     @Input()
@@ -244,10 +221,8 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
         this._setOption('fileUploaderOptions', value);
     }
 
-
     /**
      * [descr:dxChatOptions.focusStateEnabled]
-    
      */
     @Input()
     get focusStateEnabled(): boolean {
@@ -257,10 +232,8 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
         this._setOption('focusStateEnabled', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.height]
-    
      */
     @Input()
     get height(): number | string | undefined {
@@ -270,10 +243,8 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
         this._setOption('height', value);
     }
 
-
     /**
      * [descr:WidgetOptions.hint]
-    
      */
     @Input()
     get hint(): string | undefined {
@@ -283,10 +254,8 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
         this._setOption('hint', value);
     }
 
-
     /**
      * [descr:dxChatOptions.hoverStateEnabled]
-    
      */
     @Input()
     get hoverStateEnabled(): boolean {
@@ -295,7 +264,6 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
     set hoverStateEnabled(value: boolean) {
         this._setOption('hoverStateEnabled', value);
     }
-
 
     
     @Input()
@@ -306,10 +274,8 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
         this._setOption('inputFieldText', value);
     }
 
-
     /**
      * [descr:dxChatOptions.items]
-    
      */
     @Input()
     get items(): Array<Message> {
@@ -319,10 +285,8 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
         this._setOption('items', value);
     }
 
-
     /**
      * [descr:dxChatOptions.messageTemplate]
-    
      */
     @Input()
     get messageTemplate(): any {
@@ -332,10 +296,8 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
         this._setOption('messageTemplate', value);
     }
 
-
     /**
      * [descr:dxChatOptions.messageTimestampFormat]
-    
      */
     @Input()
     get messageTimestampFormat(): Format {
@@ -345,10 +307,8 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
         this._setOption('messageTimestampFormat', value);
     }
 
-
     /**
      * [descr:dxChatOptions.reloadOnChange]
-    
      */
     @Input()
     get reloadOnChange(): boolean {
@@ -358,10 +318,8 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
         this._setOption('reloadOnChange', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
-    
      */
     @Input()
     get rtlEnabled(): boolean {
@@ -370,7 +328,6 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
     set rtlEnabled(value: boolean) {
         this._setOption('rtlEnabled', value);
     }
-
 
     
     @Input()
@@ -381,10 +338,8 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
         this._setOption('sendButtonOptions', value);
     }
 
-
     /**
      * [descr:dxChatOptions.showAvatar]
-    
      */
     @Input()
     get showAvatar(): boolean {
@@ -394,10 +349,8 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
         this._setOption('showAvatar', value);
     }
 
-
     /**
      * [descr:dxChatOptions.showDayHeaders]
-    
      */
     @Input()
     get showDayHeaders(): boolean {
@@ -407,10 +360,8 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
         this._setOption('showDayHeaders', value);
     }
 
-
     /**
      * [descr:dxChatOptions.showMessageTimestamp]
-    
      */
     @Input()
     get showMessageTimestamp(): boolean {
@@ -420,10 +371,8 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
         this._setOption('showMessageTimestamp', value);
     }
 
-
     /**
      * [descr:dxChatOptions.showUserName]
-    
      */
     @Input()
     get showUserName(): boolean {
@@ -433,10 +382,8 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
         this._setOption('showUserName', value);
     }
 
-
     /**
      * [descr:dxChatOptions.speechToTextEnabled]
-    
      */
     @Input()
     get speechToTextEnabled(): boolean {
@@ -445,7 +392,6 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
     set speechToTextEnabled(value: boolean) {
         this._setOption('speechToTextEnabled', value);
     }
-
 
     
     @Input()
@@ -456,7 +402,6 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
         this._setOption('speechToTextOptions', value);
     }
 
-
     
     @Input()
     get suggestions(): dxButtonGroupOptions {
@@ -466,10 +411,8 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
         this._setOption('suggestions', value);
     }
 
-
     /**
      * [descr:dxChatOptions.typingUsers]
-    
      */
     @Input()
     get typingUsers(): Array<User> {
@@ -479,10 +422,8 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
         this._setOption('typingUsers', value);
     }
 
-
     /**
      * [descr:dxChatOptions.user]
-    
      */
     @Input()
     get user(): User {
@@ -492,10 +433,8 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
         this._setOption('user', value);
     }
 
-
     /**
      * [descr:WidgetOptions.visible]
-    
      */
     @Input()
     get visible(): boolean {
@@ -505,10 +444,8 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
         this._setOption('visible', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.width]
-    
      */
     @Input()
     get width(): number | string | undefined {
@@ -519,343 +456,234 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
     }
 
     /**
-    
      * [descr:undefined]
-    
-    
      */
     @Output() onAttachmentDownloadClick: EventEmitter<AttachmentDownloadClickEvent>;
 
     /**
-    
      * [descr:dxChatOptions.onDisposing]
-    
-    
      */
     @Output() onDisposing: EventEmitter<DisposingEvent>;
 
     /**
-    
      * [descr:dxChatOptions.onInitialized]
-    
-    
      */
     @Output() onInitialized: EventEmitter<InitializedEvent>;
 
     /**
-    
      * [descr:dxChatOptions.onInputFieldTextChanged]
-    
-    
      */
     @Output() onInputFieldTextChanged: EventEmitter<InputFieldTextChangedEvent>;
 
     /**
-    
      * [descr:dxChatOptions.onMessageDeleted]
-    
-    
      */
     @Output() onMessageDeleted: EventEmitter<MessageDeletedEvent>;
 
     /**
-    
      * [descr:dxChatOptions.onMessageDeleting]
-    
-    
      */
     @Output() onMessageDeleting: EventEmitter<MessageDeletingEvent>;
 
     /**
-    
      * [descr:dxChatOptions.onMessageEditCanceled]
-    
-    
      */
     @Output() onMessageEditCanceled: EventEmitter<MessageEditCanceledEvent>;
 
     /**
-    
      * [descr:dxChatOptions.onMessageEditingStart]
-    
-    
      */
     @Output() onMessageEditingStart: EventEmitter<MessageEditingStartEvent>;
 
     /**
-    
      * [descr:dxChatOptions.onMessageEntered]
-    
-    
      */
     @Output() onMessageEntered: EventEmitter<MessageEnteredEvent>;
 
     /**
-    
      * [descr:dxChatOptions.onMessageUpdated]
-    
-    
      */
     @Output() onMessageUpdated: EventEmitter<MessageUpdatedEvent>;
 
     /**
-    
      * [descr:dxChatOptions.onMessageUpdating]
-    
-    
      */
     @Output() onMessageUpdating: EventEmitter<MessageUpdatingEvent>;
 
     /**
-    
      * [descr:dxChatOptions.onOptionChanged]
-    
-    
      */
     @Output() onOptionChanged: EventEmitter<OptionChangedEvent>;
 
     /**
-    
      * [descr:dxChatOptions.onTypingEnd]
-    
-    
      */
     @Output() onTypingEnd: EventEmitter<TypingEndEvent>;
 
     /**
-    
      * [descr:dxChatOptions.onTypingStart]
-    
-    
      */
     @Output() onTypingStart: EventEmitter<TypingStartEvent>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() accessKeyChange: EventEmitter<string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() activeStateEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() alertsChange: EventEmitter<Array<Alert>>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() dataSourceChange: EventEmitter<Array<Message> | DataSource | DataSourceOptions | null | Store | string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() dayHeaderFormatChange: EventEmitter<Format>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() disabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() editingChange: EventEmitter<{ allowDeleting?: boolean | ((options: { component: dxChat, message: Message }) => boolean), allowUpdating?: boolean | ((options: { component: dxChat, message: Message }) => boolean) }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() elementAttrChange: EventEmitter<Record<string, any>>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() emptyViewTemplateChange: EventEmitter<any>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() fileUploaderOptionsChange: EventEmitter<dxFileUploaderOptions>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() focusStateEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() heightChange: EventEmitter<number | string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() hintChange: EventEmitter<string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() hoverStateEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() inputFieldTextChange: EventEmitter<string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() itemsChange: EventEmitter<Array<Message>>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() messageTemplateChange: EventEmitter<any>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() messageTimestampFormatChange: EventEmitter<Format>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() reloadOnChangeChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() rtlEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() sendButtonOptionsChange: EventEmitter<SendButtonProperties>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() showAvatarChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() showDayHeadersChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() showMessageTimestampChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() showUserNameChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() speechToTextEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() speechToTextOptionsChange: EventEmitter<dxSpeechToTextOptions>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() suggestionsChange: EventEmitter<dxButtonGroupOptions>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() typingUsersChange: EventEmitter<Array<User>>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() userChange: EventEmitter<User>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() visibleChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() widthChange: EventEmitter<number | string | undefined>;
-
-
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,

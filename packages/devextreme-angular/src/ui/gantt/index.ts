@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     TransferState,
     Component,
@@ -9,7 +7,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -28,7 +25,6 @@ import type { Store } from 'devextreme/data/store';
 import type { DayOfWeek } from 'devextreme/common';
 
 import DxGantt from 'devextreme/ui/gantt';
-
 
 import {
     DxComponent,
@@ -88,15 +84,14 @@ import { DxoGanttToolbarModule } from 'devextreme-angular/ui/gantt/nested';
 import { DxiGanttToolbarItemModule } from 'devextreme-angular/ui/gantt/nested';
 import { DxoGanttValidationModule } from 'devextreme-angular/ui/gantt/nested';
 import { 
-           PROPERTY_TOKEN_columns,
-           PROPERTY_TOKEN_items,
-           PROPERTY_TOKEN_stripLines,
-     } from 'devextreme-angular/core/tokens';
+    PROPERTY_TOKEN_columns,
+    PROPERTY_TOKEN_items,
+    PROPERTY_TOKEN_stripLines,
+} from 'devextreme-angular/core/tokens';
 
 
 /**
  * [descr:dxGantt]
-
  */
 @Component({
     selector: 'dx-gantt',
@@ -131,7 +126,6 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
 
     /**
      * [descr:WidgetOptions.accessKey]
-    
      */
     @Input()
     get accessKey(): string | undefined {
@@ -141,10 +135,8 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
         this._setOption('accessKey', value);
     }
 
-
     /**
      * [descr:WidgetOptions.activeStateEnabled]
-    
      */
     @Input()
     get activeStateEnabled(): boolean {
@@ -154,10 +146,8 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
         this._setOption('activeStateEnabled', value);
     }
 
-
     /**
      * [descr:dxGanttOptions.allowSelection]
-    
      */
     @Input()
     get allowSelection(): boolean {
@@ -167,10 +157,8 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
         this._setOption('allowSelection', value);
     }
 
-
     /**
      * [descr:dxGanttOptions.columns]
-    
      */
     @Input()
     get columns(): Array<dxGanttColumn | string> {
@@ -180,10 +168,8 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
         this._setOption('columns', value);
     }
 
-
     /**
      * [descr:dxGanttOptions.contextMenu]
-    
      */
     @Input()
     get contextMenu(): dxGanttContextMenu {
@@ -193,10 +179,8 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
         this._setOption('contextMenu', value);
     }
 
-
     /**
      * [descr:dxGanttOptions.dependencies]
-    
      */
     @Input()
     get dependencies(): { dataSource?: Array<any> | DataSource | DataSourceOptions | null | Store | string, keyExpr?: ((dependency: any) => any) | string, predecessorIdExpr?: ((dependency: any, value: any) => any) | string, successorIdExpr?: ((dependency: any, value: any) => any) | string, typeExpr?: ((dependency: any, value: any) => any) | string } {
@@ -206,10 +190,8 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
         this._setOption('dependencies', value);
     }
 
-
     /**
      * [descr:WidgetOptions.disabled]
-    
      */
     @Input()
     get disabled(): boolean {
@@ -219,10 +201,8 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
         this._setOption('disabled', value);
     }
 
-
     /**
      * [descr:dxGanttOptions.editing]
-    
      */
     @Input()
     get editing(): { allowDependencyAdding?: boolean, allowDependencyDeleting?: boolean, allowResourceAdding?: boolean, allowResourceDeleting?: boolean, allowResourceUpdating?: boolean, allowTaskAdding?: boolean, allowTaskDeleting?: boolean, allowTaskResourceUpdating?: boolean, allowTaskUpdating?: boolean, enabled?: boolean } {
@@ -232,10 +212,8 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
         this._setOption('editing', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.elementAttr]
-    
      */
     @Input()
     get elementAttr(): Record<string, any> {
@@ -245,10 +223,8 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
         this._setOption('elementAttr', value);
     }
 
-
     /**
      * [descr:dxGanttOptions.endDateRange]
-    
      */
     @Input()
     get endDateRange(): Date | undefined {
@@ -258,10 +234,8 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
         this._setOption('endDateRange', value);
     }
 
-
     /**
      * [descr:dxGanttOptions.filterRow]
-    
      */
     @Input()
     get filterRow(): dxGanttFilterRow {
@@ -271,10 +245,8 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
         this._setOption('filterRow', value);
     }
 
-
     /**
      * [descr:dxGanttOptions.firstDayOfWeek]
-    
      */
     @Input()
     get firstDayOfWeek(): DayOfWeek | undefined {
@@ -284,10 +256,8 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
         this._setOption('firstDayOfWeek', value);
     }
 
-
     /**
      * [descr:WidgetOptions.focusStateEnabled]
-    
      */
     @Input()
     get focusStateEnabled(): boolean {
@@ -297,10 +267,8 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
         this._setOption('focusStateEnabled', value);
     }
 
-
     /**
      * [descr:dxGanttOptions.headerFilter]
-    
      */
     @Input()
     get headerFilter(): dxGanttHeaderFilter {
@@ -310,10 +278,8 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
         this._setOption('headerFilter', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.height]
-    
      */
     @Input()
     get height(): number | string | undefined {
@@ -323,10 +289,8 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
         this._setOption('height', value);
     }
 
-
     /**
      * [descr:WidgetOptions.hint]
-    
      */
     @Input()
     get hint(): string | undefined {
@@ -336,10 +300,8 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
         this._setOption('hint', value);
     }
 
-
     /**
      * [descr:WidgetOptions.hoverStateEnabled]
-    
      */
     @Input()
     get hoverStateEnabled(): boolean {
@@ -349,10 +311,8 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
         this._setOption('hoverStateEnabled', value);
     }
 
-
     /**
      * [descr:dxGanttOptions.resourceAssignments]
-    
      */
     @Input()
     get resourceAssignments(): { dataSource?: Array<any> | DataSource | DataSourceOptions | null | Store | string, keyExpr?: ((resourceAssignment: any) => any) | string, resourceIdExpr?: ((resourceAssignment: any, value: any) => any) | string, taskIdExpr?: ((resourceAssignment: any, value: any) => any) | string } {
@@ -362,10 +322,8 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
         this._setOption('resourceAssignments', value);
     }
 
-
     /**
      * [descr:dxGanttOptions.resources]
-    
      */
     @Input()
     get resources(): { colorExpr?: ((resource: any, value: any) => any) | string, dataSource?: Array<any> | DataSource | DataSourceOptions | null | Store | string, keyExpr?: ((resource: any) => any) | string, textExpr?: ((resource: any, value: any) => string) | string } {
@@ -375,10 +333,8 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
         this._setOption('resources', value);
     }
 
-
     /**
      * [descr:dxGanttOptions.rootValue]
-    
      */
     @Input()
     get rootValue(): any {
@@ -388,10 +344,8 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
         this._setOption('rootValue', value);
     }
 
-
     /**
      * [descr:dxGanttOptions.scaleType]
-    
      */
     @Input()
     get scaleType(): GanttScaleType {
@@ -401,10 +355,8 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
         this._setOption('scaleType', value);
     }
 
-
     /**
      * [descr:dxGanttOptions.scaleTypeRange]
-    
      */
     @Input()
     get scaleTypeRange(): { max?: GanttScaleType, min?: GanttScaleType } {
@@ -414,10 +366,8 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
         this._setOption('scaleTypeRange', value);
     }
 
-
     /**
      * [descr:dxGanttOptions.selectedRowKey]
-    
      */
     @Input()
     get selectedRowKey(): any | undefined {
@@ -427,10 +377,8 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
         this._setOption('selectedRowKey', value);
     }
 
-
     /**
      * [descr:dxGanttOptions.showDependencies]
-    
      */
     @Input()
     get showDependencies(): boolean {
@@ -440,10 +388,8 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
         this._setOption('showDependencies', value);
     }
 
-
     /**
      * [descr:dxGanttOptions.showResources]
-    
      */
     @Input()
     get showResources(): boolean {
@@ -453,10 +399,8 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
         this._setOption('showResources', value);
     }
 
-
     /**
      * [descr:dxGanttOptions.showRowLines]
-    
      */
     @Input()
     get showRowLines(): boolean {
@@ -466,10 +410,8 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
         this._setOption('showRowLines', value);
     }
 
-
     /**
      * [descr:dxGanttOptions.sorting]
-    
      */
     @Input()
     get sorting(): dxGanttSorting {
@@ -479,10 +421,8 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
         this._setOption('sorting', value);
     }
 
-
     /**
      * [descr:dxGanttOptions.startDateRange]
-    
      */
     @Input()
     get startDateRange(): Date | undefined {
@@ -492,10 +432,8 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
         this._setOption('startDateRange', value);
     }
 
-
     /**
      * [descr:dxGanttOptions.stripLines]
-    
      */
     @Input()
     get stripLines(): Array<dxGanttStripLine> {
@@ -505,10 +443,8 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
         this._setOption('stripLines', value);
     }
 
-
     /**
      * [descr:WidgetOptions.tabIndex]
-    
      */
     @Input()
     get tabIndex(): number {
@@ -518,10 +454,8 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
         this._setOption('tabIndex', value);
     }
 
-
     /**
      * [descr:dxGanttOptions.taskContentTemplate]
-    
      */
     @Input()
     get taskContentTemplate(): any {
@@ -531,10 +465,8 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
         this._setOption('taskContentTemplate', value);
     }
 
-
     /**
      * [descr:dxGanttOptions.taskListWidth]
-    
      */
     @Input()
     get taskListWidth(): number {
@@ -544,10 +476,8 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
         this._setOption('taskListWidth', value);
     }
 
-
     /**
      * [descr:dxGanttOptions.taskProgressTooltipContentTemplate]
-    
      */
     @Input()
     get taskProgressTooltipContentTemplate(): any {
@@ -557,10 +487,8 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
         this._setOption('taskProgressTooltipContentTemplate', value);
     }
 
-
     /**
      * [descr:dxGanttOptions.tasks]
-    
      */
     @Input()
     get tasks(): { colorExpr?: ((task: any, value: any) => any) | string, dataSource?: Array<any> | DataSource | DataSourceOptions | null | Store | string, endExpr?: ((task: any, value: any) => any) | string, keyExpr?: ((task: any) => any) | string, parentIdExpr?: ((task: any, value: any) => any) | string, progressExpr?: ((task: any, value: any) => any) | string, startExpr?: ((task: any, value: any) => any) | string, titleExpr?: ((task: any, value: any) => any) | string } {
@@ -570,10 +498,8 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
         this._setOption('tasks', value);
     }
 
-
     /**
      * [descr:dxGanttOptions.taskTimeTooltipContentTemplate]
-    
      */
     @Input()
     get taskTimeTooltipContentTemplate(): any {
@@ -583,10 +509,8 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
         this._setOption('taskTimeTooltipContentTemplate', value);
     }
 
-
     /**
      * [descr:dxGanttOptions.taskTitlePosition]
-    
      */
     @Input()
     get taskTitlePosition(): GanttTaskTitlePosition {
@@ -596,10 +520,8 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
         this._setOption('taskTitlePosition', value);
     }
 
-
     /**
      * [descr:dxGanttOptions.taskTooltipContentTemplate]
-    
      */
     @Input()
     get taskTooltipContentTemplate(): any {
@@ -609,10 +531,8 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
         this._setOption('taskTooltipContentTemplate', value);
     }
 
-
     /**
      * [descr:dxGanttOptions.toolbar]
-    
      */
     @Input()
     get toolbar(): dxGanttToolbar {
@@ -622,10 +542,8 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
         this._setOption('toolbar', value);
     }
 
-
     /**
      * [descr:dxGanttOptions.validation]
-    
      */
     @Input()
     get validation(): { autoUpdateParentTasks?: boolean, enablePredecessorGap?: boolean, validateDependencies?: boolean } {
@@ -635,10 +553,8 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
         this._setOption('validation', value);
     }
 
-
     /**
      * [descr:WidgetOptions.visible]
-    
      */
     @Input()
     get visible(): boolean {
@@ -648,10 +564,8 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
         this._setOption('visible', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.width]
-    
      */
     @Input()
     get width(): number | string | undefined {
@@ -662,542 +576,364 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
     }
 
     /**
-    
      * [descr:dxGanttOptions.onContentReady]
-    
-    
      */
     @Output() onContentReady: EventEmitter<ContentReadyEvent>;
 
     /**
-    
      * [descr:dxGanttOptions.onContextMenuPreparing]
-    
-    
      */
     @Output() onContextMenuPreparing: EventEmitter<ContextMenuPreparingEvent>;
 
     /**
-    
      * [descr:dxGanttOptions.onCustomCommand]
-    
-    
      */
     @Output() onCustomCommand: EventEmitter<CustomCommandEvent>;
 
     /**
-    
      * [descr:dxGanttOptions.onDependencyDeleted]
-    
-    
      */
     @Output() onDependencyDeleted: EventEmitter<DependencyDeletedEvent>;
 
     /**
-    
      * [descr:dxGanttOptions.onDependencyDeleting]
-    
-    
      */
     @Output() onDependencyDeleting: EventEmitter<DependencyDeletingEvent>;
 
     /**
-    
      * [descr:dxGanttOptions.onDependencyInserted]
-    
-    
      */
     @Output() onDependencyInserted: EventEmitter<DependencyInsertedEvent>;
 
     /**
-    
      * [descr:dxGanttOptions.onDependencyInserting]
-    
-    
      */
     @Output() onDependencyInserting: EventEmitter<DependencyInsertingEvent>;
 
     /**
-    
      * [descr:dxGanttOptions.onDisposing]
-    
-    
      */
     @Output() onDisposing: EventEmitter<DisposingEvent>;
 
     /**
-    
      * [descr:dxGanttOptions.onInitialized]
-    
-    
      */
     @Output() onInitialized: EventEmitter<InitializedEvent>;
 
     /**
-    
      * [descr:dxGanttOptions.onOptionChanged]
-    
-    
      */
     @Output() onOptionChanged: EventEmitter<OptionChangedEvent>;
 
     /**
-    
      * [descr:dxGanttOptions.onResourceAssigned]
-    
-    
      */
     @Output() onResourceAssigned: EventEmitter<ResourceAssignedEvent>;
 
     /**
-    
      * [descr:dxGanttOptions.onResourceAssigning]
-    
-    
      */
     @Output() onResourceAssigning: EventEmitter<ResourceAssigningEvent>;
 
     /**
-    
      * [descr:dxGanttOptions.onResourceDeleted]
-    
-    
      */
     @Output() onResourceDeleted: EventEmitter<ResourceDeletedEvent>;
 
     /**
-    
      * [descr:dxGanttOptions.onResourceDeleting]
-    
-    
      */
     @Output() onResourceDeleting: EventEmitter<ResourceDeletingEvent>;
 
     /**
-    
      * [descr:dxGanttOptions.onResourceInserted]
-    
-    
      */
     @Output() onResourceInserted: EventEmitter<ResourceInsertedEvent>;
 
     /**
-    
      * [descr:dxGanttOptions.onResourceInserting]
-    
-    
      */
     @Output() onResourceInserting: EventEmitter<ResourceInsertingEvent>;
 
     /**
-    
      * [descr:dxGanttOptions.onResourceManagerDialogShowing]
-    
-    
      */
     @Output() onResourceManagerDialogShowing: EventEmitter<ResourceManagerDialogShowingEvent>;
 
     /**
-    
      * [descr:dxGanttOptions.onResourceUnassigned]
-    
-    
      */
     @Output() onResourceUnassigned: EventEmitter<ResourceUnassignedEvent>;
 
     /**
-    
      * [descr:dxGanttOptions.onResourceUnassigning]
-    
-    
      */
     @Output() onResourceUnassigning: EventEmitter<ResourceUnassigningEvent>;
 
     /**
-    
      * [descr:dxGanttOptions.onScaleCellPrepared]
-    
-    
      */
     @Output() onScaleCellPrepared: EventEmitter<ScaleCellPreparedEvent>;
 
     /**
-    
      * [descr:dxGanttOptions.onSelectionChanged]
-    
-    
      */
     @Output() onSelectionChanged: EventEmitter<SelectionChangedEvent>;
 
     /**
-    
      * [descr:dxGanttOptions.onTaskClick]
-    
-    
      */
     @Output() onTaskClick: EventEmitter<TaskClickEvent>;
 
     /**
-    
      * [descr:dxGanttOptions.onTaskDblClick]
-    
-    
      */
     @Output() onTaskDblClick: EventEmitter<TaskDblClickEvent>;
 
     /**
-    
      * [descr:dxGanttOptions.onTaskDeleted]
-    
-    
      */
     @Output() onTaskDeleted: EventEmitter<TaskDeletedEvent>;
 
     /**
-    
      * [descr:dxGanttOptions.onTaskDeleting]
-    
-    
      */
     @Output() onTaskDeleting: EventEmitter<TaskDeletingEvent>;
 
     /**
-    
      * [descr:dxGanttOptions.onTaskEditDialogShowing]
-    
-    
      */
     @Output() onTaskEditDialogShowing: EventEmitter<TaskEditDialogShowingEvent>;
 
     /**
-    
      * [descr:dxGanttOptions.onTaskInserted]
-    
-    
      */
     @Output() onTaskInserted: EventEmitter<TaskInsertedEvent>;
 
     /**
-    
      * [descr:dxGanttOptions.onTaskInserting]
-    
-    
      */
     @Output() onTaskInserting: EventEmitter<TaskInsertingEvent>;
 
     /**
-    
      * [descr:dxGanttOptions.onTaskMoving]
-    
-    
      */
     @Output() onTaskMoving: EventEmitter<TaskMovingEvent>;
 
     /**
-    
      * [descr:dxGanttOptions.onTaskUpdated]
-    
-    
      */
     @Output() onTaskUpdated: EventEmitter<TaskUpdatedEvent>;
 
     /**
-    
      * [descr:dxGanttOptions.onTaskUpdating]
-    
-    
      */
     @Output() onTaskUpdating: EventEmitter<TaskUpdatingEvent>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() accessKeyChange: EventEmitter<string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() activeStateEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() allowSelectionChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() columnsChange: EventEmitter<Array<dxGanttColumn | string>>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() contextMenuChange: EventEmitter<dxGanttContextMenu>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() dependenciesChange: EventEmitter<{ dataSource?: Array<any> | DataSource | DataSourceOptions | null | Store | string, keyExpr?: ((dependency: any) => any) | string, predecessorIdExpr?: ((dependency: any, value: any) => any) | string, successorIdExpr?: ((dependency: any, value: any) => any) | string, typeExpr?: ((dependency: any, value: any) => any) | string }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() disabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() editingChange: EventEmitter<{ allowDependencyAdding?: boolean, allowDependencyDeleting?: boolean, allowResourceAdding?: boolean, allowResourceDeleting?: boolean, allowResourceUpdating?: boolean, allowTaskAdding?: boolean, allowTaskDeleting?: boolean, allowTaskResourceUpdating?: boolean, allowTaskUpdating?: boolean, enabled?: boolean }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() elementAttrChange: EventEmitter<Record<string, any>>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() endDateRangeChange: EventEmitter<Date | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() filterRowChange: EventEmitter<dxGanttFilterRow>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() firstDayOfWeekChange: EventEmitter<DayOfWeek | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() focusStateEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() headerFilterChange: EventEmitter<dxGanttHeaderFilter>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() heightChange: EventEmitter<number | string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() hintChange: EventEmitter<string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() hoverStateEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() resourceAssignmentsChange: EventEmitter<{ dataSource?: Array<any> | DataSource | DataSourceOptions | null | Store | string, keyExpr?: ((resourceAssignment: any) => any) | string, resourceIdExpr?: ((resourceAssignment: any, value: any) => any) | string, taskIdExpr?: ((resourceAssignment: any, value: any) => any) | string }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() resourcesChange: EventEmitter<{ colorExpr?: ((resource: any, value: any) => any) | string, dataSource?: Array<any> | DataSource | DataSourceOptions | null | Store | string, keyExpr?: ((resource: any) => any) | string, textExpr?: ((resource: any, value: any) => string) | string }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() rootValueChange: EventEmitter<any>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() scaleTypeChange: EventEmitter<GanttScaleType>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() scaleTypeRangeChange: EventEmitter<{ max?: GanttScaleType, min?: GanttScaleType }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() selectedRowKeyChange: EventEmitter<any | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() showDependenciesChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() showResourcesChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() showRowLinesChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() sortingChange: EventEmitter<dxGanttSorting>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() startDateRangeChange: EventEmitter<Date | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() stripLinesChange: EventEmitter<Array<dxGanttStripLine>>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() tabIndexChange: EventEmitter<number>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() taskContentTemplateChange: EventEmitter<any>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() taskListWidthChange: EventEmitter<number>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() taskProgressTooltipContentTemplateChange: EventEmitter<any>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() tasksChange: EventEmitter<{ colorExpr?: ((task: any, value: any) => any) | string, dataSource?: Array<any> | DataSource | DataSourceOptions | null | Store | string, endExpr?: ((task: any, value: any) => any) | string, keyExpr?: ((task: any) => any) | string, parentIdExpr?: ((task: any, value: any) => any) | string, progressExpr?: ((task: any, value: any) => any) | string, startExpr?: ((task: any, value: any) => any) | string, titleExpr?: ((task: any, value: any) => any) | string }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() taskTimeTooltipContentTemplateChange: EventEmitter<any>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() taskTitlePositionChange: EventEmitter<GanttTaskTitlePosition>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() taskTooltipContentTemplateChange: EventEmitter<any>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() toolbarChange: EventEmitter<dxGanttToolbar>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() validationChange: EventEmitter<{ autoUpdateParentTasks?: boolean, enablePredecessorGap?: boolean, validateDependencies?: boolean }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() visibleChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() widthChange: EventEmitter<number | string | undefined>;
-
-
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,

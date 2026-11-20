@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     TransferState,
     Component,
@@ -9,7 +7,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -30,7 +27,6 @@ import type { Store } from 'devextreme/data/store';
 import type { Orientation, SingleOrNone, SubmenuShowMode } from 'devextreme/common';
 
 import DxMenu from 'devextreme/ui/menu';
-
 
 import {
     DxComponent,
@@ -75,13 +71,12 @@ import { DxoMenuShowFirstSubmenuModeModule } from 'devextreme-angular/ui/menu/ne
 import { DxoMenuShowSubmenuModeModule } from 'devextreme-angular/ui/menu/nested';
 import { DxoMenuToModule } from 'devextreme-angular/ui/menu/nested';
 import { 
-           PROPERTY_TOKEN_items,
-     } from 'devextreme-angular/core/tokens';
+    PROPERTY_TOKEN_items,
+} from 'devextreme-angular/core/tokens';
 
 
 /**
  * [descr:dxMenu]
-
  */
 @Component({
     selector: 'dx-menu',
@@ -106,7 +101,6 @@ export class DxMenuComponent<TItem = any, TKey = any> extends DxComponent implem
 
     /**
      * [descr:WidgetOptions.accessKey]
-    
      */
     @Input()
     get accessKey(): string | undefined {
@@ -116,10 +110,8 @@ export class DxMenuComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('accessKey', value);
     }
 
-
     /**
      * [descr:dxMenuBaseOptions.activeStateEnabled]
-    
      */
     @Input()
     get activeStateEnabled(): boolean {
@@ -129,10 +121,8 @@ export class DxMenuComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('activeStateEnabled', value);
     }
 
-
     /**
      * [descr:dxMenuOptions.adaptivityEnabled]
-    
      */
     @Input()
     get adaptivityEnabled(): boolean {
@@ -142,10 +132,8 @@ export class DxMenuComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('adaptivityEnabled', value);
     }
 
-
     /**
      * [descr:dxMenuBaseOptions.animation]
-    
      */
     @Input()
     get animation(): { hide?: AnimationConfig, show?: AnimationConfig } {
@@ -155,10 +143,8 @@ export class DxMenuComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('animation', value);
     }
 
-
     /**
      * [descr:dxMenuBaseOptions.cssClass]
-    
      */
     @Input()
     get cssClass(): string {
@@ -168,10 +154,8 @@ export class DxMenuComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('cssClass', value);
     }
 
-
     /**
      * [descr:dxMenuOptions.dataSource]
-    
      */
     @Input()
     get dataSource(): Array<dxMenuItem> | DataSource | DataSourceOptions | null | Store | string {
@@ -181,10 +165,8 @@ export class DxMenuComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('dataSource', value);
     }
 
-
     /**
      * [descr:WidgetOptions.disabled]
-    
      */
     @Input()
     get disabled(): boolean {
@@ -194,10 +176,8 @@ export class DxMenuComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('disabled', value);
     }
 
-
     /**
      * [descr:HierarchicalCollectionWidgetOptions.disabledExpr]
-    
      */
     @Input()
     get disabledExpr(): ((item: any) => boolean | undefined) | string {
@@ -207,10 +187,8 @@ export class DxMenuComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('disabledExpr', value);
     }
 
-
     /**
      * [descr:HierarchicalCollectionWidgetOptions.displayExpr]
-    
      */
     @Input()
     get displayExpr(): ((item: any) => string) | string {
@@ -220,10 +198,8 @@ export class DxMenuComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('displayExpr', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.elementAttr]
-    
      */
     @Input()
     get elementAttr(): Record<string, any> {
@@ -233,10 +209,8 @@ export class DxMenuComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('elementAttr', value);
     }
 
-
     /**
      * [descr:HierarchicalCollectionWidgetOptions.focusStateEnabled]
-    
      */
     @Input()
     get focusStateEnabled(): boolean {
@@ -246,10 +220,8 @@ export class DxMenuComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('focusStateEnabled', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.height]
-    
      */
     @Input()
     get height(): number | string | undefined {
@@ -259,10 +231,8 @@ export class DxMenuComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('height', value);
     }
 
-
     /**
      * [descr:dxMenuOptions.hideSubmenuOnMouseLeave]
-    
      */
     @Input()
     get hideSubmenuOnMouseLeave(): boolean {
@@ -272,10 +242,8 @@ export class DxMenuComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('hideSubmenuOnMouseLeave', value);
     }
 
-
     /**
      * [descr:WidgetOptions.hint]
-    
      */
     @Input()
     get hint(): string | undefined {
@@ -285,10 +253,8 @@ export class DxMenuComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('hint', value);
     }
 
-
     /**
      * [descr:HierarchicalCollectionWidgetOptions.hoverStateEnabled]
-    
      */
     @Input()
     get hoverStateEnabled(): boolean {
@@ -298,10 +264,8 @@ export class DxMenuComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('hoverStateEnabled', value);
     }
 
-
     /**
      * [descr:dxMenuOptions.items]
-    
      */
     @Input()
     get items(): Array<any | dxMenuItem> {
@@ -311,10 +275,8 @@ export class DxMenuComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('items', value);
     }
 
-
     /**
      * [descr:HierarchicalCollectionWidgetOptions.itemsExpr]
-    
      */
     @Input()
     get itemsExpr(): ((item: any) => Array<any> | undefined) | string {
@@ -324,10 +286,8 @@ export class DxMenuComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('itemsExpr', value);
     }
 
-
     /**
      * [descr:CollectionWidgetOptions.itemTemplate]
-    
      */
     @Input()
     get itemTemplate(): any {
@@ -337,10 +297,8 @@ export class DxMenuComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('itemTemplate', value);
     }
 
-
     /**
      * [descr:dxMenuOptions.orientation]
-    
      */
     @Input()
     get orientation(): Orientation {
@@ -350,10 +308,8 @@ export class DxMenuComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('orientation', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
-    
      */
     @Input()
     get rtlEnabled(): boolean {
@@ -363,10 +319,8 @@ export class DxMenuComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('rtlEnabled', value);
     }
 
-
     /**
      * [descr:dxMenuBaseOptions.selectByClick]
-    
      */
     @Input()
     get selectByClick(): boolean {
@@ -376,10 +330,8 @@ export class DxMenuComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('selectByClick', value);
     }
 
-
     /**
      * [descr:HierarchicalCollectionWidgetOptions.selectedExpr]
-    
      */
     @Input()
     get selectedExpr(): ((item: any, value: boolean | undefined) => boolean | undefined) | string {
@@ -389,10 +341,8 @@ export class DxMenuComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('selectedExpr', value);
     }
 
-
     /**
      * [descr:CollectionWidgetOptions.selectedItem]
-    
      */
     @Input()
     get selectedItem(): any | null {
@@ -402,10 +352,8 @@ export class DxMenuComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('selectedItem', value);
     }
 
-
     /**
      * [descr:dxMenuBaseOptions.selectionMode]
-    
      */
     @Input()
     get selectionMode(): SingleOrNone {
@@ -415,10 +363,8 @@ export class DxMenuComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('selectionMode', value);
     }
 
-
     /**
      * [descr:dxMenuOptions.showFirstSubmenuMode]
-    
      */
     @Input()
     get showFirstSubmenuMode(): SubmenuShowMode | { delay?: number | { hide?: number, show?: number }, name?: SubmenuShowMode } {
@@ -428,10 +374,8 @@ export class DxMenuComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('showFirstSubmenuMode', value);
     }
 
-
     /**
      * [descr:dxMenuBaseOptions.showSubmenuMode]
-    
      */
     @Input()
     get showSubmenuMode(): SubmenuShowMode | { delay?: number | { hide?: number, show?: number }, name?: SubmenuShowMode } {
@@ -441,10 +385,8 @@ export class DxMenuComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('showSubmenuMode', value);
     }
 
-
     /**
      * [descr:dxMenuOptions.submenuDirection]
-    
      */
     @Input()
     get submenuDirection(): SubmenuDirection {
@@ -454,10 +396,8 @@ export class DxMenuComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('submenuDirection', value);
     }
 
-
     /**
      * [descr:WidgetOptions.tabIndex]
-    
      */
     @Input()
     get tabIndex(): number {
@@ -467,10 +407,8 @@ export class DxMenuComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('tabIndex', value);
     }
 
-
     /**
      * [descr:WidgetOptions.visible]
-    
      */
     @Input()
     get visible(): boolean {
@@ -480,10 +418,8 @@ export class DxMenuComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('visible', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.width]
-    
      */
     @Input()
     get width(): number | string | undefined {
@@ -494,313 +430,214 @@ export class DxMenuComponent<TItem = any, TKey = any> extends DxComponent implem
     }
 
     /**
-    
      * [descr:dxMenuOptions.onContentReady]
-    
-    
      */
     @Output() onContentReady: EventEmitter<ContentReadyEvent>;
 
     /**
-    
      * [descr:dxMenuOptions.onDisposing]
-    
-    
      */
     @Output() onDisposing: EventEmitter<DisposingEvent>;
 
     /**
-    
      * [descr:dxMenuOptions.onInitialized]
-    
-    
      */
     @Output() onInitialized: EventEmitter<InitializedEvent>;
 
     /**
-    
      * [descr:dxMenuOptions.onItemClick]
-    
-    
      */
     @Output() onItemClick: EventEmitter<ItemClickEvent>;
 
     /**
-    
      * [descr:dxMenuOptions.onItemContextMenu]
-    
-    
      */
     @Output() onItemContextMenu: EventEmitter<ItemContextMenuEvent>;
 
     /**
-    
      * [descr:dxMenuOptions.onItemRendered]
-    
-    
      */
     @Output() onItemRendered: EventEmitter<ItemRenderedEvent>;
 
     /**
-    
      * [descr:dxMenuOptions.onOptionChanged]
-    
-    
      */
     @Output() onOptionChanged: EventEmitter<OptionChangedEvent>;
 
     /**
-    
      * [descr:dxMenuOptions.onSelectionChanged]
-    
-    
      */
     @Output() onSelectionChanged: EventEmitter<SelectionChangedEvent>;
 
     /**
-    
      * [descr:dxMenuOptions.onSubmenuHidden]
-    
-    
      */
     @Output() onSubmenuHidden: EventEmitter<SubmenuHiddenEvent>;
 
     /**
-    
      * [descr:dxMenuOptions.onSubmenuHiding]
-    
-    
      */
     @Output() onSubmenuHiding: EventEmitter<SubmenuHidingEvent>;
 
     /**
-    
      * [descr:dxMenuOptions.onSubmenuShowing]
-    
-    
      */
     @Output() onSubmenuShowing: EventEmitter<SubmenuShowingEvent>;
 
     /**
-    
      * [descr:dxMenuOptions.onSubmenuShown]
-    
-    
      */
     @Output() onSubmenuShown: EventEmitter<SubmenuShownEvent>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() accessKeyChange: EventEmitter<string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() activeStateEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() adaptivityEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() animationChange: EventEmitter<{ hide?: AnimationConfig, show?: AnimationConfig }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() cssClassChange: EventEmitter<string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() dataSourceChange: EventEmitter<Array<dxMenuItem> | DataSource | DataSourceOptions | null | Store | string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() disabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() disabledExprChange: EventEmitter<((item: any) => boolean | undefined) | string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() displayExprChange: EventEmitter<((item: any) => string) | string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() elementAttrChange: EventEmitter<Record<string, any>>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() focusStateEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() heightChange: EventEmitter<number | string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() hideSubmenuOnMouseLeaveChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() hintChange: EventEmitter<string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() hoverStateEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() itemsChange: EventEmitter<Array<any | dxMenuItem>>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() itemsExprChange: EventEmitter<((item: any) => Array<any> | undefined) | string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() itemTemplateChange: EventEmitter<any>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() orientationChange: EventEmitter<Orientation>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() rtlEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() selectByClickChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() selectedExprChange: EventEmitter<((item: any, value: boolean | undefined) => boolean | undefined) | string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() selectedItemChange: EventEmitter<any | null>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() selectionModeChange: EventEmitter<SingleOrNone>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() showFirstSubmenuModeChange: EventEmitter<SubmenuShowMode | { delay?: number | { hide?: number, show?: number }, name?: SubmenuShowMode }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() showSubmenuModeChange: EventEmitter<SubmenuShowMode | { delay?: number | { hide?: number, show?: number }, name?: SubmenuShowMode }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() submenuDirectionChange: EventEmitter<SubmenuDirection>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() tabIndexChange: EventEmitter<number>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() visibleChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() widthChange: EventEmitter<number | string | undefined>;
-
-
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,

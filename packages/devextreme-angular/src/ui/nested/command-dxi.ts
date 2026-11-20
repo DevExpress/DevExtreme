@@ -1,7 +1,5 @@
 /* tslint:disable:max-line-length */
-
 /* tslint:disable:use-input-property-decorator */
-
 import {
     Component,
     NgModule,
@@ -11,10 +9,6 @@ import {
     QueryList
 } from '@angular/core';
 
-
-
-
-
 import {
     DxIntegrationModule,
     NestedOptionHost,
@@ -23,6 +17,7 @@ import {
 import { DxiDiagramCustomCommand } from './base/diagram-custom-command-dxi';
 
 import { PROPERTY_TOKEN_commands } from 'devextreme-angular/core/tokens';
+
 import {
     PROPERTY_TOKEN_items,
 } from 'devextreme-angular/core/tokens';
@@ -60,7 +55,6 @@ export class DxiCommandComponent extends DxiDiagramCustomCommand {
         return 'commands';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -73,7 +67,6 @@ export class DxiCommandComponent extends DxiDiagramCustomCommand {
     ngOnDestroy() {
         this._deleteRemovedOptions(this._fullOptionPath());
     }
-
 }
 
 @NgModule({

@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     TransferState,
     Component,
@@ -9,7 +7,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -45,7 +42,6 @@ import {
 
 
 
-
 const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
     provide: NG_VALUE_ACCESSOR,
     useExisting: forwardRef(() => DxSwitchComponent),
@@ -53,7 +49,6 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
 };
 /**
  * [descr:dxSwitch]
-
  */
 @Component({
     selector: 'dx-switch',
@@ -74,7 +69,6 @@ export class DxSwitchComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:WidgetOptions.accessKey]
-    
      */
     @Input()
     get accessKey(): string | undefined {
@@ -84,10 +78,8 @@ export class DxSwitchComponent extends DxComponent implements OnDestroy, Control
         this._setOption('accessKey', value);
     }
 
-
     /**
      * [descr:dxSwitchOptions.activeStateEnabled]
-    
      */
     @Input()
     get activeStateEnabled(): boolean {
@@ -97,10 +89,8 @@ export class DxSwitchComponent extends DxComponent implements OnDestroy, Control
         this._setOption('activeStateEnabled', value);
     }
 
-
     /**
      * [descr:WidgetOptions.disabled]
-    
      */
     @Input()
     get disabled(): boolean {
@@ -110,10 +100,8 @@ export class DxSwitchComponent extends DxComponent implements OnDestroy, Control
         this._setOption('disabled', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.elementAttr]
-    
      */
     @Input()
     get elementAttr(): Record<string, any> {
@@ -123,10 +111,8 @@ export class DxSwitchComponent extends DxComponent implements OnDestroy, Control
         this._setOption('elementAttr', value);
     }
 
-
     /**
      * [descr:dxSwitchOptions.focusStateEnabled]
-    
      */
     @Input()
     get focusStateEnabled(): boolean {
@@ -136,10 +122,8 @@ export class DxSwitchComponent extends DxComponent implements OnDestroy, Control
         this._setOption('focusStateEnabled', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.height]
-    
      */
     @Input()
     get height(): number | string | undefined {
@@ -149,10 +133,8 @@ export class DxSwitchComponent extends DxComponent implements OnDestroy, Control
         this._setOption('height', value);
     }
 
-
     /**
      * [descr:WidgetOptions.hint]
-    
      */
     @Input()
     get hint(): string | undefined {
@@ -162,10 +144,8 @@ export class DxSwitchComponent extends DxComponent implements OnDestroy, Control
         this._setOption('hint', value);
     }
 
-
     /**
      * [descr:dxSwitchOptions.hoverStateEnabled]
-    
      */
     @Input()
     get hoverStateEnabled(): boolean {
@@ -175,10 +155,8 @@ export class DxSwitchComponent extends DxComponent implements OnDestroy, Control
         this._setOption('hoverStateEnabled', value);
     }
 
-
     /**
      * [descr:EditorOptions.isDirty]
-    
      */
     @Input()
     get isDirty(): boolean {
@@ -188,10 +166,8 @@ export class DxSwitchComponent extends DxComponent implements OnDestroy, Control
         this._setOption('isDirty', value);
     }
 
-
     /**
      * [descr:EditorOptions.isValid]
-    
      */
     @Input()
     get isValid(): boolean {
@@ -201,10 +177,8 @@ export class DxSwitchComponent extends DxComponent implements OnDestroy, Control
         this._setOption('isValid', value);
     }
 
-
     /**
      * [descr:dxSwitchOptions.name]
-    
      */
     @Input()
     get name(): string {
@@ -214,10 +188,8 @@ export class DxSwitchComponent extends DxComponent implements OnDestroy, Control
         this._setOption('name', value);
     }
 
-
     /**
      * [descr:EditorOptions.readOnly]
-    
      */
     @Input()
     get readOnly(): boolean {
@@ -227,10 +199,8 @@ export class DxSwitchComponent extends DxComponent implements OnDestroy, Control
         this._setOption('readOnly', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
-    
      */
     @Input()
     get rtlEnabled(): boolean {
@@ -240,10 +210,8 @@ export class DxSwitchComponent extends DxComponent implements OnDestroy, Control
         this._setOption('rtlEnabled', value);
     }
 
-
     /**
      * [descr:dxSwitchOptions.switchedOffText]
-    
      */
     @Input()
     get switchedOffText(): string {
@@ -253,10 +221,8 @@ export class DxSwitchComponent extends DxComponent implements OnDestroy, Control
         this._setOption('switchedOffText', value);
     }
 
-
     /**
      * [descr:dxSwitchOptions.switchedOnText]
-    
      */
     @Input()
     get switchedOnText(): string {
@@ -266,10 +232,8 @@ export class DxSwitchComponent extends DxComponent implements OnDestroy, Control
         this._setOption('switchedOnText', value);
     }
 
-
     /**
      * [descr:WidgetOptions.tabIndex]
-    
      */
     @Input()
     get tabIndex(): number {
@@ -279,10 +243,8 @@ export class DxSwitchComponent extends DxComponent implements OnDestroy, Control
         this._setOption('tabIndex', value);
     }
 
-
     /**
      * [descr:EditorOptions.validationError]
-    
      */
     @Input()
     get validationError(): any | null {
@@ -292,10 +254,8 @@ export class DxSwitchComponent extends DxComponent implements OnDestroy, Control
         this._setOption('validationError', value);
     }
 
-
     /**
      * [descr:EditorOptions.validationErrors]
-    
      */
     @Input()
     get validationErrors(): Array<any> | null {
@@ -305,10 +265,8 @@ export class DxSwitchComponent extends DxComponent implements OnDestroy, Control
         this._setOption('validationErrors', value);
     }
 
-
     /**
      * [descr:EditorOptions.validationMessageMode]
-    
      */
     @Input()
     get validationMessageMode(): ValidationMessageMode {
@@ -318,10 +276,8 @@ export class DxSwitchComponent extends DxComponent implements OnDestroy, Control
         this._setOption('validationMessageMode', value);
     }
 
-
     /**
      * [descr:EditorOptions.validationMessagePosition]
-    
      */
     @Input()
     get validationMessagePosition(): Position {
@@ -331,10 +287,8 @@ export class DxSwitchComponent extends DxComponent implements OnDestroy, Control
         this._setOption('validationMessagePosition', value);
     }
 
-
     /**
      * [descr:EditorOptions.validationStatus]
-    
      */
     @Input()
     get validationStatus(): ValidationStatus {
@@ -344,10 +298,8 @@ export class DxSwitchComponent extends DxComponent implements OnDestroy, Control
         this._setOption('validationStatus', value);
     }
 
-
     /**
      * [descr:dxSwitchOptions.value]
-    
      */
     @Input()
     get value(): boolean {
@@ -357,10 +309,8 @@ export class DxSwitchComponent extends DxComponent implements OnDestroy, Control
         this._setOption('value', value);
     }
 
-
     /**
      * [descr:WidgetOptions.visible]
-    
      */
     @Input()
     get visible(): boolean {
@@ -370,10 +320,8 @@ export class DxSwitchComponent extends DxComponent implements OnDestroy, Control
         this._setOption('visible', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.width]
-    
      */
     @Input()
     get width(): number | string | undefined {
@@ -384,225 +332,156 @@ export class DxSwitchComponent extends DxComponent implements OnDestroy, Control
     }
 
     /**
-    
      * [descr:dxSwitchOptions.onContentReady]
-    
-    
      */
     @Output() onContentReady: EventEmitter<ContentReadyEvent>;
 
     /**
-    
      * [descr:dxSwitchOptions.onDisposing]
-    
-    
      */
     @Output() onDisposing: EventEmitter<DisposingEvent>;
 
     /**
-    
      * [descr:dxSwitchOptions.onInitialized]
-    
-    
      */
     @Output() onInitialized: EventEmitter<InitializedEvent>;
 
     /**
-    
      * [descr:dxSwitchOptions.onOptionChanged]
-    
-    
      */
     @Output() onOptionChanged: EventEmitter<OptionChangedEvent>;
 
     /**
-    
      * [descr:dxSwitchOptions.onValueChanged]
-    
-    
      */
     @Output() onValueChanged: EventEmitter<ValueChangedEvent>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() accessKeyChange: EventEmitter<string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() activeStateEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() disabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() elementAttrChange: EventEmitter<Record<string, any>>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() focusStateEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() heightChange: EventEmitter<number | string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() hintChange: EventEmitter<string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() hoverStateEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() isDirtyChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() isValidChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() nameChange: EventEmitter<string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() readOnlyChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() rtlEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() switchedOffTextChange: EventEmitter<string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() switchedOnTextChange: EventEmitter<string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() tabIndexChange: EventEmitter<number>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() validationErrorChange: EventEmitter<any | null>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() validationErrorsChange: EventEmitter<Array<any> | null>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() validationMessageModeChange: EventEmitter<ValidationMessageMode>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() validationMessagePositionChange: EventEmitter<Position>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() validationStatusChange: EventEmitter<ValidationStatus>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() valueChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() visibleChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() widthChange: EventEmitter<number | string | undefined>;
 
     /**
-    
      * [descr:undefined]
-    
-    
      */
     @Output() onBlur: EventEmitter<any>;
-
-
     @HostListener('valueChange', ['$event']) change(_) { }
     @HostListener('onBlur', ['$event']) touched = (_) => {};
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,

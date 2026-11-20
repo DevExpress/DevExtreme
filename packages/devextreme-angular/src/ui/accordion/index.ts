@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     TransferState,
     Component,
@@ -9,7 +7,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -29,7 +26,6 @@ import type { Store } from 'devextreme/data/store';
 
 import DxAccordion from 'devextreme/ui/accordion';
 
-
 import {
     DxComponent,
     DxTemplateHost,
@@ -45,13 +41,12 @@ import { DxiItemModule } from 'devextreme-angular/ui/nested';
 
 import { DxiAccordionItemModule } from 'devextreme-angular/ui/accordion/nested';
 import { 
-           PROPERTY_TOKEN_items,
-     } from 'devextreme-angular/core/tokens';
+    PROPERTY_TOKEN_items,
+} from 'devextreme-angular/core/tokens';
 
 
 /**
  * [descr:dxAccordion]
-
  */
 @Component({
     selector: 'dx-accordion',
@@ -76,7 +71,6 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
 
     /**
      * [descr:WidgetOptions.accessKey]
-    
      */
     @Input()
     get accessKey(): string | undefined {
@@ -86,10 +80,8 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
         this._setOption('accessKey', value);
     }
 
-
     /**
      * [descr:WidgetOptions.activeStateEnabled]
-    
      */
     @Input()
     get activeStateEnabled(): boolean {
@@ -99,10 +91,8 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
         this._setOption('activeStateEnabled', value);
     }
 
-
     /**
      * [descr:dxAccordionOptions.animationDuration]
-    
      */
     @Input()
     get animationDuration(): number {
@@ -112,10 +102,8 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
         this._setOption('animationDuration', value);
     }
 
-
     /**
      * [descr:dxAccordionOptions.collapsible]
-    
      */
     @Input()
     get collapsible(): boolean {
@@ -125,10 +113,8 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
         this._setOption('collapsible', value);
     }
 
-
     /**
      * [descr:dxAccordionOptions.dataSource]
-    
      */
     @Input()
     get dataSource(): Array<any | dxAccordionItem | string> | DataSource | DataSourceOptions | null | Store | string {
@@ -138,10 +124,8 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
         this._setOption('dataSource', value);
     }
 
-
     /**
      * [descr:dxAccordionOptions.deferRendering]
-    
      */
     @Input()
     get deferRendering(): boolean {
@@ -151,10 +135,8 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
         this._setOption('deferRendering', value);
     }
 
-
     /**
      * [descr:WidgetOptions.disabled]
-    
      */
     @Input()
     get disabled(): boolean {
@@ -164,10 +146,8 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
         this._setOption('disabled', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.elementAttr]
-    
      */
     @Input()
     get elementAttr(): Record<string, any> {
@@ -177,10 +157,8 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
         this._setOption('elementAttr', value);
     }
 
-
     /**
      * [descr:dxAccordionOptions.focusStateEnabled]
-    
      */
     @Input()
     get focusStateEnabled(): boolean {
@@ -190,10 +168,8 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
         this._setOption('focusStateEnabled', value);
     }
 
-
     /**
      * [descr:dxAccordionOptions.height]
-    
      */
     @Input()
     get height(): number | string | undefined {
@@ -203,10 +179,8 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
         this._setOption('height', value);
     }
 
-
     /**
      * [descr:WidgetOptions.hint]
-    
      */
     @Input()
     get hint(): string | undefined {
@@ -216,10 +190,8 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
         this._setOption('hint', value);
     }
 
-
     /**
      * [descr:dxAccordionOptions.hoverStateEnabled]
-    
      */
     @Input()
     get hoverStateEnabled(): boolean {
@@ -229,10 +201,8 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
         this._setOption('hoverStateEnabled', value);
     }
 
-
     /**
      * [descr:CollectionWidgetOptions.itemHoldTimeout]
-    
      */
     @Input()
     get itemHoldTimeout(): number {
@@ -242,10 +212,8 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
         this._setOption('itemHoldTimeout', value);
     }
 
-
     /**
      * [descr:dxAccordionOptions.items]
-    
      */
     @Input()
     get items(): Array<any | dxAccordionItem | string> {
@@ -255,10 +223,8 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
         this._setOption('items', value);
     }
 
-
     /**
      * [descr:dxAccordionOptions.itemTemplate]
-    
      */
     @Input()
     get itemTemplate(): any {
@@ -268,10 +234,8 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
         this._setOption('itemTemplate', value);
     }
 
-
     /**
      * [descr:dxAccordionOptions.itemTitleTemplate]
-    
      */
     @Input()
     get itemTitleTemplate(): any {
@@ -281,10 +245,8 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
         this._setOption('itemTitleTemplate', value);
     }
 
-
     /**
      * [descr:CollectionWidgetOptions.keyExpr]
-    
      */
     @Input()
     get keyExpr(): ((item: any) => any) | null | string {
@@ -294,10 +256,8 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
         this._setOption('keyExpr', value);
     }
 
-
     /**
      * [descr:dxAccordionOptions.multiple]
-    
      */
     @Input()
     get multiple(): boolean {
@@ -307,10 +267,8 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
         this._setOption('multiple', value);
     }
 
-
     /**
      * [descr:CollectionWidgetOptions.noDataText]
-    
      */
     @Input()
     get noDataText(): string {
@@ -320,10 +278,8 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
         this._setOption('noDataText', value);
     }
 
-
     /**
      * [descr:dxAccordionOptions.repaintChangesOnly]
-    
      */
     @Input()
     get repaintChangesOnly(): boolean {
@@ -333,10 +289,8 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
         this._setOption('repaintChangesOnly', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
-    
      */
     @Input()
     get rtlEnabled(): boolean {
@@ -346,10 +300,8 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
         this._setOption('rtlEnabled', value);
     }
 
-
     /**
      * [descr:dxAccordionOptions.selectedIndex]
-    
      */
     @Input()
     get selectedIndex(): number {
@@ -359,10 +311,8 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
         this._setOption('selectedIndex', value);
     }
 
-
     /**
      * [descr:CollectionWidgetOptions.selectedItem]
-    
      */
     @Input()
     get selectedItem(): any | null {
@@ -372,10 +322,8 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
         this._setOption('selectedItem', value);
     }
 
-
     /**
      * [descr:CollectionWidgetOptions.selectedItemKeys]
-    
      */
     @Input()
     get selectedItemKeys(): Array<any> {
@@ -385,10 +333,8 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
         this._setOption('selectedItemKeys', value);
     }
 
-
     /**
      * [descr:CollectionWidgetOptions.selectedItems]
-    
      */
     @Input()
     get selectedItems(): Array<any> {
@@ -398,10 +344,8 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
         this._setOption('selectedItems', value);
     }
 
-
     /**
      * [descr:WidgetOptions.tabIndex]
-    
      */
     @Input()
     get tabIndex(): number {
@@ -411,10 +355,8 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
         this._setOption('tabIndex', value);
     }
 
-
     /**
      * [descr:WidgetOptions.visible]
-    
      */
     @Input()
     get visible(): boolean {
@@ -424,10 +366,8 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
         this._setOption('visible', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.width]
-    
      */
     @Input()
     get width(): number | string | undefined {
@@ -438,283 +378,194 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
     }
 
     /**
-    
      * [descr:dxAccordionOptions.onContentReady]
-    
-    
      */
     @Output() onContentReady: EventEmitter<ContentReadyEvent>;
 
     /**
-    
      * [descr:dxAccordionOptions.onDisposing]
-    
-    
      */
     @Output() onDisposing: EventEmitter<DisposingEvent>;
 
     /**
-    
      * [descr:dxAccordionOptions.onInitialized]
-    
-    
      */
     @Output() onInitialized: EventEmitter<InitializedEvent>;
 
     /**
-    
      * [descr:dxAccordionOptions.onItemClick]
-    
-    
      */
     @Output() onItemClick: EventEmitter<ItemClickEvent>;
 
     /**
-    
      * [descr:dxAccordionOptions.onItemContextMenu]
-    
-    
      */
     @Output() onItemContextMenu: EventEmitter<ItemContextMenuEvent>;
 
     /**
-    
      * [descr:dxAccordionOptions.onItemHold]
-    
-    
      */
     @Output() onItemHold: EventEmitter<ItemHoldEvent>;
 
     /**
-    
      * [descr:dxAccordionOptions.onItemRendered]
-    
-    
      */
     @Output() onItemRendered: EventEmitter<ItemRenderedEvent>;
 
     /**
-    
      * [descr:dxAccordionOptions.onItemTitleClick]
-    
-    
      */
     @Output() onItemTitleClick: EventEmitter<ItemTitleClickEvent>;
 
     /**
-    
      * [descr:dxAccordionOptions.onOptionChanged]
-    
-    
      */
     @Output() onOptionChanged: EventEmitter<OptionChangedEvent>;
 
     /**
-    
      * [descr:dxAccordionOptions.onSelectionChanged]
-    
-    
      */
     @Output() onSelectionChanged: EventEmitter<SelectionChangedEvent>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() accessKeyChange: EventEmitter<string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() activeStateEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() animationDurationChange: EventEmitter<number>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() collapsibleChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() dataSourceChange: EventEmitter<Array<any | dxAccordionItem | string> | DataSource | DataSourceOptions | null | Store | string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() deferRenderingChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() disabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() elementAttrChange: EventEmitter<Record<string, any>>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() focusStateEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() heightChange: EventEmitter<number | string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() hintChange: EventEmitter<string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() hoverStateEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() itemHoldTimeoutChange: EventEmitter<number>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() itemsChange: EventEmitter<Array<any | dxAccordionItem | string>>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() itemTemplateChange: EventEmitter<any>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() itemTitleTemplateChange: EventEmitter<any>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() keyExprChange: EventEmitter<((item: any) => any) | null | string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() multipleChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() noDataTextChange: EventEmitter<string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() repaintChangesOnlyChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() rtlEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() selectedIndexChange: EventEmitter<number>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() selectedItemChange: EventEmitter<any | null>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() selectedItemKeysChange: EventEmitter<Array<any>>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() selectedItemsChange: EventEmitter<Array<any>>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() tabIndexChange: EventEmitter<number>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() visibleChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() widthChange: EventEmitter<number | string | undefined>;
-
-
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,

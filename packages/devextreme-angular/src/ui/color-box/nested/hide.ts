@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     Component,
     OnInit,
@@ -10,10 +8,6 @@ import {
     SkipSelf,
     Input
 } from '@angular/core';
-
-
-
-
 import type { AnimationConfig, AnimationState, AnimationType } from 'devextreme/common/core/animation';
 import type { Direction } from 'devextreme/common';
 
@@ -22,7 +16,6 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-color-box-hide',
@@ -117,7 +110,6 @@ export class DxoColorBoxHideComponent extends NestedOption implements OnDestroy,
         return 'hide';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -133,7 +125,6 @@ export class DxoColorBoxHideComponent extends NestedOption implements OnDestroy,
     ngOnDestroy() {
         this._addRemovedOption(this._getOptionPath());
     }
-
 
 }
 
