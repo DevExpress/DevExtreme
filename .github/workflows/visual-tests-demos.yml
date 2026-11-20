@@ -799,7 +799,6 @@ jobs:
       if: ${{ !cancelled() && matrix.STRATEGY == 'screenshots' }}
       run: echo "PLAYWRIGHT_JOB_NAME=$(echo "${{ matrix.CONSTEL }}-${{ matrix.THEME }}" | tr '/' '-')" >> $GITHUB_ENV
 
-    # The demo pages themselves are shot by Playwright; TestCafe above still runs the manual widget tests.
     - name: Run Playwright tests (jQuery)
       if: ${{ !cancelled() && matrix.STRATEGY == 'screenshots' }}
       timeout-minutes: 10
@@ -810,7 +809,6 @@ jobs:
         CONCURRENCY: 4
         CONSTEL: ${{ matrix.CONSTEL }}
         THEME: ${{ matrix.THEME }}
-        CI_ENV: true # The `ignore` field in the visualtestrc.json should be disabled when running test locally
         # The default blob name is built from the test paths only, so jobs that differ by theme or
         # shard alone would write the same zip and overwrite each other once merged.
         PLAYWRIGHT_BLOB_OUTPUT_NAME: report-${{ env.PLAYWRIGHT_JOB_NAME }}.zip

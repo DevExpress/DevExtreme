@@ -57,7 +57,7 @@ MIGRATED_FRAMEWORKS.forEach((approach) => {
       const testSettings = globalReadFrom(demoDir, 'visualtestrc.json', (x) => JSON.parse(x));
       const stepsPath = join(demoDir, 'playwright-test-code.js');
 
-      if (process.env.CI_ENV && !['all', 'ignore'].includes(process.env.DISABLE_DEMO_TEST_SETTINGS)) {
+      if (process.env.CI && !['all', 'ignore'].includes(process.env.DISABLE_DEMO_TEST_SETTINGS)) {
         const mergedTestSettings = { ...testSettings, ...testSettings?.[approach.toLowerCase()] };
 
         if (mergedTestSettings.ignore) { return; }

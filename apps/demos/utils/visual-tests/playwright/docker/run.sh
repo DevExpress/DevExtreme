@@ -44,6 +44,6 @@ done
 
 # DX_CONTAINER says the render matches the agent, which is what the exact comparison keys on.
 exec docker run --rm --platform linux/amd64 --shm-size=2gb --security-opt seccomp=unconfined \
-    -e "THEME=${THEME:-}" -e "CONSTEL=${CONSTEL:-jquery}" -e CI_ENV=true -e DX_CONTAINER=1 -e CI=true \
+    -e "THEME=${THEME:-}" -e "CONSTEL=${CONSTEL:-jquery}" -e DX_CONTAINER=1 -e CI=true \
     -v "$REPO_ROOT:/repo" -w /repo/apps/demos devextreme-playwright-e2e \
     bash -c "$SETUP && exec node_modules/.bin/playwright test \"\$@\"" playwright ${WORKERS:+"$WORKERS"} "$@"
