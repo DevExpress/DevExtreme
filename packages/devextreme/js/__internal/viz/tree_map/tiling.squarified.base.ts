@@ -1,26 +1,40 @@
 /* eslint-disable @typescript-eslint/init-declarations */
 /* eslint-disable func-names */
 /* eslint-disable @typescript-eslint/naming-convention */
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
 
+import type { RowData, TilingData, TilingItem } from '@ts/viz/tree_map/tiling';
 import { buildSidesData, calculateRectangles, getStaticSideIndex } from '@ts/viz/tree_map/tiling';
+
+type Accumulate = (total: number, current: number, count: number) => number;
+
+interface CollectionContext {
+  areaToValue: number;
+  accumulate: Accumulate;
+  staticSide: number;
+}
+
+interface StepContext {
+  sum: number;
+  rect: number[];
+  directions: number[];
+  accumulate: Accumulate;
+  staticSideIndex?: 0 | 1;
+}
 
 const _max = Math.max;
 const _round = Math.round;
 
-function compare(a, b): number { return b.value - a.value; }
+function compare(a: TilingItem, b: TilingItem): number { return b.value - a.value; }
 
-function getAspectRatio(value): number {
+function getAspectRatio(value: number): number {
   return _max(value, 1 / value);
 }
 
 function findAppropriateCollection(
-  nodes,
-  head,
-  context,
-): { sum: number; count: number; side: number } {
+  nodes: TilingItem[],
+  head: number,
+  context: CollectionContext,
+): RowData {
   let bestAspectRatio = Infinity;
   let nextAspectRatio;
   let sum = 0;
@@ -53,11 +67,11 @@ function findAppropriateCollection(
   return { sum, count: i - head, side: _round(coeff * sum) };
 }
 
-function getArea(rect): number {
+function getArea(rect: number[]): number {
   return (rect[2] - rect[0]) * (rect[3] - rect[1]);
 }
 
-function doStep(nodes, head, context) {
+function doStep(nodes: TilingItem[], head: number, context: StepContext): number {
   const sidesData = buildSidesData(context.rect, context.directions, context.staticSideIndex);
   const area = getArea(context.rect);
   const rowData = area > 0 ? findAppropriateCollection(nodes, head, {
@@ -71,18 +85,21 @@ function doStep(nodes, head, context) {
   return head + rowData.count;
 }
 
-export default function (data, accumulate, isFixedStaticSide): void {
+export default function (
+  data: TilingData,
+  accumulate: Accumulate,
+  isFixedStaticSide: boolean,
+): void {
   const { items } = data;
   const ii = items.length;
   let i;
-  const context = {
+  const context: StepContext = {
     sum: data.sum,
     rect: data.rect,
     directions: data.directions,
     accumulate,
   };
   if (isFixedStaticSide) {
-    // @ts-expect-error
     context.staticSideIndex = getStaticSideIndex(context.rect);
   }
   items.sort(compare);

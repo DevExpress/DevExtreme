@@ -1,4 +1,5 @@
 @use "../../../_design-system/variables/ds" as ds;
+@use "../colors" as *;
 
 $file-manager-border: ds.$color-border !default;
 $file-manager-file-toolbar-bg: ds.$color-bg-canvas !default;
@@ -18,8 +19,19 @@ $file-manager-file-item-border-focused: ds.$color-border-primary !default;
 $file-manager-item-content-focused: ds.$color-content-inverted !default;
 $file-manager-dirs-tree-item-bg-focused: ds.$color-bg-active !default;
 
-$file-manager-icon-success-content: #107c10 !default; // dx-data-uri-static: ds.$color-bg-success (mode-invariant)
-$file-manager-icon-danger-content: #c50f1f !default; // dx-data-uri-static: ds.$color-bg-danger (mode-invariant)
+$file-manager-icon-success-content: null !default;
+$file-manager-icon-danger-content: null !default;
+
+@if $mode == "light" {
+  $file-manager-icon-success-content: #107c10 !default; // dx-data-uri-static: ds.$color-bg-success
+  $file-manager-icon-danger-content: #c50f1f !default; // dx-data-uri-static: ds.$color-bg-danger
+}
+
+@if $mode == "dark" {
+  $file-manager-icon-success-content: #066f07 !default; // dx-data-uri-static: ds.$color-bg-success
+  $file-manager-icon-danger-content: #b20017 !default; // dx-data-uri-static: ds.$color-bg-danger
+}
+
 $file-manager-icon-static-content: #fff !default; // dx-data-uri-static: ds.$color-content-static-dark (mode-invariant)
 
 $file-manager-drop-zone-placeholder-border: ds.$color-border-primary !default;

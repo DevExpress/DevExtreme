@@ -262,7 +262,6 @@ jobs:
             { "componentFolder": "dataGrid", "name": "dataGrid (3/4)", "indices": "3/4", "cache": true, "concurrency": 5 },
             { "componentFolder": "dataGrid", "name": "dataGrid (4/4)", "indices": "4/4", "cache": true, "concurrency": 5 },
 
-            { "componentFolder": "editors", "name": "editors" },
             { "componentFolder": "navigation", "name": "navigation", "concurrency": 6 }
           ]
           JSON

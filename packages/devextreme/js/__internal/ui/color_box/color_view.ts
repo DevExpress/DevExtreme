@@ -505,7 +505,7 @@ class ColorView extends Editor<ColorViewProperties> {
     this.setAria(handleAria, this._$paletteHandle);
     this.setAria('activedescendant', ariaId, target);
 
-    this._createComponent(this._$paletteHandle, Draggable, {
+    this._createComponent<Draggable>(this._$paletteHandle, Draggable, {
       contentTemplate: null,
       boundary: this._$palette,
       allowMoveByClick: true,
@@ -585,7 +585,7 @@ class ColorView extends Editor<ColorViewProperties> {
       this._$hueScaleHandle = $('<div>')
         .addClass(COLOR_VIEW_HUE_SCALE_HANDLE_CLASS)
         .appendTo(this._$hueScaleWrapper);
-      this._createComponent(this._$hueScaleHandle, Draggable, {
+      this._createComponent<Draggable>(this._$hueScaleHandle, Draggable, {
         contentTemplate: null,
         boundary: this._$hueScaleWrapper,
         allowMoveByClick: true,
@@ -856,7 +856,7 @@ class ColorView extends Editor<ColorViewProperties> {
     this._$alphaChannelHandle = $('<div>')
       .addClass(COLOR_VIEW_ALPHA_CHANNEL_HANDLE_CLASS)
       .appendTo($parent);
-    this._createComponent(this._$alphaChannelHandle, Draggable, {
+    this._createComponent<Draggable>(this._$alphaChannelHandle, Draggable, {
       contentTemplate: null,
       boundary: $parent,
       allowMoveByClick: true,
