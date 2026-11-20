@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     Component,
     OnInit,
@@ -12,10 +10,6 @@ import {
     ContentChildren,
     QueryList
 } from '@angular/core';
-
-
-
-
 import type { dxSchedulerToolbarItem, SchedulerPredefinedToolbarItem } from 'devextreme/ui/scheduler';
 
 import {
@@ -79,7 +73,6 @@ export class DxoSchedulerToolbarComponent extends NestedOption implements OnDest
         return 'toolbar';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -95,7 +88,6 @@ export class DxoSchedulerToolbarComponent extends NestedOption implements OnDest
     ngOnDestroy() {
         this._addRemovedOption(this._getOptionPath());
     }
-
 
 }
 

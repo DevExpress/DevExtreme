@@ -1,7 +1,5 @@
 /* tslint:disable:max-line-length */
-
 /* tslint:disable:use-input-property-decorator */
-
 import {
     Component,
     OnInit,
@@ -12,10 +10,6 @@ import {
     ContentChildren,
     QueryList
 } from '@angular/core';
-
-
-
-
 
 import {
     DxIntegrationModule,
@@ -60,7 +54,6 @@ export class DxoToolbarComponent extends DxoDataGridToolbar implements OnDestroy
         return 'toolbar';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -76,7 +69,6 @@ export class DxoToolbarComponent extends DxoDataGridToolbar implements OnDestroy
     ngOnDestroy() {
         this._addRemovedOption(this._getOptionPath());
     }
-
 
 }
 

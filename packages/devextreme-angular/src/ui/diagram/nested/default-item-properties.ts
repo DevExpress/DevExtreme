@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     Component,
     OnInit,
@@ -10,10 +8,6 @@ import {
     SkipSelf,
     Input
 } from '@angular/core';
-
-
-
-
 import type { ConnectorLineEnd, ConnectorLineType } from 'devextreme/ui/diagram';
 
 import {
@@ -21,7 +15,6 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-diagram-default-item-properties',
@@ -108,7 +101,6 @@ export class DxoDiagramDefaultItemPropertiesComponent extends NestedOption imple
         return 'defaultItemProperties';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -124,7 +116,6 @@ export class DxoDiagramDefaultItemPropertiesComponent extends NestedOption imple
     ngOnDestroy() {
         this._addRemovedOption(this._getOptionPath());
     }
-
 
 }
 

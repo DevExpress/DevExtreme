@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     Component,
     NgModule,
@@ -8,10 +6,6 @@ import {
     SkipSelf,
     Input
 } from '@angular/core';
-
-
-
-
 import type { ValidationRuleType } from 'devextreme/common';
 
 import {
@@ -81,7 +75,6 @@ export class DxiDataGridAsyncRuleComponent extends CollectionNestedOption {
         return 'validationRules';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -96,7 +89,6 @@ export class DxiDataGridAsyncRuleComponent extends CollectionNestedOption {
     ngOnDestroy() {
         this._deleteRemovedOptions(this._fullOptionPath());
     }
-
 }
 
 @NgModule({

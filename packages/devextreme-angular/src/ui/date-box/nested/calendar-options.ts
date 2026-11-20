@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     Component,
     OnInit,
@@ -12,10 +10,6 @@ import {
     Output,
     EventEmitter
 } from '@angular/core';
-
-
-
-
 import type { DisabledDate, CalendarZoomLevel, DisposingEvent, InitializedEvent, OptionChangedEvent, ValueChangedEvent, CalendarSelectionMode, WeekNumberRule } from 'devextreme/ui/calendar';
 import type { DayOfWeek, ValidationMessageMode, Position, ValidationStatus } from 'devextreme/common';
 
@@ -24,7 +18,6 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-date-box-calendar-options',
@@ -380,7 +373,6 @@ export class DxoDateBoxCalendarOptionsComponent extends NestedOption implements 
         return 'calendarOptions';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -401,7 +393,6 @@ export class DxoDateBoxCalendarOptionsComponent extends NestedOption implements 
     ngOnDestroy() {
         this._addRemovedOption(this._getOptionPath());
     }
-
 
 }
 

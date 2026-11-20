@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     Component,
     OnInit,
@@ -12,10 +10,6 @@ import {
     ContentChildren,
     QueryList
 } from '@angular/core';
-
-
-
-
 import type { DataGridPredefinedToolbarItem, dxDataGridToolbarItem } from 'devextreme/ui/data_grid';
 
 import {
@@ -71,7 +65,6 @@ export class DxoDataGridToolbarComponent extends NestedOption implements OnDestr
         return 'toolbar';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -87,7 +80,6 @@ export class DxoDataGridToolbarComponent extends NestedOption implements OnDestr
     ngOnDestroy() {
         this._addRemovedOption(this._getOptionPath());
     }
-
 
 }
 

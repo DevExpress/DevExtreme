@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     Component,
     OnInit,
@@ -10,10 +8,6 @@ import {
     SkipSelf,
     Input
 } from '@angular/core';
-
-
-
-
 import type { SliderValueChangeMode } from 'devextreme/common';
 
 import {
@@ -21,7 +15,6 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-range-selector-behavior',
@@ -84,7 +77,6 @@ export class DxoRangeSelectorBehaviorComponent extends NestedOption implements O
         return 'behavior';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -100,7 +92,6 @@ export class DxoRangeSelectorBehaviorComponent extends NestedOption implements O
     ngOnDestroy() {
         this._addRemovedOption(this._getOptionPath());
     }
-
 
 }
 

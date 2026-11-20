@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     Component,
     NgModule,
@@ -12,10 +10,7 @@ import {
     SkipSelf,
     Input
 } from '@angular/core';
-
 import { DOCUMENT } from '@angular/common';
-
-
 import type { ItemClickEvent } from 'devextreme/ui/drop_down_button';
 
 import {
@@ -115,7 +110,6 @@ export class DxiDropDownButtonItemComponent extends CollectionNestedOption imple
         return 'items';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost,
             private renderer: Renderer2,
@@ -136,11 +130,9 @@ export class DxiDropDownButtonItemComponent extends CollectionNestedOption imple
     }
 
 
-
     ngOnDestroy() {
         this._deleteRemovedOptions(this._fullOptionPath());
     }
-
 }
 
 @NgModule({

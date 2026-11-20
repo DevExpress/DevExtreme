@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     Component,
     OnInit,
@@ -16,10 +14,7 @@ import {
     ContentChildren,
     QueryList
 } from '@angular/core';
-
 import { DOCUMENT } from '@angular/common';
-
-
 import type * as CommonTypes from 'devextreme/common';
 import type { FormItemComponent, FormItemType, LabelLocation } from 'devextreme/ui/form';
 import type { HorizontalAlignment } from 'devextreme/common';
@@ -178,7 +173,6 @@ export class DxoTreeListFormItemComponent extends NestedOption implements AfterV
         return 'formItem';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost,
             private renderer: Renderer2,
@@ -198,7 +192,6 @@ export class DxoTreeListFormItemComponent extends NestedOption implements AfterV
         extractTemplate(this, this.element, this.renderer, this.document);
     }
 
-
     ngOnInit() {
         this._addRecreatedComponent();
     }
@@ -206,7 +199,6 @@ export class DxoTreeListFormItemComponent extends NestedOption implements AfterV
     ngOnDestroy() {
         this._addRemovedOption(this._getOptionPath());
     }
-
 
 }
 

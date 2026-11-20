@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     Component,
     OnInit,
@@ -11,16 +9,11 @@ import {
     Input
 } from '@angular/core';
 
-
-
-
-
 import {
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-menu-offset',
@@ -51,7 +44,6 @@ export class DxoMenuOffsetComponent extends NestedOption implements OnDestroy, O
         return 'offset';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -67,7 +59,6 @@ export class DxoMenuOffsetComponent extends NestedOption implements OnDestroy, O
     ngOnDestroy() {
         this._addRemovedOption(this._getOptionPath());
     }
-
 
 }
 

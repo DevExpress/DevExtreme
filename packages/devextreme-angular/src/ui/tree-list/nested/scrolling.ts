@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     Component,
     OnInit,
@@ -10,10 +8,6 @@ import {
     SkipSelf,
     Input
 } from '@angular/core';
-
-
-
-
 import type { DataRenderMode } from 'devextreme/common/grids';
 import type { ScrollMode, ScrollbarMode, Mode } from 'devextreme/common';
 
@@ -22,7 +16,6 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-tree-list-scrolling',
@@ -109,7 +102,6 @@ export class DxoTreeListScrollingComponent extends NestedOption implements OnDes
         return 'scrolling';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -125,7 +117,6 @@ export class DxoTreeListScrollingComponent extends NestedOption implements OnDes
     ngOnDestroy() {
         this._addRemovedOption(this._getOptionPath());
     }
-
 
 }
 
