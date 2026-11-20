@@ -11,7 +11,7 @@ import { getData } from '../../dataGrid/helpers/generateDataSourceData';
   'form',
   'popup',
 ] as const).forEach((mode) => {
-  test(`Embedded editors in ${mode} edit mode shoud have aria-label attribute`, async ({ page }) => {
+  test(`Embedded editors in ${mode} edit mode should have aria-label attribute`, async ({ page }) => {
     await createWidget(page, 'dxDataGrid', {
       dataSource: getData(3, 2),
       height: 400,
