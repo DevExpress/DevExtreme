@@ -631,6 +631,22 @@ const testCollision = (name, fixtureName, params, expectedHorzDist, expectedVert
         }
     });
 
+    QUnit.test('fit should round the location to the nearest pixel when the element has a fractional width', function(assert) {
+        fixtures.customBoundary.create();
+        try {
+            $('#where').css({ left: '250px' });
+            $('#what').css({ width: '39.03125px' });
+            setupPosition('#what', { my: 'right', at: 'right', of: '#where', collision: 'fit', boundary: '#boundary', boundaryOffset: '2 0' });
+
+            const boundaryRight = $('#boundary').get(0).getBoundingClientRect().right;
+            const whatRight = $('#what').get(0).getBoundingClientRect().right;
+
+            assert.roughEqual(boundaryRight - whatRight, 2, 0.5, 'distance to the boundary');
+        } finally {
+            fixtures.customBoundary.drop();
+        }
+    });
+
     testPosition(
         'left boundary offset is applied correctly',
         'customBoundary',

@@ -431,23 +431,19 @@ const calculatePosition = function calculatePosition(
       boundaryHeight = Number(getHeight($boundary));
     } else {
       const viewportSize = getViewportSize(windowWidth, windowHeight);
-      boundaryWidth = viewportSize.width;
-      boundaryHeight = viewportSize.height;
+      boundaryWidth = Math.floor(viewportSize.width);
+      boundaryHeight = Math.floor(viewportSize.height);
     }
 
-    const roundInward = ({ min, max }: AxisBounds): AxisBounds => (options.precise
-      ? { min, max }
-      : { min: Math.ceil(min), max: Math.floor(max) });
-
     return {
-      h: roundInward({
+      h: {
         min: left + h.boundaryOffset,
         max: left + boundaryWidth / hZoomLevel - h.mySize - h.boundaryOffset,
-      }),
-      v: roundInward({
+      },
+      v: {
         min: top + v.boundaryOffset,
         max: top + boundaryHeight / vZoomLevel - v.mySize - v.boundaryOffset,
-      }),
+      },
     };
   }());
 
