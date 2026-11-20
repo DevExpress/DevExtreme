@@ -1,5 +1,6 @@
 import type { Locator } from '@playwright/test';
 import { expectClass } from './internal/classMatcher';
+import type { ScrollableDirection } from './scrollable';
 
 const CLASS = {
   scrollbar: 'dx-scrollbar',
@@ -15,7 +16,7 @@ export interface ScrollTranslate {
 export default class Scrollbar {
   public readonly element: Locator;
 
-  constructor(root: Locator, direction: string) {
+  constructor(root: Locator, direction: ScrollableDirection) {
     this.element = root.locator(`.${CLASS.scrollbar}-${direction}`);
   }
 
