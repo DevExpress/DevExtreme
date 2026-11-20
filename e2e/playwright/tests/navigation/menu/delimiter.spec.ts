@@ -89,7 +89,7 @@ test.describe('Menu_common', () => {
 
           // The page overflows the window. TestCafe scrolled the whole item into view before the
           // click; Playwright scrolls only to the click point, so the focus scrolls the page
-          // afterwards, and the submenu closes on that scroll.
+          // afterward, and the submenu closes on that scroll.
           await scrollIntoView(item);
           await item.click();
 
