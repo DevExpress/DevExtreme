@@ -66,7 +66,7 @@ describe('DataGrid editing', () => {
     }];
   });
   afterEach(afterTest);
-      
+
   describe('Command buttons', () => {
     it('should have role="button"', async () => {
       // arrange
@@ -124,7 +124,7 @@ describe('DataGrid editing', () => {
       expect(onClick).toHaveBeenCalledTimes(1);
     });
   });
-  
+
   describe('Command icon buttons', () => {
     it('should have aria-label based on hint, text, built-in localized label, and icon name', async () => {
       // arrange
