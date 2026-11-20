@@ -140,7 +140,11 @@ export default createExecutor<PrepareSubmodulesExecutorSchema, ResolvedPrepareSu
     }
 
     const modulesPaths = modulesImportsFromIndex.matchAll(REGEX_IMPORTS);
-    const packParamsForModules: PackParam[] = Array.from(modulesPaths).map(([, modulePath]) => {
+    const packParamsForModules: PackParam[] = Array.from(modulesPaths).map(([, importPath]) => {
+      // A fully specified import ('./button.js') names the same module as './button'
+      const modulePath = importPath.endsWith(JS_EXTENSION)
+        ? importPath.slice(0, -JS_EXTENSION.length)
+        : importPath;
       const match = modulePath.match(REGEX_PARSE_MODULE) || [];
       const moduleFilePath = match[2] as string | undefined;
       const moduleFileName = match[3] as string | undefined;

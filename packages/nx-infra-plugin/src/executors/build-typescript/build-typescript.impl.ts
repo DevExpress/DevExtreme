@@ -9,6 +9,7 @@ import { TsConfig, CompilerOptions } from '../../utils/types';
 import { normalizeGlobPathForWindows, toPosixPath } from '../../utils/path-resolver';
 import { isWindowsOS } from '../../utils/common';
 import { exists, ensureDir, writeFileText } from '../../utils/file-operations';
+import { createFullySpecifiedImportsTransformer } from './fully-specified-imports';
 
 type AliasTranspileFunc = (filePath: string, fileContents: string) => string;
 
@@ -36,6 +37,7 @@ interface ResolvedConfig {
   excludePatterns: string[];
   resolvePaths: boolean;
   resolvePathsBaseDir?: string;
+  customTransformers?: ts.CustomTransformers;
 }
 
 interface EmitProgramResult {
@@ -46,6 +48,7 @@ interface EmitOptions {
   aliasTranspileFunc?: AliasTranspileFunc;
   outDir: string;
   aliasPath?: string;
+  customTransformers?: ts.CustomTransformers;
 }
 
 function resolveExecutorConfig(
@@ -62,6 +65,13 @@ function resolveExecutorConfig(
     resolvePaths: options.resolvePaths ?? false,
     resolvePathsBaseDir: options.resolvePathsBaseDir
       ? path.join(projectRoot, options.resolvePathsBaseDir)
+      : undefined,
+    customTransformers: options.fullySpecifiedImports
+      ? {
+          after: [
+            createFullySpecifiedImportsTransformer({ aliases: options.resolvePaths ?? false }),
+          ],
+        }
       : undefined,
   };
 }
@@ -177,19 +187,25 @@ async function emitWithAliasResolution(
   program: ts.Program,
   emitOptions: EmitOptions,
 ): Promise<{ success: boolean; diagnostics: ts.Diagnostic[] }> {
-  const { aliasTranspileFunc, outDir, aliasPath } = emitOptions;
+  const { aliasTranspileFunc, outDir, aliasPath, customTransformers } = emitOptions;
   const emittedFiles: Array<{ path: string; content: string }> = [];
 
-  const result = program.emit(undefined, (filePath, fileData) => {
-    let finalContent = fileData;
+  const result = program.emit(
+    undefined,
+    (filePath, fileData) => {
+      let finalContent = fileData;
 
-    if (aliasTranspileFunc && aliasPath) {
-      const normalizedFilePath = replacePathPrefix(filePath, outDir, aliasPath);
-      finalContent = aliasTranspileFunc(normalizedFilePath, fileData);
-    }
+      if (aliasTranspileFunc && aliasPath) {
+        const normalizedFilePath = replacePathPrefix(filePath, outDir, aliasPath);
+        finalContent = aliasTranspileFunc(normalizedFilePath, fileData);
+      }
 
-    emittedFiles.push({ path: filePath, content: finalContent });
-  });
+      emittedFiles.push({ path: filePath, content: finalContent });
+    },
+    undefined,
+    undefined,
+    customTransformers,
+  );
 
   for (const file of emittedFiles) {
     const dir = path.dirname(file.path);
@@ -216,6 +232,7 @@ async function emitWithPathAliasResolution(
     aliasTranspileFunc,
     outDir: config.outDir,
     aliasPath: config.resolvePathsBaseDir,
+    customTransformers: config.customTransformers,
   });
 
   if (!success) {
@@ -226,8 +243,11 @@ async function emitWithPathAliasResolution(
   return { success };
 }
 
-function emitStandard(program: ts.Program): EmitProgramResult {
-  const result = program.emit();
+function emitStandard(
+  program: ts.Program,
+  customTransformers?: ts.CustomTransformers,
+): EmitProgramResult {
+  const result = program.emit(undefined, undefined, undefined, undefined, customTransformers);
 
   if (result.emitSkipped) {
     logger.error(ERROR_MESSAGES.COMPILATION_FAILED);
@@ -282,6 +302,24 @@ async function runWatch(config: ResolvedConfig): Promise<void> {
     ts.sys.writeFile(filePath, content, writeByteOrderMark);
   };
   (host as { writeFile?: ts.WriteFileCallback }).writeFile = emitWriteFile;
+
+  if (config.customTransformers) {
+    const { customTransformers } = config;
+    const afterProgramCreate = host.afterProgramCreate;
+    host.afterProgramCreate = (builderProgram) => {
+      const emit = builderProgram.emit.bind(builderProgram);
+      builderProgram.emit = (targetSourceFile, writeFile, cancellationToken, emitOnlyDts, custom) =>
+        emit(
+          targetSourceFile,
+          writeFile,
+          cancellationToken,
+          emitOnlyDts,
+          custom ?? customTransformers,
+        );
+      afterProgramCreate?.(builderProgram);
+    };
+  }
+
   const watchProgram = ts.createWatchProgram(host);
   logger.verbose(`TypeScript watch is emitting to ${config.outDir}...`);
 
@@ -337,7 +375,7 @@ export default createExecutor<BuildTypescriptExecutorSchema, ResolvedBuildTypesc
     const emitResult =
       config.resolvePaths && config.resolvePathsBaseDir
         ? await emitWithPathAliasResolution(program, config)
-        : emitStandard(program);
+        : emitStandard(program, config.customTransformers);
 
     if (!emitResult.success) {
       throw new Error(ERROR_MESSAGES.COMPILATION_FAILED);

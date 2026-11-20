@@ -1,0 +1,260 @@
+import * as fs from 'fs';
+import * as path from 'path';
+import { glob } from 'glob';
+import { logger } from '@nx/devkit';
+import { createExecutor } from '../../utils/create-executor';
+import { readJson, writeJson } from '../../utils/file-operations';
+import { toPosixPath } from '../../utils/path-resolver';
+import { ExportsTarget, GenerateExportsMapExecutorSchema } from './schema';
+
+type ExportsMap = Record<string, ExportsTarget>;
+
+interface ModuleStub {
+  main?: string;
+  module?: string;
+  typings?: string;
+}
+
+const PACKAGE_JSON = 'package.json';
+const DTS_EXTENSION = '.d.ts';
+const JS_EXTENSION = '.js';
+const INDEX_FILE = 'index.js';
+const INDEX_DTS_FILE = 'index.d.ts';
+
+const ERROR_DUPLICATE_SUBPATH = (subpath: string) =>
+  `extraExports redefines a generated subpath: ${subpath}`;
+const ERROR_MISSING_TARGETS = (missing: string[]) =>
+  `The exports map points to files that do not exist:\n${missing.join('\n')}`;
+
+function toSubpath(packageDir: string, absolutePath: string): string {
+  const relative = toPosixPath(path.relative(packageDir, absolutePath));
+  return relative ? `./${relative}` : '.';
+}
+
+// `module` comes first, so bundlers resolve both import and require() to esm/, as they do through
+// the stub's `module` field today, and an app never loads two copies of the package.
+// Node and Jest ignore `module` and keep loading cjs/ through require().
+export function createStubEntry(
+  stubPath: string,
+  stub: ModuleStub,
+  packageDir: string,
+): ExportsTarget | null {
+  const stubDir = path.dirname(stubPath);
+  const resolveTarget = (file?: string) =>
+    file ? toSubpath(packageDir, path.resolve(stubDir, file)) : undefined;
+
+  const esm = resolveTarget(stub.module);
+  const cjs = resolveTarget(stub.main);
+  const types = resolveTarget(stub.typings);
+  const fallback = esm ?? cjs;
+
+  if (!fallback) {
+    return null;
+  }
+
+  return {
+    ...(types && { types }),
+    ...(esm && { module: esm, import: esm }),
+    ...(cjs && { require: cjs }),
+    default: fallback,
+  };
+}
+
+// The root entry comes from the root package.json fields: { types } alone for a package
+// without a root module, such as devextreme, or a full entry for main/module, such as devextreme-react.
+export function createRootEntry(
+  rootPackageJsonPath: string,
+  pkg: Record<string, unknown>,
+  packageDir: string,
+): ExportsTarget | null {
+  const field = (name: string) =>
+    typeof pkg[name] === 'string' ? (pkg[name] as string) : undefined;
+  const stub: ModuleStub = {
+    main: field('main'),
+    module: field('module'),
+    typings: field('types'),
+  };
+  const entry = createStubEntry(rootPackageJsonPath, stub, packageDir);
+
+  if (entry || !stub.typings) {
+    return entry;
+  }
+
+  return { types: toSubpath(packageDir, path.resolve(packageDir, stub.typings)) };
+}
+
+// './ui/button_types.d.ts' -> './ui/button_types', './data/index.d.ts' -> './data'
+export function toTypeOnlySubpath(dtsSubpath: string): string {
+  const withoutExtension = dtsSubpath.slice(0, -DTS_EXTENSION.length);
+  return withoutExtension.endsWith('/index')
+    ? withoutExtension.slice(0, -'/index'.length)
+    : withoutExtension;
+}
+
+// Entries for type imports with a '.d' suffix ('pkg/ui/button.d'): a './ui/*.d' pattern per folder
+// and an explicit entry per root file ('./common.d'). A root './*.d' pattern would also do, but
+// Node warns (DEP0155) on every 'pkg/' request when a pattern key starts with './*', and bundlers
+// make such requests for prefix shares, such as 'devextreme/' in Module Federation.
+export function createDeclarationImportEntries(dtsFiles: string[]): ExportsMap {
+  const entries: ExportsMap = {};
+
+  for (const dtsFile of dtsFiles) {
+    const separatorIndex = dtsFile.indexOf('/');
+    if (separatorIndex === -1) {
+      const withoutTs = dtsFile.slice(0, -'.ts'.length);
+      entries[`./${withoutTs}`] = { types: `./${dtsFile}` };
+    } else {
+      const folder = dtsFile.slice(0, separatorIndex);
+      entries[`./${folder}/*.d`] = { types: `./${folder}/*.d.ts` };
+    }
+  }
+
+  return entries;
+}
+
+export async function createDirectoryIndexEntries(
+  packageDir: string,
+  folders: string[],
+  typesFrom: Record<string, string> = {},
+): Promise<ExportsMap> {
+  const entries: ExportsMap = {};
+
+  for (const folder of folders) {
+    const indexFiles = await glob(`${folder}/**/${INDEX_FILE}`, { cwd: packageDir, posix: true });
+    const typesFolder = typesFrom[folder] ?? folder;
+
+    for (const indexFile of indexFiles.sort()) {
+      const folderPath = indexFile.slice(0, -`/${INDEX_FILE}`.length);
+      if (fs.existsSync(path.join(packageDir, `${folderPath}${JS_EXTENSION}`))) {
+        continue;
+      }
+
+      const types = `${typesFolder}${folderPath.slice(folder.length)}/${INDEX_DTS_FILE}`;
+      entries[`./${folderPath}`] = fs.existsSync(path.join(packageDir, types))
+        ? { types: `./${types}`, default: `./${indexFile}` }
+        : `./${indexFile}`;
+    }
+  }
+
+  return entries;
+}
+
+function collectTargets(target: ExportsTarget): string[] {
+  return typeof target === 'string' ? [target] : Object.values(target);
+}
+
+function findMissingTargets(packageDir: string, exportsMap: ExportsMap): string[] {
+  return Object.entries(exportsMap)
+    .filter(([subpath]) => !subpath.includes('*'))
+    .flatMap(([subpath, target]) =>
+      collectTargets(target)
+        .filter((file) => !fs.existsSync(path.join(packageDir, file)))
+        .map((file) => `${subpath} -> ${file}`),
+    );
+}
+
+interface ResolvedGenerateExportsMap {
+  packageDir: string;
+  ignore: string[];
+  declarationImports: boolean;
+  directoryIndexes: string[];
+  directoryIndexTypesFrom: Record<string, string>;
+  extraExports: ExportsMap;
+}
+
+export default createExecutor<GenerateExportsMapExecutorSchema, ResolvedGenerateExportsMap>({
+  name: 'GenerateExportsMap',
+  resolve: (options, { projectRoot }) => ({
+    packageDir: path.resolve(projectRoot, options.packageDir),
+    ignore: options.ignore ?? [],
+    declarationImports: options.declarationImports ?? false,
+    directoryIndexes: options.directoryIndexes ?? [],
+    directoryIndexTypesFrom: options.directoryIndexTypesFrom ?? {},
+    extraExports: options.extraExports ?? {},
+  }),
+  run: async ({
+    packageDir,
+    ignore,
+    declarationImports,
+    directoryIndexes,
+    directoryIndexTypesFrom,
+    extraExports,
+  }) => {
+    const rootPackageJsonPath = path.join(packageDir, PACKAGE_JSON);
+    const pkg = await readJson<Record<string, unknown>>(rootPackageJsonPath);
+    const globIgnore = ['node_modules/**', ...ignore.map((dir) => `${dir}/**`)];
+
+    const exportsMap: ExportsMap = {};
+
+    const rootEntry = createRootEntry(rootPackageJsonPath, pkg, packageDir);
+    if (rootEntry) {
+      exportsMap['.'] = rootEntry;
+    }
+    exportsMap['./package.json'] = './package.json';
+
+    const stubPaths = await glob(`**/${PACKAGE_JSON}`, {
+      cwd: packageDir,
+      absolute: true,
+      ignore: [PACKAGE_JSON, ...globIgnore],
+    });
+    let stubCount = 0;
+
+    for (const stubPath of stubPaths.sort()) {
+      const entry = createStubEntry(stubPath, await readJson<ModuleStub>(stubPath), packageDir);
+      if (entry) {
+        exportsMap[toSubpath(packageDir, path.dirname(stubPath))] = entry;
+        stubCount += 1;
+      }
+    }
+
+    // Declarations without a stub are type-only modules, such as ui/button_types
+    const dtsFiles = await glob(`**/*${DTS_EXTENSION}`, {
+      cwd: packageDir,
+      posix: true,
+      ignore: globIgnore,
+    });
+    let typeOnlyCount = 0;
+
+    // Sorted so that 'data.d.ts' wins over 'data/index.d.ts', as in TypeScript resolution
+    for (const dtsFile of dtsFiles.sort()) {
+      const types = `./${dtsFile}`;
+      const subpath = toTypeOnlySubpath(types);
+      if (!(subpath in exportsMap)) {
+        exportsMap[subpath] = { types };
+        typeOnlyCount += 1;
+      }
+    }
+
+    if (declarationImports) {
+      Object.assign(exportsMap, createDeclarationImportEntries(dtsFiles));
+    }
+
+    const directoryIndexEntries = await createDirectoryIndexEntries(
+      packageDir,
+      directoryIndexes,
+      directoryIndexTypesFrom,
+    );
+    Object.assign(exportsMap, directoryIndexEntries);
+
+    for (const [subpath, target] of Object.entries(extraExports)) {
+      if (subpath in exportsMap) {
+        throw new Error(ERROR_DUPLICATE_SUBPATH(subpath));
+      }
+      exportsMap[subpath] = target;
+    }
+
+    const missing = findMissingTargets(packageDir, exportsMap);
+    if (missing.length > 0) {
+      throw new Error(ERROR_MISSING_TARGETS(missing));
+    }
+
+    pkg['exports'] = exportsMap;
+    await writeJson(rootPackageJsonPath, pkg);
+
+    logger.verbose(
+      `Generated exports in ${rootPackageJsonPath}: ${stubCount} modules, ${typeOnlyCount} type-only modules, `
+        + `${Object.keys(directoryIndexEntries).length} folder indexes, `
+        + `${Object.keys(extraExports).length} extra entries`,
+    );
+  },
+});

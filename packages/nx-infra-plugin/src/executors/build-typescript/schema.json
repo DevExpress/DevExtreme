@@ -44,6 +44,11 @@
       "type": "string",
       "description": "Base directory for path alias resolution (used as aliasRoot for tsc-alias). Relative to project root. Required when resolvePaths is true. Example: './js' for DevExtreme's __internal TypeScript compilation."
     },
+    "fullySpecifiedImports": {
+      "type": "boolean",
+      "default": false,
+      "description": "Add the file extension to relative imports in the output ('./core/component' -> './core/component.js', './common' -> './common/index.js'), so Node can load the ESM output. Fails the build on a relative import that does not resolve to a source file or folder index."
+    },
     "watch": {
       "type": "boolean",
       "default": false,

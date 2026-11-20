@@ -6,5 +6,6 @@ export interface BuildTypescriptExecutorSchema {
   outDir?: string;
   resolvePaths?: boolean;
   resolvePathsBaseDir?: string;
+  fullySpecifiedImports?: boolean;
   watch?: boolean;
 }

@@ -24,7 +24,8 @@
         "excludePatterns": ["./src/**/__tests__/**/*", "./src/**/__mocks__/**/*"],
         "tsconfig": "./tsconfig.esm.json",
         "outDir": "./npm/esm",
-        "module": "esm"
+        "module": "esm",
+        "fullySpecifiedImports": true
       },
       "outputs": ["{projectRoot}/npm/esm"],
       "inputs": ["default"]
@@ -78,6 +79,25 @@
           ["common/data"],
           ["common/export"]
         ]
+      }
+    },
+    "npm:exports-map": {
+      "executor": "devextreme-nx-infra-plugin:generate-exports-map",
+      "options": {
+        "packageDir": "./npm",
+        "ignore": ["cjs", "esm"],
+        "directoryIndexes": ["esm", "cjs"],
+        "directoryIndexTypesFrom": { "esm": "cjs" },
+        "extraExports": {
+          "./esm/*.js": { "types": "./cjs/*.d.ts", "default": "./esm/*.js" },
+          "./esm/*": { "types": "./cjs/*.d.ts", "default": "./esm/*.js" },
+          "./cjs/*.d.ts": "./cjs/*.d.ts",
+          "./cjs/*.js": { "types": "./cjs/*.d.ts", "default": "./cjs/*.js" },
+          "./cjs/*": { "types": "./cjs/*.d.ts", "default": "./cjs/*.js" }
+        }
+      },
+      "metadata": {
+        "description": "Adds the \"exports\" map to npm/package.json: the root module, one entry per module stub created by npm:prepare-modules, and the esm/ and cjs/ deep paths with their declarations from cjs/. Runs after prepare-package-json, which rewrites npm/package.json."
       }
     },
     "npm:pack": {
@@ -148,7 +168,8 @@
           "pnpm --workspace-root nx run-many --targets=build:esm,build:cjs --projects=devextreme-vue",
           "pnpm --workspace-root nx copy-files devextreme-vue",
           "pnpm --workspace-root nx npm:prepare-modules devextreme-vue",
-          "pnpm --workspace-root nx prepare-package-json devextreme-vue"
+          "pnpm --workspace-root nx prepare-package-json devextreme-vue",
+          "pnpm --workspace-root nx npm:exports-map devextreme-vue"
         ],
         "parallel": false
       },
@@ -168,6 +189,7 @@
           "pnpm --workspace-root nx prepare-package-json devextreme-vue",
           "pnpm --workspace-root nx license-headers devextreme-vue",
           "pnpm --workspace-root nx npm:prepare-modules devextreme-vue",
+          "pnpm --workspace-root nx npm:exports-map devextreme-vue",
           "pnpm --workspace-root nx npm:pack devextreme-vue"
         ],
         "parallel": false
