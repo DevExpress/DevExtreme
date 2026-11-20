@@ -48,7 +48,7 @@ test.describe('TagBox_Label', () => {
       test.describe(() => {
         test.use({ browserSize: [300, 400] });
 
-        test(`Label shouldn't be cutted for dxTagBox in stylingMode=${stylingMode}, labelMode=${labelMode} (T1104913)`, async ({ page }) => {
+        test(`Label should not be cut for dxTagBox in stylingMode=${stylingMode}, labelMode=${labelMode} (T1104913)`, async ({ page }) => {
           await setStyleAttribute(page, '#container', 'top: 250px;');
 
           // The factory runs in the page, so the loop values come in as its argument.

@@ -2,7 +2,7 @@ import { expect, test } from '../../../../fixtures';
 import { createWidget } from '../../../../helpers/createWidget';
 import Scheduler from '../../../../models/scheduler';
 
-test.describe('Appointment dependend options', () => {
+test.describe('Appointment dependent options', () => {
   test.use({ theme: 'generic.light' });
 
   test('cellDuration (T1076138)', async ({ page }) => {

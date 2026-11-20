@@ -357,7 +357,7 @@ class TabPanel extends MultiView<TabPanelProperties> {
         this._refreshActiveDescendant();
       },
       onItemRendered: this._titleRenderedAction.bind(this),
-      itemTemplate: this._getTemplateByOption('itemTitleTemplate'),
+      itemTemplate: this._getTemplateByOption('itemTitleTemplate') as unknown as TabsProperties['itemTemplate'],
       items,
       // @ts-expect-error ts-error
       noDataText: null,

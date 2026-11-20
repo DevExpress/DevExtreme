@@ -72,8 +72,8 @@ export interface ConvertToRenderFieldItemOptions {
   ) => Editor);
 
   item: Required<SimpleItem>;
-  template: FunctionTemplate;
-  labelTemplate: FunctionTemplate;
+  template: FunctionTemplate | null;
+  labelTemplate: FunctionTemplate | null;
   name: string;
   formLabelLocation: LabelLocation | undefined;
   requiredMessageTemplate: FunctionTemplate;
@@ -109,7 +109,7 @@ export interface FieldItemOptions {
   item: Required<SimpleItem>;
   isSimpleItem: boolean;
   isRequired: boolean;
-  template: FunctionTemplate;
+  template: FunctionTemplate | null;
   helpID: string | null;
   labelID?: string | null;
   name: string;
@@ -127,7 +127,7 @@ export interface ConvertToLabelOptions {
   managerMarkOptions: LabelMarkOptions;
   showColonAfterLabel: boolean;
   labelLocation: LabelLocation | undefined;
-  labelTemplate: FunctionTemplate;
+  labelTemplate: FunctionTemplate | null;
   formLabelMode?: FormLabelMode;
   onLabelTemplateRendered: () => void;
 }

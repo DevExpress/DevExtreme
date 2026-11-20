@@ -27,6 +27,7 @@
         :customize-item="customizeItem"
         :element-attr="formElementAttr"
         @initialized="onFormInitialized"
+        @field-data-changed="onFormFieldDataChanged"
       >
         <DxItem
           name="conflictInformer"
@@ -230,16 +231,16 @@ const onAppointmentUpdating = (e: DxSchedulerTypes.AppointmentUpdatingEvent) => 
 
 const onFormInitialized = (e: DxFormTypes.InitializedEvent) => {
   form = e.component;
+};
 
-  e.component!.on('fieldDataChanged', (fieldEvent: { dataField: string }) => {
-    if (
-      showConflictError &&
-      ['startDate', 'endDate', 'assigneeId', 'recurrenceRule'].includes(fieldEvent.dataField)
-    ) {
-      setConflictError(false);
-      form?.validate();
-    }
-  });
+const onFormFieldDataChanged = (e: DxFormTypes.FieldDataChangedEvent) => {
+  if (
+    showConflictError &&
+    ['startDate', 'endDate', 'assigneeId', 'recurrenceRule'].includes(e.dataField ?? '')
+  ) {
+    setConflictError(false);
+    form?.validate();
+  }
 };
 
 const customizeItem = (item: DxFormTypes.SimpleItem) => {

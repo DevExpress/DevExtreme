@@ -7,7 +7,7 @@ import TabPanel from '../../../models/tabPanel';
 import { createUser, generateMessages, getLongText } from './data';
 
 test.describe('ChatMessageList', () => {
-  test('Messagelist empty view scenarios', async ({ page }) => {
+  test('MessageList empty view scenarios', async ({ page }) => {
     await createWidget(page, 'dxChat', {
       width: 400,
       height: 600,
@@ -37,7 +37,7 @@ test.describe('ChatMessageList', () => {
     await testScreenshot(page, 'Messagelist empty with limited dimensions.png', { element: '#container' });
   });
 
-  test('Messagelist appearance with scrollbar', async ({ page }) => {
+  test('MessageList appearance with scrollbar', async ({ page }) => {
     const userFirst = createUser(1, 'First');
     const userSecond = createUser(2, 'Second');
 
@@ -94,7 +94,7 @@ test.describe('ChatMessageList', () => {
     await testScreenshot(page, 'Messagelist scrollbar middle position after typing in textarea.png', { element: '#container' });
   });
 
-  test('Messagelist should scrolled to the latest messages after being rendered inside an invisible element', async ({ page }) => {
+  test('MessageList should scrolled to the latest messages after being rendered inside an invisible element', async ({ page }) => {
     const userFirst = createUser(1, 'First');
     const userSecond = createUser(2, 'Second');
 
@@ -126,7 +126,7 @@ test.describe('ChatMessageList', () => {
     await testScreenshot(page, 'Messagelist scroll position after rendering in invisible container.png', { element: '#container' });
   });
 
-  test('Messagelist with deleted items', async ({ page }) => {
+  test('MessageList with deleted items', async ({ page }) => {
     const userFirst = createUser(1, 'First');
     const userSecond = createUser(2, 'Second');
     const items = [{
@@ -153,7 +153,7 @@ test.describe('ChatMessageList', () => {
     await testScreenshot(page, 'Messagelist without message template and with deleted messages.png', { element: '#container' });
   });
 
-  test('Messagelist with deleted items and custom template', async ({ page }) => {
+  test('MessageList with deleted items and custom template', async ({ page }) => {
     const userFirst = createUser(1, 'First');
     const userSecond = createUser(2, 'Second');
     const items = [{
@@ -186,7 +186,7 @@ test.describe('ChatMessageList', () => {
     await testScreenshot(page, 'Messagelist with message template and deleted messages.png', { element: '#container' });
   });
 
-  test('Messagelist with messageTemplate', async ({ page }) => {
+  test('MessageList with messageTemplate', async ({ page }) => {
     const userFirst = createUser(1, 'First');
     const userSecond = createUser(2, 'Second');
     const items = [{
@@ -225,7 +225,7 @@ test.describe('ChatMessageList', () => {
     await testScreenshot(page, 'Messagelist with message template after new message add.png', { element: '#container' });
   });
 
-  test('Messagelist options showDayHeaders, showUserName and showMessageTimestamp set to false work', async ({ page }) => {
+  test('MessageList options showDayHeaders, showUserName and showMessageTimestamp set to false work', async ({ page }) => {
     const userFirst = createUser(1, 'First');
     const userSecond = createUser(2, 'Second');
     const items = [{
@@ -289,7 +289,7 @@ test.describe('ChatMessageList', () => {
 });
 
 test.describe('ChatMessageList: dayHeaders', () => {
-  test('Messagelist with date headers', async ({ page }) => {
+  test('MessageList with date headers', async ({ page }) => {
     await mockDate(page, '2024/10/27');
 
     const userFirst = createUser(1, 'First');

@@ -24,7 +24,6 @@ jobs:
     timeout-minutes: 6
     outputs:
       should-run: ${{ steps.check.outputs.should-run }}
-      styles-changed: ${{ steps.changes.outputs.styles }}
       has-quarantined-tests: ${{ steps.quarantined-tests.outputs.has-tests }}
     steps:
       - uses: actions/checkout@v6
@@ -47,18 +46,6 @@ jobs:
           else
             echo "has-tests=false" >> $GITHUB_OUTPUT
           fi
-
-      - uses: dorny/paths-filter@v4
-        id: changes
-        with:
-          filters: |
-            styles:
-              - 'packages/devextreme-scss/scss/**'
-              - 'packages/devextreme-scss/icons/**'
-              - 'packages/devextreme-scss/images/**'
-              - 'packages/devextreme-scss/fonts/**'
-              - 'packages/devextreme/js/**/themes/**'
-              - 'e2e/testcafe-devextreme/helpers/accessibility/**'
 
   build:
     name: Build DevExtreme
@@ -240,14 +227,7 @@ jobs:
       - name: Build matrix
         id: matrix
         run: |
-          base_matrix_start=$(cat <<'JSON'
-          [
-            { "componentFolder": "accessibility", "name": "accessibility", "concurrency": 6 }
-          ]
-          JSON
-          )
-
-          base_matrix_end=$(cat <<'JSON'
+          base_matrix=$(cat <<'JSON'
           [
             { "componentFolder": "common", "name": "common", "concurrency": 3 },
 
@@ -261,32 +241,16 @@ jobs:
             { "componentFolder": "dataGrid", "name": "dataGrid (3/4)", "indices": "3/4", "cache": true, "concurrency": 5 },
             { "componentFolder": "dataGrid", "name": "dataGrid (4/4)", "indices": "4/4", "cache": true, "concurrency": 5 },
 
-            { "componentFolder": "editors", "name": "editors" },
             { "componentFolder": "navigation", "name": "navigation", "concurrency": 6 }
           ]
           JSON
           )
 
-          style_dependent_matrix=$(cat <<'JSON'
-          [
-            { "componentFolder": "accessibility", "name": "accessibility - fluent.dark", "theme": "fluent.blue.dark", "concurrency": 6 },
-            { "componentFolder": "accessibility", "name": "accessibility - fluent-next.dark", "theme": "fluent-next.blue.dark", "concurrency": 6 },
-              { "componentFolder": "accessibility", "name": "accessibility - material.light", "theme": "material.blue.light", "concurrency": 6 },
-              { "componentFolder": "accessibility", "name": "accessibility - material.dark", "theme": "material.blue.dark", "concurrency": 6 }
-            ]
-          JSON
-          )
-
           matrix=$(jq -c -n \
-            --argjson baseStart "$base_matrix_start" \
-            --argjson baseEnd "$base_matrix_end" \
-            --argjson styleDependent "$style_dependent_matrix" \
-            --arg stylesChanged "${{ needs.check-should-run.outputs.styles-changed }}" \
+            --argjson base "$base_matrix" \
             '{ include: (
-              $baseStart
-              + (if $stylesChanged == "true" then $styleDependent else [] end)
-              + $baseEnd
-              + (($baseStart + $baseEnd) | map(
+              $base
+              + ($base | map(
                 select(.theme == null)
                 | . + { name: (.name + " - fluent-next"), theme: "fluent-next.blue.light" }
               ))

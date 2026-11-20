@@ -34,7 +34,7 @@ export type LabelOptions = SimpleItem['label'] & {
   isRequired: boolean;
 
   markOptions: LabelMarkOptions;
-  labelTemplate: FunctionTemplate;
+  labelTemplate: FunctionTemplate | null;
   labelTemplateData?: SimpleItemLabelTemplateData;
   onLabelTemplateRendered: () => void;
 

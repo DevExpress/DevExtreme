@@ -14,6 +14,8 @@ const CLASS = {
 };
 
 export default class Chat extends Widget {
+  name: WidgetName = 'dxChat';
+
   public readonly messageList: Locator;
 
   constructor(page: Page, selector: Locator | string) {
@@ -21,9 +23,6 @@ export default class Chat extends Widget {
 
     this.messageList = this.element.locator(`.${CLASS.messageList}`);
   }
-
-  // eslint-disable-next-line class-methods-use-this
-  public getName(): WidgetName { return 'dxChat'; }
 
   public getTextArea(): TextArea {
     return new TextArea(this.page, this.element.locator(`.${CLASS.textArea}`));

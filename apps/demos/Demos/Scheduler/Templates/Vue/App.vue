@@ -26,7 +26,10 @@
         :allow-adding="false"
         :popup="popupOptions"
       >
-        <DxSchedulerForm :on-initialized="onFormInitialized">
+        <DxSchedulerForm
+          :on-initialized="onFormInitialized"
+          :on-field-data-changed="onFormFieldDataChanged"
+        >
           <DxItem template="movie-info-form-template"/>
 
           <DxItem
@@ -171,16 +174,16 @@ const onFormInitialized = (e: DxFormTypes.InitializedEvent): void => {
 
   formInstance.value = form;
   currentMovie.value = formData?.movieId ? getMovieById(formData.movieId) : null;
+};
 
-  form.on('fieldDataChanged', (fieldEvent: DxFormTypes.FieldDataChangedEvent) => {
-    if (fieldEvent.dataField === 'startDate') {
-      const movie = getMovieById(form.option('formData').movieId);
+const onFormFieldDataChanged = (e: DxFormTypes.FieldDataChangedEvent): void => {
+  if (e.dataField === 'startDate') {
+    const movie = getMovieById(e.component!.option('formData').movieId);
 
-      if (movie) {
-        updateEndDate(movie);
-      }
+    if (movie) {
+      updateEndDate(movie);
     }
-  });
+  }
 };
 
 const onMovieValueChanged = (e: DxSelectBoxTypes.ValueChangedEvent): void => {
