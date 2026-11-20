@@ -1,4 +1,3 @@
-/* eslint-disable spellcheck/spell-checker */
 import { ClientFunction } from 'testcafe';
 import {
   removeStylesheetRulesFromPage,
@@ -44,34 +43,6 @@ export async function clearTestPage(t: TestController): Promise<void> {
   }).with({ boundTestRun: t })();
 
   await removeStylesheetRulesFromPage.with({ boundTestRun: t })();
-}
-
-export async function loadAxeCore(t: TestController): Promise<void> {
-  await ClientFunction(() => new Promise<void>((resolve, reject) => {
-    // @ts-expect-error ts-error
-    if (window.axe) {
-      resolve();
-      return;
-    }
-
-    const script = document.createElement('script');
-    script.id = 'axe-core-script';
-    script.src = '../../../node_modules/axe-core/axe.min.js';
-    // @ts-expect-error ts-error
-    script.onload = resolve;
-    script.onerror = reject;
-    document.head.appendChild(script);
-  })).with({ boundTestRun: t })();
-}
-
-export async function applyViewportEnvironment(t: TestController): Promise<void> {
-  await ClientFunction(() => {
-    const { body } = document;
-    body.classList.remove('dx-surface');
-    body.classList.add('dx-viewport');
-
-    (window as any).DevExpress.viewPort('.dx-viewport');
-  }).with({ boundTestRun: t })();
 }
 
 export async function loadShadowDomExtension(t: TestController): Promise<void> {
