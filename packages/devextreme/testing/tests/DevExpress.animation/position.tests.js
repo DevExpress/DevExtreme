@@ -5,6 +5,7 @@ import { stubSeam } from '../../helpers/moduleSeam.js';
 import browser from 'core/utils/browser';
 import devices from '__internal/core/devices';
 import fixtures from '../../helpers/positionFixtures.js';
+import { createWindowWithOwnModule } from '../../helpers/fractionalWindow.js';
 import { implementationsMap } from 'core/utils/size';
 import { getWindow } from 'core/utils/window.js';
 
@@ -631,6 +632,22 @@ const testCollision = (name, fixtureName, params, expectedHorzDist, expectedVert
         }
     });
 
+    QUnit.test('fit should round the location to the nearest pixel when the element has a fractional width', function(assert) {
+        fixtures.customBoundary.create();
+        try {
+            $('#where').css({ left: '250px' });
+            $('#what').css({ width: '39.03125px' });
+            setupPosition('#what', { my: 'right', at: 'right', of: '#where', collision: 'fit', boundary: '#boundary', boundaryOffset: '2 0' });
+
+            const boundaryRight = $('#boundary').get(0).getBoundingClientRect().right;
+            const whatRight = $('#what').get(0).getBoundingClientRect().right;
+
+            assert.roughEqual(boundaryRight - whatRight, 2, 0.5, 'distance to the boundary');
+        } finally {
+            fixtures.customBoundary.drop();
+        }
+    });
+
     testPosition(
         'left boundary offset is applied correctly',
         'customBoundary',
@@ -1122,5 +1139,42 @@ const testCollision = (name, fixtureName, params, expectedHorzDist, expectedVert
         } finally {
             resetPositionStub.restore();
         }
+    });
+})();
+
+(function fractionalWindowHeightModule() {
+    const PAGE_HEIGHT = 2000;
+
+    QUnit.module('fractional window height');
+
+    ['fit', 'flip', 'flipfit'].forEach((collision) => {
+        QUnit.test(`${collision} should keep the element inside a window whose client height is rounded up`, function(assert) {
+            const done = assert.async();
+
+            createWindowWithOwnModule('common/core/animation/position', (frameWindow, { default: frameWindowPositionUtils }) => {
+                const frameDocument = frameWindow.document;
+                const visibleArea = frameDocument.createElement('div');
+                const page = frameDocument.createElement('div');
+                const what = frameDocument.createElement('div');
+
+                Object.assign(visibleArea.style, { position: 'fixed', top: 0, bottom: 0 });
+                page.style.height = `${PAGE_HEIGHT}px`;
+                Object.assign(what.style, { position: 'absolute', top: 0, width: '100px', height: '100px' });
+                frameDocument.body.append(visibleArea, page, what);
+
+                const visibleHeight = visibleArea.getBoundingClientRect().height;
+
+                assert.ok(frameDocument.documentElement.clientHeight > visibleHeight, `client height ${frameDocument.documentElement.clientHeight} is larger than the visible ${visibleHeight}`);
+
+                frameWindowPositionUtils.setup(what, { my: 'bottom', at: 'bottom', of: frameWindow, collision });
+
+                assert.roughEqual(what.getBoundingClientRect().bottom, visibleHeight, 1, 'element is at the bottom of the window');
+
+                what.scrollIntoView({ block: 'nearest' });
+
+                assert.strictEqual(frameWindow.scrollY, 0, 'element is visible without scrolling the window');
+                done();
+            });
+        });
     });
 })();
