@@ -18,6 +18,8 @@ const CLASS = {
 };
 
 export default class DateRangeBox extends Widget {
+  name: WidgetName = 'dxDateRangeBox';
+
   public readonly dropDownButton: Locator;
 
   public readonly clearButton: Locator;
@@ -31,9 +33,6 @@ export default class DateRangeBox extends Widget {
     this.separator = this.element.locator(`.${CLASS.separator}`);
     this.clearButton = this.element.locator(`.${CLASS.buttonsContainer} .${CLASS.clearButton}`);
   }
-
-  // eslint-disable-next-line class-methods-use-this
-  public getName(): WidgetName { return 'dxDateRangeBox'; }
 
   public getPopup(): Popup {
     return new Popup(this.page, this.getStartDateBox().element.locator(`.${CLASS.popup}`));

@@ -12,6 +12,8 @@ const CLASS = {
 };
 
 export default class DateBox extends TextBox {
+  name: WidgetName = 'dxDateBox';
+
   public readonly dropDownEditorButton: Locator;
 
   constructor(page: Page, selector: Locator | string) {
@@ -19,9 +21,6 @@ export default class DateBox extends TextBox {
 
     this.dropDownEditorButton = this.element.locator(`.${CLASS.dropDownEditorButton}`);
   }
-
-  // eslint-disable-next-line class-methods-use-this
-  public getName(): WidgetName { return 'dxDateBox'; }
 
   public getDoneButton(): Locator {
     return this.page.locator(`.${CLASS.button}.${CLASS.doneButton}`);

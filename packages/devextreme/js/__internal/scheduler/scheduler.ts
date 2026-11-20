@@ -379,9 +379,6 @@ class Scheduler extends SchedulerOptionsBaseWidget {
 
   declare _dataSource: DataSource | undefined;
 
-  // eslint-disable-next-line @typescript-eslint/naming-convention -- inherited Widget API
-  declare _getTemplate: (template: unknown) => FunctionTemplate;
-
   // TODO: used externally in m_subscribes.ts,
   // view_model/preparation/prepare_appointments.ts,
   // view_model/filtration/utils/get_filter_options/get_filter_options.ts

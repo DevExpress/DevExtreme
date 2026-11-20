@@ -39,6 +39,7 @@ overrides:
   smol-toml@<=1.8.0: ^1.8.1
 catalog:
   axe-core: 4.13.0
+  "@axe-core/playwright": 4.13.0
   inferno: ^8.2.3
   inferno-create-element: ^8.2.3
   inferno-server: ^8.2.3

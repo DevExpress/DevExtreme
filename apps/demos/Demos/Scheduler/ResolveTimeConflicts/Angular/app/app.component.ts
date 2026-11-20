@@ -80,12 +80,13 @@ export class AppComponent {
 
   onFormInitialized = (e: DxFormTypes.InitializedEvent): void => {
     this.form = e.component;
-    this.form?.on('fieldDataChanged', (event: { dataField: string }) => {
-      if (this.showConflictError && ['startDate', 'endDate', 'assigneeId', 'recurrenceRule'].includes(event.dataField)) {
-        this.setConflictError(false);
-        this.form?.validate();
-      }
-    });
+  };
+
+  onFormFieldDataChanged = (e: DxFormTypes.FieldDataChangedEvent): void => {
+    if (this.showConflictError && ['startDate', 'endDate', 'assigneeId', 'recurrenceRule'].includes(e.dataField ?? '')) {
+      this.setConflictError(false);
+      this.form?.validate();
+    }
   };
 
   customizeItem = (item: DxFormTypes.SimpleItem): void => {

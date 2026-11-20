@@ -12,7 +12,7 @@ import Guid from '@js/core/guid';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { BindableTemplate } from '@js/core/templates/bindable_template';
-import type { TemplateBase } from '@js/core/templates/template_base';
+import type { FunctionTemplate } from '@js/core/templates/function_template';
 import { getIntersection, removeDuplicates } from '@js/core/utils/array';
 import { ensureDefined, equalByValue } from '@js/core/utils/common';
 import type { DeferredObj } from '@js/core/utils/deferred';
@@ -109,7 +109,7 @@ class TagBox<
 
   _isDataSourceChanged?: boolean;
 
-  _tagTemplate?: TemplateBase;
+  _tagTemplate?: FunctionTemplate;
 
   _isDataSourceOptionChanged?: boolean;
 

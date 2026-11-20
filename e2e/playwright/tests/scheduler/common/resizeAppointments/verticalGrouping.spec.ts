@@ -3,7 +3,7 @@ import { dragToOffset } from '../../../../helpers/dragUtils';
 import Scheduler from '../../../../models/scheduler';
 import createScheduler from './init/widget.setup';
 
-test.describe('Resize appointments in the Scheduler with vertical groupping', () => {
+test.describe('Resize appointments in the Scheduler with vertical grouping', () => {
   test('Should correctly calculate group resizing area (T1025952)', async ({ page }) => {
     await createScheduler(page, {
       dataSource: [

@@ -14,7 +14,7 @@ import {
 
 test.describe('Scheduler: Cells Selection in Virtual Scrolling', () => {
   [true, false].forEach((showAllDayPanel) => {
-    test(`Selected cells shouldn't disapppear on scroll when showAllDayPanel is equal to ${showAllDayPanel}`, async ({ page }) => {
+    test(`Selected cells should not disappear on scroll when showAllDayPanel is equal to ${showAllDayPanel}`, async ({ page }) => {
       await createScheduler(page, { showAllDayPanel });
 
       const scheduler = new Scheduler(page, '#container');
@@ -30,7 +30,7 @@ test.describe('Scheduler: Cells Selection in Virtual Scrolling', () => {
       await checkSelectionWhenFocusedInViewport(scheduler, 11, 6, 1);
     });
 
-    test(`Selected cells shouldn't disapppear on scroll when showAllDayPanel is equal to ${showAllDayPanel} and horizontal grouping is used`, async ({ page }) => {
+    test(`Selected cells should not disappear on scroll when showAllDayPanel is equal to ${showAllDayPanel} and horizontal grouping is used`, async ({ page }) => {
       await createScheduler(page, {
         showAllDayPanel,
         groups: ['resourceId0'],
@@ -53,7 +53,7 @@ test.describe('Scheduler: Cells Selection in Virtual Scrolling', () => {
       await checkSelectionWhenFocusedInViewport(scheduler, 11, 6, 1);
     });
 
-    test(`Selected cells shouldn't disapppear on scroll when showAllDayPanel is equal to ${showAllDayPanel} and appointments are grouped by date`, async ({ page }) => {
+    test(`Selected cells should not disappear on scroll when showAllDayPanel is equal to ${showAllDayPanel} and appointments are grouped by date`, async ({ page }) => {
       await createScheduler(page, {
         showAllDayPanel,
         groups: ['resourceId0'],
@@ -77,7 +77,7 @@ test.describe('Scheduler: Cells Selection in Virtual Scrolling', () => {
       await checkSelectionWhenFocusedInViewport(scheduler, 11, 6, 2);
     });
 
-    test(`Selected cells shouldn't disapppear on scroll when showAllDayPanel is equal to ${showAllDayPanel} and appointments are grouped vertically`, async ({ page }) => {
+    test(`Selected cells should not disappear on scroll when showAllDayPanel is equal to ${showAllDayPanel} and appointments are grouped vertically`, async ({ page }) => {
       await createScheduler(page, {
         showAllDayPanel,
         groups: ['resourceId0'],
@@ -117,7 +117,7 @@ test.describe('Scheduler: Cells Selection in Virtual Scrolling', () => {
     });
   });
 
-  test('All-day panel\'s selected cells shouldn\'t disapppear on scroll when horizontal grouping is used', async ({ page }) => {
+  test('All-day panel\'s selected cells should not disappear on scroll when horizontal grouping is used', async ({ page }) => {
     await createScheduler(page, {
       showAllDayPanel: true,
       groups: ['resourceId0'],
@@ -136,7 +136,7 @@ test.describe('Scheduler: Cells Selection in Virtual Scrolling', () => {
     await checkAllDayCellsWhenInViewport(scheduler);
   });
 
-  test('All-day panel\'s selected cells shouldn\'t disapppear on scroll when vertical grouping is used', async ({ page }) => {
+  test('All-day panel\'s selected cells should not disappear on scroll when vertical grouping is used', async ({ page }) => {
     await createScheduler(page, {
       showAllDayPanel: true,
       groups: ['resourceId0'],

@@ -7,8 +7,7 @@ const CLASS = {
 };
 
 export default class TabPanel extends Widget {
-  // eslint-disable-next-line class-methods-use-this
-  public getName(): WidgetName { return 'dxTabPanel'; }
+  name: WidgetName = 'dxTabPanel';
 
   public getTab(index = 0): Locator {
     return this.element.locator(`.${CLASS.tab}`).nth(index);

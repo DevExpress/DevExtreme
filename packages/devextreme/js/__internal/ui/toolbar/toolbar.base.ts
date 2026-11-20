@@ -15,6 +15,7 @@ import {
   waitWebFont,
 } from '@js/ui/themes';
 import type { Item, Properties } from '@js/ui/toolbar';
+import type { TemplateBase } from '@ts/core/templates/template_base';
 import type { OptionChanged } from '@ts/core/widget/types';
 import CollectionWidgetAsync from '@ts/ui/collection/collection_widget.async';
 import type { CollectionItemKey, CollectionWidgetBaseProperties } from '@ts/ui/collection/collection_widget.base';
@@ -115,7 +116,7 @@ class ToolbarBase<
         $container.text(String(data));
       }
 
-      this._getTemplate('dx-polymorph-widget').render({
+      (this._getTemplate('dx-polymorph-widget') as unknown as TemplateBase).render({
         container: $container,
         model: rawModel,
         parent: this,

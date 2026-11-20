@@ -1,4 +1,3 @@
-/* eslint-disable spellcheck/spell-checker */
 import createTestCafe, { ClientFunction } from 'testcafe';
 import * as fs from 'fs';
 import * as path from 'path';
@@ -8,7 +7,6 @@ import { DEFAULT_BROWSER_SIZE } from './helpers/const';
 import {
   addShadowRootTree,
   clearTestPage,
-  loadAxeCore,
   loadShadowDomExtension,
 } from './helpers/testPageUtils';
 import { getCurrentTheme } from './helpers/themeUtils';
@@ -347,25 +345,21 @@ async function main() {
               await addShadowRootTree(t);
             }
 
-            if (!componentFolder.includes('accessibility')) {
-              // @ts-expect-error ts-errors
-              const { meta } = t.testRun.test;
+            // @ts-expect-error ts-errors
+            const { meta } = t.testRun.test;
 
-              await ClientFunction(() => {
-                if (document.activeElement && document.activeElement !== document.body) {
-                  (document.activeElement as HTMLElement).blur();
-                }
+            await ClientFunction(() => {
+              if (document.activeElement && document.activeElement !== document.body) {
+                (document.activeElement as HTMLElement).blur();
+              }
 
-                window.getSelection()?.removeAllRanges();
-              }).with({ boundTestRun: t })();
+              window.getSelection()?.removeAllRanges();
+            }).with({ boundTestRun: t })();
 
-              await t.hover('html', { offsetX: 1, offsetY: 1 });
+            await t.hover('html', { offsetX: 1, offsetY: 1 });
 
-              const [width, height] = meta?.browserSize ?? DEFAULT_BROWSER_SIZE;
-              await t.resizeWindow(width, height);
-            } else {
-              await loadAxeCore(t);
-            }
+            const [width, height] = meta?.browserSize ?? DEFAULT_BROWSER_SIZE;
+            await t.resizeWindow(width, height);
 
             const currentTheme = await getCurrentTheme(t) || 'fluent.blue.light';
             const newTheme = args.theme || 'fluent.blue.light';

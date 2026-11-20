@@ -1,4 +1,3 @@
-import type { template } from '@js/common';
 import { name as clickEventName } from '@js/common/core/events/click';
 import { start as hoverStartEventName } from '@js/common/core/events/hover';
 import { addNamespace } from '@js/common/core/events/utils/index';
@@ -9,6 +8,7 @@ import { getPublicElement } from '@js/core/element';
 import { data as elementData } from '@js/core/element_data';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
+import type { FunctionTemplate } from '@js/core/templates/function_template';
 import coreDateUtils from '@js/core/utils/date';
 import dateSerialization from '@js/core/utils/date_serialization';
 import type { DxEvent } from '@js/events';
@@ -101,9 +101,7 @@ export interface BaseViewProperties extends WidgetProperties {
 
   hoveredRange: Date[];
 
-  cellTemplate?: template | (
-    (itemData: CellTemplateData, itemIndex: number, itemElement: Element) => dxElementWrapper
-  );
+  cellTemplate?: FunctionTemplate;
 
   onCellClick?: (e: CellEvent) => void;
   onCellHover?: (e: CellEvent) => void;
@@ -365,7 +363,6 @@ class BaseView<
     $(row).append(cell);
 
     if (cellTemplate) {
-      // @ts-expect-error ts-error
       cellTemplate.render(this._prepareCellTemplateData(cellDate, cellIndex, $cell));
     } else {
       cell.innerHTML = this._getCellText(cellDate);

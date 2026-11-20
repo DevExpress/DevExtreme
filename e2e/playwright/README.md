@@ -63,7 +63,7 @@ crop and render differently, so a TestCafe image is not a valid reference for th
 It is still the check of the port. Recording writes whatever the test reached, and a verify run
 compares against that same file, so neither notices a test that shot the wrong state. Before
 deleting the TestCafe etalon, compare the new one with it: the same picture, within the per-pixel
-threshold. Three differences are expected:
+threshold. Five differences are expected:
 
 - A scrollbar. This suite shows it, TestCafe cut it off, so a viewport shot of a page that
   overflows comes out up to 15 px larger, with the scrollbar in the extra strip.
@@ -71,6 +71,16 @@ threshold. Three differences are expected:
 - Single antialiased pixels on the edges of shapes that sit on fractional coordinates. The TestCafe
   comparer ignored antialiasing (looks-same, `ignoreAntialiasing`, tolerance 5), so its etalon
   could drift there unnoticed; this suite compares them strictly.
+- The crop of an element shot. TestCafe took `getBoundingClientRect` widened to the element's
+  `scrollWidth`/`scrollHeight`, so a hidden descendant that sticks out (an invalid message under the
+  last editor) made its image taller; Playwright takes the box alone and rounds a fractional size
+  up, so an image can come out a row taller or several rows shorter. The common area is identical.
+- A whole color shifted by a few units (an editor border 205 → 203). The tolerance
+  above let a later theme change or a Chrome update through without a new TestCafe etalon (`git log`
+  of the etalon shows how old it is: a toolbar popup last shot several Chrome versions back has its
+  shadow and text a few units darker, and its icon glyphs lack the colored subpixel antialiasing
+  the current Chrome draws, up to 67 units off at their edges); every other pixel of that color
+  shifts the same way, and only the text antialiasing around it changes besides.
 
 Anything else, a block of pixels or a moved edge, means the test reached a different state; find
 out why rather than accept the image.
@@ -190,7 +200,7 @@ pnpm exec playwright show-trace ci-traces/<test-name>/trace.zip --port 0
 ```
 
 The trace holds every action with the DOM before and after it, the network and the console, and a
-failed screenshot comparison uploads its `-expected`, `-actual` and `-diff` images alongside, so a
+failed screenshot comparison uploads its `-expected`, `-actual` and `-diff` images alongside. So a
 failure that only happens on CI can be diagnosed without reproducing it.
 
 On CI a failed test runs once more, in a new browser. A test that passes then does not fail the
@@ -241,7 +251,7 @@ viewport is 1200×800 and the widgets of the previous test are disposed.
 Port a test one to one: the same steps, the same checks, the same screenshot names. A title changes
 only when it repeats in the file, which Playwright rejects: add the loop parameters to it.
 
-**`runInTheme`.** In TestCafe it was a filter, not a setting: the test ran only in the job whose
+**`runInTheme`.** In TestCafe, it was a filter, not a setting: the test ran only in the job whose
 theme matched — usually one of the whole-suite theme jobs — and the folder jobs skipped it.
 `test.use({ theme })` instead runs the test in that theme in the job that takes its folder. That
 is the port: the result does not depend on the job, and a screenshot keeps one etalon named after
@@ -275,10 +285,13 @@ that is not the target. TestCafe delivered a click to a covered element anyway, 
 relied on it needs the target made reachable, not the check switched off.
 
 **Scrolling before a click.** TestCafe scrolled the whole target into view before a click;
-Playwright scrolls only as far as the click point. When the target is wider or taller than the
-window, the focus then scrolls the page after the click, and a drop-down closes on that scroll —
-sometimes before the next step, sometimes after it. Scroll the target into view first, as TestCafe
-did: `element.scrollIntoView({ block: 'nearest', inline: 'nearest' })` in `locator.evaluate`.
+Playwright scrolls only as far as the click point. When the target does not fit in the window or
+sticks out of it, the focus then scrolls the page after the click, and a drop-down closes on that
+scroll — sometimes before the next step, sometimes after it. Scroll the target into view first.
+The native `scrollIntoView` with `block: 'nearest'` is enough when only the click needs the target
+in view; it stops at the edge, though. When a screenshot or a position-dependent step (a submenu
+placed by collision) needs the page where TestCafe left it, use `scrollIntoView(locator)` from
+`helpers/dragUtils`: it repeats the TestCafe algorithm, margin included.
 
 **Page errors.** A test fails on an uncaught error in the page, as it did in TestCafe. A test whose
 TestCafe version ended with `expect(true).ok()` checks exactly that and needs no assertion.
@@ -286,3 +299,9 @@ TestCafe version ended with `expect(true).ok()` checks exactly that and needs no
 **Old models.** A model in `packages/testcafe-models` that the ported tests used goes in the same
 PR, but only after a search proves nothing else uses it: grep all of `e2e/` and `packages/` for its
 import path, since other tests and other models import models too. A model still in use stays.
+
+**Shared files.** The same goes for anything else in the TestCafe folder of the ported tests — a
+data file, a helper: other tests import them by a relative path
+(`accessibility/treeView.ts` takes `../navigation/treeView/data`). Grep `e2e/testcafe-devextreme`
+for the file's path before deleting it or moving it here; a file still in use stays, and the port
+takes a copy.
