@@ -11,6 +11,9 @@ import type {
 
 export interface DataSourceHeaderItem extends PivotGridHeaderItem {
   text?: string;
+  displayText?: string;
+  key?: unknown;
+  isEmpty?: boolean[];
   children?: DataSourceHeaderItem[];
   collapsedChildren?: DataSourceHeaderItem[];
 }
@@ -29,6 +32,8 @@ export type DataSourceData = Omit<
   columns: DataSourceHeaderItems;
   grandTotalRowIndex?: number;
   grandTotalColumnIndex?: number;
+  isEmptyGrandTotalRow?: boolean[];
+  isEmptyGrandTotalColumn?: boolean[];
 };
 
 export type DataSourceOptions = PivotGridDataSourceOptions & {
