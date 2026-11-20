@@ -16,6 +16,7 @@
 /e2e/playwright/tests/common/etalons/**                                 @DevExpress/devextreme-components
 /e2e/playwright/tests/common/gantt/**                                   @DevExpress/devextreme-components
 /e2e/playwright/tests/common/pagination/**                              @DevExpress/devextreme-components
+/e2e/playwright/tests/navigation/**                                     @DevExpress/devextreme-components
 /packages/devextreme/testing/tests/DevExpress.serverSide*/**            @DevExpress/devextreme-components
 
 ## ui
