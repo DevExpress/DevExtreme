@@ -30,6 +30,7 @@ import type { HidingEvent as PopupHidingEvent } from '@js/ui/popup';
 import { current, isFluent } from '@js/ui/themes';
 import { Deferred, fromPromise, when } from '@ts/core/utils/deferred';
 import domUtils from '@ts/core/utils/dom';
+import { getImageAriaLabel } from '@ts/core/utils/icon';
 import type Store from '@ts/data/abstract_store';
 import eventsEngine from '@ts/events/core/events_engine';
 import type { AdaptiveColumnsViewController } from '@ts/grids/grid_core/adaptivity/adaptivity';
@@ -2594,8 +2595,14 @@ export class EditingController extends modules.ViewController {
           ? this.getButtonLocalizationNames()[buttonName]
           : undefined;
 
-        if (localizationName) {
-          this.setAria('label', messageLocalization.format(localizationName), $button);
+        const localizedLabel = localizationName
+          ? messageLocalization.format(localizationName)
+          : undefined;
+        const iconLabel = icon ? getImageAriaLabel(icon) : undefined;
+        const ariaLabel = button.hint ?? button.text ?? localizedLabel ?? iconLabel;
+
+        if (ariaLabel) {
+          this.setAria('label', ariaLabel, $button);
         }
       } else {
         // @ts-expect-error text() is typed without undefined
