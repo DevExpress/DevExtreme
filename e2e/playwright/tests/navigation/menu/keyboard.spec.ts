@@ -1,6 +1,9 @@
 import { expect, test } from '../../../fixtures';
 import { createWidget } from '../../../helpers/createWidget';
+import { expectClass } from '../../../models/internal/classMatcher';
 import Menu from '../../../models/menu';
+
+const FOCUSED_STATE_CLASS = 'dx-state-focused';
 
 const items = [{
   text: 'Item 1',
@@ -30,7 +33,7 @@ test.describe('Menu_keyboard', () => {
     const focusedElement = menu.getItem(2);
 
     await expect(focusedElement).toHaveText('item_1_1_1', { useInnerText: true });
-    await menu.expectItemFocused(focusedElement);
+    await expectClass(focusedElement, FOCUSED_STATE_CLASS);
   });
 
   test('keyboard navigation should work after hover a root item if showFirstSubmenuMode is "onHover"', async ({ page }) => {
@@ -51,7 +54,7 @@ test.describe('Menu_keyboard', () => {
     const focusedElement = menu.getItem(2);
 
     await expect(focusedElement).toHaveText('item_1_1_1', { useInnerText: true });
-    await menu.expectItemFocused(focusedElement);
+    await expectClass(focusedElement, FOCUSED_STATE_CLASS);
   });
 
   test('menu should be closed after press on "escape" key when submenu was shown by click, showFirstSubmenuMode="onClick" (T1115916)', async ({ page }) => {

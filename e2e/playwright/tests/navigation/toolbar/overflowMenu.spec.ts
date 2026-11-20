@@ -1,8 +1,8 @@
-import type { Locator, Page } from '@playwright/test';
+import type { Page } from '@playwright/test';
 import type { Item as ButtonGroupItem } from 'devextreme/ui/button_group';
 import { expect, test } from '../../../fixtures';
 import { createWidget } from '../../../helpers/createWidget';
-import { appendElementTo } from '../../../helpers/domUtils';
+import { addClass, appendElementTo, removeClass } from '../../../helpers/domUtils';
 import { testScreenshot } from '../../../helpers/screenshots';
 import { expectClass } from '../../../models/internal/classMatcher';
 import Toolbar from '../../../models/toolbar';
@@ -15,20 +15,6 @@ const FOCUSED_STATE_CLASS = 'dx-state-focused';
 const stylingModes = ['text', 'outlined', 'contained'];
 const buttonTypes = ['danger', 'default', 'normal', 'success'];
 const stateClasses = [FOCUSED_STATE_CLASS, HOVER_STATE_CLASS, ACTIVE_STATE_CLASS];
-
-const setClass = (locator: Locator, className: string): Promise<void> => locator.evaluate(
-  (element, value) => {
-    element.setAttribute('class', `${element.getAttribute('class') ?? ''} ${value}`);
-  },
-  className,
-);
-
-const removeClass = (locator: Locator, className: string): Promise<void> => locator.evaluate(
-  (element, value) => {
-    element.setAttribute('class', (element.getAttribute('class') ?? '').replace(value, ''));
-  },
-  className,
-);
 
 // Opens the menu, shoots its content, then shoots it again with every list item in each state.
 const testMenuStates = async (page: Page, baseName: string): Promise<void> => {
@@ -47,7 +33,7 @@ const testMenuStates = async (page: Page, baseName: string): Promise<void> => {
 
   for (const state of stateClasses) {
     for (const item of listItems) {
-      await setClass(item, state);
+      await addClass(item, state);
     }
 
     const stateName = state.replace('dx-state-', '');

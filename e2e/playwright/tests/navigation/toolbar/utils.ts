@@ -2,7 +2,7 @@ import type { Locator } from '@playwright/test';
 import { expect } from '../../../fixtures';
 
 // The item itself or something inside it (the nested widget's input) holds the focus.
-export const expectItemFocused = async (
+export const expectItemHasFocus = async (
   item: Locator,
   present = true,
   message?: string,

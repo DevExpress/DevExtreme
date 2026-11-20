@@ -4,7 +4,7 @@ import { createWidget } from '../../../helpers/createWidget';
 import { appendElementTo, setAttribute } from '../../../helpers/domUtils';
 import { testScreenshot } from '../../../helpers/screenshots';
 import Toolbar from '../../../models/toolbar';
-import { expectItemFocused } from './utils';
+import { expectItemHasFocus } from './utils';
 
 const toolbarWidgets = [
   {
@@ -159,16 +159,16 @@ test.describe('Toolbar_keyboard_navigation', () => {
       await expect(externalBefore, 'external before button should be focused').toBeFocused();
 
       await page.keyboard.press('Tab');
-      await expectItemFocused(toolbar.getItem(0), true, 'first toolbar item should be focused after Tab');
+      await expectItemHasFocus(toolbar.getItem(0), true, 'first toolbar item should be focused after Tab');
 
       await page.keyboard.press('ArrowRight');
-      await expectItemFocused(toolbar.getItem(1), true, `${widget} should be focused after arrow right`);
+      await expectItemHasFocus(toolbar.getItem(1), true, `${widget} should be focused after arrow right`);
 
       await page.keyboard.press('Tab');
       await expect(externalAfter, 'external after button should be focused after Tab').toBeFocused();
 
       await page.keyboard.press('Shift+Tab');
-      await expectItemFocused(toolbar.getItem(1), true, `${widget} should be focused after Shift+Tab`);
+      await expectItemHasFocus(toolbar.getItem(1), true, `${widget} should be focused after Shift+Tab`);
     });
   });
 
@@ -198,17 +198,17 @@ test.describe('Toolbar_keyboard_navigation', () => {
 
     await externalBefore.click();
     await page.keyboard.press('Tab');
-    await expectItemFocused(toolbar.getItem(0), true, 'Tab -> item[0] (first enabled)');
+    await expectItemHasFocus(toolbar.getItem(0), true, 'Tab -> item[0] (first enabled)');
 
     await page.keyboard.press('ArrowRight');
     await page.keyboard.press('ArrowRight');
-    await expectItemFocused(toolbar.getItem(4), true, 'ArrowRight x2 -> item[4] (5th item, disabled items skipped)');
+    await expectItemHasFocus(toolbar.getItem(4), true, 'ArrowRight x2 -> item[4] (5th item, disabled items skipped)');
 
     await page.keyboard.press('Home');
-    await expectItemFocused(toolbar.getItem(0), true, 'Home -> item[0] (1st item)');
+    await expectItemHasFocus(toolbar.getItem(0), true, 'Home -> item[0] (1st item)');
 
     await page.keyboard.press('End');
-    await expectItemFocused(toolbar.getItem(5), true, 'End -> item[5] (6th item, trailing disabled items skipped)');
+    await expectItemHasFocus(toolbar.getItem(5), true, 'End -> item[5] (6th item, trailing disabled items skipped)');
 
     await testScreenshot(
       page,
@@ -251,10 +251,10 @@ test.describe('Toolbar_keyboard_navigation', () => {
 
     await externalBefore.click();
     await page.keyboard.press('Tab');
-    await expectItemFocused(toolbar.getItem(0), true, 'Tab -> item[0] (first item in logical order)');
+    await expectItemHasFocus(toolbar.getItem(0), true, 'Tab -> item[0] (first item in logical order)');
 
     await page.keyboard.press('ArrowLeft');
-    await expectItemFocused(toolbar.getItem(1), true, 'ArrowLeft in RTL moves focus to the logical-next item[1]');
+    await expectItemHasFocus(toolbar.getItem(1), true, 'ArrowLeft in RTL moves focus to the logical-next item[1]');
 
     await testScreenshot(
       page,
@@ -263,7 +263,7 @@ test.describe('Toolbar_keyboard_navigation', () => {
     );
 
     await toolbar.getItem(2).click();
-    await expectItemFocused(toolbar.getItem(2), true, 'mouse click -> item[2] becomes the focused item');
+    await expectItemHasFocus(toolbar.getItem(2), true, 'mouse click -> item[2] becomes the focused item');
 
     await testScreenshot(
       page,
