@@ -106,8 +106,8 @@ export interface FieldTemplate {
 }
 
 interface FieldAddonsTemplates {
-  beforeTemplate?: FieldTemplate;
-  afterTemplate?: FieldTemplate;
+  beforeTemplate: FieldTemplate | null;
+  afterTemplate: FieldTemplate | null;
 }
 
 type PopupToolbarItemConfig = ToolbarItem & { shortcut?: string };
@@ -414,7 +414,7 @@ class DropDownEditor<
       return;
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return, consistent-return
+    // eslint-disable-next-line consistent-return
     return this._getTemplate(fieldTemplate);
   }
 

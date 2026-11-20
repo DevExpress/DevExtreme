@@ -11,7 +11,6 @@ import Guid from '@js/core/guid';
 import type { DefaultOptionsRule } from '@js/core/options/utils';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
-import { FunctionTemplate } from '@js/core/templates/function_template';
 import dateUtils from '@js/core/utils/date';
 import dateSerialization from '@js/core/utils/date_serialization';
 import { inRange, sign } from '@js/core/utils/math';
@@ -29,6 +28,7 @@ import type {
   CalendarZoomLevel, DateLike, Properties,
 } from '@js/ui/calendar';
 import { current, isFluent } from '@js/ui/themes';
+import { FunctionTemplate } from '@ts/core/templates/function_template';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { SupportedKeys } from '@ts/core/widget/widget';
 import eventsEngine from '@ts/events/core/events_engine';
