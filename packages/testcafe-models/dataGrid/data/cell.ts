@@ -13,6 +13,7 @@ const CLASS = {
   cellModified: 'dx-cell-modified',
   checkbox: 'dx-checkbox',
   linkEdit: 'dx-link-edit',
+  linkCancel: 'dx-link-cancel',
 };
 
 export default class DataCell extends FocusableElement {
@@ -49,6 +50,10 @@ export default class DataCell extends FocusableElement {
 
   getLinkEdit(): Selector {
     return this.element.find(`.${CLASS.linkEdit}`);
+  }
+
+  getLinkCancel(): Selector {
+    return this.element.find(`.${CLASS.linkCancel}`);
   }
 
   getIconByTitle(title: string): Selector {
