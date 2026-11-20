@@ -1,5 +1,5 @@
 import $ from '@js/core/renderer';
-import type { TemplateBase } from '@ts/core/templates/template_base';
+import type { FunctionTemplate } from '@js/core/templates/function_template';
 import Quill from 'devextreme-quill';
 
 import type {
@@ -15,7 +15,7 @@ import TemplatesStorage from '../utils/templates_storage';
 interface MentionBlotConstructor extends EmbedBlotConstructor<MentionData> {
   create: (data: MentionData) => HTMLElement;
   value: (node: HTMLElement) => MentionData;
-  addTemplate: (data: MentionTemplateKey, template: TemplateBase) => void;
+  addTemplate: (data: MentionTemplateKey, template: FunctionTemplate) => void;
   removeTemplate: (data: MentionTemplateKey) => void;
   _templatesStorage: TemplatesStorage;
 }
@@ -80,7 +80,7 @@ if (Quill) {
         .append(data.value);
     }
 
-    static addTemplate(data: MentionTemplateKey, template: TemplateBase): void {
+    static addTemplate(data: MentionTemplateKey, template: FunctionTemplate): void {
       this._templatesStorage.set(data, template);
     }
 

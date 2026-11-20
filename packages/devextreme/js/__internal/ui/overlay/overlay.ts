@@ -39,6 +39,7 @@ import type {
 import type dxOverlay from '@js/ui/overlay';
 import type { dxOverlayAnimation, dxOverlayOptions, Properties } from '@js/ui/overlay';
 import uiErrors from '@js/ui/widget/ui.errors';
+import type { TemplateBase } from '@ts/core/templates/template_base';
 import documentSizeCallbacks from '@ts/core/utils/document_size_callbacks';
 import domUtils from '@ts/core/utils/dom';
 import selectors from '@ts/core/utils/selectors';
@@ -1257,7 +1258,7 @@ class Overlay<
     const { contentTemplate: contentTemplateOption } = this.option();
 
     const whenContentRendered = Deferred();
-    const contentTemplate = this._getTemplate(contentTemplateOption);
+    const contentTemplate = this._getTemplate(contentTemplateOption) as unknown as TemplateBase;
     const transclude = this._templateManager.anonymousTemplateName === contentTemplateOption;
 
     contentTemplate?.render({
