@@ -1,18 +1,11 @@
-import type { Locator, Page } from '@playwright/test';
+import type { Page } from '@playwright/test';
 import { expect, test } from '../../../fixtures';
 import { createWidget } from '../../../helpers/createWidget';
+import { appendStyle } from '../../../helpers/domUtils';
 import { getThemeName } from '../../../helpers/themeUtils';
 import Scheduler from '../../../models/scheduler';
 
 const SCHEDULER_SELECTOR = '#container';
-
-const setStyleAttribute = async (element: Locator, styleValue: string): Promise<void> => {
-  await element.evaluate((node, value) => {
-    const styles = node.getAttribute('style') ?? '';
-
-    node.setAttribute('style', `${styles} ${value}`);
-  }, styleValue);
-};
 
 const createScheduler = async (page: Page, container: string, options?): Promise<void> => createWidget(page, 'dxScheduler', {
   currentDate: new Date(2020, 8, 7),
@@ -46,7 +39,7 @@ test.describe('Re-render on resize', () => {
       const scheduler = new Scheduler(page, SCHEDULER_SELECTOR);
       const { element } = scheduler.getAppointment('test');
 
-      await setStyleAttribute(element, 'background-color: red;');
+      await appendStyle(element, 'background-color: red;');
       await expect(element).toHaveAttribute('style', /transform: translate\(0px, 0px\); width: \d+\.\d+px; height: \d+px; background-color: red;/);
     });
   });
@@ -60,7 +53,7 @@ test.describe('Re-render on resize', () => {
       const scheduler = new Scheduler(page, SCHEDULER_SELECTOR);
       const { element } = scheduler.getAppointment('test');
 
-      await setStyleAttribute(element, 'background-color: red;');
+      await appendStyle(element, 'background-color: red;');
 
       await expect(element).toHaveAttribute('style', 'transform: translate(0px, 30px); width: 200px; height: 70px; background-color: red;');
     });
@@ -75,7 +68,7 @@ test.describe('Re-render on resize', () => {
       const scheduler = new Scheduler(page, SCHEDULER_SELECTOR);
       const { element } = scheduler.getAppointment('test');
 
-      await setStyleAttribute(element, 'background-color: red;');
+      await appendStyle(element, 'background-color: red;');
 
       await expect(element).toHaveAttribute('style', 'transform: translate(0px, 30px); width: 200px; height: 70px; background-color: red;');
     });
@@ -90,7 +83,7 @@ test.describe('Re-render on resize', () => {
       const scheduler = new Scheduler(page, SCHEDULER_SELECTOR);
       const { element } = scheduler.getAppointment('test');
 
-      await setStyleAttribute(element, 'background-color: red;');
+      await appendStyle(element, 'background-color: red;');
 
       const height = getThemeName(theme) === 'fluent-next' ? '61.2539px' : '61.7539px';
 

@@ -1,20 +1,12 @@
-import type { Locator } from '@playwright/test';
 import type { ToolbarItemComponent } from 'devextreme/common';
 import type { Item, LocateInMenuMode } from 'devextreme/ui/toolbar';
 import { test } from '../../../fixtures';
 import { createWidget } from '../../../helpers/createWidget';
-import { appendElementTo, setAttribute } from '../../../helpers/domUtils';
+import { appendElementTo, appendStyle, setAttribute } from '../../../helpers/domUtils';
 import { testScreenshot } from '../../../helpers/screenshots';
 import Toolbar from '../../../models/toolbar';
 
 const supportedWidgets: ToolbarItemComponent[] = ['dxAutocomplete', 'dxButton', 'dxCheckBox', 'dxDateBox', 'dxMenu', 'dxSelectBox', 'dxTabs', 'dxTextBox', 'dxButtonGroup', 'dxDropDownButton'];
-
-const appendStyle = (locator: Locator, style: string): Promise<void> => locator.evaluate(
-  (element, value) => {
-    element.setAttribute('style', `${element.getAttribute('style') ?? ''} ${value}`);
-  },
-  style,
-);
 
 test.describe('Toolbar_common', () => {
   (['never', 'always'] as LocateInMenuMode[]).forEach((locateInMenu) => {
