@@ -2,6 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 
+import type { Coordinates } from '@js/core/renderer';
 import { paintedColor } from '@ts/core/utils/css_variables';
 import { isDefined } from '@ts/core/utils/type';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
@@ -28,7 +29,7 @@ interface LinkConnection {
 }
 
 interface LinkWidget {
-  _renderer: { getRootOffset: () => { left: number; top: number }; root?: { element?: Element } };
+  _renderer: { getRootOffset: () => Coordinates; root?: { element?: Element } };
   _tooltip?: {
     show: (target: ThemeValue, coords: Coords) => void;
     hide: () => void;

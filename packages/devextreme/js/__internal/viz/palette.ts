@@ -23,7 +23,7 @@ import { normalizeEnum } from '@ts/viz/core/utils';
 const FLUENT_NEXT_VIZ = {
   primary: 'var(--dx-viz-primary, #0f6cbd)',
 
-  blue: 'var(--dx-viz-blue, #0078d4)',
+  blue: 'var(--dx-viz-blue, #0c69b7)',
   red: 'var(--dx-viz-red, #c83d3d)',
   green: 'var(--dx-viz-green, #008f04)',
   yellow: 'var(--dx-viz-yellow, #eaa300)',
@@ -442,13 +442,13 @@ export let createPalette = function (palette, parameters, themeDefaultPalette?) 
       this._extensionStrategy = null;
     },
 
-    getNextColor(count) {
+    getNextColor(count?) {
       const colorIndex = this._currentColor;
       this._currentColor += 1;
       return this._extensionStrategy.getColor(colorIndex, count);
     },
 
-    generateColors(count, parameters?) {
+    generateColors(count?, parameters?) {
       return this._extensionStrategy.generateColors(count, (parameters || {}).repeat);
     },
 

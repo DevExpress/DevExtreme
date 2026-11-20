@@ -62,7 +62,7 @@ const aiCreated = async (page: Page): Promise<void> => {
 
   await page.locator(defaultSelector).click();
 
-  await htmlEditor.toolbar.getItemByName('ai').element.click();
+  await htmlEditor.getToolbarItem('ai').element.click();
   await menuItems.nth(4).click();
 
   await menuItems.nth(4)

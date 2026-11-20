@@ -13,7 +13,7 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import resizeObserverSingleton from '@js/core/resize_observer';
 import { EmptyTemplate } from '@js/core/templates/empty_template';
-import type { TemplateBase } from '@js/core/templates/template_base';
+import type { FunctionTemplate } from '@js/core/templates/function_template';
 import { noop } from '@js/core/utils/common';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import { contains } from '@js/core/utils/dom';
@@ -770,7 +770,7 @@ class Popup<
   }
 
   _renderByTemplate(
-    template: TemplateBase,
+    template: FunctionTemplate,
     $container: dxElementWrapper,
   ): dxElementWrapper {
     const $result = $(template.render({ container: getPublicElement($container) }));

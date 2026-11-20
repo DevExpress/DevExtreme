@@ -1,6 +1,6 @@
 import type { Page } from '@playwright/test';
 import type { Properties } from 'devextreme/ui/toolbar';
-import Toolbar from '../../models/toolbar/toolbar';
+import Toolbar from '../../models/toolbar';
 import { defaultSelector, testAccessibility, type Configuration } from '../../helpers/accessibility/test';
 import type { Options } from '../../helpers/generateOptionMatrix';
 
