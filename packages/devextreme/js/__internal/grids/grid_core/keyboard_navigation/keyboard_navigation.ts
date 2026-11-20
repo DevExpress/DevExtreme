@@ -3039,6 +3039,18 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
   public getRowIndex(): number | undefined {
     return this._focusedCellPosition ? this._focusedCellPosition.rowIndex : -1;
   }
+
+  public prepareCommandCellFocus(target: EventTarget | null): void {
+    const $cell = this.getCellElementFromTarget(target);
+    if (!this.isKeyboardEnabled() || !$cell.hasClass(EDITING_CLASSES.commandEdit)) {
+      return;
+    }
+
+    this.setupFocusedView();
+    this._updateFocusedCellPosition($cell);
+    this._isNeedFocus = true;
+    this._isNeedScroll = true;
+  }
 }
 
 const rowsView = (
