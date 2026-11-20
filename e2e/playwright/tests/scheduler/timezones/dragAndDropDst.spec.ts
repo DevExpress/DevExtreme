@@ -33,7 +33,7 @@ const CUSTOM_CSS = `
 .dx-scheduler-cell-sizes-vertical {
   height: 25px;
 }`;
-// NOTE: half of an regular (1 hour) appointment size
+// NOTE: half of a regular (1 hour) appointment size
 const DRAG_Y_OFFSET_PX = 12;
 
 const getAppointmentFromStartDate = (startDate: Date, offset: number): Appointment => {

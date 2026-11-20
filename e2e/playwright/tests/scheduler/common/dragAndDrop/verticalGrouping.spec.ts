@@ -5,7 +5,7 @@ import Scheduler from '../../../../models/scheduler';
 import createScheduler from './init/widget.setup';
 
 test.describe('Drag-and-drop appointments in the Scheduler with vertical grouping', () => {
-  test('Should drag appoinment to the previous day`s cell (T1025952)', async ({ page }) => {
+  test('Should drag appointment to the previous day`s cell (T1025952)', async ({ page }) => {
     await createScheduler(page, {
       dataSource: [
         {

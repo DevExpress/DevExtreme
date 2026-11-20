@@ -10,7 +10,7 @@ export interface TestOptions {
 }
 
 // Overriding "page" gives every test the prepared container page, the way the TestCafe runner did
-// it from its global test hooks. Nothing needs cleaning up afterwards: every test gets its own
+// it from its global test hooks. Nothing needs cleaning up afterward: every test gets its own
 // context, and the widgets of the previous one die with its page.
 export const test = base.extend<TestOptions>({
   theme: [DEFAULT_THEME, { option: true }],

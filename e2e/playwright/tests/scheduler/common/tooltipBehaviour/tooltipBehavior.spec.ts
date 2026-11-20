@@ -176,7 +176,7 @@ test.describe('Appointment tooltip behavior during scrolling in the Scheduler (T
   test.describe(() => {
     test.use({ browserSize: [600, 1000] });
 
-    test('Tooltip on mobile devices should have enough hight if there are async templates (React)', async ({ page }) => {
+    test('Tooltip on mobile devices should have enough high if there are async templates (React)', async ({ page }) => {
       await page.evaluate(() => {
         (window as any).deferreds = [];
       });
@@ -237,7 +237,7 @@ test.describe('Appointment tooltip behavior during scrolling in the Scheduler (T
 
       const scheduler = new Scheduler(page, '#container');
 
-      const resolveAllRenderDeferreds = () => page.evaluate(() => {
+      const resolveAllRenderDeferred = () => page.evaluate(() => {
         (window as any).deferreds
           .filter((d) => d.state() === 'pending')
           .map((d) => d.resolve());
@@ -245,7 +245,7 @@ test.describe('Appointment tooltip behavior during scrolling in the Scheduler (T
 
       await scheduler.headerPanel.element.click(); // just click away
       await scheduler.collectors.find('7').element.click();
-      await resolveAllRenderDeferreds();
+      await resolveAllRenderDeferred();
 
       await testScreenshot(page, 'tooltip-rendering-with-react.png');
 
@@ -253,7 +253,7 @@ test.describe('Appointment tooltip behavior during scrolling in the Scheduler (T
 
       await scheduler.headerPanel.element.click(); // just click away
       await scheduler.collectors.find('7').element.click();
-      await resolveAllRenderDeferreds();
+      await resolveAllRenderDeferred();
 
       await testScreenshot(page, 'tooltip-rendering-with-react.png');
     });
