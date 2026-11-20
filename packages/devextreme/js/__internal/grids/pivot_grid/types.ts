@@ -1,9 +1,11 @@
 import type { DataSource } from '@js/common/data/data_source/data_source';
 import type { ScalarFilterValue } from '@js/common/grids';
 import type { DeferredObj } from '@js/core/utils/deferred';
+import type { Cell } from '@js/ui/pivot_grid';
 import type PivotGridDataSource from '@js/ui/pivot_grid/data_source';
 import type { Field } from '@js/ui/pivot_grid/data_source';
 import type { StoreLoadOptions } from '@ts/data/data_source/types';
+import type { ColumnInfoCell } from '@ts/grids/grid_core/virtual_columns/types';
 
 export type PivotGridField = Field & {
   index?: number;
@@ -107,6 +109,13 @@ export interface PivotGridLoadResult {
   grandTotalRowIndex: number;
   grandTotalColumnIndex: number;
 }
+
+export type PivotGridCell = Cell & ColumnInfoCell & {
+  isWhiteSpace?: boolean;
+  width?: number;
+  sorted?: boolean;
+  wordWrapEnabled?: boolean;
+};
 
 export interface PivotGridStore {
   getFields: (fields?: PivotGridField[]) => DeferredObj<DiscoveredField[]>;

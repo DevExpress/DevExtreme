@@ -9,6 +9,7 @@ import Popup from '@js/ui/popup/ui.popup';
 import { capitalize } from '@ts/core/utils/capitalize';
 
 import { AreaItem } from '../area_item/m_area_item';
+import type { AreaName } from '../area_item/types';
 
 const DIV = '<div>';
 
@@ -34,7 +35,7 @@ class FieldsArea extends AreaItem {
     this._area = area;
   }
 
-  _getAreaName() {
+  _getAreaName(): AreaName {
     return 'fields';
   }
 
@@ -71,6 +72,7 @@ class FieldsArea extends AreaItem {
       icon: 'menu',
       width: 'auto',
       onClick() {
+        // @ts-expect-error dxPopup is added to the renderer at runtime
         const popup = that.tableElement().find('.dx-fields-area-popup').dxPopup('instance');
         if (!popup.option('visible')) {
           popup.show();
@@ -114,6 +116,7 @@ class FieldsArea extends AreaItem {
     const that = this;
     const button = tableElement.find('.dx-button');
     const popupOptions = that._getPopupOptions(row, button);
+    // @ts-expect-error dxPivotGridFieldChooserBase is added to the renderer at runtime
     const FieldChooserBase = that.component.$element().dxPivotGridFieldChooserBase('instance');
 
     if (that._rowPopup) {
@@ -123,6 +126,7 @@ class FieldsArea extends AreaItem {
     that._rowPopup = that.component._createComponent(
       $(DIV).appendTo(tableElement),
       Popup,
+      // @ts-expect-error the fields area popup options aren't typed yet
       popupOptions,
     );
 
@@ -144,11 +148,13 @@ class FieldsArea extends AreaItem {
     const that = this;
     const groupElement = this.groupElement();
     const isVisible = this.isVisible();
+    // @ts-expect-error dxPivotGridFieldChooserBase is added to the renderer at runtime
     const fieldChooserBase = that.component.$element().dxPivotGridFieldChooserBase('instance');
     const head = $('<thead>').addClass('dx-pivotgrid-fields-area-head').appendTo(tableElement);
     const area = that._area;
     const row = $('<tr>');
 
+    // @ts-expect-error the group element is rendered here
     groupElement.toggleClass('dx-hidden', !isVisible);
     tableElement.addClass('dx-area-field-container');
 
@@ -168,6 +174,7 @@ class FieldsArea extends AreaItem {
       }
     });
     if (!row.children().length) {
+      // @ts-expect-error option() returns unknown for a template path
       $('<td>').append($(DIV).addClass('dx-empty-area-text').text(this.option(`fieldPanel.texts.${area}FieldArea`))).appendTo(row);
     }
 
@@ -189,6 +196,7 @@ class FieldsArea extends AreaItem {
 
   reset() {
     super.reset();
+    // @ts-expect-error the group element is rendered here
     this.groupElement().css('marginTop', 0);
   }
 
