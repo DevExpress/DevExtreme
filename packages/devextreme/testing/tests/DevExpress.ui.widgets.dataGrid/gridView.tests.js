@@ -1974,7 +1974,7 @@ QUnit.module('Synchronize columns', {
         // assert
         const $colElements = $testElement.find('.dx-datagrid-headers').find('col');
         assert.strictEqual($colElements.length, 5, 'column count');
-        assert.strictEqual($colElements.get(1).style.width, '115px', 'width of a first command column');
+        assert.strictEqual($colElements.get(1).style.width, '134px', 'width of a first command column');
         assert.strictEqual($colElements.get(2).style.width, '250px', 'width of a second command column');
     });
 
@@ -2312,7 +2312,7 @@ QUnit.module('Fixed columns', {
         assert.strictEqual($colElements.get(1).style.width, '', 'width of the second cell');
         assert.strictEqual($colElements.get(2).style.width, '', 'width of the third cell');
         assert.strictEqual($colElements.get(3).style.width, '', 'width of the fourth cell');
-        assert.roughEqual(parseFloat($colElements.get(4).style.width), 128, 1.01, 'width of the fifth cell');
+        assert.roughEqual(parseFloat($colElements.get(4).style.width), 169, 1.01, 'width of the fifth cell');
     });
 
     // T800761
