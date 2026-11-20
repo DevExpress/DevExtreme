@@ -12,6 +12,7 @@
 /apps/demos/Demos/**                                                    @DevExpress/devextreme-components
 /e2e/testcafe-devextreme/tests/*/**                                     @DevExpress/devextreme-components
 /e2e/playwright/tests/editors/**                                        @DevExpress/devextreme-components
+/e2e/playwright/tests/navigation/**                                     @DevExpress/devextreme-components
 /e2e/playwright/tests/common/*                                          @DevExpress/devextreme-components
 /e2e/playwright/tests/common/etalons/**                                 @DevExpress/devextreme-components
 /e2e/playwright/tests/common/gantt/**                                   @DevExpress/devextreme-components
