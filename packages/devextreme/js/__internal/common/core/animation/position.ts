@@ -7,7 +7,7 @@ import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { getBoundingRect } from '@js/core/utils/position';
 import {
-  getHeight, getOuterHeight, getOuterWidth, getWidth,
+  getHeight, getOuterHeight, getOuterWidth, getVisibleHeight, getWidth,
 } from '@js/core/utils/size';
 import { setStyle } from '@js/core/utils/style';
 import { touch } from '@js/core/utils/support';
@@ -222,26 +222,18 @@ const calculateScrollbarWidth = function calculateScrollbarWidth(): void {
   scrollbarWidth = result;
 };
 
-const getViewportSize = function getViewportSize(
-  windowWidth: number,
-  windowHeight: number,
-): { width: number; height: number } {
+const getViewportHeight = function getViewportHeight(windowHeight: number): number {
   const $viewport = $('<div>').css({
     position: 'fixed',
     top: 0,
-    right: 0,
     bottom: 0,
-    left: 0,
     visibility: 'hidden',
   }).appendTo($('body'));
-  const { width, height } = getBoundingRect($viewport.get(0)) ?? {};
+  const height = getVisibleHeight($viewport.get(0));
 
   $viewport.remove();
 
-  return {
-    width: Math.abs(width - windowWidth) < 1 ? width : windowWidth,
-    height: Math.abs(height - windowHeight) < 1 ? height : windowHeight,
-  };
+  return Math.abs(height - windowHeight) < 1 ? height : windowHeight;
 };
 
 const defaultPositionResult = {
@@ -430,9 +422,7 @@ const calculatePosition = function calculatePosition(
       boundaryWidth = Number(getWidth($boundary));
       boundaryHeight = Number(getHeight($boundary));
     } else {
-      const viewportSize = getViewportSize(windowWidth, windowHeight);
-      boundaryWidth = Math.floor(viewportSize.width);
-      boundaryHeight = Math.floor(viewportSize.height);
+      boundaryHeight = Math.floor(getViewportHeight(windowHeight));
     }
 
     return {
