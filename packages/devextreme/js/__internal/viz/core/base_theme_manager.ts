@@ -146,6 +146,8 @@ export let BaseThemeManager = class BaseThemeManager {
   }
 };
 
+export type BaseThemeManagerInstance = InstanceType<typeof BaseThemeManager>;
+
 /// #DEBUG
 /* eslint-disable-next-line @typescript-eslint/naming-convention
   -- description seam setter for tests stubs */
