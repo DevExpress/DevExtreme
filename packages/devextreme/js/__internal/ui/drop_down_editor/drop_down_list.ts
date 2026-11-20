@@ -1,4 +1,5 @@
 import type { SingleMultipleAllOrNone } from '@js/common';
+import animationPosition from '@js/common/core/animation/position';
 import { addNamespace } from '@js/common/core/events/utils';
 import messageLocalization from '@js/common/core/localization/message';
 import type { DataSource, GroupItem } from '@js/common/data';
@@ -993,7 +994,7 @@ class DropDownList<
       $customBoundaryContainer ? $customBoundaryContainer.offset()?.top ?? 0 : 0
     );
 
-    const windowHeight = getOuterHeight(window);
+    const windowHeight = Math.floor(animationPosition.getViewportHeight(getOuterHeight(window)));
 
     const containerHeight = $customBoundaryContainer
       ? Math.min(getOuterHeight($customBoundaryContainer.get(0)), windowHeight)
@@ -1001,7 +1002,7 @@ class DropDownList<
 
     const maxHeight = Math.max(
       offsetTop,
-      containerHeight - offsetTop - getOuterHeight($element.get(0)),
+      Math.floor(containerHeight - offsetTop - getOuterHeight($element.get(0))),
     );
 
     return Math.min(containerHeight * 0.5, maxHeight);
