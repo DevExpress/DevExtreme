@@ -3,6 +3,7 @@ import { expectClass } from '../internal/classMatcher';
 
 const CLASS = {
   focused: 'dx-state-focused',
+  active: 'dx-state-active',
   collapsePrev: 'dx-resize-handle-collapse-prev-pane',
 };
 
@@ -19,5 +20,9 @@ export default class ResizeHandle {
 
   public expectFocused(present = true): Promise<void> {
     return expectClass(this.element, CLASS.focused, present);
+  }
+
+  public expectActive(present = true): Promise<void> {
+    return expectClass(this.element, CLASS.active, present);
   }
 }

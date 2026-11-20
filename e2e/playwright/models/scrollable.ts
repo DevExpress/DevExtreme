@@ -68,9 +68,7 @@ export default class Scrollable extends Widget {
   }
 
   public async update(): Promise<void> {
-    await this.element.evaluate((element, widgetName) => {
-      ($(element) as any).data(widgetName).update();
-    }, this.getName());
+    await this.invoke('update');
   }
 
   public async setContainerCssWidth(width: number): Promise<void> {
