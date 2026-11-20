@@ -67,7 +67,11 @@ function resolveExecutorConfig(
       ? path.join(projectRoot, options.resolvePathsBaseDir)
       : undefined,
     customTransformers: options.fullySpecifiedImports
-      ? { after: [createFullySpecifiedImportsTransformer()] }
+      ? {
+          after: [
+            createFullySpecifiedImportsTransformer({ aliases: options.resolvePaths ?? false }),
+          ],
+        }
       : undefined,
   };
 }

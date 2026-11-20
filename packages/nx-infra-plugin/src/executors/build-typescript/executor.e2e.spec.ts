@@ -202,6 +202,34 @@ describe('BuildTypescriptExecutor E2E', () => {
       expect(content).toContain(`from './helpers'`);
     }, 10000);
 
+    it('should add extensions to path aliases when resolvePaths is enabled', async () => {
+      await writeFileText(
+        path.join(projectDir, 'src', 'aliased.ts'),
+        `import { one } from '@lib/helpers';\nexport const two = one + 1;\nexport const lazy = () => import('@lib/helpers');\n`,
+      );
+
+      const result = await executor(
+        {
+          ...esmOptions,
+          fullySpecifiedImports: true,
+          resolvePaths: true,
+          resolvePathsBaseDir: './src',
+        },
+        context,
+      );
+      expect(result.success).toBe(true);
+
+      const outDir = path.join(projectDir, 'npm', 'esm');
+      const indexContent = await readFileText(path.join(outDir, 'index.js'));
+      expect(indexContent).toContain(`from './utils/index.js'`);
+      expect(indexContent).not.toContain('@lib/');
+
+      const aliasedContent = await readFileText(path.join(outDir, 'aliased.js'));
+      expect(aliasedContent).toContain(`from './helpers.js'`);
+      expect(aliasedContent).toContain(`import('./helpers.js')`);
+      expect(aliasedContent).not.toContain('@lib/');
+    }, 10000);
+
     it('should fail on a relative import that does not resolve', async () => {
       await writeFileText(
         path.join(projectDir, 'src', 'broken.ts'),
@@ -245,52 +273,61 @@ describe('BuildTypescriptExecutor E2E', () => {
       throw new Error('waitFor timed out');
     }
 
-    it('emits to outDir with alias resolution and stops on SIGINT', async () => {
-      const options: BuildTypescriptExecutorSchema = {
-        module: 'esm',
-        tsconfig: './tsconfig.esm.json',
-        outDir: './npm/esm-watch',
-        resolvePaths: true,
-        resolvePathsBaseDir: './src',
-        watch: true,
-      };
+    it.each([
+      { fullySpecifiedImports: false, expectedImport: `from './utils'` },
+      { fullySpecifiedImports: true, expectedImport: `from './utils/index.js'` },
+    ])(
+      'emits to outDir with alias resolution (fullySpecifiedImports: $fullySpecifiedImports) and stops on SIGINT',
+      async ({ fullySpecifiedImports, expectedImport }) => {
+        const options: BuildTypescriptExecutorSchema = {
+          module: 'esm',
+          tsconfig: './tsconfig.esm.json',
+          outDir: './npm/esm-watch',
+          resolvePaths: true,
+          resolvePathsBaseDir: './src',
+          fullySpecifiedImports,
+          watch: true,
+        };
 
-      const outIndex = path.join(projectDir, 'npm', 'esm-watch', 'index.js');
+        const outIndex = path.join(projectDir, 'npm', 'esm-watch', 'index.js');
 
-      const originalOnce = process.once;
-      let stopWatch: (() => void) | undefined;
-      let run: Promise<{ success: boolean }> | undefined;
+        const originalOnce = process.once;
+        let stopWatch: (() => void) | undefined;
+        let run: Promise<{ success: boolean }> | undefined;
 
-      (process as unknown as { once: typeof process.once }).once = ((
-        event: string,
-        handler: () => void,
-      ) => {
-        if (event === 'SIGINT' || event === 'SIGTERM') {
-          stopWatch = handler;
-          return process;
+        (process as unknown as { once: typeof process.once }).once = ((
+          event: string,
+          handler: () => void,
+        ) => {
+          if (event === 'SIGINT' || event === 'SIGTERM') {
+            stopWatch = handler;
+            return process;
+          }
+          return originalOnce.call(process, event, handler as never);
+        }) as typeof process.once;
+
+        try {
+          run = executor(options, context);
+
+          await waitFor(() => fs.existsSync(outIndex));
+          const indexContent = await readFileText(outIndex);
+          expect(indexContent).not.toContain('@lib/utils');
+          expect(indexContent).toContain(expectedImport);
+
+          stopWatch?.();
+          stopWatch = undefined;
+
+          expect((await run).success).toBe(true);
+          run = undefined;
+        } finally {
+          stopWatch?.();
+          if (run) {
+            await run;
+          }
+          (process as unknown as { once: typeof process.once }).once = originalOnce;
         }
-        return originalOnce.call(process, event, handler as never);
-      }) as typeof process.once;
-
-      try {
-        run = executor(options, context);
-
-        await waitFor(() => fs.existsSync(outIndex));
-        const indexContent = await readFileText(outIndex);
-        expect(indexContent).not.toContain('@lib/utils');
-
-        stopWatch?.();
-        stopWatch = undefined;
-
-        expect((await run).success).toBe(true);
-        run = undefined;
-      } finally {
-        stopWatch?.();
-        if (run) {
-          await run;
-        }
-        (process as unknown as { once: typeof process.once }).once = originalOnce;
-      }
-    }, 30000);
+      },
+      30000,
+    );
   });
 });
