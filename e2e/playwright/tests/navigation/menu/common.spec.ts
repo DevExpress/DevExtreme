@@ -137,9 +137,7 @@ test.describe('Menu_common', () => {
     test.use({ browserSize: [500, 500] });
 
     test('Menu scrolling', async ({ page }) => {
-      const items: { text: string; items?: { text: string }[] }[] = new Array(99)
-        .fill(null)
-        .map((_, idx) => ({ text: `item ${idx}` }));
+      const items: Item[] = new Array(99).fill(null).map((_, idx) => ({ text: `item ${idx}` }));
 
       items[98].items = new Array(99).fill(null).map((_, idx) => ({ text: `item ${idx}` }));
 

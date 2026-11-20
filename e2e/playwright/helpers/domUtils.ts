@@ -2,21 +2,20 @@ import type { Locator, Page } from '@playwright/test';
 
 const STYLESHEET_RULES_ID = 'stylesheetRules';
 
-export const setAttribute = async (
-  page: Page,
-  selector: string,
-  attribute: string,
-  value: string,
-): Promise<void> => page.evaluate(
-  ({ elementSelector, name, attributeValue }) => {
-    document.querySelector(elementSelector)?.setAttribute(name, attributeValue);
-  },
-  { elementSelector: selector, name: attribute, attributeValue: value },
-);
-
-// A selector stands for its first match, as document.querySelector did.
 const toLocator = (page: Page, target: Locator | string): Locator => (
   typeof target === 'string' ? page.locator(target).first() : target
+);
+
+export const setAttribute = async (
+  page: Page,
+  target: Locator | string,
+  attribute: string,
+  value: string,
+): Promise<void> => toLocator(page, target).evaluate(
+  (element, { name, attributeValue }) => {
+    element.setAttribute(name, attributeValue);
+  },
+  { name: attribute, attributeValue: value },
 );
 
 export const appendAttributeValue = async (
@@ -108,10 +107,6 @@ export const removeStylesheetRulesFromPage = async (page: Page): Promise<void> =
   (stylesheetId) => { document.getElementById(stylesheetId)?.remove(); },
   STYLESHEET_RULES_ID,
 );
-
-export const getStyleAttribute = async (
-  locator: Locator,
-): Promise<string | null> => locator.getAttribute('style');
 
 export const hasHorizontalScroll = async (
   locator: Locator,

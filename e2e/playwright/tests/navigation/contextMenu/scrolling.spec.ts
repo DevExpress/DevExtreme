@@ -1,3 +1,4 @@
+import type { Item } from 'devextreme/ui/context_menu';
 import { test } from '../../../fixtures';
 import { createWidget } from '../../../helpers/createWidget';
 import { appendElementTo } from '../../../helpers/domUtils';
@@ -10,9 +11,7 @@ test.describe('ContextMenu_common', () => {
   test('ContextMenu items render', async ({ page }) => {
     await appendElementTo(page, '#container', 'div', 'contextMenu');
 
-    const items: { text: string; items?: { text: string }[] }[] = new Array(99)
-      .fill(null)
-      .map((_, idx) => ({ text: `item ${idx}` }));
+    const items: Item[] = new Array(99).fill(null).map((_, idx) => ({ text: `item ${idx}` }));
 
     items[98].items = new Array(99).fill(null).map((_, idx) => ({ text: `item ${idx}` }));
 
