@@ -52,17 +52,17 @@ const getElementOffset = ($element: dxElementWrapper): Coordinates => {
 const getElementSizes = (
   $element: dxElementWrapper,
 ): { width: number; height: number } => {
-  const width = getWidth($element);
-  const height = getHeight($element);
-  return { width, height } as { width: number; height: number };
+  const width = getWidth($element) ?? 0;
+  const height = getHeight($element) ?? 0;
+  return { width, height };
 };
 
 const getElementOuterSizes = (
   $element: dxElementWrapper,
 ): { width: number; height: number } => {
-  const width = getOuterWidth($element, true);
-  const height = getOuterHeight($element, true);
-  return { width, height } as { width: number; height: number };
+  const width = getOuterWidth($element, true) ?? 0;
+  const height = getOuterHeight($element, true) ?? 0;
+  return { width, height };
 };
 
 function elementHasPoint(element: Element, x: number, y: number): boolean | undefined {
@@ -131,7 +131,7 @@ function getItemsOffset(
   $itemsContainer: dxElementWrapper,
 ): OldSortableItemOffset[] {
   const result: OldSortableItemOffset[] = [];
-  let $item: dxElementWrapper | never[] = [];
+  let $item: dxElementWrapper = $();
 
   for (let i = 0; i < $elements.length; i += $item.length) {
     $item = $elements.eq(i);
@@ -245,16 +245,14 @@ class OldSortable extends DOMComponent<OldSortable, OldSortableProperties> {
 
   _renderItem($sourceItem: dxElementWrapper, target: string): dxElementWrapper {
     const itemRender = this.option('itemRender');
-    // eslint-disable-next-line @typescript-eslint/init-declarations -- set in the if/else below
-    let $item: dxElementWrapper;
 
     if (itemRender) {
-      $item = itemRender($sourceItem, target);
-    } else {
-      $item = $sourceItem.clone();
-      $item.css(getElementSizes($sourceItem));
+      return itemRender($sourceItem, target);
     }
-    return $item;
+
+    return $sourceItem
+      .clone()
+      .css(getElementSizes($sourceItem));
   }
 
   _renderIndicator(
@@ -498,7 +496,7 @@ class OldSortable extends DOMComponent<OldSortable, OldSortableProperties> {
 
         if (!scrollWrapper && $targetGroup.attr('allow-scrolling')) {
           // @ts-expect-error dxScrollable is not defined in dxElementWrapper
-          const scrollInstance = $targetGroup.dxScrollable('instance');
+          const scrollInstance: Scrollable = $targetGroup.dxScrollable('instance');
           scrollWrapper = getScrollWrapper(scrollInstance);
         }
 
