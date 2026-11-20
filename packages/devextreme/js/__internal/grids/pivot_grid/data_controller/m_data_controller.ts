@@ -5,7 +5,6 @@ import { deferUpdate } from '@js/core/utils/common';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred, when } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
-import { each, map } from '@js/core/utils/iterator';
 import { format } from '@js/core/utils/string';
 import { isDefined, isString } from '@js/core/utils/type';
 import type { PivotGridDataFieldArea } from '@js/ui/pivot_grid';
@@ -17,7 +16,13 @@ import type { VirtualScrollDataOptions } from '@ts/grids/grid_core/virtual_scrol
 import type { VirtualScrollController } from '@ts/grids/grid_core/virtual_scrolling/virtual_scrolling_core';
 import VirtualScrollControllerModule from '@ts/grids/grid_core/virtual_scrolling/virtual_scrolling_core';
 import { PivotGridDataSource } from '@ts/grids/pivot_grid/data_source/m_data_source';
-import type { DataSourceData, DataSourceHeaderItem } from '@ts/grids/pivot_grid/data_source/types';
+import type {
+  DataSourceData,
+  DataSourceHeaderArea,
+  DataSourceHeaderItem,
+  DataSourceState,
+  DataSourceStoreLoadOptions,
+} from '@ts/grids/pivot_grid/data_source/types';
 import type { PivotGrid } from '@ts/grids/pivot_grid/m_widget';
 import type { PivotGridField } from '@ts/grids/pivot_grid/types';
 import {
@@ -27,13 +32,10 @@ import {
 import type {
   AddInfoItemOptions,
   DataControllerOptions,
-  HeaderArea,
   HeaderInfoOptions,
   IndexedHeaderItem,
-  PagingLoadOptions,
   PivotGridCellInfo,
   PivotGridColumnInfo,
-  PivotGridTexts,
   RowInfoCallback,
   ScrollDataAdapter,
   ScrollPosition,
@@ -74,7 +76,7 @@ class DataController {
 
   public _columnsScrollController?: VirtualScrollController;
 
-  public _stateStoringController: StateStoringController;
+  public _stateStoringController: StateStoringController<DataSourceState>;
 
   public _columnsInfo: PivotGridColumnInfo[][];
 
@@ -97,7 +99,7 @@ class DataController {
   public _fieldsPreparedHandler!: (fields: PivotGridField[]) => void;
 
   public _customizeStoreLoadOptionsHandler!: (
-    storeLoadOptions: PagingLoadOptions[],
+    storeLoadOptions: DataSourceStoreLoadOptions[],
     reload?: boolean,
   ) => void;
 
@@ -124,8 +126,6 @@ class DataController {
   public _changingDuration?: number;
 
   constructor(dataControllerOptions?: DataControllerOptions) {
-    // eslint-disable-next-line @typescript-eslint/no-this-alias -- the methods use their own this
-    const that = this;
     const virtualScrollControllerChanged = this._fireChanged.bind(this);
     const options = dataControllerOptions || {};
 
@@ -135,6 +135,8 @@ class DataController {
     this._dataSource = this._createDataSource(options);
 
     if (options.component?.option('scrolling.mode') === 'virtual') {
+      // eslint-disable-next-line @typescript-eslint/no-this-alias -- the methods use their own this
+      const that = this;
       this._rowsScrollController = this.createScrollController(this, options.component, {
         totalItemsCount() {
           return that.totalRowCount();
@@ -146,21 +148,21 @@ class DataController {
           return that.rowPageSize();
         },
 
-        load() {
-          if (that._rowsScrollController) {
-            if (that._rowsScrollController.pageIndex() >= this.pageCount()) {
-              that._rowsScrollController.pageIndex(this.pageCount() - 1);
-            }
-            that._rowsScrollController.handleDataChanged(() => {
-              if (that._dataSource.paginate()) {
-                that._dataSource.load();
-              } else {
-                virtualScrollControllerChanged();
-              }
-            });
+        load(): DeferredObj<unknown> | undefined {
+          if (!that._rowsScrollController) {
+            return undefined;
           }
-
-          return undefined;
+          if (that._rowsScrollController.pageIndex() >= this.pageCount()) {
+            that._rowsScrollController.pageIndex(this.pageCount() - 1);
+          }
+          // @ts-expect-error handleDataChanged() is typed as void, load() passes its result on
+          return that._rowsScrollController.handleDataChanged(() => {
+            if (that._dataSource.paginate()) {
+              that._dataSource.load();
+            } else {
+              virtualScrollControllerChanged();
+            }
+          });
         },
       });
 
@@ -175,28 +177,28 @@ class DataController {
           return that.columnPageSize();
         },
 
-        load() {
-          if (that._columnsScrollController) {
-            if (that._columnsScrollController.pageIndex() >= this.pageCount()) {
-              that._columnsScrollController.pageIndex(this.pageCount() - 1);
-            }
-
-            that._columnsScrollController.handleDataChanged(() => {
-              if (that._dataSource.paginate()) {
-                that._dataSource.load();
-              } else {
-                virtualScrollControllerChanged();
-              }
-            });
+        load(): DeferredObj<unknown> | undefined {
+          if (!that._columnsScrollController) {
+            return undefined;
+          }
+          if (that._columnsScrollController.pageIndex() >= this.pageCount()) {
+            that._columnsScrollController.pageIndex(this.pageCount() - 1);
           }
 
-          return undefined;
+          // @ts-expect-error handleDataChanged() is typed as void, load() passes its result on
+          return that._columnsScrollController.handleDataChanged(() => {
+            if (that._dataSource.paginate()) {
+              that._dataSource.load();
+            } else {
+              virtualScrollControllerChanged();
+            }
+          });
         },
 
       });
     }
 
-    this._stateStoringController = new stateStoring.StateStoringController(
+    this._stateStoringController = new stateStoring.StateStoringController<DataSourceState>(
       options.component as unknown as InternalGrid,
     ).init();
 
@@ -338,20 +340,14 @@ class DataController {
     items: ViewHeaderItem[],
     sortBySummaryPath: SortBySummaryPath,
   ): boolean => {
-    // eslint-disable-next-line @typescript-eslint/init-declarations -- assigned in the if-else
-    let path: unknown[];
     const item = items[0];
-    const stringValuesUsed = isString(sortBySummaryPath[0]);
+    const firstPathValue = sortBySummaryPath[0];
     const headerItem = Number(item.dataIndex) >= 0 ? items[1] : item;
-
-    if (
-      (stringValuesUsed && String(sortBySummaryPath[0]).includes('&[') && headerItem.key)
-      || !headerItem.key
-    ) {
-      path = createPath(items);
-    } else {
-      path = map(items, (it) => (Number(it.dataIndex) >= 0 ? it.value : it.text)).reverse();
-    }
+    const isMemberKeySortPath = isString(firstPathValue) && firstPathValue.includes('&[');
+    const useKeyPath = isMemberKeySortPath || !headerItem.key;
+    let path = useKeyPath
+      ? createPath(items)
+      : items.map((it) => (Number(it.dataIndex) >= 0 ? it.value : it.text)).reverse();
 
     if (item.type === GRAND_TOTAL_TYPE) {
       path = path.slice(1);
@@ -385,8 +381,7 @@ class DataController {
       }
 
       const hideTotals = options.showTotals === false
-        || (dataFields.length > 0
-          && (dataFields.length === options.hiddenTotals.length));
+        || (dataFields.length > 0 && (dataFields.length === options.hiddenTotals.length));
       const hideData = dataFields.length > 0 && options.hiddenValues.length === dataFields.length;
       let viewDepthSize = depthSize;
 
@@ -441,7 +436,7 @@ class DataController {
 
           item.isLast = !item.children?.length;
           if (item.isLast) {
-            each(options.sortBySummaryPaths, (_, sortBySummaryPath) => {
+            const isSorted = options.sortBySummaryPaths.some((sortBySummaryPath) => {
               let sortPath = sortBySummaryPath;
 
               if (!isDefined(item.dataIndex)) {
@@ -449,13 +444,12 @@ class DataController {
                 sortPath.pop();
               }
 
-              if (this._isItemSorted(items, sortPath)) {
-                item.sorted = true;
-                return false;
-              }
-
-              return undefined;
+              return this._isItemSorted(items, sortPath);
             });
+
+            if (isSorted) {
+              item.sorted = true;
+            }
           }
           item.text = this.getHeaderItemText(item, field, options);
         })).done(() => {
@@ -504,19 +498,21 @@ class DataController {
     when(foreachTreeAsync(headerItems, (items: DataSourceHeaderItem[], index) => {
       const item = items[0];
       const path = createPath(items);
-      const headerItem = this._createHeaderItem(childrenStack, path.length, index);
+      const headerItem = Object.assign(
+        this._createHeaderItem(childrenStack, path.length, index),
+        {
+          type: DATA_TYPE,
+          value: item.value,
+          path,
+          text: item.text,
+          index: item.index,
+          displayText: item.displayText,
+          key: item.key,
+          isEmpty: item.isEmpty,
+        },
+      );
 
-      headerItem.type = DATA_TYPE;
-      headerItem.value = item.value;
-      headerItem.path = path;
-      headerItem.text = item.text;
-      headerItem.index = item.index;
-      headerItem.displayText = item.displayText;
-      headerItem.key = item.key;
-      headerItem.isEmpty = item.isEmpty;
-
-      if (path.length < headerDescriptionsCount
-        && item.children?.length !== 0) {
+      if (path.length < headerDescriptionsCount && item.children?.length !== 0) {
         headerItem.expanded = !!item.children;
       }
     })).done(() => {
@@ -584,12 +580,13 @@ class DataController {
               ? index
               : index + 1,
             0,
-            extend({}, item, {
+            {
+              ...item,
               children: null,
               type: TOTAL_TYPE,
               expanded: totalsPrior ? true : null,
               isAdditionalTotal: true,
-            }),
+            },
           );
         }
 
@@ -692,7 +689,7 @@ class DataController {
   ): SortBySummaryPath[] {
     const sortBySummaryPaths: SortBySummaryPath[] = [];
 
-    each(headerFields, (_, headerField) => {
+    headerFields.forEach((headerField) => {
       const fieldIndex = findField(dataFields, headerField.sortBySummaryField);
       if (fieldIndex >= 0) {
         sortBySummaryPaths.push((headerField.sortBySummaryPath ?? []).concat([fieldIndex]));
@@ -775,9 +772,7 @@ class DataController {
                 value: cellValue,
                 format: dataField.format,
                 dataType: dataField.dataType,
-
                 columnType: columnInfo.type,
-
                 rowType: rowInfo.type,
                 rowPath: rowInfo.path ?? [],
                 columnPath: columnInfo.path ?? [],
@@ -828,53 +823,52 @@ class DataController {
     component: PivotGrid,
     dataAdapter: ScrollDataAdapter,
   ): VirtualScrollController {
-    const dataOptions = extend({
-      hasKnownLastPage() {
-        return true;
-      },
-      pageCount(this: VirtualScrollDataOptions) {
-        return math.ceil(this.totalItemsCount() / this.pageSize());
-      },
-      updateLoading() {
-
-      },
-      itemsCount(this: VirtualScrollDataOptions) {
-        if (this.pageIndex() < this.pageCount() - 1) {
-          return this.pageSize();
-        }
-        return this.totalItemsCount() % this.pageSize();
-      },
-      items() {
-        return [];
-      },
-      viewportItems() {
-        return [];
-      },
-      onChanged() {
-
-      },
-      isLoading() {
-        return dataController.isLoading();
-      },
-
-      changingDuration() {
-        const dataSource = dataController._dataSource;
-        if (dataSource.paginate()) {
-          return CHANGING_DURATION_IF_PAGINATE;
-        }
-        return dataController._changingDuration || 0;
-      },
-    }, dataAdapter);
-
     return new VirtualScrollControllerModule.VirtualScrollController<unknown>(
       component as unknown as InternalGrid,
-      dataOptions,
+      {
+        hasKnownLastPage(): boolean {
+          return true;
+        },
+        pageCount(this: VirtualScrollDataOptions): number {
+          return math.ceil(this.totalItemsCount() / this.pageSize());
+        },
+        updateLoading(): void {
+
+        },
+        itemsCount(this: VirtualScrollDataOptions): number {
+          if (this.pageIndex() < this.pageCount() - 1) {
+            return this.pageSize();
+          }
+          return this.totalItemsCount() % this.pageSize();
+        },
+        items(): unknown[] {
+          return [];
+        },
+        viewportItems(): unknown[] {
+          return [];
+        },
+        onChanged(): void {
+
+        },
+        isLoading(): boolean {
+          return dataController.isLoading();
+        },
+
+        changingDuration(): number {
+          const dataSource = dataController._dataSource;
+          if (dataSource.paginate()) {
+            return CHANGING_DURATION_IF_PAGINATE;
+          }
+          return dataController._changingDuration || 0;
+        },
+        ...dataAdapter,
+      },
     );
   }
 
   public getHiddenTotals(dataFields: PivotGridField[]): number[] {
     const result: number[] = [];
-    each(dataFields, (index, field) => {
+    dataFields.forEach((field, index) => {
       if (field.showTotals === false) {
         result.push(index);
       }
@@ -887,8 +881,7 @@ class DataController {
 
     dataFields.forEach((field, index) => {
       if (
-        (field.showValues === undefined
-        && field.showTotals === false)
+        (field.showValues === undefined && field.showTotals === false)
         || field.showValues === false
       ) {
         result.push(index);
@@ -903,7 +896,7 @@ class DataController {
     columnFields: PivotGridField[],
   ): number[] {
     let result: number[] = [];
-    each(dataFields, (index, field) => {
+    dataFields.forEach((field, index) => {
       if (field.showGrandTotals === false) {
         result.push(index);
       }
@@ -944,7 +937,7 @@ class DataController {
   }
 
   public _calculatePagingForRowExpandedPaths(
-    options: PagingLoadOptions,
+    options: DataSourceStoreLoadOptions,
     skips: number[],
     takes: number[],
     rowExpandedSkips: number[],
@@ -974,13 +967,11 @@ class DataController {
             ? expandedPathIndexes[String(path.slice(0, -1))]
             : -1;
 
-          // eslint-disable-next-line max-depth -- nested in the row and cell loops
           if (expandIndex >= 0) {
             rowExpandedSkips[expandIndex] = skips[levels.length] || 0;
             rowExpandedTakes[expandIndex] = takes[levels.length] || 0;
           }
 
-          // eslint-disable-next-line max-depth -- nested in the row and cell loops
           if (cell.rowspan) {
             levels.push(cell.rowspan);
           }
@@ -991,7 +982,7 @@ class DataController {
   }
 
   public _calculatePagingForColumnExpandedPaths(
-    options: PagingLoadOptions,
+    options: DataSourceStoreLoadOptions,
     skips: number[],
     takes: number[],
     expandedSkips: number[],
@@ -1033,9 +1024,9 @@ class DataController {
   }
 
   public _processPagingForExpandedPaths(
-    options: PagingLoadOptions,
-    area: HeaderArea,
-    storeLoadOptions: PagingLoadOptions[],
+    options: DataSourceStoreLoadOptions,
+    area: DataSourceHeaderArea,
+    storeLoadOptions: DataSourceStoreLoadOptions[],
     reload?: boolean,
   ): void {
     const expandedPaths = options[`${area}ExpandedPaths`];
@@ -1080,9 +1071,9 @@ class DataController {
   }
 
   public _savePagingForExpandedPaths(
-    options: PagingLoadOptions,
-    area: HeaderArea,
-    storeLoadOptions: PagingLoadOptions[],
+    options: DataSourceStoreLoadOptions,
+    area: DataSourceHeaderArea,
+    storeLoadOptions: DataSourceStoreLoadOptions[],
     skip: number | undefined,
     take: number | undefined,
     expandedSkips: number[],
@@ -1113,7 +1104,7 @@ class DataController {
   }
 
   public _handleCustomizeStoreLoadOptions(
-    storeLoadOptions: PagingLoadOptions[],
+    storeLoadOptions: DataSourceStoreLoadOptions[],
     reload?: boolean,
   ): void {
     const options = storeLoadOptions[0];
@@ -1161,7 +1152,6 @@ class DataController {
     if (stateStoringController.isEnabled() && !stateStoringController.isLoaded()) {
       stateStoringController.load().always((state) => {
         if (state) {
-          // @ts-expect-error PivotGridDataSource.state() isn't typed yet
           this._dataSource.state(state);
         } else {
           this._dataSource.load();
@@ -1296,8 +1286,6 @@ class DataController {
   }
 
   public _update(): void {
-    // eslint-disable-next-line @typescript-eslint/no-this-alias -- the methods use their own this
-    const that = this;
     const dataSource = this._dataSource;
     const options = this._options;
     const columnFields: PivotGridField[] = dataSource.getAreaFields('column');
@@ -1323,7 +1311,8 @@ class DataController {
       progress: 0,
     };
     // @ts-expect-error notifyProgress is assigned below
-    const rowOptions: HeaderInfoOptions = extend({}, commonOptions, {
+    const rowOptions: HeaderInfoOptions = {
+      ...commonOptions,
       isEmptyGrandTotal: data.isEmptyGrandTotalRow,
       showTotals: options.showRowTotals,
       showTotalsPrior: options.showTotalsPrior === 'rows' || options.showTotalsPrior === 'both',
@@ -1332,9 +1321,10 @@ class DataController {
       sortBySummaryPaths: this.createSortPaths(columnFields, dataFields),
       layout: options.rowHeaderLayout,
       fields: rowFields,
-    });
+    };
     // @ts-expect-error notifyProgress is assigned below
-    const columnOptions: HeaderInfoOptions = extend({}, commonOptions, {
+    const columnOptions: HeaderInfoOptions = {
+      ...commonOptions,
       isEmptyGrandTotal: data.isEmptyGrandTotalColumn,
       showTotals: options.showColumnTotals,
       showTotalsPrior: options.showTotalsPrior === 'columns' || options.showTotalsPrior === 'both',
@@ -1342,8 +1332,10 @@ class DataController {
                        && grandTotalsAreHiddenForNotAllDataFields,
       sortBySummaryPaths: this.createSortPaths(rowFields, dataFields),
       fields: columnFields,
-    });
+    };
 
+    // eslint-disable-next-line @typescript-eslint/no-this-alias -- the methods use their own this
+    const that = this;
     const notifyProgress = function notifyProgress(
       this: HeaderInfoOptions,
       progress: number,
@@ -1388,9 +1380,7 @@ class DataController {
     }).done(() => {
       this._fireChanged();
       if (this._stateStoringController.isEnabled() && !this._dataSource.isLoading()) {
-        // @ts-expect-error state() is protected, PivotGridDataSource.state() isn't typed yet
         this._stateStoringController.state(this._dataSource.state());
-        // @ts-expect-error save() is protected
         this._stateStoringController.save();
       }
     });
@@ -1401,9 +1391,7 @@ class DataController {
     const scrollController = this._rowsScrollController;
     const isOnePredefinedRow = rowsInfo.length === 1 && (
       // @ts-expect-error rowsInfo[0] is a row of cells, its type is always undefined
-      !rowsInfo[0].type
-      // @ts-expect-error rowsInfo[0] is a row of cells, its type is always undefined
-      || rowsInfo[0].type === GRAND_TOTAL_TYPE
+      !rowsInfo[0].type || rowsInfo[0].type === GRAND_TOTAL_TYPE
     );
 
     if (scrollController && !getAllData && !isOnePredefinedRow) {
@@ -1541,7 +1529,7 @@ class DataController {
     const rowsInfo = this.getRowsInfo(getAllData);
     const columnsInfo = this.getColumnsInfo(getAllData);
     const data = this._dataSource.getData();
-    const texts: PivotGridTexts = this._options.texts ?? {};
+    const texts = this._options.texts ?? {};
 
     return this.createCellsInfo(
       rowsInfo,

@@ -2,17 +2,14 @@ import type {
   Cell,
   Properties as PivotGridProperties,
 } from '@js/ui/pivot_grid';
-import type { PivotGridArea } from '@js/ui/pivot_grid/data_source';
 import type { ColumnInfoCell } from '@ts/grids/grid_core/virtual_columns/types';
 import type { VirtualScrollDataOptions } from '@ts/grids/grid_core/virtual_scrolling/types';
 import type { PivotGridDataSource } from '@ts/grids/pivot_grid/data_source/m_data_source';
 import type { DataSourceHeaderItem, DataSourceOptions } from '@ts/grids/pivot_grid/data_source/types';
 import type { PivotGrid } from '@ts/grids/pivot_grid/m_widget';
-import type { PivotGridField, PivotGridLoadOptions } from '@ts/grids/pivot_grid/types';
+import type { PivotGridField } from '@ts/grids/pivot_grid/types';
 
 export type HeaderItemType = NonNullable<Cell['type']>;
-
-export type HeaderArea = Extract<PivotGridArea, 'row' | 'column'>;
 
 export interface PivotGridColumnInfo extends ColumnInfoCell {
   type?: HeaderItemType;
@@ -114,11 +111,6 @@ export type DataControllerOptions = Pick<
   component?: PivotGrid;
   dataSource?: PivotGridDataSource | DataSourceOptions;
   onFieldsPrepared?: (fields: PivotGridField[]) => void;
-};
-
-export type PagingLoadOptions = PivotGridLoadOptions & {
-  area?: HeaderArea;
-  pageSize?: number;
 };
 
 export type RowInfoCallback = (
