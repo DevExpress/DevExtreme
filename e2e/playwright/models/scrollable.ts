@@ -7,8 +7,7 @@ export interface ScrollOffset {
 }
 
 export default class Scrollable extends Widget {
-  // eslint-disable-next-line class-methods-use-this
-  public getName(): WidgetName { return 'dxScrollable'; }
+  name: WidgetName = 'dxScrollable';
 
   public scrollOffset(): Promise<ScrollOffset> {
     return this.invoke('scrollOffset');

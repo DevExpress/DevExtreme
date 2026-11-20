@@ -7,8 +7,10 @@
     "type-check": "tsc --noEmit -p tsconfig.json"
   },
   "devDependencies": {
+    "@axe-core/playwright": "catalog:",
     "@playwright/test": "catalog:",
     "@types/jquery": "catalog:",
+    "axe-core": "catalog:",
     "devextreme": "workspace:*",
     "eslint": "catalog:",
     "@eslint/js": "catalog:",

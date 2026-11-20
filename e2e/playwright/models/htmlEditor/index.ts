@@ -14,6 +14,8 @@ const CLASS = {
 type ToolbarItemName = 'image' | 'color' | 'link' | 'ai' | 'bold';
 
 export default class HtmlEditor extends Widget {
+  name: WidgetName = 'dxHtmlEditor';
+
   public readonly content: Locator;
 
   public readonly dialog: Dialog;
@@ -27,9 +29,6 @@ export default class HtmlEditor extends Widget {
     this.dialog = new Dialog(page);
     this.aiDialog = new AIDialog(page);
   }
-
-  // eslint-disable-next-line class-methods-use-this
-  public getName(): WidgetName { return 'dxHtmlEditor'; }
 
   public async expectImageLoaded(src?: string): Promise<void> {
     const image = this.content.locator('img');

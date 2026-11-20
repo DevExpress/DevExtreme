@@ -8,6 +8,8 @@ const CLASS = {
 };
 
 export default class Pagination extends Widget {
+  name: WidgetName = 'dxPagination';
+
   public getPageSize(index: number): Locator {
     return this.element.locator(`.${CLASS.pageSize}`).nth(index);
   }
@@ -15,7 +17,4 @@ export default class Pagination extends Widget {
   public getNavPage(pageText: string): Locator {
     return this.element.locator(`.${CLASS.page}`).filter({ hasText: pageText });
   }
-
-  // eslint-disable-next-line class-methods-use-this
-  public getName(): WidgetName { return 'dxPagination'; }
 }
