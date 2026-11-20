@@ -540,4 +540,5 @@ export default {
   calculate: calculatePosition,
   setup: position,
   offset,
+  getViewportHeight,
 };

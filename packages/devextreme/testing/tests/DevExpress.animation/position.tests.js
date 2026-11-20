@@ -5,6 +5,7 @@ import { stubSeam } from '../../helpers/moduleSeam.js';
 import browser from 'core/utils/browser';
 import devices from '__internal/core/devices';
 import fixtures from '../../helpers/positionFixtures.js';
+import { createWindowWithOwnModule } from '../../helpers/fractionalWindow.js';
 import { implementationsMap } from 'core/utils/size';
 import { getWindow } from 'core/utils/window.js';
 
@@ -1142,35 +1143,14 @@ const testCollision = (name, fixtureName, params, expectedHorzDist, expectedVert
 })();
 
 (function fractionalWindowHeightModule() {
-    const WINDOWS_SCALE_ZOOM = 1.25;
-    const FRACTIONAL_WINDOW_HEIGHT = 481.6;
     const PAGE_HEIGHT = 2000;
-
-    const createWindowWithOwnPositionModule = (onReady) => {
-        const importMap = document.querySelector('script[type="importmap"]');
-        const runnerModule = document.querySelector('script[type="module"]');
-        const frame = document.createElement('iframe');
-
-        frame.style.zoom = WINDOWS_SCALE_ZOOM;
-        frame.style.height = `${FRACTIONAL_WINDOW_HEIGHT}px`;
-        frame.addEventListener('load', () => {
-            frame.contentWindow.positionModule.then(({ default: positionUtils }) => onReady(frame.contentWindow, positionUtils));
-        }, { once: true });
-        frame.setAttribute('srcdoc', `<!DOCTYPE html>
-            <script type="importmap" nonce="${importMap.nonce}">${importMap.textContent}</script>
-            <script type="module" nonce="${runnerModule.nonce}">
-                window.positionModule = import('common/core/animation/position');
-            </script>`);
-
-        document.getElementById('qunit-fixture').appendChild(frame);
-    };
 
     QUnit.module('fractional window height');
 
     QUnit.test('fit should keep the element inside a window whose client height is rounded up', function(assert) {
         const done = assert.async();
 
-        createWindowWithOwnPositionModule((frameWindow, frameWindowPositionUtils) => {
+        createWindowWithOwnModule('common/core/animation/position', (frameWindow, { default: frameWindowPositionUtils }) => {
             const frameDocument = frameWindow.document;
             const visibleArea = frameDocument.createElement('div');
             const page = frameDocument.createElement('div');
