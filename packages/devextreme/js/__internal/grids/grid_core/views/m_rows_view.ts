@@ -429,6 +429,13 @@ export class RowsView extends ColumnsView {
     return this._findContentElement();
   }
 
+  /**
+   * @extended: virtual_scrolling
+   */
+  public isViewportRowsRenderPending(): boolean {
+    return false;
+  }
+
   public isWaitingForRowsLayout(): boolean {
     return this.isWaitingForAsyncTemplates() && !this.isRenderedLayoutCurrent();
   }
