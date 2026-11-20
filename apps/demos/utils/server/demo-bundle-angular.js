@@ -156,7 +156,7 @@ function buildHtml({ jsFiles, cssFiles, srcDir }) {
       return `<script src="${src}" type="module"></script>`;
     })
     .join('\n    ');
-  return `<!DOCTYPE html>
+  return `<!doctype html>
 <html lang="en">
   <head>
     <title>DevExtreme Demo</title>

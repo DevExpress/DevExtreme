@@ -204,7 +204,7 @@ function onSuggestionClick({ itemData: suggestion, event }: DxButtonGroupTypes.I
 }
 
 .input-container .dx-chat-suggestions {
-  padding: 12px 0 0 0;
+  padding: 12px 0 0;
 }
 
 .input-container .dx-chat-suggestions .dx-buttongroup-item.dx-button {
