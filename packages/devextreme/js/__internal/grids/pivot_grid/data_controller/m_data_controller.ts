@@ -1,7 +1,8 @@
+import type { ScalarFilterValue } from '@js/common/grids';
 import type { dxElementWrapper } from '@js/core/renderer';
 import type { Callback } from '@js/core/utils/callbacks';
 import Callbacks from '@js/core/utils/callbacks';
-import { deferUpdate } from '@js/core/utils/common';
+import { deferUpdate, noop } from '@js/core/utils/common';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred, when } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
@@ -51,21 +52,6 @@ const TOTAL_TYPE = 'T';
 const DATA_TYPE = 'D';
 const NOT_AVAILABLE = '#N/A';
 const CHANGING_DURATION_IF_PAGINATE = 300;
-
-const proxyMethod = function proxyMethod(
-  type: typeof DataController,
-  methodName: string,
-  defaultResult?: unknown,
-): void {
-  const target = type.prototype;
-  if (!target[methodName]) {
-    target[methodName] = function (this: DataController, ...args: unknown[]): unknown {
-      const dataSource = this._dataSource;
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-return -- forwards by method name
-      return dataSource ? dataSource[methodName](...args) : defaultResult;
-    };
-  }
-};
 
 class DataController {
   public _options: DataControllerOptions;
@@ -155,14 +141,14 @@ class DataController {
           if (that._rowsScrollController.pageIndex() >= this.pageCount()) {
             that._rowsScrollController.pageIndex(this.pageCount() - 1);
           }
-          // @ts-expect-error handleDataChanged() is typed as void, load() passes its result on
-          return that._rowsScrollController.handleDataChanged(() => {
+          that._rowsScrollController.handleDataChanged(() => {
             if (that._dataSource.paginate()) {
               that._dataSource.load();
             } else {
               virtualScrollControllerChanged();
             }
           });
+          return Deferred().resolve();
         },
       });
 
@@ -185,14 +171,14 @@ class DataController {
             that._columnsScrollController.pageIndex(this.pageCount() - 1);
           }
 
-          // @ts-expect-error handleDataChanged() is typed as void, load() passes its result on
-          return that._columnsScrollController.handleDataChanged(() => {
+          that._columnsScrollController.handleDataChanged(() => {
             if (that._dataSource.paginate()) {
               that._dataSource.load();
             } else {
               virtualScrollControllerChanged();
             }
           });
+          return Deferred().resolve();
         },
 
       });
@@ -734,59 +720,64 @@ class DataController {
     dataFieldArea: PivotGridDataFieldArea | undefined,
     errorText: string | undefined,
   ): PivotGridCellInfo[][] {
-    const info: PivotGridCellInfo[][] = [];
-    const dataFieldAreaInRows = dataFieldArea === 'row';
     const dataSourceCells = data.values;
 
-    if (dataSourceCells.length) {
-      this.foreachRowInfo(rowsInfo, (rowInfo, rowIndex) => {
-        const row: PivotGridCellInfo[] = [];
-        info[rowIndex] = row;
-        const dataRowIndex = Number(rowInfo.dataSourceIndex) >= 0
-          ? rowInfo.dataSourceIndex
-          : data.grandTotalRowIndex;
-        const dataRow = (isDefined(dataRowIndex) && dataSourceCells[dataRowIndex]) || [];
+    if (!dataSourceCells.length) {
+      return [];
+    }
 
-        if (rowInfo.isLast) {
-          foreachColumnInfo(columnsInfo, (
-            columnInfo: PivotGridColumnInfo,
-            columnIndex: number,
-          ) => {
-            const dataIndex = (dataFieldAreaInRows ? rowInfo.dataIndex : columnInfo.dataIndex) || 0;
-            const dataField = dataFields[dataIndex];
+    const info: PivotGridCellInfo[][] = [];
+    const dataFieldAreaInRows = dataFieldArea === 'row';
 
-            if (columnInfo.isLast && dataField && dataField.visible !== false) {
-              const cellIndex = Number(columnInfo.dataSourceIndex) >= 0
-                ? columnInfo.dataSourceIndex
-                : data.grandTotalColumnIndex;
-              let cell = isDefined(cellIndex) ? dataRow[cellIndex] : undefined;
+    this.foreachRowInfo(rowsInfo, (rowInfo, rowIndex) => {
+      const row: PivotGridCellInfo[] = [];
+      info[rowIndex] = row;
+      const dataRowIndex = Number(rowInfo.dataSourceIndex) >= 0
+        ? rowInfo.dataSourceIndex
+        : data.grandTotalRowIndex;
+      const dataRow = (isDefined(dataRowIndex) && dataSourceCells[dataRowIndex]) || [];
 
-              if (!Array.isArray(cell)) {
-                cell = [cell];
-              }
+      if (!rowInfo.isLast) {
+        return;
+      }
 
-              const cellValue = cell[dataIndex];
+      foreachColumnInfo(columnsInfo, (
+        columnInfo: PivotGridColumnInfo,
+        columnIndex: number,
+      ) => {
+        const dataIndex = (dataFieldAreaInRows ? rowInfo.dataIndex : columnInfo.dataIndex) || 0;
+        const dataField = dataFields[dataIndex];
 
-              row[columnIndex] = {
-                text: this.formatCellValue(cellValue, dataField, errorText),
-                value: cellValue,
-                format: dataField.format,
-                dataType: dataField.dataType,
-                columnType: columnInfo.type,
-                rowType: rowInfo.type,
-                rowPath: rowInfo.path ?? [],
-                columnPath: columnInfo.path ?? [],
-                dataIndex,
-              };
+        if (columnInfo.isLast && dataField && dataField.visible !== false) {
+          const cellIndex = Number(columnInfo.dataSourceIndex) >= 0
+            ? columnInfo.dataSourceIndex
+            : data.grandTotalColumnIndex;
+          let cell = isDefined(cellIndex) ? dataRow[cellIndex] : undefined;
 
-              if (dataField.width) {
-                row[columnIndex].width = dataField.width;
-              }
-            }
-          });
+          if (!Array.isArray(cell)) {
+            cell = [cell];
+          }
+
+          const cellValue = cell[dataIndex];
+
+          row[columnIndex] = {
+            text: this.formatCellValue(cellValue, dataField, errorText),
+            value: cellValue,
+            format: dataField.format,
+            dataType: dataField.dataType,
+            columnType: columnInfo.type,
+            rowType: rowInfo.type,
+            rowPath: rowInfo.path ?? [],
+            columnPath: columnInfo.path ?? [],
+            dataIndex,
+          };
+
+          if (dataField.width) {
+            row[columnIndex].width = dataField.width;
+          }
         }
       });
-    }
+    });
 
     return info;
   }
@@ -804,8 +795,10 @@ class DataController {
 
       if (headerItem.children && options.showTotals === false) return;
 
+      visibleIndex += 1;
+
       const indexedItem: IndexedHeaderItem = extend(true, {}, headerItem, {
-        visibleIndex: visibleIndex += 1,
+        visibleIndex,
         path,
       });
 
@@ -1085,20 +1078,22 @@ class DataController {
     options[`${area}Skip`] = skip ?? options[`${area}Skip`];
     options[`${area}Take`] = take ?? options[`${area}Take`];
 
-    if (expandedPaths) {
-      for (let i = 0; i < expandedPaths.length; i += 1) {
-        if (expandedTakes[i]) {
-          const isOppositeArea = options.area && options.area !== area;
+    if (!expandedPaths) {
+      return;
+    }
 
-          storeLoadOptions.push(extend({
-            area,
-            headerName: `${area}s`,
-          }, options, {
-            [`${area}Skip`]: expandedSkips[i],
-            [`${area}Take`]: expandedTakes[i],
-            [isOppositeArea ? 'oppositePath' : 'path']: expandedPaths[i],
-          }));
-        }
+    for (let i = 0; i < expandedPaths.length; i += 1) {
+      if (expandedTakes[i]) {
+        const isOppositeArea = options.area && options.area !== area;
+
+        storeLoadOptions.push(extend({
+          area,
+          headerName: `${area}s`,
+        }, options, {
+          [`${area}Skip`]: expandedSkips[i],
+          [`${area}Take`]: expandedTakes[i],
+          [isOppositeArea ? 'oppositePath' : 'path']: expandedPaths[i],
+        }));
       }
     }
   }
@@ -1285,6 +1280,28 @@ class DataController {
     this._dataSource.endLoading();
   }
 
+  public getData(): DataSourceData {
+    return this._dataSource.getData();
+  }
+
+  public isEmpty(): boolean {
+    return this._dataSource.isEmpty();
+  }
+
+  public expandHeaderItem(area: DataSourceHeaderArea, path: ScalarFilterValue[]): boolean {
+    return this._dataSource.expandHeaderItem(area, path);
+  }
+
+  public collapseHeaderItem(area: DataSourceHeaderArea, path: ScalarFilterValue[]): boolean {
+    return this._dataSource.collapseHeaderItem(area, path);
+  }
+
+  public applyPartialDataSource(
+    ...args: Parameters<PivotGridDataSource['applyPartialDataSource']>
+  ): void {
+    this._dataSource.applyPartialDataSource(...args);
+  }
+
   public _update(): void {
     const dataSource = this._dataSource;
     const options = this._options;
@@ -1310,7 +1327,6 @@ class DataController {
       dataFields,
       progress: 0,
     };
-    // @ts-expect-error notifyProgress is assigned below
     const rowOptions: HeaderInfoOptions = {
       ...commonOptions,
       isEmptyGrandTotal: data.isEmptyGrandTotalRow,
@@ -1321,8 +1337,8 @@ class DataController {
       sortBySummaryPaths: this.createSortPaths(columnFields, dataFields),
       layout: options.rowHeaderLayout,
       fields: rowFields,
+      notifyProgress: noop,
     };
-    // @ts-expect-error notifyProgress is assigned below
     const columnOptions: HeaderInfoOptions = {
       ...commonOptions,
       isEmptyGrandTotal: data.isEmptyGrandTotalColumn,
@@ -1332,16 +1348,18 @@ class DataController {
                        && grandTotalsAreHiddenForNotAllDataFields,
       sortBySummaryPaths: this.createSortPaths(rowFields, dataFields),
       fields: columnFields,
+      notifyProgress: noop,
     };
 
-    // eslint-disable-next-line @typescript-eslint/no-this-alias -- the methods use their own this
-    const that = this;
+    const handleProgressChanged = (progress: number): void => {
+      this._handleProgressChanged(progress);
+    };
     const notifyProgress = function notifyProgress(
       this: HeaderInfoOptions,
       progress: number,
     ): void {
       this.progress = progress;
-      that._handleProgressChanged(0.8 + 0.1 * rowOptions.progress + 0.1 * columnOptions.progress);
+      handleProgressChanged(0.8 + 0.1 * rowOptions.progress + 0.1 * columnOptions.progress);
     };
 
     rowOptions.notifyProgress = notifyProgress;
@@ -1566,12 +1584,6 @@ class DataController {
     this.dataSourceChanged.empty();
   }
 }
-
-proxyMethod(DataController, 'applyPartialDataSource');
-proxyMethod(DataController, 'collapseHeaderItem');
-proxyMethod(DataController, 'expandHeaderItem');
-proxyMethod(DataController, 'getData');
-proxyMethod(DataController, 'isEmpty');
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 const DataController__internals = {
