@@ -1124,3 +1124,59 @@ const testCollision = (name, fixtureName, params, expectedHorzDist, expectedVert
         }
     });
 })();
+
+(function fractionalWindowHeightModule() {
+    const WINDOWS_SCALE_ZOOM = 1.25;
+    const FRACTIONAL_WINDOW_HEIGHT = 481.6;
+    const PAGE_HEIGHT = 2000;
+
+    const createWindowWithOwnPositionModule = (onReady) => {
+        const importMap = document.querySelector('script[type="importmap"]');
+        const runnerModule = document.querySelector('script[type="module"]');
+        const frame = document.createElement('iframe');
+
+        frame.style.zoom = WINDOWS_SCALE_ZOOM;
+        frame.style.height = `${FRACTIONAL_WINDOW_HEIGHT}px`;
+        frame.addEventListener('load', () => {
+            frame.contentWindow.positionModule.then(({ default: positionUtils }) => onReady(frame.contentWindow, positionUtils));
+        }, { once: true });
+        frame.setAttribute('srcdoc', `<!DOCTYPE html>
+            <script type="importmap" nonce="${importMap.nonce}">${importMap.textContent}</script>
+            <script type="module" nonce="${runnerModule.nonce}">
+                window.positionModule = import('common/core/animation/position');
+            </script>`);
+
+        document.getElementById('qunit-fixture').appendChild(frame);
+    };
+
+    QUnit.module('fractional window height');
+
+    QUnit.test('fit should keep the element inside a window whose client height is rounded up', function(assert) {
+        const done = assert.async();
+
+        createWindowWithOwnPositionModule((frameWindow, frameWindowPositionUtils) => {
+            const frameDocument = frameWindow.document;
+            const visibleArea = frameDocument.createElement('div');
+            const page = frameDocument.createElement('div');
+            const what = frameDocument.createElement('div');
+
+            Object.assign(visibleArea.style, { position: 'fixed', top: 0, bottom: 0 });
+            page.style.height = `${PAGE_HEIGHT}px`;
+            Object.assign(what.style, { position: 'absolute', top: 0, width: '100px', height: '100px' });
+            frameDocument.body.append(visibleArea, page, what);
+
+            const visibleHeight = visibleArea.getBoundingClientRect().height;
+
+            assert.ok(frameDocument.documentElement.clientHeight > visibleHeight, `client height ${frameDocument.documentElement.clientHeight} is larger than the visible ${visibleHeight}`);
+
+            frameWindowPositionUtils.setup(what, { my: 'bottom', at: 'bottom', of: frameWindow, collision: 'fit' });
+
+            assert.roughEqual(what.getBoundingClientRect().bottom, visibleHeight, 1, 'element is at the bottom of the window');
+
+            what.scrollIntoView({ block: 'nearest' });
+
+            assert.strictEqual(frameWindow.scrollY, 0, 'element is visible without scrolling the window');
+            done();
+        });
+    });
+})();

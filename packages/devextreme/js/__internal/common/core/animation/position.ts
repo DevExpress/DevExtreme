@@ -222,6 +222,28 @@ const calculateScrollbarWidth = function calculateScrollbarWidth(): void {
   scrollbarWidth = result;
 };
 
+const getViewportSize = function getViewportSize(
+  windowWidth: number,
+  windowHeight: number,
+): { width: number; height: number } {
+  const $viewport = $('<div>').css({
+    position: 'fixed',
+    top: 0,
+    right: 0,
+    bottom: 0,
+    left: 0,
+    visibility: 'hidden',
+  }).appendTo($('body'));
+  const { width, height } = getBoundingRect($viewport.get(0)) ?? {};
+
+  $viewport.remove();
+
+  return {
+    width: Math.abs(width - windowWidth) < 1 ? width : windowWidth,
+    height: Math.abs(height - windowHeight) < 1 ? height : windowHeight,
+  };
+};
+
 const defaultPositionResult = {
   h: {
     location: 0,
@@ -407,17 +429,25 @@ const calculatePosition = function calculatePosition(
 
       boundaryWidth = Number(getWidth($boundary));
       boundaryHeight = Number(getHeight($boundary));
+    } else {
+      const viewportSize = getViewportSize(windowWidth, windowHeight);
+      boundaryWidth = viewportSize.width;
+      boundaryHeight = viewportSize.height;
     }
 
+    const roundInward = ({ min, max }: AxisBounds): AxisBounds => (options.precise
+      ? { min, max }
+      : { min: Math.ceil(min), max: Math.floor(max) });
+
     return {
-      h: {
+      h: roundInward({
         min: left + h.boundaryOffset,
         max: left + boundaryWidth / hZoomLevel - h.mySize - h.boundaryOffset,
-      },
-      v: {
+      }),
+      v: roundInward({
         min: top + v.boundaryOffset,
         max: top + boundaryHeight / vZoomLevel - v.mySize - v.boundaryOffset,
-      },
+      }),
     };
   }());
 
