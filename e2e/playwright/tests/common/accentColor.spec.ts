@@ -8,8 +8,18 @@ import { getThemeName } from '../../helpers/themeUtils';
 
 const STEPS = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150, 160, 170, 180];
 
-const DESIGNED_PALETTE_TOLERANCE = 4;
+const DESIGNED_PALETTE_TOLERANCE = 1.5;
 const HUE_TOLERANCE = 0.01;
+
+const NORMALIZED_ACCENT_LIGHTNESS: Record<string, number> = {
+  '#000080': 0.45,
+  '#ffff00': 0.6,
+  'oklch(0.3 0.016 200)': 0.465,
+  'oklch(0.7 0.016 40)': 0.585,
+  black: 0.525,
+  white: 0.525,
+  '#808080': 0.525,
+};
 
 interface Oklch {
   l: number;
@@ -33,7 +43,6 @@ interface MeasuredStep {
 interface MeasuredPalette {
   measured: MeasuredStep[];
   source: Oklch | null;
-  settings: { lightnessMax: number; lightnessMin: number; chromaMin: number };
 }
 
 interface Painted {
@@ -86,9 +95,9 @@ const measurePalette = (
   const asOklch = (color: string): Oklch | null => {
     probe.style.backgroundColor = `oklch(from ${color} l c h)`;
     const resolved = getComputedStyle(probe).backgroundColor;
-    const parts = /^oklch\(([-\d.]+) ([-\d.]+) ([-\d.]+)/.exec(resolved);
+    const parts = /^oklch\(([-\d.]+) ([-\d.]+) ([-\d.]+|none)/.exec(resolved);
 
-    return parts ? { l: +parts[1], c: +parts[2], h: +parts[3] } : null;
+    return parts ? { l: +parts[1], c: +parts[2], h: parts[3] === 'none' ? 0 : +parts[3] } : null;
   };
 
   const asOklab = (color: string): Oklab | null => {
@@ -108,21 +117,12 @@ const measurePalette = (
     };
   };
 
-  const setting = (name: string): number => +getComputedStyle(root).getPropertyValue(name).trim();
   const measured = paletteSteps.map(read);
   const source = accentColor ? asOklch(accentColor) : null;
 
   probe.remove();
 
-  return {
-    measured,
-    source,
-    settings: {
-      lightnessMax: setting('--dx-accent-lightness-max'),
-      lightnessMin: setting('--dx-accent-lightness-min'),
-      chromaMin: setting('--dx-accent-chroma-min'),
-    },
-  };
+  return { measured, source };
 }, { accentColor: accent, paletteSteps: steps });
 
 const PALETTE_STRIP = 'accent-palette';
@@ -307,17 +307,13 @@ test.describe('Custom accent color', () => {
       .filter(({ distance }) => distance > DESIGNED_PALETTE_TOLERANCE)).toEqual([]);
   });
 
-  test('an arbitrary accent keeps hue, order and clamps', async ({ page }) => {
+  test('an arbitrary accent keeps hue and order', async ({ page }) => {
     const arbitraryAccent = '#a703ff';
-    const { measured, source, settings } = await measurePalette(page, arbitraryAccent, STEPS);
+    const { measured, source } = await measurePalette(page, arbitraryAccent, STEPS);
     const steps = measured;
-    const lightest = stepOf(steps, 10);
-    const darkest = stepOf(steps, 180);
     const accentItself = stepOf(steps, 100);
 
     expect({
-      lightest: { l: rounded(lightest.l), c: rounded(lightest.c) },
-      darkest: { l: rounded(darkest.l), c: rounded(darkest.c) },
       accentItself: { l: rounded(accentItself.l), c: rounded(accentItself.c) },
       lighteningSteps: steps
         .filter((entry, index) => index > 0 && entry.oklch!.l >= steps[index - 1].oklch!.l)
@@ -326,12 +322,27 @@ test.describe('Custom accent color', () => {
         .filter((entry) => Math.abs(entry.oklch!.h - source!.h) > HUE_TOLERANCE)
         .map((entry) => entry.step),
     }).toEqual({
-      lightest: { l: settings.lightnessMax, c: settings.chromaMin },
-      darkest: { l: settings.lightnessMin, c: settings.chromaMin },
       accentItself: { l: rounded(source!.l), c: rounded(source!.c) },
       lighteningSteps: [],
       stepsOffHue: [],
     });
+  });
+
+  test('an accent too dark, too light, short of chroma or achromatic is normalized, keeping its chroma and hue', async ({ page }) => {
+    const normalized: Record<string, Oklch> = {};
+    const expected: Record<string, Oklch> = {};
+
+    for (const [accent, lightness] of Object.entries(NORMALIZED_ACCENT_LIGHTNESS)) {
+      const { measured, source } = await measurePalette(page, accent, [100]);
+      const accentItself = stepOf(measured, 100);
+
+      normalized[accent] = {
+        l: rounded(accentItself.l), c: rounded(accentItself.c), h: rounded(accentItself.h),
+      };
+      expected[accent] = { l: lightness, c: rounded(source!.c), h: rounded(source!.h) };
+    }
+
+    expect(normalized).toEqual(expected);
   });
 
   test('the derived palette is drawn as designed', async ({ page }) => {
@@ -431,10 +442,10 @@ test.describe('Custom accent color', () => {
   });
 
   test('themes.customAccentColor takes an accent written by name', async ({ page }) => {
-    const namedAccent = 'rebeccapurple';
+    const namedAccent = 'slateblue';
     const applied = await accentThroughApi(page, namedAccent);
 
-    expect(applied.seed, 'the palette is built from the color the name stands for').toBe('#663399');
+    expect(applied.seed, 'the palette is built from the color the name stands for').toBe('#6a5acd');
     expect(applied.reported, 'the accent is reported back as it was written, not as a hex').toBe(namedAccent);
   });
 });

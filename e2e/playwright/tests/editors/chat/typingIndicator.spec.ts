@@ -13,7 +13,7 @@ const waitFont = (page: Page): Promise<unknown> => page.evaluate(
 );
 
 test.describe('ChatTypingIndicator', () => {
-  test('Chat: typing indicator with emptyview', async ({ page }) => {
+  test('Chat: typing indicator with EmptyView', async ({ page }) => {
     await insertStylesheetRulesToPage(page, `.${CHAT_TYPINGINDICATOR_CIRCLE_CLASS} { animation: none !important; }`);
 
     const typingUsers = [

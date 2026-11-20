@@ -42,4 +42,20 @@ export default class Overlay extends Widget {
   public async hide(): Promise<void> {
     await this.invoke('hide');
   }
+
+  // The event the overlay was positioned at (its "position.of"), as the controller keeps it.
+  public getOverlayOffset(): Promise<Record<'offsetX' | 'offsetY' | 'pageX' | 'pageY', number>> {
+    return this.element.evaluate((element) => {
+      const $element = $(element) as any;
+      const instance = $element.data($element.data().dxComponents[0]);
+      const {
+        offsetX, offsetY, pageX, pageY,
+      // eslint-disable-next-line no-underscore-dangle
+      } = instance._positionController._position.of;
+
+      return {
+        offsetX, offsetY, pageX, pageY,
+      };
+    });
+  }
 }

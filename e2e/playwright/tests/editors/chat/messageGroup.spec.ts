@@ -43,7 +43,7 @@ const renderChatsWithBubbleCounts = async (
 };
 
 test.describe('ChatMessageGroup', () => {
-  test('Chat: messagegroup, avatar rendering', async ({ page }) => {
+  test('Chat: MessageGroup, avatar rendering', async ({ page }) => {
     await appendElementTo(page, '#container', 'div', 'chat');
 
     const userFirst = createUser(1, 'First');
@@ -61,7 +61,7 @@ test.describe('ChatMessageGroup', () => {
     await testScreenshot(page, 'Avatar sizes do not affect indentation between bubbles.png', { element: '#chat' });
   });
 
-  test('Chat: messagegroup, information', async ({ page }) => {
+  test('Chat: MessageGroup, information', async ({ page }) => {
     await appendElementTo(page, '#container', 'div', 'chat');
 
     const userFirst = createUser(1, getLongText());
@@ -79,7 +79,7 @@ test.describe('ChatMessageGroup', () => {
     await testScreenshot(page, 'Information row with long user name.png', { element: '#chat' });
   });
 
-  test('Chat: messagegroup, bubbles', async ({ page }) => {
+  test('Chat: MessageGroup, bubbles', async ({ page }) => {
     await appendElementTo(page, '#container', 'div', 'chat');
     await createWidget(page, 'dxChat', {
       width: 400,
@@ -112,13 +112,13 @@ test.describe('ChatMessageGroup', () => {
     await testScreenshot(page, 'Messagegroup with 4 bubbles.png', { element: '#chat' });
   });
 
-  test('Messagegroup scenarios in disabled state', async ({ page }) => {
+  test('MessageGroup scenarios in disabled state', async ({ page }) => {
     await renderChatsWithBubbleCounts(page, { disabled: true });
 
     await testScreenshot(page, 'Messagegroup appearance in disabled state.png', { element: '#chat-wrapper' });
   });
 
-  test('Messagegroup scenarios in RTL mode', async ({ page }) => {
+  test('MessageGroup scenarios in RTL mode', async ({ page }) => {
     await renderChatsWithBubbleCounts(page, { rtlEnabled: true });
 
     await testScreenshot(page, 'Messagegroup appearance in RTL mode.png', { element: '#chat-wrapper' });
