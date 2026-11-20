@@ -67,7 +67,7 @@ Every demo page is compared with an etalon in `testing/etalons`. jQuery demos ru
 
 ### Run locally
 
-Build DevExtreme first (`pnpm run demos:prepare` from the monorepo root). The tests use the system Google Chrome and start their own web server.
+Build DevExtreme first with the testing configuration, as CI does: `pnpm nx build devextreme -c testing` from the monorepo root. The jQuery demos need nothing else. `pnpm run demos:prepare` builds DevExtreme without it: the license check then warns (W0021) and the page renders differently, so every test fails. Run the testing build after it. The tests use the system Google Chrome and start their own web server.
 
 ```
 cd apps/demos
@@ -96,7 +96,7 @@ A container draws what the CI agent draws: it has the same Ubuntu, Chrome and fo
 The container uses your `node_modules` and DevExtreme build, so build first and rebuild after a source change. Then record the etalons of a demo in the two themes the CI jobs run, and verify them:
 
 ```
-pnpm run demos:prepare                   # from the repository root
+pnpm nx build devextreme -c testing      # from the repository root
 
 cd apps/demos
 for theme in fluent.blue.light material.blue.light; do
