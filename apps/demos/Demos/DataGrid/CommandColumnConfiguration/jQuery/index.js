@@ -34,7 +34,6 @@ $(() => {
     columns: [
       {
         type: 'buttons',
-        width: 110,
         buttons: ['edit', 'delete', {
           hint: 'Clone',
           icon: 'copy',

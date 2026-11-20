@@ -58,7 +58,7 @@ const App = () => {
         useIcons={true}
         allowUpdating={true}
         allowDeleting={isDeleteIconVisible} />
-      <Column type="buttons" width={110}>
+      <Column type="buttons">
         <Button name="edit" />
         <Button name="delete" />
         <Button hint="Clone" icon="copy" visible={isCloneIconVisible} disabled={isCloneIconDisabled} onClick={onCloneIconClick} />
