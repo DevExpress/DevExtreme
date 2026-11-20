@@ -1,7 +1,6 @@
 import { test } from '../../../fixtures';
 import { createWidget } from '../../../helpers/createWidget';
 import { testScreenshot } from '../../../helpers/screenshots';
-import { expectClass } from '../../../models/internal/classMatcher';
 import Splitter from '../../../models/splitter';
 
 const getScreenshotName = (state: string): string => `Splitter apearance - handle in ${state} state.png`;
@@ -49,7 +48,7 @@ test.describe('Splitter_common', () => {
     await testScreenshot(page, getScreenshotName('hover'), { element: '#container' });
 
     await resizeHandle.element.dispatchEvent('mousedown');
-    await expectClass(resizeHandle.element, 'dx-state-active');
+    await resizeHandle.expectActive();
 
     await testScreenshot(page, getScreenshotName('active'), { element: '#container' });
 
