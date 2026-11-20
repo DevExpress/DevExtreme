@@ -99,10 +99,6 @@ class HorizontalHeadersArea extends AreaItem {
     return thead;
   }
 
-  _getCloseMainElementMarkup() {
-    return '</thead>';
-  }
-
   setVirtualContentParams(params) {
     super.setVirtualContentParams(params);
 
@@ -298,10 +294,6 @@ class VerticalHeadersArea extends HorizontalHeadersArea {
     tbody.classList.add(this._getAreaClassName());
     tbody.setAttribute('role', 'presentation');
     return tbody;
-  }
-
-  _getCloseMainElementMarkup() {
-    return '</tbody>';
   }
 
   updateColspans(columnCount) {
