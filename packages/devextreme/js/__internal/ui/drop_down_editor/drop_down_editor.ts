@@ -93,8 +93,8 @@ export interface FieldTemplate {
 }
 
 interface FieldAddonsTemplates {
-  beforeTemplate?: FieldTemplate;
-  afterTemplate?: FieldTemplate;
+  beforeTemplate: FieldTemplate | null;
+  afterTemplate: FieldTemplate | null;
 }
 
 type PopupToolbarItemConfig = ToolbarItem & { shortcut?: string };

@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/init-declarations */
-/* eslint-disable no-plusplus */
 /* eslint-disable func-names */
 /* eslint-disable no-nested-ternary */
 /* eslint-disable no-multi-assign */
@@ -205,7 +204,7 @@ export let Crosshair = class Crosshair {
     const lines: ThemeValue[] = [];
     const canvas = this._canvas;
     const points = [canvas.left, canvas.top, canvas.left, canvas.top];
-    for (let i = 0; i < 2; i++) {
+    for (let i = 0; i < 2; i += 1) {
       lines.push(this._renderer.path(points, 'line').attr(options).sharp(sharpParam).append(group));
     }
     return lines;
@@ -376,7 +375,7 @@ export let Crosshair = class Crosshair {
         [canvas.left, mathMin(coords.top, y - r), canvas.left, y - r],
         [canvas.left, y + r, canvas.left, mathMax(coords.bottom, y + r)],
       ];
-    for (let i = 0; i < 2; i++) {
+    for (let i = 0; i < 2; i += 1) {
       lines[i].attr({ points: points[i] }).sharp(isHorizontal ? 'v' : 'h', isHorizontal ? y === canvas.bottom ? -1 : 1 : x === canvas.right ? -1 : 1);
     }
   }
@@ -395,7 +394,7 @@ export let Crosshair = class Crosshair {
     const panes = this._panes;
     let i;
     let coords;
-    for (i = 0; i < panes.length; i++) {
+    for (i = 0; i < panes.length; i += 1) {
       coords = panes[i].coords;
       if (coords.left <= x && coords.right >= x && coords.top <= y && coords.bottom >= y) {
         return panes[i].clipRect;

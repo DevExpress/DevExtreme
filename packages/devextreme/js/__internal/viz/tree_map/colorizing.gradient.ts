@@ -1,47 +1,50 @@
 /* eslint-disable no-return-assign */
 /* eslint-disable prefer-spread */
 /* eslint-disable @typescript-eslint/init-declarations */
-/* eslint-disable no-plusplus */
 /* eslint-disable func-names */
 /* eslint-disable @typescript-eslint/naming-convention */
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-use-before-define */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
 
+import type { BaseThemeManagerInstance } from '@ts/viz/core/base_theme_manager';
+import type { ColorCodeGetter, ColorGetter, ColorizerOptions } from '@ts/viz/tree_map/colorizing';
 import { addColorizer, createColorCodeGetter as _createColorCodeGetter } from '@ts/viz/tree_map/colorizing';
+import type Node from '@ts/viz/tree_map/node';
+
+type RangeColorGetter = (node: Node, range: number[]) => string | null;
 
 const _min = Math.min;
 const _max = Math.max;
 
-function createSimpleColorizer(getColor, range) {
+function createSimpleColorizer(getColor: RangeColorGetter, range: number[]): ColorGetter {
   return function (node) {
     return getColor(node, range);
   };
 }
 
-function getRangeData(range): number[] {
+function getRangeData(range: number[]): number[] {
   return [Number(range[0]) || 0, (range[1] - range[0]) || 1];
 }
 
-function calculateRange(nodes, getValue): number[] {
+function calculateRange(nodes: Node[], getValue: ColorCodeGetter): number[] {
   let i;
   const ii = nodes.length;
-  const codes = [];
+  const codes: number[] = [];
   let code;
 
-  for (i = 0; i < ii; ++i) {
+  for (i = 0; i < ii; i += 1) {
     code = getValue(nodes[i]);
     if (isFinite(code)) {
-      // @ts-expect-error
       codes.push(code);
     }
   }
   return getRangeData([_min.apply(null, codes), _max.apply(null, codes)]);
 }
 
-function createGuessingColorizer(getColor, getValue) {
-  const ranges = {};
+function createGuessingColorizer(
+  getColor: RangeColorGetter,
+  getValue: ColorCodeGetter,
+): ColorGetter {
+  const ranges: Record<number, number[]> = {};
 
   return function (node) {
     const { parent } = node;
@@ -53,13 +56,16 @@ function createGuessingColorizer(getColor, getValue) {
   };
 }
 
-function gradientColorizer(options, themeManager) {
+function gradientColorizer(
+  options: ColorizerOptions,
+  themeManager: BaseThemeManagerInstance,
+): ColorGetter {
   const palette = themeManager.createGradientPalette(options.palette);
   const getValue = _createColorCodeGetter(options);
 
   return 'range' in options ? createSimpleColorizer(getColor, getRangeData(options.range || [])) : createGuessingColorizer(getColor, getValue);
 
-  function getColor(node, arg) {
+  function getColor(node: Node, arg: number[]): string | null {
     return palette.getColor((getValue(node) - arg[0]) / arg[1]);
   }
 }

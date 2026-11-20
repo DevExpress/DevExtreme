@@ -2,7 +2,6 @@
 /* eslint-disable prefer-rest-params */
 /* eslint-disable @typescript-eslint/no-this-alias */
 /* eslint-disable @typescript-eslint/init-declarations */
-/* eslint-disable no-plusplus */
 /* eslint-disable func-names */
 /* eslint-disable import/no-mutable-exports */
 /* eslint-disable @typescript-eslint/naming-convention */
@@ -21,6 +20,7 @@ import { addNamespace } from '@ts/events/utils/index';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 import type { Coords } from '@ts/viz/core/types';
 import { parseScalar } from '@ts/viz/core/utils';
+import type { EventEmitterMethods } from '@ts/viz/vector_map/event_emitter';
 import { makeEventEmitter } from '@ts/viz/vector_map/event_emitter';
 
 const navigator = getNavigator();
@@ -117,13 +117,13 @@ export let Tracker = class Tracker {
 
   declare _eventNames: string[];
 
-  declare _initEvents: () => void;
+  declare _initEvents: OmitThisParameter<EventEmitterMethods['_initEvents']>;
 
-  declare _disposeEvents: () => void;
+  declare _disposeEvents: OmitThisParameter<EventEmitterMethods['_disposeEvents']>;
 
-  declare _fire: (name: string, arg?: ThemeValue) => void;
+  declare _fire: OmitThisParameter<EventEmitterMethods['_fire']>;
 
-  declare on: (handlers: Record<string, (arg: ThemeValue) => void>) => () => void;
+  declare on: OmitThisParameter<EventEmitterMethods['on']>;
 
   constructor(parameters: TrackerParams) {
     this._root = parameters.root;
@@ -603,7 +603,7 @@ function selectItem(flags: boolean[], items: string[]): string {
   let i = 0;
   const ii = flags.length;
   let item;
-  for (; i < ii; ++i) {
+  for (; i < ii; i += 1) {
     if (flags[i]) {
       item = items[i];
       break;

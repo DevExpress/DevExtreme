@@ -31,7 +31,6 @@
 /* eslint-disable guard-for-in */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-use-before-define */
-/* eslint-disable no-plusplus */
 
 import type { Coordinates } from '@js/core/renderer';
 import { domAdapter } from '@ts/core/dom_adapter';
@@ -90,7 +89,7 @@ const NONE = 'none';
 const DEFAULT_FONT_SIZE = 12;
 const ELLIPSIS = '...';
 
-type SvgAttributes = Record<string, ThemeValue>;
+export type SvgAttributes = Record<string, ThemeValue>;
 
 type PathSegment = (number | string)[];
 
@@ -265,13 +264,13 @@ function backupRoot(root: SvgElementInstance): void {
   if (getBackup().backupCounter === 0) {
     domAdapter.getBody().appendChild(getBackup().backupContainer);
   }
-  ++getBackup().backupCounter;
+  getBackup().backupCounter += 1;
   root.append({ element: getBackup().backupContainer });
 }
 
 function restoreRoot(root: SvgElementInstance, container: Element): void {
   root.append({ element: container });
-  --getBackup().backupCounter;
+  getBackup().backupCounter -= 1;
   if (getBackup().backupCounter === 0) {
     domAdapter.getBody().removeChild(getBackup().backupContainer);
   }
@@ -417,7 +416,7 @@ function buildSegments(
   let ii;
   const list: PathSegment[] = [];
   if (points[0]?.length) {
-    for (i = 0, ii = points.length; i < ii; ++i) {
+    for (i = 0, ii = points.length; i < ii; i += 1) {
       buildSimpleSegment(points[i], close, list);
     }
   } else {
@@ -438,12 +437,14 @@ function buildSimpleLineSegment(
   if (ii) {
     // backward compatibility
     if (points[0].x !== undefined) {
-      for (; i < ii;) {
-        list[k++] = ['L', points[i].x, points[i++].y];
+      for (; i < ii; i += 1) {
+        list[k] = ['L', points[i].x, points[i].y];
+        k += 1;
       }
     } else {
-      for (; i < ii;) {
-        list[k++] = ['L', points[i++], points[i++]];
+      for (; i < ii; i += 2) {
+        list[k] = ['L', points[i], points[i + 1]];
+        k += 1;
       }
     }
     list[k0][0] = 'M';
@@ -465,30 +466,34 @@ function buildSimpleCurveSegment(
   if (ii) {
     // backward compatibility
     if (points[0].x !== undefined) {
-      list[k++] = ['M', points[0].x, points[0].y];
-      for (i = 1; i < ii;) {
-        list[k++] = [
+      list[k] = ['M', points[0].x, points[0].y];
+      k += 1;
+      for (i = 1; i < ii; i += 3) {
+        list[k] = [
           'C',
           points[i].x,
-          points[i++].y,
-          points[i].x,
-          points[i++].y,
-          points[i].x,
-          points[i++].y,
+          points[i].y,
+          points[i + 1].x,
+          points[i + 1].y,
+          points[i + 2].x,
+          points[i + 2].y,
         ];
+        k += 1;
       }
     } else {
-      list[k++] = ['M', points[0], points[1]];
-      for (i = 2; i < ii;) {
-        list[k++] = [
+      list[k] = ['M', points[0], points[1]];
+      k += 1;
+      for (i = 2; i < ii; i += 6) {
+        list[k] = [
           'C',
-          points[i++],
-          points[i++],
-          points[i++],
-          points[i++],
-          points[i++],
-          points[i++],
+          points[i],
+          points[i + 1],
+          points[i + 2],
+          points[i + 3],
+          points[i + 4],
+          points[i + 5],
         ];
+        k += 1;
       }
     }
   } else {
@@ -506,10 +511,11 @@ function combinePathParam(segments: PathSegment[]): string {
   let segment;
   let j;
   let jj;
-  for (i = 0; i < ii; ++i) {
+  for (i = 0; i < ii; i += 1) {
     segment = segments[i];
-    for (j = 0, jj = segment.length; j < jj; ++j) {
-      d[k++] = segment[j];
+    for (j = 0, jj = segment.length; j < jj; j += 1) {
+      d[k] = segment[j];
+      k += 1;
     }
   }
   return d.join(' ');
@@ -528,7 +534,7 @@ function compensateSegments(
   const makeEqualSegments = type.indexOf('area') !== -1 ? makeEqualAreaSegments : makeEqualLineSegments;
 
   if (oldLength === 0) {
-    for (i = 0; i < newLength; i++) {
+    for (i = 0; i < newLength; i += 1) {
       oldSegments.push(newSegments[i].slice(0));
     }
   } else if (oldLength < newLength) {
@@ -561,7 +567,7 @@ function makeEqualLineSegments(short: PathSegment[], long: PathSegment[], type: 
   const constSeg = short[short.length - 1].slice();
   let i = short.length;
   prepareConstSegment(constSeg, type);
-  for (; i < long.length; i++) {
+  for (; i < long.length; i += 1) {
     short[i] = constSeg.slice(0);
   }
 }
@@ -581,7 +587,7 @@ function makeEqualAreaSegments(short: PathSegment[], long: PathSegment[], type: 
     constsSeg2 = short.slice(i + 1)[0].slice(0);
     prepareConstSegment(constsSeg1, type);
     prepareConstSegment(constsSeg2, type);
-    for (let j = i; j < (longLength - 1) / 2 - 1; j++) {
+    for (let j = i; j < (longLength - 1) / 2 - 1; j += 1) {
       short.splice(j + 1, 0, constsSeg1);
       short.splice(j + 3, 0, constsSeg2);
     }
@@ -696,7 +702,8 @@ function baseAttr(that: SvgElementInstance, attrs?: string | SvgAttributes | nul
       value = value.replace(/longdash/g, '8,3,').replace(/dash/g, '4,3,').replace(/dot/g, '1,3,').replace(/,$/, '')
         .split(',');
       i = value.length;
-      while (i--) {
+      while (i > 0) {
+        i -= 1;
         value[i] = parseInt(value[i]) * sw;
       }
       that.element.setAttribute(key, value.join(','));
@@ -732,7 +739,7 @@ function orderHtmlTree(
       height: parentStyle[KEY_FONT_SIZE] || 0,
     });
   } else if (node.tagName === 'BR') {
-    ++line;
+    line += 1;
   } else if (domAdapter.isElementNode(node)) {
     extend((style = {}), parentStyle);
     switch (node.tagName) {
@@ -754,7 +761,7 @@ function orderHtmlTree(
     realStyle.fontStyle && (style[KEY_FONT_STYLE] = realStyle.fontStyle);
     realStyle.fontWeight && (style[KEY_FONT_WEIGHT] = realStyle.fontWeight);
     realStyle.textDecoration && (style[KEY_TEXT_DECORATION] = realStyle.textDecoration);
-    for (i = 0, nodes = node.childNodes, ii = nodes.length; i < ii; ++i) {
+    for (i = 0, nodes = node.childNodes, ii = nodes.length; i < ii; i += 1) {
       line = orderHtmlTree(list, line, nodes[i], style, node.className || parentClassName);
     }
   }
@@ -766,7 +773,7 @@ function adjustLineHeights(items: TextItem[]): void {
   let ii;
   let currentItem = items[0];
   let item;
-  for (i = 1, ii = items.length; i < ii; ++i) {
+  for (i = 1, ii = items.length; i < ii; i += 1) {
     item = items[i];
     if (item.line === currentItem.line) {
       // T177039
@@ -809,7 +816,7 @@ function parseMultiline(text: string): TextItem[] {
   const texts = text.replace(/\r/g, '').split(/\n/g);
   let i = 0;
   const items: TextItem[] = [];
-  for (; i < texts.length; i++) {
+  for (; i < texts.length; i += 1) {
     items.push({ value: texts[i].trim(), height: 0, line: i });
   }
   return items;
@@ -819,7 +826,7 @@ function createTspans(items: TextItem[], element: Node, fieldName: 'tspan' | 'st
   let i;
   let ii;
   let item;
-  for (i = 0, ii = items.length; i < ii; ++i) {
+  for (i = 0, ii = items.length; i < ii; i += 1) {
     item = items[i];
     item[fieldName] = createElement('tspan');
     item[fieldName].appendChild(domAdapter.createTextNode(item.value));
@@ -842,7 +849,7 @@ function cloneAndRemoveAttrs(node: ThemeValue): ThemeValue {
 function detachTitleElements(element: Element): NodeListOf<Element> {
   const titleElements = domAdapter.querySelectorAll(element, 'title');
 
-  for (let i = 0; i < titleElements.length; i++) {
+  for (let i = 0; i < titleElements.length; i += 1) {
     element.removeChild(titleElements[i]);
   }
 
@@ -853,7 +860,7 @@ function detachAndStoreTitleElements(element: Element): () => void {
   const titleElements = detachTitleElements(element);
 
   return () => {
-    for (let i = 0; i < titleElements.length; i++) {
+    for (let i = 0; i < titleElements.length; i += 1) {
       element.appendChild(titleElements[i]);
     }
   };
@@ -869,7 +876,7 @@ function getIndexForEllipsis(
   let k;
   let kk;
   if (startBox <= maxWidth && endBox > maxWidth) {
-    for (k = 1, kk = text.value.length; k <= kk; ++k) {
+    for (k = 1, kk = text.value.length; k <= kk; k += 1) {
       if (startBox + text.tspan.getSubStringLength(0, k) > maxWidth) {
         return k - 1;
       }
@@ -894,7 +901,7 @@ function prepareLines(
   let endBox;
 
   if (texts) {
-    for (i = 0, ii = texts.length; i < ii; ++i) {
+    for (i = 0, ii = texts.length; i < ii; i += 1) {
       text = texts[i];
       if (!lines[text.line]) {
         text.startBox = startBox = 0;
@@ -932,7 +939,7 @@ function getSpaceBreakIndex(text: TextItem, maxWidth: number): number {
     spaceIndices[spaceIndex + 1] !== undefined
     && text.startBox + text.tspan.getSubStringLength(0, spaceIndices[spaceIndex + 1]) < maxWidth
   ) {
-    spaceIndex++;
+    spaceIndex += 1;
   }
 
   return spaceIndices[spaceIndex];
@@ -940,7 +947,7 @@ function getSpaceBreakIndex(text: TextItem, maxWidth: number): number {
 
 // @ts-expect-error returns the index only when the text crosses maxWidth, undefined otherwise
 function getWordBreakIndex(text: TextItem, maxWidth: number): number | undefined {
-  for (let i = 0; i < text.value.length - 1; i++) {
+  for (let i = 0; i < text.value.length - 1; i += 1) {
     if (text.startBox + text.tspan.getSubStringLength(0, i + 1) > maxWidth) {
       return i;
     }
@@ -957,7 +964,7 @@ function getEllipsisString(
 function setEllipsis(text: TextItem, ellipsisMaxWidth: number, options: TextOverflowOptions): void {
   const ellipsis = getEllipsisString(ellipsisMaxWidth, options);
   if (text.value.length && text.tspan.parentNode) {
-    for (let i = text.value.length - 1; i >= 1; i--) {
+    for (let i = text.value.length - 1; i >= 1; i -= 1) {
       if (text.startBox + text.tspan.getSubStringLength(0, i) < ellipsisMaxWidth) {
         setNewText(text, i, ellipsis);
         break;
@@ -1225,7 +1232,7 @@ function locateTextNodes(wrapper: TextSvgElementInstance): void {
   let item = items[0];
   setTextNodeAttribute(item, 'x', x);
   setTextNodeAttribute(item, 'y', wrapper._settings.y);
-  for (i = 1, ii = items.length; i < ii; ++i) {
+  for (i = 1, ii = items.length; i < ii; i += 1) {
     item = items[i];
     if (parseFloat(item.height) >= 0) {
       setTextNodeAttribute(item, 'x', x);
@@ -1244,7 +1251,7 @@ function alignTextNodes(wrapper: TextSvgElementInstance, alignment: string): voi
   const direction = alignment === 'left' ? -1 : 1;
   const maxTextWidth = Math.max.apply(Math, items.map((t) => getTextWidth(t)));
 
-  for (let i = 0; i < items.length; i++) {
+  for (let i = 0; i < items.length; i += 1) {
     const item = items[i];
     const textWidth = getTextWidth(item);
     if (maxTextWidth !== 0 && maxTextWidth !== textWidth) {
@@ -1277,7 +1284,7 @@ function strokeTextNodes(wrapper: TextSvgElementInstance): void {
   let tspan;
   let i;
   let ii;
-  for (i = 0, ii = items.length; i < ii; ++i) {
+  for (i = 0, ii = items.length; i < ii; i += 1) {
     tspan = items[i].stroke;
     tspan.setAttribute(KEY_STROKE, stroke);
     tspan.setAttribute(KEY_STROKE_WIDTH, strokeWidth);
@@ -1441,7 +1448,7 @@ export let SvgElement = class SvgElement {
     const clearChildren = function (element: FuncIriNode): void {
       let i;
 
-      for (i = 0; i < element.childNodes.length; i++) {
+      for (i = 0; i < element.childNodes.length; i += 1) {
         removeFuncIriCallback(element.childNodes[i]._fixFuncIri);
         clearChildren(element.childNodes[i]);
       }
@@ -1481,9 +1488,9 @@ export let SvgElement = class SvgElement {
     const links = this._links;
     let i;
     const ii = links.length;
-    for (i = 0; i < ii; ++i) {
+    for (i = 0; i < ii; i += 1) {
       if (!links[i]._link.virtual) {
-        ++count;
+        count += 1;
       }
     }
     if (count > 0) {
@@ -1522,7 +1529,7 @@ export let SvgElement = class SvgElement {
     const items = link.to._links;
     let i;
     let next;
-    for (i = link.i + 1; (next = items[i]) && !next._link.is; ++i);
+    for (i = link.i + 1; (next = items[i]) && !next._link.is; i += 1);
     this._insert(link.to, next);
     link.is = true;
     return this;
@@ -1757,7 +1764,7 @@ export let SvgElement = class SvgElement {
   }
 };
 
-type SvgElementInstance = InstanceType<typeof SvgElement>;
+export type SvgElementInstance = InstanceType<typeof SvgElement>;
 
 function removeFuncIriCallback(callback?: FuncIriCallback): void {
   fixFuncIriCallbacks.remove(callback);
@@ -2050,12 +2057,12 @@ export let TextSvgElement = class TextSvgElement extends SvgElement {
       }
       lines = prepareLines(this.element, this._texts, maxWidth);
 
-      for (i = 0, ii = lines.length; i < ii; ++i) {
+      for (i = 0, ii = lines.length; i < ii; i += 1) {
         lineParts = lines[i].parts;
         if (lines[i].commonLength === 1) {
           continue;
         }
-        for (j = 0, jj = lineParts.length; j < jj; ++j) {
+        for (j = 0, jj = lineParts.length; j < jj; j += 1) {
           text = lineParts[j];
           if (isDefined(text.endIndex)) {
             setNewText(text, text.endIndex);
@@ -2156,7 +2163,7 @@ type TextSvgElementInstance = InstanceType<typeof TextSvgElement>;
 function updateIndexes(items: LinkedItem[], k: number): void {
   let i;
   let item;
-  for (i = k; item = items[i]; ++i) {
+  for (i = k; item = items[i]; i += 1) {
     item._link.i = i;
   }
 }
@@ -2167,9 +2174,9 @@ function linkItem(target: LinkedItem, container: SvgElementInstance): void {
   let i;
   let item;
   if (key) {
-    for (i = 0; (item = items[i]) && item._link.name !== key; ++i);
+    for (i = 0; (item = items[i]) && item._link.name !== key; i += 1);
     if (item) {
-      for (++i; (item = items[i]) && item._link.after === key; ++i);
+      for (i += 1; (item = items[i]) && item._link.after === key; i += 1);
     }
   } else {
     i = items.length;
@@ -2181,7 +2188,7 @@ function linkItem(target: LinkedItem, container: SvgElementInstance): void {
 function unlinkItem(target: SvgElementInstance): void {
   let i;
   const items = target._link.to._links;
-  for (i = 0; items[i] !== target; ++i);
+  for (i = 0; items[i] !== target; i += 1);
   items.splice(i, 1);
   updateIndexes(items, i);
 }
@@ -2267,12 +2274,12 @@ export let Renderer = class Renderer {
         backupRoot(this.root);
       }
     }
-    ++this._locker;
+    this._locker += 1;
     return this;
   }
 
   unlock(): this {
-    --this._locker;
+    this._locker -= 1;
     if (this._locker === 0) {
       if (this._backed) {
         restoreRoot(this.root, this._$container[0]);
@@ -2672,11 +2679,11 @@ export let Renderer = class Renderer {
     storageId: string,
     nextId: number,
   ): SvgElementInstance {
-    return this.pattern(color, hatching, `${storageId}-hatching-${nextId++}`);
+    return this.pattern(color, hatching, `${storageId}-hatching-${nextId}`);
   }
 
   drawFilter(_: SvgAttributes, storageId: string, nextId: number): SvgElementInstance {
-    return this.lightenFilter(`${storageId}-lightening-${nextId++}`);
+    return this.lightenFilter(`${storageId}-lightening-${nextId}`);
   }
 
   lockDefsElements(attrs: SvgAttributes, ref: string | null | undefined, type: string): string {
@@ -2694,11 +2701,13 @@ export let Renderer = class Renderer {
       }
       storageItem = storage.byHash[hash];
       if (!storageItem) {
-        pattern = method.call(this, attrs, storage.baseId, storage.nextId++);
+        const { nextId } = storage;
+        storage.nextId += 1;
+        pattern = method.call(this, attrs, storage.baseId, nextId);
         storageItem = storage.byHash[hash] = { pattern, count: 0 };
         storage.refToHash[pattern.id] = hash;
       }
-      ++storageItem.count;
+      storageItem.count += 1;
       ref = storageItem.pattern.id;
     }
     // @ts-expect-error ref is a stored id here: it already maps to the hash or has just been
@@ -2711,15 +2720,18 @@ export let Renderer = class Renderer {
     const hash = storage.refToHash[ref];
     const storageItem = storage.byHash[hash];
 
-    if (storageItem && --storageItem.count === 0) {
-      storageItem.pattern.dispose();
-      delete storage.byHash[hash];
-      delete storage.refToHash[ref];
+    if (storageItem) {
+      storageItem.count -= 1;
+      if (storageItem.count === 0) {
+        storageItem.pattern.dispose();
+        delete storage.byHash[hash];
+        delete storage.refToHash[ref];
+      }
     }
   }
 };
 
-type RendererInstance = InstanceType<typeof Renderer>;
+export type RendererInstance = InstanceType<typeof Renderer>;
 
 function getHatchingHash({ color, hatching }: SvgAttributes): string {
   return `@${color}::${hatching.step}:${hatching.width}:${hatching.opacity}:${hatching.direction}`;
