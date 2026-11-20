@@ -9,6 +9,7 @@ import {
 } from '@jest/globals';
 import $ from '@js/core/renderer';
 
+import type { AreaItemComponent } from '../area_item/types';
 import { FAKE_TABLE_CLASS } from '../keyboard_navigation/const';
 import { HorizontalHeadersArea, VerticalHeadersArea } from './m_headers_area';
 
@@ -16,7 +17,7 @@ const TABLE_OFFSET = 1000;
 const CELL_SIZES = [100, 120, 300];
 const POSITION_PAST_TABLE = TABLE_OFFSET + 520;
 
-const createComponent = (): unknown => ({
+const createComponent = (): AreaItemComponent => ({
   option: (optionName?: string): unknown => {
     if (optionName === undefined) {
       return {};
@@ -30,12 +31,12 @@ const createComponent = (): unknown => ({
   },
   _eventsStrategy: { hasEvent: () => false },
   _defaultActionArgs: () => ({}),
-});
+}) as unknown as AreaItemComponent;
 
 describe('Headers areas', () => {
   let container: HTMLElement = document.createElement('div');
 
-  const getFakeTable = (): HTMLElement => container.querySelector(`.${FAKE_TABLE_CLASS}`)!;
+  const getFakeTable = (): HTMLElement | null => container.querySelector(`.${FAKE_TABLE_CLASS}`);
 
   beforeEach(() => {
     container = document.createElement('div');
@@ -64,8 +65,8 @@ describe('Headers areas', () => {
 
       area.scrollTo({ left: POSITION_PAST_TABLE });
 
-      expect(getFakeTable().style.left).toBe(`${POSITION_PAST_TABLE}px`);
-      expect(getFakeTable().classList).not.toContain('dx-hidden');
+      expect(getFakeTable()?.style.left).toBe(`${POSITION_PAST_TABLE}px`);
+      expect(getFakeTable()?.classList).not.toContain('dx-hidden');
     });
 
     it('should hide the fake table when scrolled back to the rendered table', () => {
@@ -74,8 +75,8 @@ describe('Headers areas', () => {
       area.scrollTo({ left: POSITION_PAST_TABLE });
       area.scrollTo({ left: TABLE_OFFSET });
 
-      expect(getFakeTable().style.left).toBe(`${TABLE_OFFSET}px`);
-      expect(getFakeTable().classList).toContain('dx-hidden');
+      expect(getFakeTable()?.style.left).toBe(`${TABLE_OFFSET}px`);
+      expect(getFakeTable()?.classList).toContain('dx-hidden');
     });
   });
 
@@ -97,8 +98,8 @@ describe('Headers areas', () => {
 
       area.scrollTo({ top: POSITION_PAST_TABLE });
 
-      expect(getFakeTable().style.top).toBe(`${POSITION_PAST_TABLE}px`);
-      expect(getFakeTable().classList).not.toContain('dx-hidden');
+      expect(getFakeTable()?.style.top).toBe(`${POSITION_PAST_TABLE}px`);
+      expect(getFakeTable()?.classList).not.toContain('dx-hidden');
     });
 
     it('should hide the fake table when scrolled back to the rendered table', () => {
@@ -107,8 +108,8 @@ describe('Headers areas', () => {
       area.scrollTo({ top: POSITION_PAST_TABLE });
       area.scrollTo({ top: TABLE_OFFSET });
 
-      expect(getFakeTable().style.top).toBe(`${TABLE_OFFSET}px`);
-      expect(getFakeTable().classList).toContain('dx-hidden');
+      expect(getFakeTable()?.style.top).toBe(`${TABLE_OFFSET}px`);
+      expect(getFakeTable()?.classList).toContain('dx-hidden');
     });
   });
 });
