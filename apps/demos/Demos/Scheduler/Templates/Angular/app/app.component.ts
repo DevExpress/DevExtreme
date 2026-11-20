@@ -133,17 +133,17 @@ export class AppComponent {
 
     this.formInstance = form;
     this.currentSelectedMovie = this.getMovieById(formData?.movieId);
+  };
 
-    form.on('fieldDataChanged', (fieldEvent: DxFormTypes.FieldDataChangedEvent) => {
-      if (fieldEvent.dataField === 'startDate') {
-        const currentFormData = form.option('formData');
-        const movie = this.getMovieById(currentFormData?.movieId);
+  onFormFieldDataChanged = (e: DxFormTypes.FieldDataChangedEvent): void => {
+    if (e.dataField === 'startDate') {
+      const formData = e.component.option('formData');
+      const movie = this.getMovieById(formData?.movieId);
 
-        if (movie) {
-          this.updateEndDate(movie);
-        }
+      if (movie) {
+        this.updateEndDate(movie);
       }
-    });
+    }
   };
 
   onMovieValueChanged = (e: DxSelectBoxTypes.ValueChangedEvent): void => {
