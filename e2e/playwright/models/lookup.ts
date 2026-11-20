@@ -7,6 +7,8 @@ const CLASS = {
 };
 
 export default class Lookup extends DropDownList {
+  name: WidgetName = 'dxLookup';
+
   public readonly field: Locator;
 
   constructor(page: Page, selector: Locator | string) {
@@ -14,9 +16,6 @@ export default class Lookup extends DropDownList {
 
     this.field = this.element.locator(`.${CLASS.field}`);
   }
-
-  // eslint-disable-next-line class-methods-use-this
-  public getName(): WidgetName { return 'dxLookup'; }
 
   // Lookup has no text input: the field takes its place.
   public getPopupOwner(): Locator {

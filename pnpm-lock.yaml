@@ -58,6 +58,9 @@ catalogs:
       specifier: ~0.15.1
       version: 0.15.1
   default:
+    '@axe-core/playwright':
+      specifier: 4.13.0
+      version: 4.13.0
     '@eslint/js':
       specifier: 10.0.1
       version: 10.0.1
@@ -537,7 +540,7 @@ importers:
         version: 5.10.0(eslint@10.14.0(jiti@2.6.1)(supports-color@7.2.0))
       '@testcafe-community/axe':
         specifier: 3.5.0
-        version: 3.5.0(axe-core@4.13.0)(testcafe@3.7.5(patch_hash=721ed26a09d564c50b26c334470f24e87e4f52d2e497c617341b71ed1a3ddbf3))
+        version: 3.5.0(axe-core@4.13.0)(testcafe@3.7.5(patch_hash=721ed26a09d564c50b26c334470f24e87e4f52d2e497c617341b71ed1a3ddbf3)(supports-color@7.2.0))
       '@types/eslint':
         specifier: 8.56.12
         version: 8.56.12
@@ -907,6 +910,9 @@ importers:
 
   e2e/playwright:
     devDependencies:
+      '@axe-core/playwright':
+        specifier: 'catalog:'
+        version: 4.13.0(playwright-core@1.65.1)
       '@eslint/js':
         specifier: 'catalog:'
         version: 10.0.1(eslint@10.14.0(jiti@2.6.1))
@@ -928,6 +934,9 @@ importers:
       '@typescript-eslint/parser':
         specifier: 'catalog:'
         version: 8.72.1(eslint@10.14.0(jiti@2.6.1))(typescript@5.8.3)
+      axe-core:
+        specifier: 'catalog:'
+        version: 4.13.0
       devextreme:
         specifier: workspace:*
         version: link:../../packages/devextreme/artifacts/npm/devextreme
@@ -958,9 +967,6 @@ importers:
       '@stylistic/eslint-plugin':
         specifier: 'catalog:'
         version: 5.10.0(eslint@10.14.0(jiti@2.6.1))
-      '@testcafe-community/axe':
-        specifier: 3.5.0
-        version: 3.5.0(axe-core@4.13.0)(testcafe@3.7.5(patch_hash=721ed26a09d564c50b26c334470f24e87e4f52d2e497c617341b71ed1a3ddbf3))
       '@types/jquery':
         specifier: 'catalog:'
         version: 4.0.1
@@ -970,9 +976,6 @@ importers:
       '@typescript-eslint/parser':
         specifier: 'catalog:'
         version: 8.72.1(eslint@10.14.0(jiti@2.6.1))(typescript@5.9.3)
-      axe-core:
-        specifier: 'catalog:'
-        version: 4.13.0
       devextreme:
         specifier: workspace:*
         version: link:../../packages/devextreme/artifacts/npm/devextreme
@@ -2441,6 +2444,11 @@ packages:
   '@aspnet/signalr@1.0.27':
     resolution: {integrity: sha512-utZvBF9snjdwIBpvcFa6htqFTVaTN50QIZUoiznKpYSZImew1a1Ci7VYmK8HODqwRqUtj0o5/xR1nzt8xex5sA==}
     deprecated: This package is no longer supported. Consider using @microsoft/signalr.
+
+  '@axe-core/playwright@4.13.0':
+    resolution: {integrity: sha512-6YLx+kxXu5GJceG4ozFg+33a2EMTdjYwWGloJ3sb9Kta5pp+ZNS53uxGVog5JetIY8s++P5UrtX+cri+u0VAVg==}
+    peerDependencies:
+      playwright-core: '>= 1.0.0'
 
   '@babel/code-frame@7.29.7':
     resolution: {integrity: sha512-Aup7aUOfpbAUg2ROOJN6Iw5f9DMBlzu0mIkm/malLQFN/YQgO48wCj0Kxa3sEHJvPVFg7siR+qRInwXd2qhQKw==}
@@ -17763,6 +17771,11 @@ snapshots:
 
   '@aspnet/signalr@1.0.27': {}
 
+  '@axe-core/playwright@4.13.0(playwright-core@1.65.1)':
+    dependencies:
+      axe-core: 4.13.0
+      playwright-core: 1.65.1
+
   '@babel/code-frame@7.29.7':
     dependencies:
       '@babel/helper-validator-identifier': 7.29.7
@@ -23450,7 +23463,7 @@ snapshots:
     dependencies:
       '@swc/counter': 0.1.3
 
-  '@testcafe-community/axe@3.5.0(axe-core@4.13.0)(testcafe@3.7.5(patch_hash=721ed26a09d564c50b26c334470f24e87e4f52d2e497c617341b71ed1a3ddbf3))':
+  '@testcafe-community/axe@3.5.0(axe-core@4.13.0)(testcafe@3.7.5(patch_hash=721ed26a09d564c50b26c334470f24e87e4f52d2e497c617341b71ed1a3ddbf3)(supports-color@7.2.0))':
     dependencies:
       axe-core: 4.13.0
       chalk: 2.4.2
