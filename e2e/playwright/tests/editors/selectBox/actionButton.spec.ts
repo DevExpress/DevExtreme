@@ -8,15 +8,14 @@ import SelectBox from '../../../models/selectBox';
 const FOCUSED_STATE_CLASS = 'dx-state-focused';
 
 interface ActionButtonOptions {
-  refocus?: boolean;
   type?: string;
   disabled?: boolean;
 }
 
 const setActionButton = async (
   page: Page,
-  { refocus = false, ...buttonOptions }: ActionButtonOptions = {},
-): Promise<void> => page.evaluate(({ shouldRefocus, options }) => {
+  buttonOptions: ActionButtonOptions = {},
+): Promise<void> => page.evaluate((options) => {
   const selectBox = ($('#container') as any).dxSelectBox('instance');
 
   selectBox.option('buttons', [{
@@ -26,58 +25,12 @@ const setActionButton = async (
       ...options,
       onClick: () => {
         selectBox.option('value', 'item2');
-
-        if (shouldRefocus) {
-          // The editor rerenders its input.
-          selectBox.focus();
-        }
       },
     },
   }]);
-}, { shouldRefocus: refocus, options: buttonOptions });
+}, buttonOptions);
 
 test.describe('SelectBox', () => {
-  test('Click on action button should correctly work with SelectBox containing the field template (T811890)', async ({ page }) => {
-    await createWidget(page, 'dxSelectBox', () => ({
-      items: ['item1', 'item2'],
-      fieldTemplate: (value) => ($('<div>') as any).dxTextBox({ value }),
-    }));
-
-    const selectBox = new SelectBox(page, '#container');
-
-    await setActionButton(page, { refocus: true });
-
-    await selectBox.element.click();
-    await page.keyboard.press('Alt+ArrowUp');
-    await selectBox.expectFocused();
-    await expect.poll(() => selectBox.isOpened()).toBe(false);
-
-    await selectBox.getButton(0).element.click();
-    await selectBox.expectFocused();
-    await expect(selectBox.input).toHaveValue('item2');
-  });
-
-  test('Click on action button after typing should correctly work with SelectBox containing the field template (T811890)', async ({ page }) => {
-    await createWidget(page, 'dxSelectBox', () => ({
-      items: ['item1', 'item2'],
-      fieldTemplate: (value) => ($('<div>') as any).dxTextBox({ value }),
-    }));
-
-    const selectBox = new SelectBox(page, '#container');
-
-    await setActionButton(page, { refocus: true });
-
-    await selectBox.element.click();
-    await page.keyboard.press('Alt+ArrowUp');
-    await selectBox.expectFocused();
-    await expect.poll(() => selectBox.isOpened()).toBe(false);
-
-    await selectBox.input.pressSequentially('tt');
-    await selectBox.getButton(0).element.click();
-    await selectBox.expectFocused();
-    await expect(selectBox.input).toHaveValue('item2');
-  });
-
   test('editor can be focused out after click on action button', async ({ page }) => {
     await createWidget(page, 'dxSelectBox', {
       items: ['item1', 'item2'],

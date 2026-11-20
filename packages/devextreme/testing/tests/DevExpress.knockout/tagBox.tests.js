@@ -9,9 +9,8 @@ const moduleWithoutCsp = QUnit.urlParams['nocsp'] ? QUnit.module : QUnit.module.
 
 QUnit.testStart(function() {
     const markup =
-        '<div id="tagBoxWithFieldTemplate" data-bind="dxTagBox: { dataSource: dataSource, fieldTemplate: \'field\', valueExpr: \'key\', value: value }">\
+        '<div id="tagBoxWithFieldAddons" data-bind="dxTagBox: { dataSource: dataSource, fieldAddons: { beforeTemplate: \'field\' }, valueExpr: \'key\', value: value }">\
             <div data-options="dxTemplate: { name: \'field\' }">\
-                <div data-bind="dxTextBox: {}"></div>\
                 <div id="customField" data-bind="foreach: $data"><span data-bind="    text: $data.name"></span></div>\
             </div>\
         </div>\
@@ -41,7 +40,7 @@ const moduleSetup = {
 
 moduleWithoutCsp('basic', moduleSetup);
 
-QUnit.test('fieldTemplate is bound to selected items', function(assert) {
+QUnit.test('fieldAddons.beforeTemplate is bound to selected items', function(assert) {
     const viewModel = {
         dataSource: [
             { key: 1, name: 'one' },
@@ -51,10 +50,10 @@ QUnit.test('fieldTemplate is bound to selected items', function(assert) {
         value: [1, 2]
     };
 
-    const $selectBox = $('#tagBoxWithFieldTemplate');
+    const $selectBox = $('#tagBoxWithFieldAddons');
     ko.applyBindings(viewModel, $selectBox.get(0));
 
-    assert.equal($('#customField').text(), 'onetwo', 'fieldTemplate got item in viewModel');
+    assert.equal($('#customField').text(), 'onetwo', 'template got items in viewModel');
 });
 
 

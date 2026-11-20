@@ -21,7 +21,6 @@ const TAGBOX_MULTI_TAG_CLASS = 'dx-tagbox-multi-tag';
 const TAGBOX_TAG_REMOVE_BUTTON_CLASS = 'dx-tag-remove-button';
 const TAGBOX_SINGLE_LINE_CLASS = 'dx-tagbox-single-line';
 const TAGBOX_DEFAULT_FIELD_TEMPLATE_CLASS = 'dx-tagbox-default-template';
-const TAGBOX_CUSTOM_FIELD_TEMPLATE_CLASS = 'dx-tagbox-custom-template';
 const TAGBOX_TEXTEDITOR_INPUT_CONTAINER_CLASS = 'dx-texteditor-input-container';
 const SELECT_ALL_CLASS = 'dx-list-select-all';
 
@@ -435,19 +434,12 @@ QUnit.module('option dependent appearance', moduleSetup, () => {
         assert.equal($tagContainer.text().trim(), '!one!two', 'selected values are rendered correctly');
     });
 
-    QUnit.test('tagbox should have template classes', function(assert) {
-        const fieldTemplate = function() {
-            return $('<div>').dxTextBox();
-        };
-
+    QUnit.test('tagbox should have the default template class', function(assert) {
         const $tagBox = $('#tagBox').dxTagBox({
             items: [1, 2, 3],
-            focusStateEnabled: true,
-            fieldTemplate: fieldTemplate
         });
 
-        assert.notOk($tagBox.hasClass(TAGBOX_DEFAULT_FIELD_TEMPLATE_CLASS), 'default template class was removed');
-        assert.ok($tagBox.hasClass(TAGBOX_CUSTOM_FIELD_TEMPLATE_CLASS), 'custom template class was applied');
+        assert.ok($tagBox.hasClass(TAGBOX_DEFAULT_FIELD_TEMPLATE_CLASS), 'default template class is applied');
     });
 
     QUnit.test('widget gets special class in the single line mode', function(assert) {

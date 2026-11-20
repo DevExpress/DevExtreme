@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-webpack5';
 
 import React, { useCallback, useState } from 'react';
-import SelectBox, { SelectBoxTypes } from 'devextreme-react/select-box';
+import SelectBox, { FieldAddons, SelectBoxTypes } from 'devextreme-react/select-box';
 import notify from 'devextreme/ui/notify';
 
 import service from "./data";
@@ -80,9 +80,13 @@ export const CustomTemplates: Story = {
         inputAttr: templatedProductLabel,
         valueExpr: "ID",
         defaultValue: products[3].ID,
-        fieldRender: Field,
         itemRender: Item
     },
+    render: (args) => (
+        <SelectBox {...args}>
+            <FieldAddons beforeRender={Field} />
+        </SelectBox>
+    ),
 }
 
 export const EventHandling: Story = {

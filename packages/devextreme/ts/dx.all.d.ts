@@ -12252,17 +12252,6 @@ declare module DevExpress.ui {
      */
     editAlphaChannel?: boolean;
     /**
-     * [descr:dxColorBoxOptions.fieldTemplate]
-     * @deprecated [depNote:dxColorBoxOptions.fieldTemplate]
-     */
-    fieldTemplate?:
-      | template
-      | ((
-          value: string,
-          fieldElement: DevExpress.core.DxElement
-        ) => string | DevExpress.core.UserDefinedElement)
-      | null;
-    /**
      * [descr:dxColorBoxOptions.keyStep]
      */
     keyStep?: number;
@@ -17132,17 +17121,6 @@ declare module DevExpress.ui {
      * [descr:dxDropDownBoxOptions.displayValueFormatter]
      */
     displayValueFormatter?: (value: string | Array<any>) => string;
-    /**
-     * [descr:dxDropDownBoxOptions.fieldTemplate]
-     * @deprecated [depNote:dxDropDownBoxOptions.fieldTemplate]
-     */
-    fieldTemplate?:
-      | template
-      | ((
-          value: any,
-          fieldElement: DevExpress.core.DxElement
-        ) => string | DevExpress.core.UserDefinedElement)
-      | null;
     /**
      * [descr:dxDropDownBoxOptions.items]
      */
@@ -28212,17 +28190,6 @@ declare module DevExpress.ui {
      * [descr:dxSelectBoxOptions.acceptCustomValue]
      */
     acceptCustomValue?: boolean;
-    /**
-     * [descr:dxSelectBoxOptions.fieldTemplate]
-     * @deprecated [depNote:dxSelectBoxOptions.fieldTemplate]
-     */
-    fieldTemplate?:
-      | template
-      | ((
-          selectedItem: any,
-          fieldElement: DevExpress.core.DxElement
-        ) => string | DevExpress.core.UserDefinedElement)
-      | null;
     /**
      * [descr:dxSelectBoxOptions.fieldAddons]
      */

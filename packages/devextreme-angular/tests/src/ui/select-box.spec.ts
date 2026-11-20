@@ -41,11 +41,11 @@ describe('DxSelectBox', () => {
   });
 
   // spec
-  it('field template should work', () => {
+  it('field addons template should work', () => {
     TestBed.overrideComponent(TestContainerComponent, {
       set: {
         template: `
-                    <dx-select-box fieldTemplate="myTemplate">
+                    <dx-select-box [fieldAddons]="{ beforeTemplate: 'myTemplate' }">
                         <div *dxTemplate="let data of 'myTemplate'">
                             <dx-text-box [value]="data"></dx-text-box>
                         </div>

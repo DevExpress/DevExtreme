@@ -116,7 +116,6 @@ class ColorBox extends DropDownEditor<ColorBoxProperties> {
       editAlphaChannel: false,
       applyValueMode: 'useButtons',
       keyStep: 1,
-      fieldTemplate: null,
       buttonsLocation: 'bottom after',
     };
   }
@@ -395,10 +394,6 @@ class ColorBox extends DropDownEditor<ColorBoxProperties> {
     }
 
     return value;
-  }
-
-  _shouldLogFieldTemplateDeprecationWarning(): boolean {
-    return true;
   }
 
   _cleanNoColorIcon(): void {

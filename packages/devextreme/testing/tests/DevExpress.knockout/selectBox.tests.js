@@ -9,24 +9,16 @@ const moduleWithoutCsp = QUnit.urlParams['nocsp'] ? QUnit.module : QUnit.module.
 
 QUnit.testStart(function() {
     const markup =
-        '<div id="selectBoxWithFieldTemplate" data-bind="dxSelectBox: { dataSource: dataSource, fieldTemplate: \'field\', valueExpr: \'key\', value: value }">\
+        '<div id="selectBoxWithFieldAddons" data-bind="dxSelectBox: { dataSource: dataSource, fieldAddons: { beforeTemplate: \'field\' }, valueExpr: \'key\', value: value }">\
             <div data-options="dxTemplate: {name: \'field\'}">\
-                <div data-bind="dxTextBox: {}"></div>\
                 <span id="customField" data-bind="text: $data.name"></span>\
             </div>\
         </div>\
         <div id="selectBoxWithCustomConfig" data-bind="dxSelectBox: customConfig"></div>\
         \
-        <div id="selectBoxWithFieldTemplate2" data-bind="dxSelectBox: { dataSource: dataSource, fieldTemplate: \'field\', selectedItem: selectedItem }">\
+        <div id="selectBoxWithFieldAddons2" data-bind="dxSelectBox: { dataSource: dataSource, fieldAddons: { beforeTemplate: \'field\' }, selectedItem: selectedItem }">\
             <div data-options="dxTemplate: {name: \'field\'}">\
-                <div id="templateTextBox" data-bind="dxTextBox: {value: $data}"></div>\
-            </div>\
-        </div>\
-        \
-        <div id="selectBoxFieldTemplateWithDropDownButton" data-bind="dxSelectBox: { items: items, fieldTemplate: \'field\', showDropDownButton: true }">\
-            <div data-options="dxTemplate: {name: \'field\'}">\
-                <span>test</span>\
-                <div data-bind="dxTextBox: {}"></div>\
+                <span id="templateField" data-bind="text: $data"></span>\
             </div>\
         </div>';
 
@@ -47,7 +39,7 @@ const moduleSetup = {
 
 moduleWithoutCsp('widget options', moduleSetup);
 
-QUnit.test('fieldTemplate is bound to selected item', function(assert) {
+QUnit.test('fieldAddons.beforeTemplate is bound to selected item', function(assert) {
     const viewModel = {
         dataSource: [
             { key: 1, name: 'one' },
@@ -56,11 +48,11 @@ QUnit.test('fieldTemplate is bound to selected item', function(assert) {
         value: 1
     };
 
-    const $selectBox = $('#selectBoxWithFieldTemplate');
+    const $selectBox = $('#selectBoxWithFieldAddons');
 
     ko.applyBindings(viewModel, $selectBox.get(0));
 
-    assert.equal($('#customField').text(), 'one', 'fieldTemplate got item in viewModel');
+    assert.equal($('#customField').text(), 'one', 'template got item in viewModel');
 });
 
 QUnit.test('T221863: null value as template data', function(assert) {
@@ -69,27 +61,11 @@ QUnit.test('T221863: null value as template data', function(assert) {
         selectedItem: null
     };
 
-    const $selectBox = $('#selectBoxWithFieldTemplate2');
+    const $selectBox = $('#selectBoxWithFieldAddons2');
 
     ko.applyBindings(viewModel, $selectBox.get(0));
 
-    const input = $('#templateTextBox').find('.dx-textbox-input');
-
-    assert.equal(input.text(), '', 'textBox is empty when selected item is null');
-});
-
-QUnit.test('dropDownButton should be rendered when fieldTemplate is specified', function(assert) {
-    const $selectBox = $('#selectBoxFieldTemplateWithDropDownButton');
-    const vm = {
-        items: [1, 2, 3]
-    };
-
-    ko.applyBindings(vm, $selectBox.get(0));
-
-    assert.equal($selectBox.find('.dx-dropdowneditor-button').length, 1, 'dropDownButton rendered after init');
-
-    $selectBox.dxSelectBox('option', 'value', 1);
-    assert.equal($selectBox.find('.dx-dropdowneditor-button').length, 1, 'dropDownButton rendered after init');
+    assert.equal($('#templateField').text(), '', 'template is empty when selected item is null');
 });
 
 QUnit.testInActiveWindow('select box should correctly update computed value', function(assert) {
