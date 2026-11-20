@@ -114,9 +114,9 @@ export class GridStateStoringController extends StateStoringController<GridState
     return super.isLoading() || dataController.isStateLoading();
   }
 
-  protected state(): GridState;
-  protected state(state: GridState | undefined): void;
-  protected state(...args: [state?: GridState]): GridState | void {
+  public state(): GridState;
+  public state(state: GridState | undefined): void;
+  public state(...args: [state?: GridState]): GridState | void {
     if (!args.length) {
       return super.state();
     }
