@@ -960,11 +960,13 @@ class DataController {
             ? expandedPathIndexes[String(path.slice(0, -1))]
             : -1;
 
+          // eslint-disable-next-line max-depth -- per data cell inside the row and cell loops
           if (expandIndex >= 0) {
             rowExpandedSkips[expandIndex] = skips[levels.length] || 0;
             rowExpandedTakes[expandIndex] = takes[levels.length] || 0;
           }
 
+          // eslint-disable-next-line max-depth -- per data cell inside the row and cell loops
           if (cell.rowspan) {
             levels.push(cell.rowspan);
           }
