@@ -1,7 +1,6 @@
 import type { Locator, Page } from '@playwright/test';
 import type { WidgetName } from '../types';
 import Widget from '../internal/widget';
-import { expectClass } from '../internal/classMatcher';
 import ContextMenu from '../contextMenu';
 
 const CLASS = {
@@ -10,7 +9,6 @@ const CLASS = {
   adaptiveItem: 'dx-treeview-item',
   contextMenu: 'dx-context-menu',
   hamburgerButton: 'dx-menu-hamburger-button',
-  focused: 'dx-state-focused',
 };
 
 export default class Menu extends Widget {
@@ -33,11 +31,6 @@ export default class Menu extends Widget {
 
   public getHamburgerButton(): Locator {
     return this.element.locator(`.${CLASS.hamburgerButton}`);
-  }
-
-  // eslint-disable-next-line class-methods-use-this
-  public expectItemFocused(item: Locator, present = true): Promise<void> {
-    return expectClass(item, CLASS.focused, present);
   }
 
   public getSubMenu(rootItem: Locator): ContextMenu {

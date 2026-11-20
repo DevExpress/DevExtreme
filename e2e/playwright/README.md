@@ -294,10 +294,11 @@ relied on it needs the target made reachable, not the check switched off.
 **Scrolling before a click.** TestCafe scrolled the whole target into view before a click;
 Playwright scrolls only as far as the click point. When the target does not fit in the window or
 sticks out of it, the focus then scrolls the page after the click, and a drop-down closes on that
-scroll — sometimes before the next step, sometimes after it. Scroll the target into view first,
-as TestCafe did: `scrollIntoView(locator)` from `helpers/dragUtils` repeats its algorithm, margin
-included, so the page ends up where the TestCafe etalon has it. The native `scrollIntoView` with
-`block: 'nearest'` stops at the edge instead and can leave the page a few pixels short of that.
+scroll — sometimes before the next step, sometimes after it. Scroll the target into view first.
+The native `scrollIntoView` with `block: 'nearest'` is enough when only the click needs the target
+in view; it stops at the edge, though. When a screenshot or a position-dependent step (a submenu
+placed by collision) needs the page where TestCafe left it, use `scrollIntoView(locator)` from
+`helpers/dragUtils`: it repeats the TestCafe algorithm, margin included.
 
 **Page errors.** A test fails on an uncaught error in the page, as it did in TestCafe. A test whose
 TestCafe version ended with `expect(true).ok()` checks exactly that and needs no assertion.

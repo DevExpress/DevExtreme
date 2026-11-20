@@ -3,7 +3,7 @@ import { expect, test } from '../../../fixtures';
 import { createWidget } from '../../../helpers/createWidget';
 import { appendElementTo } from '../../../helpers/domUtils';
 import Toolbar from '../../../models/toolbar';
-import { expectItemFocused } from './utils';
+import { expectItemHasFocus } from './utils';
 
 const setupThreeButtonsFixture = async (page: Page): Promise<void> => {
   await appendElementTo(page, '#container', 'div', 'externalBefore');
@@ -54,25 +54,25 @@ test.describe('Toolbar_keyboard_navigation_nonAPG', () => {
     await expect(externalBefore, 'external before is focused').toBeFocused();
 
     await page.keyboard.press('Tab');
-    await expectItemFocused(toolbar.getItem(0), true, 'Tab #1 -> item[0]');
+    await expectItemHasFocus(toolbar.getItem(0), true, 'Tab #1 -> item[0]');
 
     await page.keyboard.press('Tab');
-    await expectItemFocused(toolbar.getItem(1), true, 'Tab #2 -> item[1]');
+    await expectItemHasFocus(toolbar.getItem(1), true, 'Tab #2 -> item[1]');
 
     await page.keyboard.press('Tab');
-    await expectItemFocused(toolbar.getItem(2), true, 'Tab #3 -> item[2]');
+    await expectItemHasFocus(toolbar.getItem(2), true, 'Tab #3 -> item[2]');
 
     await page.keyboard.press('Tab');
     await expect(externalAfter, 'Tab #4 -> external after').toBeFocused();
 
     await page.keyboard.press('Shift+Tab');
-    await expectItemFocused(toolbar.getItem(2), true, 'Shift+Tab #1 -> item[2]');
+    await expectItemHasFocus(toolbar.getItem(2), true, 'Shift+Tab #1 -> item[2]');
 
     await page.keyboard.press('Shift+Tab');
-    await expectItemFocused(toolbar.getItem(1), true, 'Shift+Tab #2 -> item[1]');
+    await expectItemHasFocus(toolbar.getItem(1), true, 'Shift+Tab #2 -> item[1]');
 
     await page.keyboard.press('Shift+Tab');
-    await expectItemFocused(toolbar.getItem(0), true, 'Shift+Tab #3 -> item[0]');
+    await expectItemHasFocus(toolbar.getItem(0), true, 'Shift+Tab #3 -> item[0]');
 
     await page.keyboard.press('Shift+Tab');
     await expect(externalBefore, 'Shift+Tab #4 -> external before').toBeFocused();
@@ -86,14 +86,14 @@ test.describe('Toolbar_keyboard_navigation_nonAPG', () => {
 
     await externalBefore.click();
     await page.keyboard.press('Tab');
-    await expectItemFocused(toolbar.getItem(0), true, 'item[0] focused');
+    await expectItemHasFocus(toolbar.getItem(0), true, 'item[0] focused');
 
     const keys = ['ArrowRight', 'ArrowLeft', 'Home', 'End', 'ArrowDown', 'ArrowUp'];
 
     for (const key of keys) {
       await page.keyboard.press(key);
-      await expectItemFocused(toolbar.getItem(0), true, `focus stays on item[0] after "${key}"`);
-      await expectItemFocused(toolbar.getItem(1), false, `focus does not jump to item[1] on "${key}"`);
+      await expectItemHasFocus(toolbar.getItem(0), true, `focus stays on item[0] after "${key}"`);
+      await expectItemHasFocus(toolbar.getItem(1), false, `focus does not jump to item[1] on "${key}"`);
     }
   });
 
@@ -135,7 +135,7 @@ test.describe('Toolbar_keyboard_navigation_nonAPG', () => {
     await externalBefore.click();
     await page.keyboard.press('Tab');
     await page.keyboard.press('Tab');
-    await expectItemFocused(toolbar.getItem(1), true, 'focus is inside dxTabs item');
+    await expectItemHasFocus(toolbar.getItem(1), true, 'focus is inside dxTabs item');
 
     await expect.poll(() => getTabsSelectedIndex(page), { message: 'initial selectedIndex is 0' }).toBe(0);
 
@@ -144,13 +144,13 @@ test.describe('Toolbar_keyboard_navigation_nonAPG', () => {
       () => getTabsSelectedIndex(page),
       { message: 'ArrowRight reaches dxTabs and advances selectedIndex' },
     ).toBe(1);
-    await expectItemFocused(toolbar.getItem(1), true, 'focus stays inside dxTabs, did not jump to item[2]');
+    await expectItemHasFocus(toolbar.getItem(1), true, 'focus stays inside dxTabs, did not jump to item[2]');
 
     await page.keyboard.press('ArrowLeft');
     await expect.poll(
       () => getTabsSelectedIndex(page),
       { message: 'ArrowLeft reaches dxTabs and decreases selectedIndex' },
     ).toBe(0);
-    await expectItemFocused(toolbar.getItem(1), true, 'focus still inside dxTabs');
+    await expectItemHasFocus(toolbar.getItem(1), true, 'focus still inside dxTabs');
   });
 });

@@ -52,6 +52,35 @@ export const removeClassAttribute = async (
   { elementSelector: selector, className: value },
 );
 
+const appendLocatorAttribute = async (
+  locator: Locator,
+  attribute: string,
+  value: string,
+): Promise<void> => locator.evaluate(
+  (element, { name, attributeValue }) => {
+    element.setAttribute(name, `${element.getAttribute(name) ?? ''} ${attributeValue}`);
+  },
+  { name: attribute, attributeValue: value },
+);
+
+export const appendStyle = async (
+  locator: Locator,
+  style: string,
+): Promise<void> => appendLocatorAttribute(locator, 'style', style);
+
+export const addClass = async (
+  locator: Locator,
+  className: string,
+): Promise<void> => appendLocatorAttribute(locator, 'class', className);
+
+export const removeClass = async (
+  locator: Locator,
+  className: string,
+): Promise<void> => locator.evaluate(
+  (element, value) => { element.classList.remove(value); },
+  className,
+);
+
 export const appendElementTo = async (
   page: Page,
   parentSelector: string,
