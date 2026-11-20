@@ -14,71 +14,42 @@ export const setAttribute = async (
   { elementSelector: selector, name: attribute, attributeValue: value },
 );
 
+// A selector stands for its first match, as document.querySelector did.
+const toLocator = (page: Page, target: Locator | string): Locator => (
+  typeof target === 'string' ? page.locator(target).first() : target
+);
+
 export const appendAttributeValue = async (
   page: Page,
-  selector: string,
+  target: Locator | string,
   attribute: string,
   value: string,
-): Promise<void> => page.evaluate(
-  ({ elementSelector, name, attributeValue }) => {
-    const element = document.querySelector(elementSelector);
-    const current = element?.getAttribute(name) ?? '';
-
-    element?.setAttribute(name, `${current} ${attributeValue}`);
-  },
-  { elementSelector: selector, name: attribute, attributeValue: value },
-);
-
-export const setStyleAttribute = async (
-  page: Page,
-  selector: string,
-  value: string,
-): Promise<void> => appendAttributeValue(page, selector, 'style', value);
-
-export const setClassAttribute = async (
-  page: Page,
-  selector: string,
-  value: string,
-): Promise<void> => appendAttributeValue(page, selector, 'class', value);
-
-export const removeClassAttribute = async (
-  page: Page,
-  selector: string,
-  value: string,
-): Promise<void> => page.evaluate(
-  ({ elementSelector, className }) => {
-    document.querySelector(elementSelector)?.classList.remove(className);
-  },
-  { elementSelector: selector, className: value },
-);
-
-const appendLocatorAttribute = async (
-  locator: Locator,
-  attribute: string,
-  value: string,
-): Promise<void> => locator.evaluate(
+): Promise<void> => toLocator(page, target).evaluate(
   (element, { name, attributeValue }) => {
     element.setAttribute(name, `${element.getAttribute(name) ?? ''} ${attributeValue}`);
   },
   { name: attribute, attributeValue: value },
 );
 
-export const appendStyle = async (
-  locator: Locator,
-  style: string,
-): Promise<void> => appendLocatorAttribute(locator, 'style', style);
+export const setStyleAttribute = async (
+  page: Page,
+  target: Locator | string,
+  value: string,
+): Promise<void> => appendAttributeValue(page, target, 'style', value);
 
-export const addClass = async (
-  locator: Locator,
-  className: string,
-): Promise<void> => appendLocatorAttribute(locator, 'class', className);
+export const setClassAttribute = async (
+  page: Page,
+  target: Locator | string,
+  value: string,
+): Promise<void> => appendAttributeValue(page, target, 'class', value);
 
-export const removeClass = async (
-  locator: Locator,
-  className: string,
-): Promise<void> => locator.evaluate(
-  (element, value) => { element.classList.remove(value); },
-  className,
+export const removeClassAttribute = async (
+  page: Page,
+  target: Locator | string,
+  value: string,
+): Promise<void> => toLocator(page, target).evaluate(
+  (element, className) => { element.classList.remove(className); },
+  value,
 );
 
 export const appendElementTo = async (

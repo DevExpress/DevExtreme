@@ -21,7 +21,7 @@ export default class ContextMenu extends Widget {
     super(page, selector);
 
     this.items = page.locator(`.${CLASS.contextMenu} .${CLASS.item}`);
-    this.overlay = new Overlay(page, page.locator(`.${CLASS.overlay}`).first());
+    this.overlay = new Overlay(page, this.element.locator(`.${CLASS.overlay}`));
   }
 
   public async show(): Promise<void> {
