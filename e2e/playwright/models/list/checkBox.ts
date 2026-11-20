@@ -21,7 +21,7 @@ export default class ListItemCheckBox {
     return expectClass(this.element, CLASS.checked, present);
   }
 
-  // The list moves the focus between its items; the check box itself never takes it.
+  // The list moves the focus between its items; the checkbox itself never takes it.
   public expectFocused(present = true): Promise<void> {
     return expectClass(this.item, CLASS.focused, present);
   }

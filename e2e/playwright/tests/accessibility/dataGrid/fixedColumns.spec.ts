@@ -153,7 +153,7 @@ test('Accessibility: Scrollable should have focusable element when navigate out 
   await pressKey(page, 'Tab', COLUMNS_LENGTH - 1);
   await pressKey(page, 'Tab', COLUMNS_LENGTH);
 
-  // focus button outside of the grid
+  // focus button outside the grid
   await pressKey(page, 'Tab');
 
   await expect(page.locator('#myButton')).toBeFocused();

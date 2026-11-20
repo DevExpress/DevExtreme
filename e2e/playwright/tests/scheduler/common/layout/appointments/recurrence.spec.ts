@@ -9,7 +9,7 @@ test.describe('AppointmentForm screenshot tests', () => {
   // visual: material.blue.light
   ['day', 'week', 'workWeek', 'month', 'timelineDay', 'timelineWeek', 'timelineWorkWeek', 'timelineMonth', 'agenda'].forEach((currentView) => {
     [true, false].forEach((rtlEnabled) => {
-      test(`Appointemt form tests (currentView: ${currentView}, rtlEnabled: ${rtlEnabled})`, async ({ page }) => {
+      test(`Appointment form tests (currentView: ${currentView}, rtlEnabled: ${rtlEnabled})`, async ({ page }) => {
         await createWidget(page, 'dxScheduler', {
           dataSource: [{
             text: 'Long Long Long Long Long Long Long Long Long Description',
