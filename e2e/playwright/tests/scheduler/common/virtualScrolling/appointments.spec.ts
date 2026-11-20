@@ -1,6 +1,6 @@
 import { expect, test } from '../../../../fixtures';
 import { createWidget } from '../../../../helpers/createWidget';
-import { appendStyle } from '../../../../helpers/domUtils';
+import { setStyleAttribute } from '../../../../helpers/domUtils';
 import { testScreenshot } from '../../../../helpers/screenshots';
 import Scheduler from '../../../../models/scheduler';
 import { scrollToDate } from '../../helpers/utils';
@@ -30,7 +30,7 @@ test.describe('Scheduler: Virtual Scrolling', () => {
     const scheduler = new Scheduler(page, '#container');
     const { element } = scheduler.getAppointment('', 0);
 
-    await appendStyle(element, 'background-color: red;');
+    await setStyleAttribute(page, element, 'background-color: red;');
     const initialStyle = await element.getAttribute('style');
 
     await scrollToDate(page, new Date(2020, 8, 17, 4));

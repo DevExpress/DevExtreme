@@ -1,7 +1,7 @@
 import type { Page } from '@playwright/test';
 import { expect, test } from '../../../fixtures';
 import { createWidget } from '../../../helpers/createWidget';
-import { addClass, appendElementTo, setStyleAttribute } from '../../../helpers/domUtils';
+import { appendElementTo, setClassAttribute, setStyleAttribute } from '../../../helpers/domUtils';
 import { testScreenshot } from '../../../helpers/screenshots';
 import Calendar from '../../../models/calendar';
 import { expectClass } from '../../../models/internal/classMatcher';
@@ -262,7 +262,9 @@ test.describe('Calendar', () => {
         ]) {
           const cellClasses = `${cellTypeClass} ${stateClass}`;
 
-          await addClass(view.getCellByOffset(startCellDate, cellOffset), cellClasses);
+          const cell = view.getCellByOffset(startCellDate, cellOffset);
+
+          await setClassAttribute(page, cell, cellClasses);
           await addCellCaption(page, startCellDate.getDate() + cellOffset, cellClasses);
 
           cellOffset += 1;
@@ -303,7 +305,7 @@ test.describe('Calendar', () => {
         CALENDAR_SELECTED_DATE_CLASS,
         `${CALENDAR_CONTOURED_DATE_CLASS} ${CALENDAR_SELECTED_DATE_CLASS}`,
       ]) {
-        await addClass(view.getCellByIndex(cellOffset), cellClasses);
+        await setClassAttribute(page, view.getCellByIndex(cellOffset), cellClasses);
         await addCellCaption(page, startCellDate.getDate() + cellOffset, cellClasses);
 
         cellOffset += 1;

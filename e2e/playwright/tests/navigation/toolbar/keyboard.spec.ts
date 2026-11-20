@@ -127,7 +127,7 @@ test.describe('Toolbar_keyboard_navigation', () => {
         text: 'External Before',
       }, '#externalBefore');
 
-      await createWidget(page, 'dxToolbar', (item) => ({
+      await createWidget(page, 'dxToolbar', {
         items: [
           {
             location: 'before',
@@ -136,8 +136,8 @@ test.describe('Toolbar_keyboard_navigation', () => {
           },
           {
             location: 'before',
-            widget: item.widget,
-            options: { ...item.options, focusStateEnabled: true },
+            widget,
+            options: { ...options, focusStateEnabled: true },
           },
           {
             location: 'before',
@@ -145,7 +145,7 @@ test.describe('Toolbar_keyboard_navigation', () => {
             options: { text: 'Next', focusStateEnabled: true },
           },
         ],
-      }), '#toolbar', { arg: { widget, options } });
+      }, '#toolbar');
 
       await createWidget(page, 'dxButton', {
         text: 'External After',
