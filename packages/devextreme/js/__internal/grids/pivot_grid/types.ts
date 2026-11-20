@@ -65,6 +65,7 @@ export interface PivotGridLoadOptions extends ExpandedLevelOptions {
   rowTake?: number;
   columnSkip?: number;
   columnTake?: number;
+  skipValues?: boolean;
 }
 
 export interface PivotGridDescriptions {
