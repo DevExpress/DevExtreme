@@ -1,7 +1,7 @@
 import type { Locator, Page } from '@playwright/test';
 import type { WidgetName } from '../types';
-import { hasClass } from './hasClass';
 import { expectClass } from './classMatcher';
+import { hasClass } from './hasClass';
 
 const CLASS = {
   focused: 'dx-state-focused',
@@ -18,6 +18,8 @@ export default abstract class Widget {
   public readonly page: Page;
 
   public readonly element: Locator;
+
+  abstract name: WidgetName;
 
   constructor(page: Page, selector: Locator | string) {
     this.page = page;
@@ -87,5 +89,7 @@ export default abstract class Widget {
     );
   }
 
-  abstract getName(): WidgetName;
+  public getName(): WidgetName {
+    return this.name;
+  }
 }

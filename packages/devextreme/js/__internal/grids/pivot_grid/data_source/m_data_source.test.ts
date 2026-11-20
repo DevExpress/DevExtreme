@@ -29,4 +29,26 @@ describe('PivotGridDataSource', () => {
       expect(result).toBe(loadError);
     });
   });
+
+  describe('state', () => {
+    it("should apply the state when a field's dataField is 'length'", async () => {
+      const dataSource = new PivotGridDataSource({
+        store: [{ length: 1, region: 'A' }],
+        fields: [
+          { dataField: 'length', area: 'row' },
+          { dataField: 'region', area: 'column' },
+        ],
+      });
+      await dataSource.load();
+
+      dataSource.state({
+        fields: [
+          { dataField: 'length', area: 'column' },
+          { dataField: 'region', area: 'row' },
+        ],
+      }, true);
+
+      expect(dataSource.fields().map((field) => field.area)).toEqual(['column', 'row']);
+    });
+  });
 });

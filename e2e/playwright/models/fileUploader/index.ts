@@ -9,6 +9,8 @@ const CLASS = {
 };
 
 export default class FileUploader extends Widget {
+  name: WidgetName = 'dxFileUploader';
+
   public static className = 'dx-fileuploader';
 
   public readonly input: Locator;
@@ -21,9 +23,6 @@ export default class FileUploader extends Widget {
     this.input = this.element.locator(`.${CLASS.input}`);
     this.files = this.element.locator(`.${CLASS.filesContainer} .${FileContent.className}`);
   }
-
-  // eslint-disable-next-line class-methods-use-this
-  public getName(): WidgetName { return 'dxFileUploader'; }
 
   public getFile(index = 0): FileContent {
     return new FileContent(this.page, this.files.nth(index));
