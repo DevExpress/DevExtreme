@@ -31,7 +31,7 @@ import { getWindow } from '@ts/core/utils/window';
 import { end as hoverEventEnd, start as hoverEventStart } from '@ts/events/hover';
 import pointerEvents from '@ts/events/pointer';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
-import type { SvgDomElement, SvgElement } from '@ts/viz/core/renderers/renderer';
+import type { SvgDomElement, SvgElementInstance } from '@ts/viz/core/renderers/renderer';
 import { Renderer } from '@ts/viz/core/renderers/renderer';
 import { patchFontOptions } from '@ts/viz/core/utils';
 import { getTheme } from '@ts/viz/themes';
@@ -129,8 +129,6 @@ interface ExportOptions {
   useBase64?: boolean;
   __test?: ThemeValue;
 }
-
-type SvgElementInstance = InstanceType<typeof SvgElement>;
 
 interface RendererWrapper {
   createGroup: () => SvgElementInstance;

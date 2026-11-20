@@ -2,7 +2,7 @@ import { expect, test as base } from '@playwright/test';
 import { DEFAULT_BROWSER_SIZE, DEFAULT_THEME } from './helpers/const';
 import { changeTheme, openTestPage, resetPageState } from './helpers/testPageUtils';
 
-const GOOGLE_FONTS = /^https:\/\/fonts\.googleapis\.com\//;
+export const GOOGLE_FONTS = /^https:\/\/fonts\.googleapis\.com\//;
 
 export interface TestOptions {
   theme: string;

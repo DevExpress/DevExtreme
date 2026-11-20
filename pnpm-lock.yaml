@@ -58,6 +58,9 @@ catalogs:
       specifier: ~0.15.1
       version: 0.15.1
   default:
+    '@axe-core/playwright':
+      specifier: 4.13.0
+      version: 4.13.0
     '@eslint/js':
       specifier: 10.0.1
       version: 10.0.1
@@ -153,8 +156,8 @@ catalogs:
       specifier: 20.19.37
       version: 20.19.37
     devextreme-internal-tools:
-      specifier: 22.1.0
-      version: 22.1.0
+      specifier: 22.2.0
+      version: 22.2.0
     prettier:
       specifier: 3.5.3
       version: 3.5.3
@@ -232,7 +235,7 @@ importers:
         version: 5.0.0
       devextreme-internal-tools:
         specifier: catalog:tools
-        version: 22.1.0
+        version: 22.2.0
       devextreme-metadata:
         specifier: workspace:*
         version: link:packages/devextreme-metadata
@@ -537,7 +540,7 @@ importers:
         version: 5.10.0(eslint@10.14.0(jiti@2.6.1)(supports-color@7.2.0))
       '@testcafe-community/axe':
         specifier: 3.5.0
-        version: 3.5.0(axe-core@4.13.0)(testcafe@3.7.5(patch_hash=721ed26a09d564c50b26c334470f24e87e4f52d2e497c617341b71ed1a3ddbf3))
+        version: 3.5.0(axe-core@4.13.0)(testcafe@3.7.5(patch_hash=721ed26a09d564c50b26c334470f24e87e4f52d2e497c617341b71ed1a3ddbf3)(supports-color@7.2.0))
       '@types/eslint':
         specifier: 8.56.12
         version: 8.56.12
@@ -907,6 +910,9 @@ importers:
 
   e2e/playwright:
     devDependencies:
+      '@axe-core/playwright':
+        specifier: 'catalog:'
+        version: 4.13.0(playwright-core@1.65.1)
       '@eslint/js':
         specifier: 'catalog:'
         version: 10.0.1(eslint@10.14.0(jiti@2.6.1))
@@ -928,6 +934,9 @@ importers:
       '@typescript-eslint/parser':
         specifier: 'catalog:'
         version: 8.72.1(eslint@10.14.0(jiti@2.6.1))(typescript@5.8.3)
+      axe-core:
+        specifier: 'catalog:'
+        version: 4.13.0
       devextreme:
         specifier: workspace:*
         version: link:../../packages/devextreme/artifacts/npm/devextreme
@@ -958,9 +967,6 @@ importers:
       '@stylistic/eslint-plugin':
         specifier: 'catalog:'
         version: 5.10.0(eslint@10.14.0(jiti@2.6.1))
-      '@testcafe-community/axe':
-        specifier: 3.5.0
-        version: 3.5.0(axe-core@4.13.0)(testcafe@3.7.5(patch_hash=721ed26a09d564c50b26c334470f24e87e4f52d2e497c617341b71ed1a3ddbf3))
       '@types/jquery':
         specifier: 'catalog:'
         version: 4.0.1
@@ -970,9 +976,6 @@ importers:
       '@typescript-eslint/parser':
         specifier: 'catalog:'
         version: 8.72.1(eslint@10.14.0(jiti@2.6.1))(typescript@5.9.3)
-      axe-core:
-        specifier: 'catalog:'
-        version: 4.13.0
       devextreme:
         specifier: workspace:*
         version: link:../../packages/devextreme/artifacts/npm/devextreme
@@ -1490,7 +1493,7 @@ importers:
         version: 20.19.37
       devextreme-internal-tools:
         specifier: catalog:tools
-        version: 22.1.0
+        version: 22.2.0
       prettier:
         specifier: catalog:tools
         version: 3.5.3
@@ -2441,6 +2444,11 @@ packages:
   '@aspnet/signalr@1.0.27':
     resolution: {integrity: sha512-utZvBF9snjdwIBpvcFa6htqFTVaTN50QIZUoiznKpYSZImew1a1Ci7VYmK8HODqwRqUtj0o5/xR1nzt8xex5sA==}
     deprecated: This package is no longer supported. Consider using @microsoft/signalr.
+
+  '@axe-core/playwright@4.13.0':
+    resolution: {integrity: sha512-6YLx+kxXu5GJceG4ozFg+33a2EMTdjYwWGloJ3sb9Kta5pp+ZNS53uxGVog5JetIY8s++P5UrtX+cri+u0VAVg==}
+    peerDependencies:
+      playwright-core: '>= 1.0.0'
 
   '@babel/code-frame@7.29.7':
     resolution: {integrity: sha512-Aup7aUOfpbAUg2ROOJN6Iw5f9DMBlzu0mIkm/malLQFN/YQgO48wCj0Kxa3sEHJvPVFg7siR+qRInwXd2qhQKw==}
@@ -6585,11 +6593,6 @@ packages:
   '@preact/signals-core@1.14.1':
     resolution: {integrity: sha512-vxPpfXqrwUe9lpjqfYNjAF/0RF/eFGeLgdJzdmIIZjpOnTmGmAB4BjWone562mJGMRP4frU6iZ6ei3PDsu52Ng==}
 
-  '@prettier/sync@0.6.1':
-    resolution: {integrity: sha512-yF9G8vK/LYUTF3Cijd7VC9La3b20F20/J/fgoR4H0B8JGOWnZVZX6+I6+vODPosjmMcpdlUV+gUqJQZp3kLOcw==}
-    peerDependencies:
-      prettier: '*'
-
   '@puppeteer/browsers@3.2.4':
     resolution: {integrity: sha512-okJ6yQMc0SBexOKxMi966omwAV1uAPwgF/YMZdb04gZQPXVjWHl9bmXjZYtIcsN1+PN3Bz4iFfGK3g+c6lZJ0Q==}
     engines: {node: '>=22.12.0'}
@@ -9991,8 +9994,8 @@ packages:
     resolution: {integrity: sha512-pOp1d3IqKcD43Xw4icnwCTlbzBsFRO4kQtHtaGMZOubgMmlxFvCKQxDrZhC4gzFFc1bUhgWcsxCcQ4pJFPV2nQ==}
     engines: {node: '>=22.21.1'}
 
-  devextreme-internal-tools@22.1.0:
-    resolution: {integrity: sha512-Kz02vZPa90CfM2YjZ1T+tOMDcflfX5zI8t4xECWjU3RrRR3GV5ZKl3/H+j6yHLgyD/jgcBzJb4acB7bzZdjXIg==}
+  devextreme-internal-tools@22.2.0:
+    resolution: {integrity: sha512-771QGzOb+/RDSJ3fH7JF/7JPkxaL8iCwK62ouizPUmvDtQEb3tHbsGL8O1AconR/FKpFhBXSgZgpbkcse8xm6w==}
     engines: {node: ^24.16.0}
     hasBin: true
 
@@ -12693,9 +12696,6 @@ packages:
     resolution: {integrity: sha512-uCbIa8jWWmQZt4dSnEStkVC6gdakiinAm4PiGsywIkguF0eWMdcjDz0ECYhUolFU3pFLOev9VNPCEygydXnddg==}
     engines: {node: ^20.17.0 || >=22.9.0}
 
-  make-synchronized@0.8.0:
-    resolution: {integrity: sha512-DZu4lwc0ffoFz581BSQa/BJl+1ZqIkoRQ+VejMlH0VrP4E86StAODnZujZ4sepumQj8rcP7wUnUBGM8Gu+zKUA==}
-
   makeerror@1.0.12:
     resolution: {integrity: sha512-JmqCvUhmt43madlpFzG4BQzG2Z3m6tvQDNKdClZnO3VbIudJYmxsT0FNJMeiB2+JTSlTQTSbU8QdesVmwJcmLg==}
 
@@ -15026,10 +15026,6 @@ packages:
   shell-quote@1.12.0:
     resolution: {integrity: sha512-PcByqNyT/38F2kDNi006HAMRJaULuBzq/FOsw3qdZvX/GA9W/jamDaRskgHjubHiftXK5sIFxLNkvrXUwcof6Q==}
     engines: {node: '>= 0.4'}
-
-  shelljs@0.10.0:
-    resolution: {integrity: sha512-Jex+xw5Mg2qMZL3qnzXIfaxEtBaC4n7xifqaqtrZDdlheR70OGkydrPJWT0V1cA1k3nanC86x9FwAmQl6w3Klw==}
-    engines: {node: '>=18'}
 
   shelljs@0.8.5:
     resolution: {integrity: sha512-TiwcRcrkhHvbrZbnRcFYMLl30Dfov3HKqzp5tO5b4pt6G/SezKcYhmDg15zXVBswHmctSAQKznqNW2LO5tTDow==}
@@ -17775,6 +17771,11 @@ snapshots:
 
   '@aspnet/signalr@1.0.27': {}
 
+  '@axe-core/playwright@4.13.0(playwright-core@1.65.1)':
+    dependencies:
+      axe-core: 4.13.0
+      playwright-core: 1.65.1
+
   '@babel/code-frame@7.29.7':
     dependencies:
       '@babel/helper-validator-identifier': 7.29.7
@@ -17806,10 +17807,10 @@ snapshots:
       '@babel/helper-compilation-targets': 7.29.7
       '@babel/helper-module-transforms': 7.29.7(@babel/core@7.29.7)
       '@babel/helpers': 7.29.7
-      '@babel/parser': 7.29.9
+      '@babel/parser': 7.29.14
       '@babel/template': 7.29.7
       '@babel/traverse': 7.29.7
-      '@babel/types': 7.29.8
+      '@babel/types': 7.29.14
       '@jridgewell/remapping': 2.3.5
       convert-source-map: 2.0.0
       debug: 4.4.3(supports-color@7.2.0)
@@ -17867,8 +17868,8 @@ snapshots:
 
   '@babel/generator@7.29.7':
     dependencies:
-      '@babel/parser': 7.29.9
-      '@babel/types': 7.29.8
+      '@babel/parser': 7.29.14
+      '@babel/types': 7.29.14
       '@jridgewell/gen-mapping': 0.3.13
       '@jridgewell/trace-mapping': 0.3.31
       jsesc: 3.1.0
@@ -18247,7 +18248,7 @@ snapshots:
   '@babel/helpers@7.29.7':
     dependencies:
       '@babel/template': 7.29.7
-      '@babel/types': 7.29.8
+      '@babel/types': 7.29.14
 
   '@babel/helpers@8.0.7':
     dependencies:
@@ -19858,8 +19859,8 @@ snapshots:
   '@babel/template@7.29.7':
     dependencies:
       '@babel/code-frame': 7.29.7
-      '@babel/parser': 7.29.9
-      '@babel/types': 7.29.8
+      '@babel/parser': 7.29.14
+      '@babel/types': 7.29.14
 
   '@babel/template@8.0.0':
     dependencies:
@@ -19884,9 +19885,9 @@ snapshots:
       '@babel/code-frame': 7.29.7
       '@babel/generator': 7.29.7
       '@babel/helper-globals': 7.29.7
-      '@babel/parser': 7.29.9
+      '@babel/parser': 7.29.14
       '@babel/template': 7.29.7
-      '@babel/types': 7.29.8
+      '@babel/types': 7.29.14
       debug: 4.4.3(supports-color@7.2.0)
     transitivePeerDependencies:
       - supports-color
@@ -22791,11 +22792,6 @@ snapshots:
 
   '@preact/signals-core@1.14.1': {}
 
-  '@prettier/sync@0.6.1(prettier@3.8.1)':
-    dependencies:
-      make-synchronized: 0.8.0
-      prettier: 3.8.1
-
   '@puppeteer/browsers@3.2.4(yauzl@2.10.0)':
     dependencies:
       modern-tar: 0.8.6
@@ -23467,7 +23463,7 @@ snapshots:
     dependencies:
       '@swc/counter': 0.1.3
 
-  '@testcafe-community/axe@3.5.0(axe-core@4.13.0)(testcafe@3.7.5(patch_hash=721ed26a09d564c50b26c334470f24e87e4f52d2e497c617341b71ed1a3ddbf3))':
+  '@testcafe-community/axe@3.5.0(axe-core@4.13.0)(testcafe@3.7.5(patch_hash=721ed26a09d564c50b26c334470f24e87e4f52d2e497c617341b71ed1a3ddbf3)(supports-color@7.2.0))':
     dependencies:
       axe-core: 4.13.0
       chalk: 2.4.2
@@ -26734,13 +26730,11 @@ snapshots:
       readable-stream: 3.6.2
       saxes: 5.0.1
 
-  devextreme-internal-tools@22.1.0:
+  devextreme-internal-tools@22.2.0:
     dependencies:
-      '@prettier/sync': 0.6.1(prettier@3.8.1)
       dot: 1.1.3
       mkdirp: 3.0.1
       prettier: 3.8.1
-      shelljs: 0.10.0
       typescript: 5.9.3
       winston: 3.19.0
 
@@ -30736,8 +30730,6 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  make-synchronized@0.8.0: {}
-
   makeerror@1.0.12:
     dependencies:
       tmpl: 1.0.5
@@ -31323,7 +31315,7 @@ snapshots:
       less: 4.9.1
       ora: 9.4.1
       piscina: 5.3.2
-      postcss: 8.5.31
+      postcss: 8.5.33
       rollup-plugin-dts: 6.4.1(rollup@4.59.0)(typescript@5.9.3)
       rxjs: 7.8.2
       sass: 1.105.1
@@ -32229,8 +32221,8 @@ snapshots:
     dependencies:
       htmlparser2: 8.0.2
       js-tokens: 9.0.1
-      postcss: 8.5.31
-      postcss-safe-parser: 6.0.0(postcss@8.5.31)
+      postcss: 8.5.33
+      postcss-safe-parser: 6.0.0(postcss@8.5.33)
 
   postcss-loader@8.2.0(postcss@8.5.23)(typescript@5.9.3)(webpack@5.105.2(@swc/core@1.15.30(@swc/helpers@0.5.21))(esbuild@0.28.1)):
     dependencies:
@@ -32300,9 +32292,9 @@ snapshots:
 
   postcss-resolve-nested-selector@0.1.6: {}
 
-  postcss-safe-parser@6.0.0(postcss@8.5.31):
+  postcss-safe-parser@6.0.0(postcss@8.5.33):
     dependencies:
-      postcss: 8.5.31
+      postcss: 8.5.33
 
   postcss-safe-parser@7.0.1(postcss@8.5.31):
     dependencies:
@@ -33578,11 +33570,6 @@ snapshots:
   shebang-regex@3.0.0: {}
 
   shell-quote@1.12.0: {}
-
-  shelljs@0.10.0:
-    dependencies:
-      execa: 5.1.1
-      fast-glob: 3.3.3
 
   shelljs@0.8.5:
     dependencies:
@@ -35438,7 +35425,7 @@ snapshots:
     dependencies:
       lightningcss: 1.33.0
       picomatch: 4.0.7
-      postcss: 8.5.31
+      postcss: 8.5.33
       rolldown: 1.2.14
       tinyglobby: 0.2.17
     optionalDependencies:
@@ -35456,7 +35443,7 @@ snapshots:
     dependencies:
       lightningcss: 1.33.0
       picomatch: 4.0.7
-      postcss: 8.5.31
+      postcss: 8.5.33
       rolldown: 1.2.14
       tinyglobby: 0.2.17
     optionalDependencies:
@@ -35474,7 +35461,7 @@ snapshots:
     dependencies:
       lightningcss: 1.33.0
       picomatch: 4.0.7
-      postcss: 8.5.31
+      postcss: 8.5.33
       rolldown: 1.2.14
       tinyglobby: 0.2.17
     optionalDependencies:

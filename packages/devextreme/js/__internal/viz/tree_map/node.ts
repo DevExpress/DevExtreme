@@ -16,7 +16,9 @@ class Node {
 
   declare data: ThemeValue;
 
-  declare label: ThemeValue;
+  declare label: string | null;
+
+  declare customLabel?: string | null;
 
   declare proxy: ThemeValue;
 
@@ -43,6 +45,16 @@ class Node {
   declare labelState: ThemeValue;
 
   declare labelParams: ThemeValue;
+
+  declare _groupColor?: string | null;
+
+  declare rect: number[];
+
+  declare _custom: ThemeValue;
+
+  declare _partialState: ThemeValue;
+
+  declare _partialLabelState: ThemeValue;
 
   isNode(): boolean {
     return !!(this.nodes && this.level < this.ctx.maxLevel);

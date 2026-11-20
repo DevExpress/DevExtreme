@@ -76,16 +76,14 @@ export const appendElementTo = async (
 
 export const addCaptionTo = async (
   page: Page,
-  parentSelector: string,
+  elementSelector: string,
   caption: string,
+  where: InsertPosition = 'beforebegin',
 ): Promise<void> => page.evaluate(
-  ({ parent, text }) => {
-    const element = document.createElement('div');
-
-    element.textContent = text;
-    document.querySelector(parent)?.appendChild(element);
+  ({ selector, text, position }) => {
+    document.querySelector(selector)?.insertAdjacentText(position, text);
   },
-  { parent: parentSelector, text: caption },
+  { selector: elementSelector, text: caption, position: where },
 );
 
 export const insertStylesheetRulesToPage = async (
@@ -148,6 +146,26 @@ export const addFocusableElementBefore = async (
       opacity: '0',
     });
     target?.parentElement?.insertBefore(button, target);
+
+    return button.id;
+  },
+  { selector: targetSelector, id: elementId },
+);
+
+export const addFocusableElementAfter = async (
+  page: Page,
+  targetSelector: string,
+  elementId = 'focusable-end',
+): Promise<string> => page.evaluate(
+  ({ selector, id }) => {
+    document.getElementById(id)?.remove();
+
+    const target = document.querySelector(selector);
+    const button = document.createElement('button');
+
+    button.id = id;
+    button.textContent = 'End';
+    target?.parentElement?.insertBefore(button, target.nextElementSibling);
 
     return button.id;
   },
