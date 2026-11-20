@@ -1333,6 +1333,27 @@ QUnit.module('popup', moduleConfig, () => {
             assert.roughEqual(popupRect.bottom, this.windowHeight, 1, 'popup fills the space under the editor');
             assert.ok(popupRect.bottom <= this.windowHeight, `popup bottom ${popupRect.bottom} is inside the window ${this.windowHeight}`);
         });
+
+        QUnit.test('popup should stay inside the window when the page is scrolled', function(assert) {
+            const $page = $('<div>').height(this.windowHeight * 3).appendTo('body');
+            const $element = $('#dropDownList').css({ position: 'absolute', top: Math.floor(this.windowHeight / 2) - 30 });
+
+            try {
+                window.scrollTo(0, this.windowHeight);
+
+                assert.strictEqual(window.scrollY, this.windowHeight, 'page is scrolled');
+
+                const instance = $element.dxDropDownList({ items: this.items, height: this.editorHeight, opened: true }).dxDropDownList('instance');
+                const editorRect = $element.get(0).getBoundingClientRect();
+                const popupRect = $(instance.content()).parent().get(0).getBoundingClientRect();
+
+                assert.roughEqual(popupRect.top, editorRect.bottom, 1, 'popup is under the editor');
+                assert.ok(popupRect.bottom <= this.windowHeight, `popup bottom ${popupRect.bottom} is inside the window ${this.windowHeight}`);
+            } finally {
+                window.scrollTo(0, 0);
+                $page.remove();
+            }
+        });
     });
 
     QUnit.test('After load new page scrollTop should not be changed', function(assert) {
