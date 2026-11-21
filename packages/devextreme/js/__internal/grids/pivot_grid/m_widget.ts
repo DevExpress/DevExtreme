@@ -31,7 +31,7 @@ import gridCoreUtils from '@ts/grids/grid_core/utils';
 
 import { ChartIntegrationMixin } from './chart_integration/m_chart_integration';
 import DataAreaImport from './data_area/m_data_area';
-import DataControllerImport from './data_controller/m_data_controller';
+import DataControllerImport from './data_controller/data_controller';
 import { ExportController } from './export/m_export';
 import { getFieldsHotkeysA11yLabel } from './field_chooser/a11y';
 import { FIELD_DATA_KEY } from './field_chooser/const';
