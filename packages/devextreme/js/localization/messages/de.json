@@ -448,10 +448,10 @@
         "dxChat-fileViewLabel": "Dateiliste",
         "dxChat-downloadButtonLabel": "Datei {0} herunterladen",
         "dxChat-fileLimitReachedWarning": "Sie haben zu viele Dateien ausgewählt. Wählen Sie höchstens {0} Dateien aus und versuchen Sie es erneut.",
-        "dxChat-toolCallArgumentsLabel": "Arguments",
-        "dxChat-toolCallResultLabel": "Result",
-        "dxChat-toolCallsTitle": "{0} tools",
-        "dxChat-toolCallError": "Error",
+        "dxChat-toolCallArgumentsLabel": "Argumente",
+        "dxChat-toolCallResultLabel": "Ergebnis",
+        "dxChat-toolCallsTitle": "Tools: {0}",
+        "dxChat-toolCallError": "Fehler",
 
         "dxColorView-ariaRed": "Rot",
         "dxColorView-ariaGreen": "Grün",
@@ -925,7 +925,7 @@
         "dxGantt-dialogStartDateValidation": "Startdatum muss später sein als {0}",
         "dxGantt-dialogEndDateValidation": "Enddatum muss später sein als {0}",
 
-        "dxMap-markerAriaLabel": "Map marker",
+        "dxMap-markerAriaLabel": "Kartenmarkierung",
 
         "dxGallery-itemName": "Galerieelement",
 
