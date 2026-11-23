@@ -1,6 +1,5 @@
 import { isDefined } from '@js/core/utils/type';
 import type { PivotGridSortBy } from '@js/ui/pivot_grid/data_source';
-import { map } from '@ts/core/utils/iterator';
 import type { PivotGridAxis, PivotGridField, PivotGridLoadOptions } from '@ts/grids/pivot_grid/types';
 
 import {
@@ -44,7 +43,7 @@ function getSliceIndex(
     foreachTree(items, (members: DataSourceHeaderItem[]) => {
       const item = members[0];
       const itemPath = createPath(members).join('.');
-      const textPath = map(members, (member) => member.text).reverse().join('.');
+      const textPath = members.map((member) => member.text).reverse().join('.');
 
       if (pathValue === itemPath || (item.key && textPath === pathValue)) {
         index = members[0].index;
@@ -114,8 +113,8 @@ function getSortingMethod(
     && getFieldSummaryValueSelector(field, dataSource, loadOptions, dimensionName);
   const summaryCompare = summaryValueSelector && getCompareFunction(summaryValueSelector);
   const sortingMethod: DataSourceHeaderItemCompare = function sortingMethod(a, b) {
-    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-    const result = (summaryCompare && summaryCompare(a, b)) || defaultCompare(a, b);
+    const summaryResult = summaryCompare ? summaryCompare(a, b) : 0;
+    const result = summaryResult || defaultCompare(a, b);
     return sortOrder === 'desc' ? -result : result;
   };
 
@@ -130,12 +129,17 @@ function sortDimension(
 ): void {
   const fields = loadOptions[dimensionName] || [];
   const baseIndex = loadOptions.headerName === dimensionName ? loadOptions.path?.length ?? 0 : 0;
-  const sortingMethodByLevel: DataSourceHeaderItemCompare[] = [];
+  const sortingMethodByLevel: (DataSourceHeaderItemCompare | undefined)[] = [];
 
   foreachDataLevel(dataSource[dimensionName], (item, index) => {
     const field = fields[index] || {};
-    sortingMethodByLevel[index] = sortingMethodByLevel[index]
-      || getSortingMethod(field, dataSource, loadOptions, dimensionName, getAscOrder);
+    sortingMethodByLevel[index] ??= getSortingMethod(
+      field,
+      dataSource,
+      loadOptions,
+      dimensionName,
+      getAscOrder,
+    );
     const sortingMethod = sortingMethodByLevel[index];
 
     item.sort(sortingMethod);
