@@ -1,4 +1,4 @@
-import type { Page } from '@playwright/test';
+import type { JSHandle, Page } from '@playwright/test';
 import { expect, GOOGLE_FONTS, test as base } from '../../fixtures';
 import type { WidgetName } from '../../models/types';
 import { DEFAULT_SELECTOR, TEST_PAGE_URL } from '../const';
@@ -82,60 +82,44 @@ export const getDefaultA11yCheckConfig = (theme: string): A11yCheckOptions => (
   getThemeName(theme) === 'fluent' ? {} : { runOnly: 'color-contrast' }
 );
 
-const FUNCTION_KEY = '__a11yFunction';
+const toPageFunction = async (page: Page, source: string): Promise<JSHandle> => {
+  try {
+    return await page.evaluateHandle(`(${source})`);
+  } catch {
+    // Method shorthand ("name() {}") is not an expression on its own.
+    return page.evaluateHandle(`(${source.replace(/^(async\s+)?/, '$1function ')})`);
+  }
+};
 
-// "page.evaluate" drops functions, so templates and callbacks travel as source text and are
-// rebuilt in the page. Like a TestCafe ClientFunction dependency, they must not use closures.
-const serializeFunctions = (value: unknown): unknown => {
+// "page.evaluate" drops functions, so templates and callbacks travel as source text: Playwright
+// compiles each one in the page and the options carry its handle instead. Like a TestCafe
+// ClientFunction dependency, they must not use closures.
+const toPageOptions = async (
+  page: Page,
+  value: unknown,
+  handles: JSHandle[],
+): Promise<unknown> => {
   if (typeof value === 'function') {
-    return { [FUNCTION_KEY]: value.toString() };
+    const handle = await toPageFunction(page, value.toString());
+
+    handles.push(handle);
+
+    return handle;
   }
 
   if (Array.isArray(value)) {
-    return value.map(serializeFunctions);
+    return Promise.all(value.map((item) => toPageOptions(page, item, handles)));
   }
 
   if (value && typeof value === 'object' && Object.getPrototypeOf(value) === Object.prototype) {
-    return Object.fromEntries(
-      Object.entries(value).map(([key, item]) => [key, serializeFunctions(item)]),
-    );
+    const entries = await Promise.all(Object.entries(value).map(
+      async ([key, item]) => [key, await toPageOptions(page, item, handles)],
+    ));
+
+    return Object.fromEntries(entries);
   }
 
   return value;
-};
-
-const restoreFunctions = (serialized: unknown): any => {
-  const key = '__a11yFunction';
-
-  // eslint-disable-next-line @typescript-eslint/no-implied-eval
-  const build = (code: string): unknown => new Function(`return (${code});`)();
-
-  const restore = (value: unknown): unknown => {
-    if (Array.isArray(value)) {
-      return value.map(restore);
-    }
-
-    if (value && typeof value === 'object' && Object.getPrototypeOf(value) === Object.prototype) {
-      const source = (value as Record<string, unknown>)[key];
-
-      if (typeof source === 'string') {
-        try {
-          return build(source);
-        } catch {
-          // Method shorthand ("name() {}") is not an expression on its own.
-          return build(source.replace(/^(async\s+)?/, '$1function '));
-        }
-      }
-
-      return Object.fromEntries(
-        Object.entries(value).map(([name, item]) => [name, restore(item)]),
-      );
-    }
-
-    return value;
-  };
-
-  return restore(serialized);
 };
 
 const getOptionConfigurations = <TComponentOptions>(
@@ -167,9 +151,11 @@ export const testAccessibility = <TComponentOptions = unknown>(
     const title = `${component}${name ? ` ${name}` : ''}: test with axe #${index}`;
 
     test(title, async ({ page, theme }) => {
-      await createWidget(page, component, restoreFunctions as any, DEFAULT_SELECTOR, {
-        arg: serializeFunctions(optionConfiguration),
-      });
+      const handles: JSHandle[] = [];
+      const widgetOptions = await toPageOptions(page, optionConfiguration, handles);
+
+      await createWidget(page, component, widgetOptions as any);
+      await Promise.all(handles.map((handle) => handle.dispose()));
 
       await created?.(page, optionConfiguration);
 
