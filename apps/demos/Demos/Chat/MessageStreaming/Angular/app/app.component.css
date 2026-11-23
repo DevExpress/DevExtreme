@@ -44,6 +44,11 @@
   flex-direction: column;
 }
 
+::ng-deep .dx-button {
+  display: inline-block;
+  color: var(--dx-color-icon);
+}
+
 ::ng-deep .dx-template-wrapper > div > p:first-child {
   margin-top: 0;
 }
