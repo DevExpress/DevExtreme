@@ -37,7 +37,7 @@ import { PivotGridDataSource } from '__internal/grids/pivot_grid/data_source/m_d
 import 'ui/pivot_grid/ui.pivot_grid';
 import { getRealElementWidth } from '__internal/grids/pivot_grid/area_item/m_area_item';
 import DataAreaModule from '__internal/grids/pivot_grid/data_area/m_data_area';
-import DataControllerModule from '__internal/grids/pivot_grid/data_controller/m_data_controller';
+import DataControllerModule from '__internal/grids/pivot_grid/data_controller/data_controller';
 import HeadersAreaModule from '__internal/grids/pivot_grid/headers_area/m_headers_area';
 import pivotGridUtils, { getScrollbarWidth } from '__internal/grids/pivot_grid/widget_utils';
 
