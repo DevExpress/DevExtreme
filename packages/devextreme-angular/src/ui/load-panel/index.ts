@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     TransferState,
     Component,
@@ -9,7 +7,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -23,7 +20,6 @@ import type { LoadPanelIndicatorProperties, ContentReadyEvent, DisposingEvent, H
 import type { PositionAlignment } from 'devextreme/common';
 
 import DxLoadPanel from 'devextreme/ui/load_panel';
-
 
 import {
     DxComponent,
@@ -62,7 +58,6 @@ import { DxoLoadPanelToModule } from 'devextreme-angular/ui/load-panel/nested';
 
 /**
  * [descr:dxLoadPanel]
-
  */
 @Component({
     selector: 'dx-load-panel',
@@ -81,7 +76,6 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:dxLoadPanelOptions.animation]
-    
      */
     @Input()
     get animation(): { hide?: AnimationConfig, show?: AnimationConfig } {
@@ -91,10 +85,8 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
         this._setOption('animation', value);
     }
 
-
     /**
      * [descr:dxLoadPanelOptions.container]
-    
      */
     @Input()
     get container(): any | string | undefined {
@@ -104,10 +96,8 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
         this._setOption('container', value);
     }
 
-
     /**
      * [descr:dxOverlayOptions.deferRendering]
-    
      */
     @Input()
     get deferRendering(): boolean {
@@ -117,10 +107,8 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
         this._setOption('deferRendering', value);
     }
 
-
     /**
      * [descr:dxLoadPanelOptions.delay]
-    
      */
     @Input()
     get delay(): number {
@@ -130,10 +118,8 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
         this._setOption('delay', value);
     }
 
-
     /**
      * [descr:dxLoadPanelOptions.focusStateEnabled]
-    
      */
     @Input()
     get focusStateEnabled(): boolean {
@@ -143,10 +129,8 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
         this._setOption('focusStateEnabled', value);
     }
 
-
     /**
      * [descr:dxLoadPanelOptions.height]
-    
      */
     @Input()
     get height(): number | string {
@@ -156,10 +140,8 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
         this._setOption('height', value);
     }
 
-
     /**
      * [descr:dxOverlayOptions.hideOnOutsideClick]
-    
      */
     @Input()
     get hideOnOutsideClick(): boolean | ((event: event) => boolean) {
@@ -169,10 +151,8 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
         this._setOption('hideOnOutsideClick', value);
     }
 
-
     /**
      * [descr:dxOverlayOptions.hideOnParentScroll]
-    
      */
     @Input()
     get hideOnParentScroll(): boolean {
@@ -182,10 +162,8 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
         this._setOption('hideOnParentScroll', value);
     }
 
-
     /**
      * [descr:WidgetOptions.hint]
-    
      */
     @Input()
     get hint(): string | undefined {
@@ -195,10 +173,8 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
         this._setOption('hint', value);
     }
 
-
     /**
      * [descr:WidgetOptions.hoverStateEnabled]
-    
      */
     @Input()
     get hoverStateEnabled(): boolean {
@@ -207,7 +183,6 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
     set hoverStateEnabled(value: boolean) {
         this._setOption('hoverStateEnabled', value);
     }
-
 
     
     @Input()
@@ -218,10 +193,8 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
         this._setOption('indicatorOptions', value);
     }
 
-
     /**
      * [descr:dxLoadPanelOptions.indicatorSrc]
-    
      * @deprecated [depNote:dxLoadPanelOptions.indicatorSrc]
     
      */
@@ -233,10 +206,8 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
         this._setOption('indicatorSrc', value);
     }
 
-
     /**
      * [descr:dxLoadPanelOptions.maxHeight]
-    
      */
     @Input()
     get maxHeight(): number | string {
@@ -246,10 +217,8 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
         this._setOption('maxHeight', value);
     }
 
-
     /**
      * [descr:dxLoadPanelOptions.maxWidth]
-    
      */
     @Input()
     get maxWidth(): number | string {
@@ -259,10 +228,8 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
         this._setOption('maxWidth', value);
     }
 
-
     /**
      * [descr:dxLoadPanelOptions.message]
-    
      */
     @Input()
     get message(): string {
@@ -272,10 +239,8 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
         this._setOption('message', value);
     }
 
-
     /**
      * [descr:dxOverlayOptions.minHeight]
-    
      */
     @Input()
     get minHeight(): number | string {
@@ -285,10 +250,8 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
         this._setOption('minHeight', value);
     }
 
-
     /**
      * [descr:dxOverlayOptions.minWidth]
-    
      */
     @Input()
     get minWidth(): number | string {
@@ -298,10 +261,8 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
         this._setOption('minWidth', value);
     }
 
-
     /**
      * [descr:dxLoadPanelOptions.position]
-    
      */
     @Input()
     get position(): Function | PositionAlignment | PositionConfig {
@@ -311,10 +272,8 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
         this._setOption('position', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
-    
      */
     @Input()
     get rtlEnabled(): boolean {
@@ -324,10 +283,8 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
         this._setOption('rtlEnabled', value);
     }
 
-
     /**
      * [descr:dxOverlayOptions.shading]
-    
      */
     @Input()
     get shading(): boolean {
@@ -337,10 +294,8 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
         this._setOption('shading', value);
     }
 
-
     /**
      * [descr:dxLoadPanelOptions.shadingColor]
-    
      */
     @Input()
     get shadingColor(): string {
@@ -350,10 +305,8 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
         this._setOption('shadingColor', value);
     }
 
-
     /**
      * [descr:dxLoadPanelOptions.showIndicator]
-    
      */
     @Input()
     get showIndicator(): boolean {
@@ -363,10 +316,8 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
         this._setOption('showIndicator', value);
     }
 
-
     /**
      * [descr:dxLoadPanelOptions.showPane]
-    
      */
     @Input()
     get showPane(): boolean {
@@ -376,10 +327,8 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
         this._setOption('showPane', value);
     }
 
-
     /**
      * [descr:dxOverlayOptions.visible]
-    
      */
     @Input()
     get visible(): boolean {
@@ -389,10 +338,8 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
         this._setOption('visible', value);
     }
 
-
     /**
      * [descr:dxLoadPanelOptions.width]
-    
      */
     @Input()
     get width(): number | string {
@@ -402,10 +349,8 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
         this._setOption('width', value);
     }
 
-
     /**
      * [descr:dxOverlayOptions.wrapperAttr]
-    
      */
     @Input()
     get wrapperAttr(): any {
@@ -416,253 +361,174 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
     }
 
     /**
-    
      * [descr:dxLoadPanelOptions.onContentReady]
-    
-    
      */
     @Output() onContentReady: EventEmitter<ContentReadyEvent>;
 
     /**
-    
      * [descr:dxLoadPanelOptions.onDisposing]
-    
-    
      */
     @Output() onDisposing: EventEmitter<DisposingEvent>;
 
     /**
-    
      * [descr:dxLoadPanelOptions.onHidden]
-    
-    
      */
     @Output() onHidden: EventEmitter<HiddenEvent>;
 
     /**
-    
      * [descr:dxLoadPanelOptions.onHiding]
-    
-    
      */
     @Output() onHiding: EventEmitter<HidingEvent>;
 
     /**
-    
      * [descr:dxLoadPanelOptions.onInitialized]
-    
-    
      */
     @Output() onInitialized: EventEmitter<InitializedEvent>;
 
     /**
-    
      * [descr:dxLoadPanelOptions.onOptionChanged]
-    
-    
      */
     @Output() onOptionChanged: EventEmitter<OptionChangedEvent>;
 
     /**
-    
      * [descr:dxLoadPanelOptions.onShowing]
-    
-    
      */
     @Output() onShowing: EventEmitter<ShowingEvent>;
 
     /**
-    
      * [descr:dxLoadPanelOptions.onShown]
-    
-    
      */
     @Output() onShown: EventEmitter<ShownEvent>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() animationChange: EventEmitter<{ hide?: AnimationConfig, show?: AnimationConfig }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() containerChange: EventEmitter<any | string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() deferRenderingChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() delayChange: EventEmitter<number>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() focusStateEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() heightChange: EventEmitter<number | string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() hideOnOutsideClickChange: EventEmitter<boolean | ((event: event) => boolean)>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() hideOnParentScrollChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() hintChange: EventEmitter<string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() hoverStateEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() indicatorOptionsChange: EventEmitter<LoadPanelIndicatorProperties>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() indicatorSrcChange: EventEmitter<string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() maxHeightChange: EventEmitter<number | string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() maxWidthChange: EventEmitter<number | string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() messageChange: EventEmitter<string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() minHeightChange: EventEmitter<number | string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() minWidthChange: EventEmitter<number | string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() positionChange: EventEmitter<Function | PositionAlignment | PositionConfig>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() rtlEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() shadingChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() shadingColorChange: EventEmitter<string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() showIndicatorChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() showPaneChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() visibleChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() widthChange: EventEmitter<number | string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() wrapperAttrChange: EventEmitter<any>;
-
-
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             _watcherHelper: WatcherHelper,

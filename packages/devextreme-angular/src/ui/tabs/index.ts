@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     TransferState,
     Component,
@@ -9,7 +7,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -30,7 +27,6 @@ import type { TabsIconPosition, Orientation, SingleOrMultiple, TabsStyle } from 
 
 import DxTabs from 'devextreme/ui/tabs';
 
-
 import {
     DxComponent,
     DxTemplateHost,
@@ -46,13 +42,12 @@ import { DxiItemModule } from 'devextreme-angular/ui/nested';
 
 import { DxiTabsItemModule } from 'devextreme-angular/ui/tabs/nested';
 import { 
-           PROPERTY_TOKEN_items,
-     } from 'devextreme-angular/core/tokens';
+    PROPERTY_TOKEN_items,
+} from 'devextreme-angular/core/tokens';
 
 
 /**
  * [descr:dxTabs]
-
  */
 @Component({
     selector: 'dx-tabs',
@@ -77,7 +72,6 @@ export class DxTabsComponent<TItem = any, TKey = any> extends DxComponent implem
 
     /**
      * [descr:WidgetOptions.accessKey]
-    
      */
     @Input()
     get accessKey(): string | undefined {
@@ -87,10 +81,8 @@ export class DxTabsComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('accessKey', value);
     }
 
-
     /**
      * [descr:dxTabsOptions.dataSource]
-    
      */
     @Input()
     get dataSource(): Array<any | dxTabsItem | string> | DataSource | DataSourceOptions | null | Store | string {
@@ -100,10 +92,8 @@ export class DxTabsComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('dataSource', value);
     }
 
-
     /**
      * [descr:WidgetOptions.disabled]
-    
      */
     @Input()
     get disabled(): boolean {
@@ -113,10 +103,8 @@ export class DxTabsComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('disabled', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.elementAttr]
-    
      */
     @Input()
     get elementAttr(): Record<string, any> {
@@ -126,10 +114,8 @@ export class DxTabsComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('elementAttr', value);
     }
 
-
     /**
      * [descr:dxTabsOptions.focusStateEnabled]
-    
      */
     @Input()
     get focusStateEnabled(): boolean {
@@ -139,10 +125,8 @@ export class DxTabsComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('focusStateEnabled', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.height]
-    
      */
     @Input()
     get height(): number | string | undefined {
@@ -152,10 +136,8 @@ export class DxTabsComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('height', value);
     }
 
-
     /**
      * [descr:WidgetOptions.hint]
-    
      */
     @Input()
     get hint(): string | undefined {
@@ -165,10 +147,8 @@ export class DxTabsComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('hint', value);
     }
 
-
     /**
      * [descr:dxTabsOptions.hoverStateEnabled]
-    
      */
     @Input()
     get hoverStateEnabled(): boolean {
@@ -178,10 +158,8 @@ export class DxTabsComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('hoverStateEnabled', value);
     }
 
-
     /**
      * [descr:dxTabsOptions.iconPosition]
-    
      */
     @Input()
     get iconPosition(): TabsIconPosition {
@@ -191,10 +169,8 @@ export class DxTabsComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('iconPosition', value);
     }
 
-
     /**
      * [descr:CollectionWidgetOptions.itemHoldTimeout]
-    
      */
     @Input()
     get itemHoldTimeout(): number {
@@ -204,10 +180,8 @@ export class DxTabsComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('itemHoldTimeout', value);
     }
 
-
     /**
      * [descr:dxTabsOptions.items]
-    
      */
     @Input()
     get items(): Array<any | dxTabsItem | string> {
@@ -217,10 +191,8 @@ export class DxTabsComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('items', value);
     }
 
-
     /**
      * [descr:CollectionWidgetOptions.itemTemplate]
-    
      */
     @Input()
     get itemTemplate(): any {
@@ -230,10 +202,8 @@ export class DxTabsComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('itemTemplate', value);
     }
 
-
     /**
      * [descr:CollectionWidgetOptions.keyExpr]
-    
      */
     @Input()
     get keyExpr(): ((item: any) => any) | null | string {
@@ -243,10 +213,8 @@ export class DxTabsComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('keyExpr', value);
     }
 
-
     /**
      * [descr:CollectionWidgetOptions.noDataText]
-    
      */
     @Input()
     get noDataText(): string {
@@ -256,10 +224,8 @@ export class DxTabsComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('noDataText', value);
     }
 
-
     /**
      * [descr:dxTabsOptions.orientation]
-    
      */
     @Input()
     get orientation(): Orientation {
@@ -269,10 +235,8 @@ export class DxTabsComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('orientation', value);
     }
 
-
     /**
      * [descr:dxTabsOptions.repaintChangesOnly]
-    
      */
     @Input()
     get repaintChangesOnly(): boolean {
@@ -282,10 +246,8 @@ export class DxTabsComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('repaintChangesOnly', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
-    
      */
     @Input()
     get rtlEnabled(): boolean {
@@ -295,10 +257,8 @@ export class DxTabsComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('rtlEnabled', value);
     }
 
-
     /**
      * [descr:dxTabsOptions.scrollByContent]
-    
      */
     @Input()
     get scrollByContent(): boolean {
@@ -308,10 +268,8 @@ export class DxTabsComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('scrollByContent', value);
     }
 
-
     /**
      * [descr:dxTabsOptions.scrollingEnabled]
-    
      */
     @Input()
     get scrollingEnabled(): boolean {
@@ -321,10 +279,8 @@ export class DxTabsComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('scrollingEnabled', value);
     }
 
-
     /**
      * [descr:CollectionWidgetOptions.selectedIndex]
-    
      */
     @Input()
     get selectedIndex(): number {
@@ -334,10 +290,8 @@ export class DxTabsComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('selectedIndex', value);
     }
 
-
     /**
      * [descr:CollectionWidgetOptions.selectedItem]
-    
      */
     @Input()
     get selectedItem(): any | null {
@@ -347,10 +301,8 @@ export class DxTabsComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('selectedItem', value);
     }
 
-
     /**
      * [descr:CollectionWidgetOptions.selectedItemKeys]
-    
      */
     @Input()
     get selectedItemKeys(): Array<any> {
@@ -360,10 +312,8 @@ export class DxTabsComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('selectedItemKeys', value);
     }
 
-
     /**
      * [descr:CollectionWidgetOptions.selectedItems]
-    
      */
     @Input()
     get selectedItems(): Array<any> {
@@ -373,10 +323,8 @@ export class DxTabsComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('selectedItems', value);
     }
 
-
     /**
      * [descr:dxTabsOptions.selectionMode]
-    
      */
     @Input()
     get selectionMode(): SingleOrMultiple {
@@ -386,10 +334,8 @@ export class DxTabsComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('selectionMode', value);
     }
 
-
     /**
      * [descr:dxTabsOptions.showNavButtons]
-    
      */
     @Input()
     get showNavButtons(): boolean {
@@ -399,10 +345,8 @@ export class DxTabsComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('showNavButtons', value);
     }
 
-
     /**
      * [descr:dxTabsOptions.stylingMode]
-    
      */
     @Input()
     get stylingMode(): TabsStyle {
@@ -412,10 +356,8 @@ export class DxTabsComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('stylingMode', value);
     }
 
-
     /**
      * [descr:WidgetOptions.tabIndex]
-    
      */
     @Input()
     get tabIndex(): number {
@@ -425,10 +367,8 @@ export class DxTabsComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('tabIndex', value);
     }
 
-
     /**
      * [descr:WidgetOptions.visible]
-    
      */
     @Input()
     get visible(): boolean {
@@ -438,10 +378,8 @@ export class DxTabsComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('visible', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.width]
-    
      */
     @Input()
     get width(): number | string | undefined {
@@ -452,290 +390,199 @@ export class DxTabsComponent<TItem = any, TKey = any> extends DxComponent implem
     }
 
     /**
-    
      * [descr:dxTabsOptions.onContentReady]
-    
-    
      */
     @Output() onContentReady: EventEmitter<ContentReadyEvent>;
 
     /**
-    
      * [descr:dxTabsOptions.onDisposing]
-    
-    
      */
     @Output() onDisposing: EventEmitter<DisposingEvent>;
 
     /**
-    
      * [descr:dxTabsOptions.onInitialized]
-    
-    
      */
     @Output() onInitialized: EventEmitter<InitializedEvent>;
 
     /**
-    
      * [descr:dxTabsOptions.onItemClick]
-    
-    
      */
     @Output() onItemClick: EventEmitter<ItemClickEvent>;
 
     /**
-    
      * [descr:dxTabsOptions.onItemContextMenu]
-    
-    
      */
     @Output() onItemContextMenu: EventEmitter<ItemContextMenuEvent>;
 
     /**
-    
      * [descr:dxTabsOptions.onItemHold]
-    
-    
      */
     @Output() onItemHold: EventEmitter<ItemHoldEvent>;
 
     /**
-    
      * [descr:dxTabsOptions.onItemRendered]
-    
-    
      */
     @Output() onItemRendered: EventEmitter<ItemRenderedEvent>;
 
     /**
-    
      * [descr:dxTabsOptions.onOptionChanged]
-    
-    
      */
     @Output() onOptionChanged: EventEmitter<OptionChangedEvent>;
 
     /**
-    
      * [descr:dxTabsOptions.onSelectionChanged]
-    
-    
      */
     @Output() onSelectionChanged: EventEmitter<SelectionChangedEvent>;
 
     /**
-    
      * [descr:dxTabsOptions.onSelectionChanging]
-    
-    
      */
     @Output() onSelectionChanging: EventEmitter<SelectionChangingEvent>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() accessKeyChange: EventEmitter<string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() dataSourceChange: EventEmitter<Array<any | dxTabsItem | string> | DataSource | DataSourceOptions | null | Store | string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() disabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() elementAttrChange: EventEmitter<Record<string, any>>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() focusStateEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() heightChange: EventEmitter<number | string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() hintChange: EventEmitter<string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() hoverStateEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() iconPositionChange: EventEmitter<TabsIconPosition>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() itemHoldTimeoutChange: EventEmitter<number>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() itemsChange: EventEmitter<Array<any | dxTabsItem | string>>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() itemTemplateChange: EventEmitter<any>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() keyExprChange: EventEmitter<((item: any) => any) | null | string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() noDataTextChange: EventEmitter<string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() orientationChange: EventEmitter<Orientation>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() repaintChangesOnlyChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() rtlEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() scrollByContentChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() scrollingEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() selectedIndexChange: EventEmitter<number>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() selectedItemChange: EventEmitter<any | null>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() selectedItemKeysChange: EventEmitter<Array<any>>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() selectedItemsChange: EventEmitter<Array<any>>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() selectionModeChange: EventEmitter<SingleOrMultiple>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() showNavButtonsChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() stylingModeChange: EventEmitter<TabsStyle>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() tabIndexChange: EventEmitter<number>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() visibleChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() widthChange: EventEmitter<number | string | undefined>;
-
-
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,

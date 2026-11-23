@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     Component,
     OnInit,
@@ -10,10 +8,6 @@ import {
     SkipSelf,
     Input
 } from '@angular/core';
-
-
-
-
 import type { TooltipShowMode, VerticalEdge } from 'devextreme/common';
 import type { DashStyle, Font } from 'devextreme/common/charts';
 import type { Format } from 'devextreme/common/core/localization';
@@ -25,7 +19,6 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-tooltip',
@@ -256,7 +249,6 @@ export class DxoTooltipComponent extends NestedOption implements OnDestroy, OnIn
         return 'tooltip';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -272,7 +264,6 @@ export class DxoTooltipComponent extends NestedOption implements OnDestroy, OnIn
     ngOnDestroy() {
         this._addRemovedOption(this._getOptionPath());
     }
-
 
 }
 

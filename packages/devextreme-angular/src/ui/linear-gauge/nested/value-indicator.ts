@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     Component,
     OnInit,
@@ -10,10 +8,6 @@ import {
     SkipSelf,
     Input
 } from '@angular/core';
-
-
-
-
 import type { ChartsColor, Palette, Font } from 'devextreme/common/charts';
 import type { HorizontalEdge, VerticalEdge } from 'devextreme/common';
 import type { Format } from 'devextreme/common/core/localization';
@@ -23,7 +17,6 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-linear-gauge-value-indicator',
@@ -190,7 +183,6 @@ export class DxoLinearGaugeValueIndicatorComponent extends NestedOption implemen
         return 'valueIndicator';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -206,7 +198,6 @@ export class DxoLinearGaugeValueIndicatorComponent extends NestedOption implemen
     ngOnDestroy() {
         this._addRemovedOption(this._getOptionPath());
     }
-
 
 }
 

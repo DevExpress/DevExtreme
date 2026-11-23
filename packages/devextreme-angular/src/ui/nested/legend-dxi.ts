@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     Component,
     NgModule,
@@ -8,10 +6,6 @@ import {
     SkipSelf,
     Input
 } from '@angular/core';
-
-
-
-
 import type { HorizontalAlignment, Orientation, Position, VerticalEdge } from 'devextreme/common';
 import type { DashStyle, Font } from 'devextreme/common/charts';
 import type { VectorMapMarkerShape } from 'devextreme/viz/vector_map';
@@ -243,7 +237,6 @@ export class DxiLegendComponent extends CollectionNestedOption {
         return 'legends';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -256,7 +249,6 @@ export class DxiLegendComponent extends CollectionNestedOption {
     ngOnDestroy() {
         this._deleteRemovedOptions(this._fullOptionPath());
     }
-
 }
 
 @NgModule({

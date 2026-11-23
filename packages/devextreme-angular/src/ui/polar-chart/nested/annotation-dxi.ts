@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     Component,
     NgModule,
@@ -12,10 +10,7 @@ import {
     SkipSelf,
     Input
 } from '@angular/core';
-
 import { DOCUMENT } from '@angular/common';
-
-
 import type { DashStyle, Font, TextOverflow, AnnotationType, WordWrap } from 'devextreme/common/charts';
 import type { dxPolarChartAnnotationConfig } from 'devextreme/viz/polar_chart';
 
@@ -316,7 +311,6 @@ export class DxiPolarChartAnnotationComponent extends CollectionNestedOption imp
         return 'annotations';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost,
             private renderer: Renderer2,
@@ -337,11 +331,9 @@ export class DxiPolarChartAnnotationComponent extends CollectionNestedOption imp
     }
 
 
-
     ngOnDestroy() {
         this._deleteRemovedOptions(this._fullOptionPath());
     }
-
 }
 
 @NgModule({

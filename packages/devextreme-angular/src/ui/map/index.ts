@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     TransferState,
     Component,
@@ -9,7 +7,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -25,7 +22,6 @@ import {
 import type { ClickEvent, DisposingEvent, InitializedEvent, MarkerAddedEvent, MarkerRemovedEvent, OptionChangedEvent, ReadyEvent, RouteAddedEvent, RouteRemovedEvent, MapProvider, RouteMode, MapType } from 'devextreme/ui/map';
 
 import DxMap from 'devextreme/ui/map';
-
 
 import {
     DxComponent,
@@ -55,16 +51,15 @@ import { DxiMapRouteModule } from 'devextreme-angular/ui/map/nested';
 import { DxoMapTooltipModule } from 'devextreme-angular/ui/map/nested';
 import { DxiMapLocationModule } from 'devextreme-angular/ui/map/nested';
 import { 
-           PROPERTY_TOKEN_markers,
-           PROPERTY_TOKEN_routes,
-           PROPERTY_TOKEN_locations,
-           PROPERTY_TOKEN_center,
-     } from 'devextreme-angular/core/tokens';
+    PROPERTY_TOKEN_markers,
+    PROPERTY_TOKEN_routes,
+    PROPERTY_TOKEN_locations,
+    PROPERTY_TOKEN_center,
+} from 'devextreme-angular/core/tokens';
 
 
 /**
  * [descr:dxMap]
-
  */
 @Component({
     selector: 'dx-map',
@@ -104,7 +99,6 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
 
     /**
      * [descr:WidgetOptions.accessKey]
-    
      */
     @Input()
     get accessKey(): string | undefined {
@@ -114,10 +108,8 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
         this._setOption('accessKey', value);
     }
 
-
     /**
      * [descr:WidgetOptions.activeStateEnabled]
-    
      */
     @Input()
     get activeStateEnabled(): boolean {
@@ -127,10 +119,8 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
         this._setOption('activeStateEnabled', value);
     }
 
-
     /**
      * [descr:dxMapOptions.apiKey]
-    
      */
     @Input()
     get apiKey(): string | { azure?: string, bing?: string, google?: string, googleStatic?: string } {
@@ -140,10 +130,8 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
         this._setOption('apiKey', value);
     }
 
-
     /**
      * [descr:dxMapOptions.autoAdjust]
-    
      */
     @Input()
     get autoAdjust(): boolean {
@@ -153,10 +141,8 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
         this._setOption('autoAdjust', value);
     }
 
-
     /**
      * [descr:dxMapOptions.center]
-    
      */
     @Input()
     get center(): Array<number> | string | { lat?: number, lng?: number }[] {
@@ -166,10 +152,8 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
         this._setOption('center', value);
     }
 
-
     /**
      * [descr:dxMapOptions.controls]
-    
      */
     @Input()
     get controls(): boolean {
@@ -179,10 +163,8 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
         this._setOption('controls', value);
     }
 
-
     /**
      * [descr:WidgetOptions.disabled]
-    
      */
     @Input()
     get disabled(): boolean {
@@ -192,10 +174,8 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
         this._setOption('disabled', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.elementAttr]
-    
      */
     @Input()
     get elementAttr(): Record<string, any> {
@@ -205,10 +185,8 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
         this._setOption('elementAttr', value);
     }
 
-
     /**
      * [descr:dxMapOptions.focusStateEnabled]
-    
      */
     @Input()
     get focusStateEnabled(): boolean {
@@ -218,10 +196,8 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
         this._setOption('focusStateEnabled', value);
     }
 
-
     /**
      * [descr:dxMapOptions.height]
-    
      */
     @Input()
     get height(): number | string {
@@ -231,10 +207,8 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
         this._setOption('height', value);
     }
 
-
     /**
      * [descr:WidgetOptions.hint]
-    
      */
     @Input()
     get hint(): string | undefined {
@@ -244,10 +218,8 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
         this._setOption('hint', value);
     }
 
-
     /**
      * [descr:WidgetOptions.hoverStateEnabled]
-    
      */
     @Input()
     get hoverStateEnabled(): boolean {
@@ -257,10 +229,8 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
         this._setOption('hoverStateEnabled', value);
     }
 
-
     /**
      * [descr:dxMapOptions.markerIconSrc]
-    
      */
     @Input()
     get markerIconSrc(): string {
@@ -270,10 +240,8 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
         this._setOption('markerIconSrc', value);
     }
 
-
     /**
      * [descr:dxMapOptions.markers]
-    
      */
     @Input()
     get markers(): { iconSrc?: string, location?: Array<number> | string | { lat?: number, lng?: number }[], onClick?: Function, tooltip?: string | { isShown?: boolean, text?: string } }[] {
@@ -283,10 +251,8 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
         this._setOption('markers', value);
     }
 
-
     /**
      * [descr:dxMapOptions.provider]
-    
      */
     @Input()
     get provider(): MapProvider {
@@ -296,10 +262,8 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
         this._setOption('provider', value);
     }
 
-
     /**
      * [descr:dxMapOptions.providerConfig]
-    
      */
     @Input()
     get providerConfig(): { mapId?: string, useAdvancedMarkers?: boolean } {
@@ -309,10 +273,8 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
         this._setOption('providerConfig', value);
     }
 
-
     /**
      * [descr:dxMapOptions.routes]
-    
      */
     @Input()
     get routes(): { color?: string, locations?: { lat?: number, lng?: number }[], mode?: RouteMode | string, opacity?: number, weight?: number }[] {
@@ -322,10 +284,8 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
         this._setOption('routes', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
-    
      */
     @Input()
     get rtlEnabled(): boolean {
@@ -335,10 +295,8 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
         this._setOption('rtlEnabled', value);
     }
 
-
     /**
      * [descr:WidgetOptions.tabIndex]
-    
      */
     @Input()
     get tabIndex(): number {
@@ -348,10 +306,8 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
         this._setOption('tabIndex', value);
     }
 
-
     /**
      * [descr:dxMapOptions.type]
-    
      */
     @Input()
     get type(): MapType {
@@ -361,10 +317,8 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
         this._setOption('type', value);
     }
 
-
     /**
      * [descr:WidgetOptions.visible]
-    
      */
     @Input()
     get visible(): boolean {
@@ -374,10 +328,8 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
         this._setOption('visible', value);
     }
 
-
     /**
      * [descr:dxMapOptions.width]
-    
      */
     @Input()
     get width(): number | string {
@@ -387,10 +339,8 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
         this._setOption('width', value);
     }
 
-
     /**
      * [descr:dxMapOptions.zoom]
-    
      */
     @Input()
     get zoom(): number {
@@ -401,240 +351,164 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
     }
 
     /**
-    
      * [descr:dxMapOptions.onClick]
-    
-    
      */
     @Output() onClick: EventEmitter<ClickEvent>;
 
     /**
-    
      * [descr:dxMapOptions.onDisposing]
-    
-    
      */
     @Output() onDisposing: EventEmitter<DisposingEvent>;
 
     /**
-    
      * [descr:dxMapOptions.onInitialized]
-    
-    
      */
     @Output() onInitialized: EventEmitter<InitializedEvent>;
 
     /**
-    
      * [descr:dxMapOptions.onMarkerAdded]
-    
-    
      */
     @Output() onMarkerAdded: EventEmitter<MarkerAddedEvent>;
 
     /**
-    
      * [descr:dxMapOptions.onMarkerRemoved]
-    
-    
      */
     @Output() onMarkerRemoved: EventEmitter<MarkerRemovedEvent>;
 
     /**
-    
      * [descr:dxMapOptions.onOptionChanged]
-    
-    
      */
     @Output() onOptionChanged: EventEmitter<OptionChangedEvent>;
 
     /**
-    
      * [descr:dxMapOptions.onReady]
-    
-    
      */
     @Output() onReady: EventEmitter<ReadyEvent>;
 
     /**
-    
      * [descr:dxMapOptions.onRouteAdded]
-    
-    
      */
     @Output() onRouteAdded: EventEmitter<RouteAddedEvent>;
 
     /**
-    
      * [descr:dxMapOptions.onRouteRemoved]
-    
-    
      */
     @Output() onRouteRemoved: EventEmitter<RouteRemovedEvent>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() accessKeyChange: EventEmitter<string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() activeStateEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() apiKeyChange: EventEmitter<string | { azure?: string, bing?: string, google?: string, googleStatic?: string }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() autoAdjustChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() centerChange: EventEmitter<Array<number> | string | { lat?: number, lng?: number }[]>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() controlsChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() disabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() elementAttrChange: EventEmitter<Record<string, any>>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() focusStateEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() heightChange: EventEmitter<number | string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() hintChange: EventEmitter<string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() hoverStateEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() markerIconSrcChange: EventEmitter<string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() markersChange: EventEmitter<{ iconSrc?: string, location?: Array<number> | string | { lat?: number, lng?: number }[], onClick?: Function, tooltip?: string | { isShown?: boolean, text?: string } }[]>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() providerChange: EventEmitter<MapProvider>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() providerConfigChange: EventEmitter<{ mapId?: string, useAdvancedMarkers?: boolean }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() routesChange: EventEmitter<{ color?: string, locations?: { lat?: number, lng?: number }[], mode?: RouteMode | string, opacity?: number, weight?: number }[]>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() rtlEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() tabIndexChange: EventEmitter<number>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() typeChange: EventEmitter<MapType>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() visibleChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() widthChange: EventEmitter<number | string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() zoomChange: EventEmitter<number>;
-
-
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,

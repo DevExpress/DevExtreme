@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     Component,
     NgModule,
@@ -8,10 +6,6 @@ import {
     SkipSelf,
     Input
 } from '@angular/core';
-
-
-
-
 import type { LocateInMenuMode, ShowTextMode } from 'devextreme/ui/toolbar';
 import type { ToolbarItemLocation, ToolbarItemComponent } from 'devextreme/common';
 import type { FileManagerPredefinedToolbarItem } from 'devextreme/ui/file_manager';
@@ -131,7 +125,6 @@ export class DxiFileManagerFileSelectionItemComponent extends CollectionNestedOp
         return 'fileSelectionItems';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -144,7 +137,6 @@ export class DxiFileManagerFileSelectionItemComponent extends CollectionNestedOp
     ngOnDestroy() {
         this._deleteRemovedOptions(this._fullOptionPath());
     }
-
 }
 
 @NgModule({

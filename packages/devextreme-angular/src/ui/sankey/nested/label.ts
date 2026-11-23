@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     Component,
     OnInit,
@@ -10,10 +8,6 @@ import {
     SkipSelf,
     Input
 } from '@angular/core';
-
-
-
-
 import type { dxSankeyNode } from 'devextreme/viz/sankey';
 import type { Font, TextOverflow } from 'devextreme/common/charts';
 
@@ -22,7 +16,6 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-sankey-label',
@@ -109,7 +102,6 @@ export class DxoSankeyLabelComponent extends NestedOption implements OnDestroy, 
         return 'label';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -125,7 +117,6 @@ export class DxoSankeyLabelComponent extends NestedOption implements OnDestroy, 
     ngOnDestroy() {
         this._addRemovedOption(this._getOptionPath());
     }
-
 
 }
 

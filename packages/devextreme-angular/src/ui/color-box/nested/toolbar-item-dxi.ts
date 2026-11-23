@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     Component,
     NgModule,
@@ -12,10 +10,7 @@ import {
     SkipSelf,
     Input
 } from '@angular/core';
-
 import { DOCUMENT } from '@angular/common';
-
-
 import type { LocateInMenuMode, ShowTextMode } from 'devextreme/ui/toolbar';
 import type { ToolbarItemLocation, ToolbarItemComponent } from 'devextreme/common';
 import type { ToolbarLocation } from 'devextreme/ui/popup';
@@ -157,7 +152,6 @@ export class DxiColorBoxToolbarItemComponent extends CollectionNestedOption impl
         return 'toolbarItems';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost,
             private renderer: Renderer2,
@@ -178,11 +172,9 @@ export class DxiColorBoxToolbarItemComponent extends CollectionNestedOption impl
     }
 
 
-
     ngOnDestroy() {
         this._deleteRemovedOptions(this._fullOptionPath());
     }
-
 }
 
 @NgModule({
