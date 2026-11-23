@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     TransferState,
     Component,
@@ -9,7 +7,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -54,9 +51,8 @@ import { DxiNumberBoxButtonModule } from 'devextreme-angular/ui/number-box/neste
 import { DxoNumberBoxFormatModule } from 'devextreme-angular/ui/number-box/nested';
 import { DxoNumberBoxOptionsModule } from 'devextreme-angular/ui/number-box/nested';
 import { 
-           PROPERTY_TOKEN_buttons,
-     } from 'devextreme-angular/core/tokens';
-
+    PROPERTY_TOKEN_buttons,
+} from 'devextreme-angular/core/tokens';
 
 
 const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
@@ -66,7 +62,6 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
 };
 /**
  * [descr:dxNumberBox]
-
  */
 @Component({
     selector: 'dx-number-box',
@@ -92,7 +87,6 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
 
     /**
      * [descr:WidgetOptions.accessKey]
-    
      */
     @Input()
     get accessKey(): string | undefined {
@@ -102,10 +96,8 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
         this._setOption('accessKey', value);
     }
 
-
     /**
      * [descr:WidgetOptions.activeStateEnabled]
-    
      */
     @Input()
     get activeStateEnabled(): boolean {
@@ -115,10 +107,8 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
         this._setOption('activeStateEnabled', value);
     }
 
-
     /**
      * [descr:dxNumberBoxOptions.buttons]
-    
      */
     @Input()
     get buttons(): Array<NumberBoxPredefinedButton | TextEditorButton> | undefined {
@@ -128,10 +118,8 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
         this._setOption('buttons', value);
     }
 
-
     /**
      * [descr:WidgetOptions.disabled]
-    
      */
     @Input()
     get disabled(): boolean {
@@ -141,10 +129,8 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
         this._setOption('disabled', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.elementAttr]
-    
      */
     @Input()
     get elementAttr(): Record<string, any> {
@@ -154,10 +140,8 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
         this._setOption('elementAttr', value);
     }
 
-
     /**
      * [descr:dxTextEditorOptions.focusStateEnabled]
-    
      */
     @Input()
     get focusStateEnabled(): boolean {
@@ -167,10 +151,8 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
         this._setOption('focusStateEnabled', value);
     }
 
-
     /**
      * [descr:dxNumberBoxOptions.format]
-    
      */
     @Input()
     get format(): Format {
@@ -180,10 +162,8 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
         this._setOption('format', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.height]
-    
      */
     @Input()
     get height(): number | string | undefined {
@@ -193,10 +173,8 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
         this._setOption('height', value);
     }
 
-
     /**
      * [descr:WidgetOptions.hint]
-    
      */
     @Input()
     get hint(): string | undefined {
@@ -206,10 +184,8 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
         this._setOption('hint', value);
     }
 
-
     /**
      * [descr:dxTextEditorOptions.hoverStateEnabled]
-    
      */
     @Input()
     get hoverStateEnabled(): boolean {
@@ -219,10 +195,8 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
         this._setOption('hoverStateEnabled', value);
     }
 
-
     /**
      * [descr:dxTextEditorOptions.inputAttr]
-    
      */
     @Input()
     get inputAttr(): any {
@@ -232,10 +206,8 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
         this._setOption('inputAttr', value);
     }
 
-
     /**
      * [descr:dxNumberBoxOptions.invalidValueMessage]
-    
      */
     @Input()
     get invalidValueMessage(): string {
@@ -245,10 +217,8 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
         this._setOption('invalidValueMessage', value);
     }
 
-
     /**
      * [descr:EditorOptions.isDirty]
-    
      */
     @Input()
     get isDirty(): boolean {
@@ -258,10 +228,8 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
         this._setOption('isDirty', value);
     }
 
-
     /**
      * [descr:EditorOptions.isValid]
-    
      */
     @Input()
     get isValid(): boolean {
@@ -271,10 +239,8 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
         this._setOption('isValid', value);
     }
 
-
     /**
      * [descr:dxTextEditorOptions.label]
-    
      */
     @Input()
     get label(): string {
@@ -284,10 +250,8 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
         this._setOption('label', value);
     }
 
-
     /**
      * [descr:dxTextEditorOptions.labelMode]
-    
      */
     @Input()
     get labelMode(): LabelMode {
@@ -297,10 +261,8 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
         this._setOption('labelMode', value);
     }
 
-
     /**
      * [descr:dxNumberBoxOptions.max]
-    
      */
     @Input()
     get max(): number | undefined {
@@ -310,10 +272,8 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
         this._setOption('max', value);
     }
 
-
     /**
      * [descr:dxNumberBoxOptions.min]
-    
      */
     @Input()
     get min(): number | undefined {
@@ -323,10 +283,8 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
         this._setOption('min', value);
     }
 
-
     /**
      * [descr:dxNumberBoxOptions.mode]
-    
      */
     @Input()
     get mode(): NumberBoxType {
@@ -336,10 +294,8 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
         this._setOption('mode', value);
     }
 
-
     /**
      * [descr:dxTextEditorOptions.name]
-    
      */
     @Input()
     get name(): string {
@@ -349,10 +305,8 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
         this._setOption('name', value);
     }
 
-
     /**
      * [descr:dxTextEditorOptions.placeholder]
-    
      */
     @Input()
     get placeholder(): string {
@@ -362,10 +316,8 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
         this._setOption('placeholder', value);
     }
 
-
     /**
      * [descr:EditorOptions.readOnly]
-    
      */
     @Input()
     get readOnly(): boolean {
@@ -375,10 +327,8 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
         this._setOption('readOnly', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
-    
      */
     @Input()
     get rtlEnabled(): boolean {
@@ -388,10 +338,8 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
         this._setOption('rtlEnabled', value);
     }
 
-
     /**
      * [descr:dxTextEditorOptions.showClearButton]
-    
      */
     @Input()
     get showClearButton(): boolean {
@@ -401,10 +349,8 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
         this._setOption('showClearButton', value);
     }
 
-
     /**
      * [descr:dxNumberBoxOptions.showSpinButtons]
-    
      */
     @Input()
     get showSpinButtons(): boolean {
@@ -414,10 +360,8 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
         this._setOption('showSpinButtons', value);
     }
 
-
     /**
      * [descr:dxNumberBoxOptions.step]
-    
      */
     @Input()
     get step(): number {
@@ -427,10 +371,8 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
         this._setOption('step', value);
     }
 
-
     /**
      * [descr:dxTextEditorOptions.stylingMode]
-    
      */
     @Input()
     get stylingMode(): EditorStyle {
@@ -440,10 +382,8 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
         this._setOption('stylingMode', value);
     }
 
-
     /**
      * [descr:WidgetOptions.tabIndex]
-    
      */
     @Input()
     get tabIndex(): number {
@@ -453,10 +393,8 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
         this._setOption('tabIndex', value);
     }
 
-
     /**
      * [descr:dxTextEditorOptions.text]
-    
      */
     @Input()
     get text(): string {
@@ -466,10 +404,8 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
         this._setOption('text', value);
     }
 
-
     /**
      * [descr:dxNumberBoxOptions.useLargeSpinButtons]
-    
      */
     @Input()
     get useLargeSpinButtons(): boolean {
@@ -479,10 +415,8 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
         this._setOption('useLargeSpinButtons', value);
     }
 
-
     /**
      * [descr:EditorOptions.validationError]
-    
      */
     @Input()
     get validationError(): any | null {
@@ -492,10 +426,8 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
         this._setOption('validationError', value);
     }
 
-
     /**
      * [descr:EditorOptions.validationErrors]
-    
      */
     @Input()
     get validationErrors(): Array<any> | null {
@@ -505,10 +437,8 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
         this._setOption('validationErrors', value);
     }
 
-
     /**
      * [descr:EditorOptions.validationMessageMode]
-    
      */
     @Input()
     get validationMessageMode(): ValidationMessageMode {
@@ -518,10 +448,8 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
         this._setOption('validationMessageMode', value);
     }
 
-
     /**
      * [descr:EditorOptions.validationMessagePosition]
-    
      */
     @Input()
     get validationMessagePosition(): Position {
@@ -531,10 +459,8 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
         this._setOption('validationMessagePosition', value);
     }
 
-
     /**
      * [descr:EditorOptions.validationStatus]
-    
      */
     @Input()
     get validationStatus(): ValidationStatus {
@@ -544,10 +470,8 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
         this._setOption('validationStatus', value);
     }
 
-
     /**
      * [descr:dxNumberBoxOptions.value]
-    
      */
     @Input()
     get value(): number {
@@ -557,10 +481,8 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
         this._setOption('value', value);
     }
 
-
     /**
      * [descr:dxTextEditorOptions.valueChangeEvent]
-    
      */
     @Input()
     get valueChangeEvent(): string {
@@ -570,10 +492,8 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
         this._setOption('valueChangeEvent', value);
     }
 
-
     /**
      * [descr:WidgetOptions.visible]
-    
      */
     @Input()
     get visible(): boolean {
@@ -583,10 +503,8 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
         this._setOption('visible', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.width]
-    
      */
     @Input()
     get width(): number | string | undefined {
@@ -597,410 +515,281 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
     }
 
     /**
-    
      * [descr:dxNumberBoxOptions.onChange]
-    
-    
      */
     @Output() onChange: EventEmitter<ChangeEvent>;
 
     /**
-    
      * [descr:dxNumberBoxOptions.onContentReady]
-    
-    
      */
     @Output() onContentReady: EventEmitter<ContentReadyEvent>;
 
     /**
-    
      * [descr:dxNumberBoxOptions.onCopy]
-    
-    
      */
     @Output() onCopy: EventEmitter<CopyEvent>;
 
     /**
-    
      * [descr:dxNumberBoxOptions.onCut]
-    
-    
      */
     @Output() onCut: EventEmitter<CutEvent>;
 
     /**
-    
      * [descr:dxNumberBoxOptions.onDisposing]
-    
-    
      */
     @Output() onDisposing: EventEmitter<DisposingEvent>;
 
     /**
-    
      * [descr:dxNumberBoxOptions.onEnterKey]
-    
-    
      */
     @Output() onEnterKey: EventEmitter<EnterKeyEvent>;
 
     /**
-    
      * [descr:dxNumberBoxOptions.onFocusIn]
-    
-    
      */
     @Output() onFocusIn: EventEmitter<FocusInEvent>;
 
     /**
-    
      * [descr:dxNumberBoxOptions.onFocusOut]
-    
-    
      */
     @Output() onFocusOut: EventEmitter<FocusOutEvent>;
 
     /**
-    
      * [descr:dxNumberBoxOptions.onInitialized]
-    
-    
      */
     @Output() onInitialized: EventEmitter<InitializedEvent>;
 
     /**
-    
      * [descr:dxNumberBoxOptions.onInput]
-    
-    
      */
     @Output() onInput: EventEmitter<InputEvent>;
 
     /**
-    
      * [descr:dxNumberBoxOptions.onKeyDown]
-    
-    
      */
     @Output() onKeyDown: EventEmitter<KeyDownEvent>;
 
     /**
-    
      * [descr:dxNumberBoxOptions.onKeyUp]
-    
-    
      */
     @Output() onKeyUp: EventEmitter<KeyUpEvent>;
 
     /**
-    
      * [descr:dxNumberBoxOptions.onOptionChanged]
-    
-    
      */
     @Output() onOptionChanged: EventEmitter<OptionChangedEvent>;
 
     /**
-    
      * [descr:dxNumberBoxOptions.onPaste]
-    
-    
      */
     @Output() onPaste: EventEmitter<PasteEvent>;
 
     /**
-    
      * [descr:dxNumberBoxOptions.onValueChanged]
-    
-    
      */
     @Output() onValueChanged: EventEmitter<ValueChangedEvent>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() accessKeyChange: EventEmitter<string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() activeStateEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() buttonsChange: EventEmitter<Array<NumberBoxPredefinedButton | TextEditorButton> | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() disabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() elementAttrChange: EventEmitter<Record<string, any>>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() focusStateEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() formatChange: EventEmitter<Format>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() heightChange: EventEmitter<number | string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() hintChange: EventEmitter<string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() hoverStateEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() inputAttrChange: EventEmitter<any>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() invalidValueMessageChange: EventEmitter<string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() isDirtyChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() isValidChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() labelChange: EventEmitter<string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() labelModeChange: EventEmitter<LabelMode>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() maxChange: EventEmitter<number | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() minChange: EventEmitter<number | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() modeChange: EventEmitter<NumberBoxType>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() nameChange: EventEmitter<string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() placeholderChange: EventEmitter<string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() readOnlyChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() rtlEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() showClearButtonChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() showSpinButtonsChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() stepChange: EventEmitter<number>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() stylingModeChange: EventEmitter<EditorStyle>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() tabIndexChange: EventEmitter<number>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() textChange: EventEmitter<string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() useLargeSpinButtonsChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() validationErrorChange: EventEmitter<any | null>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() validationErrorsChange: EventEmitter<Array<any> | null>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() validationMessageModeChange: EventEmitter<ValidationMessageMode>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() validationMessagePositionChange: EventEmitter<Position>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() validationStatusChange: EventEmitter<ValidationStatus>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() valueChange: EventEmitter<number>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() valueChangeEventChange: EventEmitter<string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() visibleChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() widthChange: EventEmitter<number | string | undefined>;
 
     /**
-    
      * [descr:undefined]
-    
-    
      */
     @Output() onBlur: EventEmitter<any>;
-
-
     @HostListener('valueChange', ['$event']) change(_) { }
     @HostListener('onBlur', ['$event']) touched = (_) => {};
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,

@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     TransferState,
     Component,
@@ -9,7 +7,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -29,7 +26,6 @@ import type { Position } from 'devextreme/common';
 import type { dxPopupToolbarItem } from 'devextreme/ui/popup';
 
 import DxPopover from 'devextreme/ui/popover';
-
 
 import {
     DxComponent,
@@ -71,13 +67,12 @@ import { DxoPopoverShowEventModule } from 'devextreme-angular/ui/popover/nested'
 import { DxoPopoverToModule } from 'devextreme-angular/ui/popover/nested';
 import { DxiPopoverToolbarItemModule } from 'devextreme-angular/ui/popover/nested';
 import { 
-           PROPERTY_TOKEN_toolbarItems,
-     } from 'devextreme-angular/core/tokens';
+    PROPERTY_TOKEN_toolbarItems,
+} from 'devextreme-angular/core/tokens';
 
 
 /**
  * [descr:dxPopover]
-
  */
 @Component({
     selector: 'dx-popover',
@@ -102,7 +97,6 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
 
     /**
      * [descr:dxPopoverOptions.animation]
-    
      */
     @Input()
     get animation(): { hide?: AnimationConfig, show?: AnimationConfig } {
@@ -112,10 +106,8 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('animation', value);
     }
 
-
     /**
      * [descr:dxPopupOptions.container]
-    
      */
     @Input()
     get container(): any | string | undefined {
@@ -125,10 +117,8 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('container', value);
     }
 
-
     /**
      * [descr:dxOverlayOptions.contentTemplate]
-    
      */
     @Input()
     get contentTemplate(): any {
@@ -138,10 +128,8 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('contentTemplate', value);
     }
 
-
     /**
      * [descr:dxOverlayOptions.deferRendering]
-    
      */
     @Input()
     get deferRendering(): boolean {
@@ -151,10 +139,8 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('deferRendering', value);
     }
 
-
     /**
      * [descr:WidgetOptions.disabled]
-    
      */
     @Input()
     get disabled(): boolean {
@@ -164,10 +150,8 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('disabled', value);
     }
 
-
     /**
      * [descr:dxPopupOptions.enableBodyScroll]
-    
      */
     @Input()
     get enableBodyScroll(): boolean {
@@ -177,10 +161,8 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('enableBodyScroll', value);
     }
 
-
     /**
      * [descr:dxPopoverOptions.height]
-    
      */
     @Input()
     get height(): number | string {
@@ -190,10 +172,8 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('height', value);
     }
 
-
     /**
      * [descr:dxPopoverOptions.hideEvent]
-    
      */
     @Input()
     get hideEvent(): string | undefined | { delay?: number | undefined, name?: string | undefined } {
@@ -203,10 +183,8 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('hideEvent', value);
     }
 
-
     /**
      * [descr:dxPopoverOptions.hideOnOutsideClick]
-    
      */
     @Input()
     get hideOnOutsideClick(): boolean | ((event: event) => boolean) {
@@ -216,10 +194,8 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('hideOnOutsideClick', value);
     }
 
-
     /**
      * [descr:dxPopoverOptions.hideOnParentScroll]
-    
      */
     @Input()
     get hideOnParentScroll(): boolean {
@@ -229,10 +205,8 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('hideOnParentScroll', value);
     }
 
-
     /**
      * [descr:WidgetOptions.hint]
-    
      */
     @Input()
     get hint(): string | undefined {
@@ -242,10 +216,8 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('hint', value);
     }
 
-
     /**
      * [descr:WidgetOptions.hoverStateEnabled]
-    
      */
     @Input()
     get hoverStateEnabled(): boolean {
@@ -255,10 +227,8 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('hoverStateEnabled', value);
     }
 
-
     /**
      * [descr:dxOverlayOptions.maxHeight]
-    
      */
     @Input()
     get maxHeight(): number | string {
@@ -268,10 +238,8 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('maxHeight', value);
     }
 
-
     /**
      * [descr:dxOverlayOptions.maxWidth]
-    
      */
     @Input()
     get maxWidth(): number | string {
@@ -281,10 +249,8 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('maxWidth', value);
     }
 
-
     /**
      * [descr:dxOverlayOptions.minHeight]
-    
      */
     @Input()
     get minHeight(): number | string {
@@ -294,10 +260,8 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('minHeight', value);
     }
 
-
     /**
      * [descr:dxOverlayOptions.minWidth]
-    
      */
     @Input()
     get minWidth(): number | string {
@@ -307,10 +271,8 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('minWidth', value);
     }
 
-
     /**
      * [descr:dxPopoverOptions.position]
-    
      */
     @Input()
     get position(): Position | PositionConfig {
@@ -320,10 +282,8 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('position', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
-    
      */
     @Input()
     get rtlEnabled(): boolean {
@@ -333,10 +293,8 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('rtlEnabled', value);
     }
 
-
     /**
      * [descr:dxPopoverOptions.shading]
-    
      */
     @Input()
     get shading(): boolean {
@@ -346,10 +304,8 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('shading', value);
     }
 
-
     /**
      * [descr:dxOverlayOptions.shadingColor]
-    
      */
     @Input()
     get shadingColor(): string {
@@ -359,10 +315,8 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('shadingColor', value);
     }
 
-
     /**
      * [descr:dxPopupOptions.showCloseButton]
-    
      */
     @Input()
     get showCloseButton(): boolean {
@@ -372,10 +326,8 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('showCloseButton', value);
     }
 
-
     /**
      * [descr:dxPopoverOptions.showEvent]
-    
      */
     @Input()
     get showEvent(): string | undefined | { delay?: number | undefined, name?: string | undefined } {
@@ -385,10 +337,8 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('showEvent', value);
     }
 
-
     /**
      * [descr:dxPopoverOptions.showTitle]
-    
      */
     @Input()
     get showTitle(): boolean {
@@ -397,7 +347,6 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
     set showTitle(value: boolean) {
         this._setOption('showTitle', value);
     }
-
 
     
     @Input()
@@ -408,10 +357,8 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('tabFocusLoopEnabled', value);
     }
 
-
     /**
      * [descr:dxPopoverOptions.target]
-    
      */
     @Input()
     get target(): any | string | undefined {
@@ -421,10 +368,8 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('target', value);
     }
 
-
     /**
      * [descr:dxPopupOptions.title]
-    
      */
     @Input()
     get title(): string {
@@ -434,10 +379,8 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('title', value);
     }
 
-
     /**
      * [descr:dxPopupOptions.titleTemplate]
-    
      */
     @Input()
     get titleTemplate(): any {
@@ -447,10 +390,8 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('titleTemplate', value);
     }
 
-
     /**
      * [descr:dxPopupOptions.toolbarItems]
-    
      */
     @Input()
     get toolbarItems(): Array<dxPopupToolbarItem> {
@@ -460,10 +401,8 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('toolbarItems', value);
     }
 
-
     /**
      * [descr:dxOverlayOptions.visible]
-    
      */
     @Input()
     get visible(): boolean {
@@ -473,10 +412,8 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('visible', value);
     }
 
-
     /**
      * [descr:dxPopoverOptions.width]
-    
      */
     @Input()
     get width(): number | string {
@@ -486,10 +423,8 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('width', value);
     }
 
-
     /**
      * [descr:dxOverlayOptions.wrapperAttr]
-    
      */
     @Input()
     get wrapperAttr(): any {
@@ -500,296 +435,204 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
     }
 
     /**
-    
      * [descr:dxPopoverOptions.onContentReady]
-    
-    
      */
     @Output() onContentReady: EventEmitter<ContentReadyEvent>;
 
     /**
-    
      * [descr:dxPopoverOptions.onDisposing]
-    
-    
      */
     @Output() onDisposing: EventEmitter<DisposingEvent>;
 
     /**
-    
      * [descr:dxPopoverOptions.onHidden]
-    
-    
      */
     @Output() onHidden: EventEmitter<HiddenEvent>;
 
     /**
-    
      * [descr:dxPopoverOptions.onHiding]
-    
-    
      */
     @Output() onHiding: EventEmitter<HidingEvent>;
 
     /**
-    
      * [descr:dxPopoverOptions.onInitialized]
-    
-    
      */
     @Output() onInitialized: EventEmitter<InitializedEvent>;
 
     /**
-    
      * [descr:dxPopoverOptions.onOptionChanged]
-    
-    
      */
     @Output() onOptionChanged: EventEmitter<OptionChangedEvent>;
 
     /**
-    
      * [descr:dxPopoverOptions.onShowing]
-    
-    
      */
     @Output() onShowing: EventEmitter<ShowingEvent>;
 
     /**
-    
      * [descr:dxPopoverOptions.onShown]
-    
-    
      */
     @Output() onShown: EventEmitter<ShownEvent>;
 
     /**
-    
      * [descr:dxPopoverOptions.onTitleRendered]
-    
-    
      */
     @Output() onTitleRendered: EventEmitter<TitleRenderedEvent>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() animationChange: EventEmitter<{ hide?: AnimationConfig, show?: AnimationConfig }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() containerChange: EventEmitter<any | string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() contentTemplateChange: EventEmitter<any>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() deferRenderingChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() disabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() enableBodyScrollChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() heightChange: EventEmitter<number | string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() hideEventChange: EventEmitter<string | undefined | { delay?: number | undefined, name?: string | undefined }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() hideOnOutsideClickChange: EventEmitter<boolean | ((event: event) => boolean)>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() hideOnParentScrollChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() hintChange: EventEmitter<string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() hoverStateEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() maxHeightChange: EventEmitter<number | string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() maxWidthChange: EventEmitter<number | string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() minHeightChange: EventEmitter<number | string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() minWidthChange: EventEmitter<number | string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() positionChange: EventEmitter<Position | PositionConfig>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() rtlEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() shadingChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() shadingColorChange: EventEmitter<string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() showCloseButtonChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() showEventChange: EventEmitter<string | undefined | { delay?: number | undefined, name?: string | undefined }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() showTitleChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() tabFocusLoopEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() targetChange: EventEmitter<any | string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() titleChange: EventEmitter<string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() titleTemplateChange: EventEmitter<any>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() toolbarItemsChange: EventEmitter<Array<dxPopupToolbarItem>>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() visibleChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() widthChange: EventEmitter<number | string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() wrapperAttrChange: EventEmitter<any>;
-
-
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,

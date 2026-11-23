@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     Component,
     NgModule,
@@ -12,10 +10,6 @@ import {
     ContentChildren,
     QueryList
 } from '@angular/core';
-
-
-
-
 import type * as CommonTypes from 'devextreme/common';
 import type { ColumnAIOptions, FilterOperation, FilterType, FixedPosition, ColumnHeaderFilter, SelectedFilterOperation } from 'devextreme/common/grids';
 import type { HorizontalAlignment, DataType, SortOrder } from 'devextreme/common';
@@ -575,7 +569,6 @@ export class DxiTreeListColumnComponent extends CollectionNestedOption {
         return 'columns';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -598,7 +591,6 @@ export class DxiTreeListColumnComponent extends CollectionNestedOption {
     ngOnDestroy() {
         this._deleteRemovedOptions(this._fullOptionPath());
     }
-
 }
 
 @NgModule({

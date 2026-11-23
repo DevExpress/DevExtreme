@@ -1,7 +1,5 @@
 /* tslint:disable:max-line-length */
-
 /* tslint:disable:use-input-property-decorator */
-
 import {
     Component,
     OnInit,
@@ -11,16 +9,11 @@ import {
     SkipSelf
 } from '@angular/core';
 
-
-
-
-
 import {
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxoGaugeIndicator } from './base/gauge-indicator';
-
 
 @Component({
     selector: 'dxo-subvalue-indicator',
@@ -56,7 +49,6 @@ export class DxoSubvalueIndicatorComponent extends DxoGaugeIndicator implements 
         return 'subvalueIndicator';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -72,7 +64,6 @@ export class DxoSubvalueIndicatorComponent extends DxoGaugeIndicator implements 
     ngOnDestroy() {
         this._addRemovedOption(this._getOptionPath());
     }
-
 
 }
 

@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     Component,
     NgModule,
@@ -8,10 +6,6 @@ import {
     SkipSelf,
     Input
 } from '@angular/core';
-
-
-
-
 import type { SummaryType } from 'devextreme/common/grids';
 import type { Format } from 'devextreme/common/core/localization';
 
@@ -122,7 +116,6 @@ export class DxiDataGridGroupItemComponent extends CollectionNestedOption {
         return 'groupItems';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -135,7 +128,6 @@ export class DxiDataGridGroupItemComponent extends CollectionNestedOption {
     ngOnDestroy() {
         this._deleteRemovedOptions(this._fullOptionPath());
     }
-
 }
 
 @NgModule({

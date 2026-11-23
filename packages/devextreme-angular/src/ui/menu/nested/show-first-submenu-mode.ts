@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     Component,
     OnInit,
@@ -10,10 +8,6 @@ import {
     SkipSelf,
     Input
 } from '@angular/core';
-
-
-
-
 import type { SubmenuShowMode } from 'devextreme/common';
 
 import {
@@ -21,7 +15,6 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-menu-show-first-submenu-mode',
@@ -52,7 +45,6 @@ export class DxoMenuShowFirstSubmenuModeComponent extends NestedOption implement
         return 'showFirstSubmenuMode';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -68,7 +60,6 @@ export class DxoMenuShowFirstSubmenuModeComponent extends NestedOption implement
     ngOnDestroy() {
         this._addRemovedOption(this._getOptionPath());
     }
-
 
 }
 

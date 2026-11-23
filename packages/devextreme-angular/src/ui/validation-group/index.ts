@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     TransferState,
     Component,
@@ -9,7 +7,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -20,7 +17,6 @@ import {
 import type { DisposingEvent, InitializedEvent, OptionChangedEvent } from 'devextreme/ui/validation_group';
 
 import DxValidationGroup from 'devextreme/ui/validation_group';
-
 
 import {
     DxComponent,
@@ -36,7 +32,6 @@ import {
 
 /**
  * [descr:dxValidationGroup]
-
  */
 @Component({
     selector: 'dx-validation-group',
@@ -55,7 +50,6 @@ export class DxValidationGroupComponent extends DxComponent implements OnDestroy
 
     /**
      * [descr:DOMComponentOptions.elementAttr]
-    
      */
     @Input()
     get elementAttr(): Record<string, any> {
@@ -65,10 +59,8 @@ export class DxValidationGroupComponent extends DxComponent implements OnDestroy
         this._setOption('elementAttr', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.height]
-    
      */
     @Input()
     get height(): number | string | undefined {
@@ -78,10 +70,8 @@ export class DxValidationGroupComponent extends DxComponent implements OnDestroy
         this._setOption('height', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.width]
-    
      */
     @Input()
     get width(): number | string | undefined {
@@ -92,52 +82,34 @@ export class DxValidationGroupComponent extends DxComponent implements OnDestroy
     }
 
     /**
-    
      * [descr:dxValidationGroupOptions.onDisposing]
-    
-    
      */
     @Output() onDisposing: EventEmitter<DisposingEvent>;
 
     /**
-    
      * [descr:dxValidationGroupOptions.onInitialized]
-    
-    
      */
     @Output() onInitialized: EventEmitter<InitializedEvent>;
 
     /**
-    
      * [descr:dxValidationGroupOptions.onOptionChanged]
-    
-    
      */
     @Output() onOptionChanged: EventEmitter<OptionChangedEvent>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() elementAttrChange: EventEmitter<Record<string, any>>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() heightChange: EventEmitter<number | string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() widthChange: EventEmitter<number | string | undefined>;
-
-
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             _watcherHelper: WatcherHelper,

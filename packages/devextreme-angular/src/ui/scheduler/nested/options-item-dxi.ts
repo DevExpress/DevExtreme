@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     Component,
     NgModule,
@@ -12,10 +10,7 @@ import {
     SkipSelf,
     Input
 } from '@angular/core';
-
 import { DOCUMENT } from '@angular/common';
-
-
 import type { ButtonType } from 'devextreme/common';
 
 import {
@@ -115,7 +110,6 @@ export class DxiSchedulerOptionsItemComponent extends CollectionNestedOption imp
         return 'items';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost,
             private renderer: Renderer2,
@@ -136,11 +130,9 @@ export class DxiSchedulerOptionsItemComponent extends CollectionNestedOption imp
     }
 
 
-
     ngOnDestroy() {
         this._deleteRemovedOptions(this._fullOptionPath());
     }
-
 }
 
 @NgModule({

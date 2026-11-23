@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     Component,
     OnInit,
@@ -12,10 +10,6 @@ import {
     ContentChildren,
     QueryList
 } from '@angular/core';
-
-
-
-
 import type { ChartsDataType, DashStyle, Font, DiscreteAxisDivisionMode, ArgumentAxisHoverMode, LabelOverlap, TimeInterval, AxisScaleType } from 'devextreme/common/charts';
 import type { Format } from 'devextreme/common/core/localization';
 
@@ -302,7 +296,6 @@ export class DxoPolarChartArgumentAxisComponent extends NestedOption implements 
         return 'argumentAxis';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -318,7 +311,6 @@ export class DxoPolarChartArgumentAxisComponent extends NestedOption implements 
     ngOnDestroy() {
         this._addRemovedOption(this._getOptionPath());
     }
-
 
 }
 

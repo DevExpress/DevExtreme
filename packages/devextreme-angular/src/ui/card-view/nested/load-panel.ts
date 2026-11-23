@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     Component,
     OnInit,
@@ -12,10 +10,6 @@ import {
     Output,
     EventEmitter
 } from '@angular/core';
-
-
-
-
 import type { AnimationConfig, PositionConfig } from 'devextreme/common/core/animation';
 import type { event } from 'devextreme/events/events.types';
 import type { LoadPanelIndicatorProperties, ContentReadyEvent, DisposingEvent, HiddenEvent, HidingEvent, InitializedEvent, OptionChangedEvent, ShowingEvent, ShownEvent } from 'devextreme/ui/load_panel';
@@ -26,7 +20,6 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-card-view-load-panel',
@@ -326,7 +319,6 @@ export class DxoCardViewLoadPanelComponent extends NestedOption implements OnDes
         return 'loadPanel';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -347,7 +339,6 @@ export class DxoCardViewLoadPanelComponent extends NestedOption implements OnDes
     ngOnDestroy() {
         this._addRemovedOption(this._getOptionPath());
     }
-
 
 }
 

@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     Component,
     NgModule,
@@ -8,10 +6,6 @@ import {
     SkipSelf,
     Input
 } from '@angular/core';
-
-
-
-
 import type { HorizontalAlignment } from 'devextreme/common';
 import type { SummaryType } from 'devextreme/common/grids';
 import type { Format } from 'devextreme/common/core/localization';
@@ -123,7 +117,6 @@ export class DxiDataGridTotalItemComponent extends CollectionNestedOption {
         return 'totalItems';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -136,7 +129,6 @@ export class DxiDataGridTotalItemComponent extends CollectionNestedOption {
     ngOnDestroy() {
         this._deleteRemovedOptions(this._fullOptionPath());
     }
-
 }
 
 @NgModule({

@@ -1,7 +1,5 @@
 /* tslint:disable:max-line-length */
-
 /* tslint:disable:use-input-property-decorator */
-
 import {
     Component,
     OnInit,
@@ -11,16 +9,11 @@ import {
     SkipSelf
 } from '@angular/core';
 
-
-
-
-
 import {
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxoGanttFilterRowOperationDescriptions } from './base/gantt-filter-row-operation-descriptions';
-
 
 @Component({
     selector: 'dxo-operation-descriptions',
@@ -48,7 +41,6 @@ export class DxoOperationDescriptionsComponent extends DxoGanttFilterRowOperatio
         return 'operationDescriptions';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -64,7 +56,6 @@ export class DxoOperationDescriptionsComponent extends DxoGanttFilterRowOperatio
     ngOnDestroy() {
         this._addRemovedOption(this._getOptionPath());
     }
-
 
 }
 
