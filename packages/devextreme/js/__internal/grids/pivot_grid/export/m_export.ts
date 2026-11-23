@@ -2,7 +2,6 @@ import localizationNumber from '@js/common/core/localization/number';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred, when } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
-import { each } from '@js/core/utils/iterator';
 import { getDefaultAlignment } from '@js/core/utils/position';
 import { isDefined, isFunction } from '@js/core/utils/type';
 import { hasWindow } from '@js/core/utils/window';
@@ -38,15 +37,6 @@ class DataProvider {
 
   public ready(): DeferredObj<DataProviderOptions> {
     return when(this._createOptions()).done((options) => {
-      const { items } = options;
-      const headerSize = items[0][0].rowspan;
-      const columns = items[headerSize - 1];
-
-      each(columns, (_, column) => {
-        column.width = DEFAUL_COLUMN_WIDTH;
-      });
-
-      options.columns = columns;
       this._options = options;
     });
   }
@@ -55,7 +45,7 @@ class DataProvider {
     const exportController = this._exportController;
     const dataController = exportController._dataController;
     const options = Deferred<DataProviderOptions>();
-    const areaOptions: Omit<DataProviderOptions, 'items'> = {
+    const areaOptions: Omit<DataProviderOptions, 'items' | 'columns'> = {
       rtlEnabled: exportController.option('rtlEnabled'),
       dataFields: exportController.getDataSource().getAreaFields('data'),
       rowsArea: exportController._rowsArea,
@@ -67,10 +57,18 @@ class DataProvider {
       const columnsInfo = extend(true, [], dataController.getColumnsInfo(true));
       const rowsInfoItems = extend(true, [], dataController.getRowsInfo(true));
       const cellsInfo = dataController.getCellsInfo(true);
+      const items = exportController._getAllItems(columnsInfo, rowsInfoItems, cellsInfo);
+      const headerSize = items[0][0].rowspan;
+      const columns = items[headerSize - 1];
+
+      columns.forEach((column) => {
+        column.width = DEFAUL_COLUMN_WIDTH;
+      });
 
       options.resolve({
         ...areaOptions,
-        items: exportController._getAllItems(columnsInfo, rowsInfoItems, cellsInfo),
+        items,
+        columns,
       });
       dataController.endLoading();
     });
@@ -78,17 +76,16 @@ class DataProvider {
     return options;
   }
 
-  public getColumns(): PivotGridPreparedExportItem[] | undefined {
+  public getColumns(): PivotGridPreparedExportItem[] {
     return this._options.columns;
   }
 
   public getColumnsWidths(): number[] {
     const colsArea = this._options.columnsArea;
-    const { rowsArea } = this._options;
-    const { columns } = this._options;
+    const { rowsArea, columns } = this._options;
     const useDefaultWidth = !hasWindow() || colsArea.option('scrolling.mode') === 'virtual' || colsArea.element().is(':hidden');
     return useDefaultWidth
-      ? (columns ?? []).map(() => DEFAUL_COLUMN_WIDTH)
+      ? columns.map(() => DEFAUL_COLUMN_WIDTH)
       : rowsArea.getColumnsWidth().concat(colsArea.getColumnsWidth());
   }
 
@@ -292,11 +289,10 @@ const ExportMixin: PivotGridExportMixin = {
   },
 
   _calculateCellInfoItemLength(columnsRow: PivotGridExportItem[]): number {
-    let result = 0;
-    for (const column of columnsRow) {
-      result += isDefined(column.colspan) ? column.colspan : 1;
-    }
-    return result;
+    return columnsRow.reduce(
+      (result, column) => result + (isDefined(column.colspan) ? column.colspan : 1),
+      0,
+    );
   },
 
   _getEmptyCell(): PivotGridExportItem {
