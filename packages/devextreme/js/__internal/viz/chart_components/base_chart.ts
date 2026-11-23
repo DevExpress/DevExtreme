@@ -426,12 +426,6 @@ export class BaseChart extends BaseWidget {
         event.preventDefault();
       }
     });
-    eventsEngine.on(this._$element, 'MSHoldVisual', (event) => {
-      /// #DEBUG
-      this.eventType = 'MSHoldVisual';
-      /// #ENDDEBUG
-      event.preventDefault();
-    });
   }
 
   // Common functionality is overridden because Chart has its own layout logic.

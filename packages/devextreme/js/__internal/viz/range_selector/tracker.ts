@@ -4,7 +4,6 @@
 
 import { domAdapter } from '@ts/core/dom_adapter';
 import { each } from '@ts/core/utils/iterator';
-import { pointerEvents as msPointerEnabled } from '@ts/core/utils/support';
 import { getWindow } from '@ts/core/utils/window';
 import eventsEngine from '@ts/events/core/events_engine';
 import pointerEvents from '@ts/events/pointer';
@@ -71,10 +70,10 @@ function isLeftButtonPressed(event: ThemeValue): boolean | undefined {
   const { originalEvent, touches } = e;
   const pointerType = originalEvent ? originalEvent.pointerType : false;
   const eventTouches = originalEvent ? originalEvent.touches : false;
-  const isMSPointerLeftClick = originalEvent && pointerType !== undefined && (pointerType === (originalEvent.MSPOINTER_TYPE_TOUCH || 'touch') || (pointerType === (originalEvent.MSPOINTER_TYPE_MOUSE || 'mouse') && originalEvent.buttons === 1));
+  const isPointerLeftClick = originalEvent && pointerType !== undefined && (pointerType === 'touch' || (pointerType === 'mouse' && originalEvent.buttons === 1));
   const isTouches = (touches && touches.length > 0) || (eventTouches && eventTouches.length > 0);
 
-  return (e.which === 1) || isMSPointerLeftClick || isTouches;
+  return (e.which === 1) || isPointerLeftClick || isTouches;
 }
 
 function isMultiTouches(event: ThemeValue): boolean | null {
@@ -302,9 +301,6 @@ export let Tracker = class Tracker {
     this._state = {};
     const state = this._state;
     const targets = params.controller.getTrackerTargets();
-    if (msPointerEnabled) {
-      params.renderer.root.css({ msTouchAction: 'pinch-zoom' });
-    }
     this._docEvents = [
       initializeSelectedAreaEvents(
         params.controller,
