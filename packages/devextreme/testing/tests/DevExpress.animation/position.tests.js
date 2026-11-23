@@ -632,6 +632,20 @@ const testCollision = (name, fixtureName, params, expectedHorzDist, expectedVert
         }
     });
 
+    QUnit.test('flip should keep an element whose rounded location fits the boundary', function(assert) {
+        fixtures.customBoundary.create();
+        try {
+            $('#where').css({ width: '199.75px' });
+            $('#what').css({ width: '99.5px' });
+            const { h } = setupPosition('#what', { my: 'right', at: 'right', of: '#where', collision: 'flip', boundary: '#boundary' });
+
+            assert.strictEqual(h.flip, false, 'not flipped');
+            assert.strictEqual($('#what').offset().left, 210, 'left');
+        } finally {
+            fixtures.customBoundary.drop();
+        }
+    });
+
     QUnit.test('fit should round the location to the nearest pixel when the element has a fractional width', function(assert) {
         fixtures.customBoundary.create();
         try {
