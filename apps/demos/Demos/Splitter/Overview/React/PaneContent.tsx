@@ -42,7 +42,7 @@ const PaneContent = (data: PaneContentProps) => {
       <div className="pane-state">{getPaneState(data)}</div>
       {getFilteredDimensionOptions(data).map((item, index) => (
         <div className="pane-option" key={index}>
-          {item.key}: {item.value}
+          {`${item.key}: ${item.value}`}
         </div>
       ))}
     </div>
