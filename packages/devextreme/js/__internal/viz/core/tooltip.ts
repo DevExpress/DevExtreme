@@ -249,7 +249,7 @@ export let Tooltip = class Tooltip {
 
     const pointerEvents = options.interactive ? 'auto' : 'none';
     if (options.interactive) {
-      this._renderer.root.css({ '-moz-user-select': 'auto', '-webkit-user-select': 'auto' });
+      this._renderer.root.css({ 'user-select': 'auto', '-webkit-user-select': 'auto' });
     }
 
     const drawTooltip = ({

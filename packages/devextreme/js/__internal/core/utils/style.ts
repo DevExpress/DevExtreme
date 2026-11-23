@@ -4,13 +4,11 @@ import { camelize } from '@js/core/utils/inflector';
 import { isNumeric, isString } from '@js/core/utils/type';
 import { callOnce } from '@ts/core/utils/call_once';
 
-const jsPrefixes = ['', 'Webkit', 'Moz', 'O', 'Ms'];
+// Safari still exposes some properties (e.g. user-select) only with the -webkit- prefix
+const jsPrefixes = ['', 'Webkit'];
 const cssPrefixes: Record<string, string> = {
   '': '',
   Webkit: '-webkit-',
-  Moz: '-moz-',
-  O: '-o-',
-  ms: '-ms-',
 };
 const getStyles = callOnce(() => domAdapter.createElement('dx').style);
 

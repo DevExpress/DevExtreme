@@ -17,16 +17,6 @@ type RootNode = Document | DocumentFragment;
 
 type ActiveElementHolder = Document | ShadowRoot;
 
-type MatchesFn = (this: Element, selector: string) => boolean;
-
-interface LegacyMatchesElement extends Element {
-  matchesSelector?: MatchesFn;
-  mozMatchesSelector?: MatchesFn;
-  msMatchesSelector?: MatchesFn;
-  oMatchesSelector?: MatchesFn;
-  document?: Document;
-}
-
 interface DomAdapterStrategy {
   querySelectorAll: (element: ParentNode, selector: string) => NodeListOf<Element>;
   elementMatches: (element: Element, selector: string) => boolean;
@@ -81,30 +71,7 @@ const nativeDOMAdapterStrategy: DomAdapterStrategy = {
   },
 
   elementMatches(this: DomAdapterStrategy, element, selector) {
-    const legacyElement = element as LegacyMatchesElement;
-    const matches: MatchesFn = legacyElement.matches || legacyElement.matchesSelector
-            || legacyElement.mozMatchesSelector || legacyElement.msMatchesSelector
-            || legacyElement.oMatchesSelector || legacyElement.webkitMatchesSelector
-            || ((candidate: string): boolean => {
-              const doc = legacyElement.document ?? legacyElement.ownerDocument;
-
-              if (!doc) {
-                return false;
-              }
-
-              const items = this.querySelectorAll(doc, candidate);
-              const { length } = items;
-
-              for (let i = 0; i < length; i += 1) {
-                if (items[i] === element) {
-                  return true;
-                }
-              }
-
-              return false;
-            });
-
-    return matches.call(element, selector);
+    return this.isElementNode(element) && element.matches(selector);
   },
 
   createElement(this: DomAdapterStrategy, tagName, context) {

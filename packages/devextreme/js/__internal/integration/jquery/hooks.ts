@@ -1,5 +1,4 @@
 import { each } from '@ts/core/utils/iterator';
-import { isNumeric } from '@ts/core/utils/type';
 import { compare as compareVersion } from '@ts/core/utils/version';
 import registerEvent from '@ts/events/core/event_registrator';
 import hookTouchProps from '@ts/events/core/hook_touch_props';
@@ -13,30 +12,13 @@ const useJQuery = useJQueryFn();
 
 if (useJQuery) {
   if (compareVersion(jQuery.fn.jquery, [3]) < 0) {
-    const POINTER_TYPE_MAP = {
-      2: 'touch',
-      3: 'pen',
-      4: 'mouse',
-    };
-
     each([
-      'MSPointerDown', 'MSPointerMove', 'MSPointerUp', 'MSPointerCancel', 'MSPointerOver', 'MSPointerOut', 'mouseenter', 'mouseleave',
+      'mouseenter', 'mouseleave',
       'pointerdown', 'pointermove', 'pointerup', 'pointercancel', 'pointerover', 'pointerout', 'pointerenter', 'pointerleave',
       // eslint-disable-next-line func-names
     ], function () {
       // @ts-expect-error
       jQuery.event.fixHooks[this] = {
-        // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-        filter(event, originalEvent) {
-          const { pointerType } = originalEvent;
-
-          if (isNumeric(pointerType)) {
-            event.pointerType = POINTER_TYPE_MAP[pointerType];
-          }
-
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-          return event;
-        },
         // @ts-expect-error
         props: jQuery.event.mouseHooks.props.concat([
           'pointerId',
