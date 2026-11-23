@@ -1,6 +1,5 @@
 import type { Item } from 'devextreme/ui/stepper';
 import { test } from '../../../fixtures';
-import { clickWithOffset } from '../../../helpers/clickUtils';
 import { createWidget } from '../../../helpers/createWidget';
 import { appendElementTo, setAttribute } from '../../../helpers/domUtils';
 import { testScreenshot } from '../../../helpers/screenshots';
@@ -162,7 +161,5 @@ test.describe('Stepper_common', () => {
 
     await page.keyboard.press('ArrowLeft');
     await testScreenshot(page, 'Completed step focused.png', { element: '#stepper' });
-
-    await clickWithOffset(page, page.locator('body'), { offsetX: -10, offsetY: -10 });
   });
 });

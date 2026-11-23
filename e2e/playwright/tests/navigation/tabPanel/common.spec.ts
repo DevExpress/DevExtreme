@@ -1,6 +1,5 @@
 import type { Item } from 'devextreme/ui/tab_panel';
 import { test } from '../../../fixtures';
-import { clickWithOffset } from '../../../helpers/clickUtils';
 import { createWidget } from '../../../helpers/createWidget';
 import { appendElementTo, insertStylesheetRulesToPage, setAttribute } from '../../../helpers/domUtils';
 import { testScreenshot } from '../../../helpers/screenshots';
@@ -153,8 +152,6 @@ test.describe('TabPanel_common', () => {
       useInkRipple: false,
     });
 
-    await clickWithOffset(page, page.locator('body'), { offsetX: -10, offsetY: -10 });
-
     const rightNavButton = page.locator(`.${TABS_RIGHT_NAV_BUTTON_CLASS}`);
     await rightNavButton.click();
     await rightNavButton.hover();
@@ -204,8 +201,6 @@ test.describe('TabPanel_common', () => {
 
       await createWidget(page, 'dxTabPanel', tabPanelOptions, '#tabpanel');
       await createWidget(page, 'dxTabPanel', { ...tabPanelOptions, rtlEnabled: true }, '#tabpanel-rtl');
-
-      await clickWithOffset(page, page.locator('body'), { offsetX: -10, offsetY: -10 });
 
       await testScreenshot(page, `${testName}.png`, { element: '#container' });
     });
