@@ -38,7 +38,7 @@
     <div class="options">
       <div class="caption">Options</div>
       <div class="option">
-        <span>Series Type</span>
+        <span>Series Type </span>
         <DxSelectBox
           :data-source="types"
           :input-attr="{ 'aria-label': 'Series Type' }"
@@ -88,7 +88,7 @@ const type = ref(types[0]);
 }
 
 .option > span {
-  margin-right: 14px;
+  margin-right: 10px;
 }
 
 .option > .dx-widget {

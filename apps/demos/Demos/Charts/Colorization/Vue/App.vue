@@ -16,7 +16,7 @@
     <div class="options">
       <div class="caption">Options</div>
       <div class="option">
-        <span>Colorization Type</span>
+        <span>Colorization Type </span>
         <DxSelectBox
           :data-source="colorizationOptions"
           :width="200"
@@ -71,7 +71,7 @@ const customizeTooltip = ({ node, node: { data: { name } }, valueText }: Record<
 }
 
 .option > span {
-  margin-right: 14px;
+  margin-right: 10px;
 }
 
 .option > .dx-widget {

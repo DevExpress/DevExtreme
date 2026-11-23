@@ -17,7 +17,7 @@
     <div class="options">
       <div class="caption">Options</div>
       <div class="option">
-        <span>Overlapping Modes:</span>
+        <span>Overlapping Modes: </span>
         <DxSelectBox
           :data-source="overlappingModes"
           :input-attr="{ 'aria-label': 'Overlapping Mode' }"
@@ -67,7 +67,7 @@ const currentMode = ref<DxChartTypes.ChartsAxisLabelOverlap>(overlappingModes[0]
 .option > span {
   position: relative;
   top: 2px;
-  margin-right: 14px;
+  margin-right: 10px;
 }
 
 .option > .dx-widget {
