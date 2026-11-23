@@ -13,7 +13,7 @@
 /* eslint-disable max-classes-per-file */
 
 import { domAdapter } from '@ts/core/dom_adapter';
-import { getNavigator, hasProperty } from '@ts/core/utils/window';
+import { hasProperty } from '@ts/core/utils/window';
 import eventsEngine from '@ts/events/core/events_engine';
 import { name as wheelEventName } from '@ts/events/core/wheel';
 import { addNamespace } from '@ts/events/utils/index';
@@ -23,7 +23,6 @@ import { parseScalar } from '@ts/viz/core/utils';
 import type { EventEmitterMethods } from '@ts/viz/vector_map/event_emitter';
 import { makeEventEmitter } from '@ts/viz/vector_map/event_emitter';
 
-const navigator = getNavigator();
 const _math = Math;
 const _abs = _math.abs;
 const _sqrt = _math.sqrt;
@@ -471,7 +470,6 @@ export let Tracker = class Tracker {
   _detachHandlers(): void {
     if (this._isTouchEnabled) {
       this._root.css({ 'touch-action': '', '-webkit-user-select': '' })
-        .off(_addNamespace('MSHoldVisual', _NAME))
         .off(_addNamespace('contextmenu', _NAME));
     }
     eventsEngine.off(domAdapter.getDocument(), this._docHandlers);
@@ -481,9 +479,6 @@ export let Tracker = class Tracker {
   _attachHandlers(): void {
     if (this._isTouchEnabled) {
       this._root.css({ 'touch-action': 'none', '-webkit-user-select': 'none' })
-        .on(_addNamespace('MSHoldVisual', _NAME), (event) => {
-          event.preventDefault();
-        })
         .on(_addNamespace('contextmenu', _NAME), (event) => {
           isTouchEvent(event) && event.preventDefault();
         });
@@ -596,7 +591,7 @@ function getDistance(x1: number, y1: number, x2: number, y2: number): number {
 
 function isTouchEvent(event: ThemeValue): boolean {
   const { type, pointerType }: { type: string; pointerType: ThemeValue } = event.originalEvent;
-  return type.startsWith('touch') || (type.startsWith('MSPointer') && pointerType !== 4) || (type.startsWith('pointer') && pointerType !== 'mouse');
+  return type.startsWith('touch') || (type.startsWith('pointer') && pointerType !== 'mouse');
 }
 
 function selectItem(flags: boolean[], items: string[]): string {
@@ -613,21 +608,16 @@ function selectItem(flags: boolean[], items: string[]): string {
 }
 
 function setupEvents(): void {
-  // @ts-expect-error pointerEnabled and msPointerEnabled are legacy non-standard navigator flags
-  let flags = [navigator.pointerEnabled, navigator.msPointerEnabled, hasProperty('ontouchstart')];
+  let flags = [hasProperty('ontouchstart')];
   /// #DEBUG
   if (arguments.length) {
-    flags = [
-      arguments[0] === 'pointer',
-      arguments[0] === 'MSPointer',
-      arguments[0] === 'touch',
-    ];
+    flags = [arguments[0] === 'touch'];
   }
   /// #ENDDEBUG
   EVENTS = {
-    start: selectItem(flags, ['pointerdown', 'MSPointerDown', 'touchstart mousedown', 'mousedown']),
-    move: selectItem(flags, ['pointermove', 'MSPointerMove', 'touchmove mousemove', 'mousemove']),
-    end: selectItem(flags, ['pointerup', 'MSPointerUp', 'touchend mouseup', 'mouseup']),
+    start: selectItem(flags, ['touchstart mousedown', 'mousedown']),
+    move: selectItem(flags, ['touchmove mousemove', 'mousemove']),
+    end: selectItem(flags, ['touchend mouseup', 'mouseup']),
     wheel: _addNamespace(wheelEventName, _NAME),
   };
 }

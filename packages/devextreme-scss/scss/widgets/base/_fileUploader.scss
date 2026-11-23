@@ -57,7 +57,7 @@ $fileuploader-file-size-font-size: 10px !default;
 }
 
 .dx-fileuploader-dragover {
-  .dx-fileuploader-input::-webkit-file-upload-button {
+  .dx-fileuploader-input::file-selector-button {
     width: 100%;
   }
 }

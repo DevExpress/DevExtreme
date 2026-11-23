@@ -29,28 +29,13 @@ export const initMobileViewport = function (
   }
 
   const metaVerbs = ['width=device-width'];
-  const msTouchVerbs = [];
 
-  if (allowZoom) {
-    // @ts-expect-error
-    msTouchVerbs.push('pinch-zoom');
-  } else {
+  if (!allowZoom) {
     metaVerbs.push('initial-scale=1.0', 'maximum-scale=1.0, user-scalable=no');
   }
 
-  if (allowPan) {
-    // @ts-expect-error
-    msTouchVerbs.push('pan-x', 'pan-y');
-  }
-
   if (!allowPan && !allowZoom) {
-    $('html, body').css({
-      msContentZooming: 'none',
-      msUserSelect: 'none',
-      overflow: 'hidden',
-    });
-  } else {
-    $('html').css('msOverflowStyle', '-ms-autohiding-scrollbar');
+    $('html, body').css({ overflow: 'hidden' });
   }
 
   if (!allowSelection && supportUtils.supportProp('userSelect')) {
@@ -58,7 +43,6 @@ export const initMobileViewport = function (
   }
 
   $(metaSelector).attr('content', metaVerbs.join());
-  $('html').css('msTouchAction', msTouchVerbs.join(' ') || 'none');
 
   realDevice = devices.real();
 

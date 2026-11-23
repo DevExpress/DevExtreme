@@ -1,7 +1,7 @@
 import type { dxElementWrapper } from '@js/core/renderer';
 import type { DOMComponentProperties } from '@ts/core/widget/dom_component';
 
-import type { OldSortable } from './m_sortable';
+import type { OldSortable } from './sortable';
 
 export interface OldSortableDraggingArgs {
   sourceGroup: string | undefined;
