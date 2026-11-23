@@ -5,8 +5,7 @@ import $ from '@js/core/renderer';
 import { noop } from '@js/core/utils/common';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred, when } from '@js/core/utils/deferred';
-import { extend } from '@js/core/utils/extend';
-import { each, map } from '@js/core/utils/iterator';
+import { each } from '@js/core/utils/iterator';
 import { format as stringFormat } from '@js/core/utils/string';
 import {
   isDefined, isFunction, isNumeric, isString,
@@ -258,44 +257,36 @@ class XmlaStore {
   ): string {
     const crossJoinArgs: string[] = [];
     const dimensions = options[axisName];
-    const fields: XmlaField[] = [];
     // eslint-disable-next-line @typescript-eslint/init-declarations -- kept between the iterations
     let prevDimension: XmlaField | undefined;
 
     for (let i = expandIndex; i <= expandLevel; i += 1) {
       const field = dimensions[i];
-      const { dataField } = field;
+      const { dataField, hierarchyName } = field;
       const prevHierarchyName = dimensions[i - 1]?.hierarchyName;
-      const { hierarchyName } = field;
       const isLastDimensionInGroup = !hierarchyName
         || dimensions[i + 1]?.hierarchyName !== hierarchyName;
       const expandAllIndex = path.length + expandAllCount + expandIndex;
       let arg: string | null = null;
 
-      fields.push(field);
-
       if (i < path.length) {
         if (isLastDimensionInGroup) {
           const pathValue = path[i];
-          if (hierarchyName && isString(pathValue) && pathValue.startsWith(`${hierarchyName}.`)) {
-            arg = `(${pathValue})`;
-          } else {
-            arg = `(${dataField}.${preparePathValue(pathValue, dataField)})`;
-          }
+          arg = hierarchyName && isString(pathValue) && pathValue.startsWith(`${hierarchyName}.`)
+            ? `(${pathValue})`
+            : `(${dataField}.${preparePathValue(pathValue, dataField)})`;
         }
       } else if (i <= expandAllIndex) {
         if (i === 0 && expandAllCount === 0) {
           const allMember = getAllMember(dimensions[expandIndex]);
 
-          if (!hierarchyName) {
-            arg = getAllMembers(dimensions[expandIndex]);
-          } else {
-            arg = `${allMember},${dimensions[expandIndex].dataField}`;
-          }
+          arg = hierarchyName
+            ? `${allMember},${dimensions[expandIndex].dataField}`
+            : getAllMembers(dimensions[expandIndex]);
         } else if (hierarchyName) {
-          let member = preparePathValue(slicePath[slicePath.length - 1]);
           if (isLastDimensionInGroup || i === expandAllIndex) {
             if (prevHierarchyName === hierarchyName) {
+              let member = preparePathValue(slicePath[slicePath.length - 1]);
               if (slicePath.length) {
                 prevDimension = dimensions[slicePath.length - 1];
               }
@@ -443,12 +434,8 @@ class XmlaStore {
         expression = stringFormat(
           MDX_SUBSET_TEMPLATE,
           expression,
-          rowSkip > 0
-            ? rowSkip + 1
-            : 0,
-          rowSkip > 0
-            ? options.rowTake
-            : options.rowTake + 1,
+          rowSkip > 0 ? rowSkip + 1 : 0,
+          rowSkip > 0 ? options.rowTake : options.rowTake + 1,
         );
       }
       if (axisName === 'columns' && options.columnTake) {
@@ -456,12 +443,8 @@ class XmlaStore {
         expression = stringFormat(
           MDX_SUBSET_TEMPLATE,
           expression,
-          columnSkip > 0
-            ? columnSkip + 1
-            : 0,
-          columnSkip > 0
-            ? options.columnTake
-            : options.columnTake + 1,
+          columnSkip > 0 ? columnSkip + 1 : 0,
+          columnSkip > 0 ? options.columnTake : options.columnTake + 1,
         );
       }
 
@@ -483,7 +466,7 @@ class XmlaStore {
   public generateAxisFieldsFilter(fields: XmlaField[]): string {
     const filterMembers: string[] = [];
 
-    each(fields, (_, field) => {
+    fields.forEach((field) => {
       const { dataField } = field;
       const filterExpression: string[] = [];
       const filterValues: PivotGridFilterValue[] = field.filterValues ?? [];
@@ -503,11 +486,10 @@ class XmlaStore {
       });
 
       if (filterValues.length) {
-        let filterStringExpression = stringFormat(MDX_SET_TEMPLATE, filterExpression.join(','));
-
-        if (field.filterType === 'exclude') {
-          filterStringExpression = `Except(${getAllMembers(field)},${filterStringExpression})`;
-        }
+        const filterSet = stringFormat(MDX_SET_TEMPLATE, filterExpression.join(','));
+        const filterStringExpression = field.filterType === 'exclude'
+          ? `Except(${getAllMembers(field)},${filterSet})`
+          : filterSet;
 
         filterMembers.push(filterStringExpression);
       }
@@ -524,7 +506,7 @@ class XmlaStore {
   ): string {
     let from = `[${cubeName}]`;
 
-    each([columnsFilter, rowsFilter, filter], (_, filterString) => {
+    [columnsFilter, rowsFilter, filter].forEach((filterString) => {
       if (filterString) {
         from = stringFormat(MDX_FILTER_SELECT_TEMPLATE, `${filterString}on 0`, from);
       }
@@ -543,42 +525,41 @@ class XmlaStore {
     cubeName: string | undefined,
     options: Pick<XmlaMdxOptions, 'totalsOnly'> = {},
   ): string {
-    let mdxString = '';
-    const withString = `${withArray.length ? `with ${withArray.join(' ')}` : ''} `;
-
-    if (axisStrings.length) {
-      // eslint-disable-next-line @typescript-eslint/init-declarations -- assigned in the if/else
-      let select: string;
-      if (options.totalsOnly) {
-        const countMembers: string[] = [];
-        if (rows.length) {
-          countMembers.push('[DX_rows_count]');
-        }
-        if (columns.length) {
-          countMembers.push('[DX_columns_count]');
-        }
-        select = `{${countMembers.join(',')}} on columns`;
-      } else {
-        select = axisStrings.join(',');
-      }
-      mdxString = withString + stringFormat(
-        MDX_SELECT_TEMPLATE,
-        this.generateFrom(
-          this.generateAxisFieldsFilter(columns),
-          this.generateAxisFieldsFilter(rows),
-          this.generateAxisFieldsFilter(filters ?? []),
-          cubeName,
-        ),
-        slice.length ? stringFormat(MDX_SLICE_TEMPLATE, slice.join(',')) : '',
-        select,
-      );
+    if (!axisStrings.length) {
+      return '';
     }
 
-    return mdxString;
+    const withString = `${withArray.length ? `with ${withArray.join(' ')}` : ''} `;
+    // eslint-disable-next-line @typescript-eslint/init-declarations -- assigned in the if/else
+    let select: string;
+    if (options.totalsOnly) {
+      const countMembers: string[] = [];
+      if (rows.length) {
+        countMembers.push('[DX_rows_count]');
+      }
+      if (columns.length) {
+        countMembers.push('[DX_columns_count]');
+      }
+      select = `{${countMembers.join(',')}} on columns`;
+    } else {
+      select = axisStrings.join(',');
+    }
+
+    return `${withString}${stringFormat(
+      MDX_SELECT_TEMPLATE,
+      this.generateFrom(
+        this.generateAxisFieldsFilter(columns),
+        this.generateAxisFieldsFilter(rows),
+        this.generateAxisFieldsFilter(filters ?? []),
+        cubeName,
+      ),
+      slice.length ? stringFormat(MDX_SLICE_TEMPLATE, slice.join(',')) : '',
+      select,
+    )}`;
   }
 
   public prepareDataFields(withArray: string[], valueFields: XmlaField[]): (string | undefined)[] {
-    return map(valueFields, (cell) => {
+    return valueFields.map((cell) => {
       if (isString(cell.expression)) {
         this.declare(cell.expression, withArray, cell.dataField, 'member');
       }
@@ -603,7 +584,7 @@ class XmlaStore {
         if (hierarchyName && isString(value) && value.startsWith(`${hierarchyName}.`)) {
           slices.push(value);
         } else {
-          slices.push(`${dimension.dataField}.${this.preparePathValue(value, dimension.dataField)}`);
+          slices.push(`${dimension.dataField}.${preparePathValue(value, dimension.dataField)}`);
         }
       }
     });
@@ -667,7 +648,7 @@ class XmlaStore {
       if (hierarchyName && isString(value) && value.startsWith(`${hierarchyName}.`)) {
         slice.push(value);
       } else {
-        slice.push(`${field.dataField}.${this.preparePathValue(value, field.dataField)}`);
+        slice.push(`${field.dataField}.${preparePathValue(value, field.dataField)}`);
       }
     });
   }
@@ -742,8 +723,7 @@ class XmlaStore {
               caption: getFirstChildText(tuple, 'Caption'),
               value: parseValue(getFirstChildText(tuple, 'MEMBER_VALUE')),
               level,
-              // eslint-disable-next-line no-plusplus
-              index: index++,
+              index,
               hasValue: !levelSum && (!!level || i === 0),
               name: getFirstChildText(tuple, 'UName'),
               hierarchyName: tupleMembers[i].getAttribute('Hierarchy'),
@@ -751,6 +731,7 @@ class XmlaStore {
               levelName: getFirstChildText(tuple, 'LName'),
             };
 
+            index += 1;
             levelSum += level;
           }
         });
@@ -766,10 +747,6 @@ class XmlaStore {
     return axes;
   }
 
-  public getNodeText(node: XmlaNode | undefined): string {
-    return getNodeText(node);
-  }
-
   public parseCells(xml: Document, axes: unknown[][], measureCount: number): XmlaCellValue[][][] {
     const cells: XmlaCellValue[][][] = [];
     let cell: XmlaCellValue[] = [];
@@ -783,12 +760,12 @@ class XmlaStore {
       const xmlCell = cellElements[i];
       const valueElement = xmlCell.getElementsByTagName('Value')[0];
       const errorElements = valueElement?.getElementsByTagName('Error') ?? [];
-      const text = errorElements.length === 0 ? this.getNodeText(valueElement) : '#N/A';
+      const text = errorElements.length === 0 ? getNodeText(valueElement) : '#N/A';
       const value = parseFloat(text);
       const cellOrdinal = getNumber(xmlCell.getAttribute('CellOrdinal') ?? '');
 
       if (errorElements.length) {
-        errorDictionary[this.getNodeText(errorElements[0].getElementsByTagName('ErrorCode')[0])] = this.getNodeText(errorElements[0].getElementsByTagName('Description')[0]);
+        errorDictionary[getNodeText(errorElements[0].getElementsByTagName('ErrorCode')[0])] = getNodeText(errorElements[0].getElementsByTagName('Description')[0]);
       }
 
       cellsOriginal[cellOrdinal] = {
@@ -796,10 +773,10 @@ class XmlaStore {
       };
     }
 
-    each(axes[1], () => {
+    axes[1].forEach(() => {
       const row: XmlaCellValue[][] = [];
       cells.push(row);
-      each(axes[0], () => {
+      axes[0].forEach(() => {
         const measureIndex = index % measureCount;
 
         if (measureIndex === 0) {
@@ -817,13 +794,6 @@ class XmlaStore {
     });
 
     return cells;
-  }
-
-  public preparePathValue(
-    pathValue: ScalarFilterValue | undefined,
-    dataField?: string,
-  ): ScalarFilterValue | undefined {
-    return preparePathValue(pathValue, dataField);
   }
 
   public getItem(
@@ -857,36 +827,40 @@ class XmlaStore {
     item: XmlaHeaderItem,
     visibleLevels: XmlaVisibleLevels,
   ): XmlaHeaderItems {
-    const result: XmlaHeaderItem[] = [];
-    const children: XmlaHeaderItems | undefined = item.children
-      && (item.children.length
-        ? item.children
-        : Object.keys(item.children.grandTotalHash ?? {})
-          .reduce<XmlaHeaderItem[]>((childItems, name) => childItems
-            // @ts-expect-error the keys come from grandTotalHash, whose items have children
-            .concat(item.children.grandTotalHash[name].children), [])
-      );
-    const firstChild = children?.[0];
-    const firstChildLevels: XmlaVisibleLevels[string] | undefined = firstChild
-      // @ts-expect-error an item without a hierarchy reads the levels of 'null' or 'undefined'
-      && visibleLevels[firstChild.hierarchyName];
+    const itemChildren = item.children;
 
-    if (children && firstChild && (firstChildLevels
-      ?.includes(firstChild.levelName)
-      || !firstChildLevels
-      || firstChild.level === 0)) {
-      const newChildren: XmlaHeaderItems = children
-        .filter((child) => child.hierarchyName === firstChild.hierarchyName);
-      newChildren.grandTotalHash = children.grandTotalHash;
-      return newChildren;
-    } if (children && firstChild) {
-      for (const child of children) {
-        if (child.hierarchyName === firstChild.hierarchyName) {
-          result.push(...this.getVisibleChildren(child, visibleLevels));
-        }
-      }
+    if (!itemChildren) {
+      return [];
     }
-    return result;
+
+    const grandTotalHash = itemChildren.grandTotalHash ?? {};
+    const children: XmlaHeaderItems = itemChildren.length
+      ? itemChildren
+      : Object.keys(grandTotalHash)
+        .reduce<XmlaHeaderItem[]>((childItems, name) => childItems
+          // @ts-expect-error processMember() gives every item of grandTotalHash its children
+          .concat(grandTotalHash[name].children), []);
+    const firstChild = children[0];
+
+    if (!firstChild) {
+      return [];
+    }
+
+    const { hierarchyName, levelName, level } = firstChild;
+    const hierarchyLevels = hierarchyName ? visibleLevels[hierarchyName] : undefined;
+    const isVisibleLevel = !!hierarchyLevels?.includes(levelName);
+    const hasNoVisibleLevels = !hierarchyLevels;
+    const isTopLevel = level === 0;
+    const hierarchyChildren: XmlaHeaderItems = children
+      .filter((child) => child.hierarchyName === hierarchyName);
+
+    if (isVisibleLevel || hasNoVisibleLevels || isTopLevel) {
+      hierarchyChildren.grandTotalHash = children.grandTotalHash;
+
+      return hierarchyChildren;
+    }
+
+    return hierarchyChildren.flatMap((child) => this.getVisibleChildren(child, visibleLevels));
   }
 
   public processMember(
@@ -894,19 +868,16 @@ class XmlaStore {
     member: XmlaAxisMember,
     parentItem: XmlaHeaderItem,
   ): XmlaHeaderItem {
-    let currentParentItem = parentItem;
-    let children = currentParentItem.children ?? [];
-    currentParentItem.children = children;
-    const hash = children.hash ?? {};
-    children.hash = hash;
-    const grandTotalHash = children.grandTotalHash ?? {};
-    children.grandTotalHash = grandTotalHash;
+    parentItem.children ??= [];
+    parentItem.children.hash ??= {};
+    parentItem.children.grandTotalHash ??= {};
+    const { hash, grandTotalHash } = parentItem.children;
 
-    if (member.parentName) {
-      currentParentItem = this.getItem(hash, member.parentName);
-      children = currentParentItem.children ?? [];
-      currentParentItem.children = children;
-    }
+    const memberParentItem = member.parentName
+      ? this.getItem(hash, member.parentName)
+      : parentItem;
+    memberParentItem.children ??= [];
+    const { children } = memberParentItem;
 
     // @ts-expect-error the placeholder member of a missing axis has no name
     const currentItem = this.getItem(hash, member.name, member, dataIndex);
@@ -917,14 +888,15 @@ class XmlaStore {
       children.push(currentItem);
     }
 
-    if ((!currentParentItem.value || !currentParentItem.parentName) && member.parentName) {
-      grandTotalHash[member.parentName] = currentParentItem;
+    if ((!memberParentItem.value || !memberParentItem.parentName) && member.parentName) {
+      grandTotalHash[member.parentName] = memberParentItem;
     // @ts-expect-error header items have no name field
-    } else if (grandTotalHash[currentParentItem.name]) {
+    } else if (grandTotalHash[memberParentItem.name]) {
       // @ts-expect-error the member may have no parentName here
       // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
       delete grandTotalHash[member.parentName];
     }
+
     return currentItem;
   }
 
@@ -932,20 +904,21 @@ class XmlaStore {
     parentItem: { children: XmlaHeaderItems },
     visibleLevels: XmlaVisibleLevels,
   ): number | undefined {
-    // eslint-disable-next-line @typescript-eslint/init-declarations -- assigned in the if/else
-    let grandTotalIndex: number | undefined;
-    if (parentItem.children.length === 1 && parentItem.children[0].parentName === '') {
-      grandTotalIndex = parentItem.children[0].index;
-      // TODO - refactoring
-      const { grandTotalHash } = parentItem.children;
-      parentItem.children = parentItem.children[0].children ?? [];
-
-      parentItem.children.grandTotalHash = grandTotalHash;
-
-      parentItem.children = this.getVisibleChildren(parentItem, visibleLevels);
-    } else if (parentItem.children.length === 0) {
-      grandTotalIndex = 0;
+    if (parentItem.children.length === 0) {
+      return 0;
     }
+
+    if (parentItem.children.length !== 1 || parentItem.children[0].parentName !== '') {
+      return undefined;
+    }
+
+    const grandTotalIndex = parentItem.children[0].index;
+    // TODO - refactoring
+    const { grandTotalHash } = parentItem.children;
+
+    parentItem.children = parentItem.children[0].children ?? [];
+    parentItem.children.grandTotalHash = grandTotalHash;
+    parentItem.children = this.getVisibleChildren(parentItem, visibleLevels);
 
     return grandTotalIndex;
   }
@@ -958,7 +931,7 @@ class XmlaStore {
   ): number | undefined {
     const result: XmlaHeaderItems = [];
 
-    each(axisTuples, (tupleIndex, members) => {
+    axisTuples.forEach((members, tupleIndex) => {
       let parentItem: XmlaHeaderItem = {
         children: result,
       };
@@ -966,7 +939,7 @@ class XmlaStore {
         ? Math.floor(tupleIndex / measureCount)
         : tupleIndex;
 
-      each(members, (_, member) => {
+      members.forEach((member) => {
         parentItem = this.processMember(dataIndex, member, parentItem);
       });
     });
@@ -995,7 +968,7 @@ class XmlaStore {
       delete item.level;
     }, true);
 
-    each(parentItem.children || [], (_, e) => {
+    (parentItem.children || []).forEach((e) => {
       dataSourceAxis.push(e);
     });
 
@@ -1110,10 +1083,6 @@ class XmlaStore {
     return result;
   }
 
-  public parseStringWithUnicodeSymbols(str: string): string {
-    return parseStringWithUnicodeSymbols(str);
-  }
-
   public parseDrillDownRowSet(xml: Document): Record<string, string>[] {
     const rows = xml.getElementsByTagName('row');
     const result: Record<string, string>[] = [];
@@ -1126,9 +1095,9 @@ class XmlaStore {
 
       for (const child of children) {
         const { tagName } = child;
-        columnNames[tagName] ??= this.parseStringWithUnicodeSymbols(tagName);
+        columnNames[tagName] ??= parseStringWithUnicodeSymbols(tagName);
         const name = columnNames[tagName];
-        item[name] = this.getNodeText(child);
+        item[name] = getNodeText(child);
       }
       result.push(item);
     }
@@ -1154,16 +1123,9 @@ class XmlaStore {
     options: XmlaLoadOptions,
     totalCountXml: Document,
   ): void {
-    const axes: object[] = [];
     const columnOptions = options.columns || [];
     const rowOptions = options.rows || [];
 
-    if (columnOptions.length) {
-      axes.push({});
-    }
-    if (rowOptions.length) {
-      axes.push({});
-    }
     // @ts-expect-error the cells of the totals request hold counts
     const cells: number[][][] = this.parseCells(totalCountXml, [[{}], [{}, {}]], 1);
     if (!columnOptions.length && rowOptions.length) {
@@ -1198,8 +1160,7 @@ class XmlaStore {
 
   public getFields(): DeferredObj<XmlaDiscoveredField[]> {
     const options = this._options;
-    const { catalog } = options;
-    const { cube } = options;
+    const { catalog, cube } = options;
     const localeIdProperty = getLocaleIdProperty();
     const dimensionsRequest = this.execXMLA(options, stringFormat(XMLA_DISCOVER_TEMPLATE, catalog, cube, 'MDSCHEMA_DIMENSIONS', localeIdProperty));
     const measuresRequest = this.execXMLA(options, stringFormat(XMLA_DISCOVER_TEMPLATE, catalog, cube, 'MDSCHEMA_MEASURES', localeIdProperty));
@@ -1220,13 +1181,13 @@ class XmlaStore {
               .concat(hierarchies);
             const levelsByHierarchy: Record<string, XmlaDiscoveredField[]> = {};
 
-            each(levels, (_, level) => {
+            levels.forEach((level) => {
               levelsByHierarchy[level.hierarchyName] = levelsByHierarchy[level.hierarchyName]
                 || [];
               levelsByHierarchy[level.hierarchyName].push(level);
             });
 
-            each(hierarchies, (_, hierarchy) => {
+            hierarchies.forEach((hierarchy) => {
               if (levelsByHierarchy[hierarchy.dataField]
                 && levelsByHierarchy[hierarchy.dataField].length > 1) {
                 hierarchy.hierarchyName = hierarchy.dataField;
@@ -1257,13 +1218,14 @@ class XmlaStore {
     // eslint-disable-next-line @typescript-eslint/init-declarations -- assigned in the if
     let rowCountMdx: string | undefined;
     if (options.rowSkip || options.rowTake || options.columnTake || options.columnSkip) {
-      rowCountMdx = this.generateMDX(extend({}, options, {
+      rowCountMdx = this.generateMDX({
+        ...options,
         totalsOnly: true,
         rowSkip: null,
         rowTake: null,
         columnSkip: null,
         columnTake: null,
-      }), storeOptions.cube, {});
+      }, storeOptions.cube, {});
     }
 
     const load = (): void => {
