@@ -448,7 +448,7 @@ export default [
   })),
 
   {
-    files: ['playwright.config.ts'],
+    files: ['playwright.config.ts', 'playwright.accessibility.config.ts'],
     rules: {
       'import/no-extraneous-dependencies': ['error', { devDependencies: true }],
     },

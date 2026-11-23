@@ -413,8 +413,6 @@ jobs:
           - { STRATEGY: accessibility, THEME: material.blue.dark,  CONSTEL: jquery }
           - { STRATEGY: accessibility, THEME: fluent.blue.dark,    CONSTEL: jquery }
           - { STRATEGY: accessibility, THEME: fluent-next.blue.dark, CONSTEL: jquery }
-    env:
-      ACCESSIBILITY_TESTCAFE_REPORT_PATH: "accessibility_testcafe_report"
 
     runs-on: ${{ github.event_name == 'merge_group' && 'devextreme-shr2-ondemand' || 'devextreme-shr2' }}
     name: ${{ matrix.CONSTEL }}-${{ matrix.STRATEGY }}-${{ matrix.THEME }}
@@ -512,6 +510,7 @@ jobs:
         echo "flags=$BASE_FLAGS" >> $GITHUB_OUTPUT
 
     - name: Run TestCafe tests (jQuery)
+      if: matrix.STRATEGY == 'screenshots'
       timeout-minutes: 12
       shell: bash
       working-directory: apps/demos
@@ -549,16 +548,16 @@ jobs:
         PLAYWRIGHT_BLOB_OUTPUT_NAME: report-${{ env.PLAYWRIGHT_JOB_NAME }}.zip
       run: pnpm run test-playwright
 
-    - name: Show accessibility warnings
+    - name: Run Playwright accessibility tests (jQuery)
       if: matrix.STRATEGY == 'accessibility'
+      timeout-minutes: 10
       working-directory: apps/demos
-      run: |
-        if [ -f "$ACCESSIBILITY_TESTCAFE_REPORT_PATH" ]; then
-          message=$(cat $ACCESSIBILITY_TESTCAFE_REPORT_PATH)
-          echo "::warning ::$message"
-        else
-          echo "Accessibility report not found. Skipping warning generation."
-        fi
+      env:
+        NODE_OPTIONS: --max-old-space-size=8192
+        CONCURRENCY: 4
+        CONSTEL: ${{ matrix.CONSTEL }}
+        THEME: ${{ matrix.THEME }}
+      run: pnpm run test-playwright:accessibility
 
     - name: Upload Playwright blob report
       if: failure() && matrix.STRATEGY == 'screenshots'
@@ -615,7 +614,7 @@ jobs:
         if-no-files-found: ignore
 
     - name: Copy accessibility report
-      if: matrix.STRATEGY == 'accessibility'
+      if: always() && matrix.STRATEGY == 'accessibility'
       uses: actions/upload-artifact@v7
       with:
         name: accessibility-reports-${{ env.JOB_NAME }}-${{ matrix.THEME }}

@@ -2,7 +2,6 @@ import { glob } from 'glob';
 import { join } from 'path';
 import { existsSync, mkdirSync, appendFileSync } from 'fs';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { axeCheck, createReport } from '@testcafe-community/axe';
 import { ClientFunction } from 'testcafe';
 import {
   runTestAtPage,
@@ -17,12 +16,7 @@ import {
   execCode,
   injectStyle,
 } from '../utils/visual-tests/matrix-test-helper';
-import {
-  testScreenshot,
-  isMaterial,
-  isFluent,
-} from '../utils/visual-tests/helpers/theme-utils';
-import { createMdReport, createTestCafeReport } from '../utils/axe-reporter/reporter';
+import { testScreenshot } from '../utils/visual-tests/helpers/theme-utils';
 import { getTestGlobalsScriptPath } from '../utils/visual-tests/test-globals-bundle';
 import { knownWarnings } from './known-warnings';
 import { skippedTests } from './skipped-tests';
@@ -57,69 +51,10 @@ const writeCspReport = (testName: string, framework: string, violations: any[]) 
   }
 };
 
-const getIgnoredRules = (testName) => {
-  const ignoredRules = [];
-
-  if ((isMaterial() || isFluent())
-    && [
-      'TreeList-StatePersistence',
-      // False positive: contrast rules do not apply to custom orange color
-      'CardView-FieldTemplate',
-      // False positive: contrast rules do not apply to read-only editors on the custom option panel background
-      'VectorMap-DynamicViewport',
-    ].includes(testName)
-  ) {
-    ignoredRules.push('color-contrast');
-  }
-
-  const specificRules = {
-    'Diagram-Adaptability': ['aria-dialog-name', 'label'],
-    'Diagram-AdvancedDataBinding': ['aria-dialog-name', 'label'],
-    'Diagram-Containers': ['aria-dialog-name', 'label'],
-    'Diagram-CustomShapesWithIcons': ['aria-dialog-name', 'label'],
-    'Diagram-CustomShapesWithTemplates': ['label'],
-    'Diagram-CustomShapesWithTemplatesWithEditing': ['aria-dialog-name', 'label'],
-    'Diagram-CustomShapesWithTexts': ['aria-dialog-name', 'label'],
-    'Diagram-ImagesInShapes': ['aria-dialog-name', 'label'],
-    'Diagram-ItemSelection': ['label'],
-    'Diagram-NodesAndEdgesArrays': ['aria-dialog-name', 'label'],
-    'Diagram-NodesArrayHierarchicalStructure': ['aria-dialog-name', 'label'],
-    'Diagram-NodesArrayPlainStructure': ['aria-dialog-name', 'label'],
-    'Diagram-OperationRestrictions': ['aria-dialog-name', 'label'],
-    'Diagram-Overview': ['aria-dialog-name', 'label'],
-    'Diagram-ReadOnly': ['label'],
-    'Diagram-SimpleView': ['label'],
-    'Diagram-UICustomization': ['aria-dialog-name', 'label'],
-    'Diagram-WebAPIService': ['aria-dialog-name', 'label'],
-
-    'FileManager-BindingToEF': ['aria-command-name', 'empty-table-header', 'label'],
-    'FileManager-BindingToFileSystem': ['aria-command-name', 'empty-table-header', 'label'],
-    'FileManager-BindingToHierarchicalStructure': ['aria-command-name', 'empty-table-header', 'label'],
-    'FileManager-CustomThumbnails': ['aria-allowed-attr', 'aria-command-name', 'image-alt', 'label'],
-    'FileManager-Overview': ['aria-command-name', 'empty-table-header', 'label'],
-    'FileManager-UICustomization': ['aria-command-name', 'empty-table-header', 'label'],
-
-    'Gantt-Appearance': ['aria-toggle-field-name'],
-    'Gantt-ExportToPDF': ['aria-toggle-field-name'],
-    'Gantt-Overview': ['aria-required-parent', 'aria-valid-attr-value'],
-    'Gantt-StripLines': ['aria-required-parent', 'aria-valid-attr-value'],
-    'Gantt-Validation': ['aria-required-parent', 'aria-valid-attr-value'],
-  };
-
-  return [
-    ...ignoredRules,
-    ...(specificRules[testName] || []),
-  ];
-};
-
 const getClientScripts = (approach: string) => {
   const scripts = [
     { module: 'mockdate' },
   ];
-
-  if (process.env.STRATEGY === 'accessibility') {
-    scripts.push({ module: 'axe-core/axe.min.js' });
-  }
 
   const testGlobalsScriptPath = getTestGlobalsScriptPath(approach);
   if (testGlobalsScriptPath) {
@@ -152,12 +87,10 @@ const getClientScripts = (approach: string) => {
 Object.values(FRAMEWORKS).forEach((approach) => {
   if (!shouldRunFramework(approach)) { return; }
   // jQuery screenshots are taken by Playwright (common.spec.ts).
-  if (approach === FRAMEWORKS.jquery && process.env.STRATEGY !== 'accessibility') { return; }
+  if (approach === FRAMEWORKS.jquery) { return; }
   fixture(approach)
     .beforeEach(async (t) => {
-      if (process.env.STRATEGY !== 'accessibility') {
-        await t.resizeWindow(1000, 800);
-      }
+      await t.resizeWindow(1000, 800);
     })
     .clientScripts(getClientScripts(approach))
     .requestHooks(widgetsGalleryServiceMock, xmlaServiceMock);
@@ -200,13 +133,7 @@ Object.values(FRAMEWORKS).forEach((approach) => {
     changeTheme(__dirname, `../${demoPath}/index.html`, process.env.THEME);
     const pageURL = `http://127.0.0.1:8080/apps/demos/Demos/${widgetName}/${demoName}/${approach}/`;
 
-    if (shouldSkipDemo(approach, widgetName, demoName, skippedTests) && process.env.STRATEGY !== 'accessibility') {
-      return;
-    }
-
-    if (process.env.STRATEGY === 'accessibility'
-      && process.env.THEME?.startsWith('fluent-next')
-      && getIgnoredRules(testName).includes('color-contrast')) {
+    if (shouldSkipDemo(approach, widgetName, demoName, skippedTests)) {
       return;
     }
 
@@ -232,49 +159,24 @@ Object.values(FRAMEWORKS).forEach((approach) => {
           await execTestCafeCode(t, testCafeCodeSource);
         }
 
-        if (process.env.STRATEGY === 'accessibility') {
-          const ignoredRules = getIgnoredRules(testName);
-          const isDesignSystemFluent = process.env.THEME?.startsWith('fluent-next');
-          const colorContrastIgnored = ignoredRules.includes('color-contrast');
-          const options = isDesignSystemFluent
-            ? { runOnly: { type: 'rule' as const, values: colorContrastIgnored ? [] : ['color-contrast'] }, rules: {} }
-            : { rules: {} };
+        const consoleMessages = await t.getBrowserConsoleMessages();
+        const errors = [...consoleMessages.error, ...consoleMessages.warn]
+          .filter((e) => !knownWarnings.some((kw) => e.startsWith(kw)))
+          .filter((e) => !e.startsWith('[CSP Violation]'));
+        await t.expect(errors).eql([]);
 
-          ignoredRules.forEach((ruleName) => {
-            if (isDesignSystemFluent && ruleName === 'color-contrast') return;
-            options.rules[ruleName] = { enabled: false };
-          });
-
-          const axeResult = await axeCheck(t, '.demo-container', options);
-          const { error, results } = axeResult;
-
-          if (results.violations.length > 0) {
-            createMdReport({ testName, results });
-            await t.report(createTestCafeReport(results.violations));
-          }
-
-          await t.expect(error).notOk();
-          await t.expect(results.violations.length === 0).ok(createReport(results.violations));
-        } else {
-          const consoleMessages = await t.getBrowserConsoleMessages();
-          const errors = [...consoleMessages.error, ...consoleMessages.warn]
-            .filter((e) => !knownWarnings.some((kw) => e.startsWith(kw)))
-            .filter((e) => !e.startsWith('[CSP Violation]'));
-          await t.expect(errors).eql([]);
-
-          if (isCspEnabled()) {
-            const cspViolations = await getClientCspViolations();
-            writeCspReport(testName, approach, cspViolations);
-          }
-
-          const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-
-          await testScreenshot(t, takeScreenshot, `${testName}.png`, undefined, comparisonOptions);
-
-          await t
-            .expect(compareResults.isValid())
-            .ok(compareResults.errorMessages());
+        if (isCspEnabled()) {
+          const cspViolations = await getClientCspViolations();
+          writeCspReport(testName, approach, cspViolations);
         }
+
+        const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+        await testScreenshot(t, takeScreenshot, `${testName}.png`, undefined, comparisonOptions);
+
+        await t
+          .expect(compareResults.isValid())
+          .ok(compareResults.errorMessages());
       });
   });
 });

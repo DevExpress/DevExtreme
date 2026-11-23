@@ -15,8 +15,6 @@
         "test"
       ],
       "outputs": [
-        "{projectRoot}/accessibility_report.txt",
-        "{projectRoot}/accessibility_testcafe_report",
         "{projectRoot}/coverage"
       ]
     },
@@ -42,8 +40,6 @@
         "test"
       ],
       "outputs": [
-        "{projectRoot}/accessibility_report.txt",
-        "{projectRoot}/accessibility_testcafe_report",
         "{projectRoot}/testing/artifacts"
       ]
     },
