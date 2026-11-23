@@ -73,26 +73,32 @@ class HorizontalHeadersArea extends AreaItem {
   }
 
   protected _applyCustomStyles(options: AreaItemStyleOptions): void {
-    const { cssArray } = options;
-    const { cell } = options;
-    const { rowsCount } = options;
-    const { classArray } = options;
+    const {
+      cell,
+      cssArray,
+      classArray,
+      cellIndex,
+      cellsCount,
+      rowIndex,
+      rowsCount,
+      rtlEnabled,
+    } = options;
 
-    if (options.cellIndex === options.cellsCount - 1) {
-      cssArray.push(`${options.rtlEnabled ? 'border-left:' : 'border-right:'}0px`);
+    if (cellIndex === cellsCount - 1) {
+      cssArray.push(`${rtlEnabled ? 'border-left:' : 'border-right:'}0px`);
     }
 
-    if ((cell.rowspan === rowsCount - options.rowIndex) || (options.rowIndex + 1 === rowsCount)) {
+    if ((cell.rowspan === rowsCount - rowIndex) || (rowIndex + 1 === rowsCount)) {
       cssArray.push('border-bottom-width:0px');
     }
 
     if (cell.type === 'T' || cell.type === 'GT') {
       classArray.push(PIVOTGRID_ROW_TOTAL_CLASS);
     }
-    if (options.cell.type === 'T') {
+    if (cell.type === 'T') {
       classArray.push(PIVOTGRID_TOTAL_CLASS);
     }
-    if (options.cell.type === 'GT') {
+    if (cell.type === 'GT') {
       classArray.push(PIVOTGRID_GRAND_TOTAL_CLASS);
     }
 
@@ -132,8 +138,7 @@ class HorizontalHeadersArea extends AreaItem {
   }
 
   public renderScrollable(): void {
-    // @ts-expect-error dxScrollable is added to the renderer at runtime
-    this._groupElement?.dxScrollable({
+    this.renderGroupScrollable({
       useNative: false,
       useSimulatedScrollbar: false,
       showScrollbar: 'never',
@@ -176,7 +181,7 @@ class HorizontalHeadersArea extends AreaItem {
       return undefined;
     }
 
-    const tableOffset = offset - (parseInt(tableElement[0].style.left, 10) || 0);
+    const tableOffset = offset - (parseInt(tableElement.get<HTMLElement>(0).style.left, 10) || 0);
     const cells = tableElement.find('td').toArray() as HTMLTableCellElement[];
     const cell = cells.find((td) => td.colSpan === 1
       && td.offsetLeft <= tableOffset
@@ -239,8 +244,7 @@ class VerticalHeadersArea extends HorizontalHeadersArea {
   }
 
   public renderScrollable(): void {
-    // @ts-expect-error dxScrollable is added to the renderer at runtime
-    this._groupElement?.dxScrollable({
+    this.renderGroupScrollable({
       useNative: false,
       useSimulatedScrollbar: false,
       showScrollbar: 'never',
@@ -285,7 +289,7 @@ class VerticalHeadersArea extends HorizontalHeadersArea {
       return undefined;
     }
 
-    const tableOffset = offset - (parseInt(tableElement[0].style.top, 10) || 0);
+    const tableOffset = offset - (parseInt(tableElement.get<HTMLElement>(0).style.top, 10) || 0);
     const lastCells = tableElement.find('tr').toArray()
       .map((tr) => tr.childNodes[tr.childNodes.length - 1] as HTMLTableCellElement | undefined);
     const cell = lastCells.find((td) => td?.rowSpan === 1
@@ -318,7 +322,7 @@ class VerticalHeadersArea extends HorizontalHeadersArea {
   }
 
   public updateColspans(columnCount: number): void {
-    const tableElement: HTMLTableElement | undefined = this.tableElement()?.[0];
+    const tableElement = this.tableElement()?.get<HTMLTableElement>(0);
 
     if (!tableElement) {
       return;

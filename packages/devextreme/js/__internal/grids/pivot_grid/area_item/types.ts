@@ -1,15 +1,19 @@
+import type { DxElement } from '@js/core/element';
 import type { dxElementWrapper } from '@js/core/renderer';
-import type { CellPreparedEvent, Properties as PivotGridProperties } from '@js/ui/pivot_grid';
+import type { Properties as PivotGridProperties } from '@js/ui/pivot_grid';
 import type { ScrollOffset } from '@ts/core/utils/scroll';
 import type { DefaultActionArgs } from '@ts/core/widget/component';
 import type DOMComponent from '@ts/core/widget/dom_component';
 
-import type { PivotGridCellInfo, PivotGridColumnInfo } from '../data_controller/types';
+import type { HeaderItemType, PivotGridColumnInfo } from '../data_controller/types';
 
 export type AreaName = 'column' | 'row' | 'data' | 'fields';
 
-export type AreaItemCell = PivotGridColumnInfo
-  & Partial<Pick<PivotGridCellInfo, 'value' | 'rowType' | 'columnType'>>;
+export interface AreaItemCell extends PivotGridColumnInfo {
+  value?: unknown;
+  rowType?: HeaderItemType;
+  columnType?: HeaderItemType;
+}
 
 export type AreaItemOption<TName extends string> = TName extends keyof PivotGridProperties
   ? PivotGridProperties[TName]
@@ -30,25 +34,23 @@ export interface AreaItemComponent {
   _trigger: (eventName: string, eventArg: unknown) => void;
 }
 
-export interface AreaItemStyleOptions {
-  cellElement: undefined;
-  cell: AreaItemCell;
-  cellsCount: number;
+export interface AreaItemCellPosition {
   cellIndex: number;
-  rowElement: undefined;
+  cellsCount: number;
   rowIndex: number;
   rowsCount: number;
   rtlEnabled: boolean | undefined;
+}
+
+export interface AreaItemStyleOptions extends AreaItemCellPosition {
+  cellElement: undefined;
+  cell: AreaItemCell;
+  rowElement: undefined;
   classArray: string[];
   cssArray: string[];
 }
 
-export interface AreaItemCellContext {
-  cellIndex: number;
-  cellsCount: number;
-  rowIndex: number;
-  rowsCount: number;
-  rtlEnabled: boolean | undefined;
+export interface AreaItemCellContext extends AreaItemCellPosition {
   encodeHtml: boolean | undefined;
   isCellNavigationEnabled: boolean;
 }
@@ -62,10 +64,13 @@ export interface AreaItemCellAriaIndexOptions {
   rowIndexOffset: number;
 }
 
-export type AreaItemCellPreparedArgs = Pick<
-  CellPreparedEvent,
-  'area' | 'rowIndex' | 'columnIndex' | 'cellElement' | 'cell'
->;
+export interface AreaItemCellPreparedArgs {
+  area: AreaName;
+  rowIndex: number;
+  columnIndex: number;
+  cellElement: DxElement;
+  cell: AreaItemCell;
+}
 
 export interface AreaItemVirtualContentParams {
   top?: number;
