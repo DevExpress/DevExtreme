@@ -48,4 +48,6 @@ Follow the anatomy and rules in:
    `PROPERTY_TOKEN_<name>` to `packages/devextreme-angular/src/core/tokens/index.ts` (see
    [wrapper-angular.instructions.md](../instructions/wrapper-angular.instructions.md)).
 5. **Verify.** From `packages/devextreme`, run `pnpm run regenerate` and then `pnpm run lint-dts`. Type-check/build the affected wrapper package(s).
+   From the repo root, run `node .claude/skills/devextreme-wrappers/scripts/surface-check.mjs <component...>`
+   (or `--all` after a base-class change) to compare each wrapper's options/events with the `.d.ts`.
 6. **Report** the applied changes per framework and call out any breaking changes explicitly.
