@@ -13,6 +13,7 @@ import type { ScrollOffset, ScrollToFunc } from '@ts/core/utils/scroll';
 import { getMemoizeScrollTo } from '@ts/core/utils/scroll';
 import { foreachColumnInfo } from '@ts/grids/grid_core/virtual_columns/virtual_columns_core';
 import type Scrollable from '@ts/ui/scroll_view/scrollable';
+import type { ScrollableProperties } from '@ts/ui/scroll_view/scrollable';
 
 import { FAKE_TABLE_CLASS } from '../keyboard_navigation/const';
 import type {
@@ -408,13 +409,12 @@ abstract class AreaItem {
           rowIndex,
           columnIndex,
           cellElement: getPublicElement<HTMLTableCellElement>($cellElement),
-          // @ts-expect-error the data controller types the cell path as unknown[]
           cell,
         };
         if (hasEvent) {
           this.component._trigger('onCellPrepared', onCellPreparedArgs);
         } else {
-          // @ts-expect-error the default action args are typed for an unknown component
+          // @ts-expect-error the cell prepared args use internal cell and component types
           onCellPrepared?.(extend(onCellPreparedArgs, defaultActionArgs));
         }
       }
@@ -442,7 +442,7 @@ abstract class AreaItem {
 
   protected getRowsLength(): number {
     if (this._tableElement && this._tableElement.length > 0) {
-      const tableElement: HTMLTableElement = this._tableElement[0];
+      const tableElement = this._tableElement.get<HTMLTableElement>(0);
       return tableElement.rows.length;
     }
     return 0;
@@ -468,7 +468,7 @@ abstract class AreaItem {
     }
 
     this._tableHeight = totalHeight;
-    const tableElement: HTMLTableElement | undefined = this._tableElement?.[0];
+    const tableElement = this._tableElement?.get<HTMLTableElement>(0);
     if (tableElement) {
       tableElement.style.height = `${totalHeight}px`;
     }
@@ -571,8 +571,12 @@ abstract class AreaItem {
   }
 
   protected _getGroupElementSize(dimension: 'width' | 'height'): number | null {
-    // @ts-expect-error the group element is rendered here
-    const groupElement: HTMLElement = this.groupElement()[0];
+    const groupElement = this.groupElement()?.get<HTMLElement>(0);
+
+    if (!groupElement) {
+      return null;
+    }
+
     const size = groupElement.style[dimension];
 
     if (size.indexOf('px') > 0) {
@@ -631,7 +635,7 @@ abstract class AreaItem {
   }
 
   public reset(): void {
-    const tableElement: HTMLTableElement | undefined = this._tableElement?.[0];
+    const tableElement = this._tableElement?.get<HTMLTableElement>(0);
 
     this._fakeTable?.detach();
     this._fakeTable = null;
@@ -652,7 +656,7 @@ abstract class AreaItem {
   }
 
   protected _updateFakeTableVisibility(): void {
-    const tableElement: HTMLElement | undefined = this.tableElement()?.[0];
+    const tableElement = this.tableElement()?.get<HTMLElement>(0);
     const horizontalOffsetName = this.option('rtlEnabled') ? 'right' : 'left';
     const fakeTable = this._fakeTable;
 
@@ -660,7 +664,7 @@ abstract class AreaItem {
       return;
     }
 
-    const fakeTableElement: HTMLElement = fakeTable[0];
+    const fakeTableElement = fakeTable.get<HTMLElement>(0);
 
     if (
       tableElement.style.top === fakeTableElement.style.top
@@ -675,8 +679,8 @@ abstract class AreaItem {
   protected _moveFakeTableHorizontally(scrollPos: number | undefined): void {
     const rtlEnabled = this.option('rtlEnabled');
     const offsetStyleName = rtlEnabled ? 'right' : 'left';
-    const tableElement: HTMLElement | undefined = this.tableElement()?.[0];
-    const fakeTableElement: HTMLElement | undefined = this._fakeTable?.[0];
+    const tableElement = this.tableElement()?.get<HTMLElement>(0);
+    const fakeTableElement = this._fakeTable?.get<HTMLElement>(0);
 
     if (!tableElement || !fakeTableElement) {
       return;
@@ -684,9 +688,9 @@ abstract class AreaItem {
 
     const tableElementOffset = parseFloat(tableElement.style[offsetStyleName]);
     const offset = getFakeTableOffset(
-      scrollPos ?? NaN,
+      Number(scrollPos),
       tableElementOffset,
-      this._tableWidth ?? NaN,
+      Number(this._tableWidth),
       this.getGroupWidth() ?? 0,
     );
     if (parseFloat(fakeTableElement.style[offsetStyleName]) !== offset) {
@@ -695,8 +699,8 @@ abstract class AreaItem {
   }
 
   protected _moveFakeTableTop(scrollPos: number | undefined): void {
-    const tableElement: HTMLElement | undefined = this.tableElement()?.[0];
-    const fakeTableElement: HTMLElement | undefined = this._fakeTable?.[0];
+    const tableElement = this.tableElement()?.get<HTMLElement>(0);
+    const fakeTableElement = this._fakeTable?.get<HTMLElement>(0);
 
     if (!tableElement || !fakeTableElement) {
       return;
@@ -704,9 +708,9 @@ abstract class AreaItem {
 
     const tableElementOffsetTop = parseFloat(tableElement.style.top);
     const offsetTop = getFakeTableOffset(
-      scrollPos ?? NaN,
+      Number(scrollPos),
       tableElementOffsetTop,
-      this._tableHeight ?? NaN,
+      Number(this._tableHeight),
       this.getGroupHeight() ?? 0,
     );
 
@@ -738,7 +742,7 @@ abstract class AreaItem {
   public render(rootElement: dxElementWrapper, data: AreaItemCell[][]): void {
     if (this._tableElement) {
       try {
-        this._tableElement[0].innerHTML = '';
+        this._tableElement.get(0).innerHTML = '';
       } catch (e) {
         this._tableElement.empty();
       }
@@ -763,9 +767,13 @@ abstract class AreaItem {
     return scrollable;
   }
 
-  protected _getMemoizeScrollTo(): ScrollToFunc {
-    // @ts-expect-error the scrollable is rendered here
-    this._memoizeScrollTo ??= getMemoizeScrollTo(() => this._getScrollable());
+  protected renderGroupScrollable(options: ScrollableProperties): void {
+    // @ts-expect-error dxScrollable is not defined in dxElementWrapper
+    this._groupElement?.dxScrollable(options);
+  }
+
+  protected _getMemoizeScrollTo(scrollable: Scrollable): ScrollToFunc {
+    this._memoizeScrollTo ??= getMemoizeScrollTo(() => scrollable);
     return this._memoizeScrollTo;
   }
 
@@ -808,11 +816,11 @@ abstract class AreaItem {
     const scrollablePos = {
       ...pos,
       left: rtlEnabled && (areaName === 'column' || areaName === 'data')
-        ? this._getMaxLeftOffset(scrollable) - (pos.left ?? NaN)
+        ? this._getMaxLeftOffset(scrollable) - Number(pos.left)
         : pos.left,
     };
 
-    const memoizeScrollTo = this._getMemoizeScrollTo();
+    const memoizeScrollTo = this._getMemoizeScrollTo(scrollable);
     memoizeScrollTo(scrollablePos, force);
 
     if (this._virtualContent) {
