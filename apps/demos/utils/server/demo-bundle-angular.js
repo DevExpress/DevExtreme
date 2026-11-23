@@ -6,7 +6,9 @@ const path = require('path');
 const fs = require('fs');
 const os = require('os');
 const esbuild = require('esbuild');
-const { extractDemoHeadExtras, extractDemoBodyInner } = require('./demo-html');
+const {
+  extractDemoHeadExtras, extractDemoBodyInner, PACKAGE_CSS_RE, packageCssLinks,
+} = require('./demo-html');
 const { createEntryShimSource } = require('./demo-render-signal');
 const { discoverTestGlobalsFromContent } = require('../visual-tests/test-globals-bundle');
 const { readShardConfig, applyShard: applyShardGeneric } = require('./shard');
@@ -121,11 +123,39 @@ function testGlobalsShimSource(entries) {
 `;
 }
 
+// The viz widgets whose start-up animation the screenshot tests switch off (see
+// utils/visual-tests/playwright/demo-page.ts), by their Angular module name and public module.
+const VIZ_WIDGET_MODULES = {
+  Chart: ['dxChart', 'devextreme/viz/chart'],
+  PieChart: ['dxPieChart', 'devextreme/viz/pie_chart'],
+  PolarChart: ['dxPolarChart', 'devextreme/viz/polar_chart'],
+  CircularGauge: ['dxCircularGauge', 'devextreme/viz/circular_gauge'],
+  LinearGauge: ['dxLinearGauge', 'devextreme/viz/linear_gauge'],
+  BarGauge: ['dxBarGauge', 'devextreme/viz/bar_gauge'],
+  RangeSelector: ['dxRangeSelector', 'devextreme/viz/range_selector'],
+};
+
+// Hands the widget classes of the demo to the test page before the demo renders. The static
+// imports add nothing to the bundle: the demo imports the same modules. Outside the tests the hook
+// is not defined and nothing happens.
+function vizAnimationHookSource(demo) {
+  const source = findDemoTsFiles(demo.srcDir).map((file) => fs.readFileSync(file, 'utf8')).join('\n');
+  const used = Object.entries(VIZ_WIDGET_MODULES)
+    .filter(([widget]) => new RegExp(`\\bDx${widget}(Module|Component)\\b`).test(source));
+  if (used.length === 0) return '';
+  return `
+${used.map(([, [name, specifier]]) => `    import ${name} from ${JSON.stringify(specifier)};`).join('\n')}
+${used.map(([, [name]]) => `    window.dxTestDisableVizAnimation?.(${name}, ${JSON.stringify(name)});`).join('\n')}
+`;
+}
+
 function writeEntryShim(demo, entryPath) {
   fs.mkdirSync(GENERATED_SHIM_DIR, { recursive: true });
   const slug = `${demo.widget}-${demo.name}`.replace(/[^a-zA-Z0-9_.-]/g, '_');
   const dest = path.join(GENERATED_SHIM_DIR, `${slug}.ts`);
-  const source = createEntryShimSource(entryPath, { tsNoCheck: true }) + testGlobalsShimSource(demoTestGlobals(demo));
+  const source = createEntryShimSource(entryPath, { tsNoCheck: true })
+    + vizAnimationHookSource(demo)
+    + testGlobalsShimSource(demoTestGlobals(demo));
   fs.writeFileSync(dest, source);
   allEntryShims.add(dest);
   return dest;
@@ -144,10 +174,15 @@ const DEFAULT_BODY_INNER = `<div class="demo-container">
       <demo-app>Loading...</demo-app>
     </div>`;
 
-function buildHtml({ jsFiles, cssFiles, srcDir }) {
+function buildHtml({
+  jsFiles, cssFiles, packageCss = [], srcDir,
+}) {
+  const packageLinks = packageCssLinks(packageCss);
   const cssLinks = [
+    ...packageLinks,
     '<link rel="stylesheet" type="text/css" href="../../../../node_modules/devextreme-dist/css/dx.light.css" />',
-    ...extractDemoHeadExtras(srcDir),
+    // The demo's index.html is the page generated last time; its package links are already above.
+    ...extractDemoHeadExtras(srcDir).filter((tag) => !packageLinks.includes(tag)),
     ...cssFiles.map((f) => `<link rel="stylesheet" type="text/css" href="./${f}" />`),
   ].join('\n    ');
   const bodyInner = extractDemoBodyInner(srcDir) || DEFAULT_BODY_INNER;
@@ -318,7 +353,26 @@ function patchedSiblingPath(tsFile) {
   return path.join(path.dirname(tsFile), `${PATCHED_TS_PREFIX}${path.basename(tsFile)}`);
 }
 
-function patchComponentTs(tsFile) {
+const CSS_IMPORT_RE = /@import\s+(?:url\(\s*)?(['"])([^'"]+)\1\s*\)?\s*;?/g;
+
+// Writes a copy of a component style sheet without its package imports, which go to packageCss.
+function stripPackageCssImports(cssFile, packageCss) {
+  const original = fs.readFileSync(cssFile, 'utf8');
+  let stripped = false;
+  const patched = original.replace(CSS_IMPORT_RE, (match, _quote, spec) => {
+    if (!PACKAGE_CSS_RE.test(spec)) return match;
+    if (!packageCss.includes(spec)) packageCss.push(spec);
+    stripped = true;
+    return '';
+  });
+  if (!stripped) return null;
+  const dest = patchedSiblingPath(cssFile);
+  fs.writeFileSync(dest, patched);
+  allPatchedTsFiles.add(dest);
+  return dest;
+}
+
+function patchComponentTs(tsFile, packageCss = []) {
   if (!fs.existsSync(tsFile)) return null;
   const original = fs.readFileSync(tsFile, 'utf8');
   let patched = original;
@@ -333,6 +387,11 @@ function patchComponentTs(tsFile) {
     const fixed = aotRelativeFor(tsFile, spec);
     if (!fixed) return match;
     return `styleUrls: ['${fixed}']`;
+  });
+  patched = patched.replace(STYLE_URLS_INLINE_RE, (match, _quote, spec) => {
+    const cssFile = path.resolve(path.dirname(tsFile), spec);
+    const stripped = fs.existsSync(cssFile) && stripPackageCssImports(cssFile, packageCss);
+    return stripped ? `styleUrls: ['./${path.basename(stripped)}']` : match;
   });
   // Prepend @ts-nocheck so JIT-era demo code (never strictly typed) compiles under AOT.
   patched = `// @ts-nocheck\n${patched}`;
@@ -528,14 +587,15 @@ function makeCompilerPlugin(createCompilerPlugin, tsconfig, fileReplacements) {
 
 function prepareDemo(demo) {
   const fileReplacements = {};
+  const packageCss = [];
   for (const tsFile of findDemoTsFiles(path.join(demo.srcDir, 'app'))) {
-    const patched = patchComponentTs(tsFile);
+    const patched = patchComponentTs(tsFile, packageCss);
     if (patched) fileReplacements[tsFile] = patched;
   }
   const effectiveEntry = fileReplacements[demo.entry] || demo.entry;
   const shimEntry = writeEntryShim(demo, effectiveEntry);
   return {
-    ...demo, effectiveEntry, shimEntry, fileReplacements,
+    ...demo, effectiveEntry, shimEntry, fileReplacements, packageCss,
   };
 }
 
@@ -712,7 +772,9 @@ async function bundleDemo(demo, createCompilerPlugin, destDirOverride) {
   ];
   const cssFiles = outputs.filter((o) => o.endsWith('.css')).map((o) => path.basename(o));
 
-  fs.writeFileSync(path.join(destDir, 'index.html'), buildHtml({ jsFiles, cssFiles, srcDir: prepared.srcDir }));
+  fs.writeFileSync(path.join(destDir, 'index.html'), buildHtml({
+    jsFiles, cssFiles, packageCss: prepared.packageCss, srcDir: prepared.srcDir,
+  }));
   if (IS_GENERATE_MANIFESTS) writeDemoManifest(prepared, destDir);
   return { ok: true };
 }
@@ -756,7 +818,9 @@ async function bundleDemoBatch(batch, createCompilerPlugin) {
       ANGULAR_ZONE_SCRIPT,
       ...localJsFiles,
     ];
-    fs.writeFileSync(path.join(destDir, 'index.html'), buildHtml({ jsFiles, cssFiles, srcDir: demo.srcDir }));
+    fs.writeFileSync(path.join(destDir, 'index.html'), buildHtml({
+      jsFiles, cssFiles, packageCss: demo.packageCss, srcDir: demo.srcDir,
+    }));
     if (IS_GENERATE_MANIFESTS) writeDemoManifest(demo, destDir);
   }
 

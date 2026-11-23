@@ -4,7 +4,9 @@ const path = require('path');
 const fs = require('fs');
 const os = require('os');
 const esbuild = require('esbuild');
-const { extractDemoHeadExtras, extractDemoBodyInner } = require('./demo-html');
+const {
+  extractDemoHeadExtras, extractDemoBodyInner, PACKAGE_CSS_RE, packageCssLinks,
+} = require('./demo-html');
 const { virtualEntryPath, virtualEntryPlugin } = require('./demo-render-signal');
 const { readShardConfig, applyShard: applyShardGeneric } = require('./shard');
 
@@ -84,6 +86,23 @@ const ignoreMissingCssPlugin = {
     }));
   },
 };
+
+// Leaves a package style sheet out of bundle.css and collects it for a <link> before the theme.
+function packageCssPlugin(collected) {
+  return {
+    name: 'demo-bundle:package-css',
+    setup(build) {
+      build.onResolve({ filter: PACKAGE_CSS_RE }, (args) => {
+        if (!collected.includes(args.path)) collected.push(args.path);
+        return { path: args.path, namespace: 'demo-bundle-package-css' };
+      });
+      build.onLoad({ filter: /.*/, namespace: 'demo-bundle-package-css' }, () => ({
+        contents: '',
+        loader: 'css',
+      }));
+    },
+  };
+}
 
 const ANTI_FORGERY_PATH = path.join(DEMOS_APP_ROOT, 'shared', 'anti-forgery', 'fetch-override.js');
 const GLOBALIZE_BASE = path.join(NODE_MODULES, 'globalize', 'dist', 'globalize');
@@ -180,11 +199,14 @@ const DEFAULT_BODY_INNER = `<div class="demo-container">
     </div>`;
 
 function buildHtml({
-  jsFile, cssFiles, srcDir, framework,
+  jsFile, cssFiles, packageCss = [], srcDir, framework,
 }) {
+  const packageLinks = packageCssLinks(packageCss);
   const headLinks = [
+    ...packageLinks,
     '<link rel="stylesheet" type="text/css" href="../../../../node_modules/devextreme-dist/css/dx.light.css" />',
-    ...extractDemoHeadExtras(srcDir),
+    // The demo's index.html is the page generated last time; its package links are already above.
+    ...extractDemoHeadExtras(srcDir).filter((tag) => !packageLinks.includes(tag)),
     ...cssFiles.map((f) => `<link rel="stylesheet" type="text/css" href="./${f}" />`),
   ].join('\n    ');
 
@@ -230,12 +252,13 @@ async function bundleDemoTo({ srcDir, destDir, framework }) {
   fs.mkdirSync(destDir, { recursive: true });
 
   let result;
+  const packageCss = [];
   try {
     const shared = getSharedOptions(framework);
     result = await esbuild.build({
       ...shared,
       entryPoints: [virtualEntryPath(entry)],
-      plugins: [virtualEntryPlugin({ resolveDir: srcDir }), ...shared.plugins],
+      plugins: [virtualEntryPlugin({ resolveDir: srcDir }), packageCssPlugin(packageCss), ...shared.plugins],
       outdir: destDir,
       entryNames: 'bundle',
       assetNames: 'bundle',
@@ -260,7 +283,9 @@ async function bundleDemoTo({ srcDir, destDir, framework }) {
 
   if (IS_GENERATE_MANIFESTS) writeDemoManifest({ srcDir, destDir, framework });
 
-  return { ok: true, jsFiles, cssFiles };
+  return {
+    ok: true, jsFiles, cssFiles, packageCss,
+  };
 }
 
 async function bundleDemo(demo, { destDir: destDirOverride, framework = FRAMEWORK } = {}) {
@@ -271,7 +296,7 @@ async function bundleDemo(demo, { destDir: destDirOverride, framework = FRAMEWOR
   fs.writeFileSync(
     path.join(destDir, 'index.html'),
     buildHtml({
-      jsFile: result.jsFiles[0], cssFiles: result.cssFiles, srcDir: demo.srcDir, framework,
+      jsFile: result.jsFiles[0], cssFiles: result.cssFiles, packageCss: result.packageCss, srcDir: demo.srcDir, framework,
     }),
   );
 
