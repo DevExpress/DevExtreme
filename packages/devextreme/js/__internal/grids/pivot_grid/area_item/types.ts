@@ -4,9 +4,12 @@ import type { ScrollOffset } from '@ts/core/utils/scroll';
 import type { DefaultActionArgs } from '@ts/core/widget/component';
 import type DOMComponent from '@ts/core/widget/dom_component';
 
-import type { PivotGridCell } from '../types';
+import type { PivotGridCellInfo, PivotGridColumnInfo } from '../data_controller/types';
 
 export type AreaName = 'column' | 'row' | 'data' | 'fields';
+
+export type AreaItemCell = PivotGridColumnInfo
+  & Partial<Pick<PivotGridCellInfo, 'value' | 'rowType' | 'columnType'>>;
 
 export type AreaItemOption<TName extends string> = TName extends keyof PivotGridProperties
   ? PivotGridProperties[TName]
@@ -29,7 +32,7 @@ export interface AreaItemComponent {
 
 export interface AreaItemStyleOptions {
   cellElement: undefined;
-  cell: PivotGridCell;
+  cell: AreaItemCell;
   cellsCount: number;
   cellIndex: number;
   rowElement: undefined;

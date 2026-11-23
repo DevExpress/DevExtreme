@@ -8,6 +8,7 @@ import type { ScrollOffset } from '@ts/core/utils/scroll';
 
 import { AreaItem } from '../area_item/m_area_item';
 import type {
+  AreaItemCell,
   AreaItemComponent,
   AreaItemStyleOptions,
   AreaItemVirtualContentParams,
@@ -17,7 +18,6 @@ import {
   HORIZONTAL_HEADERS_AREA_CLASS as PIVOTGRID_AREA_COLUMN_CLASS,
   VERTICAL_HEADERS_AREA_CLASS as PIVOTGRID_AREA_ROW_CLASS,
 } from '../keyboard_navigation/const';
-import type { PivotGridCell } from '../types';
 
 const PIVOTGRID_AREA_CLASS = 'dx-pivotgrid-area';
 const PIVOTGRID_TOTAL_CLASS = 'dx-total';
@@ -32,9 +32,9 @@ const PIVOTGRID_EXPAND_BORDER = 'dx-expand-border';
 function getCellPath(
   tableElement: dxElementWrapper,
   cell: HTMLTableCellElement | undefined,
-): PivotGridCell['path'] {
+): AreaItemCell['path'] {
   if (cell) {
-    const { data } = tableElement.data<{ data: PivotGridCell[][] }>();
+    const { data } = tableElement.data<{ data: AreaItemCell[][] }>();
     const { rowIndex } = cell.parentNode as HTMLTableRowElement;
     const { cellIndex } = cell;
 
@@ -169,7 +169,7 @@ class HorizontalHeadersArea extends AreaItem {
     this._scrollBarWidth = scrollBarWidth;
   }
 
-  public getScrollPath(offset: number): PivotGridCell['path'] {
+  public getScrollPath(offset: number): AreaItemCell['path'] {
     const tableElement = this.tableElement();
 
     if (!tableElement) {
@@ -278,7 +278,7 @@ class VerticalHeadersArea extends HorizontalHeadersArea {
     this._scrollBarWidth = scrollBarWidth;
   }
 
-  public getScrollPath(offset: number): PivotGridCell['path'] {
+  public getScrollPath(offset: number): AreaItemCell['path'] {
     const tableElement = this.tableElement();
 
     if (!tableElement) {
@@ -302,7 +302,7 @@ class VerticalHeadersArea extends HorizontalHeadersArea {
 
   protected _getRowClassNames(
     rowIndex: number,
-    cell: PivotGridCell | undefined,
+    cell: AreaItemCell | undefined,
     rowClassNames: string[],
   ): void {
     if (rowIndex !== 0 && cell?.expanded && !rowClassNames.includes(PIVOTGRID_EXPAND_BORDER)) {
