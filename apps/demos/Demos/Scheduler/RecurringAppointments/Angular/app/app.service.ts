@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-export class Appointment {
+export interface Appointment {
   text: string;
 
   roomId: number[];
@@ -14,7 +14,7 @@ export class Appointment {
   recurrenceException?: string;
 }
 
-export class Resource {
+export interface Resource {
   text: string;
 
   id: number;

@@ -4,6 +4,7 @@ import {
 } from '@angular/core';
 import { DxSchedulerModule, DxRadioGroupModule } from 'devextreme-angular';
 import type { DxRadioGroupTypes } from 'devextreme-angular/ui/radio-group';
+import type { DxSchedulerTypes } from 'devextreme-angular/ui/scheduler';
 import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -34,9 +35,9 @@ export class AppComponent {
     'week',
   ];
 
-  readonly allDayPanelMode = signal('allDay');
+  readonly allDayPanelMode = signal<DxSchedulerTypes.AllDayPanelMode>('allDay');
 
-  readonly allDayPanelModes = ['all', 'allDay', 'hidden'];
+  readonly allDayPanelModes: DxSchedulerTypes.AllDayPanelMode[] = ['all', 'allDay', 'hidden'];
 
   onChangeAllDayPanelMode(e: DxRadioGroupTypes.ValueChangedEvent) {
     this.allDayPanelMode.set(e.value);

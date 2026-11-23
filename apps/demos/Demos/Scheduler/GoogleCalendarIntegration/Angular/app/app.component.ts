@@ -28,7 +28,7 @@ export class AppComponent {
 
   readonly currentDate = new Date(2017, 4, 25);
 
-  private getData(requestOptions: Record<string, unknown>) {
+  private getData(params: Record<string, boolean>) {
     const PUBLIC_KEY = 'AIzaSyBnNAISIUKe6xdhq1_rjor2rxoI3UlMY7k';
     const CALENDAR_ID = 'f7jnetm22dsjc3npc2lu3buvu4@group.calendar.google.com';
     const dataUrl = [
@@ -38,8 +38,8 @@ export class AppComponent {
       PUBLIC_KEY,
     ].join('');
 
-    return lastValueFrom(this.http.get(dataUrl, requestOptions))
-      .then(({ items }: Record<string, unknown>) => items);
+    return lastValueFrom(this.http.get<{ items: unknown[] }>(dataUrl, { params }))
+      .then(({ items }) => items);
   }
 }
 

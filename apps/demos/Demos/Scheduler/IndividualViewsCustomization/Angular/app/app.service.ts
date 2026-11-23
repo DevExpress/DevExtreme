@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-export class Data {
+export interface Data {
   text: string;
 
   priorityId: number;
@@ -14,7 +14,7 @@ export class Data {
   recurrenceRule?: string;
 }
 
-export class PriorityData {
+export interface PriorityData {
   text: string;
 
   id: number;
@@ -22,7 +22,7 @@ export class PriorityData {
   color: string;
 }
 
-export class TypeData {
+export interface TypeData {
   text: string;
 
   id: number;
