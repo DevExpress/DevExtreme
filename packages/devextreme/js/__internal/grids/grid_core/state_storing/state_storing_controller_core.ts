@@ -187,9 +187,9 @@ export class StateStoringController<
     return loadResult;
   }
 
-  protected state(): TState;
-  protected state(state: TState | undefined): void;
-  protected state(...args: [state?: TState]): TState | void {
+  public state(): TState;
+  public state(state: TState | undefined): void;
+  public state(...args: [state?: TState]): TState | void {
     if (!args.length) {
       return extend(true, {}, this._state);
     }
@@ -200,7 +200,7 @@ export class StateStoringController<
     return undefined;
   }
 
-  protected save(): void {
+  public save(): void {
     clearTimeout(this._savingTimeoutID);
 
     // eslint-disable-next-line no-restricted-globals
