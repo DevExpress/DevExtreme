@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     Component,
     OnInit,
@@ -10,10 +8,6 @@ import {
     SkipSelf,
     Input
 } from '@angular/core';
-
-
-
-
 import type { ExportFormat } from 'devextreme/common';
 import type { DataGridExportFormat } from 'devextreme/ui/data_grid';
 
@@ -22,7 +16,6 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-export',
@@ -109,7 +102,6 @@ export class DxoExportComponent extends NestedOption implements OnDestroy, OnIni
         return 'export';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -125,7 +117,6 @@ export class DxoExportComponent extends NestedOption implements OnDestroy, OnIni
     ngOnDestroy() {
         this._addRemovedOption(this._getOptionPath());
     }
-
 
 }
 

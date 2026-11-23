@@ -1,7 +1,5 @@
 /* tslint:disable:max-line-length */
-
 /* tslint:disable:use-input-property-decorator */
-
 import {
     Component,
     OnInit,
@@ -11,16 +9,11 @@ import {
     SkipSelf
 } from '@angular/core';
 
-
-
-
-
 import {
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxoPager } from './base/pager';
-
 
 @Component({
     selector: 'dxo-pager',
@@ -45,7 +38,6 @@ export class DxoPagerComponent extends DxoPager implements OnDestroy, OnInit  {
         return 'pager';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -61,7 +53,6 @@ export class DxoPagerComponent extends DxoPager implements OnDestroy, OnInit  {
     ngOnDestroy() {
         this._addRemovedOption(this._getOptionPath());
     }
-
 
 }
 

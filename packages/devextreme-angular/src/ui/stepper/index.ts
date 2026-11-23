@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     TransferState,
     Component,
@@ -9,7 +7,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -30,7 +27,6 @@ import type { Orientation } from 'devextreme/common';
 
 import DxStepper from 'devextreme/ui/stepper';
 
-
 import {
     DxComponent,
     DxTemplateHost,
@@ -45,8 +41,8 @@ import {
 
 import { DxiStepperItemModule } from 'devextreme-angular/ui/stepper/nested';
 import { 
-           PROPERTY_TOKEN_items,
-     } from 'devextreme-angular/core/tokens';
+    PROPERTY_TOKEN_items,
+} from 'devextreme-angular/core/tokens';
 
 
 
@@ -80,7 +76,6 @@ export class DxStepperComponent<TItem = any, TKey = any> extends DxComponent imp
         this._setOption('accessKey', value);
     }
 
-
     
     @Input()
     get activeStateEnabled(): boolean {
@@ -89,7 +84,6 @@ export class DxStepperComponent<TItem = any, TKey = any> extends DxComponent imp
     set activeStateEnabled(value: boolean) {
         this._setOption('activeStateEnabled', value);
     }
-
 
     
     @Input()
@@ -100,7 +94,6 @@ export class DxStepperComponent<TItem = any, TKey = any> extends DxComponent imp
         this._setOption('dataSource', value);
     }
 
-
     
     @Input()
     get disabled(): boolean {
@@ -109,7 +102,6 @@ export class DxStepperComponent<TItem = any, TKey = any> extends DxComponent imp
     set disabled(value: boolean) {
         this._setOption('disabled', value);
     }
-
 
     
     @Input()
@@ -120,7 +112,6 @@ export class DxStepperComponent<TItem = any, TKey = any> extends DxComponent imp
         this._setOption('elementAttr', value);
     }
 
-
     
     @Input()
     get focusStateEnabled(): boolean {
@@ -129,7 +120,6 @@ export class DxStepperComponent<TItem = any, TKey = any> extends DxComponent imp
     set focusStateEnabled(value: boolean) {
         this._setOption('focusStateEnabled', value);
     }
-
 
     
     @Input()
@@ -140,7 +130,6 @@ export class DxStepperComponent<TItem = any, TKey = any> extends DxComponent imp
         this._setOption('height', value);
     }
 
-
     
     @Input()
     get hint(): string | undefined {
@@ -149,7 +138,6 @@ export class DxStepperComponent<TItem = any, TKey = any> extends DxComponent imp
     set hint(value: string | undefined) {
         this._setOption('hint', value);
     }
-
 
     
     @Input()
@@ -160,7 +148,6 @@ export class DxStepperComponent<TItem = any, TKey = any> extends DxComponent imp
         this._setOption('hoverStateEnabled', value);
     }
 
-
     
     @Input()
     get items(): Array<dxStepperItem> {
@@ -169,7 +156,6 @@ export class DxStepperComponent<TItem = any, TKey = any> extends DxComponent imp
     set items(value: Array<dxStepperItem>) {
         this._setOption('items', value);
     }
-
 
     
     @Input()
@@ -180,7 +166,6 @@ export class DxStepperComponent<TItem = any, TKey = any> extends DxComponent imp
         this._setOption('itemTemplate', value);
     }
 
-
     
     @Input()
     get linear(): boolean {
@@ -189,7 +174,6 @@ export class DxStepperComponent<TItem = any, TKey = any> extends DxComponent imp
     set linear(value: boolean) {
         this._setOption('linear', value);
     }
-
 
     
     @Input()
@@ -200,7 +184,6 @@ export class DxStepperComponent<TItem = any, TKey = any> extends DxComponent imp
         this._setOption('orientation', value);
     }
 
-
     
     @Input()
     get rtlEnabled(): boolean {
@@ -209,7 +192,6 @@ export class DxStepperComponent<TItem = any, TKey = any> extends DxComponent imp
     set rtlEnabled(value: boolean) {
         this._setOption('rtlEnabled', value);
     }
-
 
     
     @Input()
@@ -220,7 +202,6 @@ export class DxStepperComponent<TItem = any, TKey = any> extends DxComponent imp
         this._setOption('selectedIndex', value);
     }
 
-
     
     @Input()
     get selectedItem(): any | null {
@@ -229,7 +210,6 @@ export class DxStepperComponent<TItem = any, TKey = any> extends DxComponent imp
     set selectedItem(value: any | null) {
         this._setOption('selectedItem', value);
     }
-
 
     
     @Input()
@@ -240,7 +220,6 @@ export class DxStepperComponent<TItem = any, TKey = any> extends DxComponent imp
         this._setOption('selectOnFocus', value);
     }
 
-
     
     @Input()
     get tabIndex(): number {
@@ -250,7 +229,6 @@ export class DxStepperComponent<TItem = any, TKey = any> extends DxComponent imp
         this._setOption('tabIndex', value);
     }
 
-
     
     @Input()
     get visible(): boolean {
@@ -259,7 +237,6 @@ export class DxStepperComponent<TItem = any, TKey = any> extends DxComponent imp
     set visible(value: boolean) {
         this._setOption('visible', value);
     }
-
 
     
     @Input()
@@ -271,211 +248,144 @@ export class DxStepperComponent<TItem = any, TKey = any> extends DxComponent imp
     }
 
     /**
-    
      * [descr:undefined]
-    
-    
      */
     @Output() onDisposing: EventEmitter<DisposingEvent>;
 
     /**
-    
      * [descr:undefined]
-    
-    
      */
     @Output() onInitialized: EventEmitter<InitializedEvent>;
 
     /**
-    
      * [descr:undefined]
-    
-    
      */
     @Output() onItemClick: EventEmitter<ItemClickEvent>;
 
     /**
-    
      * [descr:undefined]
-    
-    
      */
     @Output() onItemContextMenu: EventEmitter<ItemContextMenuEvent>;
 
     /**
-    
      * [descr:undefined]
-    
-    
      */
     @Output() onItemRendered: EventEmitter<ItemRenderedEvent>;
 
     /**
-    
      * [descr:undefined]
-    
-    
      */
     @Output() onOptionChanged: EventEmitter<OptionChangedEvent>;
 
     /**
-    
      * [descr:undefined]
-    
-    
      */
     @Output() onSelectionChanged: EventEmitter<SelectionChangedEvent>;
 
     /**
-    
      * [descr:undefined]
-    
-    
      */
     @Output() onSelectionChanging: EventEmitter<SelectionChangingEvent>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() accessKeyChange: EventEmitter<string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() activeStateEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() dataSourceChange: EventEmitter<Array<dxStepperItem> | DataSource | DataSourceOptions | null | Store | string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() disabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() elementAttrChange: EventEmitter<Record<string, any>>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() focusStateEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() heightChange: EventEmitter<number | string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() hintChange: EventEmitter<string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() hoverStateEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() itemsChange: EventEmitter<Array<dxStepperItem>>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() itemTemplateChange: EventEmitter<any>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() linearChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() orientationChange: EventEmitter<Orientation>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() rtlEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() selectedIndexChange: EventEmitter<number>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() selectedItemChange: EventEmitter<any | null>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() selectOnFocusChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() tabIndexChange: EventEmitter<number>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() visibleChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() widthChange: EventEmitter<number | string | undefined>;
-
-
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,

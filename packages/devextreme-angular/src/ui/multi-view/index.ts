@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     TransferState,
     Component,
@@ -9,7 +7,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -29,7 +26,6 @@ import type { Store } from 'devextreme/data/store';
 
 import DxMultiView from 'devextreme/ui/multi_view';
 
-
 import {
     DxComponent,
     DxTemplateHost,
@@ -45,13 +41,12 @@ import { DxiItemModule } from 'devextreme-angular/ui/nested';
 
 import { DxiMultiViewItemModule } from 'devextreme-angular/ui/multi-view/nested';
 import { 
-           PROPERTY_TOKEN_items,
-     } from 'devextreme-angular/core/tokens';
+    PROPERTY_TOKEN_items,
+} from 'devextreme-angular/core/tokens';
 
 
 /**
  * [descr:dxMultiView]
-
  */
 @Component({
     selector: 'dx-multi-view',
@@ -76,7 +71,6 @@ export class DxMultiViewComponent<TItem = any, TKey = any> extends DxComponent i
 
     /**
      * [descr:WidgetOptions.accessKey]
-    
      */
     @Input()
     get accessKey(): string | undefined {
@@ -86,10 +80,8 @@ export class DxMultiViewComponent<TItem = any, TKey = any> extends DxComponent i
         this._setOption('accessKey', value);
     }
 
-
     /**
      * [descr:WidgetOptions.activeStateEnabled]
-    
      */
     @Input()
     get activeStateEnabled(): boolean {
@@ -99,10 +91,8 @@ export class DxMultiViewComponent<TItem = any, TKey = any> extends DxComponent i
         this._setOption('activeStateEnabled', value);
     }
 
-
     /**
      * [descr:dxMultiViewOptions.animationEnabled]
-    
      */
     @Input()
     get animationEnabled(): boolean {
@@ -112,10 +102,8 @@ export class DxMultiViewComponent<TItem = any, TKey = any> extends DxComponent i
         this._setOption('animationEnabled', value);
     }
 
-
     /**
      * [descr:dxMultiViewOptions.dataSource]
-    
      */
     @Input()
     get dataSource(): Array<any | dxMultiViewItem | string> | DataSource | DataSourceOptions | null | Store | string {
@@ -125,10 +113,8 @@ export class DxMultiViewComponent<TItem = any, TKey = any> extends DxComponent i
         this._setOption('dataSource', value);
     }
 
-
     /**
      * [descr:dxMultiViewOptions.deferRendering]
-    
      */
     @Input()
     get deferRendering(): boolean {
@@ -138,10 +124,8 @@ export class DxMultiViewComponent<TItem = any, TKey = any> extends DxComponent i
         this._setOption('deferRendering', value);
     }
 
-
     /**
      * [descr:WidgetOptions.disabled]
-    
      */
     @Input()
     get disabled(): boolean {
@@ -151,10 +135,8 @@ export class DxMultiViewComponent<TItem = any, TKey = any> extends DxComponent i
         this._setOption('disabled', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.elementAttr]
-    
      */
     @Input()
     get elementAttr(): Record<string, any> {
@@ -164,10 +146,8 @@ export class DxMultiViewComponent<TItem = any, TKey = any> extends DxComponent i
         this._setOption('elementAttr', value);
     }
 
-
     /**
      * [descr:dxMultiViewOptions.focusStateEnabled]
-    
      */
     @Input()
     get focusStateEnabled(): boolean {
@@ -177,10 +157,8 @@ export class DxMultiViewComponent<TItem = any, TKey = any> extends DxComponent i
         this._setOption('focusStateEnabled', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.height]
-    
      */
     @Input()
     get height(): number | string | undefined {
@@ -190,10 +168,8 @@ export class DxMultiViewComponent<TItem = any, TKey = any> extends DxComponent i
         this._setOption('height', value);
     }
 
-
     /**
      * [descr:WidgetOptions.hint]
-    
      */
     @Input()
     get hint(): string | undefined {
@@ -203,10 +179,8 @@ export class DxMultiViewComponent<TItem = any, TKey = any> extends DxComponent i
         this._setOption('hint', value);
     }
 
-
     /**
      * [descr:WidgetOptions.hoverStateEnabled]
-    
      */
     @Input()
     get hoverStateEnabled(): boolean {
@@ -216,10 +190,8 @@ export class DxMultiViewComponent<TItem = any, TKey = any> extends DxComponent i
         this._setOption('hoverStateEnabled', value);
     }
 
-
     /**
      * [descr:CollectionWidgetOptions.itemHoldTimeout]
-    
      */
     @Input()
     get itemHoldTimeout(): number {
@@ -229,10 +201,8 @@ export class DxMultiViewComponent<TItem = any, TKey = any> extends DxComponent i
         this._setOption('itemHoldTimeout', value);
     }
 
-
     /**
      * [descr:dxMultiViewOptions.items]
-    
      */
     @Input()
     get items(): Array<any | dxMultiViewItem | string> {
@@ -242,10 +212,8 @@ export class DxMultiViewComponent<TItem = any, TKey = any> extends DxComponent i
         this._setOption('items', value);
     }
 
-
     /**
      * [descr:CollectionWidgetOptions.itemTemplate]
-    
      */
     @Input()
     get itemTemplate(): any {
@@ -255,10 +223,8 @@ export class DxMultiViewComponent<TItem = any, TKey = any> extends DxComponent i
         this._setOption('itemTemplate', value);
     }
 
-
     /**
      * [descr:dxMultiViewOptions.loop]
-    
      */
     @Input()
     get loop(): boolean {
@@ -268,10 +234,8 @@ export class DxMultiViewComponent<TItem = any, TKey = any> extends DxComponent i
         this._setOption('loop', value);
     }
 
-
     /**
      * [descr:CollectionWidgetOptions.noDataText]
-    
      */
     @Input()
     get noDataText(): string {
@@ -281,10 +245,8 @@ export class DxMultiViewComponent<TItem = any, TKey = any> extends DxComponent i
         this._setOption('noDataText', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
-    
      */
     @Input()
     get rtlEnabled(): boolean {
@@ -294,10 +256,8 @@ export class DxMultiViewComponent<TItem = any, TKey = any> extends DxComponent i
         this._setOption('rtlEnabled', value);
     }
 
-
     /**
      * [descr:dxMultiViewOptions.selectedIndex]
-    
      */
     @Input()
     get selectedIndex(): number {
@@ -307,10 +267,8 @@ export class DxMultiViewComponent<TItem = any, TKey = any> extends DxComponent i
         this._setOption('selectedIndex', value);
     }
 
-
     /**
      * [descr:CollectionWidgetOptions.selectedItem]
-    
      */
     @Input()
     get selectedItem(): any | null {
@@ -320,10 +278,8 @@ export class DxMultiViewComponent<TItem = any, TKey = any> extends DxComponent i
         this._setOption('selectedItem', value);
     }
 
-
     /**
      * [descr:dxMultiViewOptions.swipeEnabled]
-    
      */
     @Input()
     get swipeEnabled(): boolean {
@@ -333,10 +289,8 @@ export class DxMultiViewComponent<TItem = any, TKey = any> extends DxComponent i
         this._setOption('swipeEnabled', value);
     }
 
-
     /**
      * [descr:WidgetOptions.tabIndex]
-    
      */
     @Input()
     get tabIndex(): number {
@@ -346,10 +300,8 @@ export class DxMultiViewComponent<TItem = any, TKey = any> extends DxComponent i
         this._setOption('tabIndex', value);
     }
 
-
     /**
      * [descr:WidgetOptions.visible]
-    
      */
     @Input()
     get visible(): boolean {
@@ -359,10 +311,8 @@ export class DxMultiViewComponent<TItem = any, TKey = any> extends DxComponent i
         this._setOption('visible', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.width]
-    
      */
     @Input()
     get width(): number | string | undefined {
@@ -373,240 +323,164 @@ export class DxMultiViewComponent<TItem = any, TKey = any> extends DxComponent i
     }
 
     /**
-    
      * [descr:dxMultiViewOptions.onContentReady]
-    
-    
      */
     @Output() onContentReady: EventEmitter<ContentReadyEvent>;
 
     /**
-    
      * [descr:dxMultiViewOptions.onDisposing]
-    
-    
      */
     @Output() onDisposing: EventEmitter<DisposingEvent>;
 
     /**
-    
      * [descr:dxMultiViewOptions.onInitialized]
-    
-    
      */
     @Output() onInitialized: EventEmitter<InitializedEvent>;
 
     /**
-    
      * [descr:dxMultiViewOptions.onItemClick]
-    
-    
      */
     @Output() onItemClick: EventEmitter<ItemClickEvent>;
 
     /**
-    
      * [descr:dxMultiViewOptions.onItemContextMenu]
-    
-    
      */
     @Output() onItemContextMenu: EventEmitter<ItemContextMenuEvent>;
 
     /**
-    
      * [descr:dxMultiViewOptions.onItemHold]
-    
-    
      */
     @Output() onItemHold: EventEmitter<ItemHoldEvent>;
 
     /**
-    
      * [descr:dxMultiViewOptions.onItemRendered]
-    
-    
      */
     @Output() onItemRendered: EventEmitter<ItemRenderedEvent>;
 
     /**
-    
      * [descr:dxMultiViewOptions.onOptionChanged]
-    
-    
      */
     @Output() onOptionChanged: EventEmitter<OptionChangedEvent>;
 
     /**
-    
      * [descr:dxMultiViewOptions.onSelectionChanged]
-    
-    
      */
     @Output() onSelectionChanged: EventEmitter<SelectionChangedEvent>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() accessKeyChange: EventEmitter<string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() activeStateEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() animationEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() dataSourceChange: EventEmitter<Array<any | dxMultiViewItem | string> | DataSource | DataSourceOptions | null | Store | string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() deferRenderingChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() disabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() elementAttrChange: EventEmitter<Record<string, any>>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() focusStateEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() heightChange: EventEmitter<number | string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() hintChange: EventEmitter<string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() hoverStateEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() itemHoldTimeoutChange: EventEmitter<number>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() itemsChange: EventEmitter<Array<any | dxMultiViewItem | string>>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() itemTemplateChange: EventEmitter<any>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() loopChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() noDataTextChange: EventEmitter<string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() rtlEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() selectedIndexChange: EventEmitter<number>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() selectedItemChange: EventEmitter<any | null>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() swipeEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() tabIndexChange: EventEmitter<number>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() visibleChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() widthChange: EventEmitter<number | string | undefined>;
-
-
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,

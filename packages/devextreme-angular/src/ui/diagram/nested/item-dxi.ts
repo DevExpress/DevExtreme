@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     Component,
     NgModule,
@@ -10,10 +8,6 @@ import {
     ContentChildren,
     QueryList
 } from '@angular/core';
-
-
-
-
 import type { Command, CustomCommand } from 'devextreme/ui/diagram';
 import type { ToolbarItemLocation } from 'devextreme/common';
 
@@ -107,7 +101,6 @@ export class DxiDiagramItemComponent extends CollectionNestedOption {
         return 'items';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -120,7 +113,6 @@ export class DxiDiagramItemComponent extends CollectionNestedOption {
     ngOnDestroy() {
         this._deleteRemovedOptions(this._fullOptionPath());
     }
-
 }
 
 @NgModule({

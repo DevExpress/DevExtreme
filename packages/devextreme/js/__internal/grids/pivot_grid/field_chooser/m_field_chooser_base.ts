@@ -23,7 +23,7 @@ import gridCoreUtils from '@ts/grids/grid_core/utils';
 
 import type { RovingTabIndexComponent } from '../keyboard_navigation/roving_tab_index';
 import { RovingTabIndex } from '../keyboard_navigation/roving_tab_index';
-import SortableModule from '../sortable/m_sortable';
+import SortableModule from '../sortable/sortable';
 import { createPath, foreachTree } from '../widget_utils';
 import { ATTRIBUTES, CLASSES, FIELD_DATA_KEY } from './const';
 import { dragAndDropItemRender } from './dom';

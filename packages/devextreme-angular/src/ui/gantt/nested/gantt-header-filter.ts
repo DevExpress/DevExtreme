@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     Component,
     OnInit,
@@ -10,10 +8,6 @@ import {
     SkipSelf,
     Input
 } from '@angular/core';
-
-
-
-
 import type { HeaderFilterSearchConfig } from 'devextreme/common/grids';
 import type { dxGanttHeaderFilterTexts } from 'devextreme/ui/gantt';
 
@@ -22,7 +16,6 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-gantt-gantt-header-filter',
@@ -101,7 +94,6 @@ export class DxoGanttGanttHeaderFilterComponent extends NestedOption implements 
         return 'headerFilter';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -117,7 +109,6 @@ export class DxoGanttGanttHeaderFilterComponent extends NestedOption implements 
     ngOnDestroy() {
         this._addRemovedOption(this._getOptionPath());
     }
-
 
 }
 

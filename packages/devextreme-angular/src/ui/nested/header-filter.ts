@@ -1,7 +1,5 @@
 /* tslint:disable:max-line-length */
-
 /* tslint:disable:use-input-property-decorator */
-
 import {
     Component,
     OnInit,
@@ -11,16 +9,11 @@ import {
     SkipSelf
 } from '@angular/core';
 
-
-
-
-
 import {
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxoColumnHeaderFilter } from './base/column-header-filter';
-
 
 @Component({
     selector: 'dxo-header-filter',
@@ -49,7 +42,6 @@ export class DxoHeaderFilterComponent extends DxoColumnHeaderFilter implements O
         return 'headerFilter';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -65,7 +57,6 @@ export class DxoHeaderFilterComponent extends DxoColumnHeaderFilter implements O
     ngOnDestroy() {
         this._addRemovedOption(this._getOptionPath());
     }
-
 
 }
 

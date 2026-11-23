@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     Component,
     NgModule,
@@ -10,10 +8,6 @@ import {
     ContentChildren,
     QueryList
 } from '@angular/core';
-
-
-
-
 import type { dxFileManagerContextMenuItem, FileManagerPredefinedContextMenuItem, FileManagerPredefinedToolbarItem } from 'devextreme/ui/file_manager';
 import type { LocateInMenuMode, ShowTextMode } from 'devextreme/ui/toolbar';
 import type { ToolbarItemLocation, ToolbarItemComponent } from 'devextreme/common';
@@ -180,7 +174,6 @@ export class DxiFileManagerItemComponent extends CollectionNestedOption {
         return 'items';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -193,7 +186,6 @@ export class DxiFileManagerItemComponent extends CollectionNestedOption {
     ngOnDestroy() {
         this._deleteRemovedOptions(this._fullOptionPath());
     }
-
 }
 
 @NgModule({

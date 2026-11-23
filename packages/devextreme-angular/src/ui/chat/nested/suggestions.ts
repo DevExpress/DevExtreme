@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     Component,
     OnInit,
@@ -14,10 +12,6 @@ import {
     ContentChildren,
     QueryList
 } from '@angular/core';
-
-
-
-
 import type { dxButtonGroupItem, ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, OptionChangedEvent, SelectionChangedEvent } from 'devextreme/ui/button_group';
 import type { SingleMultipleOrNone, ButtonStyle } from 'devextreme/common';
 
@@ -263,7 +257,6 @@ export class DxoChatSuggestionsComponent extends NestedOption implements OnDestr
         return 'suggestions';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -284,7 +277,6 @@ export class DxoChatSuggestionsComponent extends NestedOption implements OnDestr
     ngOnDestroy() {
         this._addRemovedOption(this._getOptionPath());
     }
-
 
 }
 

@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     Component,
     OnInit,
@@ -14,10 +12,6 @@ import {
     ContentChildren,
     QueryList
 } from '@angular/core';
-
-
-
-
 import type * as CommonChartTypes from 'devextreme/common/charts';
 import type { DashStyle, Font, DiscreteAxisDivisionMode, LabelOverlap, TimeInterval, AxisScaleType, ChartsDataType, ValueAxisVisualRangeUpdateMode } from 'devextreme/common/charts';
 import type { Format } from 'devextreme/common/core/localization';
@@ -335,7 +329,6 @@ export class DxoPolarChartValueAxisComponent extends NestedOption implements OnD
         return 'valueAxis';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -355,7 +348,6 @@ export class DxoPolarChartValueAxisComponent extends NestedOption implements OnD
     ngOnDestroy() {
         this._addRemovedOption(this._getOptionPath());
     }
-
 
 }
 

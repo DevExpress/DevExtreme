@@ -35,7 +35,7 @@ export default [
       'utils/templates/**/*.tsx',
       '**/.DS_Store',
 
-      '**/*.{png,json,mjs,css,html,md}',
+      '**/*.{png,json,mjs,css,html,md,sh}',
     ],
   },
 
@@ -443,6 +443,13 @@ export default [
     },
     files: ['testing/**/*.{js,ts}', 'utils/visual-tests/**/*.*'],
   })),
+
+  {
+    files: ['playwright.config.ts'],
+    rules: {
+      'import/no-extraneous-dependencies': ['error', { devDependencies: true }],
+    },
+  },
 
   {
     files: ['testing/**/*.{js,ts}'],

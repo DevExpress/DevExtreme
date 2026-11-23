@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     Component,
     OnInit,
@@ -13,16 +11,11 @@ import {
     EventEmitter
 } from '@angular/core';
 
-
-
-
-
 import {
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-grid-size',
@@ -59,7 +52,6 @@ export class DxoGridSizeComponent extends NestedOption implements OnDestroy, OnI
         return 'gridSize';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -79,7 +71,6 @@ export class DxoGridSizeComponent extends NestedOption implements OnDestroy, OnI
     ngOnDestroy() {
         this._addRemovedOption(this._getOptionPath());
     }
-
 
 }
 
