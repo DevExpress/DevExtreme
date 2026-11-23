@@ -9,9 +9,8 @@ import {
 } from '@jest/globals';
 import $ from '@js/core/renderer';
 
-import type { AreaItemComponent } from '../area_item/types';
+import type { AreaItemCell, AreaItemComponent } from '../area_item/types';
 import { FAKE_TABLE_CLASS } from '../keyboard_navigation/const';
-import type { PivotGridCell } from '../types';
 import { HorizontalHeadersArea, VerticalHeadersArea } from './m_headers_area';
 
 const TABLE_OFFSET = 1000;
@@ -51,7 +50,7 @@ describe('Headers areas', () => {
 
   describe('HorizontalHeadersArea render cells', () => {
     const renderArea = (
-      data: PivotGridCell[][],
+      data: AreaItemCell[][],
       options: Record<string, unknown> = {},
     ): HorizontalHeadersArea => {
       const area = new HorizontalHeadersArea(createComponent(options));

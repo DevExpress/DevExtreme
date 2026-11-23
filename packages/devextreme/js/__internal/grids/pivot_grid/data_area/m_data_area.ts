@@ -7,11 +7,11 @@ import supportUtils from '@ts/core/utils/support';
 
 import { AreaItem } from '../area_item/m_area_item';
 import type {
+  AreaItemCell,
   AreaItemStyleOptions,
   AreaItemVirtualContentParams,
   AreaName,
 } from '../area_item/types';
-import type { PivotGridCell } from '../types';
 import { calculateScrollbarWidth } from '../widget_utils';
 
 const PIVOTGRID_AREA_CLASS = 'dx-pivotgrid-area';
@@ -25,7 +25,7 @@ class DataArea extends AreaItem {
     return 'data';
   }
 
-  public render(rootElement: dxElementWrapper, data: PivotGridCell[][]): void {
+  public render(rootElement: dxElementWrapper, data: AreaItemCell[][]): void {
     super.render(rootElement, data);
 
     this._makeFirstCellFocusable();
