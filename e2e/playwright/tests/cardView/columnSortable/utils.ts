@@ -23,7 +23,7 @@ export const triggerDragStart = async (locator: Locator): Promise<void> => {
     const mouseMoveEvent = new MouseEvent('mousemove', {
       bubbles: true,
       cancelable: true,
-      clientX: left + 0,
+      clientX: left,
       clientY: top + 30,
     });
 

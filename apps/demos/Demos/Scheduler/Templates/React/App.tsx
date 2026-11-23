@@ -71,17 +71,17 @@ const App = () => {
   const onFormInitialized = useCallback((e: FormTypes.InitializedEvent) => {
     const form = e.component;
     form && (formInstanceRef.current = form);
+  }, []);
 
-    form?.on('fieldDataChanged', (fieldEvent: FormTypes.FieldDataChangedEvent) => {
-      if (fieldEvent.dataField === 'startDate') {
-        const currentFormData = form?.option('formData');
-        const movie = getMovieById(currentFormData?.movieId);
+  const onFormFieldDataChanged = useCallback((e: FormTypes.FieldDataChangedEvent) => {
+    if (e.dataField === 'startDate') {
+      const formData = e.component?.option('formData');
+      const movie = getMovieById(formData?.movieId);
 
-        if (movie) {
-          updateEndDate(movie);
-        }
+      if (movie) {
+        updateEndDate(movie);
       }
-    });
+    }
   }, [updateEndDate]);
 
   const onMovieValueChanged = useCallback((e: SelectBoxTypes.ValueChangedEvent) => {
@@ -141,7 +141,10 @@ const App = () => {
         allowAdding={false}
         popup={popupOptions}
       >
-        <SchedulerForm onInitialized={onFormInitialized}>
+        <SchedulerForm
+          onInitialized={onFormInitialized}
+          onFieldDataChanged={onFormFieldDataChanged}
+        >
           <Item render={movieInfoContainerRender} />
 
           <Item itemType="group" colCount={2} colCountByScreen={colCountByScreen}>
