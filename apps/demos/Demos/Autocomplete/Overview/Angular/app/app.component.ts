@@ -80,6 +80,10 @@ export class AppComponent {
     this.position = this.positions[0];
   }
 
+  constructor() {
+    this.updateEmployeeInfo();
+  }
+
   updateEmployeeInfo() {
     let result = '';
     result += (`${this.firstName || ''} ${this.lastName || ''}`).trim();
