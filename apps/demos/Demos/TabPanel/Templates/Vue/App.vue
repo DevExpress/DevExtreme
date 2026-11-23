@@ -19,8 +19,8 @@
               <span>{{ company.Address }}</span>
             </p>
             <p>
-              <span><b>{{ company.City }}</b>,&nbsp;</span>
-              <span>{{ company.State }}&nbsp;</span>
+              <span><b>{{ company.City }}</b>,</span>{{ ' ' }}
+              <span>{{ company.State }}</span>{{ ' ' }}
               <span>{{ company.Zipcode }}</span>
             </p>
           </div>
