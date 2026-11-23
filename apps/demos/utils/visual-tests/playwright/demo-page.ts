@@ -189,6 +189,28 @@ const trackPageSettling = (): void => {
   });
 };
 
+// Demos that generate their data with Math.random() draw the same picture only if they get the
+// same numbers. The seeded random of Chrome gives a sequence, but which numbers a demo gets depends
+// on how many calls the framework and DevExtreme (guids) made before it, and that differs between
+// frameworks. So every call site gets its own counter, and its n-th call returns the n-th number.
+const makeRandomDeterministic = (): void => {
+  const calls = new Map<string, number>();
+
+  Math.random = (): number => {
+    const site = new Error().stack?.split('\n')[2] ?? '';
+    const index = calls.get(site) ?? 0;
+
+    calls.set(site, index + 1);
+
+    // A 32-bit integer hash of the index (mulberry32), scaled to [0, 1).
+    let t = (index + 0x6D2B79F5) | 0;
+    t = Math.imul(t ^ (t >>> 15), t | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+};
+
 // One script instead of several: a demo script may use MockDate and testUtils, and the order of
 // separate init scripts is not guaranteed.
 const getInitScript = (
@@ -196,6 +218,7 @@ const getInitScript = (
   testGlobals: string | null,
   vendor: VendorVizWidgets | null,
 ): string => [
+  `(${makeRandomDeterministic.toString()})();`,
   `(function () { ${MOCKDATE_SOURCE} }).call(window);`,
   testGlobals ?? '',
   `(function () { ${TEST_UTILS_SOURCE} })();`,
