@@ -811,7 +811,7 @@ class ContextMenu<
   }
 
   _getMaxHeight($anchor: ContextMenuAnchor, considerAnchorHeight = true): number {
-    const windowHeight: number = getOuterHeight(window);
+    const windowHeight = animationPosition.getViewportHeight(getOuterHeight(window));
     const isAnchorRenderer = isRendererTarget($anchor);
     const document = domAdapter.getDocument();
     const isAnchorDocument = isObject($anchor) && 'length' in $anchor && $anchor.length && $anchor[0] === document;
