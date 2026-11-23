@@ -9,9 +9,8 @@ import {
 } from '@jest/globals';
 import $ from '@js/core/renderer';
 
-import type { AreaItemComponent } from '../area_item/types';
+import type { AreaItemCell, AreaItemComponent } from '../area_item/types';
 import { FAKE_TABLE_CLASS } from '../keyboard_navigation/const';
-import type { PivotGridCell } from '../types';
 import { DataArea } from './m_data_area';
 
 const createComponent = (options: Record<string, unknown> = {}): AreaItemComponent => ({
@@ -38,7 +37,7 @@ describe('DataArea', () => {
     [{ text: '3' }, { text: '4' }],
   ];
 
-  const renderDataArea = (data: PivotGridCell[][]): DataArea => {
+  const renderDataArea = (data: AreaItemCell[][]): DataArea => {
     const area = new DataArea(createComponent());
 
     area.render($(container), data);

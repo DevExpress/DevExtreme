@@ -15,8 +15,8 @@ import { foreachColumnInfo } from '@ts/grids/grid_core/virtual_columns/virtual_c
 import type Scrollable from '@ts/ui/scroll_view/scrollable';
 
 import { FAKE_TABLE_CLASS } from '../keyboard_navigation/const';
-import type { PivotGridCell } from '../types';
 import type {
+  AreaItemCell,
   AreaItemCellAriaIndexOptions,
   AreaItemCellContext,
   AreaItemCellPreparedArgs,
@@ -134,7 +134,7 @@ abstract class AreaItem {
       .attr('role', 'presentation');
   }
 
-  protected _getCellText(cell: PivotGridCell, encodeHtml: boolean | undefined): string {
+  protected _getCellText(cell: AreaItemCell, encodeHtml: boolean | undefined): string {
     let cellText = cell.isWhiteSpace ? '&nbsp' : cell.text || '&nbsp';
 
     if (encodeHtml && (cellText.includes('<') || cellText.includes('>'))) {
@@ -146,7 +146,7 @@ abstract class AreaItem {
 
   protected _getRowClassNames(
     rowIndex: number,
-    cell: PivotGridCell | undefined,
+    cell: AreaItemCell | undefined,
     rowClassNames: string[],
   ): void;
 
@@ -179,7 +179,7 @@ abstract class AreaItem {
     return this.component._dataController?.getRowIndexOffset() || 0;
   }
 
-  protected _createColumnIndexMap(data: PivotGridCell[][]): Map<string, number> {
+  protected _createColumnIndexMap(data: AreaItemCell[][]): Map<string, number> {
     const columnIndexMap = new Map<string, number>();
 
     foreachColumnInfo(data, (cell, visibleIndex, rowIndex, colIndex) => {
@@ -230,7 +230,7 @@ abstract class AreaItem {
   private renderCellContent(
     td: HTMLElement,
     span: HTMLElement,
-    cell: PivotGridCell,
+    cell: AreaItemCell,
     context: AreaItemCellContext,
   ): string {
     const { encodeHtml, isCellNavigationEnabled } = context;
@@ -276,6 +276,8 @@ abstract class AreaItem {
       expandSpan.classList.add(PIVOTGRID_EXPAND_CLASS);
       div.appendChild(expandSpan);
       td.appendChild(div);
+      /* eslint-disable-next-line @typescript-eslint/no-base-to-string
+        -- header values are primitives or dates */
       const ariaLabel = String(cell.text ?? cell.value ?? '');
       div.setAttribute('role', 'button');
       div.setAttribute('aria-label', encodeHtml ? ariaLabel : $('<div>').html(ariaLabel).text());
@@ -298,7 +300,7 @@ abstract class AreaItem {
     return cellText;
   }
 
-  protected _renderTableContent(tableElement: dxElementWrapper, data: PivotGridCell[][]): void {
+  protected _renderTableContent(tableElement: dxElementWrapper, data: AreaItemCell[][]): void {
     const rowsCount = data.length;
     const rtlEnabled = this.option('rtlEnabled');
     const encodeHtml = this.option('encodeHtml');
@@ -383,7 +385,7 @@ abstract class AreaItem {
 
   protected abstract _getAreaName(): AreaName;
 
-  protected _triggerOnCellPrepared(tableElement: dxElementWrapper, data: PivotGridCell[][]): void {
+  protected _triggerOnCellPrepared(tableElement: dxElementWrapper, data: AreaItemCell[][]): void {
     const rowElements = tableElement.find('tr');
     const areaName = this._getAreaName();
     const onCellPrepared = this.option('onCellPrepared');
@@ -406,6 +408,7 @@ abstract class AreaItem {
           rowIndex,
           columnIndex,
           cellElement: getPublicElement<HTMLTableCellElement>($cellElement),
+          // @ts-expect-error the data controller types the cell path as unknown[]
           cell,
         };
         if (hasEvent) {
@@ -732,7 +735,7 @@ abstract class AreaItem {
     }
   }
 
-  public render(rootElement: dxElementWrapper, data: PivotGridCell[][]): void {
+  public render(rootElement: dxElementWrapper, data: AreaItemCell[][]): void {
     if (this._tableElement) {
       try {
         this._tableElement[0].innerHTML = '';
@@ -847,9 +850,9 @@ abstract class AreaItem {
     return columnCount;
   }
 
-  public getData(): PivotGridCell[][] {
+  public getData(): AreaItemCell[][] {
     const tableElement = this._tableElement;
-    const data: PivotGridCell[][] = tableElement ? tableElement.data('data') : [];
+    const data: AreaItemCell[][] = tableElement ? tableElement.data('data') : [];
     return data;
   }
 }
