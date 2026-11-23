@@ -4,15 +4,15 @@
   [readOnly]="true"
 >
   @for (emp of employees; track emp.ID) {
-  <dxi-diagram-custom-shape
-    [type]="'employee' + emp.ID"
-    baseType="rectangle"
-    [defaultWidth]="1.5"
-    [defaultHeight]="1"
-    [allowEditText]="false"
-    [allowResize]="false"
-  >
-  </dxi-diagram-custom-shape>
+    <dxi-diagram-custom-shape
+      [type]="'employee' + emp.ID"
+      baseType="rectangle"
+      [defaultWidth]="1.5"
+      [defaultHeight]="1"
+      [allowEditText]="false"
+      [allowResize]="false"
+    >
+    </dxi-diagram-custom-shape>
   }
   <svg *dxTemplate="let item of 'customShapeTemplate'" class="template">
     <text class="template-name" x="50%" y="20%">
