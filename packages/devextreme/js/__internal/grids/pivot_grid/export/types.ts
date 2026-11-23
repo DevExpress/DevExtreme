@@ -40,7 +40,7 @@ export interface PivotGridExportCellMerging {
 
 export interface DataProviderOptions {
   items: PivotGridPreparedExportItem[][];
-  columns?: PivotGridPreparedExportItem[];
+  columns: PivotGridPreparedExportItem[];
   rtlEnabled?: boolean;
   dataFields: PivotGridField[];
   rowsArea: VerticalHeadersArea;

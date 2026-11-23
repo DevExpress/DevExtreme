@@ -474,17 +474,25 @@ QUnit.module('Data Provider', {
     });
 
     QUnit.test('Get columns', function(assert) {
-        const dataProvider = new DataProvider({});
+        const items = [
+            [{ rowspan: 1 }, {}],
+            [{ text: 'row1' }, {}]
+        ];
+        const dataProvider = new DataProvider({
+            _dataController: {
+                beginLoading: () => {},
+                endLoading: () => {},
+                getColumnsInfo: () => [],
+                getRowsInfo: () => [],
+                getCellsInfo: () => [],
+            },
+            _getAllItems: () => items,
+            option: () => false,
+            getDataSource: () => ({ getAreaFields: () => [] }),
+        });
 
-        const options = {
-            items: [
-                [{ rowspan: 1 }, {}],
-                [{ text: 'row1' }, {}]
-            ],
-            dataFields: []
-        };
-        dataProvider._createOptions = () => new Deferred().resolve(options);
         dataProvider.ready();
+        this.clock.tick(10);
 
         const columns = dataProvider.getColumns();
 
