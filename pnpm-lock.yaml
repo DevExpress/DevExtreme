@@ -535,6 +535,9 @@ importers:
       '@eslint/js':
         specifier: 'catalog:'
         version: 10.0.1(eslint@10.14.0(jiti@2.6.1)(supports-color@7.2.0))
+      '@playwright/test':
+        specifier: 'catalog:'
+        version: 1.65.1
       '@stylistic/eslint-plugin':
         specifier: 'catalog:'
         version: 5.10.0(eslint@10.14.0(jiti@2.6.1)(supports-color@7.2.0))

@@ -3,7 +3,7 @@ import { createWidget } from '../../../helpers/createWidget';
 import Pagination from '../../../models/pagination';
 
 test.describe('Pagination Base Properties', () => {
-  test('Pagination visibile property', async ({ page }) => {
+  test('Pagination visible property', async ({ page }) => {
     await createWidget(page, 'dxPagination', {
       itemCount: 50,
       visible: false,

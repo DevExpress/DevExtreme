@@ -113,7 +113,7 @@ test.describe('TagBox', () => {
 
       // The editor and the body margin are wider than the window. TestCafe scrolled the whole
       // target into view before a click; Playwright scrolls only to the click point, so the focus
-      // scrolls the page afterwards, and the drop-down closes on that scroll.
+      // scrolls the page afterward, and the drop-down closes on that scroll.
       await tagBox.element.evaluate((element) => {
         element.scrollIntoView({ block: 'nearest', inline: 'nearest' });
       });

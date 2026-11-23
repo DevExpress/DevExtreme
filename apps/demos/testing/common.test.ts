@@ -151,6 +151,8 @@ const getClientScripts = (approach: string) => {
 
 Object.values(FRAMEWORKS).forEach((approach) => {
   if (!shouldRunFramework(approach)) { return; }
+  // jQuery screenshots are taken by Playwright (common.spec.ts).
+  if (approach === FRAMEWORKS.jquery && process.env.STRATEGY !== 'accessibility') { return; }
   fixture(approach)
     .beforeEach(async (t) => {
       if (process.env.STRATEGY !== 'accessibility') {

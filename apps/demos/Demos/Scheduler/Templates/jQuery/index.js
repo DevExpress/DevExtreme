@@ -34,13 +34,12 @@ $(() => {
       form: {
         onInitialized: (e) => {
           form = e.component;
-
-          form.on('fieldDataChanged', (e) => {
-            if (e.dataField === 'startDate') {
-              const movie = getMovieById(form.option('formData').movieId);
-              updateEndDate(form, movie);
-            }
-          });
+        },
+        onFieldDataChanged: (e) => {
+          if (e.dataField === 'startDate') {
+            const movie = getMovieById(form.option('formData').movieId);
+            updateEndDate(form, movie);
+          }
         },
         items: [
           {

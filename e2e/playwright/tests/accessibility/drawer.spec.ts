@@ -7,10 +7,7 @@ const options: Options<Properties> = {
   disabled: [true, false],
   revealMode: ['slide', 'expand'],
   opened: [true, false],
-  template: [() => {
-    const $drawerContent = $('<div>').width(200).css('height', '100%');
-    return $drawerContent;
-  }],
+  template: [() => $('<div>').width(200).css('height', '100%')],
 };
 
 const a11yCheckConfig = {};

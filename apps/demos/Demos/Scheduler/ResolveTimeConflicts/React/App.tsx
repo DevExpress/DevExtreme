@@ -177,16 +177,16 @@ const App = () => {
   const onFormInitialized = useCallback((e: FormTypes.InitializedEvent) => {
     if (!e.component) return;
     formRef.current = e.component;
+  }, []);
 
-    e.component.on('fieldDataChanged', (fieldEvent: FormTypes.FieldDataChangedEvent) => {
-      if (
-        showConflictErrorRef.current &&
-        ['startDate', 'endDate', 'assigneeId', 'recurrenceRule'].includes(fieldEvent.dataField ?? '')
-      ) {
-        setConflictError(false);
-        formRef.current?.validate();
-      }
-    });
+  const onFormFieldDataChanged = useCallback((e: FormTypes.FieldDataChangedEvent) => {
+    if (
+      showConflictErrorRef.current &&
+      ['startDate', 'endDate', 'assigneeId', 'recurrenceRule'].includes(e.dataField ?? '')
+    ) {
+      setConflictError(false);
+      formRef.current?.validate();
+    }
   }, [setConflictError]);
 
   const customizeItem = useCallback((item: FormTypes.SimpleItem) => {
@@ -239,6 +239,7 @@ const App = () => {
           <Form
             labelMode="hidden"
             onInitialized={onFormInitialized}
+            onFieldDataChanged={onFormFieldDataChanged}
             customizeItem={customizeItem}
             elementAttr={formElementAttr}
           >
