@@ -11,7 +11,7 @@ import 'ui/pivot_grid/ui.pivot_grid';
 
 import 'fluent_blue_light.css!';
 
-import { DataController__internals } from '__internal/grids/pivot_grid/data_controller/m_data_controller';
+import { DataController__internals } from '__internal/grids/pivot_grid/data_controller/data_controller';
 import { PivotGridExport } from '__internal/grids/pivot_grid/export/m_export';
 
 let helper;
