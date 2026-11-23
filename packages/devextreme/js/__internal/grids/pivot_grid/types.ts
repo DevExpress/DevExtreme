@@ -26,7 +26,7 @@ export type PivotGridFilterField = Omit<
 export type PivotGridFilterValue = ScalarFilterValue | ScalarFilterValue[];
 
 export interface TreeItem<TItem> {
-  children?: TItem[];
+  children?: TItem[] | null;
 }
 
 export type ForeachTreeCallback<TItem> = (members: TItem[], index: number) => unknown;
@@ -65,6 +65,7 @@ export interface PivotGridLoadOptions extends ExpandedLevelOptions {
   rowTake?: number;
   columnSkip?: number;
   columnTake?: number;
+  skipValues?: boolean;
 }
 
 export interface PivotGridDescriptions {

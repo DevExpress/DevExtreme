@@ -29,7 +29,10 @@
   </dxi-scheduler-resource>
 
   <dxo-scheduler-editing [allowAdding]="false" [popup]="popupOptions">
-    <dxo-scheduler-form [onInitialized]="onFormInitialized">
+    <dxo-scheduler-form
+      [onInitialized]="onFormInitialized"
+      [onFieldDataChanged]="onFormFieldDataChanged"
+    >
       <dxi-scheduler-item
         template="movie-info-form-template"
       ></dxi-scheduler-item>

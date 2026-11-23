@@ -55,6 +55,9 @@ catalogs:
       specifier: ~0.15.1
       version: 0.15.1
   default:
+    '@axe-core/playwright':
+      specifier: 4.13.0
+      version: 4.13.0
     '@eslint/js':
       specifier: 10.0.1
       version: 10.0.1
@@ -548,6 +551,9 @@ importers:
       '@eslint/js':
         specifier: 'catalog:'
         version: 10.0.1(eslint@10.14.0(jiti@2.7.0))
+      '@playwright/test':
+        specifier: 'catalog:'
+        version: 1.65.1
       '@stylistic/eslint-plugin':
         specifier: 'catalog:'
         version: 5.10.0(eslint@10.14.0(jiti@2.7.0))
@@ -941,6 +947,9 @@ importers:
 
   e2e/playwright:
     devDependencies:
+      '@axe-core/playwright':
+        specifier: 'catalog:'
+        version: 4.13.0(playwright-core@1.65.1)
       '@eslint/js':
         specifier: 'catalog:'
         version: 10.0.1(eslint@10.14.0(jiti@2.7.0))
@@ -962,6 +971,9 @@ importers:
       '@typescript-eslint/parser':
         specifier: 'catalog:'
         version: 8.72.1(eslint@10.14.0(jiti@2.7.0))(typescript@5.8.3)
+      axe-core:
+        specifier: 'catalog:'
+        version: 4.13.0
       devextreme:
         specifier: workspace:*
         version: link:../../packages/devextreme/artifacts/npm/devextreme
@@ -992,9 +1004,6 @@ importers:
       '@stylistic/eslint-plugin':
         specifier: 'catalog:'
         version: 5.10.0(eslint@10.14.0(jiti@2.7.0))
-      '@testcafe-community/axe':
-        specifier: 3.5.0
-        version: 3.5.0(axe-core@4.13.0)(testcafe@3.7.5(patch_hash=721ed26a09d564c50b26c334470f24e87e4f52d2e497c617341b71ed1a3ddbf3))
       '@types/jquery':
         specifier: 'catalog:'
         version: 4.0.1
@@ -1004,9 +1013,6 @@ importers:
       '@typescript-eslint/parser':
         specifier: 'catalog:'
         version: 8.72.1(eslint@10.14.0(jiti@2.7.0))(typescript@5.9.3)
-      axe-core:
-        specifier: 'catalog:'
-        version: 4.13.0
       devextreme:
         specifier: workspace:*
         version: link:../../packages/devextreme/artifacts/npm/devextreme
@@ -2463,6 +2469,11 @@ packages:
   '@aspnet/signalr@1.0.27':
     resolution: {integrity: sha512-utZvBF9snjdwIBpvcFa6htqFTVaTN50QIZUoiznKpYSZImew1a1Ci7VYmK8HODqwRqUtj0o5/xR1nzt8xex5sA==}
     deprecated: This package is no longer supported. Consider using @microsoft/signalr.
+
+  '@axe-core/playwright@4.13.0':
+    resolution: {integrity: sha512-6YLx+kxXu5GJceG4ozFg+33a2EMTdjYwWGloJ3sb9Kta5pp+ZNS53uxGVog5JetIY8s++P5UrtX+cri+u0VAVg==}
+    peerDependencies:
+      playwright-core: '>= 1.0.0'
 
   '@babel/code-frame@7.29.7':
     resolution: {integrity: sha512-Aup7aUOfpbAUg2ROOJN6Iw5f9DMBlzu0mIkm/malLQFN/YQgO48wCj0Kxa3sEHJvPVFg7siR+qRInwXd2qhQKw==}
@@ -17365,6 +17376,11 @@ snapshots:
 
   '@aspnet/signalr@1.0.27': {}
 
+  '@axe-core/playwright@4.13.0(playwright-core@1.65.1)':
+    dependencies:
+      axe-core: 4.13.0
+      playwright-core: 1.65.1
+
   '@babel/code-frame@7.29.7':
     dependencies:
       '@babel/helper-validator-identifier': 7.29.7
@@ -19046,7 +19062,7 @@ snapshots:
 
   '@babel/traverse@8.0.4':
     dependencies:
-      '@babel/code-frame': 8.0.0
+      '@babel/code-frame': 8.0.6
       '@babel/generator': 8.0.6
       '@babel/helper-globals': 8.0.0
       '@babel/parser': 8.0.7
@@ -22241,7 +22257,7 @@ snapshots:
       es-module-lexer: 1.7.0
       fork-ts-checker-webpack-plugin: 9.1.0(typescript@5.9.3)(webpack@5.105.4(@swc/core@1.15.47(@swc/helpers@0.5.23)))
       html-webpack-plugin: 5.6.8(webpack@5.105.4(@swc/core@1.15.47(@swc/helpers@0.5.23)))
-      magic-string: 1.4.1
+      magic-string: 1.4.5
       semver: 7.8.5
       storybook: 10.6.3(@types/react@18.3.28)(prettier@3.8.1)(react@18.3.1)
       style-loader: 4.0.0(webpack@5.105.4(@swc/core@1.15.47(@swc/helpers@0.5.23)))
@@ -22276,7 +22292,7 @@ snapshots:
       '@storybook/core-webpack': 10.6.3(storybook@10.6.3(@types/react@18.3.28)(prettier@3.8.1)(react@18.3.1))
       '@storybook/react-docgen-typescript-plugin': 1.0.6--canary.9.0c3f3b7.0(supports-color@7.2.0)(typescript@5.9.3)(webpack@5.105.4(@swc/core@1.15.47(@swc/helpers@0.5.23)))
       '@types/semver': 7.8.0
-      magic-string: 1.4.1
+      magic-string: 1.4.5
       react: 18.3.1
       react-docgen: 8.0.3
       react-dom: 18.3.1(react@18.3.1)
@@ -26250,8 +26266,7 @@ snapshots:
 
   es-module-lexer@2.3.1: {}
 
-  es-module-lexer@2.3.2:
-    optional: true
+  es-module-lexer@2.3.2: {}
 
   es-object-atoms@1.1.1:
     dependencies:
@@ -30038,7 +30053,6 @@ snapshots:
   magic-string@1.4.5:
     dependencies:
       '@jridgewell/sourcemap-codec': 1.6.0
-    optional: true
 
   make-dir@3.1.0:
     dependencies:
@@ -35156,7 +35170,7 @@ snapshots:
       browserslist: 4.29.4
       chrome-trace-event: 1.0.4
       enhanced-resolve: 5.26.0
-      es-module-lexer: 2.3.1
+      es-module-lexer: 2.3.2
       eslint-scope: 5.1.1
       events: 3.3.0
       glob-to-regexp: 0.4.1
@@ -35317,7 +35331,7 @@ snapshots:
       browserslist: 4.29.4
       chrome-trace-event: 1.0.4
       enhanced-resolve: 5.26.0
-      es-module-lexer: 2.3.1
+      es-module-lexer: 2.3.2
       events: 3.3.0
       graceful-fs: 4.2.11
       mime-db: 1.54.0
@@ -35355,7 +35369,7 @@ snapshots:
       browserslist: 4.29.4
       chrome-trace-event: 1.0.4
       enhanced-resolve: 5.26.0
-      es-module-lexer: 2.3.1
+      es-module-lexer: 2.3.2
       events: 3.3.0
       graceful-fs: 4.2.11
       mime-db: 1.54.0
@@ -35392,7 +35406,7 @@ snapshots:
       browserslist: 4.29.4
       chrome-trace-event: 1.0.4
       enhanced-resolve: 5.26.0
-      es-module-lexer: 2.3.1
+      es-module-lexer: 2.3.2
       events: 3.3.0
       graceful-fs: 4.2.11
       mime-db: 1.54.0
