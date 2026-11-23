@@ -7,9 +7,11 @@ import { setHeight, setWidth } from '@js/core/utils/style';
 import Button from '@js/ui/button';
 import Popup from '@js/ui/popup/ui.popup';
 import { capitalize } from '@ts/core/utils/capitalize';
+import type { PopupProperties } from '@ts/ui/popup/popup';
 
 import { AreaItem } from '../area_item/m_area_item';
 import type { AreaName } from '../area_item/types';
+import type { FieldChooserBase } from '../field_chooser/m_field_chooser_base';
 
 const DIV = '<div>';
 
@@ -72,7 +74,7 @@ class FieldsArea extends AreaItem {
       icon: 'menu',
       width: 'auto',
       onClick() {
-        // @ts-expect-error dxPopup is added to the renderer at runtime
+        // @ts-expect-error dxPopup is not defined in dxElementWrapper
         const popup = that.tableElement().find('.dx-fields-area-popup').dxPopup('instance');
         if (!popup.option('visible')) {
           popup.show();
@@ -82,7 +84,7 @@ class FieldsArea extends AreaItem {
     button.$element().addClass('dx-pivotgrid-fields-area-hamburger');
   }
 
-  _getPopupOptions(row, button) {
+  _getPopupOptions(row, button): PopupProperties {
     return {
       contentTemplate() {
         return $('<div>').append(
@@ -116,8 +118,7 @@ class FieldsArea extends AreaItem {
     const that = this;
     const button = tableElement.find('.dx-button');
     const popupOptions = that._getPopupOptions(row, button);
-    // @ts-expect-error dxPivotGridFieldChooserBase is added to the renderer at runtime
-    const FieldChooserBase = that.component.$element().dxPivotGridFieldChooserBase('instance');
+    const fieldChooserBase = that.getFieldChooserBase();
 
     if (that._rowPopup) {
       that._rowPopup.$element().remove();
@@ -126,7 +127,6 @@ class FieldsArea extends AreaItem {
     that._rowPopup = that.component._createComponent(
       $(DIV).appendTo(tableElement),
       Popup,
-      // @ts-expect-error the fields area popup options aren't typed yet
       popupOptions,
     );
 
@@ -136,8 +136,17 @@ class FieldsArea extends AreaItem {
     that._rowPopup.content().parent()
       .attr('group', 'row');
 
-    FieldChooserBase.subscribeToEvents(that._rowPopup.content());
-    FieldChooserBase.renderSortable(that._rowPopup.content());
+    fieldChooserBase.subscribeToEvents(that._rowPopup.content());
+    // @ts-expect-error renderSortable() ignores the element
+    fieldChooserBase.renderSortable(that._rowPopup.content());
+  }
+
+  private getFieldChooserBase(): FieldChooserBase {
+    const $element = this.component.$element();
+    // @ts-expect-error dxPivotGridFieldChooserBase is not defined in dxElementWrapper
+    const fieldChooserBase: FieldChooserBase = $element.dxPivotGridFieldChooserBase('instance');
+
+    return fieldChooserBase;
   }
 
   _shouldCreateButton() {
@@ -148,14 +157,12 @@ class FieldsArea extends AreaItem {
     const that = this;
     const groupElement = this.groupElement();
     const isVisible = this.isVisible();
-    // @ts-expect-error dxPivotGridFieldChooserBase is added to the renderer at runtime
-    const fieldChooserBase = that.component.$element().dxPivotGridFieldChooserBase('instance');
+    const fieldChooserBase = that.getFieldChooserBase();
     const head = $('<thead>').addClass('dx-pivotgrid-fields-area-head').appendTo(tableElement);
     const area = that._area;
     const row = $('<tr>');
 
-    // @ts-expect-error the group element is rendered here
-    groupElement.toggleClass('dx-hidden', !isVisible);
+    groupElement?.toggleClass('dx-hidden', !isVisible);
     tableElement.addClass('dx-area-field-container');
 
     if (!isVisible) {
@@ -196,8 +203,7 @@ class FieldsArea extends AreaItem {
 
   reset() {
     super.reset();
-    // @ts-expect-error the group element is rendered here
-    this.groupElement().css('marginTop', 0);
+    this.groupElement()?.css('marginTop', 0);
   }
 
   _renderVirtualContent() {}

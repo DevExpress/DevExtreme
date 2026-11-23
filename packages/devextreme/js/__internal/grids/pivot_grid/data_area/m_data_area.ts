@@ -47,8 +47,13 @@ class DataArea extends AreaItem {
   }
 
   protected _applyCustomStyles(options: AreaItemStyleOptions): void {
-    const { cell } = options;
-    const { classArray } = options;
+    const {
+      cell,
+      classArray,
+      cssArray,
+      rowIndex,
+      rowsCount,
+    } = options;
 
     if (cell.rowType === 'T' || cell.columnType === 'T') {
       classArray.push(PIVOTGRID_TOTAL_CLASS);
@@ -61,8 +66,8 @@ class DataArea extends AreaItem {
       classArray.push(PIVOTGRID_ROW_TOTAL_CLASS);
     }
 
-    if (options.rowIndex === options.rowsCount - 1) {
-      options.cssArray.push('border-bottom: 0px');
+    if (rowIndex === rowsCount - 1) {
+      cssArray.push('border-bottom: 0px');
     }
 
     super._applyCustomStyles(options);
@@ -75,8 +80,7 @@ class DataArea extends AreaItem {
   }
 
   public renderScrollable(): void {
-    // @ts-expect-error dxScrollable is added to the renderer at runtime
-    this._groupElement?.dxScrollable({
+    this.renderGroupScrollable({
       useNative: this.getUseNativeValue(),
       useSimulatedScrollbar: false,
       rtlEnabled: this.component.option('rtlEnabled'),
