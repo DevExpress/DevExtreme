@@ -527,15 +527,14 @@ export class FieldChooserBase extends mixinWidget<FieldChooserBaseProperties> {
   private _getAreaFieldElements(area: string): HTMLElement[] {
     const ownFieldChooserRoot = this.$element().closest(`.${CLASSES.fieldChooser.self}`).get(0) ?? null;
     // NOTE: get() without an index is not supported by the native renderer.
-    // @ts-expect-error toArray() returns Element[], the field elements are divs
-    const fields: HTMLElement[] = this.$element()
+    const fields = this.$element()
       .find(`[group="${area}"] .${CLASSES.area.field}.${CLASSES.area.box}`)
       .toArray();
 
-    return fields.filter((field) => {
+    return fields.filter((field): field is HTMLElement => {
       const fieldChooserRoot = $(field).closest(`.${CLASSES.fieldChooser.self}`).get(0) ?? null;
 
-      return fieldChooserRoot === ownFieldChooserRoot;
+      return field instanceof HTMLElement && fieldChooserRoot === ownFieldChooserRoot;
     });
   }
 
