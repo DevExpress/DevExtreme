@@ -91,7 +91,6 @@
         "@typescript-eslint/eslint-plugin": "catalog:",
         "@typescript-eslint/parser": "catalog:",
         "@vue/tsconfig": "0.9.1",
-        "axe-core": "catalog:",
         "babel-jest": "30.4.1",
         "consola": "3.4.2",
         "cookie-parser": "1.4.7",

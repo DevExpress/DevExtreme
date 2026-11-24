@@ -495,9 +495,11 @@ jobs:
       run: fc-cache -f > /dev/null 2>&1
 
     - name: Run Web Server
+      if: matrix.STRATEGY == 'screenshots'
       run: python -m http.server 8080 &
 
     - name: Set Chrome flags
+      if: matrix.STRATEGY == 'screenshots'
       id: chrome-flags
       run: |
         BASE_FLAGS="chrome:headless --window-size=1200,800 --disable-gpu --no-sandbox --disable-dev-shm-usage --disable-partial-raster --disable-skia-runtime-opts --run-all-compositor-stages-before-draw --disable-new-content-rendering-timeout --disable-threaded-animation --disable-threaded-scrolling --disable-checker-imaging --disable-image-animation-resync --use-gl=swiftshader --disable-features=PaintHolding --js-flags=--random-seed=2147483647"
@@ -516,7 +518,6 @@ jobs:
       working-directory: apps/demos
       env:
         NODE_OPTIONS: --max-old-space-size=8192
-        STRATEGY: ${{ matrix.STRATEGY }}
         CHANGEDFILEINFOSPATH: changed-files.json
         BROWSERS: ${{ steps.chrome-flags.outputs.flags }}
         #DEBUG: hammerhead:*,testcafe:*
