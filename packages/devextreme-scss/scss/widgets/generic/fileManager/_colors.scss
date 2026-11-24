@@ -38,7 +38,7 @@ $filemanager-item-focused-color: null !default;
   $filemanager-dirs-tree-item-focus-bg: color.adjust($base-bg, $lightness: 8%, $space: hsl) !default;
   $filemanager-dirs-tree-item-focus-color: $base-text-color !default;
   $filemanager-file-item-hover-bg: $base-hover-bg !default;
-  $filemanager-item-focused-color: $base-inverted-text-color !default;
+  $filemanager-item-focused-color: $base-text-color !default;
 }
 
 @if $color == "darkmoon" {
@@ -70,7 +70,7 @@ $filemanager-item-focused-color: null !default;
   $filemanager-dirs-tree-item-focus-bg: color.adjust($base-bg, $lightness: -8%, $space: hsl) !default;
   $filemanager-dirs-tree-item-focus-color: $base-text-color !default;
   $filemanager-file-item-hover-bg: $base-hover-bg !default;
-  $filemanager-item-focused-color: $base-inverted-text-color !default;
+  $filemanager-item-focused-color: $base-text-color !default;
 }
 
 @if $color == "softblue" {

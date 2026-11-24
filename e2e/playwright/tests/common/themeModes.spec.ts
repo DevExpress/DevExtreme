@@ -111,6 +111,7 @@ const exportedHaloFrom = (page: Page, selector: string): Promise<Exported> => ex
 
 const DECLARED_BLUE = 'rgb(11, 7, 3)';
 const DECLARED_BG = 'rgb(22, 7, 3)';
+const DECLARED_ON_COLOR = 'rgb(33, 7, 3)';
 const HANDED_OUT_BLUE = '#0b0703';
 
 const declareTheNamesTheWidgetsRead = (
@@ -564,6 +565,9 @@ test.describe('Theme modes', () => {
 
   test('dxRangeSelector paints from a name the page declared, leaving no reference behind', async ({ page }) => {
     await declareTheNamesTheWidgetsRead(page, DECLARED_BLUE, DECLARED_BG);
+    await page.evaluate((onColor) => {
+      document.documentElement.style.setProperty('--dx-viz-content-on-color', onColor);
+    }, DECLARED_ON_COLOR);
     await createWidget(page, 'dxRangeSelector', {
       ...{
         scale: { startValue: 0, endValue: 10 },
@@ -572,7 +576,7 @@ test.describe('Theme modes', () => {
       size: { width: 220, height: 160 },
     });
 
-    await expectPaintedFrom(page, DECLARED_BG);
+    await expectPaintedFrom(page, DECLARED_ON_COLOR);
   });
 
   test('every viz widget the namespace exposes has a test of its own', async ({ page }) => {

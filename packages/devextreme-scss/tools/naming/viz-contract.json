@@ -52,6 +52,12 @@
       "paints": "the axis and everything that reads with it: the widget font colour that axis and legend labels take, the axis line and its ticks, and the titles of the axes. A step quieter than the rest of the text on purpose - the numbers along a scale are there to be read past, not at. The subtitle under the chart title is not among them: it inherits the colour of the title"
     },
     {
+      "name": "--dx-viz-content-on-color",
+      "role": "color-content-on-color",
+      "declaredPerMode": true,
+      "paints": "the text on the slider flags of a range selector, laid over the primary fill or the danger fill of an invalid range, so it stays the same light colour in both modes"
+    },
+    {
       "name": "--dx-viz-content-orange",
       "role": "color-content-orange",
       "declaredPerMode": true,
