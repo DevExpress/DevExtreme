@@ -26,7 +26,6 @@ const getIgnoredRules = (testName: string): string[] => {
 
   if ((isMaterial() || isFluent())
     && [
-      'TreeList-StatePersistence',
       // False positive: contrast rules do not apply to custom orange color
       'CardView-FieldTemplate',
       // False positive: contrast rules do not apply to read-only editors on the custom option panel background
