@@ -1,5 +1,7 @@
 import type { Locator, Page } from '@playwright/test';
+import { expect } from '@playwright/test';
 import GridCore, { CLASS as CLASS_BASE } from '../gridCore';
+import Toolbar from '../toolbar';
 import DataRow from './data/row';
 import DataCell from './data/cell';
 import FilterCell from './filter/cell';
@@ -13,6 +15,7 @@ const CLASS = {
   headers: 'headers',
   headerPanel: 'header-panel',
   dataRow: 'dx-data-row',
+  focusedRow: 'dx-row-focused',
   gridView: 'content',
   fixedGridView: 'content-fixed',
   cellModified: 'dx-cell-modified',
@@ -33,6 +36,19 @@ const CLASS = {
 const E2E_ATTRIBUTES = {
   a11yStatusContainer: 'e2e-a11y-general-status-container',
 };
+
+interface ScrollOffset {
+  top?: number;
+  left?: number;
+}
+
+export interface VisibleRow {
+  key: unknown;
+  data: unknown;
+  dataIndex: number;
+  rowType: string;
+  rowIndex: number;
+}
 
 export default abstract class GridBase extends GridCore {
   // A grid nested in a master-detail row has its own rows and headers: skip them.
@@ -58,6 +74,15 @@ export default abstract class GridBase extends GridCore {
 
     return new DataRow(
       this.ownElement(`.${fixedGridView} .${CLASS.dataRow}[aria-rowindex='${index + 1}']`),
+    );
+  }
+
+  public getFocusedRow(): DataRow {
+    const gridView = this.addWidgetPrefix(CLASS.gridView);
+    const fixedGridView = this.addWidgetPrefix(CLASS.fixedGridView);
+
+    return new DataRow(
+      this.ownElement(`.${gridView}:not(.${fixedGridView}) .${CLASS.dataRow}.${CLASS.focusedRow}`),
     );
   }
 
@@ -125,8 +150,64 @@ export default abstract class GridBase extends GridCore {
     );
   }
 
+  public getToolbar(): Toolbar {
+    return new Toolbar(this.page, this.element.locator(`.${CLASS.toolbar}`));
+  }
+
   public getGeneralStatusContainer(): Locator {
     return this.element.locator(`[${E2E_ATTRIBUTES.a11yStatusContainer}="true"]`);
+  }
+
+  private hasScrollable(): Promise<boolean> {
+    return this.element.evaluate(
+      (element, widgetName) => Boolean($(element).data(widgetName).getScrollable()),
+      this.getName(),
+    );
+  }
+
+  public async scrollTo(offset: ScrollOffset): Promise<void> {
+    await expect.poll(() => this.hasScrollable()).toBe(true);
+    await this.element.evaluate(
+      (element, { widgetName, options }) => {
+        $(element).data(widgetName).getScrollable().scrollTo(options);
+      },
+      { widgetName: this.getName(), options: offset },
+    );
+  }
+
+  public getScrollTop(): Promise<number> {
+    return this.element.evaluate(
+      (element, widgetName) => $(element).data(widgetName).getScrollable().scrollTop(),
+      this.getName(),
+    );
+  }
+
+  public isFocusedRowInViewport(): Promise<boolean> {
+    return this.element.evaluate((element, { widgetName, focusedRowClass }) => {
+      const rowsView: HTMLElement = $(element).data(widgetName).getView('rowsView').element()[0];
+      const focusedRow = rowsView.querySelector(`.${focusedRowClass}`);
+
+      if (!focusedRow) {
+        return false;
+      }
+
+      const rowsViewRect = rowsView.getBoundingClientRect();
+      const rowRect = focusedRow.getBoundingClientRect();
+      const tolerance = 1;
+
+      return rowRect.top >= rowsViewRect.top - tolerance
+        && rowRect.bottom <= rowsViewRect.bottom + tolerance;
+    }, { widgetName: this.getName(), focusedRowClass: CLASS.focusedRow });
+  }
+
+  public async scrollBy(offset: ScrollOffset): Promise<void> {
+    await expect.poll(() => this.hasScrollable()).toBe(true);
+    await this.element.evaluate(
+      (element, { widgetName, options }) => {
+        $(element).data(widgetName).getScrollable().scrollBy(options);
+      },
+      { widgetName: this.getName(), options: offset },
+    );
   }
 
   public async apiEditRow(rowIndex: number): Promise<void> {
@@ -151,5 +232,53 @@ export default abstract class GridBase extends GridCore {
 
   public async apiCellValue<T>(rowIndex: number, columnIndex: number, value: T): Promise<void> {
     await this.invoke('cellValue', rowIndex, columnIndex, value);
+  }
+
+  public async apiAddRow(): Promise<void> {
+    await this.invoke('addRow');
+  }
+
+  public async apiCancelEditData(): Promise<void> {
+    await this.invoke('cancelEditData');
+  }
+
+  public async apiNavigateToRow(key: unknown): Promise<void> {
+    await this.invoke('navigateToRow', key);
+  }
+
+  public apiGetTopVisibleRowKey(): Promise<unknown> {
+    return this.element.evaluate((element, widgetName) => {
+      const grid = $(element).data(widgetName);
+
+      return grid.keyOf(grid.getTopVisibleRowData());
+    }, this.getName());
+  }
+
+  public apiTotalCount(): Promise<number> {
+    return this.invoke('totalCount');
+  }
+
+  public apiGetVisibleRows(): Promise<VisibleRow[]> {
+    return this.element.evaluate(
+      (element, widgetName) => $(element).data(widgetName).getVisibleRows().map((row) => ({
+        key: row.key,
+        data: row.data,
+        dataIndex: row.dataIndex,
+        rowType: row.rowType,
+        rowIndex: row.rowIndex,
+      })),
+      this.getName(),
+    );
+  }
+
+  public async apiPush(changes: unknown[]): Promise<void> {
+    await this.element.evaluate(
+      (element, { widgetName, values }) => {
+        const dataSource = $(element).data(widgetName).getDataSource();
+
+        dataSource.store().push(values);
+      },
+      { widgetName: this.getName(), values: changes },
+    );
   }
 }
