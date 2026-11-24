@@ -2252,6 +2252,37 @@ module('Using beforeInput event', {
         assert.deepEqual(this.keyboard.caret(), { start: 6, end: 10 }, 'year is selected');
     });
 
+    test('a digit composed together with the whole text before it on Android devices is entered into the selected part (T1338541)', function(assert) {
+        const input = this.$input.get(0);
+
+        this.instance.option({
+            displayFormat: 'yyyy.M.d',
+            value: new Date(2026, 10, 24),
+        });
+        this.keyboard
+            .caret({ start: 0, end: 4 })
+            .press('right')
+            .press('right')
+            .keyDown('Unidentified')
+            .beforeInput('1', 'insertText')
+            .keyUp('Unidentified');
+
+        assert.strictEqual(input.value, '2026.11.1', 'day is 1 after the first digit');
+
+        this.$input.trigger($.Event('compositionstart'));
+        this.keyboard
+            .keyDown('Unidentified')
+            .caret({ start: 0, end: 9 })
+            .beforeInput('2026.11.15', 'insertCompositionText');
+        input.setRangeText('2026.11.15', 0, 9, 'end');
+        this.keyboard
+            .input('2026.11.15', 'insertCompositionText')
+            .keyUp('Unidentified');
+
+        assert.strictEqual(input.value, '2026.11.15', 'day is 15');
+        assert.deepEqual(this.keyboard.caret(), { start: 8, end: 10 }, 'day stays selected');
+    });
+
     test('a word composed on Android devices without the mask behavior stays in the input (T1338541)', function(assert) {
         const input = this.$input.get(0);
 

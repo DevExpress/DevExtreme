@@ -270,6 +270,12 @@ class DateBoxMask<
       this._wasAllSelectedBeforeComposition = false;
     }
 
+    const isComposedWithSurroundingText = typedChar !== data;
+
+    if (isComposedWithSurroundingText) {
+      this._caret(this._getActivePartProp('caret'));
+    }
+
     this._keyInputHandler(e, typedChar);
 
     return true;
