@@ -22,7 +22,7 @@ const __dirname = path.dirname(__filename);
 
 const spellcheckRule = spellcheckDevextreme[0].rules['spellcheck/spell-checker'];
 
-// Sections whose Angular demos are fixed for strict TS (see "exclude" in tsconfig.ngc-check.json)
+// Sections whose Angular demos are fixed for strict TS (keep in sync with "include" in tsconfig.ngc-check.json)
 const strictAngularSections = [
   'Localization',
   'Map',
