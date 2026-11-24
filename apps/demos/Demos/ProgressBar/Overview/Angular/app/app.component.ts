@@ -34,7 +34,7 @@ export class AppComponent {
 
   readonly maxValue = 10;
 
-  private intervalId: number;
+  private intervalId?: number;
 
   onButtonClick() {
     if (this.inProgress) {

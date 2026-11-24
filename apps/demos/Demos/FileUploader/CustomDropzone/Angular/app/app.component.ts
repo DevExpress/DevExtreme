@@ -1,6 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import { Component, enableProdMode, signal } from '@angular/core';
 import { DxFileUploaderModule, DxProgressBarModule } from 'devextreme-angular';
+import type { DxFileUploaderTypes } from 'devextreme-angular/ui/file-uploader';
 import 'anti-forgery';
 
 if (!/localhost/.test(document.location.host)) {
@@ -29,11 +30,14 @@ export class AppComponent {
 
   readonly allowedFileExtensions: string[] = ['.jpg', '.jpeg', '.gif', '.png'];
 
-  onDropZoneEnter({ component, dropZoneElement, event }) {
+  onDropZoneEnter({ component, dropZoneElement, event }: DxFileUploaderTypes.DropZoneEnterEvent) {
     if (dropZoneElement.id === 'dropzone-external') {
-      const items = event.originalEvent.dataTransfer.items;
+      const items = (event?.originalEvent as DragEvent | undefined)?.dataTransfer?.items;
+      if (!items?.length) {
+        return;
+      }
 
-      const allowedFileExtensions = component.option('allowedFileExtensions');
+      const allowedFileExtensions = component.option('allowedFileExtensions') ?? [];
       const draggedFileExtension = `.${items[0].type.replace(/^image\//, '')}`;
 
       const isSingleFileDragged = items.length === 1;
@@ -45,11 +49,11 @@ export class AppComponent {
     }
   }
 
-  onDropZoneLeave(e) {
+  onDropZoneLeave(e: DxFileUploaderTypes.DropZoneLeaveEvent) {
     if (e.dropZoneElement.id === 'dropzone-external') { this.isDropZoneActive.set(false); }
   }
 
-  onUploaded(e) {
+  onUploaded(e: DxFileUploaderTypes.UploadedEvent) {
     const file = e.file;
     const fileReader = new FileReader();
     fileReader.onload = () => {
@@ -62,7 +66,7 @@ export class AppComponent {
     this.progressValue.set(0);
   }
 
-  onProgress(e) {
+  onProgress(e: DxFileUploaderTypes.ProgressEvent) {
     this.progressValue.set(e.bytesLoaded / e.bytesTotal * 100);
   }
 

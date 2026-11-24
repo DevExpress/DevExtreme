@@ -50,13 +50,12 @@
       <div class="dx-field-label">This month sales</div>
       <div class="dx-field-value">
         <dx-number-box
-          #numberBox
-          [max]="30"
+          [max]="maxSales"
           [min]="0"
           [showSpinButtons]="true"
           [inputAttr]="{ 'aria-label': 'Sales' }"
           (onKeyDown)="keyDown($event)"
-          [value]="16"
+          [(value)]="sales"
         ></dx-number-box>
       </div>
     </div>
@@ -67,7 +66,7 @@
           [min]="0"
           [showSpinButtons]="false"
           [readOnly]="true"
-          [value]="numberBox.max - numberBox.value"
+          [value]="maxSales - sales()"
           [inputAttr]="{ 'aria-label': 'Stock' }"
         ></dx-number-box>
       </div>

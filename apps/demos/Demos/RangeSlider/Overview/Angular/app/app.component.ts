@@ -1,6 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import { Component, enableProdMode, signal } from '@angular/core';
 import { DxRangeSliderModule, DxNumberBoxModule } from 'devextreme-angular';
+import type { DxRangeSliderTypes } from 'devextreme-angular/ui/range-slider';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -22,13 +23,13 @@ export class AppComponent {
 
   private readonly format = (value: unknown) => `${value}%`;
 
-  readonly label = {
+  readonly label: NonNullable<DxRangeSliderTypes.Properties['label']> = {
     visible: true,
     format: (value: unknown) => this.format(value),
     position: 'top',
   };
 
-  readonly tooltip = {
+  readonly tooltip: NonNullable<DxRangeSliderTypes.Properties['tooltip']> = {
     enabled: true,
     format: (value: unknown) => this.format(value),
     showMode: 'always',

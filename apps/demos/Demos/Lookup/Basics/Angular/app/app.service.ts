@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-export class Task {
+export interface Task {
   Id: number;
 
   Assigned: string;

@@ -29,7 +29,7 @@ async function getAIResponse(messages: AIMessage[], signal: AbortSignal) {
   };
 
   const response = await aiService.chat.completions.create(params, { signal });
-  const result = response.choices[0].message?.content;
+  const result = response.choices[0].message?.content ?? '';
 
   return result;
 }
@@ -40,8 +40,8 @@ const aiIntegration = new AIIntegration({
     const signal = controller.signal;
 
     const aiPrompt: AIMessage[] = [
-      { role: 'system', content: prompt.system },
-      { role: 'user', content: prompt.user },
+      { role: 'system', content: prompt.system ?? '' },
+      { role: 'user', content: prompt.user ?? '' },
     ];
     const promise = getAIResponse(aiPrompt, signal);
 

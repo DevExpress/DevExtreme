@@ -5,21 +5,7 @@
       <div class="dx-field-label">Email</div>
       <div class="dx-field-value">
         <dx-text-box [inputAttr]="{ 'aria-label': 'Email' }">
-          <dx-validator>
-            <dxi-validator-validation-rule
-              type="required"
-              message="Email is required"
-            ></dxi-validator-validation-rule>
-            <dxi-validator-validation-rule
-              type="email"
-              message="Email is invalid"
-            ></dxi-validator-validation-rule>
-            <dxi-validator-validation-rule
-              type="async"
-              message="Email is already registered"
-              [validationCallback]="asyncValidation"
-            ></dxi-validator-validation-rule>
-          </dx-validator>
+          <dx-validator [validationRules]="emailRules"></dx-validator>
         </dx-text-box>
       </div>
     </div>

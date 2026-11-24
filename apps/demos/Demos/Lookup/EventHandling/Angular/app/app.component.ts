@@ -33,7 +33,7 @@ export class AppComponent {
     this.selectedEmployee.set(value);
   }
 
-  readonly getDisplayExpr = ({ FirstName, LastName }: Record<string, string> = {}) => (FirstName ? `${FirstName} ${LastName}` : undefined);
+  readonly getDisplayExpr = ({ FirstName, LastName }: Record<string, string> = {}) => (FirstName ? `${FirstName} ${LastName}` : '');
 }
 
 bootstrapApplication(AppComponent);

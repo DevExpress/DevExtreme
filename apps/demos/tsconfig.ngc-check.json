@@ -2,10 +2,10 @@
   "compilerOptions": {
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
-    "strict": false,
+    "strict": true,
     "verbatimModuleSyntax": true,
     "module": "ESNext",
-    "moduleResolution": "Node",
+    "moduleResolution": "bundler",
     "ignoreDeprecations": "6.0",
     "lib": ["es2022", "DOM", "DOM.Iterable"],
     "resolveJsonModule": true
@@ -16,7 +16,22 @@
   },
 
   "include": [
-    "Demos/**/Angular/**/*.ts",
+    "Demos/FileUploader/**/Angular/**/*.ts",
+    "Demos/HtmlEditor/**/Angular/**/*.ts",
+    "Demos/LoadPanel/**/Angular/**/*.ts",
+    "Demos/Lookup/**/Angular/**/*.ts",
+    "Demos/NumberBox/**/Angular/**/*.ts",
+    "Demos/Popover/**/Angular/**/*.ts",
+    "Demos/Popup/**/Angular/**/*.ts",
+    "Demos/ProgressBar/**/Angular/**/*.ts",
+    "Demos/RangeSlider/**/Angular/**/*.ts",
+    "Demos/Switch/**/Angular/**/*.ts",
+    "Demos/TagBox/**/Angular/**/*.ts",
+    "Demos/TextArea/**/Angular/**/*.ts",
+    "Demos/TextBox/**/Angular/**/*.ts",
+    "Demos/Toast/**/Angular/**/*.ts",
+    "Demos/Tooltip/**/Angular/**/*.ts",
+    "Demos/Validation/**/Angular/**/*.ts",
     "shared/anti-forgery/index.d.ts"
   ]
 }

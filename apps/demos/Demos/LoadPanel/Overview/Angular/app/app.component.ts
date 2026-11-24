@@ -4,7 +4,7 @@ import {
 } from '@angular/core';
 import { DxButtonModule, DxLoadPanelModule, DxCheckBoxModule } from 'devextreme-angular';
 
-import { Employee, Service } from './app.service';
+import { type Employee, Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -26,9 +26,11 @@ if (!/localhost/.test(document.location.host)) {
 export class AppComponent {
   private readonly employee = inject(Service).getEmployee();
 
-  readonly employeeInfo = signal(new Employee());
+  readonly employeeInfo = signal<Partial<Employee>>({});
 
   readonly loadingVisible = signal(false);
+
+  readonly hideOnOutsideClick = signal(false);
 
   onShown() {
     setTimeout(() => {
@@ -41,7 +43,7 @@ export class AppComponent {
   }
 
   showLoadPanel() {
-    this.employeeInfo.set(new Employee());
+    this.employeeInfo.set({});
     this.loadingVisible.set(true);
   }
 }

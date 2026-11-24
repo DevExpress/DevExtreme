@@ -4,6 +4,7 @@ import {
 } from '@angular/core';
 import { DxCheckBoxModule, DxToastModule } from 'devextreme-angular';
 import type { DxCheckBoxTypes } from 'devextreme-angular/ui/check-box';
+import type { DxToastTypes } from 'devextreme-angular/ui/toast';
 import { Service } from './app.service';
 import type { Product } from './app.service';
 
@@ -26,7 +27,7 @@ export class AppComponent {
 
   readonly isVisible = signal(false);
 
-  readonly type = signal('info');
+  readonly type = signal<DxToastTypes.ToastType>('info');
 
   readonly message = signal('');
 
