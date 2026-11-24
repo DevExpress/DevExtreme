@@ -9,25 +9,39 @@ import $ from '@js/core/renderer';
 import { Deferred } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { isDefined } from '@js/core/utils/type';
+import type { SearchBoxMixinOptions } from '@js/ui/widget/ui.search_box_mixin';
 import { getData, setData } from '@ts/core/element_data';
+import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
 import eventsEngine from '@ts/events/core/events_engine';
 import columnStateMixin from '@ts/grids/grid_core/column_state_mixin/column_state_mixin';
 import type { ColumnStateOptions } from '@ts/grids/grid_core/column_state_mixin/types';
 import { HeaderFilterView as HeaderFilterViewBase } from '@ts/grids/grid_core/header_filter/header_filter_core';
-import type { HeaderFilterViewOptions } from '@ts/grids/grid_core/header_filter/types';
+import type { HeaderFilterOptions, HeaderFilterViewOptions } from '@ts/grids/grid_core/header_filter/types';
 import sortingMixin from '@ts/grids/grid_core/sorting/sorting_mixin';
+import type { AriaSortState, SortingColumn } from '@ts/grids/grid_core/sorting/types';
 import type { InternalGrid } from '@ts/grids/grid_core/types';
 
 import type { PivotGridDataSource } from '../data_source/data_source';
 import { RovingTabIndex } from '../keyboard_navigation/roving_tab_index';
 import SortableModule from '../sortable/sortable';
+import type {
+  OldSortableChangedArgs,
+  OldSortableDraggingArgs,
+  OldSortableProperties,
+} from '../sortable/types';
+import type { PivotGridField } from '../types';
 import { getFieldItemA11yLabel } from './a11y';
+import type { FieldChooserField, SortOrderType } from './const';
 import {
   ATTRIBUTES, CLASSES, FIELD_DATA_KEY, FIELD_NAVIGATION_DELTAS,
 } from './const';
 import { dragAndDropItemRender } from './dom';
-import type { FieldChooserBaseProperties, FieldChooserHeaderFilterField } from './types';
+import type {
+  FieldChooserBaseProperties,
+  FieldChooserFieldEvent,
+  FieldChooserHeaderFilterField,
+} from './types';
 import {
   fieldHasHeaderFilter,
   getMainGroupField,
@@ -47,7 +61,10 @@ const DIV = '<div>';
 const FIELD_AREAS = ['filter', 'row', 'column', 'data'];
 
 class HeaderFilterView extends HeaderFilterViewBase {
-  _getSearchExpr(options, headerFilterOptions) {
+  protected _getSearchExpr(
+    options: HeaderFilterViewOptions,
+    headerFilterOptions: HeaderFilterOptions,
+  ): SearchBoxMixinOptions['searchExpr'] {
     options.useDefaultSearchExpr = true;
     return super._getSearchExpr(options, headerFilterOptions);
   }
@@ -77,7 +94,7 @@ export class FieldChooserBase extends mixinWidget<FieldChooserBaseProperties> {
   // built on the legacy DevExtreme class system in the systemjs build.
   private _fieldNavigationMap: Record<string, RovingTabIndex> | undefined;
 
-  _getDefaultOptions(): FieldChooserBaseProperties {
+  public _getDefaultOptions(): FieldChooserBaseProperties {
     return {
       ...super._getDefaultOptions(),
       ...{
@@ -108,17 +125,22 @@ export class FieldChooserBase extends mixinWidget<FieldChooserBaseProperties> {
     };
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  protected _setAriaSortAttribute(_column, _ariaSortState, _$rootElement) { }
+  protected _setAriaSortAttribute(
+    column: SortingColumn,
+    ariaSortState: AriaSortState | undefined,
+    $rootElement: dxElementWrapper,
+  ): void;
 
-  _init() {
+  protected _setAriaSortAttribute(): void { }
+
+  public _init(): void {
     super._init();
     this._headerFilterView = new HeaderFilterView(this as unknown as InternalGrid);
     this._refreshDataSource();
     this.subscribeToEvents();
   }
 
-  _refreshDataSource() {
+  protected _refreshDataSource(): void {
     const dataSource = this.option('dataSource');
 
     // Field indexes are only meaningful within one data source, so the roving
@@ -136,7 +158,7 @@ export class FieldChooserBase extends mixinWidget<FieldChooserBaseProperties> {
     });
   }
 
-  _optionChanged(args) {
+  public _optionChanged(args: OptionChanged<FieldChooserBaseProperties>): void {
     switch (args.name) {
       case 'dataSource':
         this._refreshDataSource();
@@ -167,7 +189,7 @@ export class FieldChooserBase extends mixinWidget<FieldChooserBaseProperties> {
     }
   }
 
-  renderField(field, showColumnLines) {
+  public renderField(field: FieldChooserField, showColumnLines: boolean): dxElementWrapper {
     const that = this;
     const caption = field.caption ?? field.dataField ?? '';
     const $fieldContent = $(DIV).addClass(CLASSES.area.fieldContent)
@@ -208,7 +230,7 @@ export class FieldChooserBase extends mixinWidget<FieldChooserBaseProperties> {
     return $fieldElement;
   }
 
-  private _getFieldItemAriaLabel(field, caption: string): string {
+  private _getFieldItemAriaLabel(field: FieldChooserField, caption: string): string {
     // The sort indicator is rendered for every sortable non-data field, with
     // ascending shown by default, so the label mirrors the visible state.
     const sortOrder = field.allowSorting && field.area !== 'data'
@@ -222,15 +244,15 @@ export class FieldChooserBase extends mixinWidget<FieldChooserBaseProperties> {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _clean(value?) {
+  public _clean(value?: boolean): void {
   }
 
-  _render() {
+  public _render(): void {
     super._render();
     this._headerFilterView.render(this.$element());
   }
 
-  renderSortable() {
+  public renderSortable(): void {
     const that = this;
 
     that._createComponent(that.$element(), Sortable, extend({
@@ -238,7 +260,7 @@ export class FieldChooserBase extends mixinWidget<FieldChooserBaseProperties> {
       itemSelector: `.${CLASSES.area.field}`,
       itemContainerSelector: `.${CLASSES.area.fieldContainer}`,
       groupSelector: `.${CLASSES.area.fieldList}`,
-      groupFilter() {
+      groupFilter(this: Element): boolean {
         const dataSource = that._dataSource;
         const $sortable = $(this).closest('.dx-sortable-old');
         const pivotGrid: any = $sortable.data('dxPivotGrid');
@@ -253,13 +275,13 @@ export class FieldChooserBase extends mixinWidget<FieldChooserBaseProperties> {
         return false;
       },
       itemRender: dragAndDropItemRender,
-      onDragging(e) {
+      onDragging(e: OldSortableDraggingArgs): void {
         const field = getData(e.sourceElement, FIELD_DATA_KEY);
         const { targetGroup } = e;
         e.cancel = shouldCancelDragging(field, targetGroup);
       },
       useIndicator: true,
-      onChanged(e) {
+      onChanged(e: OldSortableChangedArgs): void {
         const field = getData(e.sourceElement, FIELD_DATA_KEY);
 
         e.removeSourceElement = !!e.sourceGroup;
@@ -281,12 +303,13 @@ export class FieldChooserBase extends mixinWidget<FieldChooserBaseProperties> {
             if (fieldBeforeTarget) {
               invisibleFieldsIndexOffset = fields
                 .filter((f) => f.visible === false
-                    && f.areaIndex <= fieldBeforeTarget.areaIndex)
+                    && Number(f.areaIndex) <= Number(fieldBeforeTarget.areaIndex))
                 .length;
             }
           });
 
           that._applyChanges([mainGroupField], {
+            // @ts-expect-error the sortable groups are named after the areas
             area: e.targetGroup,
             areaIndex: targetIndex + invisibleFieldsIndexOffset,
           });
@@ -295,7 +318,9 @@ export class FieldChooserBase extends mixinWidget<FieldChooserBaseProperties> {
     }, that._getSortableOptions()));
   }
 
-  _processDemandState(func) {
+  protected _processDemandState(
+    func: (dataSource: PivotGridDataSource, isInstantlyMode: boolean) => void,
+  ): void {
     const that = this;
     const dataSource = that._dataSource;
 
@@ -321,7 +346,7 @@ export class FieldChooserBase extends mixinWidget<FieldChooserBaseProperties> {
     }
   }
 
-  _applyChanges(fields, props) {
+  protected _applyChanges(fields: FieldChooserField[], props: Partial<PivotGridField>): void {
     const that = this;
 
     that._processDemandState((dataSource, isInstantlyMode) => {
@@ -337,30 +362,30 @@ export class FieldChooserBase extends mixinWidget<FieldChooserBaseProperties> {
     });
   }
 
-  _applyLocalSortChanges(fieldIdx, sortOrder): void {
+  private _applyLocalSortChanges(fieldIdx: number, sortOrder: SortOrderType): void {
     this._processDemandState((dataSource) => {
       dataSource.field(fieldIdx, { sortOrder });
       dataSource.sortLocal();
     });
   }
 
-  _adjustSortableOnChangedArgs(e) {
+  protected _adjustSortableOnChangedArgs(e: OldSortableChangedArgs): void {
     e.removeSourceElement = false;
     e.removeTargetElement = true;
     e.removeSourceClass = false;
   }
 
-  _getSortableOptions() {
+  protected _getSortableOptions(): Partial<OldSortableProperties> {
     return {
       direction: 'auto',
     };
   }
 
-  subscribeToEvents(element?) {
+  public subscribeToEvents(element?: dxElementWrapper | Element): void {
     const fieldSelector = `.${CLASSES.area.field}.${CLASSES.area.box}`;
     const targetElement = element ?? this.$element();
 
-    const handler = (e) => {
+    const handler = (e: FieldChooserFieldEvent<KeyboardEvent>): void => {
       const field = getData($(e.currentTarget), FIELD_DATA_KEY);
 
       if (!field) {
@@ -402,7 +427,7 @@ export class FieldChooserBase extends mixinWidget<FieldChooserBaseProperties> {
       }
     };
 
-    const focusInHandler = (e) => {
+    const focusInHandler = (e: FieldChooserFieldEvent<FocusEvent>): void => {
       const $field = $(e.currentTarget);
       const field = getData($field, FIELD_DATA_KEY);
 
@@ -417,7 +442,7 @@ export class FieldChooserBase extends mixinWidget<FieldChooserBaseProperties> {
       }
     };
 
-    const focusOutHandler = (e) => {
+    const focusOutHandler = (e: FieldChooserFieldEvent<FocusEvent>): void => {
       const relatedTarget = e.relatedTarget as Node | null;
 
       if (relatedTarget) {
@@ -451,7 +476,7 @@ export class FieldChooserBase extends mixinWidget<FieldChooserBaseProperties> {
     );
   }
 
-  restoreFieldFocus(): void {
+  public restoreFieldFocus(): void {
     this.updateFieldsTabIndexes();
 
     if (this._focusedFieldIndex !== -1) {
@@ -459,7 +484,7 @@ export class FieldChooserBase extends mixinWidget<FieldChooserBaseProperties> {
     }
   }
 
-  updateFieldsTabIndexes(): void {
+  protected updateFieldsTabIndexes(): void {
     FIELD_AREAS.forEach((area) => {
       this._getFieldNavigation(area).updateTabIndexes();
     });
@@ -469,9 +494,9 @@ export class FieldChooserBase extends mixinWidget<FieldChooserBaseProperties> {
     this._fieldNavigationMap = this._fieldNavigationMap ?? {};
     this._fieldNavigationMap[area] = this._fieldNavigationMap[area] ?? new RovingTabIndex({
       component: this,
-      getItems: () => this._getAreaFieldElements(area),
-      scrollToItem: (item) => this._scrollFieldElementToView(item),
-      getItemId: (item) => this._getFieldElementId(item),
+      getItems: (): HTMLElement[] => this._getAreaFieldElements(area),
+      scrollToItem: (item: HTMLElement): void => this._scrollFieldElementToView(item),
+      getItemId: (item: HTMLElement): string | undefined => this._getFieldElementId(item),
     });
 
     return this._fieldNavigationMap[area];
@@ -520,7 +545,10 @@ export class FieldChooserBase extends mixinWidget<FieldChooserBaseProperties> {
     return FIELD_NAVIGATION_DELTAS[key];
   }
 
-  private _handleFieldContextMenuKey(e, field): void {
+  private _handleFieldContextMenuKey(
+    e: FieldChooserFieldEvent<KeyboardEvent>,
+    field: FieldChooserField,
+  ): void {
     const onContextMenuKey = this.option('onFieldContextMenuKeyDown');
 
     if (!field.area || !onContextMenuKey) {
@@ -538,7 +566,10 @@ export class FieldChooserBase extends mixinWidget<FieldChooserBaseProperties> {
     onContextMenuKey(e, navigation);
   }
 
-  private _handleFieldNavigation(e, field): void {
+  private _handleFieldNavigation(
+    e: FieldChooserFieldEvent<KeyboardEvent>,
+    field: FieldChooserField,
+  ): void {
     if (!field.area) {
       return;
     }
@@ -562,7 +593,11 @@ export class FieldChooserBase extends mixinWidget<FieldChooserBaseProperties> {
     }
   }
 
-  private _renderHeaderFilterIcon($fieldElement, field, showColumnLines): void {
+  private _renderHeaderFilterIcon(
+    $fieldElement: dxElementWrapper,
+    field: FieldChooserField,
+    showColumnLines: boolean,
+  ): void {
     if (!this._dataSource || !fieldHasHeaderFilter(this._dataSource, field)) {
       return;
     }
@@ -587,7 +622,7 @@ export class FieldChooserBase extends mixinWidget<FieldChooserBaseProperties> {
     $container.append($icon);
   }
 
-  private handleHeaderFilterIconClick(e, field): void {
+  private handleHeaderFilterIconClick(e: FieldChooserFieldEvent, field: FieldChooserField): void {
     const that = this;
 
     if (!this._dataSource) {
@@ -659,7 +694,7 @@ export class FieldChooserBase extends mixinWidget<FieldChooserBaseProperties> {
     }));
   }
 
-  private handleFieldClick(field): void {
+  private handleFieldClick(field: FieldChooserField): void {
     const isRemoteSort = this.option('remoteSort');
     const sortOrder = reverseSortOrder(field.sortOrder);
 
@@ -684,11 +719,11 @@ export class FieldChooserBase extends mixinWidget<FieldChooserBaseProperties> {
     });
   }
 
-  _initTemplates() {
+  public _initTemplates(): void {
 
   }
 
-  addWidgetPrefix(className) {
+  public addWidgetPrefix(className: string): string {
     return `dx-pivotgrid-${className}`;
   }
 }

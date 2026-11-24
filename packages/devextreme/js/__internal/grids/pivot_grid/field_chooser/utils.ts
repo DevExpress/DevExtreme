@@ -11,14 +11,14 @@ import { FIELD_NAVIGATION_DELTAS, SORT_ORDER } from './const';
 import type { FieldChooserBaseProperties, FieldChooserHeaderFilterItem } from './types';
 
 export const reverseSortOrder = (
-  sortOrder: SortOrderType,
+  sortOrder: SortOrderType | undefined,
 ): SortOrderType => (sortOrder === SORT_ORDER.descending
   ? SORT_ORDER.ascending
   : SORT_ORDER.descending);
 
 export const shouldCancelDragging = (
   field: { isMeasure?: boolean } | undefined,
-  targetGroup: string,
+  targetGroup: string | undefined,
 ): boolean => {
   if (!field) {
     return false;

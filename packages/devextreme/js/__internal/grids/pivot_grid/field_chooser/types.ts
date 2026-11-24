@@ -15,6 +15,11 @@ export interface FieldChooserHeaderFilterItem extends HeaderFilterItem {
   items?: FieldChooserHeaderFilterItem[];
 }
 
+/** currentTarget is the field element that matched the delegated selector. */
+export type FieldChooserFieldEvent<TNativeEvent extends Event = Event> = DxEvent<TNativeEvent> & {
+  currentTarget: HTMLElement;
+};
+
 /** The copy of a field that the header filter gets as its options. */
 export type FieldChooserHeaderFilterField = Omit<PivotGridField, 'selector'>
   & Pick<HeaderFilterViewOptions, 'selector'>

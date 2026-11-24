@@ -563,6 +563,7 @@ export class FieldChooser extends FieldChooserBase {
     $container.empty();
     each(fields, (_, field) => {
       if (field.visible !== false) {
+        // @ts-expect-error a field's index is set by the data source
         that.renderField(field, true).appendTo($container);
       }
     });
