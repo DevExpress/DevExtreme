@@ -6,7 +6,7 @@ import type { PivotGridDataSource } from '../data_source/data_source';
 import type { DataSourceState } from '../data_source/types';
 import type { PivotGridField } from '../types';
 import { createPath, foreachTree } from '../widget_utils';
-import type { SortOrderType } from './const';
+import type { FieldChooserField, SortOrderType } from './const';
 import { FIELD_NAVIGATION_DELTAS, SORT_ORDER } from './const';
 import type { FieldChooserBaseProperties, FieldChooserHeaderFilterItem } from './types';
 
@@ -88,10 +88,11 @@ export const processItems = (
 
 export const getMainGroupField = (
   dataSource: PivotGridDataSource,
-  sourceField: PivotGridField,
-): PivotGridField => {
+  sourceField: FieldChooserField,
+): FieldChooserField => {
   let field = sourceField;
   if (isDefined(sourceField.groupIndex)) {
+    // @ts-expect-error a field's index is set by the data source
     field = dataSource.getAreaFields(sourceField.area, true)[sourceField.areaIndex ?? -1];
   }
 
@@ -100,7 +101,7 @@ export const getMainGroupField = (
 
 export const fieldHasHeaderFilter = (
   dataSource: PivotGridDataSource,
-  field: PivotGridField,
+  field: FieldChooserField,
 ): boolean => {
   const mainGroupField = getMainGroupField(dataSource, field);
   const isFirstInGroup = field.groupIndex === 0 || !isDefined(field.groupIndex);

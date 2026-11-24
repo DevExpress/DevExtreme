@@ -21,9 +21,12 @@ import type { HeaderFilterOptions, HeaderFilterViewOptions } from '@ts/grids/gri
 import sortingMixin from '@ts/grids/grid_core/sorting/sorting_mixin';
 import type { AriaSortState, SortingColumn } from '@ts/grids/grid_core/sorting/types';
 import type { InternalGrid } from '@ts/grids/grid_core/types';
+import Scrollable from '@ts/ui/scroll_view/scrollable';
 
 import type { PivotGridDataSource } from '../data_source/data_source';
+import type { DataSourceHeaderItem } from '../data_source/types';
 import { RovingTabIndex } from '../keyboard_navigation/roving_tab_index';
+import type { PivotGrid } from '../m_widget';
 import SortableModule from '../sortable/sortable';
 import type {
   OldSortableChangedArgs,
@@ -37,10 +40,12 @@ import {
   ATTRIBUTES, CLASSES, FIELD_DATA_KEY, FIELD_NAVIGATION_DELTAS,
 } from './const';
 import { dragAndDropItemRender } from './dom';
+import type { FieldChooser } from './m_field_chooser';
 import type {
   FieldChooserBaseProperties,
   FieldChooserFieldEvent,
   FieldChooserHeaderFilterField,
+  FieldChooserHeaderFilterItem,
 } from './types';
 import {
   fieldHasHeaderFilter,
@@ -190,7 +195,6 @@ export class FieldChooserBase extends mixinWidget<FieldChooserBaseProperties> {
   }
 
   public renderField(field: FieldChooserField, showColumnLines: boolean): dxElementWrapper {
-    const that = this;
     const caption = field.caption ?? field.dataField ?? '';
     const $fieldContent = $(DIV).addClass(CLASSES.area.fieldContent)
       .text(caption);
@@ -203,11 +207,11 @@ export class FieldChooserBase extends mixinWidget<FieldChooserBaseProperties> {
 
     if (field.area !== 'data') {
       if (field.allowSorting) {
-        that._applyColumnState({
+        this._applyColumnState({
           name: 'sort',
           rootElement: $fieldElement,
           column: {
-            alignment: that.option('rtlEnabled') ? 'right' : 'left',
+            alignment: this.option('rtlEnabled') ? 'right' : 'left',
             sortOrder: field.sortOrder === 'desc' ? 'desc' : 'asc',
             allowSorting: field.allowSorting,
             caption,
@@ -216,7 +220,7 @@ export class FieldChooserBase extends mixinWidget<FieldChooserBaseProperties> {
         });
       }
 
-      that._renderHeaderFilterIcon($fieldElement, field, showColumnLines);
+      this._renderHeaderFilterIcon($fieldElement, field, showColumnLines);
     }
 
     if (field.groupName) {
@@ -233,8 +237,9 @@ export class FieldChooserBase extends mixinWidget<FieldChooserBaseProperties> {
   private _getFieldItemAriaLabel(field: FieldChooserField, caption: string): string {
     // The sort indicator is rendered for every sortable non-data field, with
     // ascending shown by default, so the label mirrors the visible state.
+    const fieldSortOrder = field.sortOrder === 'desc' ? 'desc' : 'asc';
     const sortOrder = field.allowSorting && field.area !== 'data'
-      ? (field.sortOrder === 'desc' ? 'desc' : 'asc')
+      ? fieldSortOrder
       : undefined;
     const hasHeaderFilterValue = !!this._dataSource
       && fieldHasHeaderFilter(this._dataSource, field)
@@ -253,6 +258,7 @@ export class FieldChooserBase extends mixinWidget<FieldChooserBaseProperties> {
   }
 
   public renderSortable(): void {
+    // eslint-disable-next-line @typescript-eslint/no-this-alias -- the methods use their own this
     const that = this;
 
     that._createComponent(that.$element(), Sortable, extend({
@@ -263,8 +269,9 @@ export class FieldChooserBase extends mixinWidget<FieldChooserBaseProperties> {
       groupFilter(this: Element): boolean {
         const dataSource = that._dataSource;
         const $sortable = $(this).closest('.dx-sortable-old');
-        const pivotGrid: any = $sortable.data('dxPivotGrid');
-        const pivotGridFieldChooser: any = $sortable.data('dxPivotGridFieldChooser');
+        const pivotGrid = $sortable.data<PivotGrid | undefined>('dxPivotGrid');
+        const pivotGridFieldChooser = $sortable
+          .data<FieldChooser | undefined>('dxPivotGridFieldChooser');
 
         if (pivotGrid) {
           return pivotGrid.getDataSource() === dataSource;
@@ -290,7 +297,7 @@ export class FieldChooserBase extends mixinWidget<FieldChooserBaseProperties> {
 
         if (field) {
           const { targetIndex } = e;
-          let mainGroupField;
+          let mainGroupField = field;
           let invisibleFieldsIndexOffset = 0;
 
           that._processDemandState((dataSource) => {
@@ -321,20 +328,19 @@ export class FieldChooserBase extends mixinWidget<FieldChooserBaseProperties> {
   protected _processDemandState(
     func: (dataSource: PivotGridDataSource, isInstantlyMode: boolean) => void,
   ): void {
-    const that = this;
-    const dataSource = that._dataSource;
+    const dataSource = this._dataSource;
 
     if (!dataSource) {
       return;
     }
 
-    const isInstantlyMode = that.option('applyChangesMode') === 'instantly';
+    const isInstantlyMode = this.option('applyChangesMode') === 'instantly';
 
     if (isInstantlyMode) {
       func(dataSource, isInstantlyMode);
     } else {
       const currentState = dataSource.state();
-      const pivotGridState = that.option('state');
+      const pivotGridState = this.option('state');
 
       if (pivotGridState) {
         dataSource.state(pivotGridState, true);
@@ -347,9 +353,7 @@ export class FieldChooserBase extends mixinWidget<FieldChooserBaseProperties> {
   }
 
   protected _applyChanges(fields: FieldChooserField[], props: Partial<PivotGridField>): void {
-    const that = this;
-
-    that._processDemandState((dataSource, isInstantlyMode) => {
+    this._processDemandState((dataSource, isInstantlyMode) => {
       fields.forEach(({ index }) => {
         dataSource.field(index, props);
       });
@@ -357,7 +361,7 @@ export class FieldChooserBase extends mixinWidget<FieldChooserBaseProperties> {
       if (isInstantlyMode) {
         dataSource.load();
       } else {
-        that._changedHandler?.();
+        this._changedHandler?.();
       }
     });
   }
@@ -530,7 +534,9 @@ export class FieldChooserBase extends mixinWidget<FieldChooserBaseProperties> {
 
   private _scrollFieldElementToView(fieldElement: HTMLElement): void {
     const $scrollable = $(fieldElement).closest(`.${CLASSES.scrollable.self}`);
-    const scrollable = $scrollable.length ? ($scrollable as any).dxScrollable('instance') : undefined;
+    const scrollable = $scrollable.length
+      ? Scrollable.getInstance<Scrollable | undefined>($scrollable.get(0))
+      : undefined;
 
     scrollable?.scrollToElement(fieldElement);
   }
@@ -623,13 +629,14 @@ export class FieldChooserBase extends mixinWidget<FieldChooserBaseProperties> {
   }
 
   private handleHeaderFilterIconClick(e: FieldChooserFieldEvent, field: FieldChooserField): void {
+    // eslint-disable-next-line @typescript-eslint/no-this-alias -- the methods use their own this
     const that = this;
 
     if (!this._dataSource) {
       return;
     }
 
-    // @ts-expect-error a field's index is set by the data source, its selector is typed as Function
+    // @ts-expect-error a field's selector is typed as Function
     const mainGroupField: FieldChooserHeaderFilterField = extend(
       true,
       {},
@@ -647,10 +654,10 @@ export class FieldChooserBase extends mixinWidget<FieldChooserBaseProperties> {
         load(options) {
           const { userData } = options;
           if (userData.store) {
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-return -- userData isn't typed
             return userData.store.load(options);
           }
-          // @ts-expect-error
-          const d = new Deferred();
+          const d = Deferred<DataSourceHeaderItem[]>();
           that._dataSource?.getFieldValues(
             mainGroupField.index,
             !!that.option('headerFilter')?.showRelevantValues,
@@ -672,10 +679,11 @@ export class FieldChooserBase extends mixinWidget<FieldChooserBaseProperties> {
               userData.store = new ArrayStore(data);
               userData.store.load(options).done(d.resolve).fail(d.reject);
             }
+            // eslint-disable-next-line @typescript-eslint/no-misused-promises -- ignores the result
           }).fail(d.reject);
           return d;
         },
-        postProcess(data) {
+        postProcess(data: FieldChooserHeaderFilterItem[]): FieldChooserHeaderFilterItem[] {
           processItems(data, mainGroupField);
           return data;
         },
