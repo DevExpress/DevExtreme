@@ -1,4 +1,5 @@
 import type { Locator, Page } from '@playwright/test';
+import { expect } from '../fixtures';
 
 const STYLESHEET_RULES_ID = 'stylesheetRules';
 
@@ -146,3 +147,11 @@ export const addFocusableElementBefore = async (
   },
   { selector: targetSelector, id: elementId },
 );
+
+export const expectImagesLoaded = async (container: Locator, count: number): Promise<void> => {
+  const images = container.locator('img');
+
+  await expect(images).toHaveCount(count);
+  await expect.poll(() => images.evaluateAll((elements: HTMLImageElement[]) => elements
+    .every((image) => image.complete && image.naturalWidth > 0))).toBe(true);
+};

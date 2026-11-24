@@ -1,6 +1,6 @@
 import { test } from '../../../fixtures';
 import { createWidget } from '../../../helpers/createWidget';
-import { appendElementTo } from '../../../helpers/domUtils';
+import { appendElementTo, expectImagesLoaded } from '../../../helpers/domUtils';
 import { testScreenshot } from '../../../helpers/screenshots';
 import Chat from '../../../models/chat';
 import {
@@ -10,7 +10,6 @@ import {
   generateImageMessage,
   generateMessages,
 } from './data';
-import { expectImagesLoaded } from './utils';
 
 test.describe('ChatMessageBubble', () => {
   test('Chat: messagebubble', async ({ page }) => {

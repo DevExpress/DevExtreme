@@ -1,10 +1,9 @@
 import { test } from '../../../fixtures';
 import { createWidget } from '../../../helpers/createWidget';
-import { appendElementTo } from '../../../helpers/domUtils';
+import { appendElementTo, expectImagesLoaded } from '../../../helpers/domUtils';
 import { testScreenshot } from '../../../helpers/screenshots';
 import Chat from '../../../models/chat';
 import { avatarUrl, createUser, generateMessages } from './data';
-import { expectImagesLoaded } from './utils';
 
 test.describe('ChatAvatar', () => {
   test('Chat: avatar', async ({ page }) => {
