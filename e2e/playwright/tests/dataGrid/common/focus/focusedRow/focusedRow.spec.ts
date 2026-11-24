@@ -560,13 +560,14 @@ test.describe('Focused row', () => {
       (counterName) => (window as any)[counterName],
       name,
     );
-    // The rows of the new position render a moment after the scroll, and a render is where the
-    // events would fire.
+    // The grid takes the scroll at once but can render the rows of the new position a moment later,
+    // and a render is where the events would fire.
     const scrollTo = async (top: number): Promise<void> => {
       const topRowKey = await dataGrid.apiGetTopVisibleRowKey();
 
       await dataGrid.scrollTo({ top });
       await expect.poll(() => dataGrid.apiGetTopVisibleRowKey()).not.toEqual(topRowKey);
+      await expect.poll(() => dataGrid.isViewportRowsRenderPending()).toBe(false);
     };
 
     await expect.poll(() => dataGrid.isReady()).toBe(true);

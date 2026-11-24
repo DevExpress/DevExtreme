@@ -153,6 +153,8 @@ test.describe('Editing events', () => {
       await page.keyboard.press(text);
     };
 
+    await expect.poll(() => dataGrid.isReady()).toBe(true);
+
     await addRow('1');
     await addRow('2');
     await headerPanel.getSaveButton().click();
@@ -167,6 +169,8 @@ test.describe('Editing events', () => {
     await secondRowDialog.getByRole('button', { name: 'No' }).click();
     await firstRowDialog.getByRole('button', { name: 'Yes' }).click();
     await expect(dialogs).toHaveCount(0);
+    // The save goes on after the dialogs close.
+    await expect.poll(() => dataGrid.isReady()).toBe(true);
 
     await testScreenshot(page, 'T1250405-canceled-rows-hidden.png', { element: dataGrid.element });
   });

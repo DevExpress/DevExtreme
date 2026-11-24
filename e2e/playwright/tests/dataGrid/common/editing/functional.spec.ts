@@ -21,6 +21,39 @@ const DEFAULT_CONFIG = {
   legacyRendering: false,
 };
 
+// Counts a grid event from now on, for steps whose effect nothing on the page shows.
+const countEvents = async (
+  dataGrid: DataGrid,
+  eventName: string,
+): Promise<() => Promise<number>> => {
+  const counterName = `${eventName}Count`;
+
+  await dataGrid.element.evaluate((element, { name, counter }) => {
+    (window as any)[counter] = 0;
+    $(element).data('dxDataGrid').on(name, () => {
+      (window as any)[counter] += 1;
+    });
+  }, { name: eventName, counter: counterName });
+
+  return () => dataGrid.page.evaluate((counter) => (window as any)[counter], counterName);
+};
+
+// A save that fails validation changes nothing visible, and in row mode it runs on a timer after
+// the click or the Enter. Every save attempt raises rowValidating: wait for it, then for the grid.
+const trackSaveAttempts = async (
+  dataGrid: DataGrid,
+): Promise<(action: () => Promise<void>) => Promise<void>> => {
+  const getCount = await countEvents(dataGrid, 'rowValidating');
+
+  return async (action) => {
+    const count = await getCount();
+
+    await action();
+    await expect.poll(getCount).toBeGreaterThan(count);
+    await expect.poll(() => dataGrid.isReady()).toBe(true);
+  };
+};
+
 test.describe('Editing.Functional', () => {
   test('Focused cell should be switched to the editing mode after onSaving\'s promise is resolved (T1190566)', async ({ page }) => {
     await createWidget(page, 'dxDataGrid', () => {
@@ -48,6 +81,8 @@ test.describe('Editing.Functional', () => {
 
     const dataGrid = new DataGrid(page, GRID_SELECTOR);
     const cell = dataGrid.getDataCell(0, 0);
+
+    await expect.poll(() => dataGrid.isReady()).toBe(true);
 
     await cell.element.click();
     await typeText(cell.getEditor().element, 'new_value');
@@ -87,10 +122,15 @@ test.describe('Editing.Functional', () => {
 
     const dataGrid = new DataGrid(page, GRID_SELECTOR);
     const cell = dataGrid.getDataCell(0, 0);
+    const getSavingCount = await countEvents(dataGrid, 'saving');
+
+    await expect.poll(() => dataGrid.isReady()).toBe(true);
 
     await cell.element.click();
     await typeText(cell.getEditor().element, 'new_value');
     await page.keyboard.press('Enter');
+    // The Tabs are meant to come while the save waits for its promise.
+    await expect.poll(getSavingCount).toBe(1);
     await expect.poll(() => dataGrid.isReady()).toBe(true);
     await page.keyboard.press('Tab');
     await dataGrid.getDataCell(1, 0).expectFocusVisible();
@@ -114,6 +154,8 @@ test.describe('Editing.Functional', () => {
     });
 
     const dataGrid = new DataGrid(page, GRID_SELECTOR);
+
+    await expect.poll(() => dataGrid.isReady()).toBe(true);
 
     await dataGrid.getDataCell(0, 1).element.click();
     await page.keyboard.press('1');
@@ -143,6 +185,10 @@ test.describe('Editing.Functional', () => {
       }],
     }));
 
+    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+
+    await expect.poll(() => dataGrid.isReady()).toBe(true);
+
     await page.locator('#svg-icon').locator('..').click();
 
     await expect.poll(() => page.evaluate(() => (window as any).onSvgClickCounter)).toBe(1);
@@ -163,6 +209,8 @@ test.describe('Editing.Functional', () => {
     const dataGrid = new DataGrid(page, GRID_SELECTOR);
     const selectBox = new SelectBox(page, '#otherContainer');
     const cell = dataGrid.getDataCell(0, 0);
+
+    await expect.poll(() => dataGrid.isReady()).toBe(true);
 
     await cell.element.click();
     // The editor opens with its text selected (selectTextOnEditStart), so the typing replaces it.
@@ -201,14 +249,18 @@ test.describe('Editing.Functional', () => {
     const rowIndex = 0;
     const columnIndex = 0;
 
+    await expect.poll(() => dataGrid.isReady()).toBe(true);
+
     await dataGrid.getHeaderPanel().getAddRowButton().click();
 
     const dataRow = getFirstDataRow(dataGrid);
     const cell0 = dataRow.getDataCell(columnIndex);
     const editor0 = cell0.getEditor();
-    const saveButton = dataRow.getCommandCell(3).getSaveButton();
+    const saveButton = dataRow.getCommandCell(3).getButton(0);
 
     await dataRow.expectInserted();
+    // Adding a row ends with the focus in its first editor.
+    await expect(editor0.element).toBeFocused();
     await expect(cell0.getPendingIndicator()).not.toBeAttached();
     await cell0.expectInvalid(false);
 
@@ -259,9 +311,11 @@ test.describe('Editing.Functional', () => {
     const editor0 = cell0.getEditor();
     const commandCell = dataRow.getCommandCell(3);
 
-    await commandCell.getEditButton().click();
+    await expect.poll(() => dataGrid.isReady()).toBe(true);
+
+    await commandCell.getButton(0).click();
     await typeText(editor0.element, '3', { replace: true });
-    await commandCell.getSaveButton().click();
+    await commandCell.getButton(0).click();
 
     await expect(cell0.getPendingIndicator()).toBeAttached();
     await expect.poll(() => dataGrid.apiGetCellValidationStatus(rowIndex, columnIndex)).toBe('invalid');
@@ -269,7 +323,7 @@ test.describe('Editing.Functional', () => {
     await cell0.expectInvalid();
 
     await typeText(editor0.element, '1', { replace: true });
-    await commandCell.getSaveButton().click();
+    await commandCell.getButton(0).click();
 
     await dataRow.expectEdited(false);
     await expect.poll(() => dataGrid.apiGetCellValidationStatus(rowIndex, columnIndex)).toBeFalsy();
@@ -317,9 +371,11 @@ test.describe('Editing.Functional', () => {
     const editor0 = cell0.getEditor();
     const commandCell = dataRow.getCommandCell(3);
 
-    await commandCell.getEditButton().click();
+    await expect.poll(() => dataGrid.isReady()).toBe(true);
+
+    await commandCell.getButton(0).click();
     await typeText(editor0.element, '3', { replace: true });
-    await commandCell.getSaveButton().click();
+    await commandCell.getButton(0).click();
 
     await expect(cell0.getPendingIndicator()).toBeAttached();
     await expect.poll(() => dataGrid.apiGetCellValidationStatus(rowIndex, 0)).toBe('invalid');
@@ -329,7 +385,7 @@ test.describe('Editing.Functional', () => {
     await cell1.expectInvalid(false);
 
     await typeText(editor0.element, '1', { replace: true });
-    await commandCell.getSaveButton().click();
+    await commandCell.getButton(0).click();
 
     await expect.poll(() => dataGrid.apiGetCellValidationStatus(rowIndex, 0)).toBe('valid');
     await expect.poll(() => dataGrid.apiGetCellValidationStatus(rowIndex, 1)).toBe('invalid');
@@ -366,6 +422,8 @@ test.describe('Editing.Functional', () => {
     const cell1 = dataGrid.getDataCell(0, 1);
     const cell2 = dataGrid.getDataCell(0, 2);
 
+    await expect.poll(() => dataGrid.isReady()).toBe(true);
+
     await cell0.element.click();
     await expect(cell0.getPendingIndicator()).toBeAttached();
     await cell1.element.click();
@@ -375,8 +433,8 @@ test.describe('Editing.Functional', () => {
     await page.evaluate(() => (window as any).deferred.resolve(true));
 
     await expect(cell0.getPendingIndicator()).not.toBeAttached();
-    await cell2.expectFocusHidden(false);
     await cell2.expectFocusVisible();
+    await cell2.expectFocusHidden(false);
   });
 
   test('Async Validation(Cell) - Only valid data is saved in a new row', async ({ page }) => {
@@ -408,6 +466,8 @@ test.describe('Editing.Functional', () => {
     const rowIndex = 0;
     const columnIndex = 0;
 
+    await expect.poll(() => dataGrid.isReady()).toBe(true);
+
     await dataGrid.getHeaderPanel().getAddRowButton().click();
 
     const dataRow = getFirstDataRow(dataGrid);
@@ -415,6 +475,8 @@ test.describe('Editing.Functional', () => {
     const editor0 = cell0.getEditor();
 
     await dataRow.expectInserted();
+    // Adding a row ends with the focus in its first editor.
+    await expect(editor0.element).toBeFocused();
     await expect(cell0.getPendingIndicator()).not.toBeAttached();
     await cell0.expectInvalid(false);
 
@@ -463,6 +525,8 @@ test.describe('Editing.Functional', () => {
     const columnIndex = 0;
     const cell0 = dataGrid.getDataRow(rowIndex).getDataCell(columnIndex);
     const editor0 = cell0.getEditor();
+
+    await expect.poll(() => dataGrid.isReady()).toBe(true);
 
     await cell0.element.click();
 
@@ -525,6 +589,8 @@ test.describe('Editing.Functional', () => {
     const cell0 = dataGrid.getDataCell(0, 0);
     const cell1 = dataGrid.getDataCell(0, 1);
     const editor0 = cell0.getEditor();
+
+    await expect.poll(() => dataGrid.isReady()).toBe(true);
 
     await cell0.element.click();
 
@@ -589,6 +655,8 @@ test.describe('Editing.Functional', () => {
 
     const dataGrid = new DataGrid(page, GRID_SELECTOR);
 
+    await expect.poll(() => dataGrid.isReady()).toBe(true);
+
     await dataGrid.apiAddRow();
 
     const dataRow = getFirstDataRow(dataGrid);
@@ -634,6 +702,8 @@ test.describe('Editing.Functional', () => {
 
     const dataGrid = new DataGrid(page, GRID_SELECTOR);
 
+    await expect.poll(() => dataGrid.isReady()).toBe(true);
+
     await dataGrid.apiEditCell(0, 0);
 
     await typeText(dataGrid.getDataCell(0, 0).getEditor().element, '123');
@@ -672,6 +742,8 @@ test.describe('Editing.Functional', () => {
     }), GRID_SELECTOR, { arg: DEFAULT_CONFIG });
 
     const dataGrid = new DataGrid(page, GRID_SELECTOR);
+
+    await expect.poll(() => dataGrid.isReady()).toBe(true);
 
     await dataGrid.apiAddRow();
 
@@ -715,6 +787,8 @@ test.describe('Editing.Functional', () => {
 
     const dataGrid = new DataGrid(page, GRID_SELECTOR);
 
+    await expect.poll(() => dataGrid.isReady()).toBe(true);
+
     await dataGrid.apiEditCell(0, 0);
 
     await typeText(dataGrid.getDataCell(0, 0).getEditor().element, '123');
@@ -755,6 +829,8 @@ test.describe('Editing.Functional', () => {
     const headerPanel = dataGrid.getHeaderPanel();
     const saveButton = headerPanel.getSaveButton();
 
+    await expect.poll(() => dataGrid.isReady()).toBe(true);
+
     await headerPanel.getAddRowButton().click();
 
     const dataRow = getFirstDataRow(dataGrid);
@@ -762,6 +838,8 @@ test.describe('Editing.Functional', () => {
     const editor0 = cell0.getEditor();
 
     await dataRow.expectInserted();
+    // Adding a row ends with the focus in its first editor.
+    await expect(editor0.element).toBeFocused();
     await expect(cell0.getPendingIndicator()).not.toBeAttached();
     await cell0.expectInvalid(false);
 
@@ -818,6 +896,8 @@ test.describe('Editing.Functional', () => {
     const saveButton = dataGrid.getHeaderPanel().getSaveButton();
     const cell0 = dataGrid.getDataRow(rowIndex).getDataCell(columnIndex);
     const editor0 = cell0.getEditor();
+
+    await expect.poll(() => dataGrid.isReady()).toBe(true);
 
     await cell0.element.click();
 
@@ -892,6 +972,8 @@ test.describe('Editing.Functional', () => {
     const cell0 = dataGrid.getDataRow(rowIndex).getDataCell(0);
     const cell1 = dataGrid.getDataRow(rowIndex).getDataCell(1);
     const editor0 = cell0.getEditor();
+
+    await expect.poll(() => dataGrid.isReady()).toBe(true);
 
     await cell0.element.click();
 
@@ -972,6 +1054,8 @@ test.describe('Editing.Functional', () => {
     const dataGrid = new DataGrid(page, GRID_SELECTOR);
     const headerPanel = dataGrid.getHeaderPanel();
 
+    await expect.poll(() => dataGrid.isReady()).toBe(true);
+
     await headerPanel.getAddRowButton().click();
 
     const dataRow = getFirstDataRow(dataGrid);
@@ -979,6 +1063,8 @@ test.describe('Editing.Functional', () => {
     const editor0 = cell0.getEditor();
 
     await dataRow.expectInserted();
+    // Adding a row ends with the focus in its first editor.
+    await expect(editor0.element).toBeFocused();
     await expect(cell0.getPendingIndicator()).not.toBeAttached();
     await cell0.expectInvalid(false);
 
@@ -1018,11 +1104,14 @@ test.describe('Editing.Functional', () => {
     const editor0 = cell0.getEditor();
     const cell1 = dataRow.getDataCell(1);
     const commandCell = dataRow.getCommandCell(2);
+    const saveAttempt = await trackSaveAttempts(dataGrid);
 
-    await commandCell.getEditButton().click();
+    await expect.poll(() => dataGrid.isReady()).toBe(true);
 
-    await cell1.expectInvalid(false);
+    await commandCell.getButton(0).click();
+
     await expect(editor0.element).toBeAttached();
+    await cell1.expectInvalid(false);
 
     await editor0.element.click();
     await typeText(editor0.element, '3', { replace: true });
@@ -1030,17 +1119,17 @@ test.describe('Editing.Functional', () => {
 
     await cell1.expectInvalid();
 
-    await commandCell.getSaveButton().click();
+    await saveAttempt(() => commandCell.getButton(0).click());
 
     await cell1.expectInvalid();
 
     await editor0.element.click();
     await typeText(editor0.element, '10', { replace: true });
-    await page.keyboard.press('Enter');
+    await saveAttempt(() => page.keyboard.press('Enter'));
 
     await cell1.expectInvalid();
 
-    await commandCell.getSaveButton().click();
+    await saveAttempt(() => commandCell.getButton(0).click());
 
     await cell1.expectInvalid();
     await dataRow.expectEdited();
@@ -1071,11 +1160,14 @@ test.describe('Editing.Functional', () => {
     const editor0 = cell0.getEditor();
     const cell1 = dataRow.getDataCell(1);
     const commandCell = dataRow.getCommandCell(2);
+    const saveAttempt = await trackSaveAttempts(dataGrid);
 
-    await commandCell.getEditButton().click();
+    await expect.poll(() => dataGrid.isReady()).toBe(true);
 
-    await cell1.expectInvalid(false);
+    await commandCell.getButton(0).click();
+
     await expect(editor0.element).toBeAttached();
+    await cell1.expectInvalid(false);
 
     await editor0.element.click();
     await typeText(editor0.element, '3', { replace: true });
@@ -1083,7 +1175,7 @@ test.describe('Editing.Functional', () => {
 
     await cell1.expectInvalid();
 
-    await commandCell.getSaveButton().click();
+    await saveAttempt(() => commandCell.getButton(0).click());
 
     await cell1.expectInvalid();
 
@@ -1118,11 +1210,14 @@ test.describe('Editing.Functional', () => {
     const cell0 = dataRow.getDataCell(0);
     const editor0 = cell0.getEditor();
     const cell1 = dataRow.getDataCell(1);
+    const saveAttempt = await trackSaveAttempts(dataGrid);
+
+    await expect.poll(() => dataGrid.isReady()).toBe(true);
 
     await cell0.element.click();
 
-    await cell1.expectInvalid(false);
     await expect(editor0.element).toBeAttached();
+    await cell1.expectInvalid(false);
 
     await editor0.element.click();
     await typeText(editor0.element, '3', { replace: true });
@@ -1132,7 +1227,7 @@ test.describe('Editing.Functional', () => {
     await cell0.expectEditCell();
 
     await typeText(editor0.element, '10', { replace: true });
-    await page.keyboard.press('Enter');
+    await saveAttempt(() => page.keyboard.press('Enter'));
 
     await cell1.expectInvalid();
     await cell0.expectEditCell();
@@ -1163,10 +1258,12 @@ test.describe('Editing.Functional', () => {
     const editor0 = cell0.getEditor();
     const cell1 = dataRow.getDataCell(1);
 
+    await expect.poll(() => dataGrid.isReady()).toBe(true);
+
     await cell0.element.click();
 
-    await cell1.expectInvalid(false);
     await expect(editor0.element).toBeAttached();
+    await cell1.expectInvalid(false);
 
     await editor0.element.click();
     await typeText(editor0.element, '3', { replace: true });
@@ -1209,17 +1306,19 @@ test.describe('Editing.Functional', () => {
       const editor0 = cell0.getEditor();
       const cell1 = dataRow.getDataCell(1);
 
+      await expect.poll(() => dataGrid.isReady()).toBe(true);
+
       await cell0.element.click();
 
-      await cell1.expectInvalid(false);
       await expect(editor0.element).toBeAttached();
+      await cell1.expectInvalid(false);
 
       await editor0.element.click();
       await typeText(editor0.element, '3', { replace: true });
       await page.keyboard.press('Enter');
 
-      await cell1.expectInvalid(false);
       await cell0.expectModified();
+      await cell1.expectInvalid(false);
 
       await saveButton.click();
 
@@ -1238,8 +1337,8 @@ test.describe('Editing.Functional', () => {
 
       await saveButton.click();
 
-      await cell1.expectInvalid(false);
       await cell0.expectModified(false);
+      await cell1.expectInvalid(false);
       await cell0.expectEditCell(false);
     });
   });
@@ -1276,10 +1375,12 @@ test.describe('Editing.Functional', () => {
     const cell11 = dataRow1.getDataCell(1);
     const editor10 = cell10.getEditor();
 
+    await expect.poll(() => dataGrid.isReady()).toBe(true);
+
     await cell10.element.click();
 
-    await cell11.expectInvalid(false);
     await expect(editor10.element).toBeAttached();
+    await cell11.expectInvalid(false);
 
     await editor10.element.click();
     await typeText(editor10.element, 'test');
@@ -1288,24 +1389,30 @@ test.describe('Editing.Functional', () => {
     await cell11.expectInvalid();
     await cell10.expectModified();
 
+    // The focus moves to the clicked cell, for some cells a moment later: the checks after it see
+    // the click handled.
     await cell00.element.click();
 
+    await cell00.expectFocusVisible();
     await cell11.expectInvalid();
     await cell10.expectModified();
 
     await cell01.element.click();
 
+    await cell01.expectFocusVisible();
     await cell11.expectInvalid();
     await cell10.expectModified();
 
     await cell11.element.click();
 
+    await cell11.expectFocusVisible();
     await cell11.expectInvalid();
     await expect(cell11.getInvalidMessage()).toBeAttached();
     await cell10.expectModified();
 
     await cell10.element.click();
 
+    await cell10.expectFocusVisible();
     await cell11.expectInvalid();
     await cell10.expectModified();
   });
@@ -1348,6 +1455,8 @@ test.describe('Editing.Functional', () => {
     const cell1 = dataRow.getDataCell(1);
     const editor0 = cell0.getEditor();
     const editor1 = cell1.getEditor();
+
+    await expect.poll(() => dataGrid.isReady()).toBe(true);
 
     await cell0.element.click();
 
@@ -1425,6 +1534,8 @@ test.describe('Editing.Functional', () => {
     const cell0 = dataGrid.getDataRow(0).getDataCell(1);
     const revertButton = dataGrid.getRevertButton();
 
+    await expect.poll(() => dataGrid.isReady()).toBe(true);
+
     await cell0.element.dblclick();
 
     await cell0.expectEditCell();
@@ -1479,19 +1590,25 @@ test.describe('Editing.Functional', () => {
     const detailGrid = new DataGrid(page, '#detailContainer');
     const overlay = dataGrid.getOverlay();
 
+    await expect.poll(() => dataGrid.isReady()).toBe(true);
+
     await dataGrid.getDataRow(0).getCommandCell(0).element.click();
     await detailGrid.getHeaderPanel().getAddRowButton().click();
-    await detailGrid.getDataRow(0).getCommandCell(2).getSaveButton().click();
+    await detailGrid.getDataRow(0).getCommandCell(2).getButton(0).click();
     await detailGrid.getDataCell(0, 0).element.click();
 
+    // The message moves to the clicked cell a moment after the click: count once it is there.
+    await expect(detailGrid.getDataCell(0, 0).getInvalidMessage()).toBeAttached();
     await expect(overlay.getInvalidMessage()).toHaveCount(1);
 
     await detailGrid.getDataCell(0, 1).element.click();
 
+    await expect(detailGrid.getDataCell(0, 1).getInvalidMessage()).toBeAttached();
     await expect(overlay.getInvalidMessage()).toHaveCount(1);
 
     await detailGrid.getDataCell(0, 0).element.click();
 
+    await expect(detailGrid.getDataCell(0, 0).getInvalidMessage()).toBeAttached();
     await expect(overlay.getInvalidMessage()).toHaveCount(1);
   });
 
@@ -1534,20 +1651,26 @@ test.describe('Editing.Functional', () => {
     const detailGrid = new DataGrid(page, '#detailContainer');
     const overlay = dataGrid.getOverlay();
 
+    await expect.poll(() => dataGrid.isReady()).toBe(true);
+
     await dataGrid.getDataRow(0).getCommandCell(0).element.click();
     await detailGrid.getHeaderPanel().getAddRowButton().click();
     await detailGrid.getHeaderPanel().element.click();
 
+    // The message moves to the clicked cell a moment after the click: count once it is there.
+    await expect(detailGrid.getDataCell(0, 0).getInvalidMessage()).toBeAttached();
     await expect(overlay.getInvalidMessage()).toHaveCount(1);
     await expect(overlay.getRevertTooltip()).toHaveCount(1);
 
     await detailGrid.getDataCell(0, 1).element.click();
 
+    await expect(detailGrid.getDataCell(0, 1).getInvalidMessage()).toBeAttached();
     await expect(overlay.getInvalidMessage()).toHaveCount(1);
     await expect(overlay.getRevertTooltip()).toHaveCount(1);
 
     await detailGrid.getDataCell(0, 0).element.click();
 
+    await expect(detailGrid.getDataCell(0, 0).getInvalidMessage()).toBeAttached();
     await expect(overlay.getInvalidMessage()).toHaveCount(1);
     await expect(overlay.getRevertTooltip()).toHaveCount(1);
   });
@@ -1591,19 +1714,25 @@ test.describe('Editing.Functional', () => {
     const detailGrid = new DataGrid(page, '#detailContainer');
     const overlay = dataGrid.getOverlay();
 
+    await expect.poll(() => dataGrid.isReady()).toBe(true);
+
     await dataGrid.getDataRow(0).getCommandCell(0).element.click();
     await detailGrid.getHeaderPanel().getAddRowButton().click();
     await detailGrid.getHeaderPanel().getSaveButton().click();
     await detailGrid.getDataCell(0, 0).element.click();
 
+    // The message moves to the clicked cell a moment after the click: count once it is there.
+    await expect(detailGrid.getDataCell(0, 0).getInvalidMessage()).toBeAttached();
     await expect(overlay.getInvalidMessage()).toHaveCount(1);
 
     await detailGrid.getDataCell(0, 1).element.click();
 
+    await expect(detailGrid.getDataCell(0, 1).getInvalidMessage()).toBeAttached();
     await expect(overlay.getInvalidMessage()).toHaveCount(1);
 
     await detailGrid.getDataCell(0, 0).element.click();
 
+    await expect(detailGrid.getDataCell(0, 0).getInvalidMessage()).toBeAttached();
     await expect(overlay.getInvalidMessage()).toHaveCount(1);
   });
 
@@ -1628,6 +1757,8 @@ test.describe('Editing.Functional', () => {
     const dataGrid = new DataGrid(page, GRID_SELECTOR);
     const lastName0 = dataGrid.getDataCell(0, 1);
     const active1 = dataGrid.getDataCell(1, 2);
+
+    await expect.poll(() => dataGrid.isReady()).toBe(true);
 
     await lastName0.element.click();
     await typeText(lastName0.getEditor().element, '1');
@@ -1657,6 +1788,8 @@ test.describe('Editing.Functional', () => {
       }), GRID_SELECTOR, { arg: editMode.toLowerCase() as Lowercase<typeof editMode> });
 
       const dataGrid = new DataGrid(page, GRID_SELECTOR);
+
+      await expect.poll(() => dataGrid.isReady()).toBe(true);
 
       // direct order
       for (let rowIndex = 0; rowIndex < 3; rowIndex += 1) {
@@ -1701,6 +1834,8 @@ test.describe('Editing.Functional', () => {
       const dataGrid = new DataGrid(page, GRID_SELECTOR);
       const firstCell = dataGrid.getDataCell(0, 0);
       const secondCell = dataGrid.getDataCell(0, 1);
+
+      await expect.poll(() => dataGrid.isReady()).toBe(true);
 
       await firstCell.element.click();
 
@@ -1891,6 +2026,8 @@ test.describe('Editing.Functional', () => {
 
     const dataGrid = new DataGrid(page, GRID_SELECTOR);
 
+    await expect.poll(() => dataGrid.isReady()).toBe(true);
+
     for (let i = 0; i < 10; i += 1) {
       const cell = dataGrid.getDataCell(i, 0);
 
@@ -1944,6 +2081,8 @@ test.describe('Editing.Functional', () => {
     const expectEditCellTemplateCallArgs = (): Promise<void> => expect.poll(
       () => page.evaluate(() => (window as any).editCellTemplateCallArgs),
     ).toEqual(['Column1']);
+
+    await expect.poll(() => dataGrid.isReady()).toBe(true);
 
     await firstCellOfFirstRow.element.click();
 
@@ -2001,6 +2140,8 @@ test.describe('Editing.Functional', () => {
       await expect.poll(getCallArgs).toHaveLength(expectedCallCount);
       expect((await getCallArgs())[expectedCallCount - 1]).toEqual(expectedArgs);
     };
+
+    await expect.poll(() => dataGrid.isReady()).toBe(true);
 
     await firstCellOfFirstRow.element.click();
 

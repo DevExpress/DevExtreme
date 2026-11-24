@@ -71,8 +71,9 @@ test.describe('Focus', () => {
         key: 1,
       }]);
 
-      await dataGrid.getDataRow(1).expectFocusedRow();
+      // The push renders a moment later: the row is still the removed one until then.
       await expect(dataGrid.getDataRow(1).element).toHaveText('Item 3');
+      await dataGrid.getDataRow(1).expectFocusedRow();
     });
 
     // T1233973
@@ -124,8 +125,9 @@ test.describe('Focus', () => {
         key: 2,
       }]);
 
-      await dataGrid.getDataRow(2).expectFocusedRow();
+      // The push renders a moment later: the row is still the removed one until then.
       await expect(dataGrid.getDataRow(2).element).toHaveText('Item 4');
+      await dataGrid.getDataRow(2).expectFocusedRow();
       await expect.poll(() => dataGrid.option('focusedRowKey')).toBe(3);
       await expect.poll(getFocusedRowChangedCounter).toBe(2);
     });

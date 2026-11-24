@@ -238,6 +238,14 @@ export default abstract class GridBase extends GridCore {
     }, { widgetName: this.getName(), focusedRowClass: CLASS.focusedRow });
   }
 
+  // A virtual grid can render the rows of a new scroll position a moment after the scroll.
+  public isViewportRowsRenderPending(): Promise<boolean> {
+    return this.element.evaluate(
+      (element, widgetName) => $(element).data(widgetName).getView('rowsView').isViewportRowsRenderPending(),
+      this.getName(),
+    );
+  }
+
   public async scrollBy(offset: ScrollOffset): Promise<void> {
     await expect.poll(() => this.hasScrollable()).toBe(true);
     await this.element.evaluate(
