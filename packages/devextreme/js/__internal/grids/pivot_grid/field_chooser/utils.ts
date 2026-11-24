@@ -8,7 +8,7 @@ import type { PivotGridField } from '../types';
 import { createPath, foreachTree } from '../widget_utils';
 import type { SortOrderType } from './const';
 import { FIELD_NAVIGATION_DELTAS, SORT_ORDER } from './const';
-import type { FieldChooserHeaderFilterItem } from './types';
+import type { FieldChooserBaseProperties, FieldChooserHeaderFilterItem } from './types';
 
 export const reverseSortOrder = (
   sortOrder: SortOrderType,
@@ -34,6 +34,10 @@ export const shouldCancelDragging = (
 
   return false;
 };
+
+export const isPivotGridDataSource = (
+  dataSource: FieldChooserBaseProperties['dataSource'],
+): dataSource is PivotGridDataSource => !!dataSource?.fields && !!dataSource.load;
 
 export const isFieldNavigationEvent = (
   e: DxEvent<KeyboardEvent>,

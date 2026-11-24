@@ -4,19 +4,22 @@ import { addNamespace } from '@js/common/core/events/utils/index';
 import localizationMessage from '@js/common/core/localization/message';
 import ArrayStore from '@js/common/data/array_store';
 import registerComponent from '@js/core/component_registrator';
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { Deferred } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { isDefined } from '@js/core/utils/type';
-import Widget from '@js/ui/widget/ui.widget';
 import { getData, setData } from '@ts/core/element_data';
+import Widget from '@ts/core/widget/widget';
 import eventsEngine from '@ts/events/core/events_engine';
 import columnStateMixin from '@ts/grids/grid_core/column_state_mixin/column_state_mixin';
+import type { ColumnStateOptions } from '@ts/grids/grid_core/column_state_mixin/types';
 import { HeaderFilterView as HeaderFilterViewBase } from '@ts/grids/grid_core/header_filter/header_filter_core';
+import type { HeaderFilterViewOptions } from '@ts/grids/grid_core/header_filter/types';
 import sortingMixin from '@ts/grids/grid_core/sorting/sorting_mixin';
 import type { InternalGrid } from '@ts/grids/grid_core/types';
 
-import type { RovingTabIndexComponent } from '../keyboard_navigation/roving_tab_index';
+import type { PivotGridDataSource } from '../data_source/data_source';
 import { RovingTabIndex } from '../keyboard_navigation/roving_tab_index';
 import SortableModule from '../sortable/sortable';
 import { getFieldItemA11yLabel } from './a11y';
@@ -24,12 +27,14 @@ import {
   ATTRIBUTES, CLASSES, FIELD_DATA_KEY, FIELD_NAVIGATION_DELTAS,
 } from './const';
 import { dragAndDropItemRender } from './dom';
+import type { FieldChooserBaseProperties, FieldChooserHeaderFilterField } from './types';
 import {
   fieldHasHeaderFilter,
   getMainGroupField,
   getStringState,
   isContextMenuKeyEvent,
   isFieldNavigationEvent,
+  isPivotGridDataSource,
   processItems,
   reverseSortOrder,
   shouldCancelDragging,
@@ -48,18 +53,31 @@ class HeaderFilterView extends HeaderFilterViewBase {
   }
 }
 
-const mixinWidget = sortingMixin(
-  columnStateMixin(Widget as any),
-);
+// @ts-expect-error the sorting and column state mixins are typed for grid views
+const mixinWidget: typeof Widget = sortingMixin(columnStateMixin(Widget));
 
-export class FieldChooserBase extends mixinWidget {
+export class FieldChooserBase extends mixinWidget<FieldChooserBaseProperties> {
+  protected declare _applyColumnState: (
+    options: ColumnStateOptions,
+  ) => dxElementWrapper | undefined;
+
+  protected declare _getIndicatorContainer: ($cell: dxElementWrapper) => dxElementWrapper;
+
+  protected _dataSource?: PivotGridDataSource;
+
+  protected _headerFilterView!: HeaderFilterView;
+
+  protected _skipStateChange?: boolean;
+
+  protected _changedHandler?: () => void;
+
   private _focusedFieldIndex = -1;
 
   // NOTE: no initializer — class field initializers do not run for classes
   // built on the legacy DevExtreme class system in the systemjs build.
   private _fieldNavigationMap: Record<string, RovingTabIndex> | undefined;
 
-  _getDefaultOptions() {
+  _getDefaultOptions(): FieldChooserBaseProperties {
     return {
       ...super._getDefaultOptions(),
       ...{
@@ -107,7 +125,7 @@ export class FieldChooserBase extends mixinWidget {
     // tab stops fall back to the first field of each area.
     this._resetFieldNavigation();
 
-    if (dataSource?.fields && dataSource.load/* instanceof DX.ui.dxPivotGrid.DataSource */) {
+    if (isPivotGridDataSource(dataSource)) {
       this._dataSource = dataSource;
     }
   }
@@ -196,7 +214,8 @@ export class FieldChooserBase extends mixinWidget {
     const sortOrder = field.allowSorting && field.area !== 'data'
       ? (field.sortOrder === 'desc' ? 'desc' : 'asc')
       : undefined;
-    const hasHeaderFilterValue = fieldHasHeaderFilter(this._dataSource, field)
+    const hasHeaderFilterValue = !!this._dataSource
+      && fieldHasHeaderFilter(this._dataSource, field)
       && !!getMainGroupField(this._dataSource, field).filterValues?.length;
 
     return getFieldItemA11yLabel(caption, { sortOrder, hasHeaderFilterValue });
@@ -278,8 +297,13 @@ export class FieldChooserBase extends mixinWidget {
 
   _processDemandState(func) {
     const that = this;
-    const isInstantlyMode = that.option('applyChangesMode') === 'instantly';
     const dataSource = that._dataSource;
+
+    if (!dataSource) {
+      return;
+    }
+
+    const isInstantlyMode = that.option('applyChangesMode') === 'instantly';
 
     if (isInstantlyMode) {
       func(dataSource, isInstantlyMode);
@@ -308,7 +332,7 @@ export class FieldChooserBase extends mixinWidget {
       if (isInstantlyMode) {
         dataSource.load();
       } else {
-        that._changedHandler();
+        that._changedHandler?.();
       }
     });
   }
@@ -350,7 +374,7 @@ export class FieldChooserBase extends mixinWidget {
         && $(e.target).hasClass(CLASSES.headerFilter);
 
       if (isAltArrowDown || isHeaderFilterIconInteraction) {
-        if (fieldHasHeaderFilter(this._dataSource, field)) {
+        if (this._dataSource && fieldHasHeaderFilter(this._dataSource, field)) {
           e.preventDefault();
           this.handleHeaderFilterIconClick(e, field);
         }
@@ -442,13 +466,9 @@ export class FieldChooserBase extends mixinWidget {
   }
 
   private _getFieldNavigation(area: string): RovingTabIndex {
-    // The sorting and column state mixins lose the Widget typing, so the
-    // component contract has to be restored explicitly.
-    const component = this as unknown as RovingTabIndexComponent;
-
     this._fieldNavigationMap = this._fieldNavigationMap ?? {};
     this._fieldNavigationMap[area] = this._fieldNavigationMap[area] ?? new RovingTabIndex({
-      component,
+      component: this,
       getItems: () => this._getAreaFieldElements(area),
       scrollToItem: (item) => this._scrollFieldElementToView(item),
       getItemId: (item) => this._getFieldElementId(item),
@@ -471,6 +491,7 @@ export class FieldChooserBase extends mixinWidget {
   private _getAreaFieldElements(area: string): HTMLElement[] {
     const ownFieldChooserRoot = this.$element().closest(`.${CLASSES.fieldChooser.self}`).get(0) ?? null;
     // NOTE: get() without an index is not supported by the native renderer.
+    // @ts-expect-error toArray() returns Element[], the field elements are divs
     const fields: HTMLElement[] = this.$element()
       .find(`[group="${area}"] .${CLASSES.area.field}.${CLASSES.area.box}`)
       .toArray();
@@ -542,7 +563,7 @@ export class FieldChooserBase extends mixinWidget {
   }
 
   private _renderHeaderFilterIcon($fieldElement, field, showColumnLines): void {
-    if (!fieldHasHeaderFilter(this._dataSource, field)) {
+    if (!this._dataSource || !fieldHasHeaderFilter(this._dataSource, field)) {
       return;
     }
 
@@ -557,6 +578,7 @@ export class FieldChooserBase extends mixinWidget {
       const indicatorAlignment = rtlEnabled ? 'left' : 'right';
 
       $container = $('<div>').addClass('dx-column-indicators');
+      // @ts-expect-error css() is typed without null
       $container.css('float', showColumnLines ? indicatorAlignment : null);
 
       $container[!showColumnLines && rtlEnabled ? 'appendTo' : 'prependTo']($fieldElement);
@@ -568,8 +590,17 @@ export class FieldChooserBase extends mixinWidget {
   private handleHeaderFilterIconClick(e, field): void {
     const that = this;
 
-    const mainGroupField = extend(true, {}, getMainGroupField(that._dataSource, field));
-    const type = mainGroupField.groupName ? 'tree' : 'list';
+    if (!this._dataSource) {
+      return;
+    }
+
+    // @ts-expect-error a field's index is set by the data source, its selector is typed as Function
+    const mainGroupField: FieldChooserHeaderFilterField = extend(
+      true,
+      {},
+      getMainGroupField(this._dataSource, field),
+    );
+    const type: HeaderFilterViewOptions['type'] = mainGroupField.groupName ? 'tree' : 'list';
     const paginate = this._dataSource.paginate() && type === 'list';
 
     this._headerFilterView.showHeaderFilterMenu($(e.currentTarget), extend(mainGroupField, {
@@ -585,14 +616,14 @@ export class FieldChooserBase extends mixinWidget {
           }
           // @ts-expect-error
           const d = new Deferred();
-          that._dataSource.getFieldValues(
+          that._dataSource?.getFieldValues(
             mainGroupField.index,
-            that.option('headerFilter.showRelevantValues'),
+            !!that.option('headerFilter')?.showRelevantValues,
             paginate
               ? options
               : undefined,
           ).done((data) => {
-            const emptyValue = that.option('headerFilter.texts.emptyValue');
+            const emptyValue = that.option('headerFilter')?.texts?.emptyValue;
 
             data.forEach((element) => {
               if (!element.text) {
@@ -640,9 +671,9 @@ export class FieldChooserBase extends mixinWidget {
   }
 
   private focusFieldElement(fieldIndex: number): void {
-    const fieldElements = this.$element()
-      .find(`.${CLASSES.area.field}.${CLASSES.area.box}`)
-      .get();
+    const $fieldElements = this.$element().find(`.${CLASSES.area.field}.${CLASSES.area.box}`);
+    // @ts-expect-error get() without an index returns undefined in the native renderer
+    const fieldElements: HTMLElement[] | undefined = $fieldElements.get();
 
     fieldElements?.forEach((fieldElement) => {
       const field = getData($(fieldElement), FIELD_DATA_KEY);
@@ -662,6 +693,6 @@ export class FieldChooserBase extends mixinWidget {
   }
 }
 
-registerComponent('dxPivotGridFieldChooserBase', FieldChooserBase as any);
+registerComponent('dxPivotGridFieldChooserBase', FieldChooserBase);
 
 export default { FieldChooserBase };
