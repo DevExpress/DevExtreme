@@ -1,6 +1,6 @@
 (() => {
     const atlas = window.atlas = {
-        Map: function(_, options) {
+        Map: function(container, options) {
             if(options) {
                 atlas.optionsSpecified = true;
                 atlas.options = options;
@@ -66,6 +66,9 @@
                 add: (controls, options) => {
                     atlas.addedControls += controls.length;
                     atlas.controlOptions = options;
+                    controls
+                        .filter((control) => control.onAdd)
+                        .forEach((control) => container.appendChild(control.onAdd()));
                 },
                 remove: (controls) => {
                     atlas.addedControls = atlas.addedControls ? atlas.addedControls - controls.length : 0;
@@ -118,7 +121,22 @@
         control: {
             CompassControl: function() {},
             PitchControl: function() {},
-            StyleControl: function() {},
+            StyleControl: function() {
+                this.onAdd = () => {
+                    const styleControl = document.createElement('div');
+                    const currentStyleButton = document.createElement('button');
+                    const currentStyleImage = document.createElement('img');
+
+                    styleControl.className = 'azure-maps-control-container';
+                    currentStyleButton.className = 'azure-maps-control-button curr-style';
+                    currentStyleButton.setAttribute('aria-label', 'Select Style');
+                    currentStyleImage.alt = 'Road';
+                    currentStyleButton.append(currentStyleImage, 'Road');
+                    styleControl.append(currentStyleButton);
+
+                    return styleControl;
+                };
+            },
             ZoomControl: function() {},
         },
         data: {

@@ -26,6 +26,7 @@ let AZURE_CSS_URL = `${AZURE_BASE_LINK}/sdk/javascript/mapcontrol/3/atlas.min.cs
 let CUSTOM_URL;
 
 const MAP_MARKER_TOOLTIP_CLASS = 'dx-map-marker-tooltip';
+const CURRENT_STYLE_IMAGE_SELECTOR = '.azure-maps-control-button.curr-style > img';
 
 const CAMERA_PADDING = 50;
 // @ts-expect-error ts-error
@@ -319,6 +320,10 @@ class AzureProvider extends DynamicProvider<AzureLocation> {
       ], {
         position: 'top-right',
       });
+
+      this._$container
+        .find(CURRENT_STYLE_IMAGE_SELECTOR)
+        .attr('aria-hidden', 'true');
     } else {
       const allControls = this._map.controls.getControls();
       const controlsToRemove = allControls.slice(2);
