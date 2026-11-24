@@ -1,4 +1,6 @@
 declare namespace DevExpress {
+  export const VERSION: string;
+
   /** @deprecated Use DevExpress.common.EventObject instead */
   export type dxEvent = common.core.events.EventObject;
   /** @deprecated Use DevExpress.common.event instead */
