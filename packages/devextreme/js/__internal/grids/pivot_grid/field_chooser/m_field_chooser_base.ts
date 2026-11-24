@@ -7,27 +7,33 @@ import registerComponent from '@js/core/component_registrator';
 import $ from '@js/core/renderer';
 import { Deferred } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
-import { each, map } from '@js/core/utils/iterator';
 import { isDefined } from '@js/core/utils/type';
 import Widget from '@js/ui/widget/ui.widget';
 import { getData, setData } from '@ts/core/element_data';
 import eventsEngine from '@ts/events/core/events_engine';
 import columnStateMixin from '@ts/grids/grid_core/column_state_mixin/column_state_mixin';
-import {
-  HeaderFilterView as HeaderFilterViewBase,
-  updateHeaderFilterItemSelectionState,
-} from '@ts/grids/grid_core/header_filter/header_filter_core';
+import { HeaderFilterView as HeaderFilterViewBase } from '@ts/grids/grid_core/header_filter/header_filter_core';
 import sortingMixin from '@ts/grids/grid_core/sorting/sorting_mixin';
 import type { InternalGrid } from '@ts/grids/grid_core/types';
 
 import type { RovingTabIndexComponent } from '../keyboard_navigation/roving_tab_index';
 import { RovingTabIndex } from '../keyboard_navigation/roving_tab_index';
 import SortableModule from '../sortable/sortable';
-import { createPath, foreachTree } from '../widget_utils';
 import { getFieldItemA11yLabel } from './a11y';
-import { ATTRIBUTES, CLASSES, FIELD_DATA_KEY } from './const';
+import {
+  ATTRIBUTES, CLASSES, FIELD_DATA_KEY, FIELD_NAVIGATION_DELTAS,
+} from './const';
 import { dragAndDropItemRender } from './dom';
-import { reverseSortOrder, shouldCancelDragging } from './utils';
+import {
+  fieldHasHeaderFilter,
+  getMainGroupField,
+  getStringState,
+  isContextMenuKeyEvent,
+  isFieldNavigationEvent,
+  processItems,
+  reverseSortOrder,
+  shouldCancelDragging,
+} from './utils';
 
 const { Sortable } = SortableModule;
 
@@ -35,84 +41,11 @@ const DIV = '<div>';
 
 const FIELD_AREAS = ['filter', 'row', 'column', 'data'];
 
-const FIELD_NAVIGATION_DELTAS = {
-  ArrowUp: -1,
-  ArrowLeft: -1,
-  ArrowDown: 1,
-  ArrowRight: 1,
-};
-
-function isFieldNavigationEvent(e): boolean {
-  return e.type === 'keydown'
-    && FIELD_NAVIGATION_DELTAS[e.key] !== undefined
-    && !e.altKey && !e.ctrlKey && !e.metaKey && !e.shiftKey;
-}
-
-function isContextMenuKeyEvent(e): boolean {
-  return e.type === 'keydown'
-    && !e.repeat
-    && (e.key === 'ContextMenu' || (e.shiftKey && e.key === 'F10'));
-}
-
 class HeaderFilterView extends HeaderFilterViewBase {
   _getSearchExpr(options, headerFilterOptions) {
     options.useDefaultSearchExpr = true;
     return super._getSearchExpr(options, headerFilterOptions);
   }
-}
-
-const processItems = function (groupItems, field) {
-  const filterValues: any = [];
-  const isTree = !!field.groupName;
-  const isExcludeFilterType = field.filterType === 'exclude';
-
-  if (field.filterValues) {
-    each(field.filterValues, (_, filterValue) => {
-      filterValues.push(Array.isArray(filterValue) ? filterValue.join('/') : filterValue?.valueOf());
-    });
-  }
-
-  foreachTree(groupItems, (items) => {
-    const item = items[0];
-    const path = createPath(items);
-    const preparedFilterValueByText = isTree ? map(items, (item) => item.text).reverse().join('/') : item.text;
-
-    item.value = isTree ? path.slice(0) : item.key || item.value;
-    const preparedFilterValue = isTree ? path.join('/') : item.value?.valueOf();
-
-    if (item.children) {
-      item.items = item.children;
-      item.children = null;
-    }
-
-    updateHeaderFilterItemSelectionState(
-      item,
-      item.key
-      && filterValues.includes(preparedFilterValueByText)
-      || filterValues.includes(preparedFilterValue),
-      isExcludeFilterType,
-    );
-  });
-};
-
-function getMainGroupField(dataSource, sourceField) {
-  let field = sourceField;
-  if (isDefined(sourceField.groupIndex)) {
-    field = dataSource.getAreaFields(sourceField.area, true)[sourceField.areaIndex];
-  }
-
-  return field;
-}
-
-function fieldHasHeaderFilter(dataSource, field): boolean {
-  const mainGroupField = getMainGroupField(dataSource, field);
-  const isFirstInGroup = field.groupIndex === 0 || !isDefined(field.groupIndex);
-  return mainGroupField.allowFiltering && isFirstInGroup && field.area !== 'data';
-}
-
-function getStringState(state) {
-  state = state || {};
-  return JSON.stringify([state.fields, state.columnExpandedPaths, state.rowExpandedPaths]);
 }
 
 const mixinWidget = sortingMixin(

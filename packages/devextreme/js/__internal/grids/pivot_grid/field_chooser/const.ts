@@ -68,6 +68,13 @@ export const SORTABLE_CONST = {
   },
 } as const;
 
+export const FIELD_NAVIGATION_DELTAS: Record<string, number> = {
+  ArrowUp: -1,
+  ArrowLeft: -1,
+  ArrowDown: 1,
+  ArrowRight: 1,
+};
+
 export const SORT_ORDER = {
   descending: 'desc',
   ascending: 'asc',
