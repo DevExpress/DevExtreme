@@ -21,7 +21,7 @@ import type { HeaderFilterOptions, HeaderFilterViewOptions } from '@ts/grids/gri
 import sortingMixin from '@ts/grids/grid_core/sorting/sorting_mixin';
 import type { AriaSortState, SortingColumn } from '@ts/grids/grid_core/sorting/types';
 import type { InternalGrid } from '@ts/grids/grid_core/types';
-import Scrollable from '@ts/ui/scroll_view/scrollable';
+import type Scrollable from '@ts/ui/scroll_view/scrollable';
 
 import type { PivotGridDataSource } from '../data_source/data_source';
 import type { DataSourceHeaderItem } from '../data_source/types';
@@ -540,11 +540,15 @@ export class FieldChooserBase extends mixinWidget<FieldChooserBaseProperties> {
 
   private _scrollFieldElementToView(fieldElement: HTMLElement): void {
     const $scrollable = $(fieldElement).closest(`.${CLASSES.scrollable.self}`);
-    const scrollable = $scrollable.length
-      ? Scrollable.getInstance<Scrollable | undefined>($scrollable.get(0))
-      : undefined;
 
-    scrollable?.scrollToElement(fieldElement);
+    if (!$scrollable.length) {
+      return;
+    }
+
+    // @ts-expect-error dxScrollable is not defined in dxElementWrapper
+    const scrollable: Scrollable = $scrollable.dxScrollable('instance');
+
+    scrollable.scrollToElement(fieldElement);
   }
 
   private _getFieldNavigationDelta(key: string): number {
