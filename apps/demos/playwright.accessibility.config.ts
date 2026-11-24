@@ -4,5 +4,5 @@ import { ACCESSIBILITY_VIEWPORT } from './utils/visual-tests/playwright/const';
 
 export default defineConfig(baseConfig, {
   testMatch: 'accessibility.spec.ts',
-  use: { viewport: ACCESSIBILITY_VIEWPORT },
+  use: { viewport: ACCESSIBILITY_VIEWPORT, trace: 'off', screenshot: 'off' },
 });
