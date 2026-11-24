@@ -1,17 +1,12 @@
-import type { Page } from '@playwright/test';
-import { expect, test } from '../../../fixtures';
+import { test } from '../../../fixtures';
 import { createWidget } from '../../../helpers/createWidget';
-import { setAttribute } from '../../../helpers/domUtils';
+import { expectImagesLoaded, setAttribute } from '../../../helpers/domUtils';
 import { testScreenshot } from '../../../helpers/screenshots';
 import Gallery from '../../../models/gallery';
 
 const YELLOW_PIXEL = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAMSURBVBhXYzi8wA8AA9sBsq0bEHsAAAAASUVORK5CYII=';
 const BLACK_PIXEL = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAMSURBVBhXY1hSWg4AA1EBkakDs38AAAAASUVORK5CYII=';
 const RED_PIXEL = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAMSURBVBhXY/i5aQsABQcCYPaWuk8AAAAASUVORK5CYII=';
-
-const expectImagesLoaded = (page: Page): Promise<void> => expect.poll(() => page.evaluate(
-  () => Array.from(document.images).every((image) => image.complete && image.naturalWidth > 0),
-)).toBe(true);
 
 test.describe('Click on indicator', () => {
   test('click on indicator item should change selected item', async ({ page }) => {
@@ -48,7 +43,7 @@ test.describe('Click on indicator', () => {
 
       await setAttribute(page, '#container', 'style', 'width: 120px; height: 120px;');
 
-      await expectImagesLoaded(page);
+      await expectImagesLoaded(page.locator('#container'), 3);
       await testScreenshot(page, `Gallery. showIndicator=${showIndicator}.png`, { element: '#container' });
 
       await page.locator('#container').click();
