@@ -45,8 +45,6 @@ class DateBoxMask<
 
   _dateParts!: { caret: { start: number; end: number }; isStub: boolean }[];
 
-  _maskInputHandler?: (() => void) | null;
-
   _initialMaskValue?: Date | null;
 
   _searchValue!: string;
@@ -257,16 +255,8 @@ class DateBoxMask<
   }
 
   _maskBeforeInputHandler(e: DxEvent<KeyboardKeyDownEvent & InputEvent>): boolean {
-    this._maskInputHandler = null;
-
     const { inputType, data } = e.originalEvent;
     const isCompositionText = inputType === 'insertCompositionText';
-
-    if (isCompositionText) {
-      this._maskInputHandler = (): void => {
-        this._renderSelectedPart();
-      };
-    }
 
     const typedChar = isCompositionText ? data?.slice(-1) : data;
 
@@ -361,11 +351,6 @@ class DateBoxMask<
     }
 
     super._keyPressHandler(e);
-
-    if (this._maskInputHandler) {
-      this._maskInputHandler();
-      this._maskInputHandler = null;
-    }
 
     this._wasAllSelectedBeforeComposition = false;
   }
@@ -839,7 +824,6 @@ class DateBoxMask<
     this._input().val(this._getDisplayedText(this._maskValue));
     this._caret(this._getActivePartProp('caret'));
 
-    this._maskInputHandler = null;
     this._wasAllSelectedBeforeComposition = false;
   }
 
