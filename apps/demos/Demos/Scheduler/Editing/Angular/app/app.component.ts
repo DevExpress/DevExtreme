@@ -25,7 +25,7 @@ export class AppComponent {
 
   readonly currentDate = new Date(2021, 3, 29);
 
-  private showToast(event: string, value: string, type: string) {
+  private showToast(event: string, value: string | undefined, type: string) {
     notify(`${event} "${value}" task`, type, 800);
   }
 

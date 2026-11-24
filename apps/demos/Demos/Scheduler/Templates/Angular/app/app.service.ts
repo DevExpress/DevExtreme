@@ -16,13 +16,13 @@ export interface MovieData {
   color: string;
 }
 
-export class TheatreData {
+export interface TheatreData {
   text: string;
 
   id: number;
 }
 
-export class Data {
+export interface Data {
   theatreId: number;
 
   movieId: number;

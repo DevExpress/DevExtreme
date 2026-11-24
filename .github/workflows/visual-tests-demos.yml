@@ -325,9 +325,9 @@ jobs:
       working-directory: apps/demos
       run: pnpm run ts-check-vue
 
-    # - name: Run check TS for Angular
-    #   working-directory: apps/demos
-    #   run: pnpm run ts-check-ng
+    - name: Run check TS for Angular
+      working-directory: apps/demos
+      run: pnpm run ts-check-ng
 
     - name: Demos - Check React TS
       id: ts_react

@@ -2,10 +2,10 @@
   "compilerOptions": {
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
-    "strict": false,
+    "strict": true,
     "verbatimModuleSyntax": true,
     "module": "ESNext",
-    "moduleResolution": "Node",
+    "moduleResolution": "bundler",
     "ignoreDeprecations": "6.0",
     "lib": ["es2022", "DOM", "DOM.Iterable"],
     "resolveJsonModule": true
@@ -16,7 +16,7 @@
   },
 
   "include": [
-    "Demos/**/Angular/**/*.ts",
+    "Demos/Scheduler/**/Angular/**/*.ts",
     "shared/anti-forgery/index.d.ts"
   ]
 }

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-export class Data {
+export interface Data {
   text: string;
 
   startDate: string;
@@ -10,7 +10,7 @@ export class Data {
   recurrenceRule?: string;
 }
 
-export class Location {
+export interface Location {
   id: string;
 
   offset: number;

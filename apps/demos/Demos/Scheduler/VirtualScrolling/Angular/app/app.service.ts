@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-export class Appointment {
+export interface Appointment {
   text: string;
 
   startDate: Date;
@@ -10,7 +10,7 @@ export class Appointment {
   humanId: number;
 }
 
-export class Resource {
+export interface Resource {
   id: number;
 
   text: string;
@@ -206,18 +206,18 @@ export class Service {
 
   get appointmentsText() { return appointmentsText; }
 
-  getRandomDuration(durationState): number {
+  getRandomDuration(durationState: number): number {
     const durationMin = Math.floor((durationState % 23) / 3 + 5) * 15;
 
     return durationMin * 60 * 1000;
   }
 
-  getRandomText(textIndex): string {
+  getRandomText(textIndex: number): string {
     return appointmentsText[textIndex % appointmentsText.length];
   }
 
-  filterAppointmentsByTime(appointments, startDayHour, endDayHour): Appointment[] {
-    const result = [];
+  filterAppointmentsByTime(appointments: Appointment[], startDayHour: number, endDayHour: number): Appointment[] {
+    const result: Appointment[] = [];
 
     for (let i = 0; i < appointments.length; i += 1) {
       const startDate = appointments[i].startDate;
@@ -233,8 +233,8 @@ export class Service {
     return result;
   }
 
-  generateAppointments(startDay, endDay, startDayHour, endDayHour): Appointment[] {
-    const appointments = [];
+  generateAppointments(startDay: Date, endDay: Date, startDayHour: number, endDayHour: number): Appointment[] {
+    const appointments: Appointment[] = [];
 
     let textIndex = 0;
     let durationState = 1;

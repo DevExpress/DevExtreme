@@ -43,14 +43,14 @@ export class AppComponent {
       const day = date.getDay();
       return day === 0 || day === 6;
     }
-    const classObject = {};
+    const classObject: Record<string, boolean> = {};
     classObject[`employee-${cellData.groups.employeeID}`] = true;
     classObject[`employee-weekend-${cellData.groups.employeeID}`] = isWeekEnd(cellData.startDate);
     return classObject;
   };
 
   readonly markTraining = (cellData: Data & { groups: Data }) => {
-    const classObject = {
+    const classObject: Record<string, boolean> = {
       'day-cell': true,
     };
 
