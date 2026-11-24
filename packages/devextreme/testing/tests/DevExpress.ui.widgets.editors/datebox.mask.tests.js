@@ -2251,4 +2251,23 @@ module('Using beforeInput event', {
         assert.strictEqual(input.value, '15.12.2026', 'month is 12 after the second digit');
         assert.deepEqual(this.keyboard.caret(), { start: 6, end: 10 }, 'year is selected');
     });
+
+    test('a word composed on Android devices without the mask behavior stays in the input (T1338541)', function(assert) {
+        const input = this.$input.get(0);
+
+        this.instance.option('useMaskBehavior', false);
+        this.keyboard.caret({ start: 0, end: input.value.length });
+
+        this.$input.trigger($.Event('compositionstart'));
+        this.keyboard
+            .keyDown('Unidentified')
+            .beforeInput('15.11', 'insertCompositionText');
+        input.setRangeText('15.11', input.selectionStart, input.selectionEnd, 'end');
+        this.keyboard
+            .input('15.11', 'insertCompositionText')
+            .keyUp('Unidentified');
+
+        assert.strictEqual(input.value, '15.11', 'input keeps the composed text');
+        assert.strictEqual(this.instance.option('text'), '15.11', 'text follows the input');
+    });
 });
