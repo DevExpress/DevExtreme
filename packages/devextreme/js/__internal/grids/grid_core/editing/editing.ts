@@ -2599,7 +2599,8 @@ export class EditingController extends modules.ViewController {
           ? messageLocalization.format(localizationName)
           : undefined;
         const iconLabel = icon ? getImageAriaLabel(icon) : undefined;
-        const ariaLabel = button.hint ?? button.text ?? localizedLabel ?? iconLabel;
+        // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing -- '' falls back
+        const ariaLabel = button.hint || button.text || localizedLabel || iconLabel;
 
         if (ariaLabel) {
           this.setAria('label', ariaLabel, $button);

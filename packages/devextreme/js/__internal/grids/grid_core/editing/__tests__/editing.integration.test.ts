@@ -145,6 +145,7 @@ describe('DataGrid editing', () => {
             hint: 'customHint',
           }, {
             icon: 'copy',
+            hint: '',
           }],
         }],
       });
