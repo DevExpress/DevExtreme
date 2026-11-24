@@ -16,7 +16,7 @@ $file-manager-file-item-select-content-focused: ds.$color-content-inverted !defa
 $file-manager-file-item-select-bg-focused: rgb(from #{ds.$color-bg-primary} r g b / 0.7) !default;
 $file-manager-file-item-bg-hovered: ds.$color-bg-hovered !default;
 $file-manager-file-item-border-focused: ds.$color-border-primary !default;
-$file-manager-item-content-focused: ds.$color-content-inverted !default;
+$file-manager-item-content-focused: ds.$color-content !default;
 $file-manager-dirs-tree-item-bg-focused: ds.$color-bg-active !default;
 
 $file-manager-icon-success-content: null !default;
