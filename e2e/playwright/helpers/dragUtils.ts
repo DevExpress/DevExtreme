@@ -148,7 +148,7 @@ export const scrollIntoView = (
   }
 }, { maxMargin: MAX_SCROLL_MARGIN, offsetX, offsetY });
 
-const pointWithin = async (
+export const pointWithin = async (
   element: Locator,
   offsetX?: number,
   offsetY?: number,
