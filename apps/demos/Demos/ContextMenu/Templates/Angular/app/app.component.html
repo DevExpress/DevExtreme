@@ -9,11 +9,11 @@
   <div *dxTemplate="let itemData of 'item'">
     <div class="item-template-container">
       @if (itemData.icon) {
-      <span [class]="itemData.icon" class="dx-icon"></span>
+        <span [class]="itemData.icon" class="dx-icon"></span>
       }
       <span class="dx-menu-item-text">{{ itemData.text }}</span>
       @if (itemData.items) {
-      <span class="dx-icon-spinright dx-icon"></span>
+        <span class="dx-icon-spinright dx-icon"></span>
       }
     </div>
   </div>

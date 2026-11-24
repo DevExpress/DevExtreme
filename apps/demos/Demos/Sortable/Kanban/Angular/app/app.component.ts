@@ -13,7 +13,6 @@ if (!/localhost/.test(document.location.host)) {
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
   providers: [Service],
-  preserveWhitespaces: true,
   imports: [
     DxScrollViewModule,
     DxSortableModule,
