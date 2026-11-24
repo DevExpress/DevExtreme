@@ -13,7 +13,7 @@ import renderer from 'core/renderer';
 import { triggerShownEvent } from 'common/core/events/visibility_change';
 import 'fluent_blue_light.css!';
 import $ from 'jquery';
-import { PivotGridDataSource } from '__internal/grids/pivot_grid/data_source/m_data_source';
+import { PivotGridDataSource } from '__internal/grids/pivot_grid/data_source/data_source';
 import '__internal/grids/pivot_grid/field_chooser/m_field_chooser';
 import '__internal/grids/pivot_grid/m_widget';
 

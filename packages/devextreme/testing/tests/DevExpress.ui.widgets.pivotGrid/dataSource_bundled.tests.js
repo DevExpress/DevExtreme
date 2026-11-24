@@ -2,7 +2,7 @@ import $ from 'jquery';
 import ArrayStore from 'common/data/array_store';
 import { CustomStore } from 'common/data/custom_store';
 import inflector from '__internal/core/utils/inflector';
-import { PivotGridDataSource } from '__internal/grids/pivot_grid/data_source/m_data_source';
+import { PivotGridDataSource } from '__internal/grids/pivot_grid/data_source/data_source';
 import summaryDisplayModesModule from '__internal/grids/pivot_grid/summary_display_modes/summary_display_modes';
 import xmlaStoreModule, { XmlaStore } from '__internal/grids/pivot_grid/xmla_store/m_xmla_store';
 import { LocalStore } from '__internal/grids/pivot_grid/local_store/local_store';

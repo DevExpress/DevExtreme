@@ -20,6 +20,16 @@ export interface DataSourceHeaderItem extends PivotGridHeaderItem {
 
 export type DataSourceHeaderItemsByPath = Record<string, DataSourceHeaderItem>;
 
+export type DataSourceHeaderItemCompare = (
+  a: DataSourceHeaderItem,
+  b: DataSourceHeaderItem,
+) => number;
+
+export type DataSourceSortMember = 'index' | 'text' | 'value';
+
+export type DataSourceFieldWithSortingMethod = PivotGridField
+  & Required<Pick<PivotGridField, 'sortingMethod'>>;
+
 export type DataSourceHeaderItems = DataSourceHeaderItem[] & {
   _cacheByPath?: DataSourceHeaderItemsByPath;
 };

@@ -240,9 +240,7 @@ jobs:
             { "componentFolder": "dataGrid", "name": "dataGrid (1/4)", "indices": "1/4", "cache": true, "concurrency": 5 },
             { "componentFolder": "dataGrid", "name": "dataGrid (2/4)", "indices": "2/4", "cache": true, "concurrency": 5 },
             { "componentFolder": "dataGrid", "name": "dataGrid (3/4)", "indices": "3/4", "cache": true, "concurrency": 5 },
-            { "componentFolder": "dataGrid", "name": "dataGrid (4/4)", "indices": "4/4", "cache": true, "concurrency": 5 },
-
-            { "componentFolder": "navigation", "name": "navigation", "concurrency": 6 }
+            { "componentFolder": "dataGrid", "name": "dataGrid (4/4)", "indices": "4/4", "cache": true, "concurrency": 5 }
           ]
           JSON
           )

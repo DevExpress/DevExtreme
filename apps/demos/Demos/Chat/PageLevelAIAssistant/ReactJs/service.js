@@ -50,10 +50,8 @@ export const aiIntegration = new AIIntegration({
     const signal = controller.signal;
     const isSmartPasteRequest = Array.isArray(data?.fields);
     const system = isSmartPasteRequest
-      ? `${
-        prompt.system ?? ''
-      } IMPORTANT: reply on a SINGLE line with no line breaks of any kind - use ';;;' as the only separator between fields.`
-      : prompt.system ?? '';
+      ? `${prompt.system ?? ''} IMPORTANT: reply on a SINGLE line with no line breaks of any kind - use ';;;' as the only separator between fields.`
+      : (prompt.system ?? '');
     const messages = [
       { role: 'system', content: system },
       { role: 'user', content: prompt.user ?? '' },

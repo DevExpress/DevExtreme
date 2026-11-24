@@ -4,7 +4,7 @@ import type {
 } from '@js/ui/pivot_grid';
 import type { ColumnInfoCell } from '@ts/grids/grid_core/virtual_columns/types';
 import type { VirtualScrollDataOptions } from '@ts/grids/grid_core/virtual_scrolling/types';
-import type { PivotGridDataSource } from '@ts/grids/pivot_grid/data_source/m_data_source';
+import type { PivotGridDataSource } from '@ts/grids/pivot_grid/data_source/data_source';
 import type { DataSourceHeaderItem, DataSourceOptions } from '@ts/grids/pivot_grid/data_source/types';
 import type { PivotGrid } from '@ts/grids/pivot_grid/m_widget';
 import type { PivotGridField } from '@ts/grids/pivot_grid/types';
