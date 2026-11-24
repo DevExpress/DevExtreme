@@ -531,8 +531,8 @@ jobs:
       run: pnpm exec nx test-testcafe
 
     - name: Set Playwright artifact name
-      if: ${{ !cancelled() && matrix.STRATEGY == 'screenshots' }}
-      run: echo "PLAYWRIGHT_JOB_NAME=$(echo "${{ matrix.CONSTEL }}-${{ matrix.THEME }}" | tr '/' '-')" >> $GITHUB_ENV
+      if: ${{ !cancelled() }}
+      run: echo "PLAYWRIGHT_JOB_NAME=$(echo "${{ matrix.CONSTEL }}-${{ matrix.STRATEGY }}-${{ matrix.THEME }}" | tr '/' '-')" >> $GITHUB_ENV
 
     - name: Run Playwright tests (jQuery)
       if: ${{ !cancelled() && matrix.STRATEGY == 'screenshots' }}
@@ -558,10 +558,11 @@ jobs:
         CONCURRENCY: 4
         CONSTEL: ${{ matrix.CONSTEL }}
         THEME: ${{ matrix.THEME }}
+        PLAYWRIGHT_BLOB_OUTPUT_NAME: report-${{ env.PLAYWRIGHT_JOB_NAME }}.zip
       run: pnpm run test-playwright:accessibility
 
     - name: Upload Playwright blob report
-      if: failure() && matrix.STRATEGY == 'screenshots'
+      if: failure()
       uses: actions/upload-artifact@v7
       with:
         name: playwright-blob-${{ env.PLAYWRIGHT_JOB_NAME }}
