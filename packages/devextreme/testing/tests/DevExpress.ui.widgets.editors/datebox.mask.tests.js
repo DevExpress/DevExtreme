@@ -1899,6 +1899,25 @@ module('Regression', () => {
 
         assert.strictEqual(instance.option('isValid'), true, 'should be valid when year returns to 2020');
     });
+
+    QUnit.test('a digit typed through an IME composition updates the text when useMaskBehavior is disabled (T1338541)', function(assert) {
+        const $input = $('#dateBox')
+            .dxDateBox({
+                useMaskBehavior: false,
+                displayFormat: 'dd.MM.yyyy',
+                value: new Date(2026, 10, 15),
+            })
+            .find('.dx-texteditor-input');
+        const input = $input.get(0);
+        const keyboard = keyboardMock($input, true);
+
+        keyboard.caret({ start: 0, end: 2 });
+        $input.trigger($.Event('compositionstart'));
+        input.setRangeText('2', 0, 2, 'end');
+        keyboard.input('2', 'insertCompositionText');
+
+        assert.strictEqual($('#dateBox').dxDateBox('option', 'text'), '2.11.2026', 'text follows the input');
+    });
 });
 
 module('Caret moving', setupModule, () => {

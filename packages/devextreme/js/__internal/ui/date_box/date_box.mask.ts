@@ -318,7 +318,8 @@ class DateBoxMask<
       return;
     }
 
-    const isCompositionDigit = event?.inputType === 'insertCompositionText'
+    const isCompositionDigit = this._useMaskBehavior()
+      && event?.inputType === 'insertCompositionText'
       && this._isSingleDigitKey(e);
 
     const isIMECommitDigit = event?.inputType === 'insertText'
