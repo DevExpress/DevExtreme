@@ -623,7 +623,7 @@ export class FieldChooserBase extends mixinWidget<FieldChooserBaseProperties> {
     let $container = this._getIndicatorContainer($fieldElement);
 
     if (!$container.length) {
-      const rtlEnabled = this.option('rtlEnabled') as boolean;
+      const rtlEnabled = !!this.option('rtlEnabled');
       const indicatorAlignment = rtlEnabled ? 'left' : 'right';
 
       $container = $('<div>').addClass('dx-column-indicators');
