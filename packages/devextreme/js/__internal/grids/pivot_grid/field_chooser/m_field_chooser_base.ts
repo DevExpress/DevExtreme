@@ -261,8 +261,8 @@ export class FieldChooserBase extends mixinWidget<FieldChooserBaseProperties> {
     // eslint-disable-next-line @typescript-eslint/no-this-alias -- the methods use their own this
     const that = this;
 
-    that._createComponent(that.$element(), Sortable, extend({
-      allowDragging: that.option('allowFieldDragging'),
+    this._createComponent(this.$element(), Sortable, extend({
+      allowDragging: this.option('allowFieldDragging'),
       itemSelector: `.${CLASSES.area.field}`,
       itemContainerSelector: `.${CLASSES.area.fieldContainer}`,
       groupSelector: `.${CLASSES.area.fieldList}`,
@@ -288,42 +288,46 @@ export class FieldChooserBase extends mixinWidget<FieldChooserBaseProperties> {
         e.cancel = shouldCancelDragging(field, targetGroup);
       },
       useIndicator: true,
-      onChanged(e: OldSortableChangedArgs): void {
+      onChanged: (e: OldSortableChangedArgs): void => {
         const field = getData(e.sourceElement, FIELD_DATA_KEY);
 
         e.removeSourceElement = !!e.sourceGroup;
 
-        that._adjustSortableOnChangedArgs(e);
+        this._adjustSortableOnChangedArgs(e);
 
-        if (field) {
-          const { targetIndex } = e;
-          let invisibleFieldsIndexOffset = 0;
-
-          const mainGroupField = that._processDemandState((dataSource) => {
-            const fields = dataSource.getAreaFields(field.area, true);
-            const visibleFields = fields.filter((f) => f.visible !== false);
-            const fieldBeforeTarget = visibleFields[targetIndex - 1];
-
-            if (fieldBeforeTarget) {
-              invisibleFieldsIndexOffset = fields
-                .filter((f) => f.visible === false
-                    && Number(f.areaIndex) <= Number(fieldBeforeTarget.areaIndex))
-                .length;
-            }
-
-            return getMainGroupField(dataSource, field);
-          });
-
-          if (mainGroupField) {
-            that._applyChanges([mainGroupField], {
-              // @ts-expect-error the sortable groups are named after the areas
-              area: e.targetGroup,
-              areaIndex: targetIndex + invisibleFieldsIndexOffset,
-            });
-          }
+        if (!field) {
+          return;
         }
+
+        const { targetIndex } = e;
+        let invisibleFieldsIndexOffset = 0;
+
+        const mainGroupField = this._processDemandState((dataSource) => {
+          const fields = dataSource.getAreaFields(field.area, true);
+          const visibleFields = fields.filter((f) => f.visible !== false);
+          const fieldBeforeTarget = visibleFields[targetIndex - 1];
+
+          if (fieldBeforeTarget) {
+            invisibleFieldsIndexOffset = fields
+              .filter((f) => f.visible === false
+                  && Number(f.areaIndex) <= Number(fieldBeforeTarget.areaIndex))
+              .length;
+          }
+
+          return getMainGroupField(dataSource, field);
+        });
+
+        if (!mainGroupField) {
+          return;
+        }
+
+        this._applyChanges([mainGroupField], {
+          // @ts-expect-error the sortable groups are named after the areas
+          area: e.targetGroup,
+          areaIndex: targetIndex + invisibleFieldsIndexOffset,
+        });
       },
-    }, that._getSortableOptions()));
+    }, this._getSortableOptions()));
   }
 
   protected _processDemandState<T>(
