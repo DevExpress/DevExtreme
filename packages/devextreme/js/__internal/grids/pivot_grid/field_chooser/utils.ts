@@ -16,6 +16,12 @@ export const reverseSortOrder = (
   ? SORT_ORDER.ascending
   : SORT_ORDER.descending);
 
+export const getFieldSortOrder = (
+  field: Pick<FieldChooserField, 'sortOrder'>,
+): SortOrderType => (field.sortOrder === SORT_ORDER.descending
+  ? SORT_ORDER.descending
+  : SORT_ORDER.ascending);
+
 export const shouldCancelDragging = (
   field: { isMeasure?: boolean } | undefined,
   targetGroup: string | undefined,

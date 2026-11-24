@@ -49,6 +49,7 @@ import type {
 } from './types';
 import {
   fieldHasHeaderFilter,
+  getFieldSortOrder,
   getMainGroupField,
   getStringState,
   isContextMenuKeyEvent,
@@ -212,7 +213,7 @@ export class FieldChooserBase extends mixinWidget<FieldChooserBaseProperties> {
           rootElement: $fieldElement,
           column: {
             alignment: this.option('rtlEnabled') ? 'right' : 'left',
-            sortOrder: field.sortOrder === 'desc' ? 'desc' : 'asc',
+            sortOrder: getFieldSortOrder(field),
             allowSorting: field.allowSorting,
             caption,
           },
@@ -237,9 +238,8 @@ export class FieldChooserBase extends mixinWidget<FieldChooserBaseProperties> {
   private _getFieldItemAriaLabel(field: FieldChooserField, caption: string): string {
     // The sort indicator is rendered for every sortable non-data field, with
     // ascending shown by default, so the label mirrors the visible state.
-    const fieldSortOrder = field.sortOrder === 'desc' ? 'desc' : 'asc';
     const sortOrder = field.allowSorting && field.area !== 'data'
-      ? fieldSortOrder
+      ? getFieldSortOrder(field)
       : undefined;
     const hasHeaderFilterValue = !!this._dataSource
       && fieldHasHeaderFilter(this._dataSource, field)
