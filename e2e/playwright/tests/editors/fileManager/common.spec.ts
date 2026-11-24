@@ -1,7 +1,6 @@
 import { test } from '../../../fixtures';
 import { createWidget } from '../../../helpers/createWidget';
 import { testScreenshot } from '../../../helpers/screenshots';
-import { getThemeName } from '../../../helpers/themeUtils';
 
 test.describe('FileManager', () => {
   test('Custom DropDown width for Material and Fluent themes', async ({ page }) => {
@@ -16,9 +15,7 @@ test.describe('FileManager', () => {
     await testScreenshot(page, 'drop down width.png', { element: '#container' });
   });
 
-  test('Details view, focused row actions button', async ({ page, theme }) => {
-    test.skip(getThemeName(theme) !== 'fluent-next', 'fluent-next only');
-
+  test('Details view, focused row actions button', async ({ page }) => {
     await createWidget(page, 'dxFileManager', {
       fileSystemProvider: [
         {
