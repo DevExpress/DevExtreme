@@ -470,6 +470,36 @@ QUnit.module('basic options', moduleConfig, () => {
         });
     });
 
+    QUnit.test('current style image should be hidden from assistive technologies after controls are turned off and on again', function(assert) {
+        const done = assert.async();
+        const mapReadyDeferred = $.Deferred();
+
+        const map = $('#map').dxMap({
+            provider: 'azure',
+            controls: true,
+            onReady: () => {
+                mapReadyDeferred.resolve();
+            }
+        }).dxMap('instance');
+
+        mapReadyDeferred.done(() => {
+            map.option('onUpdated', () => {
+                map.option('onUpdated', () => {
+                    const $currentStyleImage = $('#map').find('.curr-style img');
+
+                    assert.strictEqual($currentStyleImage.length, 1);
+                    assert.strictEqual($currentStyleImage.attr('aria-hidden'), 'true');
+
+                    done();
+                });
+
+                map.option('controls', true);
+            });
+
+            map.option('controls', false);
+        });
+    });
+
     QUnit.test('map should set interactive state depending on disabled option', function(assert) {
         const done = assert.async();
         const d1 = $.Deferred();

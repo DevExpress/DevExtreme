@@ -1,10 +1,12 @@
 (() => {
     const atlas = window.atlas = {
         Map: function(container, options) {
+            const mapControls = [{}, {}];
+
             if(options) {
                 atlas.optionsSpecified = true;
                 atlas.options = options;
-                atlas.addedControls = 2;
+                atlas.addedControls = mapControls.length;
             }
 
             this.events = {
@@ -64,18 +66,21 @@
             };
             this.controls = {
                 add: (controls, options) => {
-                    atlas.addedControls += controls.length;
+                    mapControls.push(...controls);
+                    atlas.addedControls = mapControls.length;
                     atlas.controlOptions = options;
                     controls
                         .filter((control) => control.onAdd)
                         .forEach((control) => container.appendChild(control.onAdd()));
                 },
                 remove: (controls) => {
-                    atlas.addedControls = atlas.addedControls ? atlas.addedControls - controls.length : 0;
+                    controls
+                        .filter((control) => control.onRemove)
+                        .forEach((control) => control.onRemove());
+                    mapControls.splice(0, mapControls.length, ...mapControls.filter((control) => !controls.includes(control)));
+                    atlas.addedControls = mapControls.length;
                 },
-                getControls: () => {
-                    return new Array(atlas.addedControls ?? 0);
-                }
+                getControls: () => [...mapControls],
             };
             this.layers = {
                 add: (layer) => {
@@ -133,8 +138,12 @@
                     currentStyleImage.alt = 'Road';
                     currentStyleButton.append(currentStyleImage, 'Road');
                     styleControl.append(currentStyleButton);
+                    this.element = styleControl;
 
                     return styleControl;
+                };
+                this.onRemove = () => {
+                    this.element.remove();
                 };
             },
             ZoomControl: function() {},
