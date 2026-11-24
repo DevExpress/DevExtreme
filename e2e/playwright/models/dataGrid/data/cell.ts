@@ -8,7 +8,13 @@ const CLASS = {
   editorInput: 'dx-texteditor-input',
   cellModified: 'dx-cell-modified',
   checkbox: 'dx-checkbox',
+  pendingIndicator: 'dx-pending-indicator',
+  invalidMessage: 'dx-invalid-message',
+  overlay: 'dx-overlay',
 };
+
+// The grid prefixes the class with its name, which a cell doesn't know.
+const INVALID_CELL_CLASS = 'dx-(datagrid|treelist)-invalid';
 
 export default class DataCell extends GridFocusableElement {
   constructor(dataRow: Locator, index: number) {
@@ -29,5 +35,17 @@ export default class DataCell extends GridFocusableElement {
 
   public getCheckbox(): Locator {
     return this.element.locator(`.${CLASS.checkbox}`);
+  }
+
+  public expectInvalid(present = true): Promise<void> {
+    return expectClass(this.element, INVALID_CELL_CLASS, present);
+  }
+
+  public getPendingIndicator(): Locator {
+    return this.element.locator(`.${CLASS.pendingIndicator}`);
+  }
+
+  public getInvalidMessage(): Locator {
+    return this.element.locator(`.${CLASS.invalidMessage}.${CLASS.overlay}`);
   }
 }

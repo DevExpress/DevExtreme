@@ -5,6 +5,7 @@ import ExportButton from './panelButtons/exportButton';
 const CLASS = {
   addRowButton: 'addrow-button',
   saveButton: 'save-button',
+  cancelButton: 'cancel-button',
   applyFilterButton: 'dx-apply-button',
 };
 
@@ -15,6 +16,10 @@ export default class HeaderPanel extends GridModule {
 
   public getSaveButton(): Locator {
     return this.element.locator(`.${this.addWidgetPrefix(CLASS.saveButton)}`);
+  }
+
+  public getCancelButton(): Locator {
+    return this.element.locator(`.${this.addWidgetPrefix(CLASS.cancelButton)}`);
   }
 
   public getExportButton(): ExportButton {

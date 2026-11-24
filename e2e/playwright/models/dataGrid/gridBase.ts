@@ -2,6 +2,7 @@ import type { Locator, Page } from '@playwright/test';
 import { expect } from '@playwright/test';
 import GridCore, { CLASS as CLASS_BASE } from '../gridCore';
 import Toolbar from '../toolbar';
+import Popup from '../popup';
 import DataRow from './data/row';
 import DataCell from './data/cell';
 import FilterCell from './filter/cell';
@@ -9,6 +10,7 @@ import EditForm from './editForm';
 import Headers from './headers';
 import HeaderPanel from './headers/panel';
 import AdaptiveDetailRow from './adaptiveDetailRow';
+import Overlay from './overlay';
 
 const CLASS = {
   ...CLASS_BASE,
@@ -31,6 +33,11 @@ const CLASS = {
   invalidMessage: 'invalid-message',
   toolbar: 'dx-toolbar',
   dialogWrapper: 'dx-dialog-wrapper',
+  overlayWrapper: 'dx-overlay-wrapper',
+  revertButton: 'dx-revert-button',
+  popup: 'dx-popup',
+  fieldItemContent: 'dx-field-item-content',
+  textEditorInput: 'dx-texteditor-input',
 };
 
 const E2E_ATTRIBUTES = {
@@ -77,6 +84,13 @@ export default abstract class GridBase extends GridCore {
     );
   }
 
+  public getDataRows(): Locator {
+    const gridView = this.addWidgetPrefix(CLASS.gridView);
+    const fixedGridView = this.addWidgetPrefix(CLASS.fixedGridView);
+
+    return this.ownElement(`.${gridView}:not(.${fixedGridView}) .${CLASS.dataRow}`);
+  }
+
   public getFocusedRow(): DataRow {
     const gridView = this.addWidgetPrefix(CLASS.gridView);
     const fixedGridView = this.addWidgetPrefix(CLASS.fixedGridView);
@@ -121,12 +135,28 @@ export default abstract class GridBase extends GridCore {
     return this.body.locator(`.${CLASS.dialogWrapper}`);
   }
 
+  public getOverlay(): Overlay {
+    return new Overlay(this.element.locator(`.${CLASS.overlayWrapper}`), this.getName());
+  }
+
+  public getRevertButton(): Locator {
+    return this.element.locator(`.${CLASS.revertButton}`);
+  }
+
   public getRevertTooltip(): Locator {
     return this.body.locator(`.${this.addWidgetPrefix(CLASS.revertTooltip)}`);
   }
 
   public getInvalidMessageTooltip(): Locator {
     return this.body.locator(`.dx-${CLASS.invalidMessage}.dx-${CLASS.invalidMessage}-always.${this.addWidgetPrefix(CLASS.invalidMessage)}`);
+  }
+
+  public getFormItemElement(index: number): Locator {
+    return this.element.locator(`.${CLASS.fieldItemContent}`).nth(index);
+  }
+
+  public getFormItemEditor(index: number): Locator {
+    return this.getFormItemElement(index).locator(`.${CLASS.textEditorInput}`);
   }
 
   public getEditForm(): EditForm {
@@ -141,6 +171,14 @@ export default abstract class GridBase extends GridCore {
     const buttons = element.locator(`.${CLASS.toolbar} .${CLASS.button}`);
 
     return new EditForm(element, buttons);
+  }
+
+  // The popup widget, not its wrapper, which carries the same class.
+  public getEditPopup(): Popup {
+    return new Popup(
+      this.page,
+      this.element.locator(`.${this.addWidgetPrefix(CLASS.popupEdit)}.${CLASS.popup}`),
+    );
   }
 
   public getHeaderPanel(): HeaderPanel {
@@ -252,6 +290,26 @@ export default abstract class GridBase extends GridCore {
 
       return grid.keyOf(grid.getTopVisibleRowData());
     }, this.getName());
+  }
+
+  public apiGetCellValue(rowIndex: number, columnIndex: number): Promise<unknown> {
+    return this.invoke('cellValue', rowIndex, columnIndex);
+  }
+
+  public apiGetCellValidationStatus(rowIndex: number, columnIndex: number): Promise<string | null> {
+    return this.element.evaluate((element, { widgetName, row, column }) => {
+      const grid = $(element).data(widgetName);
+      const result = grid.getController('validating').getCellValidationResult({
+        rowKey: grid.getKeyByRowIndex(row),
+        columnIndex: column,
+      });
+
+      return result ? result.status : null;
+    }, { widgetName: this.getName(), row: rowIndex, column: columnIndex });
+  }
+
+  public async apiPageIndex(pageIndex: number): Promise<void> {
+    await this.invoke('pageIndex', pageIndex);
   }
 
   public apiTotalCount(): Promise<number> {

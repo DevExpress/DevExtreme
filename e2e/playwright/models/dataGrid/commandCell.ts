@@ -8,6 +8,8 @@ const CLASS = {
   commandAdaptive: 'dx-command-adaptive',
   commandAI: 'dx-command-ai',
   editButton: 'dx-link-edit',
+  saveButton: 'dx-link-save',
+  deleteButton: 'dx-link-delete',
 };
 
 const commandSelector = [
@@ -17,6 +19,9 @@ const commandSelector = [
   `.${CLASS.commandAdaptive}`,
   `.${CLASS.commandAI}`,
 ].join(', ');
+
+// The grid prefixes the class with its name, which a cell doesn't know.
+const adaptiveButtonSelector = '.dx-datagrid-adaptive-more, .dx-treelist-adaptive-more';
 
 export default class CommandCell extends GridFocusableElement {
   constructor(dataRow: Locator, index: number) {
@@ -29,5 +34,17 @@ export default class CommandCell extends GridFocusableElement {
 
   public getEditButton(): Locator {
     return this.element.locator(`.${CLASS.editButton}`);
+  }
+
+  public getSaveButton(): Locator {
+    return this.element.locator(`.${CLASS.saveButton}`);
+  }
+
+  public getDeleteButton(): Locator {
+    return this.element.locator(`.${CLASS.deleteButton}`);
+  }
+
+  public getAdaptiveButton(): Locator {
+    return this.element.locator(adaptiveButtonSelector);
   }
 }
