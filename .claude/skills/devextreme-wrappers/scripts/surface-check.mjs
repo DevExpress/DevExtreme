@@ -27,9 +27,18 @@ const ts = (() => {
 
 const read = (p) => (fs.existsSync(p) ? fs.readFileSync(p, 'utf8') : null);
 const vueSrc = path.join(pkgs, 'devextreme-vue/src');
-const allComponents = fs.readdirSync(vueSrc)
+const reactSrc = path.join(pkgs, 'devextreme-react/src');
+const angularUi = path.join(pkgs, 'devextreme-angular/src/ui');
+const tsFiles = (dir) => fs.readdirSync(dir)
   .filter((f) => f.endsWith('.ts') && f !== 'index.ts')
   .map((f) => f.slice(0, -3));
+const allComponents = [...new Set([
+  ...tsFiles(vueSrc),
+  ...tsFiles(reactSrc),
+  ...fs.readdirSync(angularUi, { withFileTypes: true })
+    .filter((e) => e.isDirectory() && e.name !== 'nested')
+    .map((e) => e.name),
+])].sort();
 
 // ---------- hidden overrides from `@name Iface.option` JSDoc blocks ----------
 function walk(dir, out = []) {
@@ -98,6 +107,16 @@ function dtsSurface(moduleSpec) {
   const isHidden = (node) => ts.getJSDocTags(node).some((t) => t.tagName.text === 'hidden'
     && String(t.comment ?? '').trim() !== 'false');
   const seen = new Set();
+  const addMembers = (name, list) => {
+    const m = members.get(name) ?? new Map();
+    for (const mem of list) if (mem.name && ts.isIdentifier(mem.name)) m.set(mem.name.text, isHidden(mem));
+    members.set(name, m);
+  };
+  const ownLiterals = (n) => {
+    if (ts.isParenthesizedTypeNode(n)) return ownLiterals(n.type);
+    if (ts.isIntersectionTypeNode(n)) return n.types.flatMap(ownLiterals);
+    return ts.isTypeLiteralNode(n) ? [n] : [];
+  };
   const visitSym = (sym) => {
     sym = resolve(sym);
     if (!sym || seen.has(sym)) return;
@@ -107,14 +126,20 @@ function dtsSurface(moduleSpec) {
       if (ts.isInterfaceDeclaration(d)) {
         const name = d.name.text;
         if (!chain.includes(name)) chain.push(name);
-        const m = members.get(name) ?? new Map();
-        for (const mem of d.members) if (mem.name && ts.isIdentifier(mem.name)) m.set(mem.name.text, isHidden(mem));
-        members.set(name, m);
+        addMembers(name, d.members);
         for (const h of d.heritageClauses ?? []) for (const t of h.types) {
           visitSym(checker.getSymbolAtLocation(t.expression));
           for (const a of t.typeArguments ?? []) visitNode(a);
         }
-      } else if (ts.isTypeAliasDeclaration(d)) visitNode(d.type);
+      } else if (ts.isTypeAliasDeclaration(d)) {
+        const literals = ownLiterals(d.type);
+        if (literals.length) {
+          const name = d.name.text;
+          if (!chain.includes(name)) chain.push(name);
+          addMembers(name, literals.flatMap((l) => [...l.members]));
+        }
+        visitNode(d.type);
+      }
     }
   };
   const visitNode = (n) => {
@@ -152,14 +177,23 @@ function dtsSurface(moduleSpec) {
     decl = (parent && classes.get(parent))
       ?? (ext && resolve(checker.getSymbolAtLocation(ext.expression))?.declarations?.find(ts.isClassDeclaration));
   }
-  for (const i of tsIfaces) if (!chain.includes(i)) chain.push(i);
+  // An unplaced name goes right before the first base it derives from (the next already
+  // placed name in walk order), so it keeps precedence over what it inherits.
+  tsIfaces.forEach((i, idx) => {
+    if (chain.includes(i)) return;
+    const next = tsIfaces.slice(idx + 1).find((x) => chain.includes(x));
+    chain.splice(next ? chain.indexOf(next) : chain.length, 0, i);
+  });
 
   const visible = new Set();
   const templates = new Set();
   for (const prop of checker.getPropertiesOfType(propsType)) {
     let hidden = false;
     for (const iface of chain) {
-      const v = hiddenByName.get(`${iface}.${prop.name}`) ?? members.get(iface)?.get(prop.name);
+      const key = `${iface}.${prop.name}`;
+      const v = explicit.has(key)
+        ? hiddenByName.get(key)
+        : members.get(iface)?.get(prop.name) ?? hiddenByName.get(key);
       if (v !== undefined) { hidden = v; break; }
     }
     if (hidden) continue;
@@ -258,6 +292,13 @@ const isTemplate = (n) => n === 'template' || n.endsWith('Template');
 function check(name) {
   const problems = [];
   const add = (where, what, list) => list.length && problems.push(`${where}: ${what}: ${list.join(', ')}`);
+  if (!fs.existsSync(path.join(vueSrc, `${name}.ts`))) {
+    const has = [
+      fs.existsSync(path.join(angularUi, name)) && 'angular',
+      fs.existsSync(path.join(reactSrc, `${name}.ts`)) && 'react',
+    ].filter(Boolean);
+    return [`vue: no devextreme-vue/src/${name}.ts (wrapper exists in: ${has.join(', ') || 'none'})`];
+  }
   const spec = vueModule(name);
   if (!spec) return [`vue: cannot find Properties import in devextreme-vue/src/${name}.ts`];
 
@@ -320,10 +361,11 @@ else if (args[0] === '--changed') {
     }
   }
   const paths = "'packages/devextreme/js' 'packages/devextreme-angular/src' 'packages/devextreme-react/src' 'packages/devextreme-vue/src'";
-  const changed = [
+  const changed = [...new Set([
     ...git(`diff --name-only "${base}"...HEAD -- ${paths}`).split('\n'),
     ...git(`diff --name-only HEAD -- ${paths}`).split('\n'),
-  ].filter(Boolean);
+    ...git(`ls-files --others --exclude-standard -- ${paths}`).split('\n'),
+  ])].filter(Boolean);
   console.log(`Changes since ${base}: ${changed.length} file(s) under devextreme/js and wrapper src.`);
   const set = new Set();
   const shared = [];
