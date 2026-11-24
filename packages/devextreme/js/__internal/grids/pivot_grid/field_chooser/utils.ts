@@ -4,7 +4,7 @@ import { updateHeaderFilterItemSelectionState } from '@ts/grids/grid_core/header
 
 import type { PivotGridDataSource } from '../data_source/data_source';
 import type { DataSourceState } from '../data_source/types';
-import type { PivotGridField } from '../types';
+import type { PivotGridField, PivotGridFilterValue } from '../types';
 import { createPath, foreachTree } from '../widget_utils';
 import type { FieldChooserField, SortOrderType } from './const';
 import { FIELD_NAVIGATION_DELTAS, SORT_ORDER } from './const';
@@ -61,13 +61,13 @@ export const processItems = (
   groupItems: FieldChooserHeaderFilterItem[],
   field: PivotGridField,
 ): void => {
-  const filterValues: unknown[] = [];
+  const filterValues: unknown[] = field.filterValues?.map(
+    (filterValue: PivotGridFilterValue) => (
+      Array.isArray(filterValue) ? filterValue.join('/') : filterValue?.valueOf()
+    ),
+  ) ?? [];
   const isTree = !!field.groupName;
   const isExcludeFilterType = field.filterType === 'exclude';
-
-  field.filterValues?.forEach((filterValue) => {
-    filterValues.push(Array.isArray(filterValue) ? filterValue.join('/') : filterValue?.valueOf());
-  });
 
   foreachTree(groupItems, (items: FieldChooserHeaderFilterItem[]) => {
     const item = items[0];
