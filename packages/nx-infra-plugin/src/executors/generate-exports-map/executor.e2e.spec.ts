@@ -82,6 +82,29 @@ describe('GenerateExportsMapExecutor E2E', () => {
     expect(exportsMap['./esm/ui/ignored']).toBeUndefined();
   });
 
+  it('should export a folder index declaration under its explicit index path', async () => {
+    await writeJsonFile('events/package.json', {
+      main: '../cjs/events/index.js',
+      module: '../esm/events/index.js',
+      typings: './index.d.ts',
+    });
+    await write('cjs/events/index.js');
+    await write('esm/events/index.js');
+    await write('events/index.d.ts');
+    await write('core/index.d.ts');
+    await write('data.d.ts');
+    await write('data/index.d.ts');
+
+    const result = await run();
+    expect(result.success).toBe(true);
+
+    const exportsMap = await readExports();
+    expect(exportsMap['./events/index']).toEqual(exportsMap['./events']);
+    expect(exportsMap['./core/index']).toEqual({ types: './core/index.d.ts' });
+    expect(exportsMap['./data']).toEqual({ types: './data.d.ts' });
+    expect(exportsMap['./data/index']).toEqual({ types: './data/index.d.ts' });
+  });
+
   it('should append extra exports after the generated entries', async () => {
     const result = await run({
       extraExports: {

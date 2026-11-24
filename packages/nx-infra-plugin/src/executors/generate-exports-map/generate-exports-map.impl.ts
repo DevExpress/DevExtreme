@@ -223,6 +223,13 @@ export default createExecutor<GenerateExportsMapExecutorSchema, ResolvedGenerate
         exportsMap[subpath] = { types };
         typeOnlyCount += 1;
       }
+
+      // Explicit 'pkg/events/index' paths, which resolved to events/index.d.ts before the exports map
+      if (dtsFile.endsWith(`/${INDEX_DTS_FILE}`)) {
+        const folderEntry = exportsMap[subpath];
+        exportsMap[types.slice(0, -DTS_EXTENSION.length)] =
+          typeof folderEntry === 'object' && folderEntry.types === types ? folderEntry : { types };
+      }
     }
 
     if (declarationImports) {
