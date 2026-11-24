@@ -5,7 +5,7 @@
     "strict": true,
     "verbatimModuleSyntax": true,
     "module": "ESNext",
-    "moduleResolution": "Node",
+    "moduleResolution": "Bundler",
     "ignoreDeprecations": "6.0",
     "lib": ["es2022", "DOM", "DOM.Iterable"],
     "resolveJsonModule": true
