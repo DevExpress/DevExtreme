@@ -2270,4 +2270,27 @@ module('Using beforeInput event', {
         assert.strictEqual(input.value, '15.11', 'input keeps the composed text');
         assert.strictEqual(this.instance.option('text'), '15.11', 'text follows the input');
     });
+
+    test('a digit composed after selecting the whole text on Android devices is entered into the first part (T1338541)', function(assert) {
+        const input = this.$input.get(0);
+
+        this.keyboard
+            .caret({ start: 0, end: 2 })
+            .press('right')
+            .press('right')
+            .caret({ start: 0, end: input.value.length });
+
+        this.$input.trigger($.Event('compositionstart'));
+        this.keyboard
+            .keyDown('Unidentified')
+            .caret({ start: 6, end: 10 })
+            .beforeInput('1', 'insertCompositionText');
+        input.setRangeText('1', 6, 10, 'end');
+        this.keyboard
+            .input('1', 'insertCompositionText')
+            .keyUp('Unidentified');
+
+        assert.strictEqual(input.value, '01/01/2020 03:45', 'day is 01');
+        assert.deepEqual(this.keyboard.caret(), { start: 0, end: 2 }, 'day is selected');
+    });
 });

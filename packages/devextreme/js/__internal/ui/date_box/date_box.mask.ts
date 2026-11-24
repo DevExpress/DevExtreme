@@ -274,6 +274,12 @@ class DateBoxMask<
       return false;
     }
 
+    if (isCompositionText && this._wasAllSelectedBeforeComposition) {
+      this._clearSearchValue();
+      this._selectFirstPart();
+      this._wasAllSelectedBeforeComposition = false;
+    }
+
     this._keyInputHandler(e, typedChar);
 
     return true;
