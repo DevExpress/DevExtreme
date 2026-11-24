@@ -54,6 +54,7 @@ import {
   getStringState,
   isContextMenuKeyEvent,
   isFieldNavigationEvent,
+  isPivotGridArea,
   isPivotGridDataSource,
   processItems,
   reverseSortOrder,
@@ -299,7 +300,7 @@ export class FieldChooserBase extends mixinWidget<FieldChooserBaseProperties> {
           return;
         }
 
-        const { targetIndex } = e;
+        const { targetGroup, targetIndex } = e;
         let invisibleFieldsIndexOffset = 0;
 
         const mainGroupField = this._processDemandState((dataSource) => {
@@ -322,8 +323,7 @@ export class FieldChooserBase extends mixinWidget<FieldChooserBaseProperties> {
         }
 
         this._applyChanges([mainGroupField], {
-          // @ts-expect-error the sortable groups are named after the areas
-          area: e.targetGroup,
+          area: isPivotGridArea(targetGroup) ? targetGroup : undefined,
           areaIndex: targetIndex + invisibleFieldsIndexOffset,
         });
       },

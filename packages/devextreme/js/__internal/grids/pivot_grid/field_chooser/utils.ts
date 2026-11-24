@@ -1,5 +1,6 @@
 import { isDefined } from '@js/core/utils/type';
 import type { DxEvent } from '@js/events';
+import type { PivotGridArea } from '@js/ui/pivot_grid/data_source';
 import { updateHeaderFilterItemSelectionState } from '@ts/grids/grid_core/header_filter/header_filter_core';
 
 import type { PivotGridDataSource } from '../data_source/data_source';
@@ -40,6 +41,10 @@ export const shouldCancelDragging = (
 
   return false;
 };
+
+export const isPivotGridArea = (
+  group: string | undefined,
+): group is PivotGridArea => group === 'filter' || group === 'row' || group === 'column' || group === 'data';
 
 export const isPivotGridDataSource = (
   dataSource: FieldChooserBaseProperties['dataSource'],
