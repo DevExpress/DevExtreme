@@ -1,4 +1,4 @@
-import { existsSync } from 'fs';
+import { existsSync, readFileSync, rmSync } from 'fs';
 import { join } from 'path';
 import { glob } from 'glob';
 import AxeBuilder from '@axe-core/playwright';
@@ -89,15 +89,35 @@ const getIgnoredRules = (testName) => {
   ];
 };
 
-const createAxeBuilder = (page: Page, ignoredRules: string[]): AxeBuilder => {
+const createAxeBuilder = (page: Page, ignoredRules: string[], colorContrastOnly: boolean): AxeBuilder => {
   const builder = new AxeBuilder({ page })
     .include('.demo-container')
     .setLegacyMode();
 
-  return isColorContrastOnly
+  return colorContrastOnly
     ? builder.withRules([COLOR_CONTRAST_RULE])
     : builder.disableRules(ignoredRules);
 };
+
+const findViolations = async (
+  page: Page,
+  testName: string,
+  ignoredRules: string[],
+  colorContrastOnly: boolean,
+): Promise<string[]> => {
+  const results = await createAxeBuilder(page, ignoredRules, colorContrastOnly).analyze();
+
+  if (results.violations.length > 0) {
+    createMdReport({ testName, results });
+  }
+
+  return results.violations.map(({ id, impact, nodes }) => `${id} (${impact}): ${nodes.map(({ target }) => target.join(' ')).join(', ')}`);
+};
+
+const getPageTheme = (page: Page): Promise<string> => page.evaluate(
+  () => (window as unknown as { DevExpress: { ui: { themes: { current: () => string } } } })
+    .DevExpress.ui.themes.current(),
+);
 
 updateConfig({ explicitTestArgs: [], verbose: false });
 
@@ -159,16 +179,49 @@ test.describe(FRAMEWORKS.jquery, () => {
       await waitForIdle();
 
       expect(pageErrors, 'uncaught errors in the page').toEqual([]);
+      expect(await getPageTheme(page), 'theme of the page').toBe(THEME);
 
-      const results = await createAxeBuilder(page, ignoredRules).analyze();
-
-      if (results.violations.length > 0) {
-        createMdReport({ testName, results });
-      }
-
-      const violations = results.violations.map(({ id, impact, nodes }) => `${id} (${impact}): ${nodes.map(({ target }) => target.join(' ')).join(', ')}`);
+      const violations = await findViolations(page, testName, ignoredRules, isColorContrastOnly);
 
       expect(violations, 'accessibility violations').toEqual([]);
     });
+  });
+});
+
+test.describe('axe setup', () => {
+  const PLANTED_REPORT_NAME = 'axe-setup-planted-violations';
+  const PLANTED_REPORT_PATH = join(DEMOS_ROOT, 'testing', 'artifacts', 'axe-reports', `${PLANTED_REPORT_NAME}.md`);
+  const DEMO_URL = `${BASE_URL}/apps/demos/Demos/Button/PredefinedTypes/${FRAMEWORKS.jquery}/`;
+
+  const PLANTED_CONTRAST = 'color-contrast (serious): .planted-contrast-inside';
+  const PLANTED_IMAGE = 'image-alt (critical): .planted-image-inside';
+
+  test.afterEach(() => rmSync(PLANTED_REPORT_PATH, { force: true }));
+
+  test('reports only the violations planted inside the demo container', async ({ page }) => {
+    const waitForIdle = trackPageActivity(page);
+
+    await mockApi(page);
+    await prepareDemoPage(page, DEMO_URL, THEME, null);
+    await openDemo(page, DEMO_URL, waitForIdle);
+
+    await page.evaluate(() => {
+      const plant = (parent: Element, place: string): void => {
+        parent.insertAdjacentHTML(
+          'beforeend',
+          `<img class="planted-image-${place}" src="data:image/gif;base64,R0lGODlhAQABAAAAACw=">`
+          + `<span class="planted-contrast-${place}" style="color: #777; background: #888;">planted</span>`,
+        );
+      };
+
+      document.querySelectorAll('.demo-container').forEach((container) => plant(container, 'inside'));
+      plant(document.body, 'outside');
+    });
+
+    expect(await findViolations(page, PLANTED_REPORT_NAME, [], false)).toEqual([PLANTED_CONTRAST, PLANTED_IMAGE]);
+    expect(readFileSync(PLANTED_REPORT_PATH, 'utf8')).toContain('.planted-image-inside');
+
+    expect(await findViolations(page, PLANTED_REPORT_NAME, ['image-alt'], false)).toEqual([PLANTED_CONTRAST]);
+    expect(await findViolations(page, PLANTED_REPORT_NAME, [], true)).toEqual([PLANTED_CONTRAST]);
   });
 });
