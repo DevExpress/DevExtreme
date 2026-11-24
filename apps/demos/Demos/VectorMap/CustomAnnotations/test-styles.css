@@ -1,5 +1,0 @@
-/* image may not load at the test environment */
-
-#vector-map svg image {
-  opacity: 0;
-}
