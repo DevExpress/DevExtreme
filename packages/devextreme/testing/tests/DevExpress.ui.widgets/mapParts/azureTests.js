@@ -454,6 +454,22 @@ QUnit.module('basic options', moduleConfig, () => {
         });
     });
 
+    QUnit.test('current style image should be hidden from assistive technologies because the style name follows it as text', function(assert) {
+        const done = assert.async();
+
+        $('#map').dxMap({
+            provider: 'azure',
+            controls: true,
+            onReady: () => {
+                const $currentStyleImage = $('#map').find('.curr-style img');
+
+                assert.strictEqual($currentStyleImage.attr('aria-hidden'), 'true');
+
+                done();
+            }
+        });
+    });
+
     QUnit.test('map should set interactive state depending on disabled option', function(assert) {
         const done = assert.async();
         const d1 = $.Deferred();
