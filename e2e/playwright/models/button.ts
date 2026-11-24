@@ -20,4 +20,8 @@ export default class Button extends Widget {
   public expectSelected(present = true): Promise<void> {
     return this.expectClass(CLASS.selected, present);
   }
+
+  public expectItemSelected(present = true): Promise<void> {
+    return this.expectClass(CLASS.itemSelected, present);
+  }
 }
