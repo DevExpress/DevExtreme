@@ -16,7 +16,7 @@ import { createColumnsInfo, foreachColumnInfo } from '@ts/grids/grid_core/virtua
 import type { VirtualScrollDataOptions } from '@ts/grids/grid_core/virtual_scrolling/types';
 import type { VirtualScrollController } from '@ts/grids/grid_core/virtual_scrolling/virtual_scrolling_core';
 import VirtualScrollControllerModule from '@ts/grids/grid_core/virtual_scrolling/virtual_scrolling_core';
-import { PivotGridDataSource } from '@ts/grids/pivot_grid/data_source/m_data_source';
+import { PivotGridDataSource } from '@ts/grids/pivot_grid/data_source/data_source';
 import type {
   DataSourceData,
   DataSourceHeaderArea,

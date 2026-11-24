@@ -1,4 +1,4 @@
-import '../data_source/m_data_source';
+import '../data_source/data_source';
 
 import localizationMessage from '@js/common/core/localization/message';
 import registerComponent from '@js/core/component_registrator';

@@ -1,7 +1,7 @@
 import { describe, expect, it } from '@jest/globals';
 import CustomStore from '@js/data/custom_store';
 
-import { PivotGridDataSource } from './m_data_source';
+import { PivotGridDataSource } from './data_source';
 
 describe('PivotGridDataSource', () => {
   describe('getFieldValues', () => {
