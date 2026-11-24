@@ -1,25 +1,43 @@
 import domAdapter from '@js/core/dom_adapter';
 import { getPublicElement } from '@js/core/element';
 import Guid from '@js/core/guid';
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
+import type { DeferredObj } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { getBoundingRect } from '@js/core/utils/position';
 import { setWidth } from '@js/core/utils/size';
 import { setStyle } from '@js/core/utils/style';
 import { isDefined } from '@js/core/utils/type';
+import type { ScrollOffset, ScrollToFunc } from '@ts/core/utils/scroll';
 import { getMemoizeScrollTo } from '@ts/core/utils/scroll';
 import { foreachColumnInfo } from '@ts/grids/grid_core/virtual_columns/virtual_columns_core';
+import type Scrollable from '@ts/ui/scroll_view/scrollable';
+import type { ScrollableProperties } from '@ts/ui/scroll_view/scrollable';
 
 import { FAKE_TABLE_CLASS } from '../keyboard_navigation/const';
+import type {
+  AreaItemCell,
+  AreaItemCellAriaIndexOptions,
+  AreaItemCellContext,
+  AreaItemCellPreparedArgs,
+  AreaItemComponent,
+  AreaItemOption,
+  AreaItemScrollEvent,
+  AreaItemStyleOptions,
+  AreaItemTableCss,
+  AreaItemVirtualContentParams,
+  AreaName,
+} from './types';
 
 const PIVOTGRID_EXPAND_CLASS = 'dx-expand';
 
-const getRealElementWidth = function (element) {
+const getRealElementWidth = (element: HTMLElement): number => {
   let width = 0;
 
   const { offsetWidth } = element;
 
-  if (element.getBoundingClientRect) {
+  if (typeof element.getBoundingClientRect === 'function') {
     const clientRect = getBoundingRect(element);
     width = clientRect.width;
 
@@ -34,7 +52,12 @@ const getRealElementWidth = function (element) {
   return width > 0 ? width : offsetWidth;
 };
 
-function getFakeTableOffset(scrollPos, elementOffset, tableSize, viewPortSize) {
+function getFakeTableOffset(
+  scrollPos: number,
+  elementOffset: number,
+  tableSize: number,
+  viewPortSize: number,
+): number {
   let offset = 0;
   let halfTableCount = 0;
   const halfTableSize = tableSize / 2;
@@ -42,7 +65,7 @@ function getFakeTableOffset(scrollPos, elementOffset, tableSize, viewPortSize) {
   if (scrollPos + viewPortSize - (elementOffset + tableSize) > 1) {
     if (scrollPos >= elementOffset + tableSize + halfTableSize) {
       halfTableCount = parseInt(
-        ((scrollPos - (elementOffset + tableSize)) / halfTableSize) as any,
+        String((scrollPos - (elementOffset + tableSize)) / halfTableSize),
         10,
       );
     }
@@ -51,7 +74,7 @@ function getFakeTableOffset(scrollPos, elementOffset, tableSize, viewPortSize) {
   } else if (scrollPos < elementOffset) {
     if (scrollPos <= elementOffset - halfTableSize) {
       halfTableCount = parseInt(
-        ((scrollPos - (elementOffset - halfTableSize)) / halfTableSize) as any,
+        String((scrollPos - (elementOffset - halfTableSize)) / halfTableSize),
         10,
       );
     }
@@ -65,70 +88,72 @@ function getFakeTableOffset(scrollPos, elementOffset, tableSize, viewPortSize) {
 }
 
 abstract class AreaItem {
-  component: any;
+  public component: AreaItemComponent;
 
-  _tableElement: any;
+  protected _tableElement?: dxElementWrapper;
 
-  _tableHeight: any;
+  protected _tableHeight?: number;
 
-  _colgroupElement: any;
+  protected _colgroupElement?: dxElementWrapper;
 
-  _tableWidth: any;
+  protected _tableWidth?: number;
 
-  _groupElement: any;
+  public _groupElement?: dxElementWrapper;
 
-  _rootElement: any;
+  protected _rootElement?: dxElementWrapper;
 
-  _virtualContent: any;
+  protected _virtualContent?: dxElementWrapper;
 
-  _fakeTable: any;
+  protected _fakeTable?: dxElementWrapper | null;
 
-  _memoizeScrollTo: any;
+  protected _memoizeScrollTo?: ScrollToFunc;
 
-  constructor(component) {
+  constructor(component: AreaItemComponent) {
     this.component = component;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  option(...args: any[]): any {
-    return this.component.option.apply(this.component, arguments);
+  public option<TName extends string>(optionName: TName): AreaItemOption<TName> {
+    return this.component.option(optionName);
   }
 
-  _getRowElement(index: number): HTMLTableRowElement | null {
-    if (this._tableElement?.length > 0) {
-      const tableElement = this._tableElement.get(0) as HTMLTableElement;
+  protected _getRowElement(index: number): HTMLTableRowElement | null {
+    if (this._tableElement && this._tableElement.length > 0) {
+      const tableElement = this._tableElement.get<HTMLTableElement>(0);
       return tableElement.rows[index];
     }
 
     return null;
   }
 
-  _createGroupElement() {
+  protected _createGroupElement(): dxElementWrapper {
     return $('<div>');
   }
 
-  _createTableElement() {
+  protected _createTableElement(): dxElementWrapper {
     return $('<table>')
       .attr('id', `dx-${new Guid()}`)
       .attr('role', 'presentation');
   }
 
-  _getCellText(cell, encodeHtml) {
+  protected _getCellText(cell: AreaItemCell, encodeHtml: boolean | undefined): string {
     let cellText = cell.isWhiteSpace ? '&nbsp' : cell.text || '&nbsp';
 
-    if (encodeHtml && (cellText.indexOf('<') !== -1 || cellText.indexOf('>') !== -1)) {
-      cellText = ($('<div>') as any).text(cellText).html();
+    if (encodeHtml && (cellText.includes('<') || cellText.includes('>'))) {
+      cellText = $('<div>').text(cellText).html();
     }
 
     return cellText;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _getRowClassNames(...args: any[]): any {
+  protected _getRowClassNames(
+    rowIndex: number,
+    cell: AreaItemCell | undefined,
+    rowClassNames: string[],
+  ): void;
 
-  }
+  protected _getRowClassNames(): void {}
 
-  _applyCustomStyles(options) {
+  protected _applyCustomStyles(options: AreaItemStyleOptions): void {
     if (options.cell.width) {
       options.cssArray.push(`min-width:${options.cell.width}px`);
     }
@@ -137,30 +162,26 @@ abstract class AreaItem {
     }
   }
 
-  _getMainElementMarkup() {
+  protected _getMainElementMarkup(): HTMLElement {
     const tbody = domAdapter.createElement('tbody');
     tbody.setAttribute('role', 'presentation');
     return tbody;
   }
 
-  _isCellNavigationEnabled() {
+  protected _isCellNavigationEnabled(): boolean {
     return false;
   }
 
-  _getCloseMainElementMarkup() {
-    return '</tbody>';
-  }
-
-  _getColumnIndexOffset() {
+  protected _getColumnIndexOffset(): number {
     return this.component._dataController?.getColumnIndexOffset() || 0;
   }
 
-  _getRowIndexOffset() {
+  protected _getRowIndexOffset(): number {
     return this.component._dataController?.getRowIndexOffset() || 0;
   }
 
-  _createColumnIndexMap(data) {
-    const columnIndexMap = new Map();
+  protected _createColumnIndexMap(data: AreaItemCell[][]): Map<string, number> {
+    const columnIndexMap = new Map<string, number>();
 
     foreachColumnInfo(data, (cell, visibleIndex, rowIndex, colIndex) => {
       columnIndexMap.set(`${rowIndex}-${colIndex}`, visibleIndex);
@@ -169,8 +190,8 @@ abstract class AreaItem {
     return columnIndexMap;
   }
 
-  _getCellAriaRole() {
-    const rolesByArea = {
+  protected _getCellAriaRole(): string | undefined {
+    const rolesByArea: Partial<Record<AreaName, string>> = {
       column: 'columnheader',
       row: 'rowheader',
       data: 'gridcell',
@@ -179,7 +200,10 @@ abstract class AreaItem {
     return rolesByArea[this._getAreaName()];
   }
 
-  _setCellAriaIndexAttributes(td, options) {
+  protected _setCellAriaIndexAttributes(
+    td: HTMLElement,
+    options: AreaItemCellAriaIndexOptions,
+  ): void {
     const {
       areaName,
       rowIndex,
@@ -191,7 +215,7 @@ abstract class AreaItem {
 
     if (areaName === 'column' || areaName === 'data') {
       const visibleColumnIndex = areaName === 'column'
-        ? columnIndexMap.get(`${rowIndex}-${columnIndex}`)
+        ? columnIndexMap?.get(`${rowIndex}-${columnIndex}`)
         : columnIndex;
 
       if (visibleColumnIndex !== undefined) {
@@ -204,7 +228,80 @@ abstract class AreaItem {
     }
   }
 
-  _renderTableContent(tableElement, data) {
+  private renderCellContent(
+    td: HTMLElement,
+    span: HTMLElement,
+    cell: AreaItemCell,
+    context: AreaItemCellContext,
+  ): string {
+    const { encodeHtml, isCellNavigationEnabled } = context;
+
+    if (cell.rowspan) {
+      td.setAttribute('rowspan', String(cell.rowspan));
+    }
+    if (cell.colspan) {
+      td.setAttribute('colspan', String(cell.colspan));
+    }
+
+    if (isCellNavigationEnabled && !cell.isWhiteSpace) {
+      td.setAttribute('tabindex', '-1');
+    }
+
+    const styleOptions: AreaItemStyleOptions = {
+      cellElement: undefined,
+      cell,
+      cellsCount: context.cellsCount,
+      cellIndex: context.cellIndex,
+      rowElement: undefined,
+      rowIndex: context.rowIndex,
+      rowsCount: context.rowsCount,
+      rtlEnabled: context.rtlEnabled,
+      classArray: [],
+      cssArray: [],
+    };
+
+    this._applyCustomStyles(styleOptions);
+
+    if (styleOptions.cssArray.length) {
+      setStyle(td, styleOptions.cssArray.join(';'));
+    }
+
+    if (styleOptions.classArray.length) {
+      td.setAttribute('class', styleOptions.classArray.join(' '));
+    }
+
+    if (isDefined(cell.expanded)) {
+      const div = domAdapter.createElement('div');
+      div.classList.add('dx-expand-icon-container');
+      const expandSpan = domAdapter.createElement('span');
+      expandSpan.classList.add(PIVOTGRID_EXPAND_CLASS);
+      div.appendChild(expandSpan);
+      td.appendChild(div);
+      /* eslint-disable-next-line @typescript-eslint/no-base-to-string
+        -- header values are primitives or dates */
+      const ariaLabel = String(cell.text ?? cell.value ?? '');
+      div.setAttribute('role', 'button');
+      div.setAttribute('aria-label', encodeHtml ? ariaLabel : $('<div>').html(ariaLabel).text());
+      div.setAttribute('aria-expanded', String(cell.expanded));
+      div.setAttribute('tabindex', isCellNavigationEnabled ? '-1' : '0');
+
+      // With cell navigation the cell itself is the focus target, so it
+      // must expose the expanded state to assistive technologies.
+      if (isCellNavigationEnabled) {
+        td.setAttribute('aria-expanded', String(cell.expanded));
+      }
+    }
+
+    const cellText = this._getCellText(cell, encodeHtml);
+
+    if (isDefined(cell.wordWrapEnabled)) {
+      span.style.whiteSpace = cell.wordWrapEnabled ? 'normal' : 'nowrap';
+    }
+
+    return cellText;
+  }
+
+  protected _renderTableContent(tableElement: dxElementWrapper, data: AreaItemCell[][]): void {
     const rowsCount = data.length;
     const rtlEnabled = this.option('rtlEnabled');
     const encodeHtml = this.option('encodeHtml');
@@ -225,7 +322,7 @@ abstract class AreaItem {
 
     for (let i = 0; i < rowsCount; i += 1) {
       const row = data[i];
-      const rowClassNames = [];
+      const rowClassNames: string[] = [];
 
       const tr = domAdapter.createElement('tr');
       tr.setAttribute('role', 'row');
@@ -244,61 +341,15 @@ abstract class AreaItem {
         const span = domAdapter.createElement('span');
 
         if (cell) {
-          cell.rowspan && td.setAttribute('rowspan', cell.rowspan || 1);
-          cell.colspan && td.setAttribute('colspan', cell.colspan || 1);
-
-          if (isCellNavigationEnabled && !cell.isWhiteSpace) {
-            td.setAttribute('tabindex', '-1');
-          }
-
-          const styleOptions = {
-            cellElement: undefined,
-            cell,
-            cellsCount: row.length,
+          cellText = this.renderCellContent(td, span, cell, {
             cellIndex: j,
-            rowElement: undefined,
+            cellsCount: row.length,
             rowIndex: i,
             rowsCount,
             rtlEnabled,
-            classArray: [],
-            cssArray: [],
-          };
-
-          this._applyCustomStyles(styleOptions);
-
-          if (styleOptions.cssArray.length) {
-            setStyle(td, styleOptions.cssArray.join(';'));
-          }
-
-          if (styleOptions.classArray.length) {
-            td.setAttribute('class', styleOptions.classArray.join(' '));
-          }
-
-          if (isDefined(cell.expanded)) {
-            const div = domAdapter.createElement('div');
-            div.classList.add('dx-expand-icon-container');
-            const expandSpan = domAdapter.createElement('span');
-            expandSpan.classList.add(PIVOTGRID_EXPAND_CLASS);
-            div.appendChild(expandSpan);
-            td.appendChild(div);
-            const ariaLabel = String(cell.text ?? cell.value ?? '');
-            div.setAttribute('role', 'button');
-            div.setAttribute('aria-label', encodeHtml ? ariaLabel : $('<div>').html(ariaLabel).text());
-            div.setAttribute('aria-expanded', String(cell.expanded));
-            div.setAttribute('tabindex', isCellNavigationEnabled ? '-1' : '0');
-
-            // With cell navigation the cell itself is the focus target, so it
-            // must expose the expanded state to assistive technologies.
-            if (isCellNavigationEnabled) {
-              td.setAttribute('aria-expanded', String(cell.expanded));
-            }
-          }
-
-          cellText = this._getCellText(cell, encodeHtml);
-
-          if (isDefined(cell.wordWrapEnabled)) {
-            span.style.whiteSpace = cell.wordWrapEnabled ? 'normal' : 'nowrap';
-          }
+            encodeHtml,
+            isCellNavigationEnabled,
+          });
         }
 
         span.innerHTML = cellText;
@@ -333,49 +384,44 @@ abstract class AreaItem {
     this._triggerOnCellPrepared(tableElement, data);
   }
 
-  abstract _getAreaName(): any;
+  protected abstract _getAreaName(): AreaName;
 
-  _triggerOnCellPrepared(tableElement, data) {
-    const that = this;
+  protected _triggerOnCellPrepared(tableElement: dxElementWrapper, data: AreaItemCell[][]): void {
     const rowElements = tableElement.find('tr');
-    const areaName = that._getAreaName();
-    const onCellPrepared = that.option('onCellPrepared');
-    const hasEvent = that.component._eventsStrategy.hasEvent('cellPrepared');
-    let rowElement;
-    let $cellElement;
-    let onCellPreparedArgs;
+    const areaName = this._getAreaName();
+    const onCellPrepared = this.option('onCellPrepared');
+    const hasEvent = this.component._eventsStrategy.hasEvent('cellPrepared');
     const defaultActionArgs = this.component._defaultActionArgs();
-    let row;
-    let cell;
-    let rowIndex;
-    let columnIndex;
 
-    if (onCellPrepared || hasEvent) {
-      for (rowIndex = 0; rowIndex < data.length; rowIndex += 1) {
-        row = data[rowIndex];
-        rowElement = rowElements.eq(rowIndex);
+    if (!onCellPrepared && !hasEvent) {
+      return;
+    }
 
-        for (columnIndex = 0; columnIndex < row.length; columnIndex += 1) {
-          cell = row[columnIndex];
-          $cellElement = rowElement.children().eq(columnIndex);
-          onCellPreparedArgs = {
-            area: areaName,
-            rowIndex,
-            columnIndex,
-            cellElement: getPublicElement($cellElement),
-            cell,
-          };
-          if (hasEvent) {
-            that.component._trigger('onCellPrepared', onCellPreparedArgs);
-          } else {
-            onCellPrepared(extend(onCellPreparedArgs, defaultActionArgs));
-          }
+    for (let rowIndex = 0; rowIndex < data.length; rowIndex += 1) {
+      const row = data[rowIndex];
+      const rowElement = rowElements.eq(rowIndex);
+
+      for (let columnIndex = 0; columnIndex < row.length; columnIndex += 1) {
+        const cell = row[columnIndex];
+        const $cellElement = rowElement.children().eq(columnIndex);
+        const onCellPreparedArgs: AreaItemCellPreparedArgs = {
+          area: areaName,
+          rowIndex,
+          columnIndex,
+          cellElement: getPublicElement<HTMLTableCellElement>($cellElement),
+          cell,
+        };
+        if (hasEvent) {
+          this.component._trigger('onCellPrepared', onCellPreparedArgs);
+        } else {
+          // @ts-expect-error the cell prepared args use internal cell and component types
+          onCellPrepared?.(extend(onCellPreparedArgs, defaultActionArgs));
         }
       }
     }
   }
 
-  _getRowHeight(index: number): number {
+  protected _getRowHeight(index: number): number {
     const row = this._getRowElement(index);
 
     if (row?.lastChild) {
@@ -387,47 +433,48 @@ abstract class AreaItem {
     return 0;
   }
 
-  _setRowHeight(index, value) {
+  protected _setRowHeight(index: number, value: number): void {
     const row = this._getRowElement(index);
     if (row) {
       row.style.height = `${value}px`;
     }
   }
 
-  getRowsLength() {
-    const that = this;
-    if (that._tableElement && that._tableElement.length > 0) {
-      return that._tableElement[0].rows.length;
+  protected getRowsLength(): number {
+    if (this._tableElement && this._tableElement.length > 0) {
+      const tableElement = this._tableElement.get<HTMLTableElement>(0);
+      return tableElement.rows.length;
     }
     return 0;
   }
 
-  getRowsHeight() {
-    const that = this;
-    const result: any = [];
-    const rowsLength = that.getRowsLength();
+  public getRowsHeight(): number[] {
+    const result: number[] = [];
+    const rowsLength = this.getRowsLength();
 
     for (let i = 0; i < rowsLength; i += 1) {
-      result.push(that._getRowHeight(i));
+      result.push(this._getRowHeight(i));
     }
     return result;
   }
 
-  setRowsHeight(values) {
-    const that = this;
+  public setRowsHeight(values: number[]): void {
     let totalHeight = 0;
     const valuesLength = values.length;
 
     for (let i = 0; i < valuesLength; i += 1) {
       totalHeight += values[i];
-      that._setRowHeight(i, values[i]);
+      this._setRowHeight(i, values[i]);
     }
 
     this._tableHeight = totalHeight;
-    this._tableElement[0].style.height = `${totalHeight}px`;
+    const tableElement = this._tableElement?.get<HTMLTableElement>(0);
+    if (tableElement) {
+      tableElement.style.height = `${totalHeight}px`;
+    }
   }
 
-  getColumnsWidth(): number[] {
+  public getColumnsWidth(): number[] {
     const rowsLength = this.getRowsLength();
     const processedCells: boolean[][] = [];
     const result: number[] = [];
@@ -462,8 +509,14 @@ abstract class AreaItem {
     return result;
   }
 
-  setColumnsWidth(values: number[]): void {
-    const tableElement = this._tableElement.get(0);
+  public setColumnsWidth(values: number[]): void {
+    const tableElement = this._tableElement?.get<HTMLTableElement>(0);
+    const colgroupElement = this._colgroupElement;
+
+    if (!tableElement || !colgroupElement) {
+      return;
+    }
+
     const columnsCount = this.getColumnsCount();
     const columnWidth: number[] = [];
 
@@ -477,12 +530,12 @@ abstract class AreaItem {
       }
     }
 
-    this._colgroupElement.html('');
+    colgroupElement.html('');
 
     for (let i = 0; i < columnsCount; i += 1) {
       const col = domAdapter.createElement('col');
       col.style.width = `${columnWidth[i]}px`;
-      this._colgroupElement.append(col);
+      colgroupElement.append(col);
     }
 
     this._tableWidth = (columnsCount ? columnWidth : values)
@@ -491,32 +544,40 @@ abstract class AreaItem {
     tableElement.style.tableLayout = 'fixed';
   }
 
-  resetColumnsWidth() {
-    setWidth(this._colgroupElement.find('col'), 'auto');
-    this._tableElement.css({
+  protected resetColumnsWidth(): void {
+    if (this._colgroupElement) {
+      setWidth(this._colgroupElement.find('col'), 'auto');
+    }
+    this._tableElement?.css({
       width: '',
       tableLayout: '',
     });
   }
 
-  setGroupWidth(value) {
-    this._getScrollable().option('width', value);
+  public setGroupWidth(value: number | string): void {
+    this._getScrollable()?.option('width', value);
   }
 
-  setGroupHeight(value) {
-    this._getScrollable().option('height', value);
+  public setGroupHeight(value: number | string): void {
+    this._getScrollable()?.option('height', value);
   }
 
-  getGroupHeight() {
+  protected getGroupHeight(): number | null {
     return this._getGroupElementSize('height');
   }
 
-  getGroupWidth() {
+  public getGroupWidth(): number | null {
     return this._getGroupElementSize('width');
   }
 
-  _getGroupElementSize(dimension) {
-    const size = this.groupElement()[0].style[dimension];
+  protected _getGroupElementSize(dimension: 'width' | 'height'): number | null {
+    const groupElement = this.groupElement()?.get<HTMLElement>(0);
+
+    if (!groupElement) {
+      return null;
+    }
+
+    const size = groupElement.style[dimension];
 
     if (size.indexOf('px') > 0) {
       return parseFloat(size);
@@ -525,188 +586,210 @@ abstract class AreaItem {
     return null;
   }
 
-  groupElement() {
+  public groupElement(): dxElementWrapper | undefined {
     return this._groupElement;
   }
 
-  tableElement() {
+  public tableElement(): dxElementWrapper | undefined {
     return this._tableElement;
   }
 
-  element() {
+  public element(): dxElementWrapper | undefined {
     return this._rootElement;
   }
 
-  headElement() {
-    return this._tableElement.find('thead');
+  public headElement(): dxElementWrapper | undefined {
+    return this._tableElement?.find('thead');
   }
 
-  _setTableCss(styles) {
+  protected _setTableCss(styles: AreaItemTableCss): void {
     if (this.option('rtlEnabled')) {
       styles.right = styles.left;
       delete styles.left;
     }
 
-    this.tableElement().css(styles);
+    this.tableElement()?.css(styles);
   }
 
-  setVirtualContentParams(params) {
-    this._virtualContent.css({
+  public setVirtualContentParams(params: AreaItemVirtualContentParams): void {
+    this._virtualContent?.css({
       width: params.width,
       height: params.height,
     });
 
-    this.groupElement().addClass('dx-virtual-mode');
+    this.groupElement()?.addClass('dx-virtual-mode');
   }
 
-  disableVirtualMode() {
-    this.groupElement().removeClass('dx-virtual-mode');
+  public disableVirtualMode(): void {
+    this.groupElement()?.removeClass('dx-virtual-mode');
   }
 
-  _renderVirtualContent() {
-    const that = this;
-    if (!that._virtualContent && that.option('scrolling.mode') === 'virtual') {
-      that._virtualContent = $('<div>').addClass('dx-virtual-content').insertBefore(that._tableElement);
+  protected _renderVirtualContent(): void {
+    if (
+      !this._virtualContent
+      && this._tableElement
+      && this.option('scrolling.mode') === 'virtual'
+    ) {
+      this._virtualContent = $('<div>').addClass('dx-virtual-content').insertBefore(this._tableElement);
     }
   }
 
-  reset() {
-    const that = this;
-    const tableElement = that._tableElement[0];
+  public reset(): void {
+    const tableElement = this._tableElement?.get<HTMLTableElement>(0);
 
-    that._fakeTable && that._fakeTable.detach();
-    that._fakeTable = null;
+    this._fakeTable?.detach();
+    this._fakeTable = null;
 
-    that.disableVirtualMode();
-    that.setGroupWidth('100%');
-    that.setGroupHeight('auto');
+    this.disableVirtualMode();
+    this.setGroupWidth('100%');
+    this.setGroupHeight('auto');
 
-    that.resetColumnsWidth();
+    this.resetColumnsWidth();
 
     if (tableElement) {
-      for (let i = 0; i < tableElement.rows.length; i += 1) {
-        tableElement.rows[i].style.height = '';
+      for (const row of tableElement.rows) {
+        row.style.height = '';
       }
       tableElement.style.height = '';
       tableElement.style.width = '100%';
     }
   }
 
-  _updateFakeTableVisibility() {
-    const that = this;
-    const tableElement = that.tableElement()[0];
-    const horizontalOffsetName = that.option('rtlEnabled') ? 'right' : 'left';
-    const fakeTableElement = that._fakeTable[0];
+  protected _updateFakeTableVisibility(): void {
+    const tableElement = this.tableElement()?.get<HTMLElement>(0);
+    const horizontalOffsetName = this.option('rtlEnabled') ? 'right' : 'left';
+    const fakeTable = this._fakeTable;
+
+    if (!tableElement || !fakeTable) {
+      return;
+    }
+
+    const fakeTableElement = fakeTable.get<HTMLElement>(0);
 
     if (
       tableElement.style.top === fakeTableElement.style.top
       && fakeTableElement.style[horizontalOffsetName] === tableElement.style[horizontalOffsetName]
     ) {
-      that._fakeTable.addClass('dx-hidden');
+      fakeTable.addClass('dx-hidden');
     } else {
-      that._fakeTable.removeClass('dx-hidden');
+      fakeTable.removeClass('dx-hidden');
     }
   }
 
-  _moveFakeTableHorizontally(scrollPos) {
-    const that: any = this;
-    const rtlEnabled = that.option('rtlEnabled');
+  protected _moveFakeTableHorizontally(scrollPos: number | undefined): void {
+    const rtlEnabled = this.option('rtlEnabled');
     const offsetStyleName = rtlEnabled ? 'right' : 'left';
-    const tableElementOffset = parseFloat(that.tableElement()[0].style[offsetStyleName]);
+    const tableElement = this.tableElement()?.get<HTMLElement>(0);
+    const fakeTableElement = this._fakeTable?.get<HTMLElement>(0);
+
+    if (!tableElement || !fakeTableElement) {
+      return;
+    }
+
+    const tableElementOffset = parseFloat(tableElement.style[offsetStyleName]);
     const offset = getFakeTableOffset(
-      scrollPos,
+      Number(scrollPos),
       tableElementOffset,
-      that._tableWidth,
-      that.getGroupWidth(),
+      Number(this._tableWidth),
+      this.getGroupWidth() ?? 0,
     );
-    if (parseFloat(that._fakeTable[0].style[offsetStyleName]) !== offset) {
-      that._fakeTable[0].style[offsetStyleName] = `${offset}px`;
+    if (parseFloat(fakeTableElement.style[offsetStyleName]) !== offset) {
+      fakeTableElement.style[offsetStyleName] = `${offset}px`;
     }
   }
 
-  _moveFakeTableTop(scrollPos) {
-    const that = this;
-    const tableElementOffsetTop = parseFloat(that.tableElement()[0].style.top);
+  protected _moveFakeTableTop(scrollPos: number | undefined): void {
+    const tableElement = this.tableElement()?.get<HTMLElement>(0);
+    const fakeTableElement = this._fakeTable?.get<HTMLElement>(0);
+
+    if (!tableElement || !fakeTableElement) {
+      return;
+    }
+
+    const tableElementOffsetTop = parseFloat(tableElement.style.top);
     const offsetTop = getFakeTableOffset(
-      scrollPos,
+      Number(scrollPos),
       tableElementOffsetTop,
-      that._tableHeight,
-      that.getGroupHeight(),
+      Number(this._tableHeight),
+      this.getGroupHeight() ?? 0,
     );
 
-    if (parseFloat(that._fakeTable[0].style.top) !== offsetTop) {
-      that._fakeTable[0].style.top = `${offsetTop}px`;
+    if (parseFloat(fakeTableElement.style.top) !== offsetTop) {
+      fakeTableElement.style.top = `${offsetTop}px`;
     }
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _moveFakeTable(...args: any[]) {
+  protected _moveFakeTable(scrollPos?: ScrollOffset): void;
+
+  protected _moveFakeTable(): void {
     this._updateFakeTableVisibility();
   }
 
-  _createFakeTable() {
-    const that = this;
+  protected _createFakeTable(): void {
+    const tableElement = this.tableElement();
 
-    if (!that._fakeTable) {
-      that._fakeTable = that.tableElement()
+    if (!this._fakeTable && tableElement && this._virtualContent) {
+      this._fakeTable = tableElement
         .clone()
         .removeAttr('id')
         .attr('aria-hidden', 'true')
         .addClass(FAKE_TABLE_CLASS);
-      that._fakeTable.find('[tabindex]').removeAttr('tabindex');
-      that._fakeTable.appendTo(that._virtualContent);
+      this._fakeTable.find('[tabindex]').removeAttr('tabindex');
+      this._fakeTable.appendTo(this._virtualContent);
     }
   }
 
-  render(rootElement, data) {
-    const that = this;
-
-    if (that._tableElement) {
+  public render(rootElement: dxElementWrapper, data: AreaItemCell[][]): void {
+    if (this._tableElement) {
       try {
-        that._tableElement[0].innerHTML = '';
+        this._tableElement.get(0).innerHTML = '';
       } catch (e) {
-        that._tableElement.empty();
+        this._tableElement.empty();
       }
-      that._tableElement.removeAttr('style');
+      this._tableElement.removeAttr('style');
     } else {
-      that._groupElement = that._createGroupElement();
-      that._tableElement = that._createTableElement();
+      this._groupElement = this._createGroupElement();
+      this._tableElement = this._createTableElement();
 
-      that._tableElement.appendTo(that._groupElement);
-      that._groupElement.appendTo(rootElement);
-      that._rootElement = rootElement;
+      this._tableElement.appendTo(this._groupElement);
+      this._groupElement.appendTo(rootElement);
+      this._rootElement = rootElement;
     }
 
-    that._colgroupElement = $('<colgroup>').appendTo(that._tableElement);
-    that._renderTableContent(that._tableElement, data);
+    this._colgroupElement = $('<colgroup>').appendTo(this._tableElement);
+    this._renderTableContent(this._tableElement, data);
 
-    that._renderVirtualContent();
+    this._renderVirtualContent();
   }
 
-  _getScrollable() {
-    return this.groupElement().data('dxScrollable');
+  public _getScrollable(): Scrollable | undefined {
+    const scrollable: Scrollable | undefined = this.groupElement()?.data('dxScrollable');
+    return scrollable;
   }
 
-  _getMemoizeScrollTo() {
-    this._memoizeScrollTo = this._memoizeScrollTo
-      ?? getMemoizeScrollTo(() => this._getScrollable());
+  protected renderGroupScrollable(options: ScrollableProperties): void {
+    // @ts-expect-error dxScrollable is not defined in dxElementWrapper
+    this._groupElement?.dxScrollable(options);
+  }
+
+  protected _getMemoizeScrollTo(scrollable: Scrollable): ScrollToFunc {
+    this._memoizeScrollTo ??= getMemoizeScrollTo(() => scrollable);
     return this._memoizeScrollTo;
   }
 
-  _getMaxLeftOffset(scrollable) {
+  protected _getMaxLeftOffset(scrollable: Scrollable): number {
     const containerElement = $(scrollable.container()).get(0);
 
     return containerElement.scrollWidth - containerElement.clientWidth;
   }
 
-  on(eventName, handler) {
-    const that = this;
-    const scrollable = that._getScrollable();
+  public on(eventName: string, handler: (e: AreaItemScrollEvent) => void): this {
+    const scrollable = this._getScrollable();
 
     if (scrollable) {
-      scrollable.on(eventName, (e) => {
-        if (that.option('rtlEnabled') && isDefined(e.scrollOffset.left)) {
-          e.scrollOffset.left = that._getMaxLeftOffset(scrollable) - e.scrollOffset.left;
+      scrollable.on(eventName, (e: AreaItemScrollEvent): void => {
+        if (this.option('rtlEnabled') && isDefined(e.scrollOffset.left)) {
+          e.scrollOffset.left = this._getMaxLeftOffset(scrollable) - e.scrollOffset.left;
         }
         handler(e);
       });
@@ -714,7 +797,7 @@ abstract class AreaItem {
     return this;
   }
 
-  off(eventName) {
+  public off(eventName: string): this {
     const scrollable = this._getScrollable();
     if (scrollable) {
       scrollable.off(eventName);
@@ -722,7 +805,7 @@ abstract class AreaItem {
     return this;
   }
 
-  scrollTo(pos, force = false) {
+  public scrollTo(pos: ScrollOffset, force = false): void {
     const scrollable = this._getScrollable();
     if (!scrollable) {
       return;
@@ -733,11 +816,11 @@ abstract class AreaItem {
     const scrollablePos = {
       ...pos,
       left: rtlEnabled && (areaName === 'column' || areaName === 'data')
-        ? this._getMaxLeftOffset(scrollable) - pos.left
+        ? this._getMaxLeftOffset(scrollable) - Number(pos.left)
         : pos.left,
     };
 
-    const memoizeScrollTo = this._getMemoizeScrollTo();
+    const memoizeScrollTo = this._getMemoizeScrollTo(scrollable);
     memoizeScrollTo(scrollablePos, force);
 
     if (this._virtualContent) {
@@ -746,14 +829,14 @@ abstract class AreaItem {
     }
   }
 
-  scrollToElement(element) {
+  public scrollToElement(element: Element | dxElementWrapper): void {
     const scrollable = this._getScrollable();
     if (scrollable) {
       scrollable.scrollToElement(element);
     }
   }
 
-  updateScrollable() {
+  public updateScrollable(): DeferredObj<unknown> | undefined {
     const scrollable = this._getScrollable();
     if (scrollable) {
       return scrollable.update();
@@ -762,25 +845,23 @@ abstract class AreaItem {
     return undefined;
   }
 
-  getColumnsCount() {
+  public getColumnsCount(): number {
     let columnCount = 0;
     const row = this._getRowElement(0);
-    let cells;
 
     if (row) {
-      cells = row.cells;
-      // eslint-disable-next-line no-plusplus
-      for (let i = 0, len = cells.length; i < len; ++i) {
-        columnCount += cells[i].colSpan;
+      for (const cell of row.cells) {
+        columnCount += cell.colSpan;
       }
     }
 
     return columnCount;
   }
 
-  getData() {
+  public getData(): AreaItemCell[][] {
     const tableElement = this._tableElement;
-    return tableElement ? tableElement.data('data') : [];
+    const data: AreaItemCell[][] = tableElement ? tableElement.data('data') : [];
+    return data;
   }
 }
 
