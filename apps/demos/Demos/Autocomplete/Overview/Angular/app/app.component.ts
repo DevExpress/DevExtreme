@@ -78,9 +78,6 @@ export class AppComponent {
     this.surnames = service.getSurnames();
     this.positions = service.getPositions();
     this.position = this.positions[0];
-  }
-
-  constructor() {
     this.updateEmployeeInfo();
   }
 
