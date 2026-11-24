@@ -2,14 +2,13 @@ import React from 'react';
 import Splitter, { Item } from 'devextreme-react/splitter';
 import PaneContent from './PaneContent.js';
 
-const PaneContentWithTitle = (title, initialSize) => (data) =>
-  (
-    <PaneContent
-      title={title}
-      {...data}
-      size={initialSize}
-    />
-  );
+const PaneContentWithTitle = (title, initialSize) => (data) => (
+  <PaneContent
+    title={title}
+    {...data}
+    size={initialSize}
+  />
+);
 const App = () => (
   <>
     <Splitter id="splitter">

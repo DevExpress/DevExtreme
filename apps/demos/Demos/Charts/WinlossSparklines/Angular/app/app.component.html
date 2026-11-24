@@ -9,60 +9,60 @@
       <th>Nickel (USD/ton)</th>
       <th>Palladium (USD/troy ounce)</th>
     </tr>
-    @for(year of years; track year) {
-    <tr>
-      <th>{{ year }}</th>
-      <td>
-        <dx-sparkline
-          class="sparkline"
-          [dataSource]="copperCosts"
-          argumentField="month"
-          valueField="{{ year }}"
-          type="winloss"
-          [showMinMax]="true"
-          [winlossThreshold]="8000"
-        >
-          <dxo-sparkline-tooltip
-            [format]="{ type: 'currency', precision: 2 }"
-          ></dxo-sparkline-tooltip>
-        </dx-sparkline>
-      </td>
-      <td>
-        <dx-sparkline
-          class="sparkline"
-          [dataSource]="nickelCosts"
-          argumentField="month"
-          valueField="{{ year }}"
-          type="winloss"
-          [showMinMax]="true"
-          [showFirstLast]="false"
-          winColor="#6babac"
-          lossColor="#8076bb"
-          [winlossThreshold]="19000"
-        >
-          <dxo-sparkline-tooltip
-            [format]="{ type: 'currency', precision: 2 }"
-          ></dxo-sparkline-tooltip>
-        </dx-sparkline>
-      </td>
-      <td>
-        <dx-sparkline
-          class="sparkline"
-          [dataSource]="palladiumCosts"
-          argumentField="month"
-          valueField="{{ year }}"
-          type="winloss"
-          winColor="#7e4452"
-          lossColor="#ebdd8f"
-          firstLastColor="#e55253"
-          [winlossThreshold]="2000"
-        >
-          <dxo-sparkline-tooltip
-            [format]="{ type: 'currency', precision: 2 }"
-          ></dxo-sparkline-tooltip>
-        </dx-sparkline>
-      </td>
-    </tr>
+    @for (year of years; track year) {
+      <tr>
+        <th>{{ year }}</th>
+        <td>
+          <dx-sparkline
+            class="sparkline"
+            [dataSource]="copperCosts"
+            argumentField="month"
+            valueField="{{ year }}"
+            type="winloss"
+            [showMinMax]="true"
+            [winlossThreshold]="8000"
+          >
+            <dxo-sparkline-tooltip
+              [format]="{ type: 'currency', precision: 2 }"
+            ></dxo-sparkline-tooltip>
+          </dx-sparkline>
+        </td>
+        <td>
+          <dx-sparkline
+            class="sparkline"
+            [dataSource]="nickelCosts"
+            argumentField="month"
+            valueField="{{ year }}"
+            type="winloss"
+            [showMinMax]="true"
+            [showFirstLast]="false"
+            winColor="#6babac"
+            lossColor="#8076bb"
+            [winlossThreshold]="19000"
+          >
+            <dxo-sparkline-tooltip
+              [format]="{ type: 'currency', precision: 2 }"
+            ></dxo-sparkline-tooltip>
+          </dx-sparkline>
+        </td>
+        <td>
+          <dx-sparkline
+            class="sparkline"
+            [dataSource]="palladiumCosts"
+            argumentField="month"
+            valueField="{{ year }}"
+            type="winloss"
+            winColor="#7e4452"
+            lossColor="#ebdd8f"
+            firstLastColor="#e55253"
+            [winlossThreshold]="2000"
+          >
+            <dxo-sparkline-tooltip
+              [format]="{ type: 'currency', precision: 2 }"
+            ></dxo-sparkline-tooltip>
+          </dx-sparkline>
+        </td>
+      </tr>
     }
   </table>
 </div>
