@@ -2355,6 +2355,7 @@
       "--dx-viz-border-active",
       "--dx-viz-border-hovered",
       "--dx-viz-content",
+      "--dx-viz-content-on-color",
       "--dx-viz-content-orange",
       "--dx-viz-content-subtle",
       "--dx-viz-content-subtler",
