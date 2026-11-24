@@ -34,8 +34,9 @@ export default [
       'utils/templates/**/*.ts',
       'utils/templates/**/*.tsx',
       '**/.DS_Store',
-
-      '**/*.{png,json,mjs,css,html,md}',
+      'Demos/_chunks',
+      '**/bundle.js',
+      '**/*.{png,json,mjs,css,html,md,sh}',
     ],
   },
 
@@ -433,6 +434,7 @@ export default [
         "minProperties": 4 
       }],
       'no-unused-vars': 0,
+      'no-restricted-syntax': 0,
     }
   },
 
@@ -446,6 +448,13 @@ export default [
     },
     files: ['testing/**/*.{js,ts}', 'utils/visual-tests/**/*.*'],
   })),
+
+  {
+    files: ['playwright.config.ts'],
+    rules: {
+      'import/no-extraneous-dependencies': ['error', { devDependencies: true }],
+    },
+  },
 
   {
     files: ['testing/**/*.{js,ts}'],

@@ -4,10 +4,7 @@ const imagePatternSize = 12;
 const shapePatternSize = 6;
 function hexToRgb(hex, opacity = 1) {
   const hexColorParts = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-  return `rgba(${parseInt(hexColorParts?.[1] ?? '', 16)}, ${parseInt(
-    hexColorParts?.[2] ?? '',
-    16,
-  )}, ${parseInt(hexColorParts?.[3] ?? '', 16)}, ${opacity})`;
+  return `rgba(${parseInt(hexColorParts?.[1] ?? '', 16)}, ${parseInt(hexColorParts?.[2] ?? '', 16)}, ${parseInt(hexColorParts?.[3] ?? '', 16)}, ${opacity})`;
 }
 function getGradient(type, color1, color2) {
   return registerGradient(type, {

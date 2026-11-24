@@ -2,7 +2,6 @@
 /* eslint-disable no-bitwise */
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable guard-for-in */
-/* eslint-disable no-plusplus */
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable no-multi-assign */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
@@ -437,14 +436,14 @@ export let Point = class Point {
   }
 
   setView(style: string): void {
-    this._viewCounters[style]++;
+    this._viewCounters[style] += 1;
     this.applyView();
   }
 
   resetView(style: string): void {
     const viewCounters = this._viewCounters;
 
-    --viewCounters[style];
+    viewCounters[style] -= 1;
     if (viewCounters[style] < 0) { // T661080
       viewCounters[style] = 0;
     }

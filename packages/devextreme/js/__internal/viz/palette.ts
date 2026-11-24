@@ -1,7 +1,6 @@
 /* eslint-disable max-depth */
 /* eslint-disable no-continue */
 /* eslint-disable @typescript-eslint/init-declarations */
-/* eslint-disable no-plusplus */
 /* eslint-disable func-names */
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable @typescript-eslint/no-shadow */
@@ -24,7 +23,7 @@ import { normalizeEnum } from '@ts/viz/core/utils';
 const FLUENT_NEXT_VIZ = {
   primary: 'var(--dx-viz-primary, #0f6cbd)',
 
-  blue: 'var(--dx-viz-blue, #0078d4)',
+  blue: 'var(--dx-viz-blue, #0c69b7)',
   red: 'var(--dx-viz-red, #c83d3d)',
   green: 'var(--dx-viz-green, #008f04)',
   yellow: 'var(--dx-viz-yellow, #eaa300)',
@@ -236,7 +235,8 @@ export let getAccentColor = function (palette, themeDefault) {
 function RingBuf(buf): void {
   let ind = 0;
   this.next = function () {
-    const res = buf[ind++];
+    const res = buf[ind];
+    ind += 1;
     if (ind === buf.length) {
       this.reset();
     }
@@ -270,7 +270,7 @@ function getAlternateColorsStrategy(palette, parameters) {
     generateColors(count) {
       const colors = [];
       count = count || parameters.count;
-      for (let i = 0; i < count; i++) {
+      for (let i = 0; i < count; i += 1) {
         // @ts-expect-error
         colors.push(this.getColor(i));
       }
@@ -303,7 +303,7 @@ function getExtrapolateColorsStrategy(palette, parameters) {
       const colors = [];
       count = count || parameters.count;
       // @ts-expect-error
-      for (let i = 0; i < count; i++) colors.push(this.getColor(i, count));
+      for (let i = 0; i < count; i += 1) colors.push(this.getColor(i, count));
       return colors;
     },
 
@@ -328,7 +328,7 @@ function getColorMixer(palette, parameters) {
       size = groupSize;
       if (extraItems > 0) {
         size += 1;
-        extraItems--;
+        extraItems -= 1;
       }
       middleIndex = size > 2 ? Math.floor(size / 2) : 0;
 
@@ -349,12 +349,12 @@ function getColorMixer(palette, parameters) {
       if (arr[index]) {
         return [arr[index], distance];
       }
-      distance++;
+      distance += 1;
     }
   }
 
   function blendColors(paletteWithEmptyColors, paletteLength) {
-    for (let i = 0; i < paletteLength; i++) {
+    for (let i = 0; i < paletteLength; i += 1) {
       const color = paletteWithEmptyColors[i];
       if (!color) {
         const color1 = paletteWithEmptyColors[i - 1];
@@ -364,7 +364,7 @@ function getColorMixer(palette, parameters) {
           const c2 = getColorAndDistance(paletteWithEmptyColors, i, paletteLength);
 
           // @ts-expect-error
-          for (let j = 0; j < c2[1]; j++, i++) {
+          for (let j = 0; j < c2[1]; j += 1, i += 1) {
             // @ts-expect-error
             paletteWithEmptyColors[i] = mixColors(color1, c2[0], (j + 1) / (c2[1] + 1));
           }
@@ -391,11 +391,12 @@ function getColorMixer(palette, parameters) {
       cleanColorIndices = distributeColors(count - 1, paletteCount - 1, 1, [0]);
     }
 
-    for (let i = 0; i < count; i++) {
+    for (let i = 0; i < count; i += 1) {
       // @ts-expect-error
       if (cleanColorIndices.includes(i)) {
         // @ts-expect-error
-        result[i] = palette[currentColorIndex++];
+        result[i] = palette[currentColorIndex];
+        currentColorIndex += 1;
       }
     }
 
@@ -419,7 +420,7 @@ function getColorMixer(palette, parameters) {
       count = count || parameters.count || paletteCount;
       if (repeat && count > paletteCount) {
         const colors = extendPalette(paletteCount);
-        for (let i = 0; i < count - paletteCount; i++) {
+        for (let i = 0; i < count - paletteCount; i += 1) {
           colors.push(colors[i]);
         }
         return colors;
@@ -441,11 +442,13 @@ export let createPalette = function (palette, parameters, themeDefaultPalette?) 
       this._extensionStrategy = null;
     },
 
-    getNextColor(count) {
-      return this._extensionStrategy.getColor(this._currentColor++, count);
+    getNextColor(count?) {
+      const colorIndex = this._currentColor;
+      this._currentColor += 1;
+      return this._extensionStrategy.getColor(colorIndex, count);
     },
 
-    generateColors(count, parameters?) {
+    generateColors(count?, parameters?) {
       return this._extensionStrategy.generateColors(count, (parameters || {}).repeat);
     },
 
@@ -480,7 +483,7 @@ function getAlteredPalette(originalPalette, step) {
   const palette = [];
   let i;
   const ii = originalPalette.length;
-  for (i = 0; i < ii; ++i) {
+  for (i = 0; i < ii; i += 1) {
     // @ts-expect-error
     palette.push(getNewColor(originalPalette[i], step));
   }
@@ -527,7 +530,7 @@ function createDiscreteColors(source, count) {
   }
 
   if (colorCount > 0) {
-    for (i = 0; i <= colorCount; ++i) {
+    for (i = 0; i <= colorCount; i += 1) {
       addColor(i / colorCount);
     }
   } else {

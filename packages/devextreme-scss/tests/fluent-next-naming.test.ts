@@ -147,8 +147,7 @@ const isAccentContractFile = (file: string): boolean => file.endsWith(
 );
 const ACCENT_CONTRACT = new Set([
   accentContract.input.name,
-  accentContract.source.name,
-  ...accentContract.settings.map(({ name }) => name),
+  accentContract.base.name,
   ...accentContract.steps.values.map((step) => `${accentContract.steps.prefix}${step}`),
 ]);
 

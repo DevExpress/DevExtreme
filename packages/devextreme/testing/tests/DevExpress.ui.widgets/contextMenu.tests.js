@@ -14,6 +14,7 @@ import config from 'core/config';
 import themes from 'ui/themes';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import ariaAccessibilityTestHelper from '../../helpers/ariaAccessibilityTestHelper.js';
+import { createWindowWithOwnModule } from '../../helpers/fractionalWindow.js';
 import {
     SCROLLABLE_CONTENT_CLASS,
     SCROLLABLE_CONTAINER_CLASS,
@@ -430,6 +431,37 @@ QUnit.module('Rendering Scrollable', moduleConfig, () => {
         assert.ok($submenu.find(`.${SCROLLABLE_CONTENT_CLASS}`).height() > $(window).height(), 'total height of submenu exceeds the window');
         assert.strictEqual($submenu.outerHeight(), $(window).height(), 'menu uses the full height of the window');
         assert.strictEqual($submenu.offset().top, 0, 'menu does not cross the window border');
+    });
+
+    QUnit.test('Height of the context menu should be limited by the visible height of a window whose client height is rounded up', function(assert) {
+        const done = assert.async();
+
+        createWindowWithOwnModule('ui/context_menu', (frameWindow, { default: FrameContextMenu }) => {
+            const frameDocument = frameWindow.document;
+            const visibleArea = frameDocument.createElement('div');
+            const menuElement = frameDocument.createElement('div');
+
+            Object.assign(visibleArea.style, { position: 'fixed', top: 0, bottom: 0 });
+            frameDocument.body.append(visibleArea, menuElement);
+
+            const visibleHeight = visibleArea.getBoundingClientRect().height;
+
+            assert.ok(frameDocument.documentElement.clientHeight > visibleHeight, `client height ${frameDocument.documentElement.clientHeight} is larger than the visible ${visibleHeight}`);
+
+            new FrameContextMenu(menuElement, {
+                items: (new Array(99)).fill(null).map((_, idx) => ({ text: idx })),
+                animation: null,
+                visible: true,
+            });
+
+            const submenu = frameDocument.querySelector(`.${DX_SUBMENU_CLASS}`);
+            const submenuRect = submenu.getBoundingClientRect();
+
+            assert.ok(submenu.querySelector(`.${SCROLLABLE_CONTENT_CLASS}`).getBoundingClientRect().height > visibleHeight, 'total height of submenu exceeds the window');
+            assert.strictEqual(submenuRect.top, 0, 'menu does not cross the top of the window');
+            assert.roughEqual(submenuRect.bottom, visibleHeight, 0.1, 'menu ends at the bottom of the visible window');
+            done();
+        });
     });
 
     QUnit.test('Selected item should be always visible during keyboard navigation (root menu)', function(assert) {

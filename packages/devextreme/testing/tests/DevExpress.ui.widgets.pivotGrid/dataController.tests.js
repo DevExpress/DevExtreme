@@ -1,9 +1,9 @@
 import $ from 'jquery';
-import { DataController } from '__internal/grids/pivot_grid/data_controller/m_data_controller';
+import { DataController } from '__internal/grids/pivot_grid/data_controller/data_controller';
 import virtualScrolling from '__internal/grids/grid_core/virtual_scrolling/virtual_scrolling_core';
 import stateStoring from '__internal/grids/grid_core/state_storing/state_storing_controller_core';
 import pivotGridUtils from '__internal/grids/pivot_grid/widget_utils';
-import { PivotGridDataSource } from '__internal/grids/pivot_grid/data_source/m_data_source';
+import { PivotGridDataSource } from '__internal/grids/pivot_grid/data_source/data_source';
 
 import executeAsyncMock from '../../helpers/executeAsyncMock.js';
 
@@ -5755,8 +5755,6 @@ QUnit.module('Virtual scrolling', {
         const columnsDataAdapter = this.VirtualScrollController.firstCall.args[1];
         const rowsDataAdapter = this.VirtualScrollController.secondCall.args[1];
 
-        columnsScrollController.handleDataChanged.returns('handleChangedResult');
-
         const loadResult = columnsDataAdapter.load();
         const handleDataChangedArg = columnsScrollController.handleDataChanged.lastCall.args[0];
 
@@ -5764,7 +5762,7 @@ QUnit.module('Virtual scrolling', {
         handleDataChangedArg();
 
         assert.ok(columnsScrollController);
-        assert.strictEqual(loadResult, 'handleChangedResult');
+        assert.strictEqual(loadResult.state(), 'resolved');
         assert.strictEqual(columnsDataAdapter.changingDuration(), 377);
         assert.strictEqual(rowsDataAdapter.changingDuration(), 377);
 
@@ -5798,8 +5796,6 @@ QUnit.module('Virtual scrolling', {
         const columnsDataAdapter = this.VirtualScrollController.firstCall.args[1];
         const rowsDataAdapter = this.VirtualScrollController.secondCall.args[1];
 
-        columnsScrollController.handleDataChanged.returns('handleChangedResult');
-
         const loadResult = columnsDataAdapter.load();
         const handleDataChangedArg = columnsScrollController.handleDataChanged.lastCall.args[0];
 
@@ -5807,7 +5803,7 @@ QUnit.module('Virtual scrolling', {
         handleDataChangedArg();
 
         assert.ok(columnsScrollController);
-        assert.strictEqual(loadResult, 'handleChangedResult');
+        assert.strictEqual(loadResult.state(), 'resolved');
         assert.strictEqual(columnsDataAdapter.changingDuration(), 300);
         assert.strictEqual(rowsDataAdapter.changingDuration(), 300);
 
@@ -5836,8 +5832,6 @@ QUnit.module('Virtual scrolling', {
         const columnsDataAdapter = this.VirtualScrollController.firstCall.args[1];
         const rowsDataAdapter = this.VirtualScrollController.secondCall.args[1];
 
-        rowsScrollController.handleDataChanged.returns('handleChangedResult');
-
         const loadResult = rowsDataAdapter.load();
         const handleDataChangedArg = rowsScrollController.handleDataChanged.lastCall.args[0];
 
@@ -5845,7 +5839,7 @@ QUnit.module('Virtual scrolling', {
         handleDataChangedArg();
 
         assert.ok(rowsScrollController);
-        assert.strictEqual(loadResult, 'handleChangedResult');
+        assert.strictEqual(loadResult.state(), 'resolved');
 
         assert.strictEqual(columnsDataAdapter.changingDuration(), 377);
         assert.strictEqual(rowsDataAdapter.changingDuration(), 377);

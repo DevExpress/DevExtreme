@@ -1,4 +1,3 @@
-/* eslint-disable no-plusplus */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
@@ -31,7 +30,7 @@ export default {
     let i = 1;
 
     if (ticks.length > 1) {
-      for (; i < ticks.length; i++) {
+      for (; i < ticks.length; i += 1) {
         if (Math.abs(ticks[i].coords[valueKey] - ticks[0].coords[valueKey]) >= range) {
           break;
         }

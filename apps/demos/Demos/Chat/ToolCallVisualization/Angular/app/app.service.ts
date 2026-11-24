@@ -355,7 +355,7 @@ export class AppService {
     this.dataSource.store().push([{ type: 'insert', data: { id: Date.now(), ...message } }]);
 
     if (!this.alerts().length) {
-      await this.processMessageSending(message as DxChatTypes.TextMessage);
+      await this.processMessageSending(message);
     }
   }
 

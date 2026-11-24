@@ -9,6 +9,8 @@ export const CLASS = {
 };
 
 export default class Button extends Widget {
+  name: WidgetName = 'dxButton';
+
   public static className = 'dx-button';
 
   public get text(): Locator {
@@ -19,6 +21,7 @@ export default class Button extends Widget {
     return this.expectClass(CLASS.selected, present);
   }
 
-  // eslint-disable-next-line class-methods-use-this
-  public getName(): WidgetName { return 'dxButton'; }
+  public expectItemSelected(present = true): Promise<void> {
+    return this.expectClass(CLASS.itemSelected, present);
+  }
 }

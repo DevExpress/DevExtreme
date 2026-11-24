@@ -383,7 +383,7 @@ export const vehicles = [
     TransmissionSpeeds: 6,
     TransmissionType: 1,
     Description:
-      'The Chrysler Town & Country is a luxury minivan sold worldwide by the Chrysler division of Chrysler Group LLC. The model was introduced in 1989 as a traditional minivan.\nThe Town & Country has evolved through five generations, offered variously in long-wheelbase (LWB) and short-wheelbase (SWB) versions — though currently only in LWB form. Anniversary editions have included the 1994 \'"10 Year Anniversary Edition"" and the 2004 Platinum Series, marking the Chrysler twentieth year of minivan production.',
+      'The Chrysler Town & Country is a luxury minivan sold worldwide by the Chrysler division of Chrysler Group LLC. The model was introduced in 1989 as a traditional minivan.\nThe Town & Country has evolved through five generations, offered variously in long-wheelbase (LWB) and short-wheelbase (SWB) versions — though currently only in LWB form. Anniversary editions have included the 1994 \'\"10 Year Anniversary Edition\"\" and the 2004 Platinum Series, marking the Chrysler twentieth year of minivan production.',
     DeliveryDate: false,
     InStock: false,
     Edits: 'Resize and crop',
@@ -467,7 +467,7 @@ export const vehicles = [
     TransmissionSpeeds: 4,
     TransmissionType: 1,
     Description:
-      'The Suzuki Escudo (known as Sidekick in USA, Vitara in most of Western Europe, Bolivia, Ecuador, the Philippines, Hong Kong, Taiwan as well as North America after 1999 and the Grand Vitara in the United Kingdom, Eastern Europe, parts of South Asia, the Caribbean, South Africa, Iran, Canada, and Australia) is an off-road vehicle that has been in production since 1988. The North American version was produced as a joint venture between Suzuki and General Motors known as CAMI. The vehicle was a follow-up to the popular SJ413 and Samurai. Also, this vehicle, while sold in North America, was designed to slot above the Samurai. A larger version is also made, known as the Suzuki Grand Escudo (known as Grand Vitara XL-7 in other markets). The name is derived from the \'"escudo"", the monetary unit of Portugal until the Euro was adopted.',
+      'The Suzuki Escudo (known as Sidekick in USA, Vitara in most of Western Europe, Bolivia, Ecuador, the Philippines, Hong Kong, Taiwan as well as North America after 1999 and the Grand Vitara in the United Kingdom, Eastern Europe, parts of South Asia, the Caribbean, South Africa, Iran, Canada, and Australia) is an off-road vehicle that has been in production since 1988. The North American version was produced as a joint venture between Suzuki and General Motors known as CAMI. The vehicle was a follow-up to the popular SJ413 and Samurai. Also, this vehicle, while sold in North America, was designed to slot above the Samurai. A larger version is also made, known as the Suzuki Grand Escudo (known as Grand Vitara XL-7 in other markets). The name is derived from the \'\"escudo\"\", the monetary unit of Portugal until the Euro was adopted.',
     DeliveryDate: false,
     InStock: false,
     Edits: 'Resize and crop',
@@ -607,7 +607,7 @@ export const vehicles = [
     TransmissionSpeeds: 6,
     TransmissionType: 1,
     Description:
-      'The Toyota Camry is a series of mid-size automobiles manufactured by Toyota since 1982, and sold in the majority of automotive markets throughout the world. Between 1980 and 1982, the \'"Camry"" nameplate was delegated to a four-door sedan, known as the Toyota Celica Camry.\nThe name ""Camry"" is an Anglicized phonetic transcription of the Japanese word kanmuri, meaning ""crown"". This follows Toyota\'s naming tradition of using the crown name for primary models starting with the Toyota Crown in 1955, continuing with the Toyota Corona and Corolla; the Latin words for ""crown"" and ""small crown"", respectively. In Japan, it is exclusive to Toyota Corolla Store retail dealerships.\nAs of May 2012, the Camry is the best-selling passenger car in North America. The Camry also sells very well in Australia, and a number of Asian markets. Despite international success, the Camry has not sold as well in its home market Japan, where the only powertrain offered is a hybrid. In Europe, sales ended in 2004, where the similarly sized Toyota Avensis is offered instead.[4] For the East and Southeast Asian markets, high-specification Camry models are seen as executive cars. Since the XV30 series, the Camrys sold in these markets have sported revised front- and rear-end treatment. For the 2006 onwards XV40 version, the same was done, although the Australian-designed and Camry-derived Toyota Aurion (XV40) was the donor model. The Aurion features revised front- and rear-end styling and changes to the interior, but has the same powertrains as the Camry in various markets.',
+      'The Toyota Camry is a series of mid-size automobiles manufactured by Toyota since 1982, and sold in the majority of automotive markets throughout the world. Between 1980 and 1982, the \'\"Camry\"\" nameplate was delegated to a four-door sedan, known as the Toyota Celica Camry.\nThe name \"\"Camry\"\" is an Anglicized phonetic transcription of the Japanese word kanmuri, meaning \"\"crown\"\". This follows Toyota\'s naming tradition of using the crown name for primary models starting with the Toyota Crown in 1955, continuing with the Toyota Corona and Corolla; the Latin words for \"\"crown\"\" and \"\"small crown\"\", respectively. In Japan, it is exclusive to Toyota Corolla Store retail dealerships.\nAs of May 2012, the Camry is the best-selling passenger car in North America. The Camry also sells very well in Australia, and a number of Asian markets. Despite international success, the Camry has not sold as well in its home market Japan, where the only powertrain offered is a hybrid. In Europe, sales ended in 2004, where the similarly sized Toyota Avensis is offered instead.[4] For the East and Southeast Asian markets, high-specification Camry models are seen as executive cars. Since the XV30 series, the Camrys sold in these markets have sported revised front- and rear-end treatment. For the 2006 onwards XV40 version, the same was done, although the Australian-designed and Camry-derived Toyota Aurion (XV40) was the donor model. The Aurion features revised front- and rear-end styling and changes to the interior, but has the same powertrains as the Camry in various markets.',
     DeliveryDate: false,
     InStock: false,
     Edits: 'Resize and crop',
@@ -719,7 +719,7 @@ export const vehicles = [
     TransmissionSpeeds: 6,
     TransmissionType: 1,
     Description:
-      'The Toyota Sienna is a family minivan manufactured by Toyota at the Toyota Motor Manufacturing Indiana facility, in Princeton, Indiana, United States, for the North American market. It replaced the first-generation Previa van in 1997 with a more conventional front wheel drive layout and shares a heavily revised platform with the Camry. Both the Previa and original Sienna were smaller than the other minivans they competed against, but a redesign in 2004 increased the dimensions to match those of its competitors. The Sienna is currently the only minivan in its class to offer all-wheel-drive. It was redesigned a second time for the 2011 model year. The third generation Sienna was put on sale in the US in February 2010 and is the first Sienna to ever receive a \'"Top Safety Pick"" award from the Insurance Institute for Highway Safety.',
+      'The Toyota Sienna is a family minivan manufactured by Toyota at the Toyota Motor Manufacturing Indiana facility, in Princeton, Indiana, United States, for the North American market. It replaced the first-generation Previa van in 1997 with a more conventional front wheel drive layout and shares a heavily revised platform with the Camry. Both the Previa and original Sienna were smaller than the other minivans they competed against, but a redesign in 2004 increased the dimensions to match those of its competitors. The Sienna is currently the only minivan in its class to offer all-wheel-drive. It was redesigned a second time for the 2011 model year. The third generation Sienna was put on sale in the US in February 2010 and is the first Sienna to ever receive a \'\"Top Safety Pick\"\" award from the Insurance Institute for Highway Safety.',
     DeliveryDate: false,
     InStock: false,
     Edits: 'Resize and crop',
@@ -999,7 +999,7 @@ export const vehicles = [
     TransmissionSpeeds: -1,
     TransmissionType: 1,
     Description:
-      'The Nissan Maxima is an entry-level luxury car manufactured by Nissan, marketed as the \'"four-door sports car"". The origins of the Maxima began in July 1976 as the Datsun 810, an upscale six-cylinder version of the Bluebird, and was spun into its own line in 1981, having been made continuously since then. The ""Maxima"" name was applied gradually, beginning in 1981. Most pre-2004 Maximas were built in Oppama, Japan, until the current North American Maximas started being assembled in Smyrna, Tennessee.',
+      'The Nissan Maxima is an entry-level luxury car manufactured by Nissan, marketed as the \'\"four-door sports car\"\". The origins of the Maxima began in July 1976 as the Datsun 810, an upscale six-cylinder version of the Bluebird, and was spun into its own line in 1981, having been made continuously since then. The \"\"Maxima\"\" name was applied gradually, beginning in 1981. Most pre-2004 Maximas were built in Oppama, Japan, until the current North American Maximas started being assembled in Smyrna, Tennessee.',
     DeliveryDate: false,
     InStock: false,
     Edits: 'Resize and crop',
@@ -1083,7 +1083,7 @@ export const vehicles = [
     TransmissionSpeeds: 8,
     TransmissionType: 1,
     Description:
-      'The Audi allroad quattro is an automotive nameplate used by the German automobile manufacturer Audi, a division of the Volkswagen Group since 1999. Audi has utilised the name \'"allroad quattro"" to signify semi-offroad ability on two of its mainstream model lines.\nOriginally, the name ""Audi allroad quattro"" applied to a semi-offroad version of the Audi A6 Avant (wagon) in 1999. Audi retitled subsequent generations, as released in 2006 and 2012, as ""Audi A6 allroad quattro"".\nSince 2009, Audi has offered the ""Audi A4 allroad quattro"", based on the mainstream Audi A4 Avant (wagon).',
+      'The Audi allroad quattro is an automotive nameplate used by the German automobile manufacturer Audi, a division of the Volkswagen Group since 1999. Audi has utilised the name \'\"allroad quattro\"\" to signify semi-offroad ability on two of its mainstream model lines.\nOriginally, the name \"\"Audi allroad quattro\"\" applied to a semi-offroad version of the Audi A6 Avant (wagon) in 1999. Audi retitled subsequent generations, as released in 2006 and 2012, as \"\"Audi A6 allroad quattro\"\".\nSince 2009, Audi has offered the \"\"Audi A4 allroad quattro\"\", based on the mainstream Audi A4 Avant (wagon).',
     DeliveryDate: false,
     InStock: false,
     Edits: 'Resize and crop',
@@ -1223,7 +1223,7 @@ export const vehicles = [
     TransmissionSpeeds: 5,
     TransmissionType: 1,
     Description:
-      'The Subaru Outback is an automotive nameplate used by the Japanese automobile manufacturer Fuji Heavy Industries (FHI) since 1994. The \'"Outback"" name has been utilized on two different Subaru branded vehicles. One of these models is based on the mid-sized Subaru Legacy and the other derived from the hatchback version of the Subaru Impreza. Named after the vast, remote, and arid outback regions in Australia—the name is intended to emphasize the moderate off-road capability of the vehicle.',
+      'The Subaru Outback is an automotive nameplate used by the Japanese automobile manufacturer Fuji Heavy Industries (FHI) since 1994. The \'\"Outback\"\" name has been utilized on two different Subaru branded vehicles. One of these models is based on the mid-sized Subaru Legacy and the other derived from the hatchback version of the Subaru Impreza. Named after the vast, remote, and arid outback regions in Australia—the name is intended to emphasize the moderate off-road capability of the vehicle.',
     DeliveryDate: false,
     InStock: false,
     Edits: 'Resize and crop',
@@ -1391,7 +1391,7 @@ export const vehicles = [
     TransmissionSpeeds: 5,
     TransmissionType: 1,
     Description:
-      'The Mercedes-Benz W140 is a series of flagship vehicles that were manufactured by the German automotive company Mercedes-Benz. On November 16, 1990, Mercedes-Benz unveiled the W140 S-Class via press release, later appearing in several February and March editions of magazines. The W140 made its public debut at the Geneva Motor Show in March 1991, with the first examples rolling off the production line in April 1991 and North American examples on August 6, 1991. Short (SE) and long (SEL) wheelbase sedans were offered initially, as well as the coupé (SEC) body style from October 1992. Like all Mercedes-Benz lines, the W140 S-Class was rationalized in late 1993 using the new \'"letter-first"" nomenclature. The SE, SEL, and SEC cars were renamed the S-Class, with alphanumerical designations inverted. For example, the 500 SE became the S 500, and the 500 SEL became the S 500 L. In 1996 the coupé models following a mid-life update were separated into the CL-Class. The W140 series S-Class was superseded by the W220 S-Class sedan and C215 CL-Class coupe in 1999 after an eight-year production run.\nMercedes-Benz built 432,732 examples of the 140 series,[6] comprising 406,710 sedans and 26,022 coupés.',
+      'The Mercedes-Benz W140 is a series of flagship vehicles that were manufactured by the German automotive company Mercedes-Benz. On November 16, 1990, Mercedes-Benz unveiled the W140 S-Class via press release, later appearing in several February and March editions of magazines. The W140 made its public debut at the Geneva Motor Show in March 1991, with the first examples rolling off the production line in April 1991 and North American examples on August 6, 1991. Short (SE) and long (SEL) wheelbase sedans were offered initially, as well as the coupé (SEC) body style from October 1992. Like all Mercedes-Benz lines, the W140 S-Class was rationalized in late 1993 using the new \'\"letter-first\"\" nomenclature. The SE, SEL, and SEC cars were renamed the S-Class, with alphanumerical designations inverted. For example, the 500 SE became the S 500, and the 500 SEL became the S 500 L. In 1996 the coupé models following a mid-life update were separated into the CL-Class. The W140 series S-Class was superseded by the W220 S-Class sedan and C215 CL-Class coupe in 1999 after an eight-year production run.\nMercedes-Benz built 432,732 examples of the 140 series,[6] comprising 406,710 sedans and 26,022 coupés.',
     DeliveryDate: false,
     InStock: false,
     Edits: 'Resize and crop',
@@ -1727,7 +1727,7 @@ export const vehicles = [
     TransmissionSpeeds: 6,
     TransmissionType: 1,
     Description:
-      'The Lexus RX is a crossover sport utility vehicle (SUV) sold since 1998 by Lexus, the luxury division of Toyota. Originally released in its home market of Japan in late 1997 as the Toyota Harrier, exports began in early 1998 as Lexus RX. Three generations of the Lexus RX have been produced to date, the first being compact in size, and the latter two classified as mid-size. Both front- and four-wheel drive configurations have been used on the RX series, and several gasoline powertrain options, including V6 engines and hybrid systems, have been offered. In the Lexus model lineup, the RX sits below the larger GX and LX body-on-frame SUVs, and remains the marque\'s only crossover model. The RX name stands for Radiant Crossover. It has also been labelled as \'"Recreation Cross Country"" in some markets.',
+      'The Lexus RX is a crossover sport utility vehicle (SUV) sold since 1998 by Lexus, the luxury division of Toyota. Originally released in its home market of Japan in late 1997 as the Toyota Harrier, exports began in early 1998 as Lexus RX. Three generations of the Lexus RX have been produced to date, the first being compact in size, and the latter two classified as mid-size. Both front- and four-wheel drive configurations have been used on the RX series, and several gasoline powertrain options, including V6 engines and hybrid systems, have been offered. In the Lexus model lineup, the RX sits below the larger GX and LX body-on-frame SUVs, and remains the marque\'s only crossover model. The RX name stands for Radiant Crossover. It has also been labelled as \'\"Recreation Cross Country\"\" in some markets.',
     DeliveryDate: false,
     InStock: false,
     Edits: 'Resize and crop',
@@ -1755,7 +1755,7 @@ export const vehicles = [
     TransmissionSpeeds: 6,
     TransmissionType: 1,
     Description:
-      'The Lexus IS is a series of entry-level luxury cars / compact executive cars sold by Lexus since 1998. The IS was introduced as an entry-level sport model slotted below the ES in the Lexus lineup (and outside of North America, the Lexus GS). The IS was originally sold under the Toyota Altezza nameplate in Japan (the word \'"altezza"" is Italian for ""highness"") until the introduction of the Lexus brand and the second generation Lexus IS design in 2006. The Altezza name is still used at times to refer to chromed car taillights like those fitted to the first generation model, known as \'Altezza lights\' or \'Lexus-style\' lights.',
+      'The Lexus IS is a series of entry-level luxury cars / compact executive cars sold by Lexus since 1998. The IS was introduced as an entry-level sport model slotted below the ES in the Lexus lineup (and outside of North America, the Lexus GS). The IS was originally sold under the Toyota Altezza nameplate in Japan (the word \'\"altezza\"\" is Italian for \"\"highness\"\") until the introduction of the Lexus brand and the second generation Lexus IS design in 2006. The Altezza name is still used at times to refer to chromed car taillights like those fitted to the first generation model, known as \'Altezza lights\' or \'Lexus-style\' lights.',
     DeliveryDate: false,
     InStock: false,
     Edits: 'Resize and crop',
@@ -1949,12 +1949,12 @@ export const vehicles = [
     TransmissionSpeeds: 6,
     TransmissionType: 2,
     Description:
-      'The Ford Mustang is an automobile manufactured by the Ford Motor Company. It was initially based on the platform of the second generation North American Ford Falcon, a compact car. Introduced early on April 17, 1964, and thus dubbed as a \'"1964½"" model by Mustang fans, the 1965 Mustang was the automaker\'s most successful launch since the Model A. The Mustang has undergone several transformations to its current fifth generation.\nThe Mustang created the ""pony car"" class of American automobiles—sports car-like coupes with long hoods and short rear decks—and gave rise to competitors such as the Chevrolet Camaro, and Pontiac Firebird, AMC Javelin, as well as Chrysler\'s revamped Plymouth Barracuda and the first generation Dodge Challenger. The Mustang is also credited for inspiring the designs of coupés such as the Toyota Celica and Ford Capri, which were imported to the United States.',
+      'The Ford Mustang is an automobile manufactured by the Ford Motor Company. It was initially based on the platform of the second generation North American Ford Falcon, a compact car. Introduced early on April 17, 1964, and thus dubbed as a \'\"1964½\"\" model by Mustang fans, the 1965 Mustang was the automaker\'s most successful launch since the Model A. The Mustang has undergone several transformations to its current fifth generation.\nThe Mustang created the \"\"pony car\"\" class of American automobiles—sports car-like coupes with long hoods and short rear decks—and gave rise to competitors such as the Chevrolet Camaro, and Pontiac Firebird, AMC Javelin, as well as Chrysler\'s revamped Plymouth Barracuda and the first generation Dodge Challenger. The Mustang is also credited for inspiring the designs of coupés such as the Toyota Celica and Ford Capri, which were imported to the United States.',
     DeliveryDate: false,
     InStock: false,
     Edits: 'Resize and crop',
     LicenseName: 'CC BY-SA 3.0',
-    Author: 'Tobias \'"ToMar"" Maier',
+    Author: 'Tobias \'\"ToMar\"\" Maier',
     Source: 'devexpress.com/carimage10',
   },
 ];

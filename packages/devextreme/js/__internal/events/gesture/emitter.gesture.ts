@@ -11,7 +11,7 @@ import { isDefined } from '@js/core/utils/type';
 import devices from '@ts/core/devices';
 import { callOnce } from '@ts/core/utils/call_once';
 import domUtils from '@ts/core/utils/dom';
-import type { EmitterConfigData, EmitterEvent, EventCoords } from '@ts/events/core/emitter';
+import type { EmitterEvent, EventCoords } from '@ts/events/core/emitter';
 import Emitter from '@ts/events/core/emitter';
 import eventsEngine from '@ts/events/core/events_engine';
 
@@ -105,12 +105,6 @@ class GestureEmitter extends Emitter {
     }
 
     return TOUCH_BOUNDARY;
-  }
-
-  configure(data: EmitterConfigData, eventName?: string): void {
-    this.getElement().css('msTouchAction', data.immediate ? 'pinch-zoom' : '');
-
-    super.configure(data, eventName);
   }
 
   allowInterruptionByMouseWheel(): boolean {

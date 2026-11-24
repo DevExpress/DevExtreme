@@ -50,7 +50,6 @@ $gantt-view-min-width: 1px !default;
   }
 
   .dx-gantt-view {
-    -webkit-user-select: none; // stylelint-disable-line property-no-vendor-prefix
     user-select: none;
     width: 100%;
     min-width: $gantt-view-min-width;

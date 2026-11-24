@@ -22,21 +22,15 @@ $('#qunit-fixture').append('<div id="test-root"></div>');
 const EVENTS = {
     'start': {
         'mouse': 'mousedown',
-        'touch': 'touchstart',
-        'MSPointer': 'MSPointerDown',
-        'pointer': 'pointerdown'
+        'touch': 'touchstart'
     },
     'move': {
         'mouse': 'mousemove',
-        'touch': 'touchmove',
-        'MSPointer': 'MSPointerMove',
-        'pointer': 'pointermove'
+        'touch': 'touchmove'
     },
     'end': {
         'mouse': 'mouseup',
-        'touch': 'touchend',
-        'MSPointer': 'MSPointerUp',
-        'pointer': 'pointerup'
+        'touch': 'touchend'
     },
     'wheel': {
         'mouse': 'wheel'
@@ -114,7 +108,7 @@ const environment = {
     },
     triggerEvent: function($target, type, x, y, originalEventData) {
         const event = $.Event(type);
-        const pointerType = /^pointer/.test(type) ? 'touch' : (/^MSPointer/.test(type) ? 2 : undefined);
+        const pointerType = /^pointer/.test(type) ? 'touch' : undefined;
         event.pointerType = pointerType;
         event.originalEvent = $.extend($.Event(type), { pointerType: pointerType });
         if(/^touch/.test(type)) {
@@ -193,7 +187,7 @@ QUnit.module('Default prevention', $.extend({}, environment, {
     }
 }));
 
-$.each(['mouse', 'touch', 'MSPointer', 'pointer'], function(_, mode) {
+$.each(['mouse', 'touch'], function(_, mode) {
     QUnit.test(mode + ' - start', function(assert) {
         this.check(assert, mode, 'start', true, 1, 0);
     });
@@ -227,7 +221,7 @@ QUnit.test('mouse - wheel / no data', function(assert) {
     this.check(assert, 'mouse', 'wheel', false, 0, 1); // one 'stopPropagation' call because our events system always stops propagation
 });
 
-$.each(['mouse', 'touch', 'MSPointer', 'pointer'], function(_, type) {
+$.each(['mouse', 'touch'], function(_, type) {
     QUnit.module('click / ' + type, $.extend({}, environment, {
         eventMode: type,
         stubbedCallbacks: ['onClick']
@@ -271,7 +265,7 @@ $.each(['mouse', 'touch', 'MSPointer', 'pointer'], function(_, type) {
     }
 });
 
-$.each(['mouse', 'touch', 'MSPointer', 'pointer'], function(_, type) {
+$.each(['mouse', 'touch'], function(_, type) {
     QUnit.module('drag / ' + type, $.extend({}, environment, {
         eventMode: type,
         stubbedCallbacks: ['onStart', 'onMove', 'onEnd']
@@ -378,7 +372,7 @@ QUnit.test('not raised when disabled', function(assert) {
     assert.strictEqual(this.onZoom.lastCall, null);
 });
 
-$.each(['touch', 'MSPointer', 'pointer'], function(_, type) {
+$.each(['touch'], function(_, type) {
     QUnit.module('zoom / ' + type, $.extend({}, environment, {
         eventMode: type,
         stubbedCallbacks: ['onZoom']
@@ -438,7 +432,7 @@ QUnit.test('no stackoverflow when "reset" is called on "hover-off"', function(as
     assert.ok(true);
 });
 
-$.each(['touch', 'MSPointer', 'pointer'], function(_, type) {
+$.each(['touch'], function(_, type) {
     QUnit.module('hover / ' + type, $.extend({}, environment, {
         eventMode: type,
         stubbedCallbacks: ['onHoverOn', 'onHoverOff']
@@ -542,7 +536,7 @@ QUnit.test('focus is canceled on wheel', function(assert) {
     assert.deepEqual(this.focus.cancel.lastCall.args, []);
 });
 
-$.each(['touch', 'MSPointer', 'pointer'], function(_, type) {
+$.each(['touch'], function(_, type) {
     QUnit.module('focus / ' + type, $.extend({}, environment, {
         eventMode: type,
         beforeEach: function() {

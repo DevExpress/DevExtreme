@@ -6,6 +6,7 @@ import { cleanDataRecursive } from '@js/core/element_data';
 import errors from '@js/core/errors';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
+import type { FunctionTemplate } from '@js/core/templates/function_template';
 import { noop } from '@js/core/utils/common';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
@@ -15,7 +16,7 @@ import { addShadowDomStyles } from '@js/core/utils/shadow_dom';
 import { isDefined, isFunction, isString } from '@js/core/utils/type';
 import { hasWindow } from '@js/core/utils/window';
 import license, { peekValidationPerformed } from '@ts/core/license/license_validation';
-import type { IntegrationOptions } from '@ts/core/template_manager';
+import type { IntegrationOptions, TemplateManager } from '@ts/core/template_manager';
 import TemplateManagerModule from '@ts/core/template_manager';
 import { uiLayerInitialized } from '@ts/core/utils/common';
 import type { ComponentProperties, DefaultActionArgs, DefaultActionConfig } from '@ts/core/widget/component';
@@ -62,8 +63,12 @@ class DOMComponent<
 
   private _requireRefresh?: boolean;
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  _templateManager!: any;
+  _templateManager!: TemplateManager;
+
+  // eslint-disable-next-line @typescript-eslint/no-useless-constructor
+  constructor(element: Element | dxElementWrapper, options?: unknown) {
+    super(element, options);
+  }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   static getInstance<T = any>(element: Element | dxElementWrapper): T {
@@ -87,7 +92,7 @@ class DOMComponent<
     };
   }
 
-  ctor(element: Element, options: TProperties): void {
+  ctor(element: Element | dxElementWrapper, options: TProperties): void {
     this._customClass = null;
 
     this._createElement(element);
@@ -104,7 +109,7 @@ class DOMComponent<
     uiLayerInitialized.resolve();
   }
 
-  _createElement(element: Element): void {
+  _createElement(element: Element | dxElementWrapper): void {
     this._$element = $(element);
   }
 
@@ -576,21 +581,16 @@ class DOMComponent<
     }
   }
 
-  // eslint-disable-next-line @stylistic/max-len
-  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type, @typescript-eslint/explicit-module-boundary-types
-  _getTemplateByOption(optionName) {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+  _getTemplateByOption(optionName: string): FunctionTemplate {
     return this._getTemplate(this.option(optionName));
   }
 
-  // eslint-disable-next-line @stylistic/max-len
-  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type, @typescript-eslint/explicit-module-boundary-types
-  _getTemplate(templateSource) {
-    const templates = this.option('integrationOptions.templates');
-    const isAsyncTemplate = this.option('templatesRenderAsynchronously');
-    const skipTemplates = this.option('integrationOptions.skipTemplates');
+  _getTemplate(templateSource: unknown): FunctionTemplate {
+    const { integrationOptions } = this.option();
+    const templates = integrationOptions?.templates as Record<string, unknown>;
+    const skipTemplates = integrationOptions?.skipTemplates;
+    const isAsyncTemplate = Boolean(this.option('templatesRenderAsynchronously'));
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return this._templateManager.getTemplate(
       templateSource,
       templates,
@@ -599,7 +599,7 @@ class DOMComponent<
         skipTemplates,
       },
       this,
-    );
+    ) as FunctionTemplate;
   }
 
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
