@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-export class Appointment {
+export interface Appointment {
   startDate: Date;
 
   endDate: Date;
@@ -10,7 +10,7 @@ export class Appointment {
   recurrenceRule?: string;
 }
 
-export class MovieData {
+export interface MovieData {
   id: number;
 
   text: string;

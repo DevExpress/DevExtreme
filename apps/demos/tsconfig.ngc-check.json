@@ -26,6 +26,7 @@
     "Demos/DateRangeBox/**/Angular/**/*.ts",
     "Demos/DropDownBox/**/Angular/**/*.ts",
     "Demos/DropDownButton/**/Angular/**/*.ts",
+    "Demos/Scheduler/**/Angular/**/*.ts",
     "shared/anti-forgery/index.d.ts"
   ]
 }

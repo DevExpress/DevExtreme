@@ -39,8 +39,8 @@ export class AppComponent {
   }
 
   onAppointmentFormOpening({ form }: DxSchedulerTypes.AppointmentFormOpeningEvent) {
-    const startDateDataSource = form.getEditor('startDateTimeZone').option('dataSource') as DataSource;
-    const endDateDataSource = form.getEditor('endDateTimeZone').option('dataSource') as DataSource;
+    const startDateDataSource = form.getEditor('startDateTimeZone')?.option('dataSource') as DataSource;
+    const endDateDataSource = form.getEditor('endDateTimeZone')?.option('dataSource') as DataSource;
 
     startDateDataSource.filter(['id', 'contains', 'Europe']);
     endDateDataSource.filter(['id', 'contains', 'Europe']);
