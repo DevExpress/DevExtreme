@@ -105,6 +105,29 @@ describe('GenerateExportsMapExecutor E2E', () => {
     expect(exportsMap['./data/index']).toEqual({ types: './data/index.d.ts' });
   });
 
+  it('should add the sibling declaration to a stub without typings', async () => {
+    await writeJsonFile('core/options/package.json', {
+      main: '../../cjs/core/options/index.js',
+      module: '../../esm/core/options/index.js',
+    });
+    await write('cjs/core/options/index.js');
+    await write('esm/core/options/index.js');
+    await write('core/options.d.ts');
+
+    const result = await run();
+    expect(result.success).toBe(true);
+
+    const entry = (await readExports())['./core/options'] as Record<string, string>;
+    expect(entry).toEqual({
+      types: './core/options.d.ts',
+      module: './esm/core/options/index.js',
+      import: './esm/core/options/index.js',
+      require: './cjs/core/options/index.js',
+      default: './esm/core/options/index.js',
+    });
+    expect(Object.keys(entry)[0]).toBe('types');
+  });
+
   it('should append extra exports after the generated entries', async () => {
     const result = await run({
       extraExports: {

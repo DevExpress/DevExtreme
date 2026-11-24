@@ -219,9 +219,13 @@ export default createExecutor<GenerateExportsMapExecutorSchema, ResolvedGenerate
     for (const dtsFile of dtsFiles.sort()) {
       const types = `./${dtsFile}`;
       const subpath = toTypeOnlySubpath(types);
-      if (!(subpath in exportsMap)) {
+      const existing = exportsMap[subpath];
+      if (!existing) {
         exportsMap[subpath] = { types };
         typeOnlyCount += 1;
+      } else if (typeof existing === 'object' && !existing.types) {
+        // A stub without typings next to a declaration, such as core/options and core/options.d.ts
+        exportsMap[subpath] = { types, ...existing };
       }
 
       // Explicit 'pkg/events/index' paths, which resolved to events/index.d.ts before the exports map
