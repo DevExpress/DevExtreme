@@ -8,6 +8,7 @@ const VIZ_BORDER = '--dx-viz-border';
 const VIZ_BORDER_ACTIVE = '--dx-viz-border-active';
 const VIZ_BORDER_HOVERED = '--dx-viz-border-hovered';
 const VIZ_CONTENT = '--dx-viz-content';
+const VIZ_CONTENT_ON_COLOR = '--dx-viz-content-on-color';
 const VIZ_CONTENT_ORANGE = '--dx-viz-content-orange';
 const VIZ_CONTENT_SUBTLE = '--dx-viz-content-subtle';
 const VIZ_CONTENT_SUBTLER = '--dx-viz-content-subtler';
@@ -48,6 +49,7 @@ const LIGHT = {
   [VIZ_BORDER_ACTIVE]: '#b6b6b6',
   [VIZ_BORDER_HOVERED]: '#c0c0c0',
   [VIZ_CONTENT]: '#161616',
+  [VIZ_CONTENT_ON_COLOR]: '#ffffff',
   [VIZ_CONTENT_ORANGE]: '#ad4100',
   [VIZ_CONTENT_SUBTLE]: '#444444',
   [VIZ_CONTENT_SUBTLER]: '#656565',
@@ -92,6 +94,7 @@ const DARK: Record<PublishedName, string> = {
   [VIZ_BORDER_ACTIVE]: '#656565',
   [VIZ_BORDER_HOVERED]: '#ababab',
   [VIZ_CONTENT]: '#ffffff',
+  [VIZ_CONTENT_ON_COLOR]: '#ffffff',
   [VIZ_CONTENT_ORANGE]: '#f57d48',
   [VIZ_CONTENT_SUBTLE]: '#cbcbcb',
   [VIZ_CONTENT_SUBTLER]: '#a1a1a1',
@@ -318,7 +321,7 @@ function buildTheme(name: string, fallback: Record<PublishedName, string>): any 
       sliderMarker: {
         color: paint(VIZ_PRIMARY),
         font: {
-          color: paint(VIZ_BG),
+          color: paint(VIZ_CONTENT_ON_COLOR),
         },
         invalidRangeColor: paint(VIZ_DANGER),
       },

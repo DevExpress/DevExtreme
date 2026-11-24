@@ -376,8 +376,8 @@ const PUBLISHED_GREEN = 'var(--dx-viz-green, #008f04)';
 const PUBLISHED_RED = 'var(--dx-viz-red, #c83d3d)';
 const PUBLISHED_YELLOW = 'var(--dx-viz-yellow, #eaa300)';
 
-const LIGHT_VIVID = { primary: 'var(--dx-viz-primary, #0f6cbd)', danger: 'var(--dx-viz-danger, #c50f1f)', yellow: 'var(--dx-viz-yellow, #eaa300)', orange: 'var(--dx-viz-orange, #f7630c)' };
-const DARK_VIVID = { primary: 'var(--dx-viz-primary, #015fab)', danger: 'var(--dx-viz-danger, #b20017)', yellow: 'var(--dx-viz-yellow, #cd8e00)', orange: 'var(--dx-viz-orange, #d25101)' };
+const LIGHT_VIVID = { primary: 'var(--dx-viz-primary, #0f6cbd)', danger: 'var(--dx-viz-danger, #c50f1f)', yellow: 'var(--dx-viz-yellow, #eaa300)', orange: 'var(--dx-viz-orange, #f7630c)', onColor: 'var(--dx-viz-content-on-color, #ffffff)' };
+const DARK_VIVID = { primary: 'var(--dx-viz-primary, #015fab)', danger: 'var(--dx-viz-danger, #b20017)', yellow: 'var(--dx-viz-yellow, #cd8e00)', orange: 'var(--dx-viz-orange, #d25101)', onColor: 'var(--dx-viz-content-on-color, #ffffff)' };
 
 [
     { theme: 'fluent-next.blue.light', surface: 'var(--dx-viz-bg, #ffffff)', hovered: 'var(--dx-viz-bg-hovered, #f5f5f5)', pressed: 'var(--dx-viz-bg-active, #e1e1e1)', plate: 'var(--dx-viz-tooltip-bg, #242424)', onPlate: 'var(--dx-viz-tooltip-content, #ffffff)', ink: 'var(--dx-viz-content, #161616)', shelf: 'var(--dx-viz-bg-higher, #ebebeb)', quiet: 'var(--dx-viz-gray-subtle, #cfcfcf)', needle: 'var(--dx-viz-content-subtle, #444444)', crosshair: 'var(--dx-viz-crosshair, #b33133)', mapLineHovered: 'var(--dx-viz-content-orange, #ad4100)', rangePlate: 'var(--dx-viz-purple-subtle, #d5c7f0)', axis: 'var(--dx-viz-content-subtler, #656565)', frame: 'var(--dx-viz-border, #cbcbcb)', ...LIGHT_VIVID },
@@ -386,7 +386,7 @@ const DARK_VIVID = { primary: 'var(--dx-viz-primary, #015fab)', danger: 'var(--d
     { theme: 'fluent-next.blue.dark.compact', surface: 'var(--dx-viz-bg, #242424)', hovered: 'var(--dx-viz-bg-hovered, #3b3b3b)', pressed: 'var(--dx-viz-bg-active, #1d1d1d)', plate: 'var(--dx-viz-tooltip-bg, #ffffff)', onPlate: 'var(--dx-viz-tooltip-content, #161616)', ink: 'var(--dx-viz-content, #ffffff)', shelf: 'var(--dx-viz-bg-higher, #333333)', quiet: 'var(--dx-viz-gray-subtle, #4a4a4a)', needle: 'var(--dx-viz-content-subtle, #cbcbcb)', crosshair: 'var(--dx-viz-crosshair, #e87e78)', mapLineHovered: 'var(--dx-viz-content-orange, #f57d48)', rangePlate: 'var(--dx-viz-purple-subtle, #563780)', axis: 'var(--dx-viz-content-subtler, #a1a1a1)', frame: 'var(--dx-viz-border, #767676)', ...DARK_VIVID },
 ].forEach(({
     theme, surface, hovered, pressed, plate, onPlate, ink, shelf, quiet, needle, crosshair,
-    mapLineHovered, rangePlate, axis, frame, primary, danger, yellow, orange,
+    mapLineHovered, rangePlate, axis, frame, primary, danger, yellow, orange, onColor,
 }) => {
     QUnit.test(`fluent-next theme should be registered: ${theme}`, function(assert) {
         themeModule.currentTheme(theme);
@@ -467,10 +467,15 @@ const DARK_VIVID = { primary: 'var(--dx-viz-primary, #015fab)', danger: 'var(--d
         assert.strictEqual(registeredTheme.export.button.default.backgroundColor, surface, 'export button background');
     });
 
+    QUnit.test(`fluent-next theme should draw the slider marker text with the published on-color content: ${theme}`, function(assert) {
+        const registeredTheme = getRegisteredTheme(theme);
+
+        assert.strictEqual(registeredTheme.rangeSelector.sliderMarker.font.color, onColor, 'rangeSelector slider marker text');
+    });
+
     QUnit.test(`fluent-next theme should cut shapes out with the published surface: ${theme}`, function(assert) {
         const registeredTheme = getRegisteredTheme(theme);
 
-        assert.strictEqual(registeredTheme.rangeSelector.sliderMarker.font.color, surface, 'rangeSelector slider marker text');
         assert.strictEqual(registeredTheme.chart.crosshair.label.font.color, surface, 'crosshair label text');
         assert.strictEqual(registeredTheme.map['layer:marker:dot'].borderColor, surface, 'map dot marker ring');
         assert.strictEqual(registeredTheme.map['layer:marker:dot'].backColor, surface, 'map dot marker back disc');
