@@ -628,8 +628,9 @@ export class FieldChooserBase extends mixinWidget<FieldChooserBaseProperties> {
       const indicatorAlignment = rtlEnabled ? 'left' : 'right';
 
       $container = $('<div>').addClass('dx-column-indicators');
-      // @ts-expect-error css() is typed without null
-      $container.css('float', showColumnLines ? indicatorAlignment : null);
+      if (showColumnLines) {
+        $container.css('float', indicatorAlignment);
+      }
 
       $container[!showColumnLines && rtlEnabled ? 'appendTo' : 'prependTo']($fieldElement);
     }
