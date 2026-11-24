@@ -636,8 +636,9 @@ export class FieldChooserBase extends mixinWidget<FieldChooserBaseProperties> {
   private handleHeaderFilterIconClick(e: FieldChooserFieldEvent, field: FieldChooserField): void {
     // eslint-disable-next-line @typescript-eslint/no-this-alias -- the methods use their own this
     const that = this;
+    const dataSource = this._dataSource;
 
-    if (!this._dataSource) {
+    if (!dataSource) {
       return;
     }
 
@@ -645,10 +646,10 @@ export class FieldChooserBase extends mixinWidget<FieldChooserBaseProperties> {
     const mainGroupField: FieldChooserHeaderFilterField = extend(
       true,
       {},
-      getMainGroupField(this._dataSource, field),
+      getMainGroupField(dataSource, field),
     );
     const type: HeaderFilterViewOptions['type'] = mainGroupField.groupName ? 'tree' : 'list';
-    const paginate = this._dataSource.paginate() && type === 'list';
+    const paginate = dataSource.paginate() && type === 'list';
 
     this._headerFilterView.showHeaderFilterMenu($(e.currentTarget), extend(mainGroupField, {
       type,
@@ -663,7 +664,7 @@ export class FieldChooserBase extends mixinWidget<FieldChooserBaseProperties> {
             return userData.store.load(options);
           }
           const d = Deferred<DataSourceHeaderItem[]>();
-          that._dataSource?.getFieldValues(
+          dataSource.getFieldValues(
             mainGroupField.index,
             !!that.option('headerFilter')?.showRelevantValues,
             paginate
