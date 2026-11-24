@@ -115,30 +115,29 @@ class FieldsArea extends AreaItem {
   }
 
   _renderPopup(tableElement, row) {
-    const that = this;
     const button = tableElement.find('.dx-button');
-    const popupOptions = that._getPopupOptions(row, button);
-    const fieldChooserBase = that.getFieldChooserBase();
+    const popupOptions = this._getPopupOptions(row, button);
+    const fieldChooserBase = this.getFieldChooserBase();
 
-    if (that._rowPopup) {
-      that._rowPopup.$element().remove();
+    if (this._rowPopup) {
+      this._rowPopup.$element().remove();
     }
 
-    that._rowPopup = that.component._createComponent(
+    this._rowPopup = this.component._createComponent(
       $(DIV).appendTo(tableElement),
       Popup,
       popupOptions,
     );
 
-    that._rowPopup.$element().addClass('dx-fields-area-popup');
-    that._rowPopup.content()
+    this._rowPopup.$element().addClass('dx-fields-area-popup');
+    this._rowPopup.content()
       .addClass('dx-pivotgrid-fields-container');
-    that._rowPopup.content().parent()
+    this._rowPopup.content().parent()
       .attr('group', 'row');
 
-    fieldChooserBase.subscribeToEvents(that._rowPopup.content());
+    fieldChooserBase.subscribeToEvents(this._rowPopup.content());
     // @ts-expect-error renderSortable() ignores the element
-    fieldChooserBase.renderSortable(that._rowPopup.content());
+    fieldChooserBase.renderSortable(this._rowPopup.content());
   }
 
   private getFieldChooserBase(): FieldChooserBase {
@@ -154,12 +153,11 @@ class FieldsArea extends AreaItem {
   }
 
   _renderTableContent(tableElement, data) {
-    const that = this;
     const groupElement = this.groupElement();
     const isVisible = this.isVisible();
-    const fieldChooserBase = that.getFieldChooserBase();
+    const fieldChooserBase = this.getFieldChooserBase();
     const head = $('<thead>').addClass('dx-pivotgrid-fields-area-head').appendTo(tableElement);
-    const area = that._area;
+    const area = this._area;
     const row = $('<tr>');
 
     groupElement?.toggleClass('dx-hidden', !isVisible);
@@ -173,7 +171,7 @@ class FieldsArea extends AreaItem {
       if (field.area === area && field.visible !== false) {
         const td = $('<td>').append(fieldChooserBase.renderField(field, field.area === 'row'));
         const indicators = td.find('.dx-column-indicators');
-        if (indicators.length && that._shouldCreateButton()) {
+        if (indicators.length && this._shouldCreateButton()) {
           indicators.insertAfter((indicators as any).next());
         }
         td.appendTo(row);
@@ -185,9 +183,9 @@ class FieldsArea extends AreaItem {
       $('<td>').append($(DIV).addClass('dx-empty-area-text').text(this.option(`fieldPanel.texts.${area}FieldArea`))).appendTo(row);
     }
 
-    if (that._shouldCreateButton()) {
-      that._renderButton(head);
-      that._renderPopup(tableElement, row);
+    if (this._shouldCreateButton()) {
+      this._renderButton(head);
+      this._renderPopup(tableElement, row);
     } else {
       head.append(row);
     }
