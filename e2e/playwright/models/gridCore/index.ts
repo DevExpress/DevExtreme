@@ -2,7 +2,7 @@ import type { Locator, Page } from '@playwright/test';
 import type { WidgetName } from '../types';
 import Widget from '../internal/widget';
 import TextBox from '../textBox';
-import ColumnChooser from '../dataGrid/columnChooser';
+import ColumnChooser from './columnChooser';
 import FilterPanel from './filter/panel';
 
 export const CLASS = {
@@ -34,7 +34,10 @@ export default abstract class GridCore extends Widget {
   }
 
   public getColumnChooser(): ColumnChooser {
-    return new ColumnChooser(this.body.locator(`.${this.addWidgetPrefix(CLASS.columnChooser)}`));
+    return new ColumnChooser(
+      this.body.locator(`.${this.addWidgetPrefix(CLASS.columnChooser)}`),
+      this.getName(),
+    );
   }
 
   public getColumnChooserButton(): Locator {

@@ -1,35 +1,33 @@
 import type { Locator } from '@playwright/test';
-import { expect } from '@playwright/test';
-import FocusableElement from '../../internal/focusable';
-import { classMatcher } from '../../internal/classMatcher';
+import GridFocusableElement from '../../gridCore/focusable';
+import { expectClass } from '../../internal/classMatcher';
+import { CellEditor } from './cellEditor';
 
 const CLASS = {
   editCell: 'dx-editor-cell',
-  focused: 'dx-focused',
+  editorInput: 'dx-texteditor-input',
   cellModified: 'dx-cell-modified',
+  checkbox: 'dx-checkbox',
 };
 
-export default class DataCell extends FocusableElement {
+export default class DataCell extends GridFocusableElement {
   constructor(dataRow: Locator, index: number) {
     super(dataRow.locator(`td[aria-colindex='${index + 1}']`));
   }
 
-  private async expectClass(className: string, present: boolean): Promise<void> {
-    // TestCafe reads the state of the first match; legacy fixed columns render every row twice.
-    const assertion = expect(this.element.first());
-
-    await (present ? assertion : assertion.not).toHaveClass(classMatcher(className));
-  }
-
   public expectEditCell(present = true): Promise<void> {
-    return this.expectClass(CLASS.editCell, present);
-  }
-
-  public expectFocused(present = true): Promise<void> {
-    return this.expectClass(CLASS.focused, present);
+    return expectClass(this.element, CLASS.editCell, present);
   }
 
   public expectModified(present = true): Promise<void> {
-    return this.expectClass(CLASS.cellModified, present);
+    return expectClass(this.element, CLASS.cellModified, present);
+  }
+
+  public getEditor(): CellEditor {
+    return new CellEditor(this.element.locator(`.${CLASS.editorInput}, .${CLASS.checkbox}`));
+  }
+
+  public getCheckbox(): Locator {
+    return this.element.locator(`.${CLASS.checkbox}`);
   }
 }

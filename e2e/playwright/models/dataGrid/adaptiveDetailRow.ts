@@ -1,3 +1,3 @@
-import FocusableElement from '../internal/focusable';
+import GridElement from '../gridCore/element';
 
-export default class AdaptiveDetailRow extends FocusableElement {}
+export default class AdaptiveDetailRow extends GridElement {}
