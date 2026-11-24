@@ -610,7 +610,9 @@ export class FieldChooserBase extends mixinWidget<FieldChooserBaseProperties> {
 
     const mainGroupField = getMainGroupField(this._dataSource, field);
     const isEmpty = !mainGroupField.filterValues?.length;
-    const $icon = $('<span>').addClass(CLASSES.headerFilter).toggleClass('dx-header-filter-empty', isEmpty);
+    const $icon = $('<span>')
+      .addClass(CLASSES.headerFilter)
+      .toggleClass(CLASSES.headerFilterEmpty, isEmpty);
 
     let $container = this._getIndicatorContainer($fieldElement);
 

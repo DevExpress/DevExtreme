@@ -46,6 +46,7 @@ export const CLASSES = {
   allFields: 'dx-all-fields',
   col: 'dx-col',
   headerFilter: 'dx-header-filter',
+  headerFilterEmpty: 'dx-header-filter-empty',
   row: 'dx-row',
   widget: 'dx-widget',
 } as const;
