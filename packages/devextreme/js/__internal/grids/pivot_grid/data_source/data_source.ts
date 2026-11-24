@@ -41,7 +41,7 @@ import {
   setFieldProperty,
 } from '../widget_utils';
 import xmlaStore from '../xmla_store/m_xmla_store';
-import { sort } from './m_data_source_utils';
+import { sort } from './data_source_utils';
 import type {
   DataSourceData,
   DataSourceEventName,

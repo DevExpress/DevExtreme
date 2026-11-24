@@ -1,4 +1,5 @@
 import type { SingleMultipleAllOrNone } from '@js/common';
+import animationPosition from '@js/common/core/animation/position';
 import { addNamespace } from '@js/common/core/events/utils';
 import messageLocalization from '@js/common/core/localization/message';
 import type { DataSource, GroupItem } from '@js/common/data';
@@ -18,6 +19,7 @@ import {
 } from '@js/core/utils/common';
 import { Deferred, type DeferredObj } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
+import { getBoundingRect } from '@js/core/utils/position';
 import { getOuterHeight } from '@js/core/utils/size';
 import { isDefined, isObject, isWindow } from '@js/core/utils/type';
 import { getWindow } from '@js/core/utils/window';
@@ -989,11 +991,11 @@ class DropDownList<
     const $element = this.$element();
     const $customBoundaryContainer = this._$customBoundaryContainer;
 
-    const offsetTop = ($element.offset()?.top ?? 0) - (
-      $customBoundaryContainer ? $customBoundaryContainer.offset()?.top ?? 0 : 0
-    );
+    const offsetTop = $customBoundaryContainer
+      ? ($element.offset()?.top ?? 0) - ($customBoundaryContainer.offset()?.top ?? 0)
+      : getBoundingRect($element.get(0)).top;
 
-    const windowHeight = getOuterHeight(window);
+    const windowHeight = Math.floor(animationPosition.getViewportHeight(getOuterHeight(window)));
 
     const containerHeight = $customBoundaryContainer
       ? Math.min(getOuterHeight($customBoundaryContainer.get(0)), windowHeight)
@@ -1001,7 +1003,7 @@ class DropDownList<
 
     const maxHeight = Math.max(
       offsetTop,
-      containerHeight - offsetTop - getOuterHeight($element.get(0)),
+      Math.floor(containerHeight - offsetTop - getOuterHeight($element.get(0))),
     );
 
     return Math.min(containerHeight * 0.5, maxHeight);

@@ -41,7 +41,8 @@ export default [
       'utils/templates/**/*.ts',
       'utils/templates/**/*.tsx',
       '**/.DS_Store',
-
+      'Demos/_chunks',
+      '**/bundle.js',
       '**/*.{png,json,mjs,css,html,md,sh}',
     ],
   },
@@ -456,6 +457,7 @@ export default [
         "minProperties": 4 
       }],
       'no-unused-vars': 0,
+      'no-restricted-syntax': 0,
     }
   },
 
