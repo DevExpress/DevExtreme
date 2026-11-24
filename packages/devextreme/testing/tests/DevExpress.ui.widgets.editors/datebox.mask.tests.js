@@ -2173,4 +2173,63 @@ module('Using beforeInput event', {
 
         assert.strictEqual(this.$input.get(0).value, '01/01/2020 03:45');
     });
+
+    test('a digit typed through an IME composition on Android devices is entered once (T1338541)', function(assert) {
+        const input = this.$input.get(0);
+
+        this.keyboard.caret({ start: 0, end: 2 });
+
+        this.$input.trigger($.Event('compositionstart'));
+        this.keyboard
+            .keyDown('Unidentified')
+            .beforeInput('1', 'insertCompositionText');
+        input.setRangeText('1', input.selectionStart, input.selectionEnd, 'end');
+        this.keyboard
+            .input('1', 'insertCompositionText')
+            .keyUp('Unidentified');
+
+        assert.strictEqual(input.value, '01/01/2020 03:45', 'day is 01 after the first digit');
+        assert.deepEqual(this.keyboard.caret(), { start: 0, end: 2 }, 'day stays selected');
+
+        this.keyboard
+            .keyDown('Unidentified')
+            .beforeInput('5', 'insertText')
+            .keyUp('Unidentified');
+
+        assert.strictEqual(input.value, '15/01/2020 03:45', 'day is 15 after the second digit');
+        assert.deepEqual(this.keyboard.caret(), { start: 3, end: 5 }, 'month is selected');
+    });
+
+    test('a digit composed together with the word before it on Android devices is entered (T1338541)', function(assert) {
+        const input = this.$input.get(0);
+
+        this.instance.option({
+            displayFormat: 'dd.MM.yyyy',
+            value: new Date(2026, 10, 15),
+        });
+        this.keyboard
+            .caret({ start: 0, end: 2 })
+            .press('right');
+
+        this.$input.trigger($.Event('compositionstart'));
+        this.keyboard
+            .keyDown('Unidentified')
+            .caret({ start: 2, end: 5 })
+            .beforeInput('5.11', 'insertCompositionText');
+        input.setRangeText('5.11', 2, 5, 'end');
+        this.keyboard
+            .input('5.11', 'insertCompositionText')
+            .keyUp('Unidentified');
+
+        assert.strictEqual(input.value, '15.01.2026', 'month is 01 after the first digit');
+        assert.deepEqual(this.keyboard.caret(), { start: 3, end: 5 }, 'month stays selected');
+
+        this.keyboard
+            .keyDown('Unidentified')
+            .beforeInput('2', 'insertText')
+            .keyUp('Unidentified');
+
+        assert.strictEqual(input.value, '15.12.2026', 'month is 12 after the second digit');
+        assert.deepEqual(this.keyboard.caret(), { start: 6, end: 10 }, 'year is selected');
+    });
 });

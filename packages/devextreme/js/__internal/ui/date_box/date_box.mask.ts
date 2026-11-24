@@ -259,20 +259,22 @@ class DateBoxMask<
   _maskBeforeInputHandler(e: DxEvent<KeyboardKeyDownEvent & InputEvent>): boolean {
     this._maskInputHandler = null;
 
-    const { inputType } = e.originalEvent;
+    const { inputType, data } = e.originalEvent;
+    const isCompositionText = inputType === 'insertCompositionText';
 
-    if (inputType === 'insertCompositionText') {
+    if (isCompositionText) {
       this._maskInputHandler = (): void => {
         this._renderSelectedPart();
       };
     }
 
-    if (!this._useMaskBehavior() || !this._isSingleCharKey(e)) {
+    const typedChar = isCompositionText ? data?.slice(-1) : data;
+
+    if (!this._useMaskBehavior() || typedChar?.length !== 1) {
       return false;
     }
 
-    const key = e.originalEvent.data ?? '';
-    this._keyInputHandler(e, key);
+    this._keyInputHandler(e, typedChar);
 
     return true;
   }
@@ -300,6 +302,17 @@ class DateBoxMask<
         this._syncInputWithMask();
       }
 
+      this._wasAllSelectedBeforeComposition = false;
+
+      return;
+    }
+
+    const isCompositionHandledBeforeInput = this._useMaskBehavior()
+      && this._useBeforeInputEvent()
+      && event?.inputType === 'insertCompositionText';
+
+    if (isCompositionHandledBeforeInput) {
+      this._syncInputWithMask();
       this._wasAllSelectedBeforeComposition = false;
 
       return;
