@@ -2590,11 +2590,11 @@ export class EditingController extends modules.ViewController {
         $button.addClass(CLASSES.linkIcon);
         $container.addClass(CLASSES.commandEditWithIcons);
 
-        const iconLabel = icon ? getImageAriaLabel(icon) : undefined;
-        // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing -- '' falls back
-        const ariaLabel = button.hint || button.text || iconLabel;
+        if ($button.is('a')) {
+          const iconLabel = icon ? getImageAriaLabel(icon) : undefined;
+          // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing -- '' falls back
+          const ariaLabel = button.hint || button.text || iconLabel;
 
-        if (ariaLabel) {
           this.setAria('label', ariaLabel, $button);
         }
       } else {
