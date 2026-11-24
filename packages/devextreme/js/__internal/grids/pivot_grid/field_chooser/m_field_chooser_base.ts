@@ -297,13 +297,10 @@ export class FieldChooserBase extends mixinWidget<FieldChooserBaseProperties> {
 
         if (field) {
           const { targetIndex } = e;
-          let mainGroupField = field;
           let invisibleFieldsIndexOffset = 0;
 
-          that._processDemandState((dataSource) => {
+          const mainGroupField = that._processDemandState((dataSource) => {
             const fields = dataSource.getAreaFields(field.area, true);
-            mainGroupField = getMainGroupField(dataSource, field);
-
             const visibleFields = fields.filter((f) => f.visible !== false);
             const fieldBeforeTarget = visibleFields[targetIndex - 1];
 
@@ -313,43 +310,49 @@ export class FieldChooserBase extends mixinWidget<FieldChooserBaseProperties> {
                     && Number(f.areaIndex) <= Number(fieldBeforeTarget.areaIndex))
                 .length;
             }
+
+            return getMainGroupField(dataSource, field);
           });
 
-          that._applyChanges([mainGroupField], {
-            // @ts-expect-error the sortable groups are named after the areas
-            area: e.targetGroup,
-            areaIndex: targetIndex + invisibleFieldsIndexOffset,
-          });
+          if (mainGroupField) {
+            that._applyChanges([mainGroupField], {
+              // @ts-expect-error the sortable groups are named after the areas
+              area: e.targetGroup,
+              areaIndex: targetIndex + invisibleFieldsIndexOffset,
+            });
+          }
         }
       },
     }, that._getSortableOptions()));
   }
 
-  protected _processDemandState(
-    func: (dataSource: PivotGridDataSource, isInstantlyMode: boolean) => void,
-  ): void {
+  protected _processDemandState<T>(
+    func: (dataSource: PivotGridDataSource, isInstantlyMode: boolean) => T,
+  ): T | undefined {
     const dataSource = this._dataSource;
 
     if (!dataSource) {
-      return;
+      return undefined;
     }
 
     const isInstantlyMode = this.option('applyChangesMode') === 'instantly';
 
     if (isInstantlyMode) {
-      func(dataSource, isInstantlyMode);
-    } else {
-      const currentState = dataSource.state();
-      const pivotGridState = this.option('state');
-
-      if (pivotGridState) {
-        dataSource.state(pivotGridState, true);
-      }
-
-      func(dataSource, isInstantlyMode);
-
-      dataSource.state(currentState, true);
+      return func(dataSource, isInstantlyMode);
     }
+
+    const currentState = dataSource.state();
+    const pivotGridState = this.option('state');
+
+    if (pivotGridState) {
+      dataSource.state(pivotGridState, true);
+    }
+
+    const result = func(dataSource, isInstantlyMode);
+
+    dataSource.state(currentState, true);
+
+    return result;
   }
 
   protected _applyChanges(fields: FieldChooserField[], props: Partial<PivotGridField>): void {
