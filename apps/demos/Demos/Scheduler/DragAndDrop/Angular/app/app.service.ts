@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-export class Appointment {
+export interface Appointment {
   text: string;
 
   startDate: Date;
@@ -10,7 +10,7 @@ export class Appointment {
   allDay?: boolean;
 }
 
-export class Task {
+export interface Task {
   text: string;
 }
 
