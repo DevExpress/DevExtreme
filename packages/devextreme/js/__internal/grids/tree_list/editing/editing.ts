@@ -207,13 +207,6 @@ class EditingController extends editingModule.controllers.editing {
     return !!super._needToCloseEditableCell($targetElement)
       || (isExpandIconTarget($targetElement) && this.isEditing());
   }
-
-  protected getButtonLocalizationNames(): Partial<Record<string, string>> {
-    return {
-      ...super.getButtonLocalizationNames(),
-      add: 'dxTreeList-editingAddRowToNode',
-    };
-  }
 }
 
 const rowsView = (

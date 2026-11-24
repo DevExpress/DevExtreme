@@ -2591,16 +2591,9 @@ export class EditingController extends modules.ViewController {
         $button.addClass(CLASSES.linkIcon);
         $container.addClass(CLASSES.commandEditWithIcons);
 
-        const localizationName = isDefined(buttonName)
-          ? this.getButtonLocalizationNames()[buttonName]
-          : undefined;
-
-        const localizedLabel = localizationName
-          ? messageLocalization.format(localizationName)
-          : undefined;
         const iconLabel = icon ? getImageAriaLabel(icon) : undefined;
         // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing -- '' falls back
-        const ariaLabel = button.hint || button.text || localizedLabel || iconLabel;
+        const ariaLabel = button.hint || button.text || iconLabel;
 
         if (ariaLabel) {
           this.setAria('label', ariaLabel, $button);
@@ -2666,19 +2659,6 @@ export class EditingController extends modules.ViewController {
         this._rowsView.renderTemplate($button, button.template, options, true, change);
       }
     }
-  }
-
-  /**
-   * @extended: TreeList's editing
-   */
-  protected getButtonLocalizationNames(): Partial<Record<string, string>> {
-    return {
-      edit: 'dxDataGrid-editingEditRow',
-      save: 'dxDataGrid-editingSaveRowChanges',
-      delete: 'dxDataGrid-editingDeleteRow',
-      undelete: 'dxDataGrid-editingUndeleteRow',
-      cancel: 'dxDataGrid-editingCancelRowChanges',
-    };
   }
 
   protected prepareButtonItem(
