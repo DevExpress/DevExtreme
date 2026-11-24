@@ -68,10 +68,6 @@ const collectConsoleMessages = (): void => {
   });
 };
 
-// Charts, gauges and range selectors animate their first render in script. The edges of a shape
-// drawn that way come out a few colour levels apart from run to run, so the tests switch the
-// animation off: the widget is drawn once, in its final state. The listener is added before jQuery
-// loads, so it runs ahead of the demo code.
 // The widgets whose start-up animation the tests switch off, by the file of their public module.
 const VIZ_WIDGETS: Record<string, string> = {
   chart: 'dxChart',
@@ -112,6 +108,10 @@ export function getVendorVizWidgets(framework: string): VendorVizWidgets | null 
   return { globalVar, widgets };
 }
 
+// Charts, gauges and range selectors animate their first render in script. The edges of a shape
+// drawn that way come out a few colour levels apart from run to run, so the tests switch the
+// animation off: the widget is drawn once, in its final state. The hooks are installed before any
+// page script runs, so they take effect ahead of the demo code.
 const disableVizAnimation = (vendor: VendorVizWidgets | null, names: string[]): void => {
   const disable = (widget: WidgetClass | undefined, name: string): void => {
     widget?.defaultOptions({
