@@ -10,10 +10,10 @@
 
 import fs from 'node:fs';
 import path from 'node:path';
-import { execSync } from 'node:child_process';
+import { execFileSync } from 'node:child_process';
 import { createRequire } from 'node:module';
 
-const root = execSync('git rev-parse --show-toplevel').toString().trim();
+const root = execFileSync('git', ['rev-parse', '--show-toplevel']).toString().trim();
 const pkgs = path.join(root, 'packages');
 const jsRoot = path.join(pkgs, 'devextreme/js');
 // TypeScript from the checked-out repo; a fresh git worktree has no node_modules, so fall
@@ -350,21 +350,27 @@ const args = process.argv.slice(2);
 let names;
 if (args[0] === '--all') names = allComponents;
 else if (args[0] === '--changed') {
-  const git = (cmd) => execSync(`git ${cmd}`, { cwd: root, maxBuffer: 64 << 20, stdio: ['ignore', 'pipe', 'ignore'] })
-    .toString().trim();
+  // argument array, no shell: a ref is never interpreted by a shell
+  const git = (...gitArgs) => execFileSync('git', gitArgs, {
+    cwd: root, maxBuffer: 64 << 20, stdio: ['ignore', 'pipe', 'ignore'],
+  }).toString().trim();
   // default base: the branch's upstream; without one, only uncommitted changes are checked
   let base = args[1];
   if (!base) {
-    try { git('rev-parse --verify -q "@{upstream}"'); base = '@{upstream}'; } catch {
+    try { git('rev-parse', '--verify', '-q', '@{upstream}'); base = '@{upstream}'; } catch {
       base = 'HEAD';
       console.log('No upstream branch: checking uncommitted changes only (pass a base ref to compare a branch).');
     }
   }
-  const paths = "'packages/devextreme/js' 'packages/devextreme-angular/src' 'packages/devextreme-react/src' 'packages/devextreme-vue/src'";
+  try { git('rev-parse', '--verify', '-q', `${base}^{commit}`); } catch {
+    console.error(`Unknown base ref: ${base}`);
+    process.exit(2);
+  }
+  const paths = ['packages/devextreme/js', 'packages/devextreme-angular/src', 'packages/devextreme-react/src', 'packages/devextreme-vue/src'];
   const changed = [...new Set([
-    ...git(`diff --name-only "${base}"...HEAD -- ${paths}`).split('\n'),
-    ...git(`diff --name-only HEAD -- ${paths}`).split('\n'),
-    ...git(`ls-files --others --exclude-standard -- ${paths}`).split('\n'),
+    ...git('diff', '--name-only', `${base}...HEAD`, '--', ...paths).split('\n'),
+    ...git('diff', '--name-only', 'HEAD', '--', ...paths).split('\n'),
+    ...git('ls-files', '--others', '--exclude-standard', '--', ...paths).split('\n'),
   ])].filter(Boolean);
   console.log(`Changes since ${base}: ${changed.length} file(s) under devextreme/js and wrapper src.`);
   const set = new Set();
