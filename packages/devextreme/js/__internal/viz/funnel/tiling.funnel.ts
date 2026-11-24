@@ -1,13 +1,12 @@
 /* eslint-disable @typescript-eslint/no-shadow */
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
+
+import type { FunnelDataItem } from './funnel';
 
 const CENTER = 0.5;
 
 export default {
-  getFigures(data) {
+  getFigures(data: number[]): number[][] {
     const height = 1 / data.length;
 
     return data.map((value, index, array) => {
@@ -21,7 +20,7 @@ export default {
     });
   },
 
-  normalizeValues(items) {
+  normalizeValues(items: FunnelDataItem[]): number[] {
     const max = items.reduce(
       (max, item) => Math.max(item.value, max),
       (items[0] && items[0].value) || 0,

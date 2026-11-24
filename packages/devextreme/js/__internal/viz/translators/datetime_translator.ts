@@ -1,10 +1,6 @@
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
-
 import { dateUtils } from '@ts/core/utils/date';
 
-function parse(value) {
+function parse(value: Date | number | string | null): Date | null {
   return value !== null ? new Date(value) : value;
 }
 

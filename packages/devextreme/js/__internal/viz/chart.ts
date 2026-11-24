@@ -13,7 +13,6 @@
 /* eslint-disable no-continue */
 /* eslint-disable no-multi-assign */
 /* eslint-disable no-param-reassign */
-/* eslint-disable no-plusplus */
 
 import { registerComponent } from '@ts/core/component_registrator';
 import { noop } from '@ts/core/utils/common';
@@ -563,7 +562,10 @@ class Chart extends AdvancedChart {
     defaultPane = this.option('defaultPane');
     panes = _extend(true, [], isArray(panes) ? panes : [panes]);
     _each(panes, (_, pane) => {
-      pane.name = !_isDefined(pane.name) ? DEFAULT_PANE_NAME + panesNameCounter++ : pane.name;
+      if (!_isDefined(pane.name)) {
+        pane.name = DEFAULT_PANE_NAME + panesNameCounter;
+        panesNameCounter += 1;
+      }
     });
 
     if (_isDefined(defaultPane)) {

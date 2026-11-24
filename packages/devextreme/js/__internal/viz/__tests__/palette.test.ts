@@ -9,7 +9,7 @@ describe('a palette of published names', () => {
 
   it('hands the names themselves to the widget while the palette suffices', () => {
     expect(asked(6, 'blend')).toEqual([
-      'var(--dx-viz-blue, #0078d4)',
+      'var(--dx-viz-blue, #0c69b7)',
       'var(--dx-viz-red, #c83d3d)',
       'var(--dx-viz-green, #008f04)',
       'var(--dx-viz-yellow, #eaa300)',
@@ -27,19 +27,19 @@ describe('a palette of published names', () => {
     const colors = asked(12, 'alternate');
 
     expect(colors).toHaveLength(12);
-    expect(colors[6]).toBe('rgb(from var(--dx-viz-blue, #0078d4) calc(r + 50) calc(g + 50) calc(b + 50))');
+    expect(colors[6]).toBe('rgb(from var(--dx-viz-blue, #0c69b7) calc(r + 50) calc(g + 50) calc(b + 50))');
   });
 
   it('fans the cycles out in css when the palette is extrapolated', () => {
     const colors = asked(12, 'extrapolate');
 
-    expect(colors[0]).toBe('hsl(from var(--dx-viz-blue, #0078d4) h s calc(l + 1 * (max(calc(l - 75), min(50, calc(l * 0.9))) - l)))');
-    expect(colors[6]).toBe('hsl(from var(--dx-viz-blue, #0078d4) h s calc(l + 1 * (min(calc(l + 75), max(80, calc(l + (100 - l) * 0.15))) - l)))');
+    expect(colors[0]).toBe('hsl(from var(--dx-viz-blue, #0c69b7) h s calc(l + 1 * (max(calc(l - 75), min(50, calc(l * 0.9))) - l)))');
+    expect(colors[6]).toBe('hsl(from var(--dx-viz-blue, #0c69b7) h s calc(l + 1 * (min(calc(l + 75), max(80, calc(l + (100 - l) * 0.15))) - l)))');
   });
 
   it('keeps the gradient in css too', () => {
     expect(getGradientPalette('fluent next', undefined).getColor(0.25))
-      .toBe('color-mix(in srgb, var(--dx-viz-blue, #0078d4) 75%, var(--dx-viz-green, #008f04))');
+      .toBe('color-mix(in srgb, var(--dx-viz-blue, #0c69b7) 75%, var(--dx-viz-green, #008f04))');
   });
 
   it.each([['test'], [-1], [2], [undefined]])('answers with nothing when the ratio is %s', (ratio) => {
@@ -50,8 +50,8 @@ describe('a palette of published names', () => {
     const discrete = getDiscretePalette('fluent next', 3, undefined);
 
     expect([discrete.getColor(0), discrete.getColor(1), discrete.getColor(2)]).toEqual([
-      'color-mix(in srgb, var(--dx-viz-blue, #0078d4) 100%, var(--dx-viz-blue, #0078d4))',
-      'color-mix(in srgb, var(--dx-viz-blue, #0078d4) 50%, var(--dx-viz-green, #008f04))',
+      'color-mix(in srgb, var(--dx-viz-blue, #0c69b7) 100%, var(--dx-viz-blue, #0c69b7))',
+      'color-mix(in srgb, var(--dx-viz-blue, #0c69b7) 50%, var(--dx-viz-green, #008f04))',
       'color-mix(in srgb, var(--dx-viz-green, #008f04) 100%, var(--dx-viz-green, #008f04))',
     ]);
   });

@@ -1,4 +1,3 @@
-/* eslint-disable @stylistic/no-mixed-operators */
 /* eslint-disable @typescript-eslint/no-this-alias */
 /* eslint-disable radix */
 /* eslint-disable default-case */
@@ -18,12 +17,11 @@ import { noop } from '@ts/core/utils/common';
 import { extend } from '@ts/core/utils/extend';
 import { each } from '@ts/core/utils/iterator';
 import { isDefined as _isDefined } from '@ts/core/utils/type';
-import { getWindow, hasProperty } from '@ts/core/utils/window';
+import { hasProperty } from '@ts/core/utils/window';
 import type { BBox } from '@ts/viz/core/types';
 import { normalizeEnum as _normalizeEnum } from '@ts/viz/core/utils';
 import { Label } from '@ts/viz/series/points/label';
 
-const window = getWindow();
 const _extend = extend;
 
 const _math = Math;
@@ -601,13 +599,8 @@ export default {
 
   _storeTrackerR() {
     const that = this;
-    let { navigator } = window;
     const { r } = that._options.styles.normal;
-    /// #DEBUG
-    navigator = that.__debug_navigator || navigator;
-    that.__debug_browserNavigator = navigator;
-    /// #ENDDEBUG
-    const minTrackerSize = hasProperty('ontouchstart') || (navigator.msPointerEnabled && navigator.msMaxTouchPoints || navigator.pointerEnabled && navigator.maxTouchPoints) ? 20 : 6;
+    const minTrackerSize = hasProperty('ontouchstart') ? 20 : 6;
     that._options.trackerR = r < minTrackerSize ? minTrackerSize : r;
     return that._options.trackerR;
   },

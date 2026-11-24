@@ -15,7 +15,6 @@ const editors: HtmlEditor[] = [];
 
 const createEditor = (options = {}): HtmlEditorModel => {
   const $element = $('<div>').appendTo(document.body);
-  // @ts-expect-error direct instantiation is not typed
   const instance = new HtmlEditor($element, options);
 
   editors.push(instance);

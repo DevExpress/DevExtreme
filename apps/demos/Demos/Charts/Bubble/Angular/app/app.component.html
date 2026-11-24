@@ -24,14 +24,14 @@
     [customizeTooltip]="customizeTooltip"
   >
   </dxo-chart-tooltip>
-  @for(correlation of correlationSource; track correlation.name) {
-  <dxi-chart-series
-    [name]="correlation.name"
-    [argumentField]="correlation.argumentField"
-    [valueField]="correlation.valueField"
-    [sizeField]="correlation.sizeField"
-    [tagField]="correlation.tagField"
-  >
-  </dxi-chart-series>
+  @for (correlation of correlationSource; track correlation.name) {
+    <dxi-chart-series
+      [name]="correlation.name"
+      [argumentField]="correlation.argumentField"
+      [valueField]="correlation.valueField"
+      [sizeField]="correlation.sizeField"
+      [tagField]="correlation.tagField"
+    >
+    </dxi-chart-series>
   }
 </dx-chart>

@@ -40,9 +40,6 @@ export class FileBlobReader {
     if (file.slice) {
       return file.slice(startPos, startPos + length);
     }
-    if ('webkitSlice' in file && typeof file.webkitSlice === 'function') {
-      return file.webkitSlice(startPos, startPos + length) as Blob;
-    }
 
     return null;
   }

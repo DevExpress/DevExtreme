@@ -58,13 +58,13 @@
   </dx-load-panel>
 
   @if (!isLoading() && !responseValue() && isError()) {
-  <div class="output-error-message">
-    <span class="dx-icon-warning"></span>
-    An unexpected error occurred. Please try again.
-  </div>
+    <div class="output-error-message">
+      <span class="dx-icon-warning"></span>
+      An unexpected error occurred. Please try again.
+    </div>
   } @else if (!isLoading() && !responseValue()) {
-  <div class="output-initial-message">
-    AI Assistant is ready to answer your questions about this record.
-  </div>
+    <div class="output-initial-message">
+      AI Assistant is ready to answer your questions about this record.
+    </div>
   }
 </div>

@@ -44,10 +44,10 @@ describe('Style utils', () => {
       expect(styleProp('transition')).toBe('webkitTransition');
     });
 
-    it('should check the vendor prefixes in the webkit, moz, o, ms order', () => {
-      const { styleProp } = loadStyleModule({ msTransition: '', mozTransition: '' });
+    it('should ignore the obsolete moz, o and ms prefixes', () => {
+      const { styleProp } = loadStyleModule({ msTransition: '', mozTransition: '', oTransition: '' });
 
-      expect(styleProp('transition')).toBe('mozTransition');
+      expect(styleProp('transition')).toBe('transition');
     });
 
     it('should return the name as is when no variant is supported', () => {
@@ -76,10 +76,14 @@ describe('Style utils', () => {
       expect(stylePropPrefix('transition')).toBe('-webkit-');
     });
 
-    it('should return the css prefix of a vendor property in the upper camel case', () => {
+    it('should return the css prefix of a webkit property in the upper camel case', () => {
       expect(loadStyleModule({ WebkitTransition: '' }).stylePropPrefix('transition')).toBe('-webkit-');
-      expect(loadStyleModule({ MozTransition: '' }).stylePropPrefix('transition')).toBe('-moz-');
-      expect(loadStyleModule({ OTransition: '' }).stylePropPrefix('transition')).toBe('-o-');
+    });
+
+    it('should ignore the obsolete moz, o and ms prefixes', () => {
+      expect(loadStyleModule({ MozTransition: '' }).stylePropPrefix('transition')).toBe('');
+      expect(loadStyleModule({ OTransition: '' }).stylePropPrefix('transition')).toBe('');
+      expect(loadStyleModule({ MsTransition: '' }).stylePropPrefix('transition')).toBe('');
     });
 
     it('should accept a dashed property name', () => {

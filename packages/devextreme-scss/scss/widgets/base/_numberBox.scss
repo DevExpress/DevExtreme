@@ -12,7 +12,7 @@ $numberbox-spin-idle-opacity: null !default;
 
     &::-webkit-outer-spin-button,
     &::-webkit-inner-spin-button {
-      -webkit-appearance: none; // stylelint-disable-line property-no-vendor-prefix
+      appearance: none;
       margin: 0;
     }
   }

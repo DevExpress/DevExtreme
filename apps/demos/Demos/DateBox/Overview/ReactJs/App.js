@@ -19,9 +19,7 @@ function App() {
   const disabledDates = federalHolidays;
   const diffInDay = useMemo(
     () =>
-      `${Math.floor(
-        Math.abs((new Date().getTime() - value.getTime()) / (24 * 60 * 60 * 1000)),
-      )} days`,
+      `${Math.floor(Math.abs((new Date().getTime() - value.getTime()) / (24 * 60 * 60 * 1000)))} days`,
     [value],
   );
   const onValueChanged = useCallback((e) => {

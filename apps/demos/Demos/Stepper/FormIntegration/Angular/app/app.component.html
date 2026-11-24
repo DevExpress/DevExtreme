@@ -5,13 +5,13 @@
   (onSelectionChanging)="onSelectionChanging($event)"
 >
   @for (step of steps(); track step) {
-  <dxi-stepper-item
-    [label]="step.label"
-    [icon]="step.icon"
-    [isValid]="step.isValid"
-    [hint]="step.hint"
-    [optional]="step.optional"
-  ></dxi-stepper-item>
+    <dxi-stepper-item
+      [label]="step.label"
+      [icon]="step.icon"
+      [isValid]="step.isValid"
+      [hint]="step.hint"
+      [optional]="step.optional"
+    ></dxi-stepper-item>
   }
 </dx-stepper>
 <div class="content">
@@ -63,10 +63,10 @@
   <div class="nav-panel">
     <div class="current-step">
       @if (!isConfirmed()) {
-      <span>
-        Step <span class="selected-index">{{ selectedIndex() + 1 }}</span> of
-        {{ steps().length }}
-      </span>
+        <span>
+          Step <span class="selected-index">{{ selectedIndex() + 1 }}</span> of
+          {{ steps().length }}
+        </span>
       }
     </div>
     <div class="nav-buttons">

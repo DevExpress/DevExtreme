@@ -1,13 +1,13 @@
 <dx-diagram #diagram id="diagram">
-  @for(emp of employees; track emp.ID) {
-  <dxi-diagram-custom-shape
-    category="employees"
-    [type]="'employee' + emp.ID"
-    baseType="rectangle"
-    [defaultText]="emp.Full_Name"
-    [allowEditText]="false"
-  >
-  </dxi-diagram-custom-shape>
+  @for (emp of employees; track emp.ID) {
+    <dxi-diagram-custom-shape
+      category="employees"
+      [type]="'employee' + emp.ID"
+      baseType="rectangle"
+      [defaultText]="emp.Full_Name"
+      [allowEditText]="false"
+    >
+    </dxi-diagram-custom-shape>
   }
   <dxo-diagram-toolbox>
     <dxi-diagram-group
