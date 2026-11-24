@@ -5,7 +5,7 @@
       :src="cellData.Task_Assigned_Employee.Picture"
       alt=""
       class="img"
-    />
+    >
     <span
       v-if="cellData.Task_Assigned_Employee"
       class="name"

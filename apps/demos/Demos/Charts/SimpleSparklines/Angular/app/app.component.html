@@ -7,61 +7,61 @@
       <th>Gold (USD/troy ounce)</th>
       <th>Silver (USD/troy ounce)</th>
     </tr>
-    @for(year of years; track year) {
-    <tr>
-      <th>{{ year }}</th>
-      <td>
-        <dx-sparkline
-          class="sparkline"
-          [dataSource]="oilCosts"
-          argumentField="month"
-          valueField="{{ year }}"
-          type="line"
-          [showMinMax]="true"
-        >
-          <dxo-sparkline-tooltip
-            [format]="{ type: 'currency', precision: 2 }"
-          ></dxo-sparkline-tooltip>
-        </dx-sparkline>
-      </td>
-      <td>
-        <dx-sparkline
-          class="sparkline"
-          [dataSource]="goldCosts"
-          argumentField="month"
-          valueField="{{ year }}"
-          type="spline"
-          [lineWidth]="3"
-          lineColor="#9ab57e"
-          minColor="#6babac"
-          maxColor="#ebdd8f"
-          [showMinMax]="true"
-          [showFirstLast]="false"
-        >
-          <dxo-sparkline-tooltip
-            [format]="{ type: 'currency', precision: 2 }"
-          ></dxo-sparkline-tooltip>
-        </dx-sparkline>
-      </td>
-      <td>
-        <dx-sparkline
-          class="sparkline"
-          [dataSource]="silverCosts"
-          argumentField="month"
-          valueField="{{ year }}"
-          type="stepline"
-          lineColor="#e8c267"
-          firstLastColor="#e55253"
-          [pointSize]="6"
-          pointSymbol="square"
-          pointColor="#ebdd8f"
-        >
-          <dxo-sparkline-tooltip
-            [format]="{ type: 'currency', precision: 2 }"
-          ></dxo-sparkline-tooltip>
-        </dx-sparkline>
-      </td>
-    </tr>
+    @for (year of years; track year) {
+      <tr>
+        <th>{{ year }}</th>
+        <td>
+          <dx-sparkline
+            class="sparkline"
+            [dataSource]="oilCosts"
+            argumentField="month"
+            valueField="{{ year }}"
+            type="line"
+            [showMinMax]="true"
+          >
+            <dxo-sparkline-tooltip
+              [format]="{ type: 'currency', precision: 2 }"
+            ></dxo-sparkline-tooltip>
+          </dx-sparkline>
+        </td>
+        <td>
+          <dx-sparkline
+            class="sparkline"
+            [dataSource]="goldCosts"
+            argumentField="month"
+            valueField="{{ year }}"
+            type="spline"
+            [lineWidth]="3"
+            lineColor="#9ab57e"
+            minColor="#6babac"
+            maxColor="#ebdd8f"
+            [showMinMax]="true"
+            [showFirstLast]="false"
+          >
+            <dxo-sparkline-tooltip
+              [format]="{ type: 'currency', precision: 2 }"
+            ></dxo-sparkline-tooltip>
+          </dx-sparkline>
+        </td>
+        <td>
+          <dx-sparkline
+            class="sparkline"
+            [dataSource]="silverCosts"
+            argumentField="month"
+            valueField="{{ year }}"
+            type="stepline"
+            lineColor="#e8c267"
+            firstLastColor="#e55253"
+            [pointSize]="6"
+            pointSymbol="square"
+            pointColor="#ebdd8f"
+          >
+            <dxo-sparkline-tooltip
+              [format]="{ type: 'currency', precision: 2 }"
+            ></dxo-sparkline-tooltip>
+          </dx-sparkline>
+        </td>
+      </tr>
     }
   </table>
 </div>

@@ -193,11 +193,10 @@ function buildHtml({
   const { vendorScriptTag } = require('./vendor-bundle');
   const vendorTag = vendorScriptTag(framework);
 
-  return `<!DOCTYPE html>
+  return `<!doctype html>
 <html lang="en">
   <head>
     <title>DevExtreme Demo</title>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
     ${headLinks}
