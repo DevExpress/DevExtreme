@@ -33,7 +33,7 @@ import { triggerShownEvent } from 'common/core/events/visibility_change';
 import 'fluent_blue_light.css!';
 import $ from 'jquery';
 import dateLocalization from 'common/core/localization/date';
-import { PivotGridDataSource } from '__internal/grids/pivot_grid/data_source/m_data_source';
+import { PivotGridDataSource } from '__internal/grids/pivot_grid/data_source/data_source';
 import 'ui/pivot_grid/ui.pivot_grid';
 import { getRealElementWidth } from '__internal/grids/pivot_grid/area_item/m_area_item';
 import DataAreaModule from '__internal/grids/pivot_grid/data_area/m_data_area';
