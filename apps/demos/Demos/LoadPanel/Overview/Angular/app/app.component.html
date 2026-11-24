@@ -52,7 +52,8 @@
   <div class="option">
     <dx-check-box
       text="Hide on outside click"
-      [(value)]="hideOnOutsideClick"
+      [value]="hideOnOutsideClick()"
+      (valueChange)="hideOnOutsideClick.set(!!$event)"
     >
     </dx-check-box>
   </div>

@@ -55,7 +55,8 @@
           [showSpinButtons]="true"
           [inputAttr]="{ 'aria-label': 'Sales' }"
           (onKeyDown)="keyDown($event)"
-          [(value)]="sales"
+          [value]="sales()"
+          (valueChange)="sales.set($event ?? sales())"
         ></dx-number-box>
       </div>
     </div>
