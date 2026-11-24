@@ -9,10 +9,6 @@ testUtils.importAnd(() => ['devextreme/viz/chart', 'devextreme/data/data_source'
   return testUtils
     .postponeUntilFound('#chart', 100, 5000)
     .then(() => {
-      const instance = dxChart.getInstance(document.querySelector('#chart'));
-      // devextreme-react rolls back options changed outside the component unless this flag is set.
-      instance.skipOptionsRollBack = true;
-      instance.option('dataSource', dataSource);
-      instance.skipOptionsRollBack = false;
+      testUtils.changeOutsideFramework(dxChart.getInstance(document.querySelector('#chart')), (i) => i.option('dataSource', dataSource));
     });
 });
