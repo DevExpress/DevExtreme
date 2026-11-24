@@ -3,7 +3,7 @@ import { query } from 'devextreme-react/common/data';
 import { moviesData } from './data.js';
 
 const getMovieById = (id) =>
-  id ? query(moviesData).filter(['id', '=', id]).toArray()[0] ?? null : null;
+  id ? (query(moviesData).filter(['id', '=', id]).toArray()[0] ?? null) : null;
 const MovieInfoContainer = ({ formInstanceRef }) => {
   const [movie, setMovie] = useState(null);
   useEffect(() => {

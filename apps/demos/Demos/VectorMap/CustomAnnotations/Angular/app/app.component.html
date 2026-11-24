@@ -2,14 +2,14 @@
   <dxi-vector-map-layer [dataSource]="usaMap"></dxi-vector-map-layer>
   <dxo-vector-map-common-annotation-settings type="custom" template="template">
   </dxo-vector-map-common-annotation-settings>
-  @for(data of states; track data.data) {
-  <dxi-vector-map-annotation
-    [data]="data.data"
-    [offsetX]="data.offsetX"
-    [offsetY]="data.offsetY"
-    [coordinates]="data.coordinates"
-  >
-  </dxi-vector-map-annotation>
+  @for (data of states; track data.data) {
+    <dxi-vector-map-annotation
+      [data]="data.data"
+      [offsetX]="data.offsetX"
+      [offsetY]="data.offsetY"
+      [coordinates]="data.coordinates"
+    >
+    </dxi-vector-map-annotation>
   }
   <svg *dxTemplate="let annotation of 'template'" class="annotation">
     <image attr.href="{{ getImagePath(annotation) }}" width="60" height="40" />
@@ -22,13 +22,13 @@
       <tspan dy="14" x="0" class="caption">Population:</tspan>
       <!-- display: inline -->
       <tspan class="population" dx="5">{{
-        annotation.data.population | number : "3.0-0"
+        annotation.data.population | number: "3.0-0"
       }}</tspan>
 
       <tspan dy="14" x="0" class="caption">Area:</tspan>
       <!-- display: inline -->
       <tspan class="area" dx="5">{{
-        annotation.data.area | number : "3.0-0"
+        annotation.data.area | number: "3.0-0"
       }}</tspan>
       <tspan dx="5">km</tspan>
       <tspan class="sup" dy="-2">2</tspan>

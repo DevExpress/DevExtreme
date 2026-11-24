@@ -12,7 +12,7 @@
       hideEvent="mouseleave"
       [hideOnOutsideClick]="false"
     >
-      <div *dxTemplate="let data = data; of: 'content'"> ExcelRemote IR </div>
+      <div *dxTemplate="let data = data of 'content'"> ExcelRemote IR </div>
     </dx-tooltip>
   </div>
   <div class="label">With template</div>
@@ -29,7 +29,7 @@
       position="right"
       [hideOnOutsideClick]="false"
     >
-      <div *dxTemplate="let data = data; of: 'content'">
+      <div *dxTemplate="let data = data of 'content'">
         <img
           alt="SuperPlasma 50"
           width="150"
