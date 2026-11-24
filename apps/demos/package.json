@@ -152,7 +152,6 @@
         "lint": "pnpm exec nx run-many -t lint-js lint-demos lint-css lint-html -p devextreme-demos",
         "test-playwright": "playwright test",
         "test-testcafe": "ts-node utils/visual-tests/testcafe-runner.ts",
-        "test-testcafe:csp": "cross-env CSP_REPORT=true ts-node utils/visual-tests/testcafe-runner.ts",
         "test-testcafe:accessibility": "cross-env STRATEGY=accessibility CONSTEL=jquery node utils/visual-tests/testcafe-runner.ts",
         "csp-server": "node utils/server/csp-server.js 8080",
         "csp-check": "node utils/server/csp-check.js",
