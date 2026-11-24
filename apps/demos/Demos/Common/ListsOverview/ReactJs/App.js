@@ -98,9 +98,7 @@ const App = () => {
           elementAttr={tileViewAttrs}
         />
 
-        <div className="address">
-          {currentHotel.Postal_Code}, {currentHotel.Address}
-        </div>
+        <div className="address">{`${currentHotel.Postal_Code}, ${currentHotel.Address}`}</div>
         <div className="description">{currentHotel.Description}</div>
       </div>
     </>

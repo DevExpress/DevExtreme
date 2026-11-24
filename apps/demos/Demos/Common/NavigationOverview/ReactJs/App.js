@@ -20,14 +20,15 @@ const renderPanelItem = (city) => (
         <div>
           <div>Population</div>
           <div>
-            <b>{city.population} people</b>
+            <b>{`${city.population} people`}</b>
           </div>
         </div>
         <div>
           <div>Area</div>
           <div>
             <b>
-              {city.area} km<sup>2</sup>
+              {`${city.area} km`}
+              <sup>2</sup>
             </b>
           </div>
         </div>
@@ -35,7 +36,8 @@ const renderPanelItem = (city) => (
           <div>Density</div>
           <div>
             <b>
-              {city.density}/km<sup>2</sup>
+              {`${city.density}/km`}
+              <sup>2</sup>
             </b>
           </div>
         </div>

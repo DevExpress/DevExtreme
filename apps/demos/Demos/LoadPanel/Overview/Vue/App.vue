@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="header-container">
-      <div class="header">John Heart</div>
+      <div class="header">John Heart</div>{{ ' ' }}
       <DxButton
         :on-click="showLoadPanel"
         text="Load Data"
@@ -99,7 +99,7 @@ function onHidden() {
   font-size: 34px;
   display: inline-block;
   vertical-align: middle;
-  padding: 10px 14px 10px 10px;
+  padding: 10px;
   margin: 0;
 }
 
@@ -133,10 +133,5 @@ function onHidden() {
 
 .option {
   margin-top: 10px;
-}
-
-.header-container {
-  display: flex;
-  align-items: center;
 }
 </style>

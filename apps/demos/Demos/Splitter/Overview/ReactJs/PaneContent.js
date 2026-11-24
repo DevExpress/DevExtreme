@@ -33,7 +33,7 @@ const PaneContent = (data) => {
           className="pane-option"
           key={index}
         >
-          {item.key}: {item.value}
+          {`${item.key}: ${item.value}`}
         </div>
       ))}
     </div>

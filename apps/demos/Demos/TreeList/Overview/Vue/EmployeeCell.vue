@@ -5,7 +5,7 @@
       :src="cellData.Task_Assigned_Employee.Picture"
       alt=""
       class="img"
-    >
+    >{{ ' ' }}
     <span
       v-if="cellData.Task_Assigned_Employee"
       class="name"
@@ -30,7 +30,7 @@ withDefaults(defineProps<{
   height: 50px;
   width: 50px;
   object-fit: contain;
-  margin-right: 14px;
+  margin-right: 10px;
   border-radius: 25px;
   border: 1px solid var(--dxds-color-border, #d3d3d3);
   background-color: var(--dxds-color-bg-static-light, #fff);

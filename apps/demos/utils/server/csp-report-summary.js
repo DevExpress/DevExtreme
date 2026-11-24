@@ -6,7 +6,7 @@ const reportFile = process.env.CSP_REPORT_FILE || join(__dirname, '..', '..', 'c
 if (!existsSync(reportFile)) {
   console.log('No CSP violations report found.');
   console.log(`Expected at: ${reportFile}`);
-  console.log('Run tests with CSP_REPORT=true to generate a report.');
+  console.log('Run `pnpm run csp-check` to generate a report and pass its file in CSP_REPORT_FILE.');
   process.exit(0);
 }
 
