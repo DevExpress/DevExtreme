@@ -11,7 +11,7 @@ if (!document.location.host.includes('localhost')) {
   enableProdMode();
 }
 
-type Color = string;
+type Color = string | null;
 
 @Component({
   selector: 'demo-app',
@@ -26,7 +26,7 @@ type Color = string;
 export class AppComponent {
   private readonly service = inject(Service);
 
-  private dropDownButton: DxDropDownButtonComponent['instance'];
+  private dropDownButton?: DxDropDownButtonComponent['instance'];
 
   readonly colors: Color[] = this.service.getColors();
 
@@ -61,7 +61,7 @@ export class AppComponent {
   };
 
   onButtonClick(e: DxDropDownButtonTypes.ButtonClickEvent): void {
-    notify(`Go to ${e.element.querySelector('.button-title').textContent}'s profile`, 'success', 600);
+    notify(`Go to ${e.element.querySelector('.button-title')?.textContent}'s profile`, 'success', 600);
   }
 
   onItemClick(e: DxDropDownButtonTypes.ItemClickEvent): void {
@@ -73,9 +73,13 @@ export class AppComponent {
   };
 
   onColorClick(color: Color): void {
+    if (!this.dropDownButton) {
+      return;
+    }
+
     const iconElement = this.dropDownButton.element().getElementsByClassName('dx-icon-square')[0] as HTMLElement;
 
-    iconElement.style.color = color;
+    iconElement.style.color = color ?? '';
 
     this.color.set(color);
     this.dropDownButton.close();

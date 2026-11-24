@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-class Details {
+interface Details {
   id: string;
 
   text: string;
@@ -14,13 +14,13 @@ class Details {
   description: string;
 }
 
-export class City extends Details {
+export interface City extends Details {
   density: string;
 
   capital?: true;
 }
 
-export class Country extends Details {
+export interface Country extends Details {
   expanded?: boolean;
 
   selected?: boolean;
@@ -32,7 +32,7 @@ export class Country extends Details {
   cities: City[];
 }
 
-export class Continent {
+export interface Continent {
   id: string;
 
   text: string;

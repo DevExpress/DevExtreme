@@ -13,6 +13,7 @@ import {
   DxAutocompleteModule,
 } from 'devextreme-angular';
 
+import type { DxSelectBoxTypes } from 'devextreme-angular/ui/select-box';
 import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -50,7 +51,7 @@ export class AppComponent {
 
   readonly europeanUnion = inject(Service).getCountries();
 
-  onLanguageChanged(data) {
+  onLanguageChanged(data: DxSelectBoxTypes.ValueChangedEvent) {
     this.rtlEnabled.set(data.value === this.languages[0]);
   }
 }

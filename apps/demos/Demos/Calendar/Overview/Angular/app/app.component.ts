@@ -4,6 +4,7 @@ import {
   DxCheckBoxModule, DxDateBoxModule, DxSelectBoxModule,
 } from 'devextreme-angular';
 import { DxCalendarModule, type DxCalendarTypes } from 'devextreme-angular/ui/calendar';
+import type { DxCheckBoxTypes } from 'devextreme-angular/ui/check-box';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -60,11 +61,11 @@ export class AppComponent {
     return this.holidays.some((item) => date.getDate() === item[0] && date.getMonth() === item[1]);
   }
 
-  useCellTemplate({ value }) {
+  useCellTemplate({ value }: DxCheckBoxTypes.ValueChangedEvent) {
     this.cellTemplate.set(value ? 'custom' : 'cell');
   }
 
-  getCellCssClass({ date, view }) {
+  getCellCssClass({ date, view }: { date?: Date; view: string }) {
     let cssClass = '';
 
     if (view === 'month') {

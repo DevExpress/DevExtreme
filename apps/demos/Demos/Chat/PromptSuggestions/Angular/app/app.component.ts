@@ -43,7 +43,7 @@ export class AppComponent {
 
   readonly hideAfterUse = signal(false);
 
-  private readonly defaultSuggestions: DxChatTypes.Properties['suggestions'] = {
+  private readonly defaultSuggestions: NonNullable<DxChatTypes.Properties['suggestions']> = {
     items: this.appService.suggestionItems,
     onItemClick: (e) => this.onSuggestionItemClick(e),
   };
@@ -65,15 +65,17 @@ export class AppComponent {
     return this.appService.convertToHtml(message.text);
   }
 
-  private toggleDisabledState(disabled: boolean, event = undefined) {
+  private toggleDisabledState(disabled: boolean, event?: DxChatTypes.MessageEnteredEvent['event']) {
+    const target = event?.target as HTMLElement | undefined;
+
     this.isDisabled.set(disabled);
     this.suggestions.update((suggestions) => ({ ...suggestions, disabled }));
     this.clearButtonOptions.update((options) => ({ ...options, disabled }));
 
     if (disabled) {
-      event?.target.blur();
+      target?.blur();
     } else {
-      event?.target.focus();
+      target?.focus();
     }
   }
 
