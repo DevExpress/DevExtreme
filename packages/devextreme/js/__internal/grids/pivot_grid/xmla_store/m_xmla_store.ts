@@ -836,10 +836,7 @@ class XmlaStore {
     const grandTotalHash = itemChildren.grandTotalHash ?? {};
     const children: XmlaHeaderItems = itemChildren.length
       ? itemChildren
-      : Object.keys(grandTotalHash)
-        .reduce<XmlaHeaderItem[]>((childItems, name) => childItems
-          // @ts-expect-error processMember() gives every item of grandTotalHash its children
-          .concat(grandTotalHash[name].children), []);
+      : Object.values(grandTotalHash).flatMap((hashItem) => hashItem.children ?? []);
     const firstChild = children[0];
 
     if (!firstChild) {
