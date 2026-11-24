@@ -13,7 +13,6 @@ import $ from '@js/core/renderer';
 import { equalByValue, getKeyHash } from '@js/core/utils/common';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
-import * as iconUtils from '@js/core/utils/icon';
 import { each } from '@js/core/utils/iterator';
 import { deepExtendArraySafe } from '@js/core/utils/object';
 import {
@@ -30,7 +29,7 @@ import type { HidingEvent as PopupHidingEvent } from '@js/ui/popup';
 import { current, isFluent } from '@js/ui/themes';
 import { Deferred, fromPromise, when } from '@ts/core/utils/deferred';
 import domUtils from '@ts/core/utils/dom';
-import { getImageAriaLabel } from '@ts/core/utils/icon';
+import { getImageAriaLabel, getImageContainer, getImageSourceType } from '@ts/core/utils/icon';
 import type Store from '@ts/data/abstract_store';
 import eventsEngine from '@ts/events/core/events_engine';
 import type { AdaptiveColumnsViewController } from '@ts/grids/grid_core/adaptivity/adaptivity';
@@ -2578,11 +2577,11 @@ export class EditingController extends modules.ViewController {
       } else if ((useIcons && icon) || button.icon) {
         // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing -- '' falls back
         icon = button.icon || icon;
-        const iconType = iconUtils.getImageSourceType(icon);
+        const iconType = getImageSourceType(icon);
 
         if (iconType === 'image' || iconType === 'svg') {
           // @ts-expect-error an image/svg has a container; addClass() is typed without undefined
-          $button = iconUtils.getImageContainer(icon).addClass(button.cssClass);
+          $button = getImageContainer(icon).addClass(button.cssClass);
         } else {
           // @ts-expect-error attr() is typed without undefined
           $button.addClass(`dx-icon${iconType === 'dxIcon' ? '-' : ' '}${icon}`).attr('title', button.text);
