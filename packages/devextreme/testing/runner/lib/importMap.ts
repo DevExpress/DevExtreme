@@ -59,6 +59,29 @@ function resolveVirtualStorePackageUrl(packageName: string, fileName: string): s
   return null;
 }
 
+/**
+ * Resolve the copy of `dependency` that `ownerPackage` (a devextreme dependency) uses
+ * to a browser URL: pnpm keeps a package's own dependencies next to it in the virtual store.
+ */
+function resolvePackageDependencyUrl(ownerPackage: string, dependency: string): string | null {
+  const workspaceRoot = resolveWorkspaceRoot();
+  const ownerLink = path.join(workspaceRoot, 'packages', 'devextreme', 'node_modules', ownerPackage);
+  if (!fs.existsSync(ownerLink)) {
+    return null;
+  }
+
+  // eslint-disable-next-line spellcheck/spell-checker
+  const ownerNodeModules = path.join(fs.realpathSync(ownerLink), ...ownerPackage.split('/').map(() => '..'));
+  const dependencyDir = path.join(ownerNodeModules, dependency);
+  if (!fs.existsSync(dependencyDir)) {
+    return null;
+  }
+
+  // eslint-disable-next-line spellcheck/spell-checker
+  const relative = path.relative(workspaceRoot, fs.realpathSync(dependencyDir)).split(path.sep).join('/');
+  return `/${relative}`;
+}
+
 export interface ImportMapOptions {
   jqueryUrl: string;
   cacheBuster: string;
@@ -276,6 +299,10 @@ export function buildQunitImportMap({
   jqueryUrl,
   suiteFilePath,
 }: ImportMapOptions): BrowserImportMap {
+  // @babel/runtime is not a devextreme dependency: use the copy jspdf depends on.
+  const babelRuntime = resolvePackageDependencyUrl('jspdf', '@babel/runtime')
+    ?? `${NODE_MODULES}/@babel/runtime`;
+
   const rawImports: Record<string, string> = {
     // Package roots (trailing slash = prefix remap)
     'ui/': `${ESM_ROOT}/ui/`,
@@ -299,13 +326,9 @@ export function buildQunitImportMap({
 
     jquery: jqueryUrl.includes('noJQuery') ? jqueryUrl : `${SHIMS}/jquery.js`,
 
-    // Injected by babel transform-runtime (esm transpile).
-    // jspdf imports `@babel/runtime/helpers/<name>` (CJS); our artifacts use
-    // `helpers/esm/<name>`. Remap non-esm helper paths to the ESM builds, but
-    // keep an exact `helpers/esm/` prefix so existing imports stay correct.
-    '@babel/runtime/helpers/esm/': `${NODE_MODULES}/@babel/runtime/helpers/esm/`,
-    '@babel/runtime/helpers/': `${NODE_MODULES}/@babel/runtime/helpers/esm/`,
-    '@babel/runtime/': `${NODE_MODULES}/@babel/runtime/`,
+    // jspdf imports `@babel/runtime/helpers/<name>` (CJS); remap them to the ESM builds.
+    '@babel/runtime/helpers/': `${babelRuntime}/helpers/esm/`,
+    '@babel/runtime/': `${babelRuntime}/`,
 
     // Vendors (prefer ESM builds where available)
     inferno: `${NODE_MODULES}/inferno/dist/index.dev.esm.js`,

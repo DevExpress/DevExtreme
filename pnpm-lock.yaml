@@ -1048,9 +1048,6 @@ importers:
       '@angular/router':
         specifier: catalog:angular
         version: 21.2.25(@angular/common@21.2.25(@angular/core@21.2.25(@angular/compiler@21.2.25)(rxjs@7.8.2)(zone.js@0.15.1))(rxjs@7.8.2))(@angular/core@21.2.25(@angular/compiler@21.2.25)(rxjs@7.8.2)(zone.js@0.15.1))(@angular/platform-browser@21.2.25(@angular/common@21.2.25(@angular/core@21.2.25(@angular/compiler@21.2.25)(rxjs@7.8.2)(zone.js@0.15.1))(rxjs@7.8.2))(@angular/core@21.2.25(@angular/compiler@21.2.25)(rxjs@7.8.2)(zone.js@0.15.1)))(rxjs@7.8.2)
-      '@babel/runtime':
-        specifier: ^7.24.0
-        version: 7.29.2
       '@preact/signals-core':
         specifier: ^1.8.0
         version: 1.14.1
@@ -1175,9 +1172,6 @@ importers:
 
   packages/devextreme:
     dependencies:
-      '@babel/runtime':
-        specifier: ^7.12.1
-        version: 7.29.2
       '@preact/signals-core':
         specifier: ^1.8.0
         version: 1.14.1
@@ -1219,9 +1213,6 @@ importers:
         specifier: 7.29.7
         version: 7.29.7(@babel/core@7.29.7)
       '@babel/plugin-transform-optional-chaining':
-        specifier: 7.29.7
-        version: 7.29.7(@babel/core@7.29.7)
-      '@babel/plugin-transform-runtime':
         specifier: 7.29.7
         version: 7.29.7(@babel/core@7.29.7)
       '@babel/plugin-transform-typescript':
@@ -1830,9 +1821,6 @@ importers:
       '@babel/plugin-transform-object-rest-spread':
         specifier: '>=7.0.0'
         version: 7.28.6(@babel/core@7.29.7)
-      '@babel/plugin-transform-runtime':
-        specifier: '>=7.0.0'
-        version: 7.29.0(@babel/core@7.29.7)
       '@babel/preset-env':
         specifier: '>=7.0.0'
         version: 7.29.2(@babel/core@7.29.7)

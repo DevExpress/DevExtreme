@@ -12,7 +12,7 @@ autoprefixer (Open Source - MIT License)
 Copyright (c) 2013 Andrey Sitnik (andrey@sitnik.es)
 https://github.com/postcss/autoprefixer/blob/main/LICENSE
 
-Babel (@babel/runtime) (Open Source - MIT License)
+Babel (@babel/helpers) (Open Source - MIT License)
 Copyright (c) 2014-present Sebastian McKenzie and other contributors
 https://github.com/babel/babel/blob/main/LICENSE
 

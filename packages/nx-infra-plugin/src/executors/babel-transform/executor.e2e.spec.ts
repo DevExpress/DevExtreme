@@ -75,9 +75,6 @@ module.exports = {
   }),
   esm: Object.assign({}, common, {
     presets: [['@babel/preset-env', { targets, modules: false }]],
-    plugins: common.plugins.concat([
-      ['@babel/plugin-transform-runtime', { useESModules: true, version: '7.5.0' }]
-    ])
   })
 };
 `;
