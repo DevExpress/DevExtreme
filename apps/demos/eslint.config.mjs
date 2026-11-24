@@ -22,13 +22,6 @@ const __dirname = path.dirname(__filename);
 
 const spellcheckRule = spellcheckDevextreme[0].rules['spellcheck/spell-checker'];
 
-// Sections whose Angular demos are fixed for strict TS (keep in sync with "include" in tsconfig.ngc-check.json)
-const strictAngularSections = [
-  'Localization',
-  'Map',
-  'VectorMap',
-];
-
 export default [
   {
     ignores: [
@@ -253,22 +246,6 @@ export default [
       '@typescript-eslint/no-floating-promises': 0,
       '@typescript-eslint/only-throw-error': 'warn',
       '@typescript-eslint/no-unnecessary-type-assertion': ['error', { typesToIgnore: ['string'] }],
-    },
-  },
-
-  // Angular demos fixed for strict TS
-  {
-    files: strictAngularSections.map((section) => `Demos/${section}/**/Angular/**/*.ts`),
-    rules: {
-      '@typescript-eslint/no-explicit-any': 'error',
-      '@typescript-eslint/no-unsafe-function-type': 'error',
-      '@typescript-eslint/no-wrapper-object-types': 'error',
-      '@typescript-eslint/consistent-type-imports': ['error', { fixStyle: 'separate-type-imports' }],
-      '@typescript-eslint/no-import-type-side-effects': 'error',
-      '@typescript-eslint/consistent-type-assertions': ['error', {
-        assertionStyle: 'as',
-        objectLiteralTypeAssertions: 'never',
-      }],
     },
   },
 
