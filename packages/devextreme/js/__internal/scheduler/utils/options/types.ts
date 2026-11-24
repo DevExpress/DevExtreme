@@ -1,4 +1,5 @@
 import type { template } from '@js/common';
+import type { DefaultOptionsRule } from '@js/core/options';
 import type { Properties } from '@js/ui/scheduler';
 
 export type RawViewType = Required<Properties>['views'][number];
@@ -33,10 +34,7 @@ export interface SchedulerInternalOptions {
   skippedDays?: number[];
 }
 
-export interface SchedulerOptionsRule {
-  device: () => boolean;
-  options: Properties & Partial<SchedulerInternalOptions>;
-}
+export type SchedulerOptionsRule = DefaultOptionsRule<SafeSchedulerOptions>;
 
 type RequiredOptions = 'views'
   | 'currentView'

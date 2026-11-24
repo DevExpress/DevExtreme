@@ -1,4 +1,3 @@
-/* global Debug */
 import errors from '@js/core/errors';
 import { getWindow } from '@js/core/utils/window';
 
@@ -11,7 +10,6 @@ interface Endpoint {
 
 type EndpointConfig = Record<string, Endpoint | undefined>;
 
-let isWinJsOrigin = false;
 let isLocalOrigin = false;
 
 function isLocalHostName(url: string): boolean {
@@ -23,7 +21,6 @@ class EndpointSelector {
 
   constructor(config: EndpointConfig) {
     this.config = config;
-    isWinJsOrigin = window.location.protocol === 'ms-appx:';
     isLocalOrigin = isLocalHostName(window.location.hostname);
   }
 
@@ -34,8 +31,7 @@ class EndpointSelector {
     }
 
     if (bag.production) {
-      // @ts-expect-error `Debug` is a WinJS global that has no ambient declaration here
-      if ((isWinJsOrigin && !Debug.debuggerEnabled) || (!isWinJsOrigin && !isLocalOrigin)) {
+      if (!isLocalOrigin) {
         return bag.production;
       }
     }

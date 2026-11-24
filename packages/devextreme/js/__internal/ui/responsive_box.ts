@@ -446,7 +446,7 @@ class ResponsiveBox extends CollectionWidget<ResponsiveBoxProperties> {
       width: '100%',
       height: '100%',
       items: rootItems,
-      itemTemplate: this._getTemplateByOption('itemTemplate'),
+      itemTemplate: this._getTemplateByOption('itemTemplate') as unknown as BoxOptions['itemTemplate'],
       itemHoldTimeout,
       onItemHold: this._createActionByOption('onItemHold'),
       onItemClick: this._createActionByOption('onItemClick'),

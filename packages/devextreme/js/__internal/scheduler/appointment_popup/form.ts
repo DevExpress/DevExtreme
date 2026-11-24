@@ -291,7 +291,7 @@ export class AppointmentForm {
   private createForm(items: FormProperties['items']): dxForm {
     const element = $('<div>');
     const {
-      items: formItems, onContentReady, onInitialized, ...customFormOptions
+      items: formItems, onContentReady, onInitialized, onFieldDataChanged, ...customFormOptions
     } = this.getEditingForm() ?? {};
 
     const defaultOptions: FormProperties = {
@@ -307,40 +307,10 @@ export class AppointmentForm {
       elementAttr: {
         class: CLASSES.form,
       },
-      onFieldDataChanged: (e) => {
-        const {
-          startDateExpr, endDateExpr, recurrenceRuleExpr,
-        } = this.config.dataAccessors.expr;
+      onFieldDataChanged: (e): void => {
+        this.syncEditorsWithFormData(e.dataField);
 
-        const { dataField } = e;
-
-        if (!dataField) {
-          return;
-        }
-
-        const isDateRangeChanged = [startDateExpr, endDateExpr].includes(dataField);
-        const isRecurrenceRuleChanged = dataField === recurrenceRuleExpr;
-        const isResourceChanged = Object.keys(this.config.resourceManager.resourceById)
-          .includes(dataField);
-
-        if (isDateRangeChanged) {
-          this.updateDateEditorsValues();
-        }
-
-        if (isRecurrenceRuleChanged || startDateExpr === dataField) {
-          this.recurrenceForm.updateRecurrenceFormValues(
-            this.recurrenceRuleRaw,
-            this.startDate,
-          );
-        }
-
-        if (isRecurrenceRuleChanged) {
-          this.updateRepeatEditorValue();
-        }
-
-        if (isResourceChanged) {
-          this.updateSubjectIconColor().catch(noop);
-        }
+        onFieldDataChanged?.call(this, e);
       },
       onInitialized: (e): void => {
         this.dxFormInstance = e.component;
@@ -1001,6 +971,40 @@ export class AppointmentForm {
     const $icon = this.dxForm.$element().find(`.${CLASSES.subjectGroup} .${CLASSES.formIcon} .${CLASSES.icon}`);
 
     $icon.css('color', color ?? '');
+  }
+
+  private syncEditorsWithFormData(dataField: string | undefined): void {
+    const {
+      startDateExpr, endDateExpr, recurrenceRuleExpr,
+    } = this.config.dataAccessors.expr;
+
+    if (!dataField) {
+      return;
+    }
+
+    const isDateRangeChanged = [startDateExpr, endDateExpr].includes(dataField);
+    const isRecurrenceRuleChanged = dataField === recurrenceRuleExpr;
+    const isResourceChanged = Object.keys(this.config.resourceManager.resourceById)
+      .includes(dataField);
+
+    if (isDateRangeChanged) {
+      this.updateDateEditorsValues();
+    }
+
+    if (isRecurrenceRuleChanged || startDateExpr === dataField) {
+      this.recurrenceForm.updateRecurrenceFormValues(
+        this.recurrenceRuleRaw,
+        this.startDate,
+      );
+    }
+
+    if (isRecurrenceRuleChanged) {
+      this.updateRepeatEditorValue();
+    }
+
+    if (isResourceChanged) {
+      this.updateSubjectIconColor().catch(noop);
+    }
   }
 
   private updateDateEditorsValues(): void {

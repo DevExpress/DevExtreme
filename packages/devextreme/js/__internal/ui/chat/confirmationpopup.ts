@@ -2,10 +2,11 @@ import Guid from '@js/core/guid';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import messageLocalization from '@js/localization/message';
-import Popup, { type Properties as PopupProperties, type ToolbarItem } from '@js/ui/popup';
+import type { ToolbarItem } from '@js/ui/popup';
 import eventsEngine from '@ts/events/core/events_engine';
 import { BUTTON_CLASS } from '@ts/ui/button/button';
-import type InternalPopup from '@ts/ui/popup/popup';
+import type { PopupProperties } from '@ts/ui/popup/popup';
+import Popup from '@ts/ui/popup/popup.full';
 
 export const CHAT_CONFIRMATION_POPUP_WRAPPER_CLASS = 'dx-chat-confirmation-popup-wrapper';
 
@@ -16,7 +17,7 @@ interface ConfirmationPopupActions {
   onCancelButtonClick?: () => void;
 }
 
-type ConfirmationPopupProperties = PopupProperties & ConfirmationPopupActions;
+type ConfirmationPopupProperties = PopupProperties<Popup> & ConfirmationPopupActions;
 
 class ConfirmationPopup {
   _$container: dxElementWrapper;
@@ -52,7 +53,7 @@ class ConfirmationPopup {
     this._popup = new Popup($popupContainer.get(0), this._getPopupConfig());
   }
 
-  _getPopupConfig(): PopupProperties {
+  _getPopupConfig(): PopupProperties<Popup> {
     const messageId = new Guid().toString();
     const $message = $('<div>')
       .text(messageLocalization.format('dxChat-editingDeleteConfirmText'))
@@ -68,7 +69,7 @@ class ConfirmationPopup {
       hideOnOutsideClick: true,
       toolbarItems: this._getToolbarItems(),
       onContentReady(args): void {
-        const component = args.component as InternalPopup;
+        const { component } = args;
 
         component.$content()
           ?.append($message);
@@ -76,7 +77,7 @@ class ConfirmationPopup {
         component.$overlayContent().attr('aria-labelledby', messageId);
       },
       onShown: (e): void => {
-        const component = e.component as InternalPopup;
+        const { component } = e;
         const $firstButton = component
           .bottomToolbar()
           ?.find(`.${BUTTON_CLASS}`)

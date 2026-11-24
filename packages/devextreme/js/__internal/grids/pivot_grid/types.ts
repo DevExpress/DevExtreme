@@ -1,7 +1,9 @@
+import type { DataSource } from '@js/common/data/data_source/data_source';
 import type { ScalarFilterValue } from '@js/common/grids';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import type PivotGridDataSource from '@js/ui/pivot_grid/data_source';
 import type { Field } from '@js/ui/pivot_grid/data_source';
+import type { StoreLoadOptions } from '@ts/data/data_source/types';
 
 export type PivotGridField = Field & {
   index?: number;
@@ -24,7 +26,7 @@ export type PivotGridFilterField = Omit<
 export type PivotGridFilterValue = ScalarFilterValue | ScalarFilterValue[];
 
 export interface TreeItem<TItem> {
-  children?: TItem[];
+  children?: TItem[] | null;
 }
 
 export type ForeachTreeCallback<TItem> = (members: TItem[], index: number) => unknown;
@@ -63,6 +65,7 @@ export interface PivotGridLoadOptions extends ExpandedLevelOptions {
   rowTake?: number;
   columnSkip?: number;
   columnTake?: number;
+  skipValues?: boolean;
 }
 
 export interface PivotGridDescriptions {
@@ -89,4 +92,32 @@ export interface DrillDownStore {
     params: DrillDownParams | undefined,
   ) => unknown[] | DeferredObj<unknown[]>;
   key: () => string | string[] | undefined;
+}
+
+export interface PivotGridHeaderItem {
+  value?: unknown;
+  index?: number;
+  children?: PivotGridHeaderItem[];
+}
+
+export interface PivotGridLoadResult {
+  rows: PivotGridHeaderItem[];
+  columns: PivotGridHeaderItem[];
+  values: unknown[][][];
+  grandTotalRowIndex: number;
+  grandTotalColumnIndex: number;
+}
+
+export interface PivotGridStore {
+  getFields: (fields?: PivotGridField[]) => DeferredObj<DiscoveredField[]>;
+  load: (options: PivotGridLoadOptions) => DeferredObj<PivotGridLoadResult>;
+  filter: {
+    (): StoreLoadOptions['filter'];
+    (...filterExpr: NonNullable<StoreLoadOptions['filter']>[]): void;
+  };
+  supportPaging: () => boolean;
+  createDrillDownDataSource: (
+    descriptions: PivotGridLoadOptions | undefined,
+    drillDownParams: DrillDownParams | undefined,
+  ) => DataSource;
 }

@@ -2,7 +2,7 @@ import { expect, test as base } from '@playwright/test';
 import { DEFAULT_BROWSER_SIZE, DEFAULT_THEME } from './helpers/const';
 import { changeTheme, openTestPage, resetPageState } from './helpers/testPageUtils';
 
-const GOOGLE_FONTS = /^https:\/\/fonts\.googleapis\.com\//;
+export const GOOGLE_FONTS = /^https:\/\/fonts\.googleapis\.com\//;
 
 export interface TestOptions {
   theme: string;
@@ -10,7 +10,7 @@ export interface TestOptions {
 }
 
 // Overriding "page" gives every test the prepared container page, the way the TestCafe runner did
-// it from its global test hooks. Nothing needs cleaning up afterwards: every test gets its own
+// it from its global test hooks. Nothing needs cleaning up afterward: every test gets its own
 // context, and the widgets of the previous one die with its page.
 export const test = base.extend<TestOptions>({
   theme: [DEFAULT_THEME, { option: true }],

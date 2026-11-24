@@ -31,7 +31,10 @@ const VIZ_DANGER = '--dx-viz-danger';
 const VIZ_BLUE = '--dx-viz-blue';
 const VIZ_GRAY = '--dx-viz-gray';
 const VIZ_ORANGE = '--dx-viz-orange';
+const VIZ_PURPLE = '--dx-viz-purple';
 const VIZ_RED = '--dx-viz-red';
+const VIZ_SUCCESS = '--dx-viz-success';
+const VIZ_WARNING = '--dx-viz-warning';
 const VIZ_YELLOW = '--dx-viz-yellow';
 
 const VIZ_TILE_BORDER = '--dx-viz-tile-border';
@@ -65,10 +68,13 @@ const LIGHT = {
 
   [VIZ_DANGER]: '#c50f1f',
 
-  [VIZ_BLUE]: '#0078d4',
-  [VIZ_GRAY]: '#757575',
+  [VIZ_BLUE]: '#0c69b7',
+  [VIZ_GRAY]: '#676767',
   [VIZ_ORANGE]: '#f7630c',
+  [VIZ_PURPLE]: '#865cbf',
   [VIZ_RED]: '#c83d3d',
+  [VIZ_SUCCESS]: '#107c10',
+  [VIZ_WARNING]: '#f7630c',
   [VIZ_YELLOW]: '#eaa300',
 
   [VIZ_TILE_BORDER]: '#ffffff',
@@ -95,6 +101,16 @@ const DARK: Record<PublishedName, string> = {
   [VIZ_PURPLE_SUBTLE]: '#563780',
   [VIZ_TOOLTIP_BG]: '#ffffff',
   [VIZ_TOOLTIP_CONTENT]: '#161616',
+
+  [VIZ_PRIMARY]: '#015fab',
+
+  [VIZ_DANGER]: '#b20017',
+
+  [VIZ_ORANGE]: '#d25101',
+  [VIZ_PURPLE]: '#7650ab',
+  [VIZ_SUCCESS]: '#066f07',
+  [VIZ_WARNING]: '#d25100',
+  [VIZ_YELLOW]: '#cd8e00',
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- description theme option tree

@@ -14,7 +14,7 @@ process.env.TZ = timezone;
 // The budget follows the renderer, not the job: the agent and the local container draw the same
 // pixels, so both are judged strictly — including the UI mode, where an etalon gets rewritten by
 // hand and a lenient budget would let CI-breaking drift through. A host run stays lenient because
-// its comparison is not trustworthy in the first place: another OS rasterises text differently.
+// its comparison is not trustworthy in the first place: another OS rasterizes text differently.
 const rendersLikeCI = !!process.env.CI || !!process.env.DX_CONTAINER;
 
 const screenshotBudget = rendersLikeCI

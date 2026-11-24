@@ -52,6 +52,7 @@ export default [
         ignoreRestSiblings: true,
         caughtErrors: 'none',
       }],
+      'class-methods-use-this': 'warn',
       'no-only-tests/no-only-tests': 'error',
       'no-await-in-loop': 'off',
       'no-restricted-globals': 'off',
@@ -68,7 +69,15 @@ export default [
     },
   },
   {
-    files: ['helpers/**/*.ts', 'models/**/*.ts', 'tests/editors/**/*.ts'],
+    files: [
+      'helpers/**/*.ts',
+      'models/**/*.ts',
+      'tests/editors/**/*.ts',
+      'tests/navigation/**/*.ts',
+      'tests/common/*.ts',
+      'tests/common/gantt/**/*.ts',
+      'tests/common/pagination/**/*.ts',
+    ],
     rules: {
       'no-restricted-syntax': ['error', {
         selector: "CallExpression[callee.property.name='waitForTimeout'], CallExpression[callee.name='setTimeout'], CallExpression[callee.object.name=/^(window|globalThis)$/][callee.property.name='setTimeout']",

@@ -2,21 +2,18 @@
 /* eslint-disable no-bitwise */
 /* eslint-disable @typescript-eslint/no-this-alias */
 /* eslint-disable @typescript-eslint/init-declarations */
-/* eslint-disable no-plusplus */
 /* eslint-disable func-names */
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable @typescript-eslint/no-shadow */
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-multi-assign */
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-use-before-define */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 /* eslint-disable max-classes-per-file */
 
 import { extend } from '@ts/core/utils/extend';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
+import type { EventEmitterMethods } from '@ts/viz/vector_map/event_emitter';
 import { makeEventEmitter } from '@ts/viz/vector_map/event_emitter';
 
 const _Number = Number;
@@ -50,6 +47,8 @@ interface EngineParameters {
 }
 
 type EngineInstance = InstanceType<typeof Engine>;
+
+export type ProjectionInstance = InstanceType<typeof Projection>;
 
 interface ProjectionParams {
   centerChanged: (center: number[]) => void;
@@ -98,7 +97,7 @@ function getEngine(engine?: ThemeValue): EngineInstance {
     (engine instanceof Engine && engine)
     || projection.get(engine)
     || projection(engine)
-    || projection.get(DEFAULT_ENGINE_NAME)
+    || projection.get(DEFAULT_ENGINE_NAME) as EngineInstance
   );
 }
 
@@ -136,13 +135,13 @@ export let Projection = class Projection {
 
   declare _moveCenter: number[] | null;
 
-  declare _initEvents: () => void;
+  declare _initEvents: OmitThisParameter<EventEmitterMethods['_initEvents']>;
 
-  declare _disposeEvents: () => void;
+  declare _disposeEvents: OmitThisParameter<EventEmitterMethods['_disposeEvents']>;
 
-  declare _fire: (name: string, arg?: ThemeValue) => void;
+  declare _fire: OmitThisParameter<EventEmitterMethods['_fire']>;
 
-  declare on: (handlers: Record<string, () => void>) => () => void;
+  declare on: OmitThisParameter<EventEmitterMethods['on']>;
 
   constructor(parameters: ProjectionParams) {
     this._initEvents();
@@ -323,7 +322,7 @@ export let Projection = class Projection {
     const step = this._maxZoom ** (1 / k);
     let zoom = this._minZoom;
     this._scale = [zoom];
-    for (let i = 1; i <= k; ++i) {
+    for (let i = 1; i <= k; i += 1) {
       this._scale.push(zoom *= step);
     }
   }
@@ -577,7 +576,13 @@ const Engine = class {
     if (delta < 2) {
       extend(
         parameters,
-        createProjectUnprojectMethods(parameters.to, parameters.from, p1, p2, delta),
+        createProjectUnprojectMethods(
+          parameters.to,
+          parameters.from as ProjectMethod,
+          p1,
+          p2,
+          delta,
+        ),
       );
     }
     const engine = new Engine(parameters);
@@ -615,17 +620,17 @@ function findMinMax(p1: number[], p2: number[]): { min: number[]; max: number[] 
   };
 }
 
-export const projection = function (parameters): EngineInstance | null {
+export const projection = function (parameters: ThemeValue): EngineInstance | null {
   return parameters && parameters.to ? new Engine(parameters) : null;
 };
 
-const projectionsCache = {};
+const projectionsCache: Record<string, EngineInstance> = {};
 
-projection.get = function (name) {
+projection.get = function (name: string): EngineInstance | null {
   return projectionsCache[name] || null;
 };
 
-projection.add = function (name, engine) {
+projection.add = function (name: string, engine: ThemeValue): typeof projection {
   engine = (engine instanceof Engine && engine) || projection(engine);
   if (!projectionsCache[name] && engine) {
     projectionsCache[name] = engine;
@@ -633,16 +638,22 @@ projection.add = function (name, engine) {
   return projection; // For chaining
 };
 
-function createProjectUnprojectMethods(project, unproject, p1, p2, delta) {
+function createProjectUnprojectMethods(
+  project: ProjectMethod,
+  unproject: ProjectMethod,
+  p1: number[],
+  p2: number[],
+  delta: number,
+): Required<Pick<EngineParameters, 'from' | 'to'>> {
   const x0 = (p1[0] + p2[0]) / 2 - delta / 2;
   const y0 = (p1[1] + p2[1]) / 2 - delta / 2;
   const k = 2 / delta;
   return {
-    to(coordinates): number[] {
+    to(coordinates: number[]): number[] {
       const [p0, p1] = project(coordinates);
       return [-1 + (p0 - x0) * k, -1 + (p1 - y0) * k];
     },
-    from(coordinates) {
+    from(coordinates: number[]): number[] {
       return unproject([x0 + (coordinates[0] + 1) / k, y0 + (coordinates[1] + 1) / k]);
     },
   };

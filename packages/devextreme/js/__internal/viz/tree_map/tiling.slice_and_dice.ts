@@ -1,8 +1,7 @@
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-
+import type { TilingData } from '@ts/viz/tree_map/tiling';
 import { addAlgorithm, buildSidesData, calculateRectangles } from '@ts/viz/tree_map/tiling';
 
-function sliceAndDice(data): void {
+function sliceAndDice(data: TilingData): void {
   const { items } = data;
   const sidesData = buildSidesData(data.rect, data.directions, data.isRotated ? 1 : 0);
 

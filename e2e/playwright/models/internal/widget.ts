@@ -1,8 +1,7 @@
 import type { Locator, Page } from '@playwright/test';
-import { expect } from '@playwright/test';
 import type { WidgetName } from '../types';
+import { expectClass } from './classMatcher';
 import { hasClass } from './hasClass';
-import { classMatcher } from './classMatcher';
 
 const CLASS = {
   focused: 'dx-state-focused',
@@ -20,6 +19,8 @@ export default abstract class Widget {
 
   public readonly element: Locator;
 
+  abstract name: WidgetName;
+
   constructor(page: Page, selector: Locator | string) {
     this.page = page;
     this.element = typeof selector === 'string' ? page.locator(selector) : selector;
@@ -29,10 +30,8 @@ export default abstract class Widget {
     return `dx-${widgetName.slice(2).toLowerCase() + (className ? `-${className}` : '')}`;
   }
 
-  public async expectClass(className: string, present = true): Promise<void> {
-    const assertion = expect(this.element);
-
-    await (present ? assertion : assertion.not).toHaveClass(classMatcher(className));
+  public expectClass(className: string, present = true): Promise<void> {
+    return expectClass(this.element, className, present);
   }
 
   public expectState(state: WidgetState, present = true): Promise<void> {
@@ -90,5 +89,7 @@ export default abstract class Widget {
     );
   }
 
-  abstract getName(): WidgetName;
+  public getName(): WidgetName {
+    return this.name;
+  }
 }

@@ -3,11 +3,7 @@
 /* eslint-disable @typescript-eslint/no-this-alias */
 /* eslint-disable @typescript-eslint/init-declarations */
 /* eslint-disable func-names */
-/* eslint-disable no-nested-ternary */
-/* eslint-disable no-param-reassign */
-/* eslint-disable no-multi-assign */
 /* eslint-disable @typescript-eslint/no-use-before-define */
-/* eslint-disable no-else-return */
 
 import { noop } from '@ts/core/utils/common';
 import { adjust } from '@ts/core/utils/math';
@@ -21,8 +17,8 @@ const { animationSettings } = utils;
 const { emptySliderMarkerText } = consts;
 
 interface SelectedRange {
-  startValue: ThemeValue;
-  endValue: ThemeValue;
+  startValue: number | string | Date;
+  endValue: number | string | Date;
 }
 
 interface VisualRangeInput {
@@ -92,7 +88,8 @@ function selectClosestValue(target: ThemeValue, values: ThemeValue[] | null): Th
     val = values[middle];
     if (val === target) {
       return target;
-    } else if (target < val) {
+    }
+    if (target < val) {
       end = middle;
     } else {
       start = middle;
@@ -223,7 +220,8 @@ export let SlidersController = class SlidersController {
     this._sliders[1].update(verticalRange, sliderHandleOptions, sliderMarkerOptions);
     // This is required for placing sliders and shutter into initial position from which initial
     // animation will be going.
-    this._sliders[0]._position = this._sliders[1]._position = startScreenPosition;
+    this._sliders[1]._position = startScreenPosition;
+    this._sliders[0]._position = startScreenPosition;
 
     this._values = !this._params.translator.isValueProlonged && behavior.snapToTicks
       ? fullTicks
@@ -273,7 +271,8 @@ export let SlidersController = class SlidersController {
     if (this._params.translator.getBusinessRange().isEmpty()) {
       sliders[0]._setText(emptySliderMarkerText);
       sliders[1]._setText(emptySliderMarkerText);
-      sliders[0]._value = sliders[1]._value = undefined;
+      sliders[1]._value = undefined;
+      sliders[0]._value = undefined;
       [sliders[0]._position, sliders[1]._position] = this._params.translator.getScreenRange();
       this._applyTotalPosition(false);
       suppressSetSelectedRange(this);
@@ -284,14 +283,14 @@ export let SlidersController = class SlidersController {
 
   _applyTotalPosition(isAnimated: boolean): void {
     const sliders = this._sliders;
-    isAnimated = this._animationEnabled && isAnimated;
-    sliders[0].applyPosition(isAnimated);
-    sliders[1].applyPosition(isAnimated);
+    const animate = this._animationEnabled && isAnimated;
+    sliders[0].applyPosition(animate);
+    sliders[1].applyPosition(animate);
     const areOverlapped = sliders[0].getCloudBorder() > sliders[1].getCloudBorder();
     sliders[0].setOverlapped(areOverlapped);
     sliders[1].setOverlapped(areOverlapped);
     this._applyAreaTrackersPosition();
-    this._applySelectedRangePosition(isAnimated);
+    this._applySelectedRangePosition(animate);
     if (isFirefoxOnAndroid()) {
       this._areaTracker.attr({ transform: null });
       this._selectedAreaTracker.attr({ transform: null });
@@ -375,7 +374,7 @@ export let SlidersController = class SlidersController {
   }
 
   setSelectedRange(visualRange?: VisualRangeInput | null, e?: ThemeValue): void {
-    visualRange = visualRange || {};
+    const range = visualRange || {};
     const { translator } = this._params;
     const businessRange = translator.getBusinessRange();
     const compare = businessRange.axisType === 'discrete' ? function (a: ThemeValue, b: ThemeValue): boolean {
@@ -391,13 +390,13 @@ export let SlidersController = class SlidersController {
         base: businessRange.base,
       },
       {
-        startValue: translator.isValid(visualRange.startValue)
-          ? translator.getCorrectValue(visualRange.startValue, +1)
+        startValue: translator.isValid(range.startValue)
+          ? translator.getCorrectValue(range.startValue, +1)
           : undefined,
-        endValue: translator.isValid(visualRange.endValue)
-          ? translator.getCorrectValue(visualRange.endValue, -1)
+        endValue: translator.isValid(range.endValue)
+          ? translator.getCorrectValue(range.endValue, -1)
           : undefined,
-        length: visualRange.length,
+        length: range.length,
       },
       {
         min: businessRange.minVisible,
@@ -639,9 +638,13 @@ export let SlidersController = class SlidersController {
             }
           }
           slider._setValid(isValid);
-          slider.setDisplayValue(isValid
-            ? selectClosestValue(translator.from(pos, dir), that._values)
-            : isDefined(invalidStateValue) ? invalidStateValue : slider.getValue());
+          if (isValid) {
+            slider.setDisplayValue(selectClosestValue(translator.from(pos, dir), that._values));
+          } else {
+            slider.setDisplayValue(
+              isDefined(invalidStateValue) ? invalidStateValue : slider.getValue(),
+            );
+          }
           slider._position = pos;
           that._applyTotalPosition(false);
           slider.toForeground();
@@ -674,7 +677,8 @@ export let SlidersController = class SlidersController {
     sliders[1 - index].setDisplayValue(selectClosestValue(newValue, this._values));
     sliders[index]._setValid(true);
     sliders[index]._marker._update(); // This is to update "text" element
-    sliders[0]._position = sliders[1]._position = position;
+    sliders[1]._position = position;
+    sliders[0]._position = position;
   }
 
   foregroundSlider(index: number): void {

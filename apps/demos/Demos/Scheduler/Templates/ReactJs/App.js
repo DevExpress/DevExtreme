@@ -17,7 +17,7 @@ const currentDate = new Date(2025, 3, 27);
 const views = ['day', 'week', 'timelineDay'];
 const groups = ['theatreId'];
 const getMovieById = (id) =>
-  id ? query(moviesData).filter(['id', '=', id]).toArray()[0] ?? null : null;
+  id ? (query(moviesData).filter(['id', '=', id]).toArray()[0] ?? null) : null;
 const getEditorStylingMode = () => (themes.current().startsWith('generic') ? 'outlined' : 'filled');
 const priceDisplayExpr = (value) => `$${value}`;
 const colCountByScreen = { xs: 2 };
@@ -48,19 +48,19 @@ const App = () => {
       form?.updateData('endDate', newEndDate);
     }
   }, []);
-  const onFormInitialized = useCallback(
+  const onFormInitialized = useCallback((e) => {
+    const form = e.component;
+    form && (formInstanceRef.current = form);
+  }, []);
+  const onFormFieldDataChanged = useCallback(
     (e) => {
-      const form = e.component;
-      form && (formInstanceRef.current = form);
-      form?.on('fieldDataChanged', (fieldEvent) => {
-        if (fieldEvent.dataField === 'startDate') {
-          const currentFormData = form?.option('formData');
-          const movie = getMovieById(currentFormData?.movieId);
-          if (movie) {
-            updateEndDate(movie);
-          }
+      if (e.dataField === 'startDate') {
+        const formData = e.component?.option('formData');
+        const movie = getMovieById(formData?.movieId);
+        if (movie) {
+          updateEndDate(movie);
         }
-      });
+      }
     },
     [updateEndDate],
   );
@@ -124,7 +124,10 @@ const App = () => {
         allowAdding={false}
         popup={popupOptions}
       >
-        <SchedulerForm onInitialized={onFormInitialized}>
+        <SchedulerForm
+          onInitialized={onFormInitialized}
+          onFieldDataChanged={onFormFieldDataChanged}
+        >
           <Item render={movieInfoContainerRender} />
 
           <Item

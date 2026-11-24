@@ -1,8 +1,5 @@
 /* eslint-disable @typescript-eslint/init-declarations */
-/* eslint-disable no-plusplus */
 /* eslint-disable func-names */
-/* eslint-disable no-nested-ternary */
-/* eslint-disable no-multi-assign */
 
 import { extend } from '@ts/core/utils/extend';
 import { each } from '@ts/core/utils/iterator';
@@ -11,6 +8,7 @@ import { ThemeManager as ChartThemeManager } from '@ts/viz/components/chart_them
 import { validateData } from '@ts/viz/components/data_validator';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 import { SeriesFamily } from '@ts/viz/core/series_family';
+import type { Size } from '@ts/viz/core/types';
 import { mergeMarginOptions, processSeriesTemplate } from '@ts/viz/core/utils';
 import { Series } from '@ts/viz/series/base_series';
 import { Range } from '@ts/viz/translators/range';
@@ -98,7 +96,8 @@ export let SeriesDataSource = class SeriesDataSource {
   declare argCategories?: ThemeValue[];
 
   constructor(options: SeriesDataSourceOptions) {
-    const themeManager = this._themeManager = createThemeManager(options.chart);
+    this._themeManager = createThemeManager(options.chart);
+    const themeManager = this._themeManager;
 
     themeManager.setTheme(options.chart.theme);
     const topIndent = themeManager.getOptions('topIndent');
@@ -141,13 +140,11 @@ export let SeriesDataSource = class SeriesDataSource {
       this._hideChart = true;
     }
 
-    allSeriesOptions = Array.isArray(allSeriesOptions)
-      ? allSeriesOptions
-      : allSeriesOptions
-        ? [allSeriesOptions]
-        : [];
+    if (!Array.isArray(allSeriesOptions)) {
+      allSeriesOptions = allSeriesOptions ? [allSeriesOptions] : [];
+    }
 
-    for (i = 0; i < allSeriesOptions.length; i++) {
+    for (i = 0; i < allSeriesOptions.length; i += 1) {
       particularSeriesOptions = extend(true, {}, allSeriesOptions[i]);
 
       particularSeriesOptions.rotated = false;
@@ -187,7 +184,7 @@ export let SeriesDataSource = class SeriesDataSource {
       };
       parsedData = validateData(data, groupsData, options.incidentOccurred, chartThemeManager.getOptions('dataPrepareSettings'));
       this.argCategories = groupsData.categories;
-      for (i = 0; i < series.length; i++) {
+      for (i = 0; i < series.length; i += 1) {
         series[i].updateData(parsedData[series[i].getArgumentField()]);
       }
     }
@@ -287,7 +284,7 @@ export let SeriesDataSource = class SeriesDataSource {
     return { arg: argRange, val: valRange };
   }
 
-  getMarginOptions(canvas: { width: number; height: number }): ThemeValue {
+  getMarginOptions(canvas: Size): ThemeValue {
     const bubbleSize = Math.min(canvas.width, canvas.height) * this._themeManager.getOptions('maxBubbleSize');
 
     return this._series.reduce((marginOptions, series) => {
