@@ -30,9 +30,6 @@ import { skippedTests } from './skipped-tests';
 
 type DemoSteps = (page: Page) => Promise<void>;
 
-// The other frameworks still run in TestCafe (common.test.ts).
-const MIGRATED_FRAMEWORKS = [FRAMEWORKS.jquery, FRAMEWORKS.react, FRAMEWORKS.vue, FRAMEWORKS.angular];
-
 const DEMOS_ROOT = join(__dirname, '..');
 
 // Demos are selected by name with --grep, so the command line holds no demo masks.
@@ -40,7 +37,7 @@ updateConfig({ explicitTestArgs: [], verbose: false });
 
 const demoPaths = glob.sync('Demos/*/*', { cwd: DEMOS_ROOT }).sort();
 
-MIGRATED_FRAMEWORKS.forEach((approach) => {
+Object.values(FRAMEWORKS).forEach((approach) => {
   if (!shouldRunFramework(approach)) { return; }
 
   // The widgets test-code.js reaches through window.DevExpress; the React and Vue bundles expose them only with this script.
