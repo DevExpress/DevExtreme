@@ -42,12 +42,15 @@ const DblClick = Class.inherit({
     // beginning of the current document's lifetime till the event was created
     // (https://developer.mozilla.org/en-US/docs/Web/API/Event/timeStamp).
     const isSimulated = timeBetweenClicks < 0;
-    const isDouble = !isSimulated && timeBetweenClicks < DBLCLICK_TIMEOUT;
+    const isFirstTargetRemoved = !this._firstClickTarget?.isConnected;
+    const isDouble = !isSimulated
+      && timeBetweenClicks < DBLCLICK_TIMEOUT
+      && (!isFirstTargetRemoved || e.detail > 1);
 
     if (isDouble) {
       fireEvent({
         type: DBLCLICK_EVENT_NAME,
-        target: closestCommonParent(this._firstClickTarget, e.target),
+        target: closestCommonParent(this._firstClickTarget, e.target) ?? e.target,
         originalEvent: e,
       });
       this._forgetLastClick();
