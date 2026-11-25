@@ -786,7 +786,8 @@ const OVERRIDES: Overrides = {
       'footer-button', 'view', 'element'],
     chat: [
       // anatomy the folder needed to enter `migrated`
-      'alert', 'alerts', 'button', 'confirmation-popup-content', 'confirmation-popup-toolbar',
+      'alert', 'alerts', 'button', 'confirmation-popup', 'confirmation-popup-content',
+      'confirmation-popup-toolbar',
       'content', 'edited', 'section', 'size', 'start', 'view-items',
       'message-list', 'message-box', 'message', 'day-header', 'empty-view', 'avatar', 'bubble',
       'file', 'file-name', 'file-container', 'files-container', 'suggestions', 'editing-preview',
