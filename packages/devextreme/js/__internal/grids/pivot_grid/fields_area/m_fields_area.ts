@@ -129,8 +129,7 @@ class FieldsArea extends AreaItem {
     $content.parent().attr('group', 'row');
 
     fieldChooserBase.subscribeToEvents($content);
-    // @ts-expect-error renderSortable() ignores the element
-    fieldChooserBase.renderSortable($content);
+    fieldChooserBase.renderSortable();
   }
 
   private getFieldChooserBase(): FieldChooserBase {
