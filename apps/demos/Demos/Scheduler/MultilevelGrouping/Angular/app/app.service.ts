@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-export class Appointment {
+export interface Appointment {
   text: string;
 
   assigneeId: number[];
@@ -10,7 +10,7 @@ export class Appointment {
   endDate: Date;
 }
 
-export class Assignee {
+export interface Assignee {
   id: number | string;
 
   text: string;

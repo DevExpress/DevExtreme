@@ -65,11 +65,30 @@ pnpm run convert-to-js "JSDemos/Demos/Diagram/**/React"
 The "Check generated JS demos" GitHub Action ensures that the React JavaScript and TypeScript sources remain in sync.
 ## Screenshot Tests
 
-Every demo page is compared with an etalon in `testing/etalons`. jQuery demos run on [Playwright](https://playwright.dev/) (`testing/common.spec.ts`); React, Vue and Angular demos and the manual widget tests (`testing/widgets`) still run on TestCafe.
+Every demo page is compared with an etalon in `testing/etalons`. The jQuery, React, Vue and Angular demos run on [Playwright](https://playwright.dev/) (`testing/common.spec.ts`); the manual widget tests (`testing/widgets`) still run on TestCafe.
+
+One etalon serves all four frameworks of a demo, and it is recorded from the jQuery demo. A framework that draws a demo differently is not given an etalon of its own: find out why it differs and make the demo the same in every framework.
 
 ### Run locally
 
 Build DevExtreme first with the testing configuration, as CI does: `pnpm nx build devextreme -c testing` from the monorepo root. The jQuery demos need nothing else. `pnpm run demos:prepare` builds DevExtreme without it: the license check then warns (W0021) and the page renders differently, so every test fails. Run the testing build after it. The tests use the system Google Chrome and start their own web server.
+
+The React, Vue and Angular demos run from bundles. Build them after DevExtreme, as the `build-demos` CI job does:
+
+```
+cd apps/demos
+node utils/server/build-vendor-bundles.js                 # React and Vue share a vendor bundle
+node utils/server/demo-bundle.js --framework=React        # likewise Vue
+
+# Angular takes devextreme from packages/devextreme/artifacts/transpiled-esm-npm when it exists, and
+# that folder has the real license check: every Angular test then fails on W0021. CI has no such
+# folder, so move it aside for the Angular build.
+mv ../../packages/devextreme/artifacts/transpiled-esm-npm ../../packages/devextreme/artifacts/transpiled-esm-npm.aside
+node utils/server/demo-bundle.js --framework=Angular
+mv ../../packages/devextreme/artifacts/transpiled-esm-npm.aside ../../packages/devextreme/artifacts/transpiled-esm-npm
+```
+
+Build all Angular demos at once: `DEMO_BUNDLE_FILTER` rebuilds some of them, and the chunks they share with the rest change, so the other demos stop loading. The bundler also rewrites each demo's `index.html`; commit only the pages your change is about.
 
 ```
 cd apps/demos
@@ -77,13 +96,16 @@ pnpm run test-playwright --ignore-snapshots                # every jQuery demo, 
 pnpm run test-playwright --ignore-snapshots --grep DataGrid-   # demos of one component
 THEME=material.blue.light pnpm run test-playwright --ignore-snapshots
 CONSTEL="jquery(1/3)" CONCURRENCY=4 pnpm run test-playwright --ignore-snapshots   # one CI shard
+CONSTEL=react pnpm run test-playwright --ignore-snapshots    # React demos; likewise vue, angular
 ```
 
 Everything after the script name goes to `playwright test`, so `--headed`, `--ui` and `--repeat-each` work too.
 
 A test fails on a console error or warning outside `testing/known-warnings.js` and on an uncaught error in the page.
 
-The page is shot when it has settled: no request is pending, no script animation is running and no load panel is on screen. Charts, gauges and range selectors are drawn without their start-up animation: the tests switch it off through the default options of these widgets, so a demo that turns the animation on itself still animates.
+The page is shot when it has settled: no request is pending, no script animation is running and no load panel is on screen. Charts, gauges and range selectors are drawn without their start-up animation: the tests switch it off through the default options of these widgets, so a demo that turns the animation on itself still animates. React and Vue demos expose no `window.DevExpress`, so the tests take the widget classes from the shared vendor bundle; an Angular demo bundle hands them over itself.
+
+`Math.random()` returns the same numbers in every framework: each call site has its own sequence, so a demo that generates its data gets the same data whatever the framework and DevExtreme called before it.
 
 The time zone is UTC for the page and for the mock data, whatever the machine is set to.
 
@@ -110,7 +132,7 @@ for theme in fluent.blue.light material.blue.light fluent-next.blue.light; do
 done
 ```
 
-`--grep` takes test names, `<Product>-<Demo>`; without it every jQuery demo runs, about five minutes per theme. The first run builds the image and takes a few minutes more. The second loop compares as CI does: exactly.
+`--grep` takes test names, `<Product>-<Demo>`; without it every jQuery demo runs, about five minutes per theme. Record etalons from the jQuery demos only; check a framework against them with `CONSTEL=react` (or `vue`, `angular`) and without `--update-snapshots`. The first run builds the image and takes a few minutes more. The second loop compares as CI does: exactly.
 
 The repository is mounted case-insensitively on macOS: a file that a demo requests in the wrong case loads in the container and is missing on CI.
 

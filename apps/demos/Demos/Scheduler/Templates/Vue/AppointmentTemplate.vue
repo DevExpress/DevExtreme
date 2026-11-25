@@ -1,19 +1,21 @@
 <template>
-  <div class="movie-preview">
-    <div class="movie-preview-image">
-      <img
-        :src="movieData.image"
-        :alt="`${movieData.text} poster`"
-      >
-    </div>
-    <div class="movie-details">
-      <div class="title">{{ movieData.text }}</div>
-      <div>
-        Ticket Price: <strong>${{ templateModel.targetedAppointmentData?.price }}</strong>
+  <div>
+    <div class="movie-preview">
+      <div class="movie-preview-image">
+        <img
+          :src="movieData.image"
+          :alt="`${movieData.text} poster`"
+        >
       </div>
-      <div>
-        {{ getFormatDate(templateModel.targetedAppointmentData?.displayStartDate) }} -
-        {{ getFormatDate(templateModel.targetedAppointmentData?.displayEndDate) }}
+      <div class="movie-details">
+        <div class="title">{{ movieData.text }}</div>
+        <div>
+          Ticket Price: <strong>${{ templateModel.targetedAppointmentData?.price }}</strong>
+        </div>
+        <div>
+          {{ getFormatDate(templateModel.targetedAppointmentData?.displayStartDate) }} -
+          {{ getFormatDate(templateModel.targetedAppointmentData?.displayEndDate) }}
+        </div>
       </div>
     </div>
   </div>

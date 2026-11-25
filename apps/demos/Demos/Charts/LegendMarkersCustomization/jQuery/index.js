@@ -36,8 +36,8 @@ $(() => {
         marker.setAttribute('fill', color);
         marker.setAttribute('d', markerPath[item.series.name]);
 
-        group.appendChild(marker);
         group.appendChild(background);
+        group.appendChild(marker);
       },
     },
     onLegendClick(e) {

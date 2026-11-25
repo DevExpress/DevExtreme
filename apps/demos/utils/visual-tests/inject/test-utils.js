@@ -79,6 +79,16 @@ function mockOptionMethod(instance) {
   };
 }
 
+// devextreme-react rolls back an option changed outside the component unless this flag is set.
+function changeOutsideFramework(instance, change) {
+  instance.skipOptionsRollBack = true;
+  try {
+    change(instance);
+  } finally {
+    instance.skipOptionsRollBack = false;
+  }
+}
+
 const testUtils = {
   postpone,
   postponeUntil,
@@ -86,6 +96,7 @@ const testUtils = {
   importAnd,
   findElements,
   mockOptionMethod,
+  changeOutsideFramework,
 };
 
 window.testUtils = testUtils;

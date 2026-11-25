@@ -17,7 +17,7 @@ Copyright (c) 2014-present Sebastian McKenzie and other contributors
 https://github.com/babel/babel/blob/main/LICENSE
 
 Bootstrap (Open Source - MIT License)
-Copyright (c) 2011-2018 Twitter, Inc. / Copyright (c) 2011-2018 The Bootstrap Authors
+Copyright (c) 2011-2025 The Bootstrap Authors
 https://github.com/twbs/bootstrap/blob/main/LICENSE
 
 clean-css (Open Source - MIT License)
@@ -68,7 +68,7 @@ JSZip JavaScript Library (Open Source - MIT License)
 Copyright (c) Stuart Knightley, David Duponchel, Franz Buchinger, António Afonso
 https://github.com/Stuk/jszip/blob/main/LICENSE.markdown
 
-lodash (lodash.clonedeep, lodash.merge) (Open Source)
+lodash (lodash.clonedeep, lodash.merge) (Open Source - MIT License)
 Copyright (c) OpenJS Foundation and other contributors (https://openjsf.org/)
 https://github.com/lodash/lodash/blob/main/LICENSE
 
@@ -86,10 +86,8 @@ Copyright 2013 Andrey Sitnik (andrey@sitnik.es)
 https://github.com/postcss/postcss/blob/main/LICENSE
 
 Quill Delta (Open Source - BSD-3-Clause License)
-Copyright (c) 2017-2024, Slab
-Copyright (c) 2014, Jason Chen
-Copyright (c) 2013, salesforce.com
-https://github.com/slab/quill/blob/main/LICENSE
+Copyright (c) 2022, Slab, Inc.
+https://github.com/slab/delta/blob/main/LICENSE
 
 Roboto Font (Open Source - OFL 1.1 License)
 Copyright 2011 The Roboto Project Authors (https://github.com/googlefonts/roboto-classic)
@@ -97,7 +95,7 @@ https://github.com/googlefonts/roboto-3-classic/blob/main/OFL.txt
 
 rrule (Open Source - BSD-3-Clause License)
 Copyright 2010, Jakub Roztocil (jakub@roztocil.name) and Lars Sch&ouml;ning
-https://github.com/jakubroztocil/rrule/blob/master/LICENCE
+https://github.com/jkbrzt/rrule/blob/master/LICENCE
 
 sass-embedded (Open Source - MIT License)
 Copyright (c) 2019, Google LLC
@@ -109,7 +107,11 @@ https://github.com/preactjs/signals/blob/main/LICENSE
 
 tslib (Open Source - BSD Zero Clause License)
 Copyright (c) Microsoft Corporation.
-https://github.com/microsoft/tslib/blob/master/LICENSE.txt
+https://github.com/microsoft/tslib/blob/main/LICENSE.txt
+
+Unicode CLDR (cldr-core, cldr-dates-modern, cldr-numbers-modern) (Open Source - Unicode-DFS-2015 License)
+Copyright (c) 1991-2015 Unicode, Inc.
+https://github.com/unicode-org/cldr-json/blob/36.0.0/LICENSE
 
 Zod (Open Source - MIT License)
 Copyright (c) 2025 Colin McDonnell

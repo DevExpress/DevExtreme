@@ -127,18 +127,18 @@
   </div>
 
   <div *dxTemplate="let status of 'statusTemplate'">
-    @if(status === null) {
-    <div>
-      <span>(All)</span>
-    </div>
+    @if (status === null) {
+      <div>
+        <span>(All)</span>
+      </div>
     } @else {
-    <div dx-template>
-      <img
-        src="images/icons/status-{{ status.id }}.svg"
-        class="status-icon middle"
-      />
-      <span class="middle">{{ status.name }}</span>
-    </div>
+      <div dx-template>
+        <img
+          src="images/icons/status-{{ status.id }}.svg"
+          class="status-icon middle"
+        />
+        <span class="middle">{{ status.name }}</span>
+      </div>
     }
   </div>
 </dx-data-grid>

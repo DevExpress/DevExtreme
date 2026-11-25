@@ -83,11 +83,11 @@ const App = () => {
       <div className="options">
         <div className="caption">Options</div>
         <div className="option">
-          <span>Edit Row Key:</span>
+          <span>Edit Row Key: </span>
           <div id="editRowKey">{state.editRowKey == null ? 'null' : state.editRowKey.toString()}</div>
         </div>
         <div className="option">
-          <span>Changes:</span>
+          <span>Changes: </span>
           <div id="changes">{changesText}</div>
         </div>
       </div>

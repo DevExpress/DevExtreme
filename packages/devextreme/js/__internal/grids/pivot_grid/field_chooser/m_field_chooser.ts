@@ -1,4 +1,4 @@
-import '../data_source/m_data_source';
+import '../data_source/data_source';
 
 import localizationMessage from '@js/common/core/localization/message';
 import registerComponent from '@js/core/component_registrator';
@@ -12,6 +12,7 @@ import ContextMenu from '@js/ui/context_menu';
 import TreeView from '@js/ui/tree_view';
 import { getData, setData } from '@ts/core/element_data';
 
+import type { PivotGridDataSource } from '../data_source/data_source';
 import { foreachDataLevel, getCompareFunction } from '../widget_utils';
 import { getFieldsHotkeysA11yLabel } from './a11y';
 import {
@@ -93,6 +94,14 @@ function getScrollable(container) {
 }
 
 export class FieldChooser extends FieldChooserBase {
+  private _expandedPaths!: (string | number)[];
+
+  private _dataChangedHandlers!: (() => void)[];
+
+  private _actions!: Record<string, (event?: unknown) => void>;
+
+  private _contextMenu?: ContextMenu;
+
   _getDefaultOptions() {
     return {
       ...super._getDefaultOptions(),
@@ -125,6 +134,7 @@ export class FieldChooser extends FieldChooserBase {
       that.restoreFieldFocus();
       that._fireContentReadyAction();
       that._skipStateChange = true;
+      // @ts-expect-error the field chooser has a data source here
       that.option('state', that._dataSource.state());
       that._skipStateChange = false;
     };
@@ -311,6 +321,7 @@ export class FieldChooser extends FieldChooserBase {
     if (targetFieldElement.length) {
       const fieldCopy = getData(targetFieldElement, FIELD_DATA_KEY);
       if (fieldCopy) {
+        // @ts-expect-error the field chooser has a data source here
         field = this.getDataSource().field(fieldCopy.index) || fieldCopy;
       }
     }
@@ -444,7 +455,8 @@ export class FieldChooser extends FieldChooserBase {
 
   _renderFieldsTreeView(container) {
     const that = this;
-    const dataSource = that._dataSource;
+    // @ts-expect-error the field chooser has a data source here
+    const dataSource: PivotGridDataSource = that._dataSource;
     const treeView = that._createComponent(container, TreeView, {
       dataSource: that._createFieldsDataSource(dataSource),
       showCheckBoxesMode: 'normal',
@@ -551,6 +563,7 @@ export class FieldChooser extends FieldChooserBase {
     $container.empty();
     each(fields, (_, field) => {
       if (field.visible !== false) {
+        // @ts-expect-error a field's index is set by the data source
         that.renderField(field, true).appendTo($container);
       }
     });
@@ -569,7 +582,8 @@ export class FieldChooser extends FieldChooserBase {
     const $fieldsHeaderContainer = $(DIV)
       .addClass(CLASSES.area.fieldListHeader)
       .appendTo($areaContainer);
-    const caption = that.option(`texts.${area}Fields`);
+    // @ts-expect-error the field chooser's options aren't typed yet
+    const caption: string = that.option(`texts.${area}Fields`);
     let $fieldsContent;
     let render;
 
@@ -619,6 +633,7 @@ export class FieldChooser extends FieldChooserBase {
   }
 
   resetTreeView() {
+    // @ts-expect-error dxTreeView is added to the renderer at runtime
     const treeView = this.$element().find(`.${CLASSES.treeView.self}`).dxTreeView('instance');
 
     if (treeView) {
@@ -631,12 +646,14 @@ export class FieldChooser extends FieldChooserBase {
     const state = this.option('state');
 
     if (isDefined(state)) {
+      // @ts-expect-error the field chooser has a data source here
       this._dataSource.state(state);
     }
   }
 
   cancelChanges() {
-    const dataSource = this._dataSource;
+    // @ts-expect-error the field chooser has a data source here
+    const dataSource: PivotGridDataSource = this._dataSource;
 
     if (!dataSource.isLoading()) {
       this.option('state', dataSource.state());
@@ -651,6 +668,7 @@ export class FieldChooser extends FieldChooserBase {
 
   updateDimensions() {
     const $scrollableElements = this.$element().find(`.${CLASSES.area.self} .${CLASSES.scrollable.self}`);
+    // @ts-expect-error dxScrollable is added to the renderer at runtime
     $scrollableElements.dxScrollable('update');
   }
 

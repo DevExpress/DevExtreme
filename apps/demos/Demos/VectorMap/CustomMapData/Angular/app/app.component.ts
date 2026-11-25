@@ -1,6 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import { Component, enableProdMode, inject } from '@angular/core';
 import { DxVectorMapModule } from 'devextreme-angular';
+import type { DxVectorMapTypes } from 'devextreme-angular/ui/vector-map';
 import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -33,13 +34,13 @@ export class AppComponent {
     },
   };
 
-  customizeLayer(elements: { attribute: Function, applySettings: Function }[]) {
+  readonly customizeLayer = (elements: DxVectorMapTypes.MapLayerElement[]): void => {
     elements.forEach((element) => {
       element.applySettings({
         color: element.attribute('color'),
       });
     });
-  }
+  };
 }
 
 bootstrapApplication(AppComponent);

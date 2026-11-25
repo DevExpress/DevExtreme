@@ -1,5 +1,6 @@
 import $ from 'jquery';
 import { DataProvider } from '__internal/grids/pivot_grid/export/m_export';
+import { Deferred } from 'core/utils/deferred';
 import dateLocalization from 'common/core/localization/date';
 
 import executeAsyncMock from '../../helpers/executeAsyncMock.js';
@@ -340,7 +341,7 @@ QUnit.module('Data Provider', {
     QUnit.test('getCellType. fields dataType is not defined', function(assert) {
         const dataProvider = new DataProvider({});
 
-        dataProvider._options = {
+        const options = {
             items: [
                 [{ rowspan: 1 }, {}, {}, {}, {}, {}],
                 [{ text: 'row1' },
@@ -359,7 +360,7 @@ QUnit.module('Data Provider', {
                 { format: 'shortDate' }
             ]
         };
-        dataProvider._initOptions = () => {};
+        dataProvider._createOptions = () => new Deferred().resolve(options);
         dataProvider.ready();
 
         assert.strictEqual(dataProvider.getCellType(0, 0), 'string');
@@ -374,7 +375,7 @@ QUnit.module('Data Provider', {
     QUnit.test('getCellType. Data fields have customizeText', function(assert) {
         const dataProvider = new DataProvider({});
 
-        dataProvider._options = {
+        const options = {
             items: [
                 [{ rowspan: 1 }, {}, {}, {}, {}, {}, {}],
                 [{ text: 'row1' },
@@ -394,7 +395,7 @@ QUnit.module('Data Provider', {
                 { customizeText: function() { }, format: 'shortDate' }
             ]
         };
-        dataProvider._initOptions = () => {};
+        dataProvider._createOptions = () => new Deferred().resolve(options);
         dataProvider.ready();
 
         assert.strictEqual(dataProvider.getCellType(0, 0), 'string');
@@ -423,7 +424,7 @@ QUnit.module('Data Provider', {
             ]
         });
 
-        dataProvider._options = {
+        const options = {
             items: [
                 [{ rowspan: 2, colspan: 2 }, { text: 'a1', value: 1, format: 'fixedPoint' }, { text: 'a2', value: 2 }],
                 [{ text: 'b1', value: 1, format: 'fixedPoint' }, { text: 'b2', value: 2 }],
@@ -437,7 +438,7 @@ QUnit.module('Data Provider', {
                 {}
             ]
         };
-        dataProvider._initOptions = () => {};
+        dataProvider._createOptions = () => new Deferred().resolve(options);
         dataProvider.ready();
 
         assert.strictEqual(dataProvider.getCellType(0, 0), 'string');
@@ -454,7 +455,7 @@ QUnit.module('Data Provider', {
     QUnit.test('getCellMerging', function(assert) {
         const dataProvider = new DataProvider({});
 
-        dataProvider._options = {
+        const options = {
             items: [
                 [{ rowspan: 3, colspan: 2 }, { rowspan: 1, colspan: 1 }, {}],
                 [{}, {}, {}],
@@ -462,7 +463,7 @@ QUnit.module('Data Provider', {
             ],
             dataFields: []
         };
-        dataProvider._initOptions = () => {};
+        dataProvider._createOptions = () => new Deferred().resolve(options);
         dataProvider.ready();
 
         assert.strictEqual(dataProvider.getCellMerging(0, 0).colspan, 1, 'colspan count is correct');
@@ -473,17 +474,25 @@ QUnit.module('Data Provider', {
     });
 
     QUnit.test('Get columns', function(assert) {
-        const dataProvider = new DataProvider({});
+        const items = [
+            [{ rowspan: 1 }, {}],
+            [{ text: 'row1' }, {}]
+        ];
+        const dataProvider = new DataProvider({
+            _dataController: {
+                beginLoading: () => {},
+                endLoading: () => {},
+                getColumnsInfo: () => [],
+                getRowsInfo: () => [],
+                getCellsInfo: () => [],
+            },
+            _getAllItems: () => items,
+            option: () => false,
+            getDataSource: () => ({ getAreaFields: () => [] }),
+        });
 
-        dataProvider._options = {
-            items: [
-                [{ rowspan: 1 }, {}],
-                [{ text: 'row1' }, {}]
-            ],
-            dataFields: []
-        };
-        dataProvider._initOptions = () => {};
         dataProvider.ready();
+        this.clock.tick(10);
 
         const columns = dataProvider.getColumns();
 
@@ -503,14 +512,14 @@ QUnit.module('Data Provider', {
     QUnit.test('Data alignment', function(assert) {
         const dataProvider = new DataProvider({});
 
-        dataProvider._options = {
+        const options = {
             items: [
                 [{ rowspan: 1, colspan: 1 }, {}, {}],
                 [{ text: 'row1' }, {}, {}]
             ],
             dataFields: [{}]
         };
-        dataProvider._initOptions = () => {};
+        dataProvider._createOptions = () => new Deferred().resolve(options);
         dataProvider.ready();
 
         const styles = dataProvider.getStyles();
@@ -524,14 +533,14 @@ QUnit.module('Data Provider', {
     QUnit.test('Data alignment without data fields', function(assert) {
         const dataProvider = new DataProvider({});
 
-        dataProvider._options = {
+        const options = {
             items: [
                 [{ rowspan: 1, colspan: 1 }, {}, {}],
                 [{ text: 'row1' }, { }, { }]
             ],
             dataFields: []
         };
-        dataProvider._initOptions = () => {};
+        dataProvider._createOptions = () => new Deferred().resolve(options);
         dataProvider.ready();
 
         const styles = dataProvider.getStyles();
@@ -545,7 +554,7 @@ QUnit.module('Data Provider', {
     QUnit.test('Data alignment. RTL', function(assert) {
         const dataProvider = new DataProvider({});
 
-        dataProvider._options = {
+        const options = {
             items: [
                 [{ rowspan: 1, colspan: 1 }, {}, {}],
                 [{ text: 'row1' }, {}, {}]
@@ -553,7 +562,7 @@ QUnit.module('Data Provider', {
             rtlEnabled: true,
             dataFields: [{}]
         };
-        dataProvider._initOptions = () => {};
+        dataProvider._createOptions = () => new Deferred().resolve(options);
         dataProvider.ready();
 
         const styles = dataProvider.getStyles();
@@ -566,7 +575,7 @@ QUnit.module('Data Provider', {
     QUnit.test('Data format', function(assert) {
         const dataProvider = new DataProvider({});
 
-        dataProvider._options = {
+        const options = {
             items: [
                 [{ rowspan: 1, colspan: 1 }, {}, {}],
                 [{ text: 'row1' }, { dataIndex: 0 }, { dataIndex: 1 }]
@@ -576,7 +585,7 @@ QUnit.module('Data Provider', {
                 { format: 'currency' }
             ]
         };
-        dataProvider._initOptions = () => {};
+        dataProvider._createOptions = () => new Deferred().resolve(options);
         dataProvider.ready();
 
         const styles = dataProvider.getStyles();

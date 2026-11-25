@@ -2,7 +2,8 @@ import { bootstrapApplication } from '@angular/platform-browser';
 import {
   Component, enableProdMode, inject, signal, ViewEncapsulation,
 } from '@angular/core';
-import { DxMapModule, type DxMapTypes } from 'devextreme-angular/ui/map';
+import { DxMapModule } from 'devextreme-angular/ui/map';
+import type { DxMapTypes } from 'devextreme-angular/ui/map';
 import { DxSelectBoxModule } from 'devextreme-angular/ui/select-box';
 import type { DxSelectBoxTypes } from 'devextreme-angular/ui/select-box';
 import 'devextreme/ui/map/openlayers';
@@ -11,6 +12,7 @@ import type LineString from 'ol/geom/LineString.js';
 import Attribution from 'ol/control/Attribution.js';
 import Polyline from 'ol/format/Polyline.js';
 import { Service } from './app.service';
+import type { Marker, Route } from './app.service';
 
 const routeCache = new Map<string, DxMapTypes.OsmGeoJsonLineString>();
 
@@ -62,11 +64,11 @@ if (!/localhost/.test(document.location.host)) {
 export class AppComponent {
   private readonly service = inject(Service);
 
-  readonly markers: DxMapTypes.Properties['markers'] = this.service.getMarkers().map((marker) => (marker.iconSrc
+  readonly markers: Marker[] = this.service.getMarkers().map((marker) => (marker.iconSrc
     ? { ...marker, onClick: this.onMarkerClick }
     : marker));
 
-  readonly routes = signal<DxMapTypes.Properties['routes']>(this.service.getRoutes());
+  readonly routes = signal<Route[]>(this.service.getRoutes());
 
   readonly tileServer: DxMapTypes.OsmTileServerConfig = {
     // Demo only: tiles are served under Developer Express Inc's Stadia Maps subscription via domain-based authentication.
@@ -80,7 +82,7 @@ export class AppComponent {
 
   readonly calculateRoute = calculateRoute;
 
-  private onMarkerClick({ tooltip }: DxMapTypes.MarkerClickEvent) {
+  private onMarkerClick({ tooltip }: DxMapTypes.MarkerClickEvent): void {
     tooltip?.option({
       showTitle: true,
       showCloseButton: true,
@@ -90,7 +92,7 @@ export class AppComponent {
     });
   }
 
-  onMapReady({ originalMap }: DxMapTypes.ReadyEvent) {
+  onMapReady({ originalMap }: DxMapTypes.ReadyEvent): void {
     const map = originalMap as OpenLayersMap;
     // Ensure attribution is visible to comply with the Stadia Maps Terms of Service.
     const attribution = map.getControls().getArray()
@@ -101,11 +103,11 @@ export class AppComponent {
     map.addControl(new Attribution({ collapsible: false }));
   }
 
-  setMode({ value }: DxSelectBoxTypes.ValueChangedEvent) {
+  setMode({ value }: DxSelectBoxTypes.ValueChangedEvent): void {
     this.routes.update((routes) => routes.map((route) => ({ ...route, mode: value })));
   }
 
-  selectColor({ value }: DxSelectBoxTypes.ValueChangedEvent) {
+  selectColor({ value }: DxSelectBoxTypes.ValueChangedEvent): void {
     this.routes.update((routes) => routes.map((route) => ({ ...route, color: value })));
   }
 }

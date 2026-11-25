@@ -1,14 +1,17 @@
 import type { Locator, Page } from '@playwright/test';
 import type { WidgetName } from '../types';
 import Widget from '../internal/widget';
+import Pagination from '../pagination';
 import TextBox from '../textBox';
-import ColumnChooser from '../dataGrid/columnChooser';
+import ColumnChooser from './columnChooser';
 import FilterPanel from './filter/panel';
 
 export const CLASS = {
   filterPanel: 'filter-panel',
   columnChooser: 'column-chooser',
   columnChooserButton: 'column-chooser-button',
+  pager: 'pager',
+  pagination: 'dx-pagination',
   searchBox: 'dx-searchbox',
 };
 
@@ -34,7 +37,10 @@ export default abstract class GridCore extends Widget {
   }
 
   public getColumnChooser(): ColumnChooser {
-    return new ColumnChooser(this.body.locator(`.${this.addWidgetPrefix(CLASS.columnChooser)}`));
+    return new ColumnChooser(
+      this.body.locator(`.${this.addWidgetPrefix(CLASS.columnChooser)}`),
+      this.getName(),
+    );
   }
 
   public getColumnChooserButton(): Locator {
@@ -49,6 +55,13 @@ export default abstract class GridCore extends Widget {
     return new FilterPanel(
       this.element.locator(`.${this.addWidgetPrefix(CLASS.filterPanel, true)}`),
       this.getCompatibilityName(),
+    );
+  }
+
+  public getPager(): Pagination {
+    return new Pagination(
+      this.page,
+      this.element.locator(`.${this.addWidgetPrefix(CLASS.pager)}, .${CLASS.pagination}`),
     );
   }
 

@@ -1,4 +1,4 @@
-import { existsSync } from 'fs';
+import { existsSync, readFileSync } from 'fs';
 import { join } from 'path';
 import { glob } from 'glob';
 import { expect, test } from '@playwright/test';
@@ -18,18 +18,17 @@ import { mockApi } from '../utils/visual-tests/playwright/api-mocks';
 import { BASE_URL, THEME } from '../utils/visual-tests/playwright/const';
 import {
   getConsoleMessages,
+  getVendorVizWidgets,
   openDemo,
   prepareDemoPage,
   runTestCode,
   trackPageActivity,
 } from '../utils/visual-tests/playwright/demo-page';
 import { knownWarnings } from './known-warnings';
+import { getTestGlobalsScriptPath } from '../utils/visual-tests/test-globals-bundle';
 import { skippedTests } from './skipped-tests';
 
 type DemoSteps = (page: Page) => Promise<void>;
-
-// The other frameworks still run in TestCafe (common.test.ts).
-const MIGRATED_FRAMEWORKS = [FRAMEWORKS.jquery];
 
 const DEMOS_ROOT = join(__dirname, '..');
 
@@ -38,8 +37,13 @@ updateConfig({ explicitTestArgs: [], verbose: false });
 
 const demoPaths = glob.sync('Demos/*/*', { cwd: DEMOS_ROOT }).sort();
 
-MIGRATED_FRAMEWORKS.forEach((approach) => {
+Object.values(FRAMEWORKS).forEach((approach) => {
   if (!shouldRunFramework(approach)) { return; }
+
+  // The widgets test-code.js reaches through window.DevExpress; the React and Vue bundles expose them only with this script.
+  const testGlobalsPath = getTestGlobalsScriptPath(approach);
+  const testGlobals = testGlobalsPath ? readFileSync(testGlobalsPath, 'utf8') : null;
+  const vendorVizWidgets = getVendorVizWidgets(approach);
 
   test.describe(approach, () => {
     demoPaths.forEach((demoPath, index) => {
@@ -75,7 +79,7 @@ MIGRATED_FRAMEWORKS.forEach((approach) => {
         const waitForIdle = trackPageActivity(page);
 
         await mockApi(page);
-        await prepareDemoPage(page, pageURL, THEME, clientScript);
+        await prepareDemoPage(page, pageURL, THEME, clientScript, testGlobals, vendorVizWidgets);
         await openDemo(page, pageURL, waitForIdle);
 
         if (testStyles) {
