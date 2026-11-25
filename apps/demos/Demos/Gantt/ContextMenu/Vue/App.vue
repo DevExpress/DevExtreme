@@ -8,7 +8,7 @@
           text="Prevent Context Menu Showing"
           @value-changed="onPreventContextMenuShowing"
         />
-      </div>
+      </div>{{ ' ' }}
       <div class="option">
         <DxCheckBox
           :value="true"
@@ -122,7 +122,7 @@ function onCustomCommandClick(e: DxGanttTypes.CustomCommandEvent) {
 
   .option {
     margin-top: 10px;
-    margin-right: 44px;
+    margin-right: 40px;
     display: inline-block;
   }
 

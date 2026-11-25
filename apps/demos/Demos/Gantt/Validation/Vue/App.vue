@@ -7,13 +7,13 @@
           v-model:value="autoUpdateParentTasks"
           text="Auto Update Parent Tasks"
         />
-      </div>
+      </div>{{ ' ' }}
       <div class="option">
         <DxCheckBox
           v-model:value="validateDependencies"
           text="Enable Dependency Validation"
         />
-      </div>
+      </div>{{ ' ' }}
       <div class="option">
         <DxCheckBox
           v-model:value="enablePredecessorGap"
@@ -91,7 +91,7 @@ const enablePredecessorGap = ref(true);
 
   .option {
     margin-top: 10px;
-    margin-right: 44px;
+    margin-right: 40px;
     display: inline-block;
   }
 

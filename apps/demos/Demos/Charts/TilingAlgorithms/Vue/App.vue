@@ -19,7 +19,7 @@
     <div class="options">
       <div class="caption">Options</div>
       <div class="option">
-        <span>Tiling Algorithm</span>
+        <span>Tiling Algorithm </span>
         <DxSelectBox
           :data-source="algorithms"
           :input-attr="{ 'aria-label': 'Algorithm' }"
@@ -106,7 +106,7 @@ function customizeTooltip({
 }
 
 .option > span {
-  margin-right: 14px;
+  margin-right: 10px;
 }
 
 .option > .dx-widget {

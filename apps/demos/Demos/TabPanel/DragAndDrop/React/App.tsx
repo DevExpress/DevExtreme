@@ -37,9 +37,7 @@ function App() {
 
   const renderTitle = useCallback((data: Employee) => (
     <>
-      <span>
-        {data.FirstName} {data.LastName}
-      </span>
+      <span>{`${data.FirstName} ${data.LastName}`}</span>
       {employees.length >= 2 && <i className="dx-icon dx-icon-close" onClick={(): void => { closeButtonHandler(data); }} />}
     </>
   ), [employees, closeButtonHandler]);
