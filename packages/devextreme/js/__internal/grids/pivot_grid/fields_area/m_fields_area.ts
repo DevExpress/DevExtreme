@@ -68,9 +68,9 @@ class FieldsArea extends AreaItem {
       icon: 'menu',
       width: 'auto',
       onClick: (): void => {
-        // @ts-expect-error dxPopup is not defined in dxElementWrapper
-        const popup = this.tableElement().find('.dx-fields-area-popup').dxPopup('instance');
-        if (!popup.option('visible')) {
+        const popup = this._rowPopup;
+        if (popup && !popup.option('visible')) {
+          // eslint-disable-next-line @typescript-eslint/no-floating-promises -- fire-and-forget
           popup.show();
         }
       },
