@@ -69,10 +69,12 @@ class FieldsArea extends AreaItem {
       width: 'auto',
       onClick: (): void => {
         const popup = this._rowPopup;
-        if (popup && !popup.option('visible')) {
-          // eslint-disable-next-line @typescript-eslint/no-floating-promises -- fire-and-forget
-          popup.show();
+        if (!popup || popup.option('visible')) {
+          return;
         }
+
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises -- fire-and-forget
+        popup.show();
       },
     });
     button.$element().addClass(CLASSES.pivotgridFieldsAreaHamburger);
@@ -169,17 +171,19 @@ class FieldsArea extends AreaItem {
     }
 
     data.forEach((field, index) => {
-      if (field.area === area && field.visible !== false) {
-        const td = $('<td>')
-          .attr('role', 'none')
-          .append(fieldChooserBase.renderField(field, field.area === 'row'));
-        const indicators = td.find('.dx-column-indicators');
-        if (indicators.length && this._shouldCreateButton()) {
-          indicators.insertAfter(indicators.next());
-        }
-        td.appendTo(row);
-        renderGroupConnector(field, data[index + 1], data[index - 1], td);
+      if (field.area !== area || field.visible === false) {
+        return;
       }
+
+      const td = $('<td>')
+        .attr('role', 'none')
+        .append(fieldChooserBase.renderField(field, field.area === 'row'));
+      const indicators = td.find('.dx-column-indicators');
+      if (indicators.length && this._shouldCreateButton()) {
+        indicators.insertAfter(indicators.next());
+      }
+      td.appendTo(row);
+      renderGroupConnector(field, data[index + 1], data[index - 1], td);
     });
     if (row.children().length) {
       // Expose the fields as a menubar of menu items, consistent with the
