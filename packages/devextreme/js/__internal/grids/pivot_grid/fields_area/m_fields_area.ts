@@ -5,12 +5,13 @@ import $ from '@js/core/renderer';
 import { each } from '@js/core/utils/iterator';
 import { setHeight, setWidth } from '@js/core/utils/style';
 import Button from '@js/ui/button';
+import type { PivotGridArea } from '@js/ui/pivot_grid/data_source';
 import Popup from '@js/ui/popup/ui.popup';
 import { capitalize } from '@ts/core/utils/capitalize';
 import type { PopupProperties } from '@ts/ui/popup/popup';
 
 import { AreaItem } from '../area_item/m_area_item';
-import type { AreaName } from '../area_item/types';
+import type { AreaItemComponent, AreaName } from '../area_item/types';
 import type { FieldChooserBase } from '../field_chooser/m_field_chooser_base';
 import { DIV } from './const';
 import { renderGroupConnector } from './utils';
@@ -18,11 +19,11 @@ import { renderGroupConnector } from './utils';
 const AREA_DRAG_CLASS = 'dx-pivotgrid-drag-action';
 
 class FieldsArea extends AreaItem {
-  _area: any;
+  private readonly _area: PivotGridArea;
 
-  _rowPopup: any;
+  private _rowPopup?: Popup;
 
-  constructor(component, area) {
+  constructor(component: AreaItemComponent, area: PivotGridArea) {
     super(component);
     this._area = area;
   }
