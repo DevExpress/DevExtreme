@@ -1,6 +1,7 @@
 import { test } from '@playwright/test';
-import { describeManualTest, drag, testScreenshot } from '../../../utils/visual-tests/playwright/manual-test';
-import { trackPageActivity } from '../../../utils/visual-tests/playwright/demo-page';
+import {
+  describeManualTest, drag, testScreenshot, waitForSettled,
+} from '../../../utils/visual-tests/playwright/manual-test';
 
 describeManualTest('DataGrid', 'StatePersistence', { width: 900, height: 600 }, () => {
   test('StatePersistence', async ({ page }) => {
@@ -12,10 +13,8 @@ describeManualTest('DataGrid', 'StatePersistence', { width: 900, height: 600 }, 
 
     await testScreenshot(page, 'datagrid_state_persistence_2_desktop.png');
 
-    const waitForIdle = trackPageActivity(page);
-
     await page.reload();
-    await waitForIdle();
+    await waitForSettled(page);
 
     await testScreenshot(page, 'datagrid_state_persistence_3_desktop.png');
   });

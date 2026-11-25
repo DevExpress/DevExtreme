@@ -38,8 +38,6 @@ const getDemoStyles = (demo: string): string => {
       return '.dx-toast-wrapper { display: none !important; }';
     case 'VirtualScrolling':
     case 'StatePersistence':
-    case 'EditStateManagement':
-    case 'BatchUpdateRequest':
       return '.dx-scrollable-scroll { visibility: visible !important; }';
     default:
       return '';

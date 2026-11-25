@@ -12,8 +12,8 @@ describeManualTest('Scheduler', 'ResolveTimeConflicts', { width: 900, height: 60
     await page.locator('.dx-scheduler-form-all-day-switch .dx-switch-container').first().click();
     await waitForAllDay(page);
     // The focused switch makes Chrome scroll the form, whose overflow hides the recurrence group,
-    // by about 290px, so half of that group comes into view. TestCafe emulated the focus and did not
-    // scroll. Reported as a finding; the test looks at the conflict informer.
+    // by about 290px, so half of that group comes into view; TestCafe emulated the focus and did not
+    // scroll. The test looks at the conflict informer, so the form is scrolled back.
     await page.locator('.dx-scheduler-appointment-popup .dx-form').first().evaluate((form) => { form.scrollLeft = 0; });
     await page.locator('.dx-popup-title .dx-button[aria-label="Save"]').first().click();
     await expect(page.locator('.conflict-informer')).toBeVisible();
