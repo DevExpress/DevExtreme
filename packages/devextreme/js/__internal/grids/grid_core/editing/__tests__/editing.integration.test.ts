@@ -1,6 +1,7 @@
 import {
   afterEach, beforeEach, describe, expect, it, jest,
 } from '@jest/globals';
+import messageLocalization from '@js/common/core/localization/message';
 import CustomStore from '@js/data/custom_store';
 import { Deferred } from '@ts/core/utils/deferred';
 
@@ -121,6 +122,47 @@ describe('DataGrid editing', () => {
 
       // assert
       expect(onClick).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe('Command icon buttons', () => {
+    it('should have aria-label based on hint, text, built-in localized label, and icon name', async () => {
+      // arrange
+      await createDataGrid({
+        dataSource: [{ id: 1 }],
+        editing: {
+          useIcons: true,
+          allowUpdating: true,
+          allowDeleting: true,
+          texts: {
+            deleteRow: 'customDeleteText',
+          },
+        },
+        columns: ['id', {
+          type: 'buttons',
+          buttons: ['edit', 'delete', {
+            icon: 'copy',
+            hint: 'customHint',
+          }, {
+            icon: 'copy',
+            hint: '',
+          }],
+        }],
+      });
+
+      const buttons = document.querySelectorAll(`#${GRID_CONTAINER_ID} .dx-command-edit .dx-link`);
+      const editButton = buttons[0];
+      const deleteButton = buttons[1];
+      const customButtonWithHint = buttons[2];
+      const customButtonWithoutHint = buttons[3];
+      const expectedLabel = messageLocalization.format('dxDataGrid-editingEditRow');
+
+      // assert
+      expect(buttons).toHaveLength(4);
+      expect(editButton.getAttribute('aria-label')).toBe(expectedLabel);
+      expect(deleteButton.getAttribute('aria-label')).toBe('customDeleteText');
+      expect(customButtonWithHint.getAttribute('aria-label')).toBe('customHint');
+      expect(customButtonWithoutHint.getAttribute('aria-label')).toBe('copy');
     });
   });
 
