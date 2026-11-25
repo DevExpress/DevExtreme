@@ -1,8 +1,8 @@
 import type { Locator } from '@playwright/test';
 import { expect } from '@playwright/test';
-import FocusableElement from '../../internal/focusable';
+import GridFocusableElement from '../../gridCore/focusable';
 
-export default class HeaderCell extends FocusableElement {
+export default class HeaderCell extends GridFocusableElement {
   constructor(headerRow: Locator, index: number) {
     super(headerRow.locator(`td[aria-colindex='${index + 1}']`));
   }
