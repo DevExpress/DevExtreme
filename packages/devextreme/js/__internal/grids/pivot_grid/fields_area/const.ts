@@ -1,9 +1,9 @@
 export const DIV = '<div>';
 
 export const CLASSES = {
-  pivotgridFieldsArea: 'dx-pivotgrid-fields-area',
-  pivotgridFieldsAreaHead: 'dx-pivotgrid-fields-area-head',
-  pivotgridFieldsAreaHamburger: 'dx-pivotgrid-fields-area-hamburger',
+  pivotGridFieldsArea: 'dx-pivotgrid-fields-area',
+  pivotGridFieldsAreaHead: 'dx-pivotgrid-fields-area-head',
+  pivotGridFieldsAreaHamburger: 'dx-pivotgrid-fields-area-hamburger',
   fieldsAreaPopup: 'dx-fields-area-popup',
   emptyAreaText: 'dx-empty-area-text',
   groupConnector: 'dx-group-connector',

@@ -8,6 +8,7 @@ import Button from '@js/ui/button';
 import type { PivotGridArea } from '@js/ui/pivot_grid/data_source';
 import Popup from '@js/ui/popup/ui.popup';
 import { capitalize } from '@ts/core/utils/capitalize';
+import { CLASSES as COLUMN_STATE_MIXIN_CLASSES } from '@ts/grids/grid_core/column_state_mixin/const';
 import type { FieldChooserField } from '@ts/grids/pivot_grid/field_chooser/const';
 import { CLASSES as FIELD_CHOOSER_CLASSES } from '@ts/grids/pivot_grid/field_chooser/const';
 import { BUTTON_CLASS } from '@ts/ui/button/button';
@@ -35,7 +36,7 @@ class FieldsArea extends AreaItem {
 
   protected _createGroupElement(): dxElementWrapper {
     return $(DIV)
-      .addClass(CLASSES.pivotgridFieldsArea)
+      .addClass(CLASSES.pivotGridFieldsArea)
       .addClass(FIELD_CHOOSER_CLASSES.area.fieldList)
       .addClass(FIELD_CHOOSER_CLASSES.pivotGrid.dragAction)
       .attr('group', this._area);
@@ -77,15 +78,15 @@ class FieldsArea extends AreaItem {
         popup.show();
       },
     });
-    button.$element().addClass(CLASSES.pivotgridFieldsAreaHamburger);
+    button.$element().addClass(CLASSES.pivotGridFieldsAreaHamburger);
   }
 
   private _getPopupOptions(row: dxElementWrapper, button: dxElementWrapper): PopupProperties {
     return {
       contentTemplate(): dxElementWrapper {
-        return $('<div>').append(
+        return $(DIV).append(
           $('<table>').addClass(FIELD_CHOOSER_CLASSES.area.fieldContainer)
-            .append($('<thead>').addClass(CLASSES.pivotgridFieldsAreaHead)
+            .append($('<thead>').addClass(CLASSES.pivotGridFieldsAreaHead)
               .append(row)),
         );
       },
@@ -152,7 +153,7 @@ class FieldsArea extends AreaItem {
     const isVisible = this.isVisible();
     const fieldChooserBase = this.getFieldChooserBase();
     const head = $('<thead>')
-      .addClass(CLASSES.pivotgridFieldsAreaHead)
+      .addClass(CLASSES.pivotGridFieldsAreaHead)
       .attr('role', 'presentation')
       .appendTo(tableElement);
     const area = this._area;
@@ -178,7 +179,7 @@ class FieldsArea extends AreaItem {
       const td = $('<td>')
         .attr('role', 'none')
         .append(fieldChooserBase.renderField(field, field.area === 'row'));
-      const indicators = td.find('.dx-column-indicators');
+      const indicators = td.find(`.${COLUMN_STATE_MIXIN_CLASSES.columnIndicators}`);
       if (indicators.length && this._shouldCreateButton()) {
         indicators.insertAfter(indicators.next());
       }
