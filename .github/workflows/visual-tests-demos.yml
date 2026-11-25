@@ -776,7 +776,7 @@ jobs:
   merge-artifacts:
     runs-on: ubuntu-latest
     timeout-minutes: 6
-    needs: [playwright-jquery, playwright-frameworks-all]
+    needs: [playwright-jquery, playwright-frameworks-all, csp-playwright-jquery, csp-playwright-frameworks]
     if: ${{ !cancelled() }}
 
     steps:
@@ -1061,6 +1061,213 @@ jobs:
       with:
         name: csp-violations-${{ matrix.FRAMEWORK }}${{ matrix.SHARD_TOTAL != 1 && format('-shard{0}', matrix.SHARD_INDEX) || '' }}
         path: apps/demos/csp-reports/
+        if-no-files-found: ignore
+
+  # Temporary: the Playwright CSP check runs next to the current one until it replaces it.
+  csp-playwright-jquery:
+    name: CSP check Playwright (jQuery ${{ matrix.SHARD_INDEX }}/${{ matrix.SHARD_TOTAL }})
+    needs: [check-should-run, build-devextreme]
+    if: |
+      !cancelled() &&
+      needs.check-should-run.outputs.should-run == 'true' &&
+      needs.build-devextreme.result == 'success'
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { SHARD_INDEX: 1, SHARD_TOTAL: 2 }
+          - { SHARD_INDEX: 2, SHARD_TOTAL: 2 }
+    runs-on: ${{ github.event_name == 'merge_group' && 'devextreme-shr2-ondemand' || 'devextreme-shr2' }}
+    timeout-minutes: 20
+
+    steps:
+    - name: Get sources
+      uses: actions/checkout@v6
+
+    - name: Download artifacts
+      uses: actions/download-artifact@v8
+      with:
+        name: devextreme-artifacts-jquery
+        path: ./packages/devextreme
+
+    - name: Unpack artifacts
+      working-directory: ./packages/devextreme
+      run: 7z x artifacts.zip -aoa
+
+    - name: Setup Chrome
+      uses: ./.github/actions/setup-chrome
+      with:
+        chrome-version: '157.0.8103.78'
+
+    - name: Use Node.js
+      uses: actions/setup-node@v7
+      with:
+        node-version-file: '.node-version'
+
+    - uses: pnpm/action-setup@v6
+      with:
+        run_install: false
+
+    - name: Get pnpm store directory
+      shell: bash
+      run: echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+    - uses: actions/cache/restore@v5
+      name: Restore pnpm cache
+      with:
+        path: ${{ env.STORE_PATH }}
+        key: ${{ runner.os }}-pnpm-cache-${{ hashFiles('**/pnpm-lock.yaml') }}
+        restore-keys: |
+          ${{ runner.os }}-pnpm-cache
+
+    - name: Install dependencies
+      run: pnpm install --frozen-lockfile
+
+    - name: Set Playwright artifact name
+      run: echo "PLAYWRIGHT_JOB_NAME=csp-jquery-${{ matrix.SHARD_INDEX }}-${{ matrix.SHARD_TOTAL }}" >> $GITHUB_ENV
+
+    - name: Run Playwright CSP tests
+      timeout-minutes: 15
+      working-directory: apps/demos
+      env:
+        NODE_OPTIONS: --max-old-space-size=8192
+        CSP: 'true'
+        CONCURRENCY: 4
+        CONSTEL: jquery(${{ matrix.SHARD_INDEX }}/${{ matrix.SHARD_TOTAL }})
+        PLAYWRIGHT_BLOB_OUTPUT_NAME: report-${{ env.PLAYWRIGHT_JOB_NAME }}.zip
+      run: pnpm run test-playwright
+
+    - name: Upload Playwright blob report
+      if: failure()
+      uses: actions/upload-artifact@v7
+      with:
+        name: playwright-blob-${{ env.PLAYWRIGHT_JOB_NAME }}
+        path: ${{ github.workspace }}/apps/demos/testing/artifacts/playwright/blob-report
+        if-no-files-found: ignore
+
+    - name: Upload Playwright traces
+      if: always()
+      uses: actions/upload-artifact@v7
+      with:
+        name: playwright-traces-${{ env.PLAYWRIGHT_JOB_NAME }}
+        path: ${{ github.workspace }}/apps/demos/testing/artifacts/playwright/test-results
+        if-no-files-found: ignore
+
+  csp-playwright-frameworks:
+    name: ${{ matrix.SHARD_TOTAL == 1 && format('CSP check Playwright ({0})', matrix.FRAMEWORK) || format('CSP check Playwright ({0} {1}/{2})', matrix.FRAMEWORK, matrix.SHARD_INDEX, matrix.SHARD_TOTAL) }}
+    needs: [check-should-run, build-demos]
+    if: |
+      !cancelled() &&
+      needs.check-should-run.outputs.should-run == 'true' &&
+      needs.build-demos.result == 'success'
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { FRAMEWORK: React,   SHARD_INDEX: 1, SHARD_TOTAL: 2 }
+          - { FRAMEWORK: React,   SHARD_INDEX: 2, SHARD_TOTAL: 2 }
+          - { FRAMEWORK: Vue,     SHARD_INDEX: 1, SHARD_TOTAL: 2 }
+          - { FRAMEWORK: Vue,     SHARD_INDEX: 2, SHARD_TOTAL: 2 }
+          - { FRAMEWORK: Angular, SHARD_INDEX: 1, SHARD_TOTAL: 3 }
+          - { FRAMEWORK: Angular, SHARD_INDEX: 2, SHARD_TOTAL: 3 }
+          - { FRAMEWORK: Angular, SHARD_INDEX: 3, SHARD_TOTAL: 3 }
+    runs-on: ${{ github.event_name == 'merge_group' && 'devextreme-shr2-ondemand' || 'devextreme-shr2' }}
+    timeout-minutes: 16
+
+    steps:
+    - name: Get sources
+      uses: actions/checkout@v6
+
+    - name: Download devextreme sources
+      uses: actions/download-artifact@v8
+      with:
+        name: devextreme-sources
+
+    - name: Unpack npm packages
+      uses: ./.github/actions/unpack-npm-packages
+
+    - name: Setup Chrome
+      uses: ./.github/actions/setup-chrome
+      with:
+        chrome-version: '157.0.8103.78'
+
+    - name: Use Node.js
+      uses: actions/setup-node@v7
+      with:
+        node-version-file: '.node-version'
+
+    - uses: pnpm/action-setup@v6
+      with:
+        run_install: false
+
+    - name: Get pnpm store directory
+      shell: bash
+      run: echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+    - uses: actions/cache/restore@v5
+      name: Restore pnpm cache
+      with:
+        path: ${{ env.STORE_PATH }}
+        key: ${{ runner.os }}-pnpm-cache-${{ hashFiles('**/pnpm-lock.yaml') }}
+        restore-keys: |
+          ${{ runner.os }}-pnpm-cache
+
+    - name: Install dependencies
+      run: pnpm install --frozen-lockfile
+
+    - name: Download demo bundles
+      uses: actions/download-artifact@v8
+      with:
+        pattern: devextreme-bundles-${{ matrix.FRAMEWORK }}*
+        path: apps/demos/.demo-bundles
+
+    - name: Download vendor bundles
+      uses: actions/download-artifact@v8
+      with:
+        name: devextreme-vendor-bundles
+        path: apps/demos/bundles/vendor
+
+    - name: Unpack demo bundles
+      run: |
+        archives=$(find apps/demos/.demo-bundles -name demo-bundles.tgz 2>/dev/null || true)
+        if [ -z "$archives" ]; then
+          echo "No demo bundle archives downloaded for ${{ matrix.FRAMEWORK }}" >&2
+          exit 1
+        fi
+        for archive in $archives; do
+          tar -xzf "$archive" -C apps/demos
+        done
+        rm -rf apps/demos/.demo-bundles
+        echo "Unpacked $(find apps/demos/Demos -name 'bundle.js' | wc -l) demo bundle(s)"
+
+    - name: Set Playwright artifact name
+      run: echo "PLAYWRIGHT_JOB_NAME=csp-${{ matrix.FRAMEWORK }}-${{ matrix.SHARD_INDEX }}-${{ matrix.SHARD_TOTAL }}" >> $GITHUB_ENV
+
+    - name: Run Playwright CSP tests
+      timeout-minutes: 15
+      working-directory: apps/demos
+      env:
+        NODE_OPTIONS: --max-old-space-size=8192
+        CSP: 'true'
+        CONCURRENCY: 4
+        CONSTEL: ${{ matrix.FRAMEWORK }}(${{ matrix.SHARD_INDEX }}/${{ matrix.SHARD_TOTAL }})
+        PLAYWRIGHT_BLOB_OUTPUT_NAME: report-${{ env.PLAYWRIGHT_JOB_NAME }}.zip
+      run: pnpm run test-playwright
+
+    - name: Upload Playwright blob report
+      if: failure()
+      uses: actions/upload-artifact@v7
+      with:
+        name: playwright-blob-${{ env.PLAYWRIGHT_JOB_NAME }}
+        path: ${{ github.workspace }}/apps/demos/testing/artifacts/playwright/blob-report
+        if-no-files-found: ignore
+
+    - name: Upload Playwright traces
+      if: always()
+      uses: actions/upload-artifact@v7
+      with:
+        name: playwright-traces-${{ env.PLAYWRIGHT_JOB_NAME }}
+        path: ${{ github.workspace }}/apps/demos/testing/artifacts/playwright/test-results
         if-no-files-found: ignore
 
   csp-report-summary:

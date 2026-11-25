@@ -251,6 +251,18 @@ export async function prepareDemoPage(
   });
 }
 
+// The CSP run opens the page as the demo server sends it. The test styles are left out: a <style>
+// added by a script is itself a CSP violation.
+export async function prepareCspPage(page: Page, clientScript: string | null): Promise<void> {
+  await page.addInitScript({
+    content: [
+      `(function () { ${MOCKDATE_SOURCE} }).call(window);`,
+      `(${trackPageSettling.toString()})();`,
+      clientScript ?? '',
+    ].join('\n'),
+  });
+}
+
 // The "networkidle" load state cannot do this job: it is reported once per navigation, and a long
 // script keeps the network quiet enough for it to come before the page has finished loading.
 export function trackPageActivity(page: Page): () => Promise<void> {
