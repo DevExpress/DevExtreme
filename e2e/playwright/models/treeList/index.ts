@@ -1,12 +1,12 @@
 import type { Locator } from '@playwright/test';
 import type { WidgetName } from '../types';
-import DataGrid from '../dataGrid';
+import GridBase from '../dataGrid/gridBase';
 
 const CLASS = {
   treeList: 'dx-treelist-container',
 };
 
-export default class TreeList extends DataGrid {
+export default class TreeList extends GridBase {
   name: WidgetName = 'dxTreeList';
 
   compatibilityName: WidgetName = 'dxTreeList';
