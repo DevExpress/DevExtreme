@@ -55,7 +55,7 @@
         />
       </div>
       <div class="selected-data">
-        <span class="caption">Selected Records:</span>
+        <span class="caption">Selected Records:</span>{{ ' ' }}
         <span id="selected-items-container">{{ selectedEmployeeNames }}</span>
       </div>
     </div>
@@ -112,10 +112,6 @@ function getEmployeeNames(employeeList: Employee[]) {
 
 .selected-data {
   margin-top: 20px;
-}
-
-.selected-data .caption {
-  margin-right: 4px;
 }
 
 .option > span {

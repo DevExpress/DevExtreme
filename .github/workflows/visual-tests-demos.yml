@@ -525,7 +525,6 @@ jobs:
         THEME: ${{ matrix.THEME }}
         # DISABLE_DEMO_TEST_SETTINGS: all # Uncomment to ignore all the visualtestrc.json settings
         # DISABLE_DEMO_TEST_SETTINGS: ignore # Uncomment to ignore the `ignore` field
-        # DISABLE_DEMO_TEST_SETTINGS: comparison-options # Uncomment to ignore the `comparison-options` field
         CI_ENV: true # The `ignore` field in the visualtestrc.json should be disabled when running test locally
       run: pnpm exec nx test-testcafe
 
@@ -768,9 +767,68 @@ jobs:
         THEME: ${{ matrix.THEME }}
         # DISABLE_DEMO_TEST_SETTINGS: all # Uncomment to ignore all the visualtestrc.json settings
         # DISABLE_DEMO_TEST_SETTINGS: ignore # Uncomment to ignore the `ignore` field
-        # DISABLE_DEMO_TEST_SETTINGS: comparison-options # Uncomment to ignore the `comparison-options` field
         CI_ENV: true # The `ignore` field in the visualtestrc.json should be disabled when running test locally
       run: pnpm exec nx test-testcafe
+
+    - name: Set Playwright artifact name
+      if: ${{ !cancelled() }}
+      run: echo "PLAYWRIGHT_JOB_NAME=$(echo "${{ matrix.CONSTEL }}-${{ matrix.THEME }}" | tr '/' '-')" >> $GITHUB_ENV
+
+    - name: Run Playwright tests
+      if: ${{ !cancelled() }}
+      timeout-minutes: 10
+      working-directory: apps/demos
+      env:
+        NODE_OPTIONS: --max-old-space-size=8192
+        CONCURRENCY: ${{ steps.set-concurrency.outputs.concurrency }}
+        CONSTEL: ${{ matrix.CONSTEL }}
+        THEME: ${{ matrix.THEME }}
+        # The default blob name is built from the test paths only, so jobs that differ by theme or
+        # shard alone would write the same zip and overwrite each other once merged.
+        PLAYWRIGHT_BLOB_OUTPUT_NAME: report-${{ env.PLAYWRIGHT_JOB_NAME }}.zip
+      run: pnpm run test-playwright
+
+    - name: Upload Playwright blob report
+      if: failure()
+      uses: actions/upload-artifact@v7
+      with:
+        name: playwright-blob-${{ env.PLAYWRIGHT_JOB_NAME }}
+        path: ${{ github.workspace }}/apps/demos/testing/artifacts/playwright/blob-report
+        if-no-files-found: ignore
+
+    - name: Upload Playwright traces and screenshot diffs
+      if: always()
+      uses: actions/upload-artifact@v7
+      with:
+        name: playwright-traces-${{ env.PLAYWRIGHT_JOB_NAME }}
+        path: ${{ github.workspace }}/apps/demos/testing/artifacts/playwright/test-results
+        if-no-files-found: ignore
+
+    - name: Collect new etalons
+      if: always()
+      run: |
+        mkdir -p "$RUNNER_TEMP/new-etalons"
+        git ls-files --others --exclude-standard -z -- 'apps/demos/testing/etalons/*.png' \
+          | xargs -0 -r cp --parents -t "$RUNNER_TEMP/new-etalons"
+
+    - name: Upload new etalons
+      if: always()
+      uses: actions/upload-artifact@v7
+      with:
+        name: playwright-etalons-${{ env.PLAYWRIGHT_JOB_NAME }}
+        path: ${{ runner.temp }}/new-etalons
+        if-no-files-found: ignore
+
+    # A retry passes against the etalon its first attempt wrote, so new etalons fail the job here.
+    - name: Fail on new etalons
+      if: always()
+      run: |
+        new_etalons=$(git ls-files --others --exclude-standard -- 'apps/demos/testing/etalons/*.png')
+        if [ -n "$new_etalons" ]; then
+          echo "::error::The tests wrote etalons that are not in the repository. They are in the playwright-etalons artifact:"
+          echo "$new_etalons"
+          exit 1
+        fi
 
     - name: Sanitize job name
       if: ${{ failure() }}

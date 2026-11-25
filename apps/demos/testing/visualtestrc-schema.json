@@ -14,9 +14,6 @@
       "ignore": {
           "type": "boolean"
         },
-      "comparison-options": {
-          "$ref": "../node_modules/devextreme-screenshot-comparer/src/options.json"
-      },
       "jquery": {
           "$ref": "#/$defs/frameworkOptions"
       },
@@ -37,9 +34,6 @@
       "properties": {
         "ignore": {
           "type": "boolean"
-        },
-        "comparison-options": {
-          "$ref": "../node_modules/devextreme-screenshot-comparer/src/options-schema.json"
         }
       }
     }

@@ -90,6 +90,20 @@ function extractDemoBodyInner(srcDir) {
   return html ? extractBodyInner(html) : null;
 }
 
+// A style sheet a demo imports from a package (`import 'ol/ol.css'`, `@import url('ol/ol.css')`).
+// The jQuery demos link such a sheet before the DevExtreme theme, so the generated pages link it
+// there too instead of bundling it after the theme: rules of equal specificity win by order.
+const PACKAGE_CSS_RE = /^[^./][^:]*\.css$/;
+
+function packageCssLinks(specifiers) {
+  return specifiers.map((specifier) => `<link rel="stylesheet" type="text/css" href="../../../../node_modules/${specifier}" />`);
+}
+
 module.exports = {
-  extractHeadExtras, extractBodyInner, extractDemoHeadExtras, extractDemoBodyInner,
+  extractHeadExtras,
+  extractBodyInner,
+  extractDemoHeadExtras,
+  extractDemoBodyInner,
+  PACKAGE_CSS_RE,
+  packageCssLinks,
 };

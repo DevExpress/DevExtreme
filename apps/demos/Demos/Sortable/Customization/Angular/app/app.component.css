@@ -6,6 +6,10 @@
   height: 500px;
 }
 
+#list {
+  display: block;
+}
+
 #scroll.horizontal {
   margin-top: 170px;
   display: block;

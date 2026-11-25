@@ -18,7 +18,7 @@ if (!/localhost/.test(document.location.host)) {
 })
 export class AppComponent {
   readonly dataSource: Record<string, unknown>[] = Array.from({ length: 100 }, (_, i) => ({
-    arg: Math.pow(10, i * 0.1),
+    arg: 10 ** (i * 0.1),
     val: Math.log(i + 1) / Math.log(0.5) + (Math.random() - 0.5) * (100 / (i + 1)) + 10,
   }));
 

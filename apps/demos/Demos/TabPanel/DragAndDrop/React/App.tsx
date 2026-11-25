@@ -12,7 +12,7 @@ function TabTitle({ data, onClose }: { data: Employee; onClose: (item: Employee)
 
   return (
     <>
-      <span>{data.FirstName} {data.LastName}</span>
+      <span>{`${data.FirstName} ${data.LastName}`}</span>
       <i className="dx-icon dx-icon-close" onClick={handleClose} />
     </>
   );
@@ -48,7 +48,7 @@ function App() {
 
   const renderTitle = useCallback((data: Employee) => employees.length >= 2
     ? <TabTitle data={data} onClose={closeButtonHandler} />
-    : <><span>{data.FirstName} {data.LastName}</span></>, [employees.length, closeButtonHandler]);
+    : <><span>{`${data.FirstName} ${data.LastName}`}</span></>, [employees.length, closeButtonHandler]);
 
   const onSelectionChanged = useCallback((args: TabPanelTypes.SelectionChangedEvent): void => {
     setSelectedItem(args.addedItems[0]);

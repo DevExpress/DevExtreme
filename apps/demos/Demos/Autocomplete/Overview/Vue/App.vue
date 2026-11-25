@@ -151,6 +151,7 @@ function updateEmployeeInfo() {
   employeeInfo += (employeeInfo && currentClient.value) ? `, ${currentClient.value}` : currentClient.value || '';
   fullInfo.value = employeeInfo;
 }
+updateEmployeeInfo();
 function isNotEmpty(value: unknown) {
   return value !== undefined && value !== null && value !== '';
 }
