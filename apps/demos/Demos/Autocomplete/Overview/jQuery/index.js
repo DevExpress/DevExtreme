@@ -91,6 +91,8 @@ $(() => {
     },
   });
 
+  updateEmployeeInfo();
+
   function updateEmployeeInfo() {
     let result = `${firstName || ''} ${lastName || ''}`.trim();
 

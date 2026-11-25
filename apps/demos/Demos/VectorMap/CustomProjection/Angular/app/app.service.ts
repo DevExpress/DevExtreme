@@ -1,16 +1,16 @@
 import { Injectable } from '@angular/core';
 
-export class FeatureCollection {
+export interface FeatureCollection {
   type: string;
 
   features: Feature[];
 }
 
-export class Feature {
+export interface Feature {
   geometry: FeatureGeometry;
 }
 
-export class FeatureGeometry {
+export interface FeatureGeometry {
   type: string;
 
   coordinates: number[][];
@@ -23,7 +23,7 @@ const coordLinesData: FeatureCollection = {
 
 // add meridians
 for (let longitude = -180; longitude <= 180; longitude += 30) {
-  const lineCoords = [];
+  const lineCoords: number[][] = [];
   for (let latitude = -90; latitude <= 90; latitude += 5) {
     lineCoords.push([longitude, latitude]);
   }

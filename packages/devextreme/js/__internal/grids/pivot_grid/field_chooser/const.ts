@@ -46,6 +46,7 @@ export const CLASSES = {
   allFields: 'dx-all-fields',
   col: 'dx-col',
   headerFilter: 'dx-header-filter',
+  headerFilterEmpty: 'dx-header-filter-empty',
   row: 'dx-row',
   widget: 'dx-widget',
 } as const;
@@ -67,6 +68,13 @@ export const SORTABLE_CONST = {
     drag: 'drag',
   },
 } as const;
+
+export const FIELD_NAVIGATION_DELTAS: Record<string, number> = {
+  ArrowUp: -1,
+  ArrowLeft: -1,
+  ArrowDown: 1,
+  ArrowRight: 1,
+};
 
 export const SORT_ORDER = {
   descending: 'desc',

@@ -6,7 +6,7 @@ import { DxMapModule } from 'devextreme-angular';
 import { DxSelectBoxModule } from 'devextreme-angular/ui/select-box';
 import type { DxSelectBoxTypes } from 'devextreme-angular/ui/select-box';
 import { Service } from './app.service';
-import type { APIKey } from './app.service';
+import type { APIKey, Route } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -27,20 +27,20 @@ if (!/localhost/.test(document.location.host)) {
 export class AppComponent {
   private readonly service = inject(Service);
 
-  readonly routes = signal(this.service.getRoutes());
+  readonly routes = signal<Route[]>(this.service.getRoutes());
 
   readonly markers = this.service.getMarkers();
 
   readonly apiKey: APIKey = { azure: '6N8zuPkBsnfwniNAJkldM3cUgm3lXg3y9gkIKy59benICnnepK4DJQQJ99AIACYeBjFllM6LAAAgAZMPGFXE' };
 
-  setMode(e: DxSelectBoxTypes.ValueChangedEvent) {
+  setMode(e: DxSelectBoxTypes.ValueChangedEvent): void {
     this.routes.update((routes) => routes.map((item) => {
       item.mode = e.value;
       return item;
     }));
   }
 
-  selectColor(e: DxSelectBoxTypes.ValueChangedEvent) {
+  selectColor(e: DxSelectBoxTypes.ValueChangedEvent): void {
     this.routes.update((routes) => routes.map((item) => {
       item.color = e.value;
       return item;

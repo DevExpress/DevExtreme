@@ -1,9 +1,7 @@
 import { glob } from 'glob';
 import { join } from 'path';
-import { existsSync, mkdirSync, appendFileSync } from 'fs';
-import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import { existsSync } from 'fs';
 import { axeCheck, createReport } from '@testcafe-community/axe';
-import { ClientFunction } from 'testcafe';
 import {
   runTestAtPage,
   shouldRunFramework,
@@ -12,20 +10,13 @@ import {
   changeTheme,
   waitForAngularLoading,
   waitForStylesheets,
-  shouldSkipDemo,
   FRAMEWORKS,
   execCode,
   injectStyle,
 } from '../utils/visual-tests/matrix-test-helper';
-import {
-  testScreenshot,
-  isMaterial,
-  isFluent,
-} from '../utils/visual-tests/helpers/theme-utils';
+import { isMaterial, isFluent } from '../utils/visual-tests/helpers/theme-utils';
 import { createMdReport, createTestCafeReport } from '../utils/axe-reporter/reporter';
 import { getTestGlobalsScriptPath } from '../utils/visual-tests/test-globals-bundle';
-import { knownWarnings } from './known-warnings';
-import { skippedTests } from './skipped-tests';
 import { widgetsGalleryServiceMock } from './apiMocks/widgetsGalleryServiceMock';
 import { xmlaServiceMock } from './apiMocks/xmlaServiceMock';
 
@@ -33,28 +24,6 @@ const execTestCafeCode = (t, code) => {
   // eslint-disable-next-line no-eval
   const testCafeFunction = eval(code);
   return testCafeFunction(t);
-};
-
-const getClientCspViolations = ClientFunction(() => (window as any).__cspViolations || []);
-
-const isCspEnabled = () => process.env.CSP_REPORT === 'true';
-
-const cspReportDir = join(__dirname, '..', 'csp-reports');
-const cspReportFile = join(cspReportDir, 'csp-violations.jsonl');
-
-const writeCspReport = (testName: string, framework: string, violations: any[]) => {
-  if (!violations.length) return;
-  if (!existsSync(cspReportDir)) {
-    mkdirSync(cspReportDir, { recursive: true });
-  }
-  for (const v of violations) {
-    const entry = {
-      test: testName,
-      framework,
-      ...v,
-    };
-    appendFileSync(cspReportFile, `${JSON.stringify(entry)}\n`);
-  }
 };
 
 const getIgnoredRules = (testName) => {
@@ -115,23 +84,13 @@ const getIgnoredRules = (testName) => {
 const getClientScripts = (approach: string) => {
   const scripts = [
     { module: 'mockdate' },
+    { module: 'axe-core/axe.min.js' },
   ];
-
-  if (process.env.STRATEGY === 'accessibility') {
-    scripts.push({ module: 'axe-core/axe.min.js' });
-  }
 
   const testGlobalsScriptPath = getTestGlobalsScriptPath(approach);
   if (testGlobalsScriptPath) {
     // @ts-expect-error
     scripts.push(testGlobalsScriptPath);
-  }
-
-  if (isCspEnabled()) {
-    scripts.push(
-      // @ts-expect-error
-      join(__dirname, '../utils/visual-tests/inject/csp-listener.js'),
-    );
   }
 
   scripts.push(
@@ -149,16 +108,10 @@ const getClientScripts = (approach: string) => {
   return scripts;
 };
 
+// The demo screenshots are taken by Playwright (common.spec.ts); this test runs the accessibility checks.
 Object.values(FRAMEWORKS).forEach((approach) => {
-  if (!shouldRunFramework(approach)) { return; }
-  // jQuery screenshots are taken by Playwright (common.spec.ts).
-  if (approach === FRAMEWORKS.jquery && process.env.STRATEGY !== 'accessibility') { return; }
+  if (process.env.STRATEGY !== 'accessibility' || !shouldRunFramework(approach)) { return; }
   fixture(approach)
-    .beforeEach(async (t) => {
-      if (process.env.STRATEGY !== 'accessibility') {
-        await t.resizeWindow(1000, 800);
-      }
-    })
     .clientScripts(getClientScripts(approach))
     .requestHooks(widgetsGalleryServiceMock, xmlaServiceMock);
 
@@ -181,32 +134,19 @@ Object.values(FRAMEWORKS).forEach((approach) => {
     const visualTestSettings = readFrom('../visualtestrc.json', (x) => JSON.parse(x));
     const visualTestStyles = readFrom('../test-styles.css', (x) => injectStyle(x));
 
-    let comparisonOptions;
-    if (process.env.DISABLE_DEMO_TEST_SETTINGS !== 'all') {
-      const approachLowerCase = approach.toLowerCase();
-      const mergedTestSettings = (visualTestSettings && {
+    if (process.env.CI_ENV && !['all', 'ignore'].includes(process.env.DISABLE_DEMO_TEST_SETTINGS)) {
+      const mergedTestSettings = {
         ...visualTestSettings,
-        ...visualTestSettings[approachLowerCase],
-      }) || {};
+        ...visualTestSettings?.[approach.toLowerCase()],
+      };
 
-      if (process.env.CI_ENV && process.env.DISABLE_DEMO_TEST_SETTINGS !== 'ignore') {
-        if (mergedTestSettings.ignore) { return; }
-      }
-      if (process.env.DISABLE_DEMO_TEST_SETTINGS !== 'comparison-options') {
-        comparisonOptions = mergedTestSettings['comparison-options'];
-      }
+      if (mergedTestSettings.ignore) { return; }
     }
 
     changeTheme(__dirname, `../${demoPath}/index.html`, process.env.THEME);
     const pageURL = `http://127.0.0.1:8080/apps/demos/Demos/${widgetName}/${demoName}/${approach}/`;
 
-    if (shouldSkipDemo(approach, widgetName, demoName, skippedTests) && process.env.STRATEGY !== 'accessibility') {
-      return;
-    }
-
-    if (process.env.STRATEGY === 'accessibility'
-      && process.env.THEME?.startsWith('fluent-next')
-      && getIgnoredRules(testName).includes('color-contrast')) {
+    if (process.env.THEME?.startsWith('fluent-next') && getIgnoredRules(testName).includes('color-contrast')) {
       return;
     }
 
@@ -232,49 +172,28 @@ Object.values(FRAMEWORKS).forEach((approach) => {
           await execTestCafeCode(t, testCafeCodeSource);
         }
 
-        if (process.env.STRATEGY === 'accessibility') {
-          const ignoredRules = getIgnoredRules(testName);
-          const isDesignSystemFluent = process.env.THEME?.startsWith('fluent-next');
-          const colorContrastIgnored = ignoredRules.includes('color-contrast');
-          const options = isDesignSystemFluent
-            ? { runOnly: { type: 'rule' as const, values: colorContrastIgnored ? [] : ['color-contrast'] }, rules: {} }
-            : { rules: {} };
+        const ignoredRules = getIgnoredRules(testName);
+        const isDesignSystemFluent = process.env.THEME?.startsWith('fluent-next');
+        const colorContrastIgnored = ignoredRules.includes('color-contrast');
+        const options = isDesignSystemFluent
+          ? { runOnly: { type: 'rule' as const, values: colorContrastIgnored ? [] : ['color-contrast'] }, rules: {} }
+          : { rules: {} };
 
-          ignoredRules.forEach((ruleName) => {
-            if (isDesignSystemFluent && ruleName === 'color-contrast') return;
-            options.rules[ruleName] = { enabled: false };
-          });
+        ignoredRules.forEach((ruleName) => {
+          if (isDesignSystemFluent && ruleName === 'color-contrast') return;
+          options.rules[ruleName] = { enabled: false };
+        });
 
-          const axeResult = await axeCheck(t, '.demo-container', options);
-          const { error, results } = axeResult;
+        const axeResult = await axeCheck(t, '.demo-container', options);
+        const { error, results } = axeResult;
 
-          if (results.violations.length > 0) {
-            createMdReport({ testName, results });
-            await t.report(createTestCafeReport(results.violations));
-          }
-
-          await t.expect(error).notOk();
-          await t.expect(results.violations.length === 0).ok(createReport(results.violations));
-        } else {
-          const consoleMessages = await t.getBrowserConsoleMessages();
-          const errors = [...consoleMessages.error, ...consoleMessages.warn]
-            .filter((e) => !knownWarnings.some((kw) => e.startsWith(kw)))
-            .filter((e) => !e.startsWith('[CSP Violation]'));
-          await t.expect(errors).eql([]);
-
-          if (isCspEnabled()) {
-            const cspViolations = await getClientCspViolations();
-            writeCspReport(testName, approach, cspViolations);
-          }
-
-          const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-
-          await testScreenshot(t, takeScreenshot, `${testName}.png`, undefined, comparisonOptions);
-
-          await t
-            .expect(compareResults.isValid())
-            .ok(compareResults.errorMessages());
+        if (results.violations.length > 0) {
+          createMdReport({ testName, results });
+          await t.report(createTestCafeReport(results.violations));
         }
+
+        await t.expect(error).notOk();
+        await t.expect(results.violations.length === 0).ok(createReport(results.violations));
       });
   });
 });

@@ -57,15 +57,15 @@
       />
       <div>
         <div class="column">
-          <span class="text count">Task count: </span>
+          <span class="text count">Task count:</span>{{ ' ' }}
           <span class="value">{{ taskCount }}</span>
-        </div>
+        </div>{{ ' ' }}
         <div class="column">
-          <span class="text people-count">People assigned: </span>
+          <span class="text people-count">People assigned:</span>{{ ' ' }}
           <span class="value">{{ peopleCount }}</span>
-        </div>
+        </div>{{ ' ' }}
         <div class="column">
-          <span class="text avg-duration">Average task duration (days): </span>
+          <span class="text avg-duration">Average task duration (days):</span>{{ ' ' }}
           <span class="value">{{ avgDuration }}</span>
         </div>
       </div>
@@ -155,10 +155,6 @@ const onInitialized = (e: DxDataGridTypes.InitializedEvent) => {
   text-align: right;
 }
 
-.column:nth-child(2) {
-  padding: 0 4px;
-}
-
 .value {
   font-size: 40px;
   display: inline-block;
@@ -170,7 +166,6 @@ const onInitialized = (e: DxDataGridTypes.InitializedEvent) => {
   white-space: normal;
   display: inline-block;
   vertical-align: middle;
-  margin-right: 4px;
 }
 
 .avg-duration {

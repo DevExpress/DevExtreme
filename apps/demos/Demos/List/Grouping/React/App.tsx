@@ -3,7 +3,7 @@ import List from 'devextreme-react/list';
 import { employees } from './data.ts';
 import type { Employee } from './types.ts';
 
-const GroupTemplate = (item: Employee) => <div>Assigned: {item.key}</div>;
+const GroupTemplate = (item: Employee) => <div>{`Assigned: ${item.key}`}</div>;
 
 const App = () => (
   <div className="list-container">

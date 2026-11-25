@@ -79,6 +79,10 @@ export class AppComponent {
 
   readonly fullInfo = signal('');
 
+  constructor() {
+    this.updateEmployeeInfo();
+  }
+
   updateEmployeeInfo() {
     let result = '';
     result += (`${this.firstName || ''} ${this.lastName || ''}`).trim();
