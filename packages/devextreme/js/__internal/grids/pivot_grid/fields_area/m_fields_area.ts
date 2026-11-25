@@ -12,20 +12,10 @@ import type { PopupProperties } from '@ts/ui/popup/popup';
 import { AreaItem } from '../area_item/m_area_item';
 import type { AreaName } from '../area_item/types';
 import type { FieldChooserBase } from '../field_chooser/m_field_chooser_base';
-
-const DIV = '<div>';
+import { DIV } from './const';
+import { renderGroupConnector } from './utils';
 
 const AREA_DRAG_CLASS = 'dx-pivotgrid-drag-action';
-
-function renderGroupConnector(field, nextField, prevField, $container) {
-  if (prevField?.groupName && prevField.groupName === field.groupName) {
-    $(DIV).addClass('dx-group-connector').addClass('dx-group-connector-prev').appendTo($container);
-  }
-
-  if (nextField?.groupName && nextField.groupName === field.groupName) {
-    $(DIV).addClass('dx-group-connector').addClass('dx-group-connector-next').appendTo($container);
-  }
-}
 
 class FieldsArea extends AreaItem {
   _area: any;
