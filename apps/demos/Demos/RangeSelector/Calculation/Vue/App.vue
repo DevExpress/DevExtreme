@@ -20,7 +20,7 @@
         <DxBehavior :value-change-mode="currentBehaviorMode"/>
         <DxSliderMarker format="dd EEEE"/>
       </DxRangeSelector>
-      <h2>Working days count: {{ workingDaysCount }}</h2>
+      <h2>Working days count: <span>{{ workingDaysCount }}</span></h2>
       <div class="options">
         <div class="caption">Options</div>
         <div class="option">

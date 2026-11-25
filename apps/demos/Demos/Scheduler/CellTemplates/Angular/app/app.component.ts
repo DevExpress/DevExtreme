@@ -92,7 +92,7 @@ export class AppComponent {
   };
 
   readonly onAppointmentFormOpening = (e: DxSchedulerTypes.AppointmentFormOpeningEvent) => {
-    const startDate = e.appointmentData.startDate as Date;
+    const startDate = e.appointmentData?.startDate as Date;
     if (!this.isValidAppointmentDate(startDate)) {
       e.cancel = true;
       this.notifyDisableDate();
@@ -147,10 +147,13 @@ export class AppComponent {
   };
 
   private readonly isValidAppointment = (component: DxSchedulerComponent['instance'], appointmentData: DxSchedulerTypes.Appointment) => {
-    const startDate = new Date(appointmentData.startDate);
-    const endDate = new Date(appointmentData.endDate);
-    const cellDuration = component.option('cellDuration');
-    return this.isValidAppointmentInterval(startDate, endDate, cellDuration);
+    const { startDate, endDate } = appointmentData;
+    if (!startDate || !endDate) {
+      return true;
+    }
+
+    const cellDuration = component.option('cellDuration') ?? 30;
+    return this.isValidAppointmentInterval(new Date(startDate), new Date(endDate), cellDuration);
   };
 
   private readonly isValidAppointmentInterval = (startDate: Date, endDate: Date, cellDuration: number) => {
@@ -177,14 +180,11 @@ export class AppComponent {
 
   private readonly applyDisableDatesToDateEditors = (form: DxFormComponent['instance']) => {
     const holidays = this.dataService.getHolidays();
-    const startDateEditor = form.getEditor('startDate');
-    startDateEditor.option('disabledDates', holidays);
-
-    const endDateEditor = form.getEditor('endDate');
-    endDateEditor.option('disabledDates', holidays);
+    form.getEditor('startDate')?.option('disabledDates', holidays);
+    form.getEditor('endDate')?.option('disabledDates', holidays);
   };
 
-  private setComponentAria(element): void {
+  private setComponentAria(element: ReturnType<DxSchedulerComponent['instance']['$element']> | undefined): void {
     const prevAria = element?.attr('aria-label') || '';
     const description = this.ariaDescription();
     const nextAria = `${prevAria}${description ? ` ${description}` : ''}`;

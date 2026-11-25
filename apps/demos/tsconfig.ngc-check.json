@@ -16,6 +16,7 @@
   },
 
   "include": [
+    "Demos/Scheduler/**/Angular/**/*.ts",
     "Demos/Localization/**/Angular/**/*.ts",
     "Demos/Map/**/Angular/**/*.ts",
     "Demos/VectorMap/**/Angular/**/*.ts",
