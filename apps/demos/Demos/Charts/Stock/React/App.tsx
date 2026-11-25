@@ -97,7 +97,7 @@ function App() {
   });
 
   const onVisualRangeChange = useCallback((range: VisualRange | (Date | number | string)[]) => {
-    setVisualRange(range as VisualRange);
+    setVisualRange(range);
   }, []);
 
   const pan = useCallback((direction: number) => {

@@ -21,7 +21,7 @@
               />
             </div>
             <div class="price-container">
-              <div class="price">{{ currency(item.Price) }}</div>
+              <div class="price">{{ currency(item.Price) }}</div>{{ ' ' }}
               <div class="caption">per<br>night</div>
             </div>
           </div>
@@ -41,7 +41,7 @@
           />
         </div>
         <div class="price-container">
-          <div class="price">{{ currency(currentHotel.Price) }}</div>
+          <div class="price">{{ currency(currentHotel.Price) }}</div>{{ ' ' }}
           <div class="caption">per<br>night</div>
         </div>
       </div>
@@ -200,6 +200,6 @@ function listSelectionChanged(e: DxListTypes.SelectionChangedEvent) {
 .price-container .caption {
   font-size: 11px;
   line-height: 12px;
-  padding-left: 6px;
+  padding-left: 2px;
 }
 </style>

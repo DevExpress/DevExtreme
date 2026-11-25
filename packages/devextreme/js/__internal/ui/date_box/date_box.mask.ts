@@ -17,7 +17,6 @@ import dateLocalization from '@ts/core/localization/date';
 import {
   bindDatePartsToLocale,
   getParser as getLDMLDateParser,
-  type LocaleAwareDateLocalization,
 } from '@ts/core/localization/ldml/date.parser';
 import type { OptionChanged } from '@ts/core/widget/types';
 import eventsEngine from '@ts/events/core/events_engine';
@@ -45,8 +44,6 @@ class DateBoxMask<
   _maskValue?: Date | null;
 
   _dateParts!: { caret: { start: number; end: number }; isStub: boolean }[];
-
-  _maskInputHandler?: (() => void) | null;
 
   _initialMaskValue?: Date | null;
 
@@ -258,22 +255,28 @@ class DateBoxMask<
   }
 
   _maskBeforeInputHandler(e: DxEvent<KeyboardKeyDownEvent & InputEvent>): boolean {
-    this._maskInputHandler = null;
+    const { inputType, data } = e.originalEvent;
+    const isCompositionText = inputType === 'insertCompositionText';
 
-    const { inputType } = e.originalEvent;
+    const typedChar = isCompositionText ? data?.slice(-1) : data;
 
-    if (inputType === 'insertCompositionText') {
-      this._maskInputHandler = (): void => {
-        this._renderSelectedPart();
-      };
-    }
-
-    if (!this._useMaskBehavior() || !this._isSingleCharKey(e)) {
+    if (!this._useMaskBehavior() || typedChar?.length !== 1) {
       return false;
     }
 
-    const key = e.originalEvent.data ?? '';
-    this._keyInputHandler(e, key);
+    if (isCompositionText && this._wasAllSelectedBeforeComposition) {
+      this._clearSearchValue();
+      this._selectFirstPart();
+      this._wasAllSelectedBeforeComposition = false;
+    }
+
+    const isComposedWithSurroundingText = typedChar !== data;
+
+    if (isComposedWithSurroundingText) {
+      this._caret(this._getActivePartProp('caret'));
+    }
+
+    this._keyInputHandler(e, typedChar);
 
     return true;
   }
@@ -306,7 +309,19 @@ class DateBoxMask<
       return;
     }
 
-    const isCompositionDigit = event?.inputType === 'insertCompositionText'
+    const isCompositionHandledBeforeInput = this._useMaskBehavior()
+      && this._useBeforeInputEvent()
+      && event?.inputType === 'insertCompositionText';
+
+    if (isCompositionHandledBeforeInput) {
+      this._syncInputWithMask();
+      this._wasAllSelectedBeforeComposition = false;
+
+      return;
+    }
+
+    const isCompositionDigit = this._useMaskBehavior()
+      && event?.inputType === 'insertCompositionText'
       && this._isSingleDigitKey(e);
 
     const isIMECommitDigit = event?.inputType === 'insertText'
@@ -342,11 +357,6 @@ class DateBoxMask<
     }
 
     super._keyPressHandler(e);
-
-    if (this._maskInputHandler) {
-      this._maskInputHandler();
-      this._maskInputHandler = null;
-    }
 
     this._wasAllSelectedBeforeComposition = false;
   }
@@ -523,7 +533,7 @@ class DateBoxMask<
     const format = this._resolveDisplayFormat(displayFormat);
     const formatLocale = getDateFormatLocale(format);
     const dateParts = bindDatePartsToLocale(
-      dateLocalization as LocaleAwareDateLocalization,
+      dateLocalization,
       formatLocale,
     );
 
@@ -676,6 +686,7 @@ class DateBoxMask<
   }
 
   _getActivePartValue(dateValue?: Date | null): number {
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
     const date = dateValue ?? this._maskValue as Date;
     const getter = this._getActivePartProp('getter');
     const isGetterFunction = isFunction(getter);
@@ -819,7 +830,6 @@ class DateBoxMask<
     this._input().val(this._getDisplayedText(this._maskValue));
     this._caret(this._getActivePartProp('caret'));
 
-    this._maskInputHandler = null;
     this._wasAllSelectedBeforeComposition = false;
   }
 

@@ -1,19 +1,9 @@
 import { getWindow, hasWindow } from '@js/core/utils/window';
 import { callOnce } from '@ts/core/utils/call_once';
 
-type ExtendedWindow = Window & {
-  webkitRequestAnimationFrame?: typeof window.requestAnimationFrame;
-  mozRequestAnimationFrame?: typeof window.requestAnimationFrame;
-  oRequestAnimationFrame?: typeof window.requestAnimationFrame;
-  msRequestAnimationFrame?: typeof window.requestAnimationFrame;
+type AnimationFrameWindow = Partial<Pick<Window, 'requestAnimationFrame' | 'cancelAnimationFrame'>>;
 
-  webkitCancelAnimationFrame?: typeof window.cancelAnimationFrame;
-  mozCancelAnimationFrame?: typeof window.cancelAnimationFrame;
-  oCancelAnimationFrame?: typeof window.cancelAnimationFrame;
-  msCancelAnimationFrame?: typeof window.cancelAnimationFrame;
-};
-
-const window: ExtendedWindow = (hasWindow() ? getWindow() : {}) as ExtendedWindow;
+const window: AnimationFrameWindow = hasWindow() ? getWindow() : {};
 
 const FRAME_ANIMATION_STEP_TIME = 1000 / 60;
 
@@ -29,17 +19,8 @@ let cancel = function (requestID: number): void {
 };
 
 const setAnimationFrameMethods = callOnce(() => {
-  const nativeRequest = window.requestAnimationFrame
-            || window.webkitRequestAnimationFrame
-            || window.mozRequestAnimationFrame
-            || window.oRequestAnimationFrame
-            || window.msRequestAnimationFrame;
-
-  const nativeCancel = window.cancelAnimationFrame
-            || window.webkitCancelAnimationFrame
-            || window.mozCancelAnimationFrame
-            || window.oCancelAnimationFrame
-            || window.msCancelAnimationFrame;
+  const nativeRequest = window.requestAnimationFrame;
+  const nativeCancel = window.cancelAnimationFrame;
 
   if (nativeRequest && nativeCancel) {
     request = nativeRequest;

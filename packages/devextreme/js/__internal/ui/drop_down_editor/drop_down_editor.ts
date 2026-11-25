@@ -106,8 +106,8 @@ export interface FieldTemplate {
 }
 
 interface FieldAddonsTemplates {
-  beforeTemplate?: FieldTemplate;
-  afterTemplate?: FieldTemplate;
+  beforeTemplate: FieldTemplate | null;
+  afterTemplate: FieldTemplate | null;
 }
 
 type PopupToolbarItemConfig = ToolbarItem & { shortcut?: string };
@@ -414,7 +414,7 @@ class DropDownEditor<
       return;
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return, consistent-return
+    // eslint-disable-next-line consistent-return
     return this._getTemplate(fieldTemplate);
   }
 
@@ -550,7 +550,7 @@ class DropDownEditor<
 
         // T1259996
         if (browser.mozilla) {
-          const inputElement = $input.get(0) as HTMLInputElement;
+          const inputElement = $input.get<HTMLInputElement>(0);
           inputElement.focus({ preventScroll: true });
         } else {
           eventsEngine.trigger($input, 'focus');
@@ -656,7 +656,6 @@ class DropDownEditor<
 
   _renderOpenHandler(): void {
     const $inputWrapper = this._inputWrapper();
-    // @ts-expect-error NAME property is missing
     const eventName = addNamespace(clickEventName, this.NAME);
     const { openOnFieldClick } = this.option();
 
@@ -672,7 +671,6 @@ class DropDownEditor<
   _attachFocusOutHandler(): void {
     if (isIOs) {
       this._detachFocusOutEvents();
-      // @ts-expect-error NAME property is missing
       eventsEngine.on(this._inputWrapper(), addNamespace('focusout', this.NAME), (event: DxEvent<FocusEvent>) => {
         const newTarget = event.relatedTarget;
         const { opened } = this.option();
@@ -698,7 +696,6 @@ class DropDownEditor<
     if (!isIOs) {
       return;
     }
-    // @ts-expect-error NAME property is missing
     eventsEngine.off(this._inputWrapper(), addNamespace('focusout', this.NAME));
   }
 
@@ -833,7 +830,6 @@ class DropDownEditor<
   }
 
   _attachPopupKeyHandler(): void {
-    // @ts-expect-error ts-error NAME property is missing
     eventsEngine.on(this._popup?.$overlayContent(), addNamespace('keydown', this.NAME), (e: DxEvent<KeyboardEvent>) => this._popupKeyHandler(e));
   }
 
@@ -850,7 +846,7 @@ class DropDownEditor<
   }
 
   _popupTabHandler(e: DxEvent<KeyboardEvent>): void {
-    const $target = $(e.target as Element);
+    const $target = $(e.target);
     const moveBackward = e.shiftKey && $target.is(this._getFirstPopupElement());
     const moveForward = !e.shiftKey && $target.is(this._getLastPopupElement());
 

@@ -63,8 +63,7 @@ export const tabbable = (index: number, element: Element): boolean | string => {
 };
 // note: use this method instead of is(":focus")
 export const focused = ($element: Parameters<typeof $>[0]): boolean => {
-  const element = $($element).get(0);
-  // @ts-expect-error get(0) returns Element, getActiveElement expects HTMLElement
+  const element = $($element).get<HTMLElement>(0);
   return domAdapter.getActiveElement(element) === element;
 };
 

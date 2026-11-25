@@ -8,8 +8,7 @@ import TextBox, { type TextBoxProperties } from '../text_box';
 const textBoxes: TextBox[] = [];
 
 const createTextBox = (options: Partial<TextBoxProperties> = {}): TextBox => {
-  const element = $('<div>').appendTo(document.body).get(0) as HTMLElement;
-  // @ts-expect-error DOMComponent constructor is not typed for direct instantiation
+  const element = $('<div>').appendTo(document.body).get<HTMLElement>(0);
   const instance: TextBox = new TextBox(element, options);
 
   textBoxes.push(instance);

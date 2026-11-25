@@ -114,7 +114,7 @@ describe('AIAssistantController', () => {
         author: { id: 'user', name: 'User' },
         text: 'Sort by name',
         timestamp: '2026-04-16T10:00:00.000Z',
-      } as Message);
+      });
 
       expect(controller.isProcessing()).toBe(true);
     });
@@ -126,7 +126,7 @@ describe('AIAssistantController', () => {
         author: { id: 'user', name: 'User' },
         text: 'Sort by name',
         timestamp: '2026-04-16T10:00:00.000Z',
-      } as Message);
+      });
 
       const actions = [{ name: 'sort', args: { column: 'Name' } }];
       sendRequestCallbacks.onComplete?.({ actions });
@@ -142,7 +142,7 @@ describe('AIAssistantController', () => {
         author: { id: 'user', name: 'User' },
         text: 'Sort by name',
         timestamp: '2026-04-16T10:00:00.000Z',
-      } as Message);
+      });
       promise.catch(() => {});
 
       sendRequestCallbacks.onError?.(new Error('Network error'));
@@ -158,7 +158,7 @@ describe('AIAssistantController', () => {
         author: { id: 'user', name: 'User' },
         text: 'Sort by name',
         timestamp: '2026-04-16T10:00:00.000Z',
-      } as Message);
+      });
       promise.catch(() => {});
 
       controller.abortRequest();
@@ -179,7 +179,7 @@ describe('AIAssistantController', () => {
         author: { id: 'user', name: 'User' },
         text: 'Generate values',
         timestamp,
-      } as Message);
+      });
 
       const messages = await getStore(controller).load();
 
@@ -210,7 +210,7 @@ describe('AIAssistantController', () => {
         author: { id: 'user', name: 'User' },
         text: 'Generate values',
         timestamp: '2026-04-16T10:00:00.000Z',
-      } as Message);
+      });
 
       const messages = await getStore(controller).load();
 
@@ -229,7 +229,7 @@ describe('AIAssistantController', () => {
         author: { id: 'user', name: 'User' },
         text: 'Generate values',
         timestamp: '2026-04-16T10:00:00.000Z',
-      } as Message);
+      });
 
       const actions = [{ name: 'sort', args: { column: 'Name' } }];
       const response: ExecuteGridAssistantCommandResult = {
@@ -271,7 +271,7 @@ describe('AIAssistantController', () => {
         author: { id: 'user', name: 'User' },
         text: 'Sort and filter',
         timestamp: '2026-04-16T10:00:00.000Z',
-      } as Message);
+      });
 
       const actions = [
         { name: 'sort', args: { column: 'Name' } },
@@ -300,7 +300,7 @@ describe('AIAssistantController', () => {
         author: { id: 'user', name: 'User' },
         text: 'Generate values',
         timestamp: '2026-04-16T10:00:00.000Z',
-      } as Message);
+      });
       promise.catch(() => {});
 
       sendRequestCallbacks.onError?.(new Error('Network error'));
@@ -326,7 +326,7 @@ describe('AIAssistantController', () => {
         author: { id: 'user', name: 'User' },
         text: 'Generate values',
         timestamp: '2026-04-16T10:00:00.000Z',
-      } as Message);
+      });
       promise.catch(() => {});
 
       const response = {} as ExecuteGridAssistantCommandResult;
@@ -356,7 +356,7 @@ describe('AIAssistantController', () => {
         author: { id: 'user', name: 'User' },
         text: 'Generate values',
         timestamp: '2026-04-16T10:00:00.000Z',
-      } as Message);
+      });
       promise.catch(() => {});
 
       sendRequestCallbacks.onComplete?.({ actions: [] });
@@ -393,7 +393,7 @@ describe('AIAssistantController', () => {
         author: { id: 'user', name: 'User' },
         text: 'Generate values',
         timestamp: '2026-04-16T10:00:00.000Z',
-      } as Message);
+      });
       promise.catch(() => {});
 
       const actions = [{ name: 'sort', args: { column: 'Name' } }];
@@ -431,7 +431,7 @@ describe('AIAssistantController', () => {
         author: { id: 'user', name: 'User' },
         text: 'Generate values',
         timestamp: '2026-04-16T10:00:00.000Z',
-      } as Message);
+      });
       promise.catch(() => {});
 
       const actions = [{ name: 'sort', args: { column: 'Name' } }];
@@ -469,7 +469,7 @@ describe('AIAssistantController', () => {
         author: { id: 'user', name: 'User' },
         text: 'Generate values',
         timestamp: '2026-04-16T10:00:00.000Z',
-      } as Message);
+      });
       promise.catch(() => {});
 
       const messages = await getStore(controller).load();
@@ -491,7 +491,7 @@ describe('AIAssistantController', () => {
         author: { id: 'user', name: 'User' },
         text: 'Generate values',
         timestamp: '2026-04-16T10:00:00.000Z',
-      } as Message);
+      });
 
       const actions = [{ name: 'sort', args: { column: 'Name' } }];
       sendRequestCallbacks.onComplete?.({ actions });
@@ -506,7 +506,7 @@ describe('AIAssistantController', () => {
         author: { id: 'user', name: 'User' },
         text: 'Generate values',
         timestamp: '2026-04-16T10:00:00.000Z',
-      } as Message);
+      });
 
       sendRequestCallbacks.onError?.(new Error('Network error'));
 
@@ -520,7 +520,7 @@ describe('AIAssistantController', () => {
         author: { id: 'user', name: 'User' },
         text: 'Generate values',
         timestamp: '2026-04-16T10:00:00.000Z',
-      } as Message);
+      });
 
       sendRequestCallbacks.onComplete?.({} as ExecuteGridAssistantCommandResult);
 
@@ -535,13 +535,13 @@ describe('AIAssistantController', () => {
         author: { id: 'user', name: 'User' },
         text: 'First request',
         timestamp: '2026-04-16T10:00:00.000Z',
-      } as Message);
+      });
 
       const secondPromise = controller.sendRequestToAI({
         author: { id: 'user', name: 'User' },
         text: 'Second request',
         timestamp: '2026-04-16T10:00:01.000Z',
-      } as Message);
+      });
       secondPromise.catch(() => {});
 
       const messages = await getStore(controller).load();
@@ -563,7 +563,7 @@ describe('AIAssistantController', () => {
         author: { id: 'user', name: 'User' },
         text: 'First request',
         timestamp: '2026-04-16T10:00:00.000Z',
-      } as Message);
+      });
 
       const actions = [{ name: 'sort', args: { column: 'Name' } }];
       sendRequestCallbacks.onComplete?.({ actions });
@@ -574,7 +574,7 @@ describe('AIAssistantController', () => {
         author: { id: 'user', name: 'User' },
         text: 'Second request',
         timestamp: '2026-04-16T10:00:01.000Z',
-      } as Message);
+      });
 
       const messages = await getStore(controller).load();
 
@@ -593,7 +593,7 @@ describe('AIAssistantController', () => {
         author: { id: 'user', name: 'User' },
         text: 'First request',
         timestamp: '2026-04-16T10:00:00.000Z',
-      } as Message);
+      });
       firstPromise.catch(() => {});
 
       sendRequestCallbacks.onError?.(new Error('Network error'));
@@ -604,7 +604,7 @@ describe('AIAssistantController', () => {
         author: { id: 'user', name: 'User' },
         text: 'Second request',
         timestamp: '2026-04-16T10:00:01.000Z',
-      } as Message);
+      });
 
       const messages = await getStore(controller).load();
 
@@ -623,7 +623,7 @@ describe('AIAssistantController', () => {
         author: { id: 'user', name: 'User' },
         text: 'First request',
         timestamp: '2026-04-16T10:00:00.000Z',
-      } as Message);
+      });
       firstPromise.catch(() => {});
 
       controller.abortRequest();
@@ -634,7 +634,7 @@ describe('AIAssistantController', () => {
         author: { id: 'user', name: 'User' },
         text: 'Second request',
         timestamp: '2026-04-16T10:00:01.000Z',
-      } as Message);
+      });
 
       const messages = await getStore(controller).load();
 
@@ -658,7 +658,7 @@ describe('AIAssistantController', () => {
         author: { id: 'user', name: 'User' },
         text: 'Sort by name',
         timestamp: '2026-04-16T10:00:00.000Z',
-      } as Message);
+      });
 
       const actions = [{ name: 'sort', args: { column: 'Name' } }];
       sendRequestCallbacks.onComplete?.({ actions });
@@ -685,7 +685,7 @@ describe('AIAssistantController', () => {
         author: { id: 'user', name: 'User' },
         text: 'Sort and filter',
         timestamp: '2026-04-16T10:00:00.000Z',
-      } as Message);
+      });
 
       const actions = [
         { name: 'sorting', args: { column: 'Name' } },
@@ -711,7 +711,7 @@ describe('AIAssistantController', () => {
         author: { id: 'user', name: 'User' },
         text: 'Sort by name',
         timestamp: '2026-04-16T10:00:00.000Z',
-      } as Message);
+      });
 
       const actions = [{ name: 'sorting', args: { column: 'Name' } }];
       sendRequestCallbacks.onComplete?.({ actions });
@@ -734,7 +734,7 @@ describe('AIAssistantController', () => {
         author: { id: 'user', name: 'User' },
         text: 'Sort multiple columns',
         timestamp: '2026-04-16T10:00:00.000Z',
-      } as Message);
+      });
 
       const actions = [
         { name: 'sorting', args: { column: 'Name' } },
@@ -760,7 +760,7 @@ describe('AIAssistantController', () => {
         author: { id: 'user', name: 'User' },
         text: 'Sort by Name column',
         timestamp: '2026-04-16T10:00:00.000Z',
-      } as Message);
+      });
 
       const messages = await getStore(controller).load();
 
@@ -780,7 +780,7 @@ describe('AIAssistantController', () => {
         author: { id: 'user', name: 'User' },
         text: 'Generate values',
         timestamp: '2026-04-16T10:00:00.000Z',
-      } as Message);
+      });
       promise.catch(() => {});
 
       controller.abortRequest();
@@ -806,7 +806,7 @@ describe('AIAssistantController', () => {
         author: { id: 'user', name: 'User' },
         text: 'Generate values',
         timestamp: '2026-04-16T10:00:00.000Z',
-      } as Message);
+      });
       promise.catch(() => {});
 
       const gridCommandsInstance = MockedGridCommands.mock.results[0].value as { abort: jest.Mock };
@@ -988,7 +988,7 @@ describe('AIAssistantController', () => {
         author: { id: 'user', name: 'User' },
         text: 'First request',
         timestamp: '2026-04-16T10:00:00.000Z',
-      } as Message);
+      });
 
       const aiMessage: AIMessage = {
         id: 'assistant-old',

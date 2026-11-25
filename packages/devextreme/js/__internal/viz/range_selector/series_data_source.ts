@@ -1,9 +1,5 @@
 /* eslint-disable @typescript-eslint/init-declarations */
-/* eslint-disable no-plusplus */
 /* eslint-disable func-names */
-/* eslint-disable no-nested-ternary */
-/* eslint-disable no-multi-assign */
-/* eslint-disable @stylistic/max-len */
 
 import { extend } from '@ts/core/utils/extend';
 import { each } from '@ts/core/utils/iterator';
@@ -12,6 +8,7 @@ import { ThemeManager as ChartThemeManager } from '@ts/viz/components/chart_them
 import { validateData } from '@ts/viz/components/data_validator';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 import { SeriesFamily } from '@ts/viz/core/series_family';
+import type { Size } from '@ts/viz/core/types';
 import { mergeMarginOptions, processSeriesTemplate } from '@ts/viz/core/utils';
 import { Series } from '@ts/viz/series/base_series';
 import { Range } from '@ts/viz/translators/range';
@@ -49,7 +46,13 @@ const createThemeManager = function (chartOptions: ThemeValue): ChartThemeManage
   });
 };
 
-const processSeriesFamilies = function (series: ThemeValue[], minBubbleSize: number, maxBubbleSize: number, barOptions: BarOptions, negativesAsZeroes: boolean): ThemeValue[] {
+const processSeriesFamilies = function (
+  series: ThemeValue[],
+  minBubbleSize: number,
+  maxBubbleSize: number,
+  barOptions: BarOptions,
+  negativesAsZeroes: boolean,
+): ThemeValue[] {
   const families: ThemeValue[] = [];
   const types: string[] = [];
 
@@ -93,7 +96,8 @@ export let SeriesDataSource = class SeriesDataSource {
   declare argCategories?: ThemeValue[];
 
   constructor(options: SeriesDataSourceOptions) {
-    const themeManager = this._themeManager = createThemeManager(options.chart);
+    this._themeManager = createThemeManager(options.chart);
+    const themeManager = this._themeManager;
 
     themeManager.setTheme(options.chart.theme);
     const topIndent = themeManager.getOptions('topIndent');
@@ -118,7 +122,9 @@ export let SeriesDataSource = class SeriesDataSource {
     let parsedData;
     const chartThemeManager = this._themeManager;
     const seriesTemplate = chartThemeManager.getOptions('seriesTemplate');
-    let allSeriesOptions = seriesTemplate ? processSeriesTemplate(seriesTemplate, data) : options.chart.series;
+    let allSeriesOptions = seriesTemplate
+      ? processSeriesTemplate(seriesTemplate, data)
+      : options.chart.series;
     let dataSourceField;
     const valueAxis = this._valueAxis;
     let i;
@@ -134,9 +140,11 @@ export let SeriesDataSource = class SeriesDataSource {
       this._hideChart = true;
     }
 
-    allSeriesOptions = Array.isArray(allSeriesOptions) ? allSeriesOptions : allSeriesOptions ? [allSeriesOptions] : [];
+    if (!Array.isArray(allSeriesOptions)) {
+      allSeriesOptions = allSeriesOptions ? [allSeriesOptions] : [];
+    }
 
-    for (i = 0; i < allSeriesOptions.length; i++) {
+    for (i = 0; i < allSeriesOptions.length; i += 1) {
       particularSeriesOptions = extend(true, {}, allSeriesOptions[i]);
 
       particularSeriesOptions.rotated = false;
@@ -176,7 +184,7 @@ export let SeriesDataSource = class SeriesDataSource {
       };
       parsedData = validateData(data, groupsData, options.incidentOccurred, chartThemeManager.getOptions('dataPrepareSettings'));
       this.argCategories = groupsData.categories;
-      for (i = 0; i < series.length; i++) {
+      for (i = 0; i < series.length; i += 1) {
         series[i].updateData(parsedData[series[i].getArgumentField()]);
       }
     }
@@ -248,7 +256,8 @@ export let SeriesDataSource = class SeriesDataSource {
       minIndent = valueAxis.inverted ? this._indent.top : this._indent.bottom;
       maxIndent = valueAxis.inverted ? this._indent.bottom : this._indent.top;
       rangeYSize = valRange.max - valRange.min;
-      rangeVisibleSizeY = (isNumeric(valRange.maxVisible) ? valRange.maxVisible : valRange.max) - (isNumeric(valRange.minVisible) ? valRange.minVisible : valRange.min);
+      rangeVisibleSizeY = (isNumeric(valRange.maxVisible) ? valRange.maxVisible : valRange.max)
+        - (isNumeric(valRange.minVisible) ? valRange.minVisible : valRange.min);
       // B253717
       if (isDate(valRange.min)) {
         valRange.min = new Date(valRange.min.valueOf() - rangeYSize * minIndent);
@@ -262,8 +271,12 @@ export let SeriesDataSource = class SeriesDataSource {
       }
 
       if (isNumeric(rangeVisibleSizeY)) {
-        valRange.maxVisible = isDefined(valRange.maxVisible) ? valRange.maxVisible + rangeVisibleSizeY * maxIndent : undefined;
-        valRange.minVisible = isDefined(valRange.minVisible) ? valRange.minVisible - rangeVisibleSizeY * minIndent : undefined;
+        valRange.maxVisible = isDefined(valRange.maxVisible)
+          ? valRange.maxVisible + rangeVisibleSizeY * maxIndent
+          : undefined;
+        valRange.minVisible = isDefined(valRange.minVisible)
+          ? valRange.minVisible - rangeVisibleSizeY * minIndent
+          : undefined;
       }
       valRange.invert = valueAxis.inverted;
     }
@@ -271,7 +284,7 @@ export let SeriesDataSource = class SeriesDataSource {
     return { arg: argRange, val: valRange };
   }
 
-  getMarginOptions(canvas: { width: number; height: number }): ThemeValue {
+  getMarginOptions(canvas: Size): ThemeValue {
     const bubbleSize = Math.min(canvas.width, canvas.height) * this._themeManager.getOptions('maxBubbleSize');
 
     return this._series.reduce((marginOptions, series) => {

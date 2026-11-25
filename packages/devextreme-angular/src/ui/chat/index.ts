@@ -19,7 +19,7 @@ import {
 } from '@angular/core';
 
 
-import type { default as dxChat, Alert, Message, AttachmentDownloadClickEvent, DisposingEvent, InitializedEvent, InputFieldTextChangedEvent, MessageDeletedEvent, MessageDeletingEvent, MessageEditCanceledEvent, MessageEditingStartEvent, MessageEnteredEvent, MessageUpdatedEvent, MessageUpdatingEvent, OptionChangedEvent, TypingEndEvent, TypingStartEvent, SendButtonProperties, ToolCallOptions, User } from 'devextreme/ui/chat';
+import type { default as dxChat, Alert, Message, AttachmentDownloadClickEvent, DisposingEvent, InitializedEvent, InputFieldTextChangedEvent, MessageDeletedEvent, MessageDeletingEvent, MessageEditCanceledEvent, MessageEditingStartEvent, MessageEnteredEvent, MessageUpdatedEvent, MessageUpdatingEvent, OptionChangedEvent, TypingEndEvent, TypingStartEvent, SendButtonProperties, ToolCallProperties, User } from 'devextreme/ui/chat';
 import type { default as DataSource, DataSourceOptions } from 'devextreme/data/data_source';
 import type { Store } from 'devextreme/data/store';
 import type { Format } from 'devextreme/common/core/localization';
@@ -419,14 +419,12 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
         this._setOption('suggestions', value);
     }
 
-    /**
-     * [descr:dxChatOptions.toolCallOptions]
-     */
+    
     @Input()
-    get toolCallOptions(): ToolCallOptions {
+    get toolCallOptions(): ToolCallProperties {
         return this._getOption('toolCallOptions');
     }
-    set toolCallOptions(value: ToolCallOptions) {
+    set toolCallOptions(value: ToolCallProperties) {
         this._setOption('toolCallOptions', value);
     }
 
@@ -687,7 +685,7 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
     /**
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
      */
-    @Output() toolCallOptionsChange: EventEmitter<ToolCallOptions>;
+    @Output() toolCallOptionsChange: EventEmitter<ToolCallProperties>;
 
     /**
      * This member supports the internal infrastructure and is not intended to be used directly from your code.

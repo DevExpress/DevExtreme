@@ -16,6 +16,7 @@ import {
 } from '@js/ui/themes';
 import type { Item, Properties } from '@js/ui/toolbar';
 import { BindableTemplate } from '@ts/core/templates/bindable_template';
+import type { TemplateBase } from '@ts/core/templates/template_base';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { SupportedKeys } from '@ts/core/widget/widget';
 import CollectionWidgetAsync from '@ts/ui/collection/collection_widget.async';
@@ -144,7 +145,7 @@ class ToolbarBase<
         $container.text(String(data));
       }
 
-      this._getTemplate('dx-polymorph-widget').render({
+      (this._getTemplate('dx-polymorph-widget') as unknown as TemplateBase).render({
         container: $container,
         model: rawModel,
         parent: this,
@@ -484,7 +485,7 @@ class ToolbarBase<
     const leftWidth = isRTL ? afterWidth : beforeWidth;
     const rightWidth = isRTL ? beforeWidth : afterWidth;
 
-    const centerEl = this._$centerSection.get(0) as HTMLElement;
+    const centerEl = this._$centerSection.get<HTMLElement>(0);
     const centerLeft = centerEl.offsetLeft;
     const centerRight = centerLeft + centerEl.offsetWidth;
 

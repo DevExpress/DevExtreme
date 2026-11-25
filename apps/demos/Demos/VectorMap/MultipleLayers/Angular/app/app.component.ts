@@ -2,6 +2,7 @@ import { bootstrapApplication } from '@angular/platform-browser';
 import { Component, enableProdMode, inject } from '@angular/core';
 import { DxVectorMapModule } from 'devextreme-angular';
 import * as mapsData from 'devextreme-dist/js/vectormap-data/world.js';
+import type { DxVectorMapTypes } from 'devextreme-angular/ui/vector-map';
 import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -23,7 +24,7 @@ export class AppComponent {
 
   readonly streamsData = inject(Service).getStreamsData();
 
-  readonly customizeText = ({ color }) => (color === '#3c20c8' ? 'Cold' : 'Warm');
+  readonly customizeText: NonNullable<DxVectorMapTypes.Legend['customizeText']> = ({ color }) => (color === '#3c20c8' ? 'Cold' : 'Warm');
 }
 
 bootstrapApplication(AppComponent);

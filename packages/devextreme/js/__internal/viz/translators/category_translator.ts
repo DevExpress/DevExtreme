@@ -2,22 +2,28 @@
 /* eslint-disable radix */
 /* eslint-disable @typescript-eslint/init-declarations */
 /* eslint-disable no-param-reassign */
-/* eslint-disable @stylistic/max-len */
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
 
 import { adjust } from '@ts/core/utils/math';
 import { isDefined } from '@ts/core/utils/type';
+import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
+import type { CanvasOptions, Translator2DInstance, ZoomResult } from '@ts/viz/translators/translator2d';
+
+type CategoryTranslator = Translator2DInstance & {
+  _canvasOptions: Required<Pick<CanvasOptions, 'interval'>>;
+};
 
 const { round } = Math;
 
-function getValue(value) { return value; }
+function getValue<T>(value: T): T { return value; }
 
 const MIN_VALID_SCALE_OFFSET = 0.05;
 
 export default {
-  translate(category, directionOffset) {
+  translate(
+    this: CategoryTranslator,
+    category: ThemeValue,
+    directionOffset?: number,
+  ): number | null {
     const that = this;
     const canvasOptions = that._canvasOptions;
     const categoryIndex = that._categoriesToPoints[category?.valueOf()];
@@ -39,16 +45,16 @@ export default {
     return round(that._calculateProjection(canvasOptions.interval * stickDelta));
   },
 
-  getInterval() {
+  getInterval(this: CategoryTranslator): number {
     return this._canvasOptions.interval;
   },
 
-  getEventScale(zoomEvent) {
+  getEventScale(this: CategoryTranslator, zoomEvent: { deltaScale?: number }): number {
     const scale = zoomEvent.deltaScale || 1;
     return 1 - (1 - scale) / (0.75 + this.visibleCategories.length / this._categories.length);
   },
 
-  zoom(translate, scale) {
+  zoom(this: CategoryTranslator, translate: number, scale: number): ZoomResult {
     const that = this;
     const scaleOffset = Math.abs(Math.abs(scale) - 1);
     const isZoomIn = scale > 1;
@@ -64,14 +70,21 @@ export default {
     const interval = canvasOptions.interval * scale;
     const translateCategories = translate / interval;
     const visibleCount = (that.visibleCategories || []).length;
-    let startCategoryIndex = parseInt((canvasOptions.startPointIndex || 0) + translateCategories + 0.5);
-    // @ts-expect-error
-    const categoriesLength = parseInt(adjust(canvasOptions.canvasLength / interval) + (stick ? 1 : 0)) || 1;
+    let startCategoryIndex = parseInt(
+      // @ts-expect-error parseInt truncates a number here
+      (canvasOptions.startPointIndex || 0) + translateCategories + 0.5,
+    );
+    const categoriesLength = parseInt(
+      // @ts-expect-error parseInt truncates a number here
+      adjust(canvasOptions.canvasLength / interval) + (stick ? 1 : 0),
+    ) || 1;
     let endCategoryIndex;
 
     if (invert) {
-      // @ts-expect-error
-      startCategoryIndex = parseInt((canvasOptions.startPointIndex || 0) + visibleCount - translateCategories + 0.5) - categoriesLength;
+      startCategoryIndex = parseInt(
+        // @ts-expect-error parseInt truncates a number here
+        (canvasOptions.startPointIndex || 0) + visibleCount - translateCategories + 0.5,
+      ) - categoriesLength;
     }
 
     if (startCategoryIndex < 0) {
@@ -87,13 +100,20 @@ export default {
         startCategoryIndex = 0;
       }
     }
-    // @ts-expect-error
-    const newVisibleCategories = categories.slice(parseInt(startCategoryIndex), parseInt(endCategoryIndex));
+    const newVisibleCategories = categories.slice(
+      // @ts-expect-error parseInt truncates a number here
+      parseInt(startCategoryIndex),
+      parseInt(endCategoryIndex),
+    );
 
     const newInterval = that._getDiscreteInterval(newVisibleCategories.length, canvasOptions);
 
     scale = newInterval / canvasOptions.interval;
-    translate = that.translate(!invert ? newVisibleCategories[0] : newVisibleCategories[newVisibleCategories.length - 1]) * scale - (canvasOptions.startPoint + (stick ? 0 : newInterval / 2));
+    translate = that.translate(
+      !invert ? newVisibleCategories[0] : newVisibleCategories[newVisibleCategories.length - 1],
+    )
+        * scale
+      - (canvasOptions.startPoint + (stick ? 0 : newInterval / 2));
 
     return {
       min: newVisibleCategories[0],
@@ -103,17 +123,17 @@ export default {
     };
   },
 
-  getMinScale(zoom) {
+  getMinScale(this: CategoryTranslator, zoom: boolean): number {
     const that = this;
     const canvasOptions = that._canvasOptions;
     let categoriesLength = (that.visibleCategories || that._categories).length;
-    // @ts-expect-error
+    // @ts-expect-error parseInt truncates a number here
     categoriesLength += (parseInt(categoriesLength * 0.1) || 1) * (zoom ? -2 : 2);
 
     return canvasOptions.canvasLength / ((Math.max(categoriesLength, 1) * canvasOptions.interval));
   },
 
-  getScale(min, max) {
+  getScale(this: CategoryTranslator, min?: ThemeValue, max?: ThemeValue): number {
     const that = this;
     const canvasOptions = that._canvasOptions;
     const visibleArea = that.getCanvasVisibleArea();
@@ -132,21 +152,24 @@ export default {
 
   // dxRangeSelector
 
-  isValid(value) {
+  isValid(this: CategoryTranslator, value: ThemeValue): boolean {
     return isDefined(value) ? this._categoriesToPoints[value.valueOf()] >= 0 : false;
   },
 
   getCorrectValue: getValue,
 
-  to(value, direction) {
+  to(this: CategoryTranslator, value: ThemeValue, direction: number): number {
     const canvasOptions = this._canvasOptions;
     const categoryIndex = this._categoriesToPoints[value?.valueOf()];
     const startPointIndex = canvasOptions.startPointIndex || 0;
-    const stickDelta = categoryIndex + (this._options.stick ? 0 : 0.5) - startPointIndex + (this._businessRange.invert ? -1 : +1) * direction * 0.5;
+    const stickDelta = categoryIndex
+      + (this._options.stick ? 0 : 0.5)
+      - startPointIndex
+      + (this._businessRange.invert ? -1 : +1) * direction * 0.5;
     return round(this._calculateProjection(canvasOptions.interval * stickDelta));
   },
 
-  from(position, direction = 0) {
+  from(this: CategoryTranslator, position: number, direction = 0): ThemeValue {
     const canvasOptions = this._canvasOptions;
     const { startPoint } = canvasOptions;
     const categories = this.visibleCategories || this._categories;
@@ -154,8 +177,14 @@ export default {
     const stickInterval = this._options.stick ? 0.5 : 0;
     // It is strange - while "businessRange.invert" check is required in "to" here it is not.
     // Check that translator.from(translator.to(x, -1), -1) equals x.
-    // And check that translator.untranslate(translator.translate(x, -1), -1) does not equal x - is it really supposed to be so?
-    let result = round(((position - startPoint) / canvasOptions.interval) + stickInterval - 0.5 - /* (businessRange.invert ? -1 : +1) * */direction * 0.5);
+    // And check that translator.untranslate(translator.translate(x, -1), -1) does not equal x - is
+    // it really supposed to be so?
+    let result = round(
+      (position - startPoint) / canvasOptions.interval
+        + stickInterval
+        - 0.5
+        /* (businessRange.invert ? -1 : +1) * */ - direction * 0.5,
+    );
 
     if (result >= categoriesLength) {
       result = categoriesLength - 1;
@@ -169,7 +198,7 @@ export default {
     return categories[result];
   },
 
-  _add() {
+  _add(): number {
     return NaN;
   },
 
@@ -177,7 +206,11 @@ export default {
 
   isValueProlonged: true,
 
-  getRangeByMinZoomValue(minZoom, visualRange) {
+  getRangeByMinZoomValue(
+    this: CategoryTranslator,
+    minZoom: number,
+    visualRange: ThemeValue,
+  ): [ThemeValue, ThemeValue] {
     const categories = this._categories;
     const minVisibleIndex = categories.indexOf(visualRange.minVisible);
     const maxVisibleIndex = categories.indexOf(visualRange.maxVisible);

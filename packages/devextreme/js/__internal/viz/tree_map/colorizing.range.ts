@@ -2,13 +2,12 @@
 /* eslint-disable no-bitwise */
 /* eslint-disable @typescript-eslint/init-declarations */
 /* eslint-disable func-names */
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
 
+import type { BaseThemeManagerInstance } from '@ts/viz/core/base_theme_manager';
+import type { ColorGetter, ColorizerOptions } from '@ts/viz/tree_map/colorizing';
 import { addColorizer, createColorCodeGetter as _createColorCodeGetter } from '@ts/viz/tree_map/colorizing';
 
-function getPaletteIndex(value, items) {
+function getPaletteIndex(value: number, items: number[]): number {
   let start = 0;
   let end = items.length - 1;
   let index = -1;
@@ -31,7 +30,10 @@ function getPaletteIndex(value, items) {
   return index;
 }
 
-function rangeColorizer(options, themeManager) {
+function rangeColorizer(
+  options: ColorizerOptions,
+  themeManager: BaseThemeManagerInstance,
+): ColorGetter {
   const range = options.range || [];
   const palette = themeManager.createDiscretePalette(options.palette, range.length - 1);
   const getValue = _createColorCodeGetter(options);

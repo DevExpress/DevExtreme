@@ -2,23 +2,18 @@
 /* eslint-disable no-bitwise */
 /* eslint-disable @typescript-eslint/no-this-alias */
 /* eslint-disable @typescript-eslint/init-declarations */
-/* eslint-disable no-plusplus */
 /* eslint-disable func-names */
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable @typescript-eslint/no-shadow */
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-multi-assign */
-/* eslint-disable @stylistic/max-len */
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-use-before-define */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
-/* eslint-disable prefer-destructuring */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 /* eslint-disable max-classes-per-file */
 
 import { extend } from '@ts/core/utils/extend';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
+import type { EventEmitterMethods } from '@ts/viz/vector_map/event_emitter';
 import { makeEventEmitter } from '@ts/viz/vector_map/event_emitter';
 
 const _Number = Number;
@@ -53,6 +48,8 @@ interface EngineParameters {
 
 type EngineInstance = InstanceType<typeof Engine>;
 
+export type ProjectionInstance = InstanceType<typeof Projection>;
+
 interface ProjectionParams {
   centerChanged: (center: number[]) => void;
   zoomChanged: (zoom: number) => void;
@@ -73,12 +70,22 @@ function arraysEqual(a1: number[], a2: number[]): boolean {
   return floatsEqual(a1[0], a2[0]) && floatsEqual(a1[1], a2[1]);
 }
 
-function parseAndClamp(value: ThemeValue, minValue: number, maxValue: number, defaultValue: number): number {
+function parseAndClamp(
+  value: ThemeValue,
+  minValue: number,
+  maxValue: number,
+  defaultValue: number,
+): number {
   const val = _Number(value);
   return isFinite(val) ? _min(_max(val, minValue), maxValue) : defaultValue;
 }
 
-function parseAndClampArray(value: ThemeValue[], minValue: number[], maxValue: number[], defaultValue: number[]): number[] {
+function parseAndClampArray(
+  value: ThemeValue[],
+  minValue: number[],
+  maxValue: number[],
+  defaultValue: number[],
+): number[] {
   return [
     parseAndClamp(value[0], minValue[0], maxValue[0], defaultValue[0]),
     parseAndClamp(value[1], minValue[1], maxValue[1], defaultValue[1]),
@@ -86,7 +93,12 @@ function parseAndClampArray(value: ThemeValue[], minValue: number[], maxValue: n
 }
 
 function getEngine(engine?: ThemeValue): EngineInstance {
-  return (engine instanceof Engine && engine) || projection.get(engine) || projection(engine) || projection.get(DEFAULT_ENGINE_NAME);
+  return (
+    (engine instanceof Engine && engine)
+    || projection.get(engine)
+    || projection(engine)
+    || projection.get(DEFAULT_ENGINE_NAME) as EngineInstance
+  );
 }
 
 // eslint-disable-next-line import/no-mutable-exports -- description seam for tests
@@ -123,13 +135,13 @@ export let Projection = class Projection {
 
   declare _moveCenter: number[] | null;
 
-  declare _initEvents: () => void;
+  declare _initEvents: OmitThisParameter<EventEmitterMethods['_initEvents']>;
 
-  declare _disposeEvents: () => void;
+  declare _disposeEvents: OmitThisParameter<EventEmitterMethods['_disposeEvents']>;
 
-  declare _fire: (name: string, arg?: ThemeValue) => void;
+  declare _fire: OmitThisParameter<EventEmitterMethods['_fire']>;
 
-  declare on: (handlers: Record<string, () => void>) => () => void;
+  declare on: OmitThisParameter<EventEmitterMethods['on']>;
 
   constructor(parameters: ProjectionParams) {
     this._initEvents();
@@ -167,8 +179,7 @@ export let Projection = class Projection {
 
   _setupScreen(): void {
     const canvas = this._canvas;
-    const width = canvas.width;
-    const height = canvas.height;
+    const { width, height } = canvas;
     const engine = this._engine;
     const aspectRatio = engine.ar();
     this._x0 = canvas.left + width / 2;
@@ -180,8 +191,12 @@ export let Projection = class Projection {
     const screenAR = width / height;
     const boundsAR = _abs(max[0] - min[0]) / _abs(max[1] - min[1]);
     let correction;
-    if (isNaN(boundsAR) || boundsAR === 0
-        || (_min(screenAR, aspectRatio) <= aspectRatio * boundsAR && aspectRatio * boundsAR <= _max(screenAR, aspectRatio))) {
+    if (
+      isNaN(boundsAR)
+      || boundsAR === 0
+      || (_min(screenAR, aspectRatio) <= aspectRatio * boundsAR
+        && aspectRatio * boundsAR <= _max(screenAR, aspectRatio))
+    ) {
       correction = 1;
     } else {
       correction = boundsAR > 1 ? boundsAR : 1 / boundsAR;
@@ -293,7 +308,9 @@ export let Projection = class Projection {
   }
 
   changeScaledZoom(deltaZoom: number): void {
-    this.setZoom(this._scale[_max(_min(_round(this.getScaledZoom() + deltaZoom), this._scale.length - 1), 0)]);
+    this.setZoom(
+      this._scale[_max(_min(_round(this.getScaledZoom() + deltaZoom), this._scale.length - 1), 0)],
+    );
   }
 
   getZoomScalePartition(): number {
@@ -305,7 +322,7 @@ export let Projection = class Projection {
     const step = this._maxZoom ** (1 / k);
     let zoom = this._minZoom;
     this._scale = [zoom];
-    for (let i = 1; i <= k; ++i) {
+    for (let i = 1; i <= k; i += 1) {
       this._scale.push(zoom *= step);
     }
   }
@@ -333,7 +350,12 @@ export let Projection = class Projection {
   _changeCenter(value: ThemeValue[]): boolean {
     const engine = this._engine;
     const oldCenter = this._center;
-    const newCenter = this._center = parseAndClampArray(value, engine.min(), engine.max(), engine.center());
+    const newCenter = (this._center = parseAndClampArray(
+      value,
+      engine.min(),
+      engine.max(),
+      engine.center(),
+    ));
     const isChanged = !arraysEqual(oldCenter, newCenter);
     if (isChanged) {
       this._adjustCenter();
@@ -382,7 +404,7 @@ export let Projection = class Projection {
   }
 
   getViewport(): number[] {
-    const unproject = this._engine.unproject;
+    const { unproject } = this._engine;
     const lt = unproject(this._fromTransformed([-1, -1]));
     const lb = unproject(this._fromTransformed([-1, +1]));
     const rt = unproject(this._fromTransformed([+1, -1]));
@@ -399,16 +421,21 @@ export let Projection = class Projection {
   }
 
   // T254127
-  // There should be no expectation that if viewport is got with `getViewport` and set with `setViewport`
+  // There should be no expectation that if viewport is got with `getViewport` and set with
+  // `setViewport`
   // then center and zoom will be retained - in general case they will be not.
   // Such retaining requires invertibility of projection which is generally not available
-  // Invertibility means that `project(unproject([x, y])) === [x, y]` and `unproject(project([x, y])) === [x, y]` for any reasonable `(x, y)`
+  // Invertibility means that `project(unproject([x, y])) === [x, y]` and `unproject(project([x,
+  // y])) === [x, y]` for any reasonable `(x, y)`
   // For example:
-  // the "mercator" is non invertible - longitude is invertible, latitude is not (because of tan and log)
+  // the "mercator" is non invertible - longitude is invertible, latitude is not (because of tan and
+  // log)
   // the "equirectangular" is invertible (it uses simple linear transformations)
   setViewport(viewport: number[] | null | undefined): void {
     const engine = this._engine;
-    const data = viewport ? getZoomAndCenterFromViewport(engine.project, engine.unproject, viewport) : [this._minZoom, engine.center()];
+    const data = viewport
+      ? getZoomAndCenterFromViewport(engine.project, engine.unproject, viewport)
+      : [this._minZoom, engine.center()];
     this.setZoom(data[0]);
     this.setCenter(data[1]);
   }
@@ -438,17 +465,31 @@ Object.assign(Projection.prototype, {
 
 makeEventEmitter(Projection);
 
-function selectFarthestPoint(point1: number, point2: number, basePoint1: number, basePoint2: number): number {
+function selectFarthestPoint(
+  point1: number,
+  point2: number,
+  basePoint1: number,
+  basePoint2: number,
+): number {
   const basePoint = (basePoint1 + basePoint2) / 2;
   return _abs(point1 - basePoint) > _abs(point2 - basePoint) ? point1 : point2;
 }
 
-function selectClosestPoint(point1: number, point2: number, basePoint1: number, basePoint2: number): number {
+function selectClosestPoint(
+  point1: number,
+  point2: number,
+  basePoint1: number,
+  basePoint2: number,
+): number {
   const basePoint = (basePoint1 + basePoint2) / 2;
   return _abs(point1 - basePoint) < _abs(point2 - basePoint) ? point1 : point2;
 }
 
-function getZoomAndCenterFromViewport(project: ProjectMethod, unproject: ProjectMethod, viewport: number[]): [number, number[]] {
+function getZoomAndCenterFromViewport(
+  project: ProjectMethod,
+  unproject: ProjectMethod,
+  viewport: number[],
+): [number, number[]] {
   const lt = project([viewport[0], viewport[3]]);
   const lb = project([viewport[0], viewport[1]]);
   const rt = project([viewport[2], viewport[3]]);
@@ -457,10 +498,7 @@ function getZoomAndCenterFromViewport(project: ProjectMethod, unproject: Project
   const r = selectClosestPoint(rt[0], rb[0], lt[0], lb[0]);
   const t = selectClosestPoint(lt[1], rt[1], lb[1], rb[1]);
   const b = selectClosestPoint(lb[1], rb[1], lt[1], rt[1]);
-  return [
-    2 / _max(_abs(l - r), _abs(t - b)),
-    unproject([(l + r) / 2, (t + b) / 2]),
-  ];
+  return [2 / _max(_abs(l - r), _abs(t - b)), unproject([(l + r) / 2, (t + b) / 2])];
 }
 
 function setMinMax(engine: EngineInstance, p1: number[], p2: number[]): void {
@@ -491,7 +529,9 @@ const Engine = class {
   constructor(parameters: EngineParameters) {
     const that = this;
     const project = createProjectMethod(parameters.to);
-    const unproject = parameters.from ? createUnprojectMethod(parameters.from) : returnValue(DEFAULT_CENTER);
+    const unproject = parameters.from
+      ? createUnprojectMethod(parameters.from)
+      : returnValue(DEFAULT_CENTER);
 
     that.project = project;
     that.unproject = unproject;
@@ -528,10 +568,22 @@ const Engine = class {
     const b2 = parseAndClampArray([bounds[2], bounds[3]], min, max, max);
     const p1 = parameters.to(b1);
     const p2 = parameters.to(b2);
-    const delta = _min(_abs(p2[0] - p1[0]) > MIN_BOUNDS_RANGE ? _abs(p2[0] - p1[0]) : 2, _abs(p2[1] - p1[1]) > MIN_BOUNDS_RANGE ? _abs(p2[1] - p1[1]) : 2);
+    const delta = _min(
+      _abs(p2[0] - p1[0]) > MIN_BOUNDS_RANGE ? _abs(p2[0] - p1[0]) : 2,
+      _abs(p2[1] - p1[1]) > MIN_BOUNDS_RANGE ? _abs(p2[1] - p1[1]) : 2,
+    );
 
     if (delta < 2) {
-      extend(parameters, createProjectUnprojectMethods(parameters.to, parameters.from, p1, p2, delta));
+      extend(
+        parameters,
+        createProjectUnprojectMethods(
+          parameters.to,
+          parameters.from as ProjectMethod,
+          p1,
+          p2,
+          delta,
+        ),
+      );
     }
     const engine = new Engine(parameters);
 
@@ -568,17 +620,17 @@ function findMinMax(p1: number[], p2: number[]): { min: number[]; max: number[] 
   };
 }
 
-export const projection = function (parameters) {
+export const projection = function (parameters: ThemeValue): EngineInstance | null {
   return parameters && parameters.to ? new Engine(parameters) : null;
 };
 
-const projectionsCache = {};
+const projectionsCache: Record<string, EngineInstance> = {};
 
-projection.get = function (name) {
+projection.get = function (name: string): EngineInstance | null {
   return projectionsCache[name] || null;
 };
 
-projection.add = function (name, engine) {
+projection.add = function (name: string, engine: ThemeValue): typeof projection {
   engine = (engine instanceof Engine && engine) || projection(engine);
   if (!projectionsCache[name] && engine) {
     projectionsCache[name] = engine;
@@ -586,16 +638,22 @@ projection.add = function (name, engine) {
   return projection; // For chaining
 };
 
-function createProjectUnprojectMethods(project, unproject, p1, p2, delta) {
+function createProjectUnprojectMethods(
+  project: ProjectMethod,
+  unproject: ProjectMethod,
+  p1: number[],
+  p2: number[],
+  delta: number,
+): Required<Pick<EngineParameters, 'from' | 'to'>> {
   const x0 = (p1[0] + p2[0]) / 2 - delta / 2;
   const y0 = (p1[1] + p2[1]) / 2 - delta / 2;
   const k = 2 / delta;
   return {
-    to(coordinates) {
+    to(coordinates: number[]): number[] {
       const [p0, p1] = project(coordinates);
       return [-1 + (p0 - x0) * k, -1 + (p1 - y0) * k];
     },
-    from(coordinates) {
+    from(coordinates: number[]): number[] {
       return unproject([x0 + (coordinates[0] + 1) / k, y0 + (coordinates[1] + 1) / k]);
     },
   };

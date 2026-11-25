@@ -11,13 +11,13 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-multi-assign */
-/* eslint-disable @stylistic/max-len */
 /* eslint-disable @typescript-eslint/no-use-before-define */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 /* eslint-disable max-classes-per-file */
 
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
+import type { Size } from '@ts/viz/core/types';
 import { enumParser, parseScalar as _parseScalar } from '@ts/viz/core/utils';
 import { createTracker, createVisibilityGroup, toggleDisplay } from '@ts/viz/vector_map/control_bar/utils';
 
@@ -45,7 +45,8 @@ const EVENT_TARGET_TYPE = 'control-bar';
 const FLAG_CENTERING = 1;
 const FLAG_ZOOMING = 2;
 
-// TODO: This should be specified in options - seems like everything can be calculated from "buttonSize" and "zoomSliderLength"
+// TODO: This should be specified in options - seems like everything can be calculated from
+// "buttonSize" and "zoomSliderLength"
 const SIZE_OPTIONS = {
   bigCircleSize: 58,
   smallCircleSize: 28,
@@ -220,7 +221,8 @@ export let ControlBar = class ControlBar {
     this._root.linkRemove().linkOff();
     this._offProjection();
     this._offTracker();
-    // @ts-expect-error dispose releases the parameters, the root, the subscriptions and the callbacks
+    // @ts-expect-error dispose releases the parameters, the root, the subscriptions and the
+    // callbacks
     this._params = this._root = this._offProjection = this._offTracker = this._callbacks = null;
   }
 
@@ -315,10 +317,22 @@ export let ControlBar = class ControlBar {
     renderer.circle(0, 0, options.bigCircleSize / 2).append(group);
     renderer.circle(0, 0, size).attr({ fill: 'none' }).append(group);
 
-    renderer.path([-size, -offset1, 0, -offset2, size, -offset1], line).attr(directionOptions).append(group);
-    renderer.path([offset1, -size, offset2, 0, offset1, size], line).attr(directionOptions).append(group);
-    renderer.path([size, offset1, 0, offset2, -size, offset1], line).attr(directionOptions).append(group);
-    renderer.path([-offset1, size, -offset2, 0, -offset1, -size], line).attr(directionOptions).append(group);
+    renderer
+      .path([-size, -offset1, 0, -offset2, size, -offset1], line)
+      .attr(directionOptions)
+      .append(group);
+    renderer
+      .path([offset1, -size, offset2, 0, offset1, size], line)
+      .attr(directionOptions)
+      .append(group);
+    renderer
+      .path([size, offset1, 0, offset2, -size, offset1], line)
+      .attr(directionOptions)
+      .append(group);
+    renderer
+      .path([-offset1, size, -offset2, 0, -offset1, -size], line)
+      .attr(directionOptions)
+      .append(group);
   }
 
   _createZoomBar(renderer: ThemeValue, dataKey: string, group: ThemeValue): void {
@@ -347,25 +361,54 @@ export let ControlBar = class ControlBar {
     const offset2 = _round(_sqrt(options.bigCircleSize * options.bigCircleSize / 4 - size * size));
     const size2 = offset2 - offset1;
 
-    renderer.rect(-size, -size, size * 2, size * 2).data(dataKey, { index: COMMAND_RESET, name: EVENT_TARGET_TYPE }).append(group);
-    renderer.rect(-size, -offset2, size * 2, size2).data(dataKey, { index: COMMAND_MOVE_UP, name: EVENT_TARGET_TYPE }).append(group);
-    renderer.rect(offset1, -size, size2, size * 2).data(dataKey, { index: COMMAND_MOVE_RIGHT, name: EVENT_TARGET_TYPE }).append(group);
-    renderer.rect(-size, offset1, size * 2, size2).data(dataKey, { index: COMMAND_MOVE_DOWN, name: EVENT_TARGET_TYPE }).append(group);
-    renderer.rect(-offset2, -size, size2, size * 2).data(dataKey, { index: COMMAND_MOVE_LEFT, name: EVENT_TARGET_TYPE }).append(group);
+    renderer
+      .rect(-size, -size, size * 2, size * 2)
+      .data(dataKey, { index: COMMAND_RESET, name: EVENT_TARGET_TYPE })
+      .append(group);
+    renderer
+      .rect(-size, -offset2, size * 2, size2)
+      .data(dataKey, { index: COMMAND_MOVE_UP, name: EVENT_TARGET_TYPE })
+      .append(group);
+    renderer
+      .rect(offset1, -size, size2, size * 2)
+      .data(dataKey, { index: COMMAND_MOVE_RIGHT, name: EVENT_TARGET_TYPE })
+      .append(group);
+    renderer
+      .rect(-size, offset1, size * 2, size2)
+      .data(dataKey, { index: COMMAND_MOVE_DOWN, name: EVENT_TARGET_TYPE })
+      .append(group);
+    renderer
+      .rect(-offset2, -size, size2, size * 2)
+      .data(dataKey, { index: COMMAND_MOVE_LEFT, name: EVENT_TARGET_TYPE })
+      .append(group);
   }
 
   _createTrackersZoom(renderer: ThemeValue, dataKey: string, group: ThemeValue): void {
     const options = SIZE_OPTIONS;
 
-    renderer.circle(0, options.incButtonOffset, options.smallCircleSize / 2).data(dataKey, { index: COMMAND_ZOOM_IN, name: EVENT_TARGET_TYPE }).append(group);
-    renderer.circle(0, options.decButtonOffset, options.smallCircleSize / 2).data(dataKey, { index: COMMAND_ZOOM_OUT, name: EVENT_TARGET_TYPE }).append(group);
+    renderer
+      .circle(0, options.incButtonOffset, options.smallCircleSize / 2)
+      .data(dataKey, { index: COMMAND_ZOOM_IN, name: EVENT_TARGET_TYPE })
+      .append(group);
+    renderer
+      .circle(0, options.decButtonOffset, options.smallCircleSize / 2)
+      .data(dataKey, { index: COMMAND_ZOOM_OUT, name: EVENT_TARGET_TYPE })
+      .append(group);
 
     renderer.rect(-2, options.sliderLineStartOffset - 2, 4, options.sliderLineEndOffset - options.sliderLineStartOffset + 4).css({ cursor: 'default' }).data(dataKey, { index: COMMAND_ZOOM_DRAG_LINE, name: EVENT_TARGET_TYPE }).append(group);
-    this._zoomDragTracker = renderer.rect(-options.sliderLength / 2, options.sliderLineEndOffset - options.sliderWidth / 2, options.sliderLength, options.sliderWidth).data(dataKey, { index: COMMAND_ZOOM_DRAG, name: EVENT_TARGET_TYPE }).append(group);
+    this._zoomDragTracker = renderer
+      .rect(
+        -options.sliderLength / 2,
+        options.sliderLineEndOffset - options.sliderWidth / 2,
+        options.sliderLength,
+        options.sliderWidth,
+      )
+      .data(dataKey, { index: COMMAND_ZOOM_DRAG, name: EVENT_TARGET_TYPE })
+      .append(group);
   }
 
   // BEGIN: Implementation of LayoutTarget interface
-  resize(size: { width: number; height: number } | null): void {
+  resize(size: Size | null): void {
     if (this._isActive) {
       this._root.attr({ visibility: size !== null ? null : 'hidden' });
     }
@@ -376,7 +419,10 @@ export let ControlBar = class ControlBar {
   }
 
   locate(x: number, y: number): void {
-    this._root.attr({ translateX: x + this._margin + OFFSET_X, translateY: y + this._margin + OFFSET_Y });
+    this._root.attr({
+      translateX: x + this._margin + OFFSET_X,
+      translateY: y + this._margin + OFFSET_Y,
+    });
   }
   // END: Implementation of LayoutTarget interface
 
@@ -455,7 +501,9 @@ export let ControlBar = class ControlBar {
     let commandType: CommandType | undefined;
     if (this._isActive) {
       commandType = COMMAND_TO_TYPE_MAP[command];
-      this._command = commandType && commandType.flags & this._flags ? new commandType(this, command, arg) : null;
+      this._command = commandType && commandType.flags & this._flags
+        ? new commandType(this, command, arg)
+        : null;
     }
   }
 
@@ -609,7 +657,9 @@ class ZoomDragCommand {
 
   update(command: string, arg: TrackerArg): void {
     const owner = this._owner;
-    owner._adjustZoom(this._zoomFactor + owner._zoomPartition * (this._pos - arg.y) / owner._sliderLineLength);
+    owner._adjustZoom(
+      this._zoomFactor + (owner._zoomPartition * (this._pos - arg.y)) / owner._sliderLineLength,
+    );
   }
 
   finish(): void {
@@ -623,7 +673,8 @@ ZoomDragCommand.flags = FLAG_ZOOMING;
 let COMMAND_TO_TYPE_MAP: Record<string, CommandType> = {};
 
 COMMAND_TO_TYPE_MAP[COMMAND_RESET] = ResetCommand;
-COMMAND_TO_TYPE_MAP[COMMAND_MOVE_UP] = COMMAND_TO_TYPE_MAP[COMMAND_MOVE_RIGHT] = COMMAND_TO_TYPE_MAP[COMMAND_MOVE_DOWN] = COMMAND_TO_TYPE_MAP[COMMAND_MOVE_LEFT] = MoveCommand;
+COMMAND_TO_TYPE_MAP[COMMAND_MOVE_DOWN] = COMMAND_TO_TYPE_MAP[COMMAND_MOVE_LEFT] = MoveCommand;
+COMMAND_TO_TYPE_MAP[COMMAND_MOVE_UP] = COMMAND_TO_TYPE_MAP[COMMAND_MOVE_RIGHT] = MoveCommand;
 COMMAND_TO_TYPE_MAP[COMMAND_ZOOM_IN] = COMMAND_TO_TYPE_MAP[COMMAND_ZOOM_OUT] = ZoomCommand;
 COMMAND_TO_TYPE_MAP[COMMAND_ZOOM_DRAG] = ZoomDragCommand;
 

@@ -87,9 +87,6 @@ let renderFileUploaderInput = (): dxElementWrapper => $('<input>').attr('type', 
 const isFormDataSupported = (): boolean => !!window.FormData;
 
 class FileUploader extends Editor<FileUploaderProperties> {
-  // Temporary solution. Move to component level
-  public NAME!: string;
-
   _activeDropZone?: Element | null;
 
   _selectButton!: Button;
@@ -1266,7 +1263,7 @@ class FileUploader extends Editor<FileUploaderProperties> {
       return;
     }
 
-    if (this._isFileLimitReached(files as unknown as File[])) {
+    if (this._isFileLimitReached(files)) {
       this._fileLimitReachedAction?.();
       return;
     }

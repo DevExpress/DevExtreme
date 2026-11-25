@@ -65,8 +65,7 @@ const returnScenarios: ReturnScenario[] = [
 const disposables: { dispose: () => void }[] = [];
 
 const createEditor = (options: Partial<EditorProperties> = {}): Editor => {
-  const element = $('<div>').appendTo(document.body).get(0) as HTMLElement;
-  // @ts-expect-error DOMComponent constructor is not typed for direct instantiation
+  const element = $('<div>').appendTo(document.body).get<HTMLElement>(0);
   const instance: Editor = new Editor(element, options);
 
   disposables.push(instance);
@@ -89,7 +88,6 @@ describe('Editor initialization', () => {
     } as Partial<EditorProperties>);
 
     expect(() => {
-      // @ts-expect-error DOMComponent constructor is not typed for direct instantiation
       const validator: Validator = new Validator(instance.$element().get(0), {});
 
       disposables.push(validator);
@@ -100,7 +98,7 @@ describe('Editor initialization', () => {
 
   it('marks the element as a validation target with the validation state ready', () => {
     const instance = createEditor();
-    const element = instance.$element().get(0) as HTMLElement;
+    const element = instance.$element().get<HTMLElement>(0);
 
     expect(data(element, VALIDATION_TARGET)).toBe(instance);
     expect(instance.validationRequest).toBeDefined();

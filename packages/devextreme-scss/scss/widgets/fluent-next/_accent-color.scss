@@ -1,26 +1,25 @@
+// sync between Blazor and DevExtreme (plus vNext and WPF in the future)
 @supports (color: oklch(from red l c h)) {
   :root {
-    --dx-accent-color-source: var(--dx-accent-color);
-    --dx-accent-lightness-max: 0.975;
-    --dx-accent-lightness-min: 0.15;
-    --dx-accent-chroma-min: 0.02;
-    --dx-accent-color-10: oklch(from var(--dx-accent-color-source) max(l, var(--dx-accent-lightness-max)) min(c, var(--dx-accent-chroma-min)) h / 1);
-    --dx-accent-color-20: oklch(from var(--dx-accent-color-source) calc(l + 8 * (var(--dx-accent-lightness-max) - min(l, var(--dx-accent-lightness-max))) / 9) calc(c - 8 * (max(c, var(--dx-accent-chroma-min)) - var(--dx-accent-chroma-min)) / 9) h / 1);
-    --dx-accent-color-30: oklch(from var(--dx-accent-color-source) calc(l + 7 * (var(--dx-accent-lightness-max) - min(l, var(--dx-accent-lightness-max))) / 9) calc(c - 7 * (max(c, var(--dx-accent-chroma-min)) - var(--dx-accent-chroma-min)) / 9) h / 1);
-    --dx-accent-color-40: oklch(from var(--dx-accent-color-source) calc(l + 6 * (var(--dx-accent-lightness-max) - min(l, var(--dx-accent-lightness-max))) / 9) calc(c - 6 * (max(c, var(--dx-accent-chroma-min)) - var(--dx-accent-chroma-min)) / 9) h / 1);
-    --dx-accent-color-50: oklch(from var(--dx-accent-color-source) calc(l + 5 * (var(--dx-accent-lightness-max) - min(l, var(--dx-accent-lightness-max))) / 9) calc(c - 5 * (max(c, var(--dx-accent-chroma-min)) - var(--dx-accent-chroma-min)) / 9) h / 1);
-    --dx-accent-color-60: oklch(from var(--dx-accent-color-source) calc(l + 4 * (var(--dx-accent-lightness-max) - min(l, var(--dx-accent-lightness-max))) / 9) calc(c - 4 * (max(c, var(--dx-accent-chroma-min)) - var(--dx-accent-chroma-min)) / 9) h / 1);
-    --dx-accent-color-70: oklch(from var(--dx-accent-color-source) calc(l + 3 * (var(--dx-accent-lightness-max) - min(l, var(--dx-accent-lightness-max))) / 9) calc(c - 3 * (max(c, var(--dx-accent-chroma-min)) - var(--dx-accent-chroma-min)) / 9) h / 1);
-    --dx-accent-color-80: oklch(from var(--dx-accent-color-source) calc(l + 2 * (var(--dx-accent-lightness-max) - min(l, var(--dx-accent-lightness-max))) / 9) calc(c - 2 * (max(c, var(--dx-accent-chroma-min)) - var(--dx-accent-chroma-min)) / 9) h / 1);
-    --dx-accent-color-90: oklch(from var(--dx-accent-color-source) calc(l + 1 * (var(--dx-accent-lightness-max) - min(l, var(--dx-accent-lightness-max))) / 9) calc(c - 1 * (max(c, var(--dx-accent-chroma-min)) - var(--dx-accent-chroma-min)) / 9) h / 1);
-    --dx-accent-color-100: oklch(from var(--dx-accent-color-source) l c h / 1);
-    --dx-accent-color-110: oklch(from var(--dx-accent-color-source) calc(l - 1 * (max(l, var(--dx-accent-lightness-min)) - var(--dx-accent-lightness-min)) / 8) calc(c - 1 * (max(c, var(--dx-accent-chroma-min)) - var(--dx-accent-chroma-min)) / 8) h / 1);
-    --dx-accent-color-120: oklch(from var(--dx-accent-color-source) calc(l - 2 * (max(l, var(--dx-accent-lightness-min)) - var(--dx-accent-lightness-min)) / 8) calc(c - 2 * (max(c, var(--dx-accent-chroma-min)) - var(--dx-accent-chroma-min)) / 8) h / 1);
-    --dx-accent-color-130: oklch(from var(--dx-accent-color-source) calc(l - 3 * (max(l, var(--dx-accent-lightness-min)) - var(--dx-accent-lightness-min)) / 8) calc(c - 3 * (max(c, var(--dx-accent-chroma-min)) - var(--dx-accent-chroma-min)) / 8) h / 1);
-    --dx-accent-color-140: oklch(from var(--dx-accent-color-source) calc(l - 4 * (max(l, var(--dx-accent-lightness-min)) - var(--dx-accent-lightness-min)) / 8) calc(c - 4 * (max(c, var(--dx-accent-chroma-min)) - var(--dx-accent-chroma-min)) / 8) h / 1);
-    --dx-accent-color-150: oklch(from var(--dx-accent-color-source) calc(l - 5 * (max(l, var(--dx-accent-lightness-min)) - var(--dx-accent-lightness-min)) / 8) calc(c - 5 * (max(c, var(--dx-accent-chroma-min)) - var(--dx-accent-chroma-min)) / 8) h / 1);
-    --dx-accent-color-160: oklch(from var(--dx-accent-color-source) calc(l - 6 * (max(l, var(--dx-accent-lightness-min)) - var(--dx-accent-lightness-min)) / 8) calc(c - 6 * (max(c, var(--dx-accent-chroma-min)) - var(--dx-accent-chroma-min)) / 8) h / 1);
-    --dx-accent-color-170: oklch(from var(--dx-accent-color-source) calc(l - 7 * (max(l, var(--dx-accent-lightness-min)) - var(--dx-accent-lightness-min)) / 8) calc(c - 7 * (max(c, var(--dx-accent-chroma-min)) - var(--dx-accent-chroma-min)) / 8) h / 1);
-    --dx-accent-color-180: oklch(from var(--dx-accent-color-source) min(l, var(--dx-accent-lightness-min)) min(c, var(--dx-accent-chroma-min)) h / 1);
+    /* Normalizes the accent: lightness clamped to 45–60%, achromatic accents (white, black, grays) use 52.5% lightness, alpha forced to 100% */
+    --dx-accent-color-base: oklch(from var(--dx-accent-color) calc(0.525 + (clamp(0.45, l, 0.6) - 0.525) * min(1, c / 0.02)) c h / 1);
+    --dx-accent-color-10: oklch(from var(--dx-accent-color-base) 98% calc(c * (0.98 - 0.12 * 8)) h);
+    --dx-accent-color-20: oklch(from var(--dx-accent-color-base) 95% calc(c * (0.98 - 0.12 * 7)) h);
+    --dx-accent-color-30: oklch(from var(--dx-accent-color-base) 90% calc(c * (0.98 - 0.12 * 6)) h);
+    --dx-accent-color-40: oklch(from var(--dx-accent-color-base) 85% calc(c * (0.98 - 0.12 * 5)) h);
+    --dx-accent-color-50: oklch(from var(--dx-accent-color-base) 80% calc(c * (0.98 - 0.12 * 4)) h);
+    --dx-accent-color-60: oklch(from var(--dx-accent-color-base) 75% calc(c * (0.98 - 0.12 * 3)) h);
+    --dx-accent-color-70: oklch(from var(--dx-accent-color-base) calc(0.75 + (l - 0.75) / 4 * 1) calc(c * (0.98 - 0.12 * 2)) h);
+    --dx-accent-color-80: oklch(from var(--dx-accent-color-base) calc(0.75 + (l - 0.75) / 4 * 2) calc(c * (0.98 - 0.12 * 1)) h);
+    --dx-accent-color-90: oklch(from var(--dx-accent-color-base) calc(0.75 + (l - 0.75) / 4 * 3) calc(c * (0.98 - 0.12 * 0)) h);
+    --dx-accent-color-100: oklch(from var(--dx-accent-color-base) l c h);
+    --dx-accent-color-110: oklch(from var(--dx-accent-color-base) calc(l + (0.35 - l) / 4 * 1) calc(c * (0.95 - 0.1 * 0)) h);
+    --dx-accent-color-120: oklch(from var(--dx-accent-color-base) calc(l + (0.35 - l) / 4 * 2) calc(c * (0.95 - 0.1 * 1)) h);
+    --dx-accent-color-130: oklch(from var(--dx-accent-color-base) calc(l + (0.35 - l) / 4 * 3) calc(c * (0.95 - 0.1 * 2)) h);
+    --dx-accent-color-140: oklch(from var(--dx-accent-color-base) 35% calc(c * (0.95 - 0.1 * 3)) h);
+    --dx-accent-color-150: oklch(from var(--dx-accent-color-base) 30% calc(c * (0.95 - 0.1 * 4)) h);
+    --dx-accent-color-160: oklch(from var(--dx-accent-color-base) 25% calc(c * (0.95 - 0.1 * 5)) h);
+    --dx-accent-color-170: oklch(from var(--dx-accent-color-base) 20% calc(c * (0.95 - 0.1 * 6)) h);
+    --dx-accent-color-180: oklch(from var(--dx-accent-color-base) 15% calc(c * (0.95 - 0.1 * 7)) h);
   }
 }

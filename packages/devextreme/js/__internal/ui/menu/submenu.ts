@@ -88,7 +88,7 @@ class Submenu extends ContextMenu<SubmenuProperties> {
       position: {
         precise: true,
       },
-    }) as OverlayProperties;
+    });
   }
 
   _overlayPositionedActionHandler(arg: OverlayPositioningEvent): void {

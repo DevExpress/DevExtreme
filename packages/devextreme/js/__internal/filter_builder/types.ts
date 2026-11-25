@@ -5,7 +5,8 @@ import type { DeferredObj } from '@js/core/utils/deferred';
 import type {
   CustomOperation, Field, FieldInfo, Properties as FilterBuilderOptions,
 } from '@js/ui/filter_builder';
-import type { Properties as PopupProperties } from '@js/ui/popup';
+import type { Properties as PopupProperties, ShownEvent } from '@js/ui/popup';
+import type TreeView from '@js/ui/tree_view';
 import type {
   ContentReadyEvent, ItemClickEvent, ItemRenderedEvent, Properties as TreeViewProperties,
 } from '@js/ui/tree_view';
@@ -161,26 +162,22 @@ export interface AddMenuItem {
   click: () => void;
 }
 
-export type PopupOptions = Required<Pick<PopupProperties, 'onShown'>>;
-
 export interface ButtonWithMenuOptions<TItem> {
   caption?: string;
   menu: MenuOptions<TItem>;
 }
 
-export type ResolvedMenuOptions<TItem> = MenuOptions<TItem>
+export type MenuTreeViewOptions<TItem> = Omit<MenuOptions<TItem>, 'cssClass'>
 & Required<Pick<TreeViewProperties<TItem>, 'focusStateEnabled' | 'selectionMode'>>
-& Pick<PopupProperties, 'rtlEnabled' | 'onHiding' | 'onHidden'>
-& {
+& Pick<TreeViewProperties<TItem>, 'rtlEnabled'>;
+
+export type MenuPopupOptions = Pick<PopupProperties, 'rtlEnabled' | 'onHiding' | 'onHidden'> & {
   id: Guid;
+  cssClass: string;
   position: MenuPosition;
   animation: null;
+  onShown: (e: ShownEvent, treeView: TreeView) => void;
 };
-
-export interface PopupMenuOptions<TItem> {
-  menu: ResolvedMenuOptions<TItem>;
-  popup: PopupOptions;
-}
 
 export type KeyEvent = EngineEvent & {
   key: string;

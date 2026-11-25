@@ -64,7 +64,7 @@ export class RovingTabIndexController {
   ) {}
 
   private get root(): HTMLElement {
-    return this.host.$element().get(0) as HTMLElement;
+    return this.host.$element().get<HTMLElement>(0);
   }
 
   private getItemTabIndex($item: dxElementWrapper): number {
@@ -311,7 +311,7 @@ export class RovingTabIndexController {
   }
 
   focusInHandler(e: DxEvent): void {
-    const $target = $(e.target as Element);
+    const $target = $(e.target);
     const $item = $target.closest(this.options.itemsSelector);
 
     if ($item.length && defaultGetItemFocusTarget($item)?.length) {

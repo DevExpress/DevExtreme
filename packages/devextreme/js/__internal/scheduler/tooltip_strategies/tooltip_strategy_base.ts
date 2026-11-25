@@ -183,7 +183,7 @@ export abstract class TooltipStrategyBase {
       this.list = this.createList(listElement, dataList);
       this.list.registerKeyHandler?.('escape', (): void => {
         this.hide();
-        (this.getTarget()?.get(0) as HTMLElement | undefined)?.focus();
+        (this.getTarget()?.get<HTMLElement>(0))?.focus();
       });
       this.list.registerKeyHandler?.('del', (): void => {
         const { focusedElement } = this.list.option();

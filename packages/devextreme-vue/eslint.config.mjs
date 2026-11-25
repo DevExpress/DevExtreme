@@ -66,6 +66,7 @@ export default [
             "@typescript-eslint/prefer-nullish-coalescing": "warn",
             "import/no-extraneous-dependencies": "warn",
             "@typescript-eslint/no-unused-vars": "warn",
+            "@typescript-eslint/no-unnecessary-type-assertion": "warn",
         },
     },
     ...typescriptConfig.map(config => ({

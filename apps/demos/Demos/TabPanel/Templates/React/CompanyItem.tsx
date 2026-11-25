@@ -24,8 +24,8 @@ function CompanyItem({ data }: CompanyItemProps) {
             <span>{ Address }</span>
           </p>
           <p>
-            <span><b>{ City }</b>,&nbsp;</span>
-            <span>{ State }&nbsp;</span>
+            <span><b>{ City }</b>,</span>{' '}
+            <span>{ State }</span>{' '}
             <span>{ Zipcode }</span>
           </p>
         </div>

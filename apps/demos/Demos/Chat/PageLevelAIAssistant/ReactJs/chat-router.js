@@ -157,7 +157,7 @@ function joinSucceededOrThrow(results, fallbackError) {
   if (succeeded.length === 0) {
     throw failed.length > 0
       ? new ChatCommandError(formatFailures(failed))
-      : fallbackError ?? new ChatCommandError(FIELD_OR_VALUE_NOT_FOUND_MESSAGE);
+      : (fallbackError ?? new ChatCommandError(FIELD_OR_VALUE_NOT_FOUND_MESSAGE));
   }
   return failed.length > 0
     ? `${formatSucceeded(succeeded)}\n${formatFailures(failed)}`

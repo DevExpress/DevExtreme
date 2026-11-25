@@ -1,20 +1,28 @@
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
-
 import graphModule from './graph';
+import type { SankeyDataItem } from './sankey';
 
-const validator = {
-  validate(data, incidentOccurred) {
-    let result = null;
+interface DataValidator {
+  validate: (
+    data: SankeyDataItem[],
+    incidentOccurred: (errorCode: string) => void,
+  ) => string | null;
+  _hasCycle: (data: SankeyDataItem[]) => boolean;
+}
+
+const validator: DataValidator = {
+  validate(
+    this: DataValidator,
+    data: SankeyDataItem[],
+    incidentOccurred: (errorCode: string) => void,
+  ): string | null {
+    let result: string | null = null;
     if (this._hasCycle(data)) {
-      // @ts-expect-error
       result = 'E2006';
       incidentOccurred('E2006');
     }
     return result;
   },
-  _hasCycle(data) {
+  _hasCycle(data: SankeyDataItem[]): boolean {
     return graphModule.struct.hasCycle(data);
   },
 };

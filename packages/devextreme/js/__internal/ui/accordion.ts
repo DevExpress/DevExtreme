@@ -242,7 +242,6 @@ class Accordion extends CollectionWidgetLiveUpdate<AccordionProperties, Item, Co
   }
 
   _attachItemTitleClickAction($itemTitle: dxElementWrapper | Element): void {
-    // @ts-expect-error ts-error
     const eventName = addNamespace(clickEventName, this.NAME);
 
     eventsEngine.off($itemTitle, eventName);

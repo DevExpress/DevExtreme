@@ -1,78 +1,80 @@
 @if (dataSource(); as dataSource) {
-<div>
-  <dx-chart
-    id="chart"
-    [dataSource]="dataSource"
-    title="Stock Price"
-    [customizePoint]="customizePoint"
-  >
-    <dxi-chart-series pane="Price" argumentField="date" type="candlestick">
-      <dxo-chart-aggregation
-        [enabled]="true"
-        method="custom"
-        [calculate]="calculateCandle"
-      >
-      </dxo-chart-aggregation>
-    </dxi-chart-series>
-    <dxi-chart-series
-      pane="Volume"
-      name="Volume"
-      argumentField="date"
-      valueField="volume"
-      color="red"
-      type="bar"
+  <div>
+    <dx-chart
+      id="chart"
+      [dataSource]="dataSource"
+      title="Stock Price"
+      [customizePoint]="customizePoint"
     >
-      <dxo-chart-aggregation [enabled]="true" method="sum">
-      </dxo-chart-aggregation>
-    </dxi-chart-series>
-    <dxi-chart-pane name="Price"></dxi-chart-pane>
-    <dxi-chart-pane name="Volume" [height]="80"></dxi-chart-pane>
-    <dxo-chart-tooltip
-      [enabled]="true"
-      [shared]="true"
-      argumentFormat="shortDateShortTime"
-      contentTemplate="tooltipTemplate"
-    ></dxo-chart-tooltip>
-    <dxo-chart-crosshair
-      [enabled]="true"
-      [horizontalLine]="{ visible: false }"
-    ></dxo-chart-crosshair>
-    <dxo-chart-margin [right]="30"></dxo-chart-margin>
-    <dxo-chart-scroll-bar [visible]="true"></dxo-chart-scroll-bar>
-    <dxo-chart-legend [visible]="false"></dxo-chart-legend>
-    <dxi-chart-value-axis [placeholderSize]="50"></dxi-chart-value-axis>
-    <dxo-chart-zoom-and-pan argumentAxis="both"></dxo-chart-zoom-and-pan>
-    <dxo-chart-argument-axis
-      argumentType="datetime"
-      [minVisualRangeLength]="{ minutes: 10 }"
-      [visualRange]="{ length: 'hour' }"
-    ></dxo-chart-argument-axis>
-    <dxo-chart-loading-indicator [enabled]="true"></dxo-chart-loading-indicator>
-    <div *dxTemplate="let pointInfo of 'tooltipTemplate'">
-      <div class="tooltip-template">
-        <div>{{ pointInfo.argumentText }}</div>
-        <div>
-          <span>Open: </span>
-          {{ formatPrice(pointInfo.points, "openValue") }}
-        </div>
-        <div>
-          <span>High: </span>
-          {{ formatPrice(pointInfo.points, "highValue") }}
-        </div>
-        <div>
-          <span>Low: </span>
-          {{ formatPrice(pointInfo.points, "lowValue") }}
-        </div>
-        <div>
-          <span>Close: </span>
-          {{ formatPrice(pointInfo.points, "closeValue") }}
-        </div>
-        <div>
-          <span>Volume: </span>
-          {{ formatVolume(pointInfo.points) }}
+      <dxi-chart-series pane="Price" argumentField="date" type="candlestick">
+        <dxo-chart-aggregation
+          [enabled]="true"
+          method="custom"
+          [calculate]="calculateCandle"
+        >
+        </dxo-chart-aggregation>
+      </dxi-chart-series>
+      <dxi-chart-series
+        pane="Volume"
+        name="Volume"
+        argumentField="date"
+        valueField="volume"
+        color="red"
+        type="bar"
+      >
+        <dxo-chart-aggregation [enabled]="true" method="sum">
+        </dxo-chart-aggregation>
+      </dxi-chart-series>
+      <dxi-chart-pane name="Price"></dxi-chart-pane>
+      <dxi-chart-pane name="Volume" [height]="80"></dxi-chart-pane>
+      <dxo-chart-tooltip
+        [enabled]="true"
+        [shared]="true"
+        argumentFormat="shortDateShortTime"
+        contentTemplate="tooltipTemplate"
+      ></dxo-chart-tooltip>
+      <dxo-chart-crosshair
+        [enabled]="true"
+        [horizontalLine]="{ visible: false }"
+      ></dxo-chart-crosshair>
+      <dxo-chart-margin [right]="30"></dxo-chart-margin>
+      <dxo-chart-scroll-bar [visible]="true"></dxo-chart-scroll-bar>
+      <dxo-chart-legend [visible]="false"></dxo-chart-legend>
+      <dxi-chart-value-axis [placeholderSize]="50"></dxi-chart-value-axis>
+      <dxo-chart-zoom-and-pan argumentAxis="both"></dxo-chart-zoom-and-pan>
+      <dxo-chart-argument-axis
+        argumentType="datetime"
+        [minVisualRangeLength]="{ minutes: 10 }"
+        [visualRange]="{ length: 'hour' }"
+      ></dxo-chart-argument-axis>
+      <dxo-chart-loading-indicator
+        [enabled]="true"
+      ></dxo-chart-loading-indicator>
+      <div *dxTemplate="let pointInfo of 'tooltipTemplate'">
+        <div class="tooltip-template">
+          <div>{{ pointInfo.argumentText }}</div>
+          <div>
+            <span>Open: </span>
+            {{ formatPrice(pointInfo.points, "openValue") }}
+          </div>
+          <div>
+            <span>High: </span>
+            {{ formatPrice(pointInfo.points, "highValue") }}
+          </div>
+          <div>
+            <span>Low: </span>
+            {{ formatPrice(pointInfo.points, "lowValue") }}
+          </div>
+          <div>
+            <span>Close: </span>
+            {{ formatPrice(pointInfo.points, "closeValue") }}
+          </div>
+          <div>
+            <span>Volume: </span>
+            {{ formatVolume(pointInfo.points) }}
+          </div>
         </div>
       </div>
-    </div>
-  </dx-chart>
-</div>
+    </dx-chart>
+  </div>
 }

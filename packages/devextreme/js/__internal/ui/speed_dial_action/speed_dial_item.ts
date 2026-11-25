@@ -66,8 +66,6 @@ export interface SpeedDialItemProperties extends
 class SpeedDialItem<
   TProperties extends SpeedDialItemProperties = SpeedDialItemProperties,
 > extends Overlay<TProperties> {
-  public NAME!: string;
-
   _$label?: dxElementWrapper | null;
 
   _$wrapper!: dxElementWrapper;

@@ -100,7 +100,7 @@ QUnit.module('event utils', () => {
                 $.each(allProps, function() {
                     assert.ok(this in e || this in e.originalEvent, 'event has \'' + this + '\' property');
                 });
-                if(!navigator.pointerEnabled && !navigator.msPointerEnabled) {
+                if(!navigator.pointerEnabled) {
                     $.each(eventOwnProps, function(_, propName) {
                         assert.ok(Object.prototype.hasOwnProperty.call(e, propName), 'property \'' + this + '\' is own property');
                     });
@@ -164,27 +164,6 @@ QUnit.module('event utils', () => {
             assert.ok(!needSkipEvent(e1), 'do not skip event');
         });
     }
-
-    test('mspointer support methods', function(assert) {
-        const targetElement = $('#element');
-        const e1 = nativePointerMock(targetElement).eventMock('MSPointerMove', {
-            pageX: 1,
-            pageY: 2,
-            timeStamp: new Date().valueOf(),
-            pointerType: 2
-        });
-
-        nativePointerMock(targetElement).eventMock('MSPointerMove', {
-            pageX: 1,
-            pageY: 2
-        });
-
-        const data1 = eventData(e1);
-
-        assert.equal(data1.x, 1, 'eventData x');
-        assert.equal(data1.y, 2, 'eventData y');
-        assert.ok(data1.time, 'eventData time');
-    });
 
     test('pointer support methods', function(assert) {
         const targetElement = $('#element');
@@ -848,47 +827,6 @@ if(compare($.fn.jquery, [3]) < 0) {
                     const element = $('#element')
                         .on(eventName, (e) => {
                             $.each(W3CTouchEventProps, function() {
-                                assert.ok(this in e, 'event has \'' + this + '\' property');
-                            });
-                        })
-                        .get(0);
-
-                    nativePointerMock.simulateEvent(element, eventName, { touches: [1], changedTouches: [1] });
-                });
-
-                test(`'${eventName}' event has all jQuery properties`, function(assert) {
-                    const element = $('#element')
-                        .on(eventName, (e) => {
-                            $.each(jQueryAdditionalProps, function() {
-                                assert.ok(this in e, 'event has \'' + this + '\' property');
-                            });
-                        })
-                        .get(0);
-
-                    nativePointerMock.simulateEvent(element, eventName, { touches: [1], changedTouches: [1] });
-                });
-
-                test(`'${eventName}' should be unsubscribed by namespace`, function(assert) {
-                    assert.expect(0);
-
-                    const element = $('#element')
-                        .on(eventName + '.Test', (e) => {
-                            assert.ok(false);
-                        })
-                        .off('.Test')
-                        .get(0);
-
-                    nativePointerMock.simulateEvent(element, eventName, { touches: [1], changedTouches: [1] });
-                });
-            });
-        }
-
-        if(navigator.msPointerEnabled) {
-            $.each(['MSPointerDown', 'MSPointerMove', 'MSPointerUp'], (index, eventName) => {
-                test(`'${eventName}' event has all properties according to W3C (http://www.w3.org/TR/pointerevents/)`, function(assert) {
-                    const element = $('#element')
-                        .on(eventName, (e) => {
-                            $.each(W3CPointerEventProps, function() {
                                 assert.ok(this in e, 'event has \'' + this + '\' property');
                             });
                         })

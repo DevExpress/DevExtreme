@@ -31,8 +31,8 @@ import gridCoreUtils from '@ts/grids/grid_core/utils';
 
 import { ChartIntegrationMixin } from './chart_integration/m_chart_integration';
 import DataAreaImport from './data_area/m_data_area';
-import DataControllerImport from './data_controller/m_data_controller';
-import { ExportController } from './export/m_export';
+import DataControllerImport from './data_controller/data_controller';
+import { ExportMixin } from './export/m_export';
 import { getFieldsHotkeysA11yLabel } from './field_chooser/a11y';
 import { FIELD_DATA_KEY } from './field_chooser/const';
 import { FieldChooser } from './field_chooser/m_field_chooser';
@@ -43,7 +43,7 @@ import { FAKE_TABLE_CLASS, HORIZONTAL_HEADERS_AREA_CLASS, VERTICAL_HEADERS_AREA_
 import { RovingTabIndex } from './keyboard_navigation/roving_tab_index';
 import type { CellNavigationDirection } from './keyboard_navigation/table_cell_navigation';
 import { buildCellMatrix, getAdjacentCell } from './keyboard_navigation/table_cell_navigation';
-import { findField, mergeArraysByMaxValue, setFieldProperty } from './m_widget_utils';
+import { findField, mergeArraysByMaxValue, setFieldProperty } from './widget_utils';
 
 type FieldChooserOptions = NonNullable<PivotGridProperties['fieldChooser']>;
 type FieldPanelOptions = NonNullable<PivotGridProperties['fieldPanel']>;
@@ -359,6 +359,7 @@ class PivotGrid extends Widget {
     that._dataController && that._dataController.dispose();
 
     that._dataController = new DataControllerImport
+      // @ts-expect-error the widget's options aren't typed yet
       .DataController(that._getDataControllerOptions());
 
     if (hasWindow()) {
@@ -653,6 +654,7 @@ class PivotGrid extends Widget {
         that._createComponent(
           e.component.content(),
           FieldChooser,
+          // @ts-expect-error the widget's options aren't typed yet
           fieldChooserComponentOptions,
         );
       },
@@ -662,7 +664,7 @@ class PivotGrid extends Widget {
         fieldChooser.cancelChanges();
 
         if (that.$fieldChooserButton) {
-          (that.$fieldChooserButton.get(0) as HTMLElement).focus();
+          that.$fieldChooserButton.get<HTMLElement>(0).focus();
         }
       },
     };
@@ -1464,6 +1466,7 @@ class PivotGrid extends Widget {
       that._fieldChooserBase = that._createComponent(
         that.$element(),
         FieldChooserBase,
+        // @ts-expect-error the widget's options aren't typed yet
         fieldChooserBaseConfig,
       );
     }
@@ -1949,7 +1952,7 @@ class PivotGrid extends Widget {
   }
 }
 
-Object.assign(PivotGrid.prototype, ExportController);
+Object.assign(PivotGrid.prototype, ExportMixin);
 Object.assign(PivotGrid.prototype, ChartIntegrationMixin);
 
 registerComponent('dxPivotGrid', PivotGrid);

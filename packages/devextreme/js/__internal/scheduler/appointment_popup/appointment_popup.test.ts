@@ -939,6 +939,26 @@ describe('Isolated AppointmentPopup environment', () => {
       expect(POM.isMainGroupVisible()).toBe(false);
       expect(POM.isRecurrenceGroupVisible()).toBe(true);
     });
+
+    it('should fill date editors when custom onFieldDataChanged form callback is set', async () => {
+      const onFieldDataChanged = jest.fn();
+
+      const { POM } = await createAppointmentPopup({
+        appointmentData: { ...appointment },
+        editing: { form: { onFieldDataChanged } },
+      });
+
+      const startDate = POM.getInputValue('startDateEditor');
+      const startTime = POM.getInputValue('startTimeEditor');
+      const endDate = POM.getInputValue('endDateEditor');
+      const endTime = POM.getInputValue('endTimeEditor');
+
+      expect(startDate).toBe('5/9/2017');
+      expect(startTime).toBe('9:30 AM');
+      expect(endDate).toBe('5/9/2017');
+      expect(endTime).toBe('11:00 AM');
+      expect(onFieldDataChanged).toHaveBeenCalledWith(expect.objectContaining({ dataField: 'startDate' }));
+    });
   });
 
   describe('Popup Customization (editing.popup)', () => {

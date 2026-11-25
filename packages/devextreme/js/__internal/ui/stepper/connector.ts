@@ -68,7 +68,7 @@ class Connector extends DOMComponent<Connector, ConnectorProperties> {
   _updateConnectorValue(): void {
     const { value } = this.option();
 
-    const connectorElement = this._$connectorValue().get(0) as HTMLElement;
+    const connectorElement = this._$connectorValue().get<HTMLElement>(0);
 
     const ratio = value / MAX_SIZE;
 

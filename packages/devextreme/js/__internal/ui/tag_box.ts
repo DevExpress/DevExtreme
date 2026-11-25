@@ -12,7 +12,7 @@ import Guid from '@js/core/guid';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { BindableTemplate } from '@js/core/templates/bindable_template';
-import type { TemplateBase } from '@js/core/templates/template_base';
+import type { FunctionTemplate } from '@js/core/templates/function_template';
 import { getIntersection, removeDuplicates } from '@js/core/utils/array';
 import { ensureDefined, equalByValue } from '@js/core/utils/common';
 import type { DeferredObj } from '@js/core/utils/deferred';
@@ -109,7 +109,7 @@ class TagBox<
 
   _isDataSourceChanged?: boolean;
 
-  _tagTemplate?: TemplateBase;
+  _tagTemplate?: FunctionTemplate;
 
   _isDataSourceOptionChanged?: boolean;
 
@@ -632,7 +632,7 @@ class TagBox<
   }
 
   _renderSingleLineScroll(): void {
-    const mouseWheelEvent = addNamespace('dxmousewheel', this.NAME as string);
+    const mouseWheelEvent = addNamespace('dxmousewheel', this.NAME);
     const $element = this.$element();
     const { multiline } = this.option();
 
@@ -671,7 +671,7 @@ class TagBox<
     super._renderEvents();
 
     const input = this._input();
-    const namespace = addNamespace('keydown', this.NAME as string);
+    const namespace = addNamespace('keydown', this.NAME);
     eventsEngine.on(input, namespace, (e: DxEvent<KeyboardEvent>) => {
       const keyName = normalizeKeyName(e) ?? '';
 
@@ -915,7 +915,7 @@ class TagBox<
     const selectedItems = (listSelectedItems ?? optionSelectedItems) as unknown[];
     // @ts-expect-error _valueGetter is injected by DataExpressionMixin
     const clientFilterFunction = creator.getLocalFilter(this._valueGetter);
-    const filteredItems = selectedItems.filter(clientFilterFunction as (item: unknown) => boolean);
+    const filteredItems = selectedItems.filter(clientFilterFunction);
     const selectedItemsAlreadyLoaded = filteredItems.length === values.length;
     const d = Deferred<unknown>();
     const dataController = this._dataController;
@@ -948,7 +948,7 @@ class TagBox<
 
         const { data: items } = normalizeLoadResult(data, extra);
         const mappedItems = dataController.applyMapFunction(items);
-        d.resolve(mappedItems.filter(clientFilterFunction as (item: unknown) => boolean));
+        d.resolve(mappedItems.filter(clientFilterFunction));
       })
       // eslint-disable-next-line @typescript-eslint/no-misused-promises -- ignores the result
       .fail(d.reject);
@@ -1442,7 +1442,7 @@ class TagBox<
     e.stopPropagation();
     this._saveValueChangeEvent(e);
 
-    const $tag = $(e.target as Element).closest(`.${TAGBOX_TAG_CLASS}`);
+    const $tag = $(e.target).closest(`.${TAGBOX_TAG_CLASS}`);
     this._removeTagElement($tag);
   }
 

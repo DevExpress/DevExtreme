@@ -1,10 +1,8 @@
 /* eslint-disable @typescript-eslint/no-this-alias */
 /* eslint-disable @typescript-eslint/init-declarations */
-/* eslint-disable no-plusplus */
 /* eslint-disable func-names */
 /* eslint-disable @typescript-eslint/no-shadow */
 /* eslint-disable @typescript-eslint/no-use-before-define */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
 
 import '@ts/viz/tree_map/api';
 import '@ts/viz/tree_map/states';
@@ -28,7 +26,7 @@ expand(proto._handlers, 'calculateAdditionalStates', (states, options) => {
 
 TreeMapBase.addChange({
   code: 'HOVER_ENABLED',
-  handler() {
+  handler(this: TreeMapBase) {
     const hoverEnabled = _parseScalar(this._getOption('hoverEnabled', true), true);
     if (!hoverEnabled) {
       this.clearHover();
@@ -43,22 +41,22 @@ TreeMapBase.addChange({
 nodeProto.statesMap[1] = 1;
 nodeProto.additionalStates.push(1);
 
-expand(proto, '_extendProxyType', function (proto) {
+expand(proto, '_extendProxyType', function (this: TreeMapBase, proto) {
   const that = this;
 
-  proto.setHover = function () {
+  proto.setHover = function (this: Pick<Node, '_id'>): void {
     that._hoverNode(this._id);
   };
-  proto.isHovered = function () {
+  proto.isHovered = function (this: Pick<Node, '_id'>): boolean {
     return that._hoverIndex === this._id;
   };
 });
 
-expand(proto, '_onNodesCreated', function () {
+expand(proto, '_onNodesCreated', function (this: TreeMapBase) {
   this._hoverIndex = -1;
 });
 
-expand(proto, '_changeGroupSettings', function () {
+expand(proto, '_changeGroupSettings', function (this: TreeMapBase) {
   const that = this;
   that._groupHoverEnabled = _parseScalar(that._getOption('group').hoverEnabled, true);
   if (!that._groupHoverEnabled) {
@@ -66,23 +64,23 @@ expand(proto, '_changeGroupSettings', function () {
   }
 });
 
-proto._applyHoverState = function (index, state) {
+proto._applyHoverState = function (this: TreeMapBase, index, state): void {
   setNodeStateRecursive(this._nodes[index], STATE_CODE, state);
   this._eventTrigger('hoverChanged', { node: this._nodes[index].proxy });
 };
 
-function setNodeStateRecursive(node, code, state) {
+function setNodeStateRecursive(node, code, state): void {
   const nodes = node.isNode() && node.nodes;
   let i;
   const ii = nodes?.length;
 
   node.setState(code, state);
-  for (i = 0; i < ii; ++i) {
+  for (i = 0; i < ii; i += 1) {
     setNodeStateRecursive(nodes[i], code, state);
   }
 }
 
-proto._hoverNode = function (index) {
+proto._hoverNode = function (this: TreeMapBase, index): void {
   const that = this;
   const currentIndex = that._hoverIndex;
 
@@ -104,6 +102,6 @@ proto._hoverNode = function (index) {
   }
 };
 
-proto.clearHover = function () {
+proto.clearHover = function (this: TreeMapBase): void {
   this._hoverNode(-1);
 };

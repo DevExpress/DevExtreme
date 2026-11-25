@@ -6,10 +6,8 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-multi-assign */
-/* eslint-disable @stylistic/max-len */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-use-before-define */
-/* eslint-disable prefer-destructuring */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 
 import { extend } from '@ts/core/utils/extend';
@@ -39,7 +37,13 @@ function hasText(text: ThemeValue): boolean {
   return !!(text && String(text).length > 0);
 }
 
-function processTitleLength(elem: ThemeValue, text: ThemeValue, width: number, options: ThemeValue, placeholderSize: ThemeValue): void {
+function processTitleLength(
+  elem: ThemeValue,
+  text: ThemeValue,
+  width: number,
+  options: ThemeValue,
+  placeholderSize: ThemeValue,
+): void {
   if (elem.attr({ text }).setMaxSize(width, placeholderSize, options).textChanged) {
     elem.setTitle(text);
   }
@@ -115,7 +119,7 @@ export let Title = class Title extends LayoutElement {
   }
 
   _updateStructure(): void {
-    const renderer = this._params.renderer;
+    const { renderer } = this._params;
     const group = this._group;
     const options = this._options;
     const align = options.horizontalAlignment;
@@ -133,7 +137,9 @@ export let Title = class Title extends LayoutElement {
     this._subtitleElement.attr({ align, class: options.subtitle.cssClass });
 
     group.linkAppend();
-    hasText(options.subtitle.text) ? this._subtitleElement.append(group) : this._subtitleElement.remove();
+    hasText(options.subtitle.text)
+      ? this._subtitleElement.append(group)
+      : this._subtitleElement.remove();
   }
 
   _updateTexts(): void {
@@ -155,14 +161,16 @@ export let Title = class Title extends LayoutElement {
     titleElement.attr({ y });
 
     if (hasText(subtitleOptions.text)) {
-      subtitleElement.attr({ text: subtitleOptions.text, y: 0 }).css(_patchFontOptions(subtitleOptions.font));
+      subtitleElement
+        .attr({ text: subtitleOptions.text, y: 0 })
+        .css(_patchFontOptions(subtitleOptions.font));
     }
   }
 
   _shiftSubtitle(): void {
     const titleBox = this._titleElement.getBBox();
     const element = this._subtitleElement;
-    const offset = this._options.subtitle.offset;
+    const { offset } = this._options.subtitle;
 
     element.move(0, titleBox.y + titleBox.height - element.getBBox().y - offset);
   }
@@ -227,17 +235,23 @@ export let Title = class Title extends LayoutElement {
 
   _correctTitleLength(width: number): void {
     const options = this._options;
-    const margin = options.margin;
+    const { margin } = options;
     const maxWidth = width - margin.left - margin.right;
 
-    let placeholderSize = options.placeholderSize;
+    let { placeholderSize } = options;
 
     processTitleLength(this._titleElement, options.text, maxWidth, options, placeholderSize);
     if (this._subtitleElement) {
       if (_Number(placeholderSize) > 0) {
         placeholderSize -= this._titleElement.getBBox().height;
       }
-      processTitleLength(this._subtitleElement, options.subtitle.text, maxWidth, options.subtitle, placeholderSize);
+      processTitleLength(
+        this._subtitleElement,
+        options.subtitle.text,
+        maxWidth,
+        options.subtitle,
+        placeholderSize,
+      );
       this._shiftSubtitle();
     }
 
@@ -262,7 +276,7 @@ export let Title = class Title extends LayoutElement {
 
   _updateBoundingRect(): void {
     const options = this._options;
-    const margin = options.margin;
+    const { margin } = options;
     const boundingRect = this._boundingRect;
     const box = this._hasText ? this._group.getBBox() : {
       width: 0, height: 0, x: 0, y: 0, isEmpty: true,
@@ -344,7 +358,9 @@ Title.prototype.DEBUG_getOptions = function (): ThemeValue { return this._option
 
 function processTitleOptions(options: ThemeValue): ThemeValue {
   const newOptions = _isString(options) ? { text: options } : options || {};
-  newOptions.subtitle = _isString(newOptions.subtitle) ? { text: newOptions.subtitle } : newOptions.subtitle || {};
+  newOptions.subtitle = _isString(newOptions.subtitle)
+    ? { text: newOptions.subtitle }
+    : newOptions.subtitle || {};
   return newOptions;
 }
 

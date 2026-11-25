@@ -5,15 +5,12 @@
 /* eslint-disable @typescript-eslint/prefer-for-of */
 /* eslint-disable @typescript-eslint/no-this-alias */
 /* eslint-disable @typescript-eslint/init-declarations */
-/* eslint-disable no-plusplus */
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable @typescript-eslint/no-shadow */
 /* eslint-disable consistent-return */
 /* eslint-disable no-multi-assign */
-/* eslint-disable @stylistic/max-len */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-/* eslint-disable prefer-destructuring */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 
@@ -97,7 +94,9 @@ const baseRangeSeries = {
       });
 
       if (!isFinite(result[val1Field]) || !isFinite(result[val2Field])) {
-        if (data.filter((i) => i[val1Field] === null && i[val2Field] === null).length === data.length) {
+        if (
+          data.filter((i) => i[val1Field] === null && i[val2Field] === null).length === data.length
+        ) {
           result[val1Field] = result[val2Field] = null;
         } else {
           return;
@@ -112,8 +111,8 @@ const baseRangeSeries = {
     return [this._options.rangeValue1Field || 'val1', this._options.rangeValue2Field || 'val2'];
   },
 
-  getSeriesPairCoord(coord, isArgument) {
-    let oppositeCoord = null;
+  getSeriesPairCoord(coord, isArgument): number | null {
+    let oppositeCoord: number | null = null;
     const { rotated } = this._options;
     const isOpposite = !isArgument && !rotated || isArgument && rotated;
     const coordName = isOpposite ? 'vy' : 'vx';
@@ -121,14 +120,17 @@ const baseRangeSeries = {
     const oppositeCoordName = isOpposite ? 'vx' : 'vy';
     const points = this.getPoints();
 
-    for (let i = 0; i < points.length; i++) {
+    for (let i = 0; i < points.length; i += 1) {
       const p = points[i];
       let tmpCoord;
 
       if (isArgument) {
         tmpCoord = p.getCenterCoord()[coordName[1]] === coord ? p[oppositeCoordName] : undefined;
       } else {
-        const coords = [Math.min(p[coordName], p[minCoordName]), Math.max(p[coordName], p[minCoordName])];
+        const coords = [
+          Math.min(p[coordName], p[minCoordName]),
+          Math.max(p[coordName], p[minCoordName]),
+        ];
         tmpCoord = coord >= coords[0] && coord <= coords[1] ? p[oppositeCoordName] : undefined;
       }
 
@@ -146,7 +148,7 @@ chart.rangebar = _extend({}, barSeries, baseRangeSeries);
 // @ts-expect-error
 chart.rangearea = _extend({}, areaSeries, {
   _drawPoint(options) {
-    const point = options.point;
+    const { point } = options;
 
     if (point.isInVisibleArea()) {
       point.clearVisibility();
@@ -170,7 +172,9 @@ chart.rangearea = _extend({}, areaSeries, {
     return {
       line: processedPoints,
       bottomLine: processedMinPointsCoords,
-      area: _map(processedPoints, (pt) => pt.getCoords()).concat(processedMinPointsCoords.slice().reverse()),
+      area: _map(processedPoints, (pt) => pt.getCoords()).concat(
+        processedMinPointsCoords.slice().reverse(),
+      ),
       singlePointSegment: processedPoints !== points,
     };
   },
@@ -214,7 +218,9 @@ chart.rangearea = _extend({}, areaSeries, {
     areaSeries._updateElement.apply(this, arguments);
 
     if (bottomBorderElement) {
-      animate ? bottomBorderElement.animate(bottomLineParams) : bottomBorderElement.attr(bottomLineParams);
+      animate
+        ? bottomBorderElement.animate(bottomLineParams)
+        : bottomBorderElement.attr(bottomLineParams);
     }
   },
 }, baseRangeSeries);

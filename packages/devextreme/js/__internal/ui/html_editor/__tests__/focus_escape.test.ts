@@ -15,12 +15,11 @@ const editors: HtmlEditor[] = [];
 
 const createEditor = (options = {}): HtmlEditorModel => {
   const $element = $('<div>').appendTo(document.body);
-  // @ts-expect-error direct instantiation is not typed
   const instance = new HtmlEditor($element, options);
 
   editors.push(instance);
 
-  return new HtmlEditorModel($element.get(0) as HTMLElement);
+  return new HtmlEditorModel($element.get<HTMLElement>(0));
 };
 
 describe('HtmlEditor focus escape (Ctrl+Shift+Up/Down)', () => {
@@ -31,9 +30,9 @@ describe('HtmlEditor focus escape (Ctrl+Shift+Up/Down)', () => {
   });
 
   it('Ctrl+Shift+Down moves focus to the next focusable outside the editor', () => {
-    const before = $('<button>').attr('id', 'before').appendTo(document.body).get(0) as HTMLElement;
+    const before = $('<button>').attr('id', 'before').appendTo(document.body).get<HTMLElement>(0);
     const model = createEditor();
-    const after = $('<button>').attr('id', 'after').appendTo(document.body).get(0) as HTMLElement;
+    const after = $('<button>').attr('id', 'after').appendTo(document.body).get<HTMLElement>(0);
 
     model.moveFocusFromContent('down');
 
@@ -42,7 +41,7 @@ describe('HtmlEditor focus escape (Ctrl+Shift+Up/Down)', () => {
   });
 
   it('Ctrl+Shift+Up moves focus to the previous focusable outside the editor', () => {
-    const before = $('<button>').attr('id', 'before').appendTo(document.body).get(0) as HTMLElement;
+    const before = $('<button>').attr('id', 'before').appendTo(document.body).get<HTMLElement>(0);
     const model = createEditor();
     $('<button>').attr('id', 'after').appendTo(document.body);
 
@@ -74,7 +73,7 @@ describe('HtmlEditor focus escape (Ctrl+Shift+Up/Down)', () => {
   });
 
   it('Ctrl+Shift+Up falls back to the previous focusable when the toolbar has no focusable item', () => {
-    const before = $('<button>').attr('id', 'before').appendTo(document.body).get(0) as HTMLElement;
+    const before = $('<button>').attr('id', 'before').appendTo(document.body).get<HTMLElement>(0);
     const model = createEditor({ readOnly: true, toolbar: { items: ['bold'] } });
 
     model.moveFocusFromContent('up');
@@ -92,9 +91,9 @@ describe('HtmlEditor focus escape (Ctrl+Shift+Up/Down)', () => {
   });
 
   it('does nothing without Ctrl+Shift modifiers', () => {
-    const before = $('<button>').attr('id', 'before').appendTo(document.body).get(0) as HTMLElement;
+    const before = $('<button>').attr('id', 'before').appendTo(document.body).get<HTMLElement>(0);
     const model = createEditor();
-    const after = $('<button>').attr('id', 'after').appendTo(document.body).get(0) as HTMLElement;
+    const after = $('<button>').attr('id', 'after').appendTo(document.body).get<HTMLElement>(0);
 
     const event = model.pressKeyInContent('ArrowDown');
 

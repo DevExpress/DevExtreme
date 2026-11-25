@@ -3,9 +3,10 @@ import {
   Component, enableProdMode, inject, signal,
 } from '@angular/core';
 import { DxMapModule, DxCheckBoxModule, DxButtonModule } from 'devextreme-angular';
+import type { DxCheckBoxTypes } from 'devextreme-angular/ui/check-box';
 
 import { Service } from './app.service';
-import type { APIKey } from './app.service';
+import type { APIKey, Marker } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -32,23 +33,22 @@ export class AppComponent {
 
   readonly mapMarkerUrl = signal<string>(this.service.getMarkerUrl());
 
-  readonly markers = signal(this.service.getMarkers());
+  readonly markers = signal<Marker[]>(this.service.getMarkers());
 
   readonly apiKey: APIKey = {
     azure: '6N8zuPkBsnfwniNAJkldM3cUgm3lXg3y9gkIKy59benICnnepK4DJQQJ99AIACYeBjFllM6LAAAgAZMPGFXE',
   };
 
-  checkCustomMarker(data) {
-    this.mapMarkerUrl.set(data.value ? this.customMarkerUrl : null);
+  checkCustomMarker({ value }: DxCheckBoxTypes.ValueChangedEvent): void {
+    this.mapMarkerUrl.set(value ? this.customMarkerUrl : '');
     this.markers.set(this.originalMarkers);
   }
 
-  showTooltips() {
-    this.markers.update((markers) => markers.map((item) => {
-      const newItem = JSON.parse(JSON.stringify(item));
-      newItem.tooltip.isShown = true;
-      return newItem;
-    }));
+  showTooltips(): void {
+    this.markers.update((markers) => markers.map((item) => ({
+      ...item,
+      tooltip: { ...item.tooltip, isShown: true },
+    })));
   }
 }
 

@@ -8,7 +8,6 @@ import type { EventInfo, NativeEventInfo } from '@js/events';
 import messageLocalization from '@js/localization/message';
 import type { TextBoxInstance } from '@js/ui/text_box';
 import { combineFilters } from '@ts/grids/grid_core/filter/utils';
-import type { TextBoxProperties } from '@ts/ui/text_box/text_box';
 
 import type { Column } from '../columns_controller/types';
 import type { DefaultToolbarItem } from '../toolbar/types';
@@ -127,7 +126,7 @@ export const addSearchTextBox = (
 
   widget: 'dxTextBox',
   options: {
-    onContentReady: ({ component }: EventInfo<TextBoxInstance>) => {
+    onContentReady: ({ component }: EventInfo<TextBoxInstance>): void => {
       setTextBoxRef(component);
     },
     onInput: (e: NativeEventInfo<TextBoxInstance, UIEvent>): void => {
@@ -148,8 +147,8 @@ export const addSearchTextBox = (
       class: addWidgetPrefix(CLASS.searchPanel),
     },
     mode: 'search',
-    onDisposing: () => {
+    onDisposing: (): void => {
       clearTimeout(timer);
     },
-  } as TextBoxProperties,
+  },
 });

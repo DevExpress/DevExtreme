@@ -2,6 +2,7 @@ import { bootstrapApplication } from '@angular/platform-browser';
 import { Component, enableProdMode, inject } from '@angular/core';
 import { DxVectorMapModule } from 'devextreme-angular';
 import * as mapsData from 'devextreme-dist/js/vectormap-data/world.js';
+import type { DxVectorMapTypes } from 'devextreme-angular/ui/vector-map';
 import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -21,28 +22,27 @@ if (!/localhost/.test(document.location.host)) {
 export class AppComponent {
   readonly worldMap = mapsData.world;
 
-  private readonly populations: Object = inject(Service).getPopulations();
+  private readonly populations = inject(Service).getPopulations();
 
-  customizeTooltip({ attribute }: { attribute: Function }) {
+  readonly customizeTooltip = ({ attribute }: DxVectorMapTypes.MapLayerElement): Record<string, unknown> => {
     if (attribute('population')) {
       return {
         text: `${attribute('name')}: ${attribute('population')}% of world population`,
       };
     }
-    return null;
-  }
+    return {};
+  };
 
-  readonly customizeLayers = (elements: { attribute: Function }[]) => {
+  readonly customizeLayers = (elements: DxVectorMapTypes.MapLayerElement[]): void => {
     elements.forEach((element) => {
       element.attribute('population', this.populations[element.attribute('name')]);
     });
   };
 
-  customizeText({ index, start, end }: Record<string, number>) {
+  readonly customizeText: NonNullable<DxVectorMapTypes.Legend['customizeText']> = ({ index, start, end }) => {
     const text = (index === 0) ? '< 0.5%' : `${start}% to ${end}%`;
-
     return (index === 5) ? '> 3%' : text;
-  }
+  };
 }
 
 bootstrapApplication(AppComponent);

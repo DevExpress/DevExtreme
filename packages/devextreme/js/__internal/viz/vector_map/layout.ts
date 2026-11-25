@@ -1,12 +1,10 @@
 /* eslint-disable max-depth */
 /* eslint-disable @typescript-eslint/no-this-alias */
 /* eslint-disable @typescript-eslint/init-declarations */
-/* eslint-disable no-plusplus */
 /* eslint-disable func-names */
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable consistent-return */
 /* eslint-disable no-multi-assign */
-/* eslint-disable @stylistic/max-len */
 /* eslint-disable @typescript-eslint/no-use-before-define */
 
 import { each } from '@ts/core/utils/iterator';
@@ -72,7 +70,10 @@ interface LayoutCell {
 }
 
 function getCellIndex(options: LayoutOptions): number {
-  return verticalAlignmentMap[options.verticalAlignment] * 3 + horizontalAlignmentMap[options.horizontalAlignment];
+  return (
+    verticalAlignmentMap[options.verticalAlignment] * 3
+    + horizontalAlignmentMap[options.horizontalAlignment]
+  );
 }
 
 function createCells(canvas: Bounds, items: LayoutItem[]): LayoutCell[] {
@@ -189,7 +190,8 @@ function applyCellLayout(cell: LayoutCell, forceMode: boolean | undefined): bool
   const moves: (number[] | null)[] = [];
   let hasHiddenItems = false;
 
-  // eslint-disable-next-line @typescript-eslint/no-invalid-void-type -- the each() callback returns false to break the loop
+  // the each() callback returns false to break the loop
+  // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
   _each(cell.items, (_, item): boolean | void => {
     if (item.width > cellWidth || item.height > cellHeight) {
       moves.push(null);
@@ -277,11 +279,12 @@ export let LayoutControl = class LayoutControl {
   }
 
   suspend(): void {
-    ++this._suspended;
+    this._suspended += 1;
   }
 
   resume(): void {
-    if (--this._suspended === 0) {
+    this._suspended -= 1;
+    if (this._suspended === 0) {
       this._update();
     }
   }
@@ -306,10 +309,18 @@ export let LayoutControl = class LayoutControl {
         item.resize(canvas);
       });
 
-      this._widget.resolveItemsDeferred(this._items.filter((el) => el.getTemplatesGroups && el.getTemplatesDef));
-      applyLayout({
-        left: canvas.left, top: canvas.top, right: canvas.width + canvas.left, bottom: canvas.height + canvas.top,
-      }, this._items);
+      this._widget.resolveItemsDeferred(
+        this._items.filter((el) => el.getTemplatesGroups && el.getTemplatesDef),
+      );
+      applyLayout(
+        {
+          left: canvas.left,
+          top: canvas.top,
+          right: canvas.width + canvas.left,
+          bottom: canvas.height + canvas.top,
+        },
+        this._items,
+      );
     }
   }
 };

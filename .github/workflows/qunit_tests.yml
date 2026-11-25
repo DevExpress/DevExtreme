@@ -14,6 +14,7 @@ on:
 env:
   NX_SKIP_NX_CACHE: ${{ contains(github.event.pull_request.labels.*.name, 'skip-cache') && 'true' || 'false' }}
   RUN_ALL_TESTS: true
+  NX_MAX_CACHE_SIZE: 1GB
 
 jobs:
   check-should-run-all:
@@ -178,7 +179,7 @@ jobs:
     - name: Setup Chrome
       uses: ./.github/actions/setup-chrome
       with:
-        chrome-version: '155.0.8059.39'
+        chrome-version: '157.0.8103.78'
 
     - name: Run QUnit tests
       uses: ./.github/actions/run-qunit-tests
@@ -214,7 +215,7 @@ jobs:
       - name: Setup Chrome
         uses: ./.github/actions/setup-chrome
         with:
-          chrome-version: '155.0.8059.39'
+          chrome-version: '157.0.8103.78'
 
       - name: Run QUnit tests
         uses: ./.github/actions/run-qunit-tests

@@ -325,8 +325,7 @@ export class EditorFactory extends ViewControllerWithMixin {
 
   private _getContainerRoot(): Node {
     const $container = this.component?.$element();
-    // @ts-expect-error the grid element exists once the component is initialized
-    const root = domAdapter.getRootNode($container?.get(0));
+    const root = domAdapter.getRootNode($container?.get<HTMLElement>(0));
 
     // a grid created inside a plain document fragment (not a shadow root) listens on the document
     if (root.nodeType === Node.DOCUMENT_FRAGMENT_NODE && !('host' in root)) {

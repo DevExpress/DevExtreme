@@ -1,6 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import { Component, enableProdMode, inject } from '@angular/core';
 import { DxVectorMapModule } from 'devextreme-angular';
+import type { DxVectorMapTypes } from 'devextreme-angular/ui/vector-map';
 import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -33,14 +34,14 @@ export class AppComponent {
 
   readonly buildingData = this.service.getBuildingData();
 
-  customizeTooltip({ layer, attribute }) {
+  readonly customizeTooltip = ({ layer, attribute }: DxVectorMapTypes.MapLayerElement): Record<string, unknown> => {
     if (layer.name === 'rooms') {
       return {
         text: `Square: ${attribute('square')} ft&#178`,
       };
     }
-    return null;
-  }
+    return {};
+  };
 }
 
 bootstrapApplication(AppComponent);

@@ -76,17 +76,18 @@ export class AppComponent {
 
   readonly onFormInitialized = (e: DxFormTypes.InitializedEvent): void => {
     this.form = e.component;
-    this.form?.on('fieldDataChanged', (event: { dataField: string }) => {
-      if (this.showConflictError && ['startDate', 'endDate', 'assigneeId', 'recurrenceRule'].includes(event.dataField)) {
-        this.setConflictError(false);
-        this.form?.validate();
-      }
-    });
+  };
+
+  readonly onFormFieldDataChanged = (e: DxFormTypes.FieldDataChangedEvent): void => {
+    if (this.showConflictError && ['startDate', 'endDate', 'assigneeId', 'recurrenceRule'].includes(e.dataField ?? '')) {
+      this.setConflictError(false);
+      this.form?.validate();
+    }
   };
 
   readonly customizeItem = (item: DxFormTypes.SimpleItem): void => {
     if (item.name === 'allDayEditor' || item.name === 'recurrenceEndEditor') {
-      item.label.visible = true;
+      item.label = { ...item.label, visible: true };
     } else if (item.name === 'subjectEditor') {
       item.editorOptions = item.editorOptions || {};
       item.editorOptions.placeholder = 'Add title';

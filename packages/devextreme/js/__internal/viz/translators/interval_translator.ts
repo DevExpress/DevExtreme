@@ -1,19 +1,25 @@
 /* eslint-disable @typescript-eslint/no-this-alias */
 /* eslint-disable @typescript-eslint/init-declarations */
 /* eslint-disable no-param-reassign */
-/* eslint-disable @stylistic/max-len */
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
 
 import { dateUtils } from '@ts/core/utils/date';
 import { adjust } from '@ts/core/utils/math';
 import { isDefined, isNumeric as isNumber } from '@ts/core/utils/type';
+import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
+import type { Translator2DInstance } from '@ts/viz/translators/translator2d';
+
+type IntervalTranslator = Translator2DInstance & {
+  _intervalize: (value: ThemeValue, interval: ThemeValue) => ThemeValue;
+  _parse: (value: ThemeValue) => number | Date;
+  _to: (value: ThemeValue, skipRound?: boolean) => number;
+  isValid: (value: ThemeValue, interval?: ThemeValue) => boolean;
+  to: (bp: ThemeValue, direction?: number, skipRound?: boolean, interval?: ThemeValue) => number;
+};
 
 const { floor } = Math;
 
 export default {
-  _intervalize(value, interval) {
+  _intervalize(this: IntervalTranslator, value: ThemeValue, interval: ThemeValue): ThemeValue {
     if (!isDefined(value)) {
       return undefined;
     }
@@ -23,14 +29,25 @@ export default {
       } else {
         value = new Date(value.getTime());
       }
-      value = dateUtils.correctDateWithUnitBeginning(value, interval, null, this._options.firstDayOfWeek);
+      value = dateUtils.correctDateWithUnitBeginning(
+        value,
+        interval,
+        null,
+        this._options.firstDayOfWeek,
+      );
     } else {
       value = adjust(floor(adjust(value / interval)) * interval, interval);
     }
     return value;
   },
 
-  translate(bp, direction, skipRound, interval) {
+  translate(
+    this: IntervalTranslator,
+    bp: ThemeValue,
+    direction?: number,
+    skipRound?: boolean,
+    interval?: ThemeValue,
+  ): number | null {
     const that = this;
     const specialValue = that.translateSpecialCase(bp);
 
@@ -47,29 +64,33 @@ export default {
     return that.to(bp, direction, skipRound, interval);
   },
 
-  getInterval() {
-    return Math.round(this._canvasOptions.ratioOfCanvasRange * (this._businessRange.interval || Math.abs(this._canvasOptions.rangeMax - this._canvasOptions.rangeMin)));
+  getInterval(this: IntervalTranslator): number {
+    return Math.round(
+      this._canvasOptions.ratioOfCanvasRange
+        * (this._businessRange.interval
+          || Math.abs(this._canvasOptions.rangeMax - this._canvasOptions.rangeMin)),
+    );
   },
 
-  zoom() { },
+  zoom(): void { },
 
-  getMinScale() { },
+  getMinScale(): void { },
 
-  getScale() { },
+  getScale(): void { },
 
-  _parse(value) {
+  _parse(this: IntervalTranslator, value: ThemeValue): number | Date {
     return this._businessRange.dataType === 'datetime' ? new Date(value) : Number(value);
   },
 
-  fromValue(value) {
+  fromValue(this: IntervalTranslator, value: ThemeValue): number | Date {
     return this._parse(value);
   },
 
-  toValue(value) {
+  toValue(this: IntervalTranslator, value: ThemeValue): number | Date {
     return this._parse(value);
   },
 
-  isValid(value, interval) {
+  isValid(this: IntervalTranslator, value: ThemeValue, interval?: ThemeValue): boolean {
     const that = this;
     const co = that._canvasOptions;
     let { rangeMin } = co;
@@ -87,14 +108,23 @@ export default {
       rangeMax = that._intervalize(rangeMax, interval);
     }
 
-    if (value.valueOf() < rangeMin || value.valueOf() >= dateUtils.addInterval(rangeMax, interval)) {
+    if (
+      value.valueOf() < rangeMin
+      || value.valueOf() >= dateUtils.addInterval(rangeMax, interval)
+    ) {
       return false;
     }
 
     return true;
   },
 
-  to(bp, direction, skipRound, interval) {
+  to(
+    this: IntervalTranslator,
+    bp: ThemeValue,
+    direction?: number,
+    skipRound?: boolean,
+    interval?: ThemeValue,
+  ): number {
     const that = this;
 
     interval = interval || that._options.interval;
@@ -111,7 +141,7 @@ export default {
     return res;
   },
 
-  _to(value, skipRound) {
+  _to(this: IntervalTranslator, value: ThemeValue, skipRound?: boolean): number {
     const co = this._canvasOptions;
     const rMin = co.rangeMinVisible;
     const rMax = co.rangeMaxVisible;
@@ -124,12 +154,14 @@ export default {
       offset = dateUtils.addInterval(rMax, this._options.interval) - rMin;
     }
 
-    const projectedValue = this._calculateProjection(offset * this._canvasOptions.ratioOfCanvasRange);
+    const projectedValue = this._calculateProjection(
+      offset * this._canvasOptions.ratioOfCanvasRange,
+    );
 
     return this._conversionValue(projectedValue, skipRound);
   },
 
-  from(position, direction) {
+  from(this: IntervalTranslator, position: number, direction?: ThemeValue): ThemeValue {
     const that = this;
     const origInterval = that._options.interval;
     let interval = origInterval;
@@ -142,8 +174,13 @@ export default {
       interval = dateUtils.dateToMilliseconds(origInterval);
     }
 
-    value = that._calculateUnProjection((position - that._canvasOptions.startPoint) / that._canvasOptions.ratioOfCanvasRange);
-    value = that._intervalize(dateUtils.addInterval(value, interval / 2, direction > 0), origInterval);
+    value = that._calculateUnProjection(
+      (position - that._canvasOptions.startPoint) / that._canvasOptions.ratioOfCanvasRange,
+    );
+    value = that._intervalize(
+      dateUtils.addInterval(value, interval / 2, direction > 0),
+      origInterval,
+    );
 
     if (value < rMin) {
       value = rMin;
@@ -154,7 +191,7 @@ export default {
     return value;
   },
 
-  _add() {
+  _add(): number {
     return NaN;
   },
 

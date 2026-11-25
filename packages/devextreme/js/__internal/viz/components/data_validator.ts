@@ -1,4 +1,3 @@
-/* eslint-disable @stylistic/max-len */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/init-declarations */
@@ -15,9 +14,7 @@
 /* eslint-disable no-multi-assign */
 /* eslint-disable no-nested-ternary */
 /* eslint-disable no-param-reassign */
-/* eslint-disable no-plusplus */
 /* eslint-disable no-restricted-syntax */
-/* eslint-disable prefer-destructuring */
 
 import { extend } from '@ts/core/utils/extend';
 import {
@@ -44,7 +41,7 @@ const axisTypeParser = enumParser([STRING, NUMERIC, DATETIME]);
 
 const _isArray = Array.isArray;
 
-function groupingValues(data, others, valueField, index) {
+function groupingValues(data, others, valueField, index): void {
   if (index >= 0) {
     data.slice(index).forEach((cell) => {
       if (_isDefined(cell[valueField])) {
@@ -55,7 +52,7 @@ function groupingValues(data, others, valueField, index) {
   }
 }
 
-function processGroups(groups) {
+function processGroups(groups): void {
   groups.forEach((group) => {
     group.valueType = group.valueAxisType = null;
     group.series.forEach((series) => {
@@ -66,7 +63,13 @@ function processGroups(groups) {
 }
 
 function sortValues(data, asc, selector) {
-  const func = asc ? function (a, b) { return a - b; } : function (a, b) { return b - a; };
+  const func = asc
+    ? function (a, b): number {
+      return a - b;
+    }
+    : function (a, b): number {
+      return b - a;
+    };
   data.sort((a, b) => {
     const valA = selector(a);
     const valB = selector(b);
@@ -77,7 +80,7 @@ function sortValues(data, asc, selector) {
   return data;
 }
 
-function resetArgumentAxes(axes) {
+function resetArgumentAxes(axes): void {
   axes && axes.forEach((axis) => {
     axis.resetTypes(ARGUMENT_TYPE);
   });
@@ -94,7 +97,7 @@ function parseCategories(categories, parser) {
   return newArray;
 }
 
-function parseAxisCategories(groupsData, parsers) {
+function parseAxisCategories(groupsData, parsers): void {
   const argumentCategories = groupsData.argumentOptions && groupsData.argumentOptions.categories;
 
   groupsData.groups.forEach((valueGroup, i) => {
@@ -125,15 +128,24 @@ function getType(unit, type) {
   return result;
 }
 
-function correctAxisType(type, axisType, hasCategories, incidentOccurred) {
-  if (type === STRING && (axisType === CONTINUOUS || axisType === LOGARITHMIC || axisType === SEMIDISCRETE)) {
+function correctAxisType(type, axisType, hasCategories, incidentOccurred): 'logarithmic' | 'discrete' | 'semidiscrete' | 'continuous' {
+  if (
+    type === STRING
+    && (axisType === CONTINUOUS || axisType === LOGARITHMIC || axisType === SEMIDISCRETE)
+  ) {
     incidentOccurred('E2002');
   }
-  return axisType === LOGARITHMIC ? LOGARITHMIC : hasCategories || axisType === DISCRETE || type === STRING ? DISCRETE : axisType === SEMIDISCRETE ? SEMIDISCRETE : CONTINUOUS;
+  return axisType === LOGARITHMIC
+    ? LOGARITHMIC
+    : hasCategories || axisType === DISCRETE || type === STRING
+      ? DISCRETE
+      : axisType === SEMIDISCRETE
+        ? SEMIDISCRETE
+        : CONTINUOUS;
 }
 
 // Do we really need this one if all it is only for logarithmic case?
-function validUnit(unit, field, incidentOccurred) {
+function validUnit(unit, field, incidentOccurred): void {
   if (unit) {
     incidentOccurred(!_isNumber(unit) && !_isDate(unit) && !_isString(unit) ? 'E2003' : 'E2004', [field]);
   }
@@ -141,7 +153,11 @@ function validUnit(unit, field, incidentOccurred) {
 
 function createParserUnit(type, axisType, incidentOccurred) {
   const parser = type ? _getParser(type) : eigen;
-  const filterInfinity = axisType !== DISCRETE ? function (x) { return isFinite(x) || x === undefined ? x : null; } : eigen;
+  const filterInfinity = axisType !== DISCRETE
+    ? function (x) {
+      return isFinite(x) || x === undefined ? x : null;
+    }
+    : eigen;
 
   return function (unit, field) {
     const parseUnit = filterInfinity(parser(unit));
@@ -154,7 +170,11 @@ function createParserUnit(type, axisType, incidentOccurred) {
 }
 
 function prepareParsers(groupsData, incidentOccurred) {
-  const argumentParser = createParserUnit(groupsData.argumentType, groupsData.argumentAxisType, incidentOccurred);
+  const argumentParser = createParserUnit(
+    groupsData.argumentType,
+    groupsData.argumentAxisType,
+    incidentOccurred,
+  );
   let sizeParser;
   let valueParser;
   const categoryParsers = [argumentParser];
@@ -191,12 +211,9 @@ function getParsedCell(cell, parsers) {
   let i;
   const ii = parsers.length;
   const obj = extend({}, cell);
-  let field;
-  let value;
-  for (i = 0; i < ii; ++i) {
-    field = parsers[i][0];
-    value = cell[field];
-    obj[field] = parsers[i][1](value, field);
+  for (i = 0; i < ii; i += 1) {
+    const [field, parseField] = parsers[i];
+    obj[field] = parseField(cell[field], field);
   }
   return obj;
 }
@@ -206,7 +223,7 @@ function parse(data, parsers) {
   let i;
   const ii = data.length;
   parsedData.length = ii;
-  for (i = 0; i < ii; ++i) {
+  for (i = 0; i < ii; i += 1) {
     // @ts-expect-error
     parsedData[i] = getParsedCell(data[i], parsers);
   }
@@ -217,7 +234,7 @@ function findIndexByThreshold(data, valueField, threshold) {
   let i;
   const ii = data.length;
   let value;
-  for (i = 0; i < ii; ++i) {
+  for (i = 0; i < ii; i += 1) {
     value = data[i][valueField];
     if (_isDefined(value) && threshold > value) {
       break;
@@ -226,10 +243,10 @@ function findIndexByThreshold(data, valueField, threshold) {
   return i;
 }
 
-function groupMinSlices(originalData, argumentField, valueField, smallValuesGrouping) {
+function groupMinSlices(originalData, argumentField, valueField, smallValuesGrouping): void {
   smallValuesGrouping = smallValuesGrouping || {};
 
-  const mode = smallValuesGrouping.mode;
+  const { mode } = smallValuesGrouping;
   const others = {};
 
   if (!mode || mode === 'none') { return; }
@@ -243,7 +260,7 @@ function groupMinSlices(originalData, argumentField, valueField, smallValuesGrou
   others[valueField] && originalData.push(others);
 }
 
-function groupPieData(data, groupsData) {
+function groupPieData(data, groupsData): void {
   const firstSeries = groupsData.groups[0] && groupsData.groups[0].series[0];
   const isPie = firstSeries && (firstSeries.type === 'pie' || firstSeries.type === 'doughnut' || firstSeries.type === 'donut');
 
@@ -251,12 +268,17 @@ function groupPieData(data, groupsData) {
 
   groupsData.groups.forEach((group) => {
     group.series.forEach((series) => {
-      groupMinSlices(data, series.getArgumentField(), series.getValueFields()[0], series.getOptions().smallValuesGrouping);
+      groupMinSlices(
+        data,
+        series.getArgumentField(),
+        series.getValueFields()[0],
+        series.getOptions().smallValuesGrouping,
+      );
     });
   });
 }
 
-function addUniqueItemToCollection(item, collection, itemsHash) {
+function addUniqueItemToCollection(item, collection, itemsHash): void {
   if (!itemsHash[item]) {
     collection.push(item);
     itemsHash[item] = true;
@@ -276,7 +298,7 @@ function getUniqueArgumentFields(groupsData) {
   return uniqueArgumentFields;
 }
 
-function sort(a, b) {
+function sort(a, b): number {
   const result = a - b;
 
   if (isNaN(result)) {
@@ -325,8 +347,13 @@ function getSortByCategories(categories) {
 function sortData(data, groupsData, options, uniqueArgumentFields) {
   const dataByArguments = {};
   const isDiscrete = groupsData.argumentAxisType === DISCRETE;
-  const userCategories = isDiscrete && groupsData.argumentOptions && groupsData.argumentOptions.categories;
-  let sortFunction = function (data) { return data; };
+  const userCategories = isDiscrete
+    && groupsData.argumentOptions
+    && groupsData.argumentOptions.categories;
+  let sortFunction: (
+    data: unknown[],
+    argumentField?: string,
+  ) => unknown[] = function (data) { return data; };
   const sortingMethodOption = options.sortingMethod;
   let reSortCategories;
 
@@ -337,17 +364,19 @@ function sortData(data, groupsData, options, uniqueArgumentFields) {
     groupsData.categories = getCategories(data, uniqueArgumentFields, userCategories);
   }
 
-  if (userCategories || (!_isFunction(sortingMethodOption) && groupsData.argumentType === STRING && !options._skipArgumentSorting)) {
-    // @ts-expect-error
+  if (
+    userCategories
+    || (!_isFunction(sortingMethodOption)
+      && groupsData.argumentType === STRING
+      && !options._skipArgumentSorting)
+  ) {
     sortFunction = getSortByCategories(groupsData.categories);
   } else if (sortingMethodOption === true && groupsData.argumentType !== STRING) {
-    // @ts-expect-error
     sortFunction = sortByArgument;
     reSortCategories = isDiscrete;
   }
 
   uniqueArgumentFields.forEach((field) => {
-    // @ts-expect-error
     dataByArguments[field] = sortFunction(data, field);
   });
 
@@ -382,16 +411,20 @@ function getCategories(data, uniqueArgumentFields, userCategories) {
 
 function checkArgumentTypeOfGroup(series, cell, groupsData) {
   series.forEach((currentSeries) => {
-    groupsData.argumentType = getType(cell[currentSeries.getArgumentField()], groupsData.argumentType);
+    groupsData.argumentType = getType(
+      cell[currentSeries.getArgumentField()],
+      groupsData.argumentType,
+    );
   });
   return groupsData.argumentType;
 }
 
-function checkType(data, groupsData, checkTypeForAllData) {
+function checkType(data, groupsData, checkTypeForAllData): void {
   const groupsWithUndefinedValueType = [];
   const groupsWithUndefinedArgumentType = [];
-  // @ts-expect-error
-  const argumentTypeGroup = groupsData.argumentOptions && axisTypeParser(groupsData.argumentOptions.argumentType);
+  const argumentTypeGroup = groupsData.argumentOptions
+    // @ts-expect-error
+    && axisTypeParser(groupsData.argumentOptions.argumentType);
   let groupsIndexes;
 
   groupsData.groups.forEach((group) => {
@@ -435,15 +468,25 @@ function checkType(data, groupsData, checkTypeForAllData) {
   }
 }
 
-function checkAxisType(groupsData, incidentOccurred) {
+function checkAxisType(groupsData, incidentOccurred): void {
   const argumentOptions = groupsData.argumentOptions || {};
   const userArgumentCategories = (argumentOptions && argumentOptions.categories) || [];
-  const argumentAxisType = correctAxisType(groupsData.argumentType, argumentOptions.type, !!userArgumentCategories.length, incidentOccurred);
+  const argumentAxisType = correctAxisType(
+    groupsData.argumentType,
+    argumentOptions.type,
+    !!userArgumentCategories.length,
+    incidentOccurred,
+  );
 
   groupsData.groups.forEach((group) => {
     const valueOptions = group.valueOptions || {};
     const valueCategories = valueOptions.categories || [];
-    const valueAxisType = correctAxisType(group.valueType, valueOptions.type, !!valueCategories.length, incidentOccurred);
+    const valueAxisType = correctAxisType(
+      group.valueType,
+      valueOptions.type,
+      !!valueCategories.length,
+      incidentOccurred,
+    );
 
     group.series.forEach((series) => {
       const optionsSeries = {};
@@ -489,11 +532,12 @@ function verifyData(source, incidentOccurred) {
   let k;
   let item;
   if (sourceIsDefined && !hasError) {
-    for (i = 0, ii = source.length, k = 0; i < ii; ++i) {
+    for (i = 0, ii = source.length, k = 0; i < ii; i += 1) {
       item = source[i];
       if (_isObject(item)) {
         // @ts-expect-error
-        data[k++] = item;
+        data[k] = item;
+        k += 1;
       } else if (item) { // TODO: And what about `null`, `undefined` and `0`?
         hasError = true;
       }
@@ -522,7 +566,12 @@ export let validateData = function (data, groupsData, incidentOccurred, options)
   }
   groupPieData(data, groupsData);
 
-  const dataByArgumentFields = sortData(data, groupsData, options, getUniqueArgumentFields(groupsData));
+  const dataByArgumentFields = sortData(
+    data,
+    groupsData,
+    options,
+    getUniqueArgumentFields(groupsData),
+  );
 
   return dataByArgumentFields;
 };

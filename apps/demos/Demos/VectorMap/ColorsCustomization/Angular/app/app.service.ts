@@ -1,32 +1,12 @@
 import { Injectable } from '@angular/core';
 
-export class Country {
+export interface Country {
   totalArea: number;
 
   color: string;
 }
 
-export class Countries {
-  Russia: Country;
-
-  Canada: Country;
-
-  China: Country;
-
-  'United States': Country;
-
-  Brazil: Country;
-
-  Australia: Country;
-
-  India: Country;
-
-  Argentina: Country;
-
-  Kazakhstan: Country;
-
-  Algeria: Country;
-}
+export type Countries = Record<string, Country>;
 
 const countries: Countries = {
   Russia: { totalArea: 17.12, color: '#1564C0' },

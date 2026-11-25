@@ -87,6 +87,10 @@ export class ToolCallModel {
       .join(' '));
   }
 
+  public getFieldDirections(): string[] {
+    return this.getFieldInputs().map((input) => input.dir);
+  }
+
   public hasErrorResult(): boolean {
     return !!this.root.querySelector(`.${CHAT_TOOL_CALL_CLASSES.error}`);
   }

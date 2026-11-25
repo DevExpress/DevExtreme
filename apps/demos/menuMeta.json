@@ -110,6 +110,7 @@
       {
         "Name": "Chat",
         "Equivalents": "dxChat, dx-chat, chat",
+        "Badge": "Updated",
         "Groups": [
           {
             "Name": "AI and Chatbot Integration",
@@ -3768,6 +3769,7 @@
       {
         "Name": "Scheduler",
         "Equivalents": "dxScheduler, dx-scheduler",
+        "Badge": "Updated",
         "Groups": [
           {
             "Name": "Overview",
@@ -4018,6 +4020,7 @@
           {
             "Name": "Grouping",
             "Equivalents": "",
+            "Badge": "Updated",
             "Demos": [
               {
                 "Title": "Grouping by Resources",
@@ -4043,7 +4046,8 @@
                 "Title": "Multilevel Grouping",
                 "Name": "MultilevelGrouping",
                 "Widget": "Scheduler",
-                "DemoType": "Web"
+                "DemoType": "Web",
+                "Badge": "New"
               }
             ]
           },
@@ -4413,6 +4417,7 @@
         "Name": "Chat",
         "Breadcrumb": true,
         "Equivalents": "dxChat, dx-chat, chat",
+        "Badge": "Updated",
         "Groups": [
           {
             "Name": "Overview",

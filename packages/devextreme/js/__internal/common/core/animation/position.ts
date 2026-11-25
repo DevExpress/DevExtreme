@@ -7,7 +7,7 @@ import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { getBoundingRect } from '@js/core/utils/position';
 import {
-  getHeight, getOuterHeight, getOuterWidth, getWidth,
+  getHeight, getOuterHeight, getOuterWidth, getVisibleHeight, getWidth,
 } from '@js/core/utils/size';
 import { setStyle } from '@js/core/utils/style';
 import { touch } from '@js/core/utils/support';
@@ -215,12 +215,25 @@ const calculateScrollbarWidth = function calculateScrollbarWidth(): void {
     position: 'absolute',
     top: -9999,
   }).appendTo($('body'));
-  // @ts-expect-error get(0) is typed as Element
-  const result = $scrollDiv.get(0).offsetWidth - $scrollDiv.get(0).clientWidth;
+  const result = $scrollDiv.get<HTMLElement>(0).offsetWidth - $scrollDiv.get(0).clientWidth;
 
   $scrollDiv.remove();
 
   scrollbarWidth = result;
+};
+
+const getViewportHeight = function getViewportHeight(windowHeight: number): number {
+  const $viewport = $('<div>').css({
+    position: 'fixed',
+    top: 0,
+    bottom: 0,
+    visibility: 'hidden',
+  }).appendTo($('body'));
+  const height = getVisibleHeight($viewport.get(0));
+
+  $viewport.remove();
+
+  return Math.abs(height - windowHeight) < 1 ? height : windowHeight;
 };
 
 const defaultPositionResult = {
@@ -361,7 +374,7 @@ const calculatePosition = function calculatePosition(
         const isIos = device.platform === 'ios';
 
         h.atSize = getWidth(of);
-        v.atSize = isIos ? of[0].innerHeight : getHeight(of);
+        v.atSize = isIos ? of[0].innerHeight : Math.floor(getViewportHeight(getHeight(of)));
       }
     } else if (of[0].nodeType === 9) {
       h.atLocation = 0;
@@ -408,6 +421,8 @@ const calculatePosition = function calculatePosition(
 
       boundaryWidth = Number(getWidth($boundary));
       boundaryHeight = Number(getHeight($boundary));
+    } else {
+      boundaryHeight = Math.floor(getViewportHeight(windowHeight));
     }
 
     return {
@@ -525,4 +540,5 @@ export default {
   calculate: calculatePosition,
   setup: position,
   offset,
+  getViewportHeight,
 };

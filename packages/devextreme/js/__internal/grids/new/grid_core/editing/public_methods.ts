@@ -1,21 +1,21 @@
 /* eslint-disable spellcheck/spell-checker */
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
 import { isDefined } from '@ts/core/utils/type';
 
 import { ItemsController } from '../items_controller/items_controller';
-import type { Constructor } from '../types';
-import type { GridCoreNewBase } from '../widget';
+import type { GridCoreClass, Mixin } from '../types';
 import { EditingController } from './controller';
+import type { EditingPublicMethods } from './types';
 
-export function PublicMethods<T extends Constructor<GridCoreNewBase>>(GridCore: T) {
+export function PublicMethods<T extends GridCoreClass>(
+  GridCore: T,
+): Mixin<T, EditingPublicMethods> {
   return class GridCoreWithEditing extends GridCore {
     public addCard(): Promise<void> {
       const controller = this.diContext.get(EditingController);
       return controller.addCard();
     }
 
-    public cancelEditData() {
+    public cancelEditData(): void {
       const controller = this.diContext.get(EditingController);
       controller.clear();
     }
@@ -31,7 +31,7 @@ export function PublicMethods<T extends Constructor<GridCoreNewBase>>(GridCore: 
       }
     }
 
-    public editCard(cardIndex: number) {
+    public editCard(cardIndex: number): void {
       const controller = this.diContext.get(EditingController);
       const itemsController = this.diContext.get(ItemsController);
       const cardKey = itemsController.items.peek()[cardIndex]?.key;

@@ -36,7 +36,7 @@ test.describe('Appointments with adaptive', () => {
       currentView: 'myView',
       currentDate: '2024-01-01',
       height: 600,
-      // NOTE: resources are used only to distinguish appts in etalon file
+      // NOTE: resources are used only to distinguish appointments in etalon file
       resources: [{
         fieldExpr: 'color',
         dataSource: [

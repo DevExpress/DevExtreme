@@ -1,9 +1,5 @@
-import type { CellClickEvent } from '@js/ui/pivot_grid';
+import type { Field } from '@js/ui/pivot_grid/data_source';
 import type { DataKey } from '@ts/core/element_data';
-
-// Field is not exported from @js/ui/pivot_grid, and @typescript-eslint/no-restricted-imports
-// forbids @js/ui/pivot_grid/* in internal code, so take it from a type the root exports
-type Field = NonNullable<CellClickEvent['columnFields']>[number];
 
 export type FieldChooserField = Field & { index: number };
 
@@ -50,6 +46,7 @@ export const CLASSES = {
   allFields: 'dx-all-fields',
   col: 'dx-col',
   headerFilter: 'dx-header-filter',
+  headerFilterEmpty: 'dx-header-filter-empty',
   row: 'dx-row',
   widget: 'dx-widget',
 } as const;
@@ -71,6 +68,13 @@ export const SORTABLE_CONST = {
     drag: 'drag',
   },
 } as const;
+
+export const FIELD_NAVIGATION_DELTAS: Record<string, number> = {
+  ArrowUp: -1,
+  ArrowLeft: -1,
+  ArrowDown: 1,
+  ArrowRight: 1,
+};
 
 export const SORT_ORDER = {
   descending: 'desc',

@@ -14,8 +14,8 @@ $popup-toolbar-height: null !default;
 $popup-button-margin: 0 ds.$spacing-80 !default;
 $popup-toolbar-item-spacing: ds.$spacing-80 !default;
 
-$popup-content-box-shadow: ds.$box-shadow-2xl !default;
-$popup-content-box-shadow-focused: ds.$box-shadow-2xl !default;
+$popup-content-box-shadow: ds.$box-shadow-lg !default;
+$popup-content-box-shadow-focused: ds.$box-shadow-lg !default;
 
 @if $size == "default" {
   $popup-content-padding: ds.$spacing-240 !default;

@@ -145,8 +145,7 @@ if (Quill) {
 
         return buttonItemConfig;
       } if (item.items) {
-        item.items = this._prepareMenuItems(item.items);
-        return item;
+        return { ...item, items: this._prepareMenuItems(item.items) };
       }
       return item;
     }
@@ -232,12 +231,11 @@ if (Quill) {
 
     _setContextMenuPosition(event: DxEvent<MouseEvent>): void {
       const startPosition = this._quillContainer.get(0).getBoundingClientRect();
-      // @ts-expect-error 'fit fit' is not in CollisionResolutionCombination; it resolves as 'fit'
       this._contextMenu.option({
         position: {
           my: 'left top',
           at: 'left top',
-          collision: 'fit fit',
+          collision: 'fit',
           offset: { x: event.clientX - startPosition.left, y: event.clientY - startPosition.top },
         },
       });

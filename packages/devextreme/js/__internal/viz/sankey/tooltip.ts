@@ -2,25 +2,24 @@
 /* eslint-disable @typescript-eslint/init-declarations */
 /* eslint-disable func-names */
 /* eslint-disable consistent-return */
-/* eslint-disable @stylistic/max-len */
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable no-else-return */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 
 import { extend as _extend } from '@ts/core/utils/extend';
 import { isFunction } from '@ts/core/utils/type';
+import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
+import type { Tooltip } from '@ts/viz/core/tooltip';
+import type Sankey from '@ts/viz/sankey/sankey';
 
-const defaultCustomizeLinkTooltip = (formatter) => function (info) {
+const defaultCustomizeLinkTooltip = (formatter) => function (info): { html: string } {
   return { html: `<strong>${info.source} > ${info.target}</strong><br/>Weight: ${formatter(info.weight)}` };
 };
-const defaultCustomizeNodeTooltip = (formatter) => function (info) {
+const defaultCustomizeNodeTooltip = (formatter) => function (info): { html: string } {
   return { html: `<strong>${info.label}</strong><br/>Incoming weight: ${formatter(info.weightIn)}<br/>Outgoing weight: ${formatter(info.weightOut)}` };
 };
 const generateCustomCallback = function (customCallback, defaultCallback) {
-  return function (objectInfo) {
+  return function (objectInfo: ThemeValue): ThemeValue {
     let res = isFunction(customCallback) ? customCallback.call(objectInfo, objectInfo) : {};
     const hasOwnProperty = Object.prototype.hasOwnProperty.bind(res);
     if (!hasOwnProperty('html') && !hasOwnProperty('text')) {
@@ -31,9 +30,9 @@ const generateCustomCallback = function (customCallback, defaultCallback) {
   };
 };
 
-export function setTooltipCustomOptions(sankey) {
-  sankey.prototype._setTooltipOptions = function () {
-    const tooltip = this._tooltip;
+export function setTooltipCustomOptions(sankey: typeof Sankey): void {
+  sankey.prototype._setTooltipOptions = function (this: Sankey): void {
+    const tooltip: InstanceType<typeof Tooltip> | null = this._tooltip;
     const options = tooltip && this._getOption('tooltip');
 
     let linkTemplate;
@@ -46,20 +45,26 @@ export function setTooltipCustomOptions(sankey) {
     }
 
     tooltip && tooltip.update(_extend({}, options, {
-      customizeTooltip(args) {
+      customizeTooltip(args: ThemeValue): ThemeValue {
         if (!(linkTemplate && args.type === 'link' || nodeTemplate && args.type === 'node')) {
           args.skipTemplate = true;
         }
-        const formatter = (value) => tooltip.formatValue(value);
+        const formatter = (value: ThemeValue): string => tooltip.formatValue(value);
         if (args.type === 'node') {
-          return generateCustomCallback(options.customizeNodeTooltip, defaultCustomizeNodeTooltip(formatter))(args.info);
+          return generateCustomCallback(
+            options.customizeNodeTooltip,
+            defaultCustomizeNodeTooltip(formatter),
+          )(args.info);
         } else if (args.type === 'link') {
-          return generateCustomCallback(options.customizeLinkTooltip, defaultCustomizeLinkTooltip(formatter))(args.info);
+          return generateCustomCallback(
+            options.customizeLinkTooltip,
+            defaultCustomizeLinkTooltip(formatter),
+          )(args.info);
         }
 
         return {};
       },
-      contentTemplate(arg, div) {
+      contentTemplate(arg: ThemeValue, div: ThemeValue): ThemeValue {
         const templateArgs = { model: arg.info, container: div };
         if (linkTemplate && arg.type === 'link') {
           return linkTemplate.render(templateArgs);
@@ -71,7 +76,7 @@ export function setTooltipCustomOptions(sankey) {
       enabled: options.enabled,
     }));
   };
-  sankey.prototype.hideTooltip = function () {
+  sankey.prototype.hideTooltip = function (this: Sankey): void {
     this._tooltip && this._tooltip.hide();
   };
 }

@@ -475,7 +475,7 @@ export class RowsView extends ColumnsView {
 
     if (rtlEnabled) {
       const maxHorizontalScrollOffset = getMaxHorizontalScrollOffset(
-        this._scrollableContainer?.get(0) as HTMLElement | undefined,
+        this._scrollableContainer?.get<HTMLElement>(0),
       );
 
       this._scrollRight = maxHorizontalScrollOffset - left;
@@ -513,6 +513,13 @@ export class RowsView extends ColumnsView {
     contentElement.empty().append(tableElement);
 
     return this._findContentElement();
+  }
+
+  /**
+   * @extended: virtual_scrolling
+   */
+  public isViewportRowsRenderPending(): boolean {
+    return false;
   }
 
   public isWaitingForRowsLayout(): boolean {
@@ -1294,7 +1301,7 @@ export class RowsView extends ColumnsView {
   }
 
   public getScrollbarWidth(isHorizontal?: boolean): number {
-    const scrollableContainer = this._scrollableContainer?.get(0) as HTMLElement | undefined;
+    const scrollableContainer = this._scrollableContainer?.get<HTMLElement>(0);
     let scrollbarWidth = 0;
 
     if (scrollableContainer) {
@@ -1373,7 +1380,7 @@ export class RowsView extends ColumnsView {
 
     if (rtlEnabled) {
       const maxHorizontalScrollOffset = getMaxHorizontalScrollOffset(
-        this._scrollableContainer?.get(0) as HTMLElement | undefined,
+        this._scrollableContainer?.get<HTMLElement>(0),
       );
       const scrollRight = maxHorizontalScrollOffset - scrollLeft;
 

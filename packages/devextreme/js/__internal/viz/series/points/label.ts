@@ -4,9 +4,7 @@
 /* eslint-disable no-nested-ternary */
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-multi-assign */
-/* eslint-disable @stylistic/max-len */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable prefer-destructuring */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 
@@ -24,11 +22,17 @@ import {
 } from '@ts/viz/core/utils';
 import { processDisplayFormat } from '@ts/viz/series/helpers/display_format_parser';
 
-type LabelRect = BBox | Record<string, never>;
+export type LabelRect = BBox | Record<string, never>;
 
-interface LabelStrategy {
+export interface LabelStrategy {
   isLabelInside: (bBox: LabelRect, figure: ThemeValue, isOutside: boolean) => boolean;
-  prepareLabelPoints: (bBox: LabelRect, rotatedBBox: LabelRect, isHorizontal: boolean, angle: number, figureCenter: number[]) => ThemeValue;
+  prepareLabelPoints: (
+    bBox: LabelRect,
+    rotatedBBox: LabelRect,
+    isHorizontal: boolean,
+    angle: number,
+    figureCenter: number[],
+  ) => ThemeValue;
   isHorizontal: (bBox: LabelRect, figure: ThemeValue) => boolean;
   getFigureCenter: (figure: ThemeValue) => number[];
   findFigurePoint: (figure: ThemeValue, labelPoint: number[], isHorizontal: boolean) => number[];
@@ -90,13 +94,19 @@ function getCrossCoord(rect: number[], coord: number, indexOffset: number): numb
         + rect[1 - indexOffset];
 }
 
-// We could always conside center of label as label point (with appropriate connector path clipping). In that case we do not depend neither on background nor on rotation.
+// We could always conside center of label as label point (with appropriate connector path
+// clipping). In that case we do not depend neither on background nor on rotation.
 
 const barPointStrategy = {
   isLabelInside(labelPoint, figure): boolean {
     const xc = labelPoint.x + labelPoint.width / 2;
     const yc = labelPoint.y + labelPoint.height / 2;
-    return figure.x <= xc && xc <= figure.x + figure.width && figure.y <= yc && yc <= figure.y + figure.height;
+    return (
+      figure.x <= xc
+      && xc <= figure.x + figure.width
+      && figure.y <= yc
+      && yc <= figure.y + figure.height
+    );
   },
 
   prepareLabelPoints(bBox, rotatedBBox, isHorizontal, angle, figureCenter): number[][] {
@@ -111,13 +121,17 @@ const barPointStrategy = {
 
     if (figureCenter[0] > x1 && figureCenter[0] < x2) {
       if (isRectangular) {
-        labelPoints = [[figureCenter[0], _abs(figureCenter[1] - y1) < _abs(figureCenter[1] - y2) ? y1 : y2]];
+        labelPoints = [
+          [figureCenter[0], _abs(figureCenter[1] - y1) < _abs(figureCenter[1] - y2) ? y1 : y2],
+        ];
       } else {
         labelPoints = [[figureCenter[0], getCrossCoord([x1, y1, x2, y2], figureCenter[0], 0)]];
       }
     } else if (figureCenter[1] > y1 && figureCenter[1] < y2) {
       if (isRectangular) {
-        labelPoints = [[_abs(figureCenter[0] - x1) < _abs(figureCenter[0] - x2) ? x1 : x2, figureCenter[1]]];
+        labelPoints = [
+          [_abs(figureCenter[0] - x1) < _abs(figureCenter[0] - x2) ? x1 : x2, figureCenter[1]],
+        ];
       } else {
         labelPoints = [[getCrossCoord([x1, y1, x2, y2], figureCenter[1], 1), figureCenter[1]]];
       }
@@ -158,14 +172,15 @@ const barPointStrategy = {
   },
 
   adjustPoints(points): number[] {
-    const lineIsVertical = _abs(points[1] - points[3]) <= 1;
-    const lineIsHorizontal = _abs(points[0] - points[2]) <= 1;
+    const [x1, y1, x2, y2] = points;
+    const lineIsVertical = _abs(y1 - y2) <= 1;
+    const lineIsHorizontal = _abs(x1 - x2) <= 1;
 
     if (lineIsHorizontal) {
-      points[0] = points[2];
+      points[0] = x2;
     }
     if (lineIsVertical) {
-      points[1] = points[3];
+      points[1] = y2;
     }
     return points;
   },
@@ -188,7 +203,10 @@ const symbolPointStrategy = {
 
   findFigurePoint(figure, labelPoint): number[] {
     const angle = Math.atan2(figure.y - labelPoint[1], labelPoint[0] - figure.x);
-    return [_round(figure.x + figure.r * Math.cos(angle)), _round(figure.y - figure.r * Math.sin(angle))];
+    return [
+      _round(figure.x + figure.r * Math.cos(angle)),
+      _round(figure.y - figure.r * Math.sin(angle)),
+    ];
   },
 
   adjustPoints: barPointStrategy.adjustPoints,
@@ -257,7 +275,9 @@ const piePointStrategy = {
       return [figure.x, figure.y];
     }
     const labelX = labelPoint[0];
-    const x = _round(figure.x + (figure.y - labelPoint[1]) / Math.tan(_degreesToRadians(figure.angle)));
+    const x = _round(
+      figure.x + (figure.y - labelPoint[1]) / Math.tan(_degreesToRadians(figure.angle)),
+    );
     let points = [figure.x, figure.y, x, labelPoint[1]];
 
     if (!(figure.x <= x && x <= labelX) && !(labelX <= x && x <= figure.x)) {
@@ -278,7 +298,11 @@ const piePointStrategy = {
 };
 
 function selectStrategy(figure: ThemeValue): LabelStrategy {
-  return (figure.angle !== undefined && piePointStrategy) || (figure.r !== undefined && symbolPointStrategy) || barPointStrategy;
+  return (
+    (figure.angle !== undefined && piePointStrategy)
+    || (figure.r !== undefined && symbolPointStrategy)
+    || barPointStrategy
+  );
 }
 
 function disposeItem(obj: ThemeValue, field: string): void {
@@ -295,7 +319,7 @@ function checkConnector(connector: ThemeValue): boolean {
 }
 
 function formatText(data: ThemeValue, options: ThemeValue): string {
-  const format = options.format;
+  const { format } = options;
 
   data.valueText = _format(data.value, format);
   data.argumentText = _format(data.argument, options.argumentFormat);
@@ -324,7 +348,11 @@ function formatText(data: ThemeValue, options: ThemeValue): string {
     data.reductionValueText = _format(data.reductionValue, format);
   }
 
-  return options.customizeText ? options.customizeText.call(data, data) : options.displayFormat ? processDisplayFormat(options.displayFormat, data) : data.valueText;
+  return options.customizeText
+    ? options.customizeText.call(data, data)
+    : options.displayFormat
+      ? processDisplayFormat(options.displayFormat, data)
+      : data.valueText;
 }
 
 // eslint-disable-next-line import/no-mutable-exports -- description seam for tests
@@ -411,7 +439,8 @@ export let Label = class Label {
 
   dispose(): void {
     disposeItem(this, '_group');
-    this._data = this._options = this._textContent = this._visible = this._insideGroup = this._text = this._background = this._connector = this._figure = null;
+    this._data = this._options = this._textContent = this._visible = this._insideGroup = null;
+    this._text = this._background = this._connector = this._figure = null;
   }
 
   // The following method is required because we support partial visibility for labels
@@ -459,9 +488,11 @@ export let Label = class Label {
       this._text.css(options.attributes ? _patchFontOptions(options.attributes.font) : {});
 
       if (checkBackground(options.background)) {
-        this._background = this._background || renderer.rect().append(this._insideGroup).toBackground();
+        this._background = this._background
+          || renderer.rect().append(this._insideGroup).toBackground();
         this._background.attr(options.background);
-        // The following is because "this._options" is shared between all labels and so cannot be modified
+        // The following is because "this._options" is shared between all labels and so cannot be
+        // modified
         this._color && this._background.attr({ fill: this._color });
       } else {
         disposeItem(this, '_background');
@@ -470,7 +501,8 @@ export let Label = class Label {
       if (checkConnector(options.connector)) {
         this._connector = this._connector || renderer.path([], 'line').sharp().append(this._group).toBackground();
         this._connector.attr(options.connector);
-        // The following is because "this._options" is shared between all labels and so cannot be modified
+        // The following is because "this._options" is shared between all labels and so cannot be
+        // modified
         this._color && this._connector.attr({ stroke: this._color });
       } else {
         disposeItem(this, '_connector');
@@ -538,7 +570,13 @@ export let Label = class Label {
     if (!strategy.isLabelInside(bBox, figure, options.position !== 'inside')) {
       isHorizontal = strategy.isHorizontal(bBox, figure);
       const figureCenter = this.getFigureCenter();
-      points = strategy.prepareLabelPoints(bBox, rotatedBBox, isHorizontal, -options.rotationAngle || 0, figureCenter);
+      points = strategy.prepareLabelPoints(
+        bBox,
+        rotatedBBox,
+        isHorizontal,
+        -options.rotationAngle || 0,
+        figureCenter,
+      );
       labelPoint = getClosestCoord(figureCenter, points);
       points = strategy.findFigurePoint(figure, labelPoint, isHorizontal);
       points = points.concat(labelPoint);
@@ -552,7 +590,7 @@ export let Label = class Label {
     let rowCountChanged = false;
     if (this._text) {
       const result = this._text.setMaxSize(maxWidth - padding, undefined, this._options);
-      let rowCount = result.rowCount;
+      let { rowCount } = result;
       if (rowCount === 0) {
         rowCount = 1;
       }
@@ -621,7 +659,9 @@ export let Label = class Label {
       verticalOffset: options.verticalOffset,
       radialOffset: options.radialOffset,
       position: options.position,
-      connectorOffset: (checkConnector(options.connector) ? CONNECTOR_LENGTH : 0) + (checkBackground(options.background) ? LABEL_BACKGROUND_PADDING_X : 0),
+      connectorOffset:
+        (checkConnector(options.connector) ? CONNECTOR_LENGTH : 0)
+        + (checkBackground(options.background) ? LABEL_BACKGROUND_PADDING_X : 0),
     };
   }
 };

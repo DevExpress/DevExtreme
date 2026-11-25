@@ -1,4 +1,3 @@
-/* eslint-disable @stylistic/max-len */
 /* eslint-disable @typescript-eslint/no-use-before-define */
 
 import { extend as _extend } from '@ts/core/utils/extend';
@@ -17,7 +16,9 @@ class Node {
 
   declare data: ThemeValue;
 
-  declare label: ThemeValue;
+  declare label: string | null;
+
+  declare customLabel?: string | null;
 
   declare proxy: ThemeValue;
 
@@ -45,6 +46,16 @@ class Node {
 
   declare labelParams: ThemeValue;
 
+  declare _groupColor?: string | null;
+
+  declare rect: number[];
+
+  declare _custom: ThemeValue;
+
+  declare _partialState: ThemeValue;
+
+  declare _partialLabelState: ThemeValue;
+
   isNode(): boolean {
     return !!(this.nodes && this.level < this.ctx.maxLevel);
   }
@@ -58,7 +69,10 @@ class Node {
   updateStyles(): void {
     const isNode = Number(this.isNode());
 
-    this.state = this._buildState(this.ctx.settings[isNode].state, !isNode && this.color && { fill: this.color });
+    this.state = this._buildState(
+      this.ctx.settings[isNode].state,
+      !isNode && this.color && { fill: this.color },
+    );
   }
 
   _buildState(state: ThemeValue, extra: ThemeValue): ThemeValue {

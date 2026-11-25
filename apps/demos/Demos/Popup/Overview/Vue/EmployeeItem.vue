@@ -5,7 +5,7 @@
       :src="employee.Picture"
       :id="'image' + employee.ID"
     ><br>
-    <i>{{ employee.FirstName }} {{ employee.LastName }}</i><br>
+    <span><i>{{ employee.FirstName }}</i></span><span>{{ ' ' }}<i>{{ employee.LastName }}</i></span><br>
     <DxButton
       :on-click="showEmployeeInfo"
       class="button-info"

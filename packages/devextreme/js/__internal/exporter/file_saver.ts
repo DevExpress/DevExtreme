@@ -1,14 +1,12 @@
 /* eslint-disable no-param-reassign */
-/* eslint-disable @stylistic/max-len */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-/* global Windows */
 import domAdapter from '@js/core/dom_adapter';
 import { logger } from '@js/core/utils/console';
 import { isDefined, isFunction } from '@js/core/utils/type';
-import { getNavigator, getWindow } from '@js/core/utils/window';
 import errors from '@js/ui/widget/ui.errors';
+import { getNavigator, getWindow } from '@ts/core/utils/window';
 
 const window = getWindow();
 const navigator = getNavigator();
@@ -59,37 +57,6 @@ export const fileSaver = {
     return exportLinkElement;
   },
 
-  _winJSBlobSave(blob, fileName, format) {
-    // @ts-expect-error
-    const savePicker = new Windows.Storage.Pickers.FileSavePicker();
-    // @ts-expect-error
-    savePicker.suggestedStartLocation = Windows.Storage.Pickers.PickerLocationId.documentsLibrary;
-
-    const fileExtension = FILE_EXTESIONS[format];
-    if (fileExtension) {
-      const mimeType = this._getMimeType(format);
-      savePicker.fileTypeChoices.insert(mimeType, [`.${fileExtension}`]);
-    }
-
-    savePicker.suggestedFileName = fileName;
-
-    savePicker.pickSaveFileAsync().then((file) => {
-      if (file) {
-        // @ts-expect-error
-        file.openAsync(Windows.Storage.FileAccessMode.readWrite).then((outputStream) => {
-          const inputStream = blob.msDetachStream();
-          // @ts-expect-error
-          Windows.Storage.Streams.RandomAccessStream.copyAsync(inputStream, outputStream).then(() => {
-            outputStream.flushAsync().done(() => {
-              inputStream.close();
-              outputStream.close();
-            });
-          });
-        });
-      }
-    });
-  },
-
   _click(link) {
     try {
       link.dispatchEvent(new MouseEvent('click', { cancelable: true }));
@@ -101,34 +68,20 @@ export const fileSaver = {
   },
 
   _saveBlobAs(fileName, format, data) {
-    this._blobSaved = false;
+    const { URL } = window;
 
-    // @ts-expect-error
-    if (isDefined(navigator.msSaveOrOpenBlob)) {
-      // @ts-expect-error
-      navigator.msSaveOrOpenBlob(data, fileName);
-      this._blobSaved = true;
-      // @ts-expect-error
-    } else if (isDefined(window.WinJS)) {
-      this._winJSBlobSave(data, fileName, format);
-      this._blobSaved = true;
+    if (isDefined(URL)) {
+      const objectURL = URL.createObjectURL(data);
+      const downloadLink = this._linkDownloader(fileName, objectURL);
+
+      setTimeout(() => {
+        URL.revokeObjectURL(objectURL);
+        this._objectUrlRevoked = true;
+      }, this._revokeObjectURLTimeout);
+
+      this._click(downloadLink);
     } else {
-      // @ts-expect-error
-      const URL = window.URL || window.webkitURL || window.mozURL || window.msURL || window.oURL;
-
-      if (isDefined(URL)) {
-        const objectURL = URL.createObjectURL(data);
-        const downloadLink = this._linkDownloader(fileName, objectURL);
-
-        setTimeout(() => {
-          URL.revokeObjectURL(objectURL);
-          this._objectUrlRevoked = true;
-        }, this._revokeObjectURLTimeout);
-
-        this._click(downloadLink);
-      } else {
-        logger.warn('window.URL || window.webkitURL || window.mozURL || window.msURL || window.oURL is not defined');
-      }
+      logger.warn('window.URL is not defined');
     }
   },
 
@@ -138,7 +91,6 @@ export const fileSaver = {
       fileName += `.${fileExtension}`;
     }
 
-    // @ts-expect-error
     if (isFunction(window.Blob)) {
       this._saveBlobAs(fileName, format, data);
     } else {

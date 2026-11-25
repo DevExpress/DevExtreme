@@ -555,7 +555,7 @@ describe('global_format_config', () => {
 
     it('should keep formatter inside format object when it is not locale-aware', () => {
       const formatter = (): string => 'text';
-      const format = withFormatLocale({ formatter } as never, 'de') as { formatter: unknown };
+      const format = withFormatLocale({ formatter }, 'de') as { formatter: unknown };
 
       expect(format.formatter).toBe(formatter);
     });

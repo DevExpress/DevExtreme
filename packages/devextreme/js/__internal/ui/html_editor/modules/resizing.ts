@@ -39,7 +39,7 @@ export default class ResizingModule extends BaseModule {
 
   _framePositionChangedHandler: () => void;
 
-  _$target?: Element | null;
+  _target?: Element | null;
 
   resizable?: Resizable;
 
@@ -78,12 +78,12 @@ export default class ResizingModule extends BaseModule {
 
   _clickHandler(e: DxEvent): void {
     if (this._isAllowedTarget(e.target)) {
-      if (this._$target === e.target) {
+      if (this._target === e.target) {
         return;
       }
 
-      this._$target = e.target;
-      const $target = $(this._$target);
+      this._target = e.target;
+      const $target = $(this._target);
       const minWidth = Math.max(
         getOuterWidth($target.get(0)) - getWidth($target.get(0)),
         // @ts-expect-error resizable exists while enabled; minWidth is typed as optional
@@ -101,14 +101,14 @@ export default class ResizingModule extends BaseModule {
       this.updateFramePosition();
       this.showFrame();
       this._adjustSelection();
-    } else if (this._$target) {
+    } else if (this._target) {
       this.hideFrame();
     }
   }
 
   _prepareFramePositionChangedHandler(): () => void {
     return () => {
-      if (this._$target) {
+      if (this._target) {
         this.updateFramePosition();
       }
     };
@@ -143,7 +143,7 @@ export default class ResizingModule extends BaseModule {
   }
 
   hideFrame(): void {
-    this._$target = null;
+    this._target = null;
     // @ts-expect-error the resize frame exists while enabled
     this._$resizeFrame.hide();
     eventsEngine.off(this.quill.root, KEYDOWN_EVENT);
@@ -152,7 +152,7 @@ export default class ResizingModule extends BaseModule {
   updateFramePosition(): void {
     const {
       height, width, top: targetTop, left: targetLeft,
-    } = getBoundingRect(this._$target);
+    } = getBoundingRect(this._target);
     const { top: containerTop, left: containerLeft } = getBoundingRect(this.quill.root);
     const borderWidth = this._getBorderWidth();
 
@@ -193,10 +193,10 @@ export default class ResizingModule extends BaseModule {
 
     this.resizable = this.editorInstance._createComponent(this._$resizeFrame, Resizable, {
       onResize: (e) => {
-        if (!this._$target) {
+        if (!this._target) {
           return;
         }
-        $(this._$target).attr({
+        $(this._target).attr({
           height: e.height,
           width: e.width,
         });
@@ -206,9 +206,9 @@ export default class ResizingModule extends BaseModule {
   }
 
   _deleteImage(): void {
-    // @ts-expect-error _$target is set while the frame is shown
-    if (this._isAllowedTarget(this._$target)) {
-      Quill.find(this._$target)?.deleteAt(0);
+    // @ts-expect-error _target is set while the frame is shown
+    if (this._isAllowedTarget(this._target)) {
+      Quill.find(this._target)?.deleteAt(0);
     }
   }
 
@@ -239,7 +239,7 @@ export default class ResizingModule extends BaseModule {
     this._detachEvents();
     this._$resizeFrame?.remove();
     this._$resizeFrame = undefined;
-    this._$target = null;
+    this._target = null;
     this.enabled = false;
   }
 }
