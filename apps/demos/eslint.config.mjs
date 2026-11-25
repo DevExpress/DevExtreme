@@ -28,7 +28,6 @@ export default [
       'node_modules',
       'bundles',
       'coverage',
-      'Demos/**/testcafe-test-code.js',
       'shared/empty-file.ts',
       'Demos/**/Vue/**/*.html',
       'utils/templates/**/*.ts',
