@@ -1,11 +1,19 @@
 /* eslint-disable max-classes-per-file */
 import domAdapter from '@js/core/dom_adapter';
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
-import { each } from '@js/core/utils/iterator';
 import { setHeight, setWidth } from '@js/core/utils/size';
 import { isDefined } from '@js/core/utils/type';
+import type { ScrollOffset } from '@ts/core/utils/scroll';
 
 import { AreaItem } from '../area_item/m_area_item';
+import type {
+  AreaItemCell,
+  AreaItemComponent,
+  AreaItemStyleOptions,
+  AreaItemVirtualContentParams,
+  AreaName,
+} from '../area_item/types';
 import {
   HORIZONTAL_HEADERS_AREA_CLASS as PIVOTGRID_AREA_COLUMN_CLASS,
   VERTICAL_HEADERS_AREA_CLASS as PIVOTGRID_AREA_ROW_CLASS,
@@ -21,10 +29,13 @@ const PIVOTGRID_LAST_CELL_CLASS = 'dx-last-cell';
 const PIVOTGRID_VERTICAL_SCROLL_CLASS = 'dx-vertical-scroll';
 const PIVOTGRID_EXPAND_BORDER = 'dx-expand-border';
 
-function getCellPath(tableElement, cell) {
+function getCellPath(
+  tableElement: dxElementWrapper,
+  cell: HTMLTableCellElement | undefined,
+): AreaItemCell['path'] {
   if (cell) {
-    const { data } = tableElement.data();
-    const { rowIndex } = cell.parentNode;
+    const { data } = tableElement.data<{ data: AreaItemCell[][] }>();
+    const { rowIndex } = cell.parentNode as HTMLTableRowElement;
     const { cellIndex } = cell;
 
     return data[rowIndex] && data[rowIndex][cellIndex] && data[rowIndex][cellIndex].path;
@@ -34,54 +45,60 @@ function getCellPath(tableElement, cell) {
 }
 
 class HorizontalHeadersArea extends AreaItem {
-  _scrollBarWidth: any;
+  protected _scrollBarWidth: number;
 
-  _virtualContentWidth: any;
+  protected _virtualContentWidth?: number;
 
-  constructor(component) {
+  constructor(component: AreaItemComponent) {
     super(component);
     this._scrollBarWidth = 0;
   }
 
-  _getAreaName() {
+  protected _getAreaName(): AreaName {
     return 'column';
   }
 
-  _getAreaClassName() {
+  protected _getAreaClassName(): string {
     return PIVOTGRID_AREA_COLUMN_CLASS;
   }
 
-  _isCellNavigationEnabled() {
+  protected _isCellNavigationEnabled(): boolean {
     return true;
   }
 
-  _createGroupElement() {
+  protected _createGroupElement(): dxElementWrapper {
     return $('<div>')
       .addClass(this._getAreaClassName())
       .addClass(PIVOTGRID_AREA_CLASS);
   }
 
-  _applyCustomStyles(options) {
-    const { cssArray } = options;
-    const { cell } = options;
-    const { rowsCount } = options;
-    const { classArray } = options;
+  protected _applyCustomStyles(options: AreaItemStyleOptions): void {
+    const {
+      cell,
+      cssArray,
+      classArray,
+      cellIndex,
+      cellsCount,
+      rowIndex,
+      rowsCount,
+      rtlEnabled,
+    } = options;
 
-    if (options.cellIndex === options.cellsCount - 1) {
-      cssArray.push(`${options.rtlEnabled ? 'border-left:' : 'border-right:'}0px`);
+    if (cellIndex === cellsCount - 1) {
+      cssArray.push(`${rtlEnabled ? 'border-left:' : 'border-right:'}0px`);
     }
 
-    if ((cell.rowspan === rowsCount - options.rowIndex) || (options.rowIndex + 1 === rowsCount)) {
+    if ((cell.rowspan === rowsCount - rowIndex) || (rowIndex + 1 === rowsCount)) {
       cssArray.push('border-bottom-width:0px');
     }
 
     if (cell.type === 'T' || cell.type === 'GT') {
       classArray.push(PIVOTGRID_ROW_TOTAL_CLASS);
     }
-    if (options.cell.type === 'T') {
+    if (cell.type === 'T') {
       classArray.push(PIVOTGRID_TOTAL_CLASS);
     }
-    if (options.cell.type === 'GT') {
+    if (cell.type === 'GT') {
       classArray.push(PIVOTGRID_GRAND_TOTAL_CLASS);
     }
 
@@ -92,18 +109,14 @@ class HorizontalHeadersArea extends AreaItem {
     super._applyCustomStyles(options);
   }
 
-  _getMainElementMarkup() {
+  protected _getMainElementMarkup(): HTMLElement {
     const thead = domAdapter.createElement('thead');
     thead.setAttribute('class', this._getAreaClassName());
     thead.setAttribute('role', 'presentation');
     return thead;
   }
 
-  _getCloseMainElementMarkup() {
-    return '</thead>';
-  }
-
-  setVirtualContentParams(params) {
+  public setVirtualContentParams(params: AreaItemVirtualContentParams): void {
     super.setVirtualContentParams(params);
 
     this._setTableCss({
@@ -114,7 +127,7 @@ class HorizontalHeadersArea extends AreaItem {
     this._virtualContentWidth = params.width;
   }
 
-  hasScroll() {
+  public hasScroll(): boolean {
     const tableWidth = this._virtualContent ? this._virtualContentWidth : this._tableWidth;
     const groupWidth = this.getGroupWidth();
 
@@ -124,8 +137,8 @@ class HorizontalHeadersArea extends AreaItem {
     return false;
   }
 
-  renderScrollable() {
-    this._groupElement.dxScrollable({
+  public renderScrollable(): void {
+    this.renderGroupScrollable({
       useNative: false,
       useSimulatedScrollbar: false,
       showScrollbar: 'never',
@@ -137,7 +150,13 @@ class HorizontalHeadersArea extends AreaItem {
     });
   }
 
-  processScrollBarSpacing(scrollBarWidth) {
+  public processScrollBarSpacing(scrollBarWidth: number): void {
+    const groupElement = this._groupElement;
+
+    if (!groupElement) {
+      return;
+    }
+
     const groupAlignment = this.option('rtlEnabled') ? 'right' : 'left';
     const groupWidth = this.getGroupWidth();
 
@@ -146,47 +165,45 @@ class HorizontalHeadersArea extends AreaItem {
     }
 
     if (this._scrollBarWidth) {
-      this._groupElement.next().remove();
+      groupElement.next().remove();
     }
 
-    this._groupElement.toggleClass(PIVOTGRID_VERTICAL_SCROLL_CLASS, scrollBarWidth > 0);
+    groupElement.toggleClass(PIVOTGRID_VERTICAL_SCROLL_CLASS, scrollBarWidth > 0);
 
-    setWidth(this._groupElement.css('float', groupAlignment), this.getGroupHeight());
+    setWidth(groupElement.css('float', groupAlignment), this.getGroupHeight());
     this._scrollBarWidth = scrollBarWidth;
   }
 
-  getScrollPath(offset) {
+  public getScrollPath(offset: number): AreaItemCell['path'] {
     const tableElement = this.tableElement();
-    let cell;
 
-    offset -= parseInt(tableElement[0].style.left, 10) || 0;
-
-    each(tableElement.find('td'), (_, td) => {
-      if (td.colSpan === 1 && td.offsetLeft <= offset && td.offsetWidth + td.offsetLeft > offset) {
-        cell = td;
-        return false;
-      }
-
+    if (!tableElement) {
       return undefined;
-    });
+    }
+
+    const tableOffset = offset - (parseInt(tableElement.get<HTMLElement>(0).style.left, 10) || 0);
+    const cells = tableElement.find('td').toArray() as HTMLTableCellElement[];
+    const cell = cells.find((td) => td.colSpan === 1
+      && td.offsetLeft <= tableOffset
+      && td.offsetWidth + td.offsetLeft > tableOffset);
 
     return getCellPath(tableElement, cell);
   }
 
-  _moveFakeTable(scrollPos) {
+  protected _moveFakeTable(scrollPos: ScrollOffset): void {
     this._moveFakeTableHorizontally(scrollPos.left);
     super._moveFakeTable();
   }
 }
 
 class VerticalHeadersArea extends HorizontalHeadersArea {
-  _virtualContentHeight: any;
+  protected _virtualContentHeight?: number;
 
-  _getAreaClassName() {
+  protected _getAreaClassName(): string {
     return PIVOTGRID_AREA_ROW_CLASS;
   }
 
-  _applyCustomStyles(options) {
+  protected _applyCustomStyles(options: AreaItemStyleOptions): void {
     super._applyCustomStyles(options);
 
     if (options.cellIndex === options.cellsCount - 1) {
@@ -202,11 +219,11 @@ class VerticalHeadersArea extends HorizontalHeadersArea {
     }
   }
 
-  _getAreaName() {
+  protected _getAreaName(): AreaName {
     return 'row';
   }
 
-  setVirtualContentParams(params) {
+  public setVirtualContentParams(params: AreaItemVirtualContentParams): void {
     super.setVirtualContentParams(params);
 
     this._setTableCss({
@@ -216,7 +233,7 @@ class VerticalHeadersArea extends HorizontalHeadersArea {
     this._virtualContentHeight = params.height;
   }
 
-  hasScroll() {
+  public hasScroll(): boolean {
     const tableHeight = this._virtualContent ? this._virtualContentHeight : this._tableHeight;
     const groupHeight = this.getGroupHeight();
 
@@ -226,8 +243,8 @@ class VerticalHeadersArea extends HorizontalHeadersArea {
     return false;
   }
 
-  renderScrollable() {
-    this._groupElement.dxScrollable({
+  public renderScrollable(): void {
+    this.renderGroupScrollable({
       useNative: false,
       useSimulatedScrollbar: false,
       showScrollbar: 'never',
@@ -238,7 +255,13 @@ class VerticalHeadersArea extends HorizontalHeadersArea {
     });
   }
 
-  processScrollBarSpacing(scrollBarWidth) {
+  public processScrollBarSpacing(scrollBarWidth: number): void {
+    const groupElement = this._groupElement;
+
+    if (!groupElement) {
+      return;
+    }
+
     const groupHeight = this.getGroupHeight();
 
     if (groupHeight) {
@@ -246,68 +269,68 @@ class VerticalHeadersArea extends HorizontalHeadersArea {
     }
 
     if (this._scrollBarWidth) {
-      this._groupElement.next().remove();
+      groupElement.next().remove();
     }
 
     if (scrollBarWidth) {
       const $div = $('<div>');
       setWidth($div, '100%');
       setHeight($div, scrollBarWidth - 1);
-      this._groupElement.after($div);
+      groupElement.after($div);
     }
 
     this._scrollBarWidth = scrollBarWidth;
   }
 
-  getScrollPath(offset) {
+  public getScrollPath(offset: number): AreaItemCell['path'] {
     const tableElement = this.tableElement();
-    let cell;
 
-    offset -= parseInt(tableElement[0].style.top, 10) || 0;
-
-    each(tableElement.find('tr'), (_, tr) => {
-      const td = tr.childNodes[tr.childNodes.length - 1];
-
-      if (td && td.rowSpan === 1
-        && td.offsetTop <= offset
-        && td.offsetHeight + td.offsetTop > offset) {
-        cell = td;
-        return false;
-      }
-
+    if (!tableElement) {
       return undefined;
-    });
+    }
+
+    const tableOffset = offset - (parseInt(tableElement.get<HTMLElement>(0).style.top, 10) || 0);
+    const lastCells = tableElement.find('tr').toArray()
+      .map((tr) => tr.childNodes[tr.childNodes.length - 1] as HTMLTableCellElement | undefined);
+    const cell = lastCells.find((td) => td?.rowSpan === 1
+      && td.offsetTop <= tableOffset
+      && td.offsetHeight + td.offsetTop > tableOffset);
 
     return getCellPath(tableElement, cell);
   }
 
-  _moveFakeTable(scrollPos) {
+  protected _moveFakeTable(scrollPos: ScrollOffset): void {
     this._moveFakeTableTop(scrollPos.top);
     super._moveFakeTable(scrollPos);
   }
 
-  _getRowClassNames(rowIndex, cell, rowClassNames) {
-    // @ts-expect-error
-    if (rowIndex !== 0 & cell.expanded && !rowClassNames.includes(PIVOTGRID_EXPAND_BORDER)) {
+  protected _getRowClassNames(
+    rowIndex: number,
+    cell: AreaItemCell | undefined,
+    rowClassNames: string[],
+  ): void {
+    if (rowIndex !== 0 && cell?.expanded && !rowClassNames.includes(PIVOTGRID_EXPAND_BORDER)) {
       rowClassNames.push(PIVOTGRID_EXPAND_BORDER);
     }
   }
 
-  _getMainElementMarkup() {
+  protected _getMainElementMarkup(): HTMLElement {
     const tbody = domAdapter.createElement('tbody');
     tbody.classList.add(this._getAreaClassName());
     tbody.setAttribute('role', 'presentation');
     return tbody;
   }
 
-  _getCloseMainElementMarkup() {
-    return '</tbody>';
-  }
+  public updateColspans(columnCount: number): void {
+    const tableElement = this.tableElement()?.get<HTMLTableElement>(0);
 
-  updateColspans(columnCount) {
-    const { rows } = this.tableElement()[0];
+    if (!tableElement) {
+      return;
+    }
+
+    const { rows } = tableElement;
     let columnOffset = 0;
-    const columnOffsetResetIndexes: any = [];
+    const columnOffsetResetIndexes: number[] = [];
 
     if (this.getColumnsCount() - columnCount > 0) {
       return;
@@ -329,7 +352,7 @@ class VerticalHeadersArea extends HorizontalHeadersArea {
           cell.colSpan += diff;
         }
 
-        columnOffsetResetIndexes[i + rowSpan] = (columnOffsetResetIndexes[i + rowSpan] || 0)
+        columnOffsetResetIndexes[i + rowSpan] = (columnOffsetResetIndexes[i + rowSpan] ?? 0)
           + cell.colSpan;
         columnOffset += cell.colSpan;
       }

@@ -87,7 +87,7 @@ export class AppComponent {
 
   readonly customizeItem = (item: DxFormTypes.SimpleItem): void => {
     if (item.name === 'allDayEditor' || item.name === 'recurrenceEndEditor') {
-      item.label.visible = true;
+      item.label = { ...item.label, visible: true };
     } else if (item.name === 'subjectEditor') {
       item.editorOptions = item.editorOptions || {};
       item.editorOptions.placeholder = 'Add title';

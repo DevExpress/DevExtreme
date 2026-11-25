@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-export class StatesCollection {
+export interface StatesCollection {
   coordinates: number[];
 
   offsetX?: number;

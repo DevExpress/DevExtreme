@@ -9,10 +9,11 @@ import {
 } from '@jest/globals';
 import $ from '@js/core/renderer';
 
+import type { AreaItemCell, AreaItemComponent } from '../area_item/types';
 import { FAKE_TABLE_CLASS } from '../keyboard_navigation/const';
 import { DataArea } from './m_data_area';
 
-const createComponent = (options: Record<string, unknown> = {}): unknown => ({
+const createComponent = (options: Record<string, unknown> = {}): AreaItemComponent => ({
   option: (optionName?: string): unknown => {
     if (optionName === undefined) {
       return {};
@@ -26,7 +27,7 @@ const createComponent = (options: Record<string, unknown> = {}): unknown => ({
   },
   _eventsStrategy: { hasEvent: () => false },
   _defaultActionArgs: () => ({}),
-});
+}) as unknown as AreaItemComponent;
 
 describe('DataArea', () => {
   let container: HTMLElement = document.createElement('div');
@@ -36,7 +37,7 @@ describe('DataArea', () => {
     [{ text: '3' }, { text: '4' }],
   ];
 
-  const renderDataArea = (data: unknown[]): DataArea => {
+  const renderDataArea = (data: AreaItemCell[][]): DataArea => {
     const area = new DataArea(createComponent());
 
     area.render($(container), data);
@@ -77,7 +78,7 @@ describe('DataArea', () => {
   });
 
   describe('setColumnsWidth', () => {
-    const getTableWidth = (): string => container.querySelector('table')!.style.width;
+    const getTableWidth = (): string | undefined => container.querySelector('table')?.style.width;
 
     const getColumnWidths = (): string[] => Array
       .from(container.querySelectorAll('col'))
@@ -145,16 +146,16 @@ describe('DataArea', () => {
       return area;
     };
 
-    const getFakeTable = (): HTMLElement => container.querySelector(`.${FAKE_TABLE_CLASS}`)!;
+    const getFakeTable = (): HTMLElement | null => container.querySelector(`.${FAKE_TABLE_CLASS}`);
 
     it('should show the fake table at the position scrolled past the rendered table', () => {
       const area = renderVirtualDataArea();
 
       area.scrollTo({ left: POSITION_PAST_TABLE, top: POSITION_PAST_TABLE });
 
-      expect(getFakeTable().style.left).toBe(`${POSITION_PAST_TABLE}px`);
-      expect(getFakeTable().style.top).toBe(`${POSITION_PAST_TABLE}px`);
-      expect(getFakeTable().classList).not.toContain('dx-hidden');
+      expect(getFakeTable()?.style.left).toBe(`${POSITION_PAST_TABLE}px`);
+      expect(getFakeTable()?.style.top).toBe(`${POSITION_PAST_TABLE}px`);
+      expect(getFakeTable()?.classList).not.toContain('dx-hidden');
     });
 
     it('should hide the fake table when scrolled back to the rendered table', () => {
@@ -163,9 +164,9 @@ describe('DataArea', () => {
       area.scrollTo({ left: POSITION_PAST_TABLE, top: POSITION_PAST_TABLE });
       area.scrollTo({ left: TABLE_OFFSET, top: TABLE_OFFSET });
 
-      expect(getFakeTable().style.left).toBe(`${TABLE_OFFSET}px`);
-      expect(getFakeTable().style.top).toBe(`${TABLE_OFFSET}px`);
-      expect(getFakeTable().classList).toContain('dx-hidden');
+      expect(getFakeTable()?.style.left).toBe(`${TABLE_OFFSET}px`);
+      expect(getFakeTable()?.style.top).toBe(`${TABLE_OFFSET}px`);
+      expect(getFakeTable()?.classList).toContain('dx-hidden');
     });
 
     it('should offset the fake table from the right when rtlEnabled is true', () => {
@@ -173,8 +174,8 @@ describe('DataArea', () => {
 
       area.scrollTo({ left: POSITION_PAST_TABLE, top: TABLE_OFFSET });
 
-      expect(getFakeTable().style.right).toBe(`${POSITION_PAST_TABLE}px`);
-      expect(getFakeTable().classList).not.toContain('dx-hidden');
+      expect(getFakeTable()?.style.right).toBe(`${POSITION_PAST_TABLE}px`);
+      expect(getFakeTable()?.classList).not.toContain('dx-hidden');
     });
   });
 });

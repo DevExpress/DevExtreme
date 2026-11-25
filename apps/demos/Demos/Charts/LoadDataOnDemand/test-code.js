@@ -9,7 +9,6 @@ testUtils.importAnd(() => ['devextreme/viz/chart', 'devextreme/data/data_source'
   return testUtils
     .postponeUntilFound('#chart', 100, 5000)
     .then(() => {
-      const instance = dxChart.getInstance(document.querySelector('#chart'));
-      instance.option('dataSource', dataSource);
+      testUtils.changeOutsideFramework(dxChart.getInstance(document.querySelector('#chart')), (i) => i.option('dataSource', dataSource));
     });
 });

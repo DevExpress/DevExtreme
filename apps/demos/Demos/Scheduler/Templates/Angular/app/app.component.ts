@@ -73,7 +73,7 @@ export class AppComponent {
 
   private readonly onPopupOptionChanged = (e: DxPopupTypes.OptionChangedEvent): void => {
     if (e.fullName === 'toolbarItems' && e.value) {
-      e.value.forEach((item, index) => {
+      e.value.forEach((item: DxPopupTypes.ToolbarItem & { shortcut?: string }, index: number) => {
         if (item.shortcut === 'done' || item.shortcut === 'cancel') {
           e.component.option(`toolbarItems[${index}].toolbar`, 'bottom');
         }
@@ -88,6 +88,10 @@ export class AppComponent {
 
   private readonly updateEndDate = (movie: MovieData): void => {
     const form = this.formInstance;
+    if (!form) {
+      return;
+    }
+
     const formData = form.option('formData');
     const { startDate } = formData;
 
@@ -99,6 +103,10 @@ export class AppComponent {
 
   readonly onFormInitialized = (e: DxFormTypes.InitializedEvent): void => {
     const form = e.component;
+    if (!form) {
+      return;
+    }
+
     const formData = form.option('formData');
 
     this.formInstance = form;
@@ -122,7 +130,7 @@ export class AppComponent {
     this.currentSelectedMovie.set(movie);
 
     if (movie) {
-      form.updateData('director', movie.director);
+      form?.updateData('director', movie.director);
       this.updateEndDate(movie);
     }
   };

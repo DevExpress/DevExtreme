@@ -1,12 +1,24 @@
 import { Injectable } from '@angular/core';
 
-export class GdpInfo {
+export interface GdpInfo {
   name: string;
 
-  value: number;
+  value: number | undefined;
 }
 
-const countriesGDP: Object = {
+export interface CountryGDP {
+  agriculture?: number;
+
+  industry?: number;
+
+  services?: number;
+
+  total?: number;
+}
+
+export type CountriesGDP = Record<string, CountryGDP>;
+
+const countriesGDP: CountriesGDP = {
   Afghanistan: {
     agriculture: 34.9, industry: 25, services: 40, total: 20312,
   },
@@ -674,7 +686,7 @@ const countriesGDP: Object = {
 
 @Injectable()
 export class Service {
-  getCountriesGDP(): Object {
+  getCountriesGDP(): CountriesGDP {
     return countriesGDP;
   }
 }

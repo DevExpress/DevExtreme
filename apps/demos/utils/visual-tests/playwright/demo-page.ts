@@ -1,4 +1,4 @@
-import { readFileSync } from 'fs';
+import { existsSync, readFileSync } from 'fs';
 import { join } from 'path';
 import type { Page, Request } from '@playwright/test';
 import { applyTheme } from '../matrix-test-core';
@@ -17,6 +17,7 @@ declare global {
     DevExpress?: { viz?: Record<string, WidgetClass | undefined> };
     demoConsoleMessages: ConsoleMessage[];
     demoSettled: () => Promise<void>;
+    dxTestDisableVizAnimation: (widget: WidgetClass | undefined, name: string) => void;
   }
 }
 
@@ -67,19 +68,79 @@ const collectConsoleMessages = (): void => {
   });
 };
 
+// The widgets whose start-up animation the tests switch off, by the file of their public module.
+const VIZ_WIDGETS: Record<string, string> = {
+  chart: 'dxChart',
+  pie_chart: 'dxPieChart',
+  polar_chart: 'dxPolarChart',
+  circular_gauge: 'dxCircularGauge',
+  linear_gauge: 'dxLinearGauge',
+  bar_gauge: 'dxBarGauge',
+  range_selector: 'dxRangeSelector',
+};
+
+interface VendorVizWidgets {
+  globalVar: string;
+  // [key of the module in the vendor global, widget name]
+  widgets: [string, string][];
+}
+
+// React and Vue demos take devextreme from a vendor bundle shared by all demos. Its global holds
+// every module of the bundle under the key its manifest lists, so the widget classes the demo will
+// use are reachable without window.DevExpress.
+export function getVendorVizWidgets(framework: string): VendorVizWidgets | null {
+  const manifestPath = join(__dirname, '..', '..', '..', 'bundles', 'vendor', `${framework.toLowerCase()}.manifest.json`);
+
+  if (!existsSync(manifestPath)) {
+    return null;
+  }
+
+  const { globalVar, coverage } = JSON.parse(readFileSync(manifestPath, 'utf8')) as {
+    globalVar: string;
+    coverage: [string, string][];
+  };
+  const widgets = coverage.flatMap(([file, key]): [string, string][] => {
+    const name = /[\\/]esm[\\/]viz[\\/](\w+)\.js$/.exec(file)?.[1];
+
+    return name && VIZ_WIDGETS[name] ? [[key, VIZ_WIDGETS[name]]] : [];
+  });
+
+  return { globalVar, widgets };
+}
+
 // Charts, gauges and range selectors animate their first render in script. The edges of a shape
 // drawn that way come out a few colour levels apart from run to run, so the tests switch the
-// animation off: the widget is drawn once, in its final state. The listener is added before jQuery
-// loads, so it runs ahead of the demo code.
-const disableVizAnimation = (): void => {
-  document.addEventListener('DOMContentLoaded', () => {
-    const viz = window.DevExpress?.viz;
-
-    ['dxChart', 'dxPieChart', 'dxPolarChart', 'dxCircularGauge', 'dxLinearGauge', 'dxBarGauge'].forEach((name) => {
-      viz?.[name]?.defaultOptions({ options: { animation: { enabled: false } } });
+// animation off: the widget is drawn once, in its final state. The hooks are installed before any
+// page script runs, so they take effect ahead of the demo code.
+const disableVizAnimation = (vendor: VendorVizWidgets | null, names: string[]): void => {
+  const disable = (widget: WidgetClass | undefined, name: string): void => {
+    widget?.defaultOptions({
+      options: name === 'dxRangeSelector'
+        ? { behavior: { animationEnabled: false } }
+        : { animation: { enabled: false } },
     });
+  };
 
-    viz?.dxRangeSelector?.defaultOptions({ options: { behavior: { animationEnabled: false } } });
+  // An Angular demo bundle calls it for the widgets it uses before the demo renders.
+  window.dxTestDisableVizAnimation = disable;
+
+  // The vendor script assigns its global before the demo bundle runs.
+  if (vendor) {
+    let modules: Record<string, { default?: WidgetClass } | undefined> | undefined;
+
+    Object.defineProperty(window, vendor.globalVar, {
+      configurable: true,
+      get: () => modules,
+      set: (value: typeof modules) => {
+        modules = value;
+        vendor.widgets.forEach(([key, name]) => disable(modules?.[key]?.default, name));
+      },
+    });
+  }
+
+  // A jQuery demo takes the widgets from dx.all.js, which exposes them on window.DevExpress.
+  document.addEventListener('DOMContentLoaded', () => {
+    names.forEach((name) => disable(window.DevExpress?.viz?.[name], name));
   });
 };
 
@@ -128,15 +189,43 @@ const trackPageSettling = (): void => {
   });
 };
 
+// Demos that generate their data with Math.random() draw the same picture only if they get the
+// same numbers. The seeded random of Chrome gives a sequence, but which numbers a demo gets depends
+// on how many calls the framework and DevExtreme (guids) made before it, and that differs between
+// frameworks. So every call site gets its own counter, and its n-th call returns the n-th number.
+const makeRandomDeterministic = (): void => {
+  const calls = new Map<string, number>();
+
+  Math.random = (): number => {
+    const site = new Error().stack?.split('\n')[2] ?? '';
+    const index = calls.get(site) ?? 0;
+
+    calls.set(site, index + 1);
+
+    // A 32-bit integer hash of the index (mulberry32), scaled to [0, 1).
+    let t = (index + 0x6D2B79F5) | 0;
+    t = Math.imul(t ^ (t >>> 15), t | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+};
+
 // One script instead of several: a demo script may use MockDate and testUtils, and the order of
 // separate init scripts is not guaranteed.
-const getInitScript = (clientScript: string | null): string => [
+const getInitScript = (
+  clientScript: string | null,
+  testGlobals: string | null,
+  vendor: VendorVizWidgets | null,
+): string => [
+  `(${makeRandomDeterministic.toString()})();`,
   `(function () { ${MOCKDATE_SOURCE} }).call(window);`,
+  testGlobals ?? '',
   `(function () { ${TEST_UTILS_SOURCE} })();`,
   `(${addTestStyles.toString()})(${JSON.stringify(TEST_STYLES)});`,
   `(${collectConsoleMessages.toString()})();`,
   `(${trackPageSettling.toString()})();`,
-  `(${disableVizAnimation.toString()})();`,
+  `(${disableVizAnimation.toString()})(${JSON.stringify(vendor)}, ${JSON.stringify(Object.values(VIZ_WIDGETS))});`,
   clientScript ?? '',
 ].join('\n');
 
@@ -145,8 +234,10 @@ export async function prepareDemoPage(
   url: string,
   theme: string,
   clientScript: string | null,
+  testGlobals: string | null = null,
+  vendor: VendorVizWidgets | null = null,
 ): Promise<void> {
-  await page.addInitScript({ content: getInitScript(clientScript) });
+  await page.addInitScript({ content: getInitScript(clientScript, testGlobals, vendor) });
 
   await page.route((requestUrl) => requestUrl.href === url, async (route) => {
     const response = await route.fetch();
@@ -198,6 +289,12 @@ export async function openDemo(
   await page.waitForFunction(() => Array
     .from(document.querySelectorAll<HTMLLinkElement>('link[rel="stylesheet"]'))
     .every((link) => link.sheet !== null));
+
+  // An Angular demo shows "Loading..." in <demo-app> until the application has bootstrapped.
+  if (await page.locator('demo-app').count()) {
+    await page.waitForFunction(() => document.querySelector<HTMLElement>('demo-app')?.innerText !== 'Loading...');
+    await waitForIdle();
+  }
 }
 
 export async function runTestCode(page: Page, code: string): Promise<void> {

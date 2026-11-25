@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 
-export class Attributes {
+export interface Attributes {
   name: string;
 }
 
-export class Marker {
+export interface Marker {
   coordinates: number[];
 
   attributes: Attributes;

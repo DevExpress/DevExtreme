@@ -45,8 +45,6 @@ class DateBoxMask<
 
   _dateParts!: { caret: { start: number; end: number }; isStub: boolean }[];
 
-  _maskInputHandler?: (() => void) | null;
-
   _initialMaskValue?: Date | null;
 
   _searchValue!: string;
@@ -257,22 +255,28 @@ class DateBoxMask<
   }
 
   _maskBeforeInputHandler(e: DxEvent<KeyboardKeyDownEvent & InputEvent>): boolean {
-    this._maskInputHandler = null;
+    const { inputType, data } = e.originalEvent;
+    const isCompositionText = inputType === 'insertCompositionText';
 
-    const { inputType } = e.originalEvent;
+    const typedChar = isCompositionText ? data?.slice(-1) : data;
 
-    if (inputType === 'insertCompositionText') {
-      this._maskInputHandler = (): void => {
-        this._renderSelectedPart();
-      };
-    }
-
-    if (!this._useMaskBehavior() || !this._isSingleCharKey(e)) {
+    if (!this._useMaskBehavior() || typedChar?.length !== 1) {
       return false;
     }
 
-    const key = e.originalEvent.data ?? '';
-    this._keyInputHandler(e, key);
+    if (isCompositionText && this._wasAllSelectedBeforeComposition) {
+      this._clearSearchValue();
+      this._selectFirstPart();
+      this._wasAllSelectedBeforeComposition = false;
+    }
+
+    const isComposedWithSurroundingText = typedChar !== data;
+
+    if (isComposedWithSurroundingText) {
+      this._caret(this._getActivePartProp('caret'));
+    }
+
+    this._keyInputHandler(e, typedChar);
 
     return true;
   }
@@ -305,7 +309,19 @@ class DateBoxMask<
       return;
     }
 
-    const isCompositionDigit = event?.inputType === 'insertCompositionText'
+    const isCompositionHandledBeforeInput = this._useMaskBehavior()
+      && this._useBeforeInputEvent()
+      && event?.inputType === 'insertCompositionText';
+
+    if (isCompositionHandledBeforeInput) {
+      this._syncInputWithMask();
+      this._wasAllSelectedBeforeComposition = false;
+
+      return;
+    }
+
+    const isCompositionDigit = this._useMaskBehavior()
+      && event?.inputType === 'insertCompositionText'
       && this._isSingleDigitKey(e);
 
     const isIMECommitDigit = event?.inputType === 'insertText'
@@ -341,11 +357,6 @@ class DateBoxMask<
     }
 
     super._keyPressHandler(e);
-
-    if (this._maskInputHandler) {
-      this._maskInputHandler();
-      this._maskInputHandler = null;
-    }
 
     this._wasAllSelectedBeforeComposition = false;
   }
@@ -819,7 +830,6 @@ class DateBoxMask<
     this._input().val(this._getDisplayedText(this._maskValue));
     this._caret(this._getActivePartProp('caret'));
 
-    this._maskInputHandler = null;
     this._wasAllSelectedBeforeComposition = false;
   }
 

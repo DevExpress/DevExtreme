@@ -33,14 +33,14 @@ export class AppComponent {
 
   readonly currentDate = new Date(2021, 3, 26);
 
-  onAppointmentRemove = (e: DxSchedulerTypes.AppointmentDraggingRemoveEvent) => {
+  onAppointmentRemove = (e: Pick<DxSchedulerTypes.AppointmentDraggingRemoveEvent, 'itemData'>) => {
     if (this.appointments().includes(e.itemData)) {
       this.appointments.update((items) => items.filter((item) => item !== e.itemData));
       this.tasks.update((items) => [...items, e.itemData]);
     }
   };
 
-  onAppointmentAdd = (e: DxSchedulerTypes.AppointmentDraggingAddEvent) => {
+  onAppointmentAdd = (e: Pick<DxSchedulerTypes.AppointmentDraggingAddEvent, 'itemData' | 'fromData'>) => {
     if (this.tasks().includes(e.fromData)) {
       this.tasks.update((items) => items.filter((item) => item !== e.fromData));
       this.appointments.update((items) => [...items, e.itemData]);
