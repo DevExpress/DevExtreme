@@ -663,6 +663,7 @@ class PivotGrid extends Widget {
         that._createComponent(
           e.component.content(),
           FieldChooser,
+          // @ts-expect-error the widget's options aren't typed yet
           fieldChooserComponentOptions,
         );
       },
@@ -1460,6 +1461,7 @@ class PivotGrid extends Widget {
       that._fieldChooserBase = that._createComponent(
         that.$element(),
         FieldChooserBase,
+        // @ts-expect-error the widget's options aren't typed yet
         fieldChooserBaseConfig,
       );
     }

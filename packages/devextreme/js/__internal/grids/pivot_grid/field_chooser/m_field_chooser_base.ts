@@ -4,30 +4,61 @@ import { addNamespace } from '@js/common/core/events/utils/index';
 import localizationMessage from '@js/common/core/localization/message';
 import ArrayStore from '@js/common/data/array_store';
 import registerComponent from '@js/core/component_registrator';
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { Deferred } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
-import { each, map } from '@js/core/utils/iterator';
 import { isDefined } from '@js/core/utils/type';
-import Widget from '@js/ui/widget/ui.widget';
+import type { SearchBoxMixinOptions } from '@js/ui/widget/ui.search_box_mixin';
 import { getData, setData } from '@ts/core/element_data';
+import type { OptionChanged } from '@ts/core/widget/types';
+import Widget from '@ts/core/widget/widget';
 import eventsEngine from '@ts/events/core/events_engine';
 import columnStateMixin from '@ts/grids/grid_core/column_state_mixin/column_state_mixin';
-import {
-  HeaderFilterView as HeaderFilterViewBase,
-  updateHeaderFilterItemSelectionState,
-} from '@ts/grids/grid_core/header_filter/header_filter_core';
+import type { ColumnStateOptions } from '@ts/grids/grid_core/column_state_mixin/types';
+import { HeaderFilterView as HeaderFilterViewBase } from '@ts/grids/grid_core/header_filter/header_filter_core';
+import type { HeaderFilterOptions, HeaderFilterViewOptions } from '@ts/grids/grid_core/header_filter/types';
 import sortingMixin from '@ts/grids/grid_core/sorting/sorting_mixin';
+import type { AriaSortState, SortingColumn } from '@ts/grids/grid_core/sorting/types';
 import type { InternalGrid } from '@ts/grids/grid_core/types';
 import gridCoreUtils from '@ts/grids/grid_core/utils';
+import type Scrollable from '@ts/ui/scroll_view/scrollable';
 
-import type { RovingTabIndexComponent } from '../keyboard_navigation/roving_tab_index';
+import type { PivotGridDataSource } from '../data_source/data_source';
+import type { DataSourceHeaderItem } from '../data_source/types';
 import { RovingTabIndex } from '../keyboard_navigation/roving_tab_index';
+import type { PivotGrid } from '../m_widget';
 import SortableModule from '../sortable/sortable';
-import { createPath, foreachTree } from '../widget_utils';
-import { ATTRIBUTES, CLASSES, FIELD_DATA_KEY } from './const';
+import type {
+  OldSortableChangedArgs,
+  OldSortableDraggingArgs,
+  OldSortableProperties,
+} from '../sortable/types';
+import type { PivotGridField } from '../types';
+import type { FieldChooserField, SortOrderType } from './const';
+import {
+  ATTRIBUTES, CLASSES, FIELD_DATA_KEY, FIELD_NAVIGATION_DELTAS,
+} from './const';
 import { dragAndDropItemRender } from './dom';
-import { reverseSortOrder, shouldCancelDragging } from './utils';
+import type { FieldChooser } from './m_field_chooser';
+import type {
+  FieldChooserBaseProperties,
+  FieldChooserFieldEvent,
+  FieldChooserHeaderFilterField,
+  FieldChooserHeaderFilterItem,
+} from './types';
+import {
+  fieldHasHeaderFilter,
+  getFieldSortOrder,
+  getMainGroupField,
+  getStringState,
+  isFieldNavigationEvent,
+  isPivotGridArea,
+  isPivotGridDataSource,
+  processItems,
+  reverseSortOrder,
+  shouldCancelDragging,
+} from './utils';
 
 const { Sortable } = SortableModule;
 
@@ -35,92 +66,41 @@ const DIV = '<div>';
 
 const FIELD_AREAS = ['filter', 'row', 'column', 'data'];
 
-const FIELD_NAVIGATION_DELTAS = {
-  ArrowUp: -1,
-  ArrowLeft: -1,
-  ArrowDown: 1,
-  ArrowRight: 1,
-};
-
-function isFieldNavigationEvent(e): boolean {
-  return e.type === 'keydown'
-    && FIELD_NAVIGATION_DELTAS[e.key] !== undefined
-    && !e.altKey && !e.ctrlKey && !e.metaKey && !e.shiftKey;
-}
-
 class HeaderFilterView extends HeaderFilterViewBase {
-  _getSearchExpr(options, headerFilterOptions) {
+  protected _getSearchExpr(
+    options: HeaderFilterViewOptions,
+    headerFilterOptions: HeaderFilterOptions,
+  ): SearchBoxMixinOptions['searchExpr'] {
     options.useDefaultSearchExpr = true;
     return super._getSearchExpr(options, headerFilterOptions);
   }
 }
 
-const processItems = function (groupItems, field) {
-  const filterValues: any = [];
-  const isTree = !!field.groupName;
-  const isExcludeFilterType = field.filterType === 'exclude';
+// @ts-expect-error the sorting and column state mixins are typed for grid views
+const mixinWidget: typeof Widget = sortingMixin(columnStateMixin(Widget));
 
-  if (field.filterValues) {
-    each(field.filterValues, (_, filterValue) => {
-      filterValues.push(Array.isArray(filterValue) ? filterValue.join('/') : filterValue?.valueOf());
-    });
-  }
+export class FieldChooserBase extends mixinWidget<FieldChooserBaseProperties> {
+  protected declare _applyColumnState: (
+    options: ColumnStateOptions,
+  ) => dxElementWrapper | undefined;
 
-  foreachTree(groupItems, (items) => {
-    const item = items[0];
-    const path = createPath(items);
-    const preparedFilterValueByText = isTree ? map(items, (item) => item.text).reverse().join('/') : item.text;
+  protected declare _getIndicatorContainer: ($cell: dxElementWrapper) => dxElementWrapper;
 
-    item.value = isTree ? path.slice(0) : item.key || item.value;
-    const preparedFilterValue = isTree ? path.join('/') : item.value?.valueOf();
+  protected _dataSource?: PivotGridDataSource;
 
-    if (item.children) {
-      item.items = item.children;
-      item.children = null;
-    }
+  protected _headerFilterView!: HeaderFilterView;
 
-    updateHeaderFilterItemSelectionState(
-      item,
-      item.key
-      && filterValues.includes(preparedFilterValueByText)
-      || filterValues.includes(preparedFilterValue),
-      isExcludeFilterType,
-    );
-  });
-};
+  protected _skipStateChange?: boolean;
 
-function getMainGroupField(dataSource, sourceField) {
-  let field = sourceField;
-  if (isDefined(sourceField.groupIndex)) {
-    field = dataSource.getAreaFields(sourceField.area, true)[sourceField.areaIndex];
-  }
+  protected _changedHandler?: () => void;
 
-  return field;
-}
-
-function fieldHasHeaderFilter(dataSource, field): boolean {
-  const mainGroupField = getMainGroupField(dataSource, field);
-  const isFirstInGroup = field.groupIndex === 0 || !isDefined(field.groupIndex);
-  return mainGroupField.allowFiltering && isFirstInGroup && field.area !== 'data';
-}
-
-function getStringState(state) {
-  state = state || {};
-  return JSON.stringify([state.fields, state.columnExpandedPaths, state.rowExpandedPaths]);
-}
-
-const mixinWidget = sortingMixin(
-  columnStateMixin(Widget as any),
-);
-
-export class FieldChooserBase extends mixinWidget {
   private _focusedFieldIndex = -1;
 
   // NOTE: no initializer — class field initializers do not run for classes
   // built on the legacy DevExtreme class system in the systemjs build.
   private _fieldNavigationMap: Record<string, RovingTabIndex> | undefined;
 
-  _getDefaultOptions() {
+  public _getDefaultOptions(): FieldChooserBaseProperties {
     return {
       ...super._getDefaultOptions(),
       ...{
@@ -150,10 +130,15 @@ export class FieldChooserBase extends mixinWidget {
     };
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  protected _setAriaSortAttribute(_column, _ariaSortState, _$rootElement) { }
+  protected _setAriaSortAttribute(
+    column: SortingColumn,
+    ariaSortState: AriaSortState | undefined,
+    $rootElement: dxElementWrapper,
+  ): void;
 
-  _init() {
+  protected _setAriaSortAttribute(): void { }
+
+  public _init(): void {
     super._init();
     this._headerFilterView = new HeaderFilterView(this as unknown as InternalGrid);
     this._refreshDataSource();
@@ -162,14 +147,14 @@ export class FieldChooserBase extends mixinWidget {
     gridCoreUtils.logHeaderFilterDeprecatedWarningIfNeed(this);
   }
 
-  _refreshDataSource() {
+  protected _refreshDataSource(): void {
     const dataSource = this.option('dataSource');
 
     // Field indexes are only meaningful within one data source, so the roving
     // tab stops fall back to the first field of each area.
     this._resetFieldNavigation();
 
-    if (dataSource?.fields && dataSource.load/* instanceof DX.ui.dxPivotGrid.DataSource */) {
+    if (isPivotGridDataSource(dataSource)) {
       this._dataSource = dataSource;
     }
   }
@@ -180,7 +165,7 @@ export class FieldChooserBase extends mixinWidget {
     });
   }
 
-  _optionChanged(args) {
+  public _optionChanged(args: OptionChanged<FieldChooserBaseProperties>): void {
     switch (args.name) {
       case 'dataSource':
         this._refreshDataSource();
@@ -210,8 +195,7 @@ export class FieldChooserBase extends mixinWidget {
     }
   }
 
-  renderField(field, showColumnLines) {
-    const that = this;
+  public renderField(field: FieldChooserField, showColumnLines: boolean): dxElementWrapper {
     const caption = field.caption ?? field.dataField ?? '';
     const $fieldContent = $(DIV).addClass(CLASSES.area.fieldContent)
       .text(caption);
@@ -224,12 +208,12 @@ export class FieldChooserBase extends mixinWidget {
 
     if (field.area !== 'data') {
       if (field.allowSorting) {
-        that._applyColumnState({
+        this._applyColumnState({
           name: 'sort',
           rootElement: $fieldElement,
           column: {
-            alignment: that.option('rtlEnabled') ? 'right' : 'left',
-            sortOrder: field.sortOrder === 'desc' ? 'desc' : 'asc',
+            alignment: this.option('rtlEnabled') ? 'right' : 'left',
+            sortOrder: getFieldSortOrder(field),
             allowSorting: field.allowSorting,
             caption,
           },
@@ -237,7 +221,7 @@ export class FieldChooserBase extends mixinWidget {
         });
       }
 
-      that._renderHeaderFilterIcon($fieldElement, field, showColumnLines);
+      this._renderHeaderFilterIcon($fieldElement, field, showColumnLines);
     }
 
     if (field.groupName) {
@@ -248,27 +232,29 @@ export class FieldChooserBase extends mixinWidget {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _clean(value?) {
+  public _clean(value?: boolean): void {
   }
 
-  _render() {
+  public _render(): void {
     super._render();
     this._headerFilterView.render(this.$element());
   }
 
-  renderSortable() {
+  public renderSortable(): void {
+    // eslint-disable-next-line @typescript-eslint/no-this-alias -- the methods use their own this
     const that = this;
 
-    that._createComponent(that.$element(), Sortable, extend({
-      allowDragging: that.option('allowFieldDragging'),
+    this._createComponent(this.$element(), Sortable, extend({
+      allowDragging: this.option('allowFieldDragging'),
       itemSelector: `.${CLASSES.area.field}`,
       itemContainerSelector: `.${CLASSES.area.fieldContainer}`,
       groupSelector: `.${CLASSES.area.fieldList}`,
-      groupFilter() {
+      groupFilter(this: Element): boolean {
         const dataSource = that._dataSource;
         const $sortable = $(this).closest('.dx-sortable-old');
-        const pivotGrid: any = $sortable.data('dxPivotGrid');
-        const pivotGridFieldChooser: any = $sortable.data('dxPivotGridFieldChooser');
+        const pivotGrid = $sortable.data<PivotGrid | undefined>('dxPivotGrid');
+        const pivotGridFieldChooser = $sortable
+          .data<FieldChooser | undefined>('dxPivotGridFieldChooser');
 
         if (pivotGrid) {
           return pivotGrid.getDataSource() === dataSource;
@@ -279,73 +265,84 @@ export class FieldChooserBase extends mixinWidget {
         return false;
       },
       itemRender: dragAndDropItemRender,
-      onDragging(e) {
+      onDragging(e: OldSortableDraggingArgs): void {
         const field = getData(e.sourceElement, FIELD_DATA_KEY);
         const { targetGroup } = e;
         e.cancel = shouldCancelDragging(field, targetGroup);
       },
       useIndicator: true,
-      onChanged(e) {
+      onChanged: (e: OldSortableChangedArgs): void => {
         const field = getData(e.sourceElement, FIELD_DATA_KEY);
 
         e.removeSourceElement = !!e.sourceGroup;
 
-        that._adjustSortableOnChangedArgs(e);
+        this._adjustSortableOnChangedArgs(e);
 
-        if (field) {
-          const { targetIndex } = e;
-          let mainGroupField;
-          let invisibleFieldsIndexOffset = 0;
-
-          that._processDemandState((dataSource) => {
-            const fields = dataSource.getAreaFields(field.area, true);
-            mainGroupField = getMainGroupField(dataSource, field);
-
-            const visibleFields = fields.filter((f) => f.visible !== false);
-            const fieldBeforeTarget = visibleFields[targetIndex - 1];
-
-            if (fieldBeforeTarget) {
-              invisibleFieldsIndexOffset = fields
-                .filter((f) => f.visible === false
-                    && f.areaIndex <= fieldBeforeTarget.areaIndex)
-                .length;
-            }
-          });
-
-          that._applyChanges([mainGroupField], {
-            area: e.targetGroup,
-            areaIndex: targetIndex + invisibleFieldsIndexOffset,
-          });
+        if (!field) {
+          return;
         }
+
+        const { targetGroup, targetIndex } = e;
+        let invisibleFieldsIndexOffset = 0;
+
+        const mainGroupField = this._processDemandState((dataSource) => {
+          const fields = dataSource.getAreaFields(field.area, true);
+          const visibleFields = fields.filter((f) => f.visible !== false);
+          const fieldBeforeTarget = visibleFields[targetIndex - 1];
+
+          if (fieldBeforeTarget) {
+            invisibleFieldsIndexOffset = fields
+              .filter((f) => f.visible === false
+                  && Number(f.areaIndex) <= Number(fieldBeforeTarget.areaIndex))
+              .length;
+          }
+
+          return getMainGroupField(dataSource, field);
+        });
+
+        if (!mainGroupField) {
+          return;
+        }
+
+        this._applyChanges([mainGroupField], {
+          area: isPivotGridArea(targetGroup) ? targetGroup : undefined,
+          areaIndex: targetIndex + invisibleFieldsIndexOffset,
+        });
       },
-    }, that._getSortableOptions()));
+    }, this._getSortableOptions()));
   }
 
-  _processDemandState(func) {
-    const that = this;
-    const isInstantlyMode = that.option('applyChangesMode') === 'instantly';
-    const dataSource = that._dataSource;
+  protected _processDemandState<T>(
+    func: (dataSource: PivotGridDataSource, isInstantlyMode: boolean) => T,
+  ): T | undefined {
+    const dataSource = this._dataSource;
+
+    if (!dataSource) {
+      return undefined;
+    }
+
+    const isInstantlyMode = this.option('applyChangesMode') === 'instantly';
 
     if (isInstantlyMode) {
-      func(dataSource, isInstantlyMode);
-    } else {
-      const currentState = dataSource.state();
-      const pivotGridState = that.option('state');
-
-      if (pivotGridState) {
-        dataSource.state(pivotGridState, true);
-      }
-
-      func(dataSource, isInstantlyMode);
-
-      dataSource.state(currentState, true);
+      return func(dataSource, isInstantlyMode);
     }
+
+    const currentState = dataSource.state();
+    const pivotGridState = this.option('state');
+
+    if (pivotGridState) {
+      dataSource.state(pivotGridState, true);
+    }
+
+    const result = func(dataSource, isInstantlyMode);
+
+    dataSource.state(currentState, true);
+
+    return result;
   }
 
-  _applyChanges(fields, props) {
-    const that = this;
-
-    that._processDemandState((dataSource, isInstantlyMode) => {
+  protected _applyChanges(fields: FieldChooserField[], props: Partial<PivotGridField>): void {
+    this._processDemandState((dataSource, isInstantlyMode) => {
       fields.forEach(({ index }) => {
         dataSource.field(index, props);
       });
@@ -353,35 +350,35 @@ export class FieldChooserBase extends mixinWidget {
       if (isInstantlyMode) {
         dataSource.load();
       } else {
-        that._changedHandler();
+        this._changedHandler?.();
       }
     });
   }
 
-  _applyLocalSortChanges(fieldIdx, sortOrder): void {
+  private _applyLocalSortChanges(fieldIdx: number, sortOrder: SortOrderType): void {
     this._processDemandState((dataSource) => {
       dataSource.field(fieldIdx, { sortOrder });
       dataSource.sortLocal();
     });
   }
 
-  _adjustSortableOnChangedArgs(e) {
+  protected _adjustSortableOnChangedArgs(e: OldSortableChangedArgs): void {
     e.removeSourceElement = false;
     e.removeTargetElement = true;
     e.removeSourceClass = false;
   }
 
-  _getSortableOptions() {
+  protected _getSortableOptions(): Partial<OldSortableProperties> {
     return {
       direction: 'auto',
     };
   }
 
-  subscribeToEvents(element?) {
+  public subscribeToEvents(element?: dxElementWrapper | Element): void {
     const fieldSelector = `.${CLASSES.area.field}.${CLASSES.area.box}`;
     const targetElement = element ?? this.$element();
 
-    const handler = (e) => {
+    const handler = (e: FieldChooserFieldEvent<KeyboardEvent>): void => {
       const field = getData($(e.currentTarget), FIELD_DATA_KEY);
 
       if (!field) {
@@ -395,7 +392,7 @@ export class FieldChooserBase extends mixinWidget {
         && $(e.target).hasClass(CLASSES.headerFilter);
 
       if (isAltArrowDown || isHeaderFilterIconInteraction) {
-        if (fieldHasHeaderFilter(this._dataSource, field)) {
+        if (this._dataSource && fieldHasHeaderFilter(this._dataSource, field)) {
           e.preventDefault();
           this.handleHeaderFilterIconClick(e, field);
         }
@@ -418,7 +415,7 @@ export class FieldChooserBase extends mixinWidget {
       }
     };
 
-    const focusInHandler = (e) => {
+    const focusInHandler = (e: FieldChooserFieldEvent<FocusEvent>): void => {
       const $field = $(e.currentTarget);
       const field = getData($field, FIELD_DATA_KEY);
 
@@ -433,7 +430,7 @@ export class FieldChooserBase extends mixinWidget {
       }
     };
 
-    const focusOutHandler = (e) => {
+    const focusOutHandler = (e: FieldChooserFieldEvent<FocusEvent>): void => {
       const relatedTarget = e.relatedTarget as Node | null;
 
       if (relatedTarget) {
@@ -467,7 +464,7 @@ export class FieldChooserBase extends mixinWidget {
     );
   }
 
-  restoreFieldFocus(): void {
+  public restoreFieldFocus(): void {
     this.updateFieldsTabIndexes();
 
     if (this._focusedFieldIndex !== -1) {
@@ -475,23 +472,19 @@ export class FieldChooserBase extends mixinWidget {
     }
   }
 
-  updateFieldsTabIndexes(): void {
+  protected updateFieldsTabIndexes(): void {
     FIELD_AREAS.forEach((area) => {
       this._getFieldNavigation(area).updateTabIndexes();
     });
   }
 
   private _getFieldNavigation(area: string): RovingTabIndex {
-    // The sorting and column state mixins lose the Widget typing, so the
-    // component contract has to be restored explicitly.
-    const component = this as unknown as RovingTabIndexComponent;
-
     this._fieldNavigationMap = this._fieldNavigationMap ?? {};
     this._fieldNavigationMap[area] = this._fieldNavigationMap[area] ?? new RovingTabIndex({
-      component,
-      getItems: () => this._getAreaFieldElements(area),
-      scrollToItem: (item) => this._scrollFieldElementToView(item),
-      getItemId: (item) => this._getFieldElementId(item),
+      component: this,
+      getItems: (): HTMLElement[] => this._getAreaFieldElements(area),
+      scrollToItem: (item: HTMLElement): void => this._scrollFieldElementToView(item),
+      getItemId: (item: HTMLElement): string | undefined => this._getFieldElementId(item),
     });
 
     return this._fieldNavigationMap[area];
@@ -511,22 +504,28 @@ export class FieldChooserBase extends mixinWidget {
   private _getAreaFieldElements(area: string): HTMLElement[] {
     const ownFieldChooserRoot = this.$element().closest(`.${CLASSES.fieldChooser.self}`).get(0) ?? null;
     // NOTE: get() without an index is not supported by the native renderer.
-    const fields: HTMLElement[] = this.$element()
+    const fields = this.$element()
       .find(`[group="${area}"] .${CLASSES.area.field}.${CLASSES.area.box}`)
       .toArray();
 
-    return fields.filter((field) => {
+    return fields.filter((field): field is HTMLElement => {
       const fieldChooserRoot = $(field).closest(`.${CLASSES.fieldChooser.self}`).get(0) ?? null;
 
-      return fieldChooserRoot === ownFieldChooserRoot;
+      return field instanceof HTMLElement && fieldChooserRoot === ownFieldChooserRoot;
     });
   }
 
   private _scrollFieldElementToView(fieldElement: HTMLElement): void {
     const $scrollable = $(fieldElement).closest(`.${CLASSES.scrollable.self}`);
-    const scrollable = $scrollable.length ? ($scrollable as any).dxScrollable('instance') : undefined;
 
-    scrollable?.scrollToElement(fieldElement);
+    if (!$scrollable.length) {
+      return;
+    }
+
+    // @ts-expect-error dxScrollable is not defined in dxElementWrapper
+    const scrollable: Scrollable = $scrollable.dxScrollable('instance');
+
+    scrollable.scrollToElement(fieldElement);
   }
 
   private _getFieldNavigationDelta(key: string): number {
@@ -539,7 +538,10 @@ export class FieldChooserBase extends mixinWidget {
     return FIELD_NAVIGATION_DELTAS[key];
   }
 
-  private _handleFieldNavigation(e, field): void {
+  private _handleFieldNavigation(
+    e: FieldChooserFieldEvent<KeyboardEvent>,
+    field: FieldChooserField,
+  ): void {
     if (!field.area) {
       return;
     }
@@ -563,23 +565,31 @@ export class FieldChooserBase extends mixinWidget {
     }
   }
 
-  private _renderHeaderFilterIcon($fieldElement, field, showColumnLines): void {
-    if (!fieldHasHeaderFilter(this._dataSource, field)) {
+  private _renderHeaderFilterIcon(
+    $fieldElement: dxElementWrapper,
+    field: FieldChooserField,
+    showColumnLines: boolean,
+  ): void {
+    if (!this._dataSource || !fieldHasHeaderFilter(this._dataSource, field)) {
       return;
     }
 
     const mainGroupField = getMainGroupField(this._dataSource, field);
     const isEmpty = !mainGroupField.filterValues?.length;
-    const $icon = $('<span>').addClass(CLASSES.headerFilter).toggleClass('dx-header-filter-empty', isEmpty);
+    const $icon = $('<span>')
+      .addClass(CLASSES.headerFilter)
+      .toggleClass(CLASSES.headerFilterEmpty, isEmpty);
 
     let $container = this._getIndicatorContainer($fieldElement);
 
     if (!$container.length) {
-      const rtlEnabled = this.option('rtlEnabled') as boolean;
+      const rtlEnabled = !!this.option('rtlEnabled');
       const indicatorAlignment = rtlEnabled ? 'left' : 'right';
 
       $container = $('<div>').addClass('dx-column-indicators');
-      $container.css('float', showColumnLines ? indicatorAlignment : null);
+      if (showColumnLines) {
+        $container.css('float', indicatorAlignment);
+      }
 
       $container[!showColumnLines && rtlEnabled ? 'appendTo' : 'prependTo']($fieldElement);
     }
@@ -587,12 +597,23 @@ export class FieldChooserBase extends mixinWidget {
     $container.append($icon);
   }
 
-  private handleHeaderFilterIconClick(e, field): void {
+  private handleHeaderFilterIconClick(e: FieldChooserFieldEvent, field: FieldChooserField): void {
+    // eslint-disable-next-line @typescript-eslint/no-this-alias -- the methods use their own this
     const that = this;
+    const dataSource = this._dataSource;
 
-    const mainGroupField = extend(true, {}, getMainGroupField(that._dataSource, field));
-    const type = mainGroupField.groupName ? 'tree' : 'list';
-    const paginate = this._dataSource.paginate() && type === 'list';
+    if (!dataSource) {
+      return;
+    }
+
+    // @ts-expect-error a field's selector is typed as Function
+    const mainGroupField: FieldChooserHeaderFilterField = extend(
+      true,
+      {},
+      getMainGroupField(dataSource, field),
+    );
+    const type: HeaderFilterViewOptions['type'] = mainGroupField.groupName ? 'tree' : 'list';
+    const paginate = dataSource.paginate() && type === 'list';
 
     this._headerFilterView.showHeaderFilterMenu($(e.currentTarget), extend(mainGroupField, {
       type,
@@ -603,18 +624,18 @@ export class FieldChooserBase extends mixinWidget {
         load(options) {
           const { userData } = options;
           if (userData.store) {
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-return -- userData isn't typed
             return userData.store.load(options);
           }
-          // @ts-expect-error
-          const d = new Deferred();
-          that._dataSource.getFieldValues(
+          const d = Deferred<DataSourceHeaderItem[]>();
+          dataSource.getFieldValues(
             mainGroupField.index,
-            that.option('headerFilter.showRelevantValues'),
+            !!that.option('headerFilter')?.showRelevantValues,
             paginate
               ? options
               : undefined,
           ).done((data) => {
-            const emptyValue = that.option('headerFilter.texts.emptyValue');
+            const emptyValue = that.option('headerFilter')?.texts?.emptyValue;
 
             data.forEach((element) => {
               if (!element.text) {
@@ -628,10 +649,11 @@ export class FieldChooserBase extends mixinWidget {
               userData.store = new ArrayStore(data);
               userData.store.load(options).done(d.resolve).fail(d.reject);
             }
+            // eslint-disable-next-line @typescript-eslint/no-misused-promises -- ignores the result
           }).fail(d.reject);
           return d;
         },
-        postProcess(data) {
+        postProcess(data: FieldChooserHeaderFilterItem[]): FieldChooserHeaderFilterItem[] {
           processItems(data, mainGroupField);
           return data;
         },
@@ -650,7 +672,7 @@ export class FieldChooserBase extends mixinWidget {
     }));
   }
 
-  private handleFieldClick(field): void {
+  private handleFieldClick(field: FieldChooserField): void {
     const isRemoteSort = this.option('remoteSort');
     const sortOrder = reverseSortOrder(field.sortOrder);
 
@@ -662,9 +684,9 @@ export class FieldChooserBase extends mixinWidget {
   }
 
   private focusFieldElement(fieldIndex: number): void {
-    const fieldElements = this.$element()
-      .find(`.${CLASSES.area.field}.${CLASSES.area.box}`)
-      .get();
+    const $fieldElements = this.$element().find(`.${CLASSES.area.field}.${CLASSES.area.box}`);
+    // @ts-expect-error get() without an index returns undefined in the native renderer
+    const fieldElements: HTMLElement[] | undefined = $fieldElements.get();
 
     fieldElements?.forEach((fieldElement) => {
       const field = getData($(fieldElement), FIELD_DATA_KEY);
@@ -675,15 +697,15 @@ export class FieldChooserBase extends mixinWidget {
     });
   }
 
-  _initTemplates() {
+  public _initTemplates(): void {
 
   }
 
-  addWidgetPrefix(className) {
+  public addWidgetPrefix(className: string): string {
     return `dx-pivotgrid-${className}`;
   }
 }
 
-registerComponent('dxPivotGridFieldChooserBase', FieldChooserBase as any);
+registerComponent('dxPivotGridFieldChooserBase', FieldChooserBase);
 
 export default { FieldChooserBase };
