@@ -69,14 +69,10 @@ export default [
     },
   },
   {
-    files: [
-      'helpers/**/*.ts',
-      'models/**/*.ts',
-      'tests/editors/**/*.ts',
-      'tests/navigation/**/*.ts',
-      'tests/common/*.ts',
-      'tests/common/gantt/**/*.ts',
-      'tests/common/pagination/**/*.ts',
+    files: ['**/*.ts'],
+    ignores: [
+      'playwright.config.ts',
+      'tests/scheduler/**/*.ts',
     ],
     rules: {
       'no-restricted-syntax': ['error', {

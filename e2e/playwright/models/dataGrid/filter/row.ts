@@ -1,12 +1,8 @@
-import FocusableElement from '../../internal/focusable';
+import GridElement from '../../gridCore/element';
 import FilterCell from './cell';
 
-const CLASS = {
-  editCell: 'dx-editor-cell',
-};
-
-export default class FilterRow extends FocusableElement {
+export default class FilterRow extends GridElement {
   public getFilterCell(index: number): FilterCell {
-    return new FilterCell(this.element.locator(`.${CLASS.editCell}:nth-child(${index + 1})`));
+    return new FilterCell(this.element.locator(`td[aria-colindex='${index + 1}']`));
   }
 }

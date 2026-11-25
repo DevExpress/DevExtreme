@@ -1,7 +1,7 @@
 import type { Locator } from '@playwright/test';
 import { expect } from '@playwright/test';
 import type { WidgetName } from '../../types';
-import FocusableElement from '../../internal/focusable';
+import GridElement from '../element';
 import GridModule from '../module';
 
 const CLASS = {
@@ -26,12 +26,12 @@ export default class FilterPanel extends GridModule {
     await (present ? expect(filterBuilder) : expect(filterBuilder).not).toBeAttached();
   }
 
-  public getIconFilter(): FocusableElement {
-    return new FocusableElement(this.element.locator(`.${CLASS.filterPanelIcon}`));
+  public getIconFilter(): GridElement {
+    return new GridElement(this.element.locator(`.${CLASS.filterPanelIcon}`));
   }
 
-  public getFilterText(): FocusableElement {
-    return new FocusableElement(
+  public getFilterText(): GridElement {
+    return new GridElement(
       this.element.locator(`.${this.addWidgetPrefix(CLASS.filterPanelText)}`),
     );
   }
