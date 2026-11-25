@@ -1,7 +1,11 @@
 import { Injectable } from '@angular/core';
 import type { DxMapTypes } from 'devextreme-angular/ui/map';
 
-const markers: DxMapTypes.Properties['markers'] = [{
+export type Marker = NonNullable<DxMapTypes.Properties['markers']>[number];
+
+export type Route = NonNullable<DxMapTypes.Properties['routes']>[number];
+
+const markers: Marker[] = [{
   location: '40.7825, -73.966111',
   tooltip: { text: 'Central Park' },
 }, {
@@ -16,7 +20,7 @@ const markers: DxMapTypes.Properties['markers'] = [{
   tooltip: { text: 'City Hall Park' },
 }];
 
-const routes: DxMapTypes.Properties['routes'] = [{
+const routes: Route[] = [{
   weight: 6,
   color: 'blue',
   opacity: 0.5,
@@ -31,11 +35,11 @@ const routes: DxMapTypes.Properties['routes'] = [{
 
 @Injectable()
 export class Service {
-  getMarkers() {
+  getMarkers(): Marker[] {
     return markers;
   }
 
-  getRoutes() {
+  getRoutes(): Route[] {
     return routes;
   }
 }

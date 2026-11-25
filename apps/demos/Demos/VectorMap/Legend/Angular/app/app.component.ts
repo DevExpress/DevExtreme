@@ -2,6 +2,7 @@ import { bootstrapApplication } from '@angular/platform-browser';
 import { Component, enableProdMode, inject } from '@angular/core';
 import { DxVectorMapModule } from 'devextreme-angular';
 import * as mapsData from 'devextreme-dist/js/vectormap-data/world.js';
+import type { DxVectorMapTypes } from 'devextreme-angular/ui/vector-map';
 import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -25,27 +26,26 @@ export class AppComponent {
 
   readonly markers = this.service.getMarkers();
 
-  private readonly populations: Object = this.service.getPopulations();
+  private readonly populations = this.service.getPopulations();
 
-  customizeText({ index, start, end }) {
+  readonly customizeText: NonNullable<DxVectorMapTypes.Legend['customizeText']> = ({ index, start, end }) => {
     if (index === 0) {
       return '< 0.5%';
     }
-
     return (index === 5)
       ? '> 3%'
       : `${start}% to ${end}%`;
-  }
+  };
 
-  readonly customizeTooltip = (arg: { attribute: Function }) => ({
+  readonly customizeTooltip = (arg: DxVectorMapTypes.MapLayerElement): Record<string, unknown> => ({
     text: arg.attribute('text'),
   });
 
-  readonly customizeItems = (items: unknown[]) => items.reverse();
+  readonly customizeItems = (items: DxVectorMapTypes.LegendItem[]): DxVectorMapTypes.LegendItem[] => items.reverse();
 
-  readonly customizeLayers = (elements: { attribute: Function }[]) => {
+  readonly customizeLayers = (elements: DxVectorMapTypes.MapLayerElement[]): void => {
     elements.forEach((element) => {
-      const name = element.attribute('name');
+      const name: string = element.attribute('name');
       const population = this.populations[name];
       if (population) {
         element.attribute('population', population);
@@ -53,7 +53,7 @@ export class AppComponent {
     });
   };
 
-  readonly customizeMarkers = ({ index }) => ['< 8000K', '8000K to 10000K', '> 10000K'][index];
+  readonly customizeMarkers = ({ index }: { index: number }): string => ['< 8000K', '8000K to 10000K', '> 10000K'][index];
 }
 
 bootstrapApplication(AppComponent);

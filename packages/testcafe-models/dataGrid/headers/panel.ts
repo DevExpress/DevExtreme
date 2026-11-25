@@ -5,8 +5,6 @@ import ExportButton from './panelButtons/exportButton';
 
 const CLASS = {
   addRowButton: 'addrow-button',
-  saveButton: 'save-button',
-  cancelButton: 'cancel-button',
   columnChooserButton: 'column-chooser-button',
   dropDownMenuButton: 'dx-dropdownmenu-button',
   applyFilterButton: 'dx-apply-button',
@@ -22,14 +20,6 @@ export default class HeaderPanel extends FocusableElement {
 
   getAddRowButton(): Selector {
     return this.element.find(`.${Widget.addClassPrefix(this.widgetName, CLASS.addRowButton)}`);
-  }
-
-  getSaveButton(): Selector {
-    return this.element.find(`.${Widget.addClassPrefix(this.widgetName, CLASS.saveButton)}`);
-  }
-
-  getCancelButton(): Selector {
-    return this.element.find(`.${Widget.addClassPrefix(this.widgetName, CLASS.cancelButton)}`);
   }
 
   getExportButton(): ExportButton {

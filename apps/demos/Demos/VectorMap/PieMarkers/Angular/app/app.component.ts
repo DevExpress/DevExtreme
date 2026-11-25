@@ -2,6 +2,7 @@ import { bootstrapApplication } from '@angular/platform-browser';
 import { Component, enableProdMode, inject } from '@angular/core';
 import { DxVectorMapModule } from 'devextreme-angular';
 import * as mapsData from 'devextreme-dist/js/vectormap-data/world.js';
+import type { DxVectorMapTypes } from 'devextreme-angular/ui/vector-map';
 import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -27,11 +28,11 @@ export class AppComponent {
 
   private readonly names = this.service.getNames();
 
-  readonly customizeText = ({ index }: { index: number }) => this.names[index];
+  readonly customizeText = ({ index }: { index: number }): string => this.names[index];
 
-  readonly customizeTooltip = ({ layer, attribute }: { layer: Record<string, string>, attribute: Function }) => ((layer.type === 'marker')
+  readonly customizeTooltip = ({ layer, attribute }: DxVectorMapTypes.MapLayerElement): Record<string, unknown> => ((layer.type === 'marker')
     ? { text: attribute('tooltip') }
-    : undefined);
+    : {});
 }
 
 bootstrapApplication(AppComponent);

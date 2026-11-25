@@ -2,7 +2,6 @@ import type { Locator } from '@playwright/test';
 import type { WidgetName } from '../types';
 import GridCore, { CLASS as CLASS_BASE } from '../gridCore';
 import Card from './card';
-import HeadersElement from './headers/headers';
 import HeaderPanel from './headerPanel';
 import Toolbar from './toolbar';
 
@@ -25,13 +24,6 @@ export default class CardView extends GridCore {
 
   public getCard(nth = 0): Card {
     return new Card(this.getCards().nth(nth), this.getName());
-  }
-
-  public getHeaders(): HeadersElement {
-    return new HeadersElement(
-      this.element.locator(`.${this.addWidgetPrefix(CLASS.headers)}`),
-      this.getName(),
-    );
   }
 
   public getHeaderPanel(): HeaderPanel {

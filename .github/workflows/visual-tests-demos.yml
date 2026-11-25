@@ -325,15 +325,17 @@ jobs:
       working-directory: apps/demos
       run: pnpm run ts-check-vue
 
-    - name: Run check TS for Angular
-      working-directory: apps/demos
-      run: pnpm run ts-check-ng
-
     - name: Demos - Check React TS
       id: ts_react
       continue-on-error: true
       working-directory: apps/demos
       run: pnpm run ts-check-react
+
+    - name: Demos - Check Angular TS
+      id: ts_angular
+      continue-on-error: true
+      working-directory: apps/demos
+      run: pnpm run ts-check-ng
 
     - name: Run lint on all demos
       id: lint_all
@@ -367,6 +369,7 @@ jobs:
       env:
         TS_VUE_OUTCOME: ${{ steps.ts_vue.outcome }}
         TS_REACT_OUTCOME: ${{ steps.ts_react.outcome }}
+        TS_ANGULAR_OUTCOME: ${{ steps.ts_angular.outcome }}
         LINT_ALL_OUTCOME: ${{ steps.lint_all.outcome }}
         GENERATED_JS_OUTCOME: ${{ steps.generated_js.outcome }}
       run: |
@@ -375,6 +378,7 @@ jobs:
         for check in \
           "Demos - Check Vue TS:$TS_VUE_OUTCOME" \
           "Demos - Check React TS:$TS_REACT_OUTCOME" \
+          "Demos - Check Angular TS:$TS_ANGULAR_OUTCOME" \
           "Run lint on all demos:$LINT_ALL_OUTCOME" \
           "Check generated JS demos:$GENERATED_JS_OUTCOME"; do
           name="${check%%:*}"
