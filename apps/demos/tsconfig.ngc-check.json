@@ -16,6 +16,7 @@
   },
 
   "include": [
+    "Demos/DataGrid/**/Angular/**/*.ts",
     "Demos/Scheduler/**/Angular/**/*.ts",
     "shared/anti-forgery/index.d.ts"
   ]

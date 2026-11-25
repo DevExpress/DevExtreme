@@ -6,9 +6,9 @@ import { jsPDF } from 'jspdf';
 import {
   DxButtonModule, DxTabPanelModule, DxDataGridModule, DxDataGridComponent,
 } from 'devextreme-angular';
-import { exportDataGrid } from 'devextreme-angular/common/export/pdf';
+import { exportDataGrid, type Cell, type DataGridCell } from 'devextreme-angular/common/export/pdf';
 import { DataSource, ArrayStore } from 'devextreme-angular/common/data';
-import { Product, Service } from './app.service';
+import { type Product, Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -48,8 +48,8 @@ export class AppComponent {
     filter: ['Product_ID', '<', 10],
   });
 
-  setAlternatingRowsBackground(dataGrid, gridCell, pdfCell) {
-    if (gridCell.rowType === 'data') {
+  setAlternatingRowsBackground(dataGrid: DxDataGridComponent['instance'], gridCell?: DataGridCell, pdfCell?: Cell) {
+    if (pdfCell && gridCell?.rowType === 'data') {
       const rowIndex = dataGrid.getRowIndexByKey(gridCell.data.Product_ID);
       if (rowIndex % 2 === 0) {
         pdfCell.backgroundColor = '#D3D3D3';

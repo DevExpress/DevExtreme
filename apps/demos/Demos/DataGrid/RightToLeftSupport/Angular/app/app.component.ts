@@ -1,6 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import { Component, enableProdMode, computed, inject, signal } from '@angular/core';
 import { DxDataGridModule, DxSelectBoxModule } from 'devextreme-angular';
+import type { DxSelectBoxTypes } from 'devextreme-angular/ui/select-box';
 import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -27,7 +28,7 @@ export class AppComponent {
 
   readonly languages: string[] = ['Arabic (Right-to-Left direction)', 'English (Left-to-Right direction)'];
 
-  onSelectLanguage(data) {
+  onSelectLanguage(data: DxSelectBoxTypes.ValueChangedEvent) {
     this.rtlEnabled.set(data.value === this.languages[0]);
   }
 }

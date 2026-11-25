@@ -1,11 +1,11 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import {
-  Component, OnInit, afterNextRender, computed, enableProdMode, inject, signal,
+  Component, afterNextRender, computed, enableProdMode, inject, signal,
 } from '@angular/core';
 import { provideHttpClient, withFetch } from '@angular/common/http';
 import { DxLoadPanelModule } from 'devextreme-angular';
 import { DxDataGridModule, DxDataGridTypes } from 'devextreme-angular/ui/data-grid';
-import { Service, Order, Change } from './app.service';
+import { Service, type Order, type Change } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -22,7 +22,7 @@ if (!/localhost/.test(document.location.host)) {
     DxLoadPanelModule,
   ],
 })
-export class AppComponent implements OnInit {
+export class AppComponent {
   private readonly service = inject(Service);
 
   readonly orders = this.service.orders;

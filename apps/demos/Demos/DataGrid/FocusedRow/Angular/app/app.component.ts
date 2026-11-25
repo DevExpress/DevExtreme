@@ -72,15 +72,15 @@ export class AppComponent {
     const rowsCount = e.component.getVisibleRows().length;
     const pageCount = e.component.pageCount();
     const pageIndex = e.component.pageIndex();
-    const key = e.event?.key;
+    const key = (e.event as { key?: string } | undefined)?.key;
 
     if (key && e.prevRowIndex === e.newRowIndex) {
       if (e.newRowIndex === rowsCount - 1 && pageIndex < pageCount - 1) {
-        e.component.pageIndex(pageIndex + 1).done(() => {
+        e.component.pageIndex(pageIndex + 1).then(() => {
           e.component.option('focusedRowIndex', 0);
         });
       } else if (e.newRowIndex === 0 && pageIndex > 0) {
-        e.component.pageIndex(pageIndex - 1).done(() => {
+        e.component.pageIndex(pageIndex - 1).then(() => {
           e.component.option('focusedRowIndex', rowsCount - 1);
         });
       }

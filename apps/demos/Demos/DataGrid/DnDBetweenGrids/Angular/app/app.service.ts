@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-export class Priority {
+export interface Priority {
   id: number;
 
   text: string;

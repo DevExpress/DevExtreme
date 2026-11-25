@@ -3,6 +3,8 @@ import { Component, enableProdMode, inject } from '@angular/core';
 import {
   DxDataGridModule, DxListModule, DxDropDownBoxModule, DxTagBoxModule,
 } from 'devextreme-angular';
+import type { DxDataGridTypes } from 'devextreme-angular/ui/data-grid';
+import type { DxDropDownBoxComponent } from 'devextreme-angular/ui/drop-down-box';
 import { createStore } from 'devextreme-aspnet-data-nojquery';
 import { Service } from './app.service';
 import 'anti-forgery';
@@ -57,21 +59,30 @@ export class AppComponent {
     return value !== null && value !== undefined ? [value] : [];
   }
 
-  onSelectionChanged(selectedRowKeys, cellInfo, dropDownBoxComponent) {
+  onSelectionChanged(
+    selectedRowKeys: unknown[],
+    cellInfo: DxDataGridTypes.ColumnEditCellTemplateData,
+    dropDownBoxComponent: DxDropDownBoxComponent['instance'],
+  ) {
     cellInfo.setValue(selectedRowKeys[0]);
     if (selectedRowKeys.length > 0) {
       dropDownBoxComponent.close();
     }
   }
 
-  calculateFilterExpression(filterValue, selectedFilterOperation, target) {
+  calculateFilterExpression(
+    this: DxDataGridTypes.Column,
+    filterValue: number | string,
+    selectedFilterOperation: string | null,
+    target: string,
+  ) {
     if (target === 'search' && typeof (filterValue) === 'string') {
-      return [(this as any).dataField, 'contains', filterValue];
+      return [this.dataField, 'contains', filterValue];
     }
-    return (rowData) => (rowData.AssignedEmployee || []).indexOf(filterValue) !== -1;
+    return (rowData: { AssignedEmployee?: (number | string)[] }) => (rowData.AssignedEmployee || []).indexOf(filterValue) !== -1;
   }
 
-  cellTemplate(container, options) {
+  cellTemplate(container: HTMLElement, options: DxDataGridTypes.ColumnCellTemplateData) {
     const noBreakSpace = '\u00A0';
 
     const assignees = (options.value || []).map(

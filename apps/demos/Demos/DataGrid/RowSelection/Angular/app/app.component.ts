@@ -6,7 +6,7 @@ import {
 } from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
 import { DxDataGridModule, type DxDataGridTypes } from 'devextreme-angular/ui/data-grid';
-import { Service, Employee } from './app.service';
+import { Service, type Employee } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();

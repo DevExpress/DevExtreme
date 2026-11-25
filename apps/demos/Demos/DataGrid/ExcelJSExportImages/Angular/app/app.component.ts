@@ -34,8 +34,8 @@ export class AppComponent {
       topLeftCell: { row: 2, column: 2 },
       autoFilterEnabled: true,
       customizeCell: ({ gridCell, excelCell }) => {
-        if (gridCell.rowType === 'data') {
-          if (gridCell.column.dataField === 'Picture') {
+        if (gridCell?.rowType === 'data') {
+          if (gridCell.column?.dataField === 'Picture') {
             excelCell.value = undefined;
 
             const image = workbook.addImage({

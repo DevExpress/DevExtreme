@@ -1,5 +1,5 @@
 import {
-  Component, OnDestroy, OnInit, inject, input, signal,
+  Component, type OnDestroy, type OnInit, inject, input, signal,
 } from '@angular/core';
 import { DxTextBoxModule, DxButtonGroupModule, DxButtonModule, DxTextAreaModule, DxLoadPanelModule } from 'devextreme-angular';
 import { type DxTextBoxTypes } from 'devextreme-angular/ui/text-box';

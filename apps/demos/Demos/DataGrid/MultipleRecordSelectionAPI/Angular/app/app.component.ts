@@ -1,9 +1,10 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import {
-  Component, Pipe, PipeTransform, enableProdMode, inject, signal,
+  Component, Pipe, type PipeTransform, enableProdMode, inject, signal,
 } from '@angular/core';
 import { DxDataGridModule, DxButtonModule, DxSelectBoxModule } from 'devextreme-angular';
-import { Service, Employee } from './app.service';
+import type { DxSelectBoxTypes } from 'devextreme-angular/ui/select-box';
+import { Service, type Employee } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -40,7 +41,7 @@ export class AppComponent {
 
   private selectionChangedBySelectBox = false;
 
-  filterSelected(event) {
+  filterSelected(event: DxSelectBoxTypes.ValueChangedEvent) {
     this.selectionChangedBySelectBox = true;
 
     const prefix = event.value;

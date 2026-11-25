@@ -79,7 +79,7 @@ export class AppComponent {
       text: prompt,
     };
 
-    this.chatInstance.getDataSource().store().push([{
+    this.chatInstance?.getDataSource().store().push([{
       type: 'insert',
       data: message,
     }]);

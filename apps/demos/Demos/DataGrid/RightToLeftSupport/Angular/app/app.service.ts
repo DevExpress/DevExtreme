@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-export class EuropeanUnion {
+export interface EuropeanUnion {
   nameAr: string;
 
   nameEn: string;

@@ -1,6 +1,6 @@
 import {
   Component,
-  AfterViewInit,
+  type AfterViewInit,
   enableProdMode,
   signal,
   viewChild,

@@ -2,11 +2,14 @@ import { bootstrapApplication } from '@angular/platform-browser';
 import {
   Component, enableProdMode, inject, signal,
 } from '@angular/core';
-import { HttpClient, HttpParams, provideHttpClient, withFetch } from '@angular/common/http';
+import {
+  HttpClient, type HttpErrorResponse, HttpParams, provideHttpClient, withFetch,
+} from '@angular/common/http';
 import { lastValueFrom, Observable } from 'rxjs';
 import { DxDataGridModule, DxSelectBoxModule, DxButtonModule } from 'devextreme-angular';
 import { CustomStore } from 'devextreme-angular/common/data';
 import { formatDate } from 'devextreme-angular/common/core/localization';
+import type { DxDataGridTypes } from 'devextreme-angular/ui/data-grid';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -45,9 +48,9 @@ export class AppComponent {
 
   readonly requests = signal<string[]>([]);
 
-  readonly refreshModes = ['full', 'reshape', 'repaint'];
+  readonly refreshModes: DxDataGridTypes.GridsEditRefreshMode[] = ['full', 'reshape', 'repaint'];
 
-  readonly refreshMode = signal('reshape');
+  readonly refreshMode = signal<DxDataGridTypes.GridsEditRefreshMode>('reshape');
 
   readonly customersData = {
     paginate: true,
@@ -88,6 +91,8 @@ export class AppComponent {
       case 'DELETE':
         request = this.http.delete(url, httpOptions);
         break;
+      default:
+        throw new Error(`Unsupported request method: ${method}`);
     }
 
     try {
@@ -95,11 +100,11 @@ export class AppComponent {
 
       return method === 'GET' ? result.data : {};
     } catch (e) {
-      throw e.error.Message;
+      throw (e as HttpErrorResponse).error.Message;
     }
   }
 
-  logRequest(method: string, url: string, data: object): void {
+  logRequest(method: string, url: string, data: Record<string, unknown>): void {
     const args = Object.keys(data || {}).map((key) => `${key}=${data[key]}`).join(' ');
 
     const time = formatDate(new Date(), 'HH:mm:ss');

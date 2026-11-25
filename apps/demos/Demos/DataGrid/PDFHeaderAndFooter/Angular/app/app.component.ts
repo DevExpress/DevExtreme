@@ -31,6 +31,9 @@ export class AppComponent {
       topLeft: { x: 1, y: 15 },
       columnWidths: [30, 20, 30, 15, 22, 22, 20, 20],
       customDrawCell({ rect }) {
+        if (!rect) {
+          return;
+        }
         if (lastPoint.x < rect.x + rect.w) {
           lastPoint.x = rect.x + rect.w;
         }

@@ -2,6 +2,7 @@ import { bootstrapApplication } from '@angular/platform-browser';
 import { Component, enableProdMode, inject, signal } from '@angular/core';
 import { DxDataGridModule, DxSelectBoxModule } from 'devextreme-angular';
 import themes from 'devextreme/ui/themes';
+import type { DxDataGridTypes } from 'devextreme-angular/ui/data-grid';
 import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -22,9 +23,9 @@ if (!/localhost/.test(document.location.host)) {
 export class AppComponent {
   readonly sales = inject(Service).getSales();
 
-  readonly allMode = signal<string>('allPages');
+  readonly allMode = signal<DxDataGridTypes.SelectAllMode>('allPages');
 
-  readonly checkBoxesMode = signal<string>(themes.current().startsWith('generic') ? 'onClick' : 'always');
+  readonly checkBoxesMode = signal<DxDataGridTypes.SelectionColumnDisplayMode>(themes.current().startsWith('generic') ? 'onClick' : 'always');
 }
 
 bootstrapApplication(AppComponent);

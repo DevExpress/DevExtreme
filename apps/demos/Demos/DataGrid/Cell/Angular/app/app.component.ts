@@ -1,12 +1,13 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import {
-  Component, Pipe, PipeTransform, enableProdMode, inject,
+  Component, Pipe, type PipeTransform, enableProdMode, inject,
 } from '@angular/core';
 import {
   DxDataGridModule,
   DxSparklineModule,
 } from 'devextreme-angular';
 import { CurrencyPipe, DecimalPipe } from '@angular/common';
+import type { DxDataGridTypes } from 'devextreme-angular/ui/data-grid';
 import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -15,8 +16,8 @@ if (!/localhost/.test(document.location.host)) {
 
 @Pipe({ name: 'gridCellData' })
 export class GridCellDataPipe implements PipeTransform {
-  transform({ data, column }) {
-    return data[column.caption.toLowerCase()];
+  transform({ data, column }: DxDataGridTypes.ColumnCellTemplateData) {
+    return data[column.caption?.toLowerCase() ?? ''];
   }
 }
 

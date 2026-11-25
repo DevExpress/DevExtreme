@@ -19,7 +19,7 @@ if (!/localhost/.test(document.location.host)) {
 export class AppComponent {
   readonly orders = inject(Service).getOrders();
 
-  calculateSelectedRow(options: Parameters<DxDataGridTypes.Summary['calculateCustomSummary']>[0]) {
+  calculateSelectedRow(options: Parameters<NonNullable<DxDataGridTypes.Summary['calculateCustomSummary']>>[0]) {
     if (options.name === 'SelectedRowsSummary') {
       if (options.summaryProcess === 'start') {
         options.totalValue = 0;

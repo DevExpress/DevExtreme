@@ -17,7 +17,7 @@
       [dataType]="column?.dataType"
       [caption]="column?.caption"
       [cssClass]="column?.cssClass"
-      [allowSorting]="column?.allowSorting"
+      [allowSorting]="column?.allowSorting ?? true"
     >
     </dxi-data-grid-column>
   }
@@ -41,9 +41,9 @@
       <span>Focused Row Key</span>
       <dx-number-box
         id="taskId"
-        min="1"
-        max="183"
-        step="0"
+        [min]="1"
+        [max]="183"
+        [step]="0"
         [(value)]="focusedRowKey"
         [inputAttr]="{ 'aria-label': 'Focused Row Key' }"
       >

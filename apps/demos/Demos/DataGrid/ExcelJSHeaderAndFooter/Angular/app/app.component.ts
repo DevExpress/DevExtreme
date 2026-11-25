@@ -43,7 +43,7 @@ export class AppComponent {
       worksheet.mergeCells(2, 1, 2, 8);
 
       // footer
-      const footerRowIndex = cellRange.to.row + 2;
+      const footerRowIndex = (cellRange.to?.row ?? 0) + 2;
       const footerRow = worksheet.getRow(footerRowIndex);
 
       worksheet.mergeCells(footerRowIndex, 1, footerRowIndex, 8);

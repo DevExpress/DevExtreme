@@ -38,16 +38,8 @@
       message="Your phone must have &#34;(555) 555-5555&#34; format!"
     ></dxi-data-grid-validation-rule>
   </dxi-data-grid-column>
-  <dxi-data-grid-column dataField="Email">
-    <dxi-data-grid-validation-rule
-      type="required"
-    ></dxi-data-grid-validation-rule>
-    <dxi-data-grid-validation-rule type="email"></dxi-data-grid-validation-rule>
-    <dxi-data-grid-validation-rule
-      type="async"
-      message="Email address is not unique"
-      [validationCallback]="asyncValidation"
-    >
-    </dxi-data-grid-validation-rule>
-  </dxi-data-grid-column>
+  <dxi-data-grid-column
+    dataField="Email"
+    [validationRules]="emailValidationRules"
+  ></dxi-data-grid-column>
 </dx-data-grid>

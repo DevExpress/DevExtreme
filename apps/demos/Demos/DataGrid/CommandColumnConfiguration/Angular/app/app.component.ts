@@ -26,20 +26,20 @@ export class AppComponent {
 
   readonly states = this.service.getStates();
 
-  private static isChief(position: string) {
-    return position && ['CEO', 'CMO'].indexOf(position.trim().toUpperCase()) >= 0;
+  private static isChief(position?: string) {
+    return !!position && ['CEO', 'CMO'].indexOf(position.trim().toUpperCase()) >= 0;
   }
 
   isCloneIconVisible({ row }: FirstArgument<DxDataGridTypes.ColumnButton['visible']>) {
-    return !row.isEditing;
+    return !row?.isEditing;
   }
 
   isCloneIconDisabled({ row }: FirstArgument<DxDataGridTypes.ColumnButton['disabled']>) {
-    return AppComponent.isChief((row.data).Position);
+    return AppComponent.isChief(row?.data.Position);
   }
 
   isDeleteIconVisible({ row }: FirstArgument<DxDataGridTypes.Editing['allowDeleting']>) {
-    return !AppComponent.isChief((row.data as Record<string, string>).Position);
+    return !AppComponent.isChief((row?.data as Record<string, string> | undefined)?.Position);
   }
 
   onRowValidating(e: DxDataGridTypes.RowValidatingEvent) {
@@ -57,15 +57,19 @@ export class AppComponent {
     }
   }
 
-  readonly onCloneIconClick = (e: DxDataGridTypes.ColumnButtonClickEvent) => {
-    const clonedItem = { ...e.row.data, ID: this.service.getMaxID() };
+  readonly onCloneIconClick = ({ row, event }: DxDataGridTypes.ColumnButtonClickEvent) => {
+    if (!row) {
+      return;
+    }
+
+    const clonedItem = { ...row.data, ID: this.service.getMaxID() };
 
     this.employees.update((employees) => [
-      ...employees.slice(0, e.row.rowIndex),
+      ...employees.slice(0, row.rowIndex),
       clonedItem,
-      ...employees.slice(e.row.rowIndex),
+      ...employees.slice(row.rowIndex),
     ]);
-    e.event.preventDefault();
+    event?.preventDefault();
   };
 }
 

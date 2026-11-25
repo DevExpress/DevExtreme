@@ -40,7 +40,7 @@ export class DetailViewComponent {
     const productId = this.productIdBySupplier();
 
     if (productId === undefined) {
-      return null;
+      return undefined;
     }
 
     return new DataSource({
@@ -52,7 +52,7 @@ export class DetailViewComponent {
     });
   });
 
-  setDefaultProduct(items) {
+  setDefaultProduct(items: { ProductID: number }[]) {
     const firstItem = items[0];
 
     if (firstItem && this.productIdBySupplier() === undefined) {
