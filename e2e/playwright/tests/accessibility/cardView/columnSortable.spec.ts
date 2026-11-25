@@ -25,7 +25,7 @@ test('headerPanel dragging column when it has sorting and headerFilter', async (
   });
 
   const cardView = new CardView(page, CARD_VIEW_SELECTOR);
-  const columnElement = cardView.getHeaders().getHeaderItemNth(0).element;
+  const columnElement = cardView.getHeaderPanel().getHeaderItem(0).element;
 
   await triggerDragStart(columnElement);
 

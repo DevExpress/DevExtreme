@@ -52,10 +52,8 @@ export const getColumnItem = (
   index: number,
   source: 'headerPanel' | 'columnChooser' = 'headerPanel',
 ): Locator => {
-  const headers = cardView.getHeaders();
-
   if (source === 'headerPanel') {
-    return headers.getHeaderItemNth(index).element;
+    return cardView.getHeaderPanel().getHeaderItem(index).element;
   }
 
   // A Playwright locator does not match a scope that is itself the first part of the selector,
