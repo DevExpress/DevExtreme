@@ -1,98 +1,103 @@
 import $ from '@js/core/renderer';
-import { extend } from '@js/core/utils/extend';
-import { each } from '@js/core/utils/iterator';
+import type { PivotGridDataType } from '@js/ui/pivot_grid/data_source';
+import type dxChart from '@js/viz/chart';
+import type {
+  ChartsDataType, Panes as ChartPane, Properties as ChartOptions, ValueAxis as ChartValueAxis,
+} from '@js/viz/chart';
+import { extend } from '@ts/core/utils/extend';
+import type { DataSourceHeaderItem } from '@ts/grids/pivot_grid/data_source/types';
+import type { PivotGrid } from '@ts/grids/pivot_grid/m_widget';
+import type { PivotGridField } from '@ts/grids/pivot_grid/types';
 
+import type { PivotGridDataSource } from '../data_source/data_source';
 import { createPath, foreachTree, formatValue } from '../widget_utils';
+import type {
+  ChartCell,
+  ChartCellMembers,
+  ChartDataItem,
+  ChartIntegrationOptions,
+  ChartProcessCellArgs,
+  ChartSeriesOptions,
+  ChartTarget,
+} from './types';
 
-const FORMAT_DICTIONARY = {
+const FORMAT_DICTIONARY: Record<PivotGridDataType, ChartsDataType> = {
   number: 'numeric',
   date: 'datetime',
+  string: 'string',
 };
 const UNBIND_KEY = 'dxPivotGridUnbinding';
 
-function getFormattedValue(path, fields) {
-  const value: any = [];
+function getFormattedValue(path: DataSourceHeaderItem[], fields: PivotGridField[]): string[] {
   const lastFieldIndex = fields.length - 1;
-
-  each(path, (i: number, item) => {
-    value.push(item.text || formatValue(item.value, fields[lastFieldIndex - i]));
+  const value: string[] = path.map((item, i) => {
+    const result = item.text || formatValue(item.value, fields[lastFieldIndex - i]);
+    return result;
   });
 
   return value.reverse();
 }
 
-function getExpandedLevel(node) {
+function getExpandedLevel(node: DataSourceHeaderItem[]): number {
   let level = 0;
-  foreachTree(node, (members) => {
+  foreachTree(node, (members: DataSourceHeaderItem[]) => {
     level = Math.max(level, members.length - 1);
   });
   return level;
 }
 
-function processDataCell(processCellArgs, processCell) {
+function processDataCell(
+  processCellArgs: ChartProcessCellArgs,
+  processCell: ChartIntegrationOptions['processCell'],
+): ChartProcessCellArgs {
   let { chartDataItem } = processCellArgs;
-  let processedCell = processCell && processCell(processCellArgs);
+  const processedCell = processCell && processCell(processCellArgs);
 
   if (processedCell) {
     chartDataItem = extend({}, chartDataItem, processedCell.chartDataItem);
-    processedCell = extend({}, processCellArgs, processedCell, {
+
+    return extend({}, processCellArgs, processedCell, {
       chartDataItem,
     });
-
-    return processedCell;
   }
 
   return processCellArgs;
 }
 
-function createChartDataSource(pivotGridDataSource, mapOptions, axisDictionary) {
+function createChartDataSource(
+  pivotGridDataSource: PivotGridDataSource,
+  mapOptions: ChartIntegrationOptions,
+  axisDictionary: Record<string, string | undefined>,
+): ChartDataItem[] {
   const data = pivotGridDataSource.getData();
-  const dataSource: any = [];
+  const dataSource: ChartDataItem[] = [];
 
   const dataFields = pivotGridDataSource.getAreaFields('data');
   const rowFields = pivotGridDataSource.getAreaFields('row');
   const columnFields = pivotGridDataSource.getAreaFields('column');
 
-  const columnElements = [{ index: data.grandTotalColumnIndex, children: data.columns }];
-  const rowElements = [{ index: data.grandTotalRowIndex, children: data.rows }];
+  const columnElements: DataSourceHeaderItem[] = [
+    { index: data.grandTotalColumnIndex, children: data.columns },
+  ];
+  const rowElements: DataSourceHeaderItem[] = [
+    { index: data.grandTotalRowIndex, children: data.rows },
+  ];
 
   const rowLevel = getExpandedLevel(rowElements);
   const columnLevel = getExpandedLevel(columnElements);
 
-  let measureIndex;
-  let dataField;
+  const createDataItem = (cell: ChartCell): void => {
+    const {
+      dataField, measureIndex,
+      rowMemberIndex, rowVisibility, rowPathFormatted, rowPath,
+      columnMemberIndex, columnVisibility, columnPath, columnPathFormatted,
+    } = cell;
 
-  let rowMemberIndex;
-  let rowVisibility;
-  let rowPathFormatted;
-  let rowPath;
-
-  let columnMemberIndex;
-  let columnVisibility;
-  let columnPath;
-  let columnPathFormatted;
-
-  function createDataItem() {
-    const dataCell = (data.values[rowMemberIndex] || [])[columnMemberIndex] || [];
+    const rowValues = (rowMemberIndex !== undefined && data.values[rowMemberIndex]) || [];
+    const dataCell = (columnMemberIndex !== undefined && rowValues[columnMemberIndex]) || [];
     const value = dataCell[measureIndex];
-    let axis;
-    let processCellArgs: any = {
-      rowPath,
-      maxRowLevel: rowLevel,
-      rowPathFormatted,
-      rowFields,
-
-      columnPathFormatted,
-      maxColumnLevel: columnLevel,
-      columnPath,
-      columnFields,
-
-      dataFields,
-      dataIndex: measureIndex,
-      dataValues: dataCell,
-
-      visible: columnVisibility && rowVisibility,
-    };
+    // eslint-disable-next-line @typescript-eslint/init-declarations -- assigned in an if-chain
+    let axis: string | undefined;
     let seriesName = (mapOptions.inverted ? columnPathFormatted : rowPathFormatted).join(' - ');
     let argument = (mapOptions.inverted ? rowPathFormatted : columnPathFormatted).join('/');
 
@@ -109,10 +114,28 @@ function createChartDataSource(pivotGridDataSource, mapOptions, axisDictionary) 
       }
     }
 
-    processCellArgs.chartDataItem = {
-      val: value === undefined ? null : value,
-      series: seriesName,
-      arg: argument,
+    let processCellArgs: ChartProcessCellArgs = {
+      rowPath,
+      maxRowLevel: rowLevel,
+      rowPathFormatted,
+      rowFields,
+
+      columnPathFormatted,
+      maxColumnLevel: columnLevel,
+      columnPath,
+      columnFields,
+
+      dataFields,
+      dataIndex: measureIndex,
+      dataValues: dataCell,
+
+      visible: columnVisibility && rowVisibility,
+
+      chartDataItem: {
+        val: value === undefined ? null : value,
+        series: seriesName,
+        arg: argument,
+      },
     };
 
     processCellArgs = processDataCell(processCellArgs, mapOptions.processCell);
@@ -123,77 +146,95 @@ function createChartDataSource(pivotGridDataSource, mapOptions, axisDictionary) 
       ] = axisDictionary[processCellArgs.chartDataItem.series] || axis;
       dataSource.push(processCellArgs.chartDataItem);
     }
-  }
+  };
 
-  function foreachRowColumn(callBack) {
-    foreachTree(rowElements, (rowMembers) => {
-      rowMemberIndex = rowMembers[0].index;
+  const foreachRowColumn = (callBack: (members: ChartCellMembers) => void): void => {
+    foreachTree(rowElements, (rowMemberItems: DataSourceHeaderItem[]) => {
+      const rowMemberIndex = rowMemberItems[0].index;
 
-      rowMembers = rowMembers.slice(0, rowMembers.length - 1);
+      const rowMembers = rowMemberItems.slice(0, rowMemberItems.length - 1);
 
-      rowVisibility = rowLevel === rowMembers.length;
+      const rowVisibility = rowLevel === rowMembers.length;
 
-      rowPath = createPath(rowMembers);
-      rowPathFormatted = getFormattedValue(rowMembers, rowFields);
+      const rowPath = createPath(rowMembers);
+      let rowPathFormatted: (string | undefined)[] = getFormattedValue(rowMembers, rowFields);
 
       if (rowPath.length === 0) {
         rowPathFormatted = [mapOptions.grandTotalText];
       }
 
-      foreachTree(columnElements, (columnMembers) => {
-        columnMemberIndex = columnMembers[0].index;
+      foreachTree(columnElements, (columnMemberItems: DataSourceHeaderItem[]) => {
+        const columnMemberIndex = columnMemberItems[0].index;
 
-        columnMembers = columnMembers.slice(0, columnMembers.length - 1);
-        columnVisibility = columnLevel === columnMembers.length;
+        const columnMembers = columnMemberItems.slice(0, columnMemberItems.length - 1);
+        const columnVisibility = columnLevel === columnMembers.length;
 
-        columnPath = createPath(columnMembers);
-        columnPathFormatted = getFormattedValue(columnMembers, columnFields);
+        const columnPath = createPath(columnMembers);
+        let columnPathFormatted: (string | undefined)[] = getFormattedValue(
+          columnMembers,
+          columnFields,
+        );
 
         if (columnPath.length === 0) {
           columnPathFormatted = [mapOptions.grandTotalText];
         }
 
-        callBack();
+        callBack({
+          rowMemberIndex,
+          rowVisibility,
+          rowPath,
+          rowPathFormatted,
+
+          columnMemberIndex,
+          columnVisibility,
+          columnPath,
+          columnPathFormatted,
+        });
       });
     });
-  }
-
-  function foreachDataField(callback) {
-    each(dataFields, (index, field) => {
-      dataField = field;
-      measureIndex = index;
-      callback();
-    });
-  }
+  };
 
   if (mapOptions.alternateDataFields === false) {
-    foreachDataField(() => {
-      foreachRowColumn(createDataItem);
+    dataFields.forEach((dataField, measureIndex) => {
+      foreachRowColumn((members) => {
+        createDataItem({ dataField, measureIndex, ...members });
+      });
     });
   } else {
-    foreachRowColumn(() => {
-      foreachDataField(createDataItem);
+    foreachRowColumn((members) => {
+      dataFields.forEach((dataField, measureIndex) => {
+        createDataItem({ dataField, measureIndex, ...members });
+      });
     });
   }
 
   return dataSource;
 }
 
-function createValueAxisOptions(dataSource, options) {
+function createValueAxisOptions(
+  dataSource: PivotGridDataSource,
+  options: ChartIntegrationOptions,
+): ChartValueAxis[] {
   const dataFields = dataSource.getAreaFields('data');
-  if (options.putDataFieldsInto !== 'args' && options.dataFieldsDisplayMode !== 'singleAxis' || dataFields.length === 1) {
-    const valueAxisSettings: any = [];
-    each(dataFields, (_, dataField) => {
-      const valueAxisOptions: any = {
+  if (
+    (options.putDataFieldsInto !== 'args' && options.dataFieldsDisplayMode !== 'singleAxis')
+    || dataFields.length === 1
+  ) {
+    const valueAxisSettings: ChartValueAxis[] = [];
+    dataFields.forEach((dataField) => {
+      const valueAxisOptions: ChartValueAxis = {
         name: dataField.caption,
+        // @ts-expect-error ChartValueAxis.title is typed without the string form
         title: dataField.caption,
-        valueType: FORMAT_DICTIONARY[dataField.dataType] || dataField.dataType,
+        valueType: (dataField.dataType && FORMAT_DICTIONARY[dataField.dataType]),
         label: { format: dataField.format },
       };
 
-      if (dataField.customizeText) {
-        valueAxisOptions.label.customizeText = function (formatObject) {
-          return dataField.customizeText.call(dataField, formatObject);
+      if (valueAxisOptions.label && dataField.customizeText) {
+        valueAxisOptions.label.customizeText = (formatObject): string => {
+          // @ts-expect-error the field had customizeText when the axis was built
+          const result = dataField.customizeText(formatObject);
+          return result;
         };
       }
 
@@ -210,33 +251,30 @@ function createValueAxisOptions(dataSource, options) {
   return [{}];
 }
 
-function createPanesOptions(dataSource, options) {
-  const panes: any = [];
+function createPanesOptions(
+  dataSource: PivotGridDataSource,
+  options: ChartIntegrationOptions,
+): ChartPane[] {
   const dataFields = dataSource.getAreaFields('data');
-
-  if (dataFields.length > 1 && options.dataFieldsDisplayMode === 'splitPanes' && options.putDataFieldsInto !== 'args') {
-    each(dataFields, (_, dataField) => {
-      panes.push({
-        name: dataField.caption,
-      });
-    });
-  }
-
-  if (!panes.length) {
-    panes.push({});
-  }
+  const isSplitPanes = dataFields.length > 1 && options.dataFieldsDisplayMode === 'splitPanes' && options.putDataFieldsInto !== 'args';
+  const panes: ChartPane[] = isSplitPanes
+    ? dataFields.map((dataField) => ({ name: dataField.caption }))
+    : [{}];
 
   return panes;
 }
 
-function createChartOptions(dataSource, options) {
+function createChartOptions(
+  dataSource: PivotGridDataSource,
+  options: ChartIntegrationOptions,
+): ChartOptions {
   const { customizeSeries } = options;
   const { customizeChart } = options;
-  let chartOptions: any = {
+  let chartOptions: ChartOptions = {
     valueAxis: createValueAxisOptions(dataSource, options),
     panes: createPanesOptions(dataSource, options),
   };
-  const axisDictionary = {};
+  const axisDictionary: Record<string, string | undefined> = {};
 
   if (customizeChart) {
     chartOptions = extend(true, {}, chartOptions, customizeChart(chartOptions));
@@ -246,8 +284,8 @@ function createChartOptions(dataSource, options) {
 
   chartOptions.seriesTemplate = {
     nameField: 'series',
-    customizeSeries(seriesName) {
-      let seriesOptions: any = {};
+    customizeSeries(seriesName: string): ChartSeriesOptions {
+      let seriesOptions: ChartSeriesOptions = {};
 
       if (options.dataFieldsDisplayMode === 'splitPanes') {
         seriesOptions.pane = axisDictionary[seriesName];
@@ -266,55 +304,67 @@ function createChartOptions(dataSource, options) {
   return chartOptions;
 }
 
-function getChartInstance(chartElement) {
+function getChartInstance(chartElement: ChartTarget): dxChart | false | undefined {
   if (!chartElement) {
     return false;
   }
 
-  if (chartElement.NAME) {
-    return chartElement.NAME === 'dxChart' && chartElement;
+  // @ts-expect-error NAME is defined only on a component instance
+  const componentName: string | undefined = chartElement.NAME;
+
+  if (componentName) {
+    // @ts-expect-error chartElement is dxChart instance
+    return componentName === 'dxChart' && chartElement;
   }
 
-  const element: any = $(chartElement);
-  return element.data('dxChart') && element.dxChart('instance');
+  // @ts-expect-error renderer() is typed without component instances
+  const element = $(chartElement);
+  const chart: dxChart | undefined = element.data('dxChart');
+  return chart;
 }
 
-function removeBinding(chart) {
-  const unbind = chart.$element().data(UNBIND_KEY);
-  unbind && unbind();
+function removeBinding(chart: dxChart): void {
+  const unbind: (() => void) | undefined = chart.$element().data(UNBIND_KEY);
+  if (unbind) {
+    unbind();
+  }
 }
 
 const ChartIntegrationMixin = {
-  bindChart(chart, integrationOptions) {
-    integrationOptions = extend({}, integrationOptions);
+  bindChart(
+    this: PivotGrid,
+    chart: ChartTarget,
+    integrationOptions: ChartIntegrationOptions | undefined,
+  ): (() => void) | null {
+    const options: ChartIntegrationOptions = extend({}, integrationOptions);
 
-    const that: any = this;
-    const updateChart = function () {
-      integrationOptions.grandTotalText = that.option('texts.grandTotal');
-      const chartOptions = createChartOptions(that.getDataSource(), integrationOptions);
-      chart.option(chartOptions);
-    };
+    const chartInstance = getChartInstance(chart);
 
-    chart = getChartInstance(chart);
-
-    if (!chart) {
+    if (!chartInstance) {
       return null;
     }
 
-    removeBinding(chart);
-
-    that.on('changed', updateChart);
-    updateChart();
-
-    const disposeBinding = function () {
-      chart.$element().removeData(UNBIND_KEY);
-      that.off('changed', updateChart);
+    const updateChart = (): void => {
+      // @ts-expect-error PivotGrid options aren't typed yet
+      options.grandTotalText = this.option('texts.grandTotal');
+      const chartOptions = createChartOptions(this.getDataSource(), options);
+      chartInstance.option(chartOptions);
     };
 
-    chart.on('disposing', disposeBinding);
+    removeBinding(chartInstance);
+
+    this.on('changed', updateChart);
+    updateChart();
+
+    const disposeBinding = (): void => {
+      chartInstance.$element().removeData(UNBIND_KEY);
+      this.off('changed', updateChart);
+    };
+
+    chartInstance.on('disposing', disposeBinding);
     this.on('disposing', disposeBinding);
 
-    chart.$element().data(UNBIND_KEY, disposeBinding);
+    chartInstance.$element().data(UNBIND_KEY, disposeBinding);
 
     return disposeBinding;
   },
