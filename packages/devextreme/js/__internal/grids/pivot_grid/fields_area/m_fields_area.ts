@@ -1,6 +1,7 @@
 import '../field_chooser/m_field_chooser_base';
 
 import localizationMessage from '@js/common/core/localization/message';
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { each } from '@js/core/utils/iterator';
 import { setHeight, setWidth } from '@js/core/utils/style';
@@ -8,6 +9,7 @@ import Button from '@js/ui/button';
 import type { PivotGridArea } from '@js/ui/pivot_grid/data_source';
 import Popup from '@js/ui/popup/ui.popup';
 import { capitalize } from '@ts/core/utils/capitalize';
+import type { FieldChooserField } from '@ts/grids/pivot_grid/field_chooser/const';
 import type { PopupProperties } from '@ts/ui/popup/popup';
 
 import { AreaItem } from '../area_item/m_area_item';
@@ -28,11 +30,11 @@ class FieldsArea extends AreaItem {
     this._area = area;
   }
 
-  _getAreaName(): AreaName {
+  protected _getAreaName(): AreaName {
     return 'fields';
   }
 
-  _createGroupElement() {
+  protected _createGroupElement(): dxElementWrapper {
     return $(DIV)
       .addClass('dx-pivotgrid-fields-area')
       .addClass('dx-area-fields')
@@ -40,7 +42,7 @@ class FieldsArea extends AreaItem {
       .attr('group', this._area);
   }
 
-  _getAreaLabel() {
+  private _getAreaLabel(): string {
     const localizationMessageMap = {
       row: 'dxPivotGrid-rowFields',
       column: 'dxPivotGrid-columnFields',
@@ -51,16 +53,16 @@ class FieldsArea extends AreaItem {
     return localizationMessage.format(localizationMessageMap[this._area]);
   }
 
-  _createTableElement() {
+  protected _createTableElement(): dxElementWrapper {
     return $('<table>')
       .attr('role', 'presentation');
   }
 
-  isVisible() {
-    return !!this.option('fieldPanel.visible') && this.option(`fieldPanel.show${capitalize(this._area)}Fields`);
+  public isVisible(): boolean {
+    return !!this.option('fieldPanel.visible') && !!this.option(`fieldPanel.show${capitalize(this._area)}Fields`);
   }
 
-  _renderButton(element) {
+  private _renderButton(element: dxElementWrapper): void {
     const that = this;
     const container = $('<td>').appendTo($('<tr>').appendTo(element));
     const button = that.component._createComponent($(DIV).appendTo(container), Button, {
@@ -78,9 +80,9 @@ class FieldsArea extends AreaItem {
     button.$element().addClass('dx-pivotgrid-fields-area-hamburger');
   }
 
-  _getPopupOptions(row, button): PopupProperties {
+  private _getPopupOptions(row: dxElementWrapper, button: dxElementWrapper): PopupProperties {
     return {
-      contentTemplate() {
+      contentTemplate(): dxElementWrapper {
         return $('<div>').append(
           $('<table>').addClass('dx-area-field-container')
             .append($('<thead>').addClass('dx-pivotgrid-fields-area-head')
@@ -108,7 +110,7 @@ class FieldsArea extends AreaItem {
     };
   }
 
-  _renderPopup(tableElement, row) {
+  private _renderPopup(tableElement: dxElementWrapper, row: dxElementWrapper): void {
     const button = tableElement.find('.dx-button');
     const popupOptions = this._getPopupOptions(row, button);
     const fieldChooserBase = this.getFieldChooserBase();
@@ -141,11 +143,12 @@ class FieldsArea extends AreaItem {
     return fieldChooserBase;
   }
 
-  _shouldCreateButton() {
+  private _shouldCreateButton(): boolean {
     return false;
   }
 
-  _renderTableContent(tableElement, data) {
+  // @ts-expect-error the fields area renders fields, not cells
+  protected _renderTableContent(tableElement: dxElementWrapper, data: FieldChooserField[]): void {
     const groupElement = this.groupElement();
     const isVisible = this.isVisible();
     const fieldChooserBase = this.getFieldChooserBase();
@@ -210,20 +213,20 @@ class FieldsArea extends AreaItem {
     }
   }
 
-  setGroupWidth(value) {
+  public setGroupWidth(value: number | string): void {
     setWidth(this.groupElement(), value);
   }
 
-  setGroupHeight(value) {
+  public setGroupHeight(value: number | string): void {
     setHeight(this.groupElement(), value);
   }
 
-  reset() {
+  public reset(): void {
     super.reset();
     this.groupElement()?.css('marginTop', 0);
   }
 
-  _renderVirtualContent() {}
+  protected _renderVirtualContent(): void {}
 }
 
 export default { FieldsArea };
