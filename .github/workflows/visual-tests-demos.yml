@@ -500,10 +500,13 @@ jobs:
       if: contains(matrix.THEME, 'material')
       run: fc-cache -f > /dev/null 2>&1
 
+    # The accessibility checks still run on TestCafe; the screenshots run on Playwright, which starts its own server.
     - name: Run Web Server
+      if: matrix.STRATEGY == 'accessibility'
       run: python -m http.server 8080 &
 
     - name: Set Chrome flags
+      if: matrix.STRATEGY == 'accessibility'
       id: chrome-flags
       run: |
         BASE_FLAGS="chrome:headless --window-size=1200,800 --disable-gpu --no-sandbox --disable-dev-shm-usage --disable-partial-raster --disable-skia-runtime-opts --run-all-compositor-stages-before-draw --disable-new-content-rendering-timeout --disable-threaded-animation --disable-threaded-scrolling --disable-checker-imaging --disable-image-animation-resync --use-gl=swiftshader --disable-features=PaintHolding --js-flags=--random-seed=2147483647"
@@ -516,6 +519,7 @@ jobs:
         echo "flags=$BASE_FLAGS" >> $GITHUB_OUTPUT
 
     - name: Run TestCafe tests (jQuery)
+      if: matrix.STRATEGY == 'accessibility'
       timeout-minutes: 12
       shell: bash
       working-directory: apps/demos
@@ -583,7 +587,7 @@ jobs:
       if: always() && matrix.STRATEGY == 'screenshots'
       run: |
         mkdir -p "$RUNNER_TEMP/new-etalons"
-        git ls-files --others --exclude-standard -z -- 'apps/demos/testing/etalons/*.png' \
+        git ls-files --others --exclude-standard -z -- 'apps/demos/testing/*etalons/*.png' \
           | xargs -0 -r cp --parents -t "$RUNNER_TEMP/new-etalons"
 
     - name: Upload new etalons
@@ -598,7 +602,7 @@ jobs:
     - name: Fail on new etalons
       if: always() && matrix.STRATEGY == 'screenshots'
       run: |
-        new_etalons=$(git ls-files --others --exclude-standard -- 'apps/demos/testing/etalons/*.png')
+        new_etalons=$(git ls-files --others --exclude-standard -- 'apps/demos/testing/*etalons/*.png')
         if [ -n "$new_etalons" ]; then
           echo "::error::The tests wrote etalons that are not in the repository. They are in the playwright-etalons artifact:"
           echo "$new_etalons"
@@ -608,14 +612,6 @@ jobs:
     - name: Sanitize job name
       if: ${{ failure() }}
       run: echo "JOB_NAME=$(echo "${{ matrix.CONSTEL }}-${{ matrix.THEME }}" | tr '/' '-')" >> $GITHUB_ENV
-
-    - name: Copy screenshots artifacts
-      if: failure() && matrix.STRATEGY == 'screenshots'
-      uses: actions/upload-artifact@v7
-      with:
-        name: screenshots-${{ env.JOB_NAME }}
-        path: ${{ github.workspace }}/apps/demos/testing/artifacts/compared-screenshots/**/*
-        if-no-files-found: ignore
 
     - name: Copy accessibility report
       if: matrix.STRATEGY == 'accessibility'
@@ -736,10 +732,6 @@ jobs:
         rm -rf apps/demos/.demo-bundles
         echo "Unpacked $(find apps/demos/Demos -name 'bundle.js' | wc -l) demo bundle(s)"
 
-    - name: Run Web Server
-      run: |
-        python -m http.server 8080 &
-
     - name: Check runner resources
       run: |
         echo "CPU cores: $(nproc)"
@@ -758,22 +750,6 @@ jobs:
         else
           echo "concurrency=2" >> $GITHUB_OUTPUT
         fi
-
-    - name: Run TestCafe tests
-      timeout-minutes: 15
-      shell: bash
-      working-directory: apps/demos
-      env:
-        NODE_OPTIONS: --max-old-space-size=8192
-        BROWSERS: chrome:headless --window-size=1200,800 --disable-gpu --no-sandbox --disable-dev-shm-usage --disable-partial-raster --disable-skia-runtime-opts --run-all-compositor-stages-before-draw --disable-new-content-rendering-timeout --disable-threaded-animation --disable-threaded-scrolling --disable-checker-imaging --disable-image-animation-resync --use-gl=swiftshader --disable-features=PaintHolding --js-flags=--random-seed=2147483647 --font-render-hinting=none --disable-font-subpixel-positioning
-        # DEBUG: hammerhead:*,testcafe:*
-        CONCURRENCY: ${{ steps.set-concurrency.outputs.concurrency }}
-        CONSTEL: ${{ matrix.CONSTEL }}
-        THEME: ${{ matrix.THEME }}
-        # DISABLE_DEMO_TEST_SETTINGS: all # Uncomment to ignore all the visualtestrc.json settings
-        # DISABLE_DEMO_TEST_SETTINGS: ignore # Uncomment to ignore the `ignore` field
-        CI_ENV: true # The `ignore` field in the visualtestrc.json should be disabled when running test locally
-      run: pnpm exec nx test-testcafe
 
     - name: Set Playwright artifact name
       if: ${{ !cancelled() }}
@@ -813,7 +789,7 @@ jobs:
       if: always()
       run: |
         mkdir -p "$RUNNER_TEMP/new-etalons"
-        git ls-files --others --exclude-standard -z -- 'apps/demos/testing/etalons/*.png' \
+        git ls-files --others --exclude-standard -z -- 'apps/demos/testing/*etalons/*.png' \
           | xargs -0 -r cp --parents -t "$RUNNER_TEMP/new-etalons"
 
     - name: Upload new etalons
@@ -828,24 +804,12 @@ jobs:
     - name: Fail on new etalons
       if: always()
       run: |
-        new_etalons=$(git ls-files --others --exclude-standard -- 'apps/demos/testing/etalons/*.png')
+        new_etalons=$(git ls-files --others --exclude-standard -- 'apps/demos/testing/*etalons/*.png')
         if [ -n "$new_etalons" ]; then
           echo "::error::The tests wrote etalons that are not in the repository. They are in the playwright-etalons artifact:"
           echo "$new_etalons"
           exit 1
         fi
-
-    - name: Sanitize job name
-      if: ${{ failure() }}
-      run: echo "JOB_NAME=$(echo "${{ matrix.CONSTEL }}-${{ matrix.THEME }}" | tr '/' '-')" >> $GITHUB_ENV
-
-    - name: Copy screenshots artifacts
-      if: ${{ failure() }}
-      uses: actions/upload-artifact@v7
-      with:
-        name: screenshots-${{ env.JOB_NAME }}
-        path: ${{ github.workspace }}/apps/demos/testing/artifacts/compared-screenshots/**/*
-        if-no-files-found: ignore
 
   merge-artifacts:
     runs-on: ubuntu-latest
@@ -940,42 +904,6 @@ jobs:
         with:
           name: playwright-etalons
           pattern: playwright-etalons-*
-          delete-merged: true
-
-      - name: Merge jQuery screenshot artifacts
-        if: needs.testcafe-jquery.result == 'failure'
-        uses: actions/upload-artifact/merge@v7
-        continue-on-error: true
-        with:
-          name: screenshots-jquery
-          pattern: screenshots-jquery*
-          delete-merged: true
-
-      - name: Merge React screenshot artifacts
-        if: needs.testcafe-frameworks-all.result == 'failure'
-        uses: actions/upload-artifact/merge@v7
-        continue-on-error: true
-        with:
-          name: screenshots-react
-          pattern: screenshots-react*
-          delete-merged: true
-
-      - name: Merge Vue screenshot artifacts
-        if: needs.testcafe-frameworks-all.result == 'failure'
-        uses: actions/upload-artifact/merge@v7
-        continue-on-error: true
-        with:
-          name: screenshots-vue
-          pattern: screenshots-vue*
-          delete-merged: true
-
-      - name: Merge Angular screenshot artifacts
-        if: needs.testcafe-frameworks-all.result == 'failure'
-        uses: actions/upload-artifact/merge@v7
-        continue-on-error: true
-        with:
-          name: screenshots-angular
-          pattern: screenshots-angular*
           delete-merged: true
 
       - name: Merge jQuery accessibility reports
