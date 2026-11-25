@@ -34,8 +34,7 @@
     <h4>{{ info.attribute("name") }}</h4>
     @if (gdpData[info.attribute("name")]; as countryGDPData) {
       <div id="nominal">
-        Nominal GDP: $<span>{{ countryGDPData.total | number: "1.0-0" }}</span
-        >M
+        Nominal GDP: ${{ countryGDPData.total | number: "1.0-0" }}M
       </div>
     }
     @if (getPieData(info.attribute("name")); as data) {

@@ -26,7 +26,7 @@
       (isDinner | apply: dataCell.startDate)
     "
   >
-    {{ currentView === "month" ? (dataCell.startDate | date) : "" }}
+    {{ currentView === "month" ? (dataCell.startDate | date: "d") : "" }}
   </div>
 
   <div
