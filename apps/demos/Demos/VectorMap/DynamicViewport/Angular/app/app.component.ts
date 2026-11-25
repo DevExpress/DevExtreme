@@ -4,8 +4,10 @@ import {
 } from '@angular/core';
 import { DxTextBoxModule, DxSwitchModule } from 'devextreme-angular';
 import * as mapsData from 'devextreme-dist/js/vectormap-data/world.js';
-import { DxSelectBoxModule, type DxSelectBoxTypes } from 'devextreme-angular/ui/select-box';
-import { DxVectorMapModule, DxVectorMapComponent, type DxVectorMapTypes } from 'devextreme-angular/ui/vector-map';
+import { DxSelectBoxModule } from 'devextreme-angular/ui/select-box';
+import type { DxSelectBoxTypes } from 'devextreme-angular/ui/select-box';
+import { DxVectorMapModule, DxVectorMapComponent } from 'devextreme-angular/ui/vector-map';
+import type { DxVectorMapTypes } from 'devextreme-angular/ui/vector-map';
 import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -37,15 +39,15 @@ export class AppComponent {
 
   private readonly map = viewChild.required(DxVectorMapComponent);
 
-  onValueChanged(e: DxSelectBoxTypes.ValueChangedEvent) {
+  onValueChanged(e: DxSelectBoxTypes.ValueChangedEvent): void {
     this.map().instance.viewport(e.value);
   }
 
-  zoomChanged(e: DxVectorMapTypes.ZoomFactorChangedEvent) {
+  zoomChanged(e: DxVectorMapTypes.ZoomFactorChangedEvent): void {
     this.zoomFactorValue.set(e.zoomFactor.toFixed(2));
   }
 
-  centerChanged(e: DxVectorMapTypes.CenterChangedEvent) {
+  centerChanged(e: DxVectorMapTypes.CenterChangedEvent): void {
     this.centerValue.set(`${e.center[0].toFixed(3)
     }, ${e.center[1].toFixed(3)}`);
   }

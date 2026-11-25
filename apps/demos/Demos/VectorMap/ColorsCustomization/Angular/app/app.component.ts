@@ -24,8 +24,8 @@ export class AppComponent {
 
   private readonly countries = inject(Service).getCountries();
 
-  readonly customizeTooltip = ({ attribute }) => {
-    const name = attribute('name');
+  readonly customizeTooltip = ({ attribute }: DxVectorMapTypes.MapLayerElement): Record<string, unknown> => {
+    const name: string = attribute('name');
     const country = this.countries[name];
     if (country) {
       return {
@@ -33,10 +33,10 @@ export class AppComponent {
         color: country.color,
       };
     }
-    return null;
+    return {};
   };
 
-  readonly customizeLayers = (elements: { attribute: Function, applySettings: Function }[]) => {
+  readonly customizeLayers = (elements: DxVectorMapTypes.MapLayerElement[]): void => {
     elements.forEach((element) => {
       const country = this.countries[element.attribute('name')];
       if (country) {
@@ -49,7 +49,7 @@ export class AppComponent {
     });
   };
 
-  readonly click = ({ target }: DxVectorMapTypes.ClickEvent) => {
+  readonly click = ({ target }: DxVectorMapTypes.ClickEvent): void => {
     if (target && this.countries[target.attribute('name')]) {
       target.selected(!target.selected());
     }

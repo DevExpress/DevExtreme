@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 
-const populations: Object = {
+export type Populations = Record<string, number>;
+
+const populations: Populations = {
   China: 19,
   India: 17.4,
   'United States': 4.44,
@@ -45,7 +47,7 @@ const populations: Object = {
 
 @Injectable()
 export class Service {
-  getPopulations(): Object {
+  getPopulations(): Populations {
     return populations;
   }
 }
