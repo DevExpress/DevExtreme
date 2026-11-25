@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 
-export class FeatureCollection {
+export interface FeatureCollection {
   type: string;
 
   features: Feature[];
 }
 
-export class Feature {
+export interface Feature {
   type: string;
 
   properties: FeatureProperty;
@@ -14,7 +14,7 @@ export class Feature {
   geometry: FeatureGeometry;
 }
 
-export class FeatureProperty {
+export interface FeatureProperty {
   text: string;
 
   value: number;
@@ -22,7 +22,7 @@ export class FeatureProperty {
   tooltip: string;
 }
 
-export class FeatureGeometry {
+export interface FeatureGeometry {
   type: string;
 
   coordinates: number[];

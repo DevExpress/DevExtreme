@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
+import type { DxMapTypes } from 'devextreme-angular/ui/map';
 
-export class Marker {
-  location: unknown;
-}
+export type Marker = NonNullable<DxMapTypes.Properties['markers']>[number];
+
+export type Route = NonNullable<DxMapTypes.Properties['routes']>[number];
 
 export type APIKey = {
   azure?: string;
@@ -13,18 +14,6 @@ export type APIKey = {
 
   googleStatic?: string;
 };
-
-export class Route {
-  weight: number;
-
-  color: string;
-
-  opacity: number;
-
-  mode: string;
-
-  locations: any[];
-}
 
 const markers: Marker[] = [{
   location: '40.7825, -73.966111',

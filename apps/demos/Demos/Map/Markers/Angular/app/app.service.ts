@@ -1,16 +1,14 @@
 import { Injectable } from '@angular/core';
+import type { DxMapTypes } from 'devextreme-angular/ui/map';
 
-export class Tooltip {
-  isShown: boolean;
+type MapMarker = NonNullable<DxMapTypes.Properties['markers']>[number];
 
-  text: string;
-}
-
-export class Marker {
-  location: unknown;
-
-  tooltip: Tooltip;
-}
+export type Marker = Omit<MapMarker, 'tooltip'> & {
+  tooltip: {
+    isShown: boolean;
+    text: string;
+  };
+};
 
 export type APIKey = {
   azure?: string;

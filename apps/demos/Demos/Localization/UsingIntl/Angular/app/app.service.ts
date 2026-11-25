@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-export class Locale {
+export interface Locale {
   Name: string;
 
   Value: string;
@@ -17,7 +17,7 @@ const locales: Locale[] = [{
   Value: 'ru',
 }];
 
-export class Payment {
+export interface Payment {
   PaymentId: number;
 
   ContactName: string;
@@ -100,7 +100,7 @@ const payments: Payment[] = [{
   PaymentDate: '2013/01/11',
 }];
 
-export class PaymentView {
+export interface PaymentView {
   Number: string;
 
   Contact: string;
@@ -112,7 +112,7 @@ export class PaymentView {
   PaymentDate: string;
 }
 
-export class Dictionary {
+export interface Dictionary {
   [key: string]: PaymentView;
 }
 
@@ -142,15 +142,15 @@ const dictionary: Dictionary = {
 
 @Injectable()
 export class Service {
-  getPayments() {
+  getPayments(): Payment[] {
     return payments;
   }
 
-  getLocales() {
+  getLocales(): Locale[] {
     return locales;
   }
 
-  getDictionary() {
+  getDictionary(): Dictionary {
     return dictionary;
   }
 }

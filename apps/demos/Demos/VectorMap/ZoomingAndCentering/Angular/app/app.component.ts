@@ -3,7 +3,8 @@ import {
   Component, enableProdMode, inject, viewChild,
 } from '@angular/core';
 import { DxButtonModule } from 'devextreme-angular';
-import { DxVectorMapModule, DxVectorMapComponent, type DxVectorMapTypes } from 'devextreme-angular/ui/vector-map';
+import { DxVectorMapModule, DxVectorMapComponent } from 'devextreme-angular/ui/vector-map';
+import type { DxVectorMapTypes } from 'devextreme-angular/ui/vector-map';
 import * as mapsData from 'devextreme-dist/js/vectormap-data/world.js';
 import { Service } from './app.service';
 
@@ -29,25 +30,26 @@ export class AppComponent {
 
   readonly markers = inject(Service).getMarkers();
 
-  customizeTooltip(arg) {
+  readonly customizeTooltip = (arg: DxVectorMapTypes.MapLayerElement): Record<string, unknown> => {
     if (arg.layer.type === 'marker') {
       return {
         text: arg.attribute('name'),
       };
     }
-    return null;
-  }
+    return {};
+  };
 
-  markerClick(e: DxVectorMapTypes.ClickEvent) {
+  markerClick(e: DxVectorMapTypes.ClickEvent): void {
     if (e.target?.layer.type === 'marker') {
       e.component.center(e.target.coordinates());
       e.component.zoomFactor(10);
     }
   }
 
-  resetClick() {
-    this.vectorMap().instance.center(null);
-    this.vectorMap().instance.zoomFactor(null);
+  resetClick(): void {
+    // An empty array resets the center to its initial value
+    this.vectorMap().instance.center([]);
+    this.vectorMap().instance.zoomFactor(1);
   }
 }
 

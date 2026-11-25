@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-export class ViewportCoordinate {
+export interface ViewportCoordinate {
   continent: string;
 
   coordinates: number[] | 'null';
