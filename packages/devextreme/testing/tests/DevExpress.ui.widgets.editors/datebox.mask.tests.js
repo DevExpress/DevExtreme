@@ -1899,6 +1899,25 @@ module('Regression', () => {
 
         assert.strictEqual(instance.option('isValid'), true, 'should be valid when year returns to 2020');
     });
+
+    QUnit.test('a digit typed through an IME composition updates the text when useMaskBehavior is disabled (T1338541)', function(assert) {
+        const $input = $('#dateBox')
+            .dxDateBox({
+                useMaskBehavior: false,
+                displayFormat: 'dd.MM.yyyy',
+                value: new Date(2026, 10, 15),
+            })
+            .find('.dx-texteditor-input');
+        const input = $input.get(0);
+        const keyboard = keyboardMock($input, true);
+
+        keyboard.caret({ start: 0, end: 2 });
+        $input.trigger($.Event('compositionstart'));
+        input.setRangeText('2', 0, 2, 'end');
+        keyboard.input('2', 'insertCompositionText');
+
+        assert.strictEqual($('#dateBox').dxDateBox('option', 'text'), '2.11.2026', 'text follows the input');
+    });
 });
 
 module('Caret moving', setupModule, () => {
@@ -2172,5 +2191,137 @@ module('Using beforeInput event', {
             .input(null, 'deleteContentBackward');
 
         assert.strictEqual(this.$input.get(0).value, '01/01/2020 03:45');
+    });
+
+    test('a digit typed through an IME composition on Android devices is entered once (T1338541)', function(assert) {
+        const input = this.$input.get(0);
+
+        this.keyboard.caret({ start: 0, end: 2 });
+
+        this.$input.trigger($.Event('compositionstart'));
+        this.keyboard
+            .keyDown('Unidentified')
+            .beforeInput('1', 'insertCompositionText');
+        input.setRangeText('1', input.selectionStart, input.selectionEnd, 'end');
+        this.keyboard
+            .input('1', 'insertCompositionText')
+            .keyUp('Unidentified');
+
+        assert.strictEqual(input.value, '01/01/2020 03:45', 'day is 01 after the first digit');
+        assert.deepEqual(this.keyboard.caret(), { start: 0, end: 2 }, 'day stays selected');
+
+        this.keyboard
+            .keyDown('Unidentified')
+            .beforeInput('5', 'insertText')
+            .keyUp('Unidentified');
+
+        assert.strictEqual(input.value, '15/01/2020 03:45', 'day is 15 after the second digit');
+        assert.deepEqual(this.keyboard.caret(), { start: 3, end: 5 }, 'month is selected');
+    });
+
+    test('a digit composed together with the word before it on Android devices is entered (T1338541)', function(assert) {
+        const input = this.$input.get(0);
+
+        this.instance.option({
+            displayFormat: 'dd.MM.yyyy',
+            value: new Date(2026, 10, 15),
+        });
+        this.keyboard
+            .caret({ start: 0, end: 2 })
+            .press('right');
+
+        this.$input.trigger($.Event('compositionstart'));
+        this.keyboard
+            .keyDown('Unidentified')
+            .caret({ start: 2, end: 5 })
+            .beforeInput('5.11', 'insertCompositionText');
+        input.setRangeText('5.11', 2, 5, 'end');
+        this.keyboard
+            .input('5.11', 'insertCompositionText')
+            .keyUp('Unidentified');
+
+        assert.strictEqual(input.value, '15.01.2026', 'month is 01 after the first digit');
+        assert.deepEqual(this.keyboard.caret(), { start: 3, end: 5 }, 'month stays selected');
+
+        this.keyboard
+            .keyDown('Unidentified')
+            .beforeInput('2', 'insertText')
+            .keyUp('Unidentified');
+
+        assert.strictEqual(input.value, '15.12.2026', 'month is 12 after the second digit');
+        assert.deepEqual(this.keyboard.caret(), { start: 6, end: 10 }, 'year is selected');
+    });
+
+    test('a digit composed together with the whole text before it on Android devices is entered into the selected part (T1338541)', function(assert) {
+        const input = this.$input.get(0);
+
+        this.instance.option({
+            displayFormat: 'yyyy.M.d',
+            value: new Date(2026, 10, 24),
+        });
+        this.keyboard
+            .caret({ start: 0, end: 4 })
+            .press('right')
+            .press('right')
+            .keyDown('Unidentified')
+            .beforeInput('1', 'insertText')
+            .keyUp('Unidentified');
+
+        assert.strictEqual(input.value, '2026.11.1', 'day is 1 after the first digit');
+
+        this.$input.trigger($.Event('compositionstart'));
+        this.keyboard
+            .keyDown('Unidentified')
+            .caret({ start: 0, end: 9 })
+            .beforeInput('2026.11.15', 'insertCompositionText');
+        input.setRangeText('2026.11.15', 0, 9, 'end');
+        this.keyboard
+            .input('2026.11.15', 'insertCompositionText')
+            .keyUp('Unidentified');
+
+        assert.strictEqual(input.value, '2026.11.15', 'day is 15');
+        assert.deepEqual(this.keyboard.caret(), { start: 8, end: 10 }, 'day stays selected');
+    });
+
+    test('a word composed on Android devices without the mask behavior stays in the input (T1338541)', function(assert) {
+        const input = this.$input.get(0);
+
+        this.instance.option('useMaskBehavior', false);
+        this.keyboard.caret({ start: 0, end: input.value.length });
+
+        this.$input.trigger($.Event('compositionstart'));
+        this.keyboard
+            .keyDown('Unidentified')
+            .beforeInput('15.11', 'insertCompositionText');
+        input.setRangeText('15.11', input.selectionStart, input.selectionEnd, 'end');
+        this.keyboard
+            .input('15.11', 'insertCompositionText')
+            .keyUp('Unidentified');
+
+        assert.strictEqual(input.value, '15.11', 'input keeps the composed text');
+        assert.strictEqual(this.instance.option('text'), '15.11', 'text follows the input');
+    });
+
+    test('a digit composed after selecting the whole text on Android devices is entered into the first part (T1338541)', function(assert) {
+        const input = this.$input.get(0);
+
+        this.keyboard
+            .caret({ start: 0, end: 2 })
+            .press('right')
+            .press('right')
+            .caret({ start: 0, end: input.value.length });
+
+        this.$input.trigger($.Event('compositionstart'));
+        this.keyboard
+            .keyDown('Unidentified')
+            .caret({ start: 6, end: 10 })
+            .beforeInput('1', 'insertCompositionText');
+        input.setRangeText('1', 6, 10, 'end');
+        this.keyboard
+            .input('1', 'insertCompositionText')
+            .keyUp('Unidentified');
+
+        assert.strictEqual(input.value, '01/01/2020 03:45', 'day is 01');
+        assert.deepEqual(this.keyboard.caret(), { start: 0, end: 2 }, 'day is selected');
     });
 });
