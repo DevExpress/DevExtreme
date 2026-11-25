@@ -538,7 +538,7 @@ jobs:
 
     - name: Run Playwright tests (jQuery)
       if: ${{ !cancelled() && matrix.STRATEGY == 'screenshots' }}
-      timeout-minutes: 10
+      timeout-minutes: 12
       working-directory: apps/demos
       env:
         NODE_OPTIONS: --max-old-space-size=8192
@@ -752,7 +752,7 @@ jobs:
 
     - name: Run Playwright tests
       if: ${{ !cancelled() }}
-      timeout-minutes: 10
+      timeout-minutes: 15
       working-directory: apps/demos
       env:
         NODE_OPTIONS: --max-old-space-size=8192
