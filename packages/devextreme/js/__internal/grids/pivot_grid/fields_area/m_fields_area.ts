@@ -123,14 +123,13 @@ class FieldsArea extends AreaItem {
     );
 
     this._rowPopup.$element().addClass('dx-fields-area-popup');
-    this._rowPopup.content()
-      .addClass('dx-pivotgrid-fields-container');
-    this._rowPopup.content().parent()
-      .attr('group', 'row');
+    const $content = $(this._rowPopup.content());
+    $content.addClass('dx-pivotgrid-fields-container');
+    $content.parent().attr('group', 'row');
 
-    fieldChooserBase.subscribeToEvents(this._rowPopup.content());
+    fieldChooserBase.subscribeToEvents($content);
     // @ts-expect-error renderSortable() ignores the element
-    fieldChooserBase.renderSortable(this._rowPopup.content());
+    fieldChooserBase.renderSortable($content);
   }
 
   private getFieldChooserBase(): FieldChooserBase {
