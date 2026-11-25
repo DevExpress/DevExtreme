@@ -337,7 +337,7 @@ test.describe('Editing.Visual', () => {
         },
         columns: ['Id', 'name', {
           type: 'buttons',
-          width: 200,
+          width: 255,
           buttons: [
             {
               name: 'delete',
