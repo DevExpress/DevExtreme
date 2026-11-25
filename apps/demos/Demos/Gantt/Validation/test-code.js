@@ -1,4 +1,4 @@
-testUtils.importAnd(() => 'devextreme/ui/gantt', () => DevExpress.ui.dxGantt, (dxGantt) => {
+testUtils.importAnd(() => ['devextreme/ui/gantt', 'devextreme/ui/tree_list'], () => [DevExpress.ui.dxGantt, DevExpress.ui.dxTreeList], (dxGantt) => {
   const currentDate = new Date('2021/04/27 15:00');
   const month = currentDate.getMonth();
   const year = currentDate.getFullYear();
