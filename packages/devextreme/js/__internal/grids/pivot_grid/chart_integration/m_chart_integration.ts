@@ -29,11 +29,10 @@ const FORMAT_DICTIONARY: Record<PivotGridDataType, ChartsDataType> = {
 const UNBIND_KEY = 'dxPivotGridUnbinding';
 
 function getFormattedValue(path: DataSourceHeaderItem[], fields: PivotGridField[]): string[] {
-  const value: string[] = [];
   const lastFieldIndex = fields.length - 1;
-
-  path.forEach((item, i) => {
-    value.push(item.text || formatValue(item.value, fields[lastFieldIndex - i]));
+  const value: string[] = path.map((item, i) => {
+    const result = item.text || formatValue(item.value, fields[lastFieldIndex - i]);
+    return result;
   });
 
   return value.reverse();
@@ -234,7 +233,7 @@ function createValueAxisOptions(
       if (valueAxisOptions.label && dataField.customizeText) {
         valueAxisOptions.label.customizeText = (formatObject): string => {
           // @ts-expect-error the field had customizeText when the axis was built
-          const result = dataField.customizeText.call(dataField, formatObject);
+          const result = dataField.customizeText(formatObject);
           return result;
         };
       }
@@ -256,20 +255,11 @@ function createPanesOptions(
   dataSource: PivotGridDataSource,
   options: ChartIntegrationOptions,
 ): ChartPane[] {
-  const panes: ChartPane[] = [];
   const dataFields = dataSource.getAreaFields('data');
-
-  if (dataFields.length > 1 && options.dataFieldsDisplayMode === 'splitPanes' && options.putDataFieldsInto !== 'args') {
-    dataFields.forEach((dataField) => {
-      panes.push({
-        name: dataField.caption,
-      });
-    });
-  }
-
-  if (!panes.length) {
-    panes.push({});
-  }
+  const isSplitPanes = dataFields.length > 1 && options.dataFieldsDisplayMode === 'splitPanes' && options.putDataFieldsInto !== 'args';
+  const panes: ChartPane[] = isSplitPanes
+    ? dataFields.map((dataField) => ({ name: dataField.caption }))
+    : [{}];
 
   return panes;
 }
