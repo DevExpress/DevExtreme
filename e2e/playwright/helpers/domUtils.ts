@@ -1,66 +1,55 @@
 import type { Locator, Page } from '@playwright/test';
+import { expect } from '../fixtures';
 
 const STYLESHEET_RULES_ID = 'stylesheetRules';
 
-export const setAttribute = async (
-  page: Page,
-  selector: string,
-  attribute: string,
-  value: string,
-): Promise<void> => page.evaluate(
-  ({ elementSelector, name, attributeValue }) => {
-    document.querySelector(elementSelector)?.setAttribute(name, attributeValue);
-  },
-  { elementSelector: selector, name: attribute, attributeValue: value },
+const toLocator = (page: Page, target: Locator | string): Locator => (
+  typeof target === 'string' ? page.locator(target).first() : target
 );
 
-export const removeAttribute = async (
+export const setAttribute = async (
   page: Page,
-  selector: string,
+  target: Locator | string,
   attribute: string,
-): Promise<void> => page.evaluate(
-  ({ elementSelector, name }) => {
-    document.querySelector(elementSelector)?.removeAttribute(name);
+  value: string,
+): Promise<void> => toLocator(page, target).evaluate(
+  (element, { name, attributeValue }) => {
+    element.setAttribute(name, attributeValue);
   },
-  { elementSelector: selector, name: attribute },
+  { name: attribute, attributeValue: value },
 );
 
 export const appendAttributeValue = async (
   page: Page,
-  selector: string,
+  target: Locator | string,
   attribute: string,
   value: string,
-): Promise<void> => page.evaluate(
-  ({ elementSelector, name, attributeValue }) => {
-    const element = document.querySelector(elementSelector);
-    const current = element?.getAttribute(name) ?? '';
-
-    element?.setAttribute(name, `${current} ${attributeValue}`);
+): Promise<void> => toLocator(page, target).evaluate(
+  (element, { name, attributeValue }) => {
+    element.setAttribute(name, `${element.getAttribute(name) ?? ''} ${attributeValue}`);
   },
-  { elementSelector: selector, name: attribute, attributeValue: value },
+  { name: attribute, attributeValue: value },
 );
 
 export const setStyleAttribute = async (
   page: Page,
-  selector: string,
+  target: Locator | string,
   value: string,
-): Promise<void> => appendAttributeValue(page, selector, 'style', value);
+): Promise<void> => appendAttributeValue(page, target, 'style', value);
 
 export const setClassAttribute = async (
   page: Page,
-  selector: string,
+  target: Locator | string,
   value: string,
-): Promise<void> => appendAttributeValue(page, selector, 'class', value);
+): Promise<void> => appendAttributeValue(page, target, 'class', value);
 
 export const removeClassAttribute = async (
   page: Page,
-  selector: string,
+  target: Locator | string,
   value: string,
-): Promise<void> => page.evaluate(
-  ({ elementSelector, className }) => {
-    document.querySelector(elementSelector)?.classList.remove(className);
-  },
-  { elementSelector: selector, className: value },
+): Promise<void> => toLocator(page, target).evaluate(
+  (element, className) => { element.classList.remove(className); },
+  value,
 );
 
 export const appendElementTo = async (
@@ -87,16 +76,14 @@ export const appendElementTo = async (
 
 export const addCaptionTo = async (
   page: Page,
-  parentSelector: string,
+  elementSelector: string,
   caption: string,
+  where: InsertPosition = 'beforebegin',
 ): Promise<void> => page.evaluate(
-  ({ parent, text }) => {
-    const element = document.createElement('div');
-
-    element.textContent = text;
-    document.querySelector(parent)?.appendChild(element);
+  ({ selector, text, position }) => {
+    document.querySelector(selector)?.insertAdjacentText(position, text);
   },
-  { parent: parentSelector, text: caption },
+  { selector: elementSelector, text: caption, position: where },
 );
 
 export const insertStylesheetRulesToPage = async (
@@ -121,10 +108,6 @@ export const removeStylesheetRulesFromPage = async (page: Page): Promise<void> =
   (stylesheetId) => { document.getElementById(stylesheetId)?.remove(); },
   STYLESHEET_RULES_ID,
 );
-
-export const getStyleAttribute = async (
-  locator: Locator,
-): Promise<string | null> => locator.getAttribute('style');
 
 export const hasHorizontalScroll = async (
   locator: Locator,
@@ -165,8 +148,30 @@ export const addFocusableElementBefore = async (
   { selector: targetSelector, id: elementId },
 );
 
-export const waitForNextFrame = async (page: Page): Promise<void> => page.evaluate(
-  () => new Promise<void>((resolve) => {
-    requestAnimationFrame(() => requestAnimationFrame(() => resolve()));
-  }),
+export const addFocusableElementAfter = async (
+  page: Page,
+  targetSelector: string,
+  elementId = 'focusable-end',
+): Promise<string> => page.evaluate(
+  ({ selector, id }) => {
+    document.getElementById(id)?.remove();
+
+    const target = document.querySelector(selector);
+    const button = document.createElement('button');
+
+    button.id = id;
+    button.textContent = 'End';
+    target?.parentElement?.insertBefore(button, target.nextElementSibling);
+
+    return button.id;
+  },
+  { selector: targetSelector, id: elementId },
 );
+
+export const expectImagesLoaded = async (container: Locator, count: number): Promise<void> => {
+  const images = container.locator('img');
+
+  await expect(images).toHaveCount(count);
+  await expect.poll(() => images.evaluateAll((elements: HTMLImageElement[]) => elements
+    .every((image) => image.complete && image.naturalWidth > 0))).toBe(true);
+};

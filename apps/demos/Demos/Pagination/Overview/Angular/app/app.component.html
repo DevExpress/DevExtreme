@@ -4,7 +4,7 @@
     [class]="pageSize() === 4 ? 'employees--forth' : 'employees--six'"
   >
     @for (employee of pageEmployees(); track employee.ID) {
-    <employee-card [employee]="employee"> </employee-card>
+      <employee-card [employee]="employee"> </employee-card>
     }
   </div>
 

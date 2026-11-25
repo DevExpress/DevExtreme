@@ -295,6 +295,11 @@ function sendSuggestion(prompt: string): void {
   flex-direction: column;
 }
 
+.dx-button {
+  display: inline-block;
+  color: var(--dx-color-icon);
+}
+
 .dx-chat-messagebubble-content > div > p:first-child {
   margin-top: 0;
 }

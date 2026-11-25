@@ -9,6 +9,8 @@ const CLASS = {
 };
 
 export default class RadioGroup extends Widget {
+  name: WidgetName = 'dxRadioGroup';
+
   public readonly items: Locator;
 
   constructor(page: Page, selector: Locator | string) {
@@ -16,9 +18,6 @@ export default class RadioGroup extends Widget {
 
     this.items = this.element.locator(`:scope > .${CLASS.collection} > .${CLASS.item}`);
   }
-
-  // eslint-disable-next-line class-methods-use-this
-  public getName(): WidgetName { return 'dxRadioGroup'; }
 
   public getItem(index = 0): RadioGroupItem {
     return new RadioGroupItem(this.items.nth(index));

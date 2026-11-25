@@ -25,6 +25,7 @@
     "Demos/Popup/**/Angular/**/*.ts",
     "Demos/ProgressBar/**/Angular/**/*.ts",
     "Demos/RangeSlider/**/Angular/**/*.ts",
+    "Demos/Scheduler/**/Angular/**/*.ts",
     "Demos/Switch/**/Angular/**/*.ts",
     "Demos/TagBox/**/Angular/**/*.ts",
     "Demos/TextArea/**/Angular/**/*.ts",

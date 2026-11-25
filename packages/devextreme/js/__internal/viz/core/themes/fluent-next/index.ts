@@ -8,6 +8,7 @@ const VIZ_BORDER = '--dx-viz-border';
 const VIZ_BORDER_ACTIVE = '--dx-viz-border-active';
 const VIZ_BORDER_HOVERED = '--dx-viz-border-hovered';
 const VIZ_CONTENT = '--dx-viz-content';
+const VIZ_CONTENT_ON_COLOR = '--dx-viz-content-on-color';
 const VIZ_CONTENT_ORANGE = '--dx-viz-content-orange';
 const VIZ_CONTENT_SUBTLE = '--dx-viz-content-subtle';
 const VIZ_CONTENT_SUBTLER = '--dx-viz-content-subtler';
@@ -31,7 +32,10 @@ const VIZ_DANGER = '--dx-viz-danger';
 const VIZ_BLUE = '--dx-viz-blue';
 const VIZ_GRAY = '--dx-viz-gray';
 const VIZ_ORANGE = '--dx-viz-orange';
+const VIZ_PURPLE = '--dx-viz-purple';
 const VIZ_RED = '--dx-viz-red';
+const VIZ_SUCCESS = '--dx-viz-success';
+const VIZ_WARNING = '--dx-viz-warning';
 const VIZ_YELLOW = '--dx-viz-yellow';
 
 const VIZ_TILE_BORDER = '--dx-viz-tile-border';
@@ -45,6 +49,7 @@ const LIGHT = {
   [VIZ_BORDER_ACTIVE]: '#b6b6b6',
   [VIZ_BORDER_HOVERED]: '#c0c0c0',
   [VIZ_CONTENT]: '#161616',
+  [VIZ_CONTENT_ON_COLOR]: '#ffffff',
   [VIZ_CONTENT_ORANGE]: '#ad4100',
   [VIZ_CONTENT_SUBTLE]: '#444444',
   [VIZ_CONTENT_SUBTLER]: '#656565',
@@ -65,10 +70,13 @@ const LIGHT = {
 
   [VIZ_DANGER]: '#c50f1f',
 
-  [VIZ_BLUE]: '#0078d4',
-  [VIZ_GRAY]: '#757575',
+  [VIZ_BLUE]: '#0c69b7',
+  [VIZ_GRAY]: '#676767',
   [VIZ_ORANGE]: '#f7630c',
+  [VIZ_PURPLE]: '#865cbf',
   [VIZ_RED]: '#c83d3d',
+  [VIZ_SUCCESS]: '#107c10',
+  [VIZ_WARNING]: '#f7630c',
   [VIZ_YELLOW]: '#eaa300',
 
   [VIZ_TILE_BORDER]: '#ffffff',
@@ -86,6 +94,7 @@ const DARK: Record<PublishedName, string> = {
   [VIZ_BORDER_ACTIVE]: '#656565',
   [VIZ_BORDER_HOVERED]: '#ababab',
   [VIZ_CONTENT]: '#ffffff',
+  [VIZ_CONTENT_ON_COLOR]: '#ffffff',
   [VIZ_CONTENT_ORANGE]: '#f57d48',
   [VIZ_CONTENT_SUBTLE]: '#cbcbcb',
   [VIZ_CONTENT_SUBTLER]: '#a1a1a1',
@@ -95,6 +104,16 @@ const DARK: Record<PublishedName, string> = {
   [VIZ_PURPLE_SUBTLE]: '#563780',
   [VIZ_TOOLTIP_BG]: '#ffffff',
   [VIZ_TOOLTIP_CONTENT]: '#161616',
+
+  [VIZ_PRIMARY]: '#015fab',
+
+  [VIZ_DANGER]: '#b20017',
+
+  [VIZ_ORANGE]: '#d25101',
+  [VIZ_PURPLE]: '#7650ab',
+  [VIZ_SUCCESS]: '#066f07',
+  [VIZ_WARNING]: '#d25100',
+  [VIZ_YELLOW]: '#cd8e00',
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- description theme option tree
@@ -302,7 +321,7 @@ function buildTheme(name: string, fallback: Record<PublishedName, string>): any 
       sliderMarker: {
         color: paint(VIZ_PRIMARY),
         font: {
-          color: paint(VIZ_BG),
+          color: paint(VIZ_CONTENT_ON_COLOR),
         },
         invalidRangeColor: paint(VIZ_DANGER),
       },

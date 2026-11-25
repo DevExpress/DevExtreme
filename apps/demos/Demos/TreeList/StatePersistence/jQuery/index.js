@@ -32,6 +32,10 @@ $(() => {
     ],
   }).dxTreeList('instance');
 
+  $('#refresh-link').on('click', () => {
+    window.location.reload();
+  });
+
   $('#state-reset-link').on('click', () => {
     treeList.state(null);
   });

@@ -17,7 +17,6 @@ const popovers: PopoverModel[] = [];
 
 const createPopover = async (options: Partial<PopoverProperties>): Promise<PopoverModel> => {
   const $element = $('<div>').appendTo(document.body);
-  // @ts-expect-error DOMComponent constructor is not typed for direct instantiation
   const instance = new Popover($element, options);
 
   await instance.show();

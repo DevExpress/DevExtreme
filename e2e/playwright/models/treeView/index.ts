@@ -12,8 +12,7 @@ const CLASS = {
 };
 
 export default class TreeView extends Widget {
-  // eslint-disable-next-line class-methods-use-this
-  public getName(): WidgetName { return 'dxTreeView'; }
+  name: WidgetName = 'dxTreeView';
 
   public getNodes(): Locator {
     return this.element.locator(`.${CLASS.node}`);

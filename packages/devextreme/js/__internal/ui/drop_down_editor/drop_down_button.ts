@@ -160,7 +160,7 @@ export default class DropDownButton<
     const { editor } = this;
     const { dropDownButtonTemplate } = editor?.option() ?? {};
 
-    options.template = this.editor?._getTemplateByOption('dropDownButtonTemplate');
+    options.template = this.editor?._getTemplateByOption('dropDownButtonTemplate') as unknown as DropDownButtonOptions['template'];
     this.currentTemplate = dropDownButtonTemplate;
   }
 

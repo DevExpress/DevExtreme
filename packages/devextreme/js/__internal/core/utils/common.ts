@@ -24,7 +24,7 @@ type TimerFunction = (
   timeout: number,
 ) => ReturnType<typeof setTimeout>;
 
-interface AsyncTask {
+export interface AsyncTask {
   promise: unknown;
   abort: () => void;
 }

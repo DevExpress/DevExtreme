@@ -7,13 +7,6 @@ import { callOnce } from '@ts/core/utils/call_once';
 const {
   maxTouchPoints,
 } = getNavigator();
-const transitionEndEventNames: Record<string, string> = {
-  webkitTransition: 'webkitTransitionEnd',
-  MozTransition: 'transitionend',
-  OTransition: 'oTransitionEnd',
-  transition: 'transitionend',
-};
-
 const supportProp = function supportProp(prop: string): boolean {
   return !!styleProp(prop);
 };
@@ -77,9 +70,7 @@ export {
 
 export const touch = touchEvents || (pointerEvents && touchPointersPresent);
 export const transition = callOnce(() => supportProp('transition'));
-export const transitionEndEventName = callOnce(
-  () => transitionEndEventNames[styleProp('transition')],
-);
+export const transitionEndEventName = (): string => 'transitionend';
 export const animation = callOnce(() => supportProp('animation'));
 export const nativeScrolling = isNativeScrollingSupported();
 

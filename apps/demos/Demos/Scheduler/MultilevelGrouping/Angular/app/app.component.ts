@@ -2,6 +2,7 @@ import { bootstrapApplication } from '@angular/platform-browser';
 import { Component, enableProdMode, inject } from '@angular/core';
 import { DxSchedulerModule } from 'devextreme-angular';
 import type { DxSchedulerTypes } from 'devextreme-angular/ui/scheduler';
+import type { DxSelectBoxTypes } from 'devextreme-angular/ui/select-box';
 import { type Assignee, Service } from './app.service';
 
 type Form = DxSchedulerTypes.AppointmentFormOpeningEvent['form'];
@@ -94,7 +95,7 @@ export class AppComponent {
             value: roomId,
             placeholder: 'Room',
             stylingMode: form.getEditor('assigneeId')?.option('stylingMode'),
-            onValueChanged: (e) => {
+            onValueChanged: (e: DxSelectBoxTypes.ValueChangedEvent) => {
               const editor = form.getEditor('assigneeId');
 
               editor?.option('dataSource', e.value ? this.employeesOf(e.value) : []);

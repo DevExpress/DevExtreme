@@ -28,7 +28,7 @@
         icon="print"
         text="Print"
         @click="printChart"
-      />
+      />{{ ' ' }}
       <DxButton
         icon="export"
         text="Export"
@@ -82,7 +82,7 @@ function exportChart() {
 }
 
 #buttonGroup > .dx-button {
-  margin: 0 22px;
+  margin: 0 20px;
 }
 
 .title {

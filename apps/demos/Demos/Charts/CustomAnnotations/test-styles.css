@@ -1,5 +1,0 @@
-/* image may not load at the test environment */
-
-#chart svg image {
-  opacity: 0;
-}

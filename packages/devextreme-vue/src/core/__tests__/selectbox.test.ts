@@ -1,5 +1,5 @@
 import { mount } from '@vue/test-utils';
-import { defineComponent } from 'vue';
+import { ComponentPublicInstance, defineComponent } from 'vue';
 
 import DxSelectBox from '../../select-box';
 import DxTextBox from '../../text-box';
@@ -29,6 +29,6 @@ describe('template rendering', () => {
       },
     });
     const wrapper = mount(vm);
-    expect(wrapper.getComponent('#component').vm.$el.children).toHaveLength(1);
+    expect(wrapper.getComponent<ComponentPublicInstance>('#component').vm.$el.children).toHaveLength(1);
   });
 });

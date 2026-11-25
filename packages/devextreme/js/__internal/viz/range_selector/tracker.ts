@@ -1,12 +1,9 @@
 /* eslint-disable @typescript-eslint/init-declarations */
-/* eslint-disable no-multi-assign */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-use-before-define */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 
 import { domAdapter } from '@ts/core/dom_adapter';
 import { each } from '@ts/core/utils/iterator';
-import { pointerEvents as msPointerEnabled } from '@ts/core/utils/support';
 import { getWindow } from '@ts/core/utils/window';
 import eventsEngine from '@ts/events/core/events_engine';
 import pointerEvents from '@ts/events/pointer';
@@ -30,6 +27,23 @@ interface TrackerSlider {
   on: (events: DocumentEvents) => void;
 }
 
+interface TouchList {
+  length: number;
+}
+
+interface TrackerEvent {
+  which?: number;
+  type?: string;
+  touches?: TouchList;
+  originalEvent?: {
+    pointerType?: string;
+    touches?: TouchList;
+    buttons?: number;
+    MSPOINTER_TYPE_TOUCH?: string;
+    MSPOINTER_TYPE_MOUSE?: string;
+  };
+}
+
 interface TrackerController {
   getTrackerTargets: () => { area: ThemeValue; selectedArea: ThemeValue; sliders: TrackerSlider[] };
   placeSliderAndBeginMoving: (
@@ -51,19 +65,19 @@ interface TrackerParams {
   controller: TrackerController;
 }
 
-function isLeftButtonPressed(event: ThemeValue): boolean {
-  const e = event || window.event;
+function isLeftButtonPressed(event: ThemeValue): boolean | undefined {
+  const e: TrackerEvent = event || window.event;
   const { originalEvent, touches } = e;
   const pointerType = originalEvent ? originalEvent.pointerType : false;
   const eventTouches = originalEvent ? originalEvent.touches : false;
-  const isMSPointerLeftClick = originalEvent && pointerType !== undefined && (pointerType === (originalEvent.MSPOINTER_TYPE_TOUCH || 'touch') || (pointerType === (originalEvent.MSPOINTER_TYPE_MOUSE || 'mouse') && originalEvent.buttons === 1));
+  const isPointerLeftClick = originalEvent && pointerType !== undefined && (pointerType === 'touch' || (pointerType === 'mouse' && originalEvent.buttons === 1));
   const isTouches = (touches && touches.length > 0) || (eventTouches && eventTouches.length > 0);
 
-  return (e.which === 1) || isMSPointerLeftClick || isTouches;
+  return (e.which === 1) || isPointerLeftClick || isTouches;
 }
 
 function isMultiTouches(event: ThemeValue): boolean | null {
-  const { originalEvent, touches } = event;
+  const { originalEvent, touches }: TrackerEvent = event;
   const eventTouches = originalEvent && originalEvent.touches;
 
   return (touches && touches.length > 1) || (eventTouches && eventTouches.length > 1) || null;
@@ -83,8 +97,8 @@ function stopPropagationAndPreventDefault(e: ThemeValue): void {
 }
 
 // Q375042
-function isTouchEventArgs(e: ThemeValue): boolean {
-  return e && e.type && e.type.indexOf('touch') === 0;
+function isTouchEventArgs(e: TrackerEvent | undefined): boolean | '' | undefined {
+  return e && e.type && e.type.startsWith('touch');
 }
 
 function getEventPageX(event: ThemeValue): number {
@@ -167,7 +181,7 @@ function initializeAreaEvents(
     }
   }
 
-  area.on(pointerEvents.down, (e) => {
+  area.on(pointerEvents.down, (e: ThemeValue) => {
     if (!state.enabled || !isLeftButtonPressed(e) || isActive) return;
 
     isActive = true;
@@ -211,7 +225,7 @@ function initializeSelectedAreaEvents(
     }
   }
 
-  area.on(pointerEvents.down, (e) => {
+  area.on(pointerEvents.down, (e: ThemeValue) => {
     if (!state.enabled || !isLeftButtonPressed(e) || isActive) return;
 
     isActive = true;
@@ -284,11 +298,9 @@ export let Tracker = class Tracker {
   declare _docEvents: DocumentEvents[];
 
   constructor(params: TrackerParams) {
-    const state = this._state = {};
+    this._state = {};
+    const state = this._state;
     const targets = params.controller.getTrackerTargets();
-    if (msPointerEnabled) {
-      params.renderer.root.css({ msTouchAction: 'pinch-zoom' });
-    }
     this._docEvents = [
       initializeSelectedAreaEvents(
         params.controller,

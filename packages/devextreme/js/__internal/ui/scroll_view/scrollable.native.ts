@@ -143,7 +143,6 @@ class NativeStrategy<
     const { scrollByThumb } = this.option();
 
     this._scrollbars[direction] = new Scrollbar(
-      // @ts-expect-error ts-error
       $('<div>').appendTo(this._$element),
       {
         direction,

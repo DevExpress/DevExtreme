@@ -59,10 +59,10 @@ export class AppComponent {
       return;
     }
 
-    const currentDate = this.scheduler().instance.option('currentDate');
-    const cellDuration = this.scheduler().instance.option('cellDuration');
+    const currentDate = this.scheduler().instance.option('currentDate') ?? new Date();
+    const cellDuration = this.scheduler().instance.option('cellDuration') ?? 30;
     const cellDurationMs = cellDuration * MS_IN_HOUR;
-    const currentTime = new Date(currentDate as Date).getTime();
+    const currentTime = new Date(currentDate).getTime();
     const roundTime = Math.round(currentTime / cellDurationMs) * cellDurationMs;
 
     this.scheduler().instance.showAppointmentPopup({
@@ -72,7 +72,7 @@ export class AppComponent {
   }
 
   onAssigneesChange(event: DxSelectBoxTypes.ValueChangedEvent) {
-    const dataSource = this.scheduler().instance.option('dataSource');
+    const { dataSource } = this;
     const filter = event.value ? ['assigneeId', 'contains', event.value] : null;
 
     dataSource.filter(filter);

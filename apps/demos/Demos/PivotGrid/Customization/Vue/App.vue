@@ -21,7 +21,7 @@
           :on-value-changed="onShowTotalsPriorChanged"
           text="Show Totals Prior"
         />
-      </div>
+      </div>{{ ' ' }}
       <div class="option">
         <DxCheckBox
           id="data-field-area"
@@ -29,7 +29,7 @@
           :on-value-changed="onDataFieldAreaChanged"
           text="Data Field Headers in Rows"
         />
-      </div>
+      </div>{{ ' ' }}
       <div class="option">
         <DxCheckBox
           id="row-header-layout"
@@ -113,14 +113,9 @@ function onRowHeaderLayoutChanged(data: DxCheckBoxTypes.ValueChangedEvent) {
   font-weight: 500;
 }
 
-.option:last-child {
-  margin-right: 0;
-}
-
 .option {
   width: 33%;
   display: inline-block;
   margin-top: 10px;
-  margin-right: 4px;
 }
 </style>

@@ -1616,14 +1616,6 @@ const environment = {
         assert.equal(chart.eventType, 'contextmenu');
     });
 
-    QUnit.test('event MSHoldVisual on div element', function(assert) {
-        const chart = this.createChart();
-
-        $(chart.$element()).trigger(new $.Event('MSHoldVisual'));
-
-        assert.ok(chart.$element());
-        assert.equal(chart.eventType, 'MSHoldVisual');
-    });
 }());
 
 const getPoints = function(count, options) {

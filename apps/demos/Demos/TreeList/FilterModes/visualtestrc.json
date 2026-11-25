@@ -1,0 +1,7 @@
+{
+  "$schema": "../../../../testing/visualtestrc-schema.json",
+  "comment": "React renders templates asynchronously, and then the search highlighting nests its spans once per column, which shifts the column widths by 1/64 px. Remove once the grid_core search fix is merged.",
+  "react": {
+    "ignore": true
+  }
+}

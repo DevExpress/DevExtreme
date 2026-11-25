@@ -9,7 +9,7 @@ import {
 } from 'devextreme-angular/ui/scheduler';
 import { DxContextMenuModule, type DxContextMenuTypes } from 'devextreme-angular/ui/context-menu';
 
-import { Service, type Resource, type ContextMenuItem } from './app.service';
+import { Service, type ContextMenuItem } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -44,7 +44,7 @@ export class AppComponent {
   readonly contextMenuItems = signal<ContextMenuItem[]>([]);
 
   onContextMenuItemClick(e: DxContextMenuTypes.ItemClickEvent<ContextMenuItem>) {
-    e.itemData.onItemClick(e);
+    e.itemData?.onItemClick?.(e);
   }
 
   onAppointmentContextMenu(e: DxSchedulerTypes.AppointmentContextMenuEvent) {
@@ -82,7 +82,7 @@ export class AppComponent {
         beginGroup: true,
         onItemClick: () => scheduler.updateAppointment(appointment, {
           ...appointment,
-          startDate: targetedAppointment.startDate,
+          startDate: targetedAppointment?.startDate,
           recurrenceRule: 'FREQ=WEEKLY',
         }),
       },
@@ -93,9 +93,9 @@ export class AppComponent {
       },
       ...this.resourcesData.map((item) => ({
         ...item,
-        onItemClick: ({ itemData }: DxContextMenuTypes.ItemClickEvent<Resource>) => scheduler.updateAppointment(appointment, {
+        onItemClick: () => scheduler.updateAppointment(appointment, {
           ...appointment,
-          roomId: [itemData.id],
+          roomId: [item.id],
         }),
       })),
     ];

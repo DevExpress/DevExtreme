@@ -1,6 +1,11 @@
 const fs = require('fs');
 const {
-  extractHeadExtras, extractBodyInner, extractDemoHeadExtras, extractDemoBodyInner,
+  extractHeadExtras,
+  extractBodyInner,
+  extractDemoHeadExtras,
+  extractDemoBodyInner,
+  PACKAGE_CSS_RE,
+  packageCssLinks,
 } = require('../../server/demo-html');
 
 afterEach(() => {
@@ -87,4 +92,19 @@ test('does not read a file without a demo directory', () => {
   expect(extractDemoHeadExtras()).toEqual([]);
   expect(extractDemoBodyInner()).toBeNull();
   expect(read).not.toHaveBeenCalled();
+});
+
+test.each(['ol/ol.css', 'devextreme-dist/css/dx.light.css'])('treats %s as a package style sheet', (specifier) => {
+  expect(PACKAGE_CSS_RE.test(specifier)).toBe(true);
+});
+
+test.each(['./styles.css', '../shared/styles.css', '/styles.css', 'https://cdn.example.com/ol.css', 'ol/ol.js'])('does not treat %s as a package style sheet', (specifier) => {
+  expect(PACKAGE_CSS_RE.test(specifier)).toBe(false);
+});
+
+test('links package style sheets from node_modules of the demos app', () => {
+  expect(packageCssLinks(['ol/ol.css'])).toEqual([
+    '<link rel="stylesheet" type="text/css" href="../../../../node_modules/ol/ol.css" />',
+  ]);
+  expect(packageCssLinks([])).toEqual([]);
 });
