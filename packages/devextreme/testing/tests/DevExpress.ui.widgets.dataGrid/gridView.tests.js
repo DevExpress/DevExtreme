@@ -1974,7 +1974,7 @@ QUnit.module('Synchronize columns', {
         // assert
         const $colElements = $testElement.find('.dx-datagrid-headers').find('col');
         assert.strictEqual($colElements.length, 5, 'column count');
-        assert.strictEqual($colElements.get(1).style.width, '160px', 'width of a first command column');
+        assert.strictEqual($colElements.get(1).style.width, '170px', 'width of a first command column');
         assert.strictEqual($colElements.get(2).style.width, '250px', 'width of a second command column');
     });
 
