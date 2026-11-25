@@ -80,6 +80,9 @@ const CSP_DEMO_ALLOWLIST = {
   'DataGrid/LocalReordering': {
     'img-src': ['data:'],
   },
+  'DataGrid/Cell': {
+    'img-src': ['data:'],
+  },
   'DataGrid/PDFExportImages': {
     'img-src': ['data:'],
   },
@@ -205,6 +208,9 @@ const CSP_FRAMEWORK_ALLOWLIST = {
     },
     FilterBuilder: { 'font-src': ['https://maxcdn.bootstrapcdn.com'] },
     // globalize/message.js uses new Function() internally
+    'Localization/UsingGlobalize': {
+      'script-src': ["'unsafe-eval'"],
+    },
     // Inline <script type="module"> to import remark/rehype from esm.sh
     'HtmlEditor/MarkdownSupport': {
       'script-src': ["'unsafe-inline'"],
@@ -248,6 +254,7 @@ const CSP_FRAMEWORK_ALLOWLIST = {
   Angular: {
     FilterBuilder: { 'font-src': ['https://maxcdn.bootstrapcdn.com'] },
     // globalize/message.js uses new Function() internally
+    'Localization/UsingGlobalize': { 'script-src': ["'unsafe-eval'"] },
   },
   React: {
     'Slider/Overview': {
@@ -271,6 +278,7 @@ const CSP_FRAMEWORK_ALLOWLIST = {
     Form: { 'font-src': ['https://maxcdn.bootstrapcdn.com'] },
     'Lookup/Templates': { 'font-src': ['https://maxcdn.bootstrapcdn.com'] },
     // globalize/message.js uses new Function() internally
+    'Localization/UsingGlobalize': { 'script-src': ["'unsafe-eval'"] },
   },
   Vue: {
     'SelectBox/Grouping': {
@@ -285,6 +293,7 @@ const CSP_FRAMEWORK_ALLOWLIST = {
     'TagBox/Grouping': { 'font-src': ['https://maxcdn.bootstrapcdn.com'] },
     'SelectBox/SearchAndEditing': { 'font-src': ['https://maxcdn.bootstrapcdn.com'] },
     // globalize/message.js uses new Function() internally
+    'Localization/UsingGlobalize': { 'script-src': ["'unsafe-eval'"] },
   },
 };
 
