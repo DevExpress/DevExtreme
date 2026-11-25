@@ -21,8 +21,6 @@ const testStub = {
     page() { return this; },
   },
   page() { return this; },
-  clientScripts() { return this; },
-  requestHooks() { return this; },
 };
 
 function updateChanges(value, options) {
