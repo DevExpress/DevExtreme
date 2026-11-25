@@ -63,7 +63,7 @@ pnpm run convert-to-js "JSDemos/Demos/Diagram/**/React"
 The "Check generated JS demos" GitHub Action ensures that the React JavaScript and TypeScript sources remain in sync.
 ## Screenshot Tests
 
-Every demo page is compared with an etalon in `testing/etalons`. The jQuery, React, Vue and Angular demos run on [Playwright](https://playwright.dev/) (`testing/common.spec.ts`); the manual widget tests (`testing/widgets`) and the accessibility checks still run on TestCafe.
+Every demo page is compared with an etalon in `testing/etalons` (`testing/common.spec.ts`), and the widget tests in `testing/widgets` click through some demos and compare the steps with their own etalons. Both run on [Playwright](https://playwright.dev/) for jQuery, React, Vue and Angular; the accessibility checks still run on TestCafe.
 
 One etalon serves all four frameworks of a demo, and it is recorded from the jQuery demo. A framework that draws a demo differently is not given an etalon of its own: find out why it differs and make the demo the same in every framework.
 
@@ -106,6 +106,29 @@ The page is shot when it has settled: no request is pending, no script animation
 `Math.random()` returns the same numbers in every framework: each call site has its own sequence, so a demo that generates its data gets the same data whatever the framework and DevExtreme called before it.
 
 The time zone is UTC for the page and for the mock data, whatever the machine is set to.
+
+### Widget tests
+
+A widget test opens a demo in the framework of the job and drives it the way a user would:
+
+```ts
+import { test } from '@playwright/test';
+import { describeManualTest, testScreenshot } from '../../../utils/visual-tests/playwright/manual-test';
+
+describeManualTest('SelectBox', 'Grouping', { width: 900, height: 600 }, () => {
+  test('Grouping', async ({ page }) => {
+    await page.locator('.dx-selectbox').nth(0).click();
+
+    await testScreenshot(page, 'selectbox_groupeditems_first_opened.png');
+  });
+});
+```
+
+`describeManualTest` opens the demo before each test, as the demo page test does, in a window of the given size. `testScreenshot` waits for the page to settle and compares the viewport, or the element it is given, with `<name> (<theme>).png` in the `etalons` folder next to the test. `utils/visual-tests/playwright/manual-test.ts` also has `drag` and `dragToElement` (the mouse, in steps), `mockDate` and `waitForSettled`.
+
+Playwright acts as soon as the element is ready, where TestCafe was slow enough for a widget to finish what the previous action started: wait for the state the next step needs (an element, a text, `waitForSettled`), not for a time. Playwright also refuses to click an element that something else covers; TestCafe clicked the point and hit whatever was on top. Pass `force: true` only where a test relies on that, with a comment why.
+
+Select the widget tests by their file path: `--grep widgets/` runs them all, `--grep widgets/datagrid/` those of a component.
 
 ### Etalons
 
