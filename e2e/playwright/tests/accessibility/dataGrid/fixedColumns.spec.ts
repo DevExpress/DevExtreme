@@ -76,7 +76,7 @@ test('Accessibility: Scrollable should have focusable element when navigate thro
       ? dataGrid.getFixedDataCell(0, columnIndex)
       : dataGrid.getDataCell(0, columnIndex);
 
-    await cell.expectFocused();
+    await cell.expectFocusVisible();
 
     // it makes sense to check accessibility only if fixed column is focused
     const needCheckA11y = columnsByFixing[columnIndex];
@@ -124,7 +124,7 @@ test('Accessibility: Scrollable should have focusable element when click out of 
   // focus through data row to last cell
   await pressKey(page, 'Tab', COLUMNS_LENGTH - 1);
 
-  await dataGrid.getFixedDataCell(0, COLUMNS_LENGTH - 1).expectFocused();
+  await dataGrid.getFixedDataCell(0, COLUMNS_LENGTH - 1).expectFocusVisible();
 
   // focus out rows view by outside click
   const dataGridOffsetBottom = await dataGrid.element.evaluate(
@@ -173,7 +173,7 @@ test('Accessibility: Scrollable should have focusable when fixed on the right si
   // focus through data row till last cell (which is fixed)
   await pressKey(page, 'Tab', COLUMNS_LENGTH);
 
-  await dataGrid.getFixedDataCell(0, COLUMNS_LENGTH - 1).expectFocused();
+  await dataGrid.getFixedDataCell(0, COLUMNS_LENGTH - 1).expectFocusVisible();
 
   await a11yCheck(page);
 });

@@ -1,5 +1,5 @@
 import type { Locator, Page } from '@playwright/test';
-import FocusableElement from '../../internal/focusable';
+import GridElement from '../../gridCore/element';
 
 const CLASS = {
   filterEditor: 'dx-widget',
@@ -7,7 +7,7 @@ const CLASS = {
   menuButton: 'dx-menu-item',
 };
 
-export default class FilterCell extends FocusableElement {
+export default class FilterCell extends GridElement {
   public readonly menuButton: Locator;
 
   constructor(element: Locator) {

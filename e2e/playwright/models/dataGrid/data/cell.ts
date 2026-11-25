@@ -1,35 +1,51 @@
 import type { Locator } from '@playwright/test';
-import { expect } from '@playwright/test';
-import FocusableElement from '../../internal/focusable';
-import { classMatcher } from '../../internal/classMatcher';
+import GridFocusableElement from '../../gridCore/focusable';
+import { expectClass } from '../../internal/classMatcher';
+import { CellEditor } from './cellEditor';
 
 const CLASS = {
   editCell: 'dx-editor-cell',
-  focused: 'dx-focused',
+  editorInput: 'dx-texteditor-input',
   cellModified: 'dx-cell-modified',
+  checkbox: 'dx-checkbox',
+  pendingIndicator: 'dx-pending-indicator',
+  invalidMessage: 'dx-invalid-message',
+  overlay: 'dx-overlay',
 };
 
-export default class DataCell extends FocusableElement {
+// The grid prefixes the class with its name, which a cell doesn't know.
+const INVALID_CELL_CLASS = 'dx-(datagrid|treelist)-invalid';
+
+export default class DataCell extends GridFocusableElement {
   constructor(dataRow: Locator, index: number) {
     super(dataRow.locator(`td[aria-colindex='${index + 1}']`));
   }
 
-  private async expectClass(className: string, present: boolean): Promise<void> {
-    // TestCafe reads the state of the first match; legacy fixed columns render every row twice.
-    const assertion = expect(this.element.first());
-
-    await (present ? assertion : assertion.not).toHaveClass(classMatcher(className));
-  }
-
   public expectEditCell(present = true): Promise<void> {
-    return this.expectClass(CLASS.editCell, present);
-  }
-
-  public expectFocused(present = true): Promise<void> {
-    return this.expectClass(CLASS.focused, present);
+    return expectClass(this.element, CLASS.editCell, present);
   }
 
   public expectModified(present = true): Promise<void> {
-    return this.expectClass(CLASS.cellModified, present);
+    return expectClass(this.element, CLASS.cellModified, present);
+  }
+
+  public getEditor(): CellEditor {
+    return new CellEditor(this.element.locator(`.${CLASS.editorInput}, .${CLASS.checkbox}`));
+  }
+
+  public getCheckbox(): Locator {
+    return this.element.locator(`.${CLASS.checkbox}`);
+  }
+
+  public expectInvalid(present = true): Promise<void> {
+    return expectClass(this.element, INVALID_CELL_CLASS, present);
+  }
+
+  public getPendingIndicator(): Locator {
+    return this.element.locator(`.${CLASS.pendingIndicator}`);
+  }
+
+  public getInvalidMessage(): Locator {
+    return this.element.locator(`.${CLASS.invalidMessage}.${CLASS.overlay}`);
   }
 }

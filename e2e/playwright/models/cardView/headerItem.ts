@@ -1,11 +1,11 @@
 import type { Locator } from '@playwright/test';
-import FocusableElement from '../internal/focusable';
+import GridElement from '../gridCore/element';
 
 const CLASS = {
   filterIcon: 'dx-header-filter-icon',
 };
 
-export default class HeaderItem extends FocusableElement {
+export default class HeaderItem extends GridElement {
   public getFilterIcon(): Locator {
     return this.element.locator(`.${CLASS.filterIcon}`);
   }

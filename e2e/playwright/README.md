@@ -237,7 +237,7 @@ viewport is 1200×800 and the widgets of the previous test are disposed.
 | `RequestMock`                   | `mockApi` on top of `page.route`              |
 | `mockdate`                      | `mockDate` on top of `page.clock`             |
 | machine timezone on the agent   | `TIMEZONE` → the browser context              |
-| `t.typeText`                    | `locator.pressSequentially`                   |
+| `t.typeText`                    | a click, then `pressSequentially` (Typing)    |
 | `t.pressKey('ctrl+a')`          | `page.keyboard.press('Control+a')`            |
 | `t.expect(selector.value)`      | `expect(locator).toHaveValue`                 |
 | `t.expect(widget.option('x'))`  | `expect.poll(() => widget.option('x'))`       |
@@ -261,6 +261,12 @@ test would run once more in the tagged job.
 **Typing.** `fill` sets the value at once and sends no key events, so masked, numeric and date
 editors do not react to it. Type with `pressSequentially`, and press keys under their Playwright
 names: `Enter`, `Escape`, `ArrowLeft`, `Control+a`.
+
+`t.typeText` did more than type. It clicked the element unless the element already had the focus,
+put the caret at the end of the value (`replace: true` selected the whole value instead), and only
+then sent the keys. `pressSequentially` alone focuses the element without a click, so a widget that
+reacts to the pointer (a grid moving its focused cell) never sees it, and the caret stays where the
+browser puts it, which can be the start of the value. Port it as all three steps.
 
 **Checks.** TestCafe retried `t.expect(selector.value)`; here only `expect(locator)` and
 `expect.poll` retry. `expect(await locator.inputValue()).toBe(x)` reads the value once and fails

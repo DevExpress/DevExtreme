@@ -13,7 +13,6 @@ import Headers from './headers';
 import ContextMenu from '../contextMenu';
 
 import type { WidgetName } from '../types';
-import { Overlay } from './overlay';
 import LoadPanel from '../loadPanel';
 // eslint-disable-next-line import/no-cycle
 import MasterRow from './masterRow';
@@ -27,7 +26,6 @@ import GridCore from '../gridCore';
 import { CLASS as CLASS_BASE } from '../gridCore';
 import { AIPromptEditor } from './aiPromptEditor';
 import { AIAssistantChat } from './aiAssistantChat';
-import EditPopup from './editPopup';
 
 export const CLASS = {
   ...CLASS_BASE,
@@ -235,10 +233,6 @@ export default class DataGrid extends GridCore {
     return this.element.find(`.${CLASS.fieldItemContent}`).nth(index);
   }
 
-  getFormItemEditor(index: number): Selector {
-    return this.getFormItemElement(index).find(`.${CLASS.textEditorInput}`);
-  }
-
   getFixedDataRow(index: number): DataRow {
     return new DataRow(this.element.find(`.${this.addWidgetPrefix(CLASS.fixedGridView)} .${CLASS.dataRow}[aria-rowindex='${index + 1}']`), this.getName());
   }
@@ -312,10 +306,6 @@ export default class DataGrid extends GridCore {
 
   getColumnsSeparator(): TextBox {
     return new TextBox(this.element.find(`.${CLASS.columnsSeparator}`));
-  }
-
-  getOverlay(): Overlay {
-    return new Overlay(this.element.find(`.${CLASS.overlayWrapper}`));
   }
 
   getLoadPanel(): LoadPanel {
@@ -502,20 +492,12 @@ export default class DataGrid extends GridCore {
     return new EditForm(element, buttons);
   }
 
-  getEditPopup(): EditPopup {
-    return new EditPopup(Selector(`.${this.addWidgetPrefix(CLASS.popupEdit)}`));
-  }
-
   getToolbar(): Toolbar {
     return new Toolbar(this.element.find(`.${CLASS.toolbar}`));
   }
 
   getHeaderPanel(): HeaderPanel {
     return new HeaderPanel(this.element.find(`.${this.addWidgetPrefix(CLASS.headerPanel)}`), this.getName());
-  }
-
-  getRevertButton(): Selector {
-    return this.element.find(`.${CLASS.revertButton}`);
   }
 
   getColumnChooserButton(): Selector {
@@ -532,15 +514,6 @@ export default class DataGrid extends GridCore {
 
   isAdaptiveColumnHidden(): Promise<boolean> {
     return this.element.find(`.${CLASS.adaptiveCommandCellHidden}`).exists;
-  }
-
-  apiAddRow(): Promise<void> {
-    const { getInstance } = this;
-
-    return ClientFunction(
-      () => (getInstance() as any).addRow(),
-      { dependencies: { getInstance } },
-    )();
   }
 
   apiEditRow(rowIndex: number): Promise<void> {
@@ -588,14 +561,6 @@ export default class DataGrid extends GridCore {
     )();
   }
 
-  apiCancelEditData(): Promise<void> {
-    const { getInstance } = this;
-    return ClientFunction(
-      () => (getInstance() as any).cancelEditData(),
-      { dependencies: { getInstance } },
-    )();
-  }
-
   apiSaveEditData(): Promise<void> {
     const { getInstance } = this;
     return ClientFunction(
@@ -632,15 +597,6 @@ export default class DataGrid extends GridCore {
     )();
   }
 
-  apiGetCellValidationStatus(rowIndex: number, columnIndex: number): Promise<any> {
-    const { getInstance } = this;
-    return ClientFunction(() => {
-      const dataGrid = getInstance() as any;
-      const result = dataGrid.getController('validating').getCellValidationResult({ rowKey: dataGrid.getKeyByRowIndex(rowIndex), columnIndex });
-      return result ? result.status : null;
-    }, { dependencies: { getInstance, rowIndex, columnIndex } })();
-  }
-
   apiGetVisibleRows(): Promise<any> {
     const { getInstance } = this;
     return ClientFunction(() => {
@@ -660,23 +616,6 @@ export default class DataGrid extends GridCore {
     return ClientFunction(() => {
       return (getInstance() as any).getTopVisibleRowData();
     }, { dependencies: { getInstance } })();
-  }
-
-  apiGetTopVisibleRowKey(): Promise<any> {
-    const { getInstance } = this;
-    return ClientFunction(() => {
-      const dataGrid = getInstance() as any;
-
-      return dataGrid.keyOf(dataGrid.getTopVisibleRowData());
-    }, { dependencies: { getInstance } })();
-  }
-
-  apiTotalCount(): Promise<number> {
-    const { getInstance } = this;
-    return ClientFunction(
-      () => (getInstance() as DataGridInstance).totalCount(),
-      { dependencies: { getInstance } },
-    )();
   }
 
   apiUpdateDimensions(): Promise<void> {
