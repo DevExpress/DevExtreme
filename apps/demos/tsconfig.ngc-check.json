@@ -33,6 +33,7 @@
     "Demos/Toast/**/Angular/**/*.ts",
     "Demos/Tooltip/**/Angular/**/*.ts",
     "Demos/Validation/**/Angular/**/*.ts",
+    "Demos/Scheduler/**/Angular/**/*.ts",
     "shared/anti-forgery/index.d.ts"
   ]
 }
