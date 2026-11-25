@@ -15,6 +15,7 @@ import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
 import eventsEngine from '@ts/events/core/events_engine';
 import columnStateMixin from '@ts/grids/grid_core/column_state_mixin/column_state_mixin';
+import { CLASSES as COLUMN_STATE_MIXIN_CLASSES } from '@ts/grids/grid_core/column_state_mixin/const';
 import type { ColumnStateOptions } from '@ts/grids/grid_core/column_state_mixin/types';
 import { HeaderFilterView as HeaderFilterViewBase } from '@ts/grids/grid_core/header_filter/header_filter_core';
 import type { HeaderFilterOptions, HeaderFilterViewOptions } from '@ts/grids/grid_core/header_filter/types';
@@ -586,7 +587,7 @@ export class FieldChooserBase extends mixinWidget<FieldChooserBaseProperties> {
       const rtlEnabled = !!this.option('rtlEnabled');
       const indicatorAlignment = rtlEnabled ? 'left' : 'right';
 
-      $container = $('<div>').addClass('dx-column-indicators');
+      $container = $('<div>').addClass(COLUMN_STATE_MIXIN_CLASSES.columnIndicators);
       if (showColumnLines) {
         $container.css('float', indicatorAlignment);
       }
