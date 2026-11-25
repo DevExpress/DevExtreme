@@ -2,9 +2,6 @@
 
 const fs = require('fs');
 
-jest.mock('../../../testing/apiMocks/widgetsGalleryServiceMock', () => ({ widgetsGalleryServiceMock: {} }));
-jest.mock('../../../testing/apiMocks/xmlaServiceMock', () => ({ xmlaServiceMock: {} }));
-
 const helper = require('../../visual-tests/matrix-test-helper.ts');
 
 const productDemoFramework = [{ filename: 'Demos/Accordion/Overview/Angular/index.json' }];
@@ -12,7 +9,7 @@ const productDemo = [{ filename: 'Demos/Accordion/Overview/visualtestrc.json' }]
 const productDemoDescription = [{ filename: 'Demos/Accordion/Overview/description.md' }];
 const stubPath = [{ filename: 'stub' }];
 const manualScreenPath = [{ filename: 'testing/widgets/datagrid/etalons/image.png' }];
-const manualTestPath = [{ filename: 'testing/widgets/datagrid/sometest.test.js' }];
+const manualTestPath = [{ filename: 'testing/widgets/datagrid/sometest.spec.ts' }];
 const testStub = {
   name: 'test',
   only: {
@@ -70,9 +67,7 @@ describe('Matrix test helper tests', () => {
   test('Run manual test on manual etalon change', () => {
     try {
       updateChanges(manualScreenPath);
-      let value;
-      helper.runManualTestCore(testStub, 'DataGrid', 'SomeDemo', 'jQuery', (x) => { value = x.name; });
-      expect(value).toBe('only');
+      expect(helper.shouldRunTestExplicitlyInternal('jQuery', 'DataGrid', 'SomeDemo')).toBe(true);
     } finally {
       helper.updateConfig();
     }
@@ -81,9 +76,7 @@ describe('Matrix test helper tests', () => {
   test('Not run manual test on manual etalon change for another widget', () => {
     try {
       updateChanges(manualScreenPath);
-      let value;
-      helper.runManualTestCore(testStub, 'Scheduler', 'SomeDemo', 'jQuery', (x) => { value = x.name; });
-      expect(value).toBeUndefined();
+      expect(helper.shouldRunTestExplicitlyInternal('jQuery', 'Scheduler', 'SomeDemo')).toBe(false);
     } finally {
       helper.updateConfig();
     }
@@ -92,9 +85,7 @@ describe('Matrix test helper tests', () => {
   test('Run manual test on demo change', () => {
     try {
       updateChanges(productDemo);
-      let value;
-      helper.runManualTestCore(testStub, 'Accordion', 'Overview', 'jQuery', (x) => { value = x.name; });
-      expect(value).toBe('only');
+      expect(helper.shouldRunTestExplicitlyInternal('jQuery', 'Accordion', 'Overview')).toBe(true);
     } finally {
       helper.updateConfig();
     }
@@ -103,9 +94,7 @@ describe('Matrix test helper tests', () => {
   test('Not run manual test on another demo change', () => {
     try {
       updateChanges(productDemo);
-      let value;
-      helper.runManualTestCore(testStub, 'Accordion', 'AnotherDemo', 'jQuery', (x) => { value = x.name; });
-      expect(value).toBeUndefined();
+      expect(helper.shouldRunTestExplicitlyInternal('jQuery', 'Accordion', 'AnotherDemo')).toBe(false);
     } finally {
       helper.updateConfig();
     }
@@ -114,9 +103,7 @@ describe('Matrix test helper tests', () => {
   test('Run manual test on manual test change', () => {
     try {
       updateChanges(manualTestPath);
-      let value;
-      helper.runManualTestCore(testStub, 'DataGrid', 'SomeDemo', 'jQuery', (x) => { value = x.name; });
-      expect(value).toBe('only');
+      expect(helper.shouldRunTestExplicitlyInternal('jQuery', 'DataGrid', 'SomeDemo')).toBe(true);
     } finally {
       helper.updateConfig();
     }
