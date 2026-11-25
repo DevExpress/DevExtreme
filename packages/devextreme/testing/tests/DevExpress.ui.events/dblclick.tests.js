@@ -130,7 +130,7 @@ QUnit.module('removed first click target', {
     }
 });
 
-const nativeClick = (selector, detail) => $(selector).trigger($.Event('click', { detail, which: 1 }));
+const nativeClick = (selector, detail) => $(selector).trigger($.Event($.Event('click'), { detail, which: 1 }));
 
 QUnit.test('dxdblclick should not be fired if the first clicked element was removed and the browser counts the second click as a single one (T1338452)', function(assert) {
     const handler = sinon.stub();
