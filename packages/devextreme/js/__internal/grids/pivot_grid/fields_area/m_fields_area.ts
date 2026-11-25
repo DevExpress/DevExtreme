@@ -9,15 +9,15 @@ import type { PivotGridArea } from '@js/ui/pivot_grid/data_source';
 import Popup from '@js/ui/popup/ui.popup';
 import { capitalize } from '@ts/core/utils/capitalize';
 import type { FieldChooserField } from '@ts/grids/pivot_grid/field_chooser/const';
+import { CLASSES as FIELD_CHOOSER_CLASSES } from '@ts/grids/pivot_grid/field_chooser/const';
+import { BUTTON_CLASS } from '@ts/ui/button/button';
 import type { PopupProperties } from '@ts/ui/popup/popup';
 
 import { AreaItem } from '../area_item/m_area_item';
 import type { AreaItemComponent, AreaName } from '../area_item/types';
 import type { FieldChooserBase } from '../field_chooser/m_field_chooser_base';
-import { DIV } from './const';
+import { CLASSES, DIV } from './const';
 import { renderGroupConnector } from './utils';
-
-const AREA_DRAG_CLASS = 'dx-pivotgrid-drag-action';
 
 class FieldsArea extends AreaItem {
   private readonly _area: PivotGridArea;
@@ -35,9 +35,9 @@ class FieldsArea extends AreaItem {
 
   protected _createGroupElement(): dxElementWrapper {
     return $(DIV)
-      .addClass('dx-pivotgrid-fields-area')
-      .addClass('dx-area-fields')
-      .addClass(AREA_DRAG_CLASS)
+      .addClass(CLASSES.pivotgridFieldsArea)
+      .addClass(FIELD_CHOOSER_CLASSES.area.fieldList)
+      .addClass(FIELD_CHOOSER_CLASSES.pivotGrid.dragAction)
       .attr('group', this._area);
   }
 
@@ -75,15 +75,15 @@ class FieldsArea extends AreaItem {
         }
       },
     });
-    button.$element().addClass('dx-pivotgrid-fields-area-hamburger');
+    button.$element().addClass(CLASSES.pivotgridFieldsAreaHamburger);
   }
 
   private _getPopupOptions(row: dxElementWrapper, button: dxElementWrapper): PopupProperties {
     return {
       contentTemplate(): dxElementWrapper {
         return $('<div>').append(
-          $('<table>').addClass('dx-area-field-container')
-            .append($('<thead>').addClass('dx-pivotgrid-fields-area-head')
+          $('<table>').addClass(FIELD_CHOOSER_CLASSES.area.fieldContainer)
+            .append($('<thead>').addClass(CLASSES.pivotgridFieldsAreaHead)
               .append(row)),
         );
       },
@@ -109,7 +109,7 @@ class FieldsArea extends AreaItem {
   }
 
   private _renderPopup(tableElement: dxElementWrapper, row: dxElementWrapper): void {
-    const button = tableElement.find('.dx-button');
+    const button = tableElement.find(`.${BUTTON_CLASS}`);
     const popupOptions = this._getPopupOptions(row, button);
     const fieldChooserBase = this.getFieldChooserBase();
 
@@ -123,9 +123,9 @@ class FieldsArea extends AreaItem {
       popupOptions,
     );
 
-    this._rowPopup.$element().addClass('dx-fields-area-popup');
+    this._rowPopup.$element().addClass(CLASSES.fieldsAreaPopup);
     const $content = $(this._rowPopup.content());
-    $content.addClass('dx-pivotgrid-fields-container');
+    $content.addClass(FIELD_CHOOSER_CLASSES.pivotGrid.fieldsContainer);
     $content.parent().attr('group', 'row');
 
     fieldChooserBase.subscribeToEvents($content);
@@ -150,14 +150,14 @@ class FieldsArea extends AreaItem {
     const isVisible = this.isVisible();
     const fieldChooserBase = this.getFieldChooserBase();
     const head = $('<thead>')
-      .addClass('dx-pivotgrid-fields-area-head')
+      .addClass(CLASSES.pivotgridFieldsAreaHead)
       .attr('role', 'presentation')
       .appendTo(tableElement);
     const area = this._area;
     const row = $('<tr>');
 
-    groupElement?.toggleClass('dx-hidden', !isVisible);
-    tableElement.addClass('dx-area-field-container');
+    groupElement?.toggleClass(CLASSES.hidden, !isVisible);
+    tableElement.addClass(FIELD_CHOOSER_CLASSES.area.fieldContainer);
 
     if (!isVisible) {
       // The reused table element may carry the menubar role from the previous
@@ -199,7 +199,7 @@ class FieldsArea extends AreaItem {
         .attr('role', 'presentation')
         .removeAttr('aria-label');
       // @ts-expect-error option() returns unknown for a template path
-      $('<td>').append($(DIV).addClass('dx-empty-area-text').text(this.option(`fieldPanel.texts.${area}FieldArea`))).appendTo(row);
+      $('<td>').append($(DIV).addClass(CLASSES.emptyAreaText).text(this.option(`fieldPanel.texts.${area}FieldArea`))).appendTo(row);
     }
 
     if (this._shouldCreateButton()) {
