@@ -8,7 +8,7 @@
   </p>
   <p class="address">
     Address:<br />
-    <b>{{ employeeInfo().City }}</b
+    <b>{{ employeeInfo()?.City }}</b
     ><br />
     <span>{{ employeeInfo()?.Zipcode }}</span>
     <span>{{ employeeInfo()?.Address }}</span>
@@ -52,7 +52,8 @@
   <div class="option">
     <dx-check-box
       text="Hide on outside click"
-      [(value)]="loadPanel.hideOnOutsideClick"
+      [value]="loadPanel.hideOnOutsideClick === true"
+      (valueChange)="loadPanel.hideOnOutsideClick = !!$event"
     >
     </dx-check-box>
   </div>

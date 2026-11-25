@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-export class Order {
+export interface Order {
   ID: number;
 
   OrderNumber: number;
@@ -382,7 +382,7 @@ const orders: Order[] = [{
 
 @Injectable()
 export class Service {
-  getOrders() {
+  getOrders(): Order[] {
     return orders;
   }
 }

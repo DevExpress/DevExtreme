@@ -20,6 +20,11 @@
     "Demos/Localization/**/Angular/**/*.ts",
     "Demos/Map/**/Angular/**/*.ts",
     "Demos/VectorMap/**/Angular/**/*.ts",
+    "Demos/Sortable/**/Angular/**/*.ts",
+    "Demos/Resizable/**/Angular/**/*.ts",
+    "Demos/LoadIndicator/**/Angular/**/*.ts",
+    "Demos/LoadPanel/**/Angular/**/*.ts",
+    "Demos/ProgressBar/**/Angular/**/*.ts",
     "shared/anti-forgery/index.d.ts"
   ]
 }
