@@ -3,7 +3,6 @@ import '../field_chooser/m_field_chooser_base';
 import localizationMessage from '@js/common/core/localization/message';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
-import { each } from '@js/core/utils/iterator';
 import { setHeight, setWidth } from '@js/core/utils/style';
 import Button from '@js/ui/button';
 import type { PivotGridArea } from '@js/ui/pivot_grid/data_source';
@@ -63,15 +62,14 @@ class FieldsArea extends AreaItem {
   }
 
   private _renderButton(element: dxElementWrapper): void {
-    const that = this;
     const container = $('<td>').appendTo($('<tr>').appendTo(element));
-    const button = that.component._createComponent($(DIV).appendTo(container), Button, {
+    const button = this.component._createComponent($(DIV).appendTo(container), Button, {
       text: 'Fields',
       icon: 'menu',
       width: 'auto',
-      onClick() {
+      onClick: (): void => {
         // @ts-expect-error dxPopup is not defined in dxElementWrapper
-        const popup = that.tableElement().find('.dx-fields-area-popup').dxPopup('instance');
+        const popup = this.tableElement().find('.dx-fields-area-popup').dxPopup('instance');
         if (!popup.option('visible')) {
           popup.show();
         }
@@ -171,14 +169,14 @@ class FieldsArea extends AreaItem {
       return;
     }
 
-    each(data, (index: number, field) => {
+    data.forEach((field, index) => {
       if (field.area === area && field.visible !== false) {
         const td = $('<td>')
           .attr('role', 'none')
           .append(fieldChooserBase.renderField(field, field.area === 'row'));
         const indicators = td.find('.dx-column-indicators');
         if (indicators.length && this._shouldCreateButton()) {
-          indicators.insertAfter((indicators as any).next());
+          indicators.insertAfter(indicators.next());
         }
         td.appendTo(row);
         renderGroupConnector(field, data[index + 1], data[index - 1], td);
