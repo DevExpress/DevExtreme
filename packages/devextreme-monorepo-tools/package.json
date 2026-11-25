@@ -2,12 +2,10 @@
   "name": "devextreme-monorepo-tools",
   "version": "25.2.11",
   "dependencies": {
-    "shelljs": "0.8.5",
-    "tar-fs": "3.1.2"
+    "shelljs": "0.8.5"
   },
   "devDependencies": {
     "@types/shelljs": "0.8.17",
-    "@types/tar-fs": "2.0.4",
     "@types/jest": "29.5.14",
     "ts-jest": "29.1.3"
   }

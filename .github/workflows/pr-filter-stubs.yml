@@ -34,7 +34,7 @@ jobs:
       - name: Prepare required check stubs
         run: echo "Required check stubs are available for apps/**/*.md PRs."
 
-  # build_all.yml, demos_visual_tests.yml, packages_publishing.yml, playgrounds_tests.yml, qunit_tests.yml, testcafe_tests.yml, wrapper_tests.yml
+  # build_all.yml, demos_visual_tests.yml, playgrounds_tests.yml, qunit_tests.yml, testcafe_tests.yml, wrapper_tests.yml
   build1:
     name: 'build'
     needs: [ stubChecksReady ]
