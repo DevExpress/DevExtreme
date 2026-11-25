@@ -231,12 +231,10 @@ function createValueAxisOptions(
         label: { format: dataField.format },
       };
 
-      const { customizeText } = dataField;
-      if (valueAxisOptions.label && customizeText) {
-        valueAxisOptions.label.customizeText = (
-          formatObject,
-        ): string => {
-          const result = customizeText.call(dataField, formatObject);
+      if (valueAxisOptions.label && dataField.customizeText) {
+        valueAxisOptions.label.customizeText = (formatObject): string => {
+          // @ts-expect-error the field had customizeText when the axis was built
+          const result = dataField.customizeText.call(dataField, formatObject);
           return result;
         };
       }
