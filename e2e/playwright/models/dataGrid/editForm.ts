@@ -1,11 +1,13 @@
 import type { Locator } from '@playwright/test';
-import FocusableElement from '../internal/focusable';
+import GridElement from '../gridCore/element';
 
 const CLASS = {
   form: 'dx-form',
+  textEditorInput: 'dx-texteditor-input',
+  checkbox: 'dx-checkbox',
 };
 
-export default class EditForm extends FocusableElement {
+export default class EditForm extends GridElement {
   public readonly form: Locator;
 
   public readonly saveButton: Locator;
@@ -17,5 +19,9 @@ export default class EditForm extends FocusableElement {
     this.form = this.element.locator(`.${CLASS.form}`);
     this.saveButton = buttons.nth(0);
     this.cancelButton = buttons.nth(1);
+  }
+
+  public getItem(id: string): Locator {
+    return this.form.locator(`.${CLASS.textEditorInput}[id*=_${id}], .${CLASS.checkbox}[id*=_${id}]`);
   }
 }

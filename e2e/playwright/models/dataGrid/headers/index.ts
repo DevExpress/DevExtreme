@@ -19,7 +19,6 @@ export default class Headers extends GridModule {
 
     return new HeaderRow(
       this.element.locator(`${headersContainerSelector} .${CLASS.headerRow}:nth-child(${index + 1})`),
-      this.widgetName,
     );
   }
 
