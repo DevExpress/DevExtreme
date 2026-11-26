@@ -105,8 +105,7 @@ const findViolations = async (
 };
 
 const getPageTheme = (page: Page): Promise<string> => page.evaluate(
-  () => (window as unknown as { DevExpress: { ui: { themes: { current: () => string } } } })
-    .DevExpress.ui.themes.current(),
+  () => window.DevExpress.ui.themes.current(),
 );
 
 test.describe(FRAMEWORKS.jquery, () => {
