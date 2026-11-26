@@ -14,7 +14,10 @@ interface WidgetClass {
 
 declare global {
   interface Window {
-    DevExpress?: { viz?: Record<string, WidgetClass | undefined> };
+    DevExpress?: {
+      ui?: { themes: { current: () => string } };
+      viz?: Record<string, WidgetClass | undefined>;
+    };
     demoConsoleMessages: ConsoleMessage[];
     demoSettled: () => Promise<void>;
     dxTestDisableVizAnimation: (widget: WidgetClass | undefined, name: string) => void;

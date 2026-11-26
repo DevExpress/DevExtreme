@@ -20,6 +20,7 @@
     "./Demos/**/Angular/**/*.ts",
     "./testing/**/*.ts",
     "./playwright.config.ts",
+    "./playwright.accessibility.config.ts",
     "./shared/anti-forgery/index.d.ts"
   ]
 }
