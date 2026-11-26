@@ -562,8 +562,8 @@ class CollectionWidget<
     const $target = $(target);
 
     if ($target.length) {
-      this._refreshActiveDescendant();
       this._refreshItemId($target, needCleanItemId);
+      this._refreshActiveDescendant();
 
       const { focusStateEnabled } = this.option();
 
@@ -593,6 +593,7 @@ class CollectionWidget<
       const shouldSetExistingId = this._shouldSkipRefreshId(focusedElement);
       const id = shouldSetExistingId ? $(focusedElement).attr('id') : this.getFocusedItemId();
 
+      this.setAria('activedescendant', '', $target);
       this.setAria('activedescendant', id, $target);
 
       return;

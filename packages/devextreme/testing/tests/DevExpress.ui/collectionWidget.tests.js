@@ -2240,6 +2240,38 @@ QUnit.module('Aria accessibility', {
         }
     });
 
+    test('aria-activedescendant value should change on focused item change and refer to an item that already has the id (WebKit announces only value changes)', function(assert) {
+        helper.createWidget({ items: this.items });
+
+        const element = helper.$widget.get(0);
+        const $items = helper.$widget.find(`.${ITEM_CLASS}`);
+        helper.widget.option('focusedElement', $items.eq(0));
+
+        const observer = new MutationObserver(() => {});
+        observer.observe(element, {
+            subtree: true,
+            attributes: true,
+            attributeOldValue: true,
+            attributeFilter: ['aria-activedescendant', 'id'],
+        });
+
+        helper.widget.option('focusedElement', $items.eq(1));
+
+        const records = observer.takeRecords();
+        observer.disconnect();
+
+        const lastActiveDescendantIndex = records.findLastIndex(
+            (record) => record.target === element && record.attributeName === 'aria-activedescendant',
+        );
+        const itemIdIndex = records.findIndex(
+            (record) => record.target === $items.get(1) && record.attributeName === 'id',
+        );
+
+        assert.strictEqual(records[lastActiveDescendantIndex].oldValue, '', 'aria-activedescendant is reset before it is set');
+        assert.ok(itemIdIndex !== -1 && itemIdIndex < lastActiveDescendantIndex, 'item gets the id before aria-activedescendant refers to it');
+        assert.strictEqual(element.getAttribute('aria-activedescendant'), $items.eq(1).attr('id'), 'aria-activedescendant refers to the focused item');
+    });
+
     test('onFocusedItemChanged option on init', function(assert) {
         let focusedItemChangedCallCount = 0;
 
