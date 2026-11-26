@@ -1,55 +1,48 @@
 import '../field_chooser/m_field_chooser_base';
 
 import localizationMessage from '@js/common/core/localization/message';
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
-import { each } from '@js/core/utils/iterator';
 import { setHeight, setWidth } from '@js/core/utils/style';
 import Button from '@js/ui/button';
+import type { PivotGridArea } from '@js/ui/pivot_grid/data_source';
 import Popup from '@js/ui/popup/ui.popup';
 import { capitalize } from '@ts/core/utils/capitalize';
+import { CLASSES as COLUMN_STATE_MIXIN_CLASSES } from '@ts/grids/grid_core/column_state_mixin/const';
+import type { FieldChooserField } from '@ts/grids/pivot_grid/field_chooser/const';
+import { CLASSES as FIELD_CHOOSER_CLASSES } from '@ts/grids/pivot_grid/field_chooser/const';
+import { BUTTON_CLASS } from '@ts/ui/button/button';
 import type { PopupProperties } from '@ts/ui/popup/popup';
 
 import { AreaItem } from '../area_item/m_area_item';
-import type { AreaName } from '../area_item/types';
+import type { AreaItemComponent, AreaName } from '../area_item/types';
 import type { FieldChooserBase } from '../field_chooser/m_field_chooser_base';
-
-const DIV = '<div>';
-
-const AREA_DRAG_CLASS = 'dx-pivotgrid-drag-action';
-
-function renderGroupConnector(field, nextField, prevField, $container) {
-  if (prevField?.groupName && prevField.groupName === field.groupName) {
-    $(DIV).addClass('dx-group-connector').addClass('dx-group-connector-prev').appendTo($container);
-  }
-
-  if (nextField?.groupName && nextField.groupName === field.groupName) {
-    $(DIV).addClass('dx-group-connector').addClass('dx-group-connector-next').appendTo($container);
-  }
-}
+import { CLASSES, DIV } from './const';
+import { renderGroupConnector } from './utils';
 
 class FieldsArea extends AreaItem {
-  _area: any;
+  private readonly _area: PivotGridArea;
 
-  _rowPopup: any;
+  private _rowPopup?: Popup;
 
-  constructor(component, area) {
+  constructor(component: AreaItemComponent, area: PivotGridArea) {
     super(component);
     this._area = area;
   }
 
-  _getAreaName(): AreaName {
+  protected _getAreaName(): AreaName {
     return 'fields';
   }
 
-  _createGroupElement() {
+  protected _createGroupElement(): dxElementWrapper {
     return $(DIV)
-      .addClass('dx-pivotgrid-fields-area')
-      .addClass('dx-area-fields')
-      .addClass(AREA_DRAG_CLASS)
+      .addClass(CLASSES.pivotGridFieldsArea)
+      .addClass(FIELD_CHOOSER_CLASSES.area.fieldList)
+      .addClass(FIELD_CHOOSER_CLASSES.pivotGrid.dragAction)
       .attr('group', this._area);
   }
 
-  _createTableElement() {
+  protected _createTableElement(): dxElementWrapper {
     const localizationMessageMap = {
       row: 'dxPivotGrid-rowFields',
       column: 'dxPivotGrid-columnFields',
@@ -62,34 +55,35 @@ class FieldsArea extends AreaItem {
       .attr('aria-label', localizationMessage.format(localizationMessageMap[this._area]));
   }
 
-  isVisible() {
-    return !!this.option('fieldPanel.visible') && this.option(`fieldPanel.show${capitalize(this._area)}Fields`);
+  public isVisible(): boolean {
+    return !!this.option('fieldPanel.visible') && !!this.option(`fieldPanel.show${capitalize(this._area)}Fields`);
   }
 
-  _renderButton(element) {
-    const that = this;
+  private _renderButton(element: dxElementWrapper): void {
     const container = $('<td>').appendTo($('<tr>').appendTo(element));
-    const button = that.component._createComponent($(DIV).appendTo(container), Button, {
+    const button = this.component._createComponent($(DIV).appendTo(container), Button, {
       text: 'Fields',
       icon: 'menu',
       width: 'auto',
-      onClick() {
-        // @ts-expect-error dxPopup is not defined in dxElementWrapper
-        const popup = that.tableElement().find('.dx-fields-area-popup').dxPopup('instance');
-        if (!popup.option('visible')) {
-          popup.show();
+      onClick: (): void => {
+        const popup = this._rowPopup;
+        if (!popup || popup.option('visible')) {
+          return;
         }
+
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises -- fire-and-forget
+        popup.show();
       },
     });
-    button.$element().addClass('dx-pivotgrid-fields-area-hamburger');
+    button.$element().addClass(CLASSES.pivotGridFieldsAreaHamburger);
   }
 
-  _getPopupOptions(row, button): PopupProperties {
+  private _getPopupOptions(row: dxElementWrapper, button: dxElementWrapper): PopupProperties {
     return {
-      contentTemplate() {
-        return $('<div>').append(
-          $('<table>').addClass('dx-area-field-container')
-            .append($('<thead>').addClass('dx-pivotgrid-fields-area-head')
+      contentTemplate(): dxElementWrapper {
+        return $(DIV).append(
+          $('<table>').addClass(FIELD_CHOOSER_CLASSES.area.fieldContainer)
+            .append($('<thead>').addClass(CLASSES.pivotGridFieldsAreaHead)
               .append(row)),
         );
       },
@@ -114,8 +108,8 @@ class FieldsArea extends AreaItem {
     };
   }
 
-  _renderPopup(tableElement, row) {
-    const button = tableElement.find('.dx-button');
+  private _renderPopup(tableElement: dxElementWrapper, row: dxElementWrapper): void {
+    const button = tableElement.find(`.${BUTTON_CLASS}`);
     const popupOptions = this._getPopupOptions(row, button);
     const fieldChooserBase = this.getFieldChooserBase();
 
@@ -129,15 +123,13 @@ class FieldsArea extends AreaItem {
       popupOptions,
     );
 
-    this._rowPopup.$element().addClass('dx-fields-area-popup');
-    this._rowPopup.content()
-      .addClass('dx-pivotgrid-fields-container');
-    this._rowPopup.content().parent()
-      .attr('group', 'row');
+    this._rowPopup.$element().addClass(CLASSES.fieldsAreaPopup);
+    const $content = $(this._rowPopup.content());
+    $content.addClass(FIELD_CHOOSER_CLASSES.pivotGrid.fieldsContainer);
+    $content.parent().attr('group', 'row');
 
-    fieldChooserBase.subscribeToEvents(this._rowPopup.content());
-    // @ts-expect-error renderSortable() ignores the element
-    fieldChooserBase.renderSortable(this._rowPopup.content());
+    fieldChooserBase.subscribeToEvents($content);
+    fieldChooserBase.renderSortable();
   }
 
   private getFieldChooserBase(): FieldChooserBase {
@@ -148,39 +140,42 @@ class FieldsArea extends AreaItem {
     return fieldChooserBase;
   }
 
-  _shouldCreateButton() {
+  private _shouldCreateButton(): boolean {
     return false;
   }
 
-  _renderTableContent(tableElement, data) {
+  // @ts-expect-error the fields area renders fields, not cells
+  protected _renderTableContent(tableElement: dxElementWrapper, data: FieldChooserField[]): void {
     const groupElement = this.groupElement();
     const isVisible = this.isVisible();
     const fieldChooserBase = this.getFieldChooserBase();
-    const head = $('<thead>').addClass('dx-pivotgrid-fields-area-head').appendTo(tableElement);
+    const head = $('<thead>').addClass(CLASSES.pivotGridFieldsAreaHead).appendTo(tableElement);
     const area = this._area;
     const row = $('<tr>');
 
-    groupElement?.toggleClass('dx-hidden', !isVisible);
-    tableElement.addClass('dx-area-field-container');
+    groupElement?.toggleClass(CLASSES.hidden, !isVisible);
+    tableElement.addClass(FIELD_CHOOSER_CLASSES.area.fieldContainer);
 
     if (!isVisible) {
       return;
     }
 
-    each(data, (index: number, field) => {
-      if (field.area === area && field.visible !== false) {
-        const td = $('<td>').append(fieldChooserBase.renderField(field, field.area === 'row'));
-        const indicators = td.find('.dx-column-indicators');
-        if (indicators.length && this._shouldCreateButton()) {
-          indicators.insertAfter((indicators as any).next());
-        }
-        td.appendTo(row);
-        renderGroupConnector(field, data[index + 1], data[index - 1], td);
+    data.forEach((field, index) => {
+      if (field.area !== area || field.visible === false) {
+        return;
       }
+
+      const td = $('<td>').append(fieldChooserBase.renderField(field, field.area === 'row'));
+      const indicators = td.find(`.${COLUMN_STATE_MIXIN_CLASSES.columnIndicators}`);
+      if (indicators.length && this._shouldCreateButton()) {
+        indicators.insertAfter(indicators.next());
+      }
+      td.appendTo(row);
+      renderGroupConnector(field, data[index + 1], data[index - 1], td);
     });
     if (!row.children().length) {
       // @ts-expect-error option() returns unknown for a template path
-      $('<td>').append($(DIV).addClass('dx-empty-area-text').text(this.option(`fieldPanel.texts.${area}FieldArea`))).appendTo(row);
+      $('<td>').append($(DIV).addClass(CLASSES.emptyAreaText).text(this.option(`fieldPanel.texts.${area}FieldArea`))).appendTo(row);
     }
 
     if (this._shouldCreateButton()) {
@@ -191,20 +186,20 @@ class FieldsArea extends AreaItem {
     }
   }
 
-  setGroupWidth(value) {
+  public setGroupWidth(value: number | string): void {
     setWidth(this.groupElement(), value);
   }
 
-  setGroupHeight(value) {
+  public setGroupHeight(value: number | string): void {
     setHeight(this.groupElement(), value);
   }
 
-  reset() {
+  public reset(): void {
     super.reset();
     this.groupElement()?.css('marginTop', 0);
   }
 
-  _renderVirtualContent() {}
+  protected _renderVirtualContent(): void {}
 }
 
 export default { FieldsArea };
