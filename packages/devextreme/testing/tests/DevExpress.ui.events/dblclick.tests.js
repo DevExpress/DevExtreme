@@ -119,3 +119,53 @@ QUnit.test('dxdblclick should not be fired for the mixed (real and triggered) cl
         .start({ clock: 1111 })
         .click();
 });
+
+QUnit.module('removed first click target', {
+    beforeEach: function() {
+        this.clock = sinon.useFakeTimers(10000);
+    },
+    afterEach: function() {
+        this.clock.tick(600);
+        this.clock.restore();
+    }
+});
+
+const nativeClick = (selector, detail) => $(selector).trigger($.Event($.Event('click'), { detail, which: 1 }));
+
+QUnit.test('dxdblclick should not be fired if the first clicked element was removed and the browser counts the second click as a single one (T1338452)', function(assert) {
+    const handler = sinon.stub();
+    $('#container').on(dblclickEvent.name, handler);
+
+    nativeClick('#element', 1);
+    $('#element').remove();
+    nativeClick('#otherElement', 1);
+
+    assert.strictEqual(handler.callCount, 0);
+});
+
+QUnit.test('dxdblclick should be fired on the second clicked element if the first clicked element was removed and the browser counts a double click (T1338452)', function(assert) {
+    const handler = sinon.stub();
+    $('#otherElement').on(dblclickEvent.name, handler);
+
+    nativeClick('#element', 1);
+    $('#element').remove();
+    nativeClick('#otherElement', 2);
+
+    assert.strictEqual(handler.callCount, 1);
+    assert.strictEqual(handler.getCall(0).args[0].target, $('#otherElement').get(0));
+});
+
+QUnit.test('dxdblclick should pair the next click with the second one if the first clicked element was removed (T1338452)', function(assert) {
+    const handler = sinon.stub();
+    $('#otherElement').on(dblclickEvent.name, handler);
+
+    pointerMock($('#element')).click();
+    $('#element').remove();
+    pointerMock($('#otherElement')).click();
+
+    assert.strictEqual(handler.callCount, 0);
+
+    pointerMock($('#otherElement')).click();
+
+    assert.strictEqual(handler.callCount, 1);
+});
