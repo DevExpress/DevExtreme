@@ -2049,6 +2049,8 @@ class PivotGrid extends Widget<PivotGridProperties> {
       virtualColumnWidth: scrollingOptions.virtualColumnWidth,
       itemWidths: resultWidths,
       itemHeights: resultHeights,
+      rowCount: resultHeights.length,
+      columnCount: resultWidths.length,
       viewportWidth: groupWidth,
       viewportHeight: hasHeight ? groupHeight : getOuterHeight(window),
     });
