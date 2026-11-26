@@ -417,8 +417,6 @@ jobs:
           - { STRATEGY: accessibility, THEME: material.blue.dark,  CONSTEL: jquery }
           - { STRATEGY: accessibility, THEME: fluent.blue.dark,    CONSTEL: jquery }
           - { STRATEGY: accessibility, THEME: fluent-next.blue.dark, CONSTEL: jquery }
-    env:
-      ACCESSIBILITY_TESTCAFE_REPORT_PATH: "accessibility_testcafe_report"
 
     runs-on: ${{ github.event_name == 'merge_group' && 'devextreme-shr2-ondemand' || 'devextreme-shr2' }}
     name: ${{ matrix.CONSTEL }}-${{ matrix.STRATEGY }}-${{ matrix.THEME }}
@@ -500,46 +498,9 @@ jobs:
       if: contains(matrix.THEME, 'material')
       run: fc-cache -f > /dev/null 2>&1
 
-    # The accessibility checks still run on TestCafe; the screenshots run on Playwright, which starts its own server.
-    - name: Run Web Server
-      if: matrix.STRATEGY == 'accessibility'
-      run: python -m http.server 8080 &
-
-    - name: Set Chrome flags
-      if: matrix.STRATEGY == 'accessibility'
-      id: chrome-flags
-      run: |
-        BASE_FLAGS="chrome:headless --window-size=1200,800 --disable-gpu --no-sandbox --disable-dev-shm-usage --disable-partial-raster --disable-skia-runtime-opts --run-all-compositor-stages-before-draw --disable-new-content-rendering-timeout --disable-threaded-animation --disable-threaded-scrolling --disable-checker-imaging --disable-image-animation-resync --use-gl=swiftshader --disable-features=PaintHolding --js-flags=--random-seed=2147483647"
-
-        # For Material theme, enable better font rendering to avoid instability
-        if [[ "${{ matrix.THEME }}" != *"material"* ]]; then
-          BASE_FLAGS="$BASE_FLAGS --font-render-hinting=none --disable-font-subpixel-positioning"
-        fi
-
-        echo "flags=$BASE_FLAGS" >> $GITHUB_OUTPUT
-
-    - name: Run TestCafe tests (jQuery)
-      if: matrix.STRATEGY == 'accessibility'
-      timeout-minutes: 12
-      shell: bash
-      working-directory: apps/demos
-      env:
-        NODE_OPTIONS: --max-old-space-size=8192
-        STRATEGY: ${{ matrix.STRATEGY }}
-        CHANGEDFILEINFOSPATH: changed-files.json
-        BROWSERS: ${{ steps.chrome-flags.outputs.flags }}
-        #DEBUG: hammerhead:*,testcafe:*
-        CONCURRENCY: 4
-        CONSTEL: ${{ matrix.CONSTEL }}
-        THEME: ${{ matrix.THEME }}
-        # DISABLE_DEMO_TEST_SETTINGS: all # Uncomment to ignore all the visualtestrc.json settings
-        # DISABLE_DEMO_TEST_SETTINGS: ignore # Uncomment to ignore the `ignore` field
-        CI_ENV: true # The `ignore` field in the visualtestrc.json should be disabled when running test locally
-      run: pnpm exec nx test-testcafe
-
     - name: Set Playwright artifact name
-      if: ${{ !cancelled() && matrix.STRATEGY == 'screenshots' }}
-      run: echo "PLAYWRIGHT_JOB_NAME=$(echo "${{ matrix.CONSTEL }}-${{ matrix.THEME }}" | tr '/' '-')" >> $GITHUB_ENV
+      if: ${{ !cancelled() }}
+      run: echo "PLAYWRIGHT_JOB_NAME=$(echo "${{ matrix.CONSTEL }}-${{ matrix.STRATEGY }}-${{ matrix.THEME }}" | tr '/' '-')" >> $GITHUB_ENV
 
     - name: Run Playwright tests (jQuery)
       if: ${{ !cancelled() && matrix.STRATEGY == 'screenshots' }}
@@ -556,19 +517,20 @@ jobs:
         PLAYWRIGHT_BLOB_OUTPUT_NAME: report-${{ env.PLAYWRIGHT_JOB_NAME }}.zip
       run: pnpm run test-playwright
 
-    - name: Show accessibility warnings
+    - name: Run Playwright accessibility tests (jQuery)
       if: matrix.STRATEGY == 'accessibility'
+      timeout-minutes: 10
       working-directory: apps/demos
-      run: |
-        if [ -f "$ACCESSIBILITY_TESTCAFE_REPORT_PATH" ]; then
-          message=$(cat $ACCESSIBILITY_TESTCAFE_REPORT_PATH)
-          echo "::warning ::$message"
-        else
-          echo "Accessibility report not found. Skipping warning generation."
-        fi
+      env:
+        NODE_OPTIONS: --max-old-space-size=8192
+        CONCURRENCY: 4
+        CONSTEL: ${{ matrix.CONSTEL }}
+        THEME: ${{ matrix.THEME }}
+        PLAYWRIGHT_BLOB_OUTPUT_NAME: report-${{ env.PLAYWRIGHT_JOB_NAME }}.zip
+      run: pnpm run test-playwright:accessibility
 
     - name: Upload Playwright blob report
-      if: failure() && matrix.STRATEGY == 'screenshots'
+      if: failure()
       uses: actions/upload-artifact@v7
       with:
         name: playwright-blob-${{ env.PLAYWRIGHT_JOB_NAME }}
@@ -614,7 +576,7 @@ jobs:
       run: echo "JOB_NAME=$(echo "${{ matrix.CONSTEL }}-${{ matrix.THEME }}" | tr '/' '-')" >> $GITHUB_ENV
 
     - name: Copy accessibility report
-      if: matrix.STRATEGY == 'accessibility'
+      if: always() && matrix.STRATEGY == 'accessibility'
       uses: actions/upload-artifact@v7
       with:
         name: accessibility-reports-${{ env.JOB_NAME }}-${{ matrix.THEME }}

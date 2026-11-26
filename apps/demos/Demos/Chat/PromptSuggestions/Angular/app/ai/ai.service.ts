@@ -32,6 +32,6 @@ export class AiService {
     const response = await this.chatService.chat.completions.create(params, { maxRetries: 0 });
     const data = { choices: response.choices };
 
-    return data.choices[0].message?.content;
+    return data.choices[0].message?.content ?? '';
   }
 }

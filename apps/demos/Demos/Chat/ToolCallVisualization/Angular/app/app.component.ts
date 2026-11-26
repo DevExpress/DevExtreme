@@ -56,14 +56,16 @@ export class AppComponent {
     loadMessages(this.appService.getDictionary());
   }
 
-  toggleDisabledState(disabled: boolean, event = undefined) {
+  toggleDisabledState(disabled: boolean, event?: DxChatTypes.MessageEnteredEvent['event']) {
+    const target = event?.target as HTMLElement | undefined;
+
     this.isDisabled.set(disabled);
     this.clearButtonOptions.update((options) => ({ ...options, disabled }));
 
     if (disabled) {
-      event?.target.blur();
+      target?.blur();
     } else {
-      afterNextRender(() => event?.target.focus(), { injector: this.injector });
+      afterNextRender(() => target?.focus(), { injector: this.injector });
     }
   }
 

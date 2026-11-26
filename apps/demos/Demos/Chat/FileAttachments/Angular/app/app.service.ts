@@ -64,7 +64,7 @@ export class AppService {
     load: () => this.messages,
     insert: (message) => {
       this.messages.push(message);
-      return message;
+      return Promise.resolve(message);
     },
   });
 
