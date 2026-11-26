@@ -15,6 +15,7 @@ const CLASS = {
   suggestions: 'dx-chat-suggestions',
   button: 'dx-button',
   dialogWrapper: 'dx-dialog-wrapper',
+  overlayContent: 'dx-overlay-content',
 };
 
 // "element" is the popup's wrapper, which renders in the body while the popup is shown. The chat
@@ -34,6 +35,11 @@ export default class AIAssistantChat extends Popup {
 
   public getWrapper(): Locator {
     return this.element;
+  }
+
+  // The chat holds overlays of its own (the message list's load panel).
+  public getContent(): Locator {
+    return this.element.locator(`:scope > .${CLASS.overlayContent}`);
   }
 
   public getChat(): Chat {
