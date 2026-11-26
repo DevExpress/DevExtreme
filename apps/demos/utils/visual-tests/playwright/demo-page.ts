@@ -27,13 +27,14 @@ const MOCKDATE_SOURCE = readFileSync(require.resolve('mockdate'), 'utf8');
 const TEST_UTILS_SOURCE = readFileSync(join(INJECT_DIR, 'test-utils.js'), 'utf8');
 const TEST_STYLES = readFileSync(join(INJECT_DIR, 'test-styles.css'), 'utf8');
 
-// The test styles go first in <head>, so the styles of a demo still override them.
-const addTestStyles = (css: string): void => {
+// Adds a style to <head> as soon as it exists. The test styles go first, so the styles of a demo
+// still override them; a style for one demo goes last, so it overrides the demo.
+export const addStyles = (css: string, position: 'prepend' | 'append'): void => {
   const add = (): void => {
     const style = document.createElement('style');
 
     style.textContent = css;
-    document.head.prepend(style);
+    document.head[position](style);
   };
 
   if (document.head) {
@@ -222,7 +223,7 @@ const getInitScript = (
   `(function () { ${MOCKDATE_SOURCE} }).call(window);`,
   testGlobals ?? '',
   `(function () { ${TEST_UTILS_SOURCE} })();`,
-  `(${addTestStyles.toString()})(${JSON.stringify(TEST_STYLES)});`,
+  `(${addStyles.toString()})(${JSON.stringify(TEST_STYLES)}, 'prepend');`,
   `(${collectConsoleMessages.toString()})();`,
   `(${trackPageSettling.toString()})();`,
   `(${disableVizAnimation.toString()})(${JSON.stringify(vendor)}, ${JSON.stringify(Object.values(VIZ_WIDGETS))});`,
