@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-export class Home {
+export interface Home {
   ID: string;
 
   Address: string;

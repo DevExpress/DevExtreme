@@ -46,7 +46,7 @@ const images: Image[] = [
 
 @Injectable()
 export class Service {
-  getImages() {
+  getImages(): Image[] {
     return images;
   }
 }

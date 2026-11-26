@@ -50,7 +50,7 @@ export class AppComponent implements AfterViewInit {
 
   readonly content = signal(inject(Service).getContent());
 
-  private updateContentTimer: unknown;
+  private updateContentTimer: ReturnType<typeof setTimeout> | undefined;
 
   readonly scrollByContent = signal(true);
 
@@ -60,38 +60,38 @@ export class AppComponent implements AfterViewInit {
 
   readonly pullDown = signal(false);
 
-  readonly useNative = signal<boolean>(undefined);
+  readonly useNative = signal(false);
 
-  ngAfterViewInit() {
+  ngAfterViewInit(): void {
     this.scrollView().instance.option('onReachBottom', this.updateBottomContent);
-    this.useNative.set(this.scrollView().instance.option('useNative'));
+    this.useNative.set(this.scrollView().instance.option('useNative') ?? false);
   }
 
-  useNativeChanged = (data: DxCheckBoxTypes.ValueChangedEvent) => {
+  useNativeChanged = (data: DxCheckBoxTypes.ValueChangedEvent): void => {
     this.scrollView().instance.option('useNative', data.value);
     if (data.value && this.scrollbarMode() === 'never') {
       this.scrollbarMode.set('onScroll');
     }
   };
 
-  valueChanged = (data: DxCheckBoxTypes.ValueChangedEvent) => {
-    this.scrollView().instance.option('onReachBottom', data.value ? this.updateBottomContent : null);
+  valueChanged = (data: DxCheckBoxTypes.ValueChangedEvent): void => {
+    this.scrollView().instance.option('onReachBottom', data.value ? this.updateBottomContent : undefined);
   };
 
-  updateContent = (args: DxScrollViewTypes.PullDownEvent | DxScrollViewTypes.ReachBottomEvent, eventName: string) => {
+  updateContent = (args: DxScrollViewTypes.PullDownEvent | DxScrollViewTypes.ReachBottomEvent, eventName: string): void => {
     const updateContentText = `<br /><div>Content has been updated on the ${eventName} event.</div><br />`;
-    if (this.updateContentTimer) { clearTimeout(this.updateContentTimer as number); }
+    if (this.updateContentTimer) { clearTimeout(this.updateContentTimer); }
     this.updateContentTimer = setTimeout(() => {
       this.content.update((content) => (eventName === 'PullDown' ? updateContentText + content : content + updateContentText));
       args.component.release(false);
     }, 500);
   };
 
-  updateTopContent = (e: DxScrollViewTypes.PullDownEvent) => {
+  updateTopContent = (e: DxScrollViewTypes.PullDownEvent): void => {
     this.updateContent(e, 'PullDown');
   };
 
-  updateBottomContent = (e: DxScrollViewTypes.ReachBottomEvent) => {
+  updateBottomContent = (e: DxScrollViewTypes.ReachBottomEvent): void => {
     this.updateContent(e, 'ReachBottom');
   };
 }
