@@ -6,7 +6,7 @@ import type { HorizontalHeadersArea, VerticalHeadersArea } from '@ts/grids/pivot
 import type { PivotGrid } from '@ts/grids/pivot_grid/m_widget';
 import type { PivotGridField } from '@ts/grids/pivot_grid/types';
 
-import type { DataProvider } from './m_export';
+import type { DataProvider } from './export';
 
 export interface PivotGridExportItem extends ExcelPivotGridCell {
   colspan?: number;

@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import { DataProvider } from '__internal/grids/pivot_grid/export/m_export';
+import { DataProvider } from '__internal/grids/pivot_grid/export/export';
 import { Deferred } from 'core/utils/deferred';
 import dateLocalization from 'common/core/localization/date';
 
