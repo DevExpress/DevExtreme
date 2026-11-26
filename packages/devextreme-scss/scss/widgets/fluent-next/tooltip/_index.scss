@@ -12,6 +12,7 @@
     color: var(--dx-tooltip-content);
     border: var(--dx-tooltip-overlay-content-border);
     border-radius: var(--dx-tooltip-border-radius);
+    box-shadow: var(--dx-tooltip-box-shadow);
   }
 
   &.dx-popover-wrapper .dx-popover-arrow {
