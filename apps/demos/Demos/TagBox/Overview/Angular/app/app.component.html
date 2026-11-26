@@ -144,18 +144,19 @@
         <dx-popover [target]="target()" [visible]="visible()">
           <div *dxTemplate="let data of 'content'">
             @if (product(); as currentProduct) {
-            <p>
-              <b>Name: </b><span>{{ currentProduct.Name }}</span>
-            </p>
-            <p>
-              <b>Price: </b><span>{{ currentProduct.Price }}</span>
-            </p>
-            <p>
-              <b>In-stock: </b><span>{{ currentProduct.Current_Inventory }}</span>
-            </p>
-            <p>
-              <b>Category: </b><span>{{ currentProduct.Category }}</span>
-            </p>
+              <p>
+                <b>Name: </b><span>{{ currentProduct.Name }}</span>
+              </p>
+              <p>
+                <b>Price: </b><span>{{ currentProduct.Price }}</span>
+              </p>
+              <p>
+                <b>In-stock: </b
+                ><span>{{ currentProduct.Current_Inventory }}</span>
+              </p>
+              <p>
+                <b>Category: </b><span>{{ currentProduct.Category }}</span>
+              </p>
             }
           </div>
         </dx-popover>
