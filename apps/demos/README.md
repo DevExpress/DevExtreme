@@ -91,7 +91,7 @@ Build all Angular demos at once: `DEMO_BUNDLE_FILTER` rebuilds some of them, and
 ```
 cd apps/demos
 pnpm run test-playwright --ignore-snapshots                # every jQuery demo, fluent.blue.light
-pnpm run test-playwright --ignore-snapshots --grep DataGrid-   # demos of one component
+pnpm run test-playwright --ignore-snapshots --grep DataGrid-   # demos of one component and their widget tests
 THEME=material.blue.light pnpm run test-playwright --ignore-snapshots
 CONSTEL="jquery(1/3)" CONCURRENCY=4 pnpm run test-playwright --ignore-snapshots   # one CI shard
 CONSTEL=react pnpm run test-playwright --ignore-snapshots    # React demos; likewise vue, angular
@@ -99,7 +99,7 @@ CONSTEL=react pnpm run test-playwright --ignore-snapshots    # React demos; like
 
 Everything after the script name goes to `playwright test`, so `--headed`, `--ui` and `--repeat-each` work too.
 
-A test fails on a console error or warning outside `testing/known-warnings.js` and on an uncaught error in the page.
+A demo page test fails on a console error or warning outside `testing/known-warnings.js`; both demo page and widget tests fail on an uncaught error in the page.
 
 The page is shot when it has settled: no request is pending, no script animation is running and no load panel is on screen. Charts, gauges and range selectors are drawn without their start-up animation: the tests switch it off through the default options of these widgets, so a demo that turns the animation on itself still animates. React and Vue demos expose no `window.DevExpress`, so the tests take the widget classes from the shared vendor bundle; an Angular demo bundle hands them over itself.
 
@@ -128,7 +128,7 @@ describeManualTest('SelectBox', 'Grouping', { width: 900, height: 600 }, () => {
 
 Playwright acts as soon as the element is ready, where TestCafe was slow enough for a widget to finish what the previous action started: wait for the state the next step needs (an element, a text, `waitForSettled`), not for a time. Playwright also refuses to click an element that something else covers; TestCafe clicked the point and hit whatever was on top. Pass `force: true` only where a test relies on that, with a comment why.
 
-Select the widget tests by their file path: `--grep widgets/` runs them all, `--grep widgets/datagrid/` those of a component.
+Select the widget tests by their file path: `--grep widgets/` runs them all, `--grep widgets/datagrid/` those of a component. A `<Product>-<Demo>` name selects the demo page test and the widget tests of that demo together.
 
 ### Etalons
 
@@ -153,7 +153,7 @@ for theme in fluent.blue.light material.blue.light; do
 done
 ```
 
-`--grep` takes test names, `<Product>-<Demo>`; without it every jQuery demo runs, about five minutes per theme. Record etalons from the jQuery demos only; check a framework against them with `CONSTEL=react` (or `vue`, `angular`) and without `--update-snapshots`. The first run builds the image and takes a few minutes more. The second loop compares as CI does: exactly.
+`--grep` takes test names, `<Product>-<Demo>`, which also select the widget tests of that demo; without it every jQuery demo and widget test runs, about ten minutes per theme. Record etalons from the jQuery demos only; check a framework against them with `CONSTEL=react` (or `vue`, `angular`) and without `--update-snapshots`. The first run builds the image and takes a few minutes more. The second loop compares as CI does: exactly.
 
 The repository is mounted case-insensitively on macOS: a file that a demo requests in the wrong case loads in the container and is missing on CI.
 

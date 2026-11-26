@@ -1,4 +1,5 @@
 import { existsSync, readFileSync } from 'fs';
+import { glob } from 'glob';
 import { join } from 'path';
 import { expect, test } from '@playwright/test';
 import type { Locator, Page } from '@playwright/test';
@@ -25,7 +26,14 @@ const DEMOS_ROOT = join(__dirname, '..', '..', '..', 'Demos');
 // Tests are selected by name with --grep, so the command line holds no demo masks.
 updateConfig({ explicitTestArgs: [], verbose: false });
 
-const framework: string = FRAMEWORKS[settings.targetFramework ?? 'jquery'];
+const framework: string = FRAMEWORKS[(settings.targetFramework ?? 'jquery').toLowerCase()];
+
+if (!framework) {
+  throw new Error(`Unknown framework in CONSTEL: ${settings.targetFramework}`);
+}
+
+// The framework of the job: jQuery, React, Vue or Angular.
+export const currentFramework = framework;
 
 const testGlobalsPath = getTestGlobalsScriptPath(framework);
 const testGlobals = testGlobalsPath ? readFileSync(testGlobalsPath, 'utf8') : null;
@@ -69,11 +77,18 @@ const appendDemoStyles = (css: string): void => {
   observer.observe(document, { childList: true, subtree: true });
 };
 
-// A job takes a part of the tests by a hash of the demo, so the split does not depend on the
-// order in which a worker loads the test files.
-const getShardIndex = (name: string): number => Array
-  .from(name)
-  .reduce((hash, char) => (Math.imul(hash, 31) + char.charCodeAt(0)) | 0, 7) >>> 0;
+// A job takes a part of the demos by their place in the sorted list of all widget test demos, so
+// the split does not depend on the order in which a worker loads the test files.
+const DESCRIBE_RE = /describeManualTest\(\s*'(\w+)',\s*'(\w+)'/g;
+
+const manualTestDemos = Array.from(new Set(glob
+  .sync('testing/widgets/**/*.spec.ts', { cwd: join(DEMOS_ROOT, '..') })
+  .flatMap((file) => Array.from(
+    readFileSync(join(DEMOS_ROOT, '..', file), 'utf8').matchAll(DESCRIBE_RE),
+    ([, widget, demo]) => `${widget}-${demo}`,
+  )))).sort();
+
+const getShardIndex = (name: string): number => manualTestDemos.indexOf(name) + 1;
 
 // TestCafe waited for the requests an action had started; a screenshot here waits until the page
 // has settled: no pending request, no script animation, no visible load panel.
@@ -118,6 +133,11 @@ export function describeManualTest(
 ): void {
   const name = `${widget}-${demo}`;
 
+  // A demo without a version in this framework is skipped; a misspelt one must not be.
+  if (!existsSync(join(DEMOS_ROOT, widget, demo))) {
+    throw new Error(`There is no demo Demos/${widget}/${demo}`);
+  }
+
   if (!existsSync(join(DEMOS_ROOT, widget, demo, framework))
     || !shouldRunTestAtIndex(getShardIndex(name))
     || (settings.explicitTests && !shouldRunTestExplicitlyInternal(framework, widget, demo))) {
@@ -126,10 +146,20 @@ export function describeManualTest(
 
   test.describe(framework, () => {
     test.describe(name, () => {
+      let pageErrors: string[] = [];
+
       test.use({ viewport });
 
       test.beforeEach(async ({ page }) => {
+        pageErrors = [];
+        page.on('pageerror', (error) => pageErrors.push(error.stack ?? error.message));
+
         await openManualDemo(page, widget, demo);
+      });
+
+      // TestCafe failed a test on an uncaught error in the page.
+      test.afterEach(() => {
+        expect(pageErrors, 'uncaught errors in the page').toEqual([]);
       });
 
       body();
@@ -195,10 +225,15 @@ export async function mockDate(page: Page, date: Date): Promise<void> {
 // finished re-rendering before the next action; Playwright may act in the middle of it.
 export async function waitForSettled(page: Page): Promise<void> {
   await settlers.get(page)?.();
+
+  // An overlay shows and hides with a CSS transition, which no animation frame reports.
+  await page.waitForFunction(() => document.getAnimations().every((animation) => animation.playState !== 'running'
+    || animation.effect?.getTiming().iterations === Infinity));
 }
 
 // Compares the viewport, or the given element, with "<name> (<theme>).png" in the etalons folder
-// next to the test. `mask` covers elements whose look is not stable, with a reason in the test.
+// next to the test. `mask` covers elements whose look is not stable, with a reason in the test. A
+// difference does not stop the test, so one run shows every step that differs, as in TestCafe.
 export async function testScreenshot(
   page: Page,
   screenshotName: string,
@@ -211,18 +246,18 @@ export async function testScreenshot(
   await waitForSettled(page);
 
   if (!locator) {
-    await expect(page).toHaveScreenshot([name], { mask });
+    await expect.soft(page).toHaveScreenshot([name], { mask });
     return;
   }
 
   const clip = await clipToViewport(page, locator);
 
   if (clip) {
-    await expect(page).toHaveScreenshot([name], { clip, mask });
+    await expect.soft(page).toHaveScreenshot([name], { clip, mask });
     return;
   }
 
-  await expect(locator).toHaveScreenshot([name], { mask });
+  await expect.soft(locator).toHaveScreenshot([name], { mask });
 }
 
 interface DragOptions {

@@ -59,22 +59,6 @@ describeManualTest('DataGrid', 'Filtering', { width: 900, height: 600 }, () => {
 
     await testScreenshot(page, 'datagrid_filtering_4_desktop.png');
 
-    // Selected operation does not contain twice(T195965)
-    /* await t
-        .hover(
-          $('.dx-datagrid-filter-row')
-          .find('.dx-menu-horizontal')
-          .nth(4)')
-          .find('.dx-menu-item')
-          .nth(0)
-        )
-        .expect($('.dx-overlay-wrapper').find('.dx-menu-item').count).eql(7);
-
-    await t
-        .hover($('.dx-overlay-wrapper').find('.dx-menu-item').nth(1))
-        .click($('.dx-overlay-wrapper').find('.dx-menu-item').nth(1))
-        .expect($('.dx-overlay-wrapper').exists).notOk(); */
-
     await filterMenuItem(4).hover();
     await expect(overlayMenuItems).toHaveCount(7);
 

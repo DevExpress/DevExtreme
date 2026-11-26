@@ -50,7 +50,7 @@ describeManualTest('Stepper', 'FormIntegration', { width: 900, height: 800 }, ()
     await page.locator(`#${PREV_BUTTON_ID}`).click();
     const additionalRequestInput = page.locator(`#${ADDITIONAL_REQUEST_ID} .${INPUT_CLASS}`).filter({ visible: true }).first();
     await additionalRequestInput.click();
-    await additionalRequestInput.pressSequentially('No smoking room, please.png');
+    await additionalRequestInput.pressSequentially('No smoking room, please');
     await nextButton.click();
     await page.locator(`.${MULTIVIEW_ITEM_CLASS}`).nth(4).locator(':scope > *').first()
       .evaluate((element, [dx, dy]) => element.scrollBy(dx, dy), [0, 500]);
