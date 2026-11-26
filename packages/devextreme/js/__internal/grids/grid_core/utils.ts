@@ -276,7 +276,7 @@ export default {
   },
 
   renderLoadPanel(
-    $element: dxElementWrapper,
+    $element: dxElementWrapper | undefined,
     $container: dxElementWrapper,
     isLocalStore?: boolean,
   ): void {
