@@ -165,8 +165,6 @@ class PivotGrid extends Widget {
 
   _fieldChooserPopup: any;
 
-  _fieldChooser: any;
-
   _fieldChooserBase: any;
 
   _columnsArea: any;
@@ -185,13 +183,9 @@ class PivotGrid extends Widget {
 
   _testResultHeights: any;
 
-  showFilterFields: any;
-
   __scrollBarUseNative: any;
 
   __scrollBarWidth: any;
-
-  _createActionByOption: any;
 
   $fieldChooserButton?: dxElementWrapper;
 
