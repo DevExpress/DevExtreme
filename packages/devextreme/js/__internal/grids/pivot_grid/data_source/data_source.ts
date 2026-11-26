@@ -40,7 +40,7 @@ import {
   getFieldsDataType,
   setFieldProperty,
 } from '../widget_utils';
-import xmlaStore from '../xmla_store/m_xmla_store';
+import xmlaStore from '../xmla_store/xmla_store';
 import { sort } from './data_source_utils';
 import type {
   DataSourceData,

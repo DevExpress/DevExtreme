@@ -284,12 +284,16 @@ class XmlaStore {
             ? `${allMember},${dimensions[expandIndex].dataField}`
             : getAllMembers(dimensions[expandIndex]);
         } else if (hierarchyName) {
+          // eslint-disable-next-line max-depth
           if (isLastDimensionInGroup || i === expandAllIndex) {
+            // eslint-disable-next-line max-depth
             if (prevHierarchyName === hierarchyName) {
               let member = preparePathValue(slicePath[slicePath.length - 1]);
+              // eslint-disable-next-line max-depth
               if (slicePath.length) {
                 prevDimension = dimensions[slicePath.length - 1];
               }
+              // eslint-disable-next-line max-depth
               if (prevDimension?.hierarchyName !== hierarchyName) {
                 prevDimension = dimensions[i - 1];
                 member = '';
