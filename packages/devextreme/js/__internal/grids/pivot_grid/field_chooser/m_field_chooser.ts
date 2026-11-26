@@ -18,7 +18,7 @@ import { getFieldsHotkeysA11yLabel } from './a11y';
 import {
   ATTRIBUTES, CLASSES, FIELD_DATA_KEY, ICONS,
 } from './const';
-import { FieldChooserBase } from './m_field_chooser_base';
+import { FieldChooserBase } from './field_chooser_base';
 
 const DIV = '<div>';
 const hasWindow = hasWindowFn();
