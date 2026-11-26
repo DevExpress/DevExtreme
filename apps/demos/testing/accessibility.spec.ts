@@ -21,8 +21,8 @@ const isColorContrastOnly = THEME.startsWith('fluent-next');
 
 const DEMOS_ROOT = join(__dirname, '..');
 
-const getIgnoredRules = (testName) => {
-  const ignoredRules = [];
+const getIgnoredRules = (testName: string): string[] => {
+  const ignoredRules: string[] = [];
 
   if ((isMaterial() || isFluent())
     && [
@@ -36,7 +36,7 @@ const getIgnoredRules = (testName) => {
     ignoredRules.push('color-contrast');
   }
 
-  const specificRules = {
+  const specificRules: Record<string, string[]> = {
     'Diagram-Adaptability': ['aria-dialog-name', 'label'],
     'Diagram-AdvancedDataBinding': ['aria-dialog-name', 'label'],
     'Diagram-Containers': ['aria-dialog-name', 'label'],
