@@ -5,7 +5,7 @@ import { setTabIndex } from '@js/ui/shared/accessibility';
 import type { ScrollOffset } from '@ts/core/utils/scroll';
 import supportUtils from '@ts/core/utils/support';
 
-import { AreaItem } from '../area_item/m_area_item';
+import { AreaItem } from '../area_item/area_item';
 import type {
   AreaItemCell,
   AreaItemStyleOptions,

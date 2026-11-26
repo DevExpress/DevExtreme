@@ -11,7 +11,7 @@ import $ from '@js/core/renderer';
 
 import type { AreaItemCell, AreaItemComponent } from '../area_item/types';
 import { FAKE_TABLE_CLASS } from '../keyboard_navigation/const';
-import { DataArea } from './m_data_area';
+import { DataArea } from './data_area';
 
 const createComponent = (options: Record<string, unknown> = {}): AreaItemComponent => ({
   option: (optionName?: string): unknown => {

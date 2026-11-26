@@ -26,7 +26,7 @@ if (!/localhost/.test(document.location.host)) {
 export class AppComponent {
   private readonly employee = inject(Service).getEmployee();
 
-  readonly employeeInfo = signal<Partial<Employee>>({});
+  readonly employeeInfo = signal<Employee | null>(null);
 
   readonly loadingVisible = signal(false);
 
@@ -38,12 +38,12 @@ export class AppComponent {
     }, 3000);
   }
 
-  onHidden() {
+  onHidden(): void {
     this.employeeInfo.set(this.employee);
   }
 
-  showLoadPanel() {
-    this.employeeInfo.set({});
+  showLoadPanel(): void {
+    this.employeeInfo.set(null);
     this.loadingVisible.set(true);
   }
 }

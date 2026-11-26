@@ -5,6 +5,7 @@ import {
 import { CurrencyPipe } from '@angular/common';
 import { DxTileViewModule, DxButtonModule, DxListModule } from 'devextreme-angular';
 
+import type { DxListTypes } from 'devextreme-angular/ui/list';
 import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -31,7 +32,7 @@ export class AppComponent {
 
   readonly currentHotel = signal(this.service.getFirstHotel());
 
-  listSelectionChanged(e) {
+  listSelectionChanged(e: DxListTypes.SelectionChangedEvent) {
     this.currentHotel.set(e.addedItems[0]);
   }
 }

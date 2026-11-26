@@ -36,7 +36,7 @@ export class AppComponent {
 
   private intervalId?: number;
 
-  onButtonClick() {
+  onButtonClick(): void {
     if (this.inProgress) {
       this.buttonText.set('Continue progress');
       clearInterval(this.intervalId);
@@ -52,7 +52,7 @@ export class AppComponent {
     this.inProgress = !this.inProgress;
   }
 
-  private timer() {
+  private timer(): void {
     this.seconds.update((seconds) => seconds - 1);
     if (this.seconds() === 0) {
       this.buttonText.set('Restart progress');
@@ -61,7 +61,7 @@ export class AppComponent {
     }
   }
 
-  format(ratio: number) {
+  format(ratio: number): string {
     return `Loading: ${ratio * 100}%`;
   }
 }
