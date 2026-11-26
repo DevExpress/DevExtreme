@@ -6,7 +6,8 @@ import {
 import { DxNumberBoxModule, DxCheckBoxModule } from 'devextreme-angular';
 import { DataSource, ArrayStore } from 'devextreme-angular/common/data';
 
-import { DxDataGridModule, DxDataGridTypes } from 'devextreme-angular/ui/data-grid';
+import { DxDataGridModule } from 'devextreme-angular/ui/data-grid';
+import type { DxDataGridTypes } from 'devextreme-angular/ui/data-grid';
 import { Service } from './app.service';
 import type { Task } from './app.service';
 

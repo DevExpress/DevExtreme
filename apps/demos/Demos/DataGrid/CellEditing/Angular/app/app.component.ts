@@ -4,7 +4,8 @@ import {
 } from '@angular/core';
 import { DxButtonModule } from 'devextreme-angular';
 import { ArrayStore } from 'devextreme-angular/common/data';
-import { DxDataGridModule, DxDataGridComponent, DxDataGridTypes } from 'devextreme-angular/ui/data-grid';
+import { DxDataGridModule, DxDataGridComponent } from 'devextreme-angular/ui/data-grid';
+import type { DxDataGridTypes } from 'devextreme-angular/ui/data-grid';
 import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {

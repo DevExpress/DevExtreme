@@ -4,7 +4,8 @@ import {
 } from '@angular/core';
 import { provideHttpClient, withFetch } from '@angular/common/http';
 import { DxLoadPanelModule } from 'devextreme-angular';
-import { DxDataGridModule, DxDataGridTypes } from 'devextreme-angular/ui/data-grid';
+import { DxDataGridModule } from 'devextreme-angular/ui/data-grid';
+import type { DxDataGridTypes } from 'devextreme-angular/ui/data-grid';
 import { Service } from './app.service';
 import type { Order, Change } from './app.service';
 
