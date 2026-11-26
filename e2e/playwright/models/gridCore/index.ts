@@ -36,6 +36,10 @@ export default abstract class GridCore extends Widget {
     return this.invoke('option', name, ...value);
   }
 
+  public apiColumnOption(id: string, name: string): Promise<unknown> {
+    return this.invoke('columnOption', id, name);
+  }
+
   public getColumnChooser(): ColumnChooser {
     return new ColumnChooser(
       this.body.locator(`.${this.addWidgetPrefix(CLASS.columnChooser)}`),

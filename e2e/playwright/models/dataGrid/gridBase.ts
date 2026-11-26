@@ -14,6 +14,7 @@ import AdaptiveDetailRow from './adaptiveDetailRow';
 import MasterRow from './masterRow';
 import GroupRow from './groupRow';
 import Overlay from './overlay';
+import AIAssistantChat from './aiAssistantChat';
 
 const CLASS = {
   ...CLASS_BASE,
@@ -48,6 +49,9 @@ const CLASS = {
   contextMenu: 'dx-context-menu',
   fieldItemContent: 'dx-field-item-content',
   textEditorInput: 'dx-texteditor-input',
+  aiAssistantButton: 'ai-assistant-button',
+  aiAssistantConfirmDialog: 'ai-assistant-confirm-dialog',
+  aiChat: 'dx-ai-chat',
 };
 
 const E2E_ATTRIBUTES = {
@@ -242,6 +246,18 @@ export default abstract class GridBase extends GridCore {
   // The menu renders its items into an overlay in the body, which carries the grid's class.
   public getContextMenu(): ContextMenu {
     return new ContextMenu(this.page, this.body.locator(`.${CLASS.contextMenu}.${this.addWidgetPrefix()}`));
+  }
+
+  public getAIAssistantButton(): Locator {
+    return this.getHeaderPanel().element.locator(`.${this.addWidgetPrefix(CLASS.aiAssistantButton)}`);
+  }
+
+  public getAIAssistantChat(): AIAssistantChat {
+    return new AIAssistantChat(
+      this.page,
+      this.body.locator(`.${CLASS.overlayWrapper}.${CLASS.aiChat}`),
+      this.addWidgetPrefix(CLASS.aiAssistantConfirmDialog),
+    );
   }
 
   public getToolbar(): Toolbar {
@@ -452,6 +468,10 @@ export default abstract class GridBase extends GridCore {
 
   public apiTotalCount(): Promise<number> {
     return this.invoke('totalCount');
+  }
+
+  public apiState(): Promise<unknown> {
+    return this.invoke('state');
   }
 
   public apiGetVisibleRows(): Promise<VisibleRow[]> {
