@@ -327,7 +327,7 @@
           .dx-link:not(.dx-link-icon) {
             @include dx-command-text-target-sizing(
               buttonSizes.$button-height,
-              calc(buttonSizes.$button-padding-inline + buttonSizes.$button-border-width),
+              buttonSizes.$button-padding-inline,
               max(4px, var(--dx-grid-command-edit-text-margin)),
               var(--dx-grid-link-icon-min-width)
             );

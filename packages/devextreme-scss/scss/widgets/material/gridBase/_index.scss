@@ -263,7 +263,7 @@ $material-grid-base-group-panel-message-line-height: $material-button-text-line-
           .dx-link:not(.dx-link-icon) {
             @include dx-command-text-target-sizing(
               $material-button-height,
-              $material-button-horizontal-padding + $material-base-border-width,
+              $material-button-horizontal-padding,
               max(4px, $material-command-edit-text-margin),
               $material-button-min-width
             );

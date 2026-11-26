@@ -216,7 +216,7 @@ $generic-grid-base-cell-input-height: math.round($generic-base-line-height * $ge
         .dx-link:not(.dx-link-icon) {
           @include dx-command-text-target-sizing(
             $generic-command-edit-icon-target-size,
-            $generic-button-horizontal-padding + $generic-button-border-weight,
+            $generic-button-horizontal-padding,
             $generic-command-edit-text-margin
           );
         }

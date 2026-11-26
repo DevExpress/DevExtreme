@@ -277,7 +277,7 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
           .dx-link:not(.dx-link-icon) {
             @include dx-command-text-target-sizing(
               $fluent-button-height,
-              $fluent-button-horizontal-padding + $fluent-base-border-width,
+              $fluent-button-horizontal-padding,
               max(4px, $fluent-command-edit-text-margin)
             );
           }
