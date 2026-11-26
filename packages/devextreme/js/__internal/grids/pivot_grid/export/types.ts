@@ -2,7 +2,7 @@ import type { HorizontalAlignment } from '@js/common';
 import type { Format } from '@js/common/core/localization';
 import type { ExcelPivotGridCell } from '@js/excel_exporter';
 import type { PivotGridDataType } from '@js/ui/pivot_grid/data_source';
-import type { HorizontalHeadersArea, VerticalHeadersArea } from '@ts/grids/pivot_grid/headers_area/m_headers_area';
+import type { HorizontalHeadersArea, VerticalHeadersArea } from '@ts/grids/pivot_grid/headers_area/headers_area';
 import type { PivotGrid } from '@ts/grids/pivot_grid/m_widget';
 import type { PivotGridField } from '@ts/grids/pivot_grid/types';
 
