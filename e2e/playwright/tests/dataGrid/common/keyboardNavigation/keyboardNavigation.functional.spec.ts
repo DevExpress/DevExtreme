@@ -28,6 +28,8 @@ const SELECTION_CLASS = 'dx-selection';
 // A mouse holds its button down for tens of milliseconds. The grid handles a press partly on a
 // timer, and a release before that timer (Playwright's default click) takes another path.
 const MOUSE_PRESS_DURATION = 50;
+// DevExtreme pairs two clicks within this time into a double click.
+const DOUBLE_CLICK_WINDOW = 300;
 
 const generateData = (rowCount: number, columnCount: number): Record<string, string>[] => {
   const items: Record<string, string>[] = [];
@@ -452,6 +454,10 @@ test.describe('Keyboard Navigation - common', () => {
     await cell01.expectFocusVisible(false);
     await cell11.expectFocusVisible(false);
 
+    // Cell (0, 1) stays in the DOM, so a click within the window still pairs with the click on it,
+    // and the double click below would not start editing (T1338452 covers only a removed cell).
+    // eslint-disable-next-line no-restricted-syntax -- the double-click window is a time
+    await page.waitForTimeout(DOUBLE_CLICK_WINDOW);
     await cell11.element.dblclick();
 
     await cell11.expectEditCell();
