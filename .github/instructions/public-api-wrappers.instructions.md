@@ -8,7 +8,9 @@ The Angular, React, and Vue wrappers are **no longer regenerated** from
 `devextreme-metadata` / `devextreme-internal-tools`. They are maintained by hand (with the
 help of local AI agents). This means **every public API change in a wrapped component's
 `.d.ts` or public `.js` JSDoc must be applied, in the same pull request, to all three
-wrappers**.
+wrappers**. Follow the `devextreme-wrappers` skill
+(`.claude/skills/devextreme-wrappers/SKILL.md`) for the workflow and run its
+`scripts/surface-check.mts` to find options missing from a wrapper.
 
 This file applies to the public API surface: the `.d.ts` files in `js/ui/**` and
 `js/viz/**`, and the public `.js` entry files next to them. Those `.js` files contain only

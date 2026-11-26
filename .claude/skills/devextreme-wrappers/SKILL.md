@@ -7,7 +7,7 @@ description: Keep the hand-maintained Angular, React and Vue wrappers (packages/
 
 The Angular, React and Vue wrappers are **not generated any more**. They are ordinary source files, edited in the same PR as the public API change. No CI job
 compares them with the `.d.ts`: builds and tests pass even when a wrapper is missing an
-option, so `scripts/surface-check.mjs` (below) is what catches a miss.
+option, so `scripts/surface-check.mts` (below) is what catches a miss.
 
 The detailed rules live in `.github/` (Copilot loads them from there too). Open them when a
 step below points to them:
@@ -49,7 +49,7 @@ step below points to them:
    lines in a public `.js`, and description-only JSDoc — say so and stop.
 
 2. **List the change.** Read `git diff <base>` of `packages/devextreme/js/{ui,viz,common}` and
-   run `surface-check.mjs --changed <base>` (or `--all` for a base-class change): it lists
+   run `surface-check.mts --changed <base>` (or `--all` for a base-class change): it lists
    options the `.d.ts` now exposes but the wrappers don't, and the reverse. Retypes, `@fires`,
    narrowed events and nested types don't show there — take them from the diff. Write down each
    item as added / removed / renamed / retyped / hidden / un-hidden, which components it
@@ -116,7 +116,7 @@ options (`@fires`), EDITOR status (Angular) and `@isEditor` (Vue), nested and co
 Comment on the wrappers and the API contract only; don't suggest regenerating the wrappers.
 
 1. Classify the public `.d.ts`/`.js` changes (step 1 above).
-2. Run `surface-check.mjs --changed <base>` (`--all` for a base class). Each failure is a
+2. Run `surface-check.mts --changed <base>` (`--all` for a base class). Each failure is a
    finding; name the missing wrapper(s).
 3. Check what the script can't: type fidelity (Angular types, Vue constructors + `PropType`,
    React narrowed events), React two-way wiring, nested components (including reuses, step 3
@@ -128,12 +128,12 @@ Comment on the wrappers and the API contract only; don't suggest regenerating th
 ## Surface check
 
 ```bash
-node .claude/skills/devextreme-wrappers/scripts/surface-check.mjs <component...>     # e.g. button select-box
-node .claude/skills/devextreme-wrappers/scripts/surface-check.mjs --changed [<base>]  # touched since <base> + uncommitted; default: the branch's upstream
-node .claude/skills/devextreme-wrappers/scripts/surface-check.mjs --all               # every component, ~2 s
+node .claude/skills/devextreme-wrappers/scripts/surface-check.mts <component...>     # e.g. button select-box
+node .claude/skills/devextreme-wrappers/scripts/surface-check.mts --changed [<base>]  # touched since <base> + uncommitted; default: the branch's upstream
+node .claude/skills/devextreme-wrappers/scripts/surface-check.mts --all               # every component, ~2 s
 ```
 
-Run from the repo root; it reads the `.d.ts` **source**, so no build is needed. It compares the
+Run from the repo root with the repo's Node 24, which runs the TypeScript file directly. It reads the `.d.ts` **source**, so no build is needed. It compares the
 top-level surface with the three wrappers:
 
 - `.d.ts` visibility follows the documentation model: `@hidden` / `@hidden false` on members
@@ -159,7 +159,7 @@ cd packages/devextreme && pnpm run regenerate && pnpm run lint-dts
 cd packages/devextreme-react && ../../node_modules/.bin/tsc --noEmit -p tsconfig.json
 cd packages/devextreme-vue   && ../../node_modules/.bin/tsc --noEmit -p tsconfig.json
 pnpm nx build devextreme-angular        # ng-packagr; plain tsc checks nothing here
-node .claude/skills/devextreme-wrappers/scripts/surface-check.mjs <components>
+node .claude/skills/devextreme-wrappers/scripts/surface-check.mts <components>
 grep -rnE "__[A-Za-z_]+__|^//#" <new or edited wrapper files>   # leftover template placeholders
 ```
 
