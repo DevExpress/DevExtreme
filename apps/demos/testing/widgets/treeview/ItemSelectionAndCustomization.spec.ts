@@ -23,11 +23,11 @@ describeManualTest('TreeView', 'ItemSelectionAndCustomization', { width: 900, he
     await testScreenshot(page, 'treeview_disabled_node_selection_mode_never.png');
 
     await rootNodeCheckbox.click();
-    // A mode change while the tree still handles the click leaves it collapsed.
+    // A mode change while the tree still handles the click, or a click while the new mode re-renders
+    // the tree, leaves the tree collapsed.
     await waitForSettled(page);
     await page.locator(`.${OPTION_CLASS} .${SELECTBOX_CLASS}`).nth(2).click();
     await page.locator(`.${SELECTBOX_POPUP_WRAPPER_CLASS} .${LIST_ITEM_CLASS}`).nth(1).click();
-    // The new mode re-renders the tree; a click in the middle of it leaves the tree collapsed.
     await expect(page.locator(`.${SELECTBOX_POPUP_WRAPPER_CLASS} .${LIST_ITEM_CLASS}:visible`)).toHaveCount(0);
     await expect(page.locator('.dx-treeview-node-container-opened')).not.toHaveCount(0);
 
