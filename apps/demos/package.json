@@ -140,6 +140,7 @@
         "lint": "pnpm exec nx run-many -t lint-js lint-demos lint-css lint-html -p devextreme-demos",
         "test-playwright": "playwright test",
         "test-playwright:accessibility": "playwright test --config playwright.accessibility.config.ts",
+        "csp-check": "cross-env CSP=true playwright test",
         "test-testcafe": "ts-node utils/visual-tests/testcafe-runner.ts",
         "build-vendor-bundles": "node utils/server/build-vendor-bundles.js",
         "fix-lint": "prettier --write . && eslint --fix . && stylelint **/*.{css,vue} --fix",

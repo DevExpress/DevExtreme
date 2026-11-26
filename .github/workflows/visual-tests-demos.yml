@@ -944,11 +944,10 @@ jobs:
       working-directory: apps/demos
       env:
         NODE_OPTIONS: --max-old-space-size=8192
-        CSP: 'true'
         CONCURRENCY: 4
         CONSTEL: jquery(${{ matrix.SHARD_INDEX }}/${{ matrix.SHARD_TOTAL }})
         PLAYWRIGHT_BLOB_OUTPUT_NAME: report-${{ env.PLAYWRIGHT_JOB_NAME }}.zip
-      run: pnpm run test-playwright
+      run: pnpm run csp-check
 
     - name: Upload Playwright blob report
       if: failure()
@@ -1061,11 +1060,10 @@ jobs:
       working-directory: apps/demos
       env:
         NODE_OPTIONS: --max-old-space-size=8192
-        CSP: 'true'
         CONCURRENCY: 4
         CONSTEL: ${{ matrix.FRAMEWORK }}(${{ matrix.SHARD_INDEX }}/${{ matrix.SHARD_TOTAL }})
         PLAYWRIGHT_BLOB_OUTPUT_NAME: report-${{ env.PLAYWRIGHT_JOB_NAME }}.zip
-      run: pnpm run test-playwright
+      run: pnpm run csp-check
 
     - name: Upload Playwright blob report
       if: failure()

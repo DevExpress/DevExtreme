@@ -1,5 +1,5 @@
 // The Content Security Policy of the demo pages: a strict base and what each demo, widget or
-// framework needs on top of it. The Playwright CSP run serves the pages with it (serve.js --csp).
+// framework needs on top of it. The CSP run (pnpm run csp-check) serves the pages with it.
 
 const CSP_BASE_DIRECTIVES = {
   'default-src': ["'none'"],
