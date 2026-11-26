@@ -1,17 +1,9 @@
-import { existsSync, readFileSync, rmSync } from 'fs';
+import { readFileSync, rmSync } from 'fs';
 import { join } from 'path';
-import { glob } from 'glob';
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 import type { Page } from '@playwright/test';
-import {
-  FRAMEWORKS,
-  globalReadFrom,
-  settings,
-  shouldRunTestAtIndex,
-  shouldRunTestExplicitly,
-  updateConfig,
-} from '../utils/visual-tests/matrix-test-core';
+import { FRAMEWORKS } from '../utils/visual-tests/matrix-test-core';
 import { isFluent, isMaterial } from '../utils/visual-tests/helpers/theme-utils';
 import { createMdReport } from '../utils/axe-reporter/reporter';
 import { mockApi } from '../utils/visual-tests/playwright/api-mocks';
@@ -19,11 +11,9 @@ import { BASE_URL, THEME } from '../utils/visual-tests/playwright/const';
 import {
   openDemo,
   prepareDemoPage,
-  runTestCode,
   trackPageActivity,
 } from '../utils/visual-tests/playwright/demo-page';
-
-type DemoSteps = (page: Page) => Promise<void>;
+import { getDemos, loadDemo } from '../utils/visual-tests/playwright/demos';
 
 const COLOR_CONTRAST_RULE = 'color-contrast';
 
@@ -119,69 +109,19 @@ const getPageTheme = (page: Page): Promise<string> => page.evaluate(
     .DevExpress.ui.themes.current(),
 );
 
-updateConfig({ explicitTestArgs: [], verbose: false });
-
-const demoPaths = glob.sync('Demos/*/*', { cwd: DEMOS_ROOT }).sort();
-
 test.describe(FRAMEWORKS.jquery, () => {
-  demoPaths.forEach((demoPath, index) => {
-    const demoDir = join(DEMOS_ROOT, demoPath);
-
-    if (!shouldRunTestAtIndex(index + 1) || !existsSync(join(demoDir, FRAMEWORKS.jquery))) { return; }
-
-    const [, widgetName, demoName] = demoPath.split(/[/\\]/);
-    const testName = `${widgetName}-${demoName}`;
-    const pageURL = `${BASE_URL}/apps/demos/Demos/${widgetName}/${demoName}/${FRAMEWORKS.jquery}/`;
-
-    const clientScript = globalReadFrom(demoDir, 'client-script.js', null);
-    const testCode = globalReadFrom(demoDir, 'test-code.js', null);
-    const testStyles = globalReadFrom(demoDir, 'test-styles.css', null);
-    const testSettings = globalReadFrom(demoDir, 'visualtestrc.json', (x) => JSON.parse(x));
-    const stepsPath = join(demoDir, 'playwright-test-code.js');
-    const ignoredRules = getIgnoredRules(testName);
-
-    if (process.env.CI && !['all', 'ignore'].includes(process.env.DISABLE_DEMO_TEST_SETTINGS)) {
-      const mergedTestSettings = { ...testSettings, ...testSettings?.[FRAMEWORKS.jquery.toLowerCase()] };
-
-      if (mergedTestSettings.ignore) { return; }
-    }
+  getDemos(FRAMEWORKS.jquery).forEach((demo) => {
+    const ignoredRules = getIgnoredRules(demo.testName);
 
     if (isColorContrastOnly && ignoredRules.includes(COLOR_CONTRAST_RULE)) { return; }
 
-    if (settings.explicitTests && !shouldRunTestExplicitly(pageURL)) { return; }
-
-    test(testName, async ({ page }) => {
-      const pageErrors: string[] = [];
-
-      page.on('pageerror', (error) => pageErrors.push(error.stack ?? error.message));
-
-      const waitForIdle = trackPageActivity(page);
-
-      await mockApi(page);
-      await prepareDemoPage(page, pageURL, THEME, clientScript);
-      await openDemo(page, pageURL, waitForIdle);
-
-      if (testStyles) {
-        await page.addStyleTag({ content: testStyles });
-      }
-
-      if (testCode) {
-        await runTestCode(page, testCode);
-      }
-
-      if (existsSync(stepsPath)) {
-        // eslint-disable-next-line import/no-dynamic-require, @typescript-eslint/no-require-imports
-        const { default: steps } = require(stepsPath) as { default: DemoSteps };
-
-        await steps(page);
-      }
-
-      await waitForIdle();
+    test(demo.testName, async ({ page }) => {
+      const pageErrors = await loadDemo(page, demo);
 
       expect(pageErrors, 'uncaught errors in the page').toEqual([]);
       expect(await getPageTheme(page), 'theme of the page').toBe(THEME);
 
-      const violations = await findViolations(page, testName, ignoredRules, isColorContrastOnly);
+      const violations = await findViolations(page, demo.testName, ignoredRules, isColorContrastOnly);
 
       expect(violations, 'accessibility violations').toEqual([]);
     });
