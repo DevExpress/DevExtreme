@@ -1,6 +1,7 @@
 import type { DataSource } from '@js/common/data/data_source/data_source';
 import type { ScalarFilterValue } from '@js/common/grids';
 import type { DxElement } from '@js/core/element';
+import type { dxElementWrapper } from '@js/core/renderer';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import type { DxEvent } from '@js/events';
 import type { Properties as PivotGridPublicProperties } from '@js/ui/pivot_grid';
@@ -55,8 +56,8 @@ export type PivotGridProperties = Omit<PivotGridPublicProperties, 'fieldChooser'
     minHeight?: number;
   };
   scrolling?: NonNullable<PivotGridPublicProperties['scrolling']> & {
-    virtualRowHeight?: number;
-    virtualColumnWidth?: number;
+    virtualRowHeight: number;
+    virtualColumnWidth: number;
   };
   useNativeScrolling?: unknown;
   renderCellCountLimit?: number;
@@ -72,6 +73,16 @@ export interface PivotGridRenderedAreas {
   columnsArea: HorizontalHeadersArea;
 }
 
+export interface PivotGridLayout {
+  columnsAreaElement: dxElementWrapper;
+  rowsAreaElement: dxElementWrapper;
+  dataAreaElement: dxElementWrapper;
+  rowHeaderContainer: dxElementWrapper;
+  columnHeaderContainer: dxElementWrapper;
+  filterHeaderContainer: dxElementWrapper;
+  dataHeaderContainer: dxElementWrapper;
+}
+
 export type PivotGridCellEvent<TNativeEvent extends Event = Event> = DxEvent<TNativeEvent> & {
   currentTarget: HTMLTableCellElement;
 };
@@ -83,35 +94,28 @@ export interface PivotGridContextMenuItem {
   onItemClick?: (e: unknown) => void;
 }
 
-export interface PivotGridAreaFieldsArgs {
+export interface PivotGridEventArgsBase {
   rowFields: PivotGridField[];
   columnFields: PivotGridField[];
   dataFields: PivotGridField[];
   event: DxEvent;
+  items?: PivotGridContextMenuItem[];
 }
 
-export interface PivotGridCellArgs {
+export interface PivotGridCellEventArgs extends PivotGridEventArgsBase {
   area: AreaName | undefined;
   rowIndex: number;
   columnIndex: number;
   cellElement: DxElement<Element>;
   cell: AreaItemCell | undefined;
+  cancel?: boolean;
 }
 
-export interface PivotGridFieldArgs {
+export interface PivotGridFieldEventArgs extends PivotGridEventArgsBase {
   field?: FieldChooserField;
 }
 
-export type PivotGridEventArgs = PivotGridAreaFieldsArgs & (PivotGridCellArgs | PivotGridFieldArgs);
-
-export type PivotGridCellEventArgs = PivotGridAreaFieldsArgs
-  & PivotGridCellArgs
-  & { cancel?: boolean };
-
-export type PivotGridContextMenuArgs = PivotGridAreaFieldsArgs
-  & Partial<PivotGridCellArgs>
-  & PivotGridFieldArgs
-  & { items?: PivotGridContextMenuItem[] };
+export type PivotGridEventArgs = PivotGridCellEventArgs | PivotGridFieldEventArgs;
 
 export interface PathItem {
   key?: unknown;

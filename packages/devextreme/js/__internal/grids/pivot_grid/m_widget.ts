@@ -2,6 +2,7 @@ import { name as clickEventName } from '@js/common/core/events/click';
 import { addNamespace } from '@js/common/core/events/utils/index';
 import localizationMessage from '@js/common/core/localization/message';
 import registerComponent from '@js/core/component_registrator';
+import type { DxElement } from '@js/core/element';
 import { getPublicElement } from '@js/core/element';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
@@ -32,7 +33,6 @@ import Widget from '@ts/core/widget/widget';
 import eventsEngine from '@ts/events/core/events_engine';
 import gridCoreUtils from '@ts/grids/grid_core/utils';
 import ContextMenu from '@ts/ui/context_menu/context_menu';
-import type Scrollable from '@ts/ui/scroll_view/scrollable';
 
 import type { AreaItem } from './area_item/area_item';
 import type {
@@ -61,14 +61,14 @@ import { RovingTabIndex } from './keyboard_navigation/roving_tab_index';
 import type { CellNavigationDirection } from './keyboard_navigation/table_cell_navigation';
 import { getAdjacentCell } from './keyboard_navigation/table_cell_navigation';
 import type {
-  PivotGridCellArgs,
   PivotGridCellEvent,
   PivotGridCellEventArgs,
-  PivotGridContextMenuArgs,
   PivotGridContextMenuItem,
   PivotGridEventArgs,
+  PivotGridEventArgsBase,
   PivotGridField,
-  PivotGridFieldArgs,
+  PivotGridFieldEventArgs,
+  PivotGridLayout,
   PivotGridProperties,
   PivotGridRenderedAreas,
 } from './types';
@@ -156,6 +156,36 @@ function getCommonBorderWidth(elements: dxElementWrapper[], direction: 'width' |
   });
 
   return width;
+}
+
+function getPopupFieldChooser(
+  popup: { content: () => DxElement } | undefined,
+): FieldChooser | undefined {
+  return popup && FieldChooser.getInstance<FieldChooser | undefined>(popup.content());
+}
+
+function renderFieldsArea(
+  fieldsArea: FieldsArea,
+  container: dxElementWrapper | undefined,
+  fields: PivotGridField[],
+): void {
+  // @ts-expect-error the fields area renders fields, not cells
+  fieldsArea.render(container, fields);
+}
+
+function getToolbarContainer(
+  fieldPanel: FieldPanelOptions,
+  $filterHeader: dxElementWrapper,
+  $columnHeader: dxElementWrapper,
+  $descriptionCell: dxElementWrapper,
+): dxElementWrapper {
+  if (fieldPanel.visible && fieldPanel.showFilterFields) {
+    return $filterHeader;
+  }
+  if (fieldPanel.visible && (fieldPanel.showDataFields || fieldPanel.showColumnFields)) {
+    return $columnHeader;
+  }
+  return $descriptionCell;
 }
 
 function clickedOnFieldsArea($targetElement: dxElementWrapper): number {
@@ -594,8 +624,10 @@ class PivotGrid extends Widget<PivotGridProperties> {
     const scrollHandler = (e: AreaItemScrollEvent, area: AreaItem): void => {
       const { scrollOffset } = e;
 
-      // @ts-expect-error the area's scrollable is rendered here
-      const scrollable: Scrollable = area._getScrollable();
+      const scrollable = area._getScrollable();
+      if (!scrollable) {
+        return;
+      }
 
       const leftOffset = scrollable.option('direction') !== 'vertical' ? scrollOffset.left : this._scrollLeft;
       const topOffset = scrollable.option('direction') !== 'horizontal' && this._hasHeight ? scrollOffset.top : this._scrollTop;
@@ -646,8 +678,7 @@ class PivotGrid extends Widget<PivotGridProperties> {
         options: {
           text: localizationMessage.format('OK'),
           onClick: (): void => {
-            // @ts-expect-error dxPivotGridFieldChooser is added to the renderer at runtime
-            this.getFieldChooserPopup()?.$content().dxPivotGridFieldChooser('applyChanges');
+            getPopupFieldChooser(this.getFieldChooserPopup())?.applyChanges();
             // eslint-disable-next-line @typescript-eslint/no-floating-promises -- fire-and-forget
             this.getFieldChooserPopup()?.hide();
           },
@@ -693,8 +724,7 @@ class PivotGrid extends Widget<PivotGridProperties> {
       minHeight: fieldChooserOptions.minHeight,
       toolbarItems,
       onResize: (e): void => {
-        // @ts-expect-error dxPivotGridFieldChooser is added to the renderer at runtime
-        e.component.$content().dxPivotGridFieldChooser('updateDimensions');
+        getPopupFieldChooser(e.component)?.updateDimensions();
       },
       onShown: (e): void => {
         this._createComponent(
@@ -705,10 +735,9 @@ class PivotGrid extends Widget<PivotGridProperties> {
         );
       },
       onHidden: (e): void => {
-        // @ts-expect-error dxPivotGridFieldChooser is added to the renderer at runtime
-        const fieldChooser: FieldChooser = e.component.$content().dxPivotGridFieldChooser('instance');
-        fieldChooser.resetTreeView();
-        fieldChooser.cancelChanges();
+        const fieldChooser = getPopupFieldChooser(e.component);
+        fieldChooser?.resetTreeView();
+        fieldChooser?.cancelChanges();
 
         if (this.$fieldChooserButton) {
           this.$fieldChooserButton.get<HTMLElement>(0).focus();
@@ -795,13 +824,11 @@ class PivotGrid extends Widget<PivotGridProperties> {
     });
   }
 
-  protected _getContextMenuItems(
-    e: PivotGridContextMenuArgs,
-  ): PivotGridContextMenuItem[] | undefined {
+  protected _getContextMenuItems(e: PivotGridEventArgs): PivotGridContextMenuItem[] | undefined {
     const items: PivotGridContextMenuItem[] = [];
     const texts = this.option('texts');
 
-    if ((e.area === 'row' || e.area === 'column') && e.cell) {
+    if (isCellEventArgs(e) && (e.area === 'row' || e.area === 'column') && e.cell) {
       const { cell } = e;
       const areaFields = e[`${e.area}Fields`];
       const oppositeAreaFields = e[e.area === 'column' ? 'rowFields' : 'columnFields'];
@@ -857,7 +884,7 @@ class PivotGrid extends Widget<PivotGridProperties> {
                 if (isDefined(oppositeField.index)) {
                   dataSource.field(oppositeField.index, {
                     sortBySummaryField: dataField.name || dataField.caption || dataField.dataField,
-                    // @ts-expect-error header paths are typed as unknown[]
+                    // @ts-expect-error header paths may hold null and dates
                     sortBySummaryPath: cell.path,
                     sortOrder: oppositeField.sortOrder === 'desc' ? 'asc' : 'desc',
                   });
@@ -933,7 +960,7 @@ class PivotGrid extends Widget<PivotGridProperties> {
     dxEvent: DxEvent,
   ): PivotGridEventArgs {
     const dataSource = this.getDataSource();
-    const args = {
+    const args: PivotGridEventArgsBase = {
       rowFields: dataSource.getAreaFields('row'),
       columnFields: dataSource.getAreaFields('column'),
       dataFields: dataSource.getAreaFields('data'),
@@ -941,20 +968,23 @@ class PivotGrid extends Widget<PivotGridProperties> {
     };
 
     if (clickedOnFieldsArea($(targetElement))) {
-      return { ...this._createFieldArgs(targetElement), ...args };
+      return this._createFieldArgs(targetElement, args);
     }
-    return { ...this._createCellArgs(targetElement), ...args };
+    return this._createCellArgs(targetElement, args);
   }
 
-  protected _createFieldArgs(targetElement: Element): PivotGridFieldArgs {
+  protected _createFieldArgs(
+    targetElement: Element,
+    args: PivotGridEventArgsBase,
+  ): PivotGridFieldEventArgs {
     const field = getData($(targetElement).children(), FIELD_DATA_KEY);
-    const args = {
-      field,
-    };
-    return isDefined(field) ? args : {};
+    return isDefined(field) ? { field, ...args } : { ...args };
   }
 
-  protected _createCellArgs(cellElement: HTMLTableCellElement): PivotGridCellArgs {
+  protected _createCellArgs(
+    cellElement: HTMLTableCellElement,
+    args: PivotGridEventArgsBase,
+  ): PivotGridCellEventArgs {
     const $cellElement = $(cellElement);
     const columnIndex = cellElement.cellIndex;
     const { rowIndex } = cellElement.parentElement as HTMLTableRowElement;
@@ -962,14 +992,14 @@ class PivotGrid extends Widget<PivotGridProperties> {
     const data: AreaItemCell[][] | undefined = $table.data('data');
     const cell = data?.[rowIndex]?.[columnIndex];
     const area: AreaName | undefined = $table.data('area');
-    const args = {
+    return {
       area,
       rowIndex,
       columnIndex,
       cellElement: getPublicElement($cellElement),
       cell,
+      ...args,
     };
-    return args;
   }
 
   protected _handleCellClick(e: PivotGridCellEvent<MouseEvent>): void {
@@ -987,8 +1017,9 @@ class PivotGrid extends Widget<PivotGridProperties> {
 
     if (cell && !args.cancel && isDefined(cell.expanded)) {
       setTimeout(() => {
-        // @ts-expect-error only row and column header cells are expandable
-        this._dataController[cell.expanded ? 'collapseHeaderItem' : 'expandHeaderItem'](args.area, cell.path);
+        if ((args.area === 'row' || args.area === 'column') && cell.path) {
+          this._dataController[cell.expanded ? 'collapseHeaderItem' : 'expandHeaderItem'](args.area, cell.path);
+        }
       });
     }
   }
@@ -1185,8 +1216,9 @@ class PivotGrid extends Widget<PivotGridProperties> {
     };
     this.on('contentReady', onReady);
     setTimeout(() => {
-      // @ts-expect-error only row and column header cells are expandable
-      this._dataController[cell.expanded ? 'collapseHeaderItem' : 'expandHeaderItem'](args.area, cell.path);
+      if ((args.area === 'row' || args.area === 'column') && cell.path) {
+        this._dataController[cell.expanded ? 'collapseHeaderItem' : 'expandHeaderItem'](args.area, cell.path);
+      }
     });
   }
 
@@ -1202,7 +1234,6 @@ class PivotGrid extends Widget<PivotGridProperties> {
     element: dxElementWrapper | undefined,
     container: dxElementWrapper,
   ): void {
-    // @ts-expect-error renderLoadPanel() doesn't use the element
     return gridCoreUtils.renderLoadPanel.call(this, element, container, undefined);
   }
 
@@ -1254,19 +1285,14 @@ class PivotGrid extends Widget<PivotGridProperties> {
     const $filterHeader = $element.find('.dx-filter-header');
     const $columnHeader = $element.find('.dx-column-header');
 
-    // eslint-disable-next-line @typescript-eslint/init-declarations -- assigned in the if/else
-    let $targetContainer: dxElementWrapper;
-
-    let buttonStylingMode: ButtonStyle = isGeneric(current()) ? 'contained' : 'text';
-
-    if (fieldPanel.visible && fieldPanel.showFilterFields) {
-      $targetContainer = $filterHeader;
-    } else if (fieldPanel.visible && (fieldPanel.showDataFields || fieldPanel.showColumnFields)) {
-      $targetContainer = $columnHeader;
-    } else {
-      $targetContainer = $descriptionCell;
-      buttonStylingMode = 'text';
-    }
+    const $targetContainer = getToolbarContainer(
+      fieldPanel,
+      $filterHeader,
+      $columnHeader,
+      $descriptionCell,
+    );
+    const isTextButton = $targetContainer === $descriptionCell || !isGeneric(current());
+    const buttonStylingMode: ButtonStyle = isTextButton ? 'text' : 'contained';
 
     $columnHeader.toggleClass(
       BOTTOM_BORDER_CLASS,
@@ -1358,20 +1384,16 @@ class PivotGrid extends Widget<PivotGridProperties> {
     const dataSource = this.getDataSource();
 
     this._rowFields ??= new FieldsArea(this, 'row');
-    // @ts-expect-error the fields area renders fields, not cells
-    this._rowFields.render(rowHeaderContainer, dataSource.getAreaFields('row'));
+    renderFieldsArea(this._rowFields, rowHeaderContainer, dataSource.getAreaFields('row'));
 
     this._columnFields ??= new FieldsArea(this, 'column');
-    // @ts-expect-error the fields area renders fields, not cells
-    this._columnFields.render(columnHeaderContainer, dataSource.getAreaFields('column'));
+    renderFieldsArea(this._columnFields, columnHeaderContainer, dataSource.getAreaFields('column'));
 
     this._filterFields ??= new FieldsArea(this, 'filter');
-    // @ts-expect-error the fields area renders fields, not cells
-    this._filterFields.render(filterHeaderContainer, dataSource.getAreaFields('filter'));
+    renderFieldsArea(this._filterFields, filterHeaderContainer, dataSource.getAreaFields('filter'));
 
     this._dataFields ??= new FieldsArea(this, 'data');
-    // @ts-expect-error the fields area renders fields, not cells
-    this._dataFields.render(dataHeaderContainer, dataSource.getAreaFields('data'));
+    renderFieldsArea(this._dataFields, dataHeaderContainer, dataSource.getAreaFields('data'));
 
     this._fieldChooserBase?.renderSortable();
     this._fieldChooserBase?.restoreFieldFocus();
@@ -1455,72 +1477,68 @@ class PivotGrid extends Widget<PivotGridProperties> {
       .attr('aria-label', localizationMessage.format('dxPivotGrid-ariaLabel'));
   }
 
-  public _renderContentImpl(): void {
-    // eslint-disable-next-line @typescript-eslint/init-declarations -- assigned on the first render
-    let columnsAreaElement: dxElementWrapper | undefined;
-    // eslint-disable-next-line @typescript-eslint/init-declarations -- assigned on the first render
-    let rowsAreaElement: dxElementWrapper | undefined;
-    // eslint-disable-next-line @typescript-eslint/init-declarations -- assigned on the first render
-    let dataAreaElement: dxElementWrapper | undefined;
-    const isFirstDrawing = !this._pivotGridContainer;
-    // eslint-disable-next-line @typescript-eslint/init-declarations -- assigned on the first render
-    let rowHeaderContainer: dxElementWrapper | undefined;
-    // eslint-disable-next-line @typescript-eslint/init-declarations -- assigned on the first render
-    let columnHeaderContainer: dxElementWrapper | undefined;
-    // eslint-disable-next-line @typescript-eslint/init-declarations -- assigned on the first render
-    let filterHeaderContainer: dxElementWrapper | undefined;
-    // eslint-disable-next-line @typescript-eslint/init-declarations -- assigned on the first render
-    let dataHeaderContainer: dxElementWrapper | undefined;
+  protected renderLayout(): PivotGridLayout {
+    this.$element().addClass(ROW_LINES_CLASS)
+      .addClass(FIELDS_CONTAINER_CLASS);
 
-    let tableElement = !isFirstDrawing && this._tableElement();
+    this._pivotGridContainer = $(DIV).addClass('dx-pivotgrid-container');
+    this._renderFieldChooser();
+    this._renderContextMenu();
 
-    if (!tableElement) {
-      this.$element().addClass(ROW_LINES_CLASS)
-        .addClass(FIELDS_CONTAINER_CLASS);
+    const columnsAreaElement = $(TD).addClass(COLUMN_AREA_CELL_CLASS);
+    const rowsAreaElement = $(TD).addClass(ROW_AREA_CELL_CLASS);
+    const dataAreaElement = $(TD).addClass(DATA_AREA_CELL_CLASS);
 
-      this._pivotGridContainer = $(DIV).addClass('dx-pivotgrid-container');
-      this._renderFieldChooser();
-      this._renderContextMenu();
+    const tableElement = this._createTableElement();
 
-      columnsAreaElement = $(TD).addClass(COLUMN_AREA_CELL_CLASS);
-      rowsAreaElement = $(TD).addClass(ROW_AREA_CELL_CLASS);
-      dataAreaElement = $(TD).addClass(DATA_AREA_CELL_CLASS);
+    const dataHeaderContainer = $(TD).addClass('dx-data-header');
 
-      tableElement = this._createTableElement();
+    const filterHeaderContainer = $('<td>').attr('colspan', '2').addClass('dx-filter-header');
+    const columnHeaderContainer = $(TD).addClass('dx-column-header');
+    const rowHeaderContainer = $(TD).addClass(DESCRIPTION_AREA_CELL_CLASS);
 
-      dataHeaderContainer = $(TD).addClass('dx-data-header');
+    $(TR)
+      .append(filterHeaderContainer)
+      .appendTo(tableElement);
 
-      filterHeaderContainer = $('<td>').attr('colspan', '2').addClass('dx-filter-header');
-      columnHeaderContainer = $(TD).addClass('dx-column-header');
-      rowHeaderContainer = $(TD).addClass(DESCRIPTION_AREA_CELL_CLASS);
+    $(TR)
+      .append(dataHeaderContainer)
+      .append(columnHeaderContainer)
+      .appendTo(tableElement);
 
-      $(TR)
-        .append(filterHeaderContainer)
-        .appendTo(tableElement);
+    $(TR)
+      .append(rowHeaderContainer)
+      .append(columnsAreaElement)
+      .appendTo(tableElement);
 
-      $(TR)
-        .append(dataHeaderContainer)
-        .append(columnHeaderContainer)
-        .appendTo(tableElement);
+    $(TR)
+      .addClass(BOTTOM_ROW_CLASS)
+      .append(rowsAreaElement)
+      .append(dataAreaElement)
+      .appendTo(tableElement);
 
-      $(TR)
-        .append(rowHeaderContainer)
-        .append(columnsAreaElement)
-        .appendTo(tableElement);
+    this._pivotGridContainer.append(tableElement);
+    this.$element().append(this._pivotGridContainer);
 
-      $(TR)
-        .addClass(BOTTOM_ROW_CLASS)
-        .append(rowsAreaElement)
-        .append(dataAreaElement)
-        .appendTo(tableElement);
-
-      this._pivotGridContainer.append(tableElement);
-      this.$element().append(this._pivotGridContainer);
-
-      if (this.option('rowHeaderLayout') === 'tree') {
-        rowsAreaElement.addClass('dx-area-tree-view');
-      }
+    if (this.option('rowHeaderLayout') === 'tree') {
+      rowsAreaElement.addClass('dx-area-tree-view');
     }
+
+    return {
+      columnsAreaElement,
+      rowsAreaElement,
+      dataAreaElement,
+      rowHeaderContainer,
+      columnHeaderContainer,
+      filterHeaderContainer,
+      dataHeaderContainer,
+    };
+  }
+
+  public _renderContentImpl(): void {
+    const isFirstDrawing = !this._pivotGridContainer;
+    const tableElement = !isFirstDrawing && this._tableElement();
+    const layout = tableElement ? undefined : this.renderLayout();
 
     this.$element().addClass(OVERFLOW_HIDDEN_CLASS);
 
@@ -1543,9 +1561,9 @@ class PivotGrid extends Widget<PivotGridProperties> {
       );
     }
 
-    const dataArea = this._renderDataArea(dataAreaElement);
-    const rowsArea = this._renderRowsArea(rowsAreaElement);
-    const columnsArea = this._renderColumnsArea(columnsAreaElement);
+    const dataArea = this._renderDataArea(layout?.dataAreaElement);
+    const rowsArea = this._renderRowsArea(layout?.rowsAreaElement);
+    const columnsArea = this._renderColumnsArea(layout?.columnsAreaElement);
 
     const columnsHeadElement = columnsArea.headElement();
     if (columnsHeadElement) {
@@ -1568,10 +1586,10 @@ class PivotGrid extends Widget<PivotGridProperties> {
     });
 
     this._renderHeaders(
-      rowHeaderContainer,
-      columnHeaderContainer,
-      filterHeaderContainer,
-      dataHeaderContainer,
+      layout?.rowHeaderContainer,
+      layout?.columnHeaderContainer,
+      layout?.filterHeaderContainer,
+      layout?.dataHeaderContainer,
     );
 
     this._update(isFirstDrawing);
@@ -1671,8 +1689,6 @@ class PivotGrid extends Widget<PivotGridProperties> {
 
   public updateDimensions(): DeferredObj<unknown> | undefined {
     const tableElement = this._tableElement();
-    // eslint-disable-next-line @typescript-eslint/init-declarations -- assigned before each use
-    let bordersWidth: number;
     let totalWidth = 0;
     let totalHeight = 0;
     let rowsAreaWidth = 0;
@@ -1755,7 +1771,7 @@ class PivotGrid extends Widget<PivotGridProperties> {
         const $dataHeader = tableElement.find('.dx-data-header');
         const dataHeaderHeight = Number(getHeight($dataHeader));
 
-        bordersWidth = getCommonBorderWidth([columnAreaCell, dataAreaCell, tableElement, columnHeaderCell, filterHeaderCell], 'height');
+        const heightBordersWidth = getCommonBorderWidth([columnAreaCell, dataAreaCell, tableElement, columnHeaderCell, filterHeaderCell], 'height');
         dataAreaHeight = getHeight(
           this.$element().get(0),
         ) - Number(filterAreaHeight) - dataHeaderHeight
@@ -1764,7 +1780,7 @@ class PivotGrid extends Widget<PivotGridProperties> {
             Number(getHeight(columnAreaCell)),
             descriptionCellHeight,
           )
-            + bordersWidth
+            + heightBordersWidth
           );
       }
 
@@ -1813,8 +1829,8 @@ class PivotGrid extends Widget<PivotGridProperties> {
 
       const elementWidth = getWidth(this.$element().get(0));
 
-      bordersWidth = getCommonBorderWidth([rowAreaCell, dataAreaCell, tableElement], 'width');
-      let groupWidth = elementWidth - rowsAreaWidth - bordersWidth;
+      const widthBordersWidth = getCommonBorderWidth([rowAreaCell, dataAreaCell, tableElement], 'width');
+      let groupWidth = elementWidth - rowsAreaWidth - widthBordersWidth;
 
       groupWidth = groupWidth > 0 ? groupWidth : totalWidth;
       const diff = totalWidth - groupWidth;
@@ -1970,9 +1986,7 @@ class PivotGrid extends Widget<PivotGridProperties> {
     rowsAreaWidth: number,
   ): void {
     const virtualContentParams = this._dataController.calculateVirtualContentParams({
-      // @ts-expect-error the default options set virtualRowHeight
       virtualRowHeight: scrollingOptions.virtualRowHeight,
-      // @ts-expect-error the default options set virtualColumnWidth
       virtualColumnWidth: scrollingOptions.virtualColumnWidth,
       itemWidths: resultWidths,
       itemHeights: resultHeights,
@@ -1997,12 +2011,14 @@ class PivotGrid extends Widget<PivotGridProperties> {
       height: virtualContentParams.height,
     });
 
-    columnsArea.setVirtualContentParams({
-      left: virtualContentParams.contentLeft,
-      width: virtualContentParams.width,
-      // @ts-expect-error the group element is rendered here
-      height: getHeight(columnsArea.groupElement()),
-    });
+    const columnsGroupElement = columnsArea.groupElement();
+    if (columnsGroupElement) {
+      columnsArea.setVirtualContentParams({
+        left: virtualContentParams.contentLeft,
+        width: virtualContentParams.width,
+        height: getHeight(columnsGroupElement.get(0)),
+      });
+    }
   }
 
   public applyPartialDataSource(
