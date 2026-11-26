@@ -27,8 +27,9 @@ const MOCKDATE_SOURCE = readFileSync(require.resolve('mockdate'), 'utf8');
 const TEST_UTILS_SOURCE = readFileSync(join(INJECT_DIR, 'test-utils.js'), 'utf8');
 const TEST_STYLES = readFileSync(join(INJECT_DIR, 'test-styles.css'), 'utf8');
 
-// Adds a style to <head> as soon as it exists. The test styles go first, so the styles of a demo
-// still override them; a style for one demo goes last, so it overrides the demo.
+// Adds a style to <head> as soon as it exists, before the parser adds the stylesheets of the demo.
+// The test styles go first, so the styles of a demo still override them; a style for one demo
+// comes before the stylesheets too, so it takes !important to override them.
 export const addStyles = (css: string, position: 'prepend' | 'append'): void => {
   const add = (): void => {
     const style = document.createElement('style');
@@ -278,12 +279,8 @@ export function trackPageActivity(page: Page): () => Promise<void> {
   };
 }
 
-export async function openDemo(
-  page: Page,
-  url: string,
-  waitForIdle: () => Promise<void>,
-): Promise<void> {
-  await page.goto(url);
+// Waits until a demo that has just loaded is ready for a screenshot.
+export async function waitForDemo(page: Page, waitForIdle: () => Promise<void>): Promise<void> {
   await waitForIdle();
 
   // A screenshot taken before <link rel="stylesheet"> resolves gets unstyled, default-browser layout.
@@ -296,6 +293,15 @@ export async function openDemo(
     await page.waitForFunction(() => document.querySelector<HTMLElement>('demo-app')?.innerText !== 'Loading...');
     await waitForIdle();
   }
+}
+
+export async function openDemo(
+  page: Page,
+  url: string,
+  waitForIdle: () => Promise<void>,
+): Promise<void> {
+  await page.goto(url);
+  await waitForDemo(page, waitForIdle);
 }
 
 export async function runTestCode(page: Page, code: string): Promise<void> {
