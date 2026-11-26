@@ -31,16 +31,6 @@ const CSP_DEMO_ALLOWLIST = {
     'font-src': ['https://atlas.microsoft.com'],
     'style-src-elem': ["'self'", "'unsafe-inline'"],
   },
-  // Azure Maps draws markers and routes from blob: images and positions them with inline style
-  // attributes; the CSP guide lists both for Azure Maps. The marker icon is hosted on js.devexpress.com.
-  'Map/Markers': {
-    'img-src': ['blob:', 'https://js.devexpress.com'],
-    'style-src-attr': ["'unsafe-inline'"],
-  },
-  'Map/Routes': {
-    'img-src': ['blob:'],
-    'style-src-attr': ["'unsafe-inline'"],
-  },
   'Map/OpenStreetMapProvider': {
     'img-src': ['https://tiles-eu.stadiamaps.com'],
     'connect-src': ['https://api-eu.stadiamaps.com'],
