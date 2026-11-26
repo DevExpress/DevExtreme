@@ -667,7 +667,7 @@ jobs:
           exit 1
         fi
 
-  testcafe-jquery:
+  playwright-jquery:
     needs: [check-should-run, build-devextreme, determine-framework-tests-scope, determine-jquery-test-matrix]
     if: |
       !cancelled() &&
@@ -882,7 +882,7 @@ jobs:
         path: apps/demos/testing/artifacts/axe-reports/*
         if-no-files-found: ignore
 
-  testcafe-frameworks-all:
+  playwright-frameworks-all:
     needs: [check-should-run, determine-framework-tests-scope, build-demos]
     if: |
       !cancelled() &&
@@ -1074,7 +1074,7 @@ jobs:
           exit 1
         fi
 
-  testcafe-frameworks-changed:
+  playwright-frameworks-changed:
     needs: [check-should-run, determine-framework-tests-scope, build-demos]
     if: |
       !cancelled() &&
@@ -1254,7 +1254,7 @@ jobs:
   merge-artifacts:
     runs-on: ubuntu-latest
     timeout-minutes: 6
-    needs: [testcafe-jquery, testcafe-frameworks-all, testcafe-frameworks-changed]
+    needs: [playwright-jquery, playwright-frameworks-all, playwright-frameworks-changed]
     if: ${{ !cancelled() }}
 
     steps:
@@ -1347,7 +1347,7 @@ jobs:
           delete-merged: true
 
       - name: Merge jQuery accessibility reports
-        if: needs.testcafe-jquery.result == 'failure'
+        if: needs.playwright-jquery.result == 'failure'
         uses: actions/upload-artifact/merge@v7
         continue-on-error: true
         with:
