@@ -6,4 +6,6 @@ export const BASE_URL = `http://127.0.0.1:${SERVER_PORT}`;
 
 export const VIEWPORT = { width: 1000, height: 800 };
 
+export const ACCESSIBILITY_VIEWPORT = { width: 1200, height: 713 };
+
 export const THEME = process.env.THEME || DEFAULT_THEME_NAME;

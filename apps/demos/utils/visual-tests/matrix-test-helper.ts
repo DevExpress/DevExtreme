@@ -150,10 +150,6 @@ export function runManualTestCore(
 }
 
 export function runManualTest(widget, demo, callback) {
-  if (process.env.STRATEGY === 'accessibility') {
-    return;
-  }
-
   const framework = settings.targetFramework;
   runManualTestCore(test, widget, demo, framework, callback);
 }

@@ -15,8 +15,6 @@
         "test"
       ],
       "outputs": [
-        "{projectRoot}/accessibility_report.txt",
-        "{projectRoot}/accessibility_testcafe_report",
         "{projectRoot}/coverage"
       ]
     },
@@ -30,7 +28,6 @@
         // "devextreme:build"
       ],
       "inputs": [
-        { "env": "STRATEGY" },
         { "env": "CHANGEDFILEINFOSPATH" },
         { "env": "BROWSERS" },
         { "env": "DEBUG" },
@@ -42,8 +39,6 @@
         "test"
       ],
       "outputs": [
-        "{projectRoot}/accessibility_report.txt",
-        "{projectRoot}/accessibility_testcafe_report",
         "{projectRoot}/testing/artifacts"
       ]
     },
