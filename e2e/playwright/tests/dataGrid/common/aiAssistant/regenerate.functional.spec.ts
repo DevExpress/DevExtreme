@@ -165,6 +165,10 @@ test.describe('AI Assistant - Regenerate', () => {
 
     await closeChatAndConfirmAbort(aiChat);
 
+    await dataGrid.getAIAssistantButton().click();
+
+    await expect(aiChat.element).toBeVisible();
+
     // The aborted response is rendered as a failure with no executed commands,
     // so it currently offers Regenerate (pins current behavior; see doc §1.12.11).
     await expect(aiChat.getErrorMessages()).toHaveCount(1);

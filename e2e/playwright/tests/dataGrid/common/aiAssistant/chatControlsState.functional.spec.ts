@@ -15,6 +15,7 @@ import {
   getAICallCount,
   threeRows,
   twoRows,
+  wasSelectAllStarted,
 } from './testHelpers';
 
 test.use({ containerUrl: AI_INTEGRATION_PAGE_URL });
@@ -102,6 +103,8 @@ test.describe('AI Assistant - Chat Controls State', () => {
 
     const { aiChat } = await openChatAndSubmit(page, 'Select all rows');
 
+    // Disabled and pending hold in the LLM phase too: wait for the command phase first.
+    await expect.poll(() => wasSelectAllStarted(page)).toBe(true);
     await aiChat.getTextArea().expectDisabled();
     await expect(aiChat.getAIMessages()).toHaveCount(1);
     await expect(aiChat.getPendingMessages()).toHaveCount(1);
@@ -131,13 +134,16 @@ test.describe('AI Assistant - Chat Controls State', () => {
   test('Input should be re-enabled after abort via popup close', async ({ page }) => {
     await createGridWithAIAssistant(page, baseGrid(twoRows), [HANG]);
 
-    const { aiChat } = await openChatAndSubmit(page, 'Sort by name');
+    const { dataGrid, aiChat } = await openChatAndSubmit(page, 'Sort by name');
 
     await expect(aiChat.getPendingMessages()).toHaveCount(1);
     await aiChat.getTextArea().expectDisabled();
 
     await closeChatAndConfirmAbort(aiChat);
 
+    await dataGrid.getAIAssistantButton().click();
+
+    await expect(aiChat.element).toBeVisible();
     await expect(aiChat.getErrorMessages()).toHaveCount(1);
     await aiChat.getTextArea().expectDisabled(false);
   });
@@ -156,6 +162,8 @@ test.describe('AI Assistant - Chat Controls State', () => {
 
     const { aiChat } = await openChatAndSubmit(page, 'Select all rows');
 
+    // Disabled and pending hold in the LLM phase too: wait for the command phase first.
+    await expect.poll(() => wasSelectAllStarted(page)).toBe(true);
     await aiChat.getClearChatButton().expectDisabled();
     await expect(aiChat.getAIMessages()).toHaveCount(1);
     await expect(aiChat.getPendingMessages()).toHaveCount(1);
@@ -182,13 +190,16 @@ test.describe('AI Assistant - Chat Controls State', () => {
   test('Clear-chat button should be re-enabled after abort via popup close', async ({ page }) => {
     await createGridWithAIAssistant(page, baseGrid(twoRows), [HANG]);
 
-    const { aiChat } = await openChatAndSubmit(page, 'Sort by name');
+    const { dataGrid, aiChat } = await openChatAndSubmit(page, 'Sort by name');
 
     await expect(aiChat.getPendingMessages()).toHaveCount(1);
     await aiChat.getClearChatButton().expectDisabled();
 
     await closeChatAndConfirmAbort(aiChat);
 
+    await dataGrid.getAIAssistantButton().click();
+
+    await expect(aiChat.element).toBeVisible();
     await expect(aiChat.getErrorMessages()).toHaveCount(1);
     await aiChat.getClearChatButton().expectDisabled(false);
   });
@@ -222,6 +233,8 @@ test.describe('AI Assistant - Chat Controls State', () => {
 
     const { aiChat } = await openChatAndSubmit(page, 'Select all rows');
 
+    // Disabled and pending hold in the LLM phase too: wait for the command phase first.
+    await expect.poll(() => wasSelectAllStarted(page)).toBe(true);
     await aiChat.getSuggestion(0).expectDisabled();
     await expect(aiChat.getAIMessages()).toHaveCount(1);
     await expect(aiChat.getPendingMessages()).toHaveCount(1);

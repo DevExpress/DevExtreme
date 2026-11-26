@@ -70,6 +70,7 @@ test.describe('AI Assistant - Interruption', () => {
 
     await dataGrid.getAIAssistantButton().click();
 
+    await expect(aiChat.element).toBeVisible();
     await expect(aiChat.getMessages()).toHaveCount(2);
     await expect(aiChat.getErrorMessages()).toHaveCount(1);
     await expect(aiChat.getAIMessage(0).getErrorText()).toHaveText(
@@ -112,6 +113,8 @@ test.describe('AI Assistant - Interruption', () => {
     // Re-open to inspect the resulting response.
     await dataGrid.getAIAssistantButton().click();
 
+    await expect(aiChat.element).toBeVisible();
+
     const aiMessage = aiChat.getAIMessage(0);
 
     // An aborted command makes the whole message a failure: 2 successes + 1 aborted entry.
@@ -146,6 +149,7 @@ test.describe('AI Assistant - Interruption', () => {
 
     await dataGrid.getAIAssistantButton().click();
 
+    await expect(aiChat.element).toBeVisible();
     await expect(aiChat.getErrorMessages()).toHaveCount(1);
     await expect(aiChat.getAIMessage(0).getHeader()).toHaveText('Stopped before finishing');
   });
@@ -178,6 +182,9 @@ test.describe('AI Assistant - Interruption', () => {
     const { dataGrid, aiChat } = await openChatAndSubmit(page, 'Select all rows');
 
     await aiChat.getTextArea().expectDisabled();
+    // The select-all dispatches its store load on a timer. Disposed before that, the grid leaves
+    // the timer pending past the checks below; once the load has started, nothing is left pending.
+    await expect.poll(() => wasSelectAllStarted(page)).toBe(true);
 
     await disposeGrid(page);
 
