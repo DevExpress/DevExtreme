@@ -12,3 +12,4 @@ sh.set('-e');
 
 updateVersionJs(version);
 updateVersion(version);
+sh.exec('pnpm --filter devextreme-scss run icons:version');

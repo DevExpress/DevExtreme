@@ -28,6 +28,7 @@
   "scripts": {
     "build": "pnpm --workspace-root nx build devextreme-scss",
     "check-naming-registries": "pnpm run naming:check",
+    "icons:version": "node tools/icons/stamp-version.ts",
     "lint": "pnpm run lint-css && pnpm run lint-js",
     "lint-css": "stylelint scss/widgets build",
     "lint-js": "eslint",
