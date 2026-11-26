@@ -22,7 +22,7 @@ export class AppComponent {
 
   readonly buttonText = computed(() => (this.loadIndicatorVisible() ? 'Sending' : 'Send'));
 
-  onClick() {
+  onClick(): void {
     this.loadIndicatorVisible.set(true);
 
     setTimeout(() => {
