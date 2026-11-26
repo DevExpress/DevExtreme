@@ -583,9 +583,6 @@ importers:
       cross-env:
         specifier: 7.0.3
         version: 7.0.3
-      devextreme-screenshot-comparer:
-        specifier: 2.0.17
-        version: 2.0.17(testcafe@3.7.5(patch_hash=721ed26a09d564c50b26c334470f24e87e4f52d2e497c617341b71ed1a3ddbf3))
       eslint:
         specifier: 'catalog:'
         version: 10.14.0(jiti@2.6.1)(supports-color@7.2.0)
