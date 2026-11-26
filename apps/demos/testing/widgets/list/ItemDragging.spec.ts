@@ -1,9 +1,10 @@
 import { test, expect } from '@playwright/test';
 import { describeManualTest, drag } from '../../../utils/visual-tests/playwright/manual-test';
 
-const WINDOW_WIDTH = 600;
+// Far enough to the left to move the item from the right list to the left one.
+const TO_LEFT_LIST = 600;
 
-describeManualTest('List', 'DragAndDrop', { width: 900, height: WINDOW_WIDTH }, () => {
+describeManualTest('List', 'DragAndDrop', { width: 900, height: 600 }, () => {
   test('DragAndDrop', async ({ page }) => {
     const REORDER_HANDLE_CLASS = 'dx-list-reorder-handle';
     const LIST_CLASS = 'dx-list';
@@ -20,7 +21,7 @@ describeManualTest('List', 'DragAndDrop', { width: 900, height: WINDOW_WIDTH }, 
 
     await expect(thirdItemRightList).toHaveText(LIST_ITEM_TEXT);
 
-    await drag(page, dragHandle, -WINDOW_WIDTH, -LIST_ITEM_HEIGHT - 10);
+    await drag(page, dragHandle, -TO_LEFT_LIST, -LIST_ITEM_HEIGHT - 10);
 
     const secondItemLeftList = page.locator(`.${LIST_CLASS}`).nth(0).locator(`.${LIST_ITEM_CLASS}`).nth(1);
 
