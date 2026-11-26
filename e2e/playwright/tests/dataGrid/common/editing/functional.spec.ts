@@ -3,8 +3,10 @@
 // their API.
 import type { Properties } from 'devextreme/ui/data_grid';
 import { expect, test } from '../../../../fixtures';
+import { clickWithOffset } from '../../../../helpers/clickUtils';
 import { DEFAULT_SELECTOR } from '../../../../helpers/const';
 import { createWidget } from '../../../../helpers/createWidget';
+import Button from '../../../../models/button';
 import DataGrid from '../../../../models/dataGrid';
 import SelectBox from '../../../../models/selectBox';
 import { getData } from '../../helpers/generateDataSourceData';
@@ -55,6 +57,93 @@ const trackSaveAttempts = async (
 };
 
 test.describe('Editing.Functional', () => {
+  [true, false].forEach((useIcons) => {
+    test(`Command buttons should match editor target area (useIcons: ${useIcons})`, async ({ page }) => {
+      await page.evaluate(() => {
+        (window as any).commandButtonClickCount = 0;
+      });
+
+      await createWidget(page, 'dxDataGrid', (icons: boolean) => ({
+        dataSource: [{ id: 1, name: 'test' }],
+        keyExpr: 'id',
+        editing: {
+          useIcons: icons,
+        },
+        columns: ['name', {
+          type: 'buttons',
+          buttons: [{
+            hint: 'custom',
+            icon: icons ? 'copy' : undefined,
+            text: icons ? undefined : 'custom',
+            onClick: (): void => {
+              (window as any).commandButtonClickCount += 1;
+            },
+          }],
+        }],
+      }), DEFAULT_SELECTOR, { arg: useIcons });
+
+      await createWidget(page, 'dxButton', (icons: boolean) => ({
+        icon: icons ? 'copy' : undefined,
+        text: icons ? undefined : 'custom',
+      }), '#otherContainer', { arg: useIcons });
+
+      const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
+      const commandButton = dataGrid.getDataRow(0).getCommandCell(1).getButton(0);
+      const button = new Button(page, '#otherContainer');
+      const buttonContent = button.element.locator('.dx-button-content');
+      const getClickCount = (): Promise<number> => page.evaluate(
+        () => (window as any).commandButtonClickCount,
+      );
+
+      await expect.poll(() => dataGrid.isReady()).toBe(true);
+
+      const commandButtonSize = await commandButton.evaluate((element) => {
+        const { width, height } = element.getBoundingClientRect();
+
+        return { width, height };
+      });
+      const buttonSize = await button.element.evaluate((element) => {
+        const { width, height } = element.getBoundingClientRect();
+
+        return { width, height };
+      });
+
+      if (useIcons) {
+        expect(commandButtonSize.width).toBe(buttonSize.width);
+      } else {
+        const commandButtonPadding = await commandButton.evaluate((element) => {
+          const style = getComputedStyle(element);
+
+          return [style.paddingLeft, style.paddingRight];
+        });
+        const buttonContentPadding = await buttonContent.evaluate((element) => {
+          const style = getComputedStyle(element);
+
+          return [style.paddingLeft, style.paddingRight];
+        });
+
+        expect(commandButtonPadding).toEqual(buttonContentPadding);
+      }
+
+      expect(commandButtonSize.height).toBe(buttonSize.height);
+      await expect.poll(getClickCount).toBe(0);
+
+      await clickWithOffset(page, commandButton, {
+        offsetX: Math.round(commandButtonSize.width),
+        offsetY: Math.round(commandButtonSize.height),
+      });
+
+      await expect.poll(getClickCount).toBe(0);
+
+      await clickWithOffset(page, commandButton, {
+        offsetX: Math.round(commandButtonSize.width) - 1,
+        offsetY: Math.round(commandButtonSize.height) - 1,
+      });
+
+      await expect.poll(getClickCount).toBe(1);
+    });
+  });
+
   test('Focused cell should be switched to the editing mode after onSaving\'s promise is resolved (T1190566)', async ({ page }) => {
     await createWidget(page, 'dxDataGrid', () => {
       (window as any).deferred = $.Deferred();
