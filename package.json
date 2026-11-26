@@ -1,6 +1,6 @@
 {
   "name": "devextreme-monorepo",
-  "version": "26.2.0",
+  "version": "27.1.0",
   "license": "MIT",
   "author": "Developer Express Inc.",
   "scripts": {
@@ -12,7 +12,6 @@
     "tools": "dx-tools",
     "lint-staged": "lint-staged",
     "prepare": "husky install",
-    "change-package-scope": "ts-node tools/scripts/change-package-scope.ts",
     "make-artifacts-package": "nx make-artifacts-package workflows",
     "all:set-timestamp-version": "nx set-timestamp-version workflows",
     "all:update-version": "nx run workflows:update-version --",

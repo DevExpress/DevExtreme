@@ -35,7 +35,7 @@ const lineHeights: ItemObject[] = [
 
 @Injectable()
 export class Service {
-  getColors(): string[] {
+  getColors(): (string | null)[] {
     return colors;
   }
 

@@ -6,6 +6,7 @@ import { getData } from '@ts/core/element_data';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import { ROW_OPTIONS_KEY } from '@ts/grids/grid_core/views/const';
 
+import { CLASSES } from './const';
 import type {
   ColumnStateMixinBase,
   ColumnStateOptions,
@@ -13,7 +14,6 @@ import type {
   IndicatorOptions,
 } from './types';
 
-const COLUMN_INDICATORS_CLASS = 'dx-column-indicators';
 const GROUP_PANEL_ITEM_CLASS = 'dx-group-panel-item';
 
 // eslint-disable-next-line @stylistic/max-len
@@ -72,7 +72,7 @@ export const ColumnStateMixin = <T extends ColumnStateMixinBase>(Base: T) => cla
       : null;
 
     if (!$indicatorsContainer.length) {
-      $indicatorsContainer = $('<div>').addClass(COLUMN_INDICATORS_CLASS);
+      $indicatorsContainer = $('<div>').addClass(CLASSES.columnIndicators);
     }
 
     this.setAria('role', 'presentation', $indicatorsContainer);
@@ -82,7 +82,7 @@ export const ColumnStateMixin = <T extends ColumnStateMixinBase>(Base: T) => cla
   }
 
   protected _getIndicatorContainer($cell: dxElementWrapper): dxElementWrapper {
-    return $cell && $cell.find(`.${COLUMN_INDICATORS_CLASS}`);
+    return $cell && $cell.find(`.${CLASSES.columnIndicators}`);
   }
 
   protected _getIndicatorElements(

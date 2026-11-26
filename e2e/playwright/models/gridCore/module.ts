@@ -1,9 +1,9 @@
 import type { Locator } from '@playwright/test';
 import type { WidgetName } from '../types';
-import FocusableElement from '../internal/focusable';
 import Widget from '../internal/widget';
+import GridElement from './element';
 
-export default class GridModule extends FocusableElement {
+export default class GridModule extends GridElement {
   public readonly widgetName: WidgetName;
 
   constructor(element: Locator, widgetName: WidgetName) {

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-export class Continent {
+export interface Continent {
   id: string;
 
   text: string;
@@ -10,7 +10,7 @@ export class Continent {
   items?: Continent[];
 }
 
-export class EuropeCountry {
+export interface EuropeCountry {
   nameAr: string;
 
   nameEn: string;
