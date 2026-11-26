@@ -941,9 +941,9 @@ class PivotGrid extends Widget<PivotGridProperties> {
     };
 
     if (clickedOnFieldsArea($(targetElement))) {
-      return extend(this._createFieldArgs(targetElement), args);
+      return { ...this._createFieldArgs(targetElement), ...args };
     }
-    return extend(this._createCellArgs(targetElement), args);
+    return { ...this._createCellArgs(targetElement), ...args };
   }
 
   protected _createFieldArgs(targetElement: Element): PivotGridFieldArgs {
