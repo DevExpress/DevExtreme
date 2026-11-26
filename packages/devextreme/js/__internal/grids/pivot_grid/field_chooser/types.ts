@@ -7,7 +7,7 @@ import type { HeaderFilterItem, HeaderFilterViewOptions } from '@ts/grids/grid_c
 import type { PivotGridDataSource } from '../data_source/data_source';
 import type { DataSourceState } from '../data_source/types';
 import type { PivotGridField } from '../types';
-import type { FieldChooserBase } from './m_field_chooser_base';
+import type { FieldChooserBase } from './field_chooser_base';
 
 export interface FieldChooserHeaderFilterItem extends HeaderFilterItem {
   children?: FieldChooserHeaderFilterItem[] | null;

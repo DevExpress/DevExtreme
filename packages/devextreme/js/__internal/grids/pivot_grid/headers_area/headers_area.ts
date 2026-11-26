@@ -6,7 +6,7 @@ import { setHeight, setWidth } from '@js/core/utils/size';
 import { isDefined } from '@js/core/utils/type';
 import type { ScrollOffset } from '@ts/core/utils/scroll';
 
-import { AreaItem } from '../area_item/m_area_item';
+import { AreaItem } from '../area_item/area_item';
 import type {
   AreaItemCell,
   AreaItemComponent,
