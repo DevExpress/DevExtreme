@@ -253,9 +253,13 @@ export default abstract class GridBase extends GridCore {
   }
 
   public getAIAssistantChat(): AIAssistantChat {
+    const wrapper = this.body.locator(`.${CLASS.overlayWrapper}.${CLASS.aiChat}`);
+    const popup = this.element.locator(`.${CLASS.aiChat}.${CLASS.popup}`);
+
     return new AIAssistantChat(
       this.page,
-      this.body.locator(`.${CLASS.overlayWrapper}.${CLASS.aiChat}`),
+      wrapper,
+      popup.or(wrapper),
       this.addWidgetPrefix(CLASS.aiAssistantConfirmDialog),
     );
   }
@@ -485,6 +489,10 @@ export default abstract class GridBase extends GridCore {
       })),
       this.getName(),
     );
+  }
+
+  public apiGetSelectedRowKeys(): Promise<unknown[]> {
+    return this.invoke('getSelectedRowKeys');
   }
 
   public apiGetDataSourceSortParams(): Promise<unknown> {
