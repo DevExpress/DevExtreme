@@ -132,6 +132,8 @@ export interface VirtualContentParams {
   virtualColumnWidth: number;
   itemWidths: number[];
   itemHeights: number[];
+  rowCount: number;
+  columnCount: number;
   viewportWidth: number;
   viewportHeight: number;
 }
