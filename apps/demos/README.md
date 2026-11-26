@@ -90,7 +90,7 @@ Build all Angular demos at once: `DEMO_BUNDLE_FILTER` rebuilds some of them, and
 
 ```
 cd apps/demos
-pnpm run test-playwright --ignore-snapshots                # every jQuery demo, fluent.blue.light
+pnpm run test-playwright --ignore-snapshots                # every demo in each framework and the jQuery widget tests, fluent.blue.light
 pnpm run test-playwright --ignore-snapshots --grep DataGrid-   # demos of one component and their widget tests
 THEME=material.blue.light pnpm run test-playwright --ignore-snapshots
 CONSTEL="jquery(1/3)" CONCURRENCY=4 pnpm run test-playwright --ignore-snapshots   # one CI shard
