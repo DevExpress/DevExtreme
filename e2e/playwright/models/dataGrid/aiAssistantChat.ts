@@ -1,12 +1,14 @@
 import type { Locator, Page } from '@playwright/test';
 import Popup from '../popup';
 import Chat from '../chat';
+import type TextArea from '../textArea';
 import AIMessage from './aiMessage';
 
 const CLASS = {
   aiChatContent: 'dx-ai-chat__content',
   message: 'dx-ai-chat__message',
   messageSuccess: 'dx-ai-chat__message--success',
+  messageError: 'dx-ai-chat__message--error',
   dialogWrapper: 'dx-dialog-wrapper',
 };
 
@@ -29,6 +31,10 @@ export default class AIAssistantChat extends Popup {
     return new Chat(this.page, this.element.locator(`.${CLASS.aiChatContent}`));
   }
 
+  public getTextArea(): TextArea {
+    return this.getChat().getTextArea();
+  }
+
   public getInput(): Locator {
     return this.getChat().getInput();
   }
@@ -41,6 +47,10 @@ export default class AIAssistantChat extends Popup {
     return this.page.locator(`.${this.confirmDialogClass} .${CLASS.dialogWrapper}`);
   }
 
+  public getMessages(): Locator {
+    return this.getChat().getMessageBubbles();
+  }
+
   public getAIMessages(): Locator {
     return this.element.locator(`.${CLASS.message}`);
   }
@@ -51,5 +61,9 @@ export default class AIAssistantChat extends Popup {
 
   public getSuccessMessages(): Locator {
     return this.element.locator(`.${CLASS.messageSuccess}`);
+  }
+
+  public getErrorMessages(): Locator {
+    return this.element.locator(`.${CLASS.messageError}`);
   }
 }

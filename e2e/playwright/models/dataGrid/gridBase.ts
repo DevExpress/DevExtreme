@@ -487,6 +487,13 @@ export default abstract class GridBase extends GridCore {
     );
   }
 
+  public apiGetDataSourceSortParams(): Promise<unknown> {
+    return this.element.evaluate(
+      (element, widgetName) => $(element).data(widgetName).getDataSource().sort(),
+      this.getName(),
+    );
+  }
+
   public async apiPush(changes: unknown[]): Promise<void> {
     await this.element.evaluate(
       (element, { widgetName, values }) => {
