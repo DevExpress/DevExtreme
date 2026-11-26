@@ -8,8 +8,8 @@
 >
   @for (home of homes; track home) {
     <dxi-tile-view-item
-      [widthRatio]="home.widthRatio"
-      [heightRatio]="home.heightRatio"
+      [widthRatio]="home.widthRatio ?? 1"
+      [heightRatio]="home.heightRatio ?? 1"
     >
       <div
         class="image"

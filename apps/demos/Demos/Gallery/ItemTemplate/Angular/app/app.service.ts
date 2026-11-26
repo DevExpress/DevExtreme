@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-export class House {
+export interface House {
   ID: number;
 
   Address: string;
@@ -100,7 +100,7 @@ const houses: House[] = [{
 
 @Injectable()
 export class Service {
-  getHouses() {
+  getHouses(): House[] {
     return houses;
   }
 }

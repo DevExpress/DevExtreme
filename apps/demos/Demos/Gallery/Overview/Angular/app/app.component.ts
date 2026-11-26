@@ -25,7 +25,7 @@ export class AppComponent {
 
   readonly slideshowDelay = signal(2000);
 
-  valueChanged(e: DxCheckBoxTypes.ValueChangedEvent) {
+  valueChanged(e: DxCheckBoxTypes.ValueChangedEvent): void {
     this.slideshowDelay.set(e.value ? 2000 : 0);
   }
 }
