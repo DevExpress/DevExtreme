@@ -6,6 +6,7 @@ import Overlay from '../overlay';
 const CLASS = {
   contextMenu: 'dx-context-menu',
   item: 'dx-menu-item',
+  itemText: 'dx-menu-item-text',
   overlay: 'dx-overlay',
 };
 
@@ -22,6 +23,12 @@ export default class ContextMenu extends Widget {
 
     this.items = page.locator(`.${CLASS.contextMenu} .${CLASS.item}`);
     this.overlay = new Overlay(page, this.element.locator(`.${CLASS.overlay}`));
+  }
+
+  public getItemByText(text: string): Locator {
+    return this.element.locator(`.${CLASS.item}`).filter({
+      has: this.page.locator(`.${CLASS.itemText}`).getByText(text, { exact: true }),
+    });
   }
 
   public async show(): Promise<void> {

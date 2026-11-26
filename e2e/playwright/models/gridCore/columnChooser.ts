@@ -9,6 +9,7 @@ const CLASS = {
   columnChooser: 'column-chooser',
   checkbox: 'dx-checkbox',
   treeViewItem: 'dx-treeview-item',
+  closeButton: 'dx-closebutton',
 };
 
 export default class ColumnChooser extends GridModule {
@@ -33,6 +34,10 @@ export default class ColumnChooser extends GridModule {
 
   public getCheckbox(nth = 0): Locator {
     return this.content.locator(`.${CLASS.checkbox}`).nth(nth);
+  }
+
+  public getCloseButton(): Locator {
+    return this.content.locator(`.${CLASS.closeButton}`);
   }
 
   public getColumn(index = 0): Locator {

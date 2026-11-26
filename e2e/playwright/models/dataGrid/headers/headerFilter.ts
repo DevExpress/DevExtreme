@@ -5,6 +5,7 @@ const CLASS = {
   filterMenu: 'dx-header-filter-menu',
   content: 'dx-overlay-content',
   button: 'dx-button',
+  listItem: 'dx-list-item',
 };
 
 export default class HeaderFilter extends GridElement {
@@ -17,6 +18,10 @@ export default class HeaderFilter extends GridElement {
 
   public getButtons(): Locator {
     return this.element.locator(`.${CLASS.button}`);
+  }
+
+  public getListItems(): Locator {
+    return this.element.locator(`.${CLASS.listItem}`);
   }
 
   public getContent(): Locator {

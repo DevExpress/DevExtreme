@@ -75,7 +75,6 @@ export const CLASS = {
   textEditorInput: 'dx-texteditor-input',
   commandDrag: 'dx-command-drag',
   dialogWrapper: 'dx-dialog-wrapper',
-  summaryTotal: 'dx-datagrid-summary-item',
   scrollableContainer: 'dx-scrollable-container',
   scrollContainer: 'dx-datagrid-scroll-container',
   columnsSeparator: 'dx-datagrid-columns-separator',
@@ -690,20 +689,6 @@ export default class DataGrid extends GridCore {
     )();
   }
 
-  apiToggleKeyboardNavigation(value: boolean): Promise<void> {
-    const { getInstance } = this;
-
-    return ClientFunction(
-      () => (getInstance() as DataGridInstance).option('keyboardNavigation.enabled', value),
-      {
-        dependencies: {
-          getInstance,
-          value,
-        },
-      },
-    )();
-  }
-
   apiPush(values: any[]): Promise<void> {
     const { getInstance } = this;
 
@@ -1026,10 +1011,6 @@ export default class DataGrid extends GridCore {
 
   getSummaryCellStatusContainer(nth = 0): Selector {
     return this.element().find(`[${E2E_ATTRIBUTES.summaryCellStatusContainer}="true"]`).nth(nth);
-  }
-
-  getSummaryTotalElement(nth = 0): Selector {
-    return this.element().find(`.${CLASS.summaryTotal}`).nth(nth);
   }
 
   apiChangeSensitivity(

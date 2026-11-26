@@ -1,12 +1,11 @@
-import { ClientFunction } from 'testcafe';
 import type { Properties } from 'devextreme/ui/data_grid';
 import { employees, tasks } from './data';
 
-// NOTE: testcafe fails if adding imported variable to dependencies
-const gridTasks = tasks;
+export const gridData = { employees, tasks };
 
-export const gridOptions: Properties = {
-  dataSource: employees,
+// Runs in the page, where the data arrives as the argument.
+export const gridOptions = (data: typeof gridData): Properties => ({
+  dataSource: data.employees,
   keyExpr: 'ID',
   showBorders: true,
   columns: [{
@@ -26,7 +25,7 @@ export const gridOptions: Properties = {
   },
   masterDetail: {
     enabled: true,
-    template: ClientFunction((container, options) => {
+    template: (container, options) => {
       const devexpress = (window as any).DevExpress;
       const currentEmployeeData = options.data;
 
@@ -50,11 +49,11 @@ export const gridOptions: Properties = {
           dataSource: new devexpress.data.DataSource({
             store: new devexpress.data.ArrayStore({
               key: 'ID',
-              data: gridTasks,
+              data: data.tasks,
             }),
             filter: ['EmployeeID', '=', options.key],
           }),
         }).appendTo(container);
-    }, { dependencies: { gridTasks } }),
+    },
   },
-};
+});

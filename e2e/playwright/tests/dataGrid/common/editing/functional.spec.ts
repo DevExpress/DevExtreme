@@ -39,7 +39,8 @@ const countEvents = async (
 };
 
 // A save that fails validation changes nothing visible, and in row mode it runs on a timer after
-// the click or the Enter. Every save attempt raises rowValidating: wait for it, then for the grid.
+// the click or the Enter. A save with pending changes raises rowValidating: wait for it, then for
+// the grid.
 const trackSaveAttempts = async (
   dataGrid: DataGrid,
 ): Promise<(action: () => Promise<void>) => Promise<void>> => {
