@@ -1,7 +1,8 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import { Component, enableProdMode } from '@angular/core';
 import * as AspNetData from 'devextreme-aspnet-data-nojquery';
-import { DxDataGridModule, type DxDataGridTypes } from 'devextreme-angular/ui/data-grid';
+import { DxDataGridModule } from 'devextreme-angular/ui/data-grid';
+import type { DxDataGridTypes } from 'devextreme-angular/ui/data-grid';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();

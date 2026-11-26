@@ -1,5 +1,6 @@
 import { DestroyRef, Injectable, inject } from '@angular/core';
-import { HubConnectionBuilder, HttpTransportType, type HubConnection } from '@aspnet/signalr';
+import { HubConnectionBuilder, HttpTransportType } from '@aspnet/signalr';
+import type { HubConnection } from '@aspnet/signalr';
 import * as AspNetData from 'devextreme-aspnet-data-nojquery';
 import Guid from 'devextreme/core/guid';
 import { Subject } from 'rxjs';

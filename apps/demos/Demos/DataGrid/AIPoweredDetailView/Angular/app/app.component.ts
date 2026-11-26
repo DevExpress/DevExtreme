@@ -2,7 +2,8 @@ import { bootstrapApplication } from '@angular/platform-browser';
 import { Component, enableProdMode, inject } from '@angular/core';
 import { formatMessage } from 'devextreme/localization';
 import { DxDataGridModule, DxDataGridTypes } from 'devextreme-angular/ui/data-grid';
-import { Service, type Vehicle, type AbortRequest } from './app.service';
+import { Service } from './app.service';
+import type { Vehicle, AbortRequest } from './app.service';
 import { Category } from './category/category.component';
 import { DetailViewComponent } from './detail-view/detail-view.component';
 

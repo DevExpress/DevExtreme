@@ -10,7 +10,8 @@ import {
 } from 'devextreme-angular';
 import type { DataSourceOptions } from 'devextreme-angular/common/data';
 import type { DxDataGridTypes } from 'devextreme-angular/ui/data-grid';
-import { type Order, Service } from './app.service';
+import { Service } from './app.service';
+import type { Order } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();

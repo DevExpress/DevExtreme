@@ -5,11 +5,14 @@ import {
 import {
   DxButtonModule, DxTabPanelModule, DxDataGridModule, DxDataGridComponent,
 } from 'devextreme-angular';
-import { ArrayStore, type DataSourceOptions } from 'devextreme-angular/common/data';
-import { Workbook, type Cell } from 'devextreme-exceljs-fork';
+import { ArrayStore } from 'devextreme-angular/common/data';
+import type { DataSourceOptions } from 'devextreme-angular/common/data';
+import { Workbook } from 'devextreme-exceljs-fork';
+import type { Cell } from 'devextreme-exceljs-fork';
 import { saveAs } from 'file-saver-es';
 // Our demo infrastructure requires us to use 'file-saver-es'. We recommend that you use the official 'file-saver' package in your applications.
-import { exportDataGrid, type DataGridCell } from 'devextreme-angular/common/export/excel';
+import { exportDataGrid } from 'devextreme-angular/common/export/excel';
+import type { DataGridCell } from 'devextreme-angular/common/export/excel';
 import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {

@@ -3,8 +3,9 @@ import {
   Component, enableProdMode, inject, signal,
 } from '@angular/core';
 import {
-  HttpClient, type HttpErrorResponse, HttpParams, provideHttpClient, withFetch,
+  HttpClient, HttpParams, provideHttpClient, withFetch,
 } from '@angular/common/http';
+import type { HttpErrorResponse } from '@angular/common/http';
 import { lastValueFrom, Observable } from 'rxjs';
 import { DxDataGridModule, DxSelectBoxModule, DxButtonModule } from 'devextreme-angular';
 import { CustomStore } from 'devextreme-angular/common/data';

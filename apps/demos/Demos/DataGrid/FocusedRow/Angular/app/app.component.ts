@@ -7,7 +7,8 @@ import { DxNumberBoxModule, DxCheckBoxModule } from 'devextreme-angular';
 import { DataSource, ArrayStore } from 'devextreme-angular/common/data';
 
 import { DxDataGridModule, DxDataGridTypes } from 'devextreme-angular/ui/data-grid';
-import { type Task, Service } from './app.service';
+import { Service } from './app.service';
+import type { Task } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();

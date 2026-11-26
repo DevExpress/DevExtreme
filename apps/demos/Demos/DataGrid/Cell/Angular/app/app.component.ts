@@ -1,7 +1,8 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import {
-  Component, Pipe, type PipeTransform, enableProdMode, inject,
+  Component, Pipe, enableProdMode, inject,
 } from '@angular/core';
+import type { PipeTransform } from '@angular/core';
 import {
   DxDataGridModule,
   DxSparklineModule,

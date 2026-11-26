@@ -3,7 +3,8 @@ import {
 } from '@angular/core';
 import { DxDataGridModule } from 'devextreme-angular';
 import { DataSource, ArrayStore } from 'devextreme-angular/common/data';
-import { type Task, Service } from '../app.service';
+import { Service } from '../app.service';
+import type { Task } from '../app.service';
 
 @Component({
   selector: 'detail-grid',

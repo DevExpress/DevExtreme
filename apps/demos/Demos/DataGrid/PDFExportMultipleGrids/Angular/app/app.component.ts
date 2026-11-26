@@ -6,9 +6,11 @@ import { jsPDF } from 'jspdf';
 import {
   DxButtonModule, DxTabPanelModule, DxDataGridModule, DxDataGridComponent,
 } from 'devextreme-angular';
-import { exportDataGrid, type Cell, type DataGridCell } from 'devextreme-angular/common/export/pdf';
+import { exportDataGrid } from 'devextreme-angular/common/export/pdf';
+import type { Cell, DataGridCell } from 'devextreme-angular/common/export/pdf';
 import { DataSource, ArrayStore } from 'devextreme-angular/common/data';
-import { type Product, Service } from './app.service';
+import { Service } from './app.service';
+import type { Product } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();

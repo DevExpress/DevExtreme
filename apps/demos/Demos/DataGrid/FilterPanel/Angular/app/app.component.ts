@@ -2,8 +2,10 @@ import { bootstrapApplication } from '@angular/platform-browser';
 import { Component, enableProdMode, inject } from '@angular/core';
 import { type PositionConfig } from 'devextreme-angular/common/core/animation';
 import { DxFilterBuilderTypes } from 'devextreme-angular/ui/filter-builder';
-import { DxDataGridModule, type DxDataGridTypes } from 'devextreme-angular/ui/data-grid';
-import { type Order, Service } from './app.service';
+import { DxDataGridModule } from 'devextreme-angular/ui/data-grid';
+import type { DxDataGridTypes } from 'devextreme-angular/ui/data-grid';
+import { Service } from './app.service';
+import type { Order } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();

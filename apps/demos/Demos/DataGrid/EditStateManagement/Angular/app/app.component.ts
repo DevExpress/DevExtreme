@@ -5,7 +5,8 @@ import {
 import { provideHttpClient, withFetch } from '@angular/common/http';
 import { DxLoadPanelModule } from 'devextreme-angular';
 import { DxDataGridModule, DxDataGridTypes } from 'devextreme-angular/ui/data-grid';
-import { Service, type Order, type Change } from './app.service';
+import { Service } from './app.service';
+import type { Order, Change } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();

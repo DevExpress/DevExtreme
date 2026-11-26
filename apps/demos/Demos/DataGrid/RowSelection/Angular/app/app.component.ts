@@ -5,8 +5,10 @@ import {
   signal,
 } from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
-import { DxDataGridModule, type DxDataGridTypes } from 'devextreme-angular/ui/data-grid';
-import { Service, type Employee } from './app.service';
+import { DxDataGridModule } from 'devextreme-angular/ui/data-grid';
+import type { DxDataGridTypes } from 'devextreme-angular/ui/data-grid';
+import { Service } from './app.service';
+import type { Employee } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();

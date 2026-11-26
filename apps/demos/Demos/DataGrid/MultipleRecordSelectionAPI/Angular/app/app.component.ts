@@ -1,10 +1,12 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import {
-  Component, Pipe, type PipeTransform, enableProdMode, inject, signal,
+  Component, Pipe, enableProdMode, inject, signal,
 } from '@angular/core';
+import type { PipeTransform } from '@angular/core';
 import { DxDataGridModule, DxButtonModule, DxSelectBoxModule } from 'devextreme-angular';
 import type { DxSelectBoxTypes } from 'devextreme-angular/ui/select-box';
-import { Service, type Employee } from './app.service';
+import { Service } from './app.service';
+import type { Employee } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
