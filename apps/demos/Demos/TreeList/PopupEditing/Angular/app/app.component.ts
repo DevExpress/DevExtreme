@@ -1,7 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import { Component, enableProdMode, inject } from '@angular/core';
 import { DxTreeListModule, DxTreeListTypes } from 'devextreme-angular/ui/tree-list';
-import { Service } from './app.service';
+import { type Employee, Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -25,7 +25,7 @@ export class AppComponent {
   };
 
   editorPreparing(e: DxTreeListTypes.EditorPreparingEvent) {
-    if (e.dataField === 'Head_ID' && e.row.data.ID === 1) {
+    if (e.dataField === 'Head_ID' && e.row?.data.ID === 1) {
       e.editorOptions.disabled = true;
       e.editorOptions.value = null;
     }
@@ -35,7 +35,7 @@ export class AppComponent {
     e.data.Head_ID = 1;
   }
 
-  readonly allowDeleting = ({ row }) => row.data.ID !== 1;
+  readonly allowDeleting = ({ row }: { row: DxTreeListTypes.Row<Employee> }) => row.data.ID !== 1;
 }
 
 bootstrapApplication(AppComponent);

@@ -23,7 +23,7 @@ export class AppComponent {
     store: inject(Service).getEmployees(),
   });
 
-  readonly filterValue: DxTreeListTypes.Properties['filterValue'] = ['City', '=', 'Bentonville'];
+  readonly filterValue: NonNullable<DxTreeListTypes.Properties['filterValue']> = ['City', '=', 'Bentonville'];
 }
 
 bootstrapApplication(AppComponent);

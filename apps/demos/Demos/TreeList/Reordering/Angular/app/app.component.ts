@@ -1,7 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import { Component, enableProdMode, inject } from '@angular/core';
 import { DxTreeListModule } from 'devextreme-angular';
-import { Service } from './app.service';
+import { type Employee, Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -19,7 +19,7 @@ if (!/localhost/.test(document.location.host)) {
 export class AppComponent {
   readonly employees = inject(Service).getEmployees();
 
-  readonly calculateCellValue = ({ Title, FirstName, LastName }) => [Title, FirstName, LastName].join(' ');
+  readonly calculateCellValue = ({ Title, FirstName, LastName }: Employee) => [Title, FirstName, LastName].join(' ');
 }
 
 bootstrapApplication(AppComponent);

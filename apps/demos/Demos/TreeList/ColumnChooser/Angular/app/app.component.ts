@@ -36,7 +36,7 @@ export class AppComponent {
 
   readonly editorOptions: DxTextBoxTypes.Properties = { placeholder: 'Search column' };
 
-  readonly columnChooserModes: { key: DxTreeListTypes.ColumnChooser['mode'], name: string }[] = [{
+  readonly columnChooserModes: { key: DxTreeListTypes.ColumnChooserMode, name: string }[] = [{
     key: 'dragAndDrop',
     name: 'Drag and drop',
   }, {

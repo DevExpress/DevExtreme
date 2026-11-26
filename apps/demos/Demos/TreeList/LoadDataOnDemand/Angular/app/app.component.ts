@@ -4,6 +4,7 @@ import { HttpClient, HttpParams, provideHttpClient, withFetch } from '@angular/c
 import { lastValueFrom } from 'rxjs';
 import { DxTreeListModule } from 'devextreme-angular';
 import { DataSource } from 'devextreme-angular/common/data';
+import type { DxTreeListTypes } from 'devextreme-angular/ui/tree-list';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -34,7 +35,7 @@ export class AppComponent {
     },
   });
 
-  readonly customizeSizeText = ({ value }) => (value === null ? '' : `${Math.ceil(value / 1024)} KB`);
+  readonly customizeSizeText = ({ value }: DxTreeListTypes.ColumnCustomizeTextArg) => (value === null ? '' : `${Math.ceil(value / 1024)} KB`);
 }
 
 bootstrapApplication(AppComponent, {

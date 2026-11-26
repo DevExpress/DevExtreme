@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-export class Task {
+export interface Task {
   Task_ID: number;
 
   Task_Parent_ID: number;
@@ -2015,7 +2015,7 @@ const tasksData: Task[] = [{
   Task_Parent_ID: 27,
 }];
 
-export class Employee {
+export interface Employee {
   ID: number;
 
   Name: string;
