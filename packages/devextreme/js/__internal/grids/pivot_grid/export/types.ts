@@ -8,13 +8,16 @@ import type { PivotGridField } from '@ts/grids/pivot_grid/types';
 
 import type { DataProvider } from './export';
 
-export interface PivotGridExportItem extends ExcelPivotGridCell {
+export type PivotGridExportItem = Omit<ExcelPivotGridCell, 'path' | 'rowPath' | 'columnPath'> & {
+  path?: unknown[];
+  rowPath?: unknown[];
+  columnPath?: unknown[];
   colspan?: number;
   rowspan?: number;
   alignment?: HorizontalAlignment;
-  width?: number;
+  width?: number | null;
   isWhiteSpace?: boolean;
-}
+};
 
 /** An item after `prepareItems`, which sets `colspan` and `rowspan` on every item. */
 export type PivotGridPreparedExportItem = PivotGridExportItem & {
@@ -43,8 +46,8 @@ export interface DataProviderOptions {
   columns: PivotGridPreparedExportItem[];
   rtlEnabled?: boolean;
   dataFields: PivotGridField[];
-  rowsArea: VerticalHeadersArea;
-  columnsArea: HorizontalHeadersArea;
+  rowsArea: VerticalHeadersArea | undefined;
+  columnsArea: HorizontalHeadersArea | undefined;
 }
 
 export interface PivotGridExportMixin {
