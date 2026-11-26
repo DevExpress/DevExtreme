@@ -16,7 +16,7 @@ import { getTestGlobalsScriptPath } from '../test-globals-bundle';
 import { mockApi } from './api-mocks';
 import { BASE_URL, THEME } from './const';
 import {
-  getVendorVizWidgets, openDemo, prepareDemoPage, runTestCode, trackPageActivity,
+  addStyles, getVendorVizWidgets, openDemo, prepareDemoPage, runTestCode, trackPageActivity,
 } from './demo-page';
 
 interface Viewport { width: number; height: number }
@@ -26,55 +26,28 @@ const DEMOS_ROOT = join(__dirname, '..', '..', '..', 'Demos');
 // Tests are selected by name with --grep, so the command line holds no demo masks.
 updateConfig({ explicitTestArgs: [], verbose: false });
 
-const framework: string = FRAMEWORKS[(settings.targetFramework ?? 'jquery').toLowerCase()];
+// The framework of the job: jQuery, React, Vue or Angular.
+export const currentFramework: string = FRAMEWORKS[(settings.targetFramework ?? 'jquery').toLowerCase()];
 
-if (!framework) {
+if (!currentFramework) {
   throw new Error(`Unknown framework in CONSTEL: ${settings.targetFramework}`);
 }
 
-// The framework of the job: jQuery, React, Vue or Angular.
-export const currentFramework = framework;
-
-const testGlobalsPath = getTestGlobalsScriptPath(framework);
+const testGlobalsPath = getTestGlobalsScriptPath(currentFramework);
 const testGlobals = testGlobalsPath ? readFileSync(testGlobalsPath, 'utf8') : null;
-const vendorVizWidgets = getVendorVizWidgets(framework);
+const vendorVizWidgets = getVendorVizWidgets(currentFramework);
 
-// Styles the TestCafe run added to some demos, by demo name.
-const getDemoStyles = (demo: string): string => {
-  switch (demo) {
-    case 'EditorAppearanceVariants':
+// Styles the TestCafe run added to some demos.
+const getDemoStyles = (name: string): string => {
+  switch (name) {
+    case 'Common-EditorAppearanceVariants':
       return '.dx-toast-wrapper { display: none !important; }';
-    case 'VirtualScrolling':
-    case 'StatePersistence':
+    case 'DataGrid-VirtualScrolling':
+    case 'DataGrid-StatePersistence':
       return '.dx-scrollable-scroll { visibility: visible !important; }';
     default:
       return '';
   }
-};
-
-// Appended, unlike the common test styles, which are prepended, so that a demo style overrides
-// them; an init script, so that it survives a test that reloads the page.
-const appendDemoStyles = (css: string): void => {
-  const append = (): void => {
-    const style = document.createElement('style');
-
-    style.textContent = css;
-    document.head.append(style);
-  };
-
-  if (document.head) {
-    append();
-    return;
-  }
-
-  const observer = new MutationObserver(() => {
-    if (document.head) {
-      observer.disconnect();
-      append();
-    }
-  });
-
-  observer.observe(document, { childList: true, subtree: true });
 };
 
 // A job takes a part of the demos by their place in the sorted list of all widget test demos, so
@@ -88,7 +61,15 @@ const manualTestDemos = Array.from(new Set(glob
     ([, widget, demo]) => `${widget}-${demo}`,
   )))).sort();
 
-const getShardIndex = (name: string): number => manualTestDemos.indexOf(name) + 1;
+const getShardIndex = (name: string): number => {
+  const index = manualTestDemos.indexOf(name);
+
+  if (index < 0) {
+    throw new Error(`describeManualTest must take the widget and the demo as string literals: ${name}`);
+  }
+
+  return index + 1;
+};
 
 // TestCafe waited for the requests an action had started; a screenshot here waits until the page
 // has settled: no pending request, no script animation, no visible load panel.
@@ -96,10 +77,10 @@ const settlers = new WeakMap<Page, () => Promise<void>>();
 
 async function openManualDemo(page: Page, widget: string, demo: string): Promise<void> {
   const demoDir = join(DEMOS_ROOT, widget, demo);
-  const url = `${BASE_URL}/apps/demos/Demos/${widget}/${demo}/${framework}/`;
+  const url = `${BASE_URL}/apps/demos/Demos/${widget}/${demo}/${currentFramework}/`;
   const clientScript = globalReadFrom(demoDir, 'client-script.js', null);
   const testCode = globalReadFrom(demoDir, 'test-code.js', null);
-  const demoStyles = getDemoStyles(demo);
+  const demoStyles = getDemoStyles(`${widget}-${demo}`);
   const waitForIdle = trackPageActivity(page);
 
   settlers.set(page, waitForIdle);
@@ -108,7 +89,8 @@ async function openManualDemo(page: Page, widget: string, demo: string): Promise
   await prepareDemoPage(page, url, THEME, clientScript, testGlobals, vendorVizWidgets);
 
   if (demoStyles) {
-    await page.addInitScript({ content: `(${appendDemoStyles.toString()})(${JSON.stringify(demoStyles)});` });
+    // An init script, so that the style survives a test that reloads the page.
+    await page.addInitScript({ content: `(${addStyles.toString()})(${JSON.stringify(demoStyles)}, 'append');` });
   }
 
   await openDemo(page, url, waitForIdle);
@@ -138,13 +120,13 @@ export function describeManualTest(
     throw new Error(`There is no demo Demos/${widget}/${demo}`);
   }
 
-  if (!existsSync(join(DEMOS_ROOT, widget, demo, framework))
+  if (!existsSync(join(DEMOS_ROOT, widget, demo, currentFramework))
     || !shouldRunTestAtIndex(getShardIndex(name))
-    || (settings.explicitTests && !shouldRunTestExplicitlyInternal(framework, widget, demo))) {
+    || (settings.explicitTests && !shouldRunTestExplicitlyInternal(currentFramework, widget, demo))) {
     return;
   }
 
-  test.describe(framework, () => {
+  test.describe(currentFramework, () => {
     test.describe(name, () => {
       let pageErrors: string[] = [];
 
