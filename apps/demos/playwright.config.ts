@@ -43,8 +43,9 @@ if (!isMaterial(THEME)) {
 
 export default defineConfig({
   testDir: './testing',
-  testMatch: 'common.spec.ts',
-  snapshotPathTemplate: '{testDir}/etalons/{arg}{ext}',
+  testMatch: ['common.spec.ts', 'widgets/**/*.spec.ts'],
+  // The etalons lie next to the test: testing/etalons for the demo pages, testing/widgets/<widget>/etalons for the widget tests.
+  snapshotPathTemplate: '{testDir}/{testFileDir}/etalons/{arg}{ext}',
   outputDir: './testing/artifacts/playwright/test-results',
   fullyParallel: true,
   forbidOnly: !!process.env.CI,

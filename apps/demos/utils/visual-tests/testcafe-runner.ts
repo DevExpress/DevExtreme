@@ -1,4 +1,4 @@
-import createTestCafe, { ClientFunction } from 'testcafe';
+import createTestCafe from 'testcafe';
 
 const LAUNCH_RETRY_ATTEMPTS = 3;
 const LAUNCH_RETRY_TIMEOUT = 10000;
@@ -36,22 +36,6 @@ async function main() {
     .concurrency(concurrency || 1)
     .run({
       quarantineMode: { successThreshold: 1, attemptLimit: 3 },
-      // @ts-expect-error ts-error
-      hooks: {
-        test: {
-          // eslint-disable-next-line no-undef
-          before: async (t: TestController) => {
-            await ClientFunction(() => {
-              if (document.activeElement && document.activeElement !== document.body) {
-                (document.activeElement as HTMLElement).blur();
-              }
-              window.getSelection()?.removeAllRanges();
-            }).with({ boundTestRun: t })();
-
-            await t.hover('html', { offsetX: 1, offsetY: 1 });
-          },
-        },
-      },
     }), LAUNCH_RETRY_ATTEMPTS);
 
   await tester.close();
