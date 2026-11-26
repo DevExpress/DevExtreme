@@ -65,7 +65,7 @@ pnpm run convert-to-js "JSDemos/Demos/Diagram/**/React"
 The "Check generated JS demos" GitHub Action ensures that the React JavaScript and TypeScript sources remain in sync.
 ## Screenshot Tests
 
-Every demo page is compared with an etalon in `testing/etalons`. The jQuery, React, Vue and Angular demos run on [Playwright](https://playwright.dev/) (`testing/common.spec.ts`); the manual widget tests (`testing/widgets`) and the accessibility checks still run on TestCafe.
+Every demo page is compared with an etalon in `testing/etalons`. The jQuery, React, Vue and Angular demos run on [Playwright](https://playwright.dev/) (`testing/common.spec.ts`); the manual widget tests (`testing/widgets`) still run on TestCafe.
 
 One etalon serves all four frameworks of a demo, and it is recorded from the jQuery demo. A framework that draws a demo differently is not given an etalon of its own: find out why it differs and make the demo the same in every framework.
 
@@ -166,6 +166,27 @@ pnpm exec playwright show-report ci-report
 ```
 
 A failed comparison uploads its `-expected`, `-actual` and `-diff` images with the trace. On CI a failed test runs once more; a test that passes then is listed under "flaky" and does not fail the job.
+
+## Accessibility Tests
+
+`testing/accessibility.spec.ts` checks the `.demo-container` of every jQuery demo with [axe](https://github.com/dequelabs/axe-core) on Playwright. Fluent-next themes run only the `color-contrast` rule. The rules switched off for a demo are listed in `getIgnoredRules` of the same file. CI runs the light and dark variants of fluent, material and fluent-next.
+
+Build DevExtreme as for the screenshot tests, then:
+
+```
+cd apps/demos
+pnpm run test-playwright:accessibility                      # every jQuery demo, fluent.blue.light
+pnpm run test-playwright:accessibility --grep Diagram-      # demos of one component
+THEME=material.blue.dark pnpm run test-playwright:accessibility
+```
+
+A demo with violations fails, and its report is written to `testing/artifacts/axe-reports/<Product>-<Demo>.md`.
+
+On macOS DevExtreme scrolls natively, so `scrollable-region-focusable` fails in demos with scrollable content that pass on CI. The container checks what CI checks:
+
+```
+THEME=fluent.blue.light utils/visual-tests/playwright/docker/run.sh --config playwright.accessibility.config.ts
+```
 
 ## See Also
 

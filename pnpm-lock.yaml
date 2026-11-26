@@ -520,6 +520,9 @@ importers:
         specifier: 'catalog:'
         version: 4.6.7
     devDependencies:
+      '@axe-core/playwright':
+        specifier: 'catalog:'
+        version: 4.13.0(playwright-core@1.65.1)
       '@babel/core':
         specifier: 7.29.7
         version: 7.29.7
@@ -538,9 +541,6 @@ importers:
       '@stylistic/eslint-plugin':
         specifier: 'catalog:'
         version: 5.10.0(eslint@10.14.0(jiti@2.6.1)(supports-color@7.2.0))
-      '@testcafe-community/axe':
-        specifier: 3.5.0
-        version: 3.5.0(axe-core@4.13.0)(testcafe@3.7.5(patch_hash=721ed26a09d564c50b26c334470f24e87e4f52d2e497c617341b71ed1a3ddbf3)(supports-color@7.2.0))
       '@types/eslint':
         specifier: 8.56.12
         version: 8.56.12
@@ -565,9 +565,6 @@ importers:
       '@vue/tsconfig':
         specifier: 0.9.1
         version: 0.9.1(typescript@6.0.3)(vue@3.5.45(typescript@6.0.3))
-      axe-core:
-        specifier: 'catalog:'
-        version: 4.13.0
       babel-jest:
         specifier: 30.4.1
         version: 30.4.1(@babel/core@7.29.7)
@@ -7440,13 +7437,6 @@ packages:
 
   '@swc/types@0.1.27':
     resolution: {integrity: sha512-K6h3iUlqeM946U4sXFYeahefR1YBbXJvko+hv8WS8/0BNJ4OHiHRywMnQUJCqkR7Y9+hqQ1TvEpiKqUhz7NEFg==}
-
-  '@testcafe-community/axe@3.5.0':
-    resolution: {integrity: sha512-JFYW8IYtvVZ2788y6d0kb3LGZAQZWgS82SrsFcd/4zJU7b9j2oPruLxpmPKqbM4HwQLk8RhyzkOmECRxRbrLhA==}
-    engines: {node: '>=8.9.0'}
-    peerDependencies:
-      axe-core: '>=2.2.3 <=5'
-      testcafe: '*'
 
   '@testing-library/dom@10.4.1':
     resolution: {integrity: sha512-o4PXJQidqJl82ckFaXUeoAW+XysPLauYI43Abki5hABd853iMhitooc6znOnczgbTYmEP6U6/y1ZyKAIsvMKGg==}
@@ -23217,12 +23207,6 @@ snapshots:
   '@swc/types@0.1.27':
     dependencies:
       '@swc/counter': 0.1.3
-
-  '@testcafe-community/axe@3.5.0(axe-core@4.13.0)(testcafe@3.7.5(patch_hash=721ed26a09d564c50b26c334470f24e87e4f52d2e497c617341b71ed1a3ddbf3)(supports-color@7.2.0))':
-    dependencies:
-      axe-core: 4.13.0
-      chalk: 2.4.2
-      testcafe: 3.7.5(patch_hash=721ed26a09d564c50b26c334470f24e87e4f52d2e497c617341b71ed1a3ddbf3)(supports-color@7.2.0)
 
   '@testing-library/dom@10.4.1':
     dependencies:
