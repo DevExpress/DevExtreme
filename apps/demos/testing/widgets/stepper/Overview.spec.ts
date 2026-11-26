@@ -7,8 +7,8 @@ const NAVIGATION_MODE_BUTTON_GROUP_ID = 'navigationMode';
 const RTL_MODE_CHECK_BOX_ID = 'rtlMode';
 const SELECT_ON_FOCUS_CHECK_BOX_ID = 'selectOnFocus';
 const STEPPER_IDS = ['icons', 'numbers', 'customText'];
-const STEP_SELECTED_CLASS = /\bdx-step-selected\b/;
-const FOCUSED_STATE_CLASS = /\bdx-state-focused\b/;
+const STEP_SELECTED_CLASS = 'dx-step-selected';
+const FOCUSED_STATE_CLASS = 'dx-state-focused';
 
 const forEachStepper = async (
   page: Page,
@@ -40,21 +40,21 @@ describeManualTest('Stepper', 'Overview', { width: 900, height: 800 }, () => {
 
     await forEachStepper(page, async (step) => {
       await step(0).click();
-      await expect(step(2)).toHaveClass(STEP_SELECTED_CLASS);
+      await expect(step(2)).toContainClass(STEP_SELECTED_CLASS);
     });
 
     await navigationModeButtons.nth(0).click();
 
     await forEachStepper(page, async (step) => {
       await step(0).click();
-      await expect(step(0)).toHaveClass(STEP_SELECTED_CLASS);
+      await expect(step(0)).toContainClass(STEP_SELECTED_CLASS);
     });
 
     await forEachStepper(page, async (step) => {
       await step(1).click();
       await page.keyboard.press('ArrowRight');
-      await expect(step(2)).toHaveClass(STEP_SELECTED_CLASS);
-      await expect(step(2)).toHaveClass(FOCUSED_STATE_CLASS);
+      await expect(step(2)).toContainClass(STEP_SELECTED_CLASS);
+      await expect(step(2)).toContainClass(FOCUSED_STATE_CLASS);
     });
 
     await page.locator(`#${SELECT_ON_FOCUS_CHECK_BOX_ID}`).click();
@@ -63,8 +63,8 @@ describeManualTest('Stepper', 'Overview', { width: 900, height: 800 }, () => {
       await step(0).click();
       await page.keyboard.press('ArrowRight');
       await page.keyboard.press('ArrowRight');
-      await expect(step(2)).not.toHaveClass(STEP_SELECTED_CLASS);
-      await expect(step(2)).toHaveClass(FOCUSED_STATE_CLASS);
+      await expect(step(2)).not.toContainClass(STEP_SELECTED_CLASS);
+      await expect(step(2)).toContainClass(FOCUSED_STATE_CLASS);
     });
 
     await testScreenshot(page, 'Stepper overview selectOnFocus=false.png');
