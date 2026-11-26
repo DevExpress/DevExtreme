@@ -64,6 +64,10 @@ export default class AIAssistantChat extends Popup {
     return this.getChat().getMessageBubbles();
   }
 
+  public getUserMessages(): Locator {
+    return this.getMessages().filter({ hasNot: this.page.locator(`.${CLASS.message}`) });
+  }
+
   public getAIMessages(): Locator {
     return this.chatRoot.locator(`.${CLASS.message}`);
   }
