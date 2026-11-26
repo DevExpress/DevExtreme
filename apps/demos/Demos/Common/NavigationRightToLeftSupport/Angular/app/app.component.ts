@@ -9,6 +9,7 @@ import {
   DxTreeViewModule,
 } from 'devextreme-angular';
 
+import type { DxSelectBoxTypes } from 'devextreme-angular/ui/select-box';
 import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -41,7 +42,7 @@ export class AppComponent {
 
   readonly rtlEnabled = signal(false);
 
-  selectLanguage(e) {
+  selectLanguage(e: DxSelectBoxTypes.ValueChangedEvent) {
     this.rtlEnabled.set(e.value === this.languages[0]);
   }
 }

@@ -1,15 +1,8 @@
 /* eslint-disable @typescript-eslint/no-this-alias */
 /* eslint-disable @typescript-eslint/init-declarations */
-/* eslint-disable no-plusplus */
 /* eslint-disable no-restricted-globals */
 /* eslint-disable func-names */
-/* eslint-disable @typescript-eslint/no-shadow */
-/* eslint-disable no-param-reassign */
-/* eslint-disable no-multi-assign */
-/* eslint-disable @stylistic/max-len */
 /* eslint-disable @typescript-eslint/no-use-before-define */
-/* eslint-disable prefer-destructuring */
-/* eslint-disable @typescript-eslint/no-unused-expressions */
 
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 import type { Size } from '@ts/viz/core/types';
@@ -91,7 +84,8 @@ class SliderMarker {
     }
     return {
       width: textSize.width,
-      // @ts-expect-error null while the label has no finite height; the size arithmetic treats it as 0
+      // @ts-expect-error null while the label has no finite height; the size arithmetic treats it
+      // as 0
       height: this._textHeight,
       y: textSize.y,
     };
@@ -109,11 +103,11 @@ class SliderMarker {
     const position = this._position;
     const isLeft = this._isLeftPointer;
     const correctCloudBorders = function (): void {
-      rectLeftBorder++;
-      rectRightBorder++;
-      pointerRightPoint++;
-      pointerCenterPoint++;
-      pointerLeftPoint++;
+      rectLeftBorder += 1;
+      rectRightBorder += 1;
+      pointerRightPoint += 1;
+      pointerCenterPoint += 1;
+      pointerLeftPoint += 1;
     };
     const checkPointerBorders = function (): void {
       if (pointerRightPoint > rectRightBorder) {
@@ -122,7 +116,9 @@ class SliderMarker {
         pointerLeftPoint = rectLeftBorder;
       }
 
-      isLeft && correctCloudBorders();
+      if (isLeft) {
+        correctCloudBorders();
+      }
     };
     let borderPosition = position;
 
@@ -133,7 +129,8 @@ class SliderMarker {
         checkPointerBorders();
         borderPosition += rectLeftBorder;
       } else {
-        rectLeftBorder = pointerLeftPoint = 0;
+        pointerLeftPoint = 0;
+        rectLeftBorder = 0;
         rectRightBorder = rectWidth;
       }
     } else if (position - this._range[0] < rectWidth) {
@@ -150,15 +147,24 @@ class SliderMarker {
 
     return {
       offset: rectLeftBorder,
-      isCut: (!isLeft || pointerCenterPoint !== pointerLeftPoint) && (isLeft || pointerCenterPoint !== pointerRightPoint),
+      isCut:
+        (!isLeft || pointerCenterPoint !== pointerLeftPoint)
+        && (isLeft || pointerCenterPoint !== pointerRightPoint),
       points: [
-        rectLeftBorder, 0,
-        rectRightBorder, 0,
-        rectRightBorder, rectHeight,
-        pointerRightPoint, rectHeight,
-        pointerCenterPoint, rectHeight + POINTER_SIZE,
-        pointerLeftPoint, rectHeight,
-        rectLeftBorder, rectHeight,
+        rectLeftBorder,
+        0,
+        rectRightBorder,
+        0,
+        rectRightBorder,
+        rectHeight,
+        pointerRightPoint,
+        rectHeight,
+        pointerCenterPoint,
+        rectHeight + POINTER_SIZE,
+        pointerLeftPoint,
+        rectHeight,
+        rectLeftBorder,
+        rectHeight,
       ],
     };
   }
@@ -175,29 +181,42 @@ class SliderMarker {
     const rectSize = that._getRectSize(currentTextSize);
 
     textSize = that._textSize || currentTextSize;
-    textSize = that._textSize = currentTextSize.width > textSize.width || currentTextSize.height > textSize.height ? currentTextSize : textSize;
+    that._textSize = currentTextSize.width > textSize.width
+      || currentTextSize.height > textSize.height
+      ? currentTextSize
+      : textSize;
+    textSize = that._textSize;
     that._timeout = setTimeout(() => {
       updateSliderMarker(currentTextSize, rectSize);
       that._textSize = currentTextSize;
     }, SLIDER_MARKER_UPDATE_DELAY);
 
-    function updateSliderMarker(size: TextSize, rectSize?: Size): void {
-      rectSize = rectSize || that._getRectSize(size);
-      that._group.attr({ translateY: -(rectSize.height + POINTER_SIZE) });
+    function updateSliderMarker(size: TextSize, knownRectSize?: Size): void {
+      const markerRectSize = knownRectSize || that._getRectSize(size);
+      that._group.attr({ translateY: -(markerRectSize.height + POINTER_SIZE) });
       const pointsData = that._getAreaPointsInfo(size);
-      const points = pointsData.points;
-      const offset = pointsData.offset;
+      const { points, offset } = pointsData;
       that._area.attr({ points });
-      that._border.attr({ x: that._isLeftPointer ? points[0] - 1 : points[2], height: pointsData.isCut ? rectSize.height : rectSize.height + POINTER_SIZE });
+      that._border.attr({
+        x: that._isLeftPointer ? points[0] - 1 : points[2],
+        height: pointsData.isCut ? markerRectSize.height : markerRectSize.height + POINTER_SIZE,
+      });
 
-      const trackerAttrs: { translateX?: number; x?: number; width: number; height: number } = { translateX: offset, width: rectSize.width, height: rectSize.height + POINTER_SIZE };
+      const trackerAttrs: { translateX?: number; x?: number; width: number; height: number } = {
+        translateX: offset,
+        width: markerRectSize.width,
+        height: markerRectSize.height + POINTER_SIZE,
+      };
       if (isFirefoxOnAndroid()) {
         trackerAttrs.x = offset;
         trackerAttrs.translateX = undefined;
       }
       that._tracker.attr(trackerAttrs);
 
-      that._label.attr({ translateX: that._paddingLeftRight + offset, translateY: rectSize.height / 2 - (size.y + size.height / 2) });
+      that._label.attr({
+        translateX: that._paddingLeftRight + offset,
+        translateY: markerRectSize.height / 2 - (size.y + size.height / 2),
+      });
     }
 
     updateSliderMarker(textSize);
@@ -244,8 +263,8 @@ class SliderMarker {
     if (this._isOverlapped !== isOverlapped) {
       if (isOverlapped) {
         this._border.append(this._group);
-      } else {
-        this._isOverlapped && this._border.remove();
+      } else if (this._isOverlapped) {
+        this._border.remove();
       }
       this._isOverlapped = isOverlapped;
     }

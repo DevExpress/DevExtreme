@@ -14,6 +14,7 @@ import {
 } from 'devextreme-angular';
 import notify from 'devextreme/ui/notify';
 import type { EditorStyle, LabelMode } from 'devextreme-angular/common';
+import type { DxButtonTypes } from 'devextreme-angular/ui/button';
 import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -51,7 +52,7 @@ export class AppComponent {
     X: /[02-9]/,
   };
 
-  validateClick({ validationGroup }) {
+  validateClick({ validationGroup }: DxButtonTypes.ClickEvent) {
     const result = validationGroup.validate();
 
     if (result.isValid) {

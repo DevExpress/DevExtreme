@@ -1,6 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import { Component, enableProdMode, inject } from '@angular/core';
 import { DxSelectBoxModule, DxDataGridModule } from 'devextreme-angular';
+import type { DxSelectBoxTypes } from 'devextreme-angular/ui/select-box';
 
 import { locale, loadMessages, formatMessage } from 'devextreme-angular/common/core/localization';
 
@@ -40,23 +41,23 @@ export class AppComponent {
     locale(this.locale);
   }
 
-  private initMessages() {
+  private initMessages(): void {
     loadMessages(deMessages);
     loadMessages(ruMessages);
     loadMessages(this.service.getDictionary());
   }
 
-  changeLocale(data) {
-    this.setLocale(data.value);
+  changeLocale({ value }: DxSelectBoxTypes.ValueChangedEvent): void {
+    this.setLocale(value);
     parent.document.location.reload();
   }
 
-  private getLocale() {
+  private getLocale(): string {
     const locale = sessionStorage.getItem('locale');
     return locale != null ? locale : 'en';
   }
 
-  private setLocale(locale) {
+  private setLocale(locale: string): void {
     sessionStorage.setItem('locale', locale);
   }
 }

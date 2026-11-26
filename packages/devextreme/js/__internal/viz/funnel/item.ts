@@ -1,5 +1,4 @@
 /* eslint-disable no-bitwise */
-/* eslint-disable prefer-destructuring */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 
 import { paintedColor } from '@ts/core/utils/css_variables';
@@ -37,7 +36,7 @@ interface ItemOptions {
 }
 
 function parseStyles(color: string, style: ThemeValue, baseStyle: ThemeValue): ItemStyle {
-  const border = style.border;
+  const { border } = style;
   const baseBorder = baseStyle.border;
   const borderVisible = isDefined(border.visible) ? border.visible : baseBorder.visible;
   const borderWidth = isDefined(border.width) ? border.width : baseBorder.width;
@@ -76,7 +75,7 @@ class Item {
   declare element: ThemeValue;
 
   constructor(widget: ItemWidget, options: ItemOptions) {
-    const data = options.data;
+    const { data } = options;
 
     this.code = 0;
     this.widget = widget;

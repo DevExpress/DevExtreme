@@ -52,6 +52,7 @@ export default [
         ignoreRestSiblings: true,
         caughtErrors: 'none',
       }],
+      'class-methods-use-this': 'warn',
       'no-only-tests/no-only-tests': 'error',
       'no-await-in-loop': 'off',
       'no-restricted-globals': 'off',
@@ -65,6 +66,31 @@ export default [
       '@typescript-eslint/no-unsafe-return': 'off',
       '@typescript-eslint/no-non-null-assertion': 'off',
       '@stylistic/no-extra-parens': 'off',
+    },
+  },
+  {
+    files: ['**/*.ts'],
+    ignores: [
+      'playwright.config.ts',
+      'tests/scheduler/**/*.ts',
+    ],
+    rules: {
+      'no-restricted-syntax': ['error', {
+        selector: "CallExpression[callee.property.name='waitForTimeout'], CallExpression[callee.name='setTimeout'], CallExpression[callee.object.name=/^(window|globalThis)$/][callee.property.name='setTimeout']",
+        message: 'Wait for the state the next step needs, not for time.',
+      }, {
+        selector: "Property[key.name='force'][value.value=true]",
+        message: 'A forced action skips the checks a user action would pass. Make the target reachable.',
+      }, {
+        selector: "CallExpression[callee.property.name='toPass']",
+        message: 'Use a retrying assertion on the value itself (expect(locator), expect.poll).',
+      }, {
+        selector: "CallExpression[callee.object.name!=/^(window|globalThis)$/][callee.property.name=/^(setTimeout|setDefaultTimeout|setDefaultNavigationTimeout)$/], CallExpression[callee.object.name='test'][callee.property.name='slow']",
+        message: 'Do not raise a timeout. Find what the test is waiting for.',
+      }, {
+        selector: "Property[key.name='timeout']",
+        message: 'Do not raise a timeout. If this is a widget option, disable the rule on this line and say so.',
+      }],
     },
   },
 ];

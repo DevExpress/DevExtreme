@@ -23,17 +23,17 @@ function createClientsStore(httpClient: HttpClient) {
     useDefaultSearch: true,
     load(loadOptions) {
       let params: HttpParams = new HttpParams();
-      [
+      ([
         'skip',
         'take',
         'filter',
-      ].forEach((option) => {
+      ] as const).forEach((option) => {
         if (option in loadOptions && isNotEmpty(loadOptions[option])) {
           params = params.set(option, JSON.stringify(loadOptions[option]));
         }
       });
-      return lastValueFrom(httpClient.get('https://js.devexpress.com/Demos/NetCore/api/DataGridWebApi/CustomersLookup', { params }))
-        .then(({ data }: { data: Record<string, unknown>[] }) => ({
+      return lastValueFrom(httpClient.get<{ data: Record<string, unknown>[] }>('https://js.devexpress.com/Demos/NetCore/api/DataGridWebApi/CustomersLookup', { params }))
+        .then(({ data }) => ({
           data,
         }))
         .catch(() => { throw new Error('Data Loading Error'); });
@@ -78,6 +78,10 @@ export class AppComponent {
   currentClient = '';
 
   readonly fullInfo = signal('');
+
+  constructor() {
+    this.updateEmployeeInfo();
+  }
 
   updateEmployeeInfo() {
     let result = '';

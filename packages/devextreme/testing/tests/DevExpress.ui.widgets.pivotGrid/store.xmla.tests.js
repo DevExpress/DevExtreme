@@ -1,6 +1,6 @@
 import $ from 'jquery';
-import pivotGridUtils from '__internal/grids/pivot_grid/m_widget_utils';
-import { XmlaStore } from '__internal/grids/pivot_grid/xmla_store/m_xmla_store';
+import pivotGridUtils from '__internal/grids/pivot_grid/widget_utils';
+import { XmlaStore } from '__internal/grids/pivot_grid/xmla_store/xmla_store';
 import { errors } from 'common/data/errors';
 
 const CATEGORIES_DATA = [

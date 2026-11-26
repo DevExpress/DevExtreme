@@ -1,7 +1,4 @@
 /* eslint-disable func-names */
-/* eslint-disable @stylistic/max-len */
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
 
 import devices from '@ts/core/devices';
 import { browser } from '@ts/core/utils/browser';
@@ -26,7 +23,23 @@ export const consts = {
   pointerSize: POINTER_SIZE,
 };
 
-export const formatValue = function (value, formatOptions, tickIntervalsInfo?, valueType?, type?, logarithmBase?) {
+interface FormatObject {
+  value: unknown;
+  valueText: string;
+}
+
+interface ValueFormatOptions {
+  customizeText?: (this: FormatObject, formatObject: FormatObject) => unknown;
+}
+
+export const formatValue = function (
+  value: unknown,
+  formatOptions: ValueFormatOptions,
+  tickIntervalsInfo?: { ticks: unknown[]; tickInterval?: unknown },
+  valueType?: string,
+  type?: string,
+  logarithmBase?: number,
+): string {
   const formatObject = {
     value,
     valueText: _format(value, {
@@ -38,7 +51,12 @@ export const formatValue = function (value, formatOptions, tickIntervalsInfo?, v
       logarithmBase,
     }),
   };
-  return String(isFunction(formatOptions.customizeText) ? formatOptions.customizeText.call(formatObject, formatObject) : formatObject.valueText);
+  return String(
+    isFunction(formatOptions.customizeText)
+      ? formatOptions.customizeText.call(formatObject, formatObject)
+      : formatObject.valueText,
+  );
 };
 
-export const isFirefoxOnAndroid = () => browser.mozilla && devices.real().android;
+export const isFirefoxOnAndroid = (): boolean | undefined => browser.mozilla
+  && devices.real().android;

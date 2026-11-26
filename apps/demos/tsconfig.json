@@ -14,7 +14,8 @@
   },
   "include": [
     "utils/**/*.ts",
-    "testing/**/*.ts"
+    "testing/**/*.ts",
+    "playwright.config.ts"
   ],
   "exclude": [
     "utils/templates/Vue/index.ts"

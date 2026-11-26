@@ -7,10 +7,8 @@
 /* eslint-disable @typescript-eslint/no-shadow */
 /* eslint-disable consistent-return */
 /* eslint-disable no-multi-assign */
-/* eslint-disable @stylistic/max-len */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-/* eslint-disable prefer-destructuring */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 
 import { paintedColor } from '@ts/core/utils/css_variables';
@@ -29,9 +27,15 @@ const DEFAULT_FINANCIAL_TRACKER_MARGIN = 2;
 export default _extend({}, barPoint, {
   _getContinuousPoints(openCoord, closeCoord) {
     const that = this;
-    const x = that.x;
-    const createPoint = that._options.rotated ? function (x, y) { return [y, x]; } : function (x, y) { return [x, y]; };
-    const width = that.width;
+    const { x } = that;
+    const createPoint = that._options.rotated
+      ? function (x, y) {
+        return [y, x];
+      }
+      : function (x, y) {
+        return [x, y];
+      };
+    const { width } = that;
     const highCoord = that.highY;
     const max = _abs(highCoord - openCoord) < _abs(highCoord - closeCoord) ? openCoord : closeCoord;
     const min = max === closeCoord ? openCoord : closeCoord;
@@ -78,8 +82,14 @@ export default _extend({}, barPoint, {
 
   _getCrockPoints(y) {
     const that = this;
-    const x = that.x;
-    const createPoint = that._options.rotated ? function (x, y) { return [y, x]; } : function (x, y) { return [x, y]; };
+    const { x } = that;
+    const createPoint = that._options.rotated
+      ? function (x, y) {
+        return [y, x];
+      }
+      : function (x, y) {
+        return [x, y];
+      };
     // @ts-expect-error
     return [].concat(createPoint(x, that.highY))
     // @ts-expect-error
@@ -129,7 +139,7 @@ export default _extend({}, barPoint, {
 
   _fillStyle() {
     const that = this;
-    const styles = that._options.styles;
+    const { styles } = that._options;
     if (that._isReduction && that._isPositive) {
       that._styles = styles.reductionPositive;
     } else if (that._isReduction) {
@@ -148,7 +158,7 @@ export default _extend({}, barPoint, {
   correctCoordinates(correctOptions) {
     const minWidth = this._getMinTrackerWidth();
     const maxWidth = 10;
-    let width = correctOptions.width;
+    let { width } = correctOptions;
     width = width < minWidth ? minWidth : width > maxWidth ? maxWidth : width;
 
     this.width = width + width % 2;
@@ -178,17 +188,20 @@ export default _extend({}, barPoint, {
 
   _getSettingsForTracker() {
     const that = this;
-    let highY = that.highY;
-    let lowY = that.lowY;
-    const rotated = that._options.rotated;
+    let { highY, lowY } = that;
+    const { rotated } = that._options;
     let x;
     let y;
     let width;
     let height;
 
     if (highY === lowY) {
-      highY = rotated ? highY + DEFAULT_FINANCIAL_TRACKER_MARGIN : highY - DEFAULT_FINANCIAL_TRACKER_MARGIN;
-      lowY = rotated ? lowY - DEFAULT_FINANCIAL_TRACKER_MARGIN : lowY + DEFAULT_FINANCIAL_TRACKER_MARGIN;
+      highY = rotated
+        ? highY + DEFAULT_FINANCIAL_TRACKER_MARGIN
+        : highY - DEFAULT_FINANCIAL_TRACKER_MARGIN;
+      lowY = rotated
+        ? lowY - DEFAULT_FINANCIAL_TRACKER_MARGIN
+        : lowY + DEFAULT_FINANCIAL_TRACKER_MARGIN;
     }
 
     if (rotated) {
@@ -213,11 +226,9 @@ export default _extend({}, barPoint, {
 
   _getGraphicBBox(location) {
     const that = this;
-    const rotated = that._options.rotated;
-    const x = that.x;
-    const width = that.width;
-    let lowY = that.lowY;
-    let highY = that.highY;
+    const { rotated } = that._options;
+    const { x, width } = that;
+    let { lowY, highY } = that;
 
     if (location) {
       const valVisibleArea = that.series.getValueAxis().getVisibleArea();
@@ -251,7 +262,7 @@ export default _extend({}, barPoint, {
       const minValue = _min(that.lowY, that.highY);
       const maxValue = _max(that.lowY, that.highY);
       const visibleArea = that._getVisibleArea();
-      const rotated = that._options.rotated;
+      const { rotated } = that._options;
       const minVisible = rotated ? visibleArea.minX : visibleArea.minY;
       const maxVisible = rotated ? visibleArea.maxX : visibleArea.maxY;
       const min = _max(minVisible, minValue);
@@ -276,7 +287,7 @@ export default _extend({}, barPoint, {
       const minValue = _min(that.lowY, that.highY);
       const maxValue = _max(that.lowY, that.highY);
       const visibleArea = that._getVisibleArea();
-      const rotated = that._options.rotated;
+      const { rotated } = that._options;
       const minVisible = rotated ? visibleArea.minX : visibleArea.minY;
       const maxVisible = rotated ? visibleArea.maxX : visibleArea.maxY;
       const min = _max(minVisible, minValue);
@@ -325,10 +336,10 @@ export default _extend({}, barPoint, {
 
   getCrosshairData(x, y) {
     const that = this;
-    const rotated = that._options.rotated;
+    const { rotated } = that._options;
     const origY = rotated ? x : y;
     let yValue;
-    const argument = that.argument;
+    const { argument } = that;
     let coords;
     let coord = 'low';
 
@@ -396,7 +407,7 @@ export default _extend({}, barPoint, {
 
   _updateMarker(animationEnabled, style, group) {
     const that = this;
-    const graphic = that.graphic;
+    const { graphic } = that;
 
     graphic.attr({ points: that._getPoints() }).smartAttr(style).sharp();
     group && graphic.append(that._getMarkerGroup(group));

@@ -4,7 +4,6 @@
 /* eslint-disable no-bitwise */
 /* eslint-disable radix */
 /* eslint-disable @typescript-eslint/init-declarations */
-/* eslint-disable no-plusplus */
 /* eslint-disable func-names */
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable no-nested-ternary */
@@ -12,7 +11,6 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-multi-assign */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
-/* eslint-disable @stylistic/max-len */
 
 import { dateUtils } from '@ts/core/utils/date';
 import { extend } from '@ts/core/utils/extend';
@@ -62,7 +60,7 @@ interface BreakPosition {
   break?: ThemeValue;
 }
 
-interface CanvasOptions {
+export interface CanvasOptions {
   base?: number;
   rangeMin: ThemeValue;
   rangeMax: ThemeValue;
@@ -84,12 +82,18 @@ interface BreaksCheckingMethods {
   isStartSide: (pos: number, breaks: TranslatorBreak[], start: string, end: string) => boolean;
   isEndSide: (pos: number, breaks: TranslatorBreak[], start: string, end: string) => boolean;
   isInBreak: (pos: number, br: TranslatorBreak, start: string, end: string) => boolean;
-  isBetweenBreaks: (pos: number, br: TranslatorBreak, prevBreak: TranslatorBreak, start: string, end: string) => boolean;
+  isBetweenBreaks: (
+    pos: number,
+    br: TranslatorBreak,
+    prevBreak: TranslatorBreak,
+    start: string,
+    end: string,
+  ) => boolean;
   getLength: (br: TranslatorBreak, lastBreak: TranslatorBreak) => number;
   getBreaksSize: (br: TranslatorBreak, lastBreak: TranslatorBreak) => number;
 }
 
-interface ZoomResult {
+export interface ZoomResult {
   min: ThemeValue;
   max: ThemeValue;
   translate: number;
@@ -102,7 +106,8 @@ const CANVAS_PROP = ['width', 'height', 'left', 'top', 'bottom', 'right'];
 
 const dummyTranslator = {
   to(this: Translator2DInstance, value: number): number {
-    const coord = this._canvasOptions.startPoint + (this._options.conversionValue ? value : Math.round(value));
+    const coord = this._canvasOptions.startPoint
+      + (this._options.conversionValue ? value : Math.round(value));
     return coord > this._canvasOptions.endPoint ? this._canvasOptions.endPoint : coord;
   },
   from(this: Translator2DInstance, value: number): number {
@@ -152,7 +157,7 @@ function prepareBreaks(breaks: ThemeValue[], range: RangeInstance): TranslatorBr
   const { length } = breaks;
   let sum = 0;
 
-  for (i = 0; i < length; i++) {
+  for (i = 0; i < length; i += 1) {
     br = breaks[i];
     transformFrom = transform(br.from);
     transformTo = transform(br.to);
@@ -185,7 +190,11 @@ function getCanvasBounds(range: RangeInstance): ThemeValue {
   }
 
   return {
-    base: range.base, rangeMin: min, rangeMax: max, rangeMinVisible: minVisible, rangeMaxVisible: maxVisible,
+    base: range.base,
+    rangeMin: min,
+    rangeMax: max,
+    rangeMinVisible: minVisible,
+    rangeMaxVisible: maxVisible,
   };
 }
 
@@ -267,9 +276,16 @@ let _Translator2d = class _Translator2d {
     const categories = range.categories || [];
     let script = {};
     const canvasOptions = this._prepareCanvasOptions();
-    const visibleCategories = getCategoriesInfo(categories, range.minVisible, range.maxVisible).categories;
+    const visibleCategories = getCategoriesInfo(
+      categories,
+      range.minVisible,
+      range.maxVisible,
+    ).categories;
     const categoriesLength = visibleCategories.length;
-    const conditionalRound = (value: number, skipRound?: boolean): number => (skipRound ? value : Math.round(value));
+    const conditionalRound = (
+      value: number,
+      skipRound?: boolean,
+    ): number => (skipRound ? value : Math.round(value));
 
     if (range.isEmpty()) {
       script = dummyTranslator;
@@ -280,16 +296,23 @@ let _Translator2d = class _Translator2d {
           break;
         case 'semidiscrete':
           script = intervalTranslator;
-          // @ts-expect-error Date arithmetic: addInterval returns a Date for datetime ranges
-          canvasOptions.ratioOfCanvasRange = canvasOptions.canvasLength / (dateUtils.addInterval(canvasOptions.rangeMaxVisible, options.interval) - canvasOptions.rangeMinVisible);
+          canvasOptions.ratioOfCanvasRange = canvasOptions.canvasLength
+            // @ts-expect-error Date arithmetic: addInterval returns a Date for datetime ranges
+            / (dateUtils.addInterval(canvasOptions.rangeMaxVisible, options.interval)
+              - canvasOptions.rangeMinVisible);
           break;
         case 'discrete':
           script = categoryTranslator;
           this._categories = categories;
-          canvasOptions.interval = this._getDiscreteInterval(options.addSpiderCategory ? categoriesLength + 1 : categoriesLength, canvasOptions);
+          canvasOptions.interval = this._getDiscreteInterval(
+            options.addSpiderCategory ? categoriesLength + 1 : categoriesLength,
+            canvasOptions,
+          );
           this._categoriesToPoints = makeCategoriesToPoints(categories);
           if (categoriesLength) {
-            canvasOptions.startPointIndex = this._categoriesToPoints[visibleCategories[0].valueOf()];
+            canvasOptions.startPointIndex = this._categoriesToPoints[
+              visibleCategories[0].valueOf()
+            ];
             this.visibleCategories = visibleCategories;
           }
           break;
@@ -328,7 +351,7 @@ let _Translator2d = class _Translator2d {
     if (breaks === undefined) {
       return;
     }
-    for (i = 0, length = breaks.length; i < length; i++) {
+    for (i = 0, length = breaks.length; i < length; i += 1) {
       b = breaks[i];
       end = this.translate(b.to);
       b.end = end;
@@ -337,7 +360,13 @@ let _Translator2d = class _Translator2d {
     }
   }
 
-  _checkValueAboutBreaks(breaks: TranslatorBreak[], pos: number, start: string, end: string, methods: BreaksCheckingMethods): BreakPosition {
+  _checkValueAboutBreaks(
+    breaks: TranslatorBreak[],
+    pos: number,
+    start: string,
+    end: string,
+    methods: BreaksCheckingMethods,
+  ): BreakPosition {
     let i;
     let length;
     let prop: BreakPosition = { length: 0, breaksSize: undefined, inBreak: false };
@@ -351,7 +380,7 @@ let _Translator2d = class _Translator2d {
       return { length: lastBreak.length, breaksSize: lastBreak.cumulativeWidth, inBreak: false };
     }
 
-    for (i = 0, length = breaks.length; i < length; i++) {
+    for (i = 0, length = breaks.length; i < length; i += 1) {
       br = breaks[i];
       prevBreak = breaks[i - 1];
       if (methods.isInBreak(pos, br, start, end)) {
@@ -360,7 +389,11 @@ let _Translator2d = class _Translator2d {
         break;
       }
       if (prevBreak && methods.isBetweenBreaks(pos, br, prevBreak, start, end)) {
-        prop = { length: methods.getLength(prevBreak, lastBreak), breaksSize: methods.getBreaksSize(prevBreak, lastBreak), inBreak: false };
+        prop = {
+          length: methods.getLength(prevBreak, lastBreak),
+          breaksSize: methods.getBreaksSize(prevBreak, lastBreak),
+          inBreak: false,
+        };
         break;
       }
     }
@@ -374,7 +407,9 @@ let _Translator2d = class _Translator2d {
 
   _getDiscreteInterval(categoriesLength: number, canvasOptions: CanvasOptions): number {
     const correctedCategoriesCount = categoriesLength - (this._options.stick ? 1 : 0);
-    return correctedCategoriesCount > 0 ? canvasOptions.canvasLength / correctedCategoriesCount : canvasOptions.canvasLength;
+    return correctedCategoriesCount > 0
+      ? canvasOptions.canvasLength / correctedCategoriesCount
+      : canvasOptions.canvasLength;
   }
 
   _prepareCanvasOptions(): ThemeValue {
@@ -396,14 +431,23 @@ let _Translator2d = class _Translator2d {
       canvasOptions.endPoint = canvas.height - canvas.bottom - canvasOptions.endPadding;
       canvasOptions.invert = !businessRange.invert;// axis inverted because display drawn to bottom
     }
-    this.canvasLength = canvasOptions.canvasLength = canvasOptions.endPoint - canvasOptions.startPoint;
-    canvasOptions.rangeDoubleError = 10 ** (getPower(canvasOptions.rangeMax - canvasOptions.rangeMin) - getPower(length) - 2); // B253861
-    canvasOptions.ratioOfCanvasRange = canvasOptions.canvasLength / (canvasOptions.rangeMaxVisible - canvasOptions.rangeMinVisible);
+    canvasOptions.canvasLength = canvasOptions.endPoint - canvasOptions.startPoint;
+    this.canvasLength = canvasOptions.canvasLength;
+    canvasOptions.rangeDoubleError = 10
+      ** (getPower(canvasOptions.rangeMax - canvasOptions.rangeMin)
+        - getPower(length)
+        - 2); // B253861
+    canvasOptions.ratioOfCanvasRange = canvasOptions.canvasLength
+      / (canvasOptions.rangeMaxVisible - canvasOptions.rangeMinVisible);
 
     if (breaks !== undefined) {
-      const visibleRangeLength = canvasOptions.rangeMaxVisible - canvasOptions.rangeMinVisible - breaks[breaks.length - 1].length;
+      const visibleRangeLength = canvasOptions.rangeMaxVisible
+        - canvasOptions.rangeMinVisible
+        - breaks[breaks.length - 1].length;
       if (visibleRangeLength !== 0) {
-        canvasOptions.ratioOfCanvasRange = (canvasOptions.canvasLength - breaks[breaks.length - 1].cumulativeWidth) / visibleRangeLength;
+        canvasOptions.ratioOfCanvasRange = (canvasOptions.canvasLength
+            - breaks[breaks.length - 1].cumulativeWidth)
+          / visibleRangeLength;
       }
     }
 
@@ -491,21 +535,26 @@ let _Translator2d = class _Translator2d {
 
   _calculateProjection(distance: number): number {
     const canvasOptions = this._canvasOptions;
-    return canvasOptions.invert ? canvasOptions.endPoint - distance : canvasOptions.startPoint + distance;
+    return canvasOptions.invert
+      ? canvasOptions.endPoint - distance
+      : canvasOptions.startPoint + distance;
   }
 
   _calculateUnProjection(distance: number): number {
     const canvasOptions = this._canvasOptions;
     this._businessRange.dataType === 'datetime' && (distance = Math.round(distance));
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return -- valueOf() of a number or a Date
-    return canvasOptions.invert ? canvasOptions.rangeMaxVisible.valueOf() - distance : canvasOptions.rangeMinVisible.valueOf() + distance;
+    return canvasOptions.invert
+      ? canvasOptions.rangeMaxVisible.valueOf() - distance
+      : (canvasOptions.rangeMinVisible.valueOf() as number) + distance;
   }
 
   getMinBarSize(minBarSize: number): number {
     const visibleArea = this.getCanvasVisibleArea();
     const minValue = this.from(visibleArea.min + minBarSize);
 
-    return _abs(this.from(visibleArea.min) - (!isDefined(minValue) ? this.from(visibleArea.max) : minValue));
+    return _abs(
+      this.from(visibleArea.min) - (!isDefined(minValue) ? this.from(visibleArea.max) : minValue),
+    );
   }
 
   checkMinBarSize(value: number, minShownValue: number): number {
@@ -538,7 +587,10 @@ let _Translator2d = class _Translator2d {
   zoom(translate: number, scale: number, wholeRange?: ThemeValue): ZoomResult {
     const canvasOptions = this._canvasOptions;
 
-    if (canvasOptions.rangeMinVisible.valueOf() === canvasOptions.rangeMaxVisible.valueOf() && translate !== 0) {
+    if (
+      canvasOptions.rangeMinVisible.valueOf() === canvasOptions.rangeMaxVisible.valueOf()
+      && translate !== 0
+    ) {
       return this.zoomZeroLengthRange(translate, scale);
     }
 
@@ -610,15 +662,30 @@ let _Translator2d = class _Translator2d {
     const canvasOptions = this._canvasOptions;
     const min = canvasOptions.rangeMin;
     const max = canvasOptions.rangeMax;
-    const correction = (max.valueOf() !== min.valueOf() ? max.valueOf() - min.valueOf() : _abs(canvasOptions.rangeMinVisible.valueOf() - min.valueOf())) / canvasOptions.canvasLength;
+    const correction = (max.valueOf() !== min.valueOf()
+      ? max.valueOf() - min.valueOf()
+      : _abs(canvasOptions.rangeMinVisible.valueOf() - min.valueOf()))
+      / canvasOptions.canvasLength;
     const isDateTime = isDate(max) || isDate(min);
     const isLogarithmic = this._businessRange.axisType === 'logarithmic';
 
     let newMin = canvasOptions.rangeMinVisible.valueOf() - correction;
     let newMax = canvasOptions.rangeMaxVisible.valueOf() + correction;
 
-    newMin = (isLogarithmic ? adjust(raiseToExt(newMin, canvasOptions.base)) : isDateTime ? new Date(newMin) : newMin) as number;
-    newMax = (isLogarithmic ? adjust(raiseToExt(newMax, canvasOptions.base)) : isDateTime ? new Date(newMax) : newMax) as number;
+    newMin = (
+      isLogarithmic
+        ? adjust(raiseToExt(newMin, canvasOptions.base))
+        : isDateTime
+          ? new Date(newMin)
+          : newMin
+    ) as number;
+    newMax = (
+      isLogarithmic
+        ? adjust(raiseToExt(newMax, canvasOptions.base))
+        : isDateTime
+          ? new Date(newMax)
+          : newMax
+    ) as number;
 
     return {
       min: newMin,
@@ -714,8 +781,13 @@ let _Translator2d = class _Translator2d {
       }
       return null;
     }
-    return this._conversionValue(this._calculateProjection((bp - canvasOptions.rangeMinVisible - prop.length)
-      * canvasOptions.ratioOfCanvasRange + commonBreakSize), skipRound);
+    return this._conversionValue(
+      this._calculateProjection(
+        (bp - canvasOptions.rangeMinVisible - prop.length) * canvasOptions.ratioOfCanvasRange
+          + commonBreakSize,
+      ),
+      skipRound,
+    );
   }
 
   from(pos: number, direction?: ThemeValue): ThemeValue {
@@ -738,7 +810,11 @@ let _Translator2d = class _Translator2d {
       return null;
     }
 
-    return this.toValue(this._calculateUnProjection((pos - startPoint - commonBreakSize) / canvasOptions.ratioOfCanvasRange + prop.length));
+    return this.toValue(
+      this._calculateUnProjection(
+        (pos - startPoint - commonBreakSize) / canvasOptions.ratioOfCanvasRange + prop.length,
+      ),
+    );
   }
 
   // dxRangeSelector specific

@@ -14,7 +14,7 @@ on:
 env:
   NX_SKIP_NX_CACHE: ${{ contains(github.event.pull_request.labels.*.name, 'skip-cache') && 'true' || 'false' }}
   RUN_TESTS: true
-  NX_MAX_CACHE_SIZE: 512MB
+  NX_MAX_CACHE_SIZE: 1GB
 
 jobs:
   check-should-run:
@@ -325,15 +325,17 @@ jobs:
       working-directory: apps/demos
       run: pnpm run ts-check-vue
 
-    # - name: Run check TS for Angular
-    #   working-directory: apps/demos
-    #   run: pnpm run ts-check-ng
-
     - name: Demos - Check React TS
       id: ts_react
       continue-on-error: true
       working-directory: apps/demos
       run: pnpm run ts-check-react
+
+    - name: Demos - Check Angular TS
+      id: ts_angular
+      continue-on-error: true
+      working-directory: apps/demos
+      run: pnpm run ts-check-ng
 
     - name: Run lint on all demos
       id: lint_all
@@ -367,6 +369,7 @@ jobs:
       env:
         TS_VUE_OUTCOME: ${{ steps.ts_vue.outcome }}
         TS_REACT_OUTCOME: ${{ steps.ts_react.outcome }}
+        TS_ANGULAR_OUTCOME: ${{ steps.ts_angular.outcome }}
         LINT_ALL_OUTCOME: ${{ steps.lint_all.outcome }}
         GENERATED_JS_OUTCOME: ${{ steps.generated_js.outcome }}
       run: |
@@ -375,6 +378,7 @@ jobs:
         for check in \
           "Demos - Check Vue TS:$TS_VUE_OUTCOME" \
           "Demos - Check React TS:$TS_REACT_OUTCOME" \
+          "Demos - Check Angular TS:$TS_ANGULAR_OUTCOME" \
           "Run lint on all demos:$LINT_ALL_OUTCOME" \
           "Check generated JS demos:$GENERATED_JS_OUTCOME"; do
           name="${check%%:*}"
@@ -437,7 +441,7 @@ jobs:
     - name: Setup Chrome
       uses: ./.github/actions/setup-chrome
       with:
-        chrome-version: '155.0.8059.39'
+        chrome-version: '157.0.8103.78'
 
     - name: Use Node.js
       uses: actions/setup-node@v7
@@ -526,9 +530,27 @@ jobs:
         THEME: ${{ matrix.THEME }}
         # DISABLE_DEMO_TEST_SETTINGS: all # Uncomment to ignore all the visualtestrc.json settings
         # DISABLE_DEMO_TEST_SETTINGS: ignore # Uncomment to ignore the `ignore` field
-        # DISABLE_DEMO_TEST_SETTINGS: comparison-options # Uncomment to ignore the `comparison-options` field
         CI_ENV: true # The `ignore` field in the visualtestrc.json should be disabled when running test locally
       run: pnpm exec nx test-testcafe
+
+    - name: Set Playwright artifact name
+      if: ${{ !cancelled() && matrix.STRATEGY == 'screenshots' }}
+      run: echo "PLAYWRIGHT_JOB_NAME=$(echo "${{ matrix.CONSTEL }}-${{ matrix.THEME }}" | tr '/' '-')" >> $GITHUB_ENV
+
+    - name: Run Playwright tests (jQuery)
+      if: ${{ !cancelled() && matrix.STRATEGY == 'screenshots' }}
+      timeout-minutes: 10
+      working-directory: apps/demos
+      env:
+        NODE_OPTIONS: --max-old-space-size=8192
+        CHANGEDFILEINFOSPATH: changed-files.json
+        CONCURRENCY: 4
+        CONSTEL: ${{ matrix.CONSTEL }}
+        THEME: ${{ matrix.THEME }}
+        # The default blob name is built from the test paths only, so jobs that differ by theme or
+        # shard alone would write the same zip and overwrite each other once merged.
+        PLAYWRIGHT_BLOB_OUTPUT_NAME: report-${{ env.PLAYWRIGHT_JOB_NAME }}.zip
+      run: pnpm run test-playwright
 
     - name: Show accessibility warnings
       if: matrix.STRATEGY == 'accessibility'
@@ -539,6 +561,48 @@ jobs:
           echo "::warning ::$message"
         else
           echo "Accessibility report not found. Skipping warning generation."
+        fi
+
+    - name: Upload Playwright blob report
+      if: failure() && matrix.STRATEGY == 'screenshots'
+      uses: actions/upload-artifact@v7
+      with:
+        name: playwright-blob-${{ env.PLAYWRIGHT_JOB_NAME }}
+        path: ${{ github.workspace }}/apps/demos/testing/artifacts/playwright/blob-report
+        if-no-files-found: ignore
+
+    - name: Upload Playwright traces and screenshot diffs
+      if: always() && matrix.STRATEGY == 'screenshots'
+      uses: actions/upload-artifact@v7
+      with:
+        name: playwright-traces-${{ env.PLAYWRIGHT_JOB_NAME }}
+        path: ${{ github.workspace }}/apps/demos/testing/artifacts/playwright/test-results
+        if-no-files-found: ignore
+
+    - name: Collect new etalons
+      if: always() && matrix.STRATEGY == 'screenshots'
+      run: |
+        mkdir -p "$RUNNER_TEMP/new-etalons"
+        git ls-files --others --exclude-standard -z -- 'apps/demos/testing/etalons/*.png' \
+          | xargs -0 -r cp --parents -t "$RUNNER_TEMP/new-etalons"
+
+    - name: Upload new etalons
+      if: always() && matrix.STRATEGY == 'screenshots'
+      uses: actions/upload-artifact@v7
+      with:
+        name: playwright-etalons-${{ env.PLAYWRIGHT_JOB_NAME }}
+        path: ${{ runner.temp }}/new-etalons
+        if-no-files-found: ignore
+
+    # A retry passes against the etalon its first attempt wrote, so new etalons fail the job here.
+    - name: Fail on new etalons
+      if: always() && matrix.STRATEGY == 'screenshots'
+      run: |
+        new_etalons=$(git ls-files --others --exclude-standard -- 'apps/demos/testing/etalons/*.png')
+        if [ -n "$new_etalons" ]; then
+          echo "::error::The tests wrote etalons that are not in the repository. They are in the playwright-etalons artifact:"
+          echo "$new_etalons"
+          exit 1
         fi
 
     - name: Sanitize job name
@@ -595,7 +659,7 @@ jobs:
     - name: Setup Chrome
       uses: ./.github/actions/setup-chrome
       with:
-        chrome-version: '155.0.8059.39'
+        chrome-version: '157.0.8103.78'
 
     - name: Use Node.js
       uses: actions/setup-node@v7
@@ -708,9 +772,68 @@ jobs:
         THEME: ${{ matrix.THEME }}
         # DISABLE_DEMO_TEST_SETTINGS: all # Uncomment to ignore all the visualtestrc.json settings
         # DISABLE_DEMO_TEST_SETTINGS: ignore # Uncomment to ignore the `ignore` field
-        # DISABLE_DEMO_TEST_SETTINGS: comparison-options # Uncomment to ignore the `comparison-options` field
         CI_ENV: true # The `ignore` field in the visualtestrc.json should be disabled when running test locally
       run: pnpm exec nx test-testcafe
+
+    - name: Set Playwright artifact name
+      if: ${{ !cancelled() }}
+      run: echo "PLAYWRIGHT_JOB_NAME=$(echo "${{ matrix.CONSTEL }}-${{ matrix.THEME }}" | tr '/' '-')" >> $GITHUB_ENV
+
+    - name: Run Playwright tests
+      if: ${{ !cancelled() }}
+      timeout-minutes: 10
+      working-directory: apps/demos
+      env:
+        NODE_OPTIONS: --max-old-space-size=8192
+        CONCURRENCY: ${{ steps.set-concurrency.outputs.concurrency }}
+        CONSTEL: ${{ matrix.CONSTEL }}
+        THEME: ${{ matrix.THEME }}
+        # The default blob name is built from the test paths only, so jobs that differ by theme or
+        # shard alone would write the same zip and overwrite each other once merged.
+        PLAYWRIGHT_BLOB_OUTPUT_NAME: report-${{ env.PLAYWRIGHT_JOB_NAME }}.zip
+      run: pnpm run test-playwright
+
+    - name: Upload Playwright blob report
+      if: failure()
+      uses: actions/upload-artifact@v7
+      with:
+        name: playwright-blob-${{ env.PLAYWRIGHT_JOB_NAME }}
+        path: ${{ github.workspace }}/apps/demos/testing/artifacts/playwright/blob-report
+        if-no-files-found: ignore
+
+    - name: Upload Playwright traces and screenshot diffs
+      if: always()
+      uses: actions/upload-artifact@v7
+      with:
+        name: playwright-traces-${{ env.PLAYWRIGHT_JOB_NAME }}
+        path: ${{ github.workspace }}/apps/demos/testing/artifacts/playwright/test-results
+        if-no-files-found: ignore
+
+    - name: Collect new etalons
+      if: always()
+      run: |
+        mkdir -p "$RUNNER_TEMP/new-etalons"
+        git ls-files --others --exclude-standard -z -- 'apps/demos/testing/etalons/*.png' \
+          | xargs -0 -r cp --parents -t "$RUNNER_TEMP/new-etalons"
+
+    - name: Upload new etalons
+      if: always()
+      uses: actions/upload-artifact@v7
+      with:
+        name: playwright-etalons-${{ env.PLAYWRIGHT_JOB_NAME }}
+        path: ${{ runner.temp }}/new-etalons
+        if-no-files-found: ignore
+
+    # A retry passes against the etalon its first attempt wrote, so new etalons fail the job here.
+    - name: Fail on new etalons
+      if: always()
+      run: |
+        new_etalons=$(git ls-files --others --exclude-standard -- 'apps/demos/testing/etalons/*.png')
+        if [ -n "$new_etalons" ]; then
+          echo "::error::The tests wrote etalons that are not in the repository. They are in the playwright-etalons artifact:"
+          echo "$new_etalons"
+          exit 1
+        fi
 
     - name: Sanitize job name
       if: ${{ failure() }}
@@ -728,9 +851,97 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 6
     needs: [testcafe-jquery, testcafe-frameworks-all]
-    if: ${{ !cancelled() && (needs.testcafe-jquery.result == 'failure' || needs.testcafe-frameworks-all.result == 'failure') }}
+    if: ${{ !cancelled() }}
 
     steps:
+      - name: Detect Playwright artifacts
+        id: playwright-artifacts
+        uses: actions/github-script@v9
+        with:
+          script: |
+            const artifacts = await github.paginate(github.rest.actions.listWorkflowRunArtifacts, {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              run_id: context.runId,
+              per_page: 100,
+            });
+
+            const artifactGroups = {
+              blobs: /^playwright-blob-/,
+              traces: /^playwright-traces-/,
+              etalons: /^playwright-etalons-/,
+            };
+
+            for (const [outputName, pattern] of Object.entries(artifactGroups)) {
+              const names = artifacts
+                .map((artifact) => artifact.name)
+                .filter((name) => pattern.test(name));
+
+              core.setOutput(outputName, names.length > 0 ? 'true' : 'false');
+              core.info(`${outputName}: ${names.length ? names.join(', ') : '(none)'}`);
+            }
+
+      - name: Get sources
+        if: steps.playwright-artifacts.outputs.blobs == 'true'
+        uses: actions/checkout@v6
+
+      - name: Use Node.js
+        if: steps.playwright-artifacts.outputs.blobs == 'true'
+        uses: actions/setup-node@v7
+        with:
+          node-version-file: '.node-version'
+
+      - uses: pnpm/action-setup@v6
+        if: steps.playwright-artifacts.outputs.blobs == 'true'
+        with:
+          run_install: false
+
+      - name: Install dependencies
+        if: steps.playwright-artifacts.outputs.blobs == 'true'
+        run: pnpm install --frozen-lockfile
+
+      - name: Download Playwright blob reports
+        if: steps.playwright-artifacts.outputs.blobs == 'true'
+        uses: actions/download-artifact@v8
+        with:
+          pattern: playwright-blob-*
+          path: ${{ github.workspace }}/blob-reports
+          merge-multiple: true
+
+      - name: Merge Playwright blob reports into one report
+        if: steps.playwright-artifacts.outputs.blobs == 'true'
+        working-directory: apps/demos
+        env:
+          PLAYWRIGHT_HTML_OUTPUT_DIR: ${{ github.workspace }}/playwright-report
+        run: pnpm exec playwright merge-reports --reporter html ${{ github.workspace }}/blob-reports
+
+      - name: Upload merged Playwright report
+        if: steps.playwright-artifacts.outputs.blobs == 'true'
+        uses: actions/upload-artifact@v7
+        with:
+          name: playwright-report
+          path: ${{ github.workspace }}/playwright-report
+          if-no-files-found: error
+
+      - name: Merge Playwright traces
+        if: steps.playwright-artifacts.outputs.traces == 'true'
+        uses: actions/upload-artifact/merge@v7
+        continue-on-error: true
+        with:
+          name: playwright-traces
+          pattern: playwright-traces-*
+          separate-directories: true
+          delete-merged: true
+
+      - name: Merge new etalons
+        if: steps.playwright-artifacts.outputs.etalons == 'true'
+        uses: actions/upload-artifact/merge@v7
+        continue-on-error: true
+        with:
+          name: playwright-etalons
+          pattern: playwright-etalons-*
+          delete-merged: true
+
       - name: Merge jQuery screenshot artifacts
         if: needs.testcafe-jquery.result == 'failure'
         uses: actions/upload-artifact/merge@v7
@@ -809,7 +1020,7 @@ jobs:
     - name: Setup Chrome
       uses: ./.github/actions/setup-chrome
       with:
-        chrome-version: '155.0.8059.39'
+        chrome-version: '157.0.8103.78'
 
     - name: Use Node.js
       uses: actions/setup-node@v7
@@ -891,7 +1102,7 @@ jobs:
     - name: Setup Chrome
       uses: ./.github/actions/setup-chrome
       with:
-        chrome-version: '155.0.8059.39'
+        chrome-version: '157.0.8103.78'
 
     - name: Use Node.js
       uses: actions/setup-node@v7

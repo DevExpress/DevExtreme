@@ -38,11 +38,11 @@
     <div class="options">
       <div class="caption">Options</div>
       <div class="option">
-        <span>Edit Row Key:</span>
+        <span>Edit Row Key: </span>
         <div id="editRowKey">{{ editRowKey == null ? "null" : editRowKey.toString() }}</div>
       </div>
       <div class="option">
-        <span>Changes:</span>
+        <span>Changes: </span>
         <div id="changes">{{ changesText }}</div>
       </div>
     </div>
@@ -114,7 +114,7 @@ loadOrders();
 
 .option > span {
   position: relative;
-  margin-right: 14px;
+  margin-right: 10px;
 }
 
 .option > div {

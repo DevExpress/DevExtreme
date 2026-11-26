@@ -1,6 +1,24 @@
 import { Injectable } from '@angular/core';
 
-const tasks = [
+export interface Task {
+  Task_ID: number;
+  Task_Assigned_Employee_ID: number;
+  Task_Owner_ID: number;
+  Task_Subject: string;
+  Task_Start_Date: string;
+  Task_Due_Date: string;
+  Task_Status: string;
+  Task_Priority: number;
+  Task_Completion: number;
+  Task_Parent_ID: number;
+}
+
+export interface Employee {
+  ID: number;
+  Name: string;
+}
+
+const tasks: Task[] = [
   {
     Task_ID: 1,
     Task_Assigned_Employee_ID: 1,
@@ -1994,7 +2012,7 @@ const tasks = [
     Task_Parent_ID: 27,
   }];
 
-const employees = [{
+const employees: Employee[] = [{
   ID: 1,
   Name: 'John Heart',
 }, {
@@ -2151,15 +2169,11 @@ const employees = [{
 
 @Injectable()
 export class Service {
-  getTasks() {
+  getTasks(): Task[] {
     return tasks;
   }
 
-  getEmployees() {
+  getEmployees(): Employee[] {
     return employees;
   }
 }
-
-export type Employee = typeof employees[0];
-
-export type Task = typeof tasks[0];

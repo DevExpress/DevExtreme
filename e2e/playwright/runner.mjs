@@ -1,4 +1,4 @@
- 
+
 import { spawnSync } from 'node:child_process';
 import process from 'node:process';
 
@@ -63,7 +63,7 @@ if(values.test) {
     // whitespace, not anchored. Escaping matters: test names here carry ticket numbers in braces.
     args.push('--grep', `(^|\\s)${escapeRegExp(values.test)}(\\s|$)`);
 } else if(values.theme && !values.componentFolder) {
-    // A job that names a theme instead of a folder runs the whole suite in that theme, so it
+    // A job that names a theme instead of a folder runs the whole suite in that theme. So it
     // takes only the tests that opted into it with a "@<theme>" tag — the etalons of the rest
     // are recorded in the default theme. The tag ends at a space, otherwise "@material.blue.light"
     // would also pick up the tests tagged "@material.blue.light.compact".

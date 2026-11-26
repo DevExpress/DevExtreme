@@ -36,8 +36,10 @@ import type {
   DxEvent,
   PointerInteractionEvent,
 } from '@js/events';
-import type { dxOverlayAnimation, Properties } from '@js/ui/overlay';
+import type dxOverlay from '@js/ui/overlay';
+import type { dxOverlayAnimation, dxOverlayOptions, Properties } from '@js/ui/overlay';
 import uiErrors from '@js/ui/widget/ui.errors';
+import type { TemplateBase } from '@ts/core/templates/template_base';
 import documentSizeCallbacks from '@ts/core/utils/document_size_callbacks';
 import domUtils from '@ts/core/utils/dom';
 import selectors from '@ts/core/utils/selectors';
@@ -116,9 +118,10 @@ export type InternalAnimationConfig = Omit<AnimationConfig, 'from' | 'to'> & {
 export type InternalPositionAlignment = NonNullable<PositionConfig['my']>
   | `${VerticalAlignment} ${HorizontalAlignment}`;
 
-export type InternalPositionConfig = Omit<PositionConfig, 'of' | 'offset' | 'my' | 'at'> & {
+export type InternalPositionConfig = Omit<PositionConfig, 'of' | 'offset' | 'boundaryOffset' | 'my' | 'at'> & {
   of?: PositionConfig['of'] | dxElementWrapper;
   offset?: PositionConfig['offset'] | { h?: number; v?: number };
+  boundaryOffset?: PositionConfig['boundaryOffset'] | { h?: number; v?: number };
   my?: InternalPositionAlignment;
   at?: InternalPositionAlignment;
 };
@@ -161,7 +164,9 @@ export interface OverlayInternalProperties {
   hideTopOverlayHandler?: (() => void) | null;
 }
 
-export interface OverlayProperties extends Omit<Properties, 'animation' | 'width' | 'height'>,
+export interface OverlayProperties<
+  TComponent = dxOverlay<Properties>,
+> extends Omit<dxOverlayOptions<TComponent>, 'animation' | 'width' | 'height'>,
   OverlayInternalProperties {
   width?: Properties['width'] | (() => number | string);
 
@@ -221,7 +226,8 @@ ready(() => {
 });
 
 class Overlay<
-  TProperties extends OverlayProperties = OverlayProperties,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  TProperties extends OverlayProperties<any> = OverlayProperties,
 > extends Widget<TProperties> {
   _$wrapper?: dxElementWrapper | null;
 
@@ -1056,7 +1062,6 @@ class Overlay<
 
   _toggleTabTerminator(enabled: boolean): void {
     const { tabFocusLoopEnabled } = this.option();
-    // @ts-expect-error NAME has string | undefined type
     const eventName = addNamespace('keydown', this.NAME);
 
     if (tabFocusLoopEnabled || enabled) {
@@ -1067,7 +1072,6 @@ class Overlay<
   }
 
   _destroyTabTerminator(): void {
-    // @ts-expect-error NAME has string | undefined type
     const eventName = addNamespace('keydown', this.NAME);
     eventsEngine.off(domAdapter.getDocument(), eventName, this._proxiedTabTerminatorHandler);
   }
@@ -1170,7 +1174,6 @@ class Overlay<
   }
 
   _toggleHideOnParentsScrollSubscription(needSubscribe?: boolean): void {
-    // @ts-expect-error NAME has string | undefined type
     const scrollEvent = addNamespace('scroll', this.NAME);
     const info = this._parentsScrollSubscriptionInfo ?? {};
 
@@ -1300,7 +1303,7 @@ class Overlay<
     const { contentTemplate: contentTemplateOption } = this.option();
 
     const whenContentRendered = Deferred();
-    const contentTemplate = this._getTemplate(contentTemplateOption);
+    const contentTemplate = this._getTemplate(contentTemplateOption) as unknown as TemplateBase;
     const transclude = this._templateManager.anonymousTemplateName === contentTemplateOption;
 
     contentTemplate?.render({
@@ -1381,7 +1384,6 @@ class Overlay<
   }
 
   _toggleWrapperScrollEventsSubscription(enabled?: boolean): void {
-    // @ts-expect-error NAME has string | undefined type
     const eventName = addNamespace(dragEventMove, this.NAME);
 
     eventsEngine.off(this._$wrapper, eventName);

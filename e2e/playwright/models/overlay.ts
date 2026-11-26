@@ -8,6 +8,8 @@ const CLASS = {
 };
 
 export default class Overlay extends Widget {
+  name: WidgetName = 'dxOverlay';
+
   public readonly content: Locator;
 
   public readonly wrapper: Locator;
@@ -18,9 +20,6 @@ export default class Overlay extends Widget {
     this.content = this.element.locator(`.${CLASS.content}`);
     this.wrapper = this.element.locator(`.${CLASS.wrapper}`);
   }
-
-  // eslint-disable-next-line class-methods-use-this
-  public getName(): WidgetName { return 'dxOverlay'; }
 
   // The last wrapper on the page rather than the one under the widget element: when several
   // popups are open the topmost one is the interesting one.
@@ -42,5 +41,21 @@ export default class Overlay extends Widget {
 
   public async hide(): Promise<void> {
     await this.invoke('hide');
+  }
+
+  // The event the overlay was positioned at (its "position.of"), as the controller keeps it.
+  public getOverlayOffset(): Promise<Record<'offsetX' | 'offsetY' | 'pageX' | 'pageY', number>> {
+    return this.element.evaluate((element) => {
+      const $element = $(element) as any;
+      const instance = $element.data($element.data().dxComponents[0]);
+      const {
+        offsetX, offsetY, pageX, pageY,
+      // eslint-disable-next-line no-underscore-dangle
+      } = instance._positionController._position.of;
+
+      return {
+        offsetX, offsetY, pageX, pageY,
+      };
+    });
   }
 }

@@ -13,12 +13,7 @@ QUnit.test('exportLinkElement generate', function(assert) {
         return;
     }
 
-    if(typeUtils.isDefined(navigator.msSaveOrOpenBlob)) {
-        assert.ok(true, 'This browser use msSaveOrOpenBlob for save blob');
-        return;
-    }
-
-    const URL = window.URL || window.webkitURL || window.mozURL || window.msURL || window.oURL;
+    const { URL } = window;
 
     const helper = new ariaAccessibilityTestHelper(() => {});
 
@@ -45,11 +40,6 @@ QUnit.test('exportLinkElement generate', function(assert) {
 QUnit.test('saveAs - check revokeObjectURL', function(assert) {
     if(!typeUtils.isFunction(window.Blob)) {
         assert.ok(true, 'This browser doesn\'t support Blob function');
-        return;
-    }
-
-    if(typeUtils.isDefined(navigator.msSaveOrOpenBlob)) {
-        assert.ok(true, 'This browser use msSaveOrOpenBlob for save blob');
         return;
     }
 
@@ -91,24 +81,6 @@ QUnit.test('saveAs - check revokeObjectURL', function(assert) {
     } finally {
         fileSaver._revokeObjectURLTimeout = oldRevokeObjectURLTimeout;
         fileSaver._click = oldFileSaverClick;
-    }
-});
-
-QUnit.test('Save blob by _winJSBlobSave on winJS devices', function(assert) {
-    if(typeUtils.isFunction(window.Blob)) {
-        const _winJSBlobSave = fileSaver._winJSBlobSave;
-        let isCalled = false;
-        try {
-            window.WinJS = {};
-            fileSaver._winJSBlobSave = function() { isCalled = true; };
-
-            fileSaver.saveAs('test', 'EXCEL', [], 'testUrl');
-
-            assert.ok(isCalled);
-        } finally {
-            delete window.WinJS;
-            fileSaver._winJSBlobSave = _winJSBlobSave;
-        }
     }
 });
 

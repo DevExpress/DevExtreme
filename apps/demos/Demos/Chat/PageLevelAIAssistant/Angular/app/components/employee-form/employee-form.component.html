@@ -7,13 +7,13 @@
     (onOptionChanged)="onOptionChanged($event)"
   >
     @for (field of formFields; track field.dataField) {
-    <dxi-form-simple-item
-      [dataField]="field.dataField"
-      [label]="field.label"
-      [editorType]="field.editorType"
-      [editorOptions]="field.editorOptions"
-      [aiOptions]="field.aiOptions"
-    ></dxi-form-simple-item>
+      <dxi-form-simple-item
+        [dataField]="field.dataField"
+        [label]="field.label"
+        [editorType]="field.editorType"
+        [editorOptions]="field.editorOptions"
+        [aiOptions]="field.aiOptions"
+      ></dxi-form-simple-item>
     }
     <dxi-form-button-item
       name="Save"
@@ -33,8 +33,8 @@
 >
   <dxo-toast-position
     of="#form-container"
-    at="bottom center"
-    my="bottom center"
+    at="bottom"
+    my="bottom"
     offset="0 -20"
   >
   </dxo-toast-position>

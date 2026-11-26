@@ -4,17 +4,14 @@
 /* eslint-disable @typescript-eslint/no-this-alias */
 /* eslint-disable default-case */
 /* eslint-disable @typescript-eslint/init-declarations */
-/* eslint-disable no-plusplus */
 /* eslint-disable func-names */
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable @typescript-eslint/no-shadow */
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-multi-assign */
-/* eslint-disable @stylistic/max-len */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-/* eslint-disable prefer-destructuring */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 
@@ -25,6 +22,7 @@ import constants from '@ts/viz/axes/axes_constants';
 import { calculateCanvasMargins, measureLabels } from '@ts/viz/axes/axes_utils';
 import { tick } from '@ts/viz/axes/tick';
 import xyAxes from '@ts/viz/axes/xy_axes';
+import type { Coords } from '@ts/viz/core/types';
 import {
   convertPolarToXY, convertXYToPolar,
   getCosAndSin, getDistance,
@@ -64,7 +62,9 @@ const circularAxes = {
     let { minVisible, maxVisible } = this._getViewportRange();
     if (ticks && ticks.length > 1) {
       minVisible = minVisible < ticks[0].value ? minVisible : ticks[0].value;
-      maxVisible = minVisible > ticks[ticks.length - 1].value ? maxVisible : ticks[ticks.length - 1].value;
+      maxVisible = minVisible > ticks[ticks.length - 1].value
+        ? maxVisible
+        : ticks[ticks.length - 1].value;
     }
 
     return {
@@ -73,11 +73,15 @@ const circularAxes = {
     };
   },
 
-  applyMargins() {
+  applyMargins(): void {
     const margins = this._calculateValueMargins(this._majorTicks);
 
     const br = this._translator.getBusinessRange();
-    br.addRange({ minVisible: margins.minValue, maxVisible: margins.maxValue, interval: this._calculateRangeInterval(br.interval) });
+    br.addRange({
+      minVisible: margins.minValue,
+      maxVisible: margins.maxValue,
+      interval: this._calculateRangeInterval(br.interval),
+    });
     this._translator.updateBusinessRange(br);
   },
 
@@ -103,12 +107,15 @@ const circularAxes = {
     return [options.startAngle, options.endAngle];
   },
 
-  _updateRadius(canvas) {
-    const rad = _min(canvas.width - canvas.left - canvas.right, canvas.height - canvas.top - canvas.bottom) / 2;
+  _updateRadius(canvas): void {
+    const rad = _min(
+      canvas.width - canvas.left - canvas.right,
+      canvas.height - canvas.top - canvas.bottom,
+    ) / 2;
     this._radius = rad < 0 ? 0 : rad;
   },
 
-  _updateCenter(canvas) {
+  _updateCenter(canvas): void {
     this._center = {
       x: canvas.left + (canvas.width - canvas.right - canvas.left) / 2,
       y: canvas.top + (canvas.height - canvas.top - canvas.bottom) / 2,
@@ -126,7 +133,7 @@ const circularAxes = {
     return this._renderer.circle();
   },
 
-  _updateAxisElementPosition() {
+  _updateAxisElementPosition(): void {
     const center = this.getCenter();
     this._axisElement.attr({ cx: center.x, cy: center.y, r: this.getRadius() });
   },
@@ -139,11 +146,11 @@ const circularAxes = {
     return this._options.firstPointOnStartAngle;
   },
 
-  _validateOptions(options) {
+  _validateOptions(options): void {
     const that = this;
-    let originValue = options.originValue;
+    let { originValue } = options;
     const wholeRange = options.wholeRange = {};
-    const period = options.period;
+    const { period } = options;
 
     if (isDefined(originValue)) {
       originValue = that.validateUnit(originValue);
@@ -165,7 +172,10 @@ const circularAxes = {
 
   getMargins() {
     const tickOptions = this._options.tick;
-    const tickOuterLength = _max(tickOptions.visible ? tickOptions.length / 2 + tickOptions.shift : 0, 0);
+    const tickOuterLength = _max(
+      tickOptions.visible ? tickOptions.length / 2 + tickOptions.shift : 0,
+      0,
+    );
     const radius = this.getRadius();
     const { x, y } = this._center;
     const labelBoxes = this._majorTicks.map((t) => t.label && t.label.getBBox()).filter((b) => b);
@@ -178,12 +188,14 @@ const circularAxes = {
     });
 
     const margins = calculateCanvasMargins(labelBoxes, canvas);
-    Object.keys(margins).forEach((k) => margins[k] = (margins[k] < tickOuterLength ? tickOuterLength : margins[k]));
+    Object.keys(margins).forEach(
+      (k) => (margins[k] = margins[k] < tickOuterLength ? tickOuterLength : margins[k]),
+    );
 
     return margins;
   },
 
-  _updateLabelsPosition() {
+  _updateLabelsPosition(): void {
     const that = this;
 
     measureLabels(that._majorTicks);
@@ -200,11 +212,11 @@ const circularAxes = {
     return this._options.firstPointOnStartAngle || (this._options.type !== constants.discrete);
   },
 
-  _getTranslatedCoord(value, offset) {
+  _getTranslatedCoord(value, offset): number {
     return this._translator.translate(value, offset) - HALF_PI_ANGLE;
   },
 
-  _getCanvasStartEnd() {
+  _getCanvasStartEnd(): { start: number; end: number } {
     return {
       start: 0 - HALF_PI_ANGLE,
       end: 360 - HALF_PI_ANGLE,
@@ -227,10 +239,17 @@ const circularAxes = {
   },
 
   _createStrip(coords) {
-    return this._renderer.arc(coords.x, coords.y, coords.innerRadius, coords.outerRadius, coords.startAngle, coords.endAngle);
+    return this._renderer.arc(
+      coords.x,
+      coords.y,
+      coords.innerRadius,
+      coords.outerRadius,
+      coords.startAngle,
+      coords.endAngle,
+    );
   },
 
-  _getStripLabelCoords(from, to) {
+  _getStripLabelCoords(from, to): { x: number; y: number; align: string } {
     const that = this;
     const coords = that._getStripGraphicAttributes(from, to);
     const angle = coords.startAngle + (coords.endAngle - coords.startAngle) / 2;
@@ -256,12 +275,12 @@ const circularAxes = {
     return this._createPathElement(this._getConstantLineGraphicAttributes(value).points, attr);
   },
 
-  _rotateConstantLine(line, value) {
+  _rotateConstantLine(line, value): void {
     const { x, y } = this.getCenter();
     line.rotate(value + this.getAngles()[0], x, y);
   },
 
-  _getConstantLineLabelsCoords(value) {
+  _getConstantLineLabelsCoords(value): Coords {
     const that = this;
     const cosSin = getCosAndSin(-value - that.getAngles()[0]);
     const halfRad = that.getRadius() / 2;
@@ -274,11 +293,11 @@ const circularAxes = {
 
   _checkAlignmentConstantLineLabels: _noop,
 
-  _adjustDivisionFactor(val) {
+  _adjustDivisionFactor(val): number {
     return val * 180 / (this.getRadius() * PI);
   },
 
-  _getScreenDelta() {
+  _getScreenDelta(): number {
     const angles = this.getAngles();
     return abs(angles[0] - angles[1]);
   },
@@ -301,12 +320,11 @@ const circularAxes = {
 
   _getLabelAdjustedCoord(tick, _offset, _maxWidth, checkCanvas) {
     const that = this;
-    const labelCoords = tick.labelCoords;
+    const { labelCoords } = tick;
     const labelY = labelCoords.y;
     const labelAngle = labelCoords.angle;
     const cosSin = getCosAndSin(labelAngle);
-    const cos = cosSin.cos;
-    const sin = cosSin.sin;
+    const { cos, sin } = cosSin;
     const box = tick.labelBBox;
     const halfWidth = box.width / 2;
     const halfHeight = box.height / 2;
@@ -392,7 +410,7 @@ const circularAxes = {
     return { x: coords.x, y: coords.y, angle: this.getTranslatedAngle(angle) };
   },
 
-  _getAdjustedStripLabelCoords(strip) {
+  _getAdjustedStripLabelCoords(strip): { translateY: number } {
     const box = strip.labelBBox;
 
     return {
@@ -400,11 +418,11 @@ const circularAxes = {
     };
   },
 
-  coordsIn(x, y) {
+  coordsIn(x, y): boolean {
     return convertXYToPolar(this.getCenter(), x, y).r > this.getRadius();
   },
 
-  _rotateTick(element, coords) {
+  _rotateTick(element, coords): void {
     const center = this.getCenter();
     element.rotate(coords.angle, center.x, center.y);
   },
@@ -413,11 +431,11 @@ const circularAxes = {
     return constants.validateOverlappingMode(mode);
   },
 
-  _validateDisplayMode() {
+  _validateDisplayMode(): string {
     return 'standard';
   },
 
-  _getStep(boxes) {
+  _getStep(boxes): number {
     const that = this;
     const radius = that.getRadius() + (that._options.label.indentFromAxis || 0);
     const maxLabelBox = boxes.reduce((prevValue, box) => {
@@ -436,29 +454,41 @@ const circularAxes = {
     return constants.getTicksCountInRange(that._majorTicks, 'angle', _max(angle1, angle2));
   },
 
-  _checkBoundedLabelsOverlapping(majorTicks, boxes, mode) {
+  _checkBoundedLabelsOverlapping(majorTicks, boxes, mode): void {
     const labelOpt = this._options.label;
     mode = mode || this._validateOverlappingMode(labelOpt.overlappingBehavior);
     if (mode !== 'hide') {
       return;
     }
-    const lastVisibleLabelIndex = majorTicks.reduce((lastVisibleLabelIndex, tick, index) => (tick.label ? index : lastVisibleLabelIndex), null);
+    const lastVisibleLabelIndex = majorTicks.reduce(
+      (lastVisibleLabelIndex, tick, index) => (tick.label ? index : lastVisibleLabelIndex),
+      null,
+    );
 
     if (!lastVisibleLabelIndex) {
       return;
     }
 
-    if (constants.areLabelsOverlap(boxes[0], boxes[lastVisibleLabelIndex], labelOpt.minSpacing, constants.center)) {
-      labelOpt.hideFirstOrLast === 'first' ? majorTicks[0].removeLabel() : majorTicks[lastVisibleLabelIndex].removeLabel();
+    if (
+      constants.areLabelsOverlap(
+        boxes[0],
+        boxes[lastVisibleLabelIndex],
+        labelOpt.minSpacing,
+        constants.center,
+      )
+    ) {
+      labelOpt.hideFirstOrLast === 'first'
+        ? majorTicks[0].removeLabel()
+        : majorTicks[lastVisibleLabelIndex].removeLabel();
     }
   },
 
-  shift(margins) {
+  shift(margins): void {
     this._axisGroup.attr({ translateX: margins.right, translateY: margins.bottom });
     this._axisElementsGroup.attr({ translateX: margins.right, translateY: margins.bottom });
   },
 
-  getTranslatedAngle(angle) {
+  getTranslatedAngle(angle): number {
     const startAngle = this.getAngles()[0];
     return angle + startAngle - HALF_PI_ANGLE;
   },
@@ -527,7 +557,7 @@ export const circularSpider = extend({}, circularAxes, {
         nextTick = (spiderTicks[i + 1] || spiderTicks[0]).coords;
         lastTick = { x: (tick.x + nextTick.x) / 2, y: (tick.y + nextTick.y) / 2 };
       }
-      i++;
+      i += 1;
     }
     // @ts-expect-error
     points.push(lastTick.x, lastTick.y);
@@ -553,7 +583,7 @@ export const circularSpider = extend({}, circularAxes, {
 });
 
 export const linear = {
-  _resetMargins() {
+  _resetMargins(): void {
     this._reinitTranslator(this._getViewportRange());
   },
   _getStick: xyAxesLinear._getStick,
@@ -587,7 +617,7 @@ export const linear = {
 
   _createAxisElement: xyAxesLinear._createAxisElement,
 
-  _updateAxisElementPosition() {
+  _updateAxisElementPosition(): void {
     const centerCoord = this.getCenter();
 
     this._axisElement.attr({
@@ -608,15 +638,21 @@ export const linear = {
     ];
   },
 
-  _getLabelAdjustedCoord(tick) {
+  _getLabelAdjustedCoord(tick): Coords {
     const that = this;
-    const labelCoords = tick.labelCoords;
+    const { labelCoords } = tick;
     const labelY = labelCoords.y;
     const cosSin = getCosAndSin(labelCoords.angle);
     const indentFromAxis = that._options.label.indentFromAxis || 0;
     const box = tick.labelBBox;
-    const x = labelCoords.x - abs(indentFromAxis * cosSin.sin) + abs(box.width / 2 * cosSin.cos) - box.width / 2;
-    const y = labelY + (labelY - box.y) - abs(box.height / 2 * cosSin.sin) + abs(indentFromAxis * cosSin.cos);
+    const x = labelCoords.x
+      - abs(indentFromAxis * cosSin.sin)
+      + abs((box.width / 2) * cosSin.cos)
+      - box.width / 2;
+    const y = labelY
+      + (labelY - box.y)
+      - abs((box.height / 2) * cosSin.sin)
+      + abs(indentFromAxis * cosSin.cos);
 
     return { x, y };
   },
@@ -647,9 +683,14 @@ export const linear = {
     };
   },
 
-  _getTranslatedValue(value, offset) {
+  _getTranslatedValue(value, offset): { x: number; y: number; angle: number } {
     const startAngle = this.getAngles()[0];
-    const xy = convertPolarToXY(this.getCenter(), startAngle, 0, this._translator.translate(value, offset));
+    const xy = convertPolarToXY(
+      this.getCenter(),
+      startAngle,
+      0,
+      this._translator.translate(value, offset),
+    );
     return { x: xy.x, y: xy.y, angle: startAngle - HALF_PI_ANGLE };
   },
 
@@ -658,7 +699,7 @@ export const linear = {
   },
 
   _getCanvasStartEnd() {
-    const invert = this.getTranslator().getBusinessRange().invert;
+    const { invert } = this.getTranslator().getBusinessRange();
     const coords = [0, this.getRadius()];
 
     invert && coords.reverse();
@@ -721,7 +762,7 @@ export const linear = {
 
   _checkAlignmentConstantLineLabels: _noop,
 
-  _rotateTick(element, coords, isGridLine) {
+  _rotateTick(element, coords, isGridLine): void {
     !isGridLine && element.rotate(coords.angle + HALF_PI_ANGLE, coords.x, coords.y);
   },
 
@@ -729,10 +770,16 @@ export const linear = {
 
   _validateDisplayMode: circularAxes._validateDisplayMode,
 
-  _getStep(boxes) {
+  _getStep(boxes): number {
     const quarter = getPolarQuarter(this.getAngles()[0]);
     const spacing = this._options.label.minSpacing;
-    const func = quarter === 2 || quarter === 4 ? function (box) { return box.width + spacing; } : function (box) { return box.height; };
+    const func = quarter === 2 || quarter === 4
+      ? function (box) {
+        return box.width + spacing;
+      }
+      : function (box) {
+        return box.height;
+      };
     const maxLabelLength = boxes.reduce((prevValue, box) => _max(prevValue, func(box)), 0);
 
     return constants.getTicksCountInRange(this._majorTicks, quarter === 2 || quarter === 4 ? 'x' : 'y', maxLabelLength);

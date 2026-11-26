@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ArrayStore, DataSource } from 'devextreme-angular/common/data';
 
-export class Hotel {
+export interface Hotel {
   Id: number;
 
   Hotel_Name: string;

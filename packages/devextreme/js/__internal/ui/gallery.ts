@@ -90,7 +90,6 @@ class GalleryNavButton extends Widget<GalleryNavButtonProperties> {
     super._render();
 
     const $element = this.$element();
-    // @ts-expect-error ts-error
     const eventName = addNamespace(clickEventName, this.NAME);
 
     const { direction } = this.option();
@@ -347,7 +346,6 @@ class Gallery extends CollectionWidget<GalleryProperties, Item, CollectionItemKe
   }
 
   _renderDragHandler(): void {
-    // @ts-expect-error ts-error
     const eventName = addNamespace('dragstart', this.NAME);
 
     eventsEngine.off(this.$element(), eventName);
@@ -659,14 +657,12 @@ class Gallery extends CollectionWidget<GalleryProperties, Item, CollectionItemKe
   }
 
   _attachIndicatorClickHandler($element: dxElementWrapper, index: number): void {
-    // @ts-expect-error ts-error
     eventsEngine.on($element, addNamespace(clickEventName, this.NAME), (event: DxEvent) => {
       this._indicatorSelectHandler(event, index);
     });
   }
 
   _detachIndicatorClickHandler($element: dxElementWrapper): void {
-    // @ts-expect-error ts-error
     eventsEngine.off($element, addNamespace(clickEventName, this.NAME));
   }
 

@@ -6,11 +6,8 @@
 /* eslint-disable consistent-return */
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-multi-assign */
-/* eslint-disable @stylistic/max-len */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
-/* eslint-disable prefer-destructuring */
 /* eslint-disable no-else-return */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
@@ -41,7 +38,7 @@ import { Renderer } from './renderers/renderer';
 import type { BBox, Canvas } from './types';
 import { normalizeEnum, patchFontOptions } from './utils';
 
-const format = formatHelper.format;
+const { format } = formatHelper;
 
 const mathCeil = Math.ceil;
 const mathMax = Math.max;
@@ -184,8 +181,11 @@ export let Tooltip = class Tooltip {
       .css({ position: 'absolute', overflow: 'hidden', pointerEvents: 'none' }) // T265557, T447623
       .addClass(params.cssClass);
 
-    const renderer = this._renderer = new Renderer({ pathModified: params.pathModified, container: this._wrapper[0] });
-    const root = renderer.root;
+    const renderer = (this._renderer = new Renderer({
+      pathModified: params.pathModified,
+      container: this._wrapper[0],
+    }));
+    const { root } = renderer;
     root.attr({ 'pointer-events': 'none' });
 
     // svg text
@@ -249,18 +249,22 @@ export let Tooltip = class Tooltip {
 
     const pointerEvents = options.interactive ? 'auto' : 'none';
     if (options.interactive) {
-      this._renderer.root.css({ '-moz-user-select': 'auto', '-webkit-user-select': 'auto' });
+      this._renderer.root.css({ 'user-select': 'auto', '-webkit-user-select': 'auto' });
     }
 
     const drawTooltip = ({
-      group, onRender, eventData, isMoving, templateCallback = () => {},
-    }: TooltipDrawParams) => {
+      group, onRender, eventData, isMoving, templateCallback = (): void => {},
+    }: TooltipDrawParams): true | undefined => {
       const state = this._state;
       if (!isMoving) {
         const template = this._template;
         const useTemplate = template && !state.formatObject.skipTemplate;
         if (state.html || useTemplate) {
-          textGroupHtml.css({ color: state.textColor, width: DEFAULT_HTML_GROUP_WIDTH, pointerEvents });
+          textGroupHtml.css({
+            color: state.textColor,
+            width: DEFAULT_HTML_GROUP_WIDTH,
+            pointerEvents,
+          });
           if (useTemplate) {
             const htmlContainers = this._textHtmlContainers;
             const containerToTemplateRender = createTextHtml().appendTo(this._textGroupHtml);
@@ -324,7 +328,10 @@ export let Tooltip = class Tooltip {
       if (state.html) {
         let bBox: CSSStyleDeclaration | BBox = window.getComputedStyle(this._textHtml.get(0));
         bBox = {
-          x: 0, y: 0, width: mathCeil(parseFloat(bBox.width)), height: mathCeil(parseFloat(bBox.height)),
+          x: 0,
+          y: 0,
+          width: mathCeil(parseFloat(bBox.width)),
+          height: mathCeil(parseFloat(bBox.height)),
         };
         return bBox;
       }
@@ -343,9 +350,12 @@ export let Tooltip = class Tooltip {
 
   _riseEvents(eventData: ThemeValue): void {
     // trigger event
-    // The *onTooltipHidden* is triggered outside the *hide* method because of the cases when *show* is called to determine if tooltip will be visible or not (when target is changed) -
-    // *hide* can neither be called before that *show* - because if tooltip is determined to hide it requires some timeout before actually hiding
-    // nor after that *show* - because it is either too early to hide (because of timeout) or wrong (because tooltip has already been shown for new target)
+    // The *onTooltipHidden* is triggered outside the *hide* method because of the cases when *show*
+    // is called to determine if tooltip will be visible or not (when target is changed) -
+    // *hide* can neither be called before that *show* - because if tooltip is determined to hide it
+    // requires some timeout before actually hiding
+    // nor after that *show* - because it is either too early to hide (because of timeout) or wrong
+    // (because tooltip has already been shown for new target)
     // It is only inside the *show* where it is known weather *onTooltipHidden* is required or not
     // This functionality can be simplified when we get rid of timeouts for tooltip
     this._eventData && this._eventTrigger('tooltipHidden', this._eventData);
@@ -370,7 +380,10 @@ export let Tooltip = class Tooltip {
     for (const name in this._textFontStyles) {
       if (name !== 'fill-opacity') {
         const normalizedName = camelize(name);
-        normalizedCSS[normalizedName] = normalizeStyleProp(normalizedName, this._textFontStyles[name]);
+        normalizedCSS[normalizedName] = normalizeStyleProp(
+          normalizedName,
+          this._textFontStyles[name],
+        );
       }
     }
     this._textGroupHtml.css(normalizedCSS);
@@ -380,7 +393,11 @@ export let Tooltip = class Tooltip {
     return this;
   }
 
-  _prepare(formatObject: ThemeValue, state: TooltipState, customizeTooltip: ThemeValue = this._customizeTooltip): boolean {
+  _prepare(
+    formatObject: ThemeValue,
+    state: TooltipState,
+    customizeTooltip: ThemeValue = this._customizeTooltip,
+  ): boolean {
     const options = this._options;
 
     let customize: TooltipCustomization = {};
@@ -405,7 +422,13 @@ export let Tooltip = class Tooltip {
     return !!state.text || !!state.html || !!this._template;
   }
 
-  show(formatObject: ThemeValue, params: ThemeValue, eventData: ThemeValue, customizeTooltip?: ThemeValue, templateCallback?: (isRendered: boolean) => void): boolean {
+  show(
+    formatObject: ThemeValue,
+    params: ThemeValue,
+    eventData: ThemeValue,
+    customizeTooltip?: ThemeValue,
+    templateCallback?: (isRendered: boolean) => void,
+  ): boolean {
     if (this._options.forceEvents) { // for Blazor charts
       eventData.x = params.x;
       eventData.y = params.y - params.offset;
@@ -490,7 +513,9 @@ export let Tooltip = class Tooltip {
   }
 
   formatValue(value: ThemeValue, _specialFormat?: string, dataType?: string): string {
-    const options = _specialFormat ? getSpecialFormatOptions(this._options, _specialFormat) : this._options;
+    const options = _specialFormat
+      ? getSpecialFormatOptions(this._options, _specialFormat)
+      : this._options;
     return format(value, applyDataTypePreset(options.format, dataType));
   }
 
@@ -561,15 +586,15 @@ export interface TooltipPluginMembers {
 
 export const plugin = {
   name: 'tooltip',
-  init() {
+  init(): void {
     this._initTooltip();
   },
-  dispose() {
+  dispose(): void {
     this._disposeTooltip();
   },
   members: {
     // The method exists only to be overridden in sparklines.
-    _initTooltip() {
+    _initTooltip(): void {
       this._tooltip = new Tooltip({
         cssClass: `${this._rootClassPrefix}-tooltip`,
         eventTrigger: this._eventTrigger,
@@ -579,25 +604,25 @@ export const plugin = {
       });
     },
     // The method exists only to be overridden in sparklines.
-    _disposeTooltip() {
+    _disposeTooltip(): void {
       this._tooltip.dispose();
       this._tooltip = null;
     },
     // The method exists only to be overridden in sparklines.
-    _setTooltipRendererOptions() {
+    _setTooltipRendererOptions(): void {
       this._tooltip.setRendererOptions(this._getRendererOptions());
     },
     // The method exists only to be overridden in sparklines and gauges.
-    _setTooltipOptions() {
+    _setTooltipOptions(): void {
       this._tooltip.update(this._getOption('tooltip'));
     },
   },
   extenders: {
-    _stopCurrentHandling() {
+    _stopCurrentHandling(): void {
       this._tooltip && this._tooltip.hide();
     },
   },
-  customize(constructor) {
+  customize(constructor): void {
     const proto = constructor.prototype;
 
     proto._eventsMap.onTooltipShown = { name: 'tooltipShown' };
@@ -624,7 +649,7 @@ export const plugin = {
 };
 
 /// #DEBUG
-exports.DEBUG_set_tooltip = function (value) {
+exports.DEBUG_set_tooltip = function (value): void {
   Tooltip = value;
 };
 /// #ENDDEBUG

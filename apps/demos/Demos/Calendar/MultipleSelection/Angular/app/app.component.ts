@@ -4,6 +4,7 @@ import {
 } from '@angular/core';
 import { DxSelectBoxModule, DxCheckBoxModule, DxButtonModule } from 'devextreme-angular';
 import { DxCalendarComponent, DxCalendarModule, type DxCalendarTypes } from 'devextreme-angular/ui/calendar';
+import type { DxCheckBoxTypes } from 'devextreme-angular/ui/check-box';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -38,7 +39,7 @@ export class AppComponent {
 
   readonly maxDateValue = signal<Date | null>(null);
 
-  readonly disabledDates = signal<Function | null>(null);
+  readonly disabledDates = signal<((data: DxCalendarTypes.DisabledDate) => boolean) | null>(null);
 
   private isWeekend(date: Date) {
     const day = date.getDay();
@@ -46,19 +47,19 @@ export class AppComponent {
     return day === 0 || day === 6;
   }
 
-  setMinDate({ value }) {
+  setMinDate({ value }: DxCheckBoxTypes.ValueChangedEvent) {
     this.minDateValue.set(value
       ? new Date(this.now.getTime() - 1000 * 60 * 60 * 24 * 3)
       : null);
   }
 
-  setMaxDate({ value }) {
+  setMaxDate({ value }: DxCheckBoxTypes.ValueChangedEvent) {
     this.maxDateValue.set(value
       ? new Date(this.now.getTime() + 1000 * 60 * 60 * 24 * 3)
       : null);
   }
 
-  disableWeekend({ value }) {
+  disableWeekend({ value }: DxCheckBoxTypes.ValueChangedEvent) {
     this.disabledDates.set(value
       ? (data: { view: string, date: Date }) => data.view === 'month' && this.isWeekend(data.date)
       : null);

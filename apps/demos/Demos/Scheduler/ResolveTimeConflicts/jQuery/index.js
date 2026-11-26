@@ -36,13 +36,12 @@ $(() => {
         elementAttr: { class: 'hide-informer', id: 'form' },
         onInitialized: (e) => {
           form = e.component;
-
-          form.on('fieldDataChanged', (e) => {
-            if (showConflictError && ['startDate', 'endDate', 'assigneeId', 'recurrenceRule'].includes(e.dataField)) {
-              setConflictError(false);
-              form.validate();
-            }
-          });
+        },
+        onFieldDataChanged: (e) => {
+          if (showConflictError && ['startDate', 'endDate', 'assigneeId', 'recurrenceRule'].includes(e.dataField)) {
+            setConflictError(false);
+            form.validate();
+          }
         },
         items: [
           {

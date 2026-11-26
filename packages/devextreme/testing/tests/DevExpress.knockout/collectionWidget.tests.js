@@ -97,12 +97,6 @@ const EMPTY_MESSAGE_CLASS = 'dx-empty-message';
 const ITEM_SELECTED_CLASS = 'dx-item-selected';
 
 class TestComponent extends CollectionWidget {
-    ctor(element, options) {
-        this.NAME = 'TestComponent';
-
-        super.ctor(element, options);
-    }
-
     _activeStateUnit() {
         return '.item';
     }

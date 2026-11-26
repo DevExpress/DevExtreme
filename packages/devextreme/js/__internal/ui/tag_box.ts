@@ -12,7 +12,7 @@ import Guid from '@js/core/guid';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { BindableTemplate } from '@js/core/templates/bindable_template';
-import type { TemplateBase } from '@js/core/templates/template_base';
+import type { FunctionTemplate } from '@js/core/templates/function_template';
 import { getIntersection, removeDuplicates } from '@js/core/utils/array';
 import { ensureDefined, equalByValue } from '@js/core/utils/common';
 import type { DeferredObj } from '@js/core/utils/deferred';
@@ -109,7 +109,7 @@ class TagBox<
 
   _isDataSourceChanged?: boolean;
 
-  _tagTemplate?: TemplateBase;
+  _tagTemplate?: FunctionTemplate;
 
   _isDataSourceOptionChanged?: boolean;
 
@@ -632,7 +632,7 @@ class TagBox<
   }
 
   _renderSingleLineScroll(): void {
-    const mouseWheelEvent = addNamespace('dxmousewheel', this.NAME as string);
+    const mouseWheelEvent = addNamespace('dxmousewheel', this.NAME);
     const $element = this.$element();
     const { multiline } = this.option();
 
@@ -671,7 +671,7 @@ class TagBox<
     super._renderEvents();
 
     const input = this._input();
-    const namespace = addNamespace('keydown', this.NAME as string);
+    const namespace = addNamespace('keydown', this.NAME);
     eventsEngine.on(input, namespace, (e: DxEvent<KeyboardEvent>) => {
       const keyName = normalizeKeyName(e) ?? '';
 

@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 /* eslint-disable @typescript-eslint/init-declarations */
-/* eslint-disable @stylistic/max-len */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
@@ -26,7 +25,13 @@ export default function createStrip(axis, options) {
     _getCoord() {
       const canvas = axis._getCanvasStartEnd();
       const range = axis._translator.getBusinessRange();
-      return axis._getStripPos(options.startValue, options.endValue, canvas.start, canvas.end, range);
+      return axis._getStripPos(
+        options.startValue,
+        options.endValue,
+        canvas.start,
+        canvas.end,
+        range,
+      );
     },
 
     _drawLabel(coords) {
@@ -37,21 +42,27 @@ export default function createStrip(axis, options) {
         .append(axis._axisStripLabelGroup);
     },
 
-    draw() {
+    draw(): void {
       if (axis._translator.getBusinessRange().isEmpty()) {
         return;
       }
 
-      if ((isDefined(options.startValue) || isDefined(options.endValue)) && isDefined(options.color)) {
+      if (
+        (isDefined(options.startValue) || isDefined(options.endValue))
+        && isDefined(options.color)
+      ) {
         const stripPos = this._getCoord();
 
-        this.labelCoords = labelOptions.text ? axis._getStripLabelCoords(stripPos.from, stripPos.to, labelOptions) : null;
+        this.labelCoords = labelOptions.text
+          ? axis._getStripLabelCoords(stripPos.from, stripPos.to, labelOptions)
+          : null;
 
         if (stripPos.outOfCanvas || !isDefined(stripPos.to) || !isDefined(stripPos.from)) {
           return;
         }
 
-        this.rect = axis._createStrip(axis._getStripGraphicAttributes(stripPos.from, stripPos.to))
+        this.rect = axis
+          ._createStrip(axis._getStripGraphicAttributes(stripPos.from, stripPos.to))
           .attr({ fill: options.color })
           .append(axis._axisStripGroup);
 
@@ -63,30 +74,38 @@ export default function createStrip(axis, options) {
       return this.label;
     },
 
-    removeLabel() {
+    removeLabel(): void {
     },
 
-    updatePosition(animate) {
+    updatePosition(animate): void {
       const stripPos = this._getCoord();
 
       if (animate && storedCoord) {
-        this.label && this.label.attr(axis._getStripLabelCoords(storedCoord.from, storedCoord.to, options.label));
-        this.rect && this.rect.attr(axis._getStripGraphicAttributes(storedCoord.from, storedCoord.to));
+        this.label
+          && this.label.attr(
+            axis._getStripLabelCoords(storedCoord.from, storedCoord.to, options.label),
+          );
+        this.rect
+          && this.rect.attr(axis._getStripGraphicAttributes(storedCoord.from, storedCoord.to));
 
-        this.label && this.label.animate(axis._getStripLabelCoords(stripPos.from, stripPos.to, options.label));
+        this.label
+          && this.label.animate(
+            axis._getStripLabelCoords(stripPos.from, stripPos.to, options.label),
+          );
         this.rect && this.rect.animate(axis._getStripGraphicAttributes(stripPos.from, stripPos.to));
       } else {
-        this.label && this.label.attr(axis._getStripLabelCoords(stripPos.from, stripPos.to, options.label));
+        this.label
+          && this.label.attr(axis._getStripLabelCoords(stripPos.from, stripPos.to, options.label));
         this.rect && this.rect.attr(axis._getStripGraphicAttributes(stripPos.from, stripPos.to));
       }
     },
 
-    saveCoords() {
+    saveCoords(): void {
       lastStoredCoordinates = storedCoord;
       storedCoord = this._getCoord();
     },
 
-    resetCoordinates() {
+    resetCoordinates(): void {
       storedCoord = lastStoredCoordinates;
     },
   };

@@ -1,14 +1,12 @@
 /* eslint-disable no-bitwise */
 /* eslint-disable @typescript-eslint/init-declarations */
-/* eslint-disable no-plusplus */
 /* eslint-disable func-names */
 /* eslint-disable @typescript-eslint/naming-convention */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-use-before-define */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
 
 import { noop } from '@ts/core/utils/common';
 import { extend as _extend } from '@ts/core/utils/extend';
+import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 import Node from '@ts/viz/tree_map/node';
 import TreeMapBase from '@ts/viz/tree_map/tree_map.base';
 
@@ -18,7 +16,7 @@ const handlers = proto._handlers;
 const _calculateState = handlers.calculateState;
 const { _buildState } = nodeProto;
 
-handlers.calculateState = function (options) {
+handlers.calculateState = function (options: ThemeValue): Record<number, ThemeValue> {
   const states = { 0: _calculateState(options) };
 
   handlers.calculateAdditionalStates(states, options);
@@ -33,7 +31,7 @@ nodeProto.statesMap = { 0: 0 };
 
 nodeProto.additionalStates = [];
 
-nodeProto._buildState = function (state, extra) {
+nodeProto._buildState = function (this: Node, state: ThemeValue, extra: ThemeValue): ThemeValue {
   const states = { 0: _buildState(state[0], extra) };
 
   if (this.additionalStates.length) {
@@ -42,11 +40,11 @@ nodeProto._buildState = function (state, extra) {
   return states;
 };
 
-nodeProto._getState = function () {
+nodeProto._getState = function (this: Node): ThemeValue {
   return this.state[this.statesMap[this.code]];
 };
 
-nodeProto.setState = function (code, state) {
+nodeProto.setState = function (this: Node, code, state): void {
   if (state) {
     this.code |= code;
   } else {
@@ -55,11 +53,11 @@ nodeProto.setState = function (code, state) {
   this.ctx.change(['TILES']);
 };
 
-function buildAdditionalStates(states, base, source, list) {
+function buildAdditionalStates(states, base, source, list): void {
   let i;
   const ii = list.length;
 
-  for (i = 0; i < ii; ++i) {
+  for (i = 0; i < ii; i += 1) {
     states[list[i]] = _extend({}, base, source[list[i]]);
   }
 }

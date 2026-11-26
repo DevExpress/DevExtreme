@@ -3132,7 +3132,7 @@ QUnit.test('Update label location', function(assert) {
 
 QUnit.module('Calculate tracker size', {
     beforeEach: function() {
-        this.realTouchDevice = ('ontouchstart' in window) || (window.navigator.msPointerEnabled && window.navigator.msMaxTouchPoints > 0) || (window.navigator.pointerEnabled && window.navigator.maxTouchPoints > 0);
+        this.realTouchDevice = 'ontouchstart' in window;
         this.renderer = new Renderer();
         this.options = {
             widgetType: 'chart',
@@ -3170,74 +3170,6 @@ QUnit.test('Tracker with point.r > minTrackerSize', function(assert) {
     } else {
         assert.strictEqual(point._storeTrackerR(), 30);
     }
-});
-
-QUnit.module('Tracker size calculation on MS Touch Devices', {
-    beforeEach: function() {
-        this.renderer = new Renderer();
-        this.group = this.renderer.g();
-        this.options = {
-            widgetType: 'chart',
-            styles: { normal: { r: 6 }, hover: { r: 6 } },
-            label: {}
-        };
-        this.series = {
-            isFullStackedSeries: function() { return false; },
-            getLabelVisibility: function() { return false; },
-            _argumentChecker: function() { return true; },
-            _valueChecker: function() { return true; }
-        };
-    }
-});
-
-QUnit.test('Get navigator', function(assert) {
-    const point = createPoint(this.series, { argument: '4', value: 3 }, this.options);
-
-    point._storeTrackerR();
-
-    assert.equal(point.__debug_browserNavigator, window.navigator);
-});
-
-QUnit.test('Tracker on ms devices with point.r < minTrackerSize. msPointer', function(assert) {
-    const point = createPoint(this.series, { argument: '4', value: 3 }, this.options);
-    point.__debug_navigator = {
-        msPointerEnabled: true,
-        msMaxTouchPoints: 2
-    };
-
-    assert.strictEqual(point._storeTrackerR(), 20);
-});
-
-QUnit.test('Tracker on ms devices with point.r < minTrackerSize. Pointer', function(assert) {
-    const point = createPoint(this.series, { argument: '4', value: 3 }, this.options);
-    point.__debug_navigator = {
-        pointerEnabled: true,
-        maxTouchPoints: 2
-    };
-    assert.strictEqual(point._storeTrackerR(), 20);
-});
-
-QUnit.test('Tracker on ms devices with point.r > minTrackerSize. msPointer', function(assert) {
-    this.options.styles.normal.r = 30;
-
-    const point = createPoint(this.series, { argument: '4', value: 3 }, this.options);
-    point.__debug_navigator = {
-        msPointerEnabled: true,
-        msMaxTouchPoints: 2
-    };
-
-    assert.strictEqual(point._storeTrackerR(), 30);
-});
-
-QUnit.test('Tracker on ms devices with point.r > minTrackerSize. pointerEnabled', function(assert) {
-    this.options.styles.normal.r = 30;
-    const point = createPoint(this.series, { argument: '4', value: 3 }, this.options);
-    point.__debug_navigator = {
-        pointerEnabled: true,
-        maxTouchPoints: 2
-    };
-    point._options.styles.normal.r = 30;
-    assert.strictEqual(point._storeTrackerR(), 30);
 });
 
 QUnit.module('get point radius', {

@@ -9,9 +9,7 @@ function TabTitle({ data, onClose }) {
   const handleClose = useCallback(() => onClose(data), [onClose, data]);
   return (
     <>
-      <span>
-        {data.FirstName} {data.LastName}
-      </span>
+      <span>{`${data.FirstName} ${data.LastName}`}</span>
       <i
         className="dx-icon dx-icon-close"
         onClick={handleClose}
@@ -51,9 +49,7 @@ function App() {
         />
       ) : (
         <>
-          <span>
-            {data.FirstName} {data.LastName}
-          </span>
+          <span>{`${data.FirstName} ${data.LastName}`}</span>
         </>
       ),
     [employees.length, closeButtonHandler],

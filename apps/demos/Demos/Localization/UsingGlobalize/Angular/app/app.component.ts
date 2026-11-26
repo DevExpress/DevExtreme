@@ -1,6 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import { Component, enableProdMode, inject } from '@angular/core';
 import { DxSelectBoxModule, DxDataGridModule } from 'devextreme-angular';
+import type { DxSelectBoxTypes } from 'devextreme-angular/ui/select-box';
 
 import 'devextreme/common/core/localization/globalize/number';
 import 'devextreme/common/core/localization/globalize/date';
@@ -51,7 +52,7 @@ export class AppComponent {
     Globalize.locale(this.locale);
   }
 
-  private initGlobalize() {
+  private initGlobalize(): void {
     Globalize.load(
       deCldrData,
       ruCldrData,
@@ -62,17 +63,17 @@ export class AppComponent {
     Globalize.loadMessages(this.service.getDictionary());
   }
 
-  changeLocale(data) {
-    this.setLocale(data.value);
+  changeLocale({ value }: DxSelectBoxTypes.ValueChangedEvent): void {
+    this.setLocale(value);
     parent.document.location.reload();
   }
 
-  private getLocale() {
+  private getLocale(): string {
     const locale = sessionStorage.getItem('locale');
     return locale != null ? locale : 'en';
   }
 
-  private setLocale(locale) {
+  private setLocale(locale: string): void {
     sessionStorage.setItem('locale', locale);
   }
 }

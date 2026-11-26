@@ -4,12 +4,10 @@
 /* eslint-disable radix */
 /* eslint-disable @typescript-eslint/init-declarations */
 /* eslint-disable no-restricted-syntax */
-/* eslint-disable no-plusplus */
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable @typescript-eslint/no-shadow */
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-multi-assign */
-/* eslint-disable @stylistic/max-len */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-use-before-define */
@@ -22,6 +20,7 @@ import {
   isLocaleOnlyFormat,
   withFormatLocale,
 } from '@ts/core/global_format_config';
+import type { DatesDifferences } from '@ts/core/utils/date';
 import { dateUtils } from '@ts/core/utils/date';
 import { adjust, getExponent, getPrecision } from '@ts/core/utils/math';
 import {
@@ -42,8 +41,8 @@ const INTERVALS_MAP = {
   longtime: 'second',
 };
 
-function patchFirstTickDiff(differences, tickFormatIndex) {
-  for (let i = tickFormatIndex; i < dateUnitIntervals.length - 1; i++) {
+function patchFirstTickDiff(differences, tickFormatIndex): void {
+  for (let i = tickFormatIndex; i < dateUnitIntervals.length - 1; i += 1) {
     const dateUnitInterval = dateUnitIntervals[i];
     if (i === tickFormatIndex) {
       setDateUnitInterval(differences, tickFormatIndex + (differences.millisecond ? 2 : 1));
@@ -55,13 +54,13 @@ function patchFirstTickDiff(differences, tickFormatIndex) {
   }
 }
 
-function patchTickDiff(differences, tickFormatIndex) {
+function patchTickDiff(differences, tickFormatIndex): boolean {
   let patched = false;
-  for (let i = dateUnitIntervals.length - 1; i >= tickFormatIndex; i--) {
+  for (let i = dateUnitIntervals.length - 1; i >= tickFormatIndex; i -= 1) {
     const dateUnitInterval = dateUnitIntervals[i];
     if (differences[dateUnitInterval]) {
       if (i - tickFormatIndex > 1) {
-        for (let j = 0; j <= tickFormatIndex; j++) {
+        for (let j = 0; j <= tickFormatIndex; j += 1) {
           resetDateUnitInterval(differences, j);
           patched = true;
         }
@@ -72,7 +71,7 @@ function patchTickDiff(differences, tickFormatIndex) {
   return patched;
 }
 
-function getDatesDifferences(prevDate, curDate, nextDate?, tickIntervalFormat?) {
+function getDatesDifferences(prevDate, curDate, nextDate?, tickIntervalFormat?): DatesDifferences {
   tickIntervalFormat = INTERVALS_MAP[tickIntervalFormat] || tickIntervalFormat;
 
   const tickFormatIndex = dateUnitIntervals.indexOf(tickIntervalFormat);
@@ -93,36 +92,36 @@ function getDatesDifferences(prevDate, curDate, nextDate?, tickIntervalFormat?) 
   }
 }
 
-function resetDateUnitInterval(differences, intervalIndex) {
+function resetDateUnitInterval(differences, intervalIndex): void {
   const dateUnitInterval = dateUnitIntervals[intervalIndex];
 
   if (differences[dateUnitInterval]) {
     differences[dateUnitInterval] = false;
-    differences.count--;
+    differences.count -= 1;
   }
 }
 
-function setDateUnitInterval(differences, intervalIndex) {
+function setDateUnitInterval(differences, intervalIndex): void {
   const dateUnitInterval = dateUnitIntervals[intervalIndex];
 
   if (differences[dateUnitInterval] === false) {
     differences[dateUnitInterval] = true;
-    differences.count++;
+    differences.count += 1;
   }
 }
 
-function getNoZeroIndex(str) {
+function getNoZeroIndex(str): number {
   return str.length - parseInt(str).toString().length;
 }
 
-function getTransitionTickIndex(ticks, value) {
+function getTransitionTickIndex(ticks, value): number {
   let i;
   let curDiff;
   let minDiff;
   let nearestTickIndex = 0;
 
   minDiff = abs(value - ticks[0]);
-  for (i = 1; i < ticks.length; i++) {
+  for (i = 1; i < ticks.length; i += 1) {
     curDiff = abs(value - ticks[i]);
     if (curDiff < minDiff) {
       minDiff = curDiff;
@@ -178,22 +177,30 @@ function getDateTimeFormat(tick, { showTransition, ticks, tickInterval }) {
         prevDateIndex = indexOfTick === 0 ? ticks.length - 1 : indexOfTick - 1;
         nextDateIndex = indexOfTick === 0 ? 1 : -1;
       }
-      const datesDifferences = getDatesDifferences(ticks[prevDateIndex], tick, ticks[nextDateIndex], typeFormat);
+      const datesDifferences = getDatesDifferences(
+        ticks[prevDateIndex],
+        tick,
+        ticks[nextDateIndex],
+        typeFormat,
+      );
       typeFormat = formatHelper.getDateFormatByDifferences(datesDifferences, typeFormat);
     }
   }
   return createFormat(typeFormat);
 }
 
-function getFormatExponential(tick, tickInterval) {
+function getFormatExponential(tick, tickInterval): number {
   const stringTick = abs(tick).toString();
   if (isExponential(tick)) {
-    return Math.max(abs(getExponent(tick) - getExponent(tickInterval)), abs(getPrecision(tick) - getPrecision(tickInterval)));
+    return Math.max(
+      abs(getExponent(tick) - getExponent(tickInterval)),
+      abs(getPrecision(tick) - getPrecision(tickInterval)),
+    );
   }
   return abs(getNoZeroIndex(stringTick.split('.')[1]) - getExponent(tickInterval) + 1);
 }
 
-function getFormatWithModifier(tick, tickInterval) {
+function getFormatWithModifier(tick, tickInterval): { precision: number; type: string } {
   const tickIntervalIndex = floor(log10(tickInterval));
   let tickIndex;
   let precision = 0;
@@ -247,7 +254,7 @@ function getHighAndSelfDiffFormat(diff, interval) {
   return createFormat(formatHelper.getDateFormatByDifferences(diff));
 }
 
-function formatDateRange(startValue, endValue, tickInterval) {
+function formatDateRange(startValue, endValue, tickInterval): string {
   const diff = getDatesDifferences(startValue, endValue);
   const typeFormat = dateUtils.getDateFormatByTickInterval(tickInterval);
   const diffFormatType = formatHelper.getDateFormatByDifferences(diff, typeFormat);
@@ -255,7 +262,10 @@ function formatDateRange(startValue, endValue, tickInterval) {
   const values = [];
 
   if (tickInterval in diff) {
-    const rangeFormat = getHighAndSelfDiffFormat(getDatesDifferences(startValue, endValue), tickInterval);
+    const rangeFormat = getHighAndSelfDiffFormat(
+      getDatesDifferences(startValue, endValue),
+      tickInterval,
+    );
     const value = _format(startValue, rangeFormat);
 
     if (value) {
@@ -357,8 +367,12 @@ export function smartFormatter(tick, options) {
 }
 
 export function formatRange({
-  startValue, endValue, tickInterval, argumentFormat, axisOptions: { dataType, type, logarithmBase },
-}) {
+  startValue,
+  endValue,
+  tickInterval,
+  argumentFormat,
+  axisOptions: { dataType, type, logarithmBase },
+}): string {
   if (type === 'discrete') {
     return '';
   }

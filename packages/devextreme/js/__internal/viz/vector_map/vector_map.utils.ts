@@ -1,15 +1,13 @@
-/* eslint-disable no-plusplus */
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
-
 let nextDataKey = 1;
 
-export function generateDataKey() {
-  return `vectormap-data-${nextDataKey++}`;
+export function generateDataKey(): string {
+  const dataKey = `vectormap-data-${nextDataKey}`;
+  nextDataKey += 1;
+  return dataKey;
 }
 
 /// #DEBUG
-exports._TESTS_resetDataKey = function () {
+exports._TESTS_resetDataKey = function (): void {
   nextDataKey = 1;
 };
 /// #ENDDEBUG

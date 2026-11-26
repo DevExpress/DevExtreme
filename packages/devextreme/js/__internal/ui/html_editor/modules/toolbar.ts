@@ -144,8 +144,7 @@ if (Quill) {
       return isHeaderValue ? `${localize('heading')} ${value}` : localize('normalText');
     }
 
-    // @ts-expect-error localize() takes a string; acceptedValues may hold numbers and booleans
-    return localize(value) || value;
+    return localize(String(value)) || value;
   };
   ToolbarModule = class extends BaseModule {
     declare options: ToolbarModuleOptions;
@@ -295,7 +294,6 @@ if (Quill) {
     }
 
     _getContainerMouseDownEvent(): string {
-      // @ts-expect-error NAME is typed optional (component.ts); the constructor always sets it
       return addNamespace('mousedown', this.editorInstance.NAME);
     }
 

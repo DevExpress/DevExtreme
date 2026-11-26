@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/init-declarations */
 /* eslint-disable func-names */
-/* eslint-disable @stylistic/max-len */
 /* eslint-disable @typescript-eslint/no-use-before-define */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 
+import type { Coordinates } from '@js/core/renderer';
 import { domAdapter } from '@ts/core/dom_adapter';
 import { name as clickEventName } from '@ts/events/click';
 import eventsEngine from '@ts/events/core/events_engine';
@@ -20,7 +20,7 @@ interface TrackerNode {
 }
 
 interface TrackerWidget {
-  _renderer: { getRootOffset: () => { left: number; top: number } };
+  _renderer: { getRootOffset: () => Coordinates };
   _getOption: (name: string) => ThemeValue;
   clearHover: () => void;
   hideTooltip: () => void;
@@ -32,7 +32,7 @@ interface TrackerClickEvent {
   event: ThemeValue;
 }
 
-interface TrackerParameters {
+export interface TrackerParameters {
   widget: TrackerWidget;
   root: ThemeValue;
   getData: (e: ThemeValue, tooltipData?: boolean) => ThemeValue;
@@ -52,7 +52,8 @@ export class Tracker {
     const document = domAdapter.getDocument();
 
     parameters.getCoords = function (e): number[] {
-      // TODO: Looks like "eventData" just returns e.pageX, e.pageY. Investigate and use just e.pageX, e.pageY is possible. Don't forget about touch.
+      // TODO: Looks like "eventData" just returns e.pageX, e.pageY. Investigate and use just
+      // e.pageX, e.pageY is possible. Don't forget about touch.
       const data = _eventData(e);
       const offset = parameters.widget._renderer.getRootOffset();
       return [data.x - offset.left, data.y - offset.top];
@@ -73,12 +74,18 @@ export class Tracker {
       processClick(e, parameters);
     }
 
-    // Previously "stopPropagation" was called from the "downHandler" - so event triggered on "root" is not then triggered on "document".
-    // Unfortunately it occurred (during T396917) that on touch devices calling "stopPropagation" prevents the following "dxclick" event.
-    // Generally I think it would be better to use only (dxpointerdown, dxpointermove, dxpointerup) events (of course click is then implemented manually).
-    // But for now removing "stopPropagation" will suffice - it can be implemented faster and with less changes, there are no known drawbacks in it.
-    // We use "stopPropagation" to prevent unexpected scrolling or zooming when widget has some own scrolling behavior and is located inside another widget
-    // (like dxScrollable) with its own scrolling behavior - dxTreeMap does not have own scrolling behavior.
+    // Previously "stopPropagation" was called from the "downHandler" - so event triggered on "root"
+    // is not then triggered on "document".
+    // Unfortunately it occurred (during T396917) that on touch devices calling "stopPropagation"
+    // prevents the following "dxclick" event.
+    // Generally I think it would be better to use only (dxpointerdown, dxpointermove, dxpointerup)
+    // events (of course click is then implemented manually).
+    // But for now removing "stopPropagation" will suffice - it can be implemented faster and with
+    // less changes, there are no known drawbacks in it.
+    // We use "stopPropagation" to prevent unexpected scrolling or zooming when widget has some own
+    // scrolling behavior and is located inside another widget
+    // (like dxScrollable) with its own scrolling behavior - dxTreeMap does not have own scrolling
+    // behavior.
     let isRootDown = false;
 
     function downHandler(e: ThemeValue): void {
@@ -109,7 +116,8 @@ function processClick(e: ThemeValue, params: TrackerParameters): void {
   if (id >= 0) {
     params.click({
       node: params.getNode(id),
-      // @ts-expect-error getCoords is optional for the caller; _initHandlers assigns it before any handler is attached
+      // @ts-expect-error getCoords is optional for the caller; _initHandlers assigns it before any
+      // handler is attached
       coords: params.getCoords(e),
       event: e,
     });

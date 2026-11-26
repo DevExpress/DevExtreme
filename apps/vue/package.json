@@ -2,7 +2,7 @@
   "name": "devextreme-vue-playground",
   "description": "DevExtreme Vue UI and Visualization Components",
   "private": true,
-  "version": "26.2.0",
+  "version": "27.1.0",
   "author": "Developer Express Inc.",
   "license": "MIT",
   "repository": {
@@ -12,7 +12,7 @@
   "dependencies": {
     "devextreme": "workspace:*",
     "devextreme-vue": "workspace:*",
-    "vue": "3.2.47"
+    "vue": "^3.5.45"
   },
   "devDependencies": {
     "@types/node": "20.11.17",

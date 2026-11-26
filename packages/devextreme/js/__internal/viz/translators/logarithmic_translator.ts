@@ -1,25 +1,40 @@
 /* eslint-disable @typescript-eslint/init-declarations */
-/* eslint-disable @stylistic/max-len */
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
 
 import { isDefined } from '@ts/core/utils/type';
 import {
   getLogExt as getLog,
   raiseToExt as raiseTo,
 } from '@ts/viz/core/utils';
+import type { CanvasOptions, Translator2DInstance } from '@ts/viz/translators/translator2d';
+
+type LogarithmicTranslator = Translator2DInstance & {
+  _canvasOptions: Required<Pick<CanvasOptions, 'base'>>;
+};
 
 export default {
-  fromValue(value) {
-    return value !== null ? getLog(value, this._canvasOptions.base, this._businessRange.allowNegatives, this._businessRange.linearThreshold) : value;
+  fromValue(this: LogarithmicTranslator, value: number | null): number | null {
+    return value !== null
+      ? getLog(
+        value,
+        this._canvasOptions.base,
+        this._businessRange.allowNegatives,
+        this._businessRange.linearThreshold,
+      )
+      : value;
   },
 
-  toValue(value) {
-    return value !== null ? raiseTo(value, this._canvasOptions.base, this._businessRange.allowNegatives, this._businessRange.linearThreshold) : value;
+  toValue(this: LogarithmicTranslator, value: number | null): number | null {
+    return value !== null
+      ? raiseTo(
+        value,
+        this._canvasOptions.base,
+        this._businessRange.allowNegatives,
+        this._businessRange.linearThreshold,
+      )
+      : value;
   },
 
-  getMinBarSize(minBarSize) {
+  getMinBarSize(this: LogarithmicTranslator, minBarSize: number): number {
     const visibleArea = this.getCanvasVisibleArea();
     const minValue = this.from(visibleArea.min + minBarSize);
     const canvasOptions = this._canvasOptions;
@@ -31,15 +46,23 @@ export default {
     return canvasOptions.base ** value;
   },
 
-  checkMinBarSize(initialValue, minShownValue, stackValue) {
+  checkMinBarSize(
+    this: LogarithmicTranslator,
+    initialValue: number,
+    minShownValue: number,
+    stackValue?: number,
+  ): number {
     const canvasOptions = this._canvasOptions;
     const prevValue = stackValue ? stackValue - initialValue : 0;
     const baseMethod = this.constructor.prototype.checkMinBarSize;
-    let minBarSize;
-    let updateValue;
+    let minBarSize: number;
+    let updateValue: number;
 
     if (isDefined(minShownValue) && prevValue > 0) {
-      minBarSize = baseMethod(this.fromValue(stackValue / prevValue), this.fromValue(minShownValue) - canvasOptions.rangeMinVisible);
+      minBarSize = baseMethod(
+        this.fromValue((stackValue as number) / prevValue),
+        this.fromValue(minShownValue) - canvasOptions.rangeMinVisible,
+      );
       updateValue = canvasOptions.base ** (this.fromValue(prevValue) + minBarSize) - prevValue;
     } else {
       updateValue = baseMethod(initialValue, minShownValue);

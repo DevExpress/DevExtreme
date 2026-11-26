@@ -13,10 +13,9 @@ function CompanyItem({ data }) {
           </p>
           <p>
             <span>
-              <b>{City}</b>,&nbsp;
-            </span>
-            <span>{State}&nbsp;</span>
-            <span>{Zipcode}</span>
+              <b>{City}</b>,
+            </span>{' '}
+            <span>{State}</span> <span>{Zipcode}</span>
           </p>
         </div>
         <div>

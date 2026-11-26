@@ -226,18 +226,6 @@ if (Quill) {
       return !this._isMentionActive;
     }
 
-    _fitIntoRange(value: number, start: number, end: number): number {
-      if (value > end) {
-        return start;
-      }
-
-      if (value < start) {
-        return end;
-      }
-
-      return value;
-    }
-
     _selectItemHandler(): boolean {
       if (this._isMentionActive) {
         // @ts-expect-error items is optional in the d.ts; the list always holds an array

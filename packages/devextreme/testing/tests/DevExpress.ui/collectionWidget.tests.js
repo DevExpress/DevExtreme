@@ -1165,11 +1165,6 @@ module('option change', () => {
 
     test('user defined selectedItem with null value should be more important than default selected index', function(assert) {
         class TestCollection extends CollectionWidget {
-            ctor(element, options) {
-                this.NAME = 'TestCollection';
-                super.ctor(element, options);
-            }
-
             _getDefaultOptions() {
                 return $.extend(super._getDefaultOptions(), {
                     selectedIndex: 0
@@ -2039,11 +2034,6 @@ module('isReady', () => {
 });
 
 class TestWidget extends CollectionWidget {
-    ctor(element, options) {
-        this.NAME = 'TestWidget';
-        super.ctor(element, options);
-    }
-
     _renderItem(...args) {
         super._renderItem(...args);
     }

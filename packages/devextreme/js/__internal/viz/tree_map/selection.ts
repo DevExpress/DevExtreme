@@ -1,14 +1,11 @@
 /* eslint-disable max-depth */
 /* eslint-disable @typescript-eslint/no-this-alias */
 /* eslint-disable @typescript-eslint/init-declarations */
-/* eslint-disable no-plusplus */
 /* eslint-disable func-names */
 /* eslint-disable no-nested-ternary */
 /* eslint-disable @typescript-eslint/no-shadow */
 /* eslint-disable no-multi-assign */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-use-before-define */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
 
 import '@ts/viz/tree_map/api';
 import '@ts/viz/tree_map/states';
@@ -37,17 +34,17 @@ expand(proto._handlers, 'calculateAdditionalStates', (states, options) => {
 nodeProto.statesMap[2] = nodeProto.statesMap[3] = STATE_CODE;
 nodeProto.additionalStates.push(2);
 
-expand(proto, '_onNodesCreated', function () {
+expand(proto, '_onNodesCreated', function (this: TreeMapBase) {
   this._selectionList.length = 0;
 });
 
-expand(proto, '_extendProxyType', function (proto) {
+expand(proto, '_extendProxyType', function (this: TreeMapBase, proto) {
   const that = this;
 
-  proto.select = function (state) {
+  proto.select = function (this: Pick<Node, '_id'>, state): void {
     that._selectNode(this._id, !!state);
   };
-  proto.isSelected = function () {
+  proto.isSelected = function (this: Pick<Node, '_id'>): boolean {
     return that._selectionList.includes(this._id);
   };
   that._selectionList = [];
@@ -55,7 +52,7 @@ expand(proto, '_extendProxyType', function (proto) {
 
 TreeMapBase.addChange({
   code: 'SELECTION_MODE',
-  handler() {
+  handler(this: TreeMapBase) {
     const that = this;
     const option = _normalizeEnum(that._getOption('selectionMode', true));
     const selectionList = that._selectionList;
@@ -76,7 +73,7 @@ TreeMapBase.addChange({
   option: 'selectionMode',
 });
 
-expand(proto, '_applyTilesAppearance', function () {
+expand(proto, '_applyTilesAppearance', function (this: TreeMapBase) {
   if (this._selectionList.length) {
     bringSelectedTilesToForeground(this._nodes, this._selectionList);
   }
@@ -84,34 +81,34 @@ expand(proto, '_applyTilesAppearance', function () {
 
 const tileToFront = [leafToFront, groupToFront];
 
-function bringSelectedTilesToForeground(nodes, selectionList) {
+function bringSelectedTilesToForeground(nodes, selectionList): void {
   let i;
   const ii = selectionList.length;
   let node;
 
-  for (i = 0; i < ii; ++i) {
+  for (i = 0; i < ii; i += 1) {
     node = nodes[selectionList[i]];
     tileToFront[Number(node.isNode())](node.tile);
   }
 }
 
-function leafToFront(content) {
+function leafToFront(content): void {
   content.toForeground();
 }
 
-function groupToFront(content) {
+function groupToFront(content): void {
   content.outer.toForeground();
   content.inner.toForeground();
 }
 
-proto._applySelectionState = function (index, state) {
+proto._applySelectionState = function (this: TreeMapBase, index, state): void {
   const node = this._nodes[index];
 
   node.setState(STATE_CODE, state);
   this._eventTrigger('selectionChanged', { node: node.proxy });
 };
 
-proto._selectNode = function (index, state) {
+proto._selectNode = function (this: TreeMapBase, index, state): void {
   const that = this;
   let selectionList;
   let k;
@@ -138,7 +135,7 @@ proto._selectNode = function (index, state) {
   }
 };
 
-proto.clearSelection = function () {
+proto.clearSelection = function (this: TreeMapBase): void {
   const that = this;
   const selectionList = that._selectionList;
   let i;
@@ -146,7 +143,7 @@ proto.clearSelection = function () {
 
   if (that._selectionMode !== MODE_NONE) {
     that._context.suspend();
-    for (i = 0; i < ii; ++i) {
+    for (i = 0; i < ii; i += 1) {
       that._applySelectionState(selectionList[i], false);
     }
     selectionList.length = 0;

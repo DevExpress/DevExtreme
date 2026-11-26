@@ -1,14 +1,16 @@
 {
   "name": "devextreme-playwright-tests",
-  "version": "26.2.0",
+  "version": "27.1.0",
   "scripts": {
     "test": "node ./runner.mjs",
     "lint": "eslint",
     "type-check": "tsc --noEmit -p tsconfig.json"
   },
   "devDependencies": {
+    "@axe-core/playwright": "catalog:",
     "@playwright/test": "catalog:",
     "@types/jquery": "catalog:",
+    "axe-core": "catalog:",
     "devextreme": "workspace:*",
     "eslint": "catalog:",
     "@eslint/js": "catalog:",

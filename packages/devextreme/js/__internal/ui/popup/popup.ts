@@ -13,7 +13,7 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import resizeObserverSingleton from '@js/core/resize_observer';
 import { EmptyTemplate } from '@js/core/templates/empty_template';
-import type { TemplateBase } from '@js/core/templates/template_base';
+import type { FunctionTemplate } from '@js/core/templates/function_template';
 import { noop } from '@js/core/utils/common';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import { contains } from '@js/core/utils/dom';
@@ -33,8 +33,9 @@ import {
 import { isDefined, isObject } from '@js/core/utils/type';
 import type { Properties as ButtonProperties } from '@js/ui/button';
 import Button from '@js/ui/button';
+import type dxPopup from '@js/ui/popup';
 import type {
-  dxPopupAnimation, Properties, ToolbarItem, ToolbarLocation,
+  dxPopupAnimation, dxPopupOptions, Properties, ToolbarItem, ToolbarLocation,
 } from '@js/ui/popup';
 import type { ResizeEndEvent, ResizeEvent, ResizeStartEvent } from '@js/ui/resizable';
 import Resizable from '@js/ui/resizable';
@@ -175,13 +176,17 @@ const getHeightStrategyChangeOffset = (
   popupVerticalPaddings: number,
 ): number => (currentHeightStrategyClass === HEIGHT_STRATEGIES.flex ? -popupVerticalPaddings : 0);
 
-export interface PopupProperties extends Omit<Properties, 'animation' | 'container' | 'position'>,
+export interface PopupProperties<
+  TComponent = dxPopup,
+> extends Omit<dxPopupOptions<TComponent>, 'animation' | 'container' | 'position' | 'dragAndResizeArea'>,
   OverlayInternalProperties {
   animation?: dxPopupAnimation | null;
 
   container?: Properties['container'] | dxElementWrapper;
 
   position?: Properties['position'] | InternalPositionConfig;
+
+  dragAndResizeArea?: Properties['dragAndResizeArea'] | Window;
 
   autoResizeEnabled?: boolean;
 
@@ -203,7 +208,8 @@ export interface PopupProperties extends Omit<Properties, 'animation' | 'contain
 }
 
 class Popup<
-  TProperties extends PopupProperties = PopupProperties,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  TProperties extends PopupProperties<any> = PopupProperties,
 > extends Overlay<TProperties> {
   _actions?: PopupActions;
 
@@ -764,7 +770,7 @@ class Popup<
   }
 
   _renderByTemplate(
-    template: TemplateBase,
+    template: FunctionTemplate,
     $container: dxElementWrapper,
   ): dxElementWrapper {
     const $result = $(template.render({ container: getPublicElement($container) }));

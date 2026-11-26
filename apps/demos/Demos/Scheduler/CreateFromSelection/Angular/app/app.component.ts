@@ -1,6 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import { Component, enableProdMode, inject } from '@angular/core';
 import { DxSchedulerModule } from 'devextreme-angular';
+import type { DxSchedulerTypes } from 'devextreme-angular/ui/scheduler';
 import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -24,7 +25,7 @@ export class AppComponent {
 
   readonly prioritiesData = this.service.getPriorities();
 
-  onSelectionEnd(e) {
+  onSelectionEnd(e: DxSchedulerTypes.SelectionEndEvent) {
     const cells = e.selectedCellData;
     if (cells.length <= 1) {
       return;
