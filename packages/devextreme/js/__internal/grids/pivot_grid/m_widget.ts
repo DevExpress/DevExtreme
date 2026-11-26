@@ -9,7 +9,6 @@ import { deferRender, deferUpdate, noop } from '@js/core/utils/common';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred, when } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
-import { each } from '@js/core/utils/iterator';
 import {
   getHeight, getOuterHeight,
   getWidth, setHeight,
@@ -113,7 +112,7 @@ const ARROW_KEY_DIRECTIONS: Record<string, CellNavigationDirection> = {
 function getArraySum(array: number[]): number {
   let sum = 0;
 
-  each(array, (_, value) => {
+  array.forEach((value) => {
     sum += value || 0;
   });
 
@@ -149,7 +148,7 @@ function getCommonBorderWidth(elements: dxElementWrapper[], direction: 'width' |
     : ['borderTopWidth', 'borderBottomWidth'] as const;
   let width = 0;
 
-  each(elements, (_, elem) => {
+  elements.forEach((elem) => {
     const computedStyle = window.getComputedStyle(elem.get(0));
     borderStyleNames.forEach((borderStyleName) => {
       width += parseFloat(computedStyle[borderStyleName]) || 0;
@@ -354,8 +353,8 @@ class PivotGrid extends Widget<PivotGridProperties> {
   }
 
   protected _updateCalculatedOptions(fields: PivotGridField[]): void {
-    each(fields, (_, field) => {
-      each(FIELD_CALCULATED_OPTIONS, (__, optionName) => {
+    fields.forEach((field) => {
+      FIELD_CALCULATED_OPTIONS.forEach((optionName) => {
         const isCalculated = field._initProperties
           && (optionName in field._initProperties)
           && (field._initProperties[optionName] === undefined);
@@ -617,7 +616,7 @@ class PivotGrid extends Widget<PivotGridProperties> {
       }
     };
 
-    each([columnsArea, rowsArea, dataArea], (_, area) => {
+    [columnsArea, rowsArea, dataArea].forEach((area) => {
       subscribeToScrollEvent(area, (e) => scrollHandler(e, area));
     });
 
@@ -833,12 +832,12 @@ class PivotGrid extends Widget<PivotGridProperties> {
 
       if (cell.isLast && !dataSource.paginate()) {
         let sortingBySummaryItemCount = 0;
-        each(oppositeAreaFields, (_, oppositeField) => {
+        oppositeAreaFields.forEach((oppositeField) => {
           if (!oppositeField.allowSortingBySummary) {
             return;
           }
 
-          each(e.dataFields, (dataIndex, dataField) => {
+          e.dataFields.forEach((dataField, dataIndex) => {
             if (isDefined(cell.dataIndex) && cell.dataIndex !== dataIndex) {
               return;
             }
@@ -869,17 +868,17 @@ class PivotGrid extends Widget<PivotGridProperties> {
             sortingBySummaryItemCount += 1;
           });
         });
-        each(oppositeAreaFields, (_, oppositeField) => {
+        oppositeAreaFields.some((oppositeField) => {
           if (!oppositeField.allowSortingBySummary
             || !isDefined(oppositeField.sortBySummaryField)) {
-            return undefined;
+            return false;
           }
           items.push({
             beginGroup: sortingBySummaryItemCount === 0,
             icon: 'none',
             text: texts?.removeAllSorting,
             onItemClick: () => {
-              each(oppositeAreaFields, (__, sortedField) => {
+              oppositeAreaFields.forEach((sortedField) => {
                 if (isDefined(sortedField.index)) {
                   dataSource.field(sortedField.index, {
                     sortBySummaryField: undefined,
@@ -891,7 +890,7 @@ class PivotGrid extends Widget<PivotGridProperties> {
               dataSource.load();
             },
           });
-          return false;
+          return true;
         });
       }
     }
@@ -1934,7 +1933,7 @@ class PivotGrid extends Widget<PivotGridProperties> {
           rtlEnabled: this.option('rtlEnabled'),
         });
 
-        each([columnsArea, rowsArea, dataArea], (_, area) => {
+        [columnsArea, rowsArea, dataArea].forEach((area) => {
           updateScrollableResults.push(area.updateScrollable());
         });
 
