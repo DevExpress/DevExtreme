@@ -11,7 +11,7 @@ import $ from '@js/core/renderer';
 
 import type { AreaItemCell, AreaItemComponent } from '../area_item/types';
 import { FAKE_TABLE_CLASS } from '../keyboard_navigation/const';
-import { HorizontalHeadersArea, VerticalHeadersArea } from './m_headers_area';
+import { HorizontalHeadersArea, VerticalHeadersArea } from './headers_area';
 
 const TABLE_OFFSET = 1000;
 const CELL_SIZES = [100, 120, 300];
