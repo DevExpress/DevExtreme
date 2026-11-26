@@ -1463,7 +1463,7 @@ importers:
         version: 2.6.12
       css-loader:
         specifier: 6.11.0
-        version: 6.11.0(webpack@5.105.4(@swc/core@1.15.30(@swc/helpers@0.5.21))(esbuild@0.28.2))
+        version: 6.11.0(webpack@5.111.0(@swc/core@1.15.30(@swc/helpers@0.5.21))(esbuild@0.28.2)(postcss@8.5.25))
       devextreme-metadata:
         specifier: workspace:*
         version: link:../devextreme-metadata
@@ -1493,7 +1493,7 @@ importers:
         version: 2.0.1(karma@6.4.4)
       karma-webpack:
         specifier: 5.0.1
-        version: 5.0.1(webpack@5.105.4(@swc/core@1.15.30(@swc/helpers@0.5.21))(esbuild@0.28.2))
+        version: 5.0.1(webpack@5.111.0(@swc/core@1.15.30(@swc/helpers@0.5.21))(esbuild@0.28.2)(postcss@8.5.25))
       ng-packagr:
         specifier: catalog:angular
         version: 21.2.7(@angular/compiler-cli@21.2.25(@angular/compiler@21.2.25)(typescript@5.9.3))(tslib@2.8.1)(typescript@5.9.3)
@@ -1511,7 +1511,7 @@ importers:
         version: 3.0.0
       style-loader:
         specifier: 3.3.4
-        version: 3.3.4(webpack@5.105.4(@swc/core@1.15.30(@swc/helpers@0.5.21))(esbuild@0.28.2))
+        version: 3.3.4(webpack@5.111.0(@swc/core@1.15.30(@swc/helpers@0.5.21))(esbuild@0.28.2)(postcss@8.5.25))
       tslib:
         specifier: 2.8.1
         version: 2.8.1
@@ -1521,9 +1521,6 @@ importers:
       vitest:
         specifier: 5.1.0
         version: 5.1.0(@types/node@20.19.37)(jsdom@26.1.0)(vite@8.3.4(@types/node@20.19.37)(esbuild@0.28.2)(jiti@2.6.1)(less@4.9.1)(sass-embedded@1.105.1)(sass@1.105.1)(terser@5.51.2)(yaml@2.9.0))
-      webpack:
-        specifier: 5.105.4
-        version: 5.105.4(@swc/core@1.15.30(@swc/helpers@0.5.21))(esbuild@0.28.2)
       zone.js:
         specifier: catalog:angular
         version: 0.15.1
@@ -26363,19 +26360,6 @@ snapshots:
       utrie: 1.0.2
     optional: true
 
-  css-loader@6.11.0(webpack@5.105.4(@swc/core@1.15.30(@swc/helpers@0.5.21))(esbuild@0.28.2)):
-    dependencies:
-      icss-utils: 5.1.0(postcss@8.5.23)
-      postcss: 8.5.23
-      postcss-modules-extract-imports: 3.1.0(postcss@8.5.23)
-      postcss-modules-local-by-default: 4.2.0(postcss@8.5.23)
-      postcss-modules-scope: 3.2.1(postcss@8.5.23)
-      postcss-modules-values: 4.0.0(postcss@8.5.23)
-      postcss-value-parser: 4.2.0
-      semver: 7.7.4
-    optionalDependencies:
-      webpack: 5.105.4(@swc/core@1.15.30(@swc/helpers@0.5.21))(esbuild@0.28.2)
-
   css-loader@6.11.0(webpack@5.105.4):
     dependencies:
       icss-utils: 5.1.0(postcss@8.5.23)
@@ -26388,6 +26372,19 @@ snapshots:
       semver: 7.7.4
     optionalDependencies:
       webpack: 5.105.4(@swc/core@1.15.30(@swc/helpers@0.5.21))(webpack-cli@5.1.4)
+
+  css-loader@6.11.0(webpack@5.111.0(@swc/core@1.15.30(@swc/helpers@0.5.21))(esbuild@0.28.2)(postcss@8.5.25)):
+    dependencies:
+      icss-utils: 5.1.0(postcss@8.5.23)
+      postcss: 8.5.23
+      postcss-modules-extract-imports: 3.1.0(postcss@8.5.23)
+      postcss-modules-local-by-default: 4.2.0(postcss@8.5.23)
+      postcss-modules-scope: 3.2.1(postcss@8.5.23)
+      postcss-modules-values: 4.0.0(postcss@8.5.23)
+      postcss-value-parser: 4.2.0
+      semver: 7.7.4
+    optionalDependencies:
+      webpack: 5.111.0(@swc/core@1.15.30(@swc/helpers@0.5.21))(esbuild@0.28.2)(postcss@8.5.25)
 
   css-loader@7.1.3(webpack@5.105.2(@swc/core@1.15.30(@swc/helpers@0.5.21))(esbuild@0.28.1)):
     dependencies:
@@ -30350,11 +30347,11 @@ snapshots:
     dependencies:
       source-map-support: 0.5.21
 
-  karma-webpack@5.0.1(webpack@5.105.4(@swc/core@1.15.30(@swc/helpers@0.5.21))(esbuild@0.28.2)):
+  karma-webpack@5.0.1(webpack@5.111.0(@swc/core@1.15.30(@swc/helpers@0.5.21))(esbuild@0.28.2)(postcss@8.5.25)):
     dependencies:
       glob: 7.2.3
       minimatch: minimatch-v7-v10-patch@file:tools/minimatch-v7-v10-patch
-      webpack: 5.105.4(@swc/core@1.15.30(@swc/helpers@0.5.21))(esbuild@0.28.2)
+      webpack: 5.111.0(@swc/core@1.15.30(@swc/helpers@0.5.21))(esbuild@0.28.2)(postcss@8.5.25)
       webpack-merge: 4.2.2
 
   karma@6.4.4:
@@ -31226,6 +31223,18 @@ snapshots:
       lightningcss: 1.33.0
       postcss: 8.5.25
     optional: true
+
+  minimizer-webpack-plugin@5.13.1(@swc/core@1.15.30(@swc/helpers@0.5.21))(esbuild@0.28.2)(postcss@8.5.25)(webpack@5.111.0(@swc/core@1.15.30(@swc/helpers@0.5.21))(esbuild@0.28.2)(postcss@8.5.25)):
+    dependencies:
+      '@jridgewell/trace-mapping': 0.3.31
+      jest-worker: 27.5.1
+      schema-utils: 4.8.1(webpack@5.111.0(@swc/core@1.15.30(@swc/helpers@0.5.21))(esbuild@0.28.2)(postcss@8.5.25))
+      terser: 5.51.2
+      webpack: 5.111.0(@swc/core@1.15.30(@swc/helpers@0.5.21))(esbuild@0.28.2)(postcss@8.5.25)
+    optionalDependencies:
+      '@swc/core': 1.15.30(@swc/helpers@0.5.21)
+      esbuild: 0.28.2
+      postcss: 8.5.25
 
   minimizer-webpack-plugin@5.13.1(@swc/core@1.15.30(@swc/helpers@0.5.21))(esbuild@0.28.2)(postcss@8.5.28)(webpack@5.111.0(@swc/core@1.15.30(@swc/helpers@0.5.21))(esbuild@0.28.2)(postcss@8.5.28)):
     dependencies:
@@ -33568,6 +33577,15 @@ snapshots:
       webpack: 5.111.0(@swc/core@1.15.30(@swc/helpers@0.5.21))(esbuild@0.28.2)(lightningcss@1.33.0)(postcss@8.5.25)
     optional: true
 
+  schema-utils@4.8.1(webpack@5.111.0(@swc/core@1.15.30(@swc/helpers@0.5.21))(esbuild@0.28.2)(postcss@8.5.25)):
+    dependencies:
+      '@types/json-schema': 7.0.15
+      ajv: 8.20.0
+      ajv-formats: 3.0.1(ajv@8.20.0)
+      ajv-keywords: 5.1.0(ajv@8.20.0)
+    optionalDependencies:
+      webpack: 5.111.0(@swc/core@1.15.30(@swc/helpers@0.5.21))(esbuild@0.28.2)(postcss@8.5.25)
+
   schema-utils@4.8.1(webpack@5.111.0(@swc/core@1.15.30(@swc/helpers@0.5.21))(esbuild@0.28.2)(postcss@8.5.28)):
     dependencies:
       '@types/json-schema': 7.0.15
@@ -34214,13 +34232,13 @@ snapshots:
       prettier: 3.8.1
       tinycolor2: 1.6.0
 
-  style-loader@3.3.4(webpack@5.105.4(@swc/core@1.15.30(@swc/helpers@0.5.21))(esbuild@0.28.2)):
-    dependencies:
-      webpack: 5.105.4(@swc/core@1.15.30(@swc/helpers@0.5.21))(esbuild@0.28.2)
-
   style-loader@3.3.4(webpack@5.105.4):
     dependencies:
       webpack: 5.105.4(@swc/core@1.15.30(@swc/helpers@0.5.21))(webpack-cli@5.1.4)
+
+  style-loader@3.3.4(webpack@5.111.0(@swc/core@1.15.30(@swc/helpers@0.5.21))(esbuild@0.28.2)(postcss@8.5.25)):
+    dependencies:
+      webpack: 5.111.0(@swc/core@1.15.30(@swc/helpers@0.5.21))(esbuild@0.28.2)(postcss@8.5.25)
 
   style-loader@4.0.0(webpack@5.105.4(@swc/core@1.15.30(@swc/helpers@0.5.21))):
     dependencies:
@@ -36166,7 +36184,7 @@ snapshots:
       browserslist: 4.29.4
       chrome-trace-event: 1.0.4
       enhanced-resolve: 5.26.0
-      es-module-lexer: 2.3.1
+      es-module-lexer: 2.3.2
       events: 3.3.0
       graceful-fs: 4.2.11
       mime-db: 1.54.0
@@ -36194,6 +36212,43 @@ snapshots:
       - uglify-js
     optional: true
 
+  webpack@5.111.0(@swc/core@1.15.30(@swc/helpers@0.5.21))(esbuild@0.28.2)(postcss@8.5.25):
+    dependencies:
+      '@types/estree': 1.0.9
+      '@types/json-schema': 7.0.15
+      '@webassemblyjs/ast': 1.14.1
+      '@webassemblyjs/wasm-edit': 1.14.1
+      '@webassemblyjs/wasm-parser': 1.14.1
+      browserslist: 4.29.4
+      chrome-trace-event: 1.0.4
+      enhanced-resolve: 5.26.0
+      es-module-lexer: 2.3.2
+      events: 3.3.0
+      graceful-fs: 4.2.11
+      mime-db: 1.54.0
+      minimizer-webpack-plugin: 5.13.1(@swc/core@1.15.30(@swc/helpers@0.5.21))(esbuild@0.28.2)(postcss@8.5.25)(webpack@5.111.0(@swc/core@1.15.30(@swc/helpers@0.5.21))(esbuild@0.28.2)(postcss@8.5.25))
+      schema-utils: 4.8.1(webpack@5.111.0(@swc/core@1.15.30(@swc/helpers@0.5.21))(esbuild@0.28.2)(postcss@8.5.25))
+      tapable: 2.3.3
+      watchpack: 2.5.2
+      webpack-sources: 3.5.1
+    transitivePeerDependencies:
+      - '@minify-html/node'
+      - '@napi-rs/image'
+      - '@swc/core'
+      - '@swc/css'
+      - '@swc/html'
+      - clean-css
+      - cssnano
+      - csso
+      - esbuild
+      - html-minifier-terser
+      - imagemin
+      - lightningcss
+      - postcss
+      - sharp
+      - svgo
+      - uglify-js
+
   webpack@5.111.0(@swc/core@1.15.30(@swc/helpers@0.5.21))(esbuild@0.28.2)(postcss@8.5.28):
     dependencies:
       '@types/estree': 1.0.9
@@ -36204,7 +36259,7 @@ snapshots:
       browserslist: 4.29.4
       chrome-trace-event: 1.0.4
       enhanced-resolve: 5.26.0
-      es-module-lexer: 2.3.1
+      es-module-lexer: 2.3.2
       events: 3.3.0
       graceful-fs: 4.2.11
       mime-db: 1.54.0
@@ -36241,7 +36296,7 @@ snapshots:
       browserslist: 4.29.4
       chrome-trace-event: 1.0.4
       enhanced-resolve: 5.26.0
-      es-module-lexer: 2.3.1
+      es-module-lexer: 2.3.2
       events: 3.3.0
       graceful-fs: 4.2.11
       mime-db: 1.54.0
