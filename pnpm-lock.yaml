@@ -86,8 +86,8 @@ catalogs:
       specifier: 4.1.72
       version: 4.1.72
     devextreme-exceljs-fork:
-      specifier: 5.0.0
-      version: 5.0.0
+      specifier: 6.0.0
+      version: 6.0.0
     devextreme-quill:
       specifier: 1.8.0
       version: 1.8.0
@@ -417,7 +417,7 @@ importers:
         version: link:../../packages/devextreme/artifacts/npm/devextreme-dist
       devextreme-exceljs-fork:
         specifier: 'catalog:'
-        version: 5.0.0
+        version: 6.0.0
       devextreme-quill:
         specifier: 'catalog:'
         version: 1.8.0
@@ -1293,7 +1293,7 @@ importers:
         version: 1.0.3
       devextreme-exceljs-fork:
         specifier: 'catalog:'
-        version: 5.0.0
+        version: 6.0.0
       eslint:
         specifier: 'catalog:'
         version: 10.14.0(jiti@2.6.1)
@@ -5569,6 +5569,10 @@ packages:
   '@noble/hashes@1.4.0':
     resolution: {integrity: sha512-V1JJ1WTRUqHHrOSh597hURcMqVKVGL/ea3kv0gSnEdsEZ0/+VyPghM1lMNGc00z7CIQorSvbKpuJkxvuHbvdbg==}
     engines: {node: '>= 16'}
+
+  '@noble/hashes@2.4.0':
+    resolution: {integrity: sha512-X5XaVWZIBCT7HHZGm5I7ZQXDwLG+bGXuSrMQAW+7Zvl87h1kmc1ZB1VSRJcpUfoUrGQp4Fkoxm5kZ+Ms+aW+eA==}
+    engines: {node: '>= 20.19.0'}
 
   '@node-ntlm/core@0.3.2':
     resolution: {integrity: sha512-uCKcLcl8UCCkIDZZlgkDXNzJGaDTP/+DThwurluBOPZ8/21kvFKMVw75MC7cQsNxnbkLagp4jfu+2oX/IIXNYw==}
@@ -9992,8 +9996,8 @@ packages:
   devextreme-cldr-data@1.0.3:
     resolution: {integrity: sha512-xd+uWv1KzEhr+ZH/MOWfDei3GFz+NAYyKUR9HgjM9BBwPel7PpMElYp4whM+PtAjziBaTssQnA//ob5c3BovTA==}
 
-  devextreme-exceljs-fork@5.0.0:
-    resolution: {integrity: sha512-pOp1d3IqKcD43Xw4icnwCTlbzBsFRO4kQtHtaGMZOubgMmlxFvCKQxDrZhC4gzFFc1bUhgWcsxCcQ4pJFPV2nQ==}
+  devextreme-exceljs-fork@6.0.0:
+    resolution: {integrity: sha512-sNvFJolAIkv4vFy6B2cM6L/JZUgbUje/pB7MchSaqlOKPN40xDOpwpAa/JMB+G1NRh9VOLLpTJ34JMcvvXEa2A==}
     engines: {node: '>=22.21.1'}
 
   devextreme-internal-tools@22.2.0:
@@ -21448,6 +21452,8 @@ snapshots:
 
   '@noble/hashes@1.4.0': {}
 
+  '@noble/hashes@2.4.0': {}
+
   '@node-ntlm/core@0.3.2':
     dependencies:
       des.js: 1.1.0
@@ -26621,8 +26627,9 @@ snapshots:
 
   devextreme-cldr-data@1.0.3: {}
 
-  devextreme-exceljs-fork@5.0.0:
+  devextreme-exceljs-fork@6.0.0:
     dependencies:
+      '@noble/hashes': 2.4.0
       dayjs: 1.11.20
       fast-csv: 5.0.5
       jszip: 3.10.1
