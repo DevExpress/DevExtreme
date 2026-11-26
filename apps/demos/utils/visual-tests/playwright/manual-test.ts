@@ -226,13 +226,12 @@ export async function waitForSettled(page: Page): Promise<void> {
 }
 
 // Compares the viewport, or the given element, with "<name> (<theme>).png" in the etalons folder
-// next to the test. `mask` covers elements whose look is not stable, with a reason in the test. A
-// difference does not stop the test, so one run shows every step that differs, as in TestCafe.
+// next to the test. A difference does not stop the test, so one run shows every step that differs,
+// as in TestCafe.
 export async function testScreenshot(
   page: Page,
   screenshotName: string,
   element?: Locator | string,
-  { mask }: { mask?: Locator[] } = {},
 ): Promise<void> {
   const name = getScreenshotName(screenshotName, THEME);
   const locator = resolveLocator(page, element);
@@ -240,18 +239,18 @@ export async function testScreenshot(
   await waitForSettled(page);
 
   if (!locator) {
-    await expect.soft(page).toHaveScreenshot([name], { mask });
+    await expect.soft(page).toHaveScreenshot([name]);
     return;
   }
 
   const clip = await clipToViewport(page, locator);
 
   if (clip) {
-    await expect.soft(page).toHaveScreenshot([name], { clip, mask });
+    await expect.soft(page).toHaveScreenshot([name], { clip });
     return;
   }
 
-  await expect.soft(locator).toHaveScreenshot([name], { mask });
+  await expect.soft(locator).toHaveScreenshot([name]);
 }
 
 interface DragOptions {
