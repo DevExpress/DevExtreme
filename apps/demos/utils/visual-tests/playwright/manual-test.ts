@@ -16,7 +16,7 @@ import { getTestGlobalsScriptPath } from '../test-globals-bundle';
 import { mockApi } from './api-mocks';
 import { BASE_URL, THEME } from './const';
 import {
-  addStyles, getVendorVizWidgets, openDemo, prepareDemoPage, runTestCode, trackPageActivity,
+  addStyles, getVendorVizWidgets, openDemo, prepareDemoPage, runTestCode, trackPageActivity, waitForDemo,
 } from './demo-page';
 
 interface Viewport { width: number; height: number }
@@ -27,7 +27,7 @@ const DEMOS_ROOT = join(__dirname, '..', '..', '..', 'Demos');
 updateConfig({ explicitTestArgs: [], verbose: false });
 
 // The framework of the job: jQuery, React, Vue or Angular.
-export const currentFramework: string = FRAMEWORKS[(settings.targetFramework ?? 'jquery').toLowerCase()];
+const currentFramework: string = FRAMEWORKS[(settings.targetFramework ?? 'jquery').toLowerCase()];
 
 if (!currentFramework) {
   throw new Error(`Unknown framework in CONSTEL: ${settings.targetFramework}`);
@@ -201,6 +201,18 @@ export async function mockDate(page: Page, date: Date): Promise<void> {
   await page.evaluate((time) => {
     (window as unknown as { MockDate: { set: (value: number) => void } }).MockDate.set(time);
   }, date.getTime());
+}
+
+// Reloads the demo and waits for it as for a demo just opened.
+export async function reloadDemo(page: Page): Promise<void> {
+  const waitForIdle = settlers.get(page);
+
+  if (!waitForIdle) {
+    throw new Error('reloadDemo needs a demo opened by describeManualTest');
+  }
+
+  await page.reload();
+  await waitForDemo(page, waitForIdle);
 }
 
 // Waits until the page has settled after an action. TestCafe acted slowly enough that a widget had

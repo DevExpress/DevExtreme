@@ -1,6 +1,6 @@
 import { test } from '@playwright/test';
 import {
-  describeManualTest, drag, testScreenshot, waitForSettled,
+  describeManualTest, drag, reloadDemo, testScreenshot,
 } from '../../../utils/visual-tests/playwright/manual-test';
 
 describeManualTest('DataGrid', 'StatePersistence', { width: 900, height: 600 }, () => {
@@ -13,8 +13,7 @@ describeManualTest('DataGrid', 'StatePersistence', { width: 900, height: 600 }, 
 
     await testScreenshot(page, 'datagrid_state_persistence_2_desktop.png');
 
-    await page.reload();
-    await waitForSettled(page);
+    await reloadDemo(page);
 
     await testScreenshot(page, 'datagrid_state_persistence_3_desktop.png');
   });
