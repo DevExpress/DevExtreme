@@ -1,9 +1,17 @@
 import type { DataSource } from '@js/common/data/data_source/data_source';
 import type { ScalarFilterValue } from '@js/common/grids';
+import type { DxElement } from '@js/core/element';
 import type { DeferredObj } from '@js/core/utils/deferred';
+import type { DxEvent } from '@js/events';
+import type { Properties as PivotGridPublicProperties } from '@js/ui/pivot_grid';
 import type PivotGridDataSource from '@js/ui/pivot_grid/data_source';
 import type { Field } from '@js/ui/pivot_grid/data_source';
 import type { StoreLoadOptions } from '@ts/data/data_source/types';
+
+import type { AreaItemCell, AreaName } from './area_item/types';
+import type { DataArea } from './data_area/data_area';
+import type { FieldChooserField } from './field_chooser/const';
+import type { HorizontalHeadersArea, VerticalHeadersArea } from './headers_area/headers_area';
 
 export type PivotGridField = Field & {
   index?: number;
@@ -40,6 +48,70 @@ export type ForeachTree = <TItem extends TreeItem<TItem> = any>(
   index?: number,
   isChildrenProcessing?: boolean,
 ) => DeferredObj<unknown> | undefined;
+
+export type PivotGridProperties = Omit<PivotGridPublicProperties, 'fieldChooser' | 'scrolling'> & {
+  fieldChooser?: NonNullable<PivotGridPublicProperties['fieldChooser']> & {
+    minWidth?: number;
+    minHeight?: number;
+  };
+  scrolling?: NonNullable<PivotGridPublicProperties['scrolling']> & {
+    virtualRowHeight?: number;
+    virtualColumnWidth?: number;
+  };
+  useNativeScrolling?: unknown;
+  renderCellCountLimit?: number;
+  onChanged?: (e: unknown) => void;
+  onExpandValueChanging?: ((e: unknown) => void) | null;
+  onExported?: (e: unknown) => void;
+  onFileSaving?: (e: unknown) => void;
+};
+
+export interface PivotGridRenderedAreas {
+  dataArea: DataArea;
+  rowsArea: VerticalHeadersArea;
+  columnsArea: HorizontalHeadersArea;
+}
+
+export type PivotGridCellEvent<TNativeEvent extends Event = Event> = DxEvent<TNativeEvent> & {
+  currentTarget: HTMLTableCellElement;
+};
+
+export interface PivotGridContextMenuItem {
+  beginGroup?: boolean;
+  icon?: string;
+  text?: string;
+  onItemClick?: (e: unknown) => void;
+}
+
+export interface PivotGridAreaFieldsArgs {
+  rowFields: PivotGridField[];
+  columnFields: PivotGridField[];
+  dataFields: PivotGridField[];
+  event: DxEvent;
+}
+
+export interface PivotGridCellArgs {
+  area: AreaName | undefined;
+  rowIndex: number;
+  columnIndex: number;
+  cellElement: DxElement<Element>;
+  cell: AreaItemCell | undefined;
+}
+
+export interface PivotGridFieldArgs {
+  field?: FieldChooserField;
+}
+
+export type PivotGridEventArgs = PivotGridAreaFieldsArgs & (PivotGridCellArgs | PivotGridFieldArgs);
+
+export type PivotGridCellEventArgs = PivotGridAreaFieldsArgs
+  & PivotGridCellArgs
+  & { cancel?: boolean };
+
+export type PivotGridContextMenuArgs = PivotGridAreaFieldsArgs
+  & Partial<PivotGridCellArgs>
+  & PivotGridFieldArgs
+  & { items?: PivotGridContextMenuItem[] };
 
 export interface PathItem {
   key?: unknown;
