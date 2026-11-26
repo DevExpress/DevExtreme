@@ -24,7 +24,6 @@ const CSP_DEMO_ALLOWLIST = {
   },
   // Azure Maps SDK: inline styles, blob workers, data: images, font glyphs.
   Map: {
-    'script-src': ['https://atlas.microsoft.com'],
     'connect-src': ['https://atlas.microsoft.com'],
     'worker-src': ['blob:'],
     'img-src': ['data:'],
