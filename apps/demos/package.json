@@ -141,8 +141,6 @@
         "test-playwright": "playwright test",
         "test-playwright:accessibility": "playwright test --config playwright.accessibility.config.ts",
         "test-testcafe": "ts-node utils/visual-tests/testcafe-runner.ts",
-        "csp-server": "node utils/server/csp-server.js 8080",
-        "csp-check": "node utils/server/csp-check.js",
         "build-vendor-bundles": "node utils/server/build-vendor-bundles.js",
         "fix-lint": "prettier --write . && eslint --fix . && stylelint **/*.{css,vue} --fix",
         "prettier": "prettier",

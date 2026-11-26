@@ -211,6 +211,21 @@ On macOS DevExtreme scrolls natively, so `scrollable-region-focusable` fails in 
 THEME=fluent.blue.light utils/visual-tests/playwright/docker/run.sh --config playwright.accessibility.config.ts
 ```
 
+## CSP Tests
+
+Every demo is also opened under a Content Security Policy (`testing/csp.spec.ts`). The demo server sends the policy as a `Content-Security-Policy` header, so the browser blocks what the policy does not allow. The policy has a `report-uri`, and the test collects the report the browser sends on every violation, a blocked `eval()` that the page caught included. A test fails on a violation, and on a demo that does not load or renders no widget. `visualtestrc.json` and `test-code.js` do not apply: every demo runs.
+
+The policy is built in `utils/visual-tests/playwright/csp-policy.js`: directives for all demos, plus the sources one demo or one framework needs. Allow a source there only when the demo cannot work without it, and say why in a comment.
+
+```
+cd apps/demos
+CSP=true pnpm run test-playwright                            # every jQuery demo
+CSP=true pnpm run test-playwright --grep "jQuery CSP Map-"   # demos of one component
+CSP=true CONSTEL=angular pnpm run test-playwright            # Angular demos; likewise react, vue
+```
+
+The CSP run starts its own server on port 20081. The frameworks need their bundles, as in "Run locally" above. A failed test lists each violation as `<directive>: <blocked source> (<file>:<line>)`; the trace of the test shows the header the page got and the blocked request.
+
 ## See Also
 
 - [Technical demos online](https://js.devexpress.com/Demos/)

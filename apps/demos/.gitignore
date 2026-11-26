@@ -35,8 +35,6 @@ Demos/**/_chunks
 .DS_Store
 **/.DS_Store
 
-csp-reports
-
 # Scratch artifacts from utils/server/demo-bundle-angular.js (cleaned up on success).
 utils/server/.demo-bundle-angular-*
 Demos/**/.demo-bundle-angular-patched.*.ts
