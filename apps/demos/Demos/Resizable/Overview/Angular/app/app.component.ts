@@ -39,7 +39,7 @@ export class AppComponent {
 
   readonly resizableClasses = signal('');
 
-  handlesValueChange({ value }: DxTagBoxTypes.ValueChangedEvent) {
+  handlesValueChange({ value }: DxTagBoxTypes.ValueChangedEvent): void {
     this.resizableClasses.set(this.handleValues.reduce((acc, handle) => {
       const newClass = value.includes(handle) ? '' : ` no-${handle}-handle`;
       return acc + newClass;

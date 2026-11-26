@@ -45,13 +45,13 @@ export class AppComponent {
 
   readonly dragTemplate = signal('');
 
-  readonly cursorOffset = signal<{ x: number, y: number }>(null);
+  readonly cursorOffset = signal<NonNullable<DxSortableTypes.Properties['cursorOffset']>>('');
 
-  onDragStart(e: DxSortableTypes.DragStartEvent) {
+  onDragStart(e: DxSortableTypes.DragStartEvent): void {
     e.itemData = this.items()[e.fromIndex];
   }
 
-  onReorder(e: DxSortableTypes.ReorderEvent) {
+  onReorder(e: DxSortableTypes.ReorderEvent): void {
     this.items.update((items) => {
       const result = [...items];
       result.splice(e.fromIndex, 1);
@@ -60,18 +60,18 @@ export class AppComponent {
     });
   }
 
-  onItemOrientationChanged(e: DxSelectBoxTypes.ValueChangedEvent) {
+  onItemOrientationChanged(e: DxSelectBoxTypes.ValueChangedEvent): void {
     this.dragDirections.set(['both', e.value]);
     this.dragDirection.set('both');
   }
 
-  onHandleChanged(e: DxCheckBoxTypes.ValueChangedEvent) {
+  onHandleChanged(e: DxCheckBoxTypes.ValueChangedEvent): void {
     this.handle.set(e.value ? '.handle' : '');
   }
 
-  onDragTemplateChanged(e: DxCheckBoxTypes.ValueChangedEvent) {
+  onDragTemplateChanged(e: DxCheckBoxTypes.ValueChangedEvent): void {
     this.dragTemplate.set(e.value ? 'drag' : '');
-    this.cursorOffset.set(e.value ? { x: 10, y: 20 } : null);
+    this.cursorOffset.set(e.value ? { x: 10, y: 20 } : '');
   }
 }
 

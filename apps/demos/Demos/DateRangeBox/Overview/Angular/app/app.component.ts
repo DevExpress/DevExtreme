@@ -1,6 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import { Component, enableProdMode, signal } from '@angular/core';
 import { DxDateRangeBoxModule } from 'devextreme-angular';
+import type { DxDateRangeBoxTypes } from 'devextreme-angular/ui/date-range-box';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -13,8 +14,8 @@ const initialValue: [Date, Date] = [
   new Date(now.getTime() + msInDay * 3),
 ];
 
-function convertRangeToDays([startDate, endDate]) {
-  const diffInDay = Math.floor(Math.abs((endDate - startDate) / msInDay));
+function convertRangeToDays([startDate, endDate]: [Date, Date]) {
+  const diffInDay = Math.floor(Math.abs((endDate.getTime() - startDate.getTime()) / msInDay));
 
   return diffInDay + 1;
 }
@@ -41,7 +42,7 @@ export class AppComponent {
 
   readonly selectedDays = signal(convertRangeToDays(initialValue));
 
-  currentValueChanged({ value: [startDate, endDate] }) {
+  currentValueChanged({ value: [startDate, endDate] }: DxDateRangeBoxTypes.ValueChangedEvent) {
     let daysCount = 0;
 
     if (startDate && endDate) {

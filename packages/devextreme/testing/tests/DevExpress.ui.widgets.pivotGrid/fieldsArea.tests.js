@@ -1,8 +1,8 @@
 import $ from 'jquery';
 import 'fluent_blue_light.css!';
 import { addShadowDomStyles } from 'core/utils/shadow_dom.js';
-import { FieldsArea } from '__internal/grids/pivot_grid/fields_area/m_fields_area';
-import { AreaItem } from '__internal/grids/pivot_grid/area_item/m_area_item';
+import { FieldsArea } from '__internal/grids/pivot_grid/fields_area/fields_area';
+import { AreaItem } from '__internal/grids/pivot_grid/area_item/area_item';
 
 
 QUnit.testStart(function() {

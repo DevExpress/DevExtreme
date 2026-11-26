@@ -82,7 +82,7 @@ export class AppComponent {
     this.isGridBoxOpened.set(false);
   }
 
-  readonly gridBox_displayExpr = ({ CompanyName, Phone }) => CompanyName && `${CompanyName} <${Phone}>`;
+  readonly gridBox_displayExpr = ({ CompanyName, Phone }: { CompanyName?: string; Phone?: string }) => (CompanyName ? `${CompanyName} <${Phone}>` : '');
 }
 
 bootstrapApplication(AppComponent, {

@@ -40,15 +40,3 @@ export function createMdReport({ testName, results }) {
 
   writeFileSync(join(reportDir, `${testName}.md`), mdString);
 }
-
-export function createTestCafeReport(violations) {
-  return violations.reduce((acc, violation) => {
-    acc[violation.impact] += 1;
-    return acc;
-  }, {
-    minor: 0,
-    moderate: 0,
-    serious: 0,
-    critical: 0,
-  });
-}

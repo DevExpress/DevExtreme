@@ -55,14 +55,16 @@ export class AppComponent {
     return this.appService.convertToHtml(message.text);
   }
 
-  private toggleDisabledState(disabled: boolean, event = undefined) {
+  private toggleDisabledState(disabled: boolean, event?: DxChatTypes.MessageEnteredEvent['event']) {
+    const target = event?.target as HTMLElement | undefined;
+
     this.isDisabled.set(disabled);
     this.clearButtonOptions.update((options) => ({ ...options, disabled }));
 
     if (disabled) {
-      event?.target.blur();
+      target?.blur();
     } else {
-      event?.target.focus();
+      target?.focus();
     }
   }
 

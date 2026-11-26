@@ -49,7 +49,7 @@
             [dataSource]="gridDataSource"
             [columns]="gridColumns"
             [hoverStateEnabled]="true"
-            showBorders="true"
+            [showBorders]="true"
             [selectedRowKeys]="gridBoxValue()"
             (onSelectionChanged)="dataGrid_selectionChanged($event)"
             height="100%"

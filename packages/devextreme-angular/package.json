@@ -26,8 +26,6 @@
     "devextreme": "workspace:*"
   },
   "devDependencies": {
-    "@angular-devkit/architect": "catalog:angular",
-    "@angular/cli": "catalog:angular",
     "@angular/common": "catalog:angular",
     "@angular/compiler": "catalog:angular",
     "@angular/compiler-cli": "catalog:angular",
@@ -54,7 +52,6 @@
     "tslib": "2.8.1",
     "typescript": "catalog:angular",
     "vitest": "5.1.0",
-    "yargs": "17.7.2",
     "zone.js": "catalog:angular"
   },
   "main": "./src/index.ts",

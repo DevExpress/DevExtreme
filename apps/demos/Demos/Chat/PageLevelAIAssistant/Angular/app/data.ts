@@ -224,7 +224,10 @@ export const chatSuggestions = [
   { text: 'Filter Completed Tasks', prompt: 'Filter Completed Tasks' },
 ];
 
-export const formFieldsConfig: DxFormTypes.SimpleItem[] = [
+export type FormFieldConfig = DxFormTypes.SimpleItem
+  & Required<Pick<DxFormTypes.SimpleItem, 'dataField' | 'label' | 'editorType' | 'aiOptions'>>;
+
+export const formFieldsConfig: FormFieldConfig[] = [
   {
     dataField: 'Prefix',
     label: { text: 'Title' },
@@ -239,6 +242,7 @@ export const formFieldsConfig: DxFormTypes.SimpleItem[] = [
   {
     dataField: 'FirstName',
     label: { text: 'First Name' },
+    editorType: 'dxTextBox',
     aiOptions: {
       instruction: "Only fill this field if the text clearly refers to a person's given name. "
         + 'Never use grid/task-related words like Subject, Priority, Status, Due Date, '
@@ -248,6 +252,7 @@ export const formFieldsConfig: DxFormTypes.SimpleItem[] = [
   {
     dataField: 'LastName',
     label: { text: 'Last Name' },
+    editorType: 'dxTextBox',
     aiOptions: {
       instruction: "If the text gives a full person name (e.g. 'customer name', 'employee name') "
         + 'without separately labeled first/last names, use only the first word as First '

@@ -55,7 +55,7 @@ export class AppComponent {
     this.updateSelection(e.component);
   }
 
-  private updateSelection(treeView: DxTreeViewComponent['instance']) {
+  private updateSelection(treeView: DxTreeViewComponent['instance'] | undefined) {
     if (!treeView) return;
 
     const treeBoxValue = this.treeBoxValue();

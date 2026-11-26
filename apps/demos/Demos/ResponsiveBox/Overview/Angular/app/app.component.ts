@@ -15,7 +15,7 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  screen(width) {
+  screen(width: number): string {
     return (width < 700) ? 'sm' : 'lg';
   }
 }

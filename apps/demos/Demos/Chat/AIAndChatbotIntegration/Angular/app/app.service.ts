@@ -141,11 +141,14 @@ export class AppService {
     try {
       this.setAlerts([]);
       const aiResponse = await this.getAIResponse(this.messages.slice(0, -1));
+      const lastMessage = this.messages.at(-1);
 
       this.updateLastMessage(aiResponse);
-      this.messages.at(-1).content = aiResponse;
+      if (lastMessage) {
+        lastMessage.content = aiResponse;
+      }
     } catch (err: unknown) {
-      this.updateLastMessage(this.messages.at(-1).content);
+      this.updateLastMessage(this.messages.at(-1)?.content);
       this.alertError(this.getErrorMessage(err));
     }
   }
@@ -170,11 +173,11 @@ export class AppService {
     this.dataSource.reload();
   }
 
-  async onMessageEntered({ message, event }: DxChatTypes.MessageEnteredEvent) {
+  async onMessageEntered({ message }: DxChatTypes.MessageEnteredEvent) {
     this.dataSource.store().push([{ type: 'insert', data: { id: Date.now(), ...message } }]);
 
     if (!this.alerts().length) {
-      await this.processMessageSending(message, event);
+      await this.processMessageSending(message);
     }
   }
 }
