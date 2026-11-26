@@ -26,6 +26,11 @@
     "Demos/ScrollView/**/Angular/**/*.ts",
     "Demos/Box/**/Angular/**/*.ts",
     "Demos/ResponsiveBox/**/Angular/**/*.ts",
+    "Demos/Sortable/**/Angular/**/*.ts",
+    "Demos/Resizable/**/Angular/**/*.ts",
+    "Demos/LoadIndicator/**/Angular/**/*.ts",
+    "Demos/LoadPanel/**/Angular/**/*.ts",
+    "Demos/ProgressBar/**/Angular/**/*.ts",
     "shared/anti-forgery/index.d.ts"
   ]
 }
