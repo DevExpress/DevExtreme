@@ -1,3 +1,8 @@
+// Opens every demo with the Content-Security-Policy header of utils/visual-tests/playwright/csp-policy.js
+// and fails on a violation. Run it from apps/demos:
+//   CSP=true pnpm run test-playwright                            # every jQuery demo
+//   CSP=true pnpm run test-playwright --grep "jQuery CSP Map-"   # demos of one component
+//   CSP=true CONSTEL=angular pnpm run test-playwright            # Angular demos; likewise react, vue
 import { existsSync } from 'fs';
 import { join } from 'path';
 import { glob } from 'glob';
