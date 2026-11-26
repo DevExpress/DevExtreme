@@ -27,16 +27,19 @@ const CSP_DEMO_ALLOWLIST = {
     'script-src': ['https://atlas.microsoft.com'],
     'connect-src': ['https://atlas.microsoft.com'],
     'worker-src': ['blob:'],
-    // The map draws its tiles and markers from blob: images and positions them with inline style
-    // attributes; the CSP guide lists both for Azure Maps.
-    'img-src': ['data:', 'blob:'],
+    'img-src': ['data:'],
     'font-src': ['https://atlas.microsoft.com'],
     'style-src-elem': ["'self'", "'unsafe-inline'"],
+  },
+  // Azure Maps draws markers and routes from blob: images and positions them with inline style
+  // attributes; the CSP guide lists both for Azure Maps. The marker icon is hosted on js.devexpress.com.
+  'Map/Markers': {
+    'img-src': ['blob:', 'https://js.devexpress.com'],
     'style-src-attr': ["'unsafe-inline'"],
   },
-  // The marker icon of the demo is hosted on js.devexpress.com.
-  'Map/Markers': {
-    'img-src': ['https://js.devexpress.com'],
+  'Map/Routes': {
+    'img-src': ['blob:'],
+    'style-src-attr': ["'unsafe-inline'"],
   },
   'Map/OpenStreetMapProvider': {
     'img-src': ['https://tiles-eu.stadiamaps.com'],
@@ -194,7 +197,7 @@ const CSP_DEMO_ALLOWLIST = {
   },
 };
 
-// Framework-specific overrides (e.g. Font Awesome loaded only in React/Vue demos)
+// Overrides for one framework: what its demos load or run that the demos of the other frameworks do not.
 const CSP_FRAMEWORK_ALLOWLIST = {
   jQuery: {
     'Map/OpenStreetMapProvider': {

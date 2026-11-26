@@ -2,7 +2,7 @@ const crypto = require('crypto');
 const express = require('express');
 const RateLimit = require('express-rate-limit');
 const { readFile } = require('fs/promises');
-const { join, resolve } = require('path');
+const { join, resolve, sep } = require('path');
 const { buildCspHeader, parseDemoPath } = require('./csp-policy');
 
 // Demo pages reference the packages by paths that start above apps/demos, so the repository is the document root.
@@ -37,7 +37,7 @@ if (csp) {
     async (req, res, next) => {
       const file = resolve(demosDir, req.params.widget, req.params.name, 'Angular', 'index.html');
 
-      if (!file.startsWith(demosDir)) {
+      if (!file.startsWith(demosDir + sep)) {
         res.status(403).send('Forbidden');
         return;
       }

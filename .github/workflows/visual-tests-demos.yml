@@ -940,7 +940,7 @@ jobs:
       run: echo "PLAYWRIGHT_JOB_NAME=csp-jquery-${{ matrix.SHARD_INDEX }}-${{ matrix.SHARD_TOTAL }}" >> $GITHUB_ENV
 
     - name: Run Playwright CSP tests
-      timeout-minutes: 15
+      timeout-minutes: 10
       working-directory: apps/demos
       env:
         NODE_OPTIONS: --max-old-space-size=8192
@@ -1056,7 +1056,7 @@ jobs:
       run: echo "PLAYWRIGHT_JOB_NAME=csp-${{ matrix.FRAMEWORK }}-${{ matrix.SHARD_INDEX }}-${{ matrix.SHARD_TOTAL }}" >> $GITHUB_ENV
 
     - name: Run Playwright CSP tests
-      timeout-minutes: 15
+      timeout-minutes: 10
       working-directory: apps/demos
       env:
         NODE_OPTIONS: --max-old-space-size=8192

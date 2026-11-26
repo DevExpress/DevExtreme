@@ -251,8 +251,8 @@ export async function prepareDemoPage(
   });
 }
 
-// The CSP run opens the page as the demo server sends it. The test styles are left out: a <style>
-// added by a script is itself a CSP violation.
+// The CSP run opens the page as the demo server sends it. The test styles are left out: under the
+// base policy, a <style> added by a script is itself a CSP violation.
 export async function prepareCspPage(page: Page, clientScript: string | null): Promise<void> {
   await page.addInitScript({
     content: [
