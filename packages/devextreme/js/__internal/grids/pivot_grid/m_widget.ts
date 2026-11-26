@@ -1384,10 +1384,8 @@ class PivotGrid extends Widget<PivotGridProperties> {
     // @ts-expect-error the fields area renders fields, not cells
     this._dataFields.render(dataHeaderContainer, dataSource.getAreaFields('data'));
 
-    // @ts-expect-error dxPivotGridFieldChooserBase is added to the renderer at runtime
-    const fieldChooser: FieldChooserBase = this.$element().dxPivotGridFieldChooserBase('instance');
-    fieldChooser.renderSortable();
-    fieldChooser.restoreFieldFocus();
+    this._fieldChooserBase?.renderSortable();
+    this._fieldChooserBase?.restoreFieldFocus();
   }
 
   protected _createTableElement(): dxElementWrapper {
@@ -2012,9 +2010,7 @@ class PivotGrid extends Widget<PivotGridProperties> {
           this._updateScrollPosition(columnsArea, rowsArea, dataArea, true);
           this._subscribeToEvents(columnsArea, rowsArea, dataArea);
 
-          // @ts-expect-error dxPivotGridFieldChooserBase is added to the renderer at runtime
-          const fieldChooser: FieldChooserBase = this.$element().dxPivotGridFieldChooserBase('instance');
-          fieldChooser.restoreFieldFocus();
+          this._fieldChooserBase?.restoreFieldFocus();
 
           d.resolve();
         });
