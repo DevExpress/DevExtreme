@@ -2,7 +2,8 @@ import { bootstrapApplication } from '@angular/platform-browser';
 import { Component, enableProdMode, signal } from '@angular/core';
 import * as AspNetData from 'devextreme-aspnet-data-nojquery';
 import { DxNumberBoxModule } from 'devextreme-angular';
-import { DxTreeListModule, DxTreeListTypes } from 'devextreme-angular/ui/tree-list';
+import { DxTreeListModule } from 'devextreme-angular/ui/tree-list';
+import type { DxTreeListTypes } from 'devextreme-angular/ui/tree-list';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();

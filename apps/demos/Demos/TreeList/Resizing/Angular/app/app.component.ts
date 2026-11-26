@@ -2,7 +2,8 @@ import { bootstrapApplication } from '@angular/platform-browser';
 import {
   Component, enableProdMode, inject, signal,
 } from '@angular/core';
-import { DxTreeListModule, DxTreeListTypes } from 'devextreme-angular/ui/tree-list';
+import { DxTreeListModule } from 'devextreme-angular/ui/tree-list';
+import type { DxTreeListTypes } from 'devextreme-angular/ui/tree-list';
 import { DxSelectBoxModule } from 'devextreme-angular/ui/select-box';
 import { Service } from './app.service';
 
