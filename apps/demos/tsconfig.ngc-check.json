@@ -16,6 +16,16 @@
   },
 
   "include": [
+    "Demos/Autocomplete/**/Angular/**/*.ts",
+    "Demos/Calendar/**/Angular/**/*.ts",
+    "Demos/Chat/**/Angular/**/*.ts",
+    "Demos/CheckBox/**/Angular/**/*.ts",
+    "Demos/ColorBox/**/Angular/**/*.ts",
+    "Demos/Common/**/Angular/**/*.ts",
+    "Demos/DateBox/**/Angular/**/*.ts",
+    "Demos/DateRangeBox/**/Angular/**/*.ts",
+    "Demos/DropDownBox/**/Angular/**/*.ts",
+    "Demos/DropDownButton/**/Angular/**/*.ts",
     "Demos/Scheduler/**/Angular/**/*.ts",
     "Demos/Localization/**/Angular/**/*.ts",
     "Demos/Map/**/Angular/**/*.ts",

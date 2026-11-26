@@ -1,4 +1,4 @@
-import '../field_chooser/m_field_chooser_base';
+import '../field_chooser/field_chooser_base';
 
 import localizationMessage from '@js/common/core/localization/message';
 import type { dxElementWrapper } from '@js/core/renderer';
@@ -14,9 +14,9 @@ import { CLASSES as FIELD_CHOOSER_CLASSES } from '@ts/grids/pivot_grid/field_cho
 import { BUTTON_CLASS } from '@ts/ui/button/button';
 import type { PopupProperties } from '@ts/ui/popup/popup';
 
-import { AreaItem } from '../area_item/m_area_item';
+import { AreaItem } from '../area_item/area_item';
 import type { AreaItemComponent, AreaName } from '../area_item/types';
-import type { FieldChooserBase } from '../field_chooser/m_field_chooser_base';
+import type { FieldChooserBase } from '../field_chooser/field_chooser_base';
 import { CLASSES, DIV } from './const';
 import { renderGroupConnector } from './utils';
 

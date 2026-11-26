@@ -7,6 +7,7 @@ import {
   DxTreeViewModule,
 } from 'devextreme-angular';
 
+import type { DxTreeViewTypes } from 'devextreme-angular/ui/tree-view';
 import { type Country, Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -33,7 +34,7 @@ export class AppComponent {
 
   readonly tabPanelIndex = signal(0);
 
-  changeSelection(e) {
+  changeSelection(e: DxTreeViewTypes.ItemSelectionChangedEvent) {
     const countryData = e.itemData;
     if (countryData.cities) {
       this.countryData.set(e.itemData);
