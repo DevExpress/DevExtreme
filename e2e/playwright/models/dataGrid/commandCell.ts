@@ -1,4 +1,5 @@
 import type { Locator } from '@playwright/test';
+import DropDownButton from '../dropDownButton';
 import GridFocusableElement from '../gridCore/focusable';
 
 const CLASS = {
@@ -11,6 +12,7 @@ const CLASS = {
   saveButton: 'dx-link-save',
   deleteButton: 'dx-link-delete',
   selectCheckBox: 'dx-select-checkbox',
+  aiColumnHeaderButton: 'dx-command-ai-header-button',
 };
 
 const commandSelector = [
@@ -51,5 +53,12 @@ export default class CommandCell extends GridFocusableElement {
 
   public getAdaptiveButton(): Locator {
     return this.element.locator(adaptiveButtonSelector);
+  }
+
+  public getAIDropDownButton(): DropDownButton {
+    return new DropDownButton(
+      this.element.page(),
+      this.element.locator(`.${CLASS.aiColumnHeaderButton}`),
+    );
   }
 }

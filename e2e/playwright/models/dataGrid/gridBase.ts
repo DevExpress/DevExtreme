@@ -55,6 +55,7 @@ const CLASS = {
   aiChat: 'dx-ai-chat',
   aiPromptEditor: 'dx-ai-prompt-editor',
   scrollContainer: 'scroll-container',
+  dragHeader: 'drag-header',
 };
 
 const E2E_ATTRIBUTES = {
@@ -271,6 +272,11 @@ export default abstract class GridBase extends GridCore {
     );
   }
 
+  // The header a column drag moves around; the grid renders it in the body.
+  public getDraggableHeader(): Locator {
+    return this.body.locator(`.${this.addWidgetPrefix(CLASS.dragHeader)}`);
+  }
+
   // The popup widget, not its wrapper in the body, which carries the same class.
   public getAIPromptEditor(): AIPromptEditor {
     return new AIPromptEditor(
@@ -401,6 +407,55 @@ export default abstract class GridBase extends GridCore {
     await action();
     await rendered.evaluate(({ promise }) => promise);
     await rendered.dispose();
+  }
+
+  // The top left corner of the column's header, in the viewport.
+  private getHeaderCorner(columnIndex: number): Promise<{ x: number; y: number }> {
+    return this.element.evaluate((element, { widgetName, index }) => {
+      const header: HTMLElement = $(element).data(widgetName)
+        .getView('columnHeadersView').getHeaderElement(index)[0];
+      const { left, top } = header.getBoundingClientRect();
+
+      return { x: left, y: top };
+    }, { widgetName: this.getName(), index: columnIndex });
+  }
+
+  // A real pointer drags the left border of the column's header: the grid starts resizing where
+  // the pointer goes down near a border.
+  public async resizeHeader(columnIndex: number, offset: number): Promise<void> {
+    const corner = await this.getHeaderCorner(columnIndex);
+    const start = { x: corner.x, y: corner.y + 1 };
+
+    await this.page.mouse.move(start.x, start.y);
+    await this.page.mouse.down();
+    await this.page.mouse.move(start.x + offset, start.y);
+    await this.page.mouse.up();
+  }
+
+  // A real pointer moves the header by (x, y) from its top left corner; with "isStart", it is
+  // pressed there first.
+  public async moveHeader(
+    columnIndex: number,
+    x: number,
+    y: number,
+    isStart = false,
+  ): Promise<void> {
+    const corner = await this.getHeaderCorner(columnIndex);
+
+    if (isStart) {
+      await this.page.mouse.move(corner.x, corner.y);
+      await this.page.mouse.down();
+    }
+
+    await this.page.mouse.move(corner.x + x, corner.y + y);
+  }
+
+  // Releases the dragged header over the top left corner of the column's header.
+  public async dropHeader(columnIndex: number): Promise<void> {
+    const corner = await this.getHeaderCorner(columnIndex);
+
+    await this.page.mouse.move(corner.x, corner.y);
+    await this.page.mouse.up();
   }
 
   public async scrollBy(offset: ScrollOffset): Promise<void> {

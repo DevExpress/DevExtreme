@@ -10,6 +10,15 @@ const CLASS = {
 
 // The grid prefixes the class with its name, which a cell doesn't know.
 const HIDDEN_COLUMN_CLASS = 'dx-(datagrid|treelist)-hidden-column';
+const STICKY_COLUMN_CLASS = 'dx-(datagrid|treelist)-sticky-column';
+
+type StickyPosition = 'left' | 'right' | 'sticky';
+
+const STICKY_POSITION_SUFFIX: Record<StickyPosition, string> = {
+  left: '-left',
+  right: '-right',
+  sticky: '',
+};
 
 export default class HeaderCell extends GridFocusableElement {
   constructor(headerRow: Locator, index: number) {
@@ -22,6 +31,13 @@ export default class HeaderCell extends GridFocusableElement {
 
   public expectHidden(present = true): Promise<void> {
     return expectClass(this.element, HIDDEN_COLUMN_CLASS, present);
+  }
+
+  // With no position, any of the three.
+  public expectSticky(position?: StickyPosition, present = true): Promise<void> {
+    const suffix = position ? STICKY_POSITION_SUFFIX[position] : '(-left|-right)?';
+
+    return expectClass(this.element, `${STICKY_COLUMN_CLASS}${suffix}`, present);
   }
 
   public getFilterIcon(): Locator {
