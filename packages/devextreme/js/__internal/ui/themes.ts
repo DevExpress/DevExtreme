@@ -461,7 +461,7 @@ export function isWebFontLoaded(text: string, fontWeight: string): boolean {
   testElement.style.fontFamily = etalonFont;
   testElement.style.fontSize = '250px';
   testElement.style.fontWeight = fontWeight;
-  testElement.innerHTML = text;
+  testElement.textContent = text;
 
   document.body.appendChild(testElement);
 
