@@ -5,7 +5,8 @@ import {
 import { DxTagBoxModule, DxPopoverModule } from 'devextreme-angular';
 import { ArrayStore } from 'devextreme-angular/common/data';
 import type { DxTagBoxTypes } from 'devextreme-angular/ui/tag-box';
-import { Service, type Product } from './app.service';
+import { Service } from './app.service';
+import type { Product } from './app.service';
 
 if (!document.location.host.includes('localhost')) {
   enableProdMode();

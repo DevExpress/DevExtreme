@@ -1,6 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import { Component, enableProdMode, signal } from '@angular/core';
-import { DxTextBoxModule, type DxTextBoxTypes } from 'devextreme-angular/ui/text-box';
+import { DxTextBoxModule } from 'devextreme-angular/ui/text-box';
+import type { DxTextBoxTypes } from 'devextreme-angular/ui/text-box';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();

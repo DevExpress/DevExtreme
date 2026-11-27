@@ -4,7 +4,8 @@ import {
 } from '@angular/core';
 import { DxPopupModule, DxButtonModule } from 'devextreme-angular';
 import notify from 'devextreme/ui/notify';
-import { type Employee, Service } from './app.service';
+import { Service } from './app.service';
+import type { Employee } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();

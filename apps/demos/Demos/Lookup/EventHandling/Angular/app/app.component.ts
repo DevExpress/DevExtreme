@@ -4,7 +4,8 @@ import {
 } from '@angular/core';
 import { DxSelectBoxModule } from 'devextreme-angular';
 import { DxLookupModule, DxLookupTypes } from 'devextreme-angular/ui/lookup';
-import { Service, type Employee } from './app.service';
+import { Service } from './app.service';
+import type { Employee } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();

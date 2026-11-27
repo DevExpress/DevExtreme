@@ -1,6 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import { Component, enableProdMode, signal } from '@angular/core';
-import { DxNumberBoxModule, type DxNumberBoxTypes } from 'devextreme-angular/ui/number-box';
+import { DxNumberBoxModule } from 'devextreme-angular/ui/number-box';
+import type { DxNumberBoxTypes } from 'devextreme-angular/ui/number-box';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
