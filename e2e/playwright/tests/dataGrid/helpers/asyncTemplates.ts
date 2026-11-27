@@ -1,7 +1,11 @@
 import type { Page } from '@playwright/test';
 
-export const makeRowsViewTemplatesAsync = async (page: Page, selector: string): Promise<void> => {
-  await page.evaluate((gridSelector) => {
+export const makeRowsViewTemplatesAsync = async (
+  page: Page,
+  selector: string,
+  timeout = 0,
+): Promise<void> => {
+  await page.evaluate(({ gridSelector, delay }) => {
     const dataGrid = ($(gridSelector) as any).dxDataGrid('instance');
 
     const rowsView = dataGrid.getView('rowsView');
@@ -12,9 +16,9 @@ export const makeRowsViewTemplatesAsync = async (page: Page, selector: string): 
     rowsView.renderDelayedTemplates = (changes) => {
       // The templates render after the grid, like asynchronous templates of a framework.
       // eslint-disable-next-line no-restricted-syntax
-      setTimeout(() => { originRender(changes); });
+      setTimeout(() => { originRender(changes); }, delay);
     };
-  }, selector);
+  }, { gridSelector: selector, delay: timeout });
 };
 
 export const makeColumnHeadersViewTemplatesAsync = async (

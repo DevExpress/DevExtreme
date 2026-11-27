@@ -566,6 +566,22 @@ export default abstract class GridBase extends GridCore {
     await this.invoke('expandAll');
   }
 
+  public async apiExpandRow(key: unknown): Promise<void> {
+    await this.invoke('expandRow', key);
+  }
+
+  public async apiCollapseRow(key: unknown): Promise<void> {
+    await this.invoke('collapseRow', key);
+  }
+
+  public async apiUpdateDimensions(): Promise<void> {
+    await this.invoke('updateDimensions');
+  }
+
+  public async apiAddColumn(config: unknown): Promise<void> {
+    await this.invoke('addColumn', config);
+  }
+
   public async apiBeginCustomLoading(messageText: string): Promise<void> {
     await this.invoke('beginCustomLoading', messageText);
   }
