@@ -1,8 +1,6 @@
 import $ from 'jquery';
 import { CustomStore } from 'common/data/custom_store';
-import DropDownBox from 'ui/drop_down_box';
-import { isRenderer } from 'core/utils/type';
-import config from 'core/config';
+import 'ui/drop_down_box';
 
 
 QUnit.testStart(function() {
@@ -48,20 +46,6 @@ QUnit.module('dropDownBox markup', moduleConfig, () => {
 
         const $input = this.$element.find('.dx-texteditor-input');
         assert.equal($input.val(), 'Item 1', 'expressions work');
-    });
-
-    QUnit.test('field template should work', function(assert) {
-        new DropDownBox(this.$element, {
-            items: this.simpleItems,
-            opened: true,
-            fieldTemplate: function(value, fieldElement) {
-                assert.equal(isRenderer(fieldElement), !!config().useJQuery, 'fieldElement is correct');
-                return $('<div>').dxTextBox({ value: 1 });
-            },
-            valueExpr: 'id',
-            displayExpr: 'name',
-            value: 1
-        });
     });
 });
 

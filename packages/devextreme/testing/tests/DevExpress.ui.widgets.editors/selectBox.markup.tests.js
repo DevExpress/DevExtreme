@@ -11,21 +11,6 @@ QUnit.testStart(function() {
     const markup =
         '<div id="qunit-fixture">\
             <div id="selectBox"></div>\
-            \
-            <div id="selectBoxFieldTemplateWithoutTextBox">\
-                <div data-options="dxTemplate: { name: \'field\' }">\
-                    <span>test</span>\
-                </div>\
-            </div>\
-            \
-            <div id="selectBoxFieldTemplate">\
-                <div data-options="dxTemplate: { name: \'field\' }">\
-                    fieldTemplate\
-                </div>\
-                <div data-options="dxTemplate: { name: \'item\'}">\
-                    itemTemplate\
-                </div>\
-            </div>\
         </div>';
 
     $('#qunit-fixture').html(markup);
@@ -205,32 +190,6 @@ QUnit.module('widget options', moduleSetup, () => {
             });
 
         assert.equal($element.find('.' + PLACEHOLDER_CLASS).attr('data-dx_placeholder'), 'John Doe');
-    });
-
-    QUnit.test('fieldTemplate should contain dxTextBox inside', function(assert) {
-        assert.throws(function() {
-            $('#selectBoxFieldTemplateWithoutTextBox').dxSelectBox({ fieldTemplate: 'field' });
-        });
-    });
-
-    QUnit.test('check fieldTemplate', function(assert) {
-        const $element = $('#selectBoxFieldTemplate').dxSelectBox({
-            dataSource: [
-                { ID: 1, name: 'First' },
-                { ID: 2, name: 'Second' },
-                { ID: 3, name: 'Third' }
-            ],
-            fieldTemplate: function(selectedItem) {
-                return $('<div id=\'myfield\'>').dxTextBox({
-                    value: selectedItem ? selectedItem.ID + ' - ' + selectedItem.name : ''
-                });
-            },
-            valueExpr: 'ID',
-            value: 1
-        });
-        const $input = $element.find('.' + TEXTEDITOR_INPUT_CLASS);
-
-        assert.equal($input.val(), '1 - First', 'value is correct');
     });
 
     QUnit.test('displayCustomValue enabled', function(assert) {

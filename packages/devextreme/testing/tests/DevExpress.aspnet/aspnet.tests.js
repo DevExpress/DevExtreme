@@ -443,7 +443,9 @@ window.$ = $;
                             editorType: 'dxSelectBox',
                             editorOptions: {
                                 items: [ 'testValue' ],
-                                fieldTemplate: $('#popup1_form_fieldTempalte')
+                                fieldAddons: {
+                                    beforeTemplate: $('#popup1_form_fieldTempalte'),
+                                },
                             }
                         }
                     ]

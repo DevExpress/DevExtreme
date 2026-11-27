@@ -1,5 +1,4 @@
 @use "sass:selector";
-@use "../textEditor/mixins" as *;
 
 $dropdowneditor-icon-idle-opacity: null !default;
 
@@ -39,14 +38,6 @@ $dropdowneditor-icon-idle-opacity: null !default;
 
   .dx-texteditor-input {
     text-overflow: ellipsis;
-  }
-}
-
-.dx-dropdowneditor-field-template-wrapper {
-  @include dx-editor-content-wrapper();
-
-  > * {
-    flex-grow: 1;
   }
 }
 

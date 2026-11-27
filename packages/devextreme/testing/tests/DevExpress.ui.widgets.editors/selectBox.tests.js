@@ -30,21 +30,6 @@ QUnit.testStart(() => {
             </div>\
         </div>\
         \
-        <div id="selectBoxFieldTemplateWithoutTextBox">\
-            <div data-options="dxTemplate: { name: \'field\' }">\
-                <span>test</span>\
-            </div>\
-        </div>\
-\
-        <div id="selectBoxFieldTemplate">\
-            <div data-options="dxTemplate: { name: \'field\' }">\
-                fieldTemplate\
-            </div>\
-            <div data-options="dxTemplate: { name: \'item\'}">\
-                itemTemplate\
-            </div>\
-        </div>\
-        \
         <div id="selectBoxWithoutScrollWrapper">\
             <div id="selectBoxWithoutScroll"></div>\
         </div>\
@@ -72,7 +57,6 @@ const STATE_FOCUSED_CLASS = 'dx-state-focused';
 const TEXTEDITOR_BUTTONS_CONTAINER_CLASS = 'dx-texteditor-buttons-container';
 const PLACEHOLDER_CLASS = 'dx-placeholder';
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
-const TEXTEDITOR_LABEL_CLASS = 'dx-texteditor-label';
 const OVERLAY_CONTENT_CLASS = 'dx-overlay-content';
 const CLEAR_BUTTON_AREA = 'dx-clear-button-area';
 const SCROLLVIEW_CONTENT_CLASS = 'dx-scrollview-content';
@@ -1190,143 +1174,6 @@ QUnit.module('widget options', moduleSetup, () => {
         assert.equal($element.find(`.${PLACEHOLDER_CLASS}`).attr('data-dx_placeholder'), 'John Jr. Doe');
     });
 
-    QUnit.test('the "fieldTemplate" function should be called only once on init and value change', function(assert) {
-        let callCount = 0;
-        const instance = $('#selectBoxWithItemTemplate').dxSelectBox({
-            items: [1, 2],
-            fieldTemplate: (value, element) => {
-                assert.equal(isRenderer(element), !!config().useJQuery, 'element is correct');
-
-                callCount++;
-                return $('<div>').dxTextBox();
-            }
-        }).dxSelectBox('instance');
-
-        assert.equal(callCount, 1, 'the "fieldTemplate" called only once on init');
-
-        callCount = 0;
-        instance.option('value', 2);
-        assert.equal(callCount, 1, 'the "fieldTemplate" called only one on value change');
-    });
-
-    QUnit.test('popup should not prevent closing when fieldTemplate is used', function(assert) {
-        const $selectBox = $('#selectBoxFieldTemplate').dxSelectBox({
-            items: [1, 2],
-            fieldTemplate: () => {
-                return $('<div>').dxTextBox();
-            },
-            showDropDownButton: true,
-            openOnFieldClick: true,
-            opened: true
-        });
-        const instance = $selectBox.dxSelectBox('instance');
-        const $dropDownButton = $selectBox.find(`.${DX_DROP_DOWN_BUTTON}`);
-        const $inputWrapper = $selectBox.find('.dx-dropdowneditor-input-wrapper');
-
-        $dropDownButton.trigger('dxpointerdown');
-        $dropDownButton.trigger('dxclick');
-        assert.notOk(instance.option('opened'), 'popup had been closed');
-
-        instance.open();
-        assert.ok(instance.option('opened'), 'popup had been opened');
-
-        $inputWrapper.trigger('dxpointerdown');
-        $inputWrapper.trigger('dxclick');
-        assert.notOk(instance.option('opened'), 'popup had been closed');
-    });
-
-    QUnit.test('Field should be updated if fieldTemplate is used', function(assert) {
-        const $element = $('#selectBoxFieldTemplate').dxSelectBox({
-            dataSource: [
-                { ID: 1, name: 'First' },
-                { ID: 2, name: 'Second' },
-                { ID: 3, name: 'Third' }
-            ],
-            fieldTemplate: (selectedItem) => {
-                return $('<div id="myfield">').dxTextBox({
-                    value: selectedItem ? selectedItem.ID + ' - ' + selectedItem.name : ''
-                });
-            },
-            itemTemplate: (itemData) => {
-                return $('<div class="item">').text(
-                    itemData.ID + ' - ' + itemData.name
-                );
-            },
-            valueExpr: 'ID',
-            searchEnabled: true,
-            opened: true
-        });
-
-        $(`.${LIST_ITEM_CLASS}`).eq(0).trigger('dxclick');
-
-        const $input = $(`.${TEXTEDITOR_INPUT_CLASS}`);
-
-        assert.equal($input.val(), '1 - First', 'value is correct');
-
-        $input.triggerHandler('focusout');
-
-        assert.equal($(`.${TEXTEDITOR_INPUT_CLASS}`).val(), '1 - First', 'value is correct');
-
-        const instance = $element.dxSelectBox('instance');
-        instance.option('opened', true);
-
-        $(`.${LIST_ITEM_CLASS}`).eq(0).trigger('dxclick');
-
-        assert.equal($(`.${TEXTEDITOR_INPUT_CLASS}`).val(), '1 - First', 'value is correct');
-
-    });
-
-    QUnit.test('Field should be updated if value was changed and fieldTemplate is used (T568546)', function(assert) {
-        const $element = $('#selectBoxFieldTemplate').dxSelectBox({
-            dataSource: [
-                { name: 'First' },
-                { name: 'Second' },
-                { name: 'Third' }
-            ],
-            fieldTemplate: (selectedItem) => {
-                return $('<div id="myfield">').dxTextBox({
-                    value: selectedItem && selectedItem.name
-                });
-            },
-            value: 'First',
-            valueExpr: 'name',
-            opened: true
-        });
-
-        $(`.${LIST_ITEM_CLASS}`).eq(1).trigger('dxclick');
-
-        const $input = $(`.${TEXTEDITOR_INPUT_CLASS}`);
-
-        assert.equal($input.val(), 'Second', 'value is correct');
-
-        const instance = $element.dxSelectBox('instance');
-
-        instance.option('value', 'First');
-
-        assert.equal($(`.${TEXTEDITOR_INPUT_CLASS}`).val(), 'First', 'value is correct');
-    });
-
-    QUnit.test('dropdown button should not be hidden after the focusout when fieldTemplate and searchEnabled is used', function(assert) {
-        const $element = $('#selectBoxFieldTemplate').dxSelectBox({
-            items: [1, 2, 3],
-            focusStateEnabled: true,
-            searchValue: true,
-            searchTimeout: 0,
-            fieldTemplate: (value) => {
-                return $('<div id="myfield">').dxTextBox({
-                    value: 'test'
-                });
-            },
-            searchEnabled: true
-        });
-        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
-
-        $input.focus();
-        $input.triggerHandler('focusout');
-
-        assert.equal($element.find(`.${DX_DROP_DOWN_BUTTON}`).length, 1, 'dropdown button was not hidden');
-    });
-
     QUnit.test('item template', function(assert) {
         const $selectBox = $('#selectBoxWithItemTemplate').dxSelectBox({
             items: [1]
@@ -2046,21 +1893,6 @@ QUnit.module('editing', moduleSetup, () => {
         keyboard.keyDown('enter');
 
         $selectBox.dxSelectBox('blur');
-    });
-
-    QUnit.test('editor can be focused out when fieldTemplate is used and acceptCustomValue is true (T957627) ', function(assert) {
-        const $selectBox = $('#selectBox').dxSelectBox({
-            acceptCustomValue: true,
-            fieldTemplate: (data, elem) => {
-                $('<div>').appendTo(elem).dxTextBox();
-            },
-        });
-        const instance = $selectBox.dxSelectBox('instance');
-
-        instance.focus();
-        instance.blur();
-
-        assert.notOk($selectBox.hasClass(STATE_FOCUSED_CLASS), 'editor is focused out');
     });
 
     QUnit.testInActiveWindow('input value should be restored on focusout if clearing is manually prevented', function(assert) {
@@ -3263,254 +3095,6 @@ QUnit.module('search', moduleSetup, () => {
         assert.ok(loadStub.notCalled, 'data not loaded');
     });
 
-    QUnit.testInActiveWindow('widget with fieldTemplate and remote data source should display right value after search and selection (T668290)', function(assert) {
-        const $selectBox = $('#selectBox').dxSelectBox({
-            dataSource: {
-                store: new CustomStore({
-                    byKey: noop,
-                    load: (options) => {
-                        return [{
-                            Id: '1',
-                            Name: 'Name 1'
-                        }, {
-                            Id: '2',
-                            Name: 'Name 2'
-                        }];
-                    },
-                    key: 'Id'
-                })
-            },
-            valueExpr: 'Id',
-            displayValue: 'Name',
-            fieldTemplate: (data) => {
-                return $('<div>').dxTextBox({
-                    value: (data !== null) ? data.Name : ''
-                });
-            },
-            minSearchLength: 1,
-            showDataBeforeSearch: false,
-            searchEnabled: true,
-            searchTimeout: 0,
-            itemTemplate: (data) => {
-                return '<div><span>' + data.Name + '</span></div>';
-            }
-        });
-        const selectBox = $selectBox.dxSelectBox('instance');
-        const keyboard = keyboardMock($selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`));
-
-        keyboard.type('a');
-
-        const listItem = $(selectBox.content()).find(`.${LIST_ITEM_CLASS}`).eq(1);
-        listItem.trigger('dxclick');
-
-        assert.equal($selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`).val(), 'Name 2', 'selectBox displays right value');
-    });
-
-    [
-        { attribute: 'aria-required', value: 'true' },
-        { attribute: 'aria-haspopup', value: 'listbox' },
-        { attribute: 'aria-autocomplete', value: 'list' },
-    ].forEach(({ attribute, value }) => {
-        QUnit.test(`component with fieldTemplate should have correct ${attribute} attribute after search and selection (T1230696, T1230971)`, function(assert) {
-            const $selectBox = $('#selectBox').dxSelectBox({
-                dataSource: ['a', 'ab', 'abc'],
-                fieldTemplate: () => {
-                    return $('<div>').dxTextBox({});
-                },
-                searchEnabled: true,
-                searchTimeout: 0,
-                itemTemplate: () => {
-                    return '<div><span></span></div>';
-                }
-            }).dxValidator({
-                validationRules: [ { type: 'required' } ]
-            });
-            const selectBox = $selectBox.dxSelectBox('instance');
-            let $input = $selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
-
-            assert.strictEqual($input.attr(attribute), value, `initial render should have ${attribute} attribute set to ${value}`);
-
-            keyboardMock($input)
-                .type('a');
-
-            const listItem = $(selectBox.content()).find(`.${LIST_ITEM_CLASS}`).eq(1);
-            listItem.trigger('dxclick');
-
-            $input = $selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
-            assert.strictEqual($input.attr(attribute), value, `${attribute} should stay ${value} after search and selection`);
-        });
-    });
-
-    QUnit.module('aria-invalid', {}, () => {
-        [
-            { valueRequired: true, emptyValue: 'true', nonEmptyValue: undefined },
-            { valueRequired: false, emptyValue: undefined, nonEmptyValue: undefined }
-        ].forEach(({ valueRequired, emptyValue, nonEmptyValue }) => {
-            QUnit.test(`component with fieldTemplate should have proper aria-invalid attribute when validator is used and value is ${!valueRequired ? 'not' : ''} required (T1230706)`, function(assert) {
-                const $selectBox = $('#selectBox').dxSelectBox({
-                    items: [1, 2, 3],
-                    searchEnabled: true,
-                    fieldTemplate: 'field',
-                    showClearButton: true,
-                    templatesRenderAsynchronously: true,
-                    integrationOptions: {
-                        templates: {
-                            field: {
-                                render: function({ model, container, onRendered }) {
-                                    const $input = $('<div>').appendTo(container);
-
-                                    setTimeout(() => {
-                                        $input.dxTextBox({ value: model });
-                                        onRendered();
-                                    }, 0);
-                                }
-                            }
-                        }
-                    },
-                }).dxValidator({
-                    validationRules: valueRequired ? [{ type: 'required', message: 'required' }] : [],
-                });
-
-                this.clock.tick(TIME_TO_WAIT);
-
-                const selectBox = $selectBox.dxSelectBox('instance');
-                let $input = $selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
-
-                assert.strictEqual($input.attr('aria-invalid'), nonEmptyValue, `initial render should set aria-invalid to ${nonEmptyValue}`);
-
-                const listItem = $(selectBox.content()).find(`.${LIST_ITEM_CLASS}`).eq(0);
-                listItem.trigger('dxclick');
-
-                this.clock.tick(TIME_TO_WAIT);
-
-                assert.equal($input.val(), '1', 'input value is not empty');
-                $input = $selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
-                assert.strictEqual($input.attr('aria-invalid'), nonEmptyValue, `non empty input value set aria-invalid to ${nonEmptyValue}`);
-
-                const $clearButton = $(`.${CLEAR_BUTTON_AREA}`);
-                $($clearButton).trigger('dxclick');
-
-                this.clock.tick(TIME_TO_WAIT);
-
-                assert.equal($input.val(), '', 'input value is empty');
-                $input = $selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
-                assert.strictEqual($input.attr('aria-invalid'), emptyValue, `empty input value set aria-invalid to ${emptyValue}`);
-            });
-        });
-
-        QUnit.test('component with fieldTemplate should not have aria-invalid attribute when validator is not used (T1230706)', function(assert) {
-            const $selectBox = $('#selectBox').dxSelectBox({
-                items: [1, 2, 3],
-                searchEnabled: true,
-                fieldTemplate: 'field',
-                showClearButton: true,
-                templatesRenderAsynchronously: true,
-                integrationOptions: {
-                    templates: {
-                        field: {
-                            render: function({ model, container, onRendered }) {
-                                const $input = $('<div>').appendTo(container);
-
-                                setTimeout(() => {
-                                    $input.dxTextBox({ value: model });
-                                    onRendered();
-                                }, 0);
-                            }
-                        }
-                    }
-                },
-            });
-
-            this.clock.tick(TIME_TO_WAIT);
-
-            const selectBox = $selectBox.dxSelectBox('instance');
-            let $input = $selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
-
-            assert.strictEqual($input.attr('aria-invalid'), undefined, 'initial render should set aria-invalid to undefined');
-
-            const listItem = $(selectBox.content()).find(`.${LIST_ITEM_CLASS}`).eq(0);
-            listItem.trigger('dxclick');
-
-            this.clock.tick(TIME_TO_WAIT);
-
-            assert.equal($input.val(), '1', 'input value is not empty');
-            $input = $selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
-            assert.strictEqual($input.attr('aria-invalid'), undefined, 'initial render should set aria-invalid to undefined');
-
-            const $clearButton = $(`.${CLEAR_BUTTON_AREA}`);
-            $($clearButton).trigger('dxclick');
-
-            this.clock.tick(TIME_TO_WAIT);
-
-            assert.equal($input.val(), '', 'input value is empty');
-            $input = $selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
-            assert.strictEqual($input.attr('aria-invalid'), undefined, 'initial render should set aria-invalid to undefined');
-        });
-    });
-
-    QUnit.test('component with fieldTemplate should have proper role attribute after search and selection (T1230635)', function(assert) {
-        const $selectBox = $('#selectBox').dxSelectBox({
-            dataSource: ['a', 'ab', 'abc'],
-            fieldTemplate: () => {
-                return $('<div>').dxTextBox({});
-            },
-            searchEnabled: true,
-            searchTimeout: 0,
-        });
-        let $input = $selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
-
-        assert.strictEqual($input.attr('role'), 'combobox', 'initial render should have role attribute set to combobox');
-
-        const selectBox = $selectBox.dxSelectBox('instance');
-        const keyboard = keyboardMock($input);
-
-        keyboard.type('a');
-
-        const listItem = $(selectBox.content()).find(`.${LIST_ITEM_CLASS}`).eq(1);
-        listItem.trigger('dxclick');
-
-        $input = $selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
-
-        assert.strictEqual($input.attr('role'), 'combobox', 'role should stay to combobox after search and selection');
-    });
-
-    [
-        { label: 'Label' },
-        { label: 'Label', inputAttr: { 'aria-label': 'Label' } },
-        { label: undefined },
-        { label: '' },
-    ].forEach((options) => {
-        QUnit.test(`component with fieldTemplate should have proper aria-labelledby attribute, options: ${JSON.stringify(options)} (T1230635)`, function(assert) {
-            const $selectBox = $('#selectBox').dxSelectBox({
-                dataSource: ['a', 'ab', 'abc'],
-                fieldTemplate: () => {
-                    return $('<div>').dxTextBox({});
-                },
-                searchEnabled: true,
-                searchTimeout: 0,
-                ...options
-            });
-            let $input = $selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
-            const $label = $selectBox.find(`.${TEXTEDITOR_LABEL_CLASS}`);
-
-            const expectedAriaLabeledByValue = !options.inputAttr && options.label ? $label.attr('id') : undefined;
-
-            assert.strictEqual($input.attr('aria-labelledby'), expectedAriaLabeledByValue, 'aria-labelledby attribute value after initialization');
-
-            const selectBox = $selectBox.dxSelectBox('instance');
-            const keyboard = keyboardMock($input);
-
-            keyboard.type('a');
-
-            const listItem = $(selectBox.content()).find(`.${LIST_ITEM_CLASS}`).eq(1);
-            listItem.trigger('dxclick');
-
-            $input = $selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
-
-            assert.strictEqual($input.attr('aria-labelledby'), expectedAriaLabeledByValue, 'aria-labelledby attribute value after search and selection');
-        });
-    });
-
     [0, 1].forEach((value) => {
         QUnit.testInActiveWindow(`Value=${value} should be null after input is cleared and enter key is tapped (T935801)`, function(assert) {
             const items = [0, 1, 2];
@@ -4104,40 +3688,6 @@ QUnit.module('search substitution', {
             assert.notOk(this.hasSelection(), 'input value has no selection for the "' + item + '" item');
             assert.equal(this.selectBox.option('value'), null, 'the widget\'s value option is not changed for the "' + item + '" item');
         }, this));
-    });
-
-    QUnit.test('the list item value should not be displayed in input after click on item', function(assert) {
-        const dataSource = [
-            { id: 1, text: 'test1' },
-            { id: 2, text: 'test2' },
-            { id: 3, text: 'test3' }
-        ];
-
-        this.reinit({
-            dataSource: dataSource,
-            opened: true,
-            displayExpr: 'text',
-            fieldTemplate: (selectedItem, fieldElement) => {
-                const textBox = $('<div>').dxTextBox({
-                    value: selectedItem ? selectedItem.id : ''
-                });
-                $(fieldElement).append(textBox);
-            }
-        });
-
-        const listItem = $('.dx-list').find(`.${LIST_ITEM_CLASS}`).eq(1);
-
-        listItem.trigger('dxpointerdown');
-        this.clock.tick(10);
-        let $input = this.$selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
-
-        assert.equal($input.val(), '', 'input value should not be changed when selection is not complete');
-
-        listItem.trigger('dxclick');
-        $input = this.$selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
-
-        assert.equal($input.val(), '2', 'input value should be changed after selection complete');
-        this.clock.tick(100000);
     });
 
     QUnit.testInActiveWindow('the first list item should be focused while searching', function(assert) {
@@ -4740,27 +4290,6 @@ QUnit.module('hide on blur', moduleSetup, () => {
 });
 
 QUnit.module('keyboard navigation', moduleSetup, () => {
-    QUnit.test('keydown event should be fired only once even if fieldTemplate is used (T1238121)', function(assert) {
-        const onKeyDownHandler = sinon.spy();
-
-        const $element = $('#selectBox').dxSelectBox({
-            onKeyDown: onKeyDownHandler,
-            fieldTemplate() {
-                const result = $('<div class=\'custom-item\'><div class=\'product-name\'></div></div>');
-                return result
-                    .find('.product-name')
-                    .dxTextBox({
-                        readOnly: true,
-                    });
-            },
-        });
-
-        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
-        keyboardMock($input).type('a').change();
-
-        assert.strictEqual(onKeyDownHandler.callCount, 1, 'handler has been called once');
-    });
-
     QUnit.test('upArrow and downArrow on textbox change value', function(assert) {
 
         const $element = $('#selectBox').dxSelectBox({
@@ -4922,11 +4451,9 @@ QUnit.module('keyboard navigation', moduleSetup, () => {
                 group: 'Category'
             }),
             valueExpr: 'id',
+            displayExpr: 'text',
             value: 1,
             grouped: true,
-            fieldTemplate: (data) => {
-                return $('<div>').dxTextBox({ value: data.text });
-            }
         });
 
         let $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);

@@ -1,5 +1,5 @@
 import { mount } from '@vue/test-utils';
-import { ComponentPublicInstance, defineComponent } from 'vue';
+import { defineComponent, nextTick } from 'vue';
 
 import DxSelectBox from '../../select-box';
 import DxTextBox from '../../text-box';
@@ -10,10 +10,10 @@ beforeEach(() => {
 });
 
 describe('template rendering', () => {
-  it('field template rendered', () => {
+  it('field addons template rendered', async () => {
     const vm = defineComponent({
       template:
-                `<dx-select-box :data-source="dataSource" field-template="field" id="component">
+                `<dx-select-box :data-source="dataSource" :field-addons="{ beforeTemplate: 'field' }" id="component">
                     <template #field="">
                         <dx-text-box value="text" />
                     </template>
@@ -29,6 +29,7 @@ describe('template rendering', () => {
       },
     });
     const wrapper = mount(vm);
-    expect(wrapper.getComponent<ComponentPublicInstance>('#component').vm.$el.children).toHaveLength(1);
+    await nextTick();
+    expect(wrapper.findAll('.dx-dropdowneditor-field-before-template-wrapper .dx-textbox')).toHaveLength(1);
   });
 });

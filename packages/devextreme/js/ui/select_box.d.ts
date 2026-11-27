@@ -1,13 +1,4 @@
 import {
-    UserDefinedElement,
-    DxElement,
-} from '../core/element';
-
-import {
-    template,
-} from '../common';
-
-import {
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
@@ -226,15 +217,6 @@ export interface dxSelectBoxOptions<TComponent> extends dxDropDownListOptions<TC
      * @public
      */
     acceptCustomValue?: boolean;
-    /**
-     * @docid
-     * @default null
-     * @type_function_param1 selectedItem:object
-     * @type_function_return string|Element|jQuery
-     * @public
-     * @deprecated dxDropDownEditorOptions.fieldAddons
-     */
-    fieldTemplate?: template | ((selectedItem: any, fieldElement: DxElement) => string | UserDefinedElement) | null;
     /**
      * @docid
      * @default null
