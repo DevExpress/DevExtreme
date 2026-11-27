@@ -150,6 +150,46 @@ describe('CreateDualModeManifest Executor E2E', () => {
     }, 30000);
   });
 
+  describe('Side effects', () => {
+    it('should follow fully specified and extensionless imports', async () => {
+      const esmDir = path.join(projectDir, 'artifacts', 'transpiled-esm-npm', 'esm');
+      await writeFileText(
+        path.join(esmDir, 'editor.js'),
+        `import './events/click.js';\nimport { helper } from './helpers.js';\nexport const Editor = helper;`,
+      );
+      await writeFileText(path.join(esmDir, 'events', 'click.js'), `window.click = true;`);
+      await writeFileText(
+        path.join(esmDir, 'helpers.js'),
+        `import './events/hover';\nexport const helper = () => {};`,
+      );
+      await writeFileText(path.join(esmDir, 'events', 'hover.js'), `window.hover = true;`);
+      await writeFileText(
+        path.join(projectDir, 'artifacts', 'transpiled-esm-npm', 'cjs', 'editor.js'),
+        '',
+      );
+
+      const options: CreateDualModeManifestExecutorSchema = {
+        esmDir: './artifacts/transpiled-esm-npm/esm',
+        cjsDir: './artifacts/transpiled-esm-npm/cjs',
+        outputDir: './artifacts/transpiled-esm-npm',
+        srcDir: './js',
+      };
+
+      const result = await executor(options, context);
+      expect(result.success).toBe(true);
+
+      const editorPackageJson = JSON.parse(
+        await readFileText(
+          path.join(projectDir, 'artifacts', 'transpiled-esm-npm', 'editor', 'package.json'),
+        ),
+      );
+      expect(editorPackageJson.sideEffects).toEqual([
+        '../esm/events/click.js',
+        '../esm/events/hover.js',
+      ]);
+    }, 30000);
+  });
+
   describe('Index file handling', () => {
     it('should place package.json in same directory for index.js files', async () => {
       const options: CreateDualModeManifestExecutorSchema = {

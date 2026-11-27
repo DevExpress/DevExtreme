@@ -1,8 +1,8 @@
 import { addOffsets } from '@ts/core/utils/date';
-import { RRule, RRuleSet } from 'rrule';
 
 import timeZoneUtils from '../utils_time_zone';
 import { getDateByAsciiString, parseRecurrenceRule } from './base';
+import { RRule, RRuleSet } from './rrule';
 import type { ProcessorOptions, RRuleParams } from './types';
 import { validateRRuleObject } from './validate_rule';
 
