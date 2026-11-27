@@ -3714,7 +3714,8 @@ test.describe('Keyboard Navigation - common', () => {
     await dataGrid.getColumnChooserButton().click();
     await expect(columnChooser.content).toBeFocused();
 
-    // The overlay focus trap counts the content itself as a tab stop, so the third Tab wraps back to it.
+    // The overlay focus trap counts the content itself as a tab stop,
+    // so the third Tab wraps back to it.
     for (let i = 0; i < 3; i += 1) {
       await page.keyboard.press('Tab');
     }
