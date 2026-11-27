@@ -1,6 +1,15 @@
-import type { Locator } from '@playwright/test';
+import type { Locator, Page } from '@playwright/test';
 import { expect } from '@playwright/test';
+import { insertStylesheetRulesToPage } from '../../../helpers/domUtils';
 import type DataGrid from '../../../models/dataGrid';
+
+export const insertStylesToSuppressGroupPanelFocusOutline = (
+  page: Page,
+): Promise<void> => insertStylesheetRulesToPage(page, `
+  .dx-group-panel-item:focus-visible:not(.dx-toolbar-item) {
+    outline: none !important;
+  }
+`);
 
 // [borderLeftWidth, borderRightWidth] in pixels
 type Borders = [left: number, right: number];

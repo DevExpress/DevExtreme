@@ -60,6 +60,10 @@ export default class ColumnChooser extends GridModule {
     return this.content.locator(`.${CLASS.treeViewItem}`);
   }
 
+  public getColumnTexts(): Promise<string[]> {
+    return this.getColumns().allTextContents();
+  }
+
   public expectColumnDisabled(index = 0, present = true): Promise<void> {
     return expectClass(
       this.getColumn(index).locator(`.${CLASS.treeViewItemContent}`),

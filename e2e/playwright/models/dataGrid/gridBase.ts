@@ -475,15 +475,22 @@ export default abstract class GridBase extends GridCore {
   }
 
   // A real pointer drags the left border of the column's header: the grid starts resizing where
-  // the pointer goes down near a border.
-  public async resizeHeader(columnIndex: number, offset: number): Promise<void> {
+  // the pointer goes down near a border. Without "needToTriggerPointerUp", it stays pressed.
+  public async resizeHeader(
+    columnIndex: number,
+    offset: number,
+    needToTriggerPointerUp = true,
+  ): Promise<void> {
     const corner = await this.getHeaderCorner(columnIndex);
     const start = { x: corner.x, y: corner.y + 1 };
 
     await this.page.mouse.move(start.x, start.y);
     await this.page.mouse.down();
     await this.page.mouse.move(start.x + offset, start.y);
-    await this.page.mouse.up();
+
+    if (needToTriggerPointerUp) {
+      await this.page.mouse.up();
+    }
   }
 
   // A real pointer moves the header by (x, y) from its top left corner; with "isStart", it is

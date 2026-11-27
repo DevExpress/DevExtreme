@@ -8,8 +8,4 @@ export class GroupPanel {
   getHeader(i: number): GroupPanelItem {
     return new GroupPanelItem(this.element.find(ITEM_SELECTOR).nth(i));
   }
-
-  getHeadersCount(): Promise<number> {
-    return this.element.find(ITEM_SELECTOR).count;
-  }
 }
