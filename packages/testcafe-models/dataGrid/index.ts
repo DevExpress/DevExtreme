@@ -43,7 +43,6 @@ export const CLASS = {
   filterRangeOverlay: 'filter-range-overlay',
   filterRangeStartEditor: 'filter-range-start',
   filterRangeEndEditor: 'filter-range-end',
-  focusOverlay: 'focus-overlay',
   editFormRow: 'edit-form',
   button: 'dx-button',
   formButtonsContainer: 'form-buttons-container',
@@ -56,7 +55,6 @@ export const CLASS = {
 
   headerRow: 'dx-header-row',
   footerRow: 'dx-footer-row',
-  groupFooterRow: 'group-footer',
   freeSpaceRow: 'dx-freespace-row',
 
   overlayContent: 'dx-overlay-content',
@@ -77,7 +75,6 @@ export const CLASS = {
   dialogWrapper: 'dx-dialog-wrapper',
   scrollableContainer: 'dx-scrollable-container',
   scrollContainer: 'dx-datagrid-scroll-container',
-  columnsSeparator: 'dx-datagrid-columns-separator',
   toast: 'dx-toast-wrapper',
   aiPromptEditor: 'dx-ai-prompt-editor',
   aiAssistantChat: 'dx-ai-chat',
@@ -286,10 +283,6 @@ export default class DataGrid extends GridCore {
     return new Editor(this.body.find(`.${this.addWidgetPrefix(CLASS.filterRangeEndEditor)}`));
   }
 
-  getFocusOverlay() {
-    return this.body.find(`.${this.addWidgetPrefix(CLASS.focusOverlay)}`);
-  }
-
   getFilterEditor<T>(
     columnIndex: number,
     EditorType: new (mainElement: Selector) => T,
@@ -299,10 +292,6 @@ export default class DataGrid extends GridCore {
 
   getSearchBox(): TextBox {
     return new TextBox(this.element.find(`.${CLASS.searchBox}`));
-  }
-
-  getColumnsSeparator(): TextBox {
-    return new TextBox(this.element.find(`.${CLASS.columnsSeparator}`));
   }
 
   getLoadPanel(): LoadPanel {
@@ -331,10 +320,6 @@ export default class DataGrid extends GridCore {
 
   getFooterRow(): Selector {
     return this.element.find(`.${CLASS.footerRow}`);
-  }
-
-  getGroupFooterRow(): Selector {
-    return this.element.find(`.${CLASS.dataGrid}-${CLASS.groupFooterRow}`);
   }
 
   getFreeSpaceRow(): Selector {

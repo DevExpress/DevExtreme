@@ -6,6 +6,7 @@ const CLASS = {
   scrollbar: 'dx-scrollbar',
   scroll: 'dx-scrollable-scroll',
   invisible: 'dx-state-invisible',
+  hover: 'dx-state-hover',
 };
 
 export interface ScrollTranslate {
@@ -22,6 +23,10 @@ export default class Scrollbar {
 
   public getScroll(): Locator {
     return this.element.locator(`.${CLASS.scroll}`);
+  }
+
+  public expectHovered(present = true): Promise<void> {
+    return expectClass(this.element, CLASS.hover, present);
   }
 
   public expectScrollVisible(visible: boolean): Promise<void> {

@@ -4,6 +4,7 @@ import GridCore, { CLASS as CLASS_BASE } from '../gridCore';
 import Toolbar from '../toolbar';
 import Popup from '../popup';
 import ContextMenu from '../contextMenu';
+import Scrollbar from '../scrollbar';
 import DataRow from './data/row';
 import DataCell from './data/cell';
 import FilterCell from './filter/cell';
@@ -55,7 +56,10 @@ const CLASS = {
   aiChat: 'dx-ai-chat',
   aiPromptEditor: 'dx-ai-prompt-editor',
   scrollContainer: 'scroll-container',
+  scrollableContainer: 'dx-scrollable-container',
   dragHeader: 'drag-header',
+  columnsSeparator: 'columns-separator',
+  blockSeparator: 'dx-block-separator',
 };
 
 const E2E_ATTRIBUTES = {
@@ -87,6 +91,10 @@ export default abstract class GridBase extends GridCore {
 
   public getRowsView(): Locator {
     return this.ownElement(`.${this.addWidgetPrefix(CLASS.rowsView)}`);
+  }
+
+  public getScrollContainer(): Locator {
+    return this.getRowsView().locator(`.${CLASS.scrollableContainer}`);
   }
 
   public getHeadersScrollContainer(): Locator {
@@ -272,6 +280,15 @@ export default abstract class GridBase extends GridCore {
     );
   }
 
+  public getColumnsSeparator(): Locator {
+    return this.element.locator(`.${this.addWidgetPrefix(CLASS.columnsSeparator)}`);
+  }
+
+  // Shown where a dragged column would go in the group panel.
+  public getBlockSeparator(): Locator {
+    return this.element.locator(`.${CLASS.blockSeparator}`);
+  }
+
   // The header a column drag moves around; the grid renders it in the body.
   public getDraggableHeader(): Locator {
     return this.body.locator(`.${this.addWidgetPrefix(CLASS.dragHeader)}`);
@@ -287,6 +304,14 @@ export default abstract class GridBase extends GridCore {
 
   public getToolbar(): Toolbar {
     return new Toolbar(this.page, this.element.locator(`.${CLASS.toolbar}`));
+  }
+
+  public getScrollbar(direction: 'horizontal' | 'vertical'): Scrollbar {
+    return new Scrollbar(this.getRowsView(), direction);
+  }
+
+  public getScrollBarThumbTrack(scrollbarPosition: 'horizontal' | 'vertical'): Locator {
+    return this.getScrollbar(scrollbarPosition).getScroll();
   }
 
   public getGeneralStatusContainer(): Locator {
@@ -386,6 +411,15 @@ export default abstract class GridBase extends GridCore {
     );
   }
 
+  // With virtual scrolling, the grid delays a resize by "scrolling.updateTimeout" while the rows
+  // keep scrolling.
+  public hasResizeTimeout(): Promise<boolean> {
+    return this.element.evaluate(
+      (element, widgetName) => $(element).data(widgetName).getController('resizing').hasResizeTimeout(),
+      this.getName(),
+    );
+  }
+
   // Some actions make the grid load and render its content again a moment later, such as a header
   // click that sorts.
   public async waitForContentReady(action: () => Promise<unknown>): Promise<void> {
@@ -409,27 +443,39 @@ export default abstract class GridBase extends GridCore {
     await rendered.dispose();
   }
 
-  // The top left corner of the column's header, in the viewport.
-  private getHeaderCorner(columnIndex: number): Promise<{ x: number; y: number }> {
-    return this.element.evaluate((element, { widgetName, index }) => {
+  // The top left (or top right) corner of the column's header, in the viewport.
+  private getHeaderCorner(
+    columnIndex: number,
+    edge: 'left' | 'right' = 'left',
+  ): Promise<{ x: number; y: number }> {
+    return this.element.evaluate((element, { widgetName, index, side }) => {
       const header: HTMLElement = $(element).data(widgetName)
         .getView('columnHeadersView').getHeaderElement(index)[0];
-      const { left, top } = header.getBoundingClientRect();
+      const { left, right, top } = header.getBoundingClientRect();
 
-      return { x: left, y: top };
-    }, { widgetName: this.getName(), index: columnIndex });
+      return { x: side === 'right' ? right : left, y: top };
+    }, { widgetName: this.getName(), index: columnIndex, side: edge });
   }
 
-  // A real pointer drags the left border of the column's header: the grid starts resizing where
-  // the pointer goes down near a border.
-  public async resizeHeader(columnIndex: number, offset: number): Promise<void> {
-    const corner = await this.getHeaderCorner(columnIndex);
+  // A real pointer drags the left (or right) border of the column's header: the grid starts
+  // resizing where the pointer goes down near a border. With "needToTriggerPointerUp" false, the
+  // pointer stays pressed and the resizing goes on.
+  public async resizeHeader(
+    columnIndex: number,
+    offset: number,
+    needToTriggerPointerUp = true,
+    edge: 'left' | 'right' = 'left',
+  ): Promise<void> {
+    const corner = await this.getHeaderCorner(columnIndex, edge);
     const start = { x: corner.x, y: corner.y + 1 };
 
     await this.page.mouse.move(start.x, start.y);
     await this.page.mouse.down();
     await this.page.mouse.move(start.x + offset, start.y);
-    await this.page.mouse.up();
+
+    if (needToTriggerPointerUp) {
+      await this.page.mouse.up();
+    }
   }
 
   // A real pointer moves the header by (x, y) from its top left corner; with "isStart", it is
@@ -474,6 +520,10 @@ export default abstract class GridBase extends GridCore {
 
   public async apiDeleteRow(rowIndex: number): Promise<void> {
     await this.invoke('deleteRow', rowIndex);
+  }
+
+  public async apiExpandRow(key: unknown): Promise<void> {
+    await this.invoke('expandRow', key);
   }
 
   public async apiExpandAdaptiveDetailRow(key: unknown): Promise<void> {

@@ -10,7 +10,6 @@ const CLASS = {
   hiddenColumn: 'hidden-column',
   focused: 'dx-focused',
   selectCheckBox: 'dx-select-checkbox',
-  adaptiveButton: 'dx-datagrid-adaptive-more',
   editButton: 'dx-link-edit',
 };
 
@@ -44,9 +43,5 @@ export default class CommandCell extends FocusableElement {
 
   getSelectCheckBox(): Selector {
     return this.element.find(`.${CLASS.selectCheckBox}`);
-  }
-
-  getAdaptiveButton(): Selector {
-    return this.element.find(`.${CLASS.adaptiveButton}`);
   }
 }
