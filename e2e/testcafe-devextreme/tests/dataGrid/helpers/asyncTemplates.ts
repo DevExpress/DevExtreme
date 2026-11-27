@@ -16,20 +16,3 @@ export const makeRowsViewTemplatesAsync = async (selector: string, timeout = 0):
     dependencies: { selector, timeout },
   })();
 };
-
-export const makeColumnHeadersViewTemplatesAsync = async (selector: string): Promise<void> => {
-  await ClientFunction(() => {
-    const dataGrid = ($(selector) as any).dxDataGrid('instance');
-
-    const columnHeadersView = dataGrid.getView('columnHeadersView');
-    const originRender = columnHeadersView.renderDelayedTemplates.bind(columnHeadersView);
-
-    // eslint-disable-next-line no-underscore-dangle
-    columnHeadersView._templatesCache = {};
-    columnHeadersView.renderDelayedTemplates = (changes) => {
-      setTimeout(() => { originRender(changes); });
-    };
-  }, {
-    dependencies: { selector },
-  })();
-};

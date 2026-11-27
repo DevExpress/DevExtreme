@@ -139,6 +139,10 @@ export default abstract class GridBase extends GridCore {
     return this.ownElement(`.${gridView}:not(.${fixedGridView}) .${CLASS.dataRow}`);
   }
 
+  public getGroupRowSelector(): Locator {
+    return this.element.locator(`.${CLASS.groupRow}`);
+  }
+
   public getGroupRow(index: number): GroupRow {
     const gridView = this.addWidgetPrefix(CLASS.gridView);
     const fixedGridView = this.addWidgetPrefix(CLASS.fixedGridView);
@@ -548,6 +552,18 @@ export default abstract class GridBase extends GridCore {
 
   public async apiCancelEditData(): Promise<void> {
     await this.invoke('cancelEditData');
+  }
+
+  public async apiCollapseAllGroups(): Promise<void> {
+    await this.invoke('option', 'grouping.autoExpandAll', false);
+  }
+
+  public async apiExpandAllGroups(): Promise<void> {
+    await this.invoke('option', 'grouping.autoExpandAll', true);
+  }
+
+  public async apiExpandAll(): Promise<void> {
+    await this.invoke('expandAll');
   }
 
   public async apiBeginCustomLoading(messageText: string): Promise<void> {

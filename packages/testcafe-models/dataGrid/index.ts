@@ -529,45 +529,6 @@ export default class DataGrid extends GridCore {
     )();
   }
 
-  apiExpandAllGroups(): Promise<void> {
-    const { getInstance } = this;
-
-    return ClientFunction(
-      () => (getInstance() as any).option('grouping.autoExpandAll', true),
-      {
-        dependencies: {
-          getInstance,
-        },
-      },
-    )();
-  }
-
-  apiExpandAll(): Promise<void> {
-    const { getInstance } = this;
-
-    return ClientFunction(
-      () => (getInstance() as any).expandAll(),
-      {
-        dependencies: {
-          getInstance,
-        },
-      },
-    )();
-  }
-
-  apiCollapseAllGroups(): Promise<void> {
-    const { getInstance } = this;
-
-    return ClientFunction(
-      () => (getInstance() as DataGridInstance).option('grouping.autoExpandAll', false),
-      {
-        dependencies: {
-          getInstance,
-        },
-      },
-    )();
-  }
-
   apiRefresh(): Promise<void> {
     const { getInstance } = this;
     return ClientFunction(
