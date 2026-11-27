@@ -776,7 +776,7 @@ jobs:
   merge-artifacts:
     runs-on: ubuntu-latest
     timeout-minutes: 6
-    needs: [playwright-jquery, playwright-frameworks-all]
+    needs: [playwright-jquery, playwright-frameworks-all, csp-check-jquery, csp-check-frameworks]
     if: ${{ !cancelled() }}
 
     steps:
@@ -936,24 +936,33 @@ jobs:
     - name: Install dependencies
       run: pnpm install --frozen-lockfile
 
-    - name: Start CSP Server
-      run: node apps/demos/utils/server/csp-server.js 8080 &
+    - name: Set Playwright artifact name
+      run: echo "PLAYWRIGHT_JOB_NAME=csp-jquery-${{ matrix.SHARD_INDEX }}-${{ matrix.SHARD_TOTAL }}" >> $GITHUB_ENV
 
-    - name: Run CSP Check
+    - name: Run Playwright CSP tests
+      timeout-minutes: 10
       working-directory: apps/demos
       env:
-        CSP_FRAMEWORKS: jQuery
-        CHROME_PATH: google-chrome-stable
-        DEMO_SHARD_INDEX: ${{ matrix.SHARD_INDEX }}
-        DEMO_SHARD_TOTAL: ${{ matrix.SHARD_TOTAL }}
-      run: node utils/server/csp-check.js
+        NODE_OPTIONS: --max-old-space-size=8192
+        CONCURRENCY: 4
+        CONSTEL: jquery(${{ matrix.SHARD_INDEX }}/${{ matrix.SHARD_TOTAL }})
+        PLAYWRIGHT_BLOB_OUTPUT_NAME: report-${{ env.PLAYWRIGHT_JOB_NAME }}.zip
+      run: pnpm run csp-check
 
-    - name: Upload CSP report
+    - name: Upload Playwright blob report
+      if: failure()
+      uses: actions/upload-artifact@v7
+      with:
+        name: playwright-blob-${{ env.PLAYWRIGHT_JOB_NAME }}
+        path: ${{ github.workspace }}/apps/demos/testing/artifacts/playwright/blob-report
+        if-no-files-found: ignore
+
+    - name: Upload Playwright traces
       if: always()
       uses: actions/upload-artifact@v7
       with:
-        name: csp-violations-jquery-shard${{ matrix.SHARD_INDEX }}
-        path: apps/demos/csp-reports/
+        name: playwright-traces-${{ env.PLAYWRIGHT_JOB_NAME }}
+        path: ${{ github.workspace }}/apps/demos/testing/artifacts/playwright/test-results
         if-no-files-found: ignore
 
   csp-check-frameworks:
@@ -1043,93 +1052,31 @@ jobs:
         rm -rf apps/demos/.demo-bundles
         echo "Unpacked $(find apps/demos/Demos -name 'bundle.js' | wc -l) demo bundle(s)"
 
-    - name: Start CSP Server
-      run: node apps/demos/utils/server/csp-server.js 8080 &
+    - name: Set Playwright artifact name
+      run: echo "PLAYWRIGHT_JOB_NAME=csp-${{ matrix.FRAMEWORK }}-${{ matrix.SHARD_INDEX }}-${{ matrix.SHARD_TOTAL }}" >> $GITHUB_ENV
 
-    - name: Run CSP Check
+    - name: Run Playwright CSP tests
+      timeout-minutes: 10
       working-directory: apps/demos
       env:
-        CSP_FRAMEWORKS: ${{ matrix.FRAMEWORK }}
-        CHROME_PATH: google-chrome-stable
-        DEMO_SHARD_INDEX: ${{ matrix.SHARD_INDEX }}
-        DEMO_SHARD_TOTAL: ${{ matrix.SHARD_TOTAL }}
-      run: node utils/server/csp-check.js
+        NODE_OPTIONS: --max-old-space-size=8192
+        CONCURRENCY: 4
+        CONSTEL: ${{ matrix.FRAMEWORK }}(${{ matrix.SHARD_INDEX }}/${{ matrix.SHARD_TOTAL }})
+        PLAYWRIGHT_BLOB_OUTPUT_NAME: report-${{ env.PLAYWRIGHT_JOB_NAME }}.zip
+      run: pnpm run csp-check
 
-    - name: Upload CSP report
+    - name: Upload Playwright blob report
+      if: failure()
+      uses: actions/upload-artifact@v7
+      with:
+        name: playwright-blob-${{ env.PLAYWRIGHT_JOB_NAME }}
+        path: ${{ github.workspace }}/apps/demos/testing/artifacts/playwright/blob-report
+        if-no-files-found: ignore
+
+    - name: Upload Playwright traces
       if: always()
       uses: actions/upload-artifact@v7
       with:
-        name: csp-violations-${{ matrix.FRAMEWORK }}${{ matrix.SHARD_TOTAL != 1 && format('-shard{0}', matrix.SHARD_INDEX) || '' }}
-        path: apps/demos/csp-reports/
+        name: playwright-traces-${{ env.PLAYWRIGHT_JOB_NAME }}
+        path: ${{ github.workspace }}/apps/demos/testing/artifacts/playwright/test-results
         if-no-files-found: ignore
-
-  csp-report-summary:
-    name: CSP Violations Summary
-    runs-on: ubuntu-latest
-    needs: [check-should-run, csp-check-jquery, csp-check-frameworks]
-    if: ${{ !cancelled() && needs.check-should-run.outputs.should-run == 'true' }}
-    timeout-minutes: 6
-
-    steps:
-      - name: Get sources
-        uses: actions/checkout@v6
-
-      - name: Use Node.js
-        uses: actions/setup-node@v7
-        with:
-          node-version-file: '.node-version'
-
-      - name: Download all CSP reports
-        uses: actions/download-artifact@v8
-        with:
-          pattern: csp-violations-*
-          path: csp-reports-all
-          merge-multiple: true
-        continue-on-error: true
-
-      - name: Summarize CSP violations
-        run: |
-          mkdir -p apps/demos/csp-reports
-
-          echo "## CSP Violations Report" >> $GITHUB_STEP_SUMMARY
-          echo '' >> $GITHUB_STEP_SUMMARY
-
-          GRAND_TOTAL=0
-          for report in csp-reports-all/csp-violations-*.jsonl; do
-            [ -f "$report" ] || continue
-            FRAMEWORK=$(basename "$report" | sed 's/csp-violations-//;s/\.jsonl//')
-            cp "$report" "apps/demos/csp-reports/"
-
-            if [ -s "$report" ]; then
-              COUNT=$(wc -l < "$report" | tr -d ' ')
-              GRAND_TOTAL=$((GRAND_TOTAL + COUNT))
-              echo "### ⚠️ ${FRAMEWORK}: ${COUNT} violation(s)" >> $GITHUB_STEP_SUMMARY
-              echo '' >> $GITHUB_STEP_SUMMARY
-              echo '<details>' >> $GITHUB_STEP_SUMMARY
-              echo '<summary>Show detailed report</summary>' >> $GITHUB_STEP_SUMMARY
-              echo '' >> $GITHUB_STEP_SUMMARY
-              echo '```' >> $GITHUB_STEP_SUMMARY
-              CSP_REPORT_FILE="$report" node apps/demos/utils/server/csp-report-summary.js >> $GITHUB_STEP_SUMMARY
-              echo '```' >> $GITHUB_STEP_SUMMARY
-              echo '' >> $GITHUB_STEP_SUMMARY
-              echo '</details>' >> $GITHUB_STEP_SUMMARY
-              echo '' >> $GITHUB_STEP_SUMMARY
-            else
-              echo "### ✅ ${FRAMEWORK}: No violations" >> $GITHUB_STEP_SUMMARY
-              echo '' >> $GITHUB_STEP_SUMMARY
-            fi
-          done
-
-          if [ "$GRAND_TOTAL" -eq 0 ]; then
-            echo "✅ No CSP violations detected across all frameworks."
-          else
-            echo "⚠️  Total: $GRAND_TOTAL CSP violation(s)"
-          fi
-
-      - name: Upload merged CSP reports
-        if: always()
-        uses: actions/upload-artifact@v7
-        with:
-          name: csp-violations-report
-          path: apps/demos/csp-reports/
-          if-no-files-found: ignore

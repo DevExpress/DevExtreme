@@ -1,7 +1,7 @@
 import { defineConfig } from '@playwright/test';
 import { isMaterial } from './utils/visual-tests/helpers/theme-utils';
 import {
-  BASE_URL, SERVER_PORT, THEME, VIEWPORT,
+  BASE_URL, CSP, SERVER_PORT, THEME, VIEWPORT,
 } from './utils/visual-tests/playwright/const';
 
 // Dates are shown and mock data is built in the time zone of the machine, so it is pinned to the
@@ -43,7 +43,7 @@ if (!isMaterial(THEME)) {
 
 export default defineConfig({
   testDir: './testing',
-  testMatch: ['common.spec.ts', 'widgets/**/*.spec.ts'],
+  testMatch: CSP ? 'csp.spec.ts' : ['common.spec.ts', 'widgets/**/*.spec.ts'],
   // The etalons lie next to the test: testing/etalons for the demo pages, testing/widgets/<widget>/etalons for the widget tests.
   snapshotPathTemplate: '{testDir}/{testFileDir}/etalons/{arg}{ext}',
   outputDir: './testing/artifacts/playwright/test-results',
@@ -74,7 +74,7 @@ export default defineConfig({
     screenshot: 'only-on-failure',
   },
   webServer: {
-    command: `node ./utils/visual-tests/playwright/serve.js ${SERVER_PORT}`,
+    command: `node ./utils/visual-tests/playwright/serve.js ${SERVER_PORT}${CSP ? ' --csp' : ''}`,
     url: `${BASE_URL}/apps/demos/index.html`,
     reuseExistingServer: !process.env.CI,
     timeout: 30000,

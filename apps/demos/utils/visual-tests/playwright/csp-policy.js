@@ -1,18 +1,5 @@
-/* eslint-disable import/no-extraneous-dependencies */
-
-const crypto = require('crypto');
-const express = require('express');
-const { join, resolve } = require('path');
-const { readFileSync } = require('fs');
-const RateLimit = require('express-rate-limit');
-
-const root = join(__dirname, '..', '..', '..', '..');
-const indexFileName = 'index.html';
-const port = process.argv[2] ?? 8080;
-const host = process.env.CSP_SERVER_HOST || '127.0.0.1';
-
-const cspViolations = [];
-let cspViolationIdCounter = 0;
+// The Content Security Policy of the demo pages: a strict base and what each demo, widget or
+// framework needs on top of it. The CSP run (pnpm run csp-check) serves the pages with it.
 
 const CSP_BASE_DIRECTIVES = {
   'default-src': ["'none'"],
@@ -200,7 +187,7 @@ const CSP_DEMO_ALLOWLIST = {
   },
 };
 
-// Framework-specific overrides (e.g. Font Awesome loaded only in React/Vue demos)
+// Overrides for one framework: what its demos load or run that the demos of the other frameworks do not.
 const CSP_FRAMEWORK_ALLOWLIST = {
   jQuery: {
     'Map/OpenStreetMapProvider': {
@@ -297,10 +284,6 @@ const CSP_FRAMEWORK_ALLOWLIST = {
   },
 };
 
-function generateNonce() {
-  return crypto.randomBytes(16).toString('base64');
-}
-
 function buildCspHeader(demoKey, nonce, framework) {
   const directives = {};
   for (const [key, values] of Object.entries(CSP_BASE_DIRECTIVES)) {
@@ -349,114 +332,4 @@ function parseDemoPath(url) {
   };
 }
 
-function cspMiddleware(req, res, next) {
-  const { demoKey, framework } = parseDemoPath(req.path);
-
-  // Only Angular injects inline component <style> elements needing a nonce.
-  const nonce = framework === 'Angular' ? generateNonce() : null;
-  if (nonce) {
-    res.locals.cspNonce = nonce;
-  }
-
-  res.setHeader('Content-Security-Policy-Report-Only', buildCspHeader(demoKey, nonce, framework));
-  next();
-}
-
-function cspReportHandler(req, res) {
-  let body = '';
-  req.on('data', (chunk) => { body += chunk.toString(); });
-  req.on('end', () => {
-    try {
-      const report = JSON.parse(body);
-      const violation = report['csp-report'] || report;
-      cspViolationIdCounter += 1;
-      cspViolations.push({
-        id: cspViolationIdCounter,
-        timestamp: new Date().toISOString(),
-        documentUri: violation['document-uri'],
-        blockedUri: violation['blocked-uri'],
-        violatedDirective: violation['violated-directive'],
-        effectiveDirective: violation['effective-directive'],
-        originalPolicy: violation['original-policy'],
-        sourceFile: violation['source-file'],
-        lineNumber: violation['line-number'],
-        columnNumber: violation['column-number'],
-        statusCode: violation['status-code'],
-      });
-    } catch (e) {
-      console.error('Failed to parse CSP report:', e.message);
-    }
-    res.status(204).end();
-  });
-}
-
-function cspViolationsHandler(req, res) {
-  const since = parseInt(req.query.since, 10) || 0;
-  const filtered = cspViolations.filter((v) => v.id > since);
-  res.json({
-    violations: filtered,
-    lastId: cspViolationIdCounter,
-    total: cspViolations.length,
-  });
-}
-
-function cspViolationsClearHandler(_req, res) {
-  cspViolations.length = 0;
-  cspViolationIdCounter = 0;
-  res.status(204).end();
-}
-
-const demosBaseDir = resolve(root, 'apps', 'demos', 'Demos');
-
-const demoIndexHandler = (request, response) => {
-  const { widget, name, approach } = request.params;
-  const fileSystemPath = resolve(demosBaseDir, widget, name, approach, indexFileName);
-
-  if (!fileSystemPath.startsWith(demosBaseDir)) {
-    response.status(403).send('Forbidden');
-    return;
-  }
-  let fileContent;
-  try {
-    fileContent = readFileSync(fileSystemPath).toString();
-  } catch {
-    response.status(404).send('Not Found');
-    return;
-  }
-
-  // Stamps ngCspNonce on <demo-app> so injected component <style> carries the nonce.
-  const { cspNonce } = response.locals;
-  if (cspNonce && approach === 'Angular') {
-    fileContent = fileContent.replace(/<demo-app(?=[\s>])/, `<demo-app ngCspNonce="${cspNonce}"`);
-  }
-
-  response.set('Content-Type', 'text/html');
-  response.send(fileContent);
-};
-
-const app = express();
-app.use(cspMiddleware);
-
-const demoIndexLimiter = RateLimit({
-  windowMs: 15 * 60 * 1000,
-  max: 10000,
-});
-
-app.post('/csp-report', cspReportHandler);
-app.get('/csp-violations', cspViolationsHandler);
-app.delete('/csp-violations', cspViolationsClearHandler);
-
-app.get('/apps/demos/Demos/:widget/:name/:approach', demoIndexLimiter, demoIndexHandler);
-app.get(`/apps/demos/Demos/:widget/:name/:approach/${indexFileName}`, demoIndexLimiter, demoIndexHandler);
-
-app.use(express.static(root, { index: [indexFileName] }));
-
-const server = app.listen(port, host, () => {
-  console.log(`CSP Demo server listening on http://${host}:${port}`);
-  console.log('CSP report-only mode enabled');
-  console.log('  Report endpoint: POST /csp-report');
-  console.log('  View violations: GET /csp-violations');
-  console.log('  Clear violations: DELETE /csp-violations');
-});
-
-module.exports = { app, server };
+module.exports = { buildCspHeader, parseDemoPath };
