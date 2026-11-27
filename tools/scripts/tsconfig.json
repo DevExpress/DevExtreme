@@ -2,5 +2,10 @@
   "extends": "../tsconfig.base.json",
   "compilerOptions": {
     "types": ["node", "jest"]
+  },
+  "ts-node": {
+    "moduleTypes": {
+      "../../packages/devextreme-scss/tools/icons/font-version.ts": "cjs"
+    }
   }
 }

@@ -85,7 +85,7 @@ describe('Icon fonts metadata', () => {
       expect(detectContainer(readFont(fileName, format))).toBe(CONTAINERS[format]);
     });
 
-    test.skip.each(FORMATS)('%s carries exactly the DevExtreme name records', (format) => {
+    test.each(FORMATS)('%s carries exactly the DevExtreme name records', (format) => {
       const names = readNames(readFont(fileName, format));
       const records = Object.fromEntries(Object.entries(NAME_RECORDS)
         .map(([field, nameId]) => [field, names.get(nameId)]));
@@ -140,7 +140,7 @@ describe('Icon fonts metadata', () => {
       }).toEqual({ metadata: 0, privateData: 0 });
     });
 
-    test.skip.each(WEB_FORMATS)('%s header has the release version', (format) => {
+    test.each(WEB_FORMATS)('%s header has the release version', (format) => {
       const font = readFont(fileName, format);
       const { majorVersionOffset, minorVersionOffset } = WEB_HEADER_OFFSETS[format];
       const major = font.readUInt16BE(majorVersionOffset);
@@ -149,7 +149,7 @@ describe('Icon fonts metadata', () => {
       expect(`${major}.${minor}`).toBe(VERSION);
     });
 
-    test.skip.each(FORMATS)('%s has the release revision', (format) => {
+    test.each(FORMATS)('%s has the release revision', (format) => {
       expect(readFontRevision(readFont(fileName, format))).toBe(EXPECTED.fontRevision);
     });
 
