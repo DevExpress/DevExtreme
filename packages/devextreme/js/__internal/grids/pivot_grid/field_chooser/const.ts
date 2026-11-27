@@ -1,9 +1,8 @@
-import type { Field } from '@js/ui/pivot_grid/data_source';
 import type { DataKey } from '@ts/core/element_data';
 
-export type FieldChooserField = Field & { index: number };
+import type { PivotGridPreparedField } from '../types';
 
-export const FIELD_DATA_KEY: DataKey<FieldChooserField> = 'field';
+export const FIELD_DATA_KEY: DataKey<PivotGridPreparedField> = 'field';
 
 export const ATTRIBUTES = {
   treeViewItem: 'tree-view-item',

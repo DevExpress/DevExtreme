@@ -9,8 +9,8 @@ import type { PivotGridArea } from '@js/ui/pivot_grid/data_source';
 import Popup from '@js/ui/popup/ui.popup';
 import { capitalize } from '@ts/core/utils/capitalize';
 import { CLASSES as COLUMN_STATE_MIXIN_CLASSES } from '@ts/grids/grid_core/column_state_mixin/const';
-import type { FieldChooserField } from '@ts/grids/pivot_grid/field_chooser/const';
 import { CLASSES as FIELD_CHOOSER_CLASSES } from '@ts/grids/pivot_grid/field_chooser/const';
+import type { PivotGridPreparedField } from '@ts/grids/pivot_grid/types';
 import { BUTTON_CLASS } from '@ts/ui/button/button';
 import type { PopupProperties } from '@ts/ui/popup/popup';
 
@@ -145,7 +145,10 @@ class FieldsArea extends AreaItem {
   }
 
   // @ts-expect-error the fields area renders fields, not cells
-  protected _renderTableContent(tableElement: dxElementWrapper, data: FieldChooserField[]): void {
+  protected _renderTableContent(
+    tableElement: dxElementWrapper,
+    data: PivotGridPreparedField[],
+  ): void {
     const groupElement = this.groupElement();
     const isVisible = this.isVisible();
     const fieldChooserBase = this.getFieldChooserBase();
