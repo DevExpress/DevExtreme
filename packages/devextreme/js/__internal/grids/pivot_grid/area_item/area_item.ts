@@ -739,7 +739,7 @@ abstract class AreaItem {
     }
   }
 
-  public render(rootElement: dxElementWrapper, data: AreaItemCell[][]): void {
+  public render(rootElement: dxElementWrapper | undefined, data: AreaItemCell[][]): void {
     if (this._tableElement) {
       try {
         this._tableElement.get(0).innerHTML = '';
@@ -752,7 +752,9 @@ abstract class AreaItem {
       this._tableElement = this._createTableElement();
 
       this._tableElement.appendTo(this._groupElement);
-      this._groupElement.appendTo(rootElement);
+      if (rootElement) {
+        this._groupElement.appendTo(rootElement);
+      }
       this._rootElement = rootElement;
     }
 

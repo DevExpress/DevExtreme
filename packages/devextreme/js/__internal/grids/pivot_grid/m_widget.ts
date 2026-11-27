@@ -2,13 +2,14 @@ import { name as clickEventName } from '@js/common/core/events/click';
 import { addNamespace } from '@js/common/core/events/utils/index';
 import localizationMessage from '@js/common/core/localization/message';
 import registerComponent from '@js/core/component_registrator';
+import type { DxElement } from '@js/core/element';
 import { getPublicElement } from '@js/core/element';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { deferRender, deferUpdate, noop } from '@js/core/utils/common';
+import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred, when } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
-import { each } from '@js/core/utils/iterator';
 import {
   getHeight, getOuterHeight,
   getWidth, setHeight,
@@ -16,36 +17,66 @@ import {
 import { format as formatString } from '@js/core/utils/string';
 import { isDefined } from '@js/core/utils/type';
 import { getWindow, hasWindow } from '@js/core/utils/window';
+import type { DxEvent } from '@js/events';
 import type { ButtonStyle, Properties } from '@js/ui/button';
 import Button from '@js/ui/button';
-import ContextMenu from '@js/ui/context_menu';
-import type { Properties as PivotGridProperties } from '@js/ui/pivot_grid';
-import type { ToolbarItem } from '@js/ui/popup';
+import type { PositioningEvent } from '@js/ui/context_menu';
+import type dxLoadPanel from '@js/ui/load_panel';
+import type { Properties as LoadPanelProperties } from '@js/ui/load_panel';
+import type { Properties as PopupProperties, ToolbarItem } from '@js/ui/popup';
 import Popup from '@js/ui/popup/ui.popup';
 import { restoreFocus, saveFocusedElementInfo } from '@js/ui/shared/accessibility';
 import { current, isGeneric } from '@js/ui/themes';
 import { getData } from '@ts/core/element_data';
+import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
 import eventsEngine from '@ts/events/core/events_engine';
 import gridCoreUtils from '@ts/grids/grid_core/utils';
+import ContextMenu from '@ts/ui/context_menu/context_menu';
 
+import type { AreaItem } from './area_item/area_item';
+import type {
+  AreaItemCell,
+  AreaItemScrollEvent,
+  AreaName,
+} from './area_item/types';
 import { ChartIntegrationMixin } from './chart_integration/chart_integration';
+import type { DataArea } from './data_area/data_area';
 import DataAreaImport from './data_area/data_area';
+import type { DataController } from './data_controller/data_controller';
 import DataControllerImport from './data_controller/data_controller';
+import type { DataControllerOptions } from './data_controller/types';
+import type { PivotGridDataSource } from './data_source/data_source';
+import type { DataSourceHeaderArea } from './data_source/types';
 import { ExportMixin } from './export/export';
+import type { ExportPivotGrid } from './export/types';
 import { FIELD_DATA_KEY } from './field_chooser/const';
 import { FieldChooserBase } from './field_chooser/field_chooser_base';
 import { FieldChooser } from './field_chooser/m_field_chooser';
 import { FieldsArea } from './fields_area/fields_area';
+import type { HorizontalHeadersArea, VerticalHeadersArea } from './headers_area/headers_area';
 import HeadersArea from './headers_area/headers_area';
 import { FAKE_TABLE_CLASS, HORIZONTAL_HEADERS_AREA_CLASS, VERTICAL_HEADERS_AREA_CLASS } from './keyboard_navigation/const';
 import { RovingTabIndex } from './keyboard_navigation/roving_tab_index';
 import type { CellNavigationDirection } from './keyboard_navigation/table_cell_navigation';
 import { getAdjacentCell } from './keyboard_navigation/table_cell_navigation';
+import type {
+  PivotGridCellEvent,
+  PivotGridCellEventArgs,
+  PivotGridContextMenuItem,
+  PivotGridEventArgs,
+  PivotGridEventArgsBase,
+  PivotGridField,
+  PivotGridFieldEventArgs,
+  PivotGridLayout,
+  PivotGridProperties,
+  PivotGridRenderedAreas,
+} from './types';
 import { findField, mergeArraysByMaxValue, setFieldProperty } from './widget_utils';
 
 type FieldChooserOptions = NonNullable<PivotGridProperties['fieldChooser']>;
 type FieldPanelOptions = NonNullable<PivotGridProperties['fieldPanel']>;
+type ScrollingOptions = NonNullable<PivotGridProperties['scrolling']>;
 
 const window = getWindow();
 
@@ -78,17 +109,17 @@ const ARROW_KEY_DIRECTIONS: Record<string, CellNavigationDirection> = {
   ArrowRight: 'right',
 };
 
-function getArraySum(array) {
+function getArraySum(array: number[]): number {
   let sum = 0;
 
-  each(array, (_, value) => {
+  array.forEach((value) => {
     sum += value || 0;
   });
 
   return sum;
 }
 
-function adjustSizeArray(sizeArray, space) {
+function adjustSizeArray(sizeArray: number[], space: number): void {
   const delta = space / sizeArray.length;
 
   for (let i = 0; i < sizeArray.length; i += 1) {
@@ -96,23 +127,28 @@ function adjustSizeArray(sizeArray, space) {
   }
 }
 
-function unsubscribeScrollEvents(area) {
+function unsubscribeScrollEvents(area: AreaItem): void {
   area.off('scroll')
     .off('stop');
 }
 
-function subscribeToScrollEvent(area, handler) {
+function subscribeToScrollEvent(
+  area: AreaItem,
+  handler: (e: AreaItemScrollEvent) => void,
+): void {
   unsubscribeScrollEvents(area);
 
   area.on('scroll', handler)
     .on('stop', handler);
 }
 
-function getCommonBorderWidth(elements, direction) {
-  const borderStyleNames = direction === 'width' ? ['borderLeftWidth', 'borderRightWidth'] : ['borderTopWidth', 'borderBottomWidth'];
+function getCommonBorderWidth(elements: dxElementWrapper[], direction: 'width' | 'height'): number {
+  const borderStyleNames = direction === 'width'
+    ? ['borderLeftWidth', 'borderRightWidth'] as const
+    : ['borderTopWidth', 'borderBottomWidth'] as const;
   let width = 0;
 
-  each(elements, (_, elem) => {
+  elements.forEach((elem) => {
     const computedStyle = window.getComputedStyle(elem.get(0));
     borderStyleNames.forEach((borderStyleName) => {
       width += parseFloat(computedStyle[borderStyleName]) || 0;
@@ -122,80 +158,101 @@ function getCommonBorderWidth(elements, direction) {
   return width;
 }
 
-function clickedOnFieldsArea($targetElement) {
+function getPopupFieldChooser(
+  popup: { content: () => DxElement } | undefined,
+): FieldChooser | undefined {
+  return popup && FieldChooser.getInstance<FieldChooser | undefined>(popup.content());
+}
+
+function renderFieldsArea(
+  fieldsArea: FieldsArea,
+  container: dxElementWrapper | undefined,
+  fields: PivotGridField[],
+): void {
+  // @ts-expect-error the fields area renders fields, not cells
+  fieldsArea.render(container, fields);
+}
+
+function getToolbarContainer(
+  fieldPanel: FieldPanelOptions,
+  $filterHeader: dxElementWrapper,
+  $columnHeader: dxElementWrapper,
+  $descriptionCell: dxElementWrapper,
+): dxElementWrapper {
+  if (fieldPanel.visible && fieldPanel.showFilterFields) {
+    return $filterHeader;
+  }
+  if (fieldPanel.visible && (fieldPanel.showDataFields || fieldPanel.showColumnFields)) {
+    return $columnHeader;
+  }
+  return $descriptionCell;
+}
+
+function clickedOnFieldsArea($targetElement: dxElementWrapper): number {
   return $targetElement.closest(`.${FIELDS_CLASS}`).length || $targetElement.find(`.${FIELDS_CLASS}`).length;
 }
 
-type CellEventArgs = ReturnType<PivotGrid['_createCellArgs']> & { cancel?: boolean };
+const isCellEventArgs = (args: PivotGridEventArgs): args is PivotGridCellEventArgs => 'cell' in args;
 
-const isCellEventArgs = (
-  args: ReturnType<PivotGrid['_createEventArgs']>,
-): args is ReturnType<PivotGrid['_createEventArgs']> & CellEventArgs => 'cell' in args;
+class PivotGrid extends Widget<PivotGridProperties> {
+  public _dataController!: DataController;
 
-class PivotGrid extends Widget {
-  _dataController: any;
+  protected _columnsAreaNavigation: RovingTabIndex | undefined;
 
-  _columnsAreaNavigation: RovingTabIndex | undefined;
+  protected _rowsAreaNavigation: RovingTabIndex | undefined;
 
-  _rowsAreaNavigation: RovingTabIndex | undefined;
+  protected _contextMenuOwnerNavigation: RovingTabIndex | undefined;
 
-  _contextMenuOwnerNavigation: RovingTabIndex | undefined;
+  public _scrollLeft?: number | null;
 
-  _scrollLeft: any;
+  protected _scrollTop?: number | null;
 
-  _scrollTop: any;
+  protected _actions!: Record<string, (event?: unknown) => void>;
 
-  _actions: any;
+  protected _hideLoadingTimeoutID?: ReturnType<typeof setTimeout>;
 
-  _hideLoadingTimeoutID: any;
+  protected _hasHeight?: boolean | null;
 
-  _hasHeight: any;
+  protected _scrollUpdating?: boolean;
 
-  _scrollUpdating: any;
+  protected _pivotGridContainer?: dxElementWrapper;
 
-  _pivotGridContainer: any;
+  protected _contextMenu?: ContextMenu;
 
-  _contextMenu: any;
+  public _loadPanel?: dxLoadPanel | null;
 
-  _loadPanel: any;
+  protected _startLoadingTime?: Date;
 
-  _startLoadingTime: any;
+  public _dataArea?: DataArea;
 
-  _dataArea: any;
+  public _fieldChooserPopup?: Popup;
 
-  _fieldChooserPopup: any;
+  protected _fieldChooserBase?: FieldChooserBase;
 
-  _fieldChooser: any;
+  public _columnsArea?: HorizontalHeadersArea;
 
-  _fieldChooserBase: any;
+  public _rowsArea?: VerticalHeadersArea;
 
-  _columnsArea: any;
+  public _rowFields?: FieldsArea;
 
-  _rowsArea: any;
+  protected _columnFields?: FieldsArea;
 
-  _rowFields: any;
+  protected _filterFields?: FieldsArea;
 
-  _columnFields: any;
+  protected _dataFields?: FieldsArea;
 
-  _filterFields: any;
+  public _testResultWidths?: number[];
 
-  _dataFields: any;
+  public _testResultHeights?: number[];
 
-  _testResultWidths: any;
+  protected __scrollBarUseNative?: boolean;
 
-  _testResultHeights: any;
+  public __scrollBarWidth?: number;
 
-  showFilterFields: any;
+  public $fieldChooserButton?: dxElementWrapper;
 
-  __scrollBarUseNative: any;
-
-  __scrollBarWidth: any;
-
-  _createActionByOption: any;
-
-  $fieldChooserButton?: dxElementWrapper;
-
-  _getDefaultOptions() {
+  public _getDefaultOptions(): PivotGridProperties {
+    // @ts-expect-error the defaults hold text formatters and nulls the public options don't allow
     return extend(super._getDefaultOptions(), {
 
       scrolling: {
@@ -317,7 +374,7 @@ class PivotGrid extends Widget {
     });
   }
 
-  _setDeprecatedOptions(): void {
+  public _setDeprecatedOptions(): void {
     super._setDeprecatedOptions();
     this._deprecatedOptions = {
       ...this._deprecatedOptions,
@@ -325,112 +382,106 @@ class PivotGrid extends Widget {
     };
   }
 
-  _updateCalculatedOptions(fields) {
-    const that = this;
-    each(fields, (_, field) => {
-      each(FIELD_CALCULATED_OPTIONS, (_, optionName) => {
+  protected _updateCalculatedOptions(fields: PivotGridField[]): void {
+    fields.forEach((field) => {
+      FIELD_CALCULATED_OPTIONS.forEach((optionName) => {
         const isCalculated = field._initProperties
           && (optionName in field._initProperties)
           && (field._initProperties[optionName] === undefined);
         const needUpdate = field[optionName] === undefined || isCalculated;
         if (needUpdate) {
-          setFieldProperty(field, optionName, that.option(optionName));
+          setFieldProperty(field, optionName, this.option(optionName));
         }
       });
     });
   }
 
-  _getDataControllerOptions() {
-    const that = this;
+  protected _getDataControllerOptions(): DataControllerOptions {
     return {
-      component: that,
-      dataSource: that.option('dataSource'),
-      texts: that.option('texts'),
-      showRowTotals: that.option('showRowTotals'),
-      showRowGrandTotals: that.option('showRowGrandTotals'),
-      showColumnTotals: that.option('showColumnTotals'),
-      showTotalsPrior: that.option('showTotalsPrior'),
-      showColumnGrandTotals: that.option('showColumnGrandTotals'),
-      dataFieldArea: that.option('dataFieldArea'),
-      rowHeaderLayout: that.option('rowHeaderLayout'),
-      hideEmptySummaryCells: that.option('hideEmptySummaryCells'),
+      component: this,
+      // @ts-expect-error the data controller also takes arrays and null, its options type doesn't
+      dataSource: this.option('dataSource'),
+      texts: this.option('texts'),
+      showRowTotals: this.option('showRowTotals'),
+      showRowGrandTotals: this.option('showRowGrandTotals'),
+      showColumnTotals: this.option('showColumnTotals'),
+      showTotalsPrior: this.option('showTotalsPrior'),
+      showColumnGrandTotals: this.option('showColumnGrandTotals'),
+      dataFieldArea: this.option('dataFieldArea'),
+      rowHeaderLayout: this.option('rowHeaderLayout'),
+      hideEmptySummaryCells: this.option('hideEmptySummaryCells'),
 
-      onFieldsPrepared(fields) {
-        that._updateCalculatedOptions(fields);
+      onFieldsPrepared: (fields): void => {
+        this._updateCalculatedOptions(fields);
       },
     };
   }
 
-  _initDataController() {
-    const that = this;
-    that._dataController && that._dataController.dispose();
+  protected _initDataController(): void {
+    if (this._dataController) {
+      this._dataController.dispose();
+    }
 
-    that._dataController = new DataControllerImport
-      // @ts-expect-error the widget's options aren't typed yet
-      .DataController(that._getDataControllerOptions());
+    this._dataController = new DataControllerImport.DataController(
+      this._getDataControllerOptions(),
+    );
 
     if (hasWindow()) {
-      that._dataController.changed.add(() => {
-        that._render();
+      this._dataController.changed.add(() => {
+        this._render();
       });
     }
 
-    that._dataController.scrollChanged.add((options) => {
-      that._scrollLeft = options.left;
-      that._scrollTop = options.top;
+    this._dataController.scrollChanged.add((options) => {
+      this._scrollLeft = options.left;
+      this._scrollTop = options.top;
     });
 
-    that._dataController.loadingChanged.add(() => {
-      // @ts-expect-error ts-error
-      that._updateLoading();
+    this._dataController.loadingChanged.add(() => {
+      this._updateLoading();
     });
 
-    that._dataController.progressChanged.add(that._updateLoading.bind(that));
+    this._dataController.progressChanged.add(this._updateLoading.bind(this));
 
-    that._dataController.dataSourceChanged.add(() => {
-      that._trigger('onChanged', undefined);
+    this._dataController.dataSourceChanged.add(() => {
+      this._trigger('onChanged', undefined);
     });
 
-    const expandValueChanging = that.option('onExpandValueChanging');
+    const expandValueChanging = this.option('onExpandValueChanging');
 
     if (expandValueChanging) {
-      that._dataController.expandValueChanging.add((e) => {
-        // @ts-expect-error ts-error
+      this._dataController.expandValueChanging.add((e) => {
         expandValueChanging(e);
       });
     }
   }
 
-  _init() {
-    const that = this;
-
+  public _init(): void {
     super._init();
-    that._initDataController();
+    this._initDataController();
 
     gridCoreUtils.logHeaderFilterDeprecatedWarningIfNeed(this);
 
-    that._scrollLeft = that._scrollTop = null;
-    that._initActions();
+    this._scrollLeft = null;
+    this._scrollTop = null;
+    this._initActions();
   }
 
-  _initActions() {
-    const that = this;
-    that._actions = {
-      onChanged: that._createActionByOption('onChanged'),
-      onContextMenuPreparing: that._createActionByOption('onContextMenuPreparing'),
-      onCellClick: that._createActionByOption('onCellClick'),
-      onExporting: that._createActionByOption('onExporting'),
-      onCellPrepared: that._createActionByOption('onCellPrepared'),
+  protected _initActions(): void {
+    this._actions = {
+      onChanged: this._createActionByOption('onChanged'),
+      onContextMenuPreparing: this._createActionByOption('onContextMenuPreparing'),
+      onCellClick: this._createActionByOption('onCellClick'),
+      onExporting: this._createActionByOption('onExporting'),
+      onCellPrepared: this._createActionByOption('onCellPrepared'),
     };
   }
 
-  _trigger(eventName, eventArg) {
+  public _trigger(eventName: string, eventArg: unknown): void {
     this._actions[eventName](eventArg);
   }
 
-  _optionChanged(args) {
-    const that = this;
-
+  public _optionChanged(args: OptionChanged<PivotGridProperties>): void {
     if (FIELD_CALCULATED_OPTIONS.includes(args.name)) {
       const fields = this.getDataSource().fields();
       this._updateCalculatedOptions(fields);
@@ -444,10 +495,11 @@ class PivotGrid extends Widget {
       case 'allowSortingBySummary':
       case 'scrolling':
       case 'stateStoring':
-        that._initDataController();
-        that.getFieldChooserPopup().hide();
-        that._renderFieldChooser();
-        that._invalidate();
+        this._initDataController();
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises -- fire-and-forget
+        this.getFieldChooserPopup()?.hide();
+        this._renderFieldChooser();
+        this._invalidate();
         break;
       case 'texts':
       case 'showTotalsPrior':
@@ -457,7 +509,7 @@ class PivotGrid extends Widget {
       case 'showColumnGrandTotals':
       case 'hideEmptySummaryCells':
       case 'dataFieldArea':
-        that._dataController.updateViewOptions(that._getDataControllerOptions());
+        this._dataController.updateViewOptions(this._getDataControllerOptions());
         break;
       case 'useNativeScrolling':
       case 'encodeHtml':
@@ -465,13 +517,15 @@ class PivotGrid extends Widget {
         break;
       case 'rtlEnabled':
         super._optionChanged(args);
-        that._renderFieldChooser();
-        that._renderContextMenu();
-        hasWindow() && that._renderLoadPanel(that._dataArea.groupElement(), that.$element());
-        that._invalidate();
+        this._renderFieldChooser();
+        this._renderContextMenu();
+        if (hasWindow()) {
+          this._renderLoadPanel(this._dataArea?.groupElement(), this.$element());
+        }
+        this._invalidate();
         break;
       case 'export':
-        that._renderDescriptionArea();
+        this._renderDescriptionArea();
         break;
       case 'onExpandValueChanging':
         break;
@@ -481,128 +535,141 @@ class PivotGrid extends Widget {
       case 'onExported':
       case 'onFileSaving':
       case 'onCellPrepared':
-        that._actions[args.name] = that._createActionByOption(args.name);
+        this._actions[args.name] = this._createActionByOption(args.name);
         break;
       case 'fieldChooser':
-        that._renderFieldChooser();
-        that._renderDescriptionArea();
+        this._renderFieldChooser();
+        this._renderDescriptionArea();
         break;
       case 'loadPanel':
         if (hasWindow()) {
           if (args.fullName === 'loadPanel.enabled') {
             clearTimeout(this._hideLoadingTimeoutID);
-            that._renderLoadPanel(that._dataArea.groupElement(), that.$element());
+            this._renderLoadPanel(this._dataArea?.groupElement(), this.$element());
           } else {
-            that._renderLoadPanel(that._dataArea.groupElement(), that.$element());
-            that._invalidate();
+            this._renderLoadPanel(this._dataArea?.groupElement(), this.$element());
+            this._invalidate();
           }
         }
         break;
       case 'fieldPanel':
-        that._renderDescriptionArea();
-        that._invalidate();
+        this._renderDescriptionArea();
+        this._invalidate();
         break;
       case 'headerFilter':
-        that._renderFieldChooser();
-        that._invalidate();
+        this._renderFieldChooser();
+        this._invalidate();
         break;
       case 'showBorders':
-        that._tableElement().toggleClass(BORDERS_CLASS, !!args.value);
-        that.updateDimensions();
+        this._tableElement().toggleClass(BORDERS_CLASS, !!args.value);
+        this.updateDimensions();
         break;
       case 'wordWrapEnabled':
-        that._tableElement().toggleClass('dx-word-wrap', !!args.value);
-        that.updateDimensions();
+        this._tableElement().toggleClass('dx-word-wrap', !!args.value);
+        this.updateDimensions();
         break;
       case 'rowHeaderLayout':
-        that._tableElement().find(`.${ROW_AREA_CELL_CLASS}`).toggleClass('dx-area-tree-view', args.value === 'tree');
-        that._dataController.updateViewOptions(that._getDataControllerOptions());
+        this._tableElement().find(`.${ROW_AREA_CELL_CLASS}`).toggleClass('dx-area-tree-view', args.value === 'tree');
+        this._dataController.updateViewOptions(this._getDataControllerOptions());
         break;
       case 'height':
       case 'width':
-        that._hasHeight = null;
+        this._hasHeight = null;
         super._optionChanged(args);
-        that.resize();
+        this.resize();
         break;
       default:
         super._optionChanged(args);
     }
   }
 
-  _updateScrollPosition(columnsArea, rowsArea, dataArea, force = false) {
-    const that = this;
-    let scrollTop;
-    let scrollLeft;
-    const scrolled = that._scrollTop || that._scrollLeft;
+  protected _updateScrollPosition(
+    columnsArea: HorizontalHeadersArea,
+    rowsArea: VerticalHeadersArea,
+    dataArea: DataArea,
+    force = false,
+  ): void {
+    const scrolled = this._scrollTop || this._scrollLeft;
 
-    if (that._scrollUpdating) return; // T645458
+    if (this._scrollUpdating) return; // T645458
 
-    that._scrollUpdating = true;
+    this._scrollUpdating = true;
 
-    if (rowsArea && !rowsArea.hasScroll() && that._hasHeight) {
-      that._scrollTop = null;
+    if (rowsArea && !rowsArea.hasScroll() && this._hasHeight) {
+      this._scrollTop = null;
     }
 
     if (columnsArea && !columnsArea.hasScroll()) {
-      that._scrollLeft = null;
+      this._scrollLeft = null;
     }
-    if (that._scrollTop !== null || that._scrollLeft !== null || scrolled || that.option('rtlEnabled')) {
-      scrollTop = that._scrollTop || 0;
-      scrollLeft = that._scrollLeft || 0;
+    if (this._scrollTop !== null || this._scrollLeft !== null || scrolled || this.option('rtlEnabled')) {
+      const scrollTop = this._scrollTop || 0;
+      const scrollLeft = this._scrollLeft || 0;
 
       dataArea.scrollTo({ left: scrollLeft, top: scrollTop }, force);
       columnsArea.scrollTo({ left: scrollLeft }, force);
       rowsArea.scrollTo({ top: scrollTop }, force);
-      that._dataController.updateWindowScrollPosition(that._scrollTop);
+      // @ts-expect-error the scroll top is null when the rows area has no scroll
+      this._dataController.updateWindowScrollPosition(this._scrollTop);
     }
 
-    that._scrollUpdating = false;
+    this._scrollUpdating = false;
   }
 
-  _subscribeToEvents(columnsArea, rowsArea, dataArea) {
-    const that = this;
-    const scrollHandler = function (e, area) {
+  protected _subscribeToEvents(
+    columnsArea: HorizontalHeadersArea,
+    rowsArea: VerticalHeadersArea,
+    dataArea: DataArea,
+  ): void {
+    const scrollHandler = (e: AreaItemScrollEvent, area: AreaItem): void => {
       const { scrollOffset } = e;
 
       const scrollable = area._getScrollable();
+      if (!scrollable) {
+        return;
+      }
 
-      const leftOffset = scrollable.option('direction') !== 'vertical' ? scrollOffset.left : that._scrollLeft;
-      const topOffset = scrollable.option('direction') !== 'horizontal' && that._hasHeight ? scrollOffset.top : that._scrollTop;
+      const leftOffset = scrollable.option('direction') !== 'vertical' ? scrollOffset.left : this._scrollLeft;
+      const topOffset = scrollable.option('direction') !== 'horizontal' && this._hasHeight ? scrollOffset.top : this._scrollTop;
 
-      if ((that._scrollLeft || 0) !== (leftOffset || 0)
-        || (that._scrollTop || 0) !== (topOffset || 0)) {
-        that._scrollLeft = leftOffset;
-        that._scrollTop = topOffset;
+      if ((this._scrollLeft || 0) !== (leftOffset || 0)
+        || (this._scrollTop || 0) !== (topOffset || 0)) {
+        this._scrollLeft = leftOffset;
+        this._scrollTop = topOffset;
 
-        that._updateScrollPosition(columnsArea, rowsArea, dataArea);
+        this._updateScrollPosition(columnsArea, rowsArea, dataArea);
 
-        if (that.option('scrolling.mode') === 'virtual') {
-          that._dataController.setViewportPosition(that._scrollLeft, that._scrollTop);
+        if (this.option('scrolling.mode') === 'virtual') {
+          this._dataController.setViewportPosition(
+            this._scrollLeft ?? undefined,
+            this._scrollTop ?? undefined,
+          );
         }
       }
     };
 
-    each([columnsArea, rowsArea, dataArea], (_, area) => {
+    [columnsArea, rowsArea, dataArea].forEach((area) => {
       subscribeToScrollEvent(area, (e) => scrollHandler(e, area));
     });
 
-    !that._hasHeight && that._dataController.subscribeToWindowScrollEvents(dataArea.groupElement());
+    const groupElement = dataArea.groupElement();
+    if (!this._hasHeight && groupElement) {
+      this._dataController.subscribeToWindowScrollEvents(groupElement);
+    }
   }
 
-  _clean() {
+  public _clean(): void {
     noop();
   }
 
-  _needDelayResizing(cellsInfo) {
+  protected _needDelayResizing(cellsInfo: unknown[][]): boolean {
     const cellsCount = cellsInfo.length * (cellsInfo.length ? cellsInfo[0].length : 0);
     return cellsCount > Number(this.option('renderCellCountLimit'));
   }
 
-  _renderFieldChooser() {
-    const that = this;
-
-    const container = that._pivotGridContainer;
-    const fieldChooserOptions = (that.option('fieldChooser') || {}) as FieldChooserOptions;
+  protected _renderFieldChooser(): void {
+    const container = this._pivotGridContainer;
+    const fieldChooserOptions: FieldChooserOptions = this.option('fieldChooser') ?? {};
     const toolbarItems: ToolbarItem[] = fieldChooserOptions.applyChangesMode === 'onDemand' ? [
       {
         toolbar: 'bottom',
@@ -610,9 +677,10 @@ class PivotGrid extends Widget {
         widget: 'dxButton',
         options: {
           text: localizationMessage.format('OK'),
-          onClick() {
-            that.getFieldChooserPopup().$content().dxPivotGridFieldChooser('applyChanges');
-            that.getFieldChooserPopup().hide();
+          onClick: (): void => {
+            getPopupFieldChooser(this.getFieldChooserPopup())?.applyChanges();
+            // eslint-disable-next-line @typescript-eslint/no-floating-promises -- fire-and-forget
+            this.getFieldChooserPopup()?.hide();
           },
         },
       },
@@ -622,67 +690,69 @@ class PivotGrid extends Widget {
         widget: 'dxButton',
         options: {
           text: localizationMessage.format('Cancel'),
-          onClick() {
-            that.getFieldChooserPopup().hide();
+          onClick: (): void => {
+            // eslint-disable-next-line @typescript-eslint/no-floating-promises -- fire-and-forget
+            this.getFieldChooserPopup()?.hide();
           },
         },
       },
     ] : [];
     const fieldChooserComponentOptions = {
       layout: fieldChooserOptions.layout,
-      texts: fieldChooserOptions.texts || {},
-      dataSource: that.getDataSource(),
+      texts: fieldChooserOptions.texts ?? {},
+      dataSource: this.getDataSource(),
       allowSearch: fieldChooserOptions.allowSearch,
       searchTimeout: fieldChooserOptions.searchTimeout,
       width: undefined,
       height: undefined,
-      headerFilter: that.option('headerFilter'),
-      encodeHtml: that.option('fieldChooser.encodeHtml') ?? that.option('encodeHtml'),
+      headerFilter: this.option('headerFilter'),
+      encodeHtml: this.option('fieldChooser.encodeHtml') ?? this.option('encodeHtml'),
       applyChangesMode: fieldChooserOptions.applyChangesMode,
-      rtlEnabled: that.option('rtlEnabled'),
-      onContextMenuPreparing(e) {
-        that._trigger('onContextMenuPreparing', e);
+      rtlEnabled: this.option('rtlEnabled'),
+      onContextMenuPreparing: (e: unknown): void => {
+        this._trigger('onContextMenuPreparing', e);
       },
     };
-    const popupOptions = {
+    const popupOptions: PopupProperties = {
       shading: false,
       title: fieldChooserOptions.title,
       width: fieldChooserOptions.width,
       height: fieldChooserOptions.height,
       showCloseButton: true,
       resizeEnabled: true,
-      // @ts-expect-error ts-error
       minWidth: fieldChooserOptions.minWidth,
-      // @ts-expect-error ts-error
       minHeight: fieldChooserOptions.minHeight,
       toolbarItems,
-      onResize(e) {
-        e.component.$content().dxPivotGridFieldChooser('updateDimensions');
+      onResize: (e): void => {
+        getPopupFieldChooser(e.component)?.updateDimensions();
       },
-      onShown(e) {
-        that._createComponent(
+      onShown: (e): void => {
+        this._createComponent(
           e.component.content(),
           FieldChooser,
-          // @ts-expect-error the widget's options aren't typed yet
+          // @ts-expect-error the field chooser's options aren't typed yet
           fieldChooserComponentOptions,
         );
       },
-      onHidden(e) {
-        const fieldChooser = e.component.$content().dxPivotGridFieldChooser('instance');
-        fieldChooser.resetTreeView();
-        fieldChooser.cancelChanges();
+      onHidden: (e): void => {
+        const fieldChooser = getPopupFieldChooser(e.component);
+        fieldChooser?.resetTreeView();
+        fieldChooser?.cancelChanges();
 
-        if (that.$fieldChooserButton) {
-          that.$fieldChooserButton.get<HTMLElement>(0).focus();
+        if (this.$fieldChooserButton) {
+          this.$fieldChooserButton.get<HTMLElement>(0).focus();
         }
       },
     };
 
-    if (that.getFieldChooserPopup()) {
-      that._fieldChooserPopup.option(popupOptions);
-      that._fieldChooserPopup.$content().dxPivotGridFieldChooser(fieldChooserComponentOptions);
-    } else {
-      that._fieldChooserPopup = that._createComponent(
+    const fieldChooserPopup = this.getFieldChooserPopup();
+
+    if (fieldChooserPopup) {
+      fieldChooserPopup.option(popupOptions);
+      // @ts-expect-error dxPivotGridFieldChooser is added to the renderer at runtime
+      fieldChooserPopup.$content().dxPivotGridFieldChooser(fieldChooserComponentOptions);
+    } else if (container) {
+      this._fieldChooserPopup = this._createComponent(
         $(DIV)
           .addClass(FIELD_CHOOSER_POPUP_CLASS)
           .appendTo(container),
@@ -692,16 +762,19 @@ class PivotGrid extends Widget {
     }
   }
 
-  _renderContextMenu() {
-    const that = this;
-    const $container = that._pivotGridContainer;
+  protected _renderContextMenu(): void {
+    const $container = this._pivotGridContainer;
 
-    if (that._contextMenu) {
-      that._contextMenu.$element().remove();
+    if (!$container) {
+      return;
     }
 
-    that._contextMenu = that._createComponent($(DIV).appendTo($container), ContextMenu, {
-      onPositioning(actionArgs) {
+    if (this._contextMenu) {
+      this._contextMenu.$element().remove();
+    }
+
+    this._contextMenu = this._createComponent($(DIV).appendTo($container), ContextMenu, {
+      onPositioning: (actionArgs: PositioningEvent & { cancel?: boolean }) => {
         const { event } = actionArgs;
 
         actionArgs.cancel = true;
@@ -710,169 +783,184 @@ class PivotGrid extends Widget {
           return;
         }
 
-        const targetElement = event.target.cellIndex >= 0 ? event.target : $(event.target).closest('td').get(0);
+        const eventTarget: Element & { cellIndex?: number } = event.target;
+        const targetElement = (eventTarget.cellIndex ?? -1) >= 0
+          ? eventTarget as HTMLTableCellElement
+          : $(eventTarget).closest('td').get(0) as HTMLTableCellElement | undefined;
         if (!targetElement) {
           return;
         }
 
-        const args = that._createEventArgs(targetElement, event);
-        const items = that._getContextMenuItems(args);
+        const args = this._createEventArgs(targetElement, event);
+        const items = this._getContextMenuItems(args);
         if (items) {
           actionArgs.component.option('items', items);
           if (event.type === 'keydown') {
             // A keyboard event carries no pointer coordinates, so the menu is
             // anchored to the focused cell instead.
             if (actionArgs.position) {
+              // @ts-expect-error position.of is typed without the renderer wrapper
               actionArgs.position.of = $(targetElement);
             }
           } else {
-            that._contextMenuOwnerNavigation = undefined;
+            this._contextMenuOwnerNavigation = undefined;
           }
           actionArgs.cancel = false;
         }
       },
-      onHidden() {
-        that._contextMenuOwnerNavigation?.refocusFocusedItem();
-        that._contextMenuOwnerNavigation = undefined;
+      onHidden: () => {
+        this._contextMenuOwnerNavigation?.refocusFocusedItem();
+        this._contextMenuOwnerNavigation = undefined;
       },
-      onItemClick(params) {
-        params.itemData.onItemClick && params.itemData.onItemClick(params);
+      onItemClick: (params) => {
+        const { itemData }: { itemData?: PivotGridContextMenuItem } = params;
+        if (itemData?.onItemClick) {
+          itemData.onItemClick(params);
+        }
       },
       cssClass: PIVOTGRID_CLASS,
-      target: that.$element(),
+      // @ts-expect-error target is typed without the renderer wrapper
+      target: this.$element(),
     });
   }
 
-  _getContextMenuItems(e) {
-    const that = this;
-    let items: any = [];
-    const texts = that.option('texts');
+  protected _getContextMenuItems(e: PivotGridEventArgs): PivotGridContextMenuItem[] | undefined {
+    const items: PivotGridContextMenuItem[] = [];
+    const texts = this.option('texts');
 
-    if (e.area === 'row' || e.area === 'column') {
+    if (isCellEventArgs(e) && (e.area === 'row' || e.area === 'column') && e.cell) {
+      const { cell } = e;
       const areaFields = e[`${e.area}Fields`];
       const oppositeAreaFields = e[e.area === 'column' ? 'rowFields' : 'columnFields'];
-      const field = e.cell.path && areaFields[e.cell.path.length - 1];
-      const dataSource = that.getDataSource();
+      const field = cell.path && areaFields[cell.path.length - 1];
+      const dataSource = this.getDataSource();
 
-      if (field && field.allowExpandAll && e.cell.path.length < e[`${e.area}Fields`].length && !dataSource.paginate()) {
+      if (field?.allowExpandAll && cell.path && cell.path.length < e[`${e.area}Fields`].length && !dataSource.paginate()) {
         items.push({
           beginGroup: true,
           icon: 'none',
-          // @ts-expect-error ts-error
-          text: texts.expandAll,
-          onItemClick() {
-            dataSource.expandAll(field.index);
+          text: texts?.expandAll,
+          onItemClick: () => {
+            if (isDefined(field.index)) {
+              dataSource.expandAll(field.index);
+            }
           },
         });
         items.push({
-          // @ts-expect-error ts-error
-          text: texts.collapseAll,
+          text: texts?.collapseAll,
           icon: 'none',
-          onItemClick() {
-            dataSource.collapseAll(field.index);
+          onItemClick: () => {
+            if (isDefined(field.index)) {
+              dataSource.collapseAll(field.index);
+            }
           },
         });
       }
 
-      if (e.cell.isLast && !dataSource.paginate()) {
+      if (cell.isLast && !dataSource.paginate()) {
         let sortingBySummaryItemCount = 0;
-        each(oppositeAreaFields, (_, field) => {
-          if (!field.allowSortingBySummary) {
+        oppositeAreaFields.forEach((oppositeField) => {
+          if (!oppositeField.allowSortingBySummary) {
             return;
           }
 
-          each(e.dataFields, (dataIndex, dataField) => {
-            if (isDefined(e.cell.dataIndex) && e.cell.dataIndex !== dataIndex) {
+          e.dataFields.forEach((dataField, dataIndex) => {
+            if (isDefined(cell.dataIndex) && cell.dataIndex !== dataIndex) {
               return;
             }
 
-            const showDataFieldCaption = !isDefined(e.cell.dataIndex) && e.dataFields.length > 1;
-            // @ts-expect-error ts-error
-            const textFormat = e.area === 'column' ? texts.sortColumnBySummary : texts.sortRowBySummary;
-            const checked = findField(e.dataFields, field.sortBySummaryField) === dataIndex && (e.cell.path || []).join('/') === (field.sortBySummaryPath || []).join('/');
-            const text = formatString(textFormat, showDataFieldCaption ? `${field.caption} - ${dataField.caption}` : field.caption);
+            const showDataFieldCaption = !isDefined(cell.dataIndex) && e.dataFields.length > 1;
+            const textFormat = e.area === 'column' ? texts?.sortColumnBySummary : texts?.sortRowBySummary;
+            const checked = findField(e.dataFields, oppositeField.sortBySummaryField) === dataIndex
+              && (cell.path ?? []).join('/') === (oppositeField.sortBySummaryPath ?? []).join('/');
+            const text = formatString(textFormat, showDataFieldCaption ? `${oppositeField.caption} - ${dataField.caption}` : oppositeField.caption);
+            const sortIcon = oppositeField.sortOrder === 'desc' ? 'sortdowntext' : 'sortuptext';
 
             items.push({
               beginGroup: sortingBySummaryItemCount === 0,
-              icon: checked ? field.sortOrder === 'desc' ? 'sortdowntext' : 'sortuptext' : 'none',
+              icon: checked ? sortIcon : 'none',
               text,
-              onItemClick() {
-                dataSource.field(field.index, {
-                  sortBySummaryField: dataField.name || dataField.caption || dataField.dataField,
-                  sortBySummaryPath: e.cell.path,
-                  sortOrder: field.sortOrder === 'desc' ? 'asc' : 'desc',
-                });
+              onItemClick: () => {
+                if (isDefined(oppositeField.index)) {
+                  dataSource.field(oppositeField.index, {
+                    sortBySummaryField: dataField.name || dataField.caption || dataField.dataField,
+                    // @ts-expect-error header paths may hold null and dates
+                    sortBySummaryPath: cell.path,
+                    sortOrder: oppositeField.sortOrder === 'desc' ? 'asc' : 'desc',
+                  });
+                }
                 dataSource.load();
               },
             });
             sortingBySummaryItemCount += 1;
           });
         });
-        each(oppositeAreaFields, (_, field) => {
-          if (!field.allowSortingBySummary || !isDefined(field.sortBySummaryField)) {
-            return undefined;
+        oppositeAreaFields.some((oppositeField) => {
+          if (!oppositeField.allowSortingBySummary
+            || !isDefined(oppositeField.sortBySummaryField)) {
+            return false;
           }
           items.push({
             beginGroup: sortingBySummaryItemCount === 0,
             icon: 'none',
-            // @ts-expect-error ts-error
-            text: texts.removeAllSorting,
-            onItemClick() {
-              each(oppositeAreaFields, (_, field) => {
-                dataSource.field(field.index, {
-                  sortBySummaryField: undefined,
-                  sortBySummaryPath: undefined,
-                  sortOrder: undefined,
-                });
+            text: texts?.removeAllSorting,
+            onItemClick: () => {
+              oppositeAreaFields.forEach((sortedField) => {
+                if (isDefined(sortedField.index)) {
+                  dataSource.field(sortedField.index, {
+                    sortBySummaryField: undefined,
+                    sortBySummaryPath: undefined,
+                    sortOrder: undefined,
+                  });
+                }
               });
               dataSource.load();
             },
           });
-          return false;
+          return true;
         });
       }
     }
 
-    if (that.option('fieldChooser.enabled')) {
+    if (this.option('fieldChooser.enabled')) {
       items.push({
         beginGroup: true,
         icon: 'columnchooser',
-        // @ts-expect-error ts-error
-        text: texts.showFieldChooser,
-        onItemClick() {
-          that.getFieldChooserPopup().show();
+        text: texts?.showFieldChooser,
+        onItemClick: () => {
+          // eslint-disable-next-line @typescript-eslint/no-floating-promises -- fire-and-forget
+          this.getFieldChooserPopup()?.show();
         },
       });
     }
 
-    if (that.option('export.enabled')) {
+    if (this.option('export.enabled')) {
       items.push({
         beginGroup: true,
         icon: 'xlsxfile',
-        // @ts-expect-error ts-error
-        text: texts.exportToExcel,
-        onItemClick() {
-          // @ts-expect-error ts-error
-          that.exportTo();
+        text: texts?.exportToExcel,
+        onItemClick: () => {
+          (this as PivotGrid as ExportPivotGrid).exportTo();
         },
       });
     }
 
     e.items = items;
-    that._trigger('onContextMenuPreparing', e);
-    items = e.items;
+    this._trigger('onContextMenuPreparing', e);
 
-    if (items && items.length) {
-      return items;
+    if (e.items?.length) {
+      return e.items;
     }
 
     return undefined;
   }
 
-  _createEventArgs(targetElement, dxEvent) {
-    const that = this;
-    const dataSource = that.getDataSource();
-    const args = {
+  protected _createEventArgs(
+    targetElement: HTMLTableCellElement,
+    dxEvent: DxEvent,
+  ): PivotGridEventArgs {
+    const dataSource = this.getDataSource();
+    const args: PivotGridEventArgsBase = {
       rowFields: dataSource.getAreaFields('row'),
       columnFields: dataSource.getAreaFields('column'),
       dataFields: dataSource.getAreaFields('data'),
@@ -880,39 +968,42 @@ class PivotGrid extends Widget {
     };
 
     if (clickedOnFieldsArea($(targetElement))) {
-      return extend(that._createFieldArgs(targetElement), args);
+      return this._createFieldArgs(targetElement, args);
     }
-    return extend(that._createCellArgs(targetElement), args);
+    return this._createCellArgs(targetElement, args);
   }
 
-  _createFieldArgs(targetElement) {
+  protected _createFieldArgs(
+    targetElement: Element,
+    args: PivotGridEventArgsBase,
+  ): PivotGridFieldEventArgs {
     const field = getData($(targetElement).children(), FIELD_DATA_KEY);
-    const args = {
-      field,
-    };
-    return isDefined(field) ? args : {};
+    return isDefined(field) ? { field, ...args } : { ...args };
   }
 
-  _createCellArgs(cellElement) {
+  protected _createCellArgs(
+    cellElement: HTMLTableCellElement,
+    args: PivotGridEventArgsBase,
+  ): PivotGridCellEventArgs {
     const $cellElement = $(cellElement);
     const columnIndex = cellElement.cellIndex;
-    const { rowIndex } = cellElement.parentElement;
+    const { rowIndex } = cellElement.parentElement as HTMLTableRowElement;
     const $table = $cellElement.closest('table');
-    const data = $table.data('data');
-    const cell = data && data[rowIndex] && data[rowIndex][columnIndex];
-    const args = {
-      area: $table.data('area'),
+    const data: AreaItemCell[][] | undefined = $table.data('data');
+    const cell = data?.[rowIndex]?.[columnIndex];
+    const area: AreaName | undefined = $table.data('area');
+    return {
+      area,
       rowIndex,
       columnIndex,
       cellElement: getPublicElement($cellElement),
       cell,
+      ...args,
     };
-    return args;
   }
 
-  _handleCellClick(e) {
-    const that = this;
-    const args = that._createEventArgs(e.currentTarget, e);
+  protected _handleCellClick(e: PivotGridCellEvent<MouseEvent>): void {
+    const args = this._createEventArgs(e.currentTarget, e);
     if (!isCellEventArgs(args)) {
       return;
     }
@@ -922,19 +1013,23 @@ class PivotGrid extends Widget {
       return;
     }
 
-    that._trigger('onCellClick', args);
+    this._trigger('onCellClick', args);
 
-    cell && !args.cancel && isDefined(cell.expanded) && setTimeout(() => {
-      that._dataController[cell.expanded ? 'collapseHeaderItem' : 'expandHeaderItem'](args.area, cell.path);
-    });
+    if (cell && !args.cancel && isDefined(cell.expanded)) {
+      setTimeout(() => {
+        if ((args.area === 'row' || args.area === 'column') && cell.path) {
+          this._dataController[cell.expanded ? 'collapseHeaderItem' : 'expandHeaderItem'](args.area, cell.path);
+        }
+      });
+    }
   }
 
-  _getColumnsAreaNavigation() {
+  protected _getColumnsAreaNavigation(): RovingTabIndex {
     this._columnsAreaNavigation = this._columnsAreaNavigation ?? new RovingTabIndex({
       component: this,
-      getItems: () => this._getColumnHeaderCells(),
-      scrollToItem: (item) => this._columnsArea.scrollToElement(item),
-      getItemId: (item) => this._getHeaderCellId(item),
+      getItems: (): HTMLElement[] => this._getColumnHeaderCells(),
+      scrollToItem: (item): void => this._columnsArea?.scrollToElement(item),
+      getItemId: (item): string | undefined => this._getHeaderCellId(item),
     });
 
     return this._columnsAreaNavigation;
@@ -943,7 +1038,7 @@ class PivotGrid extends Widget {
   // aria-colindex is absolute (it includes the virtual scrolling offset), so
   // it identifies the same logical cell across re-renders that re-slice the
   // rendered header pages.
-  _getHeaderCellId(cell: HTMLElement): string | undefined {
+  protected _getHeaderCellId(cell: HTMLElement): string | undefined {
     const columnIndex = cell.getAttribute('aria-colindex');
     const row = cell.parentElement as HTMLTableRowElement | null;
 
@@ -954,12 +1049,12 @@ class PivotGrid extends Widget {
     return `${row.sectionRowIndex}:${columnIndex}`;
   }
 
-  _getRowsAreaNavigation() {
+  protected _getRowsAreaNavigation(): RovingTabIndex {
     this._rowsAreaNavigation = this._rowsAreaNavigation ?? new RovingTabIndex({
       component: this,
-      getItems: () => this._getRowHeaderCells(),
-      scrollToItem: (item) => this._rowsArea.scrollToElement(item),
-      getItemId: (item) => this._getRowHeaderCellId(item),
+      getItems: (): HTMLElement[] => this._getRowHeaderCells(),
+      scrollToItem: (item): void => this._rowsArea?.scrollToElement(item),
+      getItemId: (item): string | undefined => this._getRowHeaderCellId(item),
     });
 
     return this._rowsAreaNavigation;
@@ -967,7 +1062,7 @@ class PivotGrid extends Widget {
 
   // aria-rowindex is absolute as well, so it identifies the same logical row
   // header cell across virtual scrolling re-renders.
-  _getRowHeaderCellId(cell: HTMLElement): string | undefined {
+  protected _getRowHeaderCellId(cell: HTMLElement): string | undefined {
     const rowIndex = cell.getAttribute('aria-rowindex');
     const { cellIndex } = cell as HTMLTableCellElement;
 
@@ -978,7 +1073,7 @@ class PivotGrid extends Widget {
     return `${cellIndex}:${rowIndex}`;
   }
 
-  _getHeaderAreaCells(cellSelector: string): HTMLElement[] {
+  protected _getHeaderAreaCells(cellSelector: string): HTMLElement[] {
     const element = this.$element().get(0);
 
     if (!element) {
@@ -992,15 +1087,15 @@ class PivotGrid extends Widget {
 
   // Only cells marked as navigable on render take part in the roving
   // tabindex: whitespace filler cells are rendered without tabindex.
-  _getColumnHeaderCells(): HTMLElement[] {
+  protected _getColumnHeaderCells(): HTMLElement[] {
     return this._getHeaderAreaCells(`thead.${HORIZONTAL_HEADERS_AREA_CLASS} td[tabindex]`);
   }
 
-  _getRowHeaderCells(): HTMLElement[] {
+  protected _getRowHeaderCells(): HTMLElement[] {
     return this._getHeaderAreaCells(`tbody.${VERTICAL_HEADERS_AREA_CLASS} td[tabindex]`);
   }
 
-  _getCellAreaNavigation(cell): RovingTabIndex | undefined {
+  protected _getCellAreaNavigation(cell: HTMLElement): RovingTabIndex | undefined {
     if (cell.closest?.(`.${FAKE_TABLE_CLASS}`)) {
       return undefined;
     }
@@ -1014,7 +1109,9 @@ class PivotGrid extends Widget {
     return undefined;
   }
 
-  _normalizeCellNavigationDirection(direction: CellNavigationDirection): CellNavigationDirection {
+  protected _normalizeCellNavigationDirection(
+    direction: CellNavigationDirection,
+  ): CellNavigationDirection {
     if (!this.option('rtlEnabled')) {
       return direction;
     }
@@ -1028,7 +1125,10 @@ class PivotGrid extends Widget {
     return direction;
   }
 
-  _handleCellArrowKeyDown(e, direction: CellNavigationDirection) {
+  protected _handleCellArrowKeyDown(
+    e: PivotGridCellEvent<KeyboardEvent>,
+    direction: CellNavigationDirection,
+  ): void {
     const cell = e.currentTarget;
     const navigation = this._getCellAreaNavigation(cell);
 
@@ -1038,7 +1138,11 @@ class PivotGrid extends Widget {
 
     e.preventDefault();
 
-    const section = cell.closest('thead, tbody');
+    const section = cell.closest<HTMLTableSectionElement>('thead, tbody');
+    if (!section) {
+      return;
+    }
+
     const normalizedDirection = this._normalizeCellNavigationDirection(direction);
     let target = getAdjacentCell(section, cell, normalizedDirection);
 
@@ -1053,11 +1157,11 @@ class PivotGrid extends Widget {
     }
   }
 
-  _handleCellFocusIn(e) {
+  protected _handleCellFocusIn(e: PivotGridCellEvent<FocusEvent>): void {
     this._getCellAreaNavigation(e.currentTarget)?.handleFocusIn(e.currentTarget);
   }
 
-  _handleCellContextMenuKeyDown(e) {
+  protected _handleCellContextMenuKeyDown(e: PivotGridCellEvent<KeyboardEvent>): void {
     const cell = e.currentTarget;
     const navigation = this._getCellAreaNavigation(cell);
 
@@ -1067,6 +1171,7 @@ class PivotGrid extends Widget {
 
     // The internal _show is called instead of the public show() because only
     // _show accepts the initiating event that onPositioning builds items from.
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises -- fire-and-forget
     this._contextMenu._show(e);
 
     if (this._contextMenu.option('visible')) {
@@ -1074,7 +1179,7 @@ class PivotGrid extends Widget {
     }
   }
 
-  _handleCellKeyDown(e) {
+  protected _handleCellKeyDown(e: PivotGridCellEvent<KeyboardEvent>): void {
     const direction = ARROW_KEY_DIRECTIONS[e.key];
     if (direction) {
       this._handleCellArrowKeyDown(e, direction);
@@ -1105,88 +1210,89 @@ class PivotGrid extends Widget {
     }
     const $control = $(e.currentTarget).find('.dx-expand-icon-container');
     saveFocusedElementInfo($control.get(0), this);
-    const onReady = () => {
+    const onReady = (): void => {
       this.off('contentReady', onReady);
       restoreFocus(this);
     };
     this.on('contentReady', onReady);
     setTimeout(() => {
-      this._dataController[cell.expanded ? 'collapseHeaderItem' : 'expandHeaderItem'](args.area, cell.path);
+      if ((args.area === 'row' || args.area === 'column') && cell.path) {
+        this._dataController[cell.expanded ? 'collapseHeaderItem' : 'expandHeaderItem'](args.area, cell.path);
+      }
     });
   }
 
-  _getNoDataText() {
-    return this.option('texts.noData');
+  public _getNoDataText(): string | undefined {
+    return this.option('texts')?.noData;
   }
 
-  _renderNoDataText(element) {
+  protected _renderNoDataText(element?: dxElementWrapper): void {
     return gridCoreUtils.renderNoDataText.call(this, element);
   }
 
-  _renderLoadPanel(element, container) {
+  protected _renderLoadPanel(
+    element: dxElementWrapper | undefined,
+    container: dxElementWrapper,
+  ): void {
     return gridCoreUtils.renderLoadPanel.call(this, element, container, undefined);
   }
 
-  _updateLoading(progress) {
-    const that = this;
-    const isLoading = that._dataController.isLoading();
+  protected _updateLoading(progress?: number): void {
+    const isLoading = this._dataController.isLoading();
 
-    if (!that._loadPanel) return;
+    if (!this._loadPanel) return;
 
-    const loadPanelVisible = that._loadPanel.option('visible');
+    const loadPanelVisible = this._loadPanel.option('visible');
 
     if (!loadPanelVisible) {
-      that._startLoadingTime = new Date();
+      this._startLoadingTime = new Date();
     }
     if (isLoading) {
       if (progress) {
-        if ((new Date() as any) - that._startLoadingTime >= 1000) {
-          that._loadPanel.option('message', `${Math.floor(progress * 100)}%`);
+        if (Number(new Date()) - Number(this._startLoadingTime) >= 1000) {
+          this._loadPanel.option('message', `${Math.floor(progress * 100)}%`);
         }
       } else {
-        that._loadPanel.option('message', that.option('loadPanel.text'));
+        this._loadPanel.option('message', this.option('loadPanel')?.text);
       }
     }
-    clearTimeout(that._hideLoadingTimeoutID);
+    clearTimeout(this._hideLoadingTimeoutID);
     if (loadPanelVisible && !isLoading) {
-      that._hideLoadingTimeoutID = setTimeout(() => {
-        that._loadPanel.option('visible', false);
-        that.$element().removeClass(OVERFLOW_HIDDEN_CLASS);
+      this._hideLoadingTimeoutID = setTimeout(() => {
+        this._loadPanel?.option('visible', false);
+        this.$element().removeClass(OVERFLOW_HIDDEN_CLASS);
       });
     } else {
-      const visibilityOptions: any = {
+      const visibilityOptions: LoadPanelProperties = {
         visible: isLoading,
       };
       if (isLoading) {
+        // @ts-expect-error position.of is typed without the renderer wrapper
         visibilityOptions.position = gridCoreUtils.calculateLoadPanelPosition(
-          that._dataArea.groupElement(),
+          this._dataArea?.groupElement(),
         );
       }
-      that._loadPanel.option(visibilityOptions);
-      that.$element().toggleClass(OVERFLOW_HIDDEN_CLASS, !isLoading);
+      this._loadPanel.option(visibilityOptions);
+      this.$element().toggleClass(OVERFLOW_HIDDEN_CLASS, !isLoading);
     }
   }
 
-  _renderDescriptionArea() {
+  protected _renderDescriptionArea(): void {
     const $element = this.$element();
     const $descriptionCell = $element.find(`.${DESCRIPTION_AREA_CELL_CLASS}`);
     const $toolbarContainer = $(DIV).addClass('dx-pivotgrid-toolbar');
-    const fieldPanel = this.option('fieldPanel') as FieldPanelOptions;
+    const fieldPanel: FieldPanelOptions = this.option('fieldPanel') ?? {};
     const $filterHeader = $element.find('.dx-filter-header');
     const $columnHeader = $element.find('.dx-column-header');
 
-    let $targetContainer;
-
-    let buttonStylingMode: ButtonStyle = isGeneric(current()) ? 'contained' : 'text';
-
-    if (fieldPanel.visible && fieldPanel.showFilterFields) {
-      $targetContainer = $filterHeader;
-    } else if (fieldPanel.visible && (fieldPanel.showDataFields || fieldPanel.showColumnFields)) {
-      $targetContainer = $columnHeader;
-    } else {
-      $targetContainer = $descriptionCell;
-      buttonStylingMode = 'text';
-    }
+    const $targetContainer = getToolbarContainer(
+      fieldPanel,
+      $filterHeader,
+      $columnHeader,
+      $descriptionCell,
+    );
+    const isTextButton = $targetContainer === $descriptionCell || !isGeneric(current());
+    const buttonStylingMode: ButtonStyle = isTextButton ? 'text' : 'contained';
 
     $columnHeader.toggleClass(
       BOTTOM_BORDER_CLASS,
@@ -1213,15 +1319,15 @@ class PivotGrid extends Widget {
         .addClass('dx-pivotgrid-field-chooser-button');
       const buttonOptions: Properties = {
         icon: 'columnchooser',
-        // @ts-expect-error ts-error
-        hint: this.option('texts.showFieldChooser'),
+        hint: this.option('texts')?.showFieldChooser,
         elementAttr: {
-          'aria-label': this.option('texts.showFieldChooser'),
+          'aria-label': this.option('texts')?.showFieldChooser,
           'aria-haspopup': 'dialog',
         },
         stylingMode: buttonStylingMode,
         onClick: () => {
-          this.getFieldChooserPopup().show();
+          // eslint-disable-next-line @typescript-eslint/no-floating-promises -- fire-and-forget
+          this.getFieldChooserPopup()?.show();
         },
       };
 
@@ -1234,12 +1340,10 @@ class PivotGrid extends Widget {
         .addClass('dx-pivotgrid-export-button');
       const buttonOptions: Properties = {
         icon: 'xlsxfile',
-        // @ts-expect-error ts-error
-        hint: this.option('texts.exportToExcel'),
+        hint: this.option('texts')?.exportToExcel,
         stylingMode: buttonStylingMode,
         onClick: () => {
-          // @ts-expect-error ts-error
-          this.exportTo();
+          (this as PivotGrid as ExportPivotGrid).exportTo();
         },
       };
 
@@ -1247,105 +1351,96 @@ class PivotGrid extends Widget {
     }
   }
 
-  _detectHasContainerHeight() {
-    const that = this;
-    const element = that.$element();
+  protected _detectHasContainerHeight(): void {
+    const element = this.$element();
 
-    if (isDefined(that._hasHeight)) {
-      // @ts-expect-error ts-error
-      const height = that.option('height') || that.$element().get(0).style.height;
+    if (isDefined(this._hasHeight)) {
+      const height = this.option('height') || this.$element().get<HTMLElement>(0).style.height;
 
-      // @ts-expect-error ts-error
-      if (height && (that._hasHeight ^ (height !== 'auto'))) {
-        that._hasHeight = null;
+      if (height && (this._hasHeight !== (height !== 'auto'))) {
+        this._hasHeight = null;
       }
     }
 
-    if (isDefined(that._hasHeight) || element.is(':hidden')) {
+    if (isDefined(this._hasHeight) || element.is(':hidden')) {
       return;
     }
 
-    that._pivotGridContainer.addClass('dx-hidden');
-    const testElement: any = $(DIV);
+    this._pivotGridContainer?.addClass('dx-hidden');
+    const testElement = $(DIV);
     setHeight(testElement, TEST_HEIGHT);
     element.append(testElement);
-    that._hasHeight = getHeight(element.get(0)) !== TEST_HEIGHT;
-    that._pivotGridContainer.removeClass('dx-hidden');
+    this._hasHeight = getHeight(element.get(0)) !== TEST_HEIGHT;
+    this._pivotGridContainer?.removeClass('dx-hidden');
     testElement.remove();
   }
 
-  _renderHeaders(
-    rowHeaderContainer,
-    columnHeaderContainer,
-    filterHeaderContainer,
-    dataHeaderContainer,
-  ) {
-    const that = this;
-    const dataSource = that.getDataSource();
+  protected _renderHeaders(
+    rowHeaderContainer: dxElementWrapper | undefined,
+    columnHeaderContainer: dxElementWrapper | undefined,
+    filterHeaderContainer: dxElementWrapper | undefined,
+    dataHeaderContainer: dxElementWrapper | undefined,
+  ): void {
+    const dataSource = this.getDataSource();
 
-    that._rowFields = that._rowFields || new FieldsArea(that, 'row');
-    that._rowFields.render(rowHeaderContainer, dataSource.getAreaFields('row'));
+    this._rowFields ??= new FieldsArea(this, 'row');
+    renderFieldsArea(this._rowFields, rowHeaderContainer, dataSource.getAreaFields('row'));
 
-    that._columnFields = that._columnFields || new FieldsArea(that, 'column');
-    that._columnFields.render(columnHeaderContainer, dataSource.getAreaFields('column'));
+    this._columnFields ??= new FieldsArea(this, 'column');
+    renderFieldsArea(this._columnFields, columnHeaderContainer, dataSource.getAreaFields('column'));
 
-    that._filterFields = that._filterFields || new FieldsArea(that, 'filter');
-    that._filterFields.render(filterHeaderContainer, dataSource.getAreaFields('filter'));
+    this._filterFields ??= new FieldsArea(this, 'filter');
+    renderFieldsArea(this._filterFields, filterHeaderContainer, dataSource.getAreaFields('filter'));
 
-    that._dataFields = that._dataFields || new FieldsArea(that, 'data');
-    that._dataFields.render(dataHeaderContainer, dataSource.getAreaFields('data'));
+    this._dataFields ??= new FieldsArea(this, 'data');
+    renderFieldsArea(this._dataFields, dataHeaderContainer, dataSource.getAreaFields('data'));
 
-    // @ts-expect-error ts-error
-    const fieldChooser = that.$element().dxPivotGridFieldChooserBase('instance');
-    fieldChooser.renderSortable();
-    fieldChooser.restoreFieldFocus();
+    this._fieldChooserBase?.renderSortable();
+    this._fieldChooserBase?.restoreFieldFocus();
   }
 
-  _createTableElement() {
-    const that = this;
-    const $table = ($('<table>') as any)
+  protected _createTableElement(): dxElementWrapper {
+    const $table = $('<table>')
       .attr('role', 'presentation')
       .css({ width: '100%' })
-      .toggleClass(BORDERS_CLASS, !!that.option('showBorders'))
-      .toggleClass('dx-word-wrap', !!that.option('wordWrapEnabled'));
+      .toggleClass(BORDERS_CLASS, !!this.option('showBorders'))
+      .toggleClass('dx-word-wrap', !!this.option('wordWrapEnabled'));
 
-    eventsEngine.on($table, addNamespace(clickEventName, 'dxPivotGrid'), 'td', that._handleCellClick.bind(that));
-    eventsEngine.on($table, addNamespace('keydown', 'dxPivotGrid'), 'td', that._handleCellKeyDown.bind(that));
-    eventsEngine.on($table, addNamespace('focusin', 'dxPivotGrid'), 'td', that._handleCellFocusIn.bind(that));
+    eventsEngine.on($table, addNamespace(clickEventName, 'dxPivotGrid'), 'td', this._handleCellClick.bind(this));
+    eventsEngine.on($table, addNamespace('keydown', 'dxPivotGrid'), 'td', this._handleCellKeyDown.bind(this));
+    eventsEngine.on($table, addNamespace('focusin', 'dxPivotGrid'), 'td', this._handleCellFocusIn.bind(this));
 
     return $table;
   }
 
-  _renderDataArea(dataAreaElement) {
-    const that = this;
-    const dataArea = that._dataArea || new DataAreaImport.DataArea(that);
-    that._dataArea = dataArea;
-    dataArea.render(dataAreaElement, that._dataController.getCellsInfo());
+  protected _renderDataArea(dataAreaElement: dxElementWrapper | undefined): DataArea {
+    const dataArea = this._dataArea ?? new DataAreaImport.DataArea(this);
+    this._dataArea = dataArea;
+    dataArea.render(dataAreaElement, this._dataController.getCellsInfo());
 
     return dataArea;
   }
 
-  _renderRowsArea(rowsAreaElement) {
-    const that = this;
-    const rowsArea = that._rowsArea || new HeadersArea.VerticalHeadersArea(that);
-    that._rowsArea = rowsArea;
+  protected _renderRowsArea(rowsAreaElement: dxElementWrapper | undefined): VerticalHeadersArea {
+    const rowsArea = this._rowsArea ?? new HeadersArea.VerticalHeadersArea(this);
+    this._rowsArea = rowsArea;
 
-    const navigation = that._getRowsAreaNavigation();
+    const navigation = this._getRowsAreaNavigation();
     const needRestoreFocus = navigation.containsActiveElement();
 
-    rowsArea.render(rowsAreaElement, that._dataController.getRowsInfo());
+    rowsArea.render(rowsAreaElement, this._dataController.getRowsInfo());
     navigation.updateTabIndexes();
 
     if (needRestoreFocus) {
       navigation.refocusFocusedItem();
-      that._scheduleNavigationFocusRestore(navigation);
+      this._scheduleNavigationFocusRestore(navigation);
     }
 
     return rowsArea;
   }
 
-  _scheduleNavigationFocusRestore(navigation: RovingTabIndex) {
-    const onReady = () => {
+  protected _scheduleNavigationFocusRestore(navigation: RovingTabIndex): void {
+    const onReady = (): void => {
       this.off('contentReady', onReady);
       if (!navigation.containsActiveElement()) {
         navigation.refocusFocusedItem();
@@ -1354,251 +1449,249 @@ class PivotGrid extends Widget {
     this.on('contentReady', onReady);
   }
 
-  _renderColumnsArea(columnsAreaElement) {
-    const that = this;
-    const columnsArea = that._columnsArea || new HeadersArea.HorizontalHeadersArea(that);
-    that._columnsArea = columnsArea;
+  protected _renderColumnsArea(
+    columnsAreaElement: dxElementWrapper | undefined,
+  ): HorizontalHeadersArea {
+    const columnsArea = this._columnsArea ?? new HeadersArea.HorizontalHeadersArea(this);
+    this._columnsArea = columnsArea;
 
-    const navigation = that._getColumnsAreaNavigation();
+    const navigation = this._getColumnsAreaNavigation();
     const needRestoreFocus = navigation.containsActiveElement();
 
-    columnsArea.render(columnsAreaElement, that._dataController.getColumnsInfo());
+    columnsArea.render(columnsAreaElement, this._dataController.getColumnsInfo());
     navigation.updateTabIndexes();
 
     if (needRestoreFocus) {
       navigation.refocusFocusedItem();
-      that._scheduleNavigationFocusRestore(navigation);
+      this._scheduleNavigationFocusRestore(navigation);
     }
 
     return columnsArea;
   }
 
-  _initMarkup() {
-    const that = this;
+  public _initMarkup(): void {
     super._initMarkup();
-    that.$element()
+    this.$element()
       .addClass(PIVOTGRID_CLASS)
       .attr('role', 'group')
       .attr('aria-label', localizationMessage.format('dxPivotGrid-ariaLabel'));
   }
 
-  _renderContentImpl() {
-    const that = this;
-    let columnsAreaElement;
-    let rowsAreaElement;
-    let dataAreaElement;
-    let tableElement;
-    const isFirstDrawing = !that._pivotGridContainer;
-    let rowHeaderContainer;
-    let columnHeaderContainer;
-    let filterHeaderContainer;
-    let dataHeaderContainer;
+  protected renderLayout(): PivotGridLayout {
+    this.$element().addClass(ROW_LINES_CLASS)
+      .addClass(FIELDS_CONTAINER_CLASS);
 
-    tableElement = !isFirstDrawing && that._tableElement();
+    this._pivotGridContainer = $(DIV).addClass('dx-pivotgrid-container');
+    this._renderFieldChooser();
+    this._renderContextMenu();
 
-    if (!tableElement) {
-      that.$element().addClass(ROW_LINES_CLASS)
-        .addClass(FIELDS_CONTAINER_CLASS);
+    const columnsAreaElement = $(TD).addClass(COLUMN_AREA_CELL_CLASS);
+    const rowsAreaElement = $(TD).addClass(ROW_AREA_CELL_CLASS);
+    const dataAreaElement = $(TD).addClass(DATA_AREA_CELL_CLASS);
 
-      that._pivotGridContainer = $(DIV).addClass('dx-pivotgrid-container');
-      that._renderFieldChooser();
-      that._renderContextMenu();
+    const tableElement = this._createTableElement();
 
-      columnsAreaElement = $(TD).addClass(COLUMN_AREA_CELL_CLASS);
-      rowsAreaElement = $(TD).addClass(ROW_AREA_CELL_CLASS);
-      dataAreaElement = $(TD).addClass(DATA_AREA_CELL_CLASS);
+    const dataHeaderContainer = $(TD).addClass('dx-data-header');
 
-      tableElement = that._createTableElement();
+    const filterHeaderContainer = $('<td>').attr('colspan', '2').addClass('dx-filter-header');
+    const columnHeaderContainer = $(TD).addClass('dx-column-header');
+    const rowHeaderContainer = $(TD).addClass(DESCRIPTION_AREA_CELL_CLASS);
 
-      dataHeaderContainer = $(TD).addClass('dx-data-header');
+    $(TR)
+      .append(filterHeaderContainer)
+      .appendTo(tableElement);
 
-      filterHeaderContainer = $('<td>').attr('colspan', '2').addClass('dx-filter-header');
-      columnHeaderContainer = $(TD).addClass('dx-column-header');
-      rowHeaderContainer = $(TD).addClass(DESCRIPTION_AREA_CELL_CLASS);
+    $(TR)
+      .append(dataHeaderContainer)
+      .append(columnHeaderContainer)
+      .appendTo(tableElement);
 
-      $(TR)
-        .append(filterHeaderContainer)
-        .appendTo(tableElement);
+    $(TR)
+      .append(rowHeaderContainer)
+      .append(columnsAreaElement)
+      .appendTo(tableElement);
 
-      $(TR)
-        .append(dataHeaderContainer)
-        .append(columnHeaderContainer)
-        .appendTo(tableElement);
+    $(TR)
+      .addClass(BOTTOM_ROW_CLASS)
+      .append(rowsAreaElement)
+      .append(dataAreaElement)
+      .appendTo(tableElement);
 
-      $(TR)
-        .append(rowHeaderContainer)
-        .append(columnsAreaElement)
-        .appendTo(tableElement);
+    this._pivotGridContainer.append(tableElement);
+    this.$element().append(this._pivotGridContainer);
 
-      $(TR)
-        .addClass(BOTTOM_ROW_CLASS)
-        .append(rowsAreaElement)
-        .append(dataAreaElement)
-        .appendTo(tableElement);
-
-      that._pivotGridContainer.append(tableElement);
-      that.$element().append(that._pivotGridContainer);
-
-      if (that.option('rowHeaderLayout') === 'tree') {
-        rowsAreaElement.addClass('dx-area-tree-view');
-      }
+    if (this.option('rowHeaderLayout') === 'tree') {
+      rowsAreaElement.addClass('dx-area-tree-view');
     }
 
-    that.$element().addClass(OVERFLOW_HIDDEN_CLASS);
+    return {
+      columnsAreaElement,
+      rowsAreaElement,
+      dataAreaElement,
+      rowHeaderContainer,
+      columnHeaderContainer,
+      filterHeaderContainer,
+      dataHeaderContainer,
+    };
+  }
+
+  public _renderContentImpl(): void {
+    const isFirstDrawing = !this._pivotGridContainer;
+    const tableElement = !isFirstDrawing && this._tableElement();
+    const layout = tableElement ? undefined : this.renderLayout();
+
+    this.$element().addClass(OVERFLOW_HIDDEN_CLASS);
 
     const fieldChooserBaseConfig = {
-      dataSource: that.getDataSource(),
-      encodeHtml: that.option('encodeHtml'),
-      allowFieldDragging: that.option('fieldPanel.allowFieldDragging'),
-      headerFilter: that.option('headerFilter'),
-      visible: that.option('visible'),
-      remoteSort: that.option('scrolling.mode') === 'virtual',
+      dataSource: this.getDataSource(),
+      encodeHtml: this.option('encodeHtml'),
+      allowFieldDragging: this.option('fieldPanel')?.allowFieldDragging,
+      headerFilter: this.option('headerFilter'),
+      visible: this.option('visible'),
+      remoteSort: this.option('scrolling.mode') === 'virtual',
     };
 
-    if (that._fieldChooserBase) {
-      that._fieldChooserBase.option(fieldChooserBaseConfig);
+    if (this._fieldChooserBase) {
+      this._fieldChooserBase.option(fieldChooserBaseConfig);
     } else {
-      that._fieldChooserBase = that._createComponent(
-        that.$element(),
+      this._fieldChooserBase = this._createComponent(
+        this.$element(),
         FieldChooserBase,
-        // @ts-expect-error the widget's options aren't typed yet
         fieldChooserBaseConfig,
       );
     }
 
-    const dataArea = that._renderDataArea(dataAreaElement);
-    const rowsArea = that._renderRowsArea(rowsAreaElement);
-    const columnsArea = that._renderColumnsArea(columnsAreaElement);
+    const dataArea = this._renderDataArea(layout?.dataAreaElement);
+    const rowsArea = this._renderRowsArea(layout?.rowsAreaElement);
+    const columnsArea = this._renderColumnsArea(layout?.columnsAreaElement);
 
-    dataArea.tableElement().prepend(columnsArea.headElement());
+    const columnsHeadElement = columnsArea.headElement();
+    if (columnsHeadElement) {
+      dataArea.tableElement()?.prepend(columnsHeadElement);
+    }
 
     if (isFirstDrawing) {
-      that._renderLoadPanel(dataArea.groupElement().parent(), that.$element());
-      that._renderDescriptionArea();
+      this._renderLoadPanel(dataArea.groupElement()?.parent(), this.$element());
+      this._renderDescriptionArea();
 
       rowsArea.renderScrollable();
       columnsArea.renderScrollable();
       dataArea.renderScrollable();
     }
 
-    that._setAriaGridAttributes(dataArea, rowsArea, columnsArea);
+    this._setAriaGridAttributes(dataArea, rowsArea, columnsArea);
 
     [dataArea, rowsArea, columnsArea].forEach((area) => {
       unsubscribeScrollEvents(area);
     });
 
-    that._renderHeaders(
-      rowHeaderContainer,
-      columnHeaderContainer,
-      filterHeaderContainer,
-      dataHeaderContainer,
+    this._renderHeaders(
+      layout?.rowHeaderContainer,
+      layout?.columnHeaderContainer,
+      layout?.filterHeaderContainer,
+      layout?.dataHeaderContainer,
     );
 
-    that._update(isFirstDrawing);
+    this._update(isFirstDrawing);
   }
 
-  _setAriaGridAttributes(dataArea, rowsArea, columnsArea) {
-    const $gridElement = dataArea.tableElement().parent();
+  protected _setAriaGridAttributes(
+    dataArea: DataArea,
+    rowsArea: VerticalHeadersArea,
+    columnsArea: HorizontalHeadersArea,
+  ): void {
+    const $gridElement = dataArea.tableElement()?.parent();
     const tableIds = [
-      columnsArea.tableElement().attr('id'),
-      rowsArea.tableElement().attr('id'),
-      dataArea.tableElement().attr('id'),
+      columnsArea.tableElement()?.attr('id'),
+      rowsArea.tableElement()?.attr('id'),
+      dataArea.tableElement()?.attr('id'),
     ].filter(isDefined).join(' ');
 
     $gridElement
-      .attr('role', 'grid')
+      ?.attr('role', 'grid')
       .attr('aria-owns', tableIds)
       .attr('aria-rowcount', this._dataController.totalRowCount())
       .attr('aria-colcount', this._dataController.totalColumnCount());
   }
 
-  _update(isFirstDrawing) {
-    const that = this;
-    const updateHandler = function () {
-      that.updateDimensions();
+  protected _update(isFirstDrawing: boolean): void {
+    const updateHandler = (): void => {
+      this.updateDimensions();
     };
-    if (that._needDelayResizing(that._dataArea.getData()) && isFirstDrawing) {
+    if (this._dataArea && this._needDelayResizing(this._dataArea.getData()) && isFirstDrawing) {
       setTimeout(updateHandler);
     } else {
       updateHandler();
     }
   }
 
-  _fireContentReadyAction() {
+  public _fireContentReadyAction(): void {
     if (!this._dataController.isLoading()) {
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises -- fire-and-forget
       super._fireContentReadyAction();
     }
   }
 
-  getScrollPath(area) {
-    const that = this;
-
+  public getScrollPath(area: DataSourceHeaderArea): AreaItemCell['path'] {
     if (area === 'column') {
-      return that._columnsArea.getScrollPath(that._scrollLeft);
+      return this._columnsArea?.getScrollPath(Number(this._scrollLeft));
     }
-    return that._rowsArea.getScrollPath(that._scrollTop);
+    return this._rowsArea?.getScrollPath(Number(this._scrollTop));
   }
 
-  getDataSource() {
+  public getDataSource(): PivotGridDataSource {
     return this._dataController.getDataSource();
   }
 
-  getFieldChooserPopup() {
+  public getFieldChooserPopup(): Popup | undefined {
     return this._fieldChooserPopup;
   }
 
-  hasScroll(area) {
-    const that = this;
-    return area === 'column' ? that._columnsArea.hasScroll() : that._rowsArea.hasScroll();
+  public hasScroll(area: DataSourceHeaderArea): boolean {
+    return area === 'column' ? !!this._columnsArea?.hasScroll() : !!this._rowsArea?.hasScroll();
   }
 
-  _dimensionChanged() {
+  public _dimensionChanged(): void {
     this.updateDimensions();
   }
 
-  _visibilityChanged(visible) {
+  public _visibilityChanged(visible: boolean): void {
     if (visible) {
       this.updateDimensions();
     }
   }
 
-  _dispose() {
-    const that = this;
-    clearTimeout(that._hideLoadingTimeoutID);
+  public _dispose(): void {
+    clearTimeout(this._hideLoadingTimeoutID);
 
-    if (that._dataController) {
-      that._dataController.dispose();
+    if (this._dataController) {
+      this._dataController.dispose();
     }
 
     super._dispose();
   }
 
-  _tableElement() {
+  public _tableElement(): dxElementWrapper {
     return this.$element().find('table').first();
   }
 
-  addWidgetPrefix(className) {
+  public addWidgetPrefix(className: string): string {
     return `dx-pivotgrid-${className}`;
   }
 
-  resize() {
+  public resize(): void {
     this.updateDimensions();
   }
 
-  isReady() {
+  public isReady(): boolean {
     return super.isReady() && !this._dataController.isLoading();
   }
 
-  updateDimensions() {
-    const that = this;
-    let groupWidth;
-    const tableElement = that._tableElement();
-    let bordersWidth;
+  public updateDimensions(): DeferredObj<unknown> | undefined {
+    const tableElement = this._tableElement();
     let totalWidth = 0;
     let totalHeight = 0;
     let rowsAreaWidth = 0;
-    let hasRowsScroll;
-    let hasColumnsScroll;
 
     const dataAreaCell = tableElement.find(`.${DATA_AREA_CELL_CLASS}`);
     const rowAreaCell = tableElement.find(`.${ROW_AREA_CELL_CLASS}`);
@@ -1606,94 +1699,112 @@ class PivotGrid extends Widget {
     const descriptionCell = tableElement.find(`.${DESCRIPTION_AREA_CELL_CLASS}`);
     const filterHeaderCell = tableElement.find('.dx-filter-header');
     const columnHeaderCell = tableElement.find('.dx-column-header');
-    const rowFieldsHeader = that._rowFields;
-    // @ts-expect-error
-    const d = new Deferred();
+    const rowFieldsHeader = this._rowFields;
+    const d = Deferred<unknown>();
 
     if (!hasWindow()) {
       return undefined;
     }
 
-    const needSynchronizeFieldPanel = rowFieldsHeader.isVisible() && that.option('rowHeaderLayout') !== 'tree';
+    const dataArea = this._dataArea;
+    const rowsArea = this._rowsArea;
+    const columnsArea = this._columnsArea;
+    const filterFields = this._filterFields;
 
-    that._detectHasContainerHeight();
+    if (!rowFieldsHeader || !dataArea || !rowsArea || !columnsArea || !filterFields) {
+      return undefined;
+    }
 
-    if (!that._dataArea.headElement().length) {
-      that._dataArea.tableElement().prepend(that._columnsArea.headElement());
+    const needSynchronizeFieldPanel = rowFieldsHeader.isVisible() && this.option('rowHeaderLayout') !== 'tree';
+
+    this._detectHasContainerHeight();
+
+    if (!dataArea.headElement()?.length) {
+      const columnsHeadElement = columnsArea.headElement();
+      if (columnsHeadElement) {
+        dataArea.tableElement()?.prepend(columnsHeadElement);
+      }
     }
 
     if (needSynchronizeFieldPanel) {
-      that._rowsArea.updateColspans(rowFieldsHeader.getColumnsCount());
-      that._rowsArea.tableElement().prepend(rowFieldsHeader.headElement());
+      rowsArea.updateColspans(rowFieldsHeader.getColumnsCount());
+      const rowFieldsHeadElement = rowFieldsHeader.headElement();
+      if (rowFieldsHeadElement) {
+        rowsArea.tableElement()?.prepend(rowFieldsHeadElement);
+      }
     }
 
     tableElement.addClass(INCOMPRESSIBLE_FIELDS_CLASS);
-    that._dataArea.reset();
-    that._rowsArea.reset();
-    that._columnsArea.reset();
+    dataArea.reset();
+    rowsArea.reset();
+    columnsArea.reset();
     rowFieldsHeader.reset();
 
-    const calculateHasScroll = (areaSize, totalSize) => totalSize - areaSize >= 1;
+    const calculateHasScroll = (
+      areaSize: number,
+      totalSize: number,
+    ): boolean => totalSize - areaSize >= 1;
 
     const calculateGroupHeight = (
-      dataAreaHeight,
-      totalHeight,
-      hasRowsScroll,
-      hasColumnsScroll,
-      scrollBarWidth,
-    ) => (hasRowsScroll
-      ? dataAreaHeight
-      : totalHeight + (hasColumnsScroll ? scrollBarWidth : 0)
+      areaHeight: number,
+      contentHeight: number,
+      hasRowsScrollbar: boolean,
+      hasColumnsScrollbar: boolean,
+      scrollBarSize: number,
+    ): number => (hasRowsScrollbar
+      ? areaHeight
+      : contentHeight + (hasColumnsScrollbar ? scrollBarSize : 0)
     );
 
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises -- fire-and-forget
     deferUpdate(() => {
-      const rowHeights = that._rowsArea.getRowsHeight();
+      const rowHeights = rowsArea.getRowsHeight();
       const descriptionCellHeight = getOuterHeight(descriptionCell[0], true)
         + (needSynchronizeFieldPanel ? rowHeights[0] : 0);
 
-      const dataAreaHeadHeight = getHeight(that._dataArea.headElement());
+      const dataAreaHeadHeight = Number(getHeight(dataArea.headElement()));
       let filterAreaHeight: number | undefined = 0;
       let dataAreaHeight = 0;
-      if (that._hasHeight) {
+      if (this._hasHeight) {
         filterAreaHeight = getHeight(filterHeaderCell);
 
         const $dataHeader = tableElement.find('.dx-data-header');
         const dataHeaderHeight = Number(getHeight($dataHeader));
 
-        bordersWidth = getCommonBorderWidth([columnAreaCell, dataAreaCell, tableElement, columnHeaderCell, filterHeaderCell], 'height');
+        const heightBordersWidth = getCommonBorderWidth([columnAreaCell, dataAreaCell, tableElement, columnHeaderCell, filterHeaderCell], 'height');
         dataAreaHeight = getHeight(
-          that.$element().get(0),
+          this.$element().get(0),
         ) - Number(filterAreaHeight) - dataHeaderHeight
           - (Math.max(
             dataAreaHeadHeight,
             Number(getHeight(columnAreaCell)),
             descriptionCellHeight,
           )
-            + bordersWidth
+            + heightBordersWidth
           );
       }
 
-      const scrollBarWidth = that._dataArea.getScrollbarWidth();
-      const rowsAreaTableHeight = getHeight(that._rowsArea.tableElement());
-      const dataAreaTableHeight = getHeight(that._dataArea.tableElement());
+      const scrollBarWidth = dataArea.getScrollbarWidth();
+      const rowsAreaTableHeight = Number(getHeight(rowsArea.tableElement()));
+      const dataAreaTableHeight = Number(getHeight(dataArea.tableElement()));
       const correctDataTableHeight = Math.max(
         rowsAreaTableHeight,
         dataAreaTableHeight - dataAreaHeadHeight,
       );
       const hasVerticalScrollbar = calculateHasScroll(dataAreaHeight, correctDataTableHeight);
 
-      that._dataArea.tableElement().css({
-        width: that._hasHeight && hasVerticalScrollbar && scrollBarWidth
+      dataArea.tableElement()?.css({
+        width: this._hasHeight && hasVerticalScrollbar && scrollBarWidth
           ? `calc(100% - ${scrollBarWidth}px)`
           : '100%',
       });
 
-      const resultWidths = that._dataArea.getColumnsWidth();
+      const resultWidths = dataArea.getColumnsWidth();
 
       const rowsAreaHeights = needSynchronizeFieldPanel ? rowHeights.slice(1) : rowHeights;
-      const dataAreaHeights = that._dataArea.getRowsHeight();
+      const dataAreaHeights = dataArea.getRowsHeight();
 
-      const columnsAreaRowCount = that._dataController.getColumnsInfo().length;
+      const columnsAreaRowCount = this._dataController.getColumnsInfo().length;
 
       const resultHeights = mergeArraysByMaxValue(
         rowsAreaHeights,
@@ -1703,9 +1814,9 @@ class PivotGrid extends Widget {
       const columnsAreaRowHeights = dataAreaHeights.slice(0, columnsAreaRowCount);
       const columnsAreaHeight = getArraySum(columnsAreaRowHeights);
 
-      const rowsAreaColumnWidths = that._rowsArea.getColumnsWidth();
+      const rowsAreaColumnWidths = rowsArea.getColumnsWidth();
 
-      totalWidth = getWidth(that._dataArea.tableElement());
+      totalWidth = Number(getWidth(dataArea.tableElement()));
 
       totalHeight = getArraySum(resultHeights);
 
@@ -1716,10 +1827,10 @@ class PivotGrid extends Widget {
 
       rowsAreaWidth = getArraySum(rowsAreaColumnWidths);
 
-      const elementWidth = getWidth(that.$element().get(0));
+      const elementWidth = getWidth(this.$element().get(0));
 
-      bordersWidth = getCommonBorderWidth([rowAreaCell, dataAreaCell, tableElement], 'width');
-      groupWidth = elementWidth - rowsAreaWidth - bordersWidth;
+      const widthBordersWidth = getCommonBorderWidth([rowAreaCell, dataAreaCell, tableElement], 'width');
+      let groupWidth = elementWidth - rowsAreaWidth - widthBordersWidth;
 
       groupWidth = groupWidth > 0 ? groupWidth : totalWidth;
       const diff = totalWidth - groupWidth;
@@ -1729,12 +1840,12 @@ class PivotGrid extends Widget {
         totalWidth = groupWidth;
       }
 
-      hasRowsScroll = that._hasHeight && calculateHasScroll(dataAreaHeight, totalHeight);
-      hasColumnsScroll = calculateHasScroll(groupWidth, totalWidth);
+      let hasRowsScroll = !!this._hasHeight && calculateHasScroll(dataAreaHeight, totalHeight);
+      const hasColumnsScroll = calculateHasScroll(groupWidth, totalWidth);
 
       /// #DEBUG
-      that.__scrollBarUseNative = that._dataArea.getUseNativeValue();
-      that.__scrollBarWidth = scrollBarWidth;
+      this.__scrollBarUseNative = dataArea.getUseNativeValue();
+      this.__scrollBarWidth = scrollBarWidth;
       /// #ENDDEBUG
 
       const groupHeight = calculateGroupHeight(
@@ -1745,111 +1856,117 @@ class PivotGrid extends Widget {
         scrollBarWidth,
       );
 
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises -- fire-and-forget
       deferRender(() => {
-        that._columnsArea.tableElement().append(that._dataArea.headElement());
+        const dataHeadElement = dataArea.headElement();
+        if (dataHeadElement) {
+          columnsArea.tableElement()?.append(dataHeadElement);
+        }
 
-        rowFieldsHeader.tableElement().append(that._rowsArea.headElement());
+        const rowsHeadElement = rowsArea.headElement();
+        if (rowsHeadElement) {
+          rowFieldsHeader.tableElement()?.append(rowsHeadElement);
+        }
 
         if (descriptionCellHeight > columnsAreaHeight) {
           adjustSizeArray(columnsAreaRowHeights, columnsAreaHeight - descriptionCellHeight);
-          that._columnsArea.setRowsHeight(columnsAreaRowHeights);
+          columnsArea.setRowsHeight(columnsAreaRowHeights);
         }
 
         tableElement.removeClass(INCOMPRESSIBLE_FIELDS_CLASS);
         columnHeaderCell.children().css('maxWidth', groupWidth);
-        that._columnsArea.setGroupWidth(groupWidth);
-        that._columnsArea.processScrollBarSpacing(hasRowsScroll ? scrollBarWidth : 0);
-        that._columnsArea.setColumnsWidth(resultWidths);
+        columnsArea.setGroupWidth(groupWidth);
+        columnsArea.processScrollBarSpacing(hasRowsScroll ? scrollBarWidth : 0);
+        columnsArea.setColumnsWidth(resultWidths);
 
-        that._rowsArea.setGroupHeight(that._hasHeight ? groupHeight : 'auto');
-        that._rowsArea.processScrollBarSpacing(hasColumnsScroll ? scrollBarWidth : 0);
+        rowsArea.setGroupHeight(this._hasHeight ? groupHeight : 'auto');
+        rowsArea.processScrollBarSpacing(hasColumnsScroll ? scrollBarWidth : 0);
         // B232690
-        that._rowsArea.setColumnsWidth(rowsAreaColumnWidths);
-        that._rowsArea.setRowsHeight(resultHeights);
+        rowsArea.setColumnsWidth(rowsAreaColumnWidths);
+        rowsArea.setRowsHeight(resultHeights);
 
-        that._dataArea.setColumnsWidth(resultWidths);
-        that._dataArea.setRowsHeight(resultHeights);
-        that._dataArea.setGroupWidth(groupWidth);
-        that._dataArea.setGroupHeight(that._hasHeight ? groupHeight : 'auto');
+        dataArea.setColumnsWidth(resultWidths);
+        dataArea.setRowsHeight(resultHeights);
+        dataArea.setGroupWidth(groupWidth);
+        dataArea.setGroupHeight(this._hasHeight ? groupHeight : 'auto');
 
-        needSynchronizeFieldPanel && rowFieldsHeader.setColumnsWidth(rowsAreaColumnWidths);
+        if (needSynchronizeFieldPanel) {
+          rowFieldsHeader.setColumnsWidth(rowsAreaColumnWidths);
+        }
 
         dataAreaCell.toggleClass(BOTTOM_BORDER_CLASS, !hasRowsScroll);
         rowAreaCell.toggleClass(BOTTOM_BORDER_CLASS, !hasRowsScroll);
 
         // T317921
-        if (!that._hasHeight && (elementWidth !== getWidth(that.$element().get(0)))) {
-          const diff = elementWidth - getWidth(that.$element().get(0));
+        if (!this._hasHeight && (elementWidth !== getWidth(this.$element().get(0)))) {
+          const widthDiff = elementWidth - getWidth(this.$element().get(0));
           if (!hasColumnsScroll) {
-            adjustSizeArray(resultWidths, diff);
-            that._columnsArea.setColumnsWidth(resultWidths);
-            that._dataArea.setColumnsWidth(resultWidths);
+            adjustSizeArray(resultWidths, widthDiff);
+            columnsArea.setColumnsWidth(resultWidths);
+            dataArea.setColumnsWidth(resultWidths);
           }
 
-          that._dataArea.setGroupWidth(groupWidth - diff);
-          that._columnsArea.setGroupWidth(groupWidth - diff);
+          dataArea.setGroupWidth(groupWidth - widthDiff);
+          columnsArea.setGroupWidth(groupWidth - widthDiff);
         }
 
-        if (that._hasHeight && that._filterFields.isVisible()
+        if (this._hasHeight && filterFields.isVisible()
           && getHeight(filterHeaderCell) !== filterAreaHeight) {
-          const diff = Number(getHeight(filterHeaderCell)) - Number(filterAreaHeight);
-          if (diff > 0) {
-            hasRowsScroll = calculateHasScroll(dataAreaHeight - diff, totalHeight);
-            const groupHeight = calculateGroupHeight(
-              dataAreaHeight - diff,
+          const heightDiff = Number(getHeight(filterHeaderCell)) - Number(filterAreaHeight);
+          if (heightDiff > 0) {
+            hasRowsScroll = calculateHasScroll(dataAreaHeight - heightDiff, totalHeight);
+            const filterGroupHeight = calculateGroupHeight(
+              dataAreaHeight - heightDiff,
               totalHeight,
               hasRowsScroll,
               hasColumnsScroll,
               scrollBarWidth,
             );
 
-            that._dataArea.setGroupHeight(groupHeight);
-            that._rowsArea.setGroupHeight(groupHeight);
+            dataArea.setGroupHeight(filterGroupHeight);
+            rowsArea.setGroupHeight(filterGroupHeight);
           }
         }
 
-        const scrollingOptions = that.option('scrolling');
+        const scrollingOptions = this.option('scrolling');
 
-        // @ts-expect-error ts-error
-        if (scrollingOptions.mode === 'virtual') {
-          that._setVirtualContentParams(
+        if (scrollingOptions?.mode === 'virtual') {
+          this._setVirtualContentParams(
+            { dataArea, rowsArea, columnsArea },
             scrollingOptions,
             resultWidths,
             resultHeights,
             groupWidth,
             groupHeight,
-            that._hasHeight,
+            this._hasHeight,
             rowsAreaWidth,
           );
         }
 
-        const updateScrollableResults: any = [];
-        that._dataArea.updateScrollableOptions({
-          direction: that._dataArea.getScrollableDirection(hasColumnsScroll, hasRowsScroll),
-          rtlEnabled: that.option('rtlEnabled'),
+        const updateScrollableResults: (DeferredObj<unknown> | undefined)[] = [];
+        dataArea.updateScrollableOptions({
+          direction: dataArea.getScrollableDirection(hasColumnsScroll, hasRowsScroll),
+          rtlEnabled: this.option('rtlEnabled'),
         });
 
-        each([that._columnsArea, that._rowsArea, that._dataArea], (_, area) => {
-          updateScrollableResults.push(area && area.updateScrollable());
+        [columnsArea, rowsArea, dataArea].forEach((area) => {
+          updateScrollableResults.push(area.updateScrollable());
         });
 
-        // @ts-expect-error ts-error
-        that._updateLoading();
-        that._renderNoDataText(dataAreaCell);
+        this._updateLoading();
+        this._renderNoDataText(dataAreaCell);
 
         /// #DEBUG
-        that._testResultWidths = resultWidths;
-        that._testResultHeights = resultHeights;
+        this._testResultWidths = resultWidths;
+        this._testResultHeights = resultHeights;
         /// #ENDDEBUG
 
         when.apply($, updateScrollableResults).done(() => {
-          that._setAriaGridAttributes(that._dataArea, that._rowsArea, that._columnsArea);
-          that._updateScrollPosition(that._columnsArea, that._rowsArea, that._dataArea, true);
-          that._subscribeToEvents(that._columnsArea, that._rowsArea, that._dataArea);
+          this._setAriaGridAttributes(dataArea, rowsArea, columnsArea);
+          this._updateScrollPosition(columnsArea, rowsArea, dataArea, true);
+          this._subscribeToEvents(columnsArea, rowsArea, dataArea);
 
-          // @ts-expect-error
-          const fieldChooser = that.$element().dxPivotGridFieldChooserBase('instance');
-          fieldChooser.restoreFieldFocus();
+          this._fieldChooserBase?.restoreFieldFocus();
 
           d.resolve();
         });
@@ -1858,15 +1975,16 @@ class PivotGrid extends Widget {
     return d;
   }
 
-  _setVirtualContentParams(
-    scrollingOptions,
-    resultWidths,
-    resultHeights,
-    groupWidth,
-    groupHeight,
-    hasHeight,
-    rowsAreaWidth,
-  ) {
+  protected _setVirtualContentParams(
+    { dataArea, rowsArea, columnsArea }: PivotGridRenderedAreas,
+    scrollingOptions: ScrollingOptions,
+    resultWidths: number[],
+    resultHeights: number[],
+    groupWidth: number,
+    groupHeight: number,
+    hasHeight: boolean | null | undefined,
+    rowsAreaWidth: number,
+  ): void {
     const virtualContentParams = this._dataController.calculateVirtualContentParams({
       virtualRowHeight: scrollingOptions.virtualRowHeight,
       virtualColumnWidth: scrollingOptions.virtualColumnWidth,
@@ -1878,28 +1996,37 @@ class PivotGrid extends Widget {
       viewportHeight: hasHeight ? groupHeight : getOuterHeight(window),
     });
 
-    this._dataArea.setVirtualContentParams({
+    if (!virtualContentParams) {
+      return;
+    }
+
+    dataArea.setVirtualContentParams({
       top: virtualContentParams.contentTop,
       left: virtualContentParams.contentLeft,
       width: virtualContentParams.width,
       height: virtualContentParams.height,
     });
 
-    this._rowsArea.setVirtualContentParams({
+    rowsArea.setVirtualContentParams({
       top: virtualContentParams.contentTop,
       width: rowsAreaWidth,
       height: virtualContentParams.height,
     });
 
-    this._columnsArea.setVirtualContentParams({
-      left: virtualContentParams.contentLeft,
-      width: virtualContentParams.width,
-      height: getHeight(this._columnsArea.groupElement()),
-    });
+    const columnsGroupElement = columnsArea.groupElement();
+    if (columnsGroupElement) {
+      columnsArea.setVirtualContentParams({
+        left: virtualContentParams.contentLeft,
+        width: virtualContentParams.width,
+        height: getHeight(columnsGroupElement.get(0)),
+      });
+    }
   }
 
-  applyPartialDataSource(area, path, dataSource) {
-    this._dataController.applyPartialDataSource(area, path, dataSource);
+  public applyPartialDataSource(
+    ...args: Parameters<DataController['applyPartialDataSource']>
+  ): void {
+    this._dataController.applyPartialDataSource(...args);
   }
 }
 
