@@ -671,6 +671,7 @@ test.describe('Keyboard Navigation - common', () => {
 
     await cell11.element.dblclick();
     await cell11.expectFocusVisible();
+    await cell11.expectEditCell();
     await cell01.expectFocusVisible(false);
 
     await cell01.element.click();
@@ -678,8 +679,13 @@ test.describe('Keyboard Navigation - common', () => {
     await cell11.expectFocusVisible(false);
     await cell11.expectEditCell(false);
 
+    // Cell (0, 1) stays in the DOM, so a click within the window still pairs with the click on it,
+    // and the double click below would not start editing (T1338452 covers only a removed cell).
+    // eslint-disable-next-line no-restricted-syntax -- the double-click window is a time
+    await page.waitForTimeout(DOUBLE_CLICK_WINDOW);
     await cell11.element.dblclick();
     await cell11.expectFocusVisible();
+    await cell11.expectEditCell();
     await cell01.expectFocusVisible(false);
 
     await cell01.element.click();
@@ -3697,7 +3703,7 @@ test.describe('Keyboard Navigation - common', () => {
       .click();
     // The list takes the focus, then renders again once its items load and leaves the focus on the
     // body: the Tabs start from there.
-    await expect(headerFilter.getListItems()).toHaveCount(5);
+    await expect(headerFilter.getList().items).toHaveCount(5);
 
     for (let i = 0; i < 6; i += 1) {
       await page.keyboard.press('Tab');

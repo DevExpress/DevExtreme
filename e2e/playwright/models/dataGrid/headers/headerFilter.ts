@@ -1,11 +1,12 @@
 import type { Locator, Page } from '@playwright/test';
 import GridElement from '../../gridCore/element';
+import List from '../../list';
 
 const CLASS = {
   filterMenu: 'dx-header-filter-menu',
   content: 'dx-overlay-content',
   button: 'dx-button',
-  listItem: 'dx-list-item',
+  list: 'dx-list',
 };
 
 export default class HeaderFilter extends GridElement {
@@ -16,12 +17,12 @@ export default class HeaderFilter extends GridElement {
     this.body = page.locator('body');
   }
 
-  public getButtons(): Locator {
-    return this.element.locator(`.${CLASS.button}`);
+  public getList(): List {
+    return new List(this.element.page(), this.element.locator(`.${CLASS.list}`));
   }
 
-  public getListItems(): Locator {
-    return this.element.locator(`.${CLASS.listItem}`);
+  public getButtons(): Locator {
+    return this.element.locator(`.${CLASS.button}`);
   }
 
   public getContent(): Locator {
