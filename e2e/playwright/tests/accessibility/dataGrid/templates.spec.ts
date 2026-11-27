@@ -1,5 +1,6 @@
 import { expect, test } from '../../../helpers/accessibility/test';
 import { a11yCheck } from '../../../helpers/accessibility/utils';
+import { DEFAULT_SELECTOR } from '../../../helpers/const';
 import { createWidget } from '../../../helpers/createWidget';
 import DataGrid from '../../../models/dataGrid';
 
@@ -30,7 +31,7 @@ test('DataGrid with dataRowTemplate', async ({ page }) => {
     showBorders: true,
   }));
 
-  const dataGrid = new DataGrid(page, '#container');
+  const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
   await expect.poll(() => dataGrid.isReady()).toBe(true);
 

@@ -1,11 +1,11 @@
 import { expect, test } from '../../../helpers/accessibility/test';
 import { a11yCheck } from '../../../helpers/accessibility/utils';
+import { DEFAULT_SELECTOR } from '../../../helpers/const';
 import { createWidget } from '../../../helpers/createWidget';
 import CardView from '../../../models/cardView';
 import { getColumnItem, triggerDragEnd, triggerDragStart } from '../../cardView/columnSortable/utils';
 
-const CARD_VIEW_SELECTOR = '#container';
-const DROPZONE_SELECTOR = `${CARD_VIEW_SELECTOR} .dx-cardview-dropzone`;
+const DROPZONE_SELECTOR = `${DEFAULT_SELECTOR} .dx-cardview-dropzone`;
 
 test('headerPanel dragging column when it has sorting and headerFilter', async ({ page }) => {
   await createWidget(page, 'dxCardView', {
@@ -23,7 +23,7 @@ test('headerPanel dragging column when it has sorting and headerFilter', async (
     }],
   });
 
-  const cardView = new CardView(page, CARD_VIEW_SELECTOR);
+  const cardView = new CardView(page, DEFAULT_SELECTOR);
   const columnElement = cardView.getHeaderPanel().getHeaderItem(0).element;
 
   await triggerDragStart(columnElement);
@@ -34,7 +34,7 @@ test('headerPanel dragging column when it has sorting and headerFilter', async (
       'color-contrast': { enabled: false },
     },
   };
-  await a11yCheck(page, a11yCheckConfig, CARD_VIEW_SELECTOR);
+  await a11yCheck(page, a11yCheckConfig, DEFAULT_SELECTOR);
 });
 
 test('dropzone appear in headerPanel when drag from columnChooser a column', async ({ page }) => {
@@ -49,7 +49,7 @@ test('dropzone appear in headerPanel when drag from columnChooser a column', asy
     ],
   });
 
-  const cardView = new CardView(page, CARD_VIEW_SELECTOR);
+  const cardView = new CardView(page, DEFAULT_SELECTOR);
   const columnElement = getColumnItem(cardView, 0, 'columnChooser');
   const dropzone = page.locator(DROPZONE_SELECTOR);
 
@@ -64,7 +64,7 @@ test('dropzone appear in headerPanel when drag from columnChooser a column', asy
   await expect(dropzone).toHaveCSS('opacity', '0');
 
   const a11yCheckConfig = {};
-  await a11yCheck(page, a11yCheckConfig, CARD_VIEW_SELECTOR);
+  await a11yCheck(page, a11yCheckConfig, DEFAULT_SELECTOR);
 });
 
 test('dropzone appears in headerPanel when drag from columnChooser a column with allowReordering: false', async ({ page }) => {
@@ -80,7 +80,7 @@ test('dropzone appears in headerPanel when drag from columnChooser a column with
     ],
   });
 
-  const cardView = new CardView(page, CARD_VIEW_SELECTOR);
+  const cardView = new CardView(page, DEFAULT_SELECTOR);
   const columnElement = getColumnItem(cardView, 0, 'columnChooser');
   const dropzone = page.locator(DROPZONE_SELECTOR);
 
@@ -94,5 +94,5 @@ test('dropzone appears in headerPanel when drag from columnChooser a column with
   // wait for dropzone animation to finish
   await expect(dropzone).toHaveCSS('opacity', '0');
 
-  await a11yCheck(page, {}, CARD_VIEW_SELECTOR);
+  await a11yCheck(page, {}, DEFAULT_SELECTOR);
 });

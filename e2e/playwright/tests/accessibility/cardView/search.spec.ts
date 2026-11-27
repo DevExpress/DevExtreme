@@ -1,8 +1,7 @@
 import { test } from '../../../helpers/accessibility/test';
 import { a11yCheck } from '../../../helpers/accessibility/utils';
+import { DEFAULT_SELECTOR } from '../../../helpers/const';
 import { createWidget } from '../../../helpers/createWidget';
-
-const CARD_VIEW_SELECTOR = '#container';
 
 const COLUMNS = ['id', 'firstName', 'lastName', 'email', 'gender'];
 
@@ -49,5 +48,5 @@ test('highlighted search text', async ({ page }) => {
     height: 600,
   });
 
-  await a11yCheck(page, {}, CARD_VIEW_SELECTOR);
+  await a11yCheck(page, {}, DEFAULT_SELECTOR);
 });

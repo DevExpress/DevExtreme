@@ -75,7 +75,6 @@ export const CLASS = {
   textEditorInput: 'dx-texteditor-input',
   commandDrag: 'dx-command-drag',
   dialogWrapper: 'dx-dialog-wrapper',
-  summaryTotal: 'dx-datagrid-summary-item',
   scrollableContainer: 'dx-scrollable-container',
   scrollContainer: 'dx-datagrid-scroll-container',
   columnsSeparator: 'dx-datagrid-columns-separator',
@@ -442,32 +441,6 @@ export default class DataGrid extends GridCore {
     )();
   }
 
-  isScrolledToBottom(): Promise<boolean> {
-    const { getInstance } = this;
-    return ClientFunction(() => {
-      const scrollable = (getInstance() as any).getScrollable();
-
-      if (!scrollable) {
-        return false;
-      }
-
-      return scrollable.scrollHeight() - scrollable.clientHeight() - scrollable.scrollTop() <= 1;
-    }, { dependencies: { getInstance } })();
-  }
-
-  isScrolledToRight(): Promise<boolean> {
-    const { getInstance } = this;
-    return ClientFunction(() => {
-      const scrollable = (getInstance() as any).getScrollable();
-
-      if (!scrollable) {
-        return false;
-      }
-
-      return scrollable.scrollWidth() - scrollable.clientWidth() - scrollable.scrollLeft() <= 1;
-    }, { dependencies: { getInstance } })();
-  }
-
   getScrollbarWidth(isHorizontal: boolean): Promise<number> {
     const { getInstance } = this;
 
@@ -687,20 +660,6 @@ export default class DataGrid extends GridCore {
         (getInstance() as DataGridInstance).refresh().catch(() => { });
       },
       { dependencies: { getInstance } },
-    )();
-  }
-
-  apiToggleKeyboardNavigation(value: boolean): Promise<void> {
-    const { getInstance } = this;
-
-    return ClientFunction(
-      () => (getInstance() as DataGridInstance).option('keyboardNavigation.enabled', value),
-      {
-        dependencies: {
-          getInstance,
-          value,
-        },
-      },
     )();
   }
 
@@ -1026,10 +985,6 @@ export default class DataGrid extends GridCore {
 
   getSummaryCellStatusContainer(nth = 0): Selector {
     return this.element().find(`[${E2E_ATTRIBUTES.summaryCellStatusContainer}="true"]`).nth(nth);
-  }
-
-  getSummaryTotalElement(nth = 0): Selector {
-    return this.element().find(`.${CLASS.summaryTotal}`).nth(nth);
   }
 
   apiChangeSensitivity(

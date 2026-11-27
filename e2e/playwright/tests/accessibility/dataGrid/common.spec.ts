@@ -1,11 +1,10 @@
 import { expect, test } from '../../../helpers/accessibility/test';
 import { a11yCheck } from '../../../helpers/accessibility/utils';
+import { DEFAULT_SELECTOR } from '../../../helpers/const';
 import { createWidget } from '../../../helpers/createWidget';
 import DataGrid from '../../../models/dataGrid';
 import HeaderFilter from '../../../models/dataGrid/headers/headerFilter';
 import { getData } from '../../dataGrid/helpers/generateDataSourceData';
-
-const DATA_GRID_SELECTOR = '#container';
 
 const a11yCheckConfig = {};
 
@@ -18,11 +17,11 @@ test('Grid without config', async ({ page }) => {
     dataSource: [],
   });
 
-  const dataGrid = new DataGrid(page, DATA_GRID_SELECTOR);
+  const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
   await expectReady(dataGrid);
 
-  await a11yCheck(page, a11yCheckConfig, DATA_GRID_SELECTOR);
+  await a11yCheck(page, a11yCheckConfig, DEFAULT_SELECTOR);
 });
 
 test('Grid without data', async ({ page }) => {
@@ -33,11 +32,11 @@ test('Grid without data', async ({ page }) => {
     ],
   });
 
-  const dataGrid = new DataGrid(page, DATA_GRID_SELECTOR);
+  const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
   await expectReady(dataGrid);
 
-  await a11yCheck(page, a11yCheckConfig, DATA_GRID_SELECTOR);
+  await a11yCheck(page, a11yCheckConfig, DEFAULT_SELECTOR);
 });
 
 test('Sorting and group panel', async ({ page }) => {
@@ -64,11 +63,11 @@ test('Sorting and group panel', async ({ page }) => {
     ],
   });
 
-  const dataGrid = new DataGrid(page, DATA_GRID_SELECTOR);
+  const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
   await expectReady(dataGrid);
 
-  await a11yCheck(page, a11yCheckConfig, DATA_GRID_SELECTOR);
+  await a11yCheck(page, a11yCheckConfig, DEFAULT_SELECTOR);
 });
 
 test('Paging with displayMode is \'full\'', async ({ page }) => {
@@ -95,11 +94,11 @@ test('Paging with displayMode is \'full\'', async ({ page }) => {
     },
   });
 
-  const dataGrid = new DataGrid(page, DATA_GRID_SELECTOR);
+  const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
   await expectReady(dataGrid);
 
-  await a11yCheck(page, a11yCheckConfig, DATA_GRID_SELECTOR);
+  await a11yCheck(page, a11yCheckConfig, DEFAULT_SELECTOR);
 });
 
 test('Paging with displayMode is \'compact\'', async ({ page }) => {
@@ -126,11 +125,11 @@ test('Paging with displayMode is \'compact\'', async ({ page }) => {
     },
   });
 
-  const dataGrid = new DataGrid(page, DATA_GRID_SELECTOR);
+  const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
   await expectReady(dataGrid);
 
-  await a11yCheck(page, a11yCheckConfig, DATA_GRID_SELECTOR);
+  await a11yCheck(page, a11yCheckConfig, DEFAULT_SELECTOR);
 });
 
 test('Grouping and Summary', async ({ page }) => {
@@ -174,11 +173,11 @@ test('Grouping and Summary', async ({ page }) => {
     },
   });
 
-  const dataGrid = new DataGrid(page, DATA_GRID_SELECTOR);
+  const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
   await expectReady(dataGrid);
 
-  await a11yCheck(page, a11yCheckConfig, DATA_GRID_SELECTOR);
+  await a11yCheck(page, a11yCheckConfig, DEFAULT_SELECTOR);
 });
 
 test('Filter row - filter menu', async ({ page }) => {
@@ -201,9 +200,9 @@ test('Filter row - filter menu', async ({ page }) => {
         filterValue: [1, 7],
       },
     ],
-  }, DATA_GRID_SELECTOR);
+  }, DEFAULT_SELECTOR);
 
-  const dataGrid = new DataGrid(page, DATA_GRID_SELECTOR);
+  const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
   const filterCell = dataGrid.getFilterCell(0);
 
   await expectReady(dataGrid);
@@ -235,9 +234,9 @@ test('Header filter - filter menu', async ({ page }) => {
       'field_3',
       'field_4',
     ],
-  }, DATA_GRID_SELECTOR);
+  }, DEFAULT_SELECTOR);
 
-  const dataGrid = new DataGrid(page, DATA_GRID_SELECTOR);
+  const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
   const headerCell = dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(0);
   const filterIconElement = headerCell.getFilterIcon();
 
@@ -267,10 +266,10 @@ test('Filter panel', async ({ page }) => {
       'field_3',
       'field_4',
     ],
-  }, DATA_GRID_SELECTOR);
+  }, DEFAULT_SELECTOR);
 
   // arrange
-  const dataGrid = new DataGrid(page, DATA_GRID_SELECTOR);
+  const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
   const filterPanel = dataGrid.getFilterPanel();
 
   await expectReady(dataGrid);
@@ -293,9 +292,9 @@ test('Filter panel - popup with filter builder', async ({ page }) => {
       'field_3',
       'field_4',
     ],
-  }, DATA_GRID_SELECTOR);
+  }, DEFAULT_SELECTOR);
 
-  const dataGrid = new DataGrid(page, DATA_GRID_SELECTOR);
+  const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
   const filterPanel = dataGrid.getFilterPanel();
   const filterPanelIcon = filterPanel.getIconFilter();
 
@@ -327,11 +326,11 @@ test('Search panel', async ({ page }) => {
     ],
   });
 
-  const dataGrid = new DataGrid(page, DATA_GRID_SELECTOR);
+  const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
   await expectReady(dataGrid);
 
-  await a11yCheck(page, a11yCheckConfig, DATA_GRID_SELECTOR);
+  await a11yCheck(page, a11yCheckConfig, DEFAULT_SELECTOR);
 });
 
 test('Search panel - highlight', async ({ page }) => {
@@ -351,14 +350,14 @@ test('Search panel - highlight', async ({ page }) => {
     ],
   });
 
-  const dataGrid = new DataGrid(page, DATA_GRID_SELECTOR);
+  const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
   await expectReady(dataGrid);
 
   await a11yCheck(page, {
     ...a11yCheckConfig,
     runOnly: '',
-  }, DATA_GRID_SELECTOR);
+  }, DEFAULT_SELECTOR);
 });
 
 test('Selection', async ({ page }) => {
@@ -379,13 +378,13 @@ test('Selection', async ({ page }) => {
     ],
   });
 
-  const dataGrid = new DataGrid(page, DATA_GRID_SELECTOR);
+  const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
   await expectReady(dataGrid);
   await dataGrid.getDataRow(1).expectSelected();
   await dataGrid.getDataRow(2).expectSelected();
 
-  await a11yCheck(page, a11yCheckConfig, DATA_GRID_SELECTOR);
+  await a11yCheck(page, a11yCheckConfig, DEFAULT_SELECTOR);
 });
 
 test('Focused row', async ({ page }) => {
@@ -403,12 +402,12 @@ test('Focused row', async ({ page }) => {
     ],
   });
 
-  const dataGrid = new DataGrid(page, DATA_GRID_SELECTOR);
+  const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
   await expectReady(dataGrid);
   await dataGrid.getDataRow(1).expectFocusedRow();
 
-  await a11yCheck(page, a11yCheckConfig, DATA_GRID_SELECTOR);
+  await a11yCheck(page, a11yCheckConfig, DEFAULT_SELECTOR);
 });
 
 test('Fixed columns', async ({ page }) => {
@@ -444,11 +443,11 @@ test('Fixed columns', async ({ page }) => {
     ],
   });
 
-  const dataGrid = new DataGrid(page, DATA_GRID_SELECTOR);
+  const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
   await expectReady(dataGrid);
 
-  await a11yCheck(page, a11yCheckConfig, DATA_GRID_SELECTOR);
+  await a11yCheck(page, a11yCheckConfig, DEFAULT_SELECTOR);
 });
 
 test('Column chooser with the \'dragAndDrop\' mode', async ({ page }) => {
@@ -474,9 +473,9 @@ test('Column chooser with the \'dragAndDrop\' mode', async ({ page }) => {
       'field_5',
       'field_6',
     ],
-  }, DATA_GRID_SELECTOR);
+  }, DEFAULT_SELECTOR);
 
-  const dataGrid = new DataGrid(page, DATA_GRID_SELECTOR);
+  const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
   const columnChooser = dataGrid.getColumnChooser();
   const columnChooserButton = dataGrid.getColumnChooserButton();
 
@@ -512,9 +511,9 @@ test('Column chooser with the \'select\' mode', async ({ page }) => {
       'field_5',
       'field_6',
     ],
-  }, DATA_GRID_SELECTOR);
+  }, DEFAULT_SELECTOR);
 
-  const dataGrid = new DataGrid(page, DATA_GRID_SELECTOR);
+  const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
   const columnChooser = dataGrid.getColumnChooser();
   const columnChooserButton = dataGrid.getColumnChooserButton();
 
@@ -547,9 +546,9 @@ test('Empty column chooser', async ({ page }) => {
       'field_3',
       'field_4',
     ],
-  }, DATA_GRID_SELECTOR);
+  }, DEFAULT_SELECTOR);
 
-  const dataGrid = new DataGrid(page, DATA_GRID_SELECTOR);
+  const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
   const columnChooser = dataGrid.getColumnChooser();
   const columnChooserButton = dataGrid.getColumnChooserButton();
 
@@ -586,9 +585,9 @@ test('Empty column chooser', async ({ page }) => {
         'field_3',
         'field_4',
       ],
-    }, DATA_GRID_SELECTOR);
+    }, DEFAULT_SELECTOR);
 
-    const dataGrid = new DataGrid(page, DATA_GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
     await expectReady(dataGrid);
 
@@ -612,9 +611,9 @@ test('Empty column chooser', async ({ page }) => {
         'field_3',
         'field_4',
       ],
-    }, DATA_GRID_SELECTOR);
+    }, DEFAULT_SELECTOR);
 
-    const dataGrid = new DataGrid(page, DATA_GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
     await expectReady(dataGrid);
 
@@ -642,9 +641,9 @@ test('Row editing mode - confirm delete message', async ({ page }) => {
       'field_3',
       'field_4',
     ],
-  }, DATA_GRID_SELECTOR);
+  }, DEFAULT_SELECTOR);
 
-  const dataGrid = new DataGrid(page, DATA_GRID_SELECTOR);
+  const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
   await expectReady(dataGrid);
 
@@ -674,9 +673,9 @@ test('Batch editing mode - edit cell', async ({ page }) => {
       'field_3',
       'field_4',
     ],
-  }, DATA_GRID_SELECTOR);
+  }, DEFAULT_SELECTOR);
 
-  const dataGrid = new DataGrid(page, DATA_GRID_SELECTOR);
+  const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
   await expectReady(dataGrid);
 
@@ -684,7 +683,7 @@ test('Batch editing mode - edit cell', async ({ page }) => {
 
   await dataGrid.getDataCell(0, 0).expectEditCell();
 
-  await a11yCheck(page, a11yCheckConfig, DATA_GRID_SELECTOR);
+  await a11yCheck(page, a11yCheckConfig, DEFAULT_SELECTOR);
 });
 
 test('Batch editing mode - modified cell', async ({ page }) => {
@@ -703,9 +702,9 @@ test('Batch editing mode - modified cell', async ({ page }) => {
       'field_3',
       'field_4',
     ],
-  }, DATA_GRID_SELECTOR);
+  }, DEFAULT_SELECTOR);
 
-  const dataGrid = new DataGrid(page, DATA_GRID_SELECTOR);
+  const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
   await expectReady(dataGrid);
 
@@ -713,7 +712,7 @@ test('Batch editing mode - modified cell', async ({ page }) => {
 
   await dataGrid.getDataCell(0, 0).expectModified();
 
-  await a11yCheck(page, a11yCheckConfig, DATA_GRID_SELECTOR);
+  await a11yCheck(page, a11yCheckConfig, DEFAULT_SELECTOR);
 });
 
 test('Batch editing mode - delete row', async ({ page }) => {
@@ -732,9 +731,9 @@ test('Batch editing mode - delete row', async ({ page }) => {
       'field_3',
       'field_4',
     ],
-  }, DATA_GRID_SELECTOR);
+  }, DEFAULT_SELECTOR);
 
-  const dataGrid = new DataGrid(page, DATA_GRID_SELECTOR);
+  const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
   await expectReady(dataGrid);
 
@@ -761,9 +760,9 @@ test('Form editing mode', async ({ page }) => {
       'field_3',
       'field_4',
     ],
-  }, DATA_GRID_SELECTOR);
+  }, DEFAULT_SELECTOR);
 
-  const dataGrid = new DataGrid(page, DATA_GRID_SELECTOR);
+  const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
   await expectReady(dataGrid);
 
@@ -790,9 +789,9 @@ test('Popup editing mode', async ({ page }) => {
       'field_3',
       'field_4',
     ],
-  }, DATA_GRID_SELECTOR);
+  }, DEFAULT_SELECTOR);
 
-  const dataGrid = new DataGrid(page, DATA_GRID_SELECTOR);
+  const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
   await expectReady(dataGrid);
 
@@ -822,9 +821,9 @@ test('Validation in cell editing mode', async ({ page }) => {
       'field_3',
       'field_4',
     ],
-  }, DATA_GRID_SELECTOR);
+  }, DEFAULT_SELECTOR);
 
-  const dataGrid = new DataGrid(page, DATA_GRID_SELECTOR);
+  const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
   await expectReady(dataGrid);
 
@@ -860,9 +859,9 @@ test('Error row', async ({ page }) => {
       e.isValid = false;
       e.errorText = 'Test';
     },
-  }), DATA_GRID_SELECTOR, { arg: getData(10, 5) });
+  }), DEFAULT_SELECTOR, { arg: getData(10, 5) });
 
-  const dataGrid = new DataGrid(page, DATA_GRID_SELECTOR);
+  const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
   await expectReady(dataGrid);
 
@@ -885,9 +884,9 @@ test('Adaptability', async ({ page }) => {
     columnWidth: 100,
     width: 800,
     columnHidingEnabled: true,
-  }, DATA_GRID_SELECTOR);
+  }, DEFAULT_SELECTOR);
 
-  const dataGrid = new DataGrid(page, DATA_GRID_SELECTOR);
+  const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
   await expectReady(dataGrid);
 
@@ -895,7 +894,7 @@ test('Adaptability', async ({ page }) => {
 
   await expect(dataGrid.getAdaptiveRow(0).element).toBeAttached();
 
-  await a11yCheck(page, a11yCheckConfig, DATA_GRID_SELECTOR);
+  await a11yCheck(page, a11yCheckConfig, DEFAULT_SELECTOR);
 });
 
 test('Row drag and drop', async ({ page }) => {
@@ -906,13 +905,13 @@ test('Row drag and drop', async ({ page }) => {
       allowReordering: true,
       showDragIcons: true,
     },
-  }, DATA_GRID_SELECTOR);
+  }, DEFAULT_SELECTOR);
 
-  const dataGrid = new DataGrid(page, DATA_GRID_SELECTOR);
+  const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
   await expectReady(dataGrid);
 
-  await a11yCheck(page, a11yCheckConfig, DATA_GRID_SELECTOR);
+  await a11yCheck(page, a11yCheckConfig, DEFAULT_SELECTOR);
 });
 
 test('Export', async ({ page }) => {
@@ -924,9 +923,9 @@ test('Export', async ({ page }) => {
       formats: ['xlsx', 'pdf'],
       allowExportSelectedData: true,
     },
-  }, DATA_GRID_SELECTOR);
+  }, DEFAULT_SELECTOR);
 
-  const dataGrid = new DataGrid(page, DATA_GRID_SELECTOR);
+  const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
   const headerPanel = dataGrid.getHeaderPanel();
   const exportButton = headerPanel.getExportButton();
 
@@ -954,9 +953,9 @@ test('Context menu', async ({ page }) => {
     sorting: {
       mode: 'multiple',
     },
-  }, DATA_GRID_SELECTOR);
+  }, DEFAULT_SELECTOR);
 
-  const dataGrid = new DataGrid(page, DATA_GRID_SELECTOR);
+  const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
   const headerRow = dataGrid.getHeaders().getHeaderRow(0);
 
   await expectReady(dataGrid);

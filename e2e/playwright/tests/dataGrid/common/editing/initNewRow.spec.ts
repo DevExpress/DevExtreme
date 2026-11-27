@@ -1,4 +1,5 @@
 import { expect, test } from '../../../../fixtures';
+import { DEFAULT_SELECTOR } from '../../../../helpers/const';
 import { createWidget } from '../../../../helpers/createWidget';
 import DataGrid from '../../../../models/dataGrid';
 
@@ -21,7 +22,7 @@ test.describe('initNewRow', () => {
       height: 300,
     }));
 
-    const dataGrid = new DataGrid(page, '#container');
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
     await dataGrid.getHeaderPanel().getAddRowButton().click();
     await dataGrid.getPopupEditForm().cancelButton.click();
