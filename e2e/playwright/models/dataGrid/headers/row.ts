@@ -16,4 +16,8 @@ export default class HeaderRow extends GridElement {
   public getDataHeaderCells(): Locator {
     return this.element.locator(':scope > td[role="columnheader"]');
   }
+
+  public getHeaderCells(): Locator {
+    return this.element.locator(':scope > td');
+  }
 }
