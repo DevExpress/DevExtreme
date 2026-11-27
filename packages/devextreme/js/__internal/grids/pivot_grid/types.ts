@@ -11,7 +11,6 @@ import type { StoreLoadOptions } from '@ts/data/data_source/types';
 
 import type { AreaItemCell, AreaName } from './area_item/types';
 import type { DataArea } from './data_area/data_area';
-import type { FieldChooserField } from './field_chooser/const';
 import type { HorizontalHeadersArea, VerticalHeadersArea } from './headers_area/headers_area';
 
 export type PivotGridField = Field & {
@@ -19,7 +18,13 @@ export type PivotGridField = Field & {
   _initProperties?: Record<string, unknown> | null;
   levels?: PivotGridField[];
   searchValue?: string;
+  /** Set by the XMLA store; the field chooser groups the fields by it. */
+  dimension?: string;
+  /** Set by the XMLA store; the field chooser selects the default hierarchy first. */
+  isDefault?: boolean;
 };
+
+export type PivotGridPreparedField = PivotGridField & { index: number };
 
 export type PivotGridFilterField = Omit<
   PivotGridField,
@@ -112,7 +117,7 @@ export interface PivotGridCellEventArgs extends PivotGridEventArgsBase {
 }
 
 export interface PivotGridFieldEventArgs extends PivotGridEventArgsBase {
-  field?: FieldChooserField;
+  field?: PivotGridPreparedField;
 }
 
 export type PivotGridEventArgs = PivotGridCellEventArgs | PivotGridFieldEventArgs;
