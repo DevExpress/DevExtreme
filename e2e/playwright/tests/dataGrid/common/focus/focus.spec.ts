@@ -1,10 +1,9 @@
 import type { GridsEditMode } from 'devextreme/ui/data_grid';
 import { expect, test } from '../../../../fixtures';
+import { DEFAULT_SELECTOR } from '../../../../helpers/const';
 import { createWidget } from '../../../../helpers/createWidget';
 import DataGrid from '../../../../models/dataGrid';
 import TextBox from '../../../../models/textBox';
-
-const GRID_SELECTOR = '#container';
 
 test.describe('Focus', () => {
   test('Should remove dx-focused class on blur event from the cell', async ({ page }) => {
@@ -22,7 +21,7 @@ test.describe('Focus', () => {
       onCellClick: (event) => event.component.focus(event.cellElement),
     }));
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
     const firstCell = dataGrid.getDataCell(0, 1);
     const secondCell = dataGrid.getDataCell(1, 1);
@@ -59,9 +58,9 @@ test.describe('Focus', () => {
           focusedRowEnabled: true,
           focusedRowKey: 1,
         };
-      }, GRID_SELECTOR, { arg: reshapeOnPush });
+      }, DEFAULT_SELECTOR, { arg: reshapeOnPush });
 
-      const dataGrid = new DataGrid(page, GRID_SELECTOR);
+      const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
       await dataGrid.getDataRow(1).expectFocusedRow();
       await expect(dataGrid.getDataRow(1).element).toHaveText('Item 2');
@@ -108,9 +107,9 @@ test.describe('Focus', () => {
             global.onFocusedRowChangedCounter += 1;
           },
         };
-      }, GRID_SELECTOR, { arg: reshapeOnPush });
+      }, DEFAULT_SELECTOR, { arg: reshapeOnPush });
 
-      const dataGrid = new DataGrid(page, GRID_SELECTOR);
+      const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
       const getFocusedRowChangedCounter = (): Promise<number> => page.evaluate(
         () => (window as any).onFocusedRowChangedCounter,
       );
@@ -153,7 +152,7 @@ test.describe('Focus', () => {
       columns: ['FirstName'],
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const filterEditor = dataGrid.getFilterEditor(0, TextBox).input;
 
     await dataGrid.getDataCell(0, 0).element.click();
@@ -197,9 +196,9 @@ test.describe('Focus', () => {
         showBorders: true,
         focusedRowEnabled: true,
         focusedRowKey: 1,
-      }), GRID_SELECTOR, { arg: scrollingMode });
+      }), DEFAULT_SELECTOR, { arg: scrollingMode });
 
-      const grid = new DataGrid(page, GRID_SELECTOR);
+      const grid = new DataGrid(page, DEFAULT_SELECTOR);
 
       await grid.getDataRow(0).expectFocusedRow();
 
@@ -238,7 +237,7 @@ test.describe('Focus', () => {
       },
     }));
 
-    const grid = new DataGrid(page, GRID_SELECTOR);
+    const grid = new DataGrid(page, DEFAULT_SELECTOR);
 
     await expect.poll(() => grid.option('focusedRowKey')).toBe(null);
     await expect.poll(() => grid.option('focusedRowIndex')).toBe(-1);
@@ -257,9 +256,9 @@ test.describe('Focus', () => {
         [eventName]: (e) => {
           e.component.repaint();
         },
-      }), GRID_SELECTOR, { arg: event });
+      }), DEFAULT_SELECTOR, { arg: event });
 
-      const dataGrid = new DataGrid(page, GRID_SELECTOR);
+      const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
       await dataGrid.getDataCell(0, 0).element.click();
       await dataGrid.getDataRow(0).expectFocusedRow();
@@ -280,7 +279,7 @@ test.describe('Focus', () => {
       ],
     });
 
-    const grid = new DataGrid(page, GRID_SELECTOR);
+    const grid = new DataGrid(page, DEFAULT_SELECTOR);
 
     await grid.getDataCell(0, 0).element.click();
     await grid.getDataCell(0, 1).element.click();
@@ -307,7 +306,7 @@ test.describe('Focus', () => {
       ],
     }));
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
@@ -335,7 +334,7 @@ test.describe('Focus', () => {
       ],
     }));
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
@@ -361,7 +360,7 @@ test.describe('Focus', () => {
         columns: ['FirstName', 'LastName'],
       });
 
-      const dataGrid = new DataGrid(page, GRID_SELECTOR);
+      const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
       await expect.poll(() => dataGrid.isReady()).toBe(true);
 

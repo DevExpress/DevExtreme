@@ -10,6 +10,7 @@ const CLASS = {
   editButton: 'dx-link-edit',
   saveButton: 'dx-link-save',
   deleteButton: 'dx-link-delete',
+  selectCheckBox: 'dx-select-checkbox',
 };
 
 const commandSelector = [
@@ -42,6 +43,10 @@ export default class CommandCell extends GridFocusableElement {
 
   public getDeleteButton(): Locator {
     return this.element.locator(`.${CLASS.deleteButton}`);
+  }
+
+  public getSelectCheckBox(): Locator {
+    return this.element.locator(`.${CLASS.selectCheckBox}`);
   }
 
   public getAdaptiveButton(): Locator {

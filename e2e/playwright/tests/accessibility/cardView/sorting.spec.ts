@@ -1,9 +1,8 @@
 import { test } from '../../../helpers/accessibility/test';
 import { a11yCheck } from '../../../helpers/accessibility/utils';
+import { DEFAULT_SELECTOR } from '../../../helpers/const';
 import { createWidget } from '../../../helpers/createWidget';
 import { data } from '../../cardView/helpers/simpleArrayData';
-
-const CARD_VIEW_SELECTOR = '#container';
 
 const baseConfig = {
   dataSource: data,
@@ -30,7 +29,7 @@ test('Default render', async ({ page }) => {
     ],
   });
 
-  await a11yCheck(page, {}, CARD_VIEW_SELECTOR);
+  await a11yCheck(page, {}, DEFAULT_SELECTOR);
 });
 
 test('Default multiple sorting render', async ({ page }) => {
@@ -54,7 +53,7 @@ test('Default multiple sorting render', async ({ page }) => {
     ],
   });
 
-  await a11yCheck(page, {}, CARD_VIEW_SELECTOR);
+  await a11yCheck(page, {}, DEFAULT_SELECTOR);
 });
 
 test('Sort index API', async ({ page }) => {
@@ -80,7 +79,7 @@ test('Sort index API', async ({ page }) => {
     ],
   });
 
-  await a11yCheck(page, {}, CARD_VIEW_SELECTOR);
+  await a11yCheck(page, {}, DEFAULT_SELECTOR);
 });
 
 test('ShowSortIndexes API', async ({ page }) => {
@@ -109,7 +108,7 @@ test('ShowSortIndexes API', async ({ page }) => {
     ],
   });
 
-  await a11yCheck(page, {}, CARD_VIEW_SELECTOR);
+  await a11yCheck(page, {}, DEFAULT_SELECTOR);
 });
 
 test('AllowSorting API', async ({ page }) => {
@@ -140,7 +139,7 @@ test('AllowSorting API', async ({ page }) => {
     height: 500,
   });
 
-  await a11yCheck(page, {}, CARD_VIEW_SELECTOR);
+  await a11yCheck(page, {}, DEFAULT_SELECTOR);
 });
 
 // The function cannot cross into the page as an argument, so the factory picks it by name.
@@ -173,9 +172,9 @@ test('AllowSorting API', async ({ page }) => {
           dataField: 'lastName',
         },
       ],
-    }), CARD_VIEW_SELECTOR, { arg: { config: baseConfig, sortValue: calculateSortValue } });
+    }), DEFAULT_SELECTOR, { arg: { config: baseConfig, sortValue: calculateSortValue } });
 
-    await a11yCheck(page, {}, CARD_VIEW_SELECTOR);
+    await a11yCheck(page, {}, DEFAULT_SELECTOR);
   });
 });
 
@@ -205,7 +204,7 @@ test('SortingMethod API', async ({ page }) => {
         dataField: 'lastName',
       },
     ],
-  }), CARD_VIEW_SELECTOR, { arg: baseConfig });
+  }), DEFAULT_SELECTOR, { arg: baseConfig });
 
-  await a11yCheck(page, {}, CARD_VIEW_SELECTOR);
+  await a11yCheck(page, {}, DEFAULT_SELECTOR);
 });

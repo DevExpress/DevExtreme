@@ -3,13 +3,11 @@ import { Selector } from 'testcafe';
 import FocusableElement from '../../internal/focusable';
 import Widget from '../../internal/widget';
 import { CellEditor } from './cellEditor';
-import DropDownButton from '../../dropDownButton';
 
 const CLASS = {
   hiddenColumn: 'hidden-column',
   editCell: 'dx-editor-cell',
   focused: 'dx-focused',
-  dropDownButton: 'dx-dropdownbutton',
   editorInput: 'dx-texteditor-input',
   invalidCell: 'dx-datagrid-invalid',
   cellModified: 'dx-cell-modified',
@@ -47,10 +45,6 @@ export default class DataCell extends FocusableElement {
 
   getCheckbox(): Selector {
     return this.element.find(`.${CLASS.checkbox}`);
-  }
-
-  getDropDownButton(): DropDownButton {
-    return new DropDownButton(this.element.find(`.${CLASS.dropDownButton}`));
   }
 
   getLinkEdit(): Selector {
