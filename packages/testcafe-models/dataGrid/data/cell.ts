@@ -21,8 +21,6 @@ export default class DataCell extends FocusableElement {
 
   isInvalid: Promise<boolean>;
 
-  isModified: Promise<boolean>;
-
   isHidden: Promise<boolean>;
 
   constructor(dataRow: Selector, index: number, widgetName: string) {
@@ -30,7 +28,6 @@ export default class DataCell extends FocusableElement {
     this.isEditCell = this.element.hasClass(CLASS.editCell);
     this.isFocused = this.element.hasClass(CLASS.focused);
     this.isInvalid = this.element.hasClass(CLASS.invalidCell);
-    this.isModified = this.element.hasClass(CLASS.cellModified);
     this.isHidden = this.element.hasClass(Widget.addClassPrefix(widgetName, CLASS.hiddenColumn));
   }
 

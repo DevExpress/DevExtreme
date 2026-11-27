@@ -90,6 +90,11 @@ export default abstract class GridBase extends GridCore {
     return this.element.locator(`${selector}:not(:scope .${CLASS.masterDetailRow} *)`);
   }
 
+  // The grid's own container, not the filter menus inside it, which carry the same class.
+  public getContainer(): Locator {
+    return this.element.locator(`:scope > .${this.addWidgetPrefix()}`);
+  }
+
   public getHeaders(): Headers {
     return new Headers(this.ownElement(`.${this.addWidgetPrefix(CLASS.headers)}`), this.getName());
   }

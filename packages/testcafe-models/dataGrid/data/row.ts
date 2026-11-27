@@ -12,7 +12,6 @@ const CLASS = {
   selection: 'dx-selection',
   selectCheckBox: 'dx-select-checkbox',
   insertedRow: 'dx-row-inserted',
-  editedRow: 'dx-edit-row',
   groupExpanded: 'group-opened',
   stateHover: 'dx-state-hover',
 };
@@ -28,8 +27,6 @@ export default class DataRow extends FocusableElement {
 
   isInserted: Promise<boolean>;
 
-  isEdited: Promise<boolean>;
-
   isExpanded: Promise<boolean>;
 
   isHovered: Promise<boolean>;
@@ -41,7 +38,6 @@ export default class DataRow extends FocusableElement {
     this.isFocusedRow = this.element.hasClass(CLASS.focusedRow);
     this.isSelected = this.element.hasClass(CLASS.selection);
     this.isInserted = this.element.hasClass(CLASS.insertedRow);
-    this.isEdited = this.element.hasClass(CLASS.editedRow);
     this.isExpanded = this.element.find(`.${CLASS.commandExpand} .${Widget.addClassPrefix(this.widgetName, CLASS.groupExpanded)}`).exists;
     this.isHovered = this.element.hasClass(CLASS.stateHover);
   }
