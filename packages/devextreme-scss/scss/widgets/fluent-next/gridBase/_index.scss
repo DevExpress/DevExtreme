@@ -3,6 +3,7 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../../base/icon_fonts" as *;
+@use "../../base/gridBase/mixins" as *;
 @use "../textEditor" as *;
 @use "../textEditor/sizes" as textEditorSizes;
 @use "../common/mixins" as *;
@@ -310,11 +311,6 @@
       > td.dx-cell-modified:not(.dx-field-item-content):not(.dx-validation-pending),
       > td.dx-#{$widget-name}-invalid:not(.dx-field-item-content):not(.dx-validation-pending):not(.dx-#{$widget-name}-select-all) {
         &.dx-command-edit {
-          .dx-link:not(.dx-link-icon) {
-            margin: 0 var(--dx-grid-command-edit-text-margin);
-            min-width: var(--dx-grid-link-icon-min-width);
-          }
-
           &.dx-command-edit-with-icons {
             .dx-link {
               @include dx-icon-sizing(var(--dx-grid-command-edit-icon-size));
@@ -323,9 +319,18 @@
               vertical-align: middle;
             }
 
-            .dx-link:not(.dx-link-icon) {
-              width: auto;
+            .dx-link.dx-link-icon {
+              @include dx-icon-target-sizing(var(--dx-grid-command-edit-icon-size), var(--dx-grid-command-edit-icon-margin), buttonSizes.$button-height);
             }
+          }
+
+          .dx-link:not(.dx-link-icon) {
+            @include dx-command-text-target-sizing(
+              buttonSizes.$button-height,
+              buttonSizes.$button-padding-inline,
+              max(4px, var(--dx-grid-command-edit-text-margin)),
+              var(--dx-grid-link-icon-min-width)
+            );
           }
 
           .dx-state-disabled {

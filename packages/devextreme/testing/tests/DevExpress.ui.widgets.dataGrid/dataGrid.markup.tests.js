@@ -157,7 +157,7 @@ QUnit.module('DataGrid markup', {
 
         if(windowUtils.hasWindow()) {
             const convertedWidth = parseFloat(editCommandColWidth, 10);
-            assert.roughEqual(convertedWidth, 93, 0.5, 'width style for edit command column');
+            assert.roughEqual(convertedWidth, 120, 0.5, 'width style for edit command column');
         } else {
             assert.equal(editCommandColWidth, 'auto', 'width style for edit command column');
         }

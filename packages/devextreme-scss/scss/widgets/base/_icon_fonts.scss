@@ -236,6 +236,20 @@
   line-height: $icon-size;
 }
 
+@mixin dx-icon-target-sizing($icon-size, $icon-margin, $target-size) {
+  $container-size: max($target-size, $icon-size);
+  $inset: calc(($container-size - $icon-size) / 2);
+
+  @include dx-icon-sizing($icon-size, $container-size);
+
+  margin: calc(-1 * $inset) max(4px, $icon-margin);
+  background-clip: content-box;
+
+  & + .dx-link.dx-link-icon {
+    margin-inline-start: calc(8px - max(4px, $icon-margin));
+  }
+}
+
 @mixin dx-icon-font-centered-sizing($icon-size, $position: absolute) {
   $icon-center-offset: calc($icon-size / -2);
 

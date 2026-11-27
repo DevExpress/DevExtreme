@@ -1151,7 +1151,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
         assert.equal(cols.eq(0).width(), 50, 'select column width');
         assert.equal(cols.eq(1).width(), 30, 'grouped column width');
-        assert.roughEqual(cols.eq(cols.length - 1).width(), 93, 1, 'edit column width');
+        assert.roughEqual(cols.eq(cols.length - 1).width(), 120, 1, 'edit column width');
     });
 });
 

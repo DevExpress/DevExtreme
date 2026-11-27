@@ -5,6 +5,7 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../../base/icon_fonts" as *;
+@use "../../base/gridBase/mixins" as *;
 @use "../dropDownEditor" as *;
 @use "../textEditor" as *;
 @use "../textEditor/sizes" as *;
@@ -260,11 +261,6 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
       > td.dx-cell-modified:not(.dx-field-item-content):not(.dx-validation-pending),
       > td.dx-#{$widget-name}-invalid:not(.dx-field-item-content):not(.dx-validation-pending):not(.dx-#{$widget-name}-select-all) {
         &.dx-command-edit {
-          .dx-link:not(.dx-link-icon) {
-            margin: 0 $fluent-command-edit-text-margin;
-            min-width: 20px;
-          }
-
           &.dx-command-edit-with-icons {
             .dx-link {
               @include dx-icon-sizing($fluent-command-edit-icon-size);
@@ -273,9 +269,17 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
               vertical-align: middle;
             }
 
-            .dx-link:not(.dx-link-icon) {
-              width: auto;
+            .dx-link.dx-link-icon {
+              @include dx-icon-target-sizing($fluent-command-edit-icon-size, $fluent-command-edit-icon-margin, $fluent-button-height);
             }
+          }
+
+          .dx-link:not(.dx-link-icon) {
+            @include dx-command-text-target-sizing(
+              $fluent-button-height,
+              $fluent-button-horizontal-padding,
+              max(4px, $fluent-command-edit-text-margin)
+            );
           }
 
           .dx-state-disabled {

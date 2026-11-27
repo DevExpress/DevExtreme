@@ -17,10 +17,7 @@
         mode="row"
       />
 
-      <DxColumn
-        type="buttons"
-        :width="110"
-      >
+      <DxColumn type="buttons">
         <DxButton name="edit"/>
         <DxButton name="delete"/>
         <DxButton
