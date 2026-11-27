@@ -440,6 +440,15 @@ export default abstract class GridBase extends GridCore {
     );
   }
 
+  // A virtual grid delays a resize that comes soon after another one, as during a scroll. The
+  // delayed resize updates the row dragging too.
+  public hasResizeTimeout(): Promise<boolean> {
+    return this.element.evaluate(
+      (element, widgetName) => $(element).data(widgetName).getController('resizing').hasResizeTimeout(),
+      this.getName(),
+    );
+  }
+
   // Some actions make the grid load and render its content again a moment later, such as a header
   // click that sorts.
   public async waitForContentReady(action: () => Promise<unknown>): Promise<void> {
@@ -516,6 +525,39 @@ export default abstract class GridBase extends GridCore {
     const corner = await this.getHeaderCorner(columnIndex);
 
     await this.page.mouse.move(corner.x, corner.y);
+    await this.page.mouse.up();
+  }
+
+  // A row scrolled to the left starts off screen, where a real pointer cannot press it: the corner
+  // stays within the grid's left edge.
+  private getRowDragCorner(rowIndex: number): Promise<{ x: number; y: number }> {
+    return this.element.evaluate((element, { widgetName, index }) => {
+      const $row = $($(element).data(widgetName).getRowElement(index));
+      const $dragCell = $row.children('.dx-command-drag');
+      const { left, top } = ($dragCell.length ? $dragCell : $row)[0].getBoundingClientRect();
+
+      return { x: Math.max(left, element.getBoundingClientRect().left), y: top };
+    }, { widgetName: this.getName(), index: rowIndex });
+  }
+
+  // A real pointer moves the row by (x, y) from the top left corner of its drag cell, or of the
+  // row without one; with "isStart", it is pressed there first. The pointer stays on whole pixels,
+  // inside the cell when it presses: a virtual grid can scroll its rows to fractional positions,
+  // and the dragged row follows the pointer.
+  public async moveRow(rowIndex: number, x: number, y: number, isStart = false): Promise<void> {
+    const corner = await this.getRowDragCorner(rowIndex);
+
+    if (isStart) {
+      await this.page.mouse.move(Math.ceil(corner.x), Math.ceil(corner.y));
+      await this.page.mouse.down();
+    }
+
+    await this.page.mouse.move(Math.round(corner.x + x), Math.round(corner.y + y));
+  }
+
+  // Releases the dragged row where the pointer is: the row moves with the pointer from the corner
+  // it was pressed at.
+  public async dropRow(): Promise<void> {
     await this.page.mouse.up();
   }
 

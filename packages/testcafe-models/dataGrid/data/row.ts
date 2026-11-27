@@ -1,4 +1,3 @@
-import { ClientFunction } from 'testcafe';
 import FocusableElement from '../../internal/focusable';
 import Widget from '../../internal/widget';
 import DataCell from './cell';
@@ -6,7 +5,6 @@ import CommandCell from '../commandCell';
 
 const CLASS = {
   commandExpand: 'dx-command-expand',
-  commandDrag: 'dx-command-drag',
   focusedRow: 'dx-row-focused',
   rowRemoved: 'dx-row-removed',
   selection: 'dx-selection',
@@ -50,20 +48,7 @@ export default class DataRow extends FocusableElement {
     return new CommandCell(this.element, index, this.widgetName);
   }
 
-  getDragCommand(): Selector {
-    return this.element.find(`.${CLASS.commandDrag}`);
-  }
-
   getSelectCheckBox(): Selector {
     return this.element.find(`.${CLASS.selectCheckBox}`);
-  }
-
-  getOffset(): Promise<any> {
-    const { element } = this;
-
-    return ClientFunction(
-      () => ($(element()) as any).offset(),
-      { dependencies: { element } },
-    )();
   }
 }

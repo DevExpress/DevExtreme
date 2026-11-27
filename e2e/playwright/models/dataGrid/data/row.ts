@@ -15,6 +15,7 @@ const CLASS = {
   groupOpened: 'dx-datagrid-group-opened',
   selectCheckBox: 'dx-select-checkbox',
   stateHover: 'dx-state-hover',
+  commandDrag: 'dx-command-drag',
 };
 
 export default class DataRow extends GridFocusableElement {
@@ -57,5 +58,13 @@ export default class DataRow extends GridFocusableElement {
 
   public getSelectCheckBox(): Locator {
     return this.element.locator(`.${CLASS.selectCheckBox}`);
+  }
+
+  public getDragCommand(): Locator {
+    return this.element.locator(`.${CLASS.commandDrag}`);
+  }
+
+  public getOffset(): Promise<JQuery.Coordinates | undefined> {
+    return this.element.evaluate((element) => $(element).offset());
   }
 }

@@ -67,7 +67,6 @@ export const CLASS = {
   aiPromptEditor: 'dx-ai-prompt-editor',
   aiAssistantChat: 'dx-ai-chat',
   aiAssistantButton: 'ai-assistant-button',
-  sortableDragging: 'dx-sortable-dragging',
 };
 
 const E2E_ATTRIBUTES = {
@@ -621,21 +620,6 @@ export default class DataGrid extends GridCore {
         },
       },
     )();
-  }
-
-  dropRow(): Promise<void> {
-    return ClientFunction((sortableDraggingClass) => {
-        const $dragElement = $(`.${sortableDraggingClass}`);
-        const dragOffset = $dragElement.offset();
-
-        triggerPointerUp($dragElement, dragOffset.left, dragOffset.top);
-      },
-      {
-        dependencies: {
-          triggerPointerUp,
-        },
-      },
-    )(CLASS.sortableDragging);
   }
 
   resizeHeader(
