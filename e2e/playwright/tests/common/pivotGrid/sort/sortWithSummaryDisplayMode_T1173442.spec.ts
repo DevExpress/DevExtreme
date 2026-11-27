@@ -1,4 +1,5 @@
 import { test } from '../../../../fixtures';
+import { DEFAULT_SELECTOR } from '../../../../helpers/const';
 import { createWidget } from '../../../../helpers/createWidget';
 import { testScreenshot } from '../../../../helpers/screenshots';
 import PivotGrid from '../../../../models/pivotGrid';
@@ -92,7 +93,7 @@ test('Should apply sort changes to the markup if the "summaryDisplayMode" is set
     },
   });
 
-  const pivotGrid = new PivotGrid(page, '#container');
+  const pivotGrid = new PivotGrid(page, DEFAULT_SELECTOR);
 
   await testScreenshot(
     page,

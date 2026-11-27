@@ -1,9 +1,8 @@
 import { expect, test } from '../../../../fixtures';
+import { DEFAULT_SELECTOR } from '../../../../helpers/const';
 import { createWidget } from '../../../../helpers/createWidget';
 import { testScreenshot } from '../../../../helpers/screenshots';
 import DataGrid from '../../../../models/dataGrid';
-
-const GRID_SELECTOR = '#container';
 
 test.describe('Keyboard Navigation - screenshots', () => {
   test('Focused cells should look correctly', async ({ page }) => {
@@ -32,7 +31,7 @@ test.describe('Keyboard Navigation - screenshots', () => {
       },
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const headerRow = dataGrid.getHeaders().getHeaderRow(0);
     const headerCellToFocus = headerRow.getHeaderCell(0);
     const dataCellToFocus = dataGrid.getDataCell(0, 0);
@@ -93,7 +92,7 @@ test.describe('Keyboard Navigation - screenshots', () => {
       },
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const headerCellToFocus = dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(3);
     const customButtonsCell = dataGrid.getDataCell(0, 0);
 

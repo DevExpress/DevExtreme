@@ -1,17 +1,16 @@
 import { expect, test } from '../../../../../fixtures';
+import { DEFAULT_SELECTOR } from '../../../../../helpers/const';
 import { createWidget } from '../../../../../helpers/createWidget';
 import DataGrid from '../../../../../models/dataGrid';
 import { gridData, gridOptions } from './options';
 
-const GRID_SELECTOR = '#container';
-
 test.describe('Keyboard Navigation - screenshots', () => {
   test.beforeEach(async ({ page }) => {
-    await createWidget(page, 'dxDataGrid', gridOptions, GRID_SELECTOR, { arg: gridData });
+    await createWidget(page, 'dxDataGrid', gridOptions, DEFAULT_SELECTOR, { arg: gridData });
   });
 
   test('Focus goes inside master detail on tab', async ({ page }) => {
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
     await dataGrid.getDataRow(0).getCommandCell(0).element.click();
 
@@ -25,7 +24,7 @@ test.describe('Keyboard Navigation - screenshots', () => {
   });
 
   test('Focus goes inside previous master detail on shift+tab', async ({ page }) => {
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
     await dataGrid.getDataRow(0).getCommandCell(0).element.click();
 
@@ -39,7 +38,7 @@ test.describe('Keyboard Navigation - screenshots', () => {
   });
 
   test('Focus goes on master detail using arrow keys', async ({ page }) => {
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
     await dataGrid.getDataRow(0).getCommandCell(0).element.click();
     await dataGrid.getDataCell(0, 1).element.click();
@@ -58,7 +57,7 @@ test.describe('Keyboard Navigation - screenshots', () => {
   });
 
   test('Focus goes inside master detail on enter & goes out on esc', async ({ page }) => {
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
     await dataGrid.getDataRow(0).getCommandCell(0).element.click();
 
@@ -77,7 +76,7 @@ test.describe('Keyboard Navigation - screenshots', () => {
   });
 
   test('up/down arrows works only on master detail, not on its content', async ({ page }) => {
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
     await dataGrid.getDataRow(0).getCommandCell(0).element.click();
 

@@ -1,11 +1,10 @@
 /* eslint-disable no-param-reassign -- customizeColumns changes the columns it gets */
 import { expect, test } from '../../../../fixtures';
+import { DEFAULT_SELECTOR } from '../../../../helpers/const';
 import { createWidget } from '../../../../helpers/createWidget';
 import { testScreenshot } from '../../../../helpers/screenshots';
 import DataGrid from '../../../../models/dataGrid';
 import { getData } from '../../helpers/generateDataSourceData';
-
-const GRID_SELECTOR = '#container';
 
 test.describe('Keyboard Navigation.Visual', () => {
   // Quick navigation through grid cells via Home and End keys
@@ -21,7 +20,7 @@ test.describe('Keyboard Navigation.Visual', () => {
       },
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
     await dataGrid.getDataCell(0, 0).element.click();
@@ -43,7 +42,7 @@ test.describe('Keyboard Navigation.Visual', () => {
       },
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
     await dataGrid.getDataCell(0, 6).element.click();
@@ -65,7 +64,7 @@ test.describe('Keyboard Navigation.Visual', () => {
       },
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
     await dataGrid.getDataCell(0, 0).element.click();
@@ -87,7 +86,7 @@ test.describe('Keyboard Navigation.Visual', () => {
       },
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
     await dataGrid.scrollTo({ left: 700 });
@@ -114,7 +113,7 @@ test.describe('Keyboard Navigation.Visual', () => {
       },
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
     await dataGrid.getDataCell(0, 0).element.click();
@@ -140,7 +139,7 @@ test.describe('Keyboard Navigation.Visual', () => {
       },
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
     await dataGrid.scrollTo({ left: 700 });
@@ -171,7 +170,7 @@ test.describe('Keyboard Navigation.Visual', () => {
       },
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
     const firstCell = dataGrid.getDataCell(0, 0);
@@ -199,7 +198,7 @@ test.describe('Keyboard Navigation.Visual', () => {
       },
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
     await dataGrid.getDataCell(0, 0).element.click();
@@ -223,7 +222,7 @@ test.describe('Keyboard Navigation.Visual', () => {
       },
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
     await dataGrid.scrollTo({ left: 4200 });
@@ -251,9 +250,9 @@ test.describe('Keyboard Navigation.Visual', () => {
         columns[columns.length - 1].hidingPriority = 0;
         columns.splice(columns.length - 2, 0, { type: 'adaptive', width: 100 });
       },
-    }), GRID_SELECTOR, { arg: getData(20, 50) });
+    }), DEFAULT_SELECTOR, { arg: getData(20, 50) });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
     await dataGrid.getDataCell(0, 0).element.click();
@@ -278,9 +277,9 @@ test.describe('Keyboard Navigation.Visual', () => {
       scrolling: {
         showScrollbar: 'never',
       },
-    }), GRID_SELECTOR, { arg: getData(20, 50) });
+    }), DEFAULT_SELECTOR, { arg: getData(20, 50) });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
     await dataGrid.scrollTo({ left: 4200 });
@@ -305,7 +304,7 @@ test.describe('Keyboard Navigation.Visual', () => {
       showBorders: true,
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
     await dataGrid.getDataCell(0, 0).element.click();
@@ -324,7 +323,7 @@ test.describe('Keyboard Navigation.Visual', () => {
       showBorders: true,
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
     await dataGrid.getDataCell(4, 6).element.click();
@@ -346,7 +345,7 @@ test.describe('Keyboard Navigation.Visual', () => {
       },
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
     await dataGrid.getDataCell(0, 0).element.click();
@@ -368,7 +367,7 @@ test.describe('Keyboard Navigation.Visual', () => {
       },
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
     await dataGrid.scrollTo({ left: 700, top: 1000 });
@@ -398,7 +397,7 @@ test.describe('Keyboard Navigation.Visual', () => {
       },
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
     await dataGrid.getDataCell(0, 0).element.click();
@@ -426,7 +425,7 @@ test.describe('Keyboard Navigation.Visual', () => {
       },
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
     await dataGrid.scrollTo({ left: 700, top: 10000 });
@@ -461,7 +460,7 @@ test.describe('Keyboard Navigation.Visual', () => {
       },
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
     await dataGrid.getDataCell(0, 0).element.click();
@@ -488,7 +487,7 @@ test.describe('Keyboard Navigation.Visual', () => {
       },
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
     await dataGrid.scrollTo({ left: 3000, top: 10000 });
@@ -528,7 +527,7 @@ test.describe('Keyboard Navigation.Visual', () => {
         },
       });
 
-      const dataGrid = new DataGrid(page, GRID_SELECTOR);
+      const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
       await expect.poll(() => dataGrid.isReady()).toBe(true);
 
       await dataGrid.getDataCell(0, 1).element.click();
@@ -569,9 +568,9 @@ test.describe('Keyboard Navigation.Visual', () => {
           allowReordering: true,
           showDragIcons: true,
         },
-      }), GRID_SELECTOR, { arg: { data: getData(200, 35), isNative: useNative } });
+      }), DEFAULT_SELECTOR, { arg: { data: getData(200, 35), isNative: useNative } });
 
-      const dataGrid = new DataGrid(page, GRID_SELECTOR);
+      const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
       await expect.poll(() => dataGrid.isReady()).toBe(true);
 
       await dataGrid.getDataCell(0, 0).element.click();

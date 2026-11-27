@@ -1,13 +1,12 @@
 import type { GridsEditMode } from 'devextreme/ui/data_grid';
 import { expect, test } from '../../../../../fixtures';
+import { DEFAULT_SELECTOR } from '../../../../../helpers/const';
 import { createWidget } from '../../../../../helpers/createWidget';
 import { testScreenshot } from '../../../../../helpers/screenshots';
 import { changeTheme } from '../../../../../helpers/testPageUtils';
 import DataGrid from '../../../../../models/dataGrid';
 import { clickWithOffset } from '../../../helpers/clickWithOffset';
 import { typeText } from '../../../helpers/typeText';
-
-const GRID_SELECTOR = '#container';
 
 test.describe('Focused row', () => {
   test('onFocusedRowChanged event should fire once after changing focusedRowKey if paging.enabled = false (T755722)', async ({ page }) => {
@@ -33,7 +32,7 @@ test.describe('Focused row', () => {
       },
     }));
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const getFocusedRowChangedCounter = (): Promise<number> => page.evaluate(
       () => (window as any).onFocusedRowChangedCounter,
     );
@@ -63,7 +62,7 @@ test.describe('Focused row', () => {
       },
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
     const dataRow0 = dataGrid.getDataRow(0);
@@ -121,7 +120,7 @@ test.describe('Focused row', () => {
       },
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
     const dataRow0 = dataGrid.getDataRow(0);
@@ -180,7 +179,7 @@ test.describe('Focused row', () => {
         },
       });
 
-      const dataGrid = new DataGrid(page, GRID_SELECTOR);
+      const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
       await expect.poll(() => dataGrid.isReady()).toBe(true);
 
       const dataRow1 = dataGrid.getDataRow(1);
@@ -221,7 +220,7 @@ test.describe('Focused row', () => {
       },
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
     const dataRow0 = dataGrid.getDataRow(0);
@@ -276,7 +275,7 @@ test.describe('Focused row', () => {
       },
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     await expect.poll(() => dataGrid.isReady()).toBe(true);
     const dataRow1 = dataGrid.getDataRow(1);
 
@@ -315,7 +314,7 @@ test.describe('Focused row', () => {
       },
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
     const dataRow0 = dataGrid.getDataRow(0);
@@ -380,7 +379,7 @@ test.describe('Focused row', () => {
       },
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
     const saveButton = dataGrid.getHeaderPanel().getSaveButton();
@@ -453,7 +452,7 @@ test.describe('Focused row', () => {
         },
       });
 
-      const dataGrid = new DataGrid(page, GRID_SELECTOR);
+      const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
       await expect.poll(() => dataGrid.isReady()).toBe(true);
 
       const dataRow1 = dataGrid.getDataRow(1);
@@ -555,7 +554,7 @@ test.describe('Focused row', () => {
       };
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const getCounter = (name: string): Promise<number | undefined> => page.evaluate(
       (counterName) => (window as any)[counterName],
       name,
@@ -601,7 +600,7 @@ test.describe('Focused row', () => {
       },
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
     await expect(dataGrid.getFocusedRow().element).toBeAttached();
@@ -637,7 +636,7 @@ test.describe('Focused row', () => {
       },
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const deleteButton = page.getByRole('button', { name: 'Delete' });
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
@@ -671,7 +670,7 @@ test.describe('Focused row', () => {
         },
       });
 
-      const dataGrid = new DataGrid(page, GRID_SELECTOR);
+      const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
       await expect.poll(() => dataGrid.isReady()).toBe(true);
 
       const reloadDataSource = (): Promise<void> => page.evaluate(
@@ -708,7 +707,7 @@ test.describe('Focused row', () => {
       },
     }));
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
     await expect.poll(() => dataGrid.option('focusedRowKey')).toBe(1);
@@ -750,7 +749,7 @@ test.describe('Focused row', () => {
 
     await createDataGrid();
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
     await expect.poll(() => dataGrid.isFocusedRowInViewport()).toBe(true);
@@ -790,7 +789,7 @@ test.describe('Focused row', () => {
       ],
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
     await dataGrid.getDataRow(0).element.click();
@@ -834,7 +833,7 @@ test.describe('Focused row', () => {
         focusedRowEnabled: true,
       });
 
-      const dataGrid = new DataGrid(page, GRID_SELECTOR);
+      const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
       await expect.poll(() => dataGrid.isReady()).toBe(true);
 
       await dataGrid.apiOption('focusedRowKey', 1);
@@ -867,7 +866,7 @@ test.describe('Focused row', () => {
       focusedRowEnabled: true,
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
     await dataGrid.apiOption('focusedRowKey', 1);
 
@@ -903,9 +902,9 @@ test.describe('Focused row', () => {
             e.component.navigateToRow(key);
           }
         },
-      }), GRID_SELECTOR, { arg: useNative });
+      }), DEFAULT_SELECTOR, { arg: useNative });
 
-      const dataGrid = new DataGrid(page, GRID_SELECTOR);
+      const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
       const changes: { type: string; data: Record<string, unknown> }[] = new Array(50)
         .fill(null)
         .map((_, index) => ({

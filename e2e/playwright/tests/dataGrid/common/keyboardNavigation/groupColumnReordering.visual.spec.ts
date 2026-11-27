@@ -1,10 +1,9 @@
 import type { Locator } from '@playwright/test';
 import { expect, test } from '../../../../fixtures';
+import { DEFAULT_SELECTOR } from '../../../../helpers/const';
 import { createWidget } from '../../../../helpers/createWidget';
 import { testScreenshot } from '../../../../helpers/screenshots';
 import DataGrid from '../../../../models/dataGrid';
-
-const GRID_SELECTOR = '#container';
 
 const FOUR_FIELDS = [{
   field1: 'test1',
@@ -50,7 +49,7 @@ test.describe('Keyboard Navigation - Group Column Reordering', () => {
         ],
       });
 
-      const dataGrid = new DataGrid(page, GRID_SELECTOR);
+      const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
       const groupPanel = dataGrid.getGroupPanel();
       const firstGroupHeader = groupPanel.getHeader(0);
 
@@ -84,7 +83,7 @@ test.describe('Keyboard Navigation - Group Column Reordering', () => {
         ],
       });
 
-      const dataGrid = new DataGrid(page, GRID_SELECTOR);
+      const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
       const groupPanel = dataGrid.getGroupPanel();
       const lastGroupHeader = groupPanel.getHeader(1);
 
@@ -117,7 +116,7 @@ test.describe('Keyboard Navigation - Group Column Reordering', () => {
         ],
       });
 
-      const dataGrid = new DataGrid(page, GRID_SELECTOR);
+      const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
       const groupPanel = dataGrid.getGroupPanel();
       const contextMenuItem = dataGrid.getContextMenu().getItemByText(`Move to the ${rtlEnabled ? 'left' : 'right'}`);
 
@@ -153,7 +152,7 @@ test.describe('Keyboard Navigation - Group Column Reordering', () => {
         ],
       });
 
-      const dataGrid = new DataGrid(page, GRID_SELECTOR);
+      const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
       const groupPanel = dataGrid.getGroupPanel();
       const contextMenuItem = dataGrid.getContextMenu().getItemByText(`Move to the ${rtlEnabled ? 'right' : 'left'}`);
 
@@ -190,9 +189,9 @@ test.describe('Keyboard Navigation - Group Column Reordering', () => {
           groupIndex: 0,
         },
       ],
-    }), GRID_SELECTOR, { arg: FOUR_FIELDS });
+    }), DEFAULT_SELECTOR, { arg: FOUR_FIELDS });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const firstGroupHeader = dataGrid.getGroupPanel().getHeader(0);
 
     await dataGrid.waitForContentReady(() => firstGroupHeader.element.click());
@@ -225,7 +224,7 @@ test.describe('Keyboard Navigation - Group Column Reordering', () => {
       ],
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const firstGroupHeader = dataGrid.getGroupPanel().getHeader(0);
 
     await dataGrid.waitForContentReady(() => firstGroupHeader.element.click());
@@ -259,7 +258,7 @@ test.describe('Keyboard Navigation - Group Column Reordering', () => {
       ],
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const firstGroupHeader = dataGrid.getGroupPanel().getHeader(0);
 
     await dataGrid.waitForContentReady(() => firstGroupHeader.element.click());
@@ -292,7 +291,7 @@ test.describe('Keyboard Navigation - Group Column Reordering', () => {
       ],
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
     await dataGrid.getGroupPanel().getHeader(0).element.click({ button: 'right' });
 
@@ -327,7 +326,7 @@ test.describe('Keyboard Navigation - Group Column Reordering', () => {
       ],
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const secondGroupedHeader = dataGrid.getGroupPanel().getHeader(1);
 
     await dataGrid.waitForContentReady(() => secondGroupedHeader.element.click());
@@ -364,7 +363,7 @@ test.describe('Keyboard Navigation - Group Column Reordering', () => {
       ],
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const groupPanel = dataGrid.getGroupPanel();
     const lastGroupedHeader = groupPanel.getHeader(2);
 
@@ -396,7 +395,7 @@ test.describe('Keyboard Navigation - Group Column Reordering', () => {
       ],
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const groupedHeader = dataGrid.getGroupPanel().getHeader(0);
 
     await dataGrid.waitForContentReady(() => groupedHeader.element.click());
@@ -433,7 +432,7 @@ test.describe('Keyboard Navigation - Group Column Reordering', () => {
       ],
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const contextMenuItem = dataGrid.getContextMenu().getItemByText('Ungroup');
     const secondGroupedHeader = dataGrid.getGroupPanel().getHeader(1);
 
@@ -474,7 +473,7 @@ test.describe('Keyboard Navigation - Group Column Reordering', () => {
       ],
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const groupPanel = dataGrid.getGroupPanel();
     const contextMenuItem = dataGrid.getContextMenu().getItemByText('Ungroup');
 
@@ -509,7 +508,7 @@ test.describe('Keyboard Navigation - Group Column Reordering', () => {
       ],
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const contextMenuItem = dataGrid.getContextMenu().getItemByText('Ungroup');
 
     await dataGrid.getGroupPanel().getHeader(0).element.click({ button: 'right' });
@@ -546,7 +545,7 @@ test.describe('Keyboard Navigation - Group Column Reordering', () => {
       ],
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const firstGroupHeader = dataGrid.getGroupPanel().getHeader(0);
 
     await dataGrid.waitForContentReady(() => firstGroupHeader.element.click());
@@ -580,7 +579,7 @@ test.describe('Keyboard Navigation - Group Column Reordering', () => {
       ],
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const firstGroupedHeader = dataGrid.getGroupPanel().getHeader(0);
 
     await dataGrid.waitForContentReady(() => firstGroupedHeader.element.click());
@@ -614,7 +613,7 @@ test.describe('Keyboard Navigation - Group Column Reordering', () => {
       ],
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const groupedHeader = dataGrid.getGroupPanel().getHeader(0);
 
     await dataGrid.waitForContentReady(() => groupedHeader.element.click());
@@ -645,7 +644,7 @@ test.describe('Keyboard Navigation - Group Column Reordering', () => {
       },
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const headerRow = dataGrid.getHeaders().getHeaderRow(0);
     const contextMenuItem = dataGrid.getContextMenu().getItemByText('Ungroup');
 
@@ -680,7 +679,7 @@ test.describe('Keyboard Navigation - Group Column Reordering', () => {
       },
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const headerRow = dataGrid.getHeaders().getHeaderRow(0);
     const secondHeader = headerRow.getHeaderCell(2);
 
@@ -719,7 +718,7 @@ test.describe('Keyboard Navigation - Group Column Reordering', () => {
       ],
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const contextMenuItem = dataGrid.getContextMenu().getItemByText('Ungroup All');
 
     await dataGrid.getGroupPanel().getHeader(0).element.click({ button: 'right' });
@@ -759,7 +758,7 @@ test.describe('Keyboard Navigation - Group Column Reordering', () => {
       ],
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const firstGroupedHeader = dataGrid.getGroupPanel().getHeader(0);
 
     await dataGrid.waitForContentReady(() => firstGroupedHeader.element.click());
@@ -797,7 +796,7 @@ test.describe('Keyboard Navigation - Group Column Reordering', () => {
       ],
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const headerRow = dataGrid.getHeaders().getHeaderRow(0);
     const contextMenuItem = dataGrid.getContextMenu().getItemByText('Ungroup All');
 
@@ -838,7 +837,7 @@ test.describe('Keyboard Navigation - Group Column Reordering', () => {
       ],
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const headerRow = dataGrid.getHeaders().getHeaderRow(0);
     const fourthHeader = headerRow.getHeaderCell(3);
 
@@ -862,7 +861,7 @@ test.describe('Keyboard Navigation - Group Column Reordering', () => {
       },
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const headerRow = dataGrid.getHeaders().getHeaderRow(0);
     const secondHeader = headerRow.getHeaderCell(1);
 
@@ -885,7 +884,7 @@ test.describe('Keyboard Navigation - Group Column Reordering', () => {
       },
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const lastHeader = dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(2);
 
     await dataGrid.waitForContentReady(() => lastHeader.element.click());
@@ -909,7 +908,7 @@ test.describe('Keyboard Navigation - Group Column Reordering', () => {
       },
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const lastHeader = dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(0);
 
     await dataGrid.waitForContentReady(() => lastHeader.element.click());
@@ -939,7 +938,7 @@ test.describe('Keyboard Navigation - Group Column Reordering', () => {
       },
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const headerRow = dataGrid.getHeaders().getHeaderRow(0);
     const secondHeader = headerRow.getHeaderCell(1);
 
@@ -962,7 +961,7 @@ test.describe('Keyboard Navigation - Group Column Reordering', () => {
       },
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const headerRow = dataGrid.getHeaders().getHeaderRow(0);
     const contextMenuItem = dataGrid.getContextMenu().getItemByText('Group by This Column');
 
@@ -988,7 +987,7 @@ test.describe('Keyboard Navigation - Group Column Reordering', () => {
       },
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const lastHeader = dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(2);
     const contextMenuItem = dataGrid.getContextMenu().getItemByText('Group by This Column');
 
@@ -1016,7 +1015,7 @@ test.describe('Keyboard Navigation - Group Column Reordering', () => {
       },
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const contextMenuItem = dataGrid.getContextMenu().getItemByText('Group by This Column');
 
     await dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(0).element.click({ button: 'right' });
@@ -1049,7 +1048,7 @@ test.describe('Keyboard Navigation - Group Column Reordering', () => {
       },
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const headerRow = dataGrid.getHeaders().getHeaderRow(0);
     const contextMenuItem = dataGrid.getContextMenu().getItemByText('Group by This Column');
 

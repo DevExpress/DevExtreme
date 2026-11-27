@@ -1,10 +1,9 @@
 import { expect, test } from '../../../../fixtures';
+import { DEFAULT_SELECTOR } from '../../../../helpers/const';
 import { createWidget } from '../../../../helpers/createWidget';
 import { testScreenshot } from '../../../../helpers/screenshots';
 import DataGrid from '../../../../models/dataGrid';
 import { makeRowsViewTemplatesAsync } from '../../helpers/asyncTemplates';
-
-const GRID_SELECTOR = '#container';
 
 test.describe('Keyboard Navigation - editOnKeyPress', () => {
   ['input', 'div'].forEach((name) => {
@@ -42,10 +41,10 @@ test.describe('Keyboard Navigation - editOnKeyPress', () => {
           },
           templatesRenderAsynchronously: true,
         };
-      }, GRID_SELECTOR, { arg: name });
-      await makeRowsViewTemplatesAsync(page, GRID_SELECTOR);
+      }, DEFAULT_SELECTOR, { arg: name });
+      await makeRowsViewTemplatesAsync(page, DEFAULT_SELECTOR);
 
-      const dataGrid = new DataGrid(page, GRID_SELECTOR);
+      const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
       const dataCell = dataGrid.getDataCell(0, 0);
 
       await dataCell.element.click();
@@ -94,7 +93,7 @@ test.describe('Keyboard Navigation - editOnKeyPress', () => {
       };
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const firstCell = dataGrid.getDataCell(0, 0).element;
     const secondCell = dataGrid.getDataCell(1, 0).element;
 

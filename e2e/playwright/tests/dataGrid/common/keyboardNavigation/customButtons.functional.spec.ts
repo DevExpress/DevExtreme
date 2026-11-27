@@ -1,9 +1,8 @@
 import type { Page } from '@playwright/test';
 import { expect, test } from '../../../../fixtures';
+import { DEFAULT_SELECTOR } from '../../../../helpers/const';
 import { createWidget } from '../../../../helpers/createWidget';
 import DataGrid from '../../../../models/dataGrid';
-
-const GRID_SELECTOR = '#container';
 
 const createDataGrid = async (page: Page): Promise<void> => createWidget(page, 'dxDataGrid', () => ({
   dataSource: [
@@ -52,7 +51,7 @@ test.describe('Keyboard Navigation - custom buttons', () => {
   test('Custom buttons cell should be focused before custom buttons on tab navigation', async ({ page }) => {
     await createDataGrid(page);
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const expectedFocusedCell = dataGrid.getDataCell(0, 0);
     const cellToStartNavigation = dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(3);
 
@@ -65,7 +64,7 @@ test.describe('Keyboard Navigation - custom buttons', () => {
   test('Custom buttons cell should be focused after custom buttons on shift+tab reverse navigation', async ({ page }) => {
     await createDataGrid(page);
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const expectedFocusedCell = dataGrid.getDataCell(0, 0);
     const cellToStartNavigation = dataGrid.getDataCell(0, 1);
 
@@ -80,7 +79,7 @@ test.describe('Keyboard Navigation - custom buttons', () => {
   test('First custom button inside custom buttons cell should be focused on tab navigation', async ({ page }) => {
     await createDataGrid(page);
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const customButtonsCell = dataGrid.getDataCell(0, 0);
     const expectedFocusedButton = customButtonsCell.getIconByTitle('button_1');
     const cellToStartNavigation = dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(3);
@@ -95,7 +94,7 @@ test.describe('Keyboard Navigation - custom buttons', () => {
   test('Last custom button inside custom buttons cell should be focused on shift+tab reverse navigation', async ({ page }) => {
     await createDataGrid(page);
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const customButtonsCell = dataGrid.getDataCell(0, 0);
     const expectedFocusedButton = customButtonsCell.getIconByTitle('button_2');
     const cellToStartNavigation = dataGrid.getDataCell(0, 1);
@@ -109,7 +108,7 @@ test.describe('Keyboard Navigation - custom buttons', () => {
   test('Custom button inside custom buttons cell should be clickable by pressing enter key', async ({ page }) => {
     await createDataGrid(page);
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const customButtonsCell = dataGrid.getDataCell(0, 0);
     const expectedFocusedButton = customButtonsCell.getIconByTitle('button_1');
     const cellToStartNavigation = dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(3);

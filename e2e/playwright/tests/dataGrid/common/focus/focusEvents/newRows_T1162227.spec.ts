@@ -3,6 +3,7 @@ import type { Properties } from 'devextreme/ui/data_grid';
 import { expect, test } from '../../../../../fixtures';
 import type { WindowCallbackExtended } from '../../../../../helpers/callbackTestHelper';
 import { CallbackTestHelper } from '../../../../../helpers/callbackTestHelper';
+import { DEFAULT_SELECTOR } from '../../../../../helpers/const';
 import { createWidget } from '../../../../../helpers/createWidget';
 import DataGrid from '../../../../../models/dataGrid';
 import { getFirstDataRow } from '../../../helpers/getFirstDataRow';
@@ -17,8 +18,6 @@ type FocusRowChangedData = [rowIdx: number];
 
 type GridEventsConfig = Pick<Properties, 'onFocusedCellChanging' | 'onFocusedCellChanged' | 'onFocusedRowChanging' | 'onFocusedRowChanged'>;
 type TestWindow = WindowCallbackExtended & { gridEventsConfig: GridEventsConfig };
-
-const GRID_SELECTOR = '#container';
 
 // Handlers can't pass through page.evaluate: the page builds them once, and each grid config
 // spreads them.
@@ -82,7 +81,7 @@ const createGrid = (page: Page, options: Properties): Promise<void> => createWid
     ...gridOptions,
     ...(window as TestWindow).gridEventsConfig,
   }),
-  GRID_SELECTOR,
+  DEFAULT_SELECTOR,
   { arg: options },
 );
 
@@ -112,7 +111,7 @@ test.describe('Focused row - new rows T1162227', () => {
       ...getGridDataConfig(4),
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const addRowBtn = dataGrid.getToolbar().getItem();
 
     await addRowBtn.click();
@@ -152,7 +151,7 @@ test.describe('Focused row - new rows T1162227', () => {
       ...getGridDataConfig(4),
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const addRowBtn = dataGrid.getToolbar().getItem();
     const newRow = getFirstDataRow(dataGrid);
     const newCell = newRow.getDataCell(0);
@@ -192,7 +191,7 @@ test.describe('Focused row - new rows T1162227', () => {
       ...getGridDataConfig(4),
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const addRowBtn = dataGrid.getToolbar().getItem();
     const newRow = getFirstDataRow(dataGrid);
     const newCell = newRow.getDataCell(0);
@@ -228,7 +227,7 @@ test.describe('Focused row - new rows T1162227', () => {
       ...getGridDataConfig(4),
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
     await expect.poll(() => dataGrid.isReady()).toBe(true);
     await dataGrid.getDataRow(1).expectFocusedRow();
@@ -268,7 +267,7 @@ test.describe('Focused row - new rows T1162227', () => {
       ...getGridDataConfig(4),
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const nextPage = dataGrid.getPager().getNavPage('2');
 
     await dataGrid.getDataCell(0, 0).element.click();
@@ -301,7 +300,7 @@ test.describe('Focused row - new rows T1162227', () => {
       ...getGridDataConfig(4),
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
     await expect.poll(
       () => CallbackTestHelper.getClientResults<FocusRowChangedData>(page, 'rowFocusChanged'),
@@ -345,9 +344,9 @@ test.describe('Focused row - new rows T1162227', () => {
         event.newColumnIndex = 1;
         /* eslint-enable no-param-reassign */
       },
-    }), GRID_SELECTOR, { arg: getGridDataConfig(4) });
+    }), DEFAULT_SELECTOR, { arg: getGridDataConfig(4) });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
     await dataGrid.getDataCell(0, 0).element.click();
 
@@ -376,7 +375,7 @@ test.describe('Focused row - new rows T1162227', () => {
       },
       ...dataConfig,
       ...(window as TestWindow).gridEventsConfig,
-    }), GRID_SELECTOR, { arg: getGridDataConfig(4) });
+    }), DEFAULT_SELECTOR, { arg: getGridDataConfig(4) });
 
     await expect.poll(
       () => CallbackTestHelper.getClientResults<FocusRowChangedData>(page, 'rowFocusChanged'),

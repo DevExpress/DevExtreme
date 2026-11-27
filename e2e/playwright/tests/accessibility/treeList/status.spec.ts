@@ -1,5 +1,6 @@
 import { expect, test } from '../../../helpers/accessibility/test';
 import { a11yCheck } from '../../../helpers/accessibility/utils';
+import { DEFAULT_SELECTOR } from '../../../helpers/const';
 import { createWidget } from '../../../helpers/createWidget';
 import HeaderFilter from '../../../models/dataGrid/headers/headerFilter';
 import TextBox from '../../../models/textBox';
@@ -35,7 +36,7 @@ test('Accessibility: TreeList general status should contains correct text (rows 
     columns: ['label', 'value'],
   });
 
-  const treeList = new TreeList(page, '#container');
+  const treeList = new TreeList(page, DEFAULT_SELECTOR);
 
   await expect(treeList.getGeneralStatusContainer()).toHaveText('');
 
@@ -52,7 +53,7 @@ test('Accessibility: TreeList general status should contains correct text (rows 
     columns: ['label', 'value'],
   });
 
-  const treeList = new TreeList(page, '#container');
+  const treeList = new TreeList(page, DEFAULT_SELECTOR);
 
   await expect(treeList.getGeneralStatusContainer()).toHaveText('');
 
@@ -73,7 +74,7 @@ test('Accessibility: TreeList general status should contains correct text after 
   });
 
   const expectedStatusText = 'Tree list with 2 rows and 2 columns';
-  const treeList = new TreeList(page, '#container');
+  const treeList = new TreeList(page, DEFAULT_SELECTOR);
   const headerFilter = new HeaderFilter(page);
 
   const headerFilterIcon = treeList
@@ -108,7 +109,7 @@ test('Accessibility: TreeList general status should contains correct text after 
   });
 
   const expectedStatusText = 'Tree list with 2 rows and 2 columns';
-  const treeList = new TreeList(page, '#container');
+  const treeList = new TreeList(page, DEFAULT_SELECTOR);
   const filterEditor = treeList.getFilterEditor(0, TextBox);
 
   const applyFilterBtn = treeList.getHeaderPanel().getApplyFilterButton();
@@ -135,7 +136,7 @@ test('Accessibility: TreeList general status should contains correct text after 
   });
 
   const expectedStatusText = 'Tree list with 2 rows and 2 columns';
-  const treeList = new TreeList(page, '#container');
+  const treeList = new TreeList(page, DEFAULT_SELECTOR);
 
   const searchInput = treeList.getSearchBox();
   await searchInput.input.click();
@@ -164,7 +165,7 @@ test('Accessibility: TreeList general status should contains correct text after 
   });
 
   const expectedStatusText = 'Tree list with 3 rows and 1 columns';
-  const treeList = new TreeList(page, '#container');
+  const treeList = new TreeList(page, DEFAULT_SELECTOR);
 
   const columnChooserBtn = treeList.getColumnChooserButton();
   await columnChooserBtn.click();

@@ -1,9 +1,8 @@
 import { expect, test } from '../../../../fixtures';
+import { DEFAULT_SELECTOR } from '../../../../helpers/const';
 import { createWidget } from '../../../../helpers/createWidget';
 import DataGrid from '../../../../models/dataGrid';
 import { waitForQueuedTimers } from '../../helpers/waitForQueuedTimers';
-
-const GRID_SELECTOR = '#container';
 
 const generateData = (rowCount: number, columnCount: number): Record<string, unknown>[] => {
   const items: Record<string, unknown>[] = [];
@@ -32,7 +31,7 @@ test.describe('Virtual Columns.Functional', () => {
       },
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
@@ -62,7 +61,7 @@ test.describe('Virtual Columns.Functional', () => {
       },
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
@@ -90,7 +89,7 @@ test.describe('Virtual Columns.Functional', () => {
           },
         });
 
-        const dataGrid = new DataGrid(page, GRID_SELECTOR);
+        const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
         const headerRow = dataGrid.getHeaders().getHeaderRow(0);
         const expectedScrollLeft = rtlEnabled ? 1400 : 100;
 
@@ -120,7 +119,7 @@ test.describe('Virtual Columns.Functional', () => {
           },
         });
 
-        const dataGrid = new DataGrid(page, GRID_SELECTOR);
+        const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
         const headerRow = dataGrid.getHeaders().getHeaderRow(0);
 
         await expect.poll(() => dataGrid.isReady()).toBe(true);
@@ -155,7 +154,7 @@ test.describe('Virtual Columns.Functional', () => {
           },
         });
 
-        const dataGrid = new DataGrid(page, GRID_SELECTOR);
+        const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
         const headerRow = dataGrid.getHeaders().getHeaderRow(0);
         const expectedScrollLeft = rtlEnabled ? 1400 : 100;
         const navigationKey = rtlEnabled ? 'ArrowLeft' : 'ArrowRight';
@@ -186,7 +185,7 @@ test.describe('Virtual Columns.Functional', () => {
           },
         });
 
-        const dataGrid = new DataGrid(page, GRID_SELECTOR);
+        const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
         const headerRow = dataGrid.getHeaders().getHeaderRow(0);
         const navigationKey = rtlEnabled ? 'ArrowRight' : 'ArrowLeft';
 
@@ -228,7 +227,7 @@ test.describe('Virtual Columns.Functional', () => {
       },
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
@@ -281,7 +280,7 @@ test.describe('Virtual Columns.Functional', () => {
       },
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 

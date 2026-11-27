@@ -1,9 +1,8 @@
 /* eslint-disable no-param-reassign -- customizeColumns changes the columns it gets */
 import { expect, test } from '../../../../fixtures';
+import { DEFAULT_SELECTOR } from '../../../../helpers/const';
 import { createWidget } from '../../../../helpers/createWidget';
 import DataGrid from '../../../../models/dataGrid';
-
-const GRID_SELECTOR = '#container';
 
 test.describe('Keyboard Navigation - Column Reordering', () => {
   test('The column should be grouped when pressing Ctrl + G if grouping.contextMenuEnabled is false', async ({ page }) => {
@@ -24,7 +23,7 @@ test.describe('Keyboard Navigation - Column Reordering', () => {
       }],
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const firstVisibleHeader = dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(0);
 
     await firstVisibleHeader.element.click();
@@ -52,7 +51,7 @@ test.describe('Keyboard Navigation - Column Reordering', () => {
       }],
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const firstVisibleHeader = dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(0);
 
     await firstVisibleHeader.element.click();
@@ -87,7 +86,7 @@ test.describe('Keyboard Navigation - Column Reordering', () => {
       },
     }));
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const firstVisibleHeader = dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(1);
 
     await firstVisibleHeader.element.click();
@@ -124,7 +123,7 @@ test.describe('Keyboard Navigation - Column Reordering', () => {
       },
     }));
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const firstVisibleHeader = dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(1);
 
     await firstVisibleHeader.element.click();
@@ -159,7 +158,7 @@ test.describe('Keyboard Navigation - Column Reordering', () => {
       ],
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const nestedFirstHeader = dataGrid.getHeaders().getHeaderRow(1).getHeaderCell(0);
 
     await nestedFirstHeader.element.click();
@@ -197,7 +196,7 @@ test.describe('Keyboard Navigation - Column Reordering', () => {
       ],
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const nestedLastHeader = dataGrid.getHeaders().getHeaderRow(1).getHeaderCell(2);
 
     await nestedLastHeader.element.click();
@@ -237,7 +236,7 @@ test.describe('Keyboard Navigation - Column Reordering', () => {
       ],
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const nestedSecondHeader = dataGrid.getHeaders().getHeaderRow(1).getHeaderCell(1);
 
     await nestedSecondHeader.element.click();
@@ -270,7 +269,7 @@ test.describe('Keyboard Navigation - Column Reordering', () => {
       ],
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const nestedLastHeader = dataGrid.getHeaders().getHeaderRow(1).getHeaderCell(0);
 
     await nestedLastHeader.element.click();
@@ -329,7 +328,7 @@ test.describe('Keyboard Navigation - Column Reordering', () => {
       ],
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const firstVisibleNestedHeader = dataGrid.getHeaders().getHeaderRow(1).getHeaderCell(2);
 
     await firstVisibleNestedHeader.element.click();
@@ -367,7 +366,7 @@ test.describe('Keyboard Navigation - Column Reordering', () => {
       },
     }));
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const firstVisibleHeader = dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(2);
 
     await firstVisibleHeader.element.click();
@@ -405,7 +404,7 @@ test.describe('Keyboard Navigation - Column Reordering', () => {
       ],
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const contextMenu = dataGrid.getContextMenu();
     const firstGroupedHeader = dataGrid.getGroupPanel().getHeader(0);
 

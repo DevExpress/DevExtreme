@@ -1,5 +1,6 @@
 import { expect, test } from '../../../helpers/accessibility/test';
 import { a11yCheck } from '../../../helpers/accessibility/utils';
+import { DEFAULT_SELECTOR } from '../../../helpers/const';
 import { createWidget } from '../../../helpers/createWidget';
 import DataGrid from '../../../models/dataGrid';
 import { getData } from '../../dataGrid/helpers/generateDataSourceData';
@@ -14,7 +15,7 @@ test('Infinite scrolling', async ({ page }) => {
     },
   });
 
-  const dataGrid = new DataGrid(page, '#container');
+  const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
   await expect.poll(() => dataGrid.isReady()).toBe(true);
 
@@ -33,7 +34,7 @@ test('Horizontal Virtual Scrolling', async ({ page }) => {
     },
   });
 
-  const dataGrid = new DataGrid(page, '#container');
+  const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
   await expect.poll(() => dataGrid.isReady()).toBe(true);
 

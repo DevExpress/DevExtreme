@@ -1,4 +1,5 @@
 import { expect, test } from '../../../fixtures';
+import { DEFAULT_SELECTOR } from '../../../helpers/const';
 import { createWidget } from '../../../helpers/createWidget';
 import { testScreenshot } from '../../../helpers/screenshots';
 import PivotGrid from '../../../models/pivotGrid';
@@ -25,7 +26,7 @@ const createPivotGrid = async (page: Parameters<typeof createWidget>[0]): Promis
 test('PivotGrid renders its areas and answers its options', THEMES, async ({ page }) => {
   await createPivotGrid(page);
 
-  const pivotGrid = new PivotGrid(page, '#container');
+  const pivotGrid = new PivotGrid(page, DEFAULT_SELECTOR);
 
   await expect(pivotGrid.getRowsArea().getCell(0)).toBeVisible();
   expect(await pivotGrid.option('rowHeaderLayout')).toBe('standard');
@@ -38,5 +39,5 @@ test('PivotGrid renders its areas and answers its options', THEMES, async ({ pag
 test('PivotGrid markup', async ({ page }) => {
   await createPivotGrid(page);
 
-  await testScreenshot(page, 'PivotGrid markup.png', { element: '#container' });
+  await testScreenshot(page, 'PivotGrid markup.png', { element: DEFAULT_SELECTOR });
 });

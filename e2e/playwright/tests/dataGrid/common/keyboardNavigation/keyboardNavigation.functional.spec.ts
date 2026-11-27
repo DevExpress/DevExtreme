@@ -2,6 +2,7 @@
 import type { Locator, Page } from '@playwright/test';
 import type { GridsEditMode, Properties } from 'devextreme/ui/data_grid';
 import { expect, test } from '../../../../fixtures';
+import { DEFAULT_SELECTOR } from '../../../../helpers/const';
 import { createWidget } from '../../../../helpers/createWidget';
 import { addFocusableElementBefore } from '../../../../helpers/domUtils';
 import { testScreenshot } from '../../../../helpers/screenshots';
@@ -19,7 +20,6 @@ import { getFirstDataRow } from '../../helpers/getFirstDataRow';
 import { typeText } from '../../helpers/typeText';
 import { waitForQueuedTimers } from '../../helpers/waitForQueuedTimers';
 
-const GRID_SELECTOR = '#container';
 const OTHER_CONTAINER_SELECTOR = '#otherContainer';
 const FOCUSABLE_START = '#focusable-start';
 const FOCUSED_STATE_CLASS = 'dx-state-focused';
@@ -145,7 +145,7 @@ const createEditCellTemplateGrid = (page: Page, mode: GridsEditMode): Promise<vo
     },
     'field3',
   ],
-}), GRID_SELECTOR, { arg: mode });
+}), DEFAULT_SELECTOR, { arg: mode });
 
 const getOnKeyDownCallCount = (page: Page): Promise<number> => page.evaluate(
   () => (window as any).onKeyDownCallCount,
@@ -414,7 +414,7 @@ const createFocusEventsGrid = (
   onFocusedRowChanged(e) {
     (window as any).focusedEvents.push({ name: 'onFocusedRowChanged', args: e });
   },
-}), GRID_SELECTOR, { arg: options });
+}), DEFAULT_SELECTOR, { arg: options });
 
 test.describe('Keyboard Navigation - common', () => {
   test('Cell should not highlighted after editing another cell when startEditAction: dblClick and editing.mode: batch', async ({ page }) => {
@@ -433,7 +433,7 @@ test.describe('Keyboard Navigation - common', () => {
       loadingTimeout: null,
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const cell01 = dataGrid.getDataCell(0, 1);
     const cell11 = dataGrid.getDataCell(1, 1);
     await expect.poll(() => dataGrid.isReady()).toBe(true);
@@ -522,7 +522,7 @@ test.describe('Keyboard Navigation - common', () => {
       },
     }));
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const getInvalidateCount = (): Promise<number> => page.evaluate(
       () => (window as any).invalidateCounter,
     );
@@ -596,7 +596,7 @@ test.describe('Keyboard Navigation - common', () => {
       dataGrid.repaint();
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
@@ -628,7 +628,7 @@ test.describe('Keyboard Navigation - common', () => {
       repaintChangesOnly: true,
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
@@ -660,7 +660,7 @@ test.describe('Keyboard Navigation - common', () => {
       onFocusedCellChanging: (e) => { e.isHighlighted = true; },
     }));
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const cell01 = dataGrid.getDataCell(0, 1);
     const cell11 = dataGrid.getDataCell(1, 1);
 
@@ -707,7 +707,7 @@ test.describe('Keyboard Navigation - common', () => {
       },
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
@@ -760,7 +760,7 @@ test.describe('Keyboard Navigation - common', () => {
       ],
     }));
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
@@ -807,7 +807,7 @@ test.describe('Keyboard Navigation - common', () => {
       },
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
@@ -819,7 +819,7 @@ test.describe('Keyboard Navigation - common', () => {
     const dataRow0 = dataGrid.getDataRow(0);
     const dataRow1 = dataGrid.getDataRow(1);
 
-    await addFocusableElementBefore(page, GRID_SELECTOR);
+    await addFocusableElementBefore(page, DEFAULT_SELECTOR);
 
     await page.locator(FOCUSABLE_START).click();
     await page.keyboard.press('Tab');
@@ -1053,14 +1053,14 @@ test.describe('Keyboard Navigation - common', () => {
       },
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
     const headerRow = dataGrid.getHeaders().getHeaderRow(0);
     const dataRow = dataGrid.getDataRow(0);
 
-    await addFocusableElementBefore(page, GRID_SELECTOR);
+    await addFocusableElementBefore(page, DEFAULT_SELECTOR);
 
     await page.locator(FOCUSABLE_START).click();
     await page.keyboard.press('Tab');
@@ -1120,14 +1120,14 @@ test.describe('Keyboard Navigation - common', () => {
       },
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
     const headerRow = dataGrid.getHeaders().getHeaderRow(0);
     const dataRow = dataGrid.getDataRow(0);
 
-    await addFocusableElementBefore(page, GRID_SELECTOR);
+    await addFocusableElementBefore(page, DEFAULT_SELECTOR);
 
     await page.locator(FOCUSABLE_START).click();
     await page.keyboard.press('Tab');
@@ -1178,14 +1178,14 @@ test.describe('Keyboard Navigation - common', () => {
       },
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
     const headerRow = dataGrid.getHeaders().getHeaderRow(0);
     const dataRow = dataGrid.getDataRow(0);
 
-    await addFocusableElementBefore(page, GRID_SELECTOR);
+    await addFocusableElementBefore(page, DEFAULT_SELECTOR);
 
     await page.locator(FOCUSABLE_START).click();
     await page.keyboard.press('Tab');
@@ -1231,14 +1231,14 @@ test.describe('Keyboard Navigation - common', () => {
       ],
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
     const headerRow = dataGrid.getHeaders().getHeaderRow(0);
     const dataRow = dataGrid.getDataRow(0);
 
-    await addFocusableElementBefore(page, GRID_SELECTOR);
+    await addFocusableElementBefore(page, DEFAULT_SELECTOR);
 
     await page.locator(FOCUSABLE_START).click();
     await page.keyboard.press('Tab');
@@ -1325,7 +1325,7 @@ test.describe('Keyboard Navigation - common', () => {
       focusedRowEnabled: true,
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
@@ -1335,7 +1335,7 @@ test.describe('Keyboard Navigation - common', () => {
     const filterPanel = dataGrid.getFilterPanel();
     const pager = dataGrid.getPager();
 
-    await addFocusableElementBefore(page, GRID_SELECTOR);
+    await addFocusableElementBefore(page, DEFAULT_SELECTOR);
 
     await page.locator(FOCUSABLE_START).click();
     await page.keyboard.press('Tab');
@@ -1393,7 +1393,7 @@ test.describe('Keyboard Navigation - common', () => {
       ],
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
@@ -1435,7 +1435,7 @@ test.describe('Keyboard Navigation - common', () => {
       },
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
@@ -1495,7 +1495,7 @@ test.describe('Keyboard Navigation - common', () => {
       ],
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const headerRow = dataGrid.getHeaders().getHeaderRow(0);
     const headerCell = headerRow.getHeaderCell(2);
     const stateGroupRow = dataGrid.getGroupRow(0);
@@ -1504,7 +1504,7 @@ test.describe('Keyboard Navigation - common', () => {
 
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
-    await addFocusableElementBefore(page, GRID_SELECTOR);
+    await addFocusableElementBefore(page, DEFAULT_SELECTOR);
 
     await page.locator(FOCUSABLE_START).click();
     await page.keyboard.press('Tab');
@@ -1546,7 +1546,7 @@ test.describe('Keyboard Navigation - common', () => {
       },
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
@@ -1573,7 +1573,7 @@ test.describe('Keyboard Navigation - common', () => {
       onFocusedCellChanging: (e) => { e.isHighlighted = true; },
     }));
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
@@ -1603,7 +1603,7 @@ test.describe('Keyboard Navigation - common', () => {
       tabIndex: 111,
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
@@ -1628,7 +1628,7 @@ test.describe('Keyboard Navigation - common', () => {
       tabIndex: 111,
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
@@ -1659,13 +1659,13 @@ test.describe('Keyboard Navigation - common', () => {
       },
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
     const firstGroupRow = dataGrid.getGroupRow(0);
 
-    await addFocusableElementBefore(page, GRID_SELECTOR);
+    await addFocusableElementBefore(page, DEFAULT_SELECTOR);
 
     await page.locator(FOCUSABLE_START).click();
     await page.keyboard.press('Tab');
@@ -1692,7 +1692,7 @@ test.describe('Keyboard Navigation - common', () => {
       },
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
@@ -1704,7 +1704,7 @@ test.describe('Keyboard Navigation - common', () => {
     const cell10 = dataRow1.getCommandCell(0);
     const cell11 = dataRow1.getDataCell(1);
 
-    await addFocusableElementBefore(page, GRID_SELECTOR);
+    await addFocusableElementBefore(page, DEFAULT_SELECTOR);
 
     await page.locator(FOCUSABLE_START).click();
     await page.keyboard.press('Tab');
@@ -1775,7 +1775,7 @@ test.describe('Keyboard Navigation - common', () => {
         columns: ['a', 'b'],
       });
 
-      const dataGrid = new DataGrid(page, GRID_SELECTOR);
+      const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
       const addRowButton = dataGrid.getHeaderPanel().getAddRowButton();
       const cell00 = dataGrid.getDataCell(0, 0);
       const editor00 = cell00.getEditor();
@@ -1816,7 +1816,7 @@ test.describe('Keyboard Navigation - common', () => {
         columns: ['a', 'b'],
       });
 
-      const dataGrid = new DataGrid(page, GRID_SELECTOR);
+      const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
       const addRowButton = dataGrid.getHeaderPanel().getAddRowButton();
       const cell00 = dataGrid.getDataCell(0, 0);
       const editor00 = cell00.getEditor();
@@ -1859,7 +1859,7 @@ test.describe('Keyboard Navigation - common', () => {
         columns: ['a', 'b'],
       });
 
-      const dataGrid = new DataGrid(page, GRID_SELECTOR);
+      const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
       const cell00 = dataGrid.getDataCell(0, 0);
       const editor00 = cell00.getEditor();
       const cell01 = dataGrid.getDataCell(0, 1);
@@ -1900,7 +1900,7 @@ test.describe('Keyboard Navigation - common', () => {
         columns: ['a', 'b'],
       });
 
-      const dataGrid = new DataGrid(page, GRID_SELECTOR);
+      const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
       const cell00 = dataGrid.getDataCell(0, 0);
       const editor00 = cell00.getEditor();
       const cell01 = dataGrid.getDataCell(0, 1);
@@ -1940,7 +1940,7 @@ test.describe('Keyboard Navigation - common', () => {
         columns: ['a', 'b'],
       });
 
-      const dataGrid = new DataGrid(page, GRID_SELECTOR);
+      const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
       const cell00 = dataGrid.getDataCell(0, 0);
       const editor00 = cell00.getEditor();
       const lastHeaderCell = dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(1);
@@ -1970,9 +1970,9 @@ test.describe('Keyboard Navigation - common', () => {
         enabled: false,
       },
       onFocusedCellChanging: (e) => { e.isHighlighted = true; },
-    }), GRID_SELECTOR, { arg: generateData(2, 20) });
+    }), DEFAULT_SELECTOR, { arg: generateData(2, 20) });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
     await dataGrid.getDataCell(0, 0).element.click();
@@ -2001,9 +2001,9 @@ test.describe('Keyboard Navigation - common', () => {
         enabled: false,
       },
       onFocusedCellChanging: (e) => { e.isHighlighted = true; },
-    }), GRID_SELECTOR, { arg: generateData(20, 2) });
+    }), DEFAULT_SELECTOR, { arg: generateData(20, 2) });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
     await dataGrid.getDataCell(0, 0).element.click();
@@ -2041,7 +2041,7 @@ test.describe('Keyboard Navigation - common', () => {
         },
       });
 
-      const dataGrid = new DataGrid(page, GRID_SELECTOR);
+      const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
       await expect.poll(() => dataGrid.isReady()).toBe(true);
 
       await dataGrid.getDataCell(0, 0).element.click();
@@ -2108,9 +2108,9 @@ test.describe('Keyboard Navigation - common', () => {
             columns[16].fixed = true;
           }
         },
-      }), GRID_SELECTOR, { arg: { data: generateData(2, 17), rtl: rtlEnabled } });
+      }), DEFAULT_SELECTOR, { arg: { data: generateData(2, 17), rtl: rtlEnabled } });
 
-      const dataGrid = new DataGrid(page, GRID_SELECTOR);
+      const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
       await expect.poll(() => dataGrid.isReady()).toBe(true);
 
       const getCell = (rowIndex: number, columnIndex: number): DataCell => (
@@ -2175,7 +2175,7 @@ test.describe('Keyboard Navigation - common', () => {
           },
         });
 
-        const dataGrid = new DataGrid(page, GRID_SELECTOR);
+        const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
         const cell = dataGrid.getDataCell(0, 0);
         const cellEditor = cell.getEditor().element;
         const inputElement = page.locator('#myinput');
@@ -2205,7 +2205,7 @@ test.describe('Keyboard Navigation - common', () => {
       columns: ['id'],
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
     const headerCell = dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(0);
@@ -2349,7 +2349,7 @@ test.describe('Keyboard Navigation - common', () => {
     test(`The first cell should be focused on pressing the tab key after clicking on the document when command column is ${fixedState} and on the left side (T951849)`, async ({ page }) => {
       await createGrid(page, 'left');
 
-      const dataGrid = new DataGrid(page, GRID_SELECTOR);
+      const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
       await expect.poll(() => dataGrid.isReady()).toBe(true);
 
       await checkNavigationWithLeftCommandColumn(page, dataGrid);
@@ -2364,7 +2364,7 @@ test.describe('Keyboard Navigation - common', () => {
     test(`The cell focus should be restored on pressing shift and tab keys when command column is ${fixedState} and on the left side (T951849)`, async ({ page }) => {
       await createGrid(page, 'left');
 
-      const dataGrid = new DataGrid(page, GRID_SELECTOR);
+      const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
       await expect.poll(() => dataGrid.isReady()).toBe(true);
 
       await checkNavigationWithLeftCommandColumn(page, dataGrid);
@@ -2373,7 +2373,7 @@ test.describe('Keyboard Navigation - common', () => {
     test(`The first cell should be focused on pressing the tab key after clicking on the document when command column is ${fixedState} and on the right side (T951849)`, async ({ page }) => {
       await createGrid(page, 'right');
 
-      const dataGrid = new DataGrid(page, GRID_SELECTOR);
+      const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
       const lastButton = getDataRow(dataGrid, 1).getCommandCell(2).getButton(0);
       await expect.poll(() => dataGrid.isReady()).toBe(true);
 
@@ -2393,7 +2393,7 @@ test.describe('Keyboard Navigation - common', () => {
     test(`The first cell should be focused on pressing shift and tab keys after clicking on the document when command column is ${fixedState} and on the right side (T951849)`, async ({ page }) => {
       await createGrid(page, 'right');
 
-      const dataGrid = new DataGrid(page, GRID_SELECTOR);
+      const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
       await expect.poll(() => dataGrid.isReady()).toBe(true);
 
       await checkNavigationWithRightCommandColumn(page, dataGrid);
@@ -2407,7 +2407,7 @@ test.describe('Keyboard Navigation - common', () => {
     test(`The cell focus should be restored on pressing shift and tab keys when command column is ${fixedState} and on the right side (T951849)`, async ({ page }) => {
       await createGrid(page, 'right');
 
-      const dataGrid = new DataGrid(page, GRID_SELECTOR);
+      const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
       await expect.poll(() => dataGrid.isReady()).toBe(true);
 
       await checkNavigationWithRightCommandColumn(page, dataGrid);
@@ -2432,7 +2432,7 @@ test.describe('Keyboard Navigation - common', () => {
       focusedRowEnabled: true,
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const button = page.locator('#mycontainer');
     const body = page.locator('body');
     await expect.poll(() => dataGrid.isReady()).toBe(true);
@@ -2493,9 +2493,9 @@ test.describe('Keyboard Navigation - common', () => {
       onFocusedCellChanging(e) {
         e.isHighlighted = true;
       },
-    }), GRID_SELECTOR, { arg: items });
+    }), DEFAULT_SELECTOR, { arg: items });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
     await dataGrid.getDataCell(0, 0).element.click();
@@ -2539,7 +2539,7 @@ test.describe('Keyboard Navigation - common', () => {
           columns: ['ID', 'FirstName'],
         });
 
-        const dataGrid = new DataGrid(page, GRID_SELECTOR);
+        const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
         const addRowButton = dataGrid.getHeaderPanel().getAddRowButton();
         const insertedRow = getFirstDataRow(dataGrid);
         const cell00 = insertedRow.getDataCell(0);
@@ -2594,7 +2594,7 @@ test.describe('Keyboard Navigation - common', () => {
       },
     }));
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
     await dataGrid.getDataCell(0, 0).element.click();
@@ -2650,7 +2650,7 @@ test.describe('Keyboard Navigation - common', () => {
       },
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
     await dataGrid.getDataRow(0).getCommandCell(3).getButton(0).click();
@@ -2729,9 +2729,9 @@ test.describe('Keyboard Navigation - common', () => {
             groupIndex: 0,
           },
         ],
-      }), GRID_SELECTOR, { arg: repaintChangesOnly });
+      }), DEFAULT_SELECTOR, { arg: repaintChangesOnly });
 
-      const dataGrid = new DataGrid(page, GRID_SELECTOR);
+      const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
       const filterRowCell = dataGrid.getHeaders().getFilterRow().getFilterCell(1);
       const filterRowEditor = filterRowCell.getEditorInput();
 
@@ -2789,7 +2789,7 @@ test.describe('Keyboard Navigation - common', () => {
       },
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const insertedRow = getFirstDataRow(dataGrid);
     // The inserted row takes aria-rowindex 1 and goes before the first data row.
     const firstDataRow = new DataRow(dataGrid.getDataRow(0).element.nth(1));
@@ -2870,9 +2870,9 @@ test.describe('Keyboard Navigation - common', () => {
           allowedPageSizes: [1, 2],
           showPageSizeSelector: true,
         },
-      }), GRID_SELECTOR, { arg: { data: items, fixed: hasFixedColumns } });
+      }), DEFAULT_SELECTOR, { arg: { data: items, fixed: hasFixedColumns } });
 
-      const dataGrid = new DataGrid(page, GRID_SELECTOR);
+      const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
       const pager = dataGrid.getPager();
       const getCell = (rowIndex: number, columnIndex: number): DataCell => (
         hasFixedColumns && (columnIndex === 0 || columnIndex === 6)
@@ -2916,7 +2916,7 @@ test.describe('Keyboard Navigation - common', () => {
       height: 1500,
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const getWindowScrollTop = (): Promise<number> => page.evaluate(() => window.scrollY);
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
@@ -2953,7 +2953,7 @@ test.describe('Keyboard Navigation - common', () => {
       },
     }));
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const pageSize = dataGrid.getPager().getPageSize(0);
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
@@ -2984,7 +2984,7 @@ test.describe('Keyboard Navigation - common', () => {
     test(title, async ({ page }) => {
       await createAdaptiveGrid(page, batchEditing);
 
-      const dataGrid = new DataGrid(page, GRID_SELECTOR);
+      const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
       const headerRow = dataGrid.getHeaders().getHeaderRow(0);
       const firstDataRow = dataGrid.getDataRow(0);
       const secondDataRow = dataGrid.getDataRow(1);
@@ -2992,7 +2992,7 @@ test.describe('Keyboard Navigation - common', () => {
       await expect.poll(() => dataGrid.isReady()).toBe(true);
 
       await dataGrid.apiExpandAdaptiveDetailRow('Alex');
-      await addFocusableElementBefore(page, GRID_SELECTOR);
+      await addFocusableElementBefore(page, DEFAULT_SELECTOR);
 
       await expect(adaptiveDetailRow.element).toBeAttached();
 
@@ -3062,7 +3062,7 @@ test.describe('Keyboard Navigation - common', () => {
   test('Adaptive with batch edit mode - Adaptive cells should be focused by tab key press when they are in edit state', async ({ page }) => {
     await createAdaptiveGrid(page, true);
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const headerRow = dataGrid.getHeaders().getHeaderRow(0);
     const firstDataRow = dataGrid.getDataRow(0);
     const secondDataRow = dataGrid.getDataRow(2);
@@ -3070,7 +3070,7 @@ test.describe('Keyboard Navigation - common', () => {
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
     await dataGrid.apiExpandAdaptiveDetailRow('Alex');
-    await addFocusableElementBefore(page, GRID_SELECTOR);
+    await addFocusableElementBefore(page, DEFAULT_SELECTOR);
 
     await expect(adaptiveDetailRow.element).toBeAttached();
 
@@ -3151,7 +3151,7 @@ test.describe('Keyboard Navigation - common', () => {
       },
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
     await dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(0).element.click();
@@ -3191,10 +3191,10 @@ test.describe('Keyboard Navigation - common', () => {
       },
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
-    await addFocusableElementBefore(page, GRID_SELECTOR);
+    await addFocusableElementBefore(page, DEFAULT_SELECTOR);
 
     await page.locator(FOCUSABLE_START).click();
 
@@ -3239,7 +3239,7 @@ test.describe('Keyboard Navigation - common', () => {
       },
     }));
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
     await dataGrid.getSearchBox().input.click();
@@ -3267,7 +3267,7 @@ test.describe('Keyboard Navigation - common', () => {
       },
     }));
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
     await dataGrid.getSearchBox().input.click();
@@ -3313,9 +3313,9 @@ test.describe('Keyboard Navigation - common', () => {
           },
         ],
       },
-    }), GRID_SELECTOR, { arg: { data: getData(3, 3) } });
+    }), DEFAULT_SELECTOR, { arg: { data: getData(3, 3) } });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
     await dataGrid.getToolbar().getItem(0).click();
@@ -3342,7 +3342,7 @@ test.describe('Keyboard Navigation - common', () => {
       },
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const firstDataCell = dataGrid.getDataCell(0, 0);
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
@@ -3367,7 +3367,7 @@ test.describe('Keyboard Navigation - common', () => {
   test('Adaptive row should toggle when press enter key', async ({ page }) => {
     await createWidget(page, 'dxDataGrid', ADAPTIVE_ROW_GRID_OPTIONS);
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
     await dataGrid.getDataCell(0, 1).element.click();
@@ -3386,7 +3386,7 @@ test.describe('Keyboard Navigation - common', () => {
   test('Focus position should be correct when open second adaptive row', async ({ page }) => {
     await createWidget(page, 'dxDataGrid', ADAPTIVE_ROW_GRID_OPTIONS);
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
     const focusAdaptiveButtonCell = async (rowIndex: number): Promise<void> => {
@@ -3408,12 +3408,12 @@ test.describe('Keyboard Navigation - common', () => {
   test('Focus first cell with dropDownButton (via tab key) -> open dropDownButton list (via up key)-> close dropDownButton list (via esc key) -> navigation to the right when focusedRowEnabled is true', async ({ page }) => {
     await createWidget(page, 'dxDataGrid', createDropDownButtonGridOptions);
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const headerRow = dataGrid.getHeaders().getHeaderRow(0);
     const dropDownButton = dataGrid.getDataCell(0, 0).getDropDownButton();
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
-    await addFocusableElementBefore(page, GRID_SELECTOR);
+    await addFocusableElementBefore(page, DEFAULT_SELECTOR);
 
     await page.locator(FOCUSABLE_START).click();
     await page.keyboard.press('Tab');
@@ -3437,7 +3437,7 @@ test.describe('Keyboard Navigation - common', () => {
   test('Focus second cell (via click) -> tab navigation when focusedRowEnabled is true', async ({ page }) => {
     await createWidget(page, 'dxDataGrid', createDropDownButtonGridOptions);
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
     await dataGrid.getDataCell(0, 1).element.click();
@@ -3466,7 +3466,7 @@ test.describe('Keyboard Navigation - common', () => {
       },
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const expandCell = dataGrid.getDataRow(0).getCommandCell(0);
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
@@ -3517,7 +3517,7 @@ test.describe('Keyboard Navigation - common', () => {
       showBorders: true,
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
     const headerCell = dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(1);
@@ -3567,7 +3567,7 @@ test.describe('Keyboard Navigation - common', () => {
       },
     }));
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
     await dataGrid.getDataCell(0, 0).element.click();
@@ -3593,7 +3593,7 @@ test.describe('Keyboard Navigation - common', () => {
       width: 300,
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
     await expect(dataGrid.getDataCell(0, 2).element).toHaveAttribute('tabindex', '0');
@@ -3626,7 +3626,7 @@ test.describe('Keyboard Navigation - common', () => {
       },
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
     await dataGrid.getToolbar().getItem(0).click();
@@ -3662,7 +3662,7 @@ test.describe('Keyboard Navigation - common', () => {
       ],
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const commandCell = dataGrid.getFixedDataRow(0).getCommandCell(1);
     const editCell = dataGrid.getDataCell(0, 0);
     await expect.poll(() => dataGrid.isReady()).toBe(true);
@@ -3688,7 +3688,7 @@ test.describe('Keyboard Navigation - common', () => {
       },
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const headerFilter = new HeaderFilter(page);
     const columnChooser = dataGrid.getColumnChooser();
     await expect.poll(() => dataGrid.isReady()).toBe(true);
@@ -3726,7 +3726,7 @@ test.describe('Keyboard Navigation - common', () => {
     await createWidget(page, 'dxDataGrid', options);
     await createWidget(page, 'dxDataGrid', options, OTHER_CONTAINER_SELECTOR);
 
-    const firstGrid = new DataGrid(page, GRID_SELECTOR);
+    const firstGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const secondGrid = new DataGrid(page, OTHER_CONTAINER_SELECTOR);
     const firstGridFilterInput = firstGrid.getFilterCell(0).getEditorInput().element;
     const secondGridFilterInput = secondGrid.getFilterCell(0).getEditorInput().element;
@@ -3765,7 +3765,7 @@ test.describe('Keyboard Navigation - common', () => {
       allowedPageSizes: [1, 2, 3],
     }, OTHER_CONTAINER_SELECTOR);
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const pageSize = new Pagination(page, OTHER_CONTAINER_SELECTOR).getPageSize(0);
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
@@ -3806,7 +3806,7 @@ test.describe('Keyboard Navigation - common', () => {
       },
     }));
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const pageSize = new Pagination(page, '#masterDetailPager').getPageSize(0);
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
@@ -3820,7 +3820,7 @@ test.describe('Keyboard Navigation - common', () => {
           (window as any).dataRowFocusCount += 1;
         }
       });
-    }, GRID_SELECTOR);
+    }, DEFAULT_SELECTOR);
 
     await page.keyboard.press('Control+ArrowUp');
     await dataGrid.getDataRow(0).expectFocusedRow(false);
@@ -3849,9 +3849,9 @@ test.describe('Keyboard Navigation - common', () => {
         'field_3',
         'field_4',
       ],
-    }), GRID_SELECTOR, { arg: { data: getData(5, 5) } });
+    }), DEFAULT_SELECTOR, { arg: { data: getData(5, 5) } });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
     await dataGrid.getGroupPanel().getHeader(0).element.click();
@@ -3871,9 +3871,9 @@ test.describe('Keyboard Navigation - common', () => {
       onKeyDown() {
         (window as any).onKeyDownCallCount += 1;
       },
-    }), GRID_SELECTOR, { arg: { data: getData(5, 5) } });
+    }), DEFAULT_SELECTOR, { arg: { data: getData(5, 5) } });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
     await dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(0).element.click();
@@ -3886,7 +3886,7 @@ test.describe('Keyboard Navigation - common', () => {
   test('The row edit mode - Tab navigation through interactive elements in an editable cell when editCellTemplate is set', async ({ page }) => {
     await createEditCellTemplateGrid(page, 'row');
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const dataCell = dataGrid.getDataCell(0, 0);
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
@@ -3912,7 +3912,7 @@ test.describe('Keyboard Navigation - common', () => {
   test('The row edit mode - Shift + Tab navigation through interactive elements in an editable cell when editCellTemplate is set', async ({ page }) => {
     await createEditCellTemplateGrid(page, 'row');
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const dataCell = dataGrid.getDataCell(0, 2);
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
@@ -3938,7 +3938,7 @@ test.describe('Keyboard Navigation - common', () => {
   test('The batch edit mode - Tab navigation through interactive elements in an editable cell when editCellTemplate is set', async ({ page }) => {
     await createEditCellTemplateGrid(page, 'batch');
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const dataCell = dataGrid.getDataCell(0, 0);
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
@@ -3965,7 +3965,7 @@ test.describe('Keyboard Navigation - common', () => {
   test('The batch edit mode - Shift + Tab navigation through interactive elements in an editable cell when editCellTemplate is set', async ({ page }) => {
     await createEditCellTemplateGrid(page, 'batch');
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const dataCell = dataGrid.getDataCell(0, 2);
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
@@ -4008,12 +4008,12 @@ test.describe('Keyboard Navigation - common', () => {
           },
         }],
       }],
-    }), GRID_SELECTOR, { arg: { data: getData(2, 2) } });
+    }), DEFAULT_SELECTOR, { arg: { data: getData(2, 2) } });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
-    await addFocusableElementBefore(page, GRID_SELECTOR);
+    await addFocusableElementBefore(page, DEFAULT_SELECTOR);
 
     await page.locator(FOCUSABLE_START).click();
 
@@ -4058,10 +4058,10 @@ test.describe('Keyboard Navigation - common', () => {
       }],
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
-    await addFocusableElementBefore(page, GRID_SELECTOR);
+    await addFocusableElementBefore(page, DEFAULT_SELECTOR);
 
     await page.locator(FOCUSABLE_START).click();
     await page.keyboard.press('Tab');
@@ -4117,11 +4117,11 @@ test.describe('Keyboard Navigation - common', () => {
       },
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const pager = dataGrid.getPager();
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
-    await addFocusableElementBefore(page, GRID_SELECTOR);
+    await addFocusableElementBefore(page, DEFAULT_SELECTOR);
 
     await page.locator(FOCUSABLE_START).click();
 
@@ -4170,7 +4170,7 @@ test.describe('Keyboard Navigation - common', () => {
           },
         });
 
-        const dataGrid = new DataGrid(page, GRID_SELECTOR);
+        const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
         await expect.poll(() => dataGrid.isReady()).toBe(true);
 
         await dataGrid.getDataCell(0, 0).element.click();
@@ -4211,7 +4211,7 @@ test.describe('Keyboard Navigation - common', () => {
     }), OTHER_CONTAINER_SELECTOR);
 
     const button = new Button(page, OTHER_CONTAINER_SELECTOR);
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const firstDataCell = dataGrid.getDataCell(0, 0);
     const firstRow = dataGrid.getDataRow(0);
     const secondRow = dataGrid.getDataRow(1);
@@ -4250,7 +4250,7 @@ test.describe('Keyboard Navigation - common', () => {
       await createWidget(page, 'dxButton', { text: 'Focus receiver' }, OTHER_CONTAINER_SELECTOR);
 
       const button = new Button(page, OTHER_CONTAINER_SELECTOR);
-      const dataGrid = new DataGrid(page, GRID_SELECTOR);
+      const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
       const searchPanel = dataGrid.getSearchBox();
       const secondIDCell = dataGrid.getDataCell(1, 0);
       const secondNameCell = dataGrid.getDataCell(1, 1);

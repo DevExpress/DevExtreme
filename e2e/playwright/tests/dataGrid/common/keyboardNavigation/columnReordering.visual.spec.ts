@@ -1,12 +1,11 @@
 /* eslint-disable no-param-reassign -- customizeColumns changes the columns it gets */
 import type { Locator } from '@playwright/test';
 import { expect, test } from '../../../../fixtures';
+import { DEFAULT_SELECTOR } from '../../../../helpers/const';
 import { createWidget } from '../../../../helpers/createWidget';
 import { testScreenshot } from '../../../../helpers/screenshots';
 import DataGrid from '../../../../models/dataGrid';
 import { getData } from '../../helpers/generateDataSourceData';
-
-const GRID_SELECTOR = '#container';
 
 const FOUR_FIELDS = [{
   field1: 'test1',
@@ -56,7 +55,7 @@ test.describe('Keyboard Navigation - Column Reordering', () => {
         dataSource: FOUR_FIELDS,
       });
 
-      const dataGrid = new DataGrid(page, GRID_SELECTOR);
+      const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
       const headerRow = dataGrid.getHeaders().getHeaderRow(0);
       const firstHeaderCell = headerRow.getHeaderCell(0);
 
@@ -75,7 +74,7 @@ test.describe('Keyboard Navigation - Column Reordering', () => {
         dataSource: FOUR_FIELDS,
       });
 
-      const dataGrid = new DataGrid(page, GRID_SELECTOR);
+      const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
       const headerRow = dataGrid.getHeaders().getHeaderRow(0);
       const lastHeaderCell = headerRow.getHeaderCell(3);
 
@@ -94,7 +93,7 @@ test.describe('Keyboard Navigation - Column Reordering', () => {
         dataSource: FOUR_FIELDS,
       });
 
-      const dataGrid = new DataGrid(page, GRID_SELECTOR);
+      const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
       const headerRow = dataGrid.getHeaders().getHeaderRow(0);
       const contextMenuItem = dataGrid.getContextMenu().getItemByText(`Move to the ${rtlEnabled ? 'left' : 'right'}`);
 
@@ -116,7 +115,7 @@ test.describe('Keyboard Navigation - Column Reordering', () => {
         dataSource: FOUR_FIELDS,
       });
 
-      const dataGrid = new DataGrid(page, GRID_SELECTOR);
+      const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
       const headerRow = dataGrid.getHeaders().getHeaderRow(0);
       const contextMenuItem = dataGrid.getContextMenu().getItemByText(`Move to the ${rtlEnabled ? 'right' : 'left'}`);
 
@@ -138,7 +137,7 @@ test.describe('Keyboard Navigation - Column Reordering', () => {
       dataSource: FOUR_FIELDS,
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const firstHeaderCell = dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(0);
 
     await dataGrid.waitForContentReady(() => firstHeaderCell.element.click());
@@ -164,7 +163,7 @@ test.describe('Keyboard Navigation - Column Reordering', () => {
       ],
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const firstHeaderCell = dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(0);
 
     await dataGrid.waitForContentReady(() => firstHeaderCell.element.click());
@@ -185,7 +184,7 @@ test.describe('Keyboard Navigation - Column Reordering', () => {
       dataSource: FOUR_FIELDS,
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const firstHeaderCell = dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(0);
 
     await dataGrid.waitForContentReady(() => firstHeaderCell.element.click());
@@ -202,7 +201,7 @@ test.describe('Keyboard Navigation - Column Reordering', () => {
       dataSource: FOUR_FIELDS,
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
     await dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(0).element.click({ button: 'right' });
 
@@ -216,7 +215,7 @@ test.describe('Keyboard Navigation - Column Reordering', () => {
       dataSource: FOUR_FIELDS,
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const headerRow = dataGrid.getHeaders().getHeaderRow(0);
     const firstDataCell = dataGrid.getDataCell(0, 0);
 
@@ -240,9 +239,9 @@ test.describe('Keyboard Navigation - Column Reordering', () => {
         columns[0].fixed = true;
         columns[7].fixed = true;
       },
-    }), GRID_SELECTOR, { arg: EIGHT_FIELDS });
+    }), DEFAULT_SELECTOR, { arg: EIGHT_FIELDS });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const headerRow = dataGrid.getHeaders().getHeaderRow(0);
     const firstFixedLeftHeader = headerRow.getHeaderCell(0);
 
@@ -265,9 +264,9 @@ test.describe('Keyboard Navigation - Column Reordering', () => {
         columns[0].fixed = true;
         columns[7].fixed = true;
       },
-    }), GRID_SELECTOR, { arg: EIGHT_FIELDS });
+    }), DEFAULT_SELECTOR, { arg: EIGHT_FIELDS });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const headerRow = dataGrid.getHeaders().getHeaderRow(0);
     const secondFixedLeftHeader = headerRow.getHeaderCell(1);
 
@@ -292,9 +291,9 @@ test.describe('Keyboard Navigation - Column Reordering', () => {
         columns[7].fixed = true;
         columns[7].fixedPosition = 'right';
       },
-    }), GRID_SELECTOR, { arg: EIGHT_FIELDS });
+    }), DEFAULT_SELECTOR, { arg: EIGHT_FIELDS });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const headerRow = dataGrid.getHeaders().getHeaderRow(0);
     const firstFixedRightHeader = headerRow.getHeaderCell(6);
 
@@ -319,9 +318,9 @@ test.describe('Keyboard Navigation - Column Reordering', () => {
         columns[7].fixed = true;
         columns[7].fixedPosition = 'right';
       },
-    }), GRID_SELECTOR, { arg: EIGHT_FIELDS });
+    }), DEFAULT_SELECTOR, { arg: EIGHT_FIELDS });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const headerRow = dataGrid.getHeaders().getHeaderRow(0);
     const secondFixedRightHeader = headerRow.getHeaderCell(7);
 
@@ -352,7 +351,7 @@ test.describe('Keyboard Navigation - Column Reordering', () => {
         columns[6].fixed = true;
         columns[6].fixedPosition = 'right';
       },
-    }), GRID_SELECTOR, {
+    }), DEFAULT_SELECTOR, {
       arg: [{
         field1: 'test1',
         field2: 'test2',
@@ -364,7 +363,7 @@ test.describe('Keyboard Navigation - Column Reordering', () => {
       }],
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const headerRow = dataGrid.getHeaders().getHeaderRow(0);
     const stickyHeader = headerRow.getHeaderCell(3);
 
@@ -395,7 +394,7 @@ test.describe('Keyboard Navigation - Column Reordering', () => {
         columns[6].fixed = true;
         columns[6].fixedPosition = 'right';
       },
-    }), GRID_SELECTOR, {
+    }), DEFAULT_SELECTOR, {
       arg: [{
         field1: 'test1',
         field2: 'test2',
@@ -407,7 +406,7 @@ test.describe('Keyboard Navigation - Column Reordering', () => {
       }],
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const headerRow = dataGrid.getHeaders().getHeaderRow(0);
     const stickyHeader = headerRow.getHeaderCell(3);
 
@@ -436,9 +435,9 @@ test.describe('Keyboard Navigation - Column Reordering', () => {
         columns[7].fixed = true;
         columns[7].fixedPosition = 'right';
       },
-    }), GRID_SELECTOR, { arg: EIGHT_FIELDS });
+    }), DEFAULT_SELECTOR, { arg: EIGHT_FIELDS });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const headerRow = dataGrid.getHeaders().getHeaderRow(0);
     const firstFixedRightHeader = headerRow.getHeaderCell(6);
 
@@ -490,9 +489,9 @@ test.describe('Keyboard Navigation - Column Reordering', () => {
         columns[7].fixed = true;
         columns[7].fixedPosition = 'right';
       },
-    }), GRID_SELECTOR, { arg: EIGHT_FIELDS });
+    }), DEFAULT_SELECTOR, { arg: EIGHT_FIELDS });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const headerRow = dataGrid.getHeaders().getHeaderRow(0);
     const firstFixedRightHeader = headerRow.getHeaderCell(6);
 
@@ -517,9 +516,9 @@ test.describe('Keyboard Navigation - Column Reordering', () => {
         columns[0].fixed = true;
         columns[7].fixed = true;
       },
-    }), GRID_SELECTOR, { arg: EIGHT_FIELDS });
+    }), DEFAULT_SELECTOR, { arg: EIGHT_FIELDS });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const headerRow = dataGrid.getHeaders().getHeaderRow(0);
     const contextMenuItem = dataGrid.getContextMenu().getItemByText('Move to the right');
 
@@ -543,9 +542,9 @@ test.describe('Keyboard Navigation - Column Reordering', () => {
         columns[0].fixed = true;
         columns[7].fixed = true;
       },
-    }), GRID_SELECTOR, { arg: EIGHT_FIELDS });
+    }), DEFAULT_SELECTOR, { arg: EIGHT_FIELDS });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const headerRow = dataGrid.getHeaders().getHeaderRow(0);
     const contextMenuItem = dataGrid.getContextMenu().getItemByText('Move to the left');
 
@@ -571,9 +570,9 @@ test.describe('Keyboard Navigation - Column Reordering', () => {
         columns[7].fixed = true;
         columns[7].fixedPosition = 'right';
       },
-    }), GRID_SELECTOR, { arg: EIGHT_FIELDS });
+    }), DEFAULT_SELECTOR, { arg: EIGHT_FIELDS });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const headerRow = dataGrid.getHeaders().getHeaderRow(0);
     const contextMenuItem = dataGrid.getContextMenu().getItemByText('Move to the right');
 
@@ -599,9 +598,9 @@ test.describe('Keyboard Navigation - Column Reordering', () => {
         columns[7].fixed = true;
         columns[7].fixedPosition = 'right';
       },
-    }), GRID_SELECTOR, { arg: EIGHT_FIELDS });
+    }), DEFAULT_SELECTOR, { arg: EIGHT_FIELDS });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const headerRow = dataGrid.getHeaders().getHeaderRow(0);
     const contextMenuItem = dataGrid.getContextMenu().getItemByText('Move to the left');
 
@@ -632,7 +631,7 @@ test.describe('Keyboard Navigation - Column Reordering', () => {
       ],
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const headerRow = dataGrid.getHeaders().getHeaderRow(0);
     const secondHeader = headerRow.getHeaderCell(1);
 
@@ -662,7 +661,7 @@ test.describe('Keyboard Navigation - Column Reordering', () => {
       ],
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const headerRow = dataGrid.getHeaders().getHeaderRow(0);
     const secondHeader = headerRow.getHeaderCell(1);
 
@@ -692,7 +691,7 @@ test.describe('Keyboard Navigation - Column Reordering', () => {
       ],
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const nestedRow = dataGrid.getHeaders().getHeaderRow(1);
     const nestedSecondHeader = nestedRow.getHeaderCell(1);
 
@@ -721,7 +720,7 @@ test.describe('Keyboard Navigation - Column Reordering', () => {
       ],
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const nestedRow = dataGrid.getHeaders().getHeaderRow(1);
     const nestedFirstHeader = nestedRow.getHeaderCell(0);
 
@@ -751,7 +750,7 @@ test.describe('Keyboard Navigation - Column Reordering', () => {
       ],
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const nestedRow = dataGrid.getHeaders().getHeaderRow(1);
     const firstFixedLeftHeader = nestedRow.getHeaderCell(0);
 
@@ -782,7 +781,7 @@ test.describe('Keyboard Navigation - Column Reordering', () => {
       ],
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const nestedRow = dataGrid.getHeaders().getHeaderRow(1);
     const secondFixedLeftHeader = nestedRow.getHeaderCell(1);
 
@@ -811,7 +810,7 @@ test.describe('Keyboard Navigation - Column Reordering', () => {
       ],
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const nestedRow = dataGrid.getHeaders().getHeaderRow(1);
     const contextMenuItem = dataGrid.getContextMenu().getItemByText('Move to the left');
 
@@ -841,7 +840,7 @@ test.describe('Keyboard Navigation - Column Reordering', () => {
       ],
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const nestedRow = dataGrid.getHeaders().getHeaderRow(1);
     const contextMenuItem = dataGrid.getContextMenu().getItemByText('Move to the right');
 
@@ -881,7 +880,7 @@ test.describe('Keyboard Navigation - Column Reordering', () => {
       ],
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const headerRow = dataGrid.getHeaders().getHeaderRow(0);
     const thirdHeader = headerRow.getHeaderCell(2);
 
@@ -919,7 +918,7 @@ test.describe('Keyboard Navigation - Column Reordering', () => {
       ],
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const headerRow = dataGrid.getHeaders().getHeaderRow(0);
     const thirdHeader = headerRow.getHeaderCell(2);
 
@@ -959,7 +958,7 @@ test.describe('Keyboard Navigation - Column Reordering', () => {
       ],
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const headerRow = dataGrid.getHeaders().getHeaderRow(0);
     const commandHeader = headerRow.getHeaderCell(0);
 
@@ -998,7 +997,7 @@ test.describe('Keyboard Navigation - Column Reordering', () => {
       ],
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const headerRow = dataGrid.getHeaders().getHeaderRow(0);
     const commandHeader = headerRow.getHeaderCell(4);
 
@@ -1037,7 +1036,7 @@ test.describe('Keyboard Navigation - Column Reordering', () => {
       ],
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const headerRow = dataGrid.getHeaders().getHeaderRow(0);
     const contextMenuItem = dataGrid.getContextMenu().getItemByText('Move to the right');
 
@@ -1064,9 +1063,9 @@ test.describe('Keyboard Navigation - Column Reordering', () => {
         columns[5].hidingPriority = 1;
         columns[7].hidingPriority = 2;
       },
-    }), GRID_SELECTOR, { arg: EIGHT_FIELDS });
+    }), DEFAULT_SELECTOR, { arg: EIGHT_FIELDS });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const headerRow = dataGrid.getHeaders().getHeaderRow(0);
     const fourthHeader = headerRow.getHeaderCell(3);
 
@@ -1092,9 +1091,9 @@ test.describe('Keyboard Navigation - Column Reordering', () => {
         columns[2].hidingPriority = 1;
         columns[3].hidingPriority = 2;
       },
-    }), GRID_SELECTOR, { arg: EIGHT_FIELDS });
+    }), DEFAULT_SELECTOR, { arg: EIGHT_FIELDS });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const headerRow = dataGrid.getHeaders().getHeaderRow(0);
     const fifthHeader = headerRow.getHeaderCell(4);
 
@@ -1141,9 +1140,9 @@ test.describe('Keyboard Navigation - Column Reordering', () => {
             },
           },
         },
-      }), GRID_SELECTOR, { arg: { data: FOUR_FIELDS, isRenderAsync: renderAsync } });
+      }), DEFAULT_SELECTOR, { arg: { data: FOUR_FIELDS, isRenderAsync: renderAsync } });
 
-      const dataGrid = new DataGrid(page, GRID_SELECTOR);
+      const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
       const headerRow = dataGrid.getHeaders().getHeaderRow(0);
       const firstHeader = headerRow.getHeaderCell(0);
 
@@ -1176,7 +1175,7 @@ test.describe('Keyboard Navigation - Column Reordering', () => {
         },
       });
 
-      const dataGrid = new DataGrid(page, GRID_SELECTOR);
+      const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
       const headerRow = dataGrid.getHeaders().getHeaderRow(0);
       const firstHeaderCell = headerRow.getHeaderCell(0);
 
@@ -1202,7 +1201,7 @@ test.describe('Keyboard Navigation - Column Reordering', () => {
         },
       });
 
-      const dataGrid = new DataGrid(page, GRID_SELECTOR);
+      const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
       const headerRow = dataGrid.getHeaders().getHeaderRow(0);
       const lastHeaderCell = headerRow.getHeaderCell(9);
 
@@ -1233,7 +1232,7 @@ test.describe('Keyboard Navigation - Column Reordering', () => {
         },
       });
 
-      const dataGrid = new DataGrid(page, GRID_SELECTOR);
+      const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
       const headerRow = dataGrid.getHeaders().getHeaderRow(0);
       const firstHeaderCell = headerRow.getHeaderCell(0);
 
@@ -1261,7 +1260,7 @@ test.describe('Keyboard Navigation - Column Reordering', () => {
         },
       });
 
-      const dataGrid = new DataGrid(page, GRID_SELECTOR);
+      const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
       const headerRow = dataGrid.getHeaders().getHeaderRow(0);
       const lastHeaderCell = headerRow.getHeaderCell(29);
 

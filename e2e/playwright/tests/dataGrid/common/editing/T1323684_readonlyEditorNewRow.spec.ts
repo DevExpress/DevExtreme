@@ -1,5 +1,6 @@
 import type { GridsEditMode } from 'devextreme/ui/data_grid';
 import { expect, test } from '../../../../fixtures';
+import { DEFAULT_SELECTOR } from '../../../../helpers/const';
 import { createWidget } from '../../../../helpers/createWidget';
 import DataGrid from '../../../../models/dataGrid';
 import { classMatcher } from '../../../../models/internal/classMatcher';
@@ -30,7 +31,7 @@ test.describe('Editing - showEditorAlways cell in new row should be editable (T1
         ],
       });
 
-      const dataGrid = new DataGrid(page, '#container');
+      const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
       const addRowButton = dataGrid.getHeaderPanel().getAddRowButton();
 
       await addRowButton.click();
@@ -72,7 +73,7 @@ test.describe('Editing - showEditorAlways cell in new row should be editable (T1
         ],
       });
 
-      const dataGrid = new DataGrid(page, '#container');
+      const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
       const addRowButton = dataGrid.getHeaderPanel().getAddRowButton();
 
       await addRowButton.click();
@@ -110,7 +111,7 @@ test.describe('Editing - showEditorAlways cell in new row should be editable (T1
         ],
       });
 
-      const dataGrid = new DataGrid(page, '#container');
+      const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
       const existingCell = dataGrid.getDataCell(0, 1);
 
       await expect(existingCell.element, 'showEditorAlways cell in existing row should have readonly class when allowUpdating is false')
@@ -141,7 +142,7 @@ test.describe('Editing - showEditorAlways cell in new row should be editable (T1
       ],
     }));
 
-    const dataGrid = new DataGrid(page, '#container');
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const addRowButton = dataGrid.getHeaderPanel().getAddRowButton();
 
     await addRowButton.click();

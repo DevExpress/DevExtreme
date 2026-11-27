@@ -1,8 +1,7 @@
 import { expect, test } from '../../../../fixtures';
+import { DEFAULT_SELECTOR } from '../../../../helpers/const';
 import { createWidget } from '../../../../helpers/createWidget';
 import DataGrid from '../../../../models/dataGrid';
-
-const GRID_SELECTOR = '#container';
 
 test.describe('Keyboard Navigation - editOnKeyPress', () => {
   test('Editing should start by pressing enter after scrolling content with scrolling.mode=virtual', async ({ page }) => {
@@ -24,7 +23,7 @@ test.describe('Keyboard Navigation - editOnKeyPress', () => {
       height: 300,
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
@@ -58,7 +57,7 @@ test.describe('Keyboard Navigation - editOnKeyPress', () => {
       height: 300,
     }));
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
@@ -98,7 +97,7 @@ test.describe('Keyboard Navigation - editOnKeyPress', () => {
       height: 300,
     }));
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
@@ -145,7 +144,7 @@ test.describe('Keyboard Navigation - editOnKeyPress', () => {
       },
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const cell = dataGrid.getDataCell(0, 0);
 
     await cell.element.click();
