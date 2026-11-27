@@ -1,7 +1,8 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import {
-  Component, enableProdMode, Pipe, signal, type PipeTransform,
+  Component, enableProdMode, Pipe, signal,
 } from '@angular/core';
+import type { PipeTransform } from '@angular/core';
 import { DxCheckBoxModule, DxFileUploaderModule, DxSelectBoxModule } from 'devextreme-angular';
 import 'anti-forgery';
 

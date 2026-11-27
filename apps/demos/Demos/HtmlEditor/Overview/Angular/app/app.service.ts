@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
+import type { DxHtmlEditorTypes } from 'devextreme-angular/ui/html-editor';
 
-export class TabConfig {
+export interface TabConfig {
   name: string;
 
-  value: string[];
+  value: DxHtmlEditorTypes.HtmlEditorImageUploadTab[];
 }
 
 const markup = `

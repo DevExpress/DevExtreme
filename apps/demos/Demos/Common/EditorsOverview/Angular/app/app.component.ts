@@ -60,12 +60,20 @@ export class AppComponent {
     },
   ];
 
-  onWidthChange(value: number) {
+  onWidthChange(value: number | undefined) {
+    if (typeof value !== 'number') {
+      return;
+    }
+
     this.width.set(value);
     Promise.resolve().then(() => { this.height.set(value * 26 / 37); });
   }
 
-  onHeightChange(value: number) {
+  onHeightChange(value: number | undefined) {
+    if (typeof value !== 'number') {
+      return;
+    }
+
     this.height.set(value);
     Promise.resolve().then(() => { this.width.set(value * 37 / 26); });
   }

@@ -16,7 +16,7 @@ import {
 import notify from 'devextreme/ui/notify';
 import type { DxButtonTypes } from 'devextreme-angular/ui/button';
 import type { DxTextBoxTypes } from 'devextreme-angular/ui/text-box';
-import type { ValidationCallbackData } from 'devextreme-angular/common';
+import type { ValidationCallbackData, ValidationRule } from 'devextreme-angular/common';
 import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -119,6 +119,12 @@ export class AppComponent {
   }
 
   readonly asyncValidation = (params: ValidationCallbackData) => sendRequest(params.value);
+
+  readonly emailRules: ValidationRule[] = [
+    { type: 'required', message: 'Email is required' },
+    { type: 'email', message: 'Email is invalid' },
+    { type: 'async', message: 'Email is already registered', validationCallback: this.asyncValidation },
+  ];
 
   onPasswordChanged() {
     if (this.confirmPassword) {

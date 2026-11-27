@@ -5,7 +5,8 @@ import {
 import { DxTagBoxModule, DxPopoverModule } from 'devextreme-angular';
 import { ArrayStore } from 'devextreme-angular/common/data';
 import type { DxTagBoxTypes } from 'devextreme-angular/ui/tag-box';
-import { Service, type Product } from './app.service';
+import { Service } from './app.service';
+import type { Product } from './app.service';
 
 if (!document.location.host.includes('localhost')) {
   enableProdMode();
@@ -36,14 +37,18 @@ export class AppComponent {
 
   readonly value = [1, 2];
 
-  readonly product = signal<Product>(null);
+  readonly product = signal<Product | null>(null);
 
-  readonly target = signal<EventTarget>(null);
+  readonly target = signal<EventTarget | null>(null);
 
   readonly visible = signal(false);
 
   onCustomItemCreating(args: DxTagBoxTypes.CustomItemCreatingEvent) {
     const newValue = args.text;
+    if (!newValue) {
+      return;
+    }
+
     const isItemInDataSource = this.editableProducts.some((item) => item === newValue);
     if (!isItemInDataSource) {
       this.editableProducts.unshift(newValue);

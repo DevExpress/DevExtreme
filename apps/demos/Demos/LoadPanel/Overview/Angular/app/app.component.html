@@ -29,7 +29,7 @@
   [showIndicator]="true"
   [showPane]="true"
   [shading]="true"
-  [hideOnOutsideClick]="false"
+  [hideOnOutsideClick]="hideOnOutsideClick()"
   (onShown)="onShown()"
   (onHidden)="onHidden()"
 >
@@ -52,8 +52,8 @@
   <div class="option">
     <dx-check-box
       text="Hide on outside click"
-      [value]="loadPanel.hideOnOutsideClick === true"
-      (valueChange)="loadPanel.hideOnOutsideClick = !!$event"
+      [value]="hideOnOutsideClick()"
+      (valueChange)="hideOnOutsideClick.set(!!$event)"
     >
     </dx-check-box>
   </div>

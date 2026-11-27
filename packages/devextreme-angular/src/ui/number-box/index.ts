@@ -474,10 +474,10 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
      * [descr:dxNumberBoxOptions.value]
      */
     @Input()
-    get value(): number {
+    get value(): number | undefined {
         return this._getOption('value');
     }
-    set value(value: number) {
+    set value(value: number | undefined) {
         this._setOption('value', value);
     }
 
@@ -767,7 +767,7 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
     /**
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
      */
-    @Output() valueChange: EventEmitter<number>;
+    @Output() valueChange: EventEmitter<number | undefined>;
 
     /**
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
