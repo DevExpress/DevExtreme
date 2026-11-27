@@ -25,6 +25,7 @@ import type {
   PivotGridField,
   PivotGridLoadOptions,
   PivotGridLoadResult,
+  PivotGridPreparedField,
   PivotGridStore,
 } from '@ts/grids/pivot_grid/types';
 
@@ -713,11 +714,11 @@ class PivotGridDataSource {
   public getAreaFields(
     area: PivotGridArea | undefined,
     collectGroups?: boolean,
-  ): PivotGridField[] {
+  ): PivotGridPreparedField[] {
     if (collectGroups || area === 'data') {
-      const areaFields: PivotGridField[] = [];
+      const areaFields: PivotGridPreparedField[] = [];
 
-      this._fields.forEach((field) => {
+      this.fields().forEach((field) => {
         if (this.isAreaField(field, area)) {
           areaFields.push(field);
         }
@@ -729,6 +730,7 @@ class PivotGridDataSource {
 
     const descriptionName = area ? DESCRIPTION_NAME_BY_AREA[area] : undefined;
 
+    // @ts-expect-error a field gets its index in _fieldsPrepared(), on the first load
     return (descriptionName && this._descriptions?.[descriptionName]) ?? [];
   }
 
@@ -736,12 +738,13 @@ class PivotGridDataSource {
     return this.getAreaFields('data').filter((field) => isDefined(field.summaryType));
   }
 
-  public fields(fields?: PivotGridField[]): PivotGridField[] {
+  public fields(fields?: PivotGridField[]): PivotGridPreparedField[] {
     if (fields) {
       this._fields = this.mergeFields(fields, this._storeFields, this._retrieveFields);
       this._fieldsPrepared(this._fields);
     }
 
+    // @ts-expect-error a field gets its index in _fieldsPrepared(), on the first load
     return this._fields;
   }
 
@@ -1323,13 +1326,15 @@ class PivotGridDataSource {
   public collapseAll(id: number | string): void {
     let dataChanged = false;
     const field = this.field(id) ?? {};
-    let areaOffsets = [this.getAreaFields(field.area).indexOf(field)];
+    const areaFields: PivotGridField[] = this.getAreaFields(field.area);
+    let areaOffsets = [areaFields.indexOf(field)];
 
     field.expanded = false;
     if (field.levels) {
       areaOffsets = [];
       field.levels.forEach((f) => {
-        areaOffsets.push(this.getAreaFields(field.area).indexOf(f));
+        const levelAreaFields: PivotGridField[] = this.getAreaFields(field.area);
+        areaOffsets.push(levelAreaFields.indexOf(f));
         f.expanded = false;
       });
     }
