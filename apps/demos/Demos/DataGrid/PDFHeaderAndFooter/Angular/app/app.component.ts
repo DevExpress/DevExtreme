@@ -2,7 +2,8 @@ import { bootstrapApplication } from '@angular/platform-browser';
 import { Component, enableProdMode, inject } from '@angular/core';
 import { exportDataGrid } from 'devextreme-angular/common/export/pdf';
 import { jsPDF } from 'jspdf';
-import { DxDataGridModule, DxDataGridTypes } from 'devextreme-angular/ui/data-grid';
+import { DxDataGridModule } from 'devextreme-angular/ui/data-grid';
+import type { DxDataGridTypes } from 'devextreme-angular/ui/data-grid';
 import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -31,6 +32,9 @@ export class AppComponent {
       topLeft: { x: 1, y: 15 },
       columnWidths: [30, 20, 30, 15, 22, 22, 20, 20],
       customDrawCell({ rect }) {
+        if (!rect) {
+          return;
+        }
         if (lastPoint.x < rect.x + rect.w) {
           lastPoint.x = rect.x + rect.w;
         }

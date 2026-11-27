@@ -4,7 +4,8 @@ import { Workbook } from 'devextreme-exceljs-fork';
 import { saveAs } from 'file-saver-es';
 // Our demo infrastructure requires us to use 'file-saver-es'. We recommend that you use the official 'file-saver' package in your applications.
 import { exportDataGrid } from 'devextreme-angular/common/export/excel';
-import { DxDataGridModule, DxDataGridTypes } from 'devextreme-angular/ui/data-grid';
+import { DxDataGridModule } from 'devextreme-angular/ui/data-grid';
+import type { DxDataGridTypes } from 'devextreme-angular/ui/data-grid';
 import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -38,21 +39,21 @@ export class AppComponent {
       keepColumnWidths: false,
       topLeftCell: { row: 2, column: 2 },
       customizeCell: ({ gridCell, excelCell }) => {
-        if (gridCell.rowType === 'data') {
-          if (gridCell.column.dataField === 'Phone') {
+        if (gridCell?.rowType === 'data') {
+          if (gridCell.column?.dataField === 'Phone') {
             excelCell.value = parseInt(gridCell.value);
             excelCell.numFmt = '[<=9999999]###-####;(###) ###-####';
           }
-          if (gridCell.column.dataField === 'Website') {
+          if (gridCell.column?.dataField === 'Website') {
             excelCell.value = { text: gridCell.value, hyperlink: gridCell.value };
             excelCell.font = { color: { argb: 'FF0000FF' }, underline: true };
             excelCell.alignment = { horizontal: 'left' };
           }
         }
-        if (gridCell.rowType === 'group') {
+        if (gridCell?.rowType === 'group') {
           excelCell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'BEDFE6' } };
         }
-        if (gridCell.rowType === 'totalFooter' && excelCell.value) {
+        if (gridCell?.rowType === 'totalFooter' && excelCell.value) {
           excelCell.font.italic = true;
         }
       },
@@ -63,10 +64,10 @@ export class AppComponent {
     });
   }
 
-  phoneNumberFormat(value: string) {
-    const USNumber = value.match(/(\d{3})(\d{3})(\d{4})/);
+  phoneNumberFormat(value: number | Date | string) {
+    const USNumber = String(value).match(/(\d{3})(\d{3})(\d{4})/);
 
-    return `(${USNumber[1]}) ${USNumber[2]}-${USNumber[3]}`;
+    return USNumber ? `(${USNumber[1]}) ${USNumber[2]}-${USNumber[3]}` : '';
   }
 }
 

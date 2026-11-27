@@ -3,6 +3,7 @@ import {
   Component, enableProdMode, inject, signal,
 } from '@angular/core';
 import { DxDataGridModule, DxSelectBoxModule, DxCheckBoxModule } from 'devextreme-angular';
+import type { DxDataGridTypes } from 'devextreme-angular/ui/data-grid';
 import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -34,7 +35,7 @@ export class AppComponent {
 
   readonly recursive = signal(true);
 
-  readonly columnChooserModes = [{
+  readonly columnChooserModes: { key: DxDataGridTypes.ColumnChooserMode; name: string }[] = [{
     key: 'dragAndDrop',
     name: 'Drag and drop',
   }, {

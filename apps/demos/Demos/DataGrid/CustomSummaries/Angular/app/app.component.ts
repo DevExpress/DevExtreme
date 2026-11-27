@@ -1,6 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import { Component, enableProdMode, inject } from '@angular/core';
-import { DxDataGridModule, DxDataGridTypes } from 'devextreme-angular/ui/data-grid';
+import { DxDataGridModule } from 'devextreme-angular/ui/data-grid';
+import type { DxDataGridTypes } from 'devextreme-angular/ui/data-grid';
 import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -19,7 +20,7 @@ if (!/localhost/.test(document.location.host)) {
 export class AppComponent {
   readonly orders = inject(Service).getOrders();
 
-  calculateSelectedRow(options: Parameters<DxDataGridTypes.Summary['calculateCustomSummary']>[0]) {
+  calculateSelectedRow(options: Parameters<NonNullable<DxDataGridTypes.Summary['calculateCustomSummary']>>[0]) {
     if (options.name === 'SelectedRowsSummary') {
       if (options.summaryProcess === 'start') {
         options.totalValue = 0;

@@ -4,6 +4,7 @@ import {
 import { DxDataGridModule } from 'devextreme-angular';
 import { DataSource, ArrayStore } from 'devextreme-angular/common/data';
 import { Service } from '../app.service';
+import type { Task } from '../app.service';
 
 @Component({
   selector: 'detail-grid',
@@ -24,7 +25,7 @@ export class DetailGridComponent {
     filter: ['EmployeeID', '=', this.key()],
   }));
 
-  completedValue(rowData) {
+  completedValue(rowData: Task) {
     return rowData.Status === 'Completed';
   }
 }

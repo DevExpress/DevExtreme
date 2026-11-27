@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-export class Status {
+export interface Status {
   id: number;
 
   name: string;

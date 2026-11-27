@@ -4,7 +4,8 @@ import {
 } from '@angular/core';
 import { DxDataGridModule, DxSliderModule } from 'devextreme-angular';
 import { DataSource } from 'devextreme-angular/common/data';
-import { Product, Order, Service } from './app.service';
+import { Service } from './app.service';
+import type { Product, Order } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();

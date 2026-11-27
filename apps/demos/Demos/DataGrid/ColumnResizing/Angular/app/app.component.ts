@@ -3,6 +3,7 @@ import {
   Component, enableProdMode, inject, signal,
 } from '@angular/core';
 import { DxDataGridModule, DxSelectBoxModule } from 'devextreme-angular';
+import type { DxDataGridTypes } from 'devextreme-angular/ui/data-grid';
 import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -23,7 +24,7 @@ if (!/localhost/.test(document.location.host)) {
 export class AppComponent {
   readonly customers = inject(Service).getCustomers();
 
-  readonly resizingModes = ['nextColumn', 'widget'];
+  readonly resizingModes: DxDataGridTypes.ColumnResizeMode[] = ['nextColumn', 'widget'];
 
   readonly columnResizingMode = signal(this.resizingModes[0]);
 }

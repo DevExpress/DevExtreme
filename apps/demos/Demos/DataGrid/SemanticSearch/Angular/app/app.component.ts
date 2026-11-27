@@ -1,7 +1,9 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import { Component, enableProdMode, signal } from '@angular/core';
-import { DxDataGridModule, type DxDataGridTypes } from 'devextreme-angular/ui/data-grid';
-import { DxNumberBoxModule, type DxNumberBoxTypes } from 'devextreme-angular/ui/number-box';
+import { DxDataGridModule } from 'devextreme-angular/ui/data-grid';
+import type { DxDataGridTypes } from 'devextreme-angular/ui/data-grid';
+import { DxNumberBoxModule } from 'devextreme-angular/ui/number-box';
+import type { DxNumberBoxTypes } from 'devextreme-angular/ui/number-box';
 import { DataSource } from 'devextreme-angular/common/data';
 import * as AspNetData from 'devextreme-aspnet-data-nojquery';
 

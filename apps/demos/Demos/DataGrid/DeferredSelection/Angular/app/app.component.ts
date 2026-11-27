@@ -1,10 +1,10 @@
 import {
   Component,
-  AfterViewInit,
   enableProdMode,
   signal,
   viewChild,
 } from '@angular/core';
+import type { AfterViewInit } from '@angular/core';
 import { DxDataGridModule, DxDataGridComponent, DxButtonModule } from 'devextreme-angular';
 import { query } from 'devextreme-angular/common/data';
 import { bootstrapApplication } from '@angular/platform-browser';

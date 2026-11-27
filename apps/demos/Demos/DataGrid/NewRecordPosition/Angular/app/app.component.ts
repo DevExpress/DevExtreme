@@ -4,7 +4,8 @@ import {
 import { bootstrapApplication } from '@angular/platform-browser';
 import Guid from 'devextreme/core/guid';
 import { DxSelectBoxModule } from 'devextreme-angular';
-import { DxDataGridModule, DxDataGridTypes } from 'devextreme-angular/ui/data-grid';
+import { DxDataGridModule } from 'devextreme-angular/ui/data-grid';
+import type { DxDataGridTypes } from 'devextreme-angular/ui/data-grid';
 import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -30,7 +31,7 @@ export class AppComponent {
 
   readonly scrollingMode = signal<DxDataGridTypes.DataGridScrollMode>('standard');
 
-  readonly changes = signal<Partial<DxDataGridTypes.DataChange>[]>([]);
+  readonly changes = signal<DxDataGridTypes.DataChange[]>([]);
 
   readonly editRowKey = signal<number | string | null>(null);
 
@@ -43,13 +44,14 @@ export class AppComponent {
     this.changes.set([{
       key,
       type: 'insert',
-      insertAfterKey: row.key,
+      insertAfterKey: row?.key,
+      data: {},
     }]);
     this.editRowKey.set(key);
   };
 
   isAddButtonVisible({ row }: FirstArgument<DxDataGridTypes.ColumnButton['visible']>) {
-    return !row.isEditing;
+    return !row?.isEditing;
   }
 
   async onRowInserted(e: DxDataGridTypes.RowInsertedEvent) {

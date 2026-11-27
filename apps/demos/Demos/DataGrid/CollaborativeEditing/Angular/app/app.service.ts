@@ -1,5 +1,6 @@
-import { Injectable } from '@angular/core';
+import { DestroyRef, Injectable, inject } from '@angular/core';
 import { HubConnectionBuilder, HttpTransportType } from '@aspnet/signalr';
+import type { HubConnection } from '@aspnet/signalr';
 import * as AspNetData from 'devextreme-aspnet-data-nojquery';
 import Guid from 'devextreme/core/guid';
 import { Subject } from 'rxjs';
@@ -7,7 +8,7 @@ import 'anti-forgery';
 
 const BASE_PATH = 'https://js.devexpress.com/Demos/NetCore/';
 
-class StoreChangedEvent {
+interface StoreChangedEvent {
   type: 'update' | 'insert' | 'remove';
 
   key?: string;
@@ -21,10 +22,18 @@ export class CollaborativeEditingService {
 
   private readonly groupId: string = new Guid().toString();
 
-  private connection: Object;
+  private connection?: HubConnection;
+
+  constructor() {
+    inject(DestroyRef).onDestroy(() => {
+      this.connection?.stop();
+    });
+  }
 
   getStoreChangedObservable() {
-    this.connection || this.initHubConnection();
+    if (!this.connection) {
+      this.initHubConnection();
+    }
     return this.storeChanged.asObservable();
   }
 
@@ -51,6 +60,8 @@ export class CollaborativeEditingService {
 
   private initHubConnection() {
     const connection = this.createConnection();
+    this.connection = connection;
+
     connection.start()
       .then(() => {
         connection.on('update', (key, data) => {

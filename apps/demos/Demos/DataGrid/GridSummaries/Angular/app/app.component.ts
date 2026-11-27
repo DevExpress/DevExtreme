@@ -20,7 +20,7 @@ if (!/localhost/.test(document.location.host)) {
 export class AppComponent {
   readonly orders = inject(Service).getOrders();
 
-  customizeDate(itemInfo) {
+  customizeDate(itemInfo: { value?: string | number | Date }) {
     return `First: ${new DatePipe('en-US').transform(itemInfo.value, 'MMM dd, yyyy')}`;
   }
 }

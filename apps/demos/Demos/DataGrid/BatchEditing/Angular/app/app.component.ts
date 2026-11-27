@@ -1,6 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import { Component, enableProdMode, inject, signal } from '@angular/core';
 import { DxDataGridModule, DxSelectBoxModule, DxCheckBoxModule } from 'devextreme-angular';
+import type { DxDataGridTypes } from 'devextreme-angular/ui/data-grid';
 import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -25,7 +26,7 @@ export class AppComponent {
 
   readonly states = this.service.getStates();
 
-  readonly startEditAction = signal('click');
+  readonly startEditAction = signal<DxDataGridTypes.StartEditAction>('click');
 
   readonly selectTextOnEditStart = signal(true);
 }

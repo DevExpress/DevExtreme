@@ -2,7 +2,8 @@ import { bootstrapApplication } from '@angular/platform-browser';
 import { Component, enableProdMode, inject } from '@angular/core';
 import { jsPDF } from 'jspdf';
 import { exportDataGrid } from 'devextreme-angular/common/export/pdf';
-import { DxDataGridModule, DxDataGridTypes } from 'devextreme-angular/ui/data-grid';
+import { DxDataGridModule } from 'devextreme-angular/ui/data-grid';
+import type { DxDataGridTypes } from 'devextreme-angular/ui/data-grid';
 import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -30,26 +31,26 @@ export class AppComponent {
       component: e.component,
       columnWidths: [40, 40, 30, 30, 40],
       customizeCell({ gridCell, pdfCell }) {
-        if (gridCell.rowType === 'data' && gridCell.column.dataField === 'Phone') {
+        if (gridCell?.rowType === 'data' && gridCell.column?.dataField === 'Phone' && pdfCell?.text) {
           pdfCell.text = pdfCell.text.replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3');
-        } else if (gridCell.rowType === 'group') {
+        } else if (gridCell?.rowType === 'group' && pdfCell) {
           pdfCell.backgroundColor = '#BEDFE6';
-        } else if (gridCell.rowType === 'totalFooter') {
+        } else if (gridCell?.rowType === 'totalFooter' && pdfCell?.font) {
           pdfCell.font.style = 'italic';
         }
       },
       customDrawCell(options) {
-        const { gridCell, pdfCell } = options;
+        const { gridCell, pdfCell, rect } = options;
 
-        if (gridCell.rowType === 'data' && gridCell.column.dataField === 'Website') {
+        if (gridCell && pdfCell && rect && gridCell.rowType === 'data' && gridCell.column?.dataField === 'Website') {
           options.cancel = true;
           doc.setFontSize(11);
           doc.setTextColor('#0000FF');
 
-          const textHeight = doc.getTextDimensions(pdfCell.text).h;
+          const textHeight = pdfCell.text ? doc.getTextDimensions(pdfCell.text).h : 0;
           doc.textWithLink('website',
-            options.rect.x + pdfCell.padding.left,
-            options.rect.y + options.rect.h / 2 + textHeight / 2,
+            rect.x + (pdfCell.padding?.left ?? 0),
+            rect.y + rect.h / 2 + textHeight / 2,
             { url: pdfCell.text });
         }
       },
@@ -58,10 +59,10 @@ export class AppComponent {
     });
   }
 
-  phoneNumberFormat(value: string) {
-    const USNumber = value.match(/(\d{3})(\d{3})(\d{4})/);
+  phoneNumberFormat(value: number | Date | string) {
+    const USNumber = String(value).match(/(\d{3})(\d{3})(\d{4})/);
 
-    return `(${USNumber[1]}) ${USNumber[2]}-${USNumber[3]}`;
+    return USNumber ? `(${USNumber[1]}) ${USNumber[2]}-${USNumber[3]}` : '';
   }
 }
 

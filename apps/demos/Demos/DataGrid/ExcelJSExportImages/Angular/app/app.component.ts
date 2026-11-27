@@ -4,7 +4,8 @@ import { Anchor, Workbook } from 'devextreme-exceljs-fork';
 import { saveAs } from 'file-saver-es';
 // Our demo infrastructure requires us to use 'file-saver-es'. We recommend that you use the official 'file-saver' package in your applications.
 import { exportDataGrid } from 'devextreme-angular/common/export/excel';
-import { DxDataGridModule, DxDataGridTypes } from 'devextreme-angular/ui/data-grid';
+import { DxDataGridModule } from 'devextreme-angular/ui/data-grid';
+import type { DxDataGridTypes } from 'devextreme-angular/ui/data-grid';
 import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -34,8 +35,8 @@ export class AppComponent {
       topLeftCell: { row: 2, column: 2 },
       autoFilterEnabled: true,
       customizeCell: ({ gridCell, excelCell }) => {
-        if (gridCell.rowType === 'data') {
-          if (gridCell.column.dataField === 'Picture') {
+        if (gridCell?.rowType === 'data') {
+          if (gridCell.column?.dataField === 'Picture') {
             excelCell.value = undefined;
 
             const image = workbook.addImage({

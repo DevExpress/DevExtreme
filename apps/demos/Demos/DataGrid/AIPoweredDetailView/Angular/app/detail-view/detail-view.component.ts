@@ -1,6 +1,7 @@
 import {
-  Component, OnDestroy, OnInit, inject, input, signal,
+  Component, inject, input, signal,
 } from '@angular/core';
+import type { OnDestroy, OnInit } from '@angular/core';
 import { DxTextBoxModule, DxButtonGroupModule, DxButtonModule, DxTextAreaModule, DxLoadPanelModule } from 'devextreme-angular';
 import { type DxTextBoxTypes } from 'devextreme-angular/ui/text-box';
 import { type DxButtonGroupTypes } from 'devextreme-angular/ui/button-group';
@@ -8,7 +9,8 @@ import { type DxButtonTypes } from 'devextreme-angular/ui/button';
 import { type EventObject } from 'devextreme-angular/common/core/events';
 import themes from 'devextreme/ui/themes';
 import { type Vehicle, type AbortRequest } from '../app.service';
-import { AiService, type AIMessage } from '../ai/ai.service';
+import { AiService } from '../ai/ai.service';
+import type { AIMessage } from '../ai/ai.service';
 
 function getOutputAreaHeights() {
   const isCompact = themes.current().endsWith('compact');

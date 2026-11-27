@@ -1,7 +1,9 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import { Component, enableProdMode, inject } from '@angular/core';
-import { DxDataGridModule, DxDataGridTypes } from 'devextreme-angular/ui/data-grid';
-import { Service, Employee, City } from './app.service';
+import { DxDataGridModule } from 'devextreme-angular/ui/data-grid';
+import type { DxDataGridTypes } from 'devextreme-angular/ui/data-grid';
+import { Service } from './app.service';
+import type { Employee } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -28,7 +30,7 @@ export class AppComponent {
     this.getFilteredCities = this.getFilteredCities.bind(this);
   }
 
-  getFilteredCities(options: { data: City }) {
+  getFilteredCities(options: { data?: Partial<Employee> }) {
     return {
       store: this.cities,
       filter: options.data ? ['StateID', '=', options.data.StateID] : null,
@@ -37,7 +39,7 @@ export class AppComponent {
 
   onEditorPreparing(e: DxDataGridTypes.EditorPreparingEvent<Employee>) {
     if (e.parentType === 'dataRow' && e.dataField === 'CityID') {
-      e.editorOptions.disabled = e.row.data.StateID === undefined;
+      e.editorOptions.disabled = e.row?.data.StateID === undefined;
     }
   }
 

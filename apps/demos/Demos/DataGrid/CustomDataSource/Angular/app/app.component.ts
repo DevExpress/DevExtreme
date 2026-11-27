@@ -3,7 +3,8 @@ import { Component, enableProdMode, inject } from '@angular/core';
 import { HttpClient, HttpParams, provideHttpClient, withFetch } from '@angular/common/http';
 import { lastValueFrom } from 'rxjs';
 import { DxDataGridModule } from 'devextreme-angular';
-import { CustomStore, type LoadOptions, type LoadResultObject } from 'devextreme-angular/common/data';
+import { CustomStore } from 'devextreme-angular/common/data';
+import type { LoadOptions, LoadResultObject } from 'devextreme-angular/common/data';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
