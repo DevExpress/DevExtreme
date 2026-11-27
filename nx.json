@@ -3,12 +3,30 @@
   "$schema": "./node_modules/nx/schemas/nx-schema.json",
   "neverConnectToCloud": true,
   "cacheDirectory": ".nx/cache",
-  "plugins": ["./packages/nx-infra-plugin/dist"],
+  "plugins": [
+    "./packages/nx-infra-plugin/dist",
+    {
+      "plugin": "@nx/jest/plugin",
+      "options": {
+        "targetName": "test"
+      },
+      "include": [
+        "packages/devextreme-monorepo-tools/**/*",
+        "packages/nx-infra-plugin/**/*"
+      ]
+    }
+  ],
   "namedInputs": {
     "metadataToolsCommonInputs": [
       "{projectRoot}/**/*.ts",
       "{projectRoot}/tsconfig.json",
-      { "externalDependencies": [ "devextreme-internal-tools", "ts-node", "typescript"] }
+      {
+        "externalDependencies": [
+          "devextreme-internal-tools",
+          "ts-node",
+          "typescript"
+        ]
+      }
     ],
     "devextreme-sources": [
       "{projectRoot}/js/**/*",
@@ -51,5 +69,8 @@
   "tui": {
     "enabled": false
   },
-  "analytics": false
+  "analytics": false,
+  "affected": {
+    "legacy": true
+  }
 }
