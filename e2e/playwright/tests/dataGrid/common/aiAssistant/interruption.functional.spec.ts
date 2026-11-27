@@ -1,9 +1,5 @@
-import type { Page } from '@playwright/test';
 import { expect, test } from '../../../../fixtures';
 import { AI_INTEGRATION_PAGE_URL, DEFAULT_SELECTOR } from '../../../../helpers/const';
-import DataGrid from '../../../../models/dataGrid';
-import type AIAssistantChat from '../../../../models/dataGrid/aiAssistantChat';
-import { typeText } from '../../helpers/typeText';
 import {
   HANG,
   baseGrid,
@@ -20,6 +16,7 @@ import {
   wasAIRequestResolved,
   wasAbortCalled,
   wasSelectAllStarted,
+  openChatAndSubmit,
 } from './testHelpers';
 
 test.use({ containerUrl: AI_INTEGRATION_PAGE_URL });
@@ -34,24 +31,6 @@ const sortSelectAllSort = {
     { name: 'selectAll', args: {} },
     { name: 'sorting', args: { dataField: 'value', sortOrder: 'desc' } },
   ],
-};
-
-const openChatAndSubmit = async (
-  page: Page,
-  prompt: string,
-): Promise<{ dataGrid: DataGrid; aiChat: AIAssistantChat }> => {
-  const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
-
-  await expect.poll(() => dataGrid.isReady()).toBe(true);
-
-  await dataGrid.getAIAssistantButton().click();
-
-  const aiChat = dataGrid.getAIAssistantChat();
-
-  await typeText(aiChat.getInput(), prompt);
-  await page.keyboard.press('Enter');
-
-  return { dataGrid, aiChat };
 };
 
 test.describe('AI Assistant - Interruption', () => {

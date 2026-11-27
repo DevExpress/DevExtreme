@@ -1,8 +1,11 @@
 /* eslint-disable no-underscore-dangle */
 import type { Page } from '@playwright/test';
 import { expect } from '../../../../fixtures';
+import { DEFAULT_SELECTOR } from '../../../../helpers/const';
 import { createWidget } from '../../../../helpers/createWidget';
+import DataGrid from '../../../../models/dataGrid';
 import type AIAssistantChat from '../../../../models/dataGrid/aiAssistantChat';
+import { typeText } from '../../helpers/typeText';
 
 export const threeRows = [
   { id: 1, name: 'Alice', value: 30 },
@@ -300,6 +303,38 @@ export const formatMessage = (page: Page, key: string): Promise<string> => page.
   (messageKey) => (window as any).DevExpress.localization.formatMessage(messageKey),
   key,
 );
+
+export const openChat = async (
+  page: Page,
+): Promise<{ dataGrid: DataGrid; aiChat: AIAssistantChat }> => {
+  const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
+
+  await expect.poll(() => dataGrid.isReady()).toBe(true);
+
+  await dataGrid.getAIAssistantButton().click();
+
+  return { dataGrid, aiChat: dataGrid.getAIAssistantChat() };
+};
+
+export const submit = async (
+  page: Page,
+  aiChat: AIAssistantChat,
+  prompt: string,
+): Promise<void> => {
+  await typeText(aiChat.getInput(), prompt);
+  await page.keyboard.press('Enter');
+};
+
+export const openChatAndSubmit = async (
+  page: Page,
+  prompt: string,
+): Promise<{ dataGrid: DataGrid; aiChat: AIAssistantChat }> => {
+  const { dataGrid, aiChat } = await openChat(page);
+
+  await submit(page, aiChat, prompt);
+
+  return { dataGrid, aiChat };
+};
 
 export const closeChatAndConfirmAbort = async (aiChat: AIAssistantChat): Promise<void> => {
   await aiChat.getCloseButton().element.click();

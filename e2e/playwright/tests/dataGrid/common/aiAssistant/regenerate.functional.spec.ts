@@ -1,9 +1,5 @@
-import type { Page } from '@playwright/test';
 import { expect, test } from '../../../../fixtures';
-import { AI_INTEGRATION_PAGE_URL, DEFAULT_SELECTOR } from '../../../../helpers/const';
-import DataGrid from '../../../../models/dataGrid';
-import type AIAssistantChat from '../../../../models/dataGrid/aiAssistantChat';
-import { typeText } from '../../helpers/typeText';
+import { AI_INTEGRATION_PAGE_URL } from '../../../../helpers/const';
 import {
   FAIL,
   HANG,
@@ -15,29 +11,12 @@ import {
   getRequestText,
   threeRows,
   twoRows,
+  openChatAndSubmit,
 } from './testHelpers';
 
 test.use({ containerUrl: AI_INTEGRATION_PAGE_URL });
 
 const sortNameAsc = { actions: [{ name: 'sorting', args: { dataField: 'name', sortOrder: 'asc' } }] };
-
-const openChatAndSubmit = async (
-  page: Page,
-  prompt: string,
-): Promise<{ dataGrid: DataGrid; aiChat: AIAssistantChat }> => {
-  const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
-
-  await expect.poll(() => dataGrid.isReady()).toBe(true);
-
-  await dataGrid.getAIAssistantButton().click();
-
-  const aiChat = dataGrid.getAIAssistantChat();
-
-  await typeText(aiChat.getInput(), prompt);
-  await page.keyboard.press('Enter');
-
-  return { dataGrid, aiChat };
-};
 
 const PRE_EXECUTION_FAILURE_CASES: { title: string; response: unknown }[] = [
   { title: 'Regenerate should be visible after AI integration failure', response: FAIL },

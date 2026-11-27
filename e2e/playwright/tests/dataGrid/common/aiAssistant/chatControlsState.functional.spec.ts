@@ -1,8 +1,6 @@
-import type { Page } from '@playwright/test';
 import { expect, test } from '../../../../fixtures';
 import { AI_INTEGRATION_PAGE_URL, DEFAULT_SELECTOR } from '../../../../helpers/const';
 import DataGrid from '../../../../models/dataGrid';
-import type AIAssistantChat from '../../../../models/dataGrid/aiAssistantChat';
 import { typeText } from '../../helpers/typeText';
 import {
   FAIL,
@@ -15,6 +13,7 @@ import {
   threeRows,
   twoRows,
   wasSelectAllStarted,
+  openChatAndSubmit,
 } from './testHelpers';
 
 test.use({ containerUrl: AI_INTEGRATION_PAGE_URL });
@@ -27,24 +26,6 @@ const baseGrid = (rows: unknown[]): Record<string, unknown> => ({
 const sortByName = { actions: [{ name: 'sorting', args: { dataField: 'name', sortOrder: 'asc' } }] };
 const selectAll = { actions: [{ name: 'selectAll', args: {} }] };
 const suggestionConfig = { chat: { suggestions: { items: [{ text: 'Sort by name' }] } } };
-
-const openChatAndSubmit = async (
-  page: Page,
-  prompt: string,
-): Promise<{ dataGrid: DataGrid; aiChat: AIAssistantChat }> => {
-  const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
-
-  await expect.poll(() => dataGrid.isReady()).toBe(true);
-
-  await dataGrid.getAIAssistantButton().click();
-
-  const aiChat = dataGrid.getAIAssistantChat();
-
-  await typeText(aiChat.getInput(), prompt);
-  await page.keyboard.press('Enter');
-
-  return { dataGrid, aiChat };
-};
 
 test.describe('AI Assistant - Chat Controls State', () => {
   test('N distinct prompts back-to-back should each execute once, in order, and apply to the grid', async ({ page }) => {
