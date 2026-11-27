@@ -79,11 +79,9 @@ export const CLASS = {
   scrollContainer: 'dx-datagrid-scroll-container',
   columnsSeparator: 'dx-datagrid-columns-separator',
   toast: 'dx-toast-wrapper',
-  dragHeader: 'drag-header',
   aiPromptEditor: 'dx-ai-prompt-editor',
   aiAssistantChat: 'dx-ai-chat',
   aiAssistantButton: 'ai-assistant-button',
-  aiAssistantConfirmDialog: 'ai-assistant-confirm-dialog',
   sortableDragging: 'dx-sortable-dragging',
 };
 
@@ -735,24 +733,6 @@ export default class DataGrid extends GridCore {
     )();
   }
 
-  apiGetDataSourceSortParams(): Promise<any> {
-    const { getInstance } = this;
-
-    return ClientFunction(
-      () => (getInstance() as DataGridInstance).getDataSource().sort(),
-      { dependencies: { getInstance } },
-    )();
-  }
-
-  apiGetSelectedRowKeys(): Promise<any[]> {
-    const { getInstance } = this;
-
-    return ClientFunction(
-      () => (getInstance() as DataGridInstance).getSelectedRowKeys(),
-      { dependencies: { getInstance } },
-    )();
-  }
-
   moveRow(rowIndex: number, x: number, y: number, isStart = false): Promise<void> {
     const { getInstance } = this;
 
@@ -844,24 +824,6 @@ export default class DataGrid extends GridCore {
       {
         dependencies: {
           getInstance, columnIndex, x, y, isStart, moveElement,
-        },
-      },
-    )();
-  }
-
-  async dropHeader(columnIndex: number): Promise<void> {
-    const header = this.getHeaders().getHeaderRow(0).getHeaderCell(columnIndex).element;
-
-    return ClientFunction(
-      () => {
-        const headerOffset = $(header()).offset();
-
-        triggerPointerUp($(document), headerOffset.left, headerOffset.top);
-      },
-      {
-        dependencies: {
-          header, 
-          triggerPointerUp,
         },
       },
     )();
@@ -1009,46 +971,15 @@ export default class DataGrid extends GridCore {
     )();
   }
 
-  apiState(): Promise<unknown> {
-    const { getInstance } = this;
-
-    return ClientFunction(
-      () => (getInstance() as any).state(),
-      {
-        dependencies: {
-          getInstance,
-        },
-      },
-    )();
-  }
-
-  getDraggableHeader() {
-    return this.body.find(`.${this.addWidgetPrefix(CLASS.dragHeader)}`);
-  }
-
   getAIPromptEditor(): AIPromptEditor {
     return new AIPromptEditor(this.body.find(`.${CLASS.aiPromptEditor}`));
   }
 
   getAIAssistantChat(): AIAssistantChat {
-    return new AIAssistantChat(
-      this.body.find(`.${CLASS.overlayWrapper}.${CLASS.aiAssistantChat}`),
-      this.addWidgetPrefix(CLASS.aiAssistantConfirmDialog),
-    );
+    return new AIAssistantChat(this.body.find(`.${CLASS.overlayWrapper}.${CLASS.aiAssistantChat}`));
   }
 
   getAIAssistantButton(): Selector {
     return this.getHeaderPanel().element.find(`.${this.addWidgetPrefix(CLASS.aiAssistantButton)}`);
-  }
-
-  focusAIAssistantButton(): Promise<void> {
-    const buttonSelector = this.getAIAssistantButton();
-
-    return ClientFunction(
-      () => {
-        (buttonSelector() as unknown as HTMLElement)?.focus();
-      },
-      { dependencies: { buttonSelector } },
-    )();
   }
 }

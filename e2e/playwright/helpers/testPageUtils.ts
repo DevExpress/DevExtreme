@@ -1,8 +1,8 @@
 import type { Page } from '@playwright/test';
-import { DEFAULT_THEME, TEST_PAGE_URL } from './const';
+import { DEFAULT_THEME } from './const';
 
-export async function openTestPage(page: Page): Promise<void> {
-  await page.goto(TEST_PAGE_URL);
+export async function openTestPage(page: Page, url: string): Promise<void> {
+  await page.goto(url);
   await page.waitForFunction(() => !!(window as any).DevExpress);
 }
 

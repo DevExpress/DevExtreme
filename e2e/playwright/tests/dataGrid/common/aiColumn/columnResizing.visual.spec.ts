@@ -1,0 +1,41 @@
+import { expect, test } from '../../../../fixtures';
+import { DEFAULT_SELECTOR } from '../../../../helpers/const';
+import { createWidget } from '../../../../helpers/createWidget';
+import { testScreenshot } from '../../../../helpers/screenshots';
+import DataGrid from '../../../../models/dataGrid';
+
+test.describe('Ai Column.ColumnResizing.Visual', () => {
+  test('Resize AI Column when wordWrapEnabled is true', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', {
+      dataSource: [
+        { id: 1, name: 'Name 1', value: 10 },
+        { id: 2, name: 'Name 2', value: 20 },
+        { id: 3, name: 'Name 3', value: 30 },
+      ],
+      keyExpr: 'id',
+      allowColumnResizing: true,
+      wordWrapEnabled: true,
+      columnWidth: 100,
+      columns: [
+        {
+          type: 'ai',
+          caption: 'AI Column AI Column',
+          width: 250,
+        },
+        { dataField: 'id', caption: 'ID' },
+        { dataField: 'name', caption: 'Name' },
+        { dataField: 'value', caption: 'Value' },
+      ],
+    });
+
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
+
+    await expect.poll(() => dataGrid.isReady()).toBe(true);
+
+    await testScreenshot(page, 'datagrid__ai-column__column-resizing(wordWrapEnabled=true)-1.png', { element: dataGrid.element });
+
+    await dataGrid.resizeHeader(1, -150);
+
+    await testScreenshot(page, 'datagrid__ai-column__column-resizing(wordWrapEnabled=true)-2.png', { element: dataGrid.element });
+  });
+});
