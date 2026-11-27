@@ -37,7 +37,6 @@ export const CLASS = {
   columnChooser: 'column-chooser',
   focusedRow: 'dx-row-focused',
   filterRow: 'filter-row',
-  filterRangeOverlay: 'filter-range-overlay',
   focusOverlay: 'focus-overlay',
   editFormRow: 'edit-form',
   button: 'dx-button',
@@ -261,19 +260,8 @@ export default class DataGrid extends GridCore {
     return this.getHeaders().getFilterRow().getFilterCell(columnIndex);
   }
 
-  getFilterRangeOverlay(): Selector {
-    return this.getHeadersContainer().child(`.${this.addWidgetPrefix(CLASS.filterRangeOverlay)}`);
-  }
-
   getFocusOverlay() {
     return this.body.find(`.${this.addWidgetPrefix(CLASS.focusOverlay)}`);
-  }
-
-  getFilterEditor<T>(
-    columnIndex: number,
-    EditorType: new (mainElement: Selector) => T,
-  ): T {
-    return this.getHeaders().getFilterRow().getFilterCell(columnIndex).getEditor<T>(EditorType);
   }
 
   getSearchBox(): TextBox {

@@ -35,6 +35,14 @@ export default class ContextMenu extends Widget {
     });
   }
 
+  public getItemByIndex(index: number): Locator {
+    return this.items.nth(index);
+  }
+
+  public getItemCount(): Promise<number> {
+    return this.items.count();
+  }
+
   public async show(): Promise<void> {
     await this.invoke('show');
   }

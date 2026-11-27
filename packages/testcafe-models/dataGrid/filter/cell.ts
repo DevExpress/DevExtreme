@@ -4,8 +4,6 @@ import FocusableElement from '../../internal/focusable';
 
 const CLASS = {
   filterMenu: 'dx-filter-menu',
-  filterEditor: 'dx-widget',
-  filterEditorContainer: 'dx-editor-container',
   focused: 'dx-focused',
   menuButton: 'dx-menu-item',
   contextMenu: 'dx-context-menu',
@@ -28,9 +26,5 @@ export default class FilterCell extends FocusableElement {
 
   getSearchIcon(): FocusableElement {
     return new FocusableElement(this.element.find(`.${CLASS.filterMenu}`));
-  }
-
-  getEditor<T>(EditorType: new (mainElement: Selector) => T): T {
-    return new EditorType(this.element.find(`.${CLASS.filterEditorContainer} .${CLASS.filterEditor}`));
   }
 }
