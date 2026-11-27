@@ -1,7 +1,8 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import { Component, enableProdMode } from '@angular/core';
 import * as AspNetData from 'devextreme-aspnet-data-nojquery';
-import { DxTreeListModule, DxTreeListTypes } from 'devextreme-angular/ui/tree-list';
+import { DxTreeListModule } from 'devextreme-angular/ui/tree-list';
+import type { DxTreeListTypes } from 'devextreme-angular/ui/tree-list';
 import 'anti-forgery';
 
 if (!/localhost/.test(document.location.host)) {

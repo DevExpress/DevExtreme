@@ -1,6 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import { Component, enableProdMode, inject } from '@angular/core';
 import { DxTreeListModule } from 'devextreme-angular';
+import type { DxTreeListTypes } from 'devextreme-angular/ui/tree-list';
 import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -34,7 +35,7 @@ export class AppComponent {
     'Completed',
   ];
 
-  getCompletionText(cellInfo) {
+  getCompletionText(cellInfo: DxTreeListTypes.ColumnCustomizeTextArg) {
     return `${cellInfo.valueText}%`;
   }
 }
