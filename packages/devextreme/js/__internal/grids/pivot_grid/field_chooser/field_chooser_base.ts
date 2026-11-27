@@ -35,8 +35,8 @@ import type {
   OldSortableDraggingArgs,
   OldSortableProperties,
 } from '../sortable/types';
-import type { PivotGridField } from '../types';
-import type { FieldChooserField, SortOrderType } from './const';
+import type { PivotGridField, PivotGridPreparedField } from '../types';
+import type { SortOrderType } from './const';
 import {
   ATTRIBUTES, CLASSES, FIELD_DATA_KEY, FIELD_NAVIGATION_DELTAS,
 } from './const';
@@ -196,7 +196,7 @@ export class FieldChooserBase extends mixinWidget<FieldChooserBaseProperties> {
     }
   }
 
-  public renderField(field: FieldChooserField, showColumnLines: boolean): dxElementWrapper {
+  public renderField(field: PivotGridPreparedField, showColumnLines: boolean): dxElementWrapper {
     const caption = field.caption ?? field.dataField ?? '';
     const $fieldContent = $(DIV).addClass(CLASSES.area.fieldContent)
       .text(caption);
@@ -342,7 +342,7 @@ export class FieldChooserBase extends mixinWidget<FieldChooserBaseProperties> {
     return result;
   }
 
-  protected _applyChanges(fields: FieldChooserField[], props: Partial<PivotGridField>): void {
+  protected _applyChanges(fields: PivotGridPreparedField[], props: Partial<PivotGridField>): void {
     this._processDemandState((dataSource, isInstantlyMode) => {
       fields.forEach(({ index }) => {
         dataSource.field(index, props);
@@ -541,7 +541,7 @@ export class FieldChooserBase extends mixinWidget<FieldChooserBaseProperties> {
 
   private _handleFieldNavigation(
     e: FieldChooserFieldEvent<KeyboardEvent>,
-    field: FieldChooserField,
+    field: PivotGridPreparedField,
   ): void {
     if (!field.area) {
       return;
@@ -568,7 +568,7 @@ export class FieldChooserBase extends mixinWidget<FieldChooserBaseProperties> {
 
   private _renderHeaderFilterIcon(
     $fieldElement: dxElementWrapper,
-    field: FieldChooserField,
+    field: PivotGridPreparedField,
     showColumnLines: boolean,
   ): void {
     if (!this._dataSource || !fieldHasHeaderFilter(this._dataSource, field)) {
@@ -598,7 +598,10 @@ export class FieldChooserBase extends mixinWidget<FieldChooserBaseProperties> {
     $container.append($icon);
   }
 
-  private handleHeaderFilterIconClick(e: FieldChooserFieldEvent, field: FieldChooserField): void {
+  private handleHeaderFilterIconClick(
+    e: FieldChooserFieldEvent,
+    field: PivotGridPreparedField,
+  ): void {
     // eslint-disable-next-line @typescript-eslint/no-this-alias -- the methods use their own this
     const that = this;
     const dataSource = this._dataSource;
@@ -673,7 +676,7 @@ export class FieldChooserBase extends mixinWidget<FieldChooserBaseProperties> {
     }));
   }
 
-  private handleFieldClick(field: FieldChooserField): void {
+  private handleFieldClick(field: PivotGridPreparedField): void {
     const isRemoteSort = this.option('remoteSort');
     const sortOrder = reverseSortOrder(field.sortOrder);
 

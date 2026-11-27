@@ -1,13 +1,13 @@
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
-import type { FieldChooserField } from '@ts/grids/pivot_grid/field_chooser/const';
+import type { PivotGridPreparedField } from '@ts/grids/pivot_grid/types';
 
 import { CLASSES, DIV } from './const';
 
 export const renderGroupConnector = (
-  field: FieldChooserField,
-  nextField: FieldChooserField | undefined,
-  prevField: FieldChooserField | undefined,
+  field: PivotGridPreparedField,
+  nextField: PivotGridPreparedField | undefined,
+  prevField: PivotGridPreparedField | undefined,
   $container: dxElementWrapper,
 ): void => {
   if (prevField?.groupName && prevField.groupName === field.groupName) {

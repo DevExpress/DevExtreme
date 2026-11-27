@@ -2,32 +2,50 @@ import '../data_source/data_source';
 
 import localizationMessage from '@js/common/core/localization/message';
 import registerComponent from '@js/core/component_registrator';
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
 import { getImageContainer } from '@js/core/utils/icon';
 import { each } from '@js/core/utils/iterator';
 import { isDefined } from '@js/core/utils/type';
 import { hasWindow as hasWindowFn } from '@js/core/utils/window';
+import type { DxEvent } from '@js/events';
 import ContextMenu from '@js/ui/context_menu';
+import type { PivotGridArea } from '@js/ui/pivot_grid/data_source';
 import TreeView from '@js/ui/tree_view';
 import { getData, setData } from '@ts/core/element_data';
+import type { OptionChanged } from '@ts/core/widget/types';
+import type Scrollable from '@ts/ui/scroll_view/scrollable';
 
 import type { PivotGridDataSource } from '../data_source/data_source';
+import type { OldSortableProperties } from '../sortable/types';
+import type { PivotGridField, PivotGridPreparedField } from '../types';
 import { foreachDataLevel, getCompareFunction } from '../widget_utils';
 import {
   ATTRIBUTES, CLASSES, FIELD_DATA_KEY, ICONS,
 } from './const';
 import { FieldChooserBase } from './field_chooser_base';
+import type {
+  FieldChooserArea,
+  FieldChooserContextMenuArgs,
+  FieldChooserGroupFieldName,
+  FieldChooserTreeItem,
+  FieldChooserTreeItems,
+  PivotGridFieldChooserProperties,
+} from './types';
 
 const DIV = '<div>';
 const hasWindow = hasWindowFn();
 
-function getDimensionFields(item, fields) {
-  const result: any = [];
+function getDimensionFields(
+  item: FieldChooserTreeItem,
+  fields: PivotGridPreparedField[],
+): PivotGridPreparedField[] {
+  const result: PivotGridPreparedField[] = [];
 
   if (item.items) {
-    for (let i = 0; i < item.items.length; i += 1) {
-      result.push.apply(result, getDimensionFields(item.items[i], fields));
+    for (const childItem of item.items) {
+      result.push(...getDimensionFields(childItem, fields));
     }
   } else if (isDefined(item.index)) {
     result.push(fields[item.index]);
@@ -35,10 +53,13 @@ function getDimensionFields(item, fields) {
   return result;
 }
 
-function getFirstItem(item, condition) {
+function getFirstItem(
+  item: FieldChooserTreeItem,
+  condition: (item: FieldChooserTreeItem) => unknown,
+): FieldChooserTreeItem | undefined {
   if (item.items) {
-    for (let i = 0; i < item.items.length; i += 1) {
-      const childrenItem = getFirstItem(item.items[i], condition);
+    for (const childItem of item.items) {
+      const childrenItem = getFirstItem(childItem, condition);
       if (childrenItem) {
         return childrenItem;
       }
@@ -52,44 +73,47 @@ function getFirstItem(item, condition) {
   return undefined;
 }
 
-const compareOrder = [
-  function (a, b) {
+const compareOrder: ((a: FieldChooserTreeItem, b: FieldChooserTreeItem) => number)[] = [
+  function compareByMeasure(a, b): number {
     const aValue = -!!a.isMeasure;
     const bValue = +!!b.isMeasure;
 
     return aValue + bValue;
   },
 
-  function (a, b) {
-    const aValue = -!!(a.items && a.items.length);
-    const bValue = +!!(b.items && b.items.length);
+  function compareByItems(a, b): number {
+    const aValue = -!!a.items?.length;
+    const bValue = +!!b.items?.length;
 
     return aValue + bValue;
   },
 
-  function (a, b) {
-    const aValue = +!!(a.isMeasure === false && a.field && a.field.levels && a.field.levels.length);
-    const bValue = -!!(b.isMeasure === false && b.field && b.field.levels && b.field.levels.length);
+  function compareByLevels(a, b): number {
+    const aValue = +!!(a.isMeasure === false && a.field?.levels?.length);
+    const bValue = -!!(b.isMeasure === false && b.field?.levels?.length);
 
     return aValue + bValue;
   },
-  getCompareFunction((item) => item.text),
+  getCompareFunction((item: FieldChooserTreeItem) => item.text),
 ];
 
-function compareItems(a, b) {
+function compareItems(a: FieldChooserTreeItem, b: FieldChooserTreeItem): number {
   let result = 0;
   let i = 0;
 
   while (!result && compareOrder[i]) {
-    // eslint-disable-next-line no-plusplus
-    result = compareOrder[i++](a, b);
+    result = compareOrder[i](a, b);
+    i += 1;
   }
 
   return result;
 }
 
-function getScrollable(container) {
-  return container.find(`.${CLASSES.scrollable.self}`).dxScrollable('instance');
+function getScrollable(container: dxElementWrapper): Scrollable | undefined {
+  // @ts-expect-error dxScrollable is added to the renderer at runtime
+  const scrollable: Scrollable | undefined = container.find(`.${CLASSES.scrollable.self}`).dxScrollable('instance');
+
+  return scrollable;
 }
 
 export class FieldChooser extends FieldChooserBase {
@@ -97,11 +121,11 @@ export class FieldChooser extends FieldChooserBase {
 
   private _dataChangedHandlers!: (() => void)[];
 
-  private _actions!: Record<string, (event?: unknown) => void>;
+  private onContextMenuPreparingAction!: (event?: unknown) => void;
 
   private _contextMenu?: ContextMenu;
 
-  _getDefaultOptions() {
+  public _getDefaultOptions(): PivotGridFieldChooserProperties {
     return {
       ...super._getDefaultOptions(),
       ...{
@@ -123,61 +147,52 @@ export class FieldChooser extends FieldChooserBase {
     };
   }
 
-  _refreshDataSource() {
-    const that = this;
-    that._expandedPaths = [];
-    that._changedHandler = that._changedHandler || function () {
-      each(that._dataChangedHandlers, (_, func) => {
-        func();
+  protected _refreshDataSource(): void {
+    this._expandedPaths = [];
+    this._changedHandler ??= (): void => {
+      this._dataChangedHandlers.forEach((handler) => {
+        handler();
       });
-      that.restoreFieldFocus();
-      that._fireContentReadyAction();
-      that._skipStateChange = true;
-      // @ts-expect-error the field chooser has a data source here
-      that.option('state', that._dataSource.state());
-      that._skipStateChange = false;
+      this.restoreFieldFocus();
+      this._fireContentReadyAction();
+      this._skipStateChange = true;
+      if (this._dataSource) {
+        this.option('state', this._dataSource.state());
+      }
+      this._skipStateChange = false;
     };
 
-    that._disposeDataSource();
+    this._disposeDataSource();
 
     super._refreshDataSource();
 
-    that._dataSource && that._dataSource.on('changed', that._changedHandler);
-  }
-
-  _disposeDataSource() {
-    const that = this;
-    const dataSource = that._dataSource;
-
-    if (dataSource) {
-      dataSource.off('changed', that._changedHandler);
-      that._dataSource = undefined;
+    if (this._dataSource) {
+      this._dataSource.on('changed', this._changedHandler);
     }
   }
 
-  _dispose() {
+  private _disposeDataSource(): void {
+    const dataSource = this._dataSource;
+
+    if (dataSource) {
+      dataSource.off('changed', this._changedHandler);
+      this._dataSource = undefined;
+    }
+  }
+
+  public _dispose(): void {
     this._disposeDataSource();
     super._dispose();
   }
 
-  _init() {
+  public _init(): void {
     super._init();
     this._refreshDataSource();
     this._dataChangedHandlers = [];
-    this._initActions();
+    this.onContextMenuPreparingAction = this._createActionByOption('onContextMenuPreparing');
   }
 
-  _initActions() {
-    this._actions = {
-      onContextMenuPreparing: this._createActionByOption('onContextMenuPreparing'),
-    };
-  }
-
-  _trigger(eventName, eventArg) {
-    this._actions[eventName](eventArg);
-  }
-
-  _setOptionsByReference() {
+  public _setOptionsByReference(): void {
     super._setOptionsByReference();
 
     extend(this._optionsByReference, {
@@ -185,36 +200,35 @@ export class FieldChooser extends FieldChooserBase {
     });
   }
 
-  _optionChanged(args) {
-    const that = this;
+  public _optionChanged(args: OptionChanged<PivotGridFieldChooserProperties>): void {
     switch (args.name) {
       case 'dataSource':
-        that._refreshDataSource();
-        that._invalidate();
+        this._refreshDataSource();
+        this._invalidate();
         break;
       case 'layout':
       case 'texts':
       case 'allowSearch':
       case 'searchTimeout':
       case 'encodeHtml':
-        that._invalidate();
+        this._invalidate();
         break;
       case 'onContextMenuPreparing':
-        that._actions[args.name] = that._createActionByOption(args.name);
+        this.onContextMenuPreparingAction = this._createActionByOption(args.name);
         break;
       default:
         super._optionChanged(args);
     }
   }
 
-  _clean(skipStateSetting?) {
-    !skipStateSetting && this._dataSource && this.option('state', this._dataSource.state());
+  public _clean(skipStateSetting?: boolean): void {
+    if (!skipStateSetting && this._dataSource) {
+      this.option('state', this._dataSource.state());
+    }
     this.$element().children(`.${CLASSES.fieldChooser.container}`).remove();
   }
 
-  _renderLayout0($container) {
-    const that = this;
-
+  private _renderLayout0($container: dxElementWrapper): void {
     $container.addClass(CLASSES.layout.zero);
 
     const $row1 = $(DIV).addClass(CLASSES.row).appendTo($container);
@@ -226,49 +240,44 @@ export class FieldChooser extends FieldChooserBase {
     const $col3 = $(DIV).addClass(CLASSES.col).appendTo($row2);
     const $col4 = $(DIV).addClass(CLASSES.col).appendTo($row2);
 
-    that._renderArea($col1, 'all');
-    that._renderArea($col2, 'row');
-    that._renderArea($col2, 'column');
-    that._renderArea($col3, 'filter');
-    that._renderArea($col4, 'data');
+    this._renderArea($col1, 'all');
+    this._renderArea($col2, 'row');
+    this._renderArea($col2, 'column');
+    this._renderArea($col3, 'filter');
+    this._renderArea($col4, 'data');
   }
 
-  _renderLayout1($container) {
-    const that = this;
-
+  private _renderLayout1($container: dxElementWrapper): void {
     const $col1 = $(DIV).addClass(CLASSES.col).appendTo($container);
     const $col2 = $(DIV).addClass(CLASSES.col).appendTo($container);
 
-    that._renderArea($col1, 'all');
-    that._renderArea($col2, 'filter');
-    that._renderArea($col2, 'row');
-    that._renderArea($col2, 'column');
-    that._renderArea($col2, 'data');
+    this._renderArea($col1, 'all');
+    this._renderArea($col2, 'filter');
+    this._renderArea($col2, 'row');
+    this._renderArea($col2, 'column');
+    this._renderArea($col2, 'data');
   }
 
-  _renderLayout2($container) {
-    const that = this;
-
+  private _renderLayout2($container: dxElementWrapper): void {
     $container.addClass(CLASSES.layout.second);
 
     const $row1 = $(DIV).addClass(CLASSES.row).appendTo($container);
-    that._renderArea($row1, 'all');
+    this._renderArea($row1, 'all');
 
     const $row2 = $(DIV).addClass(CLASSES.row).appendTo($container);
     const $col1 = $(DIV).addClass(CLASSES.col).appendTo($row2);
     const $col2 = $(DIV).addClass(CLASSES.col).appendTo($row2);
 
-    that._renderArea($col1, 'filter');
-    that._renderArea($col1, 'row');
-    that._renderArea($col2, 'column');
-    that._renderArea($col2, 'data');
+    this._renderArea($col1, 'filter');
+    this._renderArea($col1, 'row');
+    this._renderArea($col2, 'column');
+    this._renderArea($col2, 'data');
   }
 
-  _initMarkup() {
-    const that = this;
+  public _initMarkup(): void {
     const $element = this.$element();
     const $container = $(DIV).addClass(CLASSES.fieldChooser.container).appendTo($element);
-    const layout = that.option('layout');
+    const layout = this.option('layout');
 
     super._initMarkup();
 
@@ -276,25 +285,30 @@ export class FieldChooser extends FieldChooserBase {
       .addClass(CLASSES.fieldChooser.self)
       .addClass(CLASSES.pivotGrid.fieldsContainer);
 
-    that._dataChangedHandlers = [];
+    this._dataChangedHandlers = [];
 
     const dataSource = this._dataSource;
-    const currentState = that.option('applyChangesMode') !== 'instantly' && dataSource && dataSource.state();
+    const currentState = this.option('applyChangesMode') !== 'instantly' && dataSource?.state();
 
-    currentState && that.option('state') && dataSource.state(that.option('state'), true);
-
-    if (layout === 0) {
-      that._renderLayout0($container);
-    } else if (layout === 1) {
-      that._renderLayout1($container);
-    } else {
-      that._renderLayout2($container);
+    if (currentState && dataSource && this.option('state')) {
+      dataSource.state(this.option('state'), true);
     }
 
-    currentState && dataSource.state(currentState, true);
+    if (layout === 0) {
+      this._renderLayout0($container);
+    } else if (layout === 1) {
+      this._renderLayout1($container);
+    } else {
+      this._renderLayout2($container);
+    }
+
+    if (currentState && dataSource) {
+      dataSource.state(currentState, true);
+    }
   }
 
-  _renderContentImpl() {
+  public _renderContentImpl(): void {
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises -- the base returns nothing
     super._renderContentImpl();
 
     this.renderSortable();
@@ -303,29 +317,27 @@ export class FieldChooser extends FieldChooserBase {
     this.updateFieldsTabIndexes();
   }
 
-  _fireContentReadyAction() {
-    if (!this._dataSource || !this._dataSource.isLoading()) {
+  public _fireContentReadyAction(): void {
+    if (!this._dataSource?.isLoading()) {
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises -- the result isn't used
       super._fireContentReadyAction();
     }
   }
 
-  _getContextMenuArgs(dxEvent) {
+  private _getContextMenuArgs(dxEvent: DxEvent): FieldChooserContextMenuArgs {
     const targetFieldElement = $(dxEvent.target).closest(`.${CLASSES.area.field}`);
     const targetGroupElement = $(dxEvent.target).closest(`.${CLASSES.area.fieldList}`);
-    let field;
-    let area;
+    // eslint-disable-next-line @typescript-eslint/init-declarations -- set for a field target
+    let field: PivotGridField | undefined;
 
     if (targetFieldElement.length) {
       const fieldCopy = getData(targetFieldElement, FIELD_DATA_KEY);
       if (fieldCopy) {
-        // @ts-expect-error the field chooser has a data source here
-        field = this.getDataSource().field(fieldCopy.index) || fieldCopy;
+        field = this.getDataSource()?.field(fieldCopy.index) ?? fieldCopy;
       }
     }
 
-    if (targetGroupElement.length) {
-      area = targetGroupElement.attr('group');
-    }
+    const area = targetGroupElement.length ? targetGroupElement.attr('group') : undefined;
 
     return {
       event: dxEvent,
@@ -335,51 +347,55 @@ export class FieldChooser extends FieldChooserBase {
     };
   }
 
-  _renderContextMenu() {
-    const that = this;
-    const $container = that.$element();
+  private _renderContextMenu(): void {
+    const $container = this.$element();
 
-    if (that._contextMenu) {
-      that._contextMenu.$element().remove();
+    if (this._contextMenu) {
+      this._contextMenu.$element().remove();
     }
 
-    that._contextMenu = that._createComponent($(DIV).appendTo($container), ContextMenu, {
-      onPositioning(actionArgs) {
+    this._contextMenu = this._createComponent($(DIV).appendTo($container), ContextMenu, {
+      onPositioning: (actionArgs): void => {
         const { event } = actionArgs;
 
         if (!event) {
           return;
         }
 
-        const args = that._getContextMenuArgs(event);
+        const args = this._getContextMenuArgs(event);
 
-        that._trigger('onContextMenuPreparing', args);
+        this.onContextMenuPreparingAction(args);
 
-        if (args.items && args.items.length) {
+        if (args.items?.length) {
           actionArgs.component.option('items', args.items);
         } else {
           actionArgs.cancel = true;
         }
       },
       target: $container,
-      onItemClick(params) {
-        params.itemData.onItemClick && params.itemData.onItemClick(params);
+      onItemClick(params): void {
+        if (params.itemData.onItemClick) {
+          params.itemData.onItemClick(params);
+        }
       },
       cssClass: CLASSES.fieldChooser.contextMenu,
     });
   }
 
-  _createTreeItems(fields, groupFieldNames, path?) {
-    const that = this;
-    let isMeasure;
-    let resultItems: any = [];
-    const groupedItems: any = [];
+  private _createTreeItems(
+    fields: PivotGridPreparedField[],
+    groupFieldNames: FieldChooserGroupFieldName[],
+    path?: string | number,
+  ): FieldChooserTreeItems {
+    let resultItems: FieldChooserTreeItems = [];
+    const groupedItems: FieldChooserTreeItem[] = [];
     const groupFieldName = groupFieldNames[0];
-    const fieldsByGroup: any = {};
+    const fieldsByGroup: Record<string, PivotGridPreparedField[]> = {};
 
     if (!groupFieldName) {
-      each(fields, (_, field) => {
-        let icon;
+      fields.forEach((field) => {
+        // eslint-disable-next-line @typescript-eslint/init-declarations -- set by the checks below
+        let icon: string | undefined;
 
         if (field.isMeasure === true) {
           icon = ICONS.measure;
@@ -401,27 +417,26 @@ export class FieldChooser extends FieldChooserBase {
         });
       });
     } else {
-      each(fields, (_, field) => {
-        const groupName = field[groupFieldName] || '';
-        fieldsByGroup[groupName] = fieldsByGroup[groupName] || [];
+      let isMeasure = true;
+
+      fields.forEach((field) => {
+        const groupName = field[groupFieldName] ?? '';
+        fieldsByGroup[groupName] ??= [];
         fieldsByGroup[groupName].push(field);
 
-        if (isMeasure === undefined) {
-          isMeasure = true;
-        }
-        isMeasure = isMeasure && field.isMeasure === true;
+        isMeasure &&= field.isMeasure === true;
       });
 
-      each(fieldsByGroup, (groupName: string | number, fields) => {
+      each(fieldsByGroup, (groupName: string | number, groupFields) => {
         const currentPath = path ? `${path}.${groupName}` : groupName;
-        const items = that._createTreeItems(fields, groupFieldNames.slice(1), currentPath);
+        const items = this._createTreeItems(groupFields, groupFieldNames.slice(1), currentPath);
         if (groupName) {
           groupedItems.push({
             key: groupName,
             text: groupName,
             path: currentPath,
             isMeasure: items.isMeasure,
-            expanded: that._expandedPaths.includes(currentPath),
+            expanded: this._expandedPaths.includes(currentPath),
             items,
           });
         } else {
@@ -436,8 +451,8 @@ export class FieldChooser extends FieldChooserBase {
     return resultItems;
   }
 
-  _createFieldsDataSource(dataSource) {
-    let fields = dataSource && dataSource.fields() || [];
+  private _createFieldsDataSource(): FieldChooserTreeItems {
+    let fields = this._dataSource?.fields() ?? [];
 
     fields = fields.filter((field) => field.visible !== false && !isDefined(field.groupIndex));
 
@@ -450,50 +465,57 @@ export class FieldChooser extends FieldChooserBase {
     return treeItems;
   }
 
-  _renderFieldsTreeView(container) {
-    const that = this;
-    // @ts-expect-error the field chooser has a data source here
-    const dataSource: PivotGridDataSource = that._dataSource;
-    const treeView = that._createComponent(container, TreeView, {
-      dataSource: that._createFieldsDataSource(dataSource),
+  private _renderFieldsTreeView(container: dxElementWrapper): void {
+    const treeView = this._createComponent(container, TreeView, {
+      dataSource: this._createFieldsDataSource(),
       showCheckBoxesMode: 'normal',
       expandNodesRecursive: false,
-      searchEnabled: that.option('allowSearch'),
-      searchTimeout: that.option('searchTimeout'),
+      searchEnabled: this.option('allowSearch'),
+      searchTimeout: this.option('searchTimeout'),
       useNativeScrolling: false,
-      itemTemplate(itemData, itemIndex, itemElement) {
-        const $item = ($('<div>') as any)
+      itemTemplate(itemData: FieldChooserTreeItem, itemIndex, itemElement): void {
+        const $item = $('<div>')
           .toggleClass(CLASSES.area.field, !itemData.items)
           .attr(ATTRIBUTES.treeViewItem, true)
           .appendTo(itemElement);
-        setData($item, FIELD_DATA_KEY, itemData.field);
+
+        if (itemData.field) {
+          setData($item, FIELD_DATA_KEY, itemData.field);
+        }
 
         if (itemData.icon) {
           getImageContainer(itemData.icon)?.appendTo($item);
         }
 
         $('<span>')
-          .text(itemData.text)
+          .text(itemData.text ?? '')
           .appendTo($item);
       },
-      onItemCollapsed(e) {
-        const index = that._expandedPaths.indexOf(e.itemData.path);
+      onItemCollapsed: (e): void => {
+        const index = this._expandedPaths.indexOf(e.itemData.path);
         if (index >= 0) {
-          that._expandedPaths.splice(index, 1);
+          this._expandedPaths.splice(index, 1);
         }
       },
-      onItemExpanded(e) {
-        const index = that._expandedPaths.indexOf(e.itemData.path);
+      onItemExpanded: (e): void => {
+        const index = this._expandedPaths.indexOf(e.itemData.path);
         if (index < 0) {
-          that._expandedPaths.push(e.itemData.path);
+          this._expandedPaths.push(e.itemData.path);
         }
       },
-      onItemSelectionChanged(e) {
+      onItemSelectionChanged: (e): void => {
+        const dataSource = this._dataSource;
+
+        if (!dataSource) {
+          return;
+        }
+
         const data = e.itemData;
-        let field;
-        let fields;
+        // eslint-disable-next-line @typescript-eslint/init-declarations -- set in the branches
+        let fields: PivotGridPreparedField[] | undefined;
         let needSelectDefaultItem = true;
-        let area;
+        // eslint-disable-next-line @typescript-eslint/init-declarations -- set for a selected field
+        let area: PivotGridArea | undefined;
 
         if (data.items) {
           if (data.selected) {
@@ -501,11 +523,11 @@ export class FieldChooser extends FieldChooserBase {
             return;
           }
 
-          that._processDemandState(() => {
+          this._processDemandState(() => {
             fields = getDimensionFields(data, dataSource.fields());
 
-            for (let i = 0; i < fields.length; i += 1) {
-              if (fields[i].area) {
+            for (const dimensionField of fields) {
+              if (dimensionField.area) {
                 needSelectDefaultItem = false;
                 break;
               }
@@ -515,13 +537,15 @@ export class FieldChooser extends FieldChooserBase {
           if (needSelectDefaultItem) {
             const item = getFirstItem(
               data,
-              (item) => item.isDefault,
-            ) || getFirstItem(data, (item) => isDefined(item.index));
-            item && treeView.selectItem(item);
+              (treeItem) => treeItem.isDefault,
+            ) ?? getFirstItem(data, (treeItem) => isDefined(treeItem.index));
+            if (item) {
+              treeView.selectItem(item);
+            }
             return;
           }
         } else {
-          field = dataSource.fields()[data.index];
+          const field = dataSource.fields()[data.index];
           if (data.selected) {
             area = field.isMeasure ? 'data' : 'column';
           }
@@ -530,18 +554,20 @@ export class FieldChooser extends FieldChooserBase {
           }
         }
 
-        that._applyChanges(fields, {
-          area,
-          areaIndex: undefined,
-        });
+        if (fields) {
+          this._applyChanges(fields, {
+            area,
+            areaIndex: undefined,
+          });
+        }
       },
     });
 
-    const dataChanged = function () {
+    const dataChanged = (): void => {
       let scrollable = getScrollable(container);
       const scrollTop = scrollable ? scrollable.scrollTop() : 0;
 
-      treeView.option({ dataSource: that._createFieldsDataSource(dataSource) });
+      treeView.option({ dataSource: this._createFieldsDataSource() });
       scrollable = getScrollable(container);
       if (scrollable) {
         scrollable.scrollTo({ top: scrollTop });
@@ -549,33 +575,27 @@ export class FieldChooser extends FieldChooserBase {
       }
     };
 
-    that._dataChangedHandlers.push(dataChanged);
+    this._dataChangedHandlers.push(dataChanged);
   }
 
-  _renderAreaFields($container, area) {
-    const that = this;
-    const dataSource = that._dataSource;
+  private _renderAreaFields($container: dxElementWrapper, area: PivotGridArea): void {
+    const dataSource = this._dataSource;
     const fields = dataSource ? extend(true, [], dataSource.getAreaFields(area, true)) : [];
 
     $container.empty();
-    each(fields, (_, field) => {
+    fields.forEach((field) => {
       if (field.visible !== false) {
-        // @ts-expect-error a field's index is set by the data source
-        that.renderField(field, true).appendTo($container);
+        this.renderField(field, true).appendTo($container);
       }
     });
   }
 
-  _renderArea(container, area) {
-    const that = this;
+  private _renderArea(container: dxElementWrapper, area: FieldChooserArea): void {
     const $areaContainer = $(DIV).addClass(CLASSES.area.self).appendTo(container);
     const $fieldsHeaderContainer = $(DIV)
       .addClass(CLASSES.area.fieldListHeader)
       .appendTo($areaContainer);
-    // @ts-expect-error the field chooser's options aren't typed yet
-    const caption: string = that.option(`texts.${area}Fields`);
-    let $fieldsContent;
-    let render;
+    const caption: string = this.option('texts')?.[`${area}Fields`] ?? '';
 
     $('<span>').addClass(CLASSES.area.icon)
       .addClass(`dx-icon-${ICONS[area]}`)
@@ -589,18 +609,21 @@ export class FieldChooser extends FieldChooserBase {
       .text(caption)
       .appendTo($fieldsHeaderContainer);
 
-    const $fieldsContainer: any = $(DIV).addClass(CLASSES.area.fieldList)
+    const $fieldsContainer = $(DIV).addClass(CLASSES.area.fieldList)
       .addClass(CLASSES.pivotGrid.dragAction)
       .appendTo($areaContainer);
 
     if (area !== 'all') {
       $fieldsContainer.attr('group', area).attr(ATTRIBUTES.allowScrolling, true);
-      $fieldsContent = $(DIV).addClass(CLASSES.area.fieldContainer).appendTo($fieldsContainer);
-      render = function () {
-        that._renderAreaFields($fieldsContent, area);
+      const $fieldsContent = $(DIV)
+        .addClass(CLASSES.area.fieldContainer)
+        .appendTo($fieldsContainer);
+      const render = (): void => {
+        this._renderAreaFields($fieldsContent, area);
       };
-      that._dataChangedHandlers.push(render);
+      this._dataChangedHandlers.push(render);
       render();
+      // @ts-expect-error dxScrollable is added to the renderer at runtime
       $fieldsContainer.dxScrollable({
         useNative: false,
         useKeyboard: false,
@@ -608,21 +631,21 @@ export class FieldChooser extends FieldChooserBase {
     } else {
       $areaContainer.addClass(CLASSES.allFields);
       $fieldsContainer.addClass(CLASSES.treeView.borderVisible);
-      that._renderFieldsTreeView($fieldsContainer);
+      this._renderFieldsTreeView($fieldsContainer);
     }
   }
 
-  _getSortableOptions() {
+  protected _getSortableOptions(): Partial<OldSortableProperties> {
     // TODO
     return {
       direction: '',
     };
   }
 
-  _adjustSortableOnChangedArgs() {
+  protected _adjustSortableOnChangedArgs(): void {
   }
 
-  resetTreeView() {
+  public resetTreeView(): void {
     // @ts-expect-error dxTreeView is added to the renderer at runtime
     const treeView = this.$element().find(`.${CLASSES.treeView.self}`).dxTreeView('instance');
 
@@ -632,43 +655,41 @@ export class FieldChooser extends FieldChooserBase {
     }
   }
 
-  applyChanges() {
+  public applyChanges(): void {
     const state = this.option('state');
 
     if (isDefined(state)) {
-      // @ts-expect-error the field chooser has a data source here
-      this._dataSource.state(state);
+      this._dataSource?.state(state);
     }
   }
 
-  cancelChanges() {
-    // @ts-expect-error the field chooser has a data source here
-    const dataSource: PivotGridDataSource = this._dataSource;
+  public cancelChanges(): boolean {
+    const dataSource = this._dataSource;
 
-    if (!dataSource.isLoading()) {
+    if (dataSource && !dataSource.isLoading()) {
       this.option('state', dataSource.state());
       return true;
     }
     return false;
   }
 
-  getDataSource() {
+  public getDataSource(): PivotGridDataSource | undefined {
     return this._dataSource;
   }
 
-  updateDimensions() {
+  public updateDimensions(): void {
     const $scrollableElements = this.$element().find(`.${CLASSES.area.self} .${CLASSES.scrollable.self}`);
     // @ts-expect-error dxScrollable is added to the renderer at runtime
     $scrollableElements.dxScrollable('update');
   }
 
-  _visibilityChanged(visible) {
+  public _visibilityChanged(visible: boolean): void {
     if (visible && hasWindow) {
       this.updateDimensions();
     }
   }
 }
 
-registerComponent('dxPivotGridFieldChooser', FieldChooser as any);
+registerComponent('dxPivotGridFieldChooser', FieldChooser);
 
 export default { FieldChooser };

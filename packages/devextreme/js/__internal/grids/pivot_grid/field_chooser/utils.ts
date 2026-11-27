@@ -5,9 +5,9 @@ import { updateHeaderFilterItemSelectionState } from '@ts/grids/grid_core/header
 
 import type { PivotGridDataSource } from '../data_source/data_source';
 import type { DataSourceState } from '../data_source/types';
-import type { PivotGridField, PivotGridFilterValue } from '../types';
+import type { PivotGridField, PivotGridFilterValue, PivotGridPreparedField } from '../types';
 import { createPath, foreachTree } from '../widget_utils';
-import type { FieldChooserField, SortOrderType } from './const';
+import type { SortOrderType } from './const';
 import { FIELD_NAVIGATION_DELTAS, SORT_ORDER } from './const';
 import type { FieldChooserBaseProperties, FieldChooserHeaderFilterItem } from './types';
 
@@ -18,7 +18,7 @@ export const reverseSortOrder = (
   : SORT_ORDER.descending);
 
 export const getFieldSortOrder = (
-  field: Pick<FieldChooserField, 'sortOrder'>,
+  field: Pick<PivotGridPreparedField, 'sortOrder'>,
 ): SortOrderType => (field.sortOrder === SORT_ORDER.descending
   ? SORT_ORDER.descending
   : SORT_ORDER.ascending);
@@ -93,11 +93,10 @@ export const processItems = (
 
 export const getMainGroupField = (
   dataSource: PivotGridDataSource,
-  sourceField: FieldChooserField,
-): FieldChooserField => {
+  sourceField: PivotGridPreparedField,
+): PivotGridPreparedField => {
   let field = sourceField;
   if (isDefined(sourceField.groupIndex)) {
-    // @ts-expect-error a field's index is set by the data source
     field = dataSource.getAreaFields(sourceField.area, true)[sourceField.areaIndex ?? -1];
   }
 
@@ -106,7 +105,7 @@ export const getMainGroupField = (
 
 export const fieldHasHeaderFilter = (
   dataSource: PivotGridDataSource,
-  field: FieldChooserField,
+  field: PivotGridPreparedField,
 ): boolean => {
   const mainGroupField = getMainGroupField(dataSource, field);
   const isFirstInGroup = field.groupIndex === 0 || !isDefined(field.groupIndex);

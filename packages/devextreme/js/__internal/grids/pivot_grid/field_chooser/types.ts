@@ -1,12 +1,13 @@
 import type { ApplyChangesMode } from '@js/common/grids';
 import type { DxEvent } from '@js/events';
+import type { PivotGridArea } from '@js/ui/pivot_grid/data_source';
 import type { Properties as FieldChooserProperties } from '@js/ui/pivot_grid_field_chooser';
 import type { WidgetProperties } from '@ts/core/widget/widget';
 import type { HeaderFilterItem, HeaderFilterViewOptions } from '@ts/grids/grid_core/header_filter/types';
 
 import type { PivotGridDataSource } from '../data_source/data_source';
 import type { DataSourceState } from '../data_source/types';
-import type { PivotGridField } from '../types';
+import type { PivotGridContextMenuItem, PivotGridField, PivotGridPreparedField } from '../types';
 import type { FieldChooserBase } from './field_chooser_base';
 
 export interface FieldChooserHeaderFilterItem extends HeaderFilterItem {
@@ -30,6 +31,41 @@ export interface FieldChooserBaseProperties extends WidgetProperties<FieldChoose
   applyChangesMode: ApplyChangesMode;
   state?: Partial<DataSourceState> | null;
   headerFilter: FieldChooserProperties['headerFilter'];
+  texts: FieldChooserProperties['texts'];
   remoteSort: boolean;
   encodeHtml?: boolean;
+}
+
+export type PivotGridFieldChooserProperties = FieldChooserBaseProperties & Pick<
+  FieldChooserProperties,
+  'layout' | 'allowSearch' | 'searchTimeout' | 'onContextMenuPreparing' | 'texts' | 'height'
+>;
+
+/** 'all' is the tree view of all fields. */
+export type FieldChooserArea = PivotGridArea | 'all';
+
+export type FieldChooserGroupFieldName = 'dimension' | 'displayFolder';
+
+export interface FieldChooserTreeItem {
+  index?: number;
+  field?: PivotGridPreparedField;
+  key?: string | number;
+  selected?: boolean;
+  text?: string | number;
+  icon?: string;
+  isMeasure?: boolean;
+  isDefault?: boolean;
+  path?: string | number;
+  expanded?: boolean;
+  items?: FieldChooserTreeItems;
+}
+
+/** isMeasure is set when all fields of a group are measures. */
+export type FieldChooserTreeItems = FieldChooserTreeItem[] & { isMeasure?: boolean };
+
+export interface FieldChooserContextMenuArgs {
+  event: DxEvent;
+  field: PivotGridField | undefined;
+  area: string | undefined;
+  items: PivotGridContextMenuItem[];
 }
