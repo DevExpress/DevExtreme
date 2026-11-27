@@ -1,9 +1,8 @@
 import { test } from '../../../helpers/accessibility/test';
 import { a11yCheck } from '../../../helpers/accessibility/utils';
+import { DEFAULT_SELECTOR } from '../../../helpers/const';
 import { createWidget } from '../../../helpers/createWidget';
 import CardView from '../../../models/cardView';
-
-const CARD_VIEW_SELECTOR = '#container';
 
 test('column chooser in \'select\' mode', async ({ page }) => {
   await createWidget(page, 'dxCardView', {
@@ -27,11 +26,11 @@ test('column chooser in \'select\' mode', async ({ page }) => {
     ],
   });
 
-  const cardView = new CardView(page, CARD_VIEW_SELECTOR);
+  const cardView = new CardView(page, DEFAULT_SELECTOR);
 
   await cardView.apiShowColumnChooser();
 
-  await a11yCheck(page, {}, CARD_VIEW_SELECTOR);
+  await a11yCheck(page, {}, DEFAULT_SELECTOR);
 });
 
 test('column chooser in \'dragAndDrop\' mode', async ({ page }) => {
@@ -53,12 +52,12 @@ test('column chooser in \'dragAndDrop\' mode', async ({ page }) => {
     ],
   });
 
-  const cardView = new CardView(page, CARD_VIEW_SELECTOR);
+  const cardView = new CardView(page, DEFAULT_SELECTOR);
 
   await cardView.apiShowColumnChooser();
 
   const a11yCheckConfig = {};
-  await a11yCheck(page, a11yCheckConfig, CARD_VIEW_SELECTOR);
+  await a11yCheck(page, a11yCheckConfig, DEFAULT_SELECTOR);
 });
 
 test('cardView with opened columnChooser', async ({ page }) => {
@@ -72,9 +71,9 @@ test('cardView with opened columnChooser', async ({ page }) => {
     ],
   });
 
-  const cardView = new CardView(page, CARD_VIEW_SELECTOR);
+  const cardView = new CardView(page, DEFAULT_SELECTOR);
 
   await cardView.apiShowColumnChooser();
 
-  await a11yCheck(page, {}, CARD_VIEW_SELECTOR);
+  await a11yCheck(page, {}, DEFAULT_SELECTOR);
 });

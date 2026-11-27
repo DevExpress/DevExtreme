@@ -1,4 +1,5 @@
 import { expect, test } from '../../../../fixtures';
+import { DEFAULT_SELECTOR } from '../../../../helpers/const';
 import { createWidget } from '../../../../helpers/createWidget';
 import PivotGrid from '../../../../models/pivotGrid';
 
@@ -20,7 +21,7 @@ test('Should call \'onExporting\' when export button clicked', async ({ page }) 
     },
   }));
 
-  const pivotGrid = new PivotGrid(page, '#container');
+  const pivotGrid = new PivotGrid(page, DEFAULT_SELECTOR);
 
   await pivotGrid.getExportButton().click();
 

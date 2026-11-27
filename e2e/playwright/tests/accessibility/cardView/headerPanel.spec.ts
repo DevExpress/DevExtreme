@@ -1,10 +1,10 @@
 import { test } from '../../../helpers/accessibility/test';
 import { a11yCheck } from '../../../helpers/accessibility/utils';
+import { DEFAULT_SELECTOR } from '../../../helpers/const';
 import { createWidget } from '../../../helpers/createWidget';
 import CardView from '../../../models/cardView';
 
-const CARD_VIEW_SELECTOR = '#container';
-const HEADER_PANEL_SELECTOR = `${CARD_VIEW_SELECTOR} .dx-cardview-headers`;
+const HEADER_PANEL_SELECTOR = `${DEFAULT_SELECTOR} .dx-cardview-headers`;
 const a11yCheckConfig = {};
 
 test('Default render', async ({ page }) => {
@@ -203,7 +203,7 @@ test('headerPanel column chooser link opens column chooser on click', async ({ p
     },
   });
 
-  const cardView = new CardView(page, CARD_VIEW_SELECTOR);
+  const cardView = new CardView(page, DEFAULT_SELECTOR);
   const headerPanel = cardView.getHeaderPanel();
 
   await headerPanel.getColumnChooserLink().click();

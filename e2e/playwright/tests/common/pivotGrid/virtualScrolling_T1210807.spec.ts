@@ -1,4 +1,5 @@
 import { expect, test } from '../../../fixtures';
+import { DEFAULT_SELECTOR } from '../../../helpers/const';
 import { createWidget } from '../../../helpers/createWidget';
 import { testScreenshot } from '../../../helpers/screenshots';
 import PivotGrid from '../../../models/pivotGrid';
@@ -68,7 +69,7 @@ test('Row fields overlap data fields if dataFieldArea is set to "row" and virtua
     },
   });
 
-  const pivotGrid = new PivotGrid(page, '#container');
+  const pivotGrid = new PivotGrid(page, DEFAULT_SELECTOR);
   const firstHeaderRow = pivotGrid.getRowsArea(2).getCell(0);
 
   await firstHeaderRow.click();

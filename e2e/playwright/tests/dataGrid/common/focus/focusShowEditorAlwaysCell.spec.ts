@@ -1,12 +1,12 @@
 import type { Page } from '@playwright/test';
 import { test } from '../../../../fixtures';
+import { DEFAULT_SELECTOR } from '../../../../helpers/const';
 import { createWidget } from '../../../../helpers/createWidget';
 import { testScreenshot } from '../../../../helpers/screenshots';
 import DataGrid from '../../../../models/dataGrid';
 import List from '../../../../models/list';
 import { typeText } from '../../helpers/typeText';
 
-const SELECTOR = '#container';
 const OVERLAY_SELECTOR = '.dx-overlay-wrapper';
 
 const createDataGrid = (page: Page): Promise<void> => createWidget(page, 'dxDataGrid', {
@@ -78,7 +78,7 @@ test.describe('Focus - cell with showEditorAlways', () => {
   test('Should switch focus after the lookup value change [T1194403]', async ({ page }) => {
     await createDataGrid(page);
 
-    const dataGrid = new DataGrid(page, SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
     const editorTextCell = dataGrid.getDataCell(0, 1);
     const lookupCell = dataGrid.getDataCell(0, 2).getEditor();
@@ -97,7 +97,7 @@ test.describe('Focus - cell with showEditorAlways', () => {
   test('Should switch focus after the textBox value change [T1194403]', async ({ page }) => {
     await createDataGrid(page);
 
-    const dataGrid = new DataGrid(page, SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
     const textEditorCellOne = dataGrid.getDataCell(0, 1).getEditor();
     const textEditorCellTwo = dataGrid.getDataCell(0, 0).getEditor();

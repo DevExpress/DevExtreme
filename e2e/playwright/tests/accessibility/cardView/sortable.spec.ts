@@ -1,6 +1,7 @@
 import type { Locator, Page } from '@playwright/test';
 import { test } from '../../../helpers/accessibility/test';
 import { a11yCheck } from '../../../helpers/accessibility/utils';
+import { DEFAULT_SELECTOR } from '../../../helpers/const';
 import { createWidget } from '../../../helpers/createWidget';
 import { insertStylesheetRulesToPage } from '../../../helpers/domUtils';
 import { getThemeName } from '../../../helpers/themeUtils';
@@ -8,7 +9,6 @@ import CardView from '../../../models/cardView';
 
 const PARENT_CONTAINER = '#parentContainer';
 const PARENT_STYLES = `${PARENT_CONTAINER} { width: 400px; padding: 0 20px; }`;
-const CARD_VIEW_SELECTOR = '#container';
 const DRAG_MOVE_X_COEFFICIENT = 1.5;
 const DRAG_MOVE_Y_COEFFICIENT = 1;
 
@@ -72,7 +72,7 @@ const createCardView = async (page: Page): Promise<void> => {
 test('sortable indicator during dragging to first place', async ({ page, theme }) => {
   await createCardView(page);
 
-  const cardView = new CardView(page, CARD_VIEW_SELECTOR);
+  const cardView = new CardView(page, DEFAULT_SELECTOR);
 
   const headerPanel = cardView.getHeaderPanel();
   const item = headerPanel.getHeaderItem(1);
@@ -89,7 +89,7 @@ test('sortable indicator during dragging to first place', async ({ page, theme }
 test('sortable indicator during dragging to middle place', async ({ page, theme }) => {
   await createCardView(page);
 
-  const cardView = new CardView(page, CARD_VIEW_SELECTOR);
+  const cardView = new CardView(page, DEFAULT_SELECTOR);
 
   const headerPanel = cardView.getHeaderPanel();
   const item = headerPanel.getHeaderItem(0);
@@ -106,7 +106,7 @@ test('sortable indicator during dragging to middle place', async ({ page, theme 
 test('sortable indicator during dragging to last place', async ({ page, theme }) => {
   await createCardView(page);
 
-  const cardView = new CardView(page, CARD_VIEW_SELECTOR);
+  const cardView = new CardView(page, DEFAULT_SELECTOR);
 
   const headerPanel = cardView.getHeaderPanel();
   const item = headerPanel.getHeaderItem(1);

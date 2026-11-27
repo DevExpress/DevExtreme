@@ -1,3 +1,5 @@
+import type { Locator } from '@playwright/test';
+import { expect } from '@playwright/test';
 import GridFocusableElement from '../../gridCore/focusable';
 import { expectClass } from '../../internal/classMatcher';
 import CommandCell from '../commandCell';
@@ -9,6 +11,9 @@ const CLASS = {
   selection: 'dx-selection',
   insertedRow: 'dx-row-inserted',
   editedRow: 'dx-edit-row',
+  commandExpand: 'dx-command-expand',
+  groupOpened: 'dx-datagrid-group-opened',
+  selectCheckBox: 'dx-select-checkbox',
 };
 
 export default class DataRow extends GridFocusableElement {
@@ -32,11 +37,20 @@ export default class DataRow extends GridFocusableElement {
     return expectClass(this.element, CLASS.editedRow, present);
   }
 
+  public async expectExpanded(present = true): Promise<void> {
+    await expect(this.element.locator(`.${CLASS.commandExpand} .${CLASS.groupOpened}`))
+      .toBeAttached({ attached: present });
+  }
+
   public getDataCell(index: number): DataCell {
     return new DataCell(this.element, index);
   }
 
   public getCommandCell(index: number): CommandCell {
     return new CommandCell(this.element, index);
+  }
+
+  public getSelectCheckBox(): Locator {
+    return this.element.locator(`.${CLASS.selectCheckBox}`);
   }
 }

@@ -1,5 +1,6 @@
 import { expect, test } from '../../../helpers/accessibility/test';
 import { a11yCheck } from '../../../helpers/accessibility/utils';
+import { DEFAULT_SELECTOR } from '../../../helpers/const';
 import { createWidget } from '../../../helpers/createWidget';
 import DataGrid from '../../../models/dataGrid';
 import HeaderFilter from '../../../models/dataGrid/headers/headerFilter';
@@ -31,7 +32,7 @@ test('Accessibility: DataGrid general status should contains correct text', asyn
   });
 
   const expectedStatusText = '';
-  const dataGrid = new DataGrid(page, '#container');
+  const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
   await expect(dataGrid.getGeneralStatusContainer()).toHaveText(expectedStatusText);
 
@@ -49,7 +50,7 @@ test('Accessibility: DataGrid general status should contains correct text after 
   });
 
   const expectedStatusText = 'Data grid with 1 rows and 2 columns';
-  const dataGrid = new DataGrid(page, '#container');
+  const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
   const headerFilter = new HeaderFilter(page);
 
   const headerFilterIcon = dataGrid
@@ -81,7 +82,7 @@ test('Accessibility: DataGrid general status should contains correct text after 
   });
 
   const expectedStatusText = 'Data grid with 1 rows and 2 columns';
-  const dataGrid = new DataGrid(page, '#container');
+  const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
   const filterEditor = dataGrid.getFilterEditor(0, TextBox);
 
   const applyFilterBtn = dataGrid.getHeaderPanel().getApplyFilterButton();
@@ -105,7 +106,7 @@ test('Accessibility: DataGrid general status should contains correct text after 
   });
 
   const expectedStatusText = 'Data grid with 1 rows and 2 columns';
-  const dataGrid = new DataGrid(page, '#container');
+  const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
   const searchInput = dataGrid.getSearchBox();
   await searchInput.input.click();
@@ -131,7 +132,7 @@ test('Accessibility: DataGrid general status should contains correct text after 
   });
 
   const expectedStatusText = 'Data grid with 3 rows and 1 columns';
-  const dataGrid = new DataGrid(page, '#container');
+  const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
   const columnChooserBtn = dataGrid.getColumnChooserButton();
   await columnChooserBtn.click();

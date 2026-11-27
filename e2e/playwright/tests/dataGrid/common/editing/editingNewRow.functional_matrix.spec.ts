@@ -1,6 +1,7 @@
 import type { Locator, Page } from '@playwright/test';
 import type { GridsEditMode } from 'devextreme/ui/data_grid';
 import { expect, test } from '../../../../fixtures';
+import { DEFAULT_SELECTOR } from '../../../../helpers/const';
 import { createWidget } from '../../../../helpers/createWidget';
 import DataGrid from '../../../../models/dataGrid';
 import type DataCell from '../../../../models/dataGrid/data/cell';
@@ -72,7 +73,7 @@ const createDataGrid = async (
       },
     },
   ],
-}), '#container', { arg: { mode, repaintChangesOnly } });
+}), DEFAULT_SELECTOR, { arg: { mode, repaintChangesOnly } });
 
 const expectedCalculatedColumnResult: ColumnInfo[] = [
   { columnIndex: 1, dataField: 'number', newValue: '8' },
@@ -172,7 +173,7 @@ test.describe('Editing.NewRow', () => {
       test(`Update cell value in new row, mode: ${mode}, repaintChangesOnly: ${repaintChangesOnly}`, async ({ page }) => {
         await createDataGrid(page, mode, repaintChangesOnly);
 
-        const dataGrid = new DataGrid(page, '#container');
+        const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
         const columnInfo = { columnIndex: 0, dataField: 'text', newValue: 'xxxx' };
         const form = getEditForm(dataGrid, mode);
         const cell = getFirstDataRow(dataGrid).getDataCell(columnInfo.columnIndex);
@@ -196,7 +197,7 @@ test.describe('Editing.NewRow', () => {
       test(`Update calculated cell value in new row, mode: ${mode}, repaintChangesOnly: ${repaintChangesOnly}`, async ({ page }) => {
         await createDataGrid(page, mode, repaintChangesOnly);
 
-        const dataGrid = new DataGrid(page, '#container');
+        const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
         const columnInfo = { columnIndex: 5, dataField: 'calculated', newValue: '9' };
         const form = getEditForm(dataGrid, mode);
         const cell = getFirstDataRow(dataGrid).getDataCell(columnInfo.columnIndex);

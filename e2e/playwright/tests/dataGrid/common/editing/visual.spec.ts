@@ -2,14 +2,13 @@
 // Grid callbacks (setCellValue, onSaving, onEditorPreparing) change their arguments: that is their
 // API.
 import { expect, test } from '../../../../fixtures';
+import { DEFAULT_SELECTOR } from '../../../../helpers/const';
 import { createWidget } from '../../../../helpers/createWidget';
 import { testScreenshot } from '../../../../helpers/screenshots';
 import DataGrid from '../../../../models/dataGrid';
 import DataRow from '../../../../models/dataGrid/data/row';
 import { getData } from '../../helpers/generateDataSourceData';
 import { typeText } from '../../helpers/typeText';
-
-const GRID_SELECTOR = '#container';
 
 const encodedIcon = 'data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pg0KPCFET0NUWVBFIHN2ZyBQVUJMSUMgIi0vL1czQy8vRFREIFNWRyAxLjEvL0VOIiAiaHR0cDovL3d3dy53My5vcmcvR3JhcGhpY3MvU1ZHLzEuMS9EVEQvc3ZnMTEuZHRkIj4NCjxzdmcgIHdpZHRoPSIyMHB4IiBoZWlnaHQ9IjIwcHgiIHZpZXdCb3g9IjAgMCAyMCAyMCIgZmlsbD0iIzAwMDAwMCIgdmVyc2lvbj0iMS4xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPg0KCTxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIC8+DQo8L3N2Zz4NCg==';
 
@@ -35,7 +34,7 @@ test.describe('Editing.Visual', () => {
       templatesRenderAsynchronously: true,
     }));
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
     await typeText(dataGrid.getFormItemEditor(0), 'new');
     await dataGrid.getEditForm().saveButton.click();
@@ -65,7 +64,7 @@ test.describe('Editing.Visual', () => {
       columns: ['LastName'],
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const popupEditForm = dataGrid.getPopupEditForm();
 
     await dataGrid.getDataRow(0).getCommandCell(1).getButton(0).click();
@@ -106,7 +105,7 @@ test.describe('Editing.Visual', () => {
       },
     }));
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const below = await dataGrid.element.evaluate((element) => {
       const body = document.body.getBoundingClientRect();
 
@@ -156,7 +155,7 @@ test.describe('Editing.Visual', () => {
       }],
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
     await dataGrid.getDataRow(0).getCommandCell(4).getAdaptiveButton().click();
     await dataGrid.getFormItemElement(0).click();
@@ -199,7 +198,7 @@ test.describe('Editing.Visual', () => {
       }],
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
     await dataGrid.getDataRow(0).getCommandCell(4).getAdaptiveButton().click();
     await dataGrid.getFormItemElement(2).click();
@@ -223,7 +222,7 @@ test.describe('Editing.Visual', () => {
       columns: ['Id', 'Checkbox'],
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const cell = dataGrid.getDataCell(0, 0);
 
     await cell.element.click();
@@ -267,7 +266,7 @@ test.describe('Editing.Visual', () => {
           },
         });
 
-        const dataGrid = new DataGrid(page, GRID_SELECTOR);
+        const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
         // A new row takes the aria-rowindex of the row it goes before and precedes it in the DOM.
         const insertedRow = new DataRow(dataGrid.getDataRow(insertedRowNumber).element.first());
         const screenshotName = `grid-new-row_position-${newRowPosition}_scroll-mode-${scrollMode}_top-${scrollTop}.png`;
@@ -292,7 +291,7 @@ test.describe('Editing.Visual', () => {
       },
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
     await dataGrid.getDataRow(0).getCommandCell(2).getEditButton().click();
 
@@ -314,7 +313,7 @@ test.describe('Editing.Visual', () => {
       },
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
     await expect(dataGrid.getPopupEditForm().element).toBeAttached();
     await testScreenshot(page, 'popup-edit-form-with-initial-editrowkey.png', { element: dataGrid.element });
@@ -360,7 +359,7 @@ test.describe('Editing.Visual', () => {
         }],
       });
 
-      const dataGrid = new DataGrid(page, GRID_SELECTOR);
+      const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
       const commandCell = dataGrid.getDataRow(0).getCommandCell(2);
       const firstCustomIcon = commandCell.getButton(2);
       const secondCustomIcon = commandCell.getButton(3);
@@ -399,7 +398,7 @@ test.describe('Editing.Visual', () => {
       };
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const dataRow = dataGrid.getDataRow(0);
     const commandCell = dataRow.getCommandCell(3);
 
@@ -437,7 +436,7 @@ test.describe('Editing.Visual', () => {
       ],
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const addRowButton = dataGrid.getHeaderPanel().getAddRowButton();
 
     await addRowButton.click();
@@ -465,7 +464,7 @@ test.describe('Editing.Visual', () => {
       },
     }));
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
     await dataGrid.getDataCell(0, 0).element.click();
 

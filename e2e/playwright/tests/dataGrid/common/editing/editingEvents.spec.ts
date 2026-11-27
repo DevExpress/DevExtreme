@@ -1,11 +1,10 @@
 import { expect, test } from '../../../../fixtures';
+import { DEFAULT_SELECTOR } from '../../../../helpers/const';
 import { createWidget } from '../../../../helpers/createWidget';
 import { testScreenshot } from '../../../../helpers/screenshots';
 import DataGrid from '../../../../models/dataGrid';
 import { getFirstDataRow } from '../../helpers/getFirstDataRow';
 import { typeText } from '../../helpers/typeText';
-
-const GRID_SELECTOR = '#container';
 
 interface CancelCase {
   caseName: string;
@@ -43,9 +42,9 @@ test.describe('Editing events', () => {
         onRowUpdating(e) {
           e.cancel = cancelCase.isPromise ? Promise.resolve(cancelCase.cancel) : cancelCase.cancel;
         },
-      }), GRID_SELECTOR, { arg: { cancel, isPromise } });
+      }), DEFAULT_SELECTOR, { arg: { cancel, isPromise } });
 
-      const dataGrid = new DataGrid(page, GRID_SELECTOR);
+      const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
       const dataRow = dataGrid.getDataRow(0);
 
       await dataRow.getCommandCell(1).getEditButton().click();
@@ -73,9 +72,9 @@ test.describe('Editing events', () => {
         onRowInserting(e) {
           e.cancel = cancelCase.isPromise ? Promise.resolve(cancelCase.cancel) : cancelCase.cancel;
         },
-      }), GRID_SELECTOR, { arg: { cancel, isPromise } });
+      }), DEFAULT_SELECTOR, { arg: { cancel, isPromise } });
 
-      const dataGrid = new DataGrid(page, GRID_SELECTOR);
+      const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
       const dataRow = dataGrid.getDataRow(0);
 
       await dataGrid.getHeaderPanel().getAddRowButton().click();
@@ -108,9 +107,9 @@ test.describe('Editing events', () => {
         onRowRemoving(e) {
           e.cancel = cancelCase.isPromise ? Promise.resolve(cancelCase.cancel) : cancelCase.cancel;
         },
-      }), GRID_SELECTOR, { arg: { cancel, isPromise } });
+      }), DEFAULT_SELECTOR, { arg: { cancel, isPromise } });
 
-      const dataGrid = new DataGrid(page, GRID_SELECTOR);
+      const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
       const dataRow = dataGrid.getDataRow(0);
 
       await dataRow.getCommandCell(1).getDeleteButton().click();
@@ -143,7 +142,7 @@ test.describe('Editing events', () => {
       },
     }));
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const headerPanel = dataGrid.getHeaderPanel();
 
     const addRow = async (text: string): Promise<void> => {
