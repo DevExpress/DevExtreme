@@ -126,13 +126,9 @@ The folders under `js/` (except `__internal/`) contain only the public API surfa
 
 Framework wrappers (`devextreme-angular/src/`, `devextreme-react/src/`, `devextreme-vue/src/`) are **maintained by hand** (with the help of local AI agents) — they are no longer regenerated from `devextreme-metadata` / `devextreme-internal-tools`.
 
-When updating public API in `js/{ui,viz}/**/*.d.ts`, apply the same change to all three wrappers in the same PR, then validate:
-```bash
-cd packages/devextreme
-pnpm run regenerate
-pnpm run lint-dts
-```
-Follow the per-framework anatomy and rules in `.github/instructions/wrapper-{angular,react,vue}.instructions.md`, and the propagation/breaking-change checklist in `.github/instructions/public-api-wrappers.instructions.md`. The reusable workflow lives in `.github/prompts/update-wrappers.prompt.md`.
+When updating public API in `js/{ui,viz}/**/*.d.ts` (or wrapper-relevant JSDoc such as `@hidden` in public `.js` files), apply the same change to all three wrappers in the same PR. Use the `devextreme-wrappers` skill (`.claude/skills/devextreme-wrappers/`): it covers propagating a change, adding a new component, reviewing, and `scripts/surface-check.mts`, which compares each wrapper with the `.d.ts`. The detailed rules it points to live in `.github/instructions/wrapper-*.instructions.md`, `.github/instructions/public-api-wrappers.instructions.md` and `.github/templates/wrapper-*/`.
+
+Never run `nx regenerate devextreme-{angular,react,vue}` / `generate-components`: they still exist and overwrite the hand-maintained wrappers. `pnpm run regenerate` from `packages/devextreme` is safe (it only updates `dx.all.d.ts` and reexports).
 
 Do not edit directly:
 - `packages/devextreme-angular/src/core/**` (exception: add a `PROPERTY_TOKEN_<name>` to `src/core/tokens/index.ts` for a new collection option; see `wrapper-angular.instructions.md`)
