@@ -4,6 +4,7 @@ import GridCore, { CLASS as CLASS_BASE } from '../gridCore';
 import Toolbar from '../toolbar';
 import Popup from '../popup';
 import ContextMenu from '../contextMenu';
+import DateBox from '../dateBox';
 import DataRow from './data/row';
 import DataCell from './data/cell';
 import FilterCell from './filter/cell';
@@ -23,7 +24,11 @@ const CLASS = {
   headers: 'headers',
   headerPanel: 'header-panel',
   rowsView: 'rowsview',
+  row: 'dx-row',
   dataRow: 'dx-data-row',
+  filterRangeOverlay: 'filter-range-overlay',
+  filterRangeStartEditor: 'filter-range-start',
+  filterRangeEndEditor: 'filter-range-end',
   focusedRow: 'dx-row-focused',
   gridView: 'content',
   fixedGridView: 'content-fixed',
@@ -95,6 +100,14 @@ export default abstract class GridBase extends GridCore {
 
   public getHeadersScrollContainer(): Locator {
     return this.getHeaders().element.locator(`.${this.addWidgetPrefix(CLASS.scrollContainer)}`);
+  }
+
+  /*
+    getRows() returns double collection of rows (two tables) when
+    columnFixing.legacyMode = true AND DataGrid has fixed columns
+  */
+  public getRows(): Locator {
+    return this.getRowsView().locator(`.${CLASS.row}`);
   }
 
   public getDataRow(index: number): DataRow {
@@ -205,6 +218,18 @@ export default abstract class GridBase extends GridCore {
 
   public getFilterCell(columnIndex: number): FilterCell {
     return this.getHeaders().getFilterRow().getFilterCell(columnIndex);
+  }
+
+  public getFilterRangeOverlay(): Locator {
+    return this.getHeaders().element.locator(`:scope > .${this.addWidgetPrefix(CLASS.filterRangeOverlay)}`);
+  }
+
+  public getFilterRangeStartEditor(): DateBox {
+    return new DateBox(this.page, this.body.locator(`.${this.addWidgetPrefix(CLASS.filterRangeStartEditor)}`));
+  }
+
+  public getFilterRangeEndEditor(): DateBox {
+    return new DateBox(this.page, this.body.locator(`.${this.addWidgetPrefix(CLASS.filterRangeEndEditor)}`));
   }
 
   public getFilterEditor<T>(

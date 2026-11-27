@@ -12,7 +12,6 @@ const CLASS = {
   invalidCell: 'dx-datagrid-invalid',
   cellModified: 'dx-cell-modified',
   checkbox: 'dx-checkbox',
-  linkEdit: 'dx-link-edit',
 };
 
 export default class DataCell extends FocusableElement {
@@ -45,10 +44,6 @@ export default class DataCell extends FocusableElement {
 
   getCheckbox(): Selector {
     return this.element.find(`.${CLASS.checkbox}`);
-  }
-
-  getLinkEdit(): Selector {
-    return this.element.find(`.${CLASS.linkEdit}`);
   }
 
   getIconByTitle(title: string): Selector {
