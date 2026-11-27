@@ -89,5 +89,14 @@
     "build": "pnpm exec ts-node --project scripts/tsconfig.json scripts/build.ts --force",
     "test": "pnpm --workspace-root nx test devextreme-nx-infra-plugin",
     "lint": "pnpm run format:check"
+  },
+  "nx": {
+    "includedScripts": [
+      "postinstall",
+      "format:check",
+      "format",
+      "build",
+      "lint"
+    ]
   }
 }
