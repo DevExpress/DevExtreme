@@ -1,4 +1,5 @@
 import { expect, test } from '../../../../fixtures';
+import { DEFAULT_SELECTOR } from '../../../../helpers/const';
 import { createWidget } from '../../../../helpers/createWidget';
 import DataGrid from '../../../../models/dataGrid';
 
@@ -24,7 +25,7 @@ test.describe('Editing - undefined values', () => {
       showBorders: true,
     }));
 
-    const dataGrid = new DataGrid(page, '#container');
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const firstCell = dataGrid.getDataCell(0, 0);
     const secondCell = dataGrid.getDataCell(1, 0);
 

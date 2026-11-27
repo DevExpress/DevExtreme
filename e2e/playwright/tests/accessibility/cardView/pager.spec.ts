@@ -1,6 +1,7 @@
 import type { Page } from '@playwright/test';
 import { test } from '../../../helpers/accessibility/test';
 import { a11yCheck } from '../../../helpers/accessibility/utils';
+import { DEFAULT_SELECTOR } from '../../../helpers/const';
 import { createWidget } from '../../../helpers/createWidget';
 import CardView from '../../../models/cardView';
 
@@ -29,13 +30,11 @@ async function createCardViewWithPager(page: Page, config: any = {}): Promise<vo
   });
 }
 
-const CARD_VIEW_SELECTOR = '#container';
-
 [true, false].forEach((remoteOperation) => {
   test(`Runtime filterValue change updates paging when remoteOperations = ${remoteOperation}`, async ({ page }) => {
     await createCardViewWithPager(page, { remoteOperations: remoteOperation });
 
-    const cardView = new CardView(page, CARD_VIEW_SELECTOR);
+    const cardView = new CardView(page, DEFAULT_SELECTOR);
 
     await cardView.apiOption('filterValue', [
       ['value', '=', '1'],
@@ -44,6 +43,6 @@ const CARD_VIEW_SELECTOR = '#container';
       'or', ['value', '=', '4'],
     ]);
 
-    await a11yCheck(page, {}, CARD_VIEW_SELECTOR);
+    await a11yCheck(page, {}, DEFAULT_SELECTOR);
   });
 });

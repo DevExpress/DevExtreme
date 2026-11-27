@@ -1,5 +1,6 @@
 import { expect, test } from '../../../../fixtures';
 import { mockApi } from '../../../../helpers/apiMock';
+import { DEFAULT_SELECTOR } from '../../../../helpers/const';
 import { createWidget } from '../../../../helpers/createWidget';
 import DataGrid from '../../../../models/dataGrid';
 import { typeText } from '../../helpers/typeText';
@@ -52,7 +53,7 @@ test.describe('Editing - cell focus', () => {
       repaintChangesOnly: true,
     });
 
-    const dataGrid = new DataGrid(page, '#container');
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const firstCell = dataGrid.getDataCell(0, 0);
     const middleCell = dataGrid.getDataCell(1, 0);
     const secondCell = dataGrid.getDataCell(2, 0);
@@ -87,7 +88,7 @@ test.describe('Editing - cell focus', () => {
       repaintChangesOnly: true,
     }));
 
-    const dataGrid = new DataGrid(page, '#container');
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const firstCell = dataGrid.getDataCell(0, 0);
     const middleCell = dataGrid.getDataCell(1, 0);
     const secondCell = dataGrid.getDataCell(2, 0);

@@ -1,6 +1,7 @@
 import type { Locator, Page } from '@playwright/test';
 import type { GridsEditMode } from 'devextreme/ui/data_grid';
 import { expect, test } from '../../../../fixtures';
+import { DEFAULT_SELECTOR } from '../../../../helpers/const';
 import { createWidget } from '../../../../helpers/createWidget';
 import Calendar from '../../../../models/calendar';
 import DataGrid from '../../../../models/dataGrid';
@@ -124,7 +125,7 @@ const createDataGrid = async (page: Page, {
       },
     },
   ],
-}), '#container', { arg: { mode, repaintChangesOnly, useMask } });
+}), DEFAULT_SELECTOR, { arg: { mode, repaintChangesOnly, useMask } });
 
 const getEditForm = (dataGrid: DataGrid, mode: GridsEditMode): EditForm | null => {
   if (mode === 'form') {
@@ -404,7 +405,7 @@ test.describe('Editing.FunctionalMatrix', () => {
       test(`Update cell value, mode: ${mode}, repaintChangesOnly: ${repaintChangesOnly}, useKeyboard: false, useMask: ${useMask}`, async ({ page }) => {
         await createDataGrid(page, { mode, useMask, repaintChangesOnly });
 
-        const dataGrid = new DataGrid(page, '#container');
+        const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
         const form = getEditForm(dataGrid, mode);
 
         if (mode === 'batch') {
@@ -440,7 +441,7 @@ test.describe('Editing.FunctionalMatrix', () => {
       test(`Update calculated cell value, mode: ${mode}, repaintChangesOnly: ${repaintChangesOnly}, useKeyboard: false, useMask:false`, async ({ page }) => {
         await createDataGrid(page, { mode, repaintChangesOnly });
 
-        const dataGrid = new DataGrid(page, '#container');
+        const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
         const columnInfo = { columnIndex: 5, dataField: 'calculated', newValue: '9' };
         const form = getEditForm(dataGrid, mode);
         const cell = dataGrid.getDataCell(0, columnInfo.columnIndex);
@@ -493,7 +494,7 @@ test.describe('Editing.FunctionalMatrix', () => {
       test(`Update cell value, mode: ${mode}, repaintChangesOnly: false, useKeyboard: true, useMask: ${useMask}`, async ({ page }) => {
         await createDataGrid(page, { mode, useMask });
 
-        const dataGrid = new DataGrid(page, '#container');
+        const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
         const form = getEditForm(dataGrid, mode);
 
         await expect.poll(() => dataGrid.isReady()).toBe(true);
@@ -534,7 +535,7 @@ test.describe('Editing.FunctionalMatrix', () => {
     test(`Update cell value and focus next cell, mode: ${mode}, repaintChangesOnly: false, useKeyboard: true`, async ({ page }) => {
       await createDataGrid(page, { mode });
 
-      const dataGrid = new DataGrid(page, '#container');
+      const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
       const form = getEditForm(dataGrid, mode);
       let activeColumnIndex = 0;
       let modifiedCellCount = mode === 'batch' ? 1 : 0;
@@ -586,7 +587,7 @@ test.describe('Editing.FunctionalMatrix', () => {
       test(`Update cell value and focus next cell, mode: ${mode}, repaintChangesOnly: ${repaintChangesOnly}, useKeyboard: false`, async ({ page }) => {
         await createDataGrid(page, { mode, repaintChangesOnly });
 
-        const dataGrid = new DataGrid(page, '#container');
+        const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
         const form = getEditForm(dataGrid, mode);
         let modifiedCellCount = mode === 'batch' ? 1 : 0;
 
