@@ -42,6 +42,7 @@
     "Demos/LoadIndicator/**/Angular/**/*.ts",
     "Demos/LoadPanel/**/Angular/**/*.ts",
     "Demos/ProgressBar/**/Angular/**/*.ts",
+    "Demos/TreeList/**/Angular/**/*.ts",
     "shared/anti-forgery/index.d.ts"
   ]
 }

@@ -2,17 +2,31 @@ import type { HorizontalAlignment } from '@js/common';
 import type { Format } from '@js/common/core/localization';
 import type { ExcelPivotGridCell } from '@js/excel_exporter';
 import type { PivotGridDataType } from '@js/ui/pivot_grid/data_source';
+import type { HeaderItemType } from '@ts/grids/pivot_grid/data_controller/types';
 import type { HorizontalHeadersArea, VerticalHeadersArea } from '@ts/grids/pivot_grid/headers_area/headers_area';
 import type { PivotGrid } from '@ts/grids/pivot_grid/m_widget';
 import type { PivotGridField } from '@ts/grids/pivot_grid/types';
 
 import type { DataProvider } from './export';
 
-export interface PivotGridExportItem extends ExcelPivotGridCell {
+export interface PivotGridExportItem {
+  area?: ExcelPivotGridCell['area'];
+  rowIndex?: number;
+  columnIndex?: number;
+  text?: string;
+  value?: unknown;
+  type?: HeaderItemType;
+  rowType?: HeaderItemType;
+  columnType?: HeaderItemType;
+  path?: unknown[];
+  rowPath?: unknown[];
+  columnPath?: unknown[];
+  dataIndex?: number;
+  expanded?: boolean;
   colspan?: number;
   rowspan?: number;
   alignment?: HorizontalAlignment;
-  width?: number;
+  width?: number | null;
   isWhiteSpace?: boolean;
 }
 
@@ -43,8 +57,8 @@ export interface DataProviderOptions {
   columns: PivotGridPreparedExportItem[];
   rtlEnabled?: boolean;
   dataFields: PivotGridField[];
-  rowsArea: VerticalHeadersArea;
-  columnsArea: HorizontalHeadersArea;
+  rowsArea: VerticalHeadersArea | undefined;
+  columnsArea: HorizontalHeadersArea | undefined;
 }
 
 export interface PivotGridExportMixin {

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-export class Task {
+export interface Task {
   Task_ID: number;
 
   Task_Parent_ID: number;
@@ -22,7 +22,7 @@ export class Task {
   Task_Assigned_Employee?: Employee;
 }
 
-export class Employee {
+export interface Employee {
   ID: number;
 
   Name: string;
@@ -30,7 +30,7 @@ export class Employee {
   Picture: string;
 }
 
-export class Priority {
+export interface Priority {
   id: number;
 
   value: string;

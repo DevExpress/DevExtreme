@@ -3,7 +3,8 @@ import {
   Component, enableProdMode, inject, signal,
 } from '@angular/core';
 import { DxCheckBoxModule } from 'devextreme-angular';
-import { DxTreeListModule, type DxTreeListTypes } from 'devextreme-angular/ui/tree-list';
+import { DxTreeListModule } from 'devextreme-angular/ui/tree-list';
+import type { DxTreeListTypes } from 'devextreme-angular/ui/tree-list';
 import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -35,7 +36,7 @@ export class AppComponent {
   onDragChange(e: DxTreeListTypes.RowDraggingChangeEvent) {
     const visibleRows = e.component.getVisibleRows();
     const sourceNode = e.component.getNodeByKey(e.itemData.ID);
-    let targetNode = visibleRows[e.toIndex].node;
+    let targetNode: DxTreeListTypes.Node | undefined = visibleRows[e.toIndex].node;
 
     while (targetNode?.data) {
       if (targetNode.data.ID === sourceNode.data.ID) {

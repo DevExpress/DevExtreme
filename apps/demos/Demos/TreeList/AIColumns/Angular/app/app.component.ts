@@ -1,7 +1,8 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import { Component, enableProdMode, inject } from '@angular/core';
 import { DxTreeListModule } from 'devextreme-angular';
-import { Service, type IEmployee } from './app.service';
+import { Service } from './app.service';
+import type { IEmployee } from './app.service';
 import { AiService } from './ai/ai.service';
 import { Employee } from './employee/employee.component';
 import { Status } from './status/status.component';

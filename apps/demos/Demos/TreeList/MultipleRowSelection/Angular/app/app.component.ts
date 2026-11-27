@@ -3,9 +3,11 @@ import {
   Component, enableProdMode, inject, signal,
 } from '@angular/core';
 import { DxCheckBoxModule } from 'devextreme-angular';
-import { DxTreeListModule, type DxTreeListTypes } from 'devextreme-angular/ui/tree-list';
+import { DxTreeListModule } from 'devextreme-angular/ui/tree-list';
+import type { DxTreeListTypes } from 'devextreme-angular/ui/tree-list';
 import { DxSelectBoxModule } from 'devextreme-angular/ui/select-box';
-import { Service, type Employee } from './app.service';
+import { Service } from './app.service';
+import type { Employee } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
