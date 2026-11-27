@@ -1,5 +1,5 @@
 import { expect, test as base } from '@playwright/test';
-import { DEFAULT_BROWSER_SIZE, DEFAULT_THEME } from './helpers/const';
+import { DEFAULT_BROWSER_SIZE, DEFAULT_THEME, TEST_PAGE_URL } from './helpers/const';
 import { changeTheme, openTestPage, resetPageState } from './helpers/testPageUtils';
 
 export const GOOGLE_FONTS = /^https:\/\/fonts\.googleapis\.com\//;
@@ -7,6 +7,7 @@ export const GOOGLE_FONTS = /^https:\/\/fonts\.googleapis\.com\//;
 export interface TestOptions {
   theme: string;
   browserSize: [number, number];
+  containerUrl: string;
 }
 
 // Overriding "page" gives every test the prepared container page, the way the TestCafe runner did
@@ -15,8 +16,11 @@ export interface TestOptions {
 export const test = base.extend<TestOptions>({
   theme: [DEFAULT_THEME, { option: true }],
   browserSize: [DEFAULT_BROWSER_SIZE, { option: true }],
+  containerUrl: [TEST_PAGE_URL, { option: true }],
 
-  page: async ({ page, theme, browserSize }, use) => {
+  page: async ({
+    page, theme, browserSize, containerUrl,
+  }, use) => {
     const [width, height] = browserSize;
     // TestCafe failed a test on an uncaught error in the page; some tests assert nothing else.
     const pageErrors: string[] = [];
@@ -27,7 +31,7 @@ export const test = base.extend<TestOptions>({
     await page.context().route(GOOGLE_FONTS, (route) => route.fulfill({ contentType: 'text/css' }));
 
     await page.setViewportSize({ width, height });
-    await openTestPage(page);
+    await openTestPage(page, containerUrl);
     await changeTheme(page, theme);
     await resetPageState(page);
 

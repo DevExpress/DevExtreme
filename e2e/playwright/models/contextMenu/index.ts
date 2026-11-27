@@ -6,6 +6,7 @@ import Overlay from '../overlay';
 const CLASS = {
   contextMenu: 'dx-context-menu',
   item: 'dx-menu-item',
+  itemContent: 'dx-menu-item-content',
   itemText: 'dx-menu-item-text',
   overlay: 'dx-overlay',
 };
@@ -25,9 +26,12 @@ export default class ContextMenu extends Widget {
     this.overlay = new Overlay(page, this.element.locator(`.${CLASS.overlay}`));
   }
 
+  // A submenu renders inside its parent item: only the item's own text counts.
   public getItemByText(text: string): Locator {
     return this.element.locator(`.${CLASS.item}`).filter({
-      has: this.page.locator(`.${CLASS.itemText}`).getByText(text, { exact: true }),
+      has: this.page
+        .locator(`:scope > .${CLASS.itemContent} > .${CLASS.itemText}`)
+        .getByText(text, { exact: true }),
     });
   }
 

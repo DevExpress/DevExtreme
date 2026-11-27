@@ -4,7 +4,7 @@ import { expect } from '@playwright/test';
 import type { Page } from '@playwright/test';
 import type { Result, RunOptions } from 'axe-core';
 import { removeStylesheetRulesFromPage } from '../domUtils';
-import { getCurrentTheme } from '../testPageUtils';
+import { getCurrentTheme, openTestPage } from '../testPageUtils';
 import { getThemeName } from '../themeUtils';
 
 export interface A11yCheckOptions extends RunOptions {
@@ -18,8 +18,7 @@ const COLOR_CONTRAST_RULE = 'color-contrast';
 const INITIAL_BODY_KEY = '__a11yInitialBody';
 
 export async function openContainerPage(page: Page, url: string): Promise<void> {
-  await page.goto(url);
-  await page.waitForFunction(() => !!(window as any).DevExpress);
+  await openTestPage(page, url);
   await page.evaluate((key) => {
     (window as any)[key] = document.body.innerHTML;
   }, INITIAL_BODY_KEY);
