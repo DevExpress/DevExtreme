@@ -2,6 +2,7 @@ import type { Page } from '@playwright/test';
 import type { Properties } from 'devextreme/ui/data_grid';
 import { expect, test } from '../../../helpers/accessibility/test';
 import { a11yCheck } from '../../../helpers/accessibility/utils';
+import { DEFAULT_SELECTOR } from '../../../helpers/const';
 import { createWidget } from '../../../helpers/createWidget';
 import DataGrid from '../../../models/dataGrid';
 
@@ -57,7 +58,7 @@ test('Accessibility: Scrollable should have focusable element', async ({ page })
 test('Accessibility: Scrollable should have focusable element when navigate through fixed columns', async ({ page }) => {
   await createWidget(page, 'dxDataGrid', getGridConfig());
 
-  const dataGrid = new DataGrid(page, '#container');
+  const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
   await expectReady(dataGrid);
 
   const columnsByFixing: boolean[] = await page.evaluate(
@@ -90,7 +91,7 @@ test('Accessibility: Scrollable should have focusable element when navigate thro
 test('Accessibility: Scrollable should always have focusable element when navigate back to column headers', async ({ page }) => {
   await createWidget(page, 'dxDataGrid', getGridConfig());
 
-  const dataGrid = new DataGrid(page, '#container');
+  const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
   await expectReady(dataGrid);
 
   // focus first cell in second row
@@ -116,7 +117,7 @@ test('Accessibility: Scrollable should always have focusable element when naviga
 test('Accessibility: Scrollable should have focusable element when click out of the grid', async ({ page }) => {
   await createWidget(page, 'dxDataGrid', getGridConfig());
 
-  const dataGrid = new DataGrid(page, '#container');
+  const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
   await expectReady(dataGrid);
 
   await dataGrid.getFixedDataCell(0, 0).element.click();
@@ -144,7 +145,7 @@ test('Accessibility: Scrollable should have focusable element when navigate out 
 
   await createWidget(page, 'dxDataGrid', getGridConfig());
 
-  const dataGrid = new DataGrid(page, '#container');
+  const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
   await expectReady(dataGrid);
 
   await dataGrid.getFixedDataCell(0, 0).element.click();
@@ -164,7 +165,7 @@ test('Accessibility: Scrollable should have focusable element when navigate out 
 test('Accessibility: Scrollable should have focusable when fixed on the right side columns are focused', async ({ page }) => {
   await createWidget(page, 'dxDataGrid', getGridConfig(false));
 
-  const dataGrid = new DataGrid(page, '#container');
+  const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
   await expectReady(dataGrid);
 
   // focus through headers

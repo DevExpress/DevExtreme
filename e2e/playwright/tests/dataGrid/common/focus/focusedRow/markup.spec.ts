@@ -1,4 +1,5 @@
 import { expect, test } from '../../../../../fixtures';
+import { DEFAULT_SELECTOR } from '../../../../../helpers/const';
 import { createWidget } from '../../../../../helpers/createWidget';
 import { insertStylesheetRulesToPage } from '../../../../../helpers/domUtils';
 import { testScreenshot } from '../../../../../helpers/screenshots';
@@ -37,7 +38,7 @@ test.describe('Focused row - markup', () => {
       }],
     });
 
-    const dataGrid = new DataGrid(page, '#container');
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
     const firstCell = dataGrid.getDataCell(0, 0);
@@ -79,7 +80,7 @@ test.describe('Focused row - markup', () => {
       }, 'dataB', 'dataC'],
     });
 
-    const dataGrid = new DataGrid(page, '#container');
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
     await dataGrid.apiAddRow();
@@ -90,7 +91,7 @@ test.describe('Focused row - markup', () => {
   });
 
   test('Link should not have background color (T1282624)', async ({ page }) => {
-    await insertStylesheetRulesToPage(page, '#container tr.dx-row-focused td { background-color: red }');
+    await insertStylesheetRulesToPage(page, `${DEFAULT_SELECTOR} tr.dx-row-focused td { background-color: red }`);
 
     await createWidget(page, 'dxDataGrid', {
       dataSource: [
@@ -107,7 +108,7 @@ test.describe('Focused row - markup', () => {
       keyExpr: 'id',
     });
 
-    const dataGrid = new DataGrid(page, '#container');
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
     await testScreenshot(page, 'focused-row-link-background.png');

@@ -1,10 +1,9 @@
 import { expect, test } from '../../../helpers/accessibility/test';
 import { a11yCheck } from '../../../helpers/accessibility/utils';
+import { DEFAULT_SELECTOR } from '../../../helpers/const';
 import { createWidget } from '../../../helpers/createWidget';
 import { getThemeName } from '../../../helpers/themeUtils';
 import TreeList from '../../../models/treeList';
-
-const TREE_LIST_SELECTOR = '#container';
 
 function getData(rowCount: number): Record<string, any>[] {
   const data = new Array(rowCount).fill(null).map((_, index) => ({
@@ -53,9 +52,9 @@ test('Search panel, filter panel, pager and selection', async ({ page, theme }) 
   });
 
   const a11yCheckConfig = getThemeName(theme) === 'fluent' ? {} : { runOnly: 'color-contrast' };
-  const treeList = new TreeList(page, TREE_LIST_SELECTOR);
+  const treeList = new TreeList(page, DEFAULT_SELECTOR);
 
   await expect.poll(() => treeList.isReady()).toBe(true);
 
-  await a11yCheck(page, a11yCheckConfig, TREE_LIST_SELECTOR);
+  await a11yCheck(page, a11yCheckConfig, DEFAULT_SELECTOR);
 });

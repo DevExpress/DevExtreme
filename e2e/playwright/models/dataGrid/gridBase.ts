@@ -3,6 +3,7 @@ import { expect } from '@playwright/test';
 import GridCore, { CLASS as CLASS_BASE } from '../gridCore';
 import Toolbar from '../toolbar';
 import Popup from '../popup';
+import ContextMenu from '../contextMenu';
 import DataRow from './data/row';
 import DataCell from './data/cell';
 import FilterCell from './filter/cell';
@@ -10,18 +11,26 @@ import EditForm from './editForm';
 import Headers from './headers';
 import HeaderPanel from './headers/panel';
 import AdaptiveDetailRow from './adaptiveDetailRow';
+import MasterRow from './masterRow';
+import GroupRow from './groupRow';
 import Overlay from './overlay';
 
 const CLASS = {
   ...CLASS_BASE,
   headers: 'headers',
   headerPanel: 'header-panel',
+  rowsView: 'rowsview',
   dataRow: 'dx-data-row',
   focusedRow: 'dx-row-focused',
   gridView: 'content',
   fixedGridView: 'content-fixed',
   cellModified: 'dx-cell-modified',
   masterDetailRow: 'dx-master-detail-row',
+  groupRow: 'dx-group-row',
+  groupFooterRow: 'group-footer',
+  freeSpaceRow: 'dx-freespace-row',
+  summaryItem: 'summary-item',
+  focusOverlay: 'focus-overlay',
   editFormRow: 'edit-form',
   button: 'dx-button',
   formButtonsContainer: 'form-buttons-container',
@@ -36,6 +45,7 @@ const CLASS = {
   overlayWrapper: 'dx-overlay-wrapper',
   revertButton: 'dx-revert-button',
   popup: 'dx-popup',
+  contextMenu: 'dx-context-menu',
   fieldItemContent: 'dx-field-item-content',
   textEditorInput: 'dx-texteditor-input',
 };
@@ -67,6 +77,10 @@ export default abstract class GridBase extends GridCore {
     return new Headers(this.ownElement(`.${this.addWidgetPrefix(CLASS.headers)}`), this.getName());
   }
 
+  public getRowsView(): Locator {
+    return this.ownElement(`.${this.addWidgetPrefix(CLASS.rowsView)}`);
+  }
+
   public getDataRow(index: number): DataRow {
     const gridView = this.addWidgetPrefix(CLASS.gridView);
     const fixedGridView = this.addWidgetPrefix(CLASS.fixedGridView);
@@ -89,6 +103,43 @@ export default abstract class GridBase extends GridCore {
     const fixedGridView = this.addWidgetPrefix(CLASS.fixedGridView);
 
     return this.ownElement(`.${gridView}:not(.${fixedGridView}) .${CLASS.dataRow}`);
+  }
+
+  public getGroupRow(index: number): GroupRow {
+    const gridView = this.addWidgetPrefix(CLASS.gridView);
+    const fixedGridView = this.addWidgetPrefix(CLASS.fixedGridView);
+
+    return new GroupRow(
+      this.ownElement(`.${gridView}:not(.${fixedGridView}) .${CLASS.groupRow}`).nth(index),
+    );
+  }
+
+  public getGroupFooterRow(index: number): Locator {
+    const gridView = this.addWidgetPrefix(CLASS.gridView);
+    const fixedGridView = this.addWidgetPrefix(CLASS.fixedGridView);
+
+    return this.ownElement(
+      `.${gridView}:not(.${fixedGridView}) .${this.addWidgetPrefix(CLASS.groupFooterRow)}`,
+    ).nth(index);
+  }
+
+  public getFreeSpaceRow(): Locator {
+    const gridView = this.addWidgetPrefix(CLASS.gridView);
+    const fixedGridView = this.addWidgetPrefix(CLASS.fixedGridView);
+
+    return this.ownElement(`.${gridView}:not(.${fixedGridView}) .${CLASS.freeSpaceRow}`);
+  }
+
+  public getSummaryItem(index: number): Locator {
+    return this.ownElement(`.${this.addWidgetPrefix(CLASS.summaryItem)}`).nth(index);
+  }
+
+  public getFocusOverlay(): Locator {
+    return this.ownElement(`.${this.addWidgetPrefix(CLASS.focusOverlay)}`);
+  }
+
+  public getMasterRow(index: number): MasterRow {
+    return new MasterRow(this.ownElement(`.${CLASS.masterDetailRow}`).nth(index));
   }
 
   public getFocusedRow(): DataRow {
@@ -188,6 +239,11 @@ export default abstract class GridBase extends GridCore {
     );
   }
 
+  // The menu renders its items into an overlay in the body, which carries the grid's class.
+  public getContextMenu(): ContextMenu {
+    return new ContextMenu(this.page, this.body.locator(`.${CLASS.contextMenu}.${this.addWidgetPrefix()}`));
+  }
+
   public getToolbar(): Toolbar {
     return new Toolbar(this.page, this.element.locator(`.${CLASS.toolbar}`));
   }
@@ -220,6 +276,49 @@ export default abstract class GridBase extends GridCore {
     );
   }
 
+  public getScrollLeft(): Promise<number> {
+    return this.element.evaluate(
+      (element, widgetName) => $(element).data(widgetName).getScrollable().scrollLeft(),
+      this.getName(),
+    );
+  }
+
+  public isScrolledToBottom(): Promise<boolean> {
+    return this.element.evaluate((element, widgetName) => {
+      const scrollable = $(element).data(widgetName).getScrollable();
+      const tolerance = 1;
+
+      if (!scrollable) {
+        return false;
+      }
+
+      return scrollable.scrollHeight() - scrollable.clientHeight() - scrollable.scrollTop()
+        <= tolerance;
+    }, this.getName());
+  }
+
+  public isScrolledToRight(): Promise<boolean> {
+    return this.element.evaluate((element, widgetName) => {
+      const scrollable = $(element).data(widgetName).getScrollable();
+      const tolerance = 1;
+
+      if (!scrollable) {
+        return false;
+      }
+
+      return scrollable.scrollWidth() - scrollable.clientWidth() - scrollable.scrollLeft()
+        <= tolerance;
+    }, this.getName());
+  }
+
+  public getScrollbarWidth(isHorizontal: boolean): Promise<number> {
+    return this.element.evaluate(
+      (element, { widgetName, horizontal }) => $(element).data(widgetName)
+        .getView('rowsView').getScrollbarWidth(horizontal),
+      { widgetName: this.getName(), horizontal: isHorizontal },
+    );
+  }
+
   public isFocusedRowInViewport(): Promise<boolean> {
     return this.element.evaluate((element, { widgetName, focusedRowClass }) => {
       const rowsView: HTMLElement = $(element).data(widgetName).getView('rowsView').element()[0];
@@ -244,6 +343,29 @@ export default abstract class GridBase extends GridCore {
       (element, widgetName) => $(element).data(widgetName).getView('rowsView').isViewportRowsRenderPending(),
       this.getName(),
     );
+  }
+
+  // Some actions make the grid load and render its content again a moment later, such as a header
+  // click that sorts.
+  public async waitForContentReady(action: () => Promise<unknown>): Promise<void> {
+    const rendered = await this.element.evaluateHandle((element, widgetName) => {
+      const grid = $(element).data(widgetName);
+
+      return {
+        promise: new Promise<void>((resolve) => {
+          const handler = (): void => {
+            grid.off('contentReady', handler);
+            resolve();
+          };
+
+          grid.on('contentReady', handler);
+        }),
+      };
+    }, this.getName());
+
+    await action();
+    await rendered.evaluate(({ promise }) => promise);
+    await rendered.dispose();
   }
 
   public async scrollBy(offset: ScrollOffset): Promise<void> {
@@ -290,6 +412,14 @@ export default abstract class GridBase extends GridCore {
 
   public async apiNavigateToRow(key: unknown): Promise<void> {
     await this.invoke('navigateToRow', key);
+  }
+
+  public async apiFocus(target: Locator): Promise<void> {
+    const targetHandle = await target.elementHandle();
+
+    await this.element.evaluate((element, { widgetName, targetElement }) => {
+      $(element).data(widgetName).focus(targetElement);
+    }, { widgetName: this.getName(), targetElement: targetHandle });
   }
 
   public apiGetTopVisibleRowKey(): Promise<unknown> {

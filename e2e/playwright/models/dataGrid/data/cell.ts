@@ -1,4 +1,5 @@
 import type { Locator } from '@playwright/test';
+import DropDownButton from '../../dropDownButton';
 import GridFocusableElement from '../../gridCore/focusable';
 import { expectClass } from '../../internal/classMatcher';
 import { CellEditor } from './cellEditor';
@@ -11,10 +12,12 @@ const CLASS = {
   pendingIndicator: 'dx-pending-indicator',
   invalidMessage: 'dx-invalid-message',
   overlay: 'dx-overlay',
+  dropDownButton: 'dx-dropdownbutton',
 };
 
 // The grid prefixes the class with its name, which a cell doesn't know.
 const INVALID_CELL_CLASS = 'dx-(datagrid|treelist)-invalid';
+const HIDDEN_COLUMN_CLASS = 'dx-(datagrid|treelist)-hidden-column';
 
 export default class DataCell extends GridFocusableElement {
   constructor(dataRow: Locator, index: number) {
@@ -47,5 +50,17 @@ export default class DataCell extends GridFocusableElement {
 
   public getInvalidMessage(): Locator {
     return this.element.locator(`.${CLASS.invalidMessage}.${CLASS.overlay}`);
+  }
+
+  public expectHidden(present = true): Promise<void> {
+    return expectClass(this.element, HIDDEN_COLUMN_CLASS, present);
+  }
+
+  public getIconByTitle(title: string): Locator {
+    return this.element.locator(`a[title="${title}"]`);
+  }
+
+  public getDropDownButton(): DropDownButton {
+    return new DropDownButton(this.element.page(), this.element.locator(`.${CLASS.dropDownButton}`));
   }
 }

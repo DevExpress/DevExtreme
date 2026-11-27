@@ -12,10 +12,6 @@ export default class AdaptiveDetailRow {
     this.element = element;
   }
 
-  getAdaptiveCell(index: number): AdaptiveCell {
-    return new AdaptiveCell(this.element, index);
-  }
-
   getAdaptiveCellByText(text: string): AdaptiveCell {
     const cellElement = this.element.find(`.${SELECTORS.ADAPTIVE_CELL_CLASS}`).withText(text);
     return new AdaptiveCell(cellElement, 0);
