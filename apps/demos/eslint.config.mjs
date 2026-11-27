@@ -28,7 +28,6 @@ export default [
       'node_modules',
       'bundles',
       'coverage',
-      'Demos/**/testcafe-test-code.js',
       'shared/empty-file.ts',
       'Demos/**/Vue/**/*.html',
       'utils/templates/**/*.ts',
@@ -447,7 +446,7 @@ export default [
   })),
 
   {
-    files: ['playwright.config.ts'],
+    files: ['playwright.config.ts', 'playwright.accessibility.config.ts'],
     rules: {
       'import/no-extraneous-dependencies': ['error', { devDependencies: true }],
     },
