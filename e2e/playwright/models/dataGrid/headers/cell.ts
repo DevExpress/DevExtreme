@@ -29,6 +29,11 @@ export default class HeaderCell extends GridFocusableElement {
     await (present ? expect(this.element) : expect(this.element).not).toBeFocused();
   }
 
+  public async expectHovered(present = true): Promise<void> {
+    await expect.poll(() => this.element.evaluate((element) => element.matches(':hover')))
+      .toBe(present);
+  }
+
   public expectHidden(present = true): Promise<void> {
     return expectClass(this.element, HIDDEN_COLUMN_CLASS, present);
   }

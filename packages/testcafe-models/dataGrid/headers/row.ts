@@ -1,11 +1,6 @@
 import FocusableElement from '../../internal/focusable';
 import HeaderCell from './cell';
 import CommandCell from '../commandCell';
-import Widget from '../../internal/widget';
-
-const CLASS = {
-  dropHighlight: 'drop-highlight',
-};
 
 export default class HeaderRow extends FocusableElement {
   widgetName: string;
@@ -29,9 +24,5 @@ export default class HeaderRow extends FocusableElement {
 
   getCommandCell(index: number): CommandCell {
     return new CommandCell(this.element, index, this.widgetName);
-  }
-
-  isHighlighted(): Promise<boolean> {
-    return this.element.hasClass(Widget.addClassPrefix(this.widgetName, CLASS.dropHighlight));
   }
 }

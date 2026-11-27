@@ -1,7 +1,11 @@
 import type { Locator } from '@playwright/test';
 import GridElement from '../../gridCore/element';
+import { expectClass } from '../../internal/classMatcher';
 import CommandCell from '../commandCell';
 import HeaderCell from './cell';
+
+// The grid prefixes the class with its name, which a row doesn't know.
+const DROP_HIGHLIGHT_CLASS = 'dx-(datagrid|treelist)-drop-highlight';
 
 export default class HeaderRow extends GridElement {
   public getHeaderCell(index: number): HeaderCell {
@@ -19,5 +23,9 @@ export default class HeaderRow extends GridElement {
 
   public getHeaderCells(): Locator {
     return this.element.locator(':scope > td');
+  }
+
+  public expectHighlighted(present = true): Promise<void> {
+    return expectClass(this.element, DROP_HIGHLIGHT_CLASS, present);
   }
 }
