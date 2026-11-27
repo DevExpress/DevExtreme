@@ -3,14 +3,13 @@
 // their API.
 import type { Properties } from 'devextreme/ui/data_grid';
 import { expect, test } from '../../../../fixtures';
+import { DEFAULT_SELECTOR } from '../../../../helpers/const';
 import { createWidget } from '../../../../helpers/createWidget';
 import DataGrid from '../../../../models/dataGrid';
 import SelectBox from '../../../../models/selectBox';
 import { getData } from '../../helpers/generateDataSourceData';
 import { getFirstDataRow } from '../../helpers/getFirstDataRow';
 import { typeText } from '../../helpers/typeText';
-
-const GRID_SELECTOR = '#container';
 
 const DEFAULT_CONFIG = {
   errorRowEnabled: true,
@@ -39,7 +38,8 @@ const countEvents = async (
 };
 
 // A save that fails validation changes nothing visible, and in row mode it runs on a timer after
-// the click or the Enter. Every save attempt raises rowValidating: wait for it, then for the grid.
+// the click or the Enter. A save with pending changes raises rowValidating: wait for it, then for
+// the grid.
 const trackSaveAttempts = async (
   dataGrid: DataGrid,
 ): Promise<(action: () => Promise<void>) => Promise<void>> => {
@@ -79,7 +79,7 @@ test.describe('Editing.Functional', () => {
       };
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const cell = dataGrid.getDataCell(0, 0);
 
     await expect.poll(() => dataGrid.isReady()).toBe(true);
@@ -120,7 +120,7 @@ test.describe('Editing.Functional', () => {
       };
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const cell = dataGrid.getDataCell(0, 0);
     const getSavingCount = await countEvents(dataGrid, 'saving');
 
@@ -153,7 +153,7 @@ test.describe('Editing.Functional', () => {
       columns: [{ dataField: 'name', allowEditing: false }, { dataField: 'value', showEditorAlways: true }],
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
@@ -185,7 +185,7 @@ test.describe('Editing.Functional', () => {
       }],
     }));
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
@@ -206,7 +206,7 @@ test.describe('Editing.Functional', () => {
     });
     await createWidget(page, 'dxSelectBox', {}, '#otherContainer');
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const selectBox = new SelectBox(page, '#otherContainer');
     const cell = dataGrid.getDataCell(0, 0);
 
@@ -243,9 +243,9 @@ test.describe('Editing.Functional', () => {
           },
         }],
       }, 'name', 'lastName'],
-    }), GRID_SELECTOR, { arg: DEFAULT_CONFIG });
+    }), DEFAULT_SELECTOR, { arg: DEFAULT_CONFIG });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const rowIndex = 0;
     const columnIndex = 0;
 
@@ -301,9 +301,9 @@ test.describe('Editing.Functional', () => {
           },
         }],
       }, 'name', 'lastName'],
-    }), GRID_SELECTOR, { arg: DEFAULT_CONFIG });
+    }), DEFAULT_SELECTOR, { arg: DEFAULT_CONFIG });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const rowIndex = 0;
     const columnIndex = 0;
     const dataRow = dataGrid.getDataRow(rowIndex);
@@ -361,9 +361,9 @@ test.describe('Editing.Functional', () => {
         dataField: 'name',
         validationRules: [{ type: 'required' }],
       }, 'lastName'],
-    }), GRID_SELECTOR, { arg: DEFAULT_CONFIG });
+    }), DEFAULT_SELECTOR, { arg: DEFAULT_CONFIG });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const rowIndex = 0;
     const dataRow = dataGrid.getDataRow(rowIndex);
     const cell0 = dataRow.getDataCell(0);
@@ -415,9 +415,9 @@ test.describe('Editing.Functional', () => {
           }],
         }, 'name', 'lastName'],
       };
-    }, GRID_SELECTOR, { arg: DEFAULT_CONFIG });
+    }, DEFAULT_SELECTOR, { arg: DEFAULT_CONFIG });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const cell0 = dataGrid.getDataCell(0, 0);
     const cell1 = dataGrid.getDataCell(0, 1);
     const cell2 = dataGrid.getDataCell(0, 2);
@@ -460,9 +460,9 @@ test.describe('Editing.Functional', () => {
           },
         }],
       }, 'name', 'lastName'],
-    }), GRID_SELECTOR, { arg: DEFAULT_CONFIG });
+    }), DEFAULT_SELECTOR, { arg: DEFAULT_CONFIG });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const rowIndex = 0;
     const columnIndex = 0;
 
@@ -518,9 +518,9 @@ test.describe('Editing.Functional', () => {
           },
         }],
       }, 'name', 'lastName'],
-    }), GRID_SELECTOR, { arg: DEFAULT_CONFIG });
+    }), DEFAULT_SELECTOR, { arg: DEFAULT_CONFIG });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const rowIndex = 0;
     const columnIndex = 0;
     const cell0 = dataGrid.getDataRow(rowIndex).getDataCell(columnIndex);
@@ -583,9 +583,9 @@ test.describe('Editing.Functional', () => {
         dataField: 'name',
         validationRules: [{ type: 'required' }],
       }, 'lastName'],
-    }), GRID_SELECTOR, { arg: DEFAULT_CONFIG });
+    }), DEFAULT_SELECTOR, { arg: DEFAULT_CONFIG });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const cell0 = dataGrid.getDataCell(0, 0);
     const cell1 = dataGrid.getDataCell(0, 1);
     const editor0 = cell0.getEditor();
@@ -651,9 +651,9 @@ test.describe('Editing.Functional', () => {
           },
         }],
       }, 'lastName'],
-    }), GRID_SELECTOR, { arg: DEFAULT_CONFIG });
+    }), DEFAULT_SELECTOR, { arg: DEFAULT_CONFIG });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
@@ -698,9 +698,9 @@ test.describe('Editing.Functional', () => {
           },
         }],
       }, 'lastName'],
-    }), GRID_SELECTOR, { arg: DEFAULT_CONFIG });
+    }), DEFAULT_SELECTOR, { arg: DEFAULT_CONFIG });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
@@ -739,9 +739,9 @@ test.describe('Editing.Functional', () => {
           },
         }],
       }, 'lastName'],
-    }), GRID_SELECTOR, { arg: DEFAULT_CONFIG });
+    }), DEFAULT_SELECTOR, { arg: DEFAULT_CONFIG });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
@@ -783,9 +783,9 @@ test.describe('Editing.Functional', () => {
           },
         }],
       }, 'lastName'],
-    }), GRID_SELECTOR, { arg: DEFAULT_CONFIG });
+    }), DEFAULT_SELECTOR, { arg: DEFAULT_CONFIG });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
@@ -821,9 +821,9 @@ test.describe('Editing.Functional', () => {
           },
         }],
       }, 'name', 'lastName'],
-    }), GRID_SELECTOR, { arg: DEFAULT_CONFIG });
+    }), DEFAULT_SELECTOR, { arg: DEFAULT_CONFIG });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const rowIndex = 0;
     const columnIndex = 0;
     const headerPanel = dataGrid.getHeaderPanel();
@@ -888,9 +888,9 @@ test.describe('Editing.Functional', () => {
           },
         }],
       }, 'name', 'lastName'],
-    }), GRID_SELECTOR, { arg: DEFAULT_CONFIG });
+    }), DEFAULT_SELECTOR, { arg: DEFAULT_CONFIG });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const rowIndex = 0;
     const columnIndex = 0;
     const saveButton = dataGrid.getHeaderPanel().getSaveButton();
@@ -964,9 +964,9 @@ test.describe('Editing.Functional', () => {
         dataField: 'name',
         validationRules: [{ type: 'required' }],
       }, 'lastName'],
-    }), GRID_SELECTOR, { arg: DEFAULT_CONFIG });
+    }), DEFAULT_SELECTOR, { arg: DEFAULT_CONFIG });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const rowIndex = 0;
     const saveButton = dataGrid.getHeaderPanel().getSaveButton();
     const cell0 = dataGrid.getDataRow(rowIndex).getDataCell(0);
@@ -1049,9 +1049,9 @@ test.describe('Editing.Functional', () => {
           return d.promise();
         },
       }, 'name', 'lastName'],
-    }), GRID_SELECTOR, { arg: DEFAULT_CONFIG });
+    }), DEFAULT_SELECTOR, { arg: DEFAULT_CONFIG });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const headerPanel = dataGrid.getHeaderPanel();
 
     await expect.poll(() => dataGrid.isReady()).toBe(true);
@@ -1096,9 +1096,9 @@ test.describe('Editing.Functional', () => {
           },
         }],
       }],
-    }), GRID_SELECTOR, { arg: DEFAULT_CONFIG });
+    }), DEFAULT_SELECTOR, { arg: DEFAULT_CONFIG });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const dataRow = dataGrid.getDataRow(0);
     const cell0 = dataRow.getDataCell(0);
     const editor0 = cell0.getEditor();
@@ -1152,9 +1152,9 @@ test.describe('Editing.Functional', () => {
           },
         }],
       }],
-    }), GRID_SELECTOR, { arg: DEFAULT_CONFIG });
+    }), DEFAULT_SELECTOR, { arg: DEFAULT_CONFIG });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const dataRow = dataGrid.getDataRow(0);
     const cell0 = dataRow.getDataCell(0);
     const editor0 = cell0.getEditor();
@@ -1203,9 +1203,9 @@ test.describe('Editing.Functional', () => {
           },
         }],
       }],
-    }), GRID_SELECTOR, { arg: DEFAULT_CONFIG });
+    }), DEFAULT_SELECTOR, { arg: DEFAULT_CONFIG });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const dataRow = dataGrid.getDataRow(0);
     const cell0 = dataRow.getDataCell(0);
     const editor0 = cell0.getEditor();
@@ -1250,9 +1250,9 @@ test.describe('Editing.Functional', () => {
           },
         }],
       }],
-    }), GRID_SELECTOR, { arg: DEFAULT_CONFIG });
+    }), DEFAULT_SELECTOR, { arg: DEFAULT_CONFIG });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const dataRow = dataGrid.getDataRow(0);
     const cell0 = dataRow.getDataCell(0);
     const editor0 = cell0.getEditor();
@@ -1297,9 +1297,9 @@ test.describe('Editing.Functional', () => {
             },
           }],
         }],
-      }), GRID_SELECTOR, { arg: { defaults: DEFAULT_CONFIG, reevaluateRule: reevaluate } });
+      }), DEFAULT_SELECTOR, { arg: { defaults: DEFAULT_CONFIG, reevaluateRule: reevaluate } });
 
-      const dataGrid = new DataGrid(page, GRID_SELECTOR);
+      const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
       const saveButton = dataGrid.getHeaderPanel().getSaveButton();
       const dataRow = dataGrid.getDataRow(0);
       const cell0 = dataRow.getDataCell(0);
@@ -1364,9 +1364,9 @@ test.describe('Editing.Functional', () => {
           validationCallback: (params): boolean => params.data.name.length <= 0,
         }],
       }],
-    }), GRID_SELECTOR, { arg: DEFAULT_CONFIG });
+    }), DEFAULT_SELECTOR, { arg: DEFAULT_CONFIG });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const dataRow0 = dataGrid.getDataRow(0);
     const dataRow1 = dataGrid.getDataRow(1);
     const cell00 = dataRow0.getDataCell(0);
@@ -1446,9 +1446,9 @@ test.describe('Editing.Functional', () => {
           },
         }],
       }],
-    }), GRID_SELECTOR, { arg: DEFAULT_CONFIG });
+    }), DEFAULT_SELECTOR, { arg: DEFAULT_CONFIG });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const cancelButton = dataGrid.getHeaderPanel().getCancelButton();
     const dataRow = dataGrid.getDataRow(0);
     const cell0 = dataRow.getDataCell(0);
@@ -1530,7 +1530,7 @@ test.describe('Editing.Functional', () => {
       ],
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const cell0 = dataGrid.getDataRow(0).getDataCell(1);
     const revertButton = dataGrid.getRevertButton();
 
@@ -1586,7 +1586,7 @@ test.describe('Editing.Functional', () => {
       },
     }));
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const detailGrid = new DataGrid(page, '#detailContainer');
     const overlay = dataGrid.getOverlay();
 
@@ -1647,7 +1647,7 @@ test.describe('Editing.Functional', () => {
       },
     }));
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const detailGrid = new DataGrid(page, '#detailContainer');
     const overlay = dataGrid.getOverlay();
 
@@ -1710,7 +1710,7 @@ test.describe('Editing.Functional', () => {
       },
     }));
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const detailGrid = new DataGrid(page, '#detailContainer');
     const overlay = dataGrid.getOverlay();
 
@@ -1754,7 +1754,7 @@ test.describe('Editing.Functional', () => {
       },
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const lastName0 = dataGrid.getDataCell(0, 1);
     const active1 = dataGrid.getDataCell(1, 2);
 
@@ -1785,9 +1785,9 @@ test.describe('Editing.Functional', () => {
             col.showEditorAlways = true;
           });
         },
-      }), GRID_SELECTOR, { arg: editMode.toLowerCase() as Lowercase<typeof editMode> });
+      }), DEFAULT_SELECTOR, { arg: editMode.toLowerCase() as Lowercase<typeof editMode> });
 
-      const dataGrid = new DataGrid(page, GRID_SELECTOR);
+      const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
       await expect.poll(() => dataGrid.isReady()).toBe(true);
 
@@ -1831,7 +1831,7 @@ test.describe('Editing.Functional', () => {
         },
       });
 
-      const dataGrid = new DataGrid(page, GRID_SELECTOR);
+      const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
       const firstCell = dataGrid.getDataCell(0, 0);
       const secondCell = dataGrid.getDataCell(0, 1);
 
@@ -1918,7 +1918,7 @@ test.describe('Editing.Functional', () => {
       };
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
@@ -1982,7 +1982,7 @@ test.describe('Editing.Functional', () => {
       };
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
@@ -2024,7 +2024,7 @@ test.describe('Editing.Functional', () => {
       },
     }));
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
@@ -2074,7 +2074,7 @@ test.describe('Editing.Functional', () => {
       };
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const firstCellOfFirstRow = dataGrid.getDataCell(0, 0);
     const secondCellOfSecondRow = dataGrid.getDataCell(1, 1);
     // editCellTemplate is called only once, for the first column only.
@@ -2127,7 +2127,7 @@ test.describe('Editing.Functional', () => {
       };
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const firstCellOfFirstRow = dataGrid.getDataCell(0, 0);
     const secondCellOfSecondRow = dataGrid.getDataCell(1, 1);
     const getCallArgs = (): Promise<unknown[]> => page.evaluate(
@@ -2196,7 +2196,7 @@ test.describe('Editing.Functional', () => {
       };
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const editPopup = dataGrid.getEditPopup();
     const addAndSaveData = async (): Promise<void> => {
       await dataGrid.apiAddRow();
@@ -2283,7 +2283,7 @@ test.describe('Editing - ShowEditorAlways', () => {
       /* eslint-enable no-restricted-syntax */
     });
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
     const getEditor = (rowIndex: number) => dataGrid.getDataCell(rowIndex, 0).getEditor().element;
     const getStoredName = (id: number): Promise<string> => page.evaluate(async (key) => {
       const item = await (window as any).myStore.byKey(key);
@@ -2373,9 +2373,9 @@ test.describe('Editing - ShowEditorAlways', () => {
           'field_2',
           'field_3',
         ],
-      }), GRID_SELECTOR, { arg: { items: data, remote: remoteOperations } });
+      }), DEFAULT_SELECTOR, { arg: { items: data, remote: remoteOperations } });
 
-      const dataGrid = new DataGrid(page, GRID_SELECTOR);
+      const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
       await expect.poll(() => dataGrid.isReady()).toBe(true);
 

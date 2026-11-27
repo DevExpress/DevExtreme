@@ -63,7 +63,7 @@ crop and render differently, so a TestCafe image is not a valid reference for th
 It is still the check of the port. Recording writes whatever the test reached, and a verify run
 compares against that same file, so neither notices a test that shot the wrong state. Before
 deleting the TestCafe etalon, compare the new one with it: the same picture, within the per-pixel
-threshold. Five differences are expected:
+threshold. Six differences are expected:
 
 - A scrollbar. This suite shows it, TestCafe cut it off, so a viewport shot of a page that
   overflows comes out up to 15 px larger, with the scrollbar in the extra strip.
@@ -81,6 +81,11 @@ threshold. Five differences are expected:
   shadow and text a few units darker, and its icon glyphs lack the colored subpixel antialiasing
   the current Chrome draws, up to 67 units off at their edges); every other pixel of that color
   shifts the same way, and only the text antialiasing around it changes besides.
+- A popup that opens at the pointer, such as a context menu, up to 2 px off. TestCafe clicked at the
+  element's rounded position plus half its rounded `offsetWidth`/`offsetHeight`, Playwright clicks
+  the exact center. When the popup opens to the left of the pointer, the pointer stays just outside
+  it, and the element under the pointer shows its `:hover` background, which the TestCafe etalon
+  lacks. A probe that clicks at TestCafe's point gets the TestCafe image, apart from that hover.
 
 Anything else, a block of pixels or a moved edge, means the test reached a different state; find
 out why rather than accept the image.

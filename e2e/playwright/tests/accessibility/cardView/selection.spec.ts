@@ -1,9 +1,8 @@
 import { test } from '../../../helpers/accessibility/test';
 import { a11yCheck } from '../../../helpers/accessibility/utils';
+import { DEFAULT_SELECTOR } from '../../../helpers/const';
 import { createWidget } from '../../../helpers/createWidget';
 import CardView from '../../../models/cardView';
-
-const CARD_VIEW_SELECTOR = '#container';
 
 test('Single mode', async ({ page }) => {
   await createWidget(page, 'dxCardView', () => ({
@@ -36,7 +35,7 @@ test('Single mode', async ({ page }) => {
     },
   }));
 
-  await a11yCheck(page, {}, CARD_VIEW_SELECTOR);
+  await a11yCheck(page, {}, DEFAULT_SELECTOR);
 });
 
 test('Multiple mode with Select All/Deselect All and showCheckBoxesMode = \'none\'', async ({ page }) => {
@@ -71,7 +70,7 @@ test('Multiple mode with Select All/Deselect All and showCheckBoxesMode = \'none
     },
   }));
 
-  await a11yCheck(page, {}, CARD_VIEW_SELECTOR);
+  await a11yCheck(page, {}, DEFAULT_SELECTOR);
 });
 
 test('Multiple mode with Select All/Deselect All and showCheckBoxesMode = \'always\'', async ({ page }) => {
@@ -106,7 +105,7 @@ test('Multiple mode with Select All/Deselect All and showCheckBoxesMode = \'alwa
     },
   }));
 
-  await a11yCheck(page, {}, CARD_VIEW_SELECTOR);
+  await a11yCheck(page, {}, DEFAULT_SELECTOR);
 });
 
 test('Multiple mode with Select All/Deselect All and showCheckBoxesMode = \'onClick\'', async ({ page }) => {
@@ -141,11 +140,11 @@ test('Multiple mode with Select All/Deselect All and showCheckBoxesMode = \'onCl
     },
   }));
 
-  const cardView = new CardView(page, CARD_VIEW_SELECTOR);
+  const cardView = new CardView(page, DEFAULT_SELECTOR);
 
   await cardView.element.hover();
 
-  await a11yCheck(page, {}, CARD_VIEW_SELECTOR);
+  await a11yCheck(page, {}, DEFAULT_SELECTOR);
 });
 
 test('Multiple mode with a selected card and showCheckBoxesMode = \'onClick\'', async ({ page }) => {
@@ -181,7 +180,7 @@ test('Multiple mode with a selected card and showCheckBoxesMode = \'onClick\'', 
     },
   }));
 
-  await a11yCheck(page, {}, CARD_VIEW_SELECTOR);
+  await a11yCheck(page, {}, DEFAULT_SELECTOR);
 });
 
 test('Multiple mode with selected cards and showCheckBoxesMode = \'onClick\'', async ({ page }) => {
@@ -217,7 +216,7 @@ test('Multiple mode with selected cards and showCheckBoxesMode = \'onClick\'', a
     },
   }));
 
-  await a11yCheck(page, {}, CARD_VIEW_SELECTOR);
+  await a11yCheck(page, {}, DEFAULT_SELECTOR);
 });
 
 test('Multiple mode with Select All/Deselect All and showCheckBoxesMode = \'onLongTap\'', async ({ page }) => {
@@ -252,14 +251,14 @@ test('Multiple mode with Select All/Deselect All and showCheckBoxesMode = \'onLo
     },
   }));
 
-  const cardView = new CardView(page, CARD_VIEW_SELECTOR);
+  const cardView = new CardView(page, DEFAULT_SELECTOR);
   const firstCard = cardView.getCard(0);
 
   await firstCard.element.evaluate((card) => {
     $(card).trigger('dxhold');
   });
 
-  await a11yCheck(page, {}, CARD_VIEW_SELECTOR);
+  await a11yCheck(page, {}, DEFAULT_SELECTOR);
 });
 
 test('Multiple mode without Select All/Deselect All', async ({ page }) => {
@@ -293,5 +292,5 @@ test('Multiple mode without Select All/Deselect All', async ({ page }) => {
     },
   }));
 
-  await a11yCheck(page, {}, CARD_VIEW_SELECTOR);
+  await a11yCheck(page, {}, DEFAULT_SELECTOR);
 });
