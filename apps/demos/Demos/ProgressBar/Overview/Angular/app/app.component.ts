@@ -1,7 +1,8 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import {
-  Component, Pipe, type PipeTransform, enableProdMode, signal,
+  Component, Pipe, enableProdMode, signal,
 } from '@angular/core';
+import type { PipeTransform } from '@angular/core';
 import { DxButtonModule, DxProgressBarModule } from 'devextreme-angular';
 
 @Pipe({ name: 'time', standalone: true })
@@ -34,7 +35,7 @@ export class AppComponent {
 
   readonly maxValue = 10;
 
-  private intervalId: number | undefined;
+  private intervalId?: number;
 
   onButtonClick(): void {
     if (this.inProgress) {

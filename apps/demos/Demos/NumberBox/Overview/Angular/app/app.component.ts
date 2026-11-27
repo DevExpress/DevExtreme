@@ -1,6 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode } from '@angular/core';
-import { DxNumberBoxModule, type DxNumberBoxTypes } from 'devextreme-angular/ui/number-box';
+import { Component, enableProdMode, signal } from '@angular/core';
+import { DxNumberBoxModule } from 'devextreme-angular/ui/number-box';
+import type { DxNumberBoxTypes } from 'devextreme-angular/ui/number-box';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -14,10 +15,13 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
+  readonly maxSales = 30;
+
+  readonly sales = signal(16);
+
   keyDown(e: DxNumberBoxTypes.KeyDownEvent) {
-    const event = e.event;
-    const str = event.key;
-    if (/^[.,e]$/.test(str)) {
+    const { event } = e;
+    if (event && /^[.,e]$/.test(event.key)) {
       event.preventDefault();
     }
   }

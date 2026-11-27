@@ -31,7 +31,9 @@ export class AppComponent {
 
   readonly loadingVisible = signal(false);
 
-  onShown(): void {
+  readonly hideOnOutsideClick = signal(false);
+
+  onShown() {
     setTimeout(() => {
       this.loadingVisible.set(false);
     }, 3000);

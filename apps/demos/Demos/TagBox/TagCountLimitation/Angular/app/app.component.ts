@@ -23,7 +23,7 @@ export class AppComponent {
   readonly slicedProducts = this.products.slice(0, 5);
 
   onMultiTagPreparing(args: DxTagBoxTypes.MultiTagPreparingEvent) {
-    const selectedItemsLength = args.selectedItems.length;
+    const selectedItemsLength = args.selectedItems?.length ?? 0;
     const totalCount = 5;
 
     if (selectedItemsLength < totalCount) {

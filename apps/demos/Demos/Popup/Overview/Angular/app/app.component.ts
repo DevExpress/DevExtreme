@@ -4,7 +4,8 @@ import {
 } from '@angular/core';
 import { DxPopupModule, DxButtonModule } from 'devextreme-angular';
 import notify from 'devextreme/ui/notify';
-import { Employee, Service } from './app.service';
+import { Service } from './app.service';
+import type { Employee } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -22,13 +23,13 @@ if (!/localhost/.test(document.location.host)) {
 })
 
 export class AppComponent {
-  readonly currentEmployee = signal<Employee>(new Employee());
+  readonly currentEmployee = signal<Partial<Employee>>({});
 
   readonly employees = inject(Service).getEmployees();
 
   readonly popupVisible = signal(false);
 
-  readonly positionOf = signal<string>(undefined);
+  readonly positionOf = signal<string | undefined>(undefined);
 
   readonly moreInfoButtonOptions: Record<string, unknown> = {
     text: 'More info',

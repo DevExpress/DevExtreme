@@ -8,13 +8,15 @@ import {
 } from 'devextreme-angular';
 import notify from 'devextreme/ui/notify';
 import hideToasts from 'devextreme/ui/toast/hide_toasts';
+import type { DxRadioGroupTypes } from 'devextreme-angular/ui/radio-group';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
 }
 
-type Position = Parameters<typeof notify>[1]['position'];
-type Direction = Parameters<typeof notify>[1]['direction'];
+type Stack = NonNullable<Parameters<typeof notify>[1]>;
+type Position = Stack['position'];
+type Direction = Stack['direction'];
 
 @Component({
   selector: 'demo-app',
@@ -47,13 +49,13 @@ export class AppComponent {
 
   readonly predefinedPosition = signal<Position>('bottom center');
 
-  readonly top = signal<number>(undefined);
+  readonly top = signal<number | undefined>(undefined);
 
-  readonly bottom = signal<number>(undefined);
+  readonly bottom = signal<number | undefined>(undefined);
 
-  readonly left = signal<number>(undefined);
+  readonly left = signal<number | undefined>(undefined);
 
-  readonly right = signal<number>(undefined);
+  readonly right = signal<number | undefined>(undefined);
 
   readonly direction = signal<Direction>('up-push');
 
@@ -90,7 +92,7 @@ export class AppComponent {
     hideToasts();
   }
 
-  radioGroupValueChanged({ value }) {
+  radioGroupValueChanged({ value }: DxRadioGroupTypes.ValueChangedEvent) {
     this.isPredefined.set(value === 'predefined');
   }
 }
