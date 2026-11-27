@@ -4,7 +4,6 @@ import type { SelectionSensitivity } from 'devextreme/ui/data_grid';
 import Toolbar from '../toolbar';
 import DataRow from './data/row';
 import GroupRow from './groupRow';
-import FilterRow from './filter/row';
 import FilterCell from './filter/cell';
 import EditForm from './editForm';
 import HeaderPanel from './headers/panel';
@@ -260,10 +259,6 @@ export default class DataGrid extends GridCore {
 
   getErrorRow(): Selector {
     return this.element.find(`.${CLASS.errorRow}`);
-  }
-
-  getFilterRow(): FilterRow {
-    return this.getHeaders().getFilterRow();
   }
 
   getFilterCell(columnIndex: number): FilterCell {
