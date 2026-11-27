@@ -1,6 +1,7 @@
 import type { Locator } from '@playwright/test';
 import { expect } from '@playwright/test';
 import type { WidgetName } from '../types';
+import { expectClass } from '../internal/classMatcher';
 import GridModule from './module';
 
 const CLASS = {
@@ -8,7 +9,10 @@ const CLASS = {
   overlayWrapper: 'dx-overlay-wrapper',
   columnChooser: 'column-chooser',
   checkbox: 'dx-checkbox',
+  checkboxChecked: 'dx-checkbox-checked',
+  stateDisabled: 'dx-state-disabled',
   treeViewItem: 'dx-treeview-item',
+  treeViewItemContent: 'dx-treeview-item-content',
 };
 
 export default class ColumnChooser extends GridModule {
@@ -35,7 +39,27 @@ export default class ColumnChooser extends GridModule {
     return this.content.locator(`.${CLASS.checkbox}`).nth(nth);
   }
 
+  public expectCheckboxChecked(nth = 0, present = true): Promise<void> {
+    return expectClass(this.getCheckbox(nth), CLASS.checkboxChecked, present);
+  }
+
+  public expectCheckboxDisabled(nth = 0, present = true): Promise<void> {
+    return expectClass(this.getCheckbox(nth), CLASS.stateDisabled, present);
+  }
+
   public getColumn(index = 0): Locator {
     return this.content.locator(`.${CLASS.treeViewItem}`).nth(index);
+  }
+
+  public getColumns(): Locator {
+    return this.content.locator(`.${CLASS.treeViewItem}`);
+  }
+
+  public expectColumnDisabled(index = 0, present = true): Promise<void> {
+    return expectClass(
+      this.getColumn(index).locator(`.${CLASS.treeViewItemContent}`),
+      CLASS.stateDisabled,
+      present,
+    );
   }
 }

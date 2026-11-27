@@ -1,7 +1,7 @@
 import type { JSHandle, Page } from '@playwright/test';
 import { expect, GOOGLE_FONTS, test as base } from '../../fixtures';
 import type { WidgetName } from '../../models/types';
-import { DEFAULT_SELECTOR, TEST_PAGE_URL } from '../const';
+import { DEFAULT_SELECTOR } from '../const';
 import { createWidget } from '../createWidget';
 import { generateOptionMatrix, type Options } from '../generateOptionMatrix';
 import { changeTheme, resetPageState } from '../testPageUtils';
@@ -14,19 +14,13 @@ import {
   type A11yContext,
 } from './utils';
 
-interface A11yOptions {
-  containerUrl: string;
-}
-
 interface A11yWorkerFixtures {
   sharedPage: Page;
 }
 
 // One page per worker, cleared between tests, the way the TestCafe fixtures kept their page:
 // loading dx.all.js again for each of the ~2400 tests made a run too long for its CI job.
-export const test = base.extend<A11yOptions, A11yWorkerFixtures>({
-  containerUrl: [TEST_PAGE_URL, { option: true }],
-
+export const test = base.extend<object, A11yWorkerFixtures>({
   sharedPage: [async ({ browser }, use, workerInfo) => {
     const { baseURL, timezoneId } = workerInfo.project.use;
     const context = await browser.newContext({ baseURL, timezoneId });

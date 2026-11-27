@@ -8,6 +8,8 @@ export const SERVER_PORT = 20070;
 
 export const TEST_PAGE_URL = '/e2e/playwright/tests/container.html';
 
+export const AI_INTEGRATION_PAGE_URL = '/e2e/playwright/tests/container-ai-integration.html';
+
 // A matrix input that is not set for the job arrives as an empty string, not as undefined.
 export const readEnv = (value: string | undefined, fallback: string): string => (
   value === undefined || value === '' ? fallback : value

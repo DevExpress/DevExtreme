@@ -14,6 +14,8 @@ import AdaptiveDetailRow from './adaptiveDetailRow';
 import MasterRow from './masterRow';
 import GroupRow from './groupRow';
 import Overlay from './overlay';
+import AIAssistantChat from './aiAssistantChat';
+import AIPromptEditor from './aiPromptEditor';
 
 const CLASS = {
   ...CLASS_BASE,
@@ -48,6 +50,12 @@ const CLASS = {
   contextMenu: 'dx-context-menu',
   fieldItemContent: 'dx-field-item-content',
   textEditorInput: 'dx-texteditor-input',
+  aiAssistantButton: 'ai-assistant-button',
+  aiAssistantConfirmDialog: 'ai-assistant-confirm-dialog',
+  aiChat: 'dx-ai-chat',
+  aiPromptEditor: 'dx-ai-prompt-editor',
+  scrollContainer: 'scroll-container',
+  dragHeader: 'drag-header',
 };
 
 const E2E_ATTRIBUTES = {
@@ -79,6 +87,10 @@ export default abstract class GridBase extends GridCore {
 
   public getRowsView(): Locator {
     return this.ownElement(`.${this.addWidgetPrefix(CLASS.rowsView)}`);
+  }
+
+  public getHeadersScrollContainer(): Locator {
+    return this.getHeaders().element.locator(`.${this.addWidgetPrefix(CLASS.scrollContainer)}`);
   }
 
   public getDataRow(index: number): DataRow {
@@ -244,6 +256,35 @@ export default abstract class GridBase extends GridCore {
     return new ContextMenu(this.page, this.body.locator(`.${CLASS.contextMenu}.${this.addWidgetPrefix()}`));
   }
 
+  public getAIAssistantButton(): Locator {
+    return this.getHeaderPanel().element.locator(`.${this.addWidgetPrefix(CLASS.aiAssistantButton)}`);
+  }
+
+  public getAIAssistantChat(): AIAssistantChat {
+    const wrapper = this.body.locator(`.${CLASS.overlayWrapper}.${CLASS.aiChat}`);
+    const popup = this.element.locator(`.${CLASS.aiChat}.${CLASS.popup}`);
+
+    return new AIAssistantChat(
+      this.page,
+      wrapper,
+      popup.or(wrapper),
+      this.addWidgetPrefix(CLASS.aiAssistantConfirmDialog),
+    );
+  }
+
+  // The header a column drag moves around; the grid renders it in the body.
+  public getDraggableHeader(): Locator {
+    return this.body.locator(`.${this.addWidgetPrefix(CLASS.dragHeader)}`);
+  }
+
+  // The popup widget, not its wrapper in the body, which carries the same class.
+  public getAIPromptEditor(): AIPromptEditor {
+    return new AIPromptEditor(
+      this.page,
+      this.element.locator(`.${CLASS.aiPromptEditor}.${CLASS.popup}`),
+    );
+  }
+
   public getToolbar(): Toolbar {
     return new Toolbar(this.page, this.element.locator(`.${CLASS.toolbar}`));
   }
@@ -368,6 +409,55 @@ export default abstract class GridBase extends GridCore {
     await rendered.dispose();
   }
 
+  // The top left corner of the column's header, in the viewport.
+  private getHeaderCorner(columnIndex: number): Promise<{ x: number; y: number }> {
+    return this.element.evaluate((element, { widgetName, index }) => {
+      const header: HTMLElement = $(element).data(widgetName)
+        .getView('columnHeadersView').getHeaderElement(index)[0];
+      const { left, top } = header.getBoundingClientRect();
+
+      return { x: left, y: top };
+    }, { widgetName: this.getName(), index: columnIndex });
+  }
+
+  // A real pointer drags the left border of the column's header: the grid starts resizing where
+  // the pointer goes down near a border.
+  public async resizeHeader(columnIndex: number, offset: number): Promise<void> {
+    const corner = await this.getHeaderCorner(columnIndex);
+    const start = { x: corner.x, y: corner.y + 1 };
+
+    await this.page.mouse.move(start.x, start.y);
+    await this.page.mouse.down();
+    await this.page.mouse.move(start.x + offset, start.y);
+    await this.page.mouse.up();
+  }
+
+  // A real pointer moves the header by (x, y) from its top left corner; with "isStart", it is
+  // pressed there first.
+  public async moveHeader(
+    columnIndex: number,
+    x: number,
+    y: number,
+    isStart = false,
+  ): Promise<void> {
+    const corner = await this.getHeaderCorner(columnIndex);
+
+    if (isStart) {
+      await this.page.mouse.move(corner.x, corner.y);
+      await this.page.mouse.down();
+    }
+
+    await this.page.mouse.move(corner.x + x, corner.y + y);
+  }
+
+  // Releases the dragged header over the top left corner of the column's header.
+  public async dropHeader(columnIndex: number): Promise<void> {
+    const corner = await this.getHeaderCorner(columnIndex);
+
+    await this.page.mouse.move(corner.x, corner.y);
+    await this.page.mouse.up();
+  }
+
   public async scrollBy(offset: ScrollOffset): Promise<void> {
     await expect.poll(() => this.hasScrollable()).toBe(true);
     await this.element.evaluate(
@@ -446,12 +536,22 @@ export default abstract class GridBase extends GridCore {
     }, { widgetName: this.getName(), row: rowIndex, column: columnIndex });
   }
 
-  public async apiPageIndex(pageIndex: number): Promise<void> {
-    await this.invoke('pageIndex', pageIndex);
+  public apiPageIndex(): Promise<number>;
+
+  public apiPageIndex(pageIndex: number): Promise<void>;
+
+  public apiPageIndex(pageIndex?: number): Promise<unknown> {
+    return pageIndex === undefined
+      ? this.invoke('pageIndex')
+      : this.invoke('pageIndex', pageIndex);
   }
 
   public apiTotalCount(): Promise<number> {
     return this.invoke('totalCount');
+  }
+
+  public apiState(): Promise<unknown> {
+    return this.invoke('state');
   }
 
   public apiGetVisibleRows(): Promise<VisibleRow[]> {
@@ -463,6 +563,17 @@ export default abstract class GridBase extends GridCore {
         rowType: row.rowType,
         rowIndex: row.rowIndex,
       })),
+      this.getName(),
+    );
+  }
+
+  public apiGetSelectedRowKeys(): Promise<unknown[]> {
+    return this.invoke('getSelectedRowKeys');
+  }
+
+  public apiGetDataSourceSortParams(): Promise<unknown> {
+    return this.element.evaluate(
+      (element, widgetName) => $(element).data(widgetName).getDataSource().sort(),
       this.getName(),
     );
   }
