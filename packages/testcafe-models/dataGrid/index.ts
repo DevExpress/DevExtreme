@@ -42,7 +42,6 @@ export const CLASS = {
   adaptiveDetailRow: 'dx-adaptive-detail-row',
   adaptiveCommandCellHidden: 'dx-command-adaptive-hidden',
   adaptiveColumnButton: 'dx-datagrid-adaptive-more',
-  errorRow: 'dx-error-row',
 
   headerRow: 'dx-header-row',
   footerRow: 'dx-footer-row',
@@ -242,10 +241,6 @@ export default class DataGrid extends GridCore {
 
   getFocusedRow(): Selector {
     return this.dataRows.filter(`.${CLASS.focusedRow}`);
-  }
-
-  getErrorRow(): Selector {
-    return this.element.find(`.${CLASS.errorRow}`);
   }
 
   getFilterCell(columnIndex: number): FilterCell {
