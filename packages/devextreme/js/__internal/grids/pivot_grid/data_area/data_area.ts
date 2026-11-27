@@ -25,7 +25,7 @@ class DataArea extends AreaItem {
     return 'data';
   }
 
-  public render(rootElement: dxElementWrapper, data: AreaItemCell[][]): void {
+  public render(rootElement: dxElementWrapper | undefined, data: AreaItemCell[][]): void {
     super.render(rootElement, data);
 
     this._makeFirstCellFocusable();

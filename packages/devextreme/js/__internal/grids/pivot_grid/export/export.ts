@@ -83,7 +83,7 @@ class DataProvider {
   public getColumnsWidths(): number[] {
     const colsArea = this._options.columnsArea;
     const { rowsArea, columns } = this._options;
-    const useDefaultWidth = !hasWindow() || colsArea.option('scrolling.mode') === 'virtual' || colsArea.element()?.is(':hidden');
+    const useDefaultWidth = !hasWindow() || !rowsArea || !colsArea || colsArea.option('scrolling.mode') === 'virtual' || colsArea.element()?.is(':hidden');
     return useDefaultWidth
       ? columns.map(() => DEFAUL_COLUMN_WIDTH)
       : rowsArea.getColumnsWidth().concat(colsArea.getColumnsWidth());
