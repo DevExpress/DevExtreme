@@ -641,16 +641,6 @@ export default class DataGrid extends GridCore {
     )();
   }
 
-  apiBeginCustomLoading(messageText: string): Promise<void> {
-    const { getInstance } = this;
-    return ClientFunction(
-      () => {
-        (getInstance() as DataGridInstance).beginCustomLoading(messageText);
-      },
-      { dependencies: { getInstance, messageText } },
-    )();
-  }
-
   apiRefresh(): Promise<void> {
     const { getInstance } = this;
     return ClientFunction(

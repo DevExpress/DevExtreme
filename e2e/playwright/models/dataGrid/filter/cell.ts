@@ -26,10 +26,11 @@ export default class FilterCell extends GridFocusableElement {
     return new FocusableElement(this.element.locator(`.${CLASS.editorInput}`));
   }
 
+  // The editor itself, not the widgets inside it, such as the drop-down button of a select box.
   public getEditor<T>(EditorType: new (page: Page, element: Locator) => T): T {
     return new EditorType(
       this.element.page(),
-      this.element.locator(`.${CLASS.filterEditorContainer} .${CLASS.filterEditor}`),
+      this.element.locator(`.${CLASS.filterEditorContainer} > .${CLASS.filterEditor}`),
     );
   }
 }

@@ -14,6 +14,7 @@ const CLASS = {
   commandExpand: 'dx-command-expand',
   groupOpened: 'dx-datagrid-group-opened',
   selectCheckBox: 'dx-select-checkbox',
+  stateHover: 'dx-state-hover',
 };
 
 export default class DataRow extends GridFocusableElement {
@@ -35,6 +36,10 @@ export default class DataRow extends GridFocusableElement {
 
   public expectEdited(present = true): Promise<void> {
     return expectClass(this.element, CLASS.editedRow, present);
+  }
+
+  public expectHovered(present = true): Promise<void> {
+    return expectClass(this.element, CLASS.stateHover, present);
   }
 
   public async expectExpanded(present = true): Promise<void> {

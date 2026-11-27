@@ -1,10 +1,9 @@
-import { ClientFunction } from 'testcafe';
-import DataGrid from 'devextreme-testcafe-models/dataGrid';
+import type { Page } from '@playwright/test';
+import type { Properties } from 'devextreme/ui/data_grid';
+import { expect, test } from '../../../../fixtures';
+import { DEFAULT_SELECTOR } from '../../../../helpers/const';
 import { createWidget } from '../../../../helpers/createWidget';
-import url from '../../../../helpers/getPageUrl';
-
-fixture.disablePageReloads`Grouping Panel - check borders and backgrounds with various options`
-  .page(url(__dirname, '../../../container.html'));
+import DataGrid from '../../../../models/dataGrid';
 
 interface MatrixOptions {
   showColumnLines: boolean;
@@ -15,7 +14,6 @@ interface MatrixOptions {
 }
 
 const SELECTORS = {
-  gridContainer: 'container',
   dataGridClass: 'dx-datagrid',
   bordersClass: 'dx-datagrid-borders',
   headersClass: 'dx-datagrid-headers',
@@ -57,19 +55,22 @@ interface GridStyleSnapshot {
   rows: RowInfo[];
 }
 
-const collectGridStyles = ClientFunction((rootSelector: string): GridStyleSnapshot => {
-  const root = document.querySelector(rootSelector);
+const collectGridStyles = (
+  page: Page,
+  rootSelector: string,
+): Promise<GridStyleSnapshot> => page.evaluate(({ selector, selectors }): GridStyleSnapshot => {
+  const root = document.querySelector(selector);
 
   const borderWidth = (element: Element | null, property: string): number => (element
     ? parseInt(window.getComputedStyle(element).getPropertyValue(property), 10) || 0
     : 0);
 
-  const container = root?.querySelector(`.${SELECTORS.dataGridClass}`) ?? null;
-  const headers = root?.querySelector(`.${SELECTORS.headersClass}`) ?? null;
-  const rowsView = root?.querySelector(`.${SELECTORS.rowsViewClass}`) ?? null;
+  const container = root?.querySelector(`.${selectors.dataGridClass}`) ?? null;
+  const headers = root?.querySelector(`.${selectors.headersClass}`) ?? null;
+  const rowsView = root?.querySelector(`.${selectors.rowsViewClass}`) ?? null;
 
   const rowElements = rowsView
-    ? Array.from(rowsView.querySelectorAll(`.${SELECTORS.rowClass}`))
+    ? Array.from(rowsView.querySelectorAll(`.${selectors.rowClass}`))
     : [];
 
   const rows: RowInfo[] = rowElements.map((row) => {
@@ -82,7 +83,7 @@ const collectGridStyles = ClientFunction((rootSelector: string): GridStyleSnapsh
     let sibling = row.nextElementSibling;
 
     while (sibling) {
-      if (sibling.matches(`tr.${SELECTORS.rowLinesClass}`)) {
+      if (sibling.matches(`tr.${selectors.rowLinesClass}`)) {
         isLastRowLine = false;
         break;
       }
@@ -93,8 +94,8 @@ const collectGridStyles = ClientFunction((rootSelector: string): GridStyleSnapsh
       borderLeftWidth: borderWidth(cell, 'border-left-width'),
       borderRightWidth: borderWidth(cell, 'border-right-width'),
       borderBottomWidth: borderWidth(cell, 'border-bottom-width'),
-      isGroupSpace: cell.classList.contains(SELECTORS.groupSpaceClass),
-      hasPointerEventsNoneClass: cell.classList.contains(SELECTORS.pointerEventsNoneClass),
+      isGroupSpace: cell.classList.contains(selectors.groupSpaceClass),
+      hasPointerEventsNoneClass: cell.classList.contains(selectors.pointerEventsNoneClass),
     }));
 
     const firstCell = row.querySelector('td');
@@ -121,7 +122,7 @@ const collectGridStyles = ClientFunction((rootSelector: string): GridStyleSnapsh
     },
     rows,
   };
-}, { dependencies: { SELECTORS } });
+}, { selector: rootSelector, selectors: SELECTORS });
 
 const dataSource = [
   {
@@ -182,15 +183,16 @@ const getTestParams = ({
   `hasMasterDetail: ${hasMasterDetail}`,
 ].join(', ');
 
-const createDataGrid = async ({
-  showColumnLines,
-  showRowLines,
-  showBorders,
-  hasFixedColumn,
-  hasMasterDetail,
-}: MatrixOptions) => {
-  await createWidget('dxDataGrid', {
-    dataSource,
+const createDataGrid = async (page: Page, matrixOptions: MatrixOptions): Promise<void> => {
+  await createWidget(page, 'dxDataGrid', ({
+    items,
+    showColumnLines,
+    showRowLines,
+    showBorders,
+    hasFixedColumn,
+    hasMasterDetail,
+  }): Properties => ({
+    dataSource: items,
     columnFixing: {
       // @ts-expect-error private option
       legacyMode: true,
@@ -233,37 +235,35 @@ const createDataGrid = async ({
     showBorders,
     showRowLines,
     showColumnLines,
-  });
+  }), DEFAULT_SELECTOR, { arg: { ...matrixOptions, items: dataSource } });
 };
 
-const checkShowBordersState = async (
-  t: TestController,
+const checkShowBordersState = (
   snapshot: GridStyleSnapshot,
   showBorders: boolean,
-) => {
+): void => {
   const expectedBorderWidth = showBorders ? BORDER_WIDTH.normal : BORDER_WIDTH.none;
 
   if (showBorders) {
-    await t.expect(snapshot.containerClasses).contains(SELECTORS.bordersClass);
+    expect(snapshot.containerClasses).toContain(SELECTORS.bordersClass);
   } else {
-    await t.expect(snapshot.containerClasses).notContains(SELECTORS.bordersClass);
+    expect(snapshot.containerClasses).not.toContain(SELECTORS.bordersClass);
   }
 
-  await t.expect(snapshot.headersBorders.top).eql(expectedBorderWidth, 'headers: border-top-width');
-  await t.expect(snapshot.headersBorders.left).eql(expectedBorderWidth, 'headers: border-left-width');
-  await t.expect(snapshot.headersBorders.right).eql(expectedBorderWidth, 'headers: border-right-width');
+  expect(snapshot.headersBorders.top, 'headers: border-top-width').toBe(expectedBorderWidth);
+  expect(snapshot.headersBorders.left, 'headers: border-left-width').toBe(expectedBorderWidth);
+  expect(snapshot.headersBorders.right, 'headers: border-right-width').toBe(expectedBorderWidth);
 
-  await t.expect(snapshot.rowsViewBorders.left).eql(expectedBorderWidth, 'rowsView: border-left-width');
-  await t.expect(snapshot.rowsViewBorders.right).eql(expectedBorderWidth, 'rowsView: border-right-width');
-  await t.expect(snapshot.rowsViewBorders.bottom).eql(expectedBorderWidth, 'rowsView: border-bottom-width');
+  expect(snapshot.rowsViewBorders.left, 'rowsView: border-left-width').toBe(expectedBorderWidth);
+  expect(snapshot.rowsViewBorders.right, 'rowsView: border-right-width').toBe(expectedBorderWidth);
+  expect(snapshot.rowsViewBorders.bottom, 'rowsView: border-bottom-width').toBe(expectedBorderWidth);
 };
 
-const checkShowRowLinesState = async (
-  t: TestController,
+const checkShowRowLinesState = (
   snapshot: GridStyleSnapshot,
   showRowLines: boolean,
   showBorders: boolean,
-) => {
+): void => {
   const expectedBorderWidth = showRowLines ? BORDER_WIDTH.normal : BORDER_WIDTH.none;
 
   const rowLineRows = snapshot.rows.filter((row) => row.classes.includes(SELECTORS.rowLinesClass));
@@ -278,16 +278,15 @@ const checkShowRowLinesState = async (
     }
 
     for (let j = 0; j < row.cells.length; j += 1) {
-      await t.expect(row.cells[j].borderBottomWidth).eql(expectedBorderWidth, `row #${i}, cell #${j}: border-bottom-width`);
+      expect(row.cells[j].borderBottomWidth, `row #${i}, cell #${j}: border-bottom-width`).toBe(expectedBorderWidth);
     }
   }
 };
 
-const checkShowColumnLinesState = async (
-  t: TestController,
+const checkShowColumnLinesState = (
   snapshot: GridStyleSnapshot,
   showColumnLines: boolean,
-) => {
+): void => {
   const getExpBorderWith = (
     isColumnLinesEnabled: boolean,
     hasPointerEventsNoneClass: boolean,
@@ -317,20 +316,19 @@ const checkShowColumnLinesState = async (
       const isLastCellInRow = j === dataCells.length - 1;
 
       if (!isFirstCellInRow) {
-        await t.expect(cell.borderLeftWidth).eql(expectedBorderWidth, `row #${i}, cell #${j}: border-left-width`);
+        expect(cell.borderLeftWidth, `row #${i}, cell #${j}: border-left-width`).toBe(expectedBorderWidth);
       }
 
       if (!isLastCellInRow) {
-        await t.expect(cell.borderRightWidth).eql(expectedBorderWidth, `row #${i}, cell #${j}: border-right-width`);
+        expect(cell.borderRightWidth, `row #${i}, cell #${j}: border-right-width`).toBe(expectedBorderWidth);
       }
     }
   }
 };
 
-const checkRowAlternationEnabledState = async (
-  t: TestController,
+const checkRowAlternationEnabledState = (
   snapshot: GridStyleSnapshot,
-) => {
+): void => {
   const rows = snapshot.rows.filter(
     (row) => !row.classes.includes(SELECTORS.masterDetailRowClass),
   );
@@ -355,32 +353,32 @@ const checkRowAlternationEnabledState = async (
     const currentHasAltClass = currentRow.classes.includes(SELECTORS.rowAlternativeClass);
     const previousHasAltClass = previousRow.classes.includes(SELECTORS.rowAlternativeClass);
 
-    await t.expect(currentHasAltClass).notEql(previousHasAltClass, `row #${i}: alt class alternation`);
-    await t.expect(currentRow.backgroundColor).notEql(previousRow.backgroundColor, `row #${i}: background-color alternation`);
+    expect(currentHasAltClass, `row #${i}: alt class alternation`).not.toBe(previousHasAltClass);
+    expect(currentRow.backgroundColor, `row #${i}: background-color alternation`).not.toBe(previousRow.backgroundColor);
 
     i += 1;
   }
 };
 
-const verifyGridStyles = async (t: TestController, {
+const verifyGridStyles = async (page: Page, {
   showBorders, showRowLines, showColumnLines,
-}: MatrixOptions) => {
-  const snapshot = await collectGridStyles(`#${SELECTORS.gridContainer}`);
+}: MatrixOptions): Promise<void> => {
+  const snapshot = await collectGridStyles(page, DEFAULT_SELECTOR);
 
-  await checkShowBordersState(t, snapshot, showBorders);
-  await checkShowRowLinesState(t, snapshot, showRowLines, showBorders);
-  await checkShowColumnLinesState(t, snapshot, showColumnLines);
-  await checkRowAlternationEnabledState(t, snapshot);
+  checkShowBordersState(snapshot, showBorders);
+  checkShowRowLinesState(snapshot, showRowLines, showBorders);
+  checkShowColumnLinesState(snapshot, showColumnLines);
+  checkRowAlternationEnabledState(snapshot);
 };
 
-const functionalTest = (matrixOptions: MatrixOptions) => {
-  test(`Should have correct applied styles with ${getTestParams(matrixOptions)}`, async (t) => {
-    const dataGrid = new DataGrid(`#${SELECTORS.gridContainer}`);
-    await t
-      .expect(dataGrid.isReady())
-      .ok();
+const functionalTest = (matrixOptions: MatrixOptions): void => {
+  test(`Should have correct applied styles with ${getTestParams(matrixOptions)}`, async ({ page }) => {
+    await createDataGrid(page, matrixOptions);
 
-    await verifyGridStyles(t, matrixOptions);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
+    await expect.poll(() => dataGrid.isReady()).toBe(true);
+
+    await verifyGridStyles(page, matrixOptions);
 
     const rowIdx = matrixOptions.hasMasterDetail ? 8 : 5;
     const colIdx = matrixOptions.hasMasterDetail ? 5 : 4;
@@ -388,11 +386,9 @@ const functionalTest = (matrixOptions: MatrixOptions) => {
       ? dataGrid.getFixedDataRow(rowIdx).getCommandCell(colIdx).element
       : dataGrid.getDataRow(rowIdx).getCommandCell(colIdx).element;
 
-    await t.click(deleteBtn);
+    await deleteBtn.click();
 
-    await verifyGridStyles(t, matrixOptions);
-  }).before(async () => {
-    await createDataGrid(matrixOptions);
+    await verifyGridStyles(page, matrixOptions);
   });
 };
 
@@ -410,15 +406,17 @@ const cases: Partial<MatrixOptions>[] = [
   },
 ];
 
-cases.forEach((overrides) => {
-  const matrixOptions: MatrixOptions = {
-    showColumnLines: false,
-    showRowLines: false,
-    showBorders: false,
-    hasFixedColumn: false,
-    hasMasterDetail: false,
-    ...overrides,
-  };
+test.describe('Grouping Panel - check borders and backgrounds with various options', () => {
+  cases.forEach((overrides) => {
+    const matrixOptions: MatrixOptions = {
+      showColumnLines: false,
+      showRowLines: false,
+      showBorders: false,
+      hasFixedColumn: false,
+      hasMasterDetail: false,
+      ...overrides,
+    };
 
-  functionalTest(matrixOptions);
+    functionalTest(matrixOptions);
+  });
 });

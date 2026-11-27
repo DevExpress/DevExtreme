@@ -7,6 +7,7 @@ import ContextMenu from '../contextMenu';
 import DataRow from './data/row';
 import DataCell from './data/cell';
 import FilterCell from './filter/cell';
+import FilterRow from './filter/row';
 import EditForm from './editForm';
 import Headers from './headers';
 import HeaderPanel from './headers/panel';
@@ -31,6 +32,7 @@ const CLASS = {
   groupRow: 'dx-group-row',
   groupFooterRow: 'group-footer',
   freeSpaceRow: 'dx-freespace-row',
+  footerRow: 'dx-footer-row',
   summaryItem: 'summary-item',
   focusOverlay: 'focus-overlay',
   editFormRow: 'edit-form',
@@ -38,6 +40,8 @@ const CLASS = {
   formButtonsContainer: 'form-buttons-container',
   popupEdit: 'edit-popup',
   adaptiveDetailRow: 'dx-adaptive-detail-row',
+  adaptiveColumnButton: 'adaptive-more',
+  adaptiveCommandCellHidden: 'dx-command-adaptive-hidden',
   errorRow: 'dx-error-row',
   overlayContent: 'dx-overlay-content',
   revertTooltip: 'revert-tooltip',
@@ -142,6 +146,10 @@ export default abstract class GridBase extends GridCore {
     return this.ownElement(`.${gridView}:not(.${fixedGridView}) .${CLASS.freeSpaceRow}`);
   }
 
+  public getFooterRow(): Locator {
+    return this.element.locator(`.${CLASS.footerRow}`);
+  }
+
   public getSummaryItem(index: number): Locator {
     return this.ownElement(`.${this.addWidgetPrefix(CLASS.summaryItem)}`).nth(index);
   }
@@ -175,12 +183,24 @@ export default abstract class GridBase extends GridCore {
     return new AdaptiveDetailRow(this.element.locator(`.${CLASS.adaptiveDetailRow}`).nth(index));
   }
 
+  public getAdaptiveButton(index: number): Locator {
+    return this.element.locator(`.${this.addWidgetPrefix(CLASS.adaptiveColumnButton)}`).nth(index);
+  }
+
+  public async isAdaptiveColumnHidden(): Promise<boolean> {
+    return await this.element.locator(`.${CLASS.adaptiveCommandCellHidden}`).count() > 0;
+  }
+
   public getModifiedCells(): Locator {
     return this.element.locator(`.${CLASS.cellModified}`);
   }
 
   public getErrorRow(): Locator {
     return this.element.locator(`.${CLASS.errorRow}`);
+  }
+
+  public getFilterRow(): FilterRow {
+    return this.getHeaders().getFilterRow();
   }
 
   public getFilterCell(columnIndex: number): FilterCell {
@@ -498,6 +518,10 @@ export default abstract class GridBase extends GridCore {
 
   public async apiCancelEditData(): Promise<void> {
     await this.invoke('cancelEditData');
+  }
+
+  public async apiBeginCustomLoading(messageText: string): Promise<void> {
+    await this.invoke('beginCustomLoading', messageText);
   }
 
   public async apiNavigateToRow(key: unknown): Promise<void> {
