@@ -16,36 +16,3 @@ export const getScreenshotName = (baseName, theme) => {
     ? baseName.replace('.png', `${themePostfix}.png`)
     : `${baseName}${themePostfix}.png`;
 };
-
-export async function testScreenshot(
-  t,
-  takeScreenshot,
-  screenshotName,
-  element,
-  comparisonOptions,
-) {
-  const testTheme = process.env.THEME;
-
-  const themeOptions = {
-    looksSameComparisonOptions: {
-      tolerance: 20,
-      antialiasingTolerance: 20,
-    },
-    textDiffTreshold: 0.2,
-  };
-
-  const finalOptions = {
-    ...comparisonOptions,
-    ...themeOptions,
-  };
-
-  await t
-    .expect(
-      await takeScreenshot(
-        getScreenshotName(screenshotName, testTheme),
-        element,
-        finalOptions,
-      ),
-    )
-    .ok();
-}

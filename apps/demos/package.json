@@ -104,7 +104,6 @@
         "consola": "3.4.2",
         "cookie-parser": "1.4.7",
         "cross-env": "7.0.3",
-        "devextreme-screenshot-comparer": "2.0.17",
         "eslint": "catalog:",
         "eslint-config-devextreme": "catalog:",
         "eslint-plugin-import": "catalog:",
