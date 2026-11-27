@@ -36,6 +36,10 @@ export default class Chat extends Widget {
     return new Scrollable(this.page, this.element.locator(`.${CLASS.scrollable}`));
   }
 
+  public getMessageBubbles(): Locator {
+    return this.element.locator(`.${CLASS.messageBubble}`);
+  }
+
   public getMessage(index: number): Locator {
     return this.element.locator(`.${CLASS.messageBubble}`).nth(index);
   }

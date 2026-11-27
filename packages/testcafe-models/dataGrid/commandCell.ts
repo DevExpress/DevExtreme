@@ -1,6 +1,5 @@
 import FocusableElement from '../internal/focusable';
 import Widget from '../internal/widget';
-import DropDownButton from '../dropDownButton';
 
 const CLASS = {
   commandEdit: 'dx-command-edit',
@@ -12,7 +11,6 @@ const CLASS = {
   focused: 'dx-focused',
   selectCheckBox: 'dx-select-checkbox',
   adaptiveButton: 'dx-datagrid-adaptive-more',
-  aiColumnHeaderButton: 'dx-command-ai-header-button',
   editButton: 'dx-link-edit',
 };
 
@@ -50,9 +48,5 @@ export default class CommandCell extends FocusableElement {
 
   getAdaptiveButton(): Selector {
     return this.element.find(`.${CLASS.adaptiveButton}`);
-  }
-
-  getAIDropDownButton(): DropDownButton {
-    return new DropDownButton(this.element.find(`.${CLASS.aiColumnHeaderButton}`));
   }
 }
