@@ -1,11 +1,10 @@
 import type { Page } from '@playwright/test';
 import { expect, test } from '../../../../fixtures';
-import { AI_INTEGRATION_PAGE_URL } from '../../../../helpers/const';
+import { AI_INTEGRATION_PAGE_URL, DEFAULT_SELECTOR } from '../../../../helpers/const';
 import DataGrid from '../../../../models/dataGrid';
 import type AIAssistantChat from '../../../../models/dataGrid/aiAssistantChat';
 import { typeText } from '../../helpers/typeText';
 import {
-  GRID_SELECTOR,
   HANG,
   baseGrid,
   closeChatAndConfirmAbort,
@@ -41,7 +40,7 @@ const openChatAndSubmit = async (
   page: Page,
   prompt: string,
 ): Promise<{ dataGrid: DataGrid; aiChat: AIAssistantChat }> => {
-  const dataGrid = new DataGrid(page, GRID_SELECTOR);
+  const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
   await expect.poll(() => dataGrid.isReady()).toBe(true);
 
@@ -168,7 +167,7 @@ test.describe('AI Assistant - Interruption', () => {
     await resolveAIRequest(page);
     await expect.poll(() => wasAIRequestResolved(page)).toBe(true);
 
-    await expect(page.locator('#container .dx-datagrid')).not.toBeAttached();
+    await expect(page.locator(`${DEFAULT_SELECTOR} .dx-datagrid`)).not.toBeAttached();
     await expect(dataGrid.getAIAssistantChat().element).not.toBeAttached();
 
     expect(consoleErrors).toEqual([]);
@@ -188,7 +187,7 @@ test.describe('AI Assistant - Interruption', () => {
 
     await disposeGrid(page);
 
-    await expect(page.locator('#container .dx-datagrid')).not.toBeAttached();
+    await expect(page.locator(`${DEFAULT_SELECTOR} .dx-datagrid`)).not.toBeAttached();
     await expect(dataGrid.getAIAssistantChat().element).not.toBeAttached();
 
     expect(consoleErrors).toEqual([]);

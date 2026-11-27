@@ -1,12 +1,11 @@
 /* eslint-disable no-underscore-dangle */
 import type { Page } from '@playwright/test';
 import { expect, test } from '../../../../fixtures';
-import { AI_INTEGRATION_PAGE_URL } from '../../../../helpers/const';
+import { AI_INTEGRATION_PAGE_URL, DEFAULT_SELECTOR } from '../../../../helpers/const';
 import DataGrid from '../../../../models/dataGrid';
 import type AIAssistantChat from '../../../../models/dataGrid/aiAssistantChat';
 import { typeText } from '../../helpers/typeText';
 import {
-  GRID_SELECTOR,
   baseGrid,
   createGridWithAIAssistant,
   getRequestColumnNames,
@@ -21,7 +20,7 @@ test.use({ containerUrl: AI_INTEGRATION_PAGE_URL });
 const sortNameAsc = { actions: [{ name: 'sorting', args: { dataField: 'name', sortOrder: 'asc' } }] };
 
 const openChat = async (page: Page): Promise<{ dataGrid: DataGrid; aiChat: AIAssistantChat }> => {
-  const dataGrid = new DataGrid(page, GRID_SELECTOR);
+  const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
   await expect.poll(() => dataGrid.isReady()).toBe(true);
 

@@ -1,12 +1,11 @@
 import type { Page } from '@playwright/test';
 import { expect, test } from '../../../../fixtures';
-import { AI_INTEGRATION_PAGE_URL } from '../../../../helpers/const';
+import { AI_INTEGRATION_PAGE_URL, DEFAULT_SELECTOR } from '../../../../helpers/const';
 import DataGrid from '../../../../models/dataGrid';
 import type AIAssistantChat from '../../../../models/dataGrid/aiAssistantChat';
 import { typeText } from '../../helpers/typeText';
 import {
   FAIL,
-  GRID_SELECTOR,
   HANG,
   baseGrid as gridDefaults,
   createGridWithAIAssistant,
@@ -33,7 +32,7 @@ const openChatAndSubmit = async (
   page: Page,
   prompt: string,
 ): Promise<{ dataGrid: DataGrid; aiChat: AIAssistantChat }> => {
-  const dataGrid = new DataGrid(page, GRID_SELECTOR);
+  const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
   await expect.poll(() => dataGrid.isReady()).toBe(true);
 
@@ -56,7 +55,7 @@ test.describe('AI Assistant - Chat Controls State', () => {
       { actions: [{ name: 'grouping', args: { dataField: 'name', groupIndex: 0 } }] },
     ]);
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 

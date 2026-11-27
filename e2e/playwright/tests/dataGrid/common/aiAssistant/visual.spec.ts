@@ -9,8 +9,6 @@ import { typeText } from '../../helpers/typeText';
 
 test.use({ containerUrl: AI_INTEGRATION_PAGE_URL });
 
-const DATA_GRID_SELECTOR = '#container';
-
 // The stub messages for the chat's message states; without them the chat starts empty. They carry
 // the grid's own AI message fields (status, commands), which the public Message type lacks.
 const createGrid = (page: Page, messages?: unknown[]): Promise<void> => createWidget(
@@ -222,7 +220,7 @@ test.describe('Ai Assistant.Visual', () => {
   }, async ({ page }) => {
     await createGrid(page);
 
-    const dataGrid = new DataGrid(page, DATA_GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
@@ -236,7 +234,7 @@ test.describe('Ai Assistant.Visual', () => {
   test('AI Assistant popup - pending state', async ({ page }) => {
     await createGrid(page);
 
-    const dataGrid = new DataGrid(page, DATA_GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
@@ -260,7 +258,7 @@ test.describe('Ai Assistant.Visual', () => {
     test(title, async ({ page }) => {
       await createGrid(page, messages);
 
-      const dataGrid = new DataGrid(page, DATA_GRID_SELECTOR);
+      const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
       await expect.poll(() => dataGrid.isReady()).toBe(true);
 

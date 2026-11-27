@@ -1,9 +1,8 @@
 import { expect, test } from '../../../../fixtures';
-import { AI_INTEGRATION_PAGE_URL } from '../../../../helpers/const';
+import { AI_INTEGRATION_PAGE_URL, DEFAULT_SELECTOR } from '../../../../helpers/const';
 import DataGrid from '../../../../models/dataGrid';
 import { typeText } from '../../helpers/typeText';
 import {
-  GRID_SELECTOR,
   createGridWithAIAssistant,
   createRemoteGridWithAIAssistant,
   threeRows,
@@ -29,7 +28,7 @@ test.describe('AI Assistant - Commands', () => {
       { actions: [{ name: 'sorting', args: { dataField: 'name', sortOrder: 'asc' } }] },
     ]);
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
@@ -60,7 +59,7 @@ test.describe('AI Assistant - Commands', () => {
       { actions: [{ name: 'clearSorting', args: {} }] },
     ]);
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
@@ -92,7 +91,7 @@ test.describe('AI Assistant - Commands', () => {
       },
     ]);
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
@@ -126,7 +125,7 @@ test.describe('AI Assistant - Commands', () => {
       },
     ]);
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
@@ -154,7 +153,7 @@ test.describe('AI Assistant - Commands', () => {
       { actions: [{ name: 'sorting', args: { dataField: 'value', sortOrder: 'desc' } }] },
     ]);
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
@@ -188,7 +187,7 @@ test.describe('AI Assistant - Commands', () => {
       ],
     );
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
@@ -219,7 +218,7 @@ test.describe('AI Assistant - Commands', () => {
       { actions: [{ name: 'clearGrouping', args: {} }] },
     ]);
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
@@ -268,7 +267,7 @@ test.describe('AI Assistant - Commands', () => {
       { actions: [{ name: 'clearFilter', args: {} }] },
     ]);
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
@@ -308,7 +307,7 @@ test.describe('AI Assistant - Commands', () => {
       { actions: [{ name: 'pageIndex', args: { pageIndex: 1 } }] },
     ]);
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
@@ -348,7 +347,7 @@ test.describe('AI Assistant - Commands', () => {
       { actions: [{ name: 'sorting', args: { dataField: 'name', sortOrder: 'asc' } }] },
     ]);
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
@@ -391,7 +390,7 @@ test.describe('AI Assistant - Commands', () => {
       },
     ]);
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
@@ -420,7 +419,7 @@ test.describe('AI Assistant - Commands', () => {
       { actions: [{ name: 'selectAll', args: {} }] },
     ]);
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
@@ -447,7 +446,7 @@ test.describe('AI Assistant - Commands', () => {
       { actions: [{ name: 'sorting', args: { dataField: 'name', sortOrder: 'asc' } }] },
     ]);
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
@@ -476,7 +475,7 @@ test.describe('AI Assistant - Commands', () => {
       { actions: [{ name: 'selectionByIndexes', args: { indexes: [1], mode: 'select', scope: 'allPages' } }] },
     ]);
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
@@ -504,7 +503,7 @@ test.describe('AI Assistant - Commands', () => {
       { actions: [{ name: 'selectionByIndexes', args: { indexes: [5], mode: 'select', scope: 'allPages' } }] },
     ]);
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
@@ -536,7 +535,7 @@ test.describe('AI Assistant - Commands', () => {
       { actions: [{ name: 'pageIndex', args: { pageIndex: 99 } }] },
     ]);
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
@@ -568,7 +567,7 @@ test.describe('AI Assistant - Commands', () => {
       { actions: [{ name: 'grouping', args: { dataField: 'name', groupIndex: 0 } }] },
     ]);
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
@@ -600,7 +599,7 @@ test.describe('AI Assistant - Commands', () => {
       { actions: [{ name: 'pageSize', args: { pageSize: 200 } }] },
     ]);
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
@@ -630,7 +629,7 @@ test.describe('AI Assistant - Commands', () => {
       { actions: [{ name: 'sorting', args: { dataField: 'name', sortOrder: 'asc' } }] },
     ]);
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
@@ -660,7 +659,7 @@ test.describe('AI Assistant - Commands', () => {
       { actions: [{ name: 'columnsReorder', args: { dataField: 'name', visibleIndex: 0 } }] },
     ]);
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
@@ -690,7 +689,7 @@ test.describe('AI Assistant - Commands', () => {
       { actions: [{ name: 'columnsVisibility', args: { dataField: 'name', visible: false } }] },
     ]);
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
@@ -718,7 +717,7 @@ test.describe('AI Assistant - Commands', () => {
       { actions: [{ name: 'columnsVisibility', args: { dataField: 'name', visible: true } }] },
     ]);
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
@@ -746,7 +745,7 @@ test.describe('AI Assistant - Commands', () => {
       { actions: [{ name: 'sorting', args: { dataField: 'name', sortOrder: 'asc' } }] },
     ]);
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
@@ -788,7 +787,7 @@ test.describe('AI Assistant - Commands', () => {
       },
     ]);
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
@@ -819,7 +818,7 @@ test.describe('AI Assistant - Commands', () => {
       { actions: [{ name: 'sorting', args: { dataField: 'name', sortOrder: 'asc' } }] },
     ]);
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
@@ -846,7 +845,7 @@ test.describe('AI Assistant - Commands', () => {
       { actions: [{ name: 'clearSorting', args: {} }] },
     ]);
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
@@ -872,7 +871,7 @@ test.describe('AI Assistant - Commands', () => {
       { actions: [{ name: 'clearFilter', args: {} }] },
     ]);
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
@@ -900,7 +899,7 @@ test.describe('AI Assistant - Commands', () => {
       { actions: [{ name: 'clearSelection', args: {} }] },
     ]);
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
@@ -928,7 +927,7 @@ test.describe('AI Assistant - Commands', () => {
       { actions: [{ name: 'deselectAll', args: {} }] },
     ]);
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
@@ -960,7 +959,7 @@ test.describe('AI Assistant - Commands', () => {
       { actions: [{ name: 'columnsVisibility', args: { dataField: 'value', visible: false } }] },
     ]);
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 

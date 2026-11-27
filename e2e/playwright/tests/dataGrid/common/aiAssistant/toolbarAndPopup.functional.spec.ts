@@ -1,10 +1,9 @@
 import { expect, test } from '../../../../fixtures';
-import { AI_INTEGRATION_PAGE_URL } from '../../../../helpers/const';
+import { AI_INTEGRATION_PAGE_URL, DEFAULT_SELECTOR } from '../../../../helpers/const';
 import { createWidget } from '../../../../helpers/createWidget';
 import DataGrid from '../../../../models/dataGrid';
 import { typeText } from '../../helpers/typeText';
 import {
-  GRID_SELECTOR,
   HANG,
   baseGrid,
   createGridWithAIAssistant,
@@ -32,7 +31,7 @@ test.describe('AI Assistant - Toolbar & Popup', () => {
   test('Toolbar button should be visible when aiAssistant.enabled is true', async ({ page }) => {
     await createGridWithAIAssistant(page, { ...baseGrid, dataSource: threeRows }, [HANG]);
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
@@ -42,7 +41,7 @@ test.describe('AI Assistant - Toolbar & Popup', () => {
   test('Toolbar button should be hidden when aiAssistant is not configured', async ({ page }) => {
     await createWidget(page, 'dxDataGrid', gridWithoutAssistant);
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
@@ -52,7 +51,7 @@ test.describe('AI Assistant - Toolbar & Popup', () => {
   test('Popup should open on toolbar button click without changing grid state', async ({ page }) => {
     await createGridWithAIAssistant(page, { ...baseGrid, dataSource: threeRows }, [HANG]);
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
@@ -78,7 +77,7 @@ test.describe('AI Assistant - Toolbar & Popup', () => {
       [sortByNameResponse],
     );
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
@@ -106,7 +105,7 @@ test.describe('AI Assistant - Toolbar & Popup', () => {
       { title: 'My Custom Assistant' },
     );
 
-    const dataGrid = new DataGrid(page, GRID_SELECTOR);
+    const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
     await expect.poll(() => dataGrid.isReady()).toBe(true);
 
@@ -124,7 +123,7 @@ test.describe('AI Assistant - Toolbar & Popup', () => {
     test(title, async ({ page }) => {
       await createGridWithAIAssistant(page, { ...baseGrid, dataSource: threeRows }, [HANG]);
 
-      const dataGrid = new DataGrid(page, GRID_SELECTOR);
+      const dataGrid = new DataGrid(page, DEFAULT_SELECTOR);
 
       await expect.poll(() => dataGrid.isReady()).toBe(true);
 

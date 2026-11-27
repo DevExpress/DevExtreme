@@ -4,8 +4,6 @@ import { expect } from '../../../../fixtures';
 import { createWidget } from '../../../../helpers/createWidget';
 import type AIAssistantChat from '../../../../models/dataGrid/aiAssistantChat';
 
-export const GRID_SELECTOR = '#container';
-
 export const threeRows = [
   { id: 1, name: 'Alice', value: 30 },
   { id: 2, name: 'Bob', value: 20 },
