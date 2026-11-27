@@ -1,5 +1,5 @@
 import sh from 'shelljs';
-import { updateVersion, updateVersionJs } from './common/version';
+import { updateVersion, updateVersionFonts, updateVersionJs } from './common/version';
 
 const version = process.argv[2];
 
@@ -12,4 +12,4 @@ sh.set('-e');
 
 updateVersionJs(version);
 updateVersion(version);
-sh.exec('pnpm --filter devextreme-scss run icons:version');
+updateVersionFonts(version);
