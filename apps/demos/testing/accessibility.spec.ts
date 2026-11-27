@@ -3,7 +3,7 @@ import { join } from 'path';
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 import type { Page } from '@playwright/test';
-import { FRAMEWORKS } from '../utils/visual-tests/matrix-test-core';
+import { FRAMEWORKS, shouldSkipDemo } from '../utils/visual-tests/matrix-test-core';
 import { isFluent, isMaterial } from '../utils/visual-tests/helpers/theme-utils';
 import { createMdReport } from '../utils/axe-reporter/reporter';
 import { mockApi } from '../utils/visual-tests/playwright/api-mocks';
@@ -14,6 +14,7 @@ import {
   trackPageActivity,
 } from '../utils/visual-tests/playwright/demo-page';
 import { getDemos, loadDemo } from '../utils/visual-tests/playwright/demos';
+import { skippedTests } from './skipped-tests';
 
 const COLOR_CONTRAST_RULE = 'color-contrast';
 
@@ -139,12 +140,18 @@ test.describe(FRAMEWORKS.jquery, () => {
   getDemos(FRAMEWORKS.jquery).forEach((demo) => {
     const ignoredRules = getIgnoredRules(demo.testName);
 
+    // The screenshot tests skip these demos: their map provider cannot create a WebGL context on the
+    // CI agents. The rest of the demo is still checked.
+    const hasPageErrors = shouldSkipDemo(FRAMEWORKS.jquery, demo.widgetName, demo.demoName, skippedTests);
+
     if (isColorContrastOnly && ignoredRules.includes(COLOR_CONTRAST_RULE)) { return; }
 
     test(demo.testName, async ({ page }) => {
       const pageErrors = await loadDemo(page, demo);
 
-      expect(pageErrors, 'uncaught errors in the page').toEqual([]);
+      if (!hasPageErrors) {
+        expect(pageErrors, 'uncaught errors in the page').toEqual([]);
+      }
       expect(await getPageTheme(page), 'theme of the page').toBe(THEME);
 
       const violations = await findViolations(page, demo.testName, ignoredRules, isColorContrastOnly);
