@@ -1,7 +1,12 @@
 import type { Locator } from '@playwright/test';
 import { expect } from '@playwright/test';
+import DropDownButton from '../../dropDownButton';
 import GridFocusableElement from '../../gridCore/focusable';
 import { expectClass } from '../../internal/classMatcher';
+
+const CLASS = {
+  aiHeaderButton: 'dx-command-ai-header-button',
+};
 
 // The grid prefixes the class with its name, which a cell doesn't know.
 const HIDDEN_COLUMN_CLASS = 'dx-(datagrid|treelist)-hidden-column';
@@ -21,5 +26,9 @@ export default class HeaderCell extends GridFocusableElement {
 
   public getFilterIcon(): Locator {
     return this.element.locator('.dx-column-indicators > .dx-header-filter');
+  }
+
+  public getAIHeaderButton(): DropDownButton {
+    return new DropDownButton(this.element.page(), this.element.locator(`.${CLASS.aiHeaderButton}`));
   }
 }

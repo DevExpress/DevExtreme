@@ -15,6 +15,7 @@ import MasterRow from './masterRow';
 import GroupRow from './groupRow';
 import Overlay from './overlay';
 import AIAssistantChat from './aiAssistantChat';
+import AIPromptEditor from './aiPromptEditor';
 
 const CLASS = {
   ...CLASS_BASE,
@@ -52,6 +53,8 @@ const CLASS = {
   aiAssistantButton: 'ai-assistant-button',
   aiAssistantConfirmDialog: 'ai-assistant-confirm-dialog',
   aiChat: 'dx-ai-chat',
+  aiPromptEditor: 'dx-ai-prompt-editor',
+  scrollContainer: 'scroll-container',
 };
 
 const E2E_ATTRIBUTES = {
@@ -83,6 +86,10 @@ export default abstract class GridBase extends GridCore {
 
   public getRowsView(): Locator {
     return this.ownElement(`.${this.addWidgetPrefix(CLASS.rowsView)}`);
+  }
+
+  public getHeadersScrollContainer(): Locator {
+    return this.getHeaders().element.locator(`.${this.addWidgetPrefix(CLASS.scrollContainer)}`);
   }
 
   public getDataRow(index: number): DataRow {
@@ -261,6 +268,14 @@ export default abstract class GridBase extends GridCore {
       wrapper,
       popup.or(wrapper),
       this.addWidgetPrefix(CLASS.aiAssistantConfirmDialog),
+    );
+  }
+
+  // The popup widget, not its wrapper in the body, which carries the same class.
+  public getAIPromptEditor(): AIPromptEditor {
+    return new AIPromptEditor(
+      this.page,
+      this.element.locator(`.${CLASS.aiPromptEditor}.${CLASS.popup}`),
     );
   }
 
@@ -466,8 +481,14 @@ export default abstract class GridBase extends GridCore {
     }, { widgetName: this.getName(), row: rowIndex, column: columnIndex });
   }
 
-  public async apiPageIndex(pageIndex: number): Promise<void> {
-    await this.invoke('pageIndex', pageIndex);
+  public apiPageIndex(): Promise<number>;
+
+  public apiPageIndex(pageIndex: number): Promise<void>;
+
+  public apiPageIndex(pageIndex?: number): Promise<unknown> {
+    return pageIndex === undefined
+      ? this.invoke('pageIndex')
+      : this.invoke('pageIndex', pageIndex);
   }
 
   public apiTotalCount(): Promise<number> {

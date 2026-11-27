@@ -1,6 +1,7 @@
 import type { Locator, Page } from '@playwright/test';
 import type { WidgetName } from '../types';
 import Widget from '../internal/widget';
+import Overlay from '../overlay';
 import Pagination from '../pagination';
 import TextBox from '../textBox';
 import ColumnChooser from './columnChooser';
@@ -10,6 +11,7 @@ export const CLASS = {
   filterPanel: 'filter-panel',
   columnChooser: 'column-chooser',
   columnChooserButton: 'column-chooser-button',
+  loadPanel: 'dx-loadpanel',
   pager: 'pager',
   pagination: 'dx-pagination',
   searchBox: 'dx-searchbox',
@@ -60,6 +62,10 @@ export default abstract class GridCore extends Widget {
       this.element.locator(`.${this.addWidgetPrefix(CLASS.filterPanel, true)}`),
       this.getCompatibilityName(),
     );
+  }
+
+  public getLoadPanel(): Overlay {
+    return new Overlay(this.page, this.element.locator(`.${CLASS.loadPanel}`));
   }
 
   public getPager(): Pagination {
