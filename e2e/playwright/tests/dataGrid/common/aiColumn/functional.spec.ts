@@ -8,7 +8,7 @@ import { typeText } from '../../helpers/typeText';
 
 test.use({ containerUrl: AI_INTEGRATION_PAGE_URL });
 
-const EMPTY_CELL_TEXT = ' ';
+const EMPTY_CELL_TEXT = '\u00A0';
 const DROPDOWNMENU_PROMPT_EDITOR_INDEX = 0;
 const DROPDOWNMENU_REGENERATE_INDEX = 1;
 const DROPDOWNMENU_CLEAR_DATA_INDEX = 2;

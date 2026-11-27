@@ -122,8 +122,8 @@ test.describe('Ai Column.Virtual Scrolling.Functional', () => {
       await dataGrid.scrollTo({ top: 1000 });
 
       await expect.poll(() => dataGrid.getScrollTop()).toBe(1000);
-      await expect.poll(() => dataGrid.apiPageIndex()).toBe(pageIndexAfterScroll);
       await expect(dataGrid.getDataCell(20, 0).element).toHaveText('21');
+      await expect.poll(() => dataGrid.apiPageIndex()).toBe(pageIndexAfterScroll);
       await expect.poll(() => isAIRequestPending(page)).toBe(true);
       await expect.poll(() => dataGrid.getLoadPanel().isVisible()).toBe(true);
 

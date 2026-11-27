@@ -10,7 +10,6 @@ const CLASS = {
   stateDisabled: 'dx-state-disabled',
   checkbox: 'dx-checkbox',
   treeViewItem: 'dx-treeview-item',
-  treeViewItemContent: 'dx-treeview-item-content',
   treeView: 'dx-treeview',
   itemContent: 'dx-item-content',
   itemContentToolbar: 'dx-toolbar-item-content',
@@ -57,10 +56,6 @@ export default class ColumnChooser extends FocusableElement {
 
   isCheckboxDisabled(nth = 0): Promise<boolean> {
     return this.getCheckbox(nth).hasClass(CLASS.stateDisabled);
-  }
-
-  isColumnDisabled(index = 0): Promise<boolean> {
-    return this.getColumn(index).find(`.${CLASS.treeViewItemContent}`).hasClass(CLASS.stateDisabled);
   }
 
   getColumnsCount(): Promise<number> {
