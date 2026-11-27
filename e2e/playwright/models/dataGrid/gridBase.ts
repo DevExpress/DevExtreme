@@ -4,9 +4,11 @@ import GridCore, { CLASS as CLASS_BASE } from '../gridCore';
 import Toolbar from '../toolbar';
 import Popup from '../popup';
 import ContextMenu from '../contextMenu';
+import DateBox from '../dateBox';
 import DataRow from './data/row';
 import DataCell from './data/cell';
 import FilterCell from './filter/cell';
+import FilterRow from './filter/row';
 import EditForm from './editForm';
 import Headers from './headers';
 import HeaderPanel from './headers/panel';
@@ -22,7 +24,11 @@ const CLASS = {
   headers: 'headers',
   headerPanel: 'header-panel',
   rowsView: 'rowsview',
+  row: 'dx-row',
   dataRow: 'dx-data-row',
+  filterRangeOverlay: 'filter-range-overlay',
+  filterRangeStartEditor: 'filter-range-start',
+  filterRangeEndEditor: 'filter-range-end',
   focusedRow: 'dx-row-focused',
   gridView: 'content',
   fixedGridView: 'content-fixed',
@@ -31,6 +37,7 @@ const CLASS = {
   groupRow: 'dx-group-row',
   groupFooterRow: 'group-footer',
   freeSpaceRow: 'dx-freespace-row',
+  footerRow: 'dx-footer-row',
   summaryItem: 'summary-item',
   focusOverlay: 'focus-overlay',
   editFormRow: 'edit-form',
@@ -38,6 +45,8 @@ const CLASS = {
   formButtonsContainer: 'form-buttons-container',
   popupEdit: 'edit-popup',
   adaptiveDetailRow: 'dx-adaptive-detail-row',
+  adaptiveColumnButton: 'adaptive-more',
+  adaptiveCommandCellHidden: 'dx-command-adaptive-hidden',
   errorRow: 'dx-error-row',
   overlayContent: 'dx-overlay-content',
   revertTooltip: 'revert-tooltip',
@@ -81,6 +90,11 @@ export default abstract class GridBase extends GridCore {
     return this.element.locator(`${selector}:not(:scope .${CLASS.masterDetailRow} *)`);
   }
 
+  // The grid's own container, not the filter menus inside it, which carry the same class.
+  public getContainer(): Locator {
+    return this.element.locator(`:scope > .${this.addWidgetPrefix()}`);
+  }
+
   public getHeaders(): Headers {
     return new Headers(this.ownElement(`.${this.addWidgetPrefix(CLASS.headers)}`), this.getName());
   }
@@ -91,6 +105,14 @@ export default abstract class GridBase extends GridCore {
 
   public getHeadersScrollContainer(): Locator {
     return this.getHeaders().element.locator(`.${this.addWidgetPrefix(CLASS.scrollContainer)}`);
+  }
+
+  /*
+    getRows() returns double collection of rows (two tables) when
+    columnFixing.legacyMode = true AND DataGrid has fixed columns
+  */
+  public getRows(): Locator {
+    return this.getRowsView().locator(`.${CLASS.row}`);
   }
 
   public getDataRow(index: number): DataRow {
@@ -142,6 +164,10 @@ export default abstract class GridBase extends GridCore {
     return this.ownElement(`.${gridView}:not(.${fixedGridView}) .${CLASS.freeSpaceRow}`);
   }
 
+  public getFooterRow(): Locator {
+    return this.element.locator(`.${CLASS.footerRow}`);
+  }
+
   public getSummaryItem(index: number): Locator {
     return this.ownElement(`.${this.addWidgetPrefix(CLASS.summaryItem)}`).nth(index);
   }
@@ -175,6 +201,14 @@ export default abstract class GridBase extends GridCore {
     return new AdaptiveDetailRow(this.element.locator(`.${CLASS.adaptiveDetailRow}`).nth(index));
   }
 
+  public getAdaptiveButton(index: number): Locator {
+    return this.element.locator(`.${this.addWidgetPrefix(CLASS.adaptiveColumnButton)}`).nth(index);
+  }
+
+  public async isAdaptiveColumnHidden(): Promise<boolean> {
+    return await this.element.locator(`.${CLASS.adaptiveCommandCellHidden}`).count() > 0;
+  }
+
   public getModifiedCells(): Locator {
     return this.element.locator(`.${CLASS.cellModified}`);
   }
@@ -183,8 +217,24 @@ export default abstract class GridBase extends GridCore {
     return this.element.locator(`.${CLASS.errorRow}`);
   }
 
+  public getFilterRow(): FilterRow {
+    return this.getHeaders().getFilterRow();
+  }
+
   public getFilterCell(columnIndex: number): FilterCell {
     return this.getHeaders().getFilterRow().getFilterCell(columnIndex);
+  }
+
+  public getFilterRangeOverlay(): Locator {
+    return this.getHeaders().element.locator(`:scope > .${this.addWidgetPrefix(CLASS.filterRangeOverlay)}`);
+  }
+
+  public getFilterRangeStartEditor(): DateBox {
+    return new DateBox(this.page, this.body.locator(`.${this.addWidgetPrefix(CLASS.filterRangeStartEditor)}`));
+  }
+
+  public getFilterRangeEndEditor(): DateBox {
+    return new DateBox(this.page, this.body.locator(`.${this.addWidgetPrefix(CLASS.filterRangeEndEditor)}`));
   }
 
   public getFilterEditor<T>(
@@ -498,6 +548,10 @@ export default abstract class GridBase extends GridCore {
 
   public async apiCancelEditData(): Promise<void> {
     await this.invoke('cancelEditData');
+  }
+
+  public async apiBeginCustomLoading(messageText: string): Promise<void> {
+    await this.invoke('beginCustomLoading', messageText);
   }
 
   public async apiNavigateToRow(key: unknown): Promise<void> {

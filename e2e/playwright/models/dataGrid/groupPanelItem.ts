@@ -1,3 +1,12 @@
+import type { Locator } from '@playwright/test';
 import GridElement from '../gridCore/element';
 
-export default class GroupPanelItem extends GridElement {}
+const CLASS = {
+  filterButton: 'dx-header-filter',
+};
+
+export default class GroupPanelItem extends GridElement {
+  public getFilterButton(): Locator {
+    return this.element.locator(`.${CLASS.filterButton}`);
+  }
+}

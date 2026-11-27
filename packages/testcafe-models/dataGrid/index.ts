@@ -1,12 +1,10 @@
-import { ClientFunction, Selector } from 'testcafe';
+import { ClientFunction } from 'testcafe';
 import DataGridInstance from 'devextreme/ui/data_grid';
 import type { SelectionSensitivity } from 'devextreme/ui/data_grid';
 import Toolbar from '../toolbar';
 import DataRow from './data/row';
 import GroupRow from './groupRow';
-import FilterRow from './filter/row';
 import FilterCell from './filter/cell';
-import EditForm from './editForm';
 import HeaderPanel from './headers/panel';
 import DataCell from './data/cell';
 import Headers from './headers';
@@ -19,8 +17,6 @@ import MasterRow from './masterRow';
 import AdaptiveDetailRow from './adaptiveDetailRow';
 import ColumnChooser from './columnChooser';
 import TextBox from '../textBox';
-import DateBox from '../dateBox';
-import NumberBox from '../numberBox';
 import { GroupPanel } from './groupPanel';
 import GridCore from '../gridCore';
 import { CLASS as CLASS_BASE } from '../gridCore';
@@ -40,14 +36,8 @@ export const CLASS = {
   columnChooser: 'column-chooser',
   focusedRow: 'dx-row-focused',
   filterRow: 'filter-row',
-  filterRangeOverlay: 'filter-range-overlay',
-  filterRangeStartEditor: 'filter-range-start',
-  filterRangeEndEditor: 'filter-range-end',
   focusOverlay: 'focus-overlay',
-  editFormRow: 'edit-form',
   button: 'dx-button',
-  formButtonsContainer: 'form-buttons-container',
-  popupEdit: 'edit-popup',
   masterDetailRow: 'dx-master-detail-row',
   adaptiveDetailRow: 'dx-adaptive-detail-row',
   adaptiveCommandCellHidden: 'dx-command-adaptive-hidden',
@@ -59,11 +49,8 @@ export const CLASS = {
   groupFooterRow: 'group-footer',
   freeSpaceRow: 'dx-freespace-row',
 
-  overlayContent: 'dx-overlay-content',
   overlayWrapper: 'dx-overlay-wrapper',
   loadPanel: 'dx-loadpanel',
-  revertTooltip: 'revert-tooltip',
-  invalidMessage: 'invalid-message',
 
   toolbar: 'dx-toolbar',
   contextMenu: 'dx-context-menu',
@@ -74,7 +61,6 @@ export const CLASS = {
   fieldItemContent: 'dx-field-item-content',
   textEditorInput: 'dx-texteditor-input',
   commandDrag: 'dx-command-drag',
-  dialogWrapper: 'dx-dialog-wrapper',
   scrollableContainer: 'dx-scrollable-container',
   scrollContainer: 'dx-datagrid-scroll-container',
   columnsSeparator: 'dx-datagrid-columns-separator',
@@ -262,39 +248,12 @@ export default class DataGrid extends GridCore {
     return this.element.find(`.${CLASS.errorRow}`);
   }
 
-  getFilterRow(): FilterRow {
-    return this.getHeaders().getFilterRow();
-  }
-
   getFilterCell(columnIndex: number): FilterCell {
     return this.getHeaders().getFilterRow().getFilterCell(columnIndex);
   }
 
-  getFilterRangeOverlay(): Selector {
-    return this.getHeadersContainer().child(`.${this.addWidgetPrefix(CLASS.filterRangeOverlay)}`);
-  }
-
-  getFilterRangeStartEditor(): DateBox;
-  getFilterRangeStartEditor(EditorType?: typeof DateBox | typeof NumberBox): DateBox | NumberBox {
-    const Editor = EditorType ?? DateBox;
-    return new Editor(this.body.find(`.${this.addWidgetPrefix(CLASS.filterRangeStartEditor)}`));
-  }
-
-  getFilterRangeEndEditor(): DateBox;
-  getFilterRangeEndEditor(EditorType?: typeof DateBox | typeof NumberBox): DateBox | NumberBox {
-    const Editor = EditorType ?? DateBox;
-    return new Editor(this.body.find(`.${this.addWidgetPrefix(CLASS.filterRangeEndEditor)}`));
-  }
-
   getFocusOverlay() {
     return this.body.find(`.${this.addWidgetPrefix(CLASS.focusOverlay)}`);
-  }
-
-  getFilterEditor<T>(
-    columnIndex: number,
-    EditorType: new (mainElement: Selector) => T,
-  ): T {
-    return this.getHeaders().getFilterRow().getFilterCell(columnIndex).getEditor<T>(EditorType);
   }
 
   getSearchBox(): TextBox {
@@ -313,20 +272,8 @@ export default class DataGrid extends GridCore {
     return this.body.find('[aria-label=\'Yes\']');
   }
 
-  getDialog(): Selector {
-    return this.body.find(`.${CLASS.dialogWrapper}`);
-  }
-
   getCancelDeletionButton(): Selector {
     return this.body.find('[aria-label=\'No\']');
-  }
-
-  getRevertTooltip(): Selector {
-    return this.body.find(`.${this.addWidgetPrefix(CLASS.revertTooltip)}`);
-  }
-
-  getInvalidMessageTooltip(): Selector {
-    return this.body.find(`.dx-${CLASS.invalidMessage}.dx-${CLASS.invalidMessage}-always.${this.addWidgetPrefix(CLASS.invalidMessage)}`);
   }
 
   getFooterRow(): Selector {
@@ -446,21 +393,6 @@ export default class DataGrid extends GridCore {
       () => (getInstance() as any).getView('rowsView').getScrollbarWidth(isHorizontal),
       { dependencies: { getInstance, isHorizontal } },
     )();
-  }
-
-  getEditForm(): EditForm {
-    const editFormRowClass = this.addWidgetPrefix(CLASS.editFormRow);
-    const element = this.element ? this.element.find(`.${editFormRowClass}`) : Selector(`.${editFormRowClass}`);
-    const buttons = element.find(`.${this.addWidgetPrefix(CLASS.formButtonsContainer)} .${CLASS.button}`);
-
-    return new EditForm(element, buttons);
-  }
-
-  getPopupEditForm(): EditForm {
-    const element = Selector(`.${this.addWidgetPrefix(CLASS.popupEdit)} .${CLASS.overlayContent}`);
-    const buttons = element.find(`.${CLASS.toolbar} .${CLASS.button}`);
-
-    return new EditForm(element, buttons);
   }
 
   getToolbar(): Toolbar {
@@ -638,16 +570,6 @@ export default class DataGrid extends GridCore {
           getInstance,
         },
       },
-    )();
-  }
-
-  apiBeginCustomLoading(messageText: string): Promise<void> {
-    const { getInstance } = this;
-    return ClientFunction(
-      () => {
-        (getInstance() as DataGridInstance).beginCustomLoading(messageText);
-      },
-      { dependencies: { getInstance, messageText } },
     )();
   }
 

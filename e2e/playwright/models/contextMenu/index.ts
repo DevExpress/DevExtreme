@@ -1,4 +1,5 @@
 import type { Locator, Page } from '@playwright/test';
+import { expect } from '@playwright/test';
 import type { WidgetName } from '../types';
 import Widget from '../internal/widget';
 import Overlay from '../overlay';
@@ -33,6 +34,20 @@ export default class ContextMenu extends Widget {
         .locator(`:scope > .${CLASS.itemContent} > .${CLASS.itemText}`)
         .getByText(text, { exact: true }),
     });
+  }
+
+  // A grid renders its menu into an overlay content that carries the grid's class, and that content
+  // is the element here: the menu is open while it is on screen.
+  public async expectOpened(present = true): Promise<void> {
+    await (present ? expect(this.element) : expect(this.element).not).toBeVisible();
+  }
+
+  public getItemByIndex(index: number): Locator {
+    return this.items.nth(index);
+  }
+
+  public getItemCount(): Promise<number> {
+    return this.items.count();
   }
 
   public async show(): Promise<void> {

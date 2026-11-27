@@ -83,6 +83,14 @@ export default abstract class GridCore extends Widget {
     return this.invoke('isReady');
   }
 
+  public async apiFilter(filter: unknown[]): Promise<void> {
+    await this.invoke('filter', filter);
+  }
+
+  public async apiClearFilter(): Promise<void> {
+    await this.invoke('clearFilter');
+  }
+
   public async apiShowColumnChooser(): Promise<void> {
     await this.invoke('showColumnChooser');
   }
