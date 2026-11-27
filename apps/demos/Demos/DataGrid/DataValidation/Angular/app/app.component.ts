@@ -2,6 +2,7 @@ import { bootstrapApplication } from '@angular/platform-browser';
 import { Component, enableProdMode, inject } from '@angular/core';
 import { HttpClient, provideHttpClient, withFetch } from '@angular/common/http';
 import { DxDataGridModule } from 'devextreme-angular';
+import type { ValidationCallbackData, ValidationRule } from 'devextreme-angular/common';
 import * as AspNetData from 'devextreme-aspnet-data-nojquery';
 import { lastValueFrom } from 'rxjs';
 import 'anti-forgery';
@@ -37,7 +38,7 @@ export class AppComponent {
 
   readonly pattern = /^\(\d{3}\) \d{3}-\d{4}$/i;
 
-  readonly asyncValidation = async (params: Record<string, unknown> & { data: Record<string, unknown> }) => {
+  readonly asyncValidation = async (params: ValidationCallbackData) => {
     const emailValidationUrl = `${this.baseUrl}/RemoteValidation/CheckUniqueEmailAddress`;
 
     const result = await lastValueFrom(this.httpClient.get(emailValidationUrl, {
@@ -50,6 +51,12 @@ export class AppComponent {
 
     return result;
   };
+
+  readonly emailValidationRules: ValidationRule[] = [
+    { type: 'required' },
+    { type: 'email' },
+    { type: 'async', message: 'Email address is not unique', validationCallback: this.asyncValidation },
+  ];
 }
 
 bootstrapApplication(AppComponent, {

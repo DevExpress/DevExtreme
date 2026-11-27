@@ -3,7 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { lastValueFrom } from 'rxjs';
 import applyChanges from 'devextreme/data/apply_changes';
 
-export class Order {
+export interface Order {
   OrderID: number;
 
   ShipName: string;
@@ -19,7 +19,7 @@ export class Order {
   Freight: number;
 }
 
-export class Change<T> {
+export interface Change<T> {
   type: 'insert' | 'update' | 'remove';
 
   key: string;
@@ -27,7 +27,7 @@ export class Change<T> {
   data: Partial<T>;
 }
 
-class Response<T> {
+interface Response<T> {
   data: T[];
 }
 
@@ -82,7 +82,7 @@ export class Service {
     return data;
   }
 
-  saveChange(change: Change<Order>): Promise<Order> {
+  saveChange(change: Change<Order>): Promise<Order | null> {
     switch (change.type) {
       case 'insert':
         return this.insert(change);
@@ -91,7 +91,7 @@ export class Service {
       case 'remove':
         return this.remove(change);
       default:
-        return null;
+        return Promise.resolve(null);
     }
   }
 }

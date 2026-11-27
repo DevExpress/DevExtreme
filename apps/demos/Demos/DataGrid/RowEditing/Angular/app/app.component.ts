@@ -26,7 +26,7 @@ export class AppComponent {
 
   readonly events = signal<string[]>([]);
 
-  logEvent(eventName) {
+  logEvent(eventName: string) {
     this.events.update((events) => [eventName, ...events]);
   }
 

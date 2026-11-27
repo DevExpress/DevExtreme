@@ -1,18 +1,18 @@
 import { Injectable } from '@angular/core';
 
-export class DiffValue {
+export interface DiffValue {
   value: number;
 
   diff: number;
 }
 
-export class DayClose {
+export interface DayClose {
   close: number;
 
   date: Date;
 }
 
-export class WeekData {
+export interface WeekData {
   date: Date;
 
   open: DiffValue;

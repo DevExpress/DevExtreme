@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-export class Order {
+export interface Order {
   OrderNumber: number;
 
   SaleAmount: number;

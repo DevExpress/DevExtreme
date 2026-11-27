@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ArrayStore } from 'devextreme-angular/common/data';
 
-export class Product {
+export interface Product {
   ProductID: number;
 
   ProductName: string;
@@ -15,7 +15,7 @@ export class Product {
   OrderCount: number;
 }
 
-export class Order {
+export interface Order {
   OrderID: number;
 
   ShipCity: string;

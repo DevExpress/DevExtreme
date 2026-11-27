@@ -8,8 +8,10 @@ import {
   DxSelectBoxModule,
   DxCheckBoxModule,
 } from 'devextreme-angular';
-import { DxoHeaderFilterComponent } from 'devextreme-angular/ui/nested/header-filter';
+import type { DataSourceOptions } from 'devextreme-angular/common/data';
+import type { DxDataGridTypes } from 'devextreme-angular/ui/data-grid';
 import { Service } from './app.service';
+import type { Order } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -37,7 +39,7 @@ export class AppComponent {
 
   readonly showHeaderFilter = signal(true);
 
-  readonly applyFilterTypes = [{
+  readonly applyFilterTypes: { key: DxDataGridTypes.ApplyFilterMode; name: string }[] = [{
     key: 'auto',
     name: 'Immediately',
   }, {
@@ -45,7 +47,7 @@ export class AppComponent {
     name: 'On Button Click',
   }];
 
-  readonly saleAmountHeaderFilter: DxoHeaderFilterComponent['dataSource'] = [{
+  readonly saleAmountHeaderFilter: DxDataGridTypes.ColumnHeaderFilter['dataSource'] = [{
     text: 'Less than $3000',
     value: ['SaleAmount', '<', 3000],
   }, {
@@ -73,7 +75,7 @@ export class AppComponent {
 
   readonly currentFilter = signal(this.applyFilterTypes[0].key);
 
-  private static getOrderDay({ OrderDate }) {
+  private static getOrderDay({ OrderDate }: Order) {
     return (new Date(OrderDate)).getDay();
   }
 
@@ -87,7 +89,11 @@ export class AppComponent {
     return column.defaultCalculateFilterExpression.apply(this, [value, _, target, ...args]);
   }
 
-  readonly orderHeaderFilter = ({ dataSource }) => {
+  readonly orderHeaderFilter = ({ dataSource }: { dataSource?: DataSourceOptions | null }) => {
+    if (!dataSource) {
+      return;
+    }
+
     dataSource.postProcess = (results: unknown[]) => {
       results.push({
         text: 'Weekends',

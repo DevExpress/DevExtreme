@@ -1,6 +1,9 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import { Component, enableProdMode, computed, inject, signal } from '@angular/core';
 import { DxDataGridModule, DxCheckBoxModule, DxSelectBoxModule } from 'devextreme-angular';
+import type { DxDataGridTypes } from 'devextreme-angular/ui/data-grid';
+import type { DisplayMode } from 'devextreme-angular/common';
+import type { PagerPageSize } from 'devextreme-angular/common/grids';
 import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -21,11 +24,11 @@ if (!/localhost/.test(document.location.host)) {
 export class AppComponent {
   readonly dataSource = inject(Service).generateData(100000);
 
-  readonly allowedPageSizes = [5, 10, 'all'];
+  readonly allowedPageSizes: (number | PagerPageSize)[] = [5, 10, 'all'];
 
   readonly displayModes = [{ text: "Display Mode 'full'", value: 'full' }, { text: "Display Mode 'compact'", value: 'compact' }];
 
-  readonly displayMode = signal('full');
+  readonly displayMode = signal<DisplayMode>('full');
 
   readonly showPageSizeSelector = signal(true);
 
@@ -33,7 +36,7 @@ export class AppComponent {
 
   readonly showNavButtons = signal(true);
 
-  customizeColumns(columns) {
+  customizeColumns(columns: DxDataGridTypes.Column[]) {
     columns[0].width = 70;
   }
 

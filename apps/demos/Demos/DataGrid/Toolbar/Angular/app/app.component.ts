@@ -8,7 +8,8 @@ import {
 } from 'devextreme-angular';
 import { DxButtonTypes } from 'devextreme-angular/ui/button';
 import { query } from 'devextreme-angular/common/data';
-import { DxSelectBoxModule, DxSelectBoxTypes } from 'devextreme-angular/ui/select-box';
+import { DxSelectBoxModule } from 'devextreme-angular/ui/select-box';
+import type { DxSelectBoxTypes } from 'devextreme-angular/ui/select-box';
 import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {

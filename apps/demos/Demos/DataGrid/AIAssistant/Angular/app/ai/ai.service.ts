@@ -1,11 +1,8 @@
 import { AzureOpenAI, OpenAI } from 'openai';
 import { Injectable } from '@angular/core';
 import notify from 'devextreme/ui/notify';
-import {
-  AIIntegration,
-  type RequestParams,
-  type Response,
-} from 'devextreme-angular/common/ai-integration';
+import { AIIntegration } from 'devextreme-angular/common/ai-integration';
+import type { RequestParams, Response } from 'devextreme-angular/common/ai-integration';
 
 type AIMessage = (OpenAI.ChatCompletionUserMessageParam | OpenAI.ChatCompletionSystemMessageParam) & {
   content: string;

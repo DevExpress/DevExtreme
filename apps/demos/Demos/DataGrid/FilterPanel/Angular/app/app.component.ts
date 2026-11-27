@@ -1,16 +1,17 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import { Component, enableProdMode, inject } from '@angular/core';
-import { PositionConfig } from 'devextreme-angular/common/core/animation';
+import { type PositionConfig } from 'devextreme-angular/common/core/animation';
 import { DxFilterBuilderTypes } from 'devextreme-angular/ui/filter-builder';
-import { DxoHeaderFilterComponent } from 'devextreme-angular/ui/nested/header-filter';
 import { DxDataGridModule } from 'devextreme-angular/ui/data-grid';
+import type { DxDataGridTypes } from 'devextreme-angular/ui/data-grid';
 import { Service } from './app.service';
+import type { Order } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
 }
 
-const getOrderDay = function ({ OrderDate }): number {
+const getOrderDay = function ({ OrderDate }: Order): number {
   return (new Date(OrderDate)).getDay();
 };
 
@@ -48,7 +49,7 @@ export class AppComponent {
     },
   }];
 
-  readonly saleAmountHeaderFilter: DxoHeaderFilterComponent['dataSource'] = [{
+  readonly saleAmountHeaderFilter: DxDataGridTypes.ColumnHeaderFilter['dataSource'] = [{
     text: 'Less than $3000',
     value: ['SaleAmount', '<', 3000],
   }, {

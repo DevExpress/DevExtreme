@@ -3,7 +3,8 @@ import {
   Component, enableProdMode, inject, signal,
 } from '@angular/core';
 import { DxButtonModule, DxCheckBoxModule, DxSelectBoxModule } from 'devextreme-angular';
-import { DxDataGridModule, DxDataGridTypes } from 'devextreme-angular/ui/data-grid';
+import { DxDataGridModule } from 'devextreme-angular/ui/data-grid';
+import type { DxDataGridTypes } from 'devextreme-angular/ui/data-grid';
 import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {

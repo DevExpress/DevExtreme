@@ -5,11 +5,14 @@ import {
 import {
   DxButtonModule, DxTabPanelModule, DxDataGridModule, DxDataGridComponent,
 } from 'devextreme-angular';
-import { ArrayStore, DataSourceOptions } from 'devextreme-angular/common/data';
+import { ArrayStore } from 'devextreme-angular/common/data';
+import type { DataSourceOptions } from 'devextreme-angular/common/data';
 import { Workbook } from 'devextreme-exceljs-fork';
+import type { Cell } from 'devextreme-exceljs-fork';
 import { saveAs } from 'file-saver-es';
 // Our demo infrastructure requires us to use 'file-saver-es'. We recommend that you use the official 'file-saver' package in your applications.
 import { exportDataGrid } from 'devextreme-angular/common/export/excel';
+import type { DataGridCell } from 'devextreme-angular/common/export/excel';
 import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -64,8 +67,8 @@ export class AppComponent {
     ratingSheet.getRow(2).getCell(2).value = 'Rating';
     ratingSheet.getRow(2).getCell(2).font = { bold: true, size: 16, underline: 'double' };
 
-    function setAlternatingRowsBackground(gridCell, excelCell) {
-      if (gridCell.rowType === 'header' || gridCell.rowType === 'data') {
+    function setAlternatingRowsBackground(gridCell?: DataGridCell, excelCell?: Cell) {
+      if (excelCell && (gridCell?.rowType === 'header' || gridCell?.rowType === 'data')) {
         if (excelCell.fullAddress.row % 2 === 0) {
           excelCell.fill = {
             type: 'pattern', pattern: 'solid', fgColor: { argb: 'D3D3D3' }, bgColor: { argb: 'D3D3D3' },

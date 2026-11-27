@@ -1,7 +1,8 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import { Component, enableProdMode, inject } from '@angular/core';
-import { DxDataGridComponent, DxDataGridModule } from 'devextreme-angular';
-import { DataSourceOptions as DataSourceConfig } from 'devextreme-angular/common/data';
+import { DxDataGridModule } from 'devextreme-angular';
+import type { DxDataGridTypes } from 'devextreme-angular/ui/data-grid';
+import { type DataSourceOptions as DataSourceConfig } from 'devextreme-angular/common/data';
 import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -20,7 +21,7 @@ if (!/localhost/.test(document.location.host)) {
 export class AppComponent {
   readonly dataSource: DataSourceConfig = inject(Service).generateData(100000);
 
-  customizeColumns(columns: DxDataGridComponent['customizeColumns']) {
+  customizeColumns(columns: DxDataGridTypes.Column[]) {
     columns[0].width = 70;
   }
 }

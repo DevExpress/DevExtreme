@@ -1,5 +1,5 @@
 import { Component, computed, input } from '@angular/core';
-import { Vehicle } from '../app.service';
+import { type Vehicle } from '../app.service';
 
 @Component({
   selector: 'license-info',

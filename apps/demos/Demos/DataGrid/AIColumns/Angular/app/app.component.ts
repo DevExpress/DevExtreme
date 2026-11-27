@@ -3,7 +3,8 @@ import {
   Component, enableProdMode, inject, signal,
 } from '@angular/core';
 import { DxDataGridModule, DxPopupModule } from 'devextreme-angular';
-import { Service, type Vehicle } from './app.service';
+import { Service } from './app.service';
+import type { Vehicle } from './app.service';
 import { AiService } from './ai/ai.service';
 import { Trademark } from './trademark/trademark.component';
 import { Category } from './category/category.component';

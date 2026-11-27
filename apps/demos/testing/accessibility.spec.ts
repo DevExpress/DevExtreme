@@ -26,7 +26,6 @@ const getIgnoredRules = (testName: string): string[] => {
 
   if ((isMaterial() || isFluent())
     && [
-      'TreeList-StatePersistence',
       // False positive: contrast rules do not apply to custom orange color
       'CardView-FieldTemplate',
       // False positive: contrast rules do not apply to read-only editors on the custom option panel background
@@ -65,9 +64,6 @@ const getIgnoredRules = (testName: string): string[] => {
 
     'Gantt-Appearance': ['aria-toggle-field-name'],
     'Gantt-ExportToPDF': ['aria-toggle-field-name'],
-    'Gantt-Overview': ['aria-required-parent', 'aria-valid-attr-value'],
-    'Gantt-StripLines': ['aria-required-parent', 'aria-valid-attr-value'],
-    'Gantt-Validation': ['aria-required-parent', 'aria-valid-attr-value'],
 
     'Map-Markers': ['image-redundant-alt'],
     'Map-Routes': ['image-redundant-alt'],
@@ -78,6 +74,12 @@ const getIgnoredRules = (testName: string): string[] => {
     ...(specificRules[testName] || []),
   ];
 };
+
+const areAriaOwnsResolved = (): boolean => Array
+  .from(document.querySelectorAll('[aria-owns]'))
+  .every((element) => (element.getAttribute('aria-owns') ?? '')
+    .split(' ')
+    .every((id) => !id || document.getElementById(id)));
 
 const createAxeBuilder = (page: Page, ignoredRules: string[], colorContrastOnly: boolean): AxeBuilder => {
   const builder = new AxeBuilder({ page })
@@ -95,6 +97,8 @@ const findViolations = async (
   ignoredRules: string[],
   colorContrastOnly: boolean,
 ): Promise<string[]> => {
+  await page.waitForFunction(areAriaOwnsResolved);
+
   const results = await createAxeBuilder(page, ignoredRules, colorContrastOnly).analyze();
 
   if (results.violations.length > 0) {
@@ -135,15 +139,17 @@ test.describe('axe setup', () => {
   const PLANTED_CONTRAST = 'color-contrast (serious): .planted-contrast-inside';
   const PLANTED_IMAGE = 'image-alt (critical): .planted-image-inside';
 
-  test.afterEach(() => rmSync(PLANTED_REPORT_PATH, { force: true }));
-
-  test('reports only the violations planted inside the demo container', async ({ page }) => {
+  test.beforeEach(async ({ page }) => {
     const waitForIdle = trackPageActivity(page);
 
     await mockApi(page);
     await prepareDemoPage(page, DEMO_URL, THEME, null);
     await openDemo(page, DEMO_URL, waitForIdle);
+  });
 
+  test.afterEach(() => rmSync(PLANTED_REPORT_PATH, { force: true }));
+
+  test('reports only the violations planted inside the demo container', async ({ page }) => {
     await page.evaluate(() => {
       const plant = (parent: Element, place: string): void => {
         parent.insertAdjacentHTML(
@@ -162,5 +168,27 @@ test.describe('axe setup', () => {
 
     expect(await findViolations(page, PLANTED_REPORT_NAME, ['image-alt'], false)).toEqual([PLANTED_CONTRAST]);
     expect(await findViolations(page, PLANTED_REPORT_NAME, [], true)).toEqual([PLANTED_CONTRAST]);
+  });
+
+  test('checks the page once the elements named in aria-owns exist', async ({ page }) => {
+    const OWNED_ELEMENT_DELAY = 1000;
+
+    await page.evaluate(() => {
+      document.querySelector('.demo-container')
+        ?.insertAdjacentHTML('beforeend', '<div class="planted-owner" aria-owns="planted-owned"></div>');
+    });
+
+    const { violations } = await createAxeBuilder(page, [], false).analyze();
+
+    expect(violations.map(({ id }) => id)).toEqual(['aria-valid-attr-value']);
+
+    await page.evaluate((delay) => {
+      setTimeout(() => {
+        document.querySelector('.demo-container')
+          ?.insertAdjacentHTML('beforeend', '<span id="planted-owned">owned</span>');
+      }, delay);
+    }, OWNED_ELEMENT_DELAY);
+
+    expect(await findViolations(page, PLANTED_REPORT_NAME, [], false)).toEqual([]);
   });
 });

@@ -18,6 +18,7 @@
   "include": [
     "Demos/Autocomplete/**/Angular/**/*.ts",
     "Demos/Box/**/Angular/**/*.ts",
+    "Demos/DataGrid/**/Angular/**/*.ts",
     "Demos/Calendar/**/Angular/**/*.ts",
     "Demos/Chat/**/Angular/**/*.ts",
     "Demos/CheckBox/**/Angular/**/*.ts",
