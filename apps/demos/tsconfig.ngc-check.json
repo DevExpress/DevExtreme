@@ -53,6 +53,7 @@
     "Demos/TileView/**/Angular/**/*.ts",
     "Demos/Toast/**/Angular/**/*.ts",
     "Demos/Tooltip/**/Angular/**/*.ts",
+    "Demos/TreeList/**/Angular/**/*.ts",
     "Demos/Validation/**/Angular/**/*.ts",
     "Demos/VectorMap/**/Angular/**/*.ts",
     "shared/anti-forgery/index.d.ts"

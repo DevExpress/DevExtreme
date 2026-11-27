@@ -22,7 +22,6 @@ export const settings = {
   explicitTests: undefined,
   explicitTestArgs: undefined,
   ignoreChangesPathPatterns: undefined,
-  manualTestIndex: undefined,
 };
 
 export function shouldRunTestExplicitlyInternal(framework, product, demo) {
@@ -203,14 +202,6 @@ export function shouldSkipDemo(framework, component, demoName, skippedTests) {
   return false;
 }
 
-export function shouldRunTest(currentFramework, testIndex, product, demo, skippedTests) {
-  if (shouldSkipDemo(FRAMEWORKS[currentFramework], product, demo, skippedTests)) {
-    return false;
-  }
-
-  return shouldRunFramework(currentFramework) && shouldRunTestAtIndex(testIndex);
-}
-
 export function shouldRunTestExplicitly(demoUrl) {
   if (!settings.explicitTests) { return false; }
 
@@ -229,7 +220,6 @@ export function getPortByIndex(testIndex) {
 
 export function updateConfig(customSettings?) {
   settings.verbose = true;
-  settings.manualTestIndex = settings.current ? (settings.current - 1) : 0;
   settings.demoExpr = /Demos\/(?<product>\w+)\/(?<demo>\w+)\/(?<framework>angular|jquery|react|vue)\/.*/i;
   settings.demoFilesExpr = /Demos\/(?<product>\w+)\/(?<demo>\w+)\/(?<data>.*)/i;
   settings.commonEtalonsExpr = /testing\/etalons\/(?<product>\w+)-(?<demo>\w+)(?<suffix>.*).png/i;

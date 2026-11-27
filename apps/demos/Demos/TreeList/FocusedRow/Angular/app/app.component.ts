@@ -2,7 +2,8 @@ import { bootstrapApplication } from '@angular/platform-browser';
 import { Component, enableProdMode, signal } from '@angular/core';
 import * as AspNetData from 'devextreme-aspnet-data-nojquery';
 import { DxNumberBoxModule } from 'devextreme-angular';
-import { DxTreeListModule, DxTreeListTypes } from 'devextreme-angular/ui/tree-list';
+import { DxTreeListModule } from 'devextreme-angular/ui/tree-list';
+import type { DxTreeListTypes } from 'devextreme-angular/ui/tree-list';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -50,16 +51,16 @@ export class AppComponent {
   onFocusedRowChanged(e: DxTreeListTypes.FocusedRowChangedEvent) {
     const rowData = e.row?.data;
     let cellValue: unknown;
-    let assigned: string;
+    let assigned: string | undefined;
 
     if (rowData) {
       cellValue = e.component.cellValue(e.row.rowIndex, 'Assigned');
-      this.taskEmployees.byKey(cellValue).done(({ Name }) => {
+      this.taskEmployees.byKey(cellValue).done(({ Name }: { Name: string }) => {
         assigned = Name;
       });
 
       this.taskSubject.set(rowData.Task_Subject);
-      this.taskAssigned.set(assigned);
+      this.taskAssigned.set(assigned ?? '');
       this.startDate.set(new Date(rowData.Task_Start_Date).toLocaleDateString());
 
       this.taskStatus.set(rowData.Task_Status);

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { DxTreeListTypes } from 'devextreme-angular/ui/tree-list';
 
-export class Employee {
+export interface Employee {
   ID: number;
 
   Head_ID: number;

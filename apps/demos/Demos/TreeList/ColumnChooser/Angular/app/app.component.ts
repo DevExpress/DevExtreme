@@ -4,7 +4,8 @@ import {
 } from '@angular/core';
 import { DxSelectBoxModule, DxCheckBoxModule } from 'devextreme-angular';
 import { DxTextBoxTypes } from 'devextreme-angular/ui/text-box';
-import { DxTreeListModule, DxTreeListTypes } from 'devextreme-angular/ui/tree-list';
+import { DxTreeListModule } from 'devextreme-angular/ui/tree-list';
+import type { DxTreeListTypes } from 'devextreme-angular/ui/tree-list';
 import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -36,7 +37,7 @@ export class AppComponent {
 
   readonly editorOptions: DxTextBoxTypes.Properties = { placeholder: 'Search column' };
 
-  readonly columnChooserModes: { key: DxTreeListTypes.ColumnChooser['mode'], name: string }[] = [{
+  readonly columnChooserModes: { key: DxTreeListTypes.ColumnChooserMode, name: string }[] = [{
     key: 'dragAndDrop',
     name: 'Drag and drop',
   }, {

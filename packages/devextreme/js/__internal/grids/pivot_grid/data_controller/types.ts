@@ -1,3 +1,4 @@
+import type { ScalarFilterValue } from '@js/common/grids';
 import type {
   Cell,
   Properties as PivotGridProperties,
@@ -14,7 +15,7 @@ export type HeaderItemType = NonNullable<Cell['type']>;
 export interface PivotGridColumnInfo extends ColumnInfoCell {
   type?: HeaderItemType;
   text?: string;
-  path?: unknown[];
+  path?: ScalarFilterValue[];
   width?: number | null;
   wordWrapEnabled?: boolean;
   isLast?: boolean;
@@ -29,7 +30,7 @@ export interface ViewHeaderItem {
   type?: HeaderItemType;
   value?: unknown;
   key?: unknown;
-  path?: unknown[];
+  path?: ScalarFilterValue[];
   text?: string;
   displayText?: string;
   caption?: string;
@@ -131,6 +132,8 @@ export interface VirtualContentParams {
   virtualColumnWidth: number;
   itemWidths: number[];
   itemHeights: number[];
+  rowCount: number;
+  columnCount: number;
   viewportWidth: number;
   viewportHeight: number;
 }

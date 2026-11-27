@@ -40,9 +40,7 @@ export default function App() {
     () => (
       <div className="popup-property-details">
         <div className="large-text">{formatCurrency(currentHouse.Price)}</div>
-        <div className="opacity">
-          {currentHouse.Address}, {currentHouse.City}, {currentHouse.State}
-        </div>
+        <div className="opacity">{`${currentHouse.Address}, ${currentHouse.City}, ${currentHouse.State}`}</div>
         <Button
           icon="favorites"
           text={currentHouse.Favorite ? REMOVE_FROM_FAVORITES : ADD_TO_FAVORITES}
