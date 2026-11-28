@@ -148,6 +148,10 @@ export default abstract class GridBase extends GridCore {
     );
   }
 
+  public getDataCells(rowIndex: number): Locator {
+    return this.getDataRows().nth(rowIndex).locator('td');
+  }
+
   public getDataRows(): Locator {
     const gridView = this.addWidgetPrefix(CLASS.gridView);
     const fixedGridView = this.addWidgetPrefix(CLASS.fixedGridView);
@@ -367,7 +371,7 @@ export default abstract class GridBase extends GridCore {
     return this.element.locator(`[${E2E_ATTRIBUTES.a11yStatusContainer}="true"]`);
   }
 
-  private hasScrollable(): Promise<boolean> {
+  public hasScrollable(): Promise<boolean> {
     return this.element.evaluate(
       (element, widgetName) => Boolean($(element).data(widgetName).getScrollable()),
       this.getName(),

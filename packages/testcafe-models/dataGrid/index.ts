@@ -51,7 +51,6 @@ export const CLASS = {
 
   toolbar: 'dx-toolbar',
   contextMenu: 'dx-context-menu',
-  fixedGridView: 'content-fixed',
   rowsView: 'rowsview',
   revertButton: 'dx-revert-button',
   columnChooserButton: 'column-chooser-button',
@@ -187,10 +186,6 @@ export default class DataGrid extends GridCore {
     return this.getRowsView().find('td');
   }
 
-  getDataCells(rowIndex: number): Selector {
-    return this.getDataRows().nth(rowIndex).find('td');
-  }
-
   getDataRow(index: number): DataRow {
     return new DataRow(this.element.find(`.${CLASS.dataRow}[aria-rowindex='${index + 1}']`), this.getName());
   }
@@ -203,16 +198,8 @@ export default class DataGrid extends GridCore {
     return this.element.find(`.${CLASS.fieldItemContent}`).nth(index);
   }
 
-  getFixedDataRow(index: number): DataRow {
-    return new DataRow(this.element.find(`.${this.addWidgetPrefix(CLASS.fixedGridView)} .${CLASS.dataRow}[aria-rowindex='${index + 1}']`), this.getName());
-  }
-
   getDataCell(rowIndex: number, columnIndex: number): DataCell {
     return this.getDataRow(rowIndex).getDataCell(columnIndex);
-  }
-
-  getFixedDataCell(rowIndex: number, columnIndex: number): DataCell {
-    return this.getFixedDataRow(rowIndex).getDataCell(columnIndex);
   }
 
   getGroupRow(index: number): GroupRow {
@@ -394,15 +381,6 @@ export default class DataGrid extends GridCore {
     )();
   }
 
-  apiCollapseRow(key: unknown): Promise<void> {
-    const { getInstance } = this;
-
-    return ClientFunction(
-      () => (getInstance() as any).collapseRow(key),
-      { dependencies: { getInstance, key } },
-    )();
-  }
-
   apiExpandAdaptiveDetailRow(key: unknown): Promise<void> {
     const { getInstance } = this;
 
@@ -452,19 +430,6 @@ export default class DataGrid extends GridCore {
         rowIndex: r.rowIndex,
       }));
     }, { dependencies: { getInstance } })();
-  }
-
-  apiPush(values: any[]): Promise<void> {
-    const { getInstance } = this;
-
-    return ClientFunction(
-      () => (getInstance() as DataGridInstance).getDataSource().store().push(values),
-      {
-        dependencies: {
-          getInstance, values
-        },
-      },
-    )();
   }
 
   apiSearchByText(text: string): Promise<void> {
@@ -596,39 +561,6 @@ export default class DataGrid extends GridCore {
         },
       },
     )();
-  }
-
-  isVirtualRowIntersectViewport(): Promise<boolean> {
-    const { getInstance } = this;
-
-    return ClientFunction(() => {
-      let result = false;
-      const gridInstance = getInstance() as any;
-      const rowsViewElement = gridInstance.getView('rowsView').element();
-      const isElementIntersectRowsView = (element) => {
-        const rowsViewRect = rowsViewElement[0].getBoundingClientRect();
-        const elementRect = element.getBoundingClientRect();
-
-        return (elementRect.top > rowsViewRect.top && elementRect.top < rowsViewRect.bottom)
-          || (elementRect.bottom > rowsViewRect.top && elementRect.bottom < rowsViewRect.bottom)
-          || (elementRect.top <= rowsViewRect.top && elementRect.bottom >= rowsViewRect.bottom);
-      };
-      const virtualRowElements = rowsViewElement.find('.dx-virtual-row');
-
-      // eslint-disable-next-line @typescript-eslint/prefer-for-of
-      for (let i = 0; i < virtualRowElements.length; i += 1) {
-        result = isElementIntersectRowsView(virtualRowElements[i]);
-        if (result) {
-          break;
-        }
-      }
-
-      return result;
-    }, {
-      dependencies: {
-        getInstance,
-      },
-    })();
   }
 
   isFocusedRowInViewport(): Promise<boolean> {
