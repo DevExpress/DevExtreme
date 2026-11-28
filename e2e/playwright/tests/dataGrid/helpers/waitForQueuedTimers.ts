@@ -13,3 +13,12 @@ export const waitForQueuedTimers = async (page: Page): Promise<void> => {
     });
   }));
 };
+
+// The browser sends the scroll event with the next frame. On it the grid renders what the new
+// position shows, and after that it restores the focused cell on a zero-delay timer.
+export const waitForScrollHandled = async (page: Page): Promise<void> => {
+  await page.evaluate(() => new Promise<void>((resolve) => {
+    requestAnimationFrame(() => requestAnimationFrame(() => resolve()));
+  }));
+  await waitForQueuedTimers(page);
+};

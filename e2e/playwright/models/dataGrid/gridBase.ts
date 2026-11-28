@@ -4,9 +4,11 @@ import GridCore, { CLASS as CLASS_BASE } from '../gridCore';
 import Toolbar from '../toolbar';
 import Popup from '../popup';
 import ContextMenu from '../contextMenu';
+import DateBox from '../dateBox';
 import DataRow from './data/row';
 import DataCell from './data/cell';
 import FilterCell from './filter/cell';
+import FilterRow from './filter/row';
 import EditForm from './editForm';
 import Headers from './headers';
 import HeaderPanel from './headers/panel';
@@ -22,7 +24,11 @@ const CLASS = {
   headers: 'headers',
   headerPanel: 'header-panel',
   rowsView: 'rowsview',
+  row: 'dx-row',
   dataRow: 'dx-data-row',
+  filterRangeOverlay: 'filter-range-overlay',
+  filterRangeStartEditor: 'filter-range-start',
+  filterRangeEndEditor: 'filter-range-end',
   focusedRow: 'dx-row-focused',
   gridView: 'content',
   fixedGridView: 'content-fixed',
@@ -31,6 +37,7 @@ const CLASS = {
   groupRow: 'dx-group-row',
   groupFooterRow: 'group-footer',
   freeSpaceRow: 'dx-freespace-row',
+  footerRow: 'dx-footer-row',
   summaryItem: 'summary-item',
   focusOverlay: 'focus-overlay',
   editFormRow: 'edit-form',
@@ -38,6 +45,8 @@ const CLASS = {
   formButtonsContainer: 'form-buttons-container',
   popupEdit: 'edit-popup',
   adaptiveDetailRow: 'dx-adaptive-detail-row',
+  adaptiveColumnButton: 'adaptive-more',
+  adaptiveCommandCellHidden: 'dx-command-adaptive-hidden',
   errorRow: 'dx-error-row',
   overlayContent: 'dx-overlay-content',
   revertTooltip: 'revert-tooltip',
@@ -81,6 +90,11 @@ export default abstract class GridBase extends GridCore {
     return this.element.locator(`${selector}:not(:scope .${CLASS.masterDetailRow} *)`);
   }
 
+  // The grid's own container, not the filter menus inside it, which carry the same class.
+  public getContainer(): Locator {
+    return this.element.locator(`:scope > .${this.addWidgetPrefix()}`);
+  }
+
   public getHeaders(): Headers {
     return new Headers(this.ownElement(`.${this.addWidgetPrefix(CLASS.headers)}`), this.getName());
   }
@@ -91,6 +105,14 @@ export default abstract class GridBase extends GridCore {
 
   public getHeadersScrollContainer(): Locator {
     return this.getHeaders().element.locator(`.${this.addWidgetPrefix(CLASS.scrollContainer)}`);
+  }
+
+  /*
+    getRows() returns double collection of rows (two tables) when
+    columnFixing.legacyMode = true AND DataGrid has fixed columns
+  */
+  public getRows(): Locator {
+    return this.getRowsView().locator(`.${CLASS.row}`);
   }
 
   public getDataRow(index: number): DataRow {
@@ -117,6 +139,10 @@ export default abstract class GridBase extends GridCore {
     return this.ownElement(`.${gridView}:not(.${fixedGridView}) .${CLASS.dataRow}`);
   }
 
+  public getGroupRowSelector(): Locator {
+    return this.element.locator(`.${CLASS.groupRow}`);
+  }
+
   public getGroupRow(index: number): GroupRow {
     const gridView = this.addWidgetPrefix(CLASS.gridView);
     const fixedGridView = this.addWidgetPrefix(CLASS.fixedGridView);
@@ -140,6 +166,10 @@ export default abstract class GridBase extends GridCore {
     const fixedGridView = this.addWidgetPrefix(CLASS.fixedGridView);
 
     return this.ownElement(`.${gridView}:not(.${fixedGridView}) .${CLASS.freeSpaceRow}`);
+  }
+
+  public getFooterRow(): Locator {
+    return this.element.locator(`.${CLASS.footerRow}`);
   }
 
   public getSummaryItem(index: number): Locator {
@@ -175,6 +205,14 @@ export default abstract class GridBase extends GridCore {
     return new AdaptiveDetailRow(this.element.locator(`.${CLASS.adaptiveDetailRow}`).nth(index));
   }
 
+  public getAdaptiveButton(index: number): Locator {
+    return this.element.locator(`.${this.addWidgetPrefix(CLASS.adaptiveColumnButton)}`).nth(index);
+  }
+
+  public async isAdaptiveColumnHidden(): Promise<boolean> {
+    return await this.element.locator(`.${CLASS.adaptiveCommandCellHidden}`).count() > 0;
+  }
+
   public getModifiedCells(): Locator {
     return this.element.locator(`.${CLASS.cellModified}`);
   }
@@ -183,8 +221,24 @@ export default abstract class GridBase extends GridCore {
     return this.element.locator(`.${CLASS.errorRow}`);
   }
 
+  public getFilterRow(): FilterRow {
+    return this.getHeaders().getFilterRow();
+  }
+
   public getFilterCell(columnIndex: number): FilterCell {
     return this.getHeaders().getFilterRow().getFilterCell(columnIndex);
+  }
+
+  public getFilterRangeOverlay(): Locator {
+    return this.getHeaders().element.locator(`:scope > .${this.addWidgetPrefix(CLASS.filterRangeOverlay)}`);
+  }
+
+  public getFilterRangeStartEditor(): DateBox {
+    return new DateBox(this.page, this.body.locator(`.${this.addWidgetPrefix(CLASS.filterRangeStartEditor)}`));
+  }
+
+  public getFilterRangeEndEditor(): DateBox {
+    return new DateBox(this.page, this.body.locator(`.${this.addWidgetPrefix(CLASS.filterRangeEndEditor)}`));
   }
 
   public getFilterEditor<T>(
@@ -386,6 +440,15 @@ export default abstract class GridBase extends GridCore {
     );
   }
 
+  // A virtual grid delays a resize that comes soon after another one, as during a scroll. The
+  // delayed resize updates the row dragging too.
+  public hasResizeTimeout(): Promise<boolean> {
+    return this.element.evaluate(
+      (element, widgetName) => $(element).data(widgetName).getController('resizing').hasResizeTimeout(),
+      this.getName(),
+    );
+  }
+
   // Some actions make the grid load and render its content again a moment later, such as a header
   // click that sorts.
   public async waitForContentReady(action: () => Promise<unknown>): Promise<void> {
@@ -421,15 +484,22 @@ export default abstract class GridBase extends GridCore {
   }
 
   // A real pointer drags the left border of the column's header: the grid starts resizing where
-  // the pointer goes down near a border.
-  public async resizeHeader(columnIndex: number, offset: number): Promise<void> {
+  // the pointer goes down near a border. Without "needToTriggerPointerUp", it stays pressed.
+  public async resizeHeader(
+    columnIndex: number,
+    offset: number,
+    needToTriggerPointerUp = true,
+  ): Promise<void> {
     const corner = await this.getHeaderCorner(columnIndex);
     const start = { x: corner.x, y: corner.y + 1 };
 
     await this.page.mouse.move(start.x, start.y);
     await this.page.mouse.down();
     await this.page.mouse.move(start.x + offset, start.y);
-    await this.page.mouse.up();
+
+    if (needToTriggerPointerUp) {
+      await this.page.mouse.up();
+    }
   }
 
   // A real pointer moves the header by (x, y) from its top left corner; with "isStart", it is
@@ -455,6 +525,39 @@ export default abstract class GridBase extends GridCore {
     const corner = await this.getHeaderCorner(columnIndex);
 
     await this.page.mouse.move(corner.x, corner.y);
+    await this.page.mouse.up();
+  }
+
+  // A row scrolled to the left starts off screen, where a real pointer cannot press it: the corner
+  // stays within the grid's left edge.
+  private getRowDragCorner(rowIndex: number): Promise<{ x: number; y: number }> {
+    return this.element.evaluate((element, { widgetName, index }) => {
+      const $row = $($(element).data(widgetName).getRowElement(index));
+      const $dragCell = $row.children('.dx-command-drag');
+      const { left, top } = ($dragCell.length ? $dragCell : $row)[0].getBoundingClientRect();
+
+      return { x: Math.max(left, element.getBoundingClientRect().left), y: top };
+    }, { widgetName: this.getName(), index: rowIndex });
+  }
+
+  // A real pointer moves the row by (x, y) from the top left corner of its drag cell, or of the
+  // row without one; with "isStart", it is pressed there first. The pointer stays on whole pixels,
+  // inside the cell when it presses: a virtual grid can scroll its rows to fractional positions,
+  // and the dragged row follows the pointer.
+  public async moveRow(rowIndex: number, x: number, y: number, isStart = false): Promise<void> {
+    const corner = await this.getRowDragCorner(rowIndex);
+
+    if (isStart) {
+      await this.page.mouse.move(Math.ceil(corner.x), Math.ceil(corner.y));
+      await this.page.mouse.down();
+    }
+
+    await this.page.mouse.move(Math.round(corner.x + x), Math.round(corner.y + y));
+  }
+
+  // Releases the dragged row where the pointer is: the row moves with the pointer from the corner
+  // it was pressed at.
+  public async dropRow(): Promise<void> {
     await this.page.mouse.up();
   }
 
@@ -498,6 +601,38 @@ export default abstract class GridBase extends GridCore {
 
   public async apiCancelEditData(): Promise<void> {
     await this.invoke('cancelEditData');
+  }
+
+  public async apiCollapseAllGroups(): Promise<void> {
+    await this.invoke('option', 'grouping.autoExpandAll', false);
+  }
+
+  public async apiExpandAllGroups(): Promise<void> {
+    await this.invoke('option', 'grouping.autoExpandAll', true);
+  }
+
+  public async apiExpandAll(): Promise<void> {
+    await this.invoke('expandAll');
+  }
+
+  public async apiExpandRow(key: unknown): Promise<void> {
+    await this.invoke('expandRow', key);
+  }
+
+  public async apiCollapseRow(key: unknown): Promise<void> {
+    await this.invoke('collapseRow', key);
+  }
+
+  public async apiUpdateDimensions(): Promise<void> {
+    await this.invoke('updateDimensions');
+  }
+
+  public async apiAddColumn(config: unknown): Promise<void> {
+    await this.invoke('addColumn', config);
+  }
+
+  public async apiBeginCustomLoading(messageText: string): Promise<void> {
+    await this.invoke('beginCustomLoading', messageText);
   }
 
   public async apiNavigateToRow(key: unknown): Promise<void> {

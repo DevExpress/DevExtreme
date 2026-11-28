@@ -14,6 +14,8 @@ const CLASS = {
   commandExpand: 'dx-command-expand',
   groupOpened: 'dx-datagrid-group-opened',
   selectCheckBox: 'dx-select-checkbox',
+  stateHover: 'dx-state-hover',
+  commandDrag: 'dx-command-drag',
 };
 
 export default class DataRow extends GridFocusableElement {
@@ -37,6 +39,10 @@ export default class DataRow extends GridFocusableElement {
     return expectClass(this.element, CLASS.editedRow, present);
   }
 
+  public expectHovered(present = true): Promise<void> {
+    return expectClass(this.element, CLASS.stateHover, present);
+  }
+
   public async expectExpanded(present = true): Promise<void> {
     await expect(this.element.locator(`.${CLASS.commandExpand} .${CLASS.groupOpened}`))
       .toBeAttached({ attached: present });
@@ -52,5 +58,13 @@ export default class DataRow extends GridFocusableElement {
 
   public getSelectCheckBox(): Locator {
     return this.element.locator(`.${CLASS.selectCheckBox}`);
+  }
+
+  public getDragCommand(): Locator {
+    return this.element.locator(`.${CLASS.commandDrag}`);
+  }
+
+  public getOffset(): Promise<JQuery.Coordinates | undefined> {
+    return this.element.evaluate((element) => $(element).offset());
   }
 }

@@ -9,7 +9,6 @@ const CLASS = {
   list: 'dx-list',
   stateHover: 'dx-state-hover',
   aiHeaderButton: 'dx-command-ai-header-button',
-  firstCell: 'dx-datagrid-first-cell',
 };
 
 export default class HeaderCell {
@@ -21,8 +20,6 @@ export default class HeaderCell {
 
   isHidden: Promise<boolean>;
 
-  isFirstCell: Promise<boolean>;
-
   isHovered(): Promise<boolean> {
     return ClientFunction((element) => {
       return element() === document.querySelector("td:hover");
@@ -33,7 +30,6 @@ export default class HeaderCell {
     this.element = headerRow.find(`td[aria-colindex='${index + 1}']`);
     this.isFocused = this.element.focused;
     this.isHidden = this.element.hasClass(Widget.addClassPrefix(widgetName, CLASS.hiddenColumn));
-    this.isFirstCell = this.element.hasClass(CLASS.firstCell);
   }
 
   getFilterIcon(): Selector {

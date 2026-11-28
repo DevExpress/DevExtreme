@@ -18,6 +18,10 @@ const CLASS = {
   viewsWrapper: 'dx-calendar-views-wrapper',
 };
 
+const SELECTORS = {
+  okButton: '[aria-label="OK"]',
+};
+
 export default class Popup extends Overlay {
   name: WidgetName = 'dxPopup';
 
@@ -37,6 +41,10 @@ export default class Popup extends Overlay {
 
   public getButton(index = 0): Button {
     return new Button(this.page, this.getWrapper().locator(`.${CLASS.button}`).nth(index));
+  }
+
+  public getOkButton(): Button {
+    return new Button(this.page, this.getWrapper().locator(SELECTORS.okButton));
   }
 
   public getOverflowButton(): Button {
