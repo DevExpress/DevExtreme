@@ -122,8 +122,10 @@ test.describe('Virtual Columns.Visual', () => {
       await dataGrid.scrollTo({ left: 1000 });
       await dataGrid.scrollTo({ left: 2000 });
 
-      // The rows settle a moment after two quick scrolls. A verify run waits for that;
-      // --update-snapshots can record the frame before it.
+      // The rows settle a moment after two quick scrolls, with a delayed resize.
+      await expect.poll(() => dataGrid.isViewportRowsRenderPending()).toBe(false);
+      await expect.poll(() => dataGrid.hasResizeTimeout()).toBe(false);
+
       // assert
       await testScreenshot(page, `T1176160-master-detail-with-virtual-columns-and-useNative=${useNative}-2.png`, { element: dataGrid.element });
     });
