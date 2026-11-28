@@ -14,6 +14,10 @@ const CLASS = {
   treeViewItem: 'dx-treeview-item',
   closeButton: 'dx-closebutton',
   treeViewItemContent: 'dx-treeview-item-content',
+  treeView: 'dx-treeview',
+  itemContent: 'dx-item-content',
+  itemContentToolbar: 'dx-toolbar-item-content',
+  emptyMessage: 'dx-empty-message',
 };
 
 export default class ColumnChooser extends GridModule {
@@ -58,6 +62,25 @@ export default class ColumnChooser extends GridModule {
 
   public getColumns(): Locator {
     return this.content.locator(`.${CLASS.treeViewItem}`);
+  }
+
+  public getColumnTexts(): Promise<string[]> {
+    return this.getColumns().allTextContents();
+  }
+
+  // Focuses the list itself, not one of its items, without a click.
+  public async focusList(): Promise<void> {
+    await this.content.locator(`.${CLASS.treeView}`).evaluate((element) => {
+      $(element).trigger('focus');
+    });
+  }
+
+  public getTitle(): Locator {
+    return this.content.locator(`.${CLASS.itemContent}.${CLASS.itemContentToolbar}`).nth(0);
+  }
+
+  public getEmptyMessage(): Locator {
+    return this.content.locator(`.${CLASS.emptyMessage}`);
   }
 
   public expectColumnDisabled(index = 0, present = true): Promise<void> {

@@ -13,6 +13,7 @@ const CLASS = {
   invalidMessage: 'dx-invalid-message',
   overlay: 'dx-overlay',
   dropDownButton: 'dx-dropdownbutton',
+  linkEdit: 'dx-link-edit',
 };
 
 // The grid prefixes the class with its name, which a cell doesn't know.
@@ -54,6 +55,10 @@ export default class DataCell extends GridFocusableElement {
 
   public expectHidden(present = true): Promise<void> {
     return expectClass(this.element, HIDDEN_COLUMN_CLASS, present);
+  }
+
+  public getLinkEdit(): Locator {
+    return this.element.locator(`.${CLASS.linkEdit}`);
   }
 
   public getIconByTitle(title: string): Locator {

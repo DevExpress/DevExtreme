@@ -7,6 +7,7 @@ const CLASS = {
   disabled: 'dx-state-disabled',
   focused: 'dx-state-focused',
   hovered: 'dx-state-hover',
+  selected: 'dx-list-item-selected',
   reorderHandle: 'dx-list-reorder-handle',
 };
 
@@ -36,5 +37,9 @@ export default class ListItem {
 
   public expectHovered(present = true): Promise<void> {
     return expectClass(this.element, CLASS.hovered, present);
+  }
+
+  public expectSelected(present = true): Promise<void> {
+    return expectClass(this.element, CLASS.selected, present);
   }
 }

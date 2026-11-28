@@ -23,10 +23,6 @@ export default class HeaderRow extends FocusableElement {
     return this.element.child('td');
   }
 
-  getDataHeaderCells(): Selector {
-    return this.getHeaderCells().filter('[role="columnheader"]');
-  }
-
   getCommandCell(index: number): CommandCell {
     return new CommandCell(this.element, index, this.widgetName);
   }

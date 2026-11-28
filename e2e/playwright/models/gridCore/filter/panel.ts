@@ -3,6 +3,7 @@ import { expect } from '@playwright/test';
 import type { WidgetName } from '../../types';
 import GridElement from '../element';
 import GridModule from '../module';
+import { FilterBuilderPopup } from './builder';
 
 const CLASS = {
   filterPanelIcon: 'dx-icon-filter',
@@ -34,5 +35,11 @@ export default class FilterPanel extends GridModule {
     return new GridElement(
       this.element.locator(`.${this.addWidgetPrefix(CLASS.filterPanelText)}`),
     );
+  }
+
+  public async openFilterBuilderPopup(): Promise<FilterBuilderPopup> {
+    await this.getIconFilter().element.click();
+
+    return new FilterBuilderPopup(this.element.page());
   }
 }

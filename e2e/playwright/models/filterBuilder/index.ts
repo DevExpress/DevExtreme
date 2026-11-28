@@ -1,6 +1,10 @@
 import type { Locator, Page } from '@playwright/test';
 import type { WidgetName } from '../types';
 import Widget from '../internal/widget';
+import { textMatcher } from '../internal/textMatcher';
+import Field from './field';
+
+type FieldType = 'item' | 'groupOperation' | 'itemOperation' | 'itemAction' | 'itemValue';
 
 const CLASS = {
   root: 'dx-filterbuilder',
@@ -11,9 +15,12 @@ const CLASS = {
   item: 'dx-filterbuilder-item-field',
   popupContent: 'dx-popup-content',
   treeView: 'dx-treeview',
+  treeViewLeaf: 'dx-treeview-node-is-leaf',
   groupOperation: 'dx-filterbuilder-group-operation',
   itemOperation: 'dx-filterbuilder-item-operation',
   itemValue: 'dx-filterbuilder-item-value-text',
+  itemAction: 'dx-filterbuilder-action',
+  checkbox: 'dx-checkbox',
 };
 
 const ITEM_CLASS = {
@@ -27,6 +34,24 @@ export default class FilterBuilder extends Widget {
 
   public static getPopupTreeView(page: Page): Locator {
     return page.locator(`.${CLASS.popupContent} .${CLASS.treeView}`);
+  }
+
+  public static getPopupTreeViewNode(page: Page, index = 0): Locator {
+    return page.locator(`.${CLASS.treeViewLeaf}`).nth(index);
+  }
+
+  public static getPopupTreeViewNodeByText(page: Page, text: string): Locator {
+    return page.locator(`.${CLASS.treeViewLeaf}`)
+      .filter({ hasText: textMatcher(text) })
+      .filter({ visible: true });
+  }
+
+  public static getPopupTreeViewNodeCheckboxByText(page: Page, text: string): Locator {
+    return FilterBuilder.getPopupTreeViewNodeByText(page, text).locator(`.${CLASS.checkbox}`);
+  }
+
+  public getField(index = 0, type: FieldType = 'item'): Field {
+    return new Field(this.element.locator(`.${CLASS[type]}`).nth(index));
   }
 
   public getRootElement(): Locator {

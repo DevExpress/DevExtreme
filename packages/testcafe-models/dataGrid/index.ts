@@ -1,12 +1,9 @@
-import { ClientFunction, Selector } from 'testcafe';
+import { ClientFunction } from 'testcafe';
 import DataGridInstance from 'devextreme/ui/data_grid';
-import type { SelectionSensitivity } from 'devextreme/ui/data_grid';
 import Toolbar from '../toolbar';
 import DataRow from './data/row';
 import GroupRow from './groupRow';
-import FilterRow from './filter/row';
 import FilterCell from './filter/cell';
-import EditForm from './editForm';
 import HeaderPanel from './headers/panel';
 import DataCell from './data/cell';
 import Headers from './headers';
@@ -19,8 +16,6 @@ import MasterRow from './masterRow';
 import AdaptiveDetailRow from './adaptiveDetailRow';
 import ColumnChooser from './columnChooser';
 import TextBox from '../textBox';
-import DateBox from '../dateBox';
-import NumberBox from '../numberBox';
 import { GroupPanel } from './groupPanel';
 import GridCore from '../gridCore';
 import { CLASS as CLASS_BASE } from '../gridCore';
@@ -40,49 +35,34 @@ export const CLASS = {
   columnChooser: 'column-chooser',
   focusedRow: 'dx-row-focused',
   filterRow: 'filter-row',
-  filterRangeOverlay: 'filter-range-overlay',
-  filterRangeStartEditor: 'filter-range-start',
-  filterRangeEndEditor: 'filter-range-end',
   focusOverlay: 'focus-overlay',
-  editFormRow: 'edit-form',
   button: 'dx-button',
-  formButtonsContainer: 'form-buttons-container',
-  popupEdit: 'edit-popup',
   masterDetailRow: 'dx-master-detail-row',
   adaptiveDetailRow: 'dx-adaptive-detail-row',
   adaptiveCommandCellHidden: 'dx-command-adaptive-hidden',
   adaptiveColumnButton: 'dx-datagrid-adaptive-more',
-  errorRow: 'dx-error-row',
 
   headerRow: 'dx-header-row',
-  footerRow: 'dx-footer-row',
   groupFooterRow: 'group-footer',
   freeSpaceRow: 'dx-freespace-row',
 
-  overlayContent: 'dx-overlay-content',
   overlayWrapper: 'dx-overlay-wrapper',
   loadPanel: 'dx-loadpanel',
-  revertTooltip: 'revert-tooltip',
-  invalidMessage: 'invalid-message',
 
   toolbar: 'dx-toolbar',
   contextMenu: 'dx-context-menu',
-  fixedGridView: 'content-fixed',
   rowsView: 'rowsview',
   revertButton: 'dx-revert-button',
   columnChooserButton: 'column-chooser-button',
   fieldItemContent: 'dx-field-item-content',
   textEditorInput: 'dx-texteditor-input',
   commandDrag: 'dx-command-drag',
-  dialogWrapper: 'dx-dialog-wrapper',
   scrollableContainer: 'dx-scrollable-container',
-  scrollContainer: 'dx-datagrid-scroll-container',
   columnsSeparator: 'dx-datagrid-columns-separator',
   toast: 'dx-toast-wrapper',
   aiPromptEditor: 'dx-ai-prompt-editor',
   aiAssistantChat: 'dx-ai-chat',
   aiAssistantButton: 'ai-assistant-button',
-  sortableDragging: 'dx-sortable-dragging',
 };
 
 const E2E_ATTRIBUTES = {
@@ -169,14 +149,6 @@ export default class DataGrid extends GridCore {
     return new Headers(this.element.find(`.${this.addWidgetPrefix(CLASS.headers)}`), this.getName());
   }
 
-  getHeadersScrollContainer(): Selector {
-    return this.getHeadersContainer().find(`.${CLASS.scrollContainer}`);
-  }
-
-  getHeadersScrollLeft(): Promise<number> {
-    return this.getHeadersScrollContainer().scrollLeft;
-  }
-
   async getHeaderCellWidths(): Promise<number[]> {
     const cells = this.getHeaders().getHeaderRow(0).getHeaderCells();
     const count = await cells.count;
@@ -214,10 +186,6 @@ export default class DataGrid extends GridCore {
     return this.getRowsView().find('td');
   }
 
-  getDataCells(rowIndex: number): Selector {
-    return this.getDataRows().nth(rowIndex).find('td');
-  }
-
   getDataRow(index: number): DataRow {
     return new DataRow(this.element.find(`.${CLASS.dataRow}[aria-rowindex='${index + 1}']`), this.getName());
   }
@@ -230,20 +198,8 @@ export default class DataGrid extends GridCore {
     return this.element.find(`.${CLASS.fieldItemContent}`).nth(index);
   }
 
-  getFixedDataRow(index: number): DataRow {
-    return new DataRow(this.element.find(`.${this.addWidgetPrefix(CLASS.fixedGridView)} .${CLASS.dataRow}[aria-rowindex='${index + 1}']`), this.getName());
-  }
-
   getDataCell(rowIndex: number, columnIndex: number): DataCell {
     return this.getDataRow(rowIndex).getDataCell(columnIndex);
-  }
-
-  getFixedDataCell(rowIndex: number, columnIndex: number): DataCell {
-    return this.getFixedDataRow(rowIndex).getDataCell(columnIndex);
-  }
-
-  getGroupRowSelector(): Selector {
-    return this.element.find(`.${CLASS.groupRow}`);
   }
 
   getGroupRow(index: number): GroupRow {
@@ -258,43 +214,12 @@ export default class DataGrid extends GridCore {
     return this.dataRows.filter(`.${CLASS.focusedRow}`);
   }
 
-  getErrorRow(): Selector {
-    return this.element.find(`.${CLASS.errorRow}`);
-  }
-
-  getFilterRow(): FilterRow {
-    return this.getHeaders().getFilterRow();
-  }
-
   getFilterCell(columnIndex: number): FilterCell {
     return this.getHeaders().getFilterRow().getFilterCell(columnIndex);
   }
 
-  getFilterRangeOverlay(): Selector {
-    return this.getHeadersContainer().child(`.${this.addWidgetPrefix(CLASS.filterRangeOverlay)}`);
-  }
-
-  getFilterRangeStartEditor(): DateBox;
-  getFilterRangeStartEditor(EditorType?: typeof DateBox | typeof NumberBox): DateBox | NumberBox {
-    const Editor = EditorType ?? DateBox;
-    return new Editor(this.body.find(`.${this.addWidgetPrefix(CLASS.filterRangeStartEditor)}`));
-  }
-
-  getFilterRangeEndEditor(): DateBox;
-  getFilterRangeEndEditor(EditorType?: typeof DateBox | typeof NumberBox): DateBox | NumberBox {
-    const Editor = EditorType ?? DateBox;
-    return new Editor(this.body.find(`.${this.addWidgetPrefix(CLASS.filterRangeEndEditor)}`));
-  }
-
   getFocusOverlay() {
     return this.body.find(`.${this.addWidgetPrefix(CLASS.focusOverlay)}`);
-  }
-
-  getFilterEditor<T>(
-    columnIndex: number,
-    EditorType: new (mainElement: Selector) => T,
-  ): T {
-    return this.getHeaders().getFilterRow().getFilterCell(columnIndex).getEditor<T>(EditorType);
   }
 
   getSearchBox(): TextBox {
@@ -313,24 +238,8 @@ export default class DataGrid extends GridCore {
     return this.body.find('[aria-label=\'Yes\']');
   }
 
-  getDialog(): Selector {
-    return this.body.find(`.${CLASS.dialogWrapper}`);
-  }
-
   getCancelDeletionButton(): Selector {
     return this.body.find('[aria-label=\'No\']');
-  }
-
-  getRevertTooltip(): Selector {
-    return this.body.find(`.${this.addWidgetPrefix(CLASS.revertTooltip)}`);
-  }
-
-  getInvalidMessageTooltip(): Selector {
-    return this.body.find(`.dx-${CLASS.invalidMessage}.dx-${CLASS.invalidMessage}-always.${this.addWidgetPrefix(CLASS.invalidMessage)}`);
-  }
-
-  getFooterRow(): Selector {
-    return this.element.find(`.${CLASS.footerRow}`);
   }
 
   getGroupFooterRow(): Selector {
@@ -412,24 +321,6 @@ export default class DataGrid extends GridCore {
     )();
   }
 
-  getScrollRight(): Promise<number> {
-    const { getInstance } = this;
-    return ClientFunction(() => {
-      const dataGrid = getInstance() as any;
-      const scrollable = dataGrid.getScrollable();
-      return scrollable.scrollWidth() - scrollable.clientWidth() - scrollable.scrollLeft();
-    }, { dependencies: { getInstance } })();
-  }
-
-  getScrollWidth(): Promise<number> {
-    const { getInstance } = this;
-
-    return ClientFunction(
-      () => (getInstance() as any).getScrollable().scrollWidth(),
-      { dependencies: { getInstance } },
-    )();
-  }
-
   getScrollTop(): Promise<number> {
     const { getInstance } = this;
 
@@ -437,30 +328,6 @@ export default class DataGrid extends GridCore {
       () => (getInstance() as any).getScrollable().scrollTop(),
       { dependencies: { getInstance } },
     )();
-  }
-
-  getScrollbarWidth(isHorizontal: boolean): Promise<number> {
-    const { getInstance } = this;
-
-    return ClientFunction(
-      () => (getInstance() as any).getView('rowsView').getScrollbarWidth(isHorizontal),
-      { dependencies: { getInstance, isHorizontal } },
-    )();
-  }
-
-  getEditForm(): EditForm {
-    const editFormRowClass = this.addWidgetPrefix(CLASS.editFormRow);
-    const element = this.element ? this.element.find(`.${editFormRowClass}`) : Selector(`.${editFormRowClass}`);
-    const buttons = element.find(`.${this.addWidgetPrefix(CLASS.formButtonsContainer)} .${CLASS.button}`);
-
-    return new EditForm(element, buttons);
-  }
-
-  getPopupEditForm(): EditForm {
-    const element = Selector(`.${this.addWidgetPrefix(CLASS.popupEdit)} .${CLASS.overlayContent}`);
-    const buttons = element.find(`.${CLASS.toolbar} .${CLASS.button}`);
-
-    return new EditForm(element, buttons);
   }
 
   getToolbar(): Toolbar {
@@ -514,15 +381,6 @@ export default class DataGrid extends GridCore {
     )();
   }
 
-  apiCollapseRow(key: unknown): Promise<void> {
-    const { getInstance } = this;
-
-    return ClientFunction(
-      () => (getInstance() as any).collapseRow(key),
-      { dependencies: { getInstance, key } },
-    )();
-  }
-
   apiExpandAdaptiveDetailRow(key: unknown): Promise<void> {
     const { getInstance } = this;
 
@@ -537,14 +395,6 @@ export default class DataGrid extends GridCore {
     return ClientFunction(
       () => (getInstance() as any).saveEditData(),
       { dependencies: { getInstance } },
-    )();
-  }
-
-  apiEditCell(rowIndex: number, columnIndex: number): Promise<void> {
-    const { getInstance } = this;
-    return ClientFunction(
-      () => (getInstance() as any).editCell(rowIndex, columnIndex),
-      { dependencies: { getInstance, rowIndex, columnIndex } },
     )();
   }
 
@@ -582,98 +432,6 @@ export default class DataGrid extends GridCore {
     }, { dependencies: { getInstance } })();
   }
 
-  apiGetTopVisibleRowData(): Promise<any> {
-    const { getInstance } = this;
-    return ClientFunction(() => {
-      return (getInstance() as any).getTopVisibleRowData();
-    }, { dependencies: { getInstance } })();
-  }
-
-  apiUpdateDimensions(): Promise<void> {
-    const { getInstance } = this;
-
-    return ClientFunction(
-      () => (getInstance() as any).updateDimensions(),
-      {
-        dependencies: {
-          getInstance,
-        },
-      },
-    )();
-  }
-
-  apiExpandAllGroups(): Promise<void> {
-    const { getInstance } = this;
-
-    return ClientFunction(
-      () => (getInstance() as any).option('grouping.autoExpandAll', true),
-      {
-        dependencies: {
-          getInstance,
-        },
-      },
-    )();
-  }
-
-  apiExpandAll(): Promise<void> {
-    const { getInstance } = this;
-
-    return ClientFunction(
-      () => (getInstance() as any).expandAll(),
-      {
-        dependencies: {
-          getInstance,
-        },
-      },
-    )();
-  }
-
-  apiCollapseAllGroups(): Promise<void> {
-    const { getInstance } = this;
-
-    return ClientFunction(
-      () => (getInstance() as DataGridInstance).option('grouping.autoExpandAll', false),
-      {
-        dependencies: {
-          getInstance,
-        },
-      },
-    )();
-  }
-
-  apiBeginCustomLoading(messageText: string): Promise<void> {
-    const { getInstance } = this;
-    return ClientFunction(
-      () => {
-        (getInstance() as DataGridInstance).beginCustomLoading(messageText);
-      },
-      { dependencies: { getInstance, messageText } },
-    )();
-  }
-
-  apiRefresh(): Promise<void> {
-    const { getInstance } = this;
-    return ClientFunction(
-      () => {
-        (getInstance() as DataGridInstance).refresh().catch(() => { });
-      },
-      { dependencies: { getInstance } },
-    )();
-  }
-
-  apiPush(values: any[]): Promise<void> {
-    const { getInstance } = this;
-
-    return ClientFunction(
-      () => (getInstance() as DataGridInstance).getDataSource().store().push(values),
-      {
-        dependencies: {
-          getInstance, values
-        },
-      },
-    )();
-  }
-
   apiSearchByText(text: string): Promise<void> {
     const { getInstance } = this;
 
@@ -697,15 +455,6 @@ export default class DataGrid extends GridCore {
           getInstance, key
         },
       },
-    )();
-  }
-
-  apiAddColumn(config: any): Promise<void> {
-    const { getInstance } = this;
-
-    return ClientFunction(
-      () => (getInstance() as DataGridInstance).addColumn(config),
-      { dependencies: { getInstance, config } },
     )();
   }
 
@@ -752,21 +501,6 @@ export default class DataGrid extends GridCore {
         },
       },
     )();
-  }
-
-  dropRow(): Promise<void> {
-    return ClientFunction((sortableDraggingClass) => {
-        const $dragElement = $(`.${sortableDraggingClass}`);
-        const dragOffset = $dragElement.offset();
-
-        triggerPointerUp($dragElement, dragOffset.left, dragOffset.top);
-      },
-      {
-        dependencies: {
-          triggerPointerUp,
-        },
-      },
-    )(CLASS.sortableDragging);
   }
 
   resizeHeader(
@@ -829,85 +563,6 @@ export default class DataGrid extends GridCore {
     )();
   }
 
-  moveColumnChooserColumn(columnIndex: number, x: number, y: number, isStart = false): Promise<void> {
-    const columnChooser = this.getColumnChooser();
-    const column = columnChooser.getColumn(columnIndex);
-
-    return ClientFunction(
-      (column) => {
-        const $column = $(column());
-
-        moveElement($column, x, y, isStart);
-      },
-      {
-        dependencies: {
-          column, x, y, isStart, moveElement,
-        },
-      },
-    )(column);
-  }
-
-  hide(): Promise<void> {
-    const { getInstance } = this;
-
-    return ClientFunction(
-      () => {
-        const gridInstance = getInstance() as any;
-        const $gridElement = $(gridInstance.element());
-
-        $gridElement.hide();
-      },
-      { dependencies: { getInstance } },
-    )();
-  }
-
-  show(): Promise<void> {
-    const { getInstance } = this;
-
-    return ClientFunction(
-      () => {
-        const gridInstance = getInstance() as any;
-        const $gridElement = $(gridInstance.element());
-
-        $gridElement.show();
-      },
-      { dependencies: { getInstance } },
-    )();
-  }
-
-  isVirtualRowIntersectViewport(): Promise<boolean> {
-    const { getInstance } = this;
-
-    return ClientFunction(() => {
-      let result = false;
-      const gridInstance = getInstance() as any;
-      const rowsViewElement = gridInstance.getView('rowsView').element();
-      const isElementIntersectRowsView = (element) => {
-        const rowsViewRect = rowsViewElement[0].getBoundingClientRect();
-        const elementRect = element.getBoundingClientRect();
-
-        return (elementRect.top > rowsViewRect.top && elementRect.top < rowsViewRect.bottom)
-          || (elementRect.bottom > rowsViewRect.top && elementRect.bottom < rowsViewRect.bottom)
-          || (elementRect.top <= rowsViewRect.top && elementRect.bottom >= rowsViewRect.bottom);
-      };
-      const virtualRowElements = rowsViewElement.find('.dx-virtual-row');
-
-      // eslint-disable-next-line @typescript-eslint/prefer-for-of
-      for (let i = 0; i < virtualRowElements.length; i += 1) {
-        result = isElementIntersectRowsView(virtualRowElements[i]);
-        if (result) {
-          break;
-        }
-      }
-
-      return result;
-    }, {
-      dependencies: {
-        getInstance,
-      },
-    })();
-  }
-
   isFocusedRowInViewport(): Promise<boolean> {
     const { getInstance } = this;
 
@@ -947,18 +602,6 @@ export default class DataGrid extends GridCore {
 
   getSummaryCellStatusContainer(nth = 0): Selector {
     return this.element().find(`[${E2E_ATTRIBUTES.summaryCellStatusContainer}="true"]`).nth(nth);
-  }
-
-  apiChangeSensitivity(
-    sensitivity: SelectionSensitivity,
-  ): Promise<void> {
-    const { getInstance } = this;
-    return ClientFunction(
-      () => {
-        (getInstance() as DataGridInstance).option('selection.sensitivity', sensitivity);
-      },
-      { dependencies: { getInstance, sensitivity } },
-    )();
   }
 
   apiShowErrorToast(): Promise<void> {

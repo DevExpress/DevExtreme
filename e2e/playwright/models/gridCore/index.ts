@@ -38,8 +38,8 @@ export default abstract class GridCore extends Widget {
     return this.invoke('option', name, ...value);
   }
 
-  public apiColumnOption(id: string, name: string): Promise<unknown> {
-    return this.invoke('columnOption', id, name);
+  public apiColumnOption(id: string, name: string, ...value: unknown[]): Promise<unknown> {
+    return this.invoke('columnOption', id, name, ...value);
   }
 
   public getColumnChooser(): ColumnChooser {
@@ -81,6 +81,14 @@ export default abstract class GridCore extends Widget {
 
   public isReady(): Promise<boolean> {
     return this.invoke('isReady');
+  }
+
+  public async apiFilter(filter: unknown[]): Promise<void> {
+    await this.invoke('filter', filter);
+  }
+
+  public async apiClearFilter(): Promise<void> {
+    await this.invoke('clearFilter');
   }
 
   public async apiShowColumnChooser(): Promise<void> {
