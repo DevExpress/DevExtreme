@@ -36,6 +36,10 @@ export default class FilterBuilder extends Widget {
     return page.locator(`.${CLASS.popupContent} .${CLASS.treeView}`);
   }
 
+  public static getPopupTreeViewNode(page: Page, index = 0): Locator {
+    return page.locator(`.${CLASS.treeViewLeaf}`).nth(index);
+  }
+
   public static getPopupTreeViewNodeByText(page: Page, text: string): Locator {
     return page.locator(`.${CLASS.treeViewLeaf}`)
       .filter({ hasText: textMatcher(text) })

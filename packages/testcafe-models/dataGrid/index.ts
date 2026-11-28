@@ -44,7 +44,6 @@ export const CLASS = {
   adaptiveColumnButton: 'dx-datagrid-adaptive-more',
 
   headerRow: 'dx-header-row',
-  footerRow: 'dx-footer-row',
   groupFooterRow: 'group-footer',
   freeSpaceRow: 'dx-freespace-row',
 
@@ -268,10 +267,6 @@ export default class DataGrid extends GridCore {
 
   getCancelDeletionButton(): Selector {
     return this.body.find('[aria-label=\'No\']');
-  }
-
-  getFooterRow(): Selector {
-    return this.element.find(`.${CLASS.footerRow}`);
   }
 
   getGroupFooterRow(): Selector {

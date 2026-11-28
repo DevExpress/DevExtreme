@@ -1,22 +1,9 @@
-import type { Page } from '@playwright/test';
 import { expect, test } from '../../../../fixtures';
 import { DEFAULT_SELECTOR } from '../../../../helpers/const';
 import { createWidget } from '../../../../helpers/createWidget';
 import DataGrid from '../../../../models/dataGrid';
+import { collectWarnings } from '../../helpers/consoleWarnings';
 import { typeText } from '../../helpers/typeText';
-
-// The test page is new for every test, so the list holds the warnings of this test only.
-const collectWarnings = (page: Page, code: string): string[] => {
-  const warnings: string[] = [];
-
-  page.on('console', (message) => {
-    if (message.type() === 'warning' && message.text().startsWith(code)) {
-      warnings.push(message.text());
-    }
-  });
-
-  return warnings;
-};
 
 const mockCountries = [
   {

@@ -65,6 +65,7 @@ const CLASS = {
   aiPromptEditor: 'dx-ai-prompt-editor',
   scrollContainer: 'scroll-container',
   dragHeader: 'drag-header',
+  toast: 'dx-toast-wrapper',
 };
 
 const E2E_ATTRIBUTES = {
@@ -308,6 +309,10 @@ export default abstract class GridBase extends GridCore {
   // The menu renders its items into an overlay in the body, which carries the grid's class.
   public getContextMenu(): ContextMenu {
     return new ContextMenu(this.page, this.body.locator(`.${CLASS.contextMenu}.${this.addWidgetPrefix()}`));
+  }
+
+  public getToast(): Locator {
+    return this.body.locator(`.${CLASS.toast}`);
   }
 
   public getAIAssistantButton(): Locator {
@@ -629,6 +634,12 @@ export default abstract class GridBase extends GridCore {
 
   public async apiAddColumn(config: unknown): Promise<void> {
     await this.invoke('addColumn', config);
+  }
+
+  public async apiShowErrorToast(): Promise<void> {
+    await this.element.evaluate((element, widgetName) => {
+      $(element).data(widgetName).getController('errorHandling').showToastError('Error');
+    }, this.getName());
   }
 
   public async apiBeginCustomLoading(messageText: string): Promise<void> {
