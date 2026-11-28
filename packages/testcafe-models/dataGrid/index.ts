@@ -1,6 +1,5 @@
 import { ClientFunction } from 'testcafe';
 import DataGridInstance from 'devextreme/ui/data_grid';
-import type { SelectionSensitivity } from 'devextreme/ui/data_grid';
 import Toolbar from '../toolbar';
 import DataRow from './data/row';
 import GroupRow from './groupRow';
@@ -523,16 +522,6 @@ export default class DataGrid extends GridCore {
     )();
   }
 
-  apiRefresh(): Promise<void> {
-    const { getInstance } = this;
-    return ClientFunction(
-      () => {
-        (getInstance() as DataGridInstance).refresh().catch(() => { });
-      },
-      { dependencies: { getInstance } },
-    )();
-  }
-
   apiPush(values: any[]): Promise<void> {
     const { getInstance } = this;
 
@@ -677,24 +666,6 @@ export default class DataGrid extends GridCore {
     )();
   }
 
-  moveColumnChooserColumn(columnIndex: number, x: number, y: number, isStart = false): Promise<void> {
-    const columnChooser = this.getColumnChooser();
-    const column = columnChooser.getColumn(columnIndex);
-
-    return ClientFunction(
-      (column) => {
-        const $column = $(column());
-
-        moveElement($column, x, y, isStart);
-      },
-      {
-        dependencies: {
-          column, x, y, isStart, moveElement,
-        },
-      },
-    )(column);
-  }
-
   hide(): Promise<void> {
     const { getInstance } = this;
 
@@ -795,18 +766,6 @@ export default class DataGrid extends GridCore {
 
   getSummaryCellStatusContainer(nth = 0): Selector {
     return this.element().find(`[${E2E_ATTRIBUTES.summaryCellStatusContainer}="true"]`).nth(nth);
-  }
-
-  apiChangeSensitivity(
-    sensitivity: SelectionSensitivity,
-  ): Promise<void> {
-    const { getInstance } = this;
-    return ClientFunction(
-      () => {
-        (getInstance() as DataGridInstance).option('selection.sensitivity', sensitivity);
-      },
-      { dependencies: { getInstance, sensitivity } },
-    )();
   }
 
   apiShowErrorToast(): Promise<void> {

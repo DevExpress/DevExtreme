@@ -1,5 +1,6 @@
 import type { Locator, Page } from '@playwright/test';
 import { expect } from '@playwright/test';
+import type { SelectionSensitivity } from 'devextreme/ui/data_grid';
 import GridCore, { CLASS as CLASS_BASE } from '../gridCore';
 import Toolbar from '../toolbar';
 import Popup from '../popup';
@@ -566,6 +567,32 @@ export default abstract class GridBase extends GridCore {
     await this.page.mouse.up();
   }
 
+  // A real pointer moves the column chooser's item by (x, y) from its top left corner; with
+  // "isStart", it is pressed there first. A focused item has its corner rounded off, so the pointer
+  // presses a pixel inside and moves from there: the dragged item lands at the corner plus (x, y).
+  public async moveColumnChooserColumn(
+    columnIndex: number,
+    x: number,
+    y: number,
+    isStart = false,
+  ): Promise<void> {
+    const column = this.getColumnChooser().getColumn(columnIndex);
+    const box = await column.boundingBox();
+
+    if (!box) {
+      throw new Error(`${column.toString()} has no box to press`);
+    }
+
+    const start = { x: Math.ceil(box.x) + 1, y: Math.ceil(box.y) + 1 };
+
+    if (isStart) {
+      await this.page.mouse.move(start.x, start.y);
+      await this.page.mouse.down();
+    }
+
+    await this.page.mouse.move(start.x + x, start.y + y);
+  }
+
   public async scrollBy(offset: ScrollOffset): Promise<void> {
     await expect.poll(() => this.hasScrollable()).toBe(true);
     await this.element.evaluate(
@@ -634,6 +661,16 @@ export default abstract class GridBase extends GridCore {
 
   public async apiAddColumn(config: unknown): Promise<void> {
     await this.invoke('addColumn', config);
+  }
+
+  public async apiRefresh(): Promise<void> {
+    await this.element.evaluate((element, widgetName) => {
+      $(element).data(widgetName).refresh().catch(() => {});
+    }, this.getName());
+  }
+
+  public async apiChangeSensitivity(sensitivity: SelectionSensitivity): Promise<void> {
+    await this.invoke('option', 'selection.sensitivity', sensitivity);
   }
 
   public async apiShowErrorToast(): Promise<void> {

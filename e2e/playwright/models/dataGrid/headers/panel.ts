@@ -7,6 +7,7 @@ const CLASS = {
   addRowButton: 'addrow-button',
   saveButton: 'save-button',
   cancelButton: 'cancel-button',
+  columnChooserButton: 'column-chooser-button',
   dropDownMenuButton: 'dx-dropdownmenu-button',
   applyFilterButton: 'dx-apply-button',
 };
@@ -26,6 +27,10 @@ export default class HeaderPanel extends GridModule {
 
   public getExportButton(): ExportButton {
     return new ExportButton(this.element, this.widgetName);
+  }
+
+  public getColumnChooserButton(): Locator {
+    return this.element.locator(`.${this.addWidgetPrefix(CLASS.columnChooserButton)}`);
   }
 
   public getDropDownMenuButton(): Locator {

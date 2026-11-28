@@ -6,6 +6,8 @@ import { expectClass } from '../../internal/classMatcher';
 
 const CLASS = {
   aiHeaderButton: 'dx-command-ai-header-button',
+  editorInput: 'dx-texteditor-input',
+  checkbox: 'dx-checkbox',
 };
 
 // The grid prefixes the class with its name, which a cell doesn't know.
@@ -24,6 +26,10 @@ const STICKY_POSITION_SUFFIX: Record<StickyPosition, string> = {
 export default class HeaderCell extends GridFocusableElement {
   constructor(headerRow: Locator, index: number) {
     super(headerRow.locator(`td[aria-colindex='${index + 1}']`));
+  }
+
+  public getEditor(): GridFocusableElement {
+    return new GridFocusableElement(this.element.locator(`.${CLASS.editorInput}, .${CLASS.checkbox}`));
   }
 
   public async expectFocused(present = true): Promise<void> {

@@ -1,4 +1,4 @@
-import { ClientFunction, Selector } from 'testcafe';
+import { Selector } from 'testcafe';
 // eslint-disable-next-line max-classes-per-file
 import FocusableElement from '../internal/focusable';
 
@@ -7,10 +7,8 @@ const CLASS = {
   overlayWrapper: 'dx-overlay-wrapper',
   columnChooser: 'dx-datagrid-column-chooser',
   checkboxChecked: 'dx-checkbox-checked',
-  stateDisabled: 'dx-state-disabled',
   checkbox: 'dx-checkbox',
   treeViewItem: 'dx-treeview-item',
-  treeView: 'dx-treeview',
   itemContent: 'dx-item-content',
   itemContentToolbar: 'dx-toolbar-item-content',
   emptyMessage: 'dx-empty-message',
@@ -32,30 +30,12 @@ export default class ColumnChooser extends FocusableElement {
     this.isOpened = this.body.find(`.${CLASS.overlayWrapper}.${CLASS.columnChooser}`).exists;
   }
 
-  async focusList() {
-    const treeView = this.content.find(`.${CLASS.treeView}`);
-
-    await ClientFunction((container) => {
-      const $treeView = $(container());
-
-      $treeView.trigger('focus');
-    }, {
-      dependencies: {
-        treeView,
-      }
-    })(treeView);
-  }
-
   getCheckbox(nth = 0): Selector {
     return this.content.find(`.${CLASS.checkbox}`).nth(nth);
   }
 
   isCheckboxChecked(nth = 0): Promise<boolean> {
     return this.getCheckbox(nth).hasClass(CLASS.checkboxChecked);
-  }
-
-  isCheckboxDisabled(nth = 0): Promise<boolean> {
-    return this.getCheckbox(nth).hasClass(CLASS.stateDisabled);
   }
 
   getColumnsCount(): Promise<number> {
