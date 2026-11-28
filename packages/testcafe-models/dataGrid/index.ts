@@ -59,7 +59,6 @@ export const CLASS = {
   textEditorInput: 'dx-texteditor-input',
   commandDrag: 'dx-command-drag',
   scrollableContainer: 'dx-scrollable-container',
-  scrollContainer: 'dx-datagrid-scroll-container',
   columnsSeparator: 'dx-datagrid-columns-separator',
   toast: 'dx-toast-wrapper',
   aiPromptEditor: 'dx-ai-prompt-editor',
@@ -151,14 +150,6 @@ export default class DataGrid extends GridCore {
     return new Headers(this.element.find(`.${this.addWidgetPrefix(CLASS.headers)}`), this.getName());
   }
 
-  getHeadersScrollContainer(): Selector {
-    return this.getHeadersContainer().find(`.${CLASS.scrollContainer}`);
-  }
-
-  getHeadersScrollLeft(): Promise<number> {
-    return this.getHeadersScrollContainer().scrollLeft;
-  }
-
   async getHeaderCellWidths(): Promise<number[]> {
     const cells = this.getHeaders().getHeaderRow(0).getHeaderCells();
     const count = await cells.count;
@@ -222,10 +213,6 @@ export default class DataGrid extends GridCore {
 
   getFixedDataCell(rowIndex: number, columnIndex: number): DataCell {
     return this.getFixedDataRow(rowIndex).getDataCell(columnIndex);
-  }
-
-  getGroupRowSelector(): Selector {
-    return this.element.find(`.${CLASS.groupRow}`);
   }
 
   getGroupRow(index: number): GroupRow {
@@ -347,39 +334,12 @@ export default class DataGrid extends GridCore {
     )();
   }
 
-  getScrollRight(): Promise<number> {
-    const { getInstance } = this;
-    return ClientFunction(() => {
-      const dataGrid = getInstance() as any;
-      const scrollable = dataGrid.getScrollable();
-      return scrollable.scrollWidth() - scrollable.clientWidth() - scrollable.scrollLeft();
-    }, { dependencies: { getInstance } })();
-  }
-
-  getScrollWidth(): Promise<number> {
-    const { getInstance } = this;
-
-    return ClientFunction(
-      () => (getInstance() as any).getScrollable().scrollWidth(),
-      { dependencies: { getInstance } },
-    )();
-  }
-
   getScrollTop(): Promise<number> {
     const { getInstance } = this;
 
     return ClientFunction(
       () => (getInstance() as any).getScrollable().scrollTop(),
       { dependencies: { getInstance } },
-    )();
-  }
-
-  getScrollbarWidth(isHorizontal: boolean): Promise<number> {
-    const { getInstance } = this;
-
-    return ClientFunction(
-      () => (getInstance() as any).getView('rowsView').getScrollbarWidth(isHorizontal),
-      { dependencies: { getInstance, isHorizontal } },
     )();
   }
 
@@ -460,14 +420,6 @@ export default class DataGrid extends GridCore {
     )();
   }
 
-  apiEditCell(rowIndex: number, columnIndex: number): Promise<void> {
-    const { getInstance } = this;
-    return ClientFunction(
-      () => (getInstance() as any).editCell(rowIndex, columnIndex),
-      { dependencies: { getInstance, rowIndex, columnIndex } },
-    )();
-  }
-
   apiCellValue<T>(rowIndex: number, columnIndex: number, value: T): Promise<void> {
     const { getInstance } = this;
     return ClientFunction(
@@ -500,26 +452,6 @@ export default class DataGrid extends GridCore {
         rowIndex: r.rowIndex,
       }));
     }, { dependencies: { getInstance } })();
-  }
-
-  apiGetTopVisibleRowData(): Promise<any> {
-    const { getInstance } = this;
-    return ClientFunction(() => {
-      return (getInstance() as any).getTopVisibleRowData();
-    }, { dependencies: { getInstance } })();
-  }
-
-  apiUpdateDimensions(): Promise<void> {
-    const { getInstance } = this;
-
-    return ClientFunction(
-      () => (getInstance() as any).updateDimensions(),
-      {
-        dependencies: {
-          getInstance,
-        },
-      },
-    )();
   }
 
   apiPush(values: any[]): Promise<void> {
@@ -663,34 +595,6 @@ export default class DataGrid extends GridCore {
           getInstance, columnIndex, x, y, isStart, moveElement,
         },
       },
-    )();
-  }
-
-  hide(): Promise<void> {
-    const { getInstance } = this;
-
-    return ClientFunction(
-      () => {
-        const gridInstance = getInstance() as any;
-        const $gridElement = $(gridInstance.element());
-
-        $gridElement.hide();
-      },
-      { dependencies: { getInstance } },
-    )();
-  }
-
-  show(): Promise<void> {
-    const { getInstance } = this;
-
-    return ClientFunction(
-      () => {
-        const gridInstance = getInstance() as any;
-        const $gridElement = $(gridInstance.element());
-
-        $gridElement.show();
-      },
-      { dependencies: { getInstance } },
     )();
   }
 

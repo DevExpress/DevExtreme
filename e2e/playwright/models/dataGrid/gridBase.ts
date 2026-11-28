@@ -67,6 +67,8 @@ const CLASS = {
   scrollContainer: 'scroll-container',
   dragHeader: 'drag-header',
   toast: 'dx-toast-wrapper',
+  scrollableContainer: 'dx-scrollable-container',
+  virtualRow: 'dx-virtual-row',
 };
 
 const E2E_ATTRIBUTES = {
@@ -107,6 +109,18 @@ export default abstract class GridBase extends GridCore {
 
   public getHeadersScrollContainer(): Locator {
     return this.getHeaders().element.locator(`.${this.addWidgetPrefix(CLASS.scrollContainer)}`);
+  }
+
+  public getHeadersScrollLeft(): Promise<number> {
+    return this.getHeadersScrollContainer().evaluate((element) => element.scrollLeft);
+  }
+
+  public getScrollContainer(): Locator {
+    return this.getRowsView().locator(`.${CLASS.scrollableContainer}`);
+  }
+
+  public getScrollBarThumbTrack(scrollbarPosition: string): Locator {
+    return this.getRowsView().locator(`.dx-scrollbar-${scrollbarPosition.toLowerCase()} .dx-scrollable-scroll`);
   }
 
   /*
@@ -375,6 +389,46 @@ export default abstract class GridBase extends GridCore {
       (element, widgetName) => $(element).data(widgetName).getScrollable().scrollTop(),
       this.getName(),
     );
+  }
+
+  public getScrollRight(): Promise<number> {
+    return this.element.evaluate((element, widgetName) => {
+      const scrollable = $(element).data(widgetName).getScrollable();
+
+      return scrollable.scrollWidth() - scrollable.clientWidth() - scrollable.scrollLeft();
+    }, this.getName());
+  }
+
+  public getScrollWidth(): Promise<number> {
+    return this.element.evaluate(
+      (element, widgetName) => $(element).data(widgetName).getScrollable().scrollWidth(),
+      this.getName(),
+    );
+  }
+
+  public isVirtualRowIntersectViewport(): Promise<boolean> {
+    return this.element.evaluate((element, { widgetName, virtualRowClass }) => {
+      const rowsViewElement: HTMLElement = $(element).data(widgetName).getView('rowsView').element()[0];
+      const rowsViewRect = rowsViewElement.getBoundingClientRect();
+      const isElementIntersectRowsView = (row: Element): boolean => {
+        const elementRect = row.getBoundingClientRect();
+
+        return (elementRect.top > rowsViewRect.top && elementRect.top < rowsViewRect.bottom)
+          || (elementRect.bottom > rowsViewRect.top && elementRect.bottom < rowsViewRect.bottom)
+          || (elementRect.top <= rowsViewRect.top && elementRect.bottom >= rowsViewRect.bottom);
+      };
+
+      return Array.from(rowsViewElement.querySelectorAll(`.${virtualRowClass}`))
+        .some(isElementIntersectRowsView);
+    }, { widgetName: this.getName(), virtualRowClass: CLASS.virtualRow });
+  }
+
+  public async hide(): Promise<void> {
+    await this.element.evaluate((element) => { $(element).hide(); });
+  }
+
+  public async show(): Promise<void> {
+    await this.element.evaluate((element) => { $(element).show(); });
   }
 
   public getScrollLeft(): Promise<number> {
@@ -661,6 +715,10 @@ export default abstract class GridBase extends GridCore {
 
   public async apiAddColumn(config: unknown): Promise<void> {
     await this.invoke('addColumn', config);
+  }
+
+  public apiGetTopVisibleRowData(): Promise<any> {
+    return this.invoke('getTopVisibleRowData');
   }
 
   public async apiRefresh(): Promise<void> {
